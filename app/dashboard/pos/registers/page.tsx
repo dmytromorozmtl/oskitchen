@@ -1,18 +1,31 @@
 import { posCreateRegisterFormAction } from "@/actions/pos";
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
 
 export default async function PosRegistersPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  if (!hasPermission(actor.granted, "pos.register.manage")) {
+    return (
+      <PosAccessCard
+        title="POS registers"
+        description="You do not have permission to manage POS registers."
+        primaryHref="/dashboard/pos"
+        primaryLabel="Back to POS"
+      />
+    );
+  }
+
   const [rows, locations] = await Promise.all([
-    listPosRegisters(dataUserId),
+    listPosRegisters(actor.userId),
     prisma.location.findMany({
-      where: { userId: dataUserId, active: true },
+      where: { userId: actor.userId, active: true },
       orderBy: { name: "asc" },
       select: { id: true, name: true },
     }),

@@ -10,7 +10,6 @@ import { decryptOrderPiiFields } from "@/lib/orders/order-pii";
 import type { PaymentModeKey } from "@/lib/orders/order-payment";
 import type { FulfillmentDetailKey } from "@/lib/orders/order-fulfillment";
 import { orderCreateInputSchema, type OrderCreateInput } from "@/lib/orders/order-validation";
-import { hasLegacyPermission, normalizeRole } from "@/lib/permissions/legacy";
 import { createOrderViaCenter } from "@/services/orders/order-creation-service";
 import { logPosCheckoutAnalytics } from "@/services/pos/pos-analytics-service";
 import { syncPosOrderToCrm } from "@/services/pos/pos-crm-service";
@@ -91,17 +90,6 @@ export async function checkoutPosSale(
   const gate = await canUseFeature(userId, "pos_terminal");
   if (!gate.allowed) {
     return { ok: false, error: gate.reason ? `POS unavailable (${gate.reason}).` : "POS is not enabled for this plan." };
-  }
-
-  if (input.paymentMode === "COMPED") {
-    const actorProfile = await prisma.userProfile.findUnique({
-      where: { id: performedByUserId },
-      select: { role: true },
-    });
-    const appRole = normalizeRole(actorProfile?.role);
-    if (!hasLegacyPermission(appRole, "pos_comp")) {
-      return { ok: false, error: "Comped sales require a manager or owner on this account." };
-    }
   }
 
   const register = await prisma.pOSRegister.findFirst({

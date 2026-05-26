@@ -3,24 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import type { PosNavLink } from "@/lib/pos/pos-subnav-links";
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
-  { href: "/dashboard/pos", label: "Overview", match: "exact" },
-  { href: "/dashboard/pos/terminal", label: "Terminal" },
-  { href: "/dashboard/pos/registers", label: "Registers" },
-  { href: "/dashboard/pos/shifts", label: "Shifts" },
-  { href: "/dashboard/pos/transactions", label: "Transactions" },
-  { href: "/dashboard/pos/receipts", label: "Receipts" },
-  { href: "/dashboard/pos/reports", label: "Reports" },
-  { href: "/dashboard/pos/settings", label: "POS settings" },
-];
-
-export function PosSubnav() {
+export function PosSubnav({ links }: { links: PosNavLink[] }) {
   const path = usePathname();
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3 print:hidden">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact"
             ? path === l.href

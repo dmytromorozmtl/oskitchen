@@ -11,6 +11,6 @@ export const LEGACY_TO_WORKSPACE: Partial<Record<LegacyPermissionKey, WorkspaceP
   manage_billing: "billing.manage",
   manage_team: "staff.manage",
   manage_customers: "customers.manage",
-  pos_access: "orders.manage",
-  pos_comp: "orders.manage",
+  pos_access: "pos.access",
+  pos_comp: "pos.manager.override",
 };

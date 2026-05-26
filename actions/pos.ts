@@ -1,15 +1,18 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { canUseFeature } from "@/lib/plans/feature-registry";
 import { safeError } from "@/lib/security";
 import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
+import {
+  logPosPermissionDenied,
+  logPosRegisterCreated,
+} from "@/services/pos/pos-permission-audit";
 import { refundPosTransaction } from "@/services/pos/pos-refund-service";
 import { voidPosTransaction } from "@/services/pos/pos-void-service";
 import { createPosRegister } from "@/services/pos/pos-register-service";
@@ -52,15 +55,40 @@ const checkoutSchema = z.object({
     .min(1),
 });
 
+async function requirePosPermission(
+  required: PermissionKey,
+  operation: string,
+  metadata?: Record<string, unknown>,
+) {
+  const access = await requireMutationPermission(required);
+  if (!access.ok) {
+    await logPosPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation,
+      metadata,
+    });
+  }
+  return access;
+}
+
 export async function posCheckoutAction(raw: z.infer<typeof checkoutSchema>) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const gate = await canUseFeature(user.id, "pos_terminal");
+    const access = await requirePosPermission("pos.checkout", "pos.checkout");
+    if (!access.ok) return { ok: false as const, error: access.error };
+    const { actor } = access;
+    const gate = await canUseFeature(actor.userId, "pos_terminal");
     if (!gate.allowed) {
       return { ok: false as const, error: "POS is not available on your current plan." };
     }
     const input = checkoutSchema.parse(raw);
-    const res = await checkoutPosSale(user.id, user.id, {
+    if ((input.discountAmount ?? 0) > 0 || input.paymentMode === "COMPED") {
+      const override = await requirePosPermission("pos.discount.apply", "pos.checkout.discount", {
+        paymentMode: input.paymentMode,
+        explicitDiscountAmount: input.discountAmount ?? 0,
+      });
+      if (!override.ok) return { ok: false as const, error: override.error };
+    }
+    const res = await checkoutPosSale(actor.userId, actor.sessionUser.id, {
       registerId: input.registerId,
       shiftId: input.shiftId,
       staffMemberId: input.staffMemberId,
@@ -90,15 +118,22 @@ export async function posCheckoutAction(raw: z.infer<typeof checkoutSchema>) {
 
 export async function posCreateRegisterAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const gate = await canUseFeature(user.id, "pos_terminal");
+    const access = await requirePosPermission("pos.register.manage", "pos.register.create");
+    if (!access.ok) return { error: access.error };
+    const { actor } = access;
+    const gate = await canUseFeature(actor.userId, "pos_terminal");
     if (!gate.allowed) return { error: "POS is not available on your current plan." };
     const name = String(formData.get("name") ?? "").trim();
     if (!name) return { error: "Name is required." };
     const locationId = String(formData.get("locationId") ?? "").trim();
-    await createPosRegister(user.id, {
+    const register = await createPosRegister(actor.userId, {
       name,
       locationId: locationId ? locationId : null,
+    });
+    await logPosRegisterCreated(actor, {
+      registerId: register.id,
+      registerName: register.name,
+      locationId: register.locationId,
     });
     revalidatePath("/dashboard/pos");
     revalidatePath("/dashboard/pos/registers");
@@ -116,15 +151,17 @@ export async function posCreateRegisterFormAction(formData: FormData): Promise<v
 
 export async function posOpenShiftAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const gate = await canUseFeature(user.id, "pos_shifts");
+    const access = await requirePosPermission("pos.shift.open", "pos.shift.open");
+    if (!access.ok) return { error: access.error };
+    const { actor } = access;
+    const gate = await canUseFeature(actor.userId, "pos_shifts");
     if (!gate.allowed) return { error: "Shift tracking is available on Team and above." };
     const registerId = String(formData.get("registerId") ?? "");
     const staffId = String(formData.get("staffId") ?? "");
     const opening = Number(formData.get("openingCash") ?? "0");
     if (!registerId || !staffId) return { error: "Register and staff are required." };
     const res = await openPosShift({
-      userId: dataUserId,
+      userId: actor.userId,
       registerId,
       openedByStaffId: staffId,
       openingCashAmount: opening,
@@ -146,15 +183,17 @@ export async function posOpenShiftFormAction(formData: FormData): Promise<void> 
 
 export async function posCloseShiftAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const gate = await canUseFeature(user.id, "pos_shifts");
+    const access = await requirePosPermission("pos.shift.close", "pos.shift.close");
+    if (!access.ok) return { error: access.error };
+    const { actor } = access;
+    const gate = await canUseFeature(actor.userId, "pos_shifts");
     if (!gate.allowed) return { error: "Shift tracking is available on Team and above." };
     const shiftId = String(formData.get("shiftId") ?? "");
     const staffId = String(formData.get("staffId") ?? "");
     const closing = Number(formData.get("closingCash") ?? "0");
     if (!shiftId || !staffId) return { error: "Shift and staff are required." };
     const res = await closePosShift({
-      userId: dataUserId,
+      userId: actor.userId,
       shiftId,
       closedByStaffId: staffId,
       closingCashAmount: closing,
@@ -187,16 +226,16 @@ const refundSchema = z.object({
 
 export async function posRefundTransactionAction(raw: z.infer<typeof refundSchema>) {
   try {
-    const access = await requireMutationPermission("orders.manage");
+    const access = await requirePosPermission("pos.refund", "pos.refund");
     if (!access.ok) return { error: access.error };
-    const { sessionUser: user, dataUserId } = access.actor;
-    const gate = await canUseFeature(user.id, "pos_terminal");
+    const { actor } = access;
+    const gate = await canUseFeature(actor.userId, "pos_terminal");
     if (!gate.allowed) return { error: "POS is not available on your plan." };
     const parsed = refundSchema.safeParse(raw);
     if (!parsed.success) return { error: "Invalid refund request." };
     const res = await refundPosTransaction({
-      userId: dataUserId,
-      performedByUserId: user.id,
+      userId: actor.userId,
+      performedByUserId: actor.sessionUser.id,
       transactionId: parsed.data.transactionId,
       reason: parsed.data.reason,
       partialAmount: parsed.data.partialAmount,
@@ -212,16 +251,16 @@ export async function posRefundTransactionAction(raw: z.infer<typeof refundSchem
 
 export async function posVoidTransactionAction(raw: z.infer<typeof voidSchema>) {
   try {
-    const access = await requireMutationPermission("orders.manage");
+    const access = await requirePosPermission("pos.void", "pos.void");
     if (!access.ok) return { error: access.error };
-    const { sessionUser: user, dataUserId } = access.actor;
-    const gate = await canUseFeature(user.id, "pos_terminal");
+    const { actor } = access;
+    const gate = await canUseFeature(actor.userId, "pos_terminal");
     if (!gate.allowed) return { error: "POS is not available on your plan." };
     const parsed = voidSchema.safeParse(raw);
     if (!parsed.success) return { error: "Invalid void request." };
     const res = await voidPosTransaction({
-      userId: dataUserId,
-      performedByUserId: user.id,
+      userId: actor.userId,
+      performedByUserId: actor.sessionUser.id,
       transactionId: parsed.data.transactionId,
       reason: parsed.data.reason,
     });

@@ -1,25 +1,40 @@
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { canUseFeature } from "@/lib/plans/feature-registry";
 import { prisma } from "@/lib/prisma";
 
 export default async function PosReportsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const gate = await canUseFeature(dataUserId, "pos_reports");
+  const actor = await requireWorkspacePermissionActor();
+  if (!hasPermission(actor.granted, "pos.access")) {
+    return (
+      <PosAccessCard
+        title="POS reports"
+        description="You do not have permission to view POS reports."
+        primaryHref="/dashboard/pos"
+        primaryLabel="Back to POS"
+      />
+    );
+  }
+
+  const gate = await canUseFeature(actor.userId, "pos_reports");
   if (!gate.allowed) {
     return (
-      <Card className="max-w-lg border-border/80 shadow-sm">
-        <CardHeader>
-          <CardTitle>POS reports</CardTitle>
-          <CardDescription>Upgrade to Team for register-level reporting slices.</CardDescription>
-        </CardHeader>
-      </Card>
+      <PosAccessCard
+        title="POS reports"
+        description="Upgrade to Team for register-level reporting slices."
+        primaryHref="/dashboard/billing"
+        primaryLabel="Review billing"
+        secondaryHref="/dashboard/pos"
+        secondaryLabel="Back to POS"
+      />
     );
   }
 
   const since = new Date(Date.now() - 30 * 86400000);
   const rows = await prisma.pOSTransaction.findMany({
-    where: { userId: dataUserId, createdAt: { gte: since }, status: "COMPLETED" },
+    where: { userId: actor.userId, createdAt: { gte: since }, status: "COMPLETED" },
     select: { total: true, paymentMode: true },
   });
   const revenue = rows.reduce((s, r) => s + Number(r.total), 0);

@@ -1,13 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
-import { hasLegacyPermission, normalizeRole } from "@/lib/permissions/legacy";
 import { auditLog } from "@/services/audit/audit-service";
 
 export type VoidPosResult = { ok: true } | { ok: false; error: string };
 
 /**
  * Void a completed POS transaction and linked order (MVP — no payment processor refund).
- * Requires manager/owner legacy `pos_comp` permission.
+ * Authorization is enforced by the caller via canonical workspace permissions.
  */
 export async function voidPosTransaction(params: {
   userId: string;
@@ -15,14 +14,6 @@ export async function voidPosTransaction(params: {
   transactionId: string;
   reason: string;
 }): Promise<VoidPosResult> {
-  const actorProfile = await prisma.userProfile.findUnique({
-    where: { id: params.performedByUserId },
-    select: { role: true },
-  });
-  if (!hasLegacyPermission(normalizeRole(actorProfile?.role), "pos_comp")) {
-    return { ok: false, error: "Void requires manager or owner permission." };
-  }
-
   const tx = await prisma.pOSTransaction.findFirst({
     where: { id: params.transactionId, userId: params.userId },
     select: { id: true, orderId: true, status: true, receiptNumber: true },

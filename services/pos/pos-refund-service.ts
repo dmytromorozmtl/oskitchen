@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
-import { hasLegacyPermission, normalizeRole } from "@/lib/permissions/legacy";
 import { auditLog } from "@/services/audit/audit-service";
 import { attemptStripePosRefund } from "@/services/pos/pos-stripe-refund-service";
 
@@ -8,7 +7,7 @@ export type RefundPosResult = { ok: true } | { ok: false; error: string };
 
 /**
  * Mark a POS sale as refunded (MVP — no payment processor reversal).
- * Requires manager/owner `pos_comp`.
+ * Authorization is enforced by the caller via canonical workspace permissions.
  */
 export async function refundPosTransaction(params: {
   userId: string;
@@ -17,14 +16,6 @@ export async function refundPosTransaction(params: {
   reason: string;
   partialAmount?: number;
 }): Promise<RefundPosResult> {
-  const actorProfile = await prisma.userProfile.findUnique({
-    where: { id: params.performedByUserId },
-    select: { role: true },
-  });
-  if (!hasLegacyPermission(normalizeRole(actorProfile?.role), "pos_comp")) {
-    return { ok: false, error: "Refund requires manager or owner permission." };
-  }
-
   const tx = await prisma.pOSTransaction.findFirst({
     where: { id: params.transactionId, userId: params.userId },
     select: {

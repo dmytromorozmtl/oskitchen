@@ -1,41 +1,48 @@
 import Link from "next/link";
 
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PosSubnav } from "@/components/dashboard/pos-subnav";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { buildPosSubnavLinks } from "@/lib/pos/pos-subnav-links";
 import { canUseFeature } from "@/lib/plans/feature-registry";
 
 export default async function PosLayout({ children }: { children: React.ReactNode }) {
-  const { dataUserId } = await getTenantActor();
-  const gate = await canUseFeature(dataUserId, "pos_terminal");
+  const actor = await requireWorkspacePermissionActor();
+  const gate = await canUseFeature(actor.userId, "pos_terminal");
   if (!gate.allowed) {
     return (
       <div className="mx-auto max-w-xl space-y-4 py-10">
-        <Card className="border-border/80 shadow-sm">
-          <CardHeader>
-            <CardTitle>POS Terminal</CardTitle>
-            <CardDescription>
-              Counter sales, registers, and shift-aware cash tracking are available on Pro plans and above (or while
-              trialing with billing access).
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Button asChild variant="premium" className="rounded-full">
-              <Link href="/dashboard/billing">Review billing</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full">
-              <Link href="/dashboard/today">Back to Today</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <PosAccessCard
+          title="POS Terminal"
+          description="Counter sales, registers, and shift-aware cash tracking are available on Pro plans and above (or while trialing with billing access)."
+          primaryHref="/dashboard/billing"
+          primaryLabel="Review billing"
+          secondaryHref="/dashboard/today"
+          secondaryLabel="Back to Today"
+        />
       </div>
     );
   }
 
+  if (!hasPermission(actor.granted, "pos.access")) {
+    return (
+      <div className="mx-auto max-w-xl space-y-4 py-10">
+        <PosAccessCard
+          title="POS workspace"
+          description="You do not have permission to access POS surfaces in this workspace."
+          primaryHref="/dashboard/today"
+          primaryLabel="Back to Today"
+        />
+      </div>
+    );
+  }
+
+  const links = buildPosSubnavLinks(actor.granted);
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <PosSubnav />
+      <PosSubnav links={links} />
       {children}
     </div>
   );

@@ -14,6 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
+- Progress update: POS-sensitive mutation slice is now migrated onto canonical POS keys for checkout, discount/comp approval, refunds, voids, register creation, shift open/close, terminal route access, and the first POS shell/subnav UI parity layer
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -26,6 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
+- Remaining work after current slice: apply the same helper/audit pattern to billing, integrations, uploads, exports, and broader POS subpage/UI parity
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
@@ -40,10 +42,11 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: creates reusable permission pattern for other domains
 - User story: as a cashier or manager, I should only be able to perform authorized POS actions
 - Current state: refunds/voids are better protected than checkout/register/shift flows
+- Progress update: checkout/register/shift/refund/void flows plus `app/api/pos/terminal/route.ts` now enforce canonical POS permissions, and the main POS shell/registers/shifts/settings entry pages now mirror those permissions; primary remaining gaps are deeper E2E/API/negative-role coverage
 - Target state: all POS mutations and route handlers require explicit POS capabilities
 - Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`
 - Dependencies: `KOS-P0-001`
-- Implementation steps: add POS permissions, wrap actions/routes, align UI gates, add negative tests
+- Implementation steps: add POS permissions, wrap actions/routes, align primary UI gates, extend parity to remaining POS pages/settings surfaces, then deepen negative tests and API coverage
 - Data model changes: none required initially
 - Service changes: permission injection and manager override checks
 - UI changes: denied states and clearer role affordances
@@ -51,7 +54,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Audit log requirements: overrides, refunds, voids, shift/register changes
 - Analytics requirements: optional denied action telemetry
 - Tests required: POS E2E, refund/void, role-negative
-- Acceptance criteria: unauthorized staff cannot perform protected POS actions
+- Acceptance criteria: unauthorized staff cannot perform protected POS actions; owner-scoped tenant data is preserved for staff-run POS mutations
 - Rollback considerations: preserve legacy fallback during transition
 - Risk level: High
 - Estimated complexity: Medium to High

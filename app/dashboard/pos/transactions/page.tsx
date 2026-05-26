@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -9,13 +10,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 
 export default async function PosTransactionsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  if (!hasPermission(actor.granted, "pos.access")) {
+    return (
+      <PosAccessCard
+        title="POS transactions"
+        description="You do not have permission to view POS transactions."
+        primaryHref="/dashboard/pos"
+        primaryLabel="Back to POS"
+      />
+    );
+  }
+
   const rows = await prisma.pOSTransaction.findMany({
-    where: { userId: dataUserId },
+    where: { userId: actor.userId },
     orderBy: { createdAt: "desc" },
     take: 80,
     include: { order: { select: { id: true, customerName: true } } },

@@ -2,7 +2,9 @@ import Link from "next/link";
 
 import { PosTerminalClient } from "@/components/dashboard/pos-terminal-client";
 import { Button } from "@/components/ui/button";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { Card, CardContent } from "@/components/ui/card";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { canUseFeature } from "@/lib/plans/feature-registry";
 import { listCustomersForUser } from "@/services/crm/customer-service";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
@@ -11,11 +13,21 @@ import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { loadPosTerminalBootstrap } from "@/services/pos/pos-session-service";
 
 export default async function PosTerminalPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { userId } = actor;
+  if (!hasPermission(actor.granted, "pos.access")) {
+    return (
+      <Card className="border-border/80 shadow-sm">
+        <CardContent className="py-8 text-center text-sm text-muted-foreground">
+          You do not have permission to use the POS terminal.
+        </CardContent>
+      </Card>
+    );
+  }
   const [boot, operatingMode, kitchen] = await Promise.all([
-    loadPosTerminalBootstrap(dataUserId),
-    getTenantOperatingMode(dataUserId),
-    findOwnerKitchenSettings(dataUserId, { businessType: true }),
+    loadPosTerminalBootstrap(userId),
+    getTenantOperatingMode(userId),
+    findOwnerKitchenSettings(userId, { businessType: true }),
   ]);
   const quickOrderEnabled = isDailyServiceMode(operatingMode);
 
@@ -39,10 +51,10 @@ export default async function PosTerminalPage() {
 
   const staff = boot.staff.map((s) => ({ id: s.id, name: s.name }));
 
-  const crm = await canUseFeature(dataUserId, "customer_crm");
+  const crm = await canUseFeature(userId, "customer_crm");
   const recentCustomers = crm.allowed
     ? (
-        await listCustomersForUser({ userId: dataUserId }, { take: 10 })
+        await listCustomersForUser({ userId }, { take: 10 })
       ).map((c) => ({
         id: c.id,
         email: c.email,

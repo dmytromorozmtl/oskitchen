@@ -1,8 +1,23 @@
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { POS_HARDWARE_CATEGORIES } from "@/lib/pos/pos-hardware";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function PosHardwareSettingsPage() {
+export default async function PosHardwareSettingsPage() {
+  const actor = await requireWorkspacePermissionActor();
+  if (!hasPermission(actor.granted, "pos.hardware.manage")) {
+    return (
+      <PosAccessCard
+        title="POS hardware"
+        description="You do not have permission to manage POS hardware readiness."
+        primaryHref="/dashboard/pos"
+        primaryLabel="Back to POS"
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>

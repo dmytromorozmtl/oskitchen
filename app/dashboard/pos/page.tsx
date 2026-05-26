@@ -2,15 +2,26 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 
 export default async function PosOverviewPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { userId } = actor;
+  if (!hasPermission(actor.granted, "pos.access")) {
+    return (
+      <Card className="border-border/80 shadow-sm">
+        <CardContent className="py-8 text-center text-sm text-muted-foreground">
+          You do not have permission to view the POS workspace.
+        </CardContent>
+      </Card>
+    );
+  }
   const [registers, tx7] = await Promise.all([
-    prisma.pOSRegister.count({ where: { userId: dataUserId } }),
+    prisma.pOSRegister.count({ where: { userId } }),
     prisma.pOSTransaction.count({
-      where: { userId: dataUserId, createdAt: { gte: new Date(Date.now() - 7 * 86400000) } },
+      where: { userId, createdAt: { gte: new Date(Date.now() - 7 * 86400000) } },
     }),
   ]);
 

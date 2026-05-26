@@ -6,13 +6,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 
 export default async function PosReceiptsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  if (!hasPermission(actor.granted, "pos.access")) {
+    return (
+      <PosAccessCard
+        title="POS receipts"
+        description="You do not have permission to view POS receipts."
+        primaryHref="/dashboard/pos"
+        primaryLabel="Back to POS"
+      />
+    );
+  }
+
   const rows = await prisma.pOSReceipt.findMany({
-    where: { transaction: { userId: dataUserId } },
+    where: { transaction: { userId: actor.userId } },
     orderBy: { createdAt: "desc" },
     take: 80,
     include: { transaction: { select: { receiptNumber: true, orderId: true } } },

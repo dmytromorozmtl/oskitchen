@@ -265,10 +265,12 @@ Initial scope:
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
+- Status update: POS slice is now live on canonical keys for checkout, discount/comp authorization, refunds, voids, register creation, shift open/close, and terminal API routes; broader billing/integrations/storefront/upload migration remains open
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates
 - keep plan/module gates separate from role permissions
+- Status update: the first POS UI parity slice is now live for the POS layout shell, filtered sub-navigation, registers, shifts, handheld, tabs, receipts, transactions, and POS hardware/settings entry pages
 
 ### Phase 4: Broader domains
 - staff/training/labor
@@ -290,6 +292,7 @@ The following current files should be treated as migration inputs, not long-term
 ### POS
 - `pos.access`
 - `pos.checkout`
+- `pos.discount.apply`
 - `pos.refund`
 - `pos.void`
 - `pos.shift.open`
