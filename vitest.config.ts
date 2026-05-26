@@ -1,10 +1,16 @@
 import path from "path";
 import { defineConfig } from "vitest/config";
+import { buildVitestWatchIgnored } from "./vitest.watch-ignored";
 
 export default defineConfig({
   server: {
     // Large repo roots can make Vite's default watcher startup dominate simple local test runs.
-    watch: null,
+    watch: {
+      ignoreInitial: true,
+      usePolling: true,
+      interval: 1000,
+      ignored: buildVitestWatchIgnored(__dirname),
+    },
   },
   test: {
     dir: "tests",

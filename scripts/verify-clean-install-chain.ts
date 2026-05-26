@@ -23,6 +23,15 @@ function fail(msg: string) {
   failed = true;
 }
 
+function checkPathExists(relPath: string, label: string) {
+  const fullPath = path.join(root, relPath);
+  if (!fs.existsSync(fullPath)) {
+    fail(`${label} missing at ${relPath}`);
+  } else {
+    ok(`${label} present`);
+  }
+}
+
 const pkgPath = path.join(root, "package.json");
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8")) as { scripts?: Record<string, string> };
 const post = pkg.scripts?.postinstall ?? "";
@@ -61,6 +70,14 @@ try {
 } catch {
   fail("stripe not resolvable from project root");
 }
+
+checkPathExists("node_modules/vitest/vitest.mjs", "Vitest CLI entrypoint");
+checkPathExists("node_modules/vitest/package.json", "Vitest package manifest");
+checkPathExists("node_modules/pathe/package.json", "Pathe package manifest");
+checkPathExists(
+  "node_modules/vitest/node_modules/picomatch/lib/scan.js",
+  "Vitest nested picomatch scan helper",
+);
 
 if (failed) {
   process.exit(1);

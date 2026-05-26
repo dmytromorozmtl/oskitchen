@@ -1,10 +1,16 @@
 import path from "path";
 import { defineConfig } from "vitest/config";
+import { buildVitestWatchIgnored } from "./vitest.watch-ignored";
 
 export default defineConfig({
   root: path.resolve(__dirname, "tests"),
   server: {
-    watch: null,
+    watch: {
+      ignoreInitial: true,
+      usePolling: true,
+      interval: 1000,
+      ignored: buildVitestWatchIgnored(__dirname),
+    },
   },
   test: {
     environment: "node",
