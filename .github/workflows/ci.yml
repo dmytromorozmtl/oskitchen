@@ -27,6 +27,9 @@ jobs:
       - name: Prisma generate
         run: npx prisma generate
 
+      - name: Validate workflow script references
+        run: npm run validate:ci-workflow-scripts
+
       - name: Verify install chain
         run: npm run verify:install-chain
 

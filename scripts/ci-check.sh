@@ -8,6 +8,12 @@ source "$(dirname "$0")/ensure-node-path.sh"
 
 echo "═══ KitchenOS ci:check ═══"
 
+echo "→ Workflow script reference audit"
+npm run validate:ci-workflow-scripts
+
+echo "→ Install chain verification"
+npm run verify:install-chain
+
 echo "→ Workspace audit (no regression)"
 npm run workspace:audit:gate
 

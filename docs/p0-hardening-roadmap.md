@@ -124,7 +124,7 @@ Priority rule:
 - Technical risk: release regressions, contributor confusion, slower incident response.
 - Affected files: `.github/workflows/*.yml`, `package.json`, `scripts/ci-check.sh`
 - Affected modules: release engineering
-- Progress update: a dedicated POS RBAC Vitest config/script now exists to narrow permission-negative validation, but local Vitest startup still hangs before test output in this environment and remains an active toolchain blocker
+- Progress update: the missing `verify:install-chain` workflow contract has been restored, CI/local checks now include a static workflow-script reference audit, and a dedicated POS RBAC Vitest config/script exists for narrowed permission-negative validation; the main remaining blocker is local Vitest startup hanging before test output in this environment
 - Safest implementation plan:
   1. remove or restore stale workflow steps
   2. align CI scripts with documented local scripts

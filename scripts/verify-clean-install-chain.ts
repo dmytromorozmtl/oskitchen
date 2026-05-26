@@ -3,15 +3,10 @@
  * Non-destructive checks after `npm install` / `npm ci`.
  * Does not modify lockfiles or run npm install.
  */
-import fs from "node:fs";
-import path from "node:path";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+const fs = require("node:fs");
+const path = require("node:path");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const root = path.join(__dirname, "..");
-const require = createRequire(import.meta.url);
 
 let failed = false;
 

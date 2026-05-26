@@ -5,6 +5,8 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 
 ## CI Green Standard
 - valid workflow references only
+- static workflow-to-`package.json` script audit passes
+- install-chain verification passes after dependency install
 - strict typecheck or approved split-typecheck replacement
 - build passes using documented production-like env assumptions
 - security suite passes
