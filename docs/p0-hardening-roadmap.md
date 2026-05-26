@@ -124,6 +124,7 @@ Priority rule:
 - Technical risk: release regressions, contributor confusion, slower incident response.
 - Affected files: `.github/workflows/*.yml`, `package.json`, `scripts/ci-check.sh`
 - Affected modules: release engineering
+- Progress update: a dedicated POS RBAC Vitest config/script now exists to narrow permission-negative validation, but local Vitest startup still hangs before test output in this environment and remains an active toolchain blocker
 - Safest implementation plan:
   1. remove or restore stale workflow steps
   2. align CI scripts with documented local scripts
@@ -175,6 +176,7 @@ Priority rule:
 - Technical risk: permission regressions during ongoing feature expansion.
 - Affected files: tests around POS, billing, integrations, storefront publishing, staff, exports
 - Affected modules: all sensitive domains
+- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, and POS terminal route tests now exist in the repo; remaining work is reliable execution in local/CI plus expansion into other P0 surfaces
 - Safest implementation plan:
   1. define canonical role matrix
   2. add shared permission-negative harness

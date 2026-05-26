@@ -34,6 +34,7 @@
     "test": "node ./node_modules/vitest/vitest.mjs run",
     "test:contracts": "node ./node_modules/vitest/vitest.mjs run tests/contracts",
     "test:coverage": "node ./node_modules/vitest/vitest.mjs run --coverage",
+    "test:pos-rbac": "node ./node_modules/vitest/vitest.mjs run -c vitest.pos.config.ts",
     "test:storefront-release": "node ./node_modules/vitest/vitest.mjs run tests/unit/storefront tests/unit/invite-audit-export.test.ts tests/unit/storefront/launch-readiness.test.ts tests/unit/theme-experiment-analytics.test.ts tests/unit/theme-experiment-auto-conclude.test.ts",
     "test:unit": "node ./node_modules/vitest/vitest.mjs run",
     "test:e2e": "playwright test",

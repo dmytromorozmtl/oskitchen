@@ -42,7 +42,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: creates reusable permission pattern for other domains
 - User story: as a cashier or manager, I should only be able to perform authorized POS actions
 - Current state: refunds/voids are better protected than checkout/register/shift flows
-- Progress update: checkout/register/shift/refund/void flows plus `app/api/pos/terminal/route.ts` now enforce canonical POS permissions, and the main POS shell/registers/shifts/settings entry pages now mirror those permissions; primary remaining gaps are deeper E2E/API/negative-role coverage
+- Progress update: checkout/register/shift/refund/void flows plus `app/api/pos/terminal/route.ts` now enforce canonical POS permissions, the main POS shell/registers/shifts/settings entry pages now mirror those permissions, and focused POS RBAC test files/config have been added; primary remaining gaps are reliable local execution plus deeper E2E/API/negative-role coverage
 - Target state: all POS mutations and route handlers require explicit POS capabilities
 - Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`
 - Dependencies: `KOS-P0-001`
@@ -53,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Permission changes: POS-specific keys
 - Audit log requirements: overrides, refunds, voids, shift/register changes
 - Analytics requirements: optional denied action telemetry
-- Tests required: POS E2E, refund/void, role-negative
+- Tests required: POS E2E, refund/void, role-negative, terminal API permission-negative
 - Acceptance criteria: unauthorized staff cannot perform protected POS actions; owner-scoped tenant data is preserved for staff-run POS mutations
 - Rollback considerations: preserve legacy fallback during transition
 - Risk level: High

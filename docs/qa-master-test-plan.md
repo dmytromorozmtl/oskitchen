@@ -113,7 +113,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - A QA report must be generated per release candidate.
 
 ## Current Highest-Priority Additions
-1. POS permission-negative role matrix
+1. POS permission-negative role matrix, including terminal API route denials and POS shell parity
 2. storefront payment failure and retry matrix
 3. upload/media malicious file denial coverage
 4. kitchen/KDS permission and realtime behavior
