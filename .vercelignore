@@ -1,0 +1,36 @@
+# Secrets / local env
+.env
+.env.local
+.env.*.local
+.env.staging.local
+
+# Dev / QA (not needed at runtime on Vercel)
+tests/
+e2e/
+docs/
+coverage/
+.playwright/
+logterminal.txt
+tmp/
+archive/
+
+# Large / local-only (prebuilt deploy uploads .vercel/output + minimal source)
+node_modules/
+.next/
+.next/cache/
+.next-broken*/
+.next-broken*
+.vercel/output-broken*/
+
+# Ops-only (keep ensure-* shims used by install; prebuilt skips remote build)
+scripts/ops/
+
+# Reduce upload size for CLI deploys (build runs locally)
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+README.md
+CHANGELOG.md
+CONTRIBUTING.md

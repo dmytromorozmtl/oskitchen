@@ -1,0 +1,126 @@
+# Required storefront quality gate for staging / production promotion.
+# Configure in GitHub: Settings → Branches → main → required checks → "Storefront staging gate"
+#
+# Repo variables (staging project):
+#   PLAYWRIGHT_BASE_URL — https://your-staging-host (no trailing slash)
+# Repo secrets:
+#   E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD (optional builder specs)
+#   E2E_STORE_SLUG or variable E2E_STOREFRONT_SLUG
+
+name: Storefront staging gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/s/**"
+      - "components/storefront/**"
+      - "lib/storefront/**"
+      - "actions/storefront*.ts"
+      - "services/storefront/**"
+      - "e2e/storefront*.ts"
+      - "docs/STOREFRONT_*"
+  pull_request:
+    paths:
+      - "app/s/**"
+      - "components/storefront/**"
+      - "lib/storefront/**"
+      - "e2e/storefront*.ts"
+
+concurrency:
+  group: storefront-staging-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Unit tests (storefront + global)
+        run: npm test
+
+      - name: Storefront env check (no secrets printed)
+        run: npm run check-env:storefront
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+          STOREFRONT_MIDDLEWARE_SECRET: ${{ secrets.STOREFRONT_MIDDLEWARE_SECRET }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          STOREFRONT_CHECK_STRIPE: ${{ vars.STOREFRONT_CHECK_STRIPE }}
+          STOREFRONT_CHECK_EMAIL: ${{ vars.STOREFRONT_CHECK_EMAIL || '1' }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ vars.RESEND_FROM_EMAIL }}
+
+      - name: Block if staging URL not configured
+        if: ${{ vars.PLAYWRIGHT_BASE_URL == '' }}
+        run: |
+          echo "::warning::PLAYWRIGHT_BASE_URL not set — skipping HTTP smoke. Set repo variable for full gate."
+          echo "SKIP_E2E=1" >> "$GITHUB_ENV"
+
+      - name: Storefront HTTP smoke
+        if: env.SKIP_E2E != '1'
+        env:
+          STOREFRONT_SMOKE_BASE_URL: ${{ vars.PLAYWRIGHT_BASE_URL }}
+          STOREFRONT_SMOKE_SLUG: ${{ secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}
+          STOREFRONT_SMOKE_SKIP_BUILD: "1"
+          STOREFRONT_SMOKE_WRITE_ARTIFACT: docs/artifacts/storefront-smoke-latest.md
+        run: npm run smoke:storefront-release
+
+      - name: Upload smoke artifact
+        if: always() && env.SKIP_E2E != '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: storefront-smoke-${{ github.run_id }}
+          path: docs/artifacts/storefront-smoke-latest.md
+          if-no-files-found: ignore
+
+      - name: Verify storefront returns 200 before Lighthouse
+        if: env.SKIP_E2E != '1'
+        env:
+          STOREFRONT_SMOKE_BASE_URL: ${{ vars.PLAYWRIGHT_BASE_URL }}
+          STOREFRONT_SMOKE_SLUG: ${{ secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}
+        run: |
+          BASE="${STOREFRONT_SMOKE_BASE_URL%/}"
+          SLUG="${STOREFRONT_SMOKE_SLUG}"
+          for path in "/s/${SLUG}/menu" "/s/${SLUG}/cart" "/s/${SLUG}/checkout"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "${BASE}${path}" || echo "000")
+            echo "${path} → ${code}"
+            if [[ "$code" != "200" ]]; then
+              echo "::error::Storefront ${path} returned ${code} — fix deploy before Lighthouse"
+              exit 1
+            fi
+          done
+
+      - name: Lighthouse storefront (staging)
+        if: env.SKIP_E2E != '1'
+        id: lighthouse
+        continue-on-error: ${{ vars.LHCI_STRICT != '1' }}
+        env:
+          LHCI_BASE_URL: ${{ vars.PLAYWRIGHT_BASE_URL }}
+          E2E_STORE_SLUG: ${{ secrets.E2E_STORE_SLUG || vars.E2E_STOREFRONT_SLUG || 'demo' }}
+          LHCI_VANITY_HOSTS: ${{ vars.LHCI_VANITY_HOSTS }}
+        run: npm run lighthouse:storefront
+
+      - name: Fail gate when LHCI_STRICT=1 and Lighthouse failed
+        if: env.SKIP_E2E != '1' && vars.LHCI_STRICT == '1' && steps.lighthouse.outcome == 'failure'
+        run: |
+          echo "::error::Lighthouse below threshold (LHCI_STRICT=1). Fix perf before promotion."
+          exit 1
+
+      # Also mark required: "Playwright storefront" (playwright-storefront.yml) when PLAYWRIGHT_BASE_URL is set.

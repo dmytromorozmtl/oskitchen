@@ -1,0 +1,66 @@
+[
+  {
+    "path": "/api/cron/webhook-jobs",
+    "schedule": "*/5 * * * *"
+  },
+  {
+    "path": "/api/cron/reminders",
+    "schedule": "0 14 * * *"
+  },
+  {
+    "path": "/api/cron/storefront-domain-recheck",
+    "schedule": "0 */6 * * *"
+  },
+  {
+    "path": "/api/cron/storefront-cart-recovery",
+    "schedule": "*/30 * * * *"
+  },
+  {
+    "path": "/api/cron/storefront-theme-publish",
+    "schedule": "*/15 * * * *"
+  },
+  {
+    "path": "/api/cron/storefront-team-invite-reminders",
+    "schedule": "0 10 * * *"
+  },
+  {
+    "path": "/api/cron/storefront-webhook-retention",
+    "schedule": "15 4 * * *"
+  },
+  {
+    "path": "/api/cron/storefront-invite-audit-retention",
+    "schedule": "0 3 * * 0"
+  },
+  {
+    "path": "/api/cron/storefront-ga4-parity",
+    "schedule": "30 */6 * * *"
+  },
+  {
+    "path": "/api/cron/storefront-edge-sync",
+    "schedule": "*/2 * * * *"
+  },
+  {
+    "path": "/api/cron/pilot-daily-health",
+    "schedule": "0 8 * * *"
+  },
+  {
+    "path": "/api/cron/meal-plan-auto-renew",
+    "schedule": "0 6 * * *"
+  },
+  {
+    "path": "/api/cron/menu-rotation",
+    "schedule": "0 7 * * *"
+  },
+  {
+    "path": "/api/cron/doordash-sync",
+    "schedule": "*/5 * * * *"
+  },
+  {
+    "path": "/api/cron/kds-overdue-alerts",
+    "schedule": "*/10 * * * *"
+  },
+  {
+    "path": "/api/cron/incident-remediation-reminders",
+    "schedule": "17 * * * *"
+  }
+]

@@ -1,0 +1,4 @@
+{
+  "paths": [],
+  "_comment": "Burn-down list only. Hot paths must use workspace-resource-scope helpers — keep empty when pilot guard is clean."
+}

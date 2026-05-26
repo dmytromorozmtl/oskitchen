@@ -1,0 +1,92 @@
+{
+  "feedback": {
+    "betaFeedbackCount": 0,
+    "appFeedbackCount": 0,
+    "topCategories": [],
+    "recent": []
+  },
+  "staffTemplates": {
+    "OWNER": [
+      "orders:read",
+      "orders:write",
+      "orders:cancel",
+      "pos:operate",
+      "pos:close_shift",
+      "production:run",
+      "packing:verify",
+      "routes:assign",
+      "inventory:read",
+      "inventory:write",
+      "staff:manage",
+      "billing:manage",
+      "integrations:manage",
+      "exports:sensitive",
+      "platform:impersonation"
+    ],
+    "MANAGER": [
+      "orders:read",
+      "orders:write",
+      "pos:operate",
+      "production:run",
+      "packing:verify",
+      "routes:assign",
+      "inventory:read",
+      "inventory:write",
+      "staff:manage",
+      "integrations:manage"
+    ],
+    "KITCHEN_LEAD": [
+      "orders:read",
+      "production:run",
+      "packing:verify",
+      "inventory:read"
+    ],
+    "PREP_COOK": [
+      "orders:read",
+      "production:run"
+    ],
+    "LINE_COOK": [
+      "orders:read",
+      "production:run"
+    ],
+    "PACKER": [
+      "orders:read",
+      "packing:verify"
+    ],
+    "DRIVER": [
+      "orders:read",
+      "routes:assign"
+    ],
+    "CUSTOMER_SERVICE": [
+      "orders:read",
+      "orders:write"
+    ],
+    "CATERING_COORDINATOR": [
+      "orders:read",
+      "orders:write"
+    ],
+    "PURCHASING": [
+      "orders:read",
+      "inventory:read",
+      "inventory:write"
+    ],
+    "INVENTORY": [
+      "inventory:read",
+      "inventory:write"
+    ],
+    "ACCOUNTING": [
+      "orders:read",
+      "exports:sensitive"
+    ],
+    "MARKETING": [
+      "orders:read"
+    ],
+    "VIEWER": [
+      "orders:read",
+      "inventory:read"
+    ],
+    "CUSTOM": [
+      "orders:read"
+    ]
+  }
+}

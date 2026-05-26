@@ -1,0 +1,42 @@
+# Staging E2E — runs when repository secrets are configured.
+# Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_PASSWORD
+# Optional: E2E_STOREFRONT_SLUG (default hello), DATABASE_URL for DB-backed checks
+
+name: E2E Staging
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  staging-e2e:
+    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_PASSWORD != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install chromium --with-deps
+
+      - name: Platform + auth smoke
+        run: npx playwright test tests/e2e/platform-access-denial.spec.ts e2e/smoke.spec.ts --project=chromium
+        env:
+          CI: "1"
+          PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+
+      - name: Storefront smoke
+        if: ${{ vars.E2E_STOREFRONT_SLUG != '' }}
+        run: npx playwright test e2e/storefront.spec.ts --project=chromium
+        env:
+          CI: "1"
+          PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_STOREFRONT_SLUG: ${{ vars.E2E_STOREFRONT_SLUG }}

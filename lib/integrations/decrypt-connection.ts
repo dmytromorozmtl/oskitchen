@@ -1,0 +1,32 @@
+import type { IntegrationConnection } from "@prisma/client";
+
+import { decryptOptional } from "@/lib/crypto";
+
+import type { ShopifyCredentials } from "@/services/integrations/shopify";
+import type { WooCredentials } from "@/services/integrations/woocommerce";
+
+export function getWooCommerceCredentials(conn: IntegrationConnection): WooCredentials | null {
+  const baseUrl = conn.baseUrl?.trim();
+  const consumerKey = decryptOptional(conn.consumerKeyEncrypted);
+  const consumerSecret = decryptOptional(conn.consumerSecretEncrypted);
+  if (!baseUrl || !consumerKey || !consumerSecret) return null;
+  return { baseUrl, consumerKey, consumerSecret };
+}
+
+export function getShopifyCredentials(
+  conn: IntegrationConnection,
+  apiVersion?: string,
+): ShopifyCredentials | null {
+  const shopDomain = conn.shopDomain?.trim();
+  const adminAccessToken = decryptOptional(conn.accessTokenEncrypted);
+  if (!shopDomain || !adminAccessToken) return null;
+  return {
+    shopDomain,
+    adminAccessToken,
+    apiVersion: apiVersion ?? (conn.settingsJson as { apiVersion?: string } | null)?.apiVersion,
+  };
+}
+
+export function getWebhookSecret(conn: IntegrationConnection): string | null {
+  return decryptOptional(conn.webhookSecretEncrypted);
+}

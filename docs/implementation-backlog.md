@@ -1,0 +1,399 @@
+# KitchenOS Implementation Backlog
+
+Status: canonical execution backlog grouped by strategic priority
+Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
+
+## P0 — Platform Safety
+### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
+- ID: `KOS-P0-001`
+- Title: Canonical RBAC rollout for sensitive mutations
+- Module: Platform / security
+- Priority: P0
+- Owner role: Platform architect
+- Business value: prevents trust-breaking authorization gaps
+- Technical value: unifies fragmented permission logic
+- User story: as an owner or operator, I need permissions to be predictable and enforced server-side
+- Current state: mixed central registry, legacy fallback, and domain-specific gates
+- Target state: canonical permission registry and helpers protect all high-risk mutations
+- Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
+- Dependencies: none
+- Implementation steps: define registry, add helpers, migrate high-risk modules, add denial audits, add scanner
+- Data model changes: minimal initially; code-first
+- Service changes: permission resolution and denial logging
+- UI changes: permission-aware nav and denied states
+- Permission changes: large
+- Audit log requirements: denial + success for sensitive actions
+- Analytics requirements: optional denial counters
+- Tests required: negative role tests, scanner, route guard tests
+- Acceptance criteria: all P0 mutations use canonical permission helpers
+- Rollback considerations: keep legacy adapter during migration
+- Risk level: High
+- Estimated complexity: High
+
+### KOS-P0-002 — POS permission hardening
+- ID: `KOS-P0-002`
+- Title: POS permission hardening
+- Module: POS
+- Priority: P0
+- Owner role: Restaurant operations architect
+- Business value: protects financial operations and operator trust
+- Technical value: creates reusable permission pattern for other domains
+- User story: as a cashier or manager, I should only be able to perform authorized POS actions
+- Current state: refunds/voids are better protected than checkout/register/shift flows
+- Target state: all POS mutations and route handlers require explicit POS capabilities
+- Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`
+- Dependencies: `KOS-P0-001`
+- Implementation steps: add POS permissions, wrap actions/routes, align UI gates, add negative tests
+- Data model changes: none required initially
+- Service changes: permission injection and manager override checks
+- UI changes: denied states and clearer role affordances
+- Permission changes: POS-specific keys
+- Audit log requirements: overrides, refunds, voids, shift/register changes
+- Analytics requirements: optional denied action telemetry
+- Tests required: POS E2E, refund/void, role-negative
+- Acceptance criteria: unauthorized staff cannot perform protected POS actions
+- Rollback considerations: preserve legacy fallback during transition
+- Risk level: High
+- Estimated complexity: Medium to High
+
+### KOS-P0-003 — Upload and media hardening
+- ID: `KOS-P0-003`
+- Title: Upload and media hardening
+- Module: Storefront / uploads
+- Priority: P0
+- Owner role: Security lead
+- Business value: prevents unsafe content and protects brand trust
+- Technical value: centralizes file validation
+- User story: as an operator, I need uploads to be safe and predictable
+- Current state: storefront media path validates more than generic upload actions
+- Target state: all upload entrypoints share one hardened validation policy
+- Affected files: `actions/upload.ts`, `actions/storefront-media.ts`, `services/storefront/storefront-media-upload-service.ts`, storage helpers
+- Dependencies: `KOS-P0-001`
+- Implementation steps: central validator, unify policies, add audit and error states, consider scan hook
+- Data model changes: optional file scan metadata later
+- Service changes: centralized upload policy
+- UI changes: clearer upload denial and setup states
+- Permission changes: `storefront.media.manage` and related export/upload keys
+- Audit log requirements: upload success/failure where sensitive
+- Analytics requirements: upload failure rates
+- Tests required: MIME/size/malicious upload tests
+- Acceptance criteria: unsafe uploads are denied consistently
+- Rollback considerations: keep existing provider abstractions
+- Risk level: High
+- Estimated complexity: Medium
+
+## P1 — Restaurant Core
+### KOS-P1-001 — Storefront payment failure recovery
+- ID: `KOS-P1-001`
+- Title: Storefront payment failure recovery
+- Module: Storefront
+- Priority: P1
+- Owner role: Commerce lead
+- Business value: protects direct-order revenue
+- Technical value: stabilizes a flagship path
+- User story: as a customer or operator, I need failed checkouts to be recoverable and visible
+- Current state: strong checkout validation, partial recovery/observability maturity
+- Target state: deterministic payment failure lifecycle with retry and support guidance
+- Affected files: `actions/storefront-order.ts`, `services/storefront/storefront-payment-service.ts`, storefront checkout UI
+- Dependencies: none
+- Implementation steps: define failure states, improve UI, add reporting and traces
+- Data model changes: optional payment failure metadata
+- Service changes: retry/recovery handlers
+- UI changes: failure/retry state components
+- Permission changes: operator-side storefront management only
+- Audit log requirements: payment failure and retry events
+- Analytics requirements: failure rate and recovery rate
+- Tests required: payment success/failure matrix, duplicate handling tests
+- Acceptance criteria: failed payments no longer leave ambiguous operator/customer state
+- Rollback considerations: keep canonical order writer unchanged
+- Risk level: Medium
+- Estimated complexity: Medium
+
+### KOS-P1-002 — KDS permission and bump/recall foundation
+- ID: `KOS-P1-002`
+- Title: KDS permission and bump/recall foundation
+- Module: Kitchen ops
+- Priority: P1
+- Owner role: Kitchen operations lead
+- Business value: moves KDS toward restaurant-grade usage
+- Technical value: creates a coherent kitchen state machine
+- User story: as kitchen staff or expo, I need live ticket actions that are fast and permissioned
+- Current state: kitchen-routing and KDS-adjacent services exist, but are fragmented
+- Target state: canonical kitchen permissions and bump/recall/rush ticket workflow
+- Affected files: kitchen services, `actions/kitchen-daily-kds.ts`, future KDS UI shells
+- Dependencies: `KOS-P0-001`
+- Implementation steps: define kitchen permissions, state machine, UI shells, negative tests
+- Data model changes: ticket/item action states
+- Service changes: bump/recall orchestration
+- UI changes: readable KDS actions
+- Permission changes: `kitchen.*`
+- Audit log requirements: bump, recall, config changes
+- Analytics requirements: timer/SLA tracking
+- Tests required: realtime KDS tests, negative permission tests
+- Acceptance criteria: unauthorized users cannot mutate kitchen state
+- Rollback considerations: keep production/packing flows intact
+- Risk level: Medium
+- Estimated complexity: High
+
+### KOS-P1-003 — Inventory depletion and variance closure
+- ID: `KOS-P1-003`
+- Title: Inventory depletion and variance closure
+- Module: Inventory / costing
+- Priority: P1
+- Owner role: Ops / finance lead
+- Business value: makes inventory and costing credible
+- Technical value: links sales and economics
+- User story: as an owner, I need sales to deplete stock and variance reports to mean something
+- Current state: pending inventory impacts and foundational inventory/counting workflows
+- Target state: end-to-end depletion and usable variance reporting
+- Affected files: `services/pos/pos-inventory-impact-service.ts`, inventory and costing services
+- Dependencies: canonical permissions for inventory
+- Implementation steps: finalize depletion linkage, add variance reporting, surface operator diagnostics
+- Data model changes: impact/variance snapshots if needed
+- Service changes: depletion and reconciliation services
+- UI changes: pending vs configured inventory visibility
+- Permission changes: `inventory.*`, `costing.manage`
+- Audit log requirements: adjustments and reconciliations
+- Analytics requirements: variance KPIs
+- Tests required: depletion integration tests, costing tests
+- Acceptance criteria: sales deplete inventory and variance is understandable
+- Rollback considerations: additive with safe fallbacks
+- Risk level: Medium
+- Estimated complexity: High
+
+### KOS-P1-004 — Staff role parity across POS/KDS/schedule
+- ID: `KOS-P1-004`
+- Title: Staff role parity across POS, KDS, and schedule
+- Module: Workforce
+- Priority: P1
+- Owner role: People systems lead
+- Business value: aligns workforce and operations
+- Technical value: reduces permission sprawl
+- User story: as an owner, I need staff roles to govern what people can actually do
+- Current state: staff and training permissions are domain-specific
+- Target state: staff roles map directly to canonical capabilities
+- Affected files: `actions/staff.ts`, `actions/training.ts`, `lib/staff/**`, `lib/training/**`
+- Dependencies: `KOS-P0-001`
+- Implementation steps: map roles to capabilities, update role management, add tests
+- Data model changes: custom role mapping if needed
+- Service changes: role resolution
+- UI changes: role editor and permission summaries
+- Permission changes: broad
+- Audit log requirements: role assignment/change logs
+- Analytics requirements: none initially
+- Tests required: staff role and permission-negative tests
+- Acceptance criteria: staff permissions map to real operational actions
+- Rollback considerations: transitional adapters
+- Risk level: Medium
+- Estimated complexity: Medium
+
+## P2 — Growth And Intelligence
+### KOS-P2-001 — Loyalty and gift-card cross-channel certification
+- ID: `KOS-P2-001`
+- Title: Loyalty and gift-card cross-channel certification
+- Module: CRM / growth
+- Priority: P2
+- Owner role: Growth lead
+- Business value: stronger retention and direct revenue
+- Technical value: unifies incentives across surfaces
+- User story: as a customer, I need rewards and balances to work online and in-store
+- Current state: foundations exist, parity is not fully certified
+- Target state: online and POS parity with clear operator diagnostics
+- Affected files: `actions/loyalty.ts`, `actions/gift-cards.ts`, related services
+- Dependencies: POS and storefront hardening
+- Implementation steps: close parity gaps, add runbooks and tests
+- Data model changes: optional redemption history refinements
+- Service changes: unified redemption flows
+- UI changes: wallet/balance/redeem states
+- Permission changes: `loyalty.manage`, `giftcards.manage`
+- Audit log requirements: issue/redeem/reversal events
+- Analytics requirements: redemption attribution
+- Tests required: loyalty/gift-card parity suites
+- Acceptance criteria: incentives work across channels without ambiguity
+- Rollback considerations: keep current reward logic stable
+- Risk level: Medium
+- Estimated complexity: Medium
+
+### KOS-P2-002 — Consent-aware campaign and attribution engine
+- ID: `KOS-P2-002`
+- Title: Consent-aware campaign and attribution engine
+- Module: Growth / marketing
+- Priority: P2
+- Owner role: Growth architect
+- Business value: turns CRM into measurable revenue
+- Technical value: formalizes growth event model
+- User story: as a marketer, I need campaigns that respect consent and show impact
+- Current state: growth services exist, automation and attribution are partial
+- Target state: consent-first campaign orchestration with revenue attribution
+- Affected files: CRM/growth services, campaign surfaces, consent helpers
+- Dependencies: CRM metric maturity
+- Implementation steps: consent model, event model, attribution reports, approval workflow
+- Data model changes: campaign, send, attribution records
+- Service changes: eventing and campaign services
+- UI changes: composer, segment targeting, attribution dashboards
+- Permission changes: `campaigns.manage`
+- Audit log requirements: send approvals and consent denials
+- Analytics requirements: attribution rollups
+- Tests required: consent and attribution tests
+- Acceptance criteria: campaigns are attributable and consent-aware
+- Rollback considerations: start with drafts and internal send paths
+- Risk level: Medium
+- Estimated complexity: High
+
+### KOS-P2-003 — Deterministic operations insights
+- ID: `KOS-P2-003`
+- Title: Deterministic operations insights
+- Module: Intelligence
+- Priority: P2
+- Owner role: Data/product lead
+- Business value: gives owners immediate value without risky AI claims
+- Technical value: builds clean data products before generative layers
+- User story: as an owner, I want to know what is selling, what is slowing, and what needs attention
+- Current state: analytics and forecast surfaces exist, but insight packaging is partial
+- Target state: explainable insights for sales, margin, waste, bottlenecks, and prep
+- Affected files: `services/ai/`, `services/forecast/`, analytics/reporting services
+- Dependencies: reporting and data quality hardening
+- Implementation steps: deterministic insight cards, evidence links, alert thresholds
+- Data model changes: snapshot/insight records optionally
+- Service changes: insight generation services
+- UI changes: owner dashboard and insight panels
+- Permission changes: `analytics.view`
+- Audit log requirements: none required initially
+- Analytics requirements: insight usage tracking
+- Tests required: insight logic tests
+- Acceptance criteria: insights are explainable and useful without AI overreach
+- Rollback considerations: additive
+- Risk level: Low to Medium
+- Estimated complexity: Medium
+
+## P3 — Enterprise Expansion
+### KOS-P3-001 — Enterprise identity roadmap implementation
+- ID: `KOS-P3-001`
+- Title: Enterprise identity roadmap implementation
+- Module: Enterprise platform
+- Priority: P3
+- Owner role: Security architect
+- Business value: unlocks enterprise deals
+- Technical value: reduces identity risk and manual support
+- User story: as an enterprise admin, I need federated identity and lifecycle controls
+- Current state: roadmap only
+- Target state: phased SSO/SAML/SCIM implementation
+- Affected files: auth, platform, org/workspace identity layers
+- Dependencies: RBAC canon and platform governance
+- Implementation steps: architecture, pilot SSO, SCIM roadmap, support runbooks
+- Data model changes: identity provider mappings
+- Service changes: enterprise auth provisioning
+- UI changes: enterprise identity settings
+- Permission changes: platform/admin settings
+- Audit log requirements: identity admin actions
+- Analytics requirements: optional auth health
+- Tests required: enterprise auth tests
+- Acceptance criteria: enterprise identity is real before sales claims
+- Rollback considerations: keep native auth intact
+- Risk level: High
+- Estimated complexity: High
+
+### KOS-P3-002 — Audit export and governance package
+- ID: `KOS-P3-002`
+- Title: Audit export and governance package
+- Module: Enterprise governance
+- Priority: P3
+- Owner role: Platform lead
+- Business value: supports enterprise trust and procurement
+- Technical value: formalizes audit and retention posture
+- User story: as an auditor or enterprise admin, I need exportable, scoped evidence
+- Current state: audit infra exists, export maturity partial
+- Target state: permissioned audit export with retention controls and runbooks
+- Affected files: audit services, export routes, governance docs
+- Dependencies: RBAC canon
+- Implementation steps: export path, filters, permissions, runbook, retention docs
+- Data model changes: optional export job tracking
+- Service changes: audit export services
+- UI changes: export/admin surfaces
+- Permission changes: `audit.view`, `audit.export`
+- Audit log requirements: export initiated/completed
+- Analytics requirements: export usage stats
+- Tests required: export permission tests
+- Acceptance criteria: enterprise audit exports are trustworthy and scoped
+- Rollback considerations: additive
+- Risk level: Medium
+- Estimated complexity: Medium
+
+## P4 — Long-Term Domination
+### KOS-P4-001 — Restaurant-grade table service and bar mode
+- ID: `KOS-P4-001`
+- Title: Restaurant-grade table service and bar mode
+- Module: FOH
+- Priority: P4
+- Owner role: Restaurant product lead
+- Business value: opens larger restaurant segment
+- Technical value: expands FOH depth
+- User story: as a full-service restaurant, I need table, check, and bar workflows that feel native
+- Current state: preview foundations only
+- Target state: robust table service and bar workflows
+- Affected files: table and POS surfaces
+- Dependencies: POS permission hardening
+- Implementation steps: floor plan, checks, tabs, coursing, bar speed paths
+- Data model changes: tables/checks/seat models
+- Service changes: table/bar orchestration
+- UI changes: FOH shells
+- Permission changes: `tables.*`, `checks.*`
+- Audit log requirements: table transfer/merge/close events
+- Analytics requirements: FOH metrics
+- Tests required: table/bar E2E
+- Acceptance criteria: service restaurants can run live operations
+- Rollback considerations: ship in phases
+- Risk level: High
+- Estimated complexity: High
+
+### KOS-P4-002 — Certified kiosk and QR table commerce
+- ID: `KOS-P4-002`
+- Title: Certified kiosk and QR table commerce
+- Module: Omnichannel
+- Priority: P4
+- Owner role: Commerce lead
+- Business value: expands self-service ordering
+- Technical value: extends order spine cleanly
+- User story: as a guest, I want fast self-service ordering that attaches correctly to the restaurant workflow
+- Current state: partial QR surfaces, no certified kiosk
+- Target state: production-grade self-service ordering
+- Affected files: storefront, table, POS, checkout
+- Dependencies: storefront and table maturity
+- Implementation steps: kiosk shell, QR attach, pay-at-table, recovery
+- Data model changes: kiosk/table session models
+- Service changes: self-service orchestration
+- UI changes: kiosk/QR flows
+- Permission changes: storefront and table permissions
+- Audit log requirements: session/order attach logs
+- Analytics requirements: self-service conversion
+- Tests required: QR/kiosk E2E
+- Acceptance criteria: self-service flows are safe and recoverable
+- Rollback considerations: start with QR menus before payment
+- Risk level: High
+- Estimated complexity: High
+
+### KOS-P4-003 — AI-assisted operational optimization
+- ID: `KOS-P4-003`
+- Title: AI-assisted operational optimization
+- Module: Intelligence
+- Priority: P4
+- Owner role: Data/AI lead
+- Business value: long-term differentiation
+- Technical value: compounds value of unified data model
+- User story: as an owner, I want explainable recommendations that improve margin and service
+- Current state: preview AI/copilot and forecast foundations
+- Target state: explainable, approval-first operational optimization suite
+- Affected files: AI, forecast, analytics, CRM surfaces
+- Dependencies: deterministic insights, data quality, privacy governance
+- Implementation steps: deterministic insights first, then draft recommendations, then constrained optimization
+- Data model changes: insight/recommendation tracking
+- Service changes: recommendation services
+- UI changes: approval and explanation panels
+- Permission changes: intelligence and campaign permissions
+- Audit log requirements: recommendation approvals and sends
+- Analytics requirements: adoption and outcome tracking
+- Tests required: safety, privacy, explanation, approval tests
+- Acceptance criteria: AI remains explainable and operator-controlled
+- Rollback considerations: keep preview/beta labels until proven
+- Risk level: Medium to High
+- Estimated complexity: High

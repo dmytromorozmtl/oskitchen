@@ -1,0 +1,140 @@
+{
+  "statuses": ["GA", "BETA", "PILOT_ONLY", "INTERNAL", "HIDDEN"],
+  "businessTypes": [
+    "MEAL_PREP",
+    "CATERING",
+    "GHOST_KITCHEN",
+    "FULL_SERVICE",
+    "COMMISSARY",
+    "FOOD_TRUCK",
+    "BAKERY"
+  ],
+  "modules": [
+    {
+      "id": "storefront",
+      "label": "Storefront",
+      "status": "GA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Core differentiator; owned commerce surface."
+    },
+    {
+      "id": "pos",
+      "label": "POS",
+      "status": "BETA",
+      "defaultEnabledFor": ["FULL_SERVICE", "FOOD_TRUCK", "BAKERY", "GHOST_KITCHEN"],
+      "notes": "Operationally real, but hardware/native parity and broader regression coverage still trail category leaders."
+    },
+    {
+      "id": "kds",
+      "label": "Kitchen display system",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Real operator surface with more polish still needed."
+    },
+    {
+      "id": "production",
+      "label": "Production planning",
+      "status": "GA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "COMMISSARY", "BAKERY"],
+      "notes": "Core KitchenOS strength."
+    },
+    {
+      "id": "packing",
+      "label": "Packing and verification",
+      "status": "GA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "COMMISSARY", "BAKERY"],
+      "notes": "Core downstream operations surface."
+    },
+    {
+      "id": "routes",
+      "label": "Routes and delivery operations",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FOOD_TRUCK"],
+      "notes": "Real routing surface; optimization and self-serve depth still growing."
+    },
+    {
+      "id": "crm",
+      "label": "CRM and customers",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "BAKERY"],
+      "notes": "Real customer layer, not yet full marketing automation stack."
+    },
+    {
+      "id": "billing",
+      "label": "Billing and subscriptions",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Plan/billing flows are real; enterprise finance depth remains separate."
+    },
+    {
+      "id": "analytics",
+      "label": "Analytics and reporting",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Useful today, but still expanding toward investor-grade and prime-cost views."
+    },
+    {
+      "id": "copilot",
+      "label": "AI Copilot",
+      "status": "PILOT_ONLY",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "BAKERY"],
+      "notes": "Real AI architecture exists, but workflow depth and ROI proof are still maturing."
+    },
+    {
+      "id": "food_safety",
+      "label": "Food safety and HACCP",
+      "status": "PILOT_ONLY",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Real base surfaces exist; do not market as full compliance suite yet."
+    },
+    {
+      "id": "accounting",
+      "label": "Accounting and GL-adjacent operations",
+      "status": "PILOT_ONLY",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "COMMISSARY", "BAKERY"],
+      "notes": "AP and finance ops surfaces exist; not a full GL."
+    },
+    {
+      "id": "training",
+      "label": "Training",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Good operational base; certification/LMS depth still roadmap."
+    },
+    {
+      "id": "nutrition_labels",
+      "label": "Nutrition labels",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "COMMISSARY", "BAKERY"],
+      "notes": "Operationally useful, but enterprise compliance depth remains incomplete."
+    },
+    {
+      "id": "purchasing",
+      "label": "Purchasing",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "COMMISSARY", "BAKERY", "FULL_SERVICE"],
+      "notes": "Useful purchasing/AP ops base; invoice-to-inventory still roadmap."
+    },
+    {
+      "id": "white_label",
+      "label": "White-label",
+      "status": "PILOT_ONLY",
+      "defaultEnabledFor": [],
+      "notes": "Explicitly placeholder-gated today; do not sell as finished."
+    },
+    {
+      "id": "franchise",
+      "label": "Franchise and multi-brand benchmarking",
+      "status": "HIDDEN",
+      "defaultEnabledFor": [],
+      "notes": "Roadmap only."
+    },
+    {
+      "id": "kiosk_qr",
+      "label": "Kiosk and QR ordering",
+      "status": "HIDDEN",
+      "defaultEnabledFor": [],
+      "notes": "Roadmap only."
+    }
+  ]
+}

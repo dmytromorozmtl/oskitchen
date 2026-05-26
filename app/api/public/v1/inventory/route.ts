@@ -1,0 +1,31 @@
+import { NextResponse } from "next/server";
+
+import { guardPublicApi, isGuardError } from "@/lib/api-public/guard";
+import { prisma } from "@/lib/prisma";
+
+export async function GET(request: Request) {
+  const guard = await guardPublicApi(request, "public_api_inventory_get");
+  if (isGuardError(guard)) return guard.response;
+
+  const ingredients = await prisma.ingredient.findMany({
+    where: { userId: guard.userId, active: true },
+    take: 200,
+    select: {
+      id: true,
+      name: true,
+      unit: true,
+      currentStock: true,
+      parLevel: true,
+      costPerUnit: true,
+    },
+  });
+
+  return NextResponse.json({
+    data: ingredients.map((i) => ({
+      ...i,
+      currentStock: i.currentStock.toString(),
+      parLevel: i.parLevel.toString(),
+      costPerUnit: i.costPerUnit.toString(),
+    })),
+  });
+}

@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-05-17T19:12:45.235Z",
+  "step": 0,
+  "ok": false,
+  "env": {
+    "step": 0,
+    "ok": true,
+    "missing": [],
+    "optionalMissing": [
+      "E2E_STAFF_PASSWORD"
+    ]
+  },
+  "validations": [
+    {
+      "key": "SMOKE_BASE_URL",
+      "ok": true,
+      "message": "URL ok (staging...)"
+    },
+    {
+      "key": "SMOKE_PUBLIC_API_KEY",
+      "ok": false,
+      "message": "API key too short",
+      "hint": "kos_... from staging settings"
+    },
+    {
+      "key": "SMOKE_DELIVERY_CONNECTION_ID_OTHER",
+      "ok": false,
+      "message": "Must be a valid UUID",
+      "hint": "Copy tenant B delivery connection id from staging DB"
+    },
+    {
+      "key": "E2E_LOGIN_EMAIL",
+      "ok": false,
+      "message": "Invalid email format",
+      "hint": "owner@kitchen.com"
+    },
+    {
+      "key": "E2E_LOGIN_PASSWORD",
+      "ok": false,
+      "message": "Password too short",
+      "hint": "Min 4 characters"
+    },
+    {
+      "key": "DATABASE_URL",
+      "ok": true,
+      "message": "PostgreSQL URL shape ok"
+    },
+    {
+      "key": "E2E_STAFF_EMAIL",
+      "ok": true,
+      "message": "Email format ok"
+    },
+    {
+      "key": "SMOKE_DELIVERY_CONNECTION_ID",
+      "ok": false,
+      "message": "Must be a valid UUID",
+      "hint": "Copy tenant B delivery connection id from staging DB"
+    }
+  ],
+  "guard": {
+    "ok": false,
+    "blockers": [
+      "Staging prep artifact not green"
+    ],
+    "warnings": []
+  },
+  "connectivity": {
+    "smokeUrl": {
+      "ok": false,
+      "message": "Could not reach https://staging... (tried /api/health, /)"
+    },
+    "database": {
+      "ok": true,
+      "message": "Database SELECT 1 ok",
+      "skipped": false
+    }
+  }
+}

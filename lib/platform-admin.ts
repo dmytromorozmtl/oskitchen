@@ -1,0 +1,95 @@
+import { redirect } from "next/navigation";
+
+import type { PlatformRole, UserRole } from "@prisma/client";
+
+import { requireSessionUser } from "@/lib/auth";
+import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasSuperAdminRoleRow, isSuperAdminUser } from "@/lib/platform-super-bypass";
+import { prisma } from "@/lib/prisma";
+
+export { PLATFORM_ROOT_EMAIL, isSuperAdminEmail } from "@/lib/platform-owner";
+export { isSuperAdminUser } from "@/lib/platform-super-bypass";
+
+const PLATFORM_STAFF_ROLES: PlatformRole[] = [
+  "SUPER_ADMIN",
+  "PLATFORM_ADMIN",
+  "SUPPORT_ADMIN",
+  "IMPLEMENTATION_ADMIN",
+  "GROWTH_ADMIN",
+  "PARTNER_ADMIN",
+  "STANDARD_USER",
+];
+
+export async function isPlatformAdmin(userId: string, email?: string | null): Promise<boolean> {
+  if (isSuperAdminEmail(email)) return true;
+  const row = await prisma.platformUserRole.findFirst({
+    where: { userId, role: { in: PLATFORM_STAFF_ROLES } },
+    select: { id: true },
+  });
+  return Boolean(row);
+}
+
+export async function getPlatformRolesForUser(userId: string): Promise<PlatformRole[]> {
+  const rows = await prisma.platformUserRole.findMany({
+    where: { userId },
+    select: { role: true },
+  });
+  return rows.map((r) => r.role);
+}
+
+export async function ensurePlatformOwnerBootstrap(
+  userId: string,
+  email: string | null | undefined,
+): Promise<void> {
+  if (!isSuperAdminEmail(email)) return;
+  await prisma.platformUserRole.upsert({
+    where: {
+      userId_role: { userId, role: "SUPER_ADMIN" },
+    },
+    create: { userId, role: "SUPER_ADMIN" },
+    update: {},
+  });
+}
+
+export async function requireSuperAdmin() {
+  const user = await requireSessionUser();
+  await ensurePlatformOwnerBootstrap(user.id, user.email ?? "");
+  const ok =
+    isSuperAdminEmail(user.email) || (await hasSuperAdminRoleRow(user.id));
+  if (!ok) redirect("/dashboard");
+  return user;
+}
+
+export async function requirePlatformRole(allowed: PlatformRole[]) {
+  const user = await requireSessionUser();
+  await ensurePlatformOwnerBootstrap(user.id, user.email ?? "");
+  if (isSuperAdminEmail(user.email)) return user;
+  const row = await prisma.platformUserRole.findFirst({
+    where: { userId: user.id, role: { in: allowed } },
+    select: { id: true },
+  });
+  if (!row) redirect("/dashboard");
+  return user;
+}
+
+export async function requirePlatformStaff() {
+  return requirePlatformRole(PLATFORM_STAFF_ROLES);
+}
+
+export async function canAccessOwnerOnlySurfaces(
+  userId: string,
+  email: string | null | undefined,
+  profileRole: UserRole,
+): Promise<boolean> {
+  if (profileRole === "OWNER") return true;
+  return isSuperAdminUser(userId, email);
+}
+
+export async function isTargetSuperAdminProtected(targetUserId: string): Promise<boolean> {
+  const profile = await prisma.userProfile.findUnique({
+    where: { id: targetUserId },
+    select: { email: true },
+  });
+  if (profile && isSuperAdminEmail(profile.email)) return true;
+  return hasSuperAdminRoleRow(targetUserId);
+}

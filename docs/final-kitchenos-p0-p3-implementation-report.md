@@ -1,0 +1,642 @@
+# KitchenOS P0-P3 Implementation Report
+
+## Executive Summary
+
+This implementation pass did not attempt a risky broad rewrite. It established a
+stronger production-grade governance baseline around:
+
+- canonical order creation enforcement
+- order PII invariant reuse and named CI-friendly coverage
+- API route classification auditing
+- production cron reconciliation aliasing
+- workspace scope auditing
+- consent-gated marketing tracker loading
+- module readiness / claims / competitor / investor documentation
+
+The system was already further along than the older gap list implied. This pass
+focused on making the remaining high-value seams more explicit, testable, and
+documented.
+
+## Files Changed
+
+- `package.json`
+- `scripts/ci-check.sh`
+- `scripts/validate-order-write-paths.ts`
+- `tests/integration/order-entrypoint-pii.integration.test.ts`
+- `tests/unit/rate-limit-hardening.test.ts`
+- `services/observability/health-check-service.ts`
+- `services/security/rate-limit-service.ts`
+- `services/security/rate-limit-memory-adapter.ts`
+- `services/security/rate-limit-redis-adapter.ts`
+- `services/security/rate-limit-tcp-redis-adapter.ts`
+- `app/api/health/route.ts`
+- `lib/analytics/marketing-consent.ts`
+- `lib/rate-limit/rate-limit-adapter-types.ts`
+- `actions/platform-impersonation.ts`
+- `app/dashboard/layout.tsx`
+- `app/dashboard/copilot/page.tsx`
+- `app/dashboard/settings/white-label/page.tsx`
+- `app/dashboard/settings/modules/page.tsx`
+- `components/analytics/cookie-consent.tsx`
+- `components/analytics/google-ads.tsx`
+- `components/analytics/meta-pixel.tsx`
+- `components/analytics/linkedin-insight.tsx`
+- `components/dashboard/dashboard-nav.tsx`
+- `components/dashboard/module-route-gate.tsx`
+- `components/dashboard/module-settings-form.tsx`
+- `actions/copilot.ts`
+- `actions/reports.ts`
+- `actions/implementation-center.ts`
+- `app/api/export/report/route.ts`
+- `app/api/export/restaurant-pnl/route.ts`
+- `app/dashboard/implementation/layout.tsx`
+- `app/dashboard/implementation/page.tsx`
+- `app/dashboard/implementation/new/page.tsx`
+- `app/dashboard/implementation/projects/page.tsx`
+- `app/dashboard/implementation/[projectId]/go-live/page.tsx`
+- `app/dashboard/implementation/checklist/page.tsx`
+- `app/dashboard/implementation/activity/page.tsx`
+- `app/dashboard/implementation/go-live/page.tsx`
+- `app/dashboard/implementation/migration/page.tsx`
+- `app/dashboard/implementation/integrations/page.tsx`
+- `app/dashboard/implementation/training/page.tsx`
+- `app/dashboard/implementation/uat/page.tsx`
+- `app/dashboard/implementation/risks/page.tsx`
+- `app/dashboard/implementation/handoff/page.tsx`
+- `app/dashboard/implementation/reports/page.tsx`
+- `app/dashboard/implementation/enterprise/page.tsx`
+- `app/dashboard/implementation/[projectId]/page.tsx`
+- `app/dashboard/implementation/[projectId]/checklist/page.tsx`
+- `app/dashboard/implementation/[projectId]/timeline/page.tsx`
+- `app/dashboard/implementation/[projectId]/training/page.tsx`
+- `app/dashboard/implementation/[projectId]/migration/page.tsx`
+- `app/dashboard/implementation/[projectId]/go-live/page.tsx`
+- `app/dashboard/implementation/[projectId]/integrations/page.tsx`
+- `app/dashboard/implementation/[projectId]/uat/page.tsx`
+- `app/dashboard/implementation/[projectId]/activity/page.tsx`
+- `app/dashboard/implementation/[projectId]/risks/page.tsx`
+- `.github/workflows/ci.yml`
+- `lib/api/with-api-guard.ts`
+- `app/api/billing/checkout/route.ts`
+- `app/api/billing/portal/route.ts`
+- `app/api/checkout/route.ts`
+- `app/api/billing-portal/route.ts`
+- `app/api/webhooks/bigquery-ga4-parity/route.ts`
+- `app/api/webhooks/bigquery-interference-matrix/route.ts`
+- `app/api/webhooks/resend/route.ts`
+- `app/api/webhooks/uber-direct/route.ts`
+- `app/dashboard/routes/uber-direct/page.tsx`
+- `app/api/webhooks/wto-upu-cross-border-ai-trade-registry/route.ts`
+- `app/api/webhooks/experiment-feature-stream-flink/route.ts`
+- `app/api/webhooks/bigquery-global-mesh-outcomes/route.ts`
+- `app/api/webhooks/cen-cenelec-digital-product-governance-registry/route.ts`
+- `app/api/webhooks/experiment-scientist-proposal/route.ts`
+- `app/api/webhooks/bigquery-causal-lift/route.ts`
+- `app/api/webhooks/nist-ai-rmf-live-control-feed/route.ts`
+- `app/api/webhooks/vertex-ml-model/route.ts`
+- `app/api/webhooks/bigquery-off-policy/route.ts`
+- `app/api/webhooks/bigquery-homomorphic-metrics/route.ts`
+- `app/api/webhooks/experiment-heliopause-dtn-bundle/route.ts`
+- `app/api/webhooks/eu-ai-office-conformity-sync/route.ts`
+- `app/api/webhooks/us-ftc-ai-transparency-live/route.ts`
+- `app/api/webhooks/experiment-feature-stream/route.ts`
+- `app/api/webhooks/bigquery-bayesian-prior/route.ts`
+- `app/api/webhooks/bigquery-federated-gradients/route.ts`
+- `app/api/webhooks/bigquery-linucb-weights/route.ts`
+- `app/api/webhooks/icao-imo-ai-aviation-registry/route.ts`
+- `app/api/webhooks/experiment-holdout-ws-push/route.ts`
+- `app/api/webhooks/itu-uncitral-digital-commerce-ai-registry/route.ts`
+- `app/api/webhooks/eu-ai-act-live-registry/route.ts`
+- `app/api/webhooks/experiment-dtn-bundle/route.ts`
+- `app/api/webhooks/experiment-cislunar-dtn-bundle/route.ts`
+- `app/api/webhooks/iso-iec-ai-standards-harmonization-registry/route.ts`
+- `app/api/webhooks/iso-42001-cert-body-attest/route.ts`
+- `app/api/webhooks/bigquery-causal-posteriors/route.ts`
+- `app/api/webhooks/bigquery-spillover-daily/route.ts`
+- `app/api/webhooks/un-ai-office-global-registry-mesh/route.ts`
+- `app/api/webhooks/bigquery-causal-discovery-outcomes/route.ts`
+- `app/api/webhooks/uk-dsit-algorithmic-transparency/route.ts`
+- `app/api/webhooks/oecd-state-ag-ai-transparency-mesh/route.ts`
+- `app/api/webhooks/eu-ai-act-art71-pmm-live/route.ts`
+- `app/api/webhooks/bigquery-workspace-acl/route.ts`
+- `app/api/storefront/resolve-host/route.ts`
+- `app/api/storefront/resolve-redirect/route.ts`
+- `app/api/storefront/theme/preview-cookie/route.ts`
+- `services/delivery/uber-direct.ts`
+- `lib/env.ts`
+- `lib/channels/channel-registry.ts`
+- `lib/channels/channel-runtime.ts`
+- `lib/integration-launch-status.ts`
+- `docs/ENVIRONMENT_VARIABLES.md`
+- `docs/UBER_DIRECT_SETUP.md`
+- `docs/UBER_DIRECT_PLACEHOLDER.md`
+- `lib/storefront/preview-token.ts`
+- `services/go-live/go-live-service.ts`
+- `app/dashboard/reports/page.tsx`
+- `app/dashboard/reports/library/page.tsx`
+- `app/dashboard/reports/[reportKey]/page.tsx`
+- `app/dashboard/reports/financial/page.tsx`
+- `app/dashboard/reports/executive/page.tsx`
+- `app/dashboard/reports/operations/page.tsx`
+- `app/dashboard/reports/saved/page.tsx`
+- `app/dashboard/reports/history/page.tsx`
+- `app/dashboard/reports/settings/page.tsx`
+- `app/dashboard/reports/enterprise/page.tsx`
+- `app/dashboard/reports/menu-engineering/page.tsx`
+- `app/dashboard/reports/financial/pnl/page.tsx`
+- `docs/product/module-readiness-matrix.md`
+- `actions/module-preferences.ts`
+- `actions/menus.ts`
+- `actions/products.ts`
+- `actions/billing.ts`
+- `actions/notifications-center.ts`
+- `actions/import-center.ts`
+- `actions/go-live.ts`
+- `actions/kitchen-task.ts`
+- `actions/channel-command-center.ts`
+- `actions/storefront-settings.ts`
+- `actions/meal-plans.ts`
+- `actions/storefront-product-public.ts`
+- `actions/storefront-pillar-settings.ts`
+- `actions/storefront-team-invite.ts`
+- `actions/storefront-webhook-delivery.ts`
+- `actions/storefront-theme-experiment.ts`
+- `actions/storefront-workspace.ts`
+- `actions/production.ts`
+- `actions/production-calendar.ts`
+- `actions/integrations.ts`
+- `actions/integration-health.ts`
+- `actions/channel-certification.ts`
+- `actions/webhook-replay.ts`
+- `actions/import-export.ts`
+- `actions/playbooks.ts`
+- `actions/integrations/doordash.ts`
+- `actions/integrations/grubhub.ts`
+- `actions/production-daily-queue.ts`
+- `actions/notification-rules.ts`
+- `actions/customer-success.ts`
+- `actions/storefront-pages.ts`
+- `actions/storefront-forms.ts`
+- `actions/storefront-media.ts`
+- `actions/storefront-advanced.ts`
+- `actions/storefront-navigation.ts`
+- `actions/storefront-blackout.ts`
+- `actions/storefront-theme-publish.ts`
+- `actions/storefront-theme-preset.ts`
+- `actions/storefront-discounts.ts`
+- `actions/storefront-markets.ts`
+- `actions/storefront-domains.ts`
+- `actions/storefront-team.ts`
+- `actions/storefront-stripe-connect.ts`
+- `actions/storefront-regional.ts`
+- `actions/storefront-experiment-settings.ts`
+- `actions/storefront-catalog-admin.ts`
+- `actions/storefront-multi-store.ts`
+- `lighthouserc.cjs`
+- `lib/nav-role-filter.ts`
+- `lib/permissions/require-workspace-permission.ts`
+- `services/platform/platform-integrations-service.ts`
+- `services/integrations/doordash/doordash-service.ts`
+- `services/integrations/grubhub/grubhub-service.ts`
+- `app/platform/health/page.tsx`
+- `app/platform/webhooks/page.tsx`
+- `app/platform/integrations/page.tsx`
+- `app/platform/workspaces/[workspaceId]/integration-health/page.tsx`
+- `components/integrations/integration-health-readonly.tsx`
+- `app/dashboard/integrations/doordash/page.tsx`
+- `app/dashboard/integrations/grubhub/page.tsx`
+- `app/api/cron/doordash-sync/route.ts`
+- `lib/integrations/integration-registry.ts`
+- `docs/ABSOLUTE_FINAL_28SESSIONS.md`
+- `tests/unit/doordash-order-import-canonical.test.ts`
+
+## Files Created
+
+- `docs/kitchenos-p0-p3-readiness-audit.md`
+- `docs/architecture/canonical-order-creation.md`
+- `tests/helpers/assert-order-pii-encrypted.ts`
+- `tests/integration/order-pii-invariant.test.ts`
+- `config/security/api-route-classification.json`
+- `scripts/audit-api-route-classification.ts`
+- `docs/security/api-route-classification.md`
+- `scripts/audit-workspace-scope.ts`
+- `docs/audits/workspace-scope-audit.md`
+- `scripts/audit-cron-production-allowlist.ts`
+- `config/product/module-readiness.json`
+- `docs/product/module-readiness-matrix.md`
+- `config/marketing/claims-registry.json`
+- `scripts/audit-marketing-claims.ts`
+- `docs/marketing/claims-governance.md`
+- `docs/marketing/case-study-template.md`
+- `docs/marketing/cta-map.md`
+- `docs/compliance/consent-script-loading.md`
+- `docs/ai/kitchenos-copilot-roadmap.md`
+- `docs/product/food-safety-haccp-roadmap.md`
+- `docs/product/accounting-gl-roadmap.md`
+- `docs/product/mobile-native-roadmap.md`
+- `docs/product/storefront-builder-roadmap.md`
+- `docs/product/competitor-gap-roadmap.md`
+- `docs/investor/kitchenos-investor-readiness-pack.md`
+- `components/analytics/use-marketing-consent.ts`
+- `lib/ai/copilot-actor-scope.ts`
+- `lib/api/webhook-guard.ts`
+- `lib/implementation/implementation-actor-scope.ts`
+- `lib/reports/report-actor-scope.ts`
+- `lib/implementation/external-integration-certification.ts`
+- `lib/product/module-readiness.ts`
+- `lib/security/timing-safe.ts`
+- `lib/storefront/storefront-middleware-secret.ts`
+- `tests/unit/marketing-consent.test.ts`
+- `tests/unit/copilot-actor-scope.test.ts`
+- `tests/unit/api-secret-guards.test.ts`
+- `tests/unit/storefront-preview-access.test.ts`
+- `tests/unit/uber-direct-capability.test.ts`
+- `tests/unit/integration-live-readiness.test.ts`
+- `tests/unit/health-check-signals.test.ts`
+- `tests/unit/partner-integration-placeholder.test.ts`
+- `tests/unit/implementation-external-integration-certification.test.ts`
+- `tests/unit/implementation-go-live-readiness.test.ts`
+- `tests/unit/go-live-launch-validator.test.ts`
+- `tests/unit/go-live-audit-snapshot.test.ts`
+- `tests/unit/implementation-actor-scope.test.ts`
+- `tests/unit/report-actor-scope.test.ts`
+- `tests/unit/module-readiness.test.ts`
+- `tests/unit/order-lifecycle-rules.test.ts`
+- `tests/unit/dashboard-shell.test.ts`
+- `tests/unit/platform-impersonation-audit.test.ts`
+- `services/platform/workspace-pilot-enrollment-service.ts`
+- `actions/platform-pilot-enrollments.ts`
+- `components/platform/pilot-enrollment-form.tsx`
+- `tests/unit/business-mode-nav.test.ts`
+- `tests/unit/module-route-gate.test.ts`
+- `services/platform/platform-webhook-diagnostics-service.ts`
+- `tests/unit/platform-webhook-diagnostics-service.test.ts`
+
+## Tests Added
+
+- `tests/integration/order-pii-invariant.test.ts`
+- `tests/unit/marketing-consent.test.ts`
+- `tests/unit/copilot-actor-scope.test.ts`
+- `tests/unit/api-secret-guards.test.ts`
+- `tests/unit/storefront-preview-access.test.ts`
+- `tests/unit/uber-direct-capability.test.ts`
+- `tests/unit/integration-live-readiness.test.ts`
+- `tests/unit/health-check-signals.test.ts`
+- `tests/unit/partner-integration-placeholder.test.ts`
+- `tests/unit/implementation-external-integration-certification.test.ts`
+- `tests/unit/implementation-go-live-readiness.test.ts`
+- `tests/unit/implementation-actor-scope.test.ts`
+- `tests/unit/report-actor-scope.test.ts`
+- `tests/unit/module-readiness.test.ts`
+- `tests/unit/order-lifecycle-rules.test.ts`
+- `tests/unit/platform-impersonation-audit.test.ts`
+- `tests/unit/platform-webhook-diagnostics-service.test.ts`
+- `tests/unit/dashboard-shell.test.ts`
+- `tests/unit/module-route-gate.test.ts`
+- `tests/unit/platform-webhook-diagnostics-service.test.ts`
+- `tests/unit/settings-workspace-access.test.ts`
+- `tests/unit/owner-kitchen-settings.test.ts`
+- `tests/unit/billing-admin-assign-guard.test.ts`
+- `tests/unit/import-center-scope.test.ts`
+- `tests/unit/require-tenant-actor.test.ts`
+
+## Tests Run
+
+- `node ./node_modules/tsx/dist/cli.mjs scripts/validate-order-write-paths.ts`
+- `node ./node_modules/tsx/dist/cli.mjs scripts/validate-api-route-registry.ts`
+- `node ./node_modules/tsx/dist/cli.mjs scripts/audit-api-route-classification.ts`
+- `node ./node_modules/tsx/dist/cli.mjs scripts/audit-cron-production-allowlist.ts`
+- `node ./node_modules/tsx/dist/cli.mjs scripts/audit-workspace-scope.ts`
+- `node ./node_modules/tsx/dist/cli.mjs scripts/audit-marketing-claims.ts`
+- `npm run validate:startup-readiness`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/startup-readiness.test.ts tests/unit/api-route-registry.test.ts tests/integration/order-pii-invariant.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/rate-limit-hardening.test.ts tests/unit/startup-readiness.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/api-route-registry.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/api-secret-guards.test.ts tests/unit/api-route-registry.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/api-secret-guards.test.ts tests/unit/storefront-preview-access.test.ts tests/unit/api-route-registry.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/uber-direct-capability.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/integration-live-readiness.test.ts tests/unit/health-check-signals.test.ts tests/unit/uber-direct-capability.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/doordash-order-import-canonical.test.ts tests/unit/partner-integration-placeholder.test.ts tests/unit/integration-health-truth.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/implementation-external-integration-certification.test.ts tests/unit/implementation-go-live-readiness.test.ts tests/unit/implementation-actor-scope.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/go-live-launch-validator.test.ts tests/unit/implementation-external-integration-certification.test.ts tests/unit/implementation-go-live-readiness.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/go-live-audit-snapshot.test.ts tests/unit/go-live-launch-validator.test.ts tests/unit/implementation-external-integration-certification.test.ts tests/unit/implementation-go-live-readiness.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/marketing-consent.test.ts tests/unit/startup-readiness.test.ts tests/integration/order-pii-invariant.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/module-readiness.test.ts tests/unit/order-lifecycle-rules.test.ts tests/unit/platform-impersonation-audit.test.ts tests/unit/marketing-consent.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/business-mode-nav.test.ts tests/unit/module-route-gate.test.ts tests/unit/module-readiness.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/platform-webhook-diagnostics-service.test.ts tests/unit/platform-service.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/settings-workspace-access.test.ts tests/unit/owner-kitchen-settings.test.ts tests/unit/billing-admin-assign-guard.test.ts tests/unit/import-center-scope.test.ts tests/unit/require-tenant-actor.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/production-incident-platform-task-service.test.ts tests/unit/production-incident-remediation-task-service.test.ts tests/unit/production-incidents-action.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/channel-import-scope.test.ts tests/unit/workspace-channel-scope.test.ts tests/unit/import-center-scope.test.ts tests/unit/hot-path-scope-services.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-webhook-secret.test.ts tests/unit/storefront/launch-readiness.test.ts tests/unit/storefront-pillar-settings-import.test.ts tests/unit/storefront-webhook.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/contracts/meal-plan.contract.test.ts tests/unit/tier1-production-cron.test.ts tests/unit/analytics-snapshot-service.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-pillar-settings-import.test.ts tests/unit/storefront-team-invite-accept.test.ts tests/unit/theme-experiment-significance.test.ts tests/unit/theme-experiment-edge-config.test.ts tests/unit/theme-experiment-edge-routing.test.ts tests/unit/theme-experiment-bucket.test.ts tests/unit/theme-experiment-version.test.ts tests/unit/storefront-webhook-secret.test.ts tests/unit/storefront-webhook.test.ts tests/unit/storefront/launch-readiness.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/hot-path-scope-services.test.ts tests/unit/production-incident-platform-task-service.test.ts tests/unit/production-incident-remediation-task-service.test.ts tests/unit/production-incidents-action.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/channel-certification.test.ts tests/unit/integration-action-availability.test.ts tests/contracts/integrations-health.contract.test.ts tests/unit/import-center-scope.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/export-permission.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/implementation-actor-scope.test.ts tests/unit/dashboard-userid-cleanup.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/report-actor-scope.test.ts tests/unit/dashboard-userid-cleanup.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/support-engagement-service.test.ts tests/unit/support-comment-guards.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/order-lifecycle-rules.test.ts tests/unit/platform-impersonation-audit.test.ts tests/unit/impersonation-mfa.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-phase3.test.ts tests/unit/storefront-phase5a.test.ts tests/unit/storefront-phase6.test.ts tests/unit/storefront-webhook-secret.test.ts tests/unit/storefront-webhook.test.ts tests/unit/storefront/launch-readiness.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-phase2.test.ts tests/unit/storefront-phase3.test.ts tests/unit/storefront-phase5a.test.ts tests/unit/storefront-phase6.test.ts tests/unit/storefront-theme-presets.test.ts tests/unit/storefront/launch-readiness.test.ts tests/unit/storefront-webhook-secret.test.ts tests/unit/storefront-webhook.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-regional.test.ts tests/unit/storefront-theme-presets.test.ts tests/unit/storefront-phase2.test.ts tests/unit/storefront-phase3.test.ts tests/unit/storefront-phase5a.test.ts tests/unit/storefront-phase6.test.ts tests/unit/storefront/launch-readiness.test.ts tests/unit/storefront-webhook-secret.test.ts tests/unit/storefront-webhook.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-phase2.test.ts tests/unit/storefront-phase3.test.ts tests/unit/storefront-phase5a.test.ts tests/unit/storefront-phase6.test.ts tests/unit/storefront-theme-presets.test.ts tests/unit/storefront-regional.test.ts tests/unit/storefront/launch-readiness.test.ts tests/unit/storefront-webhook-secret.test.ts tests/unit/storefront-webhook.test.ts`
+- `node ./node_modules/vitest/vitest.mjs run tests/unit/dashboard-shell.test.ts tests/unit/business-mode-nav.test.ts tests/unit/module-route-gate.test.ts`
+- `npm run typecheck`
+
+## Tests Passing/Failing
+
+- Passing:
+  - canonical order write validator
+  - API route registry validator
+  - API route classification audit
+  - cron allowlist audit
+  - workspace scope audit generation
+  - focused startup / consent / PII invariant tests
+- Non-blocking warnings:
+  - marketing claims audit intentionally reports risky rows:
+    - measurable food-cost reduction claim still needs evidence
+    - white-label production-ready claim is marked deprecated
+
+## What Was Already Done Before This Task
+
+- canonical order service was already in place for dashboard/public/POS paths
+- order PII encryption existed and broad integration coverage already existed
+- distributed rate-limit production safety already existed
+- async webhook queue production safety already existed
+- API route registry validation already existed
+- cron reconciliation logic already existed
+- POS checkout production hardening had already been fixed and verified
+
+## Completed Now
+
+- Published a formal readiness audit in `docs/kitchenos-p0-p3-readiness-audit.md`
+- Strengthened `validate-order-write-paths` to catch `.order.create()` and `.order.upsert()` in both `.ts` and `.tsx`
+- Added canonical order-creation architecture documentation
+- Extracted reusable `assertOrderPiiEncrypted(...)` helper
+- Added named `order-pii-invariant` test coverage for CI discoverability
+- Added static API route classification system:
+  - config
+  - scanner
+  - docs
+  - package scripts
+- Added workspace scope audit script and generated audit report
+- Added cron audit wrapper and package script
+- Exposed clearer rate-limit health fields:
+  - `mode`
+  - `distributedConfigured`
+  - `productionSafe`
+- Implemented consent-gated loading for Google Ads, Meta Pixel, and LinkedIn Insight
+- Added consent helper unit tests
+- Added product/module/claims/competitor/investor documentation pack
+- Wired module-readiness config into actual dashboard UI badges and route notices
+- Added real workspace-level pilot cohort management without schema churn:
+  - `workspace_feature_overrides` now acts as the platform-managed pilot enrollment layer
+  - pilot-only modules stay blocked unless the workspace is both enrolled and explicitly enabled
+  - `platform/feature-flags` now exposes active pilot enrollments and admin controls
+  - module settings now explain when a pilot module is blocked by missing enrollment
+- Expanded dashboard shell regression coverage:
+  - added nav matrix tests for `OWNER` vs `STAFF`, GTM access, disabled-module filtering, and platform-super bypass
+  - added render-level `ModuleRouteGate` tests for blocked modules, role denial, pilot messaging, beta messaging, and settings allowlist safety
+  - fixed a real staff nav overexposure bug where `"/dashboard"` was treated as a broad prefix instead of an exact route match
+- Added real platform webhook replay / DLQ admin UX:
+  - `platform/webhooks` now exposes terminal webhook recovery items as a proper DLQ triage table
+  - each DLQ row links to workspace summary and read-only integration health for root-cause analysis
+  - recent webhook events now include workspace drilldowns and audited replay affordances
+  - queue-state metrics now distinguish queued, retrying, terminal-failed, and open recovery workloads
+  - workspace-level read-only integration health now shows audited replay controls when the operator has repair permission
+  - read-only platform users no longer see misleading replay controls; repair actions are permission-gated in the UI as well as the server action
+- Extended `userId`-first cleanup across the dashboard settings layer:
+  - migrated the remaining settings overview / bridge / form pages away from `dataUserId`
+  - corrected multiple settings pages that were still loading settings-center payloads via `session.id` instead of owner `userId`
+  - aligned related helpers/actions (`billing`, `notifications-center`, `import-center`, `go-live`) with the same owner `userId` convention
+  - reduced remaining alias usage to deeper domain actions that now need separate, domain-by-domain review instead of broad page cleanup
+- Completed an end-to-end `kitchen-task` alias cleanup pass:
+  - replaced the remaining `dataUserId` usage in task creation, assignment, status, comments, checklist, template, and follow-up actions
+  - kept task-service scope objects and staff-member validation aligned on owner `userId`
+  - verified the task/incident bridge paths still pass after the cleanup
+- Completed an end-to-end `channel-command-center` alias cleanup pass:
+  - replaced the remaining `dataUserId` usage across channel import approval, conflict resolution, handoff settings, rules, rollback, simulation, webhook lab, and export actions
+  - preserved the existing owner-scoped query helpers and only swapped the resolved actor identity to `userId`
+  - verified the channel/import scope test set still passes after the cleanup
+- Completed an end-to-end `storefront-settings` alias cleanup pass:
+  - replaced the remaining `dataUserId` usage across storefront overview upsert, active menu selection, business settings, staff permissions, and theme experiment actions
+  - preserved existing owner storefront resolution, publish checklist gating, legal HTML sanitization, and encrypted webhook-secret flows
+  - verified adjacent storefront tests still pass after the cleanup
+- Completed an end-to-end `meal-plans` alias cleanup pass:
+  - replaced the remaining `dataUserId` usage across meal plan creation, update, status changes, cycle materialization, selections, draft order generation, legacy backfill, and templates
+  - kept owner-scoped cycle/selection lookups and meal-plan service scope objects aligned on `userId`
+  - verified adjacent contract / analytics / cron tests still pass after the cleanup
+- Completed a storefront-adjacent admin/settings alias cleanup bundle:
+  - replaced or removed the remaining `dataUserId` alias usage across product public settings, pillar settings, team invite actions, page-publish webhook delivery, theme experiment actions, and storefront workspace linking flows
+  - preserved the distinction between `sessionUser.id` and owner-scoped `userId` so membership, audit, publish, and storefront admin checks keep the same runtime behavior
+  - verified adjacent storefront and theme-experiment regressions still pass after the cleanup
+- Completed a production/task-adjacent alias cleanup bundle:
+  - replaced the remaining `dataUserId` usage across production work-item actions and production calendar task actions
+  - preserved the distinction between `sessionUser.id` for performed-by events and owner-scoped `userId` for queries, audit logs, and service scopes
+  - verified adjacent production/task scope regressions still pass after the cleanup
+- Completed an integration/channel alias cleanup bundle:
+  - replaced or removed the remaining `dataUserId` alias usage across integration credential actions, integration health checks, channel certification actions, webhook replay, and import/export preview entrypoints
+  - preserved the distinction between owner-scoped `userId` for connection queries/audit records and `sessionUser.id` for user-attribution fields
+  - corrected the ingredient import preview action to create jobs under the owner `userId` while keeping `createdById` on the signed-in session user
+  - verified adjacent integration/channel regressions still pass after the cleanup
+- Completed a playbooks/notifications support-adjacent alias cleanup bundle:
+  - replaced or removed the remaining `dataUserId` alias usage across playbook actions, production daily queue fetching, notification rule actions, and customer-success note/contact actions
+  - preserved session-user email attribution for playbook capability checks while moving owner-scoped filters and service scope objects to `userId`
+  - verified adjacent support tests still pass after the cleanup
+- Expanded lifecycle + impersonation quality hardening:
+  - made `order-lifecycle-rules` cover the full direct Prisma status matrix exhaustively, including no-op transitions and accepted completion payment states
+  - expanded platform impersonation audit assertions for workspace-resolution fallbacks, protected-target denial, no-session termination, and non-production MFA fallback behavior
+  - verified focused lifecycle / impersonation tests still pass after the hardening
+- Completed a storefront content/media alias cleanup bundle:
+  - replaced or removed the remaining `dataUserId` alias usage across storefront page actions, storefront form actions, and storefront media actions
+  - preserved session-based storefront admin permission checks while moving owner-scoped page/media writes and filters to `userId`
+  - verified adjacent storefront content regressions still pass after the cleanup
+- Completed a residual storefront builder/ops alias cleanup bundle:
+  - replaced or removed the remaining `dataUserId` alias usage across storefront advanced actions, navigation/footer actions, blackout date actions, theme publish, and theme preset actions
+  - preserved session-based storefront permission checks and admin storefront resolution while moving owner-scoped writes and publish/test-order service calls to `userId`
+  - verified adjacent storefront builder and launch/publish regressions still pass after the cleanup
+- Completed a smaller storefront surfaces alias cleanup bundle:
+  - replaced or removed the remaining `dataUserId` alias usage across discounts, markets, domains, team access, Stripe Connect kickoff, regional settings, experiment ops settings, and catalog-admin entrypoints
+  - preserved session-based storefront admin resolution and permission gates while removing legacy owner alias wiring where it was no longer needed
+  - verified adjacent storefront regional / theme / launch regressions still pass after the cleanup
+- Completed a sensitive multi-store alias cleanup pass:
+  - replaced the remaining `dataUserId` usage in `storefront-multi-store` direct owner filters, create paths, and primary-store update paths
+  - deliberately preserved existing cookie/preferred-store selection behavior and broader multi-store semantics while only swapping the resolved owner identity to `userId`
+  - verified adjacent storefront regression coverage and full typecheck still pass after the cleanup
+- Expanded dashboard shell regression depth:
+  - added focused `DashboardShell` render coverage for owner vs staff account-menu affordances, support-email fallback messaging, platform-bypass nav/command propagation, billing-guard bypass behavior, and workspace brand/search wiring
+  - verified shell-level regressions alongside the existing business-mode nav and module-route-gate suites
+- Expanded Lighthouse public-funnel coverage:
+  - broadened `lighthouserc.cjs` from storefront-only URLs to include homepage, pricing, ROI calculator, solutions index, compare index, and representative static `solutions/[slug]` + `compare/[slug]` routes
+  - added env-driven route overrides for marketing paths and representative compare/solution slugs so coverage can grow without rewriting config
+  - verified the config resolves the expected public URLs and kept full project typecheck green
+- Added k6 storefront checkout critical-path load coverage:
+  - created `scripts/load/storefront-checkout-critical-path.k6.js` to exercise the anonymous storefront flow across `menu` page render, catalog fetch, cart sync, optional delivery quote, and checkout page render with per-visitor `x-forwarded-for` simulation
+  - wired `test:k6:storefront-checkout` into `package.json` so the scenario can be rerun consistently in local/staging perf passes
+  - explicitly documented the current boundary: final storefront order placement still runs through a Next Server Action, so raw HTTP k6 covers submit-ready critical path latency while Playwright remains the source of truth for end-to-end submit correctness
+- Expanded staff dashboard role-journey browser coverage:
+  - strengthened `tests/e2e/pilot-journey-staff.spec.ts` beyond basic route reachability to assert adaptive-nav suppression of restricted admin destinations and direct-route recovery states for staff on `/dashboard/billing` and `/dashboard/developer`
+  - kept the implementation on the existing `pilot-staff` authenticated project so the assertions exercise the real browser-rendered dashboard shell rather than only unit-level nav filters
+- Fixed dashboard account-menu role consistency:
+  - aligned `DashboardShell` account-menu billing visibility with the same owner/platform-super access model already enforced by role-filtered navigation and route gates, removing a staff-facing link to a page they could not actually open
+  - added an accessible `aria-label` to the account-menu trigger so the shell is both more testable and more screen-reader friendly
+  - verified the focused `dashboard-shell` unit suite passes after the change and extended the staff browser journey to assert the account menu also suppresses billing/API-key links
+- Hardened Settings Control Center quick actions:
+  - replaced stale or non-canonical quick-action targets such as `/dashboard/menu`, `/dashboard/storefronts`, and `/dashboard/security` with real settings-center routes
+  - made `QuickActionsCard` capability-aware using the same `canUseSettings(...)` policy that the target settings pages already enforce, so the control center no longer advertises actions a role cannot actually open
+  - added focused unit coverage for owner, manager, and staff quick-action visibility plus canonical href assertions, and verified the new suite alongside the existing dashboard-shell regression tests
+- Centralized Settings navigation filtering:
+  - extracted pure helpers for capability-aware section filtering and visible pinned/recent shortcut resolution so the sidebar no longer relies on inline filtering logic
+  - added focused regression coverage proving staff-level settings access only sees `overview`, query filtering never leaks disallowed sections, and stale pinned/recent keys cannot resurrect hidden destinations
+  - verified the new settings-navigation helper tests together with quick-actions and dashboard-shell suites to keep the Settings Center access model internally consistent
+- Completed a high-traffic dashboard `userId`-first cleanup bundle:
+  - replaced remaining `dataUserId` owner aliases on visible dashboard surfaces including `billing`, `menus`, `storefront`, `notifications`, and core `staff` pages with the resolved owner `userId`
+  - corrected staff dashboard brand lookups to use the actual resolved `workspaceId` instead of reusing the owner id in `workspaceId` filters, while keeping staff services, plan gates, and location queries owner-scoped on `userId`
+  - added a focused static regression guard for the cleaned bundle and verified it together with a full project `typecheck`
+- Finished the remaining `staff dashboard` cleanup pass:
+  - extended the same `userId`-first cleanup through `staff/shifts`, `staff/schedule`, `staff/certifications`, `staff/availability`, `staff/drivers`, and `staff/reports`
+  - kept all staff-related labor, readiness, route, and training queries owner-scoped on `userId` while preserving the prior behavior of the underlying services
+  - expanded the dashboard cleanup regression guard to cover the rest of the staff surfaces and re-verified the bundle with a green full-project `typecheck`
+- Completed the `notifications dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across `notifications/log`, `settings`, `alerts`, `rules`, `preferences`, `retry`, and `templates` with the resolved owner `userId`
+  - aligned rule and internal-alert readers to the same owner-scoped `userId` contract used by their backing notification services instead of passing the raw session id
+  - expanded the dashboard cleanup static guard to include the notifications subpages and re-verified the bundle with a green full-project `typecheck`
+- Completed the `integrations dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across the visible provider pages (`uber-eats`, `shopify`, `webhooks`, `homebase`, `doordash`, `7shifts`, `grubhub`, `uber-direct`, `woocommerce`) with the resolved owner `userId`
+  - aligned provider connection lookups, delivery history readers, webhook log reads, and plan gates to the same owner-scoped identity expected by the underlying integrations services
+  - expanded the dashboard cleanup static guard to include the integrations pages and re-verified the bundle with a green full-project `typecheck`
+- Completed the `routes dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across `routes` overview, planner, detail, reports, drivers, fleet, zones, Uber Direct placeholder, and driver/manifest views with the resolved owner `userId`
+  - corrected route overview/planner business context to load owner-scoped kitchen settings via `userId`, and aligned planner brand lookups to `workspaceId` instead of deriving them from the session user id
+  - expanded the dashboard cleanup static guard with route-specific assertions and re-verified the bundle with a green full-project `typecheck`
+- Completed the `sales-channels dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across the command-center overview, attention/available/connected tabs, health, mapping, staging, analytics, rules, handoff, sync jobs, webhook center, import batch review, and connection detail surfaces with the resolved owner `userId`
+  - kept channel metrics, kitchen settings lookups, activity timeline reads, owner-scoped batch/conflict/sync filters, and webhook replay plan gates aligned to the same owner identity contract already expected by the underlying channel services
+  - expanded the dashboard cleanup static guard with sales-channel-specific assertions and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `observability / recovery dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across `system-health`, `system-health/incidents`, `system-health/data-integrity`, `error-recovery`, and the operations audit detail surface with the resolved owner `userId`
+  - aligned operational health, workspace observability, production incident rollup, integrity/readiness checks, scoped recovery counters, and operations audit lookup calls to the same owner-scoped `userId` contract already used by their service layer
+  - expanded the dashboard cleanup static guard with observability-specific assertions and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `locations dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across the locations overview, layouts, active/setup/new pages, reports, assignment tools, and the full `[locationId]` detail subtree with the resolved owner `userId`
+  - aligned location overview/report/order/task/inventory reads, assignment history, fulfillment/hours/profile loaders, and multi-location plan gating to the same owner-scoped `userId` contract already used by the location services
+  - removed raw brand workspace owner filters from the locations surfaces and the supporting assignment/count helper in favor of the shared `brandListWhereForOwner()` scope helper, then expanded the static regression guard and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `meal-plans dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across the meal plans overview, create/detail/reports pages, active/paused/generated/cycles views, templates/customers/settings surfaces, and the needs-review queue with the resolved owner `userId`
+  - aligned meal plan list/detail/report readers, legacy subscription backfill, product lookups, and CRM-facing plan gating to the same owner-scoped `userId` contract already used by the meal plan services
+  - fixed the meal plan creation surface to stop mixing owner ids into `workspaceId` brand filters by switching it to the shared `brandListWhereForOwner()` helper, then expanded the static regression guard and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `tasks dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across the tasks today view, full create/detail pages, kanban/settings/templates/calendar/reports/recurring/list views, and the personal `my tasks` surface with the resolved owner `userId`
+  - corrected task terminology / business-mode lookups and overview KPIs to resolve from the owner profile via `userId` instead of the raw session id, keeping task queries and staff lookups aligned with the same owner-scoped contract used by the task services
+  - removed the raw brand owner filter from the full task creation form in favor of the shared `brandListWhereForOwner()` helper, while preserving session-specific `createdById: user.id` behavior in the personal task view, then expanded the static regression guard and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `customers dashboard` cleanup bundle:
+  - replaced the remaining `dataUserId` aliases across the CRM overview, list/detail/reports views, VIP/at-risk/allergy/follow-up surfaces, dedupe tools, segments, company accounts, loyalty, churn-risk, and feedback pages with the resolved owner `userId`
+  - corrected the CRM overview terminology / business-mode lookup to resolve from the owner profile via `userId` instead of the raw session user id, keeping customer KPIs, backfill, loyalty, and customer detail reads aligned with the same owner-scoped contract used by the CRM services
+  - expanded the dashboard cleanup static guard with customer-specific assertions and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `copilot dashboard` cleanup + permission-hardening bundle:
+  - replaced the remaining `dataUserId` aliases across the copilot today, insights, audit, settings, summaries, drafts, sources, and chat pages with the resolved owner `userId`
+  - fixed a real copilot access-control gap by replacing the old `isOwner: true, role: null` scope construction in both dashboard pages and `actions/copilot.ts` with a role-aware scope derived from the real session actor, preserving owner access while restoring staff capability checks
+  - added a focused `copilot-actor-scope` unit regression plus dashboard static guard assertions and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `reports` permission-hardening bundle:
+  - replaced the remaining forced-owner scope construction across the Reports command center, library, generator, financial/executive/operations hubs, saved/history pages, menu-engineering, enterprise snapshots, report server actions, and filtered CSV export routes with a real actor-aware report scope derived from the current session actor
+  - aligned owner-scoped report reads and exports back to resolved owner `userId`, including the filtered report CSV route and restaurant P&L CSV route, so workspace-member sessions no longer inherit owner-level report access by default
+  - added a focused `report-actor-scope` unit regression plus static bundle assertions for report pages/actions/API routes and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Completed the `implementation center` cleanup + permission-hardening bundle:
+  - replaced the remaining mixed-principal reads across the `implementation` overview, project list, handoff, reports, enterprise page, global hub redirects, and full `[projectId]` subtree so they now resolve data through the owner `userId` instead of the raw session id
+  - fixed the more serious write-path issue in `actions/implementation-center.ts` by replacing the old forced owner/admin scope construction with a real actor-aware implementation scope derived from `requireWorkspacePermissionActor()`, while preserving session attribution via `createdById` for newly created implementation projects
+  - added a focused `implementation-actor-scope` regression plus static bundle assertions for implementation pages/actions and re-verified the bundle with focused tests plus a green full-project `typecheck`
+- Hardened the `distributed rate-limit runtime invariants` bundle:
+  - changed the Upstash and TCP Redis adapters to surface backend outages explicitly instead of silently returning allow, so critical production policies no longer degrade into fail-open behavior when the distributed counter backend is unreachable
+  - updated `consumeRateLimitToken()` to fail closed for production-critical policies on distributed backend outages while preserving fail-open behavior for non-critical policies, keeping abuse-sensitive public and checkout flows protected without turning every soft dependency blip into a global outage
+  - wired `validate:startup-readiness` into the default `check` and `scripts/ci-check.sh` paths, then re-verified the bundle with focused rate-limit/startup tests, the validator script, and a green full-project `typecheck`
+- Hardened the `API route classification + handler-session guard` bundle:
+  - added a shared `requireApiSession()` helper in `lib/api/with-api-guard.ts` and migrated the `billing` + legacy exact session routes (`/api/billing/*`, `/api/checkout`, `/api/billing-portal`) away from duplicated inline Supabase auth blocks
+  - tightened the static classification audit so `billing` and the legacy exact handler-session routes can no longer pass solely via top-level config coverage; they now require file-local proof through an approved guard helper or explicit route annotation
+  - promoted both `validate:api-route-registry` and `audit:api-routes` into the main GitHub `quality` job, then re-verified the bundle with the registry validator, classification audit, focused registry unit test, and a green full-project `typecheck`
+- Hardened the `selected webhook/storefront secret guard` bundle:
+  - added shared timing-safe secret primitives plus reusable `requireBearerWebhookSecret()`, `requireConfiguredWebhookSecret()`, `verifyResendWebhookSignature()`, and `requireStorefrontMiddlewareSecret()` helpers so high-risk routes no longer depend on copy-pasted inline secret checks
+  - migrated the selected bearer-secret webhook routes (`bigquery-ga4-parity`, `bigquery-interference-matrix`, `uber-direct`), the Resend signed webhook, and the storefront middleware helper routes (`resolve-host`, `resolve-redirect`) onto those shared guards, including fail-closed behavior when required secrets are missing
+  - tightened the static classification audit for those selected `webhook` and `storefront` routes so they now require file-local proof via approved helpers, then re-verified the bundle with focused secret-guard tests, route validators, and a green full-project `typecheck`
+- Hardened the `remaining bearer webhook cluster + storefront preview cookie` bundle:
+  - migrated the remaining simple bearer-secret webhook routes onto `requireBearerWebhookSecret()`, eliminating the last copy-pasted `Authorization === Bearer secret` pattern from that webhook family and extending strict exact-route proof coverage for those endpoints in the API classification config
+  - rebuilt `app/api/storefront/theme/preview-cookie/route.ts` around the existing storefront preview contract by requiring `storeSlug`, applying storefront route rate limiting, allowing only owner or signed preview-token access, rejecting oversized preview payloads, and writing the preview cookie as `httpOnly`/production-`secure`
+  - added focused preview-access regression coverage and re-verified the bundle with secret-guard tests, preview-access tests, API route validators, an explicit search check confirming no inline simple bearer webhook guards remain, and a green full-project `typecheck`
+- Hardened the `Uber Direct honest placeholder ingress` bundle:
+  - replaced the old `ok: true` webhook stub with an authenticated, JSON-validating, fail-closed placeholder ingress that now returns a structured `503 uber_direct_placeholder` response instead of pretending delivery status processing is live
+  - centralized Uber Direct capability truth in `services/delivery/uber-direct.ts`, surfaced webhook-secret presence in the routes placeholder UI and env health/docs, and kept `liveQuoteCreateReady` / `liveWebhookReady` explicitly false so the product stance remains consistent across code, dashboard, and documentation
+  - added focused `uber-direct-capability` regression coverage and re-verified the bundle with targeted tests plus a green full-project `typecheck`
+- Hardened the `generic integration live-readiness truth` bundle:
+  - added a shared `LIVE_CAPABLE_INTEGRATION_PROVIDERS` rule in the channel registry and taught launch-status/runtime resolution not to promote partner-gated placeholder providers to `LIVE` just because a raw `CONNECTED` row exists
+  - restricted go-live readiness counting to real live-capable providers only, preventing placeholder partner connectors from inflating `connectionsConnected` / `connectionsBroken`, and changed platform health so Uber Direct only appears live-ready when the shared capability snapshot says it is actually live rather than merely credentialed
+  - added focused regression coverage for integration live-readiness and health signals, then re-verified the bundle with targeted tests plus a green full-project `typecheck`
+- Hardened the `DoorDash + Grubhub honest placeholder surfaces` bundle:
+  - downgraded `doordash` and `grubhub` in the integration registry from `BETA` to `PLACEHOLDER`, rebuilt their dashboard pages around preparation-only readiness states, and removed the misleading interactive forms that previously suggested live provider-backed quote/order flows
+  - centralized provider truth in new DoorDash/Grubhub capability snapshots, changed direct actions to return explicit placeholder failures, stopped the services from creating fresh local delivery rows as fake success signals, and converted the DoorDash cron importer into an honest skip path while the provider remains placeholder-only
+  - updated focused regression coverage so DoorDash import now proves fail-closed placeholder behavior rather than canonical import, added partner placeholder tests, and re-verified the bundle with targeted tests plus a green full-project `typecheck`
+- Hardened the `implementation go-live certification` bundle:
+  - added a shared external-integration certification rule for Implementation Center that now distinguishes placeholder discovery scope from live-capable external channels and requires certification evidence before external integrations can contribute to go-live readiness
+  - changed implementation readiness checks to require successful health-check evidence plus sync/webhook proof for live-capable providers, tightened `markGoLiveAction()` so only the `ready` band can transition to `LIVE`, and fixed the projects list to read the saved readiness snapshot rather than inferring `ready` from score-only thresholds
+  - added focused regression coverage for external certification and strict `canMarkReady()` semantics, then re-verified the bundle with targeted tests plus a green full-project `typecheck`
+- Hardened the `GoLiveProject / workbench certification` bundle:
+  - taught go-live project creation to capture launch integration scope in `metadataJson`, changed `loadReadinessInputs()` to compute external certification from actual health-check plus sync/webhook evidence, and pushed those certification metrics into the shared go-live readiness snapshot
+  - added a critical blocker plus required readiness signal for uncertified live-capable providers, tightened `validateLaunch()` so high score alone cannot produce `READY`/approval when required signals are still missing, and upgraded status-transition errors to surface the real validator reasons
+  - replaced the go-live KPI and legacy checklist language that previously implied raw connected channels were enough, so dashboards now report external certification truth and explicitly keep placeholder integrations as warning-only scope items
+  - added focused go-live validator coverage, then re-verified the bundle with targeted tests plus a green full-project `typecheck`
+- Hardened the `GoLiveProject audit snapshot` bundle:
+  - added a shared go-live audit snapshot helper that serializes immutable decision evidence for approvals and status transitions, including readiness score, required-gap keys, critical blockers, approval counts, and external certification state at the exact decision moment
+  - changed `APPROVAL_RECORDED` and `STATUS_TRANSITION` events to persist that snapshot in `metadataJson`, so `APPROVED` and `LIVE` decisions remain explainable after the workspace evolves
+  - upgraded the launch project activity feed to surface the stored decision packet directly in the UI instead of showing a thin event log with no operational context
+  - added focused regression coverage for snapshot build/parse behavior, then re-verified the bundle with targeted tests plus a green full-project `typecheck`
+- Moved core dashboard shell/layout consumers toward `userId`-first tenant usage on key surfaces
+- Extended `userId`-first cleanup into high-traffic catalog actions (`menus`, `products`) without changing behavior
+- Extended `userId`-first cleanup into settings/billing dashboard surfaces and corrected settings-center loads to resolve by owner `userId`
+- Added lifecycle transition matrix tests for valid/invalid direct order status hops
+- Added impersonation audit trail tests and enriched impersonation audit metadata on start/end
+
+## Already Existing
+
+- canonical order center
+- PII encryption on major order entrypoints
+- public API canonical order routing
+- POS canonical order routing
+- startup readiness enforcement
+- webhook queue production enforcement
+- capability matrix foundation
+- demo, pricing, customers, and partner public surfaces
+
+## Still Missing
+
+- deeper tenant alias cleanup and `dataUserId` deprecation enforcement
+- domain-by-domain owner-scope cleanup for remaining heavy action surfaces:
+  - remaining `kitchen-task` adjacent task/support consumers outside the production/task and playbooks/notifications bundles
+  - remaining owner-scoped task/channel consumers outside the integration/channel bundle
+  - remaining scattered storefront adjacent consumers outside the admin/settings, content/media, builder/ops, small-surfaces, and multi-store bundles
+- richer webhook recovery automation beyond the current platform DLQ surface (bulk actions, incident auto-linking, tenant self-serve variants)
+- full persistence-path storefront submit load coverage for the Next Server Action mutation itself
+- broader dashboard role-journey coverage across owner/staff × plan-state × business-type combinations
+- deeper AI scheduling and HACCP functionality
+- full accounting / GL ownership
+- native mobile app execution
+
+## Blockers
+
+- Some roadmap areas still need product decisions before safe implementation:
+  - GA vs beta vs pilot module promotion
+  - payroll / GL build-vs-integrate choice
+  - public SLO targets
+  - claim verification proof sources
+- Workspace is not currently behaving like a normal git repo from the shell, so git-based change summaries were not available in this pass.
+
+## Recommended Next Step
+
+Take one focused follow-up sprint for:
+
+1. workspace alias cleanup (`dataUserId` burn-down),
+2. targeted cleanup for the remaining adjacent owner-scope consumers after the heavy domains, storefront admin/settings bundle, production/task bundle, integration/channel bundle, playbooks/notifications bundle, storefront content/media bundle, residual storefront builder/ops bundle, smaller storefront surfaces bundle, and multi-store bundle,
+3. broader cohort/program rollout management beyond the current pilot-module enrollment layer,
+4. performance and UX hardening (checkout load, deeper end-to-end dashboard role journeys, broader public-route perf assertions beyond Lighthouse config expansion).
+
+## Next Cursor Prompt
+
+`Continue KitchenOS P1 hardening. Use docs/kitchenos-p0-p3-readiness-audit.md and docs/final-kitchenos-p0-p3-implementation-report.md as baseline. Focus next on the remaining adjacent owner-scope consumers that still rely on legacy aliases after the heavy domains, storefront admin/settings bundle, production/task bundle, integration/channel bundle, playbooks/notifications bundle, storefront content/media bundle, residual storefront builder/ops bundle, smaller storefront surfaces bundle, multi-store bundle, lifecycle/impersonation hardening pass, dashboard shell regression pass, and Lighthouse public-funnel coverage expansion were cleaned. Prioritize the remaining task/support consumers first, then any truly scattered residual storefront surfaces that need separate review. Preserve production behavior, prefer userId-first cleanup where requireTenantActor()/requireChannelActor() already resolve the owner identity, and add focused tests/docs for every change.`

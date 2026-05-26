@@ -1,0 +1,132 @@
+import { Prisma } from "@prisma/client";
+
+import { prisma } from "@/lib/prisma";
+import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
+import {
+  ownerScopedAnd,
+  posRegisterByIdWhereForOwner,
+} from "@/lib/scope/workspace-resource-scope";
+
+export async function getOpenPosShift(userId: string, registerId: string) {
+  const where = (await ownerScopedAnd(userId, {
+    registerId,
+    status: "OPEN",
+  })) as Prisma.POSShiftWhereInput;
+  return prisma.pOSShift.findFirst({
+    where,
+    orderBy: { openedAt: "desc" },
+  });
+}
+
+export async function openPosShift(input: {
+  userId: string;
+  registerId: string;
+  openedByStaffId: string;
+  openingCashAmount: number;
+  notes?: string | null;
+}) {
+  const existing = await getOpenPosShift(input.userId, input.registerId);
+  if (existing) {
+    return { ok: false as const, error: "A shift is already open for this register." };
+  }
+  const registerWhere = await posRegisterByIdWhereForOwner(input.userId, input.registerId);
+  const register = await prisma.pOSRegister.findFirst({
+    where: registerWhere,
+    select: { id: true, workspaceId: true, locationId: true },
+  });
+  if (!register) return { ok: false as const, error: "Register not found." };
+
+  const workspaceId = register.workspaceId ?? (await ensureOwnerWorkspaceId(input.userId));
+
+  const shift = await prisma.pOSShift.create({
+    data: {
+      userId: input.userId,
+      workspaceId,
+      locationId: register.locationId,
+      registerId: register.id,
+      openedByStaffId: input.openedByStaffId,
+      openingCashAmount: new Prisma.Decimal(input.openingCashAmount),
+      notes: input.notes ?? undefined,
+    },
+  });
+  await prisma.pOSAuditEvent.create({
+    data: {
+      userId: input.userId,
+      workspaceId,
+      registerId: register.id,
+      shiftId: shift.id,
+      staffId: input.openedByStaffId,
+      action: "pos.shift.opened",
+      metadataJson: { openingCashAmount: input.openingCashAmount } as Prisma.InputJsonValue,
+    },
+  });
+  return { ok: true as const, shift };
+}
+
+export async function closePosShift(input: {
+  userId: string;
+  shiftId: string;
+  closedByStaffId: string;
+  closingCashAmount: number;
+  notes?: string | null;
+}) {
+  const shiftWhere = (await ownerScopedAnd(input.userId, {
+    id: input.shiftId,
+    status: "OPEN",
+  })) as Prisma.POSShiftWhereInput;
+  const shift = await prisma.pOSShift.findFirst({
+    where: shiftWhere,
+    include: { register: { select: { id: true } } },
+  });
+  if (!shift) return { ok: false as const, error: "Open shift not found." };
+
+  const txnWhere = (await ownerScopedAnd(input.userId, {
+    registerId: shift.registerId,
+    shiftId: shift.id,
+    paymentMode: "CASH",
+    status: "COMPLETED",
+  })) as Prisma.POSTransactionWhereInput;
+  const cashRows = await prisma.pOSTransaction.findMany({
+    where: txnWhere,
+    select: { total: true },
+  });
+  const cashTotal = cashRows.reduce((acc, r) => acc.add(r.total), new Prisma.Decimal(0));
+
+  const opening = new Prisma.Decimal(shift.openingCashAmount);
+  const closing = new Prisma.Decimal(input.closingCashAmount);
+  const expected = opening.add(cashTotal);
+  const variance = closing.minus(expected);
+
+  const updated = await prisma.pOSShift.update({
+    where: { id: shift.id },
+    data: {
+      status: "CLOSED",
+      closedAt: new Date(),
+      closedByStaffId: input.closedByStaffId,
+      closingCashAmount: closing,
+      expectedCashAmount: expected,
+      varianceAmount: variance,
+      notes: input.notes ?? shift.notes,
+    },
+  });
+
+  const closeWorkspaceId =
+    shift.workspaceId ?? (await ensureOwnerWorkspaceId(input.userId));
+  await prisma.pOSAuditEvent.create({
+    data: {
+      userId: input.userId,
+      workspaceId: closeWorkspaceId,
+      registerId: shift.register.id,
+      shiftId: shift.id,
+      staffId: input.closedByStaffId,
+      action: "pos.shift.closed",
+      metadataJson: {
+        closingCashAmount: input.closingCashAmount,
+        expectedCashAmount: expected.toString(),
+        varianceAmount: variance.toString(),
+      } as Prisma.InputJsonValue,
+    },
+  });
+
+  return { ok: true as const, shift: updated };
+}

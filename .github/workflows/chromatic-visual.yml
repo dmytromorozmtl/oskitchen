@@ -1,0 +1,101 @@
+# Visual regression: Playwright snapshot baselines (no Storybook required).
+# Committed baselines: tests/visual/**/*-snapshots/
+# CI uploads baselines on every run; diff artifacts only on failure.
+#
+# Optional later: CHROMATIC_PROJECT_TOKEN + Storybook for design review (not configured).
+
+name: Visual regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: "Regenerate and commit snapshot PNGs (maintainers only)"
+        required: false
+        default: false
+        type: boolean
+  pull_request:
+    paths:
+      - "components/storefront/**"
+      - "components/storefront-builder/**"
+      - "app/visual-test/**"
+      - "tests/visual/**"
+      - "playwright.config.ts"
+  push:
+    branches: [main]
+    paths:
+      - "components/storefront/**"
+      - "components/storefront-builder/**"
+      - "app/visual-test/**"
+      - "tests/visual/**"
+
+permissions:
+  contents: read
+
+jobs:
+  visual-playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Build app
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+          DIRECT_URL: postgresql://ci:ci@localhost:5432/ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Visual snapshot tests
+        env:
+          CI: true
+        run: |
+          if [ "${{ github.event.inputs.update_baselines }}" = "true" ]; then
+            npx playwright test tests/visual --project=visual --update-snapshots
+          else
+            npx playwright test tests/visual --project=visual
+          fi
+
+      - name: Upload visual baselines (reference)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-baselines-${{ github.run_id }}
+          path: tests/visual/**/*-snapshots/
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-report-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload visual diff artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-diff-${{ github.run_id }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+          if-no-files-found: warn

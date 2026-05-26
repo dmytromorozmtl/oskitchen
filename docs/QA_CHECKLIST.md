@@ -1,0 +1,44 @@
+# Manual QA checklist
+
+- [ ] Sign up / login / logout
+- [ ] Forgot password email flow
+- [ ] Auth callback (PKCE) after magic link or confirm
+- [ ] Dashboard loads with correct business name and locale (`en` / `fr` in settings)
+- [ ] Create weekly menu — validation on dates and preorder deadline
+- [ ] Activate menu — only one active; cannot activate past “closed” week (UI disables)
+- [ ] Duplicate menu
+- [ ] Reorder menus (drag handle)
+- [ ] Create / edit / delete product — category, dates, price, image URL or upload
+- [ ] Product search and category filter; table vs cards view
+- [ ] Create order from active menu — fulfillment pickup/delivery, phone, totals, plan limits
+- [ ] Orders table filters (status, fulfillment, date, search)
+- [ ] Update order status — email on confirm/ready when Resend configured
+- [ ] Production board — mark cooked / packed / labeled; filters
+- [ ] Kitchen screen — readable layout; refresh behavior
+- [ ] Packing — PDF / CSV / print paths
+- [ ] Customers page — aggregates from orders
+- [ ] Billing — plan display; Stripe checkout & portal when configured
+- [ ] Settings save — kitchen fields + validation toasts
+- [ ] Public order lookup via QR token
+- [ ] Cron `POST /api/cron/reminders` with `Authorization: Bearer CRON_SECRET`
+- [ ] Mobile sidebar + responsive tables/cards
+- [ ] Dark mode / theme toggle
+- [ ] `npm run typecheck` && `npm run build`
+- [ ] Onboarding wizard `/onboarding` — steps save, skip optional steps, finish marks complete
+- [ ] Reopen guided setup from Settings — lands on `/onboarding`
+- [ ] Demo hub `/demo` + vertical `/demo/meal-prep` — sign-in gate; import redirects to dashboard
+- [ ] Demo mode banner + reset (only clears when `demoMode` true)
+- [ ] WooCommerce / Shopify connection save + masked secrets (no exposure in HTML)
+- [ ] Uber Eats / Uber Direct placeholder flows — no crash without credentials
+- [ ] Import external order row — appears in Order hub incoming channel orders
+- [ ] Match / unmatched product warning surfaces on seeded demo external product
+- [ ] Send order flow → production tasks update (manual path)
+- [ ] Packing PDF/CSV — empty state when no qualifying orders
+- [ ] Analytics snapshot — empty state when no orders/external rows
+- [ ] Inventory demand — if present, CSV/export smoke (when implemented)
+- [ ] Customer CRM aggregates — empty vs populated
+- [ ] Feature gates / billing panel — upgrade copy renders per plan
+- [ ] Webhook log `/dashboard/integrations/webhooks` — empty state vs rows
+- [ ] Failed sync / webhook rows visible on seeded demo; retry where implemented
+- [ ] Notifications page — graceful without `RESEND_API_KEY`
+- [ ] Industry pages `/solutions/*` render and link to demo + signup

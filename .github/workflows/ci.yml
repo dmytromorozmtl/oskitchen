@@ -1,0 +1,178 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Verify install chain
+        run: npm run verify:install-chain
+
+      - name: Verify storefront migration artifacts
+        run: npm run verify:storefront-migration
+
+      - name: Verify storefront action imports
+        run: npm run verify:storefront-actions
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Prisma validate
+        run: npx prisma validate
+
+      - name: Validate production cron manifest
+        run: npx tsx scripts/validate-production-crons.ts
+
+      - name: Validate cron route inventory
+        run: npm run validate:cron-inventory
+
+      - name: Validate API route registry
+        run: npm run validate:api-route-registry
+
+      - name: Audit API route classification
+        run: npm run audit:api-routes
+
+      - name: Validate tenant scope (pilot paths)
+        run: npm run validate:tenant-scope-pilot
+
+      - name: Validate dashboard owner scope
+        run: npm run validate:dashboard-owner-scope
+
+      - name: Workspace migration audit gate
+        run: npm run workspace:audit:gate
+
+      - name: WorkspaceId schema coverage
+        run: npm run workspace:coverage:check
+
+      - name: Service userId scope audit (strict)
+        run: npm run workspace:audit:services:strict
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Unit test coverage (threshold gate)
+        run: npm run test:coverage
+
+      - name: Storefront payment matrix
+        run: node ./node_modules/vitest/vitest.mjs run tests/unit/storefront-stripe-matrix.test.ts tests/unit/storefront-i18n-structure.test.ts
+
+      - name: Demo scenario plans (static)
+        run: npm run check-demo-scenarios
+
+      - name: Marketing vs capability matrix
+        run: npm run verify-claims
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
+          DIRECT_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Platform access E2E
+        run: |
+          npm run start -- -p 3000 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3000/login >/dev/null && break
+            sleep 2
+          done
+          npx playwright test tests/e2e/platform-access-denial.spec.ts tests/e2e/a11y-marketing.spec.ts tests/e2e/a11y-auth-shell.spec.ts --project=chromium
+        env:
+          CI: "1"
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+
+      # Optional Playwright against a **deployed** host: use workflow `.github/workflows/e2e-remote-smoke.yml`
+      # (workflow_dispatch + target URL). Optional dashboard job: repo variable PLAYWRIGHT_INCLUDE_DASHBOARD=true
+      # and secrets E2E_LOGIN_EMAIL / E2E_LOGIN_PASSWORD — see docs/TESTING.md.
+
+      # Optional Playwright storefront smoke: requires a running app + published slug (see docs/STOREFRONT_E2E_SMOKE_TESTS.md).
+      # - name: Install Playwright Chromium
+      #   run: npx playwright install chromium --with-deps
+      # - name: Storefront E2E
+      #   run: npm run test:e2e:storefront
+      #   env:
+      #     PLAYWRIGHT_BASE_URL: "http://127.0.0.1:3000"
+      #     E2E_STOREFRONT_SLUG: ${{ vars.E2E_STOREFRONT_SLUG }}
+
+      # Optional: DB-backed demo audit when a workspace id and database URL are configured.
+      # - name: Demo scenario DB audit
+      #   run: npm run check-demo-scenarios:db
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DEMO_CI_DATABASE_URL }}
+      #     DEMO_AUDIT_WORKSPACE_ID: ${{ secrets.DEMO_AUDIT_WORKSPACE_ID }}
+      #     DEMO_DB_AUDIT_ALLOW_PRODUCTION: "true"
+
+  security-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchenos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d kitchenos_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+      RUN_DB_INTEGRATION: "1"
+      CRON_SECRET: ci-db-cron-secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Apply schema to CI database
+        run: node ./node_modules/prisma/build/index.js db push --skip-generate
+
+      - name: Security and tenant isolation tests
+        run: npm run test:security

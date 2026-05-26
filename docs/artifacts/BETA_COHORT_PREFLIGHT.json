@@ -1,0 +1,11 @@
+{
+  "generatedAt": "2026-05-17T18:37:35.666Z",
+  "total": 3,
+  "failed": 3,
+  "emails": [
+    "chef1@",
+    "chef2@",
+    "chef3@"
+  ],
+  "ready": false
+}

@@ -1,0 +1,10 @@
+{
+  "approved": false,
+  "approvedBy": "",
+  "approvedAt": "",
+  "ticket": "INFRA-0000",
+  "migrations": [
+    "20260517120000_workspace_phase1_order_menu_product",
+    "20260517140000_workspace_phase2_integration_webhook"
+  ]
+}
