@@ -6,12 +6,15 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
+import { requireManageStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { safeError } from "@/lib/security";
 
 async function storefrontForUser() {
-  const { sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, storeSlug: true });
+  const { sf } = await requireManageStorefrontRow(
+    { id: true, storeSlug: true },
+    { operation: "storefront.discounts" },
+  );
   return sf;
 }
 

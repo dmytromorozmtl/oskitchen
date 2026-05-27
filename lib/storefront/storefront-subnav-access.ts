@@ -47,7 +47,7 @@ const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
   { href: "/dashboard/storefront/forms", gate: { kind: "manage" } },
   { href: "/dashboard/storefront/domains", gate: { kind: "manage" } },
   { href: "/dashboard/storefront/redirects", gate: { kind: "admin", permission: "storefront.settings" } },
-  { href: "/dashboard/storefront/discounts", gate: { kind: "admin", permission: "storefront.settings" } },
+  { href: "/dashboard/storefront/discounts", gate: { kind: "manage" } },
   { href: "/dashboard/storefront/gift-cards", gate: { kind: "rewards", module: "gift_cards" } },
   { href: "/dashboard/storefront/loyalty", gate: { kind: "rewards", module: "loyalty" } },
   { href: "/dashboard/storefront/reservations", gate: { kind: "admin", permission: "storefront.settings" } },
