@@ -22,13 +22,14 @@ export async function requireReportReadActor(
     reportKey?: string;
     metadata?: Record<string, unknown>;
   },
-):
+): Promise<
   | {
       ok: true;
       actor: WorkspacePermissionActor;
       scope: ReturnType<typeof createReportActorScope>;
     }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   try {
     const actor = await requireWorkspacePermissionActor();
     const scope = createReportActorScope(actor);

@@ -5,14 +5,15 @@ import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspa
 import type { createReportActorScope } from "@/lib/reports/report-actor-scope";
 
 /** Server gate for `/dashboard/reports/[reportKey]` — audits denials before data load. */
-export async function requireReportGeneratorPageAccess(reportKey: ReportKey):
+export async function requireReportGeneratorPageAccess(reportKey: ReportKey): Promise<
   | {
       ok: true;
       actor: WorkspacePermissionActor;
       scope: ReturnType<typeof createReportActorScope>;
       definition: ReturnType<typeof getReportDefinition>;
     }
-  | { ok: false; requiredPermission: ReportPermission } {
+  | { ok: false; requiredPermission: ReportPermission }
+> {
   const definition = getReportDefinition(reportKey);
   const access = await requireReportReadActor(definition.requiredPermission, {
     operation: "reports.generator.view",

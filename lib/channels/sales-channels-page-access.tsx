@@ -14,9 +14,10 @@ export function salesChannelsManageDeniedCard(): ReactNode {
   });
 }
 
-export async function requireSalesChannelsManagePage():
+export async function requireSalesChannelsManagePage(): Promise<
   | { ok: true; actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>> }
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const access = await requireIntegrationsManagePage();
   if (!access.ok) {
     return { ok: false, deny: salesChannelsManageDeniedCard() };

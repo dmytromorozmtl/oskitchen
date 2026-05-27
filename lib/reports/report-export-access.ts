@@ -10,9 +10,10 @@ export async function requireReportExportActor(input?: {
   reportKey?: string;
   operation?: string;
   metadata?: Record<string, unknown>;
-}):
+}): Promise<
   | { ok: true; actor: WorkspacePermissionActor }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   const reportKey = input?.reportKey;
   return requireExportActor({
     exportType: "reports",

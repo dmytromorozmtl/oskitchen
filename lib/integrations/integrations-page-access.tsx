@@ -35,9 +35,10 @@ export function integrationsManageDeniedCard(): ReactNode {
   });
 }
 
-export async function requireIntegrationsReadPage():
+export async function requireIntegrationsReadPage(): Promise<
   | { ok: true; actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>; canManage: boolean }
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const actor = await requireWorkspacePermissionActor();
   if (!canReadIntegrations(actor.granted)) {
     return { ok: false, deny: integrationsReadDeniedCard() };
@@ -49,9 +50,10 @@ export async function requireIntegrationsReadPage():
   };
 }
 
-export async function requireIntegrationsManagePage():
+export async function requireIntegrationsManagePage(): Promise<
   | { ok: true; actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>> }
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const actor = await requireWorkspacePermissionActor();
   if (!canManageIntegrations(actor.granted)) {
     return { ok: false, deny: integrationsManageDeniedCard() };

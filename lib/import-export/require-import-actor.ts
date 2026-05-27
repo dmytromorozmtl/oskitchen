@@ -8,9 +8,10 @@ export async function requireImportActor(input: {
   importKind: ImportCsvKind;
   operation?: string;
   metadata?: Record<string, unknown>;
-}):
+}): Promise<
   | { ok: true; actor: WorkspacePermissionActor }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   const requiredPermission = workspacePermissionForImport(input.importKind);
   const access = await requireMutationPermission(requiredPermission);
   if (!access.ok) {

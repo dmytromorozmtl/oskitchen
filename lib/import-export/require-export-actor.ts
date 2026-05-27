@@ -8,9 +8,10 @@ export async function requireExportActor(input: {
   exportType: ExportType;
   operation?: string;
   metadata?: Record<string, unknown>;
-}):
+}): Promise<
   | { ok: true; actor: WorkspacePermissionActor }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   const requiredPermission = workspacePermissionForExport(input.exportType);
   const access = await requireMutationPermission(requiredPermission);
   if (!access.ok) {

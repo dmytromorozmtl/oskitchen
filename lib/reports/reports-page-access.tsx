@@ -65,13 +65,14 @@ export function reportPermissionDeniedCard(permission: ReportPermission): ReactN
   }
 }
 
-export async function requireReportsPageAccess(requiredPermission: ReportPermission):
+export async function requireReportsPageAccess(requiredPermission: ReportPermission): Promise<
   | {
       ok: true;
       actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>;
       scope: ReturnType<typeof createReportActorScope>;
     }
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const actor = await requireWorkspacePermissionActor();
   const scope = createReportActorScope(actor);
   if (!canDoReports(scope, requiredPermission)) {

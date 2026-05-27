@@ -4,9 +4,10 @@ import { requireApiSession } from "@/lib/api/with-api-guard";
 import type { BillingCapability } from "@/lib/billing/billing-permissions";
 import { requireBillingActor } from "@/lib/billing/require-billing-actor";
 
-export async function requireBillingApiAccess(cap: BillingCapability):
+export async function requireBillingApiAccess(cap: BillingCapability): Promise<
   | { ok: true; userId: string; email: string | null }
-  | { ok: false; response: NextResponse } {
+  | { ok: false; response: NextResponse }
+> {
   const session = await requireApiSession();
   if (!session.ok) {
     return { ok: false, response: session.response };

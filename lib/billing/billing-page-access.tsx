@@ -39,7 +39,7 @@ export function billingCancelDeniedCard(): ReactNode {
   );
 }
 
-export async function requireBillingPageAccess(cap: BillingCapability):
+export async function requireBillingPageAccess(cap: BillingCapability): Promise<
   | {
       ok: true;
       actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>;
@@ -50,7 +50,8 @@ export async function requireBillingPageAccess(cap: BillingCapability):
       canCancel: boolean;
       canViewDiagnostics: boolean;
     }
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const actor = await requireWorkspacePermissionActor();
   const profile = await requireUserProfile();
   const scope = createBillingActorScope(actor, {

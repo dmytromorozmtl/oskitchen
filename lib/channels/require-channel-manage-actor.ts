@@ -4,9 +4,10 @@ import { requireChannelActor, type ChannelActor } from "@/lib/channels/require-c
 export async function requireChannelManageActor(input?: {
   operation?: string;
   metadata?: Record<string, unknown>;
-}):
+}): Promise<
   | (ChannelActor & { ok: true })
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   const access = await requireIntegrationsActor({
     operation: input?.operation ?? "channel.manage",
     metadata: input?.metadata,

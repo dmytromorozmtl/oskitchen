@@ -5,6 +5,8 @@ import { workspacePermissionForPlaybookCapability } from "@/lib/playbooks/playbo
 
 import type { PlaybookActorScope, PlaybookCapability } from "@/lib/playbooks/playbook-types";
 
+export type { PlaybookCapability } from "@/lib/playbooks/playbook-types";
+
 const GRANTS: Record<PlaybookCapability, string[]> = {
   "playbooks.view": [
     "manager", "admin", "accountant", "kitchen_lead", "kitchen",

@@ -10,9 +10,10 @@ import { logIntegrationPermissionDenied } from "@/services/integrations/integrat
 export async function requireIntegrationsReadActor(input?: {
   operation?: string;
   metadata?: Record<string, unknown>;
-}):
+}): Promise<
   | { ok: true; actor: WorkspacePermissionActor; workspaceId: string | null; canManage: boolean }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   try {
     const actor = await requireWorkspacePermissionActor();
     const canRead =
@@ -40,9 +41,10 @@ export async function requireIntegrationsReadActor(input?: {
 export async function requireIntegrationsActor(input?: {
   operation?: string;
   metadata?: Record<string, unknown>;
-}):
+}): Promise<
   | { ok: true; actor: WorkspacePermissionActor; workspaceId: string | null }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   const operation = input?.operation ?? "integrations.manage";
   const access = await requireMutationPermission("integrations.manage");
   if (!access.ok) {
@@ -66,9 +68,10 @@ export async function requireIntegrationsPermissionActor(
     operation?: string;
     metadata?: Record<string, unknown>;
   },
-):
+): Promise<
   | { ok: true; actor: WorkspacePermissionActor; workspaceId: string | null }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   if (required === "integrations.manage") {
     return requireIntegrationsActor(input);
   }

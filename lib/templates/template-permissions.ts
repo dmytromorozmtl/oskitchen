@@ -4,6 +4,8 @@ import { workspacePermissionForTemplateCapability } from "@/lib/templates/templa
 
 import type { TemplateActorScope, TemplateCapability } from "@/lib/templates/template-types";
 
+export type { TemplateCapability } from "@/lib/templates/template-types";
+
 const GRANTS: Record<TemplateCapability, string[]> = {
   "templates.view": [
     "manager", "admin", "accountant", "kitchen_lead", "kitchen",

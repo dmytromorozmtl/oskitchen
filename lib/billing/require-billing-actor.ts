@@ -29,7 +29,7 @@ export async function requireBillingActor(
     operation?: string;
     metadata?: Record<string, unknown>;
   },
-):
+): Promise<
   | {
       ok: true;
       actor: WorkspacePermissionActor;
@@ -37,7 +37,8 @@ export async function requireBillingActor(
       userId: string;
       profileId: string;
     }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   try {
     const actor = await requireWorkspacePermissionActor();
     const profile = await requireUserProfile();
