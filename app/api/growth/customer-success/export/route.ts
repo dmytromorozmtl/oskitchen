@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { createClient } from "@/lib/supabase/server";
+import { requireGrowthApiAccess } from "@/lib/growth/require-growth-api-access";
 import { prisma } from "@/lib/prisma";
-import { UserRole } from "@prisma/client";
 
 function csvEscape(cell: string | number | null | undefined): string {
   const s = cell == null ? "" : String(cell);
@@ -11,21 +10,8 @@ function csvEscape(cell: string | number | null | undefined): string {
 }
 
 export async function GET() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: user.id },
-    select: { role: true },
-  });
-  if (profile?.role !== UserRole.OWNER) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const denied = await requireGrowthApiAccess("growth.view");
+  if (denied) return denied;
 
   const rows = await prisma.userProfile.findMany({
     orderBy: { createdAt: "desc" },

@@ -10,15 +10,17 @@ import {
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-import { assertGrowthAccess } from "@/lib/growth/growth-permissions";
+import { requireSessionUser } from "@/lib/auth";
+import { authorizeGrowth } from "@/lib/growth/require-growth-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import type { OutreachTemplate } from "@/lib/growth/outreach-generate";
 
-async function assertOwner() {
-  return assertGrowthAccess();
+async function assertGrowthManage() {
+  const access = await authorizeGrowth("growth.manage");
+  if (!access.ok) throw new Error(access.error);
 }
 
 export async function updateBetaLeadStatus(input: {
@@ -26,7 +28,7 @@ export async function updateBetaLeadStatus(input: {
   status: BetaLeadStatus;
 }) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     await prisma.betaLead.update({
       where: { id: input.leadId },
       data: { status: input.status },
@@ -44,7 +46,7 @@ export async function updateBetaLeadPriority(input: {
   priority: number;
 }) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const priority = Math.min(9, Math.max(0, Math.floor(Number(input.priority)) || 0));
     await prisma.betaLead.update({
       where: { id: input.leadId },
@@ -62,7 +64,7 @@ export async function appendBetaLeadNote(input: {
   body: string;
 }) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const body = input.body.trim();
     if (!body) return { error: "Note cannot be empty." };
     await prisma.betaLeadNote.create({
@@ -78,7 +80,7 @@ export async function appendBetaLeadNote(input: {
 
 export async function convertBetaLeadToDemoRequest(leadId: string) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const lead = await prisma.betaLead.findUnique({ where: { id: leadId } });
     if (!lead) return { error: "Lead not found." };
     await prisma.demoRequest.create({
@@ -113,7 +115,7 @@ export async function updateDemoRequestStatus(input: {
   status: DemoRequestStatus;
 }) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     await prisma.demoRequest.update({
       where: { id: input.id },
       data: { status: input.status },
@@ -130,7 +132,7 @@ export async function updateAppFeedbackStatus(input: {
   status: AppFeedbackStatus;
 }) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     await prisma.appFeedback.update({
       where: { id: input.id },
       data: { status: input.status },
@@ -154,7 +156,7 @@ function uuidOrNull(raw: unknown): string | null {
 
 export async function createOnboardingCall(formData: FormData) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const businessName = String(formData.get("businessName") ?? "").trim();
     const contactName = String(formData.get("contactName") ?? "").trim();
     const callDate = String(formData.get("callDate") ?? "").trim();
@@ -209,7 +211,8 @@ export async function dismissActivationChecklist() {
 
 export async function ensureReferralCode() {
   try {
-    const user = await assertOwner();
+    await assertGrowthManage();
+    const user = await requireSessionUser();
     const existing = await prisma.referralCode.findFirst({
       where: { userId: user.id, active: true },
     });
@@ -238,7 +241,7 @@ export async function ensureReferralCode() {
 
 export async function createDraftReleaseNote(formData: FormData) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const title = String(formData.get("title") ?? "").trim();
     const slug = String(formData.get("slug") ?? "")
       .trim()
@@ -271,7 +274,7 @@ export async function createDraftReleaseNote(formData: FormData) {
 
 export async function publishReleaseNote(id: string) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     await prisma.releaseNote.update({
       where: { id },
       data: { published: true, publishedAt: new Date() },
@@ -286,7 +289,7 @@ export async function publishReleaseNote(id: string) {
 
 export async function generateOutreachMessage(formData: FormData) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const leadId = String(formData.get("leadId") ?? "").trim();
     const template = String(formData.get("template") ?? "cold_email").trim();
     const allowed: OutreachTemplate[] = [
@@ -315,7 +318,7 @@ export async function generateOutreachMessage(formData: FormData) {
 
 export async function sendTestLeadEmail(leadId: string) {
   try {
-    await assertOwner();
+    await assertGrowthManage();
     const lead = await prisma.betaLead.findUnique({ where: { id: leadId } });
     if (!lead) return { error: "Lead not found." };
     const { notifyGrowthInbound } = await import("@/lib/growth/growth-notify");

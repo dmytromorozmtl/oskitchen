@@ -4,7 +4,9 @@
 
 - `lib/growth/growth-permissions.ts` — `canAccessGrowthModule` grants **workspace owners**, **platform superadmins** (`isSuperAdminUser`), and platform roles `SUPER_ADMIN`, `PLATFORM_ADMIN`, `GROWTH_ADMIN`, `PARTNER_ADMIN`, `SUPPORT_ADMIN`.
 - `lib/growth/require-owner-growth.ts` — layout gate for all `/dashboard/growth/*` routes.
-- `actions/growth.ts` — uses `assertGrowthAccess()` (same rules as layout).
+- `actions/growth.ts` — uses `authorizeGrowth("growth.manage")` (canonical `growth.manage` + platform GTM legacy bridge).
+- `app/dashboard/growth/layout.tsx` — `requireGrowthPageAccess("growth.view")`.
+- `/api/growth/*/export` — `requireGrowthApiAccess("growth.view")`.
 
 ## Service layer (`services/growth/`)
 

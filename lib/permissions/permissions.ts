@@ -56,6 +56,7 @@ export const PERMISSIONS = {
   "templates.manage": "Apply or roll back workspace quick-start templates",
   "templates.participate": "Preview workspace templates and view application history",
   "growth.view": "View growth / beta surfaces",
+  "growth.manage": "Manage growth CRM, outreach, and founder operations",
 } as const;
 
 export type PermissionKey = keyof typeof PERMISSIONS;
@@ -116,6 +117,7 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "templates.manage",
   "templates.participate",
   "growth.view",
+  "growth.manage",
 ];
 
 const STAFF_OPS: readonly PermissionKey[] = [

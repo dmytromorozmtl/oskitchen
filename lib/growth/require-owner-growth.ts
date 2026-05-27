@@ -1,17 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { requireSessionUser } from "@/lib/auth";
-import { canAccessGrowthModule } from "@/lib/growth/growth-permissions";
-import { prisma } from "@/lib/prisma";
+import { requireGrowthPageAccess } from "@/lib/growth/growth-page-access";
 
 export async function requireOwnerForGrowth() {
-  const session = await requireSessionUser();
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: session.id },
-    select: { role: true },
-  });
-  if (!profile) redirect("/dashboard");
-  const ok = await canAccessGrowthModule(session.id, session.email ?? null, profile.role);
-  if (!ok) redirect("/dashboard");
-  return session;
+  const access = await requireGrowthPageAccess("growth.view");
+  if (!access.ok) redirect("/dashboard");
+  return access.actor.sessionUser;
 }

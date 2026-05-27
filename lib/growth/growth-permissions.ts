@@ -1,7 +1,10 @@
 import type { UserRole } from "@prisma/client";
 
-import { requireSessionUser } from "@/lib/auth";
 import { canAccessOwnerOnlySurfaces } from "@/lib/platform-admin";
+import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasPermission } from "@/lib/permissions/guards";
+import { workspacePermissionForGrowthCapability } from "@/lib/growth/growth-permission-keys";
+import type { GrowthActorScope, GrowthCapability } from "@/lib/growth/growth-types";
 import { prisma } from "@/lib/prisma";
 
 const GTM_PLATFORM_ROLES = ["SUPER_ADMIN", "PLATFORM_ADMIN", "GROWTH_ADMIN", "PARTNER_ADMIN", "SUPPORT_ADMIN"] as const;
@@ -23,14 +26,9 @@ export async function canAccessGrowthModule(
   return Boolean(row);
 }
 
-export async function assertGrowthAccess() {
-  const user = await requireSessionUser();
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: user.id },
-    select: { role: true },
-  });
-  if (!profile) throw new Error("FORBIDDEN");
-  const ok = await canAccessGrowthModule(user.id, user.email ?? null, profile.role);
-  if (!ok) throw new Error("FORBIDDEN");
-  return user;
+export function canUseGrowth(scope: GrowthActorScope, capability: GrowthCapability): boolean {
+  if (isSuperAdminEmail(scope.email)) return true;
+  const required = workspacePermissionForGrowthCapability(capability);
+  if (scope.granted && hasPermission(scope.granted, required)) return true;
+  return false;
 }
