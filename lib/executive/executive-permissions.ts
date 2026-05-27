@@ -1,4 +1,7 @@
 import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
+import { executivePermissionKey } from "@/lib/executive/executive-permission-keys";
 
 export type ExecutivePermission =
   | "executive.view"
@@ -13,6 +16,7 @@ export type ExecutiveActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  granted?: ReadonlySet<PermissionKey>;
 };
 
 export function isSuperAdminExecutive(scope: ExecutiveActorScope): boolean {
@@ -31,6 +35,12 @@ export function canViewExecutive(
 ): boolean {
   if (isSuperAdminExecutive(scope)) return true;
   if (scope.isOwner) return true;
+
+  const canonical = executivePermissionKey(permission);
+  if (scope.granted && canonical && hasPermission(scope.granted, canonical)) {
+    return true;
+  }
+
   const role = (scope.role ?? "").toLowerCase();
 
   switch (permission) {

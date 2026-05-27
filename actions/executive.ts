@@ -1,14 +1,19 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { canViewExecutive } from "@/lib/executive/executive-permissions";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { createExecutiveActorScope } from "@/lib/executive/executive-actor-scope";
+import { workspacePermissionForExecutiveCapability } from "@/lib/executive/executive-permission-keys";
+import {
+  canViewExecutive,
+  type ExecutivePermission,
+} from "@/lib/executive/executive-permissions";
 import { parseAnalyticsFilters } from "@/lib/analytics/filters";
 import { prisma } from "@/lib/prisma";
+import { logExecutivePermissionDenied } from "@/services/executive/executive-permission-audit";
 import {
   loadExecutiveOverview,
   persistExecutiveSnapshot,
@@ -17,8 +22,31 @@ import {
 
 const EXECUTIVE_PATH = "/dashboard/executive";
 
-function actorScopeFromUser(user: { id: string; email?: string | null }) {
-  return { isOwner: true, email: user.email ?? null, role: null };
+async function gate(capability: ExecutivePermission) {
+  const required = workspacePermissionForExecutiveCapability(capability);
+  const access = await requireMutationPermission(required);
+  if (!access.ok) {
+    await logExecutivePermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      executiveCapability: capability,
+    });
+    throw new Error(access.error);
+  }
+  const scope = createExecutiveActorScope(access.actor);
+  if (!canViewExecutive(scope, capability)) {
+    await logExecutivePermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      executiveCapability: capability,
+    });
+    throw new Error(`You do not have permission to ${capability}.`);
+  }
+  return {
+    userId: access.actor.userId,
+    sessionUserId: access.actor.sessionUserId,
+    email: access.actor.email,
+  };
 }
 
 const refreshSchema = z.object({
@@ -30,18 +58,14 @@ export async function refreshExecutiveSnapshotAction(
   input: z.infer<typeof refreshSchema>,
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const scope = actorScopeFromUser(user);
-    if (!canViewExecutive(scope, "executive.view")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const { userId } = await gate("executive.view");
     const parsed = refreshSchema.parse(input);
     const filters = parseAnalyticsFilters(
       Object.fromEntries(new URLSearchParams(parsed.filtersQuery ?? "")),
     );
-    const overview = await loadExecutiveOverview({ userId: dataUserId }, filters);
-    await persistExecutiveSnapshot({ userId: dataUserId }, overview, parsed.periodType);
-    await syncExecutiveInsights({ userId: dataUserId }, overview);
+    const overview = await loadExecutiveOverview({ userId }, filters);
+    await persistExecutiveSnapshot({ userId }, overview, parsed.periodType);
+    await syncExecutiveInsights({ userId }, overview);
     revalidatePath(EXECUTIVE_PATH);
     return { ok: true };
   } catch (e) {
@@ -57,27 +81,19 @@ export async function refreshExecutiveSnapshotFormAction(formData: FormData) {
 }
 
 export async function resolveExecutiveInsightAction(insightId: string) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
-  const scope = actorScopeFromUser(user);
-  if (!canViewExecutive(scope, "executive.insights.manage")) {
-    throw new Error("Forbidden");
-  }
+  const { userId, email } = await gate("executive.insights.manage");
   await prisma.executiveInsight.updateMany({
-    where: { id: insightId, userId: dataUserId, status: "OPEN" },
-    data: { status: "RESOLVED", resolvedAt: new Date(), resolvedBy: user.email ?? "user" },
+    where: { id: insightId, userId, status: "OPEN" },
+    data: { status: "RESOLVED", resolvedAt: new Date(), resolvedBy: email ?? "user" },
   });
   revalidatePath(EXECUTIVE_PATH);
 }
 
 export async function dismissExecutiveInsightAction(insightId: string) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
-  const scope = actorScopeFromUser(user);
-  if (!canViewExecutive(scope, "executive.insights.manage")) {
-    throw new Error("Forbidden");
-  }
+  const { userId, email } = await gate("executive.insights.manage");
   await prisma.executiveInsight.updateMany({
-    where: { id: insightId, userId: dataUserId, status: "OPEN" },
-    data: { status: "DISMISSED", resolvedAt: new Date(), resolvedBy: user.email ?? "user" },
+    where: { id: insightId, userId, status: "OPEN" },
+    data: { status: "DISMISSED", resolvedAt: new Date(), resolvedBy: email ?? "user" },
   });
   revalidatePath(EXECUTIVE_PATH);
 }

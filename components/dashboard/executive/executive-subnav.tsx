@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
+export type ExecutiveSubnavLink = {
+  href: string;
+  label: string;
+  match?: "exact" | "prefix";
+};
+
+const DEFAULT_LINKS: ExecutiveSubnavLink[] = [
   { href: "/dashboard/executive", label: "Overview", match: "exact" },
   { href: "/dashboard/executive/revenue", label: "Revenue & orders" },
   { href: "/dashboard/executive/operations", label: "Operations" },
@@ -16,11 +22,12 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/executive/report", label: "Report" },
 ];
 
-export function ExecutiveSubnav() {
+export function ExecutiveSubnav({ links = DEFAULT_LINKS }: { links?: ExecutiveSubnavLink[] }) {
   const path = usePathname();
+  if (links.length === 0) return null;
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3 print:hidden">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact"
             ? path === l.href

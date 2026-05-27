@@ -50,6 +50,7 @@ export const PERMISSIONS = {
   "training.participate": "Complete assigned training, quizzes, and simulations",
   "go-live.manage": "Create and operate launch readiness projects",
   "go-live.unlock": "Override critical launch blockers",
+  "executive.insights.manage": "Resolve or dismiss executive dashboard insights",
   "growth.view": "View growth / beta surfaces",
 } as const;
 
@@ -105,6 +106,7 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "training.participate",
   "go-live.manage",
   "go-live.unlock",
+  "executive.insights.manage",
   "growth.view",
 ];
 

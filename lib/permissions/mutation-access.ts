@@ -28,6 +28,7 @@ const LEGACY_FALLBACK: Partial<Record<PermissionKey, LegacyPermissionKey>> = {
   "training.participate": "manage_team",
   "go-live.manage": "manage_team",
   "go-live.unlock": "manage_settings",
+  "executive.insights.manage": "manage_reports",
   "pos.access": "pos_access",
   "pos.checkout": "pos_access",
   "pos.discount.apply": "pos_comp",

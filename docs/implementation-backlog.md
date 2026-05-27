@@ -176,7 +176,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: aligns workforce and operations
 - Technical value: reduces permission sprawl
 - User story: as an owner, I need staff roles to govern what people can actually do
-- Current state: **in progress** — staff + labor + training + go-live canonical keys; `actions/go-live.ts` uses `go-live.manage` / `go-live.unlock` with fixed `resolveGoLiveActorScope` + `go-live.permission_denied` audit + command center / project UI gates; remaining executive/playbook surfaces still need the same scope fix
+- Current state: **in progress** — staff + labor + training + go-live + executive canonical keys; executive command center uses `createExecutiveActorScope` (reports permissions + `executive.insights.manage`), `executive.permission_denied` audits, filtered subnav, and page gates; remaining playbook/template surfaces still need the same scope fix
 - Target state: staff roles map directly to canonical capabilities
 - Affected files: `actions/staff.ts`, `actions/training.ts`, `lib/staff/**`, `lib/training/**`
 - Dependencies: `KOS-P0-001`

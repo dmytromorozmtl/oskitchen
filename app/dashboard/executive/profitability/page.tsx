@@ -3,9 +3,8 @@ import Link from "next/link";
 import { ExecutiveFilterBar } from "@/components/dashboard/executive/executive-filter-bar";
 import { ExecutiveKpiCard } from "@/components/dashboard/executive/kpi-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { parseAnalyticsFilters } from "@/lib/analytics/filters";
-import { canViewExecutive } from "@/lib/executive/executive-permissions";
+import { requireExecutivePageAccess } from "@/lib/executive/executive-page-access";
 import { prisma } from "@/lib/prisma";
 import { loadExecutiveOverview } from "@/services/executive/executive-dashboard-service";
 
@@ -15,17 +14,11 @@ export default async function ExecutiveProfitabilityPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = (await searchParams) ?? {};
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { isOwner: true, email: user.email ?? null, role: null };
-  if (!canViewExecutive(scope, "executive.read.financial")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Profitability metrics are restricted to owners, managers, admins, and accountants.
-        </CardContent>
-      </Card>
-    );
-  }
+  const access = await requireExecutivePageAccess("executive.read.financial");
+  if (!access.ok) return access.deny;
+  const { actor } = access;
+  const dataUserId = actor.userId;
+  const user = { id: actor.sessionUserId };
   const filters = parseAnalyticsFilters(sp);
   const [overview, brands, locations] = await Promise.all([
     loadExecutiveOverview({ userId: dataUserId }, filters),

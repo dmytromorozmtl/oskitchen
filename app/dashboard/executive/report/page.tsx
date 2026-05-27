@@ -2,9 +2,8 @@ import Link from "next/link";
 
 import { PrintButton } from "@/components/dashboard/reports/print-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { parseAnalyticsFilters, serialiseFilters } from "@/lib/analytics/filters";
-import { canViewExecutive } from "@/lib/executive/executive-permissions";
+import { requireExecutivePageAccess } from "@/lib/executive/executive-page-access";
 import {
   listOpenExecutiveInsights,
   loadExecutiveOverview,
@@ -24,17 +23,10 @@ export default async function ExecutiveReportPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = (await searchParams) ?? {};
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { isOwner: true, email: user.email ?? null, role: null };
-  if (!canViewExecutive(scope, "executive.export")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Exporting executive reports is restricted to owners, managers, admins, and accountants.
-        </CardContent>
-      </Card>
-    );
-  }
+  const access = await requireExecutivePageAccess("executive.export");
+  if (!access.ok) return access.deny;
+  const { actor } = access;
+  const dataUserId = actor.userId;
   const filters = parseAnalyticsFilters(sp);
   const filtersQuery = serialiseFilters(filters).toString();
 
