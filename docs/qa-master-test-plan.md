@@ -152,6 +152,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 6. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open
 7. impersonation and sensitive-action audit coverage
 8. release-critical smoke bundle aligned to production journeys
+9. ~~cron surface hygiene CI wiring~~ — `validate:production-crons` + `validate:cron-inventory` in quality job; live gate `test:ci:cron-hygiene:cert`
 
 ## Evidence / Artifact Expectations Per Release
 - CI summary
