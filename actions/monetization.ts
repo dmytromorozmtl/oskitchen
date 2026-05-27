@@ -1,6 +1,8 @@
 "use server";
 
 
+import { UserRole } from "@prisma/client";
+
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { randomBytes } from "crypto";

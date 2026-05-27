@@ -1,5 +1,4 @@
 import type { ExperimentFeatureVector } from "@/lib/storefront/theme-experiment-ml-risk";
-import { toJsonValue } from "@/lib/prisma/json";
 import { computeExperimentConcludeRiskScore, type MlRiskScore } from "@/lib/storefront/theme-experiment-ml-risk";
 import {
   computeMlRiskWithShadow,

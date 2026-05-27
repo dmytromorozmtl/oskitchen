@@ -4,7 +4,6 @@
  */
 
 import { armFromWeightedBucket, stableBucketPercent } from "@/lib/storefront/theme-experiment-bucket";
-import { toJsonValue } from "@/lib/prisma/json";
 import {
   assignArmLinUcb,
   buildLinUcbFeatureVector,
