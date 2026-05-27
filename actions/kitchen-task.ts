@@ -1,11 +1,13 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
@@ -29,6 +31,24 @@ import {
   updatePriority,
   updateTaskStatus,
 } from "@/services/tasks/task-service";
+
+async function requireKitchenTaskPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "production.manage";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "kitchen_task.permission_denied",
+      entityType: "KitchenTask",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
 
 function revalidateAll(taskId?: string) {
   revalidatePath("/dashboard/tasks");
@@ -57,6 +77,9 @@ const createSchema = z.object({
 
 export async function createKitchenTaskAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.create");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = createSchema.safeParse({
       title: formData.get("title"),
@@ -101,6 +124,9 @@ export async function createKitchenTaskAction(formData: FormData) {
 
 export async function updateKitchenTaskStatusAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.update_status");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const id = String(formData.get("id") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { error: "Invalid task." };
@@ -150,6 +176,9 @@ const fullCreateSchema = z.object({
 
 export async function createFullTaskAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.create_full");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = fullCreateSchema.safeParse({
       title: formData.get("title"),
@@ -237,6 +266,9 @@ const assignSchema = z.object({
 
 export async function assignTaskAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.assign");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = assignSchema.safeParse({
       taskId: formData.get("taskId"),
@@ -294,6 +326,9 @@ const rescheduleSchema = z.object({
 
 export async function rescheduleTaskAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.reschedule");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = rescheduleSchema.safeParse({
       taskId: formData.get("taskId"),
@@ -320,6 +355,9 @@ const commentSchema = z.object({
 
 export async function addTaskCommentAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.add_comment");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = commentSchema.safeParse({
       taskId: formData.get("taskId"),
@@ -346,6 +384,9 @@ const checklistSchema = z.object({
 
 export async function toggleChecklistAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.toggle_checklist");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = checklistSchema.safeParse({
       taskId: formData.get("taskId"),
@@ -378,6 +419,9 @@ const applyTemplateSchema = z.object({
 
 export async function applyBuiltInTemplateAction(formData: FormData) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.apply_template");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = applyTemplateSchema.safeParse({
       templateSlug: formData.get("templateSlug"),
@@ -430,6 +474,9 @@ export async function createIntegrationFollowUpTask(args: {
   description?: string | null;
 }) {
   try {
+    const gate = await requireKitchenTaskPermission("kitchen_task.integration_follow_up");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, userId } = await requireTenantActor();
     const taskId = await createFollowUpTask({
       userId,
