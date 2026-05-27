@@ -37,6 +37,11 @@ const actor = {
 describe("POS terminal route RBAC", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    createTerminalConnectionToken.mockResolvedValue("terminal-token-123");
+    createTerminalPaymentIntent.mockResolvedValue({
+      clientSecret: "pi_secret_123",
+      paymentIntentId: "pi_123",
+    });
     processTerminalPayment.mockResolvedValue({
       id: "tx-1",
       orderId: "order-1",
@@ -83,12 +88,26 @@ describe("POS terminal route RBAC", () => {
     expect(cancelTerminalPayment).not.toHaveBeenCalled();
   });
 
+  it("issues terminal connection tokens and records an allowed audit event", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+
+    const response = await GET();
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json).toEqual({ token: "terminal-token-123" });
+    expect(createTerminalConnectionToken).toHaveBeenCalledTimes(1);
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(actor, {
+      action: "POS_TERMINAL_TOKEN_ISSUED",
+      metadata: { route: "/api/pos/terminal" },
+    });
+    expect(createTerminalPaymentIntent).not.toHaveBeenCalled();
+    expect(processTerminalPayment).not.toHaveBeenCalled();
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
   it("creates terminal intents using the owner-scoped actor id", async () => {
     requireMutationPermission.mockResolvedValue({ ok: true, actor });
-    createTerminalPaymentIntent.mockResolvedValue({
-      clientSecret: "pi_secret_123",
-      paymentIntentId: "pi_123",
-    });
 
     const request = new Request("http://localhost/api/pos/terminal", {
       method: "POST",
@@ -111,14 +130,69 @@ describe("POS terminal route RBAC", () => {
     );
     expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
       actor,
-      expect.objectContaining({
+      {
+        action: "POS_TERMINAL_PAYMENT_INTENT_CREATED",
         entityId: "order-1",
         label: "order-1",
-      }),
+        metadata: {
+          amount: 12.5,
+          currency: "usd",
+          paymentIntentId: "pi_123",
+        },
+      },
     );
     expect(logPosPermissionDenied).not.toHaveBeenCalled();
     expect(processTerminalPayment).not.toHaveBeenCalled();
     expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    {
+      method: "POST",
+      invoke: () =>
+        POST(
+          new Request("http://localhost/api/pos/terminal", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: "{",
+          }),
+        ),
+    },
+    {
+      method: "PUT",
+      invoke: () =>
+        PUT(
+          new Request("http://localhost/api/pos/terminal", {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: "{",
+          }),
+        ),
+    },
+    {
+      method: "DELETE",
+      invoke: () =>
+        DELETE(
+          new Request("http://localhost/api/pos/terminal", {
+            method: "DELETE",
+            headers: { "content-type": "application/json" },
+            body: "{",
+          }),
+        ),
+    },
+  ])("rejects malformed JSON payloads for $method before calling terminal services", async ({ invoke }) => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+
+    const response = await invoke();
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json).toEqual({ error: "Invalid JSON" });
+    expect(createTerminalConnectionToken).not.toHaveBeenCalled();
+    expect(createTerminalPaymentIntent).not.toHaveBeenCalled();
+    expect(processTerminalPayment).not.toHaveBeenCalled();
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
   });
 
   it("processes terminal payments using the owner-scoped actor id and records an allowed audit event", async () => {

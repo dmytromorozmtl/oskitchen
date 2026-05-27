@@ -38,6 +38,14 @@ async function requirePosTerminalAccess(method: string) {
   return access.actor;
 }
 
+async function parseJsonBody(request: Request) {
+  try {
+    return { ok: true as const, body: await request.json() };
+  } catch {
+    return { ok: false as const, response: NextResponse.json({ error: "Invalid JSON" }, { status: 400 }) };
+  }
+}
+
 export async function GET() {
   const actor = await requirePosTerminalAccess("GET");
   if (!actor) {
@@ -63,8 +71,11 @@ export async function POST(request: Request) {
   if (!actor) {
     return NextResponse.json({ error: "You do not have permission to perform this action." }, { status: 403 });
   }
-  const body = await request.json();
-  const parsed = paymentSchema.safeParse(body);
+  const parsedBody = await parseJsonBody(request);
+  if (!parsedBody.ok) {
+    return parsedBody.response;
+  }
+  const parsed = paymentSchema.safeParse(parsedBody.body);
 
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
@@ -100,8 +111,11 @@ export async function PUT(request: Request) {
   if (!actor) {
     return NextResponse.json({ error: "You do not have permission to perform this action." }, { status: 403 });
   }
-  const body = await request.json();
-  const parsed = processSchema.safeParse(body);
+  const parsedBody = await parseJsonBody(request);
+  if (!parsedBody.ok) {
+    return parsedBody.response;
+  }
+  const parsed = processSchema.safeParse(parsedBody.body);
 
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
@@ -136,7 +150,11 @@ export async function DELETE(request: Request) {
   if (!actor) {
     return NextResponse.json({ error: "You do not have permission to perform this action." }, { status: 403 });
   }
-  const { paymentIntentId } = (await request.json()) as { paymentIntentId?: string };
+  const parsedBody = await parseJsonBody(request);
+  if (!parsedBody.ok) {
+    return parsedBody.response;
+  }
+  const { paymentIntentId } = parsedBody.body as { paymentIntentId?: string };
   if (!paymentIntentId) {
     return NextResponse.json({ error: "paymentIntentId required" }, { status: 400 });
   }
