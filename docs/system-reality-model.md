@@ -1,7 +1,8 @@
 # KitchenOS System Reality Model
 
-Updated: 2026-05-26
-Status: canonical current-state audit for the next hardening cycle
+Updated: 2026-05-27  
+Status: canonical current-state audit for the next hardening cycle  
+**Index:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md)
 
 ## Scope
 This document summarizes the current, code-backed reality of KitchenOS before additional implementation work. It is based on direct inspection of the active repository surface and reconciliation with existing audit materials, not on aspirational product claims.

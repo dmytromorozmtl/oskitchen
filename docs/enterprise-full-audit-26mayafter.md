@@ -1,3 +1,6 @@
+> **DEPRECATED — Historical audit (2026-05-26).** Do not use for release or sales decisions.  
+> **Canonical source:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md) → [`full-strategic-reaudit-2026-05-27.md`](./full-strategic-reaudit-2026-05-27.md), [`system-reality-model.md`](./system-reality-model.md).
+
 # Enterprise Full Audit — 26 May
 Read-only audit based on direct code inspection, targeted command execution, and machine-generated repository inventories. No production code was modified.
 ## 1. Executive Summary

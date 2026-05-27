@@ -278,6 +278,15 @@ Priority rule:
 - Priority order: 15
 - Estimated complexity: Low to Medium
 
+## 16. Documentation Canon Governance
+- Progress update: **Cycle 27–28** — `docs/canonical-doc-index.md` lists core/era/scoped canon; `docs/_DEPRECATED_AUDIT_FAMILY.md` marks ~1,300+ historical audits as superseded; gateway banners on three high-traffic audit files; `test:ci:doc-canon` validates required paths exist.
+- Problem: 1,400+ markdown files with contradictory readiness claims. Evidence: `docs/full-strategic-reaudit-2026-05-27.md` Step 2.
+- Business risk: sales and engineering use stale audits for go/no-go decisions.
+- Safest plan: index + deprecation notice + gateway banners only; no bulk delete or mass edit.
+- Acceptance criteria: canonical index exists; stale families documented; validation test passes.
+- Priority order: 16 (P1 governance)
+- Estimated complexity: Low
+
 ## Recommended First P0 Order
 1. RBAC inconsistency
 2. POS permission gaps

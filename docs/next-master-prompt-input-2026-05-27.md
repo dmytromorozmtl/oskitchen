@@ -217,7 +217,7 @@ AUDIT-FIRST / IMPLEMENT-SECOND
 |--------|------|
 | **Keep as canon** | `system-reality-model.md`, `feature-maturity-matrix.md`, `p0-hardening-roadmap.md`, `rbac-permission-architecture.md`, `implementation-backlog.md`, `definition-of-done.md`, `product-positioning.md`, `competitor-feature-gap-matrix.md` |
 | **Update counts** | `system-reality-model.md` (this re-audit inventory) |
-| **Create** | `docs/canonical-doc-index.md` — lists 12 allowed docs + deprecation notice |
+| **Create** | `docs/canonical-doc-index.md` — lists 12 allowed docs + deprecation notice — **done (Cycle 27–28)** |
 | **Create** | `docs/kds-v1-scope.md` — before KDS implementation cycles |
 | **Create** | `docs/ci-e2e-tier-matrix.md` — which E2E runs where |
 | **Deprecate** | Ad-hoc `*AUDIT*.md` not in index (1,300+ files) — banner only, no delete |

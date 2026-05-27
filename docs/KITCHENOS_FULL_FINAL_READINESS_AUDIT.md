@@ -1,3 +1,6 @@
+> **DEPRECATED — Historical readiness audit (2026-05-14).** Do not use for release or sales decisions.  
+> **Canonical source:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md) → [`feature-maturity-matrix.md`](./feature-maturity-matrix.md), [`p0-hardening-roadmap.md`](./p0-hardening-roadmap.md).
+
 # KitchenOS — Full final readiness audit
 
 **Date:** 2026-05-14  
