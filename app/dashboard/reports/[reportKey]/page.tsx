@@ -5,19 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { PrintButton } from "@/components/dashboard/reports/print-button";
 import { ReportFilterBar } from "@/components/dashboard/reports/report-filter-bar";
 import { SaveReportForm } from "@/components/dashboard/reports/save-report-form";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
-import { createReportActorScope } from "@/lib/reports/report-actor-scope";
+import { requireReportGeneratorPageAccess } from "@/lib/reports/require-report-generator-page";
+import { reportPermissionDeniedCard } from "@/lib/reports/reports-page-access";
 import {
   parseReportFilters,
   serialiseReportFilters,
 } from "@/lib/reports/report-filters";
 import { canExportReports } from "@/lib/reports/report-export-access";
 import { canDoReports } from "@/lib/reports/report-permissions";
-import {
-  getReportDefinition,
-  isReportKey,
-} from "@/lib/reports/report-registry";
+import { isReportKey } from "@/lib/reports/report-registry";
 import {
   PREVIEW_ROW_LIMIT,
   previewSlice,
@@ -33,11 +30,13 @@ export default async function ReportGeneratorPage({
 }) {
   const { reportKey } = await params;
   if (!isReportKey(reportKey)) notFound();
-  const sp = (await searchParams) ?? {};
-  const actor = await requireWorkspacePermissionActor();
+  const pageAccess = await requireReportGeneratorPageAccess(reportKey);
+  if (!pageAccess.ok) {
+    return reportPermissionDeniedCard(pageAccess.requiredPermission);
+  }
+  const { actor, scope, definition } = pageAccess;
   const { userId } = actor;
-  const scope = createReportActorScope(actor);
-  const definition = getReportDefinition(reportKey);
+  const sp = (await searchParams) ?? {};
 
   const filters = parseReportFilters(sp);
   const basePath = `/dashboard/reports/${reportKey}`;
@@ -58,13 +57,7 @@ export default async function ReportGeneratorPage({
   ]);
 
   if (result.status === "permission_denied") {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view this report.
-        </CardContent>
-      </Card>
-    );
+    return reportPermissionDeniedCard(definition.requiredPermission);
   }
 
   const canExport = canExportReports(actor);

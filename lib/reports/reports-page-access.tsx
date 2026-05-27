@@ -36,6 +36,35 @@ export function reportsSavedDeniedCard(): ReactNode {
   );
 }
 
+export function reportsCustomerPiiDeniedCard(): ReactNode {
+  return deniedCard(
+    "Customer reports",
+    "You do not have permission to view customer PII reports in this workspace.",
+  );
+}
+
+export function reportsAuditDeniedCard(): ReactNode {
+  return deniedCard(
+    "Audit reports",
+    "You do not have permission to view audit and compliance reports in this workspace.",
+  );
+}
+
+export function reportPermissionDeniedCard(permission: ReportPermission): ReactNode {
+  switch (permission) {
+    case "reports.read.financial":
+      return reportsFinancialDeniedCard();
+    case "reports.read.customer_pii":
+      return reportsCustomerPiiDeniedCard();
+    case "reports.read.audit":
+      return reportsAuditDeniedCard();
+    case "reports.saved.manage":
+      return reportsSavedDeniedCard();
+    default:
+      return reportsOperationsDeniedCard();
+  }
+}
+
 export async function requireReportsPageAccess(requiredPermission: ReportPermission):
   | {
       ok: true;
@@ -46,13 +75,7 @@ export async function requireReportsPageAccess(requiredPermission: ReportPermiss
   const actor = await requireWorkspacePermissionActor();
   const scope = createReportActorScope(actor);
   if (!canDoReports(scope, requiredPermission)) {
-    const deny =
-      requiredPermission === "reports.read.financial"
-        ? reportsFinancialDeniedCard()
-        : requiredPermission === "reports.saved.manage"
-          ? reportsSavedDeniedCard()
-          : reportsOperationsDeniedCard();
-    return { ok: false, deny };
+    return { ok: false, deny: reportPermissionDeniedCard(requiredPermission) };
   }
   return { ok: true, actor, scope };
 }
