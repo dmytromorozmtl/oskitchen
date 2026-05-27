@@ -18,6 +18,7 @@ export default defineConfig({
     include: [
       "unit/actions-pos-rbac.test.ts",
       "unit/actions-pos-tabs-rbac.test.ts",
+      "unit/pos-checkout-canonical.test.ts",
       "unit/pos-mutation-access-role-matrix.test.ts",
       "unit/pos-shift-service.test.ts",
       "unit/pos-terminal-service.test.ts",
