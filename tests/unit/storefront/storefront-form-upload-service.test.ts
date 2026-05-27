@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const logUploadDenied = vi.hoisted(() => vi.fn());
 const enforceStorefrontRateLimit = vi.hoisted(() => vi.fn());
 const resolveConfiguredStorefrontStorageProvider = vi.hoisted(() => vi.fn());
 const createClient = vi.hoisted(() => vi.fn());
@@ -10,6 +11,11 @@ vi.mock("@supabase/supabase-js", () => ({
 
 vi.mock("@/lib/storefront/storefront-rate-limit", () => ({
   enforceStorefrontRateLimit,
+}));
+
+vi.mock("@/services/audit/upload-audit", () => ({
+  logUploadDenied,
+  logUploadSucceeded: vi.fn(),
 }));
 
 vi.mock("@/lib/storefront/storage-provider", () => ({
@@ -47,5 +53,11 @@ describe("storefront form upload service", () => {
       error: "File type not allowed (JPEG, PNG, WebP, PDF only).",
     });
     expect(createClient).not.toHaveBeenCalled();
+    expect(logUploadDenied).toHaveBeenCalledWith(
+      expect.objectContaining({
+        channel: "storefront_form_attachment",
+        reason: "File type not allowed (JPEG, PNG, WebP, PDF only).",
+      }),
+    );
   });
 });

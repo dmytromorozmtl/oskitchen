@@ -4,6 +4,7 @@ import { z } from "zod";
 import { enforceStorefrontRouteRateLimit } from "@/lib/storefront/storefront-rate-limit";
 import { prisma } from "@/lib/prisma";
 import { validateStorefrontFormAttachmentUpload } from "@/lib/upload-policy/media-upload-validation";
+import { logUploadDenied } from "@/services/audit/upload-audit";
 import { uploadStorefrontFormAttachment } from "@/services/storefront/storefront-form-upload-service";
 
 export async function POST(request: Request) {
@@ -61,6 +62,19 @@ export async function POST(request: Request) {
       mimeType: file.type || "",
     });
     if (!validated.ok) {
+      void logUploadDenied({
+        channel: "storefront_form_attachment",
+        entity: { type: "StorefrontForm", id: formId },
+        mimeType: file.type || null,
+        sizeBytes: bytes.byteLength,
+        reason: validated.error,
+        metadata: { storeSlug, fieldId },
+        source: "API",
+        request: {
+          route: "/api/storefront/forms/upload",
+          method: "POST",
+        },
+      });
       return NextResponse.json({ error: validated.error }, { status: 400 });
     }
 

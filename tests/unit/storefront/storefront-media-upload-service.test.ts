@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const logUploadDenied = vi.hoisted(() => vi.fn());
 const assertStorefrontAssetUploadAllowed = vi.hoisted(() => vi.fn());
 const resolveConfiguredStorefrontStorageProvider = vi.hoisted(() => vi.fn());
 const createClient = vi.hoisted(() => vi.fn());
@@ -18,6 +19,11 @@ vi.mock("@/lib/prisma", () => ({
 
 vi.mock("@/services/storefront/storefront-asset-service", () => ({
   assertStorefrontAssetUploadAllowed,
+}));
+
+vi.mock("@/services/audit/upload-audit", () => ({
+  logUploadDenied,
+  logUploadSucceeded: vi.fn(),
 }));
 
 vi.mock("@/lib/storefront/storage-provider", () => ({
@@ -54,5 +60,11 @@ describe("storefront media upload service", () => {
     });
     expect(createClient).not.toHaveBeenCalled();
     expect(prismaMock.storefrontAsset.create).not.toHaveBeenCalled();
+    expect(logUploadDenied).toHaveBeenCalledWith(
+      expect.objectContaining({
+        channel: "storefront_media",
+        reason: "SVG files with scripts, event handlers, or embedded active content are not allowed.",
+      }),
+    );
   });
 });

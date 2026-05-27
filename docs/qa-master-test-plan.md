@@ -115,7 +115,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ## Current Highest-Priority Additions
 1. POS permission-negative role matrix, including terminal API route denials and POS shell parity
 2. storefront payment failure and retry matrix
-3. upload/media malicious file denial coverage — storefront media, kitchen raster, and form attachment validators covered by unit tests; E2E denial matrix still open
+3. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 4. kitchen/KDS permission and realtime behavior
 5. impersonation and sensitive-action audit coverage
 6. release-critical smoke bundle aligned to production journeys

@@ -11,6 +11,7 @@ import {
   STOREFRONT_MEDIA_ALLOWED_MIME,
   validateStorefrontMediaUpload,
 } from "@/lib/storefront/asset-validation";
+import { logUploadDenied } from "@/services/audit/upload-audit";
 import {
   deleteStorefrontMediaAsset,
   uploadStorefrontMediaAsset,
@@ -36,7 +37,7 @@ async function storefrontForUser(userId: string) {
 
 export async function uploadStorefrontMediaFormAction(formData: FormData) {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
+    const { sessionUser: user, userId, workspaceId } = await requireTenantActor();
     const sf = await storefrontForUser(user.id);
     if (!sf) return { error: "Save the storefront overview once first." };
 
@@ -48,7 +49,18 @@ export async function uploadStorefrontMediaFormAction(formData: FormData) {
       bytes,
       mimeType: file.type || "application/octet-stream",
     });
-    if (!validated.ok) return { error: validated.error };
+    if (!validated.ok) {
+      void logUploadDenied({
+        channel: "storefront_media",
+        actorUserId: user.id,
+        workspaceId,
+        entity: { type: "Storefront", id: sf.id },
+        mimeType: file.type || null,
+        sizeBytes: bytes.byteLength,
+        reason: validated.error,
+      });
+      return { error: validated.error };
+    }
     const parsed = mediaUploadSchema.safeParse({
       filename: file.name,
       mimeType: validated.mimeType,
@@ -56,7 +68,18 @@ export async function uploadStorefrontMediaFormAction(formData: FormData) {
       storefrontId: sf.id,
       alt: formData.get("altText")?.toString(),
     });
-    if (!parsed.success) return { error: "Invalid upload." };
+    if (!parsed.success) {
+      void logUploadDenied({
+        channel: "storefront_media",
+        actorUserId: user.id,
+        workspaceId,
+        entity: { type: "Storefront", id: sf.id },
+        mimeType: validated.mimeType,
+        sizeBytes: bytes.byteLength,
+        reason: "Invalid upload metadata.",
+      });
+      return { error: "Invalid upload." };
+    }
 
     const result = await uploadStorefrontMediaAsset({
       userId,

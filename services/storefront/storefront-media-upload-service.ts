@@ -6,6 +6,7 @@ import { logger } from "@/lib/logger";
 import { resolveConfiguredStorefrontStorageProvider } from "@/lib/storefront/storage-provider";
 import { validateStorefrontMediaUpload } from "@/lib/storefront/asset-validation";
 import { prisma } from "@/lib/prisma";
+import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
 import { assertStorefrontAssetUploadAllowed } from "@/services/storefront/storefront-asset-service";
 
 function storefrontBucketName(): string | null {
@@ -112,18 +113,47 @@ export async function uploadStorefrontMediaAsset(params: {
   label?: string;
 }): Promise<{ ok: true; assetId: string; url: string } | { ok: false; error: string }> {
   const gate = await assertStorefrontAssetUploadAllowed();
-  if (!gate.ok) return { ok: false, error: gate.reason };
+  if (!gate.ok) {
+    void logUploadDenied({
+      channel: "storefront_media",
+      actorUserId: params.userId,
+      entity: { type: "Storefront", id: params.storefrontId },
+      mimeType: params.contentType,
+      sizeBytes: params.bytes.byteLength,
+      reason: gate.reason,
+    });
+    return { ok: false, error: gate.reason };
+  }
 
   const validated = validateStorefrontMediaUpload({
     bytes: params.bytes,
     mimeType: params.contentType,
   });
-  if (!validated.ok) return { ok: false, error: validated.error };
+  if (!validated.ok) {
+    void logUploadDenied({
+      channel: "storefront_media",
+      actorUserId: params.userId,
+      entity: { type: "Storefront", id: params.storefrontId },
+      mimeType: params.contentType,
+      sizeBytes: params.bytes.byteLength,
+      reason: validated.error,
+    });
+    return { ok: false, error: validated.error };
+  }
 
   const provider = resolveConfiguredStorefrontStorageProvider();
   const bucket = storefrontBucketName() || process.env.STOREFRONT_S3_BUCKET?.trim();
   if (!bucket) {
-    return { ok: false, error: "Storage bucket is not configured." };
+    const error = "Storage bucket is not configured.";
+    void logUploadDenied({
+      channel: "storefront_media",
+      actorUserId: params.userId,
+      entity: { type: "Storefront", id: params.storefrontId },
+      mimeType: validated.mimeType,
+      sizeBytes: params.bytes.byteLength,
+      reason: error,
+    });
+    return { ok: false, error };
   }
 
   const ext = params.fileName.split(".").pop()?.toLowerCase() || "bin";
@@ -144,7 +174,18 @@ export async function uploadStorefrontMediaAsset(params: {
           contentType: validated.mimeType,
         });
 
-  if ("error" in uploaded) return { ok: false, error: uploaded.error };
+  if ("error" in uploaded) {
+    void logUploadDenied({
+      channel: "storefront_media",
+      actorUserId: params.userId,
+      entity: { type: "Storefront", id: params.storefrontId },
+      mimeType: validated.mimeType,
+      sizeBytes: params.bytes.byteLength,
+      reason: uploaded.error,
+      metadata: { storageProvider: provider },
+    });
+    return { ok: false, error: uploaded.error };
+  }
 
   const asset = await prisma.storefrontAsset.create({
     data: {
@@ -160,6 +201,17 @@ export async function uploadStorefrontMediaAsset(params: {
       altText: params.altText?.trim() || null,
       createdByUserId: params.userId,
     },
+  });
+
+  void logUploadSucceeded({
+    channel: "storefront_media",
+    actorUserId: params.userId,
+    entity: { type: "StorefrontAsset", id: asset.id, label: asset.label },
+    mimeType: validated.mimeType,
+    sizeBytes: params.bytes.byteLength,
+    assetId: asset.id,
+    publicUrl: uploaded.publicUrl,
+    metadata: { storefrontId: params.storefrontId, storageProvider: provider },
   });
 
   return { ok: true, assetId: asset.id, url: uploaded.publicUrl };

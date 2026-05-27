@@ -9,6 +9,7 @@ import {
   storefrontFormAttachmentExtension,
   validateStorefrontFormAttachmentUpload,
 } from "@/lib/upload-policy/media-upload-validation";
+import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
 
 function bucketName(): string | null {
   return (
@@ -33,18 +34,50 @@ export async function uploadStorefrontFormAttachment(input: {
   const rate = await enforceStorefrontRateLimit("storefront_contact_submit", {
     scopeSuffix: `${input.storeSlug}:${input.formId}`,
   });
-  if (!rate.ok) return { ok: false, error: rate.message };
+  if (!rate.ok) {
+    void logUploadDenied({
+      channel: "storefront_form_attachment",
+      entity: { type: "StorefrontForm", id: input.formId },
+      mimeType: input.contentType,
+      sizeBytes: input.bytes.byteLength,
+      reason: rate.message,
+      metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+      source: "API",
+    });
+    return { ok: false, error: rate.message };
+  }
 
   const validated = validateStorefrontFormAttachmentUpload({
     bytes: input.bytes,
     mimeType: input.contentType,
   });
   if (!validated.ok) {
+    void logUploadDenied({
+      channel: "storefront_form_attachment",
+      entity: { type: "StorefrontForm", id: input.formId },
+      mimeType: input.contentType,
+      sizeBytes: input.bytes.byteLength,
+      reason: validated.error,
+      metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+      source: "API",
+    });
     return { ok: false, error: validated.error };
   }
 
   const bucket = bucketName();
-  if (!bucket) return { ok: false, error: "File storage is not configured." };
+  if (!bucket) {
+    const error = "File storage is not configured.";
+    void logUploadDenied({
+      channel: "storefront_form_attachment",
+      entity: { type: "StorefrontForm", id: input.formId },
+      mimeType: validated.mimeType,
+      sizeBytes: input.bytes.byteLength,
+      reason: error,
+      metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+      source: "API",
+    });
+    return { ok: false, error };
+  }
 
   const ext = storefrontFormAttachmentExtension(validated.mimeType);
   const path = `storefront-forms/${input.storeSlug}/${input.formId}/${input.fieldId}/${randomUUID()}.${ext}`;
@@ -55,7 +88,28 @@ export async function uploadStorefrontFormAttachment(input: {
     bytes: input.bytes,
     contentType: validated.mimeType,
   });
-  if (!url) return { ok: false, error: "Upload failed." };
+  if (!url) {
+    void logUploadDenied({
+      channel: "storefront_form_attachment",
+      entity: { type: "StorefrontForm", id: input.formId },
+      mimeType: validated.mimeType,
+      sizeBytes: input.bytes.byteLength,
+      reason: "Upload failed.",
+      metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+      source: "API",
+    });
+    return { ok: false, error: "Upload failed." };
+  }
+
+  void logUploadSucceeded({
+    channel: "storefront_form_attachment",
+    entity: { type: "StorefrontForm", id: input.formId },
+    mimeType: validated.mimeType,
+    sizeBytes: input.bytes.byteLength,
+    publicUrl: url,
+    metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+    source: "API",
+  });
 
   return {
     ok: true,

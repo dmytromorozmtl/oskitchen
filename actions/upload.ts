@@ -7,11 +7,16 @@ import {
   kitchenRasterImageExtension,
   validateKitchenRasterImageUpload,
 } from "@/lib/upload-policy/media-upload-validation";
+import type { UploadAuditChannel } from "@/services/audit/upload-audit";
+import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
 
 async function uploadKitchenImageFromFile(params: {
+  channel: UploadAuditChannel;
   bucket: UploadBucket;
   buildPath: (ext: ReturnType<typeof kitchenRasterImageExtension>) => string;
   file: File;
+  actorUserId: string;
+  workspaceId: string | null;
 }): Promise<{ publicUrl: string } | { error: string }> {
   const bytes = new Uint8Array(await params.file.arrayBuffer());
   const validated = validateKitchenRasterImageUpload({
@@ -19,27 +24,64 @@ async function uploadKitchenImageFromFile(params: {
     mimeType: params.file.type || "",
   });
   if (!validated.ok) {
+    void logUploadDenied({
+      channel: params.channel,
+      actorUserId: params.actorUserId,
+      workspaceId: params.workspaceId,
+      entity: { type: "UploadBucket", id: params.bucket },
+      mimeType: params.file.type || null,
+      sizeBytes: bytes.byteLength,
+      reason: validated.error,
+    });
     return { error: validated.error };
   }
 
   const ext = kitchenRasterImageExtension(validated.mimeType);
-  return uploadKitchenAsset({
+  const result = await uploadKitchenAsset({
     bucket: params.bucket,
     path: params.buildPath(ext),
     bytes,
     contentType: validated.mimeType,
   });
+
+  if ("error" in result) {
+    void logUploadDenied({
+      channel: params.channel,
+      actorUserId: params.actorUserId,
+      workspaceId: params.workspaceId,
+      entity: { type: "UploadBucket", id: params.bucket },
+      mimeType: validated.mimeType,
+      sizeBytes: bytes.byteLength,
+      reason: result.error,
+    });
+    return { error: result.error };
+  }
+
+  void logUploadSucceeded({
+    channel: params.channel,
+    actorUserId: params.actorUserId,
+    workspaceId: params.workspaceId,
+    entity: { type: "UploadBucket", id: params.bucket },
+    mimeType: validated.mimeType,
+    sizeBytes: bytes.byteLength,
+    publicUrl: result.publicUrl,
+  });
+
+  return result;
 }
 
 export async function uploadProductImageAction(formData: FormData) {
-  const { sessionUser: user } = await requireTenantActor();
+  const { sessionUser: user, workspaceId } = await requireTenantActor();
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Missing file" };
 
   const result = await uploadKitchenImageFromFile({
+    channel: "kitchen_product_image",
     bucket: "product-images",
     buildPath: (ext) => `${user.id}/${crypto.randomUUID()}.${ext}`,
     file,
+    actorUserId: user.id,
+    workspaceId,
   });
 
   if ("error" in result) return { error: result.error };
@@ -47,14 +89,17 @@ export async function uploadProductImageAction(formData: FormData) {
 }
 
 export async function uploadBusinessLogoAction(formData: FormData) {
-  const { sessionUser: user } = await requireTenantActor();
+  const { sessionUser: user, workspaceId } = await requireTenantActor();
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Missing file" };
 
   const result = await uploadKitchenImageFromFile({
+    channel: "kitchen_business_logo",
     bucket: "business-logos",
     buildPath: (ext) => `${user.id}/logo.${ext}`,
     file,
+    actorUserId: user.id,
+    workspaceId,
   });
 
   if ("error" in result) return { error: result.error };
