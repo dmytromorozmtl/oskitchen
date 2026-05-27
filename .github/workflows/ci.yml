@@ -89,6 +89,9 @@ jobs:
       - name: Era 3 RBAC wave 3 focused bundle
         run: npm run test:ci:rbac-wave3
 
+      - name: Public POST fail-closed bundle
+        run: npm run test:ci:public-post-fail-closed
+
       - name: Unit test coverage (threshold gate)
         run: npm run test:coverage
 
