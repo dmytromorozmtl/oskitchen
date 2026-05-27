@@ -42,7 +42,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: creates reusable permission pattern for other domains
 - User story: as a cashier or manager, I should only be able to perform authorized POS actions
 - Current state: refunds/voids are better protected than checkout/register/shift flows
-- Progress update: checkout/register/shift/refund/void flows plus `app/api/pos/terminal/route.ts` now enforce canonical POS permissions, the main POS shell/registers/shifts/settings entry pages now mirror those permissions, and focused POS RBAC test files/config have been added; primary remaining gaps are reliable local execution plus deeper E2E/API/negative-role coverage, with the local execution blocker now traced more concretely to Vitest watch startup behavior plus damaged test-runner package payloads in `node_modules`
+- Progress update: checkout/register/shift/refund/void flows plus `app/api/pos/terminal/route.ts` now enforce canonical POS permissions, the main POS shell/registers/shifts/settings entry pages now mirror those permissions, and focused POS RBAC test files/config have been added; primary remaining gaps are reliable local execution plus deeper E2E/API/negative-role coverage, with the local execution blocker now traced more concretely to Vitest watch startup behavior plus damaged test-runner package payloads in `node_modules`, including missing direct/transitive manifests inside the focused runner stack
 - Target state: all POS mutations and route handlers require explicit POS capabilities
 - Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`
 - Dependencies: `KOS-P0-001`

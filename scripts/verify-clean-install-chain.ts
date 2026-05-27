@@ -32,6 +32,12 @@ function checkPathExists(relPath: string, label: string) {
   }
 }
 
+function checkPaths(paths: Array<{ relPath: string; label: string }>) {
+  for (const entry of paths) {
+    checkPathExists(entry.relPath, entry.label);
+  }
+}
+
 const pkgPath = path.join(root, "package.json");
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8")) as { scripts?: Record<string, string> };
 const post = pkg.scripts?.postinstall ?? "";
@@ -71,13 +77,34 @@ try {
   fail("stripe not resolvable from project root");
 }
 
-checkPathExists("node_modules/vitest/vitest.mjs", "Vitest CLI entrypoint");
-checkPathExists("node_modules/vitest/package.json", "Vitest package manifest");
-checkPathExists("node_modules/pathe/package.json", "Pathe package manifest");
-checkPathExists(
-  "node_modules/vitest/node_modules/picomatch/lib/scan.js",
-  "Vitest nested picomatch scan helper",
-);
+checkPaths([
+  { relPath: "node_modules/vitest/vitest.mjs", label: "Vitest CLI entrypoint" },
+  { relPath: "node_modules/vitest/package.json", label: "Vitest package manifest" },
+  { relPath: "node_modules/vitest/dist/module-evaluator.js", label: "Vitest module evaluator" },
+  { relPath: "node_modules/pathe/package.json", label: "Pathe package manifest" },
+  {
+    relPath: "node_modules/vitest/node_modules/picomatch/lib/scan.js",
+    label: "Vitest nested picomatch scan helper",
+  },
+  { relPath: "node_modules/vite/package.json", label: "Vite package manifest" },
+  { relPath: "node_modules/rollup/package.json", label: "Rollup package manifest" },
+  { relPath: "node_modules/postcss/package.json", label: "PostCSS package manifest" },
+  { relPath: "node_modules/picomatch/package.json", label: "Top-level picomatch package manifest" },
+  { relPath: "node_modules/std-env/package.json", label: "std-env package manifest" },
+  { relPath: "node_modules/tinyrainbow/package.json", label: "tinyrainbow package manifest" },
+  { relPath: "node_modules/tinybench/package.json", label: "tinybench package manifest" },
+  { relPath: "node_modules/tinyexec/package.json", label: "tinyexec package manifest" },
+  { relPath: "node_modules/tinyglobby/package.json", label: "tinyglobby package manifest" },
+  { relPath: "node_modules/obug/package.json", label: "obug package manifest" },
+  { relPath: "node_modules/magic-string/package.json", label: "magic-string package manifest" },
+  { relPath: "node_modules/expect-type/package.json", label: "expect-type package manifest" },
+  { relPath: "node_modules/es-module-lexer/package.json", label: "es-module-lexer package manifest" },
+  { relPath: "node_modules/estree-walker/package.json", label: "estree-walker package manifest" },
+  {
+    relPath: "node_modules/convert-source-map/package.json",
+    label: "convert-source-map package manifest",
+  },
+]);
 
 if (failed) {
   process.exit(1);
