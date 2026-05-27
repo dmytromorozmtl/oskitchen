@@ -86,6 +86,9 @@ jobs:
       - name: Governance and public API focused bundles
         run: npm run test:ci:governance-bundles
 
+      - name: Era 3 RBAC wave 3 focused bundle
+        run: npm run test:ci:rbac-wave3
+
       - name: Unit test coverage (threshold gate)
         run: npm run test:coverage
 

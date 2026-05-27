@@ -21,7 +21,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - route registry and cron manifest contracts
 - cron hygiene live gates: `tests/unit/cron-hygiene-live.test.ts`, `validate:production-crons`, `validate:cron-inventory`, bundle `test:ci:cron-hygiene`
 - doc canon gate: `tests/unit/canonical-doc-index.test.ts`, bundle `test:ci:doc-canon`, index `docs/canonical-doc-index.md`
-- **CI quality job bundle:** `npm run test:ci:governance-bundles` (doc-canon + public-api-v1 + nav-governance + integration-honesty)
+- **CI quality job bundle:** `npm run test:ci:governance-bundles` (doc-canon + public-api-v1 + nav-governance + integration-honesty); **Era 3 RBAC wave 3:** `npm run test:ci:rbac-wave3` (costing, purchasing PO/bulk-price, export audit/DSR platform gates, export dashboard UI parity)
 
 ### 4. E2E
 - user journeys through auth, storefront, POS, dashboard, packing, and critical support flows

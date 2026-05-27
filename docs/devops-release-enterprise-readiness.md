@@ -27,7 +27,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - cron allowlist, disk routes, archive manifest, production profile, and `vercel.json` must reconcile
 - validation failure blocks release
 - CI `quality` job runs `validate:production-crons` and `validate:cron-inventory` (both include `tests/unit/cron-hygiene-live.test.ts`)
-- CI `quality` job runs `npm run test:ci:governance-bundles` (doc canon, public API v1 contracts, nav maturity, integration honesty)
+- CI `quality` job runs `npm run test:ci:governance-bundles` (doc canon, public API v1 contracts, nav maturity, integration honesty) and `npm run test:ci:rbac-wave3` (Era 3 costing/purchasing/export platform RBAC gates)
 - local focused bundle: `npm run test:ci:cron-hygiene`
 - production schedule: **16** allowlisted slugs; experimental routes require `ENABLE_EXPERIMENTAL_CRONS` in production
 
