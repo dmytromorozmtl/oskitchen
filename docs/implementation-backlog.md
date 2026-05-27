@@ -14,7 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
-- Progress update: POS-sensitive mutation slice is now migrated onto canonical POS keys for checkout, discount/comp approval, refunds, voids, register creation, shift open/close, terminal route access, and the first POS shell/subnav UI parity layer
+- Progress update: POS-sensitive mutation slice is migrated onto canonical POS keys; the first KDS slice now adds `kitchen.view` / `kitchen.bump` registry keys, staff-template capability mapping, server enforcement on daily KDS actions plus kitchen page entry, kitchen permission-denial/bump audits, and focused negative tests for line-cook vs customer-service roles
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -123,7 +123,8 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: moves KDS toward restaurant-grade usage
 - Technical value: creates a coherent kitchen state machine
 - User story: as kitchen staff or expo, I need live ticket actions that are fast and permissioned
-- Current state: kitchen-routing and KDS-adjacent services exist, but are fragmented
+- Current state: daily KDS fetch/bump actions and the kitchen page now enforce `kitchen.view` / `kitchen.bump` with denial/bump audit events; recall/configure/expo permissions and broader kitchen-screen parity remain open
+- Progress update: line cooks can bump to READY without `orders.manage`; customer-service staff are denied kitchen view/bump in focused tests
 - Target state: canonical kitchen permissions and bump/recall/rush ticket workflow
 - Affected files: kitchen services, `actions/kitchen-daily-kds.ts`, future KDS UI shells
 - Dependencies: `KOS-P0-001`

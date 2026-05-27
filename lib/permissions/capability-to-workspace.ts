@@ -18,6 +18,8 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
     "pos.manager.override",
   ],
   [CAPABILITY.productionRun]: ["workspace.view", "production.manage"],
+  [CAPABILITY.kitchenView]: ["workspace.view", "kitchen.view"],
+  [CAPABILITY.kitchenBump]: ["workspace.view", "kitchen.view", "kitchen.bump"],
   [CAPABILITY.packingVerify]: ["workspace.view", "packing.manage"],
   [CAPABILITY.routesAssign]: ["workspace.view", "routes.manage"],
   [CAPABILITY.inventoryRead]: ["workspace.view"],

@@ -25,6 +25,7 @@ import {
 } from "@/services/notifications/order-lifecycle-push";
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { whereOwnedOrderForOwner } from "@/lib/scope/owned-order-guard";
 import {
@@ -187,9 +188,13 @@ export async function createOrder(formData: FormData) {
   }
 }
 
-export async function updateOrderStatus(orderId: string, status: string) {
+export async function updateOrderStatus(
+  orderId: string,
+  status: string,
+  options?: { requiredPermission?: PermissionKey },
+) {
   try {
-    const access = await requireMutationPermission("orders.manage");
+    const access = await requireMutationPermission(options?.requiredPermission ?? "orders.manage");
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, userId } = access.actor;
 

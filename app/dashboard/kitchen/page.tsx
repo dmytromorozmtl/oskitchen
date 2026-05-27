@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { KbHelpButton } from "@/components/dashboard/kb-help-button";
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { KitchenScreenClient } from "@/components/dashboard/kitchen-screen-client";
 import { KdsDailyService } from "@/components/kitchen/kds-daily-service";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
@@ -12,6 +13,8 @@ import {
   normalizeKitchenStationSlug,
 } from "@/lib/kitchen-screen/kitchen-screen-filters";
 import type { KitchenScreenMode } from "@/lib/kitchen-screen/kitchen-screen-types";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { loadKitchenScreenBundle } from "@/services/kitchen-screen/kitchen-screen-service";
@@ -23,7 +26,22 @@ export default async function KitchenScreenPage({
   searchParams?: Promise<{ station?: string; mode?: string; fullscreen?: string; card?: string }>;
 }) {
   const sp = (await searchParams) ?? {};
-  const { sessionUser: session, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { sessionUser: session, dataUserId } = actor;
+
+  if (!hasPermission(actor.granted, "kitchen.view")) {
+    return (
+      <div className="mx-auto max-w-xl space-y-4 py-10">
+        <PosAccessCard
+          title="Kitchen display"
+          description="You do not have permission to view kitchen display tickets in this workspace."
+          primaryHref="/dashboard/today"
+          primaryLabel="Back to Today"
+        />
+      </div>
+    );
+  }
+
   const operatingMode = await getTenantOperatingMode(dataUserId);
 
   if (isDailyServiceMode(operatingMode)) {

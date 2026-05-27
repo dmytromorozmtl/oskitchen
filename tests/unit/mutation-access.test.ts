@@ -14,4 +14,10 @@ describe("mutation access bridge", () => {
     expect(hasLegacyPermission(normalizeRole("KITCHEN_STAFF"), "manage_production")).toBe(true);
     expect(hasLegacyPermission(normalizeRole("KITCHEN_STAFF"), "manage_integrations")).toBe(false);
   });
+
+  it("OWNER workspace role has kitchen view and bump permissions", () => {
+    const granted = defaultPermissionsForWorkspaceRole("OWNER");
+    expect(hasPermission(granted, "kitchen.view")).toBe(true);
+    expect(hasPermission(granted, "kitchen.bump")).toBe(true);
+  });
 });
