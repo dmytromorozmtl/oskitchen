@@ -5,13 +5,30 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
+import { logSettingsPermissionDenied } from "@/services/settings/settings-permission-audit";
 import { NotificationRuleChannel, NotificationRuleTrigger, NotificationType } from "@prisma/client";
+
+async function requireNotificationRulesManageAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await logSettingsPermissionDenied(access.actor, {
+      requiredPermission: "workspace.settings",
+      operation,
+    });
+    return { ok: false as const, error: access.error };
+  }
+  return { ok: true as const, actor: access.actor };
+}
 
 export async function toggleNotificationRuleAction(formData: FormData) {
   try {
+    const manage = await requireNotificationRulesManageAccess("notification_rules.toggle");
+    if (!manage.ok) return { error: manage.error };
+
     const { userId } = await requireTenantActor();
     const id = String(formData.get("id") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { error: "Invalid rule." };
@@ -33,6 +50,9 @@ const seedSchema = z.object({
 
 export async function seedNotificationRulesAction(formData: FormData) {
   try {
+    const manage = await requireNotificationRulesManageAccess("notification_rules.seed");
+    if (!manage.ok) return { error: manage.error };
+
     const { userId } = await requireTenantActor();
     const parsed = seedSchema.safeParse({ confirm: formData.get("confirm") });
     if (!parsed.success) return { error: "Invalid request." };
