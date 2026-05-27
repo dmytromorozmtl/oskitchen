@@ -7,7 +7,6 @@ import { z } from "zod";
 import {
   ensurePlatformOwnerBootstrap,
   getPlatformRolesForUser,
-  isSuperAdminEmail,
   requirePlatformRole,
 } from "@/lib/platform-admin";
 import { safeError } from "@/lib/security";
@@ -36,7 +35,6 @@ export async function canManageProductionIncidentsForUser(user: {
   email?: string | null;
 }): Promise<boolean> {
   await ensurePlatformOwnerBootstrap(user.id, user.email ?? "");
-  if (isSuperAdminEmail(user.email)) return true;
   const roles = await getPlatformRolesForUser(user.id);
   return roles.some((role) => PRODUCTION_INCIDENT_MANAGER_ROLES.includes(role));
 }

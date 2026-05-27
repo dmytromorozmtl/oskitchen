@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requirePlatformRole, isSuperAdminEmail, getPlatformRolesForUser, ensurePlatformOwnerBootstrap } from "@/lib/platform-admin";
+import { requirePlatformRole, getPlatformRolesForUser, ensurePlatformOwnerBootstrap } from "@/lib/platform-admin";
 import { safeError } from "@/lib/security";
 import {
   acknowledgeCronIncident,
@@ -29,7 +29,6 @@ export async function canManageCronIncidentsForUser(user: {
   email?: string | null;
 }): Promise<boolean> {
   await ensurePlatformOwnerBootstrap(user.id, user.email ?? "");
-  if (isSuperAdminEmail(user.email)) return true;
   const roles = await getPlatformRolesForUser(user.id);
   return roles.some((role) => CRON_INCIDENT_MANAGER_ROLES.includes(role));
 }
