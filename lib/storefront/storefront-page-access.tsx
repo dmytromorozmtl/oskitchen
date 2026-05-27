@@ -18,6 +18,22 @@ export function canManageStorefrontMediaFromGranted(granted: ReadonlySet<Permiss
   return hasPermission(granted, "storefront.media.manage");
 }
 
+export function canManageStorefrontDraftFromGranted(granted: ReadonlySet<PermissionKey>): boolean {
+  return hasPermission(granted, "storefront.manage");
+}
+
+export async function resolveStorefrontManageAccess(userId: string, email: string | null) {
+  const actor = await requireWorkspacePermissionActor();
+  const { permissions } = await getStorefrontPermissionSetForUser(userId);
+  const canManage =
+    canManageStorefrontDraftFromGranted(actor.granted) ||
+    canStorefront(permissions, "storefront:edit-draft", {
+      email,
+      workspaceGranted: actor.granted,
+    });
+  return { actor, canManage };
+}
+
 export async function resolveStorefrontPublishAccess(userId: string, email: string | null) {
   const actor = await requireWorkspacePermissionActor();
   const { permissions } = await getStorefrontPermissionSetForUser(userId);
@@ -59,4 +75,31 @@ export function storefrontMediaDeniedCard(): ReactNode {
     primaryHref: "/dashboard/storefront",
     primaryLabel: "Storefront overview",
   });
+}
+
+export function storefrontManageDeniedCard(): ReactNode {
+  return createElement(PosAccessCard, {
+    title: "Storefront editor",
+    description:
+      "You do not have permission to edit storefront pages, navigation, footer, or business settings in this workspace.",
+    primaryHref: "/dashboard/storefront",
+    primaryLabel: "Storefront overview",
+  });
+}
+
+export async function requireStorefrontManagePage():
+  | { ok: true; actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>; canManage: true }
+  | { ok: false; deny: ReactNode } {
+  const actor = await requireWorkspacePermissionActor();
+  const { permissions } = await getStorefrontPermissionSetForUser(actor.sessionUserId);
+  const canManage =
+    canManageStorefrontDraftFromGranted(actor.granted) ||
+    canStorefront(permissions, "storefront:edit-draft", {
+      email: actor.email,
+      workspaceGranted: actor.granted,
+    });
+  if (!canManage) {
+    return { ok: false, deny: storefrontManageDeniedCard() };
+  }
+  return { ok: true, actor, canManage: true };
 }

@@ -24,6 +24,7 @@ export const CAPABILITY = {
   integrationsManage: "integrations:manage",
   storefrontPublish: "storefront:publish",
   storefrontMedia: "storefront:media",
+  storefrontManage: "storefront:manage",
   reportsReadOperations: "reports:read_operations",
   reportsReadFinancial: "reports:read_financial",
   reportsReadCustomerPii: "reports:read_customer_pii",
@@ -56,6 +57,7 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.exportsSensitive,
     CAPABILITY.storefrontPublish,
     CAPABILITY.storefrontMedia,
+    CAPABILITY.storefrontManage,
   ],
   KITCHEN_LEAD: [
     CAPABILITY.ordersRead,
@@ -121,6 +123,7 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.integrationsRead,
     CAPABILITY.storefrontPublish,
     CAPABILITY.storefrontMedia,
+    CAPABILITY.storefrontManage,
     CAPABILITY.reportsReadOperations,
   ],
   VIEWER: [

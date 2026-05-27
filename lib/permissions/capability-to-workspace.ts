@@ -43,6 +43,11 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
     "storefront.read",
     "storefront.media.manage",
   ],
+  [CAPABILITY.storefrontManage]: [
+    "workspace.view",
+    "storefront.read",
+    "storefront.manage",
+  ],
   [CAPABILITY.reportsReadOperations]: ["workspace.view", "reports.read.operations"],
   [CAPABILITY.reportsReadFinancial]: ["workspace.view", "reports.read.financial"],
   [CAPABILITY.reportsReadCustomerPii]: ["workspace.view", "reports.read.customer_pii"],

@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SITE_URL } from "@/lib/constants";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { allEditorLocalesForStorefront } from "@/lib/storefront/localized-content";
 import { prisma } from "@/lib/prisma";
 import { listStorefrontMediaForOwner } from "@/services/storefront-builder/media-service";
@@ -33,6 +34,11 @@ export default async function StorefrontPageEditorPage({
   params: Promise<{ pageId: string }>;
   searchParams: Promise<{ sectionError?: string }>;
 }) {
+  const manageAccess = await requireStorefrontManagePage();
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
+
   const { pageId } = await params;
   const sp = await searchParams;
   const sectionErr = sp.sectionError;

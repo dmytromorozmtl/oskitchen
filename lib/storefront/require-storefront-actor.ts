@@ -9,6 +9,7 @@ import { logStorefrontPermissionDenied } from "@/services/storefront/storefront-
 import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
 
 const LEGACY_BY_CANONICAL: Partial<Record<PermissionKey, StorefrontPermission>> = {
+  "storefront.manage": "storefront:edit-draft",
   "storefront.publish": "storefront:publish",
   "storefront.media.manage": "storefront:upload-assets",
 };
@@ -68,4 +69,24 @@ export async function requireStorefrontMediaActor(input?: {
     operation: input?.operation ?? "storefront.media.manage",
     metadata: input?.metadata,
   });
+}
+
+export async function requireStorefrontManageActor(input?: {
+  operation?: string;
+  metadata?: Record<string, unknown>;
+}) {
+  return requireStorefrontPermission("storefront.manage", {
+    operation: input?.operation ?? "storefront.manage",
+    metadata: input?.metadata,
+  });
+}
+
+export async function assertStorefrontManageAccess(
+  operation: string,
+): Promise<{ error: string } | null> {
+  const access = await requireStorefrontManageActor({ operation });
+  if (!access.ok) {
+    return { error: access.error };
+  }
+  return null;
 }

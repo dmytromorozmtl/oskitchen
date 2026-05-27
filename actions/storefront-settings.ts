@@ -12,7 +12,7 @@ import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { isEncryptionConfigured } from "@/lib/crypto";
 import { safeError } from "@/lib/security";
 import { validateAndSanitizeLegalHtml } from "@/lib/storefront/legal-content-validation";
-import { canStorefront } from "@/lib/storefront/storefront-permissions";
+import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
 import {
   loadPublishChecklistForStorefront,
   publishChecklistBlocksGoLive,
@@ -21,7 +21,6 @@ import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalid
 import { resolveOwnerStorefront } from "@/lib/storefront/resolve-owner-storefront";
 import { requireStorefrontAdminPermission } from "@/lib/storefront/storefront-admin-access";
 import { encryptStorefrontWebhookSecret } from "@/lib/storefront/storefront-webhook-secret";
-import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
 
 function slugify(input: string): string {
   return input
@@ -216,10 +215,8 @@ export async function updateStorefrontBusinessSettings(formData: FormData) {
     });
     if (!parsed.success) return { error: "Check contact fields." };
     const d = parsed.data;
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to update storefront business settings." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.business.update");
+    if (manageDenied) return manageDenied;
     const emailRaw = d.contactEmail?.trim() ?? "";
     if (emailRaw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRaw)) {
       return { error: "Contact email looks invalid." };
@@ -228,8 +225,9 @@ export async function updateStorefrontBusinessSettings(formData: FormData) {
     if (!row) return { error: "Save the storefront overview once before editing business settings." };
 
     const privacyRaw = d.privacyText?.trim() ?? "";
-    if (privacyRaw && !canStorefront(permissions, "storefront:edit-legal", { email })) {
-      return { error: "You do not have permission to edit privacy / legal HTML." };
+    if (privacyRaw) {
+      const legalDenied = await assertStorefrontManageAccess("storefront.legal.update");
+      if (legalDenied) return legalDenied;
     }
     const privacy = privacyRaw ? validateAndSanitizeLegalHtml(privacyRaw) : { ok: true as const, html: "" };
     if (!privacy.ok) return { error: privacy.error };

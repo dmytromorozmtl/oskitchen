@@ -6,6 +6,7 @@ import { StorefrontPageType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { secondaryLocalesForStorefront } from "@/lib/storefront/localized-content";
 import { adminPagination, parseAdminPageParam } from "@/lib/storefront/pagination";
@@ -23,6 +24,11 @@ export default async function StorefrontBuilderHubPage({
 }: {
   searchParams?: Promise<{ page?: string }>;
 }) {
+  const manageAccess = await requireStorefrontManagePage();
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
+
   const { sessionUser: user } = await getTenantActor();
   const sp = searchParams ? await searchParams : {};
   const pageNum = parseAdminPageParam(sp.page);

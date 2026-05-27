@@ -9,8 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
-import { canStorefront } from "@/lib/storefront/storefront-permissions";
-import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
+import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
 
 const navFooterSchema = z.object({
   itemsJson: z.string().max(120_000),
@@ -28,11 +27,9 @@ async function sfForUser(userId: string) {
 
 export async function updateStorefrontNavigationSettings(formData: FormData) {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit navigation." };
-    }
+    const { userId } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.navigation.update");
+    if (manageDenied) return manageDenied;
 
     const parsed = navFooterSchema.safeParse({
       itemsJson: formData.get("itemsJson")?.toString() ?? "[]",
@@ -69,11 +66,9 @@ export async function updateStorefrontNavigationSettingsFormAction(formData: For
 
 export async function updateStorefrontFooterSettings(formData: FormData) {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit the footer." };
-    }
+    const { userId } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.footer.update");
+    if (manageDenied) return manageDenied;
 
     const parsed = footerSchema.safeParse({
       blocksJson: formData.get("blocksJson")?.toString() ?? "[]",

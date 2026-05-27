@@ -16,7 +16,7 @@
 
 ## Actions gated (high level)
 
-- Page/section mutations: `storefront:edit-draft`.
+- Page/section/navigation/footer/business settings mutations: canonical `storefront.manage` via `assertStorefrontManageAccess` / `requireStorefrontManageActor` (legacy `storefront:edit-draft` staff flag still bridged).
 - Page publish checkbox: canonical `storefront.publish` (server via `requireStorefrontPublishActor`; legacy `storefront:publish` staff flag still bridged).
 - Theme publish snapshot: canonical `storefront.publish` (same helper; theme page hides form when denied).
 - Media upload/delete: canonical `storefront.media.manage` (`requireStorefrontMediaActor`; media page hides dropzone/delete when denied).

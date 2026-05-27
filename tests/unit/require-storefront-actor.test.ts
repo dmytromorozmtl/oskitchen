@@ -19,6 +19,7 @@ vi.mock("@/services/storefront/storefront-permission-audit", () => ({
 }));
 
 import {
+  requireStorefrontManageActor,
   requireStorefrontMediaActor,
   requireStorefrontPublishActor,
 } from "@/lib/storefront/require-storefront-actor";
@@ -104,6 +105,67 @@ describe("requireStorefrontPublishActor", () => {
     });
 
     const access = await requireStorefrontPublishActor();
+
+    expect(access.ok).toBe(true);
+  });
+});
+
+describe("requireStorefrontManageActor", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("denies line cook draft edits", async () => {
+    const granted = workspacePermissionsFromStaffTemplate("LINE_COOK", "STAFF");
+    const actor = {
+      sessionUserId: "user-5",
+      dataUserId: "owner-1",
+      workspaceId: "ws-1",
+      workspaceRole: "STAFF" as const,
+      staffRoleType: "LINE_COOK" as const,
+      email: "cook@example.com",
+      granted,
+    };
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "You do not have permission to perform this action.",
+      actor,
+    });
+    getStorefrontPermissionSetForUser.mockResolvedValue({
+      role: "STAFF",
+      email: "cook@example.com",
+      permissions: new Set(["storefront:view"]),
+    });
+
+    const access = await requireStorefrontManageActor({ operation: "storefront.page.create" });
+
+    expect(access.ok).toBe(false);
+    expect(logStorefrontPermissionDenied).toHaveBeenCalled();
+  });
+
+  it("allows marketing staff with legacy edit-draft flag", async () => {
+    const granted = workspacePermissionsFromStaffTemplate("MARKETING", "STAFF");
+    const actor = {
+      sessionUserId: "user-6",
+      dataUserId: "owner-1",
+      workspaceId: "ws-1",
+      workspaceRole: "STAFF" as const,
+      staffRoleType: "MARKETING" as const,
+      email: "marketing@example.com",
+      granted,
+    };
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "You do not have permission to perform this action.",
+      actor,
+    });
+    getStorefrontPermissionSetForUser.mockResolvedValue({
+      role: "STAFF",
+      email: "marketing@example.com",
+      permissions: new Set(["storefront:view", "storefront:edit-draft"]),
+    });
+
+    const access = await requireStorefrontManageActor();
 
     expect(access.ok).toBe(true);
   });

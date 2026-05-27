@@ -266,7 +266,7 @@ Initial scope:
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
-- Status update: POS, KDS, billing, integrations, export routes, storefront publish/media, report read/saved-report, and channel-command-center mutations are on canonical keys with denial audits; channel command actions use `requireChannelManageActor` (`integrations.manage`); manage-only sales-channel pages are URL-guarded; sales-channels monitoring uses `integrations.read`; storefront publish still bridges legacy `storefront:publish` staff flags via `requireStorefrontPublishActor`
+- Status update: POS, KDS, billing, integrations, export routes, storefront publish/media/manage, report read/saved-report, and channel-command-center mutations are on canonical keys with denial audits; storefront draft edits use `requireStorefrontManageActor` with legacy `storefront:edit-draft` bridge; channel command actions use `requireChannelManageActor` (`integrations.manage`); manage-only sales-channel and storefront editor pages are URL-guarded
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates

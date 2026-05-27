@@ -29,12 +29,13 @@ import { buildSectionsCreateInput, pageSectionTemplateForType } from "@/lib/stor
 import { resolveSectionPack, sectionPackToCreatePayload } from "@/lib/storefront/section-packs";
 import { defaultSectionContent, normalizeSectionContent, normalizeSectionContentForLocale } from "@/lib/storefront/sections";
 import { sanitizeRichTextLite } from "@/lib/storefront-builder/safe-content";
-import { requireStorefrontPublishActor } from "@/lib/storefront/require-storefront-actor";
-import { canStorefront } from "@/lib/storefront/storefront-permissions";
+import {
+  assertStorefrontManageAccess,
+  requireStorefrontPublishActor,
+} from "@/lib/storefront/require-storefront-actor";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
 import { auditStorefrontPagePublish } from "@/lib/storefront/storefront-audit";
 import { dispatchStorefrontPagePublishedWebhook } from "@/lib/storefront/storefront-webhook";
-import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
 
 function slugify(input: string): string {
   return input
@@ -57,10 +58,8 @@ const pageTypeEnum = z.nativeEnum(StorefrontPageType);
 export async function createStorefrontPage(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit storefront pages." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.page.create");
+    if (manageDenied) return manageDenied;
     const title = (formData.get("title") ?? "").toString().trim();
     const slugRaw = (formData.get("slug") ?? "").toString();
     const pageTypeRaw = (formData.get("pageType") ?? "CUSTOM").toString();
@@ -139,8 +138,8 @@ export async function createStorefrontPageFormAction(
 
 export async function deleteStorefrontPage(formData: FormData) {
   const { sessionUser: user, userId } = await requireTenantActor();
-  const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-  if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
+  const manageDenied = await assertStorefrontManageAccess("storefront.page.delete");
+  if (manageDenied) {
     redirect("/dashboard/storefront/pages");
   }
   const pageId = (formData.get("pageId") ?? "").toString().trim();
@@ -178,10 +177,8 @@ const updatePageSchema = z.object({
 export async function updateStorefrontPageDetails(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit storefront pages." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.page.create");
+    if (manageDenied) return manageDenied;
     const parsed = updatePageSchema.safeParse({
       pageId: formData.get("pageId")?.toString(),
       title: formData.get("title")?.toString(),
@@ -344,10 +341,8 @@ export async function updateStorefrontPageDetailsFormAction(formData: FormData):
 export async function addStorefrontSection(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit sections." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return manageDenied;
     const pageId = (formData.get("pageId") ?? "").toString().trim();
     const typeRaw = (formData.get("sectionType") ?? "TEXT_BLOCK").toString();
     const typeParse = z.nativeEnum(StorefrontSectionType).safeParse(typeRaw);
@@ -394,10 +389,8 @@ export async function addStorefrontSectionFormAction(formData: FormData): Promis
 export async function duplicateStorefrontSection(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit sections." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return manageDenied;
     const sectionId = (formData.get("sectionId") ?? "").toString().trim();
     if (!/^[0-9a-f-]{36}$/i.test(sectionId)) return { error: "Invalid section." };
 
@@ -442,10 +435,8 @@ export async function duplicateStorefrontSectionFormAction(formData: FormData): 
 export async function addStorefrontSectionPack(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit sections." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return manageDenied;
     const pageId = (formData.get("pageId") ?? "").toString().trim();
     const packId = (formData.get("packId") ?? "").toString().trim();
     const pack = resolveSectionPack(packId);
@@ -496,10 +487,8 @@ export async function addStorefrontSectionPackFormAction(formData: FormData): Pr
 export async function deleteStorefrontSection(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit sections." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return manageDenied;
     const sectionId = (formData.get("sectionId") ?? "").toString().trim();
     if (!/^[0-9a-f-]{36}$/i.test(sectionId)) return { error: "Invalid section." };
 
@@ -525,10 +514,8 @@ export async function deleteStorefrontSectionFormAction(formData: FormData): Pro
 export async function moveStorefrontSection(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit sections." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return manageDenied;
     const sectionId = (formData.get("sectionId") ?? "").toString().trim();
     const direction = (formData.get("direction") ?? "").toString();
     if (!/^[0-9a-f-]{36}$/i.test(sectionId)) return { error: "Invalid section." };
@@ -568,11 +555,9 @@ export async function moveStorefrontSectionFormAction(formData: FormData): Promi
 }
 
 export async function updateStorefrontSectionJson(formData: FormData) {
-  const { sessionUser: user, userId } = await requireTenantActor();
-  const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-  if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-    return { error: "You do not have permission to edit sections." };
-  }
+  const { userId } = await requireTenantActor();
+  const manageDenied = await assertStorefrontManageAccess("storefront.section.json");
+  if (manageDenied) return manageDenied;
   const sectionId = (formData.get("sectionId") ?? "").toString().trim();
   const rawJson = (formData.get("contentJson") ?? "").toString();
   if (!/^[0-9a-f-]{36}$/i.test(sectionId)) return { error: "Invalid section." };
@@ -611,10 +596,8 @@ export async function updateStorefrontSectionJsonFormAction(formData: FormData):
 export async function updateStorefrontSectionContent(formData: FormData) {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) {
-      return { error: "You do not have permission to edit sections." };
-    }
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return manageDenied;
     const sectionId = (formData.get("sectionId") ?? "").toString().trim();
     if (!/^[0-9a-f-]{36}$/i.test(sectionId)) return { error: "Invalid section." };
 
@@ -725,8 +708,8 @@ export async function deleteStorefrontPageFormAction(formData: FormData): Promis
 export async function copyStorefrontSectionLocalesFormAction(formData: FormData): Promise<void> {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) return;
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return;
 
     const sectionId = (formData.get("sectionId") ?? "").toString().trim();
     const sourceLocale = (formData.get("sourceLocale") ?? "en").toString().split("-")[0]?.toLowerCase() ?? "en";
@@ -758,8 +741,8 @@ export async function copyStorefrontSectionLocalesFormAction(formData: FormData)
 export async function copyStorefrontPageLocalesFormAction(formData: FormData): Promise<void> {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:edit-draft", { email })) return;
+    const manageDenied = await assertStorefrontManageAccess("storefront.section.mutate");
+    if (manageDenied) return;
 
     const pageId = (formData.get("pageId") ?? "").toString().trim();
     const sourceLocale = (formData.get("sourceLocale") ?? "en").toString().split("-")[0]?.toLowerCase() ?? "en";
