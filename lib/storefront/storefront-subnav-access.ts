@@ -2,6 +2,7 @@ import { requireSessionUser } from "@/lib/auth";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { legacyStorefrontAllowsForActor } from "@/lib/storefront/require-storefront-actor";
+import { canAccessStorefrontGiftCardsTab } from "@/lib/storefront/storefront-gift-cards-permission";
 import { workspacePermissionForStorefrontAdminPermission } from "@/lib/storefront/storefront-admin-permission-keys";
 import {
   resolveStorefrontAdminAccess,
@@ -13,6 +14,7 @@ type SubnavGate =
   | { kind: "read" }
   | { kind: "manage" }
   | { kind: "media" }
+  | { kind: "gift_cards" }
   | { kind: "admin"; permission: StorefrontAdminPermission };
 
 const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
@@ -42,7 +44,7 @@ const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
   { href: "/dashboard/storefront/domains", gate: { kind: "manage" } },
   { href: "/dashboard/storefront/redirects", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/discounts", gate: { kind: "admin", permission: "storefront.settings" } },
-  { href: "/dashboard/storefront/gift-cards", gate: { kind: "admin", permission: "storefront.settings" } },
+  { href: "/dashboard/storefront/gift-cards", gate: { kind: "gift_cards" } },
   { href: "/dashboard/storefront/loyalty", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/reservations", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/referrals", gate: { kind: "admin", permission: "storefront.settings" } },
@@ -83,6 +85,12 @@ export async function resolveStorefrontSubnavVisibleHrefs(
         break;
       case "media":
         if (hub.canManageMedia) visible.push(entry.href);
+        break;
+      case "gift_cards":
+        if (canAccessStorefrontGiftCardsTab(hub.actor.granted, hub.canRead)) {
+          const access = await resolveStorefrontAdminAccess(sessionUser.id);
+          if (access.ok) visible.push(entry.href);
+        }
         break;
       case "admin":
         if (await canAccessStorefrontAdminTab(hub.actor, sessionUser.id, entry.gate.permission)) {

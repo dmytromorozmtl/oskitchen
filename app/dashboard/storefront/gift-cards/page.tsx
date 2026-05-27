@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
+import { requireStorefrontGiftCardsPageAccess } from "@/lib/storefront/storefront-gift-cards-page-access";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { listGiftCardsForStorefront } from "@/services/storefront/gift-card-service";
 
 export default async function StorefrontGiftCardsPage() {
-  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  const pageAccess = await requireStorefrontGiftCardsPageAccess();
   if (!pageAccess.ok) return pageAccess.deny;
 
   const sf = await prisma.storefrontSettings.findUnique({

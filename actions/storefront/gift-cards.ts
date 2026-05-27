@@ -1,13 +1,12 @@
 "use server";
 
-
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { requireRewardsMutation } from "@/lib/crm/require-rewards-mutation";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { safeError } from "@/lib/security";
+import { resolveStorefrontAdminAccess } from "@/lib/storefront/storefront-admin-access";
 import { issueStorefrontGiftCard } from "@/services/storefront/gift-card-service";
 
 const issueSchema = z.object({
@@ -19,9 +18,20 @@ const issueSchema = z.object({
 
 export async function issueGiftCardFormAction(formData: FormData) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
-    const { sf } = await requireAdminStorefrontRow("storefront.settings", { id: true });
-    if (!sf) return { error: "Storefront not found." };
+    const access = await requireRewardsMutation({
+      required: "giftcards.manage",
+      operation: "storefront.gift_cards.issue",
+      module: "gift_cards",
+    });
+    if (!access.ok) return { error: access.error };
+
+    const { sessionUser, userId } = await requireTenantActor();
+    const adminAccess = await resolveStorefrontAdminAccess(sessionUser.id);
+    if (!adminAccess.ok) return { error: adminAccess.error };
+    if (adminAccess.storefront.userId !== userId) {
+      return { error: "Storefront not found." };
+    }
+
     const parsed = issueSchema.safeParse({
       amount: formData.get("amount"),
       recipientEmail: formData.get("recipientEmail")?.toString() ?? "",
@@ -29,9 +39,10 @@ export async function issueGiftCardFormAction(formData: FormData) {
       message: formData.get("message")?.toString(),
     });
     if (!parsed.success) return { error: "Check gift card fields." };
+
     const card = await issueStorefrontGiftCard({
-      userId: user.id,
-      storefrontId: sf.id,
+      userId,
+      storefrontId: adminAccess.storefront.id,
       amount: parsed.data.amount,
       recipientEmail: parsed.data.recipientEmail || undefined,
       recipientName: parsed.data.recipientName,
