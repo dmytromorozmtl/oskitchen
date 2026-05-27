@@ -244,6 +244,7 @@ Priority rule:
 - Estimated complexity: Medium
 
 ## 14. API Contract Governance
+- Progress update: **Cycle 25–26** — `tests/unit/public-api-v1-resources-contract.test.ts` covers all eight v1 resources (auth fail-closed, tenant-scoped list queries, customers pagination, recipes/webhooks POST validation); CI bundle `test:ci:public-api-v1` includes existing auth, orders, and tenant-isolation suites.
 - Problem: public API and webhook taxonomy exist, but versioned contract maturity is still partial. Evidence: `lib/api/route-registry.ts`, `app/api/public/v1/`, `docs/API_WEBHOOK_DEVELOPER_CONTRACT_MATURITY.md`.
 - Business risk: integrator trust and support complexity worsen as external use increases.
 - Technical risk: silent response drift across routes and versions.
