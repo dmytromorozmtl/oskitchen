@@ -15,6 +15,8 @@ import {
 } from "@/lib/catering/quote-types";
 import { CATERING_QUOTE_STATUS_VALUES } from "@/lib/catering/quote-status";
 import { BUILT_IN_CATERING_TEMPLATES } from "@/lib/catering/quote-templates";
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
@@ -46,6 +48,22 @@ const REVALIDATE_PATHS = [
 function revalidateAll(quoteId?: string) {
   for (const path of REVALIDATE_PATHS) revalidatePath(path);
   if (quoteId) revalidatePath(`/dashboard/catering-quotes/${quoteId}`);
+}
+
+async function requireCateringQuotesManageAccess(operation: string) {
+  const access = await requireMutationPermission("orders.manage");
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "catering_quotes.permission_denied",
+      entityType: "CateringQuote",
+      metadata: { operation, requiredPermission: "orders.manage" },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  return { ok: true as const, sessionUser: user, dataUserId };
 }
 
 function maybeDate(value: FormDataEntryValue | string | null | undefined): Date | null | undefined {
@@ -94,7 +112,9 @@ const createSchema = z.object({
 
 export async function createCateringQuoteAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.create");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = createSchema.safeParse({
       customerName: formData.get("customerName"),
       customerEmail: formData.get("customerEmail"),
@@ -219,7 +239,9 @@ const updateSchema = z.object({
 
 export async function updateCateringQuoteAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.update");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = updateSchema.safeParse({
       quoteId: formData.get("quoteId"),
       customerName: formData.get("customerName") || undefined,
@@ -306,7 +328,9 @@ const statusSchema = z.object({
 
 export async function setCateringQuoteStatusAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.set_status");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = statusSchema.safeParse({
       quoteId: formData.get("quoteId"),
       status: formData.get("status"),
@@ -342,7 +366,9 @@ const addLineSchema = z.object({
 
 export async function addCateringQuoteLineAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.add_line");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = addLineSchema.safeParse({
       quoteId: formData.get("quoteId"),
       title: formData.get("title"),
@@ -388,7 +414,9 @@ export async function addCateringQuoteLineFormAction(formData: FormData): Promis
 
 export async function removeCateringQuoteLineAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.remove_line");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const lineId = String(formData.get("lineId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(lineId)) return { error: "Invalid line id." };
     const item = await prisma.cateringQuoteItem.findFirst({
@@ -412,7 +440,9 @@ export async function removeCateringQuoteLineFormAction(formData: FormData): Pro
 
 export async function snapshotCateringQuoteVersionAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.snapshot_version");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const quoteId = String(formData.get("quoteId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(quoteId)) return { error: "Invalid quote id." };
     const reason = (formData.get("reason") ?? null) as string | null;
@@ -432,7 +462,9 @@ export async function snapshotCateringQuoteVersionFormAction(formData: FormData)
 
 export async function rotateCateringPublicLinkAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.rotate_public_link");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const quoteId = String(formData.get("quoteId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(quoteId)) return { error: "Invalid quote id." };
     const token = await rotatePublicLink({ userId: dataUserId }, quoteId, user.email ?? null);
@@ -449,7 +481,9 @@ export async function rotateCateringPublicLinkFormAction(formData: FormData): Pr
 
 export async function revokeCateringPublicLinkAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.revoke_public_link");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const quoteId = String(formData.get("quoteId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(quoteId)) return { error: "Invalid quote id." };
     await revokePublicLink({ userId: dataUserId }, quoteId, user.email ?? null);
@@ -475,7 +509,9 @@ const followUpSchema = z.object({
 
 export async function createCateringFollowUpAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.create_follow_up");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = followUpSchema.safeParse({
       quoteId: formData.get("quoteId"),
       title: formData.get("title"),
@@ -503,7 +539,9 @@ export async function createCateringFollowUpFormAction(formData: FormData): Prom
 
 export async function completeCateringFollowUpAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.complete_follow_up");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const followUpId = String(formData.get("followUpId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(followUpId)) return { error: "Invalid follow-up id." };
     const fu = await prisma.cateringQuoteFollowUp.findFirst({
@@ -527,7 +565,9 @@ export async function completeCateringFollowUpFormAction(formData: FormData): Pr
 
 export async function convertCateringQuoteAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.convert_to_order");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const quoteId = String(formData.get("quoteId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(quoteId)) return { error: "Invalid quote id." };
     const depositPercent = Number(String(formData.get("depositPercent") ?? "0"));
@@ -557,7 +597,9 @@ const templateSchema = z.object({
 
 export async function createCateringTemplateAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringQuotesManageAccess("catering_quotes.create_template");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const parsed = templateSchema.safeParse({
       name: formData.get("name"),
       description: formData.get("description"),
