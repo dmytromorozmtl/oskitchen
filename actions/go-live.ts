@@ -80,6 +80,7 @@ async function gate(capability: GoLiveCapability) {
     email: access.actor.email,
     profileRole: profile.role ?? null,
     profileEmail: profile.email ?? null,
+    platformBypass: access.actor.platformBypass,
   });
   if (!canUseGoLive(scope, capability)) {
     await logGoLivePermissionDenied(access.actor, {

@@ -12,6 +12,7 @@ export async function getGoLivePageAccess() {
     email: actor.email,
     profileRole: profile.role ?? null,
     profileEmail: profile.email ?? null,
+    platformBypass: actor.platformBypass,
   });
   const canManage = hasPermission(actor.granted, "go-live.manage");
   const canUnlock = hasPermission(actor.granted, "go-live.unlock");

@@ -19,11 +19,7 @@ import {
   SimulationResultBadge,
 } from "@/components/dashboard/go-live/status-badges";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { parseGoLiveAuditSnapshot } from "@/lib/go-live/audit-snapshot";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
 import {
   LAUNCH_STAGES,
   LAUNCH_MODE_LABEL,
@@ -31,29 +27,26 @@ import {
   STAGE_LABEL,
   stageRank,
 } from "@/lib/go-live/launch-stages";
-import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
+import { parseGoLiveAuditSnapshot } from "@/lib/go-live/audit-snapshot";
+import {
+  SIMULATION_TYPE_LABEL,
+} from "@/lib/go-live/simulation-engine";
 import {
   getProject,
   workbenchSnapshot,
 } from "@/services/go-live/go-live-service";
-import {
-  SIMULATION_TYPE_LABEL,
-} from "@/lib/go-live/simulation-engine";
 
 type PageProps = { params: Promise<{ projectId: string }> };
 
 export default async function GoLiveProjectPage({ params }: PageProps) {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const isSuper = isSuperAdminEmail(profile.email);
   const access = await getGoLivePageAccess();
   const { projectId } = await params;
 
-  const project = await getProject(dataUserId, projectId);
+  const project = await getProject(access.userId, projectId);
   if (!project) notFound();
 
   const snapshot = await workbenchSnapshot(
-    dataUserId,
+    access.userId,
     project.id,
     project.businessType ?? null,
     project.status,
@@ -124,7 +117,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           canUseApprove={access.canApprove}
           canUseLaunch={access.canLaunch}
           canUseRollback={access.canRollback}
-          canUnlock={access.canUnlock || isSuper}
+          canUnlock={access.canUnlock}
           readyToApprove={snapshot.validation.canApprove}
           readyToLaunch={snapshot.validation.canApprove && project.status === "APPROVED"}
           canRollbackStatus={project.status !== "ROLLBACK_MODE"}

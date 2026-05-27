@@ -6,10 +6,7 @@ import { LaunchStatusBadge, RiskBadge } from "@/components/dashboard/go-live/sta
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { summariseImplementationExternalCertification } from "@/lib/implementation/external-integration-certification";
 import { kitchenCustomerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
@@ -20,7 +17,6 @@ import {
 } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { LAUNCH_MODE_LABEL } from "@/lib/go-live/launch-stages";
-import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
 import {
   listProjects,
   workbenchSnapshot,
@@ -43,42 +39,40 @@ const LEGACY_CHECKS = [
 ] as const;
 
 export default async function GoLivePage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const isSuper = isSuperAdminEmail(profile.email);
-  const { canCreate } = await getGoLivePageAccess();
+  const { actor, userId, canCreate } = await getGoLivePageAccess();
+  const isSuper = actor.platformBypass;
   const [projects, brands, locations, latestSimulation, incidentCount] = await Promise.all([
-    listProjects(dataUserId),
+    listProjects(userId),
     prisma.brand.findMany({
-      where: { workspaceId: dataUserId },
+      where: { workspaceId: userId },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
       take: 50,
     }).catch(() => []),
     prisma.location.findMany({
-      where: { userId: dataUserId },
+      where: { userId },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
       take: 50,
     }).catch(() => []),
     prisma.goLiveSimulation.findFirst({
-      where: { project: { userId: dataUserId } },
+      where: { project: { userId: userId } },
       orderBy: { startedAt: "desc" },
       select: { result: true, simulationType: true, startedAt: true },
     }),
     prisma.goLiveIncident.count({
-      where: { project: { userId: dataUserId }, status: { in: ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS"] } },
+      where: { project: { userId: userId }, status: { in: ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS"] } },
     }),
   ]);
 
   if (projects.length === 0) {
     // Preserve the legacy checklist for first-time visitors.
-    const settings = await prisma.kitchenSettings.findUnique({ where: { userId: dataUserId } });
+    const settings = await prisma.kitchenSettings.findUnique({ where: { userId: userId } });
     const [productWhere, customerWhere, connectionBaseWhere, orderWhere] = await Promise.all([
-      productListWhereForOwner(dataUserId),
-      kitchenCustomerListWhereForOwner(dataUserId),
-      integrationConnectionListWhereForOwner(dataUserId),
-      orderListWhereForOwner(dataUserId),
+      productListWhereForOwner(userId),
+      kitchenCustomerListWhereForOwner(userId),
+      integrationConnectionListWhereForOwner(userId),
+      orderListWhereForOwner(userId),
     ]);
     const [productCount, customerCount, connectionRows, orderCount, staffCount, billing] = await Promise.all([
       prisma.product.count({ where: productWhere }),
@@ -103,8 +97,8 @@ export default async function GoLivePage() {
         },
       }),
       prisma.order.count({ where: orderWhere }),
-      prisma.staffMember.count({ where: { userId: dataUserId, active: true } }),
-      prisma.subscription.findUnique({ where: { userId: dataUserId } }),
+      prisma.staffMember.count({ where: { userId: userId, active: true } }),
+      prisma.subscription.findUnique({ where: { userId: userId } }),
     ]);
     const processedWebhookCounts =
       connectionRows.length === 0
@@ -203,7 +197,7 @@ export default async function GoLivePage() {
   }
 
   const primary = projects[0];
-  const snapshot = await workbenchSnapshot(dataUserId, primary.id, primary.businessType ?? null, primary.status);
+  const snapshot = await workbenchSnapshot(userId, primary.id, primary.businessType ?? null, primary.status);
   const criticalBlockers = snapshot.validation.blockers.filter((b) => b.severity === "CRITICAL").length;
   const launchEta = primary.launchDate ? primary.launchDate.toISOString().slice(0, 10) : "Not set";
   const externalTargetProviders = snapshot.inputs.externalTargetProviderCount ?? 0;

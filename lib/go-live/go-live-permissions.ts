@@ -1,9 +1,8 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type GoLiveActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export type GoLiveCapability =
@@ -47,7 +46,7 @@ const GRANTS: Record<GoLiveCapability, string[]> = {
 };
 
 export function isSuperAdminGoLive(scope: GoLiveActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUseGoLive(scope: GoLiveActorScope, cap: GoLiveCapability): boolean {
