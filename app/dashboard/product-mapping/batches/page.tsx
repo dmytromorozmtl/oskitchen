@@ -1,12 +1,14 @@
 import Link from "next/link";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import { listImportBatches } from "@/services/product-mapping/product-mapping-service";
 
 export default async function ImportBatchesPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const batches = await listImportBatches(dataUserId, 100);
 
   return (

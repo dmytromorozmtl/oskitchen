@@ -1,7 +1,7 @@
 import { ConfidenceBadge, MappingStatusBadge } from "@/components/dashboard/product-mapping/status-badge";
 import { MappingRowActions } from "@/components/dashboard/product-mapping/mapping-row-actions";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import {
   listMappings,
@@ -21,7 +21,9 @@ const REASON_LABEL: Record<string, string> = {
 };
 
 export default async function SuggestionsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const [rows, candidates] = await Promise.all([
     listMappings(dataUserId, { take: 200, status: ["SUGGESTED"] }),
     loadMatchableCandidates(dataUserId),

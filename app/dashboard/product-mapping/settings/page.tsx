@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { BULK_APPROVABLE_LABELS } from "@/services/product-mapping/product-mapping-service";
 import { PRODUCT_MAPPING_PROVIDERS, PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 
@@ -15,7 +16,9 @@ const ROLE_MATRIX: { role: string; can: string[]; cannot?: string[] }[] = [
   { role: "Superadmin (workspace.moroz@gmail.com)", can: ["full access"] },
 ];
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
   return (
     <div className="space-y-6">
       <div>

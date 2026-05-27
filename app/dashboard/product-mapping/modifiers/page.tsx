@@ -1,12 +1,15 @@
 import { ModifierForm } from "@/components/dashboard/product-mapping/modifier-form";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseProductMapping } from "@/lib/product-mapping/mapping-permissions";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import { PRODUCT_MODIFIER_STATUS_LABEL } from "@/lib/product-mapping/mapping-status";
 import { listMappings } from "@/services/product-mapping/product-mapping-service";
 
 export default async function ModifierMappingPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.modifier");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const rows = await listMappings(dataUserId, {
     take: 60,
     status: ["APPROVED", "CONFIRMED", "SUGGESTED", "NEEDS_REVIEW"],
@@ -66,9 +69,11 @@ export default async function ModifierMappingPage() {
                 </ul>
               ) : null}
 
-              <div className="mt-3">
-                <ModifierForm productMappingId={m.id} defaultProvider={m.providerKey ?? undefined} />
-              </div>
+              {canUseProductMapping(access.scope, "mapping.modifier") ? (
+                <div className="mt-3">
+                  <ModifierForm productMappingId={m.id} defaultProvider={m.providerKey ?? undefined} />
+                </div>
+              ) : null}
             </li>
           ))}
         </ul>

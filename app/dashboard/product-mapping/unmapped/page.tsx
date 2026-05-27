@@ -2,7 +2,8 @@ import { ConfidenceBadge, MappingStatusBadge } from "@/components/dashboard/prod
 import { MappingRowActions } from "@/components/dashboard/product-mapping/mapping-row-actions";
 import { SuggestionForm } from "@/components/dashboard/product-mapping/suggestion-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseProductMapping } from "@/lib/product-mapping/mapping-permissions";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import {
   listMappings,
@@ -10,7 +11,9 @@ import {
 } from "@/services/product-mapping/product-mapping-service";
 
 export default async function UnmappedQueuePage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const [rows, candidates] = await Promise.all([
     listMappings(dataUserId, {
       take: 200,
@@ -29,7 +32,7 @@ export default async function UnmappedQueuePage() {
         </p>
       </div>
 
-      <SuggestionForm />
+      {canUseProductMapping(access.scope, "mapping.create") ? <SuggestionForm /> : null}
 
       <Card>
         <CardHeader>

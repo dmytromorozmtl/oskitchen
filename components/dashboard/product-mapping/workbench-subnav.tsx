@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
+export type WorkbenchSubnavLink = {
+  href: string;
+  label: string;
+  match?: "exact" | "prefix";
+};
+
+const DEFAULT_LINKS: WorkbenchSubnavLink[] = [
   { href: "/dashboard/product-mapping", label: "Overview", match: "exact" },
   { href: "/dashboard/product-mapping/unmapped", label: "Unmapped queue" },
   { href: "/dashboard/product-mapping/suggestions", label: "Suggestions" },
@@ -20,11 +26,12 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/product-mapping/settings", label: "Settings" },
 ];
 
-export function WorkbenchSubnav() {
+export function WorkbenchSubnav({ links = DEFAULT_LINKS }: { links?: WorkbenchSubnavLink[] }) {
   const path = usePathname();
+  if (links.length === 0) return null;
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact" ? path === l.href : path === l.href || path.startsWith(`${l.href}/`);
         return (

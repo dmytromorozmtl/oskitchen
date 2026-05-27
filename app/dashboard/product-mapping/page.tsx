@@ -6,8 +6,9 @@ import { SuggestionForm } from "@/components/dashboard/product-mapping/suggestio
 import { MappingRowActions } from "@/components/dashboard/product-mapping/mapping-row-actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { channelConflictWhereForOwner } from "@/lib/scope/channel-import-scope";
+import { canUseProductMapping } from "@/lib/product-mapping/mapping-permissions";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import {
   listMappings,
   loadMatchableCandidates,
@@ -17,7 +18,9 @@ import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-t
 import { prisma } from "@/lib/prisma";
 
 export default async function ProductMappingPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const [kpis, recent, candidates, blockedConflicts] = await Promise.all([
     workbenchKpis(dataUserId),
     listMappings(dataUserId, {
@@ -59,7 +62,7 @@ export default async function ProductMappingPage() {
 
       <WorkbenchKpiGrid tiles={kpiTiles} />
 
-      <SuggestionForm />
+      {canUseProductMapping(access.scope, "mapping.create") ? <SuggestionForm /> : null}
 
       <Card>
         <CardHeader>

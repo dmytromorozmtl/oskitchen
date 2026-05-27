@@ -1,9 +1,13 @@
 import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
+import { workspacePermissionForMappingCapability } from "@/lib/product-mapping/mapping-permission-keys";
 
 export type ProductMappingActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  granted?: ReadonlySet<PermissionKey>;
 };
 
 export type ProductMappingCapability =
@@ -47,6 +51,12 @@ export function canUseProductMapping(
 ): boolean {
   if (isSuperAdminMapping(scope)) return true;
   if (scope.isOwner) return true;
+
+  const canonical = workspacePermissionForMappingCapability(cap);
+  if (scope.granted && hasPermission(scope.granted, canonical)) {
+    return true;
+  }
+
   const role = (scope.role ?? "").toLowerCase();
   return GRANTS[cap]?.includes(role) ?? false;
 }

@@ -1,6 +1,7 @@
 import { AliasForm } from "@/components/dashboard/product-mapping/alias-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseProductMapping } from "@/lib/product-mapping/mapping-permissions";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import {
   listAliases,
@@ -8,7 +9,9 @@ import {
 } from "@/services/product-mapping/product-mapping-service";
 
 export default async function AliasesPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const [aliases, candidates] = await Promise.all([
     listAliases(dataUserId, 200),
     loadMatchableCandidates(dataUserId),
@@ -25,7 +28,9 @@ export default async function AliasesPage() {
         </p>
       </div>
 
-      <AliasForm candidates={candidates} />
+      {canUseProductMapping(access.scope, "mapping.alias") ? (
+        <AliasForm candidates={candidates} />
+      ) : null}
 
       <Card>
         <CardHeader>

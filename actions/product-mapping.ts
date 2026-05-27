@@ -1,17 +1,15 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { asVoidFormAction } from "@/lib/actions/server-form-action";
 import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { createProductMappingActorScope } from "@/lib/product-mapping/mapping-actor-scope";
+import { workspacePermissionForMappingCapability } from "@/lib/product-mapping/mapping-permission-keys";
 import {
   canUseProductMapping,
-  type ProductMappingActorScope,
   type ProductMappingCapability,
 } from "@/lib/product-mapping/mapping-permissions";
 import {
@@ -25,20 +23,31 @@ import {
   rejectMapping,
   upsertModifierMapping,
 } from "@/services/product-mapping/product-mapping-service";
+import { logProductMappingPermissionDenied } from "@/services/product-mapping/product-mapping-permission-audit";
 import type { ProductMappingProvider, ProductModifierMappingStatus } from "@prisma/client";
 
-function scopeFrom(profile: { role: string | null; email: string | null }): ProductMappingActorScope {
-  return { isOwner: true, role: profile.role, email: profile.email };
-}
-
-async function assertCapability(cap: ProductMappingCapability) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+async function authorize(capability: ProductMappingCapability) {
+  const required = workspacePermissionForMappingCapability(capability);
+  const access = await requireMutationPermission(required);
   const profile = await requireUserProfile();
-  const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
-  if (!canUseProductMapping(scope, cap)) {
-    throw new Error(`You do not have permission to ${cap}.`);
+  if (!access.ok) {
+    await logProductMappingPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      mappingCapability: capability,
+    });
+    throw new Error(access.error);
   }
-  return { userId: dataUserId, profileId: profile.id };
+  const scope = createProductMappingActorScope(access.actor, profile.role ?? null);
+  if (!canUseProductMapping(scope, capability)) {
+    await logProductMappingPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      mappingCapability: capability,
+    });
+    throw new Error(`You do not have permission to ${capability}.`);
+  }
+  return { userId: access.actor.userId, profileId: profile.id };
 }
 
 const PROVIDER_KEYS = [
@@ -81,7 +90,7 @@ const createSchema = z.object({
 });
 
 export async function createMappingSuggestionAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.create");
+  const { userId, profileId } = await authorize("mapping.create");
   const parsed = createSchema.parse({
     provider: formData.get("provider") ?? "CSV",
     externalProductId: formData.get("externalProductId") ?? "",
@@ -120,7 +129,7 @@ const updateStatusSchema = z.object({
 
 /** Form action for `/dashboard/product-mapping` status updates. */
 export async function updateProductMappingStatusForm(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.edit");
+  const { userId, profileId } = await authorize("mapping.edit");
   const parsed = updateStatusSchema.parse({
     mappingId: formData.get("mappingId"),
     status: formData.get("status"),
@@ -144,7 +153,7 @@ const approveSchema = z.object({
 });
 
 export async function approveMappingAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.approve");
+  const { userId, profileId } = await authorize("mapping.approve");
   const parsed = approveSchema.parse({
     mappingId: formData.get("mappingId"),
     internalProductId: (formData.get("internalProductId") as string) || null,
@@ -167,7 +176,7 @@ const rejectSchema = z.object({
 });
 
 export async function rejectMappingAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.reject");
+  const { userId, profileId } = await authorize("mapping.reject");
   const parsed = rejectSchema.parse({
     mappingId: formData.get("mappingId"),
     reason: formData.get("reason") ?? "",
@@ -189,12 +198,11 @@ const bulkSchema = z.object({
 });
 
 function parseMappingIds(formData: FormData): string[] {
-  const ids = formData.getAll("mappingIds").map((v) => String(v));
-  return ids;
+  return formData.getAll("mappingIds").map((v) => String(v));
 }
 
 export async function bulkApproveSafeAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.bulk");
+  const { userId, profileId } = await authorize("mapping.bulk");
   const parsed = bulkSchema.parse({
     mappingIds: parseMappingIds(formData),
     confirm: formData.get("confirm") === "true",
@@ -211,7 +219,7 @@ export async function bulkApproveSafeAction(formData: FormData): Promise<void> {
 }
 
 export async function bulkArchiveAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.archive");
+  const { userId, profileId } = await authorize("mapping.archive");
   const parsed = bulkSchema.parse({
     mappingIds: parseMappingIds(formData),
     confirm: formData.get("confirm") === "true",
@@ -225,7 +233,7 @@ export async function bulkArchiveAction(formData: FormData): Promise<void> {
 }
 
 export async function bulkIgnoreAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.bulk");
+  const { userId, profileId } = await authorize("mapping.bulk");
   const parsed = bulkSchema.parse({
     mappingIds: parseMappingIds(formData),
     confirm: formData.get("confirm") === "true",
@@ -246,7 +254,7 @@ const aliasSchema = z.object({
 });
 
 export async function createAliasAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.alias");
+  const { userId, profileId } = await authorize("mapping.alias");
   const parsed = aliasSchema.parse({
     externalTitle: formData.get("externalTitle"),
     internalProductId: formData.get("internalProductId"),
@@ -277,7 +285,7 @@ const modifierSchema = z.object({
 });
 
 export async function upsertModifierAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("mapping.modifier");
+  const { userId, profileId } = await authorize("mapping.modifier");
   const parsed = modifierSchema.parse({
     productMappingId: formData.get("productMappingId"),
     provider: formData.get("provider"),

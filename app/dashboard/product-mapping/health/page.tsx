@@ -1,13 +1,15 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { getCachedIntegrationConnectionListWhere } from "@/lib/scope/cached-workspace-resource-scope";
 import { productMappingListWhereForOwner } from "@/lib/scope/workspace-product-mapping-scope";
 import { prisma } from "@/lib/prisma";
 
 export default async function SyncHealthPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const [connectionWhere, mappingWhere] = await Promise.all([
     getCachedIntegrationConnectionListWhere(),
     productMappingListWhereForOwner(dataUserId),

@@ -1,11 +1,13 @@
 import { MappingStatusBadge } from "@/components/dashboard/product-mapping/status-badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import { listMappings } from "@/services/product-mapping/product-mapping-service";
 
 export default async function ApprovedMappingsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const rows = await listMappings(dataUserId, {
     take: 200,
     status: ["APPROVED", "CONFIRMED"],

@@ -1,11 +1,13 @@
 import { BulkActionsTable } from "@/components/dashboard/product-mapping/bulk-actions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { isBulkApprovable } from "@/lib/product-mapping/matching-confidence";
 import { listMappings } from "@/services/product-mapping/product-mapping-service";
 
 export default async function BulkMappingPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.bulk");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const rows = await listMappings(dataUserId, {
     take: 200,
     status: ["SUGGESTED", "NEEDS_REVIEW", "UNMAPPED"],

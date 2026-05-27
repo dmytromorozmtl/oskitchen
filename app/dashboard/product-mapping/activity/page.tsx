@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { listEvents } from "@/services/product-mapping/product-mapping-service";
 
 const EVENT_LABEL: Record<string, string> = {
@@ -18,7 +18,9 @@ const EVENT_LABEL: Record<string, string> = {
 };
 
 export default async function ActivityPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.audit");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const events = await listEvents(dataUserId, 200);
 
   function metadataLine(meta: unknown): string | null {

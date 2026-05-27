@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { MappingStatusBadge } from "@/components/dashboard/product-mapping/status-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { channelConflictWhereForOwner } from "@/lib/scope/channel-import-scope";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
 import {
@@ -12,7 +12,9 @@ import {
 import { prisma } from "@/lib/prisma";
 
 export default async function ConflictsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireProductMappingPageAccess("mapping.view");
+  if (!access.ok) return access.deny;
+  const dataUserId = access.userId;
   const [explicitConflictRows, derived, channelConflicts] = await Promise.all([
     listMappings(dataUserId, { take: 100, status: "CONFLICT" }),
     detectConflicts(dataUserId),
