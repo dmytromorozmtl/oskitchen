@@ -69,6 +69,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ### 8d. Public API v1 contracts
 - routes: `app/api/public/v1/` (orders, products, customers, inventory, locations, recipes, staff, webhooks)
 - guard: `lib/api-public/guard.ts` (401 without auth, 429 rate limit, 503 when rate limit misconfigured)
+- wiring cert: `npm run test:ci:public-api-v1:cert` (in `test:ci:governance-bundles`, before unit bundle)
 - unit bundle: `npm run test:ci:public-api-v1`
 - coverage: auth fail-closed per resource, tenant-scoped list queries, customers pagination envelope, recipes/webhooks POST validation, existing orders/auth/cross-tenant suites
 
