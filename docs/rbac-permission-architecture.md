@@ -266,7 +266,7 @@ Initial scope:
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
-- Status update: POS, KDS, billing entitlement overrides, and integrations credential/health/menu-sync mutations are on canonical keys with denial audits and focused negative tests; integrations read-only UI parity, billing checkout/portal actions, and storefront migration remain open
+- Status update: POS, KDS, billing entitlement overrides, and integrations credential/health/menu-sync mutations are on canonical keys with denial audits; sales-channels and legacy integrations layouts now deny unauthorized staff at the page shell, while integrations read-only UI parity, billing checkout/portal actions, and storefront migration remain open
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates

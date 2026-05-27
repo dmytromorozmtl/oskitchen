@@ -1,8 +1,14 @@
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 import { SalesChannelsSubnav } from "@/components/sales-channels/sales-channels-subnav";
+import { requireIntegrationsManagePage } from "@/lib/integrations/integrations-page-access";
 
-export default function SalesChannelsLayout({ children }: { children: ReactNode }) {
+export default async function SalesChannelsLayout({ children }: { children: ReactNode }) {
+  const access = await requireIntegrationsManagePage();
+  if (!access.ok) {
+    return <div className="mx-auto max-w-xl py-10">{access.deny}</div>;
+  }
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
