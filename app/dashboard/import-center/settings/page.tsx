@@ -1,10 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireImportCenterSettingsPageAccess } from "@/lib/import-center/import-center-page-access";
 import { COMMITTABLE_TYPES, IMPORT_TYPES, IMPORT_TYPE_LABEL, PREVIEW_ONLY_TYPES } from "@/lib/import-center/import-types";
 import { MAX_IMPORT_BYTES, MAX_IMPORT_ROWS, MAX_PREVIEW_ROWS_PERSISTED } from "@/lib/import-export/limits";
 
 export default async function ImportCenterSettingsPage() {
-  await getTenantActor();
+  const access = await requireImportCenterSettingsPageAccess();
+  if (!access.ok) return access.deny;
 
   return (
     <div className="space-y-6">

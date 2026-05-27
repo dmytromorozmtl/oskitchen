@@ -6,11 +6,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { canUseImportCenter } from "@/lib/import-center/import-permissions";
 import { commitNotSupportedReason, isCommittableType } from "@/lib/import-center/import-commit";
-import type { ImportActorScope, ImportCapability } from "@/lib/import-center/import-types";
-import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import type { ImportCapability } from "@/lib/import-center/import-types";
+import {
+  requireImportCenterCapability,
+  requireImportCenterUpload,
+} from "@/lib/import-center/require-import-center-actor";
 import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied } from "@/services/audit/upload-audit";
@@ -23,21 +24,12 @@ import {
 } from "@/services/import-center/import-center-service";
 import type { ImportCommitMode, ImportType } from "@prisma/client";
 
-function scopeFrom(profile: { role: string | null; email: string | null }, isOwner: boolean): ImportActorScope {
-  return { isOwner, role: profile.role, email: profile.email };
-}
-
 async function assertCapability(cap: ImportCapability) {
-  const { sessionUser: user, userId } = await requireTenantActor();
-  const profile = await requireUserProfile();
-  const scope = scopeFrom(
-    { role: profile.role ?? null, email: profile.email ?? null },
-    user.id === userId,
-  );
-  if (!canUseImportCenter(scope, cap)) {
+  const access = await requireImportCenterCapability(cap, cap);
+  if (!access.ok) {
     throw new Error(`You do not have permission to ${cap}.`);
   }
-  return { userId, profileId: profile.id };
+  return { userId: access.userId, profileId: access.profileId };
 }
 
 const IMPORT_TYPE_VALUES = [
@@ -64,7 +56,16 @@ const uploadSchema = z.object({
 });
 
 export async function uploadImportCsvAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("import.upload");
+  const parsed = uploadSchema.parse({
+    type: formData.get("type"),
+    mode: formData.get("mode") ?? "CREATE_ONLY",
+  });
+  const access = await requireImportCenterUpload(parsed.type as ImportType);
+  if (!access.ok) {
+    throw new Error(access.error);
+  }
+  const { userId, profileId } = access;
+
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
     throw new Error("Please select a CSV file to upload.");
@@ -97,10 +98,6 @@ export async function uploadImportCsvAction(formData: FormData): Promise<void> {
   if (!safe.ok) {
     throw new Error(safe.error);
   }
-  const parsed = uploadSchema.parse({
-    type: formData.get("type"),
-    mode: formData.get("mode") ?? "CREATE_ONLY",
-  });
   const csvText = new TextDecoder("utf-8", { fatal: false }).decode(csvBytes);
   const outcome = await uploadImportCsv({
     userId,

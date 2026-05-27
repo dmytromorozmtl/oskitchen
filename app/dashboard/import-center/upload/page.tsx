@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ImportCenterUploadForm } from "@/components/dashboard/import-center/upload-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireImportCenterUploadPageAccess } from "@/lib/import-center/import-center-page-access";
 
 const STEPS = [
   "Choose import type",
@@ -22,7 +22,8 @@ export default async function ImportCenterUploadPage({
 }: {
   searchParams?: Promise<SearchParams>;
 }) {
-  await getTenantActor();
+  const access = await requireImportCenterUploadPageAccess();
+  if (!access.ok) return access.deny;
   const params = (await searchParams) ?? {};
 
   return (

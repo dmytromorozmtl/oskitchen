@@ -3,22 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import type { ImportCenterSubnavLink } from "@/lib/import-center/import-center-subnav-links";
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
-  { href: "/dashboard/import-center", label: "Overview", match: "exact" },
-  { href: "/dashboard/import-center/upload", label: "Upload" },
-  { href: "/dashboard/import-center/history", label: "Import history" },
-  { href: "/dashboard/import-center/templates", label: "Templates" },
-  { href: "/dashboard/import-center/errors", label: "Error reports" },
-  { href: "/dashboard/import-center/settings", label: "Settings" },
-];
-
-export function ImportCenterSubnav() {
+export function ImportCenterSubnav({ links }: { links: ImportCenterSubnavLink[] }) {
   const path = usePathname();
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact"
             ? path === l.href
