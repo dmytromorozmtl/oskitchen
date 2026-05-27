@@ -5,8 +5,8 @@ import { StorefrontProductTable } from "@/components/storefront/analytics/storef
 import { StorefrontSourceTable } from "@/components/storefront/analytics/storefront-source-table";
 import { StorefrontTimeseriesChart } from "@/components/storefront/analytics/storefront-timeseries-chart";
 import { Button } from "@/components/ui/button";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
+import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { getStorefrontAnalyticsReport, type StorefrontAnalyticsRangeDays } from "@/services/storefront/storefront-analytics-report-service";
 
@@ -23,10 +23,15 @@ export default async function StorefrontAnalyticsPage({
 }: {
   searchParams?: Promise<{ days?: string }>;
 }) {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const sp = searchParams ? await searchParams : {};
   const days = daysParam(sp.days);
-  const sf = await findAdminStorefront(user.id, { id: true, storeSlug: true, currency: true });
+  const sf = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: { id: true, storeSlug: true, currency: true },
+  });
   if (!sf) {
     return (
       <div className="mx-auto max-w-2xl space-y-4">

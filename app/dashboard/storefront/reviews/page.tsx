@@ -1,16 +1,13 @@
-import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { listStorefrontReviews } from "@/services/storefront/storefront-p3-list-service";
 
 export const dynamic = "force-dynamic";
 
 export default async function StorefrontReviewsPage() {
-  const { sessionUser: user } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true });
-  const reviews = sf ? await listStorefrontReviews(sf.id) : [];
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const reviews = await listStorefrontReviews(pageAccess.access.storefront.id);
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -19,11 +16,7 @@ export default async function StorefrontReviewsPage() {
         <p className="mt-2 text-sm text-muted-foreground">Moderate post-order feedback before publishing on the storefront.</p>
       </div>
 
-      {!sf ? (
-        <Button asChild className="rounded-full">
-          <Link href="/dashboard/storefront">Set up storefront</Link>
-        </Button>
-      ) : reviews.length === 0 ? (
+      {reviews.length === 0 ? (
         <p className="text-sm text-muted-foreground">No reviews yet.</p>
       ) : (
         <ul className="divide-y rounded-xl border border-border/80 text-sm">

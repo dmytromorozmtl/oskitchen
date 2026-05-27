@@ -2,14 +2,17 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { getOrCreateLoyaltyProgram } from "@/services/storefront/loyalty-service";
 
 export default async function StorefrontLoyaltyPage() {
-  const { sessionUser: user } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true });
-  const program = sf ? await getOrCreateLoyaltyProgram(sf.id, user.id) : null;
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const program = await getOrCreateLoyaltyProgram(
+    pageAccess.access.storefront.id,
+    pageAccess.userId,
+  );
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
