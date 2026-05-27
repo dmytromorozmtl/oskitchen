@@ -12,7 +12,13 @@ type PreflightResponse = {
   failures: { code: string; headline: string; detail: string }[];
 };
 
-export function StorefrontThemePublishForm({ checklistBlocked = false }: { checklistBlocked?: boolean }) {
+export function StorefrontThemePublishForm({
+  checklistBlocked = false,
+  canPublish = true,
+}: {
+  checklistBlocked?: boolean;
+  canPublish?: boolean;
+}) {
   const [state, formAction, pending] = useActionState(publishStorefrontThemeFormAction, null);
   const [preflight, setPreflight] = useState<PreflightResponse | null>(null);
 
@@ -24,10 +30,19 @@ export function StorefrontThemePublishForm({ checklistBlocked = false }: { check
   }, [state]);
 
   const experimentBlocked = preflight?.blocked === true && (preflight.failures.length ?? 0) > 0;
-  const publishBlocked = checklistBlocked || experimentBlocked;
+  const publishBlocked = checklistBlocked || experimentBlocked || !canPublish;
 
   return (
     <form action={formAction} className="space-y-3">
+      {!canPublish ? (
+        <div className="rounded-xl border border-border/80 bg-muted/40 p-3 text-sm text-muted-foreground" role="status">
+          <p className="font-medium text-foreground">Publish not permitted</p>
+          <p className="mt-1 text-xs">
+            Your role cannot publish storefront theme changes. Ask an owner or manager to publish, or request the{" "}
+            <span className="font-mono">storefront.publish</span> permission.
+          </p>
+        </div>
+      ) : null}
       {checklistBlocked ? (
         <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive" role="alert">
           <p className="font-medium">Publish blocked by launch checklist</p>

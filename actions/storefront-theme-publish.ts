@@ -13,8 +13,7 @@ import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalid
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
-import { canStorefront } from "@/lib/storefront/storefront-permissions";
-import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
+import { requireStorefrontPublishActor } from "@/lib/storefront/require-storefront-actor";
 import { publishStorefrontThemeSnapshot } from "@/services/storefront/storefront-theme-publish-service";
 
 export async function publishStorefrontThemeFormAction(
@@ -22,10 +21,12 @@ export async function publishStorefrontThemeFormAction(
   formData: FormData,
 ): Promise<{ error?: string } | null> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:publish", { email })) {
-      return { error: "You do not have permission to publish storefront theme changes." };
+    const { userId } = await requireTenantActor();
+    const publishAccess = await requireStorefrontPublishActor({
+      operation: "storefront.theme_publish",
+    });
+    if (!publishAccess.ok) {
+      return { error: publishAccess.error };
     }
     const confirm = (formData.get("confirmPublish") ?? "").toString();
     if (confirm !== "PUBLISH") {

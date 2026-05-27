@@ -31,6 +31,10 @@ export const PERMISSIONS = {
   "billing.manage": "Manage billing",
   "integrations.read": "View sales channel integrations and health",
   "integrations.manage": "Connect and manage sales channels",
+  "storefront.read": "View storefront builder and settings",
+  "storefront.manage": "Edit storefront drafts and configuration",
+  "storefront.publish": "Publish storefront theme and pages live",
+  "storefront.media.manage": "Upload and delete storefront media assets",
   "staff.manage": "Invite and manage staff",
   "growth.view": "View growth / beta surfaces",
 } as const;
@@ -68,6 +72,10 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "billing.manage",
   "integrations.read",
   "integrations.manage",
+  "storefront.read",
+  "storefront.manage",
+  "storefront.publish",
+  "storefront.media.manage",
   "staff.manage",
   "growth.view",
 ];

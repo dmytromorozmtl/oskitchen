@@ -1,5 +1,7 @@
 import type { UserRole } from "@prisma/client";
 
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 export type StorefrontPermission =
@@ -14,6 +16,20 @@ export type StorefrontPermission =
   | "storefront:edit-legal"
   | "storefront:manage-domain"
   | "storefront:toggle-publication";
+
+const LEGACY_TO_CANONICAL: Partial<Record<StorefrontPermission, PermissionKey>> = {
+  "storefront:view": "storefront.read",
+  "storefront:edit-draft": "storefront.manage",
+  "storefront:edit-navigation": "storefront.manage",
+  "storefront:edit-footer": "storefront.manage",
+  "storefront:edit-theme": "storefront.manage",
+  "storefront:edit-legal": "storefront.manage",
+  "storefront:manage-domain": "storefront.manage",
+  "storefront:publish": "storefront.publish",
+  "storefront:toggle-publication": "storefront.publish",
+  "storefront:upload-assets": "storefront.media.manage",
+  "storefront:delete-assets": "storefront.media.manage",
+};
 
 const OWNER_ALL: StorefrontPermission[] = [
   "storefront:view",
@@ -54,8 +70,12 @@ export function storefrontPermissionsForRole(
 export function canStorefront(
   perms: Set<StorefrontPermission>,
   key: StorefrontPermission,
-  ctx?: { email?: string | null },
+  ctx?: { email?: string | null; workspaceGranted?: ReadonlySet<PermissionKey> },
 ): boolean {
   if (isSuperAdminEmail(ctx?.email ?? null)) return true;
+  const canonical = LEGACY_TO_CANONICAL[key];
+  if (ctx?.workspaceGranted && canonical && hasPermission(ctx.workspaceGranted, canonical)) {
+    return true;
+  }
   return perms.has(key);
 }

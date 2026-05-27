@@ -23,10 +23,12 @@ import { buildThemePublishDiff } from "@/lib/storefront/theme-publish-diff";
 import type { ThemeSnapshotV1 } from "@/lib/storefront/theme-snapshot";
 import { STOREFRONT_THEME_PRESETS } from "@/lib/storefront-builder/theme-presets";
 import { prisma } from "@/lib/prisma";
+import { resolveStorefrontPublishAccess } from "@/lib/storefront/storefront-page-access";
 import { listStorefrontMediaForOwner } from "@/services/storefront-builder/media-service";
 
 export default async function StorefrontThemePage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { canPublish } = await resolveStorefrontPublishAccess(user.id, user.email ?? null);
   const settings = await findAdminStorefront(user.id, {
     id: true,
     storeSlug: true,
@@ -173,7 +175,7 @@ export default async function StorefrontThemePage() {
         <CardContent className="space-y-4">
           <ExperimentPublishPreflightBanner />
           <ThemePublishDiffPanel lines={publishDiff} />
-          <StorefrontThemePublishForm checklistBlocked={publishBlocked} />
+          <StorefrontThemePublishForm checklistBlocked={publishBlocked} canPublish={canPublish} />
         </CardContent>
       </Card>
 

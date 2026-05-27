@@ -8,7 +8,11 @@ import {
   productMatchesDietaryFilter,
   sortCollectionProducts,
 } from "@/lib/storefront/collection-settings";
-import { storefrontPermissionsForRole } from "@/lib/storefront/storefront-permissions";
+import {
+  canStorefront,
+  storefrontPermissionsForRole,
+} from "@/lib/storefront/storefront-permissions";
+import { workspacePermissionsFromStaffTemplate } from "@/lib/permissions/staff-template-workspace-permissions";
 import { mapVanityPathToInternal } from "@/lib/storefront/middleware-paths";
 
 describe("sitemap chunking", () => {
@@ -84,6 +88,12 @@ describe("staff role matrix", () => {
     const perms = storefrontPermissionsForRole("STAFF", { marketingDraft: true, staffPublish: true });
     expect(perms.has("storefront:publish")).toBe(true);
     expect(perms.has("storefront:edit-draft")).toBe(true);
+  });
+
+  it("prefers canonical storefront.publish from workspace granted set", () => {
+    const granted = workspacePermissionsFromStaffTemplate("MANAGER", "STAFF");
+    const perms = storefrontPermissionsForRole("STAFF", { marketingDraft: false, staffPublish: false });
+    expect(canStorefront(perms, "storefront:publish", { workspaceGranted: granted })).toBe(true);
   });
 });
 

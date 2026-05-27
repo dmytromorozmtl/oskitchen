@@ -32,6 +32,17 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
     "integrations.read",
     "integrations.manage",
   ],
+  [CAPABILITY.storefrontPublish]: [
+    "workspace.view",
+    "storefront.read",
+    "storefront.manage",
+    "storefront.publish",
+  ],
+  [CAPABILITY.storefrontMedia]: [
+    "workspace.view",
+    "storefront.read",
+    "storefront.media.manage",
+  ],
   [CAPABILITY.exportsSensitive]: [
     "workspace.view",
     "orders.export",

@@ -14,12 +14,11 @@ import { auditStorefrontExperimentApplyWinner, auditStorefrontExperimentConclude
 import { evaluateExperimentProdDecision } from "@/lib/storefront/theme-experiment-decision";
 import { parseThemeExperimentStored } from "@/lib/storefront/theme-experiment-version";
 import type { ThemeExperimentConcludeOutcome } from "@/lib/storefront/theme-experiment-version";
-import { canStorefront } from "@/lib/storefront/storefront-permissions";
+import { requireStorefrontPublishActor } from "@/lib/storefront/require-storefront-actor";
 import { countBlockingEdgeSyncJobs, reenqueueThemeExperimentEdgeSync } from "@/services/storefront/storefront-edge-sync-job-service";
 import { getThemeExperimentArmMetrics } from "@/services/storefront/theme-experiment-analytics-service";
 import { concludeThemeExperimentLifecycle } from "@/services/storefront/theme-experiment-lifecycle-service";
 import { publishStorefrontThemeSnapshot } from "@/services/storefront/storefront-theme-publish-service";
-import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
 
 const themeExperimentConcludeSchema = z.object({
   storefrontId: z.string().min(1),
@@ -160,9 +159,11 @@ export async function applyExperimentWinnerAction(days = 7) {
     if (!daysParsed.success) return { error: "Invalid experiment parameters." };
     const metricDays = daysParsed.data.days;
 
-    const { permissions, email } = await getStorefrontPermissionSetForUser(user.id);
-    if (!canStorefront(permissions, "storefront:publish", { email })) {
-      return { error: "You do not have permission to publish storefront theme changes." };
+    const publishAccess = await requireStorefrontPublishActor({
+      operation: "storefront.experiment_apply_winner",
+    });
+    if (!publishAccess.ok) {
+      return { error: publishAccess.error };
     }
 
     const stored = parseThemeExperimentStored(gate.row.themeExperimentJson);

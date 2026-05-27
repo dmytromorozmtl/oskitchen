@@ -11,6 +11,7 @@ import {
   STOREFRONT_MEDIA_ALLOWED_MIME,
   validateStorefrontMediaUpload,
 } from "@/lib/storefront/asset-validation";
+import { requireStorefrontMediaActor } from "@/lib/storefront/require-storefront-actor";
 import { logUploadDenied } from "@/services/audit/upload-audit";
 import {
   deleteStorefrontMediaAsset,
@@ -38,6 +39,12 @@ async function storefrontForUser(userId: string) {
 export async function uploadStorefrontMediaFormAction(formData: FormData) {
   try {
     const { sessionUser: user, userId, workspaceId } = await requireTenantActor();
+    const mediaAccess = await requireStorefrontMediaActor({
+      operation: "storefront.media_upload",
+    });
+    if (!mediaAccess.ok) {
+      return { error: mediaAccess.error };
+    }
     const sf = await storefrontForUser(user.id);
     if (!sf) return { error: "Save the storefront overview once first." };
 
@@ -101,9 +108,15 @@ export async function uploadStorefrontMediaFormAction(formData: FormData) {
   }
 }
 
-export async function deleteStorefrontMediaFormAction(formData: FormData): Promise<void> {
+export async function deleteStorefrontMediaFormAction(formData: FormData): Promise<{ error?: string } | void> {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
+    const mediaAccess = await requireStorefrontMediaActor({
+      operation: "storefront.media_delete",
+    });
+    if (!mediaAccess.ok) {
+      return { error: mediaAccess.error };
+    }
     const assetId = (formData.get("assetId") ?? "").toString().trim();
     if (!/^[0-9a-f-]{36}$/i.test(assetId)) return;
 

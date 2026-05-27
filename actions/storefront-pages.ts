@@ -29,6 +29,7 @@ import { buildSectionsCreateInput, pageSectionTemplateForType } from "@/lib/stor
 import { resolveSectionPack, sectionPackToCreatePayload } from "@/lib/storefront/section-packs";
 import { defaultSectionContent, normalizeSectionContent, normalizeSectionContentForLocale } from "@/lib/storefront/sections";
 import { sanitizeRichTextLite } from "@/lib/storefront-builder/safe-content";
+import { requireStorefrontPublishActor } from "@/lib/storefront/require-storefront-actor";
 import { canStorefront } from "@/lib/storefront/storefront-permissions";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
 import { auditStorefrontPagePublish } from "@/lib/storefront/storefront-audit";
@@ -213,8 +214,13 @@ export async function updateStorefrontPageDetails(formData: FormData) {
       },
     });
     if (!page) return { error: "Page not found." };
-    if (d.published && !canStorefront(permissions, "storefront:publish", { email })) {
-      return { error: "You do not have permission to publish pages." };
+    if (d.published) {
+      const publishAccess = await requireStorefrontPublishActor({
+        operation: "storefront.page_publish",
+      });
+      if (!publishAccess.ok) {
+        return { error: publishAccess.error };
+      }
     }
     const slug = page.pageType === StorefrontPageType.HOME ? "home" : slugify(d.slug);
     if (!slug) return { error: "URL slug is invalid." };
@@ -272,6 +278,15 @@ export async function updateStorefrontPageDetails(formData: FormData) {
       publishAt = dt;
     }
     const shouldPublishNow = Boolean(d.published || (publishAt != null && publishAt <= new Date()));
+    const becomingPublished = shouldPublishNow && !page.published;
+    if (becomingPublished && !d.published) {
+      const publishAccess = await requireStorefrontPublishActor({
+        operation: "storefront.page_publish_scheduled",
+      });
+      if (!publishAccess.ok) {
+        return { error: publishAccess.error };
+      }
+    }
 
     await prisma.storefrontPage.update({
       where: { id: page.id },

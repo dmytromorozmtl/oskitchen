@@ -7,10 +7,12 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { isStorefrontMediaUploadConfigured } from "@/lib/storefront-builder/media-config";
 import { prisma } from "@/lib/prisma";
+import { resolveStorefrontMediaAccess } from "@/lib/storefront/storefront-page-access";
 import { listStorefrontMediaForOwner } from "@/services/storefront-builder/media-service";
 
 export default async function StorefrontMediaPage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { canManageMedia } = await resolveStorefrontMediaAccess(user.id, user.email ?? null);
   const sf = await findAdminStorefront(user.id, { id: true });
   if (!sf) {
     return (
@@ -48,7 +50,7 @@ export default async function StorefrontMediaPage() {
           <Link href="/dashboard/storefront/theme">Theme URLs</Link>
         </Button>
       </div>
-      <MediaLibrary assets={assets} uploadConfigured={uploadConfigured} />
+      <MediaLibrary assets={assets} uploadConfigured={uploadConfigured} canManageMedia={canManageMedia} />
     </div>
   );
 }

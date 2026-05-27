@@ -22,6 +22,8 @@ export const CAPABILITY = {
   billingManage: "billing:manage",
   integrationsRead: "integrations:read",
   integrationsManage: "integrations:manage",
+  storefrontPublish: "storefront:publish",
+  storefrontMedia: "storefront:media",
   exportsSensitive: "exports:sensitive",
   impersonationRequest: "platform:impersonation",
 } as const;
@@ -47,6 +49,8 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.staffManage,
     CAPABILITY.integrationsManage,
     CAPABILITY.exportsSensitive,
+    CAPABILITY.storefrontPublish,
+    CAPABILITY.storefrontMedia,
   ],
   KITCHEN_LEAD: [
     CAPABILITY.ordersRead,
@@ -80,7 +84,12 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
   ],
   INVENTORY: [CAPABILITY.inventoryRead, CAPABILITY.inventoryWrite],
   ACCOUNTING: [CAPABILITY.ordersRead, CAPABILITY.exportsSensitive, CAPABILITY.integrationsRead],
-  MARKETING: [CAPABILITY.ordersRead, CAPABILITY.integrationsRead],
+  MARKETING: [
+    CAPABILITY.ordersRead,
+    CAPABILITY.integrationsRead,
+    CAPABILITY.storefrontPublish,
+    CAPABILITY.storefrontMedia,
+  ],
   VIEWER: [CAPABILITY.ordersRead, CAPABILITY.inventoryRead, CAPABILITY.integrationsRead],
   CUSTOM: [CAPABILITY.ordersRead],
 };
