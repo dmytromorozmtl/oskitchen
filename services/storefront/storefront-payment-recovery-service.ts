@@ -82,6 +82,16 @@ export async function retryStorefrontOnlinePaymentByToken(
     return { ok: false, error: "This order has already been paid." };
   }
 
+  if (storefrontOrder.paymentStatus !== "FAILED") {
+    return {
+      ok: false,
+      error:
+        storefrontOrder.paymentStatus === "PENDING"
+          ? "Payment is still in progress for this order. Use the original checkout window or wait for confirmation."
+          : "This order is not in a retryable payment state.",
+    };
+  }
+
   if (!isStorefrontOnlineCheckoutAvailable(storefrontOrder.storefront)) {
     return {
       ok: false,

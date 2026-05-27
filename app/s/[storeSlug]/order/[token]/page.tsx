@@ -80,10 +80,9 @@ export default async function StorefrontOrderPage({
       {paymentPending ? (
         <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100">
           <p>
-            Payment is still processing. If you closed the Stripe window or need a fresh checkout link, retry payment
-            below or contact the kitchen with your order reference.
+            Payment is still processing. Use the original Stripe checkout window if it is still open, or contact the
+            kitchen with your order reference if confirmation does not arrive.
           </p>
-          <StorefrontPaymentRecoveryActions orderToken={token} storeSlug={storeSlug} />
         </div>
       ) : null}
       <div className="text-center">

@@ -143,4 +143,25 @@ describe("storefront payment recovery service", () => {
       },
     });
   });
+
+  it("rejects retry when payment is still pending to avoid duplicate live checkout sessions", async () => {
+    prismaMock.storefrontOrder.findFirst.mockResolvedValue({
+      ...retryableOrder,
+      paymentStatus: "PENDING",
+    });
+
+    const result = await retryStorefrontOnlinePaymentByToken({
+      publicToken: "tok_12345678",
+      storeSlug: "hello",
+    });
+
+    expect(result).toEqual({
+      ok: false,
+      error:
+        "Payment is still in progress for this order. Use the original checkout window or wait for confirmation.",
+    });
+    expect(createStorefrontStripeCheckoutSession).not.toHaveBeenCalled();
+    expect(txMock.storefrontOrder.update).not.toHaveBeenCalled();
+    expect(txMock.storefrontConversionEvent.create).not.toHaveBeenCalled();
+  });
 });
