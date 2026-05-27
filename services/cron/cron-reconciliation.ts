@@ -163,25 +163,119 @@ export function reconcileProductionCronState(
     productionProfile.duplicatePaths.length === 0 &&
     productionProfile.scheduleMismatches.length === 0;
 
-  return {
+  return buildReport({
     ok,
-    manifest: {
-      allowlistedSlugs,
-      missingSchedules,
-      extraScheduleKeys,
-    },
-    routes: {
-      activeSlugs: activeRouteSlugs,
-      missingProductionRoutes: routePartition.missingRoutes,
-      experimentalCount: routePartition.experimental.length,
-    },
-    archive: {
-      archivedSlugs: archivedRouteSlugs,
-      archivedProductionSlugs,
-      manifestMissingOnDisk,
-      diskMissingFromManifest,
-    },
+    missingSchedules,
+    extraScheduleKeys,
+    routePartition,
+    archivedRouteSlugs,
+    archivedProductionSlugs,
+    manifestMissingOnDisk,
+    diskMissingFromManifest,
     vercelJson,
     productionProfile,
+    allowlistedSlugs,
+    activeRouteSlugs,
+  });
+}
+
+function buildReport(input: {
+  ok: boolean;
+  missingSchedules: string[];
+  extraScheduleKeys: string[];
+  routePartition: ReturnType<typeof partitionCronRouteSlugs>;
+  archivedRouteSlugs: string[];
+  archivedProductionSlugs: string[];
+  manifestMissingOnDisk: string[];
+  diskMissingFromManifest: string[];
+  vercelJson: CronEntryComparison & { present: boolean };
+  productionProfile: CronEntryComparison & { present: boolean };
+  allowlistedSlugs: readonly string[];
+  activeRouteSlugs: string[];
+}): ProductionCronReconciliationReport {
+  return {
+    ok: input.ok,
+    manifest: {
+      allowlistedSlugs: [...input.allowlistedSlugs],
+      missingSchedules: input.missingSchedules,
+      extraScheduleKeys: input.extraScheduleKeys,
+    },
+    routes: {
+      activeSlugs: input.activeRouteSlugs,
+      missingProductionRoutes: input.routePartition.missingRoutes,
+      experimentalCount: input.routePartition.experimental.length,
+    },
+    archive: {
+      archivedSlugs: input.archivedRouteSlugs,
+      archivedProductionSlugs: input.archivedProductionSlugs,
+      manifestMissingOnDisk: input.manifestMissingOnDisk,
+      diskMissingFromManifest: input.diskMissingFromManifest,
+    },
+    vercelJson: input.vercelJson,
+    productionProfile: input.productionProfile,
   };
+}
+
+function listNonEmpty(label: string, values: string[]): string[] {
+  return values.length > 0 ? [`${label}: ${values.join(", ")}`] : [];
+}
+
+/** Human-readable reconciliation failures for CI logs and thrown assertions. */
+export function formatProductionCronReconciliationFailures(
+  report: ProductionCronReconciliationReport,
+): string[] {
+  const lines: string[] = [];
+  lines.push(...listNonEmpty("manifest missing schedules", report.manifest.missingSchedules));
+  lines.push(...listNonEmpty("manifest extra schedule keys", report.manifest.extraScheduleKeys));
+  lines.push(
+    ...listNonEmpty("missing production routes on disk", report.routes.missingProductionRoutes),
+  );
+  lines.push(
+    ...listNonEmpty("archived production routes", report.archive.archivedProductionSlugs),
+  );
+  lines.push(
+    ...listNonEmpty("archive manifest missing on disk", report.archive.manifestMissingOnDisk),
+  );
+  lines.push(
+    ...listNonEmpty("archive disk missing from manifest", report.archive.diskMissingFromManifest),
+  );
+  if (!report.vercelJson.present) {
+    lines.push("vercel.json crons: missing");
+  } else {
+    lines.push(...listNonEmpty("vercel.json missing paths", report.vercelJson.missingPaths));
+    lines.push(...listNonEmpty("vercel.json extra paths", report.vercelJson.extraPaths));
+    lines.push(...listNonEmpty("vercel.json duplicate paths", report.vercelJson.duplicatePaths));
+    for (const mismatch of report.vercelJson.scheduleMismatches) {
+      lines.push(
+        `vercel.json schedule mismatch ${mismatch.path}: actual=${mismatch.actual} expected=${mismatch.expected}`,
+      );
+    }
+  }
+  if (!report.productionProfile.present) {
+    lines.push("config/vercel/crons-production.json: missing");
+  } else {
+    lines.push(
+      ...listNonEmpty("production profile missing paths", report.productionProfile.missingPaths),
+    );
+    lines.push(...listNonEmpty("production profile extra paths", report.productionProfile.extraPaths));
+    lines.push(
+      ...listNonEmpty("production profile duplicate paths", report.productionProfile.duplicatePaths),
+    );
+    for (const mismatch of report.productionProfile.scheduleMismatches) {
+      lines.push(
+        `production profile schedule mismatch ${mismatch.path}: actual=${mismatch.actual} expected=${mismatch.expected}`,
+      );
+    }
+  }
+  return lines;
+}
+
+export function assertProductionCronReconciliation(
+  report: ProductionCronReconciliationReport = reconcileProductionCronState(),
+): ProductionCronReconciliationReport {
+  if (report.ok) return report;
+  const detail = formatProductionCronReconciliationFailures(report).join("\n  ");
+  throw new Error(
+    `production cron reconciliation failed\n  ${detail}\n\nFix: npm run vercel:crons:production`,
+  );
 }

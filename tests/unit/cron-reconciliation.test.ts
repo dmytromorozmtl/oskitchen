@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { reconcileProductionCronState } from "@/services/cron/cron-reconciliation";
+import {
+  assertProductionCronReconciliation,
+  formatProductionCronReconciliationFailures,
+  reconcileProductionCronState,
+} from "@/services/cron/cron-reconciliation";
 import {
   ALLOWED_PRODUCTION_CRON_SLUGS,
   buildProductionCronEntries,
@@ -87,5 +91,21 @@ describe("cron reconciliation", () => {
     expect(report.archive.archivedProductionSlugs).toEqual(["webhook-jobs"]);
     expect(report.archive.manifestMissingOnDisk).toEqual(["missing-experiment"]);
     expect(report.archive.diskMissingFromManifest).toEqual(["old-experiment", "webhook-jobs"]);
+  });
+
+  it("formats reconciliation failures for CI output", () => {
+    const expected = buildProductionCronEntries();
+    const report = reconcileProductionCronState({
+      expectedEntries: expected,
+      activeRouteSlugs: ALLOWED_PRODUCTION_CRON_SLUGS.filter((slug) => slug !== "webhook-jobs"),
+      archivedRouteSlugs: [],
+      archiveManifestSlugs: [],
+      vercelEntries: expected,
+      productionProfileEntries: expected,
+    });
+
+    const lines = formatProductionCronReconciliationFailures(report);
+    expect(lines).toContain("missing production routes on disk: webhook-jobs");
+    expect(() => assertProductionCronReconciliation(report)).toThrow(/webhook-jobs/);
   });
 });

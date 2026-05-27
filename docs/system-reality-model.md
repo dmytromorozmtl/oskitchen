@@ -91,7 +91,7 @@ Primary evidence sources:
 ## 14. Broken Modules
 - Full typecheck/build reliability is not fully stable at current repo scale; the codebase already includes explicit mitigation for memory pressure and older audits record TypeScript OOM. Evidence: `next.config.ts`, `README.md`, `docs/enterprise-full-audit-26mayafter.md`.
 - CI script-reference drift is now partially hardened by restoring the missing install-chain script and adding a static workflow-to-`package.json` script audit, but broader local test-runner reliability still needs work. Evidence: `.github/workflows/ci.yml`, `scripts/validate-ci-workflow-scripts.ts`, `package.json`, `scripts/verify-clean-install-chain.ts`.
-- Production cron validation was previously reported as failing in the latest enterprise audit and should be treated as needing re-verification before new claims are made. Evidence: `docs/enterprise-full-audit-26mayafter.md`, `scripts/validate-production-crons.ts`, `services/cron/cron-reconciliation.ts`.
+- Production cron validation is enforced in CI via `npm run validate:production-crons` (Vitest live reconciliation against `services/cron/cron-reconciliation.ts`, `vercel.json`, and `config/vercel/crons-production.json`). Evidence: `tests/unit/cron-reconciliation-live.test.ts`, `.github/workflows/ci.yml`.
 
 ## 15. Duplicate Modules
 - Permission logic is duplicated across workspace permissions, legacy role fallbacks, and domain-specific gate helpers. Evidence: `lib/permissions/permissions.ts`, `lib/permissions/mutation-access.ts`, `lib/permissions/legacy.ts`, `lib/staff/staff-permissions.ts`, `lib/training/training-permissions.ts`, `lib/billing/billing-permissions.ts`.

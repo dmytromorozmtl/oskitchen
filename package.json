@@ -206,7 +206,7 @@
     "vercel:crons:staging": "tsx scripts/sync-vercel-crons.ts staging",
     "ops:pilot-dashboard": "bash scripts/ops/pilot-dashboard.sh",
     "ops:weekly-pilot-report": "bash scripts/ops/weekly-pilot-report.sh",
-    "validate:production-crons": "tsx scripts/validate-production-crons.ts",
+    "validate:production-crons": "node node_modules/vitest/vitest.mjs run tests/unit/cron-reconciliation-live.test.ts --reporter=dot",
     "validate:cron-inventory": "tsx scripts/validate-cron-route-inventory.ts",
     "cron:archive:status": "tsx scripts/cron-archive-status.ts",
     "cron:archive:experimental": "tsx scripts/archive-experimental-crons.ts",
