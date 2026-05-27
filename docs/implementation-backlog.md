@@ -176,7 +176,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: aligns workforce and operations
 - Technical value: reduces permission sprawl
 - User story: as an owner, I need staff roles to govern what people can actually do
-- Current state: **in progress** — staff + labor + training + go-live + executive + playbooks + templates + product-mapping + storefront-admin canonical gates; product mapping uses `integrations.read` / `integrations.manage`; storefront admin tabs map to `storefront.read` / `storefront.manage` via `requireStorefrontAdminPermission` with `staffAccess` JSON; settings-backed admin pages (settings, workspace, advanced, fulfillment, discounts, ordering) use `requireStorefrontAdminPageAccess`
+- Current state: **in progress** — staff + labor + training + go-live + executive + playbooks + templates + product-mapping + storefront-admin canonical gates; product mapping uses `integrations.read` / `integrations.manage`; storefront admin tabs map to `storefront.read` / `storefront.manage` via `requireStorefrontAdminPermission` with `staffAccess` JSON; settings-backed admin pages (settings, workspace, advanced, fulfillment, discounts, ordering, seo, marketing, gift-cards) use `requireStorefrontAdminPageAccess`
 - Target state: staff roles map directly to canonical capabilities
 - Affected files: `actions/staff.ts`, `actions/training.ts`, `lib/staff/**`, `lib/training/**`
 - Dependencies: `KOS-P0-001`

@@ -9,31 +9,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontSeoPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const settings = await findAdminStorefront(user.id, {
-    id: true,
-    publicName: true,
-    description: true,
-    heroImageUrl: true,
-    seoTitle: true,
-    seoDescription: true,
-    seoImageUrl: true,
-    canonicalBaseUrl: true,
-    robotsPolicy: true,
-    metaPixelId: true,
-    googleAnalyticsId: true,
-    googleAnalyticsPropertyId: true,
-    googleTagManagerId: true,
-    analyticsConsentMode: true,
-    analyticsConsentBannerText: true,
-    analyticsExcludeTestOrders: true,
-    firstPartyAnalyticsMode: true,
-    themeDraftJson: true,
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const settings = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: {
+      id: true,
+      publicName: true,
+      description: true,
+      heroImageUrl: true,
+      seoTitle: true,
+      seoDescription: true,
+      seoImageUrl: true,
+      canonicalBaseUrl: true,
+      robotsPolicy: true,
+      metaPixelId: true,
+      googleAnalyticsId: true,
+      googleAnalyticsPropertyId: true,
+      googleTagManagerId: true,
+      analyticsConsentMode: true,
+      analyticsConsentBannerText: true,
+      analyticsExcludeTestOrders: true,
+      firstPartyAnalyticsMode: true,
+      themeDraftJson: true,
+    },
   });
   const seoDraft = settings ? parseThemeDraft(settings.themeDraftJson) : null;
 

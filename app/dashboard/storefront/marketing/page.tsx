@@ -1,16 +1,17 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { listStorefrontCampaigns } from "@/services/storefront/storefront-p3-list-service";
 
 export const dynamic = "force-dynamic";
 
 export default async function StorefrontMarketingPage() {
-  const { sessionUser: user } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true });
-  const campaigns = sf ? await listStorefrontCampaigns(sf.id) : [];
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const storefrontId = pageAccess.access.storefront.id;
+  const campaigns = await listStorefrontCampaigns(storefrontId);
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -21,11 +22,7 @@ export default async function StorefrontMarketingPage() {
         </p>
       </div>
 
-      {!sf ? (
-        <Button asChild className="rounded-full">
-          <Link href="/dashboard/storefront">Set up storefront</Link>
-        </Button>
-      ) : campaigns.length === 0 ? (
+      {campaigns.length === 0 ? (
         <p className="text-sm text-muted-foreground">No campaigns yet — create drafts via API or future builder.</p>
       ) : (
         <ul className="divide-y rounded-xl border border-border/80">
