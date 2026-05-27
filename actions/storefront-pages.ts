@@ -306,7 +306,7 @@ export async function updateStorefrontPageDetails(formData: FormData) {
     if (shouldPublishNow !== page.published) {
       await auditStorefrontPagePublish({
         userId,
-        email,
+        email: user.email,
         pageId: page.id,
         pageTitle: displayTitle,
         storeSlug: page.storefront.storeSlug,
