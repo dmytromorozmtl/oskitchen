@@ -4,6 +4,8 @@ const requireMutationPermission = vi.hoisted(() => vi.fn());
 const requireTenantActor = vi.hoisted(() => vi.fn());
 const recordAuditLog = vi.hoisted(() => vi.fn());
 const updateLocation = vi.hoisted(() => vi.fn());
+const createLocation = vi.hoisted(() => vi.fn());
+const bulkAssignToLocation = vi.hoisted(() => vi.fn());
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
@@ -20,19 +22,22 @@ vi.mock("@/lib/audit-log", () => ({
 }));
 
 vi.mock("@/services/locations/location-service", () => ({
-  createLocation: vi.fn(),
+  createLocation,
   updateLocation,
-  bulkAssignToLocation: vi.fn(),
+  bulkAssignToLocation,
 }));
 
 import {
   archiveLocationAction,
+  bulkAssignAction,
+  createFullLocationAction,
   updateLocationFulfillmentAction,
   updateLocationHoursAction,
   updateLocationProfileAction,
 } from "@/actions/locations";
 
 const LOCATION_ID = "11111111-1111-4111-8111-111111111111";
+const TARGET_ID = "22222222-2222-4222-8222-222222222222";
 
 const deniedActor = {
   sessionUserId: "staff-1",
@@ -47,8 +52,13 @@ const deniedActor = {
 describe("locations actions RBAC", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    requireTenantActor.mockResolvedValue({ dataUserId: "owner-1" });
+    requireTenantActor.mockResolvedValue({
+      dataUserId: "owner-1",
+      sessionUser: { email: "manager@example.com" },
+    });
     updateLocation.mockResolvedValue(undefined);
+    createLocation.mockResolvedValue({ id: LOCATION_ID });
+    bulkAssignToLocation.mockResolvedValue({ updated: 1 });
     recordAuditLog.mockResolvedValue(undefined);
   });
 
@@ -196,6 +206,72 @@ describe("locations actions RBAC", () => {
       { userId: "owner-1" },
       LOCATION_ID,
       { status: "ARCHIVED" },
+    );
+  });
+
+  it("denies createFullLocationAction without workspace.settings and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("name", "Downtown kitchen");
+
+    const result = await createFullLocationAction(formData);
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(requireMutationPermission).toHaveBeenCalledWith("workspace.settings");
+    expect(createLocation).not.toHaveBeenCalled();
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({ operation: "locations.create_full" }),
+      }),
+    );
+  });
+
+  it("denies bulkAssignAction without workspace.settings and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("target", "MENU");
+    formData.set("targetIds", TARGET_ID);
+    formData.set("locationId", LOCATION_ID);
+
+    const result = await bulkAssignAction(formData);
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(bulkAssignToLocation).not.toHaveBeenCalled();
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({ operation: "locations.bulk_assign" }),
+      }),
+    );
+  });
+
+  it("allows bulkAssignAction when workspace.settings is granted", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor: deniedActor });
+
+    const formData = new FormData();
+    formData.set("target", "MENU");
+    formData.set("targetIds", TARGET_ID);
+    formData.set("locationId", LOCATION_ID);
+
+    const result = await bulkAssignAction(formData);
+
+    expect(result).toEqual({ ok: true, updated: 1 });
+    expect(requireTenantActor).toHaveBeenCalled();
+    expect(bulkAssignToLocation).toHaveBeenCalledWith(
+      { userId: "owner-1" },
+      "MENU",
+      [TARGET_ID],
+      LOCATION_ID,
+      "manager@example.com",
     );
   });
 });

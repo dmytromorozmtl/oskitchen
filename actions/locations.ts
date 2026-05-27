@@ -59,8 +59,8 @@ async function requireLocationMutationAccess(operation: string, permission: Perm
     });
     return { ok: false as const, error: access.error };
   }
-  const { dataUserId } = await requireTenantActor();
-  return { ok: true as const, dataUserId };
+  const actor = await requireTenantActor();
+  return { ok: true as const, dataUserId: actor.dataUserId, sessionUser: actor.sessionUser };
 }
 
 /* ============================ legacy preserved ============================ */
@@ -117,7 +117,9 @@ const fullCreateSchema = z.object({
 
 export async function createFullLocationAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireLocationMutationAccess("locations.create_full", "workspace.settings");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const parsed = fullCreateSchema.safeParse({
       name: formData.get("name"),
       slug: formData.get("slug"),
@@ -411,7 +413,9 @@ const assignSchema = z.object({
 
 export async function bulkAssignAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireLocationMutationAccess("locations.bulk_assign", "workspace.settings");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = assignSchema.safeParse({
       target: formData.get("target"),
       targetIds: formData.get("targetIds"),
