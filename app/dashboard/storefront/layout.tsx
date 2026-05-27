@@ -6,6 +6,7 @@ import {
   resolveOwnerStorefront,
 } from "@/lib/storefront/resolve-owner-storefront";
 import { requireStorefrontReadPage } from "@/lib/storefront/storefront-page-access";
+import { resolveStorefrontSubnavVisibleHrefs } from "@/lib/storefront/storefront-subnav-access";
 
 export default async function StorefrontAdminLayout({ children }: { children: React.ReactNode }) {
   const access = await requireStorefrontReadPage({
@@ -17,8 +18,11 @@ export default async function StorefrontAdminLayout({ children }: { children: Re
   }
 
   const { dataUserId } = await getTenantActor();
-  const owned = await listOwnerStorefronts(dataUserId);
-  const active = await resolveOwnerStorefront(dataUserId);
+  const [owned, active, visibleHrefs] = await Promise.all([
+    listOwnerStorefronts(dataUserId),
+    resolveOwnerStorefront(dataUserId),
+    resolveStorefrontSubnavVisibleHrefs(access),
+  ]);
 
   return (
     <div className="space-y-8">
@@ -29,6 +33,7 @@ export default async function StorefrontAdminLayout({ children }: { children: Re
         canManage={access.canManage}
         canPublish={access.canPublish}
         canManageMedia={access.canManageMedia}
+        visibleHrefs={visibleHrefs}
       />
       {children}
     </div>

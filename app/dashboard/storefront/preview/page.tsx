@@ -2,15 +2,21 @@ import Link from "next/link";
 
 import { StorefrontPreviewFrame } from "@/components/dashboard/storefront-preview-frame";
 import { SITE_URL } from "@/lib/constants";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireSessionUser } from "@/lib/auth";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
-import { prisma } from "@/lib/prisma";
+import { requireStorefrontReadPage } from "@/lib/storefront/storefront-page-access";
 import { isStorefrontPreviewTokenConfigured } from "@/lib/storefront/preview-token";
 import { Button } from "@/components/ui/button";
 
 export default async function StorefrontPreviewPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id);
+  const readAccess = await requireStorefrontReadPage({
+    operation: "storefront.preview.view",
+    route: "/dashboard/storefront/preview",
+  });
+  if (!readAccess.ok) return readAccess.deny;
+
+  const user = await requireSessionUser();
+  const sf = await findAdminStorefront(user.id, { id: true, storeSlug: true });
   if (!sf) {
     return (
       <div className="mx-auto max-w-2xl space-y-4">

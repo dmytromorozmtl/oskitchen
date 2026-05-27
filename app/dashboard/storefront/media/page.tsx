@@ -4,16 +4,23 @@ import { MediaLibrary } from "@/components/storefront/media/media-library";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { isStorefrontMediaUploadConfigured } from "@/lib/storefront-builder/media-config";
 import { prisma } from "@/lib/prisma";
-import { resolveStorefrontMediaAccess } from "@/lib/storefront/storefront-page-access";
+import {
+  resolveStorefrontMediaAccess,
+  storefrontMediaDeniedCard,
+} from "@/lib/storefront/storefront-page-access";
 import { listStorefrontMediaForOwner } from "@/services/storefront-builder/media-service";
 
 export default async function StorefrontMediaPage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const { canManageMedia } = await resolveStorefrontMediaAccess(user.id, user.email ?? null);
-  const sf = await findAdminStorefront(user.id, { id: true });
+  if (!canManageMedia) return storefrontMediaDeniedCard();
+  const sf = await prisma.storefrontSettings.findFirst({
+    where: { userId: dataUserId },
+    orderBy: { updatedAt: "desc" },
+    select: { id: true },
+  });
   if (!sf) {
     return (
       <div className="mx-auto max-w-2xl space-y-6">

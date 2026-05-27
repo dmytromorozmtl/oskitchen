@@ -6,18 +6,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
-import { menuListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { prisma } from "@/lib/prisma";
+import { menuListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { SITE_URL } from "@/lib/constants";
 import { ensureCatalogMenu } from "@/lib/products/ensure-catalog-menu";
 
 export default async function StorefrontMenuAdminPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.menu.view",
+    route: "/dashboard/storefront/menu",
+  });
+  if (!manageAccess.ok) return manageAccess.deny;
+
+  const { dataUserId } = await getTenantActor();
   await ensureCatalogMenu(dataUserId);
   const menuWhere = await menuListWhereForOwner(dataUserId);
   const [settings, menusAll] = await Promise.all([
-    findAdminStorefront(user.id),
+    prisma.storefrontSettings.findFirst({
+      where: { userId: dataUserId },
+      orderBy: { updatedAt: "desc" },
+    }),
     prisma.menu.findMany({
       where: menuWhere,
       orderBy: { createdAt: "desc" },

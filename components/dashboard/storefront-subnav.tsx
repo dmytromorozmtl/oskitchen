@@ -49,13 +49,20 @@ function tabActive(pathname: string, href: string): boolean {
 
 export function StorefrontSubnav({
   canManage = true,
+  visibleHrefs,
 }: {
   canManage?: boolean;
   canPublish?: boolean;
   canManageMedia?: boolean;
+  /** When set, only these hrefs are shown (server-resolved RBAC). */
+  visibleHrefs?: readonly string[];
 }) {
   const pathname = usePathname() ?? "";
-  const visible = tabs.filter((t) => !t.manageOnly || canManage);
+  const hrefSet = visibleHrefs ? new Set(visibleHrefs) : null;
+  const visible = tabs.filter((t) => {
+    if (hrefSet) return hrefSet.has(t.href);
+    return !t.manageOnly || canManage;
+  });
 
   return (
     <nav

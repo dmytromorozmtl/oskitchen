@@ -17,7 +17,6 @@ import { ThemePresetPreview } from "@/components/storefront/theme/theme-preset-p
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { loadPublishChecklistForStorefront, publishChecklistBlocksGoLive } from "@/lib/storefront/launch-readiness";
 import { buildThemePublishDiff } from "@/lib/storefront/theme-publish-diff";
@@ -33,26 +32,29 @@ export default async function StorefrontThemePage() {
 
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const { canPublish } = await resolveStorefrontPublishAccess(user.id, user.email ?? null);
-  const settings = await findAdminStorefront(user.id, {
-    id: true,
-    storeSlug: true,
-    locale: true,
-    themePublishedAt: true,
-    themePublishedJson: true,
-    themePreset: true,
-    brandColor: true,
-    secondaryColor: true,
-    backgroundColor: true,
-    textColor: true,
-    logoUrl: true,
-    faviconUrl: true,
-    heroImageUrl: true,
-    coverImageUrl: true,
-    fontFamily: true,
-    layoutPreset: true,
-    themeDraftJson: true,
-    navigation: { select: { itemsJson: true } },
-    footer: { select: { blocksJson: true } },
+  const settings = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: {
+      id: true,
+      storeSlug: true,
+      locale: true,
+      themePublishedAt: true,
+      themePublishedJson: true,
+      themePreset: true,
+      brandColor: true,
+      secondaryColor: true,
+      backgroundColor: true,
+      textColor: true,
+      logoUrl: true,
+      faviconUrl: true,
+      heroImageUrl: true,
+      coverImageUrl: true,
+      fontFamily: true,
+      layoutPreset: true,
+      themeDraftJson: true,
+      navigation: { select: { itemsJson: true } },
+      footer: { select: { blocksJson: true } },
+    },
   });
   const pages = settings
     ? await prisma.storefrontPage.findMany({

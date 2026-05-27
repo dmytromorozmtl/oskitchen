@@ -4,13 +4,16 @@ import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SITE_URL } from "@/lib/constants";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontWebsiteAdminPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const settings = await findAdminStorefront(user.id);
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const settings = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+  });
   const origin = SITE_URL.replace(/\/$/, "");
   const live = settings ? `${origin}/s/${settings.storeSlug}` : null;
 

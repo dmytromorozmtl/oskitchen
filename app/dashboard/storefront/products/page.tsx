@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { adminPagination, parseAdminPageParam } from "@/lib/storefront/pagination";
 import { prisma } from "@/lib/prisma";
 
@@ -17,13 +17,23 @@ export default async function StorefrontProductsAdminPage({
 }: {
   searchParams?: Promise<{ page?: string }>;
 }) {
-  const { sessionUser: user } = await getTenantActor();
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.products.view",
+    route: "/dashboard/storefront/products",
+  });
+  if (!manageAccess.ok) return manageAccess.deny;
+
+  const { dataUserId } = await getTenantActor();
   const sp = searchParams ? await searchParams : {};
   const pageNum = parseAdminPageParam(sp.page);
-  const settings = await findAdminStorefront(user.id, {
-    id: true,
-    storeSlug: true,
-    activeMenuId: true,
+  const settings = await prisma.storefrontSettings.findFirst({
+    where: { userId: dataUserId },
+    orderBy: { updatedAt: "desc" },
+    select: {
+      id: true,
+      storeSlug: true,
+      activeMenuId: true,
+    },
   });
 
   const menuId = settings?.activeMenuId;

@@ -5,7 +5,7 @@ import { PublishChecklistCard } from "@/components/storefront-builder/publish-ch
 import { StorefrontLaunchOpsCard } from "@/components/dashboard/storefront/storefront-launch-ops-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { isStorefrontStrictLaunchEnabled } from "@/lib/storefront/launch-strict";
 import {
   loadPublishChecklistForStorefront,
@@ -31,35 +31,41 @@ function Item({ ok, label, href }: { ok: boolean; label: string; href: string })
 }
 
 export default async function StorefrontLaunchPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const settings = await findAdminStorefront(user.id, {
-    id: true,
-    userId: true,
-    storeSlug: true,
-    publicName: true,
-    description: true,
-    logoUrl: true,
-    contactEmail: true,
-    contactPhone: true,
-    termsText: true,
-    privacyText: true,
-    seoTitle: true,
-    seoDescription: true,
-    primaryDomainMode: true,
-    subdomain: true,
-    customDomain: true,
-    published: true,
-    enabled: true,
-    activeMenuId: true,
-    pickupEnabled: true,
-    deliveryEnabled: true,
-    onlinePaymentEnabled: true,
-    payLaterOnly: true,
-    currency: true,
-    stripeConnectAccountId: true,
-    stripeConnectChargesEnabled: true,
-    stripeConnectPayoutsEnabled: true,
-    stripeConnectDetailsSubmitted: true,
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const { dataUserId } = await getTenantActor();
+  const settings = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: {
+      id: true,
+      userId: true,
+      storeSlug: true,
+      publicName: true,
+      description: true,
+      logoUrl: true,
+      contactEmail: true,
+      contactPhone: true,
+      termsText: true,
+      privacyText: true,
+      seoTitle: true,
+      seoDescription: true,
+      primaryDomainMode: true,
+      subdomain: true,
+      customDomain: true,
+      published: true,
+      enabled: true,
+      activeMenuId: true,
+      pickupEnabled: true,
+      deliveryEnabled: true,
+      onlinePaymentEnabled: true,
+      payLaterOnly: true,
+      currency: true,
+      stripeConnectAccountId: true,
+      stripeConnectChargesEnabled: true,
+      stripeConnectPayoutsEnabled: true,
+      stripeConnectDetailsSubmitted: true,
+    },
   });
 
   const [menus, productCount, publishChecklist] = settings

@@ -2,8 +2,11 @@ import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 
-export default function StorefrontNotificationsAdminPage() {
+export default async function StorefrontNotificationsAdminPage() {
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <div>
