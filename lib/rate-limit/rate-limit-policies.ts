@@ -24,6 +24,8 @@ export const RATE_LIMIT_POLICIES = {
   pos_crm_customer_upsert: { windowMs: 60_000, max: 30 },
   /** Public storefront checkout — per IP. */
   storefront_checkout_submit: { windowMs: 60_000, max: 12 },
+  /** Stripe checkout retry link — per IP + order token (stricter than first submit). */
+  storefront_checkout_retry: { windowMs: 60_000, max: 6 },
   /** First-party analytics beacon — per IP + store slug suffix applied at call site. */
   storefront_analytics_ingest: { windowMs: 60_000, max: 180 },
   /** Contact / catering legacy forms — per IP. */
@@ -65,6 +67,7 @@ export const PRODUCTION_CRITICAL_RATE_LIMIT_POLICIES: RateLimitPolicyKey[] = [
   "public_api_v1_post",
   "webhook_ingest",
   "storefront_checkout_submit",
+  "storefront_checkout_retry",
   "storefront_cart_sync",
   "storefront_invite_magic",
   "storefront_guest_account",

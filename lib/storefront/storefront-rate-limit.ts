@@ -59,6 +59,7 @@ export async function enforceStorefrontRouteRateLimit(
 export function storefrontRateLimitPolicySummary(): Record<string, { windowMs: number; max: number }> {
   return {
     storefront_checkout_submit: RATE_LIMIT_POLICIES.storefront_checkout_submit,
+    storefront_checkout_retry: RATE_LIMIT_POLICIES.storefront_checkout_retry,
     storefront_analytics_ingest: RATE_LIMIT_POLICIES.storefront_analytics_ingest,
     storefront_contact_submit: RATE_LIMIT_POLICIES.storefront_contact_submit,
   };
