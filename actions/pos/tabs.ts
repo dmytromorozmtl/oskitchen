@@ -4,8 +4,11 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { fail, ok } from '@/lib/action-result';
-import { requireTenantActor } from '@/lib/scope/require-tenant-actor';
+import { AUDIT_ACTIONS } from '@/lib/audit/audit-actions';
+import { requireMutationPermission } from '@/lib/permissions/mutation-access';
+import type { PermissionKey } from '@/lib/permissions/permissions';
 import * as tabService from '@/services/pos/tab-service';
+import { logPosPermissionDenied, logPosTabEvent } from '@/services/pos/pos-permission-audit';
 
 const createTabSchema = z.object({
   name: z.string().min(1).max(50),
@@ -24,13 +27,32 @@ const closeTabSchema = z.object({
   tip: z.coerce.number().min(0).default(0),
 });
 
+async function requirePosTabPermission(required: PermissionKey, operation: string) {
+  const access = await requireMutationPermission(required);
+  if (!access.ok) {
+    await logPosPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation,
+    });
+  }
+  return access;
+}
+
 export async function createTabAction(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const access = await requirePosTabPermission('pos.access', 'pos.tab.create');
+  if (!access.ok) return fail(access.error);
+  const { actor } = access;
   const parsed = createTabSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid data");
 
   try {
-    const tab = await tabService.createTab(userId, parsed.data.name, parsed.data.tableId);
+    const tab = await tabService.createTab(actor.userId, parsed.data.name, parsed.data.tableId);
+    await logPosTabEvent(actor, {
+      action: AUDIT_ACTIONS.POS_TAB_OPENED,
+      entityId: tab.id,
+      label: tab.name,
+      metadata: { tableId: tab.tableId ?? null },
+    });
     revalidatePath('/dashboard/pos/tabs');
     return ok({
       tab: {
@@ -51,12 +73,26 @@ export async function createTabAction(formData: FormData) {
 }
 
 export async function addItemToTabAction(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const access = await requirePosTabPermission('pos.access', 'pos.tab.item.add');
+  if (!access.ok) return fail(access.error);
+  const { actor } = access;
   const parsed = addItemSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid data");
 
   try {
-    await tabService.addItemToTab(parsed.data.tabId, userId, parsed.data);
+    const totalPrice = parsed.data.unitPrice * parsed.data.quantity;
+    const tab = await tabService.addItemToTab(parsed.data.tabId, actor.userId, parsed.data);
+    await logPosTabEvent(actor, {
+      action: AUDIT_ACTIONS.POS_TAB_ITEM_ADDED,
+      entityId: tab.id,
+      label: tab.name,
+      metadata: {
+        productName: parsed.data.productName,
+        quantity: parsed.data.quantity,
+        unitPrice: parsed.data.unitPrice,
+        totalPrice,
+      },
+    });
     revalidatePath('/dashboard/pos/tabs');
     return ok({
       item: {
@@ -64,7 +100,7 @@ export async function addItemToTabAction(formData: FormData) {
         productName: parsed.data.productName,
         quantity: parsed.data.quantity,
         unitPrice: parsed.data.unitPrice,
-        totalPrice: parsed.data.unitPrice * parsed.data.quantity,
+        totalPrice,
       },
     });
   } catch {
@@ -73,12 +109,25 @@ export async function addItemToTabAction(formData: FormData) {
 }
 
 export async function closeTabAction(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const access = await requirePosTabPermission('pos.checkout', 'pos.tab.close');
+  if (!access.ok) return fail(access.error);
+  const { actor } = access;
   const parsed = closeTabSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid data");
 
   try {
-    await tabService.closeTab(parsed.data.tabId, userId, parsed.data.tip);
+    const tab = await tabService.closeTab(parsed.data.tabId, actor.userId, parsed.data.tip);
+    await logPosTabEvent(actor, {
+      action: AUDIT_ACTIONS.POS_TAB_CLOSED,
+      entityId: tab.id,
+      label: tab.name,
+      metadata: {
+        tip: parsed.data.tip,
+        subtotal: Number(tab.subtotal),
+        tax: Number(tab.tax),
+        total: Number(tab.total),
+      },
+    });
     revalidatePath('/dashboard/pos/tabs');
     return ok(undefined);
   } catch {

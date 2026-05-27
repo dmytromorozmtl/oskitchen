@@ -17,6 +17,7 @@ export default defineConfig({
     watch: false,
     include: [
       "unit/actions-pos-rbac.test.ts",
+      "unit/actions-pos-tabs-rbac.test.ts",
       "unit/pos-handheld-tabs-rbac.test.ts",
       "unit/pos-settings-rbac.test.ts",
       "unit/pos-workspace-permissions.test.ts",

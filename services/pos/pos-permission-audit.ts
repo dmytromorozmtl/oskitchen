@@ -65,6 +65,31 @@ export async function logPosRegisterCreated(
   });
 }
 
+export async function logPosTabEvent(
+  actor: WorkspacePermissionActor,
+  input: {
+    action:
+      | typeof AUDIT_ACTIONS.POS_TAB_OPENED
+      | typeof AUDIT_ACTIONS.POS_TAB_ITEM_ADDED
+      | typeof AUDIT_ACTIONS.POS_TAB_CLOSED;
+    entityId?: string | null;
+    label?: string | null;
+    metadata?: Record<string, unknown>;
+  },
+): Promise<void> {
+  await auditLog({
+    workspaceId: actor.workspaceId,
+    actor: actorPayload(actor),
+    action: input.action,
+    category: "ORDERS",
+    source: "USER",
+    severity: "INFO",
+    entity: { type: "POSTab", id: input.entityId ?? null, label: input.label ?? null },
+    metadata: input.metadata,
+    maskPiiInMetadata: true,
+  });
+}
+
 export async function logPosTerminalControlEvent(
   actor: WorkspacePermissionActor,
   input: {

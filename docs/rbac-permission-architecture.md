@@ -260,12 +260,13 @@ Initial scope:
 
 ### Phase 2: High-risk mutations
 - migrate `actions/pos.ts`
+- migrate `actions/pos/tabs.ts`
 - migrate `app/api/pos/terminal/route.ts`
 - migrate `actions/billing.ts`
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
-- Status update: POS slice is now live on canonical keys for checkout, discount/comp authorization, refunds, voids, register creation, shift open/close, and terminal API routes; broader billing/integrations/storefront/upload migration remains open
+- Status update: POS slice is now live on canonical keys for checkout, discount/comp authorization, refunds, voids, register creation, shift open/close, bar-tab create/add/close workflows, and terminal API routes; broader billing/integrations/storefront/upload migration remains open
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates

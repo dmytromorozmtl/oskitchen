@@ -66,10 +66,10 @@ Priority rule:
 - Estimated complexity: High
 
 ## 4. POS Permission Gaps
-- Problem: the highest-risk POS mutation and terminal route gaps are now much narrower, and the main POS shell plus several subpages now mirror canonical permissions with focused coverage reaching into settings/hardware, handheld, and tabs page parity, but deeper role-matrix coverage and some lower-level POS surfaces still lag the target operating model. Evidence: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `app/dashboard/pos/layout.tsx`, `app/dashboard/pos/registers/page.tsx`, `app/dashboard/pos/shifts/page.tsx`, `app/dashboard/pos/settings/`, `app/dashboard/pos/handheld/page.tsx`, `app/dashboard/pos/tabs/page.tsx`.
+- Problem: the highest-risk POS mutation and terminal route gaps are now much narrower, and the main POS shell plus several subpages now mirror canonical permissions with focused coverage reaching into settings/hardware, handheld, and tabs page parity, while tab workflow mutations now sit on canonical action guards too, but deeper role-matrix coverage and some lower-level POS surfaces still lag the target operating model. Evidence: `actions/pos.ts`, `actions/pos/tabs.ts`, `app/api/pos/terminal/route.ts`, `app/dashboard/pos/layout.tsx`, `app/dashboard/pos/registers/page.tsx`, `app/dashboard/pos/shifts/page.tsx`, `app/dashboard/pos/settings/`, `app/dashboard/pos/handheld/page.tsx`, `app/dashboard/pos/tabs/page.tsx`.
 - Business risk: financial operations and operator workflows are not governance-clean enough for broad rollout.
 - Technical risk: role bypass, inconsistent cash/shift controls, weak server-side policy.
-- Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`, `lib/permissions/**`
+- Affected files: `actions/pos.ts`, `actions/pos/tabs.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`, `lib/permissions/**`
 - Affected modules: POS
 - Safest implementation plan:
   1. keep the new POS-specific permission keys as the only server truth for checkout/register/shift/refund/void/terminal flows
@@ -176,7 +176,7 @@ Priority rule:
 - Technical risk: permission regressions during ongoing feature expansion.
 - Affected files: tests around POS, billing, integrations, storefront publishing, staff, exports
 - Affected modules: all sensitive domains
-- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, POS settings/hardware page parity tests, POS handheld/tabs page parity tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, terminal route denials across GET/POST/PUT/DELETE, the terminal process/cancel lifecycle with canonical allowed-path audit logging for successful payment capture, page-level deny/allow parity for hardware/settings surfaces, and `pos.access` page parity that prevents denied actors from loading tab data, while remaining work is deeper cashier/manager/owner matrices inside workflows plus expansion into other P0 surfaces
+- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, POS tab workflow permission tests, POS settings/hardware page parity tests, POS handheld/tabs page parity tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, tab create/add/close mutation denials plus allowed-path audit coverage, terminal route denials across GET/POST/PUT/DELETE, the terminal process/cancel lifecycle with canonical allowed-path audit logging for successful payment capture, page-level deny/allow parity for hardware/settings surfaces, and `pos.access` page parity that prevents denied actors from loading tab data, while remaining work is deeper cashier/manager/owner matrices inside workflows plus expansion into other P0 surfaces
 - Safest implementation plan:
   1. define canonical role matrix
   2. add shared permission-negative harness
