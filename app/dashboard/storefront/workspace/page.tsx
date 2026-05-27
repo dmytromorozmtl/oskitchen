@@ -14,13 +14,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { asVoidFormAction, asVoidFormActionNoArg } from "@/lib/actions/server-form-action";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { compositeMarketHostLabel } from "@/lib/storefront/market-host-resolve";
 import { parseStorefrontMarketsFromSettingsCenter } from "@/lib/storefront/markets";
-import { listOwnerStorefronts, resolveOwnerStorefront } from "@/lib/storefront/resolve-owner-storefront";
+import { listOwnerStorefronts } from "@/lib/storefront/resolve-owner-storefront";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontWorkspacePage() {
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const { sessionUser: user, dataUserId } = await getTenantActor();
+  const ownerUserId = pageAccess.userId;
   const memberships = await prisma.workspaceMember.findMany({
     where: { userId: dataUserId },
     include: { workspace: { select: { id: true, name: true } } },
@@ -28,10 +33,12 @@ export default async function StorefrontWorkspacePage() {
   const workspaceIds = memberships.map((m) => m.workspaceId);
 
   const [sf, ownedStores, kitchen, workspaceStorefronts] = await Promise.all([
-    resolveOwnerStorefront(user.id),
+    prisma.storefrontSettings.findUnique({
+      where: { id: pageAccess.access.storefront.id },
+    }),
     listOwnerStorefronts(user.id),
     prisma.kitchenSettings.findUnique({
-      where: { userId: dataUserId },
+      where: { userId: ownerUserId },
       select: { settingsCenterJson: true },
     }),
     workspaceIds.length > 0

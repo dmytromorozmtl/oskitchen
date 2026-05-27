@@ -12,8 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { decryptStorefrontWebhookSecret } from "@/lib/storefront/storefront-webhook-secret";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
-import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 import { CartRecoveryChart } from "@/components/dashboard/storefront/cart-recovery-chart";
 import { WebhookDeliveryLog } from "@/components/dashboard/storefront/webhook-delivery-log";
@@ -24,20 +23,14 @@ import {
 import { getStorefrontWebhookDeliveryLog } from "@/services/storefront/webhook-delivery-log-service";
 
 export default async function StorefrontSettingsPage() {
-  const manageAccess = await requireStorefrontManagePage({
-    operation: "storefront.settings.view",
-    route: "/dashboard/storefront/settings",
-  });
-  if (!manageAccess.ok) {
-    return manageAccess.deny;
-  }
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const { sessionUser: user } = await getTenantActor();
   const profile = await prisma.userProfile.findUnique({ where: { id: user.id }, select: { role: true } });
   const isOwner = profile?.role === "OWNER";
-  const base = await findAdminStorefront(user.id, { id: true });
-  const settings = base
-    ? await prisma.storefrontSettings.findUnique({
-        where: { id: base.id },
+  const settings = await prisma.storefrontSettings.findUnique({
+        where: { id: pageAccess.access.storefront.id },
         include: {
           brand: { select: { id: true, name: true } },
           contactSubmissions: {
@@ -45,8 +38,7 @@ export default async function StorefrontSettingsPage() {
             take: 25,
           },
         },
-      })
-    : null;
+      });
   const cartMetrics = settings ? await getStorefrontCartRecoveryMetrics(settings.id) : null;
   const cartDaily = settings ? await getStorefrontCartRecoveryDailyMetrics(settings.id, 14) : [];
   const webhookLog = settings?.pagePublishWebhookUrl

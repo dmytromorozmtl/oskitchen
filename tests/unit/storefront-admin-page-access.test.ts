@@ -46,6 +46,32 @@ describe("requireStorefrontAdminPageAccess", () => {
     });
   });
 
+  it("denies settings page when canonical storefront.manage is missing", async () => {
+    const granted = workspacePermissionsFromStaffTemplate("PACKER", "STAFF");
+    const actor = {
+      sessionUserId: "staff-1",
+      userId: "owner-1",
+      workspaceId: "ws-1",
+      workspaceRole: "STAFF" as const,
+      staffRoleType: "PACKER" as const,
+      email: "packer@example.com",
+      granted,
+    };
+    requireWorkspacePermissionActor.mockResolvedValue(actor);
+
+    const result = await requireStorefrontAdminPageAccess("storefront.settings");
+
+    expect(result.ok).toBe(false);
+    expect(resolveStorefrontAdminAccess).not.toHaveBeenCalled();
+    expect(logStorefrontPermissionDenied).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        requiredPermission: "storefront.manage",
+        operation: "storefront.admin.page.storefront.settings",
+      }),
+    );
+  });
+
   it("denies team page when canonical storefront.manage is missing", async () => {
     const granted = workspacePermissionsFromStaffTemplate("PACKER", "STAFF");
     const actor = {

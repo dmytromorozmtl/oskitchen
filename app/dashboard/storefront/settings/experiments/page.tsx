@@ -5,7 +5,7 @@ import { ThemeExperimentAuditStreamTable } from "@/components/dashboard/storefro
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 import { isAutoConcludeGloballyEnabled } from "@/lib/storefront/theme-experiment-auto-conclude";
 import {
@@ -21,19 +21,25 @@ import { readWorkspaceExperimentPolicy } from "@/lib/storefront/theme-experiment
 import { listStorefrontExperimentAuditStream } from "@/services/storefront/storefront-experiment-audit-stream-list";
 
 export default async function StorefrontExperimentsSettingsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const { sessionUser: user } = await getTenantActor();
   const profile = await prisma.userProfile.findUnique({
     where: { id: user.id },
     select: { role: true },
   });
   const isOwner = profile?.role === "OWNER";
 
-  const sf = await findAdminStorefront(user.id, {
-    id: true,
-    storeSlug: true,
-    workspaceId: true,
-    themeExperimentJson: true,
-    experimentLegalHoldAt: true,
+  const sf = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: {
+      id: true,
+      storeSlug: true,
+      workspaceId: true,
+      themeExperimentJson: true,
+      experimentLegalHoldAt: true,
+    },
   });
 
   const stored = sf ? parseThemeExperimentStored(sf.themeExperimentJson) : null;
