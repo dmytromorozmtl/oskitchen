@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type MealPlanPermission =
   | "meal_plan.read.list"
   | "meal_plan.read.detail"
@@ -19,10 +17,11 @@ export type MealPlanActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdmin(scope: MealPlanActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoMealPlan(scope: MealPlanActorScope, permission: MealPlanPermission): boolean {
