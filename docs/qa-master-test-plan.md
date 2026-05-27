@@ -61,8 +61,9 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8c. Integration honesty
 - canonical ids: `lib/integrations/integration-honesty.ts`
+- wiring cert: `test:ci:integration-honesty:cert` (in `test:ci:governance-bundles`)
 - registry alignment: `lib/integrations/integration-registry.ts`, `lib/channels/channel-registry.ts`
-- unit: `tests/unit/integration-honesty-alignment.test.ts`, `tests/unit/partner-integration-placeholder.test.ts`
+- unit: `npm run test:ci:integration-honesty` (in `test:ci:governance-bundles`)
 - UI: `components/channels/channel-card.tsx`, `app/dashboard/sales-channels/available/page.tsx`
 
 ### 8d. Public API v1 contracts
@@ -158,6 +159,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 10. ~~KDS v1 scope CI wiring~~ — `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` in governance bundles; integration queue→bump focused DB workflow
 11. ~~KDS v1 prototype CI wiring~~ — `kds-v1-prototype` job + `test:ci:kds-v1:prototype:cert`; allergen UI + rollout gate verified
 12. ~~nav/maturity governance CI wiring~~ — `test:ci:nav-governance:cert` + `test:ci:nav-governance` in governance bundles
+13. ~~integration honesty CI wiring~~ — `test:ci:integration-honesty:cert` + `test:ci:integration-honesty` in governance bundles
 
 ## Evidence / Artifact Expectations Per Release
 - CI summary
