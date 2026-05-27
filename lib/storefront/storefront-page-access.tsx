@@ -8,6 +8,7 @@ import {
   type StorefrontPermission,
 } from "@/lib/storefront/storefront-permissions";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { logStorefrontPermissionDenied } from "@/services/storefront/storefront-permission-audit";
 import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
 
 export function canPublishStorefrontFromGranted(granted: ReadonlySet<PermissionKey>): boolean {
@@ -87,7 +88,10 @@ export function storefrontManageDeniedCard(): ReactNode {
   });
 }
 
-export async function requireStorefrontManagePage():
+export async function requireStorefrontManagePage(input?: {
+  operation?: string;
+  route?: string;
+}):
   | { ok: true; actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>; canManage: true }
   | { ok: false; deny: ReactNode } {
   const actor = await requireWorkspacePermissionActor();
@@ -99,6 +103,11 @@ export async function requireStorefrontManagePage():
       workspaceGranted: actor.granted,
     });
   if (!canManage) {
+    await logStorefrontPermissionDenied(actor, {
+      requiredPermission: "storefront.manage",
+      operation: input?.operation ?? "storefront.page.manage",
+      metadata: input?.route ? { route: input.route } : undefined,
+    });
     return { ok: false, deny: storefrontManageDeniedCard() };
   }
   return { ok: true, actor, canManage: true };

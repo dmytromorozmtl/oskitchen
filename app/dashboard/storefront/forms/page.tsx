@@ -6,9 +6,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 
 export default async function StorefrontFormsAdminPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.forms.view",
+    route: "/dashboard/storefront/forms",
+  });
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
+  const { sessionUser: user } = await getTenantActor();
   const settings = await findAdminStorefront(user.id, {
     id: true,
     publicContactFormId: true,

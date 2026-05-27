@@ -5,6 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import {
@@ -41,6 +42,8 @@ const kindSchema = z.enum([
 export async function createStorefrontFormAction(formData: FormData) {
   try {
     const { sessionUser: user } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.forms.create");
+    if (manageDenied) return manageDenied;
     const sf = await storefrontRow(user.id);
     if (!sf) return { error: "Save storefront overview first." };
     const title = String(formData.get("title") ?? "").trim();
@@ -79,6 +82,8 @@ export async function createStorefrontFormAction(formData: FormData) {
 export async function updateStorefrontFormAction(formData: FormData) {
   try {
     const { sessionUser: user } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.forms.update");
+    if (manageDenied) return manageDenied;
     const sf = await storefrontRow(user.id);
     if (!sf) return { error: "Storefront not found." };
     const id = String(formData.get("id") ?? "");
@@ -117,6 +122,8 @@ export async function updateStorefrontFormAction(formData: FormData) {
 export async function linkStorefrontFormsAction(formData: FormData) {
   try {
     const { sessionUser: user } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.forms.link");
+    if (manageDenied) return manageDenied;
     const contactId = String(formData.get("publicContactFormId") ?? "").trim() || null;
     const cateringId = String(formData.get("publicCateringFormId") ?? "").trim() || null;
     const sf = await getStorefrontIdForUser(user.id);
@@ -138,6 +145,8 @@ export async function linkStorefrontFormsAction(formData: FormData) {
 export async function markFormSubmissionReadAction(formData: FormData) {
   try {
     const { sessionUser: user } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.forms.submissions.read");
+    if (manageDenied) return manageDenied;
     const sf = await storefrontRow(user.id);
     if (!sf) return { error: "Storefront not found." };
     const sid = String(formData.get("submissionId") ?? "");
@@ -154,6 +163,8 @@ export async function markFormSubmissionReadAction(formData: FormData) {
 export async function archiveStorefrontFormAction(formData: FormData) {
   try {
     const { sessionUser: user } = await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.forms.archive");
+    if (manageDenied) return manageDenied;
     const sf = await storefrontRow(user.id);
     if (!sf) return { error: "Storefront not found." };
     const id = String(formData.get("id") ?? "");

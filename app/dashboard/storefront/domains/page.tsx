@@ -10,10 +10,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { SITE_URL } from "@/lib/constants";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontDomainsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.domains.view",
+    route: "/dashboard/storefront/domains",
+  });
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
+  const { sessionUser: user } = await getTenantActor();
   const settings = await findAdminStorefront(user.id);
   const root = process.env.NEXT_PUBLIC_STOREFRONT_ROOT_DOMAIN ?? "your-platform-domain.com";
 

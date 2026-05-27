@@ -9,11 +9,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { prisma } from "@/lib/prisma";
 
 export default async function EditStorefrontFormPage({ params }: { params: Promise<{ formId: string }> }) {
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.forms.edit",
+    route: "/dashboard/storefront/forms/[formId]",
+  });
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
   const { formId } = await params;
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { sessionUser: user } = await getTenantActor();
   const sf = await findAdminStorefront(user.id);
   if (!sf) notFound();
   const form = await prisma.storefrontForm.findFirst({ where: { id: formId, storefrontId: sf.id } });

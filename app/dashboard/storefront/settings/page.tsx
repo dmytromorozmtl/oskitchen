@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { decryptStorefrontWebhookSecret } from "@/lib/storefront/storefront-webhook-secret";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { prisma } from "@/lib/prisma";
 import { CartRecoveryChart } from "@/components/dashboard/storefront/cart-recovery-chart";
 import { WebhookDeliveryLog } from "@/components/dashboard/storefront/webhook-delivery-log";
@@ -23,7 +24,14 @@ import {
 import { getStorefrontWebhookDeliveryLog } from "@/services/storefront/webhook-delivery-log-service";
 
 export default async function StorefrontSettingsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.settings.view",
+    route: "/dashboard/storefront/settings",
+  });
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
+  const { sessionUser: user } = await getTenantActor();
   const profile = await prisma.userProfile.findUnique({ where: { id: user.id }, select: { role: true } });
   const isOwner = profile?.role === "OWNER";
   const base = await findAdminStorefront(user.id, { id: true });

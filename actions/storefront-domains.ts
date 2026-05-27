@@ -5,6 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { prisma } from "@/lib/prisma";
@@ -31,6 +32,8 @@ const verifyDomainSchema = z.object({
 export async function verifyStorefrontDomainDnsAction(): Promise<void> {
   try {
     await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.domain.verify");
+    if (manageDenied) return;
     const { sf: sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, storeSlug: true, customDomain: true });
     if (!sf) return;
     const gate = verifyDomainSchema.safeParse({ storefrontId: sf.id });
@@ -50,6 +53,8 @@ export async function verifyStorefrontDomainDnsAction(): Promise<void> {
 export async function refreshStorefrontDomainStatusAction(): Promise<void> {
   try {
     await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.domain.refresh");
+    if (manageDenied) return;
     const { sf: sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, storeSlug: true });
     if (!sf) return;
     const gate = verifyDomainSchema.safeParse({ storefrontId: sf.id });

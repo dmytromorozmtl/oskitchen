@@ -10,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { parseDeliveryZonesJson } from "@/lib/storefront/delivery-zones";
 import { parseAnalyticsConsentMode, parseFirstPartyAnalyticsMode } from "@/lib/storefront/consent";
 import { isStripeSecretConfigured } from "@/lib/storefront/stripe-readiness";
+import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { safeError } from "@/lib/security";
@@ -411,6 +412,8 @@ function normalizeHostname(input: string): string {
 export async function updateStorefrontCustomDomainSettings(formData: FormData) {
   try {
     await requireTenantActor();
+    const manageDenied = await assertStorefrontManageAccess("storefront.domain.update");
+    if (manageDenied) return manageDenied;
     const parsed = customDomainSchema.safeParse({
       customDomain: formData.get("customDomain")?.toString(),
       customDomainVerificationToken: formData.get("customDomainVerificationToken")?.toString(),

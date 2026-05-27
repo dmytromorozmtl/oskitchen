@@ -7,10 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontManagePage } from "@/lib/storefront/storefront-page-access";
 import { prisma } from "@/lib/prisma";
 
 export default async function NewStorefrontFormPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const manageAccess = await requireStorefrontManagePage({
+    operation: "storefront.forms.create",
+    route: "/dashboard/storefront/forms/new",
+  });
+  if (!manageAccess.ok) {
+    return manageAccess.deny;
+  }
+  const { sessionUser: user } = await getTenantActor();
   const sf = await findAdminStorefront(user.id);
   if (!sf) {
     return (
