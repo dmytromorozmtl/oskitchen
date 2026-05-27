@@ -7,6 +7,9 @@ import { MODULE_REGISTRY_ENTRIES } from "@/lib/modules/module-registry";
 import type { ModuleKey } from "@/lib/module-visibility";
 import { navigationHrefDisabled } from "@/lib/module-visibility";
 import { filterNavGroupsForUserRole } from "@/lib/nav-role-filter";
+import {
+  filterNavGroupsByMaturityGovernance,
+} from "@/lib/navigation/nav-maturity-governance";
 
 /** Stable ordering for selects (onboarding, settings, growth forms). */
 export const ALL_BUSINESS_TYPES_ORDERED = [
@@ -112,8 +115,14 @@ export function getFilteredNavGroups(
           }))
           .filter((g) => g.links.length > 0);
 
+  const afterMaturity = filterNavGroupsByMaturityGovernance(afterDisabled, {
+    fullNavAccess: ctx.fullNavAccess,
+    navScopeAll: ctx.navScopeAll,
+    gtmSurfaceAccess: Boolean(ctx.gtmSurfaceAccess),
+  });
+
   return filterNavGroupsForUserRole(
-    afterDisabled,
+    afterMaturity,
     ctx.userRole ?? "OWNER",
     Boolean(ctx.isPlatformSuper ?? ctx.fullNavAccess),
     Boolean(ctx.gtmSurfaceAccess),

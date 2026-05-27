@@ -124,7 +124,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: creates a coherent kitchen state machine
 - User story: as kitchen staff or expo, I need live ticket actions that are fast and permissioned
 - Current state: daily KDS fetch/bump/recall actions and the kitchen page enforce `kitchen.view` / `kitchen.bump` / `kitchen.recall`; production work-item transitions from the kitchen screen require `kitchen.bump` or `kitchen.expo.manage` (with `production.manage` fallback); station/mode configure UI requires `kitchen.configure`
-- Progress update: **KDS v1 prototype (Cycle 19–20)** — allergen conflict badge in `KdsDailyService`; `lib/kitchen/kds-v1-gate.ts` + `ENABLE_KDS_V1_CERTIFIED` for non-production rollout; integration `tests/integration/kds-daily-queue-bump.integration.test.ts`; CI scripts `test:ci:kds-v1:unit` / `:integration`; maturity `pilot_ready` (qualified) per `docs/kds-v1-scope.md`; **`docs/kds-v1-scope.md` locked (Cycle 17–18)**
+- Progress update: **Navigation/maturity governance (Cycle 21–22)** — `lib/navigation/nav-maturity-governance.ts` hides DoorDash/Grubhub/Uber placeholder links from focused default nav, labels preview surfaces (POS tabs/handheld, tables, copilot, forecast, reservations, food safety), gates internal GTM links; wired into `getFilteredNavGroups` + sidebar badges; KDS v1 prototype — allergen conflict badge
 - Target state: canonical kitchen permissions and bump/recall/rush ticket workflow
 - Affected files: kitchen services, `actions/kitchen-daily-kds.ts`, future KDS UI shells
 - Dependencies: `KOS-P0-001`

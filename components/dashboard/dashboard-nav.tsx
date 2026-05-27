@@ -21,6 +21,7 @@ import {
   getModuleReadinessForPath,
   moduleReadinessBadgeLabel,
 } from "@/lib/product/module-readiness";
+import { navMaturityBadgeForHref } from "@/lib/navigation/nav-maturity-governance";
 
 import {
   MAX_NAV_PINS as MAX_PINS,
@@ -121,6 +122,8 @@ function NavGroup({
             const readinessLabel = readiness
               ? moduleReadinessBadgeLabel(readiness.status)
               : null;
+            const maturityLabel = navMaturityBadgeForHref(link.href);
+            const badgeLabel = readinessLabel ?? maturityLabel;
             return (
               <div key={link.href} className="group relative flex items-stretch">
                 <Link
@@ -142,12 +145,12 @@ function NavGroup({
                     <span className="truncate">
                       {navLabelForBusinessType(locale, businessType, link.labelKey)}
                     </span>
-                    {readinessLabel ? (
+                    {badgeLabel ? (
                       <Badge
                         variant="secondary"
                         className="rounded-full px-1.5 py-0 text-[10px] uppercase tracking-wide"
                       >
-                        {readinessLabel}
+                        {badgeLabel}
                       </Badge>
                     ) : null}
                   </span>

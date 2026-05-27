@@ -50,6 +50,11 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - manual/staging: Supabase Realtime subscription smoke on `/dashboard/kitchen`; non-prod needs `ENABLE_KDS_V1_CERTIFIED=true`
 - not required for v1: multi-station E2E, offline replay, hardware cert
 
+### 8b. Navigation / maturity governance
+- rules: `lib/navigation/nav-maturity-governance.ts` (`NAV_MATURITY_RULES` aligned with `docs/feature-maturity-matrix.md`)
+- unit: `tests/unit/nav-maturity-governance.test.ts`
+- focused nav hides placeholder marketplace integrations; preview badges on immature surfaces; internal GTM links require platform access
+
 ### 9. Performance
 - storefront render and checkout
 - dashboard high-traffic pages
