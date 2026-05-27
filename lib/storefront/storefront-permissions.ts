@@ -2,7 +2,6 @@ import type { UserRole } from "@prisma/client";
 
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 export type StorefrontPermission =
   | "storefront:view"
@@ -70,9 +69,13 @@ export function storefrontPermissionsForRole(
 export function canStorefront(
   perms: Set<StorefrontPermission>,
   key: StorefrontPermission,
-  ctx?: { email?: string | null; workspaceGranted?: ReadonlySet<PermissionKey> },
+  ctx?: {
+    email?: string | null;
+    workspaceGranted?: ReadonlySet<PermissionKey>;
+    platformBypass?: boolean;
+  },
 ): boolean {
-  if (isSuperAdminEmail(ctx?.email ?? null)) return true;
+  if (ctx?.platformBypass) return true;
   const canonical = LEGACY_TO_CANONICAL[key];
   if (ctx?.workspaceGranted && canonical && hasPermission(ctx.workspaceGranted, canonical)) {
     return true;

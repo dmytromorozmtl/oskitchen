@@ -25,6 +25,7 @@ export async function legacyStorefrontAllowsForActor(
   return canStorefront(permissions, legacyKey, {
     email,
     workspaceGranted: actor.granted,
+    platformBypass: actor.platformBypass,
   });
 }
 

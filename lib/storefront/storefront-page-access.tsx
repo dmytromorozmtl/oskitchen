@@ -43,7 +43,11 @@ export type StorefrontHubAccess = {
 export async function resolveStorefrontHubAccess(): Promise<StorefrontHubAccess> {
   const actor = await requireWorkspacePermissionActor();
   const { permissions } = await getStorefrontPermissionSetForUser(actor.sessionUserId);
-  const legacyCtx = { email: actor.email, workspaceGranted: actor.granted };
+  const legacyCtx = {
+    email: actor.email,
+    workspaceGranted: actor.granted,
+    platformBypass: actor.platformBypass,
+  };
   const canManage =
     canManageStorefrontDraftFromGranted(actor.granted) ||
     canStorefront(permissions, "storefront:edit-draft", legacyCtx);
@@ -99,6 +103,7 @@ export async function resolveStorefrontManageAccess(userId: string, email: strin
     canStorefront(permissions, "storefront:edit-draft", {
       email,
       workspaceGranted: actor.granted,
+      platformBypass: actor.platformBypass,
     });
   return { actor, canManage };
 }
@@ -111,6 +116,7 @@ export async function resolveStorefrontPublishAccess(userId: string, email: stri
     canStorefront(permissions, "storefront:publish", {
       email,
       workspaceGranted: actor.granted,
+      platformBypass: actor.platformBypass,
     });
   return { actor, canPublish };
 }
@@ -123,6 +129,7 @@ export async function resolveStorefrontMediaAccess(userId: string, email: string
     canStorefront(permissions, "storefront:upload-assets", {
       email,
       workspaceGranted: actor.granted,
+      platformBypass: actor.platformBypass,
     });
   return { actor, canManageMedia };
 }
@@ -170,6 +177,7 @@ export async function requireStorefrontManagePage(input?: {
     canStorefront(permissions, "storefront:edit-draft", {
       email: actor.email,
       workspaceGranted: actor.granted,
+      platformBypass: actor.platformBypass,
     });
   if (!canManage) {
     await logStorefrontPermissionDenied(actor, {
