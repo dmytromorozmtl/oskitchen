@@ -36,7 +36,7 @@ async function requireInventoryMutationAccess(operation: string) {
   const access = await requireMutationPermission("production.manage");
   if (!access.ok) {
     await recordAuditLog({
-      userId: access.actor?.userId ?? null,
+      userId: access.actor?.sessionUserId ?? null,
       workspaceId: access.actor?.workspaceId ?? null,
       action: "inventory.permission_denied",
       entityType: "Inventory",
