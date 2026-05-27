@@ -10,7 +10,7 @@ function csvEscape(cell: string | number | null | undefined): string {
 }
 
 export async function GET() {
-  const denied = await requireGrowthApiAccess("growth.view");
+  const denied = await requireGrowthApiAccess("growth.manage");
   if (denied) return denied;
 
   const leads = await prisma.betaLead.findMany({
