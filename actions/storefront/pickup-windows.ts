@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { ok } from '@/lib/action-result';
+import { requireStorefrontAdminPermission } from '@/lib/storefront/storefront-admin-access';
 import { requireTenantActor } from '@/lib/scope/require-tenant-actor';
 import { prisma } from '@/lib/prisma';
 
@@ -20,6 +21,7 @@ export async function createPickupWindowFormAction(formData: FormData) {
 }
 
 export async function createPickupWindowAction(formData: FormData) {
+  await requireStorefrontAdminPermission('storefront.settings');
   const { userId } = await requireTenantActor();
   const parsed = createSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: 'Invalid data' };

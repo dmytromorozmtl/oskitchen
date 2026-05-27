@@ -1,19 +1,20 @@
-import { getTenantActor } from '@/lib/scope/cached-tenant';
-import { PickupWindowsPanel } from '@/components/storefront/pickup-windows-panel';
-import { prisma } from '@/lib/prisma';
-import { listPickupWindowsForStore } from '@/services/storefront/pickup-slots';
+import { PickupWindowsPanel } from "@/components/storefront/pickup-windows-panel";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
+import { prisma } from "@/lib/prisma";
+import { listPickupWindowsForStore } from "@/services/storefront/pickup-slots";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function PickupWindowsPage() {
-  const { userId } = await getTenantActor();
-  const storefront = await prisma.storefrontSettings.findFirst({
-    where: { userId },
-    orderBy: { createdAt: 'asc' },
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const storefront = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
     select: { storeSlug: true },
   });
-  const storeSlug = storefront?.storeSlug ?? '';
-  const windows = storeSlug ? await listPickupWindowsForStore(userId, storeSlug) : [];
+  const storeSlug = storefront?.storeSlug ?? "";
+  const windows = storeSlug ? await listPickupWindowsForStore(pageAccess.userId, storeSlug) : [];
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">

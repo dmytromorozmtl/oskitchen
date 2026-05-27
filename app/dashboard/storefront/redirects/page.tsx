@@ -1,11 +1,7 @@
-import Link from "next/link";
-
 import { StorefrontRedirectsPanel } from "@/components/dashboard/storefront/storefront-redirects-panel";
 import { PaginationBar } from "@/components/dashboard/pagination-bar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { adminPagination, parseAdminPageParam } from "@/lib/storefront/pagination";
 import { prisma } from "@/lib/prisma";
 
@@ -14,29 +10,12 @@ export default async function StorefrontRedirectsPage({
 }: {
   searchParams?: Promise<{ page?: string }>;
 }) {
-  const { sessionUser: user } = await getTenantActor();
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const sp = searchParams ? await searchParams : {};
   const pageNum = parseAdminPageParam(sp.page);
-  const sf = await findAdminStorefront(user.id, { id: true, storeSlug: true });
-
-  if (!sf) {
-    return (
-      <div className="mx-auto max-w-2xl space-y-6">
-        <h1 className="text-3xl font-semibold tracking-tight">Redirects</h1>
-        <Card className="border-border/80 shadow-sm">
-          <CardHeader>
-            <CardTitle>Not set up yet</CardTitle>
-            <CardDescription>Save the storefront overview first.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="rounded-full">
-              <Link href="/dashboard/storefront">Open overview</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const sf = pageAccess.access.storefront;
 
   const where = { storefrontId: sf.id };
   const total = await prisma.storefrontRedirect.count({ where });

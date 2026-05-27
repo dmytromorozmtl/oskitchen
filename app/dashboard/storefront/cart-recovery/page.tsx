@@ -1,20 +1,18 @@
-import Link from "next/link";
-
 import { CartRecoveryChart } from "@/components/dashboard/storefront/cart-recovery-chart";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import {
   getStorefrontCartRecoveryDailyMetrics,
   getStorefrontCartRecoveryMetrics,
 } from "@/services/storefront/storefront-cart-recovery-service";
 
 export default async function StorefrontCartRecoveryPage() {
-  const { sessionUser: user } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true });
-  const metrics = sf ? await getStorefrontCartRecoveryMetrics(sf.id) : null;
-  const daily = sf ? await getStorefrontCartRecoveryDailyMetrics(sf.id, 14) : [];
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const storefrontId = pageAccess.access.storefront.id;
+  const metrics = await getStorefrontCartRecoveryMetrics(storefrontId);
+  const daily = await getStorefrontCartRecoveryDailyMetrics(storefrontId, 14);
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -26,12 +24,7 @@ export default async function StorefrontCartRecoveryPage() {
         </p>
       </div>
 
-      {!sf ? (
-        <Button asChild className="rounded-full">
-          <Link href="/dashboard/storefront">Set up storefront</Link>
-        </Button>
-      ) : (
-        <>
+      <>
           <div className="grid gap-4 sm:grid-cols-3">
             <Card>
               <CardHeader className="pb-2">
@@ -68,8 +61,7 @@ export default async function StorefrontCartRecoveryPage() {
               <CartRecoveryChart data={daily} />
             </CardContent>
           </Card>
-        </>
-      )}
+      </>
     </div>
   );
 }
