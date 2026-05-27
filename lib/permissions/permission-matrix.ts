@@ -20,6 +20,7 @@ export const CAPABILITY = {
   inventoryWrite: "inventory:write",
   staffManage: "staff:manage",
   billingManage: "billing:manage",
+  integrationsRead: "integrations:read",
   integrationsManage: "integrations:manage",
   exportsSensitive: "exports:sensitive",
   impersonationRequest: "platform:impersonation",
@@ -59,8 +60,18 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
   LINE_COOK: [CAPABILITY.ordersRead, CAPABILITY.productionRun, CAPABILITY.kitchenView, CAPABILITY.kitchenBump],
   PACKER: [CAPABILITY.ordersRead, CAPABILITY.packingVerify],
   DRIVER: [CAPABILITY.ordersRead, CAPABILITY.routesAssign],
-  CUSTOMER_SERVICE: [CAPABILITY.ordersRead, CAPABILITY.ordersWrite, CAPABILITY.posOperate],
-  CATERING_COORDINATOR: [CAPABILITY.ordersRead, CAPABILITY.ordersWrite, CAPABILITY.posOperate],
+  CUSTOMER_SERVICE: [
+    CAPABILITY.ordersRead,
+    CAPABILITY.ordersWrite,
+    CAPABILITY.posOperate,
+    CAPABILITY.integrationsRead,
+  ],
+  CATERING_COORDINATOR: [
+    CAPABILITY.ordersRead,
+    CAPABILITY.ordersWrite,
+    CAPABILITY.posOperate,
+    CAPABILITY.integrationsRead,
+  ],
   PURCHASING: [
     CAPABILITY.ordersRead,
     CAPABILITY.inventoryRead,
@@ -68,9 +79,9 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.exportsSensitive,
   ],
   INVENTORY: [CAPABILITY.inventoryRead, CAPABILITY.inventoryWrite],
-  ACCOUNTING: [CAPABILITY.ordersRead, CAPABILITY.exportsSensitive],
-  MARKETING: [CAPABILITY.ordersRead],
-  VIEWER: [CAPABILITY.ordersRead, CAPABILITY.inventoryRead],
+  ACCOUNTING: [CAPABILITY.ordersRead, CAPABILITY.exportsSensitive, CAPABILITY.integrationsRead],
+  MARKETING: [CAPABILITY.ordersRead, CAPABILITY.integrationsRead],
+  VIEWER: [CAPABILITY.ordersRead, CAPABILITY.inventoryRead, CAPABILITY.integrationsRead],
   CUSTOM: [CAPABILITY.ordersRead],
 };
 

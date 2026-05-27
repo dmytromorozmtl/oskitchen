@@ -29,7 +29,8 @@ export const PERMISSIONS = {
   "routes.manage": "Plan and dispatch routes",
   "billing.view": "View billing and subscription status",
   "billing.manage": "Manage billing",
-  "integrations.manage": "Connect sales channels",
+  "integrations.read": "View sales channel integrations and health",
+  "integrations.manage": "Connect and manage sales channels",
   "staff.manage": "Invite and manage staff",
   "growth.view": "View growth / beta surfaces",
 } as const;
@@ -65,6 +66,7 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "routes.manage",
   "billing.view",
   "billing.manage",
+  "integrations.read",
   "integrations.manage",
   "staff.manage",
   "growth.view",

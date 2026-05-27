@@ -14,7 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
-- Progress update: POS, KDS, billing, integrations, and export surfaces are on canonical keys; specialty export routes (PnL, accounting bridges, franchise royalties, nutrition/allergen downloads) now use `requireReportExportActor` / `requireExportActor` with UI parity on linked pages
+- Progress update: POS, KDS, billing, integrations, and export surfaces are on canonical keys; sales-channels monitoring now allows `integrations.read` with read-only subnav and setup CTAs gated separately from `integrations.manage`
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: bridge report read permissions to canonical keys, integrations read-only UI parity for non-manager roles, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
+- Remaining work after current slice: bridge report read permissions to canonical keys, channel-command-center mutation RBAC alignment, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High

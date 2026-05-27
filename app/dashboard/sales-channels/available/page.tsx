@@ -1,13 +1,16 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canManageIntegrations } from "@/lib/integrations/integrations-page-access";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { resolveAllChannels } from "@/lib/channels/channel-runtime";
 import { prisma } from "@/lib/prisma";
 
 export default async function SalesChannelsAvailablePage() {
-  const { userId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { dataUserId: userId } = actor;
+  const canManage = canManageIntegrations(actor.granted);
   const [connections, kitchen] = await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(userId),
@@ -26,13 +29,23 @@ export default async function SalesChannelsAvailablePage() {
           <Link href="/dashboard/sales-channels">Overview</Link>
         </Button>
       </div>
+      {!canManage ? (
+        <p className="text-sm text-muted-foreground">
+          Channel setup requires integration management permission. Contact a workspace manager to
+          connect new sales channels.
+        </p>
+      ) : null}
       <ul className="space-y-2 text-sm">
         {rows.map((c) => (
           <li key={c.providerKey} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/60 px-3 py-2">
             <span>{c.label}</span>
-            <Link href={c.setupRoute} className="text-primary hover:underline">
-              Setup
-            </Link>
+            {canManage ? (
+              <Link href={c.setupRoute} className="text-primary hover:underline">
+                Setup
+              </Link>
+            ) : (
+              <span className="text-muted-foreground">Manager setup required</span>
+            )}
           </li>
         ))}
       </ul>

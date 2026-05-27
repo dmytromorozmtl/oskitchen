@@ -10,7 +10,7 @@ vi.mock("@/lib/permissions/require-workspace-permission", () => ({
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 
-function actorFor(staffRoleType: "MANAGER" | "LINE_COOK") {
+function actorFor(staffRoleType: "MANAGER" | "LINE_COOK" | "CUSTOMER_SERVICE") {
   return {
     sessionUser: { id: "session-user-1" },
     sessionUserId: "session-user-1",
@@ -35,6 +35,21 @@ describe("integrations mutation-access role matrix", () => {
 
     await expect(requireMutationPermission("integrations.manage")).resolves.toEqual({
       ok: true,
+      actor,
+    });
+  });
+
+  it("grants customer service integrations.read but not manage", async () => {
+    const actor = actorFor("CUSTOMER_SERVICE");
+    requireWorkspacePermissionActor.mockResolvedValue(actor);
+
+    await expect(requireMutationPermission("integrations.read")).resolves.toEqual({
+      ok: true,
+      actor,
+    });
+    await expect(requireMutationPermission("integrations.manage")).resolves.toEqual({
+      ok: false,
+      error: "You do not have permission to perform this action.",
       actor,
     });
   });

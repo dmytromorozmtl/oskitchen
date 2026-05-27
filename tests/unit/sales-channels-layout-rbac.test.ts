@@ -2,14 +2,18 @@ import { createElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const requireIntegrationsManagePage = vi.hoisted(() => vi.fn());
+const requireIntegrationsReadPage = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/integrations/integrations-page-access", () => ({
-  requireIntegrationsManagePage,
+  requireIntegrationsReadPage,
 }));
 
 vi.mock("@/components/sales-channels/sales-channels-subnav", () => ({
-  SalesChannelsSubnav: () => createElement("nav", { "data-testid": "sales-channels-subnav" }),
+  SalesChannelsSubnav: ({ canManage }: { canManage?: boolean }) =>
+    createElement("nav", {
+      "data-testid": "sales-channels-subnav",
+      "data-can-manage": String(canManage ?? true),
+    }),
 }));
 
 import SalesChannelsLayout from "@/app/dashboard/sales-channels/layout";
@@ -23,8 +27,8 @@ describe("sales channels layout RBAC", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the deny shell when integrations.manage is missing", async () => {
-    requireIntegrationsManagePage.mockResolvedValue({
+  it("renders the deny shell when integrations.read is missing", async () => {
+    requireIntegrationsReadPage.mockResolvedValue({
       ok: false,
       deny: createElement("div", { "data-testid": "integrations-deny" }, "denied"),
     });
@@ -36,16 +40,33 @@ describe("sales channels layout RBAC", () => {
     expect(markup).not.toContain("sales-channels-subnav");
   });
 
-  it("renders the channel operations shell when integrations.manage is granted", async () => {
-    requireIntegrationsManagePage.mockResolvedValue({
+  it("renders read-only channel shell for integrations.read without manage", async () => {
+    requireIntegrationsReadPage.mockResolvedValue({
       ok: true,
       actor: { granted: [] },
+      canManage: false,
     });
 
     const markup = await renderLayout();
 
     expect(markup).toContain("Channel operations center");
-    expect(markup).toContain("sales-channels-subnav");
+    expect(markup).toContain("Read-only access");
+    expect(markup).toContain('data-can-manage="false"');
+    expect(markup).toContain("child");
+  });
+
+  it("renders the full channel operations shell when integrations.manage is granted", async () => {
+    requireIntegrationsReadPage.mockResolvedValue({
+      ok: true,
+      actor: { granted: [] },
+      canManage: true,
+    });
+
+    const markup = await renderLayout();
+
+    expect(markup).toContain("Channel operations center");
+    expect(markup).toContain('data-can-manage="true"');
+    expect(markup).not.toContain("Read-only access");
     expect(markup).toContain("child");
   });
 });
