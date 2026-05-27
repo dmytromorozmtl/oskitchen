@@ -26,6 +26,9 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 ## Cron Validation
 - cron allowlist, disk routes, archive manifest, production profile, and `vercel.json` must reconcile
 - validation failure blocks release
+- CI `quality` job runs `validate:production-crons` and `validate:cron-inventory` (both include `tests/unit/cron-hygiene-live.test.ts`)
+- local focused bundle: `npm run test:ci:cron-hygiene`
+- production schedule: **16** allowlisted slugs; experimental routes require `ENABLE_EXPERIMENTAL_CRONS` in production
 
 ## Staging E2E
 - staging must only run when required secrets and URLs are valid

@@ -19,6 +19,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - public API response contracts
 - webhook signature and payload expectations
 - route registry and cron manifest contracts
+- cron hygiene live gates: `tests/unit/cron-hygiene-live.test.ts`, `validate:production-crons`, `validate:cron-inventory`, bundle `test:ci:cron-hygiene`
 
 ### 4. E2E
 - user journeys through auth, storefront, POS, dashboard, packing, and critical support flows

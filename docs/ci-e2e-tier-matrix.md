@@ -105,3 +105,13 @@ npm run test:ci:pos-money-path:e2e
 | POS recipe inventory depletion | ✅ `pos-recipe-depletion.test.ts` | — | ✅ `pos-inventory-depletion.integration.test.ts` |
 | Storefront inventory depletion | — | — | **Deferred** — no recipe depletion hook on storefront submit (Cycle 13–14) |
 | Stripe webhook fail-closed | — | — | ✅ in `test:security` |
+
+## Tier 1b — Cron hygiene (`quality` job)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Production manifest reconciliation | `npm run validate:production-crons` | Manifest ↔ disk ↔ `vercel.json` ↔ archive |
+| Route inventory cap | `npm run validate:cron-inventory` | Experimental count ≤ `CRON_EXPERIMENTAL_MAX` |
+| Full hygiene bundle | `npm run test:ci:cron-hygiene` | Reconciliation + inventory + `runCronRoute` scan + production gate |
+
+**Production schedule:** 16 allowlisted slugs in `services/cron/production-manifest.ts` (not 15 — includes `incident-remediation-reminders`). **On disk:** 137 total routes; non-allowlisted routes are experimental, blocked in production unless `ENABLE_EXPERIMENTAL_CRONS=true`, and stamped `X-KOS-Cron-Tier: experimental` when enabled.
