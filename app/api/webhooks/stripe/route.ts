@@ -50,16 +50,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
   }
 
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  if (!webhookSecret) {
+    logger.error("Stripe webhook received but STRIPE_WEBHOOK_SECRET is missing");
+    return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
+  }
+
   const body = await request.text();
   const signature = (await headers()).get("stripe-signature");
-
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
-    return NextResponse.json({ error: "Missing webhook secret" }, { status: 400 });
+  if (!signature) {
+    return NextResponse.json({ error: "Missing stripe-signature header" }, { status: 401 });
   }
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Invalid signature";
     return NextResponse.json({ error: message }, { status: 400 });

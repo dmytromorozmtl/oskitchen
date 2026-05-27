@@ -17,6 +17,7 @@ import {
   recordCronExecutionStarted,
 } from "@/services/cron/cron-execution-evidence";
 import { emitCronFailure } from "@/services/observability/ops-signals";
+import { logCronAuthDenied } from "@/services/cron/cron-auth-audit";
 
 export type CronRouteOptions = {
   /** @deprecated Prefer production manifest; kept for route-level documentation only. */
@@ -66,7 +67,17 @@ export async function runCronRoute(
 
   const isProductionTier = slug != null && isAllowedProductionCronSlug(slug);
   const auth = isProductionTier ? verifyCronSecret(request) : verifyExperimentalCron(request);
-  if (!auth.ok) return auth.response;
+  if (!auth.ok) {
+    if ("reason" in auth) {
+      await logCronAuthDenied({
+        slug,
+        pathname,
+        reason: auth.reason,
+        statusCode: auth.response.status === 503 ? 503 : 401,
+      });
+    }
+    return auth.response;
+  }
 
   if (!isProductionTier && slug) {
     logExperimentalCronInvocation(slug, pathname);

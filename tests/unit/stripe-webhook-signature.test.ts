@@ -11,6 +11,7 @@ describe("Stripe webhook route security", () => {
     expect(source).toContain("stripe.webhooks.constructEvent");
     expect(source).toContain("stripe-signature");
     expect(source).toContain("STRIPE_WEBHOOK_SECRET");
+    expect(source).toContain("Webhook not configured");
     expect(source).toMatch(/billingEvent\.findUnique.*stripeEventId/s);
   });
 });

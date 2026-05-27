@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 
 import { logger } from "@/lib/logger";
+import { timingSafeEqualText } from "@/lib/security/timing-safe";
 
 export type CronAuthResult =
   | { ok: true }
-  | { ok: false; response: NextResponse };
+  | { ok: false; reason: "missing_secret" | "invalid_authorization"; response: NextResponse };
 
 /** Returns true when experimental/regulatory cron routes may run. Default: disabled. */
 export function isExperimentalCronsEnabled(): boolean {
@@ -15,19 +16,29 @@ export function isExperimentalCronsEnabled(): boolean {
  * Verifies `Authorization: Bearer <CRON_SECRET>`.
  * Returns 503 when CRON_SECRET is unset (fail closed).
  */
+function readCronBearerToken(authHeader: string | null): string | null {
+  if (!authHeader) return null;
+  const trimmed = authHeader.trim();
+  if (!trimmed.toLowerCase().startsWith("bearer ")) return null;
+  const token = trimmed.slice(7).trim();
+  return token.length > 0 ? token : null;
+}
+
 export function verifyCronSecret(request: Request): CronAuthResult {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret) {
     logger.warn("CRON_SECRET not set — refusing cron");
     return {
       ok: false,
+      reason: "missing_secret",
       response: NextResponse.json({ error: "Cron not configured" }, { status: 503 }),
     };
   }
-  const auth = request.headers.get("authorization");
-  if (auth !== `Bearer ${secret}`) {
+  const token = readCronBearerToken(request.headers.get("authorization"));
+  if (!token || !timingSafeEqualText(token, secret)) {
     return {
       ok: false,
+      reason: "invalid_authorization",
       response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
     };
   }
