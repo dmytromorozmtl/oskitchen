@@ -9,6 +9,10 @@ import { z } from "zod";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { adminStorefrontCookieOptions } from "@/lib/storefront/storefront-admin-cookie";
+import {
+  requireStorefrontAdminPermission,
+  resolveStorefrontAdminAccess,
+} from "@/lib/storefront/storefront-admin-access";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
 import { resolveOwnerStorefront, listOwnerStorefronts } from "@/lib/storefront/resolve-owner-storefront";
 import { safeError } from "@/lib/security";
@@ -31,15 +35,22 @@ function slugify(input: string): string {
 /** Switch active admin storefront (cookie). */
 export async function setActiveAdminStorefrontAction(formData: FormData) {
   try {
-    const { userId } = await requireTenantActor();
+    const { sessionUser } = await requireTenantActor();
     const storefrontId = formData.get("storefrontId")?.toString()?.trim();
     if (!storefrontId) return { error: "Missing storefront." };
 
-    const sf = await prisma.storefrontSettings.findFirst({
-      where: { id: storefrontId, userId },
-      select: { id: true },
-    });
-    if (!sf) return { error: "Storefront not found." };
+    const access = await resolveStorefrontAdminAccess(sessionUser.id);
+    if (!access.ok) return { error: access.error };
+
+    if (access.isOwner) {
+      const sf = await prisma.storefrontSettings.findFirst({
+        where: { id: storefrontId, userId: sessionUser.id },
+        select: { id: true },
+      });
+      if (!sf) return { error: "Storefront not found." };
+    } else if (storefrontId !== access.storefront.id) {
+      return { error: "You cannot switch to that storefront." };
+    }
 
     const jar = await cookies();
     jar.set(adminStorefrontCookieOptions(storefrontId));
@@ -54,6 +65,10 @@ export async function setActiveAdminStorefrontAction(formData: FormData) {
 /** Create an additional storefront for the same owner (multi-store). */
 export async function createAdditionalStorefrontAction(formData: FormData) {
   try {
+    const access = await requireStorefrontAdminPermission("storefront.settings");
+    if (!access.isOwner) {
+      return { error: "Only the storefront owner can create additional stores." };
+    }
     const { sessionUser: user, userId } = await requireTenantActor();
     const parsed = createSchema.safeParse({
       storeSlug: formData.get("storeSlug")?.toString(),
@@ -118,6 +133,10 @@ export async function createAdditionalStorefrontAction(formData: FormData) {
 /** Mark a storefront as primary (one per owner). */
 export async function setPrimaryStorefrontAction(formData: FormData) {
   try {
+    const access = await requireStorefrontAdminPermission("storefront.settings");
+    if (!access.isOwner) {
+      return { error: "Only the storefront owner can change the primary store." };
+    }
     const { userId } = await requireTenantActor();
     const storefrontId = formData.get("storefrontId")?.toString()?.trim();
     if (!storefrontId) return { error: "Missing storefront." };

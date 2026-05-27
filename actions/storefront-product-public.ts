@@ -7,6 +7,9 @@ import { z } from "zod";
 
 import { productByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
+import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
+import { resolveOwnerStorefront } from "@/lib/storefront/resolve-owner-storefront";
+import { readAdminStorefrontCookie } from "@/lib/storefront/storefront-admin-cookie";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
@@ -34,7 +37,13 @@ const updateSchema = z.object({
 
 export async function updateStorefrontProductFields(formData: FormData) {
   try {
+    const manageDenied = await assertStorefrontManageAccess("storefront.products.update");
+    if (manageDenied) return manageDenied;
+
     const { userId } = await requireTenantActor();
+    const preferredId = await readAdminStorefrontCookie();
+    const sf = await resolveOwnerStorefront(userId, preferredId);
+    if (!sf) return { error: "Save the storefront overview once first." };
     const parsed = updateSchema.safeParse({
       productId: formData.get("productId")?.toString(),
       publicSlug: formData.get("publicSlug")?.toString(),
@@ -65,6 +74,9 @@ export async function updateStorefrontProductFields(formData: FormData) {
       include: { menu: { select: { id: true } } },
     });
     if (!product) return { error: "Product not found." };
+    if (sf.activeMenuId && product.menuId !== sf.activeMenuId) {
+      return { error: "Product is not on the active storefront menu." };
+    }
 
     if (publicSlug) {
       const clash = await prisma.product.findFirst({
@@ -90,10 +102,7 @@ export async function updateStorefrontProductFields(formData: FormData) {
       },
     });
 
-    const sf = await prisma.storefrontSettings.findFirst({ where: { userId }, orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-      select: { storeSlug: true },
-    });
-    if (sf) revalidateStorefrontDashboardAndPublic(sf.storeSlug);
+    revalidateStorefrontDashboardAndPublic(sf.storeSlug);
     else revalidatePath("/dashboard/storefront/products");
     return { ok: true as const };
   } catch (e) {

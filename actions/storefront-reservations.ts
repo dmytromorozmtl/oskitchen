@@ -5,8 +5,8 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import {
   addStorefrontWaitlistEntry,
   createStorefrontReservation,
@@ -50,17 +50,16 @@ const waitlistStatusSchema = z.object({
   status: z.enum(["WAITING", "NOTIFIED", "SEATED", "CANCELLED"]),
 });
 
-async function requireStorefront(userId: string) {
-  const sf = await findAdminStorefront(userId, { id: true, userId: true });
-  if (!sf) throw new Error("Set up your storefront first.");
+async function requireStorefrontForReservations() {
+  const { sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, userId: true });
   return sf;
 }
 
 export async function createReservationAction(raw: z.infer<typeof createSchema>) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
+    await requireTenantActor();
     const input = createSchema.parse(raw);
-    const sf = await requireStorefront(user.id);
+    const sf = await requireStorefrontForReservations();
 
     await createStorefrontReservation(sf.userId, sf.id, {
       guestName: input.guestName,
@@ -83,9 +82,9 @@ export async function createReservationAction(raw: z.infer<typeof createSchema>)
 
 export async function updateReservationStatusAction(raw: z.infer<typeof statusSchema>) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
+    await requireTenantActor();
     const input = statusSchema.parse(raw);
-    const sf = await requireStorefront(user.id);
+    const sf = await requireStorefrontForReservations();
 
     await updateStorefrontReservationStatus(
       sf.userId,
@@ -103,9 +102,9 @@ export async function updateReservationStatusAction(raw: z.infer<typeof statusSc
 
 export async function rescheduleReservationAction(raw: z.infer<typeof rescheduleSchema>) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
+    await requireTenantActor();
     const input = rescheduleSchema.parse(raw);
-    const sf = await requireStorefront(user.id);
+    const sf = await requireStorefrontForReservations();
 
     await rescheduleStorefrontReservation(sf.userId, input.reservationId, new Date(input.reservedAt));
 
@@ -119,9 +118,9 @@ export async function rescheduleReservationAction(raw: z.infer<typeof reschedule
 
 export async function addWaitlistEntryAction(raw: z.infer<typeof waitlistSchema>) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
+    await requireTenantActor();
     const input = waitlistSchema.parse(raw);
-    const sf = await requireStorefront(user.id);
+    const sf = await requireStorefrontForReservations();
 
     await addStorefrontWaitlistEntry(sf.userId, sf.id, input);
 
@@ -134,9 +133,9 @@ export async function addWaitlistEntryAction(raw: z.infer<typeof waitlistSchema>
 
 export async function updateWaitlistStatusAction(raw: z.infer<typeof waitlistStatusSchema>) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
+    await requireTenantActor();
     const input = waitlistStatusSchema.parse(raw);
-    const sf = await requireStorefront(user.id);
+    const sf = await requireStorefrontForReservations();
 
     await updateWaitlistStatus(sf.userId, input.entryId, input.status as WaitlistStatus);
 

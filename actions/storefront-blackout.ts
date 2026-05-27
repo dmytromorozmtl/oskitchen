@@ -1,11 +1,11 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
@@ -23,15 +23,17 @@ function parseDateOnly(s: string): Date | null {
   return Number.isNaN(dt.getTime()) ? null : dt;
 }
 
-async function sfForUser(userId: string) {
-  return prisma.storefrontSettings.findFirst({ where: { userId  }, orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-    select: { id: true, storeSlug: true },
+async function sfForSettings() {
+  const { sf } = await requireAdminStorefrontRow("storefront.settings", {
+    id: true,
+    storeSlug: true,
   });
+  return sf;
 }
 
 export async function createStorefrontBlackoutDate(formData: FormData) {
   try {
-    const { userId } = await requireTenantActor();
+    await requireTenantActor();
     const parsed = blackoutSchema.safeParse({
       startDate: formData.get("startDate")?.toString(),
       endDate: formData.get("endDate")?.toString(),
@@ -44,8 +46,7 @@ export async function createStorefrontBlackoutDate(formData: FormData) {
     if (!start || !end) return { error: "Start and end dates are required." };
     if (end < start) return { error: "End date must be on or after start date." };
 
-    const sf = await sfForUser(userId);
-    if (!sf) return { error: "Save the storefront overview once first." };
+    const sf = await sfForSettings();
 
     await prisma.storefrontBlackoutDate.create({
       data: {
@@ -70,12 +71,11 @@ export async function createStorefrontBlackoutDateFormAction(formData: FormData)
 
 export async function deleteStorefrontBlackoutDate(formData: FormData) {
   try {
-    const { userId } = await requireTenantActor();
+    await requireTenantActor();
     const id = (formData.get("id") ?? "").toString().trim();
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { error: "Invalid blackout row." };
 
-    const sf = await sfForUser(userId);
-    if (!sf) return { error: "Storefront not found." };
+    const sf = await sfForSettings();
 
     const row = await prisma.storefrontBlackoutDate.findFirst({
       where: { id, storefrontId: sf.id },
