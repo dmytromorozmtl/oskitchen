@@ -1,10 +1,12 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
@@ -12,8 +14,29 @@ import { appendLabelVerificationEvent } from "@/services/nutrition-labels/label-
 
 const statusSchema = z.enum(["NOT_STARTED", "NEEDS_REVIEW", "VERIFIED", "EXPIRED", "BLOCKED"]);
 
+async function requireNutritionLabelVerificationPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "reports.read.audit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "nutrition_label_verification.permission_denied",
+      entityType: "NutritionLabelVerification",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function verifyNutritionProfileAction(formData: FormData) {
   try {
+    const gate = await requireNutritionLabelVerificationPermission("nutrition_label.verify_profile");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const productId = z.string().uuid().safeParse(formData.get("productId"));
     const note = z.string().max(2000).optional().parse(String(formData.get("note") ?? "").trim() || undefined);
@@ -52,6 +75,9 @@ export async function verifyNutritionProfileAction(formData: FormData) {
 
 export async function setNutritionVerificationStatusAction(formData: FormData) {
   try {
+    const gate = await requireNutritionLabelVerificationPermission("nutrition_label.set_status");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const productId = z.string().uuid().safeParse(formData.get("productId"));
     const status = statusSchema.safeParse(formData.get("status"));
@@ -87,6 +113,9 @@ export async function setNutritionVerificationStatusAction(formData: FormData) {
 
 export async function verifyAllergenProfileAction(formData: FormData) {
   try {
+    const gate = await requireNutritionLabelVerificationPermission("nutrition_label.verify_allergen");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const productId = z.string().uuid().safeParse(formData.get("productId"));
     if (!productId.success) return { error: "Invalid product." };
@@ -117,6 +146,9 @@ export async function verifyAllergenProfileAction(formData: FormData) {
 
 export async function verifyIngredientDeclarationAction(formData: FormData) {
   try {
+    const gate = await requireNutritionLabelVerificationPermission("nutrition_label.verify_ingredients");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const productId = z.string().uuid().safeParse(formData.get("productId"));
     if (!productId.success) return { error: "Invalid product." };
