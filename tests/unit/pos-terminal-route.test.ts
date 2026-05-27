@@ -106,6 +106,21 @@ describe("POS terminal route RBAC", () => {
     expect(cancelTerminalPayment).not.toHaveBeenCalled();
   });
 
+  it("returns 503 when terminal token issuance fails and skips allowed-path auditing", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+    createTerminalConnectionToken.mockRejectedValueOnce(new Error("Reader offline"));
+
+    const response = await GET();
+    const json = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(json).toEqual({ error: "Reader offline" });
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
+    expect(createTerminalPaymentIntent).not.toHaveBeenCalled();
+    expect(processTerminalPayment).not.toHaveBeenCalled();
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
   it("creates terminal intents using the owner-scoped actor id", async () => {
     requireMutationPermission.mockResolvedValue({ ok: true, actor });
 
@@ -142,6 +157,26 @@ describe("POS terminal route RBAC", () => {
       },
     );
     expect(logPosPermissionDenied).not.toHaveBeenCalled();
+    expect(processTerminalPayment).not.toHaveBeenCalled();
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
+  it("returns 503 when terminal payment-intent creation fails and skips allowed-path auditing", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+    createTerminalPaymentIntent.mockRejectedValueOnce(new Error("Stripe terminal unavailable"));
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ amount: 12.5, orderId: "order-1" }),
+    });
+
+    const response = await POST(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(json).toEqual({ error: "Stripe terminal unavailable" });
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
     expect(processTerminalPayment).not.toHaveBeenCalled();
     expect(cancelTerminalPayment).not.toHaveBeenCalled();
   });
@@ -231,6 +266,25 @@ describe("POS terminal route RBAC", () => {
     expect(cancelTerminalPayment).not.toHaveBeenCalled();
   });
 
+  it("returns 400 when terminal payment capture fails and skips allowed-path auditing", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+    processTerminalPayment.mockRejectedValueOnce(new Error("Capture declined"));
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ paymentIntentId: "pi_123", orderId: "order-1" }),
+    });
+
+    const response = await PUT(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json).toEqual({ error: "Capture declined" });
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
   it("rejects invalid terminal payment-processing payloads before calling Stripe services", async () => {
     requireMutationPermission.mockResolvedValue({ ok: true, actor });
 
@@ -279,6 +333,24 @@ describe("POS terminal route RBAC", () => {
         label: "pi_123",
       }),
     );
+  });
+
+  it("returns 400 when terminal cancellation fails and skips allowed-path auditing", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+    cancelTerminalPayment.mockRejectedValueOnce(new Error("Reader busy"));
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ paymentIntentId: "pi_123" }),
+    });
+
+    const response = await DELETE(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json).toEqual({ error: "Reader busy" });
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
   });
 
   it("rejects terminal cancellation requests without a payment intent id", async () => {
