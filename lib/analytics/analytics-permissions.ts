@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type AnalyticsPermission =
   | "analytics.read.executive"
   | "analytics.read.revenue"
@@ -23,10 +21,11 @@ export type AnalyticsActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdminAnalytics(scope: AnalyticsActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoAnalytics(scope: AnalyticsActorScope, permission: AnalyticsPermission): boolean {
