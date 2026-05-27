@@ -1,10 +1,11 @@
 import type { UserRole } from "@prisma/client";
 
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
-export function canSupervisorOverride(role: UserRole, email: string | null | undefined): boolean {
-  if (isSuperAdminEmail(email)) return true;
-  return role === "OWNER";
+export function canSupervisorOverride(input: {
+  role: UserRole;
+  platformBypass?: boolean;
+}): boolean {
+  if (input.platformBypass) return true;
+  return input.role === "OWNER";
 }
 
 export function parseEmbeddedTokenFromQr(text: string): string {

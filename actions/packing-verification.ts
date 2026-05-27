@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { canSupervisorOverride } from "@/lib/packing-verification/verification-validation";
@@ -248,12 +249,8 @@ export async function completeVerificationSessionAction(formData: FormData) {
 
 export async function supervisorOverrideVerificationAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true, email: true },
-    });
-    if (!canSupervisorOverride(profile?.role ?? "STAFF", profile?.email)) {
+    const actor = await requireWorkspacePermissionActor();
+    if (!canSupervisorOverride({ role: actor.workspaceRole, platformBypass: actor.platformBypass })) {
       return { error: "Supervisor or owner access required for override." };
     }
 
@@ -262,8 +259,8 @@ export async function supervisorOverrideVerificationAction(formData: FormData) {
     if (!sessionId.success || !reason.success) return { error: "Provide session and reason (min 4 chars)." };
 
     await supervisorOverrideSession({
-      tenantUserId: user.id,
-      actorUserId: user.id,
+      tenantUserId: actor.sessionUserId,
+      actorUserId: actor.sessionUserId,
       sessionId: sessionId.data,
       reason: reason.data,
     });
