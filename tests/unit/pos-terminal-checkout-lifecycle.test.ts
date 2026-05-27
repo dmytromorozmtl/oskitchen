@@ -913,4 +913,161 @@ describe("POS terminal checkout lifecycle", () => {
       },
     });
   });
+
+  it("keeps the pending checkout intact when route-level intent creation fails and allows a later retry", async () => {
+    stripePaymentIntents.create
+      .mockRejectedValueOnce(new Error("Reader offline"))
+      .mockResolvedValueOnce({
+        client_secret: "pi_retry_secret",
+        id: "pi_retry",
+      });
+
+    const checkout = await checkoutPosSale("owner-1", "staff-1", {
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      staffMemberId: "staff-member-1",
+      locationId: null,
+      brandId: null,
+      customerId: null,
+      fulfillmentDetail: "PICKUP",
+      paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      lines: [{ title: "Americano", quantity: 1, unitPrice: 8.5 }],
+    });
+
+    expect(checkout).toEqual({
+      ok: true,
+      orderId: "ord-1",
+      transactionId: "tx-1",
+      receiptNumber: expect.stringMatching(/^POS-/),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+
+    const allowedCallsBeforeFailedIntent = logPosTerminalControlEvent.mock.calls.length;
+    const failedIntentResponse = await POST(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ amount: 8.5, orderId: "ord-1" }),
+      }),
+    );
+    const failedIntentJson = await failedIntentResponse.json();
+
+    expect(failedIntentResponse.status).toBe(503);
+    expect(failedIntentJson).toEqual({ error: "Reader offline" });
+    expect(logPosTerminalControlEvent).toHaveBeenCalledTimes(allowedCallsBeforeFailedIntent);
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+        externalPaymentReference: null,
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PENDING",
+        provider: "INTERNAL",
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(1);
+    expect(state.posAuditEvents[0]).toEqual(
+      expect.objectContaining({
+        action: "pos.checkout.completed",
+        transactionId: "tx-1",
+      }),
+    );
+
+    const retryIntentResponse = await POST(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ amount: 8.5, orderId: "ord-1" }),
+      }),
+    );
+    const retryIntentJson = await retryIntentResponse.json();
+
+    expect(retryIntentResponse.status).toBe(200);
+    expect(retryIntentJson).toEqual({
+      clientSecret: "pi_retry_secret",
+      paymentIntentId: "pi_retry",
+    });
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_INTENT_CREATED",
+        entityId: "ord-1",
+        label: "ord-1",
+        metadata: {
+          amount: 8.5,
+          currency: "usd",
+          paymentIntentId: "pi_retry",
+        },
+      }),
+    );
+
+    const captureResponse = await PUT(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ paymentIntentId: "pi_retry", orderId: "ord-1" }),
+      }),
+    );
+    const captureJson = await captureResponse.json();
+
+    expect(captureResponse.status).toBe(200);
+    expect(captureJson).toEqual({
+      success: true,
+      transaction: expect.objectContaining({
+        id: "tx-1",
+        orderId: "ord-1",
+        paymentStatus: "PAID",
+        shiftId: state.shift.id,
+        registerId: state.register.id,
+        externalPaymentReference: "pi_retry",
+      }),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        externalPaymentReference: "pi_retry",
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PAID",
+        provider: "STRIPE",
+        providerReference: "pi_retry",
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(2);
+    expect(state.posAuditEvents[1]).toEqual({
+      userId: "owner-1",
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      transactionId: "tx-1",
+      staffId: "staff-member-1",
+      action: "pos.terminal.payment_captured",
+      metadataJson: {
+        paymentIntentId: "pi_retry",
+        cardBrand: "visa",
+        last4: "4242",
+      },
+    });
+  });
 });
