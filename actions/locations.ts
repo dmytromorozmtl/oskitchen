@@ -7,6 +7,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   LOCATION_ALL,
@@ -42,6 +45,22 @@ function revalidateLocations(locationId?: string) {
     revalidatePath(`/dashboard/locations/${locationId}/fulfillment`);
     revalidatePath(`/dashboard/locations/${locationId}/reports`);
   }
+}
+
+async function requireLocationMutationAccess(operation: string, permission: PermissionKey) {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "locations.permission_denied",
+      entityType: "Location",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const { dataUserId } = await requireTenantActor();
+  return { ok: true as const, dataUserId };
 }
 
 /* ============================ legacy preserved ============================ */
@@ -179,7 +198,9 @@ const profileSchema = z.object({
 
 export async function updateLocationProfileAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireLocationMutationAccess("locations.update_profile", "workspace.settings");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const parsed = profileSchema.safeParse({
       locationId: formData.get("locationId"),
       name: formData.get("name") || undefined,
@@ -306,7 +327,9 @@ function toIntOrNull(v: string | undefined): number | null {
 
 export async function updateLocationFulfillmentAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireLocationMutationAccess("locations.update_fulfillment", "routes.manage");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const parsed = fulfillmentSchema.safeParse({
       locationId: formData.get("locationId"),
       pickupEnabled: formData.get("pickupEnabled") || "",
