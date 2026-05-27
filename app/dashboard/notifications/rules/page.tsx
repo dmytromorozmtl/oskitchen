@@ -3,19 +3,15 @@ import Link from "next/link";
 import { InstallDefaultsButton, RuleRowControls } from "@/components/dashboard/notifications/rule-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
 import { canUseNotifications } from "@/lib/notifications/notification-permissions";
+import { getNotificationActorScope } from "@/lib/notifications/notification-actor-scope";
 import { listRulesForWorkspace } from "@/services/notifications/reminder-service";
 
 export default async function NotificationRulesPage() {
-  const { userId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const actor = { userId, email: profile.email ?? null, role: profile.role ?? null };
+  const actor = await getNotificationActorScope();
   const canManage = canUseNotifications(actor, "manage_rules");
 
-  const rules = await listRulesForWorkspace(userId);
+  const rules = await listRulesForWorkspace(actor.userId);
 
   return (
     <div className="space-y-6">

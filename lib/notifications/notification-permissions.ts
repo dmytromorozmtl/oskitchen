@@ -1,9 +1,8 @@
-export const SUPERADMIN_EMAIL = "workspace.moroz@gmail.com";
-
 export type NotificationActorScope = {
   userId: string;
   email: string | null;
   role: string | null;
+  platformBypass?: boolean;
 };
 
 export type NotificationCapability =
@@ -60,11 +59,25 @@ const GRANTS: Record<string, NotificationCapability[]> = {
 };
 
 export function isSuperAdminNotifications(actor: NotificationActorScope): boolean {
-  return (actor.email ?? "").trim().toLowerCase() === SUPERADMIN_EMAIL;
+  return Boolean(actor.platformBypass);
 }
 
 export function canUseNotifications(actor: NotificationActorScope, cap: NotificationCapability): boolean {
   if (isSuperAdminNotifications(actor)) return true;
   const role = normalizeRole(actor.role);
   return (GRANTS[role] ?? []).includes(cap);
+}
+
+export function resolveNotificationActorScope(input: {
+  userId: string;
+  email: string | null;
+  profileRole: string | null;
+  platformBypass?: boolean;
+}): NotificationActorScope {
+  return {
+    userId: input.userId,
+    email: input.email,
+    role: input.profileRole,
+    platformBypass: input.platformBypass,
+  };
 }

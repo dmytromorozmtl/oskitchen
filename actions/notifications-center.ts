@@ -5,19 +5,16 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { getNotificationActorScope } from "@/lib/notifications/notification-actor-scope";
 
 import { safeError } from "@/lib/security";
-import { canUseNotifications, type NotificationActorScope } from "@/lib/notifications/notification-permissions";
+import { canUseNotifications } from "@/lib/notifications/notification-permissions";
 import { sendNotification, retryNotification, cancelQueuedNotification } from "@/services/notifications/notification-service";
 import { installDefaultRules, updateRule } from "@/services/notifications/reminder-service";
 import { getSystemTemplate } from "@/lib/notifications/template-registry";
 
-async function actor(): Promise<NotificationActorScope> {
-  const { userId } = await requireTenantActor();
-  const profile = await requireUserProfile();
-  return { userId, email: profile.email ?? null, role: profile.role ?? null };
+async function actor() {
+  return getNotificationActorScope();
 }
 
 const sendTestSchema = z.object({

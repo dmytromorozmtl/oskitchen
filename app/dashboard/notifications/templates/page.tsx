@@ -6,18 +6,13 @@ import { listSystemTemplates } from "@/lib/notifications/template-registry";
 import { previewTemplate } from "@/lib/notifications/template-renderer";
 import { canSendEmails } from "@/lib/notifications/provider-resend";
 import { canUseNotifications } from "@/lib/notifications/notification-permissions";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getNotificationActorScope } from "@/lib/notifications/notification-actor-scope";
 
 
 export default async function TemplatesPage() {
-  const { userId } = await getTenantActor();
-  const profile = await requireUserProfile();
+  const actor = await getNotificationActorScope();
   const sendingEnabled = canSendEmails();
-  const canTest = canUseNotifications(
-    { userId, email: profile.email ?? null, role: profile.role ?? null },
-    "send_test_email",
-  );
+  const canTest = canUseNotifications(actor, "send_test_email");
 
   const templates = listSystemTemplates();
 

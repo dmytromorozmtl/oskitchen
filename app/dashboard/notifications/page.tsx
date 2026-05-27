@@ -5,7 +5,7 @@ import { ProviderModeBadge } from "@/components/dashboard/notifications/status-b
 import { TestEmailForm } from "@/components/dashboard/notifications/test-email-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
+import { getNotificationActorScope } from "@/lib/notifications/notification-actor-scope";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 
 import { canSendEmails, getResendDiagnostics } from "@/lib/notifications/provider-resend";
@@ -14,8 +14,8 @@ import { canUseNotifications } from "@/lib/notifications/notification-permission
 import { prisma } from "@/lib/prisma";
 
 export default async function NotificationsOverviewPage() {
-  const { sessionUser: session, userId } = await getTenantActor();
-  const profile = await requireUserProfile();
+  const { userId } = await getTenantActor();
+  const actor = await getNotificationActorScope();
 
   const diagnostics = getResendDiagnostics();
   const sendingEnabled = canSendEmails();
@@ -33,7 +33,6 @@ export default async function NotificationsOverviewPage() {
   ]);
 
   const systemTemplates = listSystemTemplates().length;
-  const actor = { userId, email: profile.email ?? null, role: profile.role ?? null };
   const canTest = canUseNotifications(actor, "send_test_email");
 
   return (

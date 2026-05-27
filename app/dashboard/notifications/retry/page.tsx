@@ -3,7 +3,7 @@ import { NotificationStatusBadge } from "@/components/dashboard/notifications/st
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { canSendEmails } from "@/lib/notifications/provider-resend";
 import { canUseNotifications } from "@/lib/notifications/notification-permissions";
-import { requireUserProfile } from "@/lib/auth";
+import { getNotificationActorScope } from "@/lib/notifications/notification-actor-scope";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 
 import { prisma } from "@/lib/prisma";
@@ -11,8 +11,7 @@ import type { NotificationStatusKey } from "@/lib/notifications/notification-sta
 
 export default async function RetryPage() {
   const { userId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const actor = { userId, email: profile.email ?? null, role: profile.role ?? null };
+  const actor = await getNotificationActorScope();
   const canRetry = canUseNotifications(actor, "retry_failed");
   const sendingEnabled = canSendEmails();
 
