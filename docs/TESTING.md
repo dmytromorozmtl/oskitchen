@@ -8,6 +8,8 @@ KitchenOS uses **Vitest** for unit tests and **Playwright** for end-to-end smoke
 |--------|---------|
 | `npm run test` | Alias for `test:unit` |
 | `npm run test:unit` | Vitest (CI-friendly, no watch) |
+| `npm run test:pos-rbac` | Focused POS permission-negative Vitest suite (`vitest.pos.config.ts`) |
+| `npm run verify:install-chain` | Post-install integrity checks for Vitest/Vite runner files |
 | `npm run test:e2e` | Playwright headless |
 | `npm run test:e2e:dashboard` | Playwright — auth setup + dashboard + POS checkout flow |
 | `npm run test:e2e:storefront` | Playwright — `e2e/storefront.spec.ts` only |
@@ -32,6 +34,16 @@ Run:
 ```bash
 npm run test:unit
 ```
+
+### POS RBAC (focused)
+
+Narrow Vitest config for POS permission gates — faster than the full unit suite and run in CI after `npm test`.
+
+```bash
+npm run test:pos-rbac
+```
+
+If Vitest fails immediately with `Cannot find module '.../vitest/suppress-warnings.cjs'` or missing `chai`, the local `node_modules` tree is incomplete. Repair with a lockfile install (`npm ci`) and confirm `npm run verify:install-chain` passes. Postinstall runs `scripts/ensure-vitest-suppress-warnings-shim.cjs` to recreate the Vitest preload stub when the `vitest` package folder exists but the file is missing.
 
 ## End-to-end
 

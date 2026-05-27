@@ -79,7 +79,9 @@ try {
 
 checkPaths([
   { relPath: "node_modules/vitest/vitest.mjs", label: "Vitest CLI entrypoint" },
+  { relPath: "node_modules/vitest/suppress-warnings.cjs", label: "Vitest suppress-warnings preload" },
   { relPath: "node_modules/vitest/package.json", label: "Vitest package manifest" },
+  { relPath: "node_modules/chai/package.json", label: "Chai package manifest (Vitest expect)" },
   { relPath: "node_modules/vitest/dist/module-evaluator.js", label: "Vitest module evaluator" },
   { relPath: "node_modules/pathe/package.json", label: "Pathe package manifest" },
   {

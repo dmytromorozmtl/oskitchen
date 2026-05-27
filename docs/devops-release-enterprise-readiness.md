@@ -6,7 +6,8 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 ## CI Green Standard
 - valid workflow references only
 - static workflow-to-`package.json` script audit passes
-- install-chain verification passes after dependency install, including critical focused-Vitest package payload and manifest checks
+- install-chain verification passes after dependency install, including Vitest preload (`suppress-warnings.cjs`), Chai, and focused-runner manifests; postinstall recreates the Vitest preload stub when missing
+- `npm run test:pos-rbac` passes in CI (focused POS permission-negative suite)
 - strict typecheck or approved split-typecheck replacement
 - build passes using documented production-like env assumptions
 - security suite passes

@@ -125,7 +125,7 @@ Priority rule:
 - Technical risk: release regressions, contributor confusion, slower incident response.
 - Affected files: `.github/workflows/*.yml`, `package.json`, `scripts/ci-check.sh`
 - Affected modules: release engineering
-- Progress update: the missing `verify:install-chain` workflow contract has been restored, CI/local checks now include a static workflow-script reference audit, and a dedicated POS RBAC Vitest config/script exists for narrowed permission-negative validation; deeper investigation showed the local blocker was twofold: Vitest/Vite still benefits from explicit watch ignores in this large repo, and the local `node_modules` tree can become integrity-broken enough to lose not only top-level test-runner files such as `node_modules/vitest/vitest.mjs`, `node_modules/pathe/package.json`, or Vitest's nested `picomatch/lib/scan.js`, but also direct/transitive focused-runner manifests like `vite`, `rollup`, `postcss`, `obug`, `magic-string`, `estree-walker`, and `convert-source-map`; after restoring exact package payloads from the lockfile, `verify:install-chain` now passes and focused `test:pos-rbac` is green locally again, but install reproducibility remains a release-engineering risk until the same repair is no longer needed
+- Progress update: `verify:install-chain` now checks Vitest preload (`suppress-warnings.cjs`) and `chai`; postinstall runs `ensure-vitest-suppress-warnings-shim.cjs` to recreate the preload stub after partial installs; CI runs `npm run test:pos-rbac` on every push/PR; focused POS RBAC suite (80 tests) is green when `node_modules` matches the lockfile
 - Safest implementation plan:
   1. remove or restore stale workflow steps
   2. align CI scripts with documented local scripts

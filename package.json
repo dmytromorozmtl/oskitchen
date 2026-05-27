@@ -339,7 +339,7 @@
     "verify:staging-webhook-async": "tsx scripts/verify-staging-webhook-readiness.ts",
     "deps:clean": "bash scripts/clean-install-artifacts.sh",
     "deps:reinstall": "bash scripts/clean-install-artifacts.sh && npm install",
-    "postinstall": "node ./node_modules/prisma/build/index.js generate && node scripts/ensure-prisma-client-default.cjs && node scripts/ensure-object-inspect-shim.cjs && node scripts/ensure-sentry-otel-shim.cjs",
+    "postinstall": "node ./node_modules/prisma/build/index.js generate && node scripts/ensure-prisma-client-default.cjs && node scripts/ensure-object-inspect-shim.cjs && node scripts/ensure-sentry-otel-shim.cjs && node scripts/ensure-vitest-suppress-warnings-shim.cjs",
     "db:generate": "node ./node_modules/prisma/build/index.js generate",
     "db:push": "node ./node_modules/prisma/build/index.js db push",
     "db:migrate": "node ./node_modules/prisma/build/index.js migrate dev",
