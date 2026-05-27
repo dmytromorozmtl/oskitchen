@@ -1,10 +1,11 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { kitchenModulePreferenceListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -12,6 +13,7 @@ import { prisma } from "@/lib/prisma";
 import { MODULE_KEYS, type ModuleKey, getRecommendedDisabledModuleKeys } from "@/lib/module-visibility";
 import { getReadinessDefaultDisabledModuleKeys } from "@/lib/product/module-readiness";
 import { safeError } from "@/lib/security";
+import { ok } from "@/lib/action-result";
 
 const LOCKED_MODULE_KEYS = new Set<ModuleKey>([
   "dashboard",
@@ -34,11 +36,29 @@ const saveSchema = z.object({
   ),
 });
 
+async function requireModulePreferencesManageAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "module_preferences.permission_denied",
+      entityType: "ModulePreference",
+      metadata: { operation, requiredPermission: "workspace.settings" },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const actor = await requireTenantActor();
+  return { ok: true as const, ...actor };
+}
+
 export async function saveKitchenModulePreferences(input: {
   modules: { key: z.infer<typeof moduleKeySchema>; enabled: boolean }[];
 }) {
   try {
-    const { userId } = await requireTenantActor();
+    const manage = await requireModulePreferencesManageAccess("module_preferences.save");
+    if (!manage.ok) return { error: manage.error };
+    const { userId } = manage;
     const parsed = saveSchema.safeParse(input);
     if (!parsed.success) {
       return { error: "Invalid module payload" as const };
@@ -77,7 +97,9 @@ export async function saveKitchenModulePreferences(input: {
 
 export async function clearKitchenModulePreferences() {
   try {
-    const { userId } = await requireTenantActor();
+    const manage = await requireModulePreferencesManageAccess("module_preferences.clear");
+    if (!manage.ok) return { error: manage.error };
+    const { userId } = manage;
     await prisma.kitchenModulePreference.deleteMany({
       where: await kitchenModulePreferenceListWhereForOwner(userId),
     });
@@ -91,7 +113,9 @@ export async function clearKitchenModulePreferences() {
 
 export async function resetKitchenModulePreferencesToRecommended() {
   try {
-    const { sessionUser, userId } = await requireTenantActor();
+    const manage = await requireModulePreferencesManageAccess("module_preferences.reset_recommended");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser, userId } = manage;
     const profile = await prisma.userProfile.findUnique({
       where: { id: sessionUser.id },
       include: { kitchenSettings: { select: { businessType: true } } },
