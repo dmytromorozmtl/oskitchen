@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { requireIngestBearerSecret } from "@/lib/api/public-post-guard";
 import { prisma } from "@/lib/prisma";
 import { ingestIotTemperatureReading } from "@/services/food-safety/iot-temperature-service";
 
@@ -14,11 +15,11 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const secret = process.env.IOT_INGEST_SECRET?.trim();
-  const auth = request.headers.get("authorization");
-  if (secret && auth !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const authError = requireIngestBearerSecret(request, {
+    secretEnv: process.env.IOT_INGEST_SECRET,
+    missingMessage: "IoT ingest not configured",
+  });
+  if (authError) return authError;
 
   const body = await request.json().catch(() => null);
   const parsed = bodySchema.safeParse(body);
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
   }
 
   let userId = parsed.data.userId;
-  if (!userId && secret) {
+  if (!userId) {
     const device = await prisma.iotSensorDevice.findFirst({
       where: { deviceId: parsed.data.deviceId, active: true },
       select: { userId: true },

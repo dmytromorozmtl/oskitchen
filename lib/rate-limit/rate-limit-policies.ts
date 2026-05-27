@@ -5,6 +5,8 @@ export const RATE_LIMIT_POLICIES = {
   book_demo: { windowMs: 60_000, max: 6 },
   contact_sales: { windowMs: 60_000, max: 6 },
   partner_lead: { windowMs: 60_000, max: 6 },
+  /** ROI calculator marketing lead — per IP. */
+  roi_lead: { windowMs: 60_000, max: 6 },
   support_public: { windowMs: 60_000, max: 10 },
   support_authed: { windowMs: 60_000, max: 40 },
   public_api_orders_post: { windowMs: 60_000, max: 120 },

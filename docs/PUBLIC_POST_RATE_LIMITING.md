@@ -13,6 +13,7 @@
 | Book demo | `book_demo:{ip}` | `book_demo` |
 | Contact sales | `contact_sales:{ip}` | `contact_sales` |
 | Partner lead | `partner_lead:{ip}` | `partner_lead` |
+| ROI calculator lead | `roi_lead:{ip}` | `roi_lead` |
 | Support ticket | user or IP bucket | `support_*` |
 | Public API `POST /api/public/v1/orders` | `public_api_orders_post:{userId}:{ip}` | high ceiling |
 

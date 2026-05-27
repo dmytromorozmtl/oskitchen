@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { TurnstileWidget } from "@/components/storefront/turnstile-widget";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { captureProductEvent } from "@/lib/analytics/product-events";
+import { turnstileSiteKey } from "@/lib/storefront/turnstile";
 
 type Props = {
   estimatedSavingsMonthly: number;
@@ -24,10 +26,13 @@ export function RoiLeadCapture({ estimatedSavingsMonthly, weeklyOrders, recommen
   const [open, setOpen] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [businessType, setBusinessType] = React.useState("meal_prep");
+  const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<"idle" | "loading" | "done" | "error">("idle");
+  const siteKey = turnstileSiteKey();
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (siteKey && !captchaToken) return;
     setStatus("loading");
     try {
       const res = await fetch("/api/leads/roi", {
@@ -38,6 +43,7 @@ export function RoiLeadCapture({ estimatedSavingsMonthly, weeklyOrders, recommen
           businessType,
           ordersPerWeek: weeklyOrders,
           estimatedSavingsMonthly,
+          captchaToken: captchaToken ?? undefined,
         }),
       });
       if (!res.ok) throw new Error("submit_failed");
@@ -91,9 +97,10 @@ export function RoiLeadCapture({ estimatedSavingsMonthly, weeklyOrders, recommen
               <option value="CATERING">Catering</option>
             </select>
           </label>
-          <Button type="submit" disabled={status === "loading"} className="rounded-full">
+          <Button type="submit" disabled={status === "loading" || (siteKey != null && !captchaToken)} className="rounded-full">
             {status === "loading" ? "Sending…" : "Send my analysis"}
           </Button>
+          {siteKey ? <TurnstileWidget siteKey={siteKey} onToken={setCaptchaToken} /> : null}
           {status === "error" ? (
             <p className="text-sm text-destructive" role="status">
               Something went wrong. Try again or book a demo.

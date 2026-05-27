@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { requireSessionOrIngestBearer } from "@/lib/api/public-post-guard";
 import { notifyGrowthInbound } from "@/lib/growth/growth-notify";
+import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
 import { prisma } from "@/lib/prisma";
+import { consumeRateLimitToken } from "@/services/security/rate-limit-service";
 import { AppFeedbackType } from "@prisma/client";
 
 const bodySchema = z.object({
@@ -14,8 +17,26 @@ const bodySchema = z.object({
 
 /**
  * Day-30 NPS capture — persists to AppFeedback and alerts founder when score < 7.
+ * Requires authenticated session or `NPS_INGEST_SECRET` bearer (automation).
  */
 export async function POST(req: Request) {
+  const auth = await requireSessionOrIngestBearer(req, {
+    secretEnv: process.env.NPS_INGEST_SECRET,
+    missingMessage: "NPS feedback ingest not configured",
+  });
+  if (!auth.ok) {
+    return auth.response;
+  }
+
+  const ip = getClientIpFromRequest(req);
+  const rl = await consumeRateLimitToken(`nps_feedback:${auth.userId}:${ip}`, "support_authed");
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Please try again shortly." },
+      { status: 429 },
+    );
+  }
+
   let json: unknown;
   try {
     json = await req.json();
@@ -28,11 +49,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid payload" }, { status: 400 });
   }
 
-  const { score, feedback, operatorId, email } = parsed.data;
+  const { score, feedback, email } = parsed.data;
+  const userId = auth.userId === "ingest" ? parsed.data.operatorId : auth.userId;
+  if (!userId) {
+    return NextResponse.json({ ok: false, error: "operatorId required" }, { status: 400 });
+  }
 
   await prisma.appFeedback.create({
     data: {
-      userId: operatorId,
+      userId,
       email,
       type: AppFeedbackType.GENERAL,
       title: `NPS ${score}/10`,
@@ -45,7 +70,7 @@ export async function POST(req: Request) {
   if (score < 7) {
     await notifyGrowthInbound(
       `Low NPS ${score}/10`,
-      `Operator: ${operatorId ?? email ?? "anonymous"}\nScore: ${score}\n\n${feedback ?? ""}`,
+      `Operator: ${userId ?? email ?? "anonymous"}\nScore: ${score}\n\n${feedback ?? ""}`,
     );
   }
 

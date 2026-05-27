@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { enforcePublicMarketingPostGuard } from "@/lib/api/public-post-guard";
 import { notifyGrowthInbound } from "@/lib/growth/growth-notify";
 import { prisma } from "@/lib/prisma";
 import { BetaLeadStatus, BusinessType } from "@prisma/client";
@@ -10,6 +11,7 @@ const bodySchema = z.object({
   businessType: z.string().max(80).optional(),
   ordersPerWeek: z.number().int().min(0).max(100_000).optional(),
   estimatedSavingsMonthly: z.number().min(0).optional(),
+  captchaToken: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -25,6 +27,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid payload" }, { status: 400 });
   }
 
+  const guardError = await enforcePublicMarketingPostGuard(req, {
+    policyKey: "roi_lead",
+    bucketPrefix: "roi_lead",
+    captchaToken: parsed.data.captchaToken,
+  });
+  if (guardError) return guardError;
+
   const { email, businessType, ordersPerWeek, estimatedSavingsMonthly } = parsed.data;
   const biz =
     businessType && businessType in BusinessType
@@ -39,8 +48,7 @@ export async function POST(req: Request) {
       businessType: biz,
       currentChannels: [],
       interestedFeatures: ["roi_calculator"],
-      weeklyOrderVolume:
-        ordersPerWeek != null ? String(ordersPerWeek) : null,
+      weeklyOrderVolume: ordersPerWeek != null ? String(ordersPerWeek) : null,
       biggestPain: `ROI estimate ~$${Math.round(estimatedSavingsMonthly ?? 0)}/mo`,
       status: BetaLeadStatus.NEW,
       source: "roi_calculator",
