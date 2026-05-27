@@ -14,7 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
-- Progress update: POS, KDS, billing, and integrations paths are on canonical keys; integrations mutations share `requireIntegrationsActor` with denial audits, and sales-channels plus legacy integrations layouts now mirror `integrations.manage` with deny cards for unauthorized staff
+- Progress update: POS, KDS, billing, integrations, and import-export CSV paths are on canonical keys; `/api/export` and payroll export now use `requireExportActor` / `payroll.view` with `EXPORT_PERMISSION_DENIED` audits, and the export center UI hides download cards staff cannot access
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: apply the same helper/audit pattern to exports, integrations read-only UI parity for non-manager roles, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
+- Remaining work after current slice: bridge `/api/export/report` and specialty export routes to canonical keys, integrations read-only UI parity for non-manager roles, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High

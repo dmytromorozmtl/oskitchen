@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { workspacePermissionForExport } from "@/lib/import-export/export-permission";
 import { ALL_EXPORT_TYPES, type ExportType } from "@/lib/import-export/export-types";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 const COPY: Record<
@@ -30,9 +32,12 @@ const COPY: Record<
 };
 
 export default async function ExportDataPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const email = user.email ?? "";
-  const types = ALL_EXPORT_TYPES.filter((t) => t !== "audit_logs" || isSuperAdminEmail(email));
+  const actor = await requireWorkspacePermissionActor();
+  const email = actor.email ?? "";
+  const types = ALL_EXPORT_TYPES.filter((type) => {
+    if (type === "audit_logs") return isSuperAdminEmail(email);
+    return hasPermission(actor.granted, workspacePermissionForExport(type));
+  });
 
   return (
     <div className="space-y-8">

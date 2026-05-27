@@ -27,7 +27,12 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
   [CAPABILITY.staffManage]: ["workspace.view", "staff.manage"],
   [CAPABILITY.billingManage]: ["workspace.view", "billing.view", "billing.manage"],
   [CAPABILITY.integrationsManage]: ["workspace.view", "integrations.manage"],
-  [CAPABILITY.exportsSensitive]: ["workspace.view", "workspace.settings"],
+  [CAPABILITY.exportsSensitive]: [
+    "workspace.view",
+    "orders.export",
+    "customers.export",
+    "reports.export",
+  ],
   [CAPABILITY.impersonationRequest]: ["workspace.view"],
 };
 

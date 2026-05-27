@@ -45,6 +45,7 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.inventoryWrite,
     CAPABILITY.staffManage,
     CAPABILITY.integrationsManage,
+    CAPABILITY.exportsSensitive,
   ],
   KITCHEN_LEAD: [
     CAPABILITY.ordersRead,
@@ -60,7 +61,12 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
   DRIVER: [CAPABILITY.ordersRead, CAPABILITY.routesAssign],
   CUSTOMER_SERVICE: [CAPABILITY.ordersRead, CAPABILITY.ordersWrite, CAPABILITY.posOperate],
   CATERING_COORDINATOR: [CAPABILITY.ordersRead, CAPABILITY.ordersWrite, CAPABILITY.posOperate],
-  PURCHASING: [CAPABILITY.ordersRead, CAPABILITY.inventoryRead, CAPABILITY.inventoryWrite],
+  PURCHASING: [
+    CAPABILITY.ordersRead,
+    CAPABILITY.inventoryRead,
+    CAPABILITY.inventoryWrite,
+    CAPABILITY.exportsSensitive,
+  ],
   INVENTORY: [CAPABILITY.inventoryRead, CAPABILITY.inventoryWrite],
   ACCOUNTING: [CAPABILITY.ordersRead, CAPABILITY.exportsSensitive],
   MARKETING: [CAPABILITY.ordersRead],

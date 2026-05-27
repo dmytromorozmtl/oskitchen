@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { logExportPermissionDenied } from "@/services/export/export-permission-audit";
 import { generatePayrollExport, payrollToCSV } from "@/services/labor/payroll-service";
 
 export async function GET(request: NextRequest) {
-  const { dataUserId } = await requireTenantActor();
+  const access = await requireMutationPermission("payroll.view");
+  if (!access.ok) {
+    await logExportPermissionDenied(access.actor, {
+      requiredPermission: "payroll.view",
+      exportType: "reports",
+      operation: "export:payroll",
+    });
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const { searchParams } = new URL(request.url);
   const start =
     searchParams.get("start") ??
@@ -12,7 +22,7 @@ export async function GET(request: NextRequest) {
   const end = searchParams.get("end") ?? new Date().toISOString().slice(0, 10);
 
   const payroll = await generatePayrollExport(
-    dataUserId,
+    access.actor.dataUserId,
     new Date(start),
     new Date(end),
   );

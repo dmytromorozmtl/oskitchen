@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
-import { workspacePermissionForExport } from "@/lib/import-export/export-permission";
 import { isExportType } from "@/lib/import-export/export-types";
-import { hasPermission } from "@/lib/permissions/guards";
+import { requireExportActor } from "@/lib/import-export/require-export-actor";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { createStreamingCsvExport, streamExportMeta } from "@/lib/import-export/streaming-csv-export";
@@ -29,15 +28,21 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const actor = await requireWorkspacePermissionActor();
-  const required = workspacePermissionForExport(kind);
-  if (!hasPermission(actor.granted, required)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  let dataUserId: string;
+  if (kind === "audit_logs") {
+    const actor = await requireWorkspacePermissionActor();
+    dataUserId = actor.dataUserId;
+  } else {
+    const access = await requireExportActor({ exportType: kind });
+    if (!access.ok) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    dataUserId = access.actor.dataUserId;
   }
 
   const streamMeta = streamExportMeta(kind);
   if (streamMeta) {
-      const stream = createStreamingCsvExport(actor.dataUserId, kind);
+    const stream = createStreamingCsvExport(dataUserId, kind);
     if (stream) {
       await recordExportJob(user.id, user.id, kind, streamMeta.filename, -1).catch(() => {});
       return new NextResponse(stream, {
@@ -55,7 +60,7 @@ export async function GET(request: Request) {
   let body: string;
   let rowCount: number;
   try {
-    const built = await buildExportCsv(actor.dataUserId, kind, { isSuperAdmin });
+    const built = await buildExportCsv(dataUserId, kind, { isSuperAdmin });
     filename = built.filename;
     body = built.body;
     rowCount = built.rowCount;
