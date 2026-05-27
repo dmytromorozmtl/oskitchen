@@ -69,6 +69,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: centralizes file validation
 - User story: as an operator, I need uploads to be safe and predictable
 - Current state: storefront media path validates more than generic upload actions
+- Progress update: the storefront media action and storage service now share a single validator for MIME and size checks, the previous action/service mismatch around `video/mp4` and `50MB` vs `8MB` limits has been removed, and focused malicious-upload coverage now proves unsafe SVG files with scripts or event handlers are denied before storage or database writes; broader generic-upload path parity and richer audit/scan hooks still remain.
 - Target state: all upload entrypoints share one hardened validation policy
 - Affected files: `actions/upload.ts`, `actions/storefront-media.ts`, `services/storefront/storefront-media-upload-service.ts`, storage helpers
 - Dependencies: `KOS-P0-001`

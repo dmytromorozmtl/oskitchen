@@ -1,7 +1,5 @@
 "use server";
 
-
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -9,6 +7,10 @@ import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { prisma } from "@/lib/prisma";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
+import {
+  STOREFRONT_MEDIA_ALLOWED_MIME,
+  validateStorefrontMediaUpload,
+} from "@/lib/storefront/asset-validation";
 import {
   deleteStorefrontMediaAsset,
   uploadStorefrontMediaAsset,
@@ -20,8 +22,8 @@ const mediaUploadSchema = z.object({
     .min(1)
     .max(255)
     .regex(/^[^<>:"/\\|?*]+$/, "Invalid filename"),
-  mimeType: z.enum(["image/jpeg", "image/png", "image/webp", "image/gif", "video/mp4"]),
-  sizeBytes: z.number().max(50 * 1024 * 1024, "File too large (max 50MB)"),
+  mimeType: z.enum(STOREFRONT_MEDIA_ALLOWED_MIME),
+  sizeBytes: z.number(),
   storefrontId: z.string().min(1),
   alt: z.string().max(500).optional(),
 });
@@ -42,16 +44,14 @@ export async function uploadStorefrontMediaFormAction(formData: FormData) {
     if (!(file instanceof File)) return { error: "No file provided." };
 
     const bytes = new Uint8Array(await file.arrayBuffer());
-    const allowedMime = ["image/jpeg", "image/png", "image/webp", "image/gif", "video/mp4"] as const;
-    let mimeType: (typeof allowedMime)[number] = "image/jpeg";
-    if (allowedMime.includes(file.type as (typeof allowedMime)[number])) {
-      mimeType = file.type as (typeof allowedMime)[number];
-    } else if (!file.type.startsWith("image/")) {
-      return { error: "Unsupported file type." };
-    }
+    const validated = validateStorefrontMediaUpload({
+      bytes,
+      mimeType: file.type || "application/octet-stream",
+    });
+    if (!validated.ok) return { error: validated.error };
     const parsed = mediaUploadSchema.safeParse({
       filename: file.name,
-      mimeType,
+      mimeType: validated.mimeType,
       sizeBytes: bytes.byteLength,
       storefrontId: sf.id,
       alt: formData.get("altText")?.toString(),

@@ -4,17 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 
 import { logger } from "@/lib/logger";
 import { resolveConfiguredStorefrontStorageProvider } from "@/lib/storefront/storage-provider";
+import { validateStorefrontMediaUpload } from "@/lib/storefront/asset-validation";
 import { prisma } from "@/lib/prisma";
 import { assertStorefrontAssetUploadAllowed } from "@/services/storefront/storefront-asset-service";
-
-const MAX_BYTES = 8 * 1024 * 1024;
-const ALLOWED_MIME = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/svg+xml",
-]);
 
 function storefrontBucketName(): string | null {
   return (
@@ -122,12 +114,11 @@ export async function uploadStorefrontMediaAsset(params: {
   const gate = await assertStorefrontAssetUploadAllowed();
   if (!gate.ok) return { ok: false, error: gate.reason };
 
-  if (!ALLOWED_MIME.has(params.contentType)) {
-    return { ok: false, error: "Only JPEG, PNG, WebP, GIF, or SVG images are allowed." };
-  }
-  if (params.bytes.byteLength > MAX_BYTES) {
-    return { ok: false, error: "File too large (max 8MB)." };
-  }
+  const validated = validateStorefrontMediaUpload({
+    bytes: params.bytes,
+    mimeType: params.contentType,
+  });
+  if (!validated.ok) return { ok: false, error: validated.error };
 
   const provider = resolveConfiguredStorefrontStorageProvider();
   const bucket = storefrontBucketName() || process.env.STOREFRONT_S3_BUCKET?.trim();
@@ -144,13 +135,13 @@ export async function uploadStorefrontMediaAsset(params: {
           bucket,
           path,
           bytes: params.bytes,
-          contentType: params.contentType,
+          contentType: validated.mimeType,
         })
       : await uploadToSupabase({
           bucket,
           path,
           bytes: params.bytes,
-          contentType: params.contentType,
+          contentType: validated.mimeType,
         });
 
   if ("error" in uploaded) return { ok: false, error: uploaded.error };
@@ -164,7 +155,7 @@ export async function uploadStorefrontMediaAsset(params: {
       label: params.label?.trim() || params.fileName,
       storageProvider: provider,
       storageKey: path,
-      mimeType: params.contentType,
+      mimeType: validated.mimeType,
       sizeBytes: params.bytes.byteLength,
       altText: params.altText?.trim() || null,
       createdByUserId: params.userId,
