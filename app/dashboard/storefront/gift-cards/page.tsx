@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { requireStorefrontGiftCardsPageAccess } from "@/lib/storefront/storefront-gift-cards-page-access";
+import { requireStorefrontGiftCardsPageAccess } from "@/lib/storefront/storefront-rewards-page-access";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { listGiftCardsForStorefront } from "@/services/storefront/gift-card-service";

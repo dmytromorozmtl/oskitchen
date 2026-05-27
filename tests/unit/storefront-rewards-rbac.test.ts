@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { canAccessStorefrontLoyaltyTab } from "@/lib/storefront/storefront-loyalty-permission";
+import {
+  canAccessStorefrontGiftCardsTab,
+  canAccessStorefrontLoyaltyTab,
+  canAccessStorefrontRewardsTab,
+  storefrontRewardsPermission,
+} from "@/lib/storefront/storefront-rewards-permission";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { workspacePermissionsFromStaffTemplate } from "@/lib/permissions/staff-template-workspace-permissions";
 
@@ -22,7 +27,7 @@ function granted(...keys: PermissionKey[]) {
   return new Set(keys) as ReadonlySet<PermissionKey>;
 }
 
-describe("storefront loyalty RBAC", () => {
+describe("storefront rewards RBAC", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     legacyStorefrontAllowsForActor.mockResolvedValue(false);
@@ -41,13 +46,18 @@ describe("storefront loyalty RBAC", () => {
     });
   });
 
-  it("gates loyalty tab on loyalty.manage and storefront read", () => {
-    expect(canAccessStorefrontLoyaltyTab(granted("loyalty.manage"), true)).toBe(true);
-    expect(canAccessStorefrontLoyaltyTab(granted("storefront.read"), true)).toBe(false);
-    expect(canAccessStorefrontLoyaltyTab(granted("loyalty.manage"), false)).toBe(false);
+  it("maps modules to canonical permissions", () => {
+    expect(storefrontRewardsPermission("gift_cards")).toBe("giftcards.manage");
+    expect(storefrontRewardsPermission("loyalty")).toBe("loyalty.manage");
   });
 
-  it("shows loyalty subnav for marketing staff with loyalty.manage", async () => {
+  it("gates gift cards and loyalty tabs independently", () => {
+    expect(canAccessStorefrontGiftCardsTab(granted("giftcards.manage"), true)).toBe(true);
+    expect(canAccessStorefrontLoyaltyTab(granted("giftcards.manage"), true)).toBe(false);
+    expect(canAccessStorefrontRewardsTab("loyalty", granted("loyalty.manage"), true)).toBe(true);
+  });
+
+  it("shows rewards subnav for marketing staff", async () => {
     const staffGranted = workspacePermissionsFromStaffTemplate("MARKETING", "STAFF");
     const hub = {
       canRead: true,
@@ -67,11 +77,12 @@ describe("storefront loyalty RBAC", () => {
 
     const visible = await resolveStorefrontSubnavVisibleHrefs(hub);
 
+    expect(visible).toContain("/dashboard/storefront/gift-cards");
     expect(visible).toContain("/dashboard/storefront/loyalty");
-    expect(visible).not.toContain("/dashboard/storefront/settings");
+    expect(resolveStorefrontAdminAccess).toHaveBeenCalledTimes(1);
   });
 
-  it("hides loyalty subnav without loyalty.manage", async () => {
+  it("hides rewards subnav without manage permissions", async () => {
     const staffGranted = workspacePermissionsFromStaffTemplate("PACKER", "STAFF");
     const hub = {
       canRead: true,
@@ -91,6 +102,7 @@ describe("storefront loyalty RBAC", () => {
 
     const visible = await resolveStorefrontSubnavVisibleHrefs(hub);
 
+    expect(visible).not.toContain("/dashboard/storefront/gift-cards");
     expect(visible).not.toContain("/dashboard/storefront/loyalty");
   });
 });

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireStorefrontLoyaltyPageAccess } from "@/lib/storefront/storefront-loyalty-page-access";
+import { requireStorefrontLoyaltyPageAccess } from "@/lib/storefront/storefront-rewards-page-access";
 import { getOrCreateLoyaltyProgram } from "@/services/storefront/loyalty-service";
 
 export default async function StorefrontLoyaltyPage() {

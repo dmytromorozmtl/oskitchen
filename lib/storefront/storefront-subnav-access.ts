@@ -2,21 +2,23 @@ import { requireSessionUser } from "@/lib/auth";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { legacyStorefrontAllowsForActor } from "@/lib/storefront/require-storefront-actor";
-import { canAccessStorefrontGiftCardsTab } from "@/lib/storefront/storefront-gift-cards-permission";
-import { canAccessStorefrontLoyaltyTab } from "@/lib/storefront/storefront-loyalty-permission";
 import { workspacePermissionForStorefrontAdminPermission } from "@/lib/storefront/storefront-admin-permission-keys";
 import {
   resolveStorefrontAdminAccess,
+  type StorefrontAdminAccess,
   type StorefrontAdminPermission,
 } from "@/lib/storefront/storefront-admin-access";
 import type { StorefrontHubAccess } from "@/lib/storefront/storefront-page-access";
+import {
+  canAccessStorefrontRewardsTab,
+  type StorefrontRewardsModule,
+} from "@/lib/storefront/storefront-rewards-permission";
 
 type SubnavGate =
   | { kind: "read" }
   | { kind: "manage" }
   | { kind: "media" }
-  | { kind: "gift_cards" }
-  | { kind: "loyalty" }
+  | { kind: "rewards"; module: StorefrontRewardsModule }
   | { kind: "admin"; permission: StorefrontAdminPermission };
 
 const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
@@ -46,8 +48,8 @@ const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
   { href: "/dashboard/storefront/domains", gate: { kind: "manage" } },
   { href: "/dashboard/storefront/redirects", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/discounts", gate: { kind: "admin", permission: "storefront.settings" } },
-  { href: "/dashboard/storefront/gift-cards", gate: { kind: "gift_cards" } },
-  { href: "/dashboard/storefront/loyalty", gate: { kind: "loyalty" } },
+  { href: "/dashboard/storefront/gift-cards", gate: { kind: "rewards", module: "gift_cards" } },
+  { href: "/dashboard/storefront/loyalty", gate: { kind: "rewards", module: "loyalty" } },
   { href: "/dashboard/storefront/reservations", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/referrals", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/schedule", gate: { kind: "admin", permission: "storefront.settings" } },
@@ -58,15 +60,15 @@ const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
 
 async function canAccessStorefrontAdminTab(
   actor: WorkspacePermissionActor,
-  sessionUserId: string,
   permission: StorefrontAdminPermission,
+  getStorefrontAccess: () => Promise<StorefrontAdminAccess | { ok: false; error: string }>,
 ): Promise<boolean> {
   const required = workspacePermissionForStorefrontAdminPermission(permission);
   const canonicalOk =
     hasPermission(actor.granted, required) ||
     (await legacyStorefrontAllowsForActor(actor, required));
   if (!canonicalOk) return false;
-  const access = await resolveStorefrontAdminAccess(sessionUserId);
+  const access = await getStorefrontAccess();
   return access.ok && access.permissions.includes(permission);
 }
 
@@ -76,6 +78,15 @@ export async function resolveStorefrontSubnavVisibleHrefs(
 ): Promise<string[]> {
   const sessionUser = await requireSessionUser();
   const visible: string[] = [];
+  let cachedStorefrontAccess: StorefrontAdminAccess | { ok: false; error: string } | null =
+    null;
+
+  const getStorefrontAccess = async () => {
+    if (cachedStorefrontAccess === null) {
+      cachedStorefrontAccess = await resolveStorefrontAdminAccess(sessionUser.id);
+    }
+    return cachedStorefrontAccess;
+  };
 
   for (const entry of SUBNAV_ENTRIES) {
     switch (entry.gate.kind) {
@@ -88,20 +99,14 @@ export async function resolveStorefrontSubnavVisibleHrefs(
       case "media":
         if (hub.canManageMedia) visible.push(entry.href);
         break;
-      case "gift_cards":
-        if (canAccessStorefrontGiftCardsTab(hub.actor.granted, hub.canRead)) {
-          const access = await resolveStorefrontAdminAccess(sessionUser.id);
-          if (access.ok) visible.push(entry.href);
-        }
-        break;
-      case "loyalty":
-        if (canAccessStorefrontLoyaltyTab(hub.actor.granted, hub.canRead)) {
-          const access = await resolveStorefrontAdminAccess(sessionUser.id);
+      case "rewards":
+        if (canAccessStorefrontRewardsTab(entry.gate.module, hub.actor.granted, hub.canRead)) {
+          const access = await getStorefrontAccess();
           if (access.ok) visible.push(entry.href);
         }
         break;
       case "admin":
-        if (await canAccessStorefrontAdminTab(hub.actor, sessionUser.id, entry.gate.permission)) {
+        if (await canAccessStorefrontAdminTab(hub.actor, entry.gate.permission, getStorefrontAccess)) {
           visible.push(entry.href);
         }
         break;

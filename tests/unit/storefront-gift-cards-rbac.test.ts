@@ -26,7 +26,7 @@ vi.mock("next/cache", () => ({
 }));
 
 import { issueGiftCardFormAction } from "@/actions/storefront/gift-cards";
-import { canAccessStorefrontGiftCardsTab } from "@/lib/storefront/storefront-gift-cards-permission";
+import { canAccessStorefrontGiftCardsTab } from "@/lib/storefront/storefront-rewards-permission";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 
 function granted(...keys: PermissionKey[]) {
