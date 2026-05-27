@@ -2,14 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { enforceStorefrontRouteRateLimit } from "@/lib/storefront/storefront-rate-limit";
-import {
-  STOREFRONT_FORM_FILE_MAX_BYTES,
-  STOREFRONT_FORM_FILE_MIME,
-} from "@/lib/storefront/forms";
 import { prisma } from "@/lib/prisma";
+import { validateStorefrontFormAttachmentUpload } from "@/lib/upload-policy/media-upload-validation";
 import { uploadStorefrontFormAttachment } from "@/services/storefront/storefront-form-upload-service";
-
-const allowedMime = new Set<string>(STOREFRONT_FORM_FILE_MIME);
 
 export async function POST(request: Request) {
   const rl = await enforceStorefrontRouteRateLimit(request, "forms-upload");
@@ -46,14 +41,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing file." }, { status: 400 });
   }
 
-  const contentType = file.type || "application/octet-stream";
-  if (!allowedMime.has(contentType)) {
-    return NextResponse.json({ error: "File type not allowed." }, { status: 400 });
-  }
-  if (file.size > STOREFRONT_FORM_FILE_MAX_BYTES) {
-    return NextResponse.json({ error: "File too large (max 5MB)." }, { status: 400 });
-  }
-
   const { storeSlug, formId, fieldId } = meta.data;
 
   const form = await prisma.storefrontForm.findFirst({
@@ -69,12 +56,20 @@ export async function POST(request: Request) {
 
   try {
     const bytes = new Uint8Array(await file.arrayBuffer());
+    const validated = validateStorefrontFormAttachmentUpload({
+      bytes,
+      mimeType: file.type || "",
+    });
+    if (!validated.ok) {
+      return NextResponse.json({ error: validated.error }, { status: 400 });
+    }
+
     const uploaded = await uploadStorefrontFormAttachment({
       storeSlug,
       formId,
       fieldId,
       fileName: file.name.slice(0, 255),
-      contentType,
+      contentType: validated.mimeType,
       bytes,
     });
 

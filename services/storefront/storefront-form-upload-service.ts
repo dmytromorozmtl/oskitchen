@@ -3,14 +3,12 @@ import { randomUUID } from "crypto";
 import { createClient } from "@supabase/supabase-js";
 
 import { logger } from "@/lib/logger";
-import {
-  STOREFRONT_FORM_FILE_MAX_BYTES,
-  STOREFRONT_FORM_FILE_MIME,
-} from "@/lib/storefront/forms";
 import { resolveConfiguredStorefrontStorageProvider } from "@/lib/storefront/storage-provider";
 import { enforceStorefrontRateLimit } from "@/lib/storefront/storefront-rate-limit";
-
-const ALLOWED = new Set<string>(STOREFRONT_FORM_FILE_MIME);
+import {
+  storefrontFormAttachmentExtension,
+  validateStorefrontFormAttachmentUpload,
+} from "@/lib/upload-policy/media-upload-validation";
 
 function bucketName(): string | null {
   return (
@@ -37,27 +35,33 @@ export async function uploadStorefrontFormAttachment(input: {
   });
   if (!rate.ok) return { ok: false, error: rate.message };
 
-  if (!ALLOWED.has(input.contentType)) {
-    return { ok: false, error: "File type not allowed (JPEG, PNG, WebP, PDF only)." };
-  }
-  if (input.bytes.byteLength > STOREFRONT_FORM_FILE_MAX_BYTES) {
-    return { ok: false, error: "File too large (max 5MB)." };
+  const validated = validateStorefrontFormAttachmentUpload({
+    bytes: input.bytes,
+    mimeType: input.contentType,
+  });
+  if (!validated.ok) {
+    return { ok: false, error: validated.error };
   }
 
   const bucket = bucketName();
   if (!bucket) return { ok: false, error: "File storage is not configured." };
 
-  const ext = input.fileName.split(".").pop()?.toLowerCase() || "bin";
+  const ext = storefrontFormAttachmentExtension(validated.mimeType);
   const path = `storefront-forms/${input.storeSlug}/${input.formId}/${input.fieldId}/${randomUUID()}.${ext}`;
 
-  const url = await putObject({ bucket, path, bytes: input.bytes, contentType: input.contentType });
+  const url = await putObject({
+    bucket,
+    path,
+    bytes: input.bytes,
+    contentType: validated.mimeType,
+  });
   if (!url) return { ok: false, error: "Upload failed." };
 
   return {
     ok: true,
     url,
     fileName: input.fileName,
-    contentType: input.contentType,
+    contentType: validated.mimeType,
     sizeBytes: input.bytes.byteLength,
     scanned: "stub_pass",
   };

@@ -69,7 +69,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: centralizes file validation
 - User story: as an operator, I need uploads to be safe and predictable
 - Current state: storefront media path validates more than generic upload actions
-- Progress update: upload validation now lives in `lib/upload-policy/media-upload-validation.ts`; storefront media keeps the same policy through `lib/storefront/asset-validation.ts`, product-image and business-logo uploads now validate MIME/size in both `actions/upload.ts` and `lib/storage.ts` before Supabase writes (raster-only, 4MB max, SVG denied), and focused unit tests cover storefront media plus kitchen raster denial cases; storefront form attachments, upload audit logging, and malware-scan hooks still remain.
+- Progress update: upload validation now lives in `lib/upload-policy/media-upload-validation.ts`; storefront media, kitchen product/logo uploads, and public storefront form attachments now share centralized MIME/size checks (form path also validates PDF headers and derives storage extensions from validated MIME instead of user filenames), with focused unit tests for each slice; upload audit logging and malware-scan hooks still remain.
 - Target state: all upload entrypoints share one hardened validation policy
 - Affected files: `actions/upload.ts`, `actions/storefront-media.ts`, `services/storefront/storefront-media-upload-service.ts`, storage helpers
 - Dependencies: `KOS-P0-001`
