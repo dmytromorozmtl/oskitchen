@@ -1,3 +1,4 @@
+import React from "react";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { POS_HARDWARE_CATEGORIES } from "@/lib/pos/pos-hardware";
 import { hasPermission } from "@/lib/permissions/guards";

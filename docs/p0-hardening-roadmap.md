@@ -66,7 +66,7 @@ Priority rule:
 - Estimated complexity: High
 
 ## 4. POS Permission Gaps
-- Problem: the highest-risk POS mutation and terminal route gaps are now much narrower, and the main POS shell plus several subpages now mirror canonical permissions, but deeper role-matrix coverage and some lower-level POS surfaces still lag the target operating model. Evidence: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `app/dashboard/pos/layout.tsx`, `app/dashboard/pos/registers/page.tsx`, `app/dashboard/pos/shifts/page.tsx`, `app/dashboard/pos/settings/`.
+- Problem: the highest-risk POS mutation and terminal route gaps are now much narrower, and the main POS shell plus several subpages now mirror canonical permissions with focused coverage reaching into settings/hardware parity, but deeper role-matrix coverage and some lower-level POS surfaces still lag the target operating model. Evidence: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `app/dashboard/pos/layout.tsx`, `app/dashboard/pos/registers/page.tsx`, `app/dashboard/pos/shifts/page.tsx`, `app/dashboard/pos/settings/`.
 - Business risk: financial operations and operator workflows are not governance-clean enough for broad rollout.
 - Technical risk: role bypass, inconsistent cash/shift controls, weak server-side policy.
 - Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`, `lib/permissions/**`
@@ -176,7 +176,7 @@ Priority rule:
 - Technical risk: permission regressions during ongoing feature expansion.
 - Affected files: tests around POS, billing, integrations, storefront publishing, staff, exports
 - Affected modules: all sensitive domains
-- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, terminal route denials across GET/POST/PUT/DELETE, and the terminal process/cancel lifecycle with canonical allowed-path audit logging for successful payment capture, while remaining work is deeper cashier/manager/owner matrices plus expansion into other P0 surfaces
+- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, POS settings/hardware page parity tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, terminal route denials across GET/POST/PUT/DELETE, the terminal process/cancel lifecycle with canonical allowed-path audit logging for successful payment capture, and page-level deny/allow parity for hardware/settings surfaces, while remaining work is deeper cashier/manager/owner matrices plus expansion into other P0 surfaces
 - Safest implementation plan:
   1. define canonical role matrix
   2. add shared permission-negative harness
