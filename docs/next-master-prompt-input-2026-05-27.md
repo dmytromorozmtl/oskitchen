@@ -51,44 +51,40 @@
 
 ---
 
-## 4. Still-Open P0 Items
+## 4. Still-Open P0 Items (post Era 2)
 
 | ID | Item | Evidence |
 |----|------|----------|
-| P0-1 | **RBAC wave 2** — ~85 tenant-only action files | grep `requireTenantActor` without `requireMutationPermission` |
-| P0-2 | **Storefront publish API** — `app/api/storefront/theme/publish`, `builder/publish` lack `storefront.publish` | route inspection |
-| P0-3 | **Superadmin / email bypass** — `lib/platform-owner.ts`, `actions/order-creation.ts` | hardcoded email |
-| P0-4 | **Fail-closed public POST** — IoT when secret unset; leads/NPS unauthenticated | API routes |
-| P0-5 | **Money-path E2E in CI** — only 3 Playwright specs in `ci.yml` | workflow |
-| P0-6 | **Cron surface hygiene** — 137 routes vs 15 production | `app/api/cron/` |
-| P0-7 | **Inventory depletion proof** — POS/storefront → stock | integration tests |
-| P0-8 | **Sales/navigation governance** — hide placeholder integrations & immature modules | maturity matrix vs nav |
+| P0-1 | **RBAC wave 3** — ~80 tenant-only action files (costing, purchasing, export, labor-adjacent) | grep `requireTenantActor` without canonical mutation permission |
+| P0-2 | **CI bundle wiring** — focused bundles exist but not all in default `quality` job | `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance` |
+| P0-3 | **Typecheck slicing** — full strict `tsc` OOM risk | `tsconfig.typecheck.json`, 8GB+ heap |
+| P0-4 | **Storefront inventory depletion** — deferred or untested | integration gap |
+
+**Closed in Era 2:** storefront publish API RBAC, email bypass, public POST fail-closed, money-path CI tiers, cron hygiene, nav/integration honesty, public API contracts, doc canon.
 
 ---
 
 ## 5. Still-Open P1 Items
 
-- KDS v1 productization (ticket-level, stations, certified realtime).
-- POS offline policy + tests (honest claims).
+- RBAC on commissary/notification-rules/costing-adjacent exports (partial wave 2 done).
+- POS offline policy + hardware honesty (no Toast-class claims).
 - Shopify/Woo full webhook→order E2E.
-- Public API v1 contracts for all 8 resources.
 - Typecheck slicing / OOM elimination without relaxing strictness.
-- Doc consolidation (1,434 → ~12 canonical).
 - Table service / floor plan (preview only — no sell).
-- Mailchimp / campaign builder (not built).
 - Cross-channel loyalty/gift card E2E.
-- Commissary + notification-rules permission keys.
+- Wire `test:ci:*` bundles into default CI quality job.
+
+**Closed in Era 2:** KDS v1 scope + prototype, doc consolidation (canon index), public API v1 contracts, integration placeholder honesty.
 
 ---
 
-## 6. New Risks Introduced by Recent Cycles
+## 6. New Risks (Era 3)
 
-1. Partial RBAC migration creates **inconsistent operator experience** (POS strict, other modules loose).
-2. Large POS test suite may imply **production-ready POS** — still not true for hardware/tables/offline.
-3. Experimental **cron route names** may have grown via autonomous passes (brainstem, hypergraph, martian-orbital, etc.).
-4. **Storefront action RBAC** fixed while **publish API routes** lag — asymmetric security.
-5. **CI green** without checkout/POS E2E → release false confidence.
-6. Untracked `tests/node_modules/` in working tree — hygiene risk.
+1. **Partial RBAC migration** — POS/storefront strict; costing/purchasing/export still tenant-only.
+2. **Focused test bundles not in default CI** — green `quality` job may miss doc-canon/public-api/nav regressions.
+3. **Era 2 completion false confidence** — scores improved but enterprise SSO/compliance/marketplace cert still absent.
+4. Untracked `tests/node_modules/` in working tree — hygiene risk.
+5. **Typecheck OOM** — production build fixed; local full `tsc` still heavy.
 
 ---
 
@@ -101,8 +97,9 @@
 | "RBAC not started" | **~35% migrated** — POS, storefront admin, billing, import center, kitchen daily, growth |
 | "Storefront is MVP only" | **Pilot-ready** checkout with rate limits, Stripe, pay-later, RBAC |
 | "Need more features to compete" | Need **hardening + focus**, not breadth |
-| "All crons are production" | Only **15** scheduled; 122+ are non-prod/experimental |
-| "Docs reflect current state" | **Most audit docs are stale**; trust May 26–27 canonical set |
+| "All crons are production" | Only **16** scheduled; 121+ gated/experimental |
+| "Docs reflect current state" | **Canon index governs**; historical audits deprecated |
+| "Evolution Era 2 not started" | **30/30 cycles complete** (see canonical-doc-index ledger) |
 
 ---
 
@@ -224,31 +221,36 @@ AUDIT-FIRST / IMPLEMENT-SECOND
 
 ---
 
-## Scorecard Snapshot (for master prompt header)
+## Scorecard Snapshot (Evolution Era 2 end — 2026-05-27)
 
-| Area | Score |
-|------|------:|
-| Overall | 64 |
-| Storefront | 72 |
-| Backend/API | 66 |
-| DevOps | 70 |
-| QA (unit) | 65 |
-| POS | 55 |
-| KDS | 48 |
-| RBAC | 52 |
-| Integrations | 45 |
-| Enterprise | 40 |
+| Area | Start | End | Δ |
+|------|------:|----:|--:|
+| Overall | 64 | **71** | +7 |
+| Storefront | 72 | **76** | +4 |
+| Backend/API | 66 | **71** | +5 |
+| DevOps | 70 | **75** | +5 |
+| QA (unit) | 65 | **71** | +6 |
+| POS | 55 | **60** | +5 |
+| KDS | 48 | **54** | +6 |
+| RBAC | 52 | **58** | +6 |
+| Integrations | 45 | **50** | +5 |
+| Enterprise | 40 | **43** | +3 |
+| Security | 58 | **66** | +8 |
+| Marketing/sales | 55 | **62** | +7 |
+
+Full detail: `docs/full-strategic-reaudit-2026-05-27.md` §Step 19.
 
 ---
 
-## Decision: Master Prompt Validity
+## Decision: Master Prompt Validity (post Era 2)
 
 | Question | Answer |
 |----------|--------|
-| Is old master prompt still valid? | **Partially** — safety ordering yes; facts and "not started" claims no |
-| New master prompt required now? | **YES** |
-| Safe to continue recurring cycles before rewrite? | **NO** — without new prompt, risk regresses into sprawl |
-| Single sentence for new prompt | **"Complete platform safety and money-path certification on the existing spine; do not expand surface area."** |
+| Is Evolution Era 2 complete? | **Yes** — cycles 1–30 verified |
+| New master prompt required now? | **No** — continue Era 3 under same single-sentence theme |
+| Safe to continue recurring cycles? | **Yes** — RBAC wave 3 + CI wiring + typecheck |
+| Single sentence (unchanged) | **"Complete platform safety and money-path certification on the existing spine; do not expand surface area."** |
+| Full re-audit decision | **Defer** until Q3 2026 or major release |
 
 ---
 

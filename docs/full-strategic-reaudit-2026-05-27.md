@@ -472,10 +472,86 @@ KitchenOS is a **large, real, multi-surface food-operations monolith** — not a
 | Master prompt input | `docs/next-master-prompt-input-2026-05-27.md` |
 | Current master prompt still valid? | **Partially** — priorities right, facts outdated |
 | New master prompt required? | **Yes, immediately** |
-| Safe to continue blind cycles? | **No** — need doc + RBAC + E2E guardrails first |
-| Emphasize | RBAC completion, money-path E2E, cron hygiene, KDS v1, honesty |
+| Safe to continue blind cycles? | **Yes, with Era 3 guardrails** — Era 2 map (cycles 1–30) substantially complete |
+| Emphasize | RBAC wave 3, CI bundle wiring, typecheck slicing, honest maturity |
 | Avoid | New modules, experimental crons, competitor parity claims |
 
 ---
 
-*Evidence gathered 2026-05-27 via repository inspection, `git log`, file counts, grep, subagent read-only audits, and review of canonical docs dated 2026-05-26.*
+## Step 19 — Evolution Era 2 Scorecard Refresh (2026-05-27)
+
+**Branch evidence:** `3e4d604` (doc canon) through Era 2 cycle completion  
+**Method:** Re-count + verify completed cycle artifacts (tests, guards, docs)
+
+### Inventory delta (since Step 1)
+
+| Metric | May 27 start | Era 2 end | Δ |
+|--------|-------------:|----------:|--:|
+| Vitest tests | 399 | **415** | +16 |
+| Service files | 603 | **604** | +1 |
+| Docs markdown | 1,434 | **1,440** | +6 (canon only) |
+| Production crons | 15 | **16** | +1 (`kds-overdue-alerts`) |
+| Actions with `requireMutationPermission` | ~20 | **23** | +3 |
+
+### Scorecard (refreshed)
+
+| Area | Start | End | Δ | Key evidence |
+|------|------:|----:|--:|--------------|
+| **Overall** | 64 | **71** | +7 | Era 2 map 30/30 complete |
+| Storefront | 72 | **76** | +4 | publish API RBAC, money-path CI |
+| Backend/API | 66 | **71** | +5 | public API v1 contract suite |
+| DevOps | 70 | **75** | +5 | cron hygiene, dedicated CI jobs |
+| QA | 65 | **71** | +6 | +16 tests, 8 focused CI bundles |
+| POS | 55 | **60** | +5 | RBAC + pos-money-path + inventory depletion |
+| KDS | 48 | **54** | +6 | kds-v1-scope, prototype, integration test |
+| RBAC | 52 | **58** | +6 | email bypass removed, wave 2 slices |
+| Integrations | 45 | **50** | +5 | integration-honesty labels |
+| Security | 58 | **66** | +8 | fail-closed POST, publish API, cron auth |
+| Marketing/sales | 55 | **62** | +7 | nav governance, doc canon |
+| Enterprise | 40 | **43** | +3 | governance docs; SSO/compliance still gap |
+
+### Era 2 cycles closed (verified)
+
+| Band | Status |
+|------|--------|
+| 1–2 Storefront publish API RBAC | ✅ |
+| 3–4 Email bypass removal | ✅ |
+| 5–8 RBAC wave 2 + public POST fail-closed | ✅ |
+| 9–14 Money-path CI + inventory depletion | ✅ |
+| 15–16 Cron surface hygiene | ✅ |
+| 17–20 KDS v1 scope + prototype | ✅ |
+| 21–22 Nav/maturity governance | ✅ |
+| 23–24 Integration honesty | ✅ |
+| 25–26 Public API v1 contracts | ✅ |
+| 27–28 Doc canon | ✅ |
+| 29–30 Scorecard refresh | ✅ |
+
+### Risks resolved in Era 2
+
+- Storefront publish API owner-match bypass → **`storefront.publish`**
+- Cron validation broken → **live Vitest gates**
+- Superadmin email bypass → **platform role model**
+- Public POST fail-open (IoT/leads/NPS) → **fail-closed guards**
+- Placeholder integrations oversold → **honesty registry + UI labels**
+- Doc sprawl false confidence → **canonical-doc-index**
+
+### Remaining P0/P1 (Era 3 candidates)
+
+1. **RBAC wave 3** — ~80 action files still tenant-only (costing, purchasing, export, labor-adjacent).
+2. **CI wiring** — `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance` not in default `quality` job.
+3. **Typecheck slicing** — full strict `tsc` may still OOM without 8GB+ heap.
+4. **Storefront inventory depletion** — explicitly deferred; document or test.
+5. **Marketplace partner certification** — DoorDash/Grubhub/Uber remain placeholder.
+
+### Re-audit decision
+
+| Question | Answer |
+|----------|--------|
+| Full new re-audit required now? | **No** — Era 2 scorecard refresh sufficient |
+| When to re-audit? | Q3 2026, major release, or >50 net new API routes |
+| Safe to continue bounded cycles? | **Yes** — Era 3: RBAC completion + CI wiring + typecheck |
+| Master prompt still valid? | **Yes** — single-sentence theme unchanged |
+
+---
+
+*Evidence gathered 2026-05-27 via repository inspection, `git log`, file counts, grep, subagent read-only audits, and review of canonical docs. Scorecard refreshed end of Evolution Era 2 (Cycle 29–30).*

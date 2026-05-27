@@ -93,6 +93,28 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | 23–24 | Integration honesty | `lib/integrations/integration-honesty.ts` |
 | 25–26 | Public API v1 contracts | `test:ci:public-api-v1` |
 | **27–28** | **Doc canon** | **this index** |
+| **29–30** | **Scorecard refresh** | scores in `full-strategic-reaudit-2026-05-27.md` §19, `next-master-prompt-input-2026-05-27.md` §Scorecard |
+
+---
+
+## Scorecard (Evolution Era 2 end — 2026-05-27)
+
+| Area | Score (start) | Score (end) | Δ |
+|------|--------------:|------------:|--:|
+| Overall | 64 | **71** | +7 |
+| Storefront | 72 | **76** | +4 |
+| Backend/API | 66 | **71** | +5 |
+| DevOps | 70 | **75** | +5 |
+| QA (unit) | 65 | **71** | +6 |
+| POS | 55 | **60** | +5 |
+| KDS | 48 | **54** | +6 |
+| RBAC | 52 | **58** | +6 |
+| Integrations | 45 | **50** | +5 |
+| Enterprise | 40 | **43** | +3 |
+| Security | 58 | **66** | +8 |
+| Marketing/sales readiness | 55 | **62** | +7 |
+
+**Re-audit decision:** defer full repo re-audit until Q3 2026 or a major release; use this index + §Scorecard for incremental updates.
 
 ---
 
@@ -108,3 +130,4 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | Date | Change |
 |------|--------|
 | 2026-05-27 | Cycle 27–28: initial index, deprecated-family notice, validation test |
+| 2026-05-27 | Cycle 29–30: Evolution Era 2 scorecard refresh, inventory counts updated |

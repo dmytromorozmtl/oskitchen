@@ -1,8 +1,22 @@
 # KitchenOS System Reality Model
 
-Updated: 2026-05-27  
+**Updated:** 2026-05-27 (Cycle 29–30 scorecard refresh)  
 Status: canonical current-state audit for the next hardening cycle  
 **Index:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md)
+
+## Repository metrics snapshot (2026-05-27)
+
+| Metric | Count | Notes |
+|--------|------:|-------|
+| App Router pages | 699 | unchanged breadth |
+| API routes | 296 | route registry governed |
+| Server action files | 144 | 23 use `requireMutationPermission` |
+| Service files | 604 | +1 since May re-audit |
+| Vitest tests | 415 | +16 since May re-audit |
+| Playwright specs | 53 | money-path tiers in dedicated CI jobs |
+| Docs (markdown) | 1,440 | canon index governs truth |
+| Cron route handlers | 137 | 16 production-scheduled in `vercel.json` |
+| Evolution Era 2 cycles | 30/30 | see `canonical-doc-index.md` ledger |
 
 ## Scope
 This document summarizes the current, code-backed reality of KitchenOS before additional implementation work. It is based on direct inspection of the active repository surface and reconciliation with existing audit materials, not on aspirational product claims.
@@ -182,8 +196,8 @@ Primary evidence sources:
 
 ## 31. QA / Test Coverage Gaps
 - The repository has meaningful test breadth, including unit, integration, contract, visual, and E2E suites. Evidence: `tests/`, `e2e/`, `.github/workflows/ci.yml`.
-- Coverage is still uneven across permission-negative, cross-tenant, payment-failure, and operator-role matrix paths for the broadest business surfaces. Evidence: `docs/QA_TEST_COVERAGE_AUDIT.md`, `tests/unit/mutation-access.test.ts`, `tests/unit/cross-tenant-denial.test.ts`, `tests/unit/pos-stripe-refund.test.ts`.
-- Existing tests prove security and governance intent in places, but not yet enough to certify the whole breadth of exposed modules. Evidence: `tests/unit/public-api-tenant-isolation.test.ts`, `tests/integration/tenant-isolation.test.ts`.
+- **Evolution Era 2 additions:** focused CI bundles for cron hygiene (`test:ci:cron-hygiene`), KDS v1 (`test:ci:kds-v1:*`), nav governance (`test:ci:nav-governance`), integration honesty (`test:ci:integration-honesty`), public API v1 (`test:ci:public-api-v1`), doc canon (`test:ci:doc-canon`), storefront/pos money paths (`test:ci:storefront-money-path:*`, `test:ci:pos-money-path:*`). Evidence: `package.json`, `docs/ci-e2e-tier-matrix.md`.
+- Remaining gap: several focused bundles are not yet wired into the default `quality` CI job; full strict typecheck may still require high memory. Evidence: `.github/workflows/ci.yml`, `tsconfig.typecheck.json`.
 
 ## 32. UX / Design System Gaps
 - The route surface is larger than any coherent role-based information architecture currently implied by navigation. Evidence: `app/dashboard/`, `app/platform/`, `docs/UX_UI_NAVIGATION_AUDIT.md`.
@@ -206,4 +220,6 @@ Primary evidence sources:
 - Fourth, standardize upload/media security and failure handling before expanding storefront and asset-heavy sales motion. Evidence: `actions/upload.ts`, `lib/storefront/asset-validation.ts`, `services/storefront/storefront-media-upload-service.ts`.
 
 ## Current-State Conclusion
-KitchenOS already contains enough breadth to become a category-level restaurant operating platform, but its next phase is not feature sprawl. The real work is canon: one permission model, one maturity language, one set of safe product claims, one release discipline, and one prioritized P0 hardening path built on the order/storefront core that already exists.
+KitchenOS already contains enough breadth to become a category-level restaurant operating platform. **Evolution Era 2 (cycles 1–30) completed** platform-safety and money-path certification on the existing spine: publish API RBAC, email-bypass removal, public POST fail-closed, money-path CI tiers, cron hygiene, KDS v1 scope/prototype, nav/integration honesty, public API contracts, and doc canon.
+
+The next phase (**Era 3**) is not feature sprawl. Priorities: finish RBAC migration on remaining tenant-only actions (~80 files), wire focused test bundles into default CI, typecheck slicing, and incremental scorecard updates via [`docs/canonical-doc-index.md`](./canonical-doc-index.md).

@@ -50,4 +50,13 @@ describe("canonical doc index governance", () => {
       expect(content).toContain("canonical-doc-index.md");
     }
   });
+
+  it("Evolution Era 2 scorecard is published in canonical docs", () => {
+    const reaudit = readFileSync(join(DOCS, "full-strategic-reaudit-2026-05-27.md"), "utf8");
+    const promptInput = readFileSync(join(DOCS, "next-master-prompt-input-2026-05-27.md"), "utf8");
+    expect(reaudit).toContain("Step 19 — Evolution Era 2 Scorecard Refresh");
+    expect(reaudit).toContain("| **Overall** | 64 | **71** | +7 |");
+    expect(promptInput).toContain("Evolution Era 2 end — 2026-05-27");
+    expect(promptInput).toContain("| Overall | 64 | **71** | +7 |");
+  });
 });
