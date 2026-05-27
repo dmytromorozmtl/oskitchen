@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav + integration honesty + money-path + inventory + cron + KDS v1 scope/prototype CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, nav governance, integration honesty, money-path/inventory/cron certs, `test:ci:kds-v1:cert`, `test:ci:kds-v1:unit`, `test:ci:kds-v1:prototype:cert` |
+| Doc canon + public API + nav/maturity + integration honesty + money-path + inventory + cron + KDS CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, `test:ci:nav-governance:cert` + `test:ci:nav-governance`, integration honesty, money-path/inventory/cron/KDS certs |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS route fail-closed contract tests |
 
@@ -146,3 +146,14 @@ npm run test:ci:pos-money-path:e2e
 **CI workflow:** `.github/workflows/ci.yml` → job `kds-v1-prototype`.
 
 **Rollout gate:** `lib/kitchen/kds-v1-gate.ts` — non-production requires `ENABLE_KDS_V1_CERTIFIED=true`; production daily-service enabled by default.
+
+## Tier 1d — Nav / maturity governance (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Nav wiring cert | `npm run test:ci:nav-governance:cert` | `NAV_MATURITY_RULES`, sidebar filter wiring, matrix doc alignment |
+| Nav maturity unit | `npm run test:ci:nav-governance` | Placeholder hide, preview badges, release navigation |
+
+**Canonical rules:** `lib/navigation/nav-maturity-governance.ts` aligned with `docs/feature-maturity-matrix.md`.
+
+**Wiring certification (tier 0):** `test:ci:nav-governance:cert` + `test:ci:nav-governance` chained in `test:ci:governance-bundles`.

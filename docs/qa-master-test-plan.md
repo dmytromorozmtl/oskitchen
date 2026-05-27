@@ -55,7 +55,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8b. Navigation / maturity governance
 - rules: `lib/navigation/nav-maturity-governance.ts` (`NAV_MATURITY_RULES` aligned with `docs/feature-maturity-matrix.md`)
-- unit: `tests/unit/nav-maturity-governance.test.ts`
+- wiring cert: `test:ci:nav-governance:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:nav-governance` (in `test:ci:governance-bundles`)
 - focused nav hides placeholder marketplace integrations; preview badges on immature surfaces; internal GTM links require platform access
 
 ### 8c. Integration honesty
@@ -156,6 +157,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 9. ~~cron surface hygiene CI wiring~~ — `validate:production-crons` + `validate:cron-inventory` in quality job; live gate `test:ci:cron-hygiene:cert`
 10. ~~KDS v1 scope CI wiring~~ — `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` in governance bundles; integration queue→bump focused DB workflow
 11. ~~KDS v1 prototype CI wiring~~ — `kds-v1-prototype` job + `test:ci:kds-v1:prototype:cert`; allergen UI + rollout gate verified
+12. ~~nav/maturity governance CI wiring~~ — `test:ci:nav-governance:cert` + `test:ci:nav-governance` in governance bundles
 
 ## Evidence / Artifact Expectations Per Release
 - CI summary
