@@ -8,12 +8,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { externalProductListWhereForOwner } from "@/lib/scope/workspace-channel-scope";
 import { productMappingListWhereForOwner } from "@/lib/scope/workspace-product-mapping-scope";
 import { prisma } from "@/lib/prisma";
 
 export default async function SalesChannelsMappingPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   const { userId } = await getTenantActor();
   const [externalProductWhere, mappingWhere] = await Promise.all([
     externalProductListWhereForOwner(userId),

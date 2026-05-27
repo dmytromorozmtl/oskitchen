@@ -2,8 +2,14 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { parseChannelHandoffJson } from "@/lib/channels/channel-handoff";
 import { ChannelHandoffForm } from "@/components/sales-channels/channel-handoff-form";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 
 export default async function ChannelHandoffPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   const { userId } = await getTenantActor();
   const ks = await prisma.kitchenSettings.findUnique({ where: { userId } });
   const initial = parseChannelHandoffJson(ks?.channelHandoffJson);

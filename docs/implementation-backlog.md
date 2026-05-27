@@ -14,7 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
-- Progress update: POS, KDS, billing, integrations, export, storefront publish/media, and report read/saved-report surfaces are on canonical keys; report hub pages use `requireReportsPageAccess` with canonical `reports.read.*` keys mapped from staff templates; sales-channels monitoring allows `integrations.read` with read-only subnav; storefront publish/media use `storefront.publish` / `storefront.media.manage` with legacy staff-publish bridge
+- Progress update: POS, KDS, billing, integrations, export, storefront publish/media, report read/saved-report, and channel-command-center mutation surfaces are on canonical keys; `channel-command-center` actions require `integrations.manage`; manage-only sales-channel pages use `requireSalesChannelsManagePage`; sales-channels monitoring allows `integrations.read` with read-only subnav
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: channel-command-center mutation RBAC alignment, broader storefront draft/manage (`storefront.manage`) migration beyond publish/media, per-report generator page deny cards aligned to `requireReportReadActor`, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
+- Remaining work after current slice: broader storefront draft/manage (`storefront.manage`) migration beyond publish/media, per-report generator page deny cards aligned to `requireReportReadActor`, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High

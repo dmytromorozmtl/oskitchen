@@ -11,21 +11,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { requireChannelActor } from "@/lib/channels/require-channel-actor";
-import { channelImportBatchByIdWhereForOwner } from "@/lib/scope/channel-import-scope";
-import { prisma } from "@/lib/prisma";
-import { ImportBatchToolbar } from "@/components/sales-channels/import-batch-toolbar";
-import { ImportRollbackButton } from "@/components/sales-channels/import-rollback-button";
-import { StagingRecordActions } from "@/components/sales-channels/staging-record-actions";
 import {
   canApproveChannelImports,
   canViewChannelRawPayload,
 } from "@/lib/channels/channel-permissions";
+import { channelImportBatchByIdWhereForOwner } from "@/lib/scope/channel-import-scope";
+import { requireIntegrationsReadActor } from "@/lib/integrations/require-integrations-actor";
+import { prisma } from "@/lib/prisma";
+import { ImportBatchToolbar } from "@/components/sales-channels/import-batch-toolbar";
+import { ImportRollbackButton } from "@/components/sales-channels/import-rollback-button";
+import { StagingRecordActions } from "@/components/sales-channels/staging-record-actions";
 
 export default async function ChannelImportBatchPage({
   params,
 }: {
   params: Promise<{ batchId: string }>;
 }) {
+  const read = await requireIntegrationsReadActor({ operation: "channel.import.view_batch" });
+  if (!read.ok) {
+    return (
+      <p className="rounded-xl border border-border/80 bg-muted/30 px-4 py-6 text-center text-sm text-muted-foreground">
+        {read.error}
+      </p>
+    );
+  }
+
   const { profile, userId } = await requireChannelActor();
   const { batchId } = await params;
 
@@ -39,8 +49,13 @@ export default async function ChannelImportBatchPage({
     .filter((r) => r.validationStatus === "VALID" && !r.importedAt)
     .map((r) => r.id);
 
-  const canApprove = canApproveChannelImports({ email: profile.email, role: profile.role });
-  const canRaw = canViewChannelRawPayload({ email: profile.email, role: profile.role });
+  const permissionCtx = {
+    email: profile.email,
+    role: profile.role,
+    granted: read.actor.granted,
+  };
+  const canApprove = canApproveChannelImports(permissionCtx);
+  const canRaw = canViewChannelRawPayload(permissionCtx);
 
   return (
     <div className="space-y-4">
@@ -64,7 +79,7 @@ export default async function ChannelImportBatchPage({
         <ImportBatchToolbar batchId={batch.id} validRecordIds={validIds} />
       ) : (
         <p className="text-xs text-muted-foreground">
-          Approvals are limited to owners (and platform super-admin).
+          Approvals require <span className="font-mono">integrations.manage</span> in this workspace.
         </p>
       )}
 

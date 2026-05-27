@@ -1,4 +1,11 @@
-export default function ChannelAssistantPage() {
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
+
+export default async function ChannelAssistantPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   return (
     <div className="space-y-4">
       <div>

@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { channelConflictWhereForOwner } from "@/lib/scope/channel-import-scope";
 import { prisma } from "@/lib/prisma";
@@ -17,6 +18,11 @@ import { formatDistanceToNow } from "date-fns";
 import { ConflictResolveButtons } from "@/components/sales-channels/conflict-resolve-buttons";
 
 export default async function ChannelConflictsPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   const { userId } = await getTenantActor();
   const conflicts = await prisma.channelConflict.findMany({
     where: { AND: [await channelConflictWhereForOwner(userId), { status: "OPEN" }] },

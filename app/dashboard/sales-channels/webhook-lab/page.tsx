@@ -1,6 +1,12 @@
 import { WebhookLabForm } from "@/components/sales-channels/webhook-lab-form";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 
-export default function ChannelWebhookLabPage() {
+export default async function ChannelWebhookLabPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   return (
     <div className="space-y-4">
       <div>

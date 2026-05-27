@@ -9,12 +9,11 @@ import {
   ChannelImportSourceType,
   ChannelRecordValidationStatus,
   IntegrationProvider,
-  UserRole,
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
 
-import { requireChannelActor } from "@/lib/channels/require-channel-actor";
+import { requireChannelManageActor } from "@/lib/channels/require-channel-manage-actor";
 import {
   channelConflictWhereForOwner,
   channelImportBatchByIdWhereForOwner,
@@ -27,12 +26,6 @@ import {
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { orderByIdWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import {
-  canApproveChannelImports,
-  canEditChannelRules,
-  canRollbackChannelImports,
-  canViewChannelRawPayload,
-} from "@/lib/channels/channel-permissions";
-import {
   DEFAULT_CHANNEL_HANDOFF,
   mergeHandoffUpdate,
   parseChannelHandoffJson,
@@ -43,17 +36,20 @@ import {
   revalidateChannelImportRecord,
 } from "@/lib/channels/import-staging";
 import { simulationBatchDedupeKey } from "@/lib/channels/idempotency";
+import { requireIntegrationsReadActor } from "@/lib/integrations/require-integrations-actor";
+import { requireChannelActor } from "@/lib/channels/require-channel-actor";
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 export async function approveChannelImportRecords(input: { recordIds: string[] }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canApproveChannelImports({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.import.approve",
+      metadata: { recordCount: input.recordIds.length },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     const batchRelation = await channelImportBatchRelationWhere(userId);
     for (const rid of input.recordIds) {
       const record = await prisma.channelImportRecord.findFirst({
@@ -97,10 +93,12 @@ export async function approveChannelImportRecords(input: { recordIds: string[] }
 
 export async function rejectChannelImportRecord(input: { recordId: string; reason: string }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canApproveChannelImports({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.import.reject",
+      metadata: { recordId: input.recordId },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     const record = await prisma.channelImportRecord.findFirst({
       where: { id: input.recordId, batch: await channelImportBatchRelationWhere(userId) },
     });
@@ -122,10 +120,12 @@ export async function rejectChannelImportRecord(input: { recordId: string; reaso
 
 export async function retryChannelImportValidation(input: { recordId: string }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canApproveChannelImports({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.import.retry_validation",
+      metadata: { recordId: input.recordId },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     await revalidateChannelImportRecord(input.recordId, userId);
     revalidatePath("/dashboard/sales-channels/staging");
     return { ok: true as const };
@@ -139,10 +139,12 @@ export async function resolveChannelConflict(input: {
   status: "RESOLVED" | "IGNORED";
 }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canApproveChannelImports({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.conflict.resolve",
+      metadata: { conflictId: input.conflictId, status: input.status },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { profile, userId } = gate;
     await prisma.channelConflict.updateMany({
       where: { id: input.conflictId, ...(await channelConflictWhereForOwner(userId)) },
       data: {
@@ -160,10 +162,9 @@ export async function resolveChannelConflict(input: {
 
 export async function saveChannelHandoffSettings(patch: Partial<ChannelHandoffSettings>) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (profile.role !== UserRole.OWNER && !isSuperAdminEmail(profile.email)) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({ operation: "channel.handoff.save" });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     const ks = await prisma.kitchenSettings.findUnique({
       where: { userId },
     });
@@ -195,10 +196,9 @@ export async function createChannelRule(input: {
   actionsJson: unknown;
 }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canEditChannelRules({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({ operation: "channel.rule.create" });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     await prisma.channelRule.create({
       data: {
         userId,
@@ -219,10 +219,12 @@ export async function createChannelRule(input: {
 
 export async function toggleChannelRule(input: { ruleId: string; active: boolean }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canEditChannelRules({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.rule.toggle",
+      metadata: { ruleId: input.ruleId, active: input.active },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     await prisma.channelRule.updateMany({
       where: { id: input.ruleId, userId },
       data: { active: input.active },
@@ -236,10 +238,12 @@ export async function toggleChannelRule(input: { ruleId: string; active: boolean
 
 export async function rollbackChannelImportBatch(input: { batchId: string; reason?: string }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canRollbackChannelImports({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.import.rollback",
+      metadata: { batchId: input.batchId },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { profile, userId } = gate;
     const batch = await prisma.channelImportBatch.findFirst({
       where: await channelImportBatchByIdWhereForOwner(userId, input.batchId),
     });
@@ -299,10 +303,12 @@ export async function rollbackChannelImportBatch(input: { batchId: string; reaso
 
 export async function runChannelIngestSimulation(input: { scenario: string }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canApproveChannelImports({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.simulator.run",
+      metadata: { scenario: input.scenario },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     const externalOrderId = `sim-${input.scenario}-${randomUUID().slice(0, 8)}`;
     let lineItems: NormalizedKitchenOrder["lineItems"];
     if (input.scenario === "unmatched_product") {
@@ -416,10 +422,12 @@ export async function processWebhookLabPayload(input: {
   markTest: boolean;
 }) {
   try {
-    const { profile, userId } = await requireChannelActor();
-    if (!canViewChannelRawPayload({ email: profile.email, role: profile.role })) {
-      throw new Error("FORBIDDEN");
-    }
+    const gate = await requireChannelManageActor({
+      operation: "channel.webhook_lab.process",
+      metadata: { provider: input.provider, topic: input.topic },
+    });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate;
     let payload: unknown;
     try {
       payload = JSON.parse(input.payloadText);
@@ -449,7 +457,12 @@ export async function processWebhookLabPayload(input: {
 
 export async function exportChannelImportErrorCsv(batchId: string) {
   try {
-    const { profile, userId } = await requireChannelActor();
+    const read = await requireIntegrationsReadActor({
+      operation: "channel.import.export_errors",
+      metadata: { batchId },
+    });
+    if (!read.ok) return { error: read.error };
+    const { userId } = await requireChannelActor();
     const records = await prisma.channelImportRecord.findMany({
       where: {
         batchId,

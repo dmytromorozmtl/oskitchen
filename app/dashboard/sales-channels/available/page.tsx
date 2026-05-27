@@ -2,13 +2,17 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { canManageIntegrations } from "@/lib/integrations/integrations-page-access";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { resolveAllChannels } from "@/lib/channels/channel-runtime";
 import { prisma } from "@/lib/prisma";
 
 export default async function SalesChannelsAvailablePage() {
-  const actor = await requireWorkspacePermissionActor();
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+  const actor = access.actor;
   const { dataUserId: userId } = actor;
   const canManage = canManageIntegrations(actor.granted);
   const [connections, kitchen] = await Promise.all([

@@ -1,8 +1,14 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 
-export default function SalesChannelsSettingsPage() {
+export default async function SalesChannelsSettingsPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   return (
     <Card className="border-dashed">
       <CardHeader>

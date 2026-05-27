@@ -1,18 +1,32 @@
 import type { UserRole } from "@prisma/client";
 
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { isSuperAdminEmail } from "@/lib/platform-owner";
 
-/**
- * Credential surfaces are owner/admin by default; staff only when explicitly allowed later.
- * Platform super-admin always passes gates for diagnostics.
- */
-export function canManageChannelCredentials(input: {
+export type ChannelPermissionContext = {
   email: string | null | undefined;
   role: UserRole;
+  granted?: ReadonlySet<PermissionKey>;
+};
+
+/**
+ * Canonical channel command mutations map to `integrations.manage`.
+ * Legacy owner-only fallback remains until all sessions resolve workspace grants.
+ */
+export function canManageChannelOperations(input: ChannelPermissionContext): boolean {
+  if (isSuperAdminEmail(input.email)) return true;
+  if (input.granted && hasPermission(input.granted, "integrations.manage")) {
+    return true;
+  }
+  return input.role === "OWNER";
+}
+
+export function canManageChannelCredentials(input: ChannelPermissionContext & {
   staffCredentialManage?: boolean;
 }): boolean {
   if (isSuperAdminEmail(input.email)) return true;
-  if (input.role === "OWNER") return true;
+  if (canManageChannelOperations(input)) return true;
   if (input.role === "STAFF" && input.staffCredentialManage) return true;
   return false;
 }
@@ -21,43 +35,24 @@ export function bypassesPlanGates(email: string | null | undefined): boolean {
   return isSuperAdminEmail(email);
 }
 
-export function canApproveChannelImports(input: {
-  email: string | null | undefined;
-  role: UserRole;
-}): boolean {
-  if (isSuperAdminEmail(input.email)) return true;
-  return input.role === "OWNER";
+export function canApproveChannelImports(input: ChannelPermissionContext): boolean {
+  return canManageChannelOperations(input);
 }
 
-export function canRollbackChannelImports(input: {
-  email: string | null | undefined;
-  role: UserRole;
-}): boolean {
-  return canApproveChannelImports(input);
+export function canRollbackChannelImports(input: ChannelPermissionContext): boolean {
+  return canManageChannelOperations(input);
 }
 
-export function canViewChannelRawPayload(input: {
-  email: string | null | undefined;
-  role: UserRole;
-}): boolean {
-  if (isSuperAdminEmail(input.email)) return true;
-  return input.role === "OWNER";
+export function canViewChannelRawPayload(input: ChannelPermissionContext): boolean {
+  return canManageChannelOperations(input);
 }
 
-export function canReplayChannelWebhooks(input: {
-  email: string | null | undefined;
-  role: UserRole;
-}): boolean {
-  if (isSuperAdminEmail(input.email)) return true;
-  return input.role === "OWNER";
+export function canReplayChannelWebhooks(input: ChannelPermissionContext): boolean {
+  return canManageChannelOperations(input);
 }
 
-export function canEditChannelRules(input: {
-  email: string | null | undefined;
-  role: UserRole;
-}): boolean {
-  if (isSuperAdminEmail(input.email)) return true;
-  return input.role === "OWNER";
+export function canEditChannelRules(input: ChannelPermissionContext): boolean {
+  return canManageChannelOperations(input);
 }
 
 export function canViewSalesChannels(input: { role: UserRole }): boolean {

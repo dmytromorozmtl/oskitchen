@@ -1,3 +1,4 @@
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import {
@@ -12,6 +13,11 @@ import { ChannelRuleCreateForm } from "@/components/sales-channels/channel-rule-
 import { ChannelRuleToggleButton } from "@/components/sales-channels/channel-rule-toggle-button";
 
 export default async function ChannelRulesPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   const { userId } = await getTenantActor();
   const rules = await prisma.channelRule.findMany({
     where: { userId },

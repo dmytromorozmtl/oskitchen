@@ -1,6 +1,12 @@
 import { ChannelSimulatorButtons } from "@/components/sales-channels/channel-simulator-buttons";
+import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 
-export default function ChannelSimulatorPage() {
+export default async function ChannelSimulatorPage() {
+  const access = await requireSalesChannelsManagePage();
+  if (!access.ok) {
+    return access.deny;
+  }
+
   return (
     <div className="space-y-4">
       <div>
