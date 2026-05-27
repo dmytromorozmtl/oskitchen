@@ -68,7 +68,7 @@ export async function runCronRoute(
   const isProductionTier = slug != null && isAllowedProductionCronSlug(slug);
   const auth = isProductionTier ? verifyCronSecret(request) : verifyExperimentalCron(request);
   if (!auth.ok) {
-    if ("reason" in auth) {
+    if (auth.reason !== "experimental_disabled") {
       await logCronAuthDenied({
         slug,
         pathname,

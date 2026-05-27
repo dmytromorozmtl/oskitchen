@@ -56,10 +56,10 @@ export async function getPosInventoryImpactDiagnostics(userId: string, take = 50
     productIds.length > 0
       ? await prisma.product.findMany({
           where: { AND: [productScope, { id: { in: productIds } }] },
-          select: { id: true, name: true },
+          select: { id: true, title: true },
         })
       : [];
-  const productNameById = new Map(products.map((p) => [p.id, p.name]));
+  const productNameById = new Map(products.map((p) => [p.id, p.title]));
 
   const summary = summarizePosInventoryImpactStatuses(statusRows.map((r) => r.status));
 

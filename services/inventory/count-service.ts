@@ -202,6 +202,8 @@ export async function completeInventoryCount(countId: string, userId: string) {
           ingredientId: true,
           expectedQty: true,
           countedQty: true,
+          varianceQty: true,
+          varianceCost: true,
         },
       },
     },

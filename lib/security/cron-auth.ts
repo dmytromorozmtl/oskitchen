@@ -5,7 +5,11 @@ import { timingSafeEqualText } from "@/lib/security/timing-safe";
 
 export type CronAuthResult =
   | { ok: true }
-  | { ok: false; reason: "missing_secret" | "invalid_authorization"; response: NextResponse };
+  | {
+      ok: false;
+      reason: "missing_secret" | "invalid_authorization" | "experimental_disabled";
+      response: NextResponse;
+    };
 
 /** Returns true when experimental/regulatory cron routes may run. Default: disabled. */
 export function isExperimentalCronsEnabled(): boolean {
@@ -52,6 +56,7 @@ export function verifyExperimentalCron(request: Request): CronAuthResult {
   if (!isExperimentalCronsEnabled()) {
     return {
       ok: false,
+      reason: "experimental_disabled",
       response: NextResponse.json({ skipped: true, reason: "ENABLE_EXPERIMENTAL_CRONS not set" }, { status: 200 }),
     };
   }
