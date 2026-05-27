@@ -120,8 +120,9 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 
 ## Validation
 
-- Unit gate: `tests/unit/canonical-doc-index.test.ts`
-- CI bundle: `npm run test:ci:doc-canon`
+- Wiring cert: `tests/unit/doc-canon-ci-live.test.ts` → `npm run test:ci:doc-canon:cert`
+- Unit gate: `tests/unit/canonical-doc-index.test.ts` → `npm run test:ci:doc-canon`
+- Governance bundle: both chained first in `npm run test:ci:governance-bundles`
 
 ---
 

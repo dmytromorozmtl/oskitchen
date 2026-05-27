@@ -20,7 +20,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - webhook signature and payload expectations
 - route registry and cron manifest contracts
 - cron hygiene live gates: `tests/unit/cron-hygiene-live.test.ts`, `validate:production-crons`, `validate:cron-inventory`, bundle `test:ci:cron-hygiene`
-- doc canon gate: `tests/unit/canonical-doc-index.test.ts`, bundle `test:ci:doc-canon`, index `docs/canonical-doc-index.md`
+- doc canon gate: wiring cert `test:ci:doc-canon:cert` + unit `test:ci:doc-canon` (`tests/unit/doc-canon-ci-live.test.ts`, `tests/unit/canonical-doc-index.test.ts`), index `docs/canonical-doc-index.md`
 - **CI quality job bundle:** `npm run test:ci:governance-bundles` (doc-canon + public-api-v1 + nav-governance + integration-honesty); **Era 3 RBAC wave 3:** `npm run test:ci:rbac-wave3`; **public POST fail-closed:** `npm run test:ci:public-post-fail-closed` (IoT/NPS/ROI guards + route wiring)
 
 ### 4. E2E
