@@ -25,7 +25,14 @@ vi.mock("@/services/pos/pos-permission-audit", () => ({
   logPosRegisterCreated,
 }));
 
-import { posCheckoutAction } from "@/actions/pos";
+import {
+  posCheckoutAction,
+  posCloseShiftAction,
+  posCreateRegisterAction,
+  posOpenShiftAction,
+  posRefundTransactionAction,
+  posVoidTransactionAction,
+} from "@/actions/pos";
 
 const actor = {
   sessionUser: { id: "staff-user-1" },
@@ -51,11 +58,26 @@ const baseCheckoutInput = {
   lines: [{ title: "Counter coffee", quantity: 1, unitPrice: 5 }],
 };
 
+function formDataFrom(values: Record<string, string>) {
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(values)) {
+    formData.set(key, value);
+  }
+  return formData;
+}
+
+const baseForbiddenAccess = { ok: false as const, error: "Forbidden", actor };
+
 describe("POS action RBAC", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     canUseFeature.mockResolvedValue({ allowed: true });
     checkoutPosSale.mockResolvedValue({ ok: true, orderId: "ord-1" });
+    createPosRegister.mockResolvedValue({ id: "reg-1", name: "Front counter", locationId: null });
+    openPosShift.mockResolvedValue({ ok: true, shiftId: "shift-1" });
+    closePosShift.mockResolvedValue({ ok: true });
+    refundPosTransaction.mockResolvedValue({ ok: true });
+    voidPosTransaction.mockResolvedValue({ ok: true });
   });
 
   it("uses owner-scoped tenant data for checkout mutations", async () => {
@@ -95,5 +117,104 @@ describe("POS action RBAC", () => {
         explicitDiscountAmount: 2,
       },
     });
+  });
+
+  it("blocks register creation without register management permission", async () => {
+    requireMutationPermission.mockResolvedValueOnce(baseForbiddenAccess);
+
+    const result = await posCreateRegisterAction(formDataFrom({ name: "Front counter" }));
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(createPosRegister).not.toHaveBeenCalled();
+    expect(logPosPermissionDenied).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        requiredPermission: "pos.register.manage",
+        operation: "pos.register.create",
+      }),
+    );
+  });
+
+  it("blocks shift open without shift-open permission", async () => {
+    requireMutationPermission.mockResolvedValueOnce(baseForbiddenAccess);
+
+    const result = await posOpenShiftAction(
+      formDataFrom({
+        registerId: "reg-1",
+        staffId: "staff-1",
+        openingCash: "50",
+      }),
+    );
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(openPosShift).not.toHaveBeenCalled();
+    expect(logPosPermissionDenied).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        requiredPermission: "pos.shift.open",
+        operation: "pos.shift.open",
+      }),
+    );
+  });
+
+  it("blocks shift close without shift-close permission", async () => {
+    requireMutationPermission.mockResolvedValueOnce(baseForbiddenAccess);
+
+    const result = await posCloseShiftAction(
+      formDataFrom({
+        shiftId: "shift-1",
+        staffId: "staff-1",
+        closingCash: "55",
+      }),
+    );
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(closePosShift).not.toHaveBeenCalled();
+    expect(logPosPermissionDenied).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        requiredPermission: "pos.shift.close",
+        operation: "pos.shift.close",
+      }),
+    );
+  });
+
+  it("blocks refunds without refund permission", async () => {
+    requireMutationPermission.mockResolvedValueOnce(baseForbiddenAccess);
+
+    const result = await posRefundTransactionAction({
+      transactionId: "33333333-3333-4333-8333-333333333333",
+      reason: "Customer changed their mind",
+      partialAmount: 3,
+    });
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(refundPosTransaction).not.toHaveBeenCalled();
+    expect(logPosPermissionDenied).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        requiredPermission: "pos.refund",
+        operation: "pos.refund",
+      }),
+    );
+  });
+
+  it("blocks voids without void permission", async () => {
+    requireMutationPermission.mockResolvedValueOnce(baseForbiddenAccess);
+
+    const result = await posVoidTransactionAction({
+      transactionId: "44444444-4444-4444-8444-444444444444",
+      reason: "Entered on the wrong register",
+    });
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(voidPosTransaction).not.toHaveBeenCalled();
+    expect(logPosPermissionDenied).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        requiredPermission: "pos.void",
+        operation: "pos.void",
+      }),
+    );
   });
 });

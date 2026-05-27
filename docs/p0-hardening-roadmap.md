@@ -66,7 +66,7 @@ Priority rule:
 - Estimated complexity: High
 
 ## 4. POS Permission Gaps
-- Problem: the highest-risk POS mutation and terminal route gaps are now partially closed, and the main POS shell plus several subpages now mirror canonical permissions, but deeper test coverage and some lower-level POS surfaces still lag the target operating model. Evidence: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `app/dashboard/pos/layout.tsx`, `app/dashboard/pos/registers/page.tsx`, `app/dashboard/pos/shifts/page.tsx`, `app/dashboard/pos/settings/`.
+- Problem: the highest-risk POS mutation and terminal route gaps are now much narrower, and the main POS shell plus several subpages now mirror canonical permissions, but deeper role-matrix coverage and some lower-level POS surfaces still lag the target operating model. Evidence: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `app/dashboard/pos/layout.tsx`, `app/dashboard/pos/registers/page.tsx`, `app/dashboard/pos/shifts/page.tsx`, `app/dashboard/pos/settings/`.
 - Business risk: financial operations and operator workflows are not governance-clean enough for broad rollout.
 - Technical risk: role bypass, inconsistent cash/shift controls, weak server-side policy.
 - Affected files: `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/**`, `lib/permissions/**`
@@ -74,7 +74,7 @@ Priority rule:
 - Safest implementation plan:
   1. keep the new POS-specific permission keys as the only server truth for checkout/register/shift/refund/void/terminal flows
   2. keep extending the same capability model to any remaining POS subpages and hardware/settings surfaces
-  3. deepen negative tests for cashier/manager/owner role paths and terminal APIs
+  3. deepen negative tests for cashier/manager/owner role paths and the remaining terminal/payment lifecycle edges
   4. add stronger closeout/device governance and E2E coverage
 - Migration considerations: maintain current plan gates while adding permissions
 - Rollback considerations: preserve legacy fallbacks for a transitional release
@@ -176,7 +176,7 @@ Priority rule:
 - Technical risk: permission regressions during ongoing feature expansion.
 - Affected files: tests around POS, billing, integrations, storefront publishing, staff, exports
 - Affected modules: all sensitive domains
-- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, and POS terminal route tests now exist in the repo; remaining work is reliable execution in local/CI plus expansion into other P0 surfaces
+- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, and terminal route denials across GET/POST/PUT/DELETE, while remaining work is deeper cashier/manager/owner matrices plus expansion into other P0 surfaces
 - Safest implementation plan:
   1. define canonical role matrix
   2. add shared permission-negative harness

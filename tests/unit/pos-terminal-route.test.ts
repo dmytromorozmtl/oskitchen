@@ -20,7 +20,7 @@ vi.mock("@/services/pos/pos-permission-audit", () => ({
   logPosTerminalControlEvent,
 }));
 
-import { GET, POST } from "@/app/api/pos/terminal/route";
+import { DELETE, GET, POST, PUT } from "@/app/api/pos/terminal/route";
 
 const actor = {
   sessionUser: { id: "staff-user-1" },
@@ -39,10 +39,30 @@ describe("POS terminal route RBAC", () => {
     vi.clearAllMocks();
   });
 
-  it("returns 403 and audits the denial when POS checkout permission is missing", async () => {
+  it.each([
+    {
+      method: "GET",
+      invoke: () => GET(),
+    },
+    {
+      method: "POST",
+      invoke: () =>
+        POST(new Request("http://localhost/api/pos/terminal", { method: "POST" })),
+    },
+    {
+      method: "PUT",
+      invoke: () =>
+        PUT(new Request("http://localhost/api/pos/terminal", { method: "PUT" })),
+    },
+    {
+      method: "DELETE",
+      invoke: () =>
+        DELETE(new Request("http://localhost/api/pos/terminal", { method: "DELETE" })),
+    },
+  ])("returns 403 and audits the denial when POS checkout permission is missing for $method", async ({ method, invoke }) => {
     requireMutationPermission.mockResolvedValue({ ok: false, error: "Forbidden", actor });
 
-    const response = await GET();
+    const response = await invoke();
     const json = await response.json();
 
     expect(response.status).toBe(403);
@@ -50,9 +70,12 @@ describe("POS terminal route RBAC", () => {
     expect(logPosPermissionDenied).toHaveBeenCalledWith(actor, {
       requiredPermission: "pos.checkout",
       operation: "pos.terminal",
-      metadata: { method: "GET", route: "/api/pos/terminal" },
+      metadata: { method, route: "/api/pos/terminal" },
     });
     expect(createTerminalConnectionToken).not.toHaveBeenCalled();
+    expect(createTerminalPaymentIntent).not.toHaveBeenCalled();
+    expect(processTerminalPayment).not.toHaveBeenCalled();
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
   });
 
   it("creates terminal intents using the owner-scoped actor id", async () => {
