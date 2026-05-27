@@ -1,10 +1,10 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { requireIntegrationsActor } from "@/lib/integrations/require-integrations-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { integrationConnectionByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import {
@@ -18,7 +18,7 @@ import {
   persistCertificationRecord,
   runChannelCertification,
 } from "@/services/integrations/channel-certification-runner";
-import { IntegrationProvider, UserRole } from "@prisma/client";
+import { IntegrationProvider } from "@prisma/client";
 
 const connectionSchema = z.object({
   connectionId: z.string().uuid(),
@@ -30,11 +30,20 @@ const signOffSchema = z.object({
   notes: z.string().max(2000).optional(),
 });
 
+async function requireChannelCertificationManageAccess(operation: string) {
+  const gate = await requireIntegrationsActor({ operation });
+  if (!gate.ok) return { ok: false as const, error: gate.error };
+  const { userId } = await requireTenantActor();
+  return { ok: true as const, userId };
+}
+
 export async function runChannelCertificationAction(
   formData: FormData,
 ): Promise<{ ok: true; overall: string } | { error: string }> {
   try {
-    const { userId } = await requireTenantActor();
+    const manage = await requireChannelCertificationManageAccess("channel_certification.run");
+    if (!manage.ok) return { error: manage.error };
+
     const parsed = connectionSchema.safeParse({
       connectionId: formData.get("connectionId"),
     });
@@ -43,7 +52,7 @@ export async function runChannelCertificationAction(
     const conn = await prisma.integrationConnection.findFirst({
       where: {
         AND: [
-          await integrationConnectionByIdWhereForOwner(userId, parsed.data.connectionId),
+          await integrationConnectionByIdWhereForOwner(manage.userId, parsed.data.connectionId),
           { provider: { in: [IntegrationProvider.WOOCOMMERCE, IntegrationProvider.SHOPIFY] } },
         ],
       },
@@ -68,14 +77,8 @@ export async function recordCertificationSignOffAction(
   formData: FormData,
 ): Promise<{ ok: true } | { error: string }> {
   try {
-    const { sessionUser, userId } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: sessionUser.id },
-      select: { role: true },
-    });
-    if (profile?.role !== UserRole.OWNER) {
-      return { error: "Only the workspace owner can record certification sign-off." };
-    }
+    const manage = await requireChannelCertificationManageAccess("channel_certification.sign_off");
+    if (!manage.ok) return { error: manage.error };
 
     const parsed = signOffSchema.safeParse({
       connectionId: formData.get("connectionId"),
@@ -87,7 +90,7 @@ export async function recordCertificationSignOffAction(
     const conn = await prisma.integrationConnection.findFirst({
       where: {
         AND: [
-          await integrationConnectionByIdWhereForOwner(userId, parsed.data.connectionId),
+          await integrationConnectionByIdWhereForOwner(manage.userId, parsed.data.connectionId),
           { provider: { in: [IntegrationProvider.WOOCOMMERCE, IntegrationProvider.SHOPIFY] } },
         ],
       },
