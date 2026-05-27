@@ -46,8 +46,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - impersonation and audit
 
 ### 8. Kitchen / KDS (v1 scope)
-- canonical scope: `docs/kds-v1-scope.md`
-- unit bundle: `npm run test:ci:kds-v1:unit` (RBAC + rollout gate + contract)
+- canonical scope: `docs/kds-v1-scope.md` (locked; CI gate `test:ci:kds-v1:cert`)
+- unit bundle: `npm run test:ci:kds-v1:unit` (RBAC + rollout gate + contract; in `test:ci:governance-bundles`)
 - integration: `npm run test:ci:kds-v1:integration` (requires `RUN_DB_INTEGRATION=1` + Postgres)
 - manual/staging: Supabase Realtime subscription smoke on `/dashboard/kitchen`; non-prod needs `ENABLE_KDS_V1_CERTIFIED=true`
 - not required for v1: multi-station E2E, offline replay, hardware cert
@@ -153,6 +153,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 7. impersonation and sensitive-action audit coverage
 8. release-critical smoke bundle aligned to production journeys
 9. ~~cron surface hygiene CI wiring~~ — `validate:production-crons` + `validate:cron-inventory` in quality job; live gate `test:ci:cron-hygiene:cert`
+10. ~~KDS v1 scope CI wiring~~ — `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` in governance bundles; integration queue→bump focused DB workflow
 
 ## Evidence / Artifact Expectations Per Release
 - CI summary

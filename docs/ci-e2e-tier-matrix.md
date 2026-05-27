@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav + integration honesty + money-path + inventory + cron hygiene CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, nav governance, integration honesty, storefront/pos money-path certs, inventory depletion cert, and `test:ci:cron-hygiene:cert` |
+| Doc canon + public API + nav + integration honesty + money-path + inventory + cron + KDS v1 scope CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, nav governance, integration honesty, money-path/inventory/cron certs, `test:ci:kds-v1:cert`, and `test:ci:kds-v1:unit` |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS route fail-closed contract tests |
 
@@ -124,3 +124,15 @@ npm run test:ci:pos-money-path:e2e
 **Production schedule:** 16 allowlisted slugs in `services/cron/production-manifest.ts` (not 15 — includes `incident-remediation-reminders`). **On disk:** 137 total routes; non-allowlisted routes are experimental, blocked in production unless `ENABLE_EXPERIMENTAL_CRONS=true`, and stamped `X-KOS-Cron-Tier: experimental` when enabled.
 
 **Wiring certification (tier 0):** `npm run test:ci:cron-hygiene:cert` → `tests/unit/cron-hygiene-ci-live.test.ts` (included in `test:ci:governance-bundles`). Full reconciliation runs in `quality` via `validate:production-crons` and `validate:cron-inventory`.
+
+## Tier 1c — KDS v1 scope (`quality` job via governance bundles)
+
+| Suite | Command | DB | Notes |
+|-------|---------|-----|-------|
+| Scope + wiring cert | `npm run test:ci:kds-v1:cert` | No | `docs/kds-v1-scope.md` sections, canonical index, permissioned actions |
+| RBAC + rollout gate + contract | `npm run test:ci:kds-v1:unit` | No | `kitchen-daily-kds-rbac`, `kds-v1-gate`, `kds-ticket.contract` |
+| Queue → bump integration | `npm run test:ci:kds-v1:integration` | Postgres + `RUN_DB_INTEGRATION=1` | Focused workflow; not in default `quality` job |
+
+**Canonical scope:** `docs/kds-v1-scope.md` — daily-service order tickets only; not rush-hour, multi-station, or hardware certified.
+
+**Wiring certification (tier 0):** `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` chained in `test:ci:governance-bundles`.
