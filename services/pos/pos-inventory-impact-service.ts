@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { applyRecipeDepletionForPosLine } from "@/services/inventory/pos-recipe-depletion";
 
 export async function recordPendingInventoryImpactsForPosOrder(
   userId: string,
@@ -11,7 +12,7 @@ export async function recordPendingInventoryImpactsForPosOrder(
   });
   for (const li of items) {
     if (!li.productId) continue;
-    await prisma.posInventoryImpactEvent.create({
+    const impact = await prisma.posInventoryImpactEvent.create({
       data: {
         userId,
         workspaceId,
@@ -19,8 +20,15 @@ export async function recordPendingInventoryImpactsForPosOrder(
         productId: li.productId,
         quantity: li.quantity,
         status: "PENDING_CONFIGURATION",
-        note: "POS sale — connect recipes/stock rules to auto-consume inventory.",
+        note: "POS sale — recipe depletion runs when product has an active recipe.",
       },
     });
+    await applyRecipeDepletionForPosLine(
+      userId,
+      workspaceId,
+      impact.id,
+      li.productId,
+      Number(li.quantity),
+    );
   }
 }

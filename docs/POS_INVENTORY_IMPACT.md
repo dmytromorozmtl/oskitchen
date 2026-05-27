@@ -2,19 +2,24 @@
 
 ## Current implementation
 
-`recordPendingInventoryImpactsForPosOrder` inserts one `PosInventoryImpactEvent` per order line that references a `productId`.
+`recordPendingInventoryImpactsForPosOrder` inserts one `PosInventoryImpactEvent` per order line that references a `productId`, then calls `applyRecipeDepletionForPosLine`.
 
-- `status`: `PENDING_CONFIGURATION`
-- `note`: Explains POS context and that auto-consumption requires recipes/stock configuration.
+| Status | Meaning |
+| --- | --- |
+| `PENDING_CONFIGURATION` | No active recipe for the product, or recipe could not update scoped ingredients. |
+| `APPLIED` | Active recipe found; ingredient `currentStock` decremented per recipe lines (yield + waste %). |
 
-## Why placeholders
+Audit: `inventory.pos_depletion_applied` when depletion succeeds.
 
-KitchenOS inventory depth (recipes, depletion policies, alerts) varies by tenant maturity. Writing speculative stock decrements would **fake** availability.
+## Safety
+
+- No recipe → no stock write (impact row stays pending).
+- Ingredient updates are owner/workspace scoped; unmatched rows are skipped.
+- Sub-recipes and modifier recipes are not expanded in this slice.
 
 ## Next steps
 
-1. Map `PosInventoryImpactEvent` → ingredient usage jobs when `Recipe` + stock on hand exist.
-2. Surface warnings in POS terminal when catalog items dip below par levels.
-3. Feed demand forecasting from POS velocity separate from channel imports.
-
-Until then, operators should treat POS impact rows as **signals**, not ledger truth.
+1. Surface pending vs applied impacts in POS / inventory diagnostics.
+2. Par-level warnings on POS terminal.
+3. Storefront and non-POS channels sharing the same depletion service.
+4. Sub-recipe and modifier recipe expansion.
