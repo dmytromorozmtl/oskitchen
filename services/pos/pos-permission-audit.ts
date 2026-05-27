@@ -71,6 +71,7 @@ export async function logPosTerminalControlEvent(
     action:
       | typeof AUDIT_ACTIONS.POS_TERMINAL_TOKEN_ISSUED
       | typeof AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_INTENT_CREATED
+      | typeof AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_CAPTURED
       | typeof AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_CANCELLED;
     entityId?: string | null;
     label?: string | null;

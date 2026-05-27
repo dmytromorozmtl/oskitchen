@@ -37,6 +37,11 @@ const actor = {
 describe("POS terminal route RBAC", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    processTerminalPayment.mockResolvedValue({
+      id: "tx-1",
+      orderId: "order-1",
+      paymentStatus: "PAID",
+    });
   });
 
   it.each([
@@ -114,5 +119,109 @@ describe("POS terminal route RBAC", () => {
     expect(logPosPermissionDenied).not.toHaveBeenCalled();
     expect(processTerminalPayment).not.toHaveBeenCalled();
     expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
+  it("processes terminal payments using the owner-scoped actor id and records an allowed audit event", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ paymentIntentId: "pi_123", orderId: "order-1" }),
+    });
+
+    const response = await PUT(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json).toEqual({
+      success: true,
+      transaction: expect.objectContaining({
+        id: "tx-1",
+        orderId: "order-1",
+      }),
+    });
+    expect(processTerminalPayment).toHaveBeenCalledWith("pi_123", "order-1", "owner-user-1");
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_CAPTURED",
+        entityId: "order-1",
+        label: "order-1",
+        metadata: {
+          paymentIntentId: "pi_123",
+          transactionId: "tx-1",
+        },
+      }),
+    );
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid terminal payment-processing payloads before calling Stripe services", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ paymentIntentId: "", orderId: "" }),
+    });
+
+    const response = await PUT(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json).toEqual({
+      error: expect.objectContaining({
+        fieldErrors: expect.objectContaining({
+          paymentIntentId: expect.any(Array),
+          orderId: expect.any(Array),
+        }),
+      }),
+    });
+    expect(processTerminalPayment).not.toHaveBeenCalled();
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
+  });
+
+  it("cancels terminal payments and records an allowed audit event", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ paymentIntentId: "pi_123" }),
+    });
+
+    const response = await DELETE(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json).toEqual({ success: true });
+    expect(cancelTerminalPayment).toHaveBeenCalledWith("pi_123");
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_CANCELLED",
+        entityId: "pi_123",
+        label: "pi_123",
+      }),
+    );
+  });
+
+  it("rejects terminal cancellation requests without a payment intent id", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+
+    const request = new Request("http://localhost/api/pos/terminal", {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({}),
+    });
+
+    const response = await DELETE(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json).toEqual({ error: "paymentIntentId required" });
+    expect(cancelTerminalPayment).not.toHaveBeenCalled();
+    expect(logPosTerminalControlEvent).not.toHaveBeenCalled();
   });
 });

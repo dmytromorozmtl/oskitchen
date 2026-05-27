@@ -113,6 +113,15 @@ export async function PUT(request: Request) {
       parsed.data.orderId,
       actor.userId,
     );
+    await logPosTerminalControlEvent(actor, {
+      action: AUDIT_ACTIONS.POS_TERMINAL_PAYMENT_CAPTURED,
+      entityId: parsed.data.orderId,
+      label: parsed.data.orderId,
+      metadata: {
+        paymentIntentId: parsed.data.paymentIntentId,
+        transactionId: transaction.id,
+      },
+    });
     return NextResponse.json({ success: true, transaction });
   } catch (err) {
     return NextResponse.json(

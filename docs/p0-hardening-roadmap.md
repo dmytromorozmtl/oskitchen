@@ -74,7 +74,7 @@ Priority rule:
 - Safest implementation plan:
   1. keep the new POS-specific permission keys as the only server truth for checkout/register/shift/refund/void/terminal flows
   2. keep extending the same capability model to any remaining POS subpages and hardware/settings surfaces
-  3. deepen negative tests for cashier/manager/owner role paths and the remaining terminal/payment lifecycle edges
+  3. deepen negative tests for cashier/manager/owner role paths and keep filling the remaining terminal/device lifecycle edges
   4. add stronger closeout/device governance and E2E coverage
 - Migration considerations: maintain current plan gates while adding permissions
 - Rollback considerations: preserve legacy fallbacks for a transitional release
@@ -176,7 +176,7 @@ Priority rule:
 - Technical risk: permission regressions during ongoing feature expansion.
 - Affected files: tests around POS, billing, integrations, storefront publishing, staff, exports
 - Affected modules: all sensitive domains
-- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, and terminal route denials across GET/POST/PUT/DELETE, while remaining work is deeper cashier/manager/owner matrices plus expansion into other P0 surfaces
+- Progress update: POS workspace-role tests, POS subnav parity tests, POS action permission tests, and POS terminal route tests now exist in the repo; the focused local/CI execution path has been restored and the POS suite now covers checkout discount denial, register/shift/refund/void action denials, terminal route denials across GET/POST/PUT/DELETE, and the terminal process/cancel lifecycle with canonical allowed-path audit logging for successful payment capture, while remaining work is deeper cashier/manager/owner matrices plus expansion into other P0 surfaces
 - Safest implementation plan:
   1. define canonical role matrix
   2. add shared permission-negative harness
