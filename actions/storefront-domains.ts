@@ -7,8 +7,7 @@ import { z } from "zod";
 
 import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
-import { prisma } from "@/lib/prisma";
+import { requireManageStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { safeError } from "@/lib/security";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
 import {
@@ -34,8 +33,10 @@ export async function verifyStorefrontDomainDnsAction(): Promise<void> {
     await requireTenantActor();
     const manageDenied = await assertStorefrontManageAccess("storefront.domain.verify");
     if (manageDenied) return;
-    const { sf: sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, storeSlug: true, customDomain: true });
-    if (!sf) return;
+    const { sf } = await requireManageStorefrontRow(
+      { id: true, storeSlug: true, customDomain: true },
+      { operation: "storefront.domain.verify" },
+    );
     const gate = verifyDomainSchema.safeParse({ storefrontId: sf.id });
     if (!gate.success) return;
     if (sf.customDomain?.trim()) {
@@ -55,8 +56,10 @@ export async function refreshStorefrontDomainStatusAction(): Promise<void> {
     await requireTenantActor();
     const manageDenied = await assertStorefrontManageAccess("storefront.domain.refresh");
     if (manageDenied) return;
-    const { sf: sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, storeSlug: true });
-    if (!sf) return;
+    const { sf } = await requireManageStorefrontRow(
+      { id: true, storeSlug: true },
+      { operation: "storefront.domain.refresh" },
+    );
     const gate = verifyDomainSchema.safeParse({ storefrontId: sf.id });
     if (!gate.success) return;
     await refreshStorefrontDomainRouting(sf.id);

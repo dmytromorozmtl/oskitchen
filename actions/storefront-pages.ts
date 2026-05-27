@@ -8,7 +8,7 @@ import { Prisma, StorefrontPageType, StorefrontSectionType } from "@prisma/clien
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
-import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
+import { requireManageStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { STOREFRONT_PERF } from "@/lib/storefront/performance-limits";
@@ -67,7 +67,10 @@ export async function createStorefrontPage(formData: FormData) {
     const pageType = pageTypeParse.success ? pageTypeParse.data : StorefrontPageType.CUSTOM;
     if (!title) return { error: "Title is required." };
 
-    const { sf: sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, storeSlug: true, workspaceId: true, userId: true });
+    const { sf } = await requireManageStorefrontRow(
+      { id: true, storeSlug: true, workspaceId: true, userId: true },
+      { operation: "storefront.page.create" },
+    );
     if (!sf) return { error: "Save storefront overview once before creating pages." };
 
     if (pageType === StorefrontPageType.HOME) {

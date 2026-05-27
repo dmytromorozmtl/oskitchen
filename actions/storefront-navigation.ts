@@ -5,11 +5,12 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
 import { assertStorefrontManageAccess } from "@/lib/storefront/require-storefront-actor";
+import { requireManageStorefrontRow } from "@/lib/storefront/require-admin-storefront";
+import { prisma } from "@/lib/prisma";
 
 const navFooterSchema = z.object({
   itemsJson: z.string().max(120_000),
@@ -19,15 +20,9 @@ const footerSchema = z.object({
   blocksJson: z.string().max(120_000),
 });
 
-async function sfForUser(userId: string) {
-  return prisma.storefrontSettings.findFirst({ where: { userId  }, orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-    select: { id: true, storeSlug: true },
-  });
-}
-
 export async function updateStorefrontNavigationSettings(formData: FormData) {
   try {
-    const { userId } = await requireTenantActor();
+    await requireTenantActor();
     const manageDenied = await assertStorefrontManageAccess("storefront.navigation.update");
     if (manageDenied) return manageDenied;
 
@@ -43,8 +38,10 @@ export async function updateStorefrontNavigationSettings(formData: FormData) {
       return { error: "Navigation must be valid JSON." };
     }
 
-    const sf = await sfForUser(userId);
-    if (!sf) return { error: "Save the storefront overview once first." };
+    const { sf } = await requireManageStorefrontRow(
+      { id: true, storeSlug: true },
+      { operation: "storefront.navigation.update" },
+    );
 
     await prisma.storefrontNavigation.upsert({
       where: { storefrontId: sf.id },
@@ -66,7 +63,7 @@ export async function updateStorefrontNavigationSettingsFormAction(formData: For
 
 export async function updateStorefrontFooterSettings(formData: FormData) {
   try {
-    const { userId } = await requireTenantActor();
+    await requireTenantActor();
     const manageDenied = await assertStorefrontManageAccess("storefront.footer.update");
     if (manageDenied) return manageDenied;
 
@@ -82,8 +79,10 @@ export async function updateStorefrontFooterSettings(formData: FormData) {
       return { error: "Footer must be valid JSON." };
     }
 
-    const sf = await sfForUser(userId);
-    if (!sf) return { error: "Save the storefront overview once first." };
+    const { sf } = await requireManageStorefrontRow(
+      { id: true, storeSlug: true },
+      { operation: "storefront.footer.update" },
+    );
 
     await prisma.storefrontFooter.upsert({
       where: { storefrontId: sf.id },
