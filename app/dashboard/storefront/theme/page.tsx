@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { loadPublishChecklistForStorefront, publishChecklistBlocksGoLive } from "@/lib/storefront/launch-readiness";
 import { buildThemePublishDiff } from "@/lib/storefront/theme-publish-diff";
 import type { ThemeSnapshotV1 } from "@/lib/storefront/theme-snapshot";
@@ -27,6 +28,9 @@ import { resolveStorefrontPublishAccess } from "@/lib/storefront/storefront-page
 import { listStorefrontMediaForOwner } from "@/services/storefront-builder/media-service";
 
 export default async function StorefrontThemePage() {
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.theme");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const { canPublish } = await resolveStorefrontPublishAccess(user.id, user.email ?? null);
   const settings = await findAdminStorefront(user.id, {

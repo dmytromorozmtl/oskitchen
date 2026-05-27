@@ -3,13 +3,17 @@ import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontTeamInviteAuditPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true, publicName: true, workspaceId: true });
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.team");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const sf = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: { id: true, publicName: true, workspaceId: true },
+  });
 
   const events =
     sf?.workspaceId != null

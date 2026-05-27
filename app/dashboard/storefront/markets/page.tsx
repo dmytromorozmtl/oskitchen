@@ -4,19 +4,31 @@ import { seedDefaultMarketFormAction } from "@/actions/storefront-markets";
 import { StorefrontMarketsEditor } from "@/components/dashboard/storefront/storefront-markets-editor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { parseStorefrontMarketsFromSettingsCenter } from "@/lib/storefront/markets";
 import { menuListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontMarketsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const plannerMenuWhere = await menuListWhereForOwnerAnd(dataUserId, { catalogOnly: false });
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.markets");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const ownerUserId = pageAccess.userId;
+  const plannerMenuWhere = await menuListWhereForOwnerAnd(ownerUserId, { catalogOnly: false });
   const [sf, kitchen, menus] = await Promise.all([
-    findAdminStorefront(user.id),
+    prisma.storefrontSettings.findUnique({
+      where: { id: pageAccess.access.storefront.id },
+      select: {
+        id: true,
+        storeSlug: true,
+        subdomain: true,
+        workspaceId: true,
+        activeMenuId: true,
+        currency: true,
+      },
+    }),
     prisma.kitchenSettings.findUnique({
-      where: { userId: dataUserId },
+      where: { userId: ownerUserId },
       select: { settingsCenterJson: true },
     }),
     prisma.menu.findMany({

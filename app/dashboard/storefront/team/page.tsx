@@ -4,8 +4,7 @@ import { updateStorefrontStaffAccessFormAction } from "@/actions/storefront-team
 import { StorefrontTeamInvitePanel } from "@/components/dashboard/storefront/storefront-team-invite-panel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import {
   parseStorefrontStaffAccess,
   STOREFRONT_ADMIN_PERMISSIONS,
@@ -26,14 +25,19 @@ const PERM_LABELS: Record<string, string> = {
 };
 
 export default async function StorefrontTeamPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id);
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.team");
+  if (!pageAccess.ok) return pageAccess.deny;
 
-  await migrateLegacyPendingInvitesForOwner(sf?.userId ?? user.id);
+  const sf = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: { id: true, storeSlug: true, workspaceId: true, userId: true },
+  });
+
+  await migrateLegacyPendingInvitesForOwner(pageAccess.userId);
 
   const [kitchen, members, pendingInvites] = await Promise.all([
     prisma.kitchenSettings.findUnique({
-      where: { userId: sf?.userId ?? user.id },
+      where: { userId: pageAccess.userId },
       select: { settingsCenterJson: true },
     }),
     sf?.workspaceId

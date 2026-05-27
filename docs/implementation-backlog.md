@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: extend storefront admin page gates to team/markets/theme tabs; optional `storefront.admin` registry key for team-only split; vendor-specific malware scanner certification when `UPLOAD_MALWARE_SCAN_URL` is enabled in production
+- Remaining work after current slice: optional `storefront.admin` registry key for team-only split vs `storefront.manage`; vendor-specific malware scanner certification when `UPLOAD_MALWARE_SCAN_URL` is enabled in production
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
