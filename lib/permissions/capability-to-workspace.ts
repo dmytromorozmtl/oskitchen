@@ -31,7 +31,12 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
   [CAPABILITY.routesAssign]: ["workspace.view", "routes.manage"],
   [CAPABILITY.inventoryRead]: ["workspace.view"],
   [CAPABILITY.inventoryWrite]: ["workspace.view", "production.manage"],
-  [CAPABILITY.staffManage]: ["workspace.view", "staff.manage"],
+  [CAPABILITY.staffManage]: [
+    "workspace.view",
+    "staff.manage",
+    "schedule.manage",
+    "timeclock.manage",
+  ],
   [CAPABILITY.billingManage]: ["workspace.view", "billing.view", "billing.manage"],
   [CAPABILITY.integrationsRead]: ["workspace.view", "integrations.read"],
   [CAPABILITY.integrationsManage]: [

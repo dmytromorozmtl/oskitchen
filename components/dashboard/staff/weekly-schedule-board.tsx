@@ -41,9 +41,10 @@ function DropDay({ day, label, children }: { day: string; label: string; childre
   );
 }
 
-function ShiftCard({ shift }: { shift: ShiftRow }) {
+function ShiftCard({ shift, canManage }: { shift: ShiftRow; canManage: boolean }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: shift.id,
+    disabled: !canManage,
   });
   const style = transform ? { transform: CSS.Translate.toString(transform) } : undefined;
 
@@ -53,20 +54,33 @@ function ShiftCard({ shift }: { shift: ShiftRow }) {
       style={style}
       className={`rounded-md border bg-background p-2 text-xs shadow-sm ${isDragging ? "opacity-50" : ""}`}
     >
-      <button type="button" className="w-full cursor-grab text-left active:cursor-grabbing" {...listeners} {...attributes}>
-        <p className="font-medium">{shift.staffName}</p>
-        <p className="text-muted-foreground">
-          {shift.startTime}–{shift.endTime}
-          {shift.roleLabel ? ` · ${shift.roleLabel}` : ""}
-        </p>
-        <p className="text-muted-foreground">${shift.laborCost.toFixed(0)}</p>
-      </button>
-      <form action={deleteShiftAction} className="mt-1">
-        <input type="hidden" name="shiftId" value={shift.id} />
-        <button type="submit" className="text-[10px] text-destructive hover:underline">
-          Remove
+      {canManage ? (
+        <button type="button" className="w-full cursor-grab text-left active:cursor-grabbing" {...listeners} {...attributes}>
+          <p className="font-medium">{shift.staffName}</p>
+          <p className="text-muted-foreground">
+            {shift.startTime}–{shift.endTime}
+            {shift.roleLabel ? ` · ${shift.roleLabel}` : ""}
+          </p>
+          <p className="text-muted-foreground">${shift.laborCost.toFixed(0)}</p>
         </button>
-      </form>
+      ) : (
+        <div className="text-left">
+          <p className="font-medium">{shift.staffName}</p>
+          <p className="text-muted-foreground">
+            {shift.startTime}–{shift.endTime}
+            {shift.roleLabel ? ` · ${shift.roleLabel}` : ""}
+          </p>
+          <p className="text-muted-foreground">${shift.laborCost.toFixed(0)}</p>
+        </div>
+      )}
+      {canManage && (
+        <form action={deleteShiftAction} className="mt-1">
+          <input type="hidden" name="shiftId" value={shift.id} />
+          <button type="submit" className="text-[10px] text-destructive hover:underline">
+            Remove
+          </button>
+        </form>
+      )}
     </div>
   );
 }
@@ -74,9 +88,11 @@ function ShiftCard({ shift }: { shift: ShiftRow }) {
 export function WeeklyScheduleBoard({
   weekStartIso,
   shifts,
+  canManage = true,
 }: {
   weekStartIso: string;
   shifts: ShiftRow[];
+  canManage?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
@@ -97,6 +113,7 @@ export function WeeklyScheduleBoard({
   }
 
   function onDragEnd(event: DragEndEvent) {
+    if (!canManage) return;
     const { active, over } = event;
     if (!over) return;
     const shiftId = String(active.id);
@@ -119,7 +136,7 @@ export function WeeklyScheduleBoard({
         {days.map((day, idx) => (
           <DropDay key={day} day={day} label={`${DAY_LABELS[idx]} · ${day.slice(5)}`}>
             {(byDay.get(day) ?? []).map((s) => (
-              <ShiftCard key={s.id} shift={s} />
+              <ShiftCard key={s.id} shift={s} canManage={canManage} />
             ))}
           </DropDay>
         ))}

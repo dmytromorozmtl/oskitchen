@@ -3,6 +3,8 @@ import Link from "next/link";
 import { createShiftAction } from "@/actions/labor/schedule";
 import { WeeklyScheduleBoard } from "@/components/dashboard/staff/weekly-schedule-board";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import {
@@ -17,7 +19,9 @@ export default async function StaffSchedulePage({
   searchParams: Promise<{ week?: string }>;
 }) {
   const { week: weekParam } = await searchParams;
-  const { userId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { userId } = actor;
+  const canManageSchedule = hasPermission(actor.granted, "schedule.manage");
   const weekStart = weekParam ? new Date(weekParam) : weekStartMonday();
   weekStart.setHours(0, 0, 0, 0);
 
@@ -102,6 +106,14 @@ export default async function StaffSchedulePage({
         </Card>
       )}
 
+      {!canManageSchedule && (
+        <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          You can view this schedule but cannot add, move, or remove shifts without{" "}
+          <span className="font-medium text-foreground">schedule.manage</span>.
+        </p>
+      )}
+
+      {canManageSchedule && (
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Add shift</CardTitle>
@@ -134,8 +146,13 @@ export default async function StaffSchedulePage({
           </form>
         </CardContent>
       </Card>
+      )}
 
-      <WeeklyScheduleBoard weekStartIso={weekStart.toISOString()} shifts={shiftRows} />
+      <WeeklyScheduleBoard
+        weekStartIso={weekStart.toISOString()}
+        shifts={shiftRows}
+        canManage={canManageSchedule}
+      />
     </div>
   );
 }

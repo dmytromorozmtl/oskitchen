@@ -1,6 +1,7 @@
 import { clockInAction, clockOutAction } from "@/actions/labor/time-clock";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import {
   getActiveEntries,
@@ -8,7 +9,9 @@ import {
 } from "@/services/labor/time-clock-service";
 
 export default async function TimeClockPage() {
-  const { userId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { userId } = actor;
+  const canManageTimeClock = hasPermission(actor.granted, "timeclock.manage");
   const [active, today, staff] = await Promise.all([
     getActiveEntries(userId),
     getTodayTimeEntries(userId),
@@ -46,6 +49,14 @@ export default async function TimeClockPage() {
         </Card>
       </div>
 
+      {!canManageTimeClock && (
+        <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          You can review time entries but cannot clock staff in or out without{" "}
+          <span className="font-medium text-foreground">timeclock.manage</span>.
+        </p>
+      )}
+
+      {canManageTimeClock && (
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Clock in</CardTitle>
@@ -67,6 +78,7 @@ export default async function TimeClockPage() {
           </form>
         </CardContent>
       </Card>
+      )}
 
       <Card>
         <CardHeader>
@@ -85,12 +97,14 @@ export default async function TimeClockPage() {
                     Since {e.clockIn.toLocaleTimeString()} · {e.status}
                   </p>
                 </div>
-                <form action={clockOutAction}>
-                  <input type="hidden" name="entryId" value={e.id} />
-                  <button type="submit" className="rounded-md border px-3 py-1.5 text-sm">
-                    Clock out
-                  </button>
-                </form>
+                {canManageTimeClock ? (
+                  <form action={clockOutAction}>
+                    <input type="hidden" name="entryId" value={e.id} />
+                    <button type="submit" className="rounded-md border px-3 py-1.5 text-sm">
+                      Clock out
+                    </button>
+                  </form>
+                ) : null}
               </div>
             ))
           )}

@@ -176,7 +176,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: aligns workforce and operations
 - Technical value: reduces permission sprawl
 - User story: as an owner, I need staff roles to govern what people can actually do
-- Current state: staff and training permissions are domain-specific
+- Current state: **in progress** — `schedule.manage` and `timeclock.manage` in registry; labor schedule/time-clock actions + UI gated; `staff:manage` capability maps to schedule/timeclock; denial audit `labor.permission_denied`
 - Target state: staff roles map directly to canonical capabilities
 - Affected files: `actions/staff.ts`, `actions/training.ts`, `lib/staff/**`, `lib/training/**`
 - Dependencies: `KOS-P0-001`

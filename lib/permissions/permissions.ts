@@ -44,6 +44,8 @@ export const PERMISSIONS = {
   "storefront.publish": "Publish storefront theme and pages live",
   "storefront.media.manage": "Upload and delete storefront media assets",
   "staff.manage": "Invite and manage staff",
+  "schedule.manage": "Create and edit labor schedules",
+  "timeclock.manage": "Clock staff in and out on the time clock",
   "growth.view": "View growth / beta surfaces",
 } as const;
 
@@ -93,6 +95,8 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "storefront.publish",
   "storefront.media.manage",
   "staff.manage",
+  "schedule.manage",
+  "timeclock.manage",
   "growth.view",
 ];
 
