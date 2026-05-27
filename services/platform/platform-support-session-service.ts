@@ -6,7 +6,6 @@ import {
   PLATFORM_SUPPORT_SESSION_EXPIRED,
   PLATFORM_SUPPORT_SESSION_STARTED,
 } from "@/lib/audit/support-session-audit-actions";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { prisma } from "@/lib/prisma";
 import { auditLog } from "@/services/audit/audit-service";
@@ -40,7 +39,6 @@ export async function isWorkspaceOwnerSuperAdminProtected(workspaceId: string): 
     },
   });
   if (!ws?.owner) return false;
-  if (isSuperAdminEmail(ws.owner.email)) return true;
   return hasSuperAdminRoleRow(ws.owner.id);
 }
 
@@ -159,8 +157,12 @@ export async function startPlatformSupportSession(input: {
   if (!ws) return { ok: false, error: "Workspace not found." };
 
   if (await isWorkspaceOwnerSuperAdminProtected(ws.id)) {
-    if (!isSuperAdminEmail(input.actorEmail)) {
-      return { ok: false, error: "Founder-protected workspace — only the platform founder can start a support session." };
+    if (!(await hasSuperAdminRoleRow(input.actorUserId))) {
+      return {
+        ok: false,
+        error:
+          "Platform superadmin-protected workspace — only a user with the SUPER_ADMIN platform role can start a support session.",
+      };
     }
   }
 
