@@ -7,7 +7,8 @@ import {
 } from "@/lib/billing/entitlements";
 import type { PlanKey } from "@/lib/billing/plan-registry";
 import { limitForMetric, USAGE_METRICS, type UsageMetric } from "@/lib/billing/usage-limits";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { ensurePlatformOwnerBootstrap } from "@/lib/platform-admin";
+import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { entitlementOverrideListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -52,7 +53,8 @@ export async function entitlementSnapshot(userId: string): Promise<EntitlementSn
   const rows = await prisma.entitlementOverride.findMany({ where: overrideWhere });
 
   const plan = sub.plan as PlanKey;
-  const superadmin = isSuperAdminEmail(profile?.email ?? null);
+  await ensurePlatformOwnerBootstrap(userId, profile?.email ?? null);
+  const superadmin = await hasSuperAdminRoleRow(userId);
   const now = Date.now();
 
   const overrideMap: Partial<Record<FeatureFlag, boolean>> = {};

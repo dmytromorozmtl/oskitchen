@@ -5,6 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
 import { requireUserProfile } from "@/lib/auth";
+import { requireOrderCreateAccess } from "@/lib/orders/order-create-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 
 import { safeError } from "@/lib/security";
@@ -25,18 +26,13 @@ function parsePayload(formData: FormData) {
   }
 }
 
-function canCreateOrder(role: string | null | undefined, email: string | null | undefined): boolean {
-  if ((email ?? "").trim().toLowerCase() === "workspace.moroz@gmail.com") return true;
-  const r = (role ?? "").toLowerCase();
-  return r === "owner" || r === "admin" || r === "manager" || r === "customer_service" || r === "catering_sales";
-}
-
 export async function createOrderViaCenterAction(formData: FormData): Promise<OrderCreateActionResult> {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const { dataUserId } = await requireTenantActor();
     const profile = await requireUserProfile();
-    if (!canCreateOrder(profile.role ?? null, profile.email ?? null)) {
-      return { ok: false, error: "You do not have permission to create orders." };
+    const orderAccess = await requireOrderCreateAccess({ operation: "orders.create" });
+    if (!orderAccess.ok) {
+      return { ok: false, error: orderAccess.error };
     }
 
     const raw = parsePayload(formData);

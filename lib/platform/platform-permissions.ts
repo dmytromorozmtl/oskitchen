@@ -1,7 +1,5 @@
 import type { PlatformRole } from "@prisma/client";
 
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 /** Fine-grained internal permissions (string keys for policy engine). */
 export type PlatformPermission =
   | "platform:access"
@@ -96,13 +94,11 @@ function addAll(set: Set<PlatformPermission>, list: readonly PlatformPermission[
   for (const p of list) set.add(p);
 }
 
-/** Union permissions for all assigned Prisma platform roles + founder bypass. */
+/** Union permissions for all assigned Prisma platform roles. */
 export function resolvePlatformPermissions(
-  email: string | null | undefined,
+  _email: string | null | undefined,
   roles: readonly PlatformRole[],
 ): Set<PlatformPermission> {
-  if (isSuperAdminEmail(email)) return new Set(ALL);
-
   const set = new Set<PlatformPermission>();
   if (roles.includes("SUPER_ADMIN")) {
     addAll(set, ALL);

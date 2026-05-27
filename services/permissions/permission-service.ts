@@ -1,6 +1,5 @@
 import type { StaffRoleType, UserRole } from "@prisma/client";
 
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { defaultPermissionsForWorkspaceRole } from "@/lib/permissions/permissions";
 import { workspacePermissionsFromStaffTemplate } from "@/lib/permissions/staff-template-workspace-permissions";
@@ -15,7 +14,7 @@ export type PermissionContext = {
 };
 
 export function resolveWorkspacePermissions(ctx: PermissionContext): Set<PermissionKey> {
-  if (ctx.platformBypass || isSuperAdminEmail(ctx.email)) {
+  if (ctx.platformBypass) {
     return new Set(defaultPermissionsForWorkspaceRole("OWNER"));
   }
   if (ctx.workspaceRole === "OWNER") {

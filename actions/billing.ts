@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireUserProfile } from "@/lib/auth";
-import { canAssignBillingMode } from "@/lib/auth/is-superadmin";
+import { requireSuperAdminActor } from "@/lib/auth/is-superadmin";
 import type { BillingCapability } from "@/lib/billing/billing-permissions";
 import { requireBillingActor } from "@/lib/billing/require-billing-actor";
 import { FEATURE_FLAGS } from "@/lib/billing/entitlements";
@@ -25,11 +25,8 @@ async function gate(cap: BillingCapability) {
 
 async function gateBillingModeAssign() {
   const { userId } = await requireTenantActor();
+  await requireSuperAdminActor();
   const profile = await requireUserProfile();
-  const scope = { role: profile.role ?? null, email: profile.email ?? null };
-  if (!canAssignBillingMode(scope)) {
-    throw new Error("Unauthorized: superadmin required to assign plan or billing mode.");
-  }
   return { userId, profileId: profile.id };
 }
 

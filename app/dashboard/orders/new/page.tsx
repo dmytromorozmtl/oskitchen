@@ -1,5 +1,6 @@
 import { OrderCenter, type CenterCustomer, type CenterProduct } from "@/components/dashboard/orders/order-center";
 import { requireUserProfile } from "@/lib/auth";
+import { canAccessOrderCreatePage } from "@/lib/orders/order-create-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { kitchenCustomerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
 import {
@@ -8,17 +9,11 @@ import {
 } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
-function canCreateOrder(role: string | null | undefined, email: string | null | undefined): boolean {
-  if ((email ?? "").trim().toLowerCase() === "workspace.moroz@gmail.com") return true;
-  const r = (role ?? "").toLowerCase();
-  return r === "owner" || r === "admin" || r === "manager" || r === "customer_service" || r === "catering_sales";
-}
-
 export default async function NewOrderPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const profile = await requireUserProfile();
+  const { dataUserId } = await getTenantActor();
+  await requireUserProfile();
 
-  const allowed = canCreateOrder(profile.role ?? null, profile.email ?? null);
+  const allowed = await canAccessOrderCreatePage();
   if (!allowed) {
     return (
       <div className="mx-auto max-w-2xl rounded-2xl border border-dashed bg-muted/30 p-8 text-sm text-muted-foreground">

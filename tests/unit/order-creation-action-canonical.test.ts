@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const revalidatePath = vi.hoisted(() => vi.fn());
 const requireTenantActor = vi.hoisted(() => vi.fn());
 const requireUserProfile = vi.hoisted(() => vi.fn());
+const requireMutationPermission = vi.hoisted(() => vi.fn());
 const createOrderViaCenter = vi.hoisted(() => vi.fn());
 
 vi.mock("next/cache", () => ({ revalidatePath }));
 vi.mock("@/lib/scope/require-tenant-actor", () => ({ requireTenantActor }));
 vi.mock("@/lib/auth", () => ({ requireUserProfile }));
+vi.mock("@/lib/permissions/mutation-access", () => ({ requireMutationPermission }));
 vi.mock("@/services/orders/order-creation-service", () => ({
   createOrderViaCenter,
 }));
@@ -25,6 +27,19 @@ describe("createOrderViaCenterAction", () => {
       id: "profile-1",
       role: "OWNER",
       email: "owner@example.com",
+    });
+    requireMutationPermission.mockResolvedValue({
+      ok: true,
+      actor: {
+        sessionUserId: "session-user",
+        userId: "owner-1",
+        dataUserId: "owner-1",
+        workspaceId: "ws-1",
+        workspaceRole: "OWNER",
+        staffRoleType: null,
+        email: "owner@example.com",
+        granted: new Set(["orders.manage"]),
+      },
     });
   });
 

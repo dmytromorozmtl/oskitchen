@@ -4,6 +4,8 @@ import { z } from "zod";
 
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireStorefrontPublishActor } from "@/lib/storefront/require-storefront-actor";
 import { publishStorefrontThemeSnapshot } from "@/services/storefront/storefront-theme-publish-service";
 
 const bodySchema = z.object({
@@ -12,7 +14,7 @@ const bodySchema = z.object({
 
 /**
  * Programmatic theme publish (dashboard also uses publishStorefrontThemeFormAction).
- * Requires authenticated owner; experiment gates apply when enabled.
+ * Requires `storefront.publish`; tenant-scoped via resolved owner userId.
  */
 export async function POST(request: Request) {
   const user = await getSessionUser();
@@ -28,14 +30,27 @@ export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
+  const publishAccess = await requireStorefrontPublishActor({
+    operation: "storefront.theme_publish_api",
+    metadata: {
+      route: "/api/storefront/theme/publish",
+      storefrontId: parsed.data.storefrontId,
+    },
+  });
+  if (!publishAccess.ok) {
+    return NextResponse.json({ error: publishAccess.error }, { status: 403 });
+  }
+
+  const { userId: dataUserId } = await requireTenantActor();
+
   const owned = await prisma.storefrontSettings.findFirst({
-    where: { id: parsed.data.storefrontId, userId: user.id },
+    where: { id: parsed.data.storefrontId, userId: dataUserId },
     select: { id: true, storeSlug: true },
   });
   if (!owned) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const res = await publishStorefrontThemeSnapshot({
-    userId: user.id,
+    userId: dataUserId,
     storefrontId: owned.id,
   });
 

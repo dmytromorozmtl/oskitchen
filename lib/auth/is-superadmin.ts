@@ -1,15 +1,19 @@
 import { requireSessionUser } from "@/lib/auth";
+import { ensurePlatformOwnerBootstrap } from "@/lib/platform-admin";
 import { isSuperAdminEmail } from "@/lib/platform-owner";
-import { isSuperAdminUser } from "@/lib/platform-super-bypass";
+import { hasSuperAdminRoleRow, isSuperAdminUser } from "@/lib/platform-super-bypass";
 
 export { canAssignBillingMode } from "@/lib/billing/billing-permissions";
-export { isSuperAdminEmail } from "@/lib/platform-owner";
+export { isSuperAdminEmail, isBootstrapPlatformRootEmail, PLATFORM_ROOT_EMAIL } from "@/lib/platform-owner";
 export { hasSuperAdminRoleRow, isSuperAdminUser } from "@/lib/platform-super-bypass";
 
-/** Sync check for UI gates (email match; use async `isSuperAdminUser` for SUPER_ADMIN role row). */
+/**
+ * Sync UI helper — does not grant access from bootstrap email alone.
+ * Prefer async `isSuperAdminUser` / `hasSuperAdminRoleRow` for server gates.
+ */
 export function isSuperAdmin(scope: { email?: string | null } | null | undefined): boolean {
-  if (!scope) return false;
-  return isSuperAdminEmail(scope.email);
+  void scope;
+  return false;
 }
 
 /**
@@ -21,6 +25,7 @@ export async function requireSuperAdminActor(): Promise<{
   email: string | null;
 }> {
   const user = await requireSessionUser();
+  await ensurePlatformOwnerBootstrap(user.id, user.email);
   const ok = await isSuperAdminUser(user.id, user.email);
   if (!ok) {
     throw new Error("Unauthorized: superadmin role required");

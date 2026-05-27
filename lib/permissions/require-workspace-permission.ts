@@ -5,7 +5,8 @@ import { requireTenantActor, type TenantActor } from "@/lib/scope/require-tenant
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { resolveWorkspacePermissions, type PermissionContext } from "@/services/permissions/permission-service";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { ensurePlatformOwnerBootstrap } from "@/lib/platform-admin";
+import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 
 export type WorkspacePermissionActor = TenantActor & {
   workspaceRole: UserRole;
@@ -31,11 +32,13 @@ export async function requireWorkspacePermissionActor(): Promise<WorkspacePermis
     },
     select: { roleType: true },
   });
+  await ensurePlatformOwnerBootstrap(tenant.sessionUser.id, email);
+  const platformBypass = await hasSuperAdminRoleRow(tenant.sessionUser.id);
   const ctx: PermissionContext = {
     userId: tenant.userId,
     email,
     workspaceRole,
-    platformBypass: isSuperAdminEmail(email),
+    platformBypass,
     staffRoleType: staffMember?.roleType ?? null,
   };
   return {

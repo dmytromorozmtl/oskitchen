@@ -1,4 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 
@@ -62,8 +61,8 @@ export function canAssignBillingMode(scope: BillingActorScope): boolean {
   return isSuperAdminBilling(scope);
 }
 
-export function isSuperAdminBilling(scope: BillingActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+export function isSuperAdminBilling(_scope: BillingActorScope): boolean {
+  return false;
 }
 
 export function canUseBilling(

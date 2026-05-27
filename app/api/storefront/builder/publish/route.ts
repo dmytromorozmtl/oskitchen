@@ -4,12 +4,15 @@ import { z } from "zod";
 
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireStorefrontPublishActor } from "@/lib/storefront/require-storefront-actor";
 import { publishStorefrontHomeLayout } from "@/services/storefront/storefront-page-builder-publish-service";
 
 const bodySchema = z.object({
   storefrontId: z.string().uuid(),
 });
 
+/** Programmatic home layout publish from the page builder. Requires `storefront.publish`. */
 export async function POST(request: Request) {
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -24,26 +27,34 @@ export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
+  const publishAccess = await requireStorefrontPublishActor({
+    operation: "storefront.builder_publish_api",
+    metadata: {
+      route: "/api/storefront/builder/publish",
+      storefrontId: parsed.data.storefrontId,
+    },
+  });
+  if (!publishAccess.ok) {
+    return NextResponse.json({ error: publishAccess.error }, { status: 403 });
+  }
+
+  const { userId: dataUserId } = await requireTenantActor();
+
   const owned = await prisma.storefrontSettings.findFirst({
-    where: { id: parsed.data.storefrontId, userId: user.id },
-    select: { id: true },
+    where: { id: parsed.data.storefrontId, userId: dataUserId },
+    select: { id: true, storeSlug: true },
   });
   if (!owned) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const res = await publishStorefrontHomeLayout({
-    storefrontId: parsed.data.storefrontId,
-    userId: user.id,
+    storefrontId: owned.id,
+    userId: dataUserId,
   });
 
   if (!res.ok) return NextResponse.json({ error: res.error }, { status: 400 });
 
-  const sf = await prisma.storefrontSettings.findFirst({
-    where: { id: parsed.data.storefrontId, userId: user.id },
-    select: { storeSlug: true },
-  });
-
   revalidatePath("/dashboard/storefront/builder");
-  if (sf) revalidatePath(`/s/${sf.storeSlug}`);
+  revalidatePath(`/s/${owned.storeSlug}`);
 
   return NextResponse.json({ ok: true, publishedAt: res.publishedAt });
 }
