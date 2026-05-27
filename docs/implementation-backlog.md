@@ -124,7 +124,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: creates a coherent kitchen state machine
 - User story: as kitchen staff or expo, I need live ticket actions that are fast and permissioned
 - Current state: daily KDS fetch/bump/recall actions and the kitchen page enforce `kitchen.view` / `kitchen.bump` / `kitchen.recall`; production work-item transitions from the kitchen screen require `kitchen.bump` or `kitchen.expo.manage` (with `production.manage` fallback); station/mode configure UI requires `kitchen.configure`
-- Progress update: **`docs/kds-v1-scope.md` locked (Cycle 17–18)** — v1 certifies daily-service order-ticket bump/recall on unified spine; station routing, expo, item-level bump, offline, and hardware cert explicitly out; allergen UI + integration test deferred to Cycle 19–20; line cooks can bump to READY without `orders.manage`; recall to PREPARING uses `kitchen.recall` with audit; kitchen leads get recall/expo; managers/owners get configure; pack handoff requires expo permission; customer-service staff are denied kitchen view/bump in focused tests
+- Progress update: **KDS v1 prototype (Cycle 19–20)** — allergen conflict badge in `KdsDailyService`; `lib/kitchen/kds-v1-gate.ts` + `ENABLE_KDS_V1_CERTIFIED` for non-production rollout; integration `tests/integration/kds-daily-queue-bump.integration.test.ts`; CI scripts `test:ci:kds-v1:unit` / `:integration`; maturity `pilot_ready` (qualified) per `docs/kds-v1-scope.md`; **`docs/kds-v1-scope.md` locked (Cycle 17–18)**
 - Target state: canonical kitchen permissions and bump/recall/rush ticket workflow
 - Affected files: kitchen services, `actions/kitchen-daily-kds.ts`, future KDS UI shells
 - Dependencies: `KOS-P0-001`

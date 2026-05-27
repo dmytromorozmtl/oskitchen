@@ -4,6 +4,7 @@ import { KbHelpButton } from "@/components/dashboard/kb-help-button";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { KitchenScreenClient } from "@/components/dashboard/kitchen-screen-client";
 import { KdsDailyService } from "@/components/kitchen/kds-daily-service";
+import { isKdsV1CertifiedRolloutEnabled } from "@/lib/kitchen/kds-v1-gate";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
 import { getDailyKdsOrders } from "@/services/kitchen-screen/daily-kds-service";
@@ -46,6 +47,19 @@ export default async function KitchenScreenPage({
   const operatingMode = await getTenantOperatingMode(dataUserId);
 
   if (isDailyServiceMode(operatingMode)) {
+    if (!isKdsV1CertifiedRolloutEnabled()) {
+      return (
+        <div className="mx-auto max-w-xl space-y-4 py-10">
+          <PosAccessCard
+            title="KDS v1 pilot"
+            description="Daily-service kitchen display v1 is gated in non-production. Set ENABLE_KDS_V1_CERTIFIED=true to enable the certified ticket workflow in this environment."
+            primaryHref="/dashboard/today"
+            primaryLabel="Back to Today"
+          />
+        </div>
+      );
+    }
+
     const orders = await getDailyKdsOrders(dataUserId);
     return (
       <div className="p-4 md:p-6">

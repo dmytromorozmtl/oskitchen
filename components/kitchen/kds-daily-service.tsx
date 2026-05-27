@@ -213,20 +213,30 @@ export function KdsDailyService({
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {orders.map((order) => {
             const overdue = isOverdue(order.elapsedSeconds);
+            const allergenConflict = Boolean(order.hasAllergenConflict);
             return (
             <div
               key={order.id}
               role="article"
-              aria-label={`Order ${order.customerName}${overdue ? ", overdue" : ""}`}
+              aria-label={`Order ${order.customerName}${allergenConflict ? ", allergen conflict" : ""}${overdue ? ", overdue" : ""}`}
               className={cn(
                 "rounded-xl border-l-4 bg-card p-4 shadow-sm transition-all",
                 getColor(order.elapsedSeconds),
+                allergenConflict && "ring-2 ring-violet-600 dark:ring-violet-400",
                 overdue && "ring-2 ring-rose-500 animate-pulse motion-reduce:animate-none",
               )}
             >
               <div className="flex items-center justify-between mb-2 gap-2">
                 <span className="font-bold text-lg">{order.customerName}</span>
                 <div className="flex items-center gap-2 shrink-0">
+                  {allergenConflict ? (
+                    <span
+                      className="rounded-full bg-violet-700 px-2 py-0.5 text-xs font-bold text-white uppercase tracking-wide"
+                      role="status"
+                    >
+                      Allergy alert
+                    </span>
+                  ) : null}
                   {overdue ? (
                     <span className="rounded-full bg-rose-600 px-2 py-0.5 text-xs font-bold text-white uppercase tracking-wide">
                       Overdue

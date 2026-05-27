@@ -45,10 +45,9 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8. Kitchen / KDS (v1 scope)
 - canonical scope: `docs/kds-v1-scope.md`
-- unit: `tests/unit/kitchen-daily-kds-rbac.test.ts` (permission denials + bump/recall)
-- contract: `tests/contracts/kds-ticket.contract.test.ts` (extend in Cycle 19–20)
-- integration (Cycle 19–20): queue → bump → READY on Postgres
-- manual/staging: Supabase Realtime subscription smoke on `/dashboard/kitchen`
+- unit bundle: `npm run test:ci:kds-v1:unit` (RBAC + rollout gate + contract)
+- integration: `npm run test:ci:kds-v1:integration` (requires `RUN_DB_INTEGRATION=1` + Postgres)
+- manual/staging: Supabase Realtime subscription smoke on `/dashboard/kitchen`; non-prod needs `ENABLE_KDS_V1_CERTIFIED=true`
 - not required for v1: multi-station E2E, offline replay, hardware cert
 
 ### 9. Performance

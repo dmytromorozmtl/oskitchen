@@ -326,6 +326,8 @@
     "test:ci:pos-money-path:unit": "node ./node_modules/vitest/vitest.mjs run -c vitest.pos.config.ts tests/unit/pos-checkout-canonical.test.ts tests/unit/pos-terminal-checkout-lifecycle.test.ts tests/unit/actions-pos-rbac.test.ts",
     "test:ci:pos-money-path:integration": "node ./node_modules/vitest/vitest.mjs run tests/integration/order-entrypoint-pii.integration.test.ts -t \"POS checkout\"",
     "test:ci:pos-money-path:inventory": "node ./node_modules/vitest/vitest.mjs run tests/integration/pos-inventory-depletion.integration.test.ts",
+    "test:ci:kds-v1:unit": "node ./node_modules/vitest/vitest.mjs run tests/unit/kitchen-daily-kds-rbac.test.ts tests/unit/kds-v1-gate.test.ts tests/contracts/kds-ticket.contract.test.ts",
+    "test:ci:kds-v1:integration": "node ./node_modules/vitest/vitest.mjs run tests/integration/kds-daily-queue-bump.integration.test.ts",
     "test:ci:pos-money-path:e2e": "playwright test e2e/auth.setup.ts e2e/pos-checkout-flow.spec.ts --project=setup --project=chromium-authed",
     "test:e2e:storefront-stripe": "STOREFRONT_E2E_STRIPE=1 playwright test e2e/storefront-checkout-stripe.spec.ts",
     "test:e2e:storefront-policies": "playwright test e2e/storefront-policies.spec.ts",
