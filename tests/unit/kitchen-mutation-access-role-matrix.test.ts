@@ -10,7 +10,7 @@ vi.mock("@/lib/permissions/require-workspace-permission", () => ({
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 
-function actorFor(staffRoleType: "LINE_COOK" | "CUSTOMER_SERVICE") {
+function actorFor(staffRoleType: "LINE_COOK" | "KITCHEN_LEAD" | "CUSTOMER_SERVICE") {
   return {
     sessionUser: { id: "session-user-1" },
     sessionUserId: "session-user-1",
@@ -35,7 +35,30 @@ describe("kitchen mutation-access role matrix", () => {
 
     await expect(requireMutationPermission("kitchen.view")).resolves.toEqual({ ok: true, actor });
     await expect(requireMutationPermission("kitchen.bump")).resolves.toEqual({ ok: true, actor });
+    await expect(requireMutationPermission("kitchen.recall")).resolves.toEqual({
+      ok: false,
+      error: "You do not have permission to perform this action.",
+      actor,
+    });
+    await expect(requireMutationPermission("kitchen.expo.manage")).resolves.toEqual({
+      ok: false,
+      error: "You do not have permission to perform this action.",
+      actor,
+    });
     await expect(requireMutationPermission("orders.manage")).resolves.toEqual({
+      ok: false,
+      error: "You do not have permission to perform this action.",
+      actor,
+    });
+  });
+
+  it("grants kitchen leads recall and expo without configure", async () => {
+    const actor = actorFor("KITCHEN_LEAD");
+    requireWorkspacePermissionActor.mockResolvedValue(actor);
+
+    await expect(requireMutationPermission("kitchen.recall")).resolves.toEqual({ ok: true, actor });
+    await expect(requireMutationPermission("kitchen.expo.manage")).resolves.toEqual({ ok: true, actor });
+    await expect(requireMutationPermission("kitchen.configure")).resolves.toEqual({
       ok: false,
       error: "You do not have permission to perform this action.",
       actor,

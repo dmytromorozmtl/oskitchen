@@ -8,7 +8,10 @@ import { redirect } from "next/navigation";
 import { format } from "date-fns";
 import { z } from "zod";
 
+import { kitchenPermissionForWorkStatus } from "@/lib/kitchen/kitchen-work-status-permission";
+import { requireKitchenMutationAccess } from "@/lib/kitchen/require-kitchen-mutation-access";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { logKitchenPermissionDenied } from "@/services/kitchen/kitchen-permission-audit";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { recordAuditLog } from "@/lib/audit-log";
 import { productListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -131,13 +134,24 @@ export async function generateProductionOrdersFormAction(formData: FormData): Pr
 }
 
 export async function updateProductionWorkItemStatusFormAction(formData: FormData): Promise<void> {
-  const access = await requireMutationPermission("production.manage");
-  if (!access.ok) return;
+  const next = String(formData.get("status") ?? "").trim();
+  const parsedStatus = workStatusSchema.safeParse(next);
+  const requiredKitchen = parsedStatus.success
+    ? kitchenPermissionForWorkStatus(parsedStatus.data as ProductionWorkStatus)
+    : "kitchen.bump";
+  const access = await requireKitchenMutationAccess(requiredKitchen);
+  if (!access.ok) {
+    await logKitchenPermissionDenied(access.actor, {
+      requiredPermission: requiredKitchen,
+      operation: "kitchen.update_work_item_status",
+      metadata: parsedStatus.success ? { status: parsedStatus.data } : undefined,
+    });
+    return;
+  }
   const { sessionUser: user, userId } = access.actor;
   const id = String(formData.get("workItemId") ?? "").trim();
-  const next = String(formData.get("status") ?? "").trim();
   const appendNote = String(formData.get("appendNote") ?? "").trim();
-  const parsed = workStatusSchema.safeParse(next);
+  const parsed = parsedStatus;
   if (!id || !parsed.success) return;
 
   const item = await prisma.productionWorkItem.findFirst({
@@ -206,8 +220,14 @@ export async function updateProductionWorkItemStatusFormAction(formData: FormDat
 }
 
 export async function assignProductionWorkItemStaffFormAction(formData: FormData): Promise<void> {
-  const access = await requireMutationPermission("production.manage");
-  if (!access.ok) return;
+  const access = await requireKitchenMutationAccess("kitchen.expo.manage");
+  if (!access.ok) {
+    await logKitchenPermissionDenied(access.actor, {
+      requiredPermission: "kitchen.expo.manage",
+      operation: "kitchen.assign_work_item_staff",
+    });
+    return;
+  }
   const { sessionUser: user, userId } = access.actor;
   const workItemId = String(formData.get("workItemId") ?? "").trim();
   const staffRaw = String(formData.get("staffMemberId") ?? "").trim();

@@ -45,6 +45,29 @@ export async function logKitchenPermissionDenied(
   });
 }
 
+export async function logKitchenOrderRecalled(
+  actor: WorkspacePermissionActor,
+  input: {
+    orderId: string;
+    metadata?: Record<string, unknown>;
+  },
+): Promise<void> {
+  await auditLog({
+    workspaceId: actor.workspaceId,
+    actor: actorPayload(actor),
+    action: AUDIT_ACTIONS.KITCHEN_ORDER_RECALLED,
+    category: "ORDERS",
+    source: "USER",
+    severity: "INFO",
+    entity: { type: "Order", id: input.orderId, label: "KDS recall to PREPARING" },
+    metadata: {
+      targetStatus: "PREPARING",
+      ...input.metadata,
+    },
+    maskPiiInMetadata: true,
+  });
+}
+
 export async function logKitchenOrderBumped(
   actor: WorkspacePermissionActor,
   input: {

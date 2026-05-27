@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
-import { bumpDailyKdsOrderAction, fetchDailyKdsOrdersAction } from "@/actions/kitchen-daily-kds";
+import {
+  bumpDailyKdsOrderAction,
+  fetchDailyKdsOrdersAction,
+  recallDailyKdsOrderAction,
+} from "@/actions/kitchen-daily-kds";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -74,9 +78,13 @@ function formatTime(seconds: number): string {
 export function KdsDailyService({
   initialOrders,
   userId,
+  canBump = true,
+  canRecall = false,
 }: {
   initialOrders: KdsDailyOrder[];
   userId: string;
+  canBump?: boolean;
+  canRecall?: boolean;
 }) {
   const [orders, setOrders] = useState(initialOrders);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -151,7 +159,22 @@ export function KdsDailyService({
   function handleBump(orderId: string) {
     startBump(async () => {
       const res = await bumpDailyKdsOrderAction(orderId);
-      if (res.ok) setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      if (res.ok) {
+        setOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, status: "READY" } : o)),
+        );
+      }
+    });
+  }
+
+  function handleRecall(orderId: string) {
+    startBump(async () => {
+      const res = await recallDailyKdsOrderAction(orderId);
+      if (res.ok) {
+        setOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, status: "PREPARING" } : o)),
+        );
+      }
     });
   }
 
@@ -224,15 +247,27 @@ export function KdsDailyService({
                   </span>
                 ))}
               </div>
-              <button
-                type="button"
-                disabled={pending}
-                onClick={() => handleBump(order.id)}
-                aria-label={`Mark order ${order.customerName} ready and remove from KDS`}
-                className="w-full min-h-11 rounded-xl bg-emerald-600 px-4 py-3 text-white font-bold text-base hover:bg-emerald-700 active:scale-95 transition-all disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
-              >
-                BUMP — Ready!
-              </button>
+              {order.status === "READY" && canRecall ? (
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() => handleRecall(order.id)}
+                  aria-label={`Recall order ${order.customerName} to prep`}
+                  className="w-full min-h-11 rounded-xl bg-amber-600 px-4 py-3 text-white font-bold text-base hover:bg-amber-700 active:scale-95 transition-all disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+                >
+                  Recall to prep
+                </button>
+              ) : canBump && order.status !== "READY" ? (
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() => handleBump(order.id)}
+                  aria-label={`Mark order ${order.customerName} ready`}
+                  className="w-full min-h-11 rounded-xl bg-emerald-600 px-4 py-3 text-white font-bold text-base hover:bg-emerald-700 active:scale-95 transition-all disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
+                >
+                  BUMP — Ready!
+                </button>
+              ) : null}
             </div>
             );
           })}

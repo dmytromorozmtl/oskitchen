@@ -14,6 +14,7 @@ import {
 } from "@/lib/kitchen-screen/kitchen-screen-filters";
 import type { KitchenScreenMode } from "@/lib/kitchen-screen/kitchen-screen-types";
 import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
@@ -51,7 +52,12 @@ export default async function KitchenScreenPage({
         <div className="mb-2 flex justify-end">
           <KbHelpButton articleSlug="kds" title="KDS Basics" description="Kitchen display setup and bump workflow." />
         </div>
-        <KdsDailyService initialOrders={orders} userId={dataUserId} />
+        <KdsDailyService
+          initialOrders={orders}
+          userId={dataUserId}
+          canBump={hasPermission(actor.granted, "kitchen.bump")}
+          canRecall={hasPermission(actor.granted, "kitchen.recall")}
+        />
       </div>
     );
   }
@@ -77,6 +83,16 @@ export default async function KitchenScreenPage({
   const initialFullscreen = sp.fullscreen === "1";
   const initialCardSize = normalizeKitchenCardSize(sp.card);
 
+  const kitchenUiPermissions: Pick<
+    Record<PermissionKey, boolean>,
+    "kitchen.bump" | "kitchen.recall" | "kitchen.configure" | "kitchen.expo.manage"
+  > = {
+    "kitchen.bump": hasPermission(actor.granted, "kitchen.bump"),
+    "kitchen.recall": hasPermission(actor.granted, "kitchen.recall"),
+    "kitchen.configure": hasPermission(actor.granted, "kitchen.configure"),
+    "kitchen.expo.manage": hasPermission(actor.granted, "kitchen.expo.manage"),
+  };
+
   return (
     <Suspense fallback={<div className="p-8 text-muted-foreground">Loading kitchen…</div>}>
       <KitchenScreenClient
@@ -85,6 +101,7 @@ export default async function KitchenScreenPage({
         initialMode={initialMode}
         initialFullscreen={initialFullscreen}
         initialCardSize={initialCardSize}
+        kitchenPermissions={kitchenUiPermissions}
       />
     </Suspense>
   );

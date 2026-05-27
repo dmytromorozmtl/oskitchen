@@ -123,8 +123,8 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: moves KDS toward restaurant-grade usage
 - Technical value: creates a coherent kitchen state machine
 - User story: as kitchen staff or expo, I need live ticket actions that are fast and permissioned
-- Current state: daily KDS fetch/bump actions and the kitchen page now enforce `kitchen.view` / `kitchen.bump` with denial/bump audit events; recall/configure/expo permissions and broader kitchen-screen parity remain open
-- Progress update: line cooks can bump to READY without `orders.manage`; customer-service staff are denied kitchen view/bump in focused tests
+- Current state: daily KDS fetch/bump/recall actions and the kitchen page enforce `kitchen.view` / `kitchen.bump` / `kitchen.recall`; production work-item transitions from the kitchen screen require `kitchen.bump` or `kitchen.expo.manage` (with `production.manage` fallback); station/mode configure UI requires `kitchen.configure`
+- Progress update: line cooks can bump to READY without `orders.manage`; recall to PREPARING uses `kitchen.recall` with audit; kitchen leads get recall/expo; managers/owners get configure; pack handoff requires expo permission; customer-service staff are denied kitchen view/bump in focused tests
 - Target state: canonical kitchen permissions and bump/recall/rush ticket workflow
 - Affected files: kitchen services, `actions/kitchen-daily-kds.ts`, future KDS UI shells
 - Dependencies: `KOS-P0-001`

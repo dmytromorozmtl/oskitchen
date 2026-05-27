@@ -37,6 +37,7 @@ import type {
   KitchenScreenMode,
   KitchenWorkRowDTO,
 } from "@/lib/kitchen-screen/kitchen-screen-types";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { isWorkLate } from "@/lib/production/production-status";
 import { PRODUCTION_PRIORITY_LABEL } from "@/lib/production/production-priority";
 import { PRODUCTION_WORK_STATUS_LABEL } from "@/lib/production/production-status";
@@ -116,18 +117,25 @@ function KitchenEmpty({
   return null;
 }
 
+export type KitchenUiPermissions = Pick<
+  Record<PermissionKey, boolean>,
+  "kitchen.bump" | "kitchen.recall" | "kitchen.configure" | "kitchen.expo.manage"
+>;
+
 export function KitchenScreenClient({
   bundle,
   initialStation,
   initialMode,
   initialFullscreen,
   initialCardSize,
+  kitchenPermissions,
 }: {
   bundle: KitchenScreenBundleDTO;
   initialStation: string | null;
   initialMode: KitchenScreenMode;
   initialFullscreen: boolean;
   initialCardSize: "large" | "compact";
+  kitchenPermissions: KitchenUiPermissions;
 }) {
   const router = useRouter();
   const sp = useSearchParams();
@@ -257,7 +265,11 @@ export function KitchenScreenClient({
                 size="lg"
                 variant={active ? "premium" : "outline"}
                 className="min-h-11 shrink-0 rounded-xl"
-                onClick={() => pushQuery({ station: tab.slug === "all" ? null : tab.slug })}
+                disabled={!kitchenPermissions["kitchen.configure"]}
+                onClick={() => {
+                  if (!kitchenPermissions["kitchen.configure"]) return;
+                  pushQuery({ station: tab.slug === "all" ? null : tab.slug });
+                }}
               >
                 {tab.label}
                 <span className="ml-2 tabular-nums opacity-80">({count})</span>
@@ -265,7 +277,14 @@ export function KitchenScreenClient({
             );
           })}
         </div>
-        <Select value={mode} onValueChange={(v) => pushQuery({ mode: normalizeKitchenScreenMode(v) })}>
+        <Select
+          value={mode}
+          disabled={!kitchenPermissions["kitchen.configure"]}
+          onValueChange={(v) => {
+            if (!kitchenPermissions["kitchen.configure"]) return;
+            pushQuery({ mode: normalizeKitchenScreenMode(v) });
+          }}
+        >
           <SelectTrigger className="min-h-11 w-[220px] rounded-xl text-base">
             <SelectValue placeholder="Mode" />
           </SelectTrigger>
@@ -307,6 +326,7 @@ export function KitchenScreenClient({
             isPending={isPending}
             startTransition={startTransition}
             routerRefresh={refresh}
+            kitchenPermissions={kitchenPermissions}
           />
         ))}
       </div>
@@ -359,6 +379,7 @@ function KitchenWorkCard({
   isPending,
   startTransition,
   routerRefresh,
+  kitchenPermissions,
 }: {
   w: KitchenWorkRowDTO;
   cardSize: "large" | "compact";
@@ -367,6 +388,7 @@ function KitchenWorkCard({
   isPending: boolean;
   startTransition: (fn: () => void) => void;
   routerRefresh: () => void;
+  kitchenPermissions: KitchenUiPermissions;
 }) {
   const late = w.dueAt ? isWorkLate(new Date(w.dueAt), w.status) : false;
   const actions = kitchenWorkItemActions(w.status);
@@ -452,7 +474,7 @@ function KitchenWorkCard({
             id={`assign-${w.id}`}
             defaultValue={w.assignedToId ?? ""}
             className="min-h-11 min-w-[10rem] rounded-lg border border-input bg-background px-3 text-base"
-            disabled={isPending}
+            disabled={isPending || !kitchenPermissions["kitchen.expo.manage"]}
           >
             <option value="">Unassigned</option>
             {staffMembers.map((s) => (
@@ -461,13 +483,20 @@ function KitchenWorkCard({
               </option>
             ))}
           </select>
-          <Button type="button" variant="outline" size="lg" className="min-h-11 rounded-xl" disabled={isPending} onClick={() => {
-            const el = document.getElementById(`assign-${w.id}`) as HTMLSelectElement | null;
-            runAssign(el?.value ?? "");
-          }}>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="min-h-11 rounded-xl"
+            disabled={isPending || !kitchenPermissions["kitchen.expo.manage"]}
+            onClick={() => {
+              const el = document.getElementById(`assign-${w.id}`) as HTMLSelectElement | null;
+              runAssign(el?.value ?? "");
+            }}
+          >
             Save assign
           </Button>
-          {viewerStaffId ? (
+          {viewerStaffId && kitchenPermissions["kitchen.expo.manage"] ? (
             <Button type="button" size="lg" variant="secondary" className="min-h-11 rounded-xl" disabled={isPending} onClick={() => runAssign(viewerStaffId)}>
               Assign to me
             </Button>
@@ -475,22 +504,22 @@ function KitchenWorkCard({
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          {actions.start ? (
+          {actions.start && kitchenPermissions["kitchen.bump"] ? (
             <Button type="button" size="lg" className="min-h-14 min-w-[9rem] rounded-xl text-lg" disabled={isPending} onClick={() => runStatus("IN_PROGRESS")}>
               Start
             </Button>
           ) : null}
-          {actions.ready ? (
+          {actions.ready && kitchenPermissions["kitchen.bump"] ? (
             <Button type="button" size="lg" variant="outline" className="min-h-14 min-w-[9rem] rounded-xl text-lg" disabled={isPending} onClick={() => runStatus("READY")}>
               Mark ready
             </Button>
           ) : null}
-          {actions.resume ? (
+          {actions.resume && kitchenPermissions["kitchen.recall"] ? (
             <Button type="button" size="lg" variant="outline" className="min-h-14 min-w-[9rem] rounded-xl text-lg" disabled={isPending} onClick={() => runStatus("TO_PREP")}>
               Resume
             </Button>
           ) : null}
-          {actions.hold ? (
+          {actions.hold && kitchenPermissions["kitchen.bump"] ? (
             <div className="flex flex-wrap items-center gap-2">
               <select
                 className="min-h-12 rounded-lg border border-input bg-background px-3 text-base"
@@ -508,12 +537,12 @@ function KitchenWorkCard({
               </Button>
             </div>
           ) : null}
-          {w.requiresPacking && actions.packHandoff && w.status !== "DONE" ? (
+          {w.requiresPacking && actions.packHandoff && w.status !== "DONE" && kitchenPermissions["kitchen.expo.manage"] ? (
             <Button type="button" size="lg" variant="secondary" className="min-h-14 min-w-[9rem] rounded-xl text-lg" disabled={isPending} onClick={() => runStatus("PACK_HANDOFF")}>
               Send to packing
             </Button>
           ) : null}
-          {actions.complete ? (
+          {actions.complete && kitchenPermissions["kitchen.bump"] ? (
             <Button type="button" size="lg" variant="premium" className="min-h-14 min-w-[9rem] rounded-xl text-lg" disabled={isPending} onClick={() => runStatus("DONE")}>
               {w.status === "PACK_HANDOFF" ? "Complete handoff" : "Complete"}
             </Button>

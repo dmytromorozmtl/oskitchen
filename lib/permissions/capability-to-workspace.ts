@@ -20,6 +20,13 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
   [CAPABILITY.productionRun]: ["workspace.view", "production.manage"],
   [CAPABILITY.kitchenView]: ["workspace.view", "kitchen.view"],
   [CAPABILITY.kitchenBump]: ["workspace.view", "kitchen.view", "kitchen.bump"],
+  [CAPABILITY.kitchenRecall]: ["workspace.view", "kitchen.view", "kitchen.recall"],
+  [CAPABILITY.kitchenConfigure]: ["workspace.view", "kitchen.view", "kitchen.configure"],
+  [CAPABILITY.kitchenExpoManage]: [
+    "workspace.view",
+    "kitchen.view",
+    "kitchen.expo.manage",
+  ],
   [CAPABILITY.packingVerify]: ["workspace.view", "packing.manage"],
   [CAPABILITY.routesAssign]: ["workspace.view", "routes.manage"],
   [CAPABILITY.inventoryRead]: ["workspace.view"],
