@@ -6,38 +6,38 @@ import { usePathname } from "next/navigation";
 const tabs = [
   { href: "/dashboard/storefront/launch", label: "Launch" },
   { href: "/dashboard/storefront/website", label: "Website" },
-  { href: "/dashboard/storefront/builder", label: "Builder" },
-  { href: "/dashboard/storefront/media", label: "Media" },
-  { href: "/dashboard/storefront/pages", label: "Pages" },
-  { href: "/dashboard/storefront/theme", label: "Theme" },
-  { href: "/dashboard/storefront/menu", label: "Menu" },
-  { href: "/dashboard/storefront/catalog", label: "Catalog" },
-  { href: "/dashboard/storefront/products", label: "Products" },
-  { href: "/dashboard/storefront/markets", label: "Markets" },
   { href: "/dashboard/storefront", label: "Overview" },
-  { href: "/dashboard/storefront/workspace", label: "Workspace" },
-  { href: "/dashboard/storefront/team", label: "Team" },
-  { href: "/dashboard/storefront/ordering", label: "Ordering" },
-  { href: "/dashboard/storefront/fulfillment", label: "Fulfillment" },
-  { href: "/dashboard/storefront/forms", label: "Forms" },
-  { href: "/dashboard/storefront/domains", label: "Domains" },
-  { href: "/dashboard/storefront/redirects", label: "Redirects" },
-  { href: "/dashboard/storefront/discounts", label: "Discounts" },
-  { href: "/dashboard/storefront/gift-cards", label: "Gift cards" },
-  { href: "/dashboard/storefront/loyalty", label: "Loyalty" },
-  { href: "/dashboard/storefront/cart-recovery", label: "Recovery" },
-  { href: "/dashboard/storefront/reservations", label: "Reservations" },
+  { href: "/dashboard/storefront/analytics", label: "Analytics" },
+  { href: "/dashboard/storefront/preview", label: "Preview" },
+  { href: "/dashboard/storefront/seo", label: "SEO" },
   { href: "/dashboard/storefront/marketing", label: "Marketing" },
   { href: "/dashboard/storefront/reviews", label: "Reviews" },
-  { href: "/dashboard/storefront/referrals", label: "Referrals" },
-  { href: "/dashboard/storefront/schedule", label: "Schedule" },
-  { href: "/dashboard/storefront/inventory", label: "Inventory" },
-  { href: "/dashboard/storefront/seo", label: "SEO" },
-  { href: "/dashboard/storefront/analytics", label: "Analytics" },
+  { href: "/dashboard/storefront/cart-recovery", label: "Recovery" },
   { href: "/dashboard/storefront/notifications", label: "Notifications" },
-  { href: "/dashboard/storefront/settings", label: "Settings" },
-  { href: "/dashboard/storefront/advanced", label: "Advanced" },
-  { href: "/dashboard/storefront/preview", label: "Preview" },
+  { href: "/dashboard/storefront/builder", label: "Builder", manageOnly: true },
+  { href: "/dashboard/storefront/media", label: "Media" },
+  { href: "/dashboard/storefront/pages", label: "Pages", manageOnly: true },
+  { href: "/dashboard/storefront/theme", label: "Theme", manageOnly: true },
+  { href: "/dashboard/storefront/menu", label: "Menu", manageOnly: true },
+  { href: "/dashboard/storefront/catalog", label: "Catalog", manageOnly: true },
+  { href: "/dashboard/storefront/products", label: "Products", manageOnly: true },
+  { href: "/dashboard/storefront/markets", label: "Markets", manageOnly: true },
+  { href: "/dashboard/storefront/workspace", label: "Workspace", manageOnly: true },
+  { href: "/dashboard/storefront/team", label: "Team", manageOnly: true },
+  { href: "/dashboard/storefront/ordering", label: "Ordering", manageOnly: true },
+  { href: "/dashboard/storefront/fulfillment", label: "Fulfillment", manageOnly: true },
+  { href: "/dashboard/storefront/forms", label: "Forms", manageOnly: true },
+  { href: "/dashboard/storefront/domains", label: "Domains", manageOnly: true },
+  { href: "/dashboard/storefront/redirects", label: "Redirects", manageOnly: true },
+  { href: "/dashboard/storefront/discounts", label: "Discounts", manageOnly: true },
+  { href: "/dashboard/storefront/gift-cards", label: "Gift cards", manageOnly: true },
+  { href: "/dashboard/storefront/loyalty", label: "Loyalty", manageOnly: true },
+  { href: "/dashboard/storefront/reservations", label: "Reservations", manageOnly: true },
+  { href: "/dashboard/storefront/referrals", label: "Referrals", manageOnly: true },
+  { href: "/dashboard/storefront/schedule", label: "Schedule", manageOnly: true },
+  { href: "/dashboard/storefront/inventory", label: "Inventory", manageOnly: true },
+  { href: "/dashboard/storefront/settings", label: "Settings", manageOnly: true },
+  { href: "/dashboard/storefront/advanced", label: "Advanced", manageOnly: true },
 ] as const;
 
 function tabActive(pathname: string, href: string): boolean {
@@ -47,12 +47,22 @@ function tabActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function StorefrontSubnav() {
+export function StorefrontSubnav({
+  canManage = true,
+}: {
+  canManage?: boolean;
+  canPublish?: boolean;
+  canManageMedia?: boolean;
+}) {
   const pathname = usePathname() ?? "";
+  const visible = tabs.filter((t) => !t.manageOnly || canManage);
 
   return (
-    <nav className="-mx-1 flex gap-2 overflow-x-auto border-b border-border/80 pb-3 text-sm" aria-label="Storefront sections">
-      {tabs.map((t) => {
+    <nav
+      className="-mx-1 flex gap-2 overflow-x-auto border-b border-border/80 pb-3 text-sm"
+      aria-label="Storefront sections"
+    >
+      {visible.map((t) => {
         const active = tabActive(pathname, t.href);
         return (
           <Link

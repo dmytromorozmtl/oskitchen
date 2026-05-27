@@ -23,6 +23,73 @@ export function canManageStorefrontDraftFromGranted(granted: ReadonlySet<Permiss
   return hasPermission(granted, "storefront.manage");
 }
 
+export function canViewStorefrontFromGranted(granted: ReadonlySet<PermissionKey>): boolean {
+  return (
+    hasPermission(granted, "storefront.read") ||
+    canManageStorefrontDraftFromGranted(granted) ||
+    canPublishStorefrontFromGranted(granted) ||
+    canManageStorefrontMediaFromGranted(granted)
+  );
+}
+
+export type StorefrontHubAccess = {
+  actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>;
+  canRead: boolean;
+  canManage: boolean;
+  canPublish: boolean;
+  canManageMedia: boolean;
+};
+
+export async function resolveStorefrontHubAccess(): Promise<StorefrontHubAccess> {
+  const actor = await requireWorkspacePermissionActor();
+  const { permissions } = await getStorefrontPermissionSetForUser(actor.sessionUserId);
+  const legacyCtx = { email: actor.email, workspaceGranted: actor.granted };
+  const canManage =
+    canManageStorefrontDraftFromGranted(actor.granted) ||
+    canStorefront(permissions, "storefront:edit-draft", legacyCtx);
+  const canPublish =
+    canPublishStorefrontFromGranted(actor.granted) ||
+    canStorefront(permissions, "storefront:publish", legacyCtx);
+  const canManageMedia =
+    canManageStorefrontMediaFromGranted(actor.granted) ||
+    canStorefront(permissions, "storefront:upload-assets", legacyCtx);
+  const canRead =
+    canViewStorefrontFromGranted(actor.granted) ||
+    canStorefront(permissions, "storefront:view", legacyCtx) ||
+    canManage ||
+    canPublish ||
+    canManageMedia;
+
+  return { actor, canRead, canManage, canPublish, canManageMedia };
+}
+
+export function storefrontReadDeniedCard(): ReactNode {
+  return createElement(PosAccessCard, {
+    title: "Storefront",
+    description: "You do not have permission to view storefront settings in this workspace.",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+  });
+}
+
+export async function requireStorefrontReadPage(input?: {
+  operation?: string;
+  route?: string;
+}):
+  | ({ ok: true } & StorefrontHubAccess)
+  | { ok: false; deny: ReactNode } {
+  const hub = await resolveStorefrontHubAccess();
+  if (!hub.canRead) {
+    await logStorefrontPermissionDenied(hub.actor, {
+      requiredPermission: "storefront.read",
+      operation: input?.operation ?? "storefront.page.read",
+      metadata: input?.route ? { route: input.route } : undefined,
+    });
+    return { ok: false, deny: storefrontReadDeniedCard() };
+  }
+  return { ok: true, ...hub };
+}
+
 export async function resolveStorefrontManageAccess(userId: string, email: string | null) {
   const actor = await requireWorkspacePermissionActor();
   const { permissions } = await getStorefrontPermissionSetForUser(userId);

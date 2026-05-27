@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { SITE_URL } from "@/lib/constants";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { resolveStorefrontHubAccess } from "@/lib/storefront/storefront-page-access";
 import { ensureCatalogMenu } from "@/lib/products/ensure-catalog-menu";
 import { allEditorLocalesForStorefront } from "@/lib/storefront/localized-content";
 import { computeStorefrontTranslationCoverage } from "@/lib/storefront/translation-coverage";
@@ -21,6 +22,7 @@ import { menuListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
 export default async function StorefrontAdminPage() {
+  const { canManage } = await resolveStorefrontHubAccess();
   const { sessionUser, userId } = await getTenantActor();
   await ensureCatalogMenu(userId);
   const menuWhere = await menuListWhereForOwner(userId);
@@ -209,12 +211,21 @@ export default async function StorefrontAdminPage() {
           <CardDescription>
             {publicUrl ? (
               <span className="font-mono text-xs break-all">{publicUrl}</span>
-            ) : (
+            ) : canManage ? (
               "Save settings to generate your public URL."
+            ) : (
+              "Storefront is not configured yet. An editor can save settings from this workspace."
             )}
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {!canManage ? (
+            <p className="text-sm text-muted-foreground">
+              You have read-only storefront access. Publishing, domain mode, and checkout terms are
+              visible on Launch and Analytics; contact an owner or marketing lead to make changes.
+            </p>
+          ) : null}
+          {canManage ? (
           <form className="space-y-6" action={upsertStorefrontSettingsFormAction}>
             <div className="flex items-center justify-between rounded-xl border border-border/80 px-4 py-3">
               <div>
@@ -383,6 +394,7 @@ export default async function StorefrontAdminPage() {
               Save storefront
             </Button>
           </form>
+          ) : null}
         </CardContent>
       </Card>
     </div>

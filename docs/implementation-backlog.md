@@ -14,7 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
-- Progress update: POS, KDS, billing (entitlement overrides, checkout/portal API routes, billing hub layout/page gates, cancel feedback), integrations, export, storefront publish/media/manage draft mutations, report read/saved-report/generator pages, storefront domains/settings/forms pages and mutations, and channel-command-center mutation surfaces are on canonical keys; `/dashboard/reports/[reportKey]` uses `requireReportGeneratorPageAccess` with audited denials before `runReport`; billing uses `requireBillingActor` / `requireBillingPageAccess` / `requireBillingApiAccess`; `channel-command-center` actions require `integrations.manage`; manage-only sales-channel pages use `requireSalesChannelsManagePage`; sales-channels monitoring allows `integrations.read` with read-only subnav
+- Progress update: POS, KDS, billing (entitlement overrides, checkout/portal API routes, billing hub layout/page gates, cancel feedback), integrations, export, storefront publish/media/manage draft mutations, report read/saved-report/generator pages, storefront domains/settings/forms pages and mutations, storefront hub `storefront.read` layout gate with filtered subnav, and channel-command-center mutation surfaces are on canonical keys; `/dashboard/reports/[reportKey]` uses `requireReportGeneratorPageAccess` with audited denials before `runReport`; billing uses `requireBillingActor` / `requireBillingPageAccess` / `requireBillingApiAccess`; `channel-command-center` actions require `integrations.manage`; manage-only sales-channel pages use `requireSalesChannelsManagePage`; sales-channels monitoring allows `integrations.read` with read-only subnav
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: optional `storefront.read` hub gates for read-only storefront monitoring; optional malware-scan hook for uploads
+- Remaining work after current slice: optional malware-scan hook for uploads; deeper storefront admin permission split (workspace/team tabs vs `storefront.admin`)
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
