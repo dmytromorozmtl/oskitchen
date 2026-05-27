@@ -1,10 +1,11 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
@@ -22,9 +23,27 @@ const createSchema = z.object({
   lineUnitPrice: z.coerce.number().min(0).optional(),
 });
 
+async function requireCateringManageAccess(operation: string) {
+  const access = await requireMutationPermission("orders.manage");
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "catering.permission_denied",
+      entityType: "Catering",
+      metadata: { operation, requiredPermission: "orders.manage" },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  return { ok: true as const, sessionUser: user, dataUserId };
+}
+
 export async function createCateringQuoteAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringManageAccess("catering.create_quote");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = createSchema.safeParse({
       customerName: formData.get("customerName"),
       customerEmail: formData.get("customerEmail"),
@@ -74,7 +93,9 @@ export async function createCateringQuoteAction(formData: FormData) {
 
 export async function markQuoteSentAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireCateringManageAccess("catering.mark_quote_sent");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const id = String(formData.get("quoteId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { error: "Invalid quote." };
     await prisma.cateringQuote.updateMany({
