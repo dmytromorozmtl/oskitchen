@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type CrmPermission =
   | "crm.read.list"
   | "crm.read.full_profile"
@@ -19,10 +17,11 @@ export type CrmActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdmin(scope: CrmActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoCrm(scope: CrmActorScope, permission: CrmPermission): boolean {
