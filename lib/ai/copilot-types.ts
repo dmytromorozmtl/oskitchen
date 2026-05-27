@@ -16,6 +16,7 @@ export type CopilotActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export type CopilotSourceKey =

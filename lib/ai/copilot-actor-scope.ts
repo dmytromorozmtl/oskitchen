@@ -33,6 +33,7 @@ export function createCopilotActorScope(input: {
   workspaceRole?: UserRole | null;
   staffRoleType?: StaffRoleType | null;
   email?: string | null;
+  platformBypass?: boolean;
 }): CopilotScopedActor {
   const isOwner =
     input.workspaceRole === "OWNER" || input.staffRoleType === "OWNER" || input.sessionUserId === input.userId;
@@ -43,5 +44,6 @@ export function createCopilotActorScope(input: {
     email: input.email ?? null,
     isOwner,
     role: isOwner ? null : (input.staffRoleType ? COPILOT_ROLE_BY_STAFF_TYPE[input.staffRoleType] ?? null : null),
+    platformBypass: input.platformBypass,
   };
 }

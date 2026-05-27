@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 import type { CopilotActorScope, CopilotCapability } from "@/lib/ai/copilot-types";
 
 const ROLE_GRANTS: Record<CopilotCapability, string[]> = {
@@ -38,7 +36,7 @@ const ROLE_GRANTS: Record<CopilotCapability, string[]> = {
 };
 
 export function isSuperAdminCopilot(scope: CopilotActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUseCopilot(
