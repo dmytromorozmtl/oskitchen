@@ -40,4 +40,8 @@ npm run test:e2e:storefront
 
 ## CI
 
-Default GitHub workflow does **not** start Next with a database. Uncomment the Playwright block in `.github/workflows/ci.yml` when a hosted preview URL + `E2E_STOREFRONT_SLUG` repository variable are available.
+Default GitHub `quality` job runs platform/a11y smoke only (no DB).
+
+**Storefront checkout money path** runs in the `storefront-money-path` CI job (Postgres + seed + pay-later E2E). See `docs/ci-e2e-tier-matrix.md`.
+
+Optional staging workflow: `.github/workflows/playwright-storefront.yml` when `PLAYWRIGHT_BASE_URL` is configured.

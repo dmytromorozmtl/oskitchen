@@ -184,3 +184,71 @@ jobs:
 
       - name: Security and tenant isolation tests
         run: npm run test:security
+
+  storefront-money-path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchenos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d kitchenos_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/kitchenos_ci
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+      ENCRYPTION_KEY: ERERERERERERERERERERERERERERERERERERERERERE=
+      CI_STOREFRONT_SLUG: hello
+      E2E_STOREFRONT_SLUG: hello
+      E2E_STORE_SLUG: hello
+      TURNSTILE_SECRET_KEY: ""
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Apply schema to CI database
+        run: node ./node_modules/prisma/build/index.js db push --skip-generate
+
+      - name: Seed CI storefront checkout fixture
+        run: npm run storefront:seed-ci-checkout
+
+      - name: Storefront money-path unit tests
+        run: npm run test:ci:storefront-money-path:unit
+
+      - name: Build application
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Storefront pay-later checkout E2E
+        run: |
+          npm run start -- -p 3000 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:3000/api/health >/dev/null && break
+            sleep 2
+          done
+          npm run test:ci:storefront-money-path:e2e

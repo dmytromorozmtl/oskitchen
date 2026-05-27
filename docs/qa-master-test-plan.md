@@ -85,7 +85,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 | publish storefront | unit, integration, E2E |
 | online order | unit, integration, E2E |
 | payment success | integration, contract, E2E |
-| payment failure | integration, E2E |
+| payment failure | integration, unit (`storefront-payment-recovery`), E2E tier 2 optional Stripe on staging |
+| storefront pay-later checkout | unit, integration, E2E tier 2 (`storefront-money-path` CI job) |
 | POS checkout | unit, E2E, permission-negative |
 | refund | unit, integration, permission-negative |
 | void | unit, integration, permission-negative |
@@ -110,11 +111,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - P0 cannot merge without tests.
 - Permission tests are mandatory for sensitive mutations.
 - Critical journeys must have E2E coverage or an explicitly approved temporary gap.
+- Storefront money-path tiers: see `docs/ci-e2e-tier-matrix.md`.
 - A QA report must be generated per release candidate.
 
 ## Current Highest-Priority Additions
 1. POS permission-negative role matrix, including terminal API route denials and POS shell parity
-2. storefront payment failure and retry matrix
+2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration in CI; staging Stripe E2E optional
 3. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 4. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open
 5. impersonation and sensitive-action audit coverage
