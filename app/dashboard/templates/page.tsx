@@ -4,8 +4,9 @@ import { TemplateCard } from "@/components/dashboard/templates/template-card";
 import { TemplateKpis } from "@/components/dashboard/templates/template-kpis";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { BUSINESS_TYPE_LABELS } from "@/lib/business-modes";
+import { canUseTemplates } from "@/lib/templates/template-permissions";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 import { prisma } from "@/lib/prisma";
 import {
   WORKSPACE_TEMPLATE_REGISTRY,
@@ -18,8 +19,13 @@ import {
 } from "@/services/templates/template-service";
 
 export default async function TemplatesRecommendedPage() {
-  const { sessionUser, dataUserId } = await getTenantActor();
+  const access = await requireTemplatesPageAccess("templates.view");
+  if (!access.ok) return access.deny;
   await ensureWorkspaceTemplates();
+
+  const { tenantScope: scope, scope: actorScope } = access;
+  const dataUserId = scope.userId;
+  const canApply = canUseTemplates(actorScope, "templates.apply");
 
   const settings = await prisma.kitchenSettings.findUnique({
     where: { userId: dataUserId },
@@ -27,7 +33,6 @@ export default async function TemplatesRecommendedPage() {
   });
   const mode = settings?.businessType ?? null;
   const modeLabel = mode ? BUSINESS_TYPE_LABELS[mode] : null;
-  const scope = { userId: dataUserId, email: sessionUser.email ?? null };
 
   const [kpis, history] = await Promise.all([
     getTemplateKpis(scope),
@@ -87,7 +92,12 @@ export default async function TemplatesRecommendedPage() {
           <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Recommended for {modeLabel ?? "your workspace"}
           </h2>
-          <TemplateCard template={top} recommended applied={appliedKeys.has(top.key)} />
+          <TemplateCard
+            template={top}
+            recommended
+            applied={appliedKeys.has(top.key)}
+            canApply={canApply}
+          />
         </section>
       ) : null}
 
@@ -125,6 +135,7 @@ export default async function TemplatesRecommendedPage() {
                 template={t}
                 applied={appliedKeys.has(t.key)}
                 recommended={t.key === top?.key}
+                canApply={canApply}
               />
             ))}
           </div>

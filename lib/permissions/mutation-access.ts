@@ -31,6 +31,8 @@ const LEGACY_FALLBACK: Partial<Record<PermissionKey, LegacyPermissionKey>> = {
   "executive.insights.manage": "manage_reports",
   "playbooks.manage": "manage_team",
   "playbooks.participate": "manage_team",
+  "templates.manage": "manage_settings",
+  "templates.participate": "manage_team",
   "pos.access": "pos_access",
   "pos.checkout": "pos_access",
   "pos.discount.apply": "pos_comp",

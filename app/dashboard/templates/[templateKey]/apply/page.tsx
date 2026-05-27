@@ -3,11 +3,9 @@ import { notFound } from "next/navigation";
 
 import { ApplyWizard } from "@/components/dashboard/templates/apply-wizard";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { canUseTemplates } from "@/lib/templates/template-permissions";
 import { findTemplateByKey } from "@/lib/templates/template-registry";
 import { buildTemplatePreview } from "@/lib/templates/template-preview";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 import { ALL_TEMPLATE_SECTIONS } from "@/lib/templates/template-types";
 import { prisma } from "@/lib/prisma";
 
@@ -18,24 +16,14 @@ export default async function ApplyTemplatePage({
 }: {
   params: Promise<Params>;
 }) {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { isOwner: true, role: null, email: user.email ?? null };
-  if (!canUseTemplates(scope, "templates.apply")) {
-    return (
-      <Card className="border-border/80 bg-card/90 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-base">Not authorised</CardTitle>
-          <CardDescription>
-            Only admins can apply templates. Ask your workspace owner.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
+  const access = await requireTemplatesPageAccess("templates.apply");
+  if (!access.ok) return access.deny;
 
   const { templateKey } = await params;
   const template = findTemplateByKey(templateKey);
   if (!template) notFound();
+
+  const dataUserId = access.tenantScope.userId;
 
   const [settings, pins, playbooks] = await Promise.all([
     prisma.kitchenSettings.findUnique({

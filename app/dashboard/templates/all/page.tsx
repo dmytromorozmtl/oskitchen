@@ -1,11 +1,14 @@
 import { TemplateCard } from "@/components/dashboard/templates/template-card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseTemplates } from "@/lib/templates/template-permissions";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 import { WORKSPACE_TEMPLATE_REGISTRY } from "@/lib/templates/template-registry";
 import { listApplications } from "@/services/templates/template-service";
 
 export default async function AllTemplatesPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requireTemplatesPageAccess("templates.view");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope, scope: actorScope } = access;
+  const canApply = canUseTemplates(actorScope, "templates.apply");
   const history = await listApplications(scope, 200);
   const appliedKeys = new Set(
     history
@@ -23,7 +26,12 @@ export default async function AllTemplatesPage() {
       </div>
       <div className="grid gap-3 md:grid-cols-2">
         {WORKSPACE_TEMPLATE_REGISTRY.map((t) => (
-          <TemplateCard key={t.key} template={t} applied={appliedKeys.has(t.key)} />
+          <TemplateCard
+            key={t.key}
+            template={t}
+            applied={appliedKeys.has(t.key)}
+            canApply={canApply}
+          />
         ))}
       </div>
     </div>

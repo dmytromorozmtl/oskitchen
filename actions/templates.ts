@@ -1,14 +1,20 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireUserProfile } from "@/lib/auth";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import {
+  createTemplateActorScope,
+  type TemplateTenantScope,
+} from "@/lib/templates/template-actor-scope";
+import { workspacePermissionForTemplateCapability } from "@/lib/templates/template-permission-keys";
 import { canUseTemplates } from "@/lib/templates/template-permissions";
-import type { TemplateActorScope, TemplateSectionKey } from "@/lib/templates/template-types";
+import type { TemplateCapability, TemplateSectionKey } from "@/lib/templates/template-types";
 import { ALL_TEMPLATE_SECTIONS } from "@/lib/templates/template-types";
+import { logTemplatePermissionDenied } from "@/services/templates/template-permission-audit";
 import {
   applyTemplate,
   previewTemplate,
@@ -17,19 +23,35 @@ import {
 
 const PATH = "/dashboard/templates";
 
-function scopeFor(
-  user: { id: string; email?: string | null },
-  dataUserId: string,
-): TemplateActorScope & {
-  userId: string;
-  email: string | null;
-} {
-  return {
-    userId: dataUserId,
-    email: user.email ?? null,
-    isOwner: true,
-    role: null,
-  };
+async function authorize(
+  capability: TemplateCapability,
+): Promise<{ ok: true; scope: TemplateTenantScope } | { ok: false; error: string }> {
+  const required = workspacePermissionForTemplateCapability(capability);
+  const access = await requireMutationPermission(required);
+  let profile: { role: string | null } | null = null;
+  try {
+    profile = await requireUserProfile();
+  } catch {
+    profile = null;
+  }
+  if (!access.ok) {
+    await logTemplatePermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      templateCapability: capability,
+    });
+    return { ok: false, error: access.error ?? "Forbidden" };
+  }
+  const scope = createTemplateActorScope(access.actor, profile?.role ?? null);
+  if (!canUseTemplates(scope, capability)) {
+    await logTemplatePermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      templateCapability: capability,
+    });
+    return { ok: false, error: "Forbidden" };
+  }
+  return { ok: true, scope };
 }
 
 const sectionEnum = z.enum([
@@ -53,14 +75,11 @@ export async function previewTemplateAction(
   input: z.infer<typeof previewSchema>,
 ): Promise<{ ok: boolean; error?: string; counts?: { create: number; update: number; skip: number; conflicts: number } }> {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const scope = scopeFor(user, dataUserId);
-    if (!canUseTemplates(scope, "templates.preview")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const auth = await authorize("templates.preview");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const parsed = previewSchema.parse(input);
     const sections = (parsed.sections ?? ALL_TEMPLATE_SECTIONS) as TemplateSectionKey[];
-    const { preview } = await previewTemplate(scope, parsed.templateKey, sections);
+    const { preview } = await previewTemplate(auth.scope, parsed.templateKey, sections);
     revalidatePath(PATH);
     revalidatePath(`${PATH}/${parsed.templateKey}`);
     return { ok: true, counts: preview.counts };
@@ -94,13 +113,10 @@ export async function applyTemplateAction(
   error?: string;
 }> {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const scope = scopeFor(user, dataUserId);
-    if (!canUseTemplates(scope, "templates.apply")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const auth = await authorize("templates.apply");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const parsed = applySchema.parse(input);
-    const result = await applyTemplate(scope, {
+    const result = await applyTemplate(auth.scope, {
       templateKey: parsed.templateKey,
       applyMode: parsed.applyMode,
       selectedSections: parsed.selectedSections as TemplateSectionKey[],
@@ -128,13 +144,10 @@ export async function rollbackTemplateAction(
   input: z.infer<typeof rollbackSchema>,
 ): Promise<{ ok: boolean; reverted?: number; errors?: string[]; error?: string }> {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const scope = scopeFor(user, dataUserId);
-    if (!canUseTemplates(scope, "templates.rollback")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const auth = await authorize("templates.rollback");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const parsed = rollbackSchema.parse(input);
-    const result = await rollbackApplication(scope, parsed.applicationId);
+    const result = await rollbackApplication(auth.scope, parsed.applicationId);
     revalidatePath(PATH);
     return { ok: true, reverted: result.reverted, errors: result.errors };
   } catch (e) {

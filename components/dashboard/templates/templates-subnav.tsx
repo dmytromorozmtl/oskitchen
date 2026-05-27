@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
+export type TemplatesSubnavLink = {
+  href: string;
+  label: string;
+  match?: "exact" | "prefix";
+};
+
+const DEFAULT_LINKS: TemplatesSubnavLink[] = [
   { href: "/dashboard/templates", label: "Recommended", match: "exact" },
   { href: "/dashboard/templates/all", label: "All Templates" },
   { href: "/dashboard/templates/starters", label: "Business Starters" },
@@ -16,11 +22,12 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/templates/history", label: "Applied History" },
 ];
 
-export function TemplatesSubnav() {
+export function TemplatesSubnav({ links = DEFAULT_LINKS }: { links?: TemplatesSubnavLink[] }) {
   const path = usePathname();
+  if (links.length === 0) return null;
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3 print:hidden">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact"
             ? path === l.href

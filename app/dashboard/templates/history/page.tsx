@@ -10,7 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseTemplates } from "@/lib/templates/template-permissions";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 import {
   parseRollbackPlan,
   rollbackAvailability,
@@ -27,8 +28,10 @@ const STATUS_TONE: Record<string, string> = {
 };
 
 export default async function TemplateHistoryPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requireTemplatesPageAccess("templates.history");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope, scope: actorScope } = access;
+  const canRollback = canUseTemplates(actorScope, "templates.rollback");
   const apps = await listApplications(scope, 100);
 
   if (apps.length === 0) {
@@ -87,7 +90,9 @@ export default async function TemplateHistoryPage() {
                   Sections:{" "}
                   {(a.selectedSectionsJson as string[] | null)?.join(", ") ?? "—"}
                 </div>
-                <RollbackButton applicationId={a.id} available={availability} />
+                {canRollback ? (
+                  <RollbackButton applicationId={a.id} available={availability} />
+                ) : null}
               </CardContent>
             </Card>
           );

@@ -10,7 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseTemplates } from "@/lib/templates/template-permissions";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 import { findTemplateByKey } from "@/lib/templates/template-registry";
 
 type Params = { templateKey: string };
@@ -20,7 +21,9 @@ export default async function TemplateDetailPage({
 }: {
   params: Promise<Params>;
 }) {
-  await getTenantActor();
+  const access = await requireTemplatesPageAccess("templates.view");
+  if (!access.ok) return access.deny;
+  const canApply = canUseTemplates(access.scope, "templates.apply");
   const { templateKey } = await params;
   const template = findTemplateByKey(templateKey);
   if (!template) notFound();
@@ -51,9 +54,11 @@ export default async function TemplateDetailPage({
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button asChild>
-            <Link href={`/dashboard/templates/${template.key}/apply`}>Apply…</Link>
-          </Button>
+          {canApply ? (
+            <Button asChild>
+              <Link href={`/dashboard/templates/${template.key}/apply`}>Apply…</Link>
+            </Button>
+          ) : null}
           <Button asChild variant="outline">
             <Link href="/dashboard/templates">Back</Link>
           </Button>

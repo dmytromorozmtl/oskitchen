@@ -1,9 +1,12 @@
 import type { BusinessType, TemplateApplyMode, TemplateCategory } from "@prisma/client";
 
+import type { PermissionKey } from "@/lib/permissions/permissions";
+
 export type TemplateActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  granted?: ReadonlySet<PermissionKey>;
 };
 
 export type TemplateCapability =

@@ -53,6 +53,8 @@ export const PERMISSIONS = {
   "executive.insights.manage": "Resolve or dismiss executive dashboard insights",
   "playbooks.manage": "Create, edit, and archive custom playbooks",
   "playbooks.participate": "View playbooks and complete run steps",
+  "templates.manage": "Apply or roll back workspace quick-start templates",
+  "templates.participate": "Preview workspace templates and view application history",
   "growth.view": "View growth / beta surfaces",
 } as const;
 
@@ -111,6 +113,8 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "executive.insights.manage",
   "playbooks.manage",
   "playbooks.participate",
+  "templates.manage",
+  "templates.participate",
   "growth.view",
 ];
 

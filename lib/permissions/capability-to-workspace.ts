@@ -46,6 +46,8 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
     "go-live.unlock",
     "playbooks.manage",
     "playbooks.participate",
+    "templates.manage",
+    "templates.participate",
   ],
   [CAPABILITY.billingManage]: ["workspace.view", "billing.view", "billing.manage"],
   [CAPABILITY.integrationsRead]: ["workspace.view", "integrations.read"],

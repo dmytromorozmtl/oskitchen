@@ -1,4 +1,6 @@
 import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasPermission } from "@/lib/permissions/guards";
+import { workspacePermissionForTemplateCapability } from "@/lib/templates/template-permission-keys";
 
 import type { TemplateActorScope, TemplateCapability } from "@/lib/templates/template-types";
 
@@ -23,6 +25,12 @@ export function canUseTemplates(
 ): boolean {
   if (isSuperAdminTemplates(scope)) return true;
   if (scope.isOwner) return true;
+
+  const canonical = workspacePermissionForTemplateCapability(cap);
+  if (scope.granted && hasPermission(scope.granted, canonical)) {
+    return true;
+  }
+
   const role = (scope.role ?? "").toLowerCase();
   return GRANTS[cap]?.includes(role) ?? false;
 }

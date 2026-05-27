@@ -1,9 +1,12 @@
 import { TemplateCard } from "@/components/dashboard/templates/template-card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseTemplates } from "@/lib/templates/template-permissions";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 import { WORKSPACE_TEMPLATE_REGISTRY } from "@/lib/templates/template-registry";
 
 export default async function BusinessStartersPage() {
-  await getTenantActor();
+  const access = await requireTemplatesPageAccess("templates.view");
+  if (!access.ok) return access.deny;
+  const canApply = canUseTemplates(access.scope, "templates.apply");
   const starters = WORKSPACE_TEMPLATE_REGISTRY.filter(
     (t) => t.category === "WORKSPACE_STARTER",
   );
@@ -17,7 +20,7 @@ export default async function BusinessStartersPage() {
       </div>
       <div className="grid gap-3 md:grid-cols-2">
         {starters.map((t) => (
-          <TemplateCard key={t.key} template={t} />
+          <TemplateCard key={t.key} template={t} canApply={canApply} />
         ))}
       </div>
     </div>

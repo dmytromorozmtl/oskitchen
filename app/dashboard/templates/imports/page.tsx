@@ -8,10 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireTemplatesPageAccess } from "@/lib/templates/template-page-access";
 
 export default async function ImportTemplatesPage() {
-  await getTenantActor();
+  const access = await requireTemplatesPageAccess("templates.view");
+  if (!access.ok) return access.deny;
   return (
     <div className="space-y-4">
       <div>

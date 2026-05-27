@@ -9,9 +9,10 @@ type Props = {
   template: WorkspaceTemplateSeed;
   applied?: boolean;
   recommended?: boolean;
+  canApply?: boolean;
 };
 
-export function TemplateCard({ template, applied, recommended }: Props) {
+export function TemplateCard({ template, applied, recommended, canApply = true }: Props) {
   const modules = template.sections.modulePins.map((p) => p.moduleKey);
   const sampleData = (template.sections.sampleMenuCategories ?? []).length > 0;
   return (
@@ -67,9 +68,11 @@ export function TemplateCard({ template, applied, recommended }: Props) {
           <Button asChild size="sm">
             <Link href={`/dashboard/templates/${template.key}`}>Preview</Link>
           </Button>
-          <Button asChild size="sm" variant="outline">
-            <Link href={`/dashboard/templates/${template.key}/apply`}>Apply…</Link>
-          </Button>
+          {canApply ? (
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/dashboard/templates/${template.key}/apply`}>Apply…</Link>
+            </Button>
+          ) : null}
         </div>
       </CardContent>
     </Card>
