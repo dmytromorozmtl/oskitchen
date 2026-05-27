@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type ForecastPermission =
   | "forecast.read"
   | "forecast.run"
@@ -14,10 +12,11 @@ export type ForecastActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdminForecast(scope: ForecastActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoForecast(scope: ForecastActorScope, permission: ForecastPermission): boolean {
