@@ -6,10 +6,7 @@ import { AssignmentStatusBadge } from "@/components/dashboard/training/status-ba
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { getTrainingPageAccess } from "@/lib/training/training-page-access";
 import { prisma } from "@/lib/prisma";
 import { ROLE_LABEL } from "@/lib/training/training-engine";
 import {
@@ -39,7 +36,7 @@ export default async function TrainingPage() {
       take: 50,
     }).catch(() => []),
     prisma.location.findMany({
-      where: { userId: dataUserId },
+      where: { userId },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
       take: 50,

@@ -8,10 +8,12 @@ export function resolveStaffActorScope(input: {
   email: string | null;
   profileRole: string | null;
   profileEmail: string | null;
+  platformBypass?: boolean;
 }): StaffActorScope {
   return {
     isOwner: input.workspaceRole === "OWNER",
     role: input.profileRole ?? input.workspaceRole,
     email: input.profileEmail ?? input.email,
+    platformBypass: input.platformBypass,
   };
 }

@@ -8,10 +8,12 @@ export function resolveTrainingActorScope(input: {
   email: string | null;
   profileRole: string | null;
   profileEmail: string | null;
+  platformBypass?: boolean;
 }): TrainingActorScope {
   return {
     isOwner: input.workspaceRole === "OWNER",
     role: input.profileRole ?? input.workspaceRole,
     email: input.profileEmail ?? input.email,
+    platformBypass: input.platformBypass,
   };
 }

@@ -1,9 +1,8 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type StaffActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export type StaffCapability =
@@ -45,7 +44,7 @@ const GRANTS: Record<StaffCapability, string[]> = {
 };
 
 export function isSuperAdminStaff(scope: StaffActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canManageStaff(scope: StaffActorScope, cap: StaffCapability): boolean {

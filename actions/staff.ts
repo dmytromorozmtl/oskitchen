@@ -56,6 +56,7 @@ async function gate(cap: StaffCapability) {
     email: access.actor.email,
     profileRole: profile.role ?? null,
     profileEmail: profile.email ?? null,
+    platformBypass: access.actor.platformBypass,
   });
   if (!canManageStaff(scope, cap)) {
     await logStaffPermissionDenied(access.actor, {

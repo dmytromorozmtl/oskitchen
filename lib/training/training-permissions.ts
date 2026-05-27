@@ -1,9 +1,8 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type TrainingActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export type TrainingCapability =
@@ -50,7 +49,7 @@ const GRANTS: Record<TrainingCapability, string[]> = {
 };
 
 export function isSuperAdminTraining(scope: TrainingActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUseTraining(scope: TrainingActorScope, cap: TrainingCapability): boolean {

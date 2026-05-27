@@ -12,6 +12,7 @@ export async function getStaffPageAccess() {
     email: actor.email,
     profileRole: profile.role ?? null,
     profileEmail: profile.email ?? null,
+    platformBypass: actor.platformBypass,
   });
   const canManage = hasPermission(actor.granted, "staff.manage");
 

@@ -76,6 +76,7 @@ async function gate(cap: TrainingCapability) {
     email: access.actor.email,
     profileRole: profile.role ?? null,
     profileEmail: profile.email ?? null,
+    platformBypass: access.actor.platformBypass,
   });
   if (!canUseTraining(scope, cap)) {
     await logTrainingPermissionDenied(access.actor, {

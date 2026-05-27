@@ -12,6 +12,7 @@ export async function getTrainingPageAccess() {
     email: actor.email,
     profileRole: profile.role ?? null,
     profileEmail: profile.email ?? null,
+    platformBypass: actor.platformBypass,
   });
   const canManage = hasPermission(actor.granted, "training.manage");
   const canParticipate = hasPermission(actor.granted, "training.participate");

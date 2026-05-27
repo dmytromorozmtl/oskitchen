@@ -7,10 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlanGate } from "@/components/plans/plan-gate";
-import { requireUserProfile } from "@/lib/auth";
 import { getStaffPageAccess } from "@/lib/staff/staff-page-access";
-
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { prisma } from "@/lib/prisma";
 import { STAFF_ROLE_LABEL } from "@/lib/staff/staff-types";
 import {
@@ -19,9 +16,8 @@ import {
 import { listStaff, listRoles, staffKpis } from "@/services/staff/staff-service";
 
 export default async function StaffPage() {
-  const { userId, workspaceId, canManage } = await getStaffPageAccess();
-  const profile = await requireUserProfile();
-  const isSuper = isSuperAdminEmail(profile.email);
+  const { userId, workspaceId, canManage, actor } = await getStaffPageAccess();
+  const isSuper = actor.platformBypass;
 
   const [staff, kpis, roles, brands, locations] = await Promise.all([
     listStaff(userId),
