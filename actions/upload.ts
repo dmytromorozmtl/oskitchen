@@ -4,6 +4,7 @@ import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import type { UploadBucket } from "@/lib/storage";
 import { uploadKitchenAsset } from "@/lib/storage";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import {
   kitchenRasterImageExtension,
   validateKitchenRasterImageUpload,
@@ -37,6 +38,18 @@ async function uploadKitchenImageFromFile(params: {
     return { error: validated.error };
   }
 
+  const safe = await enforceUploadContentSafety({
+    bytes,
+    mimeType: validated.mimeType,
+    channel: params.channel,
+    actorUserId: params.actorUserId,
+    workspaceId: params.workspaceId,
+    entity: { type: "UploadBucket", id: params.bucket },
+  });
+  if (!safe.ok) {
+    return { error: safe.error };
+  }
+
   const ext = kitchenRasterImageExtension(validated.mimeType);
   const result = await uploadKitchenAsset({
     bucket: params.bucket,
@@ -66,6 +79,11 @@ async function uploadKitchenImageFromFile(params: {
     mimeType: validated.mimeType,
     sizeBytes: bytes.byteLength,
     publicUrl: result.publicUrl,
+    metadata: {
+      malwareScanEnabled: safe.scan.enabled,
+      malwareScanLayer: safe.scan.enabled ? safe.scan.layer : null,
+      malwareScanVerdict: safe.scan.enabled ? safe.scan.verdict : null,
+    },
   });
 
   return result;

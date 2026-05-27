@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: optional malware-scan hook for uploads; deeper storefront admin permission split (workspace/team tabs vs `storefront.admin`)
+- Remaining work after current slice: deeper storefront admin permission split (workspace/team tabs vs `storefront.admin`); vendor-specific malware scanner certification when `UPLOAD_MALWARE_SCAN_URL` is enabled in production
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
@@ -69,7 +69,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: centralizes file validation
 - User story: as an operator, I need uploads to be safe and predictable
 - Current state: storefront media path validates more than generic upload actions
-- Progress update: upload validation lives in `lib/upload-policy/media-upload-validation.ts` across storefront media, kitchen product/logo uploads, profile avatars, invoice OCR images, import CSV uploads, and public form attachments; kitchen product/logo uploads require `products.edit` / `workspace.settings`; invoice OCR requires `reports.read.financial`; `services/audit/upload-audit.ts` records `UPLOAD_SUCCEEDED` / `UPLOAD_DENIED` for these channels; malware-scan hooks still remain.
+- Progress update: upload validation lives in `lib/upload-policy/media-upload-validation.ts` across storefront media, kitchen product/logo uploads, profile avatars, invoice OCR images, import CSV uploads, and public form attachments; kitchen product/logo uploads require `products.edit` / `workspace.settings`; invoice OCR requires `reports.read.financial`; `services/audit/upload-audit.ts` records `UPLOAD_SUCCEEDED` / `UPLOAD_DENIED` for these channels; static malware/content-safety scanning and optional external hook run via `lib/upload-policy/malware-scan.ts` + `enforce-upload-content-safety.ts` on every upload path (replaces prior `stub_pass` form scan label).
 - Target state: all upload entrypoints share one hardened validation policy
 - Affected files: `actions/upload.ts`, `actions/storefront-media.ts`, `services/storefront/storefront-media-upload-service.ts`, storage helpers
 - Dependencies: `KOS-P0-001`

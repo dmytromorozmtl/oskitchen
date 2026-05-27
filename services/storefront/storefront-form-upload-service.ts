@@ -5,6 +5,11 @@ import { createClient } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
 import { resolveConfiguredStorefrontStorageProvider } from "@/lib/storefront/storage-provider";
 import { enforceStorefrontRateLimit } from "@/lib/storefront/storefront-rate-limit";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
+import {
+  uploadMalwareScanStatusForApi,
+  type UploadMalwareScanReceipt,
+} from "@/lib/upload-policy/malware-scan";
 import {
   storefrontFormAttachmentExtension,
   validateStorefrontFormAttachmentUpload,
@@ -28,7 +33,15 @@ export async function uploadStorefrontFormAttachment(input: {
   contentType: string;
   bytes: Uint8Array;
 }): Promise<
-  | { ok: true; url: string; fileName: string; contentType: string; sizeBytes: number; scanned: "stub_pass" }
+  | {
+      ok: true;
+      url: string;
+      fileName: string;
+      contentType: string;
+      sizeBytes: number;
+      scanned: ReturnType<typeof uploadMalwareScanStatusForApi>;
+      scan: UploadMalwareScanReceipt;
+    }
   | { ok: false; error: string }
 > {
   const rate = await enforceStorefrontRateLimit("storefront_contact_submit", {
@@ -62,6 +75,18 @@ export async function uploadStorefrontFormAttachment(input: {
       source: "API",
     });
     return { ok: false, error: validated.error };
+  }
+
+  const safe = await enforceUploadContentSafety({
+    bytes: input.bytes,
+    mimeType: validated.mimeType,
+    channel: "storefront_form_attachment",
+    entity: { type: "StorefrontForm", id: input.formId },
+    metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+    source: "API",
+  });
+  if (!safe.ok) {
+    return { ok: false, error: safe.error };
   }
 
   const bucket = bucketName();
@@ -107,7 +132,13 @@ export async function uploadStorefrontFormAttachment(input: {
     mimeType: validated.mimeType,
     sizeBytes: input.bytes.byteLength,
     publicUrl: url,
-    metadata: { storeSlug: input.storeSlug, fieldId: input.fieldId },
+    metadata: {
+      storeSlug: input.storeSlug,
+      fieldId: input.fieldId,
+      malwareScanEnabled: safe.scan.enabled,
+      malwareScanLayer: safe.scan.enabled ? safe.scan.layer : null,
+      malwareScanVerdict: safe.scan.enabled ? safe.scan.verdict : null,
+    },
     source: "API",
   });
 
@@ -117,7 +148,8 @@ export async function uploadStorefrontFormAttachment(input: {
     fileName: input.fileName,
     contentType: validated.mimeType,
     sizeBytes: input.bytes.byteLength,
-    scanned: "stub_pass",
+    scanned: uploadMalwareScanStatusForApi(safe.scan),
+    scan: safe.scan,
   };
 }
 

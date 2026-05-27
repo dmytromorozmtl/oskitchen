@@ -15,6 +15,7 @@ import {
 import { requireUserProfile } from "@/lib/auth";
 import { asVoidFormAction } from "@/lib/actions/server-form-action";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied } from "@/services/audit/upload-audit";
 import {
@@ -155,6 +156,19 @@ export async function createImportJobFromCsv(formData: FormData) {
         reason: csvValidated.error,
       });
       return { error: csvValidated.error };
+    }
+
+    const safe = await enforceUploadContentSafety({
+      bytes: csvBytes,
+      mimeType: "text/csv",
+      channel: "import_csv",
+      actorUserId: user.id,
+      workspaceId,
+      entity: { type: "ImportJob", id: type },
+      metadata: { filename: upload.name || `${type.toLowerCase()}.csv` },
+    });
+    if (!safe.ok) {
+      return { error: safe.error };
     }
     const csvText = new TextDecoder("utf-8", { fatal: false }).decode(csvBytes);
     const validated = validateImport(type, csvText);

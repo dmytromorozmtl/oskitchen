@@ -11,6 +11,7 @@ import { commitNotSupportedReason, isCommittableType } from "@/lib/import-center
 import type { ImportActorScope, ImportCapability } from "@/lib/import-center/import-types";
 import { requireUserProfile } from "@/lib/auth";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied } from "@/services/audit/upload-audit";
 
@@ -84,6 +85,17 @@ export async function uploadImportCsvAction(formData: FormData): Promise<void> {
       reason: csvValidated.error,
     });
     throw new Error(csvValidated.error);
+  }
+  const safe = await enforceUploadContentSafety({
+    bytes: csvBytes,
+    mimeType: "text/csv",
+    channel: "import_csv",
+    actorUserId: profileId,
+    entity: { type: "ImportJob", id: "upload" },
+    metadata: { filename: file.name || "upload.csv" },
+  });
+  if (!safe.ok) {
+    throw new Error(safe.error);
   }
   const parsed = uploadSchema.parse({
     type: formData.get("type"),

@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { uploadKitchenAsset } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import {
   profileAvatarExtension,
   validateProfileAvatarUpload,
@@ -37,6 +38,18 @@ export async function uploadAvatarAction(
       reason: validated.error,
     });
     return fail(validated.error);
+  }
+
+  const safe = await enforceUploadContentSafety({
+    bytes,
+    mimeType: validated.mimeType,
+    channel: "profile_avatar",
+    actorUserId: sessionUser.id,
+    workspaceId,
+    entity: { type: "UploadBucket", id: "business-logos" },
+  });
+  if (!safe.ok) {
+    return fail(safe.error);
   }
 
   const ext = profileAvatarExtension(validated.mimeType);

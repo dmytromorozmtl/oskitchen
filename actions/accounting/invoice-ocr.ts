@@ -2,6 +2,7 @@
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateInvoiceOcrImageUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
 import { matchInvoiceToPurchaseOrder } from "@/services/accounting/ocr-service";
@@ -34,6 +35,18 @@ export async function uploadInvoiceOcrAction(formData: FormData) {
       reason: validated.error,
     });
     return { error: validated.error };
+  }
+
+  const safe = await enforceUploadContentSafety({
+    bytes,
+    mimeType: validated.mimeType,
+    channel: "invoice_ocr_image",
+    actorUserId: sessionUser.id,
+    workspaceId,
+    entity: { type: "InvoiceOCR", id: "upload" },
+  });
+  if (!safe.ok) {
+    return { error: safe.error };
   }
 
   const { processInvoiceWithOCR } = await import("@/services/accounting/ocr-service");

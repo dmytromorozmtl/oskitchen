@@ -47,6 +47,8 @@ If Vitest fails immediately with `Cannot find module '.../vitest/suppress-warnin
 
 If `npm run typecheck` OOMs or reports missing `date-fns` / `zustand` / `next` / `typescript`, run `npm ci` and re-run `npm run verify:install-chain`. The `typecheck` script already sets `--max-old-space-size=8192`; for other Node commands use `NODE_OPTIONS=--max-old-space-size=8192` (see `scripts/predeploy-verify.sh`).
 
+Upload malware/content-safety scans run by default on all hardened upload paths (`lib/upload-policy/malware-scan.ts`). Disable locally with `UPLOAD_MALWARE_SCAN=0`. Optional external webhook: `UPLOAD_MALWARE_SCAN_EXTERNAL=1` and `UPLOAD_MALWARE_SCAN_URL` (JSON `{ "safe": true }` or `{ "safe": false, "threat": "..." }`).
+
 ## End-to-end
 
 - Location: `e2e/**/*.spec.ts` (Playwright default) and `tests/e2e/**/*.spec.ts` (CI critical paths)

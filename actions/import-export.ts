@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied } from "@/services/audit/upload-audit";
 import { createIngredientCsvPreviewJob } from "@/services/import-export/import-service";
@@ -50,6 +51,19 @@ export async function validateIngredientImportPreviewAction(
         reason: validated.error,
       });
       return { ok: false, error: validated.error };
+    }
+
+    const safe = await enforceUploadContentSafety({
+      bytes,
+      mimeType: "text/csv",
+      channel: "import_csv",
+      actorUserId: user.id,
+      workspaceId,
+      entity: { type: "ImportJob", id: "ingredient_preview" },
+      metadata: { filename: file.name || "upload.csv" },
+    });
+    if (!safe.ok) {
+      return { ok: false, error: safe.error };
     }
     const text = new TextDecoder("utf-8", { fatal: false }).decode(bytes);
     const r = await createIngredientCsvPreviewJob(userId, user.id, file.name || "upload.csv", text);

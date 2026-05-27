@@ -115,7 +115,7 @@ Priority rule:
 - Rollback considerations: keep current storage provider abstraction intact
 - Acceptance criteria: all upload entrypoints share enforced validation policy
 - Required tests: upload type/size tests, malicious upload denial tests, media integration tests
-- Status update: upload validation and audit logging now cover storefront media, kitchen raster uploads, profile avatars, invoice OCR images, import CSV uploads, and public form attachments via `lib/upload-policy/media-upload-validation.ts` and `services/audit/upload-audit.ts`; kitchen uploads enforce `products.edit` / `workspace.settings`; invoice OCR enforces `reports.read.financial`; focused unit tests cover MIME/size denials plus unsafe SVG rejection; malware-scan hooks still remain open.
+- Status update: upload validation and audit logging now cover storefront media, kitchen raster uploads, profile avatars, invoice OCR images, import CSV uploads, and public form attachments via `lib/upload-policy/media-upload-validation.ts` and `services/audit/upload-audit.ts`; kitchen uploads enforce `products.edit` / `workspace.settings`; invoice OCR enforces `reports.read.financial`; focused unit tests cover MIME/size denials plus unsafe SVG rejection; static malware/content-safety scanning runs on all upload entrypoints via `lib/upload-policy/malware-scan.ts` (magic-byte match, executable signatures, EICAR) with optional external hook / webhook (`UPLOAD_MALWARE_SCAN_EXTERNAL`, `UPLOAD_MALWARE_SCAN_URL`)
 - Priority order: 3
 - Estimated complexity: Medium
 

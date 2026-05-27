@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 import { logger } from "@/lib/logger";
 import { resolveConfiguredStorefrontStorageProvider } from "@/lib/storefront/storage-provider";
+import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateStorefrontMediaUpload } from "@/lib/storefront/asset-validation";
 import { prisma } from "@/lib/prisma";
 import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
@@ -141,6 +142,17 @@ export async function uploadStorefrontMediaAsset(params: {
     return { ok: false, error: validated.error };
   }
 
+  const safe = await enforceUploadContentSafety({
+    bytes: params.bytes,
+    mimeType: validated.mimeType,
+    channel: "storefront_media",
+    actorUserId: params.userId,
+    entity: { type: "Storefront", id: params.storefrontId },
+  });
+  if (!safe.ok) {
+    return { ok: false, error: safe.error };
+  }
+
   const provider = resolveConfiguredStorefrontStorageProvider();
   const bucket = storefrontBucketName() || process.env.STOREFRONT_S3_BUCKET?.trim();
   if (!bucket) {
@@ -211,7 +223,13 @@ export async function uploadStorefrontMediaAsset(params: {
     sizeBytes: params.bytes.byteLength,
     assetId: asset.id,
     publicUrl: uploaded.publicUrl,
-    metadata: { storefrontId: params.storefrontId, storageProvider: provider },
+    metadata: {
+      storefrontId: params.storefrontId,
+      storageProvider: provider,
+      malwareScanEnabled: safe.scan.enabled,
+      malwareScanLayer: safe.scan.enabled ? safe.scan.layer : null,
+      malwareScanVerdict: safe.scan.enabled ? safe.scan.verdict : null,
+    },
   });
 
   return { ok: true, assetId: asset.id, url: uploaded.publicUrl };
