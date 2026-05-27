@@ -1,11 +1,13 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import * as auditService from "@/services/food-safety/audit-service";
 import * as correctiveService from "@/services/food-safety/corrective-action-service";
@@ -38,7 +40,26 @@ const checklistSchema = z.object({
   questions: z.string().min(1),
 });
 
+async function requireFoodSafetyPermission(operation: string): Promise<{ ok: true } | { ok: false }> {
+  const permission: PermissionKey = "production.manage";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "food_safety.permission_denied",
+      entityType: "FoodSafety",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false };
+  }
+  return { ok: true };
+}
+
 export async function logTemperatureAction(formData: FormData): Promise<void> {
+  const gate = await requireFoodSafetyPermission("food_safety.log_temperature");
+  if (!gate.ok) return;
+
   const { dataUserId, sessionUserId } = await requireTenantActor();
   const parsed = tempLogSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) throw new Error("Invalid data");
@@ -51,6 +72,9 @@ export async function logTemperatureAction(formData: FormData): Promise<void> {
 }
 
 export async function createChecklistAction(formData: FormData): Promise<void> {
+  const gate = await requireFoodSafetyPermission("food_safety.create_checklist");
+  if (!gate.ok) return;
+
   const { dataUserId } = await requireTenantActor();
   const parsed = checklistSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) throw new Error("Invalid data");
@@ -70,6 +94,9 @@ export async function createChecklistAction(formData: FormData): Promise<void> {
 }
 
 export async function startAuditAction(formData: FormData): Promise<void> {
+  const gate = await requireFoodSafetyPermission("food_safety.start_audit");
+  if (!gate.ok) return;
+
   const { dataUserId, sessionUserId } = await requireTenantActor();
   const checklistId = z.string().uuid().safeParse(formData.get("checklistId"));
   if (!checklistId.success) throw new Error("Checklist required");
@@ -83,6 +110,9 @@ export async function startAuditAction(formData: FormData): Promise<void> {
 }
 
 export async function submitAuditResponseAction(formData: FormData): Promise<void> {
+  const gate = await requireFoodSafetyPermission("food_safety.submit_audit_response");
+  if (!gate.ok) return;
+
   const { dataUserId } = await requireTenantActor();
   const auditId = z.string().uuid().safeParse(formData.get("auditId"));
   const responseId = z.string().uuid().safeParse(formData.get("responseId"));
@@ -101,6 +131,9 @@ export async function submitAuditResponseAction(formData: FormData): Promise<voi
 }
 
 export async function addCorrectiveActionAction(formData: FormData): Promise<void> {
+  const gate = await requireFoodSafetyPermission("food_safety.add_corrective_action");
+  if (!gate.ok) return;
+
   const { dataUserId } = await requireTenantActor();
   const auditId = z.string().uuid().safeParse(formData.get("auditId"));
   const description = z.string().min(3).safeParse(formData.get("description"));
@@ -115,6 +148,9 @@ export async function addCorrectiveActionAction(formData: FormData): Promise<voi
 }
 
 export async function verifyFoodSafetyAuditAction(formData: FormData): Promise<void> {
+  const gate = await requireFoodSafetyPermission("food_safety.verify_audit");
+  if (!gate.ok) return;
+
   const { dataUserId, sessionUserId } = await requireTenantActor();
   const auditId = z.string().uuid().safeParse(formData.get("auditId"));
   if (!auditId.success) throw new Error("Invalid audit");
