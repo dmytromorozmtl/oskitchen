@@ -1,11 +1,10 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { workspacePermissionForExport } from "@/lib/import-export/export-permission";
+import { resolveVisibleExportTypes } from "@/lib/import-export/export-page-access";
 import { ALL_EXPORT_TYPES, type ExportType } from "@/lib/import-export/export-types";
-import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 
 const COPY: Record<
   ExportType,
@@ -33,10 +32,10 @@ const COPY: Record<
 
 export default async function ExportDataPage() {
   const actor = await requireWorkspacePermissionActor();
-  const email = actor.email ?? "";
-  const types = ALL_EXPORT_TYPES.filter((type) => {
-    if (type === "audit_logs") return isSuperAdminEmail(email);
-    return hasPermission(actor.granted, workspacePermissionForExport(type));
+  const isPlatformSuperAdmin = await hasSuperAdminRoleRow(actor.sessionUserId);
+  const types = resolveVisibleExportTypes({
+    granted: actor.granted,
+    isPlatformSuperAdmin,
   });
 
   return (
