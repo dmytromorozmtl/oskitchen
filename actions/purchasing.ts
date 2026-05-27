@@ -5,6 +5,9 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { prisma } from "@/lib/prisma";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { notifyPurchaseOrderApprovalRequest } from "@/services/purchasing/purchase-order-approval-service";
@@ -21,7 +24,31 @@ async function loadOwnedPo(userId: string, purchaseOrderId: string) {
   });
 }
 
+async function requirePurchasingPermission(
+  permission: PermissionKey,
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "purchasing.permission_denied",
+      entityType: "PurchaseOrder",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function submitPurchaseOrderForApproval(formData: FormData) {
+  const gate = await requirePurchasingPermission(
+    "production.manage",
+    "purchasing.submit_for_approval",
+  );
+  if (!gate.ok) return fail(gate.error);
+
   const { sessionUser, dataUserId } = await requireTenantActor();
   const parsed = poIdSchema.safeParse({ purchaseOrderId: formData.get("purchaseOrderId") });
   if (!parsed.success) return { error: "Invalid purchase order." };
@@ -60,6 +87,12 @@ export async function submitPurchaseOrderForApproval(formData: FormData) {
 }
 
 export async function approvePurchaseOrder(formData: FormData) {
+  const gate = await requirePurchasingPermission(
+    "reports.read.financial",
+    "purchasing.approve",
+  );
+  if (!gate.ok) return fail(gate.error);
+
   const { sessionUser, dataUserId } = await requireTenantActor();
   const parsed = poIdSchema.safeParse({
     purchaseOrderId: formData.get("purchaseOrderId"),
@@ -92,6 +125,12 @@ export async function approvePurchaseOrder(formData: FormData) {
 }
 
 export async function rejectPurchaseOrder(formData: FormData) {
+  const gate = await requirePurchasingPermission(
+    "reports.read.financial",
+    "purchasing.reject",
+  );
+  if (!gate.ok) return fail(gate.error);
+
   const { sessionUser, dataUserId } = await requireTenantActor();
   const parsed = poIdSchema.safeParse({
     purchaseOrderId: formData.get("purchaseOrderId"),

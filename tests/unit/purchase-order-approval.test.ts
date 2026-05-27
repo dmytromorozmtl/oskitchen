@@ -15,6 +15,20 @@ vi.mock("@/lib/scope/require-tenant-actor", () => ({
   }),
 }));
 
+vi.mock("@/lib/permissions/mutation-access", () => ({
+  requireMutationPermission: vi.fn().mockResolvedValue({
+    ok: true,
+    actor: {
+      sessionUserId: "actor-1",
+      dataUserId: "user-1",
+      workspaceId: "ws-1",
+      workspaceRole: "OWNER",
+      email: "chef@example.com",
+      granted: new Set(["production.manage"]),
+    },
+  }),
+}));
+
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
 
 vi.mock("@/services/purchasing/purchase-order-approval-service", () => ({
