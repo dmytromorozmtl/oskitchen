@@ -1,21 +1,45 @@
 "use server";
 
 
-import { UserRole } from "@prisma/client";
-
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { randomBytes } from "crypto";
 
 import { hashApiKey } from "@/lib/api-public/auth";
 import { requireBillingActor } from "@/lib/billing/require-billing-actor";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { isBillingBypassed } from "@/lib/billing/dev-bypass";
 import { getBillingAccess } from "@/lib/billing/access";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { canUseFeature } from "@/lib/plans/feature-registry";
-import { isSuperAdminUser } from "@/lib/platform-super-bypass";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
+import { logIntegrationPermissionDenied } from "@/services/integrations/integration-permission-audit";
+import { logSettingsPermissionDenied } from "@/services/settings/settings-permission-audit";
+
+async function requireApiKeyManageAccess(operation: string) {
+  const access = await requireMutationPermission("integrations.manage");
+  if (!access.ok) {
+    await logIntegrationPermissionDenied(access.actor, {
+      requiredPermission: "integrations.manage",
+      operation,
+    });
+    return { ok: false as const, error: access.error };
+  }
+  return { ok: true as const, actor: access.actor };
+}
+
+async function requireBrandingSettingsAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await logSettingsPermissionDenied(access.actor, {
+      requiredPermission: "workspace.settings",
+      operation,
+    });
+    return { ok: false as const };
+  }
+  return { ok: true as const };
+}
+
 export async function submitCancellationFeedbackForm(formData: FormData): Promise<void> {
   const access = await requireBillingActor("billing.cancel", {
     operation: "billing.cancellation_feedback",
@@ -43,12 +67,10 @@ export async function submitCancellationFeedbackForm(formData: FormData): Promis
 
 export async function saveBrandingSettingsForm(formData: FormData): Promise<void> {
   try {
+    const manage = await requireBrandingSettingsAccess("monetization.branding.save");
+    if (!manage.ok) return;
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true },
-    });
-    if (profile?.role !== UserRole.OWNER) return;
 
     const gate = await canUseFeature(user.id, "white_label");
     if (!gate.allowed) return;
@@ -89,15 +111,10 @@ export async function createApiKeyForm(
   formData: FormData,
 ): Promise<{ ok: true; secret: string } | { error: string }> {
   try {
+    const manage = await requireApiKeyManageAccess("monetization.api_key.create");
+    if (!manage.ok) return { error: manage.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true, email: true },
-    });
-    const superOk = await isSuperAdminUser(user.id, profile?.email ?? user.email);
-    if (profile?.role !== UserRole.OWNER && !superOk) {
-      return { error: "Owner only." };
-    }
 
     const gate = await canUseFeature(user.id, "api_access");
     if (!gate.allowed && !isBillingBypassed()) {
@@ -133,14 +150,12 @@ export async function createApiKeyForm(
 }
 
 export async function revokeApiKeyById(id: string): Promise<void> {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
   if (!id) return;
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: user.id },
-    select: { role: true, email: true },
-  });
-  const superOk = await isSuperAdminUser(user.id, profile?.email ?? user.email);
-  if (profile?.role !== UserRole.OWNER && !superOk) return;
+
+  const manage = await requireApiKeyManageAccess("monetization.api_key.revoke");
+  if (!manage.ok) return;
+
+  const { dataUserId } = await requireTenantActor();
   await prisma.apiKey.updateMany({
     where: { id, userId: dataUserId },
     data: { active: false, revokedAt: new Date() },
