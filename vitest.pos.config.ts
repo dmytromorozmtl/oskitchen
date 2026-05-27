@@ -19,6 +19,7 @@ export default defineConfig({
       "unit/actions-pos-rbac.test.ts",
       "unit/actions-pos-tabs-rbac.test.ts",
       "unit/pos-mutation-access-role-matrix.test.ts",
+      "unit/pos-terminal-service.test.ts",
       "unit/pos-ledger-pages-rbac.test.ts",
       "unit/pos-handheld-tabs-rbac.test.ts",
       "unit/pos-settings-rbac.test.ts",
