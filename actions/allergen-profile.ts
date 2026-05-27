@@ -1,11 +1,13 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { LabelDataSourceType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { parseAllergenListCsv } from "@/lib/nutrition/allergen-registry";
 import { productByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -17,8 +19,29 @@ function toJsonArray(csv: string): string[] {
   return parseAllergenListCsv(csv);
 }
 
+async function requireAllergenProfileMutationPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false }> {
+  const permission: PermissionKey = "products.edit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "allergen_profile.permission_denied",
+      entityType: "AllergenProfile",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false };
+  }
+  return { ok: true };
+}
+
 export async function upsertAllergenProfileFormAction(formData: FormData) {
   try {
+    const gate = await requireAllergenProfileMutationPermission("allergen_profile.upsert");
+    if (!gate.ok) return;
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const productId = z.string().uuid().safeParse(formData.get("productId"));
     if (!productId.success) return;
