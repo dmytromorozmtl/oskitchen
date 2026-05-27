@@ -86,10 +86,5 @@ export async function canAccessOwnerOnlySurfaces(
 }
 
 export async function isTargetSuperAdminProtected(targetUserId: string): Promise<boolean> {
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: targetUserId },
-    select: { email: true },
-  });
-  if (profile && isSuperAdminEmail(profile.email)) return true;
   return hasSuperAdminRoleRow(targetUserId);
 }
