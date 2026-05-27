@@ -21,6 +21,6 @@ export function createGrowthActorScope(
     email: actor.email,
     isOwner: base.isOwner,
     role: profileRole ?? base.role ?? null,
-    granted: base.granted,
+    granted: actor.granted,
   };
 }
