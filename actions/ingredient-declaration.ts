@@ -1,11 +1,13 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { LabelDataSourceType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { productByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -13,8 +15,29 @@ import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { appendLabelVerificationEvent } from "@/services/nutrition-labels/label-verification-log";
 
+async function requireIngredientDeclarationMutationPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false }> {
+  const permission: PermissionKey = "products.edit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "ingredient_declaration.permission_denied",
+      entityType: "IngredientDeclaration",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false };
+  }
+  return { ok: true };
+}
+
 export async function upsertIngredientDeclarationFormAction(formData: FormData) {
   try {
+    const gate = await requireIngredientDeclarationMutationPermission("ingredient_declaration.upsert");
+    if (!gate.ok) return;
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const productId = z.string().uuid().safeParse(formData.get("productId"));
     if (!productId.success) return;
