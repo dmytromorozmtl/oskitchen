@@ -43,7 +43,7 @@ Priority rule:
 - Rollback considerations: preserve last known-good cron manifest
 - Acceptance criteria: cron allowlist, route inventory, production profile, and `vercel.json` reconcile cleanly
 - Required tests: cron reconciliation tests, CI validation, smoke on critical cron routes
-- Status update: `verifyCronSecret` now compares bearer tokens with `timingSafeEqualText`, returns structured denial reasons, and `runCronRoute` records `cron.auth_denied` audit rows for missing `CRON_SECRET` or invalid bearer auth (experimental skip responses are not audited); focused unit tests cover timing-safe rejection and audit wiring. Live repo reconciliation re-certified via `tests/unit/cron-reconciliation-live.test.ts`; `npm run validate:production-crons` now runs that Vitest gate (CI no longer depends on a direct `npx tsx` invocation).
+- Status update: `verifyCronSecret` now compares bearer tokens with `timingSafeEqualText`, returns structured denial reasons, and `runCronRoute` records `cron.auth_denied` audit rows for missing `CRON_SECRET` or invalid bearer auth (experimental skip responses are not audited); focused unit tests cover timing-safe rejection and audit wiring. Live repo reconciliation re-certified via `tests/unit/cron-reconciliation-live.test.ts`; `npm run validate:production-crons` now runs that Vitest gate (CI no longer depends on a direct `npx tsx` invocation). Cron route inventory validation is shared in `services/cron/cron-route-inventory-validation.ts` with live gate `tests/unit/cron-route-inventory-live.test.ts`; `npm run validate:cron-inventory` runs that Vitest check in CI.
 - Priority order: 5
 - Estimated complexity: Low to Medium
 
