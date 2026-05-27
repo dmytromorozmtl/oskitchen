@@ -12,8 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { isOverdue, progressForRun } from "@/lib/playbooks/playbook-runner";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { isTerminalRunStatus } from "@/lib/playbooks/playbook-status";
 import { getRun } from "@/services/playbooks/playbook-service";
 
@@ -25,8 +25,9 @@ export default async function PlaybookRunPage({
   params: Promise<Params>;
 }) {
   const { runId } = await params;
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.view");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope } = access;
   const run = await getRun(scope, runId);
   if (!run) notFound();
 

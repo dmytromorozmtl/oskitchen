@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { getPlaybook } from "@/services/playbooks/playbook-service";
 
 type Params = { playbookId: string };
@@ -23,8 +23,9 @@ export default async function PlaybookDetailPage({
   params: Promise<Params>;
 }) {
   const { playbookId } = await params;
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.view");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope } = access;
   const playbook = await getPlaybook(scope, playbookId);
   if (!playbook) notFound();
 

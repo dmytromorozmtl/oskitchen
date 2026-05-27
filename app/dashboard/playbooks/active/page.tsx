@@ -3,13 +3,14 @@ import Link from "next/link";
 import { RunStatusBadge } from "@/components/dashboard/playbooks/playbook-status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { isOverdue, progressForRun } from "@/lib/playbooks/playbook-runner";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { listRuns } from "@/services/playbooks/playbook-service";
 
 export default async function ActiveRunsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.view");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope } = access;
   const runs = await listRuns(scope, {
     statuses: ["RUNNING", "BLOCKED", "COMPLETED", "CANCELLED"],
     limit: 50,

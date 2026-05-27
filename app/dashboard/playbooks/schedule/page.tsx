@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { listPlaybooks } from "@/services/playbooks/playbook-service";
 
 const TRIGGER_LABEL: Record<string, string> = {
@@ -15,8 +15,9 @@ const TRIGGER_LABEL: Record<string, string> = {
 };
 
 export default async function PlaybookSchedulePage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.view");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope } = access;
   const playbooks = await listPlaybooks(scope, {});
 
   const recurring = playbooks.filter(

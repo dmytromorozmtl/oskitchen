@@ -1,5 +1,7 @@
 import type { BusinessType, PlaybookType, PlaybookTriggerType } from "@prisma/client";
 
+import type { PermissionKey } from "@/lib/permissions/permissions";
+
 export type PlaybookCapability =
   | "playbooks.view"
   | "playbooks.run"
@@ -15,6 +17,7 @@ export type PlaybookActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  granted?: ReadonlySet<PermissionKey>;
 };
 
 export type PlaybookModuleKey =

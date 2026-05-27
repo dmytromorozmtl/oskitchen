@@ -1,4 +1,7 @@
 import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
+import { workspacePermissionForPlaybookCapability } from "@/lib/playbooks/playbook-permission-keys";
 
 import type { PlaybookActorScope, PlaybookCapability } from "@/lib/playbooks/playbook-types";
 
@@ -33,6 +36,12 @@ export function canUsePlaybooks(
 ): boolean {
   if (isSuperAdminPlaybooks(scope)) return true;
   if (scope.isOwner) return true;
+
+  const canonical = workspacePermissionForPlaybookCapability(cap);
+  if (scope.granted && hasPermission(scope.granted, canonical)) {
+    return true;
+  }
+
   const role = (scope.role ?? "").toLowerCase();
   return GRANTS[cap]?.includes(role) ?? false;
 }

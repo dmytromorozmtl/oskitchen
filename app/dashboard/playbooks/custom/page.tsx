@@ -9,12 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUsePlaybooks } from "@/lib/playbooks/playbook-permissions";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { listPlaybooks } from "@/services/playbooks/playbook-service";
 
 export default async function CustomPlaybooksPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.view");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope, scope: actorScope } = access;
+  const canCreateCustom = canUsePlaybooks(actorScope, "playbooks.create_custom");
   const custom = await listPlaybooks(scope, { customOnly: true });
 
   return (
@@ -26,9 +29,11 @@ export default async function CustomPlaybooksPage() {
             SOPs your team has authored. Edit, archive, or run them.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/dashboard/playbooks/new">New custom playbook</Link>
-        </Button>
+        {canCreateCustom ? (
+          <Button asChild>
+            <Link href="/dashboard/playbooks/new">New custom playbook</Link>
+          </Button>
+        ) : null}
       </div>
 
       {custom.length === 0 ? (
@@ -41,9 +46,11 @@ export default async function CustomPlaybooksPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild size="sm">
-              <Link href="/dashboard/playbooks/new">Create custom playbook</Link>
-            </Button>
+            {canCreateCustom ? (
+              <Button asChild size="sm">
+                <Link href="/dashboard/playbooks/new">Create custom playbook</Link>
+              </Button>
+            ) : null}
           </CardContent>
         </Card>
       ) : (

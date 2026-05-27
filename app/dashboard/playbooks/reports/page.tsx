@@ -1,12 +1,14 @@
 import { PlaybookKpis } from "@/components/dashboard/playbooks/playbook-kpis";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { getPlaybookKpis } from "@/services/playbooks/playbook-service";
 
 export default async function PlaybookReportsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.read.reports");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope } = access;
+  const dataUserId = scope.userId;
   const kpis = await getPlaybookKpis(scope);
 
   const recentRuns = await prisma.playbookRun.findMany({

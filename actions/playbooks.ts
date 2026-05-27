@@ -1,16 +1,22 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import type { PlaybookRunStepStatus, PlaybookTriggerType, PlaybookType } from "@prisma/client";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireUserProfile } from "@/lib/auth";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import {
+  createPlaybookActorScope,
+  type PlaybookTenantScope,
+} from "@/lib/playbooks/playbook-actor-scope";
+import { workspacePermissionForPlaybookCapability } from "@/lib/playbooks/playbook-permission-keys";
 import { canUsePlaybooks } from "@/lib/playbooks/playbook-permissions";
-import type { PlaybookActorScope } from "@/lib/playbooks/playbook-types";
+import type { PlaybookCapability } from "@/lib/playbooks/playbook-types";
 import { prisma } from "@/lib/prisma";
+import { logPlaybookPermissionDenied } from "@/services/playbooks/playbook-permission-audit";
 import {
   cancelRun,
   completeRun,
@@ -25,27 +31,42 @@ import { generateTasksForRun } from "@/services/playbooks/playbook-task-generato
 
 const PATH = "/dashboard/playbooks";
 
-function scopeFor(
-  user: { id: string; email?: string | null },
-  userId: string,
-): PlaybookActorScope & {
-  userId: string;
-  email: string | null;
-} {
-  return {
-    userId,
-    email: user.email ?? null,
-    isOwner: true,
-    role: null,
-  };
+async function authorize(
+  capability: PlaybookCapability,
+): Promise<{ ok: true; scope: PlaybookTenantScope } | { ok: false; error: string }> {
+  const required = workspacePermissionForPlaybookCapability(capability);
+  const access = await requireMutationPermission(required);
+  let profile: { role: string | null } | null = null;
+  try {
+    profile = await requireUserProfile();
+  } catch {
+    profile = null;
+  }
+  if (!access.ok) {
+    await logPlaybookPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      playbookCapability: capability,
+    });
+    return { ok: false, error: access.error ?? "Forbidden" };
+  }
+  const scope = createPlaybookActorScope(access.actor, profile?.role ?? null);
+  if (!canUsePlaybooks(scope, capability)) {
+    await logPlaybookPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      playbookCapability: capability,
+    });
+    return { ok: false, error: "Forbidden" };
+  }
+  return { ok: true, scope };
 }
 
 export async function ensureSystemPlaybooksAction(): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.view")) return { ok: false, error: "Forbidden" };
-    await ensureSystemPlaybooks(scope);
+    const auth = await authorize("playbooks.view");
+    if (!auth.ok) return { ok: false, error: auth.error };
+    await ensureSystemPlaybooks(auth.scope);
     revalidatePath(PATH);
     return { ok: true };
   } catch (e) {
@@ -66,17 +87,17 @@ export async function startRunAction(
   input: z.infer<typeof startSchema>,
 ): Promise<{ ok: boolean; runId?: string; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.run")) return { ok: false, error: "Forbidden" };
+    const auth = await authorize("playbooks.run");
+    if (!auth.ok) return { ok: false, error: auth.error };
+    const { scope } = auth;
     const parsed = startSchema.parse(input);
     const owned = await prisma.playbook.findFirst({
-      where: { id: parsed.playbookId, userId },
+      where: { id: parsed.playbookId, userId: scope.userId },
       select: { id: true },
     });
     if (!owned) return { ok: false, error: "Playbook not found" };
     const settings = await prisma.kitchenSettings.findUnique({
-      where: { userId },
+      where: { userId: scope.userId },
       select: { businessType: true },
     });
     const run = await startPlaybookRun(scope, {
@@ -108,13 +129,10 @@ export async function transitionStepAction(
   input: z.infer<typeof transitionSchema>,
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.complete_step")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const auth = await authorize("playbooks.complete_step");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const parsed = transitionSchema.parse(input);
-    await transitionRunStep(scope, parsed.runStepId, parsed.status as PlaybookRunStepStatus, {
+    await transitionRunStep(auth.scope, parsed.runStepId, parsed.status as PlaybookRunStepStatus, {
       blockedReason: parsed.blockedReason ?? null,
       notes: parsed.notes ?? null,
     });
@@ -130,13 +148,10 @@ export async function generateTasksAction(
   input: { runId: string },
 ): Promise<{ ok: boolean; created?: number; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.generate_tasks")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const auth = await authorize("playbooks.generate_tasks");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const runId = z.string().uuid().parse(input.runId);
-    const result = await generateTasksForRun(scope, runId);
+    const result = await generateTasksForRun(auth.scope, runId);
     revalidatePath(`${PATH}/runs/${runId}`);
     revalidatePath(PATH);
     return { ok: true, created: result.created };
@@ -149,11 +164,10 @@ export async function completeRunAction(
   input: { runId: string },
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.run")) return { ok: false, error: "Forbidden" };
+    const auth = await authorize("playbooks.run");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const runId = z.string().uuid().parse(input.runId);
-    await completeRun(scope, runId);
+    await completeRun(auth.scope, runId);
     revalidatePath(`${PATH}/runs/${runId}`);
     revalidatePath(PATH);
     return { ok: true };
@@ -166,11 +180,10 @@ export async function cancelRunAction(
   input: { runId: string; reason?: string },
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.run")) return { ok: false, error: "Forbidden" };
+    const auth = await authorize("playbooks.run");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const runId = z.string().uuid().parse(input.runId);
-    await cancelRun(scope, runId, input.reason);
+    await cancelRun(auth.scope, runId, input.reason);
     revalidatePath(`${PATH}/runs/${runId}`);
     revalidatePath(PATH);
     return { ok: true };
@@ -228,15 +241,12 @@ export async function createCustomPlaybookAction(
   input: z.infer<typeof customSchema>,
 ): Promise<{ ok: boolean; playbookId?: string; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.create_custom")) {
-      return { ok: false, error: "Forbidden" };
-    }
+    const auth = await authorize("playbooks.create_custom");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const parsed = customSchema.parse(input);
     const slug = slugify(parsed.title) || `custom-${Date.now()}`;
     const created = await createPlaybookFromSeed(
-      scope,
+      auth.scope,
       {
         slug,
         title: parsed.title,
@@ -270,11 +280,10 @@ export async function archivePlaybookAction(
   input: { playbookId: string },
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.archive")) return { ok: false, error: "Forbidden" };
+    const auth = await authorize("playbooks.archive");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const playbookId = z.string().uuid().parse(input.playbookId);
-    await archivePlaybook(scope, playbookId);
+    await archivePlaybook(auth.scope, playbookId);
     revalidatePath(PATH);
     return { ok: true };
   } catch (e) {
@@ -292,18 +301,17 @@ export async function updatePlaybookSettingsAction(
   input: z.infer<typeof settingsSchema>,
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const { sessionUser: user, userId } = await requireTenantActor();
-    const scope = scopeFor(user, userId);
-    if (!canUsePlaybooks(scope, "playbooks.edit")) return { ok: false, error: "Forbidden" };
+    const auth = await authorize("playbooks.edit");
+    if (!auth.ok) return { ok: false, error: auth.error };
     const parsed = settingsSchema.parse(input);
     await prisma.playbook.updateMany({
-      where: { id: parsed.playbookId, userId },
+      where: { id: parsed.playbookId, userId: auth.scope.userId },
       data: {
         active: parsed.active ?? undefined,
         recurrenceRule: parsed.recurrenceRule ?? undefined,
       },
     });
-    await recordPlaybookEvent(scope, "playbook_updated", {
+    await recordPlaybookEvent(auth.scope, "playbook_updated", {
       playbookId: parsed.playbookId,
       changes: parsed as unknown as Prisma.InputJsonValue,
     });

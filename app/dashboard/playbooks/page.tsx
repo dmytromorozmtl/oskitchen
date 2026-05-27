@@ -13,8 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { BUSINESS_TYPE_LABELS } from "@/lib/business-modes";
+import { canUsePlaybooks } from "@/lib/playbooks/playbook-permissions";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { progressForRun } from "@/lib/playbooks/playbook-runner";
 import { prisma } from "@/lib/prisma";
 import {
@@ -24,8 +25,14 @@ import {
 } from "@/services/playbooks/playbook-service";
 
 export default async function PlaybooksRecommendedPage() {
-  const { sessionUser, dataUserId } = await getTenantActor();
+  const access = await requirePlaybooksPageAccess("playbooks.view");
+  if (!access.ok) return access.deny;
   await ensureSystemPlaybooksAction();
+
+  const { tenantScope: scope, scope: actorScope } = access;
+  const dataUserId = scope.userId;
+  const canCreateCustom = canUsePlaybooks(actorScope, "playbooks.create_custom");
+  const canRun = canUsePlaybooks(actorScope, "playbooks.run");
 
   const settings = await prisma.kitchenSettings.findUnique({
     where: { userId: dataUserId },
@@ -33,7 +40,6 @@ export default async function PlaybooksRecommendedPage() {
   });
   const mode = settings?.businessType ?? null;
   const modeLabel = mode ? BUSINESS_TYPE_LABELS[mode] : null;
-  const scope = { userId: dataUserId, email: sessionUser.email ?? null };
 
   const [recommended, kpis, activeRuns] = await Promise.all([
     recommendedPlaybooksForMode(scope, mode),
@@ -58,12 +64,16 @@ export default async function PlaybooksRecommendedPage() {
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/dashboard/playbooks/new">Create custom playbook</Link>
-          </Button>
-          <Button asChild className="rounded-full">
-            <Link href="/dashboard/playbooks/all">Run playbook</Link>
-          </Button>
+          {canCreateCustom ? (
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href="/dashboard/playbooks/new">Create custom playbook</Link>
+            </Button>
+          ) : null}
+          {canRun ? (
+            <Button asChild className="rounded-full">
+              <Link href="/dashboard/playbooks/all">Run playbook</Link>
+            </Button>
+          ) : null}
         </div>
       </div>
 
@@ -103,9 +113,11 @@ export default async function PlaybooksRecommendedPage() {
               <Button asChild size="sm" variant="secondary">
                 <Link href="/dashboard/playbooks/templates">Use system template</Link>
               </Button>
-              <Button asChild size="sm" variant="outline">
-                <Link href="/dashboard/playbooks/new">Create custom playbook</Link>
-              </Button>
+              {canCreateCustom ? (
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/dashboard/playbooks/new">Create custom playbook</Link>
+                </Button>
+              ) : null}
             </CardContent>
           </Card>
         ) : (

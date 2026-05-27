@@ -1,9 +1,10 @@
 import { CustomPlaybookForm } from "@/components/dashboard/playbooks/custom-playbook-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 
 export default async function NewPlaybookPage() {
-  await getTenantActor();
+  const access = await requirePlaybooksPageAccess("playbooks.create_custom");
+  if (!access.ok) return access.deny;
   return (
     <div className="space-y-4">
       <div>

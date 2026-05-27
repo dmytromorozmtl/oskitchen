@@ -1,10 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requirePlaybooksPageAccess } from "@/lib/playbooks/playbook-page-access";
 import { listRecentEvents } from "@/services/playbooks/playbook-service";
 
 export default async function PlaybookSettingsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const scope = { userId: dataUserId, email: user.email ?? null };
+  const access = await requirePlaybooksPageAccess("playbooks.edit");
+  if (!access.ok) return access.deny;
+  const { tenantScope: scope } = access;
   const events = await listRecentEvents(scope, 80);
 
   return (

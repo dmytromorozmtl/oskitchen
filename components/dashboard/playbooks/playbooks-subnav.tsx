@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
+export type PlaybooksSubnavLink = {
+  href: string;
+  label: string;
+  match?: "exact" | "prefix";
+};
+
+const DEFAULT_LINKS: PlaybooksSubnavLink[] = [
   { href: "/dashboard/playbooks", label: "Recommended", match: "exact" },
   { href: "/dashboard/playbooks/all", label: "All Playbooks" },
   { href: "/dashboard/playbooks/active", label: "Active Runs" },
@@ -16,11 +22,12 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/playbooks/settings", label: "Settings" },
 ];
 
-export function PlaybooksSubnav() {
+export function PlaybooksSubnav({ links = DEFAULT_LINKS }: { links?: PlaybooksSubnavLink[] }) {
   const path = usePathname();
+  if (links.length === 0) return null;
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3 print:hidden">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact"
             ? path === l.href

@@ -51,6 +51,8 @@ export const PERMISSIONS = {
   "go-live.manage": "Create and operate launch readiness projects",
   "go-live.unlock": "Override critical launch blockers",
   "executive.insights.manage": "Resolve or dismiss executive dashboard insights",
+  "playbooks.manage": "Create, edit, and archive custom playbooks",
+  "playbooks.participate": "View playbooks and complete run steps",
   "growth.view": "View growth / beta surfaces",
 } as const;
 
@@ -107,6 +109,8 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "go-live.manage",
   "go-live.unlock",
   "executive.insights.manage",
+  "playbooks.manage",
+  "playbooks.participate",
   "growth.view",
 ];
 
@@ -121,6 +125,7 @@ const STAFF_OPS: readonly PermissionKey[] = [
   "packing.manage",
   "routes.manage",
   "training.participate",
+  "playbooks.participate",
 ];
 
 export function defaultPermissionsForWorkspaceRole(role: UserRole): Set<PermissionKey> {
