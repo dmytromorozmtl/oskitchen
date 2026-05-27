@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type CateringQuotePermission =
   | "catering_quote.read.list"
   | "catering_quote.read.detail"
@@ -25,10 +23,11 @@ export type CateringQuoteActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdminCatering(scope: CateringQuoteActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoCateringQuote(scope: CateringQuoteActorScope, permission: CateringQuotePermission): boolean {
