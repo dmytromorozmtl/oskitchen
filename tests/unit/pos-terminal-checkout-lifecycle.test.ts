@@ -14,6 +14,11 @@ const earnLoyaltyPointsForOrder = vi.hoisted(() => vi.fn());
 const redeemLoyaltyPoints = vi.hoisted(() => vi.fn());
 const decryptOrderPiiFields = vi.hoisted(() => vi.fn());
 const getStripe = vi.hoisted(() => vi.fn());
+const stripePaymentIntents = vi.hoisted(() => ({
+  create: vi.fn(),
+  cancel: vi.fn(),
+  retrieve: vi.fn(),
+}));
 
 const state = vi.hoisted(() => ({
   register: {
@@ -175,7 +180,11 @@ vi.mock("@/lib/prisma", () => ({
 
 import { prisma } from "@/lib/prisma";
 import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
-import { processTerminalPayment } from "@/services/payments/stripe-terminal-service";
+import {
+  cancelTerminalPayment,
+  createTerminalPaymentIntent,
+  processTerminalPayment,
+} from "@/services/payments/stripe-terminal-service";
 
 describe("POS terminal checkout lifecycle", () => {
   beforeEach(() => {
@@ -245,17 +254,21 @@ describe("POS terminal checkout lifecycle", () => {
       },
     );
 
-    getStripe.mockReturnValue({
-      paymentIntents: {
-        retrieve: vi.fn().mockResolvedValue({
-          status: "succeeded",
-          latest_charge: {
-            payment_method_details: {
-              card_present: { brand: "visa", last4: "4242" },
-            },
-          },
-        }),
+    stripePaymentIntents.create.mockResolvedValue({
+      client_secret: "pi_retry_secret",
+      id: "pi_retry",
+    });
+    stripePaymentIntents.cancel.mockResolvedValue({});
+    stripePaymentIntents.retrieve.mockResolvedValue({
+      status: "succeeded",
+      latest_charge: {
+        payment_method_details: {
+          card_present: { brand: "visa", last4: "4242" },
+        },
       },
+    });
+    getStripe.mockReturnValue({
+      paymentIntents: stripePaymentIntents,
     } as never);
   });
 
@@ -386,6 +399,145 @@ describe("POS terminal checkout lifecycle", () => {
     expect(vi.mocked(prisma.pOSTransaction.findFirst)).toHaveBeenCalledWith({
       where: { orderId: "ord-1", userId: "owner-1" },
       include: { payments: true },
+    });
+  });
+
+  it("leaves the local checkout pending after terminal cancellation and allows a later recovery capture", async () => {
+    const checkout = await checkoutPosSale("owner-1", "staff-1", {
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      staffMemberId: "staff-member-1",
+      locationId: null,
+      brandId: null,
+      customerId: null,
+      fulfillmentDetail: "PICKUP",
+      paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      lines: [{ title: "Mocha", quantity: 1, unitPrice: 9.75 }],
+    });
+
+    expect(checkout).toEqual({
+      ok: true,
+      orderId: "ord-1",
+      transactionId: "tx-1",
+      receiptNumber: expect.stringMatching(/^POS-/),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+        externalPaymentReference: null,
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PENDING",
+        provider: "INTERNAL",
+      }),
+    );
+
+    await cancelTerminalPayment("pi_original");
+
+    expect(stripePaymentIntents.cancel).toHaveBeenCalledWith("pi_original");
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+        externalPaymentReference: null,
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PENDING",
+        provider: "INTERNAL",
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(1);
+    expect(state.posAuditEvents[0]).toEqual(
+      expect.objectContaining({
+        action: "pos.checkout.completed",
+        transactionId: "tx-1",
+      }),
+    );
+
+    const retryIntent = await createTerminalPaymentIntent(9.75, "usd", {
+      orderId: "ord-1",
+      userId: "owner-1",
+    });
+    expect(retryIntent).toEqual({
+      clientSecret: "pi_retry_secret",
+      paymentIntentId: "pi_retry",
+    });
+    expect(stripePaymentIntents.create).toHaveBeenCalledWith({
+      amount: 975,
+      currency: "usd",
+      payment_method_types: ["card_present"],
+      capture_method: "automatic",
+      metadata: { orderId: "ord-1", userId: "owner-1" },
+    });
+
+    const recovered = await processTerminalPayment("pi_retry", "ord-1", "owner-1");
+
+    expect(recovered).toEqual(
+      expect.objectContaining({
+        id: "tx-1",
+        registerId: state.register.id,
+        shiftId: state.shift.id,
+        paymentStatus: "PAID",
+        externalPaymentReference: "pi_retry",
+        payments: [
+          expect.objectContaining({
+            id: "pay-1",
+            status: "PAID",
+            provider: "STRIPE",
+            providerReference: "pi_retry",
+          }),
+        ],
+      }),
+    );
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        externalPaymentReference: "pi_retry",
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PAID",
+        provider: "STRIPE",
+        providerReference: "pi_retry",
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(2);
+    expect(state.posAuditEvents[1]).toEqual({
+      userId: "owner-1",
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      transactionId: "tx-1",
+      staffId: "staff-member-1",
+      action: "pos.terminal.payment_captured",
+      metadataJson: {
+        paymentIntentId: "pi_retry",
+        cardBrand: "visa",
+        last4: "4242",
+      },
     });
   });
 });
