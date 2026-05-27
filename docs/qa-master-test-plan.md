@@ -145,7 +145,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ## Current Highest-Priority Additions
 1. POS permission-negative role matrix — terminal API route denials covered; tier 2b adds checkout integration in CI
-2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration in CI; staging Stripe E2E optional
+2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration + tier 2 pay-later E2E in CI; live wiring gate `test:ci:storefront-money-path:cert`; staging Stripe E2E optional
 3. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 4. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open
 5. impersonation and sensitive-action audit coverage
