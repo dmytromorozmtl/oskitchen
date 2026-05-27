@@ -3,18 +3,12 @@ import Link from "next/link";
 import { CertStatusBadge } from "@/components/dashboard/staff/badges";
 import { RevokeCertButton } from "@/components/dashboard/staff/cert-forms";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { canManageStaff } from "@/lib/staff/staff-permissions";
+import { getStaffPageAccess } from "@/lib/staff/staff-page-access";
 import { prisma } from "@/lib/prisma";
 import { isCertExpiringSoon } from "@/lib/staff/staff-certifications";
 
 export default async function CertificationsPage() {
-  const { userId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const scope = { isOwner: true, role: profile.role ?? null, email: profile.email ?? null };
-  const canEdit = canManageStaff(scope, "staff.cert.write");
+  const { userId, canCertWrite: canEdit } = await getStaffPageAccess();
 
   const certs = await prisma.staffCertification.findMany({
     where: { userId },

@@ -1,12 +1,12 @@
 import { RoleDeactivateButton, RoleUpsertForm } from "@/components/dashboard/staff/role-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getStaffPageAccess } from "@/lib/staff/staff-page-access";
 import { SYSTEM_ROLES } from "@/lib/staff/staff-roles";
 import { listRoles } from "@/services/staff/staff-service";
 
 export default async function RolesPage() {
-  const { userId } = await getTenantActor();
+  const { userId, canRoleManage } = await getStaffPageAccess();
   const roles = await listRoles(userId);
 
   return (
@@ -59,13 +59,20 @@ export default async function RolesPage() {
         </CardContent>
       </Card>
 
+      {!canRoleManage && (
+        <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          Custom role editing requires owner-level staff permissions (
+          <span className="font-medium text-foreground">staff.role.create</span>).
+        </p>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Custom roles</CardTitle>
           <CardDescription>Add or update workspace-specific roles. Permissions are JSON-shaped.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <RoleUpsertForm />
+          {canRoleManage ? <RoleUpsertForm /> : null}
           {roles.length === 0 ? (
             <p className="text-sm text-muted-foreground">No custom roles yet.</p>
           ) : (
@@ -78,7 +85,7 @@ export default async function RolesPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {r.active ? <Badge className="bg-emerald-100 text-emerald-700">Active</Badge> : <Badge variant="outline">Inactive</Badge>}
-                    {r.active ? <RoleDeactivateButton roleId={r.id} /> : null}
+                    {r.active && canRoleManage ? <RoleDeactivateButton roleId={r.id} /> : null}
                   </div>
                 </li>
               ))}

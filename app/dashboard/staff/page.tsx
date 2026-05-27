@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getStaffPageAccess } from "@/lib/staff/staff-page-access";
 
 import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { prisma } from "@/lib/prisma";
@@ -19,7 +19,7 @@ import {
 import { listStaff, listRoles, staffKpis } from "@/services/staff/staff-service";
 
 export default async function StaffPage() {
-  const { userId, workspaceId } = await getTenantActor();
+  const { userId, workspaceId, canManage } = await getStaffPageAccess();
   const profile = await requireUserProfile();
   const isSuper = isSuperAdminEmail(profile.email);
 
@@ -77,11 +77,17 @@ export default async function StaffPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              {canManage ? (
               <StaffForm
                 brands={brands}
                 locations={locations}
                 customRoles={roles.map((r) => ({ id: r.id, label: r.label }))}
               />
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  You need <span className="font-medium text-foreground">staff.manage</span> to add teammates.
+                </p>
+              )}
               <div className="flex flex-wrap items-center gap-2 text-xs">
                 <Button asChild size="sm" variant="outline">
                   <Link href="/dashboard/import-center">Import staff</Link>
@@ -128,6 +134,7 @@ export default async function StaffPage() {
               </CardContent>
             </Card>
 
+            {canManage ? (
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Add teammate (quick add)</CardTitle>
@@ -154,6 +161,7 @@ export default async function StaffPage() {
                 </form>
               </CardContent>
             </Card>
+            ) : null}
           </div>
         )}
       </div>

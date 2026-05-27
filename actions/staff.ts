@@ -1,18 +1,14 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-
-import {
-  canManageStaff,
-  type StaffActorScope,
-  type StaffCapability,
-} from "@/lib/staff/staff-permissions";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { resolveStaffActorScope } from "@/lib/staff/resolve-staff-actor-scope";
+import { canManageStaff, type StaffCapability } from "@/lib/staff/staff-permissions";
+import { logStaffPermissionDenied } from "@/services/staff/staff-permission-audit";
 import {
   archiveStaffMember,
   createShift,
@@ -44,18 +40,32 @@ const EMPLOYMENT_TYPES = ["FULL_TIME", "PART_TIME", "CONTRACTOR", "TEMPORARY", "
 const SHIFT_STATUSES = ["SCHEDULED", "CHECKED_IN", "COMPLETED", "NO_SHOW", "CANCELLED"] as const;
 const CERT_STATUSES = ["PENDING", "ACTIVE", "EXPIRED", "REVOKED"] as const;
 
-function scopeFrom(profile: { role: string | null; email: string | null }): StaffActorScope {
-  return { isOwner: true, role: profile.role, email: profile.email };
-}
-
 async function gate(cap: StaffCapability) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const access = await requireMutationPermission("staff.manage");
   const profile = await requireUserProfile();
-  const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
+  if (!access.ok) {
+    await logStaffPermissionDenied(access.actor, {
+      requiredPermission: "staff.manage",
+      operation: cap,
+      staffCapability: cap,
+    });
+    throw new Error(access.error);
+  }
+  const scope = resolveStaffActorScope({
+    workspaceRole: access.actor.workspaceRole,
+    email: access.actor.email,
+    profileRole: profile.role ?? null,
+    profileEmail: profile.email ?? null,
+  });
   if (!canManageStaff(scope, cap)) {
+    await logStaffPermissionDenied(access.actor, {
+      requiredPermission: "staff.manage",
+      operation: cap,
+      staffCapability: cap,
+    });
     throw new Error(`You do not have permission to ${cap}.`);
   }
-  return { userId: dataUserId, profileId: profile.id };
+  return { userId: access.actor.userId, profileId: profile.id };
 }
 
 const createSchema = z.object({

@@ -7,10 +7,7 @@ import { StaffForm } from "@/components/dashboard/staff/staff-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { canManageStaff } from "@/lib/staff/staff-permissions";
+import { getStaffPageAccess } from "@/lib/staff/staff-page-access";
 import { prisma } from "@/lib/prisma";
 import { STAFF_ROLE_LABEL, STAFF_EMPLOYMENT_LABEL } from "@/lib/staff/staff-types";
 import { listRoles, listStaff } from "@/services/staff/staff-service";
@@ -18,10 +15,7 @@ import { listRoles, listStaff } from "@/services/staff/staff-service";
 type SearchParams = Record<string, string | string[] | undefined>;
 
 export default async function RosterPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const { userId, workspaceId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const scope = { isOwner: true, role: profile.role ?? null, email: profile.email ?? null };
-  const canPII = canManageStaff(scope, "staff.view.pii");
+  const { userId, workspaceId, canPII, canManage } = await getStaffPageAccess();
   const params = await searchParams;
   const roleFilter = typeof params.role === "string" ? params.role : "";
   const statusFilter = typeof params.status === "string" ? params.status : "";
@@ -63,19 +57,26 @@ export default async function RosterPage({ searchParams }: { searchParams: Promi
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Add teammate</CardTitle>
-          <CardDescription>Set role, location, and employment type for richer scheduling and reports.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <StaffForm
-            brands={brands}
-            locations={locations}
-            customRoles={roles.map((r) => ({ id: r.id, label: r.label }))}
-          />
-        </CardContent>
-      </Card>
+      {canManage ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Add teammate</CardTitle>
+            <CardDescription>Set role, location, and employment type for richer scheduling and reports.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <StaffForm
+              brands={brands}
+              locations={locations}
+              customRoles={roles.map((r) => ({ id: r.id, label: r.label }))}
+            />
+          </CardContent>
+        </Card>
+      ) : (
+        <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          You can view the roster but cannot add or edit teammates without{" "}
+          <span className="font-medium text-foreground">staff.manage</span>.
+        </p>
+      )}
 
       <Card>
         <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
@@ -116,7 +117,9 @@ export default async function RosterPage({ searchParams }: { searchParams: Promi
                     <Button asChild size="sm" variant="outline">
                       <Link href={`/dashboard/staff/${s.id}`}>Open</Link>
                     </Button>
-                    {s.status !== "ARCHIVED" ? <ArchiveStaffButton staffMemberId={s.id} /> : null}
+                    {canManage && s.status !== "ARCHIVED" ? (
+                      <ArchiveStaffButton staffMemberId={s.id} />
+                    ) : null}
                   </div>
                 </li>
               ))}

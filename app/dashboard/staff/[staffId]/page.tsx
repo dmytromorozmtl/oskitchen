@@ -9,10 +9,7 @@ import { StaffForm } from "@/components/dashboard/staff/staff-form";
 import { ShiftStatusButtons } from "@/components/dashboard/staff/shift-forms";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { canManageStaff } from "@/lib/staff/staff-permissions";
+import { getStaffPageAccess } from "@/lib/staff/staff-page-access";
 import { prisma } from "@/lib/prisma";
 import { STAFF_ROLE_LABEL, STAFF_EMPLOYMENT_LABEL } from "@/lib/staff/staff-types";
 import { listRoles, getStaffMember } from "@/services/staff/staff-service";
@@ -20,11 +17,7 @@ import { listRoles, getStaffMember } from "@/services/staff/staff-service";
 type PageProps = { params: Promise<{ staffId: string }> };
 
 export default async function StaffDetailPage({ params }: PageProps) {
-  const { userId, workspaceId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const scope = { isOwner: true, role: profile.role ?? null, email: profile.email ?? null };
-  const canPII = canManageStaff(scope, "staff.view.pii");
-  const canEdit = canManageStaff(scope, "staff.update");
+  const { userId, workspaceId, canPII, canEdit } = await getStaffPageAccess();
 
   const { staffId } = await params;
   const [member, roles, brands, locations] = await Promise.all([

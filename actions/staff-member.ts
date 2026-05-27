@@ -1,13 +1,13 @@
 "use server";
 
-
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
+import { logStaffPermissionDenied } from "@/services/staff/staff-permission-audit";
 
 const schema = z.object({
   name: z.string().min(1).max(255),
@@ -17,7 +17,15 @@ const schema = z.object({
 
 export async function createStaffMemberAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const access = await requireMutationPermission("staff.manage");
+    if (!access.ok) {
+      await logStaffPermissionDenied(access.actor, {
+        requiredPermission: "staff.manage",
+        operation: "staff.quick_create",
+      });
+      return { error: access.error };
+    }
+    const { userId } = access.actor;
     const parsed = schema.safeParse({
       name: formData.get("name"),
       email: formData.get("email"),
@@ -27,7 +35,7 @@ export async function createStaffMemberAction(formData: FormData) {
     const d = parsed.data;
     const created = await prisma.staffMember.create({
       data: {
-        userId: dataUserId,
+        userId,
         name: d.name.trim(),
         email: d.email?.trim() || null,
         role: d.role?.trim() || "staff",
@@ -36,7 +44,7 @@ export async function createStaffMemberAction(formData: FormData) {
     try {
       await prisma.staffEvent.create({
         data: {
-          userId: dataUserId,
+          userId,
           staffMemberId: created.id,
           eventType: "STAFF_CREATED",
           summary: `${created.name} added (quick form)`,
@@ -53,5 +61,8 @@ export async function createStaffMemberAction(formData: FormData) {
 }
 
 export async function createStaffMemberFormAction(formData: FormData): Promise<void> {
-  void (await createStaffMemberAction(formData));
+  const result = await createStaffMemberAction(formData);
+  if ("error" in result && result.error) {
+    throw new Error(result.error);
+  }
 }
