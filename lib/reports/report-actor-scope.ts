@@ -35,6 +35,7 @@ export function createReportActorScope(input: {
   staffRoleType?: StaffRoleType | null;
   email?: string | null;
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 }): ReportScopedActor {
   const isOwner =
     input.workspaceRole === "OWNER" || input.staffRoleType === "OWNER" || input.sessionUserId === input.userId;
@@ -46,5 +47,6 @@ export function createReportActorScope(input: {
     isOwner,
     role: isOwner ? null : (input.staffRoleType ? REPORT_ROLE_BY_STAFF_TYPE[input.staffRoleType] ?? null : null),
     granted: input.granted,
+    platformBypass: input.platformBypass,
   };
 }

@@ -1,4 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { executivePermissionKey } from "@/lib/executive/executive-permission-keys";
@@ -17,10 +16,11 @@ export type ExecutiveActorScope = {
   role?: string | null;
   email?: string | null;
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdminExecutive(scope: ExecutiveActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 /**

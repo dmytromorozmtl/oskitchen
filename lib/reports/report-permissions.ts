@@ -1,4 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { reportPermissionKey } from "@/lib/reports/report-permission-keys";
@@ -11,10 +10,11 @@ export type ReportActorScope = {
   email?: string | null;
   /** When set, report gates prefer canonical workspace permissions, then legacy role strings. */
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 };
 
 export function isSuperAdminReports(scope: ReportActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 function legacyRoleAllows(scope: ReportActorScope, permission: ReportPermission): boolean {

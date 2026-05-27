@@ -12,5 +12,6 @@ export function createExecutiveActorScope(actor: WorkspacePermissionActor): Exec
     staffRoleType: actor.staffRoleType,
     email: actor.email,
     granted: actor.granted,
+    platformBypass: actor.platformBypass,
   });
 }
