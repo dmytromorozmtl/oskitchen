@@ -15,11 +15,13 @@ export function createProductMappingActorScope(
     staffRoleType: actor.staffRoleType,
     email: actor.email,
     granted: actor.granted,
+    platformBypass: actor.platformBypass,
   });
   return {
     isOwner: base.isOwner,
     role: profileRole ?? base.role ?? null,
     email: actor.email,
     granted: base.granted,
+    platformBypass: actor.platformBypass,
   };
 }

@@ -1,4 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { workspacePermissionForMappingCapability } from "@/lib/product-mapping/mapping-permission-keys";
@@ -8,6 +7,7 @@ export type ProductMappingActorScope = {
   role?: string | null;
   email?: string | null;
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 };
 
 export type ProductMappingCapability =
@@ -42,7 +42,7 @@ const GRANTS: Record<ProductMappingCapability, string[]> = {
 };
 
 export function isSuperAdminMapping(scope: ProductMappingActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUseProductMapping(
