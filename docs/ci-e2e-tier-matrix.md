@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav + integration honesty + storefront money-path CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance`, `test:ci:integration-honesty`, `test:ci:storefront-money-path:cert` |
+| Doc canon + public API + nav + integration honesty + money-path CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance`, `test:ci:integration-honesty`, `test:ci:storefront-money-path:cert`, `test:ci:pos-money-path:cert` |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS route fail-closed contract tests |
 
@@ -56,6 +56,8 @@ npm run test:ci:storefront-money-path:e2e
 | POS checkout E2E | `npm run test:ci:pos-money-path:e2e` | Postgres + auth secrets | Requires `E2E_LOGIN_EMAIL` / `E2E_LOGIN_PASSWORD`; optional `E2E_CI_POS_USER_ID` for `seed-e2e-pos-fixture` |
 
 **CI workflow:** `.github/workflows/ci.yml` → job `pos-money-path`.
+
+**Wiring certification (tier 0):** `npm run test:ci:pos-money-path:cert` → `tests/unit/pos-money-path-ci-live.test.ts` (included in `test:ci:governance-bundles`).
 
 **Local focused run (unit + integration):**
 

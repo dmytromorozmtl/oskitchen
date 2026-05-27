@@ -116,7 +116,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 | payment success | integration, contract, E2E |
 | payment failure | integration, unit (`storefront-payment-recovery`), E2E tier 2 optional Stripe on staging |
 | storefront pay-later checkout | unit, integration, E2E tier 2 (`storefront-money-path` CI job) |
-| POS checkout | unit, integration (tier 2b), E2E when auth secrets configured | Software path only — no hardware certification |
+| POS checkout | unit, integration, inventory (tier 2b), E2E when auth secrets configured, CI wiring gate (`test:ci:pos-money-path:cert`) | Software path only — no hardware certification |
 | refund | unit, integration, permission-negative |
 | void | unit, integration, permission-negative |
 | table order | E2E once table service ships |
@@ -144,12 +144,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - A QA report must be generated per release candidate.
 
 ## Current Highest-Priority Additions
-1. POS permission-negative role matrix — terminal API route denials covered; tier 2b adds checkout integration in CI
+1. ~~POS money-path CI wiring~~ — tier 2b unit + integration + inventory in CI; live gate `test:ci:pos-money-path:cert`; browser E2E when auth secrets configured
 2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration + tier 2 pay-later E2E in CI; live wiring gate `test:ci:storefront-money-path:cert`; staging Stripe E2E optional
-3. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
-4. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open
-5. impersonation and sensitive-action audit coverage
-6. release-critical smoke bundle aligned to production journeys
+3. POS permission-negative role matrix — terminal API route denials covered; deeper workflow-role gaps remain
+4. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
+5. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open
+6. impersonation and sensitive-action audit coverage
+7. release-critical smoke bundle aligned to production journeys
 
 ## Evidence / Artifact Expectations Per Release
 - CI summary
