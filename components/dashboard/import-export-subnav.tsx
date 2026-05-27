@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
+export type ImportExportSubnavLink = {
+  href: string;
+  label: string;
+  match?: "exact" | "prefix";
+};
+
+const DEFAULT_LINKS: ImportExportSubnavLink[] = [
   { href: "/dashboard/import-export", label: "Overview", match: "exact" },
   { href: "/dashboard/import-export/import", label: "Import data" },
   { href: "/dashboard/import-export/export", label: "Export data" },
@@ -16,11 +22,12 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/import-export/settings", label: "Settings" },
 ];
 
-export function ImportExportSubnav() {
+export function ImportExportSubnav({ links = DEFAULT_LINKS }: { links?: ImportExportSubnavLink[] }) {
   const path = usePathname();
+  if (links.length === 0) return null;
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3">
-      {LINKS.map((l) => {
+      {links.map((l) => {
         const active =
           l.match === "exact"
             ? path === l.href

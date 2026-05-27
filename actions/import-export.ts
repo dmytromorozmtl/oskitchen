@@ -4,6 +4,7 @@
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
+import { requireImportActor } from "@/lib/import-export/require-import-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
 import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
@@ -30,6 +31,13 @@ export async function validateIngredientImportPreviewAction(
   formData: FormData,
 ): Promise<{ ok: true; importJobId: string } | { ok: false; error: string }> {
   try {
+    const importAccess = await requireImportActor({
+      importKind: "ingredients",
+      operation: "import:ingredients:preview",
+    });
+    if (!importAccess.ok) {
+      return { ok: false, error: importAccess.error };
+    }
     const { sessionUser: user, userId, workspaceId } = await requireTenantActor();
     const file = formData.get("file");
     if (!file || !(file instanceof File)) {

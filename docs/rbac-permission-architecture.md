@@ -367,6 +367,7 @@ The following current files should be treated as migration inputs, not long-term
 - `orders.export`
 - `customers.export`
 - `audit.export`
+- Import / Export Center ingredient CSV preview/upload uses `products.edit` via `requireImportActor` (`lib/import-export/require-import-actor.ts`); denials audit as `IMPORT_PERMISSION_DENIED`; hub pages filter subnav via `getImportExportPageAccess`
 
 ## 13. UI Gating Principles
 - Navigation visibility is not the same as permission. Nav can hide unavailable modules, but server checks remain mandatory.

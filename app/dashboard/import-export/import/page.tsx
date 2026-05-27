@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { IngredientCsvPreviewForm } from "@/components/dashboard/import-export/ingredient-csv-preview-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireImportExportPageAccess } from "@/lib/import-export/import-export-page-access";
 
 const STEPS = [
   "Choose import type",
@@ -16,7 +16,8 @@ const STEPS = [
 ] as const;
 
 export default async function ImportDataPage() {
-  await getTenantActor();
+  const access = await requireImportExportPageAccess({ needImportIngredients: true });
+  if (!access.ok) return access.deny;
 
   return (
     <div className="space-y-8">

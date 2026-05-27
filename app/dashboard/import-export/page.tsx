@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireImportExportPageAccess } from "@/lib/import-export/import-export-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadDataOperationsOverview } from "@/services/import-export/data-operations-overview";
 
@@ -17,6 +18,9 @@ function Kpi({ label, value }: { label: string; value: string | number }) {
 }
 
 export default async function ImportExportOverviewPage() {
+  const access = await requireImportExportPageAccess();
+  if (!access.ok) return access.deny;
+
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const kpi = await loadDataOperationsOverview(dataUserId);
 
