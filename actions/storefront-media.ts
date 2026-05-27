@@ -108,15 +108,13 @@ export async function uploadStorefrontMediaFormAction(formData: FormData) {
   }
 }
 
-export async function deleteStorefrontMediaFormAction(formData: FormData): Promise<{ error?: string } | void> {
+export async function deleteStorefrontMediaFormAction(formData: FormData): Promise<void> {
   try {
     const { sessionUser: user, userId } = await requireTenantActor();
     const mediaAccess = await requireStorefrontMediaActor({
       operation: "storefront.media_delete",
     });
-    if (!mediaAccess.ok) {
-      return { error: mediaAccess.error };
-    }
+    if (!mediaAccess.ok) return;
     const assetId = (formData.get("assetId") ?? "").toString().trim();
     if (!/^[0-9a-f-]{36}$/i.test(assetId)) return;
 
