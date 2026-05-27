@@ -242,15 +242,34 @@ Full detail: `docs/full-strategic-reaudit-2026-05-27.md` §Step 19.
 
 ---
 
+## Scorecard Snapshot (Evolution Era 3 increment — 2026-05-27)
+
+Baseline = Era 2 end. Increment after governance CI certification cycles 42–52.
+
+| Area | Era 2 end | Current | Δ |
+|------|----------:|--------:|--:|
+| Overall | 71 | **73** | +2 |
+| DevOps | 75 | **78** | +3 |
+| QA (unit) | 71 | **75** | +4 |
+| Backend/API | 71 | **72** | +1 |
+| Integrations | 50 | **51** | +1 |
+| Marketing/sales | 62 | **63** | +1 |
+| Security | 66 | **67** | +1 |
+
+Full detail: `docs/full-strategic-reaudit-2026-05-27.md` §Step 20. Validation: `npm run test:ci:scorecard:cert`.
+
+---
+
 ## Decision: Master Prompt Validity (post Era 2)
 
 | Question | Answer |
 |----------|--------|
 | Is Evolution Era 2 complete? | **Yes** — cycles 1–30 verified |
+| Era 3 governance CI certification? | **Yes** — cycles 42–52 verified (`test:ci:governance-bundles`) |
 | New master prompt required now? | **No** — continue Era 3 under same single-sentence theme |
-| Safe to continue recurring cycles? | **Yes** — RBAC wave 3 + CI wiring + typecheck |
+| Safe to continue recurring cycles? | **Yes** — RBAC wave 3 + typecheck slicing |
 | Single sentence (unchanged) | **"Complete platform safety and money-path certification on the existing spine; do not expand surface area."** |
-| Full re-audit decision | **Defer** until Q3 2026 or major release |
+| Full re-audit decision | **Defer** until Q3 2026 or major release; use `test:ci:scorecard:cert` for incremental updates |
 
 ---
 

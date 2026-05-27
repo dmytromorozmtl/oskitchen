@@ -1,6 +1,6 @@
 # KitchenOS System Reality Model
 
-**Updated:** 2026-05-27 (Cycle 29–30 scorecard refresh)  
+**Updated:** 2026-05-27 (Era 3 Cycle 52 scorecard increment)  
 Status: canonical current-state audit for the next hardening cycle  
 **Index:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md)
 
@@ -12,11 +12,12 @@ Status: canonical current-state audit for the next hardening cycle
 | API routes | 296 | route registry governed |
 | Server action files | 144 | 23 use `requireMutationPermission` |
 | Service files | 604 | +1 since May re-audit |
-| Vitest tests | 415 | +16 since May re-audit |
+| Vitest unit test files | 427 | +12 cert live gates since Era 2 end |
 | Playwright specs | 53 | money-path tiers in dedicated CI jobs |
 | Docs (markdown) | 1,440 | canon index governs truth |
 | Cron route handlers | 137 | 16 production-scheduled in `vercel.json` |
 | Evolution Era 2 cycles | 30/30 | see `canonical-doc-index.md` ledger |
+| Evolution Era 3 cycles | 42–52 | governance CI certification + scorecard refresh |
 
 ## Scope
 This document summarizes the current, code-backed reality of KitchenOS before additional implementation work. It is based on direct inspection of the active repository surface and reconciliation with existing audit materials, not on aspirational product claims.

@@ -95,6 +95,21 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **27–28** | **Doc canon** | **this index** |
 | **29–30** | **Scorecard refresh** | scores in `full-strategic-reaudit-2026-05-27.md` §19, `next-master-prompt-input-2026-05-27.md` §Scorecard |
 
+## Evolution Era 3 cycle ledger (governance CI certification)
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| 42 | Storefront money-path CI cert | `test:ci:storefront-money-path:cert` |
+| 43 | POS money-path CI cert | `test:ci:pos-money-path:cert` |
+| 44 | Inventory depletion cert | `test:ci:inventory-depletion:cert` |
+| 45 | Cron hygiene cert | `test:ci:cron-hygiene:cert` |
+| 46–47 | KDS v1 scope + prototype cert | `test:ci:kds-v1:cert`, `test:ci:kds-v1:prototype:cert` |
+| 48 | Nav/maturity governance cert | `test:ci:nav-governance:cert` |
+| 49 | Integration honesty cert | `test:ci:integration-honesty:cert` |
+| 50 | Public API v1 cert | `test:ci:public-api-v1:cert` |
+| 51 | Doc canon cert | `test:ci:doc-canon:cert` (first in `test:ci:governance-bundles`) |
+| **52** | **Scorecard refresh** | **`test:ci:scorecard:cert`**, §Scorecard below |
+
 ---
 
 ## Scorecard (Evolution Era 2 end — 2026-05-27)
@@ -116,13 +131,30 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 
 **Re-audit decision:** defer full repo re-audit until Q3 2026 or a major release; use this index + §Scorecard for incremental updates.
 
+## Scorecard (Evolution Era 3 increment — 2026-05-27)
+
+Incremental refresh after Era 3 cycles 42–52 (governance CI certification wiring). Baseline = Era 2 end scores above.
+
+| Area | Era 2 end | Current | Δ | Key evidence |
+|------|----------:|--------:|--:|--------------|
+| Overall | 71 | **73** | +2 | 11 `:cert` live gates in `test:ci:governance-bundles` |
+| DevOps | 75 | **78** | +3 | full governance chain in default `quality` job |
+| QA (unit) | 71 | **75** | +4 | cert + unit bundles for money-path, cron, KDS, nav, API, doc canon |
+| Backend/API | 71 | **72** | +1 | `test:ci:public-api-v1:cert` wiring gate |
+| Integrations | 50 | **51** | +1 | `test:ci:integration-honesty:cert` |
+| Marketing/sales readiness | 62 | **63** | +1 | nav + integration honesty CI certs |
+| Security | 66 | **67** | +1 | doc-canon cert + anti-regression governance chain |
+
+**Re-audit decision (unchanged):** defer full repo re-audit until Q3 2026 or a major release; use incremental scorecard updates via `test:ci:scorecard:cert`.
+
 ---
 
 ## Validation
 
 - Wiring cert: `tests/unit/doc-canon-ci-live.test.ts` → `npm run test:ci:doc-canon:cert`
 - Unit gate: `tests/unit/canonical-doc-index.test.ts` → `npm run test:ci:doc-canon`
-- Governance bundle: both chained first in `npm run test:ci:governance-bundles`
+- Scorecard cert: `tests/unit/scorecard-ci-live.test.ts` → `npm run test:ci:scorecard:cert`
+- Governance bundle: all chained in `npm run test:ci:governance-bundles`
 
 ---
 
@@ -132,3 +164,4 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |------|--------|
 | 2026-05-27 | Cycle 27–28: initial index, deprecated-family notice, validation test |
 | 2026-05-27 | Cycle 29–30: Evolution Era 2 scorecard refresh, inventory counts updated |
+| 2026-05-27 | Era 3 Cycle 52: incremental scorecard refresh + `test:ci:scorecard:cert` |

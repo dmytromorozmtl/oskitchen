@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav/maturity + integration honesty + money-path + inventory + cron + KDS CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon:cert` + `test:ci:doc-canon`, `test:ci:public-api-v1:cert` + `test:ci:public-api-v1`, nav certs, `test:ci:integration-honesty:cert` + `test:ci:integration-honesty`, money-path/inventory/cron/KDS certs |
+| Doc canon + public API + nav/maturity + integration honesty + money-path + inventory + cron + KDS + scorecard CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon:cert` + `test:ci:doc-canon`, cert/unit pairs through KDS, `test:ci:scorecard:cert` last |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS route fail-closed contract tests |
 
@@ -179,6 +179,16 @@ npm run test:ci:pos-money-path:e2e
 **Canonical index:** `docs/canonical-doc-index.md` — 12 core + 2 era docs; ~1,300+ historical audits superseded via `docs/_DEPRECATED_AUDIT_FAMILY.md`.
 
 **Wiring certification (tier 0):** `test:ci:doc-canon:cert` + `test:ci:doc-canon` chained first in `test:ci:governance-bundles`.
+
+## Tier 1h — Scorecard governance (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Scorecard wiring cert | `npm run test:ci:scorecard:cert` | Cross-doc Era 3 score consistency, governance cert chain, re-audit deferral |
+
+**Canonical sources:** `docs/canonical-doc-index.md`, `docs/full-strategic-reaudit-2026-05-27.md` §Step 20, `docs/next-master-prompt-input-2026-05-27.md`.
+
+**Wiring certification (tier 0):** `test:ci:scorecard:cert` chained last in `test:ci:governance-bundles`.
 
 ## Tier 1g — Public API v1 contracts (`quality` job via governance bundles)
 

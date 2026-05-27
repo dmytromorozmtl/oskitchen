@@ -538,7 +538,7 @@ KitchenOS is a **large, real, multi-surface food-operations monolith** — not a
 ### Remaining P0/P1 (Era 3 candidates)
 
 1. **RBAC wave 3** — ~80 action files still tenant-only (costing, purchasing, export, labor-adjacent).
-2. **CI wiring** — `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance` not in default `quality` job.
+2. **CI wiring** — ✅ **Resolved (Era 3 cycles 42–52)** — `test:ci:governance-bundles` with 11 `:cert` live gates runs in default `quality` job via `npm run test:ci:governance-bundles`.
 3. **Typecheck slicing** — full strict `tsc` may still OOM without 8GB+ heap.
 4. **Storefront inventory depletion** — explicitly deferred; document or test.
 5. **Marketplace partner certification** — DoorDash/Grubhub/Uber remain placeholder.
@@ -547,11 +547,65 @@ KitchenOS is a **large, real, multi-surface food-operations monolith** — not a
 
 | Question | Answer |
 |----------|--------|
-| Full new re-audit required now? | **No** — Era 2 scorecard refresh sufficient |
+| Full new re-audit required now? | **No** — Era 2 scorecard refresh sufficient; Era 3 incremental updates via `test:ci:scorecard:cert` |
 | When to re-audit? | Q3 2026, major release, or >50 net new API routes |
-| Safe to continue bounded cycles? | **Yes** — Era 3: RBAC completion + CI wiring + typecheck |
+| Safe to continue bounded cycles? | **Yes** — Era 3: RBAC completion + typecheck slicing |
 | Master prompt still valid? | **Yes** — single-sentence theme unchanged |
 
 ---
 
-*Evidence gathered 2026-05-27 via repository inspection, `git log`, file counts, grep, subagent read-only audits, and review of canonical docs. Scorecard refreshed end of Evolution Era 2 (Cycle 29–30).*
+## Step 20 — Evolution Era 3 Scorecard Increment (2026-05-27)
+
+**Branch evidence:** `907d3ba` (storefront money-path cert) through `a9b364e` (doc canon cert)  
+**Method:** Incremental scorecard after governance CI certification cycles 42–51; no full repo re-audit.
+
+### Era 3 cycles closed (verified)
+
+| Cycle | Outcome | Status |
+|-------|---------|--------|
+| 42 | Storefront money-path CI cert | ✅ |
+| 43 | POS money-path CI cert | ✅ |
+| 44 | Inventory depletion cert | ✅ |
+| 45 | Cron hygiene cert | ✅ |
+| 46–47 | KDS v1 scope + prototype cert | ✅ |
+| 48 | Nav/maturity governance cert | ✅ |
+| 49 | Integration honesty cert | ✅ |
+| 50 | Public API v1 cert | ✅ |
+| 51 | Doc canon cert | ✅ |
+| **52** | **Scorecard refresh** | ✅ |
+
+### Scorecard (Era 3 increment — baseline = Era 2 end)
+
+| Area | Era 2 end | Current | Δ | Key evidence |
+|------|----------:|--------:|--:|--------------|
+| **Overall** | 71 | **73** | +2 | 11 `:cert` gates in governance bundles |
+| DevOps | 75 | **78** | +3 | full cert chain in default `quality` job |
+| QA | 71 | **75** | +4 | cert + unit bundles across money-path, cron, KDS, nav, API, doc canon |
+| Backend/API | 71 | **72** | +1 | `test:ci:public-api-v1:cert` |
+| Integrations | 50 | **51** | +1 | `test:ci:integration-honesty:cert` |
+| Marketing/sales | 62 | **63** | +1 | nav + integration honesty certs |
+| Security | 66 | **67** | +1 | doc-canon cert + governance anti-regression |
+| Storefront | 76 | **76** | — | unchanged (runtime) |
+| POS | 60 | **60** | — | unchanged (runtime) |
+| KDS | 54 | **54** | — | unchanged (runtime) |
+| RBAC | 58 | **58** | — | unchanged (runtime) |
+| Enterprise | 43 | **43** | — | unchanged (SSO/compliance gap) |
+
+### Risks resolved in Era 3 (cycles 42–52)
+
+- Governance bundles lacked live wiring gates → **11 `:cert` tests** chained in `test:ci:governance-bundles`
+- CI wiring gap in default `quality` job → **resolved** (see Remaining P0/P1 §2 above)
+- Scorecard drift across canonical docs → **`test:ci:scorecard:cert`** cross-doc consistency gate
+
+### Re-audit decision (Era 3)
+
+| Question | Answer |
+|----------|--------|
+| Full new re-audit required now? | **No** — incremental Era 3 scorecard sufficient |
+| When to re-audit? | Q3 2026, major release, or >50 net new API routes |
+| Safe to continue bounded cycles? | **Yes** — RBAC wave 3 + typecheck slicing |
+| Master prompt still valid? | **Yes** |
+
+---
+
+*Evidence gathered 2026-05-27 via repository inspection, `git log`, file counts, grep, subagent read-only audits, and review of canonical docs. Scorecard refreshed end of Evolution Era 2 (Cycle 29–30) and incrementally at Era 3 Cycle 52.*
