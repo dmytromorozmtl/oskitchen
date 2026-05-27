@@ -10,6 +10,8 @@
 - Shim script file exists.
 - `node_modules/object-inspect/util.inspect.js` exists after install (WARN if `node_modules` missing).
 - `require.resolve("qs")` and `require.resolve("stripe")` from project root.
+- `require.resolve` for `date-fns`, `zustand`, `next`, and `typescript` package manifests (catches corrupt/partial `node_modules` before typecheck).
+- Vitest/Vite runner manifests (`suppress-warnings.cjs`, `chai`, nested `picomatch`, etc.).
 
 ## Recommended CI / clean machine flow
 

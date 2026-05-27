@@ -22,7 +22,7 @@
     "deploy:prebuilt": "bash scripts/deploy-prebuilt-prod.sh",
     "start": "node ./node_modules/next/dist/bin/next start",
     "lint": "node ./node_modules/next/dist/bin/next lint",
-    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
+    "typecheck": "node --max-old-space-size=8192 ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.typecheck.json",
     "validate:order-write-paths": "tsx scripts/validate-order-write-paths.ts",
     "validate:api-route-registry": "tsx scripts/validate-api-route-registry.ts",
     "validate:ci-workflow-scripts": "node --experimental-transform-types scripts/validate-ci-workflow-scripts.ts",

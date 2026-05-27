@@ -45,6 +45,8 @@ npm run test:pos-rbac
 
 If Vitest fails immediately with `Cannot find module '.../vitest/suppress-warnings.cjs'` or missing `chai`, the local `node_modules` tree is incomplete. Repair with a lockfile install (`npm ci`) and confirm `npm run verify:install-chain` passes. Postinstall runs `scripts/ensure-vitest-suppress-warnings-shim.cjs` to recreate the Vitest preload stub when the `vitest` package folder exists but the file is missing.
 
+If `npm run typecheck` OOMs or reports missing `date-fns` / `zustand` / `next` / `typescript`, run `npm ci` and re-run `npm run verify:install-chain`. The `typecheck` script already sets `--max-old-space-size=8192`; for other Node commands use `NODE_OPTIONS=--max-old-space-size=8192` (see `scripts/predeploy-verify.sh`).
+
 ## End-to-end
 
 - Location: `e2e/**/*.spec.ts` (Playwright default) and `tests/e2e/**/*.spec.ts` (CI critical paths)

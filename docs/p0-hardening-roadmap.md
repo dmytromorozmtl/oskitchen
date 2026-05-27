@@ -125,7 +125,7 @@ Priority rule:
 - Technical risk: release regressions, contributor confusion, slower incident response.
 - Affected files: `.github/workflows/*.yml`, `package.json`, `scripts/ci-check.sh`
 - Affected modules: release engineering
-- Progress update: `verify:install-chain` now checks Vitest preload (`suppress-warnings.cjs`) and `chai`; postinstall runs `ensure-vitest-suppress-warnings-shim.cjs` to recreate the preload stub after partial installs; CI runs `npm run test:pos-rbac` on every push/PR; focused POS RBAC suite (80 tests) is green when `node_modules` matches the lockfile
+- Progress update: `verify:install-chain` now checks Vitest preload (`suppress-warnings.cjs`), `chai`, and resolvable manifests for `date-fns`, `zustand`, `next`, and `typescript`; postinstall runs `ensure-vitest-suppress-warnings-shim.cjs` to recreate the preload stub after partial installs; CI runs `npm run test:pos-rbac` on every push/PR; focused POS RBAC suite (80 tests) is green when `node_modules` matches the lockfile; `npm run typecheck` and CI `quality` / beta / pilot gate jobs use 8GB heap (`--max-old-space-size=8192`) aligned with `scripts/predeploy-verify.sh`
 - Safest implementation plan:
   1. remove or restore stale workflow steps
   2. align CI scripts with documented local scripts

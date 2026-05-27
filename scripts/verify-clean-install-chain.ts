@@ -77,6 +77,17 @@ try {
   fail("stripe not resolvable from project root");
 }
 
+/** Runtime + typecheck-critical packages (catch partial/corrupt node_modules before typecheck). */
+const criticalPackages = ["date-fns", "zustand", "next", "typescript"] as const;
+for (const name of criticalPackages) {
+  try {
+    require.resolve(`${name}/package.json`, { paths: [root] });
+    ok(`${name} package manifest resolvable`);
+  } catch {
+    fail(`${name} not resolvable from project root — run npm ci`);
+  }
+}
+
 checkPaths([
   { relPath: "node_modules/vitest/vitest.mjs", label: "Vitest CLI entrypoint" },
   { relPath: "node_modules/vitest/suppress-warnings.cjs", label: "Vitest suppress-warnings preload" },

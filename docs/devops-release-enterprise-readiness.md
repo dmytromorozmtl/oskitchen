@@ -6,15 +6,15 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 ## CI Green Standard
 - valid workflow references only
 - static workflow-to-`package.json` script audit passes
-- install-chain verification passes after dependency install, including Vitest preload (`suppress-warnings.cjs`), Chai, and focused-runner manifests; postinstall recreates the Vitest preload stub when missing
+- install-chain verification passes after dependency install, including Vitest preload (`suppress-warnings.cjs`), Chai, focused-runner manifests, and resolvable manifests for `date-fns`, `zustand`, `next`, and `typescript`; postinstall recreates the Vitest preload stub when missing
 - `npm run test:pos-rbac` passes in CI (focused POS permission-negative suite)
-- strict typecheck or approved split-typecheck replacement
+- strict typecheck or approved split-typecheck replacement; `npm run typecheck` and CI `quality` / gate workflows use `NODE_OPTIONS=--max-old-space-size=8192` (aligned with `scripts/predeploy-verify.sh`)
 - build passes using documented production-like env assumptions
 - security suite passes
 - release-critical smoke tests pass
 
 ## Typecheck Split
-- Current state: one large typecheck target, with repo-scale memory concerns.
+- Current state: one large typecheck target, with repo-scale memory concerns; heap raised to 8GB via `node --max-old-space-size=8192` in `package.json` `typecheck` and `NODE_OPTIONS` on CI gate jobs.
 - Requirement: keep strictness, but allow split execution if needed for reliability.
 - Output: one canonical developer workflow and one canonical CI workflow.
 
