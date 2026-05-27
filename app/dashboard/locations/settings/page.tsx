@@ -3,12 +3,11 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { readLocationContext } from "@/lib/locations/location-context";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
 export default async function LocationsSettingsPage() {
-  const { sessionUser: user } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
   const ctx = await readLocationContext();
 
   return (
@@ -45,11 +44,11 @@ export default async function LocationsSettingsPage() {
           <CardTitle className="text-base">Access</CardTitle>
         </CardHeader>
         <CardContent className="space-y-1 text-sm">
-          <p>Signed in as <strong>{user.email ?? "(no email)"}</strong></p>
+          <p>Signed in as <strong>{actor.email ?? "(no email)"}</strong></p>
           <p>
             Superadmin override:{" "}
-            <Badge variant={isSuperAdminEmail(user.email) ? "default" : "outline"} className="rounded-full">
-              {isSuperAdminEmail(user.email) ? "enabled" : "disabled"}
+            <Badge variant={actor.platformBypass ? "default" : "outline"} className="rounded-full">
+              {actor.platformBypass ? "enabled" : "disabled"}
             </Badge>
           </p>
           <p className="text-muted-foreground">

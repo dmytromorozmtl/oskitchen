@@ -2,8 +2,6 @@
  * Workspace-level Locations RBAC is still pending; we keep the contract
  * narrow so we can graduate without changing UI.
  */
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type LocationPermission =
   | "location.read"
   | "location.create"
@@ -20,12 +18,13 @@ export type LocationActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
   /** When set, this user can only see / mutate these location ids. Empty / undefined = all. */
   allowedLocationIds?: readonly string[] | null;
 };
 
 export function isSuperAdmin(scope: LocationActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoLocation(scope: LocationActorScope, permission: LocationPermission): boolean {
