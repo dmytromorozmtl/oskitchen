@@ -94,7 +94,7 @@ echo "[3/6] OpenAPI manifest + tests..."
 export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=16384}"
 node scripts/generate-openapi-manifest.cjs
 echo "  → unit tests (vitest)..."
-run_with_log_tail 8 ./node_modules/.bin/vitest run
+run_with_log_tail 8 node ./node_modules/vitest/vitest.mjs run
 echo "  (TypeScript is checked during next build — standalone tsc is too slow on Desktop/iCloud.)"
 
 echo ""
