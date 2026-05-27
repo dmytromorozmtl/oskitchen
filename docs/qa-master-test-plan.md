@@ -43,12 +43,20 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - upload/media validation
 - impersonation and audit
 
-### 8. Performance
+### 8. Kitchen / KDS (v1 scope)
+- canonical scope: `docs/kds-v1-scope.md`
+- unit: `tests/unit/kitchen-daily-kds-rbac.test.ts` (permission denials + bump/recall)
+- contract: `tests/contracts/kds-ticket.contract.test.ts` (extend in Cycle 19–20)
+- integration (Cycle 19–20): queue → bump → READY on Postgres
+- manual/staging: Supabase Realtime subscription smoke on `/dashboard/kitchen`
+- not required for v1: multi-station E2E, offline replay, hardware cert
+
+### 9. Performance
 - storefront render and checkout
 - dashboard high-traffic pages
 - hot-path queries
 
-### 9. Load
+### 10. Load
 - storefront checkout
 - queue/drain paths
 - high-volume order hub and reporting paths
@@ -68,7 +76,9 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - replay restrictions and queue behavior once implemented
 
 ### 14. KDS Realtime
-- bump/recall, timer, routing, and packing handoff
+- see `docs/kds-v1-scope.md` for v1 boundaries
+- bump/recall permission tests (unit); integration queue→bump in Cycle 19–20
+- timer/urgency client behavior; packing handoff out of v1 scope
 
 ### 15. Integration Certification
 - provider setup
