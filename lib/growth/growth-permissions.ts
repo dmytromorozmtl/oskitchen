@@ -1,7 +1,6 @@
 import type { UserRole } from "@prisma/client";
 
 import { canAccessOwnerOnlySurfaces } from "@/lib/platform-admin";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import { workspacePermissionForGrowthCapability } from "@/lib/growth/growth-permission-keys";
 import type { GrowthActorScope, GrowthCapability } from "@/lib/growth/growth-types";
@@ -27,7 +26,7 @@ export async function canAccessGrowthModule(
 }
 
 export function canUseGrowth(scope: GrowthActorScope, capability: GrowthCapability): boolean {
-  if (isSuperAdminEmail(scope.email)) return true;
+  if (scope.platformBypass) return true;
   const required = workspacePermissionForGrowthCapability(capability);
   if (scope.granted && hasPermission(scope.granted, required)) return true;
   return false;

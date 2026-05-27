@@ -36,6 +36,7 @@ const packerActor = {
   staffRoleType: "PACKER" as const,
   email: "packer@example.com",
   granted: workspacePermissionsFromStaffTemplate("PACKER", "STAFF"),
+  platformBypass: false,
 };
 
 describe("growth RBAC", () => {

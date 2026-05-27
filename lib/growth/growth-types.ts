@@ -7,4 +7,5 @@ export type GrowthActorScope = {
   isOwner: boolean;
   role: string | null;
   granted: ReadonlySet<import("@/lib/permissions/permissions").PermissionKey>;
+  platformBypass: boolean;
 };

@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 import type { ImportActorScope, ImportCapability } from "@/lib/import-center/import-types";
 import { canUseImportCenterCapability } from "@/lib/import-center/workspace-import-permission";
 import { hasLegacyPermission, normalizeRole } from "@/lib/permissions/legacy";
@@ -26,7 +24,7 @@ export function canUseImportCenter(
   cap: ImportCapability,
   granted?: ReadonlySet<PermissionKey>,
 ): boolean {
-  if (isSuperAdminEmail(scope.email)) return true;
+  if (scope.platformBypass) return true;
   if (scope.isOwner) return true;
   if (granted && canUseImportCenterCapability(granted, cap)) return true;
   const legacyRole = normalizeRole(

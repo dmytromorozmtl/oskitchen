@@ -13,6 +13,7 @@ export type WorkspacePermissionActor = TenantActor & {
   staffRoleType: StaffRoleType | null;
   email: string | null;
   granted: ReadonlySet<PermissionKey>;
+  platformBypass: boolean;
 };
 
 /** Load session + tenant owner + workspace permission set. */
@@ -47,6 +48,7 @@ export async function requireWorkspacePermissionActor(): Promise<WorkspacePermis
     staffRoleType: staffMember?.roleType ?? null,
     email,
     granted: resolveWorkspacePermissions(ctx),
+    platformBypass,
   };
 }
 

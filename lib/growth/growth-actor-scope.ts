@@ -22,5 +22,6 @@ export function createGrowthActorScope(
     isOwner: base.isOwner,
     role: profileRole ?? base.role ?? null,
     granted: actor.granted,
+    platformBypass: actor.platformBypass,
   };
 }
