@@ -9,7 +9,7 @@ import {
   getWooCommerceCredentials,
 } from "@/lib/integrations/decrypt-connection";
 import { asVoidFormAction } from "@/lib/actions/server-form-action";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireIntegrationsActor } from "@/lib/integrations/require-integrations-actor";
 import { integrationConnectionByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
@@ -21,7 +21,9 @@ export async function runIntegrationHealthCheckForm(
   formData: FormData,
 ): Promise<{ ok: true } | { error: string }> {
   try {
-    const { userId } = await requireTenantActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.run_health_check" });
+    if (!gate.ok) return { error: gate.error };
+    const { userId } = gate.actor;
     const connectionId = String(formData.get("connectionId") ?? "").trim();
     if (!connectionId) return { error: "Missing connection" };
 

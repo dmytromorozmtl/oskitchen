@@ -4,8 +4,8 @@ import { IntegrationProvider } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 import { fail, ok, type ActionResult } from "@/lib/action-result";
+import { requireIntegrationsActor } from "@/lib/integrations/require-integrations-actor";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { DoorDashSyncService } from "@/services/integrations/doordash/order-sync.service";
@@ -16,7 +16,9 @@ export async function forceUberEatsMenuSyncAction(): Promise<
   ActionResult<{ categoriesCount?: number; itemsCount?: number; message?: string }>
 > {
   try {
-    const { dataUserId } = await requireTenantActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.force_uber_eats_menu_sync" });
+    if (!gate.ok) return fail(gate.error);
+    const { userId: dataUserId } = gate.actor;
     const where = await integrationConnectionByProviderWhereForOwner(
       dataUserId,
       IntegrationProvider.UBER_EATS,
@@ -45,7 +47,9 @@ export async function forceUberEatsMenuSyncAction(): Promise<
 
 export async function testDoorDashConnectionAction(): Promise<ActionResult<{ message: string }>> {
   try {
-    const { dataUserId } = await requireTenantActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.test_doordash_connection" });
+    if (!gate.ok) return fail(gate.error);
+    const { userId: dataUserId } = gate.actor;
     const svc = new DoorDashSyncService();
     const result = await svc.acceptOrder(`kitchenos-ping-${dataUserId.slice(0, 8)}`);
     revalidatePath("/dashboard/integrations/health");

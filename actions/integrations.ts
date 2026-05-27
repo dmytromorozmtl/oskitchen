@@ -10,7 +10,7 @@ import {
   IntegrationStatus,
 } from "@prisma/client";
 
-import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { requireIntegrationsActor } from "@/lib/integrations/require-integrations-actor";
 import {
   integrationConnectionByIdWhereForOwner,
   integrationConnectionByProviderWhereForOwner,
@@ -30,16 +30,9 @@ import { prisma } from "@/lib/prisma";
 import { logChannelCredentialAudit } from "@/lib/channels/credentials";
 import { safeError } from "@/lib/security";
 
-async function requireIntegrationsActor() {
-  const access = await requireMutationPermission("integrations.manage");
-  if (!access.ok) return { ok: false as const, error: access.error };
-  const workspaceId = access.actor.workspaceId;
-  return { ok: true as const, actor: access.actor, workspaceId };
-}
-
 export async function saveWooCommerceSettings(formData: FormData) {
   try {
-    const gate = await requireIntegrationsActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.save_woocommerce" });
     if (!gate.ok) return fail(gate.error);
     const { sessionUser: user, userId } = gate.actor;
     const workspaceId = gate.workspaceId;
@@ -149,7 +142,7 @@ export async function saveWooCommerceSettings(formData: FormData) {
 
 export async function saveShopifySettings(formData: FormData) {
   try {
-    const gate = await requireIntegrationsActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.save_shopify" });
     if (!gate.ok) return fail(gate.error);
     const { sessionUser: user, userId } = gate.actor;
     const workspaceId = gate.workspaceId;
@@ -250,7 +243,7 @@ export async function saveShopifySettings(formData: FormData) {
 
 export async function saveUberEatsSettings(formData: FormData) {
   try {
-    const gate = await requireIntegrationsActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.save_uber_eats" });
     if (!gate.ok) return fail(gate.error);
     const { sessionUser: user, userId } = gate.actor;
     const workspaceId = gate.workspaceId;
@@ -355,7 +348,7 @@ export async function saveUberEatsSettings(formData: FormData) {
 
 export async function saveUberDirectSettings(formData: FormData) {
   try {
-    const gate = await requireIntegrationsActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.save_uber_direct" });
     if (!gate.ok) return fail(gate.error);
     const { sessionUser: user, userId } = gate.actor;
     const workspaceId = gate.workspaceId;
@@ -463,7 +456,7 @@ export async function saveUberDirectSettings(formData: FormData) {
 
 export async function disconnectIntegration(formData: FormData) {
   try {
-    const gate = await requireIntegrationsActor();
+    const gate = await requireIntegrationsActor({ operation: "integrations.disconnect" });
     if (!gate.ok) return fail(gate.error);
     const { sessionUser: user, userId } = gate.actor;
     const id = String(formData.get("connectionId") ?? "");
