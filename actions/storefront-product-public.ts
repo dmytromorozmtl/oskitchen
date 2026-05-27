@@ -2,7 +2,6 @@
 
 
 import { fail, ok } from "@/lib/action-result";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { productByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -103,7 +102,6 @@ export async function updateStorefrontProductFields(formData: FormData) {
     });
 
     revalidateStorefrontDashboardAndPublic(sf.storeSlug);
-    else revalidatePath("/dashboard/storefront/products");
     return { ok: true as const };
   } catch (e) {
     return { error: safeError(e) };

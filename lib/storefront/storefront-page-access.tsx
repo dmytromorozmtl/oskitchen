@@ -75,9 +75,10 @@ export function storefrontReadDeniedCard(): ReactNode {
 export async function requireStorefrontReadPage(input?: {
   operation?: string;
   route?: string;
-}):
+}): Promise<
   | ({ ok: true } & StorefrontHubAccess)
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const hub = await resolveStorefrontHubAccess();
   if (!hub.canRead) {
     await logStorefrontPermissionDenied(hub.actor, {
@@ -158,9 +159,10 @@ export function storefrontManageDeniedCard(): ReactNode {
 export async function requireStorefrontManagePage(input?: {
   operation?: string;
   route?: string;
-}):
+}): Promise<
   | { ok: true; actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>; canManage: true }
-  | { ok: false; deny: ReactNode } {
+  | { ok: false; deny: ReactNode }
+> {
   const actor = await requireWorkspacePermissionActor();
   const { permissions } = await getStorefrontPermissionSetForUser(actor.sessionUserId);
   const canManage =

@@ -34,9 +34,10 @@ async function requireStorefrontPermission(
     operation?: string;
     metadata?: Record<string, unknown>;
   },
-):
+): Promise<
   | { ok: true; actor: WorkspacePermissionActor }
-  | { ok: false; error: string } {
+  | { ok: false; error: string }
+> {
   const access = await requireMutationPermission(requiredPermission);
   if (access.ok) {
     return { ok: true, actor: access.actor };
