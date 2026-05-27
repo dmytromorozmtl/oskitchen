@@ -260,6 +260,16 @@ export default async function OrderHubPage({
                                 Tax {String(sf.taxTotal)}
                               </Badge>
                             ) : null}
+                            {sf.paymentMode === "ONLINE_PAYMENT" && sf.paymentStatus === "FAILED" ? (
+                              <Badge variant="destructive" className="rounded-full text-[10px]">
+                                Payment failed
+                              </Badge>
+                            ) : null}
+                            {sf.paymentMode === "ONLINE_PAYMENT" && sf.paymentStatus === "PENDING" ? (
+                              <Badge variant="outline" className="rounded-full text-[10px]">
+                                Payment pending
+                              </Badge>
+                            ) : null}
                           </div>
                         ) : o.creationSource === "STOREFRONT" ? (
                           <span className="text-muted-foreground">Legacy SF</span>

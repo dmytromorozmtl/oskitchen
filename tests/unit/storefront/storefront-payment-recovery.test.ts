@@ -15,9 +15,16 @@ const prismaMock = vi.hoisted(() => ({
 const stripeMinorAmountForOrder = vi.hoisted(() => vi.fn());
 const isStorefrontOnlineCheckoutAvailable = vi.hoisted(() => vi.fn());
 const createStorefrontStripeCheckoutSession = vi.hoisted(() => vi.fn());
+const logStorefrontPaymentFailedWorkspaceAudit = vi.hoisted(() => vi.fn());
+const logStorefrontPaymentRetryWorkspaceAudit = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/prisma", () => ({
   prisma: prismaMock,
+}));
+
+vi.mock("@/services/storefront/storefront-payment-audit", () => ({
+  logStorefrontPaymentFailedWorkspaceAudit,
+  logStorefrontPaymentRetryWorkspaceAudit,
 }));
 
 vi.mock("@/services/storefront/storefront-currency-service", () => ({
@@ -32,7 +39,10 @@ vi.mock("@/services/storefront/storefront-stripe-checkout-service", () => ({
   createStorefrontStripeCheckoutSession,
 }));
 
-import { retryStorefrontOnlinePaymentByToken } from "@/services/storefront/storefront-payment-recovery-service";
+import {
+  applyStorefrontCheckoutCanceledIfNeeded,
+  retryStorefrontOnlinePaymentByToken,
+} from "@/services/storefront/storefront-payment-recovery-service";
 
 const retryableOrder = {
   id: "sfo-1",
@@ -163,5 +173,63 @@ describe("storefront payment recovery service", () => {
     expect(createStorefrontStripeCheckoutSession).not.toHaveBeenCalled();
     expect(txMock.storefrontOrder.update).not.toHaveBeenCalled();
     expect(txMock.storefrontConversionEvent.create).not.toHaveBeenCalled();
+  });
+
+  it("marks pending online orders failed when Stripe checkout is canceled", async () => {
+    prismaMock.storefrontOrder.findFirst.mockResolvedValue({
+      id: "sfo-1",
+      userId: "owner-1",
+      storefrontId: "sf-1",
+      publicToken: "tok_12345678",
+      paymentMode: "ONLINE_PAYMENT",
+      paymentStatus: "PENDING",
+    });
+
+    const result = await applyStorefrontCheckoutCanceledIfNeeded({
+      publicToken: "tok_12345678",
+      storeSlug: "hello",
+    });
+
+    expect(result).toEqual({ applied: true });
+    expect(txMock.storefrontOrder.update).toHaveBeenCalledWith({
+      where: { id: "sfo-1" },
+      data: { paymentStatus: "FAILED" },
+    });
+    expect(txMock.storefrontConversionEvent.create).toHaveBeenCalledWith({
+      data: {
+        storefrontId: "sf-1",
+        eventName: "order_payment_failed",
+        metadataJson: {
+          phase: "checkout_canceled",
+          publicToken: "tok_12345678",
+          reason: "Customer canceled Stripe Checkout.",
+        },
+      },
+    });
+    expect(logStorefrontPaymentFailedWorkspaceAudit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        merchantUserId: "owner-1",
+        phase: "checkout_canceled",
+      }),
+    );
+  });
+
+  it("is idempotent when checkout cancel is replayed on a failed order", async () => {
+    prismaMock.storefrontOrder.findFirst.mockResolvedValue({
+      id: "sfo-1",
+      userId: "owner-1",
+      storefrontId: "sf-1",
+      publicToken: "tok_12345678",
+      paymentMode: "ONLINE_PAYMENT",
+      paymentStatus: "FAILED",
+    });
+
+    const result = await applyStorefrontCheckoutCanceledIfNeeded({
+      publicToken: "tok_12345678",
+      storeSlug: "hello",
+    });
+
+    expect(result).toEqual({ applied: false });
+    expect(txMock.storefrontOrder.update).not.toHaveBeenCalled();
   });
 });

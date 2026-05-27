@@ -1,9 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { stripeMinorAmountForOrder } from "@/services/storefront/storefront-currency-service";
+import {
+  logStorefrontPaymentFailedWorkspaceAudit,
+  logStorefrontPaymentRetryWorkspaceAudit,
+} from "@/services/storefront/storefront-payment-audit";
 import { isStorefrontOnlineCheckoutAvailable } from "@/services/storefront/storefront-payment-service";
 import { createStorefrontStripeCheckoutSession } from "@/services/storefront/storefront-stripe-checkout-service";
 
-type PaymentFailurePhase = "initial_checkout" | "retry_checkout";
+type PaymentFailurePhase = "initial_checkout" | "retry_checkout" | "checkout_canceled";
 
 type RetryStorefrontOnlinePaymentInput = {
   publicToken: string;
@@ -29,6 +33,7 @@ export async function markStorefrontOnlinePaymentFailed(input: {
   reason: string;
   storefrontId?: string | null;
   storefrontOrderId: string;
+  merchantUserId?: string | null;
 }) {
   await prisma.$transaction(async (tx) => {
     await tx.storefrontOrder.update({
@@ -50,6 +55,59 @@ export async function markStorefrontOnlinePaymentFailed(input: {
       });
     }
   });
+
+  if (input.merchantUserId) {
+    await logStorefrontPaymentFailedWorkspaceAudit({
+      merchantUserId: input.merchantUserId,
+      storefrontOrderId: input.storefrontOrderId,
+      publicToken: input.publicToken,
+      phase: input.phase,
+      reason: input.reason,
+    });
+  }
+}
+
+/**
+ * When a guest abandons Stripe Checkout, move a still-pending online order into FAILED
+ * so the public order page can offer same-token retry (idempotent).
+ */
+export async function applyStorefrontCheckoutCanceledIfNeeded(input: {
+  publicToken: string;
+  storeSlug: string;
+}): Promise<{ applied: boolean }> {
+  const storefrontOrder = await prisma.storefrontOrder.findFirst({
+    where: {
+      publicToken: input.publicToken,
+      storefront: { storeSlug: input.storeSlug },
+    },
+    select: {
+      id: true,
+      userId: true,
+      storefrontId: true,
+      publicToken: true,
+      paymentMode: true,
+      paymentStatus: true,
+    },
+  });
+
+  if (
+    !storefrontOrder ||
+    storefrontOrder.paymentMode !== "ONLINE_PAYMENT" ||
+    storefrontOrder.paymentStatus !== "PENDING"
+  ) {
+    return { applied: false };
+  }
+
+  await markStorefrontOnlinePaymentFailed({
+    storefrontOrderId: storefrontOrder.id,
+    storefrontId: storefrontOrder.storefrontId,
+    publicToken: storefrontOrder.publicToken,
+    merchantUserId: storefrontOrder.userId,
+    reason: "Customer canceled Stripe Checkout.",
+    phase: "checkout_canceled",
+  });
+
+  return { applied: true };
 }
 
 export async function retryStorefrontOnlinePaymentByToken(
@@ -105,6 +163,7 @@ export async function retryStorefrontOnlinePaymentByToken(
       storefrontOrderId: storefrontOrder.id,
       storefrontId: storefrontOrder.storefrontId,
       publicToken: storefrontOrder.publicToken,
+      merchantUserId: storefrontOrder.userId,
       reason: minor.error,
       phase: "retry_checkout",
     });
@@ -133,6 +192,7 @@ export async function retryStorefrontOnlinePaymentByToken(
       storefrontOrderId: storefrontOrder.id,
       storefrontId: storefrontOrder.storefrontId,
       publicToken: storefrontOrder.publicToken,
+      merchantUserId: storefrontOrder.userId,
       reason: stripeRes.error,
       phase: "retry_checkout",
     });
@@ -157,6 +217,13 @@ export async function retryStorefrontOnlinePaymentByToken(
         },
       });
     }
+  });
+
+  await logStorefrontPaymentRetryWorkspaceAudit({
+    merchantUserId: storefrontOrder.userId,
+    storefrontOrderId: storefrontOrder.id,
+    publicToken: storefrontOrder.publicToken,
+    paymentStatusBefore: storefrontOrder.paymentStatus,
   });
 
   return { ok: true, stripeCheckoutUrl: stripeRes.url };

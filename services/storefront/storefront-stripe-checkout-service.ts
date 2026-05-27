@@ -40,7 +40,7 @@ export async function createStorefrontStripeCheckoutSession(
   }
 
   const successUrl = `${SITE_URL}/s/${encodeURIComponent(input.storefrontSlug)}/order/${encodeURIComponent(input.publicToken)}?paid=1`;
-  const cancelUrl = `${SITE_URL}/s/${encodeURIComponent(input.storefrontSlug)}/checkout?canceled=1`;
+  const cancelUrl = `${SITE_URL}/s/${encodeURIComponent(input.storefrontSlug)}/order/${encodeURIComponent(input.publicToken)}?canceled=1`;
 
   const connectAccountId = input.stripeConnectAccountId?.trim() || null;
   const useConnect = Boolean(connectAccountId);

@@ -7,6 +7,7 @@ import { StorefrontPaymentRecoveryActions } from "@/components/storefront/storef
 import { StorefrontReorderActions } from "@/components/storefront/storefront-reorder-actions";
 import { getSessionUser } from "@/lib/auth";
 import { getStorefrontDuplicateOrderNotice } from "@/lib/storefront/storefront-duplicate-order-notice";
+import { applyStorefrontCheckoutCanceledIfNeeded } from "@/services/storefront/storefront-payment-recovery-service";
 import { turnstileSiteKey } from "@/lib/storefront/turnstile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,12 @@ export default async function StorefrontOrderPage({
   const sp = searchParams ? await searchParams : {};
   const duplicate = sp.duplicate === "1";
   const paid = sp.paid === "1";
+  const checkoutCanceled = sp.canceled === "1";
   const sessionUser = await getSessionUser();
+
+  if (checkoutCanceled) {
+    await applyStorefrontCheckoutCanceledIfNeeded({ publicToken: token, storeSlug });
+  }
 
   const row = await prisma.storefrontOrder.findFirst({
     where: {
@@ -90,7 +96,11 @@ export default async function StorefrontOrderPage({
       ) : null}
       {paymentFailed ? (
         <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-center text-sm text-rose-950 dark:text-rose-100">
-          <p>We saved your order, but online card checkout could not start.</p>
+          <p>
+            {checkoutCanceled
+              ? "Card checkout was canceled. Your order is saved — you can retry payment below."
+              : "We saved your order, but online card checkout could not start."}
+          </p>
           <p className="mt-1">Retry payment below or contact the kitchen with your order reference.</p>
           <StorefrontPaymentRecoveryActions orderToken={token} storeSlug={storeSlug} />
         </div>

@@ -563,6 +563,7 @@ export async function submitPublicStorefrontOrder(raw: unknown) {
           storefrontOrderId: storefrontOrder.id,
           storefrontId: sf.id,
           publicToken,
+          merchantUserId: sf.userId,
           reason: stripeRes.error,
           phase: "initial_checkout",
         });

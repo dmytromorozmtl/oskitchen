@@ -13,6 +13,9 @@ export type OrderHubStorefrontSummary = {
   storefrontOrderId: string;
   orderNumber: string;
   storeSlug: string;
+  publicToken: string;
+  paymentMode: string;
+  paymentStatus: string;
   currency: string;
   marketId: string | null;
   marketName: string | null;
@@ -41,6 +44,9 @@ export async function loadStorefrontSummariesForOrderIds(
       id: true,
       internalOrderId: true,
       orderNumber: true,
+      publicToken: true,
+      paymentMode: true,
+      paymentStatus: true,
       source: true,
       cartJson: true,
       subtotal: true,
@@ -81,6 +87,9 @@ export async function loadStorefrontSummariesForOrderIds(
       storefrontOrderId: row.id,
       orderNumber: row.orderNumber ?? "—",
       storeSlug: row.storefront.storeSlug,
+      publicToken: row.publicToken,
+      paymentMode: row.paymentMode,
+      paymentStatus: row.paymentStatus,
       currency: row.storefront.currency,
       marketId,
       marketName,
