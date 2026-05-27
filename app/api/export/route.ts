@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isExportType } from "@/lib/import-export/export-types";
 import { requireExportActor } from "@/lib/import-export/require-export-actor";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { createStreamingCsvExport, streamExportMeta } from "@/lib/import-export/streaming-csv-export";
 import { buildExportCsv, recordExportJob } from "@/services/import-export/export-service";
 
@@ -23,22 +22,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid type" }, { status: 400 });
   }
 
-  const isSuperAdmin = isSuperAdminEmail(user.email);
-  if (kind === "audit_logs" && !isSuperAdmin) {
+  const isPlatformSuperAdmin = await hasSuperAdminRoleRow(user.id);
+  if (kind === "audit_logs" && !isPlatformSuperAdmin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  let dataUserId: string;
-  if (kind === "audit_logs") {
-    const actor = await requireWorkspacePermissionActor();
-    dataUserId = actor.dataUserId;
-  } else {
-    const access = await requireExportActor({ exportType: kind });
-    if (!access.ok) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-    dataUserId = access.actor.dataUserId;
+  const access = await requireExportActor({ exportType: kind, operation: `export:${kind}` });
+  if (!access.ok) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+  const dataUserId = access.actor.dataUserId;
 
   const streamMeta = streamExportMeta(kind);
   if (streamMeta) {
@@ -60,7 +53,9 @@ export async function GET(request: Request) {
   let body: string;
   let rowCount: number;
   try {
-    const built = await buildExportCsv(dataUserId, kind, { isSuperAdmin });
+    const built = await buildExportCsv(dataUserId, kind, {
+      isSuperAdmin: kind === "audit_logs" && isPlatformSuperAdmin,
+    });
     filename = built.filename;
     body = built.body;
     rowCount = built.rowCount;
