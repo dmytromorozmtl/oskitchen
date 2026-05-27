@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { requireApiSession } from "@/lib/api/with-api-guard";
+import { requireBillingApiAccess } from "@/lib/billing/require-billing-api-access";
 import { SITE_URL } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { getStripe } from "@/lib/stripe";
@@ -18,11 +18,11 @@ export async function POST() {
     );
   }
 
-  const session = await requireApiSession();
-  if (!session.ok) {
-    return session.response;
+  const billingAccess = await requireBillingApiAccess("billing.portal.open");
+  if (!billingAccess.ok) {
+    return billingAccess.response;
   }
-  const { userId } = session.context;
+  const { userId } = billingAccess;
 
   const subscription = await prisma.subscription.findUnique({
     where: { userId },

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { requireApiSession } from "@/lib/api/with-api-guard";
+import { requireBillingApiAccess } from "@/lib/billing/require-billing-api-access";
 import { SITE_URL } from "@/lib/constants";
 import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
 import { prisma } from "@/lib/prisma";
@@ -26,11 +26,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const authSession = await requireApiSession();
-  if (!authSession.ok) {
-    return authSession.response;
+  const billingAccess = await requireBillingApiAccess("billing.checkout");
+  if (!billingAccess.ok) {
+    return billingAccess.response;
   }
-  const { userId, email } = authSession.context;
+  const { userId, email } = billingAccess;
 
   const ip = getClientIpFromRequest(request);
   const rl = await consumeRateLimitToken(`billing_checkout:${userId}:${ip}`, "billing_checkout");

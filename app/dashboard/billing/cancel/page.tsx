@@ -1,29 +1,25 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { submitCancellationFeedbackFormAction } from "@/actions/monetization";
 import { BillingPanelLinkPortal } from "@/components/billing/billing-cancel-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { requireBillingPageAccess } from "@/lib/billing/billing-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { isStripeConfigured } from "@/lib/env";
-import { prisma } from "@/lib/prisma";
 import { planDef, PLAN_KEYS, type PlanKey } from "@/lib/billing/plan-registry";
 import { downgradeBlockers } from "@/services/billing/entitlement-service";
 import { recomputeUsage } from "@/services/billing/usage-service";
 import { loadSubscription } from "@/services/billing/subscription-service";
-import { UserRole } from "@prisma/client";
 
 export default async function BillingCancelPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: dataUserId },
-    select: { role: true },
-  });
-  if (profile?.role !== UserRole.OWNER) {
-    redirect("/dashboard/billing");
+  const access = await requireBillingPageAccess("billing.cancel");
+  if (!access.ok) {
+    return access.deny;
   }
+
+  const { dataUserId } = await getTenantActor();
 
   const [sub, counts] = await Promise.all([
     loadSubscription(dataUserId),

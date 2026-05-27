@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { randomBytes } from "crypto";
 
 import { hashApiKey } from "@/lib/api-public/auth";
+import { requireBillingActor } from "@/lib/billing/require-billing-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { isBillingBypassed } from "@/lib/billing/dev-bypass";
 import { getBillingAccess } from "@/lib/billing/access";
@@ -13,15 +14,12 @@ import { canUseFeature } from "@/lib/plans/feature-registry";
 import { isSuperAdminUser } from "@/lib/platform-super-bypass";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
-import { UserRole } from "@prisma/client";
-
 export async function submitCancellationFeedbackForm(formData: FormData): Promise<void> {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: user.id },
-    select: { role: true },
+  const access = await requireBillingActor("billing.cancel", {
+    operation: "billing.cancellation_feedback",
   });
-  if (profile?.role !== UserRole.OWNER) return;
+  if (!access.ok) return;
+  const { userId: dataUserId } = access;
 
   const reason = String(formData.get("reason") ?? "").trim();
   const details = String(formData.get("details") ?? "").trim() || null;

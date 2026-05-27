@@ -5,56 +5,28 @@ import { z } from "zod";
 
 import { requireUserProfile } from "@/lib/auth";
 import { canAssignBillingMode } from "@/lib/auth/is-superadmin";
-import {
-  billingCapabilityToPermissionKey,
-  canUseBilling,
-  type BillingActorScope,
-  type BillingCapability,
-} from "@/lib/billing/billing-permissions";
+import type { BillingCapability } from "@/lib/billing/billing-permissions";
+import { requireBillingActor } from "@/lib/billing/require-billing-actor";
 import { FEATURE_FLAGS } from "@/lib/billing/entitlements";
-import { requireMutationPermission } from "@/lib/permissions/mutation-access";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { logBillingPermissionDenied } from "@/services/billing/billing-permission-audit";
 import {
   clearEntitlementOverride,
   setEntitlementOverride,
 } from "@/services/billing/entitlement-service";
 import { adminAssignPlan } from "@/services/billing/subscription-service";
 
-function scopeFrom(p: { role: string | null; email: string | null }): BillingActorScope {
-  return { role: p.role, email: p.email };
-}
-
 async function gate(cap: BillingCapability) {
-  const actor = await requireWorkspacePermissionActor();
-  const profile = await requireUserProfile();
-  const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
-  const requiredPermission = billingCapabilityToPermissionKey(cap);
-  const access = await requireMutationPermission(requiredPermission);
+  const access = await requireBillingActor(cap, { operation: cap });
   if (!access.ok) {
-    await logBillingPermissionDenied(access.actor, {
-      requiredPermission,
-      billingCapability: cap,
-      operation: cap,
-    });
     throw new Error(access.error);
   }
-  if (!canUseBilling(scope, cap, { granted: actor.granted })) {
-    await logBillingPermissionDenied(actor, {
-      requiredPermission,
-      billingCapability: cap,
-      operation: cap,
-    });
-    throw new Error(`You do not have permission to ${cap}.`);
-  }
-  return { userId: actor.userId, profileId: profile.id };
+  return { userId: access.userId, profileId: access.profileId };
 }
 
 async function gateBillingModeAssign() {
   const { userId } = await requireTenantActor();
   const profile = await requireUserProfile();
-  const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
+  const scope = { role: profile.role ?? null, email: profile.email ?? null };
   if (!canAssignBillingMode(scope)) {
     throw new Error("Unauthorized: superadmin required to assign plan or billing mode.");
   }

@@ -1,5 +1,6 @@
 import { PlanCards } from "@/components/dashboard/billing/plan-cards";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireBillingPageAccess } from "@/lib/billing/billing-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { FEATURE_FLAGS, FEATURE_LABEL } from "@/lib/billing/entitlements";
 import { PLAN_KEYS, planDef } from "@/lib/billing/plan-registry";
@@ -10,6 +11,10 @@ import {
 import { loadSubscription } from "@/services/billing/subscription-service";
 
 export default async function PlansPage() {
+  const access = await requireBillingPageAccess("billing.view");
+  if (!access.ok) {
+    return access.deny;
+  }
   const { dataUserId } = await getTenantActor();
   const sub = await loadSubscription(dataUserId);
   const checkoutReady = isStripeCheckoutReady();
@@ -28,7 +33,15 @@ export default async function PlansPage() {
         </p>
       </div>
 
-      <PlanCards currentPlan={sub.plan} checkoutDisabled={checkoutDisabled} reason={reason} />
+      <PlanCards
+        currentPlan={sub.plan}
+        checkoutDisabled={checkoutDisabled || !access.canCheckout}
+        reason={
+          !access.canCheckout
+            ? "You do not have permission to start checkout for this workspace."
+            : reason
+        }
+      />
 
       <Card>
         <CardHeader>

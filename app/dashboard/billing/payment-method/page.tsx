@@ -1,11 +1,16 @@
 import { PortalButton } from "@/components/dashboard/billing/checkout-buttons";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireBillingPageAccess } from "@/lib/billing/billing-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getStripeConfigState } from "@/lib/billing/stripe-config";
 import { loadSubscription } from "@/services/billing/subscription-service";
 
 export default async function PaymentMethodPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const access = await requireBillingPageAccess("billing.portal.open");
+  if (!access.ok) {
+    return access.deny;
+  }
+  const { dataUserId } = await getTenantActor();
   const sub = await loadSubscription(dataUserId);
   const state = getStripeConfigState();
   const portalEnabled = state === "configured" && Boolean(sub.stripeCustomerId);

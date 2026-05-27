@@ -266,7 +266,7 @@ Initial scope:
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
-- Status update: POS, KDS, billing, integrations, export routes, storefront publish/media/manage, report read/saved-report, and channel-command-center mutations are on canonical keys with denial audits; storefront draft edits use `requireStorefrontManageActor` with legacy `storefront:edit-draft` bridge; channel command actions use `requireChannelManageActor` (`integrations.manage`); manage-only sales-channel and storefront editor pages are URL-guarded
+- Status update: POS, KDS, billing, integrations, export routes, storefront publish/media/manage, report read/saved-report, and channel-command-center mutations are on canonical keys with denial audits; billing checkout/portal API routes and dashboard billing layout use `requireBillingActor` / `requireBillingApiAccess` / `requireBillingPageAccess` with capability-aware subnav; entitlement overrides and cancellation feedback use the same actor helper; storefront draft edits use `requireStorefrontManageActor` with legacy `storefront:edit-draft` bridge; channel command actions use `requireChannelManageActor` (`integrations.manage`); manage-only sales-channel and storefront editor pages are URL-guarded
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates
@@ -287,6 +287,9 @@ The following current files should be treated as migration inputs, not long-term
 - `lib/staff/staff-permissions.ts`
 - `lib/training/training-permissions.ts`
 - `lib/billing/billing-permissions.ts`
+- `lib/billing/require-billing-actor.ts`
+- `lib/billing/require-billing-api-access.ts`
+- `lib/billing/billing-page-access.tsx`
 - `lib/crm/require-crm-mutation.ts`
 
 ## 12. Initial Target Application By Module

@@ -7,10 +7,11 @@ import { UsageBars } from "@/components/dashboard/billing/usage-bars";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireUserProfile } from "@/lib/auth";
+import { requireBillingPageAccess } from "@/lib/billing/billing-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 
 import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { requireUserProfile } from "@/lib/auth";
 import { BILLING_MODE_LABEL } from "@/lib/billing/billing-status";
 import { getBillingAccess } from "@/lib/billing/access";
 import { trialDaysRemaining } from "@/lib/billing/billing-status";
@@ -25,6 +26,10 @@ function fmtDate(d: Date | null) {
 }
 
 export default async function BillingPage() {
+  const access = await requireBillingPageAccess("billing.view");
+  if (!access.ok) {
+    return access.deny;
+  }
   const { userId } = await getTenantActor();
   const profile = await requireUserProfile();
   const [sub, billingAccess] = await Promise.all([
@@ -53,10 +58,12 @@ export default async function BillingPage() {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <StripeConfigBadge state={state} />
-          <PortalButton disabled={!portalEnabled} />
-          <Button asChild variant="outline">
-            <Link href="/dashboard/billing/plans">Upgrade plan</Link>
-          </Button>
+          {access.canOpenPortal ? <PortalButton disabled={!portalEnabled} /> : null}
+          {access.canCheckout ? (
+            <Button asChild variant="outline">
+              <Link href="/dashboard/billing/plans">Upgrade plan</Link>
+            </Button>
+          ) : null}
           {isSuper ? <Badge variant="outline">Superadmin</Badge> : null}
         </div>
       </div>
@@ -123,7 +130,7 @@ export default async function BillingPage() {
         </Card>
       </div>
 
-      <StripeDiagnosticsCard diagnostics={diagnostics} />
+      {access.canViewDiagnostics ? <StripeDiagnosticsCard diagnostics={diagnostics} /> : null}
 
       <Card>
         <CardHeader>
@@ -134,10 +141,14 @@ export default async function BillingPage() {
           <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/plans">Compare plans</Link></Button>
           <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/usage">Usage detail</Link></Button>
           <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/invoices">Invoices</Link></Button>
-          <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/payment-method">Payment method</Link></Button>
+          {access.canOpenPortal ? (
+            <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/payment-method">Payment method</Link></Button>
+          ) : null}
           <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/entitlements">Entitlements</Link></Button>
           <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/history">Subscription history</Link></Button>
-          <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/cancel">Cancel / downgrade</Link></Button>
+          {access.canCancel ? (
+            <Button asChild size="sm" variant="outline"><Link href="/dashboard/billing/cancel">Cancel / downgrade</Link></Button>
+          ) : null}
         </CardContent>
       </Card>
     </div>
