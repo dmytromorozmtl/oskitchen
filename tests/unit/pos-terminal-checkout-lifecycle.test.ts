@@ -726,4 +726,191 @@ describe("POS terminal checkout lifecycle", () => {
       },
     });
   });
+
+  it("keeps the pending checkout intact when route-level capture fails and allows a later retry capture", async () => {
+    stripePaymentIntents.create
+      .mockResolvedValueOnce({
+        client_secret: "pi_declined_secret",
+        id: "pi_declined",
+      })
+      .mockResolvedValueOnce({
+        client_secret: "pi_retry_secret",
+        id: "pi_retry",
+      });
+    stripePaymentIntents.retrieve.mockImplementation(async (paymentIntentId: string) => {
+      if (paymentIntentId === "pi_declined") {
+        return { status: "requires_capture", latest_charge: null };
+      }
+      return {
+        status: "succeeded",
+        latest_charge: {
+          payment_method_details: {
+            card_present: { brand: "visa", last4: "4242" },
+          },
+        },
+      };
+    });
+
+    const checkout = await checkoutPosSale("owner-1", "staff-1", {
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      staffMemberId: "staff-member-1",
+      locationId: null,
+      brandId: null,
+      customerId: null,
+      fulfillmentDetail: "PICKUP",
+      paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      lines: [{ title: "Cappuccino", quantity: 1, unitPrice: 10.5 }],
+    });
+
+    expect(checkout).toEqual({
+      ok: true,
+      orderId: "ord-1",
+      transactionId: "tx-1",
+      receiptNumber: expect.stringMatching(/^POS-/),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+
+    const firstIntentResponse = await POST(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ amount: 10.5, orderId: "ord-1" }),
+      }),
+    );
+    const firstIntentJson = await firstIntentResponse.json();
+
+    expect(firstIntentResponse.status).toBe(200);
+    expect(firstIntentJson).toEqual({
+      clientSecret: "pi_declined_secret",
+      paymentIntentId: "pi_declined",
+    });
+
+    const allowedCallsBeforeFailedCapture = logPosTerminalControlEvent.mock.calls.length;
+    const failedCaptureResponse = await PUT(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ paymentIntentId: "pi_declined", orderId: "ord-1" }),
+      }),
+    );
+    const failedCaptureJson = await failedCaptureResponse.json();
+
+    expect(failedCaptureResponse.status).toBe(400);
+    expect(failedCaptureJson).toEqual({ error: "Payment not succeeded: requires_capture" });
+    expect(logPosTerminalControlEvent).toHaveBeenCalledTimes(allowedCallsBeforeFailedCapture);
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+        externalPaymentReference: null,
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PENDING",
+        provider: "INTERNAL",
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(1);
+    expect(state.posAuditEvents[0]).toEqual(
+      expect.objectContaining({
+        action: "pos.checkout.completed",
+        transactionId: "tx-1",
+      }),
+    );
+
+    const retryIntentResponse = await POST(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ amount: 10.5, orderId: "ord-1" }),
+      }),
+    );
+    const retryIntentJson = await retryIntentResponse.json();
+
+    expect(retryIntentResponse.status).toBe(200);
+    expect(retryIntentJson).toEqual({
+      clientSecret: "pi_retry_secret",
+      paymentIntentId: "pi_retry",
+    });
+
+    const recoveredCaptureResponse = await PUT(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ paymentIntentId: "pi_retry", orderId: "ord-1" }),
+      }),
+    );
+    const recoveredCaptureJson = await recoveredCaptureResponse.json();
+
+    expect(recoveredCaptureResponse.status).toBe(200);
+    expect(recoveredCaptureJson).toEqual({
+      success: true,
+      transaction: expect.objectContaining({
+        id: "tx-1",
+        orderId: "ord-1",
+        paymentStatus: "PAID",
+        shiftId: state.shift.id,
+        registerId: state.register.id,
+        externalPaymentReference: "pi_retry",
+      }),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        externalPaymentReference: "pi_retry",
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PAID",
+        provider: "STRIPE",
+        providerReference: "pi_retry",
+      }),
+    );
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_CAPTURED",
+        entityId: "ord-1",
+        label: "ord-1",
+        metadata: {
+          paymentIntentId: "pi_retry",
+          transactionId: "tx-1",
+        },
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(2);
+    expect(state.posAuditEvents[1]).toEqual({
+      userId: "owner-1",
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      transactionId: "tx-1",
+      staffId: "staff-member-1",
+      action: "pos.terminal.payment_captured",
+      metadataJson: {
+        paymentIntentId: "pi_retry",
+        cardBrand: "visa",
+        last4: "4242",
+      },
+    });
+  });
 });
