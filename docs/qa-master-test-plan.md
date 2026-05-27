@@ -93,7 +93,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 | table order | E2E once table service ships |
 | bar tab | E2E once bar mode matures |
 | KDS bump | integration, realtime, permission-negative |
-| inventory depletion | integration |
+| inventory depletion | integration (POS recipe path certified; storefront deferred) |
 | loyalty earn/redeem | unit, integration |
 | gift card redeem | unit, integration |
 | staff clock in/out | unit, E2E |

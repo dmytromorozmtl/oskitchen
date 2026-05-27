@@ -305,6 +305,9 @@ jobs:
       - name: POS checkout integration (cash sale + PII)
         run: npm run test:ci:pos-money-path:integration
 
+      - name: POS inventory depletion integration
+        run: npm run test:ci:pos-money-path:inventory
+
       - name: Build application
         if: ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
         run: npm run build

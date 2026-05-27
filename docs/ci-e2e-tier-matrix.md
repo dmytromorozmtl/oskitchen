@@ -46,7 +46,8 @@ npm run test:ci:storefront-money-path:e2e
 | Suite | Command | DB | Notes |
 |-------|---------|-----|-------|
 | POS checkout unit | `npm run test:ci:pos-money-path:unit` | No | Canonical checkout, terminal lifecycle, action RBAC |
-| POS cash sale integration | `npm run test:ci:pos-money-path:integration` | Postgres | `checkoutPosSale` + encrypted PII + transaction row |
+| POS checkout integration (cash sale + PII) | `npm run test:ci:pos-money-path:integration` | Postgres | `checkoutPosSale` + encrypted PII + transaction row |
+| POS inventory depletion | `npm run test:ci:pos-money-path:inventory` | Postgres | Recipe-linked stock decrement + pending when unconfigured |
 | POS checkout E2E | `npm run test:ci:pos-money-path:e2e` | Postgres + auth secrets | Requires `E2E_LOGIN_EMAIL` / `E2E_LOGIN_PASSWORD`; optional `E2E_CI_POS_USER_ID` for `seed-e2e-pos-fixture` |
 
 **CI workflow:** `.github/workflows/ci.yml` → job `pos-money-path`.
@@ -78,6 +79,8 @@ npm run test:ci:pos-money-path:e2e
 
 **Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only.
 
+**Storefront inventory depletion:** intentionally deferred. Storefront order submit does not call `recordPendingInventoryImpactsForPosOrder` or recipe depletion today; POS is the certified depletion path until a storefront hook is scoped.
+
 ## Tier 3 — Staging / preview (manual or scheduled)
 
 | Suite | Workflow | Secrets |
@@ -99,4 +102,6 @@ npm run test:ci:pos-money-path:e2e
 | Storefront pay-later checkout | — | ✅ pay-later spec | ✅ PII + submit |
 | Storefront online checkout failure + retry | ✅ `storefront-payment-recovery.test.ts` | — | ✅ `storefront-order-pii.integration.test.ts` |
 | POS cash checkout | ✅ `pos-checkout-canonical` + terminal lifecycle | ✅ when auth secrets | ✅ `order-entrypoint-pii` POS test |
+| POS recipe inventory depletion | ✅ `pos-recipe-depletion.test.ts` | — | ✅ `pos-inventory-depletion.integration.test.ts` |
+| Storefront inventory depletion | — | — | **Deferred** — no recipe depletion hook on storefront submit (Cycle 13–14) |
 | Stripe webhook fail-closed | — | — | ✅ in `test:security` |
