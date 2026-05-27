@@ -2,12 +2,12 @@ import type { UserRole } from "@prisma/client";
 
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 export type ChannelPermissionContext = {
   email: string | null | undefined;
   role: UserRole;
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 };
 
 /**
@@ -15,7 +15,7 @@ export type ChannelPermissionContext = {
  * Legacy owner-only fallback remains until all sessions resolve workspace grants.
  */
 export function canManageChannelOperations(input: ChannelPermissionContext): boolean {
-  if (isSuperAdminEmail(input.email)) return true;
+  if (input.platformBypass) return true;
   if (input.granted && hasPermission(input.granted, "integrations.manage")) {
     return true;
   }
@@ -25,14 +25,14 @@ export function canManageChannelOperations(input: ChannelPermissionContext): boo
 export function canManageChannelCredentials(input: ChannelPermissionContext & {
   staffCredentialManage?: boolean;
 }): boolean {
-  if (isSuperAdminEmail(input.email)) return true;
+  if (input.platformBypass) return true;
   if (canManageChannelOperations(input)) return true;
   if (input.role === "STAFF" && input.staffCredentialManage) return true;
   return false;
 }
 
-export function bypassesPlanGates(email: string | null | undefined): boolean {
-  return isSuperAdminEmail(email);
+export function bypassesPlanGates(platformBypass?: boolean): boolean {
+  return Boolean(platformBypass);
 }
 
 export function canApproveChannelImports(input: ChannelPermissionContext): boolean {

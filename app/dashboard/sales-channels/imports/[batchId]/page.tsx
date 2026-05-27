@@ -53,6 +53,7 @@ export default async function ChannelImportBatchPage({
     email: profile.email,
     role: profile.role,
     granted: read.actor.granted,
+    platformBypass: read.actor.platformBypass,
   };
   const canApprove = canApproveChannelImports(permissionCtx);
   const canRaw = canViewChannelRawPayload(permissionCtx);
