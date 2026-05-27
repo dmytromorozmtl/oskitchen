@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type AuditViewerRole = "owner" | "admin" | "manager" | "staff" | "other";
 
 export type AuditViewCapability =
@@ -17,18 +15,26 @@ function normalizeRole(role: string | null | undefined): AuditViewerRole {
   return "other";
 }
 
-export function auditViewerFromProfile(email: string | null | undefined, role: string | null | undefined): {
+export function auditViewerFromProfile(
+  email: string | null | undefined,
+  role: string | null | undefined,
+  platformBypass = false,
+): {
   role: AuditViewerRole;
   isSuper: boolean;
 } {
   return {
     role: normalizeRole(role),
-    isSuper: isSuperAdminEmail(email),
+    isSuper: platformBypass,
   };
 }
 
-export function canViewAuditLogs(email: string | null | undefined, role: string | null | undefined): boolean {
-  if (isSuperAdminEmail(email)) return true;
+export function canViewAuditLogs(
+  email: string | null | undefined,
+  role: string | null | undefined,
+  platformBypass = false,
+): boolean {
+  if (platformBypass) return true;
   const r = normalizeRole(role);
   return r === "owner" || r === "admin" || r === "manager";
 }
@@ -36,14 +42,19 @@ export function canViewAuditLogs(email: string | null | undefined, role: string 
 export function canViewSensitiveAuditDetail(
   email: string | null | undefined,
   role: string | null | undefined,
+  platformBypass = false,
 ): boolean {
-  if (isSuperAdminEmail(email)) return true;
+  if (platformBypass) return true;
   const r = normalizeRole(role);
   return r === "owner" || r === "admin";
 }
 
-export function canExportAuditLogs(email: string | null | undefined, role: string | null | undefined): boolean {
-  if (isSuperAdminEmail(email)) return true;
+export function canExportAuditLogs(
+  email: string | null | undefined,
+  role: string | null | undefined,
+  platformBypass = false,
+): boolean {
+  if (platformBypass) return true;
   const r = normalizeRole(role);
   return r === "owner" || r === "admin";
 }
@@ -51,8 +62,9 @@ export function canExportAuditLogs(email: string | null | undefined, role: strin
 export function canManageRetentionPolicy(
   email: string | null | undefined,
   role: string | null | undefined,
+  platformBypass = false,
 ): boolean {
-  if (isSuperAdminEmail(email)) return true;
+  if (platformBypass) return true;
   const r = normalizeRole(role);
   return r === "owner" || r === "admin";
 }

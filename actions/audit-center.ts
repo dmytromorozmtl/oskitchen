@@ -13,6 +13,7 @@ import {
   canViewAuditLogs,
   canViewSensitiveAuditDetail,
 } from "@/lib/audit/audit-permissions";
+import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { clampRetentionDays } from "@/lib/audit/audit-retention";
 import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
 import type { AuditListFilters } from "@/lib/audit/audit-types";
@@ -36,7 +37,8 @@ async function resolveScope(): Promise<AuditWorkspaceScope | null> {
   });
   const email = profile?.email ?? user.email ?? null;
   const role = profile?.role ?? null;
-  if (!canViewAuditLogs(email, role)) return null;
+  const platformBypass = await hasSuperAdminRoleRow(user.id);
+  if (!canViewAuditLogs(email, role, platformBypass)) return null;
   const workspaces = await prisma.workspace.findMany({
     where: { ownerUserId: user.id },
     select: { id: true },
@@ -46,6 +48,7 @@ async function resolveScope(): Promise<AuditWorkspaceScope | null> {
     email,
     role,
     ownedWorkspaceIds: workspaces.map((w) => w.id),
+    platformBypass,
   };
 }
 
@@ -95,9 +98,9 @@ export async function loadAuditCenterPageData(
   ]);
 
   const flags: AuditCenterFlags = {
-    canExport: canExportAuditLogs(scope.email, scope.role),
-    canManageRetention: canManageRetentionPolicy(scope.email, scope.role),
-    canSensitiveDetail: canViewSensitiveAuditDetail(scope.email, scope.role),
+    canExport: canExportAuditLogs(scope.email, scope.role, scope.platformBypass),
+    canManageRetention: canManageRetentionPolicy(scope.email, scope.role, scope.platformBypass),
+    canSensitiveDetail: canViewSensitiveAuditDetail(scope.email, scope.role, scope.platformBypass),
   };
 
   return {
@@ -136,13 +139,13 @@ export async function getAuditLogDetailAction(
   if (!scope) return { ok: false, error: "forbidden" };
   const row = await getAuditLogById(scope, id);
   if (!row) return { ok: false, error: "not_found" };
-  const safe = stripSensitiveDetailForViewer(row, scope.email, scope.role);
+  const safe = stripSensitiveDetailForViewer(row, scope.email, scope.role, scope.platformBypass);
   if (!safe) return { ok: false, error: "not_found" };
   const serialized = JSON.parse(JSON.stringify(safe)) as Record<string, unknown>;
   let related: Record<string, unknown>[] = [];
   if (safe.entityType && safe.entityId) {
     const rel = await getAuditTimeline(scope, safe.entityType, safe.entityId, 20);
-    related = rel.map((r) => JSON.parse(JSON.stringify(stripSensitiveDetailForViewer(r, scope.email, scope.role) ?? r)) as Record<string, unknown>);
+    related = rel.map((r) => JSON.parse(JSON.stringify(stripSensitiveDetailForViewer(r, scope.email, scope.role, scope.platformBypass) ?? r)) as Record<string, unknown>);
   }
   return { ok: true, row: serialized, related };
 }
@@ -153,7 +156,7 @@ export async function runAuditExportAction(input: {
 }): Promise<{ ok: false; error: string } | { ok: true; body: string; filename: string; rowCount: number }> {
   const scope = await resolveScope();
   if (!scope) return { ok: false, error: "forbidden" };
-  if (!canExportAuditLogs(scope.email, scope.role)) return { ok: false, error: "forbidden" };
+  if (!canExportAuditLogs(scope.email, scope.role, scope.platformBypass)) return { ok: false, error: "forbidden" };
   const wsId = input.filters.workspaceId && scope.ownedWorkspaceIds.includes(input.filters.workspaceId)
     ? input.filters.workspaceId
     : scope.ownedWorkspaceIds[0];
@@ -173,7 +176,7 @@ export async function runAuditExportAction(input: {
 export async function upsertAuditRetentionAction(formData: FormData): Promise<void> {
   const scope = await resolveScope();
   if (!scope) throw new Error("forbidden");
-  if (!canManageRetentionPolicy(scope.email, scope.role)) throw new Error("forbidden");
+  if (!canManageRetentionPolicy(scope.email, scope.role, scope.platformBypass)) throw new Error("forbidden");
   const wsId = scope.ownedWorkspaceIds[0];
   if (!wsId) throw new Error("no_workspace");
 
@@ -216,7 +219,7 @@ export async function getAuditRetentionForOwnerAction(): Promise<
 > {
   const scope = await resolveScope();
   if (!scope) return { ok: false, error: "forbidden" };
-  if (!canManageRetentionPolicy(scope.email, scope.role)) return { ok: false, error: "forbidden" };
+  if (!canManageRetentionPolicy(scope.email, scope.role, scope.platformBypass)) return { ok: false, error: "forbidden" };
   const wsId = scope.ownedWorkspaceIds[0];
   if (!wsId) return { ok: false, error: "no_workspace" };
   const row = await prisma.auditRetentionPolicy.findUnique({ where: { workspaceId: wsId } });

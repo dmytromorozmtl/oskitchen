@@ -1,7 +1,6 @@
 import type { UserRole } from "@prisma/client";
 
 import { hasPermission } from "@/lib/permissions/guards";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { resolveWorkspacePermissions } from "@/services/permissions/permission-service";
 
 import { canUseSettings, type SettingsActorScope } from "./settings-permissions";
@@ -23,7 +22,7 @@ export function canAccessSettingsSection(actor: SettingsActorScope, capability: 
     userId: actor.userId,
     email: actor.email,
     workspaceRole: toWorkspaceRole(actor.role),
-    platformBypass: isSuperAdminEmail(actor.email),
+    platformBypass: Boolean(actor.platformBypass),
   });
   return hasPermission(granted, required);
 }

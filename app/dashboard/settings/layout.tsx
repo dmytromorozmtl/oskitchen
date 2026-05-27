@@ -2,6 +2,7 @@ import { SettingsMobileDrawer } from "@/components/dashboard/settings/settings-m
 import { SettingsSidebar } from "@/components/dashboard/settings/settings-sidebar";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
+import { createSettingsActorScope } from "@/lib/settings/settings-actor-scope";
 import {
   canUseSettings,
   settingsCapabilitiesFor,
@@ -13,11 +14,11 @@ export default async function SettingsLayout({ children }: { children: React.Rea
     where: { id: session.id },
     select: { role: true, email: true },
   });
-  const actor = {
-    userId: session.id,
+  const actor = await createSettingsActorScope({
+    sessionUserId: session.id,
     email: profile?.email ?? session.email ?? null,
     role: (profile?.role ?? null) as string | null,
-  };
+  });
   const capabilities = Array.from(settingsCapabilitiesFor(actor));
   const hasSettingsAccess = canUseSettings(actor, "view_settings");
 

@@ -3,7 +3,6 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { AuditListFilters } from "@/lib/audit/audit-types";
 import { canViewSensitiveAuditDetail } from "@/lib/audit/audit-permissions";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 const PAGE_SIZE = 50;
 
@@ -12,6 +11,7 @@ export type AuditWorkspaceScope = {
   email: string | null;
   role: string | null;
   ownedWorkspaceIds: string[];
+  platformBypass?: boolean;
 };
 
 export function buildAuditWhere(
@@ -139,7 +139,7 @@ export function buildAuditWhere(
   const viewerRole = (scope.role ?? "").toLowerCase();
   const isManager =
     viewerRole === "manager" || viewerRole === "kitchen_lead" || viewerRole === "customer_service";
-  if (isManager && !isSuperAdminEmail(scope.email)) {
+  if (isManager && !scope.platformBypass) {
     and.push({
       OR: [{ category: null }, { category: { notIn: ["SECURITY", "DEVELOPER", "PERMISSIONS", "AUTH"] } }],
     });
@@ -298,9 +298,9 @@ export async function getAuditKpis(scope: AuditWorkspaceScope): Promise<AuditKpi
 
 export function stripSensitiveDetailForViewer<
   T extends { beforeJson?: unknown; afterJson?: unknown; diffJson?: unknown; metadataJson?: unknown },
->(row: T | null, email: string | null | undefined, role: string | null | undefined): T | null {
+>(row: T | null, email: string | null | undefined, role: string | null | undefined, platformBypass = false): T | null {
   if (!row) return null;
-  if (canViewSensitiveAuditDetail(email, role)) return row;
+  if (canViewSensitiveAuditDetail(email, role, platformBypass)) return row;
   const { beforeJson: _b, afterJson: _a, diffJson: _d, ...rest } = row;
   return { ...rest, beforeJson: undefined, afterJson: undefined, diffJson: undefined, metadataJson: row.metadataJson } as T;
 }

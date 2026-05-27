@@ -1,11 +1,10 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 import type { SettingsCapability } from "./section-registry";
 
 export type SettingsActorScope = {
   userId: string;
   email: string | null;
   role: string | null;
+  platformBypass?: boolean;
 };
 
 function normalizeRole(role: string | null | undefined): string {
@@ -79,7 +78,7 @@ const ROLE_GRANTS: Record<string, SettingsCapability[]> = {
 };
 
 export function isSuperAdminSettings(actor: SettingsActorScope): boolean {
-  return isSuperAdminEmail(actor.email);
+  return Boolean(actor.platformBypass);
 }
 
 export function canUseSettings(actor: SettingsActorScope, cap: SettingsCapability): boolean {
