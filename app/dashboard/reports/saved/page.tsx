@@ -1,30 +1,22 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import {
   deleteSavedReportAction,
   duplicateSavedReportAction,
   toggleSavedReportPinAction,
 } from "@/actions/reports";
-import { createReportActorScope } from "@/lib/reports/report-actor-scope";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { requireReportsPageAccess } from "@/lib/reports/reports-page-access";
 import { getReportDefinition, isReportKey } from "@/lib/reports/report-registry";
 import { listSavedReports } from "@/services/reports/report-service";
 
 export default async function SavedReportsPage() {
-  const actor = await requireWorkspacePermissionActor();
-  const { userId } = actor;
-  const scope = createReportActorScope(actor);
-  if (!canDoReports(scope, "reports.saved.manage")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to manage saved reports.
-        </CardContent>
-      </Card>
-    );
+  const access = await requireReportsPageAccess("reports.saved.manage");
+  if (!access.ok) {
+    return access.deny;
   }
+  const { actor } = access;
+  const { userId } = actor;
   const saved = await listSavedReports(userId);
 
   if (saved.length === 0) {

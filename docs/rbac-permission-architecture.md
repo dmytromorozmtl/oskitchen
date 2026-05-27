@@ -266,7 +266,7 @@ Initial scope:
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
-- Status update: POS, KDS, billing, integrations, export routes, and storefront publish/media mutations are on canonical keys with denial audits; sales-channels uses `integrations.read` for monitoring and `integrations.manage` for setup/mutations; storefront publish still bridges legacy `storefront:publish` staff flags via `requireStorefrontPublishActor`; report read gates still use legacy role strings during migration
+- Status update: POS, KDS, billing, integrations, export routes, storefront publish/media, and report read/saved-report gates are on canonical keys with denial audits; `canDoReports` prefers workspace `granted` keys then legacy role strings; sales-channels uses `integrations.read` for monitoring and `integrations.manage` for setup/mutations; storefront publish still bridges legacy `storefront:publish` staff flags via `requireStorefrontPublishActor`
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates

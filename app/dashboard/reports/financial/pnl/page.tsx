@@ -3,10 +3,8 @@ import Link from "next/link";
 import { PnlRefreshButton } from "@/components/dashboard/pnl-refresh-button";
 import { RestaurantPnLChart } from "@/components/dashboard/restaurant-pnl-chart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { canExportReports } from "@/lib/reports/report-export-access";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { requireReportsPageAccess } from "@/lib/reports/reports-page-access";
 import {
   getRestaurantPnLStatement,
   type PnlPeriod,
@@ -32,18 +30,12 @@ export default async function RestaurantPnLPage({
   const { period: raw, cursor, refresh } = await searchParams;
   const valid: PnlPeriod[] = ["today", "week", "month", "quarter", "year"];
   const period: PnlPeriod = valid.includes(raw as PnlPeriod) ? (raw as PnlPeriod) : "month";
-  const actor = await requireWorkspacePermissionActor();
-  const { userId } = actor;
-  const scope = createReportActorScope(actor);
-  if (!canDoReports(scope, "reports.read.financial")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view restaurant P&amp;L reports.
-        </CardContent>
-      </Card>
-    );
+  const access = await requireReportsPageAccess("reports.read.financial");
+  if (!access.ok) {
+    return access.deny;
   }
+  const { actor } = access;
+  const { userId } = actor;
   if (refresh === "1") {
     await refreshPnlSnapshot(userId, period);
   }

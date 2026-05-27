@@ -12,6 +12,9 @@ who can read or export each report.
 | `reports.read.customer_pii` | Customer master list with email / phone visible |
 | `reports.read.audit` | Audit log report (export history) |
 | `reports.export` | Allowed to generate a CSV export |
+| `reports.saved.manage` | Save, pin, duplicate, and delete saved report views |
+
+Workspace registry keys mirror the table above (`reports.read.*`, `reports.export`, `reports.saved.manage`). `canDoReports()` checks canonical `granted` permissions first, then legacy role strings. Server mutations use `requireReportReadActor`; hub pages use `requireReportsPageAccess`.
 | `reports.saved.manage` | Save / duplicate / pin / delete saved reports |
 
 ## Role matrix

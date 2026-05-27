@@ -2,10 +2,8 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
-import { createReportActorScope } from "@/lib/reports/report-actor-scope";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { requireReportsPageAccess } from "@/lib/reports/reports-page-access";
 
 type EnterpriseCard = {
   title: string;
@@ -16,18 +14,12 @@ type EnterpriseCard = {
 };
 
 export default async function EnterpriseReportsPage() {
-  const actor = await requireWorkspacePermissionActor();
-  const { userId } = actor;
-  const scope = createReportActorScope(actor);
-  if (!canDoReports(scope, "reports.read.financial")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view enterprise report snapshots.
-        </CardContent>
-      </Card>
-    );
+  const access = await requireReportsPageAccess("reports.read.financial");
+  if (!access.ok) {
+    return access.deny;
   }
+  const { actor } = access;
+  const { userId } = actor;
   const [orders, revenue, locations, brands, tasks] = await Promise.all([
     prisma.order.count({ where: { userId } }),
     prisma.order.aggregate({ where: { userId }, _sum: { total: true } }),

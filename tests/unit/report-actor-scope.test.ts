@@ -35,7 +35,7 @@ describe("createReportActorScope", () => {
     expect(canDoReports(scope, "reports.saved.manage")).toBe(true);
   });
 
-  it("uses canonical reports.export when workspace grants are present", () => {
+  it("uses canonical report permissions when workspace grants are present", () => {
     const granted = workspacePermissionsFromStaffTemplate("LINE_COOK", "STAFF");
     const scope = createReportActorScope({
       sessionUserId: "prep-user",
@@ -46,6 +46,8 @@ describe("createReportActorScope", () => {
       granted,
     });
 
+    expect(canDoReports(scope, "reports.read.operations")).toBe(true);
+    expect(canDoReports(scope, "reports.read.financial")).toBe(false);
     expect(canDoReports(scope, "reports.export")).toBe(false);
   });
 

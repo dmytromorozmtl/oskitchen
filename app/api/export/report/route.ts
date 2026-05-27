@@ -4,7 +4,8 @@ import { getSessionUser } from "@/lib/auth";
 import { parseReportFilters, serialiseReportFilters } from "@/lib/reports/report-filters";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { requireReportExportActor } from "@/lib/reports/report-export-access";
-import { isReportKey } from "@/lib/reports/report-registry";
+import { getReportDefinition, isReportKey } from "@/lib/reports/report-registry";
+import { logReportPermissionDenied } from "@/services/reports/report-permission-audit";
 import {
   buildReportCsv,
   recordReportExport,
@@ -41,6 +42,11 @@ export async function GET(request: Request) {
   const filters = parseReportFilters(Object.fromEntries(url.searchParams.entries()));
   const result = await runReport(key, { userId, scope, filters });
   if (result.status === "permission_denied") {
+    void logReportPermissionDenied(actor, {
+      requiredPermission: getReportDefinition(key).requiredPermission,
+      reportKey: key,
+      operation: "report:export_read_denied",
+    });
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

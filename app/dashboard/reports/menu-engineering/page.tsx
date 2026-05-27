@@ -1,7 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { createReportActorScope } from "@/lib/reports/report-actor-scope";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { requireReportsPageAccess } from "@/lib/reports/reports-page-access";
 import { getMenuEngineeringMatrix } from "@/services/analytics/menu-engineering-service";
 
 const categoryColors: Record<string, string> = {
@@ -12,18 +10,12 @@ const categoryColors: Record<string, string> = {
 };
 
 export default async function MenuEngineeringPage() {
-  const actor = await requireWorkspacePermissionActor();
-  const { userId } = actor;
-  const scope = createReportActorScope(actor);
-  if (!canDoReports(scope, "reports.read.financial")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view menu engineering profitability.
-        </CardContent>
-      </Card>
-    );
+  const access = await requireReportsPageAccess("reports.read.financial");
+  if (!access.ok) {
+    return access.deny;
   }
+  const { actor } = access;
+  const { userId } = actor;
   const matrix = await getMenuEngineeringMatrix(userId);
 
   const byCategory = {

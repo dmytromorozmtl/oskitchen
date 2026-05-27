@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { isReportKey } from "@/lib/reports/report-registry";
 import { requireReportExportActor } from "@/lib/reports/report-export-access";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { requireReportReadActor } from "@/lib/reports/require-report-read-actor";
 import {
   parseReportFilters,
   serialiseReportFilters,
@@ -34,9 +34,12 @@ const saveSchema = z.object({
 export async function saveReportAction(input: z.infer<typeof saveSchema>) {
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
-  const scope = actorScopeFromUser(actor);
-  if (!canDoReports(scope, "reports.saved.manage")) {
-    throw new Error("Forbidden");
+  const access = await requireReportReadActor("reports.saved.manage", {
+    operation: "reports.saved.create",
+    reportKey: input.reportKey,
+  });
+  if (!access.ok) {
+    throw new Error(access.error);
   }
   const parsed = saveSchema.parse(input);
   if (!isReportKey(parsed.reportKey)) throw new Error("Unknown report");
@@ -73,9 +76,11 @@ export async function saveReportAction(input: z.infer<typeof saveSchema>) {
 export async function deleteSavedReportAction(savedReportId: string) {
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
-  const scope = actorScopeFromUser(actor);
-  if (!canDoReports(scope, "reports.saved.manage")) {
-    throw new Error("Forbidden");
+  const access = await requireReportReadActor("reports.saved.manage", {
+    operation: "reports.saved.delete",
+  });
+  if (!access.ok) {
+    throw new Error(access.error);
   }
   await prisma.savedReport.deleteMany({ where: { id: savedReportId, userId } });
   revalidatePath(`${REPORTS_PATH}/saved`);
@@ -84,9 +89,11 @@ export async function deleteSavedReportAction(savedReportId: string) {
 export async function duplicateSavedReportAction(savedReportId: string) {
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
-  const scope = actorScopeFromUser(actor);
-  if (!canDoReports(scope, "reports.saved.manage")) {
-    throw new Error("Forbidden");
+  const access = await requireReportReadActor("reports.saved.manage", {
+    operation: "reports.saved.duplicate",
+  });
+  if (!access.ok) {
+    throw new Error(access.error);
   }
   const source = await prisma.savedReport.findFirst({
     where: { id: savedReportId, userId },
@@ -118,9 +125,11 @@ export async function duplicateSavedReportAction(savedReportId: string) {
 export async function toggleSavedReportPinAction(savedReportId: string) {
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
-  const scope = actorScopeFromUser(actor);
-  if (!canDoReports(scope, "reports.saved.manage")) {
-    throw new Error("Forbidden");
+  const access = await requireReportReadActor("reports.saved.manage", {
+    operation: "reports.saved.toggle_pin",
+  });
+  if (!access.ok) {
+    throw new Error(access.error);
   }
   const sr = await prisma.savedReport.findFirst({
     where: { id: savedReportId, userId },
