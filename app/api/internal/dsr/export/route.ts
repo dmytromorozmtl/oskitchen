@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { requireSessionUser } from "@/lib/auth";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { verifyImpersonationMfa } from "@/lib/platform/impersonation-mfa";
 import { rejectCrossSiteMutation } from "@/lib/security/mutation-origin-guard";
 import {
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   if (originBlock) return originBlock;
 
   const session = await requireSessionUser();
-  if (!isSuperAdminEmail(session.email)) {
+  if (!(await hasSuperAdminRoleRow(session.id))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
