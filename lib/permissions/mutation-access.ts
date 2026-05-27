@@ -16,6 +16,8 @@ const LEGACY_FALLBACK: Partial<Record<PermissionKey, LegacyPermissionKey>> = {
   "reports.read.financial": "manage_reports",
   "orders.manage": "manage_orders",
   "customers.manage": "manage_customers",
+  "loyalty.manage": "manage_customers",
+  "giftcards.manage": "manage_customers",
   "production.manage": "manage_production",
   "packing.manage": "manage_packing",
   "routes.manage": "manage_orders",

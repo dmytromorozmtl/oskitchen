@@ -5,6 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { requireRewardsMutation } from "@/lib/crm/require-rewards-mutation";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   getOrCreateLoyaltyProgram,
@@ -26,6 +27,15 @@ export async function updateLoyaltyProgramAction(
   const parsed = loyaltyProgramSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid loyalty program settings" };
+  }
+
+  const access = await requireRewardsMutation({
+    required: "loyalty.manage",
+    operation: "loyalty.program.update",
+    module: "loyalty",
+  });
+  if (!access.ok) {
+    return { error: access.error };
   }
 
   const { dataUserId } = await requireTenantActor();

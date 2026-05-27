@@ -1,12 +1,16 @@
 import { GiftCardIssueForm } from "@/components/gift-cards/gift-card-issue-form";
 import { GiftCardList } from "@/components/gift-cards/gift-card-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireGiftCardsPageAccess } from "@/lib/crm/rewards-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { listGiftCards } from "@/services/gift-cards/gift-card-service";
 
 export const dynamic = "force-dynamic";
 
 export default async function GiftCardsPage() {
+  const access = await requireGiftCardsPageAccess();
+  if (!access.ok) return access.deny;
+
   const { dataUserId } = await getTenantActor();
   const cards = await listGiftCards(dataUserId);
 
@@ -30,14 +34,16 @@ export default async function GiftCardsPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Issue gift card</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <GiftCardIssueForm />
-        </CardContent>
-      </Card>
+      {access.canManage ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Issue gift card</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GiftCardIssueForm />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>

@@ -6,7 +6,13 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
   [CAPABILITY.ordersRead]: ["workspace.view"],
   [CAPABILITY.ordersWrite]: ["workspace.view", "orders.manage"],
   [CAPABILITY.ordersCancel]: ["workspace.view", "orders.manage"],
-  [CAPABILITY.posOperate]: ["workspace.view", "orders.manage", "pos.access", "pos.checkout"],
+  [CAPABILITY.posOperate]: [
+    "workspace.view",
+    "orders.manage",
+    "pos.access",
+    "pos.checkout",
+    "giftcards.manage",
+  ],
   [CAPABILITY.posCloseShift]: ["workspace.view", "pos.shift.open", "pos.shift.close"],
   [CAPABILITY.posManage]: [
     "workspace.view",
@@ -84,6 +90,8 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
     "reports.export",
   ],
   [CAPABILITY.impersonationRequest]: ["workspace.view"],
+  [CAPABILITY.giftCardsManage]: ["workspace.view", "giftcards.manage"],
+  [CAPABILITY.loyaltyManage]: ["workspace.view", "loyalty.manage"],
 };
 
 export function workspacePermissionsFromCapabilities(

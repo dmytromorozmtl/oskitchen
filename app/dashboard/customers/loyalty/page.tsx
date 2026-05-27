@@ -1,5 +1,6 @@
 import { LoyaltyRulesForm } from "@/components/customers/loyalty-rules-form";
 import { LoyaltyTransactionHistory } from "@/components/customers/loyalty-transaction-history";
+import { requireLoyaltyPageAccess } from "@/lib/crm/rewards-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
   getLoyaltyTransactions,
@@ -10,6 +11,9 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function CustomerLoyaltyPage() {
+  const access = await requireLoyaltyPageAccess();
+  if (!access.ok) return access.deny;
+
   const { userId } = await getTenantActor();
   const [program, accounts, transactions] = await Promise.all([
     getOrCreateLoyaltyProgram(userId),
@@ -39,14 +43,20 @@ export default async function CustomerLoyaltyPage() {
         </p>
       </div>
 
-      <LoyaltyRulesForm
-        program={{
-          pointsPerDollar: Number(program.pointsPerDollar),
-          redeemPointsThreshold: program.redeemPointsThreshold,
-          redeemValueCents: program.redeemValueCents,
-          active: program.active,
-        }}
-      />
+      {access.canManage ? (
+        <LoyaltyRulesForm
+          program={{
+            pointsPerDollar: Number(program.pointsPerDollar),
+            redeemPointsThreshold: program.redeemPointsThreshold,
+            redeemValueCents: program.redeemValueCents,
+            active: program.active,
+          }}
+        />
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          You can view loyalty activity but do not have permission to change program rules.
+        </p>
+      )}
 
       <div className="rounded-xl border bg-card p-6">
         <h2 className="text-base font-semibold">Member accounts</h2>

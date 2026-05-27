@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { canLookupRewardsBalance } from "@/lib/crm/require-rewards-mutation";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { logRewardsPermissionDenied } from "@/services/crm/rewards-permission-audit";
 import {
   getLoyaltyBalance,
   getOrCreateLoyaltyProgram,
@@ -10,7 +12,20 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
-    const { dataUserId } = await requireTenantActor();
+    const actor = await requireWorkspacePermissionActor();
+    if (!canLookupRewardsBalance(actor, "loyalty")) {
+      await logRewardsPermissionDenied(actor, {
+        requiredPermission: "loyalty.manage",
+        operation: "loyalty.balance.lookup",
+        module: "loyalty",
+      });
+      return NextResponse.json(
+        { error: "You do not have permission to perform this action." },
+        { status: 403 },
+      );
+    }
+
+    const { dataUserId } = actor;
     const customerId = request.nextUrl.searchParams.get("customerId");
     if (!customerId) {
       return NextResponse.json({ error: "customerId required" }, { status: 400 });

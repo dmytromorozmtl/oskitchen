@@ -34,6 +34,8 @@ export const CAPABILITY = {
   reportsReadAudit: "reports:read_audit",
   reportsSavedManage: "reports:saved_manage",
   exportsSensitive: "exports:sensitive",
+  giftCardsManage: "gift_cards:manage",
+  loyaltyManage: "loyalty:manage",
   impersonationRequest: "platform:impersonation",
 } as const;
 
@@ -64,6 +66,8 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.storefrontPublish,
     CAPABILITY.storefrontMedia,
     CAPABILITY.storefrontManage,
+    CAPABILITY.giftCardsManage,
+    CAPABILITY.loyaltyManage,
   ],
   KITCHEN_LEAD: [
     CAPABILITY.ordersRead,
@@ -132,6 +136,8 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.storefrontPublish,
     CAPABILITY.storefrontMedia,
     CAPABILITY.storefrontManage,
+    CAPABILITY.giftCardsManage,
+    CAPABILITY.loyaltyManage,
     CAPABILITY.reportsReadOperations,
   ],
   VIEWER: [
