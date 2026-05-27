@@ -2,16 +2,16 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
+import { requireStorefrontLoyaltyPageAccess } from "@/lib/storefront/storefront-loyalty-page-access";
 import { getOrCreateLoyaltyProgram } from "@/services/storefront/loyalty-service";
 
 export default async function StorefrontLoyaltyPage() {
-  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  const pageAccess = await requireStorefrontLoyaltyPageAccess();
   if (!pageAccess.ok) return pageAccess.deny;
 
   const program = await getOrCreateLoyaltyProgram(
     pageAccess.access.storefront.id,
-    pageAccess.userId,
+    pageAccess.access.storefront.userId,
   );
 
   return (

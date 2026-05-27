@@ -3,6 +3,7 @@ import { hasPermission } from "@/lib/permissions/guards";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { legacyStorefrontAllowsForActor } from "@/lib/storefront/require-storefront-actor";
 import { canAccessStorefrontGiftCardsTab } from "@/lib/storefront/storefront-gift-cards-permission";
+import { canAccessStorefrontLoyaltyTab } from "@/lib/storefront/storefront-loyalty-permission";
 import { workspacePermissionForStorefrontAdminPermission } from "@/lib/storefront/storefront-admin-permission-keys";
 import {
   resolveStorefrontAdminAccess,
@@ -15,6 +16,7 @@ type SubnavGate =
   | { kind: "manage" }
   | { kind: "media" }
   | { kind: "gift_cards" }
+  | { kind: "loyalty" }
   | { kind: "admin"; permission: StorefrontAdminPermission };
 
 const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
@@ -45,7 +47,7 @@ const SUBNAV_ENTRIES: { href: string; gate: SubnavGate }[] = [
   { href: "/dashboard/storefront/redirects", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/discounts", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/gift-cards", gate: { kind: "gift_cards" } },
-  { href: "/dashboard/storefront/loyalty", gate: { kind: "admin", permission: "storefront.settings" } },
+  { href: "/dashboard/storefront/loyalty", gate: { kind: "loyalty" } },
   { href: "/dashboard/storefront/reservations", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/referrals", gate: { kind: "admin", permission: "storefront.settings" } },
   { href: "/dashboard/storefront/schedule", gate: { kind: "admin", permission: "storefront.settings" } },
@@ -88,6 +90,12 @@ export async function resolveStorefrontSubnavVisibleHrefs(
         break;
       case "gift_cards":
         if (canAccessStorefrontGiftCardsTab(hub.actor.granted, hub.canRead)) {
+          const access = await resolveStorefrontAdminAccess(sessionUser.id);
+          if (access.ok) visible.push(entry.href);
+        }
+        break;
+      case "loyalty":
+        if (canAccessStorefrontLoyaltyTab(hub.actor.granted, hub.canRead)) {
           const access = await resolveStorefrontAdminAccess(sessionUser.id);
           if (access.ok) visible.push(entry.href);
         }
