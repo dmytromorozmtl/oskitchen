@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { canUseFeature } from "@/lib/plans/feature-registry";
 import { safeError } from "@/lib/security";
@@ -12,6 +13,7 @@ import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
 import {
   logPosPermissionDenied,
   logPosRegisterCreated,
+  logPosShiftEvent,
 } from "@/services/pos/pos-permission-audit";
 import { refundPosTransaction } from "@/services/pos/pos-refund-service";
 import { voidPosTransaction } from "@/services/pos/pos-void-service";
@@ -69,6 +71,15 @@ async function requirePosPermission(
     });
   }
   return access;
+}
+
+function serializeAuditNumeric(value: unknown): string | number | null {
+  if (value == null) return null;
+  if (typeof value === "number" || typeof value === "string") return value;
+  if (typeof value === "object" && typeof (value as { toString?: () => string }).toString === "function") {
+    return (value as { toString: () => string }).toString();
+  }
+  return String(value);
 }
 
 export async function posCheckoutAction(raw: z.infer<typeof checkoutSchema>) {
@@ -168,6 +179,16 @@ export async function posOpenShiftAction(formData: FormData) {
       notes: String(formData.get("notes") ?? "") || undefined,
     });
     if (!res.ok) return { error: res.error };
+    await logPosShiftEvent(actor, {
+      action: AUDIT_ACTIONS.POS_SHIFT_OPENED,
+      entityId: res.shift.id,
+      label: res.shift.id,
+      metadata: {
+        registerId: res.shift.registerId,
+        openedByStaffId: res.shift.openedByStaffId,
+        openingCashAmount: serializeAuditNumeric(res.shift.openingCashAmount),
+      },
+    });
     revalidatePath("/dashboard/pos/shifts");
     revalidatePath("/dashboard/pos/terminal");
     return { ok: true as const };
@@ -200,6 +221,18 @@ export async function posCloseShiftAction(formData: FormData) {
       notes: String(formData.get("notes") ?? "") || undefined,
     });
     if (!res.ok) return { error: res.error };
+    await logPosShiftEvent(actor, {
+      action: AUDIT_ACTIONS.POS_SHIFT_CLOSED,
+      entityId: res.shift.id,
+      label: res.shift.id,
+      metadata: {
+        registerId: res.shift.registerId,
+        closedByStaffId: res.shift.closedByStaffId,
+        closingCashAmount: serializeAuditNumeric(res.shift.closingCashAmount),
+        expectedCashAmount: serializeAuditNumeric(res.shift.expectedCashAmount),
+        varianceAmount: serializeAuditNumeric(res.shift.varianceAmount),
+      },
+    });
     revalidatePath("/dashboard/pos/shifts");
     revalidatePath("/dashboard/pos/terminal");
     return { ok: true as const };

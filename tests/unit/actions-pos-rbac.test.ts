@@ -11,6 +11,7 @@ const voidPosTransaction = vi.hoisted(() => vi.fn());
 const revalidatePath = vi.hoisted(() => vi.fn());
 const logPosPermissionDenied = vi.hoisted(() => vi.fn());
 const logPosRegisterCreated = vi.hoisted(() => vi.fn());
+const logPosShiftEvent = vi.hoisted(() => vi.fn());
 
 vi.mock("next/cache", () => ({ revalidatePath }));
 vi.mock("@/lib/permissions/mutation-access", () => ({ requireMutationPermission }));
@@ -23,6 +24,7 @@ vi.mock("@/services/pos/pos-void-service", () => ({ voidPosTransaction }));
 vi.mock("@/services/pos/pos-permission-audit", () => ({
   logPosPermissionDenied,
   logPosRegisterCreated,
+  logPosShiftEvent,
 }));
 
 import {
@@ -33,6 +35,7 @@ import {
   posRefundTransactionAction,
   posVoidTransactionAction,
 } from "@/actions/pos";
+import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
 
 const actor = {
   sessionUser: { id: "staff-user-1" },
@@ -74,8 +77,26 @@ describe("POS action RBAC", () => {
     canUseFeature.mockResolvedValue({ allowed: true });
     checkoutPosSale.mockResolvedValue({ ok: true, orderId: "ord-1" });
     createPosRegister.mockResolvedValue({ id: "reg-1", name: "Front counter", locationId: null });
-    openPosShift.mockResolvedValue({ ok: true, shiftId: "shift-1" });
-    closePosShift.mockResolvedValue({ ok: true });
+    openPosShift.mockResolvedValue({
+      ok: true,
+      shift: {
+        id: "shift-1",
+        registerId: "reg-1",
+        openedByStaffId: "staff-1",
+        openingCashAmount: 50,
+      },
+    });
+    closePosShift.mockResolvedValue({
+      ok: true,
+      shift: {
+        id: "shift-1",
+        registerId: "reg-1",
+        closedByStaffId: "staff-1",
+        closingCashAmount: 55,
+        expectedCashAmount: 80,
+        varianceAmount: -25,
+      },
+    });
     refundPosTransaction.mockResolvedValue({ ok: true });
     voidPosTransaction.mockResolvedValue({ ok: true });
   });
@@ -157,6 +178,37 @@ describe("POS action RBAC", () => {
     );
   });
 
+  it("uses owner-scoped tenant data and audits shift open events", async () => {
+    requireMutationPermission.mockResolvedValueOnce({ ok: true, actor });
+
+    const result = await posOpenShiftAction(
+      formDataFrom({
+        registerId: "reg-1",
+        staffId: "staff-1",
+        openingCash: "50",
+      }),
+    );
+
+    expect(result).toEqual({ ok: true });
+    expect(openPosShift).toHaveBeenCalledWith({
+      userId: "owner-user-1",
+      registerId: "reg-1",
+      openedByStaffId: "staff-1",
+      openingCashAmount: 50,
+      notes: undefined,
+    });
+    expect(logPosShiftEvent).toHaveBeenCalledWith(actor, {
+      action: AUDIT_ACTIONS.POS_SHIFT_OPENED,
+      entityId: "shift-1",
+      label: "shift-1",
+      metadata: {
+        registerId: "reg-1",
+        openedByStaffId: "staff-1",
+        openingCashAmount: 50,
+      },
+    });
+  });
+
   it("blocks shift close without shift-close permission", async () => {
     requireMutationPermission.mockResolvedValueOnce(baseForbiddenAccess);
 
@@ -177,6 +229,39 @@ describe("POS action RBAC", () => {
         operation: "pos.shift.close",
       }),
     );
+  });
+
+  it("uses owner-scoped tenant data and audits shift close events", async () => {
+    requireMutationPermission.mockResolvedValueOnce({ ok: true, actor });
+
+    const result = await posCloseShiftAction(
+      formDataFrom({
+        shiftId: "shift-1",
+        staffId: "staff-1",
+        closingCash: "55",
+      }),
+    );
+
+    expect(result).toEqual({ ok: true });
+    expect(closePosShift).toHaveBeenCalledWith({
+      userId: "owner-user-1",
+      shiftId: "shift-1",
+      closedByStaffId: "staff-1",
+      closingCashAmount: 55,
+      notes: undefined,
+    });
+    expect(logPosShiftEvent).toHaveBeenCalledWith(actor, {
+      action: AUDIT_ACTIONS.POS_SHIFT_CLOSED,
+      entityId: "shift-1",
+      label: "shift-1",
+      metadata: {
+        registerId: "reg-1",
+        closedByStaffId: "staff-1",
+        closingCashAmount: 55,
+        expectedCashAmount: 80,
+        varianceAmount: -25,
+      },
+    });
   });
 
   it("blocks refunds without refund permission", async () => {
