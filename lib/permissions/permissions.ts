@@ -46,6 +46,8 @@ export const PERMISSIONS = {
   "staff.manage": "Invite and manage staff",
   "schedule.manage": "Create and edit labor schedules",
   "timeclock.manage": "Clock staff in and out on the time clock",
+  "training.manage": "Create programs, SOPs, assignments, and certifications",
+  "training.participate": "Complete assigned training, quizzes, and simulations",
   "growth.view": "View growth / beta surfaces",
 } as const;
 
@@ -97,6 +99,8 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "staff.manage",
   "schedule.manage",
   "timeclock.manage",
+  "training.manage",
+  "training.participate",
   "growth.view",
 ];
 
@@ -110,6 +114,7 @@ const STAFF_OPS: readonly PermissionKey[] = [
   "kitchen.bump",
   "packing.manage",
   "routes.manage",
+  "training.participate",
 ];
 
 export function defaultPermissionsForWorkspaceRole(role: UserRole): Set<PermissionKey> {

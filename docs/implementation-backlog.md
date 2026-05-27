@@ -176,7 +176,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: aligns workforce and operations
 - Technical value: reduces permission sprawl
 - User story: as an owner, I need staff roles to govern what people can actually do
-- Current state: **in progress** — labor `schedule.manage` / `timeclock.manage`; `actions/staff.ts` + `actions/staff-member.ts` use canonical `staff.manage` with fine-grained capability checks; fixed `isOwner: true` scope bug; UI via `getStaffPageAccess()`; denial audit `staff.permission_denied`
+- Current state: **in progress** — staff + labor canonical keys; `actions/training.ts` uses `training.manage` / `training.participate` with fixed scope + `training.permission_denied` audit + training UI gates
 - Target state: staff roles map directly to canonical capabilities
 - Affected files: `actions/staff.ts`, `actions/training.ts`, `lib/staff/**`, `lib/training/**`
 - Dependencies: `KOS-P0-001`

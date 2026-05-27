@@ -4,13 +4,13 @@ import { ProgramForm } from "@/components/dashboard/training/program-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getTrainingPageAccess } from "@/lib/training/training-page-access";
 import { prisma } from "@/lib/prisma";
 import { ROLE_LABEL, DIFFICULTY_LABEL, LANGUAGE_LABEL } from "@/lib/training/training-engine";
 import { listPrograms } from "@/services/training/training-service";
 
 export default async function ProgramsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { userId: dataUserId, canCreateProgram } = await getTrainingPageAccess();
   const [programs, brands, locations] = await Promise.all([
     listPrograms(dataUserId),
     prisma.brand.findMany({ where: { workspaceId: dataUserId }, select: { id: true, name: true }, orderBy: { name: "asc" } }).catch(() => []),
@@ -26,15 +26,21 @@ export default async function ProgramsPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Create a program</CardTitle>
-          <CardDescription>Optionally seed lessons + modules from a role template.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ProgramForm brands={brands} locations={locations} />
-        </CardContent>
-      </Card>
+      {canCreateProgram ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Create a program</CardTitle>
+            <CardDescription>Optionally seed lessons + modules from a role template.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ProgramForm brands={brands} locations={locations} />
+          </CardContent>
+        </Card>
+      ) : (
+        <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          Program authoring requires <span className="font-medium text-foreground">training.manage</span>.
+        </p>
+      )}
 
       {programs.length === 0 ? (
         <Card className="border-dashed">

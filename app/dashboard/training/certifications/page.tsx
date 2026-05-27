@@ -1,7 +1,7 @@
 import { IssueCertForm, RevokeCertForm } from "@/components/dashboard/training/cert-forms";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getTrainingPageAccess } from "@/lib/training/training-page-access";
 import { prisma } from "@/lib/prisma";
 import {
   isCertificationActive,
@@ -11,7 +11,7 @@ import { CERTIFICATION_LABEL } from "@/lib/training/training-engine";
 import { listCertifications } from "@/services/training/training-service";
 
 export default async function CertificationsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { userId: dataUserId, canManageCerts } = await getTrainingPageAccess();
   const [certs, staff] = await Promise.all([
     listCertifications(dataUserId),
     prisma.staffMember.findMany({
@@ -30,15 +30,17 @@ export default async function CertificationsPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Issue a certification</CardTitle>
-          <CardDescription>Issuing without an expiry uses the default validity per type.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <IssueCertForm staff={staff} />
-        </CardContent>
-      </Card>
+      {canManageCerts ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Issue a certification</CardTitle>
+            <CardDescription>Issuing without an expiry uses the default validity per type.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <IssueCertForm staff={staff} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>
@@ -80,7 +82,9 @@ export default async function CertificationsPage() {
                       ) : (
                         <Badge className="bg-rose-100 text-rose-700">{c.revokedAt ? "Revoked" : "Expired"}</Badge>
                       )}
-                      {active && !c.revokedAt ? <RevokeCertForm certId={c.id} /> : null}
+                      {canManageCerts && active && !c.revokedAt ? (
+                        <RevokeCertForm certId={c.id} />
+                      ) : null}
                     </div>
                   </li>
                 );

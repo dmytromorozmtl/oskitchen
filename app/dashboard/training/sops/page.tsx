@@ -5,13 +5,18 @@ import {
 } from "@/components/dashboard/training/sop-forms";
 import { SopStatusBadge } from "@/components/dashboard/training/status-badges";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getTrainingPageAccess } from "@/lib/training/training-page-access";
 import { prisma } from "@/lib/prisma";
 import { SOP_CATEGORY_LABEL } from "@/lib/training/sop-engine";
 import { listSops } from "@/services/training/training-service";
 
 export default async function SopsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const {
+    userId: dataUserId,
+    canManageSops,
+    canPublishSops,
+    canParticipate,
+  } = await getTrainingPageAccess();
   const [sops, staff] = await Promise.all([
     listSops(dataUserId),
     prisma.staffMember.findMany({
@@ -30,15 +35,17 @@ export default async function SopsPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">New SOP</CardTitle>
-          <CardDescription>Draft → publish to push to staff for acknowledgement.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <CreateSopForm />
-        </CardContent>
-      </Card>
+      {canManageSops ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">New SOP</CardTitle>
+            <CardDescription>Draft → publish to push to staff for acknowledgement.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CreateSopForm />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>
@@ -61,7 +68,7 @@ export default async function SopsPage() {
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <SopStatusBadge status={s.status} />
-                      <SopStatusButtons sopId={s.id} status={s.status} />
+                      {canPublishSops ? <SopStatusButtons sopId={s.id} status={s.status} /> : null}
                     </div>
                   </div>
                   {s.summary ? <p className="mt-2 text-xs text-muted-foreground">{s.summary}</p> : null}
@@ -72,7 +79,7 @@ export default async function SopsPage() {
                   <p className="mt-2 text-xs text-muted-foreground">
                     {s.acknowledgements.length} acknowledgement{s.acknowledgements.length === 1 ? "" : "s"}
                   </p>
-                  {s.status === "ACTIVE" && s.requiresAcknowledgement ? (
+                  {canParticipate && s.status === "ACTIVE" && s.requiresAcknowledgement ? (
                     <div className="mt-2">
                       <AcknowledgeSopForm sopId={s.id} staff={staff} />
                     </div>

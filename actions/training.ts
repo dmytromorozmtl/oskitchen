@@ -1,18 +1,15 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-
-import {
-  canUseTraining,
-  type TrainingActorScope,
-  type TrainingCapability,
-} from "@/lib/training/training-permissions";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { resolveTrainingActorScope } from "@/lib/training/resolve-training-actor-scope";
+import { canUseTraining, type TrainingCapability } from "@/lib/training/training-permissions";
+import { workspacePermissionForTrainingCapability } from "@/lib/training/training-mutation-permission";
+import { logTrainingPermissionDenied } from "@/services/training/training-permission-audit";
 import {
   acknowledgeSop,
   archiveSop,
@@ -62,18 +59,33 @@ const SOP_CATEGORIES = [
   "EQUIPMENT_MAINTENANCE", "OTHER",
 ] as const;
 
-function scopeFrom(profile: { role: string | null; email: string | null }): TrainingActorScope {
-  return { isOwner: true, role: profile.role, email: profile.email };
-}
-
 async function gate(cap: TrainingCapability) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const required = workspacePermissionForTrainingCapability(cap);
+  const access = await requireMutationPermission(required);
   const profile = await requireUserProfile();
-  const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
+  if (!access.ok) {
+    await logTrainingPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: cap,
+      trainingCapability: cap,
+    });
+    throw new Error(access.error);
+  }
+  const scope = resolveTrainingActorScope({
+    workspaceRole: access.actor.workspaceRole,
+    email: access.actor.email,
+    profileRole: profile.role ?? null,
+    profileEmail: profile.email ?? null,
+  });
   if (!canUseTraining(scope, cap)) {
+    await logTrainingPermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: cap,
+      trainingCapability: cap,
+    });
     throw new Error(`You do not have permission to ${cap}.`);
   }
-  return { userId: dataUserId, profileId: profile.id };
+  return { userId: access.actor.userId, profileId: profile.id };
 }
 
 const createProgramSchema = z.object({

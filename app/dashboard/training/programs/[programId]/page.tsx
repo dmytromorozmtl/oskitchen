@@ -4,7 +4,7 @@ import { AssignProgramForm } from "@/components/dashboard/training/assign-form";
 import { AssignmentStatusBadge } from "@/components/dashboard/training/status-badges";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getTrainingPageAccess } from "@/lib/training/training-page-access";
 import { prisma } from "@/lib/prisma";
 import { DIFFICULTY_LABEL, LANGUAGE_LABEL, ROLE_LABEL } from "@/lib/training/training-engine";
 import { getProgram } from "@/services/training/training-service";
@@ -12,7 +12,7 @@ import { getProgram } from "@/services/training/training-service";
 type PageProps = { params: Promise<{ programId: string }> };
 
 export default async function ProgramDetailPage({ params }: PageProps) {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { userId: dataUserId, canAssign } = await getTrainingPageAccess();
   const { programId } = await params;
   const [program, staff] = await Promise.all([
     getProgram(dataUserId, programId),
@@ -86,15 +86,17 @@ export default async function ProgramDetailPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Assign this program</CardTitle>
-          <CardDescription>Assign to a staff member or a free-form trainee.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AssignProgramForm programId={program.id} staff={staff} />
-        </CardContent>
-      </Card>
+      {canAssign ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Assign this program</CardTitle>
+            <CardDescription>Assign to a staff member or a free-form trainee.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AssignProgramForm programId={program.id} staff={staff} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>

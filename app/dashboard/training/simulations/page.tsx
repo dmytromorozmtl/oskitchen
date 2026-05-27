@@ -4,7 +4,7 @@ import {
 } from "@/components/dashboard/training/simulation-forms";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { getTrainingPageAccess } from "@/lib/training/training-page-access";
 import {
   SIMULATION_TEMPLATES,
   SIMULATION_TYPE_LABEL,
@@ -12,7 +12,7 @@ import {
 import { listSimulations } from "@/services/training/training-service";
 
 export default async function SimulationsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const { userId: dataUserId, canCreateProgram, canRunSimulations } = await getTrainingPageAccess();
   const sims = await listSimulations(dataUserId);
 
   return (
@@ -25,15 +25,17 @@ export default async function SimulationsPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Create a simulation</CardTitle>
-          <CardDescription>Pre-built scenario steps will be loaded; you can customize later.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <CreateSimulationForm />
-        </CardContent>
-      </Card>
+      {canCreateProgram ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Create a simulation</CardTitle>
+            <CardDescription>Pre-built scenario steps will be loaded; you can customize later.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CreateSimulationForm />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>
@@ -63,9 +65,11 @@ export default async function SimulationsPage() {
                       </div>
                       <Badge variant="outline">{s.runs.length} run{s.runs.length === 1 ? "" : "s"}</Badge>
                     </div>
-                    <div className="mt-3">
-                      <SimulationRunner simulationId={s.id} steps={steps} />
-                    </div>
+                    {canRunSimulations ? (
+                      <div className="mt-3">
+                        <SimulationRunner simulationId={s.id} steps={steps} />
+                      </div>
+                    ) : null}
                     {s.runs.length > 0 ? (
                       <details className="mt-3">
                         <summary className="cursor-pointer text-xs text-muted-foreground">Recent runs</summary>

@@ -36,6 +36,8 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
     "staff.manage",
     "schedule.manage",
     "timeclock.manage",
+    "training.manage",
+    "training.participate",
   ],
   [CAPABILITY.billingManage]: ["workspace.view", "billing.view", "billing.manage"],
   [CAPABILITY.integrationsRead]: ["workspace.view", "integrations.read"],
