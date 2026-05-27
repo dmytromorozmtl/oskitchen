@@ -65,6 +65,15 @@ export function summarizeInventoryCountVariance(
   };
 }
 
+export type InventoryCountListRow = {
+  id: string;
+  status: string;
+  createdAt: Date;
+  completedAt: Date | null;
+  itemCount: number;
+  varianceSummary: InventoryCountVarianceSummary;
+};
+
 export async function listInventoryCounts(userId: string, take = 30) {
   return prisma.inventoryCount.findMany({
     where: await inventoryCountListWhereForOwner(userId),
@@ -72,6 +81,34 @@ export async function listInventoryCounts(userId: string, take = 30) {
     take,
     include: { _count: { select: { items: true } } },
   });
+}
+
+/** Count history with per-count variance rollup for list dashboards. */
+export async function listInventoryCountRows(userId: string, take = 30): Promise<InventoryCountListRow[]> {
+  const counts = await prisma.inventoryCount.findMany({
+    where: await inventoryCountListWhereForOwner(userId),
+    orderBy: { createdAt: "desc" },
+    take,
+    include: {
+      _count: { select: { items: true } },
+      items: {
+        select: {
+          countedQty: true,
+          varianceQty: true,
+          varianceCost: true,
+        },
+      },
+    },
+  });
+
+  return counts.map((c) => ({
+    id: c.id,
+    status: c.status,
+    createdAt: c.createdAt,
+    completedAt: c.completedAt,
+    itemCount: c._count.items,
+    varianceSummary: summarizeInventoryCountVariance(c.items),
+  }));
 }
 
 export async function getInventoryCountDetail(countId: string, userId: string) {
