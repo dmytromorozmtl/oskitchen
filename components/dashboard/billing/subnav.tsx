@@ -5,8 +5,17 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const BASE_LINKS = [
-  { href: "/dashboard/billing", label: "Overview", match: "exact" as const },
+type BillingSubnavLink = {
+  href: string;
+  label: string;
+  match?: "exact";
+  settingsOnly?: boolean;
+  cancelOnly?: boolean;
+  portalOnly?: boolean;
+};
+
+const BASE_LINKS: BillingSubnavLink[] = [
+  { href: "/dashboard/billing", label: "Overview", match: "exact" },
   { href: "/dashboard/billing/plans", label: "Plans" },
   { href: "/dashboard/billing/usage", label: "Usage" },
   { href: "/dashboard/billing/invoices", label: "Invoices" },
@@ -15,7 +24,7 @@ const BASE_LINKS = [
   { href: "/dashboard/billing/entitlements", label: "Entitlements" },
   { href: "/dashboard/billing/cancel", label: "Cancel / downgrade", cancelOnly: true },
   { href: "/dashboard/billing/settings", label: "Settings", settingsOnly: true },
-] as const;
+];
 
 export function BillingSubnav({
   canOpenPortal = true,
