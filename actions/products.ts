@@ -5,6 +5,9 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   menuByIdWhereForOwner,
@@ -17,6 +20,24 @@ import type { OperatingMode } from "@/lib/operating-modes/types";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
 import { safeError } from "@/lib/security";
 import { getAllowedCategoryCodes } from "@/services/products/category-service";
+
+async function requireProductMutationPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "products.edit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "products.permission_denied",
+      entityType: "Product",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
 
 async function revalidateProductPaths(userId: string) {
   revalidatePath("/dashboard/products");
@@ -78,6 +99,9 @@ function parseProductForm(formData: FormData) {
 
 export async function createProduct(formData: FormData) {
   try {
+    const gate = await requireProductMutationPermission("products.create");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId, workspaceId } = await requireTenantActor();
     const menuId = String(formData.get("menuId"));
 
@@ -140,6 +164,9 @@ export async function createProduct(formData: FormData) {
 
 export async function updateProduct(productId: string, formData: FormData) {
   try {
+    const gate = await requireProductMutationPermission("products.update");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
 
     const existing = await prisma.product.findFirst({
@@ -193,6 +220,9 @@ export async function updateProduct(productId: string, formData: FormData) {
 /** Quick image update from products table (media library pick). */
 export async function updateProductImageFormAction(formData: FormData) {
   try {
+    const gate = await requireProductMutationPermission("products.update_image");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
     const parsed = productImagePatchSchema.safeParse({
       productId: formData.get("productId"),
@@ -221,6 +251,9 @@ export async function updateProductImageFormAction(formData: FormData) {
 
 export async function deleteProduct(productId: string) {
   try {
+    const gate = await requireProductMutationPermission("products.delete");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
     const existing = await prisma.product.findFirst({
       where: await productByIdWhereForOwnerWithMenuFallback(userId, productId),
@@ -237,6 +270,9 @@ export async function deleteProduct(productId: string) {
 
 export async function reorderProducts(menuId: string, orderedIds: string[]) {
   try {
+    const gate = await requireProductMutationPermission("products.reorder");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
     const menu = await prisma.menu.findFirst({
       where: await menuByIdWhereForOwner(userId, menuId),
