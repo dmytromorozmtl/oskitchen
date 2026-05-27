@@ -270,7 +270,7 @@ Initial scope:
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates
 - keep plan/module gates separate from role permissions
-- Status update: the first POS UI parity slice is now live for the POS layout shell, filtered sub-navigation, registers, shifts, handheld, tabs, receipts, transactions, and POS hardware/settings entry pages
+- Status update: the first POS UI parity slice is now live for the POS layout shell, filtered sub-navigation, registers, shifts, handheld, tabs, receipts, transactions, and POS hardware/settings entry pages, and the focused POS RBAC suite now exercises deny/allow parity on the handheld, tabs, and hardware/settings page surfaces instead of relying only on runtime guards
 
 ### Phase 4: Broader domains
 - staff/training/labor

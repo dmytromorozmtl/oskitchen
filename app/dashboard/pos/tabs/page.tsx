@@ -1,3 +1,4 @@
+import React from "react";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { TabPanel } from "@/components/pos/tab-panel";
 import { hasPermission } from "@/lib/permissions/guards";

@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
