@@ -1,20 +1,28 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { getNotificationActorScope } from "@/lib/notifications/notification-actor-scope";
-
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
-import { canUseNotifications } from "@/lib/notifications/notification-permissions";
 import { sendNotification, retryNotification, cancelQueuedNotification } from "@/services/notifications/notification-service";
 import { installDefaultRules, updateRule } from "@/services/notifications/reminder-service";
 import { getSystemTemplate } from "@/lib/notifications/template-registry";
+import { logSettingsPermissionDenied } from "@/services/settings/settings-permission-audit";
 
-async function actor() {
-  return getNotificationActorScope();
+async function requireNotificationCenterManageAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await logSettingsPermissionDenied(access.actor, {
+      requiredPermission: "workspace.settings",
+      operation,
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const { userId } = await requireTenantActor();
+  return { ok: true as const, userId, actor: access.actor };
 }
 
 const sendTestSchema = z.object({
@@ -24,8 +32,8 @@ const sendTestSchema = z.object({
 
 export async function sendTestEmailAction(formData: FormData) {
   try {
-    const a = await actor();
-    if (!canUseNotifications(a, "send_test_email")) return { ok: false as const, error: "Not allowed." };
+    const manage = await requireNotificationCenterManageAccess("notifications_center.send_test_email");
+    if (!manage.ok) return { ok: false as const, error: manage.error };
     const parsed = sendTestSchema.safeParse({
       templateKey: formData.get("templateKey"),
       recipient: formData.get("recipient"),
@@ -38,7 +46,7 @@ export async function sendTestEmailAction(formData: FormData) {
     for (const v of tpl.variables) variables[v.key] = v.example;
 
     const res = await sendNotification({
-      userId: a.userId,
+      userId: manage.userId,
       templateKey: parsed.data.templateKey,
       type: "CRON_REMINDER",
       category: tpl.category,
@@ -49,7 +57,7 @@ export async function sendTestEmailAction(formData: FormData) {
       sourceType: "TEST_EMAIL",
       sourceId: `${Date.now()}`,
       dedupeKey: `test|${parsed.data.templateKey}|${parsed.data.recipient}|${Date.now()}`,
-      metadata: { test: true, requestedBy: a.userId },
+      metadata: { test: true, requestedBy: manage.actor.sessionUserId },
     });
 
     revalidatePath("/dashboard/notifications");
@@ -64,11 +72,11 @@ export async function sendTestEmailAction(formData: FormData) {
 
 export async function retryNotificationAction(formData: FormData) {
   try {
-    const a = await actor();
-    if (!canUseNotifications(a, "retry_failed")) return { ok: false as const, error: "Not allowed." };
+    const manage = await requireNotificationCenterManageAccess("notifications_center.retry");
+    if (!manage.ok) return { ok: false as const, error: manage.error };
     const logId = String(formData.get("logId") ?? "");
     if (!logId) return { ok: false as const, error: "Missing log id." };
-    const res = await retryNotification(logId, a.userId);
+    const res = await retryNotification(logId, manage.userId);
     revalidatePath("/dashboard/notifications/retry");
     revalidatePath("/dashboard/notifications/log");
     return res.ok ? { ok: true as const, status: res.status } : { ok: false as const, error: res.reason };
@@ -79,11 +87,11 @@ export async function retryNotificationAction(formData: FormData) {
 
 export async function cancelNotificationAction(formData: FormData) {
   try {
-    const a = await actor();
-    if (!canUseNotifications(a, "retry_failed")) return { ok: false as const, error: "Not allowed." };
+    const manage = await requireNotificationCenterManageAccess("notifications_center.cancel");
+    if (!manage.ok) return { ok: false as const, error: manage.error };
     const logId = String(formData.get("logId") ?? "");
     if (!logId) return { ok: false as const, error: "Missing log id." };
-    const res = await cancelQueuedNotification(logId, a.userId);
+    const res = await cancelQueuedNotification(logId, manage.userId);
     revalidatePath("/dashboard/notifications/retry");
     revalidatePath("/dashboard/notifications/log");
     return res.ok ? { ok: true as const } : { ok: false as const, error: res.reason };
@@ -94,9 +102,9 @@ export async function cancelNotificationAction(formData: FormData) {
 
 export async function installDefaultRulesAction() {
   try {
-    const a = await actor();
-    if (!canUseNotifications(a, "manage_rules")) return { ok: false as const, error: "Not allowed." };
-    const res = await installDefaultRules(a.userId);
+    const manage = await requireNotificationCenterManageAccess("notifications_center.install_defaults");
+    if (!manage.ok) return { ok: false as const, error: manage.error };
+    const res = await installDefaultRules(manage.userId);
     revalidatePath("/dashboard/notifications/rules");
     return { ok: true as const, created: res.created };
   } catch (e) {
@@ -113,8 +121,8 @@ const updateRuleSchema = z.object({
 
 export async function updateRuleAction(formData: FormData) {
   try {
-    const a = await actor();
-    if (!canUseNotifications(a, "manage_rules")) return { ok: false as const, error: "Not allowed." };
+    const manage = await requireNotificationCenterManageAccess("notifications_center.update_rule");
+    if (!manage.ok) return { ok: false as const, error: manage.error };
     const parsed = updateRuleSchema.safeParse({
       id: formData.get("id"),
       enabled: formData.get("enabled") ?? undefined,
@@ -122,7 +130,7 @@ export async function updateRuleAction(formData: FormData) {
       dedupeWindowMinutes: formData.get("dedupeWindowMinutes") ?? undefined,
     });
     if (!parsed.success) return { ok: false as const, error: "Invalid input." };
-    const res = await updateRule(a.userId, parsed.data.id, parsed.data);
+    const res = await updateRule(manage.userId, parsed.data.id, parsed.data);
     revalidatePath("/dashboard/notifications/rules");
     return res.ok ? { ok: true as const } : { ok: false as const, error: res.error };
   } catch (e) {
