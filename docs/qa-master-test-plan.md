@@ -48,7 +48,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ### 8. Kitchen / KDS (v1 scope)
 - canonical scope: `docs/kds-v1-scope.md` (locked; CI gate `test:ci:kds-v1:cert`)
 - unit bundle: `npm run test:ci:kds-v1:unit` (RBAC + rollout gate + contract; in `test:ci:governance-bundles`)
-- integration: `npm run test:ci:kds-v1:integration` (requires `RUN_DB_INTEGRATION=1` + Postgres)
+- integration: `npm run test:ci:kds-v1:integration` in **`kds-v1-prototype` CI job** (Postgres + `RUN_DB_INTEGRATION=1`)
+- prototype wiring cert: `test:ci:kds-v1:prototype:cert` (in `test:ci:governance-bundles`)
 - manual/staging: Supabase Realtime subscription smoke on `/dashboard/kitchen`; non-prod needs `ENABLE_KDS_V1_CERTIFIED=true`
 - not required for v1: multi-station E2E, offline replay, hardware cert
 
@@ -154,6 +155,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 8. release-critical smoke bundle aligned to production journeys
 9. ~~cron surface hygiene CI wiring~~ — `validate:production-crons` + `validate:cron-inventory` in quality job; live gate `test:ci:cron-hygiene:cert`
 10. ~~KDS v1 scope CI wiring~~ — `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` in governance bundles; integration queue→bump focused DB workflow
+11. ~~KDS v1 prototype CI wiring~~ — `kds-v1-prototype` job + `test:ci:kds-v1:prototype:cert`; allergen UI + rollout gate verified
 
 ## Evidence / Artifact Expectations Per Release
 - CI summary

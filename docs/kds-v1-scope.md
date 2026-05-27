@@ -194,7 +194,7 @@ KDS v1 prototype ships **behind existing operating-mode gate**:
 1. Tenant must resolve to `DAILY_SERVICE` (`isDailyServiceMode`).
 2. Optional env **`ENABLE_KDS_V1_CERTIFIED=true`** for explicit pilot enablement in non-production/staging — **implemented** in `lib/kitchen/kds-v1-gate.ts`; production daily-service tenants enabled by default.
 3. Default nav: `/dashboard/kitchen` remains visible only to actors with `kitchen.view`.
-4. Maturity matrix stays **`beta`** until allergen UI + integration test land; then **`pilot_ready` (qualified)** with documented limitations — **Cycle 19–20 complete**.
+4. Maturity matrix stays **`beta`** until allergen UI + integration test land; then **`pilot_ready` (qualified)** with documented limitations — **Cycle 19–20 complete (Cycle 47)**.
 
 No broad kitchen rewrite. No new top-level product module.
 

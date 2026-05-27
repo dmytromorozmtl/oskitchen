@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav + integration honesty + money-path + inventory + cron + KDS v1 scope CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, nav governance, integration honesty, money-path/inventory/cron certs, `test:ci:kds-v1:cert`, and `test:ci:kds-v1:unit` |
+| Doc canon + public API + nav + integration honesty + money-path + inventory + cron + KDS v1 scope/prototype CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, nav governance, integration honesty, money-path/inventory/cron certs, `test:ci:kds-v1:cert`, `test:ci:kds-v1:unit`, `test:ci:kds-v1:prototype:cert` |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS route fail-closed contract tests |
 
@@ -131,8 +131,18 @@ npm run test:ci:pos-money-path:e2e
 |-------|---------|-----|-------|
 | Scope + wiring cert | `npm run test:ci:kds-v1:cert` | No | `docs/kds-v1-scope.md` sections, canonical index, permissioned actions |
 | RBAC + rollout gate + contract | `npm run test:ci:kds-v1:unit` | No | `kitchen-daily-kds-rbac`, `kds-v1-gate`, `kds-ticket.contract` |
-| Queue → bump integration | `npm run test:ci:kds-v1:integration` | Postgres + `RUN_DB_INTEGRATION=1` | Focused workflow; not in default `quality` job |
+| Queue → bump integration | `npm run test:ci:kds-v1:integration` | Postgres + `RUN_DB_INTEGRATION=1` | **`kds-v1-prototype` CI job** — queue visibility, bump status, allergen conflict |
 
 **Canonical scope:** `docs/kds-v1-scope.md` — daily-service order tickets only; not rush-hour, multi-station, or hardware certified.
 
-**Wiring certification (tier 0):** `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` chained in `test:ci:governance-bundles`.
+**Wiring certification (tier 0):** `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` + `test:ci:kds-v1:prototype:cert` chained in `test:ci:governance-bundles`.
+
+## Tier 2c — KDS v1 prototype (`kds-v1-prototype` job)
+
+| Suite | Command | DB | Notes |
+|-------|---------|-----|-------|
+| Queue → bump + allergen conflict | `npm run test:ci:kds-v1:integration` | Postgres service | Proves `getTodayQueue` ticket visibility and allergen flag; no Realtime E2E |
+
+**CI workflow:** `.github/workflows/ci.yml` → job `kds-v1-prototype`.
+
+**Rollout gate:** `lib/kitchen/kds-v1-gate.ts` — non-production requires `ENABLE_KDS_V1_CERTIFIED=true`; production daily-service enabled by default.
