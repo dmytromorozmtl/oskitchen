@@ -266,12 +266,21 @@ const hoursSchema = z.object({
 
 export async function updateLocationHoursAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
     const meta = hoursSchema.safeParse({
       locationId: formData.get("locationId"),
       scope: formData.get("scope"),
     });
     if (!meta.success) return { error: "Invalid hours payload." };
+
+    const permission =
+      meta.data.scope === "business" ? ("workspace.settings" as const) : ("routes.manage" as const);
+    const manage = await requireLocationMutationAccess(
+      `locations.update_hours.${meta.data.scope}`,
+      permission,
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
+
     const input: Record<DayKey, { open?: string; close?: string; closed?: boolean | "on" }> = {} as never;
     for (const day of DAY_KEYS) {
       input[day] = {
@@ -375,7 +384,9 @@ export async function updateLocationFulfillmentFormAction(formData: FormData): P
 
 export async function archiveLocationAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireLocationMutationAccess("locations.archive", "workspace.settings");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const id = String(formData.get("locationId") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { error: "Invalid location id." };
     await updateLocation({ userId: dataUserId }, id, { status: "ARCHIVED" });

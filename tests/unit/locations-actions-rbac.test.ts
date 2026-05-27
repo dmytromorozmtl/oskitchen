@@ -26,7 +26,9 @@ vi.mock("@/services/locations/location-service", () => ({
 }));
 
 import {
+  archiveLocationAction,
   updateLocationFulfillmentAction,
+  updateLocationHoursAction,
   updateLocationProfileAction,
 } from "@/actions/locations";
 
@@ -132,6 +134,68 @@ describe("locations actions RBAC", () => {
           deliveryFeeCents: 500,
         }),
       }),
+    );
+  });
+
+  it("denies updateLocationHoursAction for delivery hours without routes.manage and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("locationId", LOCATION_ID);
+    formData.set("scope", "delivery");
+
+    const result = await updateLocationHoursAction(formData);
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(requireMutationPermission).toHaveBeenCalledWith("routes.manage");
+    expect(updateLocation).not.toHaveBeenCalled();
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({ operation: "locations.update_hours.delivery" }),
+      }),
+    );
+  });
+
+  it("denies archiveLocationAction without workspace.settings and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("locationId", LOCATION_ID);
+
+    const result = await archiveLocationAction(formData);
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(requireMutationPermission).toHaveBeenCalledWith("workspace.settings");
+    expect(updateLocation).not.toHaveBeenCalled();
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({ operation: "locations.archive" }),
+      }),
+    );
+  });
+
+  it("allows archiveLocationAction when workspace.settings is granted", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor: deniedActor });
+
+    const formData = new FormData();
+    formData.set("locationId", LOCATION_ID);
+
+    const result = await archiveLocationAction(formData);
+
+    expect(result).toEqual({ ok: true });
+    expect(requireTenantActor).toHaveBeenCalled();
+    expect(updateLocation).toHaveBeenCalledWith(
+      { userId: "owner-1" },
+      LOCATION_ID,
+      { status: "ARCHIVED" },
     );
   });
 });
