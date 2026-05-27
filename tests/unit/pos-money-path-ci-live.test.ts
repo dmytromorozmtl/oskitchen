@@ -24,6 +24,7 @@ const REQUIRED_FILES = [
   "tests/unit/pos-terminal-checkout-lifecycle.test.ts",
   "tests/unit/actions-pos-rbac.test.ts",
   "tests/integration/order-entrypoint-pii.integration.test.ts",
+  "tests/unit/pos-recipe-depletion.test.ts",
   "tests/integration/pos-inventory-depletion.integration.test.ts",
 ] as const;
 
@@ -51,6 +52,7 @@ describe("POS money-path CI certification (live repo)", () => {
     }
     expect(scripts["test:ci:pos-money-path:unit"]).toContain("pos-checkout-canonical.test.ts");
     expect(scripts["test:ci:pos-money-path:unit"]).toContain("pos-terminal-checkout-lifecycle.test.ts");
+    expect(scripts["test:ci:pos-money-path:unit"]).toContain("pos-recipe-depletion.test.ts");
     expect(scripts["test:ci:pos-money-path:integration"]).toContain("order-entrypoint-pii.integration.test.ts");
     expect(scripts["test:ci:pos-money-path:inventory"]).toContain(
       "pos-inventory-depletion.integration.test.ts",

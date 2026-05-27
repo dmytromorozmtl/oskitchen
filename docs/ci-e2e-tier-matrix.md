@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav + integration honesty + money-path CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance`, `test:ci:integration-honesty`, `test:ci:storefront-money-path:cert`, `test:ci:pos-money-path:cert` |
+| Doc canon + public API + nav + integration honesty + money-path + inventory depletion CI wiring | `npm run test:ci:governance-bundles` | None | Chains doc canon, public API v1, nav governance, integration honesty, storefront/pos money-path certs, and `test:ci:inventory-depletion:cert` |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS route fail-closed contract tests |
 
@@ -86,7 +86,7 @@ npm run test:ci:pos-money-path:e2e
 
 **Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only.
 
-**Storefront inventory depletion:** intentionally deferred. Storefront order submit does not call `recordPendingInventoryImpactsForPosOrder` or recipe depletion today; POS is the certified depletion path until a storefront hook is scoped.
+**Storefront inventory depletion:** intentionally deferred. Storefront order submit does not call `recordPendingInventoryImpactsForPosOrder` or recipe depletion today; POS is the certified depletion path until a storefront hook is scoped. Live gate: `npm run test:ci:inventory-depletion:cert` → `tests/unit/inventory-depletion-cert-live.test.ts`.
 
 ## Tier 3 — Staging / preview (manual or scheduled)
 

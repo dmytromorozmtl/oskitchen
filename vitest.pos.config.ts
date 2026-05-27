@@ -22,6 +22,7 @@ export default defineConfig({
       "unit/pos-mutation-access-role-matrix.test.ts",
       "unit/pos-refund-void-service.test.ts",
       "unit/pos-terminal-checkout-lifecycle.test.ts",
+      "unit/pos-recipe-depletion.test.ts",
       "unit/pos-shift-service.test.ts",
       "unit/pos-terminal-service.test.ts",
       "unit/pos-ledger-pages-rbac.test.ts",
