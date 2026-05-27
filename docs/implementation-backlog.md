@@ -150,7 +150,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: makes inventory and costing credible
 - Technical value: links sales and economics
 - User story: as an owner, I need sales to deplete stock and variance reports to mean something
-- Current state: **in progress** — POS recipe depletion + `/dashboard/inventory/pos-impacts` diagnostics; count completion writes stock; waste logs decrement `currentStock`; inventory mutations gated by `production.manage`
+- Current state: **in progress** — POS impacts dashboard, recipe depletion, count completion + variance summary on count detail, waste→stock; remaining: cross-channel depletion, variance reporting dashboards
 - Target state: end-to-end depletion and usable variance reporting
 - Affected files: `services/pos/pos-inventory-impact-service.ts`, inventory and costing services
 - Dependencies: canonical permissions for inventory

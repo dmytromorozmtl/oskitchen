@@ -13,6 +13,58 @@ export type CountStockAdjustment = {
   countedQty: number;
 };
 
+export type InventoryCountVarianceSummary = {
+  lineCount: number;
+  linesCounted: number;
+  linesUncounted: number;
+  linesWithVariance: number;
+  totalVarianceQty: number;
+  totalVarianceCost: number;
+  shrinkCost: number;
+  overageCost: number;
+};
+
+/** Roll up count-line variance for operator dashboards (pure, testable). */
+export function summarizeInventoryCountVariance(
+  items: Array<{
+    countedQty: unknown;
+    varianceQty: unknown;
+    varianceCost: unknown;
+  }>,
+): InventoryCountVarianceSummary {
+  let linesCounted = 0;
+  let linesWithVariance = 0;
+  let totalVarianceQty = 0;
+  let totalVarianceCost = 0;
+  let shrinkCost = 0;
+  let overageCost = 0;
+
+  for (const item of items) {
+    if (item.countedQty === null || item.countedQty === undefined) continue;
+    linesCounted += 1;
+
+    const varianceQty = item.varianceQty != null ? Number(item.varianceQty) : 0;
+    const varianceCost = item.varianceCost != null ? Number(item.varianceCost) : 0;
+
+    if (varianceQty !== 0) linesWithVariance += 1;
+    totalVarianceQty += varianceQty;
+    totalVarianceCost += varianceCost;
+    if (varianceCost < 0) shrinkCost += varianceCost;
+    else if (varianceCost > 0) overageCost += varianceCost;
+  }
+
+  return {
+    lineCount: items.length,
+    linesCounted,
+    linesUncounted: items.length - linesCounted,
+    linesWithVariance,
+    totalVarianceQty,
+    totalVarianceCost,
+    shrinkCost,
+    overageCost,
+  };
+}
+
 export async function listInventoryCounts(userId: string, take = 30) {
   return prisma.inventoryCount.findMany({
     where: await inventoryCountListWhereForOwner(userId),
@@ -121,6 +173,7 @@ export async function completeInventoryCount(countId: string, userId: string) {
   if (count.status !== "IN_PROGRESS") throw new Error("Count already completed");
 
   const adjustments = buildCountStockAdjustments(count.items);
+  const varianceSummary = summarizeInventoryCountVariance(count.items);
   const ingredientScope = await ingredientListWhereForOwner(userId);
 
   await prisma.$transaction(async (tx) => {
@@ -145,6 +198,7 @@ export async function completeInventoryCount(countId: string, userId: string) {
     metadata: {
       adjustmentCount: adjustments.length,
       adjustments: adjustments.slice(0, 100),
+      varianceSummary,
     },
   });
 
