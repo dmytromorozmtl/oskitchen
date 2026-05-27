@@ -1,17 +1,43 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 
+async function requireNutritionLabelSettingsPermission(
+  operation: string,
+  permission: PermissionKey,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "nutrition_label_settings.permission_denied",
+      entityType: "NutritionLabelSettings",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function updateNutritionPackingGatesAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireNutritionLabelSettingsPermission(
+      "nutrition_label_settings.update_packing_gates",
+      "workspace.settings",
+    );
+    if (!gate.ok) return { error: gate.error };
+
+    const { dataUserId } = await requireTenantActor();
     const blockAllergen = z.enum(["on", "off"]).safeParse(formData.get("blockAllergen"));
     const blockNutrition = z.enum(["on", "off"]).safeParse(formData.get("blockNutrition"));
     if (!blockAllergen.success || !blockNutrition.success) return { error: "Invalid form." };
@@ -32,7 +58,13 @@ export async function updateNutritionPackingGatesAction(formData: FormData) {
 
 export async function updateStorefrontLabelVisibilityAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireNutritionLabelSettingsPermission(
+      "nutrition_label_settings.update_storefront_visibility",
+      "storefront.manage",
+    );
+    if (!gate.ok) return { error: gate.error };
+
+    const { dataUserId } = await requireTenantActor();
     const sf = await prisma.storefrontSettings.findFirst({
       where: { userId: dataUserId },
       orderBy: { updatedAt: "desc" },
