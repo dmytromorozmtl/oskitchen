@@ -19,6 +19,8 @@ describe("POS subnav links", () => {
 
     expect(links).toContain("/dashboard/pos");
     expect(links).toContain("/dashboard/pos/terminal");
+    expect(links).toContain("/dashboard/pos/tabs");
+    expect(links).toContain("/dashboard/pos/handheld");
     expect(links).toContain("/dashboard/pos/transactions");
     expect(links).not.toContain("/dashboard/pos/registers");
     expect(links).not.toContain("/dashboard/pos/shifts");
