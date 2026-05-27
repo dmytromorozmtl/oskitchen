@@ -1,11 +1,13 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { LabelDataSourceType, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { productByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
@@ -45,8 +47,29 @@ const schema = z.object({
   labResultRef: z.string().max(512).optional().or(z.literal("")),
 });
 
+async function requireNutritionProfileMutationPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "products.edit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "nutrition_profile.permission_denied",
+      entityType: "NutritionProfile",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function upsertNutritionProfileAction(formData: FormData) {
   try {
+    const gate = await requireNutritionProfileMutationPermission("nutrition_profile.upsert");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const parsed = schema.safeParse({
       productId: formData.get("productId"),
