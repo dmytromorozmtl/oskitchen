@@ -1,32 +1,45 @@
 "use server";
 
-
-import { fail, ok } from "@/lib/action-result";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import type { UploadBucket } from "@/lib/storage";
 import { uploadKitchenAsset } from "@/lib/storage";
+import {
+  kitchenRasterImageExtension,
+  validateKitchenRasterImageUpload,
+} from "@/lib/upload-policy/media-upload-validation";
+
+async function uploadKitchenImageFromFile(params: {
+  bucket: UploadBucket;
+  buildPath: (ext: ReturnType<typeof kitchenRasterImageExtension>) => string;
+  file: File;
+}): Promise<{ publicUrl: string } | { error: string }> {
+  const bytes = new Uint8Array(await params.file.arrayBuffer());
+  const validated = validateKitchenRasterImageUpload({
+    bytes,
+    mimeType: params.file.type || "",
+  });
+  if (!validated.ok) {
+    return { error: validated.error };
+  }
+
+  const ext = kitchenRasterImageExtension(validated.mimeType);
+  return uploadKitchenAsset({
+    bucket: params.bucket,
+    path: params.buildPath(ext),
+    bytes,
+    contentType: validated.mimeType,
+  });
+}
 
 export async function uploadProductImageAction(formData: FormData) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const { sessionUser: user } = await requireTenantActor();
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Missing file" };
 
-  const buf = new Uint8Array(await file.arrayBuffer());
-  const ext =
-    file.type === "image/png"
-      ? "png"
-      : file.type === "image/webp"
-        ? "webp"
-        : file.type === "image/gif"
-          ? "gif"
-          : "jpg";
-
-  const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-  const result = await uploadKitchenAsset({
+  const result = await uploadKitchenImageFromFile({
     bucket: "product-images",
-    path,
-    bytes: buf,
-    contentType: file.type || "image/jpeg",
+    buildPath: (ext) => `${user.id}/${crypto.randomUUID()}.${ext}`,
+    file,
   });
 
   if ("error" in result) return { error: result.error };
@@ -34,18 +47,14 @@ export async function uploadProductImageAction(formData: FormData) {
 }
 
 export async function uploadBusinessLogoAction(formData: FormData) {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const { sessionUser: user } = await requireTenantActor();
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Missing file" };
 
-  const buf = new Uint8Array(await file.arrayBuffer());
-  const ext = file.type === "image/png" ? "png" : "jpg";
-  const path = `${user.id}/logo.${ext}`;
-  const result = await uploadKitchenAsset({
+  const result = await uploadKitchenImageFromFile({
     bucket: "business-logos",
-    path,
-    bytes: buf,
-    contentType: file.type || "image/jpeg",
+    buildPath: (ext) => `${user.id}/logo.${ext}`,
+    file,
   });
 
   if ("error" in result) return { error: result.error };

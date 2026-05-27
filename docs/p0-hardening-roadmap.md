@@ -115,7 +115,7 @@ Priority rule:
 - Rollback considerations: keep current storage provider abstraction intact
 - Acceptance criteria: all upload entrypoints share enforced validation policy
 - Required tests: upload type/size tests, malicious upload denial tests, media integration tests
-- Status update: storefront media now uses one shared validator across the form action and storage service, unsafe SVG files with scripts/event handlers/active content are denied before storage writes, and focused MIME/size/malicious-upload tests now exist for that slice; broader generic-upload parity, audit logging, and malware-scan hooks still remain open.
+- Status update: `lib/upload-policy/media-upload-validation.ts` centralizes storefront and kitchen raster policies; storefront media, product images, and business logos now validate before storage writes (storefront allows hardened SVG; kitchen paths are raster-only at 4MB), and focused unit tests cover MIME/size denials plus unsafe SVG rejection on storefront media; storefront form attachments, upload audit logging, and malware-scan hooks still remain open.
 - Priority order: 3
 - Estimated complexity: Medium
 
