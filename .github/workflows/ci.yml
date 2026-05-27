@@ -83,6 +83,9 @@ jobs:
       - name: POS RBAC focused tests
         run: npm run test:pos-rbac
 
+      - name: Governance and public API focused bundles
+        run: npm run test:ci:governance-bundles
+
       - name: Unit test coverage (threshold gate)
         run: npm run test:coverage
 

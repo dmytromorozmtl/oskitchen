@@ -9,6 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
+| Doc canon + public API + nav + integration honesty | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance`, `test:ci:integration-honesty` |
 
 ## Tier 1 — Security DB (`security-db` job)
 

@@ -56,7 +56,7 @@
 | ID | Item | Evidence |
 |----|------|----------|
 | P0-1 | **RBAC wave 3** — ~80 tenant-only action files (costing, purchasing, export, labor-adjacent) | grep `requireTenantActor` without canonical mutation permission |
-| P0-2 | **CI bundle wiring** — focused bundles exist but not all in default `quality` job | `test:ci:doc-canon`, `test:ci:public-api-v1`, `test:ci:nav-governance` |
+| P0-2 | **CI bundle wiring** — focused bundles in default `quality` job | **Partially closed (Era 3 C4):** `test:ci:governance-bundles` in `.github/workflows/ci.yml` |
 | P0-3 | **Typecheck slicing** — full strict `tsc` OOM risk | `tsconfig.typecheck.json`, 8GB+ heap |
 | P0-4 | **Storefront inventory depletion** — deferred or untested | integration gap |
 
