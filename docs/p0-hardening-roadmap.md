@@ -219,7 +219,7 @@ Priority rule:
 - Rollback considerations: keep canonical order writer unchanged
 - Acceptance criteria: failed payments have deterministic operator/customer recovery paths
 - Required tests: checkout success/failure matrix, webhook duplication tests
-- Status update: initial storefront Stripe Checkout start failures now preserve the existing storefront/internal order pair instead of deleting it, the public order page now offers token-scoped retry only after a clear checkout-start failure, a focused guard now blocks retry while the order is still `PENDING` so no duplicate live checkout sessions are minted, same-cart duplicate submits now explicitly reuse the original order token with guest-visible duplicate guidance, and conversion rows record failure/retry progression; broader webhook-duplication proof and full E2E certification still remain open.
+- Status update: initial storefront Stripe Checkout start failures now preserve the existing storefront/internal order pair instead of deleting it, the public order page now offers token-scoped retry only after a clear checkout-start failure, a focused guard now blocks retry while the order is still `PENDING` so no duplicate live checkout sessions are minted, same-cart duplicate submits now explicitly reuse the original order token with guest-visible duplicate guidance, focused webhook proof now verifies duplicate Stripe-event acknowledgement at the route layer plus no-op storefront completion handling once an order is already `PAID`, and conversion rows record failure/retry progression; broader full E2E certification still remain open.
 - Priority order: 12
 - Estimated complexity: Medium
 
