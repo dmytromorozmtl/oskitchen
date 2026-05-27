@@ -1,14 +1,16 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { FORECAST_SOURCE_VALUES, FORECAST_TYPE_VALUES } from "@/lib/forecast/forecast-types";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeError } from "@/lib/security";
-import { FORECAST_SOURCE_VALUES, FORECAST_TYPE_VALUES } from "@/lib/forecast/forecast-types";
 import {
   addForecastAdjustment,
   archiveForecastRun,
@@ -36,6 +38,24 @@ function parseDate(value: FormDataEntryValue | null): Date | null {
   return d;
 }
 
+async function requireForecastPermission(
+  permission: PermissionKey,
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "forecast.permission_denied",
+      entityType: "ForecastRun",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 /* ============================ Run forecast ============================ */
 
 const runSchema = z.object({
@@ -54,6 +74,9 @@ const runSchema = z.object({
 
 export async function runForecastAction(formData: FormData) {
   try {
+    const gate = await requireForecastPermission("production.manage", "forecast.run.create");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const sourcesRaw = formData.getAll("sources").map(String).filter(Boolean);
     const parsed = runSchema.safeParse({
@@ -117,6 +140,9 @@ const adjustmentSchema = z.object({
 
 export async function addForecastAdjustmentAction(formData: FormData) {
   try {
+    const gate = await requireForecastPermission("production.manage", "forecast.adjustment.add");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const parsed = adjustmentSchema.safeParse({
       forecastRunId: formData.get("forecastRunId"),
@@ -160,6 +186,12 @@ const sendToProductionSchema = z.object({
 
 export async function sendForecastToProductionAction(formData: FormData) {
   try {
+    const gate = await requireForecastPermission(
+      "production.manage",
+      "forecast.send_to_production",
+    );
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const parsed = sendToProductionSchema.safeParse({
       forecastRunId: formData.get("forecastRunId"),
@@ -198,6 +230,9 @@ const sendToDemandSchema = z.object({
 
 export async function sendForecastToIngredientDemandAction(formData: FormData) {
   try {
+    const gate = await requireForecastPermission("production.manage", "forecast.send_to_demand");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const parsed = sendToDemandSchema.safeParse({
       forecastRunId: formData.get("forecastRunId"),
@@ -229,10 +264,13 @@ const idSchema = z.object({ forecastRunId: z.string().uuid() });
 
 export async function archiveForecastRunAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireForecastPermission("production.manage", "forecast.run.archive");
+    if (!gate.ok) return { error: gate.error };
+
+    const { dataUserId } = await requireTenantActor();
     const parsed = idSchema.safeParse({ forecastRunId: formData.get("forecastRunId") });
     if (!parsed.success) return { error: "Invalid run id." };
-    await archiveForecastRun(user.id, parsed.data.forecastRunId);
+    await archiveForecastRun(dataUserId, parsed.data.forecastRunId);
     revalidateAll();
     return { ok: true as const };
   } catch (e) {
@@ -246,10 +284,13 @@ export async function archiveForecastRunFormAction(formData: FormData): Promise<
 
 export async function restoreForecastRunAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireForecastPermission("production.manage", "forecast.run.restore");
+    if (!gate.ok) return { error: gate.error };
+
+    const { dataUserId } = await requireTenantActor();
     const parsed = idSchema.safeParse({ forecastRunId: formData.get("forecastRunId") });
     if (!parsed.success) return { error: "Invalid run id." };
-    await restoreForecastRun(user.id, parsed.data.forecastRunId);
+    await restoreForecastRun(dataUserId, parsed.data.forecastRunId);
     revalidateAll();
     return { ok: true as const };
   } catch (e) {
