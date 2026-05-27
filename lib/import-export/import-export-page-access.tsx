@@ -42,10 +42,12 @@ export async function getImportExportPageAccess() {
   };
 }
 
-export async function requireImportExportPageAccess(input: {
-  needImportIngredients?: boolean;
-  needHubView?: boolean;
-}) {
+export async function requireImportExportPageAccess(
+  input: {
+    needImportIngredients?: boolean;
+    needHubView?: boolean;
+  } = {},
+) {
   const access = await getImportExportPageAccess();
   if (input.needImportIngredients && !access.canImportIngredients) {
     return {
