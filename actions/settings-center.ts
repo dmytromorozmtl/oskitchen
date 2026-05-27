@@ -4,10 +4,8 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireSettingsCenterMutation } from "@/lib/settings/require-settings-center-mutation";
 import { prisma } from "@/lib/prisma";
-import { canAccessSettingsSection } from "@/lib/settings/settings-access";
-import type { SettingsActorScope } from "@/lib/settings/settings-permissions";
 import {
   DAY_KEYS,
   type BusinessHoursSettings,
@@ -45,20 +43,6 @@ const settingsRevalidatePaths = [
 
 function revalidateAll(): void {
   for (const p of settingsRevalidatePaths) revalidatePath(p);
-}
-
-async function getActor(): Promise<SettingsActorScope> {
-  const { sessionUser: session, userId } = await requireTenantActor();
-  // eslint-disable-next-line kitchenos/require-owner-scope -- actor profile is loaded by authenticated session id.
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: session.id },
-    select: { role: true, email: true },
-  });
-  return {
-    userId,
-    email: profile?.email ?? session.email ?? null,
-    role: (profile?.role ?? null) as string | null,
-  };
 }
 
 export type ActionResult<T = void> =
@@ -106,12 +90,12 @@ const WorkspaceIdentitySchema = z.object({
 export type WorkspaceIdentityInput = z.infer<typeof WorkspaceIdentitySchema>;
 
 export async function saveWorkspaceIdentity(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_workspace")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_workspace", "settings.workspace_identity.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = WorkspaceIdentitySchema.safeParse(input);
   if (!parsed.success) return err(parsed.error.issues[0]?.message ?? "invalid_input");
   const v = parsed.data;
-  const current = await loadSettingsCenter(actor.userId);
+  const current = await loadSettingsCenter(gate.userId);
   const nextIdentity = {
     ...current.payload.workspaceIdentity,
     legalName: v.legalName ?? null,
@@ -137,11 +121,11 @@ export async function saveWorkspaceIdentity(input: unknown): Promise<ActionResul
     operatingLanguage: v.operatingLanguage,
     defaultTaxRulesNote: v.defaultTaxRulesNote ?? null,
   };
-  await updateSettingsCenterSection(actor.userId, "workspaceIdentity", nextIdentity);
+  await updateSettingsCenterSection(gate.userId, "workspaceIdentity", nextIdentity);
   await prisma.kitchenSettings.upsert({
-    where: { userId: actor.userId },
+    where: { userId: gate.userId },
     create: {
-      userId: actor.userId,
+      userId: gate.userId,
       businessName: v.businessName ?? v.legalName ?? null,
       currency: v.currency ?? "USD",
       timezone: v.timezone ?? "UTC",
@@ -171,15 +155,15 @@ const BusinessHoursSchema = z.record(
 );
 
 export async function saveBusinessHours(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_workspace")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_workspace", "settings.business_hours.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = BusinessHoursSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
   const next: BusinessHoursSettings = { ...parsed.data } as BusinessHoursSettings;
   for (const day of DAY_KEYS) {
     if (!next[day]) next[day] = { open: null, close: null, closed: true };
   }
-  await updateSettingsCenterSection(actor.userId, "businessHours", next);
+  await updateSettingsCenterSection(gate.userId, "businessHours", next);
   revalidateAll();
   return ok();
 }
@@ -199,11 +183,11 @@ const OperationsSchema = z.object({
 });
 
 export async function saveOperationsSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_operations")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_operations", "settings.operations.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = OperationsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "operations", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "operations", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -222,11 +206,11 @@ const OrderSettingsSchema = z.object({
 });
 
 export async function saveOrderSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_orders")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_orders", "settings.orders.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = OrderSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "orders", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "orders", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -247,11 +231,11 @@ const ProductionSettingsSchema = z.object({
 });
 
 export async function saveProductionSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_production")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_production", "settings.production.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = ProductionSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "production", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "production", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -267,11 +251,11 @@ const PackingSettingsSchema = z.object({
 });
 
 export async function savePackingSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_packing")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_packing", "settings.packing.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = PackingSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "packing", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "packing", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -290,14 +274,14 @@ const DeliverySettingsSchema = z.object({
 });
 
 export async function saveDeliverySettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_delivery")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_delivery", "settings.delivery.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = DeliverySettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
   const next = parsed.data;
-  await updateSettingsCenterSection(actor.userId, "delivery", next);
+  await updateSettingsCenterSection(gate.userId, "delivery", next);
   await prisma.kitchenSettings.update({
-    where: { userId: actor.userId },
+    where: { userId: gate.userId },
     data: {
       deliveryEnabled: next.enabled,
       deliveryRadiusKm: Math.round(next.deliveryRadiusKm),
@@ -317,11 +301,11 @@ const RouteSettingsSchema = z.object({
 });
 
 export async function saveRouteSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_routes")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_routes", "settings.routes.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = RouteSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "routes", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "routes", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -339,11 +323,11 @@ const CrmSettingsSchema = z.object({
 });
 
 export async function saveCrmSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_crm")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_crm", "settings.crm.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = CrmSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "crm", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "crm", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -362,11 +346,11 @@ const AiSettingsSchema = z.object({
 });
 
 export async function saveAiSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_ai")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_ai", "settings.ai.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = AiSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "ai", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "ai", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -380,11 +364,11 @@ const AutomationSettingsSchema = z.object({
 });
 
 export async function saveAutomationSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_automation")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_automation", "settings.automation.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = AutomationSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "automation", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "automation", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -398,11 +382,11 @@ const BackupsSettingsSchema = z.object({
 });
 
 export async function saveBackupsSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_imports")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_imports", "settings.backups.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = BackupsSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "backups", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "backups", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -419,11 +403,11 @@ const ComplianceSettingsSchema = z.object({
 });
 
 export async function saveComplianceSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_compliance")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_compliance", "settings.compliance.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = ComplianceSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "compliance", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "compliance", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -436,11 +420,11 @@ const DeveloperSettingsSchema = z.object({
 });
 
 export async function saveDeveloperSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_developer")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_developer", "settings.developer.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = DeveloperSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "developer", parsed.data);
+  await updateSettingsCenterSection(gate.userId, "developer", parsed.data);
   revalidateAll();
   return ok();
 }
@@ -452,11 +436,11 @@ const AdvancedSettingsSchema = z.object({
 });
 
 export async function saveAdvancedSettings(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_advanced")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_advanced", "settings.advanced.save");
+  if (!gate.ok) return err(gate.error);
   const parsed = AdvancedSettingsSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
-  await updateSettingsCenterSection(actor.userId, "advanced", {
+  await updateSettingsCenterSection(gate.userId, "advanced", {
     workspaceArchived: parsed.data.workspaceArchived,
     transferContactEmail: parsed.data.transferContactEmail || null,
   });
@@ -481,16 +465,16 @@ const ApplyBusinessModeSchema = z.object({
 });
 
 export async function applyBusinessModePreset(input: unknown): Promise<ActionResult> {
-  const actor = await getActor();
-  if (!canAccessSettingsSection(actor, "manage_workspace")) return err("forbidden");
+  const gate = await requireSettingsCenterMutation("manage_workspace", "settings.business_mode.apply");
+  if (!gate.ok) return err(gate.error);
   const parsed = ApplyBusinessModeSchema.safeParse(input);
   if (!parsed.success) return err("invalid_input");
   const preset = getBusinessModePreset(parsed.data.type as BusinessType);
   const operatingMode = getOperatingModeForBusinessType(parsed.data.type);
   await prisma.kitchenSettings.upsert({
-    where: { userId: actor.userId },
+    where: { userId: gate.userId },
     create: {
-      userId: actor.userId,
+      userId: gate.userId,
       businessType: parsed.data.type as BusinessType,
       operatingMode: toPrismaOperatingMode(operatingMode),
     },
@@ -499,7 +483,7 @@ export async function applyBusinessModePreset(input: unknown): Promise<ActionRes
       operatingMode: toPrismaOperatingMode(operatingMode),
     },
   });
-  const current = await loadSettingsCenter(actor.userId);
+  const current = await loadSettingsCenter(gate.userId);
   const patch: Partial<SettingsCenterPayload> = {
     operations: {
       ...current.payload.operations,
@@ -515,7 +499,7 @@ export async function applyBusinessModePreset(input: unknown): Promise<ActionRes
       enabled: preset.defaults.deliveryEnabled,
     },
   };
-  await updateSettingsCenterSections(actor.userId, patch);
+  await updateSettingsCenterSections(gate.userId, patch);
   revalidateAll();
   return ok();
 }
