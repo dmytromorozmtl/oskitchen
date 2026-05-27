@@ -10,7 +10,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { requireBillingPageAccess } from "@/lib/billing/billing-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { requireUserProfile } from "@/lib/auth";
 import { BILLING_MODE_LABEL } from "@/lib/billing/billing-status";
 import { getBillingAccess } from "@/lib/billing/access";
@@ -45,7 +44,7 @@ export default async function BillingPage() {
   const trialDays =
     billingAccess.trialDaysRemaining ?? trialDaysRemaining(trialEnd);
   const portalEnabled = state === "configured" && Boolean(sub.stripeCustomerId);
-  const isSuper = isSuperAdminEmail(profile.email);
+  const isSuper = access.actor.platformBypass;
 
   return (
     <div className="space-y-6">

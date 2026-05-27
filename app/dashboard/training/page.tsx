@@ -22,15 +22,14 @@ const LEGACY_TILES = [
 ] as const;
 
 export default async function TrainingPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const profile = await requireUserProfile();
-  const isSuper = isSuperAdminEmail(profile.email);
+  const access = await getTrainingPageAccess();
+  const { userId } = access;
   const [kpis, programs, assignments, brands, locations] = await Promise.all([
-    trainingKpis(dataUserId),
-    listPrograms(dataUserId),
-    listAssignments(dataUserId),
+    trainingKpis(userId),
+    listPrograms(userId),
+    listAssignments(userId),
     prisma.brand.findMany({
-      where: { workspaceId: dataUserId },
+      where: { workspaceId: userId },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
       take: 50,
@@ -63,7 +62,7 @@ export default async function TrainingPage() {
           <Button asChild variant="outline">
             <Link href="/dashboard/training/sops">Create SOP</Link>
           </Button>
-          {isSuper ? <Badge variant="outline">Superadmin</Badge> : null}
+          {access.actor.platformBypass ? <Badge variant="outline">Superadmin</Badge> : null}
         </div>
       </div>
 

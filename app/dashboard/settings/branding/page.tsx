@@ -13,34 +13,32 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { UserRole } from "@prisma/client";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 export default async function BrandingSettingsPage() {
-  const { sessionUser: user, userId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
   const profile = await prisma.userProfile.findUnique({
-    where: { id: user.id },
+    where: { id: actor.sessionUserId },
     select: { role: true, email: true },
   });
-  const isSuper = isSuperAdminEmail(profile?.email ?? user.email);
-  if (!isSuper && profile?.role !== UserRole.OWNER) {
+  if (!actor.platformBypass && profile?.role !== UserRole.OWNER) {
     redirect("/dashboard/settings");
   }
 
   const sub = await prisma.subscription.findUnique({
-    where: { userId },
+    where: { userId: actor.userId },
     select: { plan: true },
   });
-  const allowHide = sub?.plan === "ENTERPRISE" || isSuper;
+  const allowHide = sub?.plan === "ENTERPRISE" || actor.platformBypass;
 
   const ks = await prisma.kitchenSettings.findUnique({
-    where: { userId },
+    where: { userId: actor.userId },
   });
 
   return (
-    <PlanGate userId={userId} feature="white_label" title="Branding">
+    <PlanGate userId={actor.userId} feature="white_label" title="Branding">
       <div className="space-y-6">
         <SectionHeader sectionKey="branding" />
         <Card>
