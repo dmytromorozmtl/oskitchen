@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const requireMutationPermission = vi.hoisted(() => vi.fn());
 const requireTenantActor = vi.hoisted(() => vi.fn());
-const getStorefrontIdForUser = vi.hoisted(() => vi.fn());
+const getManageStorefrontForSession = vi.hoisted(() => vi.fn());
+const requireManageStorefrontRow = vi.hoisted(() => vi.fn());
 const runStorefrontDomainVerification = vi.hoisted(() => vi.fn());
 const logStorefrontPermissionDenied = vi.hoisted(() => vi.fn());
 
@@ -28,13 +29,11 @@ vi.mock("@/services/storefront/storefront-domain-verification-service", () => ({
 }));
 
 vi.mock("@/lib/storefront/require-admin-storefront", () => ({
-  requireAdminStorefrontRow: vi.fn().mockResolvedValue({
-    sf: { id: "sf-1", storeSlug: "demo", customDomain: "shop.example.com" },
-  }),
+  requireManageStorefrontRow,
 }));
 
 vi.mock("@/services/storefront/storefront-form-service", () => ({
-  getStorefrontIdForUser,
+  getManageStorefrontForSession,
   createStorefrontFormRecord: vi.fn(),
   findStorefrontFormForMerchant: vi.fn(),
   linkStorefrontPublicForms: vi.fn(),
@@ -91,6 +90,9 @@ describe("storefront domains and forms RBAC", () => {
       userId: "owner-1",
     });
     logStorefrontPermissionDenied.mockResolvedValue(undefined);
+    requireManageStorefrontRow.mockResolvedValue({
+      sf: { id: "sf-1", storeSlug: "demo", customDomain: "shop.example.com" },
+    });
   });
 
   it("denies domain DNS verification without storefront.manage", async () => {
@@ -111,7 +113,9 @@ describe("storefront domains and forms RBAC", () => {
       error: "You do not have permission to perform this action.",
       actor: viewerActor,
     });
-    getStorefrontIdForUser.mockResolvedValue({ id: "sf-1", storeSlug: "demo" });
+    getManageStorefrontForSession.mockResolvedValue({
+      error: "You do not have permission to perform this action.",
+    });
 
     const fd = new FormData();
     fd.set("title", "Contact");
@@ -120,6 +124,7 @@ describe("storefront domains and forms RBAC", () => {
 
     const result = await createStorefrontFormAction(fd);
     expect(result).toEqual({ error: "You do not have permission to perform this action." });
-    expect(logStorefrontPermissionDenied).toHaveBeenCalled();
+    expect(getManageStorefrontForSession).toHaveBeenCalledWith("storefront.forms.create");
+    expect(requireManageStorefrontRow).not.toHaveBeenCalled();
   });
 });

@@ -1,5 +1,6 @@
 import type { StorefrontFormKind } from "@prisma/client";
 
+import { requireManageStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { prisma } from "@/lib/prisma";
 import {
   DEFAULT_CATERING_FORM_FIELDS,
@@ -104,9 +105,33 @@ export async function findStorefrontFormForMerchant(formId: string, storefrontId
   return prisma.storefrontForm.findFirst({ where: { id: formId, storefrontId } });
 }
 
-export async function getStorefrontIdForUser(userId: string) {
-  const { findAdminStorefront } = await import("@/lib/storefront/load-admin-storefront");
-  return findAdminStorefront(userId, { id: true, storeSlug: true });
+export type ManageStorefrontRef = { id: string; storeSlug: string };
+
+/** Active storefront for manage-gated form mutations (cookie-aware, canonical `storefront.manage`). */
+export async function getManageStorefrontForSession(
+  operation: string,
+): Promise<ManageStorefrontRef | { error: string }> {
+  try {
+    const { sf } = await requireManageStorefrontRow(
+      { id: true, storeSlug: true },
+      { operation },
+    );
+    return sf;
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Storefront not available.";
+    return { error: msg };
+  }
+}
+
+/**
+ * @deprecated Prefer {@link getManageStorefrontForSession} so manage RBAC and operation audits stay explicit.
+ */
+export async function getStorefrontIdForUser(
+  _sessionUserId: string,
+  operation = "storefront.forms.resolve",
+) {
+  const res = await getManageStorefrontForSession(operation);
+  return "error" in res ? null : res;
 }
 
 export { DEFAULT_CATERING_FORM_FIELDS, DEFAULT_CONTACT_FORM_FIELDS };
