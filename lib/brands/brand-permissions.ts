@@ -1,33 +1,29 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 /**
  * Future: replace with workspace role + brand assignment matrix.
- * Today: owners manage brands; super-admin bypasses all checks.
+ * Today: owners manage brands; persisted SUPER_ADMIN platformBypass bypasses checks.
  */
-export function canViewAllBrands(params: {
+export type BrandActorScope = {
   isWorkspaceOwner: boolean;
-  userEmail: string | null | undefined;
-}): boolean {
-  if (isSuperAdminEmail(params.userEmail)) return true;
-  return params.isWorkspaceOwner;
-}
-
-export function canManageBrands(params: {
-  isWorkspaceOwner: boolean;
-  userEmail: string | null | undefined;
-}): boolean {
-  return canViewAllBrands(params);
-}
-
-export function canManageSingleBrand(params: {
-  isWorkspaceOwner: boolean;
-  userEmail: string | null | undefined;
+  email?: string | null;
+  platformBypass?: boolean;
   /** When staff brand-scoping ships, pass assigned brand ids here. */
   assignedBrandIds?: readonly string[] | null;
-  brandId: string;
-}): boolean {
-  if (isSuperAdminEmail(params.userEmail)) return true;
-  if (params.isWorkspaceOwner) return true;
-  if (params.assignedBrandIds?.includes(params.brandId)) return true;
+};
+
+export function canViewAllBrands(scope: BrandActorScope): boolean {
+  if (scope.platformBypass) return true;
+  return scope.isWorkspaceOwner;
+}
+
+export function canManageBrands(scope: BrandActorScope): boolean {
+  return canViewAllBrands(scope);
+}
+
+export function canManageSingleBrand(
+  scope: BrandActorScope & { brandId: string },
+): boolean {
+  if (scope.platformBypass) return true;
+  if (scope.isWorkspaceOwner) return true;
+  if (scope.assignedBrandIds?.includes(scope.brandId)) return true;
   return false;
 }
