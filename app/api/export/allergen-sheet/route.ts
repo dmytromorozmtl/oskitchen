@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireReportExportActor } from "@/lib/reports/report-export-access";
 import { getAllergenDeclarationForRecipe } from "@/services/allergen/allergen-service";
 
 export async function GET(request: NextRequest) {
-  const { dataUserId } = await requireTenantActor();
   const recipeId = request.nextUrl.searchParams.get("recipeId");
   if (!recipeId) {
     return NextResponse.json({ error: "recipeId required" }, { status: 400 });
   }
 
-  const decl = await getAllergenDeclarationForRecipe(dataUserId, recipeId);
+  const access = await requireReportExportActor({
+    operation: "export:allergen-sheet",
+    metadata: { recipeId },
+  });
+  if (!access.ok) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const decl = await getAllergenDeclarationForRecipe(access.actor.dataUserId, recipeId);
   const text = [
     `Allergen Declaration: ${decl.productName}`,
     decl.containsStatement,

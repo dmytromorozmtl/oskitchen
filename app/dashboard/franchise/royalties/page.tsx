@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canExportReports } from "@/lib/reports/report-export-access";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { calculateRoyalties } from "@/services/franchise/franchise-service";
 
 export default async function FranchiseRoyaltiesPage({
@@ -11,8 +12,9 @@ export default async function FranchiseRoyaltiesPage({
 }) {
   const { period: p } = await searchParams;
   const period = p === "quarter" ? "quarter" : "month";
-  const { dataUserId } = await getTenantActor();
-  const data = await calculateRoyalties(dataUserId, period);
+  const actor = await requireWorkspacePermissionActor();
+  const data = await calculateRoyalties(actor.dataUserId, period);
+  const canExport = canExportReports(actor);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -31,12 +33,14 @@ export default async function FranchiseRoyaltiesPage({
           >
             Quarter
           </Link>
-          <a
-            href={`/api/export/franchise-royalties?period=${period}`}
-            className="rounded-full border px-3 py-1 text-sm"
-          >
-            Export CSV
-          </a>
+          {canExport && (
+            <a
+              href={`/api/export/franchise-royalties?period=${period}`}
+              className="rounded-full border px-3 py-1 text-sm"
+            >
+              Export CSV
+            </a>
+          )}
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireReportExportActor } from "@/lib/reports/report-export-access";
 import {
   exportQuickBooksData,
   quickBooksInvoicesToCsv,
@@ -8,12 +8,19 @@ import {
 } from "@/services/integrations/quickbooks-service";
 
 export async function GET(request: NextRequest) {
-  const { dataUserId } = await requireTenantActor();
   const type = request.nextUrl.searchParams.get("type") ?? "pnl";
   const period =
     request.nextUrl.searchParams.get("period") === "quarter" ? "quarter" : "month";
 
-  const data = await exportQuickBooksData(dataUserId, period);
+  const access = await requireReportExportActor({
+    operation: "export:quickbooks",
+    metadata: { type, period },
+  });
+  if (!access.ok) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const data = await exportQuickBooksData(access.actor.dataUserId, period);
 
   if (type === "invoices") {
     const csv = quickBooksInvoicesToCsv(data.invoices);

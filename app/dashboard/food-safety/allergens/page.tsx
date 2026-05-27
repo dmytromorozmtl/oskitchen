@@ -1,12 +1,14 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canExportReports } from "@/lib/reports/report-export-access";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { listMenuAllergenSummary } from "@/services/allergen/allergen-service";
 
 export default async function AllergensPage() {
-  const { dataUserId } = await getTenantActor();
-  const items = await listMenuAllergenSummary(dataUserId);
+  const actor = await requireWorkspacePermissionActor();
+  const items = await listMenuAllergenSummary(actor.dataUserId);
+  const canExport = canExportReports(actor);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -39,7 +41,7 @@ export default async function AllergensPage() {
                   </td>
                   <td className="py-2 text-xs">{row.verificationStatus}</td>
                   <td className="py-2 text-right">
-                    {row.recipeId ? (
+                    {row.recipeId && canExport ? (
                       <Link
                         href={`/api/export/allergen-sheet?recipeId=${row.recipeId}`}
                         className="text-xs text-primary underline"

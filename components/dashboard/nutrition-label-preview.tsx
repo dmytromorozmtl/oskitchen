@@ -6,9 +6,11 @@ import Link from "next/link";
 export function NutritionLabelPreview({
   productId,
   productTitle,
+  canExport = false,
 }: {
   productId: string;
   productTitle: string;
+  canExport?: boolean;
 }) {
   const [format, setFormat] = useState<"FDA" | "EU">("FDA");
   const [open, setOpen] = useState(false);
@@ -33,9 +35,11 @@ export function NutritionLabelPreview({
       >
         Preview
       </button>
-      <Link href={exportUrl} className="text-primary underline" target="_blank" rel="noreferrer">
-        Print {format}
-      </Link>
+      {canExport ? (
+        <Link href={exportUrl} className="text-primary underline" target="_blank" rel="noreferrer">
+          Print {format}
+        </Link>
+      ) : null}
 
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -45,14 +49,16 @@ export function NutritionLabelPreview({
               Opens the generated label in a new tab. Verify allergens and serving size before printing.
             </p>
             <div className="mt-4 flex gap-2">
-              <Link
-                href={exportUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-xl bg-primary px-3 py-1.5 text-xs text-primary-foreground"
-              >
-                Open preview
-              </Link>
+              {canExport ? (
+                <Link
+                  href={exportUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl bg-primary px-3 py-1.5 text-xs text-primary-foreground"
+                >
+                  Open preview
+                </Link>
+              ) : null}
               <button
                 type="button"
                 onClick={() => setOpen(false)}

@@ -460,8 +460,8 @@ describe("dashboard userId-first cleanup", () => {
     expect(exportRoute).not.toContain("createClient");
     expect(exportRoute).not.toContain("isOwner: true");
 
-    expect(pnlExportRoute).toContain('canDoReports(scope, "reports.read.financial")');
-    expect(pnlExportRoute).toContain("getRestaurantPnLStatement(userId, p)");
+    expect(pnlExportRoute).toContain("requireReportExportActor");
+    expect(pnlExportRoute).toContain("getRestaurantPnLStatement(access.actor.dataUserId, p)");
     expect(pnlExportRoute).not.toContain("requireTenantActor");
   });
 

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { nutritionLabelsPageTitle } from "@/lib/nutrition/nutrition-label-terminology";
 import { NutritionLabelPreview } from "@/components/dashboard/nutrition-label-preview";
 import {
@@ -11,7 +12,9 @@ import { getLabelCommandCenterStats, listProductsNeedingReview } from "@/service
 export const dynamic = "force-dynamic";
 
 export default async function NutritionLabelsPage() {
-  const { dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { dataUserId } = actor;
+  const canExport = canExportReports(actor);
   const [kitchen, storefront, stats, needs] = await Promise.all([
     prisma.kitchenSettings.findUnique({
       where: { userId: dataUserId },
@@ -51,7 +54,12 @@ export default async function NutritionLabelsPage() {
         <div className="rounded-xl border p-4 space-y-2">
           <p className="text-sm font-medium">Label printing (FDA / EU)</p>
           {needsRows.slice(0, 5).map((p) => (
-            <NutritionLabelPreview key={p.id} productId={p.id} productTitle={p.title} />
+            <NutritionLabelPreview
+              key={p.id}
+              productId={p.id}
+              productTitle={p.title}
+              canExport={canExport}
+            />
           ))}
         </div>
       ) : null}

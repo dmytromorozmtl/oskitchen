@@ -5,6 +5,7 @@ import { RestaurantPnLChart } from "@/components/dashboard/restaurant-pnl-chart"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { canDoReports } from "@/lib/reports/report-permissions";
 import {
   getRestaurantPnLStatement,
@@ -46,6 +47,7 @@ export default async function RestaurantPnLPage({
   if (refresh === "1") {
     await refreshPnlSnapshot(userId, period);
   }
+  const canExport = canExportReports(actor);
   const snapshotPage = await listPnlSnapshotsPage(userId, cursor ?? null);
   const { summary, lines } = await getRestaurantPnLStatement(userId, period);
 
@@ -66,12 +68,14 @@ export default async function RestaurantPnLPage({
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <PnlRefreshButton period={period} />
-          <a
-            href={`/api/export/restaurant-pnl?period=${period}`}
-            className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
-          >
-            Export CSV
-          </a>
+          {canExport && (
+            <a
+              href={`/api/export/restaurant-pnl?period=${period}`}
+              className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
+            >
+              Export CSV
+            </a>
+          )}
         </div>
       </div>
 

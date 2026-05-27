@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireExportActor } from "@/lib/import-export/require-export-actor";
 import { prisma } from "@/lib/prisma";
 import {
   renderNutritionLabelPdfPlaceholder,
@@ -8,7 +8,6 @@ import {
 } from "@/services/nutrition/label-format-service";
 
 export async function GET(request: NextRequest) {
-  const { dataUserId } = await requireTenantActor();
   const productId = request.nextUrl.searchParams.get("productId");
   const format = (request.nextUrl.searchParams.get("format") ?? "FDA") as LabelFormat;
 
@@ -16,8 +15,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "productId required" }, { status: 400 });
   }
 
+  const access = await requireExportActor({
+    exportType: "nutrition_labels",
+    operation: "export:nutrition-label",
+    metadata: { productId, format },
+  });
+  if (!access.ok) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const product = await prisma.product.findFirst({
-    where: { id: productId, menu: { userId: dataUserId } },
+    where: { id: productId, menu: { userId: access.actor.dataUserId } },
     include: {
       nutritionProfile: true,
       ingredientDeclaration: true,

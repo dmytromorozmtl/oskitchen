@@ -266,7 +266,7 @@ Initial scope:
 - migrate `actions/integrations.ts`
 - migrate storefront publish/media/forms/domain actions
 - migrate upload and export actions
-- Status update: POS, KDS, billing, integrations, import-export hub, and filtered report CSV exports are on canonical keys with denial audits; `/api/export/report` and report UI gates use `reports.export` via `requireReportExportActor`, while specialty financial exports (PnL, accounting bridges) still use legacy role strings
+- Status update: POS, KDS, billing, integrations, and all primary CSV/PDF export routes under `app/api/export/**` are on canonical keys with denial audits; report read gates (`reports.read.financial`, etc.) still use legacy role strings during migration
 
 ### Phase 3: UI parity
 - replace scattered UI gates with permission-derived navigation and component gates
