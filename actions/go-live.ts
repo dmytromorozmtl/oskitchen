@@ -6,13 +6,14 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { resolveGoLiveActorScope } from "@/lib/go-live/resolve-go-live-actor-scope";
 import {
   canUseGoLive,
-  type GoLiveActorScope,
   type GoLiveCapability,
 } from "@/lib/go-live/go-live-permissions";
+import { workspacePermissionForGoLiveCapability } from "@/lib/go-live/go-live-mutation-permission";
+import { logGoLivePermissionDenied } from "@/services/go-live/go-live-permission-audit";
 import { IMPLEMENTATION_INTEGRATIONS } from "@/lib/implementation/implementation-types";
 import {
   createIncident,
@@ -62,18 +63,33 @@ const INCIDENT_CATEGORIES = [
 const INCIDENT_STATUSES = ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS", "RESOLVED", "CLOSED"] as const;
 const BLOCKER_SEVERITIES = ["INFO", "WARNING", "HIGH_RISK", "CRITICAL"] as const;
 
-function scopeFrom(profile: { role: string | null; email: string | null }): GoLiveActorScope {
-  return { isOwner: true, role: profile.role, email: profile.email };
-}
-
 async function gate(capability: GoLiveCapability) {
-  const { userId } = await requireTenantActor();
+  const required = workspacePermissionForGoLiveCapability(capability);
+  const access = await requireMutationPermission(required);
   const profile = await requireUserProfile();
-  const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
+  if (!access.ok) {
+    await logGoLivePermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      goLiveCapability: capability,
+    });
+    throw new Error(access.error);
+  }
+  const scope = resolveGoLiveActorScope({
+    workspaceRole: access.actor.workspaceRole,
+    email: access.actor.email,
+    profileRole: profile.role ?? null,
+    profileEmail: profile.email ?? null,
+  });
   if (!canUseGoLive(scope, capability)) {
+    await logGoLivePermissionDenied(access.actor, {
+      requiredPermission: required,
+      operation: capability,
+      goLiveCapability: capability,
+    });
     throw new Error(`You do not have permission to ${capability}.`);
   }
-  return { userId, profileId: profile.id };
+  return { userId: access.actor.userId, profileId: profile.id };
 }
 
 const createProjectSchema = z.object({
@@ -328,10 +344,7 @@ export async function transitionLaunchStatusAction(formData: FormData): Promise<
     confirm: formData.get("confirm") === "true",
   });
   if (requiresSuperGate && parsed.override) {
-    const profile = await requireUserProfile();
-    if (!canUseGoLive({ isOwner: true, role: profile.role ?? null, email: profile.email ?? null }, "go-live.unlock")) {
-      throw new Error("Only the workspace admin or superadmin can override critical blockers.");
-    }
+    await gate("go-live.unlock");
   }
   const res = await transitionStatus({
     userId,

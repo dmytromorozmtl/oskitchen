@@ -7,16 +7,24 @@ import { Button } from "@/components/ui/button";
 
 export function StatusTransitionButtons({
   projectId,
-  canApprove,
-  canLaunch,
-  canRollback,
-  isSuper,
+  canRunValidation,
+  canUseApprove,
+  canUseLaunch,
+  canUseRollback,
+  canUnlock,
+  readyToApprove,
+  readyToLaunch,
+  canRollbackStatus,
 }: {
   projectId: string;
-  canApprove: boolean;
-  canLaunch: boolean;
-  canRollback: boolean;
-  isSuper: boolean;
+  canRunValidation: boolean;
+  canUseApprove: boolean;
+  canUseLaunch: boolean;
+  canUseRollback: boolean;
+  canUnlock: boolean;
+  readyToApprove: boolean;
+  readyToLaunch: boolean;
+  canRollbackStatus: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -51,24 +59,49 @@ export function StatusTransitionButtons({
     });
   }
 
+  if (!canRunValidation && !canUseApprove && !canUseLaunch && !canUseRollback) {
+    return null;
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button size="sm" variant="outline" onClick={refresh} disabled={isPending}>
-        {isPending ? "Working…" : "Run validation"}
-      </Button>
-      <Button size="sm" onClick={() => transition("APPROVED")} disabled={isPending || (!canApprove && !override)}>
-        Mark approved
-      </Button>
-      <Button size="sm" onClick={() => transition("LIVE")} disabled={isPending || (!canLaunch && !override)}>
-        Go live
-      </Button>
-      <Button size="sm" variant="destructive" onClick={() => transition("ROLLBACK_MODE")} disabled={isPending || !canRollback}>
-        Trigger rollback
-      </Button>
-      {isSuper ? (
+      {canRunValidation ? (
+        <Button size="sm" variant="outline" onClick={refresh} disabled={isPending}>
+          {isPending ? "Working…" : "Run validation"}
+        </Button>
+      ) : null}
+      {canUseApprove ? (
+        <Button
+          size="sm"
+          onClick={() => transition("APPROVED")}
+          disabled={isPending || (!readyToApprove && !override)}
+        >
+          Mark approved
+        </Button>
+      ) : null}
+      {canUseLaunch ? (
+        <Button
+          size="sm"
+          onClick={() => transition("LIVE")}
+          disabled={isPending || (!readyToLaunch && !override)}
+        >
+          Go live
+        </Button>
+      ) : null}
+      {canUseRollback ? (
+        <Button
+          size="sm"
+          variant="destructive"
+          onClick={() => transition("ROLLBACK_MODE")}
+          disabled={isPending || !canRollbackStatus}
+        >
+          Trigger rollback
+        </Button>
+      ) : null}
+      {canUnlock ? (
         <label className="flex items-center gap-1 text-xs text-muted-foreground">
           <input type="checkbox" checked={override} onChange={(e) => setOverride(e.currentTarget.checked)} />
-          Override blockers (super admin only)
+          Override critical blockers
         </label>
       ) : null}
       {error ? <p className="text-xs text-destructive">{error}</p> : null}

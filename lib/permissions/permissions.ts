@@ -48,6 +48,8 @@ export const PERMISSIONS = {
   "timeclock.manage": "Clock staff in and out on the time clock",
   "training.manage": "Create programs, SOPs, assignments, and certifications",
   "training.participate": "Complete assigned training, quizzes, and simulations",
+  "go-live.manage": "Create and operate launch readiness projects",
+  "go-live.unlock": "Override critical launch blockers",
   "growth.view": "View growth / beta surfaces",
 } as const;
 
@@ -101,6 +103,8 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "timeclock.manage",
   "training.manage",
   "training.participate",
+  "go-live.manage",
+  "go-live.unlock",
   "growth.view",
 ];
 

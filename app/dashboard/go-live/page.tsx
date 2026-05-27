@@ -20,6 +20,7 @@ import {
 } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { LAUNCH_MODE_LABEL } from "@/lib/go-live/launch-stages";
+import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
 import {
   listProjects,
   workbenchSnapshot,
@@ -45,6 +46,7 @@ export default async function GoLivePage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const profile = await requireUserProfile();
   const isSuper = isSuperAdminEmail(profile.email);
+  const { canCreate } = await getGoLivePageAccess();
   const [projects, brands, locations, latestSimulation, incidentCount] = await Promise.all([
     listProjects(dataUserId),
     prisma.brand.findMany({
@@ -165,7 +167,7 @@ export default async function GoLivePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <CreateProjectForm brands={brands} locations={locations} />
+            {canCreate ? <CreateProjectForm brands={brands} locations={locations} /> : null}
           </CardContent>
         </Card>
 
@@ -301,7 +303,7 @@ export default async function GoLivePage() {
           <CardDescription>Phased rollout? Multi-location? Multi-brand? Spin up another project.</CardDescription>
         </CardHeader>
         <CardContent>
-          <CreateProjectForm brands={brands} locations={locations} />
+          {canCreate ? <CreateProjectForm brands={brands} locations={locations} /> : null}
         </CardContent>
       </Card>
 

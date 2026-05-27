@@ -31,6 +31,7 @@ import {
   STAGE_LABEL,
   stageRank,
 } from "@/lib/go-live/launch-stages";
+import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
 import {
   getProject,
   workbenchSnapshot,
@@ -45,6 +46,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const profile = await requireUserProfile();
   const isSuper = isSuperAdminEmail(profile.email);
+  const access = await getGoLivePageAccess();
   const { projectId } = await params;
 
   const project = await getProject(dataUserId, projectId);
@@ -118,10 +120,14 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
         </div>
         <StatusTransitionButtons
           projectId={project.id}
-          canApprove={snapshot.validation.canApprove}
-          canLaunch={snapshot.validation.canApprove && project.status === "APPROVED"}
-          canRollback={project.status !== "ROLLBACK_MODE"}
-          isSuper={isSuper}
+          canRunValidation={access.canEdit}
+          canUseApprove={access.canApprove}
+          canUseLaunch={access.canLaunch}
+          canUseRollback={access.canRollback}
+          canUnlock={access.canUnlock || isSuper}
+          readyToApprove={snapshot.validation.canApprove}
+          readyToLaunch={snapshot.validation.canApprove && project.status === "APPROVED"}
+          canRollbackStatus={project.status !== "ROLLBACK_MODE"}
         />
       </div>
 
@@ -232,13 +238,15 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
                         </div>
                         <ChecklistStatusBadge status={item.status} />
                       </div>
-                      <ChecklistRow
-                        projectId={project.id}
-                        itemId={item.id}
-                        initialStatus={item.status}
-                        initialAssignedToId={item.assignedToId}
-                        initialDueAt={item.dueAt ? item.dueAt.toISOString().slice(0, 10) : null}
-                      />
+                      {access.canUpdateChecklist ? (
+                        <ChecklistRow
+                          projectId={project.id}
+                          itemId={item.id}
+                          initialStatus={item.status}
+                          initialAssignedToId={item.assignedToId}
+                          initialDueAt={item.dueAt ? item.dueAt.toISOString().slice(0, 10) : null}
+                        />
+                      ) : null}
                     </li>
                   ))}
                 </ul>
@@ -257,7 +265,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <SimulationLauncher projectId={project.id} />
+          {access.canSimulate ? <SimulationLauncher projectId={project.id} /> : null}
           {project.simulations.length === 0 ? (
             <p className="text-sm text-muted-foreground">No simulations yet.</p>
           ) : (
@@ -288,14 +296,18 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ApprovalButtons
-            projectId={project.id}
-            existing={project.approvals.map((a) => ({
-              approvalType: a.approvalType,
-              approvedAt: a.approvedAt,
-              approvedBy: { fullName: a.approvedBy.fullName, email: a.approvedBy.email },
-            }))}
-          />
+          {access.canApprove ? (
+            <ApprovalButtons
+              projectId={project.id}
+              existing={project.approvals.map((a) => ({
+                approvalType: a.approvalType,
+                approvedAt: a.approvedAt,
+                approvedBy: { fullName: a.approvedBy.fullName, email: a.approvedBy.email },
+              }))}
+            />
+          ) : (
+            <p className="text-sm text-muted-foreground">You do not have permission to record launch approvals.</p>
+          )}
         </CardContent>
       </Card>
 
@@ -305,7 +317,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           <CardDescription>Open: {incidentOpen.length} · Resolved: {incidentResolved.length}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <IncidentForm projectId={project.id} />
+          {access.canCreateIncident ? <IncidentForm projectId={project.id} /> : null}
           <div className="space-y-2">
             {project.incidents.length === 0 ? (
               <p className="text-sm text-muted-foreground">No incidents logged.</p>
@@ -329,13 +341,15 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
                         <IncidentStatusBadge status={inc.status} />
                       </div>
                     </div>
-                    <div className="mt-2">
-                      <IncidentRowActions
-                        projectId={project.id}
-                        incidentId={inc.id}
-                        initialStatus={inc.status}
-                      />
-                    </div>
+                    {access.canResolveIncident ? (
+                      <div className="mt-2">
+                        <IncidentRowActions
+                          projectId={project.id}
+                          incidentId={inc.id}
+                          initialStatus={inc.status}
+                        />
+                      </div>
+                    ) : null}
                   </li>
                 ))}
               </ul>
@@ -350,7 +364,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           <CardDescription>Predefined plans seeded for this launch mode plus custom plans.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <RollbackPlanForm projectId={project.id} />
+          {access.canRollback ? <RollbackPlanForm projectId={project.id} /> : null}
           {project.rollbackPlans.length === 0 ? (
             <p className="text-sm text-muted-foreground">No rollback plans yet.</p>
           ) : (
