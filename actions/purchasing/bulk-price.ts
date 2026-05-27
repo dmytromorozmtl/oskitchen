@@ -1,10 +1,12 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   bulkUpdateSupplierPrices,
@@ -18,9 +20,33 @@ const updatesSchema = z.array(
   }),
 );
 
+async function requirePurchasingBulkPricePermission(
+  permission: PermissionKey,
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "purchasing.permission_denied",
+      entityType: "PurchaseOrder",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function bulkUpdatePricesAction(
   formData: FormData,
 ): Promise<{ error?: string; updated?: number } | void> {
+  const gate = await requirePurchasingBulkPricePermission(
+    "reports.read.financial",
+    "purchasing.bulk_update_prices",
+  );
+  if (!gate.ok) return { error: gate.error };
+
   const raw = String(formData.get("updates") ?? "[]");
   let parsed: z.infer<typeof updatesSchema>;
   try {
@@ -36,6 +62,12 @@ export async function bulkUpdatePricesAction(
 }
 
 export async function undoBulkPricesAction(): Promise<{ error?: string; undone?: number } | void> {
+  const gate = await requirePurchasingBulkPricePermission(
+    "reports.read.financial",
+    "purchasing.undo_bulk_prices",
+  );
+  if (!gate.ok) return { error: gate.error };
+
   const { dataUserId } = await requireTenantActor();
   const { undone } = await undoLastBulkPriceChange(dataUserId);
   revalidatePath("/dashboard/purchasing/bulk-pricing");
