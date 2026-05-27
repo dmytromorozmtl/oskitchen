@@ -6,8 +6,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { asVoidFormAction } from "@/lib/actions/server-form-action";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { slugifyBrandSlug } from "@/lib/brands/brand-helpers";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
@@ -50,6 +51,22 @@ function tok(fd: FormData, key: string): string | undefined {
   return t.length ? t : undefined;
 }
 
+async function requireBrandMutationAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "brands.permission_denied",
+      entityType: "Brand",
+      metadata: { operation, requiredPermission: "workspace.settings" },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  return { ok: true as const, sessionUser: user, dataUserId };
+}
+
 const brandCreateSchema = z.object({
   name: z.string().min(2).max(255),
   slug: z.string().min(2).max(120).regex(/^[a-z0-9-]+$/),
@@ -84,7 +101,9 @@ export async function createBrand(
   formData: FormData,
 ): Promise<{ ok: true; id: string } | { error: string }> {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireBrandMutationAccess("brands.create");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const rawSlug = String(formData.get("slug") ?? "");
     const slug = slugifyBrandSlug(rawSlug.length ? rawSlug : String(formData.get("name") ?? "brand"));
 
@@ -229,7 +248,9 @@ const brandUpdateSchema = z.object({
 
 export async function updateBrandDetails(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireBrandMutationAccess("brands.update_details");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const brandId = String(formData.get("brandId") ?? "");
     if (!brandId) return { error: "Missing brand" };
 
@@ -330,7 +351,9 @@ export async function updateBrandDetailsFormAction(formData: FormData): Promise<
 
 export async function updateBrandLifecycle(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireBrandMutationAccess("brands.update_lifecycle");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const brandId = String(formData.get("brandId") ?? "");
     const next = String(formData.get("lifecycleStatus") ?? "").trim();
     const parsed = z.enum(["DRAFT", "ACTIVE", "PAUSED", "ARCHIVED"]).safeParse(next);
