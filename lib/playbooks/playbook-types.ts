@@ -18,6 +18,7 @@ export type PlaybookActorScope = {
   role?: string | null;
   email?: string | null;
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 };
 
 export type PlaybookModuleKey =

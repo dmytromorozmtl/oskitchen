@@ -7,6 +7,7 @@ export type TemplateActorScope = {
   role?: string | null;
   email?: string | null;
   granted?: ReadonlySet<PermissionKey>;
+  platformBypass?: boolean;
 };
 
 export type TemplateCapability =

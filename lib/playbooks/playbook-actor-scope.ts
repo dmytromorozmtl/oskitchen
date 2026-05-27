@@ -27,5 +27,6 @@ export function createPlaybookActorScope(
     isOwner: base.isOwner,
     role: profileRole ?? base.role ?? null,
     granted: base.granted,
+    platformBypass: actor.platformBypass,
   };
 }

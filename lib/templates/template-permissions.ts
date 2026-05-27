@@ -1,4 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import { workspacePermissionForTemplateCapability } from "@/lib/templates/template-permission-keys";
 
@@ -18,7 +17,7 @@ const GRANTS: Record<TemplateCapability, string[]> = {
 };
 
 export function isSuperAdminTemplates(scope: TemplateActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUseTemplates(

@@ -1,4 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { hasPermission } from "@/lib/permissions/guards";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { workspacePermissionForPlaybookCapability } from "@/lib/playbooks/playbook-permission-keys";
@@ -29,7 +28,7 @@ const GRANTS: Record<PlaybookCapability, string[]> = {
 };
 
 export function isSuperAdminPlaybooks(scope: PlaybookActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUsePlaybooks(
