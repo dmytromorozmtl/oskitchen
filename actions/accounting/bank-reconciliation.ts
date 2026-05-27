@@ -1,10 +1,12 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   importBankTransactions,
@@ -21,9 +23,33 @@ const reconcileSchema = z.object({
   matchId: z.string().uuid(),
 });
 
+async function requireBankReconciliationPermission(
+  permission: PermissionKey,
+  operation: string,
+): Promise<{ ok: true } | { ok: false }> {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "accounting.bank_reconciliation.permission_denied",
+      entityType: "BankTransaction",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false };
+  }
+  return { ok: true };
+}
+
 export async function importBankCsvAction(formData: FormData): Promise<void> {
   const parsed = importCsvSchema.safeParse({ csv: String(formData.get("csv") ?? "") });
   if (!parsed.success) return;
+
+  const gate = await requireBankReconciliationPermission(
+    "reports.read.financial",
+    "accounting.bank_reconciliation.import_csv",
+  );
+  if (!gate.ok) return;
 
   const { dataUserId } = await requireTenantActor();
   const lines = parsed.data.csv.trim().split("\n").slice(1);
@@ -60,6 +86,12 @@ export async function reconcileBankTxAction(formData: FormData): Promise<void> {
     matchId: formData.get("matchId"),
   });
   if (!parsed.success) return;
+
+  const gate = await requireBankReconciliationPermission(
+    "reports.read.financial",
+    "accounting.bank_reconciliation.reconcile",
+  );
+  if (!gate.ok) return;
 
   const { dataUserId } = await requireTenantActor();
   await reconcileTransaction(
