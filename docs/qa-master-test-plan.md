@@ -87,7 +87,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 | payment success | integration, contract, E2E |
 | payment failure | integration, unit (`storefront-payment-recovery`), E2E tier 2 optional Stripe on staging |
 | storefront pay-later checkout | unit, integration, E2E tier 2 (`storefront-money-path` CI job) |
-| POS checkout | unit, E2E, permission-negative |
+| POS checkout | unit, integration (tier 2b), E2E when auth secrets configured | Software path only — no hardware certification |
 | refund | unit, integration, permission-negative |
 | void | unit, integration, permission-negative |
 | table order | E2E once table service ships |
@@ -115,7 +115,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - A QA report must be generated per release candidate.
 
 ## Current Highest-Priority Additions
-1. POS permission-negative role matrix, including terminal API route denials and POS shell parity
+1. POS permission-negative role matrix — terminal API route denials covered; tier 2b adds checkout integration in CI
 2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration in CI; staging Stripe E2E optional
 3. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 4. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open

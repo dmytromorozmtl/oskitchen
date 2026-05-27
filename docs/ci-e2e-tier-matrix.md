@@ -41,6 +41,43 @@ unset TURNSTILE_SECRET_KEY
 npm run test:ci:storefront-money-path:e2e
 ```
 
+## Tier 2b — POS money path (`pos-money-path` job)
+
+| Suite | Command | DB | Notes |
+|-------|---------|-----|-------|
+| POS checkout unit | `npm run test:ci:pos-money-path:unit` | No | Canonical checkout, terminal lifecycle, action RBAC |
+| POS cash sale integration | `npm run test:ci:pos-money-path:integration` | Postgres | `checkoutPosSale` + encrypted PII + transaction row |
+| POS checkout E2E | `npm run test:ci:pos-money-path:e2e` | Postgres + auth secrets | Requires `E2E_LOGIN_EMAIL` / `E2E_LOGIN_PASSWORD`; optional `E2E_CI_POS_USER_ID` for `seed-e2e-pos-fixture` |
+
+**CI workflow:** `.github/workflows/ci.yml` → job `pos-money-path`.
+
+**Local focused run (unit + integration):**
+
+```bash
+export DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/kitchenos
+export DIRECT_URL="$DATABASE_URL"
+export ENCRYPTION_KEY="$(node -e 'console.log(Buffer.alloc(32,17).toString(\"base64\"))')"
+export RUN_DB_INTEGRATION=1
+npx prisma db push
+npm run pos:seed-ci-checkout
+npm run test:ci:pos-money-path:unit
+npm run test:ci:pos-money-path:integration
+```
+
+**Local E2E (requires Supabase test user):**
+
+```bash
+export E2E_LOGIN_EMAIL=...
+export E2E_LOGIN_PASSWORD=...
+export E2E_SEED_USER_ID=<supabase-auth-uuid>
+npm run build && npm run start -- -p 3000 &
+export PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000
+npx tsx scripts/seed-e2e-pos-fixture.ts
+npm run test:ci:pos-money-path:e2e
+```
+
+**Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only.
+
 ## Tier 3 — Staging / preview (manual or scheduled)
 
 | Suite | Workflow | Secrets |
@@ -53,7 +90,7 @@ npm run test:ci:storefront-money-path:e2e
 | Suite | Reason |
 |-------|--------|
 | Full Stripe live checkout E2E | Requires Stripe secrets + Connect; run via `STOREFRONT_E2E_STRIPE=1` on staging |
-| POS hardware terminal | No hardware certification claim; POS unit + optional authed E2E on staging |
+| POS hardware terminal | No hardware certification claim; tier 2b covers software POS unit + DB integration; browser E2E when auth secrets configured |
 
 ## Money-path certification mapping
 
@@ -61,4 +98,5 @@ npm run test:ci:storefront-money-path:e2e
 |------|-------------|------------|-------------------|
 | Storefront pay-later checkout | — | ✅ pay-later spec | ✅ PII + submit |
 | Storefront online checkout failure + retry | ✅ `storefront-payment-recovery.test.ts` | — | ✅ `storefront-order-pii.integration.test.ts` |
+| POS cash checkout | ✅ `pos-checkout-canonical` + terminal lifecycle | ✅ when auth secrets | ✅ `order-entrypoint-pii` POS test |
 | Stripe webhook fail-closed | — | — | ✅ in `test:security` |
