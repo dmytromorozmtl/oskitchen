@@ -1,5 +1,6 @@
 "use server";
 
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import type { UploadBucket } from "@/lib/storage";
 import { uploadKitchenAsset } from "@/lib/storage";
@@ -71,6 +72,10 @@ async function uploadKitchenImageFromFile(params: {
 }
 
 export async function uploadProductImageAction(formData: FormData) {
+  const access = await requireMutationPermission("products.edit");
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const { sessionUser: user, workspaceId } = await requireTenantActor();
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Missing file" };
@@ -89,6 +94,10 @@ export async function uploadProductImageAction(formData: FormData) {
 }
 
 export async function uploadBusinessLogoAction(formData: FormData) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const { sessionUser: user, workspaceId } = await requireTenantActor();
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Missing file" };

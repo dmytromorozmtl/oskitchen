@@ -1,15 +1,16 @@
 "use server";
 
-
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { uploadKitchenAsset } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
-
-const MAX_BYTES = 2 * 1024 * 1024;
-const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp"]);
+import {
+  profileAvatarExtension,
+  validateProfileAvatarUpload,
+} from "@/lib/upload-policy/media-upload-validation";
+import { logUploadDenied, logUploadSucceeded } from "@/services/audit/upload-audit";
 
 export async function uploadAvatarAction(
   formData: FormData,
@@ -19,34 +20,74 @@ export async function uploadAvatarAction(
     return fail("Please choose an image file");
   }
 
-  if (!ALLOWED.has(file.type)) {
-    return fail("Only JPEG, PNG, or WebP images are allowed");
-  }
-
-  if (file.size > MAX_BYTES) {
-    return fail("Image must be 2MB or smaller");
-  }
-
-  const { sessionUser } = await requireTenantActor();
-  const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
-  const path = `avatars/${sessionUser.id}.${ext}`;
+  const { sessionUser, workspaceId } = await requireTenantActor();
   const bytes = new Uint8Array(await file.arrayBuffer());
+  const validated = validateProfileAvatarUpload({
+    bytes,
+    mimeType: file.type || "",
+  });
+  if (!validated.ok) {
+    void logUploadDenied({
+      channel: "profile_avatar",
+      actorUserId: sessionUser.id,
+      workspaceId,
+      entity: { type: "UploadBucket", id: "business-logos" },
+      mimeType: file.type || null,
+      sizeBytes: bytes.byteLength,
+      reason: validated.error,
+    });
+    return fail(validated.error);
+  }
 
+  const ext = profileAvatarExtension(validated.mimeType);
+  const path = `avatars/${sessionUser.id}.${ext}`;
   const uploaded = await uploadKitchenAsset({
     bucket: "business-logos",
     path,
     bytes,
-    contentType: file.type,
+    contentType: validated.mimeType,
   });
 
-  if ("error" in uploaded) return fail(uploaded.error);
+  if ("error" in uploaded) {
+    void logUploadDenied({
+      channel: "profile_avatar",
+      actorUserId: sessionUser.id,
+      workspaceId,
+      entity: { type: "UploadBucket", id: "business-logos" },
+      mimeType: validated.mimeType,
+      sizeBytes: bytes.byteLength,
+      reason: uploaded.error,
+    });
+    return fail(uploaded.error);
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({
     data: { avatar_url: uploaded.publicUrl },
   });
 
-  if (error) return fail(error.message);
+  if (error) {
+    void logUploadDenied({
+      channel: "profile_avatar",
+      actorUserId: sessionUser.id,
+      workspaceId,
+      entity: { type: "UploadBucket", id: "business-logos" },
+      mimeType: validated.mimeType,
+      sizeBytes: bytes.byteLength,
+      reason: error.message,
+    });
+    return fail(error.message);
+  }
+
+  void logUploadSucceeded({
+    channel: "profile_avatar",
+    actorUserId: sessionUser.id,
+    workspaceId,
+    entity: { type: "UploadBucket", id: "business-logos" },
+    mimeType: validated.mimeType,
+    sizeBytes: bytes.byteLength,
+    publicUrl: uploaded.publicUrl,
+  });
 
   revalidatePath("/dashboard/settings/profile");
   return ok({ avatarUrl: uploaded.publicUrl });

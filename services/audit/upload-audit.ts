@@ -9,6 +9,9 @@ export type UploadAuditChannel =
   | "storefront_media"
   | "kitchen_product_image"
   | "kitchen_business_logo"
+  | "profile_avatar"
+  | "invoice_ocr_image"
+  | "import_csv"
   | "storefront_form_attachment";
 
 type UploadAuditBase = {

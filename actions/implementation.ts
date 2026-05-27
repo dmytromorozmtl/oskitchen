@@ -15,6 +15,8 @@ import {
 import { requireUserProfile } from "@/lib/auth";
 import { asVoidFormAction } from "@/lib/actions/server-form-action";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
+import { logUploadDenied } from "@/services/audit/upload-audit";
 import {
   kitchenCustomerByIdWhereForOwner,
   kitchenCustomerListWhereForOwner,
@@ -137,7 +139,24 @@ export async function createImportJobFromCsv(formData: FormData) {
 
     const upload = formData.get("file");
     if (!(upload instanceof File)) return { error: "Upload a CSV file" };
-    const csvText = await upload.text();
+    const csvBytes = new Uint8Array(await upload.arrayBuffer());
+    const csvValidated = validateImportCsvUpload({
+      bytes: csvBytes,
+      filename: upload.name || `${type.toLowerCase()}.csv`,
+    });
+    if (!csvValidated.ok) {
+      void logUploadDenied({
+        channel: "import_csv",
+        actorUserId: user.id,
+        workspaceId,
+        entity: { type: "ImportJob", id: type },
+        mimeType: "text/csv",
+        sizeBytes: csvBytes.byteLength,
+        reason: csvValidated.error,
+      });
+      return { error: csvValidated.error };
+    }
+    const csvText = new TextDecoder("utf-8", { fatal: false }).decode(csvBytes);
     const validated = validateImport(type, csvText);
 
     const job = await prisma.importJob.create({

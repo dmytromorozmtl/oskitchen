@@ -22,6 +22,20 @@ export const KITCHEN_RASTER_IMAGE_ALLOWED_MIME = [
 
 export const KITCHEN_RASTER_IMAGE_MAX_BYTES = 4 * 1024 * 1024;
 
+export const PROFILE_AVATAR_ALLOWED_MIME = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+] as const;
+
+export const PROFILE_AVATAR_MAX_BYTES = 2 * 1024 * 1024;
+
+export const INVOICE_OCR_IMAGE_MAX_BYTES = 8 * 1024 * 1024;
+
+export const IMPORT_CSV_MAX_BYTES = 5 * 1024 * 1024;
+
+const PROFILE_AVATAR_ALLOWED = new Set<string>(PROFILE_AVATAR_ALLOWED_MIME);
+
 const STOREFRONT_ALLOWED = new Set<string>(STOREFRONT_MEDIA_ALLOWED_MIME);
 const KITCHEN_RASTER_ALLOWED = new Set<string>(KITCHEN_RASTER_IMAGE_ALLOWED_MIME);
 const STOREFRONT_FORM_ALLOWED = new Set<string>(STOREFRONT_FORM_FILE_MIME);
@@ -135,6 +149,70 @@ export function storefrontFormAttachmentExtension(
     case "image/jpeg":
       return "jpg";
   }
+}
+
+export function validateProfileAvatarUpload(input: {
+  bytes: Uint8Array;
+  mimeType: string;
+}):
+  | { ok: true; mimeType: (typeof PROFILE_AVATAR_ALLOWED_MIME)[number] }
+  | { ok: false; error: string } {
+  const mimeType = input.mimeType.toLowerCase();
+  if (!PROFILE_AVATAR_ALLOWED.has(mimeType)) {
+    return { ok: false, error: "Only JPEG, PNG, or WebP images are allowed." };
+  }
+  if (input.bytes.byteLength <= 0 || input.bytes.byteLength > PROFILE_AVATAR_MAX_BYTES) {
+    return { ok: false, error: "Image must be 2MB or smaller." };
+  }
+  return {
+    ok: true,
+    mimeType: mimeType as (typeof PROFILE_AVATAR_ALLOWED_MIME)[number],
+  };
+}
+
+export function profileAvatarExtension(
+  mimeType: (typeof PROFILE_AVATAR_ALLOWED_MIME)[number],
+): "jpg" | "png" | "webp" {
+  switch (mimeType) {
+    case "image/png":
+      return "png";
+    case "image/webp":
+      return "webp";
+    case "image/jpeg":
+      return "jpg";
+  }
+}
+
+/** Invoice OCR accepts raster photos of supplier invoices (Vision API). */
+export function validateInvoiceOcrImageUpload(input: {
+  bytes: Uint8Array;
+  mimeType: string;
+}): ReturnType<typeof validateKitchenRasterImageUpload> {
+  const base = validateKitchenRasterImageUpload(input);
+  if (!base.ok) {
+    return base;
+  }
+  if (input.bytes.byteLength > INVOICE_OCR_IMAGE_MAX_BYTES) {
+    return { ok: false, error: "Invoice image too large (max 8MB)." };
+  }
+  return base;
+}
+
+export function validateImportCsvUpload(input: {
+  bytes: Uint8Array;
+  filename: string;
+}): { ok: true } | { ok: false; error: string } {
+  const name = input.filename.trim().toLowerCase();
+  if (!name.endsWith(".csv")) {
+    return { ok: false, error: "Only .csv files are allowed." };
+  }
+  if (input.bytes.byteLength <= 0) {
+    return { ok: false, error: "File is empty." };
+  }
+  if (input.bytes.byteLength > IMPORT_CSV_MAX_BYTES) {
+    return { ok: false, error: "CSV file too large (max 5MB)." };
+  }
+  return { ok: true };
 }
 
 export function kitchenRasterImageExtension(

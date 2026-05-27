@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: optional `storefront.read` hub gates for read-only storefront monitoring; uploads are largely covered
+- Remaining work after current slice: optional `storefront.read` hub gates for read-only storefront monitoring; optional malware-scan hook for uploads
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
@@ -69,7 +69,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: centralizes file validation
 - User story: as an operator, I need uploads to be safe and predictable
 - Current state: storefront media path validates more than generic upload actions
-- Progress update: upload validation lives in `lib/upload-policy/media-upload-validation.ts` across storefront media, kitchen product/logo uploads, and public form attachments; `services/audit/upload-audit.ts` now records `UPLOAD_SUCCEEDED` / `UPLOAD_DENIED` audit events for those paths (including workspace resolution from store slug on public form uploads); malware-scan hooks still remain.
+- Progress update: upload validation lives in `lib/upload-policy/media-upload-validation.ts` across storefront media, kitchen product/logo uploads, profile avatars, invoice OCR images, import CSV uploads, and public form attachments; kitchen product/logo uploads require `products.edit` / `workspace.settings`; invoice OCR requires `reports.read.financial`; `services/audit/upload-audit.ts` records `UPLOAD_SUCCEEDED` / `UPLOAD_DENIED` for these channels; malware-scan hooks still remain.
 - Target state: all upload entrypoints share one hardened validation policy
 - Affected files: `actions/upload.ts`, `actions/storefront-media.ts`, `services/storefront/storefront-media-upload-service.ts`, storage helpers
 - Dependencies: `KOS-P0-001`

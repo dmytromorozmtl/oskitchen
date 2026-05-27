@@ -12,6 +12,8 @@ import {
 
 const LEGACY_FALLBACK: Partial<Record<PermissionKey, LegacyPermissionKey>> = {
   "workspace.settings": "manage_settings",
+  "products.edit": "manage_products",
+  "reports.read.financial": "manage_reports",
   "orders.manage": "manage_orders",
   "customers.manage": "manage_customers",
   "production.manage": "manage_production",

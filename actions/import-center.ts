@@ -11,6 +11,8 @@ import { commitNotSupportedReason, isCommittableType } from "@/lib/import-center
 import type { ImportActorScope, ImportCapability } from "@/lib/import-center/import-types";
 import { requireUserProfile } from "@/lib/auth";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
+import { logUploadDenied } from "@/services/audit/upload-audit";
 
 import {
   cancelImportJob,
@@ -66,11 +68,28 @@ export async function uploadImportCsvAction(formData: FormData): Promise<void> {
   if (!(file instanceof File) || file.size === 0) {
     throw new Error("Please select a CSV file to upload.");
   }
+  const csvBytes = new Uint8Array(await file.arrayBuffer());
+  const csvValidated = validateImportCsvUpload({
+    bytes: csvBytes,
+    filename: file.name || "upload.csv",
+  });
+  if (!csvValidated.ok) {
+    void logUploadDenied({
+      channel: "import_csv",
+      actorUserId: profileId,
+      workspaceId: null,
+      entity: { type: "ImportJob", id: "upload" },
+      mimeType: "text/csv",
+      sizeBytes: csvBytes.byteLength,
+      reason: csvValidated.error,
+    });
+    throw new Error(csvValidated.error);
+  }
   const parsed = uploadSchema.parse({
     type: formData.get("type"),
     mode: formData.get("mode") ?? "CREATE_ONLY",
   });
-  const csvText = await file.text();
+  const csvText = new TextDecoder("utf-8", { fatal: false }).decode(csvBytes);
   const outcome = await uploadImportCsv({
     userId,
     performedById: profileId,
