@@ -7,6 +7,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { MenuStrategy, Prisma } from "@prisma/client";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   menuByIdWhereForOwner,
@@ -21,6 +24,24 @@ import { trackUsageEvent } from "@/lib/usage";
 import { assertCollectionSlugUnique, validateCollectionSlugFormat } from "@/lib/menus/collection-slug";
 import { menuStrategyDefinition } from "@/lib/menus/menu-strategies";
 import { MENU_TEMPLATE_IDS, menuTemplatePayload, type MenuTemplateId } from "@/lib/menus/menu-templates";
+
+async function requireMenuMutationPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "products.edit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "menus.permission_denied",
+      entityType: "Menu",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
 
 function parseMenuForm(formData: FormData) {
   const rawStrategy = formData.get("strategy")?.toString().trim();
@@ -51,6 +72,9 @@ function parseWizardMenuForm(formData: FormData) {
 
 export async function createMenu(formData: FormData) {
   try {
+    const gate = await requireMenuMutationPermission("menus.create");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser, userId, workspaceId } = await requireTenantActor();
     const prevMenuCount = await countMenusForUser(userId);
     const { limits } = await getEffectivePlan(userId);
@@ -107,6 +131,9 @@ export async function createMenu(formData: FormData) {
 
 export async function createMenuFromWizard(formData: FormData) {
   try {
+    const gate = await requireMenuMutationPermission("menus.create_wizard");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId, workspaceId } = await requireTenantActor();
     const prevMenuCount = await countMenusForUser(userId);
     const { limits } = await getEffectivePlan(userId);
@@ -162,6 +189,9 @@ export async function createMenuFromWizard(formData: FormData) {
 }
 
 export async function applyMenuTemplate(templateId: string): Promise<void> {
+  const gate = await requireMenuMutationPermission("menus.apply_template");
+  if (!gate.ok) return;
+
   const { userId, workspaceId } = await requireTenantActor();
   if (!MENU_TEMPLATE_IDS.includes(templateId as MenuTemplateId)) {
     redirect("/dashboard/menus/templates?error=invalid");
@@ -197,6 +227,9 @@ export async function applyMenuTemplate(templateId: string): Promise<void> {
 
 export async function updateMenu(menuId: string, formData: FormData) {
   try {
+    const gate = await requireMenuMutationPermission("menus.update");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
 
     const menu = await prisma.menu.findFirst({
@@ -264,6 +297,9 @@ export async function updateMenu(menuId: string, formData: FormData) {
 
 export async function setMenuActive(menuId: string, active: boolean) {
   try {
+    const gate = await requireMenuMutationPermission("menus.set_active");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
 
     const menu = await prisma.menu.findFirst({
@@ -303,6 +339,9 @@ export async function setMenuActive(menuId: string, active: boolean) {
 
 export async function duplicateMenu(menuId: string) {
   try {
+    const gate = await requireMenuMutationPermission("menus.duplicate");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId, workspaceId } = await requireTenantActor();
     const { limits } = await getEffectivePlan(userId);
 
@@ -382,6 +421,9 @@ export async function duplicateMenu(menuId: string) {
 
 export async function deleteMenu(menuId: string) {
   try {
+    const gate = await requireMenuMutationPermission("menus.delete");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
     const target = await prisma.menu.findFirst({
       where: await menuByIdWhereForOwner(userId, menuId),
@@ -403,6 +445,9 @@ export async function deleteMenu(menuId: string) {
 
 export async function reorderMenus(orderedIds: string[]) {
   try {
+    const gate = await requireMenuMutationPermission("menus.reorder");
+    if (!gate.ok) return { error: gate.error };
+
     const { userId } = await requireTenantActor();
     const updates = await Promise.all(
       orderedIds.map(async (id, index) => ({
