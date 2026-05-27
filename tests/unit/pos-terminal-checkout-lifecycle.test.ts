@@ -14,6 +14,9 @@ const earnLoyaltyPointsForOrder = vi.hoisted(() => vi.fn());
 const redeemLoyaltyPoints = vi.hoisted(() => vi.fn());
 const decryptOrderPiiFields = vi.hoisted(() => vi.fn());
 const getStripe = vi.hoisted(() => vi.fn());
+const requireMutationPermission = vi.hoisted(() => vi.fn());
+const logPosPermissionDenied = vi.hoisted(() => vi.fn());
+const logPosTerminalControlEvent = vi.hoisted(() => vi.fn());
 const stripePaymentIntents = vi.hoisted(() => ({
   create: vi.fn(),
   cancel: vi.fn(),
@@ -61,6 +64,11 @@ vi.mock("@/services/loyalty/loyalty-service", () => ({
 }));
 vi.mock("@/lib/orders/order-pii", () => ({ decryptOrderPiiFields }));
 vi.mock("@/lib/stripe", () => ({ getStripe }));
+vi.mock("@/lib/permissions/mutation-access", () => ({ requireMutationPermission }));
+vi.mock("@/services/pos/pos-permission-audit", () => ({
+  logPosPermissionDenied,
+  logPosTerminalControlEvent,
+}));
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -179,12 +187,25 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 import { prisma } from "@/lib/prisma";
+import { DELETE, POST, PUT } from "@/app/api/pos/terminal/route";
 import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
 import {
   cancelTerminalPayment,
   createTerminalPaymentIntent,
   processTerminalPayment,
 } from "@/services/payments/stripe-terminal-service";
+
+const actor = {
+  sessionUser: { id: "staff-user-1" },
+  sessionUserId: "staff-user-1",
+  userId: "owner-1",
+  dataUserId: "owner-1",
+  workspaceId: "ws-fallback-1",
+  workspaceRole: "STAFF" as const,
+  staffRoleType: "MANAGER" as const,
+  email: "manager@example.com",
+  granted: new Set(["pos.checkout"]),
+};
 
 describe("POS terminal checkout lifecycle", () => {
   beforeEach(() => {
@@ -212,6 +233,9 @@ describe("POS terminal checkout lifecycle", () => {
       customerEmail: "guest@example.com",
       customerPhone: null,
     });
+    requireMutationPermission.mockResolvedValue({ ok: true, actor });
+    logPosPermissionDenied.mockResolvedValue(undefined);
+    logPosTerminalControlEvent.mockResolvedValue(undefined);
 
     createOrderViaCenter.mockImplementation(
       async (
@@ -523,6 +547,168 @@ describe("POS terminal checkout lifecycle", () => {
         status: "PAID",
         provider: "STRIPE",
         providerReference: "pi_retry",
+      }),
+    );
+    expect(state.posAuditEvents).toHaveLength(2);
+    expect(state.posAuditEvents[1]).toEqual({
+      userId: "owner-1",
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      transactionId: "tx-1",
+      staffId: "staff-member-1",
+      action: "pos.terminal.payment_captured",
+      metadataJson: {
+        paymentIntentId: "pi_retry",
+        cardBrand: "visa",
+        last4: "4242",
+      },
+    });
+  });
+
+  it("drives the terminal route handlers through cancel, retry, and capture on the same pending checkout", async () => {
+    const checkout = await checkoutPosSale("owner-1", "staff-1", {
+      registerId: state.register.id,
+      shiftId: state.shift.id,
+      staffMemberId: "staff-member-1",
+      locationId: null,
+      brandId: null,
+      customerId: null,
+      fulfillmentDetail: "PICKUP",
+      paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      lines: [{ title: "Flat white", quantity: 1, unitPrice: 11.25 }],
+    });
+
+    expect(checkout).toEqual({
+      ok: true,
+      orderId: "ord-1",
+      transactionId: "tx-1",
+      receiptNumber: expect.stringMatching(/^POS-/),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+
+    const cancelResponse = await DELETE(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ paymentIntentId: "pi_original" }),
+      }),
+    );
+    const cancelJson = await cancelResponse.json();
+
+    expect(cancelResponse.status).toBe(200);
+    expect(cancelJson).toEqual({ success: true });
+    expect(stripePaymentIntents.cancel).toHaveBeenCalledWith("pi_original");
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PENDING",
+        externalPaymentReference: null,
+      }),
+    );
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_CANCELLED",
+        entityId: "pi_original",
+        label: "pi_original",
+      }),
+    );
+
+    const intentResponse = await POST(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ amount: 11.25, orderId: "ord-1" }),
+      }),
+    );
+    const intentJson = await intentResponse.json();
+
+    expect(intentResponse.status).toBe(200);
+    expect(intentJson).toEqual({
+      clientSecret: "pi_retry_secret",
+      paymentIntentId: "pi_retry",
+    });
+    expect(stripePaymentIntents.create).toHaveBeenCalledWith({
+      amount: 1125,
+      currency: "usd",
+      payment_method_types: ["card_present"],
+      capture_method: "automatic",
+      metadata: { orderId: "ord-1", userId: "owner-1" },
+    });
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_INTENT_CREATED",
+        entityId: "ord-1",
+        label: "ord-1",
+        metadata: {
+          amount: 11.25,
+          currency: "usd",
+          paymentIntentId: "pi_retry",
+        },
+      }),
+    );
+
+    const captureResponse = await PUT(
+      new Request("http://localhost/api/pos/terminal", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ paymentIntentId: "pi_retry", orderId: "ord-1" }),
+      }),
+    );
+    const captureJson = await captureResponse.json();
+
+    expect(captureResponse.status).toBe(200);
+    expect(captureJson).toEqual({
+      success: true,
+      transaction: expect.objectContaining({
+        id: "tx-1",
+        orderId: "ord-1",
+        paymentStatus: "PAID",
+        shiftId: state.shift.id,
+        registerId: state.register.id,
+        externalPaymentReference: "pi_retry",
+      }),
+    });
+    expect(state.order).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        paymentMode: "CARD_TERMINAL_PLACEHOLDER",
+      }),
+    );
+    expect(state.transaction).toEqual(
+      expect.objectContaining({
+        paymentStatus: "PAID",
+        externalPaymentReference: "pi_retry",
+      }),
+    );
+    expect(state.payment).toEqual(
+      expect.objectContaining({
+        status: "PAID",
+        provider: "STRIPE",
+        providerReference: "pi_retry",
+      }),
+    );
+    expect(logPosTerminalControlEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        action: "POS_TERMINAL_PAYMENT_CAPTURED",
+        entityId: "ord-1",
+        label: "ord-1",
+        metadata: {
+          paymentIntentId: "pi_retry",
+          transactionId: "tx-1",
+        },
       }),
     );
     expect(state.posAuditEvents).toHaveLength(2);
