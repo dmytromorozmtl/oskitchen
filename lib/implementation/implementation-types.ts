@@ -12,6 +12,7 @@ export type ImplementationActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export type ImplementationCapability =

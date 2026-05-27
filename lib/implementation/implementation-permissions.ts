@@ -1,5 +1,3 @@
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 import type {
   ImplementationActorScope,
   ImplementationCapability,
@@ -23,7 +21,7 @@ const GRANTS: Record<ImplementationCapability, string[]> = {
 };
 
 export function isSuperAdminImplementation(scope: ImplementationActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canUseImplementation(
