@@ -9,6 +9,7 @@ import {
   describeReportFormats,
   type ReportCategory,
 } from "@/lib/reports/report-types";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { getReportRegistryForScope } from "@/services/reports/report-service";
 
 export default async function ReportLibraryPage({
@@ -25,6 +26,7 @@ export default async function ReportLibraryPage({
     select: { kitchenSettings: { select: { businessType: true } } },
   });
   const mode = profile?.kitchenSettings?.businessType ?? null;
+  const canExport = canExportReports(actor);
   const visible = getReportRegistryForScope(scope);
 
   const filtered = visible.filter((d) => {
@@ -131,12 +133,14 @@ export default async function ReportLibraryPage({
                     >
                       Open
                     </Link>
-                    <Link
-                      href={`/api/export/report?key=${d.key}`}
-                      className="rounded-md border border-border px-3 py-1.5 text-xs font-medium"
-                    >
-                      Export CSV
-                    </Link>
+                    {canExport && (
+                      <Link
+                        href={`/api/export/report?key=${d.key}`}
+                        className="rounded-md border border-border px-3 py-1.5 text-xs font-medium"
+                      >
+                        Export CSV
+                      </Link>
+                    )}
                     {d.legacyExportHref && (
                       <Link
                         href={d.legacyExportHref}

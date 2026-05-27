@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { canDoReports } from "@/lib/reports/report-permissions";
+import { workspacePermissionsFromStaffTemplate } from "@/lib/permissions/staff-template-workspace-permissions";
 
 describe("createReportActorScope", () => {
   it("keeps owner sessions owner-scoped", () => {
@@ -32,6 +33,20 @@ describe("createReportActorScope", () => {
     expect(scope.role).toBe("manager");
     expect(canDoReports(scope, "reports.read.financial")).toBe(true);
     expect(canDoReports(scope, "reports.saved.manage")).toBe(true);
+  });
+
+  it("uses canonical reports.export when workspace grants are present", () => {
+    const granted = workspacePermissionsFromStaffTemplate("LINE_COOK", "STAFF");
+    const scope = createReportActorScope({
+      sessionUserId: "prep-user",
+      userId: "owner-user",
+      workspaceRole: "STAFF",
+      staffRoleType: "LINE_COOK",
+      email: "prep@example.com",
+      granted,
+    });
+
+    expect(canDoReports(scope, "reports.export")).toBe(false);
   });
 
   it("maps kitchen operators to operational reports only", () => {

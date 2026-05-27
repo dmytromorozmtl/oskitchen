@@ -2,16 +2,14 @@ import Link from "next/link";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { createReportActorScope } from "@/lib/reports/report-actor-scope";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { isReportKey, getReportDefinition } from "@/lib/reports/report-registry";
 import { listReportExportHistory } from "@/services/reports/report-service";
 
 export default async function ReportExportHistoryPage() {
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
-  const scope = createReportActorScope(actor);
-  if (!canDoReports(scope, "reports.export")) {
+  if (!canExportReports(actor)) {
     return (
       <Card className="border-border/80 shadow-sm">
         <CardContent className="py-8 text-center text-sm text-muted-foreground">

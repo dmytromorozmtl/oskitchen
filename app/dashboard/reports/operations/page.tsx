@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { getReportRegistryForScope } from "@/services/reports/report-service";
 
 const OPS_CATEGORIES = new Set(["Operations", "Production", "Packing", "Delivery", "Inventory", "Purchasing", "Staff"]);
@@ -10,6 +11,7 @@ const OPS_CATEGORIES = new Set(["Operations", "Production", "Packing", "Delivery
 export default async function OperationsReportsPage() {
   const actor = await requireWorkspacePermissionActor();
   const scope = createReportActorScope(actor);
+  const canExport = canExportReports(actor);
   const ops = getReportRegistryForScope(scope).filter((d) => OPS_CATEGORIES.has(d.category));
   return (
     <div className="space-y-4">
@@ -34,12 +36,14 @@ export default async function OperationsReportsPage() {
                 >
                   Open
                 </Link>
-                <Link
-                  href={`/api/export/report?key=${d.key}`}
-                  className="rounded-md border border-border px-3 py-1.5 text-xs"
-                >
-                  Export CSV
-                </Link>
+                {canExport && (
+                  <Link
+                    href={`/api/export/report?key=${d.key}`}
+                    className="rounded-md border border-border px-3 py-1.5 text-xs"
+                  >
+                    Export CSV
+                  </Link>
+                )}
               </div>
             </CardContent>
           </Card>

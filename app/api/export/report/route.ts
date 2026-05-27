@@ -1,13 +1,10 @@
 import { NextResponse } from "next/server";
 
 import { getSessionUser } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { parseReportFilters, serialiseReportFilters } from "@/lib/reports/report-filters";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
-import { canDoReports } from "@/lib/reports/report-permissions";
+import { requireReportExportActor } from "@/lib/reports/report-export-access";
 import { isReportKey } from "@/lib/reports/report-registry";
-import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
-import { resolveTenantDataUserId } from "@/lib/scope/resolve-tenant-data-user-id";
 import {
   buildReportCsv,
   recordReportExport,
@@ -32,33 +29,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid report key" }, { status: 400 });
   }
 
-  const userId = await resolveTenantDataUserId(user.id);
-  const workspaceId = await resolveOwnerWorkspaceId(userId).catch(() => null);
-  const [profile, staffMember] = await Promise.all([
-    prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true, email: true },
-    }),
-    prisma.staffMember.findFirst({
-      where: {
-        linkedUserId: user.id,
-        userId,
-        active: true,
-      },
-      select: { roleType: true },
-    }),
-  ]);
-  const scope = createReportActorScope({
-    sessionUserId: user.id,
-    userId,
-    workspaceId,
-    workspaceRole: profile?.role ?? "STAFF",
-    staffRoleType: staffMember?.roleType ?? null,
-    email: profile?.email ?? user.email ?? null,
-  });
-  if (!canDoReports(scope, "reports.export")) {
+  const access = await requireReportExportActor({ reportKey: key });
+  if (!access.ok) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+
+  const actor = access.actor;
+  const scope = createReportActorScope(actor);
+  const userId = actor.dataUserId;
 
   const filters = parseReportFilters(Object.fromEntries(url.searchParams.entries()));
   const result = await runReport(key, { userId, scope, filters });

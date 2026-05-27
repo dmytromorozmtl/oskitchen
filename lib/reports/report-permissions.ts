@@ -1,4 +1,6 @@
 import { isSuperAdminEmail } from "@/lib/platform-owner";
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 
 import type { ReportDefinition, ReportPermission } from "@/lib/reports/report-types";
 
@@ -6,6 +8,8 @@ export type ReportActorScope = {
   isOwner: boolean;
   role?: string | null;
   email?: string | null;
+  /** When set, export gates use canonical workspace permissions first. */
+  granted?: ReadonlySet<PermissionKey>;
 };
 
 export function isSuperAdminReports(scope: ReportActorScope): boolean {
@@ -45,6 +49,9 @@ export function canDoReports(scope: ReportActorScope, permission: ReportPermissi
     case "reports.read.audit":
       return ["admin"].includes(role);
     case "reports.export":
+      if (scope.granted) {
+        return hasPermission(scope.granted, "reports.export");
+      }
       return ["manager", "admin", "accountant", "kitchen_lead", "purchasing", "sales"].includes(role);
     case "reports.saved.manage":
       return ["manager", "admin", "accountant"].includes(role);

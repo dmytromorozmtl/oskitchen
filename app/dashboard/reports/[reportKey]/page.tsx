@@ -12,6 +12,7 @@ import {
   parseReportFilters,
   serialiseReportFilters,
 } from "@/lib/reports/report-filters";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { canDoReports } from "@/lib/reports/report-permissions";
 import {
   getReportDefinition,
@@ -66,7 +67,7 @@ export default async function ReportGeneratorPage({
     );
   }
 
-  const canExport = canDoReports(scope, "reports.export");
+  const canExport = canExportReports(actor);
   const canSave = canDoReports(scope, "reports.saved.manage");
   const exportHref = `/api/export/report?key=${reportKey}&${filtersQuery}`;
   const preview = previewSlice(result.rows);

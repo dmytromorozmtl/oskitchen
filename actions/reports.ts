@@ -9,6 +9,7 @@ import { requireWorkspacePermissionActor } from "@/lib/permissions/require-works
 import { prisma } from "@/lib/prisma";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { isReportKey } from "@/lib/reports/report-registry";
+import { requireReportExportActor } from "@/lib/reports/report-export-access";
 import { canDoReports } from "@/lib/reports/report-permissions";
 import {
   parseReportFilters,
@@ -157,12 +158,13 @@ export async function exportReportCsvAction(args: {
   filtersQuery: string;
 }): Promise<ServerActionResult<{ filename: string; body: string }>> {
   try {
-    const actor = await requireWorkspacePermissionActor();
-    const { userId } = actor;
-    const scope = actorScopeFromUser(actor);
-    if (!canDoReports(scope, "reports.export")) {
+    const access = await requireReportExportActor({ reportKey: args.reportKey });
+    if (!access.ok) {
       return { ok: false, error: "Forbidden" };
     }
+    const actor = access.actor;
+    const { userId } = actor;
+    const scope = actorScopeFromUser(actor);
     if (!isReportKey(args.reportKey)) {
       return { ok: false, error: "Unknown report" };
     }

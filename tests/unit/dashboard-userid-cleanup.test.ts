@@ -434,7 +434,7 @@ describe("dashboard userId-first cleanup", () => {
     expect(operations).toContain("const scope = createReportActorScope(actor)");
     expect(saved).toContain('canDoReports(scope, "reports.saved.manage")');
     expect(saved).toContain("listSavedReports(userId)");
-    expect(history).toContain('canDoReports(scope, "reports.export")');
+    expect(history).toContain("canExportReports(actor)");
     expect(history).toContain("listReportExportHistory(userId, 100)");
     expect(settings).toContain("where: { id: userId }");
     expect(enterprise).toContain('canDoReports(scope, "reports.read.financial")');
@@ -453,8 +453,9 @@ describe("dashboard userId-first cleanup", () => {
     expect(actions).not.toContain("requireTenantActor");
     expect(actions).not.toContain("isOwner: true");
 
-    expect(exportRoute).toContain("const userId = await resolveTenantDataUserId(user.id)");
-    expect(exportRoute).toContain("const scope = createReportActorScope({");
+    expect(exportRoute).toContain("requireReportExportActor");
+    expect(exportRoute).toContain("createReportActorScope(actor)");
+    expect(exportRoute).toContain("actor.dataUserId");
     expect(exportRoute).toContain("const result = await runReport(key, { userId, scope, filters })");
     expect(exportRoute).not.toContain("createClient");
     expect(exportRoute).not.toContain("isOwner: true");

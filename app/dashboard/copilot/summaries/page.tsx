@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { canExportReports } from "@/lib/reports/report-export-access";
 import { buildDeterministicSnapshot } from "@/services/ai/deterministic-insights-service";
 import { generateNarrative, getCopilotSettings } from "@/services/ai/copilot-service";
 import { prisma } from "@/lib/prisma";
@@ -81,6 +82,8 @@ export default async function CopilotSummariesPage() {
     );
   }
 
+  const canExport = canExportReports(actor);
+
   const [settings, profile, snapshot] = await Promise.all([
     getCopilotSettings(scope),
     prisma.userProfile.findUnique({
@@ -132,12 +135,14 @@ export default async function CopilotSummariesPage() {
               >
                 Open report
               </Link>
-              <Link
-                href={`/api/export/report?key=${s.reportKey}`}
-                className="rounded-md border border-border px-3 py-1.5 text-xs"
-              >
-                Download CSV
-              </Link>
+              {canExport && (
+                <Link
+                  href={`/api/export/report?key=${s.reportKey}`}
+                  className="rounded-md border border-border px-3 py-1.5 text-xs"
+                >
+                  Download CSV
+                </Link>
+              )}
             </CardContent>
           </Card>
         ))}

@@ -1,5 +1,6 @@
 import type { StaffRoleType, UserRole } from "@prisma/client";
 
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import type { ReportActorScope } from "@/lib/reports/report-permissions";
 
 const REPORT_ROLE_BY_STAFF_TYPE: Partial<Record<StaffRoleType, string>> = {
@@ -33,6 +34,7 @@ export function createReportActorScope(input: {
   workspaceRole?: UserRole | null;
   staffRoleType?: StaffRoleType | null;
   email?: string | null;
+  granted?: ReadonlySet<PermissionKey>;
 }): ReportScopedActor {
   const isOwner =
     input.workspaceRole === "OWNER" || input.staffRoleType === "OWNER" || input.sessionUserId === input.userId;
@@ -43,5 +45,6 @@ export function createReportActorScope(input: {
     email: input.email ?? null,
     isOwner,
     role: isOwner ? null : (input.staffRoleType ? REPORT_ROLE_BY_STAFF_TYPE[input.staffRoleType] ?? null : null),
+    granted: input.granted,
   };
 }
