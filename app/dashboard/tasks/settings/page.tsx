@@ -1,14 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 import { tasksTerminologyForMode } from "@/lib/tasks/task-types";
 
 export default async function TasksSettingsPage() {
-  const { sessionUser: user, userId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
   const profile = await prisma.userProfile.findUnique({
-    where: { id: userId },
+    where: { id: actor.userId },
     include: { kitchenSettings: { select: { businessType: true } } },
   });
   const mode = profile?.kitchenSettings?.businessType ?? null;
@@ -41,11 +40,11 @@ export default async function TasksSettingsPage() {
           <CardDescription>Coarse permission summary until WorkspaceMember.role lands.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 text-sm">
-          <p>Signed in as <span className="font-medium">{user.email ?? "(no email)"}</span></p>
+          <p>Signed in as <span className="font-medium">{actor.email ?? "(no email)"}</span></p>
           <p>
             Superadmin override:{" "}
-            <Badge variant={isSuperAdminEmail(user.email) ? "default" : "outline"} className="rounded-full">
-              {isSuperAdminEmail(user.email) ? "enabled" : "disabled"}
+            <Badge variant={actor.platformBypass ? "default" : "outline"} className="rounded-full">
+              {actor.platformBypass ? "enabled" : "disabled"}
             </Badge>
           </p>
           <p className="text-muted-foreground">

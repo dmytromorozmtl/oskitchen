@@ -1,11 +1,9 @@
 /**
  * KitchenOS does not yet expose a granular Workspace RBAC; for now permissions
- * are derived from "is the current user the workspace owner?" + the optional
- * superadmin override. This file is the single place that gating logic should
- * live so we can graduate to WorkspaceMember.role without rewriting the UI.
+ * are derived from "is the current user the workspace owner?" + persisted
+ * SUPER_ADMIN platformBypass. This file is the single place that gating logic
+ * should live so we can graduate to WorkspaceMember.role without rewriting the UI.
  */
-import { isSuperAdminEmail } from "@/lib/platform-owner";
-
 export type TaskPermission =
   | "task.read"
   | "task.create"
@@ -22,12 +20,12 @@ export type TaskActorScope = {
   isOwner: boolean;
   /** Driver / packer / kitchen role from StaffMember (best-effort string). */
   role?: string | null;
-  /** Auth email used for the superadmin override. */
   email?: string | null;
+  platformBypass?: boolean;
 };
 
 export function actorIsSuperAdmin(scope: TaskActorScope): boolean {
-  return isSuperAdminEmail(scope.email);
+  return Boolean(scope.platformBypass);
 }
 
 export function canDoTask(scope: TaskActorScope, permission: TaskPermission): boolean {
