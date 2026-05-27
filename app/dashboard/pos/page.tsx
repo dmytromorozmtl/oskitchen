@@ -67,6 +67,9 @@ export default async function PosOverviewPage() {
             <Button asChild variant="outline" className="rounded-full">
               <Link href="/dashboard/order-hub?tab=pos">Order hub · POS tab</Link>
             </Button>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href="/dashboard/inventory/pos-impacts">Inventory impacts</Link>
+            </Button>
           </CardContent>
         </Card>
       </div>

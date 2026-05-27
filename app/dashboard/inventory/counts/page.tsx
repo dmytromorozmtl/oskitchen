@@ -16,9 +16,14 @@ export default async function InventoryCountsPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Physical inventory counts</h1>
           <p className="text-sm text-muted-foreground">Cycle counts with variance vs on-hand stock.</p>
         </div>
-        <Link href="/dashboard/inventory/waste" className="text-sm text-primary hover:underline">
-          Waste log →
-        </Link>
+        <div className="flex flex-wrap gap-3 text-sm">
+          <Link href="/dashboard/inventory/pos-impacts" className="text-primary hover:underline">
+            POS impacts →
+          </Link>
+          <Link href="/dashboard/inventory/waste" className="text-primary hover:underline">
+            Waste log →
+          </Link>
+        </div>
       </div>
 
       <form action={startInventoryCountAction}>

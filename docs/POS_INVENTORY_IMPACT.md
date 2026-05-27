@@ -17,9 +17,12 @@ Audit: `inventory.pos_depletion_applied` when depletion succeeds.
 - Ingredient updates are owner/workspace scoped; unmatched rows are skipped.
 - Sub-recipes and modifier recipes are not expanded in this slice.
 
+## Operator diagnostics
+
+`/dashboard/inventory/pos-impacts` — 30-day summary (applied vs pending) and recent events with order links.
+
 ## Next steps
 
-1. Surface pending vs applied impacts in POS / inventory diagnostics.
-2. Par-level warnings on POS terminal.
+1. Par-level warnings on POS terminal.
 3. Storefront and non-POS channels sharing the same depletion service.
 4. Sub-recipe and modifier recipe expansion.

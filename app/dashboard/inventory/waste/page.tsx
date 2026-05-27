@@ -33,12 +33,17 @@ export default async function InventoryWastePage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Waste tracking</h1>
           <p className="text-sm text-muted-foreground">
-            Log spoilage and prep waste to tighten food cost control.
+            Log spoilage and prep waste — on-hand stock is decremented when you submit.
           </p>
         </div>
-        <Link href="/dashboard/inventory/counts" className="text-sm text-primary hover:underline">
-          Physical counts →
-        </Link>
+        <div className="flex flex-wrap gap-3 text-sm">
+          <Link href="/dashboard/inventory/pos-impacts" className="text-primary hover:underline">
+            POS impacts →
+          </Link>
+          <Link href="/dashboard/inventory/counts" className="text-primary hover:underline">
+            Physical counts →
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">

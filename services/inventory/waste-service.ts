@@ -1,7 +1,12 @@
 import type { WasteReason } from "@prisma/client";
 
+import { recordAuditLog } from "@/lib/audit-log";
 import { prisma } from "@/lib/prisma";
-import { ownerScopedAnd } from "@/lib/scope/workspace-resource-scope";
+import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
+import {
+  ingredientListWhereForOwner,
+  ownerScopedAnd,
+} from "@/lib/scope/workspace-resource-scope";
 
 export async function logWasteEvent(
   userId: string,
@@ -15,18 +20,48 @@ export async function logWasteEvent(
     recordedById: string;
   },
 ) {
-  return prisma.wasteEvent.create({
-    data: {
-      userId,
+  const ingredientScope = await ingredientListWhereForOwner(userId);
+  const workspaceId = await resolveOwnerWorkspaceId(userId);
+
+  const event = await prisma.$transaction(async (tx) => {
+    const updated = await tx.ingredient.updateMany({
+      where: { AND: [ingredientScope, { id: data.ingredientId }] },
+      data: { currentStock: { decrement: data.quantity } },
+    });
+    if (updated.count === 0) {
+      throw new Error("Ingredient not found");
+    }
+
+    return tx.wasteEvent.create({
+      data: {
+        userId,
+        workspaceId,
+        ingredientId: data.ingredientId,
+        quantity: data.quantity,
+        unit: data.unit,
+        reason: data.reason,
+        cost: data.cost ?? 0,
+        notes: data.notes ?? null,
+        recordedById: data.recordedById,
+      },
+    });
+  });
+
+  await recordAuditLog({
+    userId,
+    workspaceId,
+    action: "inventory.waste_logged",
+    entityType: "WasteEvent",
+    entityId: event.id,
+    metadata: {
       ingredientId: data.ingredientId,
       quantity: data.quantity,
       unit: data.unit,
       reason: data.reason,
-      cost: data.cost ?? 0,
-      notes: data.notes ?? null,
-      recordedById: data.recordedById,
     },
   });
+
+  return event;
 }
 
 export async function getWasteSummary(userId: string, days = 30) {
