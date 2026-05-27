@@ -57,12 +57,20 @@ import { buildStorefrontMenuCatalog } from "@/services/storefront/storefront-men
 import { priceCartLines } from "@/services/storefront/storefront-cart-service";
 import { upsertStorefrontCustomer } from "@/services/storefront/storefront-customer-service";
 import {
+  markStorefrontOnlinePaymentFailed,
+  retryStorefrontOnlinePaymentByToken,
+} from "@/services/storefront/storefront-payment-recovery-service";
+import {
   buildStorefrontOrderCustomerEmailEqualsWhere,
   encryptStorefrontOrderPiiFields,
 } from "@/lib/storefront/storefront-order-pii";
 import { persistResolvedOrder } from "@/services/orders/order-creation-service";
 
 const submitSchema = checkoutSubmitV2Schema;
+const retryPublicStorefrontPaymentSchema = z.object({
+  slug: z.string().trim().min(1),
+  token: z.string().trim().min(8).max(64),
+});
 
 export async function submitPublicStorefrontOrder(raw: unknown) {
   try {
@@ -547,11 +555,17 @@ export async function submitPublicStorefrontOrder(raw: unknown) {
         applicationFeeBps: useConnect ? sf.stripeApplicationFeeBps : null,
       });
       if (!stripeRes.ok) {
-        await prisma.$transaction(async (tx) => {
-          await tx.storefrontOrder.delete({ where: { id: storefrontOrder.id } });
-          await tx.order.delete({ where: { id: createdOrder.orderId } });
+        await markStorefrontOnlinePaymentFailed({
+          storefrontOrderId: storefrontOrder.id,
+          storefrontId: sf.id,
+          publicToken,
+          reason: stripeRes.error,
+          phase: "initial_checkout",
         });
-        return { error: stripeRes.error };
+        revalidatePath("/dashboard/order-hub");
+        revalidatePath("/dashboard/orders");
+        revalidatePath(`/s/${sf.storeSlug}`);
+        return { ok: true as const, token: publicToken };
       }
       await prisma.storefrontConversionEvent.create({
         data: {
@@ -655,6 +669,40 @@ export async function submitPublicStorefrontOrder(raw: unknown) {
     revalidatePath(`/s/${sf.storeSlug}`);
     revalidatePath("/dashboard/customers");
     return { ok: true as const, token: publicToken };
+  } catch (e) {
+    return { error: safeError(e) };
+  }
+}
+
+export async function retryPublicStorefrontPayment(raw: unknown) {
+  try {
+    const parsed = retryPublicStorefrontPaymentSchema.safeParse(raw);
+    if (!parsed.success) {
+      return { error: "Invalid payment retry request." };
+    }
+
+    const rate = await enforceStorefrontRateLimit("storefront_checkout_retry", {
+      scopeSuffix: `${parsed.data.slug}:${parsed.data.token.slice(0, 12)}`,
+    });
+    if (!rate.ok) {
+      return { error: rate.message };
+    }
+
+    const result = await retryStorefrontOnlinePaymentByToken({
+      publicToken: parsed.data.token,
+      storeSlug: parsed.data.slug,
+    });
+
+    revalidatePath("/dashboard/order-hub");
+    revalidatePath("/dashboard/orders");
+    revalidatePath(`/s/${parsed.data.slug}/order/${parsed.data.token}`);
+    revalidatePath(`/s/${parsed.data.slug}`);
+
+    if (!result.ok) {
+      return { error: result.error };
+    }
+
+    return { ok: true as const, stripeCheckoutUrl: result.stripeCheckoutUrl };
   } catch (e) {
     return { error: safeError(e) };
   }

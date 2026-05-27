@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { OrderTrackingAnalyticsBeacon } from "@/components/storefront/order-tracking-analytics";
 import { GuestOrderAccountClient } from "@/components/storefront/guest-order-account-client";
+import { StorefrontPaymentRecoveryActions } from "@/components/storefront/storefront-payment-recovery-actions";
 import { StorefrontReorderActions } from "@/components/storefront/storefront-reorder-actions";
 import { getSessionUser } from "@/lib/auth";
 import { turnstileSiteKey } from "@/lib/storefront/turnstile";
@@ -58,6 +59,7 @@ export default async function StorefrontOrderPage({
   };
   const cart = row.cartJson as CartLine[];
   const idx = statusIndex(row.status);
+  const paymentFailed = row.paymentMode === "ONLINE_PAYMENT" && row.paymentStatus === "FAILED";
   const paymentPending = row.paymentMode === "ONLINE_PAYMENT" && row.paymentStatus === "PENDING";
 
   return (
@@ -68,11 +70,21 @@ export default async function StorefrontOrderPage({
           Payment received — thank you.
         </p>
       ) : null}
+      {paymentFailed ? (
+        <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-center text-sm text-rose-950 dark:text-rose-100">
+          <p>We saved your order, but online card checkout could not start.</p>
+          <p className="mt-1">Retry payment below or contact the kitchen with your order reference.</p>
+          <StorefrontPaymentRecoveryActions orderToken={token} storeSlug={storeSlug} />
+        </div>
+      ) : null}
       {paymentPending ? (
-        <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100">
-          Payment is still processing. If you closed the Stripe window, return to checkout and try again, or contact the
-          kitchen with your order reference.
-        </p>
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100">
+          <p>
+            Payment is still processing. If you closed the Stripe window or need a fresh checkout link, retry payment
+            below or contact the kitchen with your order reference.
+          </p>
+          <StorefrontPaymentRecoveryActions orderToken={token} storeSlug={storeSlug} />
+        </div>
       ) : null}
       <div className="text-center">
         <Badge variant="secondary" className="rounded-full">

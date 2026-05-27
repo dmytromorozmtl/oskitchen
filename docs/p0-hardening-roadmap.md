@@ -219,6 +219,7 @@ Priority rule:
 - Rollback considerations: keep canonical order writer unchanged
 - Acceptance criteria: failed payments have deterministic operator/customer recovery paths
 - Required tests: checkout success/failure matrix, webhook duplication tests
+- Status update: initial storefront Stripe Checkout start failures now preserve the existing storefront/internal order pair instead of deleting it, the public order page now offers token-scoped retry for the same online-payment order, and conversion rows record failure/retry progression; broader duplicate-handling and full E2E certification still remain open.
 - Priority order: 12
 - Estimated complexity: Medium
 

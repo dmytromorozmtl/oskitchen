@@ -96,6 +96,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: stabilizes a flagship path
 - User story: as a customer or operator, I need failed checkouts to be recoverable and visible
 - Current state: strong checkout validation, partial recovery/observability maturity
+- Progress update: initial online-checkout session failures now preserve the already-written `StorefrontOrder` plus internal `Order` pair instead of deleting them, the persisted storefront payment state is explicitly marked `FAILED`, public token-scoped retry now recreates Stripe Checkout for the same order from `/s/[storeSlug]/order/[token]`, and focused recovery coverage now proves failed-to-pending-to-paid progression for the same order token; broader duplicate-handling and full E2E failure-path certification still remain.
 - Target state: deterministic payment failure lifecycle with retry and support guidance
 - Affected files: `actions/storefront-order.ts`, `services/storefront/storefront-payment-service.ts`, storefront checkout UI
 - Dependencies: none

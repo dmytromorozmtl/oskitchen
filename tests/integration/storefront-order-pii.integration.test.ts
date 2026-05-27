@@ -15,6 +15,7 @@ const recomputeMetricsForOrderEmail = vi.hoisted(() => vi.fn());
 const upsertStorefrontCustomer = vi.hoisted(() => vi.fn());
 const markCartRecoveryConverted = vi.hoisted(() => vi.fn());
 const sendOrderConfirmation = vi.hoisted(() => vi.fn());
+const createStorefrontStripeCheckoutSession = vi.hoisted(() => vi.fn());
 
 vi.mock("next/cache", () => ({ revalidatePath }));
 vi.mock("@/lib/storefront/storefront-rate-limit", () => ({
@@ -49,11 +50,22 @@ vi.mock("@/services/storefront/storefront-cart-recovery-service", () => ({
 vi.mock("@/lib/email", () => ({
   sendOrderConfirmation,
 }));
+vi.mock("@/services/storefront/storefront-stripe-checkout-service", async () => {
+  const actual =
+    await vi.importActual<typeof import("@/services/storefront/storefront-stripe-checkout-service")>(
+      "@/services/storefront/storefront-stripe-checkout-service",
+    );
+  return {
+    ...actual,
+    createStorefrontStripeCheckoutSession,
+  };
+});
 
 import { decryptOrderPiiFields } from "@/lib/orders/order-pii";
 import { prisma } from "@/lib/prisma";
 import { decryptStorefrontOrderPiiFields } from "@/lib/storefront/storefront-order-pii";
-import { submitPublicStorefrontOrder } from "@/actions/storefront-order";
+import { retryPublicStorefrontPayment, submitPublicStorefrontOrder } from "@/actions/storefront-order";
+import { applyStorefrontOrderCheckoutCompleted } from "@/services/storefront/storefront-stripe-checkout-service";
 
 const run =
   process.env.RUN_DB_INTEGRATION === "1" &&
@@ -152,9 +164,20 @@ async function createStorefrontFixture(tag: string): Promise<OwnerFixture> {
   };
 }
 
+async function enableStorefrontOnlineCheckout(fixture: OwnerFixture) {
+  await prisma.storefrontSettings.update({
+    where: { id: fixture.storefrontId },
+    data: {
+      onlinePaymentEnabled: true,
+      payLaterOnly: false,
+    },
+  });
+}
+
 describe.skipIf(!run)("storefront order PII integration", () => {
   beforeEach(() => {
     process.env.ENCRYPTION_KEY = ENCRYPTION_KEY_B64;
+    process.env.STRIPE_SECRET_KEY = "sk_test_storefront_retry";
     vi.clearAllMocks();
 
     enforceStorefrontRateLimit.mockResolvedValue({ ok: true });
@@ -169,6 +192,7 @@ describe.skipIf(!run)("storefront order PII integration", () => {
     upsertStorefrontCustomer.mockResolvedValue(undefined);
     markCartRecoveryConverted.mockResolvedValue(undefined);
     sendOrderConfirmation.mockResolvedValue(undefined);
+    createStorefrontStripeCheckoutSession.mockReset();
   });
 
   afterEach(async () => {
@@ -312,5 +336,160 @@ describe.skipIf(!run)("storefront order PII integration", () => {
       customerEmail: "storefront.guest@example.com",
       customerPhone: "+15550000004",
     });
+  });
+
+  it("preserves a failed online checkout and recovers the same order token on retry", async () => {
+    const fixture = await createStorefrontFixture("storefront-payment-recovery");
+    await enableStorefrontOnlineCheckout(fixture);
+
+    resolveActiveMarket.mockResolvedValue({
+      activeMenuId: fixture.menuId,
+      market: { id: "default", name: "Default Market", currency: "USD" },
+      productIds: [fixture.productId],
+    });
+    buildStorefrontMenuCatalog.mockResolvedValue({
+      priceVersion: "pv-1",
+      products: [{ id: fixture.productId }],
+    });
+    priceCartLines.mockReturnValue({
+      warnings: [],
+      cart: {
+        lines: [
+          {
+            productId: fixture.productId,
+            variantId: undefined,
+            modifierOptionIds: undefined,
+            quantity: 1,
+            unitPrice: 18.5,
+            lineTotal: 18.5,
+            title: "Storefront Meal",
+            variantTitle: undefined,
+            modifierLabels: undefined,
+          },
+        ],
+        subtotal: 18.5,
+      },
+    });
+    createStorefrontStripeCheckoutSession
+      .mockResolvedValueOnce({ ok: false, error: "Stripe checkout unavailable" })
+      .mockResolvedValueOnce({ ok: true, url: "https://stripe.test/retry" });
+
+    const submitResult = await submitPublicStorefrontOrder({
+      slug: fixture.storeSlug,
+      customerName: "Retry Guest",
+      customerEmail: "retry.guest@example.com",
+      customerPhone: "+15550000005",
+      fulfillmentType: "PICKUP",
+      pickupDate: "2026-05-28",
+      lines: [{ productId: fixture.productId, quantity: 1 }],
+      checkoutPayment: "online",
+    });
+
+    expect(submitResult).toMatchObject({ ok: true });
+    if (!("ok" in submitResult) || !submitResult.ok) {
+      throw new Error(`Expected recovery-preserving submit, got: ${JSON.stringify(submitResult)}`);
+    }
+
+    const failedOrder = await prisma.storefrontOrder.findFirst({
+      where: { publicToken: submitResult.token, storefrontId: fixture.storefrontId },
+      select: {
+        id: true,
+        internalOrderId: true,
+        paymentMode: true,
+        paymentStatus: true,
+        status: true,
+      },
+    });
+    expect(failedOrder).toEqual(
+      expect.objectContaining({
+        paymentMode: "ONLINE_PAYMENT",
+        paymentStatus: "FAILED",
+        status: "SUBMITTED",
+      }),
+    );
+
+    const internalOrderBeforeRetry = await prisma.order.findUnique({
+      where: { id: failedOrder!.internalOrderId! },
+      select: {
+        status: true,
+        paymentMode: true,
+      },
+    });
+    expect(internalOrderBeforeRetry).toEqual(
+      expect.objectContaining({
+        status: "REQUESTED",
+        paymentMode: "STRIPE_PLACEHOLDER",
+      }),
+    );
+
+    const retryResult = await retryPublicStorefrontPayment({
+      slug: fixture.storeSlug,
+      token: submitResult.token,
+    });
+    expect(retryResult).toEqual({
+      ok: true,
+      stripeCheckoutUrl: "https://stripe.test/retry",
+    });
+
+    const pendingOrder = await prisma.storefrontOrder.findUnique({
+      where: { id: failedOrder!.id },
+      select: {
+        paymentStatus: true,
+      },
+    });
+    expect(pendingOrder).toEqual({ paymentStatus: "PENDING" });
+
+    await applyStorefrontOrderCheckoutCompleted(
+      {
+        id: "cs_test_retry",
+        metadata: {
+          purpose: "storefront_order",
+          storefrontOrderId: failedOrder!.id,
+        },
+        payment_status: "paid",
+        amount_total: 1850,
+        currency: "usd",
+      } as never,
+      { stripeEventId: "evt_test_retry" },
+    );
+
+    const paidOrder = await prisma.storefrontOrder.findUnique({
+      where: { id: failedOrder!.id },
+      select: {
+        paymentStatus: true,
+        status: true,
+      },
+    });
+    expect(paidOrder).toEqual({
+      paymentStatus: "PAID",
+      status: "CONFIRMED",
+    });
+
+    const paidInternalOrder = await prisma.order.findUnique({
+      where: { id: failedOrder!.internalOrderId! },
+      select: {
+        paymentStatus: true,
+        paymentMode: true,
+        status: true,
+      },
+    });
+    expect(paidInternalOrder).toEqual({
+      paymentStatus: "paid",
+      paymentMode: "storefront_stripe_checkout",
+      status: "CONFIRMED",
+    });
+
+    const events = await prisma.storefrontConversionEvent.findMany({
+      where: { storefrontId: fixture.storefrontId },
+      orderBy: { createdAt: "asc" },
+      select: { eventName: true },
+    });
+    expect(events.map((event) => event.eventName)).toEqual(
+      expect.arrayContaining([
+        "order_payment_failed",
+        "order_payment_retry_started",
+        "order_paid",
+      ]),
+    );
   });
 });
