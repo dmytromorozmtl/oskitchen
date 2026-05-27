@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 
 import { requireSessionUser } from "@/lib/auth";
 import { ensurePlatformOwnerBootstrap, getPlatformRolesForUser, isPlatformAdmin } from "@/lib/platform-admin";
-import { isSuperAdminEmail } from "@/lib/platform-owner";
 
 import type { PlatformPermission } from "./platform-permissions";
 import { hasPlatformPermission, resolvePlatformPermissions } from "./platform-permissions";
@@ -29,7 +28,7 @@ export async function requirePlatformAccess(): Promise<PlatformAccessContext> {
     email: user.email ?? null,
     roles,
     permissions,
-    isFounder: isSuperAdminEmail(user.email),
+    isFounder: roles.includes("SUPER_ADMIN"),
   };
 }
 
