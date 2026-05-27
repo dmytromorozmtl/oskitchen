@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const tabs = [
+type StorefrontSubnavTab = {
+  href: string;
+  label: string;
+  manageOnly?: boolean;
+};
+
+const tabs: StorefrontSubnavTab[] = [
   { href: "/dashboard/storefront/launch", label: "Launch" },
   { href: "/dashboard/storefront/website", label: "Website" },
   { href: "/dashboard/storefront", label: "Overview" },
@@ -38,7 +44,7 @@ const tabs = [
   { href: "/dashboard/storefront/inventory", label: "Inventory", manageOnly: true },
   { href: "/dashboard/storefront/settings", label: "Settings", manageOnly: true },
   { href: "/dashboard/storefront/advanced", label: "Advanced", manageOnly: true },
-] as const;
+];
 
 function tabActive(pathname: string, href: string): boolean {
   if (href === "/dashboard/storefront") {
