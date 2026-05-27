@@ -6,6 +6,7 @@ import { GuestOrderAccountClient } from "@/components/storefront/guest-order-acc
 import { StorefrontPaymentRecoveryActions } from "@/components/storefront/storefront-payment-recovery-actions";
 import { StorefrontReorderActions } from "@/components/storefront/storefront-reorder-actions";
 import { getSessionUser } from "@/lib/auth";
+import { getStorefrontDuplicateOrderNotice } from "@/lib/storefront/storefront-duplicate-order-notice";
 import { turnstileSiteKey } from "@/lib/storefront/turnstile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ export default async function StorefrontOrderPage({
 }) {
   const { storeSlug, token } = await params;
   const sp = searchParams ? await searchParams : {};
+  const duplicate = sp.duplicate === "1";
   const paid = sp.paid === "1";
   const sessionUser = await getSessionUser();
 
@@ -61,10 +63,26 @@ export default async function StorefrontOrderPage({
   const idx = statusIndex(row.status);
   const paymentFailed = row.paymentMode === "ONLINE_PAYMENT" && row.paymentStatus === "FAILED";
   const paymentPending = row.paymentMode === "ONLINE_PAYMENT" && row.paymentStatus === "PENDING";
+  const duplicateNotice = getStorefrontDuplicateOrderNotice({
+    duplicate,
+    paymentMode: row.paymentMode,
+    paymentStatus: row.paymentStatus,
+  });
 
   return (
     <div className="mx-auto max-w-lg space-y-8">
       <OrderTrackingAnalyticsBeacon storeSlug={storeSlug} orderToken={token} />
+      {duplicateNotice ? (
+        <p
+          className={
+            duplicateNotice.tone === "warning"
+              ? "rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100"
+              : "rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-3 text-center text-sm text-sky-950 dark:text-sky-100"
+          }
+        >
+          {duplicateNotice.message}
+        </p>
+      ) : null}
       {paid && row.paymentStatus === "PAID" ? (
         <p className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-900 dark:text-emerald-100">
           Payment received — thank you.

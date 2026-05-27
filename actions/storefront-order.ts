@@ -233,7 +233,11 @@ export async function submitPublicStorefrontOrder(raw: unknown) {
       const prevFp = fingerprintFromStorefrontCartJson(recentDup.cartJson);
       if (prevFp && prevFp === fpNew) {
         revalidatePath(`/s/${sf.storeSlug}`);
-        return { ok: true as const, token: recentDup.publicToken };
+        return {
+          ok: true as const,
+          token: recentDup.publicToken,
+          duplicateOrder: true as const,
+        };
       }
     }
 

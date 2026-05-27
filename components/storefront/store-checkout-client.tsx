@@ -316,7 +316,8 @@ export function StoreCheckoutClient({
         window.location.assign(res.stripeCheckoutUrl);
         return;
       }
-      router.push(`/s/${slug}/order/${res.token}`);
+      const duplicateQuery = "duplicateOrder" in res && res.duplicateOrder ? "?duplicate=1" : "";
+      router.push(`/s/${slug}/order/${res.token}${duplicateQuery}`);
     }
   }
 
