@@ -1,20 +1,21 @@
 "use server";
 
-
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireUserProfile } from "@/lib/auth";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-
 import { canAssignBillingMode } from "@/lib/auth/is-superadmin";
 import {
+  billingCapabilityToPermissionKey,
   canUseBilling,
   type BillingActorScope,
   type BillingCapability,
 } from "@/lib/billing/billing-permissions";
 import { FEATURE_FLAGS } from "@/lib/billing/entitlements";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { logBillingPermissionDenied } from "@/services/billing/billing-permission-audit";
 import {
   clearEntitlementOverride,
   setEntitlementOverride,
@@ -26,13 +27,28 @@ function scopeFrom(p: { role: string | null; email: string | null }): BillingAct
 }
 
 async function gate(cap: BillingCapability) {
-  const { userId } = await requireTenantActor();
+  const actor = await requireWorkspacePermissionActor();
   const profile = await requireUserProfile();
   const scope = scopeFrom({ role: profile.role ?? null, email: profile.email ?? null });
-  if (!canUseBilling(scope, cap)) {
+  const requiredPermission = billingCapabilityToPermissionKey(cap);
+  const access = await requireMutationPermission(requiredPermission);
+  if (!access.ok) {
+    await logBillingPermissionDenied(access.actor, {
+      requiredPermission,
+      billingCapability: cap,
+      operation: cap,
+    });
+    throw new Error(access.error);
+  }
+  if (!canUseBilling(scope, cap, { granted: actor.granted })) {
+    await logBillingPermissionDenied(actor, {
+      requiredPermission,
+      billingCapability: cap,
+      operation: cap,
+    });
     throw new Error(`You do not have permission to ${cap}.`);
   }
-  return { userId, profileId: profile.id };
+  return { userId: actor.userId, profileId: profile.id };
 }
 
 async function gateBillingModeAssign() {

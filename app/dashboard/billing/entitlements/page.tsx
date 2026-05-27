@@ -2,17 +2,18 @@ import { ClearOverrideButton, SetEntitlementOverrideForm } from "@/components/da
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseBilling } from "@/lib/billing/billing-permissions";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
 import { FEATURE_FLAGS, FEATURE_LABEL } from "@/lib/billing/entitlements";
-import { canUseBilling } from "@/lib/billing/billing-permissions";
 import { entitlementSnapshot, listOverrides } from "@/services/billing/entitlement-service";
 
 export default async function EntitlementsPage() {
-  const { userId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
   const profile = await requireUserProfile();
   const scope = { role: profile.role ?? null, email: profile.email ?? null };
-  const canWrite = canUseBilling(scope, "billing.override.write");
+  const canWrite = canUseBilling(scope, "billing.override.write", { granted: actor.granted });
+  const userId = actor.userId;
   const [snap, overrides] = await Promise.all([
     entitlementSnapshot(userId),
     listOverrides(userId),

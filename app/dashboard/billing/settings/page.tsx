@@ -3,24 +3,25 @@ import { StripeDiagnosticsCard } from "@/components/dashboard/billing/diagnostic
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { requireUserProfile } from "@/lib/auth";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-
-import { isSuperAdminUser } from "@/lib/platform-super-bypass";
 import { canUseBilling } from "@/lib/billing/billing-permissions";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { isSuperAdminUser } from "@/lib/platform-super-bypass";
 import { BILLING_MODE_LABEL } from "@/lib/billing/billing-status";
 import { planDef } from "@/lib/billing/plan-registry";
 import { getStripeDiagnosticsResolved } from "@/lib/billing/stripe-config";
 import { loadSubscription } from "@/services/billing/subscription-service";
 
 export default async function BillingSettingsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
   const profile = await requireUserProfile();
   const scope = { role: profile.role ?? null, email: profile.email ?? null };
-  const canAssignPlan = await isSuperAdminUser(user.id, profile.email ?? user.email);
-  const canViewDiagnostics = canUseBilling(scope, "billing.view.diagnostics");
+  const canAssignPlan = await isSuperAdminUser(actor.sessionUserId, profile.email ?? actor.email);
+  const canViewDiagnostics = canUseBilling(scope, "billing.view.diagnostics", {
+    granted: actor.granted,
+  });
 
   const [sub, diag] = await Promise.all([
-    loadSubscription(dataUserId),
+    loadSubscription(actor.userId),
     getStripeDiagnosticsResolved(),
   ]);
 

@@ -14,7 +14,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: unifies fragmented permission logic
 - User story: as an owner or operator, I need permissions to be predictable and enforced server-side
 - Current state: mixed central registry, legacy fallback, and domain-specific gates
-- Progress update: POS-sensitive mutation slice is migrated onto canonical POS keys; the first KDS slice now adds `kitchen.view` / `kitchen.bump` registry keys, staff-template capability mapping, server enforcement on daily KDS actions plus kitchen page entry, kitchen permission-denial/bump audits, and focused negative tests for line-cook vs customer-service roles
+- Progress update: POS and KDS slices are on canonical keys; billing entitlement override actions now require `billing.manage` with `BILLING_PERMISSION_DENIED` audits, `billing.view` is registered, and `canUseBilling` bridges workspace grants with legacy role strings
 - Target state: canonical permission registry and helpers protect all high-risk mutations
 - Affected files: `lib/permissions/**`, `actions/pos.ts`, `actions/integrations.ts`, `actions/billing.ts`, `actions/upload.ts`, export routes
 - Dependencies: none
@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: apply the same helper/audit pattern to billing, integrations, uploads, exports, and broader POS subpage/UI parity
+- Remaining work after current slice: apply the same helper/audit pattern to integrations, exports, and broader billing UI parity beyond entitlement overrides; uploads are largely covered
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
