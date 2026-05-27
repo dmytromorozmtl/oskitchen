@@ -31,6 +31,10 @@ import {
 import type { ResolvedChannel } from "@/lib/channels/channel-runtime";
 import { channelCapabilityLabel } from "@/lib/channels/channel-capabilities";
 import { supportLevelBadgeLabel } from "@/lib/channels/channel-status";
+import {
+  isMarketplacePlaceholderProvider,
+  marketplacePlaceholderHonestyLabel,
+} from "@/lib/integrations/integration-honesty";
 import { SITE_URL } from "@/lib/constants";
 import { toSafeErrorPreview } from "@/lib/security/sensitive-redaction";
 
@@ -75,6 +79,7 @@ function statusBadge(s: ResolvedChannel["effectiveStatus"]) {
 }
 
 function quickHealthScore(row: ResolvedChannel): number | null {
+  if (row.isPlaceholder || isMarketplacePlaceholderProvider(row.providerKey)) return null;
   if (row.supportLevel === "COMING_SOON") return null;
   if (row.effectiveStatus === "ERROR") return 38;
   if (row.effectiveStatus === "NEEDS_CREDENTIALS") return 52;
@@ -104,7 +109,10 @@ function primaryCta(row: ResolvedChannel): { label: string; href: string } {
   if (row.providerKey === "kitchenos-storefront") {
     return { label: "Storefront settings", href: row.setupRoute };
   }
-  return { label: row.isPlaceholder ? "Roadmap & setup" : "Open setup", href: row.setupRoute };
+  if (row.isPlaceholder || isMarketplacePlaceholderProvider(row.providerKey)) {
+    return { label: "View placeholder status", href: row.setupRoute };
+  }
+  return { label: "Open setup", href: row.setupRoute };
 }
 
 export function ChannelCard({ row, mode = "default" }: { row: ResolvedChannel; mode?: "default" | "readOnly" }) {
@@ -125,6 +133,11 @@ export function ChannelCard({ row, mode = "default" }: { row: ResolvedChannel; m
         </div>
         <div className="flex flex-col items-end gap-1">
           {statusBadge(row.effectiveStatus)}
+          {row.isPlaceholder || isMarketplacePlaceholderProvider(row.providerKey) ? (
+            <Badge variant="outline" className="rounded-full border-amber-500/50 text-[10px] font-semibold uppercase tracking-wide text-amber-800 dark:text-amber-200">
+              {marketplacePlaceholderHonestyLabel()}
+            </Badge>
+          ) : null}
           <Badge variant="outline" className="rounded-full text-[10px] font-normal">
             {supportLevelBadgeLabel(row.supportLevel)}
           </Badge>

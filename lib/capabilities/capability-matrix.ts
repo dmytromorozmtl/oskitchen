@@ -66,8 +66,15 @@ export function buildCapabilityRows(env: ServerEnv): CapabilityRow[] {
       id: "doordash",
       label: "DoorDash",
       status: "ROADMAP",
-      works: "No native connector in this codebase snapshot.",
-      gaps: "Treat any UI mention as roadmap unless a signed integration program exists.",
+      works: "Preparation-only integration page; no live quote, delivery, or import.",
+      gaps: "Treat any UI mention as placeholder until a signed integration program exists.",
+    },
+    {
+      id: "grubhub",
+      label: "Grubhub",
+      status: "ROADMAP",
+      works: "Preparation-only integration page; no live menu sync or order ingestion.",
+      gaps: "Credentials do not unlock live provider traffic — placeholder-only by design.",
     },
     {
       id: "stripe_checkout",

@@ -1,7 +1,12 @@
 import Link from "next/link";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { canManageIntegrations } from "@/lib/integrations/integrations-page-access";
+import {
+  isMarketplacePlaceholderProvider,
+  marketplacePlaceholderHonestyLabel,
+} from "@/lib/integrations/integration-honesty";
 import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { resolveAllChannels } from "@/lib/channels/channel-runtime";
@@ -42,10 +47,19 @@ export default async function SalesChannelsAvailablePage() {
       <ul className="space-y-2 text-sm">
         {rows.map((c) => (
           <li key={c.providerKey} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/60 px-3 py-2">
-            <span>{c.label}</span>
+            <span className="flex flex-wrap items-center gap-2">
+              <span>{c.label}</span>
+              {c.isPlaceholder || isMarketplacePlaceholderProvider(c.providerKey) ? (
+                <Badge variant="outline" className="rounded-full text-[10px] uppercase tracking-wide">
+                  {marketplacePlaceholderHonestyLabel()}
+                </Badge>
+              ) : null}
+            </span>
             {canManage ? (
               <Link href={c.setupRoute} className="text-primary hover:underline">
-                Setup
+                {c.isPlaceholder || isMarketplacePlaceholderProvider(c.providerKey)
+                  ? "View placeholder status"
+                  : "Setup"}
               </Link>
             ) : (
               <span className="text-muted-foreground">Manager setup required</span>

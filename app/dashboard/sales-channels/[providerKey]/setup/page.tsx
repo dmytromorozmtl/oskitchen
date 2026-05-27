@@ -17,6 +17,8 @@ const REDIRECT: Record<string, string> = {
   shopify: "/dashboard/integrations/shopify",
   "uber-eats": "/dashboard/integrations/uber-eats",
   "uber-direct": "/dashboard/integrations/uber-direct",
+  doordash: "/dashboard/integrations/doordash",
+  grubhub: "/dashboard/integrations/grubhub",
   "kitchenos-storefront": "/dashboard/storefront",
   "manual-orders": "/dashboard/orders/quick",
   "csv-import": "/dashboard/import-center",

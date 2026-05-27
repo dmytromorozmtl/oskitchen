@@ -55,6 +55,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `tests/unit/nav-maturity-governance.test.ts`
 - focused nav hides placeholder marketplace integrations; preview badges on immature surfaces; internal GTM links require platform access
 
+### 8c. Integration honesty
+- canonical ids: `lib/integrations/integration-honesty.ts`
+- registry alignment: `lib/integrations/integration-registry.ts`, `lib/channels/channel-registry.ts`
+- unit: `tests/unit/integration-honesty-alignment.test.ts`, `tests/unit/partner-integration-placeholder.test.ts`
+- UI: `components/channels/channel-card.tsx`, `app/dashboard/sales-channels/available/page.tsx`
+
 ### 9. Performance
 - storefront render and checkout
 - dashboard high-traffic pages

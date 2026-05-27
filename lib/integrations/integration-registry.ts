@@ -27,6 +27,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/grubhub",
   },
   {
+    id: "uber-eats",
+    name: "Uber Eats",
+    status: "PLACEHOLDER",
+    requiredEnv: [],
+    setupRoute: "/dashboard/integrations/uber-eats",
+  },
+  {
     id: "quickbooks",
     name: "QuickBooks",
     status: "BETA",
@@ -59,7 +66,7 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     name: "Uber Direct",
     status: "PLACEHOLDER",
     requiredEnv: ["UBER_DIRECT_CUSTOMER_ID"],
-    setupRoute: "/dashboard/routes/uber-direct",
+    setupRoute: "/dashboard/integrations/uber-direct",
   },
 ];
 
