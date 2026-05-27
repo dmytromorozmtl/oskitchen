@@ -1,26 +1,25 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
+import { authorizeGrowth } from "@/lib/growth/require-growth-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { recordLifecycleEventSafe } from "@/lib/lifecycle-events";
-import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
-import { UserRole } from "@prisma/client";
+
+async function requireCustomerSuccessManageAccess() {
+  return authorizeGrowth("growth.manage");
+}
 
 export async function appendCustomerSuccessNoteForm(
   formData: FormData,
 ): Promise<void> {
   try {
-    const { sessionUser: user } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true },
-    });
-    if (profile?.role !== UserRole.OWNER) return;
+    const access = await requireCustomerSuccessManageAccess();
+    if (!access.ok) return;
 
+    const { sessionUser: user } = await requireTenantActor();
     const targetUserId = String(formData.get("targetUserId") ?? "").trim();
     const note = String(formData.get("note") ?? "").trim();
     if (!targetUserId || !note) return;
@@ -37,13 +36,10 @@ export async function appendCustomerSuccessNoteForm(
 
 export async function markCustomerContactedForm(formData: FormData): Promise<void> {
   try {
-    const { sessionUser: user } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true },
-    });
-    if (profile?.role !== UserRole.OWNER) return;
+    const access = await requireCustomerSuccessManageAccess();
+    if (!access.ok) return;
 
+    const { sessionUser: user } = await requireTenantActor();
     const targetUserId = String(formData.get("targetUserId") ?? "").trim();
     if (!targetUserId) return;
 
