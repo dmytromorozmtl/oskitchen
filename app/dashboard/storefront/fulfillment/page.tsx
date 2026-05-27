@@ -11,8 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { DeliveryZonesEditor } from "@/components/dashboard/storefront/delivery-zones-editor";
 import { BlackoutDatesPanel } from "@/components/storefront/fulfillment/blackout-dates-panel";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 
 function isoDate(d: Date | null): string {
@@ -22,16 +21,15 @@ function isoDate(d: Date | null): string {
 }
 
 export default async function StorefrontFulfillmentPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const base = await findAdminStorefront(user.id, { id: true });
-  const settings = base
-    ? await prisma.storefrontSettings.findUnique({
-        where: { id: base.id },
-        include: {
-          blackoutDates: { orderBy: { startDate: "asc" } },
-        },
-      })
-    : null;
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const settings = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    include: {
+      blackoutDates: { orderBy: { startDate: "asc" } },
+    },
+  });
 
   if (!settings) {
     return (

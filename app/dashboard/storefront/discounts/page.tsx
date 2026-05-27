@@ -9,16 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
+import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 
 export default async function StorefrontDiscountsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, {
-    id: true,
-    currency: true,
-    discounts: { orderBy: { createdAt: "desc" } },
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
+  const sf = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+    select: {
+      id: true,
+      currency: true,
+      discounts: { orderBy: { createdAt: "desc" } },
+    },
   });
 
   if (!sf) {

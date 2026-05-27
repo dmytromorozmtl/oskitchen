@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 import { getExperimentEnableCooldownBlock } from "@/lib/storefront/theme-experiment-cooldown";
 import { parseExperimentDaysParam } from "@/lib/storefront/parse-experiment-days";
@@ -156,10 +155,14 @@ export default async function StorefrontAdvancedPage({
 }: {
   searchParams: Promise<{ days?: string; refreshGa4?: string }>;
 }) {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const sp = await searchParams;
   const experimentDays = parseExperimentDaysParam(sp.days);
-  const sf = await findAdminStorefront(user.id);
+  const sf = await prisma.storefrontSettings.findUnique({
+    where: { id: pageAccess.access.storefront.id },
+  });
   const exp = parseThemeExperimentConfig(sf?.themeExperimentJson);
   const stored = sf ? parseThemeExperimentStored(sf.themeExperimentJson) : null;
   const pipelineOn = sf ? isExperimentPipelineEnabledInJson(sf.themeExperimentJson) : true;

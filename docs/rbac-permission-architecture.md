@@ -154,7 +154,7 @@ Notes:
 ### Storefront admin tabs (catalog, team, settings)
 - Maps `storefront.*` admin tab keys to `storefront.read` (`storefront.orders`) or `storefront.manage` (settings, catalog, markets, theme, team) via `storefront-admin-permission-keys.ts`
 - `requireStorefrontAdminPermission` enforces canonical keys (legacy `storefront:view` / `storefront:edit-draft` bridge) before `staffAccess` JSON tab grants
-- `storefront-admin-page-access.tsx` mirrors server checks on catalog, team (+ audit), markets, theme, settings (+ experiments), and workspace admin pages
+- `storefront-admin-page-access.tsx` mirrors server checks on catalog, team (+ audit), markets, theme, settings (+ experiments, advanced, fulfillment, discounts, ordering), and workspace admin pages
 
 ### Reports
 - `reports.view`

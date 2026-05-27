@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 import { StripeConnectButton } from "@/components/dashboard/storefront/stripe-connect-button";
 import { StorefrontCheckoutExtensionsPanel } from "@/components/dashboard/storefront/storefront-checkout-extensions-panel";
@@ -16,11 +15,15 @@ import { mergeKitchenLegacyTax, parseTaxSettingsFromSettingsCenter } from "@/lib
 import { storefrontPaymentReadiness } from "@/services/storefront/storefront-payment-service";
 
 export default async function StorefrontOrderingPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.settings");
+  if (!pageAccess.ok) return pageAccess.deny;
+
   const [settings, kitchen] = await Promise.all([
-    findAdminStorefront(user.id),
+    prisma.storefrontSettings.findUnique({
+      where: { id: pageAccess.access.storefront.id },
+    }),
     prisma.kitchenSettings.findUnique({
-      where: { userId: dataUserId },
+      where: { userId: pageAccess.userId },
       select: {
         settingsCenterJson: true,
         defaultTaxRate: true,
