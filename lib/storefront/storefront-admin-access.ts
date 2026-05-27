@@ -2,6 +2,8 @@ import { z } from "zod";
 import { requireSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { readAdminStorefrontCookie } from "@/lib/storefront/storefront-admin-cookie";
+import { workspacePermissionForStorefrontAdminPermission } from "@/lib/storefront/storefront-admin-permission-keys";
+import { requireCanonicalStorefrontPermission } from "@/lib/storefront/require-storefront-actor";
 import { resolveOwnerStorefront } from "@/lib/storefront/resolve-owner-storefront";
 
 export const STOREFRONT_ADMIN_PERMISSIONS = [
@@ -39,6 +41,7 @@ export function parseStorefrontStaffAccess(settingsCenterJson: unknown): Storefr
 
 export type StorefrontAdminAccess = {
   ok: true;
+  /** Session user owns the storefront record (`storefront.userId`), not workspace RBAC owner. */
   isOwner: boolean;
   workspaceRole: "OWNER" | "ADMIN" | "STAFF" | "PARTNER" | null;
   permissions: StorefrontAdminPermission[];
@@ -141,11 +144,17 @@ export async function resolveStorefrontAdminAccess(
   };
 }
 
-export async function requireStorefrontAdminPermission(
+export async function requireStorefrontAdminPermissionForUser(
+  userId: string,
   permission: StorefrontAdminPermission,
 ): Promise<StorefrontAdminAccess> {
-  const user = await requireSessionUser();
-  const access = await resolveStorefrontAdminAccess(user.id);
+  const required = workspacePermissionForStorefrontAdminPermission(permission);
+  await requireCanonicalStorefrontPermission(required, {
+    operation: `storefront.admin.${permission}`,
+    metadata: { adminPermission: permission },
+  });
+
+  const access = await resolveStorefrontAdminAccess(userId);
   if (!access.ok) {
     throw new Error(access.error);
   }
@@ -153,4 +162,11 @@ export async function requireStorefrontAdminPermission(
     throw new Error("You do not have permission for this action.");
   }
   return access;
+}
+
+export async function requireStorefrontAdminPermission(
+  permission: StorefrontAdminPermission,
+): Promise<StorefrontAdminAccess> {
+  const user = await requireSessionUser();
+  return requireStorefrontAdminPermissionForUser(user.id, permission);
 }

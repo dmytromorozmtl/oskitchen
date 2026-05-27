@@ -151,6 +151,11 @@ Notes:
 - Maps `mapping.*` capabilities to `integrations.read` (view/audit) and `integrations.manage` (mutations) via `mapping-permission-keys.ts`
 - `actions/product-mapping.ts` uses `authorize()` + `product_mapping.permission_denied` audits
 
+### Storefront admin tabs (catalog, team, settings)
+- Maps `storefront.*` admin tab keys to `storefront.read` (`storefront.orders`) or `storefront.manage` (settings, catalog, markets, theme, team) via `storefront-admin-permission-keys.ts`
+- `requireStorefrontAdminPermission` enforces canonical keys (legacy `storefront:view` / `storefront:edit-draft` bridge) before `staffAccess` JSON tab grants
+- `storefront-admin-page-access.tsx` mirrors server checks for catalog and related admin pages
+
 ### Reports
 - `reports.view`
 - `reports.export`

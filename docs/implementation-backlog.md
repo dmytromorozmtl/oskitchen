@@ -27,7 +27,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Analytics requirements: optional denial counters
 - Tests required: negative role tests, scanner, route guard tests
 - Acceptance criteria: all P0 mutations use canonical permission helpers
-- Remaining work after current slice: deeper storefront admin permission split (workspace/team tabs vs `storefront.admin`); vendor-specific malware scanner certification when `UPLOAD_MALWARE_SCAN_URL` is enabled in production
+- Remaining work after current slice: extend storefront admin page gates to team/markets/theme tabs; optional `storefront.admin` registry key for team-only split; vendor-specific malware scanner certification when `UPLOAD_MALWARE_SCAN_URL` is enabled in production
 - Rollback considerations: keep legacy adapter during migration
 - Risk level: High
 - Estimated complexity: High
@@ -176,7 +176,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: aligns workforce and operations
 - Technical value: reduces permission sprawl
 - User story: as an owner, I need staff roles to govern what people can actually do
-- Current state: **in progress** — staff + labor + training + go-live + executive + playbooks + templates + product-mapping canonical gates; product mapping uses `integrations.read` / `integrations.manage` via `createProductMappingActorScope`, `product_mapping.permission_denied` audits, filtered subnav, and page gates; remaining storefront-admin scope fix still needed
+- Current state: **in progress** — staff + labor + training + go-live + executive + playbooks + templates + product-mapping + storefront-admin canonical gates; product mapping uses `integrations.read` / `integrations.manage`; storefront admin tabs map to `storefront.read` / `storefront.manage` via `requireStorefrontAdminPermission` with `staffAccess` JSON fine-grained tabs preserved
 - Target state: staff roles map directly to canonical capabilities
 - Affected files: `actions/staff.ts`, `actions/training.ts`, `lib/staff/**`, `lib/training/**`
 - Dependencies: `KOS-P0-001`

@@ -9,7 +9,7 @@ import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { checkoutExtensionsSchema } from "@/lib/storefront/checkout-extensions";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
-import { resolveStorefrontAdminAccess } from "@/lib/storefront/storefront-admin-access";
+import { requireStorefrontAdminPermission } from "@/lib/storefront/storefront-admin-access";
 import { safeError } from "@/lib/security";
 import { prisma } from "@/lib/prisma";
 import { toInputJsonValue } from "@/lib/prisma/json";
@@ -20,11 +20,7 @@ import {
 
 async function ctx() {
   const { sessionUser: user } = await requireTenantActor();
-  const access = await resolveStorefrontAdminAccess(user.id);
-  if (!access.ok) throw new Error(access.error);
-  if (!access.permissions.includes("storefront.catalog")) {
-    throw new Error("You do not have permission to edit the catalog.");
-  }
+  const access = await requireStorefrontAdminPermission("storefront.catalog");
   const ownerUserId = access.storefront.userId;
   const data = await getStorefrontCatalogAdminContext(ownerUserId);
   if (!data) throw new Error("Save the storefront overview first.");

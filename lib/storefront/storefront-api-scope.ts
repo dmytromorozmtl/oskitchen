@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
-  resolveStorefrontAdminAccess,
+  requireStorefrontAdminPermissionForUser,
   type StorefrontAdminPermission,
 } from "@/lib/storefront/storefront-admin-access";
 
@@ -28,9 +28,12 @@ export async function assertScopedStorefrontApiAccess(
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const access = await resolveStorefrontAdminAccess(user.id);
-  if (!access.ok) {
-    return NextResponse.json({ error: access.error }, { status: 403 });
+  let access;
+  try {
+    access = await requireStorefrontAdminPermissionForUser(user.id, permission);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Forbidden.";
+    return NextResponse.json({ error: message }, { status: 403 });
   }
 
   if (opts?.storefrontId && opts.storefrontId !== access.storefront.id) {
@@ -46,10 +49,6 @@ export async function assertScopedStorefrontApiAccess(
     if (!owned && !member) {
       return NextResponse.json({ error: "Storefront not in scope." }, { status: 403 });
     }
-  }
-
-  if (!access.permissions.includes(permission)) {
-    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
   }
 
   return {

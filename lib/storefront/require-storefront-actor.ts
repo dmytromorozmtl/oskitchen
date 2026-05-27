@@ -9,12 +9,13 @@ import { logStorefrontPermissionDenied } from "@/services/storefront/storefront-
 import { getStorefrontPermissionSetForUser } from "@/services/storefront/storefront-permission-service";
 
 const LEGACY_BY_CANONICAL: Partial<Record<PermissionKey, StorefrontPermission>> = {
+  "storefront.read": "storefront:view",
   "storefront.manage": "storefront:edit-draft",
   "storefront.publish": "storefront:publish",
   "storefront.media.manage": "storefront:upload-assets",
 };
 
-async function legacyStorefrontAllows(
+export async function legacyStorefrontAllowsForActor(
   actor: WorkspacePermissionActor,
   requiredPermission: PermissionKey,
 ): Promise<boolean> {
@@ -40,7 +41,7 @@ async function requireStorefrontPermission(
   if (access.ok) {
     return { ok: true, actor: access.actor };
   }
-  if (access.actor && (await legacyStorefrontAllows(access.actor, requiredPermission))) {
+  if (access.actor && (await legacyStorefrontAllowsForActor(access.actor, requiredPermission))) {
     return { ok: true, actor: access.actor };
   }
   await logStorefrontPermissionDenied(access.actor, {
@@ -89,4 +90,19 @@ export async function assertStorefrontManageAccess(
     return { error: access.error };
   }
   return null;
+}
+
+/** Throws when canonical (or legacy-bridged) storefront permission is missing. */
+export async function requireCanonicalStorefrontPermission(
+  requiredPermission: PermissionKey,
+  input?: {
+    operation?: string;
+    metadata?: Record<string, unknown>;
+  },
+): Promise<WorkspacePermissionActor> {
+  const access = await requireStorefrontPermission(requiredPermission, input);
+  if (!access.ok) {
+    throw new Error(access.error);
+  }
+  return access.actor;
 }

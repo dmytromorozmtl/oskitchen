@@ -2,24 +2,20 @@ import Link from "next/link";
 
 import { StorefrontCatalogAdminPanel } from "@/components/dashboard/storefront/storefront-catalog-admin-panel";
 import { Button } from "@/components/ui/button";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { resolveStorefrontAdminAccess } from "@/lib/storefront/storefront-admin-access";
+import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { prisma } from "@/lib/prisma";
 import { getStorefrontCatalogAdminContext } from "@/services/storefront/storefront-catalog-admin-service";
 
 export default async function StorefrontCatalogAdminPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const access = await resolveStorefrontAdminAccess(user.id);
-  const ownerUserId = access.ok ? access.storefront.userId : user.id;
+  const pageAccess = await requireStorefrontAdminPageAccess("storefront.catalog");
+  if (!pageAccess.ok) return pageAccess.deny;
 
+  const ownerUserId = pageAccess.userId;
   const kitchen = await prisma.kitchenSettings.findUnique({
     where: { userId: ownerUserId },
     select: { currency: true },
   });
-  const ctx =
-    access.ok && access.permissions.includes("storefront.catalog")
-      ? await getStorefrontCatalogAdminContext(ownerUserId)
-      : null;
+  const ctx = await getStorefrontCatalogAdminContext(ownerUserId);
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
@@ -36,11 +32,7 @@ export default async function StorefrontCatalogAdminPage() {
         </Button>
       </div>
 
-      {!access.ok ? (
-        <p className="text-muted-foreground">{access.error}</p>
-      ) : !access.permissions.includes("storefront.catalog") ? (
-        <p className="text-muted-foreground">You do not have catalog edit permission. Ask the storefront owner.</p>
-      ) : !ctx ? (
+      {!ctx ? (
         <p className="text-muted-foreground">Publish your storefront overview first.</p>
       ) : (
         <StorefrontCatalogAdminPanel
