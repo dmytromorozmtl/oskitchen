@@ -6,8 +6,11 @@ const recordAuditLog = vi.hoisted(() => vi.fn());
 const updateLocation = vi.hoisted(() => vi.fn());
 const createLocation = vi.hoisted(() => vi.fn());
 const bulkAssignToLocation = vi.hoisted(() => vi.fn());
+const cookiesMock = vi.hoisted(() => vi.fn());
+const locationFindFirst = vi.hoisted(() => vi.fn());
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
+vi.mock("next/headers", () => ({ cookies: cookiesMock }));
 
 vi.mock("@/lib/permissions/mutation-access", () => ({
   requireMutationPermission,
@@ -21,6 +24,14 @@ vi.mock("@/lib/audit-log", () => ({
   recordAuditLog,
 }));
 
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    location: {
+      findFirst: locationFindFirst,
+    },
+  },
+}));
+
 vi.mock("@/services/locations/location-service", () => ({
   createLocation,
   updateLocation,
@@ -31,6 +42,8 @@ import {
   archiveLocationAction,
   bulkAssignAction,
   createFullLocationAction,
+  createLocationAction,
+  setActiveLocationAction,
   updateLocationFulfillmentAction,
   updateLocationHoursAction,
   updateLocationProfileAction,
@@ -60,6 +73,8 @@ describe("locations actions RBAC", () => {
     createLocation.mockResolvedValue({ id: LOCATION_ID });
     bulkAssignToLocation.mockResolvedValue({ updated: 1 });
     recordAuditLog.mockResolvedValue(undefined);
+    cookiesMock.mockResolvedValue({ set: vi.fn() });
+    locationFindFirst.mockResolvedValue({ id: LOCATION_ID });
   });
 
   it("denies updateLocationFulfillmentAction without routes.manage and audits", async () => {
@@ -273,5 +288,56 @@ describe("locations actions RBAC", () => {
       LOCATION_ID,
       "manager@example.com",
     );
+  });
+
+  it("denies createLocationAction without workspace.settings and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("name", "Legacy location");
+
+    const result = await createLocationAction(formData);
+
+    expect(result).toEqual({ error: "Forbidden" });
+    expect(createLocation).not.toHaveBeenCalled();
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({ operation: "locations.create_legacy" }),
+      }),
+    );
+  });
+
+  it("rejects setActiveLocationAction for locations outside tenant scope", async () => {
+    locationFindFirst.mockResolvedValue(null);
+
+    const formData = new FormData();
+    formData.set("value", LOCATION_ID);
+
+    const result = await setActiveLocationAction(formData);
+
+    expect(result).toEqual({ error: "Location not found." });
+    expect(requireTenantActor).toHaveBeenCalled();
+    expect(cookiesMock).not.toHaveBeenCalled();
+  });
+
+  it("allows setActiveLocationAction for tenant-owned location", async () => {
+    const cookieSet = vi.fn();
+    cookiesMock.mockResolvedValue({ set: cookieSet });
+
+    const formData = new FormData();
+    formData.set("value", LOCATION_ID);
+
+    const result = await setActiveLocationAction(formData);
+
+    expect(result).toEqual({ ok: true });
+    expect(locationFindFirst).toHaveBeenCalledWith({
+      where: { id: LOCATION_ID, userId: "owner-1" },
+      select: { id: true },
+    });
+    expect(cookieSet).toHaveBeenCalled();
   });
 });

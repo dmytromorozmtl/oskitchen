@@ -72,7 +72,9 @@ const legacySchema = z.object({
 
 export async function createLocationAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireLocationMutationAccess("locations.create_legacy", "workspace.settings");
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const parsed = legacySchema.safeParse({
       name: formData.get("name"),
       timezone: formData.get("timezone"),
@@ -453,11 +455,19 @@ const setLocationSchema = z.object({
 
 export async function setActiveLocationAction(formData: FormData) {
   try {
+    const { dataUserId } = await requireTenantActor();
     const parsed = setLocationSchema.safeParse({ value: formData.get("value") });
     if (!parsed.success) return { error: "Invalid value." };
     const value = parsed.data.value === LOCATION_ALL ? LOCATION_ALL : parsed.data.value;
     if (value !== LOCATION_ALL && !/^[0-9a-f-]{36}$/i.test(value)) {
       return { error: "Invalid location id." };
+    }
+    if (value !== LOCATION_ALL) {
+      const location = await prisma.location.findFirst({
+        where: { id: value, userId: dataUserId },
+        select: { id: true },
+      });
+      if (!location) return { error: "Location not found." };
     }
     const store = await cookies();
     store.set(LOCATION_COOKIE, value, {
