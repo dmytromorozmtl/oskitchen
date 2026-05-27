@@ -53,7 +53,7 @@ Priority rule:
 - Technical risk: privilege escalation, inconsistent denials, fragile UI/server parity.
 - Affected files: `lib/permissions/**`, `lib/scope/**`, high-risk actions and routes
 - Affected modules: POS, billing, integrations, storefront publishing, uploads, exports, staff, platform
-- Progress update: the first POS-focused rollout slice is now in place across `actions/pos.ts`, `app/api/pos/terminal/route.ts`, POS page entrypoints, and the central permission registry/mapping files
+- Progress update: the first POS-focused rollout slice is now in place across `actions/pos.ts`, `app/api/pos/terminal/route.ts`, POS page entrypoints, and the central permission registry/mapping files; **Era 3 Cycle 1** adds canonical gates on `actions/costing.ts` (`reports.read.financial`, `workspace.settings`) with denial audits
 - Safest implementation plan:
   1. define canonical permission registry and role presets
   2. add mutation/route helpers and denial audit patterns

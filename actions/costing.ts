@@ -1,13 +1,15 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
 import { Prisma } from "@prisma/client";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { parseCostingSettingsJson } from "@/lib/costing/costing-settings";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { runFullRecipeCosting } from "@/services/costing/costing-service";
@@ -32,9 +34,34 @@ function revalidateCosting() {
   revalidatePath("/dashboard");
 }
 
+async function requireCostingPermission(
+  permission: PermissionKey,
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "costing.permission_denied",
+      entityType: "Costing",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function recalculateCostSnapshotsAction() {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireCostingPermission(
+      "reports.read.financial",
+      "costing.recalculate_snapshots",
+    );
+    if (!gate.ok) {
+      return { error: gate.error };
+    }
+    const { sessionUser: user } = await requireTenantActor();
     const r = await runFullRecipeCosting(user.id, user.id);
     if (!r.ok) {
       return { error: r.error };
@@ -47,7 +74,10 @@ export async function recalculateCostSnapshotsAction() {
 }
 
 export async function saveCostingSettingsAction(formData: FormData): Promise<void> {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const gate = await requireCostingPermission("workspace.settings", "costing.save_settings");
+  if (!gate.ok) return;
+
+  const { dataUserId } = await requireTenantActor();
   const kitchen = await prisma.kitchenSettings.findUnique({ where: { userId: dataUserId } });
   const prev = parseCostingSettingsJson(kitchen?.costingSettingsJson ?? null);
 
@@ -105,7 +135,13 @@ export async function saveCostingSettingsAction(formData: FormData): Promise<voi
 }
 
 export async function createChannelFeeRuleAction(formData: FormData): Promise<void> {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const gate = await requireCostingPermission(
+    "reports.read.financial",
+    "costing.create_channel_fee_rule",
+  );
+  if (!gate.ok) return;
+
+  const { dataUserId } = await requireTenantActor();
   const channel = String(formData.get("channelProvider") ?? "").trim();
   if (!channel) return;
   const feeType = String(formData.get("feeType") ?? "PERCENTAGE");
@@ -129,7 +165,13 @@ export async function createChannelFeeRuleAction(formData: FormData): Promise<vo
 }
 
 export async function createMarginRuleAction(formData: FormData): Promise<void> {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const gate = await requireCostingPermission(
+    "reports.read.financial",
+    "costing.create_margin_rule",
+  );
+  if (!gate.ok) return;
+
+  const { dataUserId } = await requireTenantActor();
   const target = Number(formData.get("targetMarginPercent"));
   const warn = Number(formData.get("warningMarginPercent"));
   if (!Number.isFinite(target) || !Number.isFinite(warn)) return;
@@ -151,7 +193,13 @@ export async function createMarginRuleAction(formData: FormData): Promise<void> 
 }
 
 export async function savePriceScenarioAction(formData: FormData): Promise<void> {
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
+  const gate = await requireCostingPermission(
+    "reports.read.financial",
+    "costing.save_price_scenario",
+  );
+  if (!gate.ok) return;
+
+  const { dataUserId } = await requireTenantActor();
   const title = String(formData.get("title") ?? "Scenario").trim() || "Scenario";
   const salePrice = Number(formData.get("salePrice") ?? 0);
   const ingredientDelta = Number(formData.get("ingredientCostDeltaPercent") ?? 0);
