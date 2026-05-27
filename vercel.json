@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "installCommand": "node ./node_modules/prisma/build/index.js generate",
+  "installCommand": "npm ci && node ./node_modules/prisma/build/index.js generate",
   "buildCommand": "bash scripts/vercel-build.sh",
   "regions": [
     "iad1"
