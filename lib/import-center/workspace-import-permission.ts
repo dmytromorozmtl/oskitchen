@@ -100,3 +100,41 @@ export function canUseImportCenterCapability(
 export function canManageImportCenterSettings(granted: ReadonlySet<PermissionKey>): boolean {
   return hasPermission(granted, "workspace.settings");
 }
+
+export function canCommitImportJob(
+  granted: ReadonlySet<PermissionKey>,
+  type: ImportType,
+): boolean {
+  return (
+    canUseImportCenterCapability(granted, "import.commit") && canUploadImportType(granted, type)
+  );
+}
+
+export function canRollbackImportJob(granted: ReadonlySet<PermissionKey>): boolean {
+  return canUseImportCenterCapability(granted, "import.rollback");
+}
+
+export function canCancelImportJob(
+  granted: ReadonlySet<PermissionKey>,
+  type: ImportType,
+): boolean {
+  return canUploadImportType(granted, type);
+}
+
+export type ImportCenterJobPermissions = {
+  canCommit: boolean;
+  canRollback: boolean;
+  canCancel: boolean;
+};
+
+export function resolveImportCenterJobPermissions(
+  granted: ReadonlySet<PermissionKey>,
+  type: ImportType,
+  input: { committable: boolean },
+): ImportCenterJobPermissions {
+  return {
+    canCommit: input.committable && canCommitImportJob(granted, type),
+    canRollback: canRollbackImportJob(granted),
+    canCancel: canCancelImportJob(granted, type),
+  };
+}

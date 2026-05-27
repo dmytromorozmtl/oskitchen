@@ -1,6 +1,11 @@
 import type { ImportType } from "@prisma/client";
 
+import { prisma } from "@/lib/prisma";
 import type { ImportCapability } from "@/lib/import-center/import-types";
+import {
+  canCommitImportJob,
+  canRollbackImportJob,
+} from "@/lib/import-center/workspace-import-permission";
 import {
   canUploadImportType,
   canUseImportCenterCapability,
@@ -105,4 +110,71 @@ export async function requireImportCenterUpload(
     importType: type,
     operation,
   });
+}
+
+async function findImportJobTypeForOwner(
+  userId: string,
+  jobId: string,
+): Promise<ImportType | null> {
+  const job = await prisma.importJob.findFirst({
+    where: { id: jobId, userId },
+    select: { type: true },
+  });
+  return job?.type ?? null;
+}
+
+export async function requireImportCenterJobCancel(
+  userId: string,
+  jobId: string,
+): Promise<ImportCenterActorGate> {
+  const type = await findImportJobTypeForOwner(userId, jobId);
+  if (!type) {
+    return { ok: false, error: "Import job not found." };
+  }
+  return requireImportCenterUpload(type, "import_center.cancel");
+}
+
+export async function requireImportCenterJobCommit(
+  userId: string,
+  jobId: string,
+): Promise<ImportCenterActorGate> {
+  const type = await findImportJobTypeForOwner(userId, jobId);
+  if (!type) {
+    return { ok: false, error: "Import job not found." };
+  }
+  const settingsAccess = await requireImportCenterCapability(
+    "import.commit",
+    "import_center.commit",
+  );
+  if (!settingsAccess.ok) return settingsAccess;
+  if (!canCommitImportJob(settingsAccess.actor.granted, type)) {
+    return deny(settingsAccess.actor, {
+      requiredPermission: workspacePermissionForImportType(type),
+      importType: type,
+      capability: "import.commit",
+      operation: "import_center.commit",
+    });
+  }
+  return settingsAccess;
+}
+
+export async function requireImportCenterJobRollback(
+  userId: string,
+  jobId: string,
+): Promise<ImportCenterActorGate> {
+  const type = await findImportJobTypeForOwner(userId, jobId);
+  if (!type) {
+    return { ok: false, error: "Import job not found." };
+  }
+  const access = await requireImportCenterCapability("import.rollback", "import_center.rollback");
+  if (!access.ok) return access;
+  if (!canRollbackImportJob(access.actor.granted)) {
+    return deny(access.actor, {
+      requiredPermission: "workspace.settings",
+      capability: "import.rollback",
+      importType: type,
+      operation: "import_center.rollback",
+    });
+  }
+  return access;
 }

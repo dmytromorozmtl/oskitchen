@@ -1,17 +1,18 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { commitNotSupportedReason, isCommittableType } from "@/lib/import-center/import-commit";
-import type { ImportCapability } from "@/lib/import-center/import-types";
 import {
-  requireImportCenterCapability,
+  requireImportCenterJobCancel,
+  requireImportCenterJobCommit,
+  requireImportCenterJobRollback,
   requireImportCenterUpload,
 } from "@/lib/import-center/require-import-center-actor";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied } from "@/services/audit/upload-audit";
@@ -23,14 +24,6 @@ import {
   uploadImportCsv,
 } from "@/services/import-center/import-center-service";
 import type { ImportCommitMode, ImportType } from "@prisma/client";
-
-async function assertCapability(cap: ImportCapability) {
-  const access = await requireImportCenterCapability(cap, cap);
-  if (!access.ok) {
-    throw new Error(`You do not have permission to ${cap}.`);
-  }
-  return { userId: access.userId, profileId: access.profileId };
-}
 
 const IMPORT_TYPE_VALUES = [
   "PRODUCTS",
@@ -120,12 +113,15 @@ const commitSchema = z.object({
 });
 
 export async function commitImportJobAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("import.commit");
   const parsed = commitSchema.parse({
     jobId: formData.get("jobId"),
     includeWarnings: formData.get("includeWarnings") === "on",
     confirm: formData.get("confirm") === "true",
   });
+  const { userId } = await requireTenantActor();
+  const access = await requireImportCenterJobCommit(userId, parsed.jobId);
+  if (!access.ok) throw new Error(access.error);
+  const { profileId } = access;
   const result = await commitImportJob({
     userId,
     performedById: profileId,
@@ -145,12 +141,15 @@ const rollbackSchema = z.object({
 });
 
 export async function rollbackImportJobAction(formData: FormData): Promise<void> {
-  const { userId, profileId } = await assertCapability("import.rollback");
   const parsed = rollbackSchema.parse({
     jobId: formData.get("jobId"),
     reason: formData.get("reason") ?? "",
     confirm: formData.get("confirm") === "true",
   });
+  const { userId } = await requireTenantActor();
+  const access = await requireImportCenterJobRollback(userId, parsed.jobId);
+  if (!access.ok) throw new Error(access.error);
+  const { profileId } = access;
   const result = await rollbackImportJob({
     userId,
     performedById: profileId,
@@ -169,11 +168,13 @@ const cancelSchema = z.object({
 });
 
 export async function cancelImportJobAction(formData: FormData): Promise<void> {
-  const { userId } = await assertCapability("import.upload");
   const parsed = cancelSchema.parse({
     jobId: formData.get("jobId"),
     reason: (formData.get("reason") as string | null) ?? undefined,
   });
+  const { userId } = await requireTenantActor();
+  const access = await requireImportCenterJobCancel(userId, parsed.jobId);
+  if (!access.ok) throw new Error(access.error);
   const result = await cancelImportJob(userId, parsed.jobId, parsed.reason ?? null);
   if (!result.ok) throw new Error(result.error);
   revalidatePath("/dashboard/import-center");

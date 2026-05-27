@@ -9,6 +9,7 @@ import {
 import { ImportStatusBadge } from "@/components/dashboard/import-center/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getImportCenterJobAccess } from "@/lib/import-center/import-center-job-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
   PREVIEW_ROW_ACTION_LABEL,
@@ -76,6 +77,8 @@ export default async function ImportJobDetailPage({
   const rollbackPlan = parseRollbackPlan(fullJob?.rollbackJson);
   const rollback = rollbackAvailability(rollbackPlan, job.rolledBackAt !== null);
   const committable = isCommittableType(job.type);
+  const jobAccess = await getImportCenterJobAccess({ type: job.type, committable });
+  const { permissions } = jobAccess;
   const errorRowCount = rows.filter((r) => r.validationStatus === "ERROR").length;
   const warningRowCount = rows.filter((r) => r.validationStatus === "WARNING").length;
   const validRowCount = rows.filter((r) => r.validationStatus === "VALID").length;
@@ -127,13 +130,37 @@ export default async function ImportJobDetailPage({
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-3">
-        {job.status === "VALIDATED" && committable && validRowCount > 0 ? (
+        {job.status === "VALIDATED" && committable && validRowCount > 0 && permissions.canCommit ? (
           <CommitJobButton jobId={job.id} hasWarnings={warningRowCount > 0} />
         ) : null}
-        {job.status === "IMPORTED" && rollback.available ? (
+        {job.status === "VALIDATED" &&
+        committable &&
+        validRowCount > 0 &&
+        !permissions.canCommit ? (
+          <Card className="border-dashed">
+            <CardHeader>
+              <CardTitle className="text-base">Commit restricted</CardTitle>
+              <CardDescription>
+                You need workspace settings access and permission for this import type to commit
+                rows.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        ) : null}
+        {job.status === "IMPORTED" && rollback.available && permissions.canRollback ? (
           <RollbackJobButton jobId={job.id} recordsAvailable={rollback.count} />
         ) : null}
-        {job.status !== "IMPORTED" && job.status !== "CANCELLED" ? (
+        {job.status === "IMPORTED" && rollback.available && !permissions.canRollback ? (
+          <Card className="border-dashed">
+            <CardHeader>
+              <CardTitle className="text-base">Rollback restricted</CardTitle>
+              <CardDescription>
+                Only workspace owners or admins with settings access can roll back imports.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        ) : null}
+        {job.status !== "IMPORTED" && job.status !== "CANCELLED" && permissions.canCancel ? (
           <div className="flex flex-col justify-between rounded-lg border p-4">
             <div>
               <p className="text-sm font-medium">Cancel import</p>
@@ -143,6 +170,16 @@ export default async function ImportJobDetailPage({
             </div>
             <CancelJobButton jobId={job.id} />
           </div>
+        ) : null}
+        {job.status !== "IMPORTED" && job.status !== "CANCELLED" && !permissions.canCancel ? (
+          <Card className="border-dashed">
+            <CardHeader>
+              <CardTitle className="text-base">Cancel restricted</CardTitle>
+              <CardDescription>
+                You do not have upload permission for this import type.
+              </CardDescription>
+            </CardHeader>
+          </Card>
         ) : null}
         {job.status === "IMPORTED" && !rollback.available ? (
           <Card className="border-dashed">

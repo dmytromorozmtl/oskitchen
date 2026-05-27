@@ -5,11 +5,15 @@ import {
   IMPORT_CENTER_SUBNAV_LINKS,
 } from "@/lib/import-center/import-center-subnav-links";
 import {
+  canCancelImportJob,
+  canCommitImportJob,
   canManageImportCenterSettings,
+  canRollbackImportJob,
   canUploadAnyImportType,
   canUploadImportType,
   canUseImportCenterCapability,
   canViewImportCenterHub,
+  resolveImportCenterJobPermissions,
   workspacePermissionForImportType,
 } from "@/lib/import-center/workspace-import-permission";
 import type { PermissionKey } from "@/lib/permissions/permissions";
@@ -57,5 +61,32 @@ describe("import center canonical RBAC", () => {
   it("exposes upload when any upload permission exists", () => {
     expect(canUploadAnyImportType(granted("orders.manage"))).toBe(true);
     expect(canManageImportCenterSettings(granted("products.edit"))).toBe(false);
+  });
+
+  it("requires workspace.settings and type permission to commit", () => {
+    expect(canCommitImportJob(granted("products.edit"), "PRODUCTS")).toBe(false);
+    expect(
+      canCommitImportJob(granted("workspace.settings", "products.edit"), "PRODUCTS"),
+    ).toBe(true);
+    expect(
+      canCommitImportJob(granted("workspace.settings", "products.edit"), "CUSTOMERS"),
+    ).toBe(false);
+  });
+
+  it("scopes cancel to import type upload permission", () => {
+    expect(canCancelImportJob(granted("products.edit"), "CUSTOMERS")).toBe(false);
+    expect(canCancelImportJob(granted("customers.manage"), "CUSTOMERS")).toBe(true);
+  });
+
+  it("resolves job action permissions for UI gates", () => {
+    const perms = resolveImportCenterJobPermissions(
+      granted("customers.manage"),
+      "CUSTOMERS",
+      { committable: true },
+    );
+    expect(perms.canCancel).toBe(true);
+    expect(perms.canCommit).toBe(false);
+    expect(perms.canRollback).toBe(false);
+    expect(canRollbackImportJob(granted("workspace.settings"))).toBe(true);
   });
 });
