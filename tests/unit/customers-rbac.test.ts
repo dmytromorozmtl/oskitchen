@@ -5,8 +5,9 @@ import { defaultPermissionsForWorkspaceRole } from "@/lib/permissions/permission
 import { hasPermission } from "@/lib/permissions/guards";
 
 describe("CRM RBAC", () => {
-  it("OWNER workspace role has customers.manage", () => {
+  it("OWNER workspace role has customers.read and customers.manage", () => {
     const granted = defaultPermissionsForWorkspaceRole("OWNER");
+    expect(hasPermission(granted, "customers.read")).toBe(true);
     expect(hasPermission(granted, "customers.manage")).toBe(true);
   });
 

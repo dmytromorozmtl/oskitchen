@@ -115,6 +115,21 @@ describe("rewards RBAC", () => {
     expect(canLookupRewardsBalance(actor, "loyalty")).toBe(true);
   });
 
+  it("allows customer-service staff loyalty balance lookup via customers.read", () => {
+    const granted = workspacePermissionsFromStaffTemplate("CUSTOMER_SERVICE", "STAFF");
+    const actor = {
+      sessionUserId: "user-1",
+      dataUserId: "owner-1",
+      workspaceId: "ws-1",
+      workspaceRole: "STAFF" as const,
+      staffRoleType: "CUSTOMER_SERVICE" as const,
+      email: "cs@example.com",
+      granted,
+    };
+
+    expect(canLookupRewardsBalance(actor, "loyalty")).toBe(true);
+  });
+
   it("blocks loyalty balance lookup for kitchen staff without POS or CRM access", () => {
     const granted = workspacePermissionsFromStaffTemplate("LINE_COOK", "STAFF");
     const actor = {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { createCustomerFormAction } from "@/actions/customers";
+import { requireCustomersManagePageAccess } from "@/lib/crm/crm-page-access";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,10 @@ import {
 } from "@/lib/crm/customer-types";
 import { CUSTOMER_STATUS_LABEL, CUSTOMER_STATUS_VALUES } from "@/lib/crm/customer-status";
 
-export default function NewCustomerPage() {
+export default async function NewCustomerPage() {
+  const access = await requireCustomersManagePageAccess();
+  if (!access.ok) return access.deny;
+
   return (
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-2">

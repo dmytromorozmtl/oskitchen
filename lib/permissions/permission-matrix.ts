@@ -36,6 +36,8 @@ export const CAPABILITY = {
   exportsSensitive: "exports:sensitive",
   giftCardsManage: "gift_cards:manage",
   loyaltyManage: "loyalty:manage",
+  crmCustomersRead: "customers:read",
+  crmCustomersManage: "customers:manage",
   impersonationRequest: "platform:impersonation",
 } as const;
 
@@ -68,6 +70,8 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.storefrontManage,
     CAPABILITY.giftCardsManage,
     CAPABILITY.loyaltyManage,
+    CAPABILITY.crmCustomersRead,
+    CAPABILITY.crmCustomersManage,
   ],
   KITCHEN_LEAD: [
     CAPABILITY.ordersRead,
@@ -101,6 +105,7 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.ordersWrite,
     CAPABILITY.posOperate,
     CAPABILITY.integrationsRead,
+    CAPABILITY.crmCustomersRead,
     CAPABILITY.reportsReadOperations,
   ],
   CATERING_COORDINATOR: [
@@ -126,6 +131,7 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.ordersRead,
     CAPABILITY.exportsSensitive,
     CAPABILITY.integrationsRead,
+    CAPABILITY.crmCustomersRead,
     CAPABILITY.reportsReadOperations,
     CAPABILITY.reportsReadFinancial,
     CAPABILITY.reportsSavedManage,
@@ -138,12 +144,15 @@ export const STAFF_TEMPLATE_CAPABILITIES: Record<StaffRoleType, readonly Capabil
     CAPABILITY.storefrontManage,
     CAPABILITY.giftCardsManage,
     CAPABILITY.loyaltyManage,
+    CAPABILITY.crmCustomersRead,
+    CAPABILITY.crmCustomersManage,
     CAPABILITY.reportsReadOperations,
   ],
   VIEWER: [
     CAPABILITY.ordersRead,
     CAPABILITY.inventoryRead,
     CAPABILITY.integrationsRead,
+    CAPABILITY.crmCustomersRead,
     CAPABILITY.reportsReadOperations,
   ],
   CUSTOM: [CAPABILITY.ordersRead],

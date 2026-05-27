@@ -21,6 +21,7 @@ export async function requireGiftCardsPageAccess() {
   const actor = await requireWorkspacePermissionActor();
   const canView =
     hasPermission(actor.granted, "giftcards.manage") ||
+    hasPermission(actor.granted, "customers.read") ||
     hasPermission(actor.granted, "customers.manage");
   const canManage = hasPermission(actor.granted, "giftcards.manage");
 
@@ -43,6 +44,7 @@ export async function requireLoyaltyPageAccess() {
   const actor = await requireWorkspacePermissionActor();
   const canView =
     hasPermission(actor.granted, "loyalty.manage") ||
+    hasPermission(actor.granted, "customers.read") ||
     hasPermission(actor.granted, "customers.manage");
   const canManage = hasPermission(actor.granted, "loyalty.manage");
 

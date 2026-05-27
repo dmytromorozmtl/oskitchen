@@ -3,27 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import {
+  CUSTOMERS_SUBNAV_LINKS,
+  type CustomersSubnavLink,
+} from "@/lib/crm/customers-subnav-links";
 import { cn } from "@/lib/utils";
 
-const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
-  { href: "/dashboard/customers", label: "Overview", match: "exact" },
-  { href: "/dashboard/customers/list", label: "Customers" },
-  { href: "/dashboard/customers/segments", label: "Segments" },
-  { href: "/dashboard/customers/vip", label: "VIPs" },
-  { href: "/dashboard/customers/at-risk", label: "At risk" },
-  { href: "/dashboard/customers/companies", label: "Companies" },
-  { href: "/dashboard/customers/follow-ups", label: "Follow-ups" },
-  { href: "/dashboard/customers/allergies", label: "Allergies" },
-  { href: "/dashboard/customers/dedupe", label: "Dedupe" },
-  { href: "/dashboard/customers/reports", label: "Reports" },
-];
-
-export function CustomersSubnav() {
+export function CustomersSubnav({ links = CUSTOMERS_SUBNAV_LINKS }: { links?: CustomersSubnavLink[] }) {
   const path = usePathname();
+  if (links.length === 0) return null;
   return (
     <nav className="flex flex-wrap gap-2 border-b border-border/80 pb-3 print:hidden">
-      {LINKS.map((l) => {
-        const active = l.match === "exact" ? path === l.href : path === l.href || path.startsWith(`${l.href}/`);
+      {links.map((l) => {
+        const active =
+          l.match === "exact" ? path === l.href : path === l.href || path.startsWith(`${l.href}/`);
         return (
           <Link
             key={l.href}

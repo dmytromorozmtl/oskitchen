@@ -92,6 +92,13 @@ export const CAPABILITY_TO_WORKSPACE: Record<CapabilityKey, readonly PermissionK
   [CAPABILITY.impersonationRequest]: ["workspace.view"],
   [CAPABILITY.giftCardsManage]: ["workspace.view", "giftcards.manage"],
   [CAPABILITY.loyaltyManage]: ["workspace.view", "loyalty.manage"],
+  [CAPABILITY.crmCustomersRead]: ["workspace.view", "customers.read"],
+  [CAPABILITY.crmCustomersManage]: [
+    "workspace.view",
+    "customers.read",
+    "customers.manage",
+    "customers.export",
+  ],
 };
 
 export function workspacePermissionsFromCapabilities(

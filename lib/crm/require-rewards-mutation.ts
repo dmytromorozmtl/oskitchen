@@ -37,6 +37,7 @@ export function canLookupRewardsBalance(
   }
   return (
     hasPermission(actor.granted, "loyalty.manage") ||
+    hasPermission(actor.granted, "customers.read") ||
     hasPermission(actor.granted, "customers.manage") ||
     hasPermission(actor.granted, "pos.checkout")
   );

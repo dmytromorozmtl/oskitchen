@@ -369,6 +369,7 @@ The following current files should be treated as migration inputs, not long-term
 - `audit.export`
 - Import / Export Center ingredient CSV preview/upload uses `products.edit` via `requireImportActor` (`lib/import-export/require-import-actor.ts`); denials audit as `IMPORT_PERMISSION_DENIED`; hub pages filter subnav via `getImportExportPageAccess`
 - Workspace gift cards and loyalty program mutations use canonical `giftcards.manage` / `loyalty.manage` via `requireRewardsMutation`; dashboard pages gate issue/edit UI; POS balance lookups allow `pos.checkout` or the respective manage permission (`lib/crm/require-rewards-mutation.ts`)
+- CRM hub pages use `customers.read` for view surfaces and `customers.manage` for mutations (`requireCustomersHubPageAccess`, `requireCrmMutation` with `crm.permission_denied` audits); subnav hides manage-only links such as dedupe when the actor lacks `customers.manage`
 
 ## 13. UI Gating Principles
 - Navigation visibility is not the same as permission. Nav can hide unavailable modules, but server checks remain mandatory.
