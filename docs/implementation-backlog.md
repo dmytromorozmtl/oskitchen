@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-021 — Commerce webhook incident drill (P1)
+- ID: `KOS-E17-021`
+- Title: Era 17 Cycle 21 — Stripe/Woo/Shopify webhook incident operator checklist
+- Module: Security / Ops
+- Priority: P1 (Workstream C Cycle 12)
+- Status: **awaiting_commerce_webhook_drill_execution**
+- Decision: `era17-commerce-webhook-drill-v1` — six-step incident drill + summary artifact
+- Evidence: `lib/security/commerce-webhook-drill-era17-policy.ts`, `docs/commerce-webhook-incident-drill-era17.md`, `test:ci:commerce-webhook-drill-era17:cert`
+- Next: Public POST abuse review (Cycle 13); operator tabletop on staging
+
 ### KOS-E17-020 — POS tablet UX polish + operator runbook (P1)
 - ID: `KOS-E17-020`
 - Title: Era 17 Cycle 20 — touch targets, checkout status clarity, software-only operator runbook
@@ -33,7 +43,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **p1_ingress_dedupe_expanded**
 - Decision: `era17-webhook-replay-p1-expansion-v1` — extends Era 16 guard to matrix P1 routes
 - Evidence: `lib/security/webhook-replay-p1-expansion-era17-policy.ts`, Resend route ingress dedupe, `test:ci:webhook-replay-p1-expansion-era17:cert`
-- Next: Commerce webhook drill (Cycle 12); remaining P1 routes when pilot-critical
+- Next: Commerce webhook drill executed on staging/tabletop; remaining P1 routes when pilot-critical
 
 ### KOS-E17-017 — Production calendar operator drill on staging (P1)
 - ID: `KOS-E17-017`

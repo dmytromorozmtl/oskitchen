@@ -381,6 +381,22 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+## Era 17 commerce webhook incident drill (2026-05-28)
+
+**Policy:** `era17-commerce-webhook-drill-v1` — **awaiting_commerce_webhook_drill_execution**; operator checklist for Stripe / Woo / Shopify webhook incidents.
+
+1. Six-step drill: triage → secret alignment → URL/tenant mapping → replay containment → invalid signature test → recovery.
+2. Provider routes: `/api/webhooks/stripe`, `/api/webhooks/woocommerce`, `/api/webhooks/shopify/orders`.
+3. Record with env vars `COMMERCE_WEBHOOK_DRILL_STEP_<N>_STATUS` + `COMMERCE_WEBHOOK_DRILL_OPERATOR_EMAIL`.
+4. Run **`npm run smoke:commerce-webhook-drill`** → review **`artifacts/commerce-webhook-drill-summary.json`** (`commerceWebhookProofStatus`).
+5. Do **not** claim centralized replay monitoring ops or zero incident risk.
+
+**Enforcement:** `test:ci:commerce-webhook-drill-era17:cert` (chained in `test:ci:webhook-security-era16:cert`)
+
+**Operator doc:** `docs/commerce-webhook-incident-drill-era17.md`
+
+---
+
 ## Era 17 webhook replay P1 expansion (2026-05-28)
 
 **Policy:** `era17-webhook-replay-p1-expansion-v1` — **p1_ingress_dedupe_expanded**; extends Era 16 guard to matrix P1 delivery routes.

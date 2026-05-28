@@ -37,6 +37,8 @@ Prefix examples: `hypergraph-*`, `multiverse-*`, `eu-ai-*`, `zk-dna*`, `iso-4200
 
 **Era 17 replay P1 expansion (2026-05-28):** `era17-webhook-replay-p1-expansion-v1` — Resend ingress dedupe + Uber Eats webhook_event_store cert; `npm run smoke:webhook-replay-p1-expansion`; cert `test:ci:webhook-replay-p1-expansion-era17:cert` (in `test:ci:webhook-security-era16:cert`). Not full replay monitoring ops.
 
+**Era 17 commerce webhook incident drill (2026-05-28):** `era17-commerce-webhook-drill-v1` — Stripe/Woo/Shopify operator incident checklist; `npm run smoke:commerce-webhook-drill`; cert `test:ci:commerce-webhook-drill-era17:cert` (in `test:ci:webhook-security-era16:cert`). Awaiting operator tabletop/staging execution.
+
 Verify per provider in route handlers:
 
 | Provider | Verification | Replay / idempotency |
