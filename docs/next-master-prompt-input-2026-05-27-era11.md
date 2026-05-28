@@ -32,6 +32,7 @@ All four Era 11 DevOps / RBAC / KDS staging cycles from era10 handoff **complete
 | **2** | **E2E staging secrets alignment** — `era12-e2e-staging-secrets-align-v1`; `e2e-staging.yml` + `closed-beta-gate.yml` map `E2E_LOGIN_PASSWORD` (legacy `E2E_PASSWORD` alias) |
 | **3** | **Channel staging smoke policy** — `era12-channel-golden-path-smoke-v1`; `npm run smoke:woo-shopify`; not in default CI |
 | **4** | **E2E staging auth wiring** — `era12-e2e-staging-auth-wiring-v1`; `auth.setup` + `dashboard-auth` in `e2e-staging.yml` |
+| **5** | **Era 12 scorecard refresh** — `era12-scorecard-refresh-v1`; 99/100; see `docs/next-master-prompt-input-2026-05-27-era12.md` |
 
 ---
 

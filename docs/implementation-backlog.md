@@ -45,6 +45,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/ci/e2e-staging-auth-era12-policy.ts`, `test:ci:e2e-staging-auth-era12:cert`, `.github/workflows/e2e-staging.yml`
 - Next: first green daily staging run after secrets configured (ops)
 
+### KOS-E12-005 — Era 12 scorecard refresh (P1)
+- ID: `KOS-E12-005`
+- Title: Era 12 cycle completion scorecard and Era 13 master prompt input
+- Module: Governance / strategy
+- Priority: P1 (Era 12 Cycle 5)
+- Status: **completed**
+- Decision: `era12-scorecard-refresh-v1` — 99/100 overall; era13 handoff in `docs/next-master-prompt-input-2026-05-27-era12.md`
+- Evidence: `lib/governance/era12-scorecard-policy.ts`, `docs/era12-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+
 ## Era 11 — DevOps scale / RBAC recert
 
 ### KOS-E11-005 — Era 11 scorecard refresh (P1)

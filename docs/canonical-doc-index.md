@@ -419,6 +419,27 @@ Incremental refresh after Era 11 cycles 1–4 (DevOps scale / RBAC recert / KDS 
 
 **Re-audit decision:** defer full repo re-audit until Era 12 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era11.md`.
 
+## Scorecard (Evolution Era 12 end — 2026-05-27)
+
+Incremental refresh after Era 12 cycles 1–4 (integration hardening + staging E2E from era11 handoff). Baseline = Era 11 end **98** overall.
+
+| Area | Era 11 end | Era 12 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 98 | **99** | +1 | channel recert + staging secrets/auth wiring |
+| Security | 82 | **82** | +0 | unchanged |
+| QA | 90 | **91** | +1 | integration/staging policy certs |
+| DevOps | 96 | **97** | +1 | `e2e-staging.yml` secrets + auth.setup |
+| RBAC | 89 | **89** | +0 | unchanged |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 58 | **59** | +1 | order hub visibility + smoke policy (not full live ops) |
+| KDS | 72 | **72** | +0 | unchanged |
+| Enterprise readiness | 65 | **65** | +0 | SSO R1 design only |
+| Marketing/sales | 82 | **82** | +0 | unchanged |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 13 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era12.md`.
+
 ---
 
 ## Validation
@@ -484,3 +505,4 @@ Incremental refresh after Era 11 cycles 1–4 (DevOps scale / RBAC recert / KDS 
 | 2026-05-27 | Era 12 Cycle 2: `era12-e2e-staging-secrets-align-v1` — staging workflow `E2E_LOGIN_PASSWORD` alignment |
 | 2026-05-27 | Era 12 Cycle 3: `era12-channel-golden-path-smoke-v1` — Woo/Shopify staging smoke wiring cert (not in default CI) |
 | 2026-05-27 | Era 12 Cycle 4: `era12-e2e-staging-auth-wiring-v1` — e2e-staging auth.setup + dashboard-authed smoke |
+| 2026-05-27 | Era 12 Cycle 5: `era12-scorecard-refresh-v1` — score 99/100; era13 handoff |
