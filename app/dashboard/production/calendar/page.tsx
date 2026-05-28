@@ -6,8 +6,10 @@ import {
   updatePlanTaskStatusAction,
 } from "@/actions/production-calendar";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
+import { ProductionCalendarAttentionStrip } from "@/components/production/production-calendar-attention-strip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { readProductionCalendarFormError } from "@/lib/production/production-calendar-form-mutation";
+import { isProductionCalendarTodayColumn } from "@/lib/production/production-calendar-today-focus-era18";
 import {
   normalizeProductionPlanTaskStatus,
   PRODUCTION_PLAN_TASK_STATUSES,
@@ -17,13 +19,18 @@ import {
 import {
   adjacentProductionPlanDateIso,
   formatProductionCalendarWeekLabel,
+  isoDateOnly,
   parseProductionCalendarWeekStart,
   productionCalendarWeekDays,
   productionCalendarWeekHref,
   PRODUCTION_CALENDAR_WEEK_QUERY_PARAM,
 } from "@/lib/production/production-calendar-week-navigation";
+import { cn } from "@/lib/utils";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { getProductionCalendar } from "@/services/production/production-calendar-service";
+import {
+  getProductionCalendar,
+  getProductionCalendarOpenThroughToday,
+} from "@/services/production/production-calendar-service";
 
 export default async function ProductionCalendarPage({
   searchParams,
@@ -38,7 +45,12 @@ export default async function ProductionCalendarPage({
   const formError = readProductionCalendarFormError(params);
   const { dataUserId } = await getTenantActor();
   const weekStart = parseProductionCalendarWeekStart(weekParam);
-  const tasks = await getProductionCalendar(dataUserId, weekStart);
+  const today = new Date();
+  const todayIso = isoDateOnly(today);
+  const [tasks, attentionTasks] = await Promise.all([
+    getProductionCalendar(dataUserId, weekStart),
+    getProductionCalendarOpenThroughToday(dataUserId, today),
+  ]);
   const days = productionCalendarWeekDays(weekStart);
 
   return (
@@ -76,6 +88,8 @@ export default async function ProductionCalendarPage({
 
       <CopilotFormErrorBanner message={formError} />
 
+      <ProductionCalendarAttentionStrip tasks={attentionTasks} today={today} />
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Add batch task</CardTitle>
@@ -100,11 +114,24 @@ export default async function ProductionCalendarPage({
           );
           const previousDayIso = adjacentProductionPlanDateIso(weekStart, dayIndex, "previous");
           const nextDayIso = adjacentProductionPlanDateIso(weekStart, dayIndex, "next");
+          const isToday = isProductionCalendarTodayColumn(key, todayIso);
           return (
-            <Card key={key} className="min-h-[120px]">
+            <Card
+              key={key}
+              id={isToday ? "today" : `day-${key}`}
+              className={cn(
+                "min-h-[120px]",
+                isToday && "ring-2 ring-primary/35 shadow-sm",
+              )}
+            >
               <CardHeader className="p-3 pb-1">
                 <CardTitle className="text-xs font-medium">
                   {day.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                  {isToday ? (
+                    <span className="ml-1 rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary">
+                      Today
+                    </span>
+                  ) : null}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-2 pt-0 space-y-1">

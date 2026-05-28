@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-017 — Production calendar today focus (P1)
+- ID: `KOS-E18-017`
+- Title: Era 18 Workstream M Cycle 17 — overdue/due-today attention strip on production calendar
+- Module: Production / Production calendar
+- Priority: P1 (production visibility + kitchen lead clarity)
+- Status: **production_calendar_today_focus_wired**
+- Decision: `era18-production-calendar-today-focus-v1` — bounded open-through-today query + attention strip + today column highlight; no drag-and-drop or KDS sync claims
+- Evidence: `lib/production/production-calendar-today-focus-era18.ts`, `components/production/production-calendar-attention-strip.tsx`, `getProductionCalendarOpenThroughToday`
+- Next: Ops completes Era 17 staging operator drill; optional future-week overdue scan expansion
+
 ### KOS-E18-016 — Getting started next-step focus (P1)
 - ID: `KOS-E18-016`
 - Title: Era 18 Workstream L Cycle 16 — next-step hero on Today + golden-path checklist order

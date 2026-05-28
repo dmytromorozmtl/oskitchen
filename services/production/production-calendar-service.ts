@@ -20,6 +20,22 @@ export async function getProductionCalendar(userId: string, weekStart: Date) {
   });
 }
 
+/** Open and completed-through-today tasks for calendar attention strip (bounded). */
+export async function getProductionCalendarOpenThroughToday(userId: string, today = new Date()) {
+  const todayStart = new Date(today);
+  todayStart.setHours(0, 0, 0, 0);
+
+  const where = await ownerScopedAnd(userId, {
+    planDate: { lte: todayStart },
+  });
+
+  return prisma.productionPlanTask.findMany({
+    where,
+    orderBy: [{ planDate: "asc" }, { title: "asc" }],
+    take: 50,
+  });
+}
+
 export async function createProductionPlanTask(
   userId: string,
   data: {
