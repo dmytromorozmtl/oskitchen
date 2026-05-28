@@ -4,7 +4,7 @@
 import { fail, ok } from "@/lib/action-result";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireKitchenAiActor } from "@/lib/ai/require-kitchen-ai-actor";
 import {
   getAIMenuSuggestions,
   getAIOrderForecast,
@@ -18,19 +18,37 @@ export async function runAIOrderForecastAction(days = 7) {
   if (!parsed.success) {
     return { ok: false as const, error: "Invalid forecast range (1–30 days)" };
   }
-  const { dataUserId } = await requireTenantActor();
-  const result = await getAIOrderForecast(dataUserId, parsed.data);
+  const access = await requireKitchenAiActor({
+    capability: "copilot.read.financial",
+    operation: "kitchen_ai.order_forecast",
+  });
+  if (!access.ok) {
+    return { ok: false as const, error: access.error };
+  }
+  const result = await getAIOrderForecast(access.dataUserId, parsed.data);
   return { ok: true as const, result };
 }
 
 export async function runAIMenuSuggestionsAction() {
-  const { dataUserId } = await requireTenantActor();
-  const result = await getAIMenuSuggestions(dataUserId);
+  const access = await requireKitchenAiActor({
+    capability: "copilot.read.financial",
+    operation: "kitchen_ai.menu_suggestions",
+  });
+  if (!access.ok) {
+    return { ok: false as const, error: access.error };
+  }
+  const result = await getAIMenuSuggestions(access.dataUserId);
   return { ok: true as const, result };
 }
 
 export async function runAIWhatToOrderAction() {
-  const { dataUserId } = await requireTenantActor();
-  const result = await getAIWhatToOrder(dataUserId);
+  const access = await requireKitchenAiActor({
+    capability: "copilot.read.operations",
+    operation: "kitchen_ai.what_to_order",
+  });
+  if (!access.ok) {
+    return { ok: false as const, error: access.error };
+  }
+  const result = await getAIWhatToOrder(access.dataUserId);
   return { ok: true as const, result };
 }
