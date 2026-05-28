@@ -6,8 +6,10 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { saveKitchenModulePreferences } from "@/actions/module-preferences";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { recordAuditLog } from "@/lib/audit-log";
 import { recordLifecycleEventSafe } from "@/lib/lifecycle-events";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   businessNameSchema,
   currencySchema,
@@ -148,9 +150,27 @@ async function patchAdaptive(userId: string, patch: Partial<Omit<OnboardingAdapt
   await persistAdaptiveJson(userId, mergeAdaptive(prev, patch));
 }
 
+async function requireOnboardingManageAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "onboarding.permission_denied",
+      entityType: "KitchenSettings",
+      metadata: { operation, requiredPermission: "workspace.settings" },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const actor = await requireTenantActor();
+  return { ok: true as const, ...actor };
+}
+
 export async function onboardingSaveWelcome(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_welcome");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const skip = String(formData.get("skipSetup") ?? "") === "1";
     if (skip) {
       await patchAdaptive(user.id, {
@@ -170,7 +190,9 @@ export async function onboardingSaveWelcome(formData: FormData) {
 
 export async function onboardingSaveOperatingModel(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_operating_model");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = operatingModelSchema.safeParse(String(formData.get("operatingModel") ?? ""));
     if (!parsed.success) return { error: "Choose how you take orders." };
     const op = parsed.data;
@@ -193,7 +215,9 @@ export async function onboardingSaveOperatingModel(formData: FormData) {
 
 export async function onboardingSaveBrandsLocations(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_brands_locations");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const locations = z.coerce.number().int().min(1).max(9999).safeParse(formData.get("locationsCount"));
     const brands = z.coerce.number().int().min(0).max(9999).safeParse(formData.get("brandsCount"));
     await patchAdaptive(user.id, {
@@ -210,7 +234,9 @@ export async function onboardingSaveBrandsLocations(formData: FormData) {
 
 export async function onboardingSaveStep1(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_step1");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = step1Schema.safeParse({
       businessName: formData.get("businessName"),
       businessType: formData.get("businessType"),
@@ -268,7 +294,9 @@ async function currentStep(userId: string) {
 
 export async function onboardingSaveStep2(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_step2");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = step2Schema.safeParse({
       pickupAddress: formData.get("pickupAddress"),
       deliveryEnabled: formData.get("deliveryEnabled") === "on",
@@ -300,7 +328,9 @@ export async function onboardingSaveStep2(formData: FormData) {
 
 export async function onboardingSaveStep3Menu(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_step3_menu");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const parsed = step3Schema.safeParse({
       menuTitle: formData.get("menuTitle"),
       startDate: formData.get("startDate"),
@@ -339,7 +369,9 @@ export async function onboardingSaveStep3Menu(formData: FormData) {
 
 export async function onboardingSaveStep4Products(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_step4_products");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const menuId = String(formData.get("menuId") ?? "");
     const mode = String(formData.get("mode") ?? "skip");
 
@@ -413,7 +445,9 @@ export async function onboardingSaveStep4Products(formData: FormData) {
 
 export async function onboardingSkipWeeklyMenu() {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.skip_weekly_menu");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user } = manage;
     await markStepSkipped(user.id, "weekly_menu");
     await afterSkipSuccess(user.id, "weekly_menu");
     revalidatePath("/onboarding");
@@ -455,7 +489,9 @@ function manualChannelRow(userId: string, label: string) {
 
 export async function onboardingSaveStep5Channels(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_step5_channels");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const intents = intentFromForm(formData);
     await patchAdaptive(user.id, { selectedChannelIntents: intents });
 
@@ -543,7 +579,9 @@ export async function onboardingSaveStep5Channels(formData: FormData) {
 
 export async function onboardingSaveRecommendedModules(formData: FormData) {
   try {
-    const { sessionUser: user } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.save_recommended_modules");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user } = manage;
     const modules: { key: ModuleKey; enabled: boolean }[] = [];
     const entries = [...formData.entries()].filter(([k]) => k.startsWith("module_"));
     for (const [k, v] of entries) {
@@ -566,7 +604,9 @@ export async function onboardingSaveRecommendedModules(formData: FormData) {
 
 export async function onboardingComplete() {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.complete");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const settings = await prisma.kitchenSettings.findUnique({
       where: { userId: dataUserId },
       select: { businessType: true, onboardingAdaptiveJson: true },
@@ -611,7 +651,9 @@ export async function onboardingComplete() {
 
 export async function reopenOnboardingWizard() {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.reopen_wizard");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     await prisma.userProfile.update({
       where: { id: user.id },
       data: {
@@ -634,7 +676,9 @@ export async function reopenOnboardingWizard() {
 
 export async function onboardingSkipToDashboard() {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.skip_to_dashboard");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     await prisma.userProfile.update({
       where: { id: user.id },
       data: {
@@ -660,7 +704,9 @@ export async function onboardingSkipToDashboard() {
 
 export async function onboardingSkipStepGeneric(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireOnboardingManageAccess("onboarding.skip_step");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user } = manage;
     const sid = stepIdFromForm(formData);
     if (!sid) return { error: "Missing step" };
     await afterSkipSuccess(user.id, sid);
