@@ -1,4 +1,6 @@
+import type { ChannelPilotLiveProofSlice } from "@/lib/integrations/integration-health-live-proof-focus-era18";
 import type { GettingStartedPayload } from "@/services/onboarding/getting-started-status";
+import { shouldSuppressGenericChannelHealthItem } from "@/lib/onboarding/getting-started-pilot-channel-live-proof-era18";
 
 export type GettingStartedPilotChannelFocus = {
   menuComplete: boolean;
@@ -46,6 +48,7 @@ export function summarizeGettingStartedPilotChannelFocus(
 /** Pilot onboarding — channel connection and integration health before order volume. */
 export function pickGettingStartedPilotChannelAttentionItems(
   focus: GettingStartedPilotChannelFocus,
+  liveProofSlices: readonly ChannelPilotLiveProofSlice[] = [],
 ): GettingStartedPilotChannelAttentionItem[] {
   const items: GettingStartedPilotChannelAttentionItem[] = [];
 
@@ -74,6 +77,7 @@ export function pickGettingStartedPilotChannelAttentionItems(
   if (
     focus.channelConnectedCount > 0 &&
     focus.integrationErrorCount === 0 &&
+    !shouldSuppressGenericChannelHealthItem(focus, liveProofSlices) &&
     items.length < 4
   ) {
     items.push({

@@ -1,5 +1,6 @@
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
+import { connectedPilotChannelsPilotReady } from "@/lib/onboarding/getting-started-pilot-channel-live-proof-era18";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
@@ -10,6 +11,8 @@ import {
   storefrontSettingsListWhereForOwner,
   usageEventListWhereForOwner,
 } from "@/lib/scope/workspace-resource-scope";
+import { listChannelPilotLiveProofSlices } from "@/services/developer/integration-health-service";
+import type { ChannelPilotLiveProofSlice } from "@/lib/integrations/integration-health-live-proof-focus-era18";
 
 export type GettingStartedItem = {
   id: string;
@@ -26,6 +29,9 @@ export type GettingStartedPayload = {
   pilotChannel: {
     connectedCount: number;
     errorCount: number;
+  };
+  pilotChannelLiveProof: {
+    slices: ChannelPilotLiveProofSlice[];
   };
   pilotSso: {
     entitlementEnabled: boolean;
@@ -65,6 +71,7 @@ export async function loadGettingStartedStatus(
     channelConnectedCount,
     channelErrorCount,
     ssoView,
+    pilotChannelLiveProofSlices,
   ] = await Promise.all([
     prisma.activationState.findUnique({ where: { userId } }),
     prisma.menu.count({ where: menuScope }),
@@ -89,6 +96,7 @@ export async function loadGettingStartedStatus(
     workspaceId
       ? getWorkspaceSsoAdminView({ workspaceId, ownerUserId: userId })
       : Promise.resolve(null),
+    listChannelPilotLiveProofSlices(userId),
   ]);
 
   const pilotSso = {
@@ -121,7 +129,9 @@ export async function loadGettingStartedStatus(
       id: "integration",
       label: "Connect a sales channel",
       href: "/dashboard/integrations",
-      done: channelConnectedCount > 0,
+      done:
+        channelConnectedCount > 0 &&
+        connectedPilotChannelsPilotReady(pilotChannelLiveProofSlices),
     },
     {
       id: "order",
@@ -164,6 +174,9 @@ export async function loadGettingStartedStatus(
     pilotChannel: {
       connectedCount: channelConnectedCount,
       errorCount: channelErrorCount,
+    },
+    pilotChannelLiveProof: {
+      slices: pilotChannelLiveProofSlices,
     },
     pilotSso,
   };

@@ -32,6 +32,10 @@ vi.mock("@/lib/enterprise/workspace-sso-admin-service", () => ({
   getWorkspaceSsoAdminView: vi.fn(),
 }));
 
+vi.mock("@/services/developer/integration-health-service", () => ({
+  listChannelPilotLiveProofSlices: vi.fn(),
+}));
+
 import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
@@ -43,6 +47,7 @@ import {
   storefrontSettingsListWhereForOwner,
   usageEventListWhereForOwner,
 } from "@/lib/scope/workspace-resource-scope";
+import { listChannelPilotLiveProofSlices } from "@/services/developer/integration-health-service";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
 
 const scoped = { workspaceId: "ws-1" };
@@ -72,6 +77,7 @@ describe("loadGettingStartedStatus", () => {
     vi.mocked(prisma.storefrontSettings.count).mockResolvedValue(0);
     vi.mocked(prisma.usageEvent.count).mockResolvedValue(0);
     vi.mocked(prisma.integrationConnection.count).mockResolvedValue(0);
+    vi.mocked(listChannelPilotLiveProofSlices).mockResolvedValue([]);
   });
 
   it("scopes menu and order counts by owner workspace", async () => {

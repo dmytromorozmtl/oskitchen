@@ -8,6 +8,10 @@ import {
   summarizeGettingStartedPilotChannelFocus,
 } from "@/lib/onboarding/getting-started-pilot-channel-era18";
 import {
+  pickGettingStartedPilotChannelLiveProofAttentionItems,
+  summarizeGettingStartedPilotChannelLiveProof,
+} from "@/lib/onboarding/getting-started-pilot-channel-live-proof-era18";
+import {
   buildGettingStartedPilotSsoFocus,
   pickGettingStartedPilotSsoAttentionItems,
   summarizeGettingStartedPilotSsoFocus,
@@ -19,7 +23,9 @@ type CombinedAttentionItem = {
   title: string;
   detail: string;
   href: string;
-  source: "sso" | "channel";
+  source: "sso" | "channel" | "live-proof";
+  priority: number;
+  tone: "urgent" | "normal";
 };
 
 export function GettingStartedAttentionStrip(props: { data: GettingStartedPayload }) {
@@ -27,6 +33,10 @@ export function GettingStartedAttentionStrip(props: { data: GettingStartedPayloa
   const ssoFocus = buildGettingStartedPilotSsoFocus(props.data);
   const channelSummary = summarizeGettingStartedPilotChannelFocus(channelFocus);
   const ssoSummary = summarizeGettingStartedPilotSsoFocus(ssoFocus);
+  const liveProofSummary = summarizeGettingStartedPilotChannelLiveProof(
+    channelFocus,
+    props.data.pilotChannelLiveProof.slices,
+  );
 
   const items: CombinedAttentionItem[] = [
     ...pickGettingStartedPilotSsoAttentionItems(ssoFocus).map((item) => ({
@@ -35,21 +45,44 @@ export function GettingStartedAttentionStrip(props: { data: GettingStartedPayloa
       detail: item.detail,
       href: item.href,
       source: "sso" as const,
+      priority: item.priority,
+      tone: item.tone,
     })),
-    ...pickGettingStartedPilotChannelAttentionItems(channelFocus).map((item) => ({
+    ...pickGettingStartedPilotChannelAttentionItems(
+      channelFocus,
+      props.data.pilotChannelLiveProof.slices,
+    ).map((item) => ({
       id: item.id,
       title: item.title,
       detail: item.detail,
       href: item.href,
       source: "channel" as const,
+      priority: item.priority,
+      tone: item.tone,
     })),
-  ].slice(0, 4);
+    ...pickGettingStartedPilotChannelLiveProofAttentionItems(
+      channelFocus,
+      props.data.pilotChannelLiveProof.slices,
+    ).map((item) => ({
+      id: item.id,
+      title: item.title,
+      detail: item.detail,
+      href: item.href,
+      source: "live-proof" as const,
+      priority: item.priority,
+      tone: item.tone,
+    })),
+  ]
+    .sort((a, b) => a.priority - b.priority)
+    .slice(0, 4);
 
   if (items.length === 0) return null;
 
-  const hasUrgent = channelSummary.hasUrgent || ssoSummary.hasUrgent;
+  const hasUrgent = channelSummary.hasUrgent || ssoSummary.hasUrgent || liveProofSummary.hasUrgent;
   const hasSso = items.some((item) => item.source === "sso");
-  const hasChannel = items.some((item) => item.source === "channel");
+  const hasChannel =
+    items.some((item) => item.source === "channel") ||
+    items.some((item) => item.source === "live-proof");
 
   return (
     <Card

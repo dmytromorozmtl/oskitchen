@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-048 — Getting started pilot channel live proof (P0)
+- ID: `KOS-E18-048`
+- Title: Era 18 Workstream L Cycle 48 — Woo/Shopify live proof on getting-started attention + checklist accuracy
+- Module: Onboarding / Integrations
+- Priority: P0 (pilot deployment speed — onboarding parity with integration health + Today strip)
+- Status: **getting_started_pilot_channel_live_proof_wired**
+- Decision: `era18-getting-started-pilot-channel-live-proof-v1` — live proof attention rows; integration checklist requires pilot wizard complete when connected
+- Evidence: `lib/onboarding/getting-started-pilot-channel-live-proof-era18.ts`, `services/onboarding/getting-started-status.ts`, `components/dashboard/getting-started-attention-strip.tsx`
+- Next: Ops configures channel smoke env vars; run `npm run smoke:woo-shopify-live` for proof_passed artifact
+
 ### KOS-E18-047 — Pilot integration health live proof on Today (P0)
 - ID: `KOS-E18-047`
 - Title: Era 18 Workstream C Cycle 47 — Woo/Shopify live proof rows on Today/operator-home pilot strip

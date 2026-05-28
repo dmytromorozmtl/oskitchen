@@ -25,6 +25,7 @@ function payload(over: Partial<GettingStartedPayload> = {}): GettingStartedPaylo
     showChecklist: true,
     accountAgeDays: 3,
     pilotChannel: { connectedCount: 0, errorCount: 0 },
+    pilotChannelLiveProof: { slices: [] },
     pilotSso: {
       entitlementEnabled: true,
       configured: false,
