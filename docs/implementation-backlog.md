@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-051 — Implementation pilot readiness strip (P0)
+- ID: `KOS-E18-051`
+- Title: Era 18 Workstream P Cycle 51 — Implementation hub pilot readiness attention strip
+- Module: Implementation / Commercial pilot
+- Priority: P0 (pilot deployment visibility — implementation manager landing)
+- Status: **implementation_pilot_readiness_attention_wired**
+- Decision: `era18-implementation-pilot-readiness-focus-v1` — merges Woo/Shopify live proof, SSO pilot, and go-live launch blockers; does not claim GO/NO-GO PASS
+- Evidence: `lib/implementation/implementation-pilot-readiness-focus-era18.ts`, `services/implementation/implementation-pilot-readiness-service.ts`, `components/dashboard/implementation/implementation-pilot-readiness-attention-strip.tsx`
+- Next: Ops completes P0 staging proof; wire commercial GO/NO-GO artifact reader when ops credentials available
+
 ### KOS-E18-050 — Sales channel health live proof (P0)
 - ID: `KOS-E18-050`
 - Title: Era 18 Workstream C Cycle 50 — Woo/Shopify live proof on sales channel health page

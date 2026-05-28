@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ImplementationKpis } from "@/components/dashboard/implementation/implementation-kpis";
+import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { ReadinessBadge } from "@/components/dashboard/implementation/readiness-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { IMPLEMENTATION_STATUS_LABEL, isActiveStatus } from "@/lib/implementatio
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { getActiveProject, projectKpis } from "@/services/implementation/implementation-service";
+import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 import { getLatestReadiness } from "@/services/implementation/readiness-service";
 
 export default async function ImplementationPage() {
@@ -33,11 +35,20 @@ export default async function ImplementationPage() {
     );
   }
 
-  const [active, kpis] = await Promise.all([getActiveProject(userId), projectKpis(userId)]);
+  const [active, kpis, pilotReadiness] = await Promise.all([
+    getActiveProject(userId),
+    projectKpis(userId),
+    loadImplementationPilotReadinessModel(userId),
+  ]);
   const readiness = active ? await getLatestReadiness({ userId, projectId: active.id }) : null;
 
   if (!active) {
-    return <EmptyState companyName={ownerProfile?.companyName ?? null} />;
+    return (
+      <EmptyState
+        companyName={ownerProfile?.companyName ?? null}
+        pilotReadiness={pilotReadiness}
+      />
+    );
   }
 
   const [risksOpen, modulesConfigured, integrationsHealthy, trainingCount] = await Promise.all([
@@ -93,6 +104,8 @@ export default async function ImplementationPage() {
           </Button>
         </div>
       </header>
+
+      <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} />
 
       <ImplementationKpis tiles={tiles} />
 
@@ -182,7 +195,13 @@ async function ProjectListPreview({ userId }: { userId: string }) {
   );
 }
 
-function EmptyState({ companyName }: { companyName: string | null }) {
+function EmptyState({
+  companyName,
+  pilotReadiness,
+}: {
+  companyName: string | null;
+  pilotReadiness: Awaited<ReturnType<typeof loadImplementationPilotReadinessModel>>;
+}) {
   return (
     <div className="space-y-6">
       <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -193,6 +212,8 @@ function EmptyState({ companyName }: { companyName: string | null }) {
           </p>
         </div>
       </header>
+
+      <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} />
 
       <Card>
         <CardHeader>
