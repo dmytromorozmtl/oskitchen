@@ -1,3 +1,4 @@
+import { recordAuditLog } from "@/lib/audit-log";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import type { PermissionKey } from "@/lib/permissions/permissions";
@@ -9,8 +10,20 @@ export async function requireOrderCreateAccess(input?: {
   operation?: string;
   metadata?: Record<string, unknown>;
 }) {
+  const operation = input?.operation ?? "orders.create";
   const access = await requireMutationPermission(ORDER_CREATE_PERMISSION);
   if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "orders.permission_denied",
+      entityType: "Order",
+      metadata: {
+        operation,
+        requiredPermission: ORDER_CREATE_PERMISSION,
+        ...input?.metadata,
+      },
+    });
     return {
       ok: false as const,
       error: access.error,
@@ -19,7 +32,7 @@ export async function requireOrderCreateAccess(input?: {
   return {
     ok: true as const,
     actor: access.actor,
-    operation: input?.operation ?? "orders.create",
+    operation,
     metadata: input?.metadata,
   };
 }

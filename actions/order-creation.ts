@@ -28,12 +28,12 @@ function parsePayload(formData: FormData) {
 
 export async function createOrderViaCenterAction(formData: FormData): Promise<OrderCreateActionResult> {
   try {
-    const { dataUserId } = await requireTenantActor();
-    const profile = await requireUserProfile();
     const orderAccess = await requireOrderCreateAccess({ operation: "orders.create" });
     if (!orderAccess.ok) {
       return { ok: false, error: orderAccess.error };
     }
+    const { dataUserId } = await requireTenantActor();
+    const profile = await requireUserProfile();
 
     const raw = parsePayload(formData);
     if (!raw) return { ok: false, error: "Missing or invalid order payload." };

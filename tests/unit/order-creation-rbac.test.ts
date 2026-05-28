@@ -5,11 +5,13 @@ import { workspacePermissionsFromStaffTemplate } from "@/lib/permissions/staff-t
 const requireMutationPermission = vi.hoisted(() => vi.fn());
 const requireTenantActor = vi.hoisted(() => vi.fn());
 const requireUserProfile = vi.hoisted(() => vi.fn());
+const recordAuditLog = vi.hoisted(() => vi.fn());
 const createOrderViaCenter = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/permissions/mutation-access", () => ({ requireMutationPermission }));
 vi.mock("@/lib/scope/require-tenant-actor", () => ({ requireTenantActor }));
 vi.mock("@/lib/auth", () => ({ requireUserProfile }));
+vi.mock("@/lib/audit-log", () => ({ recordAuditLog }));
 vi.mock("@/services/orders/order-creation-service", () => ({ createOrderViaCenter }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
@@ -27,6 +29,7 @@ const validPayload = {
 describe("createOrderViaCenterAction RBAC", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    recordAuditLog.mockResolvedValue(undefined);
     requireTenantActor.mockResolvedValue({
       sessionUser: { id: "session-user" },
       dataUserId: "owner-1",
@@ -65,7 +68,17 @@ describe("createOrderViaCenterAction RBAC", () => {
       error: "You do not have permission to perform this action.",
     });
     expect(requireMutationPermission).toHaveBeenCalledWith("orders.manage");
+    expect(requireTenantActor).not.toHaveBeenCalled();
     expect(createOrderViaCenter).not.toHaveBeenCalled();
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: "orders.permission_denied",
+        metadata: expect.objectContaining({
+          operation: "orders.create",
+          requiredPermission: "orders.manage",
+        }),
+      }),
+    );
   });
 
   it("allows order creation when actor has orders.manage", async () => {
