@@ -2,11 +2,17 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, AlertTriangle, Rocket } from "lucide-react";
 
 import { LaunchWizardCommercialBlockersPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel";
+import { LaunchWizardProgressStrip } from "@/components/dashboard/launch-wizard/launch-wizard-progress-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type { LaunchWizardStep, LaunchWizardStepStatus } from "@/lib/launch-wizard/launch-wizard-era19";
+import {
+  launchWizardProgressAriaLabel,
+  launchWizardStepStatusAriaLabel,
+  launchWizardToggleModeHref,
+} from "@/lib/launch-wizard/launch-wizard-ux-era19";
 import type { LaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 import { cn } from "@/lib/utils";
 
@@ -42,19 +48,28 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
 
   return (
     <div className="space-y-6" data-testid="launch-wizard-view">
+      <LaunchWizardProgressStrip model={model} compact={compact} />
+
       <Card className="border-primary/20 bg-primary/[0.03] shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <CardTitle className="flex items-center gap-2 text-2xl">
-                <Rocket className="h-6 w-6 text-muted-foreground" aria-hidden />
+            <div className="min-w-0">
+              <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+                <Rocket className="h-5 w-5 shrink-0 text-muted-foreground sm:h-6 sm:w-6" aria-hidden />
                 Launch wizard
               </CardTitle>
               <CardDescription className="mt-1 max-w-2xl">{model.headline}</CardDescription>
             </div>
-            <Badge variant="outline" className="rounded-full tabular-nums">
-              {progress.completedCount}/{progress.totalCount} complete
-            </Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline" className="rounded-full tabular-nums">
+                {progress.completedCount}/{progress.totalCount} complete
+              </Badge>
+              <Button asChild variant="ghost" size="sm" className="hidden rounded-full lg:inline-flex">
+                <Link href={launchWizardToggleModeHref(compact)} data-testid="launch-wizard-mode-toggle-desktop">
+                  {compact ? "Switch to full view" : "Switch to compact view"}
+                </Link>
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -63,7 +78,11 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
               <span className="text-muted-foreground">Launch progress</span>
               <span className="font-medium tabular-nums">{progress.percent}%</span>
             </div>
-            <Progress value={progress.percent} className="h-2" />
+            <Progress
+              value={progress.percent}
+              className="h-2"
+              aria-label={launchWizardProgressAriaLabel(progress)}
+            />
           </div>
           {nextStep ? (
             <div className="rounded-xl border border-border/70 bg-background/80 px-3 py-3">
@@ -72,7 +91,7 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
               </p>
               <p className="mt-1 font-medium">{nextStep.title}</p>
               <p className="mt-1 text-sm text-muted-foreground">{nextStep.summary}</p>
-              <Button asChild size="sm" className="mt-3 rounded-full">
+              <Button asChild size="sm" className="mt-3 w-full rounded-full sm:w-auto">
                 <Link href={nextStep.href} data-testid="launch-wizard-next-step">
                   {nextStep.ctaLabel}
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
@@ -89,7 +108,11 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
 
       <LaunchWizardCommercialBlockersPanel slice={model.commercialBlockers} compact={compact} />
 
-      <div className={cn("grid gap-3", compact ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2")}>
+      <div
+        className={cn("grid gap-3", compact ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2")}
+        role="list"
+        aria-label="Launch setup steps"
+      >
         {model.steps.map((step) => (
           <LaunchWizardStepCard key={step.id} step={step} compact={compact} />
         ))}
@@ -101,23 +124,26 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
 function LaunchWizardStepCard(props: { step: LaunchWizardStep; compact?: boolean }) {
   const { step, compact = false } = props;
   const badge = statusBadge(step.status);
+  const titleId = `launch-wizard-step-title-${step.id}`;
 
   return (
     <Card
       className={cn(
-        "border-border/80 shadow-sm scroll-mt-24",
+        "border-border/80 shadow-sm scroll-mt-28 lg:scroll-mt-24",
         step.status === "blocked" && "border-amber-200/80 bg-amber-50/20 dark:border-amber-900/40",
         step.status === "complete" && "border-emerald-200/60 bg-emerald-50/10 dark:border-emerald-900/30",
       )}
       data-testid={`launch-wizard-step-${step.id}`}
       id={`launch-wizard-step-${step.id}`}
+      role="listitem"
+      aria-labelledby={titleId}
     >
       <CardHeader className={cn("pb-2", compact && "py-3")}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
-            {statusIcon(step.status)}
+            <span aria-label={launchWizardStepStatusAriaLabel(step.status)}>{statusIcon(step.status)}</span>
             <div className="min-w-0">
-              <CardTitle className="text-base">
+              <CardTitle id={titleId} className="text-base">
                 <span className="mr-2 text-xs font-normal text-muted-foreground tabular-nums">
                   {step.order}.
                 </span>
@@ -141,7 +167,7 @@ function LaunchWizardStepCard(props: { step: LaunchWizardStep; compact?: boolean
           <span className="truncate">Evidence: {step.evidenceSource}</span>
         </div>
         {step.missingItems.length > 0 ? (
-          <ul className="space-y-1 text-sm text-muted-foreground">
+          <ul className="space-y-1 text-sm text-muted-foreground" aria-label="Missing items">
             {step.missingItems.map((item) => (
               <li key={item} className="flex gap-2">
                 <span aria-hidden>•</span>
@@ -152,7 +178,12 @@ function LaunchWizardStepCard(props: { step: LaunchWizardStep; compact?: boolean
         ) : (
           <p className="text-sm text-muted-foreground">No missing items for this step.</p>
         )}
-        <Button asChild variant={step.status === "blocked" ? "default" : "outline"} size="sm" className="rounded-full">
+        <Button
+          asChild
+          variant={step.status === "blocked" ? "default" : "outline"}
+          size="sm"
+          className="w-full rounded-full sm:w-auto"
+        >
           <Link href={step.href} data-testid={`launch-wizard-step-cta-${step.id}`}>
             {step.ctaLabel}
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden />

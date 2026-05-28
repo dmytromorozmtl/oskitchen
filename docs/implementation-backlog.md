@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-013 — Launch Wizard mobile/tablet UX polish (P1 WOW)
+- ID: `KOS-E19-013`
+- Title: Era 19 Workstream C Cycle 13 — sticky progress strip, step navigator, mode toggle, a11y
+- Module: Onboarding / Launch Wizard / Operator UX
+- Priority: P1 (WOW pillar — time-to-first-order on mobile/tablet)
+- Status: **wizard_ux_polished**
+- Decision: `era19-launch-wizard-ux-v1` — sticky progress strip, horizontal step nav, compact/full toggle, accessible progress labels, full-width mobile CTAs
+- Evidence: `lib/launch-wizard/launch-wizard-ux-era19.ts`, `LaunchWizardProgressStrip`, updated `LaunchWizardView`
+- Next: Integration Health D4 recovery checklist or briefing B6 risk radar commercial signals
+
 ### KOS-E19-012 — Support-admin briefing role pack (P1 WOW)
 - ID: `KOS-E19-012`
 - Title: Era 19 Workstream B Cycle 12 — support admin role pack on Owner Daily Briefing
