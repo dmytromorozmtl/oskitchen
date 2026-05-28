@@ -193,7 +193,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **SSO IdP staging smoke plan** | `era17-enterprise-sso-idp-staging-smoke-v1`; `docs/enterprise-sso-idp-staging-smoke-plan.md`; `smoke:enterprise-sso-idp-staging`; delivery **pilot_foundation** unchanged |
 | **2** | **SSO IdP login proof (operator)** | `era17-enterprise-sso-idp-login-proof-v1`; **awaiting_operator_proof** — smoke `overall: SKIPPED` + 6 missing env vars until staging + IdP secrets |
-| **3** | **Staging workflows first green** | `era17-staging-workflows-first-green-v1`; **awaiting_github_first_green** — SKIPPED until GitHub secrets + run URLs |
+| **3** | **Staging workflows first green** | `era17-staging-workflows-first-green-v1`; **awaiting_github_first_green** — smoke `overall: SKIPPED` + 3 missing env vars until GitHub secrets + run URLs |
 | **4** | **Woo live channel smoke** | `era17-channel-live-smoke-woo-v1`; **awaiting_live_credentials** — SKIPPED until DATABASE_URL + Woo connection |
 | **5** | **Shopify live channel smoke** | `era17-channel-live-smoke-shopify-v1`; **awaiting_live_credentials** — SKIPPED until DATABASE_URL + Shopify connection |
 | **6** | **Channel GitHub workflow first green** | `era17-channel-github-workflow-first-green-v1`; **awaiting_github_first_green** — SKIPPED until workflow_dispatch PASS recorded |
@@ -693,6 +693,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 22: `era17-pos-manager-discount-v1` — manager discount guard + COMPED RBAC edge cases; **discount_guard_depth_enforced** |
 | 2026-05-28 | Era 17 Cycle 23: `era17-public-post-abuse-v1` — P1 public POST route rate limits; **p1_public_post_guards_expanded** |
 | 2026-05-28 | Era 17 Cycle 24: `era17-pos-operator-runbook-v1` — software-only POS golden path runbook; **operator_runbook_ready** |
+| 2026-05-28 | Era 17 P0 #2 re-run: staging workflows first green → wiring cert PASSED; GitHub proof **SKIPPED WITH REASON** (`overall: SKIPPED`; 3 env vars); cert script no longer clobbers artifact |
 | 2026-05-28 | Era 17 Cycle 2 re-run: SSO IdP smoke → wiring cert PASSED; login proof **SKIPPED WITH REASON** (`overall: SKIPPED`; 6 env vars); cert script no longer clobbers artifact |
 | 2026-05-28 | Era 17 Cycle 34: `era17-channel-pilot-setup-wizard-v1` — Woo/Shopify 5-step pilot setup wizard; **pilot_setup_wizard_ready** |
 | 2026-05-28 | Era 17 Cycle 33: `era17-permission-denied-ux-v1` — POS/KDS RBAC denial UX; **permission_denied_ux_consistent** |

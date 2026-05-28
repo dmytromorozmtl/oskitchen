@@ -312,7 +312,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Era 17 — Workstream parallel to SSO; P0 #2)
 - Status: **awaiting_github_first_green**
 - Decision: `era17-staging-workflows-first-green-v1` — GitHub run URL recording; explicit missing-env list; target ≥2/3 workflows PASSED
-- Evidence: `lib/ci/staging-workflows-first-green-era17-policy.ts`, enhanced summary, `smoke-staging-workflows-first-green-era17.ts`, `artifacts/staging-workflows-first-green-summary.json` (`firstGreenProofStatus: proof_skipped_missing_prerequisites`; `githubPassedCount: 0/3`)
+- Evidence: `lib/ci/staging-workflows-first-green-era17-policy.ts`, enhanced summary, `smoke-staging-workflows-first-green-era17.ts`, `artifacts/staging-workflows-first-green-summary.json` (`firstGreenProofStatus: proof_skipped_missing_prerequisites`, `overall: SKIPPED`; `githubPassedCount: 0/3`)
 - Next: **Ops** — configure GitHub secrets; workflow_dispatch E2E + KDS (+ Woo/Shopify optional); record `GITHUB_*_RUN_URL` + outcomes; target ≥2/3 PASSED
 
 ### KOS-E17-002 — Staging IdP login proof (P0)

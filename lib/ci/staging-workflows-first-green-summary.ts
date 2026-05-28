@@ -187,19 +187,26 @@ export function buildStagingWorkflowFirstGreenSummary(
   const githubRuns = [...(input?.githubRuns ?? [])];
   const githubPassedCount = countGitHubPassedRuns(githubRuns);
   const githubFailed = githubRuns.some((record) => record.outcome === "FAILED");
+  const firstGreenProofStatus = resolveStagingWorkflowFirstGreenProofStatus({
+    prerequisitesMet: stagingSecretsConfigured,
+    githubPassedCount,
+    githubFailed,
+  });
+
+  let overall = resolveStagingWorkflowFirstGreenOverall(steps);
+  if (firstGreenProofStatus !== "proof_passed" && overall === "PASSED") {
+    overall =
+      firstGreenProofStatus === "proof_failed" ? "FAILED" : "SKIPPED";
+  }
 
   return {
     version: STAGING_WORKFLOWS_FIRST_GREEN_SUMMARY_VERSION,
     runAt: new Date().toISOString(),
-    overall: resolveStagingWorkflowFirstGreenOverall(steps),
+    overall,
     wiringCertPassed,
     stagingSecretsConfigured,
     stagingHealthChecked,
-    firstGreenProofStatus: resolveStagingWorkflowFirstGreenProofStatus({
-      prerequisitesMet: stagingSecretsConfigured,
-      githubPassedCount,
-      githubFailed,
-    }),
+    firstGreenProofStatus,
     missingEnvVars: [...(input?.missingEnvVars ?? [])],
     githubRuns,
     githubPassedCount,

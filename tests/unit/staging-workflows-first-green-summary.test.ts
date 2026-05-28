@@ -68,6 +68,7 @@ describe("staging workflows first green summary", () => {
     expect(summary.version).toBe("era17-staging-workflows-first-green-v1");
     expect(summary.wiringCertPassed).toBe(true);
     expect(summary.firstGreenProofStatus).toBe("proof_skipped_missing_prerequisites");
+    expect(summary.overall).toBe("SKIPPED");
     expect(summary.githubPassedCount).toBe(0);
   });
 

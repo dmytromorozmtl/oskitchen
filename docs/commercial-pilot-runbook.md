@@ -53,7 +53,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 4. Run `npm run smoke:staging-workflows-first-green` — review `artifacts/staging-workflows-first-green-summary.json` (`firstGreenProofStatus`, `githubPassedCount`).
 5. **proof_passed** requires **≥2/3** workflows with GitHub `PASSED` — wiring cert alone is insufficient.
 
-**Execution status (2026-05-28):** local smoke → **SKIPPED WITH REASON** (3 prerequisite env vars unset; 0/3 GitHub runs recorded). Re-run after ops configures secrets and records run URLs.
+**Execution status (2026-05-28):** smoke re-run → wiring cert **PASSED**; GitHub first green **SKIPPED WITH REASON** (3 prerequisite env vars unset; `overall: SKIPPED`; 0/3 GitHub runs recorded). Re-run after ops configures secrets and records `GITHUB_*_RUN_URL` + outcomes.
 
 ### Woo/Shopify live channel smoke (optional — Era 16 + Era 17)
 
