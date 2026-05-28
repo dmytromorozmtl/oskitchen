@@ -12,6 +12,7 @@ import {
 import { resolveOperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { canUseFullSupportInbox } from "@/lib/support/support-permissions";
 import { prisma } from "@/lib/prisma";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
 import {
@@ -46,10 +47,14 @@ export default async function TodayOperationsPage({
     persona,
     granted: actor.granted,
   });
+  const supportAdmin =
+    actor.platformBypass ||
+    (await canUseFullSupportInbox(actor.sessionUserId, actor.email, actor.workspaceRole));
   const showOwnerBriefing = resolveOwnerDailyBriefingVisibility({
     workspaceRole: actor.workspaceRole,
     persona,
     granted: actor.granted,
+    supportAdmin,
   });
   const showLaunchWizardStrip = actor.workspaceRole === "OWNER";
   const data = await loadTodayCommandCenter(dataUserId);
@@ -67,6 +72,7 @@ export default async function TodayOperationsPage({
           today: data,
           persona,
           workspaceRole: actor.workspaceRole,
+          supportAdmin,
         })
       : Promise.resolve(null),
     showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId) : Promise.resolve(null),

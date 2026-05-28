@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-012 — Support-admin briefing role pack (P1 WOW)
+- ID: `KOS-E19-012`
+- Title: Era 19 Workstream B Cycle 12 — support admin role pack on Owner Daily Briefing
+- Module: Dashboard / Today / Owner Daily Briefing / Support
+- Priority: P1 (WOW pillar depth — support triage command center)
+- Status: **support_admin_role_pack_wired**
+- Decision: `era19-owner-daily-briefing-support-admin-v1` — workspace blockers, P0 proof, GO/NO-GO, open tickets tiles for platform/support triage; honest unavailable states
+- Evidence: `lib/briefing/owner-daily-briefing-support-admin-era19.ts`, Today briefing for `canUseFullSupportInbox` + platform bypass
+- Next: Launch Wizard C3 mobile polish or Integration Health D4 recovery checklist expansion
+
 ### KOS-E19-011 — Integration Health support/admin triage mode (P1 WOW)
 - ID: `KOS-E19-011`
 - Title: Era 19 Workstream D Cycle 11 — support admin triage panel on integration health

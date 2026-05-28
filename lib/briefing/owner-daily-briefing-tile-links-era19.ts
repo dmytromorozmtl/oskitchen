@@ -93,6 +93,31 @@ export const BRIEFING_TILE_LINK_DEFINITIONS: Record<string, BriefingTileLinkDefi
     whyItMatters: "Staffing vs schedule affects ticket times and labor cost during the shift.",
     rolePacks: ["owner", "manager"],
   },
+  "support-workspace-blockers": {
+    href: "/dashboard/integration-health#support-admin-triage",
+    whyItMatters: "Operational blockers stall tenant service — triage before escalating to platform ops.",
+    rolePacks: ["support_admin"],
+  },
+  "support-p0-proof": {
+    href: "/dashboard/integration-health#engineering-smoke-artifacts",
+    whyItMatters: "P0 staging proof is ops-gated — never claim PASS without artifact evidence.",
+    rolePacks: ["support_admin"],
+  },
+  "support-pilot-gono-go": {
+    href: LAUNCH_WIZARD_ROUTE,
+    whyItMatters: "Paid pilot GO/NO-GO must come from smoke artifact — not sales assumptions.",
+    rolePacks: ["support_admin"],
+  },
+  "support-open-tickets": {
+    href: "/dashboard/support/inbox",
+    whyItMatters: "Open tickets may hide integration or launch blockers for this tenant.",
+    rolePacks: ["support_admin"],
+  },
+  "support-integration-errors": {
+    href: "/dashboard/integration-health#support-admin-triage",
+    whyItMatters: "ERROR connections can silently drop channel orders during pilot traffic.",
+    rolePacks: ["support_admin"],
+  },
 };
 
 const LOW_STOCK_SETUP_HREF = "/dashboard/inventory";

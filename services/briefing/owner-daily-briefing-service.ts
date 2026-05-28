@@ -27,6 +27,11 @@ import {
   type OwnerDailyBriefingProductionCalendarSlice,
 } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import {
+  buildOwnerDailyBriefingSupportAdminActions,
+  buildOwnerDailyBriefingSupportAdminAlerts,
+  buildOwnerDailyBriefingSupportAdminTiles,
+} from "@/lib/briefing/owner-daily-briefing-support-admin-era19";
+import {
   BRIEFING_ROLE_PACK_HEADLINE,
   BRIEFING_ROLE_PACK_LABEL,
   filterBriefingActionsForRolePack,
@@ -162,6 +167,7 @@ export async function loadOwnerDailyBriefing(
     rolePack?: BriefingRolePack;
     persona?: OperatorHomePersona;
     workspaceRole?: UserRole;
+    supportAdmin?: boolean;
   },
 ): Promise<OwnerDailyBriefingPayload> {
   const showIntegrationHealth = options?.showIntegrationHealth ?? true;
@@ -170,7 +176,10 @@ export async function loadOwnerDailyBriefing(
     resolveBriefingRolePack({
       workspaceRole: options?.workspaceRole ?? "STAFF",
       persona: options?.persona ?? "manager",
+      supportAdmin: options?.supportAdmin ?? false,
     });
+
+  const needsCommercialOps = rolePack === "owner" || rolePack === "support_admin";
 
   const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts, commercialOps] =
     await Promise.all([
@@ -180,7 +189,7 @@ export async function loadOwnerDailyBriefing(
     loadLaborBriefingSlice(userId),
     getProductionCalendarOpenThroughToday(userId),
     countOpenPosShifts(userId),
-    rolePack === "owner"
+    needsCommercialOps
       ? loadCommercialPilotOpsStatusModel().catch(() => null)
       : Promise.resolve(null),
   ]);
@@ -234,23 +243,45 @@ export async function loadOwnerDailyBriefing(
     posShift: { openCount: openPosShifts },
   };
 
-  const allTiles = buildOwnerDailyBriefingTiles(briefingInput);
-  const allAlerts = buildOwnerDailyBriefingAlerts({
-    blockers: today.blockers,
-    pilotAlerts,
-    productionCalendarAlerts,
-    kpis: today.kpis,
-  });
-  const allTopActions = pickOwnerDailyBriefingTopActions({
-    blockers: today.blockers,
-    alerts: allAlerts,
-    readinessOverall: today.readiness.overall,
-    kpis: today.kpis,
-    pilotAttentionCount: pilotSummary.totalSignals,
-    integrationOverall: briefingInput.integrationOverall,
-    lowStockCount: lowStock.lowStockCount,
-    productionCalendarActions,
-  });
+  const allTiles =
+    rolePack === "support_admin"
+      ? buildOwnerDailyBriefingSupportAdminTiles({
+          blockers: today.blockers,
+          openSupportTickets: today.kpis.openSupportTickets,
+          errorIntegrations: today.kpis.errorIntegrations,
+          commercialOps,
+        })
+      : buildOwnerDailyBriefingTiles(briefingInput);
+  const allAlerts =
+    rolePack === "support_admin"
+      ? buildOwnerDailyBriefingSupportAdminAlerts({
+          blockers: today.blockers,
+          openSupportTickets: today.kpis.openSupportTickets,
+          commercialOps,
+        })
+      : buildOwnerDailyBriefingAlerts({
+          blockers: today.blockers,
+          pilotAlerts,
+          productionCalendarAlerts,
+          kpis: today.kpis,
+        });
+  const allTopActions =
+    rolePack === "support_admin"
+      ? buildOwnerDailyBriefingSupportAdminActions({
+          blockers: today.blockers,
+          openSupportTickets: today.kpis.openSupportTickets,
+          commercialOps,
+        })
+      : pickOwnerDailyBriefingTopActions({
+          blockers: today.blockers,
+          alerts: allAlerts,
+          readinessOverall: today.readiness.overall,
+          kpis: today.kpis,
+          pilotAttentionCount: pilotSummary.totalSignals,
+          integrationOverall: briefingInput.integrationOverall,
+          lowStockCount: lowStock.lowStockCount,
+          productionCalendarActions,
+        });
 
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
   const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);
@@ -323,7 +354,9 @@ export function resolveOwnerDailyBriefingVisibility(input: {
   workspaceRole: UserRole;
   persona: OperatorHomePersona;
   granted: ReadonlySet<PermissionKey>;
+  supportAdmin?: boolean;
 }): boolean {
+  if (input.supportAdmin) return true;
   if (!shouldShowBriefingForPersona(input)) return false;
   if (input.workspaceRole === "OWNER") return true;
   if (input.persona === "kitchen" || input.persona === "cashier") return true;

@@ -11,7 +11,7 @@ import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 export const OWNER_DAILY_BRIEFING_ROLE_PACKS_ERA19_POLICY_ID =
   "era19-owner-daily-briefing-role-packs-v1" as const;
 
-export type BriefingRolePack = "owner" | "manager" | "kitchen" | "cashier";
+export type BriefingRolePack = "owner" | "manager" | "kitchen" | "cashier" | "support_admin";
 
 export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly string[]> = {
   owner: [
@@ -46,6 +46,13 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
     "orders-today",
     "stuck-orders",
   ],
+  support_admin: [
+    "support-workspace-blockers",
+    "support-p0-proof",
+    "support-pilot-gono-go",
+    "support-open-tickets",
+    "support-integration-errors",
+  ],
 };
 
 export const BRIEFING_ROLE_PACK_ACTION_ROLES: Record<
@@ -56,6 +63,7 @@ export const BRIEFING_ROLE_PACK_ACTION_ROLES: Record<
   manager: ["manager", "kitchen", "owner"],
   kitchen: ["kitchen", "manager"],
   cashier: ["manager"],
+  support_admin: ["support"],
 };
 
 export const BRIEFING_ROLE_PACK_LABEL: Record<BriefingRolePack, string> = {
@@ -63,6 +71,7 @@ export const BRIEFING_ROLE_PACK_LABEL: Record<BriefingRolePack, string> = {
   manager: "Manager command center",
   kitchen: "Kitchen command center",
   cashier: "Cashier command center",
+  support_admin: "Support admin command center",
 };
 
 export const BRIEFING_ROLE_PACK_HEADLINE: Record<BriefingRolePack, string> = {
@@ -70,13 +79,17 @@ export const BRIEFING_ROLE_PACK_HEADLINE: Record<BriefingRolePack, string> = {
   manager: "Shift operations — labor, kitchen pressure, packing, and today's orders.",
   kitchen: "Line priorities — KDS pressure, production batches, and packing handoff.",
   cashier: "Register focus — open shifts, POS activity, and order lookups.",
+  support_admin:
+    "Support triage — workspace blockers, P0 proof, pilot GO/NO-GO, and open tickets.",
 };
 
 export function resolveBriefingRolePack(input: {
   workspaceRole: UserRole;
   persona: OperatorHomePersona;
+  supportAdmin?: boolean;
 }): BriefingRolePack {
   if (input.workspaceRole === "OWNER") return "owner";
+  if (input.supportAdmin) return "support_admin";
   if (input.persona === "kitchen") return "kitchen";
   if (input.persona === "cashier") return "cashier";
   if (input.persona === "manager") return "manager";
@@ -86,7 +99,9 @@ export function resolveBriefingRolePack(input: {
 export function shouldShowBriefingForPersona(input: {
   workspaceRole: UserRole;
   persona: OperatorHomePersona;
+  supportAdmin?: boolean;
 }): boolean {
+  if (input.supportAdmin) return true;
   if (input.workspaceRole === "OWNER") return true;
   return (
     input.persona === "manager" ||
@@ -116,6 +131,18 @@ export function filterBriefingAlertsForRolePack(
   pack: BriefingRolePack,
 ): OwnerDailyBriefingAlert[] {
   if (pack === "owner") return [...alerts];
+
+  if (pack === "support_admin") {
+    return alerts.filter(
+      (alert) =>
+        alert.id.startsWith("blocker-") ||
+        alert.id.startsWith("support-") ||
+        alert.id.includes("pilot") ||
+        alert.id.includes("commercial") ||
+        alert.id.startsWith("gate-") ||
+        alert.id === "support-open",
+    );
+  }
 
   if (pack === "manager") {
     return alerts.filter(
@@ -150,11 +177,11 @@ export function shouldShowBriefingProductionCalendarLane(pack: BriefingRolePack)
 }
 
 export function shouldShowBriefingPilotReadinessLane(pack: BriefingRolePack): boolean {
-  return pack === "owner";
+  return pack === "owner" || pack === "support_admin";
 }
 
 export function shouldShowBriefingIntegrationHealthLane(pack: BriefingRolePack): boolean {
-  return pack === "owner" || pack === "manager";
+  return pack === "owner" || pack === "manager" || pack === "support_admin";
 }
 
 export function pickBriefingHeroTilesForRolePack(
