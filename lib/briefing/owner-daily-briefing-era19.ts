@@ -1,6 +1,13 @@
 import type { TodayBlocker } from "@/services/today/today-command-center-service";
+import {
+  enrichBriefingTilesLinks,
+  normalizeBriefingOperationalHref,
+} from "@/lib/briefing/owner-daily-briefing-tile-links-era19";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 
 export type BriefingTileAvailability = "available" | "not_configured" | "unavailable";
+
+export type BriefingTileLinkState = "operational" | "blocked" | "empty" | "setup_needed";
 
 export type OwnerDailyBriefingTile = {
   id: string;
@@ -20,8 +27,10 @@ export type OwnerDailyBriefingTile = {
   label: string;
   value: string;
   detail: string;
+  whyItMatters: string;
   href: string;
   availability: BriefingTileAvailability;
+  linkState: BriefingTileLinkState;
   tone: "neutral" | "attention" | "success";
   priority: number;
 };
@@ -112,10 +121,15 @@ export type OwnerDailyBriefingInput = {
   };
 };
 
+export type OwnerDailyBriefingTileDraft = Omit<
+  OwnerDailyBriefingTile,
+  "whyItMatters" | "linkState"
+>;
+
 export function buildOwnerDailyBriefingTiles(
   input: OwnerDailyBriefingInput,
 ): OwnerDailyBriefingTile[] {
-  const tiles: OwnerDailyBriefingTile[] = [];
+  const tiles: OwnerDailyBriefingTileDraft[] = [];
 
   tiles.push({
     id: "orders-today",
@@ -407,7 +421,7 @@ export function buildOwnerDailyBriefingTiles(
     });
   }
 
-  return tiles.sort((a, b) => a.priority - b.priority);
+  return enrichBriefingTilesLinks(tiles.sort((a, b) => a.priority - b.priority));
 }
 
 export function buildOwnerDailyBriefingAlerts(input: {
@@ -423,7 +437,7 @@ export function buildOwnerDailyBriefingAlerts(input: {
       id: `blocker-${blocker.id}`,
       title: blocker.title,
       detail: blocker.detail,
-      href: blocker.href,
+      href: normalizeBriefingOperationalHref(blocker.href),
       priority: blocker.priority,
       tone: "urgent",
     });
@@ -488,7 +502,7 @@ export function pickOwnerDailyBriefingTopActions(input: {
       reason: blocker.detail,
       severity: "critical",
       ownerRole: blocker.id.includes("integration") ? "owner" : "manager",
-      href: blocker.href,
+      href: normalizeBriefingOperationalHref(blocker.href),
       status: "open",
       unblockCondition: "Resolve the blocker and refresh Today.",
       priority: blocker.priority,
@@ -605,11 +619,11 @@ export function pickOwnerDailyBriefingTopActions(input: {
       reason: `${input.pilotAttentionCount} channel, SSO, or go-live gap(s) block a clean pilot launch.`,
       severity: "high",
       ownerRole: "owner",
-      href: "/dashboard/implementation",
+      href: LAUNCH_WIZARD_ROUTE,
       status: "open",
-      unblockCondition: "Complete pilot setup wizard steps and go-live validation.",
+      unblockCondition: "Complete launch wizard steps and commercial evidence gates.",
       priority: 12,
-      ctaLabel: "Open implementation",
+      ctaLabel: "Open launch wizard",
       tone: "normal",
     });
   }
@@ -621,11 +635,11 @@ export function pickOwnerDailyBriefingTopActions(input: {
       reason: `Go-live readiness is ${input.readinessOverall}% — close setup before pilot traffic.`,
       severity: "normal",
       ownerRole: "owner",
-      href: "/dashboard/go-live",
+      href: LAUNCH_WIZARD_ROUTE,
       status: "open",
-      unblockCondition: "Complete go-live checklist categories above 85%.",
+      unblockCondition: "Complete launch wizard setup categories above 85%.",
       priority: 13,
-      ctaLabel: "Open go-live",
+      ctaLabel: "Open launch wizard",
       tone: "normal",
     });
   }

@@ -2,11 +2,13 @@ import type {
   OwnerDailyBriefingAlert,
   OwnerDailyBriefingRankedAction,
   OwnerDailyBriefingTile,
+  OwnerDailyBriefingTileDraft,
 } from "@/lib/briefing/owner-daily-briefing-era19";
 import {
   isoDateOnly,
   weekStartMonday,
 } from "@/lib/production/production-calendar-week-navigation";
+import { enrichBriefingTileLinks } from "@/lib/briefing/owner-daily-briefing-tile-links-era19";
 import type {
   ProductionCalendarAttentionItem,
   ProductionCalendarFocusSummary,
@@ -91,7 +93,7 @@ export function buildProductionCalendarBriefingTile(
     slice.attentionItems[0]?.href ??
     slice.calendarHref;
 
-  return {
+  const draft: OwnerDailyBriefingTileDraft = {
     id: "production-calendar-today",
     category: "production",
     label: "Production calendar",
@@ -102,6 +104,8 @@ export function buildProductionCalendarBriefingTile(
     tone: attention ? "attention" : slice.hasPlanTasks ? "success" : "neutral",
     priority: summary.overdue > 0 ? 4 : summary.dueToday > 0 ? 13 : 24,
   };
+
+  return enrichBriefingTileLinks(draft);
 }
 
 export function productionCalendarAlertsForBriefing(

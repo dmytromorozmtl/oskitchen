@@ -8,6 +8,7 @@ import {
   pickOwnerDailyBriefingTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era19";
 import { OWNER_DAILY_BRIEFING_ERA19_POLICY_ID } from "@/lib/briefing/owner-daily-briefing-era19-policy";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 
 const baseInput = {
   kpis: {
@@ -130,7 +131,7 @@ describe("owner daily briefing era19", () => {
         posKitchenQueueToday: 0,
       },
     });
-    expect(next.href).toBe("/dashboard/go-live");
+    expect(next.href).toBe(LAUNCH_WIZARD_ROUTE);
     expect(next.title).toContain("workspace setup");
   });
 

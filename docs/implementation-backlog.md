@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-010 — Briefing tile deep-link polish (P1 WOW)
+- ID: `KOS-E19-010`
+- Title: Era 19 Workstream B Cycle 10 — briefing tile link registry, why-it-matters microcopy, blocked states
+- Module: Dashboard / Today / Owner Daily Briefing / Operator UX
+- Priority: P1 (WOW pillar depth)
+- Status: **tile_links_polished**
+- Decision: `era19-owner-daily-briefing-tile-links-v1` — canonical href registry, role-safe packs, launch wizard action links, empty/blocked/setup UI states
+- Evidence: `lib/briefing/owner-daily-briefing-tile-links-era19.ts`, enriched hero tile cards, audit tests
+- Next: Integration Health D3 support admin mode or briefing support-admin role pack
+
 ### KOS-E19-009 — Launch Wizard commercial blockers + Today strip (P1 WOW)
 - ID: `KOS-E19-009`
 - Title: Era 19 Workstream C Cycle 9 — commercial GO/NO-GO blockers lane + owner Today strip

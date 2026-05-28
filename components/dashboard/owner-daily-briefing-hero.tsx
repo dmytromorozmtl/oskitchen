@@ -11,6 +11,7 @@ import type {
   OwnerDailyBriefingTile,
 } from "@/lib/briefing/owner-daily-briefing-era19";
 import type { OwnerDailyBriefingPayload } from "@/services/briefing/owner-daily-briefing-service";
+import { briefingTileLinkStateLabel } from "@/lib/briefing/owner-daily-briefing-tile-links-era19";
 import type { OwnerDailyBriefingProductionCalendarSlice } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import type { OwnerDailyBriefingIntegrationHealthSlice } from "@/lib/briefing/owner-daily-briefing-integration-health-era19";
 import type { OwnerDailyBriefingPilotReadinessSlice } from "@/lib/briefing/owner-daily-briefing-pilot-readiness-era19";
@@ -193,25 +194,39 @@ function RankedActionRow(props: { action: OwnerDailyBriefingRankedAction; rank: 
 function BriefingTileCard(props: { tile: OwnerDailyBriefingTile }) {
   const { tile } = props;
   const availability = availabilityLabel(tile.availability);
+  const linkStateLabel = briefingTileLinkStateLabel(tile.linkState);
 
   return (
     <Link
       href={tile.href}
       data-testid={`owner-briefing-tile-${tile.id}`}
-      className={`block rounded-2xl border px-3 py-3 transition-colors hover:bg-muted/30 ${tileToneClass(tile.tone)}`}
+      className={`block rounded-2xl border px-3 py-3 transition-colors hover:bg-muted/30 ${tileToneClass(tile.tone)} ${
+        tile.linkState === "blocked" ? "ring-1 ring-amber-200/60 dark:ring-amber-900/40" : ""
+      } ${tile.linkState === "setup_needed" ? "opacity-95" : ""}`}
     >
       <div className="flex items-start justify-between gap-2">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {tile.label}
         </p>
-        {availability ? (
-          <Badge variant="secondary" className="rounded-full text-[10px]">
-            {availability}
-          </Badge>
-        ) : null}
+        <div className="flex flex-wrap justify-end gap-1">
+          {linkStateLabel ? (
+            <Badge
+              variant={tile.linkState === "blocked" ? "destructive" : "secondary"}
+              className="rounded-full text-[10px]"
+            >
+              {linkStateLabel}
+            </Badge>
+          ) : null}
+          {availability ? (
+            <Badge variant="secondary" className="rounded-full text-[10px]">
+              {availability}
+            </Badge>
+          ) : null}
+        </div>
       </div>
       <p className="mt-2 text-2xl font-semibold tabular-nums">{tile.value}</p>
       <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{tile.detail}</p>
+      <p className="mt-2 text-[11px] text-muted-foreground/90 line-clamp-2">{tile.whyItMatters}</p>
     </Link>
   );
 }
