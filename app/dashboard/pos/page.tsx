@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -11,14 +11,7 @@ export default async function PosOverviewPage() {
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
   if (!hasPermission(actor.granted, "pos.access")) {
-    return (
-      <PosAccessCard
-        title="POS workspace"
-        description="You do not have permission to view the POS workspace."
-        primaryHref="/dashboard"
-        primaryLabel="Back to dashboard"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
   const [registers, tx7] = await Promise.all([
     prisma.pOSRegister.count({ where: { userId } }),

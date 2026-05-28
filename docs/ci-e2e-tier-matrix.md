@@ -55,7 +55,7 @@ npm run test:ci:storefront-money-path:e2e
 
 | Suite | Command | DB | Notes |
 |-------|---------|-----|-------|
-| POS tablet UX (Era 17) | `npm run test:ci:pos-tablet-ux-era17:cert` | `era17-pos-tablet-ux-v1`; touch targets; checkout status UX; operator runbook; chained in pos-money-path cert |
+| POS tablet UX (Era 17) | `npm run test:ci:pos-tablet-ux-era17:cert` | `era17-pos-tablet-ux-v1`; touch targets; checkout status UX; **`era17-permission-denied-ux-v1`** chained; operator runbook; chained in pos-money-path cert |
 | POS manager discount (Era 17) | `npm run test:ci:pos-manager-discount-era17:cert` | `era17-pos-manager-discount-v1`; explicit discount + COMPED RBAC; `pos-discount-guard`; chained in pos-money-path cert |
 | POS operator runbook (Era 17) | `npm run test:ci:pos-operator-runbook-era17:cert` | `era17-pos-operator-runbook-v1`; software-only golden path; `npm run smoke:pos-operator-runbook`; chained in pos-money-path cert |
 | POS receipt/shift spotcheck (Era 17) | `npm run test:ci:pos-receipt-shift-spotcheck-era17:cert` | `era17-pos-receipt-shift-spotcheck-v1`; closeout math + receipt consistency; chained in pos-money-path cert |

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-032 — Permission denied UX consistency (P1)
+- ID: `KOS-E17-032`
+- Title: Era 17 Cycle 33 — standardized POS/KDS/dashboard RBAC denial cards
+- Module: UX / RBAC
+- Priority: P1 (Workstream H Cycle 33)
+- Status: **permission_denied_ux_consistent**
+- Decision: `era17-permission-denied-ux-v1` — shared copy + `PermissionDeniedSurfaceCard`
+- Evidence: `docs/permission-denied-ux-era17.md`, `test:ci:permission-denied-ux-era17:cert`
+- Next: Integration setup wizard friction (Cycle 34) or P0 credential-blocked smokes
+
 ### KOS-E17-031 — Nav maturity sweep (P1)
 - ID: `KOS-E17-031`
 - Title: Era 17 Cycle 32 — classify Era 17 preview routes + nav honesty recert
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **nav_maturity_sweep_recertified**
 - Decision: `era17-nav-maturity-sweep-v1` — 5 preview routes + focused nav zero-gap audit
 - Evidence: `test:ci:nav-maturity-sweep-era17:cert`, `npm run smoke:nav-maturity-sweep-era17`
-- Next: Permission denied UX consistency (Cycle 33) or P0 credential-blocked smokes
+- Next: Permission denied UX consistency (Cycle 33) — **done**; see KOS-E17-032
 
 ### KOS-E17-030 — Costing pilot spot check (P1)
 - ID: `KOS-E17-030`

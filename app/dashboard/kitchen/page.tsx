@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { KbHelpButton } from "@/components/dashboard/kb-help-button";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { KitchenScreenClient } from "@/components/dashboard/kitchen-screen-client";
 import { KdsDailyService } from "@/components/kitchen/kds-daily-service";
@@ -32,16 +33,7 @@ export default async function KitchenScreenPage({
   const { sessionUser: session, dataUserId } = actor;
 
   if (!hasPermission(actor.granted, "kitchen.view")) {
-    return (
-      <div className="mx-auto max-w-xl space-y-4 py-10">
-        <PosAccessCard
-          title="Kitchen display"
-          description="You do not have permission to view kitchen display tickets in this workspace."
-          primaryHref="/dashboard/today"
-          primaryLabel="Back to Today"
-        />
-      </div>
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="kds" />;
   }
 
   const operatingMode = await getTenantOperatingMode(dataUserId);

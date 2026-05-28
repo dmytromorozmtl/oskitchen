@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
+import { PERMISSION_DENIED_UX_ERA17_TEST_ID } from "@/lib/ux/permission-denied-era17-policy";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -11,6 +12,8 @@ type PosAccessCardProps = {
   primaryLabel?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  /** When set, surfaces required permission in data attribute for UX audits. */
+  permissionKey?: string;
 };
 
 export function PosAccessCard({
@@ -20,9 +23,15 @@ export function PosAccessCard({
   primaryLabel,
   secondaryHref,
   secondaryLabel,
+  permissionKey,
 }: PosAccessCardProps) {
   return (
-    <Card className="max-w-lg border-border/80 shadow-sm">
+    <Card
+      className="max-w-lg border-border/80 shadow-sm"
+      data-testid={PERMISSION_DENIED_UX_ERA17_TEST_ID}
+      data-permission-key={permissionKey ?? undefined}
+      role="status"
+    >
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -44,3 +53,6 @@ export function PosAccessCard({
     </Card>
   );
 }
+
+/** Prefer PermissionDeniedSurfaceCard for POS/KDS pilot surfaces; alias for legacy imports. */
+export const PermissionDeniedCard = PosAccessCard;

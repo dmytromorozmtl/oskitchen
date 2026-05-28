@@ -52,7 +52,7 @@ describe("POS tablet UX era17 CI certification (live repo)", () => {
     }
 
     const terminalPage = readFileSync(join(ROOT, "app/dashboard/pos/terminal/page.tsx"), "utf8");
-    expect(terminalPage).toContain("PosAccessCard");
+    expect(terminalPage).toContain("PermissionDeniedSurfaceCard");
   });
 
   it("documents era17 POS tablet UX in canonical docs", () => {

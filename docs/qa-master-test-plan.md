@@ -324,6 +324,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Smoke: `npm run smoke:nav-maturity-sweep-era17` → `artifacts/nav-maturity-sweep-era17-summary.json`
 - Wiring cert: `test:ci:nav-maturity-sweep-era17:cert` (chained in `test:ci:page-maturity-sweep:cert`)
 
+### 8c4q3. Permission denied UX Era 17 (Era 17 Cycle 33)
+- Policy: `lib/ux/permission-denied-era17-policy.ts` (`era17-permission-denied-ux-v1`)
+- Surfaces: POS terminal/hub/layout + KDS — `PermissionDeniedSurfaceCard`, `data-testid="permission-denied-card"`
+- Smoke: `npm run smoke:permission-denied-ux`
+- Wiring cert: `test:ci:permission-denied-ux-era17:cert` (chained in `test:ci:pos-tablet-ux-era17:cert`)
+
 ### 8c4p. Production calendar operator depth (Era 13 Cycle 4)
 - Policy: `lib/production/production-calendar-operator-depth-era13-policy.ts` (`era13-production-calendar-operator-depth-v1`; consolidates Era 6/8/10/11)
 - era15 recert: `lib/production/production-calendar-operator-depth-era15-policy.ts` (`era15-production-calendar-operator-recert-v1`)

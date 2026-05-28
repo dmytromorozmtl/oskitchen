@@ -234,6 +234,20 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Enforcement:** `test:ci:nav-maturity-sweep-era17:cert` (chained in `test:ci:page-maturity-sweep:cert`)
 
+---
+
+## Era 17 permission denied UX consistency (2026-05-28)
+
+**Policy:** `era17-permission-denied-ux-v1` — **permission_denied_ux_consistent**; standardized RBAC denial cards on POS/KDS pilot surfaces.
+
+1. **Surfaces:** POS terminal, POS hub, POS layout, KDS — `PermissionDeniedSurfaceCard` + `resolvePermissionDeniedSurface` + `permission-denied-card` test id.
+2. **Copy:** includes missing permission key (e.g. `pos.access`, `kitchen.view`) — ask owner for role update.
+3. Operator doc: **`docs/permission-denied-ux-era17.md`**
+4. Run **`npm run smoke:permission-denied-ux`** → **`artifacts/permission-denied-ux-summary.json`**
+5. **Forbidden:** treating RBAC denial as product bug; claiming hardware POS permission UX parity.
+
+**Enforcement:** `test:ci:permission-denied-ux-era17:cert` (chained in `test:ci:pos-tablet-ux-era17:cert`)
+
 ### Era 17 operational sign-off staging proof (2026-05-28)
 
 **Policy:** `era17-operational-signoff-staging-proof-v1` — **awaiting_staging_operator_signoff**; real staging URL + operator identity for KDS + production calendar.
@@ -480,7 +494,7 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 1. **Touch targets** — cart +/- and tab actions use `posTouchCompactClass` / `posTouchButtonClass` (44–48px floor).
 2. **Checkout status** — success (green), error (red), info (neutral) via `data-testid="pos-checkout-status"`.
-3. **Permission denied** — terminal and POS hub use **PosAccessCard** when `pos.access` is missing.
+3. **Permission denied** — terminal, POS hub, and KDS use **`PermissionDeniedSurfaceCard`** (`era17-permission-denied-ux-v1`) when `pos.access` or `kitchen.view` is missing — includes permission key in copy.
 4. **Tap-to-pay errors** — surfaced in checkout status region (not console-only).
 5. Operator guide: **`docs/pos-tablet-ux-operator-runbook-era17.md`** — software-only; no hardware/offline claim.
 6. Run **`npm run smoke:pos-tablet-ux`** → review **`artifacts/pos-tablet-ux-summary.json`**.

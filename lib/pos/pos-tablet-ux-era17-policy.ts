@@ -38,7 +38,7 @@ export const POS_TABLET_UX_ERA17_UX_TARGETS = [
   "48px primary tap targets on product tiles and complete sale",
   "44px floor on cart quantity controls and tab actions",
   "Distinct success / error / info checkout status styling",
-  "PosAccessCard for permission denied on terminal and hub",
+  "PermissionDeniedSurfaceCard for permission denied on terminal and hub",
   "Tap-to-pay errors surfaced in checkout status region",
   "Pending checkout skeleton while submitting",
 ] as const;
@@ -57,7 +57,7 @@ export const POS_TABLET_UX_ERA17_CANONICAL_MARKERS = [
   "smoke:pos-tablet-ux",
   "tablet_ux_polished",
   "pos-checkout-status",
-  "PosAccessCard",
+  "PermissionDeniedSurfaceCard",
 ] as const;
 
 export const POS_TABLET_UX_ERA17_FORBIDDEN_CLAIMS = [
