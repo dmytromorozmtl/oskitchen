@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-019 — Error recovery hub attention strip (P0)
+- ID: `KOS-E18-019`
+- Title: Era 18 Workstream N Cycle 19 — prioritized failure categories + recent-event next actions
+- Module: System health / Error recovery
+- Priority: P0 (workflow reliability + support visibility)
+- Status: **error_recovery_focus_attention_wired**
+- Decision: `era18-error-recovery-focus-v1` — category attention strip ordered by production/cron/channel impact; recent observability events with safe retry links
+- Evidence: `lib/error-recovery/error-recovery-focus-era18.ts`, `components/dashboard/error-recovery-attention-strip.tsx`, `app/dashboard/error-recovery/page.tsx`
+- Next: Platform error recovery parity strip; wired replay/retry when audited mutations land
+
 ### KOS-E18-018 — KDS bump-next expo polish (P1)
 - ID: `KOS-E18-018`
 - Title: Era 18 Workstream G Cycle 18 — bump-next hero strip + bump/recall error feedback

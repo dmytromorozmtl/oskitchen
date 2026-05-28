@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ErrorRecoveryAttentionStrip } from "@/components/dashboard/error-recovery-attention-strip";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -14,6 +15,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { loadProductionCronExecutionAudit } from "@/services/cron/cron-execution-evidence";
 import { loadProductionIncidentRollup } from "@/services/incidents/production-incident-rollup-service";
+import { listWorkspaceErrorEvents } from "@/services/observability/error-event-service";
 import { IntegrationStatus } from "@prisma/client";
 
 export default async function ErrorRecoveryPage() {
@@ -35,6 +37,7 @@ export default async function ErrorRecoveryPage() {
     unmappedProducts,
     cronAudit,
     incidentRollup,
+    recentEvents,
   ] = await Promise.all([
     prisma.webhookEvent.count({ where: { AND: [webhookWhere, { processed: false }] } }),
     prisma.integrationConnection.count({
@@ -51,7 +54,20 @@ export default async function ErrorRecoveryPage() {
     }),
     loadProductionCronExecutionAudit(),
     loadProductionIncidentRollup(userId),
+    listWorkspaceErrorEvents(userId, 8),
   ]);
+
+  const snapshot = {
+    failedWebhooks,
+    errorIntegrations,
+    failedExternalOrders,
+    failedImports,
+    unmappedProducts,
+    cronOpenIncidents: cronAudit.summary.openIncidents,
+    cronStalledEscalations: cronAudit.summary.stalledAutoEscalations,
+    productionIncidentsOpen: incidentRollup.summary.open,
+    productionIncidentsCritical: incidentRollup.summary.critical,
+  } as const;
 
   const tiles = [
     {
@@ -113,6 +129,8 @@ export default async function ErrorRecoveryPage() {
           Links open the owning module — use tasks to assign follow-up.
         </p>
       </div>
+
+      <ErrorRecoveryAttentionStrip snapshot={snapshot} recentEvents={recentEvents} />
 
       <div className="rounded-lg border border-border/80 bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">Webhook replay & integration retry</p>
