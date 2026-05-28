@@ -6,6 +6,9 @@ import { PackagingLabelType, PrintedLabelStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { printedLabelByIdWhereForOwner } from "@/lib/scope/workspace-printed-label-scope";
 import { productByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -13,8 +16,29 @@ import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { appendLabelVerificationEvent } from "@/services/nutrition-labels/label-verification-log";
 
+async function requireNutritionLabelPrintPermission(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "reports.read.audit";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "nutrition_label_print.permission_denied",
+      entityType: "PrintedLabel",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function createPrintedLabelJobAction(formData: FormData) {
   try {
+    const gate = await requireNutritionLabelPrintPermission("nutrition_label_print.create_job");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const templateId = z.string().uuid().safeParse(formData.get("templateId"));
     const productId = z.string().uuid().safeParse(formData.get("productId"));
@@ -62,6 +86,9 @@ export async function createPrintedLabelJobAction(formData: FormData) {
 
 export async function markPrintedLabelJobAction(formData: FormData) {
   try {
+    const gate = await requireNutritionLabelPrintPermission("nutrition_label_print.mark_printed");
+    if (!gate.ok) return { error: gate.error };
+
     const { sessionUser: user, dataUserId } = await requireTenantActor();
     const id = z.string().uuid().safeParse(formData.get("id"));
     if (!id.success) return { error: "Invalid label job." };
@@ -102,7 +129,10 @@ export async function markPrintedLabelJobAction(formData: FormData) {
 
 export async function ensureDefaultLabelTemplatesAction() {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireNutritionLabelPrintPermission("nutrition_label_print.ensure_templates");
+    if (!gate.ok) return { error: gate.error };
+
+    const { dataUserId } = await requireTenantActor();
     const count = await prisma.labelTemplate.count({ where: { userId: dataUserId } });
     if (count > 0) return { ok: true as const, created: 0 };
 
