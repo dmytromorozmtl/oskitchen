@@ -1,0 +1,64 @@
+/**
+ * Typecheck slice policy — Evolution Era 4 Cycle 7.
+ *
+ * Full repo typecheck remains canonical for CI (`npm run typecheck`).
+ * Slices allow faster local feedback on operational spine code with lower heap.
+ */
+
+export const TYPECHECK_SLICE_POLICY_ID = "era4-typecheck-slice-v1" as const;
+
+export type TypecheckSliceId = "services-core" | "dashboard-services-api";
+
+export type TypecheckSliceDefinition = {
+  id: TypecheckSliceId;
+  tsconfig: string;
+  /** Recommended Node heap (MB) for local `tsc --noEmit` on this slice. */
+  heapMb: number;
+  description: string;
+  includes: readonly string[];
+};
+
+export const TYPECHECK_SLICES: readonly TypecheckSliceDefinition[] = [
+  {
+    id: "services-core",
+    tsconfig: "tsconfig.slice.services-core.json",
+    heapMb: 6144,
+    description:
+      "Services, actions, lib, types, prisma — no App Router pages; fastest strict slice for backend/spine edits.",
+    includes: ["services/**", "actions/**", "lib/**", "types/**", "prisma/**"],
+  },
+  {
+    id: "dashboard-services-api",
+    tsconfig: "tsconfig.slice.dashboard-services-api.json",
+    heapMb: 6144,
+    description:
+      "Dashboard UI, API routes, services, actions, shared lib/components — operational spine without marketing/storefront public pages.",
+    includes: [
+      "app/api/**",
+      "app/dashboard/**",
+      "services/**",
+      "actions/**",
+      "lib/**",
+      "components/**",
+    ],
+  },
+] as const;
+
+export const TYPECHECK_FULL_SCRIPT = "typecheck:full" as const;
+
+export const TYPECHECK_SLICE_CI_SCRIPTS = [
+  "test:ci:typecheck-slice",
+  "test:ci:typecheck-slice:cert",
+] as const;
+
+export function typecheckSliceScript(sliceId: TypecheckSliceId): string {
+  return `typecheck:slice:${sliceId}`;
+}
+
+export function findTypecheckSlice(sliceId: TypecheckSliceId): TypecheckSliceDefinition {
+  const slice = TYPECHECK_SLICES.find((s) => s.id === sliceId);
+  if (!slice) {
+    throw new Error(`Unknown typecheck slice: ${sliceId}`);
+  }
+  return slice;
+}

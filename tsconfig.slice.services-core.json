@@ -1,15 +1,11 @@
 {
   "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [],
+    "tsBuildInfoFile": "./.tsbuildinfo.slice.services-core"
+  },
   "include": [
     "next-env.d.ts",
-    "middleware.ts",
-    "instrumentation.ts",
-    "next.config.ts",
-    "sentry.*.config.ts",
-    "app/**/*.ts",
-    "app/**/*.tsx",
-    "components/**/*.ts",
-    "components/**/*.tsx",
     "lib/**/*.ts",
     "lib/**/*.tsx",
     "hooks/**/*.ts",
@@ -21,8 +17,7 @@
     "stores/**/*.ts",
     "stores/**/*.tsx",
     "types/**/*.ts",
-    "prisma/**/*.ts",
-    ".next/types/**/*.ts"
+    "prisma/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -30,12 +25,10 @@
     "e2e",
     "tests",
     "scripts",
+    "archive",
     "**/.next.trash.*/**",
     "**/.next.deploy-trash.*/**",
     "**/.next-stale-*/**",
-    ".vercel/**",
-    ".next/cache/**",
-    ".next/static/**",
-    ".next/server/**"
+    ".vercel/**"
   ]
 }

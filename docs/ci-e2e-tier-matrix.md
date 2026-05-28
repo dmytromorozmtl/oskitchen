@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav/maturity + integration honesty + money-path + inventory + cron + KDS + scorecard CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon:cert` + `test:ci:doc-canon`, cert/unit pairs through KDS, `test:ci:order-creation-rbac:cert`, `test:ci:platform-email-bypass:cert`, `test:ci:scorecard:cert` last |
+| Doc canon + public API + nav/maturity + integration honesty + channel golden path + typecheck slice + money-path + inventory + cron + KDS + scorecard CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon:cert` + `test:ci:doc-canon`, cert/unit pairs through KDS, `test:ci:typecheck-slice:cert`, `test:ci:order-creation-rbac:cert`, `test:ci:platform-email-bypass:cert`, `test:ci:scorecard:cert` last |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS/ROI route fail-closed contract tests |
 
@@ -183,6 +183,17 @@ npm run test:ci:pos-money-path:e2e
 **Golden-path policy (Era 4 Cycle 5):** `lib/integrations/channel-golden-path-policy.ts`. Certifies webhook → normalized order → `externalOrder` → channel import batch/record → order hub visibility via `externalOrder` list. **Does not certify** automatic kitchen `Order` creation from Woo/Shopify webhooks (`kitchenOrderAutoCreateFromWebhook: false`). Staging/live store proof: `npx tsx scripts/smoke-woo-shopify-certification.ts` (optional `--skip-live`).
 
 **Wiring certification (tier 0):** `test:ci:channel-golden-path:cert` + `test:ci:channel-golden-path` chained in `test:ci:governance-bundles` after integration honesty.
+
+## Tier 1e3 — Typecheck slices (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Typecheck slice wiring cert | `npm run test:ci:typecheck-slice:cert` | Policy `era4-typecheck-slice-v1`, `tsconfig.base.json`, slice tsconfig, `typecheck:full` + slice scripts |
+| Typecheck slice unit | `npm run test:ci:typecheck-slice` | Policy registry, strict base inheritance |
+
+**Local fast path (Cycle 7):** `npm run typecheck:slice:dashboard-services-api` — 4GB heap, operational spine only. **CI/release:** `npm run typecheck` → `typecheck:full` (8GB, full repo) unchanged.
+
+**Wiring certification (tier 0):** `test:ci:typecheck-slice:cert` + `test:ci:typecheck-slice` chained in `test:ci:governance-bundles`.
 
 ## Tier 1f — Doc canon (`quality` job via governance bundles)
 

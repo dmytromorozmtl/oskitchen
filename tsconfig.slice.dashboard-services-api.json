@@ -1,13 +1,21 @@
 {
   "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [],
+    "tsBuildInfoFile": "./.tsbuildinfo.slice.dashboard-services-api"
+  },
   "include": [
     "next-env.d.ts",
     "middleware.ts",
     "instrumentation.ts",
-    "next.config.ts",
-    "sentry.*.config.ts",
-    "app/**/*.ts",
-    "app/**/*.tsx",
+    "app/layout.tsx",
+    "app/global-error.tsx",
+    "app/not-found.tsx",
+    "app/opengraph-image.tsx",
+    "app/api/**/*.ts",
+    "app/api/**/*.tsx",
+    "app/dashboard/**/*.ts",
+    "app/dashboard/**/*.tsx",
     "components/**/*.ts",
     "components/**/*.tsx",
     "lib/**/*.ts",
@@ -21,8 +29,7 @@
     "stores/**/*.ts",
     "stores/**/*.tsx",
     "types/**/*.ts",
-    "prisma/**/*.ts",
-    ".next/types/**/*.ts"
+    "prisma/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -30,6 +37,7 @@
     "e2e",
     "tests",
     "scripts",
+    "archive",
     "**/.next.trash.*/**",
     "**/.next.deploy-trash.*/**",
     "**/.next-stale-*/**",

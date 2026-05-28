@@ -74,6 +74,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c3. Typecheck slices (Era 4 Cycle 7)
+- policy: `lib/ci/typecheck-slice-policy.ts` (`era4-typecheck-slice-v1`)
+- wiring cert: `test:ci:typecheck-slice:cert` (in `test:ci:governance-bundles`)
+- local slice: `npm run typecheck:slice:dashboard-services-api` (4GB heap; dashboard + API + services spine)
+- CI/release: `npm run typecheck` / `typecheck:full` (8GB; full repo) — slices do not replace CI gate yet
+
 ### 8d. Public API v1 contracts
 - routes: `app/api/public/v1/` (orders, products, customers, inventory, locations, recipes, staff, webhooks)
 - guard: `lib/api-public/guard.ts` (401 without auth, 429 rate limit, 503 when rate limit misconfigured)

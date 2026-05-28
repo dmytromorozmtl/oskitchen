@@ -59,7 +59,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-channel-golden-path-v1` — webhook/sync normalize → `externalOrder` → channel import staging → order hub external visibility; kitchen Order auto-create **not** certified
 - Evidence: `lib/integrations/channel-golden-path-policy.ts`, `tests/fixtures/channel-golden-path/`, `test:ci:channel-golden-path`, `test:ci:channel-golden-path:cert` (in `test:ci:governance-bundles`), `scripts/smoke-woo-shopify-certification.ts` for staging/live store
-- Next: typecheck slices or enterprise procurement basics
+- Next: enterprise procurement basics or additional typecheck slices
+
+### KOS-E4-007 — Typecheck slice 1 (dashboard / services / API)
+- ID: `KOS-E4-007`
+- Title: First strict typecheck slice for operational spine without weakening full CI gate
+- Module: DevOps / platform
+- Priority: P0 (Era 4 Cycle 7)
+- Status: **completed (slice 1)**
+- Decision: `era4-typecheck-slice-v1` — `typecheck:full` remains CI canonical; local slices `typecheck:slice:services-core` (6GB) and `typecheck:slice:dashboard-services-api` (6GB); slices omit `.next/types` to avoid archived-cron validator noise
+- Evidence: `tsconfig.base.json`, `tsconfig.slice.dashboard-services-api.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`
+- Next: storefront/marketing slices or wire optional CI parallel slice job
 
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations

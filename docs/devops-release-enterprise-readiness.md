@@ -14,9 +14,12 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - release-critical smoke tests pass
 
 ## Typecheck Split
-- Current state: one large typecheck target, with repo-scale memory concerns; heap raised to 8GB via `node --max-old-space-size=8192` in `package.json` `typecheck` and `NODE_OPTIONS` on CI gate jobs.
-- Requirement: keep strictness, but allow split execution if needed for reliability.
-- Output: one canonical developer workflow and one canonical CI workflow.
+- **Policy (Era 4 Cycle 7):** `era4-typecheck-slice-v1` in `lib/ci/typecheck-slice-policy.ts`.
+- **Full CI / release gate (unchanged):** `npm run typecheck` → `npm run typecheck:full` — `tsc --noEmit -p tsconfig.typecheck.json` with **8GB** heap (`node --max-old-space-size=8192`); CI `quality` / gate workflows keep `NODE_OPTIONS=--max-old-space-size=8192`.
+- **Slice A — services core (local fast path):** `npm run typecheck:slice:services-core` — `tsconfig.slice.services-core.json` (services + actions + lib; no App Router); **6GB** heap; omits `.next/types` to avoid stale Next validator refs after cron archive.
+- **Slice B — dashboard / API spine:** `npm run typecheck:slice:dashboard-services-api` — dashboard + API + components + shared spine; **6GB** heap. Strictness inherited from `tsconfig.base.json` (`strict: true`).
+- **Wiring cert (tier 0):** `npm run test:ci:typecheck-slice:cert` + `npm run test:ci:typecheck-slice` (in `test:ci:governance-bundles`).
+- **Not yet:** CI does not replace full typecheck with slices; additional slices (storefront public, marketing) are future cycles.
 
 ## Build Verification
 - continue prebuilt release discipline until memory pressure is resolved
