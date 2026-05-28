@@ -100,6 +100,19 @@ Run **`npm run test:ci:enterprise-sso-tenant-mapping-era17:cert`** — chained i
 
 **Guard module:** `lib/enterprise/workspace-sso-runtime-adapter.ts`
 
+---
+
+## Era 17 SSO procurement sync (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-procurement-sync-v1` — **procurement_sync_complete**; buyer FAQ + security questionnaire aligned to **pilot_foundation**; not production SSO.
+
+1. Authoritative SSO delivery: **pilot_foundation** — qualified pilot for one workspace only.
+2. Staging IdP login: **awaiting_operator_proof** — do not cite **pilot_ready** in contracts.
+3. Run **`npm run test:ci:enterprise-sso-procurement-sync-era17:cert`** — chained in `test:ci:enterprise-procurement:cert`.
+4. **Forbidden:** production SSO for all tenants, SOC2 Type II, SCIM live provisioning.
+
+**Pack:** `docs/enterprise-procurement-pack.md` § Era 17 SSO procurement sync.
+
 ### Staging workflows first green (Era 17 P0 #2)
 
 **Policy:** `era17-staging-workflows-first-green-v1` — **awaiting_github_first_green**; extends `era16-staging-workflows-first-green-v1`.

@@ -25,7 +25,7 @@
 | **3** | `pilot_ready` policy gate | New policy `era17-enterprise-sso-pilot-ready-v1` if proof exists | Delivery status `pilot_ready` only with evidence artifact | `test:ci:enterprise-sso-*-era17:cert` | Claiming production | Security |
 | **4** | SSO operator runbook | Support boundaries, rollback, entitlement `ssoOidc` | `commercial-pilot-runbook.md` updated | `smoke:enterprise-sso-operator-runbook` + `test:ci:enterprise-sso-operator-runbook-era17:cert` | Over-promising | GTM | **Complete** — `era17-enterprise-sso-operator-runbook-v1`; [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md); **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | **5** | Domain / email mapping hardening | Edge cases: denied domain, wrong workspace | Unit tests for callback guard | `test:ci:enterprise-sso-tenant-mapping-era17:cert` | Cross-tenant login | Platform | **Complete** — `era17-enterprise-sso-tenant-mapping-v1`; **tenant_mapping_test_backed**; delivery **pilot_foundation** unchanged |
-| **6** | Procurement pack sync | FAQ answers match `pilot_ready` or honest partial | procurement pack § SSO | procurement cert | Legal mismatch | Product |
+| **6** | Procurement pack sync | FAQ answers match `pilot_ready` or honest partial | procurement pack § SSO | `test:ci:enterprise-sso-procurement-sync-era17:cert` | Legal mismatch | Product | **Complete** — `era17-enterprise-sso-procurement-sync-v1`; **procurement_sync_complete**; authoritative **pilot_foundation** FAQ |
 
 ---
 

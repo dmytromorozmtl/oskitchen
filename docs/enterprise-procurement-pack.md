@@ -1,10 +1,10 @@
 # KitchenOS Enterprise Procurement Pack
 
 **Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
-**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1`, `era16-enterprise-sso-r2-pilot-v1`, `era16-enterprise-sso-r2-schema-v1`, `era16-enterprise-sso-r2-runtime-v1`, `era16-enterprise-sso-r2-admin-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-procurement-era15-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`, `lib/enterprise/enterprise-sso-r2-pilot-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-schema-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-runtime-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-admin-era16-policy.ts`)  
+**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1`, `era16-enterprise-sso-r2-pilot-v1`, `era16-enterprise-sso-r2-schema-v1`, `era16-enterprise-sso-r2-runtime-v1`, `era16-enterprise-sso-r2-admin-v1`, `era17-enterprise-sso-idp-staging-smoke-v1`, `era17-enterprise-sso-operator-runbook-v1`, `era17-enterprise-sso-tenant-mapping-v1`, `era17-enterprise-sso-procurement-sync-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-procurement-era15-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`, `lib/enterprise/enterprise-sso-r2-pilot-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-schema-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-runtime-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-admin-era16-policy.ts`, `lib/enterprise/enterprise-sso-procurement-sync-era17-policy.ts`)  
 **Companion:** [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) (release gates, runbooks)  
 **Smoke:** `npm run smoke:enterprise-procurement` (CI cert wiring — not a compliance attestation)  
-**Updated:** 2026-05-28 (Era 16 Cycle 4 — SSO R2 **pilot_admin_wiring**; delivery **pilot_foundation**)
+**Updated:** 2026-05-28 (Era 17 Workstream A Cycle 6 — SSO procurement sync; delivery **pilot_foundation**)
 
 Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
@@ -181,22 +181,41 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **Guard:** `validateSsoCallbackSession` in `lib/enterprise/workspace-sso-runtime-adapter.ts`.
 
+## Era 17 SSO procurement sync (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-procurement-sync-v1` — authoritative buyer FAQ + security questionnaire alignment for SSO. **Does not** advance delivery beyond **pilot_foundation** or claim production SSO.
+
+| Capability | Delivery status | Era 17 Workstream A Cycle 6 |
+|------------|-----------------|------------------------------|
+| SSO / SAML | **pilot_foundation** (authoritative) | **procurement_sync_complete** — FAQ + questionnaire reflect qualified pilot only |
+
+**Authoritative buyer stance:**
+
+- SSO delivery status: **pilot_foundation** — not qualified pilot-ready until Cycle 2 IdP login artifact + Cycle 3 gate (`era17-enterprise-sso-pilot-ready-v1`).
+- Qualified **SSO pilot** may be offered for **one workspace** with Okta or Entra ID **test tenant** — **not production SSO for all tenants**.
+- Staging IdP login proof: **awaiting_operator_proof** (6 prerequisite env vars unset locally).
+- SCIM and SOC 2 Type II: **unchanged** — not delivered.
+
+**Historical sections:** Era 13/15 tables record point-in-time recert; **this section wins** for RFP/security questionnaire responses when SSO is asked.
+
+**CI:** `test:ci:enterprise-sso-procurement-sync-era17:cert` (chained in `test:ci:enterprise-procurement:cert`).
+
 ---
 
 ## SSO and SAML roadmap
 
-**Not available today.** KitchenOS uses Supabase-authenticated sessions and workspace membership; there is no production SAML/OIDC IdP integration for customer tenants.
+**Production SSO is not available.** Default staff auth is email/password + Supabase session. **Qualified SSO pilot** (`pilot_foundation`) exists for one activated workspace with Okta or Entra ID test tenant — not enterprise-wide SAML/OIDC for all customers.
 
 | Phase | Target | Scope |
 |-------|--------|--------|
 | R0 (now) | Document posture | This pack; narrow auth claims in GTM |
 | R1 | Architecture spike | **Complete (Era 9)** — see [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md); design only |
-| R2 | Pilot SSO | **schema_ready (Era 16 Cycle 2–3)** — see [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md); Supabase SAML SSO path; callback adapter (Cycle 3); pilot admin + smoke (Cycle 4) |
+| R2 | Pilot SSO | **pilot_foundation (Era 16–17)** — schema + callback + admin wiring + IdP staging plan + operator runbook + tenant mapping tests; staging IdP login **awaiting_operator_proof** |
 | R3 | GA SSO | Admin self-service IdP config, domain verification |
 
-**Evidence today:** `app/login/`, `actions/auth.ts`, [`rbac-permission-architecture.md`](./rbac-permission-architecture.md).
+**Evidence today:** `app/login/`, `actions/workspace-sso.ts`, `/auth/callback?sso_workspace_id=`, [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md), `smoke:enterprise-sso-idp-staging`.
 
-**Procurement answer:** “SSO/SAML is **not** in production today. R1 spike and Era 16 R2 design define the Supabase SAML SSO pilot path; current auth is email/session-based with role-based workspace permissions.”
+**Procurement answer:** “SSO/SAML is **pilot_foundation** only — qualified pilot for one workspace with Okta or Entra ID test tenant; **not production SSO for all tenants**. Staging IdP login proof is **awaiting_operator_proof**. Default auth remains email/session with workspace RBAC.”
 
 ---
 
@@ -433,7 +452,7 @@ Answer from **evidence + roadmap only**:
 | Common question | Pointer |
 |-----------------|--------|
 | Do you have SOC 2? | **No** — readiness roadmap only (this doc) |
-| SSO/SAML? | **Roadmap** — session auth today |
+| SSO/SAML? | **Qualified pilot only** — **pilot_foundation** (one workspace, Okta/Entra test tenant); **not production SSO for all tenants**; staging IdP login proof **awaiting_operator_proof** |
 | SCIM? | **Roadmap** — after SSO |
 | Pen test? | Provide latest report if exists; else “scheduled / pre-enterprise” |
 | Data residency | State hosting region from deployment config (Vercel/DB region) |
@@ -459,7 +478,7 @@ Software POS money path is CI-certified (unit/integration/inventory); browser E2
 No. Shopify/Woo have webhook golden-path certification; DoorDash/Uber/Grubhub surfaces are **placeholder** (`test:ci:integration-honesty:cert`).
 
 **Do you support SSO in contract?**  
-Only as **future delivery** milestone — not current production capability.
+Qualified SSO pilot may be offered as a milestone-limited engagement for one workspace with Okta or Entra ID test tenant — delivery status **pilot_foundation**, not production SSO for all tenants. Staging IdP login proof is **awaiting_operator_proof**; do not contract for enterprise-wide SSO until Cycle 3 qualified pilot gate with IdP artifact (`era17-enterprise-sso-pilot-ready-v1`).
 
 **Can you sign our DPA?**  
 Use legal review; product capabilities in this pack define what is technically true today.
