@@ -712,6 +712,7 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 17 Workstream A Cycle 4: `era17-enterprise-sso-operator-runbook-v1` — qualified SSO pilot operator runbook; **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | 2026-05-28 | Era 17 Workstream A Cycle 5: `era17-enterprise-sso-tenant-mapping-v1` — callback guard tenant/domain deny matrix; **tenant_mapping_test_backed** |
 | 2026-05-28 | Era 17 Workstream A Cycle 6: `era17-enterprise-sso-procurement-sync-v1` — procurement FAQ sync; authoritative **pilot_foundation** SSO answers |
+| 2026-05-28 | Era 17 P0 #4: `era17-pilot-gono-go-v1` extends SSO pilot_ready gate — `sso_pilot_ready` evidence gate + `PILOT_GONOGO_SSO_PILOT_REQUIRED` |
 | 2026-05-28 | Era 17 Workstream A Cycle 6 refresh: procurement pack sync extended for Cycle 3 pilot_ready gate — delivery **pilot_foundation** unchanged |
 | 2026-05-28 | Era 17 Workstream A Cycle 3: `era17-enterprise-sso-pilot-ready-v1` — pilot_ready gate wired; delivery **pilot_foundation** until Cycle 2 proof_passed |
 | 2026-05-28 | Era 17 P0 ops bundle: `era17-p0-staging-proof-unblock-v1` — aggregates SSO + staging workflows + channel live smokes; **awaiting_ops_credentials** |

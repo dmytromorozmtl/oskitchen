@@ -78,6 +78,13 @@ export type PilotP0StagingProofArtifact = {
   };
 };
 
+export type PilotSsoPilotReadyGateArtifact = {
+  ssoDeliveryStatus?: string;
+  promotionAllowed?: boolean;
+  gateOutcome?: string;
+  reason?: string;
+};
+
 export function parseEnvBoolean(raw: string | undefined): boolean | undefined {
   if (raw === undefined) return undefined;
   const value = raw.trim().toLowerCase();
@@ -214,6 +221,31 @@ export function deriveP0ChildProofPass(input: {
   };
 }
 
+export function deriveSsoPilotReadyGatePass(
+  artifact: PilotSsoPilotReadyGateArtifact | null,
+): PilotGoNoGoEvidenceGate {
+  if (!artifact) {
+    return {
+      id: "sso_pilot_ready",
+      label: "SSO pilot_ready gate (Cycle 3)",
+      pass: false,
+      reason:
+        "artifacts/enterprise-sso-pilot-ready-gate-summary.json missing — run smoke:enterprise-sso-pilot-ready-gate",
+    };
+  }
+  const pass =
+    artifact.promotionAllowed === true && artifact.ssoDeliveryStatus === "pilot_ready";
+  return {
+    id: "sso_pilot_ready",
+    label: "SSO pilot_ready gate (Cycle 3)",
+    pass,
+    reason: pass
+      ? "promotionAllowed true — qualified pilot_ready SSO delivery"
+      : artifact.reason ??
+        `gateOutcome=${artifact.gateOutcome ?? "unknown"} ssoDeliveryStatus=${artifact.ssoDeliveryStatus ?? "unknown"} — SKIPPED WITH REASON until Cycle 2 proof_passed`,
+  };
+}
+
 export function deriveForbiddenClaimsEnforcementPass(
   artifact: PilotForbiddenClaimsEnforcementArtifact | null,
 ): PilotGoNoGoEvidenceGate {
@@ -271,6 +303,8 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   preflight: PilotTierPreflightArtifact | null;
   goldenPath: PilotGoldenPathArtifact | null;
   forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
+  p0StagingProof: PilotP0StagingProofArtifact | null;
+  ssoPilotReadyGate: PilotSsoPilotReadyGateArtifact | null;
   icpInput: PilotIcpQualificationInput;
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
@@ -305,6 +339,7 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
     child: input.p0StagingProof?.children?.channelLive,
     p0Artifact: input.p0StagingProof,
   });
+  const ssoPilotReady = deriveSsoPilotReadyGatePass(input.ssoPilotReadyGate);
   const icpQualification = evaluatePilotIcpQualification(input.icpInput);
 
   const stagingUrl = input.goldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
@@ -337,6 +372,7 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
       p0SsoIdp,
       p0StagingWorkflows,
       p0ChannelLive,
+      ssoPilotReady,
     ],
   };
 }
@@ -346,12 +382,14 @@ export function buildPilotGoNoGoSummary(input: {
   goldenPath: PilotGoldenPathArtifact | null;
   forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
   p0StagingProof: PilotP0StagingProofArtifact | null;
+  ssoPilotReadyGate: PilotSsoPilotReadyGateArtifact | null;
   icpInput: PilotIcpQualificationInput;
   customerName?: string | null;
   loiSignedDate?: string | null;
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
   tier3Pass?: boolean;
+  ssoPilotRequired?: boolean;
   runAt?: Date;
 }): PilotGoNoGoSummary {
   const customer = deriveCustomerExecution({
@@ -381,6 +419,17 @@ export function buildPilotGoNoGoSummary(input: {
   if (p0StagingProofGate && !p0StagingProofGate.pass) {
     blockers.push(
       "P0 staging proof not passed (era17-p0-staging-proof-unblock-v1) — SSO IdP, GitHub first-green, or channel live smoke incomplete",
+    );
+  }
+
+  const ssoPilotReadyGate = built.evidenceGates.find((gate) => gate.id === "sso_pilot_ready");
+  if (input.ssoPilotRequired && ssoPilotReadyGate && !ssoPilotReadyGate.pass) {
+    blockers.push(
+      "SSO pilot_ready gate not passed (era17-enterprise-sso-pilot-ready-v1) — contract includes SSO pilot scope",
+    );
+  } else if (ssoPilotReadyGate && !ssoPilotReadyGate.pass) {
+    warnings.push(
+      "SSO pilot_ready gate not passed — OK for non-SSO pilots; set PILOT_GONOGO_SSO_PILOT_REQUIRED=1 when contract includes SSO",
     );
   }
 

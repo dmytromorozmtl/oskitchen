@@ -5,6 +5,7 @@ import {
   deriveCustomerExecution,
   deriveForbiddenClaimsEnforcementPass,
   deriveP0StagingProofPass,
+  deriveSsoPilotReadyGatePass,
   deriveTier0Pass,
 } from "@/lib/commercial/pilot-gono-go-summary";
 
@@ -21,6 +22,7 @@ describe("pilot gono-go summary", () => {
       },
       forbiddenClaimsEnforcement: null,
       p0StagingProof: null,
+      ssoPilotReadyGate: null,
       icpInput: {},
     });
     expect(summary.decision).toBe("NO-GO");
@@ -62,6 +64,7 @@ describe("pilot gono-go summary", () => {
           channelLive: { proofStatus: "proof_passed/proof_passed", overall: "PASSED" },
         },
       },
+      ssoPilotReadyGate: null,
       icpInput: {
         singleOrSmallMultiUnit: true,
         ownerOperatorEngaged: true,
@@ -114,6 +117,7 @@ describe("pilot gono-go summary", () => {
         p0ProofStatus: "awaiting_ops_credentials",
         allMissingEnvVars: ["E2E_STAGING_BASE_URL"],
       },
+      ssoPilotReadyGate: null,
       icpInput: {
         singleOrSmallMultiUnit: true,
         ownerOperatorEngaged: true,
@@ -130,5 +134,101 @@ describe("pilot gono-go summary", () => {
       summary.blockers.some((item) => item.includes("P0 staging proof not passed")),
     ).toBe(true);
     expect(summary.evidenceGates.some((gate) => gate.id === "p0_sso_idp")).toBe(true);
+  });
+
+  it("blocks GO when SSO pilot required and gate not promotionAllowed", () => {
+    const gate = deriveSsoPilotReadyGatePass({
+      ssoDeliveryStatus: "pilot_foundation",
+      promotionAllowed: false,
+      gateOutcome: "pilot_foundation_awaiting_proof",
+    });
+    expect(gate.pass).toBe(false);
+
+    const summary = buildPilotGoNoGoSummary({
+      preflight: {
+        overall: "PASSED",
+        tier0ProofStatus: "proof_passed",
+        tier1ProofStatus: "proof_passed",
+      },
+      goldenPath: { phaseProofStatus: "proof_passed" },
+      forbiddenClaimsEnforcement: {
+        overall: "PASSED",
+        claimsEnforcementProofStatus: "proof_passed",
+      },
+      p0StagingProof: {
+        overall: "PASSED",
+        p0ProofStatus: "proof_passed",
+        children: {
+          ssoIdpStaging: { proofStatus: "proof_passed", overall: "PASSED" },
+          stagingWorkflowsFirstGreen: { proofStatus: "proof_passed", overall: "PASSED" },
+          channelLive: { proofStatus: "proof_passed/proof_passed", overall: "PASSED" },
+        },
+      },
+      ssoPilotReadyGate: {
+        ssoDeliveryStatus: "pilot_foundation",
+        promotionAllowed: false,
+        gateOutcome: "pilot_foundation_awaiting_proof",
+      },
+      icpInput: {
+        singleOrSmallMultiUnit: true,
+        ownerOperatorEngaged: true,
+        needsCoreKitchenOrderPath: true,
+        acceptsQualifiedBetaLabels: true,
+      },
+      roleChecklistsComplete: true,
+      tier3Pass: true,
+      ssoPilotRequired: true,
+      customerName: "Acme Kitchen",
+      loiSignedDate: "2026-05-28",
+    });
+    expect(summary.decision).toBe("NO-GO");
+    expect(
+      summary.blockers.some((item) => item.includes("SSO pilot_ready gate not passed")),
+    ).toBe(true);
+  });
+
+  it("warns but does not block non-SSO pilot when gate not passed", () => {
+    const summary = buildPilotGoNoGoSummary({
+      preflight: {
+        overall: "PASSED",
+        tier0ProofStatus: "proof_passed",
+        tier1ProofStatus: "proof_passed",
+      },
+      goldenPath: { phaseProofStatus: "proof_passed" },
+      forbiddenClaimsEnforcement: {
+        overall: "PASSED",
+        claimsEnforcementProofStatus: "proof_passed",
+      },
+      p0StagingProof: {
+        overall: "PASSED",
+        p0ProofStatus: "proof_passed",
+        children: {
+          ssoIdpStaging: { proofStatus: "proof_passed", overall: "PASSED" },
+          stagingWorkflowsFirstGreen: { proofStatus: "proof_passed", overall: "PASSED" },
+          channelLive: { proofStatus: "proof_passed/proof_passed", overall: "PASSED" },
+        },
+      },
+      ssoPilotReadyGate: {
+        ssoDeliveryStatus: "pilot_foundation",
+        promotionAllowed: false,
+      },
+      icpInput: {
+        singleOrSmallMultiUnit: true,
+        ownerOperatorEngaged: true,
+        needsCoreKitchenOrderPath: true,
+        acceptsQualifiedBetaLabels: true,
+      },
+      roleChecklistsComplete: true,
+      tier3Pass: true,
+      forbiddenClaimsInContract: true,
+      customerName: "Acme Kitchen",
+      loiSignedDate: "2026-05-28",
+    });
+    expect(
+      summary.blockers.some((item) => item.includes("SSO pilot_ready gate not passed")),
+    ).toBe(false);
+    expect(summary.warnings.some((item) => item.includes("SSO pilot_ready gate not passed"))).toBe(
+      true,
+    );
   });
 });

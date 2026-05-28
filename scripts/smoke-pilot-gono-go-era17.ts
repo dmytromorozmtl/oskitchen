@@ -23,6 +23,7 @@ import {
   type PilotForbiddenClaimsEnforcementArtifact,
   type PilotGoldenPathArtifact,
   type PilotP0StagingProofArtifact,
+  type PilotSsoPilotReadyGateArtifact,
   type PilotTierPreflightArtifact,
 } from "../lib/commercial/pilot-gono-go-summary";
 
@@ -62,6 +63,7 @@ Env:
   PILOT_GONOGO_ROLE_CHECKLISTS_COMPLETE=1
   PILOT_GONOGO_FORBIDDEN_CLAIMS_IN_CONTRACT=1
   PILOT_GONOGO_TIER3_PASS=1
+  PILOT_GONOGO_SSO_PILOT_REQUIRED=1
 
 Reads:
 ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
@@ -88,12 +90,16 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
   const p0StagingProof = loadArtifact<PilotP0StagingProofArtifact>(
     "artifacts/p0-staging-proof-unblock-summary.json",
   );
+  const ssoPilotReadyGate = loadArtifact<PilotSsoPilotReadyGateArtifact>(
+    "artifacts/enterprise-sso-pilot-ready-gate-summary.json",
+  );
 
   const summary = buildPilotGoNoGoSummary({
     preflight,
     goldenPath,
     forbiddenClaimsEnforcement,
     p0StagingProof,
+    ssoPilotReadyGate,
     icpInput: parsePilotIcpInputFromJson(process.env.PILOT_GONOGO_ICP_INPUT_JSON),
     customerName: process.env.PILOT_GONOGO_CUSTOMER_NAME ?? null,
     loiSignedDate: process.env.PILOT_GONOGO_LOI_SIGNED_DATE ?? null,
@@ -102,6 +108,7 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
       process.env.PILOT_GONOGO_FORBIDDEN_CLAIMS_IN_CONTRACT,
     ),
     tier3Pass: parseEnvBoolean(process.env.PILOT_GONOGO_TIER3_PASS),
+    ssoPilotRequired: parseEnvBoolean(process.env.PILOT_GONOGO_SSO_PILOT_REQUIRED),
   });
 
   const artifactPath = join(process.cwd(), PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT);
