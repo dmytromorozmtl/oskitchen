@@ -19,18 +19,21 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Unsafe pilot headline:** “Production-certified,” “enterprise SSO,” “unified inventory,” or “Toast-class KDS at rush hour.”
 
-### Era 17 P0 staging proof unblock (2026-05-28)
+### Era 18 P0 staging proof ops checklist (2026-05-28)
 
 **Policy:** `era17-p0-staging-proof-unblock-v1` — **awaiting_ops_credentials**; aggregates P0 #1–#3 staging proofs into one honest artifact.
 
-1. Run **`npm run smoke:p0-staging-proof-unblock`** — executes SSO IdP staging, GitHub first-green, and Woo/Shopify live smokes in sequence.
-2. Review **`artifacts/p0-staging-proof-unblock-summary.json`** — `p0ProofStatus`, `allMissingEnvVars`, per-child `overall` / `proofStatus`.
-3. Missing credentials → **SKIPPED WITH REASON** (exit 0). Any child **FAILED** → aggregate **FAILED** (exit 1).
-4. Do **not** claim SSO `pilot_ready`, GitHub staging green, or live channel ops until each child artifact shows `proof_passed`.
-5. Ops checklist: `npm run smoke:p0-staging-proof-unblock -- --checklist-only`.
-6. Cert wiring: `test:ci:p0-staging-proof-unblock-era17:cert` chained in `test:ci:commercial-pilot-runbook:cert`.
+**Ops checklist:** [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md) — all **11** prerequisite env vars with configure-in guidance.
 
-**Execution status (2026-05-28):** local smoke re-run → **overall: SKIPPED** (`p0ProofStatus: awaiting_ops_credentials`). Child smokes skipped for missing SSO (6 env vars), staging workflows (3 env vars), and channel live credentials. Artifact: `artifacts/p0-staging-proof-unblock-summary.json`. **Do not treat as paid pilot GO or P0 proof complete.**
+1. Run **`npm run smoke:p0-staging-proof-unblock -- --checklist-only`** — print env catalog + unblock steps.
+2. Configure secrets per checklist (never commit values).
+3. Run **`npm run smoke:p0-staging-proof-unblock`** — executes SSO IdP staging, GitHub first-green, and Woo/Shopify live smokes in sequence.
+4. Review **`artifacts/p0-staging-proof-unblock-summary.json`** — `p0ProofStatus`, `allMissingEnvVars`, per-child `overall` / `proofStatus`.
+5. Missing credentials → **SKIPPED WITH REASON** (exit 0). Any child **FAILED** → aggregate **FAILED** (exit 1).
+6. Do **not** claim SSO `pilot_ready`, GitHub staging green, or live channel ops until each child artifact shows `proof_passed`.
+7. Cert wiring: `test:ci:p0-staging-proof-unblock-era17:cert` chained in `test:ci:commercial-pilot-runbook:cert`.
+
+**Execution status (2026-05-28 Era 18 Cycle 1):** local smoke → **overall: FAILED** (`p0ProofStatus: proof_failed`; 11 missing env vars documented in ops checklist). Child smokes skipped for missing SSO (6), staging workflows (3), and channel live (3). **Do not treat as paid pilot GO or P0 proof complete.**
 
 ### Enterprise SSO pilot (optional — Era 16)
 
@@ -651,8 +654,8 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 2. **COMPED mode** — requires **`pos.discount.apply`** even when discount amount is zero.
 3. **Standard checkout** — cash/card with zero discount needs only **`pos.checkout`**.
 4. **Gift card / loyalty** — stack at service layer; do not bypass action gate for explicit discounts.
-5. Operator guide: **`docs/pos-manager-discount-operator-guide-era17.md`** — manager discount UI still deferred.
-6. **Forbidden:** manager discount UI shipped, hardware POS certification, Toast override parity.
+5. Operator guide: **`docs/pos-manager-discount-operator-guide-era17.md`** — Era 18 terminal UI wired (`era18-pos-manager-discount-ui-v1`).
+6. **Forbidden:** manager PIN flow, hardware POS certification, Toast override parity.
 
 **Enforcement:** `test:ci:pos-manager-discount-era17:cert` (chained in `test:ci:pos-money-path:cert`)
 

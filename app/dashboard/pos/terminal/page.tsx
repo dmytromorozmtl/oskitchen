@@ -101,6 +101,7 @@ export default async function PosTerminalPage() {
         customerAttachEnabled={crm.allowed}
         quickOrderEnabled={quickOrderEnabled}
         businessType={kitchen?.businessType ?? "RESTAURANT"}
+        canApplyPosDiscount={hasPermission(actor.granted, "pos.discount.apply")}
       />
     </div>
   );

@@ -1,170 +1,337 @@
 # Next Master Prompt Input — KitchenOS Evolution Era 18
 
 **Date:** 2026-05-28  
-**Purpose:** Canonical facts for the **Evolution Era 18** master prompt and recurring cycle prompts  
-**Policy:** `era17-era18-handoff-input-v1`  
-**Strategic baseline:** `docs/full-strategic-reaudit-2026-05-28-era16.md` (unchanged until re-audit trigger)  
-**Era 17 closure:** `docs/era17-cycle-completion-scorecard-2026-05-28.md` @ `d2a1e26`  
-**Execution map (historical):** `docs/era17-strategic-execution-map-2026-05-28.md`
+**Purpose:** Canonical facts for the **Evolution Era 18** master prompt and recurring cycle prompts — **post full Era 17 re-audit**  
+**Strategic baseline:** `docs/full-product-strategic-reaudit-2026-05-28-era17.md` @ `5e00dd4`  
+**Execution map:** `docs/era18-global-leap-execution-map-2026-05-28.md`  
+**Feature audit:** `docs/feature-by-feature-audit-2026-05-28.md`  
+**Competitor map:** `docs/era17-product-gap-and-competitor-map-2026-05-28.md`  
+**Era 17 closure:** `docs/era17-cycle-completion-scorecard-2026-05-28.md`
 
 > **For recurring Era 18 prompts:** Era 17 is **complete** (cycles 1–45). Do **not** re-run Era 4–17 delivery cycles unless live regression is proven (`git log` + failing cert). Prior handoff: `docs/next-master-prompt-input-2026-05-28-era17.md` (historical).
 
 ---
 
-## Era 17 outcomes
+## 1. Current Product Reality
 
-Evolution Era 17 (cycles 1–45) **completed the commercial ops proof delivery theme** at the **policy and governance** layer:
+- **700** dashboard/storefront/platform pages; broad food-ops surface (orders, POS, storefront, KDS, production, inventory, CRM, staff, billing).
+- **Pilot-sellable (qualified):** order spine, storefront checkout (tier-2 CI), POS software money path (tier-2b), packing, production board/calendar (qualified), CRM, Woo/Shopify golden path (synthetic CI), commercial pilot GO/NO-GO pack, forbidden-claims gate.
+- **Not sellable as delivered:** production SSO for all tenants, SOC2 Type II, SCIM, unified inventory/rewards, marketplace live ops, POS offline/hardware, rush-hour KDS, Public API SLA.
+- **No paid pilot customer** — `artifacts/pilot-gono-go-summary.json` → **NO-GO** @ audit run 2026-05-28.
+- **P0 staging proof FAILED** — `artifacts/p0-staging-proof-unblock-summary.json` → `p0ProofStatus: proof_failed`; 11 missing env vars; ops checklist: [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md) (`era17-p0-staging-proof-unblock-v1`).
+
+---
+
+## 2. Current Architecture Reality
+
+- Monolith: **604** services, **365** Prisma models, **175** API routes, **16** production crons (enforced), **59** RBAC keys, **18** mutation registry entries.
+- Auth: Supabase session + workspace RBAC; SSO R2 **`pilot_foundation`** (Supabase SAML path, callback adapter, admin UI, gated login, tenant mapping tests, pilot_ready **gate wired** — promotion blocked until IdP artifact).
+- Security: webhook matrix (**46** routes), replay P1 expansion (Resend + Uber Eats), public POST abuse review Era 17, Public API per-route scopes.
+- Money paths CI-certified: storefront tier-2, POS tier-2b — **do not redo browser E2E policy**.
+- Inventory: **POS-only** depletion (`era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`); storefront/API/manual/integration channels **do not deplete**.
+- Rewards: **dual ledger** (`era6-dual-ledger-gtm-lock-v1`); not interchangeable across POS and storefront.
+
+---
+
+## 3. What Era 17 Achieved
 
 | Theme | Outcome |
 |-------|---------|
-| SSO | IdP staging smoke plan + honest login skip path; **`pilot_foundation`** unchanged |
-| Staging / channels | First-green orchestrators; Woo/Shopify live smoke paths; P0 unblock orchestrator (`era17-p0-staging-proof-unblock-v1`); **SKIPPED WITH REASON** without credentials |
-| Commercial pilot | GO/NO-GO evaluator, forbidden-claims gate, ICP/contract templates, golden path wiring |
-| Security | Webhook replay P1 expansion, public POST abuse review, Public API per-route scopes |
-| POS / KDS / ops | Tablet UX, operator runbooks, manager discount depth, KDS/production drill wiring |
-| GTM | Investor one-pager (template), competitor matrix refresh, internal case study draft |
-| Governance | Scorecard **era17-scorecard-refresh-v1**; cycles 1–44 delivery + Cycle 45 handoff |
-
-**Governance score:** **100/100** sustained. **Blended realism:** **89/100** (+2 from Era 16 **87**).
-
-**Era 4–17:** Delivery cycles complete at policy layer. **Do not re-run** unless regression proven.
+| SSO | IdP staging smoke plan; login proof path; pilot_ready gate; operator runbook; tenant mapping; procurement sync — delivery **pilot_foundation** |
+| Staging / channels | P0 unblock orchestrator; first-green orchestrators; Woo/Shopify live smoke paths — **SKIPPED/FAIL** without credentials |
+| Commercial pilot | GO/NO-GO evaluator; forbidden-claims gate; ICP/contract; golden path; metrics/rollback wiring — **NO-GO** locally |
+| Security | Webhook replay P1; public POST abuse; Public API per-route scopes |
+| POS / KDS / ops | Tablet UX; operator runbooks; manager discount depth; KDS/production drill wiring |
+| GTM | Investor one-pager (template); competitor matrix refresh; internal case study draft |
+| Governance | Scorecard **100/100**; blended **89/100**; success criteria **NOT MET** |
 
 ---
 
-## Era 17 success criteria
+## 4. What Era 17 Did Not Solve
 
-From `docs/era17-strategic-execution-map-2026-05-28.md` — **NOT MET** as of Era 17 closure:
-
-| Criterion | Status |
-|-----------|--------|
-| Paid pilot with signed contract + GO/NO-GO artifact | **NOT MET** — NO-GO locally |
-| SSO `pilot_ready` with IdP staging evidence | **NOT MET** — `pilot_foundation`; login proof SKIPPED |
-| Two of three staging workflows GitHub PASS | **NOT MET** — awaiting operator + secrets |
-| Woo or Shopify live smoke PASS on staging | **NOT MET** — awaiting credentials |
-| Governance bundles green + claims strict | **MET** |
-| Era 17 scorecard without inflation | **MET** — blended **89**, explicit gaps |
-
-Era 18 must **execute** the unmet criteria — not rewrite Era 17 policies.
+- IdP staging login **PASS** (`loginProofStatus: proof_passed`)
+- GitHub staging workflows **first green PASS** with recorded run URLs
+- Woo/Shopify live smoke **PASS** with real credentials
+- Paid pilot customer execution
+- Tier 0 engineering gate PASS in GO/NO-GO
+- Tier 2 operator golden path sign-off on staging
+- Pilot metrics baseline `overall: PASSED`
+- SSO `pilot_ready` promotion
+- KDS Playwright GitHub PASS
+- Production calendar operator drill on staging
 
 ---
 
-## Open P0 for Era 18
+## 5. Top P0 Risks
 
-| ID | Item | Evidence required |
-|----|------|-------------------|
-| E18-P0-1 | SSO IdP staging login → `pilot_ready` | `artifacts/enterprise-sso-idp-staging-smoke-summary.json` with `loginProofStatus: proof_passed` |
-| E18-P0-2 | GitHub staging workflows first green | `artifacts/staging-workflows-first-green-summary.json` with PASS + run URLs |
-| E18-P0-3 | Woo/Shopify live smoke PASS | `artifacts/channel-live-smoke-summary.json` overall PASSED |
-| E18-P0-4 | First paid pilot execution | Signed LOI/contract + GO/NO-GO GO with qualifications |
-| E18-P0-5 | Forbidden-claims before sales | Re-run on release branch before contract (`smoke:pilot-forbidden-claims-enforcement`) |
-
-**Operator prerequisites (unchanged):**
-
-- `E2E_STAGING_BASE_URL`, `SSO_STAGING_*` (6 vars), GitHub staging secrets, Woo/Shopify staging credentials, `DATABASE_URL` for channel smoke.
-
-Missing credentials → **SKIPPED WITH REASON** — never fake PASS.
+| ID | Risk | Mitigation |
+|----|------|------------|
+| E18-P0-1 | SSO not `pilot_ready` — enterprise mis-sell | IdP staging smoke PASS → gate only with artifact |
+| E18-P0-2 | Staging workflows never green | GitHub PASS + `staging-workflows-first-green-summary.json` |
+| E18-P0-3 | Live channel smoke SKIPPED — integration claims weak | `smoke:woo-shopify-live` PASS on staging |
+| E18-P0-4 | No paid pilot — commercial pack unused | GO/NO-GO → contract → golden path → metrics |
+| E18-P0-5 | Mis-selling unified inventory/rewards/SSO/SOC2 | forbidden-claims + evidence pack |
+| E18-P0-6 | Tier 0 GO/NO-GO fail | Fix tier0 preflight blockers |
+| E18-P0-7 | Governance 100 confused with market readiness | Always cite blended **89** and competitor **58** |
 
 ---
 
-## Era 18 strategic theme
+## 6. Top P1 Opportunities
 
-**Staging proof and first paid pilot**
-
-Era 18 converts Era 17 **policy foundations** into **runtime evidence** and **revenue pilot execution**:
-
-1. Run **`npm run smoke:p0-staging-proof-unblock`** — aggregates P0 #1–#3 child smokes; review **`artifacts/p0-staging-proof-unblock-summary.json`** (`p0ProofStatus`, `allMissingEnvVars`).
-2. Execute P0 staging smokes with real credentials (SSO, GitHub, Woo/Shopify) when child artifacts still show skip.
-3. Promote SSO to `pilot_ready` **only** after IdP login artifact (`era17-enterprise-sso-pilot-ready-v1`).
-4. Run paid pilot GO/NO-GO → contract → operator golden path → metrics baseline → retrospective.
-5. Sustain governance (16 crons, mutation linter, claims strict, forbidden-claims gate).
-6. Incremental scorecard at Era 18 boundary — **no inflation** without proof artifacts.
-
-**Do not prioritize without explicit era unlock:** offline POS, hardware cert, marketplace LIVE (DoorDash/Uber/Grubhub), unified inventory/rewards, SOC2/SCIM, broad AI expansion, POS browser E2E redo.
+- First paid pilot with honest qualified contract
+- SSO `pilot_ready` unlocks enterprise procurement wedge
+- Live Woo/Shopify PASS strengthens omnichannel narrative
+- Unified order spine as flagship story **with proof artifacts**
+- KDS + production calendar bundle for prep/catering/ghost kitchen ICP
+- Governance honesty as trust moat vs Toast/Square marketing
+- Public API partner live smoke on staging
+- POS manager discount UI (guards exist)
+- Role-based operator home (Square simplicity gap)
+- Investor narrative v3 with real pilot KPIs
 
 ---
 
-## Re-audit decision
+## 7. Top Competitor Gaps
 
-**Full re-audit at Era 18 start:** **No** — continue from `docs/full-strategic-reaudit-2026-05-28-era16.md`.
+- **Toast/Square:** hardware, offline, terminal ecosystem, rush-hour KDS, table service depth, SMB simplicity
+- **Shopify/Woo:** native admin + app marketplace (KitchenOS wins on kitchen spine **if** live webhooks proven)
+- **7shifts/Homebase:** labor depth and compliance packaging
+- **Klaviyo/Mailchimp:** marketing automation depth
+- **Oracle/Simphony:** enterprise scale + attestations (SSO/SOC2/SCIM)
+- **Restaurant365/MarginEdge:** inventory/accounting depth (KitchenOS has POS-only depletion honesty)
 
-**Trigger full re-audit when any of:**
-
-1. First paid pilot completes with signed contract and captured metrics.
-2. SSO reaches `pilot_ready` with IdP staging login artifact.
-3. Repo scale shifts materially (>50 new API routes or major auth rewrite).
-
-Until then: incremental Era 18 scorecard + execution map updates only.
-
----
-
-## Scorecard (Era 17 end)
-
-| Area | Era 16 end | Era 17 end | Δ |
-|------|----------:|-----------:|--:|
-| Overall (governance) | 100 | **100** | +0 |
-| Security | 85 | **87** | +2 |
-| QA | 96 | **97** | +1 |
-| DevOps | 100 | **100** | +0 |
-| RBAC | 91 | **92** | +1 |
-| Inventory | 72 | **73** | +1 |
-| POS | 74 | **76** | +2 |
-| Integrations | 62 | **63** | +1 |
-| KDS | 75 | **76** | +1 |
-| Enterprise readiness | 72 | **73** | +1 |
-| Marketing/sales | 85 | **88** | +3 |
-| Storefront | 83 | **83** | +0 |
-
-**Blended overall:** **89/100** — not governance 100; not Toast/Square parity.
-
-Full detail: `docs/era17-cycle-completion-scorecard-2026-05-28.md`.
+**Competitor readiness score: 58/100** — do not claim parity.
 
 ---
 
-## Recommended Era 18 master prompt theme
+## 8. Top Features to Add (Era 18 — selective)
 
-**Execute commercial proof — evidence over policy**
+Only if pilot-blocking or post-GO:
 
-Each Era 18 cycle must:
+- Staging ops evidence records (GitHub URLs in artifacts)
+- Paid pilot customer record in GO/NO-GO artifact
+- SSO `pilot_ready` promotion module (artifact-gated only)
+- Role-based operator home MVP (post-pilot feedback)
+- Manager discount UI (server guards exist)
+- Pilot metrics dashboard export
 
-1. Prefer **PASS artifacts** (smoke JSON, GitHub run URLs, signed operator attestation) over new policy modules when Era 17 cert exists.
-2. State explicit **non-claims** every cycle.
-3. Run validation commands for touched workstreams.
-4. Default **no** Era 4–17 redelivery unless regression proven.
+**Do not add without explicit era unlock:** offline POS, hardware cert, marketplace LIVE, unified inventory/rewards, SCIM, SOC2 program, rush-hour KDS cert, broad AI.
 
-**Suggested Era 18 cycle bands (draft):**
+---
+
+## 9. Top Features to Finish
+
+| Feature | Action |
+|---------|--------|
+| SSO | IdP proof → `pilot_ready` |
+| Woo/Shopify | Live smoke PASS |
+| Staging GitHub | First green PASS URLs |
+| Commercial pilot | First customer GO |
+| KDS | Staging sign-off + Playwright green |
+| Production calendar | Operator drill on staging |
+| Tier 0/2 pilot gates | PASS in GO/NO-GO |
+| POS | Manager discount UI |
+| Public API | Partner live smoke |
+| Investor/case study | Real metrics gate |
+
+---
+
+## 10. Top UX Improvements
+
+- Role-based home for cashier/kitchen (reduce nav noise)
+- Manager discount UI on POS
+- Shift variance approval UI
+- Permission-denied consistency (sustain Era 17)
+- Pilot onboarding time-to-first-order reduction
+- Integration setup wizard (Era 17 — sustain with live proof)
+
+---
+
+## 11. Top Enterprise Gaps
+
+- SSO IdP live proof (pilot_foundation → pilot_ready)
+- SCIM not implemented
+- SOC2 Type II not certified
+- Backup/restore drill proof partial
+- Access review for support impersonation
+- Public API no SLA
+- Pen test before enterprise SSO sales at scale
+
+---
+
+## 12. Top Pilot Blockers
+
+1. `p0ProofStatus: proof_failed` — 11 env vars missing  
+2. `decision: NO-GO` — no customer, ICP, tier0, tier2, P0  
+3. No staging URL in evidence pack  
+4. No signed LOI  
+5. Live channel + SSO + GitHub proof all SKIPPED  
+
+---
+
+## 13. Top Investor Blockers
+
+1. No paid pilot revenue  
+2. No pilot metrics baseline PASSED  
+3. Case study internal draft only  
+4. Investor one-pager template-only  
+5. Competitor readiness 58/100 — no hardware/marketplace proof  
+6. Blended 89 ≠ governance 100 — must explain honestly  
+
+---
+
+## 14. Era 18 Strategic Theme
+
+**Execute staging proof and first paid pilot**
+
+Convert Era 17 **policy foundations** into **runtime evidence** and **revenue pilot execution**. Evidence over policy. No feature sprawl until P0 artifacts move from SKIPPED/FAILED to PASSED.
+
+---
+
+## 15. Era 18 Priority Order
+
+1. **P0** Configure staging secrets → `smoke:p0-staging-proof-unblock` → PASSED  
+2. **P0** SSO IdP login → `pilot_ready` gate (if enterprise pilot)  
+3. **P0** Woo/Shopify live smoke PASS  
+4. **P0** GitHub staging workflows PASS URLs  
+5. **P0** Tier 0 + Tier 2 pilot gates → GO/NO-GO GO  
+6. **P0** First paid pilot LOI + kickoff  
+7. **P1** KDS/production staging sign-off  
+8. **P1** Pilot metrics baseline + investor v3  
+9. **P2** POS UX depth, labor, accounting exports  
+10. **P3** deferred: inventory hook, unified rewards, marketplaces, offline  
+
+---
+
+## 16. Era 18 Safety Rules
+
+**Allowed:** ops credential configuration, smoke script runs, artifact capture, runbooks, bounded tests, docs, canonical index updates at era boundary, artifact-gated policy promotion only  
+
+**Forbidden:** deploy, push, reset/clean git, destructive migrations, false production claims, broad refactors, feature code without cycle scope, POS browser E2E redo, inventory/rewards unlock without era decision, inflating scorecard without proof  
+
+---
+
+## 17. Recommended 48 Cycles
+
+See `docs/era18-global-leap-execution-map-2026-05-28.md` — bands A–N, **48 cycles**.
 
 | Band | Theme |
 |------|-------|
-| A | SSO IdP proof → `pilot_ready` → operator runbook → procurement sync |
-| B | Staging GitHub first green + live Woo/Shopify PASS |
-| C | Paid pilot execution (GO → contract → golden path → metrics → retro) |
-| D | Operational sign-off hygiene + KDS/production staging proof |
-| E | Era 18 scorecard + conditional full re-audit |
+| A | Commercial pilot execution (1–8) |
+| B | SSO pilot_ready (9–14) |
+| C | Live channel proof (15–20) |
+| D | Staging/DevOps evidence (21–25) |
+| E | Webhook/API hardening (26–29) |
+| F | POS commercial depth (30–33) |
+| G | KDS/production ops (34–37) |
+| H | Inventory/costing (38–40) |
+| I | CRM/loyalty honesty (41–42) |
+| J | UX/operator speed (43–45) |
+| K | Investor/procurement (46–47) |
+| L | Scorecard + handoff (48) |
+| M | Competitor leapfrog (conditional post-GO) |
+| N | Era 19 handoff |
 
 ---
 
-## CI / governance facts (carry forward)
+## 18. Recurring Prompt Requirements
 
-- Default quality: `npm run test:ci:governance-bundles`
-- Scorecard: `npm run test:ci:scorecard:cert` (era4–era17)
-- Handoff cert: `test:ci:era17-era18-handoff:cert`
-- Production crons: **16** only
-- POS money path: tier-2b — **certified — do not redo**
-- Claims: `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before external materials
+Each Era 18 cycle must state:
 
----
-
-## Documentation rules
-
-- Update canonical set + `docs/canonical-doc-index.md` at era boundaries
-- Maturity claims must match policy IDs and smoke artifacts
-- Paid pilots: `docs/commercial-pilot-runbook.md` + forbidden-claims gate
+1. Cycle number + workstream (A–N)  
+2. Single theme (one deliverable)  
+3. Policy ID if new cert introduced  
+4. Evidence paths (files, artifacts, GitHub run URLs)  
+5. Explicit **non-claims** for the cycle  
+6. Validation commands (`npm run test:ci:...`, smoke scripts)  
+7. Whether Era 4–17 items are touched (default: **no**)  
+8. Whether cycle requires ops credentials (default: flag SKIPPED honestly if missing)  
 
 ---
 
-## Recommended first Era 18 cycles
+## 19. What Era 18 Must Avoid
 
-1. **Ops:** Configure staging secrets; re-run `smoke:enterprise-sso-idp-staging`, `smoke:staging-workflows-first-green`, `smoke:woo-shopify-live`.
-2. **If SSO proof_passed:** Cycle `era17-enterprise-sso-pilot-ready-v1` gate only with artifact.
-3. **Commercial:** Execute pilot golden path on staging; pursue first LOI with honest NO-GO/GO artifact.
-4. **Do not** publish Era 18 scorecard until at least one P0 proof artifact moves from SKIPPED to PASSED or explicit FAIL with remediation plan.
+- Re-implementing POS browser E2E policy (Era 4/5 certified)  
+- Re-opening Era 4–17 cycles without regression proof  
+- Claiming production SSO, SOC2, unified inventory/rewards, rush-hour KDS, marketplace live  
+- New experimental crons (stay at **16**)  
+- Aggressive feature sprawl before first paid pilot GO  
+- Inflating governance scorecard without blended evidence  
+- Fake PASS artifacts or customer records  
+
+---
+
+## 20. What Era 18 Should Unlock Only With Explicit Decision
+
+- Storefront/API inventory depletion (`era5-pos-only-gtm-lock-v1`)  
+- Unified cross-channel rewards ledger (`era6-dual-ledger-gtm-lock-v1`)  
+- Offline POS / Stripe Terminal hardware certification  
+- DoorDash/Uber Eats/Grubhub LIVE integrations  
+- SOC2 Type II / SCIM  
+- Rush-hour KDS certification  
+- Public API production SLA  
+- Broad AI/copilot expansion  
+
+---
+
+## Scorecard (Era 17 end → Era 18 start)
+
+| Area | Governance | Blended | Era 18 Target | Requires |
+|------|----------:|--------:|--------------:|----------|
+| Overall | 100 | **89** | **92** | paid pilot + P0 PASS |
+| Enterprise | — | **73** | **78** | SSO pilot_ready |
+| Integrations | — | **63** | **72** | live smoke PASS |
+| Commercial pilot | — | **68** | **85** | GO + customer |
+| DevOps | 100 | **82** | **90** | GitHub PASS |
+| Competitor readiness | — | **58** | **62** | pilot proof (not parity) |
+| Investor DD | — | **72** | **78** | metrics PASSED |
+
+Governance internal may remain **100/100** — do not conflate with blended or competitor scores.
+
+---
+
+## CI / Governance Facts (unchanged)
+
+- Default quality: `npm run test:ci:governance-bundles`  
+- Scorecard: `npm run test:ci:scorecard:cert` (era4–era17; era18 refresh at cycle 48)  
+- Handoff cert: `test:ci:era17-era18-handoff:cert`  
+- Production crons: **16** only  
+- POS money path: tier-2b — **certified — do not redo**  
+- Claims: `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before external materials  
+- P0 aggregate: `npm run smoke:p0-staging-proof-unblock`  
+- Pilot gate: `npm run smoke:pilot-gono-go`  
+
+---
+
+## Documentation Rules
+
+- Update canonical set + `docs/canonical-doc-index.md` at era boundaries  
+- Maturity claims must match matrix + policy IDs + smoke artifacts  
+- Paid pilots: `docs/commercial-pilot-runbook.md` + forbidden-claims gate  
+- Full re-audit baseline: `docs/full-product-strategic-reaudit-2026-05-28-era17.md`  
+
+---
+
+## Recommended Next Action
+
+1. **Ops:** Configure 11 P0 env vars — see [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md) (`era17-p0-staging-proof-unblock-v1`); `npm run smoke:p0-staging-proof-unblock -- --checklist-only`.
+2. **Ops:** Re-run `npm run smoke:p0-staging-proof-unblock` until `p0ProofStatus: proof_passed`.  
+3. **Commercial:** Qualify ICP prospect; prepare qualified LOI from Era 17 templates.  
+4. **Engineering:** Fix Tier 0 blockers; sustain governance bundles — no feature sprawl.  
+5. **GTM:** Run `smoke:pilot-forbidden-claims-enforcement` on release branch before any contract.  
+6. **Publish Era 18 master prompt** using this input + execution map.  
+
+---
+
+## Era 18 Master Prompt Emphasis
+
+The Era 18 master prompt must emphasize:
+
+1. **Evidence over policy** — PASS artifacts before any maturity promotion  
+2. **First paid pilot** as north star — cycles A–C before M-band leapfrog  
+3. **Honest non-claims** every cycle — especially SSO, inventory, rewards, KDS rush, hardware  
+4. **No Era 4–17 redelivery** unless regression proven  
+5. **Blended scoring** — governance 100 ≠ market ready; competitor 58 ≠ Toast  
+6. **Conditional full re-audit** at Era 18 end if pilot + SSO proof achieved  
+
+**Era 18 master prompt is required now.**

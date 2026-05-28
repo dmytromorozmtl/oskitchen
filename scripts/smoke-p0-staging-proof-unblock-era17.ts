@@ -7,7 +7,9 @@ import { spawnSync } from "node:child_process";
 
 import {
   P0_STAGING_PROOF_UNBLOCK_ERA17_CHILD_SMOKES,
+  P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG,
   P0_STAGING_PROOF_UNBLOCK_ERA17_NPM_SCRIPT,
+  P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC,
   P0_STAGING_PROOF_UNBLOCK_ERA17_POLICY_ID,
   P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT,
   P0_STAGING_PROOF_UNBLOCK_ERA17_UNBLOCK_STEPS,
@@ -54,6 +56,14 @@ Era 17 P0 staging proof unblock
 
   if (process.argv.includes("--checklist-only")) {
     console.log(`\nP0 staging proof unblock (${P0_STAGING_PROOF_UNBLOCK_ERA17_POLICY_ID})\n`);
+    console.log(`Canonical ops checklist: ${P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC}\n`);
+    console.log("Prerequisite env vars (11):\n");
+    for (const [index, entry] of P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG.entries()) {
+      console.log(
+        `${index + 1}. ${entry.key} — ${entry.configureIn}; child: ${entry.childSmokes.join(", ")}; ${entry.docPath}`,
+      );
+    }
+    console.log("\nUnblock steps:\n");
     for (const [index, step] of P0_STAGING_PROOF_UNBLOCK_ERA17_UNBLOCK_STEPS.entries()) {
       console.log(`${index + 1}. ${step}`);
     }

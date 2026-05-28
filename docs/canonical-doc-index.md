@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-28 (Era 17 strategic re-audit — post Era 16 closure @ c88be6b)  
+**Updated:** 2026-05-28 (Era 17 full product re-audit — post Era 17 closure @ 5e00dd4)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -47,10 +47,14 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 
 | Doc | Purpose |
 |-----|---------|
-| [`full-strategic-reaudit-2026-05-28-era16.md`](./full-strategic-reaudit-2026-05-28-era16.md) | **Current** post–Era 16 maximum-depth re-audit (blended overall 87/100) |
-| [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md) | Post–Era 4 re-audit (86/100) — **superseded** by era16 re-audit for strategic decisions |
+| [`full-product-strategic-reaudit-2026-05-28-era17.md`](./full-product-strategic-reaudit-2026-05-28-era17.md) | **Current** post–Era 17 maximum-depth product re-audit (blended 89/100) @ 5e00dd4 |
+| [`feature-by-feature-audit-2026-05-28.md`](./feature-by-feature-audit-2026-05-28.md) | 94-feature + workflow audit baseline for Era 18 |
+| [`era17-product-gap-and-competitor-map-2026-05-28.md`](./era17-product-gap-and-competitor-map-2026-05-28.md) | Competitor gaps, leapfrog opportunities, segment workflows |
+| [`era18-global-leap-execution-map-2026-05-28.md`](./era18-global-leap-execution-map-2026-05-28.md) | **Current** Era 18 execution map (48 cycles, workstreams A–N) |
+| [`full-strategic-reaudit-2026-05-28-era16.md`](./full-strategic-reaudit-2026-05-28-era16.md) | Post–Era 16 re-audit (87/100) — **superseded** by era17 product re-audit |
+| [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md) | Post–Era 4 re-audit (86/100) — **superseded** |
 | [`era17-strategic-execution-map-2026-05-28.md`](./era17-strategic-execution-map-2026-05-28.md) | Era 17 execution map (45 cycles, workstreams A–L) — **complete** |
-| [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md) | **Current** master prompt input for Evolution Era 18 |
+| [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md) | **Current** master prompt input for Evolution Era 18 (post full re-audit) |
 | [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md) | Era 17 closure scorecard (cycles 1–44) @ d2a1e26 |
 | [`next-master-prompt-input-2026-05-28-era17.md`](./next-master-prompt-input-2026-05-28-era17.md) | Era 17 handoff — **superseded** by era18 input for recurring prompts |
 | [`era16-cycle-completion-scorecard-2026-05-28.md`](./era16-cycle-completion-scorecard-2026-05-28.md) | Era 16 closure scorecard (cycles 1–14) @ c88be6b |
@@ -199,7 +203,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2d** | **SSO tenant mapping hardening** | `era17-enterprise-sso-tenant-mapping-v1`; **tenant_mapping_test_backed**; `validateSsoCallbackSession` deny matrix |
 | **2e** | **SSO procurement sync** | `era17-enterprise-sso-procurement-sync-v1`; **procurement_sync_complete**; FAQ reflects **pilot_foundation** |
 | **2g** | **SSO pilot_ready gate** | `era17-enterprise-sso-pilot-ready-v1`; **awaiting_idp_login_proof** — `smoke:enterprise-sso-pilot-ready-gate`; delivery **pilot_foundation** until Cycle 2 proof |
-| **2f** | **P0 staging proof unblock** | `era17-p0-staging-proof-unblock-v1`; **awaiting_ops_credentials** — `smoke:p0-staging-proof-unblock`; `artifacts/p0-staging-proof-unblock-summary.json` |
+| **2f** | **P0 staging proof unblock** | `era17-p0-staging-proof-unblock-v1`; **awaiting_ops_credentials** — `smoke:p0-staging-proof-unblock`; [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md); `artifacts/p0-staging-proof-unblock-summary.json` |
 | **3** | **Staging workflows first green** | `era17-staging-workflows-first-green-v1`; **awaiting_github_first_green** — smoke `overall: SKIPPED` + 3 missing env vars until GitHub secrets + run URLs |
 | **4** | **Woo live channel smoke** | `era17-channel-live-smoke-woo-v1`; **awaiting_live_credentials** — smoke `overall: SKIPPED` until DATABASE_URL + Woo connection |
 | **5** | **Shopify live channel smoke** | `era17-channel-live-smoke-shopify-v1`; **awaiting_live_credentials** — smoke `overall: SKIPPED` until DATABASE_URL + Shopify connection |
@@ -757,3 +761,5 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 17 Cycle 20: `era17-pos-tablet-ux-v1` — tablet touch targets + checkout status UX + operator runbook; **tablet_ux_polished** |
 | 2026-05-28 | Era 17 Cycle 19: `era17-public-api-per-route-scope-v1` — per-route scope guard on all v1 routes; **per_route_scope_enforced** |
 | 2026-05-28 | Era 17 Cycle 18: `era17-webhook-replay-p1-expansion-v1` — Resend ingress dedupe + Uber Eats cert; **p1_ingress_dedupe_expanded** |
+| 2026-05-28 | Era 18 Cycle 1: P0 staging secrets vault — `era17-p0-staging-proof-unblock-v1` env catalog (11 vars); [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md); **ops_checklist_complete**; proof still **awaiting_ops_credentials** |
+| 2026-05-28 | Era 18 Cycle 2 / Workstream F: `era18-pos-manager-discount-ui-v1` — terminal discount/comp UI; **terminal_discount_ui_wired**; no manager PIN / Toast parity claim |

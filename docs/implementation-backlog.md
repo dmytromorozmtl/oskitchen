@@ -35,6 +35,26 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-002 — POS manager discount terminal UI (P1)
+- ID: `KOS-E18-002`
+- Title: Era 18 Workstream F Cycle 30 — manager discount UI on POS terminal
+- Module: POS
+- Priority: P1 (operator speed / pilot commercial depth)
+- Status: **terminal_discount_ui_wired**
+- Decision: `era18-pos-manager-discount-ui-v1` — fixed/percent/comp controls gated by `pos.discount.apply`; uses existing `pos-discount-guard`
+- Evidence: `components/dashboard/pos-terminal-client.tsx`, `lib/pos/pos-terminal-discount-ui.ts`, `tests/unit/pos-terminal-discount-ui.test.ts`
+- Next: Shift variance approval UI (bounded); no Toast parity claim
+
+### KOS-E18-001 — Era 18 P0 staging proof ops checklist (P0)
+- ID: `KOS-E18-001`
+- Title: Era 18 Cycle 1 — P0 staging secrets vault + ops checklist
+- Module: Commercial / DevOps
+- Priority: P0 (Workstream A Cycle 1)
+- Status: **ops_checklist_complete**
+- Decision: `era17-p0-staging-proof-unblock-v1` — env var catalog (11) + `docs/era18-p0-staging-proof-ops-checklist.md`; enhanced `--checklist-only` output
+- Evidence: `lib/commercial/p0-staging-proof-unblock-era17-policy.ts` (`P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG`), `docs/era18-p0-staging-proof-ops-checklist.md`
+- Next: **Ops** configures 11 env vars in vault; re-run `smoke:p0-staging-proof-unblock` until `p0ProofStatus: proof_passed` (Era 18 Cycle 2)
+
 ### KOS-E17-042 — P0 staging proof unblock orchestrator (P0)
 - ID: `KOS-E17-042`
 - Title: Era 17 P0 ops bundle — aggregate SSO + GitHub + channel live staging proofs
@@ -43,7 +63,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **awaiting_ops_credentials**
 - Decision: `era17-p0-staging-proof-unblock-v1` — one smoke runs child P0 smokes #1–#3; honest SKIPPED when secrets missing
 - Evidence: `lib/commercial/p0-staging-proof-unblock-era17-policy.ts`, `scripts/smoke-p0-staging-proof-unblock-era17.ts`, `artifacts/p0-staging-proof-unblock-summary.json` (`p0ProofStatus: awaiting_ops_credentials`, `overall: SKIPPED`)
-- Next: Ops configures staging/IdP/channel secrets; re-run `smoke:p0-staging-proof-unblock`; then Cycle 2 IdP login proof + Cycle 3 `pilot_ready` gate when SSO artifact shows `proof_passed`
+- Next: Ops configures staging/IdP/channel secrets per `docs/era18-p0-staging-proof-ops-checklist.md`; re-run `smoke:p0-staging-proof-unblock`
 
 ### KOS-E17-041 — Enterprise SSO procurement sync (Workstream A Cycle 6 + Cycle 3 gate)
 - ID: `KOS-E17-041`

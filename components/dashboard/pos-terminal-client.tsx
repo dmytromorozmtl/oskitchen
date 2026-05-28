@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { CreditCard, Minus, Plus, ShoppingCart, UserRound, Wifi, WifiOff } from "lucide-react";
+import { CreditCard, Minus, Percent, Plus, ShoppingCart, Tag, UserRound, Wifi, WifiOff } from "lucide-react";
 
 import { posCheckoutAction } from "@/actions/pos";
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
@@ -24,8 +24,17 @@ import {
   removeOfflinePosCheckout,
 } from "@/lib/pos/offline-pos-queue";
 import type { PaymentModeKey } from "@/lib/orders/order-payment";
-import { PAYMENT_MODE_LABEL, PAYMENT_MODE_KEYS } from "@/lib/orders/order-payment";
+import { PAYMENT_MODE_LABEL } from "@/lib/orders/order-payment";
 import { posPaymentAllowedWhileOffline } from "@/services/pos/pos-payment-service";
+import {
+  computePosTerminalAmountDue,
+  computePosTerminalDiscountAmount,
+  filterPosTerminalPaymentModes,
+  parsePosTerminalFixedDiscountInput,
+  parsePosTerminalPercentDiscountInput,
+  POS_TERMINAL_DISCOUNT_PERCENT_PRESETS,
+  type PosTerminalDiscountMode,
+} from "@/lib/pos/pos-terminal-discount-ui";
 import { matchPosShortcut } from "@/lib/keyboard/shortcuts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,9 +98,16 @@ export function PosTerminalClient(props: {
   customerAttachEnabled?: boolean;
   quickOrderEnabled?: boolean;
   businessType?: string | null;
+  /** When true, operator may apply discounts and COMPED payment mode on terminal. */
+  canApplyPosDiscount?: boolean;
 }) {
   const recentCustomers = props.recentCustomers ?? [];
   const customerAttachEnabled = props.customerAttachEnabled ?? true;
+  const canApplyPosDiscount = props.canApplyPosDiscount ?? false;
+  const availablePaymentModes = useMemo(
+    () => filterPosTerminalPaymentModes(canApplyPosDiscount),
+    [canApplyPosDiscount],
+  );
   const [online, setOnline] = useState(() =>
     typeof navigator === "undefined" ? true : navigator.onLine,
   );
@@ -126,13 +142,30 @@ export function PosTerminalClient(props: {
   const [loyaltyBalance, setLoyaltyBalance] = useState<number | null>(null);
   const [giftCardBalance, setGiftCardBalance] = useState<number | null>(null);
   const [queuedSales, setQueuedSales] = useState(0);
+  const [discountMode, setDiscountMode] = useState<PosTerminalDiscountMode>("none");
+  const [fixedDiscountInput, setFixedDiscountInput] = useState("");
+  const [percentDiscountInput, setPercentDiscountInput] = useState("");
 
   function showCheckoutStatus(text: string, kind?: PosCheckoutStatusKind) {
     setCheckoutStatus(toPosCheckoutStatus(text, kind));
   }
 
+  function resetDiscountState() {
+    setDiscountMode("none");
+    setFixedDiscountInput("");
+    setPercentDiscountInput("");
+  }
+
   function buildCheckoutPayload() {
     const openShiftId = registerId ? props.openShiftsByRegisterId[registerId]?.id ?? null : null;
+    const subtotal = cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
+    const discountAmount = computePosTerminalDiscountAmount({
+      cartSubtotal: subtotal,
+      discountMode,
+      fixedAmount: parsePosTerminalFixedDiscountInput(fixedDiscountInput) ?? 0,
+      percentValue: parsePosTerminalPercentDiscountInput(percentDiscountInput) ?? 0,
+      paymentMode,
+    });
     return {
       registerId,
       shiftId: openShiftId,
@@ -152,6 +185,7 @@ export function PosTerminalClient(props: {
         ? Number.parseInt(loyaltyPointsRedeem, 10)
         : undefined,
       giftCardCode: giftCardCode.trim() || undefined,
+      discountAmount: discountAmount > 0 ? discountAmount : undefined,
     };
   }
 
@@ -281,6 +315,44 @@ export function PosTerminalClient(props: {
     [cart],
   );
 
+  const appliedDiscountAmount = useMemo(
+    () =>
+      computePosTerminalDiscountAmount({
+        cartSubtotal: cartTotal,
+        discountMode,
+        fixedAmount: parsePosTerminalFixedDiscountInput(fixedDiscountInput) ?? 0,
+        percentValue: parsePosTerminalPercentDiscountInput(percentDiscountInput) ?? 0,
+        paymentMode,
+      }),
+    [cartTotal, discountMode, fixedDiscountInput, percentDiscountInput, paymentMode],
+  );
+
+  const amountDue = useMemo(
+    () =>
+      computePosTerminalAmountDue({
+        cartSubtotal: cartTotal,
+        discountAmount: appliedDiscountAmount,
+        paymentMode,
+      }),
+    [cartTotal, appliedDiscountAmount, paymentMode],
+  );
+
+  const fixedDiscountInvalid =
+    discountMode === "fixed" &&
+    fixedDiscountInput.trim().length > 0 &&
+    parsePosTerminalFixedDiscountInput(fixedDiscountInput) == null;
+
+  const percentDiscountInvalid =
+    discountMode === "percent" &&
+    percentDiscountInput.trim().length > 0 &&
+    parsePosTerminalPercentDiscountInput(percentDiscountInput) == null;
+
+  useEffect(() => {
+    if (!availablePaymentModes.includes(paymentMode)) {
+      setPaymentMode("CASH");
+    }
+  }, [availablePaymentModes, paymentMode]);
+
   function addQuickItem(item: QuickOrderItem) {
     setCart((prev) => [
       ...prev,
@@ -336,12 +408,17 @@ export function PosTerminalClient(props: {
       showCheckoutStatus("Add at least one item.", "error");
       return;
     }
+    if (fixedDiscountInvalid || percentDiscountInvalid) {
+      showCheckoutStatus("Enter a valid discount amount before completing the sale.", "error");
+      return;
+    }
     if (!online && posPaymentAllowedWhileOffline(paymentMode)) {
       startTransition(async () => {
         await enqueueOfflinePosCheckout(buildCheckoutPayload());
         const size = await offlinePosQueueSize();
         setQueuedSales(size);
         setCart([]);
+        resetDiscountState();
         showCheckoutStatus("Offline — sale queued. Will sync when back online.", "info");
       });
       return;
@@ -357,8 +434,9 @@ export function PosTerminalClient(props: {
         return;
       }
       if (paymentMode === "CARD_TERMINAL_PLACEHOLDER") {
-        setPendingTerminal({ orderId: res.orderId, amount: cartTotal });
+        setPendingTerminal({ orderId: res.orderId, amount: amountDue });
         setCart([]);
+        resetDiscountState();
         showCheckoutStatus(
           `Order ${res.orderId.slice(0, 8)}… ready — tap card to complete payment.`,
           "success",
@@ -366,6 +444,7 @@ export function PosTerminalClient(props: {
         return;
       }
       setCart([]);
+      resetDiscountState();
       showCheckoutStatus(
         `Sale complete — order ${res.orderId.slice(0, 8)}… receipt ${res.receiptNumber}`,
         "success",
@@ -397,6 +476,7 @@ export function PosTerminalClient(props: {
       }
       if (action === "cancel") {
         setCart([]);
+        resetDiscountState();
         setCheckoutStatus(null);
       }
     }
@@ -754,13 +834,146 @@ export function PosTerminalClient(props: {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {PAYMENT_MODE_KEYS.map((k) => (
+                {availablePaymentModes.map((k) => (
                   <SelectItem key={k} value={k}>
                     {PAYMENT_MODE_LABEL[k]}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {!canApplyPosDiscount ? (
+              <p className="text-xs text-muted-foreground">
+                Discounts and comps require manager approval (`pos.discount.apply`).
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3">
+            <div className="flex items-center justify-between gap-2">
+              <Label className="flex items-center gap-2">
+                <Tag className="h-4 w-4 text-muted-foreground" aria-hidden />
+                Manager discount
+              </Label>
+              {canApplyPosDiscount && (discountMode !== "none" || paymentMode === "COMPED") ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-auto px-2 py-1 text-xs"
+                  onClick={() => {
+                    resetDiscountState();
+                    if (paymentMode === "COMPED") setPaymentMode("CASH");
+                  }}
+                >
+                  Clear
+                </Button>
+              ) : null}
+            </div>
+
+            {canApplyPosDiscount ? (
+              <>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant={discountMode === "fixed" ? "default" : "outline"}
+                    size="sm"
+                    className={cn("rounded-full", posTouchCompactClass)}
+                    data-testid="pos-discount-mode-fixed"
+                    onClick={() => {
+                      setDiscountMode("fixed");
+                      if (paymentMode === "COMPED") setPaymentMode("CASH");
+                    }}
+                  >
+                    $ Amount
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={discountMode === "percent" ? "default" : "outline"}
+                    size="sm"
+                    className={cn("rounded-full", posTouchCompactClass)}
+                    data-testid="pos-discount-mode-percent"
+                    onClick={() => {
+                      setDiscountMode("percent");
+                      if (paymentMode === "COMPED") setPaymentMode("CASH");
+                    }}
+                  >
+                    <Percent className="mr-1 h-3.5 w-3.5" aria-hidden />
+                    Percent
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={paymentMode === "COMPED" ? "default" : "outline"}
+                    size="sm"
+                    className={cn("rounded-full", posTouchCompactClass)}
+                    data-testid="pos-discount-comp-sale"
+                    onClick={() => {
+                      setPaymentMode("COMPED");
+                      resetDiscountState();
+                    }}
+                  >
+                    Comp sale
+                  </Button>
+                </div>
+
+                {discountMode === "fixed" && paymentMode !== "COMPED" ? (
+                  <div className="space-y-1">
+                    <Input
+                      data-testid="pos-discount-fixed-input"
+                      value={fixedDiscountInput}
+                      onChange={(e) => setFixedDiscountInput(e.target.value)}
+                      placeholder="Discount amount (e.g. 5.00)"
+                      inputMode="decimal"
+                      className="h-11 rounded-lg text-sm"
+                    />
+                    {fixedDiscountInvalid ? (
+                      <p className="text-xs text-destructive">Enter a valid discount amount.</p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {discountMode === "percent" && paymentMode !== "COMPED" ? (
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      {POS_TERMINAL_DISCOUNT_PERCENT_PRESETS.map((pct) => (
+                        <Button
+                          key={pct}
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          className={cn("rounded-full px-3", posTouchCompactClass)}
+                          data-testid={`pos-discount-preset-${pct}`}
+                          onClick={() => setPercentDiscountInput(String(pct))}
+                        >
+                          {pct}%
+                        </Button>
+                      ))}
+                    </div>
+                    <Input
+                      data-testid="pos-discount-percent-input"
+                      value={percentDiscountInput}
+                      onChange={(e) => setPercentDiscountInput(e.target.value)}
+                      placeholder="Custom percent (0–100)"
+                      inputMode="decimal"
+                      className="h-11 rounded-lg text-sm"
+                    />
+                    {percentDiscountInvalid ? (
+                      <p className="text-xs text-destructive">Enter a percent between 0 and 100.</p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {paymentMode === "COMPED" ? (
+                  <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
+                    Comp mode — entire sale recorded as manager-approved comp.
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Ask a manager to sign in or grant <span className="font-medium">POS discount apply</span>{" "}
+                to comp items or apply checkout discounts on this register.
+              </p>
+            )}
           </div>
 
           <div className={cn("max-h-72 space-y-3 overflow-y-auto pr-1", pending && "opacity-60")}>
@@ -812,6 +1025,23 @@ export function PosTerminalClient(props: {
               </div>
             ))}
             {!cart.length ? <p className="text-sm text-muted-foreground">No items yet.</p> : null}
+          </div>
+
+          <div className="rounded-xl border border-border/80 bg-muted/20 px-3 py-3 text-sm">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span className="font-medium tabular-nums">${cartTotal.toFixed(2)}</span>
+            </div>
+            {appliedDiscountAmount > 0 ? (
+              <div className="mt-1 flex items-center justify-between gap-2 text-emerald-700 dark:text-emerald-300">
+                <span>Discount</span>
+                <span className="font-medium tabular-nums">−${appliedDiscountAmount.toFixed(2)}</span>
+              </div>
+            ) : null}
+            <div className="mt-2 flex items-center justify-between gap-2 border-t border-border/60 pt-2">
+              <span className="font-semibold">Amount due</span>
+              <span className="text-lg font-semibold tabular-nums">${amountDue.toFixed(2)}</span>
+            </div>
           </div>
 
           <div className="grid gap-2 sm:grid-cols-2">

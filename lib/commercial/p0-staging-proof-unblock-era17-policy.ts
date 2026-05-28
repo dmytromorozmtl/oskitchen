@@ -58,10 +58,96 @@ export const P0_STAGING_PROOF_UNBLOCK_ERA17_CHILD_ARTIFACTS = [
   CHANNEL_LIVE_SMOKE_ERA16_SUMMARY_ARTIFACT,
 ] as const;
 
+export type P0StagingProofUnblockEnvVarEntry = {
+  key: string;
+  childSmokes: readonly string[];
+  configureIn: string;
+  docPath: string;
+};
+
+/** Eleven prerequisite env vars blocking P0 proof (deduplicated across child smokes). */
+export const P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG: readonly P0StagingProofUnblockEnvVarEntry[] =
+  [
+    {
+      key: "E2E_STAGING_BASE_URL",
+      childSmokes: ["smoke:enterprise-sso-idp-staging", "smoke:staging-workflows-first-green"],
+      configureIn: "GitHub Actions secret + local ops shell",
+      docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+    },
+    {
+      key: "E2E_LOGIN_EMAIL",
+      childSmokes: ["smoke:staging-workflows-first-green"],
+      configureIn: "GitHub Actions secret + local ops shell",
+      docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+    },
+    {
+      key: "E2E_LOGIN_PASSWORD",
+      childSmokes: ["smoke:staging-workflows-first-green"],
+      configureIn: "GitHub Actions secret + local ops shell (legacy alias E2E_PASSWORD in CI)",
+      docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+    },
+    {
+      key: "SSO_STAGING_WORKSPACE_ID",
+      childSmokes: ["smoke:enterprise-sso-idp-staging"],
+      configureIn: "Ops vault + local ops shell",
+      docPath: "docs/enterprise-sso-idp-staging-smoke-plan.md",
+    },
+    {
+      key: "SSO_STAGING_IDP_VENDOR",
+      childSmokes: ["smoke:enterprise-sso-idp-staging"],
+      configureIn: "Ops vault + local ops shell",
+      docPath: "docs/enterprise-sso-idp-staging-smoke-plan.md",
+    },
+    {
+      key: "SSO_STAGING_ALLOWED_DOMAIN",
+      childSmokes: ["smoke:enterprise-sso-idp-staging"],
+      configureIn: "Ops vault + local ops shell",
+      docPath: "docs/enterprise-sso-idp-staging-smoke-plan.md",
+    },
+    {
+      key: "SSO_STAGING_TEST_EMAIL",
+      childSmokes: ["smoke:enterprise-sso-idp-staging"],
+      configureIn: "Ops vault + local ops shell",
+      docPath: "docs/enterprise-sso-idp-staging-smoke-plan.md",
+    },
+    {
+      key: "SSO_STAGING_SUPABASE_PROVIDER_REF",
+      childSmokes: ["smoke:enterprise-sso-idp-staging"],
+      configureIn: "Ops vault + local ops shell",
+      docPath: "docs/enterprise-sso-idp-staging-smoke-plan.md",
+    },
+    {
+      key: "DATABASE_URL",
+      childSmokes: ["smoke:woo-shopify-live"],
+      configureIn: "Ops vault + local ops shell / GitHub secret",
+      docPath: "docs/commercial-pilot-runbook.md",
+    },
+    {
+      key: "ENCRYPTION_KEY",
+      childSmokes: ["smoke:woo-shopify-live"],
+      configureIn: "Ops vault + local ops shell / GitHub secret",
+      docPath: "docs/commercial-pilot-runbook.md",
+    },
+    {
+      key: "CHANNEL_SMOKE_OWNER_EMAIL",
+      childSmokes: ["smoke:woo-shopify-live"],
+      configureIn: "Ops vault + local ops shell / GitHub secret",
+      docPath: "docs/commercial-pilot-runbook.md",
+    },
+  ] as const;
+
+export const P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_KEYS =
+  P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG.map((entry) => entry.key);
+
+export const P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC =
+  "docs/era18-p0-staging-proof-ops-checklist.md" as const;
+
 export const P0_STAGING_PROOF_UNBLOCK_ERA17_UNBLOCK_STEPS = [
-  "Configure SSO IdP staging env vars (6) — see docs/enterprise-sso-idp-staging-smoke-plan.md",
-  "Configure GitHub staging secrets + record GITHUB_*_RUN_URL outcomes — see docs/GITHUB_E2E_STAGING_SECRETS.md",
-  "Configure DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL for Woo/Shopify live smoke",
+  "Read docs/era18-p0-staging-proof-ops-checklist.md — configure all 11 prerequisite env vars in ops vault",
+  "Step 1: E2E_STAGING_BASE_URL + E2E_LOGIN_EMAIL + E2E_LOGIN_PASSWORD — see docs/GITHUB_E2E_STAGING_SECRETS.md",
+  "Step 2: SSO_STAGING_* (6 vars) — see docs/enterprise-sso-idp-staging-smoke-plan.md",
+  "Step 3: DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL — see docs/commercial-pilot-runbook.md",
+  "Step 4: GitHub workflow_dispatch first green + record GITHUB_*_RUN_URL outcomes",
   "Re-run npm run smoke:p0-staging-proof-unblock — review artifacts/p0-staging-proof-unblock-summary.json",
   "Do not claim pilot_ready SSO, staging first-green, or live channel ops until child artifacts show proof_passed",
 ] as const;
@@ -85,6 +171,7 @@ export const P0_STAGING_PROOF_UNBLOCK_ERA17_UNIT_TESTS = [
 ] as const;
 
 export const P0_STAGING_PROOF_UNBLOCK_ERA17_CANONICAL_DOC_PATHS = [
+  "docs/era18-p0-staging-proof-ops-checklist.md",
   "docs/commercial-pilot-runbook.md",
   "docs/GITHUB_E2E_STAGING_SECRETS.md",
   "docs/implementation-backlog.md",
@@ -93,6 +180,6 @@ export const P0_STAGING_PROOF_UNBLOCK_ERA17_CANONICAL_DOC_PATHS = [
 ] as const;
 
 export const P0_STAGING_PROOF_UNBLOCK_ERA17_REVIEW_SECTION =
-  "Era 17 P0 staging proof unblock (2026-05-28)" as const;
+  "Era 18 P0 staging proof ops checklist (2026-05-28)" as const;
 
 export const P0_STAGING_PROOF_UNBLOCK_ERA17_BACKLOG_ID = "KOS-E17-042" as const;

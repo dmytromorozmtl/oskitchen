@@ -261,9 +261,11 @@ Uses the same secret names as E2E Staging (`era13-kds-staging-workflow-secrets-a
 
 Artifact on completion: `kds-realtime-e2e-staging-summary` (`PASSED` / `SKIPPED` / `FAILED`).
 
-## P0 staging proof unblock (Era 17)
+## P0 staging proof unblock (Era 17 + Era 18 ops checklist)
 
 **Policy:** `era17-p0-staging-proof-unblock-v1` — aggregates SSO IdP staging, GitHub first-green, and Woo/Shopify live smokes.
+
+**Era 18 ops checklist:** [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md) — configure all 11 prerequisite env vars.
 
 After configuring secrets above (plus SSO `SSO_STAGING_*` and channel `DATABASE_URL` per commercial runbook):
 
