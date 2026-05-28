@@ -118,6 +118,8 @@ npm run test:ci:pos-money-path:e2e
 
 **E2E staging secrets policy (Era 12 Cycle 2):** `lib/ci/e2e-staging-secrets-era12-policy.ts` — aligns `e2e-staging.yml` and `closed-beta-gate.yml` with Playwright canonical `E2E_LOGIN_PASSWORD`; cert `test:ci:e2e-staging-secrets-era12:cert`. See `docs/GITHUB_E2E_STAGING_SECRETS.md`.
 
+**Channel staging smoke (Era 12 Cycle 3 — not in default CI):** `lib/integrations/channel-golden-path-smoke-era12-policy.ts` (`era12-channel-golden-path-smoke-v1`) — `npm run smoke:woo-shopify`; optional `--skip-live`; requires `DATABASE_URL`; cert `test:ci:channel-golden-path-smoke-era12:cert` (in `test:ci:channel-golden-path:cert`). Not wired to `ci.yml`.
+
 ## Money-path certification mapping
 
 | Path | Tier 2 unit | Tier 2 E2E | Tier 1 integration |

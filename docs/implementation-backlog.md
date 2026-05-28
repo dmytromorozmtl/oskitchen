@@ -13,7 +13,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era12-channel-golden-path-recert-v1` — wires `order_hub_visibility` to `loadOrderHubPageData`; no kitchen Order auto-create claim
 - Evidence: `lib/integrations/channel-golden-path-era12-policy.ts`, `test:ci:channel-golden-path-era12:cert`
-- Next: live store smoke only via `scripts/smoke-woo-shopify-certification.ts` when credentials available
+- Next: ~~live store smoke wiring~~ — **Done** Cycle 3 (`era12-channel-golden-path-smoke-v1`)
+
+### KOS-E12-003 — Channel golden path staging smoke policy (P1)
+- ID: `KOS-E12-003`
+- Title: Certify Woo/Shopify staging smoke script wiring and honest scope
+- Module: Integrations / DevOps
+- Priority: P1 (Era 12 Cycle 3)
+- Status: **completed**
+- Decision: `era12-channel-golden-path-smoke-v1` — `npm run smoke:woo-shopify`; not in default CI; `--skip-live` documented; cert chained into `test:ci:channel-golden-path:cert`
+- Evidence: `lib/integrations/channel-golden-path-smoke-era12-policy.ts`, `test:ci:channel-golden-path-smoke-era12:cert`
+- Next: run smoke against real test shop when credentials available (ops only)
 
 ### KOS-E12-002 — E2E staging secrets alignment (P1)
 - ID: `KOS-E12-002`

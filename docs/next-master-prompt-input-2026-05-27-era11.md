@@ -30,6 +30,7 @@ All four Era 11 DevOps / RBAC / KDS staging cycles from era10 handoff **complete
 |-------|---------|
 | **1** | **Channel golden path recert** — `era12-channel-golden-path-recert-v1`; order hub visibility stage certified |
 | **2** | **E2E staging secrets alignment** — `era12-e2e-staging-secrets-align-v1`; `e2e-staging.yml` + `closed-beta-gate.yml` map `E2E_LOGIN_PASSWORD` (legacy `E2E_PASSWORD` alias) |
+| **3** | **Channel staging smoke policy** — `era12-channel-golden-path-smoke-v1`; `npm run smoke:woo-shopify`; not in default CI |
 
 ---
 

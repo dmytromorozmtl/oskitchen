@@ -6,6 +6,8 @@
 
 **CI golden path (Era 4 Cycle 5 + Era 12 Cycle 1 recert):** policy `era4-channel-golden-path-v1` + `era12-channel-golden-path-recert-v1`; `npm run test:ci:channel-golden-path` + `test:ci:channel-golden-path:cert` (tier 0 governance bundles). Certifies webhook → `externalOrder` → channel import staging → **order_hub_visibility** via order hub external list (`loadOrderHubPageData` + `externalOrderListWhereForOwner`) — **not** automatic kitchen `Order` creation or full marketplace live ops.
 
+**Staging smoke (Era 12 Cycle 3 — not in default CI):** policy `era12-channel-golden-path-smoke-v1`; `npm run smoke:woo-shopify` (`scripts/smoke-woo-shopify-certification.ts`) with `DATABASE_URL` + saved connection; use `--skip-live` for credentials-only checks. Cert wiring: `test:ci:channel-golden-path-smoke-era12:cert` (chained in `test:ci:channel-golden-path:cert`). Does **not** certify full live marketplace ops.
+
 Do not market as production-certified until this checklist is signed per tenant.
 
 ## Automated checks (in-app)

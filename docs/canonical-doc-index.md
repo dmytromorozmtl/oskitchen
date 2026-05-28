@@ -482,3 +482,4 @@ Incremental refresh after Era 11 cycles 1–4 (DevOps scale / RBAC recert / KDS 
 | 2026-05-27 | Era 11 Cycle 5: `era11-scorecard-refresh-v1` — score 98/100; era12 handoff |
 | 2026-05-27 | Era 12 Cycle 1: `era12-channel-golden-path-recert-v1` — order hub visibility stage recert |
 | 2026-05-27 | Era 12 Cycle 2: `era12-e2e-staging-secrets-align-v1` — staging workflow `E2E_LOGIN_PASSWORD` alignment |
+| 2026-05-27 | Era 12 Cycle 3: `era12-channel-golden-path-smoke-v1` — Woo/Shopify staging smoke wiring cert (not in default CI) |
