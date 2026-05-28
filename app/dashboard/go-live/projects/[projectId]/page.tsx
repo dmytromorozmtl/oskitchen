@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 
 import { ApprovalButtons } from "@/components/dashboard/go-live/approval-buttons";
 import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
+import { GoLiveChecklistAttentionStrip } from "@/components/dashboard/go-live/go-live-checklist-attention-strip";
+import { GoLiveChecklistNextAction } from "@/components/dashboard/go-live/go-live-checklist-next-action";
 import { GoLiveBlockerNextAction } from "@/components/dashboard/go-live/go-live-blocker-next-action";
 import { ChecklistRow } from "@/components/dashboard/go-live/checklist-row";
 import { IncidentForm, IncidentRowActions } from "@/components/dashboard/go-live/incident-form";
@@ -30,7 +32,7 @@ import {
   stageRank,
 } from "@/lib/go-live/launch-stages";
 import { parseGoLiveAuditSnapshot } from "@/lib/go-live/audit-snapshot";
-import { buildGoLiveFocusSnapshot } from "@/lib/go-live/go-live-focus-era18";
+import { buildGoLiveFocusSnapshot, buildGoLiveChecklistFocusSnapshot } from "@/lib/go-live/go-live-focus-era18";
 import {
   SIMULATION_TYPE_LABEL,
 } from "@/lib/go-live/simulation-engine";
@@ -75,6 +77,15 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
     externalTargetProviders === 0 || externalMissingProviders === 0 ? "success" : "danger";
   const approvalsPending = Math.max(0, snapshot.inputs.approvalsRequired - snapshot.inputs.approvalsCount);
   const goLiveFocus = buildGoLiveFocusSnapshot(snapshot.validation, approvalsPending);
+  const checklistFocusItems = project.checklistItems.map((item) => ({
+    id: item.id,
+    title: item.title,
+    status: item.status,
+    required: item.required,
+    actionRoute: item.actionRoute,
+    dueAt: item.dueAt ? item.dueAt.toISOString().slice(0, 10) : null,
+  }));
+  const checklistFocus = buildGoLiveChecklistFocusSnapshot(checklistFocusItems);
 
   const itemsByStage = new Map<string, typeof project.checklistItems>();
   for (const it of project.checklistItems) {
@@ -199,7 +210,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="go-live-checklist">
         <CardHeader>
           <CardTitle className="text-base">Stage-aware checklist</CardTitle>
           <CardDescription>
@@ -208,6 +219,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <GoLiveChecklistAttentionStrip focus={checklistFocus} items={checklistFocusItems} />
           {LAUNCH_STAGES.map((stage) => {
             const items = itemsByStage.get(stage) ?? [];
             if (items.length === 0) return null;
@@ -218,7 +230,11 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
                 </div>
                 <ul className="divide-y">
                   {items.map((item) => (
-                    <li key={item.id} className="space-y-2 px-3 py-2">
+                    <li
+                      key={item.id}
+                      id={`go-live-checklist-${item.id}`}
+                      className="scroll-mt-24 space-y-2 px-3 py-2"
+                    >
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                           <p className="text-sm font-medium">
@@ -226,11 +242,16 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
                             {item.required ? <span className="ml-2 text-[10px] uppercase text-rose-700">required</span> : null}
                           </p>
                           {item.description ? <p className="text-xs text-muted-foreground">{item.description}</p> : null}
-                          {item.actionRoute ? (
-                            <Link href={item.actionRoute} className="text-xs text-primary underline-offset-4 hover:underline">
-                              Open module
-                            </Link>
-                          ) : null}
+                          <GoLiveChecklistNextAction
+                            item={{
+                              id: item.id,
+                              title: item.title,
+                              status: item.status,
+                              required: item.required,
+                              actionRoute: item.actionRoute,
+                              dueAt: item.dueAt ? item.dueAt.toISOString().slice(0, 10) : null,
+                            }}
+                          />
                         </div>
                         <ChecklistStatusBadge status={item.status} />
                       </div>

@@ -7,11 +7,20 @@ import {
   GO_LIVE_FOCUS_ERA18_PROOF_STATUS,
 } from "@/lib/go-live/go-live-focus-era18-policy";
 import {
+  GO_LIVE_CHECKLIST_FOCUS_ERA18_BACKLOG_ID,
+  GO_LIVE_CHECKLIST_FOCUS_ERA18_POLICY_ID,
+  GO_LIVE_CHECKLIST_FOCUS_ERA18_PROOF_STATUS,
+} from "@/lib/go-live/go-live-checklist-focus-era18-policy";
+import {
   buildGoLiveFocusSnapshot,
+  buildGoLiveChecklistFocusSnapshot,
   pickGoLiveAttentionItems,
+  pickGoLiveChecklistAttentionItems,
   pickGoLiveLegacyAttentionItems,
   resolveGoLiveBlockerRowNextAction,
+  resolveGoLiveChecklistRowNextAction,
   summarizeGoLiveFocus,
+  summarizeGoLiveChecklistFocus,
 } from "@/lib/go-live/go-live-focus-era18";
 import { validateLaunch } from "@/lib/go-live/launch-validator";
 import type { ReadinessInputs } from "@/lib/go-live/readiness-engine";
@@ -141,5 +150,83 @@ describe("summarizeGoLiveFocus", () => {
     );
     const focus = buildGoLiveFocusSnapshot(report, 0);
     expect(summarizeGoLiveFocus(focus).hasUrgent).toBe(true);
+  });
+});
+
+const checklistItems = [
+  {
+    id: "check-1",
+    title: "Menu set up",
+    status: "TODO",
+    required: true,
+    actionRoute: "/dashboard/menus",
+    dueAt: "2026-05-20",
+  },
+  {
+    id: "check-2",
+    title: "Support contact confirmed",
+    status: "BLOCKED",
+    required: false,
+    actionRoute: "/help",
+    dueAt: null,
+  },
+  {
+    id: "check-3",
+    title: "Billing configured",
+    status: "DONE",
+    required: true,
+    actionRoute: "/dashboard/billing",
+    dueAt: null,
+  },
+] as const;
+
+describe("go-live-checklist-focus-era18 policy", () => {
+  it("registers era18 go-live checklist focus proof", () => {
+    expect(GO_LIVE_CHECKLIST_FOCUS_ERA18_POLICY_ID).toBe("era18-go-live-checklist-focus-v1");
+    expect(GO_LIVE_CHECKLIST_FOCUS_ERA18_PROOF_STATUS).toBe(
+      "go_live_checklist_focus_attention_wired",
+    );
+    expect(GO_LIVE_CHECKLIST_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-032");
+  });
+});
+
+describe("pickGoLiveChecklistAttentionItems", () => {
+  it("prioritizes required open and blocked checklist items", () => {
+    const focus = buildGoLiveChecklistFocusSnapshot(checklistItems, Date.parse("2026-05-28T12:00:00.000Z"));
+    const items = pickGoLiveChecklistAttentionItems(
+      checklistItems,
+      focus,
+      Date.parse("2026-05-28T12:00:00.000Z"),
+    );
+
+    expect(items.some((item) => item.id === "required-open")).toBe(true);
+    expect(items.some((item) => item.id === "blocked-items")).toBe(true);
+    expect(items.some((item) => item.id === "overdue-items")).toBe(true);
+    expect(items[0]?.id).toBe("required-open");
+  });
+});
+
+describe("resolveGoLiveChecklistRowNextAction", () => {
+  it("routes required todo items to start setup", () => {
+    const action = resolveGoLiveChecklistRowNextAction(checklistItems[0], Date.parse("2026-05-28T12:00:00.000Z"));
+    expect(action?.label).toBe("Complete — overdue");
+    expect(action?.href).toBe("/dashboard/menus");
+  });
+
+  it("routes blocked items to unblock action", () => {
+    const action = resolveGoLiveChecklistRowNextAction(checklistItems[1]);
+    expect(action?.label).toBe("Unblock — open module");
+    expect(action?.href).toBe("/help");
+  });
+
+  it("returns null for completed checklist items", () => {
+    expect(resolveGoLiveChecklistRowNextAction(checklistItems[2])).toBeNull();
+  });
+});
+
+describe("summarizeGoLiveChecklistFocus", () => {
+  it("flags urgent when required open items exist", () => {
+    const focus = buildGoLiveChecklistFocusSnapshot(checklistItems, Date.parse("2026-05-28T12:00:00.000Z"));
+    expect(summarizeGoLiveChecklistFocus(focus).hasUrgent).toBe(true);
   });
 });

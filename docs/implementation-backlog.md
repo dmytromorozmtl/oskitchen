@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-032 — Go-live checklist row next actions (P1)
+- ID: `KOS-E18-032`
+- Title: Era 18 Workstream L Cycle 32 — launch checklist prioritization + row next actions
+- Module: Go-live / Pilot deployment
+- Priority: P1 (pilot deployment speed + commercial readiness)
+- Status: **go_live_checklist_focus_attention_wired**
+- Decision: `era18-go-live-checklist-focus-v1` — required/blocked/overdue checklist prioritization; contextual row next actions on project checklist
+- Evidence: `lib/go-live/go-live-focus-era18.ts`, `components/dashboard/go-live/go-live-checklist-attention-strip.tsx`, `app/dashboard/go-live/projects/[projectId]/page.tsx`
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-031 — KDS overdue ticket focus strip (P1)
 - ID: `KOS-E18-031`
 - Title: Era 18 Workstream G Cycle 31 — KDS overdue/allergen/expo attention + ticket row next actions + recall-next hero
