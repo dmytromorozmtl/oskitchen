@@ -28,15 +28,173 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 3. Staff use **`/login` → Sign in with SSO** with workspace UUID (activated pilots only).
 4. Run `npm run smoke:enterprise-sso-r2-pilot` for CI cert wiring — not live IdP attestation.
 
-### Woo/Shopify live channel smoke (optional — Era 16)
+### Enterprise SSO IdP staging smoke (optional — Era 17)
 
-**Policy:** `era16-channel-live-smoke-v1` — **Era 16 channel live Woo/Shopify smoke (2026-05-28)** — **not in default CI**; **not** full marketplace live ops.
+**Policy:** `era17-enterprise-sso-idp-staging-smoke-v1` — **plan_ready**; delivery remains **pilot_foundation** until Cycle 2 IdP login proof.
+
+1. Read `docs/enterprise-sso-idp-staging-smoke-plan.md` — Okta or Entra test tenant + Supabase SAML setup.
+2. Set `E2E_STAGING_BASE_URL`, `SSO_STAGING_WORKSPACE_ID`, `SSO_STAGING_IDP_VENDOR`, `SSO_STAGING_ALLOWED_DOMAIN`, `SSO_STAGING_TEST_EMAIL`, `SSO_STAGING_SUPABASE_PROVIDER_REF` in ops vault (never git).
+3. Run `npm run smoke:enterprise-sso-idp-staging` — review `artifacts/enterprise-sso-idp-staging-smoke-summary.json`.
+4. Missing IdP credentials → **SKIPPED WITH REASON** (exit 0). Wiring cert failure → **FAILED** (exit 1).
+5. Cycle 2: operator completes browser SSO login → dashboard; capture screenshot + audit `sso.login_success`.
+6. Do **not** claim qualified pilot-ready SSO or production SSO until Cycle 3 gate with Cycle 2 `proof_passed` artifact.
+
+**Cycle 2 status (2026-05-28):** `era17-enterprise-sso-idp-login-proof-v1` — **awaiting_operator_proof**; local smoke → **SKIPPED WITH REASON** (6 prerequisite env vars unset). Re-run after ops configures Okta/Entra + staging secrets.
+
+**Cycle 2 operator proof env vars:** `SSO_STAGING_OPERATOR_EMAIL`, `SSO_STAGING_LOGIN_SCREENSHOT_PATH`, `SSO_STAGING_AUDIT_EVENT_REF`, `SSO_STAGING_NEGATIVE_TEST_NOTE` — see `era17-enterprise-sso-idp-login-proof-v1`.
+
+### Staging workflows first green (Era 17 P0 #2)
+
+**Policy:** `era17-staging-workflows-first-green-v1` — **awaiting_github_first_green**; extends `era16-staging-workflows-first-green-v1`.
+
+1. Configure GitHub secrets: `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD` (see `docs/GITHUB_E2E_STAGING_SECRETS.md`).
+2. `workflow_dispatch` on `e2e-staging.yml`, `playwright-kds-staging.yml`, and optionally `woo-shopify-staging-smoke.yml`.
+3. Record `GITHUB_*_RUN_URL` + `GITHUB_*_RUN_OUTCOME` (`PASSED`|`FAILED`|`SKIPPED`) after each run.
+4. Run `npm run smoke:staging-workflows-first-green` — review `artifacts/staging-workflows-first-green-summary.json` (`firstGreenProofStatus`, `githubPassedCount`).
+5. **proof_passed** requires **≥2/3** workflows with GitHub `PASSED` — wiring cert alone is insufficient.
+
+**Execution status (2026-05-28):** local smoke → **SKIPPED WITH REASON** (3 prerequisite env vars unset; 0/3 GitHub runs recorded). Re-run after ops configures secrets and records run URLs.
+
+### Woo/Shopify live channel smoke (optional — Era 16 + Era 17)
+
+**Era 16 channel live Woo/Shopify smoke (2026-05-28)** — superseded by Era 17 Woo proof path below; Era 16 policy `era16-channel-live-smoke-v1` remains chained in cert.
+
+**Policy:** `era16-channel-live-smoke-v1`, **`era17-channel-live-smoke-woo-v1`**, **`era17-channel-live-smoke-shopify-v1`** — **not in default CI**; **not** full marketplace live ops.
 
 1. Run `npm run test:ci:channel-golden-path:cert` (synthetic path).
-2. Set `DATABASE_URL`, `ENCRYPTION_KEY`, and `CHANNEL_SMOKE_OWNER_EMAIL` (or connection id).
-3. Run `npm run smoke:woo-shopify-live` — review `artifacts/channel-live-smoke-summary.json`.
+2. Set `DATABASE_URL`, `ENCRYPTION_KEY`, and `CHANNEL_SMOKE_OWNER_EMAIL` (or `CHANNEL_SMOKE_CONNECTION_ID`).
+3. Run `npm run smoke:woo-shopify-live` — review `artifacts/channel-live-smoke-summary.json` (`wooLiveProofStatus`, `shopifyLiveProofStatus`, `missingEnvVars[]`).
 4. Missing credentials → **SKIPPED WITH REASON** (exit 0). Live cert failure → **FAILED** (exit 1).
-5. Optional: GitHub **Woo Shopify Staging Smoke** workflow (`workflow_dispatch`).
+5. Woo live uses `--provider woocommerce`; Shopify live uses `--provider shopify`.
+6. Optional: GitHub **Woo Shopify Staging Smoke** workflow (`workflow_dispatch`).
+
+### Era 17 channel live Woo smoke (2026-05-28)
+
+**Policy:** `era17-channel-live-smoke-woo-v1` — **awaiting_live_credentials** until staging Woo connection configured. Summary step id: `woo_live_certification`.
+
+**Execution status (2026-05-28):** local smoke → **SKIPPED WITH REASON** (`DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL` unset). Re-run after ops configures staging Woo connection.
+
+### Era 17 channel live Shopify smoke (2026-05-28)
+
+**Policy:** `era17-channel-live-smoke-shopify-v1` — **awaiting_live_credentials** until staging Shopify connection configured. Summary step id: `shopify_live_certification`.
+
+**Execution status (2026-05-28):** local smoke → **SKIPPED WITH REASON** (same prerequisite env vars as Woo). Re-run after ops configures staging Shopify connection.
+
+### Era 17 channel GitHub workflow first green (2026-05-28)
+
+**Policy:** `era17-channel-github-workflow-first-green-v1` — **awaiting_github_first_green** until `woo-shopify-staging-smoke.yml` workflow_dispatch PASS is recorded.
+
+1. Configure GitHub secrets: `DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL` (see `docs/GITHUB_E2E_STAGING_SECRETS.md`).
+2. Actions → **Woo Shopify Staging Smoke** → Run workflow (`workflow_dispatch`).
+3. Record `GITHUB_WOO_SHOPIFY_STAGING_RUN_URL` + `GITHUB_WOO_SHOPIFY_STAGING_RUN_OUTCOME` (`PASSED` | `FAILED` | `SKIPPED`).
+4. Run `npm run smoke:channel-github-workflow-first-green` — review `artifacts/channel-github-workflow-first-green-summary.json`.
+5. Missing secrets or GitHub run → **SKIPPED WITH REASON** (exit 0). GitHub FAILED → **FAILED** (exit 1).
+6. Do **not** claim channel live ops proven without GitHub `proof_passed` artifact.
+
+### Era 17 channel pilot playbook (2026-05-28)
+
+**Policy:** `era17-channel-pilot-playbook-v1` — **operator_ready** one-page Woo/Shopify guide for qualified pilots.
+
+1. Use [`channel-pilot-playbook-era17.md`](./channel-pilot-playbook-era17.md) for owner/operator **qualified test shop** setup (~30–45 min per channel).
+2. Links smoke commands, sign-off checklist, forbidden marketplace claims, and rollback steps.
+3. Does **not** substitute live smoke PASS or GitHub workflow evidence — documents honest SKIPPED WITH REASON.
+4. Full GO/NO-GO: `npm run cert:commercial-pilot-evidence-era16`.
+
+### Era 17 pilot ICP + contract template (2026-05-28)
+
+**Policy:** `era17-pilot-icp-contract-v1` — **template_ready** for sales/legal; not a signed agreement.
+
+1. Use [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) — **qualified pilot customer profile**, disqualifiers, allowed/forbidden claims.
+2. Default **pilot duration** 90 days (30–180 qualified window); define **success metrics** in Exhibit C.
+3. Run ICP qualification (`lib/commercial/pilot-icp-contract-era17.ts`) before contract draft.
+4. Set `icpQualified: false` in evidence pack → **NO-GO** blocker.
+5. Pre-signature checklist includes `verify-claims` strict + Tier 0 PASS.
+
+### Era 17 pilot Tier 0/1 preflight (2026-05-28)
+
+**Policy:** `era17-pilot-tier-preflight-v1` — **awaiting_tier_preflight_pass** on release branch; not paid pilot GO.
+
+1. Run **`npm run smoke:pilot-tier-preflight`** on the release commit (includes full `test:ci:governance-bundles`).
+2. Review **`artifacts/pilot-tier-preflight-summary.json`** — `tier0ProofStatus`, `tier1ProofStatus`, `overall`.
+3. Local dev may use `--skip-governance-bundles` or `--skip-staging-env` — **SKIPPED WITH REASON**; do not treat as paid pilot GO.
+4. Tier 0 FAIL blocks operator Tier 2; Tier 1 staging-env skip is acceptable locally when secrets absent.
+5. Cert wiring: `test:ci:pilot-tier-preflight-era17:cert` chained in `test:ci:commercial-pilot-runbook:cert`.
+
+### Era 17 pilot operator golden path (2026-05-28)
+
+**Policy:** `era17-pilot-operator-golden-path-v1` — **awaiting_operator_execution**; Tier 2 manual staging checklist.
+
+1. Use [`pilot-operator-golden-path-era17.md`](./pilot-operator-golden-path-era17.md) — 45–60 min owner + staff phases.
+2. Run **`npm run smoke:pilot-operator-golden-path`** after checklist; review **`artifacts/pilot-operator-golden-path-summary.json`**.
+3. Set `PILOT_GOLDEN_PATH_<PHASE>_MANUAL=PASSED|FAILED` per completed phase; staging URL + operator email required.
+4. CI wiring runs `smoke:channel-golden-path` + `smoke:kds-staging` (POS money-path cert optional via `--with-pos-ci`).
+5. **`phaseProofStatus: proof_passed`** required before Tier 3 money-path smoke or paid pilot GO.
+
+### Era 17 pilot GO/NO-GO evaluator (2026-05-28)
+
+**Policy:** `era17-pilot-gono-go-v1` — **awaiting_customer_execution**; aggregates Era 17 evidence into one decision.
+
+1. Run **`npm run smoke:pilot-gono-go`** after Tier 0/1 + Tier 2 artifacts exist.
+2. Review **`artifacts/pilot-gono-go-summary.json`** — `decision`, `blockers`, `customerExecutionStatus`.
+3. Set `PILOT_GONOGO_ICP_INPUT_JSON` from prospect qualification; default empty → **NOT QUALIFIED** → **NO-GO**.
+4. Record `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` only when real LOI signed — **never fake customer execution**.
+5. **NO-GO is expected** until tiers pass, ICP qualifies, role checklists complete, and customer LOI recorded.
+
+**Execution status (2026-05-28):** local evaluator → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). Blockers: Tier 0 skipped prerequisites, Tier 2 golden path incomplete, ICP not qualified, no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
+
+### Era 17 pilot forbidden-claims enforcement (2026-05-28)
+
+**Policy:** `era17-pilot-forbidden-claims-enforcement-v1` — **awaiting_forbidden_claims_enforcement_pass**; pre-sales claims gate.
+
+1. Run **`npm run smoke:pilot-forbidden-claims-enforcement`** on release branch before pilot contract signature.
+2. Review **`artifacts/pilot-forbidden-claims-enforcement-summary.json`** — `claimsEnforcementProofStatus`.
+3. Requires `MARKETING_CLAIMS_STRICT=1 verify-claims` PASS + `audit:marketing-claims` PASS + claims/procurement cert chain PASS.
+4. **FAIL blocks paid pilot sales** until GTM copy, claims registry, or procurement pack is corrected.
+5. Chain into Tier 1 preflight and ICP pre-signature checklist (`pilot-icp-contract-template-era17.md`).
+
+**Execution status (2026-05-28):** local smoke → **overall: PASSED** (`claimsEnforcementProofStatus: proof_passed`). Strict verify-claims, registry audit, and procurement cert chain green on commit `c88be6b`. Re-run on **release branch** before each pilot contract signature.
+
+### Era 17 KDS staging Playwright proof (2026-05-28)
+
+**Policy:** `era17-kds-staging-playwright-proof-v1` — **awaiting_github_kds_playwright_pass**; GitHub evidence for Tier E Playwright.
+
+1. Configure GitHub secrets: `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD`.
+2. `workflow_dispatch` on **`playwright-kds-staging.yml`** → record `GITHUB_KDS_STAGING_RUN_URL` + `GITHUB_KDS_STAGING_RUN_OUTCOME=PASSED|FAILED|SKIPPED`.
+3. Run **`npm run smoke:kds-staging-playwright`** → review **`artifacts/kds-staging-playwright-proof-summary.json`** (`playwrightProofStatus`).
+4. **Do not claim rush-hour KDS or default-CI Playwright** — qualified staging pilot only.
+
+**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; Playwright proof **SKIPPED WITH REASON** (staging secrets + GitHub run URL unset). Artifact: `artifacts/kds-staging-playwright-proof-summary.json`.
+
+### Era 17 operational sign-off staging proof (2026-05-28)
+
+**Policy:** `era17-operational-signoff-staging-proof-v1` — **awaiting_staging_operator_signoff**; real staging URL + operator identity for KDS + production calendar.
+
+1. Set `OPERATIONAL_SIGNOFF_STAGING_URL` + `OPERATIONAL_SIGNOFF_OPERATOR_EMAIL`.
+2. Run **`npm run smoke:operational-signoff-staging`** → review **`artifacts/operational-signoff-staging-proof-summary.json`** (`stagingProofStatus`).
+3. Complete manual KDS + production calendar checklists on staging.
+4. Re-run with `OPERATIONAL_SIGNOFF_KDS_MANUAL=passed` and `OPERATIONAL_SIGNOFF_PRODUCTION_CALENDAR_MANUAL=passed` when checklists complete.
+5. **Do not claim rush-hour or full production SLO certification.**
+
+**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; staging proof **SKIPPED WITH REASON** (`stagingProofStatus: proof_skipped_missing_prerequisites`). Missing: `OPERATIONAL_SIGNOFF_STAGING_URL`, `OPERATIONAL_SIGNOFF_OPERATOR_EMAIL`.
+
+### Era 17 pilot metrics baseline (2026-05-28)
+
+**Policy:** `era17-pilot-metrics-baseline-v1` — **awaiting_baseline_capture**; real KPI snapshot only after pilot week-2 data.
+
+1. Use [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md) — orders/day, checkout success, KDS bump, support tickets, operator feedback.
+2. Run **`npm run smoke:pilot-metrics-baseline`** — review **`artifacts/pilot-metrics-baseline-summary.json`** (`baselineProofStatus`).
+3. Pre-pilot: `--template-only` → all metrics **SKIPPED WITH REASON** (honest).
+4. Do **not** cite template targets in investor materials — Era 41 requires `proof_captured` or documented `proof_partial`.
+
+### Era 17 pilot rollback drill (2026-05-28)
+
+**Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.
+
+1. Use [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md) — six steps aligned with Era 16 evidence pack.
+2. Run **`npm run smoke:pilot-rollback-drill`** — review **`artifacts/pilot-rollback-drill-summary.json`** (`rollbackProofStatus`).
+3. Tabletop or staging via `PILOT_ROLLBACK_DRILL_MODE`; set `PILOT_ROLLBACK_STEP_<N>_STATUS=PASSED|FAILED` per step.
+4. Capture retrospective via `PILOT_RETROSPECTIVE_OUTCOME` + `PILOT_RETROSPECTIVE_LESSONS`.
+5. Pre-drill: `--template-only` → **SKIPPED WITH REASON** (honest).
 
 ---
 
@@ -45,33 +203,38 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 Run on the release commit **before** inviting operators to staging:
 
 ```bash
+npm run smoke:pilot-tier-preflight
+# or individually:
 npm run test:ci:governance-bundles
 npm run test:ci:scorecard:cert
 npm run validate:production-crons
 npm run validate:cron-inventory
 ```
 
-Record: commit SHA, date, PASS/FAIL. If governance bundles fail, **do not** start operator Tier 2.
+Record: commit SHA, date, PASS/FAIL in `artifacts/pilot-tier-preflight-summary.json`. If governance bundles fail, **do not** start operator Tier 2.
 
 ---
 
 ## Tier 1 — Staging environment readiness
 
 ```bash
+npm run smoke:pilot-tier-preflight -- --tier1-only
+# or individually:
 MARKETING_CLAIMS_STRICT=1 npm run verify-claims
 npm run audit:marketing-claims
 npm run verify:staging-env
+npm run test:ci:pilot-preflight-claims:cert
 bash scripts/ops/pilot-preflight.sh
 ```
 
 | Check | Pass criteria |
 |-------|----------------|
-| Marketing claims | `MARKETING_CLAIMS_STRICT=1 verify-claims` + `audit:marketing-claims` — live copy scan (`era7-marketing-claims-governance-v1`); pilot preflight enforces strict mode (`era8-pilot-preflight-claims-strict-v1`); registry (`era8-claims-registry-v1`; no `needs-evidence` rows) |
+| Marketing claims | `MARKETING_CLAIMS_STRICT=1 verify-claims` + `audit:marketing-claims` — live copy scan (`era7-marketing-claims-governance-v1`); pilot preflight enforces strict mode (`era8-pilot-preflight-claims-strict-v1`); registry `config/marketing/claims-registry.json` (`era8-claims-registry-v1`; no `needs-evidence` rows) |
 | Staging env | `verify:staging-env` exit 0 |
 | Workspace scope | `npm run workspace:backfill:status` exit 0 (if migration pilot) |
 | Nav honesty | Preview/placeholder routes show badges (`era4-page-maturity-sweep-v1`) |
 | Cron surface | `pilot-preflight.sh` PASS — `ENABLE_EXPERIMENTAL_CRONS` not `true`; 16 production crons only (`era9-cron-surface-recert-v1`, `era14-cron-surface-recert-v1`; `npm run smoke:cron-surface`) |
-| Staging E2E wiring | `npm run smoke:staging-workflows-first-green` — review `artifacts/staging-workflows-first-green-summary.json` (`era16-staging-workflows-first-green-v1`); GitHub first green PASS is separate ops step in `docs/GITHUB_E2E_STAGING_SECRETS.md` |
+| Staging E2E wiring | `npm run smoke:staging-workflows-first-green` — review `artifacts/staging-workflows-first-green-summary.json` (`era16-staging-workflows-first-green-v1`, `era17-staging-workflows-first-green-v1`); record `GITHUB_*_RUN_URL` + outcome after workflow_dispatch — see `docs/GITHUB_E2E_STAGING_SECRETS.md` |
 
 ---
 
@@ -89,6 +252,8 @@ bash scripts/ops/pilot-preflight.sh
 | KDS | Kitchen display bump/recall | — | KDS (`era15-kds-staging-smoke-recert-v1`; `npm run smoke:kds-staging`; no rush-hour claim) |
 
 **Sign-off template:** environment URL, date, owner email, PASS/FAIL per phase, notes on permission denials or missing badges.
+
+**Era 17 orchestrator:** `npm run smoke:pilot-operator-golden-path` → `artifacts/pilot-operator-golden-path-summary.json` (`era17-pilot-operator-golden-path-v1`).
 
 Supplementary (non-canonical) detail: [`PILOT_GOLDEN_PATH_CHECKLIST.md`](./PILOT_GOLDEN_PATH_CHECKLIST.md).
 
@@ -206,6 +371,7 @@ Use this section for a **single-page paid pilot decision** — founders, sales, 
 5. **Role checklists** — Complete owner, manager, cashier, kitchen, support_admin sections below
 6. **Contract review** — No forbidden claims (see below)
 7. Run `npm run cert:commercial-pilot-evidence-era16` → `artifacts/commercial-pilot-evidence-pack-summary.json`
+8. **Era 17:** Run `npm run smoke:pilot-gono-go` → `artifacts/pilot-gono-go-summary.json` (`era17-pilot-gono-go-v1`)
 
 | Outcome | Meaning |
 |---------|---------|
@@ -337,6 +503,8 @@ Execute if pilot must pause or terminate:
 4. **Export evidence** — audit log + order snapshot if contract requires (support)
 5. **Lock staff access** — disable invites; owner read-only wind-down (owner)
 6. **Record** — rollback date, reason, commit SHA in pilot tracker (support)
+
+**Era 17 drill:** `npm run smoke:pilot-rollback-drill` → `artifacts/pilot-rollback-drill-summary.json` (`era17-pilot-rollback-drill-v1`).
 
 ---
 

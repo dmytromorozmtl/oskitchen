@@ -129,7 +129,7 @@ sequenceDiagram
 | **2** | Schema + settings model | **Complete (Era 16 Cycle 2)** — `WorkspaceSsoSettings`, `SsoIdentity`, `era16-enterprise-sso-r2-schema-v1`; migration `20260528120000_enterprise_sso_r2_schema`; defaults `enabled=false` |
 | **3** | Callback adapter + guardrails | **Complete (Era 16 Cycle 3)** — `era16-enterprise-sso-r2-runtime-v1`; `validateSsoCallbackSession`; `/auth/callback?sso_workspace_id=`; `ssoOidc` entitlement gate; audit `sso.login_*`; **no** production SSO UI |
 | **4** | Pilot admin wiring | **Complete (Era 16 Cycle 4)** — `era16-enterprise-sso-r2-admin-v1`; Settings → Security → SSO pilot; `/login` Sign in with SSO; `smoke:enterprise-sso-r2-pilot`; delivery **pilot_foundation** |
-| **5+** | Staging IdP smoke proof | One pilot tenant IdP; staging login → dashboard → guarded mutation; break-glass drill; move delivery toward **pilot_ready** only if smoke PASS |
+| **5+** | Staging IdP smoke proof | **Era 17 Cycle 1 plan ready** — `era17-enterprise-sso-idp-staging-smoke-v1`; `docs/enterprise-sso-idp-staging-smoke-plan.md`; `smoke:enterprise-sso-idp-staging`; Cycle 2 operator login proof; Cycle 3 **pilot_ready** gate only with artifact |
 
 **Explicitly not in Cycles 2–4 unless era expands scope:**
 
@@ -158,3 +158,29 @@ sequenceDiagram
 **Evidence:** this document + [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md) + [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) + `npm run smoke:enterprise-sso-r2-pilot`.
 
 **CI chain:** `test:ci:enterprise-identity-roadmap:cert` includes Era 16 R2 pilot cert.
+
+---
+
+## Era 17 SSO IdP staging smoke plan (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-idp-staging-smoke-v1` — **plan_ready**; delivery remains **pilot_foundation**.
+
+| Cycle | Scope | Status |
+|-------|--------|--------|
+| **1** | IdP staging smoke plan + env documentation + orchestrator | **Complete** — [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md); `smoke:enterprise-sso-idp-staging` |
+| **2** | Staging IdP login proof | **Engineering complete — awaiting operator** — `era17-enterprise-sso-idp-login-proof-v1`; smoke executed → **SKIPPED WITH REASON** until staging + IdP secrets |
+| **3** | Qualified pilot gate | Pending — `era17-enterprise-sso-pilot-ready-v1` only if Cycle 2 `proof_passed` |
+
+**Ops doc:** Okta/Entra test tenant, Supabase SAML, workspace mapping, break-glass, rollback, negative tests.
+
+**Honest scope:** Does **not** claim production SSO, qualified pilot-ready delivery, SOC2, or SCIM until Cycle 2–3 evidence exists.
+
+---
+
+## Era 17 SSO IdP login proof (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-idp-login-proof-v1` — Cycle 2 operator evidence path; **awaiting_operator_proof**; delivery **pilot_foundation**.
+
+Operator proof env vars: `SSO_STAGING_OPERATOR_EMAIL`, `SSO_STAGING_LOGIN_SCREENSHOT_PATH`, `SSO_STAGING_AUDIT_EVENT_REF`, `SSO_STAGING_NEGATIVE_TEST_NOTE`.
+
+**CI:** `test:ci:enterprise-sso-idp-login-proof-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`).

@@ -8,7 +8,28 @@
 
 **Staging smoke (Era 12 Cycle 3 — not in default CI):** policy `era12-channel-golden-path-smoke-v1`; `npm run smoke:woo-shopify` (`scripts/smoke-woo-shopify-certification.ts`) with `DATABASE_URL` + saved connection; use `--skip-live` for credentials-only checks. Cert wiring: `test:ci:channel-golden-path-smoke-era12:cert` (chained in `test:ci:channel-golden-path:cert`). Does **not** certify full live marketplace ops.
 
-**Live smoke orchestrator (Era 16 Cycle 5 — not in default CI):** policy `era16-channel-live-smoke-v1`; `npm run smoke:woo-shopify-live` runs synthetic cert + optional live tenant certification; missing `DATABASE_URL` / tenant selector → **SKIPPED WITH REASON** (exit 0); real certification failure → **FAILED** (exit 1); summary artifact `artifacts/channel-live-smoke-summary.json`. Optional GitHub Actions: `woo-shopify-staging-smoke.yml` (`workflow_dispatch`). Cert: `test:ci:channel-live-smoke-era16:cert`.
+**Live smoke orchestrator (Era 16 Cycle 5 + Era 17 Woo/Shopify — not in default CI):** policies `era16-channel-live-smoke-v1`, **`era17-channel-live-smoke-woo-v1`**, **`era17-channel-live-smoke-shopify-v1`**; `npm run smoke:woo-shopify-live` runs synthetic cert + Woo live (`--provider woocommerce`) + Shopify live (`--provider shopify`); missing `DATABASE_URL` / `ENCRYPTION_KEY` / tenant selector → **SKIPPED WITH REASON** with explicit `missingEnvVars[]` (exit 0); real certification failure → **FAILED** (exit 1); summary artifact `artifacts/channel-live-smoke-summary.json`. Cert: `test:ci:channel-live-smoke-woo-era17:cert` + `test:ci:channel-live-smoke-shopify-era17:cert` (chained in `test:ci:channel-golden-path:cert`).
+
+### Cycle execution record — Woo + Shopify live smoke (2026-05-28)
+
+**Policies:** `era17-channel-live-smoke-woo-v1`, `era17-channel-live-smoke-shopify-v1` — engineering complete; **awaiting_live_credentials**.
+
+| Check | Result |
+|-------|--------|
+| Synthetic golden-path cert | **PASSED** |
+| Woo live (`woo_live_certification`) | **SKIPPED WITH REASON** — prerequisites missing |
+| Shopify live (`shopify_live_certification`) | **SKIPPED WITH REASON** — prerequisites missing |
+| Artifact | `artifacts/channel-live-smoke-summary.json` → both `proof_skipped_missing_prerequisites` |
+
+**Missing locally:** `DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL` (or `CHANNEL_SMOKE_CONNECTION_ID`).
+
+**Ops unblock:** Configure staging Woo/Shopify connections in dashboard → set env vars → re-run `npm run smoke:woo-shopify-live`. Optional: `workflow_dispatch` on `woo-shopify-staging-smoke.yml` after local PASS.
+
+**No false claim:** Channel integrations remain **beta**; not production-certified marketplace ops without live PASS evidence.
+
+**GitHub workflow first green (Era 17 Cycle 9 — not in default CI):** policy **`era17-channel-github-workflow-first-green-v1`**; workflow `.github/workflows/woo-shopify-staging-smoke.yml` (`workflow_dispatch`); operator records `GITHUB_WOO_SHOPIFY_STAGING_RUN_URL` + `GITHUB_WOO_SHOPIFY_STAGING_RUN_OUTCOME`; `npm run smoke:channel-github-workflow-first-green` → `artifacts/channel-github-workflow-first-green-summary.json`; **awaiting_github_first_green** until GitHub PASSED recorded — not fake green. Cert: `test:ci:channel-github-workflow-first-green-era17:cert` (chained in `test:ci:channel-golden-path:cert`).
+
+**Channel pilot playbook (Era 17 Cycle 10):** policy **`era17-channel-pilot-playbook-v1`**; one-page operator guide [`channel-pilot-playbook-era17.md`](./channel-pilot-playbook-era17.md) — test shop setup, validation commands, sign-off checklist, forbidden claims; linked from [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md). Cert: `test:ci:channel-pilot-playbook-era17:cert` (chained in `test:ci:commercial-pilot-runbook:cert`).
 
 Do not market as production-certified until this checklist is signed per tenant.
 

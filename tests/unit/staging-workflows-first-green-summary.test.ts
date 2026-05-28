@@ -2,35 +2,27 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildStagingWorkflowFirstGreenSummary,
+  buildStagingWorkflowGitHubRunRecords,
+  countGitHubPassedRuns,
   evaluateStagingWorkflowFirstGreenPrerequisites,
+  formatMissingStagingWorkflowFirstGreenEnvVarsReason,
   formatStagingWorkflowFirstGreenStepLine,
+  listMissingStagingWorkflowFirstGreenEnvVars,
   resolveStagingWorkflowFirstGreenOverall,
+  resolveStagingWorkflowFirstGreenProofStatus,
 } from "@/lib/ci/staging-workflows-first-green-summary";
 
 describe("staging workflows first green summary", () => {
-  it("evaluates staging E2E prerequisites with explicit skip reasons", () => {
+  it("evaluates staging E2E prerequisites with explicit missing env list", () => {
+    const missing = listMissingStagingWorkflowFirstGreenEnvVars({});
+    expect(missing).toEqual([
+      "E2E_STAGING_BASE_URL",
+      "E2E_LOGIN_EMAIL",
+      "E2E_LOGIN_PASSWORD",
+    ]);
     expect(evaluateStagingWorkflowFirstGreenPrerequisites({})).toEqual({
       ok: false,
-      reason:
-        "E2E_STAGING_BASE_URL is not set — first green GitHub staging run requires staging URL secrets.",
-    });
-    expect(
-      evaluateStagingWorkflowFirstGreenPrerequisites({
-        stagingBaseUrl: "https://staging.example.com",
-      }),
-    ).toEqual({
-      ok: false,
-      reason: "E2E_LOGIN_EMAIL is not set — staging E2E workflows require login credentials.",
-    });
-    expect(
-      evaluateStagingWorkflowFirstGreenPrerequisites({
-        stagingBaseUrl: "https://staging.example.com",
-        loginEmail: "ops@example.com",
-      }),
-    ).toEqual({
-      ok: false,
-      reason:
-        "E2E_LOGIN_PASSWORD (or legacy E2E_PASSWORD) is not set — staging E2E workflows require login credentials.",
+      reason: formatMissingStagingWorkflowFirstGreenEnvVarsReason(missing),
     });
     expect(
       evaluateStagingWorkflowFirstGreenPrerequisites({
@@ -64,22 +56,33 @@ describe("staging workflows first green summary", () => {
     expect(
       resolveStagingWorkflowFirstGreenOverall([
         { id: "wiring_cert", label: "Wiring cert", status: "FAILED" },
-        { id: "github", label: "GitHub first green", status: "SKIPPED", reason: "ops" },
       ]),
     ).toBe("FAILED");
-    expect(
-      resolveStagingWorkflowFirstGreenOverall([
-        { id: "github", label: "GitHub first green", status: "SKIPPED", reason: "ops" },
-      ]),
-    ).toBe("SKIPPED");
   });
 
-  it("builds summary artifact shape", () => {
-    const summary = buildStagingWorkflowFirstGreenSummary([
-      { id: "wiring_cert", label: "Wiring cert", status: "PASSED" },
-    ]);
-    expect(summary.version).toBe("era16-staging-workflows-first-green-v1");
+  it("builds summary artifact shape with first green proof status", () => {
+    const summary = buildStagingWorkflowFirstGreenSummary(
+      [{ id: "wiring_cert", label: "Wiring cert", status: "PASSED" }],
+      { missingEnvVars: ["E2E_STAGING_BASE_URL"] },
+    );
+    expect(summary.version).toBe("era17-staging-workflows-first-green-v1");
     expect(summary.wiringCertPassed).toBe(true);
-    expect(summary.overall).toBe("PASSED");
+    expect(summary.firstGreenProofStatus).toBe("proof_skipped_missing_prerequisites");
+    expect(summary.githubPassedCount).toBe(0);
+  });
+
+  it("counts GitHub PASSED runs and resolves proof_passed at two or more", () => {
+    const runs = buildStagingWorkflowGitHubRunRecords([
+      { workflowId: "e2e", label: "E2E", runUrl: "https://github.com/r/1", outcome: "PASSED" },
+      { workflowId: "kds", label: "KDS", runUrl: "https://github.com/r/2", outcome: "PASSED" },
+    ]);
+    expect(countGitHubPassedRuns(runs)).toBe(2);
+    expect(
+      resolveStagingWorkflowFirstGreenProofStatus({
+        prerequisitesMet: true,
+        githubPassedCount: 2,
+        githubFailed: false,
+      }),
+    ).toBe("proof_passed");
   });
 });

@@ -40,7 +40,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - validation failure blocks release
 - CI `quality` job runs `validate:production-crons` and `validate:cron-inventory` (both include `tests/unit/cron-hygiene-live.test.ts`)
 - CI `quality` job runs `npm run test:ci:governance-bundles` (doc canon, public API v1 contracts, nav maturity, integration honesty, commercial pilot runbook) and `npm run test:ci:rbac-wave3` (Era 3 costing/purchasing/export platform RBAC gates)
-- **Paid pilot GO/NO-GO:** [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) (`era7-commercial-pilot-runbooks-v1`); cert `test:ci:commercial-pilot-runbook:cert`
+- **Paid pilot GO/NO-GO:** [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) (`era7-commercial-pilot-runbooks-v1`; **Era 17** `era17-pilot-tier-preflight-v1` — `smoke:pilot-tier-preflight` + `artifacts/pilot-tier-preflight-summary.json`); cert `test:ci:commercial-pilot-runbook:cert`
 - **Pilot preflight marketing strict:** `scripts/ops/pilot-preflight.sh` runs `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` (`era8-pilot-preflight-claims-strict-v1`); cert `test:ci:pilot-preflight-claims:cert`
 - local focused bundle: `npm run test:ci:cron-hygiene`
 - production schedule: **16** allowlisted slugs; experimental routes require `ENABLE_EXPERIMENTAL_CRONS` in production
@@ -55,7 +55,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - **Era 12 Cycle 2:** `era12-e2e-staging-secrets-align-v1` — `.github/workflows/e2e-staging.yml` and `closed-beta-gate.yml` require `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, and `E2E_LOGIN_PASSWORD` (legacy GitHub secret `E2E_PASSWORD` accepted); job env always sets `E2E_LOGIN_PASSWORD` for Playwright parity with POS/KDS staging. Cert: `test:ci:e2e-staging-secrets-era12:cert`. Docs: `docs/GITHUB_E2E_STAGING_SECRETS.md`.
 - **Era 12 Cycle 4:** `era12-e2e-staging-auth-wiring-v1` — `e2e-staging.yml` runs `e2e/auth.setup.ts` (`--project=setup`) + `e2e/dashboard-auth.spec.ts` (`chromium-authed`); excludes POS checkout and remediation IDOR from daily staging. Cert: `test:ci:e2e-staging-auth-era12:cert`.
 - **Era 13/15 staging workflows:** `era13-staging-workflows-first-run-ops-v1` + `era15-staging-workflows-first-run-recert-v1` — optional staging workflows; `JOB_OMITTED_SECRETS_MISSING` vs explicit outcomes; `npm run smoke:staging-workflows`; cert in `test:ci:e2e-staging-secrets-era12:cert`. Ops: `docs/GITHUB_E2E_STAGING_SECRETS.md`.
-- **Era 16 staging first green:** `era16-staging-workflows-first-green-v1` — `npm run smoke:staging-workflows-first-green`; summary artifact `artifacts/staging-workflows-first-green-summary.json`; does not claim GitHub first green without operator workflow PASS; cert `test:ci:staging-workflows-first-green-era16:cert`.
+- **Era 16/17 staging first green:** `era16-staging-workflows-first-green-v1` + **`era17-staging-workflows-first-green-v1`** — `npm run smoke:staging-workflows-first-green`; summary artifact `artifacts/staging-workflows-first-green-summary.json`; **awaiting_github_first_green** until ≥2 GitHub workflow PASS recorded; cert `test:ci:staging-workflows-first-green-era17:cert`.
 
 ## Production Smoke
 - public health route

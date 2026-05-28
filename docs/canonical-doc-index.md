@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 8 Cycle 2 — KDS Realtime E2E staging scope)  
+**Updated:** 2026-05-28 (Era 17 strategic re-audit — post Era 16 closure @ c88be6b)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -47,7 +47,12 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 
 | Doc | Purpose |
 |-----|---------|
-| [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md) | **Current** post–Era 4 maximum-depth re-audit (blended overall 86/100) |
+| [`full-strategic-reaudit-2026-05-28-era16.md`](./full-strategic-reaudit-2026-05-28-era16.md) | **Current** post–Era 16 maximum-depth re-audit (blended overall 87/100) |
+| [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md) | Post–Era 4 re-audit (86/100) — **superseded** by era16 re-audit for strategic decisions |
+| [`era17-strategic-execution-map-2026-05-28.md`](./era17-strategic-execution-map-2026-05-28.md) | Era 17 execution map (45 cycles, workstreams A–L) |
+| [`next-master-prompt-input-2026-05-28-era17.md`](./next-master-prompt-input-2026-05-28-era17.md) | **Current** master prompt input for Evolution Era 17 |
+| [`era16-cycle-completion-scorecard-2026-05-28.md`](./era16-cycle-completion-scorecard-2026-05-28.md) | Era 16 closure scorecard (cycles 1–14) @ c88be6b |
+| [`next-master-prompt-input-2026-05-28-era16.md`](./next-master-prompt-input-2026-05-28-era16.md) | Era 16 handoff — **superseded** by era17 input for recurring prompts |
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100 — inventory baseline |
 | [`next-master-prompt-input-2026-05-28-era5.md`](./next-master-prompt-input-2026-05-28-era5.md) | Post–Era 4 re-audit Era 5 input (Eras 5–15 executed; use era15 for Era 16) |
 | [`next-master-prompt-input-2026-05-27-era14.md`](./next-master-prompt-input-2026-05-27-era14.md) | Facts and constraints for Evolution Era 15 master prompt |
@@ -181,6 +186,25 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **8** | **Mutation registry linter** | `era16-mutation-registry-linter-v1`; static scan of `actions/`; `mutation-registry-linter-summary`; `test:ci:mutation-registry-linter-era16:cert` in `test:security` |
 | **9** | **Commercial pilot evidence pack** | `era16-commercial-pilot-evidence-pack-v1`; role checklists; GO/NO-GO decision; `commercial-pilot-evidence-pack-summary`; `test:ci:commercial-pilot-evidence-era16:cert` |
 | **10** | **Operational sign-off (KDS + production calendar)** | `era16-operational-signoff-v1`; `operational-signoff-summary`; `smoke:operational-signoff-era16`; `test:ci:operational-signoff-era16:cert` in kds-staging-smoke cert |
+
+## Evolution Era 17 cycle ledger (in progress)
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **SSO IdP staging smoke plan** | `era17-enterprise-sso-idp-staging-smoke-v1`; `docs/enterprise-sso-idp-staging-smoke-plan.md`; `smoke:enterprise-sso-idp-staging`; delivery **pilot_foundation** unchanged |
+| **2** | **SSO IdP login proof (operator)** | `era17-enterprise-sso-idp-login-proof-v1`; **awaiting_operator_proof** — SKIPPED until staging + IdP secrets |
+| **3** | **Staging workflows first green** | `era17-staging-workflows-first-green-v1`; **awaiting_github_first_green** — SKIPPED until GitHub secrets + run URLs |
+| **4** | **Woo live channel smoke** | `era17-channel-live-smoke-woo-v1`; **awaiting_live_credentials** — SKIPPED until DATABASE_URL + Woo connection |
+| **5** | **Shopify live channel smoke** | `era17-channel-live-smoke-shopify-v1`; **awaiting_live_credentials** — SKIPPED until DATABASE_URL + Shopify connection |
+| **6** | **Channel GitHub workflow first green** | `era17-channel-github-workflow-first-green-v1`; **awaiting_github_first_green** — SKIPPED until workflow_dispatch PASS recorded |
+| **7** | **Channel pilot playbook** | `era17-channel-pilot-playbook-v1`; **operator_ready** — [`channel-pilot-playbook-era17.md`](./channel-pilot-playbook-era17.md) |
+| **8** | **Pilot ICP + contract template** | `era17-pilot-icp-contract-v1`; **template_ready** — [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) |
+| **9** | **Pilot Tier 0/1 preflight** | `era17-pilot-tier-preflight-v1`; **awaiting_tier_preflight_pass** — `smoke:pilot-tier-preflight`; `artifacts/pilot-tier-preflight-summary.json` |
+| **10** | **Pilot operator golden path** | `era17-pilot-operator-golden-path-v1`; **awaiting_operator_execution** — [`pilot-operator-golden-path-era17.md`](./pilot-operator-golden-path-era17.md); `smoke:pilot-operator-golden-path` |
+| **11** | **Pilot GO/NO-GO evaluator** | `era17-pilot-gono-go-v1`; **awaiting_customer_execution** — `smoke:pilot-gono-go`; `artifacts/pilot-gono-go-summary.json` |
+| **12** | **Pilot metrics baseline** | `era17-pilot-metrics-baseline-v1`; **awaiting_baseline_capture** — [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md); `smoke:pilot-metrics-baseline` |
+| **13** | **Pilot rollback drill** | `era17-pilot-rollback-drill-v1`; **awaiting_rollback_drill_execution** — [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md); `smoke:pilot-rollback-drill` |
+| **14** | **Forbidden-claims enforcement** | `era17-pilot-forbidden-claims-enforcement-v1`; **awaiting_forbidden_claims_enforcement_pass** — `smoke:pilot-forbidden-claims-enforcement` |
 
 ## Evolution Era 10 cycle ledger
 
@@ -547,7 +571,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | Marketing/sales | 83 | **85** | +2 | commercial pilot evidence pack |
 | Storefront | 83 | **83** | +0 | unchanged |
 
-**Re-audit decision:** defer full repo re-audit until Era 17 delivery or repo scale shift; use `docs/next-master-prompt-input-2026-05-28-era16.md`. **Next era:** recommend **Era 17** (staging first green / SSO IdP ops proof).
+**Re-audit decision:** **Complete** — `docs/full-strategic-reaudit-2026-05-28-era16.md`. **Next era:** **Era 17** — use `docs/next-master-prompt-input-2026-05-28-era17.md` + `docs/era17-strategic-execution-map-2026-05-28.md`.
 
 ---
 
@@ -646,3 +670,20 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 16 Cycle 12: `era16-public-api-partner-confidence-v1` — partner readiness pack; OpenAPI bearer; live smoke skip honesty |
 | 2026-05-28 | Era 16 Cycle 13: `era16-scorecard-refresh-v1` — score 100/100 sustained; recommend Era 17; era16 handoff |
 | 2026-05-28 | Era 16 Cycle 14: `era16-staging-workflows-first-green-v1` — first green summary artifact; wiring cert + optional staging health; GitHub PASS remains ops |
+| 2026-05-28 | Post–Era 16 full strategic re-audit — `full-strategic-reaudit-2026-05-28-era16.md`; blended 87/100; Era 17 execution map + master prompt input |
+| 2026-05-28 | Era 17 Cycle 1: `era17-enterprise-sso-idp-staging-smoke-v1` — IdP staging smoke plan; Okta/Entra ops doc; `smoke:enterprise-sso-idp-staging`; delivery **pilot_foundation** unchanged |
+| 2026-05-28 | Era 17 Cycle 2: `era17-enterprise-sso-idp-login-proof-v1` — operator proof path; **awaiting_operator_proof**; honest skip when staging/IdP secrets missing |
+| 2026-05-28 | Era 17 Cycle 3: `era17-staging-workflows-first-green-v1` — GitHub run URL evidence; **awaiting_github_first_green**; target ≥2/3 workflows PASSED |
+| 2026-05-28 | Era 17 Cycle 4: `era17-channel-live-smoke-woo-v1` — Woo live proof path; **awaiting_live_credentials** |
+| 2026-05-28 | Era 17 Cycle 5: `era17-channel-live-smoke-shopify-v1` — Shopify live proof path; **awaiting_live_credentials** |
+| 2026-05-28 | Era 17 Cycle 6: `era17-channel-github-workflow-first-green-v1` — Woo/Shopify GitHub workflow proof; **awaiting_github_first_green** |
+| 2026-05-28 | Era 17 Cycle 7: `era17-channel-pilot-playbook-v1` — one-page Woo/Shopify operator guide; **operator_ready** |
+| 2026-05-28 | Era 17 Cycle 8: `era17-pilot-icp-contract-v1` — paid pilot ICP + contract template; **template_ready** |
+| 2026-05-28 | Era 17 Cycle 9: `era17-pilot-tier-preflight-v1` — Tier 0/1 preflight orchestrator; **awaiting_tier_preflight_pass** |
+| 2026-05-28 | Era 17 Cycle 10: `era17-pilot-operator-golden-path-v1` — Tier 2 operator checklist; **awaiting_operator_execution** |
+| 2026-05-28 | Era 17 Cycle 11: `era17-pilot-gono-go-v1` — paid pilot GO/NO-GO evaluator; **awaiting_customer_execution** |
+| 2026-05-28 | Era 17 Cycle 12: `era17-pilot-metrics-baseline-v1` — pilot KPI capture schema; **awaiting_baseline_capture** |
+| 2026-05-28 | Era 17 Cycle 13: `era17-pilot-rollback-drill-v1` — rollback drill + retrospective; **awaiting_rollback_drill_execution** |
+| 2026-05-28 | Era 17 Cycle 14: `era17-pilot-forbidden-claims-enforcement-v1` — pre-sales claims gate; **awaiting_forbidden_claims_enforcement_pass** |
+| 2026-05-28 | Era 17 Cycle 15: `era17-kds-staging-playwright-proof-v1` — KDS GitHub Playwright proof; **awaiting_github_kds_playwright_pass** |
+| 2026-05-28 | Era 17 Cycle 16: `era17-operational-signoff-staging-proof-v1` — staging URL + operator sign-off proof; **awaiting_staging_operator_signoff** |

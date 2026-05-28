@@ -1,7 +1,7 @@
 # Next Master Prompt Input — KitchenOS Era 17
 
 **Date:** 2026-05-28  
-**Purpose:** Canonical facts for the **next** master prompt after Evolution Era 16 completion  
+**Purpose:** Canonical facts for Evolution Era 16 completion — **superseded** by `docs/next-master-prompt-input-2026-05-28-era17.md` for recurring prompts  
 **Era 16 scorecard:** `docs/era16-cycle-completion-scorecard-2026-05-28.md`  
 **Strategic baseline:** `docs/full-strategic-reaudit-2026-05-28-era4.md`
 
@@ -86,7 +86,7 @@ Pick **one theme per cycle**; do not reopen Era 4–16 unless regression proven 
 
 ## 7. Re-audit Decision
 
-**Full re-audit now?** **No** — Era 16 scorecard + this input + `full-strategic-reaudit-2026-05-28-era4.md` sufficient until Era 17 delivery or repo scale changes materially.
+**Full re-audit:** **Complete** — see `docs/full-strategic-reaudit-2026-05-28-era16.md`. Use `docs/next-master-prompt-input-2026-05-28-era17.md` for Era 17 master prompt.
 
 ---
 

@@ -40,6 +40,9 @@ describe("enterprise identity roadmap CI certification (live repo)", () => {
     expect(scripts["test:ci:enterprise-identity-roadmap:cert"]).toContain(
       "enterprise-sso-r2-pilot-era16-cert-live",
     );
+    expect(scripts["test:ci:enterprise-identity-roadmap:cert"]).toContain(
+      "enterprise-sso-idp-staging-smoke-era17-cert-live",
+    );
   });
 
   it("has policy module and unit tests on disk", () => {

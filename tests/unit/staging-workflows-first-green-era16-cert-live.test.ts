@@ -33,7 +33,7 @@ describe("staging workflows first green era16 CI certification (live repo)", () 
   it("defines era16 staging workflows first green scripts", () => {
     const scripts = readPackageScripts();
     expect(scripts[STAGING_WORKFLOWS_FIRST_GREEN_ERA16_NPM_SCRIPT]).toContain(
-      STAGING_WORKFLOWS_FIRST_GREEN_ERA16_ORCHESTRATOR_SCRIPT,
+      "smoke-staging-workflows-first-green-era17",
     );
     for (const name of STAGING_WORKFLOWS_FIRST_GREEN_ERA16_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();

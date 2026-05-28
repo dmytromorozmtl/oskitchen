@@ -54,6 +54,7 @@ export type CommercialPilotGoNoGoInput = {
   tier3Pass?: boolean;
   roleChecklistsComplete: boolean;
   forbiddenClaimsInContract: boolean;
+  icpQualified?: boolean;
   stagingUrl?: string | null;
   commitSha?: string | null;
 };
@@ -402,6 +403,9 @@ export function evaluateCommercialPilotGoNoGo(
   if (!input.roleChecklistsComplete) blockers.push("One or more role checklists incomplete");
   if (input.forbiddenClaimsInContract) {
     blockers.push("Contract or marketing copy contains forbidden pilot claims");
+  }
+  if (input.icpQualified === false) {
+    blockers.push("Prospect fails Era 17 pilot ICP qualification (era17-pilot-icp-contract-v1)");
   }
   if (!input.stagingUrl?.trim()) warnings.push("Staging URL not recorded in evidence pack");
   if (!input.commitSha?.trim()) warnings.push("Release commit SHA not recorded");

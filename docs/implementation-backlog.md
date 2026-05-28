@@ -3,6 +3,168 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 17 — Commercial identity / SSO IdP staging
+
+### KOS-E17-016 — Operational sign-off staging proof (P1)
+- ID: `KOS-E17-016`
+- Title: Era 17 Cycle 16 — KDS + production calendar staging sign-off with operator URL
+- Module: Kitchen / Ops / Production
+- Priority: P1 (Workstream F Cycle 26)
+- Status: **awaiting_staging_operator_signoff**
+- Decision: `era17-operational-signoff-staging-proof-v1` — wiring cert + staging URL + operator email + manual attestation
+- Evidence: `lib/operations/operational-signoff-staging-proof-era17-policy.ts`, `scripts/smoke-operational-signoff-staging-era17.ts`, `artifacts/operational-signoff-staging-proof-summary.json` (**stagingProofStatus: proof_skipped_missing_prerequisites** locally 2026-05-28)
+- Next: Operator sets staging URL + email; completes manual checklists; re-run for `proof_passed`
+
+### KOS-E17-015 — KDS staging Playwright GitHub proof (P1)
+- ID: `KOS-E17-015`
+- Title: Era 17 Cycle 15 — KDS Playwright staging PASS with GitHub evidence
+- Module: Kitchen / QA / DevOps
+- Priority: P1 (Workstream F Cycle 25)
+- Status: **awaiting_github_kds_playwright_pass**
+- Decision: `era17-kds-staging-playwright-proof-v1` — wiring cert + GitHub run URL recording
+- Evidence: `lib/kitchen/kds-staging-playwright-proof-era17-policy.ts`, `scripts/smoke-kds-staging-playwright-era17.ts`, `artifacts/kds-staging-playwright-proof-summary.json` (**playwrightProofStatus: proof_skipped_missing_prerequisites** locally 2026-05-28)
+- Next: Operator runs `playwright-kds-staging.yml` on staging; record `GITHUB_KDS_STAGING_RUN_*`; re-run smoke for `proof_passed`
+
+### KOS-E17-014 — Forbidden-claims enforcement before pilot sales (P0)
+- ID: `KOS-E17-014`
+- Title: Era 17 P0 #5 — pre-sales forbidden-claims enforcement orchestrator
+- Module: Commercial / GTM / Governance
+- Priority: P0 (Workstream D — forbidden claims before pilot sales)
+- Status: **awaiting_forbidden_claims_enforcement_pass**
+- Decision: `era17-pilot-forbidden-claims-enforcement-v1` — strict verify-claims + registry audit + procurement cert chain
+- Evidence: `lib/commercial/pilot-forbidden-claims-enforcement-era17-policy.ts`, `scripts/smoke-pilot-forbidden-claims-enforcement-era17.ts`, `artifacts/pilot-forbidden-claims-enforcement-summary.json` (**claimsEnforcementProofStatus: proof_passed** locally 2026-05-28)
+- Next: Re-run on release branch before each pilot contract; FAIL blocks sales until copy/registry/procurement corrected
+
+### KOS-E17-013 — Pilot rollback drill + retrospective (P0)
+- ID: `KOS-E17-013`
+- Title: Era 17 Cycle 20 — exercise rollback plan once with honest skip semantics
+- Module: Commercial / Ops
+- Priority: P0 (Workstream D Cycle 20)
+- Status: **awaiting_rollback_drill_execution**
+- Decision: `era17-pilot-rollback-drill-v1` — six-step drill + retrospective artifact
+- Evidence: `docs/pilot-rollback-drill-era17.md`, `scripts/smoke-pilot-rollback-drill-era17.ts`
+- Next: Tabletop or staging drill before first paid pilot GO; Workstream A SSO Cycle 2 when creds available
+
+### KOS-E17-012 — Pilot metrics baseline (P0)
+- ID: `KOS-E17-012`
+- Title: Era 17 Cycle 19 — pilot success metrics capture schema
+- Module: Commercial / Product
+- Priority: P0 (Workstream D Cycle 19)
+- Status: **awaiting_baseline_capture**
+- Decision: `era17-pilot-metrics-baseline-v1` — six KPIs aligned with ICP Exhibit C; SKIPPED without pilot data
+- Evidence: `docs/pilot-metrics-baseline-era17.md`, `scripts/smoke-pilot-metrics-baseline-era17.ts`
+- Next: Capture week-2 snapshot after first paid pilot GO
+
+### KOS-E17-011 — Pilot GO/NO-GO evaluator (P0)
+- ID: `KOS-E17-011`
+- Title: Era 17 Cycle 18 — paid pilot LOI / customer GO/NO-GO with honest NO-GO
+- Module: Commercial / GTM
+- Priority: P0 (Workstream D Cycle 18)
+- Status: **awaiting_customer_execution**
+- Decision: `era17-pilot-gono-go-v1` — aggregates tier artifacts + ICP; SKIPPED customer without LOI env
+- Evidence: `lib/commercial/pilot-gono-go-summary.ts`, `scripts/smoke-pilot-gono-go-era17.ts`, `artifacts/pilot-gono-go-summary.json` (**decision: NO-GO** on 2026-05-28; honest blockers documented)
+- Next: First real LOI + qualified prospect (`PILOT_GONOGO_ICP_INPUT_JSON`); complete Tier 0 + Tier 2 on staging; re-run smoke for CONDITIONAL/GO only with evidence
+
+### KOS-E17-010 — Pilot operator golden path (P0)
+- ID: `KOS-E17-010`
+- Title: Era 17 Cycle 17 — staging Tier 2 operator checklist + sign-off artifact
+- Module: Commercial / Ops
+- Priority: P0 (Workstream D Cycle 17)
+- Status: **awaiting_operator_execution**
+- Decision: `era17-pilot-operator-golden-path-v1` — 6-phase checklist; honest SKIPPED without staging operator env
+- Evidence: `docs/pilot-operator-golden-path-era17.md`, `scripts/smoke-pilot-operator-golden-path-era17.ts`
+- Next: Execute on staging with owner + staff; then run smoke:pilot-gono-go
+
+### KOS-E17-009 — Pilot Tier 0/1 preflight (P0)
+- ID: `KOS-E17-009`
+- Title: Era 17 Cycle 16 — governance bundles + claims strict on release branch
+- Module: Commercial / DevOps
+- Priority: P0 (Workstream D Cycle 16)
+- Status: **awaiting_tier_preflight_pass**
+- Decision: `era17-pilot-tier-preflight-v1` — orchestrator records Tier 0/1 PASS/FAIL/SKIPPED; no fake GO
+- Evidence: `scripts/smoke-pilot-tier-preflight-era17.ts`, `artifacts/pilot-tier-preflight-summary.json`
+- Next: Run full smoke on release branch before paid pilot signature; Cycle 17 operator golden path
+
+### KOS-E17-008 — Pilot ICP + contract template (P0)
+- ID: `KOS-E17-008`
+- Title: Era 17 Cycle 15 — qualified pilot ICP and contract language
+- Module: Commercial / GTM
+- Priority: P0 (Workstream D Cycle 15)
+- Status: **template_ready**
+- Decision: `era17-pilot-icp-contract-v1` — ICP criteria, disqualifiers, allowed/forbidden claims, duration, success metrics
+- Evidence: `docs/pilot-icp-contract-template-era17.md`, `lib/commercial/pilot-icp-contract-era17.ts`
+- Next: Legal review; use before first paid pilot signature
+
+### KOS-E17-007 — Channel pilot playbook (P0)
+- ID: `KOS-E17-007`
+- Title: Era 17 Cycle 10 — one-page Woo/Shopify operator guide
+- Module: Integrations / GTM
+- Priority: P0 (Workstream B Cycle 10)
+- Status: **operator_ready**
+- Decision: `era17-channel-pilot-playbook-v1` — linked from commercial runbook; honest scope; sign-off checklist
+- Evidence: `docs/channel-pilot-playbook-era17.md`, `lib/integrations/channel-pilot-playbook-era17-policy.ts`
+- Next: Use in Tier 2 integrations phase + paid pilot GO/NO-GO
+
+### KOS-E17-006 — Channel GitHub workflow first green (P0)
+- ID: `KOS-E17-006`
+- Title: Era 17 Cycle 9 — woo-shopify-staging-smoke.yml GitHub proof path
+- Module: Integrations / CI
+- Priority: P0 (Workstream B Cycle 9)
+- Status: **awaiting_github_first_green**
+- Decision: `era17-channel-github-workflow-first-green-v1` — record workflow_dispatch URL + outcome; honest skip without GitHub PASS
+- Evidence: `lib/integrations/channel-github-workflow-first-green-era17-policy.ts`, `smoke-channel-github-workflow-first-green-era17.ts`
+- Next: **Ops** — workflow_dispatch with staging secrets; record `GITHUB_WOO_SHOPIFY_STAGING_RUN_URL`
+
+### KOS-E17-005 — Shopify live smoke proof path (P0)
+- ID: `KOS-E17-005`
+- Title: Era 17 Cycle 8 — Shopify live channel smoke with honest skip
+- Module: Integrations / Shopify
+- Priority: P0 (Workstream B Cycle 8)
+- Status: **awaiting_live_credentials**
+- Decision: `era17-channel-live-smoke-shopify-v1` — Shopify-specific proof path in shared orchestrator; explicit missing-env list
+- Evidence: `lib/integrations/channel-live-smoke-shopify-era17-policy.ts`, updated orchestrator, cert tests, `artifacts/channel-live-smoke-summary.json` (`shopifyLiveProofStatus: proof_skipped_missing_prerequisites`)
+- Next: **Ops** — set DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL; re-run `smoke:woo-shopify-live` for `shopifyLiveProofStatus: proof_passed`
+
+### KOS-E17-004 — Woo live smoke proof path (P0)
+- ID: `KOS-E17-004`
+- Title: Era 17 Cycle 7 — Woo live channel smoke with honest skip
+- Module: Integrations / Woo
+- Priority: P0 (Workstream B Cycle 7)
+- Status: **awaiting_live_credentials**
+- Decision: `era17-channel-live-smoke-woo-v1` — Woo-specific proof path; Shopify in Cycle 8 policy; explicit missing-env list
+- Evidence: `lib/integrations/channel-live-smoke-woo-era17-policy.ts`, enhanced summary, `smoke-woo-shopify-live-era17.ts`, `artifacts/channel-live-smoke-summary.json` (`wooLiveProofStatus: proof_skipped_missing_prerequisites`)
+- Next: **Ops** — set DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL; re-run smoke for `wooLiveProofStatus: proof_passed`
+
+### KOS-E17-003 — Staging workflows first green proof path (P0)
+- ID: `KOS-E17-003`
+- Title: Era 17 staging workflows first green GitHub evidence path
+- Module: CI / DevOps / E2E staging
+- Priority: P0 (Era 17 — Workstream parallel to SSO; P0 #2)
+- Status: **awaiting_github_first_green**
+- Decision: `era17-staging-workflows-first-green-v1` — GitHub run URL recording; explicit missing-env list; target ≥2/3 workflows PASSED
+- Evidence: `lib/ci/staging-workflows-first-green-era17-policy.ts`, enhanced summary, `smoke-staging-workflows-first-green-era17.ts`, `artifacts/staging-workflows-first-green-summary.json` (`firstGreenProofStatus: proof_skipped_missing_prerequisites`; `githubPassedCount: 0/3`)
+- Next: **Ops** — configure GitHub secrets; workflow_dispatch E2E + KDS (+ Woo/Shopify optional); record `GITHUB_*_RUN_URL` + outcomes; target ≥2/3 PASSED
+
+### KOS-E17-002 — Staging IdP login proof (P0)
+- ID: `KOS-E17-002`
+- Title: Era 17 Cycle 2 — operator IdP login proof path with honest skip
+- Module: Enterprise identity / SSO
+- Priority: P0 (Era 17 Cycle 2 — Workstream A)
+- Status: **awaiting_operator_proof**
+- Decision: `era17-enterprise-sso-idp-login-proof-v1` — operator evidence env vars + enhanced smoke summary; **SKIPPED WITH REASON** when staging/IdP secrets absent
+- Evidence: `lib/enterprise/enterprise-sso-idp-login-proof-era17-policy.ts`, enhanced `enterprise-sso-idp-staging-smoke-summary.ts`, `artifacts/enterprise-sso-idp-staging-smoke-summary.json` (`loginProofStatus: proof_skipped_missing_prerequisites` when secrets absent)
+- Next: **Ops** — configure Okta/Entra + staging secrets; manual browser login; re-run `smoke:enterprise-sso-idp-staging` for `loginProofStatus: proof_passed`
+
+### KOS-E17-001 — IdP staging smoke plan (P0)
+- ID: `KOS-E17-001`
+- Title: Add Era 17 enterprise SSO IdP staging smoke plan and orchestrator
+- Module: Enterprise identity / SSO
+- Priority: P0 (Era 17 Cycle 1 — Workstream A)
+- Status: **completed**
+- Decision: `era17-enterprise-sso-idp-staging-smoke-v1` — Okta/Entra test tenant ops doc; env vars; break-glass; rollback; `smoke:enterprise-sso-idp-staging`; delivery remains **pilot_foundation**
+- Evidence: `docs/enterprise-sso-idp-staging-smoke-plan.md`, `lib/enterprise/enterprise-sso-idp-staging-smoke-summary.ts`, `scripts/smoke-enterprise-sso-idp-staging-era17.ts`, `test:ci:enterprise-sso-idp-staging-era17:cert`
+- Next: **Ops** — Cycle 2 operator proof (`era17-enterprise-sso-idp-login-proof-v1`); see `docs/GITHUB_E2E_STAGING_SECRETS.md` SSO section
+
 ## Era 16 — Commercial identity / SSO R2
 
 ### KOS-E16-014 — Staging workflows first green evidence (P0)

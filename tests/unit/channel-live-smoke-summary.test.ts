@@ -4,32 +4,19 @@ import {
   buildChannelLiveSmokeSummary,
   evaluateChannelLiveSmokePrerequisites,
   formatChannelLiveSmokeStepLine,
+  formatMissingChannelLiveSmokeEnvVarsReason,
+  listMissingChannelLiveSmokeEnvVars,
+  resolveChannelLiveProviderProofStatus,
   resolveChannelLiveSmokeOverall,
 } from "@/lib/integrations/channel-live-smoke-summary";
 
 describe("channel live smoke summary", () => {
-  it("evaluates prerequisites with explicit skip reasons", () => {
+  it("evaluates prerequisites with explicit missing env list", () => {
+    const missing = listMissingChannelLiveSmokeEnvVars({});
+    expect(missing).toEqual(["DATABASE_URL", "ENCRYPTION_KEY", "CHANNEL_SMOKE_OWNER_EMAIL"]);
     expect(evaluateChannelLiveSmokePrerequisites({})).toEqual({
       ok: false,
-      reason: "DATABASE_URL is not configured — live tenant smoke requires a database connection.",
-    });
-    expect(
-      evaluateChannelLiveSmokePrerequisites({
-        databaseUrl: "postgres://local",
-      }),
-    ).toEqual({
-      ok: false,
-      reason: "ENCRYPTION_KEY is not configured — integration credentials cannot be decrypted.",
-    });
-    expect(
-      evaluateChannelLiveSmokePrerequisites({
-        databaseUrl: "postgres://local",
-        encryptionKey: "key",
-      }),
-    ).toEqual({
-      ok: false,
-      reason:
-        "Set CHANNEL_SMOKE_OWNER_EMAIL or CHANNEL_SMOKE_CONNECTION_ID (or CLI flags) to select a Woo/Shopify connection.",
+      reason: formatMissingChannelLiveSmokeEnvVarsReason(missing),
     });
     expect(
       evaluateChannelLiveSmokePrerequisites({
@@ -63,22 +50,50 @@ describe("channel live smoke summary", () => {
     expect(
       resolveChannelLiveSmokeOverall([
         { id: "a", label: "Synthetic", status: "FAILED" },
-        { id: "b", label: "Live", status: "SKIPPED", reason: "no db" },
       ]),
     ).toBe("FAILED");
-    expect(
-      resolveChannelLiveSmokeOverall([
-        { id: "b", label: "Live", status: "SKIPPED", reason: "no db" },
-      ]),
-    ).toBe("SKIPPED");
   });
 
-  it("builds summary artifact shape", () => {
-    const summary = buildChannelLiveSmokeSummary([
-      { id: "synthetic", label: "Synthetic cert", status: "PASSED" },
-    ]);
-    expect(summary.version).toBe("era16-channel-live-smoke-v1");
+  it("builds summary artifact shape with Woo and Shopify proof status", () => {
+    const summary = buildChannelLiveSmokeSummary(
+      [
+        { id: "synthetic", label: "Synthetic cert", status: "PASSED" },
+        {
+          id: "shopify_live_certification",
+          label: "Shopify",
+          status: "SKIPPED",
+          reason: "Missing env vars",
+        },
+        {
+          id: "woo_live_certification",
+          label: "Woo",
+          status: "SKIPPED",
+          reason: "Missing env vars",
+        },
+      ],
+      { missingEnvVars: ["DATABASE_URL"], prerequisitesMet: false },
+    );
+    expect(summary.version).toBe("era17-channel-live-smoke-v1");
     expect(summary.overall).toBe("PASSED");
-    expect(summary.steps).toHaveLength(1);
+    expect(summary.wooLiveProofStatus).toBe("proof_skipped_missing_prerequisites");
+    expect(summary.shopifyLiveProofStatus).toBe("proof_skipped_missing_prerequisites");
+  });
+
+  it("resolves Woo proof_passed when woo step passes", () => {
+    expect(
+      resolveChannelLiveProviderProofStatus({
+        prerequisitesMet: true,
+        step: { id: "woo", label: "Woo", status: "PASSED" },
+      }),
+    ).toBe("proof_passed");
+  });
+
+  it("resolves Shopify proof_passed when shopify step passes", () => {
+    expect(
+      resolveChannelLiveProviderProofStatus({
+        prerequisitesMet: true,
+        step: { id: "shopify", label: "Shopify", status: "PASSED" },
+      }),
+    ).toBe("proof_passed");
   });
 });

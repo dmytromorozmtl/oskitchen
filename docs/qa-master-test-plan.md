@@ -74,6 +74,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - era12 recert: `lib/integrations/channel-golden-path-era12-policy.ts` (`era12-channel-golden-path-recert-v1`) — `order_hub_visibility` via order hub service wiring
 - era12 staging smoke: `lib/integrations/channel-golden-path-smoke-era12-policy.ts` (`era12-channel-golden-path-smoke-v1`) — `npm run smoke:woo-shopify`; **not in default CI**; `--skip-live` for credentials-only; cert `test:ci:channel-golden-path-smoke-era12:cert`
 - era14 recert: `lib/integrations/channel-golden-path-era14-policy.ts` (`era14-channel-golden-path-recert-v1`) — `docs/channel-golden-path-honesty-checklist.md`; `npm run smoke:channel-golden-path`
+- **Era 17 channel live smoke:** `era17-channel-live-smoke-woo-v1` + `era17-channel-live-smoke-shopify-v1` — `npm run smoke:woo-shopify-live`; artifact `artifacts/channel-live-smoke-summary.json`; cert `test:ci:channel-live-smoke-woo-era17:cert` + `test:ci:channel-live-smoke-shopify-era17:cert` (chained in `test:ci:channel-golden-path:cert`); **awaiting_live_credentials** until staging DB + connection configured
 - wiring cert: `test:ci:channel-golden-path:cert` (chains era12 + era14 certs; in `test:ci:governance-bundles`)
 - unit: `npm run test:ci:channel-golden-path` — normalize fixtures, webhook processors → `externalOrder` + channel import staging + order hub scope (mocked)
 - era12 unit: `npm run test:ci:channel-golden-path-era12`
@@ -130,6 +131,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - policy summary: `test:ci:kds-realtime-e2e-staging:policy` → `kds-realtime-e2e-staging-summary` (`PASSED`/`SKIPPED`/`FAILED`)
 - staging: Tier E in `docs/kds-staging-smoke-checklist.md`
 - optional workflow: `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`); not in `ci.yml`
+- **Era 17 Playwright proof:** `era17-kds-staging-playwright-proof-v1` — `npm run smoke:kds-staging-playwright`; artifact `artifacts/kds-staging-playwright-proof-summary.json`; cert `test:ci:kds-staging-playwright-proof-era17:cert` (in `test:ci:kds-staging-smoke:cert`)
+- **Era 17 operational sign-off staging proof:** `era17-operational-signoff-staging-proof-v1` — `npm run smoke:operational-signoff-staging`; artifact `artifacts/operational-signoff-staging-proof-summary.json`; cert `test:ci:operational-signoff-staging-proof-era17:cert` (in `test:ci:operational-signoff-era16:cert`)
 - wiring cert: `test:ci:kds-realtime-e2e-staging:cert` (chains era11 + workflow era11; in `test:ci:governance-bundles`)
 
 ### 8c4e. Claims registry governance (Era 8 Cycle 1)
@@ -160,6 +163,11 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - policy: `lib/commercial/commercial-pilot-runbook-policy.ts` (`era7-commercial-pilot-runbooks-v1`)
 - canonical runbook: `docs/commercial-pilot-runbook.md` (Tier 0–3; matrix alignment; deprecated `docs/PILOT_*` family)
 - wiring cert: `test:ci:commercial-pilot-runbook:cert` (in `test:ci:governance-bundles`)
+- **Era 17 Tier 2:** `era17-pilot-operator-golden-path-v1` — `npm run smoke:pilot-operator-golden-path`; artifact `artifacts/pilot-operator-golden-path-summary.json`
+- **Era 17 metrics:** `era17-pilot-metrics-baseline-v1` — `npm run smoke:pilot-metrics-baseline`; artifact `artifacts/pilot-metrics-baseline-summary.json`
+- **Era 17 rollback drill:** `era17-pilot-rollback-drill-v1` — `npm run smoke:pilot-rollback-drill`; artifact `artifacts/pilot-rollback-drill-summary.json`
+- **Era 17 GO/NO-GO:** `era17-pilot-gono-go-v1` — `npm run smoke:pilot-gono-go`; artifact `artifacts/pilot-gono-go-summary.json`; cert `test:ci:pilot-gono-go-era17:cert` (in `test:ci:commercial-pilot-runbook:cert`); **awaiting_customer_execution** — honest **NO-GO** until tiers + ICP + LOI
+- **Era 17 forbidden claims:** `era17-pilot-forbidden-claims-enforcement-v1` — `npm run smoke:pilot-forbidden-claims-enforcement`; artifact `artifacts/pilot-forbidden-claims-enforcement-summary.json`; cert `test:ci:pilot-forbidden-claims-enforcement-era17:cert` (in `test:ci:commercial-pilot-runbook:cert`)
 - unit: `npm run test:ci:commercial-pilot-runbook` — required sections + forbidden pilot headline claims
 
 ### 8c4f2. Enterprise SSO architecture spike R1 (Era 9 Cycle 1)
@@ -171,6 +179,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Era 13 staging ops: `lib/ci/staging-workflows-first-run-era13-policy.ts` (`era13-staging-workflows-first-run-ops-v1`) — optional `e2e-staging.yml` / `playwright-kds-staging.yml` / `closed-beta-gate.yml`; `JOB_OMITTED_SECRETS_MISSING` when secrets unset; cert `test:ci:staging-workflows-first-run-era13:cert` (in `test:ci:e2e-staging-secrets-era12:cert`)
 - era15 recert: `lib/ci/staging-workflows-first-run-era15-policy.ts` (`era15-staging-workflows-first-run-recert-v1`); `npm run smoke:staging-workflows`
 - Era 16 first green: `lib/ci/staging-workflows-first-green-era16-policy.ts` (`era16-staging-workflows-first-green-v1`); `npm run smoke:staging-workflows-first-green`; cert `test:ci:staging-workflows-first-green-era16:cert` (in `test:ci:e2e-staging-secrets-era12:cert`)
+- **Era 17 staging first green:** `era17-staging-workflows-first-green-v1` — `npm run smoke:staging-workflows-first-green`; artifact `artifacts/staging-workflows-first-green-summary.json`; cert `test:ci:staging-workflows-first-green-era17:cert` (in `test:ci:e2e-staging-secrets-era12:cert`); **awaiting_github_first_green** until ≥2/3 GitHub workflows PASSED
+- **Era 17 SSO IdP staging:** `era17-enterprise-sso-idp-staging-smoke-v1` + `era17-enterprise-sso-idp-login-proof-v1` — `npm run smoke:enterprise-sso-idp-staging`; artifact `artifacts/enterprise-sso-idp-staging-smoke-summary.json`; cert `test:ci:enterprise-sso-idp-staging-era17:cert` (in `test:ci:enterprise-identity-roadmap:cert`); delivery **pilot_foundation** until `loginProofStatus: proof_passed`
 
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)

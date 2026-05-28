@@ -34,7 +34,7 @@ jobs:
       - run: npm ci
       - run: npx prisma generate
 
-      - name: Era 16 Woo/Shopify live smoke
+      - name: Era 17 Woo/Shopify live smoke (era17-channel-live-smoke-woo-v1 + shopify-v1)
         run: |
           ARGS=""
           if [ "${{ inputs.skip_live }}" = "true" ]; then ARGS="--skip-live"; fi

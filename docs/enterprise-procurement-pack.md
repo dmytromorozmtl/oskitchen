@@ -135,6 +135,24 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **CI:** `test:ci:enterprise-sso-r2-admin-era16:cert` (chained in `test:ci:enterprise-sso-r2-pilot-era16:cert`).
 
+## Era 17 SSO IdP staging smoke plan (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-idp-staging-smoke-v1` — documents staging IdP smoke path for Okta or Entra test tenant. **Does not** advance SSO delivery beyond **pilot_foundation** or claim live SAML/OIDC for all tenants.
+
+| Capability | Delivery status | Era 17 |
+|------------|-----------------|--------|
+| SSO / SAML | **pilot_foundation** (unchanged) | **plan_ready** — ops doc + `smoke:enterprise-sso-idp-staging`; Cycle 2 **`era17-enterprise-sso-idp-login-proof-v1`** executed — **awaiting_operator_proof** (SKIPPED when staging/IdP secrets absent) |
+| SCIM | **not_implemented** | Unchanged |
+| SOC 2 Type II | **not_certified** | Unchanged |
+
+**Procurement stance:** Staging IdP smoke plan exists; buyer-facing SSO availability unchanged until Cycle 2 artifact and Cycle 3 qualified pilot gate (`era17-enterprise-sso-pilot-ready-v1`).
+
+**Ops doc:** [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md)
+
+**Smoke:** `npm run smoke:enterprise-sso-idp-staging` (wiring cert + prerequisite check — not live IdP attestation until Cycle 2).
+
+**CI:** `test:ci:enterprise-sso-idp-staging-era17:cert` (chained in `test:ci:enterprise-identity-roadmap:cert`).
+
 ---
 
 ## SSO and SAML roadmap
@@ -213,6 +231,36 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 | CI | `test:ci:commercial-pilot-evidence-era16:cert` (in `test:ci:commercial-pilot-runbook:cert`) |
 
 **Procurement stance:** buyers evaluating a pilot should use [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) Era 16 sections — not deprecated `docs/PILOT_*` checklists.
+
+---
+
+## Pilot ICP + contract template (Era 17 Cycle 15)
+
+**Policy:** `era17-pilot-icp-contract-v1` — `lib/commercial/pilot-icp-contract-era17.ts`
+
+| Topic | Era 17 stance |
+|-------|---------------|
+| Purpose | Qualified pilot customer profile, contract allowed/forbidden claims, duration, success metrics |
+| Template | [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) — sales/legal review required before signature |
+| ICP gate | Production SSO/SOC2/unified inventory/marketplace live ops requirements **disqualify** standard paid pilot |
+| CI | `test:ci:pilot-icp-contract-era17:cert` (in `test:ci:commercial-pilot-runbook:cert`) |
+
+**Procurement stance:** contract language must match matrix maturity — template does **not** claim production certification or enterprise SSO for all tenants.
+
+---
+
+## Forbidden-claims enforcement (Era 17 P0 #5)
+
+**Policy:** `era17-pilot-forbidden-claims-enforcement-v1` — pre-sales claims gate before pilot contract signature.
+
+| Check | Command |
+|-------|---------|
+| Strict GTM copy | `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` |
+| Registry audit | `npm run audit:marketing-claims` |
+| Buyer pack honesty | `npm run test:ci:enterprise-procurement:cert` |
+| Orchestrator | `npm run smoke:pilot-forbidden-claims-enforcement` → `artifacts/pilot-forbidden-claims-enforcement-summary.json` |
+
+**Procurement stance:** this pack must pass `test:ci:enterprise-procurement:cert` — no affirmative production SSO, SOC2 Type II, or SCIM delivery claims. Status: **awaiting_forbidden_claims_enforcement_pass** on release branch.
 
 ---
 

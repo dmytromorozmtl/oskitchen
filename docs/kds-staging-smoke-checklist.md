@@ -1,7 +1,7 @@
 # KDS staging smoke checklist
 
 Status: canonical operational smoke for KDS v1 daily-service tickets  
-Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); Era 10 recert: `era10-kds-staging-smoke-recert-v1`; Era 15 recert: `era15-kds-staging-smoke-recert-v1` (`lib/kitchen/kds-staging-smoke-era15-policy.ts`); **Era 16 operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`); `npm run smoke:kds-staging`; realtime/poll: `era6-kds-realtime-smoke-v1`; Realtime Playwright E2E: `era8-kds-realtime-e2e-staging-v1` + `era11-kds-realtime-e2e-staging-v1` (**staging-only**, **not in default CI**); workflow secrets: `era13-kds-staging-workflow-secrets-align-v1`  
+Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); Era 10 recert: `era10-kds-staging-smoke-recert-v1`; Era 15 recert: `era15-kds-staging-smoke-recert-v1` (`lib/kitchen/kds-staging-smoke-era15-policy.ts`); **Era 16 operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`); **Era 17 Playwright proof:** `era17-kds-staging-playwright-proof-v1` (`npm run smoke:kds-staging-playwright`); `npm run smoke:kds-staging`; realtime/poll: `era6-kds-realtime-smoke-v1`; Realtime Playwright E2E: `era8-kds-realtime-e2e-staging-v1` + `era11-kds-realtime-e2e-staging-v1` (**staging-only**, **not in default CI**); workflow secrets: `era13-kds-staging-workflow-secrets-align-v1`  
 Scope boundary: `docs/kds-v1-scope.md`
 
 ## What this proves
@@ -82,6 +82,25 @@ Certification gate: `npm run test:ci:kds-realtime-e2e-staging:cert` (policy wiri
 **Optional GitHub Actions workflow (Era 11 + Era 13/15 staging ops):** `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`, `era13-kds-staging-workflow-secrets-align-v1`, `era13-staging-workflows-first-run-ops-v1`, `era15-staging-workflows-first-run-recert-v1`) — `workflow_dispatch` or weekly schedule when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + (`E2E_LOGIN_PASSWORD` or legacy `E2E_PASSWORD`) are set; job omitted when secrets missing (`JOB_OMITTED_SECRETS_MISSING`); uploads `kds-realtime-e2e-staging-summary` artifact (`PASSED` / `FAILED` / `SKIPPED WITH REASON`). First-run checklist: `docs/GITHUB_E2E_STAGING_SECRETS.md`; `npm run smoke:staging-workflows`.
 
 Do **not** add this tier to default GitHub Actions `ci.yml` quality job.
+
+## Era 17 — Playwright GitHub proof (Workstream F Cycle 25)
+
+**Policy:** `era17-kds-staging-playwright-proof-v1` — **awaiting_github_kds_playwright_pass**; records GitHub PASS for `playwright-kds-staging.yml`.
+
+1. Run **`npm run smoke:kds-staging-playwright`** after configuring staging secrets.
+2. Review **`artifacts/kds-staging-playwright-proof-summary.json`** — `playwrightProofStatus`.
+3. Requires `GITHUB_KDS_STAGING_RUN_URL` + `GITHUB_KDS_STAGING_RUN_OUTCOME=PASSED` after `workflow_dispatch` — wiring cert alone is insufficient.
+4. **Do not claim rush-hour KDS or default-CI Playwright certification.**
+
+**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; Playwright proof **SKIPPED WITH REASON** (`playwrightProofStatus: proof_skipped_missing_prerequisites`). Missing: `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD`, `GITHUB_KDS_STAGING_RUN_URL`, `GITHUB_KDS_STAGING_RUN_OUTCOME`.
+
+## Era 17 — operational sign-off staging proof (Workstream F Cycle 26)
+
+**Policy:** `era17-operational-signoff-staging-proof-v1` — **awaiting_staging_operator_signoff**; unified KDS + production calendar staging sign-off with operator URL.
+
+1. Set `OPERATIONAL_SIGNOFF_STAGING_URL` + `OPERATIONAL_SIGNOFF_OPERATOR_EMAIL`.
+2. Run **`npm run smoke:operational-signoff-staging`** — review **`artifacts/operational-signoff-staging-proof-summary.json`**.
+3. Complete Tier C manual UI smoke on staging; attestation via `OPERATIONAL_SIGNOFF_KDS_MANUAL=passed`.
 
 ## Tier B — Staging DB smoke script (optional)
 

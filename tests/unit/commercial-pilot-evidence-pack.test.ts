@@ -56,6 +56,17 @@ describe("commercial pilot evidence pack", () => {
         forbiddenClaimsInContract: true,
       }).blockers,
     ).toContain("Contract or marketing copy contains forbidden pilot claims");
+
+    expect(
+      evaluateCommercialPilotGoNoGo({
+        tier0Pass: true,
+        tier1Pass: true,
+        tier2Pass: true,
+        roleChecklistsComplete: true,
+        forbiddenClaimsInContract: false,
+        icpQualified: false,
+      }).blockers,
+    ).toContain("Prospect fails Era 17 pilot ICP qualification (era17-pilot-icp-contract-v1)");
   });
 
   it("returns CONDITIONAL when only warnings remain", () => {

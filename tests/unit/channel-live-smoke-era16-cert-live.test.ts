@@ -38,7 +38,7 @@ describe("channel live smoke era16 CI certification (live repo)", () => {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
     expect(scripts[CHANNEL_LIVE_SMOKE_ERA16_NPM_SCRIPT]).toContain(
-      CHANNEL_LIVE_SMOKE_ERA16_ORCHESTRATOR_SCRIPT,
+      "smoke-woo-shopify-live-era17",
     );
     expect(scripts["test:ci:channel-golden-path:cert"]).toContain(
       "channel-live-smoke-era16-cert-live",
