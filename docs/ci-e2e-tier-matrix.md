@@ -168,9 +168,9 @@ npm run test:ci:pos-money-path:e2e
 | Page maturity honesty | `npm run test:ci:page-maturity-sweep` | Preview/placeholder in-page copy; inline banner exceptions |
 | Page maturity wiring cert | `npm run test:ci:page-maturity-sweep:cert` | Layout wiring, policy id, matrix alignment |
 
-**Policy (Era 4 Cycle 12):** `lib/navigation/page-maturity-sweep-policy.ts`. **UI:** `PageMaturityRouteNotice` + existing nav badges (`test:ci:nav-governance`).
+**Policy (Era 4 Cycle 12 + Era 14 Cycle 1):** `lib/navigation/page-maturity-sweep-policy.ts` (`era4-page-maturity-sweep-v1`) + `lib/navigation/nav-page-maturity-era14-policy.ts` (`era14-nav-page-maturity-recert-v1`) — focused nav audit for preview/placeholder honesty. **UI:** `PageMaturityRouteNotice` + existing nav badges (`test:ci:nav-governance`).
 
-**Wiring certification (tier 0):** `test:ci:page-maturity-sweep:cert` + `test:ci:page-maturity-sweep` chained in `test:ci:governance-bundles`.
+**Wiring certification (tier 0):** `test:ci:page-maturity-sweep:cert` + `test:ci:page-maturity-sweep` + `test:ci:nav-page-maturity-era14:cert` chained in `test:ci:governance-bundles`.
 
 ## Tier 1c3 — Mutation access consolidation (`quality` job via governance bundles)
 

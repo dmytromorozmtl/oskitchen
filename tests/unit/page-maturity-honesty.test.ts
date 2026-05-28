@@ -24,6 +24,16 @@ describe("page maturity honesty", () => {
     expect(getPageMaturityHonesty("/dashboard/integrations/grubhub")).toBeNull();
   });
 
+  it("returns preview honesty for era14 gap-closure nav routes", () => {
+    const payroll = getPageMaturityHonesty("/dashboard/staff/payroll");
+    expect(payroll?.exposure).toBe("preview");
+    expect(payroll?.detail).toMatch(/payroll/i);
+
+    const campaigns = getPageMaturityHonesty("/dashboard/marketing/email-campaigns");
+    expect(campaigns?.exposure).toBe("preview");
+    expect(campaigns?.detail).toMatch(/marketing|klaviyo/i);
+  });
+
   it("returns null for default production routes", () => {
     expect(getPageMaturityHonesty("/dashboard/orders")).toBeNull();
     expect(getPageMaturityHonesty("/dashboard/kitchen")).toBeNull();

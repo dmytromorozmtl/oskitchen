@@ -40,7 +40,7 @@ All four Era 13 enterprise / operator-depth cycles from era12 handoff **complete
 - First green staging workflow runs — ops only (`era13-staging-workflows-first-run-ops-v1`).
 - Production calendar pilot manual sign-off — `docs/production-calendar-operator-checklist.md`.
 - Live Woo/Shopify test shop smoke — ops via `npm run smoke:woo-shopify` when credentials available.
-- Nav / page maturity sweep — placeholders must not look production-ready.
+- ~~Nav / page maturity sweep~~ — **Done** Era 14 Cycle 1 (`era14-nav-page-maturity-recert-v1`); re-run when new preview routes enter focused nav.
 
 ---
 

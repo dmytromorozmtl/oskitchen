@@ -286,6 +286,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Wiring cert: `test:ci:production-calendar-status-workflow-ui:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
 - RBAC: `tests/unit/production-calendar-actions-rbac.test.ts` (status update deny/allow)
 
+### 8c4q. Nav page maturity Era 14 recert (Era 14 Cycle 1)
+- Policy: `lib/navigation/nav-page-maturity-era14-policy.ts` (`era14-nav-page-maturity-recert-v1`; extends `era4-page-maturity-sweep-v1`)
+- Audit: `findNavPageMaturityHonestyGaps()` — every focused-nav preview/placeholder href must have `PageMaturityRouteNotice` copy or inline PlaceholderBanner exception
+- Gap closure: `/dashboard/staff/payroll`, `/dashboard/marketing/email-campaigns`
+- Wiring cert: `test:ci:nav-page-maturity-era14:cert` (chained in `test:ci:page-maturity-sweep:cert`)
+
 ### 8c4p. Production calendar operator depth (Era 13 Cycle 4)
 - Policy: `lib/production/production-calendar-operator-depth-era13-policy.ts` (`era13-production-calendar-operator-depth-v1`; consolidates Era 6/8/10/11)
 - Manual: `docs/production-calendar-operator-checklist.md` — pilot steps; not rush-hour certified

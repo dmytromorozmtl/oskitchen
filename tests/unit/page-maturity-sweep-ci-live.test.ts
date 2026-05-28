@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   PAGE_MATURITY_SWEEP_CI_SCRIPTS,
   PAGE_MATURITY_SWEEP_POLICY_ID,
@@ -33,8 +34,10 @@ describe("page maturity sweep CI certification (live repo)", () => {
 
   it("includes page maturity sweep cert in governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:page-maturity-sweep:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:page-maturity-sweep");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:page-maturity-sweep:cert")).toBe(
+      true,
+    );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:page-maturity-sweep")).toBe(true);
   });
 
   it("wires PageMaturityRouteNotice into dashboard layout", () => {

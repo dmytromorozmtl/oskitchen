@@ -27,6 +27,10 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
     "Reservations are preview-scoped. Full hospitality host workflows and availability automation are not certified.",
   "/dashboard/food-safety":
     "Food safety tools are preview-scoped — not a certified HACCP or audit-export suite.",
+  "/dashboard/staff/payroll":
+    "Payroll export is preview-scoped — CSV summary from time clock entries; not certified accounting or full payroll suite parity.",
+  "/dashboard/marketing/email-campaigns":
+    "Email campaigns are preview-scoped — Klaviyo-dependent flows; not certified full marketing automation.",
   "/dashboard/integrations/doordash":
     "DoorDash marketplace integration is a placeholder — no live order ingest or menu sync.",
   "/dashboard/integrations/grubhub":

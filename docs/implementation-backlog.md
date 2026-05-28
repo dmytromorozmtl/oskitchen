@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 14 — Nav / page maturity
+
+### KOS-E14-001 — Nav page maturity Era 14 recert (P1)
+- ID: `KOS-E14-001`
+- Title: Re-certify focused nav preview/placeholder routes have in-page honesty
+- Module: Product / UX / GTM
+- Priority: P1 (Era 14 Cycle 1)
+- Status: **completed**
+- Decision: `era14-nav-page-maturity-recert-v1` — automated `findNavPageMaturityHonestyGaps()` over `FINAL_NAVIGATION_GROUPS`; closes `/dashboard/staff/payroll` + `/dashboard/marketing/email-campaigns` preview gaps
+- Evidence: `lib/navigation/nav-page-maturity-era14-policy.ts`, `test:ci:nav-page-maturity-era14:cert` (in `test:ci:page-maturity-sweep:cert`)
+- Next: periodic recert when new preview routes ship in focused nav
+
 ## Era 13 — Enterprise delivery / identity
 
 ### KOS-E13-001 — Enterprise identity Era 13 recert (P1)

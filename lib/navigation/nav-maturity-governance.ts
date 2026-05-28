@@ -117,6 +117,16 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
     matrixRef: "Food safety and compliance",
   },
   {
+    prefix: "/dashboard/staff/payroll",
+    exposure: "preview",
+    matrixRef: "Payroll export",
+  },
+  {
+    prefix: "/dashboard/marketing/email-campaigns",
+    exposure: "preview",
+    matrixRef: "Growth campaigns",
+  },
+  {
     prefix: "/dashboard/executive",
     exposure: "hidden_default",
     matrixRef: "Executive / franchise roadmap",

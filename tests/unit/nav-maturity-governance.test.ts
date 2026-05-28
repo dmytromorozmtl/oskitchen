@@ -39,6 +39,12 @@ describe("nav maturity governance", () => {
     expect(navMaturityBadgeForHref("/dashboard/pos/handheld")).toBe("Preview");
   });
 
+  it("labels era14 gap-closure preview nav routes", () => {
+    expect(getNavMaturityExposure("/dashboard/staff/payroll")).toBe("preview");
+    expect(getNavMaturityExposure("/dashboard/marketing/email-campaigns")).toBe("preview");
+    expect(navMaturityBadgeForHref("/dashboard/staff/payroll")).toBe("Preview");
+  });
+
   it("keeps core commerce routes visible in focused nav", () => {
     expect(
       shouldShowNavLinkByMaturity("/dashboard/storefront", {

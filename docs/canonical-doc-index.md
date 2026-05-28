@@ -532,3 +532,4 @@ Incremental refresh after Era 13 cycles 1–4 (enterprise delivery + operator de
 | 2026-05-27 | Era 13 Cycle 3: `era13-staging-workflows-first-run-ops-v1` — staging workflow first-run ops; JOB_OMITTED_SECRETS_MISSING vs PASSED/FAILED/SKIPPED WITH REASON |
 | 2026-05-27 | Era 13 Cycle 4: `era13-production-calendar-operator-depth-v1` — production calendar pilot checklist + smoke:production-calendar |
 | 2026-05-27 | Era 13 Cycle 5: `era13-scorecard-refresh-v1` — score 100/100; era14 handoff |
+| 2026-05-27 | Era 14 Cycle 1: `era14-nav-page-maturity-recert-v1` — focused nav preview/placeholder honesty audit + payroll/email-campaigns gaps |
