@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, AlertTriangle, Rocket } from "lucide-react";
 
 import { LaunchWizardCommercialBlockersPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel";
+import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
 import { LaunchWizardProgressStrip } from "@/components/dashboard/launch-wizard/launch-wizard-progress-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import type { LaunchWizardStep, LaunchWizardStepStatus } from "@/lib/launch-wizard/launch-wizard-era19";
 import type { LaunchWizardOperatorLink } from "@/lib/launch-wizard/launch-wizard-kds-production-era19";
+import {
+  buildLaunchWizardOnboardingHeroModel,
+} from "@/lib/launch-wizard/launch-wizard-onboarding-convergence-era19";
 import {
   launchWizardProgressAriaLabel,
   launchWizardStepStatusAriaLabel,
@@ -46,10 +50,17 @@ function statusIcon(status: LaunchWizardStepStatus) {
 export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: boolean }) {
   const { model, compact = false } = props;
   const { progress, nextStep } = model;
+  const onboardingHero = buildLaunchWizardOnboardingHeroModel({
+    progress,
+    nextStep,
+    compact,
+  });
 
   return (
     <div className="space-y-6" data-testid="launch-wizard-view">
       <LaunchWizardProgressStrip model={model} compact={compact} />
+
+      {onboardingHero ? <LaunchWizardOnboardingHero model={onboardingHero} /> : null}
 
       <Card className="border-primary/20 bg-primary/[0.03] shadow-sm">
         <CardHeader className="pb-3">
@@ -85,7 +96,7 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
               aria-label={launchWizardProgressAriaLabel(progress)}
             />
           </div>
-          {nextStep ? (
+          {!onboardingHero && nextStep ? (
             <div className="rounded-xl border border-border/70 bg-background/80 px-3 py-3">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Next best setup step
@@ -99,11 +110,11 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
                 </Link>
               </Button>
             </div>
-          ) : (
+          ) : !onboardingHero ? (
             <p className="text-sm text-muted-foreground">
               All wizard steps are complete — confirm commercial GO/NO-GO before paid pilot cutover.
             </p>
-          )}
+          ) : null}
         </CardContent>
       </Card>
 

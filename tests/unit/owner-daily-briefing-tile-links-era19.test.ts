@@ -128,6 +128,29 @@ describe("owner-daily-briefing-tile-links-era19", () => {
     expect(tile.whyItMatters).toBe(BRIEFING_TILE_LINK_DEFINITIONS["production-calendar-today"].whyItMatters);
   });
 
+  it("preserves launch wizard step deep links for go-live and pilot tiles", () => {
+    const deepHref = `${LAUNCH_WIZARD_ROUTE}?mode=compact#launch-wizard-step-menu-catalog`;
+    expect(
+      resolveBriefingTileCanonicalHref("go-live-readiness", deepHref, "available"),
+    ).toBe(deepHref);
+    const audit = auditBriefingTileLinks([
+      {
+        id: "go-live-readiness",
+        category: "go-live",
+        label: "Go-live readiness",
+        value: "25%",
+        detail: "Next setup step",
+        href: deepHref,
+        availability: "available",
+        tone: "attention",
+        priority: 16,
+        whyItMatters: "Setup completeness gates safe pilot cutover.",
+        linkState: "blocked",
+      },
+    ]);
+    expect(audit.valid).toBe(true);
+  });
+
   it("preserves shift-aware POS terminal href for cashier tile", () => {
     expect(
       resolveBriefingTileCanonicalHref(

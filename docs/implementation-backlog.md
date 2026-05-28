@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-037 — Launch Wizard onboarding convergence (Convergence Pillar 1+2)
+- ID: `KOS-E19-037`
+- Title: Era 19 Convergence Cycle 37 — unify Today briefing + launch wizard onboarding path with next-step deep links and fear-reduction hero
+- Module: Launch Wizard / Owner Daily Briefing / Onboarding
+- Priority: P1 convergence (onboarding brilliance — one path from Today to next setup step)
+- Status: **launch_wizard_onboarding_convergence_wired**
+- Decision: `era19-launch-wizard-onboarding-convergence-v1` + `era19-owner-daily-briefing-launch-wizard-convergence-v1` — briefing go-live/pilot tiles + setup-next ranked action deep-link to `#launch-wizard-step-{id}`; onboarding hero on wizard page
+- Evidence: `launch-wizard-onboarding-convergence-era19.ts`, `LaunchWizardOnboardingHero`, updated briefing service + tile-links audit + Today page
+- Next: P0 proof unblock when ops credentials available, or storefront order → KDS → packing command-flow convergence
+
 ### KOS-E19-036 — Briefing production drill convergence (Convergence Pillar 1+4)
 - ID: `KOS-E19-036`
 - Title: Era 19 Convergence Cycle 36 — unify overdue production deep-links to operator drill across briefing tiles, role actions, and risk radar

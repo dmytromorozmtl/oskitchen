@@ -80,6 +80,8 @@ export default async function TodayOperationsPage({
           ? {
               commercialBlockers: launchWizardModel.commercialBlockers,
               commercialSetup: launchWizardModel.commercialSetup,
+              nextStep: launchWizardModel.nextStep,
+              progress: launchWizardModel.progress,
             }
           : undefined,
       })

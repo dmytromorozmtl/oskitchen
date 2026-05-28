@@ -77,11 +77,19 @@ import {
   mergeBriefingLaunchWizardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-launch-wizard-era19";
 import {
+  buildOwnerDailyBriefingLaunchWizardSetupAction,
+  enrichBriefingLaunchWizardPackTiles,
+} from "@/lib/launch-wizard/launch-wizard-onboarding-convergence-era19";
+import {
   buildBriefingSmokeNextActionRankedAction,
   mergeBriefingSmokeNextTopActions,
 } from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
+import type {
+  LaunchWizardProgress,
+  LaunchWizardStep,
+} from "@/lib/launch-wizard/launch-wizard-era19";
 import {
   buildOwnerDailyBriefingRiskRadarSlice,
   summarizeOwnerDailyBriefingRiskRadar,
@@ -235,6 +243,8 @@ export async function loadOwnerDailyBriefing(
     launchWizard?: {
       commercialBlockers: LaunchWizardCommercialBlockersSlice;
       commercialSetup: LaunchWizardCommercialSetupSlice;
+      nextStep: LaunchWizardStep | null;
+      progress: LaunchWizardProgress;
     };
     granted?: ReadonlySet<PermissionKey>;
   },
@@ -381,7 +391,13 @@ export async function loadOwnerDailyBriefing(
               kdsBriefingInput,
             )
           : rolePack === "owner"
-            ? enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput)
+            ? options?.launchWizard
+              ? enrichBriefingLaunchWizardPackTiles({
+                  tiles: enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
+                  nextStep: options.launchWizard.nextStep,
+                  progress: options.launchWizard.progress,
+                })
+              : enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput)
             : baseTiles;
   const allAlerts =
     rolePack === "support_admin"
@@ -476,6 +492,15 @@ export async function loadOwnerDailyBriefing(
         })
       : null;
 
+  const launchWizardSetupAction =
+    rolePack === "owner" && options?.launchWizard
+      ? buildOwnerDailyBriefingLaunchWizardSetupAction({
+          nextStep: options.launchWizard.nextStep,
+          progress: options.launchWizard.progress,
+          hasCommercialUnblock: Boolean(options.launchWizard.commercialSetup.nextUnblock),
+        })
+      : null;
+
   const smokeNextActionRanked =
     needsCommercialOps && smokeNextAction
       ? buildBriefingSmokeNextActionRankedAction(smokeNextAction)
@@ -484,6 +509,8 @@ export async function loadOwnerDailyBriefing(
   let allTopActions = allTopActionsBase;
   if (rolePack === "owner" && launchWizardCommercialAction) {
     allTopActions = mergeBriefingLaunchWizardTopActions(launchWizardCommercialAction, allTopActions);
+  } else if (rolePack === "owner" && launchWizardSetupAction) {
+    allTopActions = mergeBriefingLaunchWizardTopActions(launchWizardSetupAction, allTopActions);
   }
   if (needsCommercialOps && smokeNextActionRanked) {
     allTopActions = mergeBriefingSmokeNextTopActions(smokeNextActionRanked, allTopActions);

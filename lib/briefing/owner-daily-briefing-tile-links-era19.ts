@@ -1,6 +1,7 @@
 import { BRIEFING_CASHIER_POS_SPEED_TERMINAL_HREF } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
 import { BRIEFING_KDS_PRIORITY_LANE_HREF } from "@/lib/kitchen/kds-priority-lane-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
 import type { BriefingRolePack } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import type {
   BriefingTileAvailability,
@@ -175,6 +176,13 @@ export function resolveBriefingTileCanonicalHref(
   if (tileId === "kds-priority-lane") {
     return fallbackHref;
   }
+  if (
+    (tileId === "go-live-readiness" || tileId === "pilot-status") &&
+    (fallbackHref.includes("#launch-wizard-step-") ||
+      fallbackHref.includes(LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR))
+  ) {
+    return fallbackHref;
+  }
   return briefingTileLinkDefinition(tileId)?.href ?? fallbackHref;
 }
 
@@ -253,7 +261,7 @@ export function auditBriefingTileLinks(tiles: readonly OwnerDailyBriefingTile[])
     }
     if (
       (tile.id === "pilot-status" || tile.id === "go-live-readiness") &&
-      tile.href !== LAUNCH_WIZARD_ROUTE
+      !tile.href.startsWith(LAUNCH_WIZARD_ROUTE)
     ) {
       issues.push(`${tile.id}: must link to launch wizard`);
     }
