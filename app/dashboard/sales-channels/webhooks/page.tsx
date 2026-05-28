@@ -23,6 +23,8 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
+import { WebhookQueueAttentionStrip } from "@/components/integrations/webhook-queue-attention-strip";
+import { WebhookQueueRowNextAction } from "@/components/integrations/webhook-queue-row-next-action";
 import { WebhookReplayRow } from "@/components/integrations/webhook-replay-row";
 import { SensitiveErrorPreview } from "@/components/integrations/sensitive-error-preview";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -35,10 +37,29 @@ import { toSafeErrorPreview } from "@/lib/security/sensitive-redaction";
 export default async function SalesChannelsWebhookCenterPage() {
   const { userId } = await getTenantActor();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const events = await prisma.webhookEvent.findMany({
-    where: webhookWhere,
-    orderBy: { receivedAt: "desc" },
-    take: 200,
+  const [events, unprocessedCount, invalidSignatureCount, processingErrorCount] = await Promise.all([
+    prisma.webhookEvent.findMany({
+      where: webhookWhere,
+      orderBy: { receivedAt: "desc" },
+      take: 200,
+    }),
+    prisma.webhookEvent.count({
+      where: { AND: [webhookWhere, { processed: false }] },
+    }),
+    prisma.webhookEvent.count({
+      where: { AND: [webhookWhere, { processed: false, signatureValid: false }] },
+    }),
+    prisma.webhookEvent.count({
+      where: {
+        AND: [webhookWhere, { processingError: { not: null } }],
+      },
+    }),
+  ]);
+
+  const focusSnapshot = buildWebhookQueueFocusSnapshot({
+    unprocessedCount,
+    invalidSignatureCount,
+    processingErrorCount,
   });
 
   return (
@@ -103,6 +124,8 @@ export default async function SalesChannelsWebhookCenterPage() {
             </div>
           </div>
 
+          <WebhookQueueAttentionStrip snapshot={focusSnapshot} />
+
           {!events.length ? (
             <EmptyState
               icon={Webhook}
@@ -134,12 +157,13 @@ export default async function SalesChannelsWebhookCenterPage() {
                       <TableHead>Topic</TableHead>
                       <TableHead>Signature</TableHead>
                       <TableHead>Processed</TableHead>
+                      <TableHead>Next action</TableHead>
                       <TableHead className="min-w-[240px]">Replay</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {events.map((ev) => (
-                      <TableRow key={ev.id}>
+                      <TableRow key={ev.id} id={`webhook-event-${ev.id}`}>
                         <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
                           {formatDistanceToNow(ev.receivedAt, { addSuffix: true })}
                         </TableCell>
@@ -181,6 +205,17 @@ export default async function SalesChannelsWebhookCenterPage() {
                               variant="inline"
                             />
                           </div>
+                        </TableCell>
+                        <TableCell className="align-top">
+                          <WebhookQueueRowNextAction
+                            event={{
+                              id: ev.id,
+                              provider: String(ev.provider),
+                              signatureValid: ev.signatureValid,
+                              processed: ev.processed,
+                              processingError: ev.processingError,
+                            }}
+                          />
                         </TableCell>
                         <TableCell className="align-top">
                           <WebhookReplayRow

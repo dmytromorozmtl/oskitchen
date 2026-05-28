@@ -1,14 +1,32 @@
 import Link from "next/link";
 
+import { ImportCenterAttentionStrip } from "@/components/dashboard/import-center/import-center-attention-strip";
+import { ImportJobRowNextAction } from "@/components/dashboard/import-center/import-job-row-next-action";
 import { ImportStatusBadge } from "@/components/dashboard/import-center/status-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { IMPORT_TYPE_LABEL } from "@/lib/import-center/import-types";
-import { listImportJobs } from "@/services/import-center/import-center-service";
+import { buildImportCenterFocusSnapshot } from "@/lib/import-center/import-center-focus-era18";
+import { importJobListWhereForOwner } from "@/lib/scope/workspace-import-export-scope";
+import { prisma } from "@/lib/prisma";
+import { importCenterKpis, listImportJobs } from "@/services/import-center/import-center-service";
 
 export default async function ImportCenterHistoryPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
-  const jobs = await listImportJobs(dataUserId, 100);
+  const { dataUserId } = await getTenantActor();
+  const jobWhere = await importJobListWhereForOwner(dataUserId);
+  const [jobs, kpis, failedCount] = await Promise.all([
+    listImportJobs(dataUserId, 100),
+    importCenterKpis(dataUserId),
+    prisma.importJob.count({ where: { AND: [jobWhere, { status: "FAILED" }] } }),
+  ]);
+
+  const focusSnapshot = buildImportCenterFocusSnapshot({
+    failedCount,
+    pendingValidation: kpis.pendingValidation,
+    readyToCommit: kpis.readyToCommit,
+    rowsWithErrorsThisMonth: kpis.rowsWithErrorsThisMonth,
+    rollbackEligibleJobs: kpis.rollbackEligibleJobs,
+  });
 
   return (
     <div className="space-y-6">
@@ -19,6 +37,8 @@ export default async function ImportCenterHistoryPage() {
           status are all linked from each row.
         </p>
       </div>
+
+      <ImportCenterAttentionStrip snapshot={focusSnapshot} />
 
       <Card>
         <CardHeader>
@@ -41,13 +61,14 @@ export default async function ImportCenterHistoryPage() {
                   <th className="px-3 py-2 font-medium tabular-nums">Created / updated</th>
                   <th className="px-3 py-2 font-medium">Rollback</th>
                   <th className="px-3 py-2 font-medium">Created</th>
+                  <th className="px-3 py-2 font-medium">Next action</th>
                 </tr>
               </thead>
               <tbody>
                 {jobs.map((job) => {
                   const hasRollback = job.rollbacks.some((r) => r.status === "COMPLETED");
                   return (
-                    <tr key={job.id} className="border-b last:border-0">
+                    <tr key={job.id} id={`import-job-${job.id}`} className="border-b last:border-0">
                       <td className="px-3 py-2">
                         <Link
                           href={`/dashboard/import-center/jobs/${job.id}`}
@@ -76,6 +97,16 @@ export default async function ImportCenterHistoryPage() {
                       </td>
                       <td className="px-3 py-2 text-xs text-muted-foreground">
                         {job.createdAt.toISOString().slice(0, 10)}
+                      </td>
+                      <td className="px-3 py-2">
+                        <ImportJobRowNextAction
+                          job={{
+                            id: job.id,
+                            status: job.status,
+                            errorRows: job.errorRows,
+                            hasCompletedRollback: hasRollback,
+                          }}
+                        />
                       </td>
                     </tr>
                   );

@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { ImportCenterAttentionStrip } from "@/components/dashboard/import-center/import-center-attention-strip";
+import { ImportJobRowNextAction } from "@/components/dashboard/import-center/import-job-row-next-action";
 import { ImportCenterKpiGrid } from "@/components/dashboard/import-center/kpi-grid";
 import { ImportStatusBadge } from "@/components/dashboard/import-center/status-badge";
 import { ImportCenterUploadForm } from "@/components/dashboard/import-center/upload-form";
@@ -11,13 +13,28 @@ import {
   listImportJobs,
 } from "@/services/import-center/import-center-service";
 import { IMPORT_TYPE_LABEL } from "@/lib/import-center/import-types";
+import { buildImportCenterFocusSnapshot } from "@/lib/import-center/import-center-focus-era18";
+import { importJobListWhereForOwner } from "@/lib/scope/workspace-import-export-scope";
+import { prisma } from "@/lib/prisma";
 
 export default async function ImportCenterPage() {
   const { dataUserId } = await getTenantActor();
-  const [kpis, jobs] = await Promise.all([
+  const jobWhere = await importJobListWhereForOwner(dataUserId);
+  const [kpis, jobs, failedCount] = await Promise.all([
     importCenterKpis(dataUserId),
     listImportJobs(dataUserId, 12),
+    prisma.importJob.count({
+      where: { AND: [jobWhere, { status: "FAILED" }] },
+    }),
   ]);
+
+  const focusSnapshot = buildImportCenterFocusSnapshot({
+    failedCount,
+    pendingValidation: kpis.pendingValidation,
+    readyToCommit: kpis.readyToCommit,
+    rowsWithErrorsThisMonth: kpis.rowsWithErrorsThisMonth,
+    rollbackEligibleJobs: kpis.rollbackEligibleJobs,
+  });
 
   return (
     <div className="space-y-8">
@@ -39,6 +56,8 @@ export default async function ImportCenterPage() {
       </div>
 
       <ImportCenterKpiGrid tiles={kpis} />
+
+      <ImportCenterAttentionStrip snapshot={focusSnapshot} />
 
       <ImportCenterUploadForm />
 
@@ -66,7 +85,11 @@ export default async function ImportCenterPage() {
           ) : (
             <ul className="divide-y">
               {jobs.map((job) => (
-                <li key={job.id} className="flex flex-col gap-1 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+                <li
+                  key={job.id}
+                  id={`import-job-${job.id}`}
+                  className="flex flex-col gap-1 py-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+                >
                   <div className="flex flex-col gap-0.5">
                     <Link
                       href={`/dashboard/import-center/jobs/${job.id}`}
@@ -79,6 +102,14 @@ export default async function ImportCenterPage() {
                       {" "}
                       {job.createdAt.toISOString().slice(0, 10)}
                     </span>
+                    <ImportJobRowNextAction
+                      job={{
+                        id: job.id,
+                        status: job.status,
+                        errorRows: job.errorRows,
+                        hasCompletedRollback: job.rollbacks.some((r) => r.status === "COMPLETED"),
+                      }}
+                    />
                   </div>
                   <div className="flex items-center gap-3">
                     {job.rollbacks.some((r) => r.status === "COMPLETED") ? (

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-037 — Import center and webhook queue focus (P0)
+- ID: `KOS-E18-037`
+- Title: Era 18 Workstream P/C Cycle 37 — import job + webhook event row next actions
+- Module: Import center / Sales channels webhooks
+- Priority: P0 (recovery spine depth + channel proof path)
+- Status: **import_center_focus_attention_wired** + **webhook_queue_focus_attention_wired**
+- Decision: `era18-import-center-focus-v1` + `era18-webhook-queue-focus-v1` — attention strips + row next actions on import history and webhook activity
+- Evidence: `lib/import-center/import-center-focus-era18.ts`, `lib/integrations/webhook-queue-focus-era18.ts`, import center + webhook center pages
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-036 — Error recovery and system health tile next actions (P0)
 - ID: `KOS-E18-036`
 - Title: Era 18 Workstream N/O Cycle 36 — recovery and health hub tile row next actions
