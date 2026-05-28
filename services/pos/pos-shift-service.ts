@@ -251,13 +251,27 @@ export type ClosedShiftSummary = {
 
 const DEFAULT_CLOSED_SHIFT_HISTORY_LIMIT = 10;
 
+export type ClosedShiftDateRange = {
+  closedAfter: Date;
+  closedBefore?: Date;
+};
+
 /** Recent closed shifts for manager review — read-only, owner-scoped. */
 export async function listRecentClosedShiftSummaries(
   userId: string,
   limit = DEFAULT_CLOSED_SHIFT_HISTORY_LIMIT,
+  range?: ClosedShiftDateRange,
 ): Promise<ClosedShiftSummary[]> {
   const shiftWhere = (await ownerScopedAnd(userId, {
     status: "CLOSED",
+    ...(range
+      ? {
+          closedAt: {
+            gte: range.closedAfter,
+            ...(range.closedBefore ? { lte: range.closedBefore } : {}),
+          },
+        }
+      : {}),
   })) as Prisma.POSShiftWhereInput;
   const rows = await prisma.pOSShift.findMany({
     where: shiftWhere,

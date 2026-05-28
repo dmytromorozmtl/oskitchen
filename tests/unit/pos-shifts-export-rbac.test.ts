@@ -55,7 +55,7 @@ describe("pos shifts export route RBAC", () => {
       actor,
     });
 
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/pos/shifts/export"));
 
     expect(response.status).toBe(403);
     expect(logPosPermissionDenied).toHaveBeenCalled();
@@ -65,11 +65,20 @@ describe("pos shifts export route RBAC", () => {
   it("exports csv when pos.shift.close is granted", async () => {
     requireMutationPermission.mockResolvedValue({ ok: true, actor });
 
-    const response = await GET();
+    const response = await GET(
+      new Request("http://localhost/api/pos/shifts/export?range=30d"),
+    );
 
     expect(response.status).toBe(200);
     expect(response.headers.get("Content-Type")).toContain("text/csv");
-    expect(listRecentClosedShiftSummaries).toHaveBeenCalledWith("owner-user-1", 50);
+    expect(listRecentClosedShiftSummaries).toHaveBeenCalledWith(
+      "owner-user-1",
+      50,
+      expect.objectContaining({
+        closedAfter: expect.any(Date),
+        closedBefore: expect.any(Date),
+      }),
+    );
     expect(logPosShiftEvent).toHaveBeenCalledWith(
       actor,
       expect.objectContaining({

@@ -8,6 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import {
+  parseShiftCloseHistoryRangeParam,
+  resolveShiftCloseHistoryRangeBounds,
+  SHIFT_CLOSE_HISTORY_FILTERED_LIMIT,
+  SHIFT_CLOSE_HISTORY_RANGE_LABEL,
+} from "@/lib/pos/pos-shift-close-history-range-era18";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
 import {
@@ -15,8 +21,15 @@ import {
   listRecentClosedShiftSummaries,
 } from "@/services/pos/pos-shift-service";
 
-export default async function PosShiftsPage() {
+export default async function PosShiftsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ range?: string }>;
+}) {
   const actor = await requireWorkspacePermissionActor();
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const rangePreset = parseShiftCloseHistoryRangeParam(resolvedSearchParams.range);
+  const rangeBounds = resolveShiftCloseHistoryRangeBounds(rangePreset);
   const canOpenShift = hasPermission(actor.granted, "pos.shift.open");
   const canCloseShift = hasPermission(actor.granted, "pos.shift.close");
   if (!canOpenShift && !canCloseShift) {
@@ -40,7 +53,9 @@ export default async function PosShiftsPage() {
       select: { id: true, name: true },
     }),
     canCloseShift ? listOpenShiftCloseoutPreviews(actor.userId) : Promise.resolve([]),
-    canViewShiftHistory ? listRecentClosedShiftSummaries(actor.userId) : Promise.resolve([]),
+    canViewShiftHistory
+      ? listRecentClosedShiftSummaries(actor.userId, SHIFT_CLOSE_HISTORY_FILTERED_LIMIT, rangeBounds)
+      : Promise.resolve([]),
   ]);
 
   return (
@@ -129,13 +144,15 @@ export default async function PosShiftsPage() {
           <CardHeader>
             <CardTitle>Recent closeouts</CardTitle>
             <CardDescription>
-              Last 10 closed shifts — expected vs counted cash with variance badges.
+              {SHIFT_CLOSE_HISTORY_RANGE_LABEL[rangePreset]} — expected vs counted cash with variance
+              badges (up to {SHIFT_CLOSE_HISTORY_FILTERED_LIMIT} rows).
             </CardDescription>
           </CardHeader>
           <CardContent>
             <PosShiftCloseHistoryPanel
               shifts={closedShiftHistory}
               canExportCsv={canCloseShift}
+              rangePreset={rangePreset}
             />
           </CardContent>
         </Card>

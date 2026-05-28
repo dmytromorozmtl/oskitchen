@@ -1,12 +1,17 @@
 import Link from "next/link";
 
+import { PosShiftCloseHistoryRangeFilter } from "@/components/dashboard/pos-shift-close-history-range-filter";
 import { Button } from "@/components/ui/button";
 import {
   classifyShiftVariance,
   formatShiftCloseoutMoney,
   formatShiftVarianceDisplay,
 } from "@/lib/pos/pos-shift-closeout-preview";
-import { CLOSED_SHIFT_CSV_EXPORT_LIMIT } from "@/lib/pos/pos-shift-close-csv-era18";
+import {
+  buildShiftCloseHistoryExportHref,
+  SHIFT_CLOSE_HISTORY_RANGE_LABEL,
+  type ShiftCloseHistoryRangePreset,
+} from "@/lib/pos/pos-shift-close-history-range-era18";
 import {
   formatShiftClosedAt,
   shiftVarianceBadgeClassName,
@@ -19,13 +24,17 @@ import { cn } from "@/lib/utils";
 type PosShiftCloseHistoryPanelProps = {
   shifts: ClosedShiftSummary[];
   canExportCsv?: boolean;
+  rangePreset: ShiftCloseHistoryRangePreset;
 };
 
 export function PosShiftCloseHistoryPanel({
   shifts,
   canExportCsv = false,
+  rangePreset,
 }: PosShiftCloseHistoryPanelProps) {
   const summary = summarizeClosedShiftHistory(shifts);
+  const rangeLabel = SHIFT_CLOSE_HISTORY_RANGE_LABEL[rangePreset];
+  const exportHref = buildShiftCloseHistoryExportHref(rangePreset);
 
   if (shifts.length === 0) {
     return (
@@ -41,17 +50,20 @@ export function PosShiftCloseHistoryPanel({
 
   return (
     <div className="space-y-3" data-testid="pos-shift-close-history">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <PosShiftCloseHistoryRangeFilter />
         <p className="text-xs text-muted-foreground">
-          Last {summary.total} close{summary.total === 1 ? "" : "s"}
+          {rangeLabel} · {summary.total} close{summary.total === 1 ? "" : "s"}
           {summary.withVariance > 0
             ? ` · ${summary.withVariance} with variance`
-            : " · all balanced"}
+            : summary.total > 0
+              ? " · all balanced"
+              : ""}
         </p>
         {canExportCsv ? (
           <Button asChild variant="outline" size="sm" className="rounded-full h-8">
-            <Link href="/api/pos/shifts/export" data-testid="pos-shift-close-csv-export">
-              Download CSV (last {CLOSED_SHIFT_CSV_EXPORT_LIMIT})
+            <Link href={exportHref} data-testid="pos-shift-close-csv-export">
+              Download CSV ({rangeLabel.toLowerCase()})
             </Link>
           </Button>
         ) : null}

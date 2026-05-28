@@ -323,4 +323,17 @@ describe("pos-shift-service", () => {
     ]);
     expect(ownerScopedAnd).toHaveBeenCalledWith("owner-1", { status: "CLOSED" });
   });
+
+  it("filters closed shift summaries by closedAt range", async () => {
+    vi.mocked(prisma.pOSShift.findMany).mockResolvedValue([] as never);
+
+    const closedAfter = new Date("2026-05-21T00:00:00.000Z");
+    const closedBefore = new Date("2026-05-28T15:30:00.000Z");
+    await listRecentClosedShiftSummaries("owner-1", 50, { closedAfter, closedBefore });
+
+    expect(ownerScopedAnd).toHaveBeenCalledWith("owner-1", {
+      status: "CLOSED",
+      closedAt: { gte: closedAfter, lte: closedBefore },
+    });
+  });
 });

@@ -8,12 +8,16 @@ import {
   serializeClosedShiftSummariesToCsv,
 } from "@/lib/pos/pos-shift-close-csv-era18";
 import {
+  parseShiftCloseHistoryRangeParam,
+  resolveShiftCloseHistoryRangeBounds,
+} from "@/lib/pos/pos-shift-close-history-range-era18";
+import {
   logPosPermissionDenied,
   logPosShiftEvent,
 } from "@/services/pos/pos-permission-audit";
 import { listRecentClosedShiftSummaries } from "@/services/pos/pos-shift-service";
 
-export async function GET() {
+export async function GET(request: Request) {
   const access = await requireMutationPermission("pos.shift.close");
   if (!access.ok) {
     await logPosPermissionDenied(access.actor, {
@@ -27,9 +31,13 @@ export async function GET() {
     );
   }
 
+  const url = new URL(request.url);
+  const rangePreset = parseShiftCloseHistoryRangeParam(url.searchParams.get("range"));
+  const rangeBounds = resolveShiftCloseHistoryRangeBounds(rangePreset);
   const shifts = await listRecentClosedShiftSummaries(
     access.actor.userId,
     CLOSED_SHIFT_CSV_EXPORT_LIMIT,
+    rangeBounds,
   );
   const csv = serializeClosedShiftSummariesToCsv(shifts);
 
@@ -39,6 +47,7 @@ export async function GET() {
     metadata: {
       rowCount: shifts.length,
       exportLimit: CLOSED_SHIFT_CSV_EXPORT_LIMIT,
+      rangePreset,
     },
   });
 
