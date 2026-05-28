@@ -6,7 +6,7 @@
 **Execution map:** `docs/era17-strategic-execution-map-2026-05-28.md`  
 **Era 16 closure:** `docs/era16-cycle-completion-scorecard-2026-05-28.md` @ `c88be6b`
 
-> **For recurring Era 17 prompts:** Era 16 is **complete** (cycles 1–14). Do **not** re-run Era 4–16 delivery cycles unless live regression is proven (`git log` + failing cert). Prior handoff: `docs/next-master-prompt-input-2026-05-28-era16.md` (historical).
+> **For recurring Era 17 prompts:** Era 16 is **complete** (cycles 1–14). Do **not** re-run Era 4–16 delivery cycles unless live regression is proven (`git log` + failing cert). **Superseded** for Era 18+ by `docs/next-master-prompt-input-2026-05-28-era18.md`. Prior handoff: `docs/next-master-prompt-input-2026-05-28-era16.md` (historical).
 
 ---
 
@@ -210,6 +210,8 @@ Each Era 17 cycle must state:
 Governance internal may remain **100/100** — do not conflate with blended scores.
 
 **Era 17 scorecard (Cycle 44):** `era17-scorecard-refresh-v1` — governance **100/100** sustained; blended **89/100** (+2 from Era 16 **87**); Era 17 success criteria **NOT MET** (no paid pilot, SSO not `pilot_ready`, staging/live channel SKIPPED). See `docs/era17-cycle-completion-scorecard-2026-05-28.md`.
+
+**Era 18 handoff (Cycle 45):** `era17-era18-handoff-input-v1` — see `docs/next-master-prompt-input-2026-05-28-era18.md` for recurring Era 18 prompts.
 
 ---
 

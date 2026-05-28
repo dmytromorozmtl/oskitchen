@@ -137,4 +137,4 @@ find app/api/cron -name route.ts | wc -l   # expect 16
 
 ## Next Era
 
-See Cycle 45 — `docs/next-master-prompt-input-2026-05-28-era18.md` (when evidence supports handoff).
+See [`docs/next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md) — Era 17 Cycle 45 handoff (`era17-era18-handoff-input-v1`).

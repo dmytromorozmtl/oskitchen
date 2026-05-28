@@ -26,6 +26,7 @@ Interpretation rule:
 - **Competitor matrix (Era 17):** `era17-competitor-feature-gap-matrix-refresh-v1` — [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md); **evidence_aligned_awaiting_pilot_proof**; `npm run smoke:competitor-feature-gap-matrix`.
 - **Case study draft (Era 17):** `era17-pilot-case-study-draft-v1` — [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md); **internal_draft_awaiting_customer_approval**; `npm run smoke:pilot-case-study-draft`.
 - **Era 17 scorecard:** `era17-scorecard-refresh-v1` — [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md); governance **100**; blended **89/100**; success criteria **NOT MET**.
+- **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); Era 18 theme **staging_proof_and_first_paid_pilot**.
 
 | Feature name | Module | User roles | Current status | Evidence path | Business value | Risk level | Missing pieces | Required hardening | Required tests | Sales claim allowed? | Should appear in navigation? | Should appear in marketing? | Owner role | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

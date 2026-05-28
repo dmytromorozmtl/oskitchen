@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-038 — Era 18 handoff input (P2)
+- ID: `KOS-E17-038`
+- Title: Era 17 Cycle 45 — Era 18 master prompt input with honest P0 carry-forward
+- Module: Governance / Platform
+- Priority: P2 (Workstream L Cycle 45)
+- Status: **era17_complete_awaiting_p0_ops_proof**
+- Decision: `era17-era18-handoff-input-v1` — Era 17 success criteria **NOT MET**; Era 18 theme **staging_proof_and_first_paid_pilot**
+- Evidence: `docs/next-master-prompt-input-2026-05-28-era18.md`, `lib/governance/era17-era18-handoff-policy.ts`, `test:ci:era17-era18-handoff:cert`
+- Next: Era 18 Cycle 1 — execute P0 SSO IdP staging proof when credentials available
+
 ### KOS-E17-037 — Era 17 scorecard refresh (P2)
 - ID: `KOS-E17-037`
 - Title: Era 17 Cycle 44 — evidence-based scorecard without inflation
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **scorecard_published_awaiting_p0_proof**
 - Decision: `era17-scorecard-refresh-v1` — governance 100 sustained; blended **89/100**; Era 17 success criteria **NOT MET**
 - Evidence: `docs/era17-cycle-completion-scorecard-2026-05-28.md`, `lib/governance/era17-scorecard-policy.ts`, `test:ci:scorecard:cert`
-- Next: Era 18 handoff input (Cycle 45) if evidence supports
+- Next: Era 18 handoff input — **done**; see KOS-E17-038
 
 ### KOS-E17-036 — Pilot case study draft (P2)
 - ID: `KOS-E17-036`

@@ -119,6 +119,7 @@ export const ERA17_BLENDED_OVERALL = {
 export const ERA17_SCORECARD_DOCS = {
   scorecard: "docs/era17-cycle-completion-scorecard-2026-05-28.md",
   nextPromptInput: "docs/next-master-prompt-input-2026-05-28-era17.md",
+  era18HandoffInput: "docs/next-master-prompt-input-2026-05-28-era18.md",
   executionMap: "docs/era17-strategic-execution-map-2026-05-28.md",
   canonicalIndex: "docs/canonical-doc-index.md",
   era16Scorecard: "docs/era16-cycle-completion-scorecard-2026-05-28.md",

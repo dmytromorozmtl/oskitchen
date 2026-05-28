@@ -49,8 +49,10 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-28-era16.md`](./full-strategic-reaudit-2026-05-28-era16.md) | **Current** post–Era 16 maximum-depth re-audit (blended overall 87/100) |
 | [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md) | Post–Era 4 re-audit (86/100) — **superseded** by era16 re-audit for strategic decisions |
-| [`era17-strategic-execution-map-2026-05-28.md`](./era17-strategic-execution-map-2026-05-28.md) | Era 17 execution map (45 cycles, workstreams A–L) |
-| [`next-master-prompt-input-2026-05-28-era17.md`](./next-master-prompt-input-2026-05-28-era17.md) | **Current** master prompt input for Evolution Era 17 |
+| [`era17-strategic-execution-map-2026-05-28.md`](./era17-strategic-execution-map-2026-05-28.md) | Era 17 execution map (45 cycles, workstreams A–L) — **complete** |
+| [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md) | **Current** master prompt input for Evolution Era 18 |
+| [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md) | Era 17 closure scorecard (cycles 1–44) @ d2a1e26 |
+| [`next-master-prompt-input-2026-05-28-era17.md`](./next-master-prompt-input-2026-05-28-era17.md) | Era 17 handoff — **superseded** by era18 input for recurring prompts |
 | [`era16-cycle-completion-scorecard-2026-05-28.md`](./era16-cycle-completion-scorecard-2026-05-28.md) | Era 16 closure scorecard (cycles 1–14) @ c88be6b |
 | [`next-master-prompt-input-2026-05-28-era16.md`](./next-master-prompt-input-2026-05-28-era16.md) | Era 16 handoff — **superseded** by era17 input for recurring prompts |
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100 — inventory baseline |
@@ -210,6 +212,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **13** | **Pilot rollback drill** | `era17-pilot-rollback-drill-v1`; **awaiting_rollback_drill_execution** — [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md); `smoke:pilot-rollback-drill` |
 | **14** | **Forbidden-claims enforcement** | `era17-pilot-forbidden-claims-enforcement-v1`; **forbidden_claims_enforcement_wired** — GO/NO-GO gate; re-run on release branch before contract |
 | **15** | **Era 17 scorecard refresh** | `era17-scorecard-refresh-v1`; governance **100**; blended **89/100**; success criteria **NOT MET** — [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md) |
+| **16** | **Era 18 handoff input** | `era17-era18-handoff-input-v1`; **era17_complete_awaiting_p0_ops_proof** — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md) |
 
 ## Evolution Era 10 cycle ledger
 
@@ -599,7 +602,7 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 
 **Blended overall:** **89/100** (Era 16 **87**; +2). **Era 17 success criteria:** **NOT MET** — see `docs/era17-cycle-completion-scorecard-2026-05-28.md`.
 
-**Re-audit decision:** defer — Era 16 re-audit baseline until first paid pilot. **Next:** Era 18 handoff (Cycle 45).
+**Re-audit decision:** defer — Era 16 re-audit baseline until first paid pilot. **Next:** Evolution Era 18 — use `docs/next-master-prompt-input-2026-05-28-era18.md`.
 
 ---
 

@@ -343,6 +343,17 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** scorecard published; blended **89/100** (+2 from Era 16 **87**); success criteria **NOT MET**.
 
+### Era 17 → Era 18 handoff input (2026-05-28)
+
+**Policy:** `era17-era18-handoff-input-v1` — **era17_complete_awaiting_p0_ops_proof**; Era 18 theme **staging_proof_and_first_paid_pilot**.
+
+1. Use [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md) for Evolution Era 18 master prompt — **supersedes** era17 input for recurring prompts.
+2. Run **`npm run test:ci:era17-era18-handoff:cert`** — wired in `test:ci:scorecard:cert`.
+3. Era 17 success criteria **NOT MET** — Era 18 must execute P0 staging proof + first paid pilot, not rewrite Era 17 policies.
+4. Full re-audit **deferred** until first paid pilot, SSO `pilot_ready`, or major repo scale shift.
+
+**Execution status (2026-05-28):** handoff published; P0 ops proof remains operator-blocked (SSO, GitHub, Woo/Shopify credentials).
+
 ### Era 17 pilot rollback drill (2026-05-28)
 
 **Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.
