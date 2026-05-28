@@ -1,9 +1,9 @@
 # KitchenOS Enterprise Procurement Pack
 
-**Status:** canonical enterprise / investor procurement narrative (Evolution Era 4)  
-**Policy id:** `era4-procurement-honesty-v1` (`lib/enterprise/enterprise-procurement-policy.ts`)  
+**Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
+**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-identity-roadmap-policy.ts`)  
 **Companion:** [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) (release gates, runbooks)  
-**Updated:** 2026-05-27 (Era 4 Cycle 8)
+**Updated:** 2026-05-27 (Era 6 Cycle 5 — annual identity review)
 
 Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
@@ -13,9 +13,9 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 | Area | Today | Roadmap |
 |------|--------|---------|
-| Multi-tenant operations | Workspace-scoped data model, owner resolution, RBAC waves 1–4 in progress | Workspace migration completion, custom roles UI |
-| Authentication | Email/password + Supabase session; staff invites | SSO/SAML pilot, MFA depth |
-| Authorization | Canonical permission keys + `domain-mutation-registry.ts`; `requireMutationPermission` core; CI RBAC bundles | Wave-4 residuals closed; registry + shared denial audit (Era 4 Cycle 11) |
+| Multi-tenant operations | Workspace-scoped data model, owner resolution, RBAC waves 1–4 certified in CI | Workspace migration completion, custom roles UI |
+| Authentication | Email/password + Supabase session; staff invites (**SSO not_implemented**) | SSO/SAML pilot, MFA depth |
+| Authorization | Canonical permission keys + `domain-mutation-registry.ts`; `test:ci:rbac-wave4` in `test:security` | Custom roles UI; broader denial audit taxonomy |
 | Audit | `recordAuditLog`, audit center, export gates (`audit.export`) | Broader taxonomy, retention automation |
 | Commerce | Stripe billing + webhooks certified in CI | Enterprise invoicing, procurement billing |
 | Integrations | Shopify/Woo golden path certified; marketplace placeholders honest | Live partner connectors per maturity matrix |
@@ -24,6 +24,24 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 **Safe headline:** KitchenOS provides **tenant-scoped restaurant operations** (orders, POS, storefront, kitchen, inventory policy) with **documented RBAC**, **audit hooks**, and **CI-certified money paths** where listed in [`feature-maturity-matrix.md`](./feature-maturity-matrix.md).
 
 **Unsafe headline:** “Enterprise-certified,” “SOC 2 compliant,” “SSO included,” or “full marketplace integrations live.”
+
+---
+
+## Annual enterprise identity review (2026-05-27)
+
+**Policy:** `era6-enterprise-identity-roadmap-v1` — **delivery decision: `roadmap_only`**
+
+| Capability | Delivery status | Era 6 decision |
+|------------|-----------------|----------------|
+| SSO / SAML | **not_implemented** | Continue R1 architecture spike; no production IdP in this era |
+| SCIM | **not_implemented** | Remains after SSO pilot (dependency unchanged) |
+| SOC 2 Type II | **not_certified** | Internal readiness mapping only; no customer attestation |
+
+**Procurement stance (unchanged):** Honest roadmap in this pack; no contract language implying live SSO, SCIM, or SOC 2 Type II until a future era ships product + evidence.
+
+**Next scheduled review:** 2027-05-27 or after a major release / enterprise pilot requiring identity delivery.
+
+**CI:** `npm run test:ci:enterprise-identity-roadmap:cert` (forbidden delivery-claim scan + pack markers).
 
 ---
 

@@ -248,6 +248,13 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:enterprise-procurement:cert` + `test:ci:enterprise-procurement` chained in `test:ci:governance-bundles`.
 
+| Enterprise identity annual review cert | `npm run test:ci:enterprise-identity-roadmap:cert` | Policy `era6-enterprise-identity-roadmap-v1`, annual review section, delivery markers |
+| Enterprise identity roadmap unit | `npm run test:ci:enterprise-identity-roadmap` | roadmap_only decision; forbidden delivery claims |
+
+**Era 6 Cycle 5:** SSO/SCIM/SOC2 **delivery** remains roadmap_only — no implementation in this cycle.
+
+**Wiring certification (tier 0):** `test:ci:enterprise-identity-roadmap:cert` + `test:ci:enterprise-identity-roadmap` chained in `test:ci:governance-bundles`.
+
 ## Tier 1e5 — Cross-channel rewards honesty (`quality` job via governance bundles)
 
 | Suite | Command | Notes |

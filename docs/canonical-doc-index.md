@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 6 Cycle 4 — production calendar form deny UX)  
+**Updated:** 2026-05-27 (Era 6 Cycle 5 — enterprise identity annual review)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -132,6 +132,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2** | **KDS realtime / poll smoke** | `era6-kds-realtime-smoke-v1`; `test:ci:kds-realtime-smoke:cert` |
 | **3** | **Typecheck slices parallel CI** | `era6-typecheck-slice-ci-v1`; job `typecheck-slices` |
 | **4** | **Production calendar form deny** | `era6-production-calendar-form-deny-v1`; `test:ci:rbac-wave4` |
+| **5** | **Enterprise identity annual review** | `era6-enterprise-identity-roadmap-v1`; `test:ci:enterprise-identity-roadmap:cert` |
 
 ## Evolution Era 5 cycle ledger (P0 closure)
 
@@ -272,3 +273,4 @@ Incremental refresh after Era 5 cycles 1–5 (P0 closure from era4 handoff). Bas
 | 2026-05-27 | Era 6 Cycle 2: `era6-kds-realtime-smoke-v1` — poll fallback + Realtime channel unit cert |
 | 2026-05-27 | Era 6 Cycle 3: `era6-typecheck-slice-ci-v1` — parallel `typecheck-slices` CI job |
 | 2026-05-27 | Era 6 Cycle 4: `era6-production-calendar-form-deny-v1` — void form redirect on deny |
+| 2026-05-27 | Era 6 Cycle 5: `era6-enterprise-identity-roadmap-v1` — SSO/SCIM/SOC2 roadmap_only review |

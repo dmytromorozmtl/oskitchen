@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 6 — Customer value honesty
 
+### KOS-E6-005 — Enterprise identity annual review (E6-5)
+- ID: `KOS-E6-005`
+- Title: Annual SSO/SCIM/SOC2 roadmap review — roadmap_only delivery decision
+- Module: Enterprise / GTM / security
+- Priority: P0 (Era 6 Cycle 5)
+- Status: **completed**
+- Decision: `era6-enterprise-identity-roadmap-v1` — SSO/SCIM not_implemented; SOC2 Type II not_certified; refresh procurement pack; no fake delivery claims
+- Evidence: `lib/enterprise/enterprise-identity-roadmap-policy.ts`, `docs/enterprise-procurement-pack.md`, `test:ci:enterprise-identity-roadmap:cert`
+- Next: Era 6 scorecard refresh or P1 gitignore hygiene
+
 ### KOS-E6-004 — Production calendar void-form deny UX (P1 → E6-4)
 - ID: `KOS-E6-004`
 - Title: Production calendar HTML forms redirect on permission deny (copilot pattern)
