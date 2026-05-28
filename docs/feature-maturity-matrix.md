@@ -43,6 +43,7 @@ Interpretation rule:
 - **Era 19 Cycle 13 (2026-05-28):** Launch Wizard UX polish — `era19-launch-wizard-ux-v1`; sticky progress strip, horizontal step navigator, compact/full toggle, accessible labels, mobile full-width CTAs.
 - **Era 19 Cycle 14 (2026-05-28):** Integration Health recovery checklist — `era19-integration-health-recovery-v1`; prioritized contextual steps from channel cards + smoke artifacts; quick links to webhook queue, product mapping, import center, error recovery.
 - **Era 19 Cycle 15 (2026-05-28):** Briefing risk radar depth — `era19-owner-daily-briefing-risk-radar-v1`; P0 proof, GO/NO-GO, live smoke, SSO, stuck orders, production, integration, support, low-stock signals with role filtering.
+- **Era 19 Cycle 16 (2026-05-28):** Launch Wizard commercial setup — `era19-launch-wizard-commercial-setup-v1`; next commercial unblock hero, go-live blocker merge, recovery links to integration health and Today risk radar.
 - **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); theme **staging_proof_and_first_paid_pilot**.
 - **Era 18 Cycle 18 (2026-05-28):** KDS bump-next expo — `era18-kds-bump-next-v1`; oldest-ticket hero + action error feedback.
 - **Era 18 Cycle 17 (2026-05-28):** Production calendar today focus — `era18-production-calendar-today-focus-v1`; overdue/due-today strip + today column highlight.

@@ -6,6 +6,7 @@ import {
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { PilotGoNoGoCustomerStatus } from "@/lib/commercial/pilot-gono-go-summary";
+import { INTEGRATION_HEALTH_RECOVERY_ANCHOR } from "@/lib/integrations/integration-health-recovery-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 
 export const LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ERA19_POLICY_ID =
@@ -106,7 +107,7 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
           ? `${p0.allMissingEnvVars.length} ops env var(s) missing.`
           : "SSO IdP, GitHub first-green, or channel live smoke incomplete.",
       tone: "urgent",
-      href: "/dashboard/integration-health#engineering-smoke-artifacts",
+      href: `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
     });
   }
 
@@ -126,7 +127,7 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
       label: "Channel live smoke not passed",
       detail: "Woo/Shopify engineering live smoke SKIPPED or FAILED — not a LIVE marketplace claim.",
       tone: "urgent",
-      href: "/dashboard/integration-health#engineering-smoke-artifacts",
+      href: `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
     });
   }
 

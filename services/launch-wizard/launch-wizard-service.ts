@@ -34,6 +34,11 @@ import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commerc
 import { listChannelPilotLiveProofSlices } from "@/services/developer/integration-health-service";
 import { listProjects, workbenchSnapshot } from "@/services/go-live/go-live-service";
 import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
+import {
+  buildLaunchWizardCommercialSetupSlice,
+  mergeLaunchWizardCommercialBlockers,
+  type LaunchWizardCommercialSetupSlice,
+} from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 
 export type LaunchWizardModel = {
@@ -44,11 +49,13 @@ export type LaunchWizardModel = {
   headline: string;
   nextStep: LaunchWizardStep | null;
   commercialBlockers: LaunchWizardCommercialBlockersSlice;
+  commercialSetup: LaunchWizardCommercialSetupSlice;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
   signals: LaunchWizardSignals;
   commercialOps: Awaited<ReturnType<typeof loadCommercialPilotOpsStatusModel>> | null;
+  goLiveBlockers: import("@/lib/go-live/blocker-engine").LaunchBlocker[];
 }> {
   const liveProviderFilter = {
     provider: { in: [...LIVE_CAPABLE_INTEGRATION_PROVIDERS] },
@@ -195,19 +202,35 @@ async function loadLaunchWizardContext(userId: string): Promise<{
     },
     },
     commercialOps,
+    goLiveBlockers: goLiveSnapshot?.validation?.blockers ?? [],
   };
 }
 
 export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizardModel> {
-  const { signals, commercialOps } = await loadLaunchWizardContext(userId);
+  const { signals, commercialOps, goLiveBlockers } = await loadLaunchWizardContext(userId);
   const steps = buildLaunchWizardSteps(signals);
   const progress = summarizeLaunchWizardProgress(steps);
   const nextStep = pickLaunchWizardNextStep(steps);
-  const commercialBlockers = buildLaunchWizardCommercialBlockersSlice({
+  const baseCommercialBlockers = buildLaunchWizardCommercialBlockersSlice({
     commercialOps,
     p0Blocked: signals.pilotReadiness.p0Blocked,
     ssoProofBlocked: signals.pilotReadiness.ssoProofBlocked,
     channelLiveProofBlocked: signals.pilotReadiness.channelLiveProofBlocked,
+  });
+  const mergedBlockers = mergeLaunchWizardCommercialBlockers({
+    baseBlockers: baseCommercialBlockers.blockers,
+    goLiveBlockers,
+  });
+  const commercialBlockers: LaunchWizardCommercialBlockersSlice = {
+    ...baseCommercialBlockers,
+    blockers: mergedBlockers,
+    headline:
+      mergedBlockers.length > baseCommercialBlockers.blockers.length
+        ? `${mergedBlockers.length} commercial and go-live blocker(s) — resolve before paid pilot traffic.`
+        : baseCommercialBlockers.headline,
+  };
+  const commercialSetup = buildLaunchWizardCommercialSetupSlice({
+    blockers: commercialBlockers.blockers,
   });
 
   return {
@@ -218,5 +241,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     headline: launchWizardHeadline(progress),
     nextStep,
     commercialBlockers,
+    commercialSetup,
   };
 }

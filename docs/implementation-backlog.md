@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-016 — Launch Wizard commercial pilot setup integration (P1 WOW)
+- ID: `KOS-E19-016`
+- Title: Era 19 Workstream C Cycle 16 — next commercial unblock, go-live blockers merge, recovery deep links
+- Module: Onboarding / Launch Wizard / Commercial proof
+- Priority: P1 (WOW pillar — time-to-first-order + pilot GO honesty)
+- Status: **commercial_setup_integrated**
+- Decision: `era19-launch-wizard-commercial-setup-v1` — merge go-live critical blockers; next commercial unblock hero; links to integration recovery, Today risk radar, smoke artifacts; ops checklist reference
+- Evidence: `lib/launch-wizard/launch-wizard-commercial-setup-era19.ts`, updated commercial blockers panel + service
+- Next: P0 proof unblock when ops credentials available, or Workstream E POS cashier speed
+
 ### KOS-E19-015 — Briefing risk radar commercial/P0 signals depth (P1 WOW)
 - ID: `KOS-E19-015`
 - Title: Era 19 Workstream B Cycle 15 — structured risk radar with P0, GO/NO-GO, live smoke, SSO, operational signals

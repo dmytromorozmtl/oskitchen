@@ -106,7 +106,11 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
         </CardContent>
       </Card>
 
-      <LaunchWizardCommercialBlockersPanel slice={model.commercialBlockers} compact={compact} />
+      <LaunchWizardCommercialBlockersPanel
+        slice={model.commercialBlockers}
+        setup={model.commercialSetup}
+        compact={compact}
+      />
 
       <div
         className={cn("grid gap-3", compact ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2")}
