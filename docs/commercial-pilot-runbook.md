@@ -465,6 +465,22 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+## Era 17 partner webhook integration docs (2026-05-28)
+
+**Policy:** `era17-partner-webhook-docs-v1` — **partner_webhook_docs_ready**; partner-facing inbound commerce webhook contract + outbound event taxonomy.
+
+1. Inbound routes: Stripe `/api/webhooks/stripe`, Woo `/api/webhooks/woocommerce?cid=`, Shopify `/api/webhooks/shopify/orders`.
+2. Eight-item partner checklist in `lib/developer/partner-webhook-pack.ts` — signature, tenant mapping, idempotency, honesty gate.
+3. Optional attestation: `PARTNER_WEBHOOK_ATTESTATION_EMAIL` + `npm run smoke:partner-webhook-docs`.
+4. Review **`artifacts/partner-webhook-docs-summary.json`** — `partnerWebhookProofStatus`.
+5. Do **not** claim production webhook SLA, guaranteed delivery, or full outbound subscription platform.
+
+**Enforcement:** `test:ci:partner-webhook-docs-era17:cert` (chained in `test:ci:webhook-security-era16:cert`)
+
+**Partner doc:** `docs/partner-webhook-integration-era17.md`
+
+---
+
 ## Era 17 webhook replay P1 expansion (2026-05-28)
 
 **Policy:** `era17-webhook-replay-p1-expansion-v1` — **p1_ingress_dedupe_expanded**; extends Era 16 guard to matrix P1 delivery routes.

@@ -39,6 +39,8 @@ Prefix examples: `hypergraph-*`, `multiverse-*`, `eu-ai-*`, `zk-dna*`, `iso-4200
 
 **Era 17 commerce webhook incident drill (2026-05-28):** `era17-commerce-webhook-drill-v1` — Stripe/Woo/Shopify operator incident checklist; `npm run smoke:commerce-webhook-drill`; cert `test:ci:commerce-webhook-drill-era17:cert` (in `test:ci:webhook-security-era16:cert`). Awaiting operator tabletop/staging execution.
 
+**Era 17 partner webhook docs (2026-05-28):** `era17-partner-webhook-docs-v1` — partner inbound/outbound webhook contract; `npm run smoke:partner-webhook-docs`; cert `test:ci:partner-webhook-docs-era17:cert` (in `test:ci:webhook-security-era16:cert`). **partner_webhook_docs_ready** — no production webhook SLA claim.
+
 Verify per provider in route handlers:
 
 | Provider | Verification | Replay / idempotency |

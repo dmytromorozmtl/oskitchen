@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-026 — Partner webhook integration docs (P1)
+- ID: `KOS-E17-026`
+- Title: Era 17 Cycle 26 — partner-facing inbound/outbound webhook contract
+- Module: Developer platform / Webhooks
+- Priority: P1 (Workstream C Cycle 14)
+- Status: **partner_webhook_docs_ready**
+- Decision: `era17-partner-webhook-docs-v1` — partner doc + pack + smoke summary
+- Evidence: `docs/partner-webhook-integration-era17.md`, `test:ci:partner-webhook-docs-era17:cert`
+- Next: Workstream F KDS staging Playwright proof (P1) or P0 credential-blocked smokes
+
 ### KOS-E17-025 — POS receipt / shift closeout spot check (P1)
 - ID: `KOS-E17-025`
 - Title: Era 17 Cycle 25 — shift variance + receipt total spot check
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **closeout_math_spotcheck_documented**
 - Decision: `era17-pos-receipt-shift-spotcheck-v1` — `pos-shift-closeout-math` + operator spot check doc
 - Evidence: `docs/pos-receipt-shift-spotcheck-era17.md`, `test:ci:pos-receipt-shift-spotcheck-era17:cert`
-- Next: Partner webhook docs (Cycle 14) or Workstream F KDS staging proof
+- Next: Partner webhook docs (Cycle 14) — **done**; see KOS-E17-026 — **done**; see KOS-E17-026
 
 ### KOS-E17-024 — POS software-only operator runbook (P1)
 - ID: `KOS-E17-024`
@@ -33,7 +43,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **p1_public_post_guards_expanded**
 - Decision: `era17-public-post-abuse-v1` — experiment auto-conclude, IoT ingest, billing portal guards
 - Evidence: `lib/security/public-post-abuse-matrix.ts`, `docs/public-post-abuse-review-era17.md`, `test:ci:public-post-abuse-era17:cert`
-- Next: Partner webhook docs (Cycle 14)
+- Next: Partner webhook docs (Cycle 14) — **done**; see KOS-E17-026
 
 ### KOS-E17-022 — POS manager discount / override depth (P1)
 - ID: `KOS-E17-022`
@@ -53,7 +63,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **awaiting_commerce_webhook_drill_execution**
 - Decision: `era17-commerce-webhook-drill-v1` — six-step incident drill + summary artifact
 - Evidence: `lib/security/commerce-webhook-drill-era17-policy.ts`, `docs/commerce-webhook-incident-drill-era17.md`, `test:ci:commerce-webhook-drill-era17:cert`
-- Next: Partner webhook docs (Cycle 14)
+- Next: Partner webhook docs (Cycle 14) — **done**; see KOS-E17-026
 
 ### KOS-E17-020 — POS tablet UX polish + operator runbook (P1)
 - ID: `KOS-E17-020`

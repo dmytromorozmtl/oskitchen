@@ -70,6 +70,15 @@
 
 **Era 16 public API partner confidence (2026-05-28):** partner readiness evaluator in `lib/api-public/public-api-partner-confidence-pack.ts`; cert writes summary artifact for integration-led pilots.
 
+## Partner webhook integration (Era 17)
+
+- **Policy:** `era17-partner-webhook-docs-v1` — **partner_webhook_docs_ready**.  
+- **Partner doc:** `docs/partner-webhook-integration-era17.md` — inbound Stripe/Woo/Shopify routes, outbound event taxonomy, idempotency, incident drill cross-link.  
+- **Pack:** `lib/developer/partner-webhook-pack.ts` — eight-item partner checklist + readiness evaluator.  
+- **Smoke:** `npm run smoke:partner-webhook-docs` → `artifacts/partner-webhook-docs-summary.json`; attestation via `PARTNER_WEBHOOK_ATTESTATION_EMAIL` optional — **docs_ready_awaiting_partner_attestation** without email (not fake success).  
+- **Cert:** `npm run test:ci:partner-webhook-docs-era17:cert` (chained in `test:ci:webhook-security-era16:cert`).  
+- **Not claimed:** production webhook SLA, guaranteed delivery, SOC2 webhook certification, full outbound subscription platform.
+
 ## Next
 
 - External developer portal authentication.  

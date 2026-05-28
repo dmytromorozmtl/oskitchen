@@ -144,6 +144,8 @@ npm run test:ci:pos-money-path:e2e
 
 **Era 17 commerce webhook incident drill (Cycle 21):** `era17-commerce-webhook-drill-v1` — Stripe/Woo/Shopify operator incident checklist; `npm run smoke:commerce-webhook-drill`; cert `test:ci:commerce-webhook-drill-era17:cert` (chained in `test:ci:webhook-security-era16:cert`). **awaiting_commerce_webhook_drill_execution** — tabletop/staging attestation required for `proof_passed`.
 
+**Era 17 partner webhook docs (Cycle 26):** `era17-partner-webhook-docs-v1` — partner inbound/outbound webhook contract; `npm run smoke:partner-webhook-docs`; cert `test:ci:partner-webhook-docs-era17:cert` (chained in `test:ci:webhook-security-era16:cert`). **partner_webhook_docs_ready** — optional `PARTNER_WEBHOOK_ATTESTATION_EMAIL`; no production webhook SLA claim.
+
 **Era 17 public POST abuse review (Cycle 23):** `era17-public-post-abuse-v1` — P1 route rate limits (experiment auto-conclude, IoT ingest, billing portal); cert `test:ci:public-post-abuse-era17:cert` (chained in `test:ci:public-post-fail-closed`).
 
 **Mutation registry linter (Era 16 Cycle 8):** `lib/permissions/mutation-registry-linter-era16-policy.ts` + `lib/permissions/mutation-registry-linter.ts` (`era16-mutation-registry-linter-v1`) — static scan of `actions/` for Prisma-write server mutations missing registry helpers or documented allowlist markers; `npm run cert:mutation-registry-linter-era16` → `artifacts/mutation-registry-linter-summary.json`; cert `test:ci:mutation-registry-linter-era16:cert` (chained in `test:security`). Blocks **new** ungoverned sensitive actions; does **not** replace wave-4 RBAC tests.

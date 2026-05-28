@@ -327,6 +327,7 @@ Readiness work is **internal control mapping**, not customer-facing attestation:
 - List/mutation queries use workspace scope helpers (`lib/scope/workspace-*-scope.ts`)
 - Public API v1 enforces bearer auth + tenant scope + per-route Developer API scopes — `test:ci:public-api-v1:cert`, `era17-public-api-per-route-scope-v1`, `tests/unit/public-api-tenant-isolation.test.ts`
 - **Era 16 partner confidence:** `era16-public-api-partner-confidence-v1` — partner readiness pack, OpenAPI bearer scheme, standard error/rate-limit docs (`docs/API_WEBHOOK_DEVELOPER_CONTRACT_MATURITY.md`); **beta** — no production SLA or unlimited throughput claim
+- **Era 17 partner webhook docs:** `era17-partner-webhook-docs-v1` — inbound Stripe/Woo/Shopify contract + outbound event taxonomy (`docs/partner-webhook-integration-era17.md`); **partner_webhook_docs_ready** — no production webhook SLA or guaranteed delivery claim
 - **Era 17 scope enforcement:** `era17-public-api-per-route-scope-v1` — high-risk writes (`orders:write`, `webhooks:receive`) require matching `scopes_json`; no full scope admin UI claim
 
 **Honest limits:**
