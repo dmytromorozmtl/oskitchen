@@ -53,11 +53,14 @@ npm run test:ci:storefront-money-path:e2e
 | POS checkout unit | `npm run test:ci:pos-money-path:unit` | No | Canonical checkout, terminal lifecycle, action RBAC |
 | POS checkout integration (cash sale + PII) | `npm run test:ci:pos-money-path:integration` | Postgres | `checkoutPosSale` + encrypted PII + transaction row |
 | POS inventory depletion | `npm run test:ci:pos-money-path:inventory` | Postgres | Recipe-linked stock decrement + pending when unconfigured |
-| POS checkout E2E | `npm run test:ci:pos-money-path:e2e` | Postgres + auth secrets | Requires `E2E_LOGIN_EMAIL` / `E2E_LOGIN_PASSWORD`; optional `E2E_CI_POS_USER_ID` for `seed-e2e-pos-fixture` |
+| POS checkout E2E (browser) | `npm run test:ci:pos-money-path:e2e` | Postgres + auth secrets | **Optional tier** — runs only when repository secrets `E2E_LOGIN_EMAIL` and `E2E_LOGIN_PASSWORD` are set; optional `E2E_CI_POS_USER_ID` for `seed-e2e-pos-fixture` |
+| POS browser E2E policy summary | `npm run test:ci:pos-browser-e2e:policy` | None | **Always runs** at end of `pos-money-path` job; writes `ci-artifacts/pos-browser-e2e-summary.json` with `PASSED` / `SKIPPED` / `FAILED` |
 
 **CI workflow:** `.github/workflows/ci.yml` → job `pos-money-path`.
 
-**Wiring certification (tier 0):** `npm run test:ci:pos-money-path:cert` → `tests/unit/pos-money-path-ci-live.test.ts` (included in `test:ci:governance-bundles`).
+**Browser E2E policy (Era 4 Cycle 2):** policy id `era4-tier2b-optional-v1` in `lib/ci/pos-browser-e2e-policy.ts`. Unit + integration + inventory are **always-on** tier-2b certification. Browser E2E does **not** run without dashboard auth secrets; the always-on policy step prints and uploads explicit status so green jobs cannot silently imply Playwright POS E2E passed. Artifact: `pos-browser-e2e-summary` (GitHub Actions).
+
+**Wiring certification (tier 0):** `npm run test:ci:pos-money-path:cert` → `tests/unit/pos-money-path-ci-live.test.ts` + `tests/unit/pos-browser-e2e-policy.test.ts` (included in `test:ci:governance-bundles`).
 
 **Local focused run (unit + integration):**
 
@@ -84,9 +87,9 @@ npx tsx scripts/seed-e2e-pos-fixture.ts
 npm run test:ci:pos-money-path:e2e
 ```
 
-**Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only.
+**Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only. **Not certified without secrets:** full dashboard Playwright POS checkout — see policy summary artifact when browser tier was `SKIPPED`.
 
-**Storefront inventory depletion:** intentionally deferred. Storefront order submit does not call `recordPendingInventoryImpactsForPosOrder` or recipe depletion today; POS is the certified depletion path until a storefront hook is scoped. Live gate: `npm run test:ci:inventory-depletion:cert` → `tests/unit/inventory-depletion-cert-live.test.ts`.
+**Inventory depletion channel policy (Era 4 Cycle 1):** **POS-only** (`lib/inventory/inventory-depletion-policy.ts`, policy id `era4-pos-only-v1`). Storefront, public API, manual, and integration orders do not call `recordPendingInventoryImpactsForPosOrder` or recipe depletion. Do not claim unified cross-channel stock depletion in sales or matrix copy. Live gate: `npm run test:ci:inventory-depletion:cert` → `tests/unit/inventory-depletion-cert-live.test.ts` + `tests/unit/inventory-depletion-policy.test.ts`.
 
 ## Tier 3 — Staging / preview (manual or scheduled)
 
@@ -110,7 +113,7 @@ npm run test:ci:pos-money-path:e2e
 | Storefront online checkout failure + retry | ✅ `storefront-payment-recovery.test.ts` | — | ✅ `storefront-order-pii.integration.test.ts` |
 | POS cash checkout | ✅ `pos-checkout-canonical` + terminal lifecycle | ✅ when auth secrets | ✅ `order-entrypoint-pii` POS test |
 | POS recipe inventory depletion | ✅ `pos-recipe-depletion.test.ts` | — | ✅ `pos-inventory-depletion.integration.test.ts` |
-| Storefront inventory depletion | — | — | **Deferred** — no recipe depletion hook on storefront submit (Cycle 13–14) |
+| Storefront / API / manual inventory depletion | — | — | **Not certified** — POS-only policy (`era4-pos-only-v1`; Era 4 Cycle 1) |
 | Stripe webhook fail-closed | — | — | ✅ in `test:security` |
 
 ## Tier 1b — Cron hygiene (`quality` job)

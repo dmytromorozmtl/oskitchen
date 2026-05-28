@@ -9,6 +9,8 @@
 /e2e/.auth/
 /playwright-report/
 /test-results/
+/tests/node_modules/
+/ci-artifacts/
 
 # next.js
 /.next/

@@ -13,8 +13,12 @@ const REQUIRED_SCRIPTS = [
   "test:ci:pos-money-path:integration",
   "test:ci:pos-money-path:inventory",
   "test:ci:pos-money-path:e2e",
+  "test:ci:pos-browser-e2e:policy",
   "test:ci:pos-money-path:cert",
 ] as const;
+
+const POLICY_MODULE = join(ROOT, "lib/ci/pos-browser-e2e-policy.ts");
+const POLICY_SCRIPT = join(ROOT, "scripts/pos-browser-e2e-ci-policy.ts");
 
 const REQUIRED_FILES = [
   "scripts/seed-ci-pos-checkout.ts",
@@ -60,7 +64,7 @@ describe("POS money-path CI certification (live repo)", () => {
     expect(scripts["test:ci:pos-money-path:e2e"]).toContain("pos-checkout-flow.spec.ts");
   });
 
-  it("wires pos-money-path job in CI with seed, unit, integration, inventory, and optional auth E2E", () => {
+  it("wires pos-money-path job with always-on tier-2b cert and explicit browser E2E policy", () => {
     const workflow = readFileSync(CI_WORKFLOW, "utf8");
     const job = extractJobBlock(workflow, "pos-money-path");
 
@@ -70,6 +74,10 @@ describe("POS money-path CI certification (live repo)", () => {
     expect(job).toContain("test:ci:pos-money-path:integration");
     expect(job).toContain("test:ci:pos-money-path:inventory");
     expect(job).toContain("test:ci:pos-money-path:e2e");
+    expect(job).toContain("test:ci:pos-browser-e2e:policy");
+    expect(job).toContain("id: pos_browser_e2e");
+    expect(job).toContain("POS_BROWSER_E2E_STEP_OUTCOME");
+    expect(job).toContain("pos-browser-e2e-summary");
     expect(job).toContain("E2E_LOGIN_EMAIL");
     expect(job).toContain("E2E_LOGIN_PASSWORD");
     expect(job).toContain("npm run build");
@@ -89,7 +97,7 @@ describe("POS money-path CI certification (live repo)", () => {
     expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:pos-money-path:cert");
   });
 
-  it("documents tier 2b POS money path, software-only scope, and required artifacts exist", () => {
+  it("documents tier 2b POS money path, browser E2E PASSED/SKIPPED/FAILED policy, and required artifacts exist", () => {
     expect(existsSync(TIER_MATRIX)).toBe(true);
     const matrix = readFileSync(TIER_MATRIX, "utf8");
     expect(matrix).toContain("pos-money-path");
@@ -97,7 +105,13 @@ describe("POS money-path CI certification (live repo)", () => {
     expect(matrix).toContain("test:ci:pos-money-path:integration");
     expect(matrix).toContain("test:ci:pos-money-path:inventory");
     expect(matrix).toContain("test:ci:pos-money-path:e2e");
+    expect(matrix).toContain("test:ci:pos-browser-e2e:policy");
+    expect(matrix).toMatch(/PASSED|SKIPPED|FAILED/i);
+    expect(matrix).toContain("era4-tier2b-optional-v1");
     expect(matrix).toMatch(/hardware|software POS/i);
+
+    expect(existsSync(POLICY_MODULE), "missing pos-browser-e2e-policy module").toBe(true);
+    expect(existsSync(POLICY_SCRIPT), "missing pos-browser-e2e-ci-policy script").toBe(true);
 
     for (const rel of REQUIRED_FILES) {
       expect(existsSync(join(ROOT, rel)), `missing ${rel}`).toBe(true);

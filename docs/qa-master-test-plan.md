@@ -149,9 +149,9 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - A QA report must be generated per release candidate.
 
 ## Current Highest-Priority Additions
-1. ~~POS money-path CI wiring~~ — tier 2b unit + integration + inventory in CI; live gate `test:ci:pos-money-path:cert`; browser E2E when auth secrets configured
+1. ~~POS money-path CI wiring + browser E2E policy~~ — tier 2b unit + integration + inventory always in CI; optional Playwright when `E2E_LOGIN_*` secrets set; explicit `PASSED`/`SKIPPED`/`FAILED` via `test:ci:pos-browser-e2e:policy` + `pos-browser-e2e-summary` artifact (Era 4 Cycle 2)
 2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration + tier 2 pay-later E2E in CI; live wiring gate `test:ci:storefront-money-path:cert`; staging Stripe E2E optional
-3. ~~inventory depletion POS proof~~ — unit + integration in CI; live gate `test:ci:inventory-depletion:cert`; storefront depletion deferred with documented rationale
+3. ~~inventory depletion POS proof + channel policy~~ — unit + integration in CI; live gate `test:ci:inventory-depletion:cert`; **Era 4 Cycle 1:** POS-only policy (`era4-pos-only-v1` in `lib/inventory/inventory-depletion-policy.ts`); storefront/API/manual do not deplete
 4. POS permission-negative role matrix — terminal API route denials covered; deeper workflow-role gaps remain
 5. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 6. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open

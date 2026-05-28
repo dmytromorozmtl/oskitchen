@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Cycle 27–28)  
+**Updated:** 2026-05-27 (Era 4 Cycle 1)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -36,14 +36,17 @@ Operational source of truth for day-to-day hardening and release gating.
 
 ---
 
-## Era / strategic canon (2)
+## Era / strategic canon (4)
 
 Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit cycles).
 
 | Doc | Purpose |
 |-----|---------|
-| [`full-strategic-reaudit-2026-05-27.md`](./full-strategic-reaudit-2026-05-27.md) | Live repo re-audit, scorecard snapshot, execution map |
-| [`next-master-prompt-input-2026-05-27.md`](./next-master-prompt-input-2026-05-27.md) | Facts and constraints for Evolution Era 2 recurring prompt |
+| [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
+| [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | Facts and constraints for Evolution Era 4 master prompt |
+| [`era2-cycle-completion-scorecard-2026-05-27.md`](./era2-cycle-completion-scorecard-2026-05-27.md) | Era 2 execution map completion + post wave-3 scorecard |
+| [`full-strategic-reaudit-2026-05-27.md`](./full-strategic-reaudit-2026-05-27.md) | **Superseded** by era2 re-audit for strategic decisions |
+| [`next-master-prompt-input-2026-05-27.md`](./next-master-prompt-input-2026-05-27.md) | **Superseded** by era3 input for recurring prompts |
 
 ---
 
@@ -94,6 +97,13 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | 25–26 | Public API v1 contracts | `test:ci:public-api-v1` |
 | **27–28** | **Doc canon** | **this index** |
 | **29–30** | **Scorecard refresh** | scores in `full-strategic-reaudit-2026-05-27.md` §19, `next-master-prompt-input-2026-05-27.md` §Scorecard |
+
+## Evolution Era 4 cycle ledger (cross-channel truth)
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **Inventory depletion POS-only policy** | `lib/inventory/inventory-depletion-policy.ts` (`era4-pos-only-v1`); `test:ci:inventory-depletion:cert`; matrix + positioning honesty |
+| **2** | **POS browser E2E CI policy** | `lib/ci/pos-browser-e2e-policy.ts` (`era4-tier2b-optional-v1`); `test:ci:pos-browser-e2e:policy`; `pos-browser-e2e-summary` artifact |
 
 ## Evolution Era 3 cycle ledger (governance CI certification)
 
@@ -165,3 +175,5 @@ Incremental refresh after Era 3 cycles 42–52 (governance CI certification wiri
 | 2026-05-27 | Cycle 27–28: initial index, deprecated-family notice, validation test |
 | 2026-05-27 | Cycle 29–30: Evolution Era 2 scorecard refresh, inventory counts updated |
 | 2026-05-27 | Era 3 Cycle 52: incremental scorecard refresh + `test:ci:scorecard:cert` |
+| 2026-05-27 | Era 4 Cycle 1: POS-only inventory depletion policy + cert gate expansion |
+| 2026-05-27 | Era 4 Cycle 2: POS browser E2E explicit PASSED/SKIPPED/FAILED policy + CI artifact |

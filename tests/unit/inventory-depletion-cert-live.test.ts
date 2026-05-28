@@ -3,9 +3,16 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import {
+  INVENTORY_DEPLETION_POLICY_ID,
+  INVENTORY_DEPLETION_UNIFIED_STOCK_CLAIM_ALLOWED,
+} from "@/lib/inventory/inventory-depletion-policy";
+
 const ROOT = process.cwd();
 const CI_WORKFLOW = join(ROOT, ".github/workflows/ci.yml");
 const TIER_MATRIX = join(ROOT, "docs/ci-e2e-tier-matrix.md");
+const FEATURE_MATRIX = join(ROOT, "docs/feature-maturity-matrix.md");
+const PRODUCT_POSITIONING = join(ROOT, "docs/product-positioning.md");
 
 const POS_CHECKOUT_SERVICE = join(ROOT, "services/pos/pos-checkout-service.ts");
 const STOREFRONT_ORDER_ACTION = join(ROOT, "actions/storefront-order.ts");
@@ -79,12 +86,27 @@ describe("inventory depletion certification (live repo)", () => {
     expect(posConfig).toContain("pos-recipe-depletion.test.ts");
   });
 
-  it("documents POS certified path and explicit storefront deferral", () => {
+  it("locks Era 4 POS-only depletion policy (no unified cross-channel stock claim)", () => {
+    expect(INVENTORY_DEPLETION_POLICY_ID).toBe("era4-pos-only-v1");
+    expect(INVENTORY_DEPLETION_UNIFIED_STOCK_CLAIM_ALLOWED).toBe(false);
+  });
+
+  it("documents POS certified path and POS-only storefront policy in canonical docs", () => {
     expect(existsSync(TIER_MATRIX)).toBe(true);
-    const matrix = readFileSync(TIER_MATRIX, "utf8");
-    expect(matrix).toContain("pos-inventory-depletion.integration.test.ts");
-    expect(matrix).toContain("pos-recipe-depletion.test.ts");
-    expect(matrix).toMatch(/Storefront inventory depletion[\s\S]*Deferred/i);
+    const tierMatrix = readFileSync(TIER_MATRIX, "utf8");
+    expect(tierMatrix).toContain("pos-inventory-depletion.integration.test.ts");
+    expect(tierMatrix).toContain("pos-recipe-depletion.test.ts");
+    expect(tierMatrix).toMatch(/POS-only/i);
+    expect(tierMatrix).toContain("inventory-depletion-policy.ts");
+
+    const featureMatrix = readFileSync(FEATURE_MATRIX, "utf8");
+    expect(featureMatrix).toMatch(/POS-only/i);
+    expect(featureMatrix).not.toMatch(/unified inventory depletion/i);
+
+    const positioning = readFileSync(PRODUCT_POSITIONING, "utf8");
+    expect(positioning).toMatch(/POS checkout depletes/i);
+    expect(positioning).toMatch(/storefront, public API, and manual orders do not/i);
+    expect(positioning).toContain("era4-pos-only-v1");
 
     for (const rel of REQUIRED_FILES) {
       expect(existsSync(join(ROOT, rel)), `missing ${rel}`).toBe(true);

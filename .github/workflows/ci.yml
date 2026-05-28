@@ -325,7 +325,8 @@ jobs:
         if: ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
         run: npx playwright install chromium --with-deps
 
-      - name: POS checkout E2E (dashboard auth secrets required)
+      - name: POS browser E2E (tier 2b — dashboard auth secrets required)
+        id: pos_browser_e2e
         if: ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
@@ -343,6 +344,22 @@ jobs:
             sleep 2
           done
           npm run test:ci:pos-money-path:e2e
+
+      - name: POS browser E2E CI policy summary
+        if: always()
+        env:
+          POS_BROWSER_E2E_STEP_OUTCOME: ${{ steps.pos_browser_e2e.outcome }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+        run: npm run test:ci:pos-browser-e2e:policy
+
+      - name: Upload POS browser E2E summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pos-browser-e2e-summary
+          path: ci-artifacts/pos-browser-e2e-summary.json
+          if-no-files-found: warn
 
   kds-v1-prototype:
     runs-on: ubuntu-latest

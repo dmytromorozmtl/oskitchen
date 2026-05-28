@@ -151,6 +151,7 @@ Current truth: all of these surfaces exist, but RBAC canon, enterprise governanc
 - Broad live marketplace coverage across DoorDash/Uber/Grubhub without partner certification and verified production flows.
 - Enterprise-grade SSO/SCIM/compliance readiness.
 - AI autopilot for restaurant operations or autonomous customer messaging.
+- Unified cross-channel inventory depletion (storefront or online sales automatically reducing on-hand stock). **POS checkout depletes** recipe-linked ingredients when configured; **storefront, public API, and manual orders do not** until a certified hook ships (`lib/inventory/inventory-depletion-policy.ts`, policy `era4-pos-only-v1`).
 
 Evidence: `docs/POS_ARCHITECTURE.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/ENTERPRISE_SECURITY_ROADMAP.md`, `services/ai/`.
 
@@ -159,7 +160,7 @@ Evidence: `docs/POS_ARCHITECTURE.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `do
 - Branded storefront and online ordering foundation with one shared order model.
 - Real POS foundation with receipts, shifts, refunds, and canonical order creation.
 - CRM, loyalty, and gift card foundations connected to ordering.
-- Inventory, costing, purchasing, staff, and training foundations that are real but still maturing.
+- Inventory, costing, purchasing, staff, and training foundations that are real but still maturing (inventory recipe depletion on sale is **POS-certified only** — not storefront/API).
 - Strong founder-led pilot posture for operators who value workflow unification over pure hardware maturity.
 
 Evidence: `services/orders/order-creation-service.ts`, `app/s/[storeSlug]/checkout/page.tsx`, `actions/pos.ts`, `actions/customers.ts`, `actions/inventory.ts`, `actions/staff.ts`.

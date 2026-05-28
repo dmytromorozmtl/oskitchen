@@ -3,6 +3,28 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 4 — Cross-channel operational truth
+
+### KOS-E4-001 — Inventory depletion channel policy (POS-only)
+- ID: `KOS-E4-001`
+- Title: Formalize POS-only inventory depletion; prohibit unified cross-channel stock claims
+- Module: Inventory / storefront / POS
+- Priority: P0 (Era 4 Cycle 1)
+- Status: **completed (policy)** — implementation of storefront hook deferred
+- Decision: `era4-pos-only-v1` — certified channel: POS only
+- Evidence: `lib/inventory/inventory-depletion-policy.ts`, `test:ci:inventory-depletion:cert`, canonical matrix + positioning updates
+- Next: optional storefront depletion implementation (future cycles) or RBAC wave 4
+
+### KOS-E4-002 — POS browser E2E CI policy (tier 2b optional + explicit status)
+- ID: `KOS-E4-002`
+- Title: POS browser E2E must not silently pass when skipped
+- Module: POS / CI / QA
+- Priority: P0 (Era 4 Cycle 2)
+- Status: **completed**
+- Decision: `era4-tier2b-optional-v1` — always-on unit/integration/inventory; optional Playwright; always-on policy summary + artifact
+- Evidence: `lib/ci/pos-browser-e2e-policy.ts`, `scripts/pos-browser-e2e-ci-policy.ts`, `.github/workflows/ci.yml`, `test:ci:pos-browser-e2e:policy`, `test:ci:pos-money-path:cert`
+- Next: RBAC wave 4 residuals
+
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
 - ID: `KOS-P0-001`
@@ -150,8 +172,8 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Business value: makes inventory and costing credible
 - Technical value: links sales and economics
 - User story: as an owner, I need sales to deplete stock and variance reports to mean something
-- Current state: **in progress** — POS impacts, recipe depletion (unit + integration certified in CI via `test:ci:inventory-depletion:cert`), count completion + detail/list variance rollups, waste→stock; remaining: cross-channel storefront depletion, multi-count variance dashboards
-- Target state: end-to-end depletion and usable variance reporting
+- Current state: **in progress** — POS impacts, recipe depletion (unit + integration certified in CI via `test:ci:inventory-depletion:cert`); **Era 4 Cycle 1:** POS-only channel policy (`KOS-E4-001`); count completion + detail/list variance rollups, waste→stock; remaining: optional storefront depletion hook (scoped implementation), multi-count variance dashboards
+- Target state: certified depletion per channel (POS today) and usable variance reporting
 - Affected files: `services/pos/pos-inventory-impact-service.ts`, inventory and costing services
 - Dependencies: canonical permissions for inventory
 - Implementation steps: finalize depletion linkage, add variance reporting, surface operator diagnostics
@@ -162,7 +184,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Audit log requirements: adjustments and reconciliations
 - Analytics requirements: variance KPIs
 - Tests required: depletion integration tests, costing tests
-- Acceptance criteria: sales deplete inventory and variance is understandable
+- Acceptance criteria: certified channels deplete inventory (POS today); variance is understandable; no false unified depletion claims
 - Rollback considerations: additive with safe fallbacks
 - Risk level: Medium
 - Estimated complexity: High

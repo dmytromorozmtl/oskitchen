@@ -149,6 +149,18 @@ Workflow **`.github/workflows/e2e-remote-smoke.yml`** (`workflow_dispatch`):
 
 The default PR **CI** workflow does not start a server or hit the network; use the manual remote workflow for hosted smoke.
 
+### POS money-path job (`pos-money-path`)
+
+Dedicated job **`.github/workflows/ci.yml` → `pos-money-path`** always runs tier-2b **unit**, **integration**, and **inventory** tests. **Playwright POS checkout** runs only when repository secrets **`E2E_LOGIN_EMAIL`** and **`E2E_LOGIN_PASSWORD`** are configured.
+
+An **always-on** policy step (`npm run test:ci:pos-browser-e2e:policy`) runs at the end of every `pos-money-path` job and:
+
+- prints **`POS browser E2E CI: PASSED | SKIPPED | FAILED`** with a reason,
+- writes **`ci-artifacts/pos-browser-e2e-summary.json`** (uploaded as GitHub artifact **`pos-browser-e2e-summary`**),
+- fails the job only when browser E2E was required to run and failed (`FAILED`).
+
+Policy id: **`era4-tier2b-optional-v1`** (`lib/ci/pos-browser-e2e-policy.ts`). See **`docs/ci-e2e-tier-matrix.md`** tier 2b.
+
 ### Hosted production tenant smoke
 
 Use this when you want a quick hosted check without launching Playwright:

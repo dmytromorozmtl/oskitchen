@@ -287,6 +287,21 @@ Priority rule:
 - Priority order: 16 (P1 governance)
 - Estimated complexity: Low
 
+## Era 4 — POS browser E2E CI policy (P0-2)
+
+- **Decision (Cycle 2, 2026-05-27):** Option C — tier-2b **always-on** unit/integration/inventory; Playwright browser E2E **optional** when `E2E_LOGIN_EMAIL` + `E2E_LOGIN_PASSWORD` secrets exist; **always-on** policy step reports `PASSED` / `SKIPPED` / `FAILED` and uploads `pos-browser-e2e-summary` artifact.
+- **Rationale:** Forks without dashboard auth secrets must not imply browser POS E2E passed; failures must fail the job; skips must be explicit in logs and artifacts.
+- **Evidence:** `lib/ci/pos-browser-e2e-policy.ts`, `scripts/pos-browser-e2e-ci-policy.ts`, `.github/workflows/ci.yml` (`pos_browser_e2e` + policy summary), `test:ci:pos-browser-e2e:policy`, `test:ci:pos-money-path:cert`.
+- **Acceptance:** CI output and artifact distinguish browser tier from always-on certification; matrix/docs match workflow.
+
+## Era 4 — Inventory depletion channel truth (P0-1)
+
+- **Decision (Cycle 1, 2026-05-27):** Recipe depletion on sale remains **POS-only** (`era4-pos-only-v1`). Storefront, public API, manual, and integration orders use the unified order spine but do **not** trigger `recordPendingInventoryImpactsForPosOrder`.
+- **Rationale:** Payment timing, idempotency, cancellation/refund policy, and cross-channel hook design need a scoped cycle before implementation; honest matrix/sales claims take priority over false “unified inventory” parity.
+- **Evidence:** `lib/inventory/inventory-depletion-policy.ts`, `tests/unit/inventory-depletion-policy.test.ts`, `tests/unit/inventory-depletion-cert-live.test.ts`, `docs/feature-maturity-matrix.md`, `docs/product-positioning.md`.
+- **Acceptance:** Canonical docs and CI cert gates enforce POS-only policy; no ambiguous unified depletion claims.
+- **Next implementation cycle (deferred):** Hook storefront submit after payment-settled event with idempotency tests — Era 4 cycles 2–3 if prioritized.
+
 ## Recommended First P0 Order
 1. RBAC inconsistency
 2. POS permission gaps
