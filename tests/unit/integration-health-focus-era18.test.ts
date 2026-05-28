@@ -4,11 +4,15 @@ import {
   INTEGRATION_HEALTH_FOCUS_ERA18_BACKLOG_ID,
   INTEGRATION_HEALTH_FOCUS_ERA18_POLICY_ID,
   INTEGRATION_HEALTH_FOCUS_ERA18_PROOF_STATUS,
+  SALES_CHANNEL_HEALTH_FOCUS_ERA18_BACKLOG_ID,
+  SALES_CHANNEL_HEALTH_FOCUS_ERA18_POLICY_ID,
+  SALES_CHANNEL_HEALTH_FOCUS_ERA18_PROOF_STATUS,
 } from "@/lib/integrations/integration-health-focus-era18-policy";
 import {
   buildIntegrationHealthFocusSnapshot,
   pickIntegrationHealthAttentionItems,
   resolveIntegrationHealthRowNextAction,
+  resolveSalesChannelHealthConnectionNextAction,
   summarizeIntegrationHealthFocus,
 } from "@/lib/integrations/integration-health-focus-era18";
 import type { IntegrationHealthCard } from "@/services/developer/integration-health-service";
@@ -33,6 +37,16 @@ describe("integration-health-focus-era18 policy", () => {
       "integration_health_focus_attention_wired",
     );
     expect(INTEGRATION_HEALTH_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-022");
+  });
+
+  it("registers era18 sales channel health focus proof", () => {
+    expect(SALES_CHANNEL_HEALTH_FOCUS_ERA18_POLICY_ID).toBe(
+      "era18-sales-channel-health-focus-v1",
+    );
+    expect(SALES_CHANNEL_HEALTH_FOCUS_ERA18_PROOF_STATUS).toBe(
+      "sales_channel_health_focus_attention_wired",
+    );
+    expect(SALES_CHANNEL_HEALTH_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-024");
   });
 });
 
@@ -116,6 +130,26 @@ describe("resolveIntegrationHealthRowNextAction", () => {
 
   it("returns null when connection is healthy", () => {
     expect(resolveIntegrationHealthRowNextAction(card())).toBeNull();
+  });
+});
+
+describe("resolveSalesChannelHealthConnectionNextAction", () => {
+  it("surfaces failed manual health probes after base checks pass", () => {
+    const action = resolveSalesChannelHealthConnectionNextAction(card(), {
+      status: "FAILED",
+      errorMessage: "401 unauthorized",
+    });
+    expect(action?.label).toBe("Fix failed health probe");
+    expect(action?.href).toBe("/dashboard/integrations/woocommerce");
+    expect(action?.tone).toBe("urgent");
+  });
+
+  it("prefers connection ERROR over probe status", () => {
+    const action = resolveSalesChannelHealthConnectionNextAction(
+      card({ status: "ERROR" }),
+      { status: "FAILED" },
+    );
+    expect(action?.label).toBe("Reconnect integration");
   });
 });
 

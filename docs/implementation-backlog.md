@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-024 — Sales channels health next actions (P1)
+- ID: `KOS-E18-024`
+- Title: Era 18 Workstream C Cycle 24 — attention strip + connection next actions on channel health probes
+- Module: Integrations / Sales channels
+- Priority: P1 (integration observability + pilot channel reliability)
+- Status: **sales_channel_health_focus_attention_wired**
+- Decision: `era18-sales-channel-health-focus-v1` — reuses integration health attention strip; per-connection next actions include failed manual probe recovery
+- Evidence: `lib/integrations/integration-health-focus-era18.ts`, `app/dashboard/sales-channels/health/page.tsx`
+- Next: Support inbox attention strip; P0 staging proof ops execution when vault ready
+
 ### KOS-E18-023 — Platform system health attention strip (P0)
 - ID: `KOS-E18-023`
 - Title: Era 18 Workstream O Cycle 23 — cross-tenant system health triage parity
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **platform_system_health_focus_attention_wired**
 - Decision: `era18-platform-system-health-focus-v1` — production → integrations → webhook recovery ordering; cross-tenant observability events with workspace labels
 - Evidence: `lib/system-health/system-health-focus-era18.ts`, `components/platform/platform-system-health-attention-strip.tsx`, `app/platform/system-health/page.tsx`
-- Next: Sales-channels health row next actions; P0 staging proof ops execution when vault ready
+- Next: Sales-channels health row next actions — **done** (KOS-E18-024); P0 staging proof ops execution when vault ready
 
 ### KOS-E18-022 — Integration health dashboard next actions (P1)
 - ID: `KOS-E18-022`

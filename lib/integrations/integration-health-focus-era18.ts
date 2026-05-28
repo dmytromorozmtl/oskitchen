@@ -229,3 +229,28 @@ export function resolveIntegrationHealthRowNextAction(
 
   return null;
 }
+
+export type SalesChannelHealthProbe = {
+  status: string;
+  errorMessage?: string | null;
+};
+
+/** Sales channels health cards — extends integration row actions with manual probe results. */
+export function resolveSalesChannelHealthConnectionNextAction(
+  card: IntegrationHealthCard,
+  probe?: SalesChannelHealthProbe | null,
+): IntegrationHealthRowNextAction | null {
+  const base = resolveIntegrationHealthRowNextAction(card);
+  if (base) return base;
+
+  const probeStatus = probe?.status?.toUpperCase();
+  if (probeStatus === "FAILED" || probeStatus === "ERROR" || probeStatus === "UNHEALTHY") {
+    return {
+      label: "Fix failed health probe",
+      href: integrationConnectionSetupHref(card.provider),
+      tone: "urgent",
+    };
+  }
+
+  return null;
+}

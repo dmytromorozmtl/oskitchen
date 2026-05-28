@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
 import { runIntegrationHealthCheckFormAction } from "@/actions/integration-health";
+import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +11,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getServerEnv } from "@/lib/env";
+import {
+  buildIntegrationHealthFocusSnapshot,
+  resolveSalesChannelHealthConnectionNextAction,
+} from "@/lib/integrations/integration-health-focus-era18";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
   getCachedIntegrationConnectionListWhere,
@@ -17,27 +23,52 @@ import {
 } from "@/lib/scope/cached-workspace-resource-scope";
 import { loadSalesChannelMetrics } from "@/lib/channels/sales-channel-metrics";
 import { prisma } from "@/lib/prisma";
+import {
+  listIntegrationHealthCards,
+  summarizeIntegrationHealth,
+} from "@/services/developer/integration-health-service";
 
 export default async function SalesChannelsHealthPage() {
-  const { userId } = await getTenantActor();
+  const { userId, dataUserId } = await getTenantActor();
+  const env = getServerEnv();
 
   const [connectionWhere, webhookWhere] = await Promise.all([
     getCachedIntegrationConnectionListWhere(),
     getCachedWebhookEventListWhere(),
   ]);
-  const [connections, webhookFailCount, metrics] = await Promise.all([
-    prisma.integrationConnection.findMany({
-      where: connectionWhere,
-      orderBy: { updatedAt: "desc" },
-      include: {
-        healthChecks: { orderBy: { checkedAt: "desc" }, take: 1 },
-      },
-    }),
-    prisma.webhookEvent.count({
-      where: { AND: [webhookWhere, { processed: false, signatureValid: false }] },
-    }),
-    loadSalesChannelMetrics(userId),
-  ]);
+  const [connections, webhookFailCount, unprocessedWebhookCount, metrics, healthCards] =
+    await Promise.all([
+      prisma.integrationConnection.findMany({
+        where: connectionWhere,
+        orderBy: { updatedAt: "desc" },
+        include: {
+          healthChecks: { orderBy: { checkedAt: "desc" }, take: 1 },
+        },
+      }),
+      prisma.webhookEvent.count({
+        where: { AND: [webhookWhere, { processed: false, signatureValid: false }] },
+      }),
+      prisma.webhookEvent.count({
+        where: { AND: [webhookWhere, { processed: false }] },
+      }),
+      loadSalesChannelMetrics(userId),
+      listIntegrationHealthCards(dataUserId),
+    ]);
+
+  const stripeConfigured = Boolean(
+    env.STRIPE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim(),
+  );
+  const emailConfigured = Boolean(env.RESEND_API_KEY?.trim() && env.RESEND_FROM_EMAIL?.trim());
+  const healthSummary = summarizeIntegrationHealth(healthCards, {
+    stripe: stripeConfigured,
+    email: emailConfigured,
+  });
+  const focusSnapshot = buildIntegrationHealthFocusSnapshot({
+    summary: healthSummary,
+    cards: healthCards,
+    failedWebhookCount: unprocessedWebhookCount,
+  });
+  const healthCardById = new Map(healthCards.map((card) => [card.id, card]));
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -50,9 +81,11 @@ export default async function SalesChannelsHealthPage() {
           </p>
         </div>
         <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/dashboard/integrations/health">Legacy URL</Link>
+          <Link href="/dashboard/integration-health">Full integration health</Link>
         </Button>
       </div>
+
+      <IntegrationHealthAttentionStrip snapshot={focusSnapshot} />
 
       {webhookFailCount > 0 ? (
         <Card className="border-amber-500/40 bg-amber-500/5">
@@ -82,10 +115,15 @@ export default async function SalesChannelsHealthPage() {
       <div className="grid gap-4">
         {connections.map((c) => {
           const last = c.healthChecks[0];
+          const healthCard = healthCardById.get(c.id);
+          const nextAction = healthCard
+            ? resolveSalesChannelHealthConnectionNextAction(healthCard, last ?? null)
+            : null;
+
           return (
-            <Card key={c.id} className="border-border/80">
+            <Card key={c.id} className="border-border/80" data-testid={`sales-channel-health-${c.id}`}>
               <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0 flex-1">
                   <CardTitle className="text-base">
                     {c.name}{" "}
                     <span className="text-xs font-normal text-muted-foreground">{c.provider}</span>
@@ -96,6 +134,24 @@ export default async function SalesChannelsHealthPage() {
                       ? ` · last sync ${formatDistanceToNow(c.lastSyncAt, { addSuffix: true })}`
                       : ""}
                   </CardDescription>
+                  {nextAction ? (
+                    <p className="mt-2 text-sm">
+                      <span className="text-muted-foreground">Next: </span>
+                      <Link
+                        href={nextAction.href}
+                        data-testid={`sales-channel-health-next-${c.id}`}
+                        className={
+                          nextAction.tone === "urgent"
+                            ? "font-medium text-amber-800 underline-offset-2 hover:underline dark:text-amber-200"
+                            : "font-medium text-primary underline-offset-2 hover:underline"
+                        }
+                      >
+                        {nextAction.label}
+                      </Link>
+                    </p>
+                  ) : (
+                    <p className="mt-2 text-sm text-muted-foreground">Next: On track — run check to verify.</p>
+                  )}
                 </div>
                 <form action={runIntegrationHealthCheckFormAction}>
                   <input type="hidden" name="connectionId" value={c.id} />
