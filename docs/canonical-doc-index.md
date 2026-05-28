@@ -487,6 +487,27 @@ Incremental refresh after Era 14 cycles 1–5 (GTM honesty / recert from era13 h
 
 **Re-audit decision:** defer full repo re-audit until Era 15 delivery theme or major release; use `docs/next-master-prompt-input-2026-05-27-era14.md`.
 
+## Scorecard (Evolution Era 15 end — 2026-05-27)
+
+Incremental refresh after Era 15 cycles 1–5 (ops / certification recert from era14 handoff). Baseline = Era 14 end **100** overall.
+
+| Area | Era 14 end | Era 15 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 100 | **100** | +0 | five ops recert cycles; overall plateau |
+| Security | 82 | **82** | +0 | unchanged |
+| QA | 93 | **94** | +1 | production calendar operator recert |
+| DevOps | 99 | **100** | +1 | staging workflows + typecheck slice era15 recert |
+| RBAC | 90 | **90** | +0 | unchanged |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 60 | **60** | +0 | live store smoke still ops-only |
+| KDS | 73 | **74** | +1 | era15 kds staging smoke recert |
+| Enterprise readiness | 66 | **67** | +1 | procurement pack era15 recert |
+| Marketing/sales | 83 | **83** | +0 | unchanged |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 16 delivery theme or major release; use `docs/next-master-prompt-input-2026-05-27-era15.md`.
+
 ---
 
 ## Validation
@@ -569,3 +590,4 @@ Incremental refresh after Era 14 cycles 1–5 (GTM honesty / recert from era13 h
 | 2026-05-27 | Era 15 Cycle 3: `era15-staging-workflows-first-run-recert-v1` — staging workflow skip honesty; smoke:staging-workflows |
 | 2026-05-27 | Era 15 Cycle 4: `era15-typecheck-slice-recert-v1` — four strict slices; full typecheck canonical; smoke:typecheck-slices |
 | 2026-05-27 | Era 15 Cycle 5: `era15-production-calendar-operator-recert-v1` — pilot checklist recert; smoke:production-calendar |
+| 2026-05-27 | Era 15 Cycle 6: `era15-scorecard-refresh-v1` — score 100/100 sustained; DevOps 100; era16 handoff |

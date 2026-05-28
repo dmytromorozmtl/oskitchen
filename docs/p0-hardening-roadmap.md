@@ -345,6 +345,7 @@ Priority rule:
 - **Era 5 Cycle 2 (2026-05-27):** policy bumped to `era5-typecheck-slice-v2`; added `typecheck:slice:storefront-marketing` (6GB) for public storefront + GTM pages + dashboard storefront admin.
 - **Era 6 Cycle 3 (2026-05-27):** `era6-typecheck-slice-ci-v1` — parallel CI job `typecheck-slices` runs `npm run typecheck:ci:slices`; `quality` job keeps `typecheck:full` as canonical gate.
 - **Era 15 Cycle 4 (2026-05-27):** `era15-typecheck-slice-recert-v1` — four slices recertified; `smoke:typecheck-slices`; strictness unchanged; slices do not replace full gate.
+- **Era 15 Cycle 6 (2026-05-27):** `era15-scorecard-refresh-v1` — 100/100 sustained; era16 handoff in `docs/next-master-prompt-input-2026-05-27-era15.md`.
 - **Evidence:** `tsconfig.base.json`, `tsconfig.slice.*.json`, `lib/ci/typecheck-slice-era15-policy.ts`, `test:ci:typecheck-slice-era15:cert`.
 
 ## Era 4 — RBAC wave 4 residuals batch 2 (P0-3)

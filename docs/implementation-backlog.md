@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 15 — KDS / enterprise / DevOps
 
+### KOS-E15-006 — Era 15 scorecard refresh (P1)
+- ID: `KOS-E15-006`
+- Title: Scorecard refresh and era16 master-prompt handoff
+- Module: Governance / Strategy
+- Priority: P1 (Era 15 Cycle 6)
+- Status: **completed**
+- Decision: `era15-scorecard-refresh-v1` — 100/100 sustained; +1 QA/DevOps/KDS/Enterprise; `docs/next-master-prompt-input-2026-05-27-era15.md`
+- Evidence: `lib/governance/era15-scorecard-policy.ts`, `docs/era15-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+- Next: Era 16 theme selection (SSO R2 or live channel proof per handoff)
+
 ### KOS-E15-005 — Production calendar operator Era 15 recert (P1)
 - ID: `KOS-E15-005`
 - Title: Re-certify production calendar pilot operator checklist and honest scope
