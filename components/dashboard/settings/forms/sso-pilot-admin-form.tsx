@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 
 import {
@@ -11,6 +12,7 @@ import {
 import { getActionError } from "@/lib/action-result";
 import type { WorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import { SsoPilotSetupWizard } from "@/components/dashboard/settings/sso-pilot-setup-wizard";
+import { buildSsoPilotLoginUrl } from "@/lib/enterprise/enterprise-sso-login-entry-focus-era18";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -205,7 +207,14 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
         <CardHeader>
           <CardTitle className="text-base">Staff login entry</CardTitle>
           <CardDescription>
-            When active, staff can use `/login` → “Sign in with SSO” with workspace id{" "}
+            When active, staff open{" "}
+            <Link
+              href={buildSsoPilotLoginUrl(view.workspaceId)}
+              className="text-primary hover:underline"
+            >
+              /login with workspace pre-filled
+            </Link>{" "}
+            and choose “Sign in with SSO”. Workspace id{" "}
             <code className="text-xs">{view.workspaceId}</code>.
           </CardDescription>
         </CardHeader>

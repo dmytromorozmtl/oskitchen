@@ -7,11 +7,13 @@ export function SsoPilotSetupStepNextAction(props: {
   def: SsoPilotSetupStepDef;
   complete: boolean;
   isCurrent: boolean;
+  workspaceId?: string;
 }) {
   const action = resolveSsoPilotSetupStepRowNextAction(
     props.def,
     props.complete,
     props.isCurrent,
+    props.workspaceId,
   );
 
   if (!action) {

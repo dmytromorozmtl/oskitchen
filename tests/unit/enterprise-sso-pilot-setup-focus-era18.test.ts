@@ -8,8 +8,8 @@ import {
   SSO_PILOT_BILLING_PLANS_ROUTE,
   SSO_PILOT_CONFIGURATION_ANCHOR,
   SSO_PILOT_LOGIN_ENTRY_ANCHOR,
-  SSO_PILOT_LOGIN_ROUTE,
 } from "@/lib/enterprise/enterprise-sso-pilot-setup-focus-era18-policy";
+import { buildSsoPilotLoginUrl } from "@/lib/enterprise/enterprise-sso-login-entry-focus-era18";
 import {
   buildSsoPilotSetupFocusSnapshot,
   pickSsoPilotSetupAttentionItems,
@@ -103,10 +103,14 @@ describe("enterprise SSO pilot setup focus era18", () => {
         runtimeGateAllowed: true,
       }),
     );
-    const items = pickSsoPilotSetupAttentionItems(progress, SSO_PILOT_SETUP_STEPS);
+    const items = pickSsoPilotSetupAttentionItems(
+      progress,
+      SSO_PILOT_SETUP_STEPS,
+      "ws-pilot-1",
+    );
 
     expect(items[0]?.title).toContain("IdP login proof");
-    expect(items[0]?.href).toBe(SSO_PILOT_LOGIN_ENTRY_ANCHOR);
+    expect(items[0]?.href).toBe(buildSsoPilotLoginUrl("ws-pilot-1"));
   });
 
   it("resolves row next actions for incomplete steps", () => {
@@ -133,9 +137,11 @@ describe("enterprise SSO pilot setup focus era18", () => {
     });
 
     const proofStep = SSO_PILOT_SETUP_STEPS[3]!;
-    expect(resolveSsoPilotSetupStepRowNextAction(proofStep, false, true)).toEqual({
+    expect(
+      resolveSsoPilotSetupStepRowNextAction(proofStep, false, true, "ws-pilot-1"),
+    ).toEqual({
       label: "Test SSO login entry",
-      href: SSO_PILOT_LOGIN_ROUTE,
+      href: buildSsoPilotLoginUrl("ws-pilot-1"),
       tone: "urgent",
     });
   });

@@ -15,6 +15,7 @@ import {
   SSO_PILOT_OPERATOR_RUNBOOK_DOC,
   SSO_PILOT_STAGING_SMOKE_PLAN_DOC,
 } from "@/lib/enterprise/enterprise-sso-pilot-setup-focus-era18-policy";
+import { buildSsoPilotLoginUrl } from "@/lib/enterprise/enterprise-sso-login-entry-focus-era18";
 import type { WorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import {
   evaluateSsoPilotSetupProgress,
@@ -54,6 +55,7 @@ export function SsoPilotSetupWizard(props: { view: WorkspaceSsoAdminView }) {
             focus={setupFocus}
             progress={progress}
             stepDefs={SSO_PILOT_SETUP_STEPS}
+            workspaceId={props.view.workspaceId}
           />
         ) : null}
         <ol className="space-y-2">
@@ -84,6 +86,7 @@ export function SsoPilotSetupWizard(props: { view: WorkspaceSsoAdminView }) {
                       def={def}
                       complete={complete}
                       isCurrent={isCurrent}
+                      workspaceId={props.view.workspaceId}
                     />
                   </div>
                 </div>
@@ -95,7 +98,7 @@ export function SsoPilotSetupWizard(props: { view: WorkspaceSsoAdminView }) {
           Staging proof playbook:{" "}
           <code className="text-xs">{SSO_PILOT_STAGING_SMOKE_PLAN_DOC}</code> · Operator runbook:{" "}
           <code className="text-xs">{SSO_PILOT_OPERATOR_RUNBOOK_DOC}</code> · Staff login:{" "}
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href={buildSsoPilotLoginUrl(props.view.workspaceId)} className="text-primary hover:underline">
             /login
           </Link>
         </p>

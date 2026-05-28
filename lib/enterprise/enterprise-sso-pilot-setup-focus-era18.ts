@@ -4,9 +4,9 @@ import {
   SSO_PILOT_CONFIGURATION_ANCHOR,
   SSO_PILOT_ENTITLEMENT_ANCHOR,
   SSO_PILOT_LOGIN_ENTRY_ANCHOR,
-  SSO_PILOT_LOGIN_ROUTE,
   SSO_PILOT_STATUS_ANCHOR,
 } from "@/lib/enterprise/enterprise-sso-pilot-setup-focus-era18-policy";
+import { buildSsoPilotLoginUrl } from "@/lib/enterprise/enterprise-sso-login-entry-focus-era18";
 import type {
   SsoPilotSetupProgress,
   SsoPilotSetupStepDef,
@@ -81,7 +81,7 @@ function stepDef(
   return stepDefs.find((def) => def.id === stepId) ?? null;
 }
 
-function stepHref(stepId: SsoPilotSetupStepId): string {
+function stepHref(stepId: SsoPilotSetupStepId, workspaceId?: string): string {
   switch (stepId) {
     case "sso_entitlement":
       return SSO_PILOT_ENTITLEMENT_ANCHOR;
@@ -90,7 +90,7 @@ function stepHref(stepId: SsoPilotSetupStepId): string {
     case "activate_pilot":
       return SSO_PILOT_ACTIVATION_ANCHOR;
     case "idp_login_proof":
-      return SSO_PILOT_LOGIN_ENTRY_ANCHOR;
+      return workspaceId ? buildSsoPilotLoginUrl(workspaceId) : SSO_PILOT_LOGIN_ENTRY_ANCHOR;
     default:
       return ssoPilotSetupStepAnchor(stepId);
   }
@@ -100,6 +100,7 @@ function stepHref(stepId: SsoPilotSetupStepId): string {
 export function pickSsoPilotSetupAttentionItems(
   progress: SsoPilotSetupProgress,
   stepDefs: readonly SsoPilotSetupStepDef[],
+  workspaceId?: string,
 ): SsoPilotSetupAttentionItem[] {
   const snapshot = buildSsoPilotSetupFocusSnapshot(progress);
   if (snapshot.incompleteCount === 0) return [];
@@ -118,7 +119,7 @@ export function pickSsoPilotSetupAttentionItems(
       id: "current-step",
       title: `Next: ${current?.title ?? snapshot.currentStepId.replace(/_/g, " ")}`,
       detail,
-      href: stepHref(snapshot.currentStepId),
+      href: stepHref(snapshot.currentStepId, workspaceId),
       priority: 5,
       tone: "urgent",
     });
@@ -134,7 +135,7 @@ export function pickSsoPilotSetupAttentionItems(
       id: `blocked-${stepId}`,
       title: def?.title ?? stepId,
       detail: def?.description ?? "Complete this step to advance the SSO pilot path.",
-      href: stepHref(stepId),
+      href: stepHref(stepId, workspaceId),
       priority: STEP_ORDER.indexOf(stepId),
       tone: "normal",
     });
@@ -154,6 +155,7 @@ export function resolveSsoPilotSetupStepRowNextAction(
   def: SsoPilotSetupStepDef,
   complete: boolean,
   isCurrent: boolean,
+  workspaceId?: string,
 ): SsoPilotSetupStepRowNextAction | null {
   if (complete) return null;
 
@@ -179,9 +181,16 @@ export function resolveSsoPilotSetupStepRowNextAction(
         tone,
       };
     case "idp_login_proof":
+      if (isCurrent && workspaceId) {
+        return {
+          label: "Test SSO login entry",
+          href: buildSsoPilotLoginUrl(workspaceId),
+          tone,
+        };
+      }
       return {
         label: isCurrent ? "Test SSO login entry" : "Review staff login entry",
-        href: isCurrent ? SSO_PILOT_LOGIN_ROUTE : SSO_PILOT_LOGIN_ENTRY_ANCHOR,
+        href: SSO_PILOT_LOGIN_ENTRY_ANCHOR,
         tone,
       };
     default:

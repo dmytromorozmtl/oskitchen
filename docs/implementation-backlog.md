@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-041 — Enterprise SSO login entry focus (P0)
+- ID: `KOS-E18-041`
+- Title: Era 18 Workstream A Cycle 41 — /login workspace pre-fill + pilot context strip
+- Module: Enterprise identity / Auth
+- Priority: P0 (SSO IdP staging login proof — staff entry path from admin wizard)
+- Status: **enterprise_sso_login_entry_pilot_context_wired**
+- Decision: `era18-enterprise-sso-login-entry-focus-v1` — `?workspaceId=` deep links from admin wizard; pilot context strip; IdP proof remains ops-gated
+- Evidence: `lib/enterprise/enterprise-sso-login-entry-focus-era18.ts`, `components/auth/sso-login-entry.tsx`, admin wizard deep links
+- Next: Ops completes Cycle 2 IdP login proof on staging with pre-filled login URL
+
 ### KOS-E18-040 — Enterprise SSO pilot setup focus (P0)
 - ID: `KOS-E18-040`
 - Title: Era 18 Workstream A Cycle 40 — SSO admin wizard attention + step row next actions

@@ -16,9 +16,14 @@ export function SsoPilotSetupAttentionStrip(props: {
   focus: SsoPilotSetupFocusSnapshot;
   progress: SsoPilotSetupProgress;
   stepDefs: readonly SsoPilotSetupStepDef[];
+  workspaceId?: string;
 }) {
   const summary = summarizeSsoPilotSetupFocus(props.focus);
-  const items = pickSsoPilotSetupAttentionItems(props.progress, props.stepDefs);
+  const items = pickSsoPilotSetupAttentionItems(
+    props.progress,
+    props.stepDefs,
+    props.workspaceId,
+  );
 
   if (items.length === 0) return null;
 
