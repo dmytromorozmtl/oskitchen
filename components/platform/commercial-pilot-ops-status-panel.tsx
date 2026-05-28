@@ -1,0 +1,201 @@
+import Link from "next/link";
+import { ClipboardList } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  COMMERCIAL_PILOT_GONOGO_ANCHOR,
+  COMMERCIAL_PILOT_OPS_P0_CHECKLIST_DOC,
+  COMMERCIAL_PILOT_P0_STAGING_ANCHOR,
+} from "@/lib/commercial/commercial-pilot-ops-status-era18-policy";
+import {
+  buildCommercialPilotOpsGateRows,
+  formatCommercialPilotOpsDecisionLabel,
+  resolveCommercialPilotOpsDecision,
+  type CommercialPilotOpsStatusModel,
+} from "@/lib/commercial/commercial-pilot-ops-status-era18";
+
+function decisionBadgeVariant(
+  decision: ReturnType<typeof resolveCommercialPilotOpsDecision>,
+): "default" | "destructive" | "secondary" {
+  if (decision === "GO") return "default";
+  if (decision === "NO-GO") return "destructive";
+  return "secondary";
+}
+
+export function CommercialPilotOpsStatusPanel(props: { model: CommercialPilotOpsStatusModel }) {
+  const decision = resolveCommercialPilotOpsDecision(props.model.goNoGo);
+  const gateRows = buildCommercialPilotOpsGateRows(props.model);
+  const goNoGo = props.model.goNoGo.summary;
+  const p0 = props.model.p0Staging.summary;
+
+  return (
+    <div className="space-y-6">
+      <Card
+        id={COMMERCIAL_PILOT_GONOGO_ANCHOR.slice(1)}
+        className="scroll-mt-24 border-zinc-800 bg-zinc-900/60"
+        data-testid="commercial-pilot-gono-go-panel"
+      >
+        <CardHeader>
+          <CardTitle className="flex flex-wrap items-center gap-2 text-white">
+            <ClipboardList className="h-5 w-5 text-zinc-400" aria-hidden />
+            Pilot GO/NO-GO evaluator
+            <Badge variant={decisionBadgeVariant(decision)} className="rounded-full">
+              {formatCommercialPilotOpsDecisionLabel(decision)}
+            </Badge>
+          </CardTitle>
+          <CardDescription className="text-zinc-400">
+            Source: <span className="font-mono text-xs">artifacts/pilot-gono-go-summary.json</span>
+            {goNoGo?.runAt ? ` · last run ${new Date(goNoGo.runAt).toLocaleString()}` : ""}
+            {!props.model.goNoGo.artifactPresent ? " · artifact not found on this host" : ""}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm text-zinc-300">
+          {goNoGo?.blockers.length ? (
+            <div>
+              <p className="mb-2 font-medium text-rose-300">Blockers</p>
+              <ul className="list-disc space-y-1 pl-5 text-zinc-400">
+                {goNoGo.blockers.map((blocker) => (
+                  <li key={blocker}>{blocker}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {goNoGo?.warnings.length ? (
+            <div>
+              <p className="mb-2 font-medium text-amber-200">Warnings</p>
+              <ul className="list-disc space-y-1 pl-5 text-zinc-400">
+                {goNoGo.warnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {gateRows.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-zinc-800 text-zinc-500">
+                    <th className="py-2 pr-4 font-medium">Evidence gate</th>
+                    <th className="py-2 pr-4 font-medium">Status</th>
+                    <th className="py-2 pr-4 font-medium">Reason</th>
+                    <th className="py-2 font-medium">Next</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {gateRows.map((row) => (
+                    <tr key={row.id} className="border-b border-zinc-800/60" data-testid={`gate-row-${row.id}`}>
+                      <td className="py-2 pr-4 text-zinc-200">{row.label}</td>
+                      <td className="py-2 pr-4">
+                        <Badge variant={row.pass ? "default" : "destructive"} className="rounded-full text-[10px]">
+                          {row.pass ? "PASS" : "FAIL"}
+                        </Badge>
+                      </td>
+                      <td className="max-w-md py-2 pr-4 text-xs text-zinc-500">{row.reason}</td>
+                      <td className="py-2">
+                        {row.nextAction ? (
+                          <Link
+                            href={row.nextAction.href}
+                            className={
+                              row.nextAction.tone === "urgent"
+                                ? "font-medium text-amber-300 underline-offset-2 hover:underline"
+                                : "text-primary underline-offset-2 hover:underline"
+                            }
+                          >
+                            {row.nextAction.label}
+                          </Link>
+                        ) : (
+                          <span className="text-zinc-600">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-zinc-500">No evidence gates loaded — run smoke:pilot-gono-go.</p>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card
+        id={COMMERCIAL_PILOT_P0_STAGING_ANCHOR.slice(1)}
+        className="scroll-mt-24 border-zinc-800 bg-zinc-900/60"
+        data-testid="commercial-pilot-p0-staging-panel"
+      >
+        <CardHeader>
+          <CardTitle className="text-white">P0 staging proof unblock</CardTitle>
+          <CardDescription className="text-zinc-400">
+            Source: <span className="font-mono text-xs">artifacts/p0-staging-proof-unblock-summary.json</span>
+            {p0?.runAt ? ` · last run ${new Date(p0.runAt).toLocaleString()}` : ""}
+            {!props.model.p0Staging.artifactPresent ? " · artifact not found on this host" : ""}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm text-zinc-300">
+          {p0 ? (
+            <>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  variant={p0.p0ProofStatus === "proof_passed" ? "default" : "destructive"}
+                  className="rounded-full"
+                >
+                  {p0.p0ProofStatus.replaceAll("_", " ")}
+                </Badge>
+                <span className="text-zinc-500">overall {p0.overall}</span>
+              </div>
+
+              {p0.allMissingEnvVars.length > 0 ? (
+                <div>
+                  <p className="mb-2 font-medium text-amber-200">Missing env vars ({p0.allMissingEnvVars.length})</p>
+                  <p className="font-mono text-xs text-zinc-500">{p0.allMissingEnvVars.join(", ")}</p>
+                  <p className="mt-2 text-xs text-zinc-500">
+                    Ops checklist: {COMMERCIAL_PILOT_OPS_P0_CHECKLIST_DOC}
+                  </p>
+                </div>
+              ) : null}
+
+              <div className="grid gap-3 md:grid-cols-3">
+                {(
+                  [
+                    ["ssoIdpStaging", "SSO IdP staging"],
+                    ["stagingWorkflowsFirstGreen", "GitHub first green"],
+                    ["channelLive", "Woo/Shopify live"],
+                  ] as const
+                ).map(([key, label]) => {
+                  const child = p0.children[key];
+                  return (
+                    <div key={key} className="rounded-lg border border-zinc-800 p-3">
+                      <p className="font-medium text-zinc-200">{label}</p>
+                      <p className="mt-1 text-xs text-zinc-500">{child.smokeScript}</p>
+                      <p className="mt-2">
+                        <Badge
+                          variant={child.overall === "PASSED" ? "default" : "secondary"}
+                          className="rounded-full text-[10px]"
+                        >
+                          {child.overall ?? "—"} · {child.proofStatus ?? "—"}
+                        </Badge>
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <p className="text-zinc-500">
+              Run <span className="font-mono">npm run smoke:p0-staging-proof-unblock</span> after vault
+              credentials are configured.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      <p className="text-xs text-zinc-500">
+        This panel reads smoke summary artifacts from the repo host. It never upgrades NO-GO to GO and
+        does not record customer LOI — use env vars and smoke scripts per era17-pilot-gono-go-v1.
+      </p>
+    </div>
+  );
+}

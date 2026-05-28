@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-052 — Commercial pilot ops status panel (P0)
+- ID: `KOS-E18-052`
+- Title: Era 18 Workstream D Cycle 52 — honest GO/NO-GO + P0 staging proof on platform implementations
+- Module: Commercial / Platform ops
+- Priority: P0 (paid pilot execution visibility — ops artifact reader)
+- Status: **commercial_pilot_ops_status_panel_wired**
+- Decision: `era18-commercial-pilot-ops-status-v1` — reads pilot-gono-go + p0-staging artifacts; never fakes GO or proof_passed
+- Evidence: `lib/commercial/commercial-pilot-ops-status-era18.ts`, `app/platform/implementations/page.tsx`, `tests/unit/commercial-pilot-ops-status-era18.test.ts`
+- Next: Ops configures vault env vars; re-run smoke:p0-staging-proof-unblock then smoke:pilot-gono-go for GO decision
+
 ### KOS-E18-051 — Implementation pilot readiness strip (P0)
 - ID: `KOS-E18-051`
 - Title: Era 18 Workstream P Cycle 51 — Implementation hub pilot readiness attention strip
