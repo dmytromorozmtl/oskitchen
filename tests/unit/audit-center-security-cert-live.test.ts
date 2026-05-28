@@ -14,10 +14,12 @@ function readPackageScripts(): Record<string, string> {
 }
 
 describe("audit center RBAC security bundle certification (live repo)", () => {
-  it("includes audit-center-actions-rbac in test:security and rbac-wave3", () => {
+  it("includes audit center RBAC tests in test:security and rbac-wave3", () => {
     const scripts = readPackageScripts();
     expect(scripts["test:security"]).toContain("audit-center-actions-rbac.test.ts");
+    expect(scripts["test:security"]).toContain("audit-sensitive-detail-rbac.test.ts");
     expect(scripts["test:ci:rbac-wave3"]).toContain("audit-center-actions-rbac.test.ts");
+    expect(scripts["test:ci:rbac-wave3"]).toContain("audit-sensitive-detail-rbac.test.ts");
   });
 
   it("keeps security-db job running test:security in CI", () => {
