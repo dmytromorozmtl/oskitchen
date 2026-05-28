@@ -1,7 +1,8 @@
 # KDS Realtime Playwright staging — optional Tier E (Evolution Era 11 Cycle 4).
 # Policy: era11-kds-realtime-e2e-staging-workflow-v1
+# Secrets: era13-kds-staging-workflow-secrets-align-v1 (E2E_LOGIN_PASSWORD; legacy E2E_PASSWORD alias)
 #
-# Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD
+# Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD (or legacy E2E_PASSWORD)
 # Optional: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY (Realtime client)
 #
 # Not in default ci.yml — workflow_dispatch or weekly schedule only.
@@ -15,9 +16,14 @@ on:
 
 jobs:
   kds-realtime-staging:
-    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
+    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && (secrets.E2E_LOGIN_PASSWORD != '' || secrets.E2E_PASSWORD != '') }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      CI: "1"
+      PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+      E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+      E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,14 +40,6 @@ jobs:
 
       - name: KDS realtime staging E2E (Tier E)
         id: kds_realtime_e2e
-        env:
-          CI: "1"
-          PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
-          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
-          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
-          ENABLE_KDS_V1_CERTIFIED: "true"
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: npm run test:ci:kds-realtime-e2e-staging:playwright
 
       - name: KDS realtime staging E2E policy summary
@@ -49,8 +47,6 @@ jobs:
         if: always()
         env:
           KDS_REALTIME_E2E_STEP_OUTCOME: ${{ steps.kds_realtime_e2e.outcome }}
-          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
-          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
           ENABLE_KDS_V1_CERTIFIED: "true"
           NODE_ENV: test
         run: npm run test:ci:kds-realtime-e2e-staging:policy

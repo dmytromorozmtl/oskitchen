@@ -79,7 +79,7 @@ KDS_REALTIME_E2E_STEP_OUTCOME=success npm run test:ci:kds-realtime-e2e-staging:p
 
 Certification gate: `npm run test:ci:kds-realtime-e2e-staging:cert` (policy wiring + era11 recert — not a browser run in default CI).
 
-**Optional GitHub Actions workflow (Era 11 Cycle 4):** `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`) — `workflow_dispatch` or weekly schedule when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_*` secrets are set; uploads `kds-realtime-e2e-staging-summary` artifact.
+**Optional GitHub Actions workflow (Era 11 Cycle 4 + Era 13 Cycle 2 secrets):** `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`, `era13-kds-staging-workflow-secrets-align-v1`) — `workflow_dispatch` or weekly schedule when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + (`E2E_LOGIN_PASSWORD` or legacy `E2E_PASSWORD`) are set; uploads `kds-realtime-e2e-staging-summary` artifact.
 
 Do **not** add this tier to default GitHub Actions `ci.yml` quality job.
 

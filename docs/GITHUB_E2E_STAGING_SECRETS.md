@@ -55,7 +55,16 @@ npm run smoke:staging
 
 Uses `.env.staging` — never commit passwords.
 
+## KDS Realtime staging workflow (Era 13 Cycle 2)
+
+Workflow: `.github/workflows/playwright-kds-staging.yml` (weekly Monday 07:00 UTC + manual).
+
+Uses the same secret names as E2E Staging (`era13-kds-staging-workflow-secrets-align-v1`). Additionally requires `ENABLE_KDS_V1_CERTIFIED=true` in the job and optional `NEXT_PUBLIC_SUPABASE_*` for Realtime.
+
+Artifact on completion: `kds-realtime-e2e-staging-summary` (`PASSED` / `SKIPPED` / `FAILED`).
+
 ## CI certification
 
 - `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert`
 - `npm run test:ci:e2e-staging-auth-era12` + `test:ci:e2e-staging-auth-era12:cert` (wired in `test:ci:governance-bundles:partition-platform`)
+- `npm run test:ci:kds-staging-workflow-secrets-era13:cert` (chained in `test:ci:kds-realtime-e2e-staging-era11:cert`)

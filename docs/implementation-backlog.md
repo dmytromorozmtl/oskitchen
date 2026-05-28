@@ -15,6 +15,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/enterprise/enterprise-identity-era13-policy.ts`, `test:ci:enterprise-identity-era13:cert`, `docs/enterprise-procurement-pack.md`
 - Next: SSO/SAML R2 **implementation** only with explicit era budget (E8-2)
 
+### KOS-E13-002 — KDS staging workflow secrets alignment (P1)
+- ID: `KOS-E13-002`
+- Title: Align playwright-kds-staging.yml secrets with Era 12 E2E_LOGIN_PASSWORD convention
+- Module: Kitchen / KDS / DevOps
+- Priority: P1 (Era 13 Cycle 2)
+- Status: **completed**
+- Decision: `era13-kds-staging-workflow-secrets-align-v1` — legacy `E2E_PASSWORD` alias; job-level `E2E_LOGIN_PASSWORD` env
+- Evidence: `lib/ci/kds-staging-workflow-secrets-era13-policy.ts`, `test:ci:kds-staging-workflow-secrets-era13:cert`
+- Next: first green KDS staging workflow run when secrets configured (ops)
+
 ## Era 12 — Integration hardening / enterprise
 
 ### KOS-E12-001 — Channel golden path Era 12 recert (P1)
