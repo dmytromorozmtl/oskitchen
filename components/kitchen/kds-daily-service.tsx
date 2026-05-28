@@ -9,10 +9,18 @@ import {
 } from "@/actions/kitchen-daily-kds";
 import { KdsBumpNextStrip } from "@/components/kitchen/kds-bump-next-strip";
 import { KdsQueueStatusStrip } from "@/components/kitchen/kds-queue-status-strip";
+import { KdsRecallNextStrip } from "@/components/kitchen/kds-recall-next-strip";
+import { KdsTicketAttentionStrip } from "@/components/kitchen/kds-ticket-attention-strip";
+import { KdsTicketRowNextAction } from "@/components/kitchen/kds-ticket-row-next-action";
 import {
   pickKdsBumpNextTicket,
   shouldShowKdsBumpNextHero,
+  shouldShowKdsRecallNextHero,
 } from "@/lib/kitchen/kds-bump-next-era18";
+import {
+  buildKdsTicketFocusSnapshot,
+  shouldShowKdsTicketAttentionStrip,
+} from "@/lib/kitchen/kds-ticket-focus-era18";
 import {
   formatKdsElapsedClock,
   formatKdsTicketNumber,
@@ -103,6 +111,12 @@ export function KdsDailyService({
     canBump,
     preparingCount: preparing.length,
   });
+  const showRecallNextHero = shouldShowKdsRecallNextHero({
+    canRecall,
+    readyCount: ready.length,
+  });
+  const ticketFocus = useMemo(() => buildKdsTicketFocusSnapshot(orders), [orders]);
+  const showTicketAttentionStrip = shouldShowKdsTicketAttentionStrip(ticketFocus, queueSummary);
 
   const refresh = useCallback(() => {
     startRefresh(async () => {
@@ -241,11 +255,27 @@ export function KdsDailyService({
         </div>
       ) : null}
 
+      {showTicketAttentionStrip ? (
+        <KdsTicketAttentionStrip
+          focus={ticketFocus}
+          preparing={preparing}
+          ready={ready}
+        />
+      ) : null}
+
       {showBumpNextHero && bumpNextTicket ? (
         <KdsBumpNextStrip
           ticket={bumpNextTicket}
           pending={pendingOrderId !== null}
           onBump={handleBump}
+        />
+      ) : null}
+
+      {showRecallNextHero ? (
+        <KdsRecallNextStrip
+          ready={ready}
+          pending={pendingOrderId !== null}
+          onRecall={handleRecall}
         />
       ) : null}
 
@@ -345,6 +375,7 @@ function KdsTicketCard({
 
   return (
     <div
+      id={`kds-ticket-${order.id}`}
       role="article"
       aria-label={`Order ${ticketNumber} ${order.customerName}${allergenConflict ? ", allergen conflict" : ""}${overdue ? ", overdue" : ""}`}
       data-testid={`kds-ticket-${order.id}`}
@@ -386,6 +417,15 @@ function KdsTicketCard({
           <span className="font-mono text-sm tabular-nums text-muted-foreground">
             ⏱ {formatKdsElapsedClock(order.elapsedSeconds)}
           </span>
+          <KdsTicketRowNextAction
+            order={order}
+            canBump={canBump}
+            canRecall={canRecall}
+            pending={isPending}
+            blocked={isBlocked}
+            onBump={onBump}
+            onRecall={onRecall}
+          />
         </div>
       </div>
       <div className="mb-4 flex flex-wrap gap-1">

@@ -9,6 +9,7 @@ import {
   kdsBumpNextLabel,
   pickKdsBumpNextTicket,
   shouldShowKdsBumpNextHero,
+  shouldShowKdsRecallNextHero,
 } from "@/lib/kitchen/kds-bump-next-era18";
 
 const tickets = [
@@ -44,6 +45,12 @@ describe("kds bump next era18", () => {
     expect(shouldShowKdsBumpNextHero({ canBump: true, preparingCount: 2 })).toBe(true);
     expect(shouldShowKdsBumpNextHero({ canBump: false, preparingCount: 2 })).toBe(false);
     expect(shouldShowKdsBumpNextHero({ canBump: true, preparingCount: 0 })).toBe(false);
+  });
+
+  it("shows recall next hero when recall permission and ready queue exist", () => {
+    expect(shouldShowKdsRecallNextHero({ canRecall: true, readyCount: 2 })).toBe(true);
+    expect(shouldShowKdsRecallNextHero({ canRecall: false, readyCount: 2 })).toBe(false);
+    expect(shouldShowKdsRecallNextHero({ canRecall: true, readyCount: 0 })).toBe(false);
   });
 
   it("formats bump next label with ticket number and customer", () => {

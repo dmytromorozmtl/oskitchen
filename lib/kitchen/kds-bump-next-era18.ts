@@ -29,6 +29,13 @@ export function shouldShowKdsBumpNextHero(input: {
   return input.canBump && input.preparingCount > 0;
 }
 
+export function shouldShowKdsRecallNextHero(input: {
+  canRecall: boolean;
+  readyCount: number;
+}): boolean {
+  return input.canRecall && input.readyCount > 0;
+}
+
 export function kdsBumpNextDetail(ticket: KdsBumpNextTicket): string {
   const parts: string[] = [];
   if (ticket.tableName?.trim()) parts.push(`Table ${ticket.tableName.trim()}`);
