@@ -206,6 +206,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **12** | **Pilot metrics baseline** | `era17-pilot-metrics-baseline-v1`; **awaiting_baseline_capture** — [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md); `smoke:pilot-metrics-baseline` |
 | **12b** | **Investor narrative one-pager v2** | `era17-investor-narrative-onepager-v2-v1`; **template_only_awaiting_pilot_metrics** — [`investor-narrative-onepager-era17.md`](./investor-narrative-onepager-era17.md) |
 | **12c** | **Competitor feature gap matrix refresh** | `era17-competitor-feature-gap-matrix-refresh-v1`; **evidence_aligned_awaiting_pilot_proof** — [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md); `smoke:competitor-feature-gap-matrix` |
+| **12d** | **Pilot case study draft** | `era17-pilot-case-study-draft-v1`; **internal_draft_awaiting_customer_approval** — [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md); `smoke:pilot-case-study-draft` |
 | **13** | **Pilot rollback drill** | `era17-pilot-rollback-drill-v1`; **awaiting_rollback_drill_execution** — [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md); `smoke:pilot-rollback-drill` |
 | **14** | **Forbidden-claims enforcement** | `era17-pilot-forbidden-claims-enforcement-v1`; **forbidden_claims_enforcement_wired** — GO/NO-GO gate; re-run on release branch before contract |
 

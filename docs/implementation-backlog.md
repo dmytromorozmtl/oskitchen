@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-036 — Pilot case study draft (P2)
+- ID: `KOS-E17-036`
+- Title: Era 17 Cycle 43 — internal case study draft gated on customer approval + pilot metrics
+- Module: GTM / Sales proof
+- Priority: P2 (Workstream K Cycle 43)
+- Status: **internal_draft_awaiting_customer_approval**
+- Decision: `era17-pilot-case-study-draft-v1` — internal scaffold only; no public publish without signed permission and verified KPIs
+- Evidence: `docs/pilot-case-study-draft-era17.md`, `lib/commercial/pilot-case-study-draft-summary.ts`, `scripts/smoke-pilot-case-study-draft-era17.ts`, `test:ci:pilot-case-study-draft-era17:cert`
+- Next: Era 17 scorecard refresh (P2 #15 / Cycle 44)
+
 ### KOS-E17-035 — Competitor feature gap matrix refresh (P2)
 - ID: `KOS-E17-035`
 - Title: Era 17 Cycle 42 — competitor matrix aligned to re-audit §6 and Era 17 evidence
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **evidence_aligned_awaiting_pilot_proof**
 - Decision: `era17-competitor-feature-gap-matrix-refresh-v1` — sixteen competitors + forbidden parity claims; no leapfrog without pilot proof
 - Evidence: `docs/competitor-feature-gap-matrix.md`, `lib/commercial/competitor-feature-gap-matrix-summary.ts`, `scripts/smoke-competitor-feature-gap-matrix-era17.ts`, `test:ci:competitor-feature-gap-matrix-era17:cert`
-- Next: Case study draft (P2 #14) — internal or customer-approved only
+- Next: Case study draft — **done**; see KOS-E17-036
 
 ### KOS-E17-034 — Investor narrative one-pager v2 (P2)
 - ID: `KOS-E17-034`

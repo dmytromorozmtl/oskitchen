@@ -10,6 +10,7 @@ Notes:
 - Priority reflects KitchenOS sequencing, not absolute market importance for every buyer.
 - **Investor narrative (Era 17):** `era17-investor-narrative-onepager-v2-v1` — use [`investor-narrative-onepager-era17.md`](./investor-narrative-onepager-era17.md) for founder deck framing; **template_only_awaiting_pilot_metrics** until pilot KPI baseline captured.
 - **Matrix refresh (Era 17):** `npm run smoke:competitor-feature-gap-matrix` → `artifacts/competitor-feature-gap-matrix-summary.json` (`matrixProofStatus`).
+- **Case study draft (Era 17):** `era17-pilot-case-study-draft-v1` — [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md); internal only until customer approval + metrics gate.
 
 ## Era 17 evidence alignment (2026-05-28)
 

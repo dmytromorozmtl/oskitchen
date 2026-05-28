@@ -320,6 +320,18 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** smoke → **overall: PASSED** (`matrixProofStatus: evidence_aligned_era17`; cert PASSED). Leapfrog claims still blocked until P0 proof artifacts exist.
 
+### Era 17 pilot case study draft (2026-05-28)
+
+**Policy:** `era17-pilot-case-study-draft-v1` — **internal_draft_awaiting_customer_approval**; no public publish without signed permission and verified KPIs.
+
+1. Use [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md) — internal scaffold only; metric cells remain TBD until pilot baseline captured.
+2. Run **`npm run smoke:pilot-case-study-draft`** → review **`artifacts/pilot-case-study-draft-summary.json`** (`caseStudyProofStatus`, `publishProofStatus`).
+3. Requires `artifacts/pilot-metrics-baseline-summary.json` **`overall: PASSED`** before citing KPIs in case study.
+4. Set **`PILOT_CASE_STUDY_CUSTOMER_APPROVAL=signed|anonymized_signed`** only after written permission per [`outreach/pilot-agreement-template.md`](./outreach/pilot-agreement-template.md).
+5. Chain with **`npm run smoke:pilot-forbidden-claims-enforcement`** before any external publish.
+
+**Execution status (2026-05-28):** smoke → **overall: PASSED** (`caseStudyProofStatus: internal_draft_ready`; `publishProofStatus: proof_skipped_missing_pilot_metrics`). **Internal draft only — not published.**
+
 ### Era 17 pilot rollback drill (2026-05-28)
 
 **Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.

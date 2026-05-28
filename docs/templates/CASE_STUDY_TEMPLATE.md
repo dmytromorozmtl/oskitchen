@@ -1,6 +1,7 @@
 # Case Study Template — KitchenOS Pilot
 
 **Permission:** Named or anonymized — get written approval before publish.  
+**Era 17 canonical gate:** `era17-pilot-case-study-draft-v1` — use [`pilot-case-study-draft-era17.md`](../pilot-case-study-draft-era17.md) for proof wiring; this legacy template remains reference-only.
 **Target:** 2 case studies by day 90 of GTM plan.
 
 ---

@@ -30,7 +30,7 @@
 ## What [Company] Provides
 
 - Honest feedback on product usability, bugs, and feature gaps
-- Permission to publish **anonymized case study** with agreed metrics (or named, if preferred)
+- Permission to publish **anonymized case study** with agreed metrics (or named, if preferred) — Era 17 gate: `era17-pilot-case-study-draft-v1`; see [`pilot-case-study-draft-era17.md`](../pilot-case-study-draft-era17.md)
 - Optional: permission to use company logo on KitchenOS website as "Pilot Partner"
 - Participation in weekly check-in calls (or async feedback if scheduling conflicts)
 
