@@ -13,6 +13,12 @@ export const PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES = [
   "/dashboard/routes/uber-direct",
 ] as const;
 
+/** Routes with certified in-page pilot/preview copy — skip layout duplicate (Era 17). */
+export const PAGE_MATURITY_INLINE_HONESTY_ROUTES = [
+  "/dashboard/settings/security/sso",
+  "/dashboard/inventory/pos-impacts",
+] as const;
+
 export const PAGE_MATURITY_SWEEP_CI_SCRIPTS = [
   "test:ci:page-maturity-sweep",
   "test:ci:page-maturity-sweep:cert",

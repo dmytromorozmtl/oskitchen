@@ -2,7 +2,10 @@ import {
   getNavMaturityRule,
   type NavMaturityExposure,
 } from "@/lib/navigation/nav-maturity-governance";
-import { PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES } from "@/lib/navigation/page-maturity-sweep-policy";
+import {
+  PAGE_MATURITY_INLINE_HONESTY_ROUTES,
+  PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES,
+} from "@/lib/navigation/page-maturity-sweep-policy";
 
 export type PageMaturityHonesty = {
   exposure: Extract<NavMaturityExposure, "preview" | "placeholder">;
@@ -41,6 +44,16 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
     "Uber Direct dispatch is a placeholder — workflow rehearsal only, not live courier APIs.",
   "/dashboard/routes/uber-direct":
     "Uber Direct dispatch is a placeholder — workflow rehearsal only, not live courier APIs.",
+  "/dashboard/settings/security/sso":
+    "Enterprise SSO is pilot wiring for activated workspaces only — not production SSO for all tenants.",
+  "/dashboard/inventory/pos-impacts":
+    "POS-only recipe depletion diagnostics — beta. Storefront and online orders do not deplete stock in pilot.",
+  "/dashboard/costing/theft":
+    "Theft detection alerts are preview-scoped variance signals — not certified shrink or loss-prevention product.",
+  "/dashboard/marketing/holiday-packages":
+    "Holiday packages are preview-scoped seasonal bundles — not certified full catering or ecommerce parity.",
+  "/dashboard/integrations/7shifts":
+    "7shifts schedule sync is preview-scoped — not certified labor suite or payroll parity.",
 };
 
 function normalizeHref(href: string): string {
@@ -59,11 +72,20 @@ function hasInlinePlaceholderBanner(pathname: string): boolean {
   );
 }
 
+function hasInlineHonestyCopy(pathname: string): boolean {
+  return PAGE_MATURITY_INLINE_HONESTY_ROUTES.some((prefix) =>
+    hrefMatchesPrefix(pathname, prefix),
+  );
+}
+
 export function getPageMaturityHonesty(pathname: string): PageMaturityHonesty | null {
   const rule = getNavMaturityRule(pathname);
   if (!rule) return null;
   if (rule.exposure !== "preview" && rule.exposure !== "placeholder") return null;
   if (rule.exposure === "placeholder" && hasInlinePlaceholderBanner(pathname)) {
+    return null;
+  }
+  if (rule.exposure === "preview" && hasInlineHonestyCopy(pathname)) {
     return null;
   }
 

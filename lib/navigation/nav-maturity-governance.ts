@@ -22,6 +22,31 @@ export type NavMaturityRule = {
 /** Longest-prefix wins — keep more specific paths before broader ones. */
 export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
   {
+    prefix: "/dashboard/settings/security/sso",
+    exposure: "preview",
+    matrixRef: "Enterprise SSO pilot",
+  },
+  {
+    prefix: "/dashboard/inventory/pos-impacts",
+    exposure: "preview",
+    matrixRef: "Inventory counts and waste",
+  },
+  {
+    prefix: "/dashboard/costing/theft",
+    exposure: "preview",
+    matrixRef: "Costing and margin",
+  },
+  {
+    prefix: "/dashboard/marketing/holiday-packages",
+    exposure: "preview",
+    matrixRef: "Growth campaigns",
+  },
+  {
+    prefix: "/dashboard/integrations/7shifts",
+    exposure: "preview",
+    matrixRef: "7shifts scheduling sync",
+  },
+  {
     prefix: "/dashboard/integrations/doordash",
     exposure: "placeholder",
     matrixRef: "Uber / DoorDash provider surfaces",

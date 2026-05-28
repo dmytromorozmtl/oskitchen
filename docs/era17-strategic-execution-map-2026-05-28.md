@@ -100,7 +100,7 @@
 
 | Cycle Band | Goal | Tasks | Acceptance Criteria | Validation | Risks | Owner |
 |------------|------|-------|---------------------|------------|-------|-------|
-| **32** | Nav maturity sweep on new routes | `page-maturity-honesty` | nav cert PASS | CI | — | Product |
+| **32** | Nav maturity sweep on new routes | `page-maturity-honesty` | nav cert PASS | `test:ci:nav-maturity-sweep-era17:cert` + `smoke:nav-maturity-sweep-era17` | — | Product | **Done** — `era17-nav-maturity-sweep-v1` |
 | **33** | Permission-denied UX consistency | Spot-check POS/KDS/dashboard | Checklist | manual | — | UX |
 | **34** | Integration setup wizard friction | Reduce steps for Woo/Shopify pilot | Operator feedback | pilot retro | — | Product |
 

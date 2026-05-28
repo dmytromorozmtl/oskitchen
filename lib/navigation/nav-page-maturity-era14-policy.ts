@@ -12,7 +12,10 @@ import {
   type NavMaturityExposure,
 } from "@/lib/navigation/nav-maturity-governance";
 import { getPageMaturityHonesty } from "@/lib/navigation/page-maturity-honesty";
-import { PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES } from "@/lib/navigation/page-maturity-sweep-policy";
+import {
+  PAGE_MATURITY_INLINE_HONESTY_ROUTES,
+  PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES,
+} from "@/lib/navigation/page-maturity-sweep-policy";
 
 export const NAV_PAGE_MATURITY_ERA14_POLICY_ID = "era14-nav-page-maturity-recert-v1" as const;
 
@@ -63,6 +66,12 @@ export function collectFocusedNavHrefs(): string[] {
   return [...hrefs].sort();
 }
 
+export function hasInlineHonestyCopyException(href: string): boolean {
+  return PAGE_MATURITY_INLINE_HONESTY_ROUTES.some((prefix) =>
+    hrefMatchesPrefix(href, prefix),
+  );
+}
+
 export function hasInlinePlaceholderBannerException(href: string): boolean {
   return PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES.some((prefix) =>
     hrefMatchesPrefix(href, prefix),
@@ -80,6 +89,7 @@ export function navPageMaturityHonestyGap(href: string): string | null {
   const exposure = getNavMaturityExposure(href);
   if (!navHrefRequiresPageHonesty(exposure)) return null;
   if (hasInlinePlaceholderBannerException(href)) return null;
+  if (hasInlineHonestyCopyException(href)) return null;
   if (getPageMaturityHonesty(href)) return null;
   return `Nav link ${href} is ${exposure} but has no PageMaturityRouteNotice copy`;
 }

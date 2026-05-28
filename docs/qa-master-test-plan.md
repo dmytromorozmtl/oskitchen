@@ -317,6 +317,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Gap closure: `/dashboard/staff/payroll`, `/dashboard/marketing/email-campaigns`
 - Wiring cert: `test:ci:nav-page-maturity-era14:cert` (chained in `test:ci:page-maturity-sweep:cert`)
 
+### 8c4q2. Nav maturity sweep Era 17 (Era 17 Cycle 32)
+- Policy: `lib/navigation/nav-maturity-sweep-era17-policy.ts` (`era17-nav-maturity-sweep-v1`; extends Era 4/14)
+- Audit: `runNavMaturitySweepEra17Audit()` — focused nav zero-gap + 5 Era 17 preview route classifications
+- New preview routes: SSO pilot settings, POS inventory impacts, costing theft, holiday packages, 7shifts sync
+- Smoke: `npm run smoke:nav-maturity-sweep-era17` → `artifacts/nav-maturity-sweep-era17-summary.json`
+- Wiring cert: `test:ci:nav-maturity-sweep-era17:cert` (chained in `test:ci:page-maturity-sweep:cert`)
+
 ### 8c4p. Production calendar operator depth (Era 13 Cycle 4)
 - Policy: `lib/production/production-calendar-operator-depth-era13-policy.ts` (`era13-production-calendar-operator-depth-v1`; consolidates Era 6/8/10/11)
 - era15 recert: `lib/production/production-calendar-operator-depth-era15-policy.ts` (`era15-production-calendar-operator-recert-v1`)

@@ -199,7 +199,7 @@ npm run test:ci:pos-money-path:e2e
 | Page maturity honesty | `npm run test:ci:page-maturity-sweep` | Preview/placeholder in-page copy; inline banner exceptions |
 | Page maturity wiring cert | `npm run test:ci:page-maturity-sweep:cert` | Layout wiring, policy id, matrix alignment |
 
-**Policy (Era 4 Cycle 12 + Era 14 Cycle 1):** `lib/navigation/page-maturity-sweep-policy.ts` (`era4-page-maturity-sweep-v1`) + `lib/navigation/nav-page-maturity-era14-policy.ts` (`era14-nav-page-maturity-recert-v1`) — focused nav audit for preview/placeholder honesty. **UI:** `PageMaturityRouteNotice` + existing nav badges (`test:ci:nav-governance`).
+**Policy (Era 4 Cycle 12 + Era 14 Cycle 1 + Era 17 Cycle 32):** `lib/navigation/page-maturity-sweep-policy.ts` (`era4-page-maturity-sweep-v1`) + `lib/navigation/nav-page-maturity-era14-policy.ts` (`era14-nav-page-maturity-recert-v1`) + `lib/navigation/nav-maturity-sweep-era17-policy.ts` (`era17-nav-maturity-sweep-v1`) — focused nav audit for preview/placeholder honesty. **UI:** `PageMaturityRouteNotice` + existing nav badges (`test:ci:nav-governance`).
 
 **Wiring certification (tier 0):** `test:ci:page-maturity-sweep:cert` + `test:ci:page-maturity-sweep` + `test:ci:nav-page-maturity-era14:cert` chained in `test:ci:governance-bundles`.
 

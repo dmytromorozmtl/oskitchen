@@ -34,6 +34,20 @@ describe("page maturity honesty", () => {
     expect(campaigns?.detail).toMatch(/marketing|klaviyo/i);
   });
 
+  it("returns preview honesty for era17 classified routes", () => {
+    const theft = getPageMaturityHonesty("/dashboard/costing/theft");
+    expect(theft?.exposure).toBe("preview");
+    expect(theft?.detail).toMatch(/theft|variance/i);
+
+    const holiday = getPageMaturityHonesty("/dashboard/marketing/holiday-packages");
+    expect(holiday?.exposure).toBe("preview");
+  });
+
+  it("skips duplicate banner when page has inline honesty copy", () => {
+    expect(getPageMaturityHonesty("/dashboard/settings/security/sso")).toBeNull();
+    expect(getPageMaturityHonesty("/dashboard/inventory/pos-impacts")).toBeNull();
+  });
+
   it("returns null for default production routes", () => {
     expect(getPageMaturityHonesty("/dashboard/orders")).toBeNull();
     expect(getPageMaturityHonesty("/dashboard/kitchen")).toBeNull();

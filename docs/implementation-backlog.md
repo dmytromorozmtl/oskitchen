@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-031 — Nav maturity sweep (P1)
+- ID: `KOS-E17-031`
+- Title: Era 17 Cycle 32 — classify Era 17 preview routes + nav honesty recert
+- Module: Dashboard / UX
+- Priority: P1 (Workstream H Cycle 32)
+- Status: **nav_maturity_sweep_recertified**
+- Decision: `era17-nav-maturity-sweep-v1` — 5 preview routes + focused nav zero-gap audit
+- Evidence: `test:ci:nav-maturity-sweep-era17:cert`, `npm run smoke:nav-maturity-sweep-era17`
+- Next: Permission denied UX consistency (Cycle 33) or P0 credential-blocked smokes
+
 ### KOS-E17-030 — Costing pilot spot check (P1)
 - ID: `KOS-E17-030`
 - Title: Era 17 Cycle 31 — recipe → margin report pilot menu spot check
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **pilot_menu_margin_spotcheck_documented**
 - Decision: `era17-costing-pilot-spotcheck-v1` — fixture math + operator checklist
 - Evidence: `docs/costing-pilot-spotcheck-era17.md`, `test:ci:costing-pilot-spotcheck-era17:cert`
-- Next: Workstream H nav maturity sweep (Cycle 32) or P0 credential-blocked smokes
+- Next: Workstream H nav maturity sweep (Cycle 32) — **done**; see KOS-E17-031
 
 ### KOS-E17-029 — Pilot inventory messaging (P1)
 - ID: `KOS-E17-029`

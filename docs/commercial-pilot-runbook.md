@@ -221,6 +221,19 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Enforcement:** `test:ci:costing-pilot-spotcheck-era17:cert` (chained in `test:ci:rbac-wave3`)
 
+---
+
+## Era 17 nav maturity sweep (2026-05-28)
+
+**Policy:** `era17-nav-maturity-sweep-v1` — **nav_maturity_sweep_recertified**; Era 17 preview route classification + focused nav honesty recert.
+
+1. **New preview routes:** SSO pilot settings, POS inventory impacts, costing theft alerts, holiday packages, 7shifts sync.
+2. **Focused nav:** `findNavPageMaturityHonestyGaps()` must return **zero** gaps (`page-maturity-honesty`, `PageMaturityRouteNotice`).
+3. Run **`npm run smoke:nav-maturity-sweep-era17`** → **`artifacts/nav-maturity-sweep-era17-summary.json`**
+4. **Forbidden:** hiding preview badges or promoting preview routes to live in sales copy.
+
+**Enforcement:** `test:ci:nav-maturity-sweep-era17:cert` (chained in `test:ci:page-maturity-sweep:cert`)
+
 ### Era 17 operational sign-off staging proof (2026-05-28)
 
 **Policy:** `era17-operational-signoff-staging-proof-v1` — **awaiting_staging_operator_signoff**; real staging URL + operator identity for KDS + production calendar.
