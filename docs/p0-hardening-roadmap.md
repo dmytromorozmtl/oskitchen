@@ -297,7 +297,13 @@ Priority rule:
 
 - **Completed (Cycle 3, 2026-05-27):** Denial audits + negative tests for delivery routes (`routes.manage`), Copilot mutations (`requireCopilotMutation`), demo/golden scenario (`templates.manage` + production guard), in-app feedback (session required), integration menu sync (certified tests), production calendar (`production.manage`), holiday packages (`growth.manage`).
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
-- **Next:** Batch 2 — restaurant tables, customer-subscription, any remaining tenant-only sensitive mutations.
+- **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
+
+## Era 4 — RBAC wave 4 residuals batch 2 (P0-3)
+
+- **Completed (Cycle 6, 2026-05-27):** Restaurant table mutations require `pos.access` (`lib/restaurant/require-restaurant-table-mutation.ts`); customer subscription mutations require `customers.manage` via `requireCrmMutation`; storefront experiment ethics review requires `storefront.manage` via `requireStorefrontManageActor`.
+- **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert` (extended bundle).
+- **Residual:** Copilot void form actions still silent-return on deny; optional wire `test:ci:rbac-wave4` into `test:security`.
 
 ## Era 4 — POS browser E2E CI policy (P0-2)
 

@@ -32,7 +32,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Era 4 Cycle 3)
 - Status: **completed (batch 1)**
 - Evidence: `lib/routes/require-route-mutation.ts`, `lib/ai/require-copilot-mutation.ts`, `lib/demo/require-demo-mutation.ts`, `lib/feedback/require-app-feedback-submit.ts`, `test:ci:rbac-wave4`, `test:ci:rbac-wave4:cert`
-- Remaining batch 2: restaurant tables, customer-subscription, other tenant-only surfaces per re-audit §5.2
+
+### KOS-E4-006 — RBAC wave 4 residuals (batch 2)
+- ID: `KOS-E4-006`
+- Title: Close restaurant tables, customer subscriptions, and experiment ethics review mutations
+- Module: Platform / security / FOH preview / CRM / storefront
+- Priority: P0 (Era 4 Cycle 6)
+- Status: **completed**
+- Evidence: `lib/restaurant/require-restaurant-table-mutation.ts` (`pos.access`), `requireCrmMutation` on `actions/customer-subscription.ts`, `requireStorefrontManageActor` on `actions/experiment-ethics-review.ts`, extended `test:ci:rbac-wave4`
+- Residual: copilot void form actions silent-deny UX; broader tenant-only grep sweep
 
 ### KOS-E4-004 — Cron experimental surface archive
 - ID: `KOS-E4-004`
@@ -51,7 +59,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-channel-golden-path-v1` — webhook/sync normalize → `externalOrder` → channel import staging → order hub external visibility; kitchen Order auto-create **not** certified
 - Evidence: `lib/integrations/channel-golden-path-policy.ts`, `tests/fixtures/channel-golden-path/`, `test:ci:channel-golden-path`, `test:ci:channel-golden-path:cert` (in `test:ci:governance-bundles`), `scripts/smoke-woo-shopify-certification.ts` for staging/live store
-- Next: RBAC wave 4 batch 2 or typecheck slices
+- Next: typecheck slices or enterprise procurement basics
 
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations

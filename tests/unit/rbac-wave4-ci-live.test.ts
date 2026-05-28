@@ -14,6 +14,9 @@ const WAVE4_TESTS = [
   "tests/unit/integration-menu-sync-rbac.test.ts",
   "tests/unit/production-calendar-actions-rbac.test.ts",
   "tests/unit/holiday-packages-rbac.test.ts",
+  "tests/unit/restaurant-tables-actions-rbac.test.ts",
+  "tests/unit/customer-subscription-rbac.test.ts",
+  "tests/unit/experiment-ethics-review-rbac.test.ts",
 ] as const;
 
 const WAVE4_MODULES = [
@@ -21,6 +24,7 @@ const WAVE4_MODULES = [
   "lib/ai/require-copilot-mutation.ts",
   "lib/demo/require-demo-mutation.ts",
   "lib/feedback/require-app-feedback-submit.ts",
+  "lib/restaurant/require-restaurant-table-mutation.ts",
 ] as const;
 
 function readPackageScripts(): Record<string, string> {
@@ -46,5 +50,8 @@ describe("RBAC wave 4 CI certification (live repo)", () => {
     expect(existsSync(join(ROOT, "actions/delivery-route.ts"))).toBe(true);
     expect(existsSync(join(ROOT, "actions/copilot.ts"))).toBe(true);
     expect(existsSync(join(ROOT, "actions/demo-golden-scenario.ts"))).toBe(true);
+    expect(existsSync(join(ROOT, "actions/restaurant/tables.ts"))).toBe(true);
+    expect(existsSync(join(ROOT, "actions/customer-subscription.ts"))).toBe(true);
+    expect(existsSync(join(ROOT, "actions/experiment-ethics-review.ts"))).toBe(true);
   });
 });

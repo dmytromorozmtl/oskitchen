@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 import type { Prisma } from "@prisma/client";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireStorefrontManageActor } from "@/lib/storefront/require-storefront-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import {
@@ -35,7 +35,11 @@ export async function submitEthicsReviewAction(
       return { error: "Ethics board is not enabled." };
     }
 
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const access = await requireStorefrontManageActor({
+      operation: "storefront.experiment_ethics_review",
+    });
+    if (!access.ok) return { error: access.error };
+    const { sessionUser: user, dataUserId } = access.actor;
     const status = formData.get("status")?.toString();
     if (status !== "approved" && status !== "vetoed") {
       return { error: "Invalid status." };

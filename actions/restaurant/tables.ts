@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { fail, ok } from '@/lib/action-result';
-import { requireTenantActor } from '@/lib/scope/require-tenant-actor';
+import { requireRestaurantTableMutation } from '@/lib/restaurant/require-restaurant-table-mutation';
 import * as tableService from '@/services/restaurant/table-service';
 
 const createTableSchema = z.object({
@@ -30,7 +30,9 @@ const deleteTableSchema = z.object({
 });
 
 export async function createRestaurantTable(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const gate = await requireRestaurantTableMutation({ operation: 'restaurant_tables.create' });
+  if (!gate.ok) return fail(gate.error);
+  const { userId } = gate.actor;
   const parsed = createTableSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid table data");
 
@@ -59,7 +61,9 @@ export async function createRestaurantTable(formData: FormData) {
 }
 
 export async function updateTablePosition(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const gate = await requireRestaurantTableMutation({ operation: 'restaurant_tables.update_position' });
+  if (!gate.ok) return fail(gate.error);
+  const { userId } = gate.actor;
   const parsed = updatePositionSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid data");
 
@@ -73,7 +77,9 @@ export async function updateTablePosition(formData: FormData) {
 }
 
 export async function updateTableStatusAction(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const gate = await requireRestaurantTableMutation({ operation: 'restaurant_tables.update_status' });
+  if (!gate.ok) return fail(gate.error);
+  const { userId } = gate.actor;
   const parsed = updateStatusSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid data");
 
@@ -91,7 +97,9 @@ export async function updateTableStatusAction(formData: FormData) {
 }
 
 export async function deleteRestaurantTable(formData: FormData) {
-  const { userId } = await requireTenantActor();
+  const gate = await requireRestaurantTableMutation({ operation: 'restaurant_tables.delete' });
+  if (!gate.ok) return fail(gate.error);
+  const { userId } = gate.actor;
   const parsed = deleteTableSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("Invalid data");
 

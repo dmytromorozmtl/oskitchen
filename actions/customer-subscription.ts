@@ -5,7 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireCrmMutation } from "@/lib/crm/require-crm-mutation";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger";
 import { safeError } from "@/lib/security";
@@ -29,7 +29,9 @@ const schema = z.object({
 
 export async function createCustomerSubscriptionAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const access = await requireCrmMutation("customer_subscription.create");
+    if (!access.ok) return { error: access.error };
+    const { sessionUser: user, dataUserId } = access.actor;
     const parsed = schema.safeParse({
       customerEmail: formData.get("customerEmail"),
       customerName: formData.get("customerName"),
@@ -113,7 +115,9 @@ export async function createCustomerSubscriptionAction(formData: FormData) {
 
 export async function setSubscriptionStatusAction(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const access = await requireCrmMutation("customer_subscription.set_status");
+    if (!access.ok) return { error: access.error };
+    const { dataUserId } = access.actor;
     const id = String(formData.get("id") ?? "");
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { error: "Invalid subscription." };
     const status = String(formData.get("status") ?? "");
