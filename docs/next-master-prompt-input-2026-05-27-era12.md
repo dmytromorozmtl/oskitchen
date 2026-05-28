@@ -31,6 +31,7 @@ All four Era 12 integration / staging E2E cycles from era11 handoff **completed*
 | **1** | **Enterprise identity recert** — `era13-enterprise-identity-recert-v1`; roadmap_only; SSO R2 pilot not_started |
 | **2** | **KDS staging workflow secrets** — `era13-kds-staging-workflow-secrets-align-v1`; `playwright-kds-staging.yml` password alias parity |
 | **3** | **Staging workflows first-run ops** — `era13-staging-workflows-first-run-ops-v1`; `JOB_OMITTED_SECRETS_MISSING` vs PASSED/FAILED/SKIPPED WITH REASON |
+| **4** | **Production calendar operator depth** — `era13-production-calendar-operator-depth-v1`; pilot checklist + `smoke:production-calendar` |
 
 ---
 

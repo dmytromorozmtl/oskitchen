@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/ci/staging-workflows-first-run-era13-policy.ts`, `test:ci:staging-workflows-first-run-era13:cert`, `docs/GITHUB_E2E_STAGING_SECRETS.md`
 - Next: operator runs first green `e2e-staging.yml` + `playwright-kds-staging.yml` when repo secrets configured (ops only)
 
+### KOS-E13-004 — Production calendar operator depth (P1)
+- ID: `KOS-E13-004`
+- Title: Consolidate production calendar pilot operator scope and checklist
+- Module: Production / Ops
+- Priority: P1 (Era 13 Cycle 4)
+- Status: **completed**
+- Decision: `era13-production-calendar-operator-depth-v1` — honest scope (no drag-drop/KDS sync/delete UI); `npm run smoke:production-calendar`; manual checklist in `docs/production-calendar-operator-checklist.md`
+- Evidence: `lib/production/production-calendar-operator-depth-era13-policy.ts`, `test:ci:production-calendar-operator-depth-era13:cert` (in `test:ci:production-calendar-move-ui:cert`)
+- Next: pilot manual sign-off using checklist (ops); delete-task UI only if explicitly scoped in a future era
+
 ## Era 12 — Integration hardening / enterprise
 
 ### KOS-E12-001 — Channel golden path Era 12 recert (P1)

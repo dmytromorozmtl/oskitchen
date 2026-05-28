@@ -509,3 +509,4 @@ Incremental refresh after Era 12 cycles 1–4 (integration hardening + staging E
 | 2026-05-27 | Era 13 Cycle 1: `era13-enterprise-identity-recert-v1` — roadmap_only identity recert; R2 pilot not_started |
 | 2026-05-27 | Era 13 Cycle 2: `era13-kds-staging-workflow-secrets-align-v1` — KDS Playwright staging workflow password secret parity |
 | 2026-05-27 | Era 13 Cycle 3: `era13-staging-workflows-first-run-ops-v1` — staging workflow first-run ops; JOB_OMITTED_SECRETS_MISSING vs PASSED/FAILED/SKIPPED WITH REASON |
+| 2026-05-27 | Era 13 Cycle 4: `era13-production-calendar-operator-depth-v1` — production calendar pilot checklist + smoke:production-calendar |
