@@ -34,6 +34,14 @@ describe("domain mutation registry", () => {
     }
   });
 
+  it("registers production calendar inline wave4 gate (era11 recert)", () => {
+    const entry = DOMAIN_MUTATION_HELPERS.find((h) => h.id === "production_calendar");
+    expect(entry?.era4Wave).toBe("wave4");
+    const source = readFileSync(join(ROOT, entry!.module), "utf8");
+    expect(source).toContain("requireMutationPermission");
+    expect(source).toContain("updatePlanTaskStatusAction");
+  });
+
   it("documents copilot and feedback exceptions", () => {
     expect(getDocumentedMutationException("copilot_capability_matrix")?.module).toContain(
       "copilot",

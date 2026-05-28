@@ -38,6 +38,8 @@ Policy id: `era4-mutation-access-consolidation-v1` (`lib/permissions/mutation-ac
 
 **CI:** `npm run test:ci:mutation-access-consolidation` + `test:ci:mutation-access-consolidation:cert` in `test:ci:governance-bundles:partition-platform`. Wave-4 action RBAC: `test:ci:rbac-wave4` chained at end of `test:security` (security-db job); wiring cert `test:ci:rbac-wave4:cert` includes `era9-rbac-wave4-recert-v1` (`lib/security/rbac-wave4-era9-policy.ts`).
 
+**Era 11 recert (Cycle 2):** `era11-mutation-access-recert-v1` (`lib/permissions/mutation-access-era11-policy.ts`) — re-validates registry after Era 10 production calendar status workflow; registers inline wave-4 gate `production_calendar` in `domain-mutation-registry.ts` (`actions/production-calendar.ts` → `requireProductionCalendarMutation` → `production.manage`; operations include `production_calendar.update_task_status`). Certs: `test:ci:mutation-access-era11:cert` chained into `test:ci:mutation-access-consolidation:cert`.
+
 **Not consolidated in Cycle 11:** Copilot (`requireCopilotMutation`), per-domain audit services (CRM, kitchen), or platform GTM bridges — listed as documented exceptions in the registry.
 
 ## 3. Canonical Roles

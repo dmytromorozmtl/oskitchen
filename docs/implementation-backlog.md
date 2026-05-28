@@ -3,7 +3,17 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
-## Era 10 — Customer value loop / GTM honesty
+## Era 11 — DevOps scale / RBAC recert
+
+### KOS-E11-002 — Mutation access Era 11 recert (P1)
+- ID: `KOS-E11-002`
+- Title: Re-certify domain mutation registry after Era 10 production calendar status workflow
+- Module: Security / RBAC
+- Priority: P1 (Era 11 Cycle 2)
+- Status: **completed**
+- Decision: `era11-mutation-access-recert-v1` — registers `production_calendar` inline wave-4 gate; cert chains into `test:ci:mutation-access-consolidation:cert`
+- Evidence: `lib/permissions/mutation-access-era11-policy.ts`, `test:ci:mutation-access-era11:cert`
+- Next: permission helper consolidation only where safe; no mass rewrite
 
 ### KOS-E11-001 — Typecheck slice platform-auth (P1)
 - ID: `KOS-E11-001`

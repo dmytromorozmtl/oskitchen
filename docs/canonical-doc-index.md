@@ -453,3 +453,4 @@ Incremental refresh after Era 10 cycles 1–4 (customer value / operator depth /
 | 2026-05-27 | Era 10 Cycle 4: `era10-kds-staging-smoke-recert-v1` — bump + recall integration recert |
 | 2026-05-27 | Era 10 Cycle 5: `era10-scorecard-refresh-v1` — score 97/100; era11 handoff |
 | 2026-05-27 | Era 11 Cycle 1: `era11-typecheck-slice-v3` — `platform-auth` typecheck slice |
+| 2026-05-27 | Era 11 Cycle 2: `era11-mutation-access-recert-v1` — production calendar inline gate + status operation recert |

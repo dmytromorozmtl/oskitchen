@@ -163,6 +163,15 @@ export const DOMAIN_MUTATION_HELPERS: readonly DomainMutationHelperEntry[] = [
     auditsDenials: true,
     era4Wave: "wave4",
   },
+  {
+    id: "production_calendar",
+    domain: "production",
+    module: "actions/production-calendar.ts",
+    entrypoint: "requireProductionCalendarMutation",
+    backing: { kind: "canonical", permissions: ["production.manage"] },
+    auditsDenials: true,
+    era4Wave: "wave4",
+  },
 ] as const;
 
 export const DOMAIN_MUTATION_WAVE4_HELPER_IDS = DOMAIN_MUTATION_HELPERS.filter(

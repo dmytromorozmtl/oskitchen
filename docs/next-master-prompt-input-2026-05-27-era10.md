@@ -29,6 +29,7 @@ All four Era 10 customer value / operator depth cycles from era9 prompt input **
 | Cycle | Outcome |
 |-------|---------|
 | **1** | **Typecheck slice platform-auth** — `era11-typecheck-slice-v3`; `typecheck:slice:platform-auth` |
+| **2** | **Mutation access recert** — `era11-mutation-access-recert-v1`; `production_calendar` registry + status operation certified |
 
 ---
 
@@ -45,6 +46,7 @@ All four Era 10 customer value / operator depth cycles from era9 prompt input **
 
 - KDS Playwright Realtime spec — staging-only; explicit era decision.
 - ~~Typecheck project-reference slices (platform-auth)~~ — **Done** Cycle 1 (`era11-typecheck-slice-v3`); `typecheck:full` still canonical.
+- ~~Mutation access / permission helper recert after Era 10 production calendar~~ — **Done** Cycle 2 (`era11-mutation-access-recert-v1`).
 - Unified cross-channel rewards E2E — still `deferred_locked` after Era 10 Cycle 1.
 - ~~Production calendar operator depth~~ — **Done** Era 10 Cycles 2–3.
 - ~~KDS staging smoke recert~~ — **Done** Era 10 Cycle 4.

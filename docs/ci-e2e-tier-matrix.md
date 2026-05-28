@@ -167,9 +167,10 @@ npm run test:ci:pos-money-path:e2e
 | Suite | Command | Notes |
 |-------|---------|-------|
 | Domain mutation registry + denial logger | `npm run test:ci:mutation-access-consolidation` | Registry paths, wave-4 `requireMutationPermission` + `logDomainMutationDenied` wiring |
-| Consolidation wiring cert | `npm run test:ci:mutation-access-consolidation:cert` | Policy id, governance bundle, RBAC architecture §2a |
+| Consolidation wiring cert | `npm run test:ci:mutation-access-consolidation:cert` | Policy id, governance bundle, RBAC architecture §2a; chains `mutation-access-era11-cert-live` |
+| Era 11 mutation access recert | `npm run test:ci:mutation-access-era11:cert` | `era11-mutation-access-recert-v1`; production calendar inline gate + `production_calendar.update_task_status` |
 
-**Policy (Era 4 Cycle 11):** `lib/permissions/mutation-access-policy.ts`. **Wave-4 action tests:** `test:ci:rbac-wave4` — chained at end of `test:security` (security-db job); wiring cert `test:ci:rbac-wave4:cert` + **Era 9 Cycle 4 recert** `era9-rbac-wave4-recert-v1` (`lib/security/rbac-wave4-era9-policy.ts`); not in governance bundles.
+**Policy (Era 4 Cycle 11):** `lib/permissions/mutation-access-policy.ts` (`era4-mutation-access-consolidation-v1`). **Era 11 recert:** `lib/permissions/mutation-access-era11-policy.ts` (`era11-mutation-access-recert-v1`). **Wave-4 action tests:** `test:ci:rbac-wave4` — chained at end of `test:security` (security-db job); wiring cert `test:ci:rbac-wave4:cert` + **Era 9 Cycle 4 recert** `era9-rbac-wave4-recert-v1` (`lib/security/rbac-wave4-era9-policy.ts`); not in governance bundles.
 
 **Wiring certification (tier 0):** `test:ci:mutation-access-consolidation:cert` + `test:ci:mutation-access-consolidation` chained in `test:ci:governance-bundles`.
 

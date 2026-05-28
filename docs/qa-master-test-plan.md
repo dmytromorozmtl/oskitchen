@@ -87,12 +87,14 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: `PageMaturityRouteNotice` in `app/dashboard/layout.tsx`
 - complements: `test:ci:nav-governance` (sidebar badges)
 
-### 8c7. Mutation access consolidation (Era 4 Cycle 11)
+### 8c7. Mutation access consolidation (Era 4 Cycle 11 + Era 11 Cycle 2 recert)
 - policy: `lib/permissions/mutation-access-policy.ts` (`era4-mutation-access-consolidation-v1`)
-- registry: `lib/permissions/domain-mutation-registry.ts`
-- wiring cert: `test:ci:mutation-access-consolidation:cert` (in `test:ci:governance-bundles`)
+- era11 recert: `lib/permissions/mutation-access-era11-policy.ts` (`era11-mutation-access-recert-v1`) — production calendar inline gate + `production_calendar.update_task_status` after Era 10 status workflow
+- registry: `lib/permissions/domain-mutation-registry.ts` (includes `production_calendar` entry)
+- wiring cert: `test:ci:mutation-access-consolidation:cert` (in `test:ci:governance-bundles`; chains `test:ci:mutation-access-era11:cert`)
 - unit: `npm run test:ci:mutation-access-consolidation` — registry integrity + shared denial logger
-- wave-4 action RBAC: `npm run test:ci:rbac-wave4` — chained at end of `npm run test:security` (security-db job); not in governance bundles
+- era11 unit: `npm run test:ci:mutation-access-era11` — inline wave-4 gate policy tests
+- wave-4 action RBAC: `npm run test:ci:rbac-wave4` — chained at end of `npm run test:security` (security-db job); includes `production-calendar-actions-rbac.test.ts`; not in governance bundles
 
 ### 8c6. KDS staging operational smoke (Era 4 Cycle 10)
 - policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`)
