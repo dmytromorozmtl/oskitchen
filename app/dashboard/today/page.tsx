@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 export default async function TodayOperationsPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ metrics?: string }>;
+  searchParams?: Promise<{ metrics?: string; checklist?: string }>;
 }) {
   const [{ sessionUser, dataUserId }, actor] = await Promise.all([
     getTenantActor(),
@@ -26,6 +26,7 @@ export default async function TodayOperationsPage({
   ]);
   const resolvedSearchParams = (await searchParams) ?? {};
   const showFullMetrics = resolvedSearchParams.metrics === "all";
+  const showAllChecklistSteps = resolvedSearchParams.checklist === "all";
   const persona = resolveOperatorHomePersona({
     workspaceRole: actor.workspaceRole,
     staffRoleType: actor.staffRoleType,
@@ -59,7 +60,7 @@ export default async function TodayOperationsPage({
         {integrationHealthModel ? (
           <PilotIntegrationHealthStrip model={integrationHealthModel} />
         ) : null}
-        <GettingStartedChecklist data={gettingStarted} />
+        <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
         <TodayCommandCenterView
           userId={dataUserId}
           email={sessionUser.email ?? null}

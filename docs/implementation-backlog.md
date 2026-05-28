@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-016 — Getting started next-step focus (P1)
+- ID: `KOS-E18-016`
+- Title: Era 18 Workstream L Cycle 16 — next-step hero on Today + golden-path checklist order
+- Module: Onboarding / Today / Owner setup
+- Priority: P1 (time-to-first-order + pilot deployment speed)
+- Status: **getting_started_focus_wired**
+- Decision: `era18-getting-started-focus-v1` — one prioritized setup step with primary CTA; `?checklist=all` expands; first order links to manual order create
+- Evidence: `lib/onboarding/getting-started-focus-era18.ts`, `components/dashboard/getting-started-checklist.tsx`, `services/onboarding/getting-started-status.ts`
+- Next: Capture TTV metric in pilot retro; optional go-live checklist sync
+
 ### KOS-E18-015 — Order hub channel row next actions (P0)
 - ID: `KOS-E18-015`
 - Title: Era 18 Workstream K Cycle 15 — Woo/Shopify external row next actions on order hub

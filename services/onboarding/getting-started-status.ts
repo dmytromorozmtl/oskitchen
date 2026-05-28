@@ -61,16 +61,16 @@ export async function loadGettingStartedStatus(
       done: menuCount > 0 || Boolean(activation?.firstMenuCreated),
     },
     {
-      id: "pos",
-      label: "Try the POS",
-      href: "/dashboard/pos",
-      done: posUseCount > 0,
+      id: "order",
+      label: "Receive your first order",
+      href: "/dashboard/orders/new",
+      done: orderCount > 0 || Boolean(activation?.firstOrderCreated),
     },
     {
-      id: "storefront",
-      label: "Publish your storefront",
-      href: "/dashboard/storefront",
-      done: storefrontLive > 0,
+      id: "pos",
+      label: "Try the POS",
+      href: "/dashboard/pos/terminal",
+      done: posUseCount > 0,
     },
     {
       id: "staff",
@@ -79,10 +79,10 @@ export async function loadGettingStartedStatus(
       done: staffCount > 1,
     },
     {
-      id: "order",
-      label: "Receive your first order",
-      href: null,
-      done: orderCount > 0 || Boolean(activation?.firstOrderCreated),
+      id: "storefront",
+      label: "Publish your storefront",
+      href: "/dashboard/storefront",
+      done: storefrontLive > 0,
     },
   ];
 
