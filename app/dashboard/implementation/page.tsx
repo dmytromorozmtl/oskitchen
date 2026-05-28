@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ImplementationKpis } from "@/components/dashboard/implementation/implementation-kpis";
+import { ImplementationPilotExecutionReadinessPanel } from "@/components/dashboard/implementation/implementation-pilot-execution-readiness-panel";
 import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { ReadinessBadge } from "@/components/dashboard/implementation/readiness-badge";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { IMPLEMENTATION_STATUS_LABEL, isActiveStatus } from "@/lib/implementatio
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { getActiveProject, projectKpis } from "@/services/implementation/implementation-service";
+import { loadPilotExecutionReadinessSlice } from "@/services/commercial/pilot-execution-readiness-service";
 import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 import { getLatestReadiness } from "@/services/implementation/readiness-service";
 
@@ -35,10 +37,11 @@ export default async function ImplementationPage() {
     );
   }
 
-  const [active, kpis, pilotReadiness] = await Promise.all([
+  const [active, kpis, pilotReadiness, pilotExecutionReadiness] = await Promise.all([
     getActiveProject(userId),
     projectKpis(userId),
     loadImplementationPilotReadinessModel(userId),
+    loadPilotExecutionReadinessSlice(),
   ]);
   const readiness = active ? await getLatestReadiness({ userId, projectId: active.id }) : null;
 
@@ -47,6 +50,7 @@ export default async function ImplementationPage() {
       <EmptyState
         companyName={ownerProfile?.companyName ?? null}
         pilotReadiness={pilotReadiness}
+        pilotExecutionReadiness={pilotExecutionReadiness}
       />
     );
   }
@@ -106,6 +110,8 @@ export default async function ImplementationPage() {
       </header>
 
       <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} />
+
+      <ImplementationPilotExecutionReadinessPanel slice={pilotExecutionReadiness} />
 
       <ImplementationKpis tiles={tiles} />
 
@@ -198,9 +204,11 @@ async function ProjectListPreview({ userId }: { userId: string }) {
 function EmptyState({
   companyName,
   pilotReadiness,
+  pilotExecutionReadiness,
 }: {
   companyName: string | null;
   pilotReadiness: Awaited<ReturnType<typeof loadImplementationPilotReadinessModel>>;
+  pilotExecutionReadiness: Awaited<ReturnType<typeof loadPilotExecutionReadinessSlice>>;
 }) {
   return (
     <div className="space-y-6">
@@ -214,6 +222,8 @@ function EmptyState({
       </header>
 
       <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} />
+
+      <ImplementationPilotExecutionReadinessPanel slice={pilotExecutionReadiness} />
 
       <Card>
         <CardHeader>

@@ -76,6 +76,18 @@ const BLOCKER_RULES: readonly {
     nextAction: "Set PILOT_GONOGO_ICP_INPUT_JSON from config/commercial/pilot-icp-qualified-example.template.json",
   },
   {
+    pattern: /metrics baseline not captured/i,
+    category: "documentation",
+    owner: "gtm",
+    nextAction: "npm run smoke:pilot-metrics-baseline after Week 1 kickoff",
+  },
+  {
+    pattern: /rollback drill incomplete/i,
+    category: "operator_tier",
+    owner: "ops",
+    nextAction: "npm run smoke:pilot-rollback-drill — tabletop before kickoff",
+  },
+  {
     pattern: /LOI|customer on record/i,
     category: "customer_prospect",
     owner: "legal",

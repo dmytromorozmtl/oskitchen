@@ -14,6 +14,15 @@ import {
 } from "@/lib/commercial/pilot-icp-contract-era17";
 import { buildEra20ProspectPlaceholder } from "@/lib/commercial/era20-first-paid-pilot-package";
 import {
+  buildEra20PilotExecutionReadinessSlice,
+  buildPilotExecutionReadinessGoNoGoWarnings,
+  derivePilotMetricsBaselineGate,
+  derivePilotRollbackDrillGate,
+  type Era20PilotExecutionReadinessSlice,
+  type PilotMetricsBaselineGoNoGoArtifact,
+  type PilotRollbackDrillGoNoGoArtifact,
+} from "@/lib/commercial/era20-pilot-execution-readiness";
+import {
   buildPilotGoNoGoBlockerTaxonomy,
   formatPilotGoNoGoBlockerTaxonomyLines,
   type PilotGoNoGoCategorizedBlocker,
@@ -51,6 +60,7 @@ export type PilotGoNoGoSummary = {
     categorizedBlockers: PilotGoNoGoCategorizedBlocker[];
     categorizedWarnings: PilotGoNoGoCategorizedBlocker[];
   };
+  executionReadiness?: Era20PilotExecutionReadinessSlice;
 };
 
 export type PilotTierPreflightArtifact = {
@@ -319,6 +329,8 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
   p0StagingProof: PilotP0StagingProofArtifact | null;
   ssoPilotReadyGate: PilotSsoPilotReadyGateArtifact | null;
+  metricsBaseline?: PilotMetricsBaselineGoNoGoArtifact | null;
+  rollbackDrill?: PilotRollbackDrillGoNoGoArtifact | null;
   icpInput: PilotIcpQualificationInput;
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
@@ -354,6 +366,8 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
     p0Artifact: input.p0StagingProof,
   });
   const ssoPilotReady = deriveSsoPilotReadyGatePass(input.ssoPilotReadyGate);
+  const pilotMetricsBaseline = derivePilotMetricsBaselineGate(input.metricsBaseline);
+  const pilotRollbackDrill = derivePilotRollbackDrillGate(input.rollbackDrill);
   const icpQualification = evaluatePilotIcpQualification(input.icpInput);
 
   const stagingUrl = input.goldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
@@ -387,6 +401,8 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
       p0StagingWorkflows,
       p0ChannelLive,
       ssoPilotReady,
+      pilotMetricsBaseline,
+      pilotRollbackDrill,
     ],
   };
 }
@@ -397,6 +413,8 @@ export function buildPilotGoNoGoSummary(input: {
   forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
   p0StagingProof: PilotP0StagingProofArtifact | null;
   ssoPilotReadyGate: PilotSsoPilotReadyGateArtifact | null;
+  metricsBaseline?: PilotMetricsBaselineGoNoGoArtifact | null;
+  rollbackDrill?: PilotRollbackDrillGoNoGoArtifact | null;
   icpInput: PilotIcpQualificationInput;
   customerName?: string | null;
   loiSignedDate?: string | null;
@@ -414,9 +432,22 @@ export function buildPilotGoNoGoSummary(input: {
   const prospectPlaceholder = buildEra20ProspectPlaceholder(input.prospectName);
   const built = buildPilotGoNoGoEvaluatorInput(input);
   const evaluation = evaluateCommercialPilotGoNoGo(built.evaluatorInput);
+  const forbiddenClaimsGatePass =
+    built.evidenceGates.find((gate) => gate.id === "forbidden_claims_enforcement")?.pass ??
+    false;
+  const executionReadiness = buildEra20PilotExecutionReadinessSlice({
+    metricsBaseline: input.metricsBaseline,
+    rollbackDrill: input.rollbackDrill,
+    goNoGoArtifactPresent: true,
+    forbiddenClaimsPassed: forbiddenClaimsGatePass,
+    p0ProofPassed: input.p0StagingProof?.p0ProofStatus === "proof_passed",
+  });
 
   const blockers = [...evaluation.blockers];
-  const warnings = [...evaluation.warnings];
+  const warnings = [
+    ...evaluation.warnings,
+    ...buildPilotExecutionReadinessGoNoGoWarnings(executionReadiness),
+  ];
 
   if (customer.status === "skipped_missing_customer") {
     blockers.push("No signed LOI / customer on record (era17-pilot-gono-go-v1)");
@@ -488,6 +519,7 @@ export function buildPilotGoNoGoSummary(input: {
       categorizedBlockers: taxonomy.categorizedBlockers,
       categorizedWarnings: taxonomy.categorizedWarnings,
     },
+    executionReadiness,
   };
 }
 

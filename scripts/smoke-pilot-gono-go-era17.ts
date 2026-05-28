@@ -15,6 +15,10 @@ import {
   PILOT_GONOGO_ERA17_POLICY_ID,
   PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT,
 } from "../lib/commercial/pilot-gono-go-era17-policy";
+import type {
+  PilotMetricsBaselineGoNoGoArtifact,
+  PilotRollbackDrillGoNoGoArtifact,
+} from "../lib/commercial/era20-pilot-execution-readiness";
 import {
   buildPilotGoNoGoSummary,
   formatPilotGoNoGoReportLines,
@@ -95,6 +99,12 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
   const ssoPilotReadyGate = loadArtifact<PilotSsoPilotReadyGateArtifact>(
     "artifacts/enterprise-sso-pilot-ready-gate-summary.json",
   );
+  const metricsBaseline = loadArtifact<PilotMetricsBaselineGoNoGoArtifact>(
+    "artifacts/pilot-metrics-baseline-summary.json",
+  );
+  const rollbackDrill = loadArtifact<PilotRollbackDrillGoNoGoArtifact>(
+    "artifacts/pilot-rollback-drill-summary.json",
+  );
 
   const summary = buildPilotGoNoGoSummary({
     preflight,
@@ -102,6 +112,8 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
     forbiddenClaimsEnforcement,
     p0StagingProof,
     ssoPilotReadyGate,
+    metricsBaseline,
+    rollbackDrill,
     icpInput: parsePilotIcpInputFromJson(process.env.PILOT_GONOGO_ICP_INPUT_JSON),
     customerName: process.env.PILOT_GONOGO_CUSTOMER_NAME ?? null,
     loiSignedDate: process.env.PILOT_GONOGO_LOI_SIGNED_DATE ?? null,

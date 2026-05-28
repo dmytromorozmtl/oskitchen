@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 9 — Workstream C/P1: Pilot execution readiness (2026-05-28)
+
+- Title: Era 20 Cycle 9 — metrics baseline + rollback gates, support checklist, GO/NO-GO executionReadiness slice
+- Status: **done**
+- Policy: `era20-pilot-execution-readiness-v1` (`KOS-E20-009`)
+- Doc: `docs/era20-pilot-execution-readiness-2026-05-28.md`
+- Tests: `test:ci:era20-pilot-execution-readiness`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR Workstream H (CRM/staff/billing guards)
+
 ### Cycle 8 — Workstream E: Launch Wizard production-grade (2026-05-28)
 
 - Title: Era 20 Cycle 8 — launch wizard production-grade banner, P0 chip, CTA finalization, launch_wizard RBAC
