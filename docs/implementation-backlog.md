@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 6 — Customer value honesty
 
+### KOS-E6-004 — Production calendar void-form deny UX (P1 → E6-4)
+- ID: `KOS-E6-004`
+- Title: Production calendar HTML forms redirect on permission deny (copilot pattern)
+- Module: Production / security / UX
+- Priority: P1 closed in Era 6 Cycle 4
+- Status: **completed**
+- Decision: `era6-production-calendar-form-deny-v1` — `assertProductionCalendarFormGate` + `production_calendar_error` query param + page banner
+- Evidence: `lib/production/production-calendar-form-mutation.ts`, `actions/production-calendar.ts`, `test:ci:rbac-wave4`
+- Next: E6-5 SSO/SOC2 roadmap review or Era 6 scorecard refresh
+
 ### KOS-E6-003 — Typecheck slices parallel CI job (E6-3)
 - ID: `KOS-E6-003`
 - Title: Add optional `typecheck-slices` CI job; keep `typecheck:full` canonical in `quality`

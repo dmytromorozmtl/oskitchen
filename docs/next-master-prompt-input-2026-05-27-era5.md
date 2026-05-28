@@ -41,7 +41,7 @@ All five Era 5 P0 items from era4 prompt input **completed** (cycles 1–5). Pol
 
 - Stripe live-card storefront E2E tier.
 - `tests/node_modules/` gitignore hygiene.
-- Production-calendar void-form deny UX (copilot pattern not yet applied).
+- ~~Production-calendar void-form deny UX~~ — **Closed Era 6 Cycle 4** (`era6-production-calendar-form-deny-v1`).
 - Commercial pilot runbooks tied to maturity matrix.
 
 ---

@@ -1,10 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const redirect = vi.hoisted(() => vi.fn((url: string) => {
+  throw new Error(`REDIRECT:${url}`);
+}));
 const requireMutationPermission = vi.hoisted(() => vi.fn());
 const requireTenantActor = vi.hoisted(() => vi.fn());
 const recordAuditLog = vi.hoisted(() => vi.fn());
 const createProductionPlanTask = vi.hoisted(() => vi.fn());
 
+vi.mock("next/navigation", () => ({ redirect }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 vi.mock("@/lib/permissions/mutation-access", () => ({
@@ -54,7 +58,8 @@ describe("production calendar actions RBAC", () => {
     formData.set("title", "Prep batch");
     formData.set("planDate", "2026-06-01");
 
-    await createPlanTaskAction(formData);
+    await expect(createPlanTaskAction(formData)).rejects.toThrow("REDIRECT:");
+    expect(redirect).toHaveBeenCalled();
 
     expect(recordAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({

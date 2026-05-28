@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 
 import { recordAuditLog } from "@/lib/audit-log";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import { assertProductionCalendarFormGate } from "@/lib/production/production-calendar-form-mutation";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
@@ -15,7 +16,7 @@ import {
 
 async function requireProductionCalendarMutation(
   operation: string,
-): Promise<{ ok: true } | { ok: false }> {
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const permission: PermissionKey = "production.manage";
   const access = await requireMutationPermission(permission);
   if (!access.ok) {
@@ -26,14 +27,17 @@ async function requireProductionCalendarMutation(
       entityType: "ProductionCalendar",
       metadata: { operation, requiredPermission: permission },
     });
-    return { ok: false };
+    return {
+      ok: false,
+      error: access.error ?? "You do not have permission to manage the production calendar.",
+    };
   }
   return { ok: true };
 }
 
 export async function createPlanTaskAction(formData: FormData): Promise<void> {
   const gate = await requireProductionCalendarMutation("production_calendar.create_task");
-  if (!gate.ok) return;
+  assertProductionCalendarFormGate(gate);
 
   const { dataUserId } = await requireTenantActor();
   await createProductionPlanTask(dataUserId, {
@@ -47,7 +51,7 @@ export async function createPlanTaskAction(formData: FormData): Promise<void> {
 
 export async function movePlanTaskAction(formData: FormData): Promise<void> {
   const gate = await requireProductionCalendarMutation("production_calendar.move_task");
-  if (!gate.ok) return;
+  assertProductionCalendarFormGate(gate);
 
   const { dataUserId } = await requireTenantActor();
   await updateProductionPlanTaskDate(

@@ -1,5 +1,7 @@
 import { createPlanTaskAction } from "@/actions/production-calendar";
+import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { readProductionCalendarFormError } from "@/lib/production/production-calendar-form-mutation";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getProductionCalendar } from "@/services/production/production-calendar-service";
 
@@ -12,7 +14,12 @@ function weekStartMonday(date = new Date()): Date {
   return d;
 }
 
-export default async function ProductionCalendarPage() {
+export default async function ProductionCalendarPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const formError = readProductionCalendarFormError((await searchParams) ?? {});
   const { dataUserId } = await getTenantActor();
   const weekStart = weekStartMonday(new Date());
   const tasks = await getProductionCalendar(dataUserId, weekStart);
@@ -27,6 +34,8 @@ export default async function ProductionCalendarPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <h1 className="text-2xl font-semibold">Production planning calendar</h1>
+
+      <CopilotFormErrorBanner message={formError} />
 
       <Card>
         <CardHeader>
