@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 14 — Workstream G: support impersonation audit flow proof (2026-05-28)
+
+- Title: Era 20 Cycle 14 — platform support session + impersonation 5-hop proof
+- Status: **done**
+- Policy: `era20-support-impersonation-flow-proof-v1` (`KOS-E20-014`)
+- Doc: `docs/era20-support-impersonation-flow-proof-2026-05-28.md`
+- Tests: `test:ci:era20-support-impersonation-flow-proof`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR Workstream B ICP on GO/NO-GO OR Workstream H copilot/platform guards
+
 ### Cycle 13 — Workstream G: manager discount audit flow proof (2026-05-28)
 
 - Title: Era 20 Cycle 13 — manager override 5-hop proof on POS terminal
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Doc: `docs/era20-manager-discount-audit-flow-proof-2026-05-28.md`
 - Tests: `test:ci:era20-manager-discount-audit-flow-proof`, `:cert`
 - P0 unchanged: `awaiting_ops_credentials`
-- Next: Ops P0 vault OR support impersonation flow proof (Workstream G #8)
+- Next: Ops P0 vault OR shift closeout flow proof (Workstream G #6)
 
 ### Cycle 12 — Workstream G: POS checkout → inventory flow proof (2026-05-28)
 

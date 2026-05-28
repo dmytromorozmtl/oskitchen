@@ -28,6 +28,7 @@ Interpretation rule:
 - **Era 17 scorecard:** `era17-scorecard-refresh-v1` — [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md); governance **100**; blended **89/100**; success criteria **NOT MET**.
 - **Era 17 product re-audit (2026-05-28):** [`full-product-strategic-reaudit-2026-05-28-era17.md`](./full-product-strategic-reaudit-2026-05-28-era17.md) @ `5e00dd4`; blended **89/100**; Era 17 success criteria **NOT MET**; live `smoke:pilot-gono-go` → **NO-GO**; `smoke:p0-staging-proof-unblock` → **FAILED**.
 - **Era 20 handoff:** [`next-master-prompt-input-post-era19-2026-05-28.md`](./next-master-prompt-input-post-era19-2026-05-28.md); theme **PROOF EXECUTION + first paid pilot**; full re-audit [`full-strategic-reaudit-post-era19-2026-05-28.md`](./full-strategic-reaudit-post-era19-2026-05-28.md).
+- **Era 20 Cycle 14 (2026-05-28):** Support impersonation flow proof — `era20-support-impersonation-flow-proof-v1`; 5-hop session/MFA/audit on platform go-live; internal_only honesty.
 - **Era 20 Cycle 13 (2026-05-28):** Manager discount audit flow proof — `era20-manager-discount-audit-flow-proof-v1`; 5-hop override checklist on POS terminal; RBAC-honest pos.discount.apply.
 - **Era 20 Cycle 12 (2026-05-28):** POS money path flow proof — `era20-pos-money-path-flow-proof-v1`; 5-hop crosswalk on POS hub; POS-only inventory scope honesty.
 - **Era 20 Cycle 11 (2026-05-28):** Storefront fulfillment flow proof — `era20-storefront-fulfillment-flow-proof-v1`; 5-hop crosswalk on Order hub; P0-honest channel ingest blocker.

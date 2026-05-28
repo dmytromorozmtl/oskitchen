@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 
 import { PlatformGoLiveAttentionStrip } from "@/components/platform/platform-go-live-attention-strip";
 import { PlatformGoLiveProjectsPanel } from "@/components/platform/platform-go-live-projects-panel";
+import { PlatformGoLiveSupportImpersonationFlowProofPanel } from "@/components/platform/platform-go-live-support-impersonation-flow-proof-panel";
+import { buildSupportImpersonationFlowProofSlice } from "@/lib/commercial/era20-support-impersonation-flow-proof-era20";
 import { Button } from "@/components/ui/button";
 import { getSessionUser } from "@/lib/auth";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
@@ -25,6 +27,10 @@ export default async function PlatformGoLivePage() {
     ? await getActiveSupportSessionForActor(ctx.userId, supportSessionId)
     : null;
   const activeSupportWorkspaceId = supportSession?.workspace.id ?? null;
+  const supportImpersonationFlowProof = buildSupportImpersonationFlowProofSlice({
+    viewerCanImpersonate: canImpersonate,
+    hasActiveSupportSession: activeSupportWorkspaceId !== null,
+  });
 
   return (
     <div className="space-y-8">
@@ -47,6 +53,8 @@ export default async function PlatformGoLivePage() {
       </div>
 
       <PlatformGoLiveAttentionStrip model={model} />
+
+      <PlatformGoLiveSupportImpersonationFlowProofPanel slice={supportImpersonationFlowProof} />
 
       <PlatformGoLiveProjectsPanel
         model={model}
