@@ -171,6 +171,7 @@ sequenceDiagram
 | **2** | Staging IdP login proof | **Engineering complete — awaiting operator** — `era17-enterprise-sso-idp-login-proof-v1`; smoke executed → **SKIPPED WITH REASON** (`overall: SKIPPED`; 6 prerequisite env vars unset) until staging + IdP secrets |
 | **3** | Qualified pilot gate | Pending — `era17-enterprise-sso-pilot-ready-v1` only if Cycle 2 `proof_passed` |
 | **4** | SSO operator runbook | **Complete** — `era17-enterprise-sso-operator-runbook-v1`; [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md); **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
+| **5** | SSO tenant mapping hardening | **Complete** — `era17-enterprise-sso-tenant-mapping-v1`; **tenant_mapping_test_backed**; `validateSsoCallbackSession` deny matrix; delivery **pilot_foundation** unchanged |
 
 **Ops doc:** Okta/Entra test tenant, Supabase SAML, workspace mapping, break-glass, rollback, negative tests.
 

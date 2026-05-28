@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-040 — Enterprise SSO tenant mapping hardening (Workstream A Cycle 5)
+- ID: `KOS-E17-040`
+- Title: Era 17 Workstream A Cycle 5 — callback guard tenant/domain deny matrix
+- Module: Enterprise identity / Security
+- Priority: P0 support depth (Workstream A Cycle 5)
+- Status: **tenant_mapping_test_backed**
+- Decision: `era17-enterprise-sso-tenant-mapping-v1` — six required deny/allow scenarios unit-tested; delivery **pilot_foundation** unchanged
+- Evidence: `lib/enterprise/enterprise-sso-tenant-mapping-era17-policy.ts`, `tests/unit/enterprise-sso-tenant-mapping-era17.test.ts`, `test:ci:enterprise-sso-tenant-mapping-era17:cert`
+- Next: Workstream A Cycle 6 — procurement pack sync; P0 Cycle 2 IdP login proof when staging credentials available
+
 ### KOS-E17-039 — Enterprise SSO operator runbook (Workstream A Cycle 4)
 - ID: `KOS-E17-039`
 - Title: Era 17 Workstream A Cycle 4 — qualified SSO pilot operator runbook

@@ -66,6 +66,40 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Operator doc:** `docs/enterprise-sso-operator-runbook-era17.md`
 
+### Enterprise SSO tenant mapping hardening (Era 17 Workstream A Cycle 5)
+
+**Policy:** `era17-enterprise-sso-tenant-mapping-v1` — **tenant_mapping_test_backed**; callback guard deny matrix; delivery **pilot_foundation** unchanged.
+
+Required scenarios (unit-tested via `validateSsoCallbackSession`):
+
+- `wrong_email_domain_denied`
+- `wrong_workspace_uuid_denied`
+- `disabled_sso_pilot_denied`
+- `missing_provider_ref_denied`
+- `no_entitlement_denied`
+- `valid_pilot_workspace_allowed`
+
+Run **`npm run test:ci:enterprise-sso-tenant-mapping-era17:cert`** — chained in `test:ci:enterprise-sso-idp-staging-era17:cert`.
+
+**Forbidden:** production SSO for all tenants, cross-tenant SSO without workspace gate, `pilot_ready` without IdP login artifact.
+
+---
+
+## Era 17 enterprise SSO tenant mapping hardening (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-tenant-mapping-v1` — **tenant_mapping_test_backed**; certifies `validateSsoCallbackSession` deny paths; delivery **pilot_foundation** unchanged.
+
+1. **Wrong domain** → `domain_not_allowed`
+2. **Wrong workspace UUID / no membership** → `workspace_access_denied`
+3. **Disabled or non-active pilot** → `runtime_gate_denied`
+4. **Missing Supabase provider ref** → `missing_provider_ref` (runtime gate)
+5. **Missing `ssoOidc` entitlement** → `entitlement_denied`
+6. **Valid pilot workspace** → allow when gate + domain + entitlement pass
+
+**Enforcement:** `test:ci:enterprise-sso-tenant-mapping-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`)
+
+**Guard module:** `lib/enterprise/workspace-sso-runtime-adapter.ts`
+
 ### Staging workflows first green (Era 17 P0 #2)
 
 **Policy:** `era17-staging-workflows-first-green-v1` — **awaiting_github_first_green**; extends `era16-staging-workflows-first-green-v1`.

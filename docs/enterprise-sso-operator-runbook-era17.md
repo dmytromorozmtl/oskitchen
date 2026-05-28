@@ -105,7 +105,7 @@ Escalate to engineering when: callback errors persist after IdP metadata refresh
 
 **Engineering:**
 
-- Maintain callback guard (`validateSsoCallbackSession`) and tenant isolation tests
+- Maintain callback guard (`validateSsoCallbackSession`) and tenant isolation tests — see `era17-enterprise-sso-tenant-mapping-v1`
 - Do not promote to `pilot_ready` without `loginProofStatus: proof_passed`
 
 ---

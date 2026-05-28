@@ -169,6 +169,18 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **CI:** `test:ci:enterprise-sso-operator-runbook-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`).
 
+## Era 17 SSO tenant mapping hardening (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-tenant-mapping-v1` — unit matrix for callback guard deny paths. **Does not** advance SSO delivery beyond **pilot_foundation**.
+
+| Capability | Delivery status | Era 17 Workstream A Cycle 5 |
+|------------|-----------------|------------------------------|
+| SSO / SAML | **pilot_foundation** (unchanged) | **tenant_mapping_test_backed** — wrong domain, wrong workspace, disabled pilot, missing provider ref, no entitlement |
+
+**CI:** `test:ci:enterprise-sso-tenant-mapping-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`).
+
+**Guard:** `validateSsoCallbackSession` in `lib/enterprise/workspace-sso-runtime-adapter.ts`.
+
 ---
 
 ## SSO and SAML roadmap
