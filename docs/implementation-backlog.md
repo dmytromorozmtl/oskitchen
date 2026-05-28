@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-053 — Platform go-live command center (P0)
+- ID: `KOS-E18-053`
+- Title: Era 18 Workstream O Cycle 53 — cross-tenant launch queue on platform go-live
+- Module: Go-live / Platform ops
+- Priority: P0 (pilot deployment visibility — platform launch calendar)
+- Status: **platform_go_live_command_center_wired**
+- Decision: `era18-platform-go-live-focus-v1` — attention strip + KPI tiles + project table; does not bypass tenant RBAC
+- Evidence: `lib/go-live/platform-go-live-focus-era18.ts`, `app/platform/go-live/page.tsx`, `tests/unit/platform-go-live-focus-era18.test.ts`
+- Next: Wire platform impersonation deep link to tenant go-live project when support session active
+
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)
 - ID: `KOS-E18-052`
 - Title: Era 18 Workstream D Cycle 52 — honest GO/NO-GO + P0 staging proof on platform implementations

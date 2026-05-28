@@ -35,6 +35,7 @@ Interpretation rule:
 - **Era 18 Cycle 14 (2026-05-28):** Order hub stuck-state UX — `era18-order-hub-stuck-state-v1`; attention strip + row next actions.
 - **Era 18 Cycle 13 (2026-05-28):** Today focus mode — `era18-today-command-center-focus-v1`; quiet KPI collapse + attention strip.
 - **Era 18 Cycle 12 (2026-05-28):** Shift close history date range — `era18-pos-shift-close-history-range-v1`; 7/30/90-day filter + CSV sync.
+- **Era 18 Cycle 53 (2026-05-28):** Platform go-live command center — `era18-platform-go-live-focus-v1`; cross-tenant launch queue + attention strip on platform go-live.
 - **Era 18 Cycle 52 (2026-05-28):** Commercial pilot ops status — `era18-commercial-pilot-ops-status-v1`; honest GO/NO-GO + P0 staging panel on platform implementations.
 - **Era 18 Cycle 51 (2026-05-28):** Implementation pilot readiness — `era18-implementation-pilot-readiness-focus-v1`; channel + SSO + go-live attention strip on Implementation hub.
 - **Era 18 Cycle 50 (2026-05-28):** Sales channel health live proof — `era18-sales-channel-health-live-proof-focus-v1`; Woo/Shopify live proof panel + row CTAs on sales channel health.
