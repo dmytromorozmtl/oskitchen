@@ -165,7 +165,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 3. Run **`npm run smoke:kds-staging-playwright`** → review **`artifacts/kds-staging-playwright-proof-summary.json`** (`playwrightProofStatus`).
 4. **Do not claim rush-hour KDS or default-CI Playwright** — qualified staging pilot only.
 
-**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; Playwright proof **SKIPPED WITH REASON** (staging secrets + GitHub run URL unset). Artifact: `artifacts/kds-staging-playwright-proof-summary.json`.
+**Execution status (2026-05-28):** smoke re-run → **overall: SKIPPED** (`playwrightProofStatus: proof_skipped_missing_prerequisites`; wiring cert PASSED). Missing: `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD`, `GITHUB_KDS_STAGING_RUN_URL`, `GITHUB_KDS_STAGING_RUN_OUTCOME`. Artifact: `artifacts/kds-staging-playwright-proof-summary.json`. **Do not claim GitHub Playwright PASS or rush-hour KDS.**
 
 ### Era 17 KDS qualified sales one-pager (2026-05-28)
 

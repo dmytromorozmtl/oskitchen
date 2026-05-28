@@ -79,7 +79,7 @@
 
 | Cycle Band | Goal | Tasks | Acceptance Criteria | Validation | Risks | Owner |
 |------------|------|-------|---------------------|------------|-------|-------|
-| **25** | KDS staging Playwright PASS | Secrets + `playwright-kds-staging.yml` | GitHub PASS URL | e2e workflow | Flake | QA |
+| **25** | KDS staging Playwright PASS | Secrets + `playwright-kds-staging.yml` | GitHub PASS URL | e2e workflow | Flake | QA | **Awaiting ops** — smoke re-run **overall: SKIPPED** (3 staging env vars + GitHub run URL unset); wiring cert PASSED |
 | **26** | Operational sign-off with real URL | `smoke:operational-signoff-era16` on staging | summary JSON with operator email | smoke | — | Kitchen |
 | **27** | Production calendar operator drill | `smoke:production-calendar` | PASS on staging | smoke | — | Kitchen |
 | **28** | Qualified KDS sales one-pager | No rush-hour language | marketing claims audit | verify-claims | Overclaim | GTM |

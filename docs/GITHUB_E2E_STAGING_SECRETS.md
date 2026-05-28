@@ -157,7 +157,7 @@ Cert: `npm run test:ci:kds-staging-playwright-proof-era17:cert` (chained in `tes
 | Staging E2E secrets | **SKIPPED WITH REASON** — 3 env vars unset locally |
 | Staging health | **SKIPPED** (prerequisites missing) |
 | GitHub KDS run evidence | **SKIPPED** — no `GITHUB_KDS_STAGING_RUN_URL` recorded |
-| Artifact | `artifacts/kds-staging-playwright-proof-summary.json` → `playwrightProofStatus: proof_skipped_missing_prerequisites` |
+| Artifact | `artifacts/kds-staging-playwright-proof-summary.json` → **overall: SKIPPED**; `playwrightProofStatus: proof_skipped_missing_prerequisites` |
 
 **Ops unblock:** Configure GitHub Actions secrets → `workflow_dispatch` on `playwright-kds-staging.yml` → set `GITHUB_KDS_STAGING_RUN_URL` + `GITHUB_KDS_STAGING_RUN_OUTCOME=PASSED` → re-run `npm run smoke:kds-staging-playwright`.
 

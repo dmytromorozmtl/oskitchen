@@ -190,9 +190,9 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Title: Era 17 Cycle 15 — KDS Playwright staging PASS with GitHub evidence
 - Module: Kitchen / QA / DevOps
 - Priority: P1 (Workstream F Cycle 25)
-- Status: **awaiting_github_kds_playwright_pass**
+- Status: **awaiting_github_kds_playwright_pass** — honest skip re-run; `overall: SKIPPED` when proof prerequisites missing
 - Decision: `era17-kds-staging-playwright-proof-v1` — wiring cert + GitHub run URL recording
-- Evidence: `lib/kitchen/kds-staging-playwright-proof-era17-policy.ts`, `scripts/smoke-kds-staging-playwright-era17.ts`, `artifacts/kds-staging-playwright-proof-summary.json` (**playwrightProofStatus: proof_skipped_missing_prerequisites** locally 2026-05-28)
+- Evidence: `lib/kitchen/kds-staging-playwright-proof-summary.ts` (overall honesty gate), `scripts/smoke-kds-staging-playwright-era17.ts`, `artifacts/kds-staging-playwright-proof-summary.json` (**overall: SKIPPED**, `playwrightProofStatus: proof_skipped_missing_prerequisites` re-run 2026-05-28)
 - Next: Operator runs `playwright-kds-staging.yml` on staging; record `GITHUB_KDS_STAGING_RUN_*`; re-run smoke for `proof_passed`
 
 ### KOS-E17-014 — Forbidden-claims enforcement before pilot sales (P0)

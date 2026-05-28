@@ -148,18 +148,24 @@ export function buildKdsStagingPlaywrightProofSummary(
   const githubFailed =
     githubRun?.outcome === "FAILED" ||
     steps.some((step) => step.id === "github_kds_run" && step.status === "FAILED");
+  const playwrightProofStatus = resolveKdsStagingPlaywrightProofStatus({
+    prerequisitesMet,
+    wiringCertPassed,
+    githubRun,
+    githubFailed,
+  });
+
+  let overall = resolveKdsStagingPlaywrightProofOverall(steps);
+  if (playwrightProofStatus !== "proof_passed" && overall === "PASSED") {
+    overall = playwrightProofStatus === "proof_failed" ? "FAILED" : "SKIPPED";
+  }
 
   return {
     version: KDS_STAGING_PLAYWRIGHT_PROOF_SUMMARY_VERSION,
     runAt: runAt.toISOString(),
     commitSha: input?.commitSha?.trim() || null,
-    overall: resolveKdsStagingPlaywrightProofOverall(steps),
-    playwrightProofStatus: resolveKdsStagingPlaywrightProofStatus({
-      prerequisitesMet,
-      wiringCertPassed,
-      githubRun,
-      githubFailed,
-    }),
+    overall,
+    playwrightProofStatus,
     missingEnvVars: [...(input?.missingEnvVars ?? [])],
     githubRun,
     steps: [...steps],

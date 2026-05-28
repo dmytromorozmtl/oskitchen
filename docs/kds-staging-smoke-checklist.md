@@ -92,7 +92,7 @@ Do **not** add this tier to default GitHub Actions `ci.yml` quality job.
 3. Requires `GITHUB_KDS_STAGING_RUN_URL` + `GITHUB_KDS_STAGING_RUN_OUTCOME=PASSED` after `workflow_dispatch` — wiring cert alone is insufficient.
 4. **Do not claim rush-hour KDS or default-CI Playwright certification.**
 
-**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; Playwright proof **SKIPPED WITH REASON** (`playwrightProofStatus: proof_skipped_missing_prerequisites`). Missing: `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD`, `GITHUB_KDS_STAGING_RUN_URL`, `GITHUB_KDS_STAGING_RUN_OUTCOME`.
+**Execution status (2026-05-28):** smoke re-run → **overall: SKIPPED** (`playwrightProofStatus: proof_skipped_missing_prerequisites`; wiring cert PASSED). Missing: `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD`, `GITHUB_KDS_STAGING_RUN_URL`, `GITHUB_KDS_STAGING_RUN_OUTCOME`.
 
 ## Era 17 — operational sign-off staging proof (Workstream F Cycle 26)
 
