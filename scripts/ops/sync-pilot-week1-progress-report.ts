@@ -17,6 +17,10 @@ export function buildPilotWeek1ProgressReportMarkdown(
     "",
     `Generated: ${new Date().toISOString()}`,
     "",
+    "## Milestone",
+    "",
+    `- week1Milestone: **${result.week1Milestone}**`,
+    "",
     "## Prerequisites",
     "",
     `- GO decision: **${result.goDecision ?? "missing"}**`,
@@ -51,7 +55,8 @@ export function buildPilotWeek1ProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
-  lines.push("npm run ops:validate-pilot-week1-env");
+  lines.push("npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write");
+  lines.push("npm run ops:validate-pilot-week1-env -- --json");
   lines.push("npm run smoke:pilot-metrics-baseline");
   lines.push("npm run smoke:pilot-case-study-draft");
   lines.push("npm run smoke:pilot-gono-go");

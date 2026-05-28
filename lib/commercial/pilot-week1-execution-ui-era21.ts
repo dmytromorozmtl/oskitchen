@@ -1,6 +1,10 @@
 /**
  * Pilot Week 1 execution UI slice — Owner Briefing, Launch Wizard, Platform ops, Integration Health.
  */
+import {
+  resolvePilotWeek1ExecutionMilestoneFromPhaseStatuses,
+  type PilotWeek1ExecutionMilestone,
+} from "@/lib/commercial/pilot-week1-execution-post-go-orchestrator-era21";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
@@ -39,6 +43,11 @@ export type PilotWeek1ExecutionUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
+  postGoOrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateGoClosureCommand: string;
+  day5SmokesCommand: string;
+  week1Milestone: PilotWeek1ExecutionMilestone;
   todayHref: string;
   launchWizardHref: string;
   integrationHealthHref: string;
@@ -77,6 +86,10 @@ export function buildPilotWeek1ExecutionUiSlice(input: {
   const nextPhaseDetail = nextPhase
     ? formatPilotWeek1ExecutionPhaseBlockerDetail(nextPhase)
     : null;
+  const week1Milestone = resolvePilotWeek1ExecutionMilestoneFromPhaseStatuses(phases, {
+    prerequisitesComplete: true,
+    week1Complete: false,
+  });
 
   return {
     policyId: PILOT_WEEK1_EXECUTION_UI_ERA21_POLICY_ID,
@@ -92,6 +105,11 @@ export function buildPilotWeek1ExecutionUiSlice(input: {
     validateCommand: "npm run ops:validate-pilot-week1-env",
     exportTemplateCommand: "npm run ops:export-pilot-week1-env-template -- --write",
     syncProgressReportCommand: "npm run ops:sync-pilot-week1-progress-report -- --write",
+    postGoOrchestratorCommand: "npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write",
+    exportReadinessChecklistCommand: "npm run ops:export-pilot-week1-readiness-checklist -- --write",
+    validateGoClosureCommand: "npm run ops:validate-commercial-go-closure-env -- --json",
+    day5SmokesCommand: "npm run smoke:pilot-metrics-baseline && npm run smoke:pilot-case-study-draft && npm run smoke:pilot-gono-go",
+    week1Milestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     integrationHealthHref: `/dashboard/integration-health${PILOT_WEEK1_INTEGRATION_HEALTH_ANCHOR}`,
@@ -107,5 +125,5 @@ export function buildPilotWeek1ExecutionUiSlice(input: {
 }
 
 export function formatPilotWeek1ExecutionProgressLabel(slice: PilotWeek1ExecutionUiSlice): string {
-  return `Pilot Week 1 ${slice.completedPhaseCount}/${slice.phases.length} days · GO · ${slice.customerName ?? "customer"}`;
+  return `Pilot Week 1 ${slice.completedPhaseCount}/${slice.phases.length} days · ${slice.week1Milestone.replaceAll("_", " ")} · GO · ${slice.customerName ?? "customer"}`;
 }

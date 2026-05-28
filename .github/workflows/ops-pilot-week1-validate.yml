@@ -24,3 +24,12 @@ jobs:
           PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED: ${{ secrets.PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED }}
           PILOT_WEEK1_POS_CLOSEOUT_STATUS: ${{ secrets.PILOT_WEEK1_POS_CLOSEOUT_STATUS }}
           PILOT_WEEK1_REPORTS_WEEKLY_EXPORT: ${{ secrets.PILOT_WEEK1_REPORTS_WEEKLY_EXPORT }}
+      - name: Pilot Week 1 post-GO orchestrator (JSON summary)
+        run: npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --json --skip-template
+        continue-on-error: true
+        env:
+          PILOT_WEEK1_TTV_HOURS: ${{ secrets.PILOT_WEEK1_TTV_HOURS }}
+          PILOT_WEEK1_FIRST_ORDER_ID: ${{ secrets.PILOT_WEEK1_FIRST_ORDER_ID }}
+          PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED: ${{ secrets.PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED }}
+          PILOT_WEEK1_POS_CLOSEOUT_STATUS: ${{ secrets.PILOT_WEEK1_POS_CLOSEOUT_STATUS }}
+          PILOT_WEEK1_REPORTS_WEEKLY_EXPORT: ${{ secrets.PILOT_WEEK1_REPORTS_WEEKLY_EXPORT }}

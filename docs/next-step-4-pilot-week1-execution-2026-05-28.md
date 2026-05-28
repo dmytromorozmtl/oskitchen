@@ -40,10 +40,12 @@ decision: GO
 ## Preflight (30 min)
 
 ```bash
+npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write
 npm run ops:validate-commercial-go-closure-env -- --json   # decision: GO
 npm run ops:validate-pilot-week1-env -- --json
 npm run ops:export-pilot-week1-env-template -- --write
 npm run ops:sync-pilot-week1-progress-report -- --write
+npm run ops:export-pilot-week1-readiness-checklist -- --write
 ```
 
 **Product surfaces active after GO (week incomplete):**
@@ -141,6 +143,7 @@ When all pass, Week 1 panels disappear from Today / Launch Wizard / Platform / I
 ## Ops commands
 
 ```bash
+npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write
 npm run ops:validate-pilot-week1-env -- --json
 npm run ops:export-pilot-week1-env-template -- --write
 npm run ops:sync-pilot-week1-progress-report -- --write

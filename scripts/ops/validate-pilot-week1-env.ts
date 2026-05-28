@@ -5,6 +5,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { resolvePilotWeek1ExecutionMilestone } from "@/lib/commercial/pilot-week1-execution-post-go-orchestrator-era21";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
@@ -48,6 +49,7 @@ export function evaluatePilotWeek1Env(env: NodeJS.ProcessEnv = process.env): {
   goDecision: string | null;
   week1Complete: boolean;
   readyForDay5Smokes: boolean;
+  week1Milestone: ReturnType<typeof resolvePilotWeek1ExecutionMilestone>;
 } {
   const artifacts = readPilotWeek1ExecutionArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -74,6 +76,11 @@ export function evaluatePilotWeek1Env(env: NodeJS.ProcessEnv = process.env): {
     goDecision,
     week1Complete,
     readyForDay5Smokes,
+    week1Milestone: resolvePilotWeek1ExecutionMilestone({
+      prerequisitesComplete: prerequisites.prerequisitesComplete,
+      week1Complete,
+      phases,
+    }),
   };
 }
 
@@ -90,6 +97,7 @@ function main() {
           goDecision: result.goDecision,
           week1Complete: result.week1Complete,
           readyForDay5Smokes: result.readyForDay5Smokes,
+          week1Milestone: result.week1Milestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -109,9 +117,13 @@ function main() {
   console.log(`\nPilot Week 1 validation (era21-pilot-week1-execution-v1)\n`);
 
   if (!result.prerequisites.prerequisitesComplete) {
-    console.log("Blocked — decision must be GO in artifacts/pilot-gono-go-summary.json first.\n");
+    console.log("Blocked — decision must be GO first:");
+    console.log("  npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write");
+    console.log("  npm run smoke:pilot-gono-go\n");
     process.exit(2);
   }
+
+  console.log(`Week 1 milestone: ${result.week1Milestone}\n`);
 
   for (const phase of result.phases) {
     console.log(`${phase.complete ? "✓" : "○"} ${phase.label}`);
@@ -119,7 +131,8 @@ function main() {
   }
 
   console.log(`Week 1 complete: ${result.week1Complete ? "yes" : "no"}`);
-  console.log(`Ready for Day 5 smokes: ${result.readyForDay5Smokes ? "yes" : "no"}\n`);
+  console.log(`Ready for Day 5 smokes: ${result.readyForDay5Smokes ? "yes" : "no"}`);
+  console.log("Orchestrator: npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write\n");
   process.exit(0);
 }
 

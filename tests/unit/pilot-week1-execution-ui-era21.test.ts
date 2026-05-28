@@ -38,6 +38,10 @@ describe("pilot-week1-execution-ui-era21", () => {
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.phases.length).toBe(5);
+    expect(slice?.week1Milestone).toBe("day1_ttv_onboarding");
+    expect(slice?.postGoOrchestratorCommand).toContain(
+      "ops:run-pilot-week1-execution-post-go-orchestrator",
+    );
     expect(formatPilotWeek1ExecutionProgressLabel(slice!)).toContain("Acme Kitchen");
   });
 

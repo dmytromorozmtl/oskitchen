@@ -38,6 +38,12 @@ export function PilotWeek1PhasesPanel(props: {
       <CardContent className={cn("space-y-3", isCompact && "pt-4")}>
         {!isCompact ? (
           <div className="flex flex-wrap gap-2">
+            <Badge
+              variant="outline"
+              className="rounded-full font-mono text-[10px]"
+            >
+              {slice.week1Milestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               decision: {slice.goDecision}
             </Badge>
@@ -120,12 +126,13 @@ export function PilotWeek1PhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postGoOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.validateGoClosureCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
-                <li>npm run smoke:pilot-metrics-baseline</li>
-                <li>npm run smoke:pilot-case-study-draft</li>
-                <li>npm run smoke:pilot-gono-go</li>
+                <li>{slice.day5SmokesCommand}</li>
               </ul>
             </div>
             <div className="flex flex-wrap gap-2">

@@ -40,6 +40,7 @@ describe("pilot week1 execution era21 CI certification (live repo)", () => {
     const step4 = readFileSync(join(ROOT, PILOT_WEEK1_EXECUTION_STEP4_DOC), "utf8");
     expect(step4).toContain("smoke:pilot-metrics-baseline");
     expect(step4).toContain("PILOT_WEEK1_TTV_HOURS");
+    expect(step4).toContain("ops:run-pilot-week1-execution-post-go-orchestrator");
     expect(step4).toContain("era21-pilot-week1-execution-v1");
   });
 
