@@ -65,6 +65,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/go-live/platform-workspace-go-live-focus-era18.ts`, `components/platform/platform-workspace-go-live-panel.tsx`, `tests/unit/platform-workspace-go-live-focus-era18.test.ts`
 - Next: Support session banner quick link to active workspace go-live section when session open
 
+### KOS-E18-056 — Support session banner go-live quick links (P0)
+- ID: `KOS-E18-056`
+- Title: Era 18 Workstream O Cycle 56 — banner links into workspace go-live section + urgent project
+- Module: Go-live / Platform ops
+- Priority: P0 (pilot deployment speed — persistent ops context during support session)
+- Status: **platform_support_session_banner_go_live_wired**
+- Decision: `era18-platform-support-session-banner-go-live-v1` — workspace/go-live/urgent project links on active session banner
+- Evidence: `lib/go-live/platform-support-session-banner-go-live-era18.ts`, `components/platform/support-session-platform-banner.tsx`, `tests/unit/platform-support-session-banner-go-live-era18.test.ts`
+- Next: Cross-link platform implementations panel to workspace go-live section for blocked pilot tenants
+
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)
 - ID: `KOS-E18-052`
 - Title: Era 18 Workstream D Cycle 52 — honest GO/NO-GO + P0 staging proof on platform implementations
