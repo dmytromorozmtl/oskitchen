@@ -1,6 +1,24 @@
 import type { HealthRollup } from "@/lib/observability/status-types";
-import { pickErrorRecoveryEventNextActions } from "@/lib/error-recovery/error-recovery-focus-era18";
+import {
+  pickErrorRecoveryEventNextActions,
+  pickPlatformErrorRecoveryEventNextActions,
+} from "@/lib/error-recovery/error-recovery-focus-era18";
 import type { ObservabilityErrorEvent } from "@/services/observability/error-event-service";
+
+export type PlatformSystemHealthSnapshot = {
+  rollup: HealthRollup;
+  webhookPending: number;
+  integrationErrors: number;
+  automationFailures: number;
+  openTickets: number;
+  criticalTickets: number;
+  activeIncidents: number;
+  criticalProductionIncidents: number;
+  webhookProcessingErrors7d: number;
+  openWebhookJobRecoveries: number;
+  channelSyncFailed: number;
+  notificationFailures7d: number;
+};
 
 export type SystemHealthSnapshot = {
   rollup: HealthRollup;
@@ -190,4 +208,153 @@ export function pickSystemHealthEventNextActions(
   limit = 5,
 ) {
   return pickErrorRecoveryEventNextActions(events, limit);
+}
+
+export function summarizePlatformSystemHealthSnapshot(
+  snapshot: PlatformSystemHealthSnapshot,
+): { totalSignals: number; hasUrgent: boolean } {
+  const totalSignals =
+    snapshot.webhookPending +
+    snapshot.integrationErrors +
+    snapshot.automationFailures +
+    snapshot.openTickets +
+    snapshot.activeIncidents +
+    snapshot.webhookProcessingErrors7d +
+    snapshot.openWebhookJobRecoveries +
+    snapshot.channelSyncFailed +
+    snapshot.notificationFailures7d;
+
+  const hasUrgent =
+    snapshot.rollup === "CRITICAL" ||
+    snapshot.criticalProductionIncidents > 0 ||
+    snapshot.criticalTickets > 0 ||
+    snapshot.integrationErrors > 0 ||
+    snapshot.openWebhookJobRecoveries > 0 ||
+    snapshot.channelSyncFailed > 0;
+
+  return { totalSignals, hasUrgent };
+}
+
+/** Cross-tenant system health categories — production and channel signals first. */
+export function pickPlatformSystemHealthAttentionItems(
+  snapshot: PlatformSystemHealthSnapshot,
+): SystemHealthAttentionItem[] {
+  const items: SystemHealthAttentionItem[] = [];
+
+  if (snapshot.criticalProductionIncidents > 0) {
+    items.push({
+      id: "production-critical",
+      title: `${snapshot.criticalProductionIncidents} critical production incident${snapshot.criticalProductionIncidents === 1 ? "" : "s"}`,
+      detail: "Cross-tenant live-service blockers — triage in the platform incident hub first.",
+      href: "/platform/incidents",
+      priority: 1,
+      tone: "urgent",
+    });
+  } else if (snapshot.activeIncidents > 0) {
+    items.push({
+      id: "production-open",
+      title: `${snapshot.activeIncidents} open production incident${snapshot.activeIncidents === 1 ? "" : "s"}`,
+      detail: "Unified queue across cron, webhooks, and startup readiness.",
+      href: "/platform/incidents",
+      priority: 2,
+      tone: "normal",
+    });
+  }
+
+  if (snapshot.criticalTickets > 0) {
+    items.push({
+      id: "critical-tickets",
+      title: `${snapshot.criticalTickets} critical support ticket${snapshot.criticalTickets === 1 ? "" : "s"}`,
+      detail: "Customer escalations may indicate cross-tenant integration or order failures.",
+      href: "/platform/support/escalations",
+      priority: 3,
+      tone: "urgent",
+    });
+  }
+
+  if (snapshot.integrationErrors > 0) {
+    items.push({
+      id: "integration-errors",
+      title: `${snapshot.integrationErrors} integration error${snapshot.integrationErrors === 1 ? "" : "s"}`,
+      detail: "OAuth, token, or remote API failures across tenants.",
+      href: "/platform/integrations",
+      priority: 4,
+      tone: "urgent",
+    });
+  }
+
+  if (snapshot.openWebhookJobRecoveries > 0) {
+    items.push({
+      id: "webhook-job-recoveries",
+      title: `${snapshot.openWebhookJobRecoveries} async webhook job${snapshot.openWebhookJobRecoveries === 1 ? "" : "s"} exhausted retries`,
+      detail: "Terminal jobs with open recovery items — inspect tenant webhook health before replay.",
+      href: "/platform/webhooks",
+      priority: 5,
+      tone: "urgent",
+    });
+  }
+
+  if (snapshot.channelSyncFailed > 0) {
+    items.push({
+      id: "channel-sync-failed",
+      title: `${snapshot.channelSyncFailed} channel sync failure${snapshot.channelSyncFailed === 1 ? "" : "s"}`,
+      detail: "Failed sync jobs block catalog and order imports for affected workspaces.",
+      href: "/platform/integrations",
+      priority: 6,
+      tone: "urgent",
+    });
+  }
+
+  if (snapshot.webhookProcessingErrors7d > 0) {
+    items.push({
+      id: "webhook-errors-7d",
+      title: `${snapshot.webhookProcessingErrors7d} webhook processing error${snapshot.webhookProcessingErrors7d === 1 ? "" : "s"} (7d)`,
+      detail: "Signature or handler failures in the last week across all tenants.",
+      href: "/platform/webhooks",
+      priority: 7,
+      tone: snapshot.webhookProcessingErrors7d >= 5 ? "urgent" : "normal",
+    });
+  }
+
+  if (snapshot.automationFailures > 0) {
+    items.push({
+      id: "automation-failures",
+      title: `${snapshot.automationFailures} automation failure${snapshot.automationFailures === 1 ? "" : "s"}`,
+      detail: "Failed playbook or automation executions needing platform review.",
+      href: "/platform/automations",
+      priority: 8,
+      tone: "normal",
+    });
+  }
+
+  if (snapshot.webhookPending > 0) {
+    items.push({
+      id: "webhook-backlog",
+      title: `${snapshot.webhookPending} unprocessed webhook${snapshot.webhookPending === 1 ? "" : "s"}`,
+      detail: "Cross-tenant backlog — compare with processing errors above.",
+      href: "/platform/webhooks",
+      priority: 9,
+      tone: "normal",
+    });
+  }
+
+  if (snapshot.notificationFailures7d > 0) {
+    items.push({
+      id: "notification-failures",
+      title: `${snapshot.notificationFailures7d} notification failure${snapshot.notificationFailures7d === 1 ? "" : "s"} (7d)`,
+      detail: "Delivery failures across tenants — check provider posture per workspace.",
+      href: "/platform/notifications",
+      priority: 10,
+      tone: "normal",
+    });
+  }
+
+  return items.sort((a, b) => a.priority - b.priority).slice(0, 4);
+}
+
+export function pickPlatformSystemHealthEventNextActions(
+  events: readonly ObservabilityErrorEvent[],
+  limit = 5,
+) {
+  return pickPlatformErrorRecoveryEventNextActions(events, limit);
 }

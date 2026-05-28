@@ -4,14 +4,41 @@ import {
   SYSTEM_HEALTH_FOCUS_ERA18_BACKLOG_ID,
   SYSTEM_HEALTH_FOCUS_ERA18_POLICY_ID,
   SYSTEM_HEALTH_FOCUS_ERA18_PROOF_STATUS,
+  PLATFORM_SYSTEM_HEALTH_FOCUS_ERA18_BACKLOG_ID,
+  PLATFORM_SYSTEM_HEALTH_FOCUS_ERA18_POLICY_ID,
+  PLATFORM_SYSTEM_HEALTH_FOCUS_ERA18_PROOF_STATUS,
 } from "@/lib/system-health/system-health-focus-era18-policy";
 import {
+  pickPlatformSystemHealthAttentionItems,
+  pickPlatformSystemHealthEventNextActions,
   pickSystemHealthAttentionItems,
   pickSystemHealthEventNextActions,
+  summarizePlatformSystemHealthSnapshot,
   summarizeSystemHealthSnapshot,
+  type PlatformSystemHealthSnapshot,
   type SystemHealthSnapshot,
 } from "@/lib/system-health/system-health-focus-era18";
 import type { ObservabilityErrorEvent } from "@/services/observability/error-event-service";
+
+function emptyPlatformSnapshot(
+  over: Partial<PlatformSystemHealthSnapshot> = {},
+): PlatformSystemHealthSnapshot {
+  return {
+    rollup: "HEALTHY",
+    webhookPending: 0,
+    integrationErrors: 0,
+    automationFailures: 0,
+    openTickets: 0,
+    criticalTickets: 0,
+    activeIncidents: 0,
+    criticalProductionIncidents: 0,
+    webhookProcessingErrors7d: 0,
+    openWebhookJobRecoveries: 0,
+    channelSyncFailed: 0,
+    notificationFailures7d: 0,
+    ...over,
+  };
+}
 
 function emptySnapshot(over: Partial<SystemHealthSnapshot> = {}): SystemHealthSnapshot {
   return {
@@ -59,6 +86,16 @@ describe("system-health-focus-era18 policy", () => {
     expect(SYSTEM_HEALTH_FOCUS_ERA18_POLICY_ID).toBe("era18-system-health-focus-v1");
     expect(SYSTEM_HEALTH_FOCUS_ERA18_PROOF_STATUS).toBe("system_health_focus_attention_wired");
     expect(SYSTEM_HEALTH_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-021");
+  });
+
+  it("registers era18 platform system health focus proof", () => {
+    expect(PLATFORM_SYSTEM_HEALTH_FOCUS_ERA18_POLICY_ID).toBe(
+      "era18-platform-system-health-focus-v1",
+    );
+    expect(PLATFORM_SYSTEM_HEALTH_FOCUS_ERA18_PROOF_STATUS).toBe(
+      "platform_system_health_focus_attention_wired",
+    );
+    expect(PLATFORM_SYSTEM_HEALTH_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-023");
   });
 });
 
@@ -131,6 +168,50 @@ describe("summarizeSystemHealthSnapshot", () => {
     ).toBe(true);
     expect(
       summarizeSystemHealthSnapshot(emptySnapshot({ errorIntegrations: 1 })).hasUrgent,
+    ).toBe(true);
+  });
+});
+
+describe("pickPlatformSystemHealthAttentionItems", () => {
+  it("prioritizes critical production incidents and integration errors", () => {
+    const items = pickPlatformSystemHealthAttentionItems(
+      emptyPlatformSnapshot({
+        criticalProductionIncidents: 2,
+        integrationErrors: 5,
+        channelSyncFailed: 3,
+      }),
+    );
+
+    expect(items[0]?.id).toBe("production-critical");
+    expect(items.some((item) => item.id === "integration-errors")).toBe(true);
+    expect(items[0]?.href).toBe("/platform/incidents");
+  });
+
+  it("returns empty when platform signals are clear", () => {
+    expect(pickPlatformSystemHealthAttentionItems(emptyPlatformSnapshot())).toEqual([]);
+  });
+});
+
+describe("pickPlatformSystemHealthEventNextActions", () => {
+  it("prefixes workspace label for cross-tenant triage", () => {
+    const actions = pickPlatformSystemHealthEventNextActions([
+      sampleEvent({
+        workspaceLabel: "Pilot Cafe",
+        safeRetryHref: "/platform/integrations",
+      }),
+    ]);
+
+    expect(actions[0]?.title).toContain("[Pilot Cafe]");
+    expect(actions[0]?.href).toBe("/platform/integrations");
+  });
+});
+
+describe("summarizePlatformSystemHealthSnapshot", () => {
+  it("flags urgent when critical tickets or webhook recoveries exist", () => {
+    expect(
+      summarizePlatformSystemHealthSnapshot(
+        emptyPlatformSnapshot({ criticalTickets: 1 }),
+      ).hasUrgent,
     ).toBe(true);
   });
 });

@@ -1,14 +1,34 @@
 import Link from "next/link";
 
+import { PlatformSystemHealthAttentionStrip } from "@/components/platform/platform-system-health-attention-strip";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadPlatformObservabilityPanel } from "@/services/observability/observability-service";
 import { getPlatformDashboardSnapshot } from "@/services/platform/platform-service";
 
 export default async function PlatformSystemHealthPage() {
   const ctx = await requirePlatformAccess();
   assertPlatformPermission(ctx, "platform:access");
-  const s = await getPlatformDashboardSnapshot();
+  const [s, obs] = await Promise.all([
+    getPlatformDashboardSnapshot(),
+    loadPlatformObservabilityPanel(),
+  ]);
+
+  const snapshot = {
+    rollup: obs.rollup,
+    webhookPending: s.webhookPending,
+    integrationErrors: s.integrationErrors,
+    automationFailures: s.automationFailures,
+    openTickets: s.openTickets,
+    criticalTickets: s.criticalTickets,
+    activeIncidents: s.activeIncidents,
+    criticalProductionIncidents: s.criticalProductionIncidents,
+    webhookProcessingErrors7d: obs.counts.webhookProcessingErrors7d,
+    openWebhookJobRecoveries: obs.counts.openWebhookJobRecoveries,
+    channelSyncFailed: obs.counts.channelSyncFailed,
+    notificationFailures7d: obs.counts.notificationFailures7d,
+  } as const;
 
   return (
     <div className="space-y-8 text-zinc-100">
@@ -19,6 +39,8 @@ export default async function PlatformSystemHealthPage() {
           Stripe or warehouse exports.
         </p>
       </div>
+
+      <PlatformSystemHealthAttentionStrip snapshot={snapshot} recentEvents={obs.events} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Tile title="Webhook backlog (all)" value={s.webhookPending} href="/platform/webhooks" />
