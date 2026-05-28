@@ -1,5 +1,6 @@
 import { GettingStartedChecklist } from "@/components/dashboard/getting-started-checklist";
 import { GettingStartedAttentionStrip } from "@/components/dashboard/getting-started-attention-strip";
+import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-briefing-hero";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
@@ -12,6 +13,10 @@ import { requireWorkspacePermissionActor } from "@/lib/permissions/require-works
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
+import {
+  loadOwnerDailyBriefing,
+  resolveOwnerDailyBriefingVisibility,
+} from "@/services/briefing/owner-daily-briefing-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 
 export const dynamic = "force-dynamic";
@@ -39,14 +44,22 @@ export default async function TodayOperationsPage({
     persona,
     granted: actor.granted,
   });
-  const [data, profile, integrationHealthModel] = await Promise.all([
-    loadTodayCommandCenter(dataUserId),
+  const showOwnerBriefing = resolveOwnerDailyBriefingVisibility({
+    workspaceRole: actor.workspaceRole,
+    persona,
+    granted: actor.granted,
+  });
+  const data = await loadTodayCommandCenter(dataUserId);
+  const [profile, integrationHealthModel, ownerBriefing] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: dataUserId },
       select: { createdAt: true },
     }),
     showIntegrationHealth
       ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)
+      : Promise.resolve(null),
+    showOwnerBriefing
+      ? loadOwnerDailyBriefing(dataUserId, { showIntegrationHealth, today: data })
       : Promise.resolve(null),
   ]);
   const gettingStarted = await loadGettingStartedStatus(
@@ -64,12 +77,14 @@ export default async function TodayOperationsPage({
         {gettingStarted.showChecklist && !gettingStarted.allDone ? (
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
+        {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
         <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
         <TodayCommandCenterView
           userId={dataUserId}
           email={sessionUser.email ?? null}
           data={data}
           showFullMetrics={showFullMetrics}
+          briefingActive={Boolean(ownerBriefing)}
         />
       </div>
     </>

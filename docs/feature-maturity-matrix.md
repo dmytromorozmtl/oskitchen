@@ -27,6 +27,9 @@ Interpretation rule:
 - **Case study draft (Era 17):** `era17-pilot-case-study-draft-v1` — [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md); **internal_draft_awaiting_customer_approval**; `npm run smoke:pilot-case-study-draft`.
 - **Era 17 scorecard:** `era17-scorecard-refresh-v1` — [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md); governance **100**; blended **89/100**; success criteria **NOT MET**.
 - **Era 17 product re-audit (2026-05-28):** [`full-product-strategic-reaudit-2026-05-28-era17.md`](./full-product-strategic-reaudit-2026-05-28-era17.md) @ `5e00dd4`; blended **89/100**; Era 17 success criteria **NOT MET**; live `smoke:pilot-gono-go` → **NO-GO**; `smoke:p0-staging-proof-unblock` → **FAILED**.
+- **Era 19 handoff:** [`next-master-prompt-input-2026-05-28-breakthrough.md`](./next-master-prompt-input-2026-05-28-breakthrough.md); theme **BREAKTHROUGH: proof + Owner Daily Briefing WOW pillar**.
+- **Era 19 Cycle 1 (2026-05-28):** Owner daily briefing aggregator — `era19-owner-daily-briefing-v1`; briefing hero on Today for owner/manager with real tiles, alerts, and next action.
+- **Era 19 Cycle 2 (2026-05-28):** Briefing command center depth — `era19-owner-daily-briefing-today-focus-v1`; next 3 actions lane, risk radar, KPI wall collapse when briefing active, integration health deep link.
 - **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); theme **staging_proof_and_first_paid_pilot**.
 - **Era 18 Cycle 18 (2026-05-28):** KDS bump-next expo — `era18-kds-bump-next-v1`; oldest-ticket hero + action error feedback.
 - **Era 18 Cycle 17 (2026-05-28):** Production calendar today focus — `era18-production-calendar-today-focus-v1`; overdue/due-today strip + today column highlight.

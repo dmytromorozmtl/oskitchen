@@ -29,6 +29,13 @@ import {
   isTodayShiftQuiet,
   shouldCollapseTodayKpiWall,
 } from "@/lib/today/today-command-center-focus-era18";
+import {
+  resolveTodayMetricsExpandHref,
+  shouldCollapseTodayMetricsForBriefing,
+  shouldCompactTodayReadinessForBriefing,
+  shouldHideTodayAttentionStripForBriefing,
+  todayMetricsExpandLabel,
+} from "@/lib/briefing/owner-daily-briefing-today-focus-era19";
 import { formatCurrency } from "@/lib/utils";
 import type { TodayCommandCenterPayload } from "@/services/today/today-command-center-service";
 
@@ -37,11 +44,13 @@ export function TodayCommandCenterView({
   email,
   data,
   showFullMetrics = false,
+  briefingActive = false,
 }: {
   userId: string;
   email: string | null;
   data: TodayCommandCenterPayload;
   showFullMetrics?: boolean;
+  briefingActive?: boolean;
 }) {
   const mode = data.settings?.businessType;
   const modeLabel = mode ? BUSINESS_TYPE_LABELS[mode] : null;
@@ -49,7 +58,16 @@ export function TodayCommandCenterView({
   const { kpis, blockers, readiness, shortageReadiness } = data;
 
   const quiet = isTodayShiftQuiet(kpis, blockers);
-  const collapseKpiWall = shouldCollapseTodayKpiWall({ quiet, showFullMetrics });
+  const collapseKpiWall = briefingActive
+    ? shouldCollapseTodayMetricsForBriefing({ briefingActive, showFullMetrics })
+    : shouldCollapseTodayKpiWall({ quiet, showFullMetrics });
+  const hideAttentionStrip = shouldHideTodayAttentionStripForBriefing(briefingActive);
+  const compactReadiness = shouldCompactTodayReadinessForBriefing({
+    briefingActive,
+    showFullMetrics,
+  });
+  const metricsExpandHref = resolveTodayMetricsExpandHref(showFullMetrics);
+  const metricsExpandLabel = todayMetricsExpandLabel(showFullMetrics);
 
   return (
     <div className="space-y-8">
@@ -65,11 +83,19 @@ export function TodayCommandCenterView({
             <SyncIndicator />
           </div>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Operational command center — orders, kitchen throughput, routes, tasks, integrations, and
-            blockers in one place. Data is workspace-scoped; refresh to update counts.
+            {briefingActive
+              ? "Detailed metrics and secondary signals — your daily briefing above covers priorities."
+              : "Operational command center — orders, kitchen throughput, routes, tasks, integrations, and blockers in one place. Data is workspace-scoped; refresh to update counts."}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {briefingActive ? (
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href={metricsExpandHref} data-testid="today-briefing-metrics-toggle">
+                {metricsExpandLabel}
+              </Link>
+            </Button>
+          ) : null}
           <Button asChild variant="outline" className="rounded-full">
             <Link href="/dashboard">Classic dashboard</Link>
           </Button>
@@ -90,8 +116,26 @@ export function TodayCommandCenterView({
         </ul>
       ) : null}
 
-      <TodayAttentionStrip data={data} />
+      {!hideAttentionStrip ? <TodayAttentionStrip data={data} /> : null}
 
+      {compactReadiness ? (
+        <Card className="border-border/80 bg-card/90 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Workspace setup details</CardTitle>
+            <CardDescription>
+              Readiness {readiness.overall}% — expand full metrics for category breakdown.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            <Button asChild size="sm" variant="outline" className="rounded-full">
+              <Link href="/dashboard/go-live">Open go-live</Link>
+            </Button>
+            <Button asChild size="sm" variant="secondary" className="rounded-full">
+              <Link href={metricsExpandHref}>{metricsExpandLabel}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
       <Card className="border-primary/25 bg-primary/[0.04] shadow-sm">
         <CardHeader className="pb-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -128,9 +172,10 @@ export function TodayCommandCenterView({
           </div>
         </CardContent>
       </Card>
+      )}
 
-      <ChangelogBanner />
-      <LaborRealtimeWidget />
+      {!briefingActive ? <ChangelogBanner /> : null}
+      {!briefingActive ? <LaborRealtimeWidget /> : null}
 
       <Card className="border-border/80 bg-card/90 shadow-sm">
         <CardHeader className="pb-2">
@@ -190,16 +235,19 @@ export function TodayCommandCenterView({
       {collapseKpiWall ? (
         <Card className="border-border/80 bg-card/90 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Metrics hidden — shift is quiet</CardTitle>
+            <CardTitle className="text-base">
+              {briefingActive ? "Full metrics collapsed" : "Metrics hidden — shift is quiet"}
+            </CardTitle>
             <CardDescription>
-              Full KPI tiles stay collapsed until orders, tasks, or blockers appear. Open all metrics when you need
-              the full wall.
+              {briefingActive
+                ? "Your daily briefing shows the operational snapshot. Open full metrics for the complete KPI wall."
+                : "Full KPI tiles stay collapsed until orders, tasks, or blockers appear. Open all metrics when you need the full wall."}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" size="sm" className="rounded-full">
-              <Link href="/dashboard/today?metrics=all" data-testid="today-show-all-metrics">
-                Show all metrics
+              <Link href={metricsExpandHref} data-testid="today-show-all-metrics">
+                {metricsExpandLabel}
               </Link>
             </Button>
           </CardContent>

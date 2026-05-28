@@ -3,6 +3,38 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
+
+### KOS-E19-002 — Briefing command center depth (P1 WOW)
+- ID: `KOS-E19-002`
+- Title: Era 19 Workstream B Cycle 2 — next 3 actions, KPI collapse, risk radar
+- Module: Dashboard / Today / Operator UX
+- Priority: P1 (WOW pillar depth)
+- Status: **briefing_depth_wired**
+- Decision: `era19-owner-daily-briefing-today-focus-v1` — collapse legacy KPI wall when briefing active; ranked top-3 actions; risk radar; integration health center deep link
+- Evidence: `lib/briefing/owner-daily-briefing-today-focus-era19.ts`, updated hero + Today command center
+- Next: Production calendar today tile + role-based tile packs
+
+### KOS-E19-001 — Owner Daily Briefing aggregator (P1 WOW)
+- ID: `KOS-E19-001`
+- Title: Era 19 Band C Cycle 13 foundation — Owner Daily Briefing command center on Today
+- Module: Dashboard / Today / Operator UX
+- Priority: P1 (WOW pillar — parallel while P0 ops-owned)
+- Status: **aggregator_wired**
+- Decision: `era19-owner-daily-briefing-v1` — aggregates orders, KDS pressure, packing, integrations, go-live, pilot readiness, SSO, revenue, low-stock, labor; honest unavailable/not_configured states
+- Evidence: `services/briefing/owner-daily-briefing-service.ts`, `components/dashboard/owner-daily-briefing-hero.tsx`, `tests/unit/owner-daily-briefing-era19.test.ts`
+- Next: Role-based tile packs; launch wizard shell
+
+### KOS-E19-000 — P0 staging proof ops vault (P0)
+- ID: `KOS-E19-000`
+- Title: Era 19 Band A Cycle 1 — reconfirm P0 staging proof blocker + ops checklist
+- Module: Commercial / DevOps
+- Priority: P0
+- Status: **awaiting_ops_credentials**
+- Decision: Re-run `smoke:p0-staging-proof-unblock` → **SKIPPED** (11 env vars); no fake PASS
+- Evidence: `artifacts/p0-staging-proof-unblock-summary.json`, updated `docs/era18-p0-staging-proof-ops-checklist.md`
+- Next: Ops configures vault secrets → Cycle 2 full P0 PASS
+
 ## Era 17 — Commercial identity / SSO IdP staging
 
 ### KOS-E17-045 — Pilot GO/NO-GO SSO pilot_ready gate (P0)
