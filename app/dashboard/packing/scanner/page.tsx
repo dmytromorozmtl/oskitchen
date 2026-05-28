@@ -1,6 +1,11 @@
 import Link from "next/link";
 
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import {
+  hasPackingManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolvePackingDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,7 +16,13 @@ import {
 } from "@/components/ui/card";
 
 export default async function PackingScannerHubPage() {
-  await getTenantActor();
+  const actor = await loadWorkspacePermissionPageActor();
+
+  if (!hasPackingManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolvePackingDeniedSurfaceId("scanner")} />
+    );
+  }
 
   return (
     <div className="space-y-6">

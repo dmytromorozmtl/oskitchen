@@ -1,12 +1,25 @@
 import Link from "next/link";
 
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import {
+  hasProductionManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolveProductionDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 
 export default async function ProductionReportsPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await loadWorkspacePermissionPageActor();
+
+  if (!hasProductionManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolveProductionDeniedSurfaceId("reports")} />
+    );
+  }
+
+  const { sessionUser: user, dataUserId } = actor;
 
   const [workDone, workOpen] = await Promise.all([
     prisma.productionWorkItem.count({

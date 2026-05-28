@@ -24,7 +24,11 @@ describe("permission denied ux era19 CI certification (live repo)", () => {
     for (const rel of PERMISSION_DENIED_UX_ERA19_WIRED_PAGE_PATHS) {
       const text = readFileSync(join(ROOT, rel), "utf8");
       expect(text.includes("PermissionDeniedSurfaceCard"), rel).toBe(true);
-      expect(text.includes("requireWorkspacePermissionActor"), rel).toBe(true);
+      expect(
+        text.includes("loadWorkspacePermissionPageActor") ||
+          text.includes("requireWorkspacePermissionActor"),
+        rel,
+      ).toBe(true);
     }
   });
 
@@ -36,7 +40,7 @@ describe("permission denied ux era19 CI certification (live repo)", () => {
 
   it("resolves packing and production denial surfaces with permission keys", () => {
     expect(resolvePermissionDeniedSurface("packing_command").permissionKey).toBe("packing.manage");
-    expect(resolvePermissionDeniedSurface("packing_verify").primaryHref).toBe("/dashboard/packing");
+    expect(resolvePermissionDeniedSurface("packing_verify").primaryHref).toBe("/dashboard/today");
     expect(resolvePermissionDeniedSurface("production_calendar").permissionKey).toBe(
       "production.manage",
     );

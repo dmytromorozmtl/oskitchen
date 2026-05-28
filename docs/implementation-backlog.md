@@ -7,12 +7,12 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ### KOS-E19-035 — Permission-denied UX on packing/production surfaces (P1 operator speed)
 - ID: `KOS-E19-035`
-- Title: Era 19 Workstream E Cycle 35 — standard PermissionDeniedSurfaceCard on packing command center, packing verify, production calendar, and production board
+- Title: Era 19 Workstream E Cycle 35 — standard PermissionDeniedSurfaceCard on packing + production routes
 - Module: RBAC UX / Packing / Production
 - Priority: P1 (operator speed — consistent denial cards with permission key + recovery links)
-- Status: **permission_denied_packing_production_wired**
-- Decision: `era19-permission-denied-packing-production-v1` — page-level `packing.manage` / `production.manage` gates; extends Era 17 denial card pattern; daily-service production queue unchanged
-- Evidence: `lib/ux/permission-denied-era19-policy.ts`, updated `permission-denied-copy.ts`, wired dashboard pages
+- Status: **permission_denied_packing_production_enforced**
+- Decision: `era19-permission-denied-packing-production-v1` + `era19-permission-denied-page-access-v1` — page-level `packing.manage` / `production.manage` gates on 9 routes; no denial recovery loops; daily-service production queue unchanged
+- Evidence: `lib/ux/permission-denied-era19-policy.ts`, `lib/ux/permission-denied-page-access-era19.ts`, wired packing/production pages + cert tests
 - Next: P0 proof unblock when ops credentials available, or Launch Wizard step UX polish
 
 ### KOS-E19-034 — Briefing manager pack ↔ packing QC cross-link (P1 WOW)

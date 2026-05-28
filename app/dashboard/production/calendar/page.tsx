@@ -30,8 +30,11 @@ import {
   PRODUCTION_CALENDAR_WEEK_QUERY_PARAM,
 } from "@/lib/production/production-calendar-week-navigation";
 import { cn } from "@/lib/utils";
-import { hasPermission } from "@/lib/permissions/guards";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import {
+  hasProductionManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolveProductionDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import {
   getProductionCalendar,
   getProductionCalendarOpenThroughToday,
@@ -43,10 +46,12 @@ export default async function ProductionCalendarPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = (await searchParams) ?? {};
-  const actor = await requireWorkspacePermissionActor();
+  const actor = await loadWorkspacePermissionPageActor();
 
-  if (!hasPermission(actor.granted, "production.manage")) {
-    return <PermissionDeniedSurfaceCard surfaceId="production_calendar" />;
+  if (!hasProductionManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolveProductionDeniedSurfaceId("calendar")} />
+    );
   }
 
   const weekParam =

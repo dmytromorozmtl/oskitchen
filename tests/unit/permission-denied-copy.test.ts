@@ -29,6 +29,12 @@ describe("permission denied copy", () => {
     expect(surface.secondaryHref).toBe("/dashboard/kitchen");
   });
 
+  it("resolves packing verify surface without looping back to gated packing route", () => {
+    const surface = resolvePermissionDeniedSurface("packing_verify");
+    expect(surface.primaryHref).toBe("/dashboard/today");
+    expect(surface.secondaryHref).toBe("/dashboard/kitchen");
+  });
+
   it("resolves production calendar surface", () => {
     const surface = resolvePermissionDeniedSurface("production_calendar");
     expect(surface.permissionKey).toBe("production.manage");

@@ -4,11 +4,13 @@ import { ProductionCommandCenter } from "@/components/dashboard/production-comma
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { TodayQueue } from "@/components/production/today-queue";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
-import { hasPermission } from "@/lib/permissions/guards";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import {
+  hasProductionManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolveProductionDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
 import { normalizeProductionView } from "@/lib/production/production-views";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { getTodayQueue } from "@/services/production/daily-queue-service";
 import { aggregateWorkItemKpis } from "@/lib/production/production-aggregation";
@@ -33,7 +35,7 @@ export default async function ProductionPage({
   searchParams?: Promise<{ date?: string; view?: string }>;
 }) {
   const sp = (await searchParams) ?? {};
-  const actor = await requireWorkspacePermissionActor();
+  const actor = await loadWorkspacePermissionPageActor();
   const { sessionUser, dataUserId } = actor;
   const operatingMode = await getTenantOperatingMode(dataUserId);
 
@@ -52,8 +54,10 @@ export default async function ProductionPage({
     );
   }
 
-  if (!hasPermission(actor.granted, "production.manage")) {
-    return <PermissionDeniedSurfaceCard surfaceId="production_board" />;
+  if (!hasProductionManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolveProductionDeniedSurfaceId("board")} />
+    );
   }
 
   const productionDay = parseProductionDay(sp.date);

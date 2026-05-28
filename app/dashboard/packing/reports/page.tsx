@@ -1,12 +1,25 @@
 import Link from "next/link";
 
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import {
+  hasPackingManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolvePackingDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 
 export default async function PackingReportsPage() {
-  const { sessionUser: session, dataUserId } = await getTenantActor();
+  const actor = await loadWorkspacePermissionPageActor();
+
+  if (!hasPackingManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolvePackingDeniedSurfaceId("reports")} />
+    );
+  }
+
+  const { sessionUser: session, dataUserId } = actor;
   const since = new Date();
   since.setDate(since.getDate() - 14);
 

@@ -22,8 +22,13 @@ export const PERMISSION_DENIED_UX_ERA19_BACKLOG_ID = "KOS-E19-035" as const;
 export const PERMISSION_DENIED_UX_ERA19_WIRED_PAGE_PATHS = [
   "app/dashboard/packing/page.tsx",
   "app/dashboard/packing/verify/page.tsx",
+  "app/dashboard/packing/scanner/page.tsx",
+  "app/dashboard/packing/reports/page.tsx",
   "app/dashboard/production/calendar/page.tsx",
   "app/dashboard/production/page.tsx",
+  "app/dashboard/production/templates/page.tsx",
+  "app/dashboard/production/reports/page.tsx",
+  "app/dashboard/production/batches/[batchId]/page.tsx",
 ] as const;
 
 export const PERMISSION_DENIED_UX_ERA19_ALL_WIRED_PAGE_PATHS = [
@@ -41,4 +46,5 @@ export const PERMISSION_DENIED_UX_ERA19_SPOTCHECK_SURFACES = [
 export const PERMISSION_DENIED_UX_ERA19_UNIT_TESTS = [
   "tests/unit/permission-denied-era19-policy.test.ts",
   "tests/unit/permission-denied-era19-cert-live.test.ts",
+  "tests/unit/permission-denied-page-access-era19.test.ts",
 ] as const;

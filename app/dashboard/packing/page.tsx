@@ -1,7 +1,10 @@
 import { PackingCommandCenter } from "@/components/dashboard/packing-command-center";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
-import { hasPermission } from "@/lib/permissions/guards";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import {
+  hasPackingManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolvePackingDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { getCachedOrderListWhere } from "@/lib/scope/cached-workspace-order-scope";
 import { formatYyyyMmDdForInput, packingDayFromYyyyMmDd } from "@/lib/packing/packing-dates";
@@ -20,10 +23,12 @@ export default async function PackingPage({
   searchParams?: Promise<{ date?: string; mode?: string; fulfillment?: string }>;
 }) {
   const sp = (await searchParams) ?? {};
-  const actor = await requireWorkspacePermissionActor();
+  const actor = await loadWorkspacePermissionPageActor();
 
-  if (!hasPermission(actor.granted, "packing.manage")) {
-    return <PermissionDeniedSurfaceCard surfaceId="packing_command" />;
+  if (!hasPackingManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolvePackingDeniedSurfaceId("command")} />
+    );
   }
 
   const { dataUserId } = actor;

@@ -1,10 +1,15 @@
 import Link from "next/link";
 
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { defaultProductionModeForBusiness } from "@/lib/production/production-modes";
+import {
+  hasProductionManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolveProductionDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 
 const TEMPLATE_NAMES = [
@@ -18,7 +23,15 @@ const TEMPLATE_NAMES = [
 ] as const;
 
 export default async function ProductionTemplatesPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await loadWorkspacePermissionPageActor();
+
+  if (!hasProductionManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolveProductionDeniedSurfaceId("templates")} />
+    );
+  }
+
+  const { sessionUser: user, dataUserId } = actor;
   const profile = await prisma.userProfile.findUnique({
     where: { id: user.id },
     select: { kitchenSettings: { select: { businessType: true } } },

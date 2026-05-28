@@ -23,7 +23,7 @@ describe("permission-denied-era19 policy", () => {
       "production_calendar",
       "production_board",
     ]);
-    expect(PERMISSION_DENIED_UX_ERA19_WIRED_PAGE_PATHS).toHaveLength(4);
+    expect(PERMISSION_DENIED_UX_ERA19_WIRED_PAGE_PATHS).toHaveLength(9);
   });
 
   it("chains to era17 policy id", () => {

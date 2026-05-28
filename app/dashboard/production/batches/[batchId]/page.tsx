@@ -2,10 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ActivityTimeline } from "@/components/activity/activity-timeline";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import {
+  hasProductionManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolveProductionDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 import { listActivityForEntity } from "@/services/activity/activity-service";
 
@@ -15,7 +20,15 @@ export default async function ProductionBatchDetailPage({
   params: Promise<{ batchId: string }>;
 }) {
   const { batchId } = await params;
-  const { dataUserId } = await getTenantActor();
+  const actor = await loadWorkspacePermissionPageActor();
+
+  if (!hasProductionManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolveProductionDeniedSurfaceId("batch")} />
+    );
+  }
+
+  const { dataUserId } = actor;
 
   const batch = await prisma.productionBatch.findFirst({
     where: { id: batchId, userId: dataUserId },

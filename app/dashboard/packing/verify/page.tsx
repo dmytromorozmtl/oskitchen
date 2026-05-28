@@ -1,8 +1,11 @@
 import { PackingVerifyClient } from "@/components/dashboard/packing-verify-client";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PlanGate } from "@/components/plans/plan-gate";
-import { hasPermission } from "@/lib/permissions/guards";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import {
+  hasPackingManagePageAccess,
+  loadWorkspacePermissionPageActor,
+  resolvePackingDeniedSurfaceId,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { getServerEnv } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import { listOpenSessions, listRecentScans } from "@/services/packing-verification/verification-service";
@@ -12,10 +15,12 @@ export default async function PackingVerifyPage({
 }: {
   searchParams: Promise<{ t?: string }>;
 }) {
-  const actor = await requireWorkspacePermissionActor();
+  const actor = await loadWorkspacePermissionPageActor();
 
-  if (!hasPermission(actor.granted, "packing.manage")) {
-    return <PermissionDeniedSurfaceCard surfaceId="packing_verify" />;
+  if (!hasPackingManagePageAccess(actor)) {
+    return (
+      <PermissionDeniedSurfaceCard surfaceId={resolvePackingDeniedSurfaceId("verify")} />
+    );
   }
 
   const { sessionUser: user, dataUserId } = actor;
