@@ -38,3 +38,38 @@ export const INVENTORY_DEPLETION_UNIFIED_STOCK_CLAIM_ALLOWED = false;
 
 export const INVENTORY_DEPLETION_POLICY_SUMMARY =
   "Recipe ingredient depletion on sale is certified for POS checkout only. Storefront, public API, manual, and marketplace-import orders do not deplete on-hand inventory until a dedicated hook is implemented, idempotency-tested, and documented in the maturity matrix.";
+
+/**
+ * Era 5 Cycle 3 — permanent GTM lock: defer storefront/API depletion until an explicit
+ * future era implements payment-timing + idempotency + cert gates. Sales must not imply
+ * unified cross-channel stock impact.
+ */
+export const INVENTORY_DEPLETION_GTM_LOCK_ID = "era5-pos-only-gtm-lock-v1" as const;
+
+export const INVENTORY_DEPLETION_STOREFRONT_HOOK_STATUS = "deferred_locked" as const;
+
+/** Order entrypoints that must not call POS inventory impact recording. */
+export const INVENTORY_DEPLETION_NON_DEPLETING_ENTRYPOINTS = [
+  "actions/storefront-order.ts",
+  "actions/order-creation.ts",
+  "app/api/public/v1/orders/route.ts",
+] as const;
+
+/**
+ * Phrases that must not appear in canonical GTM docs (product-positioning, feature matrix,
+ * competitor gap matrix) without explicit negation — enforced by CI cert.
+ */
+export const INVENTORY_DEPLETION_FORBIDDEN_GTM_PHRASES = [
+  "unified cross-channel depletion",
+  "storefront checkout depletes",
+  "storefront depletes stock",
+  "online orders automatically reduce on-hand",
+  "all channels deplete",
+  "every channel depletes",
+] as const;
+
+export const INVENTORY_DEPLETION_GTM_REQUIRED_MARKERS = [
+  INVENTORY_DEPLETION_POLICY_ID,
+  INVENTORY_DEPLETION_GTM_LOCK_ID,
+  "POS-only",
+] as const;

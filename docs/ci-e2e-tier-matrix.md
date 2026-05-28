@@ -89,7 +89,7 @@ npm run test:ci:pos-money-path:e2e
 
 **Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only. **Not certified without secrets:** full dashboard Playwright POS checkout — see policy summary artifact when browser tier was `SKIPPED`.
 
-**Inventory depletion channel policy (Era 4 Cycle 1):** **POS-only** (`lib/inventory/inventory-depletion-policy.ts`, policy id `era4-pos-only-v1`). Storefront, public API, manual, and integration orders do not call `recordPendingInventoryImpactsForPosOrder` or recipe depletion. Do not claim unified cross-channel stock depletion in sales or matrix copy. Live gate: `npm run test:ci:inventory-depletion:cert` → `tests/unit/inventory-depletion-cert-live.test.ts` + `tests/unit/inventory-depletion-policy.test.ts`.
+**Inventory depletion channel policy (Era 4 Cycle 1 + Era 5 Cycle 3):** **POS-only** (`lib/inventory/inventory-depletion-policy.ts`, `era4-pos-only-v1`); permanent GTM lock `era5-pos-only-gtm-lock-v1` (`deferred_locked` storefront hook). Storefront, public API, manual, and integration entrypoints must not call POS inventory impact recording. Live gate: `npm run test:ci:inventory-depletion:cert` → wiring + policy + GTM lock certs.
 
 ## Tier 3 — Staging / preview (manual or scheduled)
 

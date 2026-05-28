@@ -80,7 +80,7 @@ Evolution Era 4 (cycles 1–12) **completed all 11 strategic priorities** from t
 
 ## Top Risks After Era 4 (honest)
 
-1. **Storefront inventory depletion** — still not implemented; sales must cite POS-only policy.
+1. ~~**Storefront inventory depletion GTM**~~ — **Era 5 Cycle 3:** permanent POS-only lock (`era5-pos-only-gtm-lock-v1`); hook deferred; CI scans GTM docs.
 2. **POS browser E2E** — still secrets-optional; green CI ≠ browser proof without `E2E_LOGIN_*`.
 3. **Cross-channel rewards** — dual ledger; not unified gift/loyalty across channels.
 4. **KDS** — no rush-hour or realtime Playwright certification.
@@ -104,7 +104,7 @@ npm run validate:cron-inventory
 
 ## Recommended Era 5 Themes (not started)
 
-1. Optional storefront inventory depletion **or** permanent POS-only GTM lock.
+1. ~~Permanent POS-only GTM lock~~ — **Era 5 Cycle 3 completed**; storefront hook remains future-era work only.
 2. ~~Wire `test:ci:rbac-wave4` into `test:security`~~ — **Era 5 Cycle 1 completed**.
 3. ~~Typecheck slice 2 (storefront/marketing)~~ — **Era 5 Cycle 2 completed**; optional CI parallel job remains.
 4. Implement SSO/SCIM **or** keep procurement roadmap-only with annual review.

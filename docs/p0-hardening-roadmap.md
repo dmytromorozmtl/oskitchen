@@ -361,6 +361,7 @@ Priority rule:
 - **Rationale:** Payment timing, idempotency, cancellation/refund policy, and cross-channel hook design need a scoped cycle before implementation; honest matrix/sales claims take priority over false “unified inventory” parity.
 - **Evidence:** `lib/inventory/inventory-depletion-policy.ts`, `tests/unit/inventory-depletion-policy.test.ts`, `tests/unit/inventory-depletion-cert-live.test.ts`, `docs/feature-maturity-matrix.md`, `docs/product-positioning.md`.
 - **Acceptance:** Canonical docs and CI cert gates enforce POS-only policy; no ambiguous unified depletion claims.
+- **Era 5 Cycle 3 (2026-05-27):** `era5-pos-only-gtm-lock-v1` — permanent GTM deferral for storefront/API hook; `inventory-depletion-gtm-lock-cert-live` scans sales docs and non-depleting entrypoints.
 - **Next implementation cycle (deferred):** Hook storefront submit after payment-settled event with idempotency tests — Era 4 cycles 2–3 if prioritized.
 
 ## Recommended First P0 Order

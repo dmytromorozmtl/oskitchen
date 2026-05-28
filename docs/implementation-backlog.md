@@ -23,7 +23,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era5-typecheck-slice-v2` — extends Era 4 slices with `typecheck:slice:storefront-marketing` (6GB); `typecheck:full` remains CI canonical
 - Evidence: `tsconfig.slice.storefront-marketing.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`
-- Next: E5-1 storefront depletion decision or optional CI parallel typecheck job
+- Next: POS E2E secrets in CI (E5-5) or copilot void-form deny UX (E5-4)
+
+### KOS-E5-003 — Permanent POS-only inventory GTM lock (E5-1)
+- ID: `KOS-E5-003`
+- Title: Lock storefront/API depletion as deferred; enforce honest GTM claims in CI
+- Module: Inventory / GTM / sales
+- Priority: P0 (Era 5 Cycle 3)
+- Status: **completed**
+- Decision: `era5-pos-only-gtm-lock-v1` — `deferred_locked`; no storefront hook until explicit future era; forbidden GTM phrases scanned in canonical sales docs
+- Evidence: `lib/inventory/inventory-depletion-policy.ts`, `tests/unit/inventory-depletion-gtm-lock-cert-live.test.ts`, matrix + positioning updates
+- Next: implement storefront depletion only when payment/idempotency design + cert gates are scoped (new era item)
 
 ## Era 4 — Cross-channel operational truth
 
@@ -35,7 +45,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed (policy)** — implementation of storefront hook deferred
 - Decision: `era4-pos-only-v1` — certified channel: POS only
 - Evidence: `lib/inventory/inventory-depletion-policy.ts`, `test:ci:inventory-depletion:cert`, canonical matrix + positioning updates
-- Next: optional storefront depletion implementation (future cycles) or RBAC wave 4
+- Next: ~~optional storefront depletion~~ — locked `deferred_locked` (Era 5 Cycle 3 / KOS-E5-003)
 
 ### KOS-E4-002 — POS browser E2E CI policy (tier 2b optional + explicit status)
 - ID: `KOS-E4-002`

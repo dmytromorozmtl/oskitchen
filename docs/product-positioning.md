@@ -153,7 +153,7 @@ Current truth: all of these surfaces exist, but RBAC canon, enterprise governanc
 - Broad live marketplace coverage across DoorDash/Uber/Grubhub without partner certification and verified production flows.
 - Enterprise-grade SSO/SCIM/compliance readiness.
 - AI autopilot for restaurant operations or autonomous customer messaging.
-- Unified cross-channel inventory depletion (storefront or online sales automatically reducing on-hand stock). **POS checkout depletes** recipe-linked ingredients when configured; **storefront, public API, and manual orders do not** until a certified hook ships (`lib/inventory/inventory-depletion-policy.ts`, policy `era4-pos-only-v1`).
+- Unified cross-channel inventory depletion (storefront or online sales automatically reducing on-hand stock). **POS checkout depletes** recipe-linked ingredients when configured; **storefront, public API, and manual orders do not** — permanent GTM lock until a future era ships a certified hook (`era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`, `lib/inventory/inventory-depletion-policy.ts`).
 
 Evidence: `docs/POS_ARCHITECTURE.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/ENTERPRISE_SECURITY_ROADMAP.md`, `services/ai/`.
 
