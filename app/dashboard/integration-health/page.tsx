@@ -55,7 +55,12 @@ import {
   listIntegrationHealthCards,
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
+import { IntegrationHealthRecoveryFlowProofPanel } from "@/components/dashboard/integration-health/integration-health-recovery-flow-proof-panel";
 import { IntegrationHealthRecoveryPanel } from "@/components/dashboard/integration-health-recovery-panel";
+import {
+  buildIntegrationHealthRecoveryFlowProofSlice,
+  deriveP0ChannelProofFromSmokeRows,
+} from "@/lib/commercial/era20-integration-health-recovery-flow-proof-era20";
 import { IntegrationHealthSupportAdminPanel } from "@/components/dashboard/integration-health-support-admin-panel";
 import { IntegrationHealthSummaryPanel } from "@/components/integrations/integration-health-summary";
 import { buildIntegrationHealthRecoveryModel } from "@/lib/integrations/integration-health-recovery-era19";
@@ -149,6 +154,9 @@ export default async function IntegrationHealthDashboardPage({
     channelCards,
     smokeArtifacts,
   });
+  const integrationRecoveryFlowProof = buildIntegrationHealthRecoveryFlowProofSlice({
+    p0ChannelProofPassed: deriveP0ChannelProofFromSmokeRows(smokeArtifacts.rows),
+  });
 
   return (
     <div className="space-y-8">
@@ -161,6 +169,8 @@ export default async function IntegrationHealthDashboardPage({
       ) : null}
 
       <IntegrationHealthChannelCardsPanel model={channelCards} />
+
+      <IntegrationHealthRecoveryFlowProofPanel slice={integrationRecoveryFlowProof} />
 
       <IntegrationHealthRecoveryPanel model={recoveryModel} />
 

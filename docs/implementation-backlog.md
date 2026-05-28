@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 18 — Workstream G: integration health recovery flow proof (2026-05-28)
+
+- Title: Era 20 Cycle 18 — integration issue → Health Center 5-hop proof
+- Status: **done**
+- Policy: `era20-integration-health-recovery-flow-proof-v1` (`KOS-E20-018`)
+- Doc: `docs/era20-integration-health-recovery-flow-proof-2026-05-28.md`
+- Tests: `test:ci:era20-integration-health-recovery-flow-proof`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault — Workstream G operator golden path matrix complete
+
 ### Cycle 17 — Workstream H: copilot permission-denied UX (2026-05-28)
 
 - Title: Era 20 Cycle 17 — copilot layout + chat/audit/settings denial surfaces
