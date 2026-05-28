@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-020 — Owner Today Launch Wizard commercial unblock cross-link (P1 WOW)
+- ID: `KOS-E19-020`
+- Title: Era 19 Workstream B/C Cycle 20 — briefing top action + Today strip commercial unblock wiring
+- Module: Owner Daily Briefing / Launch Wizard / Commercial proof
+- Priority: P1 (WOW pillar — owner command center ↔ pilot GO honesty)
+- Status: **today_launch_wizard_commercial_crosslink_wired**
+- Decision: `era19-launch-wizard-today-strip-v1` + `era19-owner-daily-briefing-launch-wizard-v1` — next commercial unblock in owner top actions; Today strip prioritizes commercial unblock or setup-only when briefing active; honest GO/NO-GO badge
+- Evidence: `lib/launch-wizard/launch-wizard-today-strip-era19.ts`, `lib/briefing/owner-daily-briefing-launch-wizard-era19.ts`, updated Today page + briefing service
+- Next: P0 proof unblock when ops credentials available, or Integration Health smoke artifact depth
+
 ### KOS-E19-019 — POS shift closeout clarity (P1 operator speed)
 - ID: `KOS-E19-019`
 - Title: Era 19 Workstream E Cycle 19 — closeout checklist, end-of-shift hero, tablet sticky submit

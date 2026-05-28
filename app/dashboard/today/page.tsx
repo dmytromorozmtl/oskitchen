@@ -58,7 +58,7 @@ export default async function TodayOperationsPage({
   });
   const showLaunchWizardStrip = actor.workspaceRole === "OWNER";
   const data = await loadTodayCommandCenter(dataUserId);
-  const [profile, integrationHealthModel, ownerBriefing, launchWizardModel] = await Promise.all([
+  const [profile, integrationHealthModel, launchWizardModel] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: dataUserId },
       select: { createdAt: true },
@@ -66,17 +66,23 @@ export default async function TodayOperationsPage({
     showIntegrationHealth
       ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)
       : Promise.resolve(null),
-    showOwnerBriefing
-      ? loadOwnerDailyBriefing(dataUserId, {
-          showIntegrationHealth,
-          today: data,
-          persona,
-          workspaceRole: actor.workspaceRole,
-          supportAdmin,
-        })
-      : Promise.resolve(null),
     showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId) : Promise.resolve(null),
   ]);
+  const ownerBriefing = showOwnerBriefing
+    ? await loadOwnerDailyBriefing(dataUserId, {
+        showIntegrationHealth,
+        today: data,
+        persona,
+        workspaceRole: actor.workspaceRole,
+        supportAdmin,
+        launchWizard: launchWizardModel
+          ? {
+              commercialBlockers: launchWizardModel.commercialBlockers,
+              commercialSetup: launchWizardModel.commercialSetup,
+            }
+          : undefined,
+      })
+    : null;
   const gettingStarted = await loadGettingStartedStatus(
     dataUserId,
     profile?.createdAt ?? new Date(),
@@ -93,7 +99,13 @@ export default async function TodayOperationsPage({
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
-        {launchWizardModel ? <LaunchWizardTodayStrip model={launchWizardModel} /> : null}
+        {launchWizardModel ? (
+          <LaunchWizardTodayStrip
+            model={launchWizardModel}
+            briefingActive={Boolean(ownerBriefing)}
+            rolePack={ownerBriefing?.rolePack ?? null}
+          />
+        ) : null}
         <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
         <TodayCommandCenterView
           userId={dataUserId}

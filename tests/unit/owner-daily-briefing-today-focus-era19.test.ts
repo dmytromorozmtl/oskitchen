@@ -5,6 +5,7 @@ import {
   shouldCollapseTodayMetricsForBriefing,
   shouldCompactTodayReadinessForBriefing,
   shouldHideTodayAttentionStripForBriefing,
+  shouldUseSetupOnlyLaunchWizardTodayStrip,
   todayMetricsExpandLabel,
   OWNER_DAILY_BRIEFING_TODAY_FOCUS_ERA19_POLICY_ID,
 } from "@/lib/briefing/owner-daily-briefing-today-focus-era19";
@@ -47,5 +48,22 @@ describe("owner daily briefing today focus era19", () => {
     expect(resolveTodayMetricsExpandHref(true)).toBe("/dashboard/today");
     expect(todayMetricsExpandLabel(false)).toBe("View full metrics");
     expect(todayMetricsExpandLabel(true)).toBe("Hide full metrics");
+  });
+
+  it("uses setup-only launch wizard strip for owner briefing with commercial blockers", () => {
+    expect(
+      shouldUseSetupOnlyLaunchWizardTodayStrip({
+        briefingActive: true,
+        rolePack: "owner",
+        commercialBlockerCount: 1,
+      }),
+    ).toBe(true);
+    expect(
+      shouldUseSetupOnlyLaunchWizardTodayStrip({
+        briefingActive: true,
+        rolePack: "manager",
+        commercialBlockerCount: 1,
+      }),
+    ).toBe(false);
   });
 });

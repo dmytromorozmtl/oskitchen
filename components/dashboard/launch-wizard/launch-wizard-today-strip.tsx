@@ -5,46 +5,81 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { launchWizardTodayStripHref } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
+import {
+  buildLaunchWizardTodayStripViewModel,
+  resolveLaunchWizardTodayStripDisplayMode,
+  type LaunchWizardTodayStripDisplayMode,
+} from "@/lib/launch-wizard/launch-wizard-today-strip-era19";
 import type { LaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 
-export function LaunchWizardTodayStrip(props: { model: LaunchWizardModel }) {
-  const { model } = props;
-  const { progress, nextStep, commercialBlockers } = model;
-  const href = launchWizardTodayStripHref(nextStep?.id ?? null);
-  const blockerCount = commercialBlockers.blockers.length;
+function decisionBadgeVariant(
+  tone: "urgent" | "success" | "neutral",
+): "destructive" | "default" | "outline" {
+  if (tone === "urgent") return "destructive";
+  if (tone === "success") return "default";
+  return "outline";
+}
+
+export function LaunchWizardTodayStrip(props: {
+  model: LaunchWizardModel;
+  briefingActive?: boolean;
+  rolePack?: "owner" | "manager" | "kitchen" | "cashier" | "support_admin" | null;
+}) {
+  const displayMode: LaunchWizardTodayStripDisplayMode = resolveLaunchWizardTodayStripDisplayMode({
+    briefingActive: props.briefingActive ?? false,
+    rolePack: props.rolePack ?? null,
+    commercialBlockerCount: props.model.commercialBlockers.blockers.length,
+  });
+
+  const view = buildLaunchWizardTodayStripViewModel({
+    commercialBlockers: props.model.commercialBlockers,
+    commercialSetup: props.model.commercialSetup,
+    nextStep: props.model.nextStep,
+    progress: props.model.progress,
+    displayMode,
+  });
 
   return (
     <Card
       className="border-primary/20 bg-primary/[0.03] shadow-sm"
       data-testid="launch-wizard-today-strip"
+      data-strip-mode={view.mode}
+      data-strip-display={view.displayMode}
     >
       <CardContent className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <Rocket className="h-4 w-4 text-muted-foreground" aria-hidden />
-            <p className="font-medium">Launch wizard</p>
+            <p className="font-medium">
+              {view.mode === "commercial_unblock" ? "Commercial unblock" : "Launch wizard"}
+            </p>
             <Badge variant="outline" className="rounded-full tabular-nums">
-              {progress.completedCount}/{progress.totalCount}
+              {view.progressLabel}
             </Badge>
-            {blockerCount > 0 ? (
+            {view.displayMode === "full" ? (
+              <Badge
+                variant={decisionBadgeVariant(view.decisionTone)}
+                className="rounded-full"
+                data-testid="launch-wizard-today-strip-decision"
+              >
+                {view.decisionLabel}
+              </Badge>
+            ) : null}
+            {view.blockerCount > 0 ? (
               <Badge variant="destructive" className="rounded-full tabular-nums">
-                {blockerCount} commercial blocker{blockerCount === 1 ? "" : "s"}
+                {view.blockerCount} commercial blocker{view.blockerCount === 1 ? "" : "s"}
               </Badge>
             ) : null}
           </div>
           <div className="space-y-1.5">
-            <Progress value={progress.percent} className="h-1.5 max-w-md" />
-            <p className="text-sm text-muted-foreground">
-              {nextStep
-                ? `Next: ${nextStep.title}`
-                : "Setup steps complete — confirm commercial GO/NO-GO before cutover."}
-            </p>
+            <Progress value={view.progressPercent} className="h-1.5 max-w-md" />
+            <p className="text-sm font-medium text-foreground">{view.headline}</p>
+            <p className="text-sm text-muted-foreground">{view.subline}</p>
           </div>
         </div>
         <Button asChild size="sm" className="shrink-0 rounded-full">
-          <Link href={href} data-testid="launch-wizard-today-strip-cta">
-            {nextStep ? nextStep.ctaLabel : "Open launch wizard"}
+          <Link href={view.href} data-testid="launch-wizard-today-strip-cta">
+            {view.ctaLabel}
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
           </Link>
         </Button>

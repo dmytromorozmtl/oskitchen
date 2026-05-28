@@ -37,6 +37,12 @@ import {
   mergeBriefingCashierTopActions,
 } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
 import {
+  buildOwnerDailyBriefingLaunchWizardCommercialAction,
+  mergeBriefingLaunchWizardTopActions,
+} from "@/lib/briefing/owner-daily-briefing-launch-wizard-era19";
+import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
+import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
+import {
   buildOwnerDailyBriefingRiskRadarSlice,
   summarizeOwnerDailyBriefingRiskRadar,
   type OwnerDailyBriefingRiskRadarSlice,
@@ -183,6 +189,10 @@ export async function loadOwnerDailyBriefing(
     persona?: OperatorHomePersona;
     workspaceRole?: UserRole;
     supportAdmin?: boolean;
+    launchWizard?: {
+      commercialBlockers: LaunchWizardCommercialBlockersSlice;
+      commercialSetup: LaunchWizardCommercialSetupSlice;
+    };
   },
 ): Promise<OwnerDailyBriefingPayload> {
   const showIntegrationHealth = options?.showIntegrationHealth ?? true;
@@ -290,7 +300,7 @@ export async function loadOwnerDailyBriefing(
           productionCalendarAlerts,
           kpis: today.kpis,
         });
-  const allTopActions =
+  const allTopActionsBase =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminActions({
           blockers: today.blockers,
@@ -321,6 +331,19 @@ export async function loadOwnerDailyBriefing(
             lowStockCount: lowStock.lowStockCount,
             productionCalendarActions,
           });
+
+  const launchWizardCommercialAction =
+    rolePack === "owner" && options?.launchWizard
+      ? buildOwnerDailyBriefingLaunchWizardCommercialAction({
+          commercialBlockers: options.launchWizard.commercialBlockers,
+          nextUnblock: options.launchWizard.commercialSetup.nextUnblock,
+        })
+      : null;
+
+  const allTopActions =
+    rolePack === "owner" && launchWizardCommercialAction
+      ? mergeBriefingLaunchWizardTopActions(launchWizardCommercialAction, allTopActionsBase)
+      : allTopActionsBase;
 
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
   const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);

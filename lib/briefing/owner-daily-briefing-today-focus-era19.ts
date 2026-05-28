@@ -27,6 +27,15 @@ export function shouldCompactTodayReadinessForBriefing(input: {
   return input.briefingActive && !input.showFullMetrics;
 }
 
+/** Owner briefing owns commercial unblock — Today strip shows setup-only progress. */
+export function shouldUseSetupOnlyLaunchWizardTodayStrip(input: {
+  briefingActive: boolean;
+  rolePack: "owner" | "manager" | "kitchen" | "cashier" | "support_admin" | null;
+  commercialBlockerCount: number;
+}): boolean {
+  return input.briefingActive && input.rolePack === "owner" && input.commercialBlockerCount > 0;
+}
+
 export function resolveTodayMetricsExpandHref(showFullMetrics: boolean): string {
   return showFullMetrics ? "/dashboard/today" : "/dashboard/today?metrics=all";
 }
