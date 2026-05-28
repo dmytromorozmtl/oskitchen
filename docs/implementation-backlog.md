@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-034 — Investor narrative one-pager v2 (P2)
+- ID: `KOS-E17-034`
+- Title: Era 17 Cycle 41 — investor one-pager gated on pilot metrics baseline
+- Module: GTM / Founder
+- Priority: P2 (Workstream K Cycle 41)
+- Status: **template_only_awaiting_pilot_metrics**
+- Decision: `era17-investor-narrative-onepager-v2-v1` — template + smoke gate; no live KPI narrative without baseline overall PASSED
+- Evidence: `docs/investor-narrative-onepager-era17.md`, `lib/commercial/investor-narrative-onepager-summary.ts`, `scripts/smoke-investor-narrative-onepager-era17.ts`, `test:ci:investor-narrative-onepager-era17:cert`
+- Next: Re-run after pilot week-2 baseline `overall: PASSED`; then competitor matrix refresh (P2 #13)
+
 ### KOS-E17-033 — Integration setup wizard friction (P1)
 - ID: `KOS-E17-033`
 - Title: Era 17 Cycle 34 — streamlined 5-step Woo/Shopify pilot setup wizard

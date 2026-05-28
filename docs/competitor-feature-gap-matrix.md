@@ -7,6 +7,7 @@ Notes:
 - This matrix is for product strategy, not for direct customer-facing factual claims about competitor current pricing or certifications.
 - "KitchenOS current state" uses the maturity language established in `docs/system-reality-model.md`.
 - Priority reflects KitchenOS sequencing, not absolute market importance for every buyer.
+- **Investor narrative (Era 17):** `era17-investor-narrative-onepager-v2-v1` — use [`investor-narrative-onepager-era17.md`](./investor-narrative-onepager-era17.md) for founder deck framing; **template_only_awaiting_pilot_metrics** until pilot KPI baseline captured.
 
 | Competitor | Capability | Competitor Strength | KitchenOS Current State | Gap | Opportunity | Priority | Complexity | Business Impact | Implementation Path | Acceptance Criteria | Tests |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

@@ -68,7 +68,8 @@ Review **`artifacts/pilot-metrics-baseline-summary.json`** — `overall: PASSED`
 - **Do not** cite `proof_partial` snapshots in investor materials — treat as **SKIPPED** until complete.
 - **Do not** claim rush-hour KDS SLA from bump rate alone.
 - **Do not** treat staging checkout rate as production SLA.
-- Era 41 investor narrative uses this artifact only when real pilot data exists.
+- Era 41 investor narrative uses this artifact only when `overall: PASSED` / `proof_captured` (all six KPIs).
+- See also: [`investor-narrative-onepager-era17.md`](./investor-narrative-onepager-era17.md) (`era17-investor-narrative-onepager-v2-v1`).
 
 ---
 

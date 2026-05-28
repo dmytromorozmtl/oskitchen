@@ -297,6 +297,20 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** smoke re-run → **overall: SKIPPED** (`baselineProofStatus: proof_skipped_missing_pilot_data`; no pilot week-2 snapshot). Artifact: `artifacts/pilot-metrics-baseline-summary.json`. **Do not cite partial metrics in investor narrative.**
 
+### Era 17 investor narrative one-pager v2 (2026-05-28)
+
+**Policy:** `era17-investor-narrative-onepager-v2-v1` — **template_only_awaiting_pilot_metrics**; founder deck template gated on pilot KPI snapshot.
+
+1. Use [`investor-narrative-onepager-era17.md`](./investor-narrative-onepager-era17.md) — qualitative claims only until metrics gate passes.
+2. Run **`npm run smoke:investor-narrative-onepager`** → review **`artifacts/investor-narrative-onepager-summary.json`** (`narrativeProofStatus`).
+3. Requires `artifacts/pilot-metrics-baseline-summary.json` **`overall: PASSED`** before citing live KPIs in investor materials.
+4. Chain with **`npm run smoke:pilot-forbidden-claims-enforcement`** before external share.
+5. **Do not** use legacy `INVESTOR_NARRATIVE.md` traction placeholders as verified metrics.
+
+**Execution status (2026-05-28):** smoke → **overall: SKIPPED** (`narrativeProofStatus: proof_skipped_missing_pilot_metrics`; cert PASSED; pilot metrics baseline not captured). **Template only — no live KPI narrative.**
+
+### Era 17 pilot rollback drill (2026-05-28)
+
 **Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.
 
 1. Use [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md) — six steps aligned with Era 16 evidence pack.
