@@ -10,8 +10,8 @@ import { z } from "zod";
 import { ensureAppUser } from "@/lib/auth";
 import { authCallbackUrl } from "@/lib/auth/public-site-url";
 import { safeInternalNextPath } from "@/lib/auth/safe-redirect";
+import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
 import { prisma } from "@/lib/prisma";
-import { defaultPostAuthPath } from "@/lib/role-navigation";
 import { safeError } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
@@ -53,14 +53,7 @@ export async function signInAction(formData: FormData) {
 
     let defaultPath = "/dashboard/today";
     if (data.user) {
-      const profile = await prisma.userProfile.findUnique({
-        where: { id: data.user.id },
-        select: { role: true, onboardingCompleted: true },
-      });
-      defaultPath = defaultPostAuthPath(
-        profile?.role ?? "OWNER",
-        Boolean(profile?.onboardingCompleted),
-      );
+      defaultPath = await resolvePostAuthPathForSessionUser(data.user.id);
     }
 
     const redirectTo = safeInternalNextPath(rawRedirect, defaultPath);

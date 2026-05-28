@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-005 — Persona default landing redirect (P1)
+- ID: `KOS-E18-005`
+- Title: Era 18 Workstream J Cycle 5 — staff post-auth lands on persona primary workflow
+- Module: Dashboard / Auth / UX
+- Priority: P1 (operator speed — fixes legacy STAFF → kitchen misroute)
+- Status: **operator_default_landing_wired**
+- Decision: `era18-operator-default-landing-v1` — sign-in, login page, signup, auth callback use `resolvePostAuthPathForSessionUser`
+- Evidence: `lib/navigation/resolve-operator-post-auth-path.ts`, `lib/navigation/operator-home-era18.ts` (`resolveOperatorDefaultLandingPath`)
+- Next: Shift variance close preview UI (bounded); optional `/dashboard` hub-only mode for staff bookmarks
+
 ### KOS-E18-004 — Pilot integration health strip (P1)
 - ID: `KOS-E18-004`
 - Title: Era 18 Workstream C Cycle 19 — compact integration health on manager operator home
@@ -53,7 +63,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **operator_home_mvp_wired**
 - Decision: `era18-operator-home-v1` — persona resolver + quick actions; owners keep `HomeOverview`
 - Evidence: `lib/navigation/operator-home-era18.ts`, `components/dashboard/operator-home-panel.tsx`, `app/dashboard/page.tsx`
-- Next: Default landing redirect for staff roles; deeper persona customization post-pilot
+- Next: Deeper persona customization post-pilot; landing already wired (`era18-operator-default-landing-v1`)
 
 ### KOS-E18-002 — POS manager discount terminal UI (P1)
 - ID: `KOS-E18-002`

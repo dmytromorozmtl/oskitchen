@@ -764,4 +764,5 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 18 Cycle 1: P0 staging secrets vault — `era17-p0-staging-proof-unblock-v1` env catalog (11 vars); [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md); **ops_checklist_complete**; proof still **awaiting_ops_credentials** |
 | 2026-05-28 | Era 18 Cycle 2 / Workstream F: `era18-pos-manager-discount-ui-v1` — terminal discount/comp UI; **terminal_discount_ui_wired**; no manager PIN / Toast parity claim |
 | 2026-05-28 | Era 18 Cycle 3 / Workstream J: `era18-operator-home-v1` — role-based operator home on `/dashboard`; **operator_home_mvp_wired** |
+| 2026-05-28 | Era 18 Cycle 5 / Workstream J: `era18-operator-default-landing-v1` — persona post-auth landing (cashier → POS terminal, kitchen → KDS); **operator_default_landing_wired** |
 | 2026-05-28 | Era 18 Cycle 4 / Workstream C: `era18-pilot-integration-health-strip-v1` — manager pilot integration health strip; handoff doc sections restored for Tier 0 scorecard cert |

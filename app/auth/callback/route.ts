@@ -9,12 +9,13 @@ import {
   parseSsoCallbackWorkspaceId,
   SSO_CALLBACK_WORKSPACE_QUERY_PARAM,
 } from "@/lib/enterprise/workspace-sso-runtime-adapter";
+import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
 import { createClient } from "@/lib/supabase/server";
 
 async function finishAuthSession(
   supabase: Awaited<ReturnType<typeof createClient>>,
   origin: string,
-  next: string,
+  rawNext: string | null,
 ) {
   const {
     data: { user },
@@ -22,6 +23,10 @@ async function finishAuthSession(
   if (user?.email) {
     await ensureAppUser(user.id, user.email);
   }
+  const fallbackNext = user
+    ? await resolvePostAuthPathForSessionUser(user.id)
+    : "/dashboard/today";
+  const next = safeInternalNextPath(rawNext, fallbackNext);
   return NextResponse.redirect(new URL(next, origin));
 }
 
@@ -34,7 +39,6 @@ export async function GET(request: Request) {
   const type = searchParams.get("type");
   const rawNext = searchParams.get("next");
 
-  const next = safeInternalNextPath(rawNext, "/dashboard/today");
   const supabase = await createClient();
 
   if (code) {
@@ -64,7 +68,7 @@ export async function GET(request: Request) {
           );
         }
       }
-      return finishAuthSession(supabase, origin, next);
+      return finishAuthSession(supabase, origin, rawNext);
     }
   }
 
@@ -77,7 +81,7 @@ export async function GET(request: Request) {
       if (type === "recovery") {
         return NextResponse.redirect(new URL("/dashboard/settings", origin));
       }
-      return finishAuthSession(supabase, origin, next);
+      return finishAuthSession(supabase, origin, rawNext);
     }
   }
 

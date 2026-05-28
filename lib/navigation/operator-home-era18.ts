@@ -218,3 +218,23 @@ export function pickOperatorHomePrimaryAction(
 ): OperatorHomeAction | null {
   return actions.find((action) => action.primary) ?? actions[0] ?? null;
 }
+
+/** Owner dashboard command center — unchanged from Era 17 role navigation. */
+export const OWNER_DEFAULT_LANDING_PATH = "/dashboard/today" as const;
+
+/** Staff hub when persona primary is unavailable (permissions). */
+export const OPERATOR_HOME_HUB_PATH = "/dashboard" as const;
+
+/** Resolve post-login landing from Era 18 persona + RBAC-filtered primary action. */
+export function resolveOperatorDefaultLandingPath(input: {
+  persona: OperatorHomePersona;
+  granted: ReadonlySet<PermissionKey>;
+}): string {
+  if (input.persona === "owner") {
+    return OWNER_DEFAULT_LANDING_PATH;
+  }
+
+  const actions = listOperatorHomeActions(input.persona, input.granted);
+  const primary = pickOperatorHomePrimaryAction(actions);
+  return primary?.href ?? OPERATOR_HOME_HUB_PATH;
+}

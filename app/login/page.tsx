@@ -7,8 +7,7 @@ import { SsoLoginEntry } from "@/components/auth/sso-login-entry";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getSessionUser } from "@/lib/auth";
 import { APP_NAME } from "@/lib/constants";
-import { prisma } from "@/lib/prisma";
-import { defaultPostAuthPath } from "@/lib/role-navigation";
+import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
 
 export const metadata = {
   title: "Sign in",
@@ -17,16 +16,7 @@ export const metadata = {
 export default async function LoginPage() {
   const user = await getSessionUser();
   if (user) {
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: user.id },
-      select: { role: true, onboardingCompleted: true },
-    });
-    redirect(
-      defaultPostAuthPath(
-        profile?.role ?? "OWNER",
-        Boolean(profile?.onboardingCompleted),
-      ),
-    );
+    redirect(await resolvePostAuthPathForSessionUser(user.id));
   }
 
   return (

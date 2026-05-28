@@ -5,8 +5,10 @@ import type { PermissionKey } from "@/lib/permissions/permissions";
 import {
   listOperatorHomeActions,
   pickOperatorHomePrimaryAction,
+  resolveOperatorDefaultLandingPath,
   resolveOperatorHomePersona,
 } from "@/lib/navigation/operator-home-era18";
+import { OPERATOR_DEFAULT_LANDING_ERA18_POLICY_ID } from "@/lib/navigation/operator-default-landing-era18-policy";
 import { OPERATOR_HOME_ERA18_POLICY_ID } from "@/lib/navigation/operator-home-era18-policy";
 
 function granted(...keys: PermissionKey[]) {
@@ -16,6 +18,7 @@ function granted(...keys: PermissionKey[]) {
 describe("operator home era18", () => {
   it("locks era18 operator home policy id", () => {
     expect(OPERATOR_HOME_ERA18_POLICY_ID).toBe("era18-operator-home-v1");
+    expect(OPERATOR_DEFAULT_LANDING_ERA18_POLICY_ID).toBe("era18-operator-default-landing-v1");
   });
 
   it("routes owners to owner home", () => {
@@ -81,5 +84,44 @@ describe("operator home era18", () => {
       granted("kitchen.view", "production.manage", "orders.manage", "packing.manage"),
     );
     expect(pickOperatorHomePrimaryAction(kitchen)?.id).toBe("kds");
+  });
+
+  it("resolves persona default landing paths", () => {
+    expect(
+      resolveOperatorDefaultLandingPath({
+        persona: "owner",
+        granted: granted("orders.manage"),
+      }),
+    ).toBe("/dashboard/today");
+
+    expect(
+      resolveOperatorDefaultLandingPath({
+        persona: "cashier",
+        granted: granted("pos.access", "pos.checkout"),
+      }),
+    ).toBe("/dashboard/pos/terminal");
+
+    expect(
+      resolveOperatorDefaultLandingPath({
+        persona: "kitchen",
+        granted: granted("kitchen.view"),
+      }),
+    ).toBe("/dashboard/kitchen");
+
+    expect(
+      resolveOperatorDefaultLandingPath({
+        persona: "manager",
+        granted: granted("orders.manage", "pos.access"),
+      }),
+    ).toBe("/dashboard/today");
+  });
+
+  it("falls back to operator home hub when no actions pass permission filter", () => {
+    expect(
+      resolveOperatorDefaultLandingPath({
+        persona: "kitchen",
+        granted: granted(),
+      }),
+    ).toBe("/dashboard");
   });
 });
