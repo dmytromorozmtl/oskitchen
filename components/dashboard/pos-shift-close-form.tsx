@@ -14,6 +14,7 @@ import {
   shiftVarianceLabel,
   shiftVarianceToneClassName,
 } from "@/lib/pos/pos-shift-closeout-preview";
+import { resolveShiftVarianceGuidance } from "@/lib/pos/pos-shift-close-focus-era18";
 import type { OpenShiftCloseoutPreview } from "@/services/pos/pos-shift-service";
 
 type StaffOption = { id: string; name: string };
@@ -56,6 +57,7 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
     : null;
 
   const needsNote = livePreview ? shiftCloseoutNeedsVarianceNote(livePreview) : false;
+  const varianceGuidance = livePreview ? resolveShiftVarianceGuidance(livePreview.tone) : null;
   const canSubmit = canSubmitShiftCloseWithPreview({
     preview: livePreview,
     varianceAcknowledged,
@@ -139,6 +141,18 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
               Non-zero variance — acknowledge and explain before closing.
             </p>
           ) : null}
+          {varianceGuidance ? (
+            <p
+              className={`mt-2 text-xs ${
+                livePreview?.tone === "balanced"
+                  ? "text-green-700 dark:text-green-500"
+                  : "text-muted-foreground"
+              }`}
+              data-testid="pos-shift-variance-guidance"
+            >
+              {varianceGuidance}
+            </p>
+          ) : null}
         </div>
       ) : null}
 
@@ -158,7 +172,21 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
         </select>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="closingCash">Closing cash counted</Label>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Label htmlFor="closingCash">Closing cash counted</Label>
+          {selected ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 rounded-full text-xs"
+              onClick={() => setClosingCashInput(selected.expectedCash.toFixed(2))}
+              data-testid="pos-shift-use-expected-cash"
+            >
+              Use expected ({formatShiftCloseoutMoney(selected.expectedCash)})
+            </Button>
+          ) : null}
+        </div>
         <Input
           id="closingCash"
           name="closingCash"

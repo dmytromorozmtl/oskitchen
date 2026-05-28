@@ -1,4 +1,5 @@
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
+import { PosShiftCloseAttentionStrip } from "@/components/dashboard/pos-shift-close-attention-strip";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PosShiftCloseForm } from "@/components/dashboard/pos-shift-close-form";
 import { PosShiftCloseHistoryPanel } from "@/components/dashboard/pos-shift-close-history-panel";
@@ -14,6 +15,7 @@ import {
   SHIFT_CLOSE_HISTORY_FILTERED_LIMIT,
   SHIFT_CLOSE_HISTORY_RANGE_LABEL,
 } from "@/lib/pos/pos-shift-close-history-range-era18";
+import { buildPosShiftCloseFocusSnapshot } from "@/lib/pos/pos-shift-close-focus-era18";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
 import {
@@ -58,6 +60,11 @@ export default async function PosShiftsPage({
       : Promise.resolve([]),
   ]);
 
+  const shiftCloseFocus = buildPosShiftCloseFocusSnapshot({
+    openPreviews: closeoutPreviews,
+    closedHistory: closedShiftHistory,
+  });
+
   return (
     <div className="space-y-6">
       <div>
@@ -66,6 +73,10 @@ export default async function PosShiftsPage({
           Open and close shifts — review recent closeouts and variance history.
         </p>
       </div>
+
+      {canCloseShift || canViewShiftHistory ? (
+        <PosShiftCloseAttentionStrip focus={shiftCloseFocus} />
+      ) : null}
 
       {canOpenShift ? (
         <Card className="max-w-lg border-border/80 shadow-sm">
@@ -122,7 +133,7 @@ export default async function PosShiftsPage({
       ) : null}
 
       {canCloseShift ? (
-        <Card className="max-w-lg border-border/80 shadow-sm">
+        <Card className="max-w-lg border-border/80 shadow-sm" id="pos-shift-close">
           <CardHeader>
             <CardTitle>Close shift</CardTitle>
             <CardDescription>

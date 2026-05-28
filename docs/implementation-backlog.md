@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-027 — POS shift close focus strip (P1)
+- ID: `KOS-E18-027`
+- Title: Era 18 Workstream F Cycle 27 — shift closeout attention strip + variance guidance + history next actions
+- Module: POS / Shifts
+- Priority: P1 (operator speed + financial clarity)
+- Status: **pos_shift_close_focus_attention_wired**
+- Decision: `era18-pos-shift-close-focus-v1` — open shift + recent variance prioritization; use-expected quick fill; short/over guidance; history row next actions
+- Evidence: `lib/pos/pos-shift-close-focus-era18.ts`, `components/dashboard/pos-shift-close-attention-strip.tsx`, `app/dashboard/pos/shifts/page.tsx`, `components/dashboard/pos-shift-close-form.tsx`
+- Next: P0 staging proof ops execution when vault ready; POS manager discount UI (P2)
+
 ### KOS-E18-026 — Platform support inbox attention strip (P0)
 - ID: `KOS-E18-026`
 - Title: Era 18 Workstream P Cycle 26 — cross-tenant support queue prioritization + ticket row next actions
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **platform_support_inbox_focus_attention_wired**
 - Decision: `era18-platform-support-inbox-focus-v1` — SLA → critical → escalated → integration → unassigned urgent ordering; platform routes on attention strip and row actions
 - Evidence: `lib/support/platform-support-inbox-focus-era18.ts`, `components/platform/platform-support-inbox-attention-strip.tsx`, `app/platform/support/page.tsx`, `app/platform/support/queue/page.tsx`
-- Next: P0 staging proof ops execution when vault ready; POS shift close variance UX polish (P1)
+- Next: P0 staging proof ops execution when vault ready; POS shift close variance UX polish — **done** (KOS-E18-027)
 
 ### KOS-E18-025 — Support inbox attention strip (P0)
 - ID: `KOS-E18-025`

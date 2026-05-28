@@ -18,6 +18,7 @@ import {
   shiftVarianceLabel,
   summarizeClosedShiftHistory,
 } from "@/lib/pos/pos-shift-close-history-era18";
+import { resolvePosShiftCloseHistoryRowNextAction } from "@/lib/pos/pos-shift-close-focus-era18";
 import type { ClosedShiftSummary } from "@/services/pos/pos-shift-service";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +50,7 @@ export function PosShiftCloseHistoryPanel({
   }
 
   return (
-    <div className="space-y-3" data-testid="pos-shift-close-history">
+    <div className="space-y-3" data-testid="pos-shift-close-history" id="pos-shift-close-history">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <PosShiftCloseHistoryRangeFilter />
         <p className="text-xs text-muted-foreground">
@@ -77,12 +78,19 @@ export function PosShiftCloseHistoryPanel({
               <th className="px-3 py-2 font-medium text-right">Expected</th>
               <th className="px-3 py-2 font-medium text-right">Counted</th>
               <th className="px-3 py-2 font-medium">Variance</th>
+              <th className="px-3 py-2 font-medium">Next action</th>
               <th className="px-3 py-2 font-medium">Closed by</th>
             </tr>
           </thead>
           <tbody>
             {shifts.map((shift) => {
               const tone = classifyShiftVariance(shift.variance);
+              const nextAction = resolvePosShiftCloseHistoryRowNextAction({
+                shiftId: shift.shiftId,
+                variance: shift.variance,
+                notes: shift.notes,
+                registerName: shift.registerName,
+              });
               return (
                 <tr
                   key={shift.shiftId}
@@ -110,6 +118,23 @@ export function PosShiftCloseHistoryPanel({
                       {tone !== "balanced" && tone !== "pending" ? ` · ${shiftVarianceLabel(tone)}` : ""}
                     </span>
                   </td>
+                  <td className="px-3 py-2.5">
+                    {nextAction ? (
+                      <Link
+                        href={nextAction.href}
+                        className={
+                          nextAction.tone === "urgent"
+                            ? "text-sm font-medium text-destructive hover:underline"
+                            : "text-sm text-amber-700 hover:underline dark:text-amber-400"
+                        }
+                        data-testid={`pos-shift-history-next-action-${shift.shiftId}`}
+                      >
+                        {nextAction.label}
+                      </Link>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2.5 text-muted-foreground">
                     {shift.closedByName ?? "—"}
                   </td>
@@ -127,7 +152,8 @@ export function PosShiftCloseHistoryPanel({
             .map((shift) => (
               <p
                 key={`${shift.shiftId}-note`}
-                className="text-xs text-muted-foreground"
+                id={`pos-shift-history-note-${shift.shiftId}`}
+                className="text-xs text-muted-foreground scroll-mt-24"
                 data-testid={`pos-shift-history-note-${shift.shiftId}`}
               >
                 <span className="font-medium text-foreground">{shift.registerName}</span> — {shift.notes}
