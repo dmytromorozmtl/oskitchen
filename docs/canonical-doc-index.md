@@ -48,7 +48,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era9.md`](./next-master-prompt-input-2026-05-27-era9.md) | Facts and constraints for Evolution Era 10 master prompt |
+| [`next-master-prompt-input-2026-05-27-era10.md`](./next-master-prompt-input-2026-05-27-era10.md) | Facts and constraints for Evolution Era 11 master prompt |
+| [`era10-cycle-completion-scorecard-2026-05-27.md`](./era10-cycle-completion-scorecard-2026-05-27.md) | Era 10 customer value / operator depth (cycles 1–4) + score 97/100 |
+| [`next-master-prompt-input-2026-05-27-era9.md`](./next-master-prompt-input-2026-05-27-era9.md) | **Superseded** by era10 input for recurring prompts |
 | [`era9-cycle-completion-scorecard-2026-05-27.md`](./era9-cycle-completion-scorecard-2026-05-27.md) | Era 9 enterprise / DevOps / security recert (cycles 1–4) + score 96/100 |
 | [`next-master-prompt-input-2026-05-27-era8.md`](./next-master-prompt-input-2026-05-27-era8.md) | **Superseded** by era9 input for recurring prompts |
 | [`era8-cycle-completion-scorecard-2026-05-27.md`](./era8-cycle-completion-scorecard-2026-05-27.md) | Era 8 operator depth / GTM hygiene (cycles 1–4) + score 94/100 |
@@ -161,6 +163,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2** | **Production calendar cross-week UI** | `era10-production-calendar-cross-week-ui-v1`; `test:ci:production-calendar-cross-week-ui:cert` |
 | **3** | **Production calendar status workflow UI** | `era10-production-calendar-status-workflow-ui-v1`; `test:ci:production-calendar-status-workflow-ui:cert` |
 | **4** | **KDS staging smoke recert** | `era10-kds-staging-smoke-recert-v1`; `test:ci:kds-staging-smoke-era10:cert` |
+| **5** | **Era 10 scorecard refresh** | `era10-scorecard-refresh-v1`; `test:ci:scorecard:cert` |
 
 ## Evolution Era 7 cycle ledger
 
@@ -372,6 +375,27 @@ Incremental refresh after Era 9 cycles 1–4 (enterprise / DevOps / security rec
 
 **Re-audit decision:** defer full repo re-audit until Era 10 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era9.md`.
 
+## Scorecard (Evolution Era 10 end — 2026-05-27)
+
+Incremental refresh after Era 10 cycles 1–4 (customer value / operator depth / KDS recert from era9 handoff). Baseline = Era 9 end **96** overall.
+
+| Area | Era 9 end | Era 10 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 96 | **97** | +1 | production calendar depth + KDS recert + rewards honesty |
+| Security | 82 | **82** | +0 | unchanged |
+| QA | 88 | **89** | +1 | expanded cert wiring + honest gaps |
+| DevOps | 95 | **95** | +0 | unchanged |
+| RBAC | 88 | **88** | +0 | unchanged |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 68 | **70** | +2 | `era10-kds-staging-smoke-recert-v1` |
+| Enterprise readiness | 65 | **65** | +0 | SSO R1 design only |
+| Marketing/sales | 81 | **82** | +1 | `era10-cross-channel-rewards-recert-v1` |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 11 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era10.md`.
+
 ---
 
 ## Validation
@@ -427,3 +451,4 @@ Incremental refresh after Era 9 cycles 1–4 (enterprise / DevOps / security rec
 | 2026-05-27 | Era 10 Cycle 2: `era10-production-calendar-cross-week-ui-v1` — week nav + cross-week moves |
 | 2026-05-27 | Era 10 Cycle 3: `era10-production-calendar-status-workflow-ui-v1` — task status workflow on calendar |
 | 2026-05-27 | Era 10 Cycle 4: `era10-kds-staging-smoke-recert-v1` — bump + recall integration recert |
+| 2026-05-27 | Era 10 Cycle 5: `era10-scorecard-refresh-v1` — score 97/100; era11 handoff |

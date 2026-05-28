@@ -1,5 +1,7 @@
 # Next Master Prompt Input — KitchenOS Era 10
 
+> **Superseded for recurring execution** by `docs/next-master-prompt-input-2026-05-27-era10.md` (Era 11 handoff). Retained for Era 9→10 history.
+
 **Date:** 2026-05-27  
 **Purpose:** Canonical facts for the **next** master prompt after Evolution Era 9 completion  
 **Era 9 scorecard:** `docs/era9-cycle-completion-scorecard-2026-05-27.md`  
@@ -32,6 +34,7 @@ All four Era 9 enterprise / DevOps / security cycles from era8 prompt input **co
 | **2** | **Production calendar cross-week UI** — `era10-production-calendar-cross-week-ui-v1`; `?week=` nav + boundary moves |
 | **3** | **Production calendar status workflow UI** — `era10-production-calendar-status-workflow-ui-v1`; per-task status select |
 | **4** | **KDS staging smoke recert** — `era10-kds-staging-smoke-recert-v1`; bump + recall integration; no Playwright in CI |
+| **5** | **Era 10 scorecard refresh** — `era10-scorecard-refresh-v1`; **97/100**; see `docs/era10-cycle-completion-scorecard-2026-05-27.md` |
 
 ---
 

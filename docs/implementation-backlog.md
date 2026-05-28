@@ -5,6 +5,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 10 — Customer value loop / GTM honesty
 
+### KOS-E10-005 — Era 10 scorecard refresh (P1)
+- ID: `KOS-E10-005`
+- Title: Era 10 cycle completion scorecard and Era 11 master prompt input
+- Module: Governance / strategy
+- Priority: P1 (Era 10 Cycle 5)
+- Status: **completed**
+- Decision: `era10-scorecard-refresh-v1` — 97/100 overall; era11 handoff in `docs/next-master-prompt-input-2026-05-27-era10.md`
+- Evidence: `lib/governance/era10-scorecard-policy.ts`, `docs/era10-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+
 ### KOS-E10-004 — KDS staging smoke recert (P1)
 - ID: `KOS-E10-004`
 - Title: Re-certify KDS operational smoke (bump + recall integration, honest gaps)
