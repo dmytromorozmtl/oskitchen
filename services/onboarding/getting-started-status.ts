@@ -1,6 +1,8 @@
+import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { prisma } from "@/lib/prisma";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import {
+  integrationConnectionListWhereForOwner,
   menuListWhereForOwner,
   staffMemberListWhereForOwner,
   storefrontSettingsListWhereForOwner,
@@ -19,19 +21,29 @@ export type GettingStartedPayload = {
   allDone: boolean;
   showChecklist: boolean;
   accountAgeDays: number;
+  pilotChannel: {
+    connectedCount: number;
+    errorCount: number;
+  };
 };
 
 export async function loadGettingStartedStatus(
   userId: string,
   accountCreatedAt: Date,
 ): Promise<GettingStartedPayload> {
-  const [menuScope, orderScope, staffScope, storefrontScope, usageScope] = await Promise.all([
+  const [menuScope, orderScope, staffScope, storefrontScope, usageScope, connectionScope] =
+    await Promise.all([
     menuListWhereForOwner(userId),
     orderListWhereForOwner(userId),
     staffMemberListWhereForOwner(userId),
     storefrontSettingsListWhereForOwner(userId),
     usageEventListWhereForOwner(userId),
+    integrationConnectionListWhereForOwner(userId),
   ]);
+
+  const liveProviderFilter = {
+    provider: { in: [...LIVE_CAPABLE_INTEGRATION_PROVIDERS] },
+  };
 
   const [
     activation,
@@ -40,6 +52,8 @@ export async function loadGettingStartedStatus(
     staffCount,
     storefrontLive,
     posUseCount,
+    channelConnectedCount,
+    channelErrorCount,
   ] = await Promise.all([
     prisma.activationState.findUnique({ where: { userId } }),
     prisma.menu.count({ where: menuScope }),
@@ -51,6 +65,16 @@ export async function loadGettingStartedStatus(
     prisma.usageEvent.count({
       where: { AND: [usageScope, { eventName: "pos_first_use" }] },
     }),
+    prisma.integrationConnection.count({
+      where: {
+        AND: [connectionScope, liveProviderFilter, { status: "CONNECTED" }],
+      },
+    }),
+    prisma.integrationConnection.count({
+      where: {
+        AND: [connectionScope, liveProviderFilter, { status: "ERROR" }],
+      },
+    }),
   ]);
 
   const items: GettingStartedItem[] = [
@@ -59,6 +83,12 @@ export async function loadGettingStartedStatus(
       label: "Create your first menu",
       href: "/dashboard/menus/new",
       done: menuCount > 0 || Boolean(activation?.firstMenuCreated),
+    },
+    {
+      id: "integration",
+      label: "Connect a sales channel",
+      href: "/dashboard/integrations",
+      done: channelConnectedCount > 0,
     },
     {
       id: "order",
@@ -93,5 +123,14 @@ export async function loadGettingStartedStatus(
   const showChecklist =
     !activation?.checklistDismissed && !allDone && accountAgeDays <= 30;
 
-  return { items, allDone, showChecklist, accountAgeDays };
+  return {
+    items,
+    allDone,
+    showChecklist,
+    accountAgeDays,
+    pilotChannel: {
+      connectedCount: channelConnectedCount,
+      errorCount: channelErrorCount,
+    },
+  };
 }

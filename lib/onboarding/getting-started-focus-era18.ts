@@ -1,8 +1,9 @@
 import type { GettingStartedItem } from "@/services/onboarding/getting-started-status";
 
-/** Pilot golden-path order — menu before first order before POS before team before storefront. */
+/** Pilot golden-path order — menu before channel before first order. */
 export const GETTING_STARTED_STEP_PRIORITY = [
   "menu",
+  "integration",
   "order",
   "pos",
   "staff",
@@ -13,6 +14,8 @@ export type GettingStartedStepId = (typeof GETTING_STARTED_STEP_PRIORITY)[number
 
 export const GETTING_STARTED_STEP_DETAIL: Record<GettingStartedStepId, string> = {
   menu: "Add at least one menu so POS, manual orders, and kitchen routing have items to sell.",
+  integration:
+    "Connect WooCommerce or Shopify when pilot orders should flow from a sales channel — skip for POS-only pilots.",
   order: "Create a manual order or complete a test POS sale — this unlocks production and packing workflows.",
   pos: "Open the terminal and run a practice checkout so cashiers know the golden path.",
   staff: "Invite a manager or cashier so day-one shifts are not owner-only.",
@@ -21,6 +24,7 @@ export const GETTING_STARTED_STEP_DETAIL: Record<GettingStartedStepId, string> =
 
 export const GETTING_STARTED_STEP_CTA: Record<GettingStartedStepId, string> = {
   menu: "Create menu",
+  integration: "Connect sales channel",
   order: "Create first order",
   pos: "Open POS terminal",
   staff: "Invite team member",

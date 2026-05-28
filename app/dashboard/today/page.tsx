@@ -1,4 +1,5 @@
 import { GettingStartedChecklist } from "@/components/dashboard/getting-started-checklist";
+import { GettingStartedAttentionStrip } from "@/components/dashboard/getting-started-attention-strip";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
@@ -59,6 +60,9 @@ export default async function TodayOperationsPage({
       <div className="space-y-6">
         {integrationHealthModel ? (
           <PilotIntegrationHealthStrip model={integrationHealthModel} />
+        ) : null}
+        {gettingStarted.showChecklist && !gettingStarted.allDone ? (
+          <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
         <TodayCommandCenterView

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-028 — Getting started pilot channel step (P1)
+- ID: `KOS-E18-028`
+- Title: Era 18 Workstream L Cycle 28 — sales channel onboarding step + channel readiness attention strip
+- Module: Onboarding / Integrations
+- Priority: P1 (pilot deployment speed + time-to-first-order)
+- Status: **getting_started_pilot_channel_wired**
+- Decision: `era18-getting-started-pilot-channel-v1` — integration step in golden path; attention strip for errors and connect prompts on Today
+- Evidence: `lib/onboarding/getting-started-pilot-channel-era18.ts`, `components/dashboard/getting-started-attention-strip.tsx`, `services/onboarding/getting-started-status.ts`, `app/dashboard/today/page.tsx`
+- Next: P0 staging proof ops execution when vault ready; go-live blocker attention strip (P1)
+
 ### KOS-E18-027 — POS shift close focus strip (P1)
 - ID: `KOS-E18-027`
 - Title: Era 18 Workstream F Cycle 27 — shift closeout attention strip + variance guidance + history next actions
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **pos_shift_close_focus_attention_wired**
 - Decision: `era18-pos-shift-close-focus-v1` — open shift + recent variance prioritization; use-expected quick fill; short/over guidance; history row next actions
 - Evidence: `lib/pos/pos-shift-close-focus-era18.ts`, `components/dashboard/pos-shift-close-attention-strip.tsx`, `app/dashboard/pos/shifts/page.tsx`, `components/dashboard/pos-shift-close-form.tsx`
-- Next: P0 staging proof ops execution when vault ready; POS manager discount UI (P2)
+- Next: P0 staging proof ops execution when vault ready; getting started pilot channel step — **done** (KOS-E18-028)
 
 ### KOS-E18-026 — Platform support inbox attention strip (P0)
 - ID: `KOS-E18-026`

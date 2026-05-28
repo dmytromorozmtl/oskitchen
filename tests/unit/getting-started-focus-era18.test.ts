@@ -33,6 +33,17 @@ describe("getting started focus era18", () => {
   it("surfaces first order after menu is complete", () => {
     const next = pickGettingStartedNextStep([
       item("menu", true),
+      item("integration", false),
+      item("pos", false),
+      item("order", false),
+    ]);
+    expect(next?.id).toBe("integration");
+  });
+
+  it("surfaces first order after menu and integration are complete", () => {
+    const next = pickGettingStartedNextStep([
+      item("menu", true),
+      item("integration", true),
       item("pos", false),
       item("order", false),
     ]);

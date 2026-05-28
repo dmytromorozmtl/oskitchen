@@ -8,6 +8,7 @@ vi.mock("@/lib/prisma", () => ({
     staffMember: { count: vi.fn() },
     storefrontSettings: { count: vi.fn() },
     usageEvent: { count: vi.fn() },
+    integrationConnection: { count: vi.fn() },
   },
 }));
 
@@ -20,11 +21,13 @@ vi.mock("@/lib/scope/workspace-resource-scope", () => ({
   staffMemberListWhereForOwner: vi.fn(),
   storefrontSettingsListWhereForOwner: vi.fn(),
   usageEventListWhereForOwner: vi.fn(),
+  integrationConnectionListWhereForOwner: vi.fn(),
 }));
 
 import { prisma } from "@/lib/prisma";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import {
+  integrationConnectionListWhereForOwner,
   menuListWhereForOwner,
   staffMemberListWhereForOwner,
   storefrontSettingsListWhereForOwner,
@@ -42,12 +45,14 @@ describe("loadGettingStartedStatus", () => {
     vi.mocked(staffMemberListWhereForOwner).mockResolvedValue(scoped);
     vi.mocked(storefrontSettingsListWhereForOwner).mockResolvedValue(scoped);
     vi.mocked(usageEventListWhereForOwner).mockResolvedValue(scoped);
+    vi.mocked(integrationConnectionListWhereForOwner).mockResolvedValue(scoped);
     vi.mocked(prisma.activationState.findUnique).mockResolvedValue(null);
     vi.mocked(prisma.menu.count).mockResolvedValue(0);
     vi.mocked(prisma.order.count).mockResolvedValue(0);
     vi.mocked(prisma.staffMember.count).mockResolvedValue(0);
     vi.mocked(prisma.storefrontSettings.count).mockResolvedValue(0);
     vi.mocked(prisma.usageEvent.count).mockResolvedValue(0);
+    vi.mocked(prisma.integrationConnection.count).mockResolvedValue(0);
   });
 
   it("scopes menu and order counts by owner workspace", async () => {
@@ -57,5 +62,6 @@ describe("loadGettingStartedStatus", () => {
     expect(prisma.usageEvent.count).toHaveBeenCalledWith({
       where: { AND: [scoped, { eventName: "pos_first_use" }] },
     });
+    expect(prisma.integrationConnection.count).toHaveBeenCalled();
   });
 });

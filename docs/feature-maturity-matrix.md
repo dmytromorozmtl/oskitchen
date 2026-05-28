@@ -35,6 +35,7 @@ Interpretation rule:
 - **Era 18 Cycle 14 (2026-05-28):** Order hub stuck-state UX — `era18-order-hub-stuck-state-v1`; attention strip + row next actions.
 - **Era 18 Cycle 13 (2026-05-28):** Today focus mode — `era18-today-command-center-focus-v1`; quiet KPI collapse + attention strip.
 - **Era 18 Cycle 12 (2026-05-28):** Shift close history date range — `era18-pos-shift-close-history-range-v1`; 7/30/90-day filter + CSV sync.
+- **Era 18 Cycle 28 (2026-05-28):** Getting started pilot channel — `era18-getting-started-pilot-channel-v1`; sales channel onboarding step + channel readiness attention strip.
 - **Era 18 Cycle 27 (2026-05-28):** POS shift close focus — `era18-pos-shift-close-focus-v1`; attention strip, variance guidance, use-expected fill, history next actions.
 - **Era 18 Cycle 26 (2026-05-28):** Platform support inbox attention strip — `era18-platform-support-inbox-focus-v1`; cross-tenant SLA/escalation prioritization + row next actions.
 - **Era 18 Cycle 25 (2026-05-28):** Support inbox attention strip — `era18-support-inbox-focus-v1`; SLA/critical/integration prioritization + ticket row next actions.
