@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-034 — Packing verify console focus strip (P1)
+- ID: `KOS-E18-034`
+- Title: Era 18 Workstream G Cycle 34 — packing verify QC attention + session/item row next actions
+- Module: Packing verification / Fulfillment
+- Priority: P1 (fulfillment spine + operator speed)
+- Status: **packing_verify_focus_attention_wired**
+- Decision: `era18-packing-verify-focus-v1` — flagged lines, allergen checks, open sessions, failed scans prioritization; row next actions on verify console
+- Evidence: `lib/packing-verification/packing-verify-focus-era18.ts`, `components/packing-verification/packing-verify-attention-strip.tsx`, `components/dashboard/packing-verify-console.tsx`
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-033 — Packing command center focus strip (P1)
 - ID: `KOS-E18-033`
 - Title: Era 18 Workstream G Cycle 33 — packing allergen/label/verify attention + task row next actions

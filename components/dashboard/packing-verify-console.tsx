@@ -24,6 +24,9 @@ import {
 } from "@/actions/packing-verification";
 import { logPackingEventFormAction, lookupOrderByPackTokenAction } from "@/actions/packing-verify";
 import { PackingVerifyQrRegion } from "@/components/dashboard/packing-verify-qr-region";
+import { PackingVerifyAttentionStrip } from "@/components/packing-verification/packing-verify-attention-strip";
+import { PackingVerifyItemNextAction } from "@/components/packing-verification/packing-verify-item-next-action";
+import { PackingVerifySessionNextAction } from "@/components/packing-verification/packing-verify-session-next-action";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,6 +39,10 @@ import {
   verificationPageSubtitle,
   verificationPageTitle,
 } from "@/lib/packing-verification/verification-terminology";
+import {
+  buildPackingVerifyFocusSnapshot,
+  shouldShowPackingVerifyAttentionStrip,
+} from "@/lib/packing-verification/packing-verify-focus-era18";
 import type { VerificationSessionDetail } from "@/services/packing-verification/verification-service";
 
 type CustomerOrderHit = {
@@ -244,6 +251,44 @@ export function PackingVerifyConsole({
   const issueItems =
     sessionDetail?.items.filter((i) => ["MISSING", "WRONG_ITEM", "DAMAGED", "EXTRA"].includes(i.status)) ?? [];
 
+  const openSessionFocus = React.useMemo(
+    () =>
+      openSessions.map((session) => ({
+        id: session.id,
+        status: session.status,
+        itemCount: session.itemCount,
+        customerName: session.order?.customerName ?? null,
+        startedAt: session.startedAt,
+      })),
+    [openSessions],
+  );
+
+  const sessionItemFocus = React.useMemo(
+    () =>
+      sessionDetail?.items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        status: item.status,
+        allergenCheckStatus: item.allergenCheckStatus,
+        labelCheckStatus: item.labelCheckStatus,
+        expectedQuantity: item.expectedQuantity,
+        verifiedQuantity: item.verifiedQuantity,
+      })) ?? [],
+    [sessionDetail],
+  );
+
+  const verifyFocus = React.useMemo(
+    () =>
+      buildPackingVerifyFocusSnapshot(
+        openSessionFocus,
+        recentScans.map((scan) => ({ success: scan.success })),
+        sessionItemFocus,
+      ),
+    [openSessionFocus, recentScans, sessionItemFocus],
+  );
+
+  const showVerifyAttentionStrip = shouldShowPackingVerifyAttentionStrip(verifyFocus);
+
   return (
     <div ref={rootRef} className="mx-auto max-w-5xl space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -284,6 +329,15 @@ export function PackingVerifyConsole({
         </Card>
       ) : null}
 
+      {showVerifyAttentionStrip ? (
+        <PackingVerifyAttentionStrip
+          focus={verifyFocus}
+          openSessions={openSessionFocus}
+          sessionItems={sessionItemFocus}
+          onTabChange={setTab}
+        />
+      ) : null}
+
       <Tabs value={tab} onValueChange={setTab} className="w-full">
         <TabsList className="flex h-auto min-h-12 flex-wrap justify-start gap-1 rounded-2xl bg-muted/50 p-1">
           <TabsTrigger value="scan" className="rounded-xl px-3 py-2 text-sm">
@@ -310,7 +364,7 @@ export function PackingVerifyConsole({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="scan" className="mt-4 space-y-4">
+        <TabsContent value="scan" className="mt-4 space-y-4" id="packing-verify-scan">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Camera scan</CardTitle>
@@ -410,7 +464,7 @@ export function PackingVerifyConsole({
         </TabsContent>
 
         <TabsContent value="active" className="mt-4 space-y-4">
-          <Card>
+          <Card id="packing-verify-open-sessions">
             <CardHeader>
               <CardTitle className="text-lg">Open sessions</CardTitle>
             </CardHeader>
@@ -419,12 +473,26 @@ export function PackingVerifyConsole({
                 <p className="text-sm text-muted-foreground">No open sessions.</p>
               ) : (
                 openSessions.map((s) => (
-                  <div key={s.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3">
+                  <div
+                    key={s.id}
+                    id={`packing-verify-session-${s.id}`}
+                    className="scroll-mt-24 flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3"
+                  >
                     <div>
                       <p className="font-medium">{s.order?.customerName ?? "Order"}</p>
                       <p className="text-xs text-muted-foreground">
                         {s.status} · {s.itemCount} lines · {new Date(s.startedAt).toLocaleString()}
                       </p>
+                      <PackingVerifySessionNextAction
+                        session={{
+                          id: s.id,
+                          status: s.status,
+                          itemCount: s.itemCount,
+                          customerName: s.order?.customerName ?? null,
+                          startedAt: s.startedAt,
+                        }}
+                        onResume={(sessionId) => void loadSession(sessionId)}
+                      />
                     </div>
                     <Button type="button" variant="secondary" className="rounded-full" onClick={() => void loadSession(s.id)}>
                       Resume
@@ -498,7 +566,7 @@ export function PackingVerifyConsole({
                       </div>
                       <ul className="space-y-3">
                         {sessionDetail.items.map((i) => (
-                          <li key={i.id} className="rounded-xl border p-4">
+                          <li key={i.id} id={`packing-verify-item-${i.id}`} className="scroll-mt-24 rounded-xl border p-4">
                             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                               <div className="min-w-0 flex-1 space-y-2">
                                 <div className="flex flex-wrap gap-2">
@@ -514,6 +582,17 @@ export function PackingVerifyConsole({
                                     ({i.verifiedQuantity}/{i.expectedQuantity})
                                   </span>
                                 </p>
+                                <PackingVerifyItemNextAction
+                                  item={{
+                                    id: i.id,
+                                    title: i.title,
+                                    status: i.status,
+                                    allergenCheckStatus: i.allergenCheckStatus,
+                                    labelCheckStatus: i.labelCheckStatus,
+                                    expectedQuantity: i.expectedQuantity,
+                                    verifiedQuantity: i.verifiedQuantity,
+                                  }}
+                                />
                                 {i.productAllergens?.trim() ? (
                                   <p className="text-xs text-amber-900 dark:text-amber-100">Allergens: {i.productAllergens}</p>
                                 ) : null}
@@ -675,7 +754,7 @@ export function PackingVerifyConsole({
           </Card>
         </TabsContent>
 
-        <TabsContent value="issues" className="mt-4">
+        <TabsContent value="issues" className="mt-4" id="packing-verify-issues">
           <Card>
             <CardHeader>
               <CardTitle>Issues</CardTitle>
