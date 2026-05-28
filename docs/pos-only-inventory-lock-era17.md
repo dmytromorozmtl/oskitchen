@@ -38,6 +38,8 @@ These paths create orders but **must not** import POS depletion hooks:
 
 ## Pilot / sales wording
 
+**Sales training doc:** [`pilot-inventory-messaging-era17.md`](./pilot-inventory-messaging-era17.md) (`era17-pilot-inventory-messaging-v1`).
+
 **Allowed:**
 
 - "POS sales deplete recipe ingredients when products have active recipes configured."
@@ -49,7 +51,7 @@ These paths create orders but **must not** import POS depletion hooks:
 - Storefront checkout depletes stock
 - All channels deplete on-hand inventory
 
-Enforcement: `npm run smoke:pilot-forbidden-claims-enforcement` + `era17-pilot-forbidden-claims-enforcement-v1`.
+Enforcement: `npm run smoke:pilot-forbidden-claims-enforcement` + `era17-pilot-forbidden-claims-enforcement-v1` + `npm run smoke:pilot-inventory-messaging`.
 
 ---
 

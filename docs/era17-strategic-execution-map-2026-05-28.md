@@ -91,7 +91,7 @@
 | Cycle Band | Goal | Tasks | Acceptance Criteria | Validation | Risks | Owner |
 |------------|------|-------|---------------------|------------|-------|-------|
 | **29** | Reconfirm POS-only lock | No storefront hook without era unlock | `test:ci:inventory-depletion:cert` | cert PASS | Accidental unlock | Platform |
-| **30** | Pilot inventory messaging | Train sales on POS-only depletion | Matrix + claims aligned | audit:marketing-claims | Unified stock claim | GTM |
+| **30** | Pilot inventory messaging | Train sales on POS-only depletion | Matrix + claims aligned | `test:ci:pilot-inventory-messaging-era17:cert` + `smoke:pilot-inventory-messaging` | Unified stock claim | GTM | **Done** — `era17-pilot-inventory-messaging-v1` |
 | **31** | Costing pilot spot-check | Recipe → margin report for pilot menu | Manual QA on staging | costing RBAC tests | Bad data | Ops |
 
 ---

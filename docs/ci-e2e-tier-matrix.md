@@ -98,7 +98,7 @@ npm run test:ci:pos-money-path:e2e
 
 **Not certified:** native card-terminal hardware, EMV, or pin-pad integrations — software POS cash/card-intent path only. **Not certified without secrets:** full dashboard Playwright POS checkout — see policy summary artifact when browser tier was `SKIPPED`.
 
-**Inventory depletion channel policy (Era 4 Cycle 1 + Era 5 Cycle 3 + Era 17 Cycle 29):** **POS-only** (`lib/inventory/inventory-depletion-policy.ts`, `era4-pos-only-v1`); permanent GTM lock `era5-pos-only-gtm-lock-v1` (`deferred_locked` storefront hook); **Era 17 recert** `era17-pos-only-inventory-lock-v1` — expanded entrypoint scan + `npm run smoke:pos-only-inventory-lock`. Storefront, public API, manual, and integration entrypoints must not call POS inventory impact recording. Live gate: `npm run test:ci:inventory-depletion:cert` → wiring + policy + GTM lock + Era 17 recert certs.
+**Inventory depletion channel policy (Era 4 Cycle 1 + Era 5 Cycle 3 + Era 17 Cycles 29–30):** **POS-only** (`lib/inventory/inventory-depletion-policy.ts`, `era4-pos-only-v1`); permanent GTM lock `era5-pos-only-gtm-lock-v1` (`deferred_locked` storefront hook); **Era 17 recert** `era17-pos-only-inventory-lock-v1`; **Era 17 sales training** `era17-pilot-inventory-messaging-v1` — `npm run smoke:pilot-inventory-messaging`. Storefront, public API, manual, and integration entrypoints must not call POS inventory impact recording. Live gate: `npm run test:ci:inventory-depletion:cert`.
 
 ## Tier 3 — Staging / preview (manual or scheduled)
 

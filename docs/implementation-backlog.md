@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-029 — Pilot inventory messaging (P1)
+- ID: `KOS-E17-029`
+- Title: Era 17 Cycle 29 — sales training for POS-only depletion
+- Module: Inventory / GTM
+- Priority: P1 (Workstream G Cycle 30)
+- Status: **pilot_inventory_messaging_ready**
+- Decision: `era17-pilot-inventory-messaging-v1` — safe/forbidden phrases + demo script
+- Evidence: `docs/pilot-inventory-messaging-era17.md`, `test:ci:pilot-inventory-messaging-era17:cert`
+- Next: Costing pilot spot check (Cycle 31) or P0 credential-blocked smokes
+
 ### KOS-E17-028 — POS-only inventory lock recert (P1)
 - ID: `KOS-E17-028`
 - Title: Era 17 Cycle 28 — reconfirm storefront depletion remains deferred_locked
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **pos_only_lock_recertified**
 - Decision: `era17-pos-only-inventory-lock-v1` — expanded entrypoint scan + recert artifact
 - Evidence: `docs/pos-only-inventory-lock-era17.md`, `test:ci:pos-only-inventory-lock-era17:cert`
-- Next: Pilot inventory messaging (Cycle 30) or P0 credential-blocked smokes
+- Next: Pilot inventory messaging (Cycle 30) — **done**; see KOS-E17-029
 
 ### KOS-E17-027 — KDS qualified sales one-pager (P1)
 - ID: `KOS-E17-027`
