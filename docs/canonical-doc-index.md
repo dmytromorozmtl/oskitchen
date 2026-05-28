@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 5 Cycle 3 — POS-only inventory GTM lock)  
+**Updated:** 2026-05-27 (Era 5 Cycle 4 — copilot void-form deny UX)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -222,3 +222,4 @@ Incremental refresh after Era 4 cycles 1–12 (cross-channel truth, governance e
 | 2026-05-27 | Era 5 Cycle 1: `test:ci:rbac-wave4` chained in `test:security` (security-db job) |
 | 2026-05-27 | Era 5 Cycle 2: `typecheck:slice:storefront-marketing` + `era5-typecheck-slice-v2` policy |
 | 2026-05-27 | Era 5 Cycle 3: `era5-pos-only-gtm-lock-v1` + inventory GTM lock cert |
+| 2026-05-27 | Era 5 Cycle 4: `era5-copilot-form-deny-v1` — copilot form deny redirect UX |

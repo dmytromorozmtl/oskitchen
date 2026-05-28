@@ -1,11 +1,18 @@
 import { updateCopilotSettingsFormAction } from "@/actions/copilot";
+import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
 import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getCopilotSettings } from "@/services/ai/copilot-service";
 
-export default async function CopilotSettingsPage() {
+export default async function CopilotSettingsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const formError = readCopilotFormError((await searchParams) ?? {});
   const actor = await requireWorkspacePermissionActor();
   const scope = createCopilotActorScope(actor);
   if (!canUseCopilot(scope, "copilot.settings.manage")) {
@@ -27,6 +34,8 @@ export default async function CopilotSettingsPage() {
           Tune how the copilot behaves in your workspace. The API key itself is never shown here.
         </p>
       </header>
+
+      <CopilotFormErrorBanner message={formError} />
 
       <Card className="border-border/80 shadow-sm">
         <CardHeader>

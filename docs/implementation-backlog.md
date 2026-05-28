@@ -23,7 +23,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era5-typecheck-slice-v2` — extends Era 4 slices with `typecheck:slice:storefront-marketing` (6GB); `typecheck:full` remains CI canonical
 - Evidence: `tsconfig.slice.storefront-marketing.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`
-- Next: POS E2E secrets in CI (E5-5) or copilot void-form deny UX (E5-4)
+- Next: POS E2E secrets policy closure (E5-5)
+
+### KOS-E5-004 — Copilot void-form deny UX (E5-4)
+- ID: `KOS-E5-004`
+- Title: Copilot HTML form actions must not silently no-op on permission deny
+- Module: Platform / AI / security
+- Priority: P0 (Era 5 Cycle 4)
+- Status: **completed**
+- Decision: `era5-copilot-form-deny-v1` — `assertCopilotFormGate` redirects with `copilot_error`; refresh action returns `{ ok, error }` for client UI
+- Evidence: `lib/ai/copilot-form-mutation.ts`, `actions/copilot.ts`, `tests/unit/copilot-form-deny.test.ts`, wave-4 bundle extended
+- Next: E5-5 POS E2E secrets policy documentation closure
 
 ### KOS-E5-003 — Permanent POS-only inventory GTM lock (E5-1)
 - ID: `KOS-E5-003`
@@ -72,7 +82,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Era 4 Cycle 6)
 - Status: **completed**
 - Evidence: `lib/restaurant/require-restaurant-table-mutation.ts` (`pos.access`), `requireCrmMutation` on `actions/customer-subscription.ts`, `requireStorefrontManageActor` on `actions/experiment-ethics-review.ts`, extended `test:ci:rbac-wave4`
-- Residual: copilot void form actions silent-deny UX; broader tenant-only grep sweep
+- Residual: broader tenant-only grep sweep (copilot void-form deny closed Era 5 Cycle 4)
 
 ### KOS-E4-004 — Cron experimental surface archive
 - ID: `KOS-E4-004`

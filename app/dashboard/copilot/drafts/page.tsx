@@ -4,7 +4,9 @@ import {
   executeActionDraftFormAction,
   rejectActionDraftFormAction,
 } from "@/actions/copilot";
+import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
 import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
 import { COPILOT_TOOLS, COPILOT_TOOL_KEYS } from "@/lib/ai/copilot-tools";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
@@ -20,7 +22,12 @@ const STATUS_COLOR: Record<string, string> = {
   DRAFT: "bg-muted text-muted-foreground",
 };
 
-export default async function CopilotDraftsPage() {
+export default async function CopilotDraftsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const formError = readCopilotFormError((await searchParams) ?? {});
   const actor = await requireWorkspacePermissionActor();
   const scope = createCopilotActorScope(actor);
   if (!canUseCopilot(scope, "copilot.view")) {
@@ -45,6 +52,8 @@ export default async function CopilotDraftsPage() {
           dismissal.
         </p>
       </header>
+
+      <CopilotFormErrorBanner message={formError} />
 
       {canDraft && (
         <Card className="border-border/80 shadow-sm">

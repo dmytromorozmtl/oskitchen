@@ -9,6 +9,8 @@ const CI_WORKFLOW = join(ROOT, ".github/workflows/ci.yml");
 const WAVE4_TESTS = [
   "tests/unit/delivery-route-actions-rbac.test.ts",
   "tests/unit/copilot-actions-rbac.test.ts",
+  "tests/unit/copilot-form-deny.test.ts",
+  "tests/unit/copilot-form-deny-ci-live.test.ts",
   "tests/unit/demo-actions-rbac.test.ts",
   "tests/unit/demo-golden-scenario-rbac.test.ts",
   "tests/unit/feedback-actions-rbac.test.ts",

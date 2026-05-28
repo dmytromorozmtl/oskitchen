@@ -5,6 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { assertCopilotFormGate } from "@/lib/ai/copilot-form-mutation";
 import { requireCopilotMutation } from "@/lib/ai/require-copilot-mutation";
 import {
   createCopilotActionDraft,
@@ -17,6 +18,8 @@ import {
 } from "@/services/ai/copilot-service";
 
 const COPILOT_PATH = "/dashboard/copilot";
+const COPILOT_DRAFTS_PATH = `${COPILOT_PATH}/drafts`;
+const COPILOT_SETTINGS_PATH = `${COPILOT_PATH}/settings`;
 
 const chatSchema = z.object({
   conversationId: z.string().uuid().nullish(),
@@ -75,7 +78,7 @@ export async function createActionDraftAction(formData: FormData): Promise<void>
     capability: "copilot.actions.draft",
     operation: "copilot.create_action_draft",
   });
-  if (!gate.ok) return;
+  assertCopilotFormGate(gate, COPILOT_DRAFTS_PATH);
   const parsed = draftSchema.parse({
     actionType: String(formData.get("actionType") ?? ""),
     title: String(formData.get("title") ?? ""),
@@ -110,7 +113,7 @@ export async function approveActionDraftFormAction(formData: FormData): Promise<
     capability: "copilot.actions.approve",
     operation: "copilot.approve_action_draft",
   });
-  if (!gate.ok) return;
+  assertCopilotFormGate(gate, COPILOT_DRAFTS_PATH);
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   await setActionDraftStatus(gate.scope, id, "APPROVED");
@@ -122,7 +125,7 @@ export async function rejectActionDraftFormAction(formData: FormData): Promise<v
     capability: "copilot.actions.approve",
     operation: "copilot.reject_action_draft",
   });
-  if (!gate.ok) return;
+  assertCopilotFormGate(gate, COPILOT_DRAFTS_PATH);
   const id = String(formData.get("id") ?? "");
   const reason = (formData.get("reason") as string) || undefined;
   if (!id) return;
@@ -135,21 +138,24 @@ export async function executeActionDraftFormAction(formData: FormData): Promise<
     capability: "copilot.actions.approve",
     operation: "copilot.execute_action_draft",
   });
-  if (!gate.ok) return;
+  assertCopilotFormGate(gate, COPILOT_DRAFTS_PATH);
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   await executeApprovedAction(gate.scope, id);
   revalidatePath(`${COPILOT_PATH}/drafts`);
 }
 
-export async function refreshDeterministicAction(): Promise<void> {
+export async function refreshDeterministicAction(): Promise<{ ok: boolean; error?: string }> {
   const gate = await requireCopilotMutation({
     capability: "copilot.view",
     operation: "copilot.refresh_deterministic",
   });
-  if (!gate.ok) return;
+  if (!gate.ok) {
+    return { ok: false, error: gate.error };
+  }
   await persistDeterministicInsights(gate.scope);
   revalidatePath(COPILOT_PATH);
+  return { ok: true };
 }
 
 export async function resolveCopilotInsightFormAction(formData: FormData): Promise<void> {
@@ -157,7 +163,7 @@ export async function resolveCopilotInsightFormAction(formData: FormData): Promi
     capability: "copilot.view",
     operation: "copilot.resolve_insight",
   });
-  if (!gate.ok) return;
+  assertCopilotFormGate(gate, COPILOT_PATH);
   const id = String(formData.get("id") ?? "");
   if (id) {
     await resolveInsight(gate.scope, id);
@@ -182,7 +188,7 @@ export async function updateCopilotSettingsFormAction(formData: FormData): Promi
     capability: "copilot.settings.manage",
     operation: "copilot.update_settings",
   });
-  if (!gate.ok) return;
+  assertCopilotFormGate(gate, COPILOT_SETTINGS_PATH);
   const parsed = settingsSchema.parse({
     aiNarrativeEnabled: formData.get("aiNarrativeEnabled") != null
       ? formData.get("aiNarrativeEnabled") === "on"

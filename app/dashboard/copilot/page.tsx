@@ -1,7 +1,9 @@
 import Link from "next/link";
 
 import { AiStatusBadges } from "@/components/dashboard/copilot/ai-status-badges";
+import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { CopilotInsightCard } from "@/components/dashboard/copilot/insight-card";
+import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
 import { KitchenAiTools } from "@/components/dashboard/copilot/kitchen-ai-tools";
 import { RefreshDeterministicButton } from "@/components/dashboard/copilot/refresh-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,7 +30,12 @@ const NARRATIVE_COPY: Record<string, string> = {
     "The outbound redaction guardrail tripped on this request — no prompt was sent.",
 };
 
-export default async function CopilotTodayPage() {
+export default async function CopilotTodayPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const formError = readCopilotFormError((await searchParams) ?? {});
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
   const scope = createCopilotActorScope(actor);
@@ -104,6 +111,8 @@ export default async function CopilotTodayPage() {
           </Link>
         </div>
       </header>
+
+      <CopilotFormErrorBanner message={formError} />
 
       <section className="grid gap-3 sm:grid-cols-3">
         <Card className="border-border/80 shadow-sm">

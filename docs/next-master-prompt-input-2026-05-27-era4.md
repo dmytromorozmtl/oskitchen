@@ -35,7 +35,7 @@ All 11 Era 4 execution-map priorities **completed** (cycles 1–12). Policy IDs 
 | E5-1 | ~~Storefront inventory depletion~~ | **Closed Era 5 Cycle 3** — permanent POS-only GTM lock (`era5-pos-only-gtm-lock-v1`); hook deferred until explicit era |
 | E5-2 | ~~`test:ci:rbac-wave4` in `test:security`~~ | **Closed Era 5 Cycle 1** — chained at end of `test:security` |
 | E5-3 | ~~Typecheck slice 2+~~ | **Closed Era 5 Cycle 2** — `typecheck:slice:storefront-marketing`; optional CI parallel job remains |
-| E5-4 | Copilot void-form deny UX | Silent return on deny (documented exception) |
+| E5-4 | ~~Copilot void-form deny UX~~ | **Closed Era 5 Cycle 4** — `era5-copilot-form-deny-v1` redirect + client error for refresh |
 | E5-5 | POS E2E secrets in CI | Fork/staging credentials or accept explicit skip |
 
 ---

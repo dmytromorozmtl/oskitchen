@@ -20,7 +20,8 @@ export const MUTATION_ACCESS_DOCUMENTED_EXCEPTIONS = [
   {
     id: "copilot_capability_matrix",
     module: "lib/ai/require-copilot-mutation.ts",
-    reason: "Copilot uses capability matrix + workspace actor, not a single PermissionKey.",
+    reason:
+      "Copilot uses capability matrix + workspace actor, not a single PermissionKey; void HTML forms redirect with copilot_error on deny (era5-copilot-form-deny-v1).",
   },
   {
     id: "feedback_session_only",
