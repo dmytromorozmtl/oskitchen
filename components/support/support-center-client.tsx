@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { useActionState } from "react";
 
 import { bulkAssignSupportTickets, submitDashboardSupportTicketForm } from "@/actions/support-tickets";
+import { SupportInboxAttentionStrip } from "@/components/support/support-inbox-attention-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,6 +28,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { SUPPORT_CATEGORY_LABEL } from "@/lib/support/support-categories";
 import { SUPPORT_PRIORITY_LABEL } from "@/lib/support/support-priority";
 import { SUPPORT_STATUS_LABEL } from "@/lib/support/support-status";
+import {
+  buildSupportInboxFocusSnapshot,
+  resolveSupportTicketRowNextAction,
+} from "@/lib/support/support-inbox-focus-era18";
 import type { SupportCenterSnapshot } from "@/services/support/support-service";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -283,11 +288,14 @@ function TicketTable({
               <th className="p-3">Requester</th>
               <th className="p-3">Owner</th>
               <th className="p-3">SLA</th>
+              <th className="p-3">Next action</th>
               <th className="p-3">Updated</th>
             </tr>
           </thead>
           <tbody>
-            {tickets.map((t) => (
+            {tickets.map((t) => {
+              const nextAction = resolveSupportTicketRowNextAction(t);
+              return (
               <tr key={t.id} className="border-b border-border/60 hover:bg-muted/20">
                 {canTriage ? (
                   <td className="p-3">
@@ -319,9 +327,27 @@ function TicketTable({
                 <td className="p-3 text-xs">{t.email}</td>
                 <td className="p-3 text-xs">{t.assignedName ?? "—"}</td>
                 <td className="p-3">{slaBadge(t.slaDueAt, t.status)}</td>
+                <td className="p-3 text-xs">
+                  {nextAction ? (
+                    <Link
+                      href={nextAction.href}
+                      data-testid={`support-ticket-next-${t.id}`}
+                      className={
+                        nextAction.tone === "urgent"
+                          ? "font-medium text-amber-800 underline-offset-2 hover:underline dark:text-amber-200"
+                          : "font-medium text-primary underline-offset-2 hover:underline"
+                      }
+                    >
+                      {nextAction.label}
+                    </Link>
+                  ) : (
+                    <span className="text-muted-foreground">On track</span>
+                  )}
+                </td>
                 <td className="p-3 text-xs text-muted-foreground">{format(new Date(t.updatedAt), "MMM d HH:mm")}</td>
               </tr>
-            ))}
+            );
+            })}
           </tbody>
         </table>
         {tickets.length === 0 ? (
@@ -361,6 +387,10 @@ export function SupportCenterClient({
   const sp = useSearchParams();
   const tab = sp.get("tab") ?? "my";
   const { canTriage, kpis } = snapshot;
+  const inboxFocus = React.useMemo(
+    () => buildSupportInboxFocusSnapshot(snapshot, tickets),
+    [snapshot, tickets],
+  );
 
   const em = defaultEmail.trim().toLowerCase();
   const myTickets = React.useMemo(
@@ -400,6 +430,8 @@ export function SupportCenterClient({
         <Kpi label="Billing tickets" value={kpis.billingTickets} />
         <Kpi label="Resolved this week" value={kpis.resolvedThisWeek} />
       </div>
+
+      <SupportInboxAttentionStrip focus={inboxFocus} />
 
       <Tabs key={tab} defaultValue={tab} className="space-y-4">
         <TabsList className="flex h-auto max-w-full flex-wrap gap-1">

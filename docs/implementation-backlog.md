@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-025 — Support inbox attention strip (P0)
+- ID: `KOS-E18-025`
+- Title: Era 18 Workstream P Cycle 25 — support queue prioritization + ticket row next actions
+- Module: Support / Customer success
+- Priority: P0 (support visibility + pilot execution)
+- Status: **support_inbox_focus_attention_wired**
+- Decision: `era18-support-inbox-focus-v1` — SLA overdue → critical → integration → unassigned urgent ordering; row next actions on all ticket tables
+- Evidence: `lib/support/support-inbox-focus-era18.ts`, `components/support/support-inbox-attention-strip.tsx`, `components/support/support-center-client.tsx`
+- Next: Platform support inbox parity; P0 staging proof ops execution when vault ready
+
 ### KOS-E18-024 — Sales channels health next actions (P1)
 - ID: `KOS-E18-024`
 - Title: Era 18 Workstream C Cycle 24 — attention strip + connection next actions on channel health probes
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **sales_channel_health_focus_attention_wired**
 - Decision: `era18-sales-channel-health-focus-v1` — reuses integration health attention strip; per-connection next actions include failed manual probe recovery
 - Evidence: `lib/integrations/integration-health-focus-era18.ts`, `app/dashboard/sales-channels/health/page.tsx`
-- Next: Support inbox attention strip; P0 staging proof ops execution when vault ready
+- Next: Support inbox attention strip — **done** (KOS-E18-025); P0 staging proof ops execution when vault ready
 
 ### KOS-E18-023 — Platform system health attention strip (P0)
 - ID: `KOS-E18-023`
