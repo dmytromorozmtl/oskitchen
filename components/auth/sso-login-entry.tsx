@@ -14,6 +14,10 @@ import {
   shouldShowSsoLoginPilotContextStrip,
 } from "@/lib/enterprise/enterprise-sso-login-entry-focus-era18";
 import {
+  parseSsoCallbackLoginErrorFromSearchParams,
+  resolveSsoCallbackLoginErrorRecovery,
+} from "@/lib/enterprise/enterprise-sso-callback-error-recovery-era18";
+import {
   resolveSsoLoginErrorRecovery,
   type SsoLoginErrorRecovery,
 } from "@/lib/enterprise/enterprise-sso-login-error-recovery-era18";
@@ -44,6 +48,32 @@ export function SsoLoginEntry() {
 
   const pilotContext = buildSsoLoginPilotContext(prefilledWorkspaceId);
   const showPilotContext = shouldShowSsoLoginPilotContextStrip(prefilledWorkspaceId);
+
+  const callbackErrorCode = React.useMemo(
+    () => parseSsoCallbackLoginErrorFromSearchParams(searchParams),
+    [searchParams],
+  );
+
+  const callbackErrorRecovery = React.useMemo(() => {
+    if (!callbackErrorCode) return null;
+    return resolveSsoCallbackLoginErrorRecovery({
+      errorCode: callbackErrorCode,
+      workspaceId: prefilledWorkspaceId ?? workspaceId.trim() || null,
+    });
+  }, [callbackErrorCode, prefilledWorkspaceId, workspaceId]);
+
+  React.useEffect(() => {
+    if (!callbackErrorCode) return;
+    const recovery = resolveSsoCallbackLoginErrorRecovery({
+      errorCode: callbackErrorCode,
+      workspaceId: prefilledWorkspaceId ?? workspaceId.trim() || null,
+    });
+    if (!recovery) return;
+    setErrorRecovery(recovery);
+    toast.error(recovery.title);
+  }, [callbackErrorCode, prefilledWorkspaceId, workspaceId]);
+
+  const activeErrorRecovery = errorRecovery ?? callbackErrorRecovery;
 
   return (
     <div
@@ -119,7 +149,9 @@ export function SsoLoginEntry() {
         </Button>
       </form>
 
-      {errorRecovery ? <SsoLoginErrorRecoveryStrip recovery={errorRecovery} /> : null}
+      {activeErrorRecovery ? (
+        <SsoLoginErrorRecoveryStrip recovery={activeErrorRecovery} />
+      ) : null}
     </div>
   );
 }

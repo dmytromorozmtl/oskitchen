@@ -12,6 +12,18 @@ import {
 import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
 import { createClient } from "@/lib/supabase/server";
 
+function loginSsoErrorRedirect(
+  origin: string,
+  errorCode: string,
+  workspaceId?: string | null,
+): NextResponse {
+  const params = new URLSearchParams({ error: errorCode });
+  if (workspaceId?.trim()) {
+    params.set("workspaceId", workspaceId.trim());
+  }
+  return NextResponse.redirect(new URL(`/login?${params.toString()}`, origin));
+}
+
 async function finishAuthSession(
   supabase: Awaited<ReturnType<typeof createClient>>,
   origin: string,
@@ -51,7 +63,7 @@ export async function GET(request: Request) {
         } = await supabase.auth.getUser();
         if (!user) {
           await supabase.auth.signOut();
-          return NextResponse.redirect(new URL("/login?error=sso_denied", origin));
+          return loginSsoErrorRedirect(origin, "sso_denied", workspaceId);
         }
         const ssoResult = await completeWorkspaceSsoCallback({
           workspaceId,
@@ -63,9 +75,7 @@ export async function GET(request: Request) {
         });
         if (!ssoResult.ok) {
           await supabase.auth.signOut();
-          return NextResponse.redirect(
-            new URL(`/login?error=${ssoResult.loginErrorCode}`, origin),
-          );
+          return loginSsoErrorRedirect(origin, ssoResult.loginErrorCode, workspaceId);
         }
       }
       return finishAuthSession(supabase, origin, rawNext);

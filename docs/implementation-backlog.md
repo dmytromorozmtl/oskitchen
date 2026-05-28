@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-044 — Enterprise SSO callback error recovery (P0)
+- ID: `KOS-E18-044`
+- Title: Era 18 Workstream A Cycle 44 — /auth/callback SSO deny recovery on /login
+- Module: Enterprise identity / Auth
+- Priority: P0 (SSO IdP staging login proof — callback deny operator UX)
+- Status: **enterprise_sso_callback_error_recovery_wired**
+- Decision: `era18-enterprise-sso-callback-error-recovery-v1` — callback redirects preserve workspaceId; recovery strip maps deny codes to operator guidance
+- Evidence: `lib/enterprise/enterprise-sso-callback-error-recovery-era18.ts`, `app/auth/callback/route.ts`, `components/auth/sso-login-entry.tsx`
+- Next: Ops completes Cycle 2 IdP login proof on staging; validate recovery copy against live deny scenarios
+
 ### KOS-E18-043 — Getting started pilot SSO step (P0)
 - ID: `KOS-E18-043`
 - Title: Era 18 Workstream L Cycle 43 — SSO checklist step + Today attention when ssoOidc entitled
