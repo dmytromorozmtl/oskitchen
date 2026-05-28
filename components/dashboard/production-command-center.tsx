@@ -13,6 +13,8 @@ import {
 } from "@/actions/production";
 import { ProductionTable, type ProductionRowDTO } from "@/components/dashboard/production-table";
 import { StationHandoffPanel } from "@/components/production/station-handoff-panel";
+import { ProductionBoardAttentionStrip } from "@/components/production/production-board-attention-strip";
+import { ProductionWorkItemNextAction } from "@/components/production/production-work-item-next-action";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { normalizeProductionView, type ProductionView } from "@/lib/production/production-views";
+import { buildProductionBoardFocusSnapshot } from "@/lib/production/production-board-focus-era18";
 import { BOARD_STATUS_ORDER, PRODUCTION_WORK_STATUS_LABEL } from "@/lib/production/production-status";
 import type { ProductionEmptyStateCopy } from "@/lib/production/production-modes";
 import type { ProductionBatchStatus, ProductionCommandMode, ProductionWorkStatus } from "@prisma/client";
@@ -106,6 +109,35 @@ export function ProductionCommandCenter({
     return [...m.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   }, [workItems]);
 
+  const boardFocus = React.useMemo(
+    () =>
+      buildProductionBoardFocusSnapshot(
+        workItems.map((item) => ({
+          id: item.id,
+          title: item.title,
+          status: item.status,
+          station: item.station,
+          dueAt: item.dueAt,
+          requiresPacking: item.requiresPacking,
+        })),
+        kpis.stationWarnings,
+      ),
+    [workItems, kpis.stationWarnings],
+  );
+
+  const boardFocusItems = React.useMemo(
+    () =>
+      workItems.map((item) => ({
+        id: item.id,
+        title: item.title,
+        status: item.status,
+        station: item.station,
+        dueAt: item.dueAt,
+        requiresPacking: item.requiresPacking,
+      })),
+    [workItems],
+  );
+
   async function onStatusChange(workItemId: string, status: string) {
     const fd = new FormData();
     fd.set("workItemId", workItemId);
@@ -161,6 +193,15 @@ export function ProductionCommandCenter({
           </form>
         </div>
       </div>
+
+      {hasAnyWork ? (
+        <ProductionBoardAttentionStrip
+          focus={boardFocus}
+          workItems={boardFocusItems}
+          stationWarnings={kpis.stationWarnings}
+          productionDateIso={productionDateIso}
+        />
+      ) : null}
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -282,9 +323,23 @@ export function ProductionCommandCenter({
                     {workItems
                       .filter((w) => w.status === status)
                       .map((w) => (
-                        <div key={w.id} className="rounded-lg border border-border/70 bg-card/80 p-3 text-sm">
+                        <div
+                          key={w.id}
+                          id={`production-work-${w.id}`}
+                          className="scroll-mt-24 rounded-lg border border-border/70 bg-card/80 p-3 text-sm"
+                        >
                           <p className="font-medium leading-snug">{w.title}</p>
                           <p className="text-xs text-muted-foreground">×{w.quantity}</p>
+                          <ProductionWorkItemNextAction
+                            item={{
+                              id: w.id,
+                              title: w.title,
+                              status: w.status,
+                              station: w.station,
+                              dueAt: w.dueAt,
+                              requiresPacking: w.requiresPacking,
+                            }}
+                          />
                           {w.allergenWarning ? (
                             <Badge variant="destructive" className="mt-2 rounded-full text-[10px]">
                               Allergen
@@ -326,13 +381,27 @@ export function ProductionCommandCenter({
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {items.map((w) => (
-                    <div key={w.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3">
+                    <div
+                      key={w.id}
+                      id={`production-work-${w.id}`}
+                      className="scroll-mt-24 flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3"
+                    >
                       <div>
                         <p className="font-medium">{w.title}</p>
                         <p className="text-xs text-muted-foreground">
                           {PRODUCTION_WORK_STATUS_LABEL[w.status]} · qty {w.quantity}
                           {w.dueAt ? ` · due ${format(parseISO(w.dueAt), "MMM d h:mm a")}` : ""}
                         </p>
+                        <ProductionWorkItemNextAction
+                          item={{
+                            id: w.id,
+                            title: w.title,
+                            status: w.status,
+                            station: w.station,
+                            dueAt: w.dueAt,
+                            requiresPacking: w.requiresPacking,
+                          }}
+                        />
                       </div>
                       <Badge variant="outline" className="rounded-full text-[10px]">
                         {w.sourceType}

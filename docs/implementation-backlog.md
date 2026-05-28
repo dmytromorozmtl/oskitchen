@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-030 — Production board focus strip (P1)
+- ID: `KOS-E18-030`
+- Title: Era 18 Workstream G Cycle 30 — production command center attention + work item next actions
+- Module: Production / Kitchen ops
+- Priority: P1 (production visibility + operator speed)
+- Status: **production_board_focus_attention_wired**
+- Decision: `era18-production-board-focus-v1` — late/hold/station overload prioritization; row next actions on board and prep list
+- Evidence: `lib/production/production-board-focus-era18.ts`, `components/production/production-board-attention-strip.tsx`, `components/dashboard/production-command-center.tsx`
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-029 — Go-live blocker attention strip (P1)
 - ID: `KOS-E18-029`
 - Title: Era 18 Workstream L Cycle 29 — launch blocker prioritization + validation row next actions
