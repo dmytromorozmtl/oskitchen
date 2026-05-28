@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { guardPublicApi, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
 import { prisma } from "@/lib/prisma";
 
 const querySchema = z.object({
@@ -10,9 +10,10 @@ const querySchema = z.object({
 });
 
 export async function GET(request: Request) {
-  const guard = await guardPublicApi(
+  const guard = await guardPublicApiV1Resource(
     request,
-    "public_api_customers_get",
+    "customers",
+    "GET",
     "public_api_customers_get",
   );
   if (isGuardError(guard)) return guard.response;

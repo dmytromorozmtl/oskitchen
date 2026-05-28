@@ -24,10 +24,20 @@
 - **Live smoke:** `npm run smoke:public-api-live` — SKIPPED WITH REASON without `SMOKE_PUBLIC_API_KEY`; not in default CI.  
 - **Honest scope:** beta Public API v1 — no production SLA, no unlimited rate limits, no SOC2 API certification claim.
 
+## Per-route scope enforcement (Era 17)
+
+- **Policy:** `era17-public-api-per-route-scope-v1` — **per_route_scope_enforced**.  
+- **Mapping:** `lib/api-public/public-api-v1-route-scopes.ts` — each v1 route/method requires one `DEVELOPER_API_SCOPES` value.  
+- **Guard:** `guardPublicApiV1Resource` in `lib/api-public/guard.ts` — 403 when API key lacks required scope.  
+- **Key storage:** optional `api_keys.scopes_json` (null = all documented scopes for legacy keys).  
+- **Cert:** `npm run test:ci:public-api-per-route-scope-era17:cert` (chained in `test:ci:public-api-v1:cert`).  
+- **Smoke:** `npm run smoke:public-api-per-route-scope` — cert-only locally; live restricted-key proof via staging optional.  
+- **Not claimed:** production SLA, full scope picker UI, SOC2 API certification.
+
 ## Public API v1 auth and entitlement
 
 - Header: `Authorization: Bearer kos_...` (prefix required; minimum length enforced).  
-- Resolver: `resolveEnterpriseApiUserId` — validates API key hash, `api_access` entitlement, and paid subscription (dev/platform bypass excepted).  
+- Resolver: `resolveEnterpriseApiCredential` — validates API key hash, scopes, `api_access` entitlement, and paid subscription (dev/platform bypass excepted).  
 - Tenant scope: workspace owner `userId` from active API key — cross-tenant isolation tested in `tests/unit/public-api-tenant-isolation.test.ts`.  
 - OpenAPI: `GET /api/openapi.json` — public v1 routes document `bearerApiKey` security scheme.
 
@@ -36,6 +46,7 @@
 | Status | Body | When |
 |--------|------|------|
 | 401 | `{ "error": "Unauthorized" }` | Missing/invalid key, revoked key, or entitlement denied |
+| 403 | `{ "error": "Forbidden", "message": "API key missing required scope: ...", "requiredScope": "..." }` | Valid key without route scope (Era 17) |
 | 429 | `{ "error": "Too many requests. Please slow down." }` | Rate limit exceeded; `Retry-After` header set |
 | 503 | `{ "error": "Public API temporarily unavailable: distributed rate limiting is not configured." }` | Rate limit backend misconfigured — fail-closed |
 | 400 | `{ "error": "Invalid body", "details": { ... } }` | POST body fails validation |
@@ -61,5 +72,5 @@
 
 ## Next
 
-- Scope enforcement per route (today: tenant scope + entitlement gate; fine-grained scopes roadmap).  
-- External developer portal authentication.
+- External developer portal authentication.  
+- Dashboard scope picker UI for API key creation (Era 17 enforces scopes at runtime; UI deferred).

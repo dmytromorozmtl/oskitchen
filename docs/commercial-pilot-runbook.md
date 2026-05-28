@@ -352,6 +352,20 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+## Era 17 public API per-route scope enforcement (2026-05-28)
+
+**Policy:** `era17-public-api-per-route-scope-v1` — **per_route_scope_enforced**; all eight Public API v1 routes require documented scopes via `guardPublicApiV1Resource`.
+
+1. Route mapping: `lib/api-public/public-api-v1-route-scopes.ts` — high-risk writes first (`orders:write`, `webhooks:receive`, recipes POST `menus:read`).
+2. API keys store optional `scopes_json`; null grants all documented scopes for backward compatibility.
+3. Missing scope returns **403** `{ error: "Forbidden", requiredScope: "..." }` before rate limit or handler logic.
+4. Run **`npm run smoke:public-api-per-route-scope`** → review **`artifacts/public-api-per-route-scope-summary.json`**.
+5. Do **not** claim production SLA, full scope admin UI, or unlimited rate limits.
+
+**Enforcement:** `test:ci:public-api-per-route-scope-era17:cert` (chained in `test:ci:public-api-v1:cert`)
+
+---
+
 ## Era 17 webhook replay P1 expansion (2026-05-28)
 
 **Policy:** `era17-webhook-replay-p1-expansion-v1` — **p1_ingress_dedupe_expanded**; extends Era 16 guard to matrix P1 delivery routes.

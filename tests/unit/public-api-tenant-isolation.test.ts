@@ -9,7 +9,7 @@ const prismaMock = vi.hoisted(() => ({
 
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
 
-import { hashApiKey, resolvePublicApiUserId } from "@/lib/api-public/auth";
+import { hashApiKey, hashApiKeyCandidates, resolvePublicApiUserId } from "@/lib/api-public/auth";
 
 describe("public API tenant isolation", () => {
   beforeEach(() => {
@@ -34,13 +34,14 @@ describe("public API tenant isolation", () => {
       userId: "user-a",
       active: true,
       revokedAt: null,
+      scopesJson: null,
     });
 
     const userId = await resolvePublicApiUserId(`Bearer ${raw}`);
     expect(userId).toBe("user-a");
     expect(prismaMock.apiKey.findFirst).toHaveBeenCalledWith({
-      where: { keyHash: { in: expect.arrayContaining([digest]) } },
-      select: { id: true, userId: true, active: true, revokedAt: true },
+      where: { keyHash: { in: hashApiKeyCandidates(raw) } },
+      select: { id: true, userId: true, active: true, revokedAt: true, scopesJson: true },
     });
   });
 

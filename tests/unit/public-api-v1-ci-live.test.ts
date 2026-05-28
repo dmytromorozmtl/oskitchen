@@ -35,6 +35,8 @@ const REQUIRED_UNIT_TESTS = [
 const REQUIRED_FILES = [
   "lib/api-public/guard.ts",
   "lib/api-public/auth.ts",
+  "lib/api-public/public-api-v1-route-scopes.ts",
+  "lib/api-public/public-api-scopes.ts",
   "lib/orders/public-api-order-create.ts",
   ...V1_RESOURCES.map((r) => `app/api/public/v1/${r}/route.ts`),
   ...REQUIRED_UNIT_TESTS,
@@ -77,14 +79,16 @@ describe("public API v1 CI certification (live repo)", () => {
       const routePath = join(ROOT, `app/api/public/v1/${resource}/route.ts`);
       expect(existsSync(routePath), resource).toBe(true);
       const source = readFileSync(routePath, "utf8");
-      expect(source, resource).toContain("guardPublicApi");
+      expect(source, resource).toContain("guardPublicApiV1Resource");
       expect(source, resource).toContain("isGuardError");
     }
 
     const guard = readFileSync(GUARD, "utf8");
+    expect(guard).toContain("guardPublicApiV1Resource");
     expect(guard).toContain('status: 401');
     expect(guard).toContain("Unauthorized");
-    expect(guard).toContain("resolveEnterpriseApiUserId");
+    expect(guard).toContain("resolveEnterpriseApiCredential");
+    expect(guard).toContain("requiredScope");
   });
 
   it("covers auth, tenant isolation, and contract suites in the unit bundle script", () => {

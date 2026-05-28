@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-019 — Public API per-route scope enforcement (P1)
+- ID: `KOS-E17-019`
+- Title: Era 17 Cycle 19 — per-route Developer API scope guard on all v1 routes
+- Module: Developer platform / Security
+- Priority: P1 (Workstream I Cycle 35)
+- Status: **per_route_scope_enforced**
+- Decision: `era17-public-api-per-route-scope-v1` — `guardPublicApiV1Resource` + `api_keys.scopes_json`
+- Evidence: `lib/api-public/public-api-v1-route-scopes.ts`, `lib/api-public/public-api-scopes.ts`, `test:ci:public-api-per-route-scope-era17:cert`
+- Next: Partner smoke with restricted API key on staging (`smoke:public-api-live`); scope picker UI deferred
+
 ### KOS-E17-018 — Webhook replay P1 expansion (P1)
 - ID: `KOS-E17-018`
 - Title: Era 17 Cycle 18 — Resend ingress dedupe + Uber Eats replay cert

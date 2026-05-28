@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 
-import { guardPublicApi, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
 import { publicApiRecipeCreateSchema } from "@/lib/api-public/schemas";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
-  const guard = await guardPublicApi(request, "public_api_recipes_get");
+  const guard = await guardPublicApiV1Resource(
+    request,
+    "recipes",
+    "GET",
+    "public_api_recipes_get",
+  );
   if (isGuardError(guard)) return guard.response;
 
   const recipes = await prisma.recipe.findMany({
@@ -29,7 +34,12 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const guard = await guardPublicApi(request, "public_api_recipes_post", "public_api_v1_post");
+  const guard = await guardPublicApiV1Resource(
+    request,
+    "recipes",
+    "POST",
+    "public_api_recipes_post",
+  );
   if (isGuardError(guard)) return guard.response;
 
   const body = await request.json().catch(() => null);

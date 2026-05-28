@@ -356,8 +356,9 @@ npm run test:ci:pos-money-path:e2e
 
 | Suite | Command | Notes |
 |-------|---------|-------|
+| Era 17 public API per-route scope | `npm run test:ci:public-api-per-route-scope-era17:cert` | `era17-public-api-per-route-scope-v1`; guardPublicApiV1Resource; high-risk write scopes first |
 | Era 16 public API partner confidence | `npm run test:ci:public-api-partner-confidence-era16:cert` | `era16-public-api-partner-confidence-v1`; partner checklist; OpenAPI bearer; live smoke skip honesty |
-| Public API wiring cert | `npm run test:ci:public-api-v1:cert` | Eight v1 routes, `guardPublicApi` fail-closed, unit bundle script alignment; chains era16 partner cert |
+| Public API wiring cert | `npm run test:ci:public-api-v1:cert` | Eight v1 routes, `guardPublicApiV1Resource` fail-closed + scope 403, unit bundle script alignment; chains era17 scope + era16 partner cert |
 | Public API v1 unit | `npm run test:ci:public-api-v1` | Auth, pagination, tenant scope, cross-tenant isolation, orders/recipes/webhooks contracts |
 
 **Canonical guard:** `lib/api-public/guard.ts` — 401 without bearer auth, 429 rate limit, 503 when distributed rate limiting misconfigured.

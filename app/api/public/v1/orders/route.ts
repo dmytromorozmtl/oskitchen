@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { decryptOrderPiiFields } from "@/lib/orders/order-pii";
-import { guardPublicApi, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
 import { publicApiOrderCreateSchema } from "@/lib/orders/public-api-order-create";
 import { prisma } from "@/lib/prisma";
 import { createOrderViaCenter } from "@/services/orders/order-creation-service";
@@ -9,9 +9,10 @@ import { createOrderViaCenter } from "@/services/orders/order-creation-service";
 /** Enterprise API — authenticate with `Authorization: Bearer kos_...`. */
 
 export async function GET(request: Request) {
-  const guard = await guardPublicApi(
+  const guard = await guardPublicApiV1Resource(
     request,
-    "public_api_orders_get",
+    "orders",
+    "GET",
     "public_api_orders_get",
   );
   if (isGuardError(guard)) return guard.response;
@@ -48,9 +49,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const guard = await guardPublicApi(
+  const guard = await guardPublicApiV1Resource(
     request,
-    "public_api_orders_post",
+    "orders",
+    "POST",
     "public_api_orders_post",
   );
   if (isGuardError(guard)) return guard.response;

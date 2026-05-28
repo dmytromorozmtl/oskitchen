@@ -66,6 +66,7 @@ describe("resolvePublicApiUserId", () => {
       userId: "u1",
       active: false,
       revokedAt: null,
+      scopesJson: null,
     });
     expect(await resolvePublicApiUserId("Bearer kos_aaaaaaaaaaaaaaaa")).toBeNull();
 
@@ -74,6 +75,7 @@ describe("resolvePublicApiUserId", () => {
       userId: "u1",
       active: true,
       revokedAt: new Date(),
+      scopesJson: null,
     });
     expect(await resolvePublicApiUserId("Bearer kos_bbbbbbbbbbbbbbbb")).toBeNull();
   });
@@ -84,6 +86,7 @@ describe("resolvePublicApiUserId", () => {
       userId: "owner-id",
       active: true,
       revokedAt: null,
+      scopesJson: null,
     });
     const uid = await resolvePublicApiUserId("Bearer kos_cccccccccccccc");
     expect(uid).toBe("owner-id");

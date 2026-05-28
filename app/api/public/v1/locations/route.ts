@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 
-import { guardPublicApi, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
-  const guard = await guardPublicApi(request, "public_api_locations_get");
+  const guard = await guardPublicApiV1Resource(
+    request,
+    "locations",
+    "GET",
+    "public_api_locations_get",
+  );
   if (isGuardError(guard)) return guard.response;
 
   const locations = await prisma.location.findMany({

@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const guardPublicApiV1Resource = vi.hoisted(() => vi.fn());
 const guardPublicApi = vi.hoisted(() => vi.fn());
 const createOrderViaCenter = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/api-public/guard", () => ({
+  guardPublicApiV1Resource,
   guardPublicApi,
   isGuardError: (value: unknown) =>
     Boolean(value && typeof value === "object" && "response" in value),
@@ -20,7 +22,7 @@ import { POST } from "@/app/api/public/v1/orders/route";
 describe("public API orders route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    guardPublicApi.mockResolvedValue({ userId: "owner-1" });
+    guardPublicApiV1Resource.mockResolvedValue({ userId: "owner-1" });
   });
 
   it("routes order creation through the canonical order service", async () => {

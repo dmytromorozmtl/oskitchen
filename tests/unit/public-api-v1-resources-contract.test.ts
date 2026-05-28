@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
+const guardPublicApiV1Resource = vi.hoisted(() => vi.fn());
 const guardPublicApi = vi.hoisted(() => vi.fn());
 const productListWhereForOwner = vi.hoisted(() => vi.fn());
 
@@ -17,6 +18,7 @@ const prismaMock = vi.hoisted(() => ({
 }));
 
 vi.mock("@/lib/api-public/guard", () => ({
+  guardPublicApiV1Resource,
   guardPublicApi,
   isGuardError: (value: unknown) =>
     Boolean(value && typeof value === "object" && "response" in value),
@@ -69,13 +71,13 @@ const customersEnvelopeSchema = z.object({
 });
 
 function unauthorizedGuard() {
-  guardPublicApi.mockResolvedValue({
+  guardPublicApiV1Resource.mockResolvedValue({
     response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
   });
 }
 
 function authorizedGuard(userId = "owner-1") {
-  guardPublicApi.mockResolvedValue({ userId });
+  guardPublicApiV1Resource.mockResolvedValue({ userId });
 }
 
 describe("public API v1 resource contracts", () => {

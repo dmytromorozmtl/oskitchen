@@ -3268,6 +3268,7 @@ model ApiKey {
   name       String    @db.VarChar(120)
   keyHash    String    @unique @map("key_hash") @db.VarChar(128)
   prefix     String    @db.VarChar(16)
+  scopesJson String?   @map("scopes_json") @db.Text
   lastUsedAt DateTime? @map("last_used_at")
   active     Boolean   @default(true)
   createdAt  DateTime  @default(now()) @map("created_at")

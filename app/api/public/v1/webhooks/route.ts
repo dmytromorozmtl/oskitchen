@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 
-import { guardPublicApi, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
 import { publicApiWebhookCreateSchema } from "@/lib/api-public/schemas";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
-  const guard = await guardPublicApi(request, "public_api_webhooks_get");
+  const guard = await guardPublicApiV1Resource(
+    request,
+    "webhooks",
+    "GET",
+    "public_api_webhooks_get",
+  );
   if (isGuardError(guard)) return guard.response;
 
   const events = await prisma.webhookEvent.findMany({
@@ -25,7 +30,12 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const guard = await guardPublicApi(request, "public_api_webhooks_post", "public_api_v1_post");
+  const guard = await guardPublicApiV1Resource(
+    request,
+    "webhooks",
+    "POST",
+    "public_api_webhooks_post",
+  );
   if (isGuardError(guard)) return guard.response;
 
   const body = await request.json().catch(() => null);

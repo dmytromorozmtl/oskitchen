@@ -1,6 +1,13 @@
 import { createHash } from "crypto";
 
+import { parseApiKeyScopesJson } from "@/lib/api-public/public-api-scopes";
+import type { DeveloperApiScope } from "@/lib/developer/api-scopes";
 import { prisma } from "@/lib/prisma";
+
+export type PublicApiCredential = {
+  userId: string;
+  scopes: readonly DeveloperApiScope[];
+};
 
 function legacyHashApiKey(raw: string): string {
   return createHash("sha256").update(raw, "utf8").digest("hex");
@@ -32,10 +39,10 @@ export function hashApiKeyCandidates(raw: string): string[] {
   return next === legacy ? [next] : [next, legacy];
 }
 
-/** Returns workspace user id when the bearer API key is valid and active. */
-export async function resolvePublicApiUserId(
+/** Returns workspace credential when the bearer API key is valid and active. */
+export async function resolvePublicApiCredential(
   authHeader: string | null,
-): Promise<string | null> {
+): Promise<PublicApiCredential | null> {
   if (!authHeader?.startsWith("Bearer ")) return null;
   const raw = authHeader.slice("Bearer ".length).trim();
   if (!raw.startsWith("kos_") || raw.length < 16) return null;
@@ -43,7 +50,13 @@ export async function resolvePublicApiUserId(
   const digests = hashApiKeyCandidates(raw);
   const row = await prisma.apiKey.findFirst({
     where: { keyHash: { in: digests } },
-    select: { id: true, userId: true, active: true, revokedAt: true },
+    select: {
+      id: true,
+      userId: true,
+      active: true,
+      revokedAt: true,
+      scopesJson: true,
+    },
   });
   if (!row?.active || row.revokedAt) return null;
 
@@ -54,5 +67,16 @@ export async function resolvePublicApiUserId(
     })
     .catch(() => undefined);
 
-  return row.userId;
+  return {
+    userId: row.userId,
+    scopes: parseApiKeyScopesJson(row.scopesJson),
+  };
+}
+
+/** Returns workspace user id when the bearer API key is valid and active. */
+export async function resolvePublicApiUserId(
+  authHeader: string | null,
+): Promise<string | null> {
+  const credential = await resolvePublicApiCredential(authHeader);
+  return credential?.userId ?? null;
 }

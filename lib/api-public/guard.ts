@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 
-import { resolveEnterpriseApiUserId } from "@/lib/api-public/resolve-enterprise-api";
+import { resolveEnterpriseApiCredential } from "@/lib/api-public/resolve-enterprise-api";
+import { getRequiredScopeForPublicApiRoute } from "@/lib/api-public/public-api-v1-route-scopes";
+import type {
+  PublicApiV1HttpMethod,
+  PublicApiV1ResourceId,
+} from "@/lib/api-public/public-api-v1-registry";
+import { findPublicApiV1Resource } from "@/lib/api-public/public-api-v1-registry";
+import { apiKeyHasScope } from "@/lib/api-public/public-api-scopes";
+import type { DeveloperApiScope } from "@/lib/developer/api-scopes";
 import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
 import type { RateLimitPolicyKey } from "@/lib/rate-limit/rate-limit-policies";
 import { consumeRateLimitToken } from "@/services/security/rate-limit-service";
@@ -13,11 +21,29 @@ export async function guardPublicApi(
   request: Request,
   rateLimitKey: string,
   policyKey: RateLimitPolicyKey = "public_api_v1_get",
+  requiredScope?: DeveloperApiScope,
 ): Promise<PublicApiGuardResult> {
-  const userId = await resolveEnterpriseApiUserId(request.headers.get("authorization"));
-  if (!userId) {
+  const credential = await resolveEnterpriseApiCredential(
+    request.headers.get("authorization"),
+  );
+  if (!credential) {
     return { response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
   }
+
+  if (requiredScope && !apiKeyHasScope(credential.scopes, requiredScope)) {
+    return {
+      response: NextResponse.json(
+        {
+          error: "Forbidden",
+          message: `API key missing required scope: ${requiredScope}`,
+          requiredScope,
+        },
+        { status: 403 },
+      ),
+    };
+  }
+
+  const userId = credential.userId;
 
   const ip = getClientIpFromRequest(request);
   const rl = await consumeRateLimitToken(`${rateLimitKey}:${userId}:${ip}`, policyKey);
@@ -42,6 +68,21 @@ export async function guardPublicApi(
   }
 
   return { userId };
+}
+
+export async function guardPublicApiV1Resource(
+  request: Request,
+  resourceId: PublicApiV1ResourceId,
+  method: PublicApiV1HttpMethod,
+  rateLimitKey: string,
+): Promise<PublicApiGuardResult> {
+  const resource = findPublicApiV1Resource(resourceId);
+  const policyKey =
+    method === "POST"
+      ? resource.postRateLimitPolicy ?? "public_api_v1_post"
+      : resource.rateLimitPolicy;
+  const requiredScope = getRequiredScopeForPublicApiRoute(resourceId, method);
+  return guardPublicApi(request, rateLimitKey, policyKey, requiredScope);
 }
 
 export function isGuardError(
