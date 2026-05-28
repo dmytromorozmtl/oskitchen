@@ -22,6 +22,8 @@ export type IntegrationHealthFocusSnapshot = {
   needsAuthCount: number;
   missingWebhookSecretCount: number;
   neverSyncedCount: number;
+  /** Woo/Shopify pilot + live proof slices when loaded on integration health. */
+  liveProofSlices?: readonly import("@/lib/integrations/integration-health-live-proof-focus-era18").ChannelPilotLiveProofSlice[];
 };
 
 export type IntegrationHealthAttentionItem = {
@@ -102,7 +104,12 @@ export function summarizeIntegrationHealthFocus(
     snapshot.needsAuthCount > 0 ||
     snapshot.missingWebhookSecretCount > 0 ||
     snapshot.failedWebhookCount > 0 ||
-    !snapshot.stripeConfigured;
+    !snapshot.stripeConfigured ||
+    (snapshot.liveProofSlices?.some(
+      (slice) =>
+        slice.operatorStatus === "wizard_incomplete" && slice.progress.completedCount > 0,
+    ) ??
+      false);
 
   return { totalSignals, hasUrgent };
 }

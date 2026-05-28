@@ -7,12 +7,15 @@ import {
   summarizeIntegrationHealthFocus,
   type IntegrationHealthFocusSnapshot,
 } from "@/lib/integrations/integration-health-focus-era18";
+import { pickIntegrationHealthAttentionItemsWithLiveProof } from "@/lib/integrations/integration-health-live-proof-focus-era18";
 
 export function IntegrationHealthAttentionStrip(props: {
   snapshot: IntegrationHealthFocusSnapshot;
 }) {
   const summary = summarizeIntegrationHealthFocus(props.snapshot);
-  const items = pickIntegrationHealthAttentionItems(props.snapshot);
+  const items = props.snapshot.liveProofSlices
+    ? pickIntegrationHealthAttentionItemsWithLiveProof(props.snapshot)
+    : pickIntegrationHealthAttentionItems(props.snapshot);
 
   if (items.length === 0) return null;
 

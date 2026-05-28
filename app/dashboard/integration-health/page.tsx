@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
+import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
 import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
 import { SensitiveErrorPreview } from "@/components/integrations/sensitive-error-preview";
 import { CapabilityMatrixPanel } from "@/components/capabilities/capability-matrix-panel";
@@ -36,11 +37,17 @@ import {
   buildIntegrationHealthFocusSnapshot,
   resolveIntegrationHealthRowNextAction,
 } from "@/lib/integrations/integration-health-focus-era18";
+import {
+  liveProofSliceForProvider,
+  mergeLiveProofIntoIntegrationHealthSnapshot,
+  resolveIntegrationHealthRowNextActionWithLiveProof,
+} from "@/lib/integrations/integration-health-live-proof-focus-era18";
 import type { IntegrationMaturityTier } from "@/lib/integrations/integration-maturity-types";
 import { prisma } from "@/lib/prisma";
 import { toSafeErrorPreview } from "@/lib/security/sensitive-redaction";
 import { listCapabilities } from "@/services/capabilities/capability-service";
 import {
+  listChannelPilotLiveProofSlices,
   listIntegrationHealthCards,
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
@@ -68,7 +75,7 @@ export default async function IntegrationHealthDashboardPage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [connections, kitchen, failedHooks, healthCards] = await Promise.all([
+  const [connections, kitchen, failedHooks, healthCards, liveProofSlices] = await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(dataUserId),
       orderBy: { updatedAt: "desc" },
@@ -88,17 +95,21 @@ export default async function IntegrationHealthDashboardPage() {
       },
     }),
     listIntegrationHealthCards(dataUserId),
+    listChannelPilotLiveProofSlices(dataUserId),
   ]);
 
   const workspaceDemo = kitchen?.demoMode ?? false;
   const stripeConfigured = Boolean(env.STRIPE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim());
   const emailConfigured = Boolean(env.RESEND_API_KEY?.trim() && env.RESEND_FROM_EMAIL?.trim());
   const healthSummary = summarizeIntegrationHealth(healthCards, { stripe: stripeConfigured, email: emailConfigured });
-  const integrationFocusSnapshot = buildIntegrationHealthFocusSnapshot({
-    summary: healthSummary,
-    cards: healthCards,
-    failedWebhookCount: failedHooks.length,
-  });
+  const integrationFocusSnapshot = mergeLiveProofIntoIntegrationHealthSnapshot(
+    buildIntegrationHealthFocusSnapshot({
+      summary: healthSummary,
+      cards: healthCards,
+      failedWebhookCount: failedHooks.length,
+    }),
+    liveProofSlices,
+  );
   const resolved = resolveAllChannels(connections, workspaceDemo);
   const infra = infrastructureMaturityRows(env);
   const capabilities = listCapabilities();
@@ -108,6 +119,8 @@ export default async function IntegrationHealthDashboardPage() {
       <IntegrationHealthSummaryPanel summary={healthSummary} />
 
       <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
+
+      <ChannelLiveProofStatusPanel slices={liveProofSlices} />
 
       <CapabilityMatrixPanel rows={capabilities} title="Honest capability matrix" />
 
@@ -157,7 +170,10 @@ export default async function IntegrationHealthDashboardPage() {
             <TableBody>
               {healthCards.map((c) => {
                 const errPreview = c.lastError ? toSafeErrorPreview(c.lastError, 160) : null;
-                const nextAction = resolveIntegrationHealthRowNextAction(c);
+                const liveProofSlice = liveProofSliceForProvider(liveProofSlices, c.provider);
+                const nextAction = liveProofSlice
+                  ? resolveIntegrationHealthRowNextActionWithLiveProof(c, liveProofSlice)
+                  : resolveIntegrationHealthRowNextAction(c);
                 return (
                   <TableRow key={c.id}>
                     <TableCell className="font-mono text-xs">{c.provider}</TableCell>
