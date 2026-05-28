@@ -232,7 +232,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Workstream D Cycle 18)
 - Status: **awaiting_customer_execution**
 - Decision: `era17-pilot-gono-go-v1` — aggregates tier artifacts + ICP; SKIPPED customer without LOI env
-- Evidence: `lib/commercial/pilot-gono-go-summary.ts`, `scripts/smoke-pilot-gono-go-era17.ts`, `artifacts/pilot-gono-go-summary.json` (**decision: NO-GO** on 2026-05-28; honest blockers documented)
+- Evidence: `lib/commercial/pilot-gono-go-summary.ts`, `scripts/smoke-pilot-gono-go-era17.ts`, `artifacts/pilot-gono-go-summary.json` (**decision: NO-GO** on 2026-05-28 re-run; honest blockers; tier preflight `overall: SKIPPED`)
 - Next: First real LOI + qualified prospect (`PILOT_GONOGO_ICP_INPUT_JSON`); complete Tier 0 + Tier 2 on staging; re-run smoke for CONDITIONAL/GO only with evidence
 
 ### KOS-E17-010 — Pilot operator golden path (P0)
@@ -252,7 +252,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Workstream D Cycle 16)
 - Status: **awaiting_tier_preflight_pass**
 - Decision: `era17-pilot-tier-preflight-v1` — orchestrator records Tier 0/1 PASS/FAIL/SKIPPED; no fake GO
-- Evidence: `scripts/smoke-pilot-tier-preflight-era17.ts`, `artifacts/pilot-tier-preflight-summary.json`
+- Evidence: `lib/commercial/pilot-tier-preflight-era17-policy.ts`, `scripts/smoke-pilot-tier-preflight-era17.ts`, `artifacts/pilot-tier-preflight-summary.json` (`tier0ProofStatus: proof_skipped_missing_prerequisites`, `overall: SKIPPED` when Tier 0 skipped locally)
 - Next: Run full smoke on release branch before paid pilot signature; Cycle 17 operator golden path
 
 ### KOS-E17-008 — Pilot ICP + contract template (P0)

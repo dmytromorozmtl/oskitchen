@@ -63,5 +63,17 @@ describe("pilot tier preflight summary", () => {
     expect(summary.commitSha).toBe("abc123");
     expect(summary.marketingClaimsStrict).toBe(true);
     expect(summary.tier1ProofStatus).toBe("proof_passed");
+    expect(summary.tier0ProofStatus).toBe("proof_skipped_missing_prerequisites");
+    expect(summary.overall).toBe("SKIPPED");
+  });
+
+  it("marks overall passed only when both tiers proof_passed", () => {
+    const summary = buildPilotTierPreflightSummary([
+      { id: "tier0_gov", tier: "tier0", label: "Governance", status: "PASSED" },
+      { id: "tier1_claims", tier: "tier1", label: "Claims", status: "PASSED" },
+    ]);
+    expect(summary.tier0ProofStatus).toBe("proof_passed");
+    expect(summary.tier1ProofStatus).toBe("proof_passed");
+    expect(summary.overall).toBe("PASSED");
   });
 });

@@ -74,13 +74,27 @@ export function buildPilotTierPreflightSummary(
   },
   runAt: Date = new Date(),
 ): PilotTierPreflightSummary {
+  const tier0ProofStatus = resolvePilotTierProofStatus(steps, "tier0");
+  const tier1ProofStatus = resolvePilotTierProofStatus(steps, "tier1");
+
+  let overall = resolvePilotTierPreflightOverall(steps);
+  if (overall === "PASSED") {
+    const bothTiersPassed =
+      tier0ProofStatus === "proof_passed" && tier1ProofStatus === "proof_passed";
+    if (!bothTiersPassed) {
+      const anyTierFailed =
+        tier0ProofStatus === "proof_failed" || tier1ProofStatus === "proof_failed";
+      overall = anyTierFailed ? "FAILED" : "SKIPPED";
+    }
+  }
+
   return {
     version: PILOT_TIER_PREFLIGHT_SUMMARY_VERSION,
     runAt: runAt.toISOString(),
     commitSha: input?.commitSha?.trim() || null,
-    overall: resolvePilotTierPreflightOverall(steps),
-    tier0ProofStatus: resolvePilotTierProofStatus(steps, "tier0"),
-    tier1ProofStatus: resolvePilotTierProofStatus(steps, "tier1"),
+    overall,
+    tier0ProofStatus,
+    tier1ProofStatus,
     marketingClaimsStrict: input?.marketingClaimsStrict ?? false,
     steps: [...steps],
   };

@@ -120,6 +120,8 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 4. Tier 0 FAIL blocks operator Tier 2; Tier 1 staging-env skip is acceptable locally when secrets absent.
 5. Cert wiring: `test:ci:pilot-tier-preflight-era17:cert` chained in `test:ci:commercial-pilot-runbook:cert`.
 
+**Execution status (2026-05-28):** local smoke (`--skip-governance-bundles --skip-staging-env`) → Tier 1 claims **PASSED**; Tier 0 **FAILED** (`test:ci:scorecard:cert` exit 1); `overall: FAILED`. Not paid pilot GO until full release-branch run passes all Tier 0 steps.
+
 ### Era 17 pilot operator golden path (2026-05-28)
 
 **Policy:** `era17-pilot-operator-golden-path-v1` — **awaiting_operator_execution**; Tier 2 manual staging checklist.
@@ -140,7 +142,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 4. Record `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` only when real LOI signed — **never fake customer execution**.
 5. **NO-GO is expected** until tiers pass, ICP qualifies, role checklists complete, and customer LOI recorded.
 
-**Execution status (2026-05-28):** local evaluator → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). Blockers: Tier 0 skipped prerequisites, Tier 2 golden path incomplete, ICP not qualified, no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
+**Execution status (2026-05-28):** smoke re-run → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). Tier preflight `overall: FAILED` locally (`test:ci:scorecard:cert` exit 1; governance bundles skipped); Tier 2 golden path incomplete; ICP not qualified; no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
 
 ### Era 17 pilot forbidden-claims enforcement (2026-05-28)
 
