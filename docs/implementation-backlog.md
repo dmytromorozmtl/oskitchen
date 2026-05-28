@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 13 — Workstream G: manager discount audit flow proof (2026-05-28)
+
+- Title: Era 20 Cycle 13 — manager override 5-hop proof on POS terminal
+- Status: **done**
+- Policy: `era20-manager-discount-audit-flow-proof-v1` (`KOS-E20-013`)
+- Doc: `docs/era20-manager-discount-audit-flow-proof-2026-05-28.md`
+- Tests: `test:ci:era20-manager-discount-audit-flow-proof`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR support impersonation flow proof (Workstream G #8)
+
 ### Cycle 12 — Workstream G: POS checkout → inventory flow proof (2026-05-28)
 
 - Title: Era 20 Cycle 12 — five-hop POS money path panel on POS hub
