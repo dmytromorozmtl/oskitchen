@@ -14,6 +14,11 @@ export type PermissionDeniedSurfaceId =
   | "reports_hub"
   | "inventory_operations"
   | "launch_wizard"
+  | "implementation_hub"
+  | "staff_hub"
+  | "go_live_hub"
+  | "crm_customers"
+  | "billing_hub"
   | "packing_command"
   | "packing_verify"
   | "production_calendar"
@@ -103,6 +108,51 @@ export const PERMISSION_DENIED_SURFACES: Record<
     primaryLabel: "Back to Today",
     secondaryHref: "/dashboard/implementation",
     secondaryLabel: "Implementation hub",
+  },
+  implementation_hub: {
+    id: "implementation_hub",
+    title: "Implementation",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/launch-wizard",
+    secondaryLabel: "Launch wizard",
+  },
+  staff_hub: {
+    id: "staff_hub",
+    title: "Staff",
+    permissionKey: "staff.manage",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/training",
+    secondaryLabel: "Training",
+  },
+  go_live_hub: {
+    id: "go_live_hub",
+    title: "Go-live",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/launch-wizard",
+    secondaryLabel: "Launch wizard",
+  },
+  crm_customers: {
+    id: "crm_customers",
+    title: "Customers",
+    permissionKey: "customers.read",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/order-hub",
+    secondaryLabel: "Order hub",
+  },
+  billing_hub: {
+    id: "billing_hub",
+    title: "Billing",
+    permissionKey: "billing.view",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/settings",
+    secondaryLabel: "Settings",
   },
   packing_command: {
     id: "packing_command",

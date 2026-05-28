@@ -1,12 +1,17 @@
 import Link from "next/link";
 
 import { recomputeCrmMetricsFormAction } from "@/actions/customers";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import {
+  hasCrmCustomersPageAccess,
+  loadWorkspacePermissionPageActor,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { crmTerminologyForMode } from "@/lib/crm/customer-types";
 import {
   CUSTOMER_STATUS_BADGE,
@@ -38,6 +43,11 @@ function Kpi({ label, value, hint }: { label: string; value: string | number; hi
 }
 
 export default async function CustomersPage() {
+  const pageActor = await loadWorkspacePermissionPageActor();
+  if (!hasCrmCustomersPageAccess(pageActor)) {
+    return <PermissionDeniedSurfaceCard surfaceId="crm_customers" />;
+  }
+
   const { userId } = await requireTenantActor();
   const profile = await prisma.userProfile.findUnique({
     where: { id: userId },

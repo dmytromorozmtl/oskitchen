@@ -1,4 +1,10 @@
 import { hasPermission } from "@/lib/permissions/guards";
+import { canUseGoLive, type GoLiveCapability } from "@/lib/go-live/go-live-permissions";
+import type { GoLiveActorScope } from "@/lib/go-live/go-live-permissions";
+import { canUseImplementation } from "@/lib/implementation/implementation-permissions";
+import type { ImplementationActorScope } from "@/lib/implementation/implementation-types";
+import { canManageStaff } from "@/lib/staff/staff-permissions";
+import type { StaffActorScope } from "@/lib/staff/staff-permissions";
 import {
   requireWorkspacePermissionActor,
   type WorkspacePermissionActor,
@@ -29,6 +35,48 @@ export function hasIntegrationHealthPageAccess(actor: WorkspacePermissionActor):
 
 export function hasLaunchWizardPageAccess(actor: WorkspacePermissionActor): boolean {
   return actor.workspaceRole === "OWNER" || hasPermission(actor.granted, "workspace.view");
+}
+
+export function hasImplementationHubPageAccess(
+  scope: ImplementationActorScope,
+): boolean {
+  return canUseImplementation(scope, "implementation.view");
+}
+
+export function hasStaffHubPageAccess(
+  actor: WorkspacePermissionActor,
+  scope: StaffActorScope,
+): boolean {
+  if (actor.platformBypass || scope.isOwner) return true;
+  if (hasPermission(actor.granted, "staff.manage")) return true;
+  return canManageStaff(scope, "staff.view");
+}
+
+export function hasGoLiveHubPageAccess(
+  actor: WorkspacePermissionActor,
+  scope: GoLiveActorScope,
+  cap: GoLiveCapability = "go-live.view",
+): boolean {
+  if (actor.platformBypass || scope.isOwner) return true;
+  if (cap === "go-live.view") {
+    return hasPermission(actor.granted, "workspace.view") && canUseGoLive(scope, cap);
+  }
+  return hasPermission(actor.granted, "go-live.manage") && canUseGoLive(scope, cap);
+}
+
+export function hasCrmCustomersPageAccess(actor: WorkspacePermissionActor): boolean {
+  return (
+    hasPermission(actor.granted, "customers.read") ||
+    hasPermission(actor.granted, "customers.manage")
+  );
+}
+
+export function hasBillingHubPageAccess(
+  actor: WorkspacePermissionActor,
+  scope: { isOwner: boolean; platformBypass?: boolean },
+): boolean {
+  if (actor.platformBypass || scope.isOwner) return true;
+  return hasPermission(actor.granted, "billing.view");
 }
 
 export function hasReportsHubPageAccess(actor: WorkspacePermissionActor): boolean {

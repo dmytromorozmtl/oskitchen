@@ -5,6 +5,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 10 — Workstream H: permission-denied pilot hubs (2026-05-28)
+
+- Title: Era 20 Cycle 10 — implementation, staff, go-live, CRM, billing guard-before-query
+- Status: **done**
+- Policy: `era20-permission-denied-pilot-hubs-cycle10-v1` (`KOS-E20-010`)
+- Tests: `test:ci:permission-denied-ux-era20-cycle10`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR Workstream G storefront→KDS flow proof doc
+
 ### Cycle 9 — Workstream C/P1: Pilot execution readiness (2026-05-28)
 
 - Title: Era 20 Cycle 9 — metrics baseline + rollback gates, support checklist, GO/NO-GO executionReadiness slice

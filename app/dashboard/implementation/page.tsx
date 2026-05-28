@@ -7,10 +7,8 @@ import { ReadinessBadge } from "@/components/dashboard/implementation/readiness-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { createImplementationActorScope } from "@/lib/implementation/implementation-actor-scope";
-import { canUseImplementation } from "@/lib/implementation/implementation-permissions";
 import { IMPLEMENTATION_STATUS_LABEL, isActiveStatus } from "@/lib/implementation/implementation-status";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadWorkspacePermissionPageActor } from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 import { getActiveProject, projectKpis } from "@/services/implementation/implementation-service";
 import { loadPilotExecutionReadinessSlice } from "@/services/commercial/pilot-execution-readiness-service";
@@ -18,31 +16,19 @@ import { loadImplementationPilotReadinessModel } from "@/services/implementation
 import { getLatestReadiness } from "@/services/implementation/readiness-service";
 
 export default async function ImplementationPage() {
-  const actor = await requireWorkspacePermissionActor();
+  const actor = await loadWorkspacePermissionPageActor();
   const { userId } = actor;
-  const scope = createImplementationActorScope(actor);
-  const ownerProfile = await prisma.userProfile.findUnique({
-    where: { id: userId },
-    select: { companyName: true },
-  });
 
-  if (!canUseImplementation(scope, "implementation.view")) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>No access</CardTitle>
-          <CardDescription>You do not have permission to view the Implementation Center.</CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
-
-  const [active, kpis, pilotReadiness, pilotExecutionReadiness] = await Promise.all([
+  const [ownerProfile, active, kpis, pilotReadiness, pilotExecutionReadiness] = await Promise.all([
+    prisma.userProfile.findUnique({
+      where: { id: userId },
+      select: { companyName: true },
+    }),
     getActiveProject(userId),
     projectKpis(userId),
     loadImplementationPilotReadinessModel(userId),
     loadPilotExecutionReadinessSlice(),
-  ]);
+  ] as const);
   const readiness = active ? await getLatestReadiness({ userId, projectId: active.id }) : null;
 
   if (!active) {

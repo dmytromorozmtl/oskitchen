@@ -1,6 +1,6 @@
 import { createElement, type ReactNode } from "react";
 
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { requireUserProfile } from "@/lib/auth";
 import { createBillingActorScope } from "@/lib/billing/billing-actor-scope";
 import {
@@ -9,34 +9,16 @@ import {
 } from "@/lib/billing/billing-permissions";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
-function deniedCard(title: string, description: string): ReactNode {
-  return createElement(PosAccessCard, {
-    title,
-    description,
-    primaryHref: "/dashboard/today",
-    primaryLabel: "Back to Today",
-  });
-}
-
 export function billingViewDeniedCard(): ReactNode {
-  return deniedCard(
-    "Billing",
-    "You do not have permission to view billing for this workspace.",
-  );
+  return createElement(PermissionDeniedSurfaceCard, { surfaceId: "billing_hub" });
 }
 
 export function billingManageDeniedCard(): ReactNode {
-  return deniedCard(
-    "Billing management",
-    "You do not have permission to manage subscriptions, checkout, or payment methods in this workspace.",
-  );
+  return createElement(PermissionDeniedSurfaceCard, { surfaceId: "billing_hub" });
 }
 
 export function billingCancelDeniedCard(): ReactNode {
-  return deniedCard(
-    "Cancel or downgrade",
-    "You do not have permission to cancel or downgrade the subscription for this workspace.",
-  );
+  return createElement(PermissionDeniedSurfaceCard, { surfaceId: "billing_hub" });
 }
 
 export async function requireBillingPageAccess(cap: BillingCapability): Promise<

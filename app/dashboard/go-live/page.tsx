@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { GoLiveProjectNextStepHeroCard } from "@/components/dashboard/go-live/go-live-project-next-step-hero";
 import { GoLiveSecondarySignalsPanel } from "@/components/dashboard/go-live/go-live-secondary-signals-panel";
 import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
@@ -11,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGoLivePageAccess } from "@/lib/go-live/go-live-page-access";
+import { hasGoLiveHubPageAccess } from "@/lib/ux/permission-denied-page-access-era19";
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { summariseImplementationExternalCertification } from "@/lib/implementation/external-integration-certification";
 import { kitchenCustomerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
@@ -48,7 +50,10 @@ const LEGACY_CHECKS = [
 ] as const;
 
 export default async function GoLivePage() {
-  const { actor, userId, canCreate } = await getGoLivePageAccess();
+  const { actor, userId, canCreate, scope } = await getGoLivePageAccess();
+  if (!hasGoLiveHubPageAccess(actor, scope)) {
+    return <PermissionDeniedSurfaceCard surfaceId="go_live_hub" />;
+  }
   const isSuper = actor.platformBypass;
   const [projects, brands, locations, latestSimulation, incidentCount, pilotReadiness] = await Promise.all([
     listProjects(userId),
