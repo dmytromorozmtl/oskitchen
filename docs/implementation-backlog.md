@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-039 — Product mapping conflicts and suggestions parity (P0)
+- ID: `KOS-E18-039`
+- Title: Era 18 Workstream C Cycle 39 — conflicts + suggestions queue focus parity
+- Module: Product mapping / Integrations
+- Priority: P0 (channel catalog conflict resolution path)
+- Status: **product_mapping_conflicts_suggestions_focus_wired**
+- Decision: `era18-product-mapping-conflicts-focus-v1` — conflicts page attention strip + row next actions; suggestions queue wired
+- Evidence: `lib/product-mapping/product-mapping-focus-era18.ts`, conflicts + suggestions pages
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-038 — Product mapping workbench focus (P0)
 - ID: `KOS-E18-038`
 - Title: Era 18 Workstream C Cycle 38 — catalog mapping attention + row next actions

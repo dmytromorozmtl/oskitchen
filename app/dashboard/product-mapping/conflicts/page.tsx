@@ -1,7 +1,12 @@
-import Link from "next/link";
-
+import {
+  ChannelMappingConflictRowNextAction,
+  DuplicateMappingGroupRowNextAction,
+} from "@/components/dashboard/product-mapping/mapping-conflict-row-next-action";
+import { MappingRowNextAction } from "@/components/dashboard/product-mapping/mapping-row-next-action";
+import { ProductMappingConflictsAttentionStrip } from "@/components/dashboard/product-mapping/product-mapping-conflicts-attention-strip";
 import { MappingStatusBadge } from "@/components/dashboard/product-mapping/status-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { buildProductMappingConflictsFocusSnapshot } from "@/lib/product-mapping/product-mapping-focus-era18";
 import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import { channelConflictWhereForOwner } from "@/lib/scope/channel-import-scope";
 import { PRODUCT_MAPPING_PROVIDER_LABEL } from "@/lib/product-mapping/provider-types";
@@ -37,6 +42,13 @@ export default async function ConflictsPage() {
     }),
   ]);
 
+  const conflictsSnapshot = buildProductMappingConflictsFocusSnapshot({
+    explicitConflictCount: explicitConflictRows.length,
+    duplicateInternalGroupCount: derived.duplicateInternalTargets.length,
+    duplicateExternalGroupCount: derived.duplicateExternal.length,
+    blockedOrderLines: channelConflicts.length,
+  });
+
   return (
     <div className="space-y-6">
       <div>
@@ -46,7 +58,9 @@ export default async function ConflictsPage() {
         </p>
       </div>
 
-      <Card>
+      <ProductMappingConflictsAttentionStrip snapshot={conflictsSnapshot} />
+
+      <Card id="explicit-conflicts">
         <CardHeader>
           <CardTitle className="text-base">Explicit conflicts</CardTitle>
           <CardDescription>Mappings flagged with status CONFLICT.</CardDescription>
@@ -57,12 +71,25 @@ export default async function ConflictsPage() {
           ) : (
             <ul className="space-y-2 text-sm">
               {explicitConflictRows.map((m) => (
-                <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-3">
+                <li
+                  key={m.id}
+                  id={`mapping-${m.id}`}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-3"
+                >
                   <div>
                     <p className="font-medium">{m.externalTitle}</p>
                     <p className="text-xs text-muted-foreground">
                       {PRODUCT_MAPPING_PROVIDER_LABEL[m.providerKey ?? "CUSTOM"]} · ext {m.externalProductId}
                     </p>
+                    <MappingRowNextAction
+                      row={{
+                        id: m.id,
+                        status: m.status,
+                        confidenceLabel: m.confidenceLabel,
+                        hasCandidate: Boolean(m.internalProductId),
+                      }}
+                      basePath="/dashboard/product-mapping/conflicts"
+                    />
                   </div>
                   <MappingStatusBadge status={m.status} />
                 </li>
@@ -72,7 +99,7 @@ export default async function ConflictsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="duplicate-internal">
         <CardHeader>
           <CardTitle className="text-base">Duplicate KitchenOS target</CardTitle>
           <CardDescription>
@@ -87,7 +114,12 @@ export default async function ConflictsPage() {
             <ul className="space-y-2 text-sm">
               {derived.duplicateInternalTargets.map((group) => (
                 <li key={group.internalProductId} className="rounded-md border p-3">
-                  <p className="font-medium">Internal product {group.internalProductId.slice(0, 8)}…</p>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <p className="font-medium">Internal product {group.internalProductId.slice(0, 8)}…</p>
+                    {group.mappings[0] ? (
+                      <DuplicateMappingGroupRowNextAction mappingId={group.mappings[0].id} />
+                    ) : null}
+                  </div>
                   <ul className="mt-1 list-disc pl-5 text-xs text-muted-foreground">
                     {group.mappings.map((m) => (
                       <li key={m.id}>
@@ -102,7 +134,7 @@ export default async function ConflictsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="duplicate-external">
         <CardHeader>
           <CardTitle className="text-base">Duplicate external product</CardTitle>
           <CardDescription>
@@ -116,7 +148,12 @@ export default async function ConflictsPage() {
             <ul className="space-y-2 text-sm">
               {derived.duplicateExternal.map((group) => (
                 <li key={group.externalProductId} className="rounded-md border p-3">
-                  <p className="font-medium">External {group.externalProductId}</p>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <p className="font-medium">External {group.externalProductId}</p>
+                    {group.mappings[0] ? (
+                      <DuplicateMappingGroupRowNextAction mappingId={group.mappings[0].id} />
+                    ) : null}
+                  </div>
                   <ul className="mt-1 list-disc pl-5 text-xs text-muted-foreground">
                     {group.mappings.map((m) => (
                       <li key={m.id}>
@@ -131,7 +168,7 @@ export default async function ConflictsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="order-hub-conflicts">
         <CardHeader>
           <CardTitle className="text-base">Order Hub conflicts</CardTitle>
           <CardDescription>
@@ -145,18 +182,15 @@ export default async function ConflictsPage() {
           ) : (
             <ul className="space-y-2 text-sm">
               {channelConflicts.map((c) => (
-                <li key={c.id} className="rounded-md border p-3">
+                <li key={c.id} id={`channel-conflict-${c.id}`} className="rounded-md border p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <p className="font-medium">{c.title}</p>
                       <p className="text-xs text-muted-foreground">{c.description}</p>
+                      <ChannelMappingConflictRowNextAction
+                        row={{ id: c.id, recordId: c.recordId }}
+                      />
                     </div>
-                    <Link
-                      href={`/dashboard/order-hub`}
-                      className="text-xs font-medium text-primary underline underline-offset-4"
-                    >
-                      Open Order Hub
-                    </Link>
                   </div>
                 </li>
               ))}

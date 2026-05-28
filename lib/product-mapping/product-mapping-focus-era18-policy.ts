@@ -12,6 +12,26 @@ export const PRODUCT_MAPPING_FOCUS_ERA18_PROOF_STATUS =
 
 export const PRODUCT_MAPPING_FOCUS_ERA18_BACKLOG_ID = "KOS-E18-038" as const;
 
+/**
+ * Conflicts + suggestions queue parity — Evolution Era 18 Workstream C Cycle 39.
+ */
+
+export const PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_POLICY_ID =
+  "era18-product-mapping-conflicts-focus-v1" as const;
+
+export const PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_PROOF_STATUS =
+  "product_mapping_conflicts_suggestions_focus_wired" as const;
+
+export const PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_BACKLOG_ID = "KOS-E18-039" as const;
+
+export const PRODUCT_MAPPING_EXPLICIT_CONFLICTS_ANCHOR = "#explicit-conflicts" as const;
+
+export const PRODUCT_MAPPING_DUPLICATE_INTERNAL_ANCHOR = "#duplicate-internal" as const;
+
+export const PRODUCT_MAPPING_DUPLICATE_EXTERNAL_ANCHOR = "#duplicate-external" as const;
+
+export const PRODUCT_MAPPING_ORDER_HUB_CONFLICTS_ANCHOR = "#order-hub-conflicts" as const;
+
 export const PRODUCT_MAPPING_UNMAPPED_ROUTE = "/dashboard/product-mapping/unmapped" as const;
 
 export const PRODUCT_MAPPING_CONFLICTS_ROUTE = "/dashboard/product-mapping/conflicts" as const;

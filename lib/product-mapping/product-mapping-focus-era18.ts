@@ -4,6 +4,10 @@ import { isBulkApprovable } from "@/lib/product-mapping/matching-confidence";
 import {
   ORDER_HUB_FAILED_ROUTE,
   PRODUCT_MAPPING_CONFLICTS_ROUTE,
+  PRODUCT_MAPPING_DUPLICATE_EXTERNAL_ANCHOR,
+  PRODUCT_MAPPING_DUPLICATE_INTERNAL_ANCHOR,
+  PRODUCT_MAPPING_EXPLICIT_CONFLICTS_ANCHOR,
+  PRODUCT_MAPPING_ORDER_HUB_CONFLICTS_ANCHOR,
   PRODUCT_MAPPING_SUGGESTIONS_ROUTE,
   PRODUCT_MAPPING_UNMAPPED_ROUTE,
 } from "@/lib/product-mapping/product-mapping-focus-era18-policy";
@@ -37,6 +41,18 @@ export type ProductMappingRowNextAction = {
   label: string;
   href: string;
   tone: "urgent" | "normal";
+};
+
+export type ProductMappingConflictsFocusSnapshot = {
+  explicitConflictCount: number;
+  duplicateInternalGroupCount: number;
+  duplicateExternalGroupCount: number;
+  blockedOrderLines: number;
+};
+
+export type ChannelMappingConflictFocusRow = {
+  id: string;
+  recordId: string | null;
 };
 
 export function productMappingAnchor(mappingId: string): string {
@@ -154,6 +170,73 @@ export function pickProductMappingAttentionItems(
   return items.sort((a, b) => a.priority - b.priority).slice(0, 4);
 }
 
+export function buildProductMappingConflictsFocusSnapshot(input: {
+  explicitConflictCount: number;
+  duplicateInternalGroupCount: number;
+  duplicateExternalGroupCount: number;
+  blockedOrderLines: number;
+}): ProductMappingConflictsFocusSnapshot {
+  return {
+    explicitConflictCount: input.explicitConflictCount,
+    duplicateInternalGroupCount: input.duplicateInternalGroupCount,
+    duplicateExternalGroupCount: input.duplicateExternalGroupCount,
+    blockedOrderLines: input.blockedOrderLines,
+  };
+}
+
+/** Conflicts page categories — blocked orders and explicit flags before duplicate groups. */
+export function pickProductMappingConflictsAttentionItems(
+  snapshot: ProductMappingConflictsFocusSnapshot,
+): ProductMappingAttentionItem[] {
+  const items: ProductMappingAttentionItem[] = [];
+
+  if (snapshot.blockedOrderLines > 0) {
+    items.push({
+      id: "blocked-order-lines",
+      title: `${snapshot.blockedOrderLines} order line${snapshot.blockedOrderLines === 1 ? "" : "s"} blocked by missing mapping`,
+      detail: "Resolve catalog mapping, then reprocess failed channel orders in order hub.",
+      href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${PRODUCT_MAPPING_ORDER_HUB_CONFLICTS_ANCHOR}`,
+      priority: 1,
+      tone: "urgent",
+    });
+  }
+
+  if (snapshot.explicitConflictCount > 0) {
+    items.push({
+      id: "explicit-conflicts",
+      title: `${snapshot.explicitConflictCount} explicit mapping conflict${snapshot.explicitConflictCount === 1 ? "" : "s"}`,
+      detail: "Rows flagged CONFLICT — pick a single KitchenOS target or reject duplicates.",
+      href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${PRODUCT_MAPPING_EXPLICIT_CONFLICTS_ANCHOR}`,
+      priority: 2,
+      tone: "urgent",
+    });
+  }
+
+  if (snapshot.duplicateExternalGroupCount > 0) {
+    items.push({
+      id: "duplicate-external",
+      title: `${snapshot.duplicateExternalGroupCount} duplicate external product group${snapshot.duplicateExternalGroupCount === 1 ? "" : "s"}`,
+      detail: "Same external id mapped more than once — archive or reject older rows.",
+      href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${PRODUCT_MAPPING_DUPLICATE_EXTERNAL_ANCHOR}`,
+      priority: 3,
+      tone: "normal",
+    });
+  }
+
+  if (snapshot.duplicateInternalGroupCount > 0) {
+    items.push({
+      id: "duplicate-internal",
+      title: `${snapshot.duplicateInternalGroupCount} duplicate KitchenOS target group${snapshot.duplicateInternalGroupCount === 1 ? "" : "s"}`,
+      detail: "Multiple externals share one menu item — confirm this is intentional for your channels.",
+      href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${PRODUCT_MAPPING_DUPLICATE_INTERNAL_ANCHOR}`,
+      priority: 4,
+      tone: "normal",
+    });
+  }
+
+  return items.sort((a, b) => a.priority - b.priority).slice(0, 4);
+}
+
 /** Per-row next action for workbench and unmapped queue lists. */
 export function resolveProductMappingRowNextAction(
   row: ProductMappingFocusRow,
@@ -215,6 +298,28 @@ export function resolveProductMappingRowNextAction(
   }
 
   return null;
+}
+
+/** Order hub channel conflict row — map SKU then reprocess. */
+export function resolveChannelMappingConflictRowNextAction(
+  row: ChannelMappingConflictFocusRow,
+): ProductMappingRowNextAction {
+  return {
+    label: row.recordId ? "Map SKU to unblock order" : "Review blocked channel orders",
+    href: row.recordId
+      ? `${PRODUCT_MAPPING_UNMAPPED_ROUTE}${productMappingAnchor(row.recordId)}`
+      : ORDER_HUB_FAILED_ROUTE,
+    tone: "urgent",
+  };
+}
+
+/** Duplicate group row — jump to first mapping in the group. */
+export function resolveDuplicateMappingGroupRowNextAction(mappingId: string): ProductMappingRowNextAction {
+  return {
+    label: "Review mapping row",
+    href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${productMappingAnchor(mappingId)}`,
+    tone: "normal",
+  };
 }
 
 /** When channel orders are blocked, link operators to order hub failed tab. */

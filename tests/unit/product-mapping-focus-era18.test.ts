@@ -1,13 +1,20 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_BACKLOG_ID,
+  PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_POLICY_ID,
+  PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_PROOF_STATUS,
   PRODUCT_MAPPING_FOCUS_ERA18_BACKLOG_ID,
   PRODUCT_MAPPING_FOCUS_ERA18_POLICY_ID,
   PRODUCT_MAPPING_FOCUS_ERA18_PROOF_STATUS,
 } from "@/lib/product-mapping/product-mapping-focus-era18-policy";
 import {
+  buildProductMappingConflictsFocusSnapshot,
   buildProductMappingFocusSnapshot,
+  pickProductMappingConflictsAttentionItems,
   pickProductMappingAttentionItems,
+  resolveChannelMappingConflictRowNextAction,
+  resolveDuplicateMappingGroupRowNextAction,
   resolveProductMappingBlockedOrdersNextAction,
   resolveProductMappingRowNextAction,
 } from "@/lib/product-mapping/product-mapping-focus-era18";
@@ -17,6 +24,16 @@ describe("product-mapping-focus-era18 policy", () => {
     expect(PRODUCT_MAPPING_FOCUS_ERA18_POLICY_ID).toBe("era18-product-mapping-focus-v1");
     expect(PRODUCT_MAPPING_FOCUS_ERA18_PROOF_STATUS).toBe("product_mapping_focus_attention_wired");
     expect(PRODUCT_MAPPING_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-038");
+  });
+
+  it("registers era18 conflicts and suggestions parity proof", () => {
+    expect(PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_POLICY_ID).toBe(
+      "era18-product-mapping-conflicts-focus-v1",
+    );
+    expect(PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_PROOF_STATUS).toBe(
+      "product_mapping_conflicts_suggestions_focus_wired",
+    );
+    expect(PRODUCT_MAPPING_CONFLICTS_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-039");
   });
 });
 
@@ -105,6 +122,45 @@ describe("resolveProductMappingBlockedOrdersNextAction", () => {
       label: "Review blocked channel orders",
       href: "/dashboard/order-hub?tab=failed",
       tone: "urgent",
+    });
+  });
+});
+
+describe("pickProductMappingConflictsAttentionItems", () => {
+  it("prioritizes blocked orders and explicit conflicts on conflicts page", () => {
+    const items = pickProductMappingConflictsAttentionItems(
+      buildProductMappingConflictsFocusSnapshot({
+        explicitConflictCount: 2,
+        duplicateInternalGroupCount: 1,
+        duplicateExternalGroupCount: 3,
+        blockedOrderLines: 4,
+      }),
+    );
+
+    expect(items[0]?.id).toBe("blocked-order-lines");
+    expect(items[1]?.id).toBe("explicit-conflicts");
+    expect(items[0]?.href).toContain("#order-hub-conflicts");
+  });
+});
+
+describe("resolveChannelMappingConflictRowNextAction", () => {
+  it("routes to unmapped queue when record id is known", () => {
+    expect(
+      resolveChannelMappingConflictRowNextAction({ id: "cc-1", recordId: "map-9" }),
+    ).toMatchObject({
+      label: "Map SKU to unblock order",
+      href: "/dashboard/product-mapping/unmapped#mapping-map-9",
+      tone: "urgent",
+    });
+  });
+});
+
+describe("resolveDuplicateMappingGroupRowNextAction", () => {
+  it("links to mapping anchor on conflicts page", () => {
+    expect(resolveDuplicateMappingGroupRowNextAction("map-5")).toEqual({
+      label: "Review mapping row",
+      href: "/dashboard/product-mapping/conflicts#mapping-map-5",
+      tone: "normal",
     });
   });
 });
