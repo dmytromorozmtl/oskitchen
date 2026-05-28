@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-008 — Integration Health channel readiness cards (P1 WOW)
+- ID: `KOS-E19-008`
+- Title: Era 19 Workstream D Cycle 8 — per-channel readiness cards on integration health
+- Module: Integrations / Integration Health / Operator UX
+- Priority: P1 (WOW pillar — channel reliability)
+- Status: **channel_cards_wired**
+- Decision: `era19-integration-health-channel-cards-v1` — Stripe, Woo, Shopify, webhooks, public API, SSO cards with connection state, engineering smoke status, missing env vars, next actions; no LIVE claims without artifact PASS
+- Evidence: `lib/integrations/integration-health-channel-cards-era19.ts`, panel on `/dashboard/integration-health#integration-channel-readiness`
+- Next: Launch Wizard C3 UX polish or briefing launch wizard tile
+
 ### KOS-E19-007 — Integration Health smoke artifact viewer (P1 WOW)
 - ID: `KOS-E19-007`
 - Title: Era 19 Workstream D Cycle 7 — engineering smoke artifact viewer on integration health

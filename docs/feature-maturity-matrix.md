@@ -35,6 +35,7 @@ Interpretation rule:
 - **Era 19 Cycle 5 (2026-05-28):** Pilot readiness + integration health briefing lanes — `era19-owner-daily-briefing-pilot-readiness-v1` + `era19-owner-daily-briefing-integration-health-v1`; commercial GO/NO-GO and P0 artifact honesty; collapses redundant integration health strip when briefing lane active.
 - **Era 19 Cycle 6 (2026-05-28):** Launch Wizard shell — `/dashboard/launch-wizard` with 8 setup steps, real completion signals, next-best-step hero, nav link; `era19-launch-wizard-v1`.
 - **Era 19 Cycle 7 (2026-05-28):** Integration Health smoke artifact viewer — `era19-integration-health-smoke-artifacts-v1`; PASS/FAILED/SKIPPED WITH REASON for channel, P0, and staging workflow artifacts + recovery checklist on `/dashboard/integration-health`.
+- **Era 19 Cycle 8 (2026-05-28):** Integration Health channel readiness cards — `era19-integration-health-channel-cards-v1`; Stripe/Woo/Shopify/webhooks/API/SSO cards with state, smoke status, missing env vars, next action, support guidance.
 - **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); theme **staging_proof_and_first_paid_pilot**.
 - **Era 18 Cycle 18 (2026-05-28):** KDS bump-next expo — `era18-kds-bump-next-v1`; oldest-ticket hero + action error feedback.
 - **Era 18 Cycle 17 (2026-05-28):** Production calendar today focus — `era18-production-calendar-today-focus-v1`; overdue/due-today strip + today column highlight.

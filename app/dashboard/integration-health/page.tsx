@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
+import { IntegrationHealthChannelCardsPanel } from "@/components/dashboard/integration-health-channel-cards-panel";
 import { IntegrationHealthSmokeArtifactViewer } from "@/components/dashboard/integration-health-smoke-artifact-viewer";
 import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
 import { SensitiveErrorPreview } from "@/components/integrations/sensitive-error-preview";
@@ -53,6 +54,7 @@ import {
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
 import { IntegrationHealthSummaryPanel } from "@/components/integrations/integration-health-summary";
+import { loadIntegrationHealthChannelCardsModel } from "@/services/integrations/integration-health-channel-cards-service";
 import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 
 function tierBadge(tier: IntegrationMaturityTier) {
@@ -77,7 +79,7 @@ export default async function IntegrationHealthDashboardPage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts] =
+  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards] =
     await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(dataUserId),
@@ -100,6 +102,7 @@ export default async function IntegrationHealthDashboardPage() {
     listIntegrationHealthCards(dataUserId),
     listChannelPilotLiveProofSlices(dataUserId),
     loadIntegrationHealthSmokeArtifactsModel(),
+    loadIntegrationHealthChannelCardsModel(dataUserId),
   ]);
 
   const workspaceDemo = kitchen?.demoMode ?? false;
@@ -121,6 +124,8 @@ export default async function IntegrationHealthDashboardPage() {
   return (
     <div className="space-y-8">
       <IntegrationHealthSummaryPanel summary={healthSummary} />
+
+      <IntegrationHealthChannelCardsPanel model={channelCards} />
 
       <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
 

@@ -430,6 +430,7 @@
     "test:ci:nav-page-maturity-era14": "node ./node_modules/vitest/vitest.mjs run tests/unit/nav-page-maturity-era14-policy.test.ts tests/unit/page-maturity-honesty.test.ts tests/unit/nav-maturity-governance.test.ts",
     "test:ci:nav-page-maturity-era14:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/nav-page-maturity-era14-cert-live.test.ts",
     "smoke:kds-daily": "tsx scripts/smoke-kds-daily-service.ts",
+    "test:ci:integration-health-channel-cards-era19": "node ./node_modules/vitest/vitest.mjs run tests/unit/integration-health-channel-cards-era19.test.ts",
     "test:ci:integration-health-smoke-artifacts-era19": "node ./node_modules/vitest/vitest.mjs run tests/unit/integration-health-smoke-artifacts-era19.test.ts",
     "test:ci:launch-wizard-era19": "node ./node_modules/vitest/vitest.mjs run tests/unit/launch-wizard-era19.test.ts",
     "test:ci:owner-daily-briefing-era19": "node ./node_modules/vitest/vitest.mjs run tests/unit/owner-daily-briefing-era19.test.ts tests/unit/owner-daily-briefing-today-focus-era19.test.ts tests/unit/owner-daily-briefing-production-calendar-era19.test.ts tests/unit/owner-daily-briefing-role-packs-era19.test.ts tests/unit/owner-daily-briefing-pilot-readiness-era19.test.ts tests/unit/owner-daily-briefing-integration-health-era19.test.ts",
