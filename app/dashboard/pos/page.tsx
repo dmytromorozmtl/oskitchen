@@ -1,6 +1,8 @@
 import Link from "next/link";
 
+import { PosHubMoneyPathFlowProofPanel } from "@/components/dashboard/pos/pos-hub-money-path-flow-proof-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { buildPosMoneyPathFlowProofSlice } from "@/lib/commercial/era20-pos-money-path-flow-proof-era20";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -13,6 +15,9 @@ export default async function PosOverviewPage() {
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
+
+  const posMoneyPathProof = buildPosMoneyPathFlowProofSlice();
+
   const [registers, tx7] = await Promise.all([
     prisma.pOSRegister.count({ where: { userId } }),
     prisma.pOSTransaction.count({
@@ -29,6 +34,9 @@ export default async function PosOverviewPage() {
           production routing, inventory impact events, and audit trails.
         </p>
       </div>
+
+      <PosHubMoneyPathFlowProofPanel slice={posMoneyPathProof} />
+
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="border-border/80 shadow-sm">
           <CardHeader>
