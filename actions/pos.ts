@@ -11,6 +11,11 @@ import { canUseFeature } from "@/lib/plans/feature-registry";
 import { safeError } from "@/lib/security";
 import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
 import {
+  buildPosDiscountAuditMetadata,
+  POS_DISCOUNT_APPLY_PERMISSION,
+  resolvePosDiscountGuard,
+} from "@/lib/pos/pos-discount-guard";
+import {
   logPosPermissionDenied,
   logPosRegisterCreated,
   logPosShiftEvent,
@@ -39,7 +44,7 @@ const checkoutSchema = z.object({
     "COMPED",
   ]),
   notes: z.string().max(2000).optional(),
-  discountAmount: z.number().optional(),
+  discountAmount: z.number().nonnegative().max(10_000_000).optional(),
   taxAmount: z.number().optional(),
   loyaltyPointsRedeem: z.number().int().nonnegative().optional(),
   giftCardCode: z.string().max(32).optional(),
@@ -92,11 +97,16 @@ export async function posCheckoutAction(raw: z.infer<typeof checkoutSchema>) {
       return { ok: false as const, error: "POS is not available on your current plan." };
     }
     const input = checkoutSchema.parse(raw);
-    if ((input.discountAmount ?? 0) > 0 || input.paymentMode === "COMPED") {
-      const override = await requirePosPermission("pos.discount.apply", "pos.checkout.discount", {
-        paymentMode: input.paymentMode,
-        explicitDiscountAmount: input.discountAmount ?? 0,
-      });
+    const discountGuard = resolvePosDiscountGuard({
+      paymentMode: input.paymentMode,
+      discountAmount: input.discountAmount,
+    });
+    if (discountGuard.requiresManagerDiscount) {
+      const override = await requirePosPermission(
+        POS_DISCOUNT_APPLY_PERMISSION,
+        "pos.checkout.discount",
+        buildPosDiscountAuditMetadata(discountGuard),
+      );
       if (!override.ok) return { ok: false as const, error: override.error };
     }
     const res = await checkoutPosSale(actor.userId, actor.sessionUser.id, {

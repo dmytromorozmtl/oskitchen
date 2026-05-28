@@ -136,8 +136,56 @@ describe("POS action RBAC", () => {
       metadata: {
         paymentMode: "CASH",
         explicitDiscountAmount: 2,
+        guardReason: "explicit_discount",
       },
     });
+  });
+
+  it("blocks COMPED checkout without pos.discount.apply", async () => {
+    requireMutationPermission
+      .mockResolvedValueOnce({ ok: true, actor: { ...actor, granted: new Set(["pos.checkout"]) } })
+      .mockResolvedValueOnce({ ok: false, error: "Discount approval required.", actor });
+
+    const result = await posCheckoutAction({
+      ...baseCheckoutInput,
+      paymentMode: "COMPED",
+    });
+
+    expect(result).toEqual({ ok: false, error: "Discount approval required." });
+    expect(checkoutPosSale).not.toHaveBeenCalled();
+    expect(logPosPermissionDenied).toHaveBeenCalledWith(
+      expect.objectContaining({ granted: expect.any(Set) }),
+      expect.objectContaining({
+        requiredPermission: "pos.discount.apply",
+        operation: "pos.checkout.discount",
+        metadata: expect.objectContaining({ guardReason: "comped_payment_mode" }),
+      }),
+    );
+  });
+
+  it("allows standard checkout with only pos.checkout permission", async () => {
+    requireMutationPermission.mockResolvedValueOnce({
+      ok: true,
+      actor: { ...actor, granted: new Set(["pos.checkout"]) },
+    });
+
+    const result = await posCheckoutAction(baseCheckoutInput);
+
+    expect(result).toEqual({ ok: true, orderId: "ord-1" });
+    expect(requireMutationPermission).toHaveBeenCalledTimes(1);
+    expect(checkoutPosSale).toHaveBeenCalled();
+  });
+
+  it("rejects negative discountAmount at schema validation", async () => {
+    requireMutationPermission.mockResolvedValueOnce({ ok: true, actor });
+
+    const result = await posCheckoutAction({
+      ...baseCheckoutInput,
+      discountAmount: -1,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(checkoutPosSale).not.toHaveBeenCalled();
   });
 
   it("blocks register creation without register management permission", async () => {

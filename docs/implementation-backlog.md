@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-022 — POS manager discount / override depth (P1)
+- ID: `KOS-E17-022`
+- Title: Era 17 Cycle 22 — manager discount guard + COMPED RBAC edge cases
+- Module: POS / RBAC
+- Priority: P1 (Workstream E Cycle 21)
+- Status: **discount_guard_depth_enforced**
+- Decision: `era17-pos-manager-discount-v1` — `pos-discount-guard` + action/service validation
+- Evidence: `lib/pos/pos-discount-guard.ts`, `docs/pos-manager-discount-operator-guide-era17.md`, `test:ci:pos-manager-discount-era17:cert`
+- Next: Receipt / shift report spot check (Cycle 24); manager discount UI deferred
+
 ### KOS-E17-021 — Commerce webhook incident drill (P1)
 - ID: `KOS-E17-021`
 - Title: Era 17 Cycle 21 — Stripe/Woo/Shopify webhook incident operator checklist
@@ -23,7 +33,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **tablet_ux_polished**
 - Decision: `era17-pos-tablet-ux-v1` — terminal UX + PosAccessCard + operator runbook
 - Evidence: `lib/pos/pos-tablet-ux-era17-policy.ts`, `docs/pos-tablet-ux-operator-runbook-era17.md`, `test:ci:pos-tablet-ux-era17:cert`
-- Next: Manager override / discount UI depth (Cycle 21); manual tablet sign-off on staging optional
+- Next: POS operator runbook depth (Cycle 23); manual tablet sign-off on staging optional
 
 ### KOS-E17-019 — Public API per-route scope enforcement (P1)
 - ID: `KOS-E17-019`

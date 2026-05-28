@@ -18,10 +18,13 @@ import { enqueueKitchenRoutingForPosOrder } from "@/services/pos/pos-kitchen-rou
 import { buildPosReceiptText } from "@/services/pos/pos-receipt-service";
 import { auditLog } from "@/services/audit/audit-service";
 import { redeemGiftCard } from "@/services/gift-cards/gift-card-service";
-import {
-  earnLoyaltyPointsForOrder,
+import { earnLoyaltyPointsForOrder,
   redeemLoyaltyPoints,
 } from "@/services/loyalty/loyalty-service";
+import {
+  computePosCheckoutDiscountTotal,
+  validateExplicitPosDiscountAmount,
+} from "@/lib/pos/pos-discount-guard";
 
 export type PosCheckoutLine = {
   productId?: string;
@@ -107,11 +110,15 @@ export async function checkoutPosSale(
     if (!shift) return { ok: false, error: "Shift is not open for this register." };
   }
 
-  let discountTotal = input.discountAmount ?? 0;
+  const explicitDiscountError = validateExplicitPosDiscountAmount(input.discountAmount);
+  if (explicitDiscountError) return { ok: false, error: explicitDiscountError };
+
+  let giftCardApplied = 0;
+  let loyaltyDiscountApplied = 0;
   if (input.giftCardCode?.trim()) {
     try {
       const gc = await redeemGiftCard(userId, input.giftCardCode.trim(), 10_000);
-      discountTotal += gc.applied;
+      giftCardApplied = gc.applied;
     } catch {
       return { ok: false, error: "Invalid or empty gift card." };
     }
@@ -123,11 +130,17 @@ export async function checkoutPosSale(
         input.customerId,
         input.loyaltyPointsRedeem,
       );
-      discountTotal += lr.discount;
+      loyaltyDiscountApplied = lr.discount;
     } catch (e) {
       return { ok: false, error: e instanceof Error ? e.message : "Loyalty redeem failed." };
     }
   }
+
+  const discountTotal = computePosCheckoutDiscountTotal({
+    explicitDiscountAmount: input.discountAmount,
+    giftCardApplied,
+    loyaltyDiscountApplied,
+  });
 
   const orderInput: OrderCreateInput = orderCreateInputSchema.parse({
     orderType: "POS_SALE",

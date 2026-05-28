@@ -352,6 +352,23 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+---
+
+## Era 17 POS manager discount depth (2026-05-28)
+
+**Policy:** `era17-pos-manager-discount-v1` — **discount_guard_depth_enforced**; action-layer RBAC via `pos-discount-guard` for explicit discounts and COMPED checkout.
+
+1. **Explicit discount** — `discountAmount > 0` requires **`pos.discount.apply`** at checkout action (`pos.checkout.discount` audit operation).
+2. **COMPED mode** — requires **`pos.discount.apply`** even when discount amount is zero.
+3. **Standard checkout** — cash/card with zero discount needs only **`pos.checkout`**.
+4. **Gift card / loyalty** — stack at service layer; do not bypass action gate for explicit discounts.
+5. Operator guide: **`docs/pos-manager-discount-operator-guide-era17.md`** — manager discount UI still deferred.
+6. **Forbidden:** manager discount UI shipped, hardware POS certification, Toast override parity.
+
+**Enforcement:** `test:ci:pos-manager-discount-era17:cert` (chained in `test:ci:pos-money-path:cert`)
+
+---
+
 ## Era 17 POS tablet UX polish (2026-05-28)
 
 **Policy:** `era17-pos-tablet-ux-v1` — **tablet_ux_polished**; touch-first terminal UX without new browser E2E policy.

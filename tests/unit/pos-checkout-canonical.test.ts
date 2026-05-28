@@ -349,6 +349,32 @@ describe("checkoutPosSale", () => {
     );
   });
 
+  it("rejects negative explicit discount at service layer", async () => {
+    const result = await checkoutPosSale("owner-1", "staff-1", {
+      ...baseInput,
+      discountAmount: -2,
+    });
+
+    expect(result).toEqual({ ok: false, error: "Discount amount cannot be negative." });
+    expect(createOrderViaCenter).not.toHaveBeenCalled();
+  });
+
+  it("stacks explicit, gift card, and loyalty discounts into order input", async () => {
+    redeemGiftCard.mockResolvedValue({ applied: 3 });
+    redeemLoyaltyPoints.mockResolvedValue({ discount: 2 });
+
+    await checkoutPosSale("owner-1", "staff-1", {
+      ...baseInput,
+      customerId: "55555555-5555-4555-8555-555555555555",
+      discountAmount: 1,
+      giftCardCode: "GC-TEST",
+      loyaltyPointsRedeem: 100,
+    });
+
+    const orderInput = createOrderViaCenter.mock.calls[0]?.[1];
+    expect(orderInput.discountAmount).toBe(6);
+  });
+
   it("returns a supportable error when POS persistence fails after order creation", async () => {
     prismaMock.order.findFirst.mockResolvedValue({
       id: "ord-1",

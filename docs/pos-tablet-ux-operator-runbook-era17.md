@@ -46,7 +46,7 @@ If tap-to-pay fails, the error appears in the same region — check Stripe Termi
 
 If you lack `pos.access`, the terminal shows **PosAccessCard** with a link back to the POS hub — contact workspace owner for role assignment. This is expected RBAC, not a bug.
 
-Discount / comp modes require **`pos.discount.apply`** — UI for manager override is deferred; backend denies unauthorized checkout attempts.
+Discount / comp modes require **`pos.discount.apply`** — enforced in `actions/pos.ts` via `pos-discount-guard`; dedicated manager discount UI on terminal remains deferred (`era17-pos-manager-discount-v1`).
 
 ---
 

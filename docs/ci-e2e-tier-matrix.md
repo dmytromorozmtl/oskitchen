@@ -56,6 +56,7 @@ npm run test:ci:storefront-money-path:e2e
 | Suite | Command | DB | Notes |
 |-------|---------|-----|-------|
 | POS tablet UX (Era 17) | `npm run test:ci:pos-tablet-ux-era17:cert` | `era17-pos-tablet-ux-v1`; touch targets; checkout status UX; operator runbook; chained in pos-money-path cert |
+| POS manager discount (Era 17) | `npm run test:ci:pos-manager-discount-era17:cert` | `era17-pos-manager-discount-v1`; explicit discount + COMPED RBAC; `pos-discount-guard`; chained in pos-money-path cert |
 | POS checkout unit | `npm run test:ci:pos-money-path:unit` | No | Canonical checkout, terminal lifecycle, action RBAC, tablet UX policy |
 | POS checkout integration (cash sale + PII) | `npm run test:ci:pos-money-path:integration` | Postgres | `checkoutPosSale` + encrypted PII + transaction row |
 | POS inventory depletion | `npm run test:ci:pos-money-path:inventory` | Postgres | Recipe-linked stock decrement + pending when unconfigured |
