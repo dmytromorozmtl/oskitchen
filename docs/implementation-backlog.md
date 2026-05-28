@@ -93,6 +93,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **go_live_pilot_readiness_attention_wired**
 - Decision: `era18-go-live-pilot-readiness-focus-v1` — reuses implementation pilot readiness model on go-live hub + project pages; does not claim live PASS
 - Evidence: `lib/go-live/go-live-pilot-readiness-focus-era18.ts`, `app/dashboard/go-live/page.tsx`, `app/dashboard/go-live/projects/[projectId]/page.tsx`, `tests/unit/go-live-pilot-readiness-focus-era18.test.ts`
+- Next: Go-live project page primary CTA hero for next single blocker
+
+### KOS-E18-059 — Go-live project next-step hero (P0)
+- ID: `KOS-E18-059`
+- Title: Era 18 Workstream P Cycle 59 — single prioritized launch action on go-live project surfaces
+- Module: Go-live / Operator UX
+- Priority: P0 (operator speed — one clear next action before cutover)
+- Status: **go_live_project_next_step_hero_wired**
+- Decision: `era18-go-live-project-next-step-v1` — merges blockers, pilot readiness, checklist, and approvals into one hero CTA
+- Evidence: `lib/go-live/go-live-project-next-step-focus-era18.ts`, `components/dashboard/go-live/go-live-project-next-step-hero.tsx`, `tests/unit/go-live-project-next-step-focus-era18.test.ts`
 - Next: P0 staging proof ops run when vault credentials available; re-run smoke:pilot-gono-go after proof
 
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)

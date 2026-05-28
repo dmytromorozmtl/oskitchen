@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { GoLiveProjectNextStepHeroCard } from "@/components/dashboard/go-live/go-live-project-next-step-hero";
 import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { GoLiveKpiGrid } from "@/components/dashboard/go-live/kpi-grid";
 import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
@@ -20,8 +21,11 @@ import {
 import { prisma } from "@/lib/prisma";
 import { LAUNCH_MODE_LABEL } from "@/lib/go-live/launch-stages";
 import { buildGoLiveFocusSnapshot } from "@/lib/go-live/go-live-focus-era18";
+import { resolveGoLiveProjectNextStepHero } from "@/lib/go-live/go-live-project-next-step-focus-era18";
+import { pickImplementationPilotReadinessAttentionItems } from "@/lib/implementation/implementation-pilot-readiness-focus-era18";
 import {
   listProjects,
+  getProject,
   workbenchSnapshot,
 } from "@/services/go-live/go-live-service";
 import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
@@ -212,7 +216,11 @@ export default async function GoLivePage() {
   }
 
   const primary = projects[0];
-  const snapshot = await workbenchSnapshot(userId, primary.id, primary.businessType ?? null, primary.status);
+  const [snapshot, primaryDetail, primaryPilotReadiness] = await Promise.all([
+    workbenchSnapshot(userId, primary.id, primary.businessType ?? null, primary.status),
+    getProject(userId, primary.id),
+    loadImplementationPilotReadinessModel(userId, { goLiveProjectId: primary.id }),
+  ]);
   const criticalBlockers = snapshot.validation.blockers.filter((b) => b.severity === "CRITICAL").length;
   const approvalsPending = Math.max(
     0,
@@ -237,6 +245,24 @@ export default async function GoLivePage() {
   const certificationTone =
     externalTargetProviders === 0 || externalMissingProviders === 0 ? "success" : "danger";
 
+  const checklistFocusItems =
+    primaryDetail?.checklistItems.map((item) => ({
+      id: item.id,
+      title: item.title,
+      status: item.status,
+      required: item.required,
+      actionRoute: item.actionRoute,
+      dueAt: item.dueAt ? item.dueAt.toISOString().slice(0, 10) : null,
+    })) ?? [];
+
+  const nextStepHero = resolveGoLiveProjectNextStepHero({
+    blockers: snapshot.validation.blockers,
+    focus: goLiveFocus,
+    checklistItems: checklistFocusItems,
+    pilotReadinessItems: pickImplementationPilotReadinessAttentionItems(primaryPilotReadiness),
+    channelPilotLiveProofSlices: snapshot.inputs.channelPilotLiveProofSlices,
+  });
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -254,7 +280,9 @@ export default async function GoLivePage() {
         </div>
       </div>
 
-      <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} variant="go-live" />
+      <GoLiveProjectNextStepHeroCard hero={nextStepHero} />
+
+      <ImplementationPilotReadinessAttentionStrip model={primaryPilotReadiness} variant="go-live" />
 
       <GoLiveAttentionStrip focus={goLiveFocus} blockers={snapshot.validation.blockers} />
 

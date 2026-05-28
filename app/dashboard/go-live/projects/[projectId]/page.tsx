@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { GoLiveProjectNextStepHeroCard } from "@/components/dashboard/go-live/go-live-project-next-step-hero";
 import { ApprovalButtons } from "@/components/dashboard/go-live/approval-buttons";
 import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
@@ -34,6 +35,8 @@ import {
 } from "@/lib/go-live/launch-stages";
 import { parseGoLiveAuditSnapshot } from "@/lib/go-live/audit-snapshot";
 import { buildGoLiveFocusSnapshot, buildGoLiveChecklistFocusSnapshot } from "@/lib/go-live/go-live-focus-era18";
+import { resolveGoLiveProjectNextStepHero } from "@/lib/go-live/go-live-project-next-step-focus-era18";
+import { pickImplementationPilotReadinessAttentionItems } from "@/lib/implementation/implementation-pilot-readiness-focus-era18";
 import {
   SIMULATION_TYPE_LABEL,
 } from "@/lib/go-live/simulation-engine";
@@ -91,6 +94,13 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
     dueAt: item.dueAt ? item.dueAt.toISOString().slice(0, 10) : null,
   }));
   const checklistFocus = buildGoLiveChecklistFocusSnapshot(checklistFocusItems);
+  const nextStepHero = resolveGoLiveProjectNextStepHero({
+    blockers,
+    focus: goLiveFocus,
+    checklistItems: checklistFocusItems,
+    pilotReadinessItems: pickImplementationPilotReadinessAttentionItems(pilotReadiness),
+    channelPilotLiveProofSlices: snapshot.inputs.channelPilotLiveProofSlices,
+  });
 
   const itemsByStage = new Map<string, typeof project.checklistItems>();
   for (const it of project.checklistItems) {
@@ -144,6 +154,8 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           canRollbackStatus={project.status !== "ROLLBACK_MODE"}
         />
       </div>
+
+      <GoLiveProjectNextStepHeroCard hero={nextStepHero} />
 
       <GoLiveKpiGrid
         tiles={{
