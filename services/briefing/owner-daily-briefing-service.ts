@@ -32,10 +32,16 @@ import {
   buildOwnerDailyBriefingSupportAdminTiles,
 } from "@/lib/briefing/owner-daily-briefing-support-admin-era19";
 import {
+  buildOwnerDailyBriefingRiskRadarSlice,
+  summarizeOwnerDailyBriefingRiskRadar,
+  type OwnerDailyBriefingRiskRadarSlice,
+} from "@/lib/briefing/owner-daily-briefing-risk-radar-era19";
+import {
   BRIEFING_ROLE_PACK_HEADLINE,
   BRIEFING_ROLE_PACK_LABEL,
   filterBriefingActionsForRolePack,
   filterBriefingAlertsForRolePack,
+  filterBriefingRiskSignalsForRolePack,
   filterBriefingTilesForRolePack,
   pickBriefingHeroTilesForRolePack,
   resolveBriefingRolePack,
@@ -43,6 +49,7 @@ import {
   shouldShowBriefingIntegrationHealthLane,
   shouldShowBriefingPilotReadinessLane,
   shouldShowBriefingProductionCalendarLane,
+  shouldShowBriefingRiskRadarLane,
   type BriefingRolePack,
 } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import { shouldShowPilotIntegrationHealthStrip } from "@/lib/integrations/pilot-integration-health-strip-era18";
@@ -81,9 +88,12 @@ export type OwnerDailyBriefingPayload = {
   productionCalendar: OwnerDailyBriefingProductionCalendarSlice | null;
   pilotReadiness: OwnerDailyBriefingPilotReadinessSlice | null;
   integrationHealth: OwnerDailyBriefingIntegrationHealthSlice | null;
+  showRiskRadarLane: boolean;
+  riskRadar: OwnerDailyBriefingRiskRadarSlice | null;
   summary: {
     attentionTileCount: number;
     alertCount: number;
+    riskSignalCount: number;
     readinessOverall: number;
   };
 };
@@ -308,6 +318,32 @@ export async function loadOwnerDailyBriefing(
         })
       : null;
 
+  const showRiskRadarLane = shouldShowBriefingRiskRadarLane(rolePack);
+  const riskRadar: OwnerDailyBriefingRiskRadarSlice | null = showRiskRadarLane
+    ? (() => {
+        const base = buildOwnerDailyBriefingRiskRadarSlice({
+          kpis: today.kpis,
+          blockers: today.blockers,
+          integrationOverall: briefingInput.integrationOverall,
+          integrationHealth: integrationHealthSlice,
+          productionCalendarSummary: productionCalendarSlice.summary,
+          commercialOps,
+          ssoEntitlementEnabled: pilotReadiness.pilotSso.entitlementEnabled,
+          ssoActive: pilotReadiness.pilotSso.active,
+          ssoConfigured: pilotReadiness.pilotSso.configured,
+          lowStockCount: lowStock.lowStockCount,
+          ingredientParConfigured: lowStock.ingredientParConfigured,
+        });
+        const filteredSignals = filterBriefingRiskSignalsForRolePack(base.signals, rolePack);
+        const summary = summarizeOwnerDailyBriefingRiskRadar(filteredSignals);
+        return {
+          ...base,
+          ...summary,
+          signals: filteredSignals,
+        };
+      })()
+    : null;
+
   const nextAction = topActions[0]
     ? {
         title: topActions[0].title,
@@ -342,9 +378,12 @@ export async function loadOwnerDailyBriefing(
     productionCalendar: showProductionCalendarLane ? productionCalendarSlice : null,
     pilotReadiness: pilotReadinessSlice,
     integrationHealth: integrationHealthSlice,
+    showRiskRadarLane,
+    riskRadar,
     summary: {
       attentionTileCount: tiles.filter((tile) => tile.tone === "attention").length,
       alertCount: alerts.length,
+      riskSignalCount: riskRadar?.totalSignals ?? 0,
       readinessOverall: today.readiness.overall,
     },
   };

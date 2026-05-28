@@ -6,6 +6,10 @@ import type {
   OwnerDailyBriefingRankedAction,
   OwnerDailyBriefingTile,
 } from "@/lib/briefing/owner-daily-briefing-era19";
+import type {
+  OwnerDailyBriefingRiskCategory,
+  OwnerDailyBriefingRiskSignal,
+} from "@/lib/briefing/owner-daily-briefing-risk-radar-era19";
 import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 
 export const OWNER_DAILY_BRIEFING_ROLE_PACKS_ERA19_POLICY_ID =
@@ -182,6 +186,55 @@ export function shouldShowBriefingPilotReadinessLane(pack: BriefingRolePack): bo
 
 export function shouldShowBriefingIntegrationHealthLane(pack: BriefingRolePack): boolean {
   return pack === "owner" || pack === "manager" || pack === "support_admin";
+}
+
+export const BRIEFING_ROLE_PACK_RISK_CATEGORIES: Record<
+  BriefingRolePack,
+  readonly OwnerDailyBriefingRiskCategory[]
+> = {
+  owner: [
+    "p0_proof",
+    "commercial_gono_go",
+    "live_smoke",
+    "sso_proof",
+    "stuck_orders",
+    "overdue_production",
+    "integration_failure",
+    "support_sla",
+    "low_stock",
+    "blocker",
+  ],
+  support_admin: [
+    "p0_proof",
+    "commercial_gono_go",
+    "live_smoke",
+    "sso_proof",
+    "integration_failure",
+    "support_sla",
+    "blocker",
+  ],
+  manager: [
+    "stuck_orders",
+    "overdue_production",
+    "integration_failure",
+    "support_sla",
+    "low_stock",
+    "blocker",
+  ],
+  kitchen: ["overdue_production", "stuck_orders", "blocker"],
+  cashier: ["stuck_orders", "blocker"],
+};
+
+export function shouldShowBriefingRiskRadarLane(pack: BriefingRolePack): boolean {
+  return pack === "owner" || pack === "manager" || pack === "support_admin" || pack === "kitchen";
+}
+
+export function filterBriefingRiskSignalsForRolePack(
+  signals: readonly OwnerDailyBriefingRiskSignal[],
+  pack: BriefingRolePack,
+): OwnerDailyBriefingRiskSignal[] {
+  const allowed = new Set(BRIEFING_ROLE_PACK_RISK_CATEGORIES[pack]);
+  return signals.filter((signal) => allowed.has(signal.category));
 }
 
 export function pickBriefingHeroTilesForRolePack(

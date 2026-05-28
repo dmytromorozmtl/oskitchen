@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-015 — Briefing risk radar commercial/P0 signals depth (P1 WOW)
+- ID: `KOS-E19-015`
+- Title: Era 19 Workstream B Cycle 15 — structured risk radar with P0, GO/NO-GO, live smoke, SSO, operational signals
+- Module: Dashboard / Today / Owner Daily Briefing / Commercial proof
+- Priority: P1 (WOW pillar — command center risk visibility)
+- Status: **risk_radar_commercial_depth_wired**
+- Decision: `era19-owner-daily-briefing-risk-radar-v1` — categorized risk signals from commercial ops + integration health + KPIs; role-filtered; honest SKIPPED states; links to integration recovery checklist
+- Evidence: `lib/briefing/owner-daily-briefing-risk-radar-era19.ts`, `RiskRadarLane` on Today briefing hero
+- Next: P0 proof unblock when ops credentials available, or Launch Wizard C4 pilot setup polish
+
 ### KOS-E19-014 — Integration Health recovery checklist expansion (P1 WOW)
 - ID: `KOS-E19-014`
 - Title: Era 19 Workstream D Cycle 14 — contextual recovery steps + quick links on integration health

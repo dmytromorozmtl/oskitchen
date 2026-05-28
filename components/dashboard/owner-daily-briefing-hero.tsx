@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type {
-  OwnerDailyBriefingAlert,
   OwnerDailyBriefingNextAction,
   OwnerDailyBriefingRankedAction,
   OwnerDailyBriefingTile,
@@ -15,7 +14,9 @@ import { briefingTileLinkStateLabel } from "@/lib/briefing/owner-daily-briefing-
 import type { OwnerDailyBriefingProductionCalendarSlice } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import type { OwnerDailyBriefingIntegrationHealthSlice } from "@/lib/briefing/owner-daily-briefing-integration-health-era19";
 import type { OwnerDailyBriefingPilotReadinessSlice } from "@/lib/briefing/owner-daily-briefing-pilot-readiness-era19";
-import { AlertTriangle, Cable, CheckCircle2, ClipboardCheck, XCircle } from "lucide-react";
+import type { OwnerDailyBriefingRiskRadarSlice } from "@/lib/briefing/owner-daily-briefing-risk-radar-era19";
+import type { OwnerDailyBriefingRiskSignal } from "@/lib/briefing/owner-daily-briefing-risk-radar-era19";
+import { AlertTriangle, Cable, CheckCircle2, ClipboardCheck, Radar, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function nextActionCardClass(tone: OwnerDailyBriefingNextAction["tone"]): string {
@@ -59,8 +60,7 @@ function availabilityLabel(availability: OwnerDailyBriefingTile["availability"])
 
 export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayload }) {
   const { briefing } = props;
-  const { nextAction, topActions, heroTiles, alerts, summary, rolePackLabel, rolePackHeadline } =
-    briefing;
+  const { nextAction, topActions, heroTiles, summary, rolePackLabel, rolePackHeadline } = briefing;
 
   return (
     <section className="space-y-4" data-testid="owner-daily-briefing-hero">
@@ -140,20 +140,8 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         ))}
       </div>
 
-      {alerts.length > 0 ? (
-        <Card className="border-border/80 bg-card/90 shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Risk radar</CardTitle>
-            <CardDescription>
-              {summary.alertCount} signal(s) — blockers, pilot gaps, and operational exceptions.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {alerts.map((alert) => (
-              <BriefingAlertRow key={alert.id} alert={alert} />
-            ))}
-          </CardContent>
-        </Card>
+      {briefing.showRiskRadarLane && briefing.riskRadar ? (
+        <RiskRadarLane slice={briefing.riskRadar} />
       ) : null}
     </section>
   );
@@ -231,20 +219,100 @@ function BriefingTileCard(props: { tile: OwnerDailyBriefingTile }) {
   );
 }
 
-function BriefingAlertRow(props: { alert: OwnerDailyBriefingAlert }) {
-  const { alert } = props;
+function RiskRadarLane(props: { slice: OwnerDailyBriefingRiskRadarSlice }) {
+  const { slice } = props;
+  const tone = slice.allClear
+    ? "border-emerald-200/80 bg-emerald-50/20 dark:border-emerald-900/40 dark:bg-emerald-950/15"
+    : slice.criticalCount > 0
+      ? "border-rose-200/80 bg-rose-50/30 dark:border-rose-900/40 dark:bg-rose-950/20"
+      : slice.highCount > 0
+        ? "border-amber-200/80 bg-amber-50/40 dark:border-amber-900/40 dark:bg-amber-950/20"
+        : "border-border/80 bg-card/90";
+
+  return (
+    <Card
+      className={cn("shadow-sm", tone)}
+      data-testid="owner-briefing-risk-radar-lane"
+      id="owner-briefing-risk-radar"
+    >
+      <CardHeader className="pb-2">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Radar className="h-4 w-4 text-muted-foreground" aria-hidden />
+              Risk radar
+            </CardTitle>
+            <CardDescription>{slice.headline}</CardDescription>
+          </div>
+          {!slice.allClear ? (
+            <div className="flex flex-wrap gap-2">
+              {slice.criticalCount > 0 ? (
+                <Badge variant="destructive" className="rounded-full tabular-nums">
+                  {slice.criticalCount} critical
+                </Badge>
+              ) : null}
+              {slice.highCount > 0 ? (
+                <Badge variant="secondary" className="rounded-full tabular-nums">
+                  {slice.highCount} high
+                </Badge>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        {slice.signals.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No active risk signals for your role — commercial proof, integrations, and pipeline
+            look clear from available data.
+          </p>
+        ) : (
+          slice.signals.map((signal) => <RiskSignalRow key={signal.id} signal={signal} />)
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function riskSeverityBadgeClass(severity: OwnerDailyBriefingRiskSignal["severity"]): string {
+  switch (severity) {
+    case "critical":
+      return "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200";
+    case "high":
+      return "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-100";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+}
+
+function RiskSignalRow(props: { signal: OwnerDailyBriefingRiskSignal }) {
+  const { signal } = props;
 
   return (
     <Link
-      href={alert.href}
-      data-testid={`owner-briefing-alert-${alert.id}`}
-      className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-muted/20 px-3 py-2 text-sm hover:bg-muted/40"
+      href={signal.href}
+      data-testid={`owner-briefing-risk-${signal.id}`}
+      className="flex flex-col gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-3 text-sm hover:bg-muted/30 sm:flex-row sm:items-start sm:justify-between"
     >
-      <div>
-        <p className="font-medium">{alert.title}</p>
-        <p className="text-xs text-muted-foreground">{alert.detail}</p>
+      <div className="min-w-0 flex-1 space-y-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline" className="rounded-full text-[10px]">
+            {signal.categoryLabel}
+          </Badge>
+          <Badge className={`rounded-full text-[10px] uppercase ${riskSeverityBadgeClass(signal.severity)}`}>
+            {signal.severity}
+          </Badge>
+          <Badge variant="secondary" className="rounded-full text-[10px]">
+            {signal.statusLabel}
+          </Badge>
+        </div>
+        <p className="font-medium">{signal.title}</p>
+        <p className="text-xs text-muted-foreground">{signal.detail}</p>
+        {signal.honestNote ? (
+          <p className="text-[11px] text-muted-foreground/90">{signal.honestNote}</p>
+        ) : null}
       </div>
-      <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+      <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground sm:ml-2" aria-hidden />
     </Link>
   );
 }
