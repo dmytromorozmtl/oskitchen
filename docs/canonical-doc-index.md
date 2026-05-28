@@ -48,7 +48,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era10.md`](./next-master-prompt-input-2026-05-27-era10.md) | Facts and constraints for Evolution Era 11 master prompt (in progress) |
+| [`next-master-prompt-input-2026-05-27-era11.md`](./next-master-prompt-input-2026-05-27-era11.md) | Facts and constraints for Evolution Era 12 master prompt (in progress) |
+| [`era11-cycle-completion-scorecard-2026-05-27.md`](./era11-cycle-completion-scorecard-2026-05-27.md) | Era 11 DevOps / RBAC / KDS staging (cycles 1–4) + score 98/100 |
+| [`next-master-prompt-input-2026-05-27-era10.md`](./next-master-prompt-input-2026-05-27-era10.md) | **Superseded** by era11 input for recurring prompts |
 | [`era10-cycle-completion-scorecard-2026-05-27.md`](./era10-cycle-completion-scorecard-2026-05-27.md) | Era 10 customer value / operator depth (cycles 1–4) + score 97/100 |
 | [`next-master-prompt-input-2026-05-27-era9.md`](./next-master-prompt-input-2026-05-27-era9.md) | **Superseded** by era10 input for recurring prompts |
 | [`era9-cycle-completion-scorecard-2026-05-27.md`](./era9-cycle-completion-scorecard-2026-05-27.md) | Era 9 enterprise / DevOps / security recert (cycles 1–4) + score 96/100 |
@@ -396,6 +398,27 @@ Incremental refresh after Era 10 cycles 1–4 (customer value / operator depth /
 
 **Re-audit decision:** defer full repo re-audit until Era 11 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era10.md`.
 
+## Scorecard (Evolution Era 11 end — 2026-05-27)
+
+Incremental refresh after Era 11 cycles 1–4 (DevOps scale / RBAC recert / KDS staging Playwright from era10 handoff). Baseline = Era 10 end **97** overall.
+
+| Area | Era 10 end | Era 11 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 97 | **98** | +1 | typecheck slice + mutation recert + KDS staging Playwright |
+| Security | 82 | **82** | +0 | unchanged |
+| QA | 89 | **90** | +1 | staging/policy cert wiring |
+| DevOps | 95 | **96** | +1 | `era11-typecheck-slice-v3` |
+| RBAC | 88 | **89** | +1 | `era11-mutation-access-recert-v1` |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 70 | **72** | +2 | Playwright spec + workflow + skip summary |
+| Enterprise readiness | 65 | **65** | +0 | SSO R1 design only |
+| Marketing/sales | 82 | **82** | +0 | unchanged |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 12 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era11.md`.
+
 ---
 
 ## Validation
@@ -456,3 +479,4 @@ Incremental refresh after Era 10 cycles 1–4 (customer value / operator depth /
 | 2026-05-27 | Era 11 Cycle 2: `era11-mutation-access-recert-v1` — production calendar inline gate + status operation recert |
 | 2026-05-27 | Era 11 Cycle 3: `era11-kds-realtime-e2e-staging-v1` — KDS Playwright staging spec + skip summary artifact |
 | 2026-05-27 | Era 11 Cycle 4: `era11-kds-realtime-e2e-staging-workflow-v1` — optional `playwright-kds-staging.yml` workflow |
+| 2026-05-27 | Era 11 Cycle 5: `era11-scorecard-refresh-v1` — score 98/100; era12 handoff |

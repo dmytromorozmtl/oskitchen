@@ -5,6 +5,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 11 — DevOps scale / RBAC recert
 
+### KOS-E11-005 — Era 11 scorecard refresh (P1)
+- ID: `KOS-E11-005`
+- Title: Era 11 cycle completion scorecard and Era 12 master prompt input
+- Module: Governance / strategy
+- Priority: P1 (Era 11 Cycle 5)
+- Status: **completed**
+- Decision: `era11-scorecard-refresh-v1` — 98/100 overall; era12 handoff in `docs/next-master-prompt-input-2026-05-27-era11.md`
+- Evidence: `lib/governance/era11-scorecard-policy.ts`, `docs/era11-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+
 ### KOS-E11-004 — KDS Realtime staging workflow (P1)
 - ID: `KOS-E11-004`
 - Title: Optional GitHub Actions workflow for KDS Playwright staging Tier E
