@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-042 — Enterprise SSO login error recovery (P0)
+- ID: `KOS-E18-042`
+- Title: Era 18 Workstream A Cycle 42 — SSO login failure codes + recovery strip on /login
+- Module: Enterprise identity / Auth
+- Priority: P0 (SSO IdP staging login proof — operator blocking UX on failed SSO start)
+- Status: **enterprise_sso_login_error_recovery_wired**
+- Decision: `era18-enterprise-sso-login-error-recovery-v1` — structured failure codes from login initiate; recovery strip with honest admin/IdP guidance
+- Evidence: `lib/enterprise/enterprise-sso-login-error-recovery-era18.ts`, `lib/enterprise/workspace-sso-login-initiate.ts`, `components/auth/sso-login-error-recovery-strip.tsx`
+- Next: Ops completes Cycle 2 IdP login proof on staging; verify recovery copy against real IdP failures
+
 ### KOS-E18-041 — Enterprise SSO login entry focus (P0)
 - ID: `KOS-E18-041`
 - Title: Era 18 Workstream A Cycle 41 — /login workspace pre-fill + pilot context strip

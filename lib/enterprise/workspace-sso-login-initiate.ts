@@ -13,6 +13,10 @@ import { safeInternalNextPath } from "@/lib/auth/safe-redirect";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 
+import type { SsoLoginFailureCode } from "@/lib/enterprise/enterprise-sso-login-error-recovery-era18-policy";
+
+export type { SsoLoginFailureCode };
+
 export type ResolveWorkspaceSsoLoginTargetResult =
   | {
       ok: true;
@@ -81,7 +85,34 @@ export function buildSsoAuthCallbackUrl(input: {
 
 export type InitiateWorkspaceSsoLoginResult =
   | { ok: true; redirectUrl: string }
-  | { ok: false; error: string };
+  | { ok: false; error: string; code: SsoLoginFailureCode };
+
+function mapResolveFailureReason(
+  reason: Exclude<ResolveWorkspaceSsoLoginTargetResult, { ok: true }>["reason"],
+): InitiateWorkspaceSsoLoginResult {
+  switch (reason) {
+    case "not_found":
+      return { ok: false, error: "Workspace not found.", code: "workspace_not_found" };
+    case "not_configured":
+      return {
+        ok: false,
+        error: "SSO is not configured for this workspace.",
+        code: "sso_not_configured",
+      };
+    case "missing_domain":
+      return {
+        ok: false,
+        error: "SSO login domain is not configured.",
+        code: "missing_domain",
+      };
+    default:
+      return {
+        ok: false,
+        error: "SSO login is not enabled for this workspace.",
+        code: "sso_disabled",
+      };
+  }
+}
 
 /** Initiate Supabase SAML/OIDC SSO redirect for a pilot-active workspace. */
 export async function initiateWorkspaceSsoLogin(input: {
@@ -90,16 +121,7 @@ export async function initiateWorkspaceSsoLogin(input: {
 }): Promise<InitiateWorkspaceSsoLoginResult> {
   const target = await resolveWorkspaceSsoLoginTarget(input.workspaceId);
   if (!target.ok) {
-    switch (target.reason) {
-      case "not_found":
-        return { ok: false, error: "Workspace not found." };
-      case "not_configured":
-        return { ok: false, error: "SSO is not configured for this workspace." };
-      case "missing_domain":
-        return { ok: false, error: "SSO login domain is not configured." };
-      default:
-        return { ok: false, error: "SSO login is not enabled for this workspace." };
-    }
+    return mapResolveFailureReason(target.reason);
   }
 
   const redirectTo = buildSsoAuthCallbackUrl({
@@ -114,10 +136,14 @@ export async function initiateWorkspaceSsoLogin(input: {
   });
 
   if (error) {
-    return { ok: false, error: error.message };
+    return { ok: false, error: error.message, code: "supabase_error" };
   }
   if (!data?.url) {
-    return { ok: false, error: "SSO redirect URL was not returned by Supabase." };
+    return {
+      ok: false,
+      error: "SSO redirect URL was not returned by Supabase.",
+      code: "missing_redirect_url",
+    };
   }
 
   return { ok: true, redirectUrl: data.url };

@@ -123,7 +123,7 @@ export async function initiateWorkspaceSsoLoginAction(formData: FormData) {
   const nextPath = safeInternalNextPath(rawNext, "/dashboard/today");
 
   const result = await initiateWorkspaceSsoLogin({ workspaceId, nextPath });
-  if (!result.ok) return fail(result.error);
+  if (!result.ok) return fail(result.error, result.code);
 
   return ok({ redirectUrl: result.redirectUrl });
 }

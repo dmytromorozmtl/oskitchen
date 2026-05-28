@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { initiateWorkspaceSsoLoginAction } from "@/actions/workspace-sso";
+import { SsoLoginErrorRecoveryStrip } from "@/components/auth/sso-login-error-recovery-strip";
 import { SsoLoginPilotContextStrip } from "@/components/auth/sso-login-pilot-context-strip";
 import { getActionError } from "@/lib/action-result";
 import {
@@ -12,6 +13,10 @@ import {
   parseSsoLoginWorkspaceId,
   shouldShowSsoLoginPilotContextStrip,
 } from "@/lib/enterprise/enterprise-sso-login-entry-focus-era18";
+import {
+  resolveSsoLoginErrorRecovery,
+  type SsoLoginErrorRecovery,
+} from "@/lib/enterprise/enterprise-sso-login-error-recovery-era18";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +26,7 @@ export function SsoLoginEntry() {
   const searchParams = useSearchParams();
   const [workspaceId, setWorkspaceId] = React.useState("");
   const [pending, startTransition] = React.useTransition();
+  const [errorRecovery, setErrorRecovery] = React.useState<SsoLoginErrorRecovery | null>(null);
 
   const redirectTo =
     searchParams.get("redirect") ?? searchParams.get("next") ?? "";
@@ -59,13 +65,23 @@ export function SsoLoginEntry() {
         className="space-y-3"
         onSubmit={(e) => {
           e.preventDefault();
+          setErrorRecovery(null);
           const fd = new FormData();
           fd.set("workspaceId", workspaceId.trim());
           fd.set("redirect", redirectTo);
           startTransition(async () => {
             const res = await initiateWorkspaceSsoLoginAction(fd);
             if (!res.ok) {
-              toast.error(getActionError(res) ?? "SSO sign-in failed.");
+              const message = getActionError(res) ?? "SSO sign-in failed.";
+              const code = "code" in res && typeof res.code === "string" ? res.code : undefined;
+              setErrorRecovery(
+                resolveSsoLoginErrorRecovery({
+                  code,
+                  error: message,
+                  workspaceId: workspaceId.trim(),
+                }),
+              );
+              toast.error(message);
               return;
             }
             if (res.data?.redirectUrl) {
@@ -102,6 +118,8 @@ export function SsoLoginEntry() {
           Sign in with SSO
         </Button>
       </form>
+
+      {errorRecovery ? <SsoLoginErrorRecoveryStrip recovery={errorRecovery} /> : null}
     </div>
   );
 }
