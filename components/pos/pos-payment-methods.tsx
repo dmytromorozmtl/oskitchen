@@ -9,10 +9,12 @@ export function TapToPayButton({
   amount,
   orderId,
   onSuccess,
+  onError,
 }: {
   amount: number;
   orderId: string;
   onSuccess: (transaction: unknown) => void;
+  onError?: (message: string) => void;
 }) {
   const [terminalReady, setTerminalReady] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -91,6 +93,8 @@ export function TapToPayButton({
 
       onSuccess(data.transaction);
     } catch (err) {
+      const message = err instanceof Error ? err.message : "Tap-to-pay failed";
+      onError?.(message);
       console.error("Tap-to-pay failed:", err);
     } finally {
       setProcessing(false);

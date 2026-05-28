@@ -352,6 +352,21 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+## Era 17 POS tablet UX polish (2026-05-28)
+
+**Policy:** `era17-pos-tablet-ux-v1` — **tablet_ux_polished**; touch-first terminal UX without new browser E2E policy.
+
+1. **Touch targets** — cart +/- and tab actions use `posTouchCompactClass` / `posTouchButtonClass` (44–48px floor).
+2. **Checkout status** — success (green), error (red), info (neutral) via `data-testid="pos-checkout-status"`.
+3. **Permission denied** — terminal and POS hub use **PosAccessCard** when `pos.access` is missing.
+4. **Tap-to-pay errors** — surfaced in checkout status region (not console-only).
+5. Operator guide: **`docs/pos-tablet-ux-operator-runbook-era17.md`** — software-only; no hardware/offline claim.
+6. Run **`npm run smoke:pos-tablet-ux`** → review **`artifacts/pos-tablet-ux-summary.json`**.
+
+**Enforcement:** `test:ci:pos-tablet-ux-era17:cert` (chained in `test:ci:pos-money-path:cert`)
+
+---
+
 ## Era 17 public API per-route scope enforcement (2026-05-28)
 
 **Policy:** `era17-public-api-per-route-scope-v1` — **per_route_scope_enforced**; all eight Public API v1 routes require documented scopes via `guardPublicApiV1Resource`.

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -11,11 +12,12 @@ export default async function PosOverviewPage() {
   const { userId } = actor;
   if (!hasPermission(actor.granted, "pos.access")) {
     return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view the POS workspace.
-        </CardContent>
-      </Card>
+      <PosAccessCard
+        title="POS workspace"
+        description="You do not have permission to view the POS workspace."
+        primaryHref="/dashboard"
+        primaryLabel="Back to dashboard"
+      />
     );
   }
   const [registers, tx7] = await Promise.all([

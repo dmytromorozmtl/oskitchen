@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-020 — POS tablet UX polish + operator runbook (P1)
+- ID: `KOS-E17-020`
+- Title: Era 17 Cycle 20 — touch targets, checkout status clarity, software-only operator runbook
+- Module: POS / UX
+- Priority: P1 (Workstream E Cycle 22)
+- Status: **tablet_ux_polished**
+- Decision: `era17-pos-tablet-ux-v1` — terminal UX + PosAccessCard + operator runbook
+- Evidence: `lib/pos/pos-tablet-ux-era17-policy.ts`, `docs/pos-tablet-ux-operator-runbook-era17.md`, `test:ci:pos-tablet-ux-era17:cert`
+- Next: Manager override / discount UI depth (Cycle 21); manual tablet sign-off on staging optional
+
 ### KOS-E17-019 — Public API per-route scope enforcement (P1)
 - ID: `KOS-E17-019`
 - Title: Era 17 Cycle 19 — per-route Developer API scope guard on all v1 routes

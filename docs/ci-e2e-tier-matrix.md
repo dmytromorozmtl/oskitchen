@@ -55,7 +55,8 @@ npm run test:ci:storefront-money-path:e2e
 
 | Suite | Command | DB | Notes |
 |-------|---------|-----|-------|
-| POS checkout unit | `npm run test:ci:pos-money-path:unit` | No | Canonical checkout, terminal lifecycle, action RBAC |
+| POS tablet UX (Era 17) | `npm run test:ci:pos-tablet-ux-era17:cert` | `era17-pos-tablet-ux-v1`; touch targets; checkout status UX; operator runbook; chained in pos-money-path cert |
+| POS checkout unit | `npm run test:ci:pos-money-path:unit` | No | Canonical checkout, terminal lifecycle, action RBAC, tablet UX policy |
 | POS checkout integration (cash sale + PII) | `npm run test:ci:pos-money-path:integration` | Postgres | `checkoutPosSale` + encrypted PII + transaction row |
 | POS inventory depletion | `npm run test:ci:pos-money-path:inventory` | Postgres | Recipe-linked stock decrement + pending when unconfigured |
 | POS checkout E2E (browser) | `npm run test:ci:pos-money-path:e2e` | Postgres + auth secrets | **Optional tier** — runs only when repository secrets `E2E_LOGIN_EMAIL` and `E2E_LOGIN_PASSWORD` are set; optional `E2E_CI_POS_USER_ID` for `seed-e2e-pos-fixture` |

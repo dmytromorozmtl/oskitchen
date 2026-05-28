@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { PosTerminalClient } from "@/components/dashboard/pos-terminal-client";
+import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { canUseFeature } from "@/lib/plans/feature-registry";
@@ -17,11 +17,12 @@ export default async function PosTerminalPage() {
   const { userId } = actor;
   if (!hasPermission(actor.granted, "pos.access")) {
     return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to use the POS terminal.
-        </CardContent>
-      </Card>
+      <PosAccessCard
+        title="POS terminal"
+        description="You do not have permission to use the POS terminal. Ask a workspace owner to grant pos.access."
+        primaryHref="/dashboard/pos"
+        primaryLabel="Back to POS hub"
+      />
     );
   }
   const [boot, operatingMode, kitchen] = await Promise.all([

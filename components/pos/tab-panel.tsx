@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 import { addItemToTabAction, closeTabAction, createTabAction } from '@/actions/pos/tabs';
 import { useSyncedServerState } from '@/hooks/use-synced-server-state';
-import { posTouchButtonClass } from '@/lib/pos/touch-targets';
+import { posTouchButtonClass, posTouchCompactClass } from '@/lib/pos/touch-targets';
 
 export interface TabRow {
   id: string;
@@ -157,7 +157,7 @@ export function TabPanel({ tabs: initialTabs }: { tabs: TabRow[] }) {
             type="button"
             disabled={pending}
             onClick={() => setShowNewTab(!showNewTab)}
-            className="inline-flex items-center gap-1 rounded-xl bg-primary text-primary-foreground px-3 py-1.5 text-sm disabled:opacity-60"
+            className={`inline-flex items-center gap-1 rounded-xl bg-primary text-primary-foreground px-4 text-sm disabled:opacity-60 ${posTouchButtonClass}`}
           >
             <Plus className="h-3.5 w-3.5" />
             New Tab
@@ -200,7 +200,7 @@ export function TabPanel({ tabs: initialTabs }: { tabs: TabRow[] }) {
               type="button"
               disabled={pending}
               onClick={() => setSelectedTab(tab.id)}
-              className={`w-full text-left rounded-xl border p-3 transition-all ${
+              className={`w-full text-left rounded-xl border p-3 transition-all ${posTouchCompactClass} ${
                 selectedTab === tab.id
                   ? 'border-primary bg-primary/5 shadow-sm'
                   : 'hover:bg-muted/50'
@@ -236,14 +236,14 @@ export function TabPanel({ tabs: initialTabs }: { tabs: TabRow[] }) {
                   onChange={(e) =>
                     setTipAmount({ ...tipAmount, [currentTab.id]: Number(e.target.value) })
                   }
-                  className="w-16 h-8 rounded-lg border px-2 text-sm"
+                  className="w-16 h-11 rounded-lg border px-2 text-sm"
                 />
               </div>
               <button
                 type="button"
                 disabled={pending}
                 onClick={handleCloseTab}
-                className="rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-medium hover:bg-emerald-700 disabled:opacity-60"
+                className={`rounded-xl bg-emerald-600 text-white px-4 text-sm font-medium hover:bg-emerald-700 disabled:opacity-60 ${posTouchButtonClass}`}
               >
                 {pending ? 'Closing…' : `Close Tab — $${(liveSubtotal + liveTax + liveTip).toFixed(2)}`}
               </button>

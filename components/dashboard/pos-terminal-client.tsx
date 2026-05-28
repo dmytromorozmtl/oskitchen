@@ -7,6 +7,12 @@ import { CreditCard, Minus, Plus, ShoppingCart, UserRound, Wifi, WifiOff } from 
 import { posCheckoutAction } from "@/actions/pos";
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
 import { posTouchCompactClass, posTouchTileClass } from "@/lib/pos/touch-targets";
+import {
+  posCheckoutStatusClassName,
+  type PosCheckoutStatus,
+  type PosCheckoutStatusKind,
+  toPosCheckoutStatus,
+} from "@/lib/pos/pos-checkout-status";
 import { TapToPayButton } from "@/components/pos/pos-payment-methods";
 import { posQuickCreateKitchenCustomerAction, posSearchKitchenCustomersAction } from "@/actions/pos-terminal-customers";
 import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
@@ -95,7 +101,7 @@ export function PosTerminalClient(props: {
   const [paymentMode, setPaymentMode] = useState<PaymentModeKey>("CASH");
   const [fulfillment, setFulfillment] = useState<"PICKUP" | "DINE_IN" | "DELIVERY">("PICKUP");
   const [cart, setCart] = useState<CartLine[]>([]);
-  const [message, setMessage] = useState<string | null>(null);
+  const [checkoutStatus, setCheckoutStatus] = useState<PosCheckoutStatus | null>(null);
   const [pendingTerminal, setPendingTerminal] = useState<{ orderId: string; amount: number } | null>(
     null,
   );
@@ -120,6 +126,10 @@ export function PosTerminalClient(props: {
   const [loyaltyBalance, setLoyaltyBalance] = useState<number | null>(null);
   const [giftCardBalance, setGiftCardBalance] = useState<number | null>(null);
   const [queuedSales, setQueuedSales] = useState(0);
+
+  function showCheckoutStatus(text: string, kind?: PosCheckoutStatusKind) {
+    setCheckoutStatus(toPosCheckoutStatus(text, kind));
+  }
 
   function buildCheckoutPayload() {
     const openShiftId = registerId ? props.openShiftsByRegisterId[registerId]?.id ?? null : null;
@@ -160,7 +170,7 @@ export function PosTerminalClient(props: {
     const remaining = await offlinePosQueueSize();
     setQueuedSales(remaining);
     if (remaining === 0 && queued.length) {
-      setMessage(`Synced ${queued.length} offline sale(s).`);
+      showCheckoutStatus(`Synced ${queued.length} offline sale(s).`, "success");
     }
   }
 
@@ -317,13 +327,13 @@ export function PosTerminalClient(props: {
   }
 
   function checkout() {
-    setMessage(null);
+    setCheckoutStatus(null);
     if (!registerId) {
-      setMessage("Create a register before checking out.");
+      showCheckoutStatus("Create a register before checking out.", "error");
       return;
     }
     if (!cart.length) {
-      setMessage("Add at least one item.");
+      showCheckoutStatus("Add at least one item.", "error");
       return;
     }
     if (!online && posPaymentAllowedWhileOffline(paymentMode)) {
@@ -332,28 +342,34 @@ export function PosTerminalClient(props: {
         const size = await offlinePosQueueSize();
         setQueuedSales(size);
         setCart([]);
-        setMessage("Offline — sale queued. Will sync when back online.");
+        showCheckoutStatus("Offline — sale queued. Will sync when back online.", "info");
       });
       return;
     }
     if (!online && !posPaymentAllowedWhileOffline(paymentMode)) {
-      setMessage("Reconnect before using card or Stripe placeholder modes.");
+      showCheckoutStatus("Reconnect before using card or Stripe placeholder modes.", "error");
       return;
     }
     startTransition(async () => {
       const res = await posCheckoutAction(buildCheckoutPayload());
       if (!res.ok) {
-        setMessage(res.error);
+        showCheckoutStatus(res.error, "error");
         return;
       }
       if (paymentMode === "CARD_TERMINAL_PLACEHOLDER") {
         setPendingTerminal({ orderId: res.orderId, amount: cartTotal });
         setCart([]);
-        setMessage(`Order ${res.orderId.slice(0, 8)}… ready — tap card to complete payment.`);
+        showCheckoutStatus(
+          `Order ${res.orderId.slice(0, 8)}… ready — tap card to complete payment.`,
+          "success",
+        );
         return;
       }
       setCart([]);
-      setMessage(`Sale complete — order ${res.orderId.slice(0, 8)}… receipt ${res.receiptNumber}`);
+      showCheckoutStatus(
+        `Sale complete — order ${res.orderId.slice(0, 8)}… receipt ${res.receiptNumber}`,
+        "success",
+      );
     });
   }
 
@@ -381,7 +397,7 @@ export function PosTerminalClient(props: {
       }
       if (action === "cancel") {
         setCart([]);
-        setMessage(null);
+        setCheckoutStatus(null);
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -391,7 +407,11 @@ export function PosTerminalClient(props: {
   return (
     <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
       <div className="flex flex-1 flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border/70 bg-muted/20 p-3">
+        <div
+          className="flex flex-wrap items-center gap-3 rounded-2xl border border-border/70 bg-muted/20 p-3"
+          role="status"
+          aria-live="polite"
+        >
           <div className="flex items-center gap-2 text-sm">
             {online ? (
               <Wifi className="h-4 w-4 text-emerald-600" aria-hidden />
@@ -522,7 +542,7 @@ export function PosTerminalClient(props: {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-8 rounded-lg text-xs"
+                      className={cn("rounded-lg text-xs", posTouchCompactClass)}
                       onClick={() => {
                         setSelectedCustomer(null);
                         setCustomerQuery("");
@@ -594,7 +614,10 @@ export function PosTerminalClient(props: {
                           type="button"
                           variant="secondary"
                           size="sm"
-                          className="h-auto max-w-[11rem] truncate rounded-full px-3 py-1.5 text-xs font-normal"
+                          className={cn(
+                            "h-auto max-w-[11rem] truncate rounded-full px-3 py-2 text-xs font-normal",
+                            posTouchCompactClass,
+                          )}
                           title={c.email}
                           onClick={() => {
                             setSelectedCustomer({
@@ -740,7 +763,13 @@ export function PosTerminalClient(props: {
             </Select>
           </div>
 
-          <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+          <div className={cn("max-h-72 space-y-3 overflow-y-auto pr-1", pending && "opacity-60")}>
+            {pending ? (
+              <div className="space-y-2" aria-hidden>
+                <div className="h-16 animate-pulse rounded-xl bg-muted" />
+                <div className="h-16 animate-pulse rounded-xl bg-muted" />
+              </div>
+            ) : null}
             {cart.map((line) => (
               <div
                 key={line.key}
@@ -751,14 +780,32 @@ export function PosTerminalClient(props: {
                   <p className="text-xs text-muted-foreground">${line.unitPrice.toFixed(2)} each</p>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-1">
-                  <Button type="button" size="icon" variant="outline" className="h-10 w-10" onClick={() => bump(line.key, -1)}>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    className={posTouchCompactClass}
+                    onClick={() => bump(line.key, -1)}
+                  >
                     <Minus className="h-4 w-4" />
                   </Button>
                   <span className="w-8 text-center text-base font-semibold">{line.quantity}</span>
-                  <Button type="button" size="icon" variant="outline" className="h-10 w-10" onClick={() => bump(line.key, 1)}>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    className={posTouchCompactClass}
+                    onClick={() => bump(line.key, 1)}
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
-                  <Button type="button" size="sm" variant="ghost" className="text-destructive" onClick={() => removeLine(line.key)}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className={cn("text-destructive", posTouchCompactClass)}
+                    onClick={() => removeLine(line.key)}
+                  >
                     Remove
                   </Button>
                 </div>
@@ -795,13 +842,14 @@ export function PosTerminalClient(props: {
             </div>
           </div>
 
-          {message ? (
+          {checkoutStatus ? (
             <p
-              className="rounded-xl bg-muted px-3 py-2 text-sm text-foreground"
+              className={posCheckoutStatusClassName(checkoutStatus.kind)}
               role="status"
+              aria-live="polite"
               data-testid="pos-checkout-status"
             >
-              {message}
+              {checkoutStatus.text}
             </p>
           ) : null}
 
@@ -810,16 +858,18 @@ export function PosTerminalClient(props: {
               amount={pendingTerminal.amount}
               orderId={pendingTerminal.orderId}
               onSuccess={() => {
+                const orderRef = pendingTerminal.orderId.slice(0, 8);
                 setPendingTerminal(null);
-                setMessage(`Card payment captured — order ${pendingTerminal.orderId.slice(0, 8)}…`);
+                showCheckoutStatus(`Card payment captured — order ${orderRef}…`, "success");
               }}
+              onError={(error) => showCheckoutStatus(error, "error")}
             />
           ) : null}
 
           <Button
             type="button"
             data-testid="pos-complete-sale"
-            className="h-14 w-full rounded-2xl text-lg font-semibold"
+            className="h-14 w-full rounded-2xl text-lg font-semibold touch-manipulation"
             disabled={pending}
             onClick={() => checkout()}
           >
