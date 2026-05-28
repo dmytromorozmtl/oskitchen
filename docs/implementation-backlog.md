@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-018 — KDS bump-next expo polish (P1)
+- ID: `KOS-E18-018`
+- Title: Era 18 Workstream G Cycle 18 — bump-next hero strip + bump/recall error feedback
+- Module: KDS / Kitchen ops
+- Priority: P1 (KDS polish + kitchen workflow clarity)
+- Status: **kds_bump_next_wired**
+- Decision: `era18-kds-bump-next-v1` — oldest prep ticket hero with large bump CTA; explicit error banner on failed bump/recall
+- Evidence: `lib/kitchen/kds-bump-next-era18.ts`, `components/kitchen/kds-bump-next-strip.tsx`, `components/kitchen/kds-daily-service.tsx`
+- Next: GitHub KDS Playwright proof (ops); optional keyboard bump shortcut if pilot requests
+
 ### KOS-E18-017 — Production calendar today focus (P1)
 - ID: `KOS-E18-017`
 - Title: Era 18 Workstream M Cycle 17 — overdue/due-today attention strip on production calendar

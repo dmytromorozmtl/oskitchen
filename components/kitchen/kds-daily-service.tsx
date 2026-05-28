@@ -7,7 +7,12 @@ import {
   fetchDailyKdsOrdersAction,
   recallDailyKdsOrderAction,
 } from "@/actions/kitchen-daily-kds";
+import { KdsBumpNextStrip } from "@/components/kitchen/kds-bump-next-strip";
 import { KdsQueueStatusStrip } from "@/components/kitchen/kds-queue-status-strip";
+import {
+  pickKdsBumpNextTicket,
+  shouldShowKdsBumpNextHero,
+} from "@/lib/kitchen/kds-bump-next-era18";
 import {
   formatKdsElapsedClock,
   formatKdsTicketNumber,
@@ -85,12 +90,19 @@ export function KdsDailyService({
   const [orders, setOrders] = useState(initialOrders);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [realtimeConnected, setRealtimeConnected] = useState(false);
-  const [pending, startBump] = useTransition();
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [, startBump] = useTransition();
   const [, startRefresh] = useTransition();
   const overdueAlertedRef = useRef<Set<string>>(new Set());
 
   const queueSummary = useMemo(() => summarizeKdsQueue(orders), [orders]);
   const { preparing, ready } = useMemo(() => partitionKdsQueue(orders), [orders]);
+  const bumpNextTicket = useMemo(() => pickKdsBumpNextTicket(preparing), [preparing]);
+  const showBumpNextHero = shouldShowKdsBumpNextHero({
+    canBump,
+    preparingCount: preparing.length,
+  });
 
   const refresh = useCallback(() => {
     startRefresh(async () => {
@@ -157,23 +169,33 @@ export function KdsDailyService({
   }, [soundEnabled]);
 
   function handleBump(orderId: string) {
+    setActionError(null);
+    setPendingOrderId(orderId);
     startBump(async () => {
       const res = await bumpDailyKdsOrderAction(orderId);
+      setPendingOrderId(null);
       if (res.ok) {
         setOrders((prev) =>
           prev.map((order) => (order.id === orderId ? { ...order, status: "READY" } : order)),
         );
+      } else {
+        setActionError(res.error ?? "Could not bump order. Try again or check permissions.");
       }
     });
   }
 
   function handleRecall(orderId: string) {
+    setActionError(null);
+    setPendingOrderId(orderId);
     startBump(async () => {
       const res = await recallDailyKdsOrderAction(orderId);
+      setPendingOrderId(null);
       if (res.ok) {
         setOrders((prev) =>
           prev.map((order) => (order.id === orderId ? { ...order, status: "PREPARING" } : order)),
         );
+      } else {
+        setActionError(res.error ?? "Could not recall order. Try again or check permissions.");
       }
     });
   }
@@ -209,6 +231,24 @@ export function KdsDailyService({
         connectionLabel={getKdsConnectionStatusLabel(realtimeConnected)}
       />
 
+      {actionError ? (
+        <div
+          role="alert"
+          data-testid="kds-action-error"
+          className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-100"
+        >
+          {actionError}
+        </div>
+      ) : null}
+
+      {showBumpNextHero && bumpNextTicket ? (
+        <KdsBumpNextStrip
+          ticket={bumpNextTicket}
+          pending={pendingOrderId !== null}
+          onBump={handleBump}
+        />
+      ) : null}
+
       {orders.length === 0 ? (
         <div className="py-16 text-center text-muted-foreground">
           <p className="mb-4 text-4xl">🍽️</p>
@@ -225,7 +265,8 @@ export function KdsDailyService({
                   order={order}
                   canBump={canBump}
                   canRecall={false}
-                  pending={pending}
+                  pending={pendingOrderId !== null}
+                  pendingOrderId={pendingOrderId}
                   onBump={handleBump}
                   onRecall={handleRecall}
                 />
@@ -241,7 +282,8 @@ export function KdsDailyService({
                   order={order}
                   canBump={false}
                   canRecall={canRecall}
-                  pending={pending}
+                  pending={pendingOrderId !== null}
+                  pendingOrderId={pendingOrderId}
                   onBump={handleBump}
                   onRecall={handleRecall}
                 />
@@ -283,6 +325,7 @@ function KdsTicketCard({
   canBump,
   canRecall,
   pending,
+  pendingOrderId,
   onBump,
   onRecall,
 }: {
@@ -290,12 +333,15 @@ function KdsTicketCard({
   canBump: boolean;
   canRecall: boolean;
   pending: boolean;
+  pendingOrderId: string | null;
   onBump: (orderId: string) => void;
   onRecall: (orderId: string) => void;
 }) {
   const overdue = isKdsTicketOverdue(order.elapsedSeconds);
   const allergenConflict = Boolean(order.hasAllergenConflict);
   const ticketNumber = formatKdsTicketNumber(order.id);
+  const isPending = pending && pendingOrderId === order.id;
+  const isBlocked = pending && pendingOrderId !== order.id;
 
   return (
     <div
@@ -355,7 +401,7 @@ function KdsTicketCard({
       {canRecall ? (
         <button
           type="button"
-          disabled={pending}
+          disabled={isPending || isBlocked}
           onClick={() => onRecall(order.id)}
           aria-label={`Recall order ${ticketNumber} to prep`}
           className="min-h-11 w-full rounded-xl bg-amber-600 px-4 py-3 text-base font-bold text-white transition-all hover:bg-amber-700 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 disabled:opacity-60"
@@ -365,7 +411,7 @@ function KdsTicketCard({
       ) : canBump ? (
         <button
           type="button"
-          disabled={pending}
+          disabled={isPending || isBlocked}
           onClick={() => onBump(order.id)}
           aria-label={`Mark order ${ticketNumber} ready`}
           className="min-h-11 w-full rounded-xl bg-emerald-600 px-4 py-3 text-base font-bold text-white transition-all hover:bg-emerald-700 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 disabled:opacity-60"
