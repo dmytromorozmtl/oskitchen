@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-006 — Launch Wizard shell (P1 WOW)
+- ID: `KOS-E19-006`
+- Title: Era 19 Workstream C Cycle 6 — `/dashboard/launch-wizard` eight-step shell
+- Module: Onboarding / Launch / Operator UX
+- Priority: P1 (WOW pillar — time-to-first-order)
+- Status: **wizard_shell_wired**
+- Decision: `era19-launch-wizard-v1` — business profile → pilot readiness steps with real ActivationState, go-live, integration, and commercial artifact signals; no fake GO
+- Evidence: `lib/launch-wizard/*`, `services/launch-wizard/launch-wizard-service.ts`, `app/dashboard/launch-wizard/page.tsx`
+- Next: Wizard UX polish (compact mode CTA from briefing) + Integration Health Center smoke artifact viewer
+
 ### KOS-E19-005 — Pilot readiness + integration health briefing lanes (P1 WOW)
 - ID: `KOS-E19-005`
 - Title: Era 19 Workstream B Cycle 5 — pilot readiness lane + integration health lane on Owner Daily Briefing

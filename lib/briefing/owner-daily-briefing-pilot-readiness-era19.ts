@@ -11,6 +11,7 @@ import {
   IMPLEMENTATION_GO_LIVE_ROUTE,
   IMPLEMENTATION_PILOT_READINESS_ROUTE,
 } from "@/lib/implementation/implementation-pilot-readiness-focus-era18-policy";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { GettingStartedPilotSsoFocus } from "@/lib/onboarding/getting-started-pilot-sso-era18";
 
 export const OWNER_DAILY_BRIEFING_PILOT_READINESS_ERA19_POLICY_ID =
@@ -137,9 +138,7 @@ export function buildOwnerDailyBriefingPilotReadinessSlice(input: {
   const hasUrgent = attentionItems.some((item) => item.tone === "urgent");
   const allClear = totalSignals === 0;
 
-  const hubHref = input.model.goLive.projectId
-    ? `/dashboard/go-live/projects/${input.model.goLive.projectId}`
-    : IMPLEMENTATION_PILOT_READINESS_ROUTE;
+  const hubHref = LAUNCH_WIZARD_ROUTE;
 
   let headline: string;
   if (allClear) {

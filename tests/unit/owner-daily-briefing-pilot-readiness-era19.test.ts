@@ -127,7 +127,7 @@ describe("owner daily briefing pilot readiness era19", () => {
     expect(slice.goLiveBlockerCount).toBe(1);
     expect(slice.attentionItems.some((item) => item.id === "commercial-gono-go")).toBe(true);
     expect(slice.attentionItems.some((item) => item.id === "commercial-p0-staging")).toBe(true);
-    expect(slice.hubHref).toBe("/dashboard/go-live/projects/proj-1");
+    expect(slice.hubHref).toBe("/dashboard/launch-wizard");
   });
 
   it("reports all clear when no attention items and no commercial blockers", () => {
