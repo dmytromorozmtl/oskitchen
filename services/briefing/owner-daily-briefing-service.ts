@@ -47,6 +47,11 @@ import {
   mergeBriefingManagerKdsTopActions,
 } from "@/lib/briefing/owner-daily-briefing-manager-kds-era19";
 import {
+  buildOwnerDailyBriefingOwnerKdsActions,
+  enrichBriefingOwnerPackTiles,
+  mergeBriefingOwnerKdsTopActions,
+} from "@/lib/briefing/owner-daily-briefing-owner-kds-era19";
+import {
   buildOwnerDailyBriefingLaunchWizardCommercialAction,
   mergeBriefingLaunchWizardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-launch-wizard-era19";
@@ -222,7 +227,8 @@ export async function loadOwnerDailyBriefing(
 
   const needsCommercialOps = rolePack === "owner" || rolePack === "support_admin";
 
-  const needsBriefingKdsQueue = rolePack === "kitchen" || rolePack === "manager";
+  const needsBriefingKdsQueue =
+    rolePack === "kitchen" || rolePack === "manager" || rolePack === "owner";
 
   const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts, commercialOps, smokeArtifacts, kdsOrders] =
     await Promise.all([
@@ -322,7 +328,9 @@ export async function loadOwnerDailyBriefing(
         ? enrichBriefingKitchenPackTiles(baseTiles, kdsBriefingInput)
         : rolePack === "manager"
           ? enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput)
-          : baseTiles;
+          : rolePack === "owner"
+            ? enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput)
+            : baseTiles;
   const allAlerts =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminAlerts({
@@ -415,6 +423,12 @@ export async function loadOwnerDailyBriefing(
   }
   if (needsCommercialOps && smokeNextActionRanked) {
     allTopActions = mergeBriefingSmokeNextTopActions(smokeNextActionRanked, allTopActions);
+  }
+  if (rolePack === "owner") {
+    allTopActions = mergeBriefingOwnerKdsTopActions(
+      buildOwnerDailyBriefingOwnerKdsActions(kdsBriefingInput),
+      allTopActions,
+    );
   }
 
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);

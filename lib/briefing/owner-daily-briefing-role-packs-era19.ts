@@ -22,6 +22,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
     "revenue-snapshot",
     "pilot-status",
     "integration-health",
+    "kds-priority-lane",
     "stuck-orders",
     "go-live-readiness",
     "sso-proof",

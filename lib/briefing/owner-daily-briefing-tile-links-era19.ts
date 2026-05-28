@@ -39,7 +39,7 @@ export const BRIEFING_TILE_LINK_DEFINITIONS: Record<string, BriefingTileLinkDefi
     href: BRIEFING_KDS_PRIORITY_LANE_HREF,
     whyItMatters:
       "Allergy alerts and overdue tickets must bump first — the priority lane shows the exact queue order.",
-    rolePacks: ["kitchen", "manager"],
+    rolePacks: ["kitchen", "manager", "owner"],
   },
   "production-priorities": {
     href: "/dashboard/production",
