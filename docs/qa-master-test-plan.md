@@ -248,6 +248,11 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration + tier 2 pay-later E2E in CI; live wiring gate `test:ci:storefront-money-path:cert`; **Era 7 Cycle 2:** optional Stripe live-card E2E with `storefront-stripe-e2e-summary` artifact (`era7-storefront-stripe-optional-v1`)
 3. ~~inventory depletion POS proof + channel policy~~ — unit + integration in CI; live gate `test:ci:inventory-depletion:cert`; **Era 4 Cycle 1:** POS-only policy (`era4-pos-only-v1` in `lib/inventory/inventory-depletion-policy.ts`); storefront/API/manual do not deplete
 4. ~~RBAC wave 4~~ — `test:ci:rbac-wave4` batch 1 + batch 2; **Era 5 Cycle 1:** bundle in `test:security`; **Era 5 Cycle 4:** copilot void-form deny (`era5-copilot-form-deny-v1`); **Era 6 Cycle 4:** production calendar void-form deny (`era6-production-calendar-form-deny-v1`)
+
+### 8c4g. Production calendar move-task UI (Era 8 Cycle 4)
+- Policy: `lib/production/production-calendar-move-ui-policy.ts` (`era8-production-calendar-move-ui-v1`)
+- UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
+- Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 5. POS permission-negative role matrix — terminal API route denials covered; deeper workflow-role gaps remain
 5. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 6. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open

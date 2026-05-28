@@ -1,4 +1,4 @@
-import { createPlanTaskAction } from "@/actions/production-calendar";
+import { createPlanTaskAction, movePlanTaskAction } from "@/actions/production-calendar";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { readProductionCalendarFormError } from "@/lib/production/production-calendar-form-mutation";
@@ -54,11 +54,15 @@ export default async function ProductionCalendarPage({
       </Card>
 
       <div className="grid gap-3 md:grid-cols-7">
-        {days.map((day) => {
+        {days.map((day, dayIndex) => {
           const key = day.toISOString().slice(0, 10);
           const dayTasks = tasks.filter(
             (t) => t.planDate.toISOString().slice(0, 10) === key,
           );
+          const previousDayIso =
+            dayIndex > 0 ? days[dayIndex - 1]!.toISOString().slice(0, 10) : null;
+          const nextDayIso =
+            dayIndex < days.length - 1 ? days[dayIndex + 1]!.toISOString().slice(0, 10) : null;
           return (
             <Card key={key} className="min-h-[120px]">
               <CardHeader className="p-3 pb-1">
@@ -78,8 +82,42 @@ export default async function ProductionCalendarPage({
                           : "bg-primary/10"
                     }`}
                   >
-                    {t.title}
-                    {t.batchSize ? ` ×${t.batchSize}` : ""}
+                    <div className="flex items-start justify-between gap-1">
+                      <span className="min-w-0 flex-1 leading-snug">
+                        {t.title}
+                        {t.batchSize ? ` ×${t.batchSize}` : ""}
+                      </span>
+                      <div className="flex shrink-0 gap-0.5">
+                        {previousDayIso ? (
+                          <form action={movePlanTaskAction}>
+                            <input type="hidden" name="taskId" value={t.id} />
+                            <input type="hidden" name="planDate" value={previousDayIso} />
+                            <button
+                              type="submit"
+                              className="rounded px-1 text-[10px] text-muted-foreground hover:bg-background/80 hover:text-foreground"
+                              aria-label={`Move ${t.title} to previous day`}
+                              title="Move to previous day"
+                            >
+                              ←
+                            </button>
+                          </form>
+                        ) : null}
+                        {nextDayIso ? (
+                          <form action={movePlanTaskAction}>
+                            <input type="hidden" name="taskId" value={t.id} />
+                            <input type="hidden" name="planDate" value={nextDayIso} />
+                            <button
+                              type="submit"
+                              className="rounded px-1 text-[10px] text-muted-foreground hover:bg-background/80 hover:text-foreground"
+                              aria-label={`Move ${t.title} to next day`}
+                              title="Move to next day"
+                            >
+                              →
+                            </button>
+                          </form>
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </CardContent>

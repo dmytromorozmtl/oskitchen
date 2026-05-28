@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 8 — Operator depth / GTM hygiene
 
+### KOS-E8-004 — Production calendar move-task UI (P1)
+- ID: `KOS-E8-004`
+- Title: Wire `movePlanTaskAction` on production planning calendar page
+- Module: Production / RBAC / dashboard
+- Priority: P1 (Era 8 Cycle 4)
+- Status: **completed**
+- Decision: `era8-production-calendar-move-ui-v1` — week-column ←/→ reschedule; RBAC + form deny unchanged
+- Evidence: `app/dashboard/production/calendar/page.tsx`, `lib/production/production-calendar-move-ui-policy.ts`, `test:ci:production-calendar-move-ui:cert`
+- Next: Era 8 scorecard refresh or SSO architecture spike (explicit era budget)
+
 ### KOS-E8-003 — Pilot preflight strict marketing claims (P1)
 - ID: `KOS-E8-003`
 - Title: Enforce `MARKETING_CLAIMS_STRICT=1` in paid pilot preflight
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era8-pilot-preflight-claims-strict-v1` — `pilot-preflight.sh` fails on unqualified roadmap terms; default CI `verify-claims` remains warn-only
 - Evidence: `lib/governance/pilot-preflight-claims-policy.ts`, `scripts/ops/pilot-preflight.sh`, `test:ci:pilot-preflight-claims:cert`
-- Next: production-calendar `movePlanTaskAction` UI wiring or Era 8 scorecard refresh
+- Next: Era 8 scorecard refresh
 
 ### KOS-E8-002 — KDS Realtime Playwright E2E staging scope (P1)
 - ID: `KOS-E8-002`

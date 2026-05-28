@@ -7,6 +7,7 @@ const requireMutationPermission = vi.hoisted(() => vi.fn());
 const requireTenantActor = vi.hoisted(() => vi.fn());
 const recordAuditLog = vi.hoisted(() => vi.fn());
 const createProductionPlanTask = vi.hoisted(() => vi.fn());
+const updateProductionPlanTaskDate = vi.hoisted(() => vi.fn());
 
 vi.mock("next/navigation", () => ({ redirect }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
@@ -25,10 +26,10 @@ vi.mock("@/lib/audit-log", () => ({
 
 vi.mock("@/services/production/production-calendar-service", () => ({
   createProductionPlanTask,
-  updateProductionPlanTaskDate: vi.fn(),
+  updateProductionPlanTaskDate,
 }));
 
-import { createPlanTaskAction } from "@/actions/production-calendar";
+import { createPlanTaskAction, movePlanTaskAction } from "@/actions/production-calendar";
 
 const deniedActor = {
   sessionUserId: "staff-1",
@@ -45,6 +46,7 @@ describe("production calendar actions RBAC", () => {
     vi.clearAllMocks();
     requireTenantActor.mockResolvedValue({ dataUserId: "owner-1" });
     createProductionPlanTask.mockResolvedValue(undefined);
+    updateProductionPlanTaskDate.mockResolvedValue(undefined);
   });
 
   it("denies createPlanTaskAction without production.manage and audits", async () => {
@@ -83,5 +85,44 @@ describe("production calendar actions RBAC", () => {
     await createPlanTaskAction(formData);
 
     expect(createProductionPlanTask).toHaveBeenCalled();
+  });
+
+  it("denies movePlanTaskAction without production.manage and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("taskId", "task-1");
+    formData.set("planDate", "2026-06-02");
+
+    await expect(movePlanTaskAction(formData)).rejects.toThrow("REDIRECT:");
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          operation: "production_calendar.move_task",
+          requiredPermission: "production.manage",
+        }),
+      }),
+    );
+    expect(updateProductionPlanTaskDate).not.toHaveBeenCalled();
+  });
+
+  it("allows move when production.manage passes", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor: deniedActor });
+
+    const formData = new FormData();
+    formData.set("taskId", "task-1");
+    formData.set("planDate", "2026-06-02");
+
+    await movePlanTaskAction(formData);
+
+    expect(updateProductionPlanTaskDate).toHaveBeenCalledWith(
+      "task-1",
+      "owner-1",
+      expect.any(Date),
+    );
   });
 });
