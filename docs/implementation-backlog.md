@@ -79,7 +79,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-procurement-honesty-v1` — single canonical pack for questionnaires and RFPs; deprecated enterprise audit family for posture
 - Evidence: `docs/enterprise-procurement-pack.md`, `lib/enterprise/enterprise-procurement-policy.ts`, `test:ci:enterprise-procurement:cert`
-- Next: cross-channel loyalty/gift card E2E or KDS staging smoke
+- Next: KDS staging smoke or nav maturity sweep
+
+### KOS-E4-009 — Cross-channel loyalty / gift card honesty
+- ID: `KOS-E4-009`
+- Title: Certify POS kitchen-ledger rewards wiring; document dual-ledger storefront scope
+- Module: Growth / POS / storefront
+- Priority: P0 (Era 4 Cycle 9)
+- Status: **completed**
+- Decision: `era4-cross-channel-rewards-v1` — POS gift card + loyalty redeem certified; **not** unified cross-channel; storefront `redeemGiftCardPartial` unwired
+- Evidence: `lib/rewards/cross-channel-rewards-policy.ts`, `test:ci:cross-channel-rewards`, `tests/unit/pos-rewards-checkout-wiring.test.ts`
+- Next: wire storefront checkout gift-card redeem OR explicit product decision to keep separate
 
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
@@ -273,6 +283,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## P2 — Growth And Intelligence
 ### KOS-P2-001 — Loyalty and gift-card cross-channel certification
+- Status: **scoped by Era 4 Cycle 9** — see `KOS-E4-009` and `lib/rewards/cross-channel-rewards-policy.ts`; full unified ledger deferred
 - ID: `KOS-P2-001`
 - Title: Loyalty and gift-card cross-channel certification
 - Module: CRM / growth

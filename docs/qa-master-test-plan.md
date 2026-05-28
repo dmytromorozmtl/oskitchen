@@ -74,6 +74,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c5. Cross-channel loyalty / gift cards (Era 4 Cycle 9)
+- policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`)
+- wiring cert: `test:ci:cross-channel-rewards:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
+- not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
+
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)
 - canonical pack: `docs/enterprise-procurement-pack.md`

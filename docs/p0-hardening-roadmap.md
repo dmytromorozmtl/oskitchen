@@ -299,6 +299,12 @@ Priority rule:
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
 - **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
 
+## Era 4 — Cross-channel rewards honesty (Cycle 9)
+
+- **Completed (2026-05-27):** `era4-cross-channel-rewards-v1` — POS kitchen-ledger gift card + loyalty redeem wired in `checkoutPosSale` (unit tests); storefront uses separate `storefrontGiftCard` / `storefrontLoyalty*` ledgers; `redeemGiftCardPartial` not wired to checkout.
+- **Evidence:** `npm run test:ci:cross-channel-rewards`, `npm run test:ci:cross-channel-rewards:cert`.
+- **Sales rule:** do not claim unified cross-channel gift card or loyalty balances.
+
 ## Era 4 — Enterprise procurement basics (Cycle 8)
 
 - **Completed (2026-05-27):** Canonical [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) with honest SSO/SCIM/SOC2 roadmaps, audit/tenant/retention/backup/incident/questionnaire/FAQ sections; policy `era4-procurement-honesty-v1`; CI cert `test:ci:enterprise-procurement:cert` forbids false affirmative certification claims in the pack.

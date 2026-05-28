@@ -95,6 +95,8 @@ Current truth: CRM, segments, loyalty, gift cards, and some feedback/follow-up t
 
 Current truth: foundational inventory, costing, purchasing, staff, schedule, and time-clock systems exist; compliance, payroll depth, and enterprise controls are not fully mature. Evidence: `actions/inventory.ts`, `actions/costing.ts`, `actions/purchasing.ts`, `actions/staff.ts`, `actions/labor/time-clock.ts`, `actions/training.ts`.
 
+Loyalty and gift cards: POS checkout applies the **kitchen** ledger (`giftCard`, `loyaltyAccount`). Storefront uses **separate** `storefrontGiftCard` / `storefrontLoyalty*` models — codes and points are **not** interchangeable across channels. Policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`).
+
 ### F. Intelligence
 - analytics
 - forecasting
