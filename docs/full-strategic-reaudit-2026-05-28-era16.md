@@ -168,6 +168,8 @@ Aligned with `docs/feature-maturity-matrix.md` (57 rows). Condensed:
 
 ## 6. Competitor Gap Audit (Abbreviated)
 
+**Canonical matrix (Era 17):** `era17-competitor-feature-gap-matrix-refresh-v1` — full refresh in [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md).
+
 | Competitor | Stronger Than KitchenOS | KitchenOS Advantage | Gap | Leapfrog Opportunity | Era 17 Priority |
 |------------|-------------------------|---------------------|-----|------------------------|-----------------|
 | Toast | POS hardware, offline, KDS rush, payments ecosystem | Broad ops modules on one spine; honesty CI | Hardware, offline, depth | Unified ops narrative **if** pilots prove | POS depth P1; hardware defer |

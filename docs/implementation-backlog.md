@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-035 — Competitor feature gap matrix refresh (P2)
+- ID: `KOS-E17-035`
+- Title: Era 17 Cycle 42 — competitor matrix aligned to re-audit §6 and Era 17 evidence
+- Module: GTM / Product strategy
+- Priority: P2 (Workstream K Cycle 42)
+- Status: **evidence_aligned_awaiting_pilot_proof**
+- Decision: `era17-competitor-feature-gap-matrix-refresh-v1` — sixteen competitors + forbidden parity claims; no leapfrog without pilot proof
+- Evidence: `docs/competitor-feature-gap-matrix.md`, `lib/commercial/competitor-feature-gap-matrix-summary.ts`, `scripts/smoke-competitor-feature-gap-matrix-era17.ts`, `test:ci:competitor-feature-gap-matrix-era17:cert`
+- Next: Case study draft (P2 #14) — internal or customer-approved only
+
 ### KOS-E17-034 — Investor narrative one-pager v2 (P2)
 - ID: `KOS-E17-034`
 - Title: Era 17 Cycle 41 — investor one-pager gated on pilot metrics baseline
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **template_only_awaiting_pilot_metrics**
 - Decision: `era17-investor-narrative-onepager-v2-v1` — template + smoke gate; no live KPI narrative without baseline overall PASSED
 - Evidence: `docs/investor-narrative-onepager-era17.md`, `lib/commercial/investor-narrative-onepager-summary.ts`, `scripts/smoke-investor-narrative-onepager-era17.ts`, `test:ci:investor-narrative-onepager-era17:cert`
-- Next: Re-run after pilot week-2 baseline `overall: PASSED`; then competitor matrix refresh (P2 #13)
+- Next: Re-run after pilot week-2 baseline `overall: PASSED`; competitor matrix refresh — **done**; see KOS-E17-035
 
 ### KOS-E17-033 — Integration setup wizard friction (P1)
 - ID: `KOS-E17-033`

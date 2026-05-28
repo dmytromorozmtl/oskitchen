@@ -23,6 +23,7 @@ Interpretation rule:
 - **KDS / production calendar operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`); qualified operational smoke — no rush-hour production SLO claim.
 - **Marketing / sales claims:** `npm run verify-claims` + `era7-marketing-claims-governance-v1` (`test:ci:marketing-claims-governance:cert`); registry `config/marketing/claims-registry.json` via `era8-claims-registry-v1` (`audit:marketing-claims`, `test:ci:claims-registry:cert`); must align with this matrix and linked era policy IDs.
 - **Investor narrative (Era 17):** `era17-investor-narrative-onepager-v2-v1` — [`investor-narrative-onepager-era17.md`](./investor-narrative-onepager-era17.md); template only until `pilot-metrics-baseline-summary` **overall: PASSED**; `npm run smoke:investor-narrative-onepager`.
+- **Competitor matrix (Era 17):** `era17-competitor-feature-gap-matrix-refresh-v1` — [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md); **evidence_aligned_awaiting_pilot_proof**; `npm run smoke:competitor-feature-gap-matrix`.
 
 | Feature name | Module | User roles | Current status | Evidence path | Business value | Risk level | Missing pieces | Required hardening | Required tests | Sales claim allowed? | Should appear in navigation? | Should appear in marketing? | Owner role | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

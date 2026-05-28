@@ -309,6 +309,17 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** smoke → **overall: SKIPPED** (`narrativeProofStatus: proof_skipped_missing_pilot_metrics`; cert PASSED; pilot metrics baseline not captured). **Template only — no live KPI narrative.**
 
+### Era 17 competitor feature gap matrix refresh (2026-05-28)
+
+**Policy:** `era17-competitor-feature-gap-matrix-refresh-v1` — **evidence_aligned_awaiting_pilot_proof**; sixteen competitors aligned to re-audit §6.
+
+1. Use [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md) — strategy only; no parity claims without pilot proof.
+2. Run **`npm run smoke:competitor-feature-gap-matrix`** → review **`artifacts/competitor-feature-gap-matrix-summary.json`** (`matrixProofStatus`).
+3. Chain with **`npm run smoke:pilot-forbidden-claims-enforcement`** before sales or investor use.
+4. **Do not** mark competitor gaps closed without staging or pilot artifacts (SSO IdP login, Woo/Shopify live smoke, KDS GitHub PASS).
+
+**Execution status (2026-05-28):** smoke → **overall: PASSED** (`matrixProofStatus: evidence_aligned_era17`; cert PASSED). Leapfrog claims still blocked until P0 proof artifacts exist.
+
 ### Era 17 pilot rollback drill (2026-05-28)
 
 **Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.

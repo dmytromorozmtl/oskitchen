@@ -131,7 +131,7 @@
 | Cycle Band | Goal | Tasks | Acceptance Criteria | Validation | Risks | Owner |
 |------------|------|-------|---------------------|------------|-------|-------|
 | **41** | Investor narrative v2 | Post-pilot metrics + honest gaps | 1-pager | founder review | Overclaim | GTM | **Done** — `era17-investor-narrative-onepager-v2-v1`; **template_only_awaiting_pilot_metrics** |
-| **42** | Competitor matrix refresh | `competitor-feature-gap-matrix.md` | Matches re-audit §6 | doc review | Stale | Product |
+| **42** | Competitor matrix refresh | `competitor-feature-gap-matrix.md` | Matches re-audit §6 | doc review | Stale | Product | **Done** — `era17-competitor-feature-gap-matrix-refresh-v1`; **evidence_aligned_awaiting_pilot_proof** |
 | **43** | Case study draft (pilot) | With customer permission | Published or internal | legal | — | GTM |
 
 ---

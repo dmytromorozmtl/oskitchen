@@ -131,6 +131,6 @@ Review: `artifacts/investor-narrative-onepager-summary.json`
 | Doc | Use |
 |-----|-----|
 | [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md) | KPI capture gate |
-| [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md) | Honest competitor framing |
+| [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md) | Honest competitor framing (`era17-competitor-feature-gap-matrix-refresh-v1`) |
 | [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) | Pilot execution |
 | [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) | Buyer-facing honesty |
