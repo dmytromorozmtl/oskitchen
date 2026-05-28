@@ -2,10 +2,12 @@ import Link from "next/link";
 
 import { ChatThread } from "@/components/dashboard/copilot/chat-thread";
 import { AiStatusBadges } from "@/components/dashboard/copilot/ai-status-badges";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  hasCopilotChatPageAccess,
+  loadCopilotPageActor,
+} from "@/lib/ux/copilot-page-access-era20";
 import {
   getCopilotSettings,
   listConversations,
@@ -18,16 +20,9 @@ export default async function CopilotChatPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = (await searchParams) ?? {};
-  const actor = await requireWorkspacePermissionActor();
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.chat")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to use copilot chat.
-        </CardContent>
-      </Card>
-    );
+  const { scope } = await loadCopilotPageActor();
+  if (!hasCopilotChatPageAccess(scope)) {
+    return <PermissionDeniedSurfaceCard surfaceId="copilot_chat" />;
   }
   const conversationId = typeof sp.c === "string" ? sp.c : null;
   const [settings, conversations, messages] = await Promise.all([

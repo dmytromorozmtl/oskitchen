@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 17 — Workstream H: copilot permission-denied UX (2026-05-28)
+
+- Title: Era 20 Cycle 17 — copilot layout + chat/audit/settings denial surfaces
+- Status: **done**
+- Policy: `era20-permission-denied-copilot-cycle17-v1` (`KOS-E20-017`)
+- Doc: `docs/era20-cycle-17-permission-denied-copilot-2026-05-28.md`
+- Tests: `test:ci:permission-denied-ux-era20-cycle17`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR integration health recovery flow proof (Workstream G)
+
 ### Cycle 16 — Workstream G: shift closeout flow proof (2026-05-28)
 
 - Title: Era 20 Cycle 16 — shift open → sales → closeout 5-hop proof on POS shifts

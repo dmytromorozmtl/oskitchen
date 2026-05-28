@@ -1,9 +1,7 @@
 import Link from "next/link";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { canExportReports } from "@/lib/reports/report-export-access";
 import { buildDeterministicSnapshot } from "@/services/ai/deterministic-insights-service";
 import { generateNarrative, getCopilotSettings } from "@/services/ai/copilot-service";
@@ -69,18 +67,8 @@ const SUMMARIES = [
 ];
 
 export default async function CopilotSummariesPage() {
-  const actor = await requireWorkspacePermissionActor();
+  const { actor, scope } = await loadCopilotPageActor();
   const { userId } = actor;
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.view")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view copilot summaries.
-        </CardContent>
-      </Card>
-    );
-  }
 
   const canExport = canExportReports(actor);
 

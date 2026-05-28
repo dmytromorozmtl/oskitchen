@@ -7,9 +7,7 @@ import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
 import { KitchenAiTools } from "@/components/dashboard/copilot/kitchen-ai-tools";
 import { RefreshDeterministicButton } from "@/components/dashboard/copilot/refresh-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { prisma } from "@/lib/prisma";
 import { buildDeterministicSnapshot } from "@/services/ai/deterministic-insights-service";
 import {
@@ -36,18 +34,8 @@ export default async function CopilotTodayPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const formError = readCopilotFormError((await searchParams) ?? {});
-  const actor = await requireWorkspacePermissionActor();
+  const { actor, scope } = await loadCopilotPageActor();
   const { userId } = actor;
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.view")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view the AI Operations Copilot.
-        </CardContent>
-      </Card>
-    );
-  }
 
   const [settings, snapshot, profile, openInsights, drafts] = await Promise.all([
     getCopilotSettings(scope),

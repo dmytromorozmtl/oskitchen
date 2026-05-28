@@ -7,10 +7,9 @@ import {
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
 import { COPILOT_TOOLS, COPILOT_TOOL_KEYS } from "@/lib/ai/copilot-tools";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { listActionDrafts } from "@/services/ai/copilot-service";
 
 const STATUS_COLOR: Record<string, string> = {
@@ -28,17 +27,7 @@ export default async function CopilotDraftsPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const formError = readCopilotFormError((await searchParams) ?? {});
-  const actor = await requireWorkspacePermissionActor();
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.view")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view action drafts.
-        </CardContent>
-      </Card>
-    );
-  }
+  const { scope } = await loadCopilotPageActor();
   const canDraft = canUseCopilot(scope, "copilot.actions.draft");
   const canApprove = canUseCopilot(scope, "copilot.actions.approve");
   const drafts = await listActionDrafts(scope);

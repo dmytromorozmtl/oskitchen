@@ -19,6 +19,10 @@ export type PermissionDeniedSurfaceId =
   | "go_live_hub"
   | "crm_customers"
   | "billing_hub"
+  | "copilot_hub"
+  | "copilot_chat"
+  | "copilot_audit"
+  | "copilot_settings"
   | "packing_command"
   | "packing_verify"
   | "production_calendar"
@@ -153,6 +157,42 @@ export const PERMISSION_DENIED_SURFACES: Record<
     primaryLabel: "Back to Today",
     secondaryHref: "/dashboard/settings",
     secondaryLabel: "Settings",
+  },
+  copilot_hub: {
+    id: "copilot_hub",
+    title: "AI Operations Copilot",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/order-hub",
+    secondaryLabel: "Order hub",
+  },
+  copilot_chat: {
+    id: "copilot_chat",
+    title: "Copilot chat",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/copilot",
+    primaryLabel: "Back to copilot",
+    secondaryHref: "/dashboard/today",
+    secondaryLabel: "Back to Today",
+  },
+  copilot_audit: {
+    id: "copilot_audit",
+    title: "Copilot audit log",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/copilot",
+    primaryLabel: "Back to copilot",
+    secondaryHref: "/dashboard/today",
+    secondaryLabel: "Back to Today",
+  },
+  copilot_settings: {
+    id: "copilot_settings",
+    title: "Copilot settings",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/copilot",
+    primaryLabel: "Back to copilot",
+    secondaryHref: "/dashboard/today",
+    secondaryLabel: "Back to Today",
   },
   packing_command: {
     id: "packing_command",

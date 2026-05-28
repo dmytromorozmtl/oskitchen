@@ -1,8 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
 import { COPILOT_SOURCE_KEYS, COPILOT_SOURCE_REGISTRY } from "@/lib/ai/copilot-sources";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 
 const PII_COLOR: Record<string, string> = {
   NONE: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100",
@@ -12,17 +10,7 @@ const PII_COLOR: Record<string, string> = {
 };
 
 export default async function CopilotSourcesPage() {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.view")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view copilot data sources.
-        </CardContent>
-      </Card>
-    );
-  }
+  await loadCopilotPageActor();
   return (
     <div className="space-y-4">
       <header>

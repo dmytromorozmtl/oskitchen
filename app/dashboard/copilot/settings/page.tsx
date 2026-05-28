@@ -2,9 +2,11 @@ import { updateCopilotSettingsFormAction } from "@/actions/copilot";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import {
+  hasCopilotSettingsPageAccess,
+  loadCopilotPageActor,
+} from "@/lib/ux/copilot-page-access-era20";
 import { getCopilotSettings } from "@/services/ai/copilot-service";
 
 export default async function CopilotSettingsPage({
@@ -13,16 +15,9 @@ export default async function CopilotSettingsPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const formError = readCopilotFormError((await searchParams) ?? {});
-  const actor = await requireWorkspacePermissionActor();
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.settings.manage")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to change copilot settings.
-        </CardContent>
-      </Card>
-    );
+  const { scope } = await loadCopilotPageActor();
+  if (!hasCopilotSettingsPageAccess(scope)) {
+    return <PermissionDeniedSurfaceCard surfaceId="copilot_settings" />;
   }
   const s = await getCopilotSettings(scope);
 

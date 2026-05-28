@@ -1,22 +1,10 @@
 import { CopilotInsightCard } from "@/components/dashboard/copilot/insight-card";
 import { Card, CardContent } from "@/components/ui/card";
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { listOpenInsights, persistDeterministicInsights } from "@/services/ai/copilot-service";
 
 export default async function CopilotInsightsPage() {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = createCopilotActorScope(actor);
-  if (!canUseCopilot(scope, "copilot.view")) {
-    return (
-      <Card className="border-border/80 shadow-sm">
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          You do not have permission to view copilot insights.
-        </CardContent>
-      </Card>
-    );
-  }
+  const { scope } = await loadCopilotPageActor();
   await persistDeterministicInsights(scope);
   const insights = await listOpenInsights(scope, 100);
   return (
