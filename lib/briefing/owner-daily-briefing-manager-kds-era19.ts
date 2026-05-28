@@ -60,22 +60,6 @@ export function buildOwnerDailyBriefingManagerKdsActions(
     });
   }
 
-  if (input.packingQueueOpen > 0 && summary.showPriorityLane) {
-    actions.push({
-      id: "manager-packing-kds-handoff",
-      title: "Align packing with KDS urgency",
-      reason: `${input.packingQueueOpen} pack job(s) open while KDS has urgent tickets — coordinate expo handoff.`,
-      severity: "high",
-      ownerRole: "manager",
-      href: "/dashboard/packing",
-      status: "open",
-      unblockCondition: "Expo clears ready tickets before outbound packing backlog grows.",
-      priority: 4,
-      ctaLabel: "Open packing",
-      tone: "urgent",
-    });
-  }
-
   if (input.productionCalendarOverdue > 0) {
     actions.push({
       id: "manager-overdue-production",

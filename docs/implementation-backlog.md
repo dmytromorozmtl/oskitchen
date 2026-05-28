@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-034 — Briefing manager pack ↔ packing QC cross-link (P1 WOW)
+- ID: `KOS-E19-034`
+- Title: Era 19 Workstream B Cycle 34 — manager briefing tile + ranked action deep-link to packing QC checklist when KDS + packing pressure align
+- Module: Owner Daily Briefing / Manager / Packing QC
+- Priority: P1 (WOW pillar — supervisor expo ↔ packing QC handoff honesty when priority lane active)
+- Status: **briefing_manager_packing_qc_crosslink_wired**
+- Decision: `era19-owner-daily-briefing-manager-packing-qc-v1` — supervision tile after KDS priority lane; `#packing-qc-clarity` deep link; packing-status rewire when aligned; no scanner certification claims
+- Evidence: `lib/briefing/owner-daily-briefing-manager-packing-qc-era19.ts`, updated briefing service + manager pack
+- Next: P0 proof unblock when ops credentials available, or permission-denied UX polish on packing/production surfaces
+
 ### KOS-E19-033 — Briefing kitchen pack ↔ packing QC cross-link (P1 WOW)
 - ID: `KOS-E19-033`
 - Title: Era 19 Workstream B Cycle 33 — kitchen briefing tile + ranked action deep-link to packing QC checklist when KDS + packing pressure align

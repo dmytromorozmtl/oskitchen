@@ -100,7 +100,18 @@ describe("buildOwnerDailyBriefingManagerKdsActions", () => {
     expect(actions[0]?.id).toBe("manager-kds-priority-lane");
     expect(actions[0]?.ownerRole).toBe("manager");
     expect(actions[0]?.href).toBe(BRIEFING_KDS_PRIORITY_LANE_HREF);
-    expect(actions.some((action) => action.id === "manager-packing-kds-handoff")).toBe(true);
+  });
+
+  it("does not include packing handoff in base manager kds actions", () => {
+    const actions = buildOwnerDailyBriefingManagerKdsActions({
+      kdsOrders: [allergenPrep],
+      productionCalendarOverdue: 0,
+      productionCalendarDueToday: 2,
+      packingQueueOpen: 2,
+      productionWorkOpen: 0,
+    });
+
+    expect(actions.some((action) => action.id === "manager-packing-kds-handoff")).toBe(false);
   });
 
   it("returns no priority action when queue is steady", () => {

@@ -62,6 +62,11 @@ import {
   mergeBriefingManagerOverrideActions,
 } from "@/lib/briefing/owner-daily-briefing-manager-override-era19";
 import {
+  buildOwnerDailyBriefingManagerPackingQcActions,
+  enrichBriefingManagerPackingQcPackTiles,
+  mergeBriefingManagerPackingQcActions,
+} from "@/lib/briefing/owner-daily-briefing-manager-packing-qc-era19";
+import {
   buildOwnerDailyBriefingOwnerKdsActions,
   enrichBriefingOwnerPackTiles,
   mergeBriefingOwnerKdsTopActions,
@@ -364,9 +369,12 @@ export async function loadOwnerDailyBriefing(
             kdsBriefingInput,
           )
         : rolePack === "manager"
-          ? enrichBriefingManagerOverridePackTiles(
-              enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput),
-              managerOverrideInput,
+          ? enrichBriefingManagerPackingQcPackTiles(
+              enrichBriefingManagerOverridePackTiles(
+                enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput),
+                managerOverrideInput,
+              ),
+              kdsBriefingInput,
             )
           : rolePack === "owner"
             ? enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput)
@@ -427,9 +435,12 @@ export async function loadOwnerDailyBriefing(
             )
           : rolePack === "manager"
             ? mergeBriefingManagerKdsTopActions(
-                mergeBriefingManagerOverrideActions(
-                  buildOwnerDailyBriefingManagerKdsActions(kdsBriefingInput),
-                  buildOwnerDailyBriefingManagerOverrideActions(managerOverrideInput),
+                mergeBriefingManagerPackingQcActions(
+                  mergeBriefingManagerOverrideActions(
+                    buildOwnerDailyBriefingManagerKdsActions(kdsBriefingInput),
+                    buildOwnerDailyBriefingManagerOverrideActions(managerOverrideInput),
+                  ),
+                  buildOwnerDailyBriefingManagerPackingQcActions(kdsBriefingInput),
                 ),
                 pickOwnerDailyBriefingTopActions({
                   blockers: today.blockers,
