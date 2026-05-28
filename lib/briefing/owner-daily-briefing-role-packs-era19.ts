@@ -45,6 +45,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
     "packing-status",
   ],
   cashier: [
+    "pos-terminal-register",
     "pos-open-shifts",
     "pos-transactions-today",
     "orders-today",
@@ -66,7 +67,7 @@ export const BRIEFING_ROLE_PACK_ACTION_ROLES: Record<
   owner: ["owner", "manager", "kitchen", "support"],
   manager: ["manager", "kitchen", "owner"],
   kitchen: ["kitchen", "manager"],
-  cashier: ["manager"],
+  cashier: ["cashier", "manager"],
   support_admin: ["support"],
 };
 
@@ -82,7 +83,8 @@ export const BRIEFING_ROLE_PACK_HEADLINE: Record<BriefingRolePack, string> = {
   owner: "Leadership priorities — revenue, pilot readiness, integrations, and blockers.",
   manager: "Shift operations — labor, kitchen pressure, packing, and today's orders.",
   kitchen: "Line priorities — KDS pressure, production batches, and packing handoff.",
-  cashier: "Register focus — open shifts, POS activity, and order lookups.",
+  cashier:
+    "Register focus — speed-mode terminal, open shifts, POS activity, and order lookups.",
   support_admin:
     "Support triage — workspace blockers, P0 proof, pilot GO/NO-GO, and open tickets.",
 };

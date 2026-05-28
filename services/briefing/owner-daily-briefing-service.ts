@@ -32,6 +32,11 @@ import {
   buildOwnerDailyBriefingSupportAdminTiles,
 } from "@/lib/briefing/owner-daily-briefing-support-admin-era19";
 import {
+  buildOwnerDailyBriefingCashierActions,
+  enrichBriefingCashierPackTiles,
+  mergeBriefingCashierTopActions,
+} from "@/lib/briefing/owner-daily-briefing-cashier-era19";
+import {
   buildOwnerDailyBriefingRiskRadarSlice,
   summarizeOwnerDailyBriefingRiskRadar,
   type OwnerDailyBriefingRiskRadarSlice,
@@ -253,7 +258,13 @@ export async function loadOwnerDailyBriefing(
     posShift: { openCount: openPosShifts },
   };
 
-  const allTiles =
+  const cashierInput = {
+    openShiftCount: openPosShifts,
+    posTransactionsToday: today.kpis.posTransactionsToday,
+    blockedOrdersApprox: today.kpis.blockedOrdersApprox,
+  };
+
+  const baseTiles =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminTiles({
           blockers: today.blockers,
@@ -262,6 +273,10 @@ export async function loadOwnerDailyBriefing(
           commercialOps,
         })
       : buildOwnerDailyBriefingTiles(briefingInput);
+  const allTiles =
+    rolePack === "cashier"
+      ? enrichBriefingCashierPackTiles(baseTiles, cashierInput)
+      : baseTiles;
   const allAlerts =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminAlerts({
@@ -282,16 +297,30 @@ export async function loadOwnerDailyBriefing(
           openSupportTickets: today.kpis.openSupportTickets,
           commercialOps,
         })
-      : pickOwnerDailyBriefingTopActions({
-          blockers: today.blockers,
-          alerts: allAlerts,
-          readinessOverall: today.readiness.overall,
-          kpis: today.kpis,
-          pilotAttentionCount: pilotSummary.totalSignals,
-          integrationOverall: briefingInput.integrationOverall,
-          lowStockCount: lowStock.lowStockCount,
-          productionCalendarActions,
-        });
+      : rolePack === "cashier"
+        ? mergeBriefingCashierTopActions(
+            buildOwnerDailyBriefingCashierActions(cashierInput),
+            pickOwnerDailyBriefingTopActions({
+              blockers: today.blockers,
+              alerts: allAlerts,
+              readinessOverall: today.readiness.overall,
+              kpis: today.kpis,
+              pilotAttentionCount: pilotSummary.totalSignals,
+              integrationOverall: briefingInput.integrationOverall,
+              lowStockCount: lowStock.lowStockCount,
+              productionCalendarActions,
+            }),
+          )
+        : pickOwnerDailyBriefingTopActions({
+            blockers: today.blockers,
+            alerts: allAlerts,
+            readinessOverall: today.readiness.overall,
+            kpis: today.kpis,
+            pilotAttentionCount: pilotSummary.totalSignals,
+            integrationOverall: briefingInput.integrationOverall,
+            lowStockCount: lowStock.lowStockCount,
+            productionCalendarActions,
+          });
 
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
   const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);

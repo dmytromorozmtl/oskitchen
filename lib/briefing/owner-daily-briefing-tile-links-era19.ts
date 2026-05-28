@@ -1,3 +1,4 @@
+import { BRIEFING_CASHIER_POS_SPEED_TERMINAL_HREF } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { BriefingRolePack } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import type {
@@ -140,6 +141,9 @@ export function resolveBriefingTileCanonicalHref(
   ) {
     return fallbackHref;
   }
+  if (tileId === "pos-terminal-register") {
+    return fallbackHref;
+  }
   return briefingTileLinkDefinition(tileId)?.href ?? fallbackHref;
 }
 
@@ -224,6 +228,12 @@ export function auditBriefingTileLinks(tiles: readonly OwnerDailyBriefingTile[])
     }
     if (tile.id === "stuck-orders" && tile.href !== "/dashboard/order-hub") {
       issues.push(`${tile.id}: must link to order hub`);
+    }
+    if (
+      tile.id === "pos-terminal-register" &&
+      !tile.href.startsWith("/dashboard/pos/terminal")
+    ) {
+      issues.push(`${tile.id}: must link to POS terminal`);
     }
   }
 

@@ -12,6 +12,7 @@ import {
   resolveBriefingTileCanonicalHref,
   resolveBriefingTileLinkState,
 } from "@/lib/briefing/owner-daily-briefing-tile-links-era19";
+import { BRIEFING_CASHIER_POS_SHIFTS_HREF } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
 import { filterBriefingTilesForRolePack } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 
@@ -125,6 +126,16 @@ describe("owner-daily-briefing-tile-links-era19", () => {
     ]);
     expect(tile.href).toBe(dynamicHref);
     expect(tile.whyItMatters).toBe(BRIEFING_TILE_LINK_DEFINITIONS["production-calendar-today"].whyItMatters);
+  });
+
+  it("preserves shift-aware POS terminal href for cashier tile", () => {
+    expect(
+      resolveBriefingTileCanonicalHref(
+        "pos-terminal-register",
+        BRIEFING_CASHIER_POS_SHIFTS_HREF,
+        "available",
+      ),
+    ).toBe(BRIEFING_CASHIER_POS_SHIFTS_HREF);
   });
 
   it("resolves canonical href from registry with fallback", () => {

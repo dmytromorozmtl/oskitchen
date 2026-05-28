@@ -54,7 +54,12 @@ export type OwnerDailyBriefingNextAction = {
 
 export type OwnerDailyBriefingActionSeverity = "critical" | "high" | "normal" | "low";
 
-export type OwnerDailyBriefingActionRole = "owner" | "manager" | "kitchen" | "support";
+export type OwnerDailyBriefingActionRole =
+  | "owner"
+  | "manager"
+  | "kitchen"
+  | "cashier"
+  | "support";
 
 export type OwnerDailyBriefingRankedAction = {
   id: string;

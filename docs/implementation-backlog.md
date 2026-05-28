@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-018 — Briefing cashier pack POS speed mode integration (P1 WOW)
+- ID: `KOS-E19-018`
+- Title: Era 19 Workstream B Cycle 18 — cashier briefing tile + ranked actions deep-link to POS speed mode
+- Module: Owner Daily Briefing / POS / Cashier UX
+- Priority: P1 (WOW pillar — cashier command center + Cycle 17 speed mode connection)
+- Status: **cashier_briefing_speed_mode_wired**
+- Decision: `era19-owner-daily-briefing-cashier-v1` — `pos-terminal-register` tile routes to `/dashboard/pos/terminal?speed=1` when shift open; cashier-ranked actions for open shift, register, closeout, stuck orders; `cashier` action role
+- Evidence: `lib/briefing/owner-daily-briefing-cashier-era19.ts`, updated briefing service + role packs + tile links
+- Next: P0 proof unblock when ops credentials available, or POS closeout clarity polish
+
 ### KOS-E19-017 — POS cashier speed mode (P1 operator speed)
 - ID: `KOS-E19-017`
 - Title: Era 19 Workstream E Cycle 17 — POS terminal speed mode with category pills and checkout-first layout

@@ -13,6 +13,7 @@ import {
   shouldShowBriefingProductionCalendarLane,
 } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import { buildOwnerDailyBriefingTiles } from "@/lib/briefing/owner-daily-briefing-era19";
+import { enrichBriefingCashierPackTiles } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
 import type {
   OwnerDailyBriefingAlert,
   OwnerDailyBriefingRankedAction,
@@ -94,8 +95,13 @@ describe("owner daily briefing role packs era19", () => {
   });
 
   it("filters cashier pack to POS-focused tiles", () => {
-    const tiles = buildOwnerDailyBriefingTiles(baseInput);
+    const tiles = enrichBriefingCashierPackTiles(buildOwnerDailyBriefingTiles(baseInput), {
+      openShiftCount: baseInput.posShift.openCount,
+      posTransactionsToday: baseInput.kpis.posTransactionsToday,
+      blockedOrdersApprox: baseInput.kpis.blockedOrdersApprox,
+    });
     const cashierTiles = filterBriefingTilesForRolePack(tiles, "cashier");
+    expect(cashierTiles.some((tile) => tile.id === "pos-terminal-register")).toBe(true);
     expect(cashierTiles.some((tile) => tile.id === "pos-open-shifts")).toBe(true);
     expect(cashierTiles.some((tile) => tile.id === "pos-transactions-today")).toBe(true);
     expect(cashierTiles.some((tile) => tile.id === "revenue-snapshot")).toBe(false);
