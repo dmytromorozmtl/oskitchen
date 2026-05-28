@@ -2,9 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { GoLiveProjectNextStepHeroCard } from "@/components/dashboard/go-live/go-live-project-next-step-hero";
+import { GoLiveSecondarySignalsPanel } from "@/components/dashboard/go-live/go-live-secondary-signals-panel";
 import { ApprovalButtons } from "@/components/dashboard/go-live/approval-buttons";
-import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
-import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
 import { GoLiveChecklistAttentionStrip } from "@/components/dashboard/go-live/go-live-checklist-attention-strip";
 import { GoLiveChecklistNextAction } from "@/components/dashboard/go-live/go-live-checklist-next-action";
 import { GoLiveBlockerNextAction } from "@/components/dashboard/go-live/go-live-blocker-next-action";
@@ -157,6 +156,13 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
 
       <GoLiveProjectNextStepHeroCard hero={nextStepHero} />
 
+      <GoLiveSecondarySignalsPanel
+        hero={nextStepHero}
+        pilotReadiness={pilotReadiness}
+        focus={goLiveFocus}
+        blockers={blockers}
+      />
+
       <GoLiveKpiGrid
         tiles={{
           readiness: snapshot.validation.readiness.score,
@@ -171,10 +177,6 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           approvalsPending,
         }}
       />
-
-      <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} variant="go-live" />
-
-      <GoLiveAttentionStrip focus={goLiveFocus} blockers={blockers} />
 
       <Card>
         <CardHeader>

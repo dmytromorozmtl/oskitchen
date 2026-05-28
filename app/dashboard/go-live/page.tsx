@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { GoLiveProjectNextStepHeroCard } from "@/components/dashboard/go-live/go-live-project-next-step-hero";
+import { GoLiveSecondarySignalsPanel } from "@/components/dashboard/go-live/go-live-secondary-signals-panel";
 import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { GoLiveKpiGrid } from "@/components/dashboard/go-live/kpi-grid";
 import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
@@ -282,9 +283,12 @@ export default async function GoLivePage() {
 
       <GoLiveProjectNextStepHeroCard hero={nextStepHero} />
 
-      <ImplementationPilotReadinessAttentionStrip model={primaryPilotReadiness} variant="go-live" />
-
-      <GoLiveAttentionStrip focus={goLiveFocus} blockers={snapshot.validation.blockers} />
+      <GoLiveSecondarySignalsPanel
+        hero={nextStepHero}
+        pilotReadiness={primaryPilotReadiness}
+        focus={goLiveFocus}
+        blockers={snapshot.validation.blockers}
+      />
 
       <GoLiveKpiGrid
         tiles={{

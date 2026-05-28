@@ -103,6 +103,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **go_live_project_next_step_hero_wired**
 - Decision: `era18-go-live-project-next-step-v1` — merges blockers, pilot readiness, checklist, and approvals into one hero CTA
 - Evidence: `lib/go-live/go-live-project-next-step-focus-era18.ts`, `components/dashboard/go-live/go-live-project-next-step-hero.tsx`, `tests/unit/go-live-project-next-step-focus-era18.test.ts`
+- Next: Go-live command center progress ring + collapsed strips when hero active
+
+### KOS-E18-060 — Go-live command center progress + collapse (P0)
+- ID: `KOS-E18-060`
+- Title: Era 18 Workstream P Cycle 60 — readiness progress ring + collapsed secondary strips when hero active
+- Module: Go-live / Operator UX
+- Priority: P1 (operator clarity — reduce launch page noise after Cycle 59 hero)
+- Status: **go_live_command_center_progress_collapse_wired**
+- Decision: `era18-go-live-command-center-focus-v1` — progress ring on hero; pilot + launch strips collapse behind details when next-step hero shows
+- Evidence: `lib/go-live/go-live-command-center-focus-era18.ts`, `components/dashboard/go-live/go-live-secondary-signals-panel.tsx`, `tests/unit/go-live-command-center-focus-era18.test.ts`
 - Next: P0 staging proof ops run when vault credentials available; re-run smoke:pilot-gono-go after proof
 
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)

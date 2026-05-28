@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, Rocket } from "lucide-react";
 
+import { GoLiveReadinessProgressRing } from "@/components/dashboard/go-live/go-live-readiness-progress-ring";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { goLiveReadinessProgressTone } from "@/lib/go-live/go-live-command-center-focus-era18";
 import type { GoLiveProjectNextStepHero } from "@/lib/go-live/go-live-project-next-step-focus-era18";
 
 function cardClass(tone: GoLiveProjectNextStepHero["tone"]): string {
@@ -19,17 +21,23 @@ export function GoLiveProjectNextStepHeroCard(props: { hero: GoLiveProjectNextSt
   if (!props.hero) return null;
 
   const { hero } = props;
+  const progressTone = goLiveReadinessProgressTone(hero.readinessScore);
 
   return (
     <Card className={cardClass(hero.tone)} data-testid="go-live-project-next-step-hero">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <Rocket className="h-5 w-5 text-muted-foreground" aria-hidden />
-          Next launch action
-        </CardTitle>
-        <CardDescription>
-          {hero.readinessScore}% readiness — one step at a time before cutover.
-        </CardDescription>
+        <div className="flex items-start gap-4">
+          <GoLiveReadinessProgressRing score={hero.readinessScore} tone={progressTone} />
+          <div className="min-w-0 flex-1">
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Rocket className="h-5 w-5 text-muted-foreground" aria-hidden />
+              Next launch action
+            </CardTitle>
+            <CardDescription className="mt-1">
+              One prioritized step before cutover — expand additional signals below when needed.
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="rounded-xl border border-border/70 bg-background/80 px-3 py-3">
