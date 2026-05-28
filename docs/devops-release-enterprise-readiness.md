@@ -38,6 +38,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - CI `quality` job runs `validate:production-crons` and `validate:cron-inventory` (both include `tests/unit/cron-hygiene-live.test.ts`)
 - CI `quality` job runs `npm run test:ci:governance-bundles` (doc canon, public API v1 contracts, nav maturity, integration honesty, commercial pilot runbook) and `npm run test:ci:rbac-wave3` (Era 3 costing/purchasing/export platform RBAC gates)
 - **Paid pilot GO/NO-GO:** [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) (`era7-commercial-pilot-runbooks-v1`); cert `test:ci:commercial-pilot-runbook:cert`
+- **Pilot preflight marketing strict:** `scripts/ops/pilot-preflight.sh` runs `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` (`era8-pilot-preflight-claims-strict-v1`); cert `test:ci:pilot-preflight-claims:cert`
 - local focused bundle: `npm run test:ci:cron-hygiene`
 - production schedule: **16** allowlisted slugs; experimental routes require `ENABLE_EXPERIMENTAL_CRONS` in production
 

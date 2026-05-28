@@ -39,14 +39,15 @@ Record: commit SHA, date, PASS/FAIL. If governance bundles fail, **do not** star
 ## Tier 1 — Staging environment readiness
 
 ```bash
-npm run verify-claims
+MARKETING_CLAIMS_STRICT=1 npm run verify-claims
 npm run audit:marketing-claims
 npm run verify:staging-env
+bash scripts/ops/pilot-preflight.sh
 ```
 
 | Check | Pass criteria |
 |-------|----------------|
-| Marketing claims | `verify-claims` + `audit:marketing-claims` — live copy scan (`era7-marketing-claims-governance-v1`) and `config/marketing/claims-registry.json` (`era8-claims-registry-v1`; no `needs-evidence` rows) |
+| Marketing claims | `MARKETING_CLAIMS_STRICT=1 verify-claims` + `audit:marketing-claims` — live copy scan (`era7-marketing-claims-governance-v1`); pilot preflight enforces strict mode (`era8-pilot-preflight-claims-strict-v1`); registry (`era8-claims-registry-v1`; no `needs-evidence` rows) |
 | Staging env | `verify:staging-env` exit 0 |
 | Workspace scope | `npm run workspace:backfill:status` exit 0 (if migration pilot) |
 | Nav honesty | Preview/placeholder routes show badges (`era4-page-maturity-sweep-v1`) |

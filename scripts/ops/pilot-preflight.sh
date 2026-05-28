@@ -32,7 +32,8 @@ step npx prisma validate
 step tsx scripts/validate-production-crons.ts
 step "$NPM" run validate:cron-inventory
 step "$NPM" run validate:tenant-scope-pilot
-step "$NPM" run verify-claims
+# era8-pilot-preflight-claims-strict-v1 — roadmap terms fail in paid pilot gate
+step env MARKETING_CLAIMS_STRICT=1 "$NPM" run verify-claims
 
 if [[ "${SKIP_BUILD:-}" == "1" ]]; then
   echo "SKIP build (SKIP_BUILD=1)"

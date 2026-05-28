@@ -129,6 +129,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ### 8c4d. Marketing claims governance (Era 7 Cycle 4)
 - policy: `lib/governance/marketing-claims-governance-policy.ts` (`era7-marketing-claims-governance-v1`)
 - scan: `npm run verify-claims` (forbidden phrases exit 1; roadmap terms warn unless `MARKETING_CLAIMS_STRICT=1`)
+- pilot preflight: `scripts/ops/pilot-preflight.sh` runs strict `verify-claims` (`era8-pilot-preflight-claims-strict-v1`); cert `test:ci:pilot-preflight-claims:cert`
 - registry: `config/marketing/claims-registry.json`; audit `npm run audit:marketing-claims`
 - wiring cert: `test:ci:marketing-claims-governance:cert` (in `test:ci:governance-bundles`)
 

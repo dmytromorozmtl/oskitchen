@@ -40,6 +40,12 @@ export const COMMERCIAL_PILOT_TIER1_COMMANDS = [
 export const COMMERCIAL_PILOT_MARKETING_CLAIMS_POLICY_ID =
   "era7-marketing-claims-governance-v1" as const;
 
+/** Pilot deploy preflight runs verify-claims in strict mode (Era 8 Cycle 3). */
+export const COMMERCIAL_PILOT_PREFLIGHT_CLAIMS_POLICY_ID =
+  "era8-pilot-preflight-claims-strict-v1" as const;
+
+export const COMMERCIAL_PILOT_PREFLIGHT_SCRIPT = "scripts/ops/pilot-preflight.sh" as const;
+
 export const COMMERCIAL_PILOT_MONEY_PATH_COMMANDS = [
   "npm run test:ci:storefront-money-path:cert",
   "npm run test:ci:pos-money-path:cert",

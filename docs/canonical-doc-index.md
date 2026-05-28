@@ -135,6 +135,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **Claims registry governance** | `era8-claims-registry-v1`; `test:ci:claims-registry:cert` |
 | **2** | **KDS Realtime E2E staging scope** | `era8-kds-realtime-e2e-staging-v1`; Tier E checklist; not in default CI |
+| **3** | **Pilot preflight strict claims** | `era8-pilot-preflight-claims-strict-v1`; `pilot-preflight.sh` + `test:ci:pilot-preflight-claims:cert` |
 
 ## Evolution Era 7 cycle ledger
 
@@ -347,3 +348,4 @@ Incremental refresh after Era 7 cycles 1–4 (commercial readiness from era6 han
 | 2026-05-27 | Era 7 Cycle 5: scorecard refresh 92/100 + `next-master-prompt-input-2026-05-27-era7.md` |
 | 2026-05-27 | Era 8 Cycle 1: `era8-claims-registry-v1` — zero `needs-evidence` rows in claims registry |
 | 2026-05-27 | Era 8 Cycle 2: `era8-kds-realtime-e2e-staging-v1` — honest staging-only Realtime E2E scope |
+| 2026-05-27 | Era 8 Cycle 3: `era8-pilot-preflight-claims-strict-v1` — strict `verify-claims` in paid pilot preflight |

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 8 — Operator depth / GTM hygiene
 
+### KOS-E8-003 — Pilot preflight strict marketing claims (P1)
+- ID: `KOS-E8-003`
+- Title: Enforce `MARKETING_CLAIMS_STRICT=1` in paid pilot preflight
+- Module: GTM / DevOps / commercial
+- Priority: P1 (Era 8 Cycle 3)
+- Status: **completed**
+- Decision: `era8-pilot-preflight-claims-strict-v1` — `pilot-preflight.sh` fails on unqualified roadmap terms; default CI `verify-claims` remains warn-only
+- Evidence: `lib/governance/pilot-preflight-claims-policy.ts`, `scripts/ops/pilot-preflight.sh`, `test:ci:pilot-preflight-claims:cert`
+- Next: production-calendar `movePlanTaskAction` UI wiring or Era 8 scorecard refresh
+
 ### KOS-E8-002 — KDS Realtime Playwright E2E staging scope (P1)
 - ID: `KOS-E8-002`
 - Title: Document staging-only Realtime E2E; forbid default CI false confidence
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era8-kds-realtime-e2e-staging-v1` — Tier E checklist; no Playwright spec in repo; not in `ci.yml` default jobs
 - Evidence: `lib/kitchen/kds-realtime-e2e-staging-policy.ts`, `docs/kds-staging-smoke-checklist.md`, `test:ci:kds-realtime-e2e-staging:cert`
-- Next: add `e2e/kds-realtime-*.spec.ts` only with explicit era decision, or pilot-preflight strict claims
+- Next: add `e2e/kds-realtime-*.spec.ts` only with explicit era decision
 
 ### KOS-E8-001 — Claims registry governance (P1)
 - ID: `KOS-E8-001`

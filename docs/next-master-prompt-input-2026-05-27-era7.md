@@ -30,6 +30,7 @@ All four Era 7 commercial-readiness cycles from era6 prompt input **completed** 
 |-------|---------|
 | **1** | **Claims registry cleanup** — `era8-claims-registry-v1`; zero `needs-evidence` rows; `test:ci:claims-registry:cert` |
 | **2** | **KDS Realtime E2E staging scope** — `era8-kds-realtime-e2e-staging-v1`; Tier E; not in default CI |
+| **3** | **Pilot preflight strict claims** — `era8-pilot-preflight-claims-strict-v1`; `MARKETING_CLAIMS_STRICT=1` in `pilot-preflight.sh` |
 
 ## 3. What Remains Open (P0 for Era 8 consideration)
 
@@ -64,7 +65,7 @@ Pick **one theme per cycle**; do not reopen Era 4–7 unless regression proven.
 
 ## 6. CI / Governance Facts
 
-- Default quality job: `npm run test:ci:governance-bundles` (25 `:cert` gates incl. `kds-realtime-e2e-staging` + unit bundles).
+- Default quality job: `npm run test:ci:governance-bundles` (26 `:cert` gates incl. `pilot-preflight-claims` + `kds-realtime-e2e-staging` + unit bundles).
 - Scorecard cert: `npm run test:ci:scorecard:cert` (era4 + era5 + era6 + era7 policy tests; must stay last).
 - Commercial pilot: `test:ci:commercial-pilot-runbook:cert`; Tier 1 includes `verify-claims`.
 - Storefront money path: pay-later always-on; Stripe browser optional — `storefront-stripe-e2e-summary` artifact.
