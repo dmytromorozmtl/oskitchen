@@ -43,6 +43,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: 121 slugs in `archive/cron-routes/`, `config/cron-archive-manifest.json`, `test:ci:cron-hygiene:cert` includes `cron-archive-era4-cert-live`
 - Ops restore: `npm run cron:restore:archived -- --execute` (see `docs/CRON_ARCHIVE_RUNBOOK.md`)
 
+### KOS-E4-005 — Woo / Shopify golden path proof
+- ID: `KOS-E4-005`
+- Title: Certify external order ingest path without overclaiming full integration live ops
+- Module: Integrations / channels / order hub
+- Priority: P0 (Era 4 Cycle 5)
+- Status: **completed**
+- Decision: `era4-channel-golden-path-v1` — webhook/sync normalize → `externalOrder` → channel import staging → order hub external visibility; kitchen Order auto-create **not** certified
+- Evidence: `lib/integrations/channel-golden-path-policy.ts`, `tests/fixtures/channel-golden-path/`, `test:ci:channel-golden-path`, `test:ci:channel-golden-path:cert` (in `test:ci:governance-bundles`), `scripts/smoke-woo-shopify-certification.ts` for staging/live store
+- Next: RBAC wave 4 batch 2 or typecheck slices
+
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
 - ID: `KOS-P0-001`

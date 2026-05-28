@@ -67,6 +67,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:integration-honesty` (in `test:ci:governance-bundles`)
 - UI: `components/channels/channel-card.tsx`, `app/dashboard/sales-channels/available/page.tsx`
 
+### 8c2. Woo / Shopify golden path (Era 4 Cycle 5)
+- policy: `lib/integrations/channel-golden-path-policy.ts` (`era4-channel-golden-path-v1`)
+- wiring cert: `test:ci:channel-golden-path:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:channel-golden-path` — normalize fixtures, webhook processors → `externalOrder` + channel import staging (mocked), channel certification + webhook signatures
+- honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
+- staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
+
 ### 8d. Public API v1 contracts
 - routes: `app/api/public/v1/` (orders, products, customers, inventory, locations, recipes, staff, webhooks)
 - guard: `lib/api-public/guard.ts` (401 without auth, 429 rate limit, 503 when rate limit misconfigured)

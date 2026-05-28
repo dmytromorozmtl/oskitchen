@@ -173,6 +173,17 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:integration-honesty:cert` + `test:ci:integration-honesty` chained in `test:ci:governance-bundles`.
 
+## Tier 1e2 — Woo / Shopify golden path (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Channel golden-path wiring cert | `npm run test:ci:channel-golden-path:cert` | Policy id `era4-channel-golden-path-v1`, scripts, fixtures, honest scope in matrix + maturity |
+| Channel golden-path unit | `npm run test:ci:channel-golden-path` | Normalize → webhook processor → `externalOrder` + channel import staging (mocked); channel certification + webhook signature helpers |
+
+**Golden-path policy (Era 4 Cycle 5):** `lib/integrations/channel-golden-path-policy.ts`. Certifies webhook → normalized order → `externalOrder` → channel import batch/record → order hub visibility via `externalOrder` list. **Does not certify** automatic kitchen `Order` creation from Woo/Shopify webhooks (`kitchenOrderAutoCreateFromWebhook: false`). Staging/live store proof: `npx tsx scripts/smoke-woo-shopify-certification.ts` (optional `--skip-live`).
+
+**Wiring certification (tier 0):** `test:ci:channel-golden-path:cert` + `test:ci:channel-golden-path` chained in `test:ci:governance-bundles` after integration honesty.
+
 ## Tier 1f — Doc canon (`quality` job via governance bundles)
 
 | Suite | Command | Notes |
