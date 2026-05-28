@@ -1,5 +1,6 @@
 import type { UserRole } from "@prisma/client";
 
+import { augmentPilotIntegrationHealthStripWithLiveProof } from "@/lib/integrations/pilot-integration-health-live-proof-era18";
 import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import { getServerEnv } from "@/lib/env";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -7,11 +8,13 @@ import type { PermissionKey } from "@/lib/permissions/permissions";
 import { prisma } from "@/lib/prisma";
 import { getCachedWebhookEventListWhere } from "@/lib/scope/cached-workspace-resource-scope";
 import {
+  listChannelPilotLiveProofSlices,
   listIntegrationHealthCards,
   summarizeIntegrationHealth,
   type IntegrationHealthCard,
   type IntegrationHealthSummary,
 } from "@/services/developer/integration-health-service";
+import type { PilotIntegrationLiveProofRow } from "@/lib/integrations/pilot-integration-health-live-proof-era18";
 
 export type PilotIntegrationHealthStripModel = {
   overall: IntegrationHealthSummary["overall"];
@@ -28,6 +31,8 @@ export type PilotIntegrationHealthStripModel = {
     lastSyncLabel: string;
     hasError: boolean;
   }>;
+  liveProofRows: PilotIntegrationLiveProofRow[];
+  hasLiveProofAttention: boolean;
 };
 
 export function formatPilotIntegrationLastSync(lastSyncAt: Date | null, now = Date.now()): string {
@@ -71,6 +76,8 @@ export function buildPilotIntegrationHealthStripModel(input: {
       lastSyncLabel: formatPilotIntegrationLastSync(card.lastSyncAt, now.getTime()),
       hasError: Boolean(card.lastError?.trim()) || card.status === "ERROR",
     })),
+    liveProofRows: [],
+    hasLiveProofAttention: false,
   };
 }
 
@@ -93,11 +100,12 @@ export async function loadPilotIntegrationHealthStripModelForWorkspace(
 ): Promise<PilotIntegrationHealthStripModel> {
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [healthCards, failedWebhookCount] = await Promise.all([
+  const [healthCards, failedWebhookCount, liveProofSlices] = await Promise.all([
     listIntegrationHealthCards(dataUserId),
     prisma.webhookEvent.count({
       where: { AND: [webhookWhere, { processed: false }] },
     }),
+    listChannelPilotLiveProofSlices(dataUserId),
   ]);
   const stripeConfigured = Boolean(
     env.STRIPE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim(),
@@ -107,9 +115,12 @@ export async function loadPilotIntegrationHealthStripModelForWorkspace(
     stripe: stripeConfigured,
     email: emailConfigured,
   });
-  return buildPilotIntegrationHealthStripModel({
-    summary,
-    cards: healthCards,
-    failedWebhookCount,
-  });
+  return augmentPilotIntegrationHealthStripWithLiveProof(
+    buildPilotIntegrationHealthStripModel({
+      summary,
+      cards: healthCards,
+      failedWebhookCount,
+    }),
+    liveProofSlices,
+  );
 }

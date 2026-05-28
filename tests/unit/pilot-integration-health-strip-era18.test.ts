@@ -55,6 +55,8 @@ describe("pilot integration health strip era18", () => {
     expect(model.failedWebhookCount).toBe(2);
     expect(model.connections).toHaveLength(2);
     expect(model.connections[1]?.hasError).toBe(true);
+    expect(model.liveProofRows).toEqual([]);
+    expect(model.hasLiveProofAttention).toBe(false);
   });
 
   it("shows strip for owners, managers, and integration readers", () => {

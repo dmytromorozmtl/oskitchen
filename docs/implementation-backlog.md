@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-047 — Pilot integration health live proof on Today (P0)
+- ID: `KOS-E18-047`
+- Title: Era 18 Workstream C Cycle 47 — Woo/Shopify live proof rows on Today/operator-home pilot strip
+- Module: Integrations / Today command center
+- Priority: P0 (pilot deployment visibility — manager landing parity with integration health)
+- Status: **pilot_integration_health_live_proof_wired**
+- Decision: `era18-pilot-integration-health-live-proof-v1` — extends Today strip with live proof rows + headline; does not claim live PASS
+- Evidence: `lib/integrations/pilot-integration-health-live-proof-era18.ts`, `components/dashboard/pilot-integration-health-strip.tsx`, `loadPilotIntegrationHealthStripModelForWorkspace`
+- Next: Ops configures channel smoke env vars; run `npm run smoke:woo-shopify-live` for proof_passed artifact
+
 ### KOS-E18-046 — Integration health live proof operator UX (P0)
 - ID: `KOS-E18-046`
 - Title: Era 18 Workstream C Cycle 46 — Woo/Shopify live proof status on integration health dashboard
