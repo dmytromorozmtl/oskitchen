@@ -21,6 +21,25 @@ What it does not yet have is a single canonical capability system that covers th
 - No hardcoded email allowlists.
 - No duplication of permission logic across route families.
 
+## 2a. Unified mutation access narrative (Era 4 Cycle 11)
+
+Policy id: `era4-mutation-access-consolidation-v1` (`lib/permissions/mutation-access-policy.ts`).
+
+**Server mutation flow (canonical):**
+
+1. Resolve workspace actor via `requireWorkspacePermissionActor()` (tenant scope first).
+2. Assert canonical capability via `requireMutationPermission(permissionKey)` in `lib/permissions/mutation-access.ts` (legacy matrix fallback only inside this adapter).
+3. Domain modules expose **named helpers** — e.g. `requireRouteMutation`, `requireCrmMutation`, `requireStorefrontManageActor` — that wrap step 2, add denial audits, and optional domain lookups.
+4. UI mirrors grants via `lib/permissions/resolve-ui-permissions.ts`; UI never replaces server checks.
+
+**Registry:** `lib/permissions/domain-mutation-registry.ts` lists domain helpers, canonical permission keys, Era 4 wave-4 surfaces, and documented exceptions (Copilot capability matrix, feedback session-only, platform roles).
+
+**Shared denial audit:** `logDomainMutationDenied` in `lib/permissions/log-domain-mutation-denied.ts` — used by wave-4 logistics/demo/FOH helpers to avoid duplicated `recordAuditLog` wiring.
+
+**CI:** `npm run test:ci:mutation-access-consolidation` + `test:ci:mutation-access-consolidation:cert` in `test:ci:governance-bundles`. Wave-4 action RBAC remains in `test:ci:rbac-wave4`.
+
+**Not consolidated in Cycle 11:** Copilot (`requireCopilotMutation`), per-domain audit services (CRM, kitchen), or platform GTM bridges — listed as documented exceptions in the registry.
+
 ## 3. Canonical Roles
 ### Workspace roles
 - Owner

@@ -99,7 +99,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-kds-staging-smoke-v1` — automated queue→bump in `test:ci:kds-v1:integration`; staging checklist + `smoke:kds-daily`; **not** rush-hour or realtime Playwright certified
 - Evidence: `lib/kitchen/kds-staging-smoke-policy.ts`, `docs/kds-staging-smoke-checklist.md`, `test:ci:kds-staging-smoke:cert`
-- Next: nav/page maturity sweep or permission helper consolidation
+- Next: nav/page maturity sweep
+
+### KOS-E4-011 — Permission helper consolidation
+- ID: `KOS-E4-011`
+- Title: Domain mutation registry + shared denial audit for wave-4 helpers
+- Module: Platform / security
+- Priority: P0 (Era 4 Cycle 11)
+- Status: **completed**
+- Decision: `era4-mutation-access-consolidation-v1` — canonical narrative in `docs/rbac-permission-architecture.md`; registry at `lib/permissions/domain-mutation-registry.ts`; `logDomainMutationDenied` adopted by routes/demo/restaurant-table helpers
+- Evidence: `test:ci:mutation-access-consolidation`, `test:ci:mutation-access-consolidation:cert`
+- Next: nav/page maturity sweep
 
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations

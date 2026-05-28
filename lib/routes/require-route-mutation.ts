@@ -1,4 +1,4 @@
-import { recordAuditLog } from "@/lib/audit-log";
+import { logDomainMutationDenied } from "@/lib/permissions/log-domain-mutation-denied";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
@@ -12,15 +12,11 @@ export async function requireRouteMutation(input?: {
   const operation = input?.operation ?? "routes.mutate";
   const access = await requireMutationPermission("routes.manage");
   if (!access.ok) {
-    await recordAuditLog({
-      userId: access.actor?.sessionUserId ?? null,
-      workspaceId: access.actor?.workspaceId ?? null,
+    await logDomainMutationDenied({
       action: "routes.permission_denied",
       entityType: "DeliveryRoute",
-      metadata: {
-        operation,
-        requiredPermission: "routes.manage",
-      },
+      actor: access.actor,
+      metadata: { operation, requiredPermission: "routes.manage" },
     });
     return { ok: false, error: access.error };
   }

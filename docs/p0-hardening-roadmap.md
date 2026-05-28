@@ -299,6 +299,12 @@ Priority rule:
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
 - **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
 
+## Era 4 — Permission helper consolidation (Cycle 11)
+
+- **Completed (2026-05-27):** `era4-mutation-access-consolidation-v1` — domain mutation registry, unified RBAC narrative, shared `logDomainMutationDenied` for wave-4 canonical helpers.
+- **Evidence:** `npm run test:ci:mutation-access-consolidation`, `npm run test:ci:mutation-access-consolidation:cert`.
+- **Residual:** Copilot capability matrix and feedback session gate remain documented exceptions; broader helper migration deferred.
+
 ## Era 4 — KDS staging operational smoke (Cycle 10)
 
 - **Completed (2026-05-27):** `era4-kds-staging-smoke-v1` — CI certifies daily queue→bump integration + policy wiring; `docs/kds-staging-smoke-checklist.md` for manual staging UI; `npm run smoke:kds-daily` for optional DB smoke on staging/local.

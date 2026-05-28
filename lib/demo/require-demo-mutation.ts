@@ -1,4 +1,4 @@
-import { recordAuditLog } from "@/lib/audit-log";
+import { logDomainMutationDenied } from "@/lib/permissions/log-domain-mutation-denied";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import {
@@ -19,11 +19,10 @@ export async function requireDemoWorkspaceMutation(input: {
 
   const access = await requireMutationPermission("templates.manage");
   if (!access.ok) {
-    await recordAuditLog({
-      userId: access.actor?.sessionUserId ?? null,
-      workspaceId: access.actor?.workspaceId ?? null,
+    await logDomainMutationDenied({
       action: "demo.permission_denied",
       entityType: "DemoWorkspace",
+      actor: access.actor,
       metadata: {
         operation: input.operation,
         requiredPermission: "templates.manage",

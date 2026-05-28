@@ -15,7 +15,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 |------|--------|---------|
 | Multi-tenant operations | Workspace-scoped data model, owner resolution, RBAC waves 1–4 in progress | Workspace migration completion, custom roles UI |
 | Authentication | Email/password + Supabase session; staff invites | SSO/SAML pilot, MFA depth |
-| Authorization | Canonical permission keys + domain `require-*-actor` helpers; CI RBAC bundles | Residual tenant-only mutations closed; helper consolidation |
+| Authorization | Canonical permission keys + `domain-mutation-registry.ts`; `requireMutationPermission` core; CI RBAC bundles | Wave-4 residuals closed; registry + shared denial audit (Era 4 Cycle 11) |
 | Audit | `recordAuditLog`, audit center, export gates (`audit.export`) | Broader taxonomy, retention automation |
 | Commerce | Stripe billing + webhooks certified in CI | Enterprise invoicing, procurement billing |
 | Integrations | Shopify/Woo golden path certified; marketplace placeholders honest | Live partner connectors per maturity matrix |

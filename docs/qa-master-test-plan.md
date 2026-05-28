@@ -74,6 +74,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c7. Mutation access consolidation (Era 4 Cycle 11)
+- policy: `lib/permissions/mutation-access-policy.ts` (`era4-mutation-access-consolidation-v1`)
+- registry: `lib/permissions/domain-mutation-registry.ts`
+- wiring cert: `test:ci:mutation-access-consolidation:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:mutation-access-consolidation` — registry integrity + shared denial logger
+- wave-4 action RBAC: `npm run test:ci:rbac-wave4` (unchanged; not in governance bundles)
+
 ### 8c6. KDS staging operational smoke (Era 4 Cycle 10)
 - policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`)
 - wiring cert: `test:ci:kds-staging-smoke:cert` (in `test:ci:governance-bundles`)

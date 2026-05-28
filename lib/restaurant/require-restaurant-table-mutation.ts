@@ -1,4 +1,4 @@
-import { recordAuditLog } from "@/lib/audit-log";
+import { logDomainMutationDenied } from "@/lib/permissions/log-domain-mutation-denied";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
@@ -12,11 +12,10 @@ export async function requireRestaurantTableMutation(input: {
 }): Promise<RestaurantTableMutationAccessResult> {
   const access = await requireMutationPermission("pos.access");
   if (!access.ok) {
-    await recordAuditLog({
-      userId: access.actor?.sessionUserId ?? null,
-      workspaceId: access.actor?.workspaceId ?? null,
+    await logDomainMutationDenied({
       action: "restaurant_tables.permission_denied",
       entityType: "RestaurantTable",
+      actor: access.actor,
       metadata: {
         operation: input.operation,
         requiredPermission: "pos.access",
