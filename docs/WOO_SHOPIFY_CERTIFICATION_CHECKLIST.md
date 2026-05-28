@@ -4,7 +4,7 @@
 **In-app runner:** Dashboard → Integrations → WooCommerce/Shopify → **Test shop certification**.  
 **CLI:** `npx tsx scripts/smoke-woo-shopify-certification.ts --owner-email …`
 
-**CI golden path (Era 4 Cycle 5 + Era 12 + Era 14 recert):** policy `era4-channel-golden-path-v1` + `era12-channel-golden-path-recert-v1` + `era14-channel-golden-path-recert-v1`; `npm run test:ci:channel-golden-path` + `test:ci:channel-golden-path:cert` (tier 0 governance bundles). Honesty checklist: `docs/channel-golden-path-honesty-checklist.md`; `npm run smoke:channel-golden-path`. Certifies webhook → `externalOrder` → channel import staging → **order_hub_visibility** via order hub external list (`loadOrderHubPageData` + `externalOrderListWhereForOwner`) — **not** automatic kitchen `Order` creation or full marketplace live ops.
+**CI golden path (Era 4 Cycle 5 + Era 12 + Era 14 recert):** policy `era4-channel-golden-path-v1` + `era12-channel-golden-path-recert-v1` + `era14-channel-golden-path-recert-v1`; `npm run test:ci:channel-golden-path` + `test:ci:channel-golden-path:cert` (tier 0 governance bundles). Honesty checklist: `docs/channel-golden-path-honesty-checklist.md`; `npm run smoke:channel-golden-path`. Certifies webhook → `externalOrder` → channel import staging → **order_hub_visibility** via order hub external list (`loadOrderHubPageData` + `externalOrderListWhereForOwner`) — **not** auto-creating internal kitchen orders from every webhook row or full marketplace live ops.
 
 **Staging smoke (Era 12 Cycle 3 — not in default CI):** policy `era12-channel-golden-path-smoke-v1`; `npm run smoke:woo-shopify` (`scripts/smoke-woo-shopify-certification.ts`) with `DATABASE_URL` + saved connection; use `--skip-live` for credentials-only checks. Cert wiring: `test:ci:channel-golden-path-smoke-era12:cert` (chained in `test:ci:channel-golden-path:cert`). Does **not** certify full live marketplace ops.
 
@@ -19,13 +19,14 @@
 | Synthetic golden-path cert | **PASSED** |
 | Woo live (`woo_live_certification`) | **SKIPPED WITH REASON** — prerequisites missing |
 | Shopify live (`shopify_live_certification`) | **SKIPPED WITH REASON** — prerequisites missing |
-| Artifact | `artifacts/channel-live-smoke-summary.json` → both `proof_skipped_missing_prerequisites` |
+| Smoke overall | **SKIPPED** (synthetic cert passed; live proof not attested) |
+| Artifact | `artifacts/channel-live-smoke-summary.json` → both `proof_skipped_missing_prerequisites`; `overall: SKIPPED` |
 
 **Missing locally:** `DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL` (or `CHANNEL_SMOKE_CONNECTION_ID`).
 
 **Ops unblock:** Configure staging Woo/Shopify connections in dashboard → set env vars → re-run `npm run smoke:woo-shopify-live`. Optional: `workflow_dispatch` on `woo-shopify-staging-smoke.yml` after local PASS.
 
-**No false claim:** Channel integrations remain **beta**; not production-certified marketplace ops without live PASS evidence.
+**No false claim:** Channel integrations remain **beta**; not claiming live marketplace production certification without PASS evidence.
 
 **GitHub workflow first green (Era 17 Cycle 9 — not in default CI):** policy **`era17-channel-github-workflow-first-green-v1`**; workflow `.github/workflows/woo-shopify-staging-smoke.yml` (`workflow_dispatch`); operator records `GITHUB_WOO_SHOPIFY_STAGING_RUN_URL` + `GITHUB_WOO_SHOPIFY_STAGING_RUN_OUTCOME`; `npm run smoke:channel-github-workflow-first-green` → `artifacts/channel-github-workflow-first-green-summary.json`; **awaiting_github_first_green** until GitHub PASSED recorded — not fake green. Cert: `test:ci:channel-github-workflow-first-green-era17:cert` (chained in `test:ci:channel-golden-path:cert`).
 

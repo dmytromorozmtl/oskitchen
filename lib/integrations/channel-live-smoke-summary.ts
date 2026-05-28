@@ -147,23 +147,33 @@ export function buildChannelLiveSmokeSummary(
   const prerequisitesMet = input?.prerequisitesMet ?? false;
   const wooStep = steps.find((step) => step.id === "woo_live_certification");
   const shopifyStep = steps.find((step) => step.id === "shopify_live_certification");
+  const wooLiveProofStatus = resolveChannelLiveProviderProofStatus({
+    prerequisitesMet,
+    step: wooStep,
+  });
+  const shopifyLiveProofStatus = resolveChannelLiveProviderProofStatus({
+    prerequisitesMet,
+    step: shopifyStep,
+    pendingNextCycle: Boolean(
+      shopifyStep?.status === "SKIPPED" && shopifyStep.reason?.includes("Cycle 8"),
+    ),
+  });
+
+  let overall = resolveChannelLiveSmokeOverall(steps);
+  const anyLiveProofPassed =
+    wooLiveProofStatus === "proof_passed" || shopifyLiveProofStatus === "proof_passed";
+  const anyLiveProofFailed =
+    wooLiveProofStatus === "proof_failed" || shopifyLiveProofStatus === "proof_failed";
+  if (!anyLiveProofPassed && overall === "PASSED") {
+    overall = anyLiveProofFailed ? "FAILED" : "SKIPPED";
+  }
 
   return {
     version: CHANNEL_LIVE_SMOKE_SUMMARY_VERSION,
     runAt: runAt.toISOString(),
-    overall: resolveChannelLiveSmokeOverall(steps),
-    wooLiveProofStatus: resolveChannelLiveProviderProofStatus({
-      prerequisitesMet,
-      step: wooStep,
-    }),
-    shopifyLiveProofStatus: resolveChannelLiveProviderProofStatus({
-      prerequisitesMet,
-      step: shopifyStep,
-      pendingNextCycle: Boolean(
-        shopifyStep?.status === "SKIPPED" &&
-          shopifyStep.reason?.includes("Cycle 8"),
-      ),
-    }),
+    overall,
+    wooLiveProofStatus,
+    shopifyLiveProofStatus,
     missingEnvVars: [...(input?.missingEnvVars ?? [])],
     steps: [...steps],
   };

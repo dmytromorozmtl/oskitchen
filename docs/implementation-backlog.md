@@ -292,7 +292,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Workstream B Cycle 8)
 - Status: **awaiting_live_credentials**
 - Decision: `era17-channel-live-smoke-shopify-v1` — Shopify-specific proof path in shared orchestrator; explicit missing-env list
-- Evidence: `lib/integrations/channel-live-smoke-shopify-era17-policy.ts`, updated orchestrator, cert tests, `artifacts/channel-live-smoke-summary.json` (`shopifyLiveProofStatus: proof_skipped_missing_prerequisites`)
+- Evidence: `lib/integrations/channel-live-smoke-shopify-era17-policy.ts`, updated orchestrator, cert tests, `artifacts/channel-live-smoke-summary.json` (`shopifyLiveProofStatus: proof_skipped_missing_prerequisites`, `overall: SKIPPED`)
 - Next: **Ops** — set DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL; re-run `smoke:woo-shopify-live` for `shopifyLiveProofStatus: proof_passed`
 
 ### KOS-E17-004 — Woo live smoke proof path (P0)
@@ -302,7 +302,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Workstream B Cycle 7)
 - Status: **awaiting_live_credentials**
 - Decision: `era17-channel-live-smoke-woo-v1` — Woo-specific proof path; Shopify in Cycle 8 policy; explicit missing-env list
-- Evidence: `lib/integrations/channel-live-smoke-woo-era17-policy.ts`, enhanced summary, `smoke-woo-shopify-live-era17.ts`, `artifacts/channel-live-smoke-summary.json` (`wooLiveProofStatus: proof_skipped_missing_prerequisites`)
+- Evidence: `lib/integrations/channel-live-smoke-woo-era17-policy.ts`, enhanced summary, `smoke-woo-shopify-live-era17.ts`, `artifacts/channel-live-smoke-summary.json` (`wooLiveProofStatus: proof_skipped_missing_prerequisites`, `overall: SKIPPED`)
 - Next: **Ops** — set DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL; re-run smoke for `wooLiveProofStatus: proof_passed`
 
 ### KOS-E17-003 — Staging workflows first green proof path (P0)

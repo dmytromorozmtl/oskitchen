@@ -74,7 +74,7 @@ describe("channel live smoke summary", () => {
       { missingEnvVars: ["DATABASE_URL"], prerequisitesMet: false },
     );
     expect(summary.version).toBe("era17-channel-live-smoke-v1");
-    expect(summary.overall).toBe("PASSED");
+    expect(summary.overall).toBe("SKIPPED");
     expect(summary.wooLiveProofStatus).toBe("proof_skipped_missing_prerequisites");
     expect(summary.shopifyLiveProofStatus).toBe("proof_skipped_missing_prerequisites");
   });

@@ -72,13 +72,13 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Policy:** `era17-channel-live-smoke-woo-v1` — **awaiting_live_credentials** until staging Woo connection configured. Summary step id: `woo_live_certification`.
 
-**Execution status (2026-05-28):** local smoke → **SKIPPED WITH REASON** (`DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL` unset). Re-run after ops configures staging Woo connection.
+**Execution status (2026-05-28):** smoke re-run → synthetic golden-path cert **PASSED**; Woo live **SKIPPED WITH REASON** (`overall: SKIPPED`; `DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL` unset). Re-run after ops configures staging Woo connection.
 
 ### Era 17 channel live Shopify smoke (2026-05-28)
 
 **Policy:** `era17-channel-live-smoke-shopify-v1` — **awaiting_live_credentials** until staging Shopify connection configured. Summary step id: `shopify_live_certification`.
 
-**Execution status (2026-05-28):** local smoke → **SKIPPED WITH REASON** (same prerequisite env vars as Woo). Re-run after ops configures staging Shopify connection.
+**Execution status (2026-05-28):** smoke re-run → synthetic golden-path cert **PASSED**; Shopify live **SKIPPED WITH REASON** (`overall: SKIPPED`; same prerequisite env vars as Woo). Re-run after ops configures staging Shopify connection.
 
 ### Era 17 channel GitHub workflow first green (2026-05-28)
 
