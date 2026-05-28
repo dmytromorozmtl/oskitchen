@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-007 — KDS queue clarity polish (P1)
+- ID: `KOS-E18-007`
+- Title: Era 18 Workstream G Cycle 7 — queue strip, ticket numbers, prep/expo sections
+- Module: Kitchen / KDS
+- Priority: P1 (kitchen-native clarity vs Toast expo)
+- Status: **kds_queue_clarity_wired**
+- Decision: `era18-kds-queue-clarity-v1` — summary strip, oldest-first sort, prep vs ready sections
+- Evidence: `components/kitchen/kds-daily-service.tsx`, `lib/kitchen/kds-queue-clarity-era18.ts`
+- Next: KDS staging Playwright PASS when ops credentials configured (KOS-E17-015)
+
 ### KOS-E18-006 — Shift closeout variance preview UI (P1)
 - ID: `KOS-E18-006`
 - Title: Era 18 Workstream F Cycle 6 — live expected cash and variance preview on shift close
