@@ -53,8 +53,10 @@ import {
   listIntegrationHealthCards,
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
+import { IntegrationHealthRecoveryPanel } from "@/components/dashboard/integration-health-recovery-panel";
 import { IntegrationHealthSupportAdminPanel } from "@/components/dashboard/integration-health-support-admin-panel";
 import { IntegrationHealthSummaryPanel } from "@/components/integrations/integration-health-summary";
+import { buildIntegrationHealthRecoveryModel } from "@/lib/integrations/integration-health-recovery-era19";
 import { loadIntegrationHealthChannelCardsModel } from "@/services/integrations/integration-health-channel-cards-service";
 import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 import { loadIntegrationHealthSupportAdminModel } from "@/services/integrations/integration-health-support-admin-service";
@@ -137,6 +139,10 @@ export default async function IntegrationHealthDashboardPage({
   const resolved = resolveAllChannels(connections, workspaceDemo);
   const infra = infrastructureMaturityRows(env);
   const capabilities = listCapabilities();
+  const recoveryModel = buildIntegrationHealthRecoveryModel({
+    channelCards,
+    smokeArtifacts,
+  });
 
   return (
     <div className="space-y-8">
@@ -145,6 +151,8 @@ export default async function IntegrationHealthDashboardPage({
       <IntegrationHealthSummaryPanel summary={healthSummary} />
 
       <IntegrationHealthChannelCardsPanel model={channelCards} />
+
+      <IntegrationHealthRecoveryPanel model={recoveryModel} />
 
       <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
 

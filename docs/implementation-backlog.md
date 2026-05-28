@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-014 — Integration Health recovery checklist expansion (P1 WOW)
+- ID: `KOS-E19-014`
+- Title: Era 19 Workstream D Cycle 14 — contextual recovery steps + quick links on integration health
+- Module: Integrations / Integration Health / Operator UX
+- Priority: P1 (WOW pillar — channel reliability triage)
+- Status: **recovery_checklist_expanded**
+- Decision: `era19-integration-health-recovery-v1` — prioritized steps from channel cards + smoke artifacts; webhook backlog, P0 credentials, mapping, import center, error recovery deep links; no risky mutations
+- Evidence: `lib/integrations/integration-health-recovery-era19.ts`, `IntegrationHealthRecoveryPanel` on `/dashboard/integration-health#integration-recovery-checklist`
+- Next: Briefing B6 risk radar commercial/P0 signals depth or P0 proof unblock when ops credentials available
+
 ### KOS-E19-013 — Launch Wizard mobile/tablet UX polish (P1 WOW)
 - ID: `KOS-E19-013`
 - Title: Era 19 Workstream C Cycle 13 — sticky progress strip, step navigator, mode toggle, a11y
