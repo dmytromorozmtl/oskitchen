@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   COMMERCIAL_PILOT_CI_SCRIPTS,
   COMMERCIAL_PILOT_RUNBOOK_DOC,
@@ -29,8 +30,10 @@ describe("commercial pilot runbook CI certification (live repo)", () => {
     for (const name of COMMERCIAL_PILOT_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:commercial-pilot-runbook:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:commercial-pilot-runbook");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:commercial-pilot-runbook:cert")).toBe(
+      true,
+    );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:commercial-pilot-runbook")).toBe(true);
   });
 
   it("has policy module, runbook, and unit tests on disk", () => {

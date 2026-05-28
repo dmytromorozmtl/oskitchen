@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
+
 const ROOT = process.cwd();
 const CI_WORKFLOW = join(ROOT, ".github/workflows/ci.yml");
 const TIER_MATRIX = join(ROOT, "docs/ci-e2e-tier-matrix.md");
@@ -78,7 +80,9 @@ describe("storefront money-path CI certification (live repo)", () => {
 
   it("includes storefront money-path cert in default quality governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:storefront-money-path:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:storefront-money-path:cert")).toBe(
+      true,
+    );
   });
 
   it("documents tier 2 storefront money path and required artifacts exist", () => {

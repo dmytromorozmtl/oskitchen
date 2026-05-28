@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   MARKETING_CLAIMS_CANONICAL_DOC_PATHS,
   MARKETING_CLAIMS_CI_SCRIPTS,
@@ -59,10 +60,12 @@ describe("marketing claims governance CI certification (live repo)", () => {
     for (const name of MARKETING_CLAIMS_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain(
-      "test:ci:marketing-claims-governance:cert",
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:marketing-claims-governance:cert")).toBe(
+      true,
     );
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:marketing-claims-governance");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:marketing-claims-governance")).toBe(
+      true,
+    );
     expect(scripts["verify-claims"]).toContain("verify-marketing-claims.ts");
   });
 

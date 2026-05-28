@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
+
 const ROOT = process.cwd();
 const KDS_SCOPE = join(ROOT, "docs/kds-v1-scope.md");
 const KDS_ACTIONS = join(ROOT, "actions/kitchen-daily-kds.ts");
@@ -56,8 +58,8 @@ describe("KDS v1 scope CI certification (live repo)", () => {
 
   it("includes KDS v1 cert and unit bundle in default quality governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-v1:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-v1:unit");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-v1:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-v1:unit")).toBe(true);
   });
 
   it("locks canonical KDS v1 scope doc with workflow, permissions, and boundaries", () => {

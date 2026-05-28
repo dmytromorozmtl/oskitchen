@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   REPO_HYGIENE_CANONICAL_DOC_MARKERS,
   REPO_HYGIENE_CANONICAL_DOC_PATHS,
@@ -45,8 +46,8 @@ describe("repo hygiene CI certification (live repo)", () => {
     for (const name of REPO_HYGIENE_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:repo-hygiene:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:repo-hygiene");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:repo-hygiene:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:repo-hygiene")).toBe(true);
   });
 
   it("has policy module and unit tests on disk", () => {

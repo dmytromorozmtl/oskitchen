@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   INVENTORY_DEPLETION_POLICY_ID,
   INVENTORY_DEPLETION_UNIFIED_STOCK_CLAIM_ALLOWED,
@@ -78,7 +79,9 @@ describe("inventory depletion certification (live repo)", () => {
 
   it("includes inventory depletion cert in default quality governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:inventory-depletion:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:inventory-depletion:cert")).toBe(
+      true,
+    );
   });
 
   it("includes POS recipe depletion unit in vitest.pos.config allowlist", () => {

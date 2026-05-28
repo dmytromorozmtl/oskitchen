@@ -69,6 +69,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | [`era5-cycle-completion-scorecard-2026-05-27.md`](./era5-cycle-completion-scorecard-2026-05-27.md) | Era 5 P0 completion (cycles 1–5) + score 86/100 |
 | [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | **Superseded** by era6 input for recurring prompts |
 | [`era4-cycle-completion-scorecard-2026-05-27.md`](./era4-cycle-completion-scorecard-2026-05-27.md) | Era 4 execution map completion (cycles 1–12) + score 82/100 |
+| [`era4-completion-scorecard-2026-05-27.md`](./era4-completion-scorecard-2026-05-27.md) | **Era 4 closure audit** — evidence-based completion vs Eras 5–15 sustained state |
+| [`era15-cycle-completion-scorecard-2026-05-27.md`](./era15-cycle-completion-scorecard-2026-05-27.md) | Era 15 ops recert (cycles 1–6) + score 100/100 plateau |
+| [`next-master-prompt-input-2026-05-27-era15.md`](./next-master-prompt-input-2026-05-27-era15.md) | Facts and constraints for Evolution Era 16 master prompt |
 | [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | **Superseded** by era5 input for recurring prompts |
 | [`era2-cycle-completion-scorecard-2026-05-27.md`](./era2-cycle-completion-scorecard-2026-05-27.md) | Era 2 execution map completion + post wave-3 scorecard |
 | [`full-strategic-reaudit-2026-05-27.md`](./full-strategic-reaudit-2026-05-27.md) | **Superseded** by era2 re-audit for strategic decisions |

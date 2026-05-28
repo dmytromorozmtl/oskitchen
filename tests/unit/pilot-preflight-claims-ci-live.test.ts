@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   PILOT_PREFLIGHT_CLAIMS_CANONICAL_DOC_PATHS,
   PILOT_PREFLIGHT_CLAIMS_CANONICAL_MARKERS,
@@ -32,8 +33,10 @@ describe("pilot preflight claims CI certification (live repo)", () => {
     for (const name of PILOT_PREFLIGHT_CLAIMS_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:pilot-preflight-claims:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:pilot-preflight-claims");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:pilot-preflight-claims:cert")).toBe(
+      true,
+    );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:pilot-preflight-claims")).toBe(true);
   });
 
   it("has policy module, preflight script, and unit tests on disk", () => {

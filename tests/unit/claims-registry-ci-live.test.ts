@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   CLAIMS_REGISTRY_CANONICAL_DOC_PATHS,
   CLAIMS_REGISTRY_CANONICAL_MARKERS,
@@ -33,8 +34,8 @@ describe("claims registry CI certification (live repo)", () => {
     for (const name of CLAIMS_REGISTRY_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:claims-registry:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:claims-registry");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:claims-registry:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:claims-registry")).toBe(true);
   });
 
   it("has policy module, registry, and unit tests on disk", () => {

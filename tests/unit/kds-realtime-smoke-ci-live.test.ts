@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   KDS_REALTIME_FORBIDDEN_GTM_PHRASES,
   KDS_REALTIME_SMOKE_CI_SCRIPTS,
@@ -30,8 +31,8 @@ describe("kds realtime smoke CI certification (live repo)", () => {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
     expect(scripts["test:ci:kds-realtime-smoke"]).toContain("kds-realtime-smoke-wiring");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-realtime-smoke:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-realtime-smoke");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-realtime-smoke:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-realtime-smoke")).toBe(true);
   });
 
   it("has policy module and unit tests on disk", () => {

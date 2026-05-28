@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   POS_BROWSER_E2E_ACCEPT_FORK_SKIP_WITHOUT_SECRETS,
   POS_BROWSER_E2E_CANONICAL_DOC_MARKERS,
@@ -66,6 +67,6 @@ describe("POS E2E secrets policy certification (live repo)", () => {
     expect(scripts["test:ci:pos-money-path:cert"]).toContain(
       "pos-e2e-secrets-policy-cert-live.test.ts",
     );
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:pos-money-path:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:pos-money-path:cert")).toBe(true);
   });
 });

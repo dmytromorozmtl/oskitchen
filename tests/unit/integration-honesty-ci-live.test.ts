@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS,
   MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS,
@@ -46,8 +47,10 @@ describe("integration honesty CI certification (live repo)", () => {
 
   it("includes integration honesty cert and unit bundle in default quality governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:integration-honesty:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:integration-honesty");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:integration-honesty:cert")).toBe(
+      true,
+    );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:integration-honesty")).toBe(true);
   });
 
   it("aligns marketplace placeholder registry with nav maturity placeholder rules", () => {

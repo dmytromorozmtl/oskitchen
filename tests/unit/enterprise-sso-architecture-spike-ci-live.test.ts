@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   ENTERPRISE_SSO_SPIKE_CANONICAL_DOC_PATHS,
   ENTERPRISE_SSO_SPIKE_CANONICAL_MARKERS,
@@ -33,8 +34,10 @@ describe("enterprise SSO architecture spike CI certification (live repo)", () =>
     for (const name of ENTERPRISE_SSO_SPIKE_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:enterprise-sso-spike:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:enterprise-sso-spike");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:enterprise-sso-spike:cert")).toBe(
+      true,
+    );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:enterprise-sso-spike")).toBe(true);
   });
 
   it("has policy module, spike doc, evidence paths, and unit tests on disk", () => {

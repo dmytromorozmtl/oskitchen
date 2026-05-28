@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   STOREFRONT_STRIPE_E2E_ACCEPT_FORK_SKIP_WITHOUT_SECRETS,
   STOREFRONT_STRIPE_E2E_CANONICAL_DOC_MARKERS,
@@ -65,6 +66,8 @@ describe("storefront Stripe E2E secrets policy certification (live repo)", () =>
     expect(scripts["test:ci:storefront-money-path:cert"]).toContain(
       "storefront-stripe-e2e-secrets-policy-cert-live.test.ts",
     );
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:storefront-money-path:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:storefront-money-path:cert")).toBe(
+      true,
+    );
   });
 });

@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
+
 const ROOT = process.cwd();
 const CI_WORKFLOW = join(ROOT, ".github/workflows/ci.yml");
 const KDS_UI = join(ROOT, "components/kitchen/kds-daily-service.tsx");
@@ -51,7 +53,7 @@ describe("KDS v1 prototype CI certification (live repo)", () => {
 
   it("includes KDS v1 prototype cert in default quality governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-v1:prototype:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-v1:prototype:cert")).toBe(true);
   });
 
   it("gates daily-service KDS behind rollout flag and renders certified ticket UI", () => {

@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
+
 const ROOT = process.cwd();
 const CANONICAL_INDEX = join(ROOT, "docs/canonical-doc-index.md");
 const DEPRECATED_NOTICE = join(ROOT, "docs/_DEPRECATED_AUDIT_FAMILY.md");
@@ -64,11 +66,13 @@ describe("doc canon CI certification (live repo)", () => {
 
   it("includes doc canon cert before unit bundle in default quality governance bundles", () => {
     const scripts = readPackageScripts();
-    const bundle = scripts["test:ci:governance-bundles"];
-    expect(bundle).toContain("test:ci:doc-canon:cert");
-    expect(bundle).toContain("npm run test:ci:doc-canon &&");
-    expect(bundle.indexOf("test:ci:doc-canon:cert")).toBeLessThan(
-      bundle.indexOf("npm run test:ci:doc-canon &&"),
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:doc-canon:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:doc-canon")).toBe(true);
+    const platform = scripts["test:ci:governance-bundles:partition-platform"] ?? "";
+    expect(platform).toContain("test:ci:doc-canon:cert");
+    expect(platform).toContain("npm run test:ci:doc-canon &&");
+    expect(platform.indexOf("test:ci:doc-canon:cert")).toBeLessThan(
+      platform.indexOf("npm run test:ci:doc-canon &&"),
     );
   });
 
