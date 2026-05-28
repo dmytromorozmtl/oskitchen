@@ -49,6 +49,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
   ],
   cashier: [
     "pos-terminal-register",
+    "pos-manager-override-handoff",
     "pos-open-shifts",
     "pos-transactions-today",
     "orders-today",

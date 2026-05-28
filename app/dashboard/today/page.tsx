@@ -75,6 +75,7 @@ export default async function TodayOperationsPage({
         persona,
         workspaceRole: actor.workspaceRole,
         supportAdmin,
+        granted: actor.granted,
         launchWizard: launchWizardModel
           ? {
               commercialBlockers: launchWizardModel.commercialBlockers,

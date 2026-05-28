@@ -91,6 +91,12 @@ export const BRIEFING_TILE_LINK_DEFINITIONS: Record<string, BriefingTileLinkDefi
     whyItMatters: "Cashiers need an open shift before ringing sales — close when the drawer is done.",
     rolePacks: ["cashier"],
   },
+  "pos-manager-override-handoff": {
+    href: "/dashboard/pos/terminal",
+    whyItMatters:
+      "Comps and discounts require manager override review — cashiers hand off to pos.discount.apply on the register checklist.",
+    rolePacks: ["cashier"],
+  },
   "low-stock": {
     href: "/dashboard/purchasing",
     whyItMatters: "Below-par ingredients cause 86'd items and missed orders during service.",
@@ -149,6 +155,9 @@ export function resolveBriefingTileCanonicalHref(
     return fallbackHref;
   }
   if (tileId === "pos-terminal-register") {
+    return fallbackHref;
+  }
+  if (tileId === "pos-manager-override-handoff") {
     return fallbackHref;
   }
   if (tileId === "kds-priority-lane") {
@@ -244,6 +253,12 @@ export function auditBriefingTileLinks(tiles: readonly OwnerDailyBriefingTile[])
       !tile.href.startsWith("/dashboard/pos/terminal")
     ) {
       issues.push(`${tile.id}: must link to POS terminal`);
+    }
+    if (
+      tile.id === "pos-manager-override-handoff" &&
+      !tile.href.startsWith("/dashboard/pos/")
+    ) {
+      issues.push(`${tile.id}: must link to POS terminal or shifts`);
     }
   }
 

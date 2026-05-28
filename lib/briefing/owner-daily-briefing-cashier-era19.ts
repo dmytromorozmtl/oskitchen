@@ -29,6 +29,7 @@ export type OwnerDailyBriefingCashierInput = {
   openShiftCount: number;
   posTransactionsToday: number;
   blockedOrdersApprox: number;
+  canApplyPosDiscount?: boolean;
 };
 
 function draftTile(tile: OwnerDailyBriefingTileDraft): OwnerDailyBriefingTile {

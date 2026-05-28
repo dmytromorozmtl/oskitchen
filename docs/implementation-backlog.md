@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-029 — Briefing cashier pack ↔ POS manager override cross-link (P1 WOW)
+- ID: `KOS-E19-029`
+- Title: Era 19 Workstream B Cycle 29 — cashier briefing tile + ranked action deep-link to POS manager override checklist
+- Module: Owner Daily Briefing / POS / Cashier command center
+- Priority: P1 (WOW pillar — cashier ↔ manager override handoff honesty)
+- Status: **briefing_cashier_manager_override_crosslink_wired**
+- Decision: `era19-owner-daily-briefing-cashier-manager-override-v1` — override handoff tile after POS register; speed-mode `#pos-manager-override` deep link; blocked until shift open; respects pos.discount.apply RBAC
+- Evidence: `lib/briefing/owner-daily-briefing-cashier-manager-override-era19.ts`, updated briefing service + role pack + tile links
+- Next: P0 proof unblock when ops credentials available, or production calendar drill UX
+
 ### KOS-E19-028 — Launch Wizard KDS/production operator cross-links (P1 WOW)
 - ID: `KOS-E19-028`
 - Title: Era 19 Workstream C Cycle 28 — KDS/production wizard step links to priority lane + POS manager override

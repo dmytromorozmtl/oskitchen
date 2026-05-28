@@ -37,6 +37,11 @@ import {
   mergeBriefingCashierTopActions,
 } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
 import {
+  buildOwnerDailyBriefingCashierManagerOverrideActions,
+  enrichBriefingCashierManagerOverridePackTiles,
+  mergeBriefingCashierManagerOverrideActions,
+} from "@/lib/briefing/owner-daily-briefing-cashier-manager-override-era19";
+import {
   buildOwnerDailyBriefingKitchenActions,
   enrichBriefingKitchenPackTiles,
   mergeBriefingKitchenTopActions,
@@ -85,6 +90,7 @@ import {
 import { shouldShowPilotIntegrationHealthStrip } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import type { PermissionKey } from "@/lib/permissions/permissions";
+import { hasPermission } from "@/lib/permissions/guards";
 import { prisma } from "@/lib/prisma";
 import { ownerScopedAnd } from "@/lib/scope/workspace-resource-scope";
 import {
@@ -214,6 +220,7 @@ export async function loadOwnerDailyBriefing(
       commercialBlockers: LaunchWizardCommercialBlockersSlice;
       commercialSetup: LaunchWizardCommercialSetupSlice;
     };
+    granted?: ReadonlySet<PermissionKey>;
   },
 ): Promise<OwnerDailyBriefingPayload> {
   const showIntegrationHealth = options?.showIntegrationHealth ?? true;
@@ -302,6 +309,14 @@ export async function loadOwnerDailyBriefing(
     openShiftCount: openPosShifts,
     posTransactionsToday: today.kpis.posTransactionsToday,
     blockedOrdersApprox: today.kpis.blockedOrdersApprox,
+    canApplyPosDiscount: options?.granted
+      ? hasPermission(options.granted, "pos.discount.apply")
+      : false,
+  };
+
+  const cashierManagerOverrideInput = {
+    ...cashierInput,
+    canApplyPosDiscount: cashierInput.canApplyPosDiscount ?? false,
   };
 
   const kdsBriefingInput = {
@@ -323,7 +338,10 @@ export async function loadOwnerDailyBriefing(
       : buildOwnerDailyBriefingTiles(briefingInput);
   const allTiles =
     rolePack === "cashier"
-      ? enrichBriefingCashierPackTiles(baseTiles, cashierInput)
+      ? enrichBriefingCashierManagerOverridePackTiles(
+          enrichBriefingCashierPackTiles(baseTiles, cashierInput),
+          cashierManagerOverrideInput,
+        )
       : rolePack === "kitchen"
         ? enrichBriefingKitchenPackTiles(baseTiles, kdsBriefingInput)
         : rolePack === "manager"
@@ -353,7 +371,10 @@ export async function loadOwnerDailyBriefing(
         })
       : rolePack === "cashier"
         ? mergeBriefingCashierTopActions(
-            buildOwnerDailyBriefingCashierActions(cashierInput),
+            mergeBriefingCashierManagerOverrideActions(
+              buildOwnerDailyBriefingCashierActions(cashierInput),
+              buildOwnerDailyBriefingCashierManagerOverrideActions(cashierManagerOverrideInput),
+            ),
             pickOwnerDailyBriefingTopActions({
               blockers: today.blockers,
               alerts: allAlerts,
