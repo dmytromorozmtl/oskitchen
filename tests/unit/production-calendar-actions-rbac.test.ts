@@ -8,6 +8,7 @@ const requireTenantActor = vi.hoisted(() => vi.fn());
 const recordAuditLog = vi.hoisted(() => vi.fn());
 const createProductionPlanTask = vi.hoisted(() => vi.fn());
 const updateProductionPlanTaskDate = vi.hoisted(() => vi.fn());
+const updateProductionPlanTaskStatus = vi.hoisted(() => vi.fn());
 
 vi.mock("next/navigation", () => ({ redirect }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
@@ -27,9 +28,14 @@ vi.mock("@/lib/audit-log", () => ({
 vi.mock("@/services/production/production-calendar-service", () => ({
   createProductionPlanTask,
   updateProductionPlanTaskDate,
+  updateProductionPlanTaskStatus,
 }));
 
-import { createPlanTaskAction, movePlanTaskAction } from "@/actions/production-calendar";
+import {
+  createPlanTaskAction,
+  movePlanTaskAction,
+  updatePlanTaskStatusAction,
+} from "@/actions/production-calendar";
 
 const deniedActor = {
   sessionUserId: "staff-1",
@@ -47,6 +53,7 @@ describe("production calendar actions RBAC", () => {
     requireTenantActor.mockResolvedValue({ dataUserId: "owner-1" });
     createProductionPlanTask.mockResolvedValue(undefined);
     updateProductionPlanTaskDate.mockResolvedValue(undefined);
+    updateProductionPlanTaskStatus.mockResolvedValue(undefined);
   });
 
   it("denies createPlanTaskAction without production.manage and audits", async () => {
@@ -123,6 +130,45 @@ describe("production calendar actions RBAC", () => {
       "task-1",
       "owner-1",
       expect.any(Date),
+    );
+  });
+
+  it("denies updatePlanTaskStatusAction without production.manage and audits", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "Forbidden",
+      actor: deniedActor,
+    });
+
+    const formData = new FormData();
+    formData.set("taskId", "task-1");
+    formData.set("status", "IN_PROGRESS");
+
+    await expect(updatePlanTaskStatusAction(formData)).rejects.toThrow("REDIRECT:");
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          operation: "production_calendar.update_task_status",
+          requiredPermission: "production.manage",
+        }),
+      }),
+    );
+    expect(updateProductionPlanTaskStatus).not.toHaveBeenCalled();
+  });
+
+  it("allows status update when production.manage passes", async () => {
+    requireMutationPermission.mockResolvedValue({ ok: true, actor: deniedActor });
+
+    const formData = new FormData();
+    formData.set("taskId", "task-1");
+    formData.set("status", "COMPLETED");
+
+    await updatePlanTaskStatusAction(formData);
+
+    expect(updateProductionPlanTaskStatus).toHaveBeenCalledWith(
+      "task-1",
+      "owner-1",
+      "COMPLETED",
     );
   });
 });

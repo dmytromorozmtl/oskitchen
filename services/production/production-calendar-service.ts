@@ -1,3 +1,4 @@
+import { parseProductionPlanTaskStatus } from "@/lib/production/production-plan-task-status";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import {
@@ -54,5 +55,22 @@ export async function updateProductionPlanTaskDate(
   return prisma.productionPlanTask.update({
     where: { id: row.id },
     data: { planDate },
+  });
+}
+
+export async function updateProductionPlanTaskStatus(
+  taskId: string,
+  userId: string,
+  status: string,
+) {
+  const parsed = parseProductionPlanTaskStatus(status);
+  if (!parsed) throw new Error("Invalid plan task status");
+
+  const where = await productionPlanTaskByIdWhereForOwner(userId, taskId);
+  const row = await prisma.productionPlanTask.findFirst({ where, select: { id: true } });
+  if (!row) throw new Error("Task not found");
+  return prisma.productionPlanTask.update({
+    where: { id: row.id },
+    data: { status: parsed },
   });
 }

@@ -1,9 +1,19 @@
 import Link from "next/link";
 
-import { createPlanTaskAction, movePlanTaskAction } from "@/actions/production-calendar";
+import {
+  createPlanTaskAction,
+  movePlanTaskAction,
+  updatePlanTaskStatusAction,
+} from "@/actions/production-calendar";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { readProductionCalendarFormError } from "@/lib/production/production-calendar-form-mutation";
+import {
+  normalizeProductionPlanTaskStatus,
+  PRODUCTION_PLAN_TASK_STATUSES,
+  PRODUCTION_PLAN_TASK_STATUS_LABEL,
+  productionPlanTaskStatusCardClass,
+} from "@/lib/production/production-plan-task-status";
 import {
   adjacentProductionPlanDateIso,
   formatProductionCalendarWeekLabel,
@@ -60,8 +70,8 @@ export default async function ProductionCalendarPage({
         </nav>
       </div>
       <p className="text-sm text-muted-foreground">
-        Viewing {formatProductionCalendarWeekLabel(weekStart)}. Use ←/→ on tasks to reschedule
-        within or across weeks.
+        Viewing {formatProductionCalendarWeekLabel(weekStart)}. Use ←/→ to reschedule within or
+        across weeks; update status with the control on each task.
       </p>
 
       <CopilotFormErrorBanner message={formError} />
@@ -98,51 +108,75 @@ export default async function ProductionCalendarPage({
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-2 pt-0 space-y-1">
-                {dayTasks.map((t) => (
-                  <div
-                    key={t.id}
-                    className={`rounded-lg px-2 py-1 text-xs ${
-                      t.status === "COMPLETED"
-                        ? "bg-muted"
-                        : t.status === "IN_PROGRESS"
-                          ? "bg-amber-100 dark:bg-amber-950"
-                          : "bg-primary/10"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-1">
-                      <span className="min-w-0 flex-1 leading-snug">
-                        {t.title}
-                        {t.batchSize ? ` ×${t.batchSize}` : ""}
-                      </span>
-                      <div className="flex shrink-0 gap-0.5">
-                        <form action={movePlanTaskAction}>
-                          <input type="hidden" name="taskId" value={t.id} />
-                          <input type="hidden" name="planDate" value={previousDayIso} />
-                          <button
-                            type="submit"
-                            className="rounded px-1 text-[10px] text-muted-foreground hover:bg-background/80 hover:text-foreground"
-                            aria-label={`Move ${t.title} to previous day`}
-                            title="Move to previous day (may change week)"
-                          >
-                            ←
-                          </button>
-                        </form>
-                        <form action={movePlanTaskAction}>
-                          <input type="hidden" name="taskId" value={t.id} />
-                          <input type="hidden" name="planDate" value={nextDayIso} />
-                          <button
-                            type="submit"
-                            className="rounded px-1 text-[10px] text-muted-foreground hover:bg-background/80 hover:text-foreground"
-                            aria-label={`Move ${t.title} to next day`}
-                            title="Move to next day (may change week)"
-                          >
-                            →
-                          </button>
-                        </form>
+                {dayTasks.map((t) => {
+                  const taskStatus = normalizeProductionPlanTaskStatus(t.status);
+                  return (
+                    <div
+                      key={t.id}
+                      className={`rounded-lg px-2 py-1 text-xs ${productionPlanTaskStatusCardClass(t.status)}`}
+                    >
+                      <div className="flex items-start justify-between gap-1">
+                        <span className="min-w-0 flex-1 leading-snug">
+                          {t.title}
+                          {t.batchSize ? ` ×${t.batchSize}` : ""}
+                        </span>
+                        <div className="flex shrink-0 gap-0.5">
+                          <form action={movePlanTaskAction}>
+                            <input type="hidden" name="taskId" value={t.id} />
+                            <input type="hidden" name="planDate" value={previousDayIso} />
+                            <button
+                              type="submit"
+                              className="rounded px-1 text-[10px] text-muted-foreground hover:bg-background/80 hover:text-foreground"
+                              aria-label={`Move ${t.title} to previous day`}
+                              title="Move to previous day (may change week)"
+                            >
+                              ←
+                            </button>
+                          </form>
+                          <form action={movePlanTaskAction}>
+                            <input type="hidden" name="taskId" value={t.id} />
+                            <input type="hidden" name="planDate" value={nextDayIso} />
+                            <button
+                              type="submit"
+                              className="rounded px-1 text-[10px] text-muted-foreground hover:bg-background/80 hover:text-foreground"
+                              aria-label={`Move ${t.title} to next day`}
+                              title="Move to next day (may change week)"
+                            >
+                              →
+                            </button>
+                          </form>
+                        </div>
                       </div>
+                      <form
+                        action={updatePlanTaskStatusAction}
+                        className="mt-1 flex items-center gap-1"
+                      >
+                        <input type="hidden" name="taskId" value={t.id} />
+                        <label className="sr-only" htmlFor={`status-${t.id}`}>
+                          Status for {t.title}
+                        </label>
+                        <select
+                          id={`status-${t.id}`}
+                          name="status"
+                          defaultValue={taskStatus}
+                          className="min-w-0 flex-1 rounded border bg-background px-1 py-0.5 text-[10px]"
+                        >
+                          {PRODUCTION_PLAN_TASK_STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                              {PRODUCTION_PLAN_TASK_STATUS_LABEL[status]}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="submit"
+                          className="shrink-0 rounded border px-1 py-0.5 text-[10px] hover:bg-background/80"
+                        >
+                          Set
+                        </button>
+                      </form>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </CardContent>
             </Card>
           );

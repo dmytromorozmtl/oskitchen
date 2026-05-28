@@ -1,7 +1,6 @@
 "use server";
 
 
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
 import { recordAuditLog } from "@/lib/audit-log";
@@ -12,6 +11,7 @@ import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   createProductionPlanTask,
   updateProductionPlanTaskDate,
+  updateProductionPlanTaskStatus,
 } from "@/services/production/production-calendar-service";
 
 async function requireProductionCalendarMutation(
@@ -58,6 +58,19 @@ export async function movePlanTaskAction(formData: FormData): Promise<void> {
     String(formData.get("taskId") ?? ""),
     dataUserId,
     new Date(String(formData.get("planDate") ?? "")),
+  );
+  revalidatePath("/dashboard/production/calendar");
+}
+
+export async function updatePlanTaskStatusAction(formData: FormData): Promise<void> {
+  const gate = await requireProductionCalendarMutation("production_calendar.update_task_status");
+  assertProductionCalendarFormGate(gate);
+
+  const { dataUserId } = await requireTenantActor();
+  await updateProductionPlanTaskStatus(
+    String(formData.get("taskId") ?? ""),
+    dataUserId,
+    String(formData.get("status") ?? ""),
   );
   revalidatePath("/dashboard/production/calendar");
 }

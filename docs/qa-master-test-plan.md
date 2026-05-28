@@ -260,6 +260,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 
+### 8c4n. Production calendar status workflow UI (Era 10 Cycle 3)
+- Policy: `lib/production/production-calendar-status-workflow-ui-policy.ts` (`era10-production-calendar-status-workflow-ui-v1`; extends cross-week)
+- Status allowlist: `lib/production/production-plan-task-status.ts`
+- Action: `updatePlanTaskStatusAction` (`production.manage` + form deny)
+- Wiring cert: `test:ci:production-calendar-status-workflow-ui:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
+- RBAC: `tests/unit/production-calendar-actions-rbac.test.ts` (status update deny/allow)
+
 ### 8c4m. Production calendar cross-week UI (Era 10 Cycle 2)
 - Policy: `lib/production/production-calendar-cross-week-ui-policy.ts` (`era10-production-calendar-cross-week-ui-v1`; extends `era8-production-calendar-move-ui-v1`)
 - Helpers: `lib/production/production-calendar-week-navigation.ts`

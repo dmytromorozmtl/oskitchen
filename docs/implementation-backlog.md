@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 10 — Customer value loop / GTM honesty
 
+### KOS-E10-003 — Production calendar status workflow UI (P1)
+- ID: `KOS-E10-003`
+- Title: Scheduled / in-progress / completed status controls on production calendar tasks
+- Module: Production / operator depth
+- Priority: P1 (Era 10 Cycle 3)
+- Status: **completed**
+- Decision: `era10-production-calendar-status-workflow-ui-v1` — per-task status select + `updatePlanTaskStatusAction`; allowlist SCHEDULED | IN_PROGRESS | COMPLETED
+- Evidence: `lib/production/production-plan-task-status.ts`, `actions/production-calendar.ts`, `test:ci:production-calendar-status-workflow-ui:cert`
+- Next: drag-and-drop still out of scope; no kitchen work-item sync claim
+
 ### KOS-E10-002 — Production calendar cross-week UI (P1)
 - ID: `KOS-E10-002`
 - Title: Week navigation and cross-week task reschedule on production calendar
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era10-production-calendar-cross-week-ui-v1` — `?week=` query + prev/next week links; ←/→ on Mon/Sun crosses weeks via existing `movePlanTaskAction`
 - Evidence: `lib/production/production-calendar-week-navigation.ts`, `app/dashboard/production/calendar/page.tsx`, `test:ci:production-calendar-cross-week-ui:cert`
-- Next: task status workflow UI (separate cycle); no drag-and-drop claim
+- Next: ~~task status workflow UI~~ — **Done** Cycle 3 (`era10-production-calendar-status-workflow-ui-v1`); no drag-and-drop claim
 
 ### KOS-E10-001 — Cross-channel rewards recert (P1)
 - ID: `KOS-E10-001`

@@ -159,6 +159,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **Cross-channel rewards recert** | `era10-cross-channel-rewards-recert-v1`; `test:ci:cross-channel-rewards:cert` |
 | **2** | **Production calendar cross-week UI** | `era10-production-calendar-cross-week-ui-v1`; `test:ci:production-calendar-cross-week-ui:cert` |
+| **3** | **Production calendar status workflow UI** | `era10-production-calendar-status-workflow-ui-v1`; `test:ci:production-calendar-status-workflow-ui:cert` |
 
 ## Evolution Era 7 cycle ledger
 
@@ -423,3 +424,4 @@ Incremental refresh after Era 9 cycles 1–4 (enterprise / DevOps / security rec
 | 2026-05-27 | Era 9 Cycle 5: scorecard refresh 96/100 + `next-master-prompt-input-2026-05-27-era9.md` |
 | 2026-05-27 | Era 10 Cycle 1: `era10-cross-channel-rewards-recert-v1` — dual-ledger rewards honesty recert |
 | 2026-05-27 | Era 10 Cycle 2: `era10-production-calendar-cross-week-ui-v1` — week nav + cross-week moves |
+| 2026-05-27 | Era 10 Cycle 3: `era10-production-calendar-status-workflow-ui-v1` — task status workflow on calendar |

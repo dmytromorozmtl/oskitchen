@@ -26,9 +26,14 @@ vi.mock("@/lib/audit-log", () => ({
 vi.mock("@/services/production/production-calendar-service", () => ({
   createProductionPlanTask,
   updateProductionPlanTaskDate: vi.fn(),
+  updateProductionPlanTaskStatus: vi.fn(),
 }));
 
-import { createPlanTaskAction, movePlanTaskAction } from "@/actions/production-calendar";
+import {
+  createPlanTaskAction,
+  movePlanTaskAction,
+  updatePlanTaskStatusAction,
+} from "@/actions/production-calendar";
 import {
   PRODUCTION_CALENDAR_FORM_DENY_POLICY_ID,
   PRODUCTION_CALENDAR_FORM_ERROR_PARAM,
@@ -102,6 +107,23 @@ describe("production calendar form deny UX", () => {
     formData.set("planDate", "2026-06-02");
 
     await expect(movePlanTaskAction(formData)).rejects.toThrow(
+      `REDIRECT:${PRODUCTION_CALENDAR_PAGE_PATH}?${PRODUCTION_CALENDAR_FORM_ERROR_PARAM}=`,
+    );
+    expect(redirect).toHaveBeenCalled();
+  });
+
+  it("redirects updatePlanTaskStatusAction on deny instead of silent return", async () => {
+    requireMutationPermission.mockResolvedValue({
+      ok: false,
+      error: "You do not have permission to perform this action.",
+      actor: { sessionUserId: "staff-1", workspaceId: "ws-1" },
+    });
+
+    const formData = new FormData();
+    formData.set("taskId", "task-1");
+    formData.set("status", "IN_PROGRESS");
+
+    await expect(updatePlanTaskStatusAction(formData)).rejects.toThrow(
       `REDIRECT:${PRODUCTION_CALENDAR_PAGE_PATH}?${PRODUCTION_CALENDAR_FORM_ERROR_PARAM}=`,
     );
     expect(redirect).toHaveBeenCalled();
