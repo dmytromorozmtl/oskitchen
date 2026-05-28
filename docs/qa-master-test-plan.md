@@ -114,6 +114,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 
+### 8c4a. Commercial pilot runbook (Era 7 Cycle 1)
+- policy: `lib/commercial/commercial-pilot-runbook-policy.ts` (`era7-commercial-pilot-runbooks-v1`)
+- canonical runbook: `docs/commercial-pilot-runbook.md` (Tier 0–3; matrix alignment; deprecated `docs/PILOT_*` family)
+- wiring cert: `test:ci:commercial-pilot-runbook:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:commercial-pilot-runbook` — required sections + forbidden pilot headline claims
+
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)
 - canonical pack: `docs/enterprise-procurement-pack.md`

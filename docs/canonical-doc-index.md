@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 6 Cycle 6 — scorecard refresh)  
+**Updated:** 2026-05-27 (Era 7 Cycle 1 — commercial pilot runbook)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -37,6 +37,7 @@ Operational source of truth for day-to-day hardening and release gating.
 | Domain mutation registry | `lib/permissions/domain-mutation-registry.ts` + §2a in [`rbac-permission-architecture.md`](./rbac-permission-architecture.md) | Platform/Security |
 | Page maturity sweep | `lib/navigation/page-maturity-honesty.ts`, `lib/navigation/page-maturity-sweep-policy.ts` | Product/UX/GTM |
 | [`ci-e2e-tier-matrix.md`](./ci-e2e-tier-matrix.md) | Money-path and smoke E2E tiers by CI job | QA/DevOps |
+| [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) | Paid pilot GO/NO-GO aligned with maturity matrix (`era7-commercial-pilot-runbooks-v1`) | Product/GTM/Ops |
 
 ---
 
@@ -125,6 +126,12 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **11** | **Mutation access consolidation** | `era4-mutation-access-consolidation-v1`; domain registry |
 | **12** | **Page maturity sweep** | `era4-page-maturity-sweep-v1`; `PageMaturityRouteNotice` |
 | **13** | **Scorecard refresh** | `era4-scorecard-refresh-v1`; this §Scorecard Era 4 |
+
+## Evolution Era 7 cycle ledger
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **Commercial pilot runbook** | `era7-commercial-pilot-runbooks-v1`; `docs/commercial-pilot-runbook.md` |
 
 ## Evolution Era 6 cycle ledger
 
@@ -299,3 +306,4 @@ Incremental refresh after Era 6 cycles 1–5 (P0 closure from era5 handoff). Bas
 | 2026-05-27 | Era 6 Cycle 4: `era6-production-calendar-form-deny-v1` — void form redirect on deny |
 | 2026-05-27 | Era 6 Cycle 5: `era6-enterprise-identity-roadmap-v1` — SSO/SCIM/SOC2 roadmap_only review |
 | 2026-05-27 | Era 6 Cycle 6: scorecard refresh 90/100 + `next-master-prompt-input-2026-05-27-era6.md` |
+| 2026-05-27 | Era 7 Cycle 1: `era7-commercial-pilot-runbooks-v1` — canonical commercial pilot runbook |

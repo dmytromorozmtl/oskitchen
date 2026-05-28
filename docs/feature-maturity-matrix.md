@@ -19,6 +19,7 @@ Interpretation rule:
 - Rows are major feature and route families, not every leaf file.
 - Leaf pages inherit the family status unless explicitly overridden in a future revision.
 - `Sales claim allowed?` means safe to sell directly without qualification.
+- **Paid pilot GO/NO-GO:** use [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) (`era7-commercial-pilot-runbooks-v1`); do not rely on deprecated `docs/PILOT_*` checklists for new pilots.
 
 | Feature name | Module | User roles | Current status | Evidence path | Business value | Risk level | Missing pieces | Required hardening | Required tests | Sales claim allowed? | Should appear in navigation? | Should appear in marketing? | Owner role | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

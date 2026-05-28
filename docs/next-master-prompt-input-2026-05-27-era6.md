@@ -25,18 +25,24 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 
 ---
 
-## 2. What Remains Open (P0 for Era 7 consideration)
+## 2. Era 7 Progress (Facts)
+
+| Cycle | Outcome |
+|-------|---------|
+| **1** | **Commercial pilot runbook** — `era7-commercial-pilot-runbooks-v1`; `docs/commercial-pilot-runbook.md`; `test:ci:commercial-pilot-runbook:cert` |
+
+## 3. What Remains Open (P0 for Era 7 consideration)
 
 | ID | Item | Notes |
 |----|------|-------|
 | E7-1 | Storefront inventory hook | Only if `era5-pos-only-gtm-lock-v1` lifted by explicit era decision |
 | E7-2 | SSO/SAML pilot implementation | Requires dedicated era — not roadmap_only |
-| E7-3 | Commercial pilot runbooks | Tie maturity matrix to operator onboarding |
+| ~~E7-3~~ | ~~Commercial pilot runbooks~~ | **Done** — Cycle 1 (`KOS-E7-001`) |
 | E7-4 | Stripe live-card storefront E2E | Honest tier; secrets + slug documented |
 
 ---
 
-## 3. What Remains Open (P1)
+## 4. What Remains Open (P1)
 
 - `tests/node_modules/` gitignore hygiene.
 - Unified rewards product/schema era (if dual-ledger lock reversed).
@@ -45,11 +51,11 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 
 ---
 
-## 4. Era 7 Strategic Themes (Suggested — Not Started)
+## 5. Era 7 Strategic Themes (Suggested)
 
 Pick **one theme per cycle**; do not reopen Era 4–6 unless regression proven.
 
-1. **Commercial readiness** — pilot runbooks, claim validator expansion, sales enablement.
+1. **Commercial readiness** — ~~pilot runbooks~~ (Cycle 1 done); claim validator expansion, sales enablement, E7-4 storefront E2E.
 2. **Operator depth** — storefront E2E, inventory hook (if unlocked), KDS UI polish.
 3. **Enterprise delivery** — SSO architecture spike (R1) — only with explicit era budget.
 4. **CI hygiene** — gitignore, workflow runtime, slice optimization.
@@ -59,16 +65,16 @@ Pick **one theme per cycle**; do not reopen Era 4–6 unless regression proven.
 
 ---
 
-## 5. CI / Governance Facts
+## 6. CI / Governance Facts
 
-- Default quality job: `npm run test:ci:governance-bundles` (20 `:cert` gates + unit bundles).
+- Default quality job: `npm run test:ci:governance-bundles` (21 `:cert` gates incl. `commercial-pilot-runbook` + unit bundles).
 - Scorecard cert: `npm run test:ci:scorecard:cert` (era4 + era5 + era6 policy tests; must stay last).
 - Parallel typecheck: job `typecheck-slices` → `npm run typecheck:ci:slices` (6GB); canonical gate remains `quality` → `typecheck:full` (8GB).
 - Security-db: `test:security` includes `test:ci:rbac-wave4` (production calendar form deny tests included).
 
 ---
 
-## 6. Documentation Rules
+## 7. Documentation Rules
 
 - Update **canonical doc set** + `docs/canonical-doc-index.md` only.
 - Maturity claims must match policy IDs and CI certs.
@@ -76,7 +82,7 @@ Pick **one theme per cycle**; do not reopen Era 4–6 unless regression proven.
 
 ---
 
-## 7. Re-audit Decision
+## 8. Re-audit Decision
 
 **Full re-audit now?** **No** — Era 6 scorecard + this input sufficient until Era 7 selects a theme or repo scale changes materially.
 

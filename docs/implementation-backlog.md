@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 7 — Commercial readiness
+
+### KOS-E7-001 — Commercial pilot runbook (E7-3)
+- ID: `KOS-E7-001`
+- Title: Canonical paid-pilot GO/NO-GO runbook aligned with feature maturity matrix
+- Module: Product / GTM / Ops
+- Priority: P0 (Era 7 Cycle 1)
+- Status: **completed**
+- Decision: `era7-commercial-pilot-runbooks-v1` — Tier 0–3 gates; deprecated `docs/PILOT_*` as non-canonical; forbidden pilot headline claims locked in policy tests
+- Evidence: `docs/commercial-pilot-runbook.md`, `lib/commercial/commercial-pilot-runbook-policy.ts`, `test:ci:commercial-pilot-runbook:cert`
+- Next: E7-4 Stripe storefront E2E tier honesty or E7-2 repo hygiene (`tests/node_modules/`)
+
 ## Era 6 — Customer value honesty
 
 ### KOS-E6-006 — Era 6 scorecard refresh
