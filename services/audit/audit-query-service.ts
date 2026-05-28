@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import type { AuditListFilters } from "@/lib/audit/audit-types";
-import { canViewSensitiveAuditDetail } from "@/lib/audit/audit-permissions";
 
 const PAGE_SIZE = 50;
 
@@ -298,9 +297,9 @@ export async function getAuditKpis(scope: AuditWorkspaceScope): Promise<AuditKpi
 
 export function stripSensitiveDetailForViewer<
   T extends { beforeJson?: unknown; afterJson?: unknown; diffJson?: unknown; metadataJson?: unknown },
->(row: T | null, email: string | null | undefined, role: string | null | undefined, platformBypass = false): T | null {
+>(row: T | null, viewSensitive: boolean): T | null {
   if (!row) return null;
-  if (canViewSensitiveAuditDetail(email, role, platformBypass)) return row;
+  if (viewSensitive) return row;
   const { beforeJson: _b, afterJson: _a, diffJson: _d, ...rest } = row;
   return { ...rest, beforeJson: undefined, afterJson: undefined, diffJson: undefined, metadataJson: row.metadataJson } as T;
 }

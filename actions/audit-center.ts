@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import type { AuditExportFormat } from "@prisma/client";
 
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { canViewSensitiveAuditDetail } from "@/lib/audit/audit-permissions";
+import { canViewSensitiveAuditDetailFromGrants } from "@/lib/audit/audit-permissions";
 import {
   requireAuditCenterViewAccess,
   requireAuditExportAccess,
@@ -102,10 +102,11 @@ export async function loadAuditCenterPageData(
   ]);
 
   const actor = await requireWorkspacePermissionActor();
+  const viewSensitive = canViewSensitiveAuditDetailFromGrants(actor.granted, actor.platformBypass);
   const flags: AuditCenterFlags = {
     canExport: hasPermission(actor.granted, "audit.export"),
     canManageRetention: hasPermission(actor.granted, "workspace.settings"),
-    canSensitiveDetail: canViewSensitiveAuditDetail(scope.email, scope.role, scope.platformBypass),
+    canSensitiveDetail: viewSensitive,
   };
 
   return {
@@ -142,15 +143,17 @@ export async function getAuditLogDetailAction(
 ): Promise<{ ok: false; error: string } | { ok: true; row: Record<string, unknown>; related: Record<string, unknown>[] }> {
   const scope = await resolveScope();
   if (!scope) return { ok: false, error: "forbidden" };
+  const actor = await requireWorkspacePermissionActor();
+  const viewSensitive = canViewSensitiveAuditDetailFromGrants(actor.granted, actor.platformBypass);
   const row = await getAuditLogById(scope, id);
   if (!row) return { ok: false, error: "not_found" };
-  const safe = stripSensitiveDetailForViewer(row, scope.email, scope.role, scope.platformBypass);
+  const safe = stripSensitiveDetailForViewer(row, viewSensitive);
   if (!safe) return { ok: false, error: "not_found" };
   const serialized = JSON.parse(JSON.stringify(safe)) as Record<string, unknown>;
   let related: Record<string, unknown>[] = [];
   if (safe.entityType && safe.entityId) {
     const rel = await getAuditTimeline(scope, safe.entityType, safe.entityId, 20);
-    related = rel.map((r) => JSON.parse(JSON.stringify(stripSensitiveDetailForViewer(r, scope.email, scope.role, scope.platformBypass) ?? r)) as Record<string, unknown>);
+    related = rel.map((r) => JSON.parse(JSON.stringify(stripSensitiveDetailForViewer(r, viewSensitive) ?? r)) as Record<string, unknown>);
   }
   return { ok: true, row: serialized, related };
 }

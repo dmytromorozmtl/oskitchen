@@ -1,3 +1,6 @@
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
+
 export type AuditViewerRole = "owner" | "admin" | "manager" | "staff" | "other";
 
 export type AuditViewCapability =
@@ -47,6 +50,15 @@ export function canViewSensitiveAuditDetail(
   if (platformBypass) return true;
   const r = normalizeRole(role);
   return r === "owner" || r === "admin";
+}
+
+/** Canonical gate: full before/after/diff JSON requires `audit.export` (or platform bypass). */
+export function canViewSensitiveAuditDetailFromGrants(
+  granted: ReadonlySet<PermissionKey>,
+  platformBypass = false,
+): boolean {
+  if (platformBypass) return true;
+  return hasPermission(granted, "audit.export");
 }
 
 export function canExportAuditLogs(
