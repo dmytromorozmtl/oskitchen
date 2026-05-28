@@ -33,7 +33,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era5-copilot-form-deny-v1` — `assertCopilotFormGate` redirects with `copilot_error`; refresh action returns `{ ok, error }` for client UI
 - Evidence: `lib/ai/copilot-form-mutation.ts`, `actions/copilot.ts`, `tests/unit/copilot-form-deny.test.ts`, wave-4 bundle extended
-- Next: Era 5 scorecard refresh or unified rewards product decision
+- Next: Era 6 theme selection (rewards decision or KDS realtime smoke)
+
+### KOS-E5-006 — Era 5 scorecard refresh
+- ID: `KOS-E5-006`
+- Title: Document Era 5 P0 completion, score deltas, and Era 6 prompt input
+- Module: Platform / GTM / engineering
+- Priority: P0 (Era 5 Cycle 6)
+- Status: **completed**
+- Decision: `era5-scorecard-refresh-v1` — 5/5 E5 P0 items closed; overall **86/100**; defer full re-audit
+- Evidence: `docs/era5-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era5.md`, `lib/governance/era5-scorecard-policy.ts`
+- Next: pick Era 6 cycle 1 theme from era5 prompt input §4
 
 ### KOS-E5-005 — POS E2E secrets policy closure (E5-5)
 - ID: `KOS-E5-005`

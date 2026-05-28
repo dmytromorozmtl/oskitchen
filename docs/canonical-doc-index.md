@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 5 Cycle 5 — POS E2E secrets policy closure)  
+**Updated:** 2026-05-27 (Era 5 Cycle 6 — scorecard refresh)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -47,9 +47,11 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | Facts and constraints for Evolution Era 5 master prompt |
+| [`next-master-prompt-input-2026-05-27-era5.md`](./next-master-prompt-input-2026-05-27-era5.md) | Facts and constraints for Evolution Era 6 master prompt |
+| [`era5-cycle-completion-scorecard-2026-05-27.md`](./era5-cycle-completion-scorecard-2026-05-27.md) | Era 5 P0 completion (cycles 1–5) + score 86/100 |
+| [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | **Superseded** by era5 input for recurring prompts |
 | [`era4-cycle-completion-scorecard-2026-05-27.md`](./era4-cycle-completion-scorecard-2026-05-27.md) | Era 4 execution map completion (cycles 1–12) + score 82/100 |
-| [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | **Superseded** by era4 input for recurring prompts |
+| [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | **Superseded** by era5 input for recurring prompts |
 | [`era2-cycle-completion-scorecard-2026-05-27.md`](./era2-cycle-completion-scorecard-2026-05-27.md) | Era 2 execution map completion + post wave-3 scorecard |
 | [`full-strategic-reaudit-2026-05-27.md`](./full-strategic-reaudit-2026-05-27.md) | **Superseded** by era2 re-audit for strategic decisions |
 | [`next-master-prompt-input-2026-05-27.md`](./next-master-prompt-input-2026-05-27.md) | **Superseded** by era3 input for recurring prompts |
@@ -121,6 +123,17 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **11** | **Mutation access consolidation** | `era4-mutation-access-consolidation-v1`; domain registry |
 | **12** | **Page maturity sweep** | `era4-page-maturity-sweep-v1`; `PageMaturityRouteNotice` |
 | **13** | **Scorecard refresh** | `era4-scorecard-refresh-v1`; this §Scorecard Era 4 |
+
+## Evolution Era 5 cycle ledger (P0 closure)
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **RBAC wave 4 in security-db** | `test:security` chains `test:ci:rbac-wave4` |
+| **2** | **Typecheck slice 2** | `era5-typecheck-slice-v2`; `typecheck:slice:storefront-marketing` |
+| **3** | **POS-only GTM lock** | `era5-pos-only-gtm-lock-v1`; `inventory-depletion-gtm-lock-cert` |
+| **4** | **Copilot void-form deny UX** | `era5-copilot-form-deny-v1` |
+| **5** | **POS E2E secrets policy** | `era5-pos-e2e-secrets-accept-v1` |
+| **6** | **Scorecard refresh** | `era5-scorecard-refresh-v1`; this §Scorecard Era 5 |
 
 ## Evolution Era 3 cycle ledger (governance CI certification)
 
@@ -195,6 +208,27 @@ Incremental refresh after Era 4 cycles 1–12 (cross-channel truth, governance e
 
 **Re-audit decision:** defer full repo re-audit until Era 5 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era4.md`.
 
+## Scorecard (Evolution Era 5 end — 2026-05-27)
+
+Incremental refresh after Era 5 cycles 1–5 (P0 closure from era4 handoff). Baseline = Era 4 end **82** overall.
+
+| Area | Era 4 end | Era 5 end | Δ | Key evidence |
+|------|----------:|----------:|--:|--------------|
+| Overall | 82 | **86** | +4 | All E5 P0 closed with policy + cert wiring |
+| Security | 74 | **78** | +4 | wave 4 in security-db; copilot deny UX |
+| QA | 82 | **84** | +2 | POS E2E secrets policy cert |
+| DevOps | 85 | **88** | +3 | typecheck slice storefront/marketing |
+| RBAC | 80 | **83** | +3 | `test:security` chains wave 4 |
+| Inventory | 68 | **72** | +4 | permanent GTM lock |
+| POS | 70 | **74** | +4 | explicit fork skip acceptance |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 64 | **64** | +0 | unchanged |
+| Enterprise readiness | 55 | **55** | +0 | procurement roadmap only |
+| Marketing/sales | 70 | **71** | +1 | GTM depletion honesty |
+| Storefront | 79 | **80** | +1 | typecheck slice includes storefront spine |
+
+**Re-audit decision:** defer full repo re-audit until Era 6 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era5.md`.
+
 ---
 
 ## Validation
@@ -224,3 +258,4 @@ Incremental refresh after Era 4 cycles 1–12 (cross-channel truth, governance e
 | 2026-05-27 | Era 5 Cycle 3: `era5-pos-only-gtm-lock-v1` + inventory GTM lock cert |
 | 2026-05-27 | Era 5 Cycle 4: `era5-copilot-form-deny-v1` — copilot form deny redirect UX |
 | 2026-05-27 | Era 5 Cycle 5: `era5-pos-e2e-secrets-accept-v1` — POS browser E2E fork skip policy cert |
+| 2026-05-27 | Era 5 Cycle 6: scorecard refresh 86/100 + `next-master-prompt-input-2026-05-27-era5.md` |
