@@ -64,7 +64,7 @@ bash scripts/ops/pilot-preflight.sh
 | Onboarding | Sign in, kitchen settings, menu + products | Accept invite | Auth, catalog |
 | Orders | Manual order → production → packing | Order hub scoped to workspace | Order spine, kitchen |
 | Storefront | Publish menu, test checkout | — | Storefront (`beta` / qualified) |
-| Integrations | Woo **or** Shopify test shop only | — | Integrations (`era4-channel-golden-path-v1`); staging smoke `npm run smoke:woo-shopify` (`era12-channel-golden-path-smoke-v1`, not in default CI) |
+| Integrations | Woo **or** Shopify test shop only | — | Integrations (`era4-channel-golden-path-v1`, `era14-channel-golden-path-recert-v1`); `npm run smoke:channel-golden-path`; staging `npm run smoke:woo-shopify` (`era12-channel-golden-path-smoke-v1`, not in default CI) |
 | POS | Open POS terminal, checkout test sale | RBAC deny spot check | POS (`beta`), inventory POS-only |
 | KDS | Kitchen display bump/recall | — | KDS (`era4-kds-staging-smoke-v1`, `era6-kds-realtime-smoke-v1`) |
 

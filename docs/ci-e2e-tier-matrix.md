@@ -240,10 +240,11 @@ npm run test:ci:pos-money-path:e2e
 
 | Suite | Command | Notes |
 |-------|---------|-------|
-| Channel golden-path wiring cert | `npm run test:ci:channel-golden-path:cert` | Policy id `era4-channel-golden-path-v1`, scripts, fixtures, honest scope in matrix + maturity |
+| Channel golden-path wiring cert | `npm run test:ci:channel-golden-path:cert` | Policy ids `era4-channel-golden-path-v1` + era12/era14 recerts; scripts, fixtures, honest scope in matrix + maturity |
+| Era 14 channel golden-path recert | `npm run test:ci:channel-golden-path-era14:cert` | `era14-channel-golden-path-recert-v1`; honesty checklist; chains into channel cert |
 | Channel golden-path unit | `npm run test:ci:channel-golden-path` | Normalize → webhook processor → `externalOrder` + channel import staging (mocked); channel certification + webhook signature helpers |
 
-**Golden-path policy (Era 4 Cycle 5 + Era 12 Cycle 1 recert):** `lib/integrations/channel-golden-path-policy.ts` (`era4-channel-golden-path-v1`); **Era 12:** `era12-channel-golden-path-recert-v1` — certifies `order_hub_visibility` via `loadOrderHubPageData` + `externalOrderListWhereForOwner`. Webhook → normalized order → `externalOrder` → channel import staging → order hub external list. **Does not certify** automatic kitchen `Order` creation from Woo/Shopify webhooks (`kitchenOrderAutoCreateFromWebhook: false`). Staging/live store proof: `npx tsx scripts/smoke-woo-shopify-certification.ts` (optional `--skip-live`).
+**Golden-path policy (Era 4 Cycle 5 + Era 12 + Era 14 recert):** `lib/integrations/channel-golden-path-policy.ts` (`era4-channel-golden-path-v1`); **Era 12:** `era12-channel-golden-path-recert-v1`; **Era 14:** `era14-channel-golden-path-recert-v1` — `docs/channel-golden-path-honesty-checklist.md`; `npm run smoke:channel-golden-path`. Certifies `order_hub_visibility` via `loadOrderHubPageData` + `externalOrderListWhereForOwner`. Webhook → normalized order → `externalOrder` → channel import staging → order hub external list. **Does not certify** automatic kitchen `Order` creation from Woo/Shopify webhooks (`kitchenOrderAutoCreateFromWebhook: false`). Staging/live store proof: `npm run smoke:woo-shopify` (optional `--skip-live`; not in default CI).
 
 **Wiring certification (tier 0):** `test:ci:channel-golden-path:cert` + `test:ci:channel-golden-path` chained in `test:ci:governance-bundles` after integration honesty.
 

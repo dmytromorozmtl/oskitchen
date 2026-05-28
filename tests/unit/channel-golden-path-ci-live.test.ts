@@ -49,6 +49,9 @@ describe("channel golden path CI certification (live repo)", () => {
     expect(scripts["test:ci:channel-golden-path:cert"]).toContain(
       "channel-golden-path-era12-cert-live",
     );
+    expect(scripts["test:ci:channel-golden-path:cert"]).toContain(
+      "channel-golden-path-era14-cert-live",
+    );
   });
 
   it("wires webhook processors, fixtures, and unit tests on disk", () => {

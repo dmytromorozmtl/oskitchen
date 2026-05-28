@@ -536,3 +536,4 @@ Incremental refresh after Era 13 cycles 1–4 (enterprise delivery + operator de
 | 2026-05-27 | Era 14 Cycle 2: `era14-cross-channel-rewards-recert-v1` — dual-ledger recert; deferred unified E2E; smoke:cross-channel-rewards |
 | 2026-05-27 | Era 14 Cycle 3: `era14-mutation-access-consolidation-recert-v1` — registry/scoped-helper recert; smoke:mutation-access; no helper rewrite |
 | 2026-05-27 | Era 14 Cycle 4: `era14-cron-surface-recert-v1` — 16 production crons only; smoke:cron-surface; no new experimental routes |
+| 2026-05-27 | Era 14 Cycle 5: `era14-channel-golden-path-recert-v1` — Woo/Shopify path recert; smoke:channel-golden-path; no live marketplace claim |

@@ -3,7 +3,17 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
-## Era 14 — Nav / page maturity / RBAC / cron recert
+## Era 14 — Nav / page maturity / RBAC / cron / integrations recert
+
+### KOS-E14-005 — Channel golden path Era 14 recert (P1)
+- ID: `KOS-E14-005`
+- Title: Re-certify Woo/Shopify golden path and honest integration scope
+- Module: Integrations / Platform
+- Priority: P1 (Era 14 Cycle 5)
+- Status: **completed**
+- Decision: `era14-channel-golden-path-recert-v1` — webhook → externalOrder → hub visibility; no kitchen Order auto-create; `smoke:channel-golden-path` for CI certs; `smoke:woo-shopify` staging-only
+- Evidence: `lib/integrations/channel-golden-path-era14-policy.ts`, `test:ci:channel-golden-path-era14:cert`, `docs/channel-golden-path-honesty-checklist.md`
+- Next: live store pilot via `npm run smoke:woo-shopify` when credentials available
 
 ### KOS-E14-004 — Cron surface Era 14 recert (P1)
 - ID: `KOS-E14-004`

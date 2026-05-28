@@ -73,7 +73,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - policy: `lib/integrations/channel-golden-path-policy.ts` (`era4-channel-golden-path-v1`)
 - era12 recert: `lib/integrations/channel-golden-path-era12-policy.ts` (`era12-channel-golden-path-recert-v1`) — `order_hub_visibility` via order hub service wiring
 - era12 staging smoke: `lib/integrations/channel-golden-path-smoke-era12-policy.ts` (`era12-channel-golden-path-smoke-v1`) — `npm run smoke:woo-shopify`; **not in default CI**; `--skip-live` for credentials-only; cert `test:ci:channel-golden-path-smoke-era12:cert`
-- wiring cert: `test:ci:channel-golden-path:cert` (chains era12 cert; in `test:ci:governance-bundles`)
+- era14 recert: `lib/integrations/channel-golden-path-era14-policy.ts` (`era14-channel-golden-path-recert-v1`) — `docs/channel-golden-path-honesty-checklist.md`; `npm run smoke:channel-golden-path`
+- wiring cert: `test:ci:channel-golden-path:cert` (chains era12 + era14 certs; in `test:ci:governance-bundles`)
 - unit: `npm run test:ci:channel-golden-path` — normalize fixtures, webhook processors → `externalOrder` + channel import staging + order hub scope (mocked)
 - era12 unit: `npm run test:ci:channel-golden-path-era12`
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
