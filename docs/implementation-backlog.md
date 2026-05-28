@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-004 — Pilot integration health strip (P1)
+- ID: `KOS-E18-004`
+- Title: Era 18 Workstream C Cycle 19 — compact integration health on manager operator home
+- Module: Integrations / Dashboard
+- Priority: P1 (pilot transparency)
+- Status: **pilot_integration_health_strip_wired**
+- Decision: `era18-pilot-integration-health-strip-v1` — real connection rows + webhook backlog; links to full `/dashboard/integration-health`
+- Evidence: `components/dashboard/pilot-integration-health-strip.tsx`, `app/dashboard/page.tsx`
+- Next: Woo/Shopify live smoke PASS when ops credentials configured
+
 ### KOS-E18-003 — Role-based operator home MVP (P1)
 - ID: `KOS-E18-003`
 - Title: Era 18 Workstream J Cycle 43 — focused dashboard home for cashier/kitchen/manager

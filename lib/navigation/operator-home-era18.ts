@@ -107,6 +107,12 @@ const OPERATOR_HOME_ACTION_CATALOG: Record<
   ],
   manager: [
     {
+      id: "integration-health",
+      label: "Integration health",
+      description: "Channel sync status, last errors, and webhook backlog.",
+      href: "/dashboard/integration-health",
+    },
+    {
       id: "today",
       label: "Today",
       description: "Operational command center for the shift.",

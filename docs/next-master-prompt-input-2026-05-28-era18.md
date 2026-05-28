@@ -12,6 +12,32 @@
 
 ---
 
+## Era 17 outcomes
+
+Era 17 closed the policy/wiring layer: SSO pilot foundation, P0 unblock orchestrators, commercial GO/NO-GO pack, governance **100/100**, blended **89/100**. Live staging proof and paid pilot execution remain **operator-blocked**.
+
+## Era 17 success criteria
+
+**NOT MET** — no IdP login PASS, no GitHub staging first-green PASS URLs, no Woo/Shopify live PASS, no paid pilot customer, Tier 0/Tier 2 incomplete in GO/NO-GO artifact.
+
+## Open P0 for Era 18
+
+Configure 11 P0 staging env vars → `smoke:p0-staging-proof-unblock` PASS; GitHub staging workflows first green; Woo/Shopify live smoke; Tier 0 engineering gate; Tier 2 golden path; qualified ICP + LOI; first paid pilot execution.
+
+## Era 18 strategic theme
+
+**Execute staging proof and first paid pilot** — evidence over policy; no feature sprawl until P0 PASS artifacts exist.
+
+## Re-audit decision
+
+Defer full re-audit at Era 18 start. Trigger full re-audit when first paid pilot completes, SSO reaches `pilot_ready` with IdP artifact, or repo scale shifts materially (>50 new API routes).
+
+## Recommended Era 18 master prompt theme
+
+**GLOBAL LEAP: staging proof + first paid pilot** — honest claims, forbidden-claims gate, operator speed (POS discount UI, role-based home, integration visibility), no Toast/Square parity fiction.
+
+---
+
 ## 1. Current Product Reality
 
 - **700** dashboard/storefront/platform pages; broad food-ops surface (orders, POS, storefront, KDS, production, inventory, CRM, staff, billing).
@@ -114,6 +140,7 @@ Only if pilot-blocking or post-GO:
 - Role-based operator home MVP (post-pilot feedback)
 - Manager discount UI (server guards exist)
 - Pilot metrics dashboard export
+- Manager integration health strip on operator home (Era 18 Cycle 4)
 
 **Do not add without explicit era unlock:** offline POS, hardware cert, marketplace LIVE, unified inventory/rewards, SCIM, SOC2 program, rush-hour KDS cert, broad AI.
 
@@ -274,7 +301,9 @@ Each Era 18 cycle must state:
 
 ---
 
-## Scorecard (Era 17 end → Era 18 start)
+## Scorecard (Era 17 end)
+
+Era 17 end → Era 18 start scorecard (governance vs blended):
 
 | Area | Governance | Blended | Era 18 Target | Requires |
 |------|----------:|--------:|--------------:|----------|

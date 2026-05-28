@@ -27,7 +27,8 @@ Interpretation rule:
 - **Case study draft (Era 17):** `era17-pilot-case-study-draft-v1` — [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md); **internal_draft_awaiting_customer_approval**; `npm run smoke:pilot-case-study-draft`.
 - **Era 17 scorecard:** `era17-scorecard-refresh-v1` — [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md); governance **100**; blended **89/100**; success criteria **NOT MET**.
 - **Era 17 product re-audit (2026-05-28):** [`full-product-strategic-reaudit-2026-05-28-era17.md`](./full-product-strategic-reaudit-2026-05-28-era17.md) @ `5e00dd4`; blended **89/100**; Era 17 success criteria **NOT MET**; live `smoke:pilot-gono-go` → **NO-GO**; `smoke:p0-staging-proof-unblock` → **FAILED**.
-- **Era 18 Cycle 3 (2026-05-28):** Role-based operator home — `era18-operator-home-v1`; cashier/kitchen/manager focused `/dashboard`; owners keep full overview.
+- **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); theme **staging_proof_and_first_paid_pilot**.
+- **Era 18 Cycle 4 (2026-05-28):** Pilot integration health strip — `era18-pilot-integration-health-strip-v1` on manager operator home.
 
 | Feature name | Module | User roles | Current status | Evidence path | Business value | Risk level | Missing pieces | Required hardening | Required tests | Sales claim allowed? | Should appear in navigation? | Should appear in marketing? | Owner role | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
