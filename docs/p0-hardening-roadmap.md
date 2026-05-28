@@ -344,7 +344,8 @@ Priority rule:
 
 - **Completed (Cycle 6, 2026-05-27):** Restaurant table mutations require `pos.access` (`lib/restaurant/require-restaurant-table-mutation.ts`); customer subscription mutations require `customers.manage` via `requireCrmMutation`; storefront experiment ethics review requires `storefront.manage` via `requireStorefrontManageActor`.
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert` (extended bundle).
-- **Residual:** Copilot void form actions still silent-return on deny; optional wire `test:ci:rbac-wave4` into `test:security`.
+- **Residual:** Copilot void form actions still silent-return on deny.
+- **Era 5 Cycle 1 (2026-05-27):** `test:ci:rbac-wave4` chained at end of `test:security` (security-db job); `test:ci:rbac-wave4:cert` asserts wiring.
 
 ## Era 4 — POS browser E2E CI policy (P0-2)
 

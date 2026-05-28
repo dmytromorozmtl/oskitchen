@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 4 Cycle 13 — scorecard refresh)  
+**Updated:** 2026-05-27 (Era 5 Cycle 1 — RBAC wave 4 in security-db)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -219,3 +219,4 @@ Incremental refresh after Era 4 cycles 1–12 (cross-channel truth, governance e
 | 2026-05-27 | Era 4 Cycle 4: experimental cron archive (121 off App Router) + surface cert |
 | 2026-05-27 | Era 4 Cycles 5–12: channel golden path, typecheck slice, procurement, rewards, KDS smoke, mutation registry, page maturity |
 | 2026-05-27 | Era 4 Cycle 13: scorecard refresh 82/100 + `next-master-prompt-input-2026-05-27-era4.md` |
+| 2026-05-27 | Era 5 Cycle 1: `test:ci:rbac-wave4` chained in `test:security` (security-db job) |

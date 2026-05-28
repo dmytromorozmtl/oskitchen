@@ -84,7 +84,7 @@ Evolution Era 4 (cycles 1–12) **completed all 11 strategic priorities** from t
 2. **POS browser E2E** — still secrets-optional; green CI ≠ browser proof without `E2E_LOGIN_*`.
 3. **Cross-channel rewards** — dual ledger; not unified gift/loyalty across channels.
 4. **KDS** — no rush-hour or realtime Playwright certification.
-5. **RBAC wave 4** — not wired into `test:security` bundle (manual/CI script only).
+5. ~~**RBAC wave 4 in security-db**~~ — **closed Era 5 Cycle 1:** `test:ci:rbac-wave4` chained in `test:security`.
 6. **Typecheck** — slice 1 only; full monolith typecheck still heavy.
 7. **SSO/SOC2/SCIM** — roadmap in procurement pack only, not implemented.
 
@@ -105,7 +105,7 @@ npm run validate:cron-inventory
 ## Recommended Era 5 Themes (not started)
 
 1. Optional storefront inventory depletion **or** permanent POS-only GTM lock.
-2. Wire `test:ci:rbac-wave4` into `test:security` / security-db job.
+2. ~~Wire `test:ci:rbac-wave4` into `test:security`~~ — **Era 5 Cycle 1 completed**.
 3. Typecheck slice 2 (storefront/marketing) + optional CI parallel job.
 4. Implement SSO/SCIM **or** keep procurement roadmap-only with annual review.
 5. Full strategic re-audit only if commercial posture or repo scale shifts materially.

@@ -33,7 +33,7 @@ All 11 Era 4 execution-map priorities **completed** (cycles 1–12). Policy IDs 
 | ID | Item | Notes |
 |----|------|-------|
 | E5-1 | Storefront inventory depletion | Implement hook **or** lock POS-only in GTM permanently |
-| E5-2 | `test:ci:rbac-wave4` in `test:security` | Wave 4 exists but not security-db default |
+| E5-2 | ~~`test:ci:rbac-wave4` in `test:security`~~ | **Closed Era 5 Cycle 1** — chained at end of `test:security` |
 | E5-3 | Typecheck slice 2+ | storefront/marketing; optional CI parallel job |
 | E5-4 | Copilot void-form deny UX | Silent return on deny (documented exception) |
 | E5-5 | POS E2E secrets in CI | Fork/staging credentials or accept explicit skip |
@@ -71,7 +71,7 @@ Pick **one theme per cycle**; do not reopen Era 4 unless regression proven.
 - Scorecard cert: `npm run test:ci:scorecard:cert` (must stay last in governance bundles).
 - Money paths: `storefront-money-path`, `pos-money-path` jobs.
 - KDS: `kds-v1-prototype` job + `test:ci:kds-staging-smoke`.
-- RBAC wave 4: `test:ci:rbac-wave4` (not in governance bundles).
+- RBAC wave 4: `test:ci:rbac-wave4` at end of `test:security` (security-db); not in governance bundles.
 
 ---
 

@@ -36,7 +36,7 @@ Policy id: `era4-mutation-access-consolidation-v1` (`lib/permissions/mutation-ac
 
 **Shared denial audit:** `logDomainMutationDenied` in `lib/permissions/log-domain-mutation-denied.ts` — used by wave-4 logistics/demo/FOH helpers to avoid duplicated `recordAuditLog` wiring.
 
-**CI:** `npm run test:ci:mutation-access-consolidation` + `test:ci:mutation-access-consolidation:cert` in `test:ci:governance-bundles`. Wave-4 action RBAC remains in `test:ci:rbac-wave4`.
+**CI:** `npm run test:ci:mutation-access-consolidation` + `test:ci:mutation-access-consolidation:cert` in `test:ci:governance-bundles`. Wave-4 action RBAC: `test:ci:rbac-wave4` chained at end of `test:security` (security-db job); wiring cert `test:ci:rbac-wave4:cert`.
 
 **Not consolidated in Cycle 11:** Copilot (`requireCopilotMutation`), per-domain audit services (CRM, kitchen), or platform GTM bridges — listed as documented exceptions in the registry.
 

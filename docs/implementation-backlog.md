@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 5 — Security CI consolidation
+
+### KOS-E5-001 — RBAC wave 4 in security-db bundle
+- ID: `KOS-E5-001`
+- Title: Wire `test:ci:rbac-wave4` into `test:security` (security-db job)
+- Module: Platform / security / CI
+- Priority: P0 (Era 5 Cycle 1)
+- Status: **completed**
+- Decision: chain wave-4 bundle after integration PII tests; cert asserts order + security-db workflow
+- Evidence: `package.json` (`test:security`), `tests/unit/rbac-wave4-ci-live.test.ts`, `test:ci:rbac-wave4:cert`
+- Next: typecheck slice 2 or storefront inventory depletion decision (E5-1)
+
 ## Era 4 — Cross-channel operational truth
 
 ### KOS-E4-001 — Inventory depletion channel policy (POS-only)

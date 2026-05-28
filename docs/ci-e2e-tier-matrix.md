@@ -159,7 +159,7 @@ npm run test:ci:pos-money-path:e2e
 | Domain mutation registry + denial logger | `npm run test:ci:mutation-access-consolidation` | Registry paths, wave-4 `requireMutationPermission` + `logDomainMutationDenied` wiring |
 | Consolidation wiring cert | `npm run test:ci:mutation-access-consolidation:cert` | Policy id, governance bundle, RBAC architecture §2a |
 
-**Policy (Era 4 Cycle 11):** `lib/permissions/mutation-access-policy.ts`. **Wave-4 action tests:** `test:ci:rbac-wave4` (security-db / manual; not in governance bundles).
+**Policy (Era 4 Cycle 11):** `lib/permissions/mutation-access-policy.ts`. **Wave-4 action tests:** `test:ci:rbac-wave4` — chained at end of `test:security` (security-db job); wiring cert `test:ci:rbac-wave4:cert`; not in governance bundles.
 
 **Wiring certification (tier 0):** `test:ci:mutation-access-consolidation:cert` + `test:ci:mutation-access-consolidation` chained in `test:ci:governance-bundles`.
 
