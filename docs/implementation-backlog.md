@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-007 — Integration Health smoke artifact viewer (P1 WOW)
+- ID: `KOS-E19-007`
+- Title: Era 19 Workstream D Cycle 7 — engineering smoke artifact viewer on integration health
+- Module: Integrations / Integration Health / Operator UX
+- Priority: P1 (WOW pillar — channel reliability proof)
+- Status: **smoke_artifact_viewer_wired**
+- Decision: `era19-integration-health-smoke-artifacts-v1` — reads channel-live, P0 unblock, staging first-green JSON; honest SKIPPED WITH REASON; recovery deep links; never claims LIVE without artifact
+- Evidence: `lib/integrations/integration-health-smoke-artifacts-era19.ts`, viewer on `/dashboard/integration-health#engineering-smoke-artifacts`
+- Next: Integration Health card polish (Stripe/webhooks/API per-channel next actions) or Launch Wizard C3 UX polish
+
 ### KOS-E19-006 — Launch Wizard shell (P1 WOW)
 - ID: `KOS-E19-006`
 - Title: Era 19 Workstream C Cycle 6 — `/dashboard/launch-wizard` eight-step shell

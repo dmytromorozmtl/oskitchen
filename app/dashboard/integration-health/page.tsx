@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
+import { IntegrationHealthSmokeArtifactViewer } from "@/components/dashboard/integration-health-smoke-artifact-viewer";
 import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
 import { SensitiveErrorPreview } from "@/components/integrations/sensitive-error-preview";
 import { CapabilityMatrixPanel } from "@/components/capabilities/capability-matrix-panel";
@@ -52,6 +53,7 @@ import {
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
 import { IntegrationHealthSummaryPanel } from "@/components/integrations/integration-health-summary";
+import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 
 function tierBadge(tier: IntegrationMaturityTier) {
   const variant: Record<IntegrationMaturityTier, "default" | "secondary" | "destructive" | "outline"> = {
@@ -75,7 +77,8 @@ export default async function IntegrationHealthDashboardPage() {
   const { sessionUser: user, dataUserId } = await getTenantActor();
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [connections, kitchen, failedHooks, healthCards, liveProofSlices] = await Promise.all([
+  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts] =
+    await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(dataUserId),
       orderBy: { updatedAt: "desc" },
@@ -96,6 +99,7 @@ export default async function IntegrationHealthDashboardPage() {
     }),
     listIntegrationHealthCards(dataUserId),
     listChannelPilotLiveProofSlices(dataUserId),
+    loadIntegrationHealthSmokeArtifactsModel(),
   ]);
 
   const workspaceDemo = kitchen?.demoMode ?? false;
@@ -119,6 +123,8 @@ export default async function IntegrationHealthDashboardPage() {
       <IntegrationHealthSummaryPanel summary={healthSummary} />
 
       <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
+
+      <IntegrationHealthSmokeArtifactViewer model={smokeArtifacts} />
 
       <ChannelLiveProofStatusPanel slices={liveProofSlices} />
 
