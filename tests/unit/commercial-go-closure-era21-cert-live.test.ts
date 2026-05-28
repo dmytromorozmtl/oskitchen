@@ -40,6 +40,7 @@ describe("commercial go closure era21 CI certification (live repo)", () => {
     const step3 = readFileSync(join(ROOT, COMMERCIAL_GO_CLOSURE_STEP3_DOC), "utf8");
     expect(step3).toContain("smoke:pilot-gono-go");
     expect(step3).toContain("PILOT_GONOGO_ICP_INPUT_JSON");
+    expect(step3).toContain("ops:run-commercial-go-closure-post-tier2-orchestrator");
   });
 
   it("wires product surfaces", () => {

@@ -2,6 +2,10 @@
  * Commercial GO closure UI slice — Launch Wizard, Owner Briefing, Platform ops.
  */
 import {
+  resolveCommercialGoClosureMilestoneFromPhaseStatuses,
+  type CommercialGoClosureMilestone,
+} from "@/lib/commercial/commercial-go-closure-post-tier2-orchestrator-era21";
+import {
   buildCommercialGoClosurePhaseStatuses,
   COMMERCIAL_GO_CLOSURE_BLOCKER_PLAYBOOK_DOC,
   COMMERCIAL_GO_CLOSURE_STEP3_DOC,
@@ -30,7 +34,11 @@ export type CommercialGoClosureUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
-  orchestratorCommand: string;
+  postTier2OrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateTier2GateCommand: string;
+  forbiddenClaimsCommand: string;
+  goClosureMilestone: CommercialGoClosureMilestone;
   implementationHref: string;
   launchWizardHref: string;
   nextPhase: CommercialGoClosurePhaseStatus | null;
@@ -63,6 +71,10 @@ export function buildCommercialGoClosureUiSlice(input: {
   const nextPhaseDetail = nextPhase
     ? formatCommercialGoClosurePhaseBlockerDetail(nextPhase)
     : null;
+  const goClosureMilestone = resolveCommercialGoClosureMilestoneFromPhaseStatuses(phases, {
+    prerequisitesComplete: true,
+    decision,
+  });
 
   return {
     policyId: COMMERCIAL_GO_CLOSURE_UI_ERA21_POLICY_ID,
@@ -77,6 +89,13 @@ export function buildCommercialGoClosureUiSlice(input: {
     validateCommand: "npm run ops:validate-commercial-go-closure-env",
     exportTemplateCommand: "npm run ops:export-commercial-go-closure-env-template -- --write",
     syncProgressReportCommand: "npm run ops:sync-commercial-go-closure-progress-report -- --write",
+    postTier2OrchestratorCommand:
+      "npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-commercial-go-closure-readiness-checklist -- --write",
+    validateTier2GateCommand: "npm run ops:validate-tier2-golden-path-env -- --json",
+    forbiddenClaimsCommand: "npm run smoke:pilot-forbidden-claims-enforcement",
+    goClosureMilestone,
     orchestratorCommand: "npm run smoke:pilot-gono-go",
     implementationHref: "/dashboard/implementation",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
@@ -88,5 +107,5 @@ export function buildCommercialGoClosureUiSlice(input: {
 
 export function formatCommercialGoClosureProgressLabel(slice: CommercialGoClosureUiSlice): string {
   const decisionLabel = slice.decision ?? "not evaluated";
-  return `Commercial GO ${slice.completedPhaseCount}/${slice.phases.length} phases · ${decisionLabel}`;
+  return `Commercial GO ${slice.completedPhaseCount}/${slice.phases.length} phases · ${slice.goClosureMilestone.replaceAll("_", " ")} · ${decisionLabel}`;
 }

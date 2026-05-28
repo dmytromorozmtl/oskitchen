@@ -42,6 +42,10 @@ describe("commercial-go-closure-ui-era21", () => {
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.phases.length).toBe(5);
+    expect(slice?.goClosureMilestone).toBe("awaiting_icp_qualification");
+    expect(slice?.postTier2OrchestratorCommand).toContain(
+      "ops:run-commercial-go-closure-post-tier2-orchestrator",
+    );
     expect(formatCommercialGoClosureProgressLabel(slice!)).toContain("NO-GO");
   });
 

@@ -17,6 +17,10 @@ export function buildCommercialGoClosureProgressReportMarkdown(
     "",
     `Generated: ${new Date().toISOString()}`,
     "",
+    "## Milestone",
+    "",
+    `- goClosureMilestone: **${result.goClosureMilestone}**`,
+    "",
     "## Prerequisites",
     "",
     `- P0: **${result.prerequisites.p0ProofStatus ?? "missing"}**`,
@@ -52,7 +56,8 @@ export function buildCommercialGoClosureProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
-  lines.push("npm run ops:validate-commercial-go-closure-env");
+  lines.push("npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write");
+  lines.push("npm run ops:validate-commercial-go-closure-env -- --json");
   lines.push("npm run smoke:pilot-forbidden-claims-enforcement");
   lines.push("npm run smoke:pilot-gono-go");
   lines.push("```");

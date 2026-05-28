@@ -29,9 +29,11 @@ tier2ProofStatus: proof_passed
 ### Preflight tooling
 
 ```bash
+npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write
 npm run ops:validate-commercial-go-closure-env -- --json
 npm run ops:export-commercial-go-closure-env-template -- --write
 npm run ops:sync-commercial-go-closure-progress-report -- --write
+npm run ops:export-commercial-go-closure-readiness-checklist -- --write
 ```
 
 ### 1. ICP qualification (real prospect)

@@ -5,6 +5,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { resolveCommercialGoClosureMilestone } from "@/lib/commercial/commercial-go-closure-post-tier2-orchestrator-era21";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import {
   buildCommercialGoClosurePhaseStatuses,
@@ -48,6 +49,7 @@ export function evaluateCommercialGoClosureEnv(env: NodeJS.ProcessEnv = process.
   phases: ReturnType<typeof buildCommercialGoClosurePhaseStatuses>;
   decision: string | null;
   readyForGoOrchestrator: boolean;
+  goClosureMilestone: ReturnType<typeof resolveCommercialGoClosureMilestone>;
 } {
   const artifacts = readCommercialGoClosureArtifacts();
   const prerequisites = resolveCommercialGoClosurePrerequisites({
@@ -73,6 +75,11 @@ export function evaluateCommercialGoClosureEnv(env: NodeJS.ProcessEnv = process.
     phases,
     decision,
     readyForGoOrchestrator,
+    goClosureMilestone: resolveCommercialGoClosureMilestone({
+      prerequisitesComplete: prerequisites.prerequisitesComplete,
+      decision,
+      phases,
+    }),
   };
 }
 
@@ -90,6 +97,7 @@ function main() {
           tier2ProofStatus: result.prerequisites.tier2ProofStatus,
           decision: result.decision,
           readyForGoOrchestrator: result.readyForGoOrchestrator,
+          goClosureMilestone: result.goClosureMilestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -109,9 +117,13 @@ function main() {
   console.log(`\nCommercial GO closure validation (era21-commercial-go-closure-v1)\n`);
 
   if (!result.prerequisites.prerequisitesComplete) {
-    console.log("Blocked — complete P0 + Tier 2 proof_passed first.\n");
+    console.log("Blocked — complete P0 + Tier 2 proof_passed first:");
+    console.log("  npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write");
+    console.log("  npm run ops:validate-tier2-golden-path-env -- --json\n");
     process.exit(2);
   }
+
+  console.log(`GO closure milestone: ${result.goClosureMilestone}\n`);
 
   for (const phase of result.phases) {
     console.log(`${phase.complete ? "✓" : "○"} ${phase.label}`);
@@ -119,7 +131,8 @@ function main() {
   }
 
   console.log(`Decision: ${result.decision ?? "not evaluated"}`);
-  console.log(`Ready for smoke:pilot-gono-go: ${result.readyForGoOrchestrator ? "yes" : "no"}\n`);
+  console.log(`Ready for smoke:pilot-gono-go: ${result.readyForGoOrchestrator ? "yes" : "no"}`);
+  console.log("Orchestrator: npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write\n");
   process.exit(0);
 }
 

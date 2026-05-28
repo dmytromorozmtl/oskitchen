@@ -39,6 +39,12 @@ export function CommercialGoClosurePhasesPanel(props: {
       <CardContent className={cn("space-y-3", isCompact && "pt-4")}>
         {!isCompact ? (
           <div className="flex flex-wrap gap-2">
+            <Badge
+              variant="outline"
+              className="rounded-full font-mono text-[10px]"
+            >
+              {slice.goClosureMilestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full font-mono text-[10px]">
               decision: {slice.decision ?? "unknown"}
             </Badge>
@@ -106,10 +112,13 @@ export function CommercialGoClosurePhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postTier2OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.validateTier2GateCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
-                <li>npm run smoke:pilot-forbidden-claims-enforcement</li>
+                <li>{slice.forbiddenClaimsCommand}</li>
                 <li>{slice.orchestratorCommand}</li>
               </ul>
             </div>
