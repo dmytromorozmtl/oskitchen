@@ -455,3 +455,4 @@ Incremental refresh after Era 10 cycles 1–4 (customer value / operator depth /
 | 2026-05-27 | Era 11 Cycle 1: `era11-typecheck-slice-v3` — `platform-auth` typecheck slice |
 | 2026-05-27 | Era 11 Cycle 2: `era11-mutation-access-recert-v1` — production calendar inline gate + status operation recert |
 | 2026-05-27 | Era 11 Cycle 3: `era11-kds-realtime-e2e-staging-v1` — KDS Playwright staging spec + skip summary artifact |
+| 2026-05-27 | Era 11 Cycle 4: `era11-kds-realtime-e2e-staging-workflow-v1` — optional `playwright-kds-staging.yml` workflow |

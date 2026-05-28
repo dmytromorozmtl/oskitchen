@@ -1,0 +1,64 @@
+# KDS Realtime Playwright staging — optional Tier E (Evolution Era 11 Cycle 4).
+# Policy: era11-kds-realtime-e2e-staging-workflow-v1
+#
+# Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD
+# Optional: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY (Realtime client)
+#
+# Not in default ci.yml — workflow_dispatch or weekly schedule only.
+
+name: Playwright KDS Staging
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1"
+
+jobs:
+  kds-realtime-staging:
+    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: KDS realtime staging E2E (Tier E)
+        id: kds_realtime_e2e
+        env:
+          CI: "1"
+          PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          ENABLE_KDS_V1_CERTIFIED: "true"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: npm run test:ci:kds-realtime-e2e-staging:playwright
+
+      - name: KDS realtime staging E2E policy summary
+        id: kds_realtime_e2e_policy
+        if: always()
+        env:
+          KDS_REALTIME_E2E_STEP_OUTCOME: ${{ steps.kds_realtime_e2e.outcome }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          ENABLE_KDS_V1_CERTIFIED: "true"
+          NODE_ENV: test
+        run: npm run test:ci:kds-realtime-e2e-staging:policy
+
+      - name: Upload KDS realtime staging summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kds-realtime-e2e-staging-summary
+          path: ci-artifacts/kds-realtime-e2e-staging-summary.json
+          if-no-files-found: warn

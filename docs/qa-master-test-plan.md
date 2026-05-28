@@ -122,7 +122,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - playwright: `e2e/kds-realtime-staging.spec.ts` — `test:ci:kds-realtime-e2e-staging:playwright` (staging); **not in default CI**
 - policy summary: `test:ci:kds-realtime-e2e-staging:policy` → `kds-realtime-e2e-staging-summary` (`PASSED`/`SKIPPED`/`FAILED`)
 - staging: Tier E in `docs/kds-staging-smoke-checklist.md`
-- wiring cert: `test:ci:kds-realtime-e2e-staging:cert` (chains era11; in `test:ci:governance-bundles`)
+- optional workflow: `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`); not in `ci.yml`
+- wiring cert: `test:ci:kds-realtime-e2e-staging:cert` (chains era11 + workflow era11; in `test:ci:governance-bundles`)
 
 ### 8c4e. Claims registry governance (Era 8 Cycle 1)
 - policy: `lib/governance/claims-registry-policy.ts` (`era8-claims-registry-v1`)

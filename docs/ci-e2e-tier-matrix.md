@@ -102,9 +102,10 @@ npm run test:ci:pos-money-path:e2e
 |-------|----------|---------|
 | Storefront public + pay-later + optional Stripe | `.github/workflows/playwright-storefront.yml` | `PLAYWRIGHT_BASE_URL`, `E2E_STORE_SLUG`, optional `STRIPE_SECRET_KEY` + `STOREFRONT_E2E_STRIPE=1` |
 | Pilot golden path | `.github/workflows/e2e-pilot.yml` | Pilot credentials |
-| KDS Realtime observation (manual Tier E) | Staging only — see `docs/kds-staging-smoke-checklist.md` | `PLAYWRIGHT_BASE_URL`, `E2E_LOGIN_*`, `ENABLE_KDS_V1_CERTIFIED`, Supabase public keys |
+| KDS Realtime Playwright (optional) | `.github/workflows/playwright-kds-staging.yml` | `era11-kds-realtime-e2e-staging-workflow-v1`; `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD`, `ENABLE_KDS_V1_CERTIFIED=true`; artifact `kds-realtime-e2e-staging-summary` |
+| KDS Realtime observation (manual Tier D/E) | Staging only — see `docs/kds-staging-smoke-checklist.md` | `PLAYWRIGHT_BASE_URL`, `E2E_LOGIN_*`, `ENABLE_KDS_V1_CERTIFIED`, Supabase public keys |
 
-**Policy:** `era8-kds-realtime-e2e-staging-v1` + Era 11 `era11-kds-realtime-e2e-staging-v1` — Playwright spec `e2e/kds-realtime-staging.spec.ts`; explicit `kds-realtime-e2e-staging-summary` artifact via `test:ci:kds-realtime-e2e-staging:policy`; wiring cert `test:ci:kds-realtime-e2e-staging:cert`.
+**Policy:** `era8-kds-realtime-e2e-staging-v1` + Era 11 `era11-kds-realtime-e2e-staging-v1` — Playwright spec `e2e/kds-realtime-staging.spec.ts` (Tier E); optional workflow `era11-kds-realtime-e2e-staging-workflow-v1` (`playwright-kds-staging.yml`); explicit `kds-realtime-e2e-staging-summary` artifact via `test:ci:kds-realtime-e2e-staging:policy`; wiring cert `test:ci:kds-realtime-e2e-staging:cert`.
 
 ## Not in default CI (by design)
 

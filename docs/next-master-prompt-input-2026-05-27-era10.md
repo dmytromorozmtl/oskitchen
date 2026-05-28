@@ -31,6 +31,7 @@ All four Era 10 customer value / operator depth cycles from era9 prompt input **
 | **1** | **Typecheck slice platform-auth** — `era11-typecheck-slice-v3`; `typecheck:slice:platform-auth` |
 | **2** | **Mutation access recert** — `era11-mutation-access-recert-v1`; `production_calendar` registry + status operation certified |
 | **3** | **KDS Realtime Playwright staging** — `era11-kds-realtime-e2e-staging-v1`; spec + skip summary; not in default CI |
+| **4** | **KDS staging workflow** — `era11-kds-realtime-e2e-staging-workflow-v1`; `playwright-kds-staging.yml`; not in `ci.yml` |
 
 ---
 

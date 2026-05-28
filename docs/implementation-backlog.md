@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 11 — DevOps scale / RBAC recert
 
+### KOS-E11-004 — KDS Realtime staging workflow (P1)
+- ID: `KOS-E11-004`
+- Title: Optional GitHub Actions workflow for KDS Playwright staging Tier E
+- Module: Kitchen / KDS / DevOps
+- Priority: P1 (Era 11 Cycle 4)
+- Status: **completed**
+- Decision: `era11-kds-realtime-e2e-staging-workflow-v1` — `playwright-kds-staging.yml`; policy summary + artifact; not in `ci.yml`
+- Evidence: `lib/ci/kds-realtime-e2e-staging-workflow-era11-policy.ts`, `test:ci:kds-realtime-e2e-staging-workflow-era11:cert`
+- Next: run workflow on staging when secrets configured; no default CI job
+
 ### KOS-E11-003 — KDS Realtime Playwright staging (P1)
 - ID: `KOS-E11-003`
 - Title: Staging-only KDS Playwright spec with explicit skip summary artifact
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era11-kds-realtime-e2e-staging-v1` — `e2e/kds-realtime-staging.spec.ts`; `test:ci:kds-realtime-e2e-staging:policy`; not in default `ci.yml`
 - Evidence: `lib/ci/kds-realtime-e2e-staging-summary-policy.ts`, `test:ci:kds-realtime-e2e-staging-era11:cert`
-- Next: wire optional staging workflow only with explicit era decision; no default CI job
+- Next: ~~wire optional staging workflow~~ — **Done** Cycle 4 (`era11-kds-realtime-e2e-staging-workflow-v1`)
 
 ### KOS-E11-002 — Mutation access Era 11 recert (P1)
 - ID: `KOS-E11-002`
