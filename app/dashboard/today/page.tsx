@@ -76,7 +76,7 @@ export default async function TodayOperationsPage({
     <>
       <OperatorTourLauncher />
       <div className="space-y-6">
-        {integrationHealthModel ? (
+        {integrationHealthModel && !ownerBriefing?.showIntegrationHealthLane ? (
           <PilotIntegrationHealthStrip model={integrationHealthModel} />
         ) : null}
         {gettingStarted.showChecklist && !gettingStarted.allDone ? (

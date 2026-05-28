@@ -1,6 +1,6 @@
 # Era 18 P0 Staging Proof — Ops Checklist
 
-**Status:** canonical **Era 18 Cycle 1** ops vault checklist — **reconfirmed Era 19 Cycle 4** (2026-05-28)  
+**Status:** canonical **Era 18 Cycle 1** ops vault checklist — **reconfirmed Era 19 Cycle 5** (2026-05-28)  
 **Policy:** `era17-p0-staging-proof-unblock-v1` (`lib/commercial/p0-staging-proof-unblock-era17-policy.ts`)  
 **Smoke:** `npm run smoke:p0-staging-proof-unblock`  
 **Artifact:** `artifacts/p0-staging-proof-unblock-summary.json`  
@@ -16,7 +16,7 @@ Configure the **11 prerequisite env vars** that block P0 staging proof. This che
 
 ---
 
-## Current blocker snapshot (2026-05-28 — Era 19 Cycle 4 re-run)
+## Current blocker snapshot (2026-05-28 — Era 19 Cycle 5 re-run)
 
 | Field | Value |
 |-------|-------|

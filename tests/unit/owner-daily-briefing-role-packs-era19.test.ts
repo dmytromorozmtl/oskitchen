@@ -8,6 +8,8 @@ import {
   OWNER_DAILY_BRIEFING_ROLE_PACKS_ERA19_POLICY_ID,
   resolveBriefingRolePack,
   shouldShowBriefingForPersona,
+  shouldShowBriefingIntegrationHealthLane,
+  shouldShowBriefingPilotReadinessLane,
   shouldShowBriefingProductionCalendarLane,
 } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import { buildOwnerDailyBriefingTiles } from "@/lib/briefing/owner-daily-briefing-era19";
@@ -169,6 +171,17 @@ describe("owner daily briefing role packs era19", () => {
   it("hides production calendar lane for cashier pack", () => {
     expect(shouldShowBriefingProductionCalendarLane("cashier")).toBe(false);
     expect(shouldShowBriefingProductionCalendarLane("kitchen")).toBe(true);
+  });
+
+  it("shows pilot readiness lane for owner only", () => {
+    expect(shouldShowBriefingPilotReadinessLane("owner")).toBe(true);
+    expect(shouldShowBriefingPilotReadinessLane("manager")).toBe(false);
+  });
+
+  it("shows integration health lane for owner and manager", () => {
+    expect(shouldShowBriefingIntegrationHealthLane("owner")).toBe(true);
+    expect(shouldShowBriefingIntegrationHealthLane("manager")).toBe(true);
+    expect(shouldShowBriefingIntegrationHealthLane("kitchen")).toBe(false);
   });
 
   it("labels each role pack for UI headline", () => {

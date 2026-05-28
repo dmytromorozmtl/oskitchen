@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-005 — Pilot readiness + integration health briefing lanes (P1 WOW)
+- ID: `KOS-E19-005`
+- Title: Era 19 Workstream B Cycle 5 — pilot readiness lane + integration health lane on Owner Daily Briefing
+- Module: Dashboard / Today / Operator UX
+- Priority: P1 (WOW pillar depth)
+- Status: **briefing_lanes_wired**
+- Decision: `era19-owner-daily-briefing-pilot-readiness-v1` + `era19-owner-daily-briefing-integration-health-v1` — owner pilot readiness with honest commercial GO/NO-GO + P0 artifact; manager/owner integration health with live smoke SKIPPED honesty; redundant strip collapsed
+- Evidence: `lib/briefing/owner-daily-briefing-pilot-readiness-era19.ts`, `lib/briefing/owner-daily-briefing-integration-health-era19.ts`, updated briefing service + hero
+- Next: Launch Wizard shell (Workstream C1)
+
 ### KOS-E19-004 — Role-based briefing tile packs (P1 WOW)
 - ID: `KOS-E19-004`
 - Title: Era 19 Workstream B Cycle 4 — owner/manager/kitchen/cashier tile packs

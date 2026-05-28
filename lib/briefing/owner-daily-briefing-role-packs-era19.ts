@@ -149,6 +149,14 @@ export function shouldShowBriefingProductionCalendarLane(pack: BriefingRolePack)
   return pack === "owner" || pack === "manager" || pack === "kitchen";
 }
 
+export function shouldShowBriefingPilotReadinessLane(pack: BriefingRolePack): boolean {
+  return pack === "owner";
+}
+
+export function shouldShowBriefingIntegrationHealthLane(pack: BriefingRolePack): boolean {
+  return pack === "owner" || pack === "manager";
+}
+
 export function pickBriefingHeroTilesForRolePack(
   tiles: readonly OwnerDailyBriefingTile[],
   pack: BriefingRolePack,

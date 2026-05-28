@@ -12,6 +12,14 @@ import {
   type OwnerDailyBriefingTile,
 } from "@/lib/briefing/owner-daily-briefing-era19";
 import {
+  buildOwnerDailyBriefingIntegrationHealthSlice,
+  type OwnerDailyBriefingIntegrationHealthSlice,
+} from "@/lib/briefing/owner-daily-briefing-integration-health-era19";
+import {
+  buildOwnerDailyBriefingPilotReadinessSlice,
+  type OwnerDailyBriefingPilotReadinessSlice,
+} from "@/lib/briefing/owner-daily-briefing-pilot-readiness-era19";
+import {
   buildOwnerDailyBriefingProductionCalendarSlice,
   mapProductionPlanTasksToFocusTasks,
   productionCalendarActionsForBriefing,
@@ -27,6 +35,8 @@ import {
   pickBriefingHeroTilesForRolePack,
   resolveBriefingRolePack,
   shouldShowBriefingForPersona,
+  shouldShowBriefingIntegrationHealthLane,
+  shouldShowBriefingPilotReadinessLane,
   shouldShowBriefingProductionCalendarLane,
   type BriefingRolePack,
 } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
@@ -47,6 +57,7 @@ import { loadImplementationPilotReadinessModel } from "@/services/implementation
 import { getProductionCalendarOpenThroughToday } from "@/services/production/production-calendar-service";
 import { loadPilotIntegrationHealthStripModelForWorkspace } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import { getLaborRealtimeData } from "@/services/labor/labor-realtime-service";
+import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 
 export type OwnerDailyBriefingPayload = {
@@ -55,12 +66,16 @@ export type OwnerDailyBriefingPayload = {
   rolePackLabel: string;
   rolePackHeadline: string;
   showProductionCalendarLane: boolean;
+  showPilotReadinessLane: boolean;
+  showIntegrationHealthLane: boolean;
   tiles: OwnerDailyBriefingTile[];
   heroTiles: OwnerDailyBriefingTile[];
   alerts: OwnerDailyBriefingAlert[];
   topActions: OwnerDailyBriefingRankedAction[];
   nextAction: OwnerDailyBriefingNextAction;
   productionCalendar: OwnerDailyBriefingProductionCalendarSlice | null;
+  pilotReadiness: OwnerDailyBriefingPilotReadinessSlice | null;
+  integrationHealth: OwnerDailyBriefingIntegrationHealthSlice | null;
   summary: {
     attentionTileCount: number;
     alertCount: number;
@@ -157,13 +172,17 @@ export async function loadOwnerDailyBriefing(
       persona: options?.persona ?? "manager",
     });
 
-  const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts] = await Promise.all([
+  const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts, commercialOps] =
+    await Promise.all([
     options?.today ?? loadTodayCommandCenter(userId),
     loadImplementationPilotReadinessModel(userId),
     countLowStockIngredients(userId),
     loadLaborBriefingSlice(userId),
     getProductionCalendarOpenThroughToday(userId),
     countOpenPosShifts(userId),
+    rolePack === "owner"
+      ? loadCommercialPilotOpsStatusModel().catch(() => null)
+      : Promise.resolve(null),
   ]);
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
@@ -239,6 +258,24 @@ export async function loadOwnerDailyBriefing(
   const heroTiles = pickBriefingHeroTilesForRolePack(tiles, rolePack, pickOwnerDailyBriefingHeroTiles);
   const showProductionCalendarLane =
     shouldShowBriefingProductionCalendarLane(rolePack) && productionCalendarSlice.hasPlanTasks;
+  const showPilotReadinessLane = shouldShowBriefingPilotReadinessLane(rolePack);
+  const showIntegrationHealthLane = shouldShowBriefingIntegrationHealthLane(rolePack);
+
+  const pilotReadinessSlice = showPilotReadinessLane
+    ? buildOwnerDailyBriefingPilotReadinessSlice({
+        model: pilotReadiness,
+        attentionItems: pilotAttentionItems,
+        commercialOps,
+      })
+    : null;
+
+  const integrationHealthSlice =
+    showIntegrationHealthLane && integrationHealth
+      ? buildOwnerDailyBriefingIntegrationHealthSlice({
+          model: integrationHealth,
+          p0Summary: commercialOps?.p0Staging.summary ?? null,
+        })
+      : null;
 
   const nextAction = topActions[0]
     ? {
@@ -264,12 +301,16 @@ export async function loadOwnerDailyBriefing(
     rolePackLabel: BRIEFING_ROLE_PACK_LABEL[rolePack],
     rolePackHeadline: BRIEFING_ROLE_PACK_HEADLINE[rolePack],
     showProductionCalendarLane,
+    showPilotReadinessLane,
+    showIntegrationHealthLane,
     tiles,
     heroTiles,
     alerts,
     topActions,
     nextAction,
     productionCalendar: showProductionCalendarLane ? productionCalendarSlice : null,
+    pilotReadiness: pilotReadinessSlice,
+    integrationHealth: integrationHealthSlice,
     summary: {
       attentionTileCount: tiles.filter((tile) => tile.tone === "attention").length,
       alertCount: alerts.length,

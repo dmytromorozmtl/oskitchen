@@ -12,6 +12,10 @@ import type {
 } from "@/lib/briefing/owner-daily-briefing-era19";
 import type { OwnerDailyBriefingPayload } from "@/services/briefing/owner-daily-briefing-service";
 import type { OwnerDailyBriefingProductionCalendarSlice } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
+import type { OwnerDailyBriefingIntegrationHealthSlice } from "@/lib/briefing/owner-daily-briefing-integration-health-era19";
+import type { OwnerDailyBriefingPilotReadinessSlice } from "@/lib/briefing/owner-daily-briefing-pilot-readiness-era19";
+import { AlertTriangle, Cable, CheckCircle2, ClipboardCheck, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 function nextActionCardClass(tone: OwnerDailyBriefingNextAction["tone"]): string {
   if (tone === "success") {
@@ -119,6 +123,14 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
 
       {briefing.showProductionCalendarLane && briefing.productionCalendar ? (
         <ProductionCalendarLane slice={briefing.productionCalendar} />
+      ) : null}
+
+      {briefing.showPilotReadinessLane && briefing.pilotReadiness ? (
+        <PilotReadinessLane slice={briefing.pilotReadiness} />
+      ) : null}
+
+      {briefing.showIntegrationHealthLane && briefing.integrationHealth ? (
+        <IntegrationHealthLane slice={briefing.integrationHealth} />
       ) : null}
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -305,6 +317,230 @@ function CalendarStat(props: {
         {props.label}
       </p>
       <p className="mt-1 text-xl font-semibold tabular-nums">{props.value}</p>
+    </div>
+  );
+}
+
+function PilotReadinessLane(props: { slice: OwnerDailyBriefingPilotReadinessSlice }) {
+  const { slice } = props;
+  const tone = slice.allClear
+    ? "border-emerald-200/80 bg-emerald-50/30 dark:border-emerald-900/40 dark:bg-emerald-950/15"
+    : slice.hasUrgent
+      ? "border-amber-200/80 bg-amber-50/40 dark:border-amber-900/40 dark:bg-amber-950/20"
+      : "border-border/80 bg-card/90";
+
+  return (
+    <Card className={cn("shadow-sm", tone)} data-testid="owner-briefing-pilot-readiness-lane">
+      <CardHeader className="pb-2">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <ClipboardCheck className="h-4 w-4 text-muted-foreground" aria-hidden />
+              Pilot readiness
+            </CardTitle>
+            <CardDescription>{slice.headline}</CardDescription>
+          </div>
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <Link href={slice.hubHref}>Open hub</Link>
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <BriefingStat
+            label="SSO"
+            value={slice.ssoLabel}
+            tone={slice.ssoTone}
+            compact
+          />
+          <BriefingStat
+            label="Channel gaps"
+            value={String(slice.channelIncompleteCount)}
+            tone={slice.channelIncompleteCount > 0 ? "attention" : "neutral"}
+          />
+          <BriefingStat
+            label="Go-live blockers"
+            value={String(slice.goLiveBlockerCount)}
+            tone={slice.goLiveBlockerCount > 0 ? "attention" : "neutral"}
+          />
+          <BriefingStat
+            label="Signals"
+            value={String(slice.totalSignals)}
+            tone={slice.hasUrgent ? "attention" : slice.allClear ? "success" : "neutral"}
+          />
+        </div>
+        {(slice.commercialDecisionLabel || slice.p0ProofStatusLabel) && (
+          <div className="flex flex-wrap gap-2">
+            {slice.commercialDecisionLabel ? (
+              <Badge variant="destructive" className="rounded-full">
+                {slice.commercialDecisionLabel}
+              </Badge>
+            ) : null}
+            {slice.p0ProofStatusLabel ? (
+              <Badge variant="outline" className="rounded-full">
+                P0: {slice.p0ProofStatusLabel}
+              </Badge>
+            ) : null}
+          </div>
+        )}
+        {slice.attentionItems.length > 0 ? (
+          <div className="space-y-2">
+            {slice.attentionItems.map((item) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                data-testid={`owner-briefing-pilot-${item.id}`}
+                className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-muted/15 px-3 py-2 text-sm hover:bg-muted/35"
+              >
+                <div>
+                  <p className="font-medium">{item.title}</p>
+                  <p className="text-xs text-muted-foreground">{item.detail}</p>
+                </div>
+                <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No workspace pilot blockers — confirm commercial evidence gates before paid cutover.
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function IntegrationHealthLane(props: { slice: OwnerDailyBriefingIntegrationHealthSlice }) {
+  const { slice } = props;
+  const Icon =
+    slice.overall === "healthy" ? CheckCircle2 : slice.overall === "degraded" ? AlertTriangle : XCircle;
+  const tone =
+    slice.overall === "healthy" && slice.allClear
+      ? "border-emerald-200/80 bg-emerald-50/30 dark:border-emerald-900/40 dark:bg-emerald-950/15"
+      : slice.overall === "degraded"
+        ? "border-amber-200/80 bg-amber-50/40 dark:border-amber-900/40 dark:bg-amber-950/20"
+        : "border-rose-200/80 bg-rose-50/40 dark:border-rose-900/40 dark:bg-rose-950/20";
+
+  return (
+    <Card className={cn("shadow-sm", tone)} data-testid="owner-briefing-integration-health-lane">
+      <CardHeader className="pb-2">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Cable className="h-4 w-4 text-muted-foreground" aria-hidden />
+              <Icon className="h-4 w-4" aria-hidden />
+              Integration health
+            </CardTitle>
+            <CardDescription>{slice.headline}</CardDescription>
+          </div>
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <Link href={slice.healthHref}>Full dashboard</Link>
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="flex flex-wrap gap-2 text-xs">
+          <Badge variant="outline">{slice.healthyCount} healthy</Badge>
+          <Badge variant="outline">{slice.degradedCount} degraded</Badge>
+          <Badge variant="outline">{slice.downCount} down</Badge>
+          {slice.failedWebhookCount > 0 ? (
+            <Badge variant="destructive">{slice.failedWebhookCount} webhook backlog</Badge>
+          ) : (
+            <Badge variant="secondary">No webhook backlog</Badge>
+          )}
+          {slice.channelSmokeOverall ? (
+            <Badge
+              variant={slice.channelSmokeOverall === "PASSED" ? "default" : "outline"}
+              className="rounded-full"
+            >
+              Live smoke: {slice.channelSmokeOverall}
+            </Badge>
+          ) : null}
+        </div>
+
+        {slice.liveProofRows.length > 0 ? (
+          <div className="space-y-2">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Woo / Shopify pilot proof
+            </p>
+            {slice.liveProofRows.map((row) => (
+              <Link
+                key={row.id}
+                href={row.href}
+                data-testid={`owner-briefing-integration-${row.id}`}
+                className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-muted/15 px-3 py-2 text-sm hover:bg-muted/35"
+              >
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-medium">{row.label}</p>
+                    <Badge
+                      variant={row.tone === "urgent" ? "destructive" : "secondary"}
+                      className="rounded-full text-[10px]"
+                    >
+                      {row.statusLabel}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{row.detail}</p>
+                </div>
+                <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+              </Link>
+            ))}
+          </div>
+        ) : slice.connections.length > 0 ? (
+          <div className="space-y-2">
+            {slice.connections.map((conn) => (
+              <div
+                key={conn.id}
+                className="flex items-center justify-between gap-2 rounded-xl border border-border/70 bg-muted/15 px-3 py-2 text-sm"
+              >
+                <div>
+                  <p className="font-medium">{conn.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {conn.provider} · {conn.lastSyncLabel}
+                  </p>
+                </div>
+                <Badge variant={conn.hasError ? "destructive" : "secondary"} className="rounded-full text-[10px]">
+                  {conn.status}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No channel connections yet — connect Woo or Shopify from integration health.
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function BriefingStat(props: {
+  label: string;
+  value: string;
+  tone: "success" | "attention" | "neutral";
+  compact?: boolean;
+}) {
+  const toneClass =
+    props.tone === "attention"
+      ? "border-amber-200/70 bg-amber-50/30 dark:border-amber-900/40"
+      : props.tone === "success"
+        ? "border-emerald-200/60 bg-emerald-50/20 dark:border-emerald-900/30"
+        : "border-border/70 bg-background/80";
+
+  return (
+    <div className={`rounded-xl border px-3 py-2 ${toneClass}`}>
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+        {props.label}
+      </p>
+      <p
+        className={cn(
+          "mt-1 font-semibold tabular-nums",
+          props.compact ? "text-xs leading-snug" : "text-xl",
+        )}
+      >
+        {props.value}
+      </p>
     </div>
   );
 }
