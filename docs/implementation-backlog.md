@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-022 — Integration health dashboard next actions (P1)
+- ID: `KOS-E18-022`
+- Title: Era 18 Workstream C Cycle 22 — attention strip + row next actions on full integration health dashboard
+- Module: Integrations / Pilot readiness
+- Priority: P1 (integration observability + pilot deployment speed)
+- Status: **integration_health_focus_attention_wired**
+- Decision: `era18-integration-health-focus-v1` — bridges pilot strip on Today to full dashboard; per-connection next actions on saved connections table
+- Evidence: `lib/integrations/integration-health-focus-era18.ts`, `components/dashboard/integration-health-attention-strip.tsx`, `app/dashboard/integration-health/page.tsx`
+- Next: Platform system health parity; live Woo/Shopify proof when credentials available
+
 ### KOS-E18-021 — System health integration observability strip (P1)
 - ID: `KOS-E18-021`
 - Title: Era 18 Workstream O Cycle 21 — prioritized integration/production attention on system health

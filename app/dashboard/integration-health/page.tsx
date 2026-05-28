@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
+import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
 import { SensitiveErrorPreview } from "@/components/integrations/sensitive-error-preview";
 import { CapabilityMatrixPanel } from "@/components/capabilities/capability-matrix-panel";
 import { ChannelCard } from "@/components/channels/channel-card";
@@ -31,6 +32,10 @@ import {
   infrastructureMaturityRows,
   maturityTierFromResolvedChannel,
 } from "@/lib/integrations/integration-maturity-matrix";
+import {
+  buildIntegrationHealthFocusSnapshot,
+  resolveIntegrationHealthRowNextAction,
+} from "@/lib/integrations/integration-health-focus-era18";
 import type { IntegrationMaturityTier } from "@/lib/integrations/integration-maturity-types";
 import { prisma } from "@/lib/prisma";
 import { toSafeErrorPreview } from "@/lib/security/sensitive-redaction";
@@ -89,6 +94,11 @@ export default async function IntegrationHealthDashboardPage() {
   const stripeConfigured = Boolean(env.STRIPE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim());
   const emailConfigured = Boolean(env.RESEND_API_KEY?.trim() && env.RESEND_FROM_EMAIL?.trim());
   const healthSummary = summarizeIntegrationHealth(healthCards, { stripe: stripeConfigured, email: emailConfigured });
+  const integrationFocusSnapshot = buildIntegrationHealthFocusSnapshot({
+    summary: healthSummary,
+    cards: healthCards,
+    failedWebhookCount: failedHooks.length,
+  });
   const resolved = resolveAllChannels(connections, workspaceDemo);
   const infra = infrastructureMaturityRows(env);
   const capabilities = listCapabilities();
@@ -96,6 +106,8 @@ export default async function IntegrationHealthDashboardPage() {
   return (
     <div className="space-y-8">
       <IntegrationHealthSummaryPanel summary={healthSummary} />
+
+      <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
 
       <CapabilityMatrixPanel rows={capabilities} title="Honest capability matrix" />
 
@@ -139,11 +151,13 @@ export default async function IntegrationHealthDashboardPage() {
                 <TableHead>Last sync</TableHead>
                 <TableHead>Webhook secret</TableHead>
                 <TableHead>Last error</TableHead>
+                <TableHead>Next action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {healthCards.map((c) => {
                 const errPreview = c.lastError ? toSafeErrorPreview(c.lastError, 160) : null;
+                const nextAction = resolveIntegrationHealthRowNextAction(c);
                 return (
                   <TableRow key={c.id}>
                     <TableCell className="font-mono text-xs">{c.provider}</TableCell>
@@ -166,12 +180,28 @@ export default async function IntegrationHealthDashboardPage() {
                         <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </TableCell>
+                    <TableCell className="text-xs">
+                      {nextAction ? (
+                        <Link
+                          href={nextAction.href}
+                          className={
+                            nextAction.tone === "urgent"
+                              ? "font-medium text-amber-800 underline-offset-2 hover:underline dark:text-amber-200"
+                              : "font-medium text-primary underline-offset-2 hover:underline"
+                          }
+                        >
+                          {nextAction.label}
+                        </Link>
+                      ) : (
+                        <span className="text-muted-foreground">On track</span>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
               {!healthCards.length ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-sm text-muted-foreground">
+                  <TableCell colSpan={7} className="text-sm text-muted-foreground">
                     No integration connections yet — add credentials from Sales channels or Developer → Integrations.
                   </TableCell>
                 </TableRow>
