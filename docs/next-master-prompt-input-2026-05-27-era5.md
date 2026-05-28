@@ -30,7 +30,7 @@ All five Era 5 P0 items from era4 prompt input **completed** (cycles 1–5). Pol
 | ID | Item | Notes |
 |----|------|-------|
 | E6-1 | ~~Unified rewards ledger~~ | **Closed Era 6 Cycle 1** — `era6-dual-ledger-gtm-lock-v1` (permanent dual ledger; unification deferred_locked) |
-| E6-2 | KDS realtime smoke | Beyond staging checklist; no rush-hour claim |
+| E6-2 | ~~KDS realtime smoke~~ | **Closed Era 6 Cycle 2** — `era6-kds-realtime-smoke-v1` (poll fallback 15s unit-certified + Tier D checklist; no rush-hour/Playwright) |
 | E6-3 | Typecheck slices in CI | Optional parallel job; keep `typecheck:full` canonical |
 | E6-4 | Storefront inventory hook | Only if GTM lock lifted by explicit era decision |
 | E6-5 | SSO/SOC2/SCIM delivery | Phased implementation or roadmap-only annual review |

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 6 — Customer value honesty
 
+### KOS-E6-002 — KDS realtime / poll fallback smoke (E6-2)
+- ID: `KOS-E6-002`
+- Title: Certify KDS poll fallback intervals and Realtime channel wiring; add Tier D checklist
+- Module: Kitchen / KDS / QA
+- Priority: P0 (Era 6 Cycle 2)
+- Status: **completed**
+- Decision: `era6-kds-realtime-smoke-v1` — 15s poll fallback + per-user channel naming unit-certified; manual Tier D staging verification; no rush-hour or Playwright Realtime claims
+- Evidence: `lib/kitchen/kds-realtime-smoke-policy.ts`, `components/kitchen/kds-daily-service.tsx`, `test:ci:kds-realtime-smoke:cert`
+- Next: typecheck slices in CI (E6-3) or production-calendar void-form deny UX (P1)
+
 ### KOS-E6-001 — Permanent dual-ledger rewards GTM lock (E6-1)
 - ID: `KOS-E6-001`
 - Title: Lock permanent dual-ledger rewards decision; forbid unified cross-channel GTM claims
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era6-dual-ledger-gtm-lock-v1` — unification `deferred_locked`; POS kitchen ledger + storefront ledger remain separate until explicit future era
 - Evidence: `lib/rewards/cross-channel-rewards-policy.ts`, `tests/unit/cross-channel-rewards-gtm-lock-cert-live.test.ts`, `test:ci:cross-channel-rewards:cert`
-- Next: KDS realtime smoke (E6-2) or production-calendar void-form deny UX (P1)
+- Next: KDS realtime smoke (E6-2) — **completed**; see `KOS-E6-002`
 
 ## Era 5 — Security CI consolidation
 

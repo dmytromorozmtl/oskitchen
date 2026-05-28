@@ -1,7 +1,7 @@
 # KDS staging smoke checklist
 
 Status: canonical operational smoke for KDS v1 daily-service tickets  
-Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`)  
+Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); realtime/poll: `lib/kitchen/kds-realtime-smoke-policy.ts` (`era6-kds-realtime-smoke-v1`)  
 Scope boundary: `docs/kds-v1-scope.md`
 
 ## What this proves
@@ -37,7 +37,21 @@ npx prisma db push
 npm run test:ci:kds-v1:integration
 npm run test:ci:kds-staging-smoke
 npm run test:ci:kds-staging-smoke:cert
+npm run test:ci:kds-realtime-smoke
+npm run test:ci:kds-realtime-smoke:cert
 ```
+
+## Tier D — Realtime verification (staging, manual)
+
+Policy `era6-kds-realtime-smoke-v1` certifies **poll fallback (15s)** and **channel naming** in unit tests — not production Realtime load.
+
+1. Open kitchen KDS (`/dashboard/kitchen` or fullscreen/tablet).
+2. Note status line: **○ Polling fallback (15s)** or **● Live (Supabase Realtime)**.
+3. With Realtime disconnected (or blocked), create a new `PREPARING` order — ticket should appear within **≤15s**.
+4. With Realtime connected, confirm status shows **Live**; optional: verify faster refresh on order change (manual).
+5. Record: Realtime observed? Poll-only? Any missed tickets?
+
+Do **not** use this tier to claim rush-hour, Playwright E2E, or production-traffic Realtime certification.
 
 ## Tier B — Staging DB smoke script (optional)
 
@@ -73,6 +87,7 @@ Record result: **PASS** / **FAIL** with date, environment URL, operator, and ord
 | Tier A CI | pass/fail |
 | Tier B DB smoke | pass/skip/fail |
 | Tier C UI | pass/fail |
-| Notes | Realtime observed? Any permission denials? |
+| Tier D Realtime | pass/skip/fail |
+| Notes | Realtime observed? Poll-only? Any permission denials? |
 
 Do **not** use this checklist to claim rush-hour or restaurant-grade KDS certification.

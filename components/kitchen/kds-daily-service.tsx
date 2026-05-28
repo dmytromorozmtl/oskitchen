@@ -8,6 +8,13 @@ import {
   recallDailyKdsOrderAction,
 } from "@/actions/kitchen-daily-kds";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
+import {
+  getKdsConnectionStatusLabel,
+  getKdsPollIntervalMs,
+  getKdsRealtimeChannelName,
+  KDS_REALTIME_ORDERS_SCHEMA,
+  KDS_REALTIME_ORDERS_TABLE,
+} from "@/lib/kitchen/kds-realtime-smoke-policy";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -105,16 +112,16 @@ export function KdsDailyService({
 
   useEffect(() => {
     const supabase = createClient();
-    let pollMs = 15_000;
+    let pollMs = getKdsPollIntervalMs(false);
 
     const channel = supabase
-      .channel(`kds-orders-${userId}`)
+      .channel(getKdsRealtimeChannelName(userId))
       .on(
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
-          table: "orders",
+          schema: KDS_REALTIME_ORDERS_SCHEMA,
+          table: KDS_REALTIME_ORDERS_TABLE,
           filter: `user_id=eq.${userId}`,
         },
         () => {
@@ -124,7 +131,7 @@ export function KdsDailyService({
       .subscribe((status) => {
         const live = status === "SUBSCRIBED";
         setRealtimeConnected(live);
-        pollMs = live ? 60_000 : 15_000;
+        pollMs = getKdsPollIntervalMs(live);
       });
 
     const fallback = setInterval(refresh, pollMs);
@@ -184,7 +191,7 @@ export function KdsDailyService({
         <div>
           <h2 className="text-xl font-bold">Kitchen Display</h2>
           <p className="text-xs text-muted-foreground mt-0.5">
-            {realtimeConnected ? "● Live (Supabase Realtime)" : "○ Polling fallback (15s)"}
+            {getKdsConnectionStatusLabel(realtimeConnected)}
           </p>
         </div>
         <button

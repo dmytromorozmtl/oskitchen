@@ -174,6 +174,13 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:kds-staging-smoke:cert` + `test:ci:kds-staging-smoke` chained in `test:ci:governance-bundles`.
 
+| KDS realtime / poll smoke unit | `npm run test:ci:kds-realtime-smoke` | Poll 15s / 60s intervals, channel name, status label wiring |
+| KDS realtime smoke cert | `npm run test:ci:kds-realtime-smoke:cert` | Policy `era6-kds-realtime-smoke-v1`, governance bundle, Tier D checklist |
+
+**Policy (Era 6 Cycle 2):** `lib/kitchen/kds-realtime-smoke-policy.ts`. **Certified:** poll fallback interval and Supabase channel naming in unit tests. **Not certified:** rush-hour, Playwright Realtime E2E, production Realtime SLO.
+
+**Wiring certification (tier 0):** `test:ci:kds-realtime-smoke:cert` + `test:ci:kds-realtime-smoke` chained in `test:ci:governance-bundles`.
+
 ## Tier 2c — KDS v1 prototype (`kds-v1-prototype` job)
 
 | Suite | Command | DB | Notes |

@@ -101,6 +101,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - staging: `docs/kds-staging-smoke-checklist.md`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`
 - not in scope: rush-hour load, multi-station routing, Playwright realtime KDS E2E
 
+### 8c7. KDS realtime / poll fallback smoke (Era 6 Cycle 2)
+- policy: `lib/kitchen/kds-realtime-smoke-policy.ts` (`era6-kds-realtime-smoke-v1`)
+- wiring cert: `test:ci:kds-realtime-smoke:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:kds-realtime-smoke` — 15s/60s poll intervals, channel naming, status labels in `kds-daily-service.tsx`
+- staging: Tier D in `docs/kds-staging-smoke-checklist.md` (manual Realtime vs poll observation)
+- not in scope: rush-hour, production Realtime traffic, Playwright Realtime E2E
+
 ### 8c5. Cross-channel loyalty / gift cards (Era 4 Cycle 9)
 - policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`, GTM lock `era6-dual-ledger-gtm-lock-v1`)
 - wiring cert: `test:ci:cross-channel-rewards:cert` (includes GTM forbidden-phrase scan; in `test:ci:governance-bundles`)

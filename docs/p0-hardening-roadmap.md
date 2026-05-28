@@ -321,6 +321,8 @@ Priority rule:
 
 - **Completed (2026-05-27):** `era4-kds-staging-smoke-v1` — CI certifies daily queue→bump integration + policy wiring; `docs/kds-staging-smoke-checklist.md` for manual staging UI; `npm run smoke:kds-daily` for optional DB smoke on staging/local.
 - **Evidence:** `npm run test:ci:kds-staging-smoke`, `npm run test:ci:kds-staging-smoke:cert`.
+- **Completed (2026-05-27):** `era6-kds-realtime-smoke-v1` — poll fallback 15s + Realtime channel naming unit-certified; Tier D checklist; not rush-hour or Playwright.
+- **Evidence:** `npm run test:ci:kds-realtime-smoke`, `npm run test:ci:kds-realtime-smoke:cert`.
 - **Sales rule:** do not claim rush-hour, multi-station, or realtime Playwright KDS certification.
 
 ## Era 4 — Cross-channel rewards honesty (Cycle 9)
