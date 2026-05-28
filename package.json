@@ -214,7 +214,7 @@
     "validate:production-crons": "node node_modules/vitest/vitest.mjs run tests/unit/cron-reconciliation-live.test.ts tests/unit/cron-hygiene-live.test.ts --reporter=dot",
     "validate:cron-inventory": "node node_modules/vitest/vitest.mjs run tests/unit/cron-route-inventory-live.test.ts tests/unit/cron-hygiene-live.test.ts --reporter=dot",
     "test:ci:cron-hygiene": "node ./node_modules/vitest/vitest.mjs run tests/unit/cron-hygiene-live.test.ts tests/unit/cron-reconciliation-live.test.ts tests/unit/cron-route-inventory-live.test.ts tests/unit/run-cron-production-gate.test.ts tests/unit/cron-experimental-skip.test.ts",
-    "test:ci:cron-hygiene:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/cron-hygiene-ci-live.test.ts tests/unit/cron-archive-era4-cert-live.test.ts",
+    "test:ci:cron-hygiene:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/cron-hygiene-ci-live.test.ts tests/unit/cron-archive-era4-cert-live.test.ts tests/unit/cron-surface-era9-cert-live.test.ts",
     "cron:archive:status": "tsx scripts/cron-archive-status.ts",
     "cron:archive:experimental": "tsx scripts/archive-experimental-crons.ts",
     "cron:restore:archived": "tsx scripts/restore-archived-crons.ts",

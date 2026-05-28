@@ -385,3 +385,4 @@ Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from 
 | 2026-05-27 | Era 8 Cycle 5: scorecard refresh 94/100 + `next-master-prompt-input-2026-05-27-era8.md` |
 | 2026-05-27 | Era 9 Cycle 1: `era9-enterprise-sso-architecture-spike-v1` — SSO R1 design spike (not production) |
 | 2026-05-27 | Era 9 Cycle 2: `era9-governance-bundles-partition-v1` — parallel governance CI partitions |
+| 2026-05-27 | Era 9 Cycle 3: `era9-cron-surface-recert-v1` — cron archive posture recert (no new routes) |

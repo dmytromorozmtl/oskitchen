@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 9 — Enterprise delivery / DevOps
 
+### KOS-E9-003 — Cron surface recert (P1)
+- ID: `KOS-E9-003`
+- Title: Era 9 cron archive posture recert without new routes or weakened auth
+- Module: DevOps / cron / pilot ops
+- Priority: P1 (Era 9 Cycle 3)
+- Status: **completed**
+- Decision: `era9-cron-surface-recert-v1` — extends `era4-active-production-only-v1`; 16 production / 0 experimental on disk
+- Evidence: `lib/cron/cron-surface-era9-policy.ts`, `tests/unit/cron-surface-era9-cert-live.test.ts`, `test:ci:cron-hygiene:cert`
+- Next: no new experimental cron routes; revisit only if production manifest changes
+
 ### KOS-E9-002 — Governance bundles partition (P1)
 - ID: `KOS-E9-002`
 - Title: Split governance bundles for parallel CI without weakening quality gate

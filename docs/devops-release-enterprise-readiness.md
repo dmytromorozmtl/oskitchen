@@ -42,6 +42,8 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - **Pilot preflight marketing strict:** `scripts/ops/pilot-preflight.sh` runs `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` (`era8-pilot-preflight-claims-strict-v1`); cert `test:ci:pilot-preflight-claims:cert`
 - local focused bundle: `npm run test:ci:cron-hygiene`
 - production schedule: **16** allowlisted slugs; experimental routes require `ENABLE_EXPERIMENTAL_CRONS` in production
+- **Era 4 archive policy:** `era4-active-production-only-v1` — 16 production routes under `app/api/cron/`; 121+ experimental handlers in `archive/cron-routes/`
+- **Cron surface recert (Era 9 Cycle 3):** `era9-cron-surface-recert-v1` (`lib/cron/cron-surface-era9-policy.ts`) — re-validates Era 4 archive (0 experimental on disk); `validate:production-crons` + `validate:cron-inventory`; pilot preflight forbids `ENABLE_EXPERIMENTAL_CRONS=true`
 
 ## Staging E2E
 - staging must only run when required secrets and URLs are valid

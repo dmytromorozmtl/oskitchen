@@ -21,6 +21,8 @@ const REQUIRED_FILES = [
   "tests/unit/cron-reconciliation-live.test.ts",
   "tests/unit/cron-route-inventory-live.test.ts",
   "tests/unit/cron-archive-era4-cert-live.test.ts",
+  "tests/unit/cron-surface-era9-cert-live.test.ts",
+  "lib/cron/cron-surface-era9-policy.ts",
   "tests/unit/run-cron-production-gate.test.ts",
   "tests/unit/cron-experimental-skip.test.ts",
   "lib/cron/cron-surface-policy.ts",
@@ -67,9 +69,13 @@ describe("cron hygiene CI certification (live repo)", () => {
     expect(quality).toContain("validate:cron-inventory");
   });
 
-  it("includes cron hygiene cert in default quality governance bundles", () => {
+  it("includes cron hygiene cert in governance platform partition (full bundle composition)", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:cron-hygiene:cert");
+    expect(scripts["test:ci:governance-bundles:partition-platform"]).toContain(
+      "test:ci:cron-hygiene:cert",
+    );
+    const full = scripts["test:ci:governance-bundles"] ?? "";
+    expect(full).toContain("partition-platform");
   });
 
   it("keeps production allowlist count honest and documented", () => {

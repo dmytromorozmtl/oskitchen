@@ -30,6 +30,7 @@ All four Era 8 operator-depth / GTM hygiene cycles from era7 prompt input **comp
 |-------|---------|
 | **1** | **SSO architecture spike (R1)** — `era9-enterprise-sso-architecture-spike-v1`; design doc only; delivery `not_implemented` |
 | **2** | **Governance bundles partition** — `era9-governance-bundles-partition-v1`; parallel CI job; `quality` keeps full bundle |
+| **3** | **Cron surface recert** — `era9-cron-surface-recert-v1`; extends Era 4 archive; `test:ci:cron-hygiene:cert` |
 
 ---
 

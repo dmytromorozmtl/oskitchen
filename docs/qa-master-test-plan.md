@@ -260,6 +260,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 
+### 8c4i. Cron surface recert (Era 9 Cycle 3)
+- Policy: `lib/cron/cron-surface-era9-policy.ts` (`era9-cron-surface-recert-v1`; extends `era4-active-production-only-v1`)
+- Validators: `npm run validate:production-crons`, `npm run validate:cron-inventory`
+- Pilot: `scripts/ops/pilot-preflight.sh` forbids `ENABLE_EXPERIMENTAL_CRONS=true`
+- Wiring cert: `test:ci:cron-hygiene:cert` → `tests/unit/cron-surface-era9-cert-live.test.ts` (in `test:ci:governance-bundles:partition-platform`)
+
 ### 8c4h. Governance bundles partition (Era 9 Cycle 2)
 - Policy: `lib/ci/governance-bundles-partition-policy.ts` (`era9-governance-bundles-partition-v1`)
 - Parallel CI job: `governance-bundles-partitions` (matrix: platform, money-path, security-rbac, product-kds)
@@ -272,7 +278,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 6. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open
 7. impersonation and sensitive-action audit coverage
 8. release-critical smoke bundle aligned to production journeys
-9. ~~cron surface hygiene + Era 4 archive~~ — 16 active production crons; 121+ archived; `validate:production-crons` + `validate:cron-inventory`; `test:ci:cron-hygiene:cert` includes `cron-archive-era4-cert-live`
+9. ~~cron surface hygiene + Era 4 archive + Era 9 recert~~ — 16 active production crons; 121+ archived; `validate:production-crons` + `validate:cron-inventory`; `test:ci:cron-hygiene:cert` includes `cron-archive-era4-cert-live` + `cron-surface-era9-cert-live`
 10. ~~KDS v1 scope CI wiring~~ — `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` in governance bundles; integration queue→bump focused DB workflow
 11. ~~KDS v1 prototype CI wiring~~ — `kds-v1-prototype` job + `test:ci:kds-v1:prototype:cert`; allergen UI + rollout gate verified
 12. ~~nav/maturity governance CI wiring~~ — `test:ci:nav-governance:cert` + `test:ci:nav-governance` in governance bundles

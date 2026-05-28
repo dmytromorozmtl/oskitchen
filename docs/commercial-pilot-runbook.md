@@ -51,6 +51,7 @@ bash scripts/ops/pilot-preflight.sh
 | Staging env | `verify:staging-env` exit 0 |
 | Workspace scope | `npm run workspace:backfill:status` exit 0 (if migration pilot) |
 | Nav honesty | Preview/placeholder routes show badges (`era4-page-maturity-sweep-v1`) |
+| Cron surface | `pilot-preflight.sh` PASS — `ENABLE_EXPERIMENTAL_CRONS` not `true`; 16 production crons only (`era9-cron-surface-recert-v1`) |
 
 ---
 

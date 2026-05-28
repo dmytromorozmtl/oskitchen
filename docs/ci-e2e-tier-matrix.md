@@ -133,10 +133,11 @@ npm run test:ci:pos-money-path:e2e
 | Route inventory cap | `npm run validate:cron-inventory` | **0 active experimental** under `app/api/cron` (Era 4 archive) |
 | Full hygiene bundle | `npm run test:ci:cron-hygiene` | Reconciliation + inventory + `runCronRoute` scan + production gate |
 | Era 4 archive surface cert | `test:ci:cron-hygiene:cert` (chained) | `tests/unit/cron-archive-era4-cert-live.test.ts` |
+| Era 9 cron surface recert | `test:ci:cron-hygiene:cert` (chained) | `tests/unit/cron-surface-era9-cert-live.test.ts` |
 
-**Production schedule:** 16 allowlisted slugs in `services/cron/production-manifest.ts` (includes `incident-remediation-reminders`). **Active App Router surface (Era 4 Cycle 4):** **16 production routes only** under `app/api/cron/`; **121+ experimental handlers** moved to `archive/cron-routes/` per policy `era4-active-production-only-v1` (`lib/cron/cron-surface-policy.ts`). Experimental paths remain blocked in production unless `ENABLE_EXPERIMENTAL_CRONS=true` (`runCronRoute`).
+**Production schedule:** 16 allowlisted slugs in `services/cron/production-manifest.ts` (includes `incident-remediation-reminders`). **Active App Router surface (Era 4 Cycle 4):** **16 production routes only** under `app/api/cron/`; **121+ experimental handlers** moved to `archive/cron-routes/` per policy `era4-active-production-only-v1` (`lib/cron/cron-surface-policy.ts`). **Era 9 Cycle 3 recert:** `era9-cron-surface-recert-v1` (`lib/cron/cron-surface-era9-policy.ts`) — 0 experimental on disk; pilot preflight forbids `ENABLE_EXPERIMENTAL_CRONS=true`. Experimental paths remain blocked in production unless `ENABLE_EXPERIMENTAL_CRONS=true` (`runCronRoute`).
 
-**Wiring certification (tier 0):** `npm run test:ci:cron-hygiene:cert` → `tests/unit/cron-hygiene-ci-live.test.ts` + `tests/unit/cron-archive-era4-cert-live.test.ts` (included in `test:ci:governance-bundles`). Full reconciliation runs in `quality` via `validate:production-crons` and `validate:cron-inventory`.
+**Wiring certification (tier 0):** `npm run test:ci:cron-hygiene:cert` → `tests/unit/cron-hygiene-ci-live.test.ts` + `tests/unit/cron-archive-era4-cert-live.test.ts` + `tests/unit/cron-surface-era9-cert-live.test.ts` (included in `test:ci:governance-bundles`). Full reconciliation runs in `quality` via `validate:production-crons` and `validate:cron-inventory`.
 
 ## Tier 1c — KDS v1 scope (`quality` job via governance bundles)
 
