@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 15 — KDS / enterprise / DevOps
 
+### KOS-E15-003 — Staging workflows first-run Era 15 recert (P1)
+- ID: `KOS-E15-003`
+- Title: Re-certify optional GitHub staging workflow ops and skip honesty
+- Module: DevOps / QA
+- Priority: P1 (Era 15 Cycle 3)
+- Status: **completed**
+- Decision: `era15-staging-workflows-first-run-recert-v1` — `JOB_OMITTED_SECRETS_MISSING` vs PASSED/FAILED/SKIPPED WITH REASON; not in default `ci.yml`; `smoke:staging-workflows`
+- Evidence: `lib/ci/staging-workflows-first-run-era15-policy.ts`, `test:ci:staging-workflows-first-run-era15:cert`, `docs/GITHUB_E2E_STAGING_SECRETS.md`
+- Next: first green GitHub Actions run when staging secrets available (ops)
+
 ### KOS-E15-002 — Enterprise procurement Era 15 recert (P1)
 - ID: `KOS-E15-002`
 - Title: Re-certify enterprise procurement pack and buyer FAQ alignment

@@ -566,3 +566,4 @@ Incremental refresh after Era 14 cycles 1–5 (GTM honesty / recert from era13 h
 | 2026-05-27 | Era 14 Cycle 6: `era14-scorecard-refresh-v1` — score 100/100 sustained; era15 handoff |
 | 2026-05-27 | Era 15 Cycle 1: `era15-kds-staging-smoke-recert-v1` — bump/recall recert; smoke:kds-staging; no rush-hour claim |
 | 2026-05-27 | Era 15 Cycle 2: `era15-enterprise-procurement-recert-v1` — buyer pack/FAQ recert; smoke:enterprise-procurement; no SSO/SOC2 delivery |
+| 2026-05-27 | Era 15 Cycle 3: `era15-staging-workflows-first-run-recert-v1` — staging workflow skip honesty; smoke:staging-workflows |

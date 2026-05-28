@@ -79,7 +79,7 @@ KDS_REALTIME_E2E_STEP_OUTCOME=success npm run test:ci:kds-realtime-e2e-staging:p
 
 Certification gate: `npm run test:ci:kds-realtime-e2e-staging:cert` (policy wiring + era11 recert — not a browser run in default CI).
 
-**Optional GitHub Actions workflow (Era 11 Cycle 4 + Era 13 Cycle 2 secrets + Era 13 Cycle 3 ops):** `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`, `era13-kds-staging-workflow-secrets-align-v1`, `era13-staging-workflows-first-run-ops-v1`) — `workflow_dispatch` or weekly schedule when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + (`E2E_LOGIN_PASSWORD` or legacy `E2E_PASSWORD`) are set; job omitted when secrets missing (`JOB_OMITTED_SECRETS_MISSING`); uploads `kds-realtime-e2e-staging-summary` artifact (`PASSED` / `FAILED` / `SKIPPED WITH REASON`). First-run checklist: `docs/GITHUB_E2E_STAGING_SECRETS.md`.
+**Optional GitHub Actions workflow (Era 11 + Era 13/15 staging ops):** `.github/workflows/playwright-kds-staging.yml` (`era11-kds-realtime-e2e-staging-workflow-v1`, `era13-kds-staging-workflow-secrets-align-v1`, `era13-staging-workflows-first-run-ops-v1`, `era15-staging-workflows-first-run-recert-v1`) — `workflow_dispatch` or weekly schedule when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + (`E2E_LOGIN_PASSWORD` or legacy `E2E_PASSWORD`) are set; job omitted when secrets missing (`JOB_OMITTED_SECRETS_MISSING`); uploads `kds-realtime-e2e-staging-summary` artifact (`PASSED` / `FAILED` / `SKIPPED WITH REASON`). First-run checklist: `docs/GITHUB_E2E_STAGING_SECRETS.md`; `npm run smoke:staging-workflows`.
 
 Do **not** add this tier to default GitHub Actions `ci.yml` quality job.
 

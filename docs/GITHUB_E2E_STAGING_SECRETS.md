@@ -27,9 +27,10 @@ Workflow: `.github/workflows/e2e-staging.yml` (daily 06:00 UTC + manual).
 3. **Variables** tab → add `E2E_STOREFRONT_SLUG` if not `hello`
 4. **Actions** → **E2E Staging** → **Run workflow** → confirm green (job skipped entirely when secrets missing — not a silent pass)
 
-## First-run ops (Era 13 Cycle 3)
+## First-run ops (Era 13 + Era 15 recert)
 
-**Policy:** `era13-staging-workflows-first-run-ops-v1` (`lib/ci/staging-workflows-first-run-era13-policy.ts`)
+**Policies:** `era13-staging-workflows-first-run-ops-v1`, `era15-staging-workflows-first-run-recert-v1` (`lib/ci/staging-workflows-first-run-era13-policy.ts`, `lib/ci/staging-workflows-first-run-era15-policy.ts`)  
+**Smoke:** `npm run smoke:staging-workflows` (CI cert wiring — does not run GitHub Actions)
 
 | Outcome | Meaning |
 |---------|---------|
@@ -53,7 +54,18 @@ Workflow: `.github/workflows/e2e-staging.yml` (daily 06:00 UTC + manual).
 3. **Playwright KDS Staging** → Run workflow → confirm `kds-realtime-staging` + download `kds-realtime-e2e-staging-summary`.
 4. **Closed Beta Gate** → Run workflow → `security-bundle` always; `staging-smoke` only when E2E secrets are set.
 
-Cert: `npm run test:ci:staging-workflows-first-run-era13:cert` (chained in `test:ci:e2e-staging-secrets-era12:cert`).
+Cert: `npm run test:ci:staging-workflows-first-run-era13:cert` + `test:ci:staging-workflows-first-run-era15:cert` (chained in `test:ci:e2e-staging-secrets-era12:cert`).
+
+## Era 15 staging workflows recert (2026-05-27)
+
+**Policy:** `era15-staging-workflows-first-run-recert-v1` — re-validates optional workflow gates after Era 14/15 honesty cycles. **Does not** add staging Playwright to default `ci.yml`.
+
+| Outcome | Still means |
+|---------|----------------|
+| `JOB_OMITTED_SECRETS_MISSING` | Secrets unset — staging job **absent** (not green) |
+| `PASSED` / `FAILED` / `SKIPPED WITH REASON` | Job ran with explicit result (KDS summary artifact) |
+
+**Ops:** Run `npm run smoke:staging-workflows` before telling buyers staging browser E2E is certified.
 
 ## Workflow steps (Era 12 Cycle 4)
 
