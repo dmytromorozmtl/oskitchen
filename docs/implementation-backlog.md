@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-003 — Role-based operator home MVP (P1)
+- ID: `KOS-E18-003`
+- Title: Era 18 Workstream J Cycle 43 — focused dashboard home for cashier/kitchen/manager
+- Module: Dashboard / UX
+- Priority: P1 (operator speed, Square IA gap)
+- Status: **operator_home_mvp_wired**
+- Decision: `era18-operator-home-v1` — persona resolver + quick actions; owners keep `HomeOverview`
+- Evidence: `lib/navigation/operator-home-era18.ts`, `components/dashboard/operator-home-panel.tsx`, `app/dashboard/page.tsx`
+- Next: Default landing redirect for staff roles; deeper persona customization post-pilot
+
 ### KOS-E18-002 — POS manager discount terminal UI (P1)
 - ID: `KOS-E18-002`
 - Title: Era 18 Workstream F Cycle 30 — manager discount UI on POS terminal
