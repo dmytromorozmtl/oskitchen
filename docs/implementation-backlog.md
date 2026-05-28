@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-017 — POS cashier speed mode (P1 operator speed)
+- ID: `KOS-E19-017`
+- Title: Era 19 Workstream E Cycle 17 — POS terminal speed mode with category pills and checkout-first layout
+- Module: POS / Terminal / Operator UX
+- Priority: P1 (operator speed — rush-hour register flow)
+- Status: **pos_cashier_speed_mode_wired**
+- Decision: `era19-pos-cashier-speed-mode-v1` — `?speed=1` dense grid, category strip, collapsed CRM/discount/loyalty panels, sticky complete sale; no offline claims
+- Evidence: `lib/pos/pos-cashier-speed-mode-era19.ts`, updated `PosTerminalClient` + `/dashboard/pos/terminal?speed=1`
+- Next: P0 proof unblock when ops credentials available, or POS closeout clarity
+
 ### KOS-E19-016 — Launch Wizard commercial pilot setup integration (P1 WOW)
 - ID: `KOS-E19-016`
 - Title: Era 19 Workstream C Cycle 16 — next commercial unblock, go-live blockers merge, recovery deep links

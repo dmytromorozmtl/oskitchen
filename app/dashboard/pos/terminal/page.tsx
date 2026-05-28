@@ -12,7 +12,18 @@ import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { loadPosTerminalBootstrap } from "@/services/pos/pos-session-service";
 
-export default async function PosTerminalPage() {
+import {
+  posCashierSpeedModeFromSearchParam,
+  posCashierSpeedModeHeadline,
+} from "@/lib/pos/pos-cashier-speed-mode-era19";
+
+export default async function PosTerminalPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ speed?: string }>;
+}) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const speedMode = posCashierSpeedModeFromSearchParam(resolvedSearchParams.speed);
   const actor = await requireWorkspacePermissionActor();
   const { userId } = actor;
   if (!hasPermission(actor.granted, "pos.access")) {
@@ -86,7 +97,11 @@ export default async function PosTerminalPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">POS Terminal</h1>
-          <p className="text-sm text-muted-foreground">Touch-first layout · catalog respects POS visibility on each menu item.</p>
+          <p className="text-sm text-muted-foreground">
+            {speedMode
+              ? posCashierSpeedModeHeadline(true)
+              : "Touch-first layout · catalog respects POS visibility on each menu item."}
+          </p>
         </div>
         <Button asChild variant="outline" className="rounded-full" size="sm">
           <Link href="/dashboard/pos">Exit to POS hub</Link>
@@ -102,6 +117,7 @@ export default async function PosTerminalPage() {
         quickOrderEnabled={quickOrderEnabled}
         businessType={kitchen?.businessType ?? "RESTAURANT"}
         canApplyPosDiscount={hasPermission(actor.granted, "pos.discount.apply")}
+        initialSpeedMode={speedMode}
       />
     </div>
   );

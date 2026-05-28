@@ -35,7 +35,16 @@ import {
   POS_TERMINAL_DISCOUNT_PERCENT_PRESETS,
   type PosTerminalDiscountMode,
 } from "@/lib/pos/pos-terminal-discount-ui";
-import { matchPosShortcut } from "@/lib/keyboard/shortcuts";
+import {
+  buildPosProductCategories,
+  filterPosProductsForCashierSpeed,
+  posCashierSpeedModeLabel,
+  posCashierSpeedModeToggleHref,
+  posCashierSpeedProductGridClass,
+  posCashierSpeedProductTileClass,
+  shouldShowPosTerminalSecondaryPanels,
+} from "@/lib/pos/pos-cashier-speed-mode-era19";
+import { POS_CASHIER_SPEED_MODE_ALL_CATEGORY } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -100,10 +109,18 @@ export function PosTerminalClient(props: {
   businessType?: string | null;
   /** When true, operator may apply discounts and COMPED payment mode on terminal. */
   canApplyPosDiscount?: boolean;
+  /** Rush-hour layout from ?speed=1 — denser grid and checkout-first panels. */
+  initialSpeedMode?: boolean;
 }) {
   const recentCustomers = props.recentCustomers ?? [];
   const customerAttachEnabled = props.customerAttachEnabled ?? true;
   const canApplyPosDiscount = props.canApplyPosDiscount ?? false;
+  const speedMode = props.initialSpeedMode ?? false;
+  const showSecondaryPanels = shouldShowPosTerminalSecondaryPanels(speedMode);
+  const categories = useMemo(
+    () => buildPosProductCategories(props.products),
+    [props.products],
+  );
   const availablePaymentModes = useMemo(
     () => filterPosTerminalPaymentModes(canApplyPosDiscount),
     [canApplyPosDiscount],
@@ -145,6 +162,7 @@ export function PosTerminalClient(props: {
   const [discountMode, setDiscountMode] = useState<PosTerminalDiscountMode>("none");
   const [fixedDiscountInput, setFixedDiscountInput] = useState("");
   const [percentDiscountInput, setPercentDiscountInput] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState(POS_CASHIER_SPEED_MODE_ALL_CATEGORY);
 
   function showCheckoutStatus(text: string, kind?: PosCheckoutStatusKind) {
     setCheckoutStatus(toPosCheckoutStatus(text, kind));
@@ -300,6 +318,13 @@ export function PosTerminalClient(props: {
   const shiftId = registerId ? props.openShiftsByRegisterId[registerId]?.id ?? null : null;
 
   const filtered = useMemo(() => {
+    if (speedMode) {
+      return filterPosProductsForCashierSpeed({
+        products: props.products,
+        query,
+        category: categoryFilter,
+      });
+    }
     const q = query.trim().toLowerCase();
     if (!q) return props.products;
     return props.products.filter(
@@ -308,7 +333,7 @@ export function PosTerminalClient(props: {
         (p.barcode && p.barcode.toLowerCase() === q) ||
         p.id.toLowerCase().includes(q),
     );
-  }, [props.products, query]);
+  }, [props.products, query, speedMode, categoryFilter]);
 
   const cartTotal = useMemo(
     () => cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0),
@@ -513,13 +538,15 @@ export function PosTerminalClient(props: {
             onItemClick={addQuickItem}
           />
         ) : null}
-        <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+        <div className="grid gap-2 sm:grid-cols-[1fr_auto_auto]">
           <Input
             ref={productSearchRef}
             data-testid="pos-product-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search menu or type barcode + Enter"
+            placeholder={
+              speedMode ? "Search or scan barcode + Enter" : "Search menu or type barcode + Enter"
+            }
             className="h-12 rounded-xl text-base"
             onKeyDown={(e) => {
               if (e.key !== "Enter") return;
@@ -532,11 +559,55 @@ export function PosTerminalClient(props: {
               }
             }}
           />
-          <Button variant="outline" className="h-12 rounded-xl" asChild>
-            <Link href="/dashboard/pos/settings/hardware">Hardware</Link>
+          <Button
+            asChild
+            variant={speedMode ? "default" : "outline"}
+            className="h-12 rounded-xl"
+          >
+            <Link
+              href={posCashierSpeedModeToggleHref(speedMode)}
+              data-testid="pos-cashier-speed-mode-toggle"
+            >
+              {posCashierSpeedModeLabel(speedMode)}
+            </Link>
           </Button>
+          {!speedMode ? (
+            <Button variant="outline" className="h-12 rounded-xl" asChild>
+              <Link href="/dashboard/pos/settings/hardware">Hardware</Link>
+            </Button>
+          ) : null}
         </div>
-        <div className="grid flex-1 grid-cols-2 gap-3 overflow-y-auto pb-24 sm:grid-cols-3 xl:grid-cols-4">
+        {speedMode ? (
+          <div
+            className="flex gap-2 overflow-x-auto pb-1"
+            data-testid="pos-speed-category-strip"
+            role="tablist"
+            aria-label="Product categories"
+          >
+            {categories.map((category) => (
+              <Button
+                key={category}
+                type="button"
+                role="tab"
+                aria-selected={categoryFilter === category}
+                variant={categoryFilter === category ? "default" : "outline"}
+                size="sm"
+                className={cn("shrink-0 rounded-full", posTouchCompactClass)}
+                data-testid={`pos-speed-category-${category.replace(/\s+/g, "-").toLowerCase()}`}
+                onClick={() => setCategoryFilter(category)}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        ) : null}
+        <div
+          className={cn(
+            "grid flex-1 gap-3 overflow-y-auto pb-24",
+            posCashierSpeedProductGridClass(speedMode),
+          )}
+          data-testid={speedMode ? "pos-speed-product-grid" : "pos-product-grid"}
+        >
           {filtered.map((p) => (
             <button
               type="button"
@@ -544,12 +615,27 @@ export function PosTerminalClient(props: {
               data-testid="pos-product-tile"
               onClick={() => addProduct(p)}
               className={cn(
-                `flex ${posTouchTileClass} flex-col rounded-2xl border border-border/80 bg-card p-4 text-left shadow-sm transition hover:border-primary/40 hover:shadow-md`,
+                `flex ${posTouchTileClass} flex-col rounded-2xl border border-border/80 bg-card text-left shadow-sm transition hover:border-primary/40 hover:shadow-md`,
+                posCashierSpeedProductTileClass(speedMode),
               )}
             >
-              <span className="text-xs uppercase text-muted-foreground">{p.category}</span>
-              <span className="mt-2 line-clamp-2 text-base font-semibold leading-snug">{p.title}</span>
-              <span className="mt-auto pt-3 text-lg font-semibold tabular-nums">
+              {!speedMode ? (
+                <span className="text-xs uppercase text-muted-foreground">{p.category}</span>
+              ) : null}
+              <span
+                className={cn(
+                  "line-clamp-2 font-semibold leading-snug",
+                  speedMode ? "text-sm" : "mt-2 text-base",
+                )}
+              >
+                {p.title}
+              </span>
+              <span
+                className={cn(
+                  "mt-auto pt-2 font-semibold tabular-nums",
+                  speedMode ? "text-base" : "pt-3 text-lg",
+                )}
+              >
                 ${p.price.toFixed(2)}
               </span>
             </button>
@@ -563,7 +649,11 @@ export function PosTerminalClient(props: {
             <ShoppingCart className="h-5 w-5" />
             Cart
           </CardTitle>
-          <CardDescription>Large tap targets for counter service.</CardDescription>
+          <CardDescription>
+            {speedMode
+              ? "Speed mode — register, cart, and complete sale first."
+              : "Large tap targets for counter service."}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -598,7 +688,7 @@ export function PosTerminalClient(props: {
             </Select>
           </div>
 
-          {customerAttachEnabled ? (
+          {customerAttachEnabled && showSecondaryPanels ? (
           <div className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3">
             <div className="flex items-center justify-between gap-2">
               <Label className="flex items-center gap-2">
@@ -848,6 +938,7 @@ export function PosTerminalClient(props: {
             ) : null}
           </div>
 
+          {showSecondaryPanels ? (
           <div className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3">
             <div className="flex items-center justify-between gap-2">
               <Label className="flex items-center gap-2">
@@ -975,6 +1066,7 @@ export function PosTerminalClient(props: {
               </p>
             )}
           </div>
+          ) : null}
 
           <div className={cn("max-h-72 space-y-3 overflow-y-auto pr-1", pending && "opacity-60")}>
             {pending ? (
@@ -1044,6 +1136,7 @@ export function PosTerminalClient(props: {
             </div>
           </div>
 
+          {showSecondaryPanels ? (
           <div className="grid gap-2 sm:grid-cols-2">
             <div>
               <Label className="text-xs">Redeem loyalty points</Label>
@@ -1071,6 +1164,7 @@ export function PosTerminalClient(props: {
               ) : null}
             </div>
           </div>
+          ) : null}
 
           {checkoutStatus ? (
             <p
@@ -1096,21 +1190,37 @@ export function PosTerminalClient(props: {
             />
           ) : null}
 
+          <div
+            className={cn(
+              speedMode &&
+                "sticky bottom-2 z-10 rounded-2xl border border-border/70 bg-card/95 p-2 shadow-lg backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none",
+            )}
+          >
           <Button
             type="button"
             data-testid="pos-complete-sale"
-            className="h-14 w-full rounded-2xl text-lg font-semibold touch-manipulation"
+            className={cn(
+              "h-14 w-full rounded-2xl text-lg font-semibold touch-manipulation",
+              speedMode && "h-16 text-xl",
+            )}
             disabled={pending}
             onClick={() => checkout()}
           >
             <CreditCard className="mr-2 h-5 w-5" />
-            {pending ? "Submitting…" : "Complete sale"}
+            {pending ? "Submitting…" : speedMode ? "Complete sale — speed" : "Complete sale"}
           </Button>
+          </div>
+          {!speedMode ? (
           <p className="text-xs text-muted-foreground">
             Cash and comp modes record operational intent only. Select{" "}
             <span className="font-medium text-foreground">Card terminal</span> to use Stripe Terminal
             tap-to-pay when configured.
           </p>
+          ) : (
+          <p className="text-xs text-muted-foreground">
+            Speed mode hides CRM, discounts, and loyalty — switch to standard layout for full controls.
+          </p>
+          )}
         </CardContent>
       </Card>
     </div>
