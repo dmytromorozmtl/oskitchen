@@ -45,6 +45,46 @@ export const CROSS_CHANNEL_REWARDS_FORBIDDEN_CLAIMS = [
   /redeem\s+.*\s+on\s+(POS|storefront)\s+and\s+(POS|storefront)/i,
 ] as const;
 
+/**
+ * Era 6 Cycle 1 — permanent product decision: maintain dual ledgers until a future
+ * era ships unified schema, migration, idempotency, and cert gates. Sales/GTM must
+ * not imply interchangeable gift cards or loyalty balances across channels.
+ */
+export const CROSS_CHANNEL_REWARDS_GTM_LOCK_ID = "era6-dual-ledger-gtm-lock-v1" as const;
+
+export const CROSS_CHANNEL_REWARDS_UNIFICATION_STATUS = "deferred_locked" as const;
+
+/** Safe for sales/GTM when describing cross-channel rewards interchangeability. */
+export const CROSS_CHANNEL_REWARDS_UNIFIED_CLAIM_ALLOWED = false;
+
+export const CROSS_CHANNEL_REWARDS_GTM_POLICY_SUMMARY =
+  "Gift cards and loyalty use separate kitchen (POS) and storefront ledgers. Codes and balances are not interchangeable across channels until a future era certifies unification.";
+
+/**
+ * Phrases that must not appear in canonical GTM docs without explicit negation —
+ * enforced by `test:ci:cross-channel-rewards:cert`.
+ */
+export const CROSS_CHANNEL_REWARDS_FORBIDDEN_GTM_PHRASES = [
+  "unified cross-channel loyalty",
+  "unified cross-channel gift",
+  "single rewards ledger",
+  "same gift card on POS and storefront",
+  "loyalty works online and POS interchangeably",
+  "redeem anywhere across channels",
+] as const;
+
+export const CROSS_CHANNEL_REWARDS_GTM_REQUIRED_MARKERS = [
+  CROSS_CHANNEL_REWARDS_POLICY_ID,
+  CROSS_CHANNEL_REWARDS_GTM_LOCK_ID,
+  "dual ledger",
+] as const;
+
+export const CROSS_CHANNEL_REWARDS_GTM_DOCS = [
+  "docs/product-positioning.md",
+  "docs/feature-maturity-matrix.md",
+  "docs/competitor-feature-gap-matrix.md",
+] as const;
+
 export const CROSS_CHANNEL_REWARDS_CI_SCRIPTS = [
   "test:ci:cross-channel-rewards",
   "test:ci:cross-channel-rewards:cert",

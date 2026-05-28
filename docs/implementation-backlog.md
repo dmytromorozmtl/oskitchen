@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 6 — Customer value honesty
+
+### KOS-E6-001 — Permanent dual-ledger rewards GTM lock (E6-1)
+- ID: `KOS-E6-001`
+- Title: Lock permanent dual-ledger rewards decision; forbid unified cross-channel GTM claims
+- Module: Growth / GTM / rewards
+- Priority: P0 (Era 6 Cycle 1)
+- Status: **completed**
+- Decision: `era6-dual-ledger-gtm-lock-v1` — unification `deferred_locked`; POS kitchen ledger + storefront ledger remain separate until explicit future era
+- Evidence: `lib/rewards/cross-channel-rewards-policy.ts`, `tests/unit/cross-channel-rewards-gtm-lock-cert-live.test.ts`, `test:ci:cross-channel-rewards:cert`
+- Next: KDS realtime smoke (E6-2) or production-calendar void-form deny UX (P1)
+
 ## Era 5 — Security CI consolidation
 
 ### KOS-E5-001 — RBAC wave 4 in security-db bundle

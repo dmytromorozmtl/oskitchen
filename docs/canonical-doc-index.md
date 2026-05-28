@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 5 Cycle 6 — scorecard refresh)  
+**Updated:** 2026-05-27 (Era 6 Cycle 1 — dual-ledger rewards GTM lock)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -123,6 +123,12 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **11** | **Mutation access consolidation** | `era4-mutation-access-consolidation-v1`; domain registry |
 | **12** | **Page maturity sweep** | `era4-page-maturity-sweep-v1`; `PageMaturityRouteNotice` |
 | **13** | **Scorecard refresh** | `era4-scorecard-refresh-v1`; this §Scorecard Era 4 |
+
+## Evolution Era 6 cycle ledger
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **Dual-ledger rewards GTM lock** | `era6-dual-ledger-gtm-lock-v1`; `test:ci:cross-channel-rewards:cert` |
 
 ## Evolution Era 5 cycle ledger (P0 closure)
 
@@ -259,3 +265,4 @@ Incremental refresh after Era 5 cycles 1–5 (P0 closure from era4 handoff). Bas
 | 2026-05-27 | Era 5 Cycle 4: `era5-copilot-form-deny-v1` — copilot form deny redirect UX |
 | 2026-05-27 | Era 5 Cycle 5: `era5-pos-e2e-secrets-accept-v1` — POS browser E2E fork skip policy cert |
 | 2026-05-27 | Era 5 Cycle 6: scorecard refresh 86/100 + `next-master-prompt-input-2026-05-27-era5.md` |
+| 2026-05-27 | Era 6 Cycle 1: `era6-dual-ledger-gtm-lock-v1` — permanent dual-ledger rewards GTM lock |

@@ -326,6 +326,7 @@ Priority rule:
 ## Era 4 — Cross-channel rewards honesty (Cycle 9)
 
 - **Completed (2026-05-27):** `era4-cross-channel-rewards-v1` — POS kitchen-ledger gift card + loyalty redeem wired in `checkoutPosSale` (unit tests); storefront uses separate `storefrontGiftCard` / `storefrontLoyalty*` ledgers; `redeemGiftCardPartial` not wired to checkout.
+- **Completed (2026-05-27):** `era6-dual-ledger-gtm-lock-v1` — permanent product decision to keep dual ledgers; GTM forbidden-phrase cert in `test:ci:cross-channel-rewards:cert`.
 - **Evidence:** `npm run test:ci:cross-channel-rewards`, `npm run test:ci:cross-channel-rewards:cert`.
 - **Sales rule:** do not claim unified cross-channel gift card or loyalty balances.
 

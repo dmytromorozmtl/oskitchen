@@ -95,7 +95,7 @@ Current truth: CRM, segments, loyalty, gift cards, and some feedback/follow-up t
 
 Current truth: foundational inventory, costing, purchasing, staff, schedule, and time-clock systems exist; compliance, payroll depth, and enterprise controls are not fully mature. Evidence: `actions/inventory.ts`, `actions/costing.ts`, `actions/purchasing.ts`, `actions/staff.ts`, `actions/labor/time-clock.ts`, `actions/training.ts`.
 
-Loyalty and gift cards: POS checkout applies the **kitchen** ledger (`giftCard`, `loyaltyAccount`). Storefront uses **separate** `storefrontGiftCard` / `storefrontLoyalty*` models — codes and points are **not** interchangeable across channels. Policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`).
+Loyalty and gift cards: POS checkout applies the **kitchen** ledger (`giftCard`, `loyaltyAccount`). Storefront uses **separate** `storefrontGiftCard` / `storefrontLoyalty*` models — codes and points are **not** interchangeable across channels (**dual ledger**). Policies: `era4-cross-channel-rewards-v1`, permanent GTM lock `era6-dual-ledger-gtm-lock-v1` (`lib/rewards/cross-channel-rewards-policy.ts`).
 
 ### F. Intelligence
 - analytics
@@ -154,6 +154,7 @@ Current truth: all of these surfaces exist, but RBAC canon, enterprise governanc
 - Enterprise-grade SSO/SCIM/compliance readiness.
 - AI autopilot for restaurant operations or autonomous customer messaging.
 - Unified cross-channel inventory depletion (storefront or online sales automatically reducing on-hand stock). **POS checkout depletes** recipe-linked ingredients when configured; **storefront, public API, and manual orders do not** — permanent GTM lock until a future era ships a certified hook (`era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`, `lib/inventory/inventory-depletion-policy.ts`).
+- Unified cross-channel loyalty or gift card balances (same code redeemable on POS and storefront). **Dual ledger** — kitchen vs storefront tables; unification `deferred_locked` until a future era (`era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`).
 
 Evidence: `docs/POS_ARCHITECTURE.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/ENTERPRISE_SECURITY_ROADMAP.md`, `services/ai/`.
 
@@ -161,7 +162,7 @@ Evidence: `docs/POS_ARCHITECTURE.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `do
 - Unified direct ordering, manual ordering, and operational order management.
 - Branded storefront and online ordering foundation with one shared order model.
 - Real POS foundation with receipts, shifts, refunds, and canonical order creation.
-- CRM, loyalty, and gift card foundations connected to ordering.
+- CRM, loyalty, and gift card foundations connected to ordering (POS kitchen ledger + separate storefront ledger — not interchangeable).
 - Inventory, costing, purchasing, staff, and training foundations that are real but still maturing (inventory recipe depletion on sale is **POS-certified only** — not storefront/API).
 - Strong founder-led pilot posture for operators who value workflow unification over pure hardware maturity.
 

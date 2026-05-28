@@ -243,10 +243,10 @@ npm run test:ci:pos-money-path:e2e
 
 | Suite | Command | Notes |
 |-------|---------|-------|
-| Cross-channel rewards wiring cert | `npm run test:ci:cross-channel-rewards:cert` | Policy `era4-cross-channel-rewards-v1`, scripts, maturity matrix dual-ledger wording |
+| Cross-channel rewards wiring cert | `npm run test:ci:cross-channel-rewards:cert` | Policy `era4-cross-channel-rewards-v1` + GTM lock `era6-dual-ledger-gtm-lock-v1`, scripts, maturity matrix dual-ledger wording |
 | Cross-channel rewards unit | `npm run test:ci:cross-channel-rewards` | POS `checkoutPosSale` kitchen gift card + loyalty wiring; storefront `redeemGiftCardPartial` not imported outside service |
 
-**Policy (Era 4 Cycle 9):** `lib/rewards/cross-channel-rewards-policy.ts`. **Certified:** POS applies `services/gift-cards` + `services/loyalty` at checkout. **Not certified:** unified gift card / loyalty balance across storefront and POS (separate Prisma models).
+**Policy (Era 4/6):** `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`). **Certified:** POS applies `services/gift-cards` + `services/loyalty` at checkout. **Not certified:** unified gift card / loyalty balance across storefront and POS (dual ledger; unification `deferred_locked`).
 
 **Wiring certification (tier 0):** `test:ci:cross-channel-rewards:cert` + `test:ci:cross-channel-rewards` chained in `test:ci:governance-bundles`.
 

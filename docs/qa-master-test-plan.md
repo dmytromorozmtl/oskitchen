@@ -102,8 +102,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - not in scope: rush-hour load, multi-station routing, Playwright realtime KDS E2E
 
 ### 8c5. Cross-channel loyalty / gift cards (Era 4 Cycle 9)
-- policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`)
-- wiring cert: `test:ci:cross-channel-rewards:cert` (in `test:ci:governance-bundles`)
+- policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`, GTM lock `era6-dual-ledger-gtm-lock-v1`)
+- wiring cert: `test:ci:cross-channel-rewards:cert` (includes GTM forbidden-phrase scan; in `test:ci:governance-bundles`)
 - unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 

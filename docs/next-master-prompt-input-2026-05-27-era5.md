@@ -29,7 +29,7 @@ All five Era 5 P0 items from era4 prompt input **completed** (cycles 1–5). Pol
 
 | ID | Item | Notes |
 |----|------|-------|
-| E6-1 | Unified rewards ledger | Product decision: unify or permanent dual-ledger lock |
+| E6-1 | ~~Unified rewards ledger~~ | **Closed Era 6 Cycle 1** — `era6-dual-ledger-gtm-lock-v1` (permanent dual ledger; unification deferred_locked) |
 | E6-2 | KDS realtime smoke | Beyond staging checklist; no rush-hour claim |
 | E6-3 | Typecheck slices in CI | Optional parallel job; keep `typecheck:full` canonical |
 | E6-4 | Storefront inventory hook | Only if GTM lock lifted by explicit era decision |
