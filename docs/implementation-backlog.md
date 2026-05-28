@@ -3,7 +3,17 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
-## Era 14 — Nav / page maturity / RBAC recert
+## Era 14 — Nav / page maturity / RBAC / cron recert
+
+### KOS-E14-004 — Cron surface Era 14 recert (P1)
+- ID: `KOS-E14-004`
+- Title: Re-certify production-only cron surface and experimental archive honesty
+- Module: Platform / DevOps
+- Priority: P1 (Era 14 Cycle 4)
+- Status: **completed**
+- Decision: `era14-cron-surface-recert-v1` — 16 production / 0 experimental on disk; 121+ archived; no new cron routes; pilot forbids `ENABLE_EXPERIMENTAL_CRONS`
+- Evidence: `lib/cron/cron-surface-era14-policy.ts`, `test:ci:cron-hygiene-era14:cert`, `docs/cron-surface-honesty-checklist.md`, `npm run smoke:cron-surface`
+- Next: periodic recert when cron inventory changes; never restore experimental routes without era sign-off
 
 ### KOS-E14-003 — Mutation access consolidation Era 14 recert (P1)
 - ID: `KOS-E14-003`

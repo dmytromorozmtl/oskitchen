@@ -332,6 +332,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8c4i. Cron surface recert (Era 9 Cycle 3)
 - Policy: `lib/cron/cron-surface-era9-policy.ts` (`era9-cron-surface-recert-v1`; extends `era4-active-production-only-v1`)
+- Era 14 recert: `lib/cron/cron-surface-era14-policy.ts` (`era14-cron-surface-recert-v1`) — operator checklist `docs/cron-surface-honesty-checklist.md`; `npm run smoke:cron-surface`
 - Validators: `npm run validate:production-crons`, `npm run validate:cron-inventory`
 - Pilot: `scripts/ops/pilot-preflight.sh` forbids `ENABLE_EXPERIMENTAL_CRONS=true`
 - Wiring cert: `test:ci:cron-hygiene:cert` → `tests/unit/cron-surface-era9-cert-live.test.ts` (in `test:ci:governance-bundles:partition-platform`)
