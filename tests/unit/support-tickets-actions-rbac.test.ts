@@ -2,10 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const requireWorkspacePermissionActor = vi.hoisted(() => vi.fn());
 const canUseFullSupportInbox = vi.hoisted(() => vi.fn());
+const canViewSupportTicket = vi.hoisted(() => vi.fn());
 const recordAuditLog = vi.hoisted(() => vi.fn());
 const supportTicketFindUnique = vi.hoisted(() => vi.fn());
 const supportTicketUpdate = vi.hoisted(() => vi.fn());
 const supportTicketEventCreate = vi.hoisted(() => vi.fn());
+const supportTicketCommentCreate = vi.hoisted(() => vi.fn());
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
@@ -15,7 +17,7 @@ vi.mock("@/lib/permissions/require-workspace-permission", () => ({
 
 vi.mock("@/lib/support/support-permissions", () => ({
   canUseFullSupportInbox,
-  canViewSupportTicket: vi.fn(),
+  canViewSupportTicket,
 }));
 
 vi.mock("@/lib/audit-log", () => ({
@@ -36,10 +38,14 @@ vi.mock("@/lib/prisma", () => ({
     supportTicketEvent: {
       create: supportTicketEventCreate,
     },
+    supportTicketComment: {
+      create: supportTicketCommentCreate,
+    },
   },
 }));
 
 import {
+  addSupportTicketComment,
   assignSupportTicket,
   escalateSupportTicketAction,
   updateSupportTicketStatus,
@@ -64,6 +70,9 @@ const ticketRow = {
   id: TICKET_ID,
   status: "NEW" as const,
   assignedToId: "staff-1",
+  userId: null,
+  email: "customer@example.com",
+  workspaceId: "ws-1",
   firstResponseAt: null,
   resolvedAt: null,
   closedAt: null,
@@ -140,5 +149,44 @@ describe("support ticket mutation RBAC", () => {
 
     expect(result).toEqual({ error: "Only support staff can perform this action." });
     expect(supportTicketUpdate).not.toHaveBeenCalled();
+  });
+
+  it("denies internal comment without triage and audits", async () => {
+    canUseFullSupportInbox.mockResolvedValue(false);
+    canViewSupportTicket.mockResolvedValue(true);
+
+    const result = await addSupportTicketComment({
+      ticketId: TICKET_ID,
+      message: "Private note",
+      visibility: "INTERNAL",
+    });
+
+    expect(result).toEqual({ error: "Internal notes are restricted to support staff." });
+    expect(recordAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: "support_comment.permission_denied",
+        entityId: TICKET_ID,
+        metadata: expect.objectContaining({
+          visibility: "INTERNAL",
+          reason: "INTERNAL_NOT_ALLOWED",
+        }),
+      }),
+    );
+    expect(supportTicketCommentCreate).not.toHaveBeenCalled();
+  });
+
+  it("allows customer comment when actor can view ticket", async () => {
+    canUseFullSupportInbox.mockResolvedValue(false);
+    canViewSupportTicket.mockResolvedValue(true);
+    supportTicketCommentCreate.mockResolvedValue({ id: "comment-1" });
+
+    const result = await addSupportTicketComment({
+      ticketId: TICKET_ID,
+      message: "Thanks for your patience.",
+      visibility: "CUSTOMER",
+    });
+
+    expect(result).toEqual({ ok: true });
+    expect(supportTicketCommentCreate).toHaveBeenCalled();
   });
 });

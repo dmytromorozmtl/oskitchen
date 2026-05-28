@@ -11,6 +11,7 @@ import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { userHasWorkspaceAccess } from "@/lib/scope/assert-user-workspace-access";
 import {
+  requireSupportCommentMutationAccess,
   requireSupportStatusMutationAccess,
   requireSupportTriageAccess,
 } from "@/lib/support/require-support-mutation-access";
@@ -18,7 +19,6 @@ import {
   canUseFullSupportInbox,
   canViewSupportTicket,
 } from "@/lib/support/support-permissions";
-import { resolveSupportCommentPostPermission } from "@/lib/support/support-comment-guards";
 import { redactSupportJson } from "@/lib/support/support-redaction";
 import { escalateSupportTicketNotify, evaluateEscalationSignals } from "@/services/support/escalation-service";
 import { resolveFirstResponseStamp } from "@/services/support/support-engagement-service";
@@ -136,25 +136,16 @@ export async function addSupportTicketComment(input: {
   visibility: "INTERNAL" | "CUSTOMER" | "PARTNER";
 }) {
   try {
-    const ctx = await sessionProfile();
-    if (!ctx) return { error: "Unauthorized." };
-    const { session, profile } = ctx;
     const ticket = await prisma.supportTicket.findUnique({ where: { id: input.ticketId } });
     if (!ticket) return { error: "Ticket not found." };
-    const triage = await canUseFullSupportInbox(session.id, session.email, profile.role);
-    const canView = await canViewSupportTicket(session.id, session.email, ticket, profile.role);
-    const isAssignee = ticket.assignedToId === session.id;
-    const policy = resolveSupportCommentPostPermission({
+    const access = await requireSupportCommentMutationAccess(ticket, {
+      operation: "support.comment_add",
       visibility: input.visibility,
-      canTriage: triage,
-      canViewTicket: canView,
     });
-    if (!policy.ok) {
-      if (policy.error === "INTERNAL_NOT_ALLOWED") {
-        return { error: "Internal notes are restricted to support staff." };
-      }
-      return { error: "Forbidden." };
-    }
+    if (!access.ok) return { error: access.error };
+    const { actor, isAssignee } = access;
+    const session = actor.sessionUser;
+    const triage = actor.canTriage;
     await prisma.supportTicketComment.create({
       data: {
         ticketId: input.ticketId,
