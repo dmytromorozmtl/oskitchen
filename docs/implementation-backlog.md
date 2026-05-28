@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-025 — Briefing manager pack ↔ KDS priority lane cross-link (P1 WOW)
+- ID: `KOS-E19-025`
+- Title: Era 19 Workstream B Cycle 25 — manager briefing tile + ranked actions deep-link to KDS priority lane
+- Module: Owner Daily Briefing / KDS / Manager command center
+- Priority: P1 (WOW pillar — shift supervisor ↔ kitchen priority lane honesty)
+- Status: **briefing_manager_kds_priority_lane_crosslink_wired**
+- Decision: `era19-owner-daily-briefing-manager-kds-v1` — real KDS queue load for manager role pack; priority lane tile + supervisor actions link to `#kds-priority-lane-strip`; kds-pressure rewired when lane active
+- Evidence: `lib/briefing/owner-daily-briefing-manager-kds-era19.ts`, updated briefing service + role pack + tile links
+- Next: P0 proof unblock when ops credentials available, or POS manager override UX
+
 ### KOS-E19-024 — Briefing kitchen pack ↔ KDS priority lane cross-link (P1 WOW)
 - ID: `KOS-E19-024`
 - Title: Era 19 Workstream B Cycle 24 — kitchen briefing tile + ranked actions deep-link to KDS priority lane

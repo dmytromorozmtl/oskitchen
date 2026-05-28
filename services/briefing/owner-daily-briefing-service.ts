@@ -42,6 +42,11 @@ import {
   mergeBriefingKitchenTopActions,
 } from "@/lib/briefing/owner-daily-briefing-kitchen-era19";
 import {
+  buildOwnerDailyBriefingManagerKdsActions,
+  enrichBriefingManagerPackTiles,
+  mergeBriefingManagerKdsTopActions,
+} from "@/lib/briefing/owner-daily-briefing-manager-kds-era19";
+import {
   buildOwnerDailyBriefingLaunchWizardCommercialAction,
   mergeBriefingLaunchWizardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-launch-wizard-era19";
@@ -217,7 +222,7 @@ export async function loadOwnerDailyBriefing(
 
   const needsCommercialOps = rolePack === "owner" || rolePack === "support_admin";
 
-  const needsKitchenKds = rolePack === "kitchen";
+  const needsBriefingKdsQueue = rolePack === "kitchen" || rolePack === "manager";
 
   const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts, commercialOps, smokeArtifacts, kdsOrders] =
     await Promise.all([
@@ -233,7 +238,7 @@ export async function loadOwnerDailyBriefing(
     needsCommercialOps
       ? loadIntegrationHealthSmokeArtifactsModel().catch(() => null)
       : Promise.resolve(null),
-    needsKitchenKds ? getDailyKdsOrders(userId).catch(() => []) : Promise.resolve([]),
+    needsBriefingKdsQueue ? getDailyKdsOrders(userId).catch(() => []) : Promise.resolve([]),
   ]);
 
   const smokeNextAction = smokeArtifacts?.depth.nextSmokeAction ?? null;
@@ -293,7 +298,7 @@ export async function loadOwnerDailyBriefing(
     blockedOrdersApprox: today.kpis.blockedOrdersApprox,
   };
 
-  const kitchenInput = {
+  const kdsBriefingInput = {
     kdsOrders,
     productionCalendarOverdue: productionCalendarSlice.summary.overdue,
     productionCalendarDueToday: productionCalendarSlice.summary.dueToday,
@@ -314,8 +319,10 @@ export async function loadOwnerDailyBriefing(
     rolePack === "cashier"
       ? enrichBriefingCashierPackTiles(baseTiles, cashierInput)
       : rolePack === "kitchen"
-        ? enrichBriefingKitchenPackTiles(baseTiles, kitchenInput)
-        : baseTiles;
+        ? enrichBriefingKitchenPackTiles(baseTiles, kdsBriefingInput)
+        : rolePack === "manager"
+          ? enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput)
+          : baseTiles;
   const allAlerts =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminAlerts({
@@ -352,7 +359,7 @@ export async function loadOwnerDailyBriefing(
           )
         : rolePack === "kitchen"
           ? mergeBriefingKitchenTopActions(
-              buildOwnerDailyBriefingKitchenActions(kitchenInput),
+              buildOwnerDailyBriefingKitchenActions(kdsBriefingInput),
               pickOwnerDailyBriefingTopActions({
                 blockers: today.blockers,
                 alerts: allAlerts,
@@ -364,6 +371,20 @@ export async function loadOwnerDailyBriefing(
                 productionCalendarActions,
               }),
             )
+          : rolePack === "manager"
+            ? mergeBriefingManagerKdsTopActions(
+                buildOwnerDailyBriefingManagerKdsActions(kdsBriefingInput),
+                pickOwnerDailyBriefingTopActions({
+                  blockers: today.blockers,
+                  alerts: allAlerts,
+                  readinessOverall: today.readiness.overall,
+                  kpis: today.kpis,
+                  pilotAttentionCount: pilotSummary.totalSignals,
+                  integrationOverall: briefingInput.integrationOverall,
+                  lowStockCount: lowStock.lowStockCount,
+                  productionCalendarActions,
+                }),
+              )
           : pickOwnerDailyBriefingTopActions({
             blockers: today.blockers,
             alerts: allAlerts,
