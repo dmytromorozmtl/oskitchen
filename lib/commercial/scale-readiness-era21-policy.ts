@@ -14,11 +14,14 @@ export const SCALE_READINESS_ERA21_EXTENDS_POLICIES = [
   "era17-investor-narrative-onepager-v2-v1",
   SCALE_READINESS_PHASES_ERA21_POLICY_ID,
   SCALE_READINESS_UI_ERA21_POLICY_ID,
+  "era21-scale-readiness-post-month2-orchestrator-v1",
 ] as const;
 
 export const SCALE_READINESS_ERA21_OPS_SCRIPTS = [
+  "ops:run-scale-readiness-post-month2-orchestrator",
   "ops:validate-scale-readiness-env",
   "ops:export-scale-readiness-env-template",
+  "ops:export-scale-readiness-readiness-checklist",
   "ops:sync-scale-readiness-progress-report",
 ] as const;
 
@@ -28,9 +31,11 @@ export const SCALE_READINESS_ERA21_CI_SCRIPTS = [
 ] as const;
 
 export const SCALE_READINESS_ERA21_UNIT_TESTS = [
+  "tests/unit/scale-readiness-post-month2-orchestrator-era21.test.ts",
   "tests/unit/scale-readiness-phases-era21.test.ts",
   "tests/unit/scale-readiness-ui-era21.test.ts",
   "tests/unit/owner-daily-briefing-scale-readiness-era21.test.ts",
+  "tests/unit/run-scale-readiness-post-month2-orchestrator.test.ts",
   "tests/unit/scale-readiness-era21-cert-live.test.ts",
 ] as const;
 

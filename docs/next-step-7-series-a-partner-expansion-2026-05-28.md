@@ -39,11 +39,29 @@ Scale complete (era21 scale panels hidden)
 ## Preflight
 
 ```bash
+npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write   # planned — Step 7 orchestrator
 npm run ops:validate-scale-readiness-env -- --json        # scaleComplete: true
+npm run ops:validate-series-a-partner-expansion-env -- --json
+npm run ops:export-series-a-partner-expansion-env-template -- --write
+npm run ops:sync-series-a-partner-expansion-progress-report -- --write
+npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write   # planned
 npm run smoke:investor-narrative-onepager
 npm run smoke:competitor-feature-gap-matrix
 npm run test:ci:commercial-pilot-runbook:cert
 ```
+
+**Planned post-Scale orchestrator milestones (`seriesAMilestone`):**
+
+| Milestone | Track | Blocking? |
+|-----------|-------|-----------|
+| `scale_blocked` | Scale gates 1–5 incomplete | prerequisite |
+| `track_a_data_room` | `SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED=1` | yes |
+| `track_b_partner_channel` | partner one-pager + Woo/Shopify smoke honesty | yes |
+| `track_c_multi_region` | multi-region playbook drafted | yes |
+| `track_d_cs_playbook` | CS playbook with real pilot metrics | yes |
+| `series_a_complete` | Tracks A–D done | terminal |
+
+**Wiring surfaces when Series A incomplete:** briefing priority **6**, Launch Wizard commercial blockers, Platform `#series-a-partner-expansion`. Redirect to Scale orchestrator when `scale_blocked`.
 
 ---
 
@@ -120,14 +138,18 @@ Owner Briefing daily cadence — operational tiles only after Step 7 complete (n
 ## Ops commands
 
 ```bash
+npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write   # planned
 npm run ops:validate-series-a-partner-expansion-env -- --json
 npm run ops:export-series-a-partner-expansion-env-template -- --write
 npm run ops:sync-series-a-partner-expansion-progress-report -- --write
+npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write   # planned
 npm run test:ci:series-a-partner-expansion-era21
 npm run test:ci:series-a-partner-expansion-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-series-a-partner-expansion-validate.yml`
+GitHub workflow: `.github/workflows/ops-series-a-partner-expansion-validate.yml` (+ planned orchestrator step)
+
+**Readiness checklist artifact (planned):** `docs/series-a-partner-expansion-readiness-checklist.md`
 
 ---
 

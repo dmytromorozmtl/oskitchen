@@ -41,31 +41,40 @@ Month 2 complete (era21 Month 2 panels hidden)
 ## Preflight
 
 ```bash
-npm run ops:run-scale-readiness-post-month2-orchestrator -- --write   # planned — Step 6 orchestrator
+npm run ops:run-scale-readiness-post-month2-orchestrator -- --write
 npm run ops:validate-month2-market-readiness-env -- --json   # month2Complete: true
 npm run ops:validate-scale-readiness-env -- --json
 npm run ops:export-scale-readiness-env-template -- --write
 npm run ops:sync-scale-readiness-progress-report -- --write
-npm run ops:export-scale-readiness-readiness-checklist -- --write   # planned
+npm run ops:export-scale-readiness-readiness-checklist -- --write
 npm run smoke:pilot-gono-go                                  # decision: GO
 npm run smoke:pilot-rollback-drill
 npm run smoke:pilot-metrics-baseline
 ```
 
-**Planned post-Month 2 orchestrator milestones (`scaleMilestone`):**
+**Post-Month 2 orchestrator milestones (`scaleMilestone`):**
 
-| Milestone | Gate | Blocking? |
-|-----------|------|-----------|
-| `month2_blocked` | Month 2 A + B + D incomplete | prerequisite |
-| `gate1_per_customer_go` | `SCALE_PER_CUSTOMER_GO_ISOLATION=1` | yes |
-| `gate2_soc2_track` | `SCALE_SOC2_READINESS_TRACK_REVIEWED=1` | yes |
-| `gate3_sso_production` | `SCALE_SSO_PRODUCTION_STATUS=pass\|deferred_honest` | yes |
-| `gate4_resilience_drills` | rollback + webhook smokes + attestation | yes |
-| `gate5_data_room` | `SCALE_DATA_ROOM_INDEX_PUBLISHED=1` + artifact chain | yes |
-| `scale_complete` | Gates 1–5 done | terminal |
-| _(optional)_ Gate 6 | second paid pilot queued/skipped | no |
+| Milestone | Gate | Exit code (orchestrator `--json`) |
+|-----------|------|-----------------------------------|
+| `month2_blocked` | Month 2 A + B + D incomplete | `2` |
+| `gate1_per_customer_pilot_ops` | `SCALE_PER_CUSTOMER_GO_ISOLATION=1` | `0` |
+| `gate2_soc2_readiness_track` | `SCALE_SOC2_READINESS_TRACK_REVIEWED=1` | `0` |
+| `gate3_enterprise_sso_production` | SSO pass or honest deferral | `0` |
+| `gate4_operational_resilience` | rollback + webhook smokes + attestation | `0` |
+| `gate5_data_room_artifact_chain` | artifact chain + index published | `0` |
+| `scale_complete` | Gates 1–5 done | `0` |
 
-**Wiring surfaces when scale incomplete:** briefing priority **5**, Launch Wizard commercial blockers, Platform `#scale-readiness`. Redirect to Month 2 orchestrator when `month2_blocked`.
+Optional Gate 6 (second paid pilot) does **not** block milestone resolution.
+
+**Product surfaces active after Month 2 complete (scale incomplete):**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Scale ranked action (priority 5) + compact panel |
+| `/dashboard/launch-wizard` | Scale gates in commercial blockers |
+| Platform → Pilot ops | `#scale-readiness` phases panel |
+| `/dashboard/integration-health` | SSO production status |
+| `/dashboard/implementation` | Per-customer GO isolation |
 
 ---
 
@@ -159,18 +168,18 @@ Reuse Step 3 playbook per customer — never share GO artifacts.
 ## Ops commands
 
 ```bash
-npm run ops:run-scale-readiness-post-month2-orchestrator -- --write   # planned
+npm run ops:run-scale-readiness-post-month2-orchestrator -- --write
 npm run ops:validate-scale-readiness-env -- --json
 npm run ops:export-scale-readiness-env-template -- --write
 npm run ops:sync-scale-readiness-progress-report -- --write
-npm run ops:export-scale-readiness-readiness-checklist -- --write   # planned
+npm run ops:export-scale-readiness-readiness-checklist -- --write
 npm run test:ci:scale-readiness-era21
 npm run test:ci:scale-readiness-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-scale-readiness-validate.yml` (+ planned orchestrator step)
+GitHub workflow: `.github/workflows/ops-scale-readiness-validate.yml` (includes orchestrator step with `continue-on-error: true`)
 
-**Readiness checklist artifact (planned):** `docs/scale-readiness-readiness-checklist.md`
+**Readiness checklist artifact:** `docs/scale-readiness-readiness-checklist.md` (generated via export script — do not hand-edit PASS states)
 
 ---
 
@@ -184,13 +193,27 @@ GitHub workflow: `.github/workflows/ops-scale-readiness-validate.yml` (+ planned
 - [ ] Second paid pilot queued or explicitly skipped (optional)
 - [ ] No hand-edited PASS in `artifacts/*.json`
 - [ ] `artifacts/scale-readiness-progress-report.md` synced
+- [ ] `docs/scale-readiness-readiness-checklist.md` exported via orchestrator
 
 ---
 
-## Step 7 preview — Series A / partner expansion
+## Step 7 preview — Series A / partner expansion (orchestrator plan)
 
 See [`next-step-7-series-a-partner-expansion-2026-05-28.md`](./next-step-7-series-a-partner-expansion-2026-05-28.md)
 
-**Engineering:** `era21-series-a-partner-expansion-v1` · briefing priority **6** · `#series-a-partner-expansion`
+**Next engineering slice (Step 7, same pattern as Steps 1–6):**
+
+| Component | Planned artifact |
+|-----------|------------------|
+| Orchestrator lib | `lib/commercial/series-a-partner-expansion-post-scale-orchestrator-era21.ts` |
+| Policy | `era21-series-a-partner-expansion-post-scale-orchestrator-v1` |
+| Milestones | `scale_blocked` → `track_a_data_room` → `track_b_partner_channel` → `track_c_multi_region` → `track_d_cs_playbook` → `series_a_complete` |
+| Ops scripts | `ops:run-series-a-partner-expansion-post-scale-orchestrator`, `ops:export-series-a-partner-expansion-readiness-checklist` |
+| Validate env | add `seriesAMilestone` + `readyForPartnerSmokes` to JSON |
+| UI slice | milestone badge + redirect to Scale orchestrator when `scale_blocked` |
+| Briefing priority | **6** (mutually exclusive with Steps 1–5) |
+| CI workflow | orchestrator step in `ops-series-a-partner-expansion-validate.yml` |
+
+**Human gate before Step 7:** all Scale blocking gates 1–5 complete — `scaleComplete: true` in validate JSON.
 
 **Immediate action if Month 2 incomplete:** [`next-step-5-month2-market-readiness-2026-05-28.md`](./next-step-5-month2-market-readiness-2026-05-28.md)

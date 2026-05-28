@@ -37,6 +37,7 @@ describe("scale readiness era21 CI certification (live repo)", () => {
     const step6 = readFileSync(join(ROOT, SCALE_READINESS_STEP6_DOC), "utf8");
     expect(step6).toContain("smoke:pilot-rollback-drill");
     expect(step6).toContain("era21-scale-readiness-v1");
+    expect(step6).toContain("run-scale-readiness-post-month2-orchestrator");
     expect(step6).toContain("SCALE_PER_CUSTOMER_GO_ISOLATION");
   });
 

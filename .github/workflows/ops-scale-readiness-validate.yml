@@ -26,3 +26,14 @@ jobs:
           SCALE_RESILIENCE_DRILLS_ATTESTED: ${{ secrets.SCALE_RESILIENCE_DRILLS_ATTESTED }}
           SCALE_DATA_ROOM_INDEX_PUBLISHED: ${{ secrets.SCALE_DATA_ROOM_INDEX_PUBLISHED }}
           SCALE_SECOND_PAID_PILOT_QUEUED: ${{ secrets.SCALE_SECOND_PAID_PILOT_QUEUED }}
+      - name: Scale readiness post-Month 2 orchestrator (JSON summary)
+        run: npm run ops:run-scale-readiness-post-month2-orchestrator -- --json --skip-template
+        continue-on-error: true
+        env:
+          SCALE_PER_CUSTOMER_GO_ISOLATION: ${{ secrets.SCALE_PER_CUSTOMER_GO_ISOLATION }}
+          SCALE_SOC2_READINESS_TRACK_REVIEWED: ${{ secrets.SCALE_SOC2_READINESS_TRACK_REVIEWED }}
+          SCALE_SSO_PRODUCTION_STATUS: ${{ secrets.SCALE_SSO_PRODUCTION_STATUS }}
+          SCALE_SSO_PRODUCTION_DEFERRED_REASON: ${{ secrets.SCALE_SSO_PRODUCTION_DEFERRED_REASON }}
+          SCALE_RESILIENCE_DRILLS_ATTESTED: ${{ secrets.SCALE_RESILIENCE_DRILLS_ATTESTED }}
+          SCALE_DATA_ROOM_INDEX_PUBLISHED: ${{ secrets.SCALE_DATA_ROOM_INDEX_PUBLISHED }}
+          SCALE_SECOND_PAID_PILOT_QUEUED: ${{ secrets.SCALE_SECOND_PAID_PILOT_QUEUED }}

@@ -1,6 +1,10 @@
 /**
  * Scale readiness UI slice — Owner Briefing, Launch Wizard, Platform ops.
  */
+import {
+  resolveScaleReadinessMilestoneFromPhaseStatuses,
+  type ScaleReadinessMilestone,
+} from "@/lib/commercial/scale-readiness-post-month2-orchestrator-era21";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
@@ -50,6 +54,10 @@ export type ScaleReadinessUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
+  postMonth2OrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateMonth2Command: string;
+  scaleMilestone: ScaleReadinessMilestone;
   todayHref: string;
   launchWizardHref: string;
   platformOpsHref: string;
@@ -112,6 +120,11 @@ export function buildScaleReadinessUiSlice(input: {
   const completedBlockingPhaseCount = blockingPhases.filter((phase) => phase.complete).length;
   const nextPhase = resolveNextIncompleteScaleReadinessPhase(phases);
   const nextPhaseDetail = nextPhase ? formatScaleReadinessPhaseBlockerDetail(nextPhase) : null;
+  const scaleMilestone = resolveScaleReadinessMilestoneFromPhaseStatuses(phases, {
+    prerequisitesComplete: true,
+    month2Complete: true,
+    scaleComplete: false,
+  });
 
   return {
     policyId: SCALE_READINESS_UI_ERA21_POLICY_ID,
@@ -129,6 +142,12 @@ export function buildScaleReadinessUiSlice(input: {
     validateCommand: "npm run ops:validate-scale-readiness-env",
     exportTemplateCommand: "npm run ops:export-scale-readiness-env-template -- --write",
     syncProgressReportCommand: "npm run ops:sync-scale-readiness-progress-report -- --write",
+    postMonth2OrchestratorCommand:
+      "npm run ops:run-scale-readiness-post-month2-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-scale-readiness-readiness-checklist -- --write",
+    validateMonth2Command: "npm run ops:validate-month2-market-readiness-env -- --json",
+    scaleMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     platformOpsHref: `${SCALE_READINESS_PLATFORM_OPS_ROUTE}${SCALE_READINESS_PLATFORM_ANCHOR}`,
@@ -148,5 +167,5 @@ export function buildScaleReadinessUiSlice(input: {
 }
 
 export function formatScaleReadinessProgressLabel(slice: ScaleReadinessUiSlice): string {
-  return `Scale readiness ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} gates · GO · ${slice.customerName ?? "customer"}`;
+  return `Scale readiness ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} gates · ${slice.scaleMilestone.replaceAll("_", " ")} · GO · ${slice.customerName ?? "customer"}`;
 }

@@ -12,6 +12,7 @@ import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary"
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { resolveScaleReadinessMilestone } from "@/lib/commercial/scale-readiness-post-month2-orchestrator-era21";
 import {
   buildScaleReadinessPhaseStatuses,
   INVESTOR_NARRATIVE_ONEPAGER_ARTIFACT_PATH,
@@ -26,6 +27,12 @@ import {
   SCALE_READINESS_TRACKED_ENV_KEYS,
   TIER2_STAGING_GOLDEN_PATH_ARTIFACT_PATH,
 } from "@/lib/commercial/scale-readiness-phases-era21";
+
+const SCALE_GATES_BEFORE_RESILIENCE = [
+  "gate1_per_customer_pilot_ops",
+  "gate2_soc2_readiness_track",
+  "gate3_enterprise_sso_production",
+] as const;
 
 function readJson<T>(path: string): T | null {
   const full = join(process.cwd(), path);
@@ -67,6 +74,8 @@ export function evaluateScaleReadinessEnv(env: NodeJS.ProcessEnv = process.env):
   phases: ReturnType<typeof buildScaleReadinessPhaseStatuses>;
   goDecision: string | null;
   scaleComplete: boolean;
+  readyForResilienceSmokes: boolean;
+  scaleMilestone: ReturnType<typeof resolveScaleReadinessMilestone>;
 } {
   const artifacts = readScaleReadinessArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -95,6 +104,23 @@ export function evaluateScaleReadinessEnv(env: NodeJS.ProcessEnv = process.env):
     env,
   });
   const scaleComplete = resolveScaleReadinessComplete(phases);
+  const gate4 = phases.find((phase) => phase.id === "gate4_operational_resilience");
+  const priorGatesComplete = SCALE_GATES_BEFORE_RESILIENCE.every(
+    (id) => phases.find((phase) => phase.id === id)?.complete === true,
+  );
+  const rollbackPassed = artifacts.rollbackDrill?.rollbackProofStatus === "proof_passed";
+  const readyForResilienceSmokes =
+    prerequisites.prerequisitesComplete &&
+    !scaleComplete &&
+    priorGatesComplete &&
+    gate4?.complete !== true &&
+    !rollbackPassed;
+  const scaleMilestone = resolveScaleReadinessMilestone({
+    prerequisitesComplete: prerequisites.prerequisitesComplete,
+    month2Complete,
+    scaleComplete,
+    phases,
+  });
 
   return {
     prerequisites,
@@ -104,6 +130,8 @@ export function evaluateScaleReadinessEnv(env: NodeJS.ProcessEnv = process.env):
     phases,
     goDecision,
     scaleComplete,
+    readyForResilienceSmokes,
+    scaleMilestone,
   };
 }
 
@@ -120,6 +148,8 @@ function main() {
           month2Complete: result.month2Complete,
           goDecision: result.goDecision,
           scaleComplete: result.scaleComplete,
+          readyForResilienceSmokes: result.readyForResilienceSmokes,
+          scaleMilestone: result.scaleMilestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -148,6 +178,8 @@ function main() {
     console.log("Blocked — decision must be GO in artifacts/pilot-gono-go-summary.json.\n");
     process.exit(2);
   }
+
+  console.log(`Scale milestone: ${result.scaleMilestone}\n`);
 
   for (const phase of result.phases) {
     const marker = phase.complete ? "✓" : phase.optional ? "○ (optional)" : "○";

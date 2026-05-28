@@ -51,6 +51,9 @@ export function ScaleReadinessPhasesPanel(props: {
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               decision: {slice.goDecision}
             </Badge>
+            <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+              {slice.scaleMilestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
               Month 2 complete
             </Badge>
@@ -138,9 +141,12 @@ export function ScaleReadinessPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postMonth2OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.validateMonth2Command}</li>
                 <li>npm run smoke:pilot-rollback-drill</li>
                 <li>npm run smoke:commerce-webhook-drill</li>
                 <li>npm run smoke:pilot-gono-go</li>

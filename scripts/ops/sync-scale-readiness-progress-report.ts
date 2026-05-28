@@ -21,6 +21,8 @@ export function buildScaleReadinessProgressReportMarkdown(
     `- Month 2 complete: **${result.month2Complete ? "yes" : "no"}**`,
     `- GO decision: **${result.goDecision ?? "missing"}**`,
     `- Scale complete: ${result.scaleComplete ? "yes" : "no"}`,
+    `- scaleMilestone: **${result.scaleMilestone}**`,
+    `- Ready for resilience smokes: ${result.readyForResilienceSmokes ? "yes" : "no"}`,
     "",
     "## Gate checklist",
     "",
@@ -48,7 +50,9 @@ export function buildScaleReadinessProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-scale-readiness-post-month2-orchestrator -- --write");
   lines.push("npm run ops:validate-scale-readiness-env");
+  lines.push("npm run ops:export-scale-readiness-readiness-checklist -- --write");
   lines.push("npm run smoke:pilot-rollback-drill");
   lines.push("npm run smoke:commerce-webhook-drill");
   lines.push("npm run smoke:pilot-gono-go");

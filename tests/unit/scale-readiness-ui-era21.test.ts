@@ -84,6 +84,10 @@ describe("scale-readiness-ui-era21", () => {
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.month2Complete).toBe(true);
+    expect(slice?.scaleMilestone).toBe("gate1_per_customer_pilot_ops");
+    expect(slice?.postMonth2OrchestratorCommand).toContain(
+      "run-scale-readiness-post-month2-orchestrator",
+    );
     expect(formatScaleReadinessProgressLabel(slice!)).toContain("Acme Kitchen");
   });
 
