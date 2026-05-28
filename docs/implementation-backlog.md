@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 7 — Commercial readiness
 
+### KOS-E7-005 — Era 7 scorecard refresh
+- ID: `KOS-E7-005`
+- Title: Document Era 7 commercial-readiness completion, score deltas, and Era 8 prompt input
+- Module: Platform / GTM / engineering
+- Priority: P0 (Era 7 Cycle 5)
+- Status: **completed**
+- Decision: `era7-scorecard-refresh-v1` — 4/4 commercial cycles closed; overall **92/100**; defer full re-audit
+- Evidence: `docs/era7-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era7.md`, `lib/governance/era7-scorecard-policy.ts`
+- Next: pick Era 8 cycle 1 theme from era7 prompt input §4
+
 ### KOS-E7-004 — Marketing claims governance (sales enablement)
 - ID: `KOS-E7-004`
 - Title: Matrix-aligned marketing claims scan with governance CI cert

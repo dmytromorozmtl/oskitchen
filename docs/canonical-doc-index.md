@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 7 Cycle 4 — marketing claims governance cert)  
+**Updated:** 2026-05-27 (Era 7 Cycle 5 — scorecard refresh)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -48,9 +48,11 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era6.md`](./next-master-prompt-input-2026-05-27-era6.md) | Facts and constraints for Evolution Era 7 master prompt |
+| [`next-master-prompt-input-2026-05-27-era7.md`](./next-master-prompt-input-2026-05-27-era7.md) | Facts and constraints for Evolution Era 8 master prompt |
+| [`era7-cycle-completion-scorecard-2026-05-27.md`](./era7-cycle-completion-scorecard-2026-05-27.md) | Era 7 commercial readiness (cycles 1–4) + score 92/100 |
+| [`next-master-prompt-input-2026-05-27-era6.md`](./next-master-prompt-input-2026-05-27-era6.md) | **Superseded** by era7 input for recurring prompts |
 | [`era6-cycle-completion-scorecard-2026-05-27.md`](./era6-cycle-completion-scorecard-2026-05-27.md) | Era 6 P0 completion (cycles 1–5) + score 90/100 |
-| [`next-master-prompt-input-2026-05-27-era5.md`](./next-master-prompt-input-2026-05-27-era5.md) | **Superseded** by era6 input for recurring prompts |
+| [`next-master-prompt-input-2026-05-27-era5.md`](./next-master-prompt-input-2026-05-27-era5.md) | **Superseded** by era7 input for recurring prompts |
 | [`era5-cycle-completion-scorecard-2026-05-27.md`](./era5-cycle-completion-scorecard-2026-05-27.md) | Era 5 P0 completion (cycles 1–5) + score 86/100 |
 | [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | **Superseded** by era6 input for recurring prompts |
 | [`era4-cycle-completion-scorecard-2026-05-27.md`](./era4-cycle-completion-scorecard-2026-05-27.md) | Era 4 execution map completion (cycles 1–12) + score 82/100 |
@@ -135,6 +137,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2** | **Storefront Stripe E2E CI policy** | `era7-storefront-stripe-optional-v1`; `storefront-stripe-e2e-summary` artifact |
 | **3** | **Repo hygiene (`tests/node_modules`)** | `era7-tests-node-modules-hygiene-v1`; `test:ci:repo-hygiene:cert` |
 | **4** | **Marketing claims governance** | `era7-marketing-claims-governance-v1`; `verify-claims` + `test:ci:marketing-claims-governance:cert` |
+| **5** | **Scorecard refresh** | `era7-scorecard-refresh-v1`; this §Scorecard Era 7 |
 
 ## Evolution Era 6 cycle ledger
 
@@ -273,6 +276,27 @@ Incremental refresh after Era 6 cycles 1–5 (P0 closure from era5 handoff). Bas
 
 **Re-audit decision:** defer full repo re-audit until Era 7 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era6.md`.
 
+## Scorecard (Evolution Era 7 end — 2026-05-27)
+
+Incremental refresh after Era 7 cycles 1–4 (commercial readiness from era6 handoff). Baseline = Era 6 end **90** overall.
+
+| Area | Era 6 end | Era 7 end | Δ | Key evidence |
+|------|----------:|----------:|--:|--------------|
+| Overall | 90 | **92** | +2 | pilot runbook + claims governance + honest E2E tiers |
+| Security | 81 | **81** | +0 | unchanged |
+| QA | 86 | **87** | +1 | Stripe E2E policy artifact + marketing scan cert |
+| DevOps | 91 | **92** | +1 | `tests/node_modules/` hygiene cert |
+| RBAC | 86 | **86** | +0 | unchanged |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | unchanged |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 67 | **67** | +0 | unchanged |
+| Enterprise readiness | 62 | **62** | +0 | roadmap_only identity |
+| Marketing/sales | 74 | **79** | +5 | commercial pilot + verify-claims governance |
+| Storefront | 80 | **83** | +3 | optional Stripe browser tier |
+
+**Re-audit decision:** defer full repo re-audit until Era 8 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era7.md`.
+
 ---
 
 ## Validation
@@ -313,3 +337,4 @@ Incremental refresh after Era 6 cycles 1–5 (P0 closure from era5 handoff). Bas
 | 2026-05-27 | Era 7 Cycle 2: `era7-storefront-stripe-optional-v1` — honest Stripe browser E2E tier + summary artifact |
 | 2026-05-27 | Era 7 Cycle 3: `era7-tests-node-modules-hygiene-v1` — gitignore + CI cert blocks tracked nested test installs |
 | 2026-05-27 | Era 7 Cycle 4: `era7-marketing-claims-governance-v1` — matrix-aligned marketing claims scan + CI cert |
+| 2026-05-27 | Era 7 Cycle 5: scorecard refresh 92/100 + `next-master-prompt-input-2026-05-27-era7.md` |

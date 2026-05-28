@@ -1,5 +1,7 @@
 # Next Master Prompt Input — KitchenOS Era 7
 
+**Status:** **Superseded** by [`next-master-prompt-input-2026-05-27-era7.md`](./next-master-prompt-input-2026-05-27-era7.md) for recurring execution prompts.
+
 **Date:** 2026-05-27  
 **Purpose:** Canonical facts for the **next** master prompt after Evolution Era 6 completion  
 **Era 6 scorecard:** `docs/era6-cycle-completion-scorecard-2026-05-27.md`  
