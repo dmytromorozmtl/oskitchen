@@ -11,6 +11,10 @@ import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { userHasWorkspaceAccess } from "@/lib/scope/assert-user-workspace-access";
 import {
+  requireSupportStatusMutationAccess,
+  requireSupportTriageAccess,
+} from "@/lib/support/require-support-mutation-access";
+import {
   canUseFullSupportInbox,
   canViewSupportTicket,
 } from "@/lib/support/support-permissions";
@@ -32,11 +36,11 @@ async function sessionProfile() {
 
 export async function assignSupportTicket(ticketId: string, assigneeId: string | null) {
   try {
-    const ctx = await sessionProfile();
-    if (!ctx) return { error: "Unauthorized." };
-    const { session, profile } = ctx;
-    const triage = await canUseFullSupportInbox(session.id, session.email, profile.role);
-    if (!triage) return { error: "Only support staff can assign tickets." };
+    const access = await requireSupportTriageAccess({ operation: "support.assign" });
+    if (!access.ok) return { error: access.error };
+    const { actor } = access;
+    const session = actor.sessionUser;
+    const triage = access.actor.canTriage;
     const ticket = await prisma.supportTicket.findUnique({ where: { id: ticketId } });
     if (!ticket) return { error: "Ticket not found." };
     const now = new Date();
@@ -81,16 +85,15 @@ export async function updateSupportTicketStatus(
   resolutionSummary?: string,
 ) {
   try {
-    const ctx = await sessionProfile();
-    if (!ctx) return { error: "Unauthorized." };
-    const { session, profile } = ctx;
     const ticket = await prisma.supportTicket.findUnique({ where: { id: ticketId } });
     if (!ticket) return { error: "Ticket not found." };
-    const triage = await canUseFullSupportInbox(session.id, session.email, profile.role);
-    const isAssignee = ticket.assignedToId === session.id;
-    if (!triage && !isAssignee) {
-      return { error: "Only support staff or the assigned owner can change status." };
-    }
+    const access = await requireSupportStatusMutationAccess(ticket, {
+      operation: "support.status_update",
+    });
+    if (!access.ok) return { error: access.error };
+    const { actor, isAssignee } = access;
+    const session = actor.sessionUser;
+    const triage = actor.canTriage;
     const now = new Date();
     const data = {
       status,
@@ -205,11 +208,10 @@ export async function addSupportTicketComment(input: {
 
 export async function escalateSupportTicketAction(ticketId: string) {
   try {
-    const ctx = await sessionProfile();
-    if (!ctx) return { error: "Unauthorized." };
-    const { session, profile } = ctx;
-    const triage = await canUseFullSupportInbox(session.id, session.email, profile.role);
-    if (!triage) return { error: "Only support staff can escalate." };
+    const access = await requireSupportTriageAccess({ operation: "support.escalate" });
+    if (!access.ok) return { error: access.error };
+    const { actor } = access;
+    const session = actor.sessionUser;
     const ticket = await prisma.supportTicket.findUnique({ where: { id: ticketId } });
     if (!ticket) return { error: "Ticket not found." };
     const reasons = evaluateEscalationSignals(ticket);
