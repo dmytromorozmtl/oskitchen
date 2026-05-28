@@ -11,6 +11,7 @@ import type {
   OwnerDailyBriefingTile,
 } from "@/lib/briefing/owner-daily-briefing-era19";
 import type { OwnerDailyBriefingPayload } from "@/services/briefing/owner-daily-briefing-service";
+import type { OwnerDailyBriefingProductionCalendarSlice } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 
 function nextActionCardClass(tone: OwnerDailyBriefingNextAction["tone"]): string {
   if (tone === "success") {
@@ -112,6 +113,10 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         </Card>
       ) : null}
 
+      {briefing.productionCalendar ? (
+        <ProductionCalendarLane slice={briefing.productionCalendar} />
+      ) : null}
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {heroTiles.map((tile) => (
           <BriefingTileCard key={tile.id} tile={tile} />
@@ -210,5 +215,92 @@ function BriefingAlertRow(props: { alert: OwnerDailyBriefingAlert }) {
       </div>
       <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
     </Link>
+  );
+}
+
+function ProductionCalendarLane(props: { slice: OwnerDailyBriefingProductionCalendarSlice }) {
+  const { slice } = props;
+  const { summary } = slice;
+
+  return (
+    <Card
+      className="border-border/80 bg-card/90 shadow-sm"
+      data-testid="owner-briefing-production-calendar-lane"
+    >
+      <CardHeader className="pb-2">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <CardTitle className="text-base">Production calendar — today</CardTitle>
+            <CardDescription>
+              Batch prep priorities from the planning calendar — no rush-hour SLO claim.
+            </CardDescription>
+          </div>
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <Link href={slice.calendarHref}>Open calendar</Link>
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {!slice.hasPlanTasks ? (
+          <p className="text-sm text-muted-foreground">
+            No batches scheduled through today. Add production plan tasks on the calendar to track
+            overdue and due-today prep.
+          </p>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <CalendarStat label="Overdue" value={summary.overdue} tone={summary.overdue > 0 ? "attention" : "neutral"} />
+              <CalendarStat label="Due today" value={summary.dueToday} tone={summary.dueToday > 0 ? "attention" : "neutral"} />
+              <CalendarStat label="In progress" value={summary.inProgress} tone="neutral" />
+              <CalendarStat label="Completed" value={summary.completedToday} tone="success" />
+            </div>
+            {slice.attentionItems.length > 0 ? (
+              <div className="space-y-2">
+                {slice.attentionItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    data-testid={`owner-briefing-production-${item.id}`}
+                    className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-muted/15 px-3 py-2 text-sm hover:bg-muted/35"
+                  >
+                    <div>
+                      <p className="font-medium">{item.title}</p>
+                      <p className="text-xs text-muted-foreground">{item.detail}</p>
+                    </div>
+                    <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                All calendar batches through today are complete or on track.
+              </p>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function CalendarStat(props: {
+  label: string;
+  value: number;
+  tone: "attention" | "neutral" | "success";
+}) {
+  const toneClass =
+    props.tone === "attention"
+      ? "border-amber-200/70 bg-amber-50/30 dark:border-amber-900/40"
+      : props.tone === "success"
+        ? "border-emerald-200/60 bg-emerald-50/20 dark:border-emerald-900/30"
+        : "border-border/70 bg-background/80";
+
+  return (
+    <div className={`rounded-xl border px-3 py-2 ${toneClass}`}>
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+        {props.label}
+      </p>
+      <p className="mt-1 text-xl font-semibold tabular-nums">{props.value}</p>
+    </div>
   );
 }

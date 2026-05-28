@@ -94,6 +94,17 @@ export type OwnerDailyBriefingInput = {
     laborPercent: number;
     status: "OVER" | "ON_TRACK" | "UNDER" | null;
   };
+  productionCalendar?: {
+    summary: {
+      overdue: number;
+      dueToday: number;
+      inProgress: number;
+      completedToday: number;
+    };
+    hasPlanTasks: boolean;
+    calendarHref: string;
+    primaryHref: string;
+  };
 };
 
 export function buildOwnerDailyBriefingTiles(
@@ -150,17 +161,46 @@ export function buildOwnerDailyBriefingTiles(
   tiles.push({
     id: "production-priorities",
     category: "production",
-    label: "Production open",
+    label: "Production work open",
     value: String(input.kpis.productionWorkOpen),
     detail:
       input.kpis.productionWorkOpen > 0
-        ? "Open production work — check calendar and board."
-        : "No open production work items.",
-    href: "/dashboard/production/calendar",
+        ? "Open kitchen work items — check production board."
+        : "No open production work items on the board.",
+    href: "/dashboard/production",
     availability: "available",
     tone: input.kpis.productionWorkOpen > 0 ? "attention" : "success",
     priority: 14,
   });
+
+  if (input.productionCalendar) {
+    const cal = input.productionCalendar;
+    const openCount = cal.summary.overdue + cal.summary.dueToday;
+    const attention = cal.summary.overdue > 0 || cal.summary.dueToday > 0;
+
+    let detail: string;
+    if (!cal.hasPlanTasks) {
+      detail = "No production calendar batches through today — schedule prep on the calendar.";
+    } else if (cal.summary.overdue > 0) {
+      detail = `${cal.summary.overdue} overdue · ${cal.summary.dueToday} due today · ${cal.summary.inProgress} in progress`;
+    } else if (cal.summary.dueToday > 0) {
+      detail = `${cal.summary.dueToday} due today · ${cal.summary.inProgress} in progress · ${cal.summary.completedToday} completed`;
+    } else {
+      detail = `${cal.summary.completedToday} completed today — no overdue or due-today batches.`;
+    }
+
+    tiles.push({
+      id: "production-calendar-today",
+      category: "production",
+      label: "Production calendar",
+      value: String(openCount),
+      detail,
+      href: cal.primaryHref,
+      availability: cal.hasPlanTasks ? "available" : "not_configured",
+      tone: attention ? "attention" : cal.hasPlanTasks ? "success" : "neutral",
+      priority: cal.summary.overdue > 0 ? 4 : cal.summary.dueToday > 0 ? 13 : 24,
+    });
+  }
 
   tiles.push({
     id: "packing-status",
@@ -336,6 +376,7 @@ export function buildOwnerDailyBriefingTiles(
 export function buildOwnerDailyBriefingAlerts(input: {
   blockers: readonly TodayBlocker[];
   pilotAlerts: readonly OwnerDailyBriefingAlert[];
+  productionCalendarAlerts?: readonly OwnerDailyBriefingAlert[];
   kpis: OwnerDailyBriefingInput["kpis"];
 }): OwnerDailyBriefingAlert[] {
   const alerts: OwnerDailyBriefingAlert[] = [];
@@ -374,8 +415,9 @@ export function buildOwnerDailyBriefingAlerts(input: {
   }
 
   alerts.push(...input.pilotAlerts);
+  alerts.push(...(input.productionCalendarAlerts ?? []));
 
-  return alerts.sort((a, b) => a.priority - b.priority).slice(0, 6);
+  return alerts.sort((a, b) => a.priority - b.priority).slice(0, 8);
 }
 
 function rankedActionToNext(action: OwnerDailyBriefingRankedAction): OwnerDailyBriefingNextAction {
@@ -396,8 +438,11 @@ export function pickOwnerDailyBriefingTopActions(input: {
   pilotAttentionCount: number;
   integrationOverall: OwnerDailyBriefingInput["integrationOverall"];
   lowStockCount: number;
+  productionCalendarActions?: readonly OwnerDailyBriefingRankedAction[];
 }): OwnerDailyBriefingRankedAction[] {
   const candidates: OwnerDailyBriefingRankedAction[] = [];
+
+  candidates.push(...(input.productionCalendarActions ?? []));
 
   for (const blocker of input.blockers) {
     candidates.push({

@@ -30,6 +30,7 @@ Interpretation rule:
 - **Era 19 handoff:** [`next-master-prompt-input-2026-05-28-breakthrough.md`](./next-master-prompt-input-2026-05-28-breakthrough.md); theme **BREAKTHROUGH: proof + Owner Daily Briefing WOW pillar**.
 - **Era 19 Cycle 1 (2026-05-28):** Owner daily briefing aggregator — `era19-owner-daily-briefing-v1`; briefing hero on Today for owner/manager with real tiles, alerts, and next action.
 - **Era 19 Cycle 2 (2026-05-28):** Briefing command center depth — `era19-owner-daily-briefing-today-focus-v1`; next 3 actions lane, risk radar, KPI wall collapse when briefing active, integration health deep link.
+- **Era 19 Cycle 3 (2026-05-28):** Production calendar today tile — `era19-owner-daily-briefing-production-calendar-v1`; overdue/due-today batch lane on briefing from real calendar queries.
 - **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); theme **staging_proof_and_first_paid_pilot**.
 - **Era 18 Cycle 18 (2026-05-28):** KDS bump-next expo — `era18-kds-bump-next-v1`; oldest-ticket hero + action error feedback.
 - **Era 18 Cycle 17 (2026-05-28):** Production calendar today focus — `era18-production-calendar-today-focus-v1`; overdue/due-today strip + today column highlight.

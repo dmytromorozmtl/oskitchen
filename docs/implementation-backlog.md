@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-003 — Production calendar today briefing tile (P1 WOW)
+- ID: `KOS-E19-003`
+- Title: Era 19 Workstream B Cycle 3 — production calendar today-priority tile + lane
+- Module: Dashboard / Today / Production calendar
+- Priority: P1 (WOW pillar depth)
+- Status: **production_calendar_briefing_wired**
+- Decision: `era19-owner-daily-briefing-production-calendar-v1` — real `productionPlanTask` queries; overdue/due-today/in-progress/completed; deep links to calendar day anchors
+- Evidence: `lib/briefing/owner-daily-briefing-production-calendar-era19.ts`, briefing hero production lane
+- Next: Role-based tile packs (owner vs kitchen vs manager)
+
 ### KOS-E19-002 — Briefing command center depth (P1 WOW)
 - ID: `KOS-E19-002`
 - Title: Era 19 Workstream B Cycle 2 — next 3 actions, KPI collapse, risk radar
