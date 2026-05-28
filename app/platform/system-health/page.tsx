@@ -1,11 +1,10 @@
-import Link from "next/link";
-
 import { PlatformSystemHealthAttentionStrip } from "@/components/platform/platform-system-health-attention-strip";
+import { PlatformSystemHealthTileNextAction } from "@/components/platform/platform-system-health-tile-next-action";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadPlatformObservabilityPanel } from "@/services/observability/observability-service";
 import { getPlatformDashboardSnapshot } from "@/services/platform/platform-service";
+import type { PlatformSystemHealthTileId } from "@/lib/system-health/system-health-focus-era18";
 
 export default async function PlatformSystemHealthPage() {
   const ctx = await requirePlatformAccess();
@@ -43,12 +42,12 @@ export default async function PlatformSystemHealthPage() {
       <PlatformSystemHealthAttentionStrip snapshot={snapshot} recentEvents={obs.events} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Tile title="Webhook backlog (all)" value={s.webhookPending} href="/platform/webhooks" />
-        <Tile title="Integration errors" value={s.integrationErrors} href="/platform/integrations" />
-        <Tile title="Automation failures" value={s.automationFailures} href="/platform/automations" />
-        <Tile title="Open tickets" value={s.openTickets} href="/platform/support" />
-        <Tile title="Critical tickets" value={s.criticalTickets} href="/platform/support/escalations" />
-        <Tile title="Workspaces" value={s.workspaces} href="/platform/workspaces" />
+        <Tile id="webhook-backlog" title="Webhook backlog (all)" value={s.webhookPending} />
+        <Tile id="integration-errors" title="Integration errors" value={s.integrationErrors} />
+        <Tile id="automation-failures" title="Automation failures" value={s.automationFailures} />
+        <Tile id="open-tickets" title="Open tickets" value={s.openTickets} />
+        <Tile id="critical-tickets" title="Critical tickets" value={s.criticalTickets} />
+        <Tile id="workspaces" title="Workspaces" value={s.workspaces} />
       </div>
 
       <Card className="border-zinc-800 bg-zinc-900/60">
@@ -76,7 +75,7 @@ export default async function PlatformSystemHealthPage() {
   );
 }
 
-function Tile({ title, value, href }: { title: string; value: number; href: string }) {
+function Tile({ id, title, value }: { id: PlatformSystemHealthTileId; title: string; value: number }) {
   return (
     <Card className="border-zinc-800 bg-zinc-900/60">
       <CardHeader className="pb-2">
@@ -84,9 +83,7 @@ function Tile({ title, value, href }: { title: string; value: number; href: stri
       </CardHeader>
       <CardContent className="flex items-center justify-between gap-2">
         <p className="text-3xl font-semibold tabular-nums text-white">{value}</p>
-        <Button asChild variant="link" className="text-amber-200">
-          <Link href={href}>Open</Link>
-        </Button>
+        <PlatformSystemHealthTileNextAction tileId={id} value={value} />
       </CardContent>
     </Card>
   );

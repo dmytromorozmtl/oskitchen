@@ -1,11 +1,9 @@
-import Link from "next/link";
-
 import { canManageProductionIncidentsForUser } from "@/actions/production-incidents";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { PlatformErrorRecoveryAttentionStrip } from "@/components/platform/platform-error-recovery-attention-strip";
+import { PlatformErrorRecoveryTileNextAction } from "@/components/platform/platform-error-recovery-tile-next-action";
 import { PlatformProductionIncidentPanel } from "@/components/platform/production-incident-panel";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   listProductionIncidentAssignees,
@@ -13,6 +11,7 @@ import {
 } from "@/services/incidents/production-incident-rollup-service";
 import { listPlatformErrorEvents } from "@/services/observability/error-event-service";
 import { getPlatformDashboardSnapshot } from "@/services/platform/platform-service";
+import type { PlatformErrorRecoveryTileId } from "@/lib/error-recovery/error-recovery-focus-era18";
 
 export default async function PlatformErrorRecoveryPage() {
   const ctx = await requirePlatformAccess();
@@ -35,38 +34,43 @@ export default async function PlatformErrorRecoveryPage() {
     criticalProductionIncidents: s.criticalProductionIncidents,
   } as const;
 
-  const tiles = [
+  const tiles: { id: PlatformErrorRecoveryTileId; title: string; count: number; href: string; detail: string }[] = [
     {
+      id: "webhook-backlog",
       title: "Webhook backlog (all tenants)",
       count: s.webhookPending,
       href: "/platform/webhooks",
       detail: "Investigate signing, retries, and dead-letter patterns.",
     },
     {
+      id: "integration-errors",
       title: "Integration errors",
       count: s.integrationErrors,
       href: "/platform/integrations",
       detail: "OAuth / token / remote API failures aggregated globally.",
     },
     {
+      id: "automation-failures",
       title: "Automation failures",
       count: s.automationFailures,
       href: "/platform/automations",
       detail: "Failed playbook or automation executions.",
     },
     {
+      id: "open-tickets",
       title: "Open support tickets",
       count: s.openTickets,
       href: "/platform/support",
       detail: "Customer-visible issues requiring operator response.",
     },
     {
+      id: "critical-tickets",
       title: "Critical tickets",
       count: s.criticalTickets,
       href: "/platform/support/escalations",
       detail: "Highest priority incidents.",
     },
-  ] as const;
+  ];
 
   return (
     <div className="space-y-8 text-zinc-100">
@@ -94,16 +98,14 @@ export default async function PlatformErrorRecoveryPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {tiles.map((t) => (
-          <Card key={t.href} className="border-zinc-800 bg-zinc-900/60">
+          <Card key={t.id} className="border-zinc-800 bg-zinc-900/60">
             <CardHeader className="pb-2">
               <CardTitle className="text-base text-white">{t.title}</CardTitle>
               <CardDescription className="text-zinc-500">{t.detail}</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center justify-between gap-2">
               <p className="text-3xl font-semibold tabular-nums text-white">{t.count}</p>
-              <Button asChild variant="link" className="text-amber-200">
-                <Link href={t.href}>Open</Link>
-              </Button>
+              <PlatformErrorRecoveryTileNextAction tileId={t.id} count={t.count} />
             </CardContent>
           </Card>
         ))}

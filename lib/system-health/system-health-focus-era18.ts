@@ -45,6 +45,28 @@ export type SystemHealthAttentionItem = {
   tone: "urgent" | "normal";
 };
 
+export type SystemHealthMetricId =
+  | "failed-webhooks"
+  | "integration-errors"
+  | "integrity-flags"
+  | "open-support"
+  | "unmapped-catalog"
+  | "active-orders";
+
+export type PlatformSystemHealthTileId =
+  | "webhook-backlog"
+  | "integration-errors"
+  | "automation-failures"
+  | "open-tickets"
+  | "critical-tickets"
+  | "workspaces";
+
+export type SystemHealthMetricRowNextAction = {
+  label: string;
+  href: string;
+  tone: "urgent" | "normal";
+};
+
 export function summarizeSystemHealthSnapshot(snapshot: SystemHealthSnapshot): {
   totalSignals: number;
   hasUrgent: boolean;
@@ -201,6 +223,110 @@ export function pickSystemHealthAttentionItems(
   }
 
   return items.sort((a, b) => a.priority - b.priority).slice(0, 4);
+}
+
+/** Health metric tile next action — contextual triage when the signal needs operator action. */
+export function resolveSystemHealthMetricRowNextAction(
+  metricId: SystemHealthMetricId,
+  value: number,
+): SystemHealthMetricRowNextAction | null {
+  switch (metricId) {
+    case "failed-webhooks":
+      if (value <= 0) return null;
+      return {
+        label: "Inspect webhook queue",
+        href: "/dashboard/sales-channels/webhooks",
+        tone: value >= 10 ? "urgent" : "normal",
+      };
+    case "integration-errors":
+      if (value <= 0) return null;
+      return {
+        label: "Fix channel connections",
+        href: "/dashboard/sales-channels/health",
+        tone: "urgent",
+      };
+    case "integrity-flags":
+      if (value <= 0) return null;
+      return {
+        label: "Review integrity flags",
+        href: "/dashboard/system-health/data-integrity",
+        tone: "normal",
+      };
+    case "open-support":
+      if (value <= 0) return null;
+      return {
+        label: "Open support inbox",
+        href: "/dashboard/support/inbox",
+        tone: "normal",
+      };
+    case "unmapped-catalog":
+      if (value <= 0) return null;
+      return {
+        label: "Map external SKUs",
+        href: "/dashboard/product-mapping",
+        tone: "normal",
+      };
+    case "active-orders":
+      return {
+        label: "Open order hub",
+        href: "/dashboard/orders",
+        tone: "normal",
+      };
+    default:
+      return null;
+  }
+}
+
+/** Platform health tile next action — cross-tenant triage CTA. */
+export function resolvePlatformSystemHealthTileRowNextAction(
+  tileId: PlatformSystemHealthTileId,
+  value: number,
+): SystemHealthMetricRowNextAction | null {
+  switch (tileId) {
+    case "webhook-backlog":
+      if (value <= 0) return null;
+      return {
+        label: "Inspect cross-tenant webhooks",
+        href: "/platform/webhooks",
+        tone: value >= 25 ? "urgent" : "normal",
+      };
+    case "integration-errors":
+      if (value <= 0) return null;
+      return {
+        label: "Review platform integrations",
+        href: "/platform/integrations",
+        tone: "urgent",
+      };
+    case "automation-failures":
+      if (value <= 0) return null;
+      return {
+        label: "Review automation failures",
+        href: "/platform/automations",
+        tone: "normal",
+      };
+    case "open-tickets":
+      if (value <= 0) return null;
+      return {
+        label: "Open support inbox",
+        href: "/platform/support",
+        tone: "normal",
+      };
+    case "critical-tickets":
+      if (value <= 0) return null;
+      return {
+        label: "Respond to escalations",
+        href: "/platform/support/escalations",
+        tone: "urgent",
+      };
+    case "workspaces":
+      return {
+        label: "Review workspaces",
+        href: "/platform/workspaces",
+        tone: "normal",
+      };
+    default:
+      return null;
+  }
 }
 
 export function pickSystemHealthEventNextActions(

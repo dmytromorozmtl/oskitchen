@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { canManageProductionIncidentsForUser } from "@/actions/production-incidents";
 import { SystemHealthAttentionStrip } from "@/components/dashboard/system-health-attention-strip";
+import { SystemHealthMetricNextAction } from "@/components/dashboard/system-health-metric-next-action";
 import { ProductionIncidentWorkflowForm } from "@/components/system/production-incident-workflow-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { loadProductionIncidentRollup } from "@/services/incidents/production-in
 import { listProductionIncidentAssignees } from "@/services/incidents/production-incident-rollup-service";
 import { loadWorkspaceObservabilityPanel } from "@/services/observability/observability-service";
 import { loadOperationHealth } from "@/services/operations/operation-health-service";
+import type { SystemHealthMetricId } from "@/lib/system-health/system-health-focus-era18";
 
 export default async function SystemHealthPage() {
   const { sessionUser, userId } = await getTenantActor();
@@ -70,12 +72,12 @@ export default async function SystemHealthPage() {
       <SystemHealthAttentionStrip snapshot={snapshot} recentEvents={obs.events} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Metric title="Failed webhooks" value={today.kpis.failedWebhooks} href="/dashboard/sales-channels/webhooks" />
-        <Metric title="Integration errors" value={today.kpis.errorIntegrations} href="/dashboard/sales-channels/health" />
-        <Metric title="Integrity flags" value={today.kpis.integrityIssueCount} href="/dashboard/system-health/data-integrity" />
-        <Metric title="Open support tickets" value={today.kpis.openSupportTickets} href="/dashboard/support/inbox" />
-        <Metric title="Unmapped catalog rows" value={today.kpis.unmatchedExternalProducts} href="/dashboard/product-mapping" />
-        <Metric title="Active orders" value={today.kpis.activeOrders} href="/dashboard/orders" />
+        <Metric id="failed-webhooks" title="Failed webhooks" value={today.kpis.failedWebhooks} />
+        <Metric id="integration-errors" title="Integration errors" value={today.kpis.errorIntegrations} />
+        <Metric id="integrity-flags" title="Integrity flags" value={today.kpis.integrityIssueCount} />
+        <Metric id="open-support" title="Open support tickets" value={today.kpis.openSupportTickets} />
+        <Metric id="unmapped-catalog" title="Unmapped catalog rows" value={today.kpis.unmatchedExternalProducts} />
+        <Metric id="active-orders" title="Active orders" value={today.kpis.activeOrders} />
       </div>
 
       <Card className="border-border/80 bg-card/90 shadow-sm">
@@ -252,7 +254,15 @@ function ObsStat({ label, value }: { label: string; value: number }) {
   );
 }
 
-function Metric({ title, value, href }: { title: string; value: number; href: string }) {
+function Metric({
+  id,
+  title,
+  value,
+}: {
+  id: SystemHealthMetricId;
+  title: string;
+  value: number;
+}) {
   return (
     <Card className="border-border/80 bg-card/90 shadow-sm">
       <CardHeader className="pb-2">
@@ -260,9 +270,7 @@ function Metric({ title, value, href }: { title: string; value: number; href: st
       </CardHeader>
       <CardContent className="flex items-center justify-between gap-2">
         <p className="text-3xl font-semibold tabular-nums">{value}</p>
-        <Button asChild variant="link" className="shrink-0 px-0">
-          <Link href={href}>Open</Link>
-        </Button>
+        <SystemHealthMetricNextAction metricId={id} value={value} />
       </CardContent>
     </Card>
   );

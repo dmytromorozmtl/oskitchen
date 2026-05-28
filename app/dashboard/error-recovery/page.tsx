@@ -1,6 +1,5 @@
-import Link from "next/link";
-
 import { ErrorRecoveryAttentionStrip } from "@/components/dashboard/error-recovery-attention-strip";
+import { ErrorRecoveryTileNextAction } from "@/components/dashboard/error-recovery-tile-next-action";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -16,6 +15,7 @@ import { prisma } from "@/lib/prisma";
 import { loadProductionCronExecutionAudit } from "@/services/cron/cron-execution-evidence";
 import { loadProductionIncidentRollup } from "@/services/incidents/production-incident-rollup-service";
 import { listWorkspaceErrorEvents } from "@/services/observability/error-event-service";
+import type { ErrorRecoveryTileId } from "@/lib/error-recovery/error-recovery-focus-era18";
 import { IntegrationStatus } from "@prisma/client";
 
 export default async function ErrorRecoveryPage() {
@@ -69,56 +69,74 @@ export default async function ErrorRecoveryPage() {
     productionIncidentsCritical: incidentRollup.summary.critical,
   } as const;
 
-  const tiles = [
+  const tiles: {
+    id: ErrorRecoveryTileId;
+    title: string;
+    count: number | null;
+    href: string;
+    detail: string;
+    criticalCount?: number;
+    stalledEscalations?: number;
+  }[] = [
     {
+      id: "webhooks-queued",
       title: "Webhooks queued (unprocessed)",
       count: failedWebhooks,
       href: "/dashboard/sales-channels/webhooks",
       detail: "Unprocessed events — may include normal backlog; inspect errors separately in Webhooks.",
     },
     {
+      id: "integration-errors",
       title: "Integration errors",
       count: errorIntegrations,
       href: "/dashboard/sales-channels/health",
       detail: "OAuth, scopes, or remote API failures.",
     },
     {
+      id: "failed-channel-orders",
       title: "Failed channel orders",
       count: failedExternalOrders,
       href: "/dashboard/order-hub",
       detail: "Rows that never became KitchenOS orders.",
     },
     {
+      id: "import-jobs",
       title: "Import jobs (failed / partial)",
       count: failedImports,
       href: "/dashboard/import-center/history",
       detail: "CSV / connector uploads needing fixes.",
     },
     {
+      id: "unmapped-catalog",
       title: "Unmapped catalog rows",
       count: unmappedProducts,
       href: "/dashboard/product-mapping",
       detail: "External SKUs without menu linkage.",
     },
     {
+      id: "cron-attention",
       title: "Cron execution attention",
       count: cronAudit.summary.openIncidents,
       href: "/dashboard/system-health/cron-execution",
       detail: `Production cron incidents that are stale/failing and not yet acknowledged. Stalled escalations: ${cronAudit.summary.stalledAutoEscalations}, auto-escalated: ${cronAudit.summary.autoEscalatedIncidents}.`,
+      stalledEscalations: cronAudit.summary.stalledAutoEscalations,
     },
     {
+      id: "production-incidents",
       title: "Production incidents",
       count: incidentRollup.summary.open,
       href: "/dashboard/system-health/incidents",
       detail: `Unified incident queue across startup readiness, critical cron incidents, and webhook recovery. Critical: ${incidentRollup.summary.critical}.`,
+      criticalCount: incidentRollup.summary.critical,
     },
     {
+      id: "data-integrity",
       title: "Data integrity workspace",
       count: null,
       href: "/dashboard/system-health/data-integrity",
       detail: "Structural checks (empty orders, missing prices, etc.).",
     },
-  ] as const;
+  ];
 
   return (
     <div className="space-y-8">
@@ -146,7 +164,7 @@ export default async function ErrorRecoveryPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {tiles.map((t) => (
-          <Card key={t.href} className="border-border/80 bg-card/90 shadow-sm">
+          <Card key={t.id} className="border-border/80 bg-card/90 shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">{t.title}</CardTitle>
               <CardDescription>{t.detail}</CardDescription>
@@ -157,12 +175,14 @@ export default async function ErrorRecoveryPage() {
               ) : (
                 <p className="text-sm text-muted-foreground">Open checker</p>
               )}
-              <Link
-                href={t.href}
-                className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-              >
-                Open
-              </Link>
+              <ErrorRecoveryTileNextAction
+                tileId={t.id}
+                context={{
+                  count: t.count,
+                  criticalCount: t.criticalCount,
+                  stalledEscalations: t.stalledEscalations,
+                }}
+              />
             </CardContent>
           </Card>
         ))}

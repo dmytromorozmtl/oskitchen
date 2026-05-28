@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-036 — Error recovery and system health tile next actions (P0)
+- ID: `KOS-E18-036`
+- Title: Era 18 Workstream N/O Cycle 36 — recovery and health hub tile row next actions
+- Module: Platform ops / Observability
+- Priority: P0 (operator blocking UX + integration transparency)
+- Status: **error_recovery_tile_next_actions_wired** + **system_health_metric_next_actions_wired**
+- Decision: `era18-error-recovery-tile-next-actions-v1` + `era18-system-health-metric-next-actions-v1` — contextual CTAs on category tiles; platform parity
+- Evidence: `lib/error-recovery/error-recovery-focus-era18.ts`, `lib/system-health/system-health-focus-era18.ts`, workspace + platform hub pages
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-035 — Channel pilot setup wizard focus (P1)
 - ID: `KOS-E18-035`
 - Title: Era 18 Workstream C Cycle 35 — Woo/Shopify pilot setup attention + step row next actions

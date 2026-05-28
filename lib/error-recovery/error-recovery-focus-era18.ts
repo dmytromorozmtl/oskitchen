@@ -40,6 +40,35 @@ export type ErrorRecoveryEventNextAction = {
   tone: "urgent" | "normal";
 };
 
+export type ErrorRecoveryTileId =
+  | "webhooks-queued"
+  | "integration-errors"
+  | "failed-channel-orders"
+  | "import-jobs"
+  | "unmapped-catalog"
+  | "cron-attention"
+  | "production-incidents"
+  | "data-integrity";
+
+export type PlatformErrorRecoveryTileId =
+  | "webhook-backlog"
+  | "integration-errors"
+  | "automation-failures"
+  | "open-tickets"
+  | "critical-tickets";
+
+export type ErrorRecoveryTileRowNextAction = {
+  label: string;
+  href: string;
+  tone: "urgent" | "normal";
+};
+
+export type ErrorRecoveryTileContext = {
+  count: number | null;
+  criticalCount?: number;
+  stalledEscalations?: number;
+};
+
 const SEVERITY_RANK: Record<ObservabilitySeverity, number> = {
   critical: 0,
   high: 1,
@@ -169,6 +198,122 @@ export function pickErrorRecoveryAttentionItems(
   }
 
   return items.sort((a, b) => a.priority - b.priority).slice(0, 4);
+}
+
+/** Category tile next action — contextual recovery CTA when the signal needs operator action. */
+export function resolveErrorRecoveryTileRowNextAction(
+  tileId: ErrorRecoveryTileId,
+  context: ErrorRecoveryTileContext,
+): ErrorRecoveryTileRowNextAction | null {
+  const count = context.count ?? 0;
+
+  switch (tileId) {
+    case "data-integrity":
+      return {
+        label: "Run integrity check",
+        href: "/dashboard/system-health/data-integrity",
+        tone: "normal",
+      };
+    case "webhooks-queued":
+      if (count <= 0) return null;
+      return {
+        label: "Inspect webhook queue",
+        href: "/dashboard/sales-channels/webhooks",
+        tone: count >= 10 ? "urgent" : "normal",
+      };
+    case "integration-errors":
+      if (count <= 0) return null;
+      return {
+        label: "Reconnect integrations",
+        href: "/dashboard/sales-channels/health",
+        tone: "urgent",
+      };
+    case "failed-channel-orders":
+      if (count <= 0) return null;
+      return {
+        label: "Recover failed orders",
+        href: "/dashboard/order-hub?tab=failed",
+        tone: "urgent",
+      };
+    case "import-jobs":
+      if (count <= 0) return null;
+      return {
+        label: "Review failed imports",
+        href: "/dashboard/import-center/history",
+        tone: "normal",
+      };
+    case "unmapped-catalog":
+      if (count <= 0) return null;
+      return {
+        label: "Map catalog rows",
+        href: "/dashboard/product-mapping",
+        tone: "normal",
+      };
+    case "cron-attention":
+      if (count <= 0) return null;
+      return {
+        label:
+          (context.stalledEscalations ?? 0) > 0
+            ? "Acknowledge stalled cron"
+            : "Review cron incidents",
+        href: "/dashboard/system-health/cron-execution",
+        tone: (context.stalledEscalations ?? 0) > 0 ? "urgent" : "normal",
+      };
+    case "production-incidents":
+      if (count <= 0) return null;
+      return {
+        label:
+          (context.criticalCount ?? 0) > 0 ? "Triage critical incidents" : "Open incident queue",
+        href: "/dashboard/system-health/incidents",
+        tone: (context.criticalCount ?? 0) > 0 ? "urgent" : "normal",
+      };
+    default:
+      return null;
+  }
+}
+
+/** Platform category tile next action — cross-tenant recovery CTA. */
+export function resolvePlatformErrorRecoveryTileRowNextAction(
+  tileId: PlatformErrorRecoveryTileId,
+  count: number,
+): ErrorRecoveryTileRowNextAction | null {
+  if (count <= 0 && tileId !== "critical-tickets") return null;
+
+  switch (tileId) {
+    case "webhook-backlog":
+      return {
+        label: "Inspect cross-tenant webhooks",
+        href: "/platform/webhooks",
+        tone: count >= 25 ? "urgent" : "normal",
+      };
+    case "integration-errors":
+      return {
+        label: "Review platform integrations",
+        href: "/platform/integrations",
+        tone: "urgent",
+      };
+    case "automation-failures":
+      return {
+        label: "Review automation failures",
+        href: "/platform/automations",
+        tone: "normal",
+      };
+    case "open-tickets":
+      return {
+        label: "Open support inbox",
+        href: "/platform/support",
+        tone: "normal",
+      };
+    case "critical-tickets":
+      if (count <= 0) return null;
+      return {
+        label: "Respond to escalations",
+        href: "/platform/support/escalations",
+        tone: "urgent",
+      };
+    default:
+      return null;
+  }
 }
 
 /** Recent observability events with safe retry links — newest high-severity first. */
