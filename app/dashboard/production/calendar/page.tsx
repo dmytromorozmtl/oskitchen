@@ -6,6 +6,7 @@ import {
   updatePlanTaskStatusAction,
 } from "@/actions/production-calendar";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { ProductionCalendarAttentionStrip } from "@/components/production/production-calendar-attention-strip";
 import { ProductionCalendarDrillChecklist } from "@/components/production/production-calendar-drill-checklist";
 import { ProductionCalendarDrillHero } from "@/components/production/production-calendar-drill-hero";
@@ -29,7 +30,8 @@ import {
   PRODUCTION_CALENDAR_WEEK_QUERY_PARAM,
 } from "@/lib/production/production-calendar-week-navigation";
 import { cn } from "@/lib/utils";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import {
   getProductionCalendar,
   getProductionCalendarOpenThroughToday,
@@ -41,12 +43,18 @@ export default async function ProductionCalendarPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = (await searchParams) ?? {};
+  const actor = await requireWorkspacePermissionActor();
+
+  if (!hasPermission(actor.granted, "production.manage")) {
+    return <PermissionDeniedSurfaceCard surfaceId="production_calendar" />;
+  }
+
   const weekParam =
     typeof params[PRODUCTION_CALENDAR_WEEK_QUERY_PARAM] === "string"
       ? params[PRODUCTION_CALENDAR_WEEK_QUERY_PARAM]
       : undefined;
   const formError = readProductionCalendarFormError(params);
-  const { dataUserId } = await getTenantActor();
+  const { dataUserId } = actor;
   const weekStart = parseProductionCalendarWeekStart(weekParam);
   const today = new Date();
   const todayIso = isoDateOnly(today);

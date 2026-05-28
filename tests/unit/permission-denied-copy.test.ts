@@ -21,4 +21,17 @@ describe("permission denied copy", () => {
     const surface = resolvePermissionDeniedSurface("kds");
     expect(surface.permissionKey).toBe("kitchen.view");
   });
+
+  it("resolves packing command surface", () => {
+    const surface = resolvePermissionDeniedSurface("packing_command");
+    expect(surface.permissionKey).toBe("packing.manage");
+    expect(surface.primaryHref).toBe("/dashboard/today");
+    expect(surface.secondaryHref).toBe("/dashboard/kitchen");
+  });
+
+  it("resolves production calendar surface", () => {
+    const surface = resolvePermissionDeniedSurface("production_calendar");
+    expect(surface.permissionKey).toBe("production.manage");
+    expect(surface.secondaryHref).toBe("/dashboard/production");
+  });
 });

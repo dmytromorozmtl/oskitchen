@@ -1,8 +1,11 @@
 import { endOfDay, format, parseISO, startOfDay } from "date-fns";
 
 import { ProductionCommandCenter } from "@/components/dashboard/production-command-center";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { TodayQueue } from "@/components/production/today-queue";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
 import { normalizeProductionView } from "@/lib/production/production-views";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -30,7 +33,8 @@ export default async function ProductionPage({
   searchParams?: Promise<{ date?: string; view?: string }>;
 }) {
   const sp = (await searchParams) ?? {};
-  const { sessionUser, dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const { sessionUser, dataUserId } = actor;
   const operatingMode = await getTenantOperatingMode(dataUserId);
 
   if (isDailyServiceMode(operatingMode)) {
@@ -46,6 +50,10 @@ export default async function ProductionPage({
         <TodayQueue initialOrders={orders} />
       </div>
     );
+  }
+
+  if (!hasPermission(actor.granted, "production.manage")) {
+    return <PermissionDeniedSurfaceCard surfaceId="production_board" />;
   }
 
   const productionDay = parseProductionDay(sp.date);

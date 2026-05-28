@@ -1,5 +1,7 @@
 import { PackingCommandCenter } from "@/components/dashboard/packing-command-center";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { getCachedOrderListWhere } from "@/lib/scope/cached-workspace-order-scope";
 import { formatYyyyMmDdForInput, packingDayFromYyyyMmDd } from "@/lib/packing/packing-dates";
@@ -18,7 +20,13 @@ export default async function PackingPage({
   searchParams?: Promise<{ date?: string; mode?: string; fulfillment?: string }>;
 }) {
   const sp = (await searchParams) ?? {};
-  const { dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+
+  if (!hasPermission(actor.granted, "packing.manage")) {
+    return <PermissionDeniedSurfaceCard surfaceId="packing_command" />;
+  }
+
+  const { dataUserId } = actor;
 
   const kitchen = await findOwnerKitchenSettings(dataUserId, { businessType: true });
   const businessType = kitchen?.businessType ?? null;
