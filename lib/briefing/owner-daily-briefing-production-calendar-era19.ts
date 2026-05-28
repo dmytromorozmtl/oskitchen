@@ -19,6 +19,7 @@ import {
   productionCalendarTaskHref,
   summarizeProductionCalendarFocus,
 } from "@/lib/production/production-calendar-today-focus-era18";
+import { resolveProductionCalendarBriefingDrillHref } from "@/lib/production/production-calendar-drill-clarity-era19";
 
 export const OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_POLICY_ID =
   "era19-owner-daily-briefing-production-calendar-v1" as const;
@@ -89,9 +90,11 @@ export function buildProductionCalendarBriefingTile(
     detail = `${summary.completedToday} completed today — no overdue or due-today batches.`;
   }
 
-  const href =
-    slice.attentionItems[0]?.href ??
-    slice.calendarHref;
+  const href = resolveProductionCalendarBriefingDrillHref({
+    overdue: summary.overdue,
+    calendarHref: slice.calendarHref,
+    taskHref: slice.attentionItems[0]?.href ?? null,
+  });
 
   const draft: OwnerDailyBriefingTileDraft = {
     id: "production-calendar-today",
@@ -127,16 +130,19 @@ export function productionCalendarActionsForBriefing(
   const actions: OwnerDailyBriefingRankedAction[] = [];
 
   if (slice.summary.overdue > 0) {
-    const oldestHref =
-      slice.attentionItems.find((item) => item.id === "overdue-batches")?.href ??
-      slice.calendarHref;
+    const drillHref = resolveProductionCalendarBriefingDrillHref({
+      overdue: slice.summary.overdue,
+      calendarHref: slice.calendarHref,
+      taskHref:
+        slice.attentionItems.find((item) => item.id === "overdue-batches")?.href ?? null,
+    });
     actions.push({
       id: "production-calendar-overdue",
       title: "Clear overdue production batches",
       reason: `${slice.summary.overdue} calendar batch(es) are past due — prep may block fulfillment.`,
       severity: "high",
       ownerRole: "kitchen",
-      href: oldestHref,
+      href: drillHref,
       status: "open",
       unblockCondition: "Reschedule, start, or complete overdue batches on the calendar.",
       priority: 5,

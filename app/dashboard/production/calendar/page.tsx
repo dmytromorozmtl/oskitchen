@@ -7,8 +7,11 @@ import {
 } from "@/actions/production-calendar";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { ProductionCalendarAttentionStrip } from "@/components/production/production-calendar-attention-strip";
+import { ProductionCalendarDrillChecklist } from "@/components/production/production-calendar-drill-checklist";
+import { ProductionCalendarDrillHero } from "@/components/production/production-calendar-drill-hero";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { readProductionCalendarFormError } from "@/lib/production/production-calendar-form-mutation";
+import { summarizeProductionCalendarFocus } from "@/lib/production/production-calendar-today-focus-era18";
 import { isProductionCalendarTodayColumn } from "@/lib/production/production-calendar-today-focus-era18";
 import {
   normalizeProductionPlanTaskStatus,
@@ -52,6 +55,8 @@ export default async function ProductionCalendarPage({
     getProductionCalendarOpenThroughToday(dataUserId, today),
   ]);
   const days = productionCalendarWeekDays(weekStart);
+  const drillSummary = summarizeProductionCalendarFocus(attentionTasks, todayIso);
+  const hasPlanTasks = attentionTasks.length > 0;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -89,6 +94,11 @@ export default async function ProductionCalendarPage({
       <CopilotFormErrorBanner message={formError} />
 
       <ProductionCalendarAttentionStrip tasks={attentionTasks} today={today} />
+
+      <div className="space-y-3" data-testid="production-calendar-drill-strip">
+        <ProductionCalendarDrillHero summary={drillSummary} hasPlanTasks={hasPlanTasks} />
+        <ProductionCalendarDrillChecklist summary={drillSummary} hasPlanTasks={hasPlanTasks} />
+      </div>
 
       <Card>
         <CardHeader>

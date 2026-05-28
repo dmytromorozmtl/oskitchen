@@ -49,7 +49,7 @@ describe("owner daily briefing production calendar era19", () => {
     expect(slice.attentionItems[0]?.id).toBe("overdue-batches");
   });
 
-  it("builds attention tile with calendar deep link when batches are overdue", () => {
+  it("builds attention tile with drill deep link when batches are overdue", () => {
     const slice = buildOwnerDailyBriefingProductionCalendarSlice({
       tasks: [task({ planDate: "2026-05-26", title: "Late prep" })],
       today: new Date("2026-05-28T12:00:00"),
@@ -58,7 +58,7 @@ describe("owner daily briefing production calendar era19", () => {
     expect(tile.id).toBe("production-calendar-today");
     expect(tile.tone).toBe("attention");
     expect(tile.href).toContain("/dashboard/production/calendar");
-    expect(tile.href).toContain("#day-2026-05-26");
+    expect(tile.href).toContain("#production-calendar-drill");
   });
 
   it("feeds production calendar into briefing tiles and risk radar", () => {
