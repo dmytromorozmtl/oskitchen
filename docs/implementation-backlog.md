@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-021 — Integration Health smoke artifact viewer depth (P1 WOW)
+- ID: `KOS-E19-021`
+- Title: Era 19 Workstream D Cycle 21 — child proof breakdown, GitHub run links, next smoke action hero
+- Module: Integrations / Integration Health / Engineering proof
+- Priority: P1 (WOW pillar — channel reliability proof depth)
+- Status: **smoke_artifact_viewer_depth_wired**
+- Decision: `era19-integration-health-smoke-artifacts-depth-v1` — P0 child proofs (SSO/workflows/channel), GitHub run URLs, deduped missing env summary, prioritized next smoke script hero; never LIVE unless artifact supports
+- Evidence: `lib/integrations/integration-health-smoke-artifacts-depth-era19.ts`, updated smoke artifact viewer
+- Next: P0 proof unblock when ops credentials available, or KDS priority lane (Workstream E)
+
 ### KOS-E19-020 — Owner Today Launch Wizard commercial unblock cross-link (P1 WOW)
 - ID: `KOS-E19-020`
 - Title: Era 19 Workstream B/C Cycle 20 — briefing top action + Today strip commercial unblock wiring

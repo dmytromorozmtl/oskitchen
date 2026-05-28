@@ -6,6 +6,13 @@ import {
   INTEGRATION_HEALTH_SMOKE_ARTIFACTS_ERA19_POLICY_ID,
   INTEGRATION_HEALTH_SMOKE_RECOVERY_LINKS,
 } from "@/lib/integrations/integration-health-smoke-artifacts-era19-policy";
+import {
+  buildIntegrationHealthSmokeArtifactsDepthSlice,
+  enrichIntegrationHealthSmokeArtifactRows,
+  type IntegrationHealthSmokeArtifactsDepthSlice,
+  type IntegrationHealthSmokeChildProofRow,
+  type IntegrationHealthSmokeGitHubRunLink,
+} from "@/lib/integrations/integration-health-smoke-artifacts-depth-era19";
 
 export const INTEGRATION_HEALTH_SMOKE_ARTIFACTS_AGGREGATOR_ERA19_POLICY_ID =
   "era19-integration-health-smoke-artifacts-aggregator-v1" as const;
@@ -29,6 +36,8 @@ export type IntegrationHealthSmokeArtifactRow = {
   detail: string;
   honestyNote: string;
   nextAction: { label: string; href: string } | null;
+  childProofs?: IntegrationHealthSmokeChildProofRow[];
+  githubRuns?: IntegrationHealthSmokeGitHubRunLink[];
 };
 
 export type IntegrationHealthSmokeArtifactsModel = {
@@ -38,6 +47,7 @@ export type IntegrationHealthSmokeArtifactsModel = {
   hasAnyArtifact: boolean;
   rows: IntegrationHealthSmokeArtifactRow[];
   recoveryLinks: typeof INTEGRATION_HEALTH_SMOKE_RECOVERY_LINKS;
+  depth: IntegrationHealthSmokeArtifactsDepthSlice;
 };
 
 export function normalizeSmokeArtifactOverall(
@@ -243,12 +253,18 @@ export function buildIntegrationHealthSmokeArtifactsModel(input: {
   stagingWorkflows: StagingWorkflowFirstGreenSummary | null;
   loadedAt?: string;
 }): IntegrationHealthSmokeArtifactsModel {
-  const rows = [
+  const baseRows = [
     buildChannelLiveSmokeArtifactRow(input.channelLive),
     buildStagingWorkflowsSmokeArtifactRow(input.stagingWorkflows),
     buildP0StagingSmokeArtifactRow(input.p0Staging),
   ];
+  const rows = enrichIntegrationHealthSmokeArtifactRows({
+    rows: baseRows,
+    p0Staging: input.p0Staging,
+    stagingWorkflows: input.stagingWorkflows,
+  });
   const summary = summarizeIntegrationHealthSmokeArtifacts(rows);
+  const depth = buildIntegrationHealthSmokeArtifactsDepthSlice({ rows });
 
   return {
     policyId: INTEGRATION_HEALTH_SMOKE_ARTIFACTS_ERA19_POLICY_ID,
@@ -257,5 +273,6 @@ export function buildIntegrationHealthSmokeArtifactsModel(input: {
     hasAnyArtifact: summary.hasAnyArtifact,
     rows,
     recoveryLinks: INTEGRATION_HEALTH_SMOKE_RECOVERY_LINKS,
+    depth,
   };
 }
