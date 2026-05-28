@@ -1,5 +1,7 @@
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
+import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import { prisma } from "@/lib/prisma";
+import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import {
   integrationConnectionListWhereForOwner,
@@ -25,6 +27,12 @@ export type GettingStartedPayload = {
     connectedCount: number;
     errorCount: number;
   };
+  pilotSso: {
+    entitlementEnabled: boolean;
+    configured: boolean;
+    active: boolean;
+    workspaceId: string | null;
+  };
 };
 
 export async function loadGettingStartedStatus(
@@ -45,6 +53,8 @@ export async function loadGettingStartedStatus(
     provider: { in: [...LIVE_CAPABLE_INTEGRATION_PROVIDERS] },
   };
 
+  const workspaceId = await resolveOwnerWorkspaceId(userId);
+
   const [
     activation,
     menuCount,
@@ -54,6 +64,7 @@ export async function loadGettingStartedStatus(
     posUseCount,
     channelConnectedCount,
     channelErrorCount,
+    ssoView,
   ] = await Promise.all([
     prisma.activationState.findUnique({ where: { userId } }),
     prisma.menu.count({ where: menuScope }),
@@ -75,7 +86,17 @@ export async function loadGettingStartedStatus(
         AND: [connectionScope, liveProviderFilter, { status: "ERROR" }],
       },
     }),
+    workspaceId
+      ? getWorkspaceSsoAdminView({ workspaceId, ownerUserId: userId })
+      : Promise.resolve(null),
   ]);
+
+  const pilotSso = {
+    entitlementEnabled: ssoView?.ssoEntitlementEnabled ?? false,
+    configured: ssoView?.configured ?? false,
+    active: ssoView?.active ?? false,
+    workspaceId,
+  };
 
   const items: GettingStartedItem[] = [
     {
@@ -84,6 +105,18 @@ export async function loadGettingStartedStatus(
       href: "/dashboard/menus/new",
       done: menuCount > 0 || Boolean(activation?.firstMenuCreated),
     },
+  ];
+
+  if (pilotSso.entitlementEnabled) {
+    items.push({
+      id: "sso_pilot",
+      label: "Configure enterprise SSO pilot",
+      href: "/dashboard/settings/security/sso",
+      done: pilotSso.active,
+    });
+  }
+
+  items.push(
     {
       id: "integration",
       label: "Connect a sales channel",
@@ -114,7 +147,7 @@ export async function loadGettingStartedStatus(
       href: "/dashboard/storefront",
       done: storefrontLive > 0,
     },
-  ];
+  );
 
   const allDone = items.every((i) => i.done);
   const accountAgeDays = Math.floor(
@@ -132,5 +165,6 @@ export async function loadGettingStartedStatus(
       connectedCount: channelConnectedCount,
       errorCount: channelErrorCount,
     },
+    pilotSso,
   };
 }

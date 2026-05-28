@@ -24,7 +24,17 @@ vi.mock("@/lib/scope/workspace-resource-scope", () => ({
   integrationConnectionListWhereForOwner: vi.fn(),
 }));
 
+vi.mock("@/lib/scope/resolve-owner-workspace-id", () => ({
+  resolveOwnerWorkspaceId: vi.fn(),
+}));
+
+vi.mock("@/lib/enterprise/workspace-sso-admin-service", () => ({
+  getWorkspaceSsoAdminView: vi.fn(),
+}));
+
+import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import { prisma } from "@/lib/prisma";
+import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import {
   integrationConnectionListWhereForOwner,
@@ -46,6 +56,15 @@ describe("loadGettingStartedStatus", () => {
     vi.mocked(storefrontSettingsListWhereForOwner).mockResolvedValue(scoped);
     vi.mocked(usageEventListWhereForOwner).mockResolvedValue(scoped);
     vi.mocked(integrationConnectionListWhereForOwner).mockResolvedValue(scoped);
+    vi.mocked(resolveOwnerWorkspaceId).mockResolvedValue("ws-1");
+    vi.mocked(getWorkspaceSsoAdminView).mockResolvedValue({
+      workspaceId: "ws-1",
+      settings: null,
+      ssoEntitlementEnabled: false,
+      runtimeGateAllowed: false,
+      configured: false,
+      active: false,
+    });
     vi.mocked(prisma.activationState.findUnique).mockResolvedValue(null);
     vi.mocked(prisma.menu.count).mockResolvedValue(0);
     vi.mocked(prisma.order.count).mockResolvedValue(0);

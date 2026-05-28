@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-043 — Getting started pilot SSO step (P0)
+- ID: `KOS-E18-043`
+- Title: Era 18 Workstream L Cycle 43 — SSO checklist step + Today attention when ssoOidc entitled
+- Module: Onboarding / Enterprise identity
+- Priority: P0 (pilot deployment speed + SSO proof path visibility)
+- Status: **getting_started_pilot_sso_wired**
+- Decision: `era18-getting-started-pilot-sso-v1` — conditional checklist step after menu; attention strip merged with channel readiness
+- Evidence: `lib/onboarding/getting-started-pilot-sso-era18.ts`, `services/onboarding/getting-started-status.ts`, `components/dashboard/getting-started-attention-strip.tsx`
+- Next: Ops completes Cycle 2 IdP login proof on staging when vault ready
+
 ### KOS-E18-042 — Enterprise SSO login error recovery (P0)
 - ID: `KOS-E18-042`
 - Title: Era 18 Workstream A Cycle 42 — SSO login failure codes + recovery strip on /login

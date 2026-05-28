@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, PlugZap } from "lucide-react";
+import { AlertTriangle, ArrowRight, PlugZap, ShieldCheck } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -7,14 +7,49 @@ import {
   pickGettingStartedPilotChannelAttentionItems,
   summarizeGettingStartedPilotChannelFocus,
 } from "@/lib/onboarding/getting-started-pilot-channel-era18";
+import {
+  buildGettingStartedPilotSsoFocus,
+  pickGettingStartedPilotSsoAttentionItems,
+  summarizeGettingStartedPilotSsoFocus,
+} from "@/lib/onboarding/getting-started-pilot-sso-era18";
 import type { GettingStartedPayload } from "@/services/onboarding/getting-started-status";
 
+type CombinedAttentionItem = {
+  id: string;
+  title: string;
+  detail: string;
+  href: string;
+  source: "sso" | "channel";
+};
+
 export function GettingStartedAttentionStrip(props: { data: GettingStartedPayload }) {
-  const focus = buildGettingStartedPilotChannelFocus(props.data);
-  const summary = summarizeGettingStartedPilotChannelFocus(focus);
-  const items = pickGettingStartedPilotChannelAttentionItems(focus);
+  const channelFocus = buildGettingStartedPilotChannelFocus(props.data);
+  const ssoFocus = buildGettingStartedPilotSsoFocus(props.data);
+  const channelSummary = summarizeGettingStartedPilotChannelFocus(channelFocus);
+  const ssoSummary = summarizeGettingStartedPilotSsoFocus(ssoFocus);
+
+  const items: CombinedAttentionItem[] = [
+    ...pickGettingStartedPilotSsoAttentionItems(ssoFocus).map((item) => ({
+      id: item.id,
+      title: item.title,
+      detail: item.detail,
+      href: item.href,
+      source: "sso" as const,
+    })),
+    ...pickGettingStartedPilotChannelAttentionItems(channelFocus).map((item) => ({
+      id: item.id,
+      title: item.title,
+      detail: item.detail,
+      href: item.href,
+      source: "channel" as const,
+    })),
+  ].slice(0, 4);
 
   if (items.length === 0) return null;
+
+  const hasUrgent = channelSummary.hasUrgent || ssoSummary.hasUrgent;
+  const hasSso = items.some((item) => item.source === "sso");
+  const hasChannel = items.some((item) => item.source === "channel");
 
   return (
     <Card
@@ -23,14 +58,19 @@ export function GettingStartedAttentionStrip(props: { data: GettingStartedPayloa
     >
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <PlugZap className="h-5 w-5 text-muted-foreground" aria-hidden />
+          {hasSso ? (
+            <ShieldCheck className="h-5 w-5 text-muted-foreground" aria-hidden />
+          ) : (
+            <PlugZap className="h-5 w-5 text-muted-foreground" aria-hidden />
+          )}
           <AlertTriangle className="h-5 w-5 text-amber-600" aria-hidden />
-          Pilot setup — channel readiness
+          Pilot setup
+          {hasSso && hasChannel ? " — enterprise SSO & channels" : hasSso ? " — enterprise SSO" : " — channel readiness"}
         </CardTitle>
         <CardDescription>
-          {summary.hasUrgent
-            ? "Integration issues block channel orders — resolve before scaling pilot traffic."
-            : "Connect and verify sales channels to shorten time-to-first-order."}
+          {hasUrgent
+            ? "Resolve pilot blockers before scaling staff access or channel order volume."
+            : "Finish pilot setup steps to shorten time-to-first-order."}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">

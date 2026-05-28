@@ -3,6 +3,7 @@ import type { GettingStartedItem } from "@/services/onboarding/getting-started-s
 /** Pilot golden-path order — menu before channel before first order. */
 export const GETTING_STARTED_STEP_PRIORITY = [
   "menu",
+  "sso_pilot",
   "integration",
   "order",
   "pos",
@@ -14,6 +15,8 @@ export type GettingStartedStepId = (typeof GETTING_STARTED_STEP_PRIORITY)[number
 
 export const GETTING_STARTED_STEP_DETAIL: Record<GettingStartedStepId, string> = {
   menu: "Add at least one menu so POS, manual orders, and kitchen routing have items to sell.",
+  sso_pilot:
+    "Configure and activate Supabase SAML SSO for this pilot tenant — required when your plan includes enterprise SSO.",
   integration:
     "Connect WooCommerce or Shopify when pilot orders should flow from a sales channel — skip for POS-only pilots.",
   order: "Create a manual order or complete a test POS sale — this unlocks production and packing workflows.",
@@ -24,6 +27,7 @@ export const GETTING_STARTED_STEP_DETAIL: Record<GettingStartedStepId, string> =
 
 export const GETTING_STARTED_STEP_CTA: Record<GettingStartedStepId, string> = {
   menu: "Create menu",
+  sso_pilot: "Open SSO pilot setup",
   integration: "Connect sales channel",
   order: "Create first order",
   pos: "Open POS terminal",

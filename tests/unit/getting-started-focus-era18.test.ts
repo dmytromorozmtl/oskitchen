@@ -40,6 +40,16 @@ describe("getting started focus era18", () => {
     expect(next?.id).toBe("integration");
   });
 
+  it("prioritizes SSO pilot after menu when step is present", () => {
+    const next = pickGettingStartedNextStep([
+      item("menu", true),
+      item("sso_pilot", false, "/dashboard/settings/security/sso"),
+      item("integration", false),
+      item("order", false),
+    ]);
+    expect(next?.id).toBe("sso_pilot");
+  });
+
   it("surfaces first order after menu and integration are complete", () => {
     const next = pickGettingStartedNextStep([
       item("menu", true),
