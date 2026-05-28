@@ -22,6 +22,7 @@ import {
   parsePilotIcpInputFromJson,
   type PilotForbiddenClaimsEnforcementArtifact,
   type PilotGoldenPathArtifact,
+  type PilotP0StagingProofArtifact,
   type PilotTierPreflightArtifact,
 } from "../lib/commercial/pilot-gono-go-summary";
 
@@ -84,11 +85,15 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
   const forbiddenClaimsEnforcement = loadArtifact<PilotForbiddenClaimsEnforcementArtifact>(
     "artifacts/pilot-forbidden-claims-enforcement-summary.json",
   );
+  const p0StagingProof = loadArtifact<PilotP0StagingProofArtifact>(
+    "artifacts/p0-staging-proof-unblock-summary.json",
+  );
 
   const summary = buildPilotGoNoGoSummary({
     preflight,
     goldenPath,
     forbiddenClaimsEnforcement,
+    p0StagingProof,
     icpInput: parsePilotIcpInputFromJson(process.env.PILOT_GONOGO_ICP_INPUT_JSON),
     customerName: process.env.PILOT_GONOGO_CUSTOMER_NAME ?? null,
     loiSignedDate: process.env.PILOT_GONOGO_LOI_SIGNED_DATE ?? null,

@@ -61,6 +61,23 @@ export type PilotForbiddenClaimsEnforcementArtifact = {
   commitSha?: string | null;
 };
 
+export type PilotP0StagingProofChildArtifact = {
+  overall?: string | null;
+  proofStatus?: string | null;
+  missingEnvVars?: string[];
+};
+
+export type PilotP0StagingProofArtifact = {
+  overall?: string;
+  p0ProofStatus?: string;
+  allMissingEnvVars?: string[];
+  children?: {
+    ssoIdpStaging?: PilotP0StagingProofChildArtifact;
+    stagingWorkflowsFirstGreen?: PilotP0StagingProofChildArtifact;
+    channelLive?: PilotP0StagingProofChildArtifact;
+  };
+};
+
 export function parseEnvBoolean(raw: string | undefined): boolean | undefined {
   if (raw === undefined) return undefined;
   const value = raw.trim().toLowerCase();
@@ -140,6 +157,63 @@ export function deriveTier2Pass(goldenPath: PilotGoldenPathArtifact | null): Pil
   };
 }
 
+export function deriveP0StagingProofPass(
+  artifact: PilotP0StagingProofArtifact | null,
+): PilotGoNoGoEvidenceGate {
+  if (!artifact) {
+    return {
+      id: "p0_staging_proof",
+      label: "P0 staging proof (SSO + GitHub + channel)",
+      pass: false,
+      reason:
+        "artifacts/p0-staging-proof-unblock-summary.json missing — run smoke:p0-staging-proof-unblock",
+    };
+  }
+  const pass = artifact.p0ProofStatus === "proof_passed";
+  const missing =
+    artifact.allMissingEnvVars?.length ?
+      ` missing: ${artifact.allMissingEnvVars.join(", ")}`
+    : "";
+  return {
+    id: "p0_staging_proof",
+    label: "P0 staging proof (SSO + GitHub + channel)",
+    pass,
+    reason: pass
+      ? "p0ProofStatus proof_passed"
+      : `p0ProofStatus=${artifact.p0ProofStatus ?? "unknown"} overall=${artifact.overall ?? "unknown"} — SKIPPED WITH REASON${missing}`,
+  };
+}
+
+export function deriveP0ChildProofPass(input: {
+  id: string;
+  label: string;
+  child: PilotP0StagingProofChildArtifact | null | undefined;
+  p0Artifact: PilotP0StagingProofArtifact | null;
+}): PilotGoNoGoEvidenceGate {
+  if (!input.p0Artifact) {
+    return {
+      id: input.id,
+      label: input.label,
+      pass: false,
+      reason: "P0 unblock artifact missing — run smoke:p0-staging-proof-unblock",
+    };
+  }
+  const proofStatus = input.child?.proofStatus ?? null;
+  const pass = proofStatus === "proof_passed";
+  const missing =
+    input.child?.missingEnvVars?.length ?
+      ` missing: ${input.child.missingEnvVars.join(", ")}`
+    : "";
+  return {
+    id: input.id,
+    label: input.label,
+    pass,
+    reason: pass
+      ? "proof_passed"
+      : `proofStatus=${proofStatus ?? "unknown"} overall=${input.child?.overall ?? "unknown"} — SKIPPED WITH REASON${missing}`,
+  };
+}
+
 export function deriveForbiddenClaimsEnforcementPass(
   artifact: PilotForbiddenClaimsEnforcementArtifact | null,
 ): PilotGoNoGoEvidenceGate {
@@ -212,6 +286,25 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   const forbiddenClaimsEnforcement = deriveForbiddenClaimsEnforcementPass(
     input.forbiddenClaimsEnforcement,
   );
+  const p0StagingProof = deriveP0StagingProofPass(input.p0StagingProof);
+  const p0SsoIdp = deriveP0ChildProofPass({
+    id: "p0_sso_idp",
+    label: "P0 #1 SSO IdP staging login",
+    child: input.p0StagingProof?.children?.ssoIdpStaging,
+    p0Artifact: input.p0StagingProof,
+  });
+  const p0StagingWorkflows = deriveP0ChildProofPass({
+    id: "p0_staging_workflows",
+    label: "P0 #2 GitHub staging workflows first green",
+    child: input.p0StagingProof?.children?.stagingWorkflowsFirstGreen,
+    p0Artifact: input.p0StagingProof,
+  });
+  const p0ChannelLive = deriveP0ChildProofPass({
+    id: "p0_channel_live",
+    label: "P0 #3 Woo/Shopify live channel smoke",
+    child: input.p0StagingProof?.children?.channelLive,
+    p0Artifact: input.p0StagingProof,
+  });
   const icpQualification = evaluatePilotIcpQualification(input.icpInput);
 
   const stagingUrl = input.goldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
@@ -235,7 +328,16 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   return {
     evaluatorInput,
     icpQualification,
-    evidenceGates: [tier0, tier1, tier2, forbiddenClaimsEnforcement],
+    evidenceGates: [
+      tier0,
+      tier1,
+      tier2,
+      forbiddenClaimsEnforcement,
+      p0StagingProof,
+      p0SsoIdp,
+      p0StagingWorkflows,
+      p0ChannelLive,
+    ],
   };
 }
 
@@ -243,6 +345,7 @@ export function buildPilotGoNoGoSummary(input: {
   preflight: PilotTierPreflightArtifact | null;
   goldenPath: PilotGoldenPathArtifact | null;
   forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
+  p0StagingProof: PilotP0StagingProofArtifact | null;
   icpInput: PilotIcpQualificationInput;
   customerName?: string | null;
   loiSignedDate?: string | null;
@@ -271,6 +374,13 @@ export function buildPilotGoNoGoSummary(input: {
   if (forbiddenClaimsGate && !forbiddenClaimsGate.pass) {
     blockers.push(
       "Pre-sales forbidden-claims enforcement not passed (era17-pilot-forbidden-claims-enforcement-v1)",
+    );
+  }
+
+  const p0StagingProofGate = built.evidenceGates.find((gate) => gate.id === "p0_staging_proof");
+  if (p0StagingProofGate && !p0StagingProofGate.pass) {
+    blockers.push(
+      "P0 staging proof not passed (era17-p0-staging-proof-unblock-v1) — SSO IdP, GitHub first-green, or channel live smoke incomplete",
     );
   }
 

@@ -712,6 +712,7 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 17 Workstream A Cycle 5: `era17-enterprise-sso-tenant-mapping-v1` — callback guard tenant/domain deny matrix; **tenant_mapping_test_backed** |
 | 2026-05-28 | Era 17 Workstream A Cycle 6: `era17-enterprise-sso-procurement-sync-v1` — procurement FAQ sync; authoritative **pilot_foundation** SSO answers |
 | 2026-05-28 | Era 17 P0 ops bundle: `era17-p0-staging-proof-unblock-v1` — aggregates SSO + staging workflows + channel live smokes; **awaiting_ops_credentials** |
+| 2026-05-28 | Era 17 P0 #4: `era17-pilot-gono-go-v1` extends P0 unblock — GO/NO-GO gates for SSO, GitHub, channel live proof |
 | 2026-05-28 | Era 17 Cycle 3: `era17-staging-workflows-first-green-v1` — GitHub run URL evidence; **awaiting_github_first_green**; target ≥2/3 workflows PASSED |
 | 2026-05-28 | Era 17 Cycle 4: `era17-channel-live-smoke-woo-v1` — Woo live proof path; **awaiting_live_credentials** |
 | 2026-05-28 | Era 17 Cycle 5: `era17-channel-live-smoke-shopify-v1` — Shopify live proof path; **awaiting_live_credentials** |

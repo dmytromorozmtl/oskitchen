@@ -219,13 +219,14 @@ Run **`npm run test:ci:enterprise-sso-tenant-mapping-era17:cert`** — chained i
 
 **Policy:** `era17-pilot-gono-go-v1` — **awaiting_customer_execution**; aggregates Era 17 evidence into one decision.
 
-1. Run **`npm run smoke:pilot-gono-go`** after Tier 0/1 + Tier 2 artifacts exist **and** `artifacts/pilot-forbidden-claims-enforcement-summary.json` is fresh.
-2. Review **`artifacts/pilot-gono-go-summary.json`** — `decision`, `blockers`, `customerExecutionStatus`, `evidenceGates` (includes forbidden-claims enforcement).
-3. Set `PILOT_GONOGO_ICP_INPUT_JSON` from prospect qualification; default empty → **NOT QUALIFIED** → **NO-GO**.
-4. Record `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` only when real LOI signed — **never fake customer execution**.
-5. **NO-GO is expected** until tiers pass, forbidden-claims enforcement passes, ICP qualifies, role checklists complete, and customer LOI recorded.
+1. Run **`npm run smoke:p0-staging-proof-unblock`** first — P0 #1–#3 evidence required in GO/NO-GO gates.
+2. Run **`npm run smoke:pilot-gono-go`** after Tier 0/1 + Tier 2 artifacts exist **and** `artifacts/pilot-forbidden-claims-enforcement-summary.json` is fresh.
+3. Review **`artifacts/pilot-gono-go-summary.json`** — `decision`, `blockers`, `customerExecutionStatus`, `evidenceGates` (includes `p0_staging_proof`, `p0_sso_idp`, `p0_staging_workflows`, `p0_channel_live`, and forbidden-claims enforcement).
+4. Set `PILOT_GONOGO_ICP_INPUT_JSON` from prospect qualification; default empty → **NOT QUALIFIED** → **NO-GO**.
+5. Record `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` only when real LOI signed — **never fake customer execution**.
+6. **NO-GO is expected** until P0 staging proof passes, tiers pass, forbidden-claims enforcement passes, ICP qualifies, role checklists complete, and customer LOI recorded.
 
-**Execution status (2026-05-28):** smoke re-run → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). Tier preflight `overall: FAILED` locally; Tier 2 golden path incomplete; ICP not qualified; forbidden-claims gate wired into GO/NO-GO evaluator; no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
+**Execution status (2026-05-28):** smoke re-run → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). P0 staging proof **`awaiting_ops_credentials`** (11 missing env vars); Tier preflight incomplete locally; Tier 2 golden path incomplete; ICP not qualified; no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
 
 ### Era 17 pilot forbidden-claims enforcement (2026-05-28)
 

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-043 — Pilot GO/NO-GO P0 staging proof gates (P0)
+- ID: `KOS-E17-043`
+- Title: Era 17 P0 #4 — wire p0-staging-proof-unblock into GO/NO-GO evaluator
+- Module: Commercial / GTM
+- Priority: P0 (Workstream D — paid pilot GO/NO-GO)
+- Status: **p0_gates_wired**
+- Decision: `era17-pilot-gono-go-v1` extends `era17-p0-staging-proof-unblock-v1` — four P0 evidence gates block GO until `p0ProofStatus: proof_passed`
+- Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
+- Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
+
 ### KOS-E17-042 — P0 staging proof unblock orchestrator (P0)
 - ID: `KOS-E17-042`
 - Title: Era 17 P0 ops bundle — aggregate SSO + GitHub + channel live staging proofs
