@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-015 — Order hub channel row next actions (P0)
+- ID: `KOS-E18-015`
+- Title: Era 18 Workstream K Cycle 15 — Woo/Shopify external row next actions on order hub
+- Module: Order operations / Integrations / Order hub
+- Priority: P0 (workflow reliability + integration transparency)
+- Status: **order_hub_channel_next_actions_wired**
+- Decision: `era18-order-hub-channel-next-actions-v1` — channel table next-action column aligned with triage heuristics; links to import batch, staging, or KitchenOS order
+- Evidence: `resolveExternalOrderHubRowNextAction`, `app/dashboard/order-hub/page.tsx`, exported triage helpers
+- Next: Live Woo/Shopify proof (ops); deeper import approval UX from hub row if needed
+
 ### KOS-E18-014 — Order hub stuck-state UX (P0)
 - ID: `KOS-E18-014`
 - Title: Era 18 Workstream K Cycle 14 — attention strip + row next actions on order hub

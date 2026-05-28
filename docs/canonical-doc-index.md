@@ -770,6 +770,7 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 18 Cycle 7 / Workstream G: `era18-kds-queue-clarity-v1` — KDS queue strip, prep/expo sections, ticket numbers; **kds_queue_clarity_wired** |
 | 2026-05-28 | Era 18 Cycle 6 / Workstream F: `era18-pos-shift-closeout-preview-v1` — live shift closeout expected/variance preview; **shift_closeout_preview_wired** |
 | 2026-05-28 | Era 18 Cycle 5 / Workstream J: `era18-operator-default-landing-v1` — persona post-auth landing (cashier → POS terminal, kitchen → KDS); **operator_default_landing_wired** |
+| 2026-05-28 | Era 18 Cycle 15 / Workstream K: `era18-order-hub-channel-next-actions-v1` — external channel row next actions on order hub; **order_hub_channel_next_actions_wired** |
 | 2026-05-28 | Era 18 Cycle 14 / Workstream K: `era18-order-hub-stuck-state-v1` — order hub attention strip + row next actions; **order_hub_stuck_state_wired** |
 | 2026-05-28 | Era 18 Cycle 13 / Workstream J: `era18-today-command-center-focus-v1` — Today quiet-shift KPI collapse + attention strip; Tier 0 nav cert matrix alignment |
 | 2026-05-28 | Era 18 Cycle 12 / Workstream F: `era18-pos-shift-close-history-range-v1` — bounded 7/30/90-day shift closeout history + CSV range filter |

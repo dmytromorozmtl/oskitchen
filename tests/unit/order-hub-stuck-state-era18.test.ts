@@ -5,13 +5,19 @@ import {
   ORDER_HUB_STUCK_STATE_ERA18_PROOF_STATUS,
 } from "@/lib/order-hub/order-hub-stuck-state-era18-policy";
 import {
+  ORDER_HUB_CHANNEL_NEXT_ACTIONS_ERA18_POLICY_ID,
+  ORDER_HUB_CHANNEL_NEXT_ACTIONS_ERA18_PROOF_STATUS,
+} from "@/lib/order-hub/order-hub-channel-next-actions-era18-policy";
+import {
   pickOrderHubAttentionItems,
+  resolveExternalOrderHubRowNextAction,
   resolveInternalOrderHubRowNextAction,
 } from "@/lib/order-hub/order-hub-stuck-state-era18";
 import type { OrderHubPageData } from "@/services/order-hub/order-hub-service";
 import { ORDER_HUB_TABS } from "@/lib/order-hub/order-hub-status";
 
 type Internal = OrderHubPageData["internalOrders"][number];
+type External = OrderHubPageData["externalOrders"][number];
 
 function baseOrder(over: Partial<Internal>): Internal {
   return {
@@ -60,6 +66,39 @@ function baseOrder(over: Partial<Internal>): Internal {
     importedFromExternal: null,
     ...over,
   } as Internal;
+}
+
+function baseExternal(over: Partial<External>): External {
+  return {
+    id: "e0000000-0000-0000-0000-000000000001",
+    userId: "00000000-0000-0000-0000-000000000002",
+    connectionId: null,
+    provider: "SHOPIFY",
+    externalOrderId: "ext-9001",
+    externalOrderNumber: "#9001",
+    sourceStatus: null,
+    normalizedStatus: null,
+    customerName: "Jane",
+    customerEmail: "jane@example.com",
+    customerPhone: null,
+    subtotal: null,
+    tax: null,
+    deliveryFee: null,
+    total: 42 as unknown as External["total"],
+    currency: "USD",
+    fulfillmentType: "PICKUP",
+    pickupTime: new Date(),
+    deliveryTime: null,
+    deliveryAddressJson: null,
+    rawPayloadJson: {},
+    importedOrderId: null,
+    channelImportBatchId: null,
+    syncStatus: "PENDING",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    channelImportBatch: null,
+    ...over,
+  } as External;
 }
 
 function exactCounts(totals: Partial<Record<string, number>>) {
@@ -121,5 +160,38 @@ describe("order hub stuck state era18", () => {
       channelImportBatch: { id: "b1", sourceType: "WEBHOOK", status: "FAILED" },
     });
     expect(resolveInternalOrderHubRowNextAction(o)?.label).toBe("Fix channel sync");
+  });
+
+  it("locks era18 channel row next actions policy id", () => {
+    expect(ORDER_HUB_CHANNEL_NEXT_ACTIONS_ERA18_POLICY_ID).toBe(
+      "era18-order-hub-channel-next-actions-v1",
+    );
+    expect(ORDER_HUB_CHANNEL_NEXT_ACTIONS_ERA18_PROOF_STATUS).toBe(
+      "order_hub_channel_next_actions_wired",
+    );
+  });
+
+  it("routes imported channel rows to the KitchenOS order", () => {
+    const o = baseExternal({
+      importedOrderId: "00000000-0000-0000-0000-000000000099",
+      syncStatus: "SYNCED",
+    });
+    expect(resolveExternalOrderHubRowNextAction(o)?.href).toContain(
+      "00000000-0000-0000-0000-000000000099",
+    );
+  });
+
+  it("surfaces sync failure before staging review", () => {
+    const o = baseExternal({ syncStatus: "FAILED" });
+    expect(resolveExternalOrderHubRowNextAction(o)?.label).toBe("Fix sync failure");
+  });
+
+  it("sends missing pickup time to import batch review", () => {
+    const o = baseExternal({
+      pickupTime: null,
+      channelImportBatch: { id: "batch-1", sourceType: "WEBHOOK", status: "NEEDS_REVIEW" },
+    });
+    expect(resolveExternalOrderHubRowNextAction(o)?.label).toBe("Set pickup time");
+    expect(resolveExternalOrderHubRowNextAction(o)?.href).toContain("batch-1");
   });
 });

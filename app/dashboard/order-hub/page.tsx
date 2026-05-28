@@ -26,7 +26,10 @@ import { IntegrationProvider } from "@prisma/client";
 import { OrderHubExportButton } from "@/components/dashboard/order-hub-export-button";
 import { OrderHubAttentionStrip } from "@/components/dashboard/order-hub-attention-strip";
 import { loadStorefrontSummariesForOrderIds } from "@/lib/storefront/order-hub-commerce";
-import { resolveInternalOrderHubRowNextAction } from "@/lib/order-hub/order-hub-stuck-state-era18";
+import {
+  resolveExternalOrderHubRowNextAction,
+  resolveInternalOrderHubRowNextAction,
+} from "@/lib/order-hub/order-hub-stuck-state-era18";
 import { loadOrderHubExactTabCounts } from "@/services/order-hub/order-hub-exact-counts-service";
 import { loadOrderHubPageData } from "@/services/order-hub/order-hub-service";
 import {
@@ -349,11 +352,14 @@ export default async function OrderHubPage({
                       <TableHead>Customer</TableHead>
                       <TableHead>Sync</TableHead>
                       <TableHead>Import batch</TableHead>
+                      <TableHead>Next action</TableHead>
                       <TableHead className="text-right">Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {externalFiltered.map((o) => (
+                    {externalFiltered.map((o) => {
+                      const nextAction = resolveExternalOrderHubRowNextAction(o);
+                      return (
                       <TableRow key={o.id}>
                         <TableCell>
                           <Badge variant="outline" className="rounded-full">
@@ -381,12 +387,31 @@ export default async function OrderHubPage({
                             "—"
                           )}
                         </TableCell>
+                        <TableCell className="text-xs">
+                          {nextAction ? (
+                            <Link
+                              href={nextAction.href}
+                              className={
+                                nextAction.tone === "urgent"
+                                  ? "font-medium text-amber-800 underline-offset-2 hover:underline dark:text-amber-200"
+                                  : "font-medium text-primary underline-offset-2 hover:underline"
+                              }
+                            >
+                              {nextAction.label}
+                            </Link>
+                          ) : o.syncStatus === "SYNCING" ? (
+                            <span className="text-muted-foreground">Syncing…</span>
+                          ) : (
+                            <span className="text-muted-foreground">On track</span>
+                          )}
+                        </TableCell>
                         <TableCell className="text-right">{o.total != null ? String(o.total) : "—"}</TableCell>
                       </TableRow>
-                    ))}
+                    );
+                    })}
                     {externalFiltered.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-muted-foreground">
+                        <TableCell colSpan={7} className="text-muted-foreground">
                           No channel rows in this tab.
                         </TableCell>
                       </TableRow>

@@ -96,7 +96,7 @@ export function filterInternalOrders(tab: string, data: OrderHubPageData["intern
   }
 }
 
-function externalMissingCustomer(o: ExternalOrderRow): boolean {
+function externalOrderMissingCustomer(o: ExternalOrderRow): boolean {
   if (o.syncStatus !== "PENDING") return false;
   const nameOk = o.customerName?.trim();
   const email = o.customerEmail?.trim() ?? "";
@@ -106,11 +106,21 @@ function externalMissingCustomer(o: ExternalOrderRow): boolean {
   return false;
 }
 
-function externalMissingFulfillment(o: ExternalOrderRow): boolean {
+function externalOrderMissingFulfillment(o: ExternalOrderRow): boolean {
   if (o.syncStatus !== "PENDING") return false;
   if (o.fulfillmentType === "DELIVERY" && o.deliveryAddressJson == null) return true;
   if (o.fulfillmentType === "PICKUP" && o.pickupTime == null) return true;
   return false;
+}
+
+/** Mirrors hub triage filters — exported for stuck-state row hints. */
+export function externalOrderMissingCustomerInfo(o: ExternalOrderRow): boolean {
+  return externalOrderMissingCustomer(o);
+}
+
+/** Mirrors hub triage filters — exported for stuck-state row hints. */
+export function externalOrderMissingFulfillmentInfo(o: ExternalOrderRow): boolean {
+  return externalOrderMissingFulfillment(o);
 }
 
 export function filterExternalOrders(tab: string, data: OrderHubPageData["externalOrders"]) {
@@ -122,10 +132,10 @@ export function filterExternalOrders(tab: string, data: OrderHubPageData["extern
     return data.filter((o) => o.syncStatus === "PENDING");
   }
   if (t === "missing_customer_info") {
-    return data.filter((o) => externalMissingCustomer(o));
+    return data.filter((o) => externalOrderMissingCustomerInfo(o));
   }
   if (t === "missing_fulfillment_info") {
-    return data.filter((o) => externalMissingFulfillment(o));
+    return data.filter((o) => externalOrderMissingFulfillmentInfo(o));
   }
   if (t === "pos") {
     return [];

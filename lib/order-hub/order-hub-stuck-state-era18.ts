@@ -3,6 +3,8 @@ import type { OrderHubPageData } from "@/services/order-hub/order-hub-service";
 import {
   internalOrderMissingCustomerInfo,
   internalOrderMissingFulfillmentInfo,
+  externalOrderMissingCustomerInfo,
+  externalOrderMissingFulfillmentInfo,
 } from "@/services/order-hub/order-triage-service";
 
 export type OrderHubAttentionItem = {
@@ -20,6 +22,7 @@ export type OrderHubRowNextAction = {
 };
 
 type InternalOrderRow = OrderHubPageData["internalOrders"][number];
+type ExternalOrderRow = OrderHubPageData["externalOrders"][number];
 
 function tabCount(exactTabCounts: readonly OrderHubExactTabCount[], id: string): number {
   return exactTabCounts.find((r) => r.id === id)?.total ?? 0;
@@ -112,6 +115,94 @@ export function pickOrderHubAttentionItems(input: {
   }
 
   return items.sort((a, b) => a.priority - b.priority).slice(0, 5);
+}
+
+function importBatchHref(batchId: string): string {
+  return `/dashboard/sales-channels/imports/${batchId}`;
+}
+
+function externalStagingHref(status?: string): string {
+  return status
+    ? `/dashboard/sales-channels/staging?status=${status}`
+    : "/dashboard/sales-channels/staging";
+}
+
+/** Lightweight channel-row hint — aligned with triage heuristics, not full import service. */
+export function resolveExternalOrderHubRowNextAction(
+  o: ExternalOrderRow,
+): OrderHubRowNextAction | null {
+  if (o.importedOrderId) {
+    return {
+      label: "Open KitchenOS order",
+      href: orderTab(o.importedOrderId, "overview"),
+      tone: "normal",
+    };
+  }
+
+  if (o.syncStatus === "FAILED") {
+    return {
+      label: "Fix sync failure",
+      href: o.channelImportBatch
+        ? importBatchHref(o.channelImportBatch.id)
+        : externalStagingHref("FAILED"),
+      tone: "urgent",
+    };
+  }
+
+  if (o.channelImportBatch?.status === "FAILED") {
+    return {
+      label: "Review failed batch",
+      href: importBatchHref(o.channelImportBatch.id),
+      tone: "urgent",
+    };
+  }
+
+  if (externalOrderMissingFulfillmentInfo(o)) {
+    return {
+      label: o.fulfillmentType === "DELIVERY" ? "Add delivery address" : "Set pickup time",
+      href: o.channelImportBatch
+        ? importBatchHref(o.channelImportBatch.id)
+        : externalStagingHref(),
+      tone: "urgent",
+    };
+  }
+
+  if (externalOrderMissingCustomerInfo(o)) {
+    return {
+      label: "Add customer contact",
+      href: o.channelImportBatch
+        ? importBatchHref(o.channelImportBatch.id)
+        : externalStagingHref(),
+      tone: "normal",
+    };
+  }
+
+  if (o.syncStatus === "SYNCED") {
+    return {
+      label: "Finish KitchenOS import",
+      href: o.channelImportBatch
+        ? importBatchHref(o.channelImportBatch.id)
+        : externalStagingHref("READY_TO_IMPORT"),
+      tone: "normal",
+    };
+  }
+
+  if (o.syncStatus === "PENDING" || o.syncStatus === "SYNCING") {
+    if (o.channelImportBatch) {
+      return {
+        label: "Review import batch",
+        href: importBatchHref(o.channelImportBatch.id),
+        tone: "normal",
+      };
+    }
+    return {
+      label: "Review channel order",
+      href: externalStagingHref("NEEDS_REVIEW"),
+      tone: "normal",
+    };
+  }
+
+  return null;
 }
 
 /** Lightweight row hint — aligned with triage heuristics, not full blocker service. */
