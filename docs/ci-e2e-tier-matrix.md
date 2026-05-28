@@ -254,6 +254,7 @@ npm run test:ci:pos-money-path:e2e
 | Suite | Command | Notes |
 |-------|---------|-------|
 | Typecheck slice wiring cert | `npm run test:ci:typecheck-slice:cert` | Policy `era11-typecheck-slice-v3`, `tsconfig.base.json`, four slice tsconfigs, `typecheck:full` + slice scripts |
+| Era 15 typecheck slice recert | `npm run test:ci:typecheck-slice-era15:cert` | `era15-typecheck-slice-recert-v1`; `smoke:typecheck-slices`; full gate unchanged |
 | Typecheck slice unit | `npm run test:ci:typecheck-slice` | Policy registry, strict base inheritance |
 
 **Local fast path:** `npm run typecheck:slice:*` — 6GB heap per slice. **CI canonical gate:** `quality` job → `npm run typecheck` → `typecheck:full` (8GB, full repo).

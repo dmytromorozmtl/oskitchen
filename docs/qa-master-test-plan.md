@@ -181,6 +181,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ### 8c3. Typecheck slices (Era 4 Cycle 7 + Era 11 Cycle 1)
 - policy: `lib/ci/typecheck-slice-policy.ts` (`era11-typecheck-slice-v3`; extends `era5-typecheck-slice-v2` — services-core, dashboard-services-api, storefront-marketing, **platform-auth**)
 - era11 cert: `test:ci:typecheck-slice-era11:cert` (chained in `test:ci:typecheck-slice:cert`)
+- era15 recert: `lib/ci/typecheck-slice-era15-policy.ts` (`era15-typecheck-slice-recert-v1`); `npm run smoke:typecheck-slices`
 - wiring cert: `test:ci:typecheck-slice:cert` (in `test:ci:governance-bundles`)
 - local slice: `npm run typecheck:slice:platform-auth` (6GB; platform admin + login/onboarding)
 - parallel CI: `typecheck-slices` job → `npm run typecheck:ci:slices` (all four slices); **canonical gate:** `quality` → `typecheck:full` (8GB)

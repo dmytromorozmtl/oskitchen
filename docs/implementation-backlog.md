@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 15 — KDS / enterprise / DevOps
 
+### KOS-E15-004 — Typecheck slice Era 15 recert (P1)
+- ID: `KOS-E15-004`
+- Title: Re-certify strict typecheck slices and parallel CI job honesty
+- Module: DevOps / Platform
+- Priority: P1 (Era 15 Cycle 4)
+- Status: **completed**
+- Decision: `era15-typecheck-slice-recert-v1` — four slices at 6GB; `typecheck:full` at 8GB remains canonical in `quality`; `smoke:typecheck-slices`
+- Evidence: `lib/ci/typecheck-slice-era15-policy.ts`, `test:ci:typecheck-slice-era15:cert`, `docs/devops-release-enterprise-readiness.md`
+- Next: profile OOM hotspots if full typecheck fails in CI; no strictness reduction
+
 ### KOS-E15-003 — Staging workflows first-run Era 15 recert (P1)
 - ID: `KOS-E15-003`
 - Title: Re-certify optional GitHub staging workflow ops and skip honesty

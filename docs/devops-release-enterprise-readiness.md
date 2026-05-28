@@ -19,14 +19,14 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - release-critical smoke tests pass
 
 ## Typecheck Split
-- **Policy (Era 4–5 + Era 11 Cycle 1):** `era11-typecheck-slice-v3` in `lib/ci/typecheck-slice-policy.ts` (extends `era5-typecheck-slice-v2` with `platform-auth` slice).
+- **Policy (Era 4–5 + Era 11 + Era 15 recert):** `era5-typecheck-slice-v2` → `era11-typecheck-slice-v3` + `era15-typecheck-slice-recert-v1` in `lib/ci/typecheck-slice-policy.ts` / `lib/ci/typecheck-slice-era15-policy.ts`; `npm run smoke:typecheck-slices`.
 - **Full CI / release gate (unchanged):** `npm run typecheck` → `npm run typecheck:full` — `tsc --noEmit -p tsconfig.typecheck.json` with **8GB** heap (`node --max-old-space-size=8192`); CI `quality` / gate workflows keep `NODE_OPTIONS=--max-old-space-size=8192`.
 - **Slice A — services core (local fast path):** `npm run typecheck:slice:services-core` — `tsconfig.slice.services-core.json` (services + actions + lib; no App Router); **6GB** heap; omits `.next/types` to avoid stale Next validator refs after cron archive.
 - **Slice B — dashboard / API spine:** `npm run typecheck:slice:dashboard-services-api` — dashboard + API + components + shared spine; **6GB** heap. Strictness inherited from `tsconfig.base.json` (`strict: true`).
 - **Slice C — storefront / marketing:** `npm run typecheck:slice:storefront-marketing` — public storefront (`app/s`, `app/b`), GTM/marketing pages, `app/dashboard/storefront`, storefront API routes; **6GB** heap.
 - **Slice D — platform / auth (Era 11):** `npm run typecheck:slice:platform-auth` — `app/platform`, login/onboarding/forgot-password; **6GB** heap.
 - **Wiring cert (tier 0):** `npm run test:ci:typecheck-slice:cert` + `npm run test:ci:typecheck-slice` (in `test:ci:governance-bundles`).
-- **Parallel CI job (Era 6 Cycle 3):** `era6-typecheck-slice-ci-v1` — workflow job `typecheck-slices` runs `npm run typecheck:ci:slices` at **6GB** heap in parallel with `quality`; **does not** replace `npm run typecheck` → `typecheck:full` (8GB) as canonical gate.
+- **Parallel CI job (Era 6 + Era 15 recert):** `era6-typecheck-slice-ci-v1` — job `typecheck-slices` runs `npm run typecheck:ci:slices` at **6GB** in parallel with `quality`; **does not replace** `npm run typecheck` → `typecheck:full` (8GB) as canonical gate (`era15-typecheck-slice-recert-v1`).
 - **Governance bundle partitions (Era 9 Cycle 2):** `era9-governance-bundles-partition-v1` — job `governance-bundles-partitions` runs four matrix partitions in parallel; **`quality` still runs** `npm run test:ci:governance-bundles` (full sequential composition). Local fast path: `npm run test:ci:governance-bundles:partition-platform` (etc.). Cert: `test:ci:governance-bundles-partition:cert` (via `test:ci:typecheck-slice:cert`).
 
 ## Build Verification
