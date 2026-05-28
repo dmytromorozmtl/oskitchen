@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 9 — Enterprise delivery / DevOps
 
+### KOS-E9-004 — RBAC wave 4 recert (P1)
+- ID: `KOS-E9-004`
+- Title: Era 9 wave-4 sensitive mutation recert (inventory + cert drift fix)
+- Module: Platform / security
+- Priority: P1 (Era 9 Cycle 4)
+- Status: **completed**
+- Decision: `era9-rbac-wave4-recert-v1` — static guard inventory for 11 wave-4 surfaces; `test:ci:rbac-wave4:cert` extended; no RBAC weakening
+- Evidence: `lib/security/rbac-wave4-era9-policy.ts`, `tests/unit/rbac-wave4-era9-cert-live.test.ts`, `test:ci:rbac-wave4` in `test:security`
+- Next: broader tenant-only grep only on new sensitive actions; do not reopen Era 4 POS E2E
+
 ### KOS-E9-003 — Cron surface recert (P1)
 - ID: `KOS-E9-003`
 - Title: Era 9 cron archive posture recert without new routes or weakened auth
@@ -300,7 +310,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Era 4 Cycle 6)
 - Status: **completed**
 - Evidence: `lib/restaurant/require-restaurant-table-mutation.ts` (`pos.access`), `requireCrmMutation` on `actions/customer-subscription.ts`, `requireStorefrontManageActor` on `actions/experiment-ethics-review.ts`, extended `test:ci:rbac-wave4`
-- Residual: broader tenant-only grep sweep (copilot void-form deny closed Era 5 Cycle 4)
+- Residual: ~~broader tenant-only grep sweep~~ — **Era 9 Cycle 4 recert** locks 11 wave-4 surfaces via `era9-rbac-wave4-recert-v1`; new sensitive actions need explicit wave entry
 
 ### KOS-E4-004 — Cron experimental surface archive
 - ID: `KOS-E4-004`

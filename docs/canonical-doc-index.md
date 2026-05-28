@@ -386,3 +386,4 @@ Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from 
 | 2026-05-27 | Era 9 Cycle 1: `era9-enterprise-sso-architecture-spike-v1` — SSO R1 design spike (not production) |
 | 2026-05-27 | Era 9 Cycle 2: `era9-governance-bundles-partition-v1` — parallel governance CI partitions |
 | 2026-05-27 | Era 9 Cycle 3: `era9-cron-surface-recert-v1` — cron archive posture recert (no new routes) |
+| 2026-05-27 | Era 9 Cycle 4: `era9-rbac-wave4-recert-v1` — wave-4 mutation guard inventory + cert |

@@ -3,24 +3,12 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { RBAC_WAVE4_ERA9_TEST_FILES } from "@/lib/security/rbac-wave4-era9-policy";
+
 const ROOT = process.cwd();
 const CI_WORKFLOW = join(ROOT, ".github/workflows/ci.yml");
 
-const WAVE4_TESTS = [
-  "tests/unit/delivery-route-actions-rbac.test.ts",
-  "tests/unit/copilot-actions-rbac.test.ts",
-  "tests/unit/copilot-form-deny.test.ts",
-  "tests/unit/copilot-form-deny-ci-live.test.ts",
-  "tests/unit/demo-actions-rbac.test.ts",
-  "tests/unit/demo-golden-scenario-rbac.test.ts",
-  "tests/unit/feedback-actions-rbac.test.ts",
-  "tests/unit/integration-menu-sync-rbac.test.ts",
-  "tests/unit/production-calendar-actions-rbac.test.ts",
-  "tests/unit/holiday-packages-rbac.test.ts",
-  "tests/unit/restaurant-tables-actions-rbac.test.ts",
-  "tests/unit/customer-subscription-rbac.test.ts",
-  "tests/unit/experiment-ethics-review-rbac.test.ts",
-] as const;
+const WAVE4_TESTS = RBAC_WAVE4_ERA9_TEST_FILES;
 
 const WAVE4_MODULES = [
   "lib/routes/require-route-mutation.ts",
@@ -28,6 +16,7 @@ const WAVE4_MODULES = [
   "lib/demo/require-demo-mutation.ts",
   "lib/feedback/require-app-feedback-submit.ts",
   "lib/restaurant/require-restaurant-table-mutation.ts",
+  "lib/security/rbac-wave4-era9-policy.ts",
 ] as const;
 
 function readPackageScripts(): Record<string, string> {

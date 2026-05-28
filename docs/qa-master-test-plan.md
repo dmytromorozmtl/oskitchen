@@ -260,6 +260,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 
+### 8c4j. RBAC wave 4 recert (Era 9 Cycle 4)
+- Policy: `lib/security/rbac-wave4-era9-policy.ts` (`era9-rbac-wave4-recert-v1`)
+- Bundle: `npm run test:ci:rbac-wave4` (15 negative/deny tests incl. production-calendar form deny)
+- Security-db: chained at end of `npm run test:security`
+- Wiring cert: `test:ci:rbac-wave4:cert` → `rbac-wave4-era9-cert-live.test.ts`
+
 ### 8c4i. Cron surface recert (Era 9 Cycle 3)
 - Policy: `lib/cron/cron-surface-era9-policy.ts` (`era9-cron-surface-recert-v1`; extends `era4-active-production-only-v1`)
 - Validators: `npm run validate:production-crons`, `npm run validate:cron-inventory`

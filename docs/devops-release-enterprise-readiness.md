@@ -15,7 +15,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - `npm run test:pos-rbac` passes in CI (focused POS permission-negative suite)
 - strict typecheck or approved split-typecheck replacement; `npm run typecheck` and CI `quality` / gate workflows use `NODE_OPTIONS=--max-old-space-size=8192` (aligned with `scripts/predeploy-verify.sh`)
 - build passes using documented production-like env assumptions
-- security suite passes (`npm run test:security` — includes `test:ci:rbac-wave4` wave-4 action RBAC at end of security-db job)
+- security suite passes (`npm run test:security` — includes `test:ci:rbac-wave4` wave-4 action RBAC at end of security-db job; Era 9 recert `era9-rbac-wave4-recert-v1` via `test:ci:rbac-wave4:cert`)
 - release-critical smoke tests pass
 
 ## Typecheck Split
