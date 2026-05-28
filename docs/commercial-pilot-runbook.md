@@ -15,7 +15,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 2. **Certified vs manual** — Tier 0–1 are automatable checks; Tier 2–3 require human sign-off on staging.
 3. **No false enterprise claims** — SSO/SCIM/SOC2 remain roadmap-only (`era6-enterprise-identity-roadmap-v1`, `era13-enterprise-identity-recert-v1`; R2 pilot not_started).
 4. **Inventory** — POS-only depletion (`era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`); storefront orders do not deplete stock in pilot.
-5. **Rewards** — Dual ledger (`era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`, `era10-cross-channel-rewards-recert-v1`); gift/loyalty codes are not interchangeable across POS and storefront; POS kitchen-ledger checkout certified; no unified cross-channel E2E.
+5. **Rewards** — Dual ledger (`era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`, `era10-cross-channel-rewards-recert-v1`, `era14-cross-channel-rewards-recert-v1`); gift/loyalty codes are not interchangeable across POS and storefront; POS kitchen-ledger checkout certified; unified E2E `deferred_locked` — see `docs/cross-channel-rewards-honesty-checklist.md`.
 
 **Unsafe pilot headline:** “Production-certified,” “enterprise SSO,” “unified inventory,” or “Toast-class KDS at rush hour.”
 

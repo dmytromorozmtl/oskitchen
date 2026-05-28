@@ -36,7 +36,7 @@ All four Era 13 enterprise / operator-depth cycles from era12 handoff **complete
 ## 3. What Remains Open (P1)
 
 - SSO/SAML R2 **implementation** — explicit era budget only (Era 13 Cycle 1 recert confirms **not_started**).
-- Unified cross-channel rewards E2E — still `deferred_locked` after Era 10 Cycle 1.
+- ~~Unified cross-channel rewards E2E~~ — **Scoped** Era 14 Cycle 2 (`era14-cross-channel-rewards-recert-v1`); unification remains `deferred_locked`; no unified Playwright in CI.
 - First green staging workflow runs — ops only (`era13-staging-workflows-first-run-ops-v1`).
 - Production calendar pilot manual sign-off — `docs/production-calendar-operator-checklist.md`.
 - Live Woo/Shopify test shop smoke — ops via `npm run smoke:woo-shopify` when credentials available.

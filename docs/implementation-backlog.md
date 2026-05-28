@@ -15,6 +15,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/navigation/nav-page-maturity-era14-policy.ts`, `test:ci:nav-page-maturity-era14:cert` (in `test:ci:page-maturity-sweep:cert`)
 - Next: periodic recert when new preview routes ship in focused nav
 
+### KOS-E14-002 — Cross-channel rewards Era 14 recert (P1)
+- ID: `KOS-E14-002`
+- Title: Re-certify dual-ledger rewards honesty and document deferred unified E2E
+- Module: Growth / POS / Storefront
+- Priority: P1 (Era 14 Cycle 2)
+- Status: **completed**
+- Decision: `era14-cross-channel-rewards-recert-v1` — unification `deferred_locked`; no cross-channel Playwright in `ci.yml`; `npm run smoke:cross-channel-rewards`
+- Evidence: `lib/rewards/cross-channel-rewards-era14-policy.ts`, `test:ci:cross-channel-rewards-era14:cert`, `docs/cross-channel-rewards-honesty-checklist.md`
+- Next: unified ledger only with explicit era budget + schema migration plan
+
 ## Era 13 — Enterprise delivery / identity
 
 ### KOS-E13-001 — Enterprise identity Era 13 recert (P1)

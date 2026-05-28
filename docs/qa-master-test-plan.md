@@ -286,6 +286,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Wiring cert: `test:ci:production-calendar-status-workflow-ui:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
 - RBAC: `tests/unit/production-calendar-actions-rbac.test.ts` (status update deny/allow)
 
+### 8c4r. Cross-channel rewards Era 14 recert (Era 14 Cycle 2)
+- Policy: `lib/rewards/cross-channel-rewards-era14-policy.ts` (`era14-cross-channel-rewards-recert-v1`; extends era4/6/10)
+- Honest scope: dual ledger; unification `deferred_locked`; no unified Playwright E2E in default CI
+- Smoke: `npm run smoke:cross-channel-rewards` — runs `test:ci:cross-channel-rewards:cert` + era14 cert
+- Wiring cert: `test:ci:cross-channel-rewards-era14:cert` (chained in `test:ci:cross-channel-rewards:cert`)
+
 ### 8c4q. Nav page maturity Era 14 recert (Era 14 Cycle 1)
 - Policy: `lib/navigation/nav-page-maturity-era14-policy.ts` (`era14-nav-page-maturity-recert-v1`; extends `era4-page-maturity-sweep-v1`)
 - Audit: `findNavPageMaturityHonestyGaps()` — every focused-nav preview/placeholder href must have `PageMaturityRouteNotice` copy or inline PlaceholderBanner exception
