@@ -45,6 +45,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/production/production-calendar-operator-depth-era13-policy.ts`, `test:ci:production-calendar-operator-depth-era13:cert` (in `test:ci:production-calendar-move-ui:cert`)
 - Next: pilot manual sign-off using checklist (ops); delete-task UI only if explicitly scoped in a future era
 
+### KOS-E13-005 — Era 13 scorecard refresh (P1)
+- ID: `KOS-E13-005`
+- Title: Era 13 cycle completion scorecard and Era 14 master prompt input
+- Module: Governance
+- Priority: P1 (Era 13 Cycle 5)
+- Status: **completed**
+- Decision: `era13-scorecard-refresh-v1` — 100/100 overall; era14 handoff in `docs/next-master-prompt-input-2026-05-27-era13.md`
+- Evidence: `lib/governance/era13-scorecard-policy.ts`, `docs/era13-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+- Next: Era 14 theme selection (SSO R2 budget, nav maturity, or rewards honesty)
+
 ## Era 12 — Integration hardening / enterprise
 
 ### KOS-E12-001 — Channel golden path Era 12 recert (P1)

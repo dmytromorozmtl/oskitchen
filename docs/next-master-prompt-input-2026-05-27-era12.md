@@ -90,6 +90,8 @@ Pick **one theme per cycle**; do not reopen Era 4–12 unless regression proven.
 
 **Full re-audit now?** **No** — Era 12 scorecard + this input sufficient until Era 13 selects a theme or repo scale changes materially.
 
+**Era 13 status:** **Complete** (cycles 1–5). Use `docs/next-master-prompt-input-2026-05-27-era13.md` and `docs/era13-cycle-completion-scorecard-2026-05-27.md` for Era 14 handoff. Overall **100/100**.
+
 ---
 
 ## Scorecard (Evolution Era 12 end — 2026-05-27)

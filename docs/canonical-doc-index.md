@@ -440,6 +440,27 @@ Incremental refresh after Era 12 cycles 1–4 (integration hardening + staging E
 
 **Re-audit decision:** defer full repo re-audit until Era 13 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era12.md`.
 
+## Scorecard (Evolution Era 13 end — 2026-05-27)
+
+Incremental refresh after Era 13 cycles 1–4 (enterprise delivery + operator depth from era12 handoff). Baseline = Era 12 end **99** overall.
+
+| Area | Era 12 end | Era 13 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 99 | **100** | +1 | identity recert + staging ops + production calendar operator depth |
+| Security | 82 | **82** | +0 | unchanged |
+| QA | 91 | **92** | +1 | production calendar operator checklist + smoke |
+| DevOps | 97 | **98** | +1 | staging first-run ops + KDS staging secrets |
+| RBAC | 89 | **89** | +0 | unchanged |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 59 | **59** | +0 | unchanged |
+| KDS | 72 | **73** | +1 | staging workflow secret parity |
+| Enterprise readiness | 65 | **66** | +1 | Era 13 identity recert (`roadmap_only`) |
+| Marketing/sales | 82 | **82** | +0 | unchanged |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 14 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era13.md`.
+
 ---
 
 ## Validation
@@ -510,3 +531,4 @@ Incremental refresh after Era 12 cycles 1–4 (integration hardening + staging E
 | 2026-05-27 | Era 13 Cycle 2: `era13-kds-staging-workflow-secrets-align-v1` — KDS Playwright staging workflow password secret parity |
 | 2026-05-27 | Era 13 Cycle 3: `era13-staging-workflows-first-run-ops-v1` — staging workflow first-run ops; JOB_OMITTED_SECRETS_MISSING vs PASSED/FAILED/SKIPPED WITH REASON |
 | 2026-05-27 | Era 13 Cycle 4: `era13-production-calendar-operator-depth-v1` — production calendar pilot checklist + smoke:production-calendar |
+| 2026-05-27 | Era 13 Cycle 5: `era13-scorecard-refresh-v1` — score 100/100; era14 handoff |
