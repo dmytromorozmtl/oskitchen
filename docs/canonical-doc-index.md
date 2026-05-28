@@ -195,6 +195,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **SSO IdP staging smoke plan** | `era17-enterprise-sso-idp-staging-smoke-v1`; `docs/enterprise-sso-idp-staging-smoke-plan.md`; `smoke:enterprise-sso-idp-staging`; delivery **pilot_foundation** unchanged |
 | **2** | **SSO IdP login proof (operator)** | `era17-enterprise-sso-idp-login-proof-v1`; **awaiting_operator_proof** — smoke `overall: SKIPPED` + 6 missing env vars until staging + IdP secrets |
+| **2c** | **SSO operator runbook** | `era17-enterprise-sso-operator-runbook-v1`; [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md); **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | **3** | **Staging workflows first green** | `era17-staging-workflows-first-green-v1`; **awaiting_github_first_green** — smoke `overall: SKIPPED` + 3 missing env vars until GitHub secrets + run URLs |
 | **4** | **Woo live channel smoke** | `era17-channel-live-smoke-woo-v1`; **awaiting_live_credentials** — smoke `overall: SKIPPED` until DATABASE_URL + Woo connection |
 | **5** | **Shopify live channel smoke** | `era17-channel-live-smoke-shopify-v1`; **awaiting_live_credentials** — smoke `overall: SKIPPED` until DATABASE_URL + Shopify connection |
@@ -704,6 +705,7 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Post–Era 16 full strategic re-audit — `full-strategic-reaudit-2026-05-28-era16.md`; blended 87/100; Era 17 execution map + master prompt input |
 | 2026-05-28 | Era 17 Cycle 1: `era17-enterprise-sso-idp-staging-smoke-v1` — IdP staging smoke plan; Okta/Entra ops doc; `smoke:enterprise-sso-idp-staging`; delivery **pilot_foundation** unchanged |
 | 2026-05-28 | Era 17 Cycle 2: `era17-enterprise-sso-idp-login-proof-v1` — operator proof path; **awaiting_operator_proof**; honest skip when staging/IdP secrets missing |
+| 2026-05-28 | Era 17 Workstream A Cycle 4: `era17-enterprise-sso-operator-runbook-v1` — qualified SSO pilot operator runbook; **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | 2026-05-28 | Era 17 Cycle 3: `era17-staging-workflows-first-green-v1` — GitHub run URL evidence; **awaiting_github_first_green**; target ≥2/3 workflows PASSED |
 | 2026-05-28 | Era 17 Cycle 4: `era17-channel-live-smoke-woo-v1` — Woo live proof path; **awaiting_live_credentials** |
 | 2026-05-28 | Era 17 Cycle 5: `era17-channel-live-smoke-shopify-v1` — Shopify live proof path; **awaiting_live_credentials** |

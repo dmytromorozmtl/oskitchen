@@ -43,6 +43,29 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Cycle 2 operator proof env vars:** `SSO_STAGING_OPERATOR_EMAIL`, `SSO_STAGING_LOGIN_SCREENSHOT_PATH`, `SSO_STAGING_AUDIT_EVENT_REF`, `SSO_STAGING_NEGATIVE_TEST_NOTE` — see `era17-enterprise-sso-idp-login-proof-v1`.
 
+### Enterprise SSO operator runbook (optional — Era 17 Workstream A Cycle 4)
+
+**Policy:** `era17-enterprise-sso-operator-runbook-v1` — **operator_runbook_ready**; support boundaries for qualified SSO pilot; delivery **pilot_foundation** unchanged.
+
+1. Read **`docs/enterprise-sso-operator-runbook-era17.md`** — break-glass, rollback, entitlements, failure modes, audit events.
+2. Run **`npm run smoke:enterprise-sso-operator-runbook`** → review **`artifacts/enterprise-sso-operator-runbook-summary.json`** (`ssoOperatorProofStatus`).
+3. Pair with IdP staging smoke (`smoke:enterprise-sso-idp-staging`) before citing SSO in pilot contract.
+4. **Forbidden:** production SSO for all tenants, `pilot_ready` without Cycle 2 proof, SOC2/SCIM claims.
+
+**Enforcement:** `test:ci:enterprise-sso-operator-runbook-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`)
+
+## Era 17 enterprise SSO operator runbook (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-operator-runbook-v1` — **operator_runbook_ready**; qualified pilot support without production SSO claim.
+
+1. **Break-glass** — owner email/password when IdP unavailable and `breakGlassOwnerEnabled`.
+2. **Rollback** — deactivate SSO pilot → disable Supabase SAML ref → confirm fail-closed login.
+3. **Entitlements** — `ssoOidc`, `PILOT_ACTIVE`, allowed domains, Supabase provider ref.
+4. **Support boundaries** — one pilot workspace; Okta/Entra test tenant; no 24/7 SSO SLA.
+5. Run **`npm run smoke:enterprise-sso-operator-runbook`** — cert wiring; not live IdP attestation.
+
+**Operator doc:** `docs/enterprise-sso-operator-runbook-era17.md`
+
 ### Staging workflows first green (Era 17 P0 #2)
 
 **Policy:** `era17-staging-workflows-first-green-v1` — **awaiting_github_first_green**; extends `era16-staging-workflows-first-green-v1`.

@@ -170,8 +170,11 @@ sequenceDiagram
 | **1** | IdP staging smoke plan + env documentation + orchestrator | **Complete** — [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md); `smoke:enterprise-sso-idp-staging` |
 | **2** | Staging IdP login proof | **Engineering complete — awaiting operator** — `era17-enterprise-sso-idp-login-proof-v1`; smoke executed → **SKIPPED WITH REASON** (`overall: SKIPPED`; 6 prerequisite env vars unset) until staging + IdP secrets |
 | **3** | Qualified pilot gate | Pending — `era17-enterprise-sso-pilot-ready-v1` only if Cycle 2 `proof_passed` |
+| **4** | SSO operator runbook | **Complete** — `era17-enterprise-sso-operator-runbook-v1`; [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md); **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 
 **Ops doc:** Okta/Entra test tenant, Supabase SAML, workspace mapping, break-glass, rollback, negative tests.
+
+**Operator runbook:** [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md) — break-glass, rollback, support boundaries, entitlements, audit events (`era17-enterprise-sso-operator-runbook-v1`).
 
 **Honest scope:** Does **not** claim production SSO, qualified pilot-ready delivery, SOC2, or SCIM until Cycle 2–3 evidence exists.
 

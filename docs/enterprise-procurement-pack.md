@@ -153,6 +153,22 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **CI:** `test:ci:enterprise-sso-idp-staging-era17:cert` (chained in `test:ci:enterprise-identity-roadmap:cert`).
 
+## Era 17 SSO operator runbook (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-operator-runbook-v1` — qualified pilot operator support doc + cert. **Does not** advance SSO delivery beyond **pilot_foundation** or claim production SSO.
+
+| Capability | Delivery status | Era 17 Workstream A Cycle 4 |
+|------------|-----------------|------------------------------|
+| SSO / SAML | **pilot_foundation** (unchanged) | **operator_runbook_ready** — break-glass, rollback, entitlements, support boundaries |
+
+**Procurement stance:** Support can run a qualified SSO pilot using the operator runbook; buyer-facing SSO availability unchanged until Cycle 2 IdP login artifact and Cycle 3 qualified pilot gate.
+
+**Operator doc:** [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md)
+
+**Smoke:** `npm run smoke:enterprise-sso-operator-runbook` (cert wiring — not live IdP attestation).
+
+**CI:** `test:ci:enterprise-sso-operator-runbook-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`).
+
 ---
 
 ## SSO and SAML roadmap

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-039 — Enterprise SSO operator runbook (Workstream A Cycle 4)
+- ID: `KOS-E17-039`
+- Title: Era 17 Workstream A Cycle 4 — qualified SSO pilot operator runbook
+- Module: Enterprise identity / Support
+- Priority: P0 support depth (Workstream A Cycle 4)
+- Status: **operator_runbook_ready**
+- Decision: `era17-enterprise-sso-operator-runbook-v1` — break-glass, rollback, entitlements, support boundaries; delivery **pilot_foundation** unchanged
+- Evidence: `docs/enterprise-sso-operator-runbook-era17.md`, `lib/enterprise/enterprise-sso-operator-runbook-era17-policy.ts`, `smoke:enterprise-sso-operator-runbook`, `test:ci:enterprise-sso-operator-runbook-era17:cert`
+- Next: Workstream A Cycle 5 — domain/email mapping hardening tests; P0 Cycle 2 IdP login proof when staging credentials available
+
 ### KOS-E17-038 — Era 18 handoff input (P2)
 - ID: `KOS-E17-038`
 - Title: Era 17 Cycle 45 — Era 18 master prompt input with honest P0 carry-forward

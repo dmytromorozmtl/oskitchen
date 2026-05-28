@@ -226,6 +226,7 @@ Run: `npm run smoke:enterprise-sso-idp-staging`
 ## Related docs
 
 - [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md) — R2 architecture and acceptance criteria
+- [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md) — qualified pilot support boundaries (`era17-enterprise-sso-operator-runbook-v1`)
 - [`GITHUB_E2E_STAGING_SECRETS.md`](./GITHUB_E2E_STAGING_SECRETS.md) — staging URL and login secrets
 - [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) — pilot GO/NO-GO and forbidden claims
 - [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — buyer FAQ (unchanged until `pilot_ready`)
