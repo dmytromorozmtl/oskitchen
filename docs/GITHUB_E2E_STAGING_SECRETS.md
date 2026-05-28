@@ -261,6 +261,18 @@ Uses the same secret names as E2E Staging (`era13-kds-staging-workflow-secrets-a
 
 Artifact on completion: `kds-realtime-e2e-staging-summary` (`PASSED` / `SKIPPED` / `FAILED`).
 
+## P0 staging proof unblock (Era 17)
+
+**Policy:** `era17-p0-staging-proof-unblock-v1` — aggregates SSO IdP staging, GitHub first-green, and Woo/Shopify live smokes.
+
+After configuring secrets above (plus SSO `SSO_STAGING_*` and channel `DATABASE_URL` per commercial runbook):
+
+```bash
+npm run smoke:p0-staging-proof-unblock
+```
+
+Review `artifacts/p0-staging-proof-unblock-summary.json` — `p0ProofStatus` and `allMissingEnvVars`. Missing credentials → **SKIPPED WITH REASON** (exit 0); do not claim P0 proof complete.
+
 ## CI certification
 
 - `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert` (includes era13/era15 first-run certs + `test:ci:staging-workflows-first-green-era16:cert`)

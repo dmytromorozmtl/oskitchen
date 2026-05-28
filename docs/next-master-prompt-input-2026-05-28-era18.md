@@ -18,7 +18,7 @@ Evolution Era 17 (cycles 1–45) **completed the commercial ops proof delivery t
 | Theme | Outcome |
 |-------|---------|
 | SSO | IdP staging smoke plan + honest login skip path; **`pilot_foundation`** unchanged |
-| Staging / channels | First-green orchestrators; Woo/Shopify live smoke paths; **SKIPPED WITH REASON** without credentials |
+| Staging / channels | First-green orchestrators; Woo/Shopify live smoke paths; P0 unblock orchestrator (`era17-p0-staging-proof-unblock-v1`); **SKIPPED WITH REASON** without credentials |
 | Commercial pilot | GO/NO-GO evaluator, forbidden-claims gate, ICP/contract templates, golden path wiring |
 | Security | Webhook replay P1 expansion, public POST abuse review, Public API per-route scopes |
 | POS / KDS / ops | Tablet UX, operator runbooks, manager discount depth, KDS/production drill wiring |
@@ -72,11 +72,12 @@ Missing credentials → **SKIPPED WITH REASON** — never fake PASS.
 
 Era 18 converts Era 17 **policy foundations** into **runtime evidence** and **revenue pilot execution**:
 
-1. Execute P0 staging smokes with real credentials (SSO, GitHub, Woo/Shopify).
-2. Promote SSO to `pilot_ready` **only** after IdP login artifact (`era17-enterprise-sso-pilot-ready-v1`).
-3. Run paid pilot GO/NO-GO → contract → operator golden path → metrics baseline → retrospective.
-4. Sustain governance (16 crons, mutation linter, claims strict, forbidden-claims gate).
-5. Incremental scorecard at Era 18 boundary — **no inflation** without proof artifacts.
+1. Run **`npm run smoke:p0-staging-proof-unblock`** — aggregates P0 #1–#3 child smokes; review **`artifacts/p0-staging-proof-unblock-summary.json`** (`p0ProofStatus`, `allMissingEnvVars`).
+2. Execute P0 staging smokes with real credentials (SSO, GitHub, Woo/Shopify) when child artifacts still show skip.
+3. Promote SSO to `pilot_ready` **only** after IdP login artifact (`era17-enterprise-sso-pilot-ready-v1`).
+4. Run paid pilot GO/NO-GO → contract → operator golden path → metrics baseline → retrospective.
+5. Sustain governance (16 crons, mutation linter, claims strict, forbidden-claims gate).
+6. Incremental scorecard at Era 18 boundary — **no inflation** without proof artifacts.
 
 **Do not prioritize without explicit era unlock:** offline POS, hardware cert, marketplace LIVE (DoorDash/Uber/Grubhub), unified inventory/rewards, SOC2/SCIM, broad AI expansion, POS browser E2E redo.
 

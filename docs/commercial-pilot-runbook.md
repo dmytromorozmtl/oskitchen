@@ -19,6 +19,19 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Unsafe pilot headline:** “Production-certified,” “enterprise SSO,” “unified inventory,” or “Toast-class KDS at rush hour.”
 
+### Era 17 P0 staging proof unblock (2026-05-28)
+
+**Policy:** `era17-p0-staging-proof-unblock-v1` — **awaiting_ops_credentials**; aggregates P0 #1–#3 staging proofs into one honest artifact.
+
+1. Run **`npm run smoke:p0-staging-proof-unblock`** — executes SSO IdP staging, GitHub first-green, and Woo/Shopify live smokes in sequence.
+2. Review **`artifacts/p0-staging-proof-unblock-summary.json`** — `p0ProofStatus`, `allMissingEnvVars`, per-child `overall` / `proofStatus`.
+3. Missing credentials → **SKIPPED WITH REASON** (exit 0). Any child **FAILED** → aggregate **FAILED** (exit 1).
+4. Do **not** claim SSO `pilot_ready`, GitHub staging green, or live channel ops until each child artifact shows `proof_passed`.
+5. Ops checklist: `npm run smoke:p0-staging-proof-unblock -- --checklist-only`.
+6. Cert wiring: `test:ci:p0-staging-proof-unblock-era17:cert` chained in `test:ci:commercial-pilot-runbook:cert`.
+
+**Execution status (2026-05-28):** local smoke re-run → **overall: SKIPPED** (`p0ProofStatus: awaiting_ops_credentials`). Child smokes skipped for missing SSO (6 env vars), staging workflows (3 env vars), and channel live credentials. Artifact: `artifacts/p0-staging-proof-unblock-summary.json`. **Do not treat as paid pilot GO or P0 proof complete.**
+
 ### Enterprise SSO pilot (optional — Era 16)
 
 **Policy:** `era16-enterprise-sso-r2-admin-v1` — **pilot_admin_wiring** only; delivery **pilot_foundation**.

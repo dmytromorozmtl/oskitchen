@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-042 — P0 staging proof unblock orchestrator (P0)
+- ID: `KOS-E17-042`
+- Title: Era 17 P0 ops bundle — aggregate SSO + GitHub + channel live staging proofs
+- Module: Commercial / DevOps
+- Priority: P0 (unblock operator execution)
+- Status: **awaiting_ops_credentials**
+- Decision: `era17-p0-staging-proof-unblock-v1` — one smoke runs child P0 smokes #1–#3; honest SKIPPED when secrets missing
+- Evidence: `lib/commercial/p0-staging-proof-unblock-era17-policy.ts`, `scripts/smoke-p0-staging-proof-unblock-era17.ts`, `artifacts/p0-staging-proof-unblock-summary.json` (`p0ProofStatus: awaiting_ops_credentials`, `overall: SKIPPED`)
+- Next: Ops configures staging/IdP/channel secrets; re-run `smoke:p0-staging-proof-unblock`; then Cycle 2 IdP login proof + Cycle 3 `pilot_ready` gate when SSO artifact shows `proof_passed`
+
 ### KOS-E17-041 — Enterprise SSO procurement sync (Workstream A Cycle 6)
 - ID: `KOS-E17-041`
 - Title: Era 17 Workstream A Cycle 6 — procurement pack FAQ sync for pilot_foundation SSO
