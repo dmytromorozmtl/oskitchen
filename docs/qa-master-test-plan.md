@@ -114,6 +114,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 
+### 8c4c. Repository hygiene — `tests/node_modules/` (Era 7 Cycle 3)
+- policy: `lib/ci/repo-hygiene-policy.ts` (`era7-tests-node-modules-hygiene-v1`)
+- wiring cert: `test:ci:repo-hygiene:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:repo-hygiene` — gitignore lines + forbidden-path detection
+- live: `git ls-files tests/node_modules` must be empty
+
 ### 8c4b. Storefront Stripe E2E CI policy (Era 7 Cycle 2)
 - policy: `lib/ci/storefront-stripe-e2e-policy.ts` (`era7-storefront-stripe-optional-v1`, `era7-storefront-stripe-secrets-accept-v1`)
 - optional Playwright: `test:ci:storefront-money-path:stripe-e2e` when `STRIPE_SECRET_KEY` + `STOREFRONT_E2E_STRIPE=1`

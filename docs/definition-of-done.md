@@ -66,6 +66,7 @@ No feature is complete unless:
    - The release path that touches the feature passes the relevant quality gates and smoke tests.
 
 ## Additional KitchenOS Rules
+- **Repository hygiene (`era7-tests-node-modules-hygiene-v1`):** never commit `tests/node_modules/` (nested Vitest/npm installs) or `ci-artifacts/`; CI gate `npm run test:ci:repo-hygiene:cert` fails if git tracks paths under `tests/node_modules/`.
 - If a feature touches POS, billing, storefront publishing, uploads, exports, integrations, or impersonation, permission-negative tests are mandatory.
 - If a feature changes a customer-facing revenue path, recovery behavior must be defined and tested.
 - If a feature is preview, beta, internal-only, or placeholder, the UI and docs must say so explicitly.

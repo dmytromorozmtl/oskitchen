@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 7 — Commercial readiness
 
+### KOS-E7-003 — Repo hygiene cert (`tests/node_modules/`)
+- ID: `KOS-E7-003`
+- Title: CI cert blocks tracked nested test installs under `tests/node_modules/`
+- Module: DevOps / engineering hygiene
+- Priority: P1 (Era 7 Cycle 3)
+- Status: **completed**
+- Decision: `era7-tests-node-modules-hygiene-v1` — `.gitignore` lines locked; `git ls-files` gate in `test:ci:repo-hygiene:cert`
+- Evidence: `lib/ci/repo-hygiene-policy.ts`, `test:ci:repo-hygiene:cert` in `test:ci:governance-bundles`
+- Next: claim-validator expansion or Era 7 scorecard refresh
+
 ### KOS-E7-002 — Storefront Stripe live-card E2E CI policy (E7-4)
 - ID: `KOS-E7-002`
 - Title: Honest optional Stripe browser E2E tier with PASSED/SKIPPED/FAILED artifact

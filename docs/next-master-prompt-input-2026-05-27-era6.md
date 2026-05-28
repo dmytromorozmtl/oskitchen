@@ -31,6 +31,7 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 |-------|---------|
 | **1** | **Commercial pilot runbook** — `era7-commercial-pilot-runbooks-v1`; `docs/commercial-pilot-runbook.md`; `test:ci:commercial-pilot-runbook:cert` |
 | **2** | **Storefront Stripe E2E CI policy** — `era7-storefront-stripe-optional-v1`; `storefront-stripe-e2e-summary` artifact; `test:ci:storefront-money-path:cert` extended |
+| **3** | **Repo hygiene** — `era7-tests-node-modules-hygiene-v1`; `test:ci:repo-hygiene:cert` |
 
 ## 3. What Remains Open (P0 for Era 7 consideration)
 
@@ -45,7 +46,7 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 
 ## 4. What Remains Open (P1)
 
-- `tests/node_modules/` gitignore hygiene.
+- ~~`tests/node_modules/` gitignore hygiene~~ — **Done** Cycle 3 (`KOS-E7-003`).
 - Unified rewards product/schema era (if dual-ledger lock reversed).
 - KDS Playwright Realtime E2E (staging-only; no rush-hour claim).
 - Production-calendar `movePlanTaskAction` UI wiring if not yet exposed.
@@ -59,7 +60,7 @@ Pick **one theme per cycle**; do not reopen Era 4–6 unless regression proven.
 1. **Commercial readiness** — ~~pilot runbooks~~ + ~~Stripe E2E policy~~ (Cycles 1–2 done); claim validator expansion, sales enablement.
 2. **Operator depth** — storefront E2E, inventory hook (if unlocked), KDS UI polish.
 3. **Enterprise delivery** — SSO architecture spike (R1) — only with explicit era budget.
-4. **CI hygiene** — gitignore, workflow runtime, slice optimization.
+4. **CI hygiene** — ~~gitignore nested test installs~~ (Cycle 3 done); workflow runtime, slice optimization.
 5. **Surface reduction** — further route/archive review without removing production crons.
 
 **Do not prioritize without explicit era decision:** new modules, AI expansion, hardware POS, DoorDash live, new marketplace integrations, experimental crons.
@@ -68,7 +69,7 @@ Pick **one theme per cycle**; do not reopen Era 4–6 unless regression proven.
 
 ## 6. CI / Governance Facts
 
-- Default quality job: `npm run test:ci:governance-bundles` (21 `:cert` gates incl. `commercial-pilot-runbook` + unit bundles).
+- Default quality job: `npm run test:ci:governance-bundles` (22 `:cert` gates incl. `repo-hygiene` + unit bundles).
 - Scorecard cert: `npm run test:ci:scorecard:cert` (era4 + era5 + era6 policy tests; must stay last).
 - Parallel typecheck: job `typecheck-slices` → `npm run typecheck:ci:slices` (6GB); canonical gate remains `quality` → `typecheck:full` (8GB).
 - Security-db: `test:security` includes `test:ci:rbac-wave4` (production calendar form deny tests included).

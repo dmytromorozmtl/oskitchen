@@ -3,6 +3,11 @@
 Status: canonical release-readiness and enterprise-ops checklist
 Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows/e2e-staging.yml`, `README.md`, `vercel.json`, `next.config.ts`, `instrumentation.ts`, `scripts/`, `docs/OBSERVABILITY_RELEASE_OPS_AUDIT.md`, `docs/system-reality-model.md`
 
+## Repository hygiene
+- **Policy:** `era7-tests-node-modules-hygiene-v1` (`lib/ci/repo-hygiene-policy.ts`)
+- **Rule:** `tests/node_modules/` and `ci-artifacts/` are gitignored; nested test installs must not be committed (Vitest cache under `tests/node_modules/.vite/` is a common accident).
+- **CI:** `npm run test:ci:repo-hygiene:cert` (in `test:ci:governance-bundles`) — fails if `git ls-files tests/node_modules` returns any path.
+
 ## CI Green Standard
 - valid workflow references only
 - static workflow-to-`package.json` script audit passes
