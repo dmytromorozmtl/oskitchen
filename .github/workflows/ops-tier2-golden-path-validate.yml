@@ -29,3 +29,16 @@ jobs:
           PILOT_GOLDEN_PATH_OPERATOR_EMAIL: ${{ secrets.PILOT_GOLDEN_PATH_OPERATOR_EMAIL }}
           PILOT_GOLDEN_PATH_COMMIT_SHA: ${{ secrets.PILOT_GOLDEN_PATH_COMMIT_SHA }}
           PILOT_GOLDEN_PATH_DURATION_MINUTES: ${{ secrets.PILOT_GOLDEN_PATH_DURATION_MINUTES }}
+      - name: Tier 2 post-P0 orchestrator (JSON summary)
+        run: npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --json --skip-template
+        continue-on-error: true
+        env:
+          TIER2_CHANNEL_WEBHOOK_MANUAL: ${{ secrets.TIER2_CHANNEL_WEBHOOK_MANUAL }}
+          TIER2_KDS_BUMP_MANUAL: ${{ secrets.TIER2_KDS_BUMP_MANUAL }}
+          TIER2_PACKING_COMPLETE_MANUAL: ${{ secrets.TIER2_PACKING_COMPLETE_MANUAL }}
+          GITHUB_KDS_STAGING_RUN_URL: ${{ secrets.GITHUB_KDS_STAGING_RUN_URL }}
+          GITHUB_KDS_STAGING_RUN_OUTCOME: ${{ secrets.GITHUB_KDS_STAGING_RUN_OUTCOME }}
+          PILOT_GOLDEN_PATH_STAGING_URL: ${{ secrets.PILOT_GOLDEN_PATH_STAGING_URL }}
+          PILOT_GOLDEN_PATH_OPERATOR_EMAIL: ${{ secrets.PILOT_GOLDEN_PATH_OPERATOR_EMAIL }}
+          PILOT_GOLDEN_PATH_COMMIT_SHA: ${{ secrets.PILOT_GOLDEN_PATH_COMMIT_SHA }}
+          PILOT_GOLDEN_PATH_DURATION_MINUTES: ${{ secrets.PILOT_GOLDEN_PATH_DURATION_MINUTES }}

@@ -1,6 +1,10 @@
 /**
  * Tier 2 golden path UI slice — Integration Health, Owner Briefing, Launch Wizard, Platform ops.
  */
+import {
+  resolveTier2GoldenPathMilestoneFromPhaseStatuses,
+  type Tier2GoldenPathMilestone,
+} from "@/lib/commercial/tier2-golden-path-post-p0-orchestrator-era21";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import {
@@ -32,6 +36,10 @@ export type Tier2GoldenPathUiSlice = {
   exportTemplateCommand: string;
   orchestratorCommand: string;
   syncProgressReportCommand: string;
+  postP0OrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateP0GateCommand: string;
+  tier2Milestone: Tier2GoldenPathMilestone;
   integrationHealthHref: string;
   launchWizardHref: string;
   nextPhase: Tier2GoldenPathPhaseStatus | null;
@@ -55,6 +63,10 @@ export function buildTier2GoldenPathUiSlice(input: {
   const completedPhaseCount = phases.filter((p) => p.complete).length;
   const nextPhase = resolveNextIncompleteTier2GoldenPathPhase(phases);
   const nextPhaseDetail = nextPhase ? formatTier2GoldenPathPhaseBlockerDetail(nextPhase) : null;
+  const tier2Milestone = resolveTier2GoldenPathMilestoneFromPhaseStatuses(phases, {
+    p0GatePassed: true,
+    tier2GatePassed: tier2ProofStatus === "proof_passed",
+  });
 
   return {
     policyId: TIER2_GOLDEN_PATH_UI_ERA21_POLICY_ID,
@@ -71,6 +83,11 @@ export function buildTier2GoldenPathUiSlice(input: {
     exportTemplateCommand: "npm run ops:export-tier2-golden-path-env-template -- --write",
     orchestratorCommand: "npm run smoke:tier2-staging-golden-path",
     syncProgressReportCommand: "npm run ops:sync-tier2-golden-path-progress-report -- --write",
+    postP0OrchestratorCommand: "npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-tier2-golden-path-readiness-checklist -- --write",
+    validateP0GateCommand: "npm run ops:validate-p0-vault-env -- --json",
+    tier2Milestone,
     integrationHealthHref: `/dashboard/integration-health${TIER2_GOLDEN_PATH_INTEGRATION_HEALTH_ANCHOR}`,
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     nextPhase,
@@ -79,5 +96,5 @@ export function buildTier2GoldenPathUiSlice(input: {
 }
 
 export function formatTier2GoldenPathProgressLabel(slice: Tier2GoldenPathUiSlice): string {
-  return `Tier 2 ${slice.completedPhaseCount}/${slice.phases.length} phases · ${slice.tier2ProofStatus.replaceAll("_", " ")}`;
+  return `Tier 2 ${slice.completedPhaseCount}/${slice.phases.length} phases · ${slice.tier2Milestone.replaceAll("_", " ")} · ${slice.tier2ProofStatus.replaceAll("_", " ")}`;
 }

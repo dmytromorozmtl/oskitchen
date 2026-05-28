@@ -4,6 +4,7 @@
  */
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
+import { resolveTier2GoldenPathMilestone } from "@/lib/commercial/tier2-golden-path-post-p0-orchestrator-era21";
 import {
   TIER2_GOLDEN_PATH_ALL_TRACKED_ENV_KEYS,
   buildTier2GoldenPathPhaseStatuses,
@@ -49,6 +50,7 @@ export function evaluateTier2GoldenPathEnv(env: NodeJS.ProcessEnv = process.env)
   phases: ReturnType<typeof buildTier2GoldenPathPhaseStatuses>;
   p0GatePassed: boolean;
   tier2GatePassed: boolean;
+  tier2Milestone: ReturnType<typeof resolveTier2GoldenPathMilestone>;
 } {
   const artifacts = readTier2GoldenPathArtifacts();
   const present = TIER2_GOLDEN_PATH_ALL_TRACKED_ENV_KEYS.filter((key) =>
@@ -61,6 +63,8 @@ export function evaluateTier2GoldenPathEnv(env: NodeJS.ProcessEnv = process.env)
     tier2Summary: artifacts.tier2Summary,
     env,
   });
+  const p0GatePassed = artifacts.p0ProofStatus === "proof_passed";
+  const tier2GatePassed = artifacts.tier2Summary?.tier2ProofStatus === "proof_passed";
 
   return {
     p0ProofStatus: artifacts.p0ProofStatus,
@@ -68,8 +72,13 @@ export function evaluateTier2GoldenPathEnv(env: NodeJS.ProcessEnv = process.env)
     present,
     missing,
     phases,
-    p0GatePassed: artifacts.p0ProofStatus === "proof_passed",
-    tier2GatePassed: artifacts.tier2Summary?.tier2ProofStatus === "proof_passed",
+    p0GatePassed,
+    tier2GatePassed,
+    tier2Milestone: resolveTier2GoldenPathMilestone({
+      p0GatePassed,
+      tier2GatePassed,
+      phases,
+    }),
   };
 }
 
@@ -86,6 +95,7 @@ function main() {
           tier2ProofStatus: result.tier2ProofStatus,
           p0GatePassed: result.p0GatePassed,
           tier2GatePassed: result.tier2GatePassed,
+          tier2Milestone: result.tier2Milestone,
           presentCount: result.present.length,
           totalTrackedEnvKeys: TIER2_GOLDEN_PATH_ALL_TRACKED_ENV_KEYS.length,
           missing: result.missing,
@@ -105,10 +115,13 @@ function main() {
 
   console.log(`\nTier 2 golden path env validation (${TIER2_STAGING_GOLDEN_PATH_ERA21_POLICY_ID})\n`);
   console.log(`P0 gate: ${result.p0ProofStatus ?? "missing artifact"}`);
-  console.log(`Tier 2 artifact: ${result.tier2ProofStatus ?? "no artifact"}\n`);
+  console.log(`Tier 2 artifact: ${result.tier2ProofStatus ?? "no artifact"}`);
+  console.log(`Tier 2 milestone: ${result.tier2Milestone}\n`);
 
   if (!result.p0GatePassed) {
-    console.log("Blocked — configure P0 ops vault first (npm run ops:validate-p0-vault-env).\n");
+    console.log("Blocked — configure P0 ops vault first:");
+    console.log("  npm run ops:run-p0-vault-day0-orchestrator -- --write");
+    console.log("  npm run ops:validate-p0-vault-env\n");
     process.exit(2);
   }
 
@@ -121,7 +134,8 @@ function main() {
   if (result.missing.length > 0) {
     console.log(`Missing: ${result.missing.join(", ")}`);
   }
-  console.log("\nOrchestrator: npm run smoke:tier2-staging-golden-path\n");
+  console.log("\nOrchestrator: npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write");
+  console.log("Smoke: npm run smoke:tier2-staging-golden-path\n");
   process.exit(0);
 }
 

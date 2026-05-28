@@ -40,6 +40,7 @@ describe("tier2 golden path era21 CI certification (live repo)", () => {
     const step2 = readFileSync(join(ROOT, TIER2_STAGING_GOLDEN_PATH_ERA21_STEP2_DOC), "utf8");
     expect(step2).toContain("smoke:tier2-staging-golden-path");
     expect(step2).toContain("TIER2_CHANNEL_WEBHOOK_MANUAL");
+    expect(step2).toContain("ops:run-tier2-golden-path-post-p0-orchestrator");
   });
 
   it("wires product surfaces and unit tests", () => {

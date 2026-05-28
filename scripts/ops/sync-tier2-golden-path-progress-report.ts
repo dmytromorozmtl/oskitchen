@@ -5,7 +5,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-import { TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import { TIER2_STAGING_GOLDEN_PATH_ERA21_STEP2_DOC } from "@/lib/commercial/tier2-staging-golden-path-era21-policy";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import {
@@ -23,6 +22,10 @@ export function buildTier2GoldenPathProgressReportMarkdown(
     "# Tier 2 Golden Path — Progress Report",
     "",
     `Generated: ${new Date().toISOString()}`,
+    "",
+    "## Milestone",
+    "",
+    `- tier2Milestone: **${result.tier2Milestone}**`,
     "",
     "## Gate status",
     "",
@@ -59,7 +62,8 @@ export function buildTier2GoldenPathProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
-  lines.push("npm run ops:validate-tier2-golden-path-env");
+  lines.push("npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write");
+  lines.push("npm run ops:validate-tier2-golden-path-env -- --json");
   lines.push("npm run smoke:tier2-staging-golden-path -- --checklist-only");
   lines.push("npm run smoke:tier2-staging-golden-path");
   lines.push("```");

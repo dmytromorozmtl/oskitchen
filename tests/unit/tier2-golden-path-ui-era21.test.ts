@@ -25,6 +25,10 @@ describe("tier2-golden-path-ui-era21", () => {
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.phases.length).toBe(4);
+    expect(slice?.tier2Milestone).toBe("awaiting_child_smokes");
+    expect(slice?.postP0OrchestratorCommand).toContain(
+      "ops:run-tier2-golden-path-post-p0-orchestrator",
+    );
     expect(formatTier2GoldenPathProgressLabel(slice!)).toContain("Tier 2");
   });
 

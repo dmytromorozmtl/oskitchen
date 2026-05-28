@@ -35,11 +35,13 @@ smoke:tier2-staging-golden-path
 ### Утро (2 ч) — automated
 
 ```bash
+npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write
 npm run ops:validate-p0-vault-env -- --json
 npm run ops:validate-tier2-golden-path-env -- --json
 npm run smoke:tier2-staging-golden-path -- --checklist-only
 npm run ops:export-tier2-golden-path-env-template -- --write
 npm run ops:sync-tier2-golden-path-progress-report -- --write
+npm run ops:export-tier2-golden-path-readiness-checklist -- --write
 
 export PILOT_GOLDEN_PATH_STAGING_URL="$E2E_STAGING_BASE_URL"
 export PILOT_GOLDEN_PATH_OPERATOR_EMAIL="$E2E_LOGIN_EMAIL"

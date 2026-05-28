@@ -40,6 +40,12 @@ export function Tier2GoldenPathPhasesPanel(props: {
       <CardContent className={cn("space-y-3", isCompact && "pt-4")}>
         {!isCompact ? (
           <div className="flex flex-wrap gap-2">
+            <Badge
+              variant="outline"
+              className="rounded-full font-mono text-[10px]"
+            >
+              {slice.tier2Milestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full font-mono text-[10px]">
               {slice.tier2ProofStatus}
             </Badge>
@@ -112,8 +118,11 @@ export function Tier2GoldenPathPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postP0OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.validateP0GateCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
                 <li>{slice.orchestratorCommand}</li>
               </ul>
