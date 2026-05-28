@@ -48,7 +48,12 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era11.md`](./next-master-prompt-input-2026-05-27-era11.md) | Facts and constraints for Evolution Era 12 master prompt (in progress) |
+| [`next-master-prompt-input-2026-05-27-era14.md`](./next-master-prompt-input-2026-05-27-era14.md) | Facts and constraints for Evolution Era 15 master prompt |
+| [`era14-cycle-completion-scorecard-2026-05-27.md`](./era14-cycle-completion-scorecard-2026-05-27.md) | Era 14 GTM honesty / recert (cycles 1–5) + score 100/100 sustained |
+| [`next-master-prompt-input-2026-05-27-era13.md`](./next-master-prompt-input-2026-05-27-era13.md) | **Superseded** by era14 input for recurring prompts |
+| [`era13-cycle-completion-scorecard-2026-05-27.md`](./era13-cycle-completion-scorecard-2026-05-27.md) | Era 13 enterprise / operator depth (cycles 1–4) + score 100/100 |
+| [`next-master-prompt-input-2026-05-27-era12.md`](./next-master-prompt-input-2026-05-27-era12.md) | **Superseded** by era13 input for recurring prompts |
+| [`next-master-prompt-input-2026-05-27-era11.md`](./next-master-prompt-input-2026-05-27-era11.md) | **Superseded** by era12 input for recurring prompts |
 | [`era11-cycle-completion-scorecard-2026-05-27.md`](./era11-cycle-completion-scorecard-2026-05-27.md) | Era 11 DevOps / RBAC / KDS staging (cycles 1–4) + score 98/100 |
 | [`next-master-prompt-input-2026-05-27-era10.md`](./next-master-prompt-input-2026-05-27-era10.md) | **Superseded** by era11 input for recurring prompts |
 | [`era10-cycle-completion-scorecard-2026-05-27.md`](./era10-cycle-completion-scorecard-2026-05-27.md) | Era 10 customer value / operator depth (cycles 1–4) + score 97/100 |
@@ -461,6 +466,27 @@ Incremental refresh after Era 13 cycles 1–4 (enterprise delivery + operator de
 
 **Re-audit decision:** defer full repo re-audit until Era 14 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era13.md`.
 
+## Scorecard (Evolution Era 14 end — 2026-05-27)
+
+Incremental refresh after Era 14 cycles 1–5 (GTM honesty / recert from era13 handoff). Baseline = Era 13 end **100** overall.
+
+| Area | Era 13 end | Era 14 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 100 | **100** | +0 | five recert cycles; overall plateau |
+| Security | 82 | **82** | +0 | unchanged |
+| QA | 92 | **93** | +1 | recert operator checklists + smoke scripts |
+| DevOps | 98 | **99** | +1 | cron surface era14 recert |
+| RBAC | 89 | **90** | +1 | mutation access era14 recert |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 59 | **60** | +1 | channel golden path era14 recert |
+| KDS | 73 | **73** | +0 | unchanged |
+| Enterprise readiness | 66 | **66** | +0 | SSO/SCIM still `roadmap_only` |
+| Marketing/sales | 82 | **83** | +1 | nav page maturity era14 recert |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 15 delivery theme or major release; use `docs/next-master-prompt-input-2026-05-27-era14.md`.
+
 ---
 
 ## Validation
@@ -537,3 +563,4 @@ Incremental refresh after Era 13 cycles 1–4 (enterprise delivery + operator de
 | 2026-05-27 | Era 14 Cycle 3: `era14-mutation-access-consolidation-recert-v1` — registry/scoped-helper recert; smoke:mutation-access; no helper rewrite |
 | 2026-05-27 | Era 14 Cycle 4: `era14-cron-surface-recert-v1` — 16 production crons only; smoke:cron-surface; no new experimental routes |
 | 2026-05-27 | Era 14 Cycle 5: `era14-channel-golden-path-recert-v1` — Woo/Shopify path recert; smoke:channel-golden-path; no live marketplace claim |
+| 2026-05-27 | Era 14 Cycle 6: `era14-scorecard-refresh-v1` — score 100/100 sustained; era15 handoff |

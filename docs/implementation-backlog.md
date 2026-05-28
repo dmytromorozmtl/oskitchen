@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 14 — Nav / page maturity / RBAC / cron / integrations recert
 
+### KOS-E14-006 — Era 14 scorecard refresh (P1)
+- ID: `KOS-E14-006`
+- Title: Scorecard refresh and era15 master-prompt handoff
+- Module: Governance / Strategy
+- Priority: P1 (Era 14 Cycle 6)
+- Status: **completed**
+- Decision: `era14-scorecard-refresh-v1` — 100/100 sustained; sub-area +1 for recert depth; `docs/next-master-prompt-input-2026-05-27-era14.md`
+- Evidence: `lib/governance/era14-scorecard-policy.ts`, `docs/era14-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+- Next: Era 15 theme selection (SSO R2 or KDS ops recert per handoff)
+
 ### KOS-E14-005 — Channel golden path Era 14 recert (P1)
 - ID: `KOS-E14-005`
 - Title: Re-certify Woo/Shopify golden path and honest integration scope
