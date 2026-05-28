@@ -1,6 +1,7 @@
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PosShiftCloseForm } from "@/components/dashboard/pos-shift-close-form";
+import { PosShiftCloseHistoryPanel } from "@/components/dashboard/pos-shift-close-history-panel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,10 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
-import { listOpenShiftCloseoutPreviews } from "@/services/pos/pos-shift-service";
+import {
+  listOpenShiftCloseoutPreviews,
+  listRecentClosedShiftSummaries,
+} from "@/services/pos/pos-shift-service";
 
 export default async function PosShiftsPage() {
   const actor = await requireWorkspacePermissionActor();
@@ -26,7 +30,9 @@ export default async function PosShiftsPage() {
     );
   }
 
-  const [registers, staff, closeoutPreviews] = await Promise.all([
+  const canViewShiftHistory = canOpenShift || canCloseShift;
+
+  const [registers, staff, closeoutPreviews, closedShiftHistory] = await Promise.all([
     listPosRegisters(actor.userId),
     prisma.staffMember.findMany({
       where: { userId: actor.userId, status: "ACTIVE", archivedAt: null },
@@ -34,6 +40,7 @@ export default async function PosShiftsPage() {
       select: { id: true, name: true },
     }),
     canCloseShift ? listOpenShiftCloseoutPreviews(actor.userId) : Promise.resolve([]),
+    canViewShiftHistory ? listRecentClosedShiftSummaries(actor.userId) : Promise.resolve([]),
   ]);
 
   return (
@@ -41,7 +48,7 @@ export default async function PosShiftsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">POS shifts</h1>
         <p className="text-sm text-muted-foreground">
-          Open and close shifts — expected drawer cash and variance preview before close.
+          Open and close shifts — review recent closeouts and variance history.
         </p>
       </div>
 
@@ -113,6 +120,20 @@ export default async function PosShiftsPage() {
               previews={closeoutPreviews}
               formAction={posCloseShiftFormAction}
             />
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {canViewShiftHistory ? (
+        <Card className="border-border/80 shadow-sm">
+          <CardHeader>
+            <CardTitle>Recent closeouts</CardTitle>
+            <CardDescription>
+              Last 10 closed shifts — expected vs counted cash with variance badges.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PosShiftCloseHistoryPanel shifts={closedShiftHistory} />
           </CardContent>
         </Card>
       ) : null}

@@ -48,6 +48,27 @@ export function shiftVarianceToneClassName(tone: ShiftVarianceTone): string {
   }
 }
 
+export function shiftVarianceBadgeClassName(tone: ShiftVarianceTone): string {
+  switch (tone) {
+    case "balanced":
+      return "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-100";
+    case "short":
+      return "bg-rose-100 text-rose-900 dark:bg-rose-950 dark:text-rose-100";
+    case "over":
+      return "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-100";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+}
+
+export function formatShiftVarianceDisplay(variance: number | null): string {
+  if (variance === null) return "—";
+  const tone = classifyShiftVariance(variance);
+  if (tone === "balanced") return "Balanced";
+  const prefix = variance >= 0 ? "+" : "";
+  return `${prefix}${formatShiftCloseoutMoney(variance)}`;
+}
+
 export function shiftVarianceLabel(tone: ShiftVarianceTone): string {
   switch (tone) {
     case "balanced":

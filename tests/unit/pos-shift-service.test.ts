@@ -33,7 +33,7 @@ vi.mock("@/lib/scope/workspace-resource-scope", () => ({
 import { prisma } from "@/lib/prisma";
 import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
 import { ownerScopedAnd, posRegisterByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
-import { closePosShift, getShiftCloseoutVariance, listOpenShiftCloseoutPreviews, openPosShift } from "@/services/pos/pos-shift-service";
+import { closePosShift, getShiftCloseoutVariance, listOpenShiftCloseoutPreviews, listRecentClosedShiftSummaries, openPosShift } from "@/services/pos/pos-shift-service";
 
 describe("pos-shift-service", () => {
   beforeEach(() => {
@@ -287,5 +287,40 @@ describe("pos-shift-service", () => {
       expectedCash: 80,
       cashSalesTotal: 30,
     });
+  });
+
+  it("lists recent closed shift summaries for history panel", async () => {
+    vi.mocked(prisma.pOSShift.findMany).mockResolvedValue([
+      {
+        id: "shift-closed-1",
+        openedAt: new Date("2026-05-28T08:00:00.000Z"),
+        closedAt: new Date("2026-05-28T16:00:00.000Z"),
+        openingCashAmount: new Prisma.Decimal(50),
+        closingCashAmount: new Prisma.Decimal(75),
+        expectedCashAmount: new Prisma.Decimal(80),
+        varianceAmount: new Prisma.Decimal(-5),
+        notes: "Short after payout",
+        register: { name: "Front counter" },
+        closedByStaff: { name: "Alex Manager" },
+      },
+    ] as never);
+
+    const rows = await listRecentClosedShiftSummaries("owner-1", 10);
+
+    expect(rows).toEqual([
+      {
+        shiftId: "shift-closed-1",
+        registerName: "Front counter",
+        openedAtIso: "2026-05-28T08:00:00.000Z",
+        closedAtIso: "2026-05-28T16:00:00.000Z",
+        openingCash: 50,
+        closingCash: 75,
+        expectedCash: 80,
+        variance: -5,
+        notes: "Short after payout",
+        closedByName: "Alex Manager",
+      },
+    ]);
+    expect(ownerScopedAnd).toHaveBeenCalledWith("owner-1", { status: "CLOSED" });
   });
 });

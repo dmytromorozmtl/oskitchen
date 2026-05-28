@@ -235,3 +235,52 @@ export async function getShiftCloseoutVariance(
     cashSalesTotal: closeout.cashSalesTotal,
   };
 }
+
+export type ClosedShiftSummary = {
+  shiftId: string;
+  registerName: string;
+  openedAtIso: string;
+  closedAtIso: string;
+  openingCash: number;
+  closingCash: number;
+  expectedCash: number;
+  variance: number;
+  notes: string | null;
+  closedByName: string | null;
+};
+
+const DEFAULT_CLOSED_SHIFT_HISTORY_LIMIT = 10;
+
+/** Recent closed shifts for manager review — read-only, owner-scoped. */
+export async function listRecentClosedShiftSummaries(
+  userId: string,
+  limit = DEFAULT_CLOSED_SHIFT_HISTORY_LIMIT,
+): Promise<ClosedShiftSummary[]> {
+  const shiftWhere = (await ownerScopedAnd(userId, {
+    status: "CLOSED",
+  })) as Prisma.POSShiftWhereInput;
+  const rows = await prisma.pOSShift.findMany({
+    where: shiftWhere,
+    orderBy: { closedAt: "desc" },
+    take: limit,
+    include: {
+      register: { select: { name: true } },
+      closedByStaff: { select: { name: true } },
+    },
+  });
+
+  return rows
+    .filter((row) => row.closedAt != null)
+    .map((row) => ({
+      shiftId: row.id,
+      registerName: row.register.name,
+      openedAtIso: row.openedAt.toISOString(),
+      closedAtIso: row.closedAt!.toISOString(),
+      openingCash: Number(row.openingCashAmount),
+      closingCash: Number(row.closingCashAmount ?? 0),
+      expectedCash: Number(row.expectedCashAmount ?? 0),
+      variance: Number(row.varianceAmount ?? 0),
+      notes: row.notes ?? null,
+      closedByName: row.closedByStaff?.name ?? null,
+    }));
+}
