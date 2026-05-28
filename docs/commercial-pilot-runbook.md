@@ -136,13 +136,13 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Policy:** `era17-pilot-gono-go-v1` — **awaiting_customer_execution**; aggregates Era 17 evidence into one decision.
 
-1. Run **`npm run smoke:pilot-gono-go`** after Tier 0/1 + Tier 2 artifacts exist.
-2. Review **`artifacts/pilot-gono-go-summary.json`** — `decision`, `blockers`, `customerExecutionStatus`.
+1. Run **`npm run smoke:pilot-gono-go`** after Tier 0/1 + Tier 2 artifacts exist **and** `artifacts/pilot-forbidden-claims-enforcement-summary.json` is fresh.
+2. Review **`artifacts/pilot-gono-go-summary.json`** — `decision`, `blockers`, `customerExecutionStatus`, `evidenceGates` (includes forbidden-claims enforcement).
 3. Set `PILOT_GONOGO_ICP_INPUT_JSON` from prospect qualification; default empty → **NOT QUALIFIED** → **NO-GO**.
 4. Record `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` only when real LOI signed — **never fake customer execution**.
-5. **NO-GO is expected** until tiers pass, ICP qualifies, role checklists complete, and customer LOI recorded.
+5. **NO-GO is expected** until tiers pass, forbidden-claims enforcement passes, ICP qualifies, role checklists complete, and customer LOI recorded.
 
-**Execution status (2026-05-28):** smoke re-run → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). Tier preflight `overall: FAILED` locally (`test:ci:scorecard:cert` exit 1; governance bundles skipped); Tier 2 golden path incomplete; ICP not qualified; no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
+**Execution status (2026-05-28):** smoke re-run → **decision: NO-GO** (`customerExecutionStatus: skipped_missing_customer`). Tier preflight `overall: FAILED` locally; Tier 2 golden path incomplete; ICP not qualified; forbidden-claims gate wired into GO/NO-GO evaluator; no LOI. Artifact: `artifacts/pilot-gono-go-summary.json`. **Do not treat as paid pilot GO.**
 
 ### Era 17 pilot forbidden-claims enforcement (2026-05-28)
 
@@ -154,7 +154,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 4. **FAIL blocks paid pilot sales** until GTM copy, claims registry, or procurement pack is corrected.
 5. Chain into Tier 1 preflight and ICP pre-signature checklist (`pilot-icp-contract-template-era17.md`).
 
-**Execution status (2026-05-28):** local smoke → **overall: PASSED** (`claimsEnforcementProofStatus: proof_passed`). Strict verify-claims, registry audit, and procurement cert chain green on commit `c88be6b`. Re-run on **release branch** before each pilot contract signature.
+**Execution status (2026-05-28):** local smoke re-run on current HEAD → **overall: PASSED** (`claimsEnforcementProofStatus: proof_passed`). Strict verify-claims, registry audit, and procurement cert chain green. Wired into **`era17-pilot-gono-go-v1`** evidence gates — GO/NO-GO blocks when artifact missing or not `proof_passed`. Re-run on **release branch** before each pilot contract signature.
 
 ### Era 17 KDS staging Playwright proof (2026-05-28)
 

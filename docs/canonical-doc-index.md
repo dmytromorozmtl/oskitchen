@@ -202,10 +202,10 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **8** | **Pilot ICP + contract template** | `era17-pilot-icp-contract-v1`; **template_ready** — [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) |
 | **9** | **Pilot Tier 0/1 preflight** | `era17-pilot-tier-preflight-v1`; **awaiting_tier_preflight_pass** — `smoke:pilot-tier-preflight`; `artifacts/pilot-tier-preflight-summary.json` |
 | **10** | **Pilot operator golden path** | `era17-pilot-operator-golden-path-v1`; **awaiting_operator_execution** — [`pilot-operator-golden-path-era17.md`](./pilot-operator-golden-path-era17.md); `smoke:pilot-operator-golden-path` |
-| **11** | **Pilot GO/NO-GO evaluator** | `era17-pilot-gono-go-v1`; **awaiting_customer_execution** — smoke re-run **NO-GO** until tiers + ICP + LOI |
+| **11** | **Pilot GO/NO-GO evaluator** | `era17-pilot-gono-go-v1`; **awaiting_customer_execution** — smoke re-run **NO-GO** until tiers + forbidden-claims + ICP + LOI |
 | **12** | **Pilot metrics baseline** | `era17-pilot-metrics-baseline-v1`; **awaiting_baseline_capture** — [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md); `smoke:pilot-metrics-baseline` |
 | **13** | **Pilot rollback drill** | `era17-pilot-rollback-drill-v1`; **awaiting_rollback_drill_execution** — [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md); `smoke:pilot-rollback-drill` |
-| **14** | **Forbidden-claims enforcement** | `era17-pilot-forbidden-claims-enforcement-v1`; **awaiting_forbidden_claims_enforcement_pass** — `smoke:pilot-forbidden-claims-enforcement` |
+| **14** | **Forbidden-claims enforcement** | `era17-pilot-forbidden-claims-enforcement-v1`; **forbidden_claims_enforcement_wired** — GO/NO-GO gate; re-run on release branch before contract |
 
 ## Evolution Era 10 cycle ledger
 
@@ -693,6 +693,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 22: `era17-pos-manager-discount-v1` — manager discount guard + COMPED RBAC edge cases; **discount_guard_depth_enforced** |
 | 2026-05-28 | Era 17 Cycle 23: `era17-public-post-abuse-v1` — P1 public POST route rate limits; **p1_public_post_guards_expanded** |
 | 2026-05-28 | Era 17 Cycle 24: `era17-pos-operator-runbook-v1` — software-only POS golden path runbook; **operator_runbook_ready** |
+| 2026-05-28 | Era 17 P0 #5: forbidden-claims enforcement wired into GO/NO-GO evaluator; smoke re-run **proof_passed**; **forbidden_claims_enforcement_wired** |
 | 2026-05-28 | Era 17 P0 #4 re-run: paid pilot GO/NO-GO → **NO-GO**; tier preflight `overall: SKIPPED` honesty fix |
 | 2026-05-28 | Era 17 P0 #3 re-run: Woo/Shopify live smoke → synthetic cert PASSED; live proof **SKIPPED WITH REASON** (`overall: SKIPPED`; 3 env vars) |
 | 2026-05-28 | Era 17 P0 #2 re-run: staging workflows first green → wiring cert PASSED; GitHub proof **SKIPPED WITH REASON** (`overall: SKIPPED`; 3 env vars); cert script no longer clobbers artifact |

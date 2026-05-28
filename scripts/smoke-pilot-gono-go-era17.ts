@@ -20,6 +20,7 @@ import {
   formatPilotGoNoGoReportLines,
   parseEnvBoolean,
   parsePilotIcpInputFromJson,
+  type PilotForbiddenClaimsEnforcementArtifact,
   type PilotGoldenPathArtifact,
   type PilotTierPreflightArtifact,
 } from "../lib/commercial/pilot-gono-go-summary";
@@ -80,10 +81,14 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
   const goldenPath = loadArtifact<PilotGoldenPathArtifact>(
     "artifacts/pilot-operator-golden-path-summary.json",
   );
+  const forbiddenClaimsEnforcement = loadArtifact<PilotForbiddenClaimsEnforcementArtifact>(
+    "artifacts/pilot-forbidden-claims-enforcement-summary.json",
+  );
 
   const summary = buildPilotGoNoGoSummary({
     preflight,
     goldenPath,
+    forbiddenClaimsEnforcement,
     icpInput: parsePilotIcpInputFromJson(process.env.PILOT_GONOGO_ICP_INPUT_JSON),
     customerName: process.env.PILOT_GONOGO_CUSTOMER_NAME ?? null,
     loiSignedDate: process.env.PILOT_GONOGO_LOI_SIGNED_DATE ?? null,

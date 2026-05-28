@@ -200,9 +200,9 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Title: Era 17 P0 #5 — pre-sales forbidden-claims enforcement orchestrator
 - Module: Commercial / GTM / Governance
 - Priority: P0 (Workstream D — forbidden claims before pilot sales)
-- Status: **awaiting_forbidden_claims_enforcement_pass**
-- Decision: `era17-pilot-forbidden-claims-enforcement-v1` — strict verify-claims + registry audit + procurement cert chain
-- Evidence: `lib/commercial/pilot-forbidden-claims-enforcement-era17-policy.ts`, `scripts/smoke-pilot-forbidden-claims-enforcement-era17.ts`, `artifacts/pilot-forbidden-claims-enforcement-summary.json` (**claimsEnforcementProofStatus: proof_passed** locally 2026-05-28)
+- Status: **forbidden_claims_enforcement_wired** — smoke PASS locally; GO/NO-GO gate active
+- Decision: `era17-pilot-forbidden-claims-enforcement-v1` — strict verify-claims + registry audit + procurement cert chain; consumed by `era17-pilot-gono-go-v1`
+- Evidence: `lib/commercial/pilot-forbidden-claims-enforcement-era17-policy.ts`, `lib/commercial/pilot-gono-go-summary.ts` (`deriveForbiddenClaimsEnforcementPass`), `scripts/smoke-pilot-forbidden-claims-enforcement-era17.ts`, `artifacts/pilot-forbidden-claims-enforcement-summary.json` (**claimsEnforcementProofStatus: proof_passed** re-run 2026-05-28)
 - Next: Re-run on release branch before each pilot contract; FAIL blocks sales until copy/registry/procurement corrected
 
 ### KOS-E17-013 — Pilot rollback drill + retrospective (P0)

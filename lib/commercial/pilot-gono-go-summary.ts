@@ -55,6 +55,12 @@ export type PilotGoldenPathArtifact = {
   };
 };
 
+export type PilotForbiddenClaimsEnforcementArtifact = {
+  overall?: string;
+  claimsEnforcementProofStatus?: string;
+  commitSha?: string | null;
+};
+
 export function parseEnvBoolean(raw: string | undefined): boolean | undefined {
   if (raw === undefined) return undefined;
   const value = raw.trim().toLowerCase();
@@ -134,6 +140,29 @@ export function deriveTier2Pass(goldenPath: PilotGoldenPathArtifact | null): Pil
   };
 }
 
+export function deriveForbiddenClaimsEnforcementPass(
+  artifact: PilotForbiddenClaimsEnforcementArtifact | null,
+): PilotGoNoGoEvidenceGate {
+  if (!artifact) {
+    return {
+      id: "forbidden_claims_enforcement",
+      label: "Pre-sales forbidden-claims enforcement",
+      pass: false,
+      reason:
+        "artifacts/pilot-forbidden-claims-enforcement-summary.json missing — run smoke:pilot-forbidden-claims-enforcement",
+    };
+  }
+  const pass = artifact.claimsEnforcementProofStatus === "proof_passed";
+  return {
+    id: "forbidden_claims_enforcement",
+    label: "Pre-sales forbidden-claims enforcement",
+    pass,
+    reason: pass
+      ? "claimsEnforcementProofStatus proof_passed"
+      : `claimsEnforcementProofStatus=${artifact.claimsEnforcementProofStatus ?? "unknown"} overall=${artifact.overall ?? "unknown"}`,
+  };
+}
+
 export function deriveCustomerExecution(input: {
   customerName?: string | null;
   loiSignedDate?: string | null;
@@ -167,6 +196,7 @@ export function deriveCustomerExecution(input: {
 export function buildPilotGoNoGoEvaluatorInput(input: {
   preflight: PilotTierPreflightArtifact | null;
   goldenPath: PilotGoldenPathArtifact | null;
+  forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
   icpInput: PilotIcpQualificationInput;
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
@@ -179,6 +209,9 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   const tier0 = deriveTier0Pass(input.preflight);
   const tier1 = deriveTier1Pass(input.preflight);
   const tier2 = deriveTier2Pass(input.goldenPath);
+  const forbiddenClaimsEnforcement = deriveForbiddenClaimsEnforcementPass(
+    input.forbiddenClaimsEnforcement,
+  );
   const icpQualification = evaluatePilotIcpQualification(input.icpInput);
 
   const stagingUrl = input.goldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
@@ -202,13 +235,14 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   return {
     evaluatorInput,
     icpQualification,
-    evidenceGates: [tier0, tier1, tier2],
+    evidenceGates: [tier0, tier1, tier2, forbiddenClaimsEnforcement],
   };
 }
 
 export function buildPilotGoNoGoSummary(input: {
   preflight: PilotTierPreflightArtifact | null;
   goldenPath: PilotGoldenPathArtifact | null;
+  forbiddenClaimsEnforcement: PilotForbiddenClaimsEnforcementArtifact | null;
   icpInput: PilotIcpQualificationInput;
   customerName?: string | null;
   loiSignedDate?: string | null;
@@ -229,6 +263,15 @@ export function buildPilotGoNoGoSummary(input: {
 
   if (customer.status === "skipped_missing_customer") {
     blockers.push("No signed LOI / customer on record (era17-pilot-gono-go-v1)");
+  }
+
+  const forbiddenClaimsGate = built.evidenceGates.find(
+    (gate) => gate.id === "forbidden_claims_enforcement",
+  );
+  if (forbiddenClaimsGate && !forbiddenClaimsGate.pass) {
+    blockers.push(
+      "Pre-sales forbidden-claims enforcement not passed (era17-pilot-forbidden-claims-enforcement-v1)",
+    );
   }
 
   let decision = evaluation.decision;
