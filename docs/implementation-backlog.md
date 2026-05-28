@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-039 — Integration health recovery convergence (Convergence Pillar 1+3)
+- ID: `KOS-E19-039`
+- Title: Era 19 Convergence Cycle 39 — unify Today integration-health tile, smoke next-action, and risk radar to one recovery path
+- Module: Owner Daily Briefing / Integration Health Center / Risk radar
+- Priority: P1 convergence (trust engine — one path from Today to smoke proof or recovery checklist)
+- Status: **briefing_integration_recovery_convergence_wired**
+- Decision: `era19-owner-daily-briefing-integration-recovery-convergence-v1` — smoke blockers → `#integration-health-smoke-next-action`; connection issues → `#integration-recovery-checklist`; owner ranked action dedupes generic integration-health action
+- Evidence: `owner-daily-briefing-integration-recovery-convergence-era19.ts`, updated briefing service + risk radar + tile-links audit
+- Next: P0 proof unblock when ops credentials available, or shift open → closeout command-flow convergence in briefing
+
 ### KOS-E19-038 — Fulfillment command flow convergence (Convergence Pillar 1+4)
 - ID: `KOS-E19-038`
 - Title: Era 19 Convergence Cycle 38 — unify storefront order → KDS → packing deep-links on Today for owner and manager packs

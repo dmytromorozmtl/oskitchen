@@ -10,10 +10,10 @@ import {
   OWNER_DAILY_BRIEFING_RISK_RADAR_ERA19_POLICY_ID,
   type OwnerDailyBriefingRiskCategory,
 } from "@/lib/briefing/owner-daily-briefing-risk-radar-era19-policy";
-import { INTEGRATION_HEALTH_RECOVERY_ANCHOR } from "@/lib/integrations/integration-health-recovery-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { IntegrationHealthSmokeNextAction } from "@/lib/integrations/integration-health-smoke-artifacts-depth-era19";
 import { enrichBriefingRiskSignalsWithSmokeNextAction } from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
+import { resolveBriefingIntegrationRecoveryHref } from "@/lib/briefing/owner-daily-briefing-integration-recovery-convergence-era19";
 import { resolveBriefingOverdueProductionHref } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import type { TodayBlocker } from "@/services/today/today-command-center-service";
 
@@ -138,6 +138,7 @@ function commercialRiskSignals(
 
 function liveSmokeRiskSignals(
   integrationHealth: OwnerDailyBriefingIntegrationHealthSlice | null | undefined,
+  integrationRecoveryHref: string,
 ): OwnerDailyBriefingRiskSignal[] {
   if (!integrationHealth?.channelSmokeOverall) return [];
 
@@ -157,7 +158,7 @@ function liveSmokeRiskSignals(
         overall === "FAILED"
           ? "Engineering live smoke failed — fix credentials and product mapping before pilot scale."
           : "Live smoke SKIPPED WITH REASON or missing — in-app pilot ready ≠ LIVE marketplace claim.",
-      href: `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
+      href: integrationRecoveryHref,
       severity: overall === "FAILED" ? "critical" : "high",
       statusLabel: overall,
       honestNote: "Never claim LIVE without artifact PASS.",
@@ -194,6 +195,7 @@ function operationalRiskSignals(input: {
   productionCalendarSummary?: { overdue: number; dueToday: number } | null;
   lowStockCount: number;
   ingredientParConfigured: boolean;
+  integrationRecoveryHref: string;
 }): OwnerDailyBriefingRiskSignal[] {
   const signals: OwnerDailyBriefingRiskSignal[] = [];
 
@@ -263,7 +265,7 @@ function operationalRiskSignals(input: {
       categoryLabel: OWNER_DAILY_BRIEFING_RISK_CATEGORY_LABEL.integration_failure,
       title: "Integration reliability at risk",
       detail,
-      href: `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
+      href: input.integrationRecoveryHref,
       severity: input.integrationOverall === "down" ? "critical" : "high",
       statusLabel: input.integrationOverall.replace("_", " "),
       priority: input.integrationOverall === "down" ? 2 : 7,
@@ -366,6 +368,13 @@ export function buildOwnerDailyBriefingRiskSignals(input: {
   ingredientParConfigured: boolean;
   smokeNextAction?: IntegrationHealthSmokeNextAction | null;
 }): OwnerDailyBriefingRiskSignal[] {
+  const integrationRecoveryHref = resolveBriefingIntegrationRecoveryHref({
+    integrationOverall: input.integrationOverall,
+    integrationHealth: input.integrationHealth ?? null,
+    smokeNextAction: input.smokeNextAction ?? null,
+    errorIntegrations: input.kpis.errorIntegrations,
+    webhooksNeedingAttention: input.kpis.webhooksNeedingAttention,
+  });
   const signals: OwnerDailyBriefingRiskSignal[] = [];
   const seen = new Set<string>();
 
@@ -373,14 +382,17 @@ export function buildOwnerDailyBriefingRiskSignals(input: {
     pushUniqueSignal(signals, seen, signal);
   }
 
-  for (const signal of liveSmokeRiskSignals(input.integrationHealth)) {
+  for (const signal of liveSmokeRiskSignals(input.integrationHealth, integrationRecoveryHref)) {
     pushUniqueSignal(signals, seen, signal);
   }
 
   const ssoSignal = ssoWorkspaceRiskSignal(input);
   if (ssoSignal) pushUniqueSignal(signals, seen, ssoSignal);
 
-  for (const signal of operationalRiskSignals(input)) {
+  for (const signal of operationalRiskSignals({
+    ...input,
+    integrationRecoveryHref,
+  })) {
     pushUniqueSignal(signals, seen, signal);
   }
 

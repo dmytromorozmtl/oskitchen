@@ -87,6 +87,12 @@ import {
   type FulfillmentCommandFlowBriefingInput,
 } from "@/lib/briefing/owner-daily-briefing-fulfillment-command-flow-era19";
 import {
+  buildBriefingIntegrationRecoveryConvergedAction,
+  enrichBriefingIntegrationRecoveryPackTiles,
+  mergeBriefingIntegrationRecoveryTopActions,
+  type BriefingIntegrationRecoveryInput,
+} from "@/lib/briefing/owner-daily-briefing-integration-recovery-convergence-era19";
+import {
   buildBriefingSmokeNextActionRankedAction,
   mergeBriefingSmokeNextTopActions,
 } from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
@@ -305,6 +311,13 @@ export async function loadOwnerDailyBriefing(
     ? await loadPilotIntegrationHealthStripModelForWorkspace(userId).catch(() => null)
     : null;
 
+  const integrationHealthSlice = integrationHealth
+    ? buildOwnerDailyBriefingIntegrationHealthSlice({
+        model: integrationHealth,
+        p0Summary: commercialOps?.p0Staging.summary ?? null,
+      })
+    : null;
+
   const pilotAttentionItems = pickImplementationPilotReadinessAttentionItems(pilotReadiness);
   const pilotSummary = summarizeImplementationPilotReadiness(pilotAttentionItems);
 
@@ -373,6 +386,14 @@ export async function loadOwnerDailyBriefing(
     posKitchenQueueToday: today.kpis.posKitchenQueueToday,
   };
 
+  const integrationRecoveryInput: BriefingIntegrationRecoveryInput = {
+    integrationOverall: briefingInput.integrationOverall,
+    integrationHealth: integrationHealthSlice,
+    smokeNextAction,
+    errorIntegrations: today.kpis.errorIntegrations,
+    webhooksNeedingAttention: today.kpis.webhooksNeedingAttention,
+  };
+
   const baseTiles =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminTiles({
@@ -408,15 +429,18 @@ export async function loadOwnerDailyBriefing(
               fulfillmentCommandFlowInput,
             )
           : rolePack === "owner"
-            ? enrichBriefingFulfillmentCommandFlowPackTiles(
-                options?.launchWizard
-                  ? enrichBriefingLaunchWizardPackTiles({
-                      tiles: enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
-                      nextStep: options.launchWizard.nextStep,
-                      progress: options.launchWizard.progress,
-                    })
-                  : enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
-                fulfillmentCommandFlowInput,
+            ? enrichBriefingIntegrationRecoveryPackTiles(
+                enrichBriefingFulfillmentCommandFlowPackTiles(
+                  options?.launchWizard
+                    ? enrichBriefingLaunchWizardPackTiles({
+                        tiles: enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
+                        nextStep: options.launchWizard.nextStep,
+                        progress: options.launchWizard.progress,
+                      })
+                    : enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
+                  fulfillmentCommandFlowInput,
+                ),
+                integrationRecoveryInput,
               )
             : baseTiles;
   const allAlerts =
@@ -532,8 +556,17 @@ export async function loadOwnerDailyBriefing(
   } else if (rolePack === "owner" && launchWizardSetupAction) {
     allTopActions = mergeBriefingLaunchWizardTopActions(launchWizardSetupAction, allTopActions);
   }
-  if (needsCommercialOps && smokeNextActionRanked) {
+  if (needsCommercialOps && smokeNextActionRanked && rolePack === "support_admin") {
     allTopActions = mergeBriefingSmokeNextTopActions(smokeNextActionRanked, allTopActions);
+  }
+  if (rolePack === "owner") {
+    const integrationRecoveryAction =
+      buildBriefingIntegrationRecoveryConvergedAction(integrationRecoveryInput);
+    if (integrationRecoveryAction) {
+      allTopActions = mergeBriefingIntegrationRecoveryTopActions(allTopActions, [
+        integrationRecoveryAction,
+      ]);
+    }
   }
   if (rolePack === "owner") {
     allTopActions = mergeBriefingFulfillmentCommandFlowTopActions(
@@ -573,13 +606,8 @@ export async function loadOwnerDailyBriefing(
       })
     : null;
 
-  const integrationHealthSlice =
-    showIntegrationHealthLane && integrationHealth
-      ? buildOwnerDailyBriefingIntegrationHealthSlice({
-          model: integrationHealth,
-          p0Summary: commercialOps?.p0Staging.summary ?? null,
-        })
-      : null;
+  const integrationHealthSliceForPayload =
+    showIntegrationHealthLane && integrationHealthSlice ? integrationHealthSlice : null;
 
   const showRiskRadarLane = shouldShowBriefingRiskRadarLane(rolePack);
   const riskRadar: OwnerDailyBriefingRiskRadarSlice | null = showRiskRadarLane
@@ -641,7 +669,7 @@ export async function loadOwnerDailyBriefing(
     nextAction,
     productionCalendar: showProductionCalendarLane ? productionCalendarSlice : null,
     pilotReadiness: pilotReadinessSlice,
-    integrationHealth: integrationHealthSlice,
+    integrationHealth: integrationHealthSliceForPayload,
     showRiskRadarLane,
     riskRadar,
     summary: {

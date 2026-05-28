@@ -182,6 +182,13 @@ export function resolveBriefingTileCanonicalHref(
   if (tileId === "fulfillment-command-flow" && fallbackHref.startsWith("/dashboard")) {
     return fallbackHref;
   }
+  if (
+    tileId === "integration-health" &&
+    (fallbackHref.includes("#integration-health-smoke-next-action") ||
+      fallbackHref.includes("#integration-recovery-checklist"))
+  ) {
+    return fallbackHref;
+  }
   if (tileId === "kds-priority-lane") {
     return fallbackHref;
   }
@@ -265,7 +272,7 @@ export function auditBriefingTileLinks(tiles: readonly OwnerDailyBriefingTile[])
     if (!tile.whyItMatters?.trim()) {
       issues.push(`${tile.id}: missing whyItMatters microcopy`);
     }
-    if (tile.id === "integration-health" && tile.href !== "/dashboard/integration-health") {
+    if (tile.id === "integration-health" && !tile.href.startsWith("/dashboard/integration-health")) {
       issues.push(`${tile.id}: must link to integration health center`);
     }
     if (
