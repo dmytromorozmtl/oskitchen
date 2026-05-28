@@ -104,6 +104,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **Inventory depletion POS-only policy** | `lib/inventory/inventory-depletion-policy.ts` (`era4-pos-only-v1`); `test:ci:inventory-depletion:cert`; matrix + positioning honesty |
 | **2** | **POS browser E2E CI policy** | `lib/ci/pos-browser-e2e-policy.ts` (`era4-tier2b-optional-v1`); `test:ci:pos-browser-e2e:policy`; `pos-browser-e2e-summary` artifact |
+| **3** | **RBAC wave 4 residuals (batch 1)** | `test:ci:rbac-wave4`; routes/copilot/demo/feedback/integration-menu-sync/production-calendar/holiday-packages |
 
 ## Evolution Era 3 cycle ledger (governance CI certification)
 
@@ -177,3 +178,4 @@ Incremental refresh after Era 3 cycles 42–52 (governance CI certification wiri
 | 2026-05-27 | Era 3 Cycle 52: incremental scorecard refresh + `test:ci:scorecard:cert` |
 | 2026-05-27 | Era 4 Cycle 1: POS-only inventory depletion policy + cert gate expansion |
 | 2026-05-27 | Era 4 Cycle 2: POS browser E2E explicit PASSED/SKIPPED/FAILED policy + CI artifact |
+| 2026-05-27 | Era 4 Cycle 3: RBAC wave 4 batch 1 + `test:ci:rbac-wave4` |

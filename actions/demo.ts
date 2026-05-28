@@ -5,14 +5,10 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireDemoWorkspaceMutation } from "@/lib/demo/require-demo-mutation";
 import type { DemoVerticalSlug } from "@/lib/demo-verticals";
 import { parseDemoVertical } from "@/lib/demo-verticals";
 import { prisma } from "@/lib/prisma";
-import {
-  areDemoWorkspaceMutationsAllowed,
-  demoWorkspaceBlockedInProductionMessage,
-} from "@/lib/production-guards";
 import { safeError } from "@/lib/security";
 import { trackUsageEvent } from "@/lib/usage";
 import { clearWorkspaceSampleData, seedDemoWorkspace } from "@/services/demo-data";
@@ -21,10 +17,9 @@ export async function importDemoWorkspace(options?: {
   vertical?: DemoVerticalSlug;
 }) {
   try {
-    if (!areDemoWorkspaceMutationsAllowed()) {
-      return { error: demoWorkspaceBlockedInProductionMessage() };
-    }
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireDemoWorkspaceMutation({ operation: "demo.import_workspace" });
+    if (!gate.ok) return { error: gate.error };
+    const { sessionUser: user, dataUserId } = gate.actor;
     const vertical = options?.vertical ?? "meal-prep";
     await seedDemoWorkspace(user.id, vertical);
     void trackUsageEvent({
@@ -56,10 +51,9 @@ export async function importDemoWorkspaceFromForm(formData: FormData) {
 
 export async function resetDemoWorkspace() {
   try {
-    if (!areDemoWorkspaceMutationsAllowed()) {
-      return { error: demoWorkspaceBlockedInProductionMessage() };
-    }
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const gate = await requireDemoWorkspaceMutation({ operation: "demo.reset_workspace" });
+    if (!gate.ok) return { error: gate.error };
+    const { sessionUser: user, dataUserId } = gate.actor;
     const settings = await prisma.kitchenSettings.findUnique({
       where: { userId: dataUserId },
     });

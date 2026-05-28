@@ -287,6 +287,12 @@ Priority rule:
 - Priority order: 16 (P1 governance)
 - Estimated complexity: Low
 
+## Era 4 — RBAC wave 4 residuals batch 1 (P0-3)
+
+- **Completed (Cycle 3, 2026-05-27):** Denial audits + negative tests for delivery routes (`routes.manage`), Copilot mutations (`requireCopilotMutation`), demo/golden scenario (`templates.manage` + production guard), in-app feedback (session required), integration menu sync (certified tests), production calendar (`production.manage`), holiday packages (`growth.manage`).
+- **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
+- **Next:** Batch 2 — restaurant tables, customer-subscription, any remaining tenant-only sensitive mutations.
+
 ## Era 4 — POS browser E2E CI policy (P0-2)
 
 - **Decision (Cycle 2, 2026-05-27):** Option C — tier-2b **always-on** unit/integration/inventory; Playwright browser E2E **optional** when `E2E_LOGIN_EMAIL` + `E2E_LOGIN_PASSWORD` secrets exist; **always-on** policy step reports `PASSED` / `SKIPPED` / `FAILED` and uploads `pos-browser-e2e-summary` artifact.

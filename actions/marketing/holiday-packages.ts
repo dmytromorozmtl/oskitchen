@@ -5,6 +5,9 @@ import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 
@@ -20,9 +23,32 @@ const createHolidayPackageSchema = z.object({
     .transform((v) => (v?.trim() ? v.trim() : undefined)),
 });
 
+async function requireHolidayPackageMutation(
+  operation: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const permission: PermissionKey = "growth.manage";
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "holiday_packages.permission_denied",
+      entityType: "HolidayPackage",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false, error: access.error };
+  }
+  return { ok: true };
+}
+
 export async function createHolidayPackageAction(
   formData: FormData,
 ): Promise<ActionResult<void>> {
+  const gate = await requireHolidayPackageMutation("holiday_packages.create");
+  if (!gate.ok) {
+    return fail(gate.error);
+  }
+
   const parsed = createHolidayPackageSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     return fail(parsed.error.issues[0]?.message ?? "Invalid package data");

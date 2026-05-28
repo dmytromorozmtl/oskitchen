@@ -5,7 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { AppFeedbackPriority, AppFeedbackType } from "@prisma/client";
 import { z } from "zod";
 
-import { getSessionUser } from "@/lib/auth";
+import { requireAppFeedbackSubmit } from "@/lib/feedback/require-app-feedback-submit";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 
@@ -22,9 +22,10 @@ export async function submitAppFeedback(formData: FormData) {
     const hp = formData.get("feedback_hp")?.toString().trim();
     if (hp) return { ok: true as const };
 
-    const session = await getSessionUser();
-    const userId = session?.id ?? null;
-    const email = session?.email ?? null;
+    const gate = await requireAppFeedbackSubmit();
+    if (!gate.ok) {
+      return { error: gate.error };
+    }
 
     const parsed = schema.safeParse({
       type: formData.get("type"),
@@ -41,8 +42,8 @@ export async function submitAppFeedback(formData: FormData) {
     const d = parsed.data;
     await prisma.appFeedback.create({
       data: {
-        userId,
-        email: email?.toLowerCase() ?? null,
+        userId: gate.userId,
+        email: gate.email?.toLowerCase() ?? null,
         type: d.type,
         title: d.title.trim(),
         message: d.message.trim(),

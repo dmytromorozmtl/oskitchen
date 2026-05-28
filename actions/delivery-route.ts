@@ -45,7 +45,7 @@ function revalidateRoutes(routeId?: string) {
 
 export async function createDeliveryRouteFromOrdersAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.create_from_orders" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = buildSchema.safeParse({
@@ -134,7 +134,7 @@ const manualRouteSchema = z.object({
 
 export async function createManualRouteAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.create_manual" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = manualRouteSchema.safeParse({
@@ -183,7 +183,7 @@ const reorderSchema = z.object({
 
 export async function reorderStopAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.reorder_stop" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = reorderSchema.safeParse({
@@ -230,7 +230,7 @@ const stopStatusSchema = z.object({
 
 export async function updateStopStatusAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.update_stop_status" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = stopStatusSchema.safeParse({
@@ -273,7 +273,7 @@ const assignDriverSchema = z.object({
 
 export async function assignDriverAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.assign_driver" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = assignDriverSchema.safeParse({
@@ -312,7 +312,7 @@ const driverSchema = z.object({
 
 export async function createDriverAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.create_driver" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = driverSchema.safeParse({
@@ -361,7 +361,7 @@ function toDecimal(value: string | null | undefined): number | null {
 
 export async function createZoneAction(formData: FormData) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.create_zone" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const parsed = zoneSchema.safeParse({
@@ -403,7 +403,7 @@ export async function createZoneFormAction(formData: FormData): Promise<void> {
 
 export async function recordManifestPrintedAction(routeId: string) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.record_manifest_printed" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const route = await prisma.deliveryRoute.findFirst({
@@ -421,7 +421,7 @@ export async function recordManifestPrintedAction(routeId: string) {
 
 export async function recordUberQuotePlaceholderAction(routeId: string) {
   try {
-    const access = await requireRouteMutation();
+    const access = await requireRouteMutation({ operation: "delivery_route.record_uber_quote_placeholder" });
     if (!access.ok) return { error: access.error };
     const { sessionUser: user, dataUserId } = access.actor;
     const route = await prisma.deliveryRoute.findFirst({

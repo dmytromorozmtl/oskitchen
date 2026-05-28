@@ -23,7 +23,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-tier2b-optional-v1` — always-on unit/integration/inventory; optional Playwright; always-on policy summary + artifact
 - Evidence: `lib/ci/pos-browser-e2e-policy.ts`, `scripts/pos-browser-e2e-ci-policy.ts`, `.github/workflows/ci.yml`, `test:ci:pos-browser-e2e:policy`, `test:ci:pos-money-path:cert`
-- Next: RBAC wave 4 residuals
+- Next: RBAC wave 4 residuals (batch 2)
+
+### KOS-E4-003 — RBAC wave 4 residuals (batch 1)
+- ID: `KOS-E4-003`
+- Title: Close residual sensitive mutations (routes, copilot, demo, feedback, integrations, production calendar, holiday packages)
+- Module: Platform / security
+- Priority: P0 (Era 4 Cycle 3)
+- Status: **completed (batch 1)**
+- Evidence: `lib/routes/require-route-mutation.ts`, `lib/ai/require-copilot-mutation.ts`, `lib/demo/require-demo-mutation.ts`, `lib/feedback/require-app-feedback-submit.ts`, `test:ci:rbac-wave4`, `test:ci:rbac-wave4:cert`
+- Remaining batch 2: restaurant tables, customer-subscription, other tenant-only surfaces per re-audit §5.2
 
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations

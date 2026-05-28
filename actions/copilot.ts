@@ -5,10 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { createCopilotActorScope } from "@/lib/ai/copilot-actor-scope";
-import { canUseCopilot } from "@/lib/ai/copilot-permissions";
-import type { CopilotActorScope } from "@/lib/ai/copilot-types";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { requireCopilotMutation } from "@/lib/ai/require-copilot-mutation";
 import {
   createCopilotActionDraft,
   executeApprovedAction,
@@ -21,16 +18,6 @@ import {
 
 const COPILOT_PATH = "/dashboard/copilot";
 
-function scopeFor(
-  actor: Awaited<ReturnType<typeof requireWorkspacePermissionActor>>,
-): CopilotActorScope & {
-  userId: string;
-  workspaceId?: string | null;
-  email: string | null;
-} {
-  return createCopilotActorScope(actor);
-}
-
 const chatSchema = z.object({
   conversationId: z.string().uuid().nullish(),
   message: z.string().min(1).max(2000),
@@ -40,13 +27,15 @@ export async function chatTurnAction(
   input: z.infer<typeof chatSchema>,
 ): Promise<{ ok: boolean; conversationId?: string; reply?: string; status?: string; error?: string }> {
   try {
-    const actor = await requireWorkspacePermissionActor();
-    const scope = scopeFor(actor);
-    if (!canUseCopilot(scope, "copilot.chat")) {
-      return { ok: false, error: "Forbidden" };
+    const gate = await requireCopilotMutation({
+      capability: "copilot.chat",
+      operation: "copilot.chat_turn",
+    });
+    if (!gate.ok) {
+      return { ok: false, error: gate.error };
     }
     const parsed = chatSchema.parse(input);
-    const result = await runChatTurn(scope, {
+    const result = await runChatTurn(gate.scope, {
       conversationId: parsed.conversationId ?? null,
       message: parsed.message,
     });
@@ -82,9 +71,11 @@ const draftSchema = z.object({
 });
 
 export async function createActionDraftAction(formData: FormData): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.actions.draft")) return;
+  const gate = await requireCopilotMutation({
+    capability: "copilot.actions.draft",
+    operation: "copilot.create_action_draft",
+  });
+  if (!gate.ok) return;
   const parsed = draftSchema.parse({
     actionType: String(formData.get("actionType") ?? ""),
     title: String(formData.get("title") ?? ""),
@@ -101,7 +92,7 @@ export async function createActionDraftAction(formData: FormData): Promise<void>
     }
   }
   await createCopilotActionDraft(
-    scope,
+    gate.scope,
     {
       actionType: parsed.actionType,
       title: parsed.title,
@@ -115,51 +106,61 @@ export async function createActionDraftAction(formData: FormData): Promise<void>
 }
 
 export async function approveActionDraftFormAction(formData: FormData): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.actions.approve")) return;
+  const gate = await requireCopilotMutation({
+    capability: "copilot.actions.approve",
+    operation: "copilot.approve_action_draft",
+  });
+  if (!gate.ok) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
-  await setActionDraftStatus(scope, id, "APPROVED");
+  await setActionDraftStatus(gate.scope, id, "APPROVED");
   revalidatePath(`${COPILOT_PATH}/drafts`);
 }
 
 export async function rejectActionDraftFormAction(formData: FormData): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.actions.approve")) return;
+  const gate = await requireCopilotMutation({
+    capability: "copilot.actions.approve",
+    operation: "copilot.reject_action_draft",
+  });
+  if (!gate.ok) return;
   const id = String(formData.get("id") ?? "");
   const reason = (formData.get("reason") as string) || undefined;
   if (!id) return;
-  await setActionDraftStatus(scope, id, "REJECTED", reason);
+  await setActionDraftStatus(gate.scope, id, "REJECTED", reason);
   revalidatePath(`${COPILOT_PATH}/drafts`);
 }
 
 export async function executeActionDraftFormAction(formData: FormData): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.actions.approve")) return;
+  const gate = await requireCopilotMutation({
+    capability: "copilot.actions.approve",
+    operation: "copilot.execute_action_draft",
+  });
+  if (!gate.ok) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
-  await executeApprovedAction(scope, id);
+  await executeApprovedAction(gate.scope, id);
   revalidatePath(`${COPILOT_PATH}/drafts`);
 }
 
 export async function refreshDeterministicAction(): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.view")) return;
-  await persistDeterministicInsights(scope);
+  const gate = await requireCopilotMutation({
+    capability: "copilot.view",
+    operation: "copilot.refresh_deterministic",
+  });
+  if (!gate.ok) return;
+  await persistDeterministicInsights(gate.scope);
   revalidatePath(COPILOT_PATH);
 }
 
 export async function resolveCopilotInsightFormAction(formData: FormData): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.view")) return;
+  const gate = await requireCopilotMutation({
+    capability: "copilot.view",
+    operation: "copilot.resolve_insight",
+  });
+  if (!gate.ok) return;
   const id = String(formData.get("id") ?? "");
   if (id) {
-    await resolveInsight(scope, id);
+    await resolveInsight(gate.scope, id);
     revalidatePath(COPILOT_PATH);
   }
 }
@@ -177,9 +178,11 @@ const settingsSchema = z.object({
 });
 
 export async function updateCopilotSettingsFormAction(formData: FormData): Promise<void> {
-  const actor = await requireWorkspacePermissionActor();
-  const scope = scopeFor(actor);
-  if (!canUseCopilot(scope, "copilot.settings.manage")) return;
+  const gate = await requireCopilotMutation({
+    capability: "copilot.settings.manage",
+    operation: "copilot.update_settings",
+  });
+  if (!gate.ok) return;
   const parsed = settingsSchema.parse({
     aiNarrativeEnabled: formData.get("aiNarrativeEnabled") != null
       ? formData.get("aiNarrativeEnabled") === "on"
@@ -199,6 +202,6 @@ export async function updateCopilotSettingsFormAction(formData: FormData): Promi
       : undefined,
     privacyDisclaimer: (formData.get("privacyDisclaimer") as string) || undefined,
   });
-  await upsertCopilotSettings(scope, parsed);
+  await upsertCopilotSettings(gate.scope, parsed);
   revalidatePath(`${COPILOT_PATH}/settings`);
 }
