@@ -9,7 +9,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 | Platform access denial | `tests/e2e/platform-access-denial.spec.ts` | None | Local `next start` on port 3000 |
 | Marketing a11y | `tests/e2e/a11y-marketing.spec.ts` | None | Same server |
 | Auth shell a11y | `tests/e2e/a11y-auth-shell.spec.ts` | Optional login secrets | Skips authed cases without credentials |
-| Doc canon + public API + nav/maturity + integration honesty + money-path + inventory + cron + KDS + scorecard CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon:cert` + `test:ci:doc-canon`, cert/unit pairs through KDS, `test:ci:scorecard:cert` last |
+| Doc canon + public API + nav/maturity + integration honesty + money-path + inventory + cron + KDS + scorecard CI wiring | `npm run test:ci:governance-bundles` | None | Chains `test:ci:doc-canon:cert` + `test:ci:doc-canon`, cert/unit pairs through KDS, `test:ci:order-creation-rbac:cert`, `test:ci:scorecard:cert` last |
 | Era 3 RBAC wave 3 (costing, purchasing, export platform gates, incident access) | `npm run test:ci:rbac-wave3` | None | Costing + PO approval/bulk-price + export audit/DSR + export dashboard UI parity + incident manager platform access |
 | Public POST fail-closed (IoT, NPS, ROI guards + route wiring) | `npm run test:ci:public-post-fail-closed` | None | Guard unit tests + IoT/NPS/ROI route fail-closed contract tests |
 
@@ -17,7 +17,7 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 
 | Suite | Command | DB | Notes |
 |-------|---------|-----|-------|
-| Tenant isolation + RBAC | `npm run test:security` | Postgres service | Includes `tests/integration/storefront-order-pii.integration.test.ts` (pay-later PII + **online payment failure + retry** recovery) |
+| Tenant isolation + RBAC | `npm run test:security` | Postgres service | Includes `tests/integration/storefront-order-pii.integration.test.ts` (pay-later PII + **online payment failure + retry** recovery) and `tests/unit/order-creation-rbac.test.ts` (`orders.manage` + founder-email bypass closure) |
 
 ## Tier 2 — Storefront money path (`storefront-money-path` job)
 
