@@ -692,6 +692,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 22: `era17-pos-manager-discount-v1` — manager discount guard + COMPED RBAC edge cases; **discount_guard_depth_enforced** |
 | 2026-05-28 | Era 17 Cycle 23: `era17-public-post-abuse-v1` — P1 public POST route rate limits; **p1_public_post_guards_expanded** |
 | 2026-05-28 | Era 17 Cycle 24: `era17-pos-operator-runbook-v1` — software-only POS golden path runbook; **operator_runbook_ready** |
+| 2026-05-28 | Era 17 Cycle 28: `era17-pos-only-inventory-lock-v1` — POS-only depletion recert; **deferred_locked** storefront hook |
 | 2026-05-28 | Era 17 Cycle 27: `era17-kds-qualified-sales-onepager-v1` — sales-safe KDS pilot wording; **sales_onepager_ready** |
 | 2026-05-28 | Era 17 Cycle 26: `era17-partner-webhook-docs-v1` — partner inbound/outbound webhook contract; **partner_webhook_docs_ready** |
 | 2026-05-28 | Era 17 Cycle 25: `era17-pos-receipt-shift-spotcheck-v1` — shift closeout + receipt spot check; **closeout_math_spotcheck_documented** |

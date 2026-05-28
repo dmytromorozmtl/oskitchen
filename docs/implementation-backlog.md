@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-028 — POS-only inventory lock recert (P1)
+- ID: `KOS-E17-028`
+- Title: Era 17 Cycle 28 — reconfirm storefront depletion remains deferred_locked
+- Module: Inventory / GTM
+- Priority: P1 (Workstream G Cycle 29)
+- Status: **pos_only_lock_recertified**
+- Decision: `era17-pos-only-inventory-lock-v1` — expanded entrypoint scan + recert artifact
+- Evidence: `docs/pos-only-inventory-lock-era17.md`, `test:ci:pos-only-inventory-lock-era17:cert`
+- Next: Pilot inventory messaging (Cycle 30) or P0 credential-blocked smokes
+
 ### KOS-E17-027 — KDS qualified sales one-pager (P1)
 - ID: `KOS-E17-027`
 - Title: Era 17 Cycle 27 — sales-safe KDS pilot wording + evidence paths
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **sales_onepager_ready**
 - Decision: `era17-kds-qualified-sales-onepager-v1` — qualified pilot wording; no rush-hour claim
 - Evidence: `docs/kds-qualified-sales-onepager-era17.md`, `test:ci:kds-qualified-sales-onepager-era17:cert`
-- Next: KDS GitHub Playwright PASS when staging secrets available (KOS-E17-015)
+- Next: POS-only inventory lock recert (Cycle 29) — **done**; see KOS-E17-028
 
 ### KOS-E17-026 — Partner webhook integration docs (P1)
 - ID: `KOS-E17-026`

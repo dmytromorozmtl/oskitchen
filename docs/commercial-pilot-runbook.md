@@ -14,7 +14,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 1. **Matrix wins** — If this runbook and the feature maturity matrix disagree, the matrix + policy IDs win.
 2. **Certified vs manual** — Tier 0–1 are automatable checks; Tier 2–3 require human sign-off on staging.
 3. **No false enterprise claims** — SSO/SCIM/SOC2 remain roadmap-only (`era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1`, `era16-enterprise-sso-r2-pilot-v1`, `era16-enterprise-sso-r2-schema-v1`, `era16-enterprise-sso-r2-runtime-v1`, `era16-enterprise-sso-r2-admin-v1`; R2 **`supabase_saml_sso`** path **schema_ready** / **pilot_foundation** / **pilot_admin_wiring**; gated login for activated pilots only — not production SSO for all tenants).
-4. **Inventory** — POS-only depletion (`era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`); storefront orders do not deplete stock in pilot.
+4. **Inventory** — POS-only depletion (`era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`, `era17-pos-only-inventory-lock-v1`); storefront hook **deferred_locked**; storefront orders do not deplete stock in pilot.
 5. **Rewards** — Dual ledger (`era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`, `era10-cross-channel-rewards-recert-v1`, `era14-cross-channel-rewards-recert-v1`); gift/loyalty codes are not interchangeable across POS and storefront; POS kitchen-ledger checkout certified; unified E2E `deferred_locked` — see `docs/cross-channel-rewards-honesty-checklist.md`.
 
 **Unsafe pilot headline:** “Production-certified,” “enterprise SSO,” “unified inventory,” or “Toast-class KDS at rush hour.”
@@ -176,6 +176,21 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 5. Pre-signature: `npm run smoke:pilot-forbidden-claims-enforcement` must PASS.
 
 **Enforcement:** `test:ci:kds-qualified-sales-onepager-era17:cert` (chained in `test:ci:kds-staging-smoke:cert`)
+
+---
+
+## Era 17 POS-only inventory lock recert (2026-05-28)
+
+**Policy:** `era17-pos-only-inventory-lock-v1` — **pos_only_lock_recertified**; storefront depletion hook remains **deferred_locked**.
+
+1. POS checkout only: `services/pos/pos-checkout-service.ts` → `recordPendingInventoryImpactsForPosOrder`.
+2. Non-depleting scan: storefront, manual, public API, Woo/Shopify webhook handlers — no depletion imports.
+3. Run **`npm run smoke:pos-only-inventory-lock`** → review **`artifacts/pos-only-inventory-lock-summary.json`** (`lockProofStatus`).
+4. Do **not** claim unified cross-channel inventory depletion in pilot contracts.
+
+**Enforcement:** `test:ci:pos-only-inventory-lock-era17:cert` (chained in `test:ci:inventory-depletion:cert`)
+
+**Operator doc:** `docs/pos-only-inventory-lock-era17.md`
 
 ### Era 17 operational sign-off staging proof (2026-05-28)
 
