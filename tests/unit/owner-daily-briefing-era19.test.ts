@@ -16,6 +16,7 @@ const baseInput = {
     activeOrders: 8,
     blockedOrdersApprox: 0,
     posKitchenQueueToday: 2,
+    posTransactionsToday: 0,
     productionWorkOpen: 3,
     packingQueueOpen: 1,
     revenueToday: 1250,

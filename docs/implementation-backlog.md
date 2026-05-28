@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-004 — Role-based briefing tile packs (P1 WOW)
+- ID: `KOS-E19-004`
+- Title: Era 19 Workstream B Cycle 4 — owner/manager/kitchen/cashier tile packs
+- Module: Dashboard / Today / Operator UX
+- Priority: P1 (WOW pillar depth)
+- Status: **role_packs_wired**
+- Decision: `era19-owner-daily-briefing-role-packs-v1` — persona-filtered tiles, actions, alerts; POS open shift + transaction tiles for cashier; kitchen/cashier briefing visibility
+- Evidence: `lib/briefing/owner-daily-briefing-role-packs-era19.ts`, updated briefing service + hero
+- Next: Pilot readiness lane + integration health lane on briefing
+
 ### KOS-E19-003 — Production calendar today briefing tile (P1 WOW)
 - ID: `KOS-E19-003`
 - Title: Era 19 Workstream B Cycle 3 — production calendar today-priority tile + lane

@@ -15,7 +15,8 @@ export type OwnerDailyBriefingTile = {
     | "sso"
     | "revenue"
     | "inventory"
-    | "labor";
+    | "labor"
+    | "pos";
   label: string;
   value: string;
   detail: string;
@@ -67,6 +68,7 @@ export type OwnerDailyBriefingInput = {
     activeOrders: number;
     blockedOrdersApprox: number;
     posKitchenQueueToday: number;
+    posTransactionsToday: number;
     productionWorkOpen: number;
     packingQueueOpen: number;
     revenueToday: number;
@@ -104,6 +106,9 @@ export type OwnerDailyBriefingInput = {
     hasPlanTasks: boolean;
     calendarHref: string;
     primaryHref: string;
+  };
+  posShift?: {
+    openCount: number;
   };
 };
 
@@ -311,6 +316,38 @@ export function buildOwnerDailyBriefingTiles(
     tone: "neutral",
     priority: 11,
   });
+
+  tiles.push({
+    id: "pos-transactions-today",
+    category: "pos",
+    label: "POS transactions today",
+    value: String(input.kpis.posTransactionsToday),
+    detail:
+      input.kpis.posTransactionsToday > 0
+        ? "Register sales recorded today — open POS hub for receipts."
+        : "No POS transactions yet today.",
+    href: "/dashboard/pos/transactions",
+    availability: "available",
+    tone: input.kpis.posTransactionsToday > 0 ? "neutral" : "neutral",
+    priority: 12,
+  });
+
+  if (input.posShift !== undefined) {
+    tiles.push({
+      id: "pos-open-shifts",
+      category: "pos",
+      label: "Open POS shifts",
+      value: String(input.posShift.openCount),
+      detail:
+        input.posShift.openCount > 0
+          ? `${input.posShift.openCount} register shift(s) open — close when done.`
+          : "No open register shift — open a shift before ringing sales.",
+      href: "/dashboard/pos/shifts",
+      availability: "available",
+      tone: input.posShift.openCount > 0 ? "success" : "attention",
+      priority: input.posShift.openCount > 0 ? 18 : 5,
+    });
+  }
 
   if (input.ingredientParConfigured) {
     tiles.push({

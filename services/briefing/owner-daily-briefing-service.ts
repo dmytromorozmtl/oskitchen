@@ -18,10 +18,23 @@ import {
   productionCalendarAlertsForBriefing,
   type OwnerDailyBriefingProductionCalendarSlice,
 } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
+import {
+  BRIEFING_ROLE_PACK_HEADLINE,
+  BRIEFING_ROLE_PACK_LABEL,
+  filterBriefingActionsForRolePack,
+  filterBriefingAlertsForRolePack,
+  filterBriefingTilesForRolePack,
+  pickBriefingHeroTilesForRolePack,
+  resolveBriefingRolePack,
+  shouldShowBriefingForPersona,
+  shouldShowBriefingProductionCalendarLane,
+  type BriefingRolePack,
+} from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import { shouldShowPilotIntegrationHealthStrip } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import type { PermissionKey } from "@/lib/permissions/permissions";
 import { prisma } from "@/lib/prisma";
+import { ownerScopedAnd } from "@/lib/scope/workspace-resource-scope";
 import {
   ingredientListWhereForOwner,
   staffShiftListWhereForOwner,
@@ -30,6 +43,7 @@ import {
   pickImplementationPilotReadinessAttentionItems,
   summarizeImplementationPilotReadiness,
 } from "@/lib/implementation/implementation-pilot-readiness-focus-era18";
+import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 import { getProductionCalendarOpenThroughToday } from "@/services/production/production-calendar-service";
 import { loadPilotIntegrationHealthStripModelForWorkspace } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import { getLaborRealtimeData } from "@/services/labor/labor-realtime-service";
@@ -37,6 +51,10 @@ import { loadTodayCommandCenter } from "@/services/today/today-command-center-se
 
 export type OwnerDailyBriefingPayload = {
   loadedAt: string;
+  rolePack: BriefingRolePack;
+  rolePackLabel: string;
+  rolePackHeadline: string;
+  showProductionCalendarLane: boolean;
   tiles: OwnerDailyBriefingTile[];
   heroTiles: OwnerDailyBriefingTile[];
   alerts: OwnerDailyBriefingAlert[];
@@ -76,6 +94,11 @@ async function countLowStockIngredients(userId: string): Promise<{
   return { lowStockCount, ingredientParConfigured: true };
 }
 
+async function countOpenPosShifts(userId: string): Promise<number> {
+  const where = await ownerScopedAnd(userId, { status: "OPEN" });
+  return prisma.pOSShift.count({ where });
+}
+
 async function loadLaborBriefingSlice(userId: string) {
   try {
     const today = new Date();
@@ -113,7 +136,7 @@ export function shouldShowOwnerDailyBriefing(input: {
   workspaceRole: UserRole;
   persona: OperatorHomePersona;
 }): boolean {
-  return input.workspaceRole === "OWNER" || input.persona === "manager";
+  return shouldShowBriefingForPersona(input);
 }
 
 export async function loadOwnerDailyBriefing(
@@ -121,16 +144,26 @@ export async function loadOwnerDailyBriefing(
   options?: {
     showIntegrationHealth?: boolean;
     today?: Awaited<ReturnType<typeof loadTodayCommandCenter>>;
+    rolePack?: BriefingRolePack;
+    persona?: OperatorHomePersona;
+    workspaceRole?: UserRole;
   },
 ): Promise<OwnerDailyBriefingPayload> {
   const showIntegrationHealth = options?.showIntegrationHealth ?? true;
+  const rolePack =
+    options?.rolePack ??
+    resolveBriefingRolePack({
+      workspaceRole: options?.workspaceRole ?? "STAFF",
+      persona: options?.persona ?? "manager",
+    });
 
-  const [today, pilotReadiness, lowStock, labor, calendarRows] = await Promise.all([
+  const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts] = await Promise.all([
     options?.today ?? loadTodayCommandCenter(userId),
     loadImplementationPilotReadinessModel(userId),
     countLowStockIngredients(userId),
     loadLaborBriefingSlice(userId),
     getProductionCalendarOpenThroughToday(userId),
+    countOpenPosShifts(userId),
   ]);
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
@@ -179,18 +212,19 @@ export async function loadOwnerDailyBriefing(
     ingredientParConfigured: lowStock.ingredientParConfigured,
     labor,
     productionCalendar: productionCalendarInput,
+    posShift: { openCount: openPosShifts },
   };
 
-  const tiles = buildOwnerDailyBriefingTiles(briefingInput);
-  const alerts = buildOwnerDailyBriefingAlerts({
+  const allTiles = buildOwnerDailyBriefingTiles(briefingInput);
+  const allAlerts = buildOwnerDailyBriefingAlerts({
     blockers: today.blockers,
     pilotAlerts,
     productionCalendarAlerts,
     kpis: today.kpis,
   });
-  const topActions = pickOwnerDailyBriefingTopActions({
+  const allTopActions = pickOwnerDailyBriefingTopActions({
     blockers: today.blockers,
-    alerts,
+    alerts: allAlerts,
     readinessOverall: today.readiness.overall,
     kpis: today.kpis,
     pilotAttentionCount: pilotSummary.totalSignals,
@@ -198,6 +232,14 @@ export async function loadOwnerDailyBriefing(
     lowStockCount: lowStock.lowStockCount,
     productionCalendarActions,
   });
+
+  const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
+  const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);
+  const topActions = filterBriefingActionsForRolePack(allTopActions, rolePack).slice(0, 3);
+  const heroTiles = pickBriefingHeroTilesForRolePack(tiles, rolePack, pickOwnerDailyBriefingHeroTiles);
+  const showProductionCalendarLane =
+    shouldShowBriefingProductionCalendarLane(rolePack) && productionCalendarSlice.hasPlanTasks;
+
   const nextAction = topActions[0]
     ? {
         title: topActions[0].title,
@@ -218,12 +260,16 @@ export async function loadOwnerDailyBriefing(
 
   return {
     loadedAt: new Date().toISOString(),
+    rolePack,
+    rolePackLabel: BRIEFING_ROLE_PACK_LABEL[rolePack],
+    rolePackHeadline: BRIEFING_ROLE_PACK_HEADLINE[rolePack],
+    showProductionCalendarLane,
     tiles,
-    heroTiles: pickOwnerDailyBriefingHeroTiles(tiles),
+    heroTiles,
     alerts,
     topActions,
     nextAction,
-    productionCalendar: productionCalendarSlice,
+    productionCalendar: showProductionCalendarLane ? productionCalendarSlice : null,
     summary: {
       attentionTileCount: tiles.filter((tile) => tile.tone === "attention").length,
       alertCount: alerts.length,
@@ -237,7 +283,8 @@ export function resolveOwnerDailyBriefingVisibility(input: {
   persona: OperatorHomePersona;
   granted: ReadonlySet<PermissionKey>;
 }): boolean {
-  if (!shouldShowOwnerDailyBriefing(input)) return false;
+  if (!shouldShowBriefingForPersona(input)) return false;
   if (input.workspaceRole === "OWNER") return true;
+  if (input.persona === "kitchen" || input.persona === "cashier") return true;
   return shouldShowPilotIntegrationHealthStrip(input);
 }

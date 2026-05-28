@@ -54,7 +54,8 @@ function availabilityLabel(availability: OwnerDailyBriefingTile["availability"])
 
 export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayload }) {
   const { briefing } = props;
-  const { nextAction, topActions, heroTiles, alerts, summary } = briefing;
+  const { nextAction, topActions, heroTiles, alerts, summary, rolePackLabel, rolePackHeadline } =
+    briefing;
 
   return (
     <section className="space-y-4" data-testid="owner-daily-briefing-hero">
@@ -64,15 +65,18 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
             <div>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <LayoutDashboard className="h-5 w-5 text-muted-foreground" aria-hidden />
-                Owner daily briefing
+                {rolePackLabel}
               </CardTitle>
-              <CardDescription className="mt-1">
-                One-screen priorities from real workspace data — no decorative metrics.
-              </CardDescription>
+              <CardDescription className="mt-1">{rolePackHeadline}</CardDescription>
             </div>
-            <Badge variant="outline" className="rounded-full tabular-nums">
-              Readiness {summary.readinessOverall}%
-            </Badge>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary" className="rounded-full capitalize" data-testid="briefing-role-pack">
+                {briefing.rolePack}
+              </Badge>
+              <Badge variant="outline" className="rounded-full tabular-nums">
+                Readiness {summary.readinessOverall}%
+              </Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -113,7 +117,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         </Card>
       ) : null}
 
-      {briefing.productionCalendar ? (
+      {briefing.showProductionCalendarLane && briefing.productionCalendar ? (
         <ProductionCalendarLane slice={briefing.productionCalendar} />
       ) : null}
 

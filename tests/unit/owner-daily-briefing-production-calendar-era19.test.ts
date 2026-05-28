@@ -73,6 +73,7 @@ describe("owner daily briefing production calendar era19", () => {
         activeOrders: 0,
         blockedOrdersApprox: 0,
         posKitchenQueueToday: 0,
+        posTransactionsToday: 0,
         productionWorkOpen: 0,
         packingQueueOpen: 0,
         revenueToday: 0,

@@ -59,7 +59,12 @@ export default async function TodayOperationsPage({
       ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)
       : Promise.resolve(null),
     showOwnerBriefing
-      ? loadOwnerDailyBriefing(dataUserId, { showIntegrationHealth, today: data })
+      ? loadOwnerDailyBriefing(dataUserId, {
+          showIntegrationHealth,
+          today: data,
+          persona,
+          workspaceRole: actor.workspaceRole,
+        })
       : Promise.resolve(null),
   ]);
   const gettingStarted = await loadGettingStartedStatus(
