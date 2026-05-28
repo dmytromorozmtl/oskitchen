@@ -8,11 +8,16 @@ import type { AuditExportFormat } from "@prisma/client";
 
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
-  canExportAuditLogs,
   canManageRetentionPolicy,
   canViewAuditLogs,
   canViewSensitiveAuditDetail,
 } from "@/lib/audit/audit-permissions";
+import {
+  requireAuditExportAccess,
+  requireAuditRetentionMutationAccess,
+} from "@/lib/audit/require-audit-center-mutation-access";
+import { hasPermission } from "@/lib/permissions/guards";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { clampRetentionDays } from "@/lib/audit/audit-retention";
 import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
@@ -97,9 +102,10 @@ export async function loadAuditCenterPageData(
     }),
   ]);
 
+  const actor = await requireWorkspacePermissionActor();
   const flags: AuditCenterFlags = {
-    canExport: canExportAuditLogs(scope.email, scope.role, scope.platformBypass),
-    canManageRetention: canManageRetentionPolicy(scope.email, scope.role, scope.platformBypass),
+    canExport: hasPermission(actor.granted, "audit.export"),
+    canManageRetention: hasPermission(actor.granted, "workspace.settings"),
     canSensitiveDetail: canViewSensitiveAuditDetail(scope.email, scope.role, scope.platformBypass),
   };
 
@@ -154,9 +160,10 @@ export async function runAuditExportAction(input: {
   format: AuditExportFormat;
   filters: AuditListFilters;
 }): Promise<{ ok: false; error: string } | { ok: true; body: string; filename: string; rowCount: number }> {
+  const exportAccess = await requireAuditExportAccess();
+  if (!exportAccess.ok) return { ok: false, error: "forbidden" };
   const scope = await resolveScope();
   if (!scope) return { ok: false, error: "forbidden" };
-  if (!canExportAuditLogs(scope.email, scope.role, scope.platformBypass)) return { ok: false, error: "forbidden" };
   const wsId = input.filters.workspaceId && scope.ownedWorkspaceIds.includes(input.filters.workspaceId)
     ? input.filters.workspaceId
     : scope.ownedWorkspaceIds[0];
@@ -174,9 +181,10 @@ export async function runAuditExportAction(input: {
 }
 
 export async function upsertAuditRetentionAction(formData: FormData): Promise<void> {
+  const retentionAccess = await requireAuditRetentionMutationAccess();
+  if (!retentionAccess.ok) throw new Error("forbidden");
   const scope = await resolveScope();
   if (!scope) throw new Error("forbidden");
-  if (!canManageRetentionPolicy(scope.email, scope.role, scope.platformBypass)) throw new Error("forbidden");
   const wsId = scope.ownedWorkspaceIds[0];
   if (!wsId) throw new Error("no_workspace");
 
