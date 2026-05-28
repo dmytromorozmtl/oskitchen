@@ -48,7 +48,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era7.md`](./next-master-prompt-input-2026-05-27-era7.md) | Facts and constraints for Evolution Era 8 master prompt |
+| [`next-master-prompt-input-2026-05-27-era8.md`](./next-master-prompt-input-2026-05-27-era8.md) | Facts and constraints for Evolution Era 9 master prompt |
+| [`era8-cycle-completion-scorecard-2026-05-27.md`](./era8-cycle-completion-scorecard-2026-05-27.md) | Era 8 operator depth / GTM hygiene (cycles 1–4) + score 94/100 |
+| [`next-master-prompt-input-2026-05-27-era7.md`](./next-master-prompt-input-2026-05-27-era7.md) | **Superseded** by era8 input for recurring prompts |
 | [`era7-cycle-completion-scorecard-2026-05-27.md`](./era7-cycle-completion-scorecard-2026-05-27.md) | Era 7 commercial readiness (cycles 1–4) + score 92/100 |
 | [`next-master-prompt-input-2026-05-27-era6.md`](./next-master-prompt-input-2026-05-27-era6.md) | **Superseded** by era7 input for recurring prompts |
 | [`era6-cycle-completion-scorecard-2026-05-27.md`](./era6-cycle-completion-scorecard-2026-05-27.md) | Era 6 P0 completion (cycles 1–5) + score 90/100 |
@@ -137,6 +139,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2** | **KDS Realtime E2E staging scope** | `era8-kds-realtime-e2e-staging-v1`; Tier E checklist; not in default CI |
 | **3** | **Pilot preflight strict claims** | `era8-pilot-preflight-claims-strict-v1`; `pilot-preflight.sh` + `test:ci:pilot-preflight-claims:cert` |
 | **4** | **Production calendar move UI** | `era8-production-calendar-move-ui-v1`; `movePlanTaskAction` week-column controls |
+| **5** | **Scorecard refresh** | `era8-scorecard-refresh-v1`; this §Scorecard Era 8 |
 
 ## Evolution Era 7 cycle ledger
 
@@ -306,6 +309,27 @@ Incremental refresh after Era 7 cycles 1–4 (commercial readiness from era6 han
 
 **Re-audit decision:** defer full repo re-audit until Era 8 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era7.md`.
 
+## Scorecard (Evolution Era 8 end — 2026-05-27)
+
+Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from era7 handoff). Baseline = Era 7 end **92** overall.
+
+| Area | Era 7 end | Era 8 end | Δ | Key evidence |
+|------|----------:|----------:|--:|--------------|
+| Overall | 92 | **94** | +2 | claims registry + strict pilot preflight + KDS scope + calendar UI |
+| Security | 81 | **81** | +0 | unchanged |
+| QA | 87 | **88** | +1 | KDS Tier E scope cert; production calendar move UI cert |
+| DevOps | 92 | **93** | +1 | `MARKETING_CLAIMS_STRICT=1` in pilot preflight |
+| RBAC | 86 | **87** | +1 | move-task UI with existing `production.manage` guards |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged (`era4-tier2b-optional-v1`) |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 67 | **68** | +1 | honest Realtime Playwright staging scope (Tier E) |
+| Enterprise readiness | 62 | **62** | +0 | roadmap_only identity |
+| Marketing/sales | 79 | **81** | +2 | zero `needs-evidence` registry + strict pilot gate |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 9 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era8.md`.
+
 ---
 
 ## Validation
@@ -351,3 +375,4 @@ Incremental refresh after Era 7 cycles 1–4 (commercial readiness from era6 han
 | 2026-05-27 | Era 8 Cycle 2: `era8-kds-realtime-e2e-staging-v1` — honest staging-only Realtime E2E scope |
 | 2026-05-27 | Era 8 Cycle 3: `era8-pilot-preflight-claims-strict-v1` — strict `verify-claims` in paid pilot preflight |
 | 2026-05-27 | Era 8 Cycle 4: `era8-production-calendar-move-ui-v1` — move task UI on production calendar |
+| 2026-05-27 | Era 8 Cycle 5: scorecard refresh 94/100 + `next-master-prompt-input-2026-05-27-era8.md` |

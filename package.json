@@ -380,7 +380,7 @@
     "test:ci:public-api-v1:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/public-api-v1-ci-live.test.ts",
     "test:ci:doc-canon": "node ./node_modules/vitest/vitest.mjs run tests/unit/canonical-doc-index.test.ts",
     "test:ci:doc-canon:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/doc-canon-ci-live.test.ts",
-    "test:ci:scorecard:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/scorecard-ci-live.test.ts tests/unit/era4-scorecard-policy.test.ts tests/unit/era5-scorecard-ci-live.test.ts tests/unit/era5-scorecard-policy.test.ts tests/unit/era6-scorecard-ci-live.test.ts tests/unit/era6-scorecard-policy.test.ts tests/unit/era7-scorecard-ci-live.test.ts tests/unit/era7-scorecard-policy.test.ts",
+    "test:ci:scorecard:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/scorecard-ci-live.test.ts tests/unit/era4-scorecard-policy.test.ts tests/unit/era5-scorecard-ci-live.test.ts tests/unit/era5-scorecard-policy.test.ts tests/unit/era6-scorecard-ci-live.test.ts tests/unit/era6-scorecard-policy.test.ts tests/unit/era7-scorecard-ci-live.test.ts tests/unit/era7-scorecard-policy.test.ts tests/unit/era8-scorecard-ci-live.test.ts tests/unit/era8-scorecard-policy.test.ts",
     "test:ci:order-creation-rbac:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/order-creation-rbac-security-cert-live.test.ts",
     "test:ci:platform-email-bypass:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/platform-email-bypass-security-cert-live.test.ts",
     "test:ci:global-search-rbac:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/global-search-security-cert-live.test.ts",

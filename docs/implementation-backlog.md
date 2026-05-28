@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 8 — Operator depth / GTM hygiene
 
+### KOS-E8-005 — Era 8 scorecard refresh
+- ID: `KOS-E8-005`
+- Title: Document Era 8 completion, score deltas, and Era 9 master prompt input
+- Module: Platform / GTM / engineering
+- Priority: P0 (Era 8 Cycle 5)
+- Status: **completed**
+- Decision: `era8-scorecard-refresh-v1` — 94/100 overall; era9 handoff in `next-master-prompt-input-2026-05-27-era8.md`
+- Evidence: `docs/era8-cycle-completion-scorecard-2026-05-27.md`, `test:ci:scorecard:cert`
+- Next: pick Era 9 cycle 1 theme from era8 prompt input §4
+
 ### KOS-E8-004 — Production calendar move-task UI (P1)
 - ID: `KOS-E8-004`
 - Title: Wire `movePlanTaskAction` on production planning calendar page
