@@ -6,6 +6,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 import {
+  buildP0VaultDay0OrchestratorSummary,
+} from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import {
   P0_OPS_VAULT_ERA21_DAY0_DOC,
   P0_OPS_VAULT_ERA21_PLAYBOOK_DOC,
 } from "@/lib/commercial/p0-ops-vault-era21-policy";
@@ -28,11 +31,28 @@ export function buildP0OpsVaultProgressReportMarkdown(input: {
   const artifactMissing = input.artifact?.allMissingEnvVars ?? [];
   const artifactPhases = buildP0OpsVaultPhaseStatuses({ missingEnvVars: artifactMissing });
   const localPhases = input.localEnv.phases;
+  const day0Summary = buildP0VaultDay0OrchestratorSummary({
+    env: input.localEnv,
+    artifact: input.artifact,
+    stagingHealth: {
+      checked: false,
+      ok: false,
+      url: null,
+      statusCode: null,
+      error: "not checked in sync report",
+    },
+  });
 
   const lines: string[] = [
     "# P0 Ops Vault — Day 0 Progress Report",
     "",
     `Generated: ${new Date().toISOString()}`,
+    "",
+    "## Day 0 milestone",
+    "",
+    `- milestone: **${day0Summary.milestone}**`,
+    `- day0PartialComplete (Phase 1+2): ${day0Summary.day0PartialComplete ? "yes" : "no"}`,
+    `- next phase: ${day0Summary.nextPhaseLabel ?? "none"}`,
     "",
     "## Artifact state",
     "",
@@ -76,8 +96,10 @@ export function buildP0OpsVaultProgressReportMarkdown(input: {
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-p0-vault-day0-orchestrator -- --write");
   lines.push("npm run ops:export-p0-vault-env-template -- --write");
   lines.push("npm run ops:validate-p0-vault-env");
+  lines.push("npm run ops:check-p0-staging-health");
   lines.push("npm run ops:print-p0-github-secrets-checklist");
   lines.push("npm run smoke:p0-staging-proof-unblock");
   lines.push("```");

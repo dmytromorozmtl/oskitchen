@@ -32,6 +32,18 @@ describe("validate-p0-vault-env", () => {
     expect(result.allPresent).toBe(false);
   });
 
+  it("reports day0 milestone fields", () => {
+    const result = evaluateP0VaultEnv({
+      E2E_STAGING_BASE_URL: "https://staging.example.com",
+      E2E_LOGIN_EMAIL: "owner@example.com",
+      E2E_LOGIN_PASSWORD: "secret",
+      DATABASE_URL: "postgres://x",
+      ENCRYPTION_KEY: "key",
+    });
+    expect(result.day0PartialComplete).toBe(true);
+    expect(result.day0Milestone).toBe("day0_partial");
+  });
+
   it("marks allPresent when every key is set", () => {
     const env = Object.fromEntries(P0_VAULT_ENV_KEYS.map((key) => [key, "set"])) as NodeJS.ProcessEnv;
     const result = evaluateP0VaultEnv(env);

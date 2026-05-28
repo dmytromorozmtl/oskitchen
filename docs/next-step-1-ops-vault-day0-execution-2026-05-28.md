@@ -2,7 +2,7 @@
 
 **Audience:** DevOps / founder with GitHub admin  
 **Time:** 2–4 hours  
-**Outcome:** Phase 1 + Phase 2 complete → `ops:validate-p0-vault-env` shows 5/11 vars  
+**Outcome:** Phase 1 + Phase 2 complete → `ops:validate-p0-vault-env` shows 5/11 vars · `day0Milestone: day0_partial`
 **Next:** [`next-step-2-after-p0-pass-2026-05-28.md`](./next-step-2-after-p0-pass-2026-05-28.md)
 
 ---
@@ -10,10 +10,13 @@
 ## Before you start
 
 ```bash
+npm run ops:run-p0-vault-day0-orchestrator -- --write
 npm run ops:export-p0-vault-env-template -- --write
 npm run smoke:p0-staging-proof-unblock -- --checklist-only
 npm run ops:print-p0-github-secrets-checklist   # after first artifact exists
 npm run ops:sync-p0-vault-progress-report -- --write   # standup markdown
+npm run ops:export-p0-vault-day0-readiness-checklist -- --write
+npm run ops:check-p0-staging-health -- --json    # after E2E_STAGING_BASE_URL set
 ```
 
 **Product surfaces that reflect progress (no fake PASS):**

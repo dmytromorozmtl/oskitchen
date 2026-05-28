@@ -4,6 +4,12 @@
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import {
+  P0_OPS_VAULT_DAY0_READINESS_EXPORT_COMMAND,
+  P0_OPS_VAULT_STAGING_HEALTH_COMMAND,
+  resolveP0VaultDay0MilestoneFromPhaseStatuses,
+  type P0VaultDay0Milestone,
+} from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import {
   buildP0OpsVaultPhaseStatuses,
   formatP0OpsVaultPhaseBlockerDetail,
   P0_OPS_VAULT_ENV_KEYS,
@@ -35,6 +41,11 @@ export type P0OpsVaultUiSlice = {
   orchestratorCommand: string;
   githubSecretsChecklistCommand: string;
   syncProgressReportCommand: string;
+  day0OrchestratorCommand: string;
+  stagingHealthCheckCommand: string;
+  exportDay0ReadinessChecklistCommand: string;
+  day0Milestone: P0VaultDay0Milestone;
+  day0PartialComplete: boolean;
   integrationHealthHref: string;
   launchWizardHref: string;
   nextPhase: P0OpsVaultPhaseStatus | null;
@@ -54,6 +65,13 @@ export function buildP0OpsVaultUiSlice(
   const completedPhaseCount = phases.filter((p) => p.complete).length;
   const nextPhase = resolveNextIncompleteP0OpsVaultPhase(phases);
   const nextPhaseDetail = nextPhase ? formatP0OpsVaultPhaseBlockerDetail(nextPhase) : null;
+  const day0Milestone = resolveP0VaultDay0MilestoneFromPhaseStatuses(
+    phases,
+    p0Staging.p0ProofStatus,
+  );
+  const day0PartialComplete = phases
+    .filter((phase) => phase.id === "staging_login" || phase.id === "database_encryption")
+    .every((phase) => phase.complete);
 
   return {
     policyId: P0_OPS_VAULT_UI_ERA21_POLICY_ID,
@@ -73,6 +91,11 @@ export function buildP0OpsVaultUiSlice(
     orchestratorCommand: "npm run smoke:p0-staging-proof-unblock",
     githubSecretsChecklistCommand: "npm run ops:print-p0-github-secrets-checklist",
     syncProgressReportCommand: "npm run ops:sync-p0-vault-progress-report -- --write",
+    day0OrchestratorCommand: "npm run ops:run-p0-vault-day0-orchestrator -- --write",
+    stagingHealthCheckCommand: P0_OPS_VAULT_STAGING_HEALTH_COMMAND,
+    exportDay0ReadinessChecklistCommand: P0_OPS_VAULT_DAY0_READINESS_EXPORT_COMMAND,
+    day0Milestone,
+    day0PartialComplete,
     integrationHealthHref: `/dashboard/integration-health${P0_OPS_VAULT_INTEGRATION_HEALTH_ANCHOR}`,
     launchWizardHref: "/dashboard/launch-wizard",
     nextPhase,
@@ -81,5 +104,11 @@ export function buildP0OpsVaultUiSlice(
 }
 
 export function formatP0OpsVaultProgressLabel(slice: P0OpsVaultUiSlice): string {
-  return `Ops vault ${slice.completedPhaseCount}/${slice.phases.length} phases · ${slice.missingCount}/${slice.totalCount} vars missing`;
+  const milestoneLabel =
+    slice.day0Milestone === "day0_partial"
+      ? "Day 0 partial 5/11"
+      : slice.day0Milestone === "phase1_complete"
+        ? "Phase 1 complete 3/11"
+        : slice.day0Milestone;
+  return `Ops vault ${slice.completedPhaseCount}/${slice.phases.length} phases · ${slice.missingCount}/${slice.totalCount} vars missing · ${milestoneLabel}`;
 }

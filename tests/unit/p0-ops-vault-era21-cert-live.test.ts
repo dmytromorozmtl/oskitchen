@@ -41,6 +41,7 @@ describe("p0 ops vault era21 CI certification (live repo)", () => {
     expect(day0).toContain("integration-health");
     expect(day0).toContain("awaiting_ops_credentials");
     expect(day0).toContain("ops:sync-p0-vault-progress-report");
+    expect(day0).toContain("ops:run-p0-vault-day0-orchestrator");
   });
 
   it("wires product surfaces and unit tests", () => {

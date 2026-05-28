@@ -9,6 +9,10 @@ import {
   P0_STAGING_PROOF_UNBLOCK_ERA17_POLICY_ID,
 } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import {
+  isP0VaultDay0PartialComplete,
+  resolveP0VaultDay0Milestone,
+} from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import {
   P0_OPS_VAULT_ENV_KEYS,
   P0_OPS_VAULT_PHASES,
 } from "@/lib/commercial/p0-ops-vault-phases-era21";
@@ -29,6 +33,8 @@ export function evaluateP0VaultEnv(env: NodeJS.ProcessEnv = process.env): {
   missing: string[];
   phases: Array<P0VaultEnvPhase & { present: string[]; missing: string[]; complete: boolean }>;
   allPresent: boolean;
+  day0PartialComplete: boolean;
+  day0Milestone: ReturnType<typeof resolveP0VaultDay0Milestone>;
 } {
   const present = P0_OPS_VAULT_ENV_KEYS.filter((key) => Boolean(env[key]?.trim()));
   const missing = P0_OPS_VAULT_ENV_KEYS.filter((key) => !env[key]?.trim());
@@ -49,6 +55,8 @@ export function evaluateP0VaultEnv(env: NodeJS.ProcessEnv = process.env): {
     missing,
     phases,
     allPresent: missing.length === 0,
+    day0PartialComplete: isP0VaultDay0PartialComplete({ phases }),
+    day0Milestone: resolveP0VaultDay0Milestone({ env: { allPresent: missing.length === 0, present, phases } }),
   };
 }
 
@@ -60,6 +68,8 @@ function printJson(result: ReturnType<typeof evaluateP0VaultEnv>): void {
         presentCount: result.present.length,
         totalCount: P0_OPS_VAULT_ENV_KEYS.length,
         allPresent: result.allPresent,
+        day0PartialComplete: result.day0PartialComplete,
+        day0Milestone: result.day0Milestone,
         missing: result.missing,
         phases: result.phases.map((phase) => ({
           id: phase.id,
@@ -84,7 +94,9 @@ function main() {
   }
 
   console.log(`P0 ops vault validation (${P0_STAGING_PROOF_UNBLOCK_ERA17_POLICY_ID})\n`);
-  console.log(`Present: ${result.present.length}/${P0_OPS_VAULT_ENV_KEYS.length}\n`);
+  console.log(`Present: ${result.present.length}/${P0_OPS_VAULT_ENV_KEYS.length}`);
+  console.log(`Day 0 milestone: ${result.day0Milestone}`);
+  console.log(`Day 0 partial (Phase 1+2): ${result.day0PartialComplete ? "yes" : "no"}\n`);
 
   for (const phase of result.phases) {
     const status = phase.complete ? "✓ complete" : `✗ ${phase.missing.length} missing`;

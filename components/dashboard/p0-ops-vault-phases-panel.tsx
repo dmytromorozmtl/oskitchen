@@ -42,6 +42,12 @@ export function P0OpsVaultPhasesPanel(props: {
             <Badge variant="outline" className="rounded-full font-mono text-[10px]">
               {slice.p0ProofStatus}
             </Badge>
+            <Badge
+              variant={slice.day0PartialComplete ? "secondary" : "outline"}
+              className="rounded-full font-mono text-[10px]"
+            >
+              {slice.day0Milestone}
+            </Badge>
             {slice.overall ? (
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 aggregate: {slice.overall}
@@ -110,10 +116,13 @@ export function P0OpsVaultPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.day0OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
+                <li>{slice.stagingHealthCheckCommand}</li>
                 <li>{slice.githubSecretsChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.exportDay0ReadinessChecklistCommand}</li>
                 <li>{slice.orchestratorCommand}</li>
               </ul>
             </div>

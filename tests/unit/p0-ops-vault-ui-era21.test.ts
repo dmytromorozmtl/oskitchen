@@ -42,6 +42,8 @@ describe("p0-ops-vault-ui-era21", () => {
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.phases.length).toBe(4);
+    expect(slice?.day0Milestone).toBe("blocked");
+    expect(slice?.day0OrchestratorCommand).toContain("ops:run-p0-vault-day0-orchestrator");
     expect(formatP0OpsVaultProgressLabel(slice!)).toContain("vars missing");
   });
 
