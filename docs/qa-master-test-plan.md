@@ -95,6 +95,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ### 8c7. Mutation access consolidation (Era 4 Cycle 11 + Era 11 Cycle 2 recert)
 - policy: `lib/permissions/mutation-access-policy.ts` (`era4-mutation-access-consolidation-v1`)
 - era11 recert: `lib/permissions/mutation-access-era11-policy.ts` (`era11-mutation-access-recert-v1`) — production calendar inline gate + `production_calendar.update_task_status` after Era 10 status workflow
+- era14 recert: `lib/permissions/mutation-access-era14-policy.ts` (`era14-mutation-access-consolidation-recert-v1`) — registry + scoped-helper honesty; `docs/mutation-access-consolidation-checklist.md`; `npm run smoke:mutation-access`
 - registry: `lib/permissions/domain-mutation-registry.ts` (includes `production_calendar` entry)
 - wiring cert: `test:ci:mutation-access-consolidation:cert` (in `test:ci:governance-bundles`; chains `test:ci:mutation-access-era11:cert`)
 - unit: `npm run test:ci:mutation-access-consolidation` — registry integrity + shared denial logger

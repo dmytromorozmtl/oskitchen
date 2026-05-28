@@ -314,7 +314,8 @@ Priority rule:
 ## Era 4 — Permission helper consolidation (Cycle 11)
 
 - **Completed (2026-05-27):** `era4-mutation-access-consolidation-v1` — domain mutation registry, unified RBAC narrative, shared `logDomainMutationDenied` for wave-4 canonical helpers.
-- **Evidence:** `npm run test:ci:mutation-access-consolidation`, `npm run test:ci:mutation-access-consolidation:cert`.
+- **Era 14 recert (2026-05-27):** `era14-mutation-access-consolidation-recert-v1` — automated registry/scoped-helper honesty; `docs/mutation-access-consolidation-checklist.md`; `npm run smoke:mutation-access`; no mass helper rewrite.
+- **Evidence:** `npm run test:ci:mutation-access-consolidation`, `npm run test:ci:mutation-access-consolidation:cert`, `npm run test:ci:mutation-access-era14:cert`.
 - **Residual:** Copilot capability matrix and feedback session gate remain documented exceptions; broader helper migration deferred.
 
 ## Era 4 — KDS staging operational smoke (Cycle 10)

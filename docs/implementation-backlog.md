@@ -3,7 +3,17 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
-## Era 14 — Nav / page maturity
+## Era 14 — Nav / page maturity / RBAC recert
+
+### KOS-E14-003 — Mutation access consolidation Era 14 recert (P1)
+- ID: `KOS-E14-003`
+- Title: Re-certify domain mutation registry narrative and scoped-helper honesty
+- Module: Security / RBAC
+- Priority: P1 (Era 14 Cycle 3)
+- Status: **completed**
+- Decision: `era14-mutation-access-consolidation-recert-v1` — registry delegation + wave-4 lib denial audits; documents scoped helpers outside registry; **no mass helper rewrite**
+- Evidence: `lib/permissions/mutation-access-era14-policy.ts`, `test:ci:mutation-access-era14:cert`, `docs/mutation-access-consolidation-checklist.md`, `npm run smoke:mutation-access`
+- Next: add registry rows when introducing new reusable domain mutation helpers
 
 ### KOS-E14-001 — Nav page maturity Era 14 recert (P1)
 - ID: `KOS-E14-001`

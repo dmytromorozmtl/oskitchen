@@ -42,6 +42,8 @@ Policy id: `era4-mutation-access-consolidation-v1` (`lib/permissions/mutation-ac
 
 **Not consolidated in Cycle 11:** Copilot (`requireCopilotMutation`), per-domain audit services (CRM, kitchen), or platform GTM bridges — listed as documented exceptions in the registry.
 
+**Era 14 recert (Cycle 3):** `era14-mutation-access-consolidation-recert-v1` (`lib/permissions/mutation-access-era14-policy.ts`) — re-validates registry delegation to `requireMutationPermission`, wave-4 `lib/*` denial-audit wiring, and documents scoped helpers outside the registry (order create spine, support triage bridge, import center, global search, growth). **No mass helper rewrite.** Operator checklist: `docs/mutation-access-consolidation-checklist.md`; smoke: `npm run smoke:mutation-access`. Certs: `test:ci:mutation-access-era14:cert` chained into `test:ci:mutation-access-consolidation:cert`.
+
 ## 3. Canonical Roles
 ### Workspace roles
 - Owner

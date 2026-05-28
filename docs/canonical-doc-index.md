@@ -534,3 +534,4 @@ Incremental refresh after Era 13 cycles 1–4 (enterprise delivery + operator de
 | 2026-05-27 | Era 13 Cycle 5: `era13-scorecard-refresh-v1` — score 100/100; era14 handoff |
 | 2026-05-27 | Era 14 Cycle 1: `era14-nav-page-maturity-recert-v1` — focused nav preview/placeholder honesty audit + payroll/email-campaigns gaps |
 | 2026-05-27 | Era 14 Cycle 2: `era14-cross-channel-rewards-recert-v1` — dual-ledger recert; deferred unified E2E; smoke:cross-channel-rewards |
+| 2026-05-27 | Era 14 Cycle 3: `era14-mutation-access-consolidation-recert-v1` — registry/scoped-helper recert; smoke:mutation-access; no helper rewrite |
