@@ -40,6 +40,7 @@ describe("series a partner expansion era21 CI certification (live repo)", () => 
     const step7 = readFileSync(join(ROOT, SERIES_A_PARTNER_EXPANSION_STEP7_DOC), "utf8");
     expect(step7).toContain("smoke:woo-shopify-live");
     expect(step7).toContain("era21-series-a-partner-expansion-v1");
+    expect(step7).toContain("run-series-a-partner-expansion-post-scale-orchestrator");
     expect(step7).toContain("SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED");
   });
 

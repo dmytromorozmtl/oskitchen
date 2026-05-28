@@ -21,6 +21,9 @@ export function buildSeriesAPartnerExpansionProgressReportMarkdown(
     `- Scale complete: **${result.scaleComplete ? "yes" : "no"}**`,
     `- GO decision: **${result.goDecision ?? "missing"}**`,
     `- Series A complete: ${result.seriesAComplete ? "yes" : "no"}`,
+    `- seriesAMilestone: **${result.seriesAMilestone}**`,
+    `- Ready for data room smokes: ${result.readyForDataRoomSmokes ? "yes" : "no"}`,
+    `- Ready for partner smokes: ${result.readyForPartnerSmokes ? "yes" : "no"}`,
     "",
     "## Track checklist",
     "",
@@ -48,7 +51,9 @@ export function buildSeriesAPartnerExpansionProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write");
   lines.push("npm run ops:validate-series-a-partner-expansion-env");
+  lines.push("npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write");
   lines.push("npm run smoke:investor-narrative-onepager");
   lines.push("npm run smoke:competitor-feature-gap-matrix");
   lines.push("npm run smoke:woo-shopify-live");

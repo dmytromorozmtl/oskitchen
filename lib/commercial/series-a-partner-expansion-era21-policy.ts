@@ -15,11 +15,14 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_EXTENDS_POLICIES = [
   "era17-competitor-feature-gap-matrix-v1",
   SERIES_A_PARTNER_EXPANSION_PHASES_ERA21_POLICY_ID,
   SERIES_A_PARTNER_EXPANSION_UI_ERA21_POLICY_ID,
+  "era21-series-a-partner-expansion-post-scale-orchestrator-v1",
 ] as const;
 
 export const SERIES_A_PARTNER_EXPANSION_ERA21_OPS_SCRIPTS = [
+  "ops:run-series-a-partner-expansion-post-scale-orchestrator",
   "ops:validate-series-a-partner-expansion-env",
   "ops:export-series-a-partner-expansion-env-template",
+  "ops:export-series-a-partner-expansion-readiness-checklist",
   "ops:sync-series-a-partner-expansion-progress-report",
 ] as const;
 
@@ -29,9 +32,11 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_CI_SCRIPTS = [
 ] as const;
 
 export const SERIES_A_PARTNER_EXPANSION_ERA21_UNIT_TESTS = [
+  "tests/unit/series-a-partner-expansion-post-scale-orchestrator-era21.test.ts",
   "tests/unit/series-a-partner-expansion-phases-era21.test.ts",
   "tests/unit/series-a-partner-expansion-ui-era21.test.ts",
   "tests/unit/owner-daily-briefing-series-a-partner-expansion-era21.test.ts",
+  "tests/unit/run-series-a-partner-expansion-post-scale-orchestrator.test.ts",
   "tests/unit/series-a-partner-expansion-era21-cert-live.test.ts",
 ] as const;
 

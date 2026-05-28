@@ -13,6 +13,7 @@ import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary"
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { resolveSeriesAPartnerExpansionMilestone } from "@/lib/commercial/series-a-partner-expansion-post-scale-orchestrator-era21";
 import {
   buildSeriesAPartnerExpansionPhaseStatuses,
   COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
@@ -74,6 +75,9 @@ export function evaluateSeriesAPartnerExpansionEnv(env: NodeJS.ProcessEnv = proc
   phases: ReturnType<typeof buildSeriesAPartnerExpansionPhaseStatuses>;
   goDecision: string | null;
   seriesAComplete: boolean;
+  readyForDataRoomSmokes: boolean;
+  readyForPartnerSmokes: boolean;
+  seriesAMilestone: ReturnType<typeof resolveSeriesAPartnerExpansionMilestone>;
 } {
   const artifacts = readSeriesAPartnerExpansionArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -107,6 +111,30 @@ export function evaluateSeriesAPartnerExpansionEnv(env: NodeJS.ProcessEnv = proc
     env,
   });
   const seriesAComplete = resolveSeriesAPartnerExpansionComplete(phases);
+  const trackA = phases.find((phase) => phase.id === "track_a_series_a_data_room");
+  const trackB = phases.find((phase) => phase.id === "track_b_partner_channel_expansion");
+  const competitorAligned =
+    artifacts.competitorMatrix?.overall === "PASSED" &&
+    artifacts.competitorMatrix.matrixProofStatus === "evidence_aligned_era17";
+  const channelLivePassed = artifacts.p0Staging?.children.channelLive.overall === "PASSED";
+  const tier2Passed = artifacts.tier2Summary?.tier2ProofStatus === "proof_passed";
+  const integrationHonest = channelLivePassed || tier2Passed;
+  const readyForDataRoomSmokes =
+    prerequisites.prerequisitesComplete &&
+    !seriesAComplete &&
+    trackA?.complete !== true &&
+    !competitorAligned;
+  const readyForPartnerSmokes =
+    prerequisites.prerequisitesComplete &&
+    !seriesAComplete &&
+    trackB?.complete !== true &&
+    !integrationHonest;
+  const seriesAMilestone = resolveSeriesAPartnerExpansionMilestone({
+    prerequisitesComplete: prerequisites.prerequisitesComplete,
+    scaleComplete,
+    seriesAComplete,
+    phases,
+  });
 
   return {
     prerequisites,
@@ -116,6 +144,9 @@ export function evaluateSeriesAPartnerExpansionEnv(env: NodeJS.ProcessEnv = proc
     phases,
     goDecision,
     seriesAComplete,
+    readyForDataRoomSmokes,
+    readyForPartnerSmokes,
+    seriesAMilestone,
   };
 }
 
@@ -132,6 +163,9 @@ function main() {
           scaleComplete: result.scaleComplete,
           goDecision: result.goDecision,
           seriesAComplete: result.seriesAComplete,
+          readyForDataRoomSmokes: result.readyForDataRoomSmokes,
+          readyForPartnerSmokes: result.readyForPartnerSmokes,
+          seriesAMilestone: result.seriesAMilestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -160,6 +194,8 @@ function main() {
     console.log("Blocked — decision must be GO in artifacts/pilot-gono-go-summary.json.\n");
     process.exit(2);
   }
+
+  console.log(`Series A milestone: ${result.seriesAMilestone}\n`);
 
   for (const phase of result.phases) {
     const marker = phase.complete ? "✓" : phase.optional ? "○ (optional)" : "○";

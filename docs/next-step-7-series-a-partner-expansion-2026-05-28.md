@@ -39,29 +39,37 @@ Scale complete (era21 scale panels hidden)
 ## Preflight
 
 ```bash
-npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write   # planned — Step 7 orchestrator
+npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write
 npm run ops:validate-scale-readiness-env -- --json        # scaleComplete: true
 npm run ops:validate-series-a-partner-expansion-env -- --json
 npm run ops:export-series-a-partner-expansion-env-template -- --write
 npm run ops:sync-series-a-partner-expansion-progress-report -- --write
-npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write   # planned
+npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write
 npm run smoke:investor-narrative-onepager
 npm run smoke:competitor-feature-gap-matrix
 npm run test:ci:commercial-pilot-runbook:cert
 ```
 
-**Planned post-Scale orchestrator milestones (`seriesAMilestone`):**
+**Post-Scale orchestrator milestones (`seriesAMilestone`):**
 
-| Milestone | Track | Blocking? |
-|-----------|-------|-----------|
-| `scale_blocked` | Scale gates 1–5 incomplete | prerequisite |
-| `track_a_data_room` | `SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED=1` | yes |
-| `track_b_partner_channel` | partner one-pager + Woo/Shopify smoke honesty | yes |
-| `track_c_multi_region` | multi-region playbook drafted | yes |
-| `track_d_cs_playbook` | CS playbook with real pilot metrics | yes |
-| `series_a_complete` | Tracks A–D done | terminal |
+| Milestone | Track | Exit code (orchestrator `--json`) |
+|-----------|-------|-----------------------------------|
+| `scale_blocked` | Scale gates 1–5 incomplete | `2` |
+| `track_a_series_a_data_room` | data room bundle + competitor matrix | `0` |
+| `track_b_partner_channel_expansion` | partner one-pager + integration honesty | `0` |
+| `track_c_multi_region_playbook` | multi-region playbook + claims review | `0` |
+| `track_d_customer_success_repeatability` | CS playbook + NPS/support metrics | `0` |
+| `series_a_complete` | Tracks A–D done | `0` |
 
-**Wiring surfaces when Series A incomplete:** briefing priority **6**, Launch Wizard commercial blockers, Platform `#series-a-partner-expansion`. Redirect to Scale orchestrator when `scale_blocked`.
+**Product surfaces active after Scale complete (Series A incomplete):**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Series A ranked action (priority 6) + compact panel |
+| `/dashboard/launch-wizard` | Series A tracks in commercial blockers |
+| Platform → Pilot ops | `#series-a-partner-expansion` panel |
+| `/solutions/ghost-kitchens` + `/integrations` | partner channel surfaces |
+| `/dashboard/reports` | data room KPI source |
 
 ---
 
@@ -138,18 +146,18 @@ Owner Briefing daily cadence — operational tiles only after Step 7 complete (n
 ## Ops commands
 
 ```bash
-npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write   # planned
+npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write
 npm run ops:validate-series-a-partner-expansion-env -- --json
 npm run ops:export-series-a-partner-expansion-env-template -- --write
 npm run ops:sync-series-a-partner-expansion-progress-report -- --write
-npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write   # planned
+npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write
 npm run test:ci:series-a-partner-expansion-era21
 npm run test:ci:series-a-partner-expansion-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-series-a-partner-expansion-validate.yml` (+ planned orchestrator step)
+GitHub workflow: `.github/workflows/ops-series-a-partner-expansion-validate.yml` (includes orchestrator step with `continue-on-error: true`)
 
-**Readiness checklist artifact (planned):** `docs/series-a-partner-expansion-readiness-checklist.md`
+**Readiness checklist artifact:** `docs/series-a-partner-expansion-readiness-checklist.md` (generated via export script — do not hand-edit PASS states)
 
 ---
 
@@ -162,13 +170,27 @@ GitHub workflow: `.github/workflows/ops-series-a-partner-expansion-validate.yml`
 - [ ] Second+ customer GO artifacts isolated per Gate 1 policy
 - [ ] No hand-edited PASS in `artifacts/*.json`
 - [ ] `artifacts/series-a-partner-expansion-progress-report.md` synced
+- [ ] `docs/series-a-partner-expansion-readiness-checklist.md` exported via orchestrator
 
 ---
 
-## Step 8 preview — Market leader positioning
+## Step 8 preview — Market leader positioning (orchestrator plan)
 
 See [`next-step-8-market-leader-positioning-2026-05-28.md`](./next-step-8-market-leader-positioning-2026-05-28.md)
 
-**Engineering:** `era21-market-leader-positioning-v1` · briefing priority **7** · `#market-leader-positioning`
+**Next engineering slice (Step 8, same pattern as Steps 1–7):**
+
+| Component | Planned artifact |
+|-----------|------------------|
+| Orchestrator lib | `lib/commercial/market-leader-positioning-post-series-a-orchestrator-era21.ts` |
+| Policy | `era21-market-leader-positioning-post-series-a-orchestrator-v1` |
+| Milestones | `series_a_blocked` → `pillar1_category_narrative` → `pillar2_moat_proof` → `pillar3_analyst_kit` → `pillar4_expansion_motion` → `market_leader_complete` |
+| Ops scripts | `ops:run-market-leader-positioning-post-series-a-orchestrator`, `ops:export-market-leader-positioning-readiness-checklist` |
+| Validate env | add `marketLeaderMilestone` + `readyForMoatSmokes` to JSON |
+| UI slice | milestone badge + redirect to Series A orchestrator when `series_a_blocked` |
+| Briefing priority | **7** (mutually exclusive with Steps 1–6) |
+| CI workflow | orchestrator step in `ops-market-leader-positioning-validate.yml` |
+
+**Human gate before Step 8:** all Series A tracks A–D complete — `seriesAComplete: true` in validate JSON.
 
 **Immediate action if Scale incomplete:** [`next-step-6-scale-readiness-2026-05-28.md`](./next-step-6-scale-readiness-2026-05-28.md)

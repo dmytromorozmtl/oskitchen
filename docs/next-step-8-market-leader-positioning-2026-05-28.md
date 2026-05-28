@@ -39,11 +39,29 @@ Series A complete (era21 Series A panels hidden)
 ## Preflight
 
 ```bash
+npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write   # planned — Step 8 orchestrator
 npm run ops:validate-series-a-partner-expansion-env -- --json   # seriesAComplete: true
+npm run ops:validate-market-leader-positioning-env -- --json
+npm run ops:export-market-leader-positioning-env-template -- --write
+npm run ops:sync-market-leader-positioning-progress-report -- --write
+npm run ops:export-market-leader-positioning-readiness-checklist -- --write   # planned
 npm run smoke:competitor-feature-gap-matrix
 npm run smoke:investor-narrative-onepager
 npm run test:ci:commercial-pilot-runbook:cert
 ```
+
+**Planned post-Series A orchestrator milestones (`marketLeaderMilestone`):**
+
+| Milestone | Pillar | Blocking? |
+|-----------|--------|-----------|
+| `series_a_blocked` | Series A tracks A–D incomplete | prerequisite |
+| `pillar1_category_narrative` | category narrative + case study publish gate | yes |
+| `pillar2_moat_proof` | integration + TTV + resilience artifact chain | yes |
+| `pillar3_analyst_kit` | analyst kit with honest maturity disclaimers | yes |
+| `pillar4_expansion_motion` | expansion revenue playbook | yes |
+| `market_leader_complete` | Pillars 1–4 done | terminal |
+
+**Wiring surfaces when market leader incomplete:** briefing priority **7**, Launch Wizard commercial blockers, Platform `#market-leader-positioning`. Redirect to Series A orchestrator when `series_a_blocked`.
 
 ---
 
@@ -114,14 +132,18 @@ export MARKET_LEADER_EXPANSION_MOTION_REVIEWED=1
 ## Ops commands
 
 ```bash
+npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write   # planned
 npm run ops:validate-market-leader-positioning-env -- --json
 npm run ops:export-market-leader-positioning-env-template -- --write
 npm run ops:sync-market-leader-positioning-progress-report -- --write
+npm run ops:export-market-leader-positioning-readiness-checklist -- --write   # planned
 npm run test:ci:market-leader-positioning-era21
 npm run test:ci:market-leader-positioning-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-market-leader-positioning-validate.yml`
+GitHub workflow: `.github/workflows/ops-market-leader-positioning-validate.yml` (+ planned orchestrator step)
+
+**Readiness checklist artifact (planned):** `docs/market-leader-positioning-readiness-checklist.md`
 
 ---
 

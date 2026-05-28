@@ -1,6 +1,10 @@
 /**
  * Series A / partner expansion UI slice — Owner Briefing, Launch Wizard, Platform ops.
  */
+import {
+  resolveSeriesAPartnerExpansionMilestoneFromPhaseStatuses,
+  type SeriesAPartnerExpansionMilestone,
+} from "@/lib/commercial/series-a-partner-expansion-post-scale-orchestrator-era21";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -59,6 +63,10 @@ export type SeriesAPartnerExpansionUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
+  postScaleOrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateScaleCommand: string;
+  seriesAMilestone: SeriesAPartnerExpansionMilestone;
   todayHref: string;
   launchWizardHref: string;
   platformOpsHref: string;
@@ -130,6 +138,11 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
   const nextPhaseDetail = nextPhase
     ? formatSeriesAPartnerExpansionPhaseBlockerDetail(nextPhase)
     : null;
+  const seriesAMilestone = resolveSeriesAPartnerExpansionMilestoneFromPhaseStatuses(phases, {
+    prerequisitesComplete: true,
+    scaleComplete: true,
+    seriesAComplete: false,
+  });
 
   return {
     policyId: SERIES_A_PARTNER_EXPANSION_UI_ERA21_POLICY_ID,
@@ -150,6 +163,12 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
     exportTemplateCommand: "npm run ops:export-series-a-partner-expansion-env-template -- --write",
     syncProgressReportCommand:
       "npm run ops:sync-series-a-partner-expansion-progress-report -- --write",
+    postScaleOrchestratorCommand:
+      "npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write",
+    validateScaleCommand: "npm run ops:validate-scale-readiness-env -- --json",
+    seriesAMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${SERIES_A_PARTNER_EXPANSION_PLATFORM_ANCHOR}`,
@@ -174,5 +193,5 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
 export function formatSeriesAPartnerExpansionProgressLabel(
   slice: SeriesAPartnerExpansionUiSlice,
 ): string {
-  return `Series A / partners ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} tracks · GO · ${slice.customerName ?? "customer"}`;
+  return `Series A / partners ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} tracks · ${slice.seriesAMilestone.replaceAll("_", " ")} · GO · ${slice.customerName ?? "customer"}`;
 }

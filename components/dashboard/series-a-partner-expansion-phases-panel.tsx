@@ -51,6 +51,9 @@ export function SeriesAPartnerExpansionPhasesPanel(props: {
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               decision: {slice.goDecision}
             </Badge>
+            <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+              {slice.seriesAMilestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
               Scale complete
             </Badge>
@@ -138,9 +141,12 @@ export function SeriesAPartnerExpansionPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postScaleOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.validateScaleCommand}</li>
                 <li>npm run smoke:investor-narrative-onepager</li>
                 <li>npm run smoke:competitor-feature-gap-matrix</li>
                 <li>npm run smoke:woo-shopify-live</li>
