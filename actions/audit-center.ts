@@ -7,12 +7,9 @@ import { revalidatePath } from "next/cache";
 import type { AuditExportFormat } from "@prisma/client";
 
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { canViewSensitiveAuditDetail } from "@/lib/audit/audit-permissions";
 import {
-  canManageRetentionPolicy,
-  canViewAuditLogs,
-  canViewSensitiveAuditDetail,
-} from "@/lib/audit/audit-permissions";
-import {
+  requireAuditCenterViewAccess,
   requireAuditExportAccess,
   requireAuditRetentionMutationAccess,
 } from "@/lib/audit/require-audit-center-mutation-access";
@@ -35,6 +32,9 @@ import {
 } from "@/services/audit/audit-query-service";
 
 async function resolveScope(): Promise<AuditWorkspaceScope | null> {
+  const viewAccess = await requireAuditCenterViewAccess();
+  if (!viewAccess.ok) return null;
+
   const { sessionUser: user, dataUserId } = await requireTenantActor();
   const profile = await prisma.userProfile.findUnique({
     where: { id: user.id },
@@ -43,9 +43,8 @@ async function resolveScope(): Promise<AuditWorkspaceScope | null> {
   const email = profile?.email ?? user.email ?? null;
   const role = profile?.role ?? null;
   const platformBypass = await hasSuperAdminRoleRow(user.id);
-  if (!canViewAuditLogs(email, role, platformBypass)) return null;
   const workspaces = await prisma.workspace.findMany({
-    where: { ownerUserId: user.id },
+    where: { ownerUserId: dataUserId },
     select: { id: true },
   });
   return {
@@ -225,9 +224,10 @@ export async function upsertAuditRetentionAction(formData: FormData): Promise<vo
 export async function getAuditRetentionForOwnerAction(): Promise<
   { ok: false; error: string } | { ok: true; policy: { retentionDays: number; exportBeforeDelete: boolean; archiveBeforeDelete: boolean; legalHoldNote: string | null } | null }
 > {
+  const retentionAccess = await requireAuditRetentionMutationAccess();
+  if (!retentionAccess.ok) return { ok: false, error: "forbidden" };
   const scope = await resolveScope();
   if (!scope) return { ok: false, error: "forbidden" };
-  if (!canManageRetentionPolicy(scope.email, scope.role, scope.platformBypass)) return { ok: false, error: "forbidden" };
   const wsId = scope.ownedWorkspaceIds[0];
   if (!wsId) return { ok: false, error: "no_workspace" };
   const row = await prisma.auditRetentionPolicy.findUnique({ where: { workspaceId: wsId } });

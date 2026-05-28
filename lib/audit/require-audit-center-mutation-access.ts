@@ -23,6 +23,12 @@ async function requireAuditCenterMutation(
   return { ok: true };
 }
 
+export async function requireAuditCenterViewAccess(): Promise<
+  { ok: true } | { ok: false; error: string }
+> {
+  return requireAuditCenterMutation("reports.read.audit", "audit_center.view");
+}
+
 export async function requireAuditExportAccess(): Promise<
   { ok: true } | { ok: false; error: string }
 > {
