@@ -153,6 +153,12 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **4** | **RBAC wave 4 recert** | `era9-rbac-wave4-recert-v1`; `test:ci:rbac-wave4:cert` |
 | **5** | **Scorecard refresh** | `era9-scorecard-refresh-v1`; this §Scorecard Era 9 |
 
+## Evolution Era 10 cycle ledger
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **Cross-channel rewards recert** | `era10-cross-channel-rewards-recert-v1`; `test:ci:cross-channel-rewards:cert` |
+
 ## Evolution Era 7 cycle ledger
 
 | Cycle | Outcome | Evidence |
@@ -414,3 +420,4 @@ Incremental refresh after Era 9 cycles 1–4 (enterprise / DevOps / security rec
 | 2026-05-27 | Era 9 Cycle 3: `era9-cron-surface-recert-v1` — cron archive posture recert (no new routes) |
 | 2026-05-27 | Era 9 Cycle 4: `era9-rbac-wave4-recert-v1` — wave-4 mutation guard inventory + cert |
 | 2026-05-27 | Era 9 Cycle 5: scorecard refresh 96/100 + `next-master-prompt-input-2026-05-27-era9.md` |
+| 2026-05-27 | Era 10 Cycle 1: `era10-cross-channel-rewards-recert-v1` — dual-ledger rewards honesty recert |

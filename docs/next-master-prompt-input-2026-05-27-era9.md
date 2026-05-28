@@ -28,7 +28,7 @@ All four Era 9 enterprise / DevOps / security cycles from era8 prompt input **co
 
 | Cycle | Outcome |
 |-------|---------|
-| — | *Not started* |
+| **1** | **Cross-channel rewards recert** — `era10-cross-channel-rewards-recert-v1`; dual ledger honest; no unified E2E |
 
 ---
 
@@ -43,7 +43,7 @@ All four Era 9 enterprise / DevOps / security cycles from era8 prompt input **co
 
 ## 4. What Remains Open (P1)
 
-- Cross-channel loyalty/gift card E2E or honest gap doc (`era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`).
+- ~~Cross-channel loyalty/gift card E2E or honest gap doc~~ — **Done** Cycle 1 (`era10-cross-channel-rewards-recert-v1`); unified E2E still `deferred_locked`.
 - KDS Playwright Realtime spec — staging-only; explicit era decision.
 - Production calendar cross-week reschedule / status workflow UI.
 - ~~Governance bundle partition~~ — **Done** Era 9 Cycle 2.

@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 10 — Customer value loop / GTM honesty
+
+### KOS-E10-001 — Cross-channel rewards recert (P1)
+- ID: `KOS-E10-001`
+- Title: Re-certify dual-ledger rewards honesty (POS certified; no unified E2E claim)
+- Module: Growth / POS / storefront / GTM
+- Priority: P1 (Era 10 Cycle 1)
+- Status: **completed**
+- Decision: `era10-cross-channel-rewards-recert-v1` — extends `era4-cross-channel-rewards-v1` + `era6-dual-ledger-gtm-lock-v1`; prisma model separation + POS wiring recert; unification remains `deferred_locked`
+- Evidence: `lib/rewards/cross-channel-rewards-era10-policy.ts`, `test:ci:cross-channel-rewards:cert`
+- Next: unified rewards era only with explicit schema/migration budget; no fake cross-channel E2E
+
 ## Era 9 — Enterprise delivery / DevOps
 
 ### KOS-E9-005 — Era 9 scorecard refresh (P0)

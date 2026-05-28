@@ -260,6 +260,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 
+### 8c4l. Cross-channel rewards recert (Era 10 Cycle 1)
+- Policy: `lib/rewards/cross-channel-rewards-era10-policy.ts` (`era10-cross-channel-rewards-recert-v1`; extends `era4-cross-channel-rewards-v1`, `era6-dual-ledger-gtm-lock-v1`; **dual ledger** honesty)
+- Unit: `test:ci:cross-channel-rewards` — POS checkout wiring + storefront honesty
+- Wiring cert: `test:ci:cross-channel-rewards:cert` (in `test:ci:governance-bundles:partition-money-path`)
+- Honest scope: no unified cross-channel Playwright E2E; unification `deferred_locked`
+
 ### 8c4k. Era 9 scorecard refresh (Era 9 Cycle 5)
 - Policy: `lib/governance/era9-scorecard-policy.ts` (`era9-scorecard-refresh-v1`)
 - Docs: `docs/era9-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era9.md`

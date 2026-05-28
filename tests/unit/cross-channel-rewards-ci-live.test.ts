@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   CROSS_CHANNEL_REWARDS_CI_SCRIPTS,
   CROSS_CHANNEL_REWARDS_POLICY_ID,
@@ -34,8 +35,10 @@ describe("cross-channel rewards CI certification (live repo)", () => {
 
   it("includes cross-channel rewards cert in governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:cross-channel-rewards:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:cross-channel-rewards");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:cross-channel-rewards:cert")).toBe(
+      true,
+    );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:cross-channel-rewards")).toBe(true);
   });
 
   it("has policy module and unit tests on disk", () => {
