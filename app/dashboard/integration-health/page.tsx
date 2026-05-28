@@ -53,9 +53,12 @@ import {
   listIntegrationHealthCards,
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
+import { IntegrationHealthSupportAdminPanel } from "@/components/dashboard/integration-health-support-admin-panel";
 import { IntegrationHealthSummaryPanel } from "@/components/integrations/integration-health-summary";
 import { loadIntegrationHealthChannelCardsModel } from "@/services/integrations/integration-health-channel-cards-service";
 import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
+import { loadIntegrationHealthSupportAdminModel } from "@/services/integrations/integration-health-support-admin-service";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
 function tierBadge(tier: IntegrationMaturityTier) {
   const variant: Record<IntegrationMaturityTier, "default" | "secondary" | "destructive" | "outline"> = {
@@ -75,11 +78,18 @@ function tierBadge(tier: IntegrationMaturityTier) {
   );
 }
 
-export default async function IntegrationHealthDashboardPage() {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+export default async function IntegrationHealthDashboardPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ mode?: string }>;
+}) {
+  const { dataUserId } = await getTenantActor();
+  const actor = await requireWorkspacePermissionActor();
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const supportCompact = resolvedSearchParams.mode === "support";
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards] =
+  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards, supportAdmin] =
     await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(dataUserId),
@@ -103,6 +113,13 @@ export default async function IntegrationHealthDashboardPage() {
     listChannelPilotLiveProofSlices(dataUserId),
     loadIntegrationHealthSmokeArtifactsModel(),
     loadIntegrationHealthChannelCardsModel(dataUserId),
+    loadIntegrationHealthSupportAdminModel({
+      dataUserId,
+      sessionUserId: actor.sessionUserId,
+      email: actor.email,
+      workspaceRole: actor.workspaceRole,
+      platformBypass: actor.platformBypass,
+    }),
   ]);
 
   const workspaceDemo = kitchen?.demoMode ?? false;
@@ -123,6 +140,8 @@ export default async function IntegrationHealthDashboardPage() {
 
   return (
     <div className="space-y-8">
+      <IntegrationHealthSupportAdminPanel model={supportAdmin} compact={supportCompact} />
+
       <IntegrationHealthSummaryPanel summary={healthSummary} />
 
       <IntegrationHealthChannelCardsPanel model={channelCards} />

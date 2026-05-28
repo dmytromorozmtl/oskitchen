@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-011 — Integration Health support/admin triage mode (P1 WOW)
+- ID: `KOS-E19-011`
+- Title: Era 19 Workstream D Cycle 11 — support admin triage panel on integration health
+- Module: Integrations / Integration Health / Support / Platform ops
+- Priority: P1 (WOW pillar — channel reliability + support triage)
+- Status: **support_admin_panel_wired**
+- Decision: `era19-integration-health-support-admin-v1` — tenant-scoped triage for platform bypass + support triage roles; commercial GO/NO-GO + P0 + channel + smoke rows; platform links only in platform mode
+- Evidence: `lib/integrations/integration-health-support-admin-era19.ts`, panel on `/dashboard/integration-health#support-admin-triage`
+- Next: Briefing B4 support-admin role pack or Launch Wizard C3 mobile polish
+
 ### KOS-E19-010 — Briefing tile deep-link polish (P1 WOW)
 - ID: `KOS-E19-010`
 - Title: Era 19 Workstream B Cycle 10 — briefing tile link registry, why-it-matters microcopy, blocked states
