@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 12 — Integration hardening / enterprise
+
+### KOS-E12-001 — Channel golden path Era 12 recert (P1)
+- ID: `KOS-E12-001`
+- Title: Re-certify Woo/Shopify golden path including order hub visibility stage
+- Module: Integrations / order hub
+- Priority: P1 (Era 12 Cycle 1)
+- Status: **completed**
+- Decision: `era12-channel-golden-path-recert-v1` — wires `order_hub_visibility` to `loadOrderHubPageData`; no kitchen Order auto-create claim
+- Evidence: `lib/integrations/channel-golden-path-era12-policy.ts`, `test:ci:channel-golden-path-era12:cert`
+- Next: live store smoke only via `scripts/smoke-woo-shopify-certification.ts` when credentials available
+
 ## Era 11 — DevOps scale / RBAC recert
 
 ### KOS-E11-005 — Era 11 scorecard refresh (P1)

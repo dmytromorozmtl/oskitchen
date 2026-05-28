@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   CHANNEL_GOLDEN_PATH_CI_SCRIPTS,
   CHANNEL_GOLDEN_PATH_FIXTURES,
@@ -39,8 +40,15 @@ describe("channel golden path CI certification (live repo)", () => {
 
   it("includes channel golden-path cert in governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:channel-golden-path:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:channel-golden-path");
+    expect(
+      governanceBundlesIncludesCert(scripts, "test:ci:channel-golden-path:cert"),
+    ).toBe(true);
+    expect(
+      governanceBundlesIncludesCert(scripts, "test:ci:channel-golden-path"),
+    ).toBe(true);
+    expect(scripts["test:ci:channel-golden-path:cert"]).toContain(
+      "channel-golden-path-era12-cert-live",
+    );
   });
 
   it("wires webhook processors, fixtures, and unit tests on disk", () => {

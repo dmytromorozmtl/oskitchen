@@ -5,6 +5,10 @@ import { IntegrationProvider } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  CHANNEL_GOLDEN_PATH_ERA12_ORDER_HUB_SERVICE_MARKERS,
+  CHANNEL_GOLDEN_PATH_ERA12_WORKSPACE_SCOPE_MARKERS,
+} from "@/lib/integrations/channel-golden-path-era12-policy";
+import {
   CHANNEL_GOLDEN_PATH_FIXTURES,
   CHANNEL_GOLDEN_PATH_POLICY_ID,
   CHANNEL_GOLDEN_PATH_STAGES,
@@ -151,5 +155,16 @@ describe("channel golden path (Woo / Shopify)", () => {
       webhookEventId: "wh-shopify-1",
     });
     expect(mockConnUpdate).toHaveBeenCalled();
+  });
+
+  it("order hub visibility stage loads external orders via workspace scope (era12 recert)", () => {
+    const hub = readFileSync(join(ROOT, "services/order-hub/order-hub-service.ts"), "utf8");
+    for (const marker of CHANNEL_GOLDEN_PATH_ERA12_ORDER_HUB_SERVICE_MARKERS) {
+      expect(hub).toContain(marker);
+    }
+    const scope = readFileSync(join(ROOT, "lib/scope/workspace-channel-scope.ts"), "utf8");
+    for (const marker of CHANNEL_GOLDEN_PATH_ERA12_WORKSPACE_SCOPE_MARKERS) {
+      expect(scope).toContain(marker);
+    }
   });
 });

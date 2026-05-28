@@ -4,7 +4,7 @@
 **In-app runner:** Dashboard → Integrations → WooCommerce/Shopify → **Test shop certification**.  
 **CLI:** `npx tsx scripts/smoke-woo-shopify-certification.ts --owner-email …`
 
-**CI golden path (Era 4 Cycle 5):** policy `era4-channel-golden-path-v1` in `lib/integrations/channel-golden-path-policy.ts`; `npm run test:ci:channel-golden-path` + `test:ci:channel-golden-path:cert` (tier 0 governance bundles). Certifies webhook → `externalOrder` → channel import staging — **not** automatic kitchen `Order` creation or full marketplace live ops.
+**CI golden path (Era 4 Cycle 5 + Era 12 Cycle 1 recert):** policy `era4-channel-golden-path-v1` + `era12-channel-golden-path-recert-v1`; `npm run test:ci:channel-golden-path` + `test:ci:channel-golden-path:cert` (tier 0 governance bundles). Certifies webhook → `externalOrder` → channel import staging → **order_hub_visibility** via order hub external list (`loadOrderHubPageData` + `externalOrderListWhereForOwner`) — **not** automatic kitchen `Order` creation or full marketplace live ops.
 
 Do not market as production-certified until this checklist is signed per tenant.
 

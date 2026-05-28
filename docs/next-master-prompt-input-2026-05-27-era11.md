@@ -28,7 +28,7 @@ All four Era 11 DevOps / RBAC / KDS staging cycles from era10 handoff **complete
 
 | Cycle | Outcome |
 |-------|---------|
-| — | *Not started* |
+| **1** | **Channel golden path recert** — `era12-channel-golden-path-recert-v1`; order hub visibility stage certified |
 
 ---
 
@@ -57,7 +57,7 @@ All four Era 11 DevOps / RBAC / KDS staging cycles from era10 handoff **complete
 Pick **one theme per cycle**; do not reopen Era 4–11 unless regression proven.
 
 1. **Enterprise delivery (R2)** — SSO/SAML pilot with explicit budget; no fake SOC2/SSO claims.
-2. **Integration hardening** — extend channel golden path only if gap found.
+2. ~~**Integration hardening** — channel golden path~~ — **Done** Cycle 1 (`era12-channel-golden-path-recert-v1`).
 3. **Governance / CI runtime** — only if partition wall-time regresses.
 4. **Operator depth** — production calendar or KDS only with clear bounded scope.
 

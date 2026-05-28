@@ -232,7 +232,7 @@ npm run test:ci:pos-money-path:e2e
 | Channel golden-path wiring cert | `npm run test:ci:channel-golden-path:cert` | Policy id `era4-channel-golden-path-v1`, scripts, fixtures, honest scope in matrix + maturity |
 | Channel golden-path unit | `npm run test:ci:channel-golden-path` | Normalize → webhook processor → `externalOrder` + channel import staging (mocked); channel certification + webhook signature helpers |
 
-**Golden-path policy (Era 4 Cycle 5):** `lib/integrations/channel-golden-path-policy.ts`. Certifies webhook → normalized order → `externalOrder` → channel import batch/record → order hub visibility via `externalOrder` list. **Does not certify** automatic kitchen `Order` creation from Woo/Shopify webhooks (`kitchenOrderAutoCreateFromWebhook: false`). Staging/live store proof: `npx tsx scripts/smoke-woo-shopify-certification.ts` (optional `--skip-live`).
+**Golden-path policy (Era 4 Cycle 5 + Era 12 Cycle 1 recert):** `lib/integrations/channel-golden-path-policy.ts` (`era4-channel-golden-path-v1`); **Era 12:** `era12-channel-golden-path-recert-v1` — certifies `order_hub_visibility` via `loadOrderHubPageData` + `externalOrderListWhereForOwner`. Webhook → normalized order → `externalOrder` → channel import staging → order hub external list. **Does not certify** automatic kitchen `Order` creation from Woo/Shopify webhooks (`kitchenOrderAutoCreateFromWebhook: false`). Staging/live store proof: `npx tsx scripts/smoke-woo-shopify-certification.ts` (optional `--skip-live`).
 
 **Wiring certification (tier 0):** `test:ci:channel-golden-path:cert` + `test:ci:channel-golden-path` chained in `test:ci:governance-bundles` after integration honesty.
 

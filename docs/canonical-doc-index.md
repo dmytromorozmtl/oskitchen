@@ -480,3 +480,4 @@ Incremental refresh after Era 11 cycles 1–4 (DevOps scale / RBAC recert / KDS 
 | 2026-05-27 | Era 11 Cycle 3: `era11-kds-realtime-e2e-staging-v1` — KDS Playwright staging spec + skip summary artifact |
 | 2026-05-27 | Era 11 Cycle 4: `era11-kds-realtime-e2e-staging-workflow-v1` — optional `playwright-kds-staging.yml` workflow |
 | 2026-05-27 | Era 11 Cycle 5: `era11-scorecard-refresh-v1` — score 98/100; era12 handoff |
+| 2026-05-27 | Era 12 Cycle 1: `era12-channel-golden-path-recert-v1` — order hub visibility stage recert |
