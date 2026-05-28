@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-040 — Enterprise SSO pilot setup focus (P0)
+- ID: `KOS-E18-040`
+- Title: Era 18 Workstream A Cycle 40 — SSO admin wizard attention + step row next actions
+- Module: Enterprise identity / Security
+- Priority: P0 (SSO IdP staging login proof path — admin UX before ops proof)
+- Status: **enterprise_sso_pilot_setup_focus_attention_wired**
+- Decision: `era18-enterprise-sso-pilot-setup-focus-v1` — 4-step wizard on SSO settings page; IdP login proof never auto-passes in product UI (`awaiting_idp_login_proof`)
+- Evidence: `lib/enterprise/enterprise-sso-pilot-setup-focus-era18.ts`, `components/dashboard/settings/sso-pilot-setup-wizard.tsx`, SSO admin form anchors
+- Next: Ops completes Cycle 2 IdP login proof on staging; re-run `smoke:enterprise-sso-idp-staging` and pilot_ready gate
+
 ### KOS-E18-039 — Product mapping conflicts and suggestions parity (P0)
 - ID: `KOS-E18-039`
 - Title: Era 18 Workstream C Cycle 39 — conflicts + suggestions queue focus parity

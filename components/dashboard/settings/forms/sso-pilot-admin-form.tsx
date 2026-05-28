@@ -10,6 +10,7 @@ import {
 } from "@/actions/workspace-sso";
 import { getActionError } from "@/lib/action-result";
 import type { WorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
+import { SsoPilotSetupWizard } from "@/components/dashboard/settings/sso-pilot-setup-wizard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,7 +89,9 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <SsoPilotSetupWizard view={view} />
+
+      <Card id="sso-pilot-status">
         <CardHeader>
           <CardTitle className="text-base">Pilot status</CardTitle>
           <CardDescription>
@@ -109,7 +112,7 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
       </Card>
 
       {!view.ssoEntitlementEnabled ? (
-        <Card>
+        <Card id="sso-pilot-entitlement">
           <CardContent className="pt-6 text-sm text-muted-foreground">
             Enterprise SSO entitlement (`ssoOidc`) is required before configuring a pilot tenant.
             Upgrade plan or add an entitlement override for the workspace owner.
@@ -117,7 +120,7 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
         </Card>
       ) : (
         <form onSubmit={onConfigure} className="space-y-6">
-          <Card>
+          <Card id="sso-pilot-configuration">
             <CardHeader>
               <CardTitle className="text-base">Pilot IdP configuration</CardTitle>
               <CardDescription>
@@ -184,7 +187,7 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
             </CardContent>
           </Card>
 
-          <div className="flex flex-wrap gap-2">
+          <div id="sso-pilot-activation" className="flex flex-wrap gap-2 scroll-mt-24">
             <Button type="submit" disabled={pending}>
               Save pilot configuration
             </Button>
@@ -198,7 +201,7 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
         </form>
       )}
 
-      <Card>
+      <Card id="sso-pilot-login-entry">
         <CardHeader>
           <CardTitle className="text-base">Staff login entry</CardTitle>
           <CardDescription>
