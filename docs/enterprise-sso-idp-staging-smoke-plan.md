@@ -212,7 +212,8 @@ Run: `npm run smoke:enterprise-sso-idp-staging`
 | IdP staging prerequisites | **SKIPPED WITH REASON** — 6 env vars unset locally |
 | Staging health / login page | **SKIPPED** (prerequisites missing) |
 | `idp_browser_login` | **SKIPPED** — no Okta/Entra + staging secrets in ops shell |
-| Artifact | `artifacts/enterprise-sso-idp-staging-smoke-summary.json` → `loginProofStatus: proof_skipped_missing_prerequisites` |
+| Smoke overall | **SKIPPED** (wiring cert passed; login proof not attested) |
+| Artifact | `artifacts/enterprise-sso-idp-staging-smoke-summary.json` → `loginProofStatus: proof_skipped_missing_prerequisites`; `overall: SKIPPED` |
 
 **Missing locally:** `E2E_STAGING_BASE_URL`, `SSO_STAGING_WORKSPACE_ID`, `SSO_STAGING_IDP_VENDOR`, `SSO_STAGING_ALLOWED_DOMAIN`, `SSO_STAGING_TEST_EMAIL`, `SSO_STAGING_SUPABASE_PROVIDER_REF`.
 

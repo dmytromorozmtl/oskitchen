@@ -111,7 +111,7 @@ describe("enterprise SSO IdP staging smoke summary", () => {
     );
     expect(summary.version).toBe("era17-enterprise-sso-idp-staging-smoke-v1");
     expect(summary.wiringCertPassed).toBe(true);
-    expect(summary.overall).toBe("PASSED");
+    expect(summary.overall).toBe("SKIPPED");
     expect(summary.loginProofStatus).toBe("proof_skipped_missing_prerequisites");
     expect(summary.missingEnvVars).toEqual(["E2E_STAGING_BASE_URL"]);
   });

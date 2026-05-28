@@ -292,17 +292,23 @@ export function buildEnterpriseSsoIdpStagingSmokeSummary(
     (step) => step.id === "idp_staging_prerequisites" && step.status === "PASSED",
   );
   const idpBrowserLoginStep = steps.find((step) => step.id === "idp_browser_login");
+  const loginProofStatus = resolveEnterpriseSsoIdpLoginProofStatus({
+    prerequisitesMet: idpStagingPrerequisitesMet,
+    idpBrowserLoginStep,
+  });
+
+  let overall = resolveEnterpriseSsoIdpStagingSmokeOverall(steps);
+  if (loginProofStatus !== "proof_passed" && overall === "PASSED") {
+    overall = loginProofStatus === "proof_failed" ? "FAILED" : "SKIPPED";
+  }
 
   return {
     version: ENTERPRISE_SSO_IDP_STAGING_SMOKE_SUMMARY_VERSION,
     runAt: new Date().toISOString(),
-    overall: resolveEnterpriseSsoIdpStagingSmokeOverall(steps),
+    overall,
     wiringCertPassed,
     idpStagingPrerequisitesMet,
-    loginProofStatus: resolveEnterpriseSsoIdpLoginProofStatus({
-      prerequisitesMet: idpStagingPrerequisitesMet,
-      idpBrowserLoginStep,
-    }),
+    loginProofStatus,
     missingEnvVars: [...(input?.missingEnvVars ?? [])],
     operatorProof:
       input?.operatorProof ??

@@ -39,7 +39,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 5. Cycle 2: operator completes browser SSO login → dashboard; capture screenshot + audit `sso.login_success`.
 6. Do **not** claim qualified pilot-ready SSO or production SSO until Cycle 3 gate with Cycle 2 `proof_passed` artifact.
 
-**Cycle 2 status (2026-05-28):** `era17-enterprise-sso-idp-login-proof-v1` — **awaiting_operator_proof**; local smoke → **SKIPPED WITH REASON** (6 prerequisite env vars unset). Re-run after ops configures Okta/Entra + staging secrets.
+**Cycle 2 status (2026-05-28):** `era17-enterprise-sso-idp-login-proof-v1` — **awaiting_operator_proof**; smoke re-run → wiring cert **PASSED**; IdP login **SKIPPED WITH REASON** (6 prerequisite env vars unset); artifact `overall: SKIPPED`. Re-run after ops configures Okta/Entra + staging secrets + operator proof env vars.
 
 **Cycle 2 operator proof env vars:** `SSO_STAGING_OPERATOR_EMAIL`, `SSO_STAGING_LOGIN_SCREENSHOT_PATH`, `SSO_STAGING_AUDIT_EVENT_REF`, `SSO_STAGING_NEGATIVE_TEST_NOTE` — see `era17-enterprise-sso-idp-login-proof-v1`.
 

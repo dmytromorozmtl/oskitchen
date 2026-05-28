@@ -168,7 +168,7 @@ sequenceDiagram
 | Cycle | Scope | Status |
 |-------|--------|--------|
 | **1** | IdP staging smoke plan + env documentation + orchestrator | **Complete** — [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md); `smoke:enterprise-sso-idp-staging` |
-| **2** | Staging IdP login proof | **Engineering complete — awaiting operator** — `era17-enterprise-sso-idp-login-proof-v1`; smoke executed → **SKIPPED WITH REASON** until staging + IdP secrets |
+| **2** | Staging IdP login proof | **Engineering complete — awaiting operator** — `era17-enterprise-sso-idp-login-proof-v1`; smoke executed → **SKIPPED WITH REASON** (`overall: SKIPPED`; 6 prerequisite env vars unset) until staging + IdP secrets |
 | **3** | Qualified pilot gate | Pending — `era17-enterprise-sso-pilot-ready-v1` only if Cycle 2 `proof_passed` |
 
 **Ops doc:** Okta/Entra test tenant, Supabase SAML, workspace mapping, break-glass, rollback, negative tests.

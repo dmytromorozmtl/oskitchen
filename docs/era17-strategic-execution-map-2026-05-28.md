@@ -21,7 +21,7 @@
 | Cycle Band | Goal | Tasks | Acceptance Criteria | Validation | Risks | Owner |
 |------------|------|-------|---------------------|------------|-------|-------|
 | **1** | IdP staging smoke plan | Document Okta/Entra test tenant; env vars; break-glass | Runbook section in SSO design doc | Doc review | Wrong tenant mapping | Security |
-| **2** | Staging IdP login proof | Configure Supabase SAML; one workspace pilot | Owner completes SSO login → dashboard | Screenshot + audit `sso.login_success` | IdP misconfig | Platform |
+| **2** | Staging IdP login proof | Configure Supabase SAML; one workspace pilot | Owner completes SSO login → dashboard | `smoke:enterprise-sso-idp-staging` + `test:ci:enterprise-sso-idp-staging-era17:cert` | IdP misconfig | Platform | **Awaiting ops** — `era17-enterprise-sso-idp-login-proof-v1`; smoke → **SKIPPED WITH REASON** (6 env vars); `loginProofStatus: proof_skipped_missing_prerequisites` |
 | **3** | `pilot_ready` policy gate | New policy `era17-enterprise-sso-pilot-ready-v1` if proof exists | Delivery status `pilot_ready` only with evidence artifact | `test:ci:enterprise-sso-*-era17:cert` | Claiming production | Security |
 | **4** | SSO operator runbook | Support boundaries, rollback, entitlement `ssoOidc` | `commercial-pilot-runbook.md` updated | pilot cert chain | Over-promising | GTM |
 | **5** | Domain / email mapping hardening | Edge cases: denied domain, wrong workspace | Unit tests for callback guard | SSO unit suite | Cross-tenant login | Platform |

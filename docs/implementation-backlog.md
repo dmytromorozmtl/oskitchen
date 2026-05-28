@@ -322,7 +322,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Priority: P0 (Era 17 Cycle 2 — Workstream A)
 - Status: **awaiting_operator_proof**
 - Decision: `era17-enterprise-sso-idp-login-proof-v1` — operator evidence env vars + enhanced smoke summary; **SKIPPED WITH REASON** when staging/IdP secrets absent
-- Evidence: `lib/enterprise/enterprise-sso-idp-login-proof-era17-policy.ts`, enhanced `enterprise-sso-idp-staging-smoke-summary.ts`, `artifacts/enterprise-sso-idp-staging-smoke-summary.json` (`loginProofStatus: proof_skipped_missing_prerequisites` when secrets absent)
+- Evidence: `lib/enterprise/enterprise-sso-idp-login-proof-era17-policy.ts`, enhanced `enterprise-sso-idp-staging-smoke-summary.ts`, `artifacts/enterprise-sso-idp-staging-smoke-summary.json` (`loginProofStatus: proof_skipped_missing_prerequisites`, `overall: SKIPPED` when secrets absent; wiring cert PASSED)
 - Next: **Ops** — configure Okta/Entra + staging secrets; manual browser login; re-run `smoke:enterprise-sso-idp-staging` for `loginProofStatus: proof_passed`
 
 ### KOS-E17-001 — IdP staging smoke plan (P0)
