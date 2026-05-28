@@ -306,10 +306,11 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8c4p. Production calendar operator depth (Era 13 Cycle 4)
 - Policy: `lib/production/production-calendar-operator-depth-era13-policy.ts` (`era13-production-calendar-operator-depth-v1`; consolidates Era 6/8/10/11)
+- era15 recert: `lib/production/production-calendar-operator-depth-era15-policy.ts` (`era15-production-calendar-operator-recert-v1`)
 - Manual: `docs/production-calendar-operator-checklist.md` — pilot steps; not rush-hour certified
 - Smoke: `npm run smoke:production-calendar` — runs `test:ci:production-calendar-move-ui:cert` + era13 cert (not browser E2E)
 - Honest gaps: no drag-and-drop, KDS sync, or delete-task UI
-- Wiring cert: `test:ci:production-calendar-operator-depth-era13:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
+- Wiring cert: `test:ci:production-calendar-operator-depth-era15:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
 
 ### 8c4m. Production calendar cross-week UI (Era 10 Cycle 2)
 - Policy: `lib/production/production-calendar-cross-week-ui-policy.ts` (`era10-production-calendar-cross-week-ui-v1`; extends `era8-production-calendar-move-ui-v1`)

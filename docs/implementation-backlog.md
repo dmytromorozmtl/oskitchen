@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 15 — KDS / enterprise / DevOps
 
+### KOS-E15-005 — Production calendar operator Era 15 recert (P1)
+- ID: `KOS-E15-005`
+- Title: Re-certify production calendar pilot operator checklist and honest scope
+- Module: Production / Ops
+- Priority: P1 (Era 15 Cycle 5)
+- Status: **completed**
+- Decision: `era15-production-calendar-operator-recert-v1` — manual sign-off checklist; `smoke:production-calendar`; no drag-and-drop/KDS sync/rush-hour claims
+- Evidence: `lib/production/production-calendar-operator-depth-era15-policy.ts`, `test:ci:production-calendar-operator-depth-era15:cert`, `docs/production-calendar-operator-checklist.md`
+- Next: staging manual sign-off by ops when environment available
+
 ### KOS-E15-004 — Typecheck slice Era 15 recert (P1)
 - ID: `KOS-E15-004`
 - Title: Re-certify strict typecheck slices and parallel CI job honesty

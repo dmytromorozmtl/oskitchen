@@ -198,6 +198,15 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:kds-staging-smoke:cert` + `test:ci:kds-staging-smoke` chained in `test:ci:governance-bundles`.
 
+## Tier 1c3 — Production calendar operator (`partition-product-kds` via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Production calendar move UI cert | `npm run test:ci:production-calendar-move-ui:cert` | Era 8/10 move, cross-week, status workflow + era13/era15 operator depth |
+| Era 15 production calendar recert | `npm run test:ci:production-calendar-operator-depth-era15:cert` | `era15-production-calendar-operator-recert-v1`; `npm run smoke:production-calendar`; manual checklist |
+
+**Policy:** `era13-production-calendar-operator-depth-v1` + `era15-production-calendar-operator-recert-v1`. **Not certified:** drag-and-drop, KDS sync, delete-task UI, rush-hour production, default CI browser E2E. **Manual:** `docs/production-calendar-operator-checklist.md`.
+
 | KDS realtime / poll smoke unit | `npm run test:ci:kds-realtime-smoke` | Poll 15s / 60s intervals, channel name, status label wiring |
 | KDS realtime smoke cert | `npm run test:ci:kds-realtime-smoke:cert` | Policy `era6-kds-realtime-smoke-v1`, governance bundle, Tier D checklist |
 

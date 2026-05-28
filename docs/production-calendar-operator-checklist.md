@@ -1,10 +1,10 @@
 # Production calendar — operator checklist (pilot / staging)
 
-**Policy:** `era13-production-calendar-operator-depth-v1` (`lib/production/production-calendar-operator-depth-era13-policy.ts`)
+**Policies:** `era13-production-calendar-operator-depth-v1`, `era15-production-calendar-operator-recert-v1` (`lib/production/production-calendar-operator-depth-era13-policy.ts`, `lib/production/production-calendar-operator-depth-era15-policy.ts`)
 
 **Page:** `/dashboard/production/calendar` (`app/dashboard/production/calendar/page.tsx`)
 
-**Maturity:** `pilot_ready` (qualified) — move, cross-week, and status workflow are certified in CI; not rush-hour production certified.
+**Maturity:** `pilot_ready` (qualified) — move, cross-week, and status workflow are certified in CI; **not rush-hour** production certified.
 
 ## Certified operator actions
 
@@ -30,7 +30,11 @@
 npm run smoke:production-calendar
 ```
 
-Runs wired unit/cert tests (`test:ci:production-calendar-move-ui:cert` + era13 operator-depth cert). Does **not** replace manual pilot steps below.
+Runs wired unit/cert tests (`test:ci:production-calendar-move-ui:cert` + era15 operator recert). Does **not** replace manual pilot steps below.
+
+## Era 15 operator recert (2026-05-27)
+
+**Policy:** `era15-production-calendar-operator-recert-v1` — re-validates Era 6/8/10/13 scope after Era 14/15 honesty cycles. Honest limits unchanged (no drag-and-drop, KDS sync, delete-task UI). Complete manual checklist on staging before pilot sign-off.
 
 ## Manual pilot checklist
 
@@ -44,7 +48,7 @@ Runs wired unit/cert tests (`test:ci:production-calendar-move-ui:cert` + era13 o
 
 ## CI certification
 
-- `npm run test:ci:production-calendar-operator-depth-era13:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
+- `npm run test:ci:production-calendar-operator-depth-era15:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
 - Governance: `test:ci:governance-bundles:partition-product-kds` includes `test:ci:production-calendar-move-ui:cert`
 - RBAC negatives: `npm run test:ci:rbac-wave4` (`production-calendar-actions-rbac.test.ts`)
 

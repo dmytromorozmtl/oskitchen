@@ -11,9 +11,9 @@
 import { spawnSync } from "node:child_process";
 
 import {
-  PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA13_MANUAL_CHECKLIST,
-  PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA13_POLICY_ID,
-} from "../lib/production/production-calendar-operator-depth-era13-policy";
+  PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA15_MANUAL_CHECKLIST,
+  PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA15_POLICY_ID,
+} from "../lib/production/production-calendar-operator-depth-era15-policy";
 
 function hasFlag(name: string): boolean {
   return process.argv.includes(name);
@@ -28,8 +28,8 @@ function runNpmScript(script: string): number {
 }
 
 function printChecklist(): void {
-  console.log(`\nProduction calendar operator checklist (${PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA13_POLICY_ID})\n`);
-  for (const [index, step] of PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA13_MANUAL_CHECKLIST.entries()) {
+  console.log(`\nProduction calendar operator checklist (${PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA15_POLICY_ID})\n`);
+  for (const [index, step] of PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA15_MANUAL_CHECKLIST.entries()) {
     console.log(`${index + 1}. ${step}`);
   }
   console.log("\nSee docs/production-calendar-operator-checklist.md\n");
@@ -51,11 +51,11 @@ Production calendar operator smoke
     process.exit(0);
   }
 
-  console.log(`\n[smoke:production-calendar] ${PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA13_POLICY_ID}\n`);
+  console.log(`\n[smoke:production-calendar] ${PRODUCTION_CALENDAR_OPERATOR_DEPTH_ERA15_POLICY_ID}\n`);
 
   const codes = [
     runNpmScript("test:ci:production-calendar-move-ui:cert"),
-    runNpmScript("test:ci:production-calendar-operator-depth-era13:cert"),
+    runNpmScript("test:ci:production-calendar-operator-depth-era15:cert"),
   ];
 
   printChecklist();
