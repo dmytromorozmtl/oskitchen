@@ -15,11 +15,17 @@ import { loadTodayCommandCenter } from "@/services/today/today-command-center-se
 
 export const dynamic = "force-dynamic";
 
-export default async function TodayOperationsPage() {
+export default async function TodayOperationsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ metrics?: string }>;
+}) {
   const [{ sessionUser, dataUserId }, actor] = await Promise.all([
     getTenantActor(),
     requireWorkspacePermissionActor(),
   ]);
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const showFullMetrics = resolvedSearchParams.metrics === "all";
   const persona = resolveOperatorHomePersona({
     workspaceRole: actor.workspaceRole,
     staffRoleType: actor.staffRoleType,
@@ -58,6 +64,7 @@ export default async function TodayOperationsPage() {
           userId={dataUserId}
           email={sessionUser.email ?? null}
           data={data}
+          showFullMetrics={showFullMetrics}
         />
       </div>
     </>

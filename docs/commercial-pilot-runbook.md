@@ -288,7 +288,7 @@ Run **`npm run test:ci:enterprise-sso-tenant-mapping-era17:cert`** — chained i
 1. POS checkout only: `services/pos/pos-checkout-service.ts` → `recordPendingInventoryImpactsForPosOrder`.
 2. Non-depleting scan: storefront, manual, public API, Woo/Shopify webhook handlers — no depletion imports.
 3. Run **`npm run smoke:pos-only-inventory-lock`** → review **`artifacts/pos-only-inventory-lock-summary.json`** (`lockProofStatus`).
-4. Do **not** claim unified cross-channel inventory depletion in pilot contracts.
+4. Do **not** claim POS-only inventory depletion covers storefront or channel orders in pilot contracts.
 
 **Enforcement:** `test:ci:pos-only-inventory-lock-era17:cert` (chained in `test:ci:inventory-depletion:cert`)
 

@@ -60,10 +60,10 @@ export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_SSO_CONTRACT_FAQ =
 
 /** Security questionnaire row guidance for SSO/SAML. */
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_QUESTIONNAIRE_SSO_ANSWER =
-  "Qualified pilot only — pilot_foundation (one workspace, Okta/Entra test tenant); not production SSO for all tenants; staging IdP login proof awaiting_operator_proof; pilot_ready gate awaiting_idp_login_proof until Cycle 2 artifact proof_passed." as const;
+  "Qualified pilot only — pilot_foundation (one workspace, Okta/Entra test tenant); not production SSO for all tenants; staging IdP login proof awaiting_operator_proof; pilot-ready gate awaiting_idp_login_proof until Cycle 2 artifact proof_passed." as const;
 
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_GATE_REVIEW_SECTION =
-  "Era 17 SSO pilot_ready gate (2026-05-28)" as const;
+  "Era 17 SSO pilot-ready gate (2026-05-28)" as const;
 
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_FORBIDDEN_CLAIMS = [
   "production sso for all tenants",

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { PlaybookTodayStrip } from "@/components/dashboard/playbooks/playbook-today-strip";
+import { TodayAttentionStrip } from "@/components/dashboard/today-attention-strip";
 import { ChangelogBanner } from "@/components/dashboard/changelog-banner";
 import { LaborRealtimeWidget } from "@/components/labor/labor-realtime-widget";
 import { LiveActivityFeed } from "@/components/realtime/live-activity-feed";
@@ -24,6 +25,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BUSINESS_TYPE_LABELS, dashboardModeSummaryLines } from "@/lib/business-modes";
+import {
+  isTodayShiftQuiet,
+  shouldCollapseTodayKpiWall,
+} from "@/lib/today/today-command-center-focus-era18";
 import { formatCurrency } from "@/lib/utils";
 import type { TodayCommandCenterPayload } from "@/services/today/today-command-center-service";
 
@@ -31,24 +36,20 @@ export function TodayCommandCenterView({
   userId,
   email,
   data,
+  showFullMetrics = false,
 }: {
   userId: string;
   email: string | null;
   data: TodayCommandCenterPayload;
+  showFullMetrics?: boolean;
 }) {
   const mode = data.settings?.businessType;
   const modeLabel = mode ? BUSINESS_TYPE_LABELS[mode] : null;
   const hints = dashboardModeSummaryLines(mode);
   const { kpis, blockers, readiness, shortageReadiness } = data;
 
-  const isQuiet =
-    kpis.ordersToday === 0 &&
-    kpis.activeOrders === 0 &&
-    kpis.openTasks === 0 &&
-    kpis.failedWebhooks === 0 &&
-    blockers.length === 0 &&
-    kpis.blockedOrdersApprox === 0 &&
-    kpis.posTransactionsToday === 0;
+  const quiet = isTodayShiftQuiet(kpis, blockers);
+  const collapseKpiWall = shouldCollapseTodayKpiWall({ quiet, showFullMetrics });
 
   return (
     <div className="space-y-8">
@@ -88,6 +89,8 @@ export function TodayCommandCenterView({
           ))}
         </ul>
       ) : null}
+
+      <TodayAttentionStrip data={data} />
 
       <Card className="border-primary/25 bg-primary/[0.04] shadow-sm">
         <CardHeader className="pb-2">
@@ -150,7 +153,7 @@ export function TodayCommandCenterView({
         </CardContent>
       </Card>
 
-      {isQuiet ? (
+      {quiet ? (
         <Card className="border-dashed border-border/80 bg-muted/10 shadow-none">
           <CardHeader className="pb-2">
             <CardTitle className="text-base">Everything is calm today</CardTitle>
@@ -184,6 +187,24 @@ export function TodayCommandCenterView({
         </Card>
       ) : null}
 
+      {collapseKpiWall ? (
+        <Card className="border-border/80 bg-card/90 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Metrics hidden — shift is quiet</CardTitle>
+            <CardDescription>
+              Full KPI tiles stay collapsed until orders, tasks, or blockers appear. Open all metrics when you need
+              the full wall.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href="/dashboard/today?metrics=all" data-testid="today-show-all-metrics">
+                Show all metrics
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         <Kpi title="Blocked orders (approx.)" value={kpis.blockedOrdersApprox} href="/dashboard/order-hub" />
         <Kpi title="Confirmed pipeline" value={kpis.confirmedOrders} href="/dashboard/orders" />
@@ -229,6 +250,7 @@ export function TodayCommandCenterView({
           valueClassName="text-lg"
         />
       </div>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="border-border/80 bg-card/90 shadow-sm">

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-013 — Today command center focus mode (P1)
+- ID: `KOS-E18-013`
+- Title: Era 18 Workstream J Cycle 13 — quiet-shift KPI collapse + attention strip
+- Module: Dashboard / Today
+- Priority: P1 (dashboard simplification + operator speed)
+- Status: **today_command_center_focus_wired**
+- Decision: `era18-today-command-center-focus-v1` — hide KPI wall when quiet; attention strip for blockers/pulse; `?metrics=all` expands
+- Evidence: `lib/today/today-command-center-focus-era18.ts`, `components/dashboard/today-attention-strip.tsx`
+- Next: P0 staging proof ops execution (cannot fake PASS)
+
 ### KOS-E18-012 — Shift close history date-range filter (P1)
 - ID: `KOS-E18-012`
 - Title: Era 18 Workstream F Cycle 12 — bounded 7/30/90-day filter on history + CSV export

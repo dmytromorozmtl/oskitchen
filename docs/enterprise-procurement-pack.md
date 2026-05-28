@@ -181,7 +181,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **Guard:** `validateSsoCallbackSession` in `lib/enterprise/workspace-sso-runtime-adapter.ts`.
 
-## Era 17 SSO pilot_ready gate (2026-05-28)
+## Era 17 SSO pilot-ready gate (2026-05-28)
 
 **Policy:** `era17-enterprise-sso-pilot-ready-v1` — evaluates Cycle 2 IdP staging artifact before any qualified pilot-ready SSO delivery claim. **Does not** advance buyer-facing delivery beyond **pilot_foundation** until `promotionAllowed: true`.
 
@@ -224,7 +224,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 |-------|--------|--------|
 | R0 (now) | Document posture | This pack; narrow auth claims in GTM |
 | R1 | Architecture spike | **Complete (Era 9)** — see [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md); design only |
-| R2 | Pilot SSO | **pilot_foundation (Era 16–17)** — schema + callback + admin wiring + IdP staging plan + operator runbook + tenant mapping tests + pilot_ready gate; staging IdP login **awaiting_operator_proof**; gate **awaiting_idp_login_proof** |
+| R2 | Pilot SSO | **pilot_foundation (Era 16–17)** — schema + callback + admin wiring + IdP staging plan + operator runbook + tenant mapping tests + pilot-ready gate; staging IdP login **awaiting_operator_proof**; gate **awaiting_idp_login_proof** |
 | R3 | GA SSO | Admin self-service IdP config, domain verification |
 
 **Evidence today:** `app/login/`, `actions/workspace-sso.ts`, `/auth/callback?sso_workspace_id=`, [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md), `smoke:enterprise-sso-idp-staging`.
