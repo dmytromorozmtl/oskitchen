@@ -20,7 +20,7 @@ Interpretation rule:
 - Leaf pages inherit the family status unless explicitly overridden in a future revision.
 - `Sales claim allowed?` means safe to sell directly without qualification.
 - **Paid pilot GO/NO-GO:** use [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) (`era7-commercial-pilot-runbooks-v1`); do not rely on deprecated `docs/PILOT_*` checklists for new pilots.
-- **Marketing / sales claims:** `npm run verify-claims` + `era7-marketing-claims-governance-v1` (`test:ci:marketing-claims-governance:cert`); must align with this matrix and linked era policy IDs.
+- **Marketing / sales claims:** `npm run verify-claims` + `era7-marketing-claims-governance-v1` (`test:ci:marketing-claims-governance:cert`); registry `config/marketing/claims-registry.json` via `era8-claims-registry-v1` (`audit:marketing-claims`, `test:ci:claims-registry:cert`); must align with this matrix and linked era policy IDs.
 
 | Feature name | Module | User roles | Current status | Evidence path | Business value | Risk level | Missing pieces | Required hardening | Required tests | Sales claim allowed? | Should appear in navigation? | Should appear in marketing? | Owner role | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

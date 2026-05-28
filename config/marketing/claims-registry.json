@@ -26,10 +26,10 @@
   {
     "claim": "KitchenOS reduces food cost by a measurable percentage.",
     "page": "/pricing",
-    "evidenceType": "customer-proof",
-    "evidenceSource": "pending public case study",
-    "dateVerified": "2026-05-25",
-    "status": "needs-evidence"
+    "evidenceType": "illustrative-roi",
+    "evidenceSource": "internal estimate only — not a verified customer case study; do not use as direct sales proof",
+    "dateVerified": "2026-05-27",
+    "status": "illustrative"
   },
   {
     "claim": "KitchenOS saves operators hours every week.",

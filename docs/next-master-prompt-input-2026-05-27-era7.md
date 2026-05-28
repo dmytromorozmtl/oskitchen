@@ -24,7 +24,13 @@ All four Era 7 commercial-readiness cycles from era6 prompt input **completed** 
 
 ---
 
-## 2. What Remains Open (P0 for Era 8 consideration)
+## 2. Era 8 Progress (Facts)
+
+| Cycle | Outcome |
+|-------|---------|
+| **1** | **Claims registry cleanup** — `era8-claims-registry-v1`; zero `needs-evidence` rows; `test:ci:claims-registry:cert` |
+
+## 3. What Remains Open (P0 for Era 8 consideration)
 
 | ID | Item | Notes |
 |----|------|-------|
@@ -33,21 +39,21 @@ All four Era 7 commercial-readiness cycles from era6 prompt input **completed** 
 
 ---
 
-## 3. What Remains Open (P1)
+## 4. What Remains Open (P1)
 
-- `config/marketing/claims-registry.json` — resolve `needs-evidence` rows.
+- ~~`config/marketing/claims-registry.json` — resolve `needs-evidence` rows~~ — **Done** Cycle 1 (`era8-claims-registry-v1`).
 - KDS Playwright Realtime E2E (staging-only; no rush-hour claim).
 - Production-calendar `movePlanTaskAction` UI wiring if not yet exposed.
 - Unified rewards product/schema era (if dual-ledger lock reversed).
 
 ---
 
-## 4. Era 8 Strategic Themes (Suggested)
+## 5. Era 8 Strategic Themes (Suggested)
 
 Pick **one theme per cycle**; do not reopen Era 4–7 unless regression proven.
 
 1. **Enterprise delivery** — SSO architecture spike (R1) only with explicit era budget.
-2. **Operator depth** — KDS UI polish, inventory hook if unlocked, claims-registry cleanup.
+2. **Operator depth** — KDS UI polish, inventory hook if unlocked.
 3. **CI / DevOps** — workflow runtime, slice optimization, optional strict `MARKETING_CLAIMS_STRICT=1` in release preflight.
 4. **Surface reduction** — further route/archive review without removing production crons.
 
@@ -55,9 +61,9 @@ Pick **one theme per cycle**; do not reopen Era 4–7 unless regression proven.
 
 ---
 
-## 5. CI / Governance Facts
+## 6. CI / Governance Facts
 
-- Default quality job: `npm run test:ci:governance-bundles` (23 `:cert` gates + unit bundles).
+- Default quality job: `npm run test:ci:governance-bundles` (24 `:cert` gates incl. `claims-registry` + unit bundles).
 - Scorecard cert: `npm run test:ci:scorecard:cert` (era4 + era5 + era6 + era7 policy tests; must stay last).
 - Commercial pilot: `test:ci:commercial-pilot-runbook:cert`; Tier 1 includes `verify-claims`.
 - Storefront money path: pay-later always-on; Stripe browser optional — `storefront-stripe-e2e-summary` artifact.
@@ -65,7 +71,7 @@ Pick **one theme per cycle**; do not reopen Era 4–7 unless regression proven.
 
 ---
 
-## 6. Documentation Rules
+## 7. Documentation Rules
 
 - Update **canonical doc set** + `docs/canonical-doc-index.md` only.
 - Maturity claims must match policy IDs and CI certs.
@@ -73,7 +79,7 @@ Pick **one theme per cycle**; do not reopen Era 4–7 unless regression proven.
 
 ---
 
-## 7. Re-audit Decision
+## 8. Re-audit Decision
 
 **Full re-audit now?** **No** — Era 7 scorecard + this input sufficient until Era 8 selects a theme or repo scale changes materially.
 

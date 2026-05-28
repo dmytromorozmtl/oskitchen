@@ -40,12 +40,13 @@ Record: commit SHA, date, PASS/FAIL. If governance bundles fail, **do not** star
 
 ```bash
 npm run verify-claims
+npm run audit:marketing-claims
 npm run verify:staging-env
 ```
 
 | Check | Pass criteria |
 |-------|----------------|
-| Marketing claims | `verify-claims` — matrix-aligned scan (`era7-marketing-claims-governance-v1`); CI cert `test:ci:marketing-claims-governance:cert` |
+| Marketing claims | `verify-claims` + `audit:marketing-claims` — live copy scan (`era7-marketing-claims-governance-v1`) and `config/marketing/claims-registry.json` (`era8-claims-registry-v1`; no `needs-evidence` rows) |
 | Staging env | `verify:staging-env` exit 0 |
 | Workspace scope | `npm run workspace:backfill:status` exit 0 (if migration pilot) |
 | Nav honesty | Preview/placeholder routes show badges (`era4-page-maturity-sweep-v1`) |

@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 8 — Operator depth / GTM hygiene
+
+### KOS-E8-001 — Claims registry governance (P1)
+- ID: `KOS-E8-001`
+- Title: Resolve `needs-evidence` rows; CI cert for claims registry
+- Module: GTM / marketing / commercial
+- Priority: P1 (Era 8 Cycle 1)
+- Status: **completed**
+- Decision: `era8-claims-registry-v1` — food-cost claim reclassified `illustrative`; `needs-evidence` forbidden in CI
+- Evidence: `lib/governance/claims-registry-policy.ts`, `config/marketing/claims-registry.json`, `test:ci:claims-registry:cert`
+- Next: KDS Realtime E2E staging scope or production-calendar UI wiring
+
 ## Era 7 — Commercial readiness
 
 ### KOS-E7-005 — Era 7 scorecard refresh

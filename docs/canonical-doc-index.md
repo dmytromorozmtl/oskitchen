@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 7 Cycle 5 — scorecard refresh)  
+**Updated:** 2026-05-27 (Era 8 Cycle 1 — claims registry governance)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -128,6 +128,12 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **11** | **Mutation access consolidation** | `era4-mutation-access-consolidation-v1`; domain registry |
 | **12** | **Page maturity sweep** | `era4-page-maturity-sweep-v1`; `PageMaturityRouteNotice` |
 | **13** | **Scorecard refresh** | `era4-scorecard-refresh-v1`; this §Scorecard Era 4 |
+
+## Evolution Era 8 cycle ledger
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **Claims registry governance** | `era8-claims-registry-v1`; `test:ci:claims-registry:cert` |
 
 ## Evolution Era 7 cycle ledger
 
@@ -338,3 +344,4 @@ Incremental refresh after Era 7 cycles 1–4 (commercial readiness from era6 han
 | 2026-05-27 | Era 7 Cycle 3: `era7-tests-node-modules-hygiene-v1` — gitignore + CI cert blocks tracked nested test installs |
 | 2026-05-27 | Era 7 Cycle 4: `era7-marketing-claims-governance-v1` — matrix-aligned marketing claims scan + CI cert |
 | 2026-05-27 | Era 7 Cycle 5: scorecard refresh 92/100 + `next-master-prompt-input-2026-05-27-era7.md` |
+| 2026-05-27 | Era 8 Cycle 1: `era8-claims-registry-v1` — zero `needs-evidence` rows in claims registry |

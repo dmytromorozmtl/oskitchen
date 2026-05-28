@@ -14,6 +14,7 @@ export const MARKETING_CLAIMS_REGISTRY_PATH = "config/marketing/claims-registry.
 
 /** Era policy IDs marketing must stay consistent with (documented cross-refs). */
 export const MARKETING_CLAIMS_LINKED_POLICY_IDS = [
+  "era8-claims-registry-v1",
   "era4-pos-only-v1",
   "era5-pos-only-gtm-lock-v1",
   "era6-dual-ledger-gtm-lock-v1",
