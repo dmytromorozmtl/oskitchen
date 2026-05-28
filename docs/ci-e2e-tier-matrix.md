@@ -222,6 +222,8 @@ npm run test:ci:pos-money-path:e2e
 
 **Era 17 operational sign-off staging proof (Cycle 16):** `era17-operational-signoff-staging-proof-v1` — `npm run smoke:operational-signoff-staging` → `artifacts/operational-signoff-staging-proof-summary.json`; requires `OPERATIONAL_SIGNOFF_STAGING_URL` + `OPERATIONAL_SIGNOFF_OPERATOR_EMAIL`; manual attestation via `OPERATIONAL_SIGNOFF_KDS_MANUAL=passed` + `OPERATIONAL_SIGNOFF_PRODUCTION_CALENDAR_MANUAL=passed`; cert `test:ci:operational-signoff-staging-proof-era17:cert` (in `test:ci:operational-signoff-era16:cert`). **Not** rush-hour certified.
 
+**Era 17 production calendar operator drill (Cycle 17):** `era17-production-calendar-operator-drill-v1` — `npm run smoke:production-calendar-drill` → `artifacts/production-calendar-operator-drill-summary.json`; requires `PRODUCTION_CALENDAR_DRILL_STAGING_URL` + `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`; attestation via `PRODUCTION_CALENDAR_DRILL_MANUAL=passed`; cert `test:ci:production-calendar-operator-drill-era17:cert` (in `test:ci:production-calendar-move-ui:cert`). **Not** drag-and-drop or rush-hour claim.
+
 ## Tier 1c3 — Production calendar operator (`partition-product-kds` via governance bundles)
 
 | Suite | Command | Notes |

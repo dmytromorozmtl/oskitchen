@@ -324,6 +324,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Smoke: `npm run smoke:production-calendar` — runs `test:ci:production-calendar-move-ui:cert` + era13 cert (not browser E2E)
 - Honest gaps: no drag-and-drop, KDS sync, or delete-task UI
 - Wiring cert: `test:ci:production-calendar-operator-depth-era15:cert` (chained in `test:ci:production-calendar-move-ui:cert`)
+- **Era 17 operator drill:** `era17-production-calendar-operator-drill-v1` — `npm run smoke:production-calendar-drill`; artifact `artifacts/production-calendar-operator-drill-summary.json`; cert `test:ci:production-calendar-operator-drill-era17:cert` (in `test:ci:production-calendar-move-ui:cert`)
 
 ### 8c4m. Production calendar cross-week UI (Era 10 Cycle 2)
 - Policy: `lib/production/production-calendar-cross-week-ui-policy.ts` (`era10-production-calendar-cross-week-ui-v1`; extends `era8-production-calendar-move-ui-v1`)

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-017 — Production calendar operator drill on staging (P1)
+- ID: `KOS-E17-017`
+- Title: Era 17 Cycle 17 — production calendar manual checklist on staging
+- Module: Production / Ops
+- Priority: P1 (Workstream F Cycle 27)
+- Status: **awaiting_staging_operator_drill**
+- Decision: `era17-production-calendar-operator-drill-v1` — wiring cert + staging URL + manual attestation
+- Evidence: `lib/production/production-calendar-operator-drill-era17-policy.ts`, `scripts/smoke-production-calendar-operator-drill-era17.ts`, `artifacts/production-calendar-operator-drill-summary.json` (**drillProofStatus: proof_skipped_missing_prerequisites** locally 2026-05-28)
+- Next: Operator sets drill URL + email; completes seven-step checklist; re-run with `PRODUCTION_CALENDAR_DRILL_MANUAL=passed`
+
 ### KOS-E17-016 — Operational sign-off staging proof (P1)
 - ID: `KOS-E17-016`
 - Title: Era 17 Cycle 16 — KDS + production calendar staging sign-off with operator URL

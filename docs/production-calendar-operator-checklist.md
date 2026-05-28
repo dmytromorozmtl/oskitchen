@@ -1,6 +1,6 @@
 # Production calendar — operator checklist (pilot / staging)
 
-**Policies:** `era13-production-calendar-operator-depth-v1`, `era15-production-calendar-operator-recert-v1` (`lib/production/production-calendar-operator-depth-era13-policy.ts`, `lib/production/production-calendar-operator-depth-era15-policy.ts`); **Era 16 operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`); **Era 17 staging proof:** `era17-operational-signoff-staging-proof-v1` (`npm run smoke:operational-signoff-staging`)
+**Policies:** `era13-production-calendar-operator-depth-v1`, `era15-production-calendar-operator-recert-v1` (`lib/production/production-calendar-operator-depth-era13-policy.ts`, `lib/production/production-calendar-operator-depth-era15-policy.ts`); **Era 16 operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`); **Era 17 staging proof:** `era17-operational-signoff-staging-proof-v1` (`npm run smoke:operational-signoff-staging`); **Era 17 operator drill:** `era17-production-calendar-operator-drill-v1` (`npm run smoke:production-calendar-drill`)
 
 **Page:** `/dashboard/production/calendar` (`app/dashboard/production/calendar/page.tsx`)
 
@@ -58,3 +58,15 @@ Runs wired unit/cert tests (`test:ci:production-calendar-move-ui:cert` + era15 o
 - `era10-production-calendar-cross-week-ui-v1` — `?week=` navigation
 - `era10-production-calendar-status-workflow-ui-v1` — per-task status select
 - `era11-mutation-access-recert-v1` — inline `production.manage` gate registry
+
+## Era 17 — operator drill on staging (Workstream F Cycle 27)
+
+**Policy:** `era17-production-calendar-operator-drill-v1` — **awaiting_staging_operator_drill**; staging URL + operator identity + manual checklist attestation.
+
+1. Set `PRODUCTION_CALENDAR_DRILL_STAGING_URL` + `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`.
+2. Run **`npm run smoke:production-calendar-drill`** — review **`artifacts/production-calendar-operator-drill-summary.json`** (`drillProofStatus`).
+3. Complete the seven manual pilot steps above on staging.
+4. Re-run with `PRODUCTION_CALENDAR_DRILL_MANUAL=passed` when checklist complete.
+5. **Do not claim drag-and-drop, KDS sync, delete-task UI, or rush-hour certification.**
+
+**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; drill **SKIPPED WITH REASON** (`drillProofStatus: proof_skipped_missing_prerequisites`). Missing: `PRODUCTION_CALENDAR_DRILL_STAGING_URL`, `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`.

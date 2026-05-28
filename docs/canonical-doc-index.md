@@ -687,3 +687,4 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 14: `era17-pilot-forbidden-claims-enforcement-v1` — pre-sales claims gate; **awaiting_forbidden_claims_enforcement_pass** |
 | 2026-05-28 | Era 17 Cycle 15: `era17-kds-staging-playwright-proof-v1` — KDS GitHub Playwright proof; **awaiting_github_kds_playwright_pass** |
 | 2026-05-28 | Era 17 Cycle 16: `era17-operational-signoff-staging-proof-v1` — staging URL + operator sign-off proof; **awaiting_staging_operator_signoff** |
+| 2026-05-28 | Era 17 Cycle 17: `era17-production-calendar-operator-drill-v1` — staging operator drill; **awaiting_staging_operator_drill** |

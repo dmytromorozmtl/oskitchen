@@ -177,6 +177,18 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; staging proof **SKIPPED WITH REASON** (`stagingProofStatus: proof_skipped_missing_prerequisites`). Missing: `OPERATIONAL_SIGNOFF_STAGING_URL`, `OPERATIONAL_SIGNOFF_OPERATOR_EMAIL`.
 
+### Era 17 production calendar operator drill (2026-05-28)
+
+**Policy:** `era17-production-calendar-operator-drill-v1` — **awaiting_staging_operator_drill**; staging manual checklist execution path.
+
+1. Set `PRODUCTION_CALENDAR_DRILL_STAGING_URL` + `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`.
+2. Run **`npm run smoke:production-calendar-drill`** → review **`artifacts/production-calendar-operator-drill-summary.json`** (`drillProofStatus`).
+3. Complete manual checklist in [`production-calendar-operator-checklist.md`](./production-calendar-operator-checklist.md) on staging.
+4. Re-run with `PRODUCTION_CALENDAR_DRILL_MANUAL=passed` when all seven steps pass.
+5. **Do not claim rush-hour or drag-and-drop production calendar certification.**
+
+**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; drill **SKIPPED WITH REASON** (staging URL + operator email unset).
+
 ### Era 17 pilot metrics baseline (2026-05-28)
 
 **Policy:** `era17-pilot-metrics-baseline-v1` — **awaiting_baseline_capture**; real KPI snapshot only after pilot week-2 data.
