@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 16 — Workstream G: shift closeout flow proof (2026-05-28)
+
+- Title: Era 20 Cycle 16 — shift open → sales → closeout 5-hop proof on POS shifts
+- Status: **done**
+- Policy: `era20-shift-closeout-flow-proof-v1` (`KOS-E20-016`)
+- Doc: `docs/era20-shift-closeout-flow-proof-2026-05-28.md`
+- Tests: `test:ci:era20-shift-closeout-flow-proof`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR Workstream H copilot permission-denied OR integration health recovery flow proof
+
 ### Cycle 15 — Workstream B: pilot ICP qualification bridge (2026-05-28)
 
 - Title: Era 20 Cycle 15 — ICP live vs example on Implementation + GO/NO-GO gate
@@ -33,7 +43,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Doc: `docs/era20-manager-discount-audit-flow-proof-2026-05-28.md`
 - Tests: `test:ci:era20-manager-discount-audit-flow-proof`, `:cert`
 - P0 unchanged: `awaiting_ops_credentials`
-- Next: Ops P0 vault OR shift closeout flow proof (Workstream G #6)
+- Next: Ops P0 vault OR Workstream H permission-denied gaps
 
 ### Cycle 12 — Workstream G: POS checkout → inventory flow proof (2026-05-28)
 

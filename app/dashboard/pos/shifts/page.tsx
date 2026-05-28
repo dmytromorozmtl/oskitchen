@@ -1,4 +1,6 @@
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
+import { PosShiftsCloseoutFlowProofPanel } from "@/components/dashboard/pos/pos-shifts-closeout-flow-proof-panel";
+import { buildShiftCloseoutFlowProofSlice } from "@/lib/commercial/era20-shift-closeout-flow-proof-era20";
 import { PosShiftCloseAttentionStrip } from "@/components/dashboard/pos-shift-close-attention-strip";
 import { PosShiftCloseHero } from "@/components/dashboard/pos-shift-close-hero";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
@@ -68,6 +70,11 @@ export default async function PosShiftsPage({
     closedHistory: closedShiftHistory,
   });
   const prioritizeCloseout = shouldPrioritizePosShiftCloseSection(closeoutPreviews.length);
+  const shiftCloseoutFlowProof = buildShiftCloseoutFlowProofSlice({
+    viewerCanOpenShift: canOpenShift,
+    viewerCanCloseShift: canCloseShift,
+    hasOpenShift: closeoutPreviews.length > 0,
+  });
 
   const closeShiftCard = canCloseShift ? (
     <Card
@@ -168,6 +175,8 @@ export default async function PosShiftsPage({
       {canCloseShift || canViewShiftHistory ? (
         <PosShiftCloseAttentionStrip focus={shiftCloseFocus} />
       ) : null}
+
+      <PosShiftsCloseoutFlowProofPanel slice={shiftCloseoutFlowProof} />
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         {prioritizeCloseout ? (
