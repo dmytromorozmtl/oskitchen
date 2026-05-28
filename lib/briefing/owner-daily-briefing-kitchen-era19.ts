@@ -244,22 +244,6 @@ export function buildOwnerDailyBriefingKitchenActions(
     });
   }
 
-  if (input.packingQueueOpen > 0 && summary.showPriorityLane) {
-    actions.push({
-      id: "kitchen-packing-handoff",
-      title: "Coordinate packing handoff",
-      reason: `${input.packingQueueOpen} pack job(s) open while KDS has urgent tickets — align expo pickup.`,
-      severity: "high",
-      ownerRole: "kitchen",
-      href: "/dashboard/packing",
-      status: "open",
-      unblockCondition: "Expo clears ready tickets before packing backlog grows.",
-      priority: 4,
-      ctaLabel: "Open packing",
-      tone: "urgent",
-    });
-  }
-
   if (summary.queueCount === 0 && input.productionWorkOpen > 0) {
     actions.push({
       id: "kitchen-production-board",

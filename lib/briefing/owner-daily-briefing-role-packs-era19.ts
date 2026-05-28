@@ -43,6 +43,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
   ],
   kitchen: [
     "kds-priority-lane",
+    "kitchen-packing-qc-handoff",
     "kds-pressure",
     "production-priorities",
     "production-calendar-today",

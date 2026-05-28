@@ -47,6 +47,11 @@ import {
   mergeBriefingKitchenTopActions,
 } from "@/lib/briefing/owner-daily-briefing-kitchen-era19";
 import {
+  buildOwnerDailyBriefingKitchenPackingQcActions,
+  enrichBriefingKitchenPackingQcPackTiles,
+  mergeBriefingKitchenPackingQcActions,
+} from "@/lib/briefing/owner-daily-briefing-kitchen-packing-qc-era19";
+import {
   buildOwnerDailyBriefingManagerKdsActions,
   enrichBriefingManagerPackTiles,
   mergeBriefingManagerKdsTopActions,
@@ -354,7 +359,10 @@ export async function loadOwnerDailyBriefing(
           cashierManagerOverrideInput,
         )
       : rolePack === "kitchen"
-        ? enrichBriefingKitchenPackTiles(baseTiles, kdsBriefingInput)
+        ? enrichBriefingKitchenPackingQcPackTiles(
+            enrichBriefingKitchenPackTiles(baseTiles, kdsBriefingInput),
+            kdsBriefingInput,
+          )
         : rolePack === "manager"
           ? enrichBriefingManagerOverridePackTiles(
               enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput),
@@ -402,7 +410,10 @@ export async function loadOwnerDailyBriefing(
           )
         : rolePack === "kitchen"
           ? mergeBriefingKitchenTopActions(
-              buildOwnerDailyBriefingKitchenActions(kdsBriefingInput),
+              mergeBriefingKitchenPackingQcActions(
+                buildOwnerDailyBriefingKitchenActions(kdsBriefingInput),
+                buildOwnerDailyBriefingKitchenPackingQcActions(kdsBriefingInput),
+              ),
               pickOwnerDailyBriefingTopActions({
                 blockers: today.blockers,
                 alerts: allAlerts,
