@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ApprovalButtons } from "@/components/dashboard/go-live/approval-buttons";
+import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
 import { GoLiveChecklistAttentionStrip } from "@/components/dashboard/go-live/go-live-checklist-attention-strip";
 import { GoLiveChecklistNextAction } from "@/components/dashboard/go-live/go-live-checklist-next-action";
@@ -40,6 +41,7 @@ import {
   getProject,
   workbenchSnapshot,
 } from "@/services/go-live/go-live-service";
+import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 
 type PageProps = { params: Promise<{ projectId: string }> };
 
@@ -56,6 +58,9 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
     project.businessType ?? null,
     project.status,
   );
+  const pilotReadiness = await loadImplementationPilotReadinessModel(access.userId, {
+    goLiveProjectId: project.id,
+  });
   const blockers = snapshot.validation.blockers;
   const criticalBlockers = blockers.filter((b) => b.severity === "CRITICAL").length;
   const launchEta = project.launchDate ? project.launchDate.toISOString().slice(0, 10) : "Not set";
@@ -154,6 +159,8 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           approvalsPending,
         }}
       />
+
+      <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} variant="go-live" />
 
       <GoLiveAttentionStrip focus={goLiveFocus} blockers={blockers} />
 

@@ -35,6 +35,7 @@ Interpretation rule:
 - **Era 18 Cycle 14 (2026-05-28):** Order hub stuck-state UX — `era18-order-hub-stuck-state-v1`; attention strip + row next actions.
 - **Era 18 Cycle 13 (2026-05-28):** Today focus mode — `era18-today-command-center-focus-v1`; quiet KPI collapse + attention strip.
 - **Era 18 Cycle 12 (2026-05-28):** Shift close history date range — `era18-pos-shift-close-history-range-v1`; 7/30/90-day filter + CSV sync.
+- **Era 18 Cycle 58 (2026-05-28):** Go-live pilot readiness strip — `era18-go-live-pilot-readiness-focus-v1`; channel + SSO + launch validation on go-live command center and project pages.
 - **Era 18 Cycle 57 (2026-05-28):** Commercial pilot ops ↔ go-live bridge — `era18-commercial-pilot-ops-go-live-bridge-v1`; blocked launch panel on platform implementations.
 - **Era 18 Cycle 56 (2026-05-28):** Support session banner go-live links — `era18-platform-support-session-banner-go-live-v1`; workspace go-live + urgent project quick links on active session banner.
 - **Era 18 Cycle 55 (2026-05-28):** Platform workspace go-live section — `era18-platform-workspace-go-live-focus-v1`; session-aware tenant review on workspace detail.

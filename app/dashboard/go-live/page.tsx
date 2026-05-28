@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { GoLiveKpiGrid } from "@/components/dashboard/go-live/kpi-grid";
 import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
 import { CreateProjectForm } from "@/components/dashboard/go-live/create-project-form";
@@ -23,6 +24,7 @@ import {
   listProjects,
   workbenchSnapshot,
 } from "@/services/go-live/go-live-service";
+import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 
 const LEGACY_CHECKS = [
   ["Business profile", "/dashboard/settings"],
@@ -43,7 +45,7 @@ const LEGACY_CHECKS = [
 export default async function GoLivePage() {
   const { actor, userId, canCreate } = await getGoLivePageAccess();
   const isSuper = actor.platformBypass;
-  const [projects, brands, locations, latestSimulation, incidentCount] = await Promise.all([
+  const [projects, brands, locations, latestSimulation, incidentCount, pilotReadiness] = await Promise.all([
     listProjects(userId),
     prisma.brand.findMany({
       where: { workspaceId: userId },
@@ -65,6 +67,7 @@ export default async function GoLivePage() {
     prisma.goLiveIncident.count({
       where: { project: { userId: userId }, status: { in: ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS"] } },
     }),
+    loadImplementationPilotReadinessModel(userId),
   ]);
 
   if (projects.length === 0) {
@@ -152,6 +155,8 @@ export default async function GoLivePage() {
             </p>
           </div>
         </div>
+
+        <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} variant="go-live" />
 
         <GoLiveAttentionStrip
           legacyChecks={LEGACY_CHECKS.map(([label, href]) => ({
@@ -248,6 +253,8 @@ export default async function GoLivePage() {
           </Button>
         </div>
       </div>
+
+      <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} variant="go-live" />
 
       <GoLiveAttentionStrip focus={goLiveFocus} blockers={snapshot.validation.blockers} />
 

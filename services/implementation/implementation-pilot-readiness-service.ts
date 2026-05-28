@@ -4,11 +4,17 @@ import {
   type ImplementationPilotReadinessModel,
 } from "@/lib/implementation/implementation-pilot-readiness-focus-era18";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
+import { resolveGoLivePilotReadinessTargetProject } from "@/lib/go-live/go-live-pilot-readiness-focus-era18";
 import { listChannelPilotLiveProofSlices } from "@/services/developer/integration-health-service";
 import { listProjects, workbenchSnapshot } from "@/services/go-live/go-live-service";
 
+export type LoadImplementationPilotReadinessOptions = {
+  goLiveProjectId?: string | null;
+};
+
 export async function loadImplementationPilotReadinessModel(
   userId: string,
+  options?: LoadImplementationPilotReadinessOptions,
 ): Promise<ImplementationPilotReadinessModel> {
   const workspaceId = await resolveOwnerWorkspaceId(userId);
 
@@ -20,7 +26,10 @@ export async function loadImplementationPilotReadinessModel(
     listProjects(userId),
   ]);
 
-  const primaryGoLive = goLiveProjects[0] ?? null;
+  const primaryGoLive = resolveGoLivePilotReadinessTargetProject(
+    goLiveProjects,
+    options?.goLiveProjectId,
+  );
   const goLiveSnapshot = primaryGoLive
     ? await workbenchSnapshot(
         userId,

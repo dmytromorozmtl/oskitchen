@@ -85,6 +85,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/commercial-pilot-ops-go-live-bridge-era18.ts`, `components/platform/commercial-pilot-blocked-launch-panel.tsx`, `tests/unit/commercial-pilot-ops-go-live-bridge-era18.test.ts`
 - Next: P0 staging proof ops run when vault credentials available; re-run smoke:pilot-gono-go after proof
 
+### KOS-E18-058 — Go-live pilot readiness strip (P0)
+- ID: `KOS-E18-058`
+- Title: Era 18 Workstream P Cycle 58 — channel + SSO + launch validation on go-live command center
+- Module: Go-live / Commercial pilot
+- Priority: P0 (operator launch workflow — pilot cutover visibility where operators work)
+- Status: **go_live_pilot_readiness_attention_wired**
+- Decision: `era18-go-live-pilot-readiness-focus-v1` — reuses implementation pilot readiness model on go-live hub + project pages; does not claim live PASS
+- Evidence: `lib/go-live/go-live-pilot-readiness-focus-era18.ts`, `app/dashboard/go-live/page.tsx`, `app/dashboard/go-live/projects/[projectId]/page.tsx`, `tests/unit/go-live-pilot-readiness-focus-era18.test.ts`
+- Next: P0 staging proof ops run when vault credentials available; re-run smoke:pilot-gono-go after proof
+
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)
 - ID: `KOS-E18-052`
 - Title: Era 18 Workstream D Cycle 52 — honest GO/NO-GO + P0 staging proof on platform implementations
