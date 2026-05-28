@@ -14,11 +14,14 @@ export const MONTH2_MARKET_READINESS_ERA21_EXTENDS_POLICIES = [
   "era17-pilot-case-study-draft-v1",
   MONTH2_MARKET_READINESS_PHASES_ERA21_POLICY_ID,
   MONTH2_MARKET_READINESS_UI_ERA21_POLICY_ID,
+  "era21-month2-market-readiness-post-week1-orchestrator-v1",
 ] as const;
 
 export const MONTH2_MARKET_READINESS_ERA21_OPS_SCRIPTS = [
+  "ops:run-month2-market-readiness-post-week1-orchestrator",
   "ops:validate-month2-market-readiness-env",
   "ops:export-month2-market-readiness-env-template",
+  "ops:export-month2-market-readiness-readiness-checklist",
   "ops:sync-month2-market-readiness-progress-report",
 ] as const;
 
@@ -28,9 +31,11 @@ export const MONTH2_MARKET_READINESS_ERA21_CI_SCRIPTS = [
 ] as const;
 
 export const MONTH2_MARKET_READINESS_ERA21_UNIT_TESTS = [
+  "tests/unit/month2-market-readiness-post-week1-orchestrator-era21.test.ts",
   "tests/unit/month2-market-readiness-phases-era21.test.ts",
   "tests/unit/month2-market-readiness-ui-era21.test.ts",
   "tests/unit/owner-daily-briefing-month2-market-readiness-era21.test.ts",
+  "tests/unit/run-month2-market-readiness-post-week1-orchestrator.test.ts",
   "tests/unit/month2-market-readiness-era21-cert-live.test.ts",
 ] as const;
 

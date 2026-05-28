@@ -41,14 +41,31 @@ Month 2 complete (era21 Month 2 panels hidden)
 ## Preflight
 
 ```bash
+npm run ops:run-scale-readiness-post-month2-orchestrator -- --write   # planned — Step 6 orchestrator
 npm run ops:validate-month2-market-readiness-env -- --json   # month2Complete: true
 npm run ops:validate-scale-readiness-env -- --json
 npm run ops:export-scale-readiness-env-template -- --write
 npm run ops:sync-scale-readiness-progress-report -- --write
+npm run ops:export-scale-readiness-readiness-checklist -- --write   # planned
 npm run smoke:pilot-gono-go                                  # decision: GO
 npm run smoke:pilot-rollback-drill
 npm run smoke:pilot-metrics-baseline
 ```
+
+**Planned post-Month 2 orchestrator milestones (`scaleMilestone`):**
+
+| Milestone | Gate | Blocking? |
+|-----------|------|-----------|
+| `month2_blocked` | Month 2 A + B + D incomplete | prerequisite |
+| `gate1_per_customer_go` | `SCALE_PER_CUSTOMER_GO_ISOLATION=1` | yes |
+| `gate2_soc2_track` | `SCALE_SOC2_READINESS_TRACK_REVIEWED=1` | yes |
+| `gate3_sso_production` | `SCALE_SSO_PRODUCTION_STATUS=pass\|deferred_honest` | yes |
+| `gate4_resilience_drills` | rollback + webhook smokes + attestation | yes |
+| `gate5_data_room` | `SCALE_DATA_ROOM_INDEX_PUBLISHED=1` + artifact chain | yes |
+| `scale_complete` | Gates 1–5 done | terminal |
+| _(optional)_ Gate 6 | second paid pilot queued/skipped | no |
+
+**Wiring surfaces when scale incomplete:** briefing priority **5**, Launch Wizard commercial blockers, Platform `#scale-readiness`. Redirect to Month 2 orchestrator when `month2_blocked`.
 
 ---
 
@@ -142,14 +159,18 @@ Reuse Step 3 playbook per customer — never share GO artifacts.
 ## Ops commands
 
 ```bash
+npm run ops:run-scale-readiness-post-month2-orchestrator -- --write   # planned
 npm run ops:validate-scale-readiness-env -- --json
 npm run ops:export-scale-readiness-env-template -- --write
 npm run ops:sync-scale-readiness-progress-report -- --write
+npm run ops:export-scale-readiness-readiness-checklist -- --write   # planned
 npm run test:ci:scale-readiness-era21
 npm run test:ci:scale-readiness-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-scale-readiness-validate.yml`
+GitHub workflow: `.github/workflows/ops-scale-readiness-validate.yml` (+ planned orchestrator step)
+
+**Readiness checklist artifact (planned):** `docs/scale-readiness-readiness-checklist.md`
 
 ---
 

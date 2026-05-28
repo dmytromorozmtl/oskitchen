@@ -1,6 +1,10 @@
 /**
  * Month 2 market readiness UI slice — Owner Briefing, Launch Wizard, Platform ops.
  */
+import {
+  resolveMonth2MarketReadinessMilestoneFromPhaseStatuses,
+  type Month2MarketReadinessMilestone,
+} from "@/lib/commercial/month2-market-readiness-post-week1-orchestrator-era21";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
@@ -48,6 +52,10 @@ export type Month2MarketReadinessUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
+  postWeek1OrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateWeek1Command: string;
+  month2Milestone: Month2MarketReadinessMilestone;
   todayHref: string;
   launchWizardHref: string;
   reportsHref: string;
@@ -102,6 +110,11 @@ export function buildMonth2MarketReadinessUiSlice(input: {
   const nextPhaseDetail = nextPhase
     ? formatMonth2MarketReadinessPhaseBlockerDetail(nextPhase)
     : null;
+  const month2Milestone = resolveMonth2MarketReadinessMilestoneFromPhaseStatuses(phases, {
+    prerequisitesComplete: true,
+    week1Complete: true,
+    month2Complete: false,
+  });
 
   return {
     policyId: MONTH2_MARKET_READINESS_UI_ERA21_POLICY_ID,
@@ -120,6 +133,12 @@ export function buildMonth2MarketReadinessUiSlice(input: {
     validateCommand: "npm run ops:validate-month2-market-readiness-env",
     exportTemplateCommand: "npm run ops:export-month2-market-readiness-env-template -- --write",
     syncProgressReportCommand: "npm run ops:sync-month2-market-readiness-progress-report -- --write",
+    postWeek1OrchestratorCommand:
+      "npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-month2-market-readiness-readiness-checklist -- --write",
+    validateWeek1Command: "npm run ops:validate-pilot-week1-env -- --json",
+    month2Milestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     reportsHref: "/dashboard/reports",
@@ -138,5 +157,5 @@ export function buildMonth2MarketReadinessUiSlice(input: {
 export function formatMonth2MarketReadinessProgressLabel(
   slice: Month2MarketReadinessUiSlice,
 ): string {
-  return `Month 2 ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} workstreams · GO · ${slice.customerName ?? "customer"}`;
+  return `Month 2 ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} workstreams · ${slice.month2Milestone.replaceAll("_", " ")} · GO · ${slice.customerName ?? "customer"}`;
 }

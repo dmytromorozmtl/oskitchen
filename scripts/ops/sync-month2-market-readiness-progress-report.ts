@@ -21,6 +21,8 @@ export function buildMonth2MarketReadinessProgressReportMarkdown(
     `- Week 1 complete: **${result.week1Complete ? "yes" : "no"}**`,
     `- GO decision: **${result.goDecision ?? "missing"}**`,
     `- Month 2 complete: ${result.month2Complete ? "yes" : "no"}`,
+    `- month2Milestone: **${result.month2Milestone}**`,
+    `- Ready for investor one-pager smoke: ${result.readyForInvestorOnepagerSmoke ? "yes" : "no"}`,
     "",
     "## Workstream checklist",
     "",
@@ -48,7 +50,9 @@ export function buildMonth2MarketReadinessProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --write");
   lines.push("npm run ops:validate-month2-market-readiness-env");
+  lines.push("npm run ops:export-month2-market-readiness-readiness-checklist -- --write");
   lines.push("npm run smoke:investor-narrative-onepager");
   lines.push("npm run smoke:pilot-forbidden-claims-enforcement");
   lines.push("npm run smoke:pilot-case-study-draft");

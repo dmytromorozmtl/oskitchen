@@ -25,3 +25,13 @@ jobs:
           MONTH2_API_RATE_LIMITS_DOC_REVIEWED: ${{ secrets.MONTH2_API_RATE_LIMITS_DOC_REVIEWED }}
           PILOT_CASE_STUDY_CUSTOMER_APPROVAL: ${{ secrets.PILOT_CASE_STUDY_CUSTOMER_APPROVAL }}
           MONTH2_SECOND_PROSPECT_QUEUED: ${{ secrets.MONTH2_SECOND_PROSPECT_QUEUED }}
+      - name: Month 2 post-Week 1 orchestrator (JSON summary)
+        run: npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --json --skip-template
+        continue-on-error: true
+        env:
+          MONTH2_INVESTOR_FOUNDER_SIGNOFF: ${{ secrets.MONTH2_INVESTOR_FOUNDER_SIGNOFF }}
+          MONTH2_GTM_GHOST_KITCHEN_LANDING_REVIEWED: ${{ secrets.MONTH2_GTM_GHOST_KITCHEN_LANDING_REVIEWED }}
+          MONTH2_GTM_MEAL_PREP_LANDING_REVIEWED: ${{ secrets.MONTH2_GTM_MEAL_PREP_LANDING_REVIEWED }}
+          MONTH2_API_RATE_LIMITS_DOC_REVIEWED: ${{ secrets.MONTH2_API_RATE_LIMITS_DOC_REVIEWED }}
+          PILOT_CASE_STUDY_CUSTOMER_APPROVAL: ${{ secrets.PILOT_CASE_STUDY_CUSTOMER_APPROVAL }}
+          MONTH2_SECOND_PROSPECT_QUEUED: ${{ secrets.MONTH2_SECOND_PROSPECT_QUEUED }}

@@ -40,6 +40,7 @@ describe("month2 market readiness era21 CI certification (live repo)", () => {
     const step5 = readFileSync(join(ROOT, MONTH2_MARKET_READINESS_STEP5_DOC), "utf8");
     expect(step5).toContain("smoke:investor-narrative-onepager");
     expect(step5).toContain("era21-month2-market-readiness-v1");
+    expect(step5).toContain("run-month2-market-readiness-post-week1-orchestrator");
     expect(step5).toContain("/solutions/ghost-kitchens");
   });
 

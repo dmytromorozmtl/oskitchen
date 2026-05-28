@@ -74,6 +74,10 @@ describe("month2-market-readiness-ui-era21", () => {
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.week1Complete).toBe(true);
+    expect(slice?.month2Milestone).toBe("workstream_a_investor_onepager");
+    expect(slice?.postWeek1OrchestratorCommand).toContain(
+      "run-month2-market-readiness-post-week1-orchestrator",
+    );
     expect(slice?.phases.length).toBe(5);
     expect(formatMonth2MarketReadinessProgressLabel(slice!)).toContain("Acme Kitchen");
   });

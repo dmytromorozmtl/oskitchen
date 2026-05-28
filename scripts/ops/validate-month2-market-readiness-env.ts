@@ -9,6 +9,7 @@ import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import { resolveMonth2MarketReadinessMilestone } from "@/lib/commercial/month2-market-readiness-post-week1-orchestrator-era21";
 import {
   buildMonth2MarketReadinessPhaseStatuses,
   INVESTOR_NARRATIVE_ONEPAGER_ARTIFACT_PATH,
@@ -55,6 +56,8 @@ export function evaluateMonth2MarketReadinessEnv(env: NodeJS.ProcessEnv = proces
   phases: ReturnType<typeof buildMonth2MarketReadinessPhaseStatuses>;
   goDecision: string | null;
   month2Complete: boolean;
+  readyForInvestorOnepagerSmoke: boolean;
+  month2Milestone: ReturnType<typeof resolveMonth2MarketReadinessMilestone>;
 } {
   const artifacts = readMonth2MarketReadinessArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -81,6 +84,19 @@ export function evaluateMonth2MarketReadinessEnv(env: NodeJS.ProcessEnv = proces
     env,
   });
   const month2Complete = resolveMonth2MarketReadinessComplete(phases);
+  const workstreamA = phases.find((phase) => phase.id === "workstream_a_investor_onepager");
+  const metricsPassed = artifacts.metricsBaseline?.overall === "PASSED";
+  const readyForInvestorOnepagerSmoke =
+    prerequisites.prerequisitesComplete &&
+    !month2Complete &&
+    metricsPassed &&
+    workstreamA?.complete !== true;
+  const month2Milestone = resolveMonth2MarketReadinessMilestone({
+    prerequisitesComplete: prerequisites.prerequisitesComplete,
+    week1Complete,
+    month2Complete,
+    phases,
+  });
 
   return {
     prerequisites,
@@ -90,6 +106,8 @@ export function evaluateMonth2MarketReadinessEnv(env: NodeJS.ProcessEnv = proces
     phases,
     goDecision,
     month2Complete,
+    readyForInvestorOnepagerSmoke,
+    month2Milestone,
   };
 }
 
@@ -106,6 +124,8 @@ function main() {
           week1Complete: result.week1Complete,
           goDecision: result.goDecision,
           month2Complete: result.month2Complete,
+          readyForInvestorOnepagerSmoke: result.readyForInvestorOnepagerSmoke,
+          month2Milestone: result.month2Milestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -134,6 +154,8 @@ function main() {
     console.log("Blocked — decision must be GO in artifacts/pilot-gono-go-summary.json.\n");
     process.exit(2);
   }
+
+  console.log(`Month 2 milestone: ${result.month2Milestone}\n`);
 
   for (const phase of result.phases) {
     const marker = phase.complete ? "✓" : phase.optional ? "○ (optional)" : "○";

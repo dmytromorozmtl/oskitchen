@@ -49,6 +49,9 @@ export function Month2MarketReadinessPhasesPanel(props: {
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               decision: {slice.goDecision}
             </Badge>
+            <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+              {slice.month2Milestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
               Week 1 complete
             </Badge>
@@ -136,9 +139,12 @@ export function Month2MarketReadinessPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postWeek1OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.validateWeek1Command}</li>
                 <li>npm run smoke:investor-narrative-onepager</li>
                 <li>npm run smoke:pilot-forbidden-claims-enforcement</li>
                 <li>npm run smoke:pilot-case-study-draft</li>

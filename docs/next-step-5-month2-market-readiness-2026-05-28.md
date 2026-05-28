@@ -41,15 +41,39 @@ Week 1 complete (era21 Week 1 panels hidden)
 ## Preflight (1 hour)
 
 ```bash
+npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --write
 npm run ops:validate-pilot-week1-env -- --json          # week1Complete: true
 npm run ops:validate-month2-market-readiness-env -- --json
 npm run ops:export-month2-market-readiness-env-template -- --write
 npm run ops:sync-month2-market-readiness-progress-report -- --write
+npm run ops:export-month2-market-readiness-readiness-checklist -- --write
 npm run smoke:pilot-metrics-baseline                     # overall: PASSED
 npm run smoke:pilot-case-study-draft                     # internal_draft_ready
 npm run smoke:pilot-gono-go                              # decision: GO
 npm run smoke:investor-narrative-onepager                # gated on metrics PASSED
 ```
+
+**Post-Week 1 orchestrator milestones (`month2Milestone`):**
+
+| Milestone | Meaning | Exit code (orchestrator `--json`) |
+|-----------|---------|-----------------------------------|
+| `week1_blocked` | Week 1 incomplete or GO missing | `2` |
+| `workstream_a_investor_onepager` | Metrics PASSED; investor sign-off pending | `0` |
+| `workstream_b_gtm_icp_landings` | ICP landing review env vars pending | `0` |
+| `workstream_d_case_study_publish` | Customer approval + publish smoke pending | `0` |
+| `month2_complete` | Blocking A + B + D done | `0` |
+
+Optional workstreams C (API rate limits) and E (second prospect) do **not** block milestone resolution.
+
+**Product surfaces active after Week 1 complete (Month 2 incomplete):**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Month 2 ranked action (priority 4) + compact panel |
+| `/dashboard/launch-wizard` | Month 2 workstreams in commercial blockers |
+| `/solutions/ghost-kitchens` + `/solutions/meal-prep` | ICP landing review targets |
+| Platform → Pilot ops | `#month2-market-readiness` phases panel |
+| `/dashboard/reports` | Investor KPI source from metrics baseline |
 
 **Honest gates:**
 
@@ -131,14 +155,18 @@ Reuse Step 3 playbook: [`next-step-3-after-tier2-pass-2026-05-28.md`](./next-ste
 ## Ops commands
 
 ```bash
+npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --write
 npm run ops:validate-month2-market-readiness-env -- --json
 npm run ops:export-month2-market-readiness-env-template -- --write
 npm run ops:sync-month2-market-readiness-progress-report -- --write
+npm run ops:export-month2-market-readiness-readiness-checklist -- --write
 npm run test:ci:month2-market-readiness-era21
 npm run test:ci:month2-market-readiness-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-month2-market-readiness-validate.yml`
+GitHub workflow: `.github/workflows/ops-month2-market-readiness-validate.yml` (includes orchestrator step with `continue-on-error: true`)
+
+**Readiness checklist artifact:** `docs/month2-market-readiness-readiness-checklist.md` (generated via export script — do not hand-edit PASS states)
 
 ---
 
@@ -174,11 +202,27 @@ See [`competitor-leapfrog-roadmap-2026-05-28.md`](./competitor-leapfrog-roadmap-
 - [ ] GO still valid for active pilot customer
 - [ ] No fabricated traction in `artifacts/*.json`
 - [ ] `artifacts/month2-market-readiness-progress-report.md` synced for ops standup
+- [ ] `docs/month2-market-readiness-readiness-checklist.md` exported via orchestrator
 
 ---
 
-## Step 6 preview — Scale readiness
+## Step 6 preview — Scale readiness (orchestrator plan)
 
 See [`next-step-6-scale-readiness-2026-05-28.md`](./next-step-6-scale-readiness-2026-05-28.md)
+
+**Next engineering slice (Step 6, same pattern as Steps 1–5):**
+
+| Component | Planned artifact |
+|-----------|------------------|
+| Orchestrator lib | `lib/commercial/scale-readiness-post-month2-orchestrator-era21.ts` |
+| Policy | `era21-scale-readiness-post-month2-orchestrator-v1` |
+| Milestones | `month2_blocked` → `gate1_per_customer_go` → `gate2_soc2_track` → `gate3_sso_production` → `gate4_resilience_drills` → `gate5_data_room` → `scale_complete` |
+| Ops scripts | `ops:run-scale-readiness-post-month2-orchestrator`, `ops:export-scale-readiness-readiness-checklist` |
+| Validate env | add `scaleMilestone` + `readyForResilienceSmokes` to JSON |
+| UI slice | milestone badge + redirect to Month 2 orchestrator when `month2_blocked` |
+| Briefing priority | **5** (mutually exclusive with Steps 1–4) |
+| CI workflow | orchestrator step in `ops-scale-readiness-validate.yml` |
+
+**Human gate before Step 6:** all Month 2 blocking workstreams (A + B + D) complete — `month2Complete: true` in validate JSON.
 
 **Immediate action if Week 1 incomplete:** [`next-step-4-pilot-week1-execution-2026-05-28.md`](./next-step-4-pilot-week1-execution-2026-05-28.md)
