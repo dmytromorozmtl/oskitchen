@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 15 — KDS / enterprise / DevOps
 
+### KOS-E15-002 — Enterprise procurement Era 15 recert (P1)
+- ID: `KOS-E15-002`
+- Title: Re-certify enterprise procurement pack and buyer FAQ alignment
+- Module: Platform / GTM / Security
+- Priority: P1 (Era 15 Cycle 2)
+- Status: **completed**
+- Decision: `era15-enterprise-procurement-recert-v1` — pack + questionnaire sections; Era 14 CI evidence listed; SSO R2 still `not_started`; no SOC 2/SSO delivery claims
+- Evidence: `lib/enterprise/enterprise-procurement-era15-policy.ts`, `test:ci:enterprise-procurement-era15:cert`, `docs/enterprise-procurement-pack.md`, `npm run smoke:enterprise-procurement`
+- Next: SSO/SAML R2 only with explicit era budget (E8-2)
+
 ### KOS-E15-001 — KDS staging smoke Era 15 recert (P1)
 - ID: `KOS-E15-001`
 - Title: Re-certify KDS staging operational smoke and honest scope

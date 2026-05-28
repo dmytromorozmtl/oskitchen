@@ -172,6 +172,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)
+- era15 recert: `lib/enterprise/enterprise-procurement-era15-policy.ts` (`era15-enterprise-procurement-recert-v1`); `npm run smoke:enterprise-procurement`
 - canonical pack: `docs/enterprise-procurement-pack.md`
 - wiring cert: `test:ci:enterprise-procurement:cert` (in `test:ci:governance-bundles`)
 - unit: `npm run test:ci:enterprise-procurement` — required sections present; forbidden false SOC2/SSO/SCIM affirmative claims absent

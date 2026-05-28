@@ -1,9 +1,10 @@
 # KitchenOS Enterprise Procurement Pack
 
 **Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
-**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-identity-roadmap-policy.ts`, `lib/enterprise/enterprise-sso-architecture-spike-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`)  
+**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-procurement-era15-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`)  
 **Companion:** [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) (release gates, runbooks)  
-**Updated:** 2026-05-27 (Era 13 Cycle 1 — enterprise identity recert; SSO R2 pilot **not_started**)
+**Smoke:** `npm run smoke:enterprise-procurement` (CI cert wiring — not a compliance attestation)  
+**Updated:** 2026-05-27 (Era 15 Cycle 2 — procurement recert after Era 14 honesty cycles; SSO R2 **not_started**)
 
 Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
@@ -56,6 +57,21 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 **Procurement stance:** No contract language implying live SSO, SCIM, or SOC 2 Type II. Era 12 integration/staging E2E work does **not** change enterprise identity delivery.
 
 **CI:** `test:ci:enterprise-identity-era13:cert` (chained in `test:ci:enterprise-identity-roadmap:cert`).
+
+## Era 15 enterprise procurement recert (2026-05-27)
+
+**Policy:** `era15-enterprise-procurement-recert-v1` — re-validates this pack and Era 13 `roadmap_only` identity posture after Era 14 operational honesty recerts. **Does not** change SSO/SCIM/SOC 2 delivery status.
+
+| Topic | Era 15 stance |
+|-------|----------------|
+| SSO / SAML | **not_implemented** — R2 pilot **not_started** (unchanged) |
+| SCIM | **not_implemented** (unchanged) |
+| SOC 2 Type II | **not_certified** — internal readiness mapping only |
+| Buyer evidence (CI honesty) | Era 14 recerts: nav maturity, cross-channel rewards honesty, mutation-access registry, cron surface (16 prod), channel golden path — **not** compliance certifications |
+
+**Procurement stance:** Use this pack + [`feature-maturity-matrix.md`](./feature-maturity-matrix.md) + [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md). Run `npm run smoke:enterprise-procurement` before RFP/security questionnaire responses.
+
+**CI:** `test:ci:enterprise-procurement-era15:cert` (chained in `test:ci:enterprise-procurement:cert`).
 
 ---
 
@@ -242,7 +258,7 @@ Only as **future delivery** milestone — not current production capability.
 Use legal review; product capabilities in this pack define what is technically true today.
 
 **What evidence can you share in a pilot?**  
-CI tier matrix, feature maturity matrix, Era 4 cycle certifications (POS, inventory policy, RBAC wave 4, cron archive, channel golden path).
+CI tier matrix, feature maturity matrix, Era 4–15 policy certifications where listed (POS money path, inventory depletion policy, RBAC wave 4, cron surface, channel golden path, Era 14 honesty recerts, Era 15 procurement recert). These are **engineering honesty** artifacts — not SOC 2 or ISO attestations.
 
 ---
 

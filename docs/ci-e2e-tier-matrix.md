@@ -267,6 +267,7 @@ npm run test:ci:pos-money-path:e2e
 | Suite | Command | Notes |
 |-------|---------|-------|
 | Enterprise procurement wiring cert | `npm run test:ci:enterprise-procurement:cert` | Policy `era4-procurement-honesty-v1`, pack on disk, canon index + devops links |
+| Era 15 enterprise procurement recert | `npm run test:ci:enterprise-procurement-era15:cert` | `era15-enterprise-procurement-recert-v1`; `smoke:enterprise-procurement`; no SSO/SOC2 delivery claims |
 | Enterprise procurement unit | `npm run test:ci:enterprise-procurement` | Required pack sections; no forbidden false certification claims |
 
 **Canonical pack:** [`docs/enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — SSO/SCIM/SOC2 roadmaps, audit, tenant isolation, retention, backup, incident, questionnaire, FAQ.

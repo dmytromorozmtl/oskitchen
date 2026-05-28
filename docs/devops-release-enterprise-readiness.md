@@ -143,7 +143,7 @@ Each environment should have:
 
 ## Enterprise procurement (Era 4 Cycle 8)
 
-- **Canonical pack:** [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — policy `era4-procurement-honesty-v1`
+- **Canonical pack:** [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — `era4-procurement-honesty-v1` + Era 15 recert `era15-enterprise-procurement-recert-v1`; `npm run smoke:enterprise-procurement`
 - **CI:** `npm run test:ci:enterprise-procurement:cert` (in `test:ci:governance-bundles`) — scans pack for required sections and forbidden false certification claims
 - **Rule:** questionnaires, RFPs, and sales decks must align with the pack; do not cite deprecated `docs/ENTERPRISE_*_FINAL.md` or `enterprise-full-audit-*` for current posture
 

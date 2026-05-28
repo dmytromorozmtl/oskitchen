@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   ENTERPRISE_PROCUREMENT_CI_SCRIPTS,
   ENTERPRISE_PROCUREMENT_EVIDENCE_ANCHORS,
@@ -36,8 +37,10 @@ describe("enterprise procurement CI certification (live repo)", () => {
 
   it("includes enterprise procurement cert in governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:enterprise-procurement:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:enterprise-procurement");
+    expect(
+      governanceBundlesIncludesCert(scripts, "test:ci:enterprise-procurement:cert"),
+    ).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:enterprise-procurement")).toBe(true);
   });
 
   it("has procurement pack and evidence anchors on disk", () => {
