@@ -24,7 +24,9 @@ import { formatCustomerPrimaryLabel } from "@/lib/customers/customer-display";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { IntegrationProvider } from "@prisma/client";
 import { OrderHubExportButton } from "@/components/dashboard/order-hub-export-button";
+import { OrderHubAttentionStrip } from "@/components/dashboard/order-hub-attention-strip";
 import { loadStorefrontSummariesForOrderIds } from "@/lib/storefront/order-hub-commerce";
+import { resolveInternalOrderHubRowNextAction } from "@/lib/order-hub/order-hub-stuck-state-era18";
 import { loadOrderHubExactTabCounts } from "@/services/order-hub/order-hub-exact-counts-service";
 import { loadOrderHubPageData } from "@/services/order-hub/order-hub-service";
 import {
@@ -168,21 +170,7 @@ export default async function OrderHubPage({
         ) : null}
       </div>
 
-      {mappingBlockedCount > 0 ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <div>
-            <p className="font-semibold">
-              {mappingBlockedCount} open mapping conflict{mappingBlockedCount === 1 ? "" : "s"}
-            </p>
-            <p className="text-xs">
-              Map external products to KitchenOS menu items so imported lines can flow into production.
-            </p>
-          </div>
-          <Button asChild size="sm" variant="outline" className="rounded-full">
-            <Link href="/dashboard/product-mapping/unmapped">Open mapping workbench</Link>
-          </Button>
-        </div>
-      ) : null}
+      <OrderHubAttentionStrip mappingBlockedCount={mappingBlockedCount} exactTabCounts={exactTabCounts} />
 
       {hubEmpty ? (
         <EmptyState
@@ -214,6 +202,7 @@ export default async function OrderHubPage({
                     <TableHead>Storefront</TableHead>
                     <TableHead>Channel</TableHead>
                     <TableHead>Import batch</TableHead>
+                    <TableHead>Next action</TableHead>
                     <TableHead className="text-right">Total</TableHead>
                     <TableHead className="text-right">Open</TableHead>
                   </TableRow>
@@ -221,6 +210,12 @@ export default async function OrderHubPage({
                 <TableBody>
                   {internalFiltered.map((o) => {
                     const sf = storefrontSummaries.get(o.id);
+                    const nextAction = resolveInternalOrderHubRowNextAction(o, {
+                      paymentFailed:
+                        sf?.paymentMode === "ONLINE_PAYMENT" && sf.paymentStatus === "FAILED",
+                      paymentPending:
+                        sf?.paymentMode === "ONLINE_PAYMENT" && sf.paymentStatus === "PENDING",
+                    });
                     return (
                     <TableRow key={o.id} data-order-id={o.id}>
                       <TableCell>
@@ -294,6 +289,22 @@ export default async function OrderHubPage({
                           "—"
                         )}
                       </TableCell>
+                      <TableCell className="text-xs">
+                        {nextAction ? (
+                          <Link
+                            href={nextAction.href}
+                            className={
+                              nextAction.tone === "urgent"
+                                ? "font-medium text-amber-800 underline-offset-2 hover:underline dark:text-amber-200"
+                                : "font-medium text-primary underline-offset-2 hover:underline"
+                            }
+                          >
+                            {nextAction.label}
+                          </Link>
+                        ) : (
+                          <span className="text-muted-foreground">On track</span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right font-medium">{String(o.total)}</TableCell>
                       <TableCell className="text-right">
                         <Button asChild variant="outline" size="sm" className="rounded-full">
@@ -305,7 +316,7 @@ export default async function OrderHubPage({
                   })}
                   {internalFiltered.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-muted-foreground">
+                      <TableCell colSpan={9} className="text-muted-foreground">
                         No rows in this tab. Switch to All or adjust filters.
                       </TableCell>
                     </TableRow>

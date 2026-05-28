@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-014 — Order hub stuck-state UX (P0)
+- ID: `KOS-E18-014`
+- Title: Era 18 Workstream K Cycle 14 — attention strip + row next actions on order hub
+- Module: Order operations / Order hub
+- Priority: P0 (workflow reliability + operator blocking UX)
+- Status: **order_hub_stuck_state_wired**
+- Decision: `era18-order-hub-stuck-state-v1` — prioritized stuck-order strip from exact tab counts; lightweight row hints without per-order blocker queries
+- Evidence: `lib/order-hub/order-hub-stuck-state-era18.ts`, `components/dashboard/order-hub-attention-strip.tsx`, `app/dashboard/order-hub/page.tsx`
+- Next: External channel row next actions; deeper FoodOps blocker parity on hub list if needed
+
 ### KOS-E18-013 — Today command center focus mode (P1)
 - ID: `KOS-E18-013`
 - Title: Era 18 Workstream J Cycle 13 — quiet-shift KPI collapse + attention strip
