@@ -8,6 +8,7 @@ import {
   recallDailyKdsOrderAction,
 } from "@/actions/kitchen-daily-kds";
 import { KdsBumpNextStrip } from "@/components/kitchen/kds-bump-next-strip";
+import { KdsPriorityLaneStrip } from "@/components/kitchen/kds-priority-lane-strip";
 import { KdsQueueStatusStrip } from "@/components/kitchen/kds-queue-status-strip";
 import { KdsRecallNextStrip } from "@/components/kitchen/kds-recall-next-strip";
 import { KdsTicketAttentionStrip } from "@/components/kitchen/kds-ticket-attention-strip";
@@ -22,11 +23,15 @@ import {
   shouldShowKdsTicketAttentionStrip,
 } from "@/lib/kitchen/kds-ticket-focus-era18";
 import {
+  buildKdsPriorityLaneItems,
+  partitionKdsQueueByPriority,
+  shouldShowKdsPriorityLane,
+} from "@/lib/kitchen/kds-priority-lane-era19";
+import {
   formatKdsElapsedClock,
   formatKdsTicketNumber,
   isKdsTicketOverdue,
   kdsTicketAgeClassName,
-  partitionKdsQueue,
   summarizeKdsQueue,
 } from "@/lib/kitchen/kds-queue-clarity-era18";
 import {
@@ -105,7 +110,12 @@ export function KdsDailyService({
   const overdueAlertedRef = useRef<Set<string>>(new Set());
 
   const queueSummary = useMemo(() => summarizeKdsQueue(orders), [orders]);
-  const { preparing, ready } = useMemo(() => partitionKdsQueue(orders), [orders]);
+  const { preparing, ready } = useMemo(() => partitionKdsQueueByPriority(orders), [orders]);
+  const priorityLaneItems = useMemo(
+    () => buildKdsPriorityLaneItems(preparing, ready),
+    [preparing, ready],
+  );
+  const showPriorityLane = shouldShowKdsPriorityLane(orders);
   const bumpNextTicket = useMemo(() => pickKdsBumpNextTicket(preparing), [preparing]);
   const showBumpNextHero = shouldShowKdsBumpNextHero({
     canBump,
@@ -220,7 +230,7 @@ export function KdsDailyService({
         <div>
           <h2 className="text-xl font-bold">Kitchen Display</h2>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Prep line + expo — oldest tickets first
+            Prep line + expo — allergen and overdue tickets sorted first
           </p>
         </div>
         <button
@@ -254,6 +264,8 @@ export function KdsDailyService({
           {actionError}
         </div>
       ) : null}
+
+      {showPriorityLane ? <KdsPriorityLaneStrip items={priorityLaneItems} /> : null}
 
       {showTicketAttentionStrip ? (
         <KdsTicketAttentionStrip

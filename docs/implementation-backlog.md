@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-023 — KDS priority lane allergen + overdue scoring (P1 operator speed)
+- ID: `KOS-E19-023`
+- Title: Era 19 Workstream E Cycle 23 — priority lane strip + prep/expo column scoring
+- Module: KDS / Kitchen Display / Operator speed
+- Priority: P1 (operator speed — rush-hour ticket triage without SLO claims)
+- Status: **kds_priority_lane_wired**
+- Decision: `era19-kds-priority-lane-v1` — allergen + overdue scoring sorts prep and expo columns; top-3 priority lane strip with honest reason badges; no rush-hour certification claim
+- Evidence: `lib/kitchen/kds-priority-lane-era19.ts`, `KdsPriorityLaneStrip`, updated `kds-daily-service.tsx`
+- Next: P0 proof unblock when ops credentials available, or POS manager override UX
+
 ### KOS-E19-022 — Briefing risk radar ↔ Integration Health smoke action cross-link (P1 WOW)
 - ID: `KOS-E19-022`
 - Title: Era 19 Workstream B Cycle 22 — risk radar + top actions wire Integration Health next smoke script
