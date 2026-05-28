@@ -1,6 +1,7 @@
 # Staging E2E — runs when repository secrets are configured.
 # Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD
 # Legacy: E2E_PASSWORD accepted as alias for E2E_LOGIN_PASSWORD (era12-e2e-staging-secrets-align-v1)
+# Auth wiring: auth.setup + dashboard-authed smoke (era12-e2e-staging-auth-wiring-v1)
 # Optional: E2E_STOREFRONT_SLUG (default hello), DATABASE_URL for DB-backed checks
 
 name: E2E Staging
@@ -14,7 +15,12 @@ jobs:
   staging-e2e:
     if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && (secrets.E2E_LOGIN_PASSWORD != '' || secrets.E2E_PASSWORD != '') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
+    env:
+      CI: "1"
+      PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+      E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+      E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,18 +32,17 @@ jobs:
       - run: npm ci
       - run: npx playwright install chromium --with-deps
 
-      - name: Platform + auth smoke
+      - name: Auth setup
+        run: npx playwright test e2e/auth.setup.ts --project=setup
+
+      - name: Platform + unauthenticated smoke
         run: npx playwright test tests/e2e/platform-access-denial.spec.ts e2e/smoke.spec.ts --project=chromium
-        env:
-          CI: "1"
-          PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
-          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
-          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
+
+      - name: Dashboard authenticated smoke
+        run: npx playwright test e2e/dashboard-auth.spec.ts --project=chromium-authed
 
       - name: Storefront smoke
         if: ${{ vars.E2E_STOREFRONT_SLUG != '' }}
         run: npx playwright test e2e/storefront.spec.ts --project=chromium
         env:
-          CI: "1"
-          PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
           E2E_STOREFRONT_SLUG: ${{ vars.E2E_STOREFRONT_SLUG }}

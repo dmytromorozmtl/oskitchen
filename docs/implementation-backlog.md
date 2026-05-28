@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/ci/e2e-staging-secrets-era12-policy.ts`, `test:ci:e2e-staging-secrets-era12:cert`, `docs/GITHUB_E2E_STAGING_SECRETS.md`
 - Next: rename repo secret `E2E_PASSWORD` → `E2E_LOGIN_PASSWORD` when convenient (optional ops)
 
+### KOS-E12-004 — E2E staging auth wiring (P1)
+- ID: `KOS-E12-004`
+- Title: Wire Playwright auth.setup and dashboard-authed smoke into e2e-staging workflow
+- Module: DevOps / E2E
+- Priority: P1 (Era 12 Cycle 4)
+- Status: **completed**
+- Decision: `era12-e2e-staging-auth-wiring-v1` — `auth.setup` + `e2e/dashboard-auth.spec.ts`; excludes POS checkout and remediation IDOR from daily staging
+- Evidence: `lib/ci/e2e-staging-auth-era12-policy.ts`, `test:ci:e2e-staging-auth-era12:cert`, `.github/workflows/e2e-staging.yml`
+- Next: first green daily staging run after secrets configured (ops)
+
 ## Era 11 — DevOps scale / RBAC recert
 
 ### KOS-E11-005 — Era 11 scorecard refresh (P1)

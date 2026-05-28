@@ -27,6 +27,17 @@ Workflow: `.github/workflows/e2e-staging.yml` (daily 06:00 UTC + manual).
 3. **Variables** tab → add `E2E_STOREFRONT_SLUG` if not `hello`
 4. **Actions** → **E2E Staging** → **Run workflow** → confirm green (job skipped entirely when secrets missing — not a silent pass)
 
+## Workflow steps (Era 12 Cycle 4)
+
+When secrets are set, the job runs in order:
+
+1. `e2e/auth.setup.ts` (`--project=setup`) — writes `e2e/.auth/user.json`
+2. Unauthenticated: `platform-access-denial` + `e2e/smoke.spec.ts` (`chromium`)
+3. Authenticated: `e2e/dashboard-auth.spec.ts` (`chromium-authed`) — read-only dashboard navigation smoke
+4. Optional: `e2e/storefront.spec.ts` when `E2E_STOREFRONT_SLUG` variable is set
+
+**Policy:** `era12-e2e-staging-auth-wiring-v1` — does **not** run POS checkout E2E or remediation IDOR specs (those stay in `closed-beta-gate.yml`).
+
 ## Local parity
 
 ```bash
@@ -46,5 +57,5 @@ Uses `.env.staging` — never commit passwords.
 
 ## CI certification
 
-- `npm run test:ci:e2e-staging-secrets-era12`
-- `npm run test:ci:e2e-staging-secrets-era12:cert` (wired in `test:ci:governance-bundles:partition-platform`)
+- `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert`
+- `npm run test:ci:e2e-staging-auth-era12` + `test:ci:e2e-staging-auth-era12:cert` (wired in `test:ci:governance-bundles:partition-platform`)

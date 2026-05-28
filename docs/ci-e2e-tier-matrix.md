@@ -114,9 +114,11 @@ npm run test:ci:pos-money-path:e2e
 | Full Stripe live checkout E2E without policy artifact | Superseded — optional tier in `storefront-money-path` when `STRIPE_SECRET_KEY` is set; check `storefront-stripe-e2e-summary` for `PASSED`/`SKIPPED`/`FAILED` |
 | POS hardware terminal | No hardware certification claim; tier 2b covers software POS unit + DB integration; browser E2E when auth secrets configured |
 | KDS Realtime Playwright E2E | `era11-kds-realtime-e2e-staging-v1` — optional staging browser tier; `PASSED`/`SKIPPED`/`FAILED` via `kds-realtime-e2e-staging-summary`; poll fallback unit-certified via `era6-kds-realtime-smoke-v1` |
-| E2E Staging (daily workflow) | `.github/workflows/e2e-staging.yml` — **optional**; job runs only when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + (`E2E_LOGIN_PASSWORD` or legacy `E2E_PASSWORD`) are set; maps password to `E2E_LOGIN_PASSWORD` env (`era12-e2e-staging-secrets-align-v1`) |
+| E2E Staging (daily workflow) | `.github/workflows/e2e-staging.yml` — **optional**; job runs only when `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + (`E2E_LOGIN_PASSWORD` or legacy `E2E_PASSWORD`) are set; maps password to `E2E_LOGIN_PASSWORD` env (`era12-e2e-staging-secrets-align-v1`); runs `auth.setup` + `dashboard-auth` authed smoke (`era12-e2e-staging-auth-wiring-v1`) |
 
 **E2E staging secrets policy (Era 12 Cycle 2):** `lib/ci/e2e-staging-secrets-era12-policy.ts` — aligns `e2e-staging.yml` and `closed-beta-gate.yml` with Playwright canonical `E2E_LOGIN_PASSWORD`; cert `test:ci:e2e-staging-secrets-era12:cert`. See `docs/GITHUB_E2E_STAGING_SECRETS.md`.
+
+**E2E staging auth policy (Era 12 Cycle 4):** `lib/ci/e2e-staging-auth-era12-policy.ts` (`era12-e2e-staging-auth-wiring-v1`) — runs `e2e/auth.setup.ts` (`--project=setup`) then `e2e/dashboard-auth.spec.ts` (`chromium-authed`) in `e2e-staging.yml`; read-only authed smoke; excludes POS checkout and remediation IDOR; cert `test:ci:e2e-staging-auth-era12:cert`.
 
 **Channel staging smoke (Era 12 Cycle 3 — not in default CI):** `lib/integrations/channel-golden-path-smoke-era12-policy.ts` (`era12-channel-golden-path-smoke-v1`) — `npm run smoke:woo-shopify`; optional `--skip-live`; requires `DATABASE_URL`; cert `test:ci:channel-golden-path-smoke-era12:cert` (in `test:ci:channel-golden-path:cert`). Not wired to `ci.yml`.
 
