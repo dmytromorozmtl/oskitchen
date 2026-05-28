@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 15 — Workstream B: pilot ICP qualification bridge (2026-05-28)
+
+- Title: Era 20 Cycle 15 — ICP live vs example on Implementation + GO/NO-GO gate
+- Status: **done**
+- Policy: `era20-pilot-icp-qualification-bridge-v1` (`KOS-E20-015`)
+- Doc: `docs/era20-pilot-icp-qualification-bridge-2026-05-28.md`
+- Tests: `test:ci:era20-pilot-icp-qualification-bridge`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR export real `PILOT_GONOGO_ICP_INPUT_JSON` after prospect call
+
 ### Cycle 14 — Workstream G: support impersonation audit flow proof (2026-05-28)
 
 - Title: Era 20 Cycle 14 — platform support session + impersonation 5-hop proof

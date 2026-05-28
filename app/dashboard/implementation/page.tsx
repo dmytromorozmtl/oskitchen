@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ImplementationKpis } from "@/components/dashboard/implementation/implementation-kpis";
 import { ImplementationPilotExecutionReadinessPanel } from "@/components/dashboard/implementation/implementation-pilot-execution-readiness-panel";
+import { ImplementationPilotIcpQualificationPanel } from "@/components/dashboard/implementation/implementation-pilot-icp-qualification-panel";
 import { ImplementationPilotReadinessAttentionStrip } from "@/components/dashboard/implementation/implementation-pilot-readiness-attention-strip";
 import { ReadinessBadge } from "@/components/dashboard/implementation/readiness-badge";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import { IMPLEMENTATION_STATUS_LABEL, isActiveStatus } from "@/lib/implementatio
 import { loadWorkspacePermissionPageActor } from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 import { getActiveProject, projectKpis } from "@/services/implementation/implementation-service";
+import { loadPilotIcpQualificationBridgeSlice } from "@/services/commercial/pilot-icp-qualification-bridge-service";
 import { loadPilotExecutionReadinessSlice } from "@/services/commercial/pilot-execution-readiness-service";
 import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 import { getLatestReadiness } from "@/services/implementation/readiness-service";
@@ -19,7 +21,8 @@ export default async function ImplementationPage() {
   const actor = await loadWorkspacePermissionPageActor();
   const { userId } = actor;
 
-  const [ownerProfile, active, kpis, pilotReadiness, pilotExecutionReadiness] = await Promise.all([
+  const [ownerProfile, active, kpis, pilotReadiness, pilotExecutionReadiness, pilotIcpQualification] =
+    await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: userId },
       select: { companyName: true },
@@ -28,6 +31,7 @@ export default async function ImplementationPage() {
     projectKpis(userId),
     loadImplementationPilotReadinessModel(userId),
     loadPilotExecutionReadinessSlice(),
+    loadPilotIcpQualificationBridgeSlice(),
   ] as const);
   const readiness = active ? await getLatestReadiness({ userId, projectId: active.id }) : null;
 
@@ -37,6 +41,7 @@ export default async function ImplementationPage() {
         companyName={ownerProfile?.companyName ?? null}
         pilotReadiness={pilotReadiness}
         pilotExecutionReadiness={pilotExecutionReadiness}
+        pilotIcpQualification={pilotIcpQualification}
       />
     );
   }
@@ -96,6 +101,8 @@ export default async function ImplementationPage() {
       </header>
 
       <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} />
+
+      <ImplementationPilotIcpQualificationPanel slice={pilotIcpQualification} />
 
       <ImplementationPilotExecutionReadinessPanel slice={pilotExecutionReadiness} />
 
@@ -191,10 +198,12 @@ function EmptyState({
   companyName,
   pilotReadiness,
   pilotExecutionReadiness,
+  pilotIcpQualification,
 }: {
   companyName: string | null;
   pilotReadiness: Awaited<ReturnType<typeof loadImplementationPilotReadinessModel>>;
   pilotExecutionReadiness: Awaited<ReturnType<typeof loadPilotExecutionReadinessSlice>>;
+  pilotIcpQualification: Awaited<ReturnType<typeof loadPilotIcpQualificationBridgeSlice>>;
 }) {
   return (
     <div className="space-y-6">
@@ -208,6 +217,8 @@ function EmptyState({
       </header>
 
       <ImplementationPilotReadinessAttentionStrip model={pilotReadiness} />
+
+      <ImplementationPilotIcpQualificationPanel slice={pilotIcpQualification} />
 
       <ImplementationPilotExecutionReadinessPanel slice={pilotExecutionReadiness} />
 

@@ -492,6 +492,8 @@
     "test:ci:era20-manager-discount-audit-flow-proof:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-manager-discount-audit-flow-proof-cert-live.test.ts",
     "test:ci:era20-support-impersonation-flow-proof": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-support-impersonation-flow-proof.test.ts",
     "test:ci:era20-support-impersonation-flow-proof:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-support-impersonation-flow-proof-cert-live.test.ts",
+    "test:ci:era20-pilot-icp-qualification-bridge": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-pilot-icp-qualification-bridge.test.ts",
+    "test:ci:era20-pilot-icp-qualification-bridge:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-pilot-icp-qualification-bridge-cert-live.test.ts",
     "test:ci:pilot-forbidden-claims-enforcement-era17": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-forbidden-claims-enforcement-era17-policy.test.ts tests/unit/pilot-forbidden-claims-enforcement-summary.test.ts",
     "test:ci:pilot-forbidden-claims-enforcement-era17:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-forbidden-claims-enforcement-era17-cert-live.test.ts",
     "test:ci:pilot-metrics-baseline-era17": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-metrics-baseline-era17-policy.test.ts tests/unit/pilot-metrics-baseline-summary.test.ts",

@@ -115,6 +115,7 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
     metricsBaseline,
     rollbackDrill,
     icpInput: parsePilotIcpInputFromJson(process.env.PILOT_GONOGO_ICP_INPUT_JSON),
+    icpEnvRaw: process.env.PILOT_GONOGO_ICP_INPUT_JSON,
     customerName: process.env.PILOT_GONOGO_CUSTOMER_NAME ?? null,
     loiSignedDate: process.env.PILOT_GONOGO_LOI_SIGNED_DATE ?? null,
     prospectName: process.env.PILOT_GONOGO_PROSPECT_NAME ?? null,

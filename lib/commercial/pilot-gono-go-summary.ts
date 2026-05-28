@@ -14,6 +14,11 @@ import {
 } from "@/lib/commercial/pilot-icp-contract-era17";
 import { buildEra20ProspectPlaceholder } from "@/lib/commercial/era20-first-paid-pilot-package";
 import {
+  buildEra20PilotIcpQualificationBridgeSlice,
+  buildPilotIcpQualificationGoNoGoWarning,
+  derivePilotIcpQualificationGate,
+} from "@/lib/commercial/era20-pilot-icp-qualification-bridge-era20";
+import {
   buildEra20PilotExecutionReadinessSlice,
   buildPilotExecutionReadinessGoNoGoWarnings,
   derivePilotMetricsBaselineGate,
@@ -332,6 +337,7 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   metricsBaseline?: PilotMetricsBaselineGoNoGoArtifact | null;
   rollbackDrill?: PilotRollbackDrillGoNoGoArtifact | null;
   icpInput: PilotIcpQualificationInput;
+  icpEnvRaw?: string | undefined;
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
   tier3Pass?: boolean;
@@ -369,6 +375,9 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   const pilotMetricsBaseline = derivePilotMetricsBaselineGate(input.metricsBaseline);
   const pilotRollbackDrill = derivePilotRollbackDrillGate(input.rollbackDrill);
   const icpQualification = evaluatePilotIcpQualification(input.icpInput);
+  const icpQualificationGate = derivePilotIcpQualificationGate({
+    icpEnvRaw: input.icpEnvRaw,
+  });
 
   const stagingUrl = input.goldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
   const commitSha =
@@ -383,7 +392,7 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
     tier3Pass: input.tier3Pass,
     roleChecklistsComplete: input.roleChecklistsComplete ?? false,
     forbiddenClaimsInContract: input.forbiddenClaimsInContract ?? false,
-    icpQualified: icpQualification.qualified,
+    icpQualified: icpQualificationGate.pass,
     stagingUrl,
     commitSha,
   };
@@ -395,6 +404,7 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
       tier0,
       tier1,
       tier2,
+      icpQualificationGate,
       forbiddenClaimsEnforcement,
       p0StagingProof,
       p0SsoIdp,
@@ -416,6 +426,7 @@ export function buildPilotGoNoGoSummary(input: {
   metricsBaseline?: PilotMetricsBaselineGoNoGoArtifact | null;
   rollbackDrill?: PilotRollbackDrillGoNoGoArtifact | null;
   icpInput: PilotIcpQualificationInput;
+  icpEnvRaw?: string | undefined;
   customerName?: string | null;
   loiSignedDate?: string | null;
   prospectName?: string | null;
@@ -430,6 +441,7 @@ export function buildPilotGoNoGoSummary(input: {
     loiSignedDate: input.loiSignedDate,
   });
   const prospectPlaceholder = buildEra20ProspectPlaceholder(input.prospectName);
+  const icpBridge = buildEra20PilotIcpQualificationBridgeSlice({ icpEnvRaw: input.icpEnvRaw });
   const built = buildPilotGoNoGoEvaluatorInput(input);
   const evaluation = evaluateCommercialPilotGoNoGo(built.evaluatorInput);
   const forbiddenClaimsGatePass =
@@ -448,6 +460,10 @@ export function buildPilotGoNoGoSummary(input: {
     ...evaluation.warnings,
     ...buildPilotExecutionReadinessGoNoGoWarnings(executionReadiness),
   ];
+  const icpWarning = buildPilotIcpQualificationGoNoGoWarning(icpBridge);
+  if (icpWarning) {
+    warnings.push(icpWarning);
+  }
 
   if (customer.status === "skipped_missing_customer") {
     blockers.push("No signed LOI / customer on record (era17-pilot-gono-go-v1)");
