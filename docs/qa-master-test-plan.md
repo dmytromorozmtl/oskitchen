@@ -162,11 +162,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - wiring cert: `test:ci:enterprise-procurement:cert` (in `test:ci:governance-bundles`)
 - unit: `npm run test:ci:enterprise-procurement` — required sections present; forbidden false SOC2/SSO/SCIM affirmative claims absent
 
-### 8c3. Typecheck slices (Era 4 Cycle 7)
-- policy: `lib/ci/typecheck-slice-policy.ts` (`era5-typecheck-slice-v2` — services-core, dashboard-services-api, storefront-marketing)
+### 8c3. Typecheck slices (Era 4 Cycle 7 + Era 11 Cycle 1)
+- policy: `lib/ci/typecheck-slice-policy.ts` (`era11-typecheck-slice-v3`; extends `era5-typecheck-slice-v2` — services-core, dashboard-services-api, storefront-marketing, **platform-auth**)
+- era11 cert: `test:ci:typecheck-slice-era11:cert` (chained in `test:ci:typecheck-slice:cert`)
 - wiring cert: `test:ci:typecheck-slice:cert` (in `test:ci:governance-bundles`)
-- local slice: `npm run typecheck:slice:dashboard-services-api` (4GB heap; dashboard + API + services spine)
-- CI/release: `npm run typecheck` / `typecheck:full` (8GB; full repo) — slices do not replace CI gate yet
+- local slice: `npm run typecheck:slice:platform-auth` (6GB; platform admin + login/onboarding)
+- parallel CI: `typecheck-slices` job → `npm run typecheck:ci:slices` (all four slices); **canonical gate:** `quality` → `typecheck:full` (8GB)
 
 ### 8d. Public API v1 contracts
 - routes: `app/api/public/v1/` (orders, products, customers, inventory, locations, recipes, staff, webhooks)

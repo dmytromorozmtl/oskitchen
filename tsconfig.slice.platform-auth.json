@@ -1,0 +1,53 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [],
+    "tsBuildInfoFile": "./.tsbuildinfo.slice.platform-auth"
+  },
+  "include": [
+    "next-env.d.ts",
+    "middleware.ts",
+    "instrumentation.ts",
+    "app/layout.tsx",
+    "app/global-error.tsx",
+    "app/not-found.tsx",
+    "app/opengraph-image.tsx",
+    "app/platform/**/*.ts",
+    "app/platform/**/*.tsx",
+    "app/login/**/*.ts",
+    "app/login/**/*.tsx",
+    "app/onboarding/**/*.ts",
+    "app/onboarding/**/*.tsx",
+    "app/forgot-password/**/*.ts",
+    "app/forgot-password/**/*.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
+    "hooks/**/*.ts",
+    "hooks/**/*.tsx",
+    "actions/**/*.ts",
+    "actions/**/*.tsx",
+    "services/**/*.ts",
+    "services/**/*.tsx",
+    "stores/**/*.ts",
+    "stores/**/*.tsx",
+    "types/**/*.ts",
+    "prisma/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "playwright.config.ts",
+    "e2e",
+    "tests",
+    "scripts",
+    "archive",
+    "**/.next.trash.*/**",
+    "**/.next.deploy-trash.*/**",
+    "**/.next-stale-*/**",
+    ".vercel/**",
+    ".next/cache/**",
+    ".next/static/**",
+    ".next/server/**"
+  ]
+}

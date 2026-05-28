@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   TYPECHECK_FULL_SCRIPT,
   TYPECHECK_SLICE_CI_SCRIPTS,
@@ -20,12 +21,13 @@ function readPackageScripts(): Record<string, string> {
 }
 
 describe("typecheck slice CI certification (live repo)", () => {
-  it("locks era5 typecheck slice policy", () => {
-    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era5-typecheck-slice-v2");
+  it("locks era11 typecheck slice policy", () => {
+    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era11-typecheck-slice-v3");
     expect(TYPECHECK_SLICES.map((s) => s.id)).toEqual([
       "services-core",
       "dashboard-services-api",
       "storefront-marketing",
+      "platform-auth",
     ]);
   });
 
@@ -43,6 +45,10 @@ describe("typecheck slice CI certification (live repo)", () => {
       "tsconfig.slice.storefront-marketing.json",
     );
     expect(scripts["typecheck:slice:storefront-marketing"]).toContain("6144");
+    expect(scripts["typecheck:slice:platform-auth"]).toContain(
+      "tsconfig.slice.platform-auth.json",
+    );
+    expect(scripts["typecheck:slice:platform-auth"]).toContain("6144");
     for (const name of TYPECHECK_SLICE_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
@@ -50,8 +56,8 @@ describe("typecheck slice CI certification (live repo)", () => {
 
   it("includes typecheck slice cert in governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:typecheck-slice:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:typecheck-slice");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:typecheck-slice:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:typecheck-slice")).toBe(true);
   });
 
   it("has tsconfig base and slice configs on disk", () => {
@@ -67,9 +73,10 @@ describe("typecheck slice CI certification (live repo)", () => {
 
   it("documents typecheck slices in devops readiness", () => {
     const devops = readFileSync(join(ROOT, "docs/devops-release-enterprise-readiness.md"), "utf8");
-    expect(devops).toContain("era5-typecheck-slice-v2");
+    expect(devops).toContain("era11-typecheck-slice-v3");
     expect(devops).toContain("typecheck:slice:dashboard-services-api");
     expect(devops).toContain("typecheck:slice:storefront-marketing");
+    expect(devops).toContain("typecheck:slice:platform-auth");
     expect(devops).toMatch(/typecheck:full|8192/);
   });
 });

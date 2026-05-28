@@ -13,9 +13,9 @@ import {
 const ROOT = process.cwd();
 
 describe("typecheck slice policy", () => {
-  it("locks era5 typecheck slice policy id", () => {
-    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era5-typecheck-slice-v2");
-    expect(TYPECHECK_SLICES).toHaveLength(3);
+  it("locks era11 typecheck slice policy id", () => {
+    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era11-typecheck-slice-v3");
+    expect(TYPECHECK_SLICES).toHaveLength(4);
   });
 
   it("maps storefront-marketing slice to tsconfig and script", () => {

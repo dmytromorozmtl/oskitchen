@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 10 — Customer value loop / GTM honesty
 
+### KOS-E11-001 — Typecheck slice platform-auth (P1)
+- ID: `KOS-E11-001`
+- Title: Fourth typecheck slice for platform admin and auth surfaces
+- Module: DevOps / CI
+- Priority: P1 (Era 11 Cycle 1)
+- Status: **completed**
+- Decision: `era11-typecheck-slice-v3` — `typecheck:slice:platform-auth`; `typecheck:full` remains canonical in `quality`
+- Evidence: `tsconfig.slice.platform-auth.json`, `lib/ci/typecheck-slice-era11-policy.ts`, `test:ci:typecheck-slice-era11:cert`
+- Next: additional slices only if OOM persists on full typecheck
+
 ### KOS-E10-005 — Era 10 scorecard refresh (P1)
 - ID: `KOS-E10-005`
 - Title: Era 10 cycle completion scorecard and Era 11 master prompt input

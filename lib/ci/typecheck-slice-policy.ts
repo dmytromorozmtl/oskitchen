@@ -1,16 +1,19 @@
 /**
- * Typecheck slice policy — Evolution Era 4 Cycle 7 + Era 5 Cycle 2.
+ * Typecheck slice policy — Evolution Era 4 Cycle 7 + Era 5 Cycle 2 + Era 11 Cycle 1.
  *
  * Full repo typecheck remains canonical for CI (`npm run typecheck`).
  * Slices allow faster local feedback on operational spine code with lower heap.
  */
 
-export const TYPECHECK_SLICE_POLICY_ID = "era5-typecheck-slice-v2" as const;
+export const TYPECHECK_SLICE_POLICY_ID = "era11-typecheck-slice-v3" as const;
+
+export const TYPECHECK_SLICE_PREVIOUS_POLICY_ID = "era5-typecheck-slice-v2" as const;
 
 export type TypecheckSliceId =
   | "services-core"
   | "dashboard-services-api"
-  | "storefront-marketing";
+  | "storefront-marketing"
+  | "platform-auth";
 
 export type TypecheckSliceDefinition = {
   id: TypecheckSliceId;
@@ -61,6 +64,19 @@ export const TYPECHECK_SLICES: readonly TypecheckSliceDefinition[] = [
       "app/dashboard/storefront/**",
       "app/api/storefront/**",
       "app/api/dashboard/storefront/**",
+    ],
+  },
+  {
+    id: "platform-auth",
+    tsconfig: "tsconfig.slice.platform-auth.json",
+    heapMb: 6144,
+    description:
+      "Platform admin (app/platform), login/onboarding/forgot-password — internal surfaces omitted from dashboard/storefront slices.",
+    includes: [
+      "app/platform/**",
+      "app/login/**",
+      "app/onboarding/**",
+      "app/forgot-password/**",
     ],
   },
 ] as const;

@@ -238,12 +238,12 @@ npm run test:ci:pos-money-path:e2e
 
 | Suite | Command | Notes |
 |-------|---------|-------|
-| Typecheck slice wiring cert | `npm run test:ci:typecheck-slice:cert` | Policy `era5-typecheck-slice-v2`, `tsconfig.base.json`, three slice tsconfigs, `typecheck:full` + slice scripts |
+| Typecheck slice wiring cert | `npm run test:ci:typecheck-slice:cert` | Policy `era11-typecheck-slice-v3`, `tsconfig.base.json`, four slice tsconfigs, `typecheck:full` + slice scripts |
 | Typecheck slice unit | `npm run test:ci:typecheck-slice` | Policy registry, strict base inheritance |
 
 **Local fast path:** `npm run typecheck:slice:*` — 6GB heap per slice. **CI canonical gate:** `quality` job → `npm run typecheck` → `typecheck:full` (8GB, full repo).
 
-**Parallel CI job (Era 6 Cycle 3):** `typecheck-slices` job → `npm run typecheck:ci:slices` (all three slices at 6GB); policy `era6-typecheck-slice-ci-v1`; does **not** replace full typecheck.
+**Policy:** `era11-typecheck-slice-v3` (extends `era5-typecheck-slice-v2`). **Parallel CI job (Era 6 Cycle 3):** `typecheck-slices` job → `npm run typecheck:ci:slices` (all four slices at 6GB); policy `era6-typecheck-slice-ci-v1`; does **not** replace full typecheck. **Era 11:** adds `platform-auth` slice.
 
 **Wiring certification (tier 0):** `test:ci:typecheck-slice:cert` + `test:ci:typecheck-slice` chained in `test:ci:governance-bundles`.
 

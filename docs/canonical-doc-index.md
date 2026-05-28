@@ -48,7 +48,7 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era10.md`](./next-master-prompt-input-2026-05-27-era10.md) | Facts and constraints for Evolution Era 11 master prompt |
+| [`next-master-prompt-input-2026-05-27-era10.md`](./next-master-prompt-input-2026-05-27-era10.md) | Facts and constraints for Evolution Era 11 master prompt (in progress) |
 | [`era10-cycle-completion-scorecard-2026-05-27.md`](./era10-cycle-completion-scorecard-2026-05-27.md) | Era 10 customer value / operator depth (cycles 1–4) + score 97/100 |
 | [`next-master-prompt-input-2026-05-27-era9.md`](./next-master-prompt-input-2026-05-27-era9.md) | **Superseded** by era10 input for recurring prompts |
 | [`era9-cycle-completion-scorecard-2026-05-27.md`](./era9-cycle-completion-scorecard-2026-05-27.md) | Era 9 enterprise / DevOps / security recert (cycles 1–4) + score 96/100 |
@@ -452,3 +452,4 @@ Incremental refresh after Era 10 cycles 1–4 (customer value / operator depth /
 | 2026-05-27 | Era 10 Cycle 3: `era10-production-calendar-status-workflow-ui-v1` — task status workflow on calendar |
 | 2026-05-27 | Era 10 Cycle 4: `era10-kds-staging-smoke-recert-v1` — bump + recall integration recert |
 | 2026-05-27 | Era 10 Cycle 5: `era10-scorecard-refresh-v1` — score 97/100; era11 handoff |
+| 2026-05-27 | Era 11 Cycle 1: `era11-typecheck-slice-v3` — `platform-auth` typecheck slice |
