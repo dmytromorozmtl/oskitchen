@@ -169,7 +169,7 @@ sequenceDiagram
 |-------|--------|--------|
 | **1** | IdP staging smoke plan + env documentation + orchestrator | **Complete** — [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md); `smoke:enterprise-sso-idp-staging` |
 | **2** | Staging IdP login proof | **Engineering complete — awaiting operator** — `era17-enterprise-sso-idp-login-proof-v1`; smoke executed → **SKIPPED WITH REASON** (`overall: SKIPPED`; 6 prerequisite env vars unset) until staging + IdP secrets |
-| **3** | Qualified pilot gate | Pending — `era17-enterprise-sso-pilot-ready-v1` only if Cycle 2 `proof_passed` |
+| **3** | Qualified pilot gate | **Gate wired — awaiting Cycle 2 proof** — `era17-enterprise-sso-pilot-ready-v1`; `smoke:enterprise-sso-pilot-ready-gate`; delivery **pilot_foundation** until `loginProofStatus: proof_passed` |
 | **4** | SSO operator runbook | **Complete** — `era17-enterprise-sso-operator-runbook-v1`; [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md); **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | **5** | SSO tenant mapping hardening | **Complete** — `era17-enterprise-sso-tenant-mapping-v1`; **tenant_mapping_test_backed** |
 | **6** | SSO procurement sync | **Complete** — `era17-enterprise-sso-procurement-sync-v1`; **procurement_sync_complete**; FAQ **pilot_foundation** |
@@ -189,3 +189,19 @@ sequenceDiagram
 Operator proof env vars: `SSO_STAGING_OPERATOR_EMAIL`, `SSO_STAGING_LOGIN_SCREENSHOT_PATH`, `SSO_STAGING_AUDIT_EVENT_REF`, `SSO_STAGING_NEGATIVE_TEST_NOTE`.
 
 **CI:** `test:ci:enterprise-sso-idp-login-proof-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`).
+
+---
+
+## Era 17 SSO pilot_ready gate (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-pilot-ready-v1` — **awaiting_idp_login_proof**; delivery **pilot_foundation** until Cycle 2 artifact validates.
+
+1. Run **`npm run smoke:enterprise-sso-idp-staging`** — Cycle 2 must produce `loginProofStatus: proof_passed`.
+2. Run **`npm run smoke:enterprise-sso-pilot-ready-gate`** — review **`artifacts/enterprise-sso-pilot-ready-gate-summary.json`**.
+3. `ssoDeliveryStatus` becomes **pilot_ready** only when input artifact `overall: PASSED` and `loginProofStatus: proof_passed`.
+4. Missing or skipped Cycle 2 proof → **pilot_foundation** (exit 0) — not fake promotion.
+5. Production SSO for all tenants, SOC2, and SCIM remain forbidden.
+
+**Execution status (2026-05-28):** gate smoke re-run → **ssoDeliveryStatus: pilot_foundation** (`gateOutcome: pilot_foundation_awaiting_proof`; Cycle 2 **SKIPPED** — 6 prerequisite env vars unset). **Do not claim qualified pilot-ready SSO in sales or procurement until gate shows promotionAllowed.**
+
+**Enforcement:** `test:ci:enterprise-sso-pilot-ready-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`)

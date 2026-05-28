@@ -198,6 +198,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2c** | **SSO operator runbook** | `era17-enterprise-sso-operator-runbook-v1`; [`enterprise-sso-operator-runbook-era17.md`](./enterprise-sso-operator-runbook-era17.md); **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | **2d** | **SSO tenant mapping hardening** | `era17-enterprise-sso-tenant-mapping-v1`; **tenant_mapping_test_backed**; `validateSsoCallbackSession` deny matrix |
 | **2e** | **SSO procurement sync** | `era17-enterprise-sso-procurement-sync-v1`; **procurement_sync_complete**; FAQ reflects **pilot_foundation** |
+| **2g** | **SSO pilot_ready gate** | `era17-enterprise-sso-pilot-ready-v1`; **awaiting_idp_login_proof** — `smoke:enterprise-sso-pilot-ready-gate`; delivery **pilot_foundation** until Cycle 2 proof |
 | **2f** | **P0 staging proof unblock** | `era17-p0-staging-proof-unblock-v1`; **awaiting_ops_credentials** — `smoke:p0-staging-proof-unblock`; `artifacts/p0-staging-proof-unblock-summary.json` |
 | **3** | **Staging workflows first green** | `era17-staging-workflows-first-green-v1`; **awaiting_github_first_green** — smoke `overall: SKIPPED` + 3 missing env vars until GitHub secrets + run URLs |
 | **4** | **Woo live channel smoke** | `era17-channel-live-smoke-woo-v1`; **awaiting_live_credentials** — smoke `overall: SKIPPED` until DATABASE_URL + Woo connection |
@@ -711,6 +712,7 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 17 Workstream A Cycle 4: `era17-enterprise-sso-operator-runbook-v1` — qualified SSO pilot operator runbook; **operator_runbook_ready**; delivery **pilot_foundation** unchanged |
 | 2026-05-28 | Era 17 Workstream A Cycle 5: `era17-enterprise-sso-tenant-mapping-v1` — callback guard tenant/domain deny matrix; **tenant_mapping_test_backed** |
 | 2026-05-28 | Era 17 Workstream A Cycle 6: `era17-enterprise-sso-procurement-sync-v1` — procurement FAQ sync; authoritative **pilot_foundation** SSO answers |
+| 2026-05-28 | Era 17 Workstream A Cycle 3: `era17-enterprise-sso-pilot-ready-v1` — pilot_ready gate wired; delivery **pilot_foundation** until Cycle 2 proof_passed |
 | 2026-05-28 | Era 17 P0 ops bundle: `era17-p0-staging-proof-unblock-v1` — aggregates SSO + staging workflows + channel live smokes; **awaiting_ops_credentials** |
 | 2026-05-28 | Era 17 P0 #4: `era17-pilot-gono-go-v1` extends P0 unblock — GO/NO-GO gates for SSO, GitHub, channel live proof |
 | 2026-05-28 | Era 17 Cycle 3: `era17-staging-workflows-first-green-v1` — GitHub run URL evidence; **awaiting_github_first_green**; target ≥2/3 workflows PASSED |

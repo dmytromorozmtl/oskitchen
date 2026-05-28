@@ -219,7 +219,9 @@ Run: `npm run smoke:enterprise-sso-idp-staging`
 
 **Ops unblock:** Configure vars per [`GITHUB_E2E_STAGING_SECRETS.md`](./GITHUB_E2E_STAGING_SECRETS.md) → manual IdP login on staging → set operator proof env vars → re-run `npm run smoke:enterprise-sso-idp-staging`.
 
-**No maturity promotion:** SSO remains **pilot_foundation**; do not create `era17-enterprise-sso-pilot-ready-v1` until `proof_passed`.
+**No maturity promotion:** SSO remains **pilot_foundation** until gate summary shows `promotionAllowed: true` (`era17-enterprise-sso-pilot-ready-v1`).
+
+**Cycle 3 gate (2026-05-28):** `era17-enterprise-sso-pilot-ready-v1` wired — run `npm run smoke:enterprise-sso-pilot-ready-gate` after Cycle 2 smoke; delivery stays **pilot_foundation** until `loginProofStatus: proof_passed`.
 
 ---
 

@@ -126,6 +126,17 @@ Run **`npm run test:ci:enterprise-sso-tenant-mapping-era17:cert`** — chained i
 
 **Pack:** `docs/enterprise-procurement-pack.md` § Era 17 SSO procurement sync.
 
+### Enterprise SSO pilot_ready gate (Era 17 Workstream A Cycle 3)
+
+**Policy:** `era17-enterprise-sso-pilot-ready-v1` — **awaiting_idp_login_proof**; delivery **pilot_foundation** until Cycle 2 IdP artifact validates.
+
+1. Run **`npm run smoke:enterprise-sso-idp-staging`** then **`npm run smoke:enterprise-sso-pilot-ready-gate`**.
+2. Review **`artifacts/enterprise-sso-pilot-ready-gate-summary.json`** — `ssoDeliveryStatus`, `promotionAllowed`, `gateOutcome`.
+3. **Do not** update sales/procurement SSO delivery language until `promotionAllowed: true`.
+4. Production SSO for all tenants remains forbidden.
+
+**Execution status (2026-05-28):** gate re-run → **ssoDeliveryStatus: pilot_foundation** (Cycle 2 SKIPPED — 6 prerequisite env vars unset).
+
 ### Staging workflows first green (Era 17 P0 #2)
 
 **Policy:** `era17-staging-workflows-first-green-v1` — **awaiting_github_first_green**; extends `era16-staging-workflows-first-green-v1`.

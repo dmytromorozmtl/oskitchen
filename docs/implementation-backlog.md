@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-044 — Enterprise SSO pilot_ready gate (Workstream A Cycle 3)
+- ID: `KOS-E17-044`
+- Title: Era 17 Workstream A Cycle 3 — pilot_ready gate evaluator (dormant until Cycle 2 proof)
+- Module: Enterprise identity / Security
+- Priority: P0 (SSO IdP staging login → pilot_ready path)
+- Status: **awaiting_idp_login_proof**
+- Decision: `era17-enterprise-sso-pilot-ready-v1` — promotes to pilot_ready only when IdP staging artifact shows proof_passed; default pilot_foundation
+- Evidence: `lib/enterprise/enterprise-sso-pilot-ready-era17-policy.ts`, `scripts/smoke-enterprise-sso-pilot-ready-gate-era17.ts`, `artifacts/enterprise-sso-pilot-ready-gate-summary.json` (`ssoDeliveryStatus: pilot_foundation`, `gateOutcome: pilot_foundation_awaiting_proof`)
+- Next: Ops completes Cycle 2 IdP login proof; re-run gate smoke for qualified promotionAllowed
+
 ### KOS-E17-043 — Pilot GO/NO-GO P0 staging proof gates (P0)
 - ID: `KOS-E17-043`
 - Title: Era 17 P0 #4 — wire p0-staging-proof-unblock into GO/NO-GO evaluator
