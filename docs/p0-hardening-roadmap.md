@@ -299,6 +299,12 @@ Priority rule:
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
 - **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
 
+## Era 4 — KDS staging operational smoke (Cycle 10)
+
+- **Completed (2026-05-27):** `era4-kds-staging-smoke-v1` — CI certifies daily queue→bump integration + policy wiring; `docs/kds-staging-smoke-checklist.md` for manual staging UI; `npm run smoke:kds-daily` for optional DB smoke on staging/local.
+- **Evidence:** `npm run test:ci:kds-staging-smoke`, `npm run test:ci:kds-staging-smoke:cert`.
+- **Sales rule:** do not claim rush-hour, multi-station, or realtime Playwright KDS certification.
+
 ## Era 4 — Cross-channel rewards honesty (Cycle 9)
 
 - **Completed (2026-05-27):** `era4-cross-channel-rewards-v1` — POS kitchen-ledger gift card + loyalty redeem wired in `checkoutPosSale` (unit tests); storefront uses separate `storefrontGiftCard` / `storefrontLoyalty*` ledgers; `redeemGiftCardPartial` not wired to checkout.

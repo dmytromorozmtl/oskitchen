@@ -178,7 +178,7 @@ Do **not** implement or claim for v1:
 |------|--------|
 | Extend contract test | Full `KdsDailyOrder` / `TodayOrderItem` fields incl. `hasAllergenConflict` |
 | Integration: queue → bump | Order in DB → appears in queue → bump → status READY + audit row |
-| Realtime smoke (optional CI) | Document manual or staging check; do not block CI on Supabase Realtime |
+| Realtime smoke (optional CI) | **Era 4 Cycle 10:** `docs/kds-staging-smoke-checklist.md` + `test:ci:kds-staging-smoke`; do not block CI on Supabase Realtime |
 | UI/accessibility spot check | Fullscreen readability, bump target ≥44px, overdue aria labels |
 
 ### Explicit deferrals

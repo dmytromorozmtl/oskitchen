@@ -141,6 +141,17 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` + `test:ci:kds-v1:prototype:cert` chained in `test:ci:governance-bundles`.
 
+## Tier 1c2 — KDS staging operational smoke (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Staging smoke policy + wiring | `npm run test:ci:kds-staging-smoke` | Checklist tiers, `smoke:kds-daily` script, permissioned actions |
+| Staging smoke wiring cert | `npm run test:ci:kds-staging-smoke:cert` | Policy id, governance bundle, maturity matrix honesty |
+
+**Policy (Era 4 Cycle 10):** `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`). **Prerequisites:** `test:ci:kds-v1:integration` (queue→bump). **Staging/manual:** `docs/kds-staging-smoke-checklist.md`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`. **Not certified:** rush-hour, multi-station, Playwright realtime KDS.
+
+**Wiring certification (tier 0):** `test:ci:kds-staging-smoke:cert` + `test:ci:kds-staging-smoke` chained in `test:ci:governance-bundles`.
+
 ## Tier 2c — KDS v1 prototype (`kds-v1-prototype` job)
 
 | Suite | Command | DB | Notes |

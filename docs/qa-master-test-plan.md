@@ -74,6 +74,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c6. KDS staging operational smoke (Era 4 Cycle 10)
+- policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`)
+- wiring cert: `test:ci:kds-staging-smoke:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:kds-staging-smoke` — checklist + smoke script wiring; prerequisites `test:ci:kds-v1:*`
+- staging: `docs/kds-staging-smoke-checklist.md`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`
+- not in scope: rush-hour load, multi-station routing, Playwright realtime KDS E2E
+
 ### 8c5. Cross-channel loyalty / gift cards (Era 4 Cycle 9)
 - policy: `lib/rewards/cross-channel-rewards-policy.ts` (`era4-cross-channel-rewards-v1`)
 - wiring cert: `test:ci:cross-channel-rewards:cert` (in `test:ci:governance-bundles`)

@@ -79,7 +79,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-procurement-honesty-v1` — single canonical pack for questionnaires and RFPs; deprecated enterprise audit family for posture
 - Evidence: `docs/enterprise-procurement-pack.md`, `lib/enterprise/enterprise-procurement-policy.ts`, `test:ci:enterprise-procurement:cert`
-- Next: KDS staging smoke or nav maturity sweep
+- Next: nav maturity sweep or permission helper consolidation
 
 ### KOS-E4-009 — Cross-channel loyalty / gift card honesty
 - ID: `KOS-E4-009`
@@ -90,6 +90,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Decision: `era4-cross-channel-rewards-v1` — POS gift card + loyalty redeem certified; **not** unified cross-channel; storefront `redeemGiftCardPartial` unwired
 - Evidence: `lib/rewards/cross-channel-rewards-policy.ts`, `test:ci:cross-channel-rewards`, `tests/unit/pos-rewards-checkout-wiring.test.ts`
 - Next: wire storefront checkout gift-card redeem OR explicit product decision to keep separate
+
+### KOS-E4-010 — KDS staging operational smoke
+- ID: `KOS-E4-010`
+- Title: One honest KDS v1 operational smoke path (CI + staging checklist + DB script)
+- Module: Kitchen ops / QA
+- Priority: P0 (Era 4 Cycle 10)
+- Status: **completed**
+- Decision: `era4-kds-staging-smoke-v1` — automated queue→bump in `test:ci:kds-v1:integration`; staging checklist + `smoke:kds-daily`; **not** rush-hour or realtime Playwright certified
+- Evidence: `lib/kitchen/kds-staging-smoke-policy.ts`, `docs/kds-staging-smoke-checklist.md`, `test:ci:kds-staging-smoke:cert`
+- Next: nav/page maturity sweep or permission helper consolidation
 
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
