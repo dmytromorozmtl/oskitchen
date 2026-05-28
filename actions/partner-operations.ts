@@ -6,8 +6,7 @@ import { revalidatePath } from "next/cache";
 import type { PartnerOrgType } from "@prisma/client";
 
 import { slugifyBrandSlug } from "@/lib/brands/brand-helpers";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
-import { canProvisionPartnerOrganizations } from "@/lib/partner/partner-permissions";
+import { requirePartnerProvisionActor } from "@/lib/partner/require-partner-provision-actor";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 
@@ -30,14 +29,14 @@ export async function createPartnerOrganization(input: {
   orgType?: PartnerOrgType;
 }) {
   try {
-    const { sessionUser: session } = await requireTenantActor();
-    const profile = await prisma.userProfile.findUnique({
-      where: { id: session.id },
-      select: { role: true },
+    const access = await requirePartnerProvisionActor({
+      operation: "partner.create_organization",
     });
-    if (!profile) return { error: "Profile not found." };
-    const allowed = await canProvisionPartnerOrganizations(session.id, session.email ?? null, profile.role);
-    if (!allowed) return { error: "You do not have permission to create partner organizations." };
+    if (!access.ok) {
+      return { error: access.error };
+    }
+    const { actor } = access;
+    const session = actor.sessionUser;
 
     const name = input.name.trim();
     if (name.length < 2) return { error: "Name must be at least 2 characters." };
