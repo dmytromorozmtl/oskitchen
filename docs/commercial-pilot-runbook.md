@@ -45,7 +45,7 @@ npm run verify:staging-env
 
 | Check | Pass criteria |
 |-------|----------------|
-| Marketing claims | `verify-claims` — no unqualified live marketplace/hardware claims |
+| Marketing claims | `verify-claims` — matrix-aligned scan (`era7-marketing-claims-governance-v1`); CI cert `test:ci:marketing-claims-governance:cert` |
 | Staging env | `verify:staging-env` exit 0 |
 | Workspace scope | `npm run workspace:backfill:status` exit 0 (if migration pilot) |
 | Nav honesty | Preview/placeholder routes show badges (`era4-page-maturity-sweep-v1`) |

@@ -36,6 +36,10 @@ export const COMMERCIAL_PILOT_TIER1_COMMANDS = [
   "npm run verify:staging-env",
 ] as const;
 
+/** Marketing honesty gate aligned with feature maturity matrix (Era 7 Cycle 4). */
+export const COMMERCIAL_PILOT_MARKETING_CLAIMS_POLICY_ID =
+  "era7-marketing-claims-governance-v1" as const;
+
 export const COMMERCIAL_PILOT_MONEY_PATH_COMMANDS = [
   "npm run test:ci:storefront-money-path:cert",
   "npm run test:ci:pos-money-path:cert",

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 7 — Commercial readiness
 
+### KOS-E7-004 — Marketing claims governance (sales enablement)
+- ID: `KOS-E7-004`
+- Title: Matrix-aligned marketing claims scan with governance CI cert
+- Module: GTM / marketing / commercial
+- Priority: P1 (Era 7 Cycle 4)
+- Status: **completed**
+- Decision: `era7-marketing-claims-governance-v1` — forbidden phrases fail `verify-claims`; live marketing scan in `test:ci:marketing-claims-governance:cert`
+- Evidence: `lib/governance/marketing-claims-governance-policy.ts`, `scripts/verify-marketing-claims.ts`, `config/marketing/claims-registry.json`
+- Next: Era 7 scorecard refresh or claim-registry cleanup for `needs-evidence` rows
+
 ### KOS-E7-003 — Repo hygiene cert (`tests/node_modules/`)
 - ID: `KOS-E7-003`
 - Title: CI cert blocks tracked nested test installs under `tests/node_modules/`

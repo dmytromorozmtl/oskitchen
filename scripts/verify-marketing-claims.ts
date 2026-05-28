@@ -1,75 +1,81 @@
 /**
- * Non-blocking marketing vs capability-matrix consistency check.
+ * Marketing vs capability-matrix consistency check.
  * Run: npm run verify-claims
+ * Strict (fails on roadmap warnings): MARKETING_CLAIMS_STRICT=1 npm run verify-claims
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
+import {
+  MARKETING_CLAIMS_GOVERNANCE_POLICY_ID,
+  MARKETING_CLAIMS_SCAN_ROOTS,
+  exitCodeForMarketingClaimViolations,
+  scanMarketingText,
+  type MarketingClaimViolation,
+} from "@/lib/governance/marketing-claims-governance-policy";
+
 const ROOT = process.cwd();
 
-const ROADMAP_TERMS = [
-  { id: "uber_eats", patterns: [/uber\s*eats/i, /live\s+uber/i] },
-  { id: "uber_direct", patterns: [/uber\s*direct/i, /live\s+courier/i] },
-  { id: "doordash", patterns: [/doordash/i] },
-  { id: "stripe_terminal", patterns: [/stripe\s*terminal/i] },
-  { id: "sms", patterns: [/\bsms\b/i, /text\s+message/i] },
-];
+function readMarketingSources(): { label: string; text: string }[] {
+  const sources: { label: string; text: string }[] = [];
 
-const SAFE_QUALIFIERS = /beta|roadmap|coming soon|partner|not available|requires|placeholder|evaluation/i;
-
-function readMarketingSources(): string[] {
-  const paths: string[] = [];
-  const dirs = ["components/marketing", "components/landing", "app/integrations", "lib/public-copy.ts"];
-  for (const rel of dirs) {
+  for (const rel of MARKETING_CLAIMS_SCAN_ROOTS) {
     const full = join(ROOT, rel);
     try {
       const stat = statSync(full);
       if (stat.isFile()) {
-        paths.push(full);
+        sources.push({ label: rel, text: readFileSync(full, "utf8") });
         continue;
       }
       for (const f of readdirSync(full, { withFileTypes: true })) {
         if (f.isFile() && /\.(tsx?|md)$/.test(f.name)) {
-          paths.push(join(full, f.name));
+          const path = join(rel, f.name);
+          sources.push({ label: path, text: readFileSync(join(full, f.name), "utf8") });
         }
       }
     } catch {
-      /* skip */
+      /* skip missing roots */
     }
   }
-  return paths.map((p) => readFileSync(p, "utf8"));
+
+  return sources;
 }
 
-function main() {
+function printViolations(violations: MarketingClaimViolation[]): void {
+  for (const v of violations) {
+    const prefix = v.kind === "forbidden" ? "✗ FORBIDDEN" : "⚠  ROADMAP";
+    console.warn(`${prefix} [${v.termId}] in ${v.sourceLabel}: "${v.match}"`);
+    console.warn(`   …${v.context.replace(/\s+/g, " ").trim().slice(0, 240)}…`);
+  }
+}
+
+function main(): void {
+  const strict = process.env.MARKETING_CLAIMS_STRICT === "1";
   const sources = readMarketingSources();
-  const combined = sources.join("\n");
-  let warnings = 0;
+  const allViolations: MarketingClaimViolation[] = [];
 
-  console.log("Marketing claim check (non-blocking)\n");
+  console.log(`Marketing claim check (policy: ${MARKETING_CLAIMS_GOVERNANCE_POLICY_ID})`);
+  if (strict) console.log("Strict mode: unqualified roadmap terms fail the run.\n");
 
-  for (const term of ROADMAP_TERMS) {
-    for (const pattern of term.patterns) {
-      const matches = combined.match(new RegExp(pattern.source, "gi"));
-      if (!matches?.length) continue;
-      const hasUnsafe = matches.some((m) => {
-        const idx = combined.indexOf(m);
-        const context = combined.slice(Math.max(0, idx - 80), idx + m.length + 80);
-        return !SAFE_QUALIFIERS.test(context);
-      });
-      if (hasUnsafe) {
-        console.warn(`⚠  Possible overclaim for "${term.id}" — verify context includes beta/roadmap qualifier`);
-        warnings++;
-      }
-    }
+  for (const { label, text } of sources) {
+    allViolations.push(...scanMarketingText(text, label));
   }
 
-  if (warnings === 0) {
-    console.log("✓ No obvious unqualified roadmap-term hits in scanned marketing files");
-  } else {
-    console.log(`\n${warnings} warning(s). Cross-check lib/capabilities/capability-matrix.ts`);
+  const forbidden = allViolations.filter((v) => v.kind === "forbidden");
+  const roadmap = allViolations.filter((v) => v.kind === "roadmap_unqualified");
+
+  if (allViolations.length === 0) {
+    console.log("✓ No forbidden phrases or unqualified roadmap-term hits in scanned marketing files");
+    console.log("  Cross-check docs/feature-maturity-matrix.md and config/marketing/claims-registry.json");
+    process.exit(0);
   }
 
-  process.exitCode = 0;
+  printViolations(allViolations);
+  console.log(
+    `\n${forbidden.length} forbidden, ${roadmap.length} roadmap warning(s). See docs/feature-maturity-matrix.md`,
+  );
+
+  process.exit(exitCodeForMarketingClaimViolations(allViolations, strict));
 }
 
 main();

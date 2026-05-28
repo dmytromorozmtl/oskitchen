@@ -114,6 +114,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 
+### 8c4d. Marketing claims governance (Era 7 Cycle 4)
+- policy: `lib/governance/marketing-claims-governance-policy.ts` (`era7-marketing-claims-governance-v1`)
+- scan: `npm run verify-claims` (forbidden phrases exit 1; roadmap terms warn unless `MARKETING_CLAIMS_STRICT=1`)
+- registry: `config/marketing/claims-registry.json`; audit `npm run audit:marketing-claims`
+- wiring cert: `test:ci:marketing-claims-governance:cert` (in `test:ci:governance-bundles`)
+
 ### 8c4c. Repository hygiene — `tests/node_modules/` (Era 7 Cycle 3)
 - policy: `lib/ci/repo-hygiene-policy.ts` (`era7-tests-node-modules-hygiene-v1`)
 - wiring cert: `test:ci:repo-hygiene:cert` (in `test:ci:governance-bundles`)

@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 7 Cycle 3 — tests/node_modules repo hygiene cert)  
+**Updated:** 2026-05-27 (Era 7 Cycle 4 — marketing claims governance cert)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -134,6 +134,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **1** | **Commercial pilot runbook** | `era7-commercial-pilot-runbooks-v1`; `docs/commercial-pilot-runbook.md` |
 | **2** | **Storefront Stripe E2E CI policy** | `era7-storefront-stripe-optional-v1`; `storefront-stripe-e2e-summary` artifact |
 | **3** | **Repo hygiene (`tests/node_modules`)** | `era7-tests-node-modules-hygiene-v1`; `test:ci:repo-hygiene:cert` |
+| **4** | **Marketing claims governance** | `era7-marketing-claims-governance-v1`; `verify-claims` + `test:ci:marketing-claims-governance:cert` |
 
 ## Evolution Era 6 cycle ledger
 
@@ -311,3 +312,4 @@ Incremental refresh after Era 6 cycles 1–5 (P0 closure from era5 handoff). Bas
 | 2026-05-27 | Era 7 Cycle 1: `era7-commercial-pilot-runbooks-v1` — canonical commercial pilot runbook |
 | 2026-05-27 | Era 7 Cycle 2: `era7-storefront-stripe-optional-v1` — honest Stripe browser E2E tier + summary artifact |
 | 2026-05-27 | Era 7 Cycle 3: `era7-tests-node-modules-hygiene-v1` — gitignore + CI cert blocks tracked nested test installs |
+| 2026-05-27 | Era 7 Cycle 4: `era7-marketing-claims-governance-v1` — matrix-aligned marketing claims scan + CI cert |
