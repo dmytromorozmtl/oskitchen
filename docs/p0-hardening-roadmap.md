@@ -287,6 +287,12 @@ Priority rule:
 - Priority order: 16 (P1 governance)
 - Estimated complexity: Low
 
+## Era 4 — Cron experimental archive (P0-4)
+
+- **Completed (Cycle 4, 2026-05-27):** Moved **121** experimental `/api/cron/*` route folders from `app/api/cron/` to `archive/cron-routes/`; **16** production routes remain active. Policy id `era4-active-production-only-v1`.
+- **Evidence:** `CONFIRM_CRON_ARCHIVE=1 npm run cron:archive:experimental -- --execute`, `config/cron-archive-manifest.json`, `lib/cron/cron-surface-policy.ts`, `tests/unit/cron-archive-era4-cert-live.test.ts`, `validate:production-crons`, `validate:cron-inventory`.
+- **Acceptance:** CI cert asserts `experimentalOnDisk === 0` and archived count ≥ 121; production crons unchanged.
+
 ## Era 4 — RBAC wave 4 residuals batch 1 (P0-3)
 
 - **Completed (Cycle 3, 2026-05-27):** Denial audits + negative tests for delivery routes (`routes.manage`), Copilot mutations (`requireCopilotMutation`), demo/golden scenario (`templates.manage` + production guard), in-app feedback (session required), integration menu sync (certified tests), production calendar (`production.manage`), holiday packages (`growth.manage`).

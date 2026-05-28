@@ -121,12 +121,13 @@ npm run test:ci:pos-money-path:e2e
 | Suite | Command | Notes |
 |-------|---------|-------|
 | Production manifest reconciliation | `npm run validate:production-crons` | Manifest ↔ disk ↔ `vercel.json` ↔ archive |
-| Route inventory cap | `npm run validate:cron-inventory` | Experimental count ≤ `CRON_EXPERIMENTAL_MAX` |
+| Route inventory cap | `npm run validate:cron-inventory` | **0 active experimental** under `app/api/cron` (Era 4 archive) |
 | Full hygiene bundle | `npm run test:ci:cron-hygiene` | Reconciliation + inventory + `runCronRoute` scan + production gate |
+| Era 4 archive surface cert | `test:ci:cron-hygiene:cert` (chained) | `tests/unit/cron-archive-era4-cert-live.test.ts` |
 
-**Production schedule:** 16 allowlisted slugs in `services/cron/production-manifest.ts` (not 15 — includes `incident-remediation-reminders`). **On disk:** 137 total routes; non-allowlisted routes are experimental, blocked in production unless `ENABLE_EXPERIMENTAL_CRONS=true`, and stamped `X-KOS-Cron-Tier: experimental` when enabled.
+**Production schedule:** 16 allowlisted slugs in `services/cron/production-manifest.ts` (includes `incident-remediation-reminders`). **Active App Router surface (Era 4 Cycle 4):** **16 production routes only** under `app/api/cron/`; **121+ experimental handlers** moved to `archive/cron-routes/` per policy `era4-active-production-only-v1` (`lib/cron/cron-surface-policy.ts`). Experimental paths remain blocked in production unless `ENABLE_EXPERIMENTAL_CRONS=true` (`runCronRoute`).
 
-**Wiring certification (tier 0):** `npm run test:ci:cron-hygiene:cert` → `tests/unit/cron-hygiene-ci-live.test.ts` (included in `test:ci:governance-bundles`). Full reconciliation runs in `quality` via `validate:production-crons` and `validate:cron-inventory`.
+**Wiring certification (tier 0):** `npm run test:ci:cron-hygiene:cert` → `tests/unit/cron-hygiene-ci-live.test.ts` + `tests/unit/cron-archive-era4-cert-live.test.ts` (included in `test:ci:governance-bundles`). Full reconciliation runs in `quality` via `validate:production-crons` and `validate:cron-inventory`.
 
 ## Tier 1c — KDS v1 scope (`quality` job via governance bundles)
 

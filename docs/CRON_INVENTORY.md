@@ -1,8 +1,8 @@
 # Cron route inventory
 
-**Total routes:** 131 (`app/api/cron/**/route.ts`)  
+**Active App Router routes:** 16 production (`app/api/cron/**/route.ts`) — Era 4 Cycle 4 archived **121** experimental handlers to `archive/cron-routes/` (policy `era4-active-production-only-v1`).  
 **Auth:** `runCronRoute` → `CRON_SECRET` Bearer.  
-**Production allowlist (code):** `services/cron/production-manifest.ts` — only these slugs run in `NODE_ENV=production` without `ENABLE_EXPERIMENTAL_CRONS=true`. All other slugs return **404** in production when the flag is off. Experimental paths on disk: `listExperimentalCronPathsOnDisk()` / `EXPERIMENTAL_CRON_PATHS()` in `services/cron/cron-route-inventory.ts`.  
+**Production allowlist (code):** `services/cron/production-manifest.ts` — only these slugs run in `NODE_ENV=production` without `ENABLE_EXPERIMENTAL_CRONS=true`. Archived experimental slugs are not registered as App Router routes unless restored.  
 **Vercel schedules:** must match the allowlist — see `vercel.json` (do not schedule experimental slugs).
 
 ## Pilot production cron list (Vercel — 10 slugs)

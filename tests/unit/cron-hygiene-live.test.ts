@@ -11,6 +11,7 @@ import {
   assertProductionCronReconciliation,
   reconcileProductionCronState,
 } from "@/services/cron/cron-reconciliation";
+import { CRON_ACTIVE_PRODUCTION_ROUTE_COUNT } from "@/lib/cron/cron-surface-policy";
 import { ALLOWED_PRODUCTION_CRON_SLUGS } from "@/services/cron/production-manifest";
 
 const CRON_ROOT = join(process.cwd(), "app/api/cron");
@@ -35,10 +36,11 @@ describe("cron hygiene certification (live repo)", () => {
     expect(() => assertCronRouteInventory(report)).not.toThrow();
     expect(report.ok).toBe(true);
     expect(report.productionAllowlist).toBe(ALLOWED_PRODUCTION_CRON_SLUGS.length);
-    expect(report.productionOnDisk).toBe(report.productionAllowlist);
+    expect(report.productionOnDisk).toBe(CRON_ACTIVE_PRODUCTION_ROUTE_COUNT);
     expect(report.missingProductionRoutes).toEqual([]);
-    expect(report.experimentalOnDisk).toBeLessThanOrEqual(report.maxExperimental);
-    expect(report.totalRoutes).toBe(report.productionOnDisk + report.experimentalOnDisk);
+    expect(report.experimentalOnDisk).toBe(0);
+    expect(report.archivedRoutes).toBeGreaterThanOrEqual(121);
+    expect(report.totalRoutes).toBe(report.productionOnDisk);
   });
 
   it("requires every cron route handler to use runCronRoute", () => {

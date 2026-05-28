@@ -34,6 +34,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/routes/require-route-mutation.ts`, `lib/ai/require-copilot-mutation.ts`, `lib/demo/require-demo-mutation.ts`, `lib/feedback/require-app-feedback-submit.ts`, `test:ci:rbac-wave4`, `test:ci:rbac-wave4:cert`
 - Remaining batch 2: restaurant tables, customer-subscription, other tenant-only surfaces per re-audit §5.2
 
+### KOS-E4-004 — Cron experimental surface archive
+- ID: `KOS-E4-004`
+- Title: Archive experimental cron routes off App Router; certify 16 production-only active surface
+- Module: DevOps / platform
+- Priority: P0 (Era 4 Cycle 4)
+- Status: **completed**
+- Evidence: 121 slugs in `archive/cron-routes/`, `config/cron-archive-manifest.json`, `test:ci:cron-hygiene:cert` includes `cron-archive-era4-cert-live`
+- Ops restore: `npm run cron:restore:archived -- --execute` (see `docs/CRON_ARCHIVE_RUNBOOK.md`)
+
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
 - ID: `KOS-P0-001`

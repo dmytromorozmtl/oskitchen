@@ -30,7 +30,7 @@ Next.js no longer registers archived paths. Manifest: `config/cron-archive-manif
 ## CI
 
 - `npm run validate:cron-inventory` — counts only **active** routes under `app/api/cron/`.
-- After archive, experimental count should drop (target: **0** active experimental, **~121** archived).
+- **Era 4 Cycle 4 (2026-05-27):** bulk archive executed — **0** active experimental, **121** archived. CI cert: `tests/unit/cron-archive-era4-cert-live.test.ts`.
 
 ## Rollback
 
