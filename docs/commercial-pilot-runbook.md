@@ -356,6 +356,23 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+---
+
+## Era 17 POS receipt / shift spot check (2026-05-28)
+
+**Policy:** `era17-pos-receipt-shift-spotcheck-v1` — **closeout_math_spotcheck_documented**; shift variance + receipt total consistency via `pos-shift-closeout-math`.
+
+1. **Closeout** — `expectedCash = opening + sum(CASH COMPLETED)`; `variance = closing - expected`.
+2. **Receipt** — `subtotal - discount + tax ≈ total`; line totals ≈ subtotal (`receiptTotalsConsistent` in `pos-shift-closeout-math`).
+3. Card/placeholder sales **excluded** from cash closeout sum.
+4. Operator doc: **`docs/pos-receipt-shift-spotcheck-era17.md`**
+5. Run **`npm run smoke:pos-receipt-shift-spotcheck`** → **`artifacts/pos-receipt-shift-spotcheck-summary.json`**
+6. **Forbidden:** automated variance approval, hardware drawer certification.
+
+**Enforcement:** `test:ci:pos-receipt-shift-spotcheck-era17:cert` (chained in `test:ci:pos-money-path:cert`)
+
+---
+
 ## Era 17 POS software-only operator runbook (2026-05-28)
 
 **Policy:** `era17-pos-operator-runbook-v1` — **operator_runbook_ready**; daily golden path for web-first POS via `pos-operator-runbook-summary`.

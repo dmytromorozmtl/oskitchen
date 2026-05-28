@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { computeShiftCloseout } from "@/lib/pos/pos-shift-closeout-math";
 import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
 import {
   ownerScopedAnd,
@@ -90,12 +91,16 @@ export async function closePosShift(input: {
     where: txnWhere,
     select: { total: true },
   });
-  const cashTotal = cashRows.reduce((acc, r) => acc.add(r.total), new Prisma.Decimal(0));
+  const closeout = computeShiftCloseout({
+    openingCash: Number(shift.openingCashAmount),
+    cashSalesTotals: cashRows.map((row) => Number(row.total)),
+    closingCash: input.closingCashAmount,
+  });
 
   const opening = new Prisma.Decimal(shift.openingCashAmount);
   const closing = new Prisma.Decimal(input.closingCashAmount);
-  const expected = opening.add(cashTotal);
-  const variance = closing.minus(expected);
+  const expected = new Prisma.Decimal(closeout.expectedCash);
+  const variance = new Prisma.Decimal(closeout.variance);
 
   const updated = await prisma.pOSShift.update({
     where: { id: shift.id },

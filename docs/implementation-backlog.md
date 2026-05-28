@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-025 — POS receipt / shift closeout spot check (P1)
+- ID: `KOS-E17-025`
+- Title: Era 17 Cycle 25 — shift variance + receipt total spot check
+- Module: POS / Ops
+- Priority: P1 (Workstream E Cycle 24)
+- Status: **closeout_math_spotcheck_documented**
+- Decision: `era17-pos-receipt-shift-spotcheck-v1` — `pos-shift-closeout-math` + operator spot check doc
+- Evidence: `docs/pos-receipt-shift-spotcheck-era17.md`, `test:ci:pos-receipt-shift-spotcheck-era17:cert`
+- Next: Partner webhook docs (Cycle 14) or Workstream F KDS staging proof
+
 ### KOS-E17-024 — POS software-only operator runbook (P1)
 - ID: `KOS-E17-024`
 - Title: Era 17 Cycle 24 — daily golden path operator runbook for web-first POS
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **operator_runbook_ready**
 - Decision: `era17-pos-operator-runbook-v1` — shifts, checkout, receipts, closeout + smoke summary
 - Evidence: `docs/pos-software-only-operator-runbook-era17.md`, `test:ci:pos-operator-runbook-era17:cert`
-- Next: Receipt / shift report spot check (Cycle 24)
+- Next: Receipt / shift report spot check (Cycle 24) — **done**; see KOS-E17-025
 
 ### KOS-E17-023 — Public POST abuse review (P1)
 - ID: `KOS-E17-023`

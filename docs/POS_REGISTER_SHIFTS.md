@@ -9,7 +9,7 @@
 
 - `getOpenPosShift` — latest `OPEN` row for `(userId, registerId)`.
 - `openPosShift` — rejects double-open; writes `POSAuditEvent` `pos.shift.opened`.
-- `closePosShift` — sums **cash** `POSTransaction` rows for the shift, computes `expected = opening + cashSales`, `variance = closing - expected`, writes `pos.shift.closed` audit.
+- `closePosShift` — sums **cash** `POSTransaction` rows for the shift via `computeShiftCloseout` (`lib/pos/pos-shift-closeout-math.ts`), computes `expected = opening + cashSales`, `variance = closing - expected`, writes `pos.shift.closed` audit. See **`docs/pos-receipt-shift-spotcheck-era17.md`** (`era17-pos-receipt-shift-spotcheck-v1`).
 
 ## UI
 

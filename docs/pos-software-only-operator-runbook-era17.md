@@ -51,7 +51,7 @@ Missing permission shows **PosAccessCard** — contact workspace owner; this is 
 ### 3. Verify sale
 
 1. **`/dashboard/pos/transactions`** — new row with correct total and payment mode.
-2. **`/dashboard/pos/receipts`** — receipt number matches; subtotal, tax, discount, total align with cart.
+2. **`/dashboard/pos/receipts`** — receipt number matches; subtotal, tax, discount, total align with cart. Closeout/receipt math spot check: **`docs/pos-receipt-shift-spotcheck-era17.md`**.
 3. Order appears in **`/dashboard/order-hub`** (canonical order spine).
 
 ### 4. Manager corrections (when needed)
