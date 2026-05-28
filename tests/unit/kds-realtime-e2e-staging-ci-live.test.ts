@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   KDS_REALTIME_E2E_CANONICAL_DOC_PATHS,
   KDS_REALTIME_E2E_CANONICAL_MARKERS,
@@ -34,11 +35,14 @@ describe("kds realtime e2e staging CI certification (live repo)", () => {
     for (const name of KDS_REALTIME_E2E_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
-    expect(scripts["test:ci:governance-bundles"]).toContain(
-      "test:ci:kds-realtime-e2e-staging:cert",
-    );
-    expect(scripts["test:ci:governance-bundles"]).toContain(
-      "test:ci:kds-realtime-e2e-staging",
+    expect(
+      governanceBundlesIncludesCert(scripts, "test:ci:kds-realtime-e2e-staging:cert"),
+    ).toBe(true);
+    expect(
+      governanceBundlesIncludesCert(scripts, "test:ci:kds-realtime-e2e-staging"),
+    ).toBe(true);
+    expect(scripts["test:ci:kds-realtime-e2e-staging:cert"]).toContain(
+      "kds-realtime-e2e-staging-era11-cert-live",
     );
   });
 

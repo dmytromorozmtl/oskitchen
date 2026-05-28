@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 11 — DevOps scale / RBAC recert
 
+### KOS-E11-003 — KDS Realtime Playwright staging (P1)
+- ID: `KOS-E11-003`
+- Title: Staging-only KDS Playwright spec with explicit skip summary artifact
+- Module: Kitchen / KDS / QA
+- Priority: P1 (Era 11 Cycle 3)
+- Status: **completed**
+- Decision: `era11-kds-realtime-e2e-staging-v1` — `e2e/kds-realtime-staging.spec.ts`; `test:ci:kds-realtime-e2e-staging:policy`; not in default `ci.yml`
+- Evidence: `lib/ci/kds-realtime-e2e-staging-summary-policy.ts`, `test:ci:kds-realtime-e2e-staging-era11:cert`
+- Next: wire optional staging workflow only with explicit era decision; no default CI job
+
 ### KOS-E11-002 — Mutation access Era 11 recert (P1)
 - ID: `KOS-E11-002`
 - Title: Re-certify domain mutation registry after Era 10 production calendar status workflow

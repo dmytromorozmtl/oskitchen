@@ -117,10 +117,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 
 ### 8c4f. KDS Realtime Playwright E2E staging scope (Era 8 Cycle 2)
-- policy: `lib/kitchen/kds-realtime-e2e-staging-policy.ts` (`era8-kds-realtime-e2e-staging-v1`)
+- policy: `lib/kitchen/kds-realtime-e2e-staging-policy.ts` (`era8-kds-realtime-e2e-staging-v1`) + Era 11 `era11-kds-realtime-e2e-staging-v1` (`lib/ci/kds-realtime-e2e-staging-summary-policy.ts`)
 - extends: `era6-kds-realtime-smoke-v1` (poll fallback unit-certified)
-- staging: Tier E in `docs/kds-staging-smoke-checklist.md` — manual only; no Playwright spec in repo yet; **not in default CI**
-- wiring cert: `test:ci:kds-realtime-e2e-staging:cert` (in `test:ci:governance-bundles`)
+- playwright: `e2e/kds-realtime-staging.spec.ts` — `test:ci:kds-realtime-e2e-staging:playwright` (staging); **not in default CI**
+- policy summary: `test:ci:kds-realtime-e2e-staging:policy` → `kds-realtime-e2e-staging-summary` (`PASSED`/`SKIPPED`/`FAILED`)
+- staging: Tier E in `docs/kds-staging-smoke-checklist.md`
+- wiring cert: `test:ci:kds-realtime-e2e-staging:cert` (chains era11; in `test:ci:governance-bundles`)
 
 ### 8c4e. Claims registry governance (Era 8 Cycle 1)
 - policy: `lib/governance/claims-registry-policy.ts` (`era8-claims-registry-v1`)
@@ -267,7 +269,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Policy: `lib/kitchen/kds-staging-smoke-era10-policy.ts` (`era10-kds-staging-smoke-recert-v1`; extends `era4-kds-staging-smoke-v1`)
 - Integration: `tests/integration/kds-daily-queue-bump.integration.test.ts` (bump + recall + allergen)
 - Wiring cert: `test:ci:kds-staging-smoke-era10:cert` (chained in `test:ci:kds-staging-smoke:cert`)
-- Honest gap: no Playwright KDS spec in default CI; Tier E manual only
+- Honest gap: Playwright KDS spec is staging-only (not default CI); no rush-hour or production Realtime SLO claim
 
 ### 8c4n. Production calendar status workflow UI (Era 10 Cycle 3)
 - Policy: `lib/production/production-calendar-status-workflow-ui-policy.ts` (`era10-production-calendar-status-workflow-ui-v1`; extends cross-week)

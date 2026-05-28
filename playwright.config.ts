@@ -64,6 +64,7 @@ if (dashboardE2EEnabled) {
         "**/dashboard-auth.spec.ts",
         "**/workspace-post-not-null-smoke.spec.ts",
         "**/pos-checkout-flow.spec.ts",
+        "**/kds-realtime-staging.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
       ],

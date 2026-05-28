@@ -3,10 +3,14 @@
  *
  * Honest scope: Supabase Realtime browser verification is **staging-only** and
  * **not** in default CI. Unit-certified poll fallback remains `era6-kds-realtime-smoke-v1`.
- * No Playwright KDS spec ships yet — manual Tier E checklist until one is added.
+ * Era 11 adds staging Playwright spec (`e2e/kds-realtime-staging.spec.ts`) with explicit
+ * skip summary artifact — still **not** in default CI.
  */
 
 export const KDS_REALTIME_E2E_STAGING_POLICY_ID = "era8-kds-realtime-e2e-staging-v1" as const;
+
+export const KDS_REALTIME_E2E_STAGING_ERA11_POLICY_ID =
+  "era11-kds-realtime-e2e-staging-v1" as const;
 
 export const KDS_REALTIME_E2E_EXTENDS_POLICY_ID = "era6-kds-realtime-smoke-v1" as const;
 
@@ -15,8 +19,8 @@ export const KDS_REALTIME_E2E_STAGING_CHECKLIST_DOC =
 
 export const KDS_REALTIME_E2E_STAGING_TIER = "Tier E" as const;
 
-/** Playwright spec path when implemented (none in repo at Era 8 Cycle 2). */
-export const KDS_REALTIME_E2E_PLAYWRIGHT_SPEC: string | null = null;
+/** Staging Playwright spec (Era 11 Cycle 3). */
+export const KDS_REALTIME_E2E_PLAYWRIGHT_SPEC = "e2e/kds-realtime-staging.spec.ts" as const;
 
 export const KDS_REALTIME_E2E_IN_DEFAULT_CI = false as const;
 
@@ -37,7 +41,8 @@ export const KDS_REALTIME_E2E_HONEST_SCOPE = {
   pollFallbackUnitCertified: true,
   pollFallbackPolicyId: KDS_REALTIME_E2E_EXTENDS_POLICY_ID,
   stagingManualRealtimeChecklist: true,
-  playwrightSpecImplemented: false,
+  playwrightSpecImplemented: true,
+  playwrightSpecEra11PolicyId: KDS_REALTIME_E2E_STAGING_ERA11_POLICY_ID,
   defaultCiPlaywrightJob: false,
   rushHourCertified: false,
   productionRealtimeTrafficCertified: false,
@@ -59,6 +64,9 @@ export const KDS_REALTIME_E2E_CI_SCRIPTS = [
 export const KDS_REALTIME_E2E_UNIT_TESTS = [
   "tests/unit/kds-realtime-e2e-staging-policy.test.ts",
   "tests/unit/kds-realtime-e2e-staging-ci-live.test.ts",
+  "tests/unit/kds-realtime-e2e-staging-era11-policy.test.ts",
+  "tests/unit/kds-realtime-e2e-staging-era11-cert-live.test.ts",
+  "tests/unit/kds-realtime-e2e-staging-summary-policy.test.ts",
 ] as const;
 
 export const KDS_REALTIME_E2E_CANONICAL_DOC_PATHS = [

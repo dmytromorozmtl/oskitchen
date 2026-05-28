@@ -12,7 +12,7 @@ One **qualified** operational path: today's active order appears on the daily KD
 
 - Rush-hour or multi-station kitchen load
 - Supabase Realtime reliability under production traffic (poll fallback exists; verify manually)
-- Playwright Realtime E2E in default CI (no KDS Playwright spec in repo at Era 8 Cycle 2)
+- Playwright Realtime E2E in default CI (spec exists at Era 11 — staging-only with explicit skip summary)
 - Hardware bump bars or kitchen printers
 - Production-board / `ProductionWorkItem` workflows (adjacent, not v1-certified here)
 
@@ -56,9 +56,9 @@ Do **not** use this tier to claim rush-hour, Playwright E2E, or production-traff
 
 ## Tier E — Realtime Playwright E2E (staging-only, not in default CI)
 
-Policy `era8-kds-realtime-e2e-staging-v1` — **no Playwright KDS spec ships yet**. Use Tier D manual observation until `e2e/kds-realtime-*.spec.ts` exists.
+Policy `era8-kds-realtime-e2e-staging-v1` + Era 11 extension `era11-kds-realtime-e2e-staging-v1` — Playwright spec **`e2e/kds-realtime-staging.spec.ts`** (staging-only; **not in default CI**). Explicit skip artifact: `kds-realtime-e2e-staging-summary` via `npm run test:ci:kds-realtime-e2e-staging:policy` reports **PASSED** / **SKIPPED** / **FAILED** (never silent pass).
 
-When a spec is added, run **only on staging** with:
+Run **only on staging** with:
 
 | Variable | Purpose |
 |----------|---------|
@@ -68,13 +68,16 @@ When a spec is added, run **only on staging** with:
 | `NEXT_PUBLIC_SUPABASE_*` | Realtime client |
 
 ```bash
-# Future (when spec exists) — example only:
-# ENABLE_KDS_V1_CERTIFIED=1 PLAYWRIGHT_BASE_URL=https://staging.example.com \
-#   E2E_LOGIN_EMAIL=... E2E_LOGIN_PASSWORD=... \
-#   npx playwright test e2e/kds-realtime-kitchen.spec.ts --project=chromium-authed
+export ENABLE_KDS_V1_CERTIFIED=true
+export PLAYWRIGHT_BASE_URL=https://staging.example.com
+export E2E_LOGIN_EMAIL=...
+export E2E_LOGIN_PASSWORD=...
+npm run build && npm run start -- -p 3000 &
+npm run test:ci:kds-realtime-e2e-staging:playwright
+KDS_REALTIME_E2E_STEP_OUTCOME=success npm run test:ci:kds-realtime-e2e-staging:policy
 ```
 
-Certification gate: `npm run test:ci:kds-realtime-e2e-staging:cert` (policy wiring — not a browser run).
+Certification gate: `npm run test:ci:kds-realtime-e2e-staging:cert` (policy wiring + era11 recert — not a browser run in default CI).
 
 Do **not** add this tier to default GitHub Actions CI without an explicit era decision.
 

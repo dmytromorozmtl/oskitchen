@@ -13,7 +13,7 @@ describe("kds realtime e2e staging policy", () => {
     expect(KDS_REALTIME_E2E_STAGING_POLICY_ID).toBe("era8-kds-realtime-e2e-staging-v1");
     expect(KDS_REALTIME_E2E_STAGING_ONLY).toBe(true);
     expect(KDS_REALTIME_E2E_IN_DEFAULT_CI).toBe(false);
-    expect(KDS_REALTIME_E2E_PLAYWRIGHT_SPEC).toBeNull();
-    expect(KDS_REALTIME_E2E_HONEST_SCOPE.playwrightSpecImplemented).toBe(false);
+    expect(KDS_REALTIME_E2E_PLAYWRIGHT_SPEC).toBe("e2e/kds-realtime-staging.spec.ts");
+    expect(KDS_REALTIME_E2E_HONEST_SCOPE.playwrightSpecImplemented).toBe(true);
   });
 });
