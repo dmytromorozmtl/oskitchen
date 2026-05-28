@@ -13,7 +13,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: chain wave-4 bundle after integration PII tests; cert asserts order + security-db workflow
 - Evidence: `package.json` (`test:security`), `tests/unit/rbac-wave4-ci-live.test.ts`, `test:ci:rbac-wave4:cert`
-- Next: typecheck slice 2 or storefront inventory depletion decision (E5-1)
+- Next: storefront inventory depletion decision (E5-1) or POS E2E secrets in CI (E5-5)
+
+### KOS-E5-002 — Typecheck slice 2 (storefront / marketing)
+- ID: `KOS-E5-002`
+- Title: Add strict typecheck slice for public storefront and GTM/marketing pages
+- Module: DevOps / engineering
+- Priority: P0 (Era 5 Cycle 2)
+- Status: **completed**
+- Decision: `era5-typecheck-slice-v2` — extends Era 4 slices with `typecheck:slice:storefront-marketing` (6GB); `typecheck:full` remains CI canonical
+- Evidence: `tsconfig.slice.storefront-marketing.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`
+- Next: E5-1 storefront depletion decision or optional CI parallel typecheck job
 
 ## Era 4 — Cross-channel operational truth
 

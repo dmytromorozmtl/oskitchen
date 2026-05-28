@@ -114,7 +114,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:enterprise-procurement` — required sections present; forbidden false SOC2/SSO/SCIM affirmative claims absent
 
 ### 8c3. Typecheck slices (Era 4 Cycle 7)
-- policy: `lib/ci/typecheck-slice-policy.ts` (`era4-typecheck-slice-v1`)
+- policy: `lib/ci/typecheck-slice-policy.ts` (`era5-typecheck-slice-v2` — services-core, dashboard-services-api, storefront-marketing)
 - wiring cert: `test:ci:typecheck-slice:cert` (in `test:ci:governance-bundles`)
 - local slice: `npm run typecheck:slice:dashboard-services-api` (4GB heap; dashboard + API + services spine)
 - CI/release: `npm run typecheck` / `typecheck:full` (8GB; full repo) — slices do not replace CI gate yet

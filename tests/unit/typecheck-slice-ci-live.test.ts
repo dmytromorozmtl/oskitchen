@@ -20,11 +20,12 @@ function readPackageScripts(): Record<string, string> {
 }
 
 describe("typecheck slice CI certification (live repo)", () => {
-  it("locks era4 typecheck slice policy", () => {
-    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era4-typecheck-slice-v1");
+  it("locks era5 typecheck slice policy", () => {
+    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era5-typecheck-slice-v2");
     expect(TYPECHECK_SLICES.map((s) => s.id)).toEqual([
       "services-core",
       "dashboard-services-api",
+      "storefront-marketing",
     ]);
   });
 
@@ -38,6 +39,10 @@ describe("typecheck slice CI certification (live repo)", () => {
       "tsconfig.slice.dashboard-services-api.json",
     );
     expect(scripts["typecheck:slice:dashboard-services-api"]).toContain("6144");
+    expect(scripts["typecheck:slice:storefront-marketing"]).toContain(
+      "tsconfig.slice.storefront-marketing.json",
+    );
+    expect(scripts["typecheck:slice:storefront-marketing"]).toContain("6144");
     for (const name of TYPECHECK_SLICE_CI_SCRIPTS) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
@@ -60,10 +65,11 @@ describe("typecheck slice CI certification (live repo)", () => {
     expect(main.extends).toBe("./tsconfig.base.json");
   });
 
-  it("documents era4 typecheck slices in devops readiness", () => {
+  it("documents typecheck slices in devops readiness", () => {
     const devops = readFileSync(join(ROOT, "docs/devops-release-enterprise-readiness.md"), "utf8");
-    expect(devops).toContain("era4-typecheck-slice-v1");
+    expect(devops).toContain("era5-typecheck-slice-v2");
     expect(devops).toContain("typecheck:slice:dashboard-services-api");
+    expect(devops).toContain("typecheck:slice:storefront-marketing");
     expect(devops).toMatch(/typecheck:full|8192/);
   });
 });

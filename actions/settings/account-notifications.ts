@@ -27,8 +27,7 @@ export async function saveAccountNotificationPrefsAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  const account = await requireSelfAccountMutation("settings_account_notifications.save");
-  if (!account.ok) return fail(account.error);
+  await requireSelfAccountMutation("settings_account_notifications.save");
 
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({

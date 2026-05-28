@@ -1,13 +1,16 @@
 /**
- * Typecheck slice policy — Evolution Era 4 Cycle 7.
+ * Typecheck slice policy — Evolution Era 4 Cycle 7 + Era 5 Cycle 2.
  *
  * Full repo typecheck remains canonical for CI (`npm run typecheck`).
  * Slices allow faster local feedback on operational spine code with lower heap.
  */
 
-export const TYPECHECK_SLICE_POLICY_ID = "era4-typecheck-slice-v1" as const;
+export const TYPECHECK_SLICE_POLICY_ID = "era5-typecheck-slice-v2" as const;
 
-export type TypecheckSliceId = "services-core" | "dashboard-services-api";
+export type TypecheckSliceId =
+  | "services-core"
+  | "dashboard-services-api"
+  | "storefront-marketing";
 
 export type TypecheckSliceDefinition = {
   id: TypecheckSliceId;
@@ -40,6 +43,24 @@ export const TYPECHECK_SLICES: readonly TypecheckSliceDefinition[] = [
       "actions/**",
       "lib/**",
       "components/**",
+    ],
+  },
+  {
+    id: "storefront-marketing",
+    tsconfig: "tsconfig.slice.storefront-marketing.json",
+    heapMb: 6144,
+    description:
+      "Public storefront (app/s, app/b), GTM/marketing pages, dashboard storefront admin, and storefront API routes — without full dashboard spine.",
+    includes: [
+      "app/s/**",
+      "app/b/**",
+      "app/lp/**",
+      "app/pricing/**",
+      "app/product/**",
+      "app/markets/**",
+      "app/dashboard/storefront/**",
+      "app/api/storefront/**",
+      "app/api/dashboard/storefront/**",
     ],
   },
 ] as const;

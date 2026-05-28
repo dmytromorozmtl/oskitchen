@@ -21,10 +21,7 @@ export async function changeEmailAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  const account = await requireSelfAccountMutation("settings_email.change");
-  if (!account.ok) return fail(account.error);
-
-  const { sessionUser } = account;
+  const { sessionUser } = await requireSelfAccountMutation("settings_email.change");
   const nextEmail = parsed.data.email.toLowerCase();
 
   if (nextEmail === sessionUser.email?.toLowerCase()) {

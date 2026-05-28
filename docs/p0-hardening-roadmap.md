@@ -338,7 +338,8 @@ Priority rule:
 ## Era 4 — Typecheck slices (Cycle 7)
 
 - **Completed (2026-05-27):** `era4-typecheck-slice-v1` — `typecheck:slice:services-core` and `typecheck:slice:dashboard-services-api` (6GB); `typecheck:full` remains CI canonical (8GB).
-- **Evidence:** `tsconfig.base.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`.
+- **Era 5 Cycle 2 (2026-05-27):** policy bumped to `era5-typecheck-slice-v2`; added `typecheck:slice:storefront-marketing` (6GB) for public storefront + GTM pages + dashboard storefront admin.
+- **Evidence:** `tsconfig.base.json`, `tsconfig.slice.storefront-marketing.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`.
 
 ## Era 4 — RBAC wave 4 residuals batch 2 (P0-3)
 

@@ -13,9 +13,18 @@ import {
 const ROOT = process.cwd();
 
 describe("typecheck slice policy", () => {
-  it("locks era4 typecheck slice policy id", () => {
-    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era4-typecheck-slice-v1");
-    expect(TYPECHECK_SLICES).toHaveLength(2);
+  it("locks era5 typecheck slice policy id", () => {
+    expect(TYPECHECK_SLICE_POLICY_ID).toBe("era5-typecheck-slice-v2");
+    expect(TYPECHECK_SLICES).toHaveLength(3);
+  });
+
+  it("maps storefront-marketing slice to tsconfig and script", () => {
+    const slice = findTypecheckSlice("storefront-marketing");
+    expect(slice.tsconfig).toBe("tsconfig.slice.storefront-marketing.json");
+    expect(typecheckSliceScript("storefront-marketing")).toBe(
+      "typecheck:slice:storefront-marketing",
+    );
+    expect(slice.heapMb).toBe(6144);
   });
 
   it("maps dashboard-services-api slice to tsconfig and script", () => {

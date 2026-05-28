@@ -14,12 +14,13 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - release-critical smoke tests pass
 
 ## Typecheck Split
-- **Policy (Era 4 Cycle 7):** `era4-typecheck-slice-v1` in `lib/ci/typecheck-slice-policy.ts`.
+- **Policy (Era 4 Cycle 7 + Era 5 Cycle 2):** `era5-typecheck-slice-v2` in `lib/ci/typecheck-slice-policy.ts` (supersedes `era4-typecheck-slice-v1` slice set).
 - **Full CI / release gate (unchanged):** `npm run typecheck` → `npm run typecheck:full` — `tsc --noEmit -p tsconfig.typecheck.json` with **8GB** heap (`node --max-old-space-size=8192`); CI `quality` / gate workflows keep `NODE_OPTIONS=--max-old-space-size=8192`.
 - **Slice A — services core (local fast path):** `npm run typecheck:slice:services-core` — `tsconfig.slice.services-core.json` (services + actions + lib; no App Router); **6GB** heap; omits `.next/types` to avoid stale Next validator refs after cron archive.
 - **Slice B — dashboard / API spine:** `npm run typecheck:slice:dashboard-services-api` — dashboard + API + components + shared spine; **6GB** heap. Strictness inherited from `tsconfig.base.json` (`strict: true`).
+- **Slice C — storefront / marketing:** `npm run typecheck:slice:storefront-marketing` — public storefront (`app/s`, `app/b`), GTM/marketing pages, `app/dashboard/storefront`, storefront API routes; **6GB** heap.
 - **Wiring cert (tier 0):** `npm run test:ci:typecheck-slice:cert` + `npm run test:ci:typecheck-slice` (in `test:ci:governance-bundles`).
-- **Not yet:** CI does not replace full typecheck with slices; additional slices (storefront public, marketing) are future cycles.
+- **Not yet:** CI does not replace full typecheck with slices; optional parallel CI slice job remains future work.
 
 ## Build Verification
 - continue prebuilt release discipline until memory pressure is resolved

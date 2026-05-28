@@ -20,10 +20,7 @@ export async function changePasswordAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  const account = await requireSelfAccountMutation("settings_password.change");
-  if (!account.ok) return fail(account.error);
-
-  const { sessionUser } = account;
+  const { sessionUser } = await requireSelfAccountMutation("settings_password.change");
   const email = sessionUser.email;
   if (!email) return fail("No email on account");
 

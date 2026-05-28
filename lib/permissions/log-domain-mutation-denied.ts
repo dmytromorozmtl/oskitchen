@@ -1,4 +1,5 @@
 import { recordAuditLog } from "@/lib/audit-log";
+import { toInputJsonValue } from "@/lib/prisma/json";
 import type { WorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
 /**
@@ -16,6 +17,6 @@ export async function logDomainMutationDenied(input: {
     workspaceId: input.actor?.workspaceId ?? null,
     action: input.action,
     entityType: input.entityType,
-    metadata: input.metadata,
+    metadata: toInputJsonValue(input.metadata),
   });
 }

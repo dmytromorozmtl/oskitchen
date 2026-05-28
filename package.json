@@ -26,6 +26,7 @@
     "typecheck:full": "node --max-old-space-size=8192 ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.typecheck.json",
     "typecheck:slice:services-core": "node --max-old-space-size=6144 ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.slice.services-core.json",
     "typecheck:slice:dashboard-services-api": "node --max-old-space-size=6144 ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.slice.dashboard-services-api.json",
+    "typecheck:slice:storefront-marketing": "node --max-old-space-size=6144 ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.slice.storefront-marketing.json",
     "validate:order-write-paths": "tsx scripts/validate-order-write-paths.ts",
     "validate:api-route-registry": "tsx scripts/validate-api-route-registry.ts",
     "validate:ci-workflow-scripts": "node --experimental-transform-types scripts/validate-ci-workflow-scripts.ts",

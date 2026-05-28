@@ -21,10 +21,7 @@ export async function uploadAvatarAction(
     return fail("Please choose an image file");
   }
 
-  const account = await requireSelfAccountMutation("settings_avatar.upload");
-  if (!account.ok) return fail(account.error);
-
-  const { sessionUser, workspaceId } = account;
+  const { sessionUser, workspaceId } = await requireSelfAccountMutation("settings_avatar.upload");
   const bytes = new Uint8Array(await file.arrayBuffer());
   const validated = validateProfileAvatarUpload({
     bytes,
@@ -110,8 +107,7 @@ export async function uploadAvatarAction(
 }
 
 export async function removeAvatarAction(): Promise<ActionResult<void>> {
-  const account = await requireSelfAccountMutation("settings_avatar.remove");
-  if (!account.ok) return fail(account.error);
+  await requireSelfAccountMutation("settings_avatar.remove");
 
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({
