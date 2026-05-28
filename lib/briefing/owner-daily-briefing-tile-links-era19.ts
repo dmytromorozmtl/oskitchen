@@ -97,6 +97,12 @@ export const BRIEFING_TILE_LINK_DEFINITIONS: Record<string, BriefingTileLinkDefi
       "Comps and discounts require manager override review — cashiers hand off to pos.discount.apply on the register checklist.",
     rolePacks: ["cashier"],
   },
+  "pos-manager-override-supervisor": {
+    href: "/dashboard/pos/terminal",
+    whyItMatters:
+      "Shift supervisors must review the register override checklist before approving comps or discounts on the floor.",
+    rolePacks: ["manager"],
+  },
   "low-stock": {
     href: "/dashboard/purchasing",
     whyItMatters: "Below-par ingredients cause 86'd items and missed orders during service.",
@@ -158,6 +164,9 @@ export function resolveBriefingTileCanonicalHref(
     return fallbackHref;
   }
   if (tileId === "pos-manager-override-handoff") {
+    return fallbackHref;
+  }
+  if (tileId === "pos-manager-override-supervisor") {
     return fallbackHref;
   }
   if (tileId === "kds-priority-lane") {
@@ -256,6 +265,12 @@ export function auditBriefingTileLinks(tiles: readonly OwnerDailyBriefingTile[])
     }
     if (
       tile.id === "pos-manager-override-handoff" &&
+      !tile.href.startsWith("/dashboard/pos/")
+    ) {
+      issues.push(`${tile.id}: must link to POS terminal or shifts`);
+    }
+    if (
+      tile.id === "pos-manager-override-supervisor" &&
       !tile.href.startsWith("/dashboard/pos/")
     ) {
       issues.push(`${tile.id}: must link to POS terminal or shifts`);

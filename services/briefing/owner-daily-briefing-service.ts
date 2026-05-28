@@ -52,6 +52,11 @@ import {
   mergeBriefingManagerKdsTopActions,
 } from "@/lib/briefing/owner-daily-briefing-manager-kds-era19";
 import {
+  buildOwnerDailyBriefingManagerOverrideActions,
+  enrichBriefingManagerOverridePackTiles,
+  mergeBriefingManagerOverrideActions,
+} from "@/lib/briefing/owner-daily-briefing-manager-override-era19";
+import {
   buildOwnerDailyBriefingOwnerKdsActions,
   enrichBriefingOwnerPackTiles,
   mergeBriefingOwnerKdsTopActions,
@@ -319,6 +324,12 @@ export async function loadOwnerDailyBriefing(
     canApplyPosDiscount: cashierInput.canApplyPosDiscount ?? false,
   };
 
+  const managerOverrideInput = {
+    openShiftCount: openPosShifts,
+    canApplyPosDiscount: cashierInput.canApplyPosDiscount ?? false,
+    posTransactionsToday: today.kpis.posTransactionsToday,
+  };
+
   const kdsBriefingInput = {
     kdsOrders,
     productionCalendarOverdue: productionCalendarSlice.summary.overdue,
@@ -345,7 +356,10 @@ export async function loadOwnerDailyBriefing(
       : rolePack === "kitchen"
         ? enrichBriefingKitchenPackTiles(baseTiles, kdsBriefingInput)
         : rolePack === "manager"
-          ? enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput)
+          ? enrichBriefingManagerOverridePackTiles(
+              enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput),
+              managerOverrideInput,
+            )
           : rolePack === "owner"
             ? enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput)
             : baseTiles;
@@ -402,7 +416,10 @@ export async function loadOwnerDailyBriefing(
             )
           : rolePack === "manager"
             ? mergeBriefingManagerKdsTopActions(
-                buildOwnerDailyBriefingManagerKdsActions(kdsBriefingInput),
+                mergeBriefingManagerOverrideActions(
+                  buildOwnerDailyBriefingManagerKdsActions(kdsBriefingInput),
+                  buildOwnerDailyBriefingManagerOverrideActions(managerOverrideInput),
+                ),
                 pickOwnerDailyBriefingTopActions({
                   blockers: today.blockers,
                   alerts: allAlerts,

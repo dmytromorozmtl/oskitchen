@@ -31,6 +31,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
   ],
   manager: [
     "kds-priority-lane",
+    "pos-manager-override-supervisor",
     "labor-coverage",
     "kds-pressure",
     "packing-status",
