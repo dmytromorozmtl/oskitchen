@@ -14,7 +14,11 @@ import {
 
 import { requireUserProfile } from "@/lib/auth";
 import { asVoidFormAction } from "@/lib/actions/server-form-action";
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { recordAuditLog } from "@/lib/audit-log";
+import { workspacePermissionForImplementationCapability } from "@/lib/implementation/implementation-mutation-permission";
+import type { ImplementationCapability } from "@/lib/implementation/implementation-types";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
 import { validateImportCsvUpload } from "@/lib/upload-policy/media-upload-validation";
 import { logUploadDenied } from "@/services/audit/upload-audit";
@@ -76,9 +80,43 @@ function jsonRows(value: unknown): ParsedCsvRow[] {
   return value.filter((row): row is ParsedCsvRow => row && typeof row === "object" && !Array.isArray(row));
 }
 
+async function requireImplementationLegacyAccess(
+  operation: string,
+  permission: PermissionKey,
+) {
+  const access = await requireMutationPermission(permission);
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "implementation.permission_denied",
+      entityType: "ImplementationProject",
+      metadata: { operation, requiredPermission: permission },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const { sessionUser, dataUserId, workspaceId } = access.actor;
+  return { ok: true as const, sessionUser, dataUserId, workspaceId };
+}
+
+async function requireImplementationCapabilityAccess(
+  operation: string,
+  capability: ImplementationCapability,
+) {
+  return requireImplementationLegacyAccess(
+    operation,
+    workspacePermissionForImplementationCapability(capability),
+  );
+}
+
 export async function createImplementationProject(formData: FormData) {
   try {
-    const { dataUserId } = await requireTenantActor();
+    const manage = await requireImplementationCapabilityAccess(
+      "implementation.create_project",
+      "implementation.create",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const user = await requireUserProfile();
     const businessName = str(formData, "businessName") || user.companyName || "Implementation project";
     const project = await prisma.implementationProject.create({
@@ -110,7 +148,12 @@ export async function createImplementationProject(formData: FormData) {
 
 export async function updateImplementationTaskStatus(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationCapabilityAccess(
+      "implementation.update_task_status",
+      "implementation.complete_checklist",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const taskId = str(formData, "taskId");
     const status = str(formData, "status") as ImplementationTaskStatus;
     if (!Object.values(ImplementationTaskStatus).includes(status)) return { error: "Invalid status" };
@@ -134,7 +177,12 @@ export async function updateImplementationTaskStatus(formData: FormData) {
 
 export async function createImportJobFromCsv(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationCapabilityAccess(
+      "implementation.create_import_job",
+      "implementation.edit",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId, workspaceId } = manage;
     const type = str(formData, "type") as ImportType;
     if (!Object.values(ImportType).includes(type)) return { error: "Invalid import type" };
 
@@ -225,7 +273,12 @@ export async function createImportJobFromCsv(formData: FormData) {
 
 export async function commitImportJob(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationCapabilityAccess(
+      "implementation.commit_import_job",
+      "implementation.edit",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId, workspaceId } = manage;
     const jobId = str(formData, "jobId");
     const job = await prisma.importJob.findFirst({ where: { id: jobId, userId: dataUserId } });
     if (!job) return { error: "Import job not found" };
@@ -324,7 +377,12 @@ export async function commitImportJob(formData: FormData) {
 
 export async function createProductMappingSuggestion(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationLegacyAccess(
+      "implementation.create_product_mapping",
+      "integrations.manage",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId, workspaceId } = manage;
     const provider = str(formData, "provider") || "CSV";
     const externalTitle = str(formData, "externalTitle");
     const externalProductId = str(formData, "externalProductId") || externalTitle;
@@ -379,7 +437,12 @@ export async function createProductMappingSuggestion(formData: FormData) {
 
 export async function updateProductMappingStatus(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationLegacyAccess(
+      "implementation.update_product_mapping",
+      "integrations.manage",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const mappingId = str(formData, "mappingId");
     const status = str(formData, "status") as ProductMappingStatus;
     if (!Object.values(ProductMappingStatus).includes(status)) return { error: "Invalid mapping status" };
@@ -403,7 +466,12 @@ export async function updateProductMappingStatus(formData: FormData) {
 
 export async function mergeCustomers(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationLegacyAccess(
+      "implementation.merge_customers",
+      "customers.manage",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
     const primaryCustomerId = str(formData, "primaryCustomerId");
     const mergedCustomerIds = str(formData, "mergedCustomerIds")
       .split(",")
@@ -449,7 +517,12 @@ export async function mergeCustomers(formData: FormData) {
 
 export async function runGoLiveTestRun(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId, workspaceId } = await requireTenantActor();
+    const manage = await requireImplementationCapabilityAccess(
+      "implementation.run_go_live_test",
+      "implementation.run_readiness",
+    );
+    if (!manage.ok) return { error: manage.error };
+    const { dataUserId } = manage;
     const mappingWhere = await productMappingListWhereForOwner(dataUserId);
     const [orders, missingMappings, staffCount, openTasks] = await Promise.all([
       prisma.order.count({
