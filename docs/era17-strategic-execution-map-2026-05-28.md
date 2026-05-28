@@ -140,7 +140,7 @@
 
 | Cycle Band | Goal | Tasks | Acceptance Criteria | Validation | Risks | Owner |
 |------------|------|-------|---------------------|------------|-------|-------|
-| **44** | Era 17 scorecard refresh | `era17-scorecard-refresh-v1` policy + doc | `test:ci:scorecard:cert` | cert | Score inflation | Platform |
+| **44** | Era 17 scorecard refresh | `era17-scorecard-refresh-v1` policy + doc | `test:ci:scorecard:cert` | cert | Score inflation | Platform | **Done** — governance **100**; blended **89/100**; success criteria **NOT MET** |
 | **45** | Era 18 handoff input | `next-master-prompt-input-*-era18.md` | Re-audit decision documented | review | — | Platform |
 
 ---

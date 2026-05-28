@@ -332,6 +332,17 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** smoke → **overall: PASSED** (`caseStudyProofStatus: internal_draft_ready`; `publishProofStatus: proof_skipped_missing_pilot_metrics`). **Internal draft only — not published.**
 
+### Era 17 scorecard refresh (2026-05-28)
+
+**Policy:** `era17-scorecard-refresh-v1` — governance **100/100** sustained; blended **89/100**; Era 17 success criteria **NOT MET**.
+
+1. Use [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md) — evidence-based scores only; no Toast/hardware/marketplace parity claim.
+2. Run **`npm run test:ci:scorecard:cert`** — includes `era17-scorecard-ci-live.test.ts`.
+3. P0 proof gaps (SSO IdP login, GitHub first green, live channel smoke, paid pilot) cap blended score until resolved.
+4. **Do not** cite governance 100 as commercial pilot readiness or competitor parity.
+
+**Execution status (2026-05-28):** scorecard published; blended **89/100** (+2 from Era 16 **87**); success criteria **NOT MET**.
+
 ### Era 17 pilot rollback drill (2026-05-28)
 
 **Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.

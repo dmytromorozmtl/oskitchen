@@ -209,6 +209,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **12d** | **Pilot case study draft** | `era17-pilot-case-study-draft-v1`; **internal_draft_awaiting_customer_approval** — [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md); `smoke:pilot-case-study-draft` |
 | **13** | **Pilot rollback drill** | `era17-pilot-rollback-drill-v1`; **awaiting_rollback_drill_execution** — [`pilot-rollback-drill-era17.md`](./pilot-rollback-drill-era17.md); `smoke:pilot-rollback-drill` |
 | **14** | **Forbidden-claims enforcement** | `era17-pilot-forbidden-claims-enforcement-v1`; **forbidden_claims_enforcement_wired** — GO/NO-GO gate; re-run on release branch before contract |
+| **15** | **Era 17 scorecard refresh** | `era17-scorecard-refresh-v1`; governance **100**; blended **89/100**; success criteria **NOT MET** — [`era17-cycle-completion-scorecard-2026-05-28.md`](./era17-cycle-completion-scorecard-2026-05-28.md) |
 
 ## Evolution Era 10 cycle ledger
 
@@ -576,6 +577,29 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | Storefront | 83 | **83** | +0 | unchanged |
 
 **Re-audit decision:** **Complete** — `docs/full-strategic-reaudit-2026-05-28-era16.md`. **Next era:** **Era 17** — use `docs/next-master-prompt-input-2026-05-28-era17.md` + `docs/era17-strategic-execution-map-2026-05-28.md`.
+
+## Scorecard (Evolution Era 17 end — 2026-05-28)
+
+Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 handoff). Baseline = Era 16 end **100** governance / **87** blended.
+
+| Area | Era 16 end | Era 17 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 100 | **100** | +0 | governance plateau — not commercial proof |
+| Security | 85 | **87** | +2 | webhook replay P1 + public POST abuse review |
+| QA | 96 | **97** | +1 | KDS Playwright + production calendar drill wiring |
+| DevOps | 100 | **100** | +0 | staging orchestrators; GitHub PASS still operator-run |
+| RBAC | 91 | **92** | +1 | public API scopes + permission-denied UX |
+| Inventory | 72 | **73** | +1 | POS-only lock recert + pilot messaging |
+| POS | 74 | **76** | +2 | tablet UX, manager discount, operator runbook |
+| Integrations | 62 | **63** | +1 | channel playbook + wizard; live smoke SKIPPED |
+| KDS | 75 | **76** | +1 | qualified sales one-pager + staging Playwright wiring |
+| Enterprise readiness | 72 | **73** | +1 | IdP smoke plan; SSO **pilot_foundation** only |
+| Marketing/sales | 85 | **88** | +3 | GO/NO-GO, forbidden claims, GTM proof pack |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Blended overall:** **89/100** (Era 16 **87**; +2). **Era 17 success criteria:** **NOT MET** — see `docs/era17-cycle-completion-scorecard-2026-05-28.md`.
+
+**Re-audit decision:** defer — Era 16 re-audit baseline until first paid pilot. **Next:** Era 18 handoff (Cycle 45).
 
 ---
 

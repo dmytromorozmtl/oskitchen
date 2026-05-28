@@ -123,4 +123,5 @@ find app/api/cron -name route.ts | wc -l   # expect 16
 
 ## Next Era
 
+Historical Era 16 handoff: `docs/next-master-prompt-input-2026-05-28-era16.md`.  
 See `docs/next-master-prompt-input-2026-05-28-era17.md` and `docs/era17-strategic-execution-map-2026-05-28.md`.

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-037 — Era 17 scorecard refresh (P2)
+- ID: `KOS-E17-037`
+- Title: Era 17 Cycle 44 — evidence-based scorecard without inflation
+- Module: Governance / Platform
+- Priority: P2 (Workstream L Cycle 44)
+- Status: **scorecard_published_awaiting_p0_proof**
+- Decision: `era17-scorecard-refresh-v1` — governance 100 sustained; blended **89/100**; Era 17 success criteria **NOT MET**
+- Evidence: `docs/era17-cycle-completion-scorecard-2026-05-28.md`, `lib/governance/era17-scorecard-policy.ts`, `test:ci:scorecard:cert`
+- Next: Era 18 handoff input (Cycle 45) if evidence supports
+
 ### KOS-E17-036 — Pilot case study draft (P2)
 - ID: `KOS-E17-036`
 - Title: Era 17 Cycle 43 — internal case study draft gated on customer approval + pilot metrics
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **internal_draft_awaiting_customer_approval**
 - Decision: `era17-pilot-case-study-draft-v1` — internal scaffold only; no public publish without signed permission and verified KPIs
 - Evidence: `docs/pilot-case-study-draft-era17.md`, `lib/commercial/pilot-case-study-draft-summary.ts`, `scripts/smoke-pilot-case-study-draft-era17.ts`, `test:ci:pilot-case-study-draft-era17:cert`
-- Next: Era 17 scorecard refresh (P2 #15 / Cycle 44)
+- Next: Era 17 scorecard refresh — **done**; see KOS-E17-037
 
 ### KOS-E17-035 — Competitor feature gap matrix refresh (P2)
 - ID: `KOS-E17-035`

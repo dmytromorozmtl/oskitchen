@@ -209,12 +209,14 @@ Each Era 17 cycle must state:
 
 Governance internal may remain **100/100** — do not conflate with blended scores.
 
+**Era 17 scorecard (Cycle 44):** `era17-scorecard-refresh-v1` — governance **100/100** sustained; blended **89/100** (+2 from Era 16 **87**); Era 17 success criteria **NOT MET** (no paid pilot, SSO not `pilot_ready`, staging/live channel SKIPPED). See `docs/era17-cycle-completion-scorecard-2026-05-28.md`.
+
 ---
 
 ## CI / Governance Facts (unchanged)
 
 - Default quality: `npm run test:ci:governance-bundles`
-- Scorecard: `npm run test:ci:scorecard:cert` (era4–era16; era17 adds on cycle 44)
+- Scorecard: `npm run test:ci:scorecard:cert` (era4–era17; `era17-scorecard-refresh-v1` on cycle 44)
 - Production crons: **16** only
 - POS money path: tier-2b always-on — **certified — do not redo**
 
