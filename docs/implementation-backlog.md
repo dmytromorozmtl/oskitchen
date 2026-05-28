@@ -220,9 +220,9 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Title: Era 17 Cycle 19 — pilot success metrics capture schema
 - Module: Commercial / Product
 - Priority: P0 (Workstream D Cycle 19)
-- Status: **awaiting_baseline_capture**
+- Status: **awaiting_baseline_capture** — honest skip re-run; `overall: SKIPPED` until all six KPIs captured
 - Decision: `era17-pilot-metrics-baseline-v1` — six KPIs aligned with ICP Exhibit C; SKIPPED without pilot data
-- Evidence: `docs/pilot-metrics-baseline-era17.md`, `scripts/smoke-pilot-metrics-baseline-era17.ts`
+- Evidence: `lib/commercial/pilot-metrics-baseline-summary.ts` (overall honesty gate), `scripts/smoke-pilot-metrics-baseline-era17.ts`, `artifacts/pilot-metrics-baseline-summary.json` (**overall: SKIPPED**, `proof_skipped_missing_pilot_data` re-run 2026-05-28)
 - Next: Capture week-2 snapshot after first paid pilot GO
 
 ### KOS-E17-011 — Pilot GO/NO-GO evaluator (P0)

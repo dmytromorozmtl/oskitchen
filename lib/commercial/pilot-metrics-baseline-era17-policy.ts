@@ -111,6 +111,7 @@ export const PILOT_METRICS_BASELINE_ERA17_CANONICAL_MARKERS = [
   "pilot-metrics-baseline",
   "awaiting_baseline_capture",
   "baselineProofStatus",
+  "overall",
 ] as const;
 
 export const PILOT_METRICS_BASELINE_ERA17_CI_SCRIPTS = [

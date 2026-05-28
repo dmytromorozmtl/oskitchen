@@ -293,9 +293,9 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 1. Use [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md) — orders/day, checkout success, KDS bump, support tickets, operator feedback.
 2. Run **`npm run smoke:pilot-metrics-baseline`** — review **`artifacts/pilot-metrics-baseline-summary.json`** (`baselineProofStatus`).
 3. Pre-pilot: `--template-only` → all metrics **SKIPPED WITH REASON** (honest).
-4. Do **not** cite template targets in investor materials — Era 41 requires `proof_captured` or documented `proof_partial`.
+4. Do **not** cite template targets or partial snapshots in investor materials — Era 41 requires `overall: PASSED` / `proof_captured` only.
 
-### Era 17 pilot rollback drill (2026-05-28)
+**Execution status (2026-05-28):** smoke re-run → **overall: SKIPPED** (`baselineProofStatus: proof_skipped_missing_pilot_data`; no pilot week-2 snapshot). Artifact: `artifacts/pilot-metrics-baseline-summary.json`. **Do not cite partial metrics in investor narrative.**
 
 **Policy:** `era17-pilot-rollback-drill-v1` — **awaiting_rollback_drill_execution**; exercise rollback plan once.
 

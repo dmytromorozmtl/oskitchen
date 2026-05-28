@@ -25,10 +25,13 @@ export type PilotBaselineProofStatus =
   | "proof_skipped_missing_pilot_data"
   | "proof_partial";
 
+export type PilotMetricsBaselineOverall = "PASSED" | "SKIPPED";
+
 export type PilotMetricsBaselineSummary = {
   version: typeof PILOT_METRICS_BASELINE_SUMMARY_VERSION;
   policyId: typeof PILOT_METRICS_BASELINE_ERA17_POLICY_ID;
   runAt: string;
+  overall: PilotMetricsBaselineOverall;
   baselineProofStatus: PilotBaselineProofStatus;
   pilotWeek: number | null;
   customerRef: string | null;
@@ -143,6 +146,12 @@ export function resolvePilotBaselineProofStatus(
   return "proof_partial";
 }
 
+export function resolvePilotMetricsBaselineOverall(
+  baselineProofStatus: PilotBaselineProofStatus,
+): PilotMetricsBaselineOverall {
+  return baselineProofStatus === "proof_captured" ? "PASSED" : "SKIPPED";
+}
+
 export function buildPilotMetricsBaselineSummary(
   input: PilotMetricsSnapshotInput,
   meta?: {
@@ -154,11 +163,13 @@ export function buildPilotMetricsBaselineSummary(
 ): PilotMetricsBaselineSummary {
   const metrics = buildPilotMetricSnapshotValues(input);
   const capturedCount = metrics.filter((metric) => metric.status === "captured").length;
+  const baselineProofStatus = resolvePilotBaselineProofStatus(metrics);
   return {
     version: PILOT_METRICS_BASELINE_SUMMARY_VERSION,
     policyId: PILOT_METRICS_BASELINE_ERA17_POLICY_ID,
     runAt: runAt.toISOString(),
-    baselineProofStatus: resolvePilotBaselineProofStatus(metrics),
+    overall: resolvePilotMetricsBaselineOverall(baselineProofStatus),
+    baselineProofStatus,
     pilotWeek: meta?.pilotWeek ?? null,
     customerRef: meta?.customerRef?.trim() || null,
     capturedAt: meta?.capturedAt?.trim() || null,
@@ -172,7 +183,8 @@ export function formatPilotMetricsBaselineReportLines(
   summary: PilotMetricsBaselineSummary,
 ): string[] {
   return [
-    `Pilot metrics baseline (${summary.version}) — proof: ${summary.baselineProofStatus}`,
+    `Pilot metrics baseline (${summary.version}) — overall: ${summary.overall}`,
+    `Proof status: ${summary.baselineProofStatus}`,
     `Run at: ${summary.runAt}`,
     `Pilot week: ${summary.pilotWeek ?? "not recorded"}`,
     `Customer ref: ${summary.customerRef ?? "not recorded"}`,

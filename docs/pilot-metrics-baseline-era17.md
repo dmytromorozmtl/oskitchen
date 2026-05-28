@@ -58,13 +58,14 @@ export PILOT_METRICS_SNAPSHOT_JSON='{"ordersPerDay":18,"storefrontCheckoutSucces
 npm run smoke:pilot-metrics-baseline
 ```
 
-Review **`artifacts/pilot-metrics-baseline-summary.json`** — `baselineProofStatus` must be `proof_captured` or `proof_partial` before citing metrics externally.
+Review **`artifacts/pilot-metrics-baseline-summary.json`** — `overall: PASSED` requires `baselineProofStatus: proof_captured` (all six KPIs) before citing metrics externally.
 
 ---
 
 ## Honesty rules
 
-- **Do not** publish investor metrics without `proof_captured` or documented `proof_partial`.
+- **Do not** publish investor metrics unless `overall: PASSED` / `proof_captured` (all six KPIs).
+- **Do not** cite `proof_partial` snapshots in investor materials — treat as **SKIPPED** until complete.
 - **Do not** claim rush-hour KDS SLA from bump rate alone.
 - **Do not** treat staging checkout rate as production SLA.
 - Era 41 investor narrative uses this artifact only when real pilot data exists.

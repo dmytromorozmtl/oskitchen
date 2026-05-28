@@ -4,6 +4,7 @@ import {
   buildPilotMetricsBaselineSummary,
   buildPilotMetricSnapshotValues,
   resolvePilotBaselineProofStatus,
+  resolvePilotMetricsBaselineOverall,
 } from "@/lib/commercial/pilot-metrics-baseline-summary";
 
 describe("pilot metrics baseline summary", () => {
@@ -22,15 +23,21 @@ describe("pilot metrics baseline summary", () => {
       operatorFeedbackScore: 4.5,
     });
     expect(summary.baselineProofStatus).toBe("proof_captured");
+    expect(summary.overall).toBe("PASSED");
     expect(summary.capturedCount).toBe(6);
   });
 
-  it("marks proof partial when some metrics missing", () => {
+  it("marks overall SKIPPED when metrics are partial", () => {
     const summary = buildPilotMetricsBaselineSummary({
       ordersPerDay: 10,
       operatorFeedbackScore: 4,
     });
     expect(summary.baselineProofStatus).toBe("proof_partial");
+    expect(summary.overall).toBe("SKIPPED");
     expect(summary.missingCount).toBeGreaterThan(0);
+  });
+
+  it("marks overall SKIPPED when no metrics captured", () => {
+    expect(resolvePilotMetricsBaselineOverall("proof_skipped_missing_pilot_data")).toBe("SKIPPED");
   });
 });
