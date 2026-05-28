@@ -133,7 +133,10 @@ export default async function PosShiftsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <PosShiftCloseHistoryPanel shifts={closedShiftHistory} />
+            <PosShiftCloseHistoryPanel
+              shifts={closedShiftHistory}
+              canExportCsv={canCloseShift}
+            />
           </CardContent>
         </Card>
       ) : null}

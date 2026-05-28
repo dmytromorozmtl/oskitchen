@@ -68,7 +68,10 @@ export async function logPosRegisterCreated(
 export async function logPosShiftEvent(
   actor: WorkspacePermissionActor,
   input: {
-    action: typeof AUDIT_ACTIONS.POS_SHIFT_OPENED | typeof AUDIT_ACTIONS.POS_SHIFT_CLOSED;
+    action:
+      | typeof AUDIT_ACTIONS.POS_SHIFT_OPENED
+      | typeof AUDIT_ACTIONS.POS_SHIFT_CLOSED
+      | typeof AUDIT_ACTIONS.POS_SHIFT_CLOSEOUT_CSV_EXPORTED;
     entityId?: string | null;
     label?: string | null;
     metadata?: Record<string, unknown>;

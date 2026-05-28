@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-010 — Shift close CSV export (P1)
+- ID: `KOS-E18-010`
+- Title: Era 18 Workstream F Cycle 10 — bookkeeper CSV export for closed shifts
+- Module: POS
+- Priority: P1 (financial handoff)
+- Status: **shift_close_csv_wired**
+- Decision: `era18-pos-shift-close-csv-v1` — `/api/pos/shifts/export` gated by `pos.shift.close`; last 50 rows
+- Evidence: `app/api/pos/shifts/export/route.ts`, `lib/pos/pos-shift-close-csv-era18.ts`
+- Next: P0 staging proof ops execution (cannot fake PASS)
+
 ### KOS-E18-009 — Shift close history panel (P1)
 - ID: `KOS-E18-009`
 - Title: Era 18 Workstream F Cycle 9 — recent closed shifts with variance badges
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **shift_close_history_wired**
 - Decision: `era18-pos-shift-close-history-v1` — last 10 closes on shifts page with expected/counted/variance
 - Evidence: `components/dashboard/pos-shift-close-history-panel.tsx`, `services/pos/pos-shift-service.ts` (`listRecentClosedShiftSummaries`)
-- Next: Export closed shift CSV for bookkeeper (bounded)
+- Next: Date-range filter on history (bounded); CSV export wired in KOS-E18-010
 
 ### KOS-E18-008 — Shift variance acknowledgment gate (P1)
 - ID: `KOS-E18-008`

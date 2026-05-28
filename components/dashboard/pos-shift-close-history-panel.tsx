@@ -1,8 +1,12 @@
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 import {
   classifyShiftVariance,
   formatShiftCloseoutMoney,
   formatShiftVarianceDisplay,
 } from "@/lib/pos/pos-shift-closeout-preview";
+import { CLOSED_SHIFT_CSV_EXPORT_LIMIT } from "@/lib/pos/pos-shift-close-csv-era18";
 import {
   formatShiftClosedAt,
   shiftVarianceBadgeClassName,
@@ -14,9 +18,13 @@ import { cn } from "@/lib/utils";
 
 type PosShiftCloseHistoryPanelProps = {
   shifts: ClosedShiftSummary[];
+  canExportCsv?: boolean;
 };
 
-export function PosShiftCloseHistoryPanel({ shifts }: PosShiftCloseHistoryPanelProps) {
+export function PosShiftCloseHistoryPanel({
+  shifts,
+  canExportCsv = false,
+}: PosShiftCloseHistoryPanelProps) {
   const summary = summarizeClosedShiftHistory(shifts);
 
   if (shifts.length === 0) {
@@ -33,12 +41,21 @@ export function PosShiftCloseHistoryPanel({ shifts }: PosShiftCloseHistoryPanelP
 
   return (
     <div className="space-y-3" data-testid="pos-shift-close-history">
-      <p className="text-xs text-muted-foreground">
-        Last {summary.total} close{summary.total === 1 ? "" : "s"}
-        {summary.withVariance > 0
-          ? ` · ${summary.withVariance} with variance`
-          : " · all balanced"}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs text-muted-foreground">
+          Last {summary.total} close{summary.total === 1 ? "" : "s"}
+          {summary.withVariance > 0
+            ? ` · ${summary.withVariance} with variance`
+            : " · all balanced"}
+        </p>
+        {canExportCsv ? (
+          <Button asChild variant="outline" size="sm" className="rounded-full h-8">
+            <Link href="/api/pos/shifts/export" data-testid="pos-shift-close-csv-export">
+              Download CSV (last {CLOSED_SHIFT_CSV_EXPORT_LIMIT})
+            </Link>
+          </Button>
+        ) : null}
+      </div>
       <div className="overflow-x-auto rounded-xl border border-border/80">
         <table className="w-full min-w-[640px] text-sm">
           <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
