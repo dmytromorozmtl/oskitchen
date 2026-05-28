@@ -17,7 +17,7 @@ Longer-term kitchen capabilities remain in `docs/kds-kitchen-ops-roadmap.md`. Th
 | Ticket unit | **One order ticket** from today's active queue | Item-level bumping, course firing, rush/hold |
 | Operating context | **Daily service** tenants (`DAILY_SERVICE` operating mode) | Weekly preorder / batch production board as primary KDS |
 | Stations | **Logical station label only** (table/source metadata); no station routing engine | Canonical station config, modifier routing, expo orchestration |
-| Realtime | **Supabase Realtime + polling fallback** | Offline replay, native hardware push, websocket farm |
+| Realtime | **Supabase Realtime + polling fallback** (`era6-kds-realtime-smoke-v1`) | Playwright Realtime E2E in default CI (`era8-kds-realtime-e2e-staging-v1` — staging Tier E only) |
 | Permissions | Existing canonical `kitchen.*` keys | New parallel kitchen auth model |
 | Maturity label today | `beta` | `production_certified` until v1 acceptance bar met |
 | Maturity label after v1 | `pilot_ready` (qualified) behind rollout gate | "Restaurant-grade" or "rush-hour certified" claims |

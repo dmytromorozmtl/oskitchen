@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 8 Cycle 1 — claims registry governance)  
+**Updated:** 2026-05-27 (Era 8 Cycle 2 — KDS Realtime E2E staging scope)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -134,6 +134,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | Cycle | Outcome | Evidence |
 |-------|---------|----------|
 | **1** | **Claims registry governance** | `era8-claims-registry-v1`; `test:ci:claims-registry:cert` |
+| **2** | **KDS Realtime E2E staging scope** | `era8-kds-realtime-e2e-staging-v1`; Tier E checklist; not in default CI |
 
 ## Evolution Era 7 cycle ledger
 
@@ -345,3 +346,4 @@ Incremental refresh after Era 7 cycles 1–4 (commercial readiness from era6 han
 | 2026-05-27 | Era 7 Cycle 4: `era7-marketing-claims-governance-v1` — matrix-aligned marketing claims scan + CI cert |
 | 2026-05-27 | Era 7 Cycle 5: scorecard refresh 92/100 + `next-master-prompt-input-2026-05-27-era7.md` |
 | 2026-05-27 | Era 8 Cycle 1: `era8-claims-registry-v1` — zero `needs-evidence` rows in claims registry |
+| 2026-05-27 | Era 8 Cycle 2: `era8-kds-realtime-e2e-staging-v1` — honest staging-only Realtime E2E scope |

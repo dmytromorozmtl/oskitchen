@@ -114,6 +114,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 
+### 8c4f. KDS Realtime Playwright E2E staging scope (Era 8 Cycle 2)
+- policy: `lib/kitchen/kds-realtime-e2e-staging-policy.ts` (`era8-kds-realtime-e2e-staging-v1`)
+- extends: `era6-kds-realtime-smoke-v1` (poll fallback unit-certified)
+- staging: Tier E in `docs/kds-staging-smoke-checklist.md` — manual only; no Playwright spec in repo yet; **not in default CI**
+- wiring cert: `test:ci:kds-realtime-e2e-staging:cert` (in `test:ci:governance-bundles`)
+
 ### 8c4e. Claims registry governance (Era 8 Cycle 1)
 - policy: `lib/governance/claims-registry-policy.ts` (`era8-claims-registry-v1`)
 - registry: `config/marketing/claims-registry.json` — statuses `verified` | `illustrative` | `deprecated` only

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 8 — Operator depth / GTM hygiene
 
+### KOS-E8-002 — KDS Realtime Playwright E2E staging scope (P1)
+- ID: `KOS-E8-002`
+- Title: Document staging-only Realtime E2E; forbid default CI false confidence
+- Module: Kitchen / KDS / QA
+- Priority: P1 (Era 8 Cycle 2)
+- Status: **completed**
+- Decision: `era8-kds-realtime-e2e-staging-v1` — Tier E checklist; no Playwright spec in repo; not in `ci.yml` default jobs
+- Evidence: `lib/kitchen/kds-realtime-e2e-staging-policy.ts`, `docs/kds-staging-smoke-checklist.md`, `test:ci:kds-realtime-e2e-staging:cert`
+- Next: add `e2e/kds-realtime-*.spec.ts` only with explicit era decision, or pilot-preflight strict claims
+
 ### KOS-E8-001 — Claims registry governance (P1)
 - ID: `KOS-E8-001`
 - Title: Resolve `needs-evidence` rows; CI cert for claims registry

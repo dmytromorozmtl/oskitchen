@@ -102,6 +102,9 @@ npm run test:ci:pos-money-path:e2e
 |-------|----------|---------|
 | Storefront public + pay-later + optional Stripe | `.github/workflows/playwright-storefront.yml` | `PLAYWRIGHT_BASE_URL`, `E2E_STORE_SLUG`, optional `STRIPE_SECRET_KEY` + `STOREFRONT_E2E_STRIPE=1` |
 | Pilot golden path | `.github/workflows/e2e-pilot.yml` | Pilot credentials |
+| KDS Realtime observation (manual Tier E) | Staging only — see `docs/kds-staging-smoke-checklist.md` | `PLAYWRIGHT_BASE_URL`, `E2E_LOGIN_*`, `ENABLE_KDS_V1_CERTIFIED`, Supabase public keys |
+
+**Policy:** `era8-kds-realtime-e2e-staging-v1` — no Playwright KDS spec in repo yet; wiring cert `test:ci:kds-realtime-e2e-staging:cert` only.
 
 ## Not in default CI (by design)
 
@@ -109,6 +112,7 @@ npm run test:ci:pos-money-path:e2e
 |-------|--------|
 | Full Stripe live checkout E2E without policy artifact | Superseded — optional tier in `storefront-money-path` when `STRIPE_SECRET_KEY` is set; check `storefront-stripe-e2e-summary` for `PASSED`/`SKIPPED`/`FAILED` |
 | POS hardware terminal | No hardware certification claim; tier 2b covers software POS unit + DB integration; browser E2E when auth secrets configured |
+| KDS Realtime Playwright E2E | `era8-kds-realtime-e2e-staging-v1` — staging manual Tier D/E only; poll fallback unit-certified via `era6-kds-realtime-smoke-v1` |
 
 ## Money-path certification mapping
 

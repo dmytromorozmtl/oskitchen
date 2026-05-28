@@ -1,7 +1,7 @@
 # KDS staging smoke checklist
 
 Status: canonical operational smoke for KDS v1 daily-service tickets  
-Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); realtime/poll: `lib/kitchen/kds-realtime-smoke-policy.ts` (`era6-kds-realtime-smoke-v1`)  
+Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); realtime/poll: `lib/kitchen/kds-realtime-smoke-policy.ts` (`era6-kds-realtime-smoke-v1`); Realtime Playwright E2E: `lib/kitchen/kds-realtime-e2e-staging-policy.ts` (`era8-kds-realtime-e2e-staging-v1`, **staging-only**, **not in default CI**)  
 Scope boundary: `docs/kds-v1-scope.md`
 
 ## What this proves
@@ -12,6 +12,7 @@ One **qualified** operational path: today's active order appears on the daily KD
 
 - Rush-hour or multi-station kitchen load
 - Supabase Realtime reliability under production traffic (poll fallback exists; verify manually)
+- Playwright Realtime E2E in default CI (no KDS Playwright spec in repo at Era 8 Cycle 2)
 - Hardware bump bars or kitchen printers
 - Production-board / `ProductionWorkItem` workflows (adjacent, not v1-certified here)
 
@@ -52,6 +53,30 @@ Policy `era6-kds-realtime-smoke-v1` certifies **poll fallback (15s)** and **chan
 5. Record: Realtime observed? Poll-only? Any missed tickets?
 
 Do **not** use this tier to claim rush-hour, Playwright E2E, or production-traffic Realtime certification.
+
+## Tier E — Realtime Playwright E2E (staging-only, not in default CI)
+
+Policy `era8-kds-realtime-e2e-staging-v1` — **no Playwright KDS spec ships yet**. Use Tier D manual observation until `e2e/kds-realtime-*.spec.ts` exists.
+
+When a spec is added, run **only on staging** with:
+
+| Variable | Purpose |
+|----------|---------|
+| `PLAYWRIGHT_BASE_URL` | Staging or preview host |
+| `E2E_LOGIN_EMAIL` / `E2E_LOGIN_PASSWORD` | Dashboard kitchen actor |
+| `ENABLE_KDS_V1_CERTIFIED=true` | Non-production KDS gate |
+| `NEXT_PUBLIC_SUPABASE_*` | Realtime client |
+
+```bash
+# Future (when spec exists) — example only:
+# ENABLE_KDS_V1_CERTIFIED=1 PLAYWRIGHT_BASE_URL=https://staging.example.com \
+#   E2E_LOGIN_EMAIL=... E2E_LOGIN_PASSWORD=... \
+#   npx playwright test e2e/kds-realtime-kitchen.spec.ts --project=chromium-authed
+```
+
+Certification gate: `npm run test:ci:kds-realtime-e2e-staging:cert` (policy wiring — not a browser run).
+
+Do **not** add this tier to default GitHub Actions CI without an explicit era decision.
 
 ## Tier B — Staging DB smoke script (optional)
 
