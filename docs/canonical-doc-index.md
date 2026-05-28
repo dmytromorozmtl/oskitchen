@@ -198,6 +198,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **5** | **Shopify live channel smoke** | `era17-channel-live-smoke-shopify-v1`; **awaiting_live_credentials** — SKIPPED until DATABASE_URL + Shopify connection |
 | **6** | **Channel GitHub workflow first green** | `era17-channel-github-workflow-first-green-v1`; **awaiting_github_first_green** — SKIPPED until workflow_dispatch PASS recorded |
 | **7** | **Channel pilot playbook** | `era17-channel-pilot-playbook-v1`; **operator_ready** — [`channel-pilot-playbook-era17.md`](./channel-pilot-playbook-era17.md) |
+| **7b** | **Channel pilot setup wizard** | `era17-channel-pilot-setup-wizard-v1`; **pilot_setup_wizard_ready** — [`channel-pilot-setup-wizard-era17.md`](./channel-pilot-setup-wizard-era17.md) |
 | **8** | **Pilot ICP + contract template** | `era17-pilot-icp-contract-v1`; **template_ready** — [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) |
 | **9** | **Pilot Tier 0/1 preflight** | `era17-pilot-tier-preflight-v1`; **awaiting_tier_preflight_pass** — `smoke:pilot-tier-preflight`; `artifacts/pilot-tier-preflight-summary.json` |
 | **10** | **Pilot operator golden path** | `era17-pilot-operator-golden-path-v1`; **awaiting_operator_execution** — [`pilot-operator-golden-path-era17.md`](./pilot-operator-golden-path-era17.md); `smoke:pilot-operator-golden-path` |
@@ -692,6 +693,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 22: `era17-pos-manager-discount-v1` — manager discount guard + COMPED RBAC edge cases; **discount_guard_depth_enforced** |
 | 2026-05-28 | Era 17 Cycle 23: `era17-public-post-abuse-v1` — P1 public POST route rate limits; **p1_public_post_guards_expanded** |
 | 2026-05-28 | Era 17 Cycle 24: `era17-pos-operator-runbook-v1` — software-only POS golden path runbook; **operator_runbook_ready** |
+| 2026-05-28 | Era 17 Cycle 34: `era17-channel-pilot-setup-wizard-v1` — Woo/Shopify 5-step pilot setup wizard; **pilot_setup_wizard_ready** |
 | 2026-05-28 | Era 17 Cycle 33: `era17-permission-denied-ux-v1` — POS/KDS RBAC denial UX; **permission_denied_ux_consistent** |
 | 2026-05-28 | Era 17 Cycle 32: `era17-nav-maturity-sweep-v1` — Era 17 preview route classification; **nav_maturity_sweep_recertified** |
 | 2026-05-28 | Era 17 Cycle 31: `era17-costing-pilot-spotcheck-v1` — recipe → margin report pilot spot check; **pilot_menu_margin_spotcheck_documented** |

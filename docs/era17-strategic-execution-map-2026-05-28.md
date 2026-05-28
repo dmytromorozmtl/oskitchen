@@ -102,7 +102,7 @@
 |------------|------|-------|---------------------|------------|-------|-------|
 | **32** | Nav maturity sweep on new routes | `page-maturity-honesty` | nav cert PASS | `test:ci:nav-maturity-sweep-era17:cert` + `smoke:nav-maturity-sweep-era17` | — | Product | **Done** — `era17-nav-maturity-sweep-v1` |
 | **33** | Permission-denied UX consistency | Spot-check POS/KDS/dashboard | Checklist | `test:ci:permission-denied-ux-era17:cert` + `smoke:permission-denied-ux` | — | UX | **Done** — `era17-permission-denied-ux-v1` |
-| **34** | Integration setup wizard friction | Reduce steps for Woo/Shopify pilot | Operator feedback | pilot retro | — | Product |
+| **34** | Integration setup wizard friction | Reduce steps for Woo/Shopify pilot | Operator feedback | `test:ci:channel-pilot-setup-wizard-era17:cert` + `smoke:channel-pilot-setup-wizard` | — | Product | **Done** — `era17-channel-pilot-setup-wizard-v1` |
 
 ---
 

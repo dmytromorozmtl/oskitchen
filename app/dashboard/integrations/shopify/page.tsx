@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { isEncryptionConfigured } from "@/lib/crypto";
 import { SITE_URL } from "@/lib/constants";
+import { ChannelPilotSetupWizard } from "@/components/integrations/channel-pilot-setup-wizard";
 import { IntegrationCertificationPanel } from "@/components/dashboard/integration-certification-panel";
 import { CapabilityBadge } from "@/components/capabilities/capability-badge";
 import { PlanGate } from "@/components/plans/plan-gate";
@@ -62,6 +63,15 @@ export default async function ShopifyIntegrationPage() {
           <Link href="/dashboard/sales-channels">← Back</Link>
         </Button>
       </div>
+
+      <ChannelPilotSetupWizard
+        provider="shopify"
+        hasConnection={Boolean(conn)}
+        hasCredentials={hasToken}
+        hasWebhookSecret={Boolean(conn?.webhookSecretEncrypted)}
+        hasStoreIdentity={Boolean(conn?.shopDomain)}
+        certification={certification}
+      />
 
       {!isEncryptionConfigured() ? (
         <Card className="border-destructive/50 bg-destructive/5">

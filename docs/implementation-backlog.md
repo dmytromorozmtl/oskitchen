@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-033 — Integration setup wizard friction (P1)
+- ID: `KOS-E17-033`
+- Title: Era 17 Cycle 34 — streamlined 5-step Woo/Shopify pilot setup wizard
+- Module: Integrations / UX
+- Priority: P1 (Workstream H Cycle 34)
+- Status: **pilot_setup_wizard_ready**
+- Decision: `era17-channel-pilot-setup-wizard-v1` — in-app wizard + collapsed advanced toggles
+- Evidence: `docs/channel-pilot-setup-wizard-era17.md`, `test:ci:channel-pilot-setup-wizard-era17:cert`
+- Next: P0 credential-blocked smokes (SSO Cycle 2, Woo/Shopify live) or Public API per-route scopes (Cycle 35)
+
 ### KOS-E17-032 — Permission denied UX consistency (P1)
 - ID: `KOS-E17-032`
 - Title: Era 17 Cycle 33 — standardized POS/KDS/dashboard RBAC denial cards
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **permission_denied_ux_consistent**
 - Decision: `era17-permission-denied-ux-v1` — shared copy + `PermissionDeniedSurfaceCard`
 - Evidence: `docs/permission-denied-ux-era17.md`, `test:ci:permission-denied-ux-era17:cert`
-- Next: Integration setup wizard friction (Cycle 34) or P0 credential-blocked smokes
+- Next: Integration setup wizard friction (Cycle 34) — **done**; see KOS-E17-033
 
 ### KOS-E17-031 — Nav maturity sweep (P1)
 - ID: `KOS-E17-031`

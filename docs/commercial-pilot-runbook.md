@@ -236,6 +236,18 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 ---
 
+## Era 17 channel pilot setup wizard (2026-05-28)
+
+**Policy:** `era17-channel-pilot-setup-wizard-v1` — **pilot_setup_wizard_ready**; 5-step in-app wizard on Woo/Shopify integration pages.
+
+1. **Surfaces:** Dashboard → Integrations → WooCommerce or Shopify — `ChannelPilotSetupWizard` with progress tracker.
+2. **Steps:** save credentials → test connection → configure webhooks → verify webhook → run certification (`evaluateChannelPilotSetupProgress`).
+3. Operator doc: **`docs/channel-pilot-setup-wizard-era17.md`**
+4. Run **`npm run smoke:channel-pilot-setup-wizard`** → **`artifacts/channel-pilot-setup-wizard-summary.json`**
+5. **Forbidden:** one-click marketplace connect; production-certified Woo/Shopify for all tenants.
+
+**Enforcement:** `test:ci:channel-pilot-setup-wizard-era17:cert` (chained in `test:ci:channel-pilot-playbook-era17:cert`)
+
 ## Era 17 permission denied UX consistency (2026-05-28)
 
 **Policy:** `era17-permission-denied-ux-v1` — **permission_denied_ux_consistent**; standardized RBAC denial cards on POS/KDS pilot surfaces.

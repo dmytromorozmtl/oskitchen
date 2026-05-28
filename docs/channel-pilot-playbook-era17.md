@@ -3,6 +3,7 @@
 **Policy:** `era17-channel-pilot-playbook-v1`  
 **Status:** operator-ready one-pager for **qualified paid pilots**  
 **Updated:** 2026-05-28  
+**In-app wizard:** [`channel-pilot-setup-wizard-era17.md`](./channel-pilot-setup-wizard-era17.md) (`era17-channel-pilot-setup-wizard-v1`) — **5-step** progress tracker on integration pages  
 **Maturity source of truth:** [`feature-maturity-matrix.md`](./feature-maturity-matrix.md)  
 **Parent runbook:** [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md)
 
@@ -40,7 +41,21 @@ Related policies: `era16-channel-live-smoke-v1`, `era17-channel-live-smoke-woo-v
 | RBAC | Owner or `integrations.manage` for connection setup |
 | Entitlements | Workspace on plan that includes channel integrations |
 
-**Duration:** ~30–45 minutes per channel (Woo **or** Shopify); allow 60 minutes if running both.
+**Duration:** ~20–30 minutes per channel with in-app wizard; allow 45 minutes if running both and documenting certification PARTIAL.
+
+---
+
+## In-app pilot setup wizard (preferred path)
+
+Use **Dashboard → Integrations → WooCommerce** or **Shopify** — the **Pilot setup wizard** card tracks five steps:
+
+1. Save credentials  
+2. Test connection  
+3. Configure webhooks (copy URL on Woo)  
+4. Verify webhook delivery → link to Sales channels → Webhooks  
+5. Run certification checks  
+
+See [`channel-pilot-setup-wizard-era17.md`](./channel-pilot-setup-wizard-era17.md). Legacy playbook steps below remain for CLI/engineering reference.
 
 ---
 

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { isEncryptionConfigured } from "@/lib/crypto";
 import { SITE_URL } from "@/lib/constants";
+import { ChannelPilotSetupWizard } from "@/components/integrations/channel-pilot-setup-wizard";
 import { IntegrationCertificationPanel } from "@/components/dashboard/integration-certification-panel";
 import { CapabilityBadge } from "@/components/capabilities/capability-badge";
 import { PlanGate } from "@/components/plans/plan-gate";
@@ -69,6 +70,16 @@ export default async function WooCommerceIntegrationPage() {
           <Link href="/dashboard/sales-channels">← Back</Link>
         </Button>
       </div>
+
+      <ChannelPilotSetupWizard
+        provider="woocommerce"
+        hasConnection={Boolean(conn)}
+        hasCredentials={hasSecrets}
+        hasWebhookSecret={Boolean(conn?.webhookSecretEncrypted)}
+        hasStoreIdentity={Boolean(conn?.baseUrl)}
+        certification={certification}
+        webhookUrl={webhookUrl}
+      />
 
       {!isEncryptionConfigured() ? (
         <Card className="border-destructive/50 bg-destructive/5">
@@ -148,32 +159,37 @@ export default async function WooCommerceIntegrationPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-3 rounded-xl border border-border/70 bg-muted/20 p-4">
-              <div className="flex items-center gap-2">
-                <input
-                  id="autoImportOrders"
-                  name="autoImportOrders"
-                  type="checkbox"
-                  defaultChecked={settings.autoImportOrders ?? false}
-                  className="h-4 w-4 rounded border border-input"
-                />
-                <Label htmlFor="autoImportOrders" className="font-normal">
-                  Auto-import orders (planned — toggle stored in settings)
-                </Label>
+            <details className="rounded-xl border border-border/70 bg-muted/20 p-4 text-sm">
+              <summary className="cursor-pointer font-medium text-foreground">
+                Advanced (not required for pilot)
+              </summary>
+              <div className="mt-3 flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <input
+                    id="autoImportOrders"
+                    name="autoImportOrders"
+                    type="checkbox"
+                    defaultChecked={settings.autoImportOrders ?? false}
+                    className="h-4 w-4 rounded border border-input"
+                  />
+                  <Label htmlFor="autoImportOrders" className="font-normal">
+                    Auto-import orders (planned — toggle stored in settings)
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="autoCreateProducts"
+                    name="autoCreateProducts"
+                    type="checkbox"
+                    defaultChecked={settings.autoCreateProducts ?? false}
+                    className="h-4 w-4 rounded border border-input"
+                  />
+                  <Label htmlFor="autoCreateProducts" className="font-normal">
+                    Auto-create internal products from catalog sync (planned)
+                  </Label>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <input
-                  id="autoCreateProducts"
-                  name="autoCreateProducts"
-                  type="checkbox"
-                  defaultChecked={settings.autoCreateProducts ?? false}
-                  className="h-4 w-4 rounded border border-input"
-                />
-                <Label htmlFor="autoCreateProducts" className="font-normal">
-                  Auto-create internal products from catalog sync (planned)
-                </Label>
-              </div>
-            </div>
+            </details>
 
             <Button type="submit" className="rounded-full">
               Save encrypted credentials

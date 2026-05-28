@@ -134,6 +134,8 @@ npm run test:ci:pos-money-path:e2e
 
 **Channel GitHub workflow first green (Era 17 Cycle 9 — not in default CI):** `lib/integrations/channel-github-workflow-first-green-era17-policy.ts` (`era17-channel-github-workflow-first-green-v1`) — `.github/workflows/woo-shopify-staging-smoke.yml`; `npm run smoke:channel-github-workflow-first-green`; cert `test:ci:channel-github-workflow-first-green-era17:cert` (chained in `test:ci:channel-golden-path:cert`).
 
+**Channel pilot setup wizard (Era 17 Cycle 34):** `lib/integrations/channel-pilot-setup-wizard-era17-policy.ts` (`era17-channel-pilot-setup-wizard-v1`) — [`docs/channel-pilot-setup-wizard-era17.md`](./channel-pilot-setup-wizard-era17.md); 5-step in-app Woo/Shopify wizard; cert `test:ci:channel-pilot-setup-wizard-era17:cert` (chained in `test:ci:channel-pilot-playbook-era17:cert`).
+
 **Channel pilot playbook (Era 17 Cycle 10):** `lib/integrations/channel-pilot-playbook-era17-policy.ts` (`era17-channel-pilot-playbook-v1`) — [`docs/channel-pilot-playbook-era17.md`](./channel-pilot-playbook-era17.md); operator one-pager for qualified pilots; cert `test:ci:channel-pilot-playbook-era17:cert` (chained in `test:ci:commercial-pilot-runbook:cert`).
 
 **Webhook security matrix (Era 16 Cycle 6):** `lib/security/webhook-security-era16-policy.ts` (`era16-webhook-security-matrix-v1`) — `lib/security/webhook-security-matrix.ts` inventories **46 webhook routes** with signature validation + replay protection classification; `npm run cert:webhook-security-era16` → `artifacts/webhook-security-matrix-summary.json`; cert `test:ci:webhook-security-era16:cert` (chained in `test:security`). Does **not** claim full replay monitoring ops.
