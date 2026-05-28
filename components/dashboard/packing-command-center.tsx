@@ -15,6 +15,8 @@ import {
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { PackingExportsPanel } from "@/components/dashboard/packing-client";
 import { PackingAttentionStrip } from "@/components/packing/packing-attention-strip";
+import { PackingQcChecklist } from "@/components/packing/packing-qc-checklist";
+import { PackingQcHero } from "@/components/packing/packing-qc-hero";
 import { PackingTaskNextAction } from "@/components/packing/packing-task-next-action";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -249,6 +251,11 @@ export function PackingCommandCenter({
           kpis={kpis}
         />
       ) : null}
+
+      <div className="space-y-3" data-testid="packing-qc-strip">
+        <PackingQcHero focus={packingFocus} hasTasks={tasks.length > 0} />
+        <PackingQcChecklist focus={packingFocus} hasTasks={tasks.length > 0} />
+      </div>
 
       {showEmpty ? (
         <EmptyState

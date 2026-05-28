@@ -4,6 +4,7 @@ import {
   normalizeBriefingOperationalHref,
 } from "@/lib/briefing/owner-daily-briefing-tile-links-era19";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { resolvePackingBriefingQcHref } from "@/lib/packing/packing-qc-clarity-era19";
 
 export type BriefingTileAvailability = "available" | "not_configured" | "unavailable";
 
@@ -235,7 +236,9 @@ export function buildOwnerDailyBriefingTiles(
       input.kpis.packingQueueOpen > 0
         ? `${input.kpis.packingQueueOpen} pack job(s) open.`
         : "Packing queue is clear.",
-    href: "/dashboard/packing",
+    href: resolvePackingBriefingQcHref({
+      packingQueueOpen: input.kpis.packingQueueOpen,
+    }),
     availability: "available",
     tone: input.kpis.packingQueueOpen > 0 ? "attention" : "success",
     priority: 15,
@@ -575,7 +578,9 @@ export function pickOwnerDailyBriefingTopActions(input: {
       reason: `${input.kpis.packingQueueOpen} pack job(s) waiting — fulfillment may slip.`,
       severity: "normal",
       ownerRole: "manager",
-      href: "/dashboard/packing",
+      href: resolvePackingBriefingQcHref({
+        packingQueueOpen: input.kpis.packingQueueOpen,
+      }),
       status: "open",
       unblockCondition: "Complete or reassign open pack jobs.",
       priority: 8,

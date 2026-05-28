@@ -169,6 +169,9 @@ export function resolveBriefingTileCanonicalHref(
   if (tileId === "pos-manager-override-supervisor") {
     return fallbackHref;
   }
+  if (tileId === "packing-status" && fallbackHref.includes("#")) {
+    return fallbackHref;
+  }
   if (tileId === "kds-priority-lane") {
     return fallbackHref;
   }
