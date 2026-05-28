@@ -1,10 +1,10 @@
 # KitchenOS Enterprise Procurement Pack
 
 **Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
-**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-procurement-era15-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`)  
+**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1`, `era16-enterprise-sso-r2-pilot-v1`, `era16-enterprise-sso-r2-schema-v1`, `era16-enterprise-sso-r2-runtime-v1`, `era16-enterprise-sso-r2-admin-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-procurement-era15-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`, `lib/enterprise/enterprise-sso-r2-pilot-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-schema-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-runtime-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-admin-era16-policy.ts`)  
 **Companion:** [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) (release gates, runbooks)  
 **Smoke:** `npm run smoke:enterprise-procurement` (CI cert wiring — not a compliance attestation)  
-**Updated:** 2026-05-27 (Era 15 Cycle 2 — procurement recert after Era 14 honesty cycles; SSO R2 **not_started**)
+**Updated:** 2026-05-28 (Era 16 Cycle 4 — SSO R2 **pilot_admin_wiring**; delivery **pilot_foundation**)
 
 Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
@@ -15,8 +15,8 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 | Area | Today | Roadmap |
 |------|--------|---------|
 | Multi-tenant operations | Workspace-scoped data model, owner resolution, RBAC waves 1–4 certified in CI | Workspace migration completion, custom roles UI |
-| Authentication | Email/password + Supabase session; staff invites (**SSO not_implemented**) | SSO/SAML pilot, MFA depth |
-| Authorization | Canonical permission keys + `domain-mutation-registry.ts`; `test:ci:rbac-wave4` in `test:security` | Custom roles UI; broader denial audit taxonomy |
+| Authentication | Email/password + Supabase session; staff invites (**SSO pilot_foundation** — schema + callback + **pilot_admin_wiring**; `/login` Sign in with SSO for activated pilots only) | Staging IdP smoke proof, MFA depth |
+| Authorization | Canonical permission keys + `domain-mutation-registry.ts`; `test:ci:rbac-wave4` + **Era 16 mutation registry linter** (`era16-mutation-registry-linter-v1`) in `test:security` | Custom roles UI; broader denial audit taxonomy |
 | Audit | `recordAuditLog`, audit center, export gates (`audit.export`) | Broader taxonomy, retention automation |
 | Commerce | Stripe billing + webhooks certified in CI | Enterprise invoicing, procurement billing |
 | Integrations | Shopify/Woo golden path certified; marketplace placeholders honest | Live partner connectors per maturity matrix |
@@ -73,6 +73,68 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **CI:** `test:ci:enterprise-procurement-era15:cert` (chained in `test:ci:enterprise-procurement:cert`).
 
+## Era 16 SSO R2 pilot decision (2026-05-28)
+
+**Policy:** `era16-enterprise-sso-r2-pilot-v1` — locks R2 integration path after auth architecture inspection. **Does not** implement SSO, SCIM, or SOC 2 delivery.
+
+| Capability | Delivery status | Era 16 decision |
+|------------|-----------------|-----------------|
+| SSO / SAML | **not_implemented** | R2 pilot **design_locked** — path **`supabase_saml_sso`** (R1 Option A); pilot IdP: Okta **or** Entra ID |
+| SCIM | **not_implemented** | Remains after R2 implementation cycles |
+| SOC 2 Type II | **not_certified** | Unchanged |
+
+**Procurement stance:** SSO is still **not** in production. Buyers may reference [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md) as engineering intent for a future pilot — not availability.
+
+**CI:** `test:ci:enterprise-sso-r2-pilot-era16:cert` (chained in `test:ci:enterprise-identity-roadmap:cert`).
+
+## Era 16 SSO R2 schema foundation (2026-05-28)
+
+**Policy:** `era16-enterprise-sso-r2-schema-v1` — Prisma foundation for workspace SSO settings and IdP identity mapping. **Does not** enable SSO login, SAML callback, or production delivery.
+
+| Capability | Delivery status | Era 16 Cycle 2 |
+|------------|-----------------|----------------|
+| SSO / SAML | **pilot_foundation** | R2 pilot **schema_ready** — models `WorkspaceSsoSettings`, `SsoIdentity`; defaults `enabled=false`, `pilotPhase=DISABLED` |
+| SCIM | **not_implemented** | Unchanged |
+| SOC 2 Type II | **not_certified** | Unchanged |
+
+**Procurement stance:** Schema exists for a future pilot tenant; **no** production SSO claim. Staff auth remains email/password + Supabase session.
+
+**CI:** `test:ci:enterprise-sso-r2-schema-era16:cert` (chained in `test:ci:enterprise-sso-r2-pilot-era16:cert`).
+
+## Era 16 SSO R2 runtime callback foundation (2026-05-28)
+
+**Policy:** `era16-enterprise-sso-r2-runtime-v1` — Supabase SSO callback adapter with tenant/domain guardrails and audit events. **Does not** expose production SSO login UI or claim live SAML/OIDC delivery. **callback_adapter** remains fail-closed until workspace `PILOT_ACTIVE` + `ssoOidc` entitlement.
+
+| Capability | Delivery status | Era 16 Cycle 3 |
+|------------|-----------------|----------------|
+| SSO / SAML | **pilot_foundation** | Callback adapter (`validateSsoCallbackSession`, `completeWorkspaceSsoCallback`); query param `sso_workspace_id`; fail-closed until `PILOT_ACTIVE` + `ssoOidc` entitlement |
+| SCIM | **not_implemented** | Unchanged |
+| SOC 2 Type II | **not_certified** | Unchanged |
+
+**Procurement stance:** Runtime callback foundation exists behind safe gate; default workspace SSO remains disabled. Staff auth remains email/password + Supabase session for all tenants until Cycle 4 pilot wiring.
+
+**Audit:** `sso.login_success`, `sso.login_denied` via `recordAuditLog`.
+
+**CI:** `test:ci:enterprise-sso-r2-runtime-era16:cert` (chained in `test:ci:enterprise-sso-r2-pilot-era16:cert`).
+
+## Era 16 SSO R2 pilot admin wiring (2026-05-28)
+
+**Policy:** `era16-enterprise-sso-r2-admin-v1` — admin-safe workspace SSO configuration, `ssoOidc` entitlement gate, and gated `/login` **Sign in with SSO** entry. **Does not** claim production SSO for all tenants.
+
+| Capability | Delivery status | Era 16 Cycle 4 |
+|------------|-----------------|----------------|
+| SSO / SAML | **pilot_foundation** | **pilot_admin_wiring** — Settings → Security → SSO pilot; configure/activate/deactivate; staff login entry with workspace UUID |
+| SCIM | **not_implemented** | Unchanged |
+| SOC 2 Type II | **not_certified** | Unchanged |
+
+**Procurement stance:** One pilot tenant can be prepared via admin UI; SSO remains tenant-scoped and inactive until explicit activation. Staging IdP smoke required before SSO delivery status advances beyond **pilot_foundation**.
+
+**Audit:** `sso.settings_configured`, `sso.settings_activated`, `sso.settings_deactivated`.
+
+**Smoke:** `npm run smoke:enterprise-sso-r2-pilot` (CI cert wiring — not live IdP attestation).
+
+**CI:** `test:ci:enterprise-sso-r2-admin-era16:cert` (chained in `test:ci:enterprise-sso-r2-pilot-era16:cert`).
+
 ---
 
 ## SSO and SAML roadmap
@@ -83,12 +145,12 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 |-------|--------|--------|
 | R0 (now) | Document posture | This pack; narrow auth claims in GTM |
 | R1 | Architecture spike | **Complete (Era 9)** — see [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md); design only |
-| R2 | Pilot SSO | One IdP (Okta or Entra ID), owner + staff login via SAML |
+| R2 | Pilot SSO | **schema_ready (Era 16 Cycle 2–3)** — see [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md); Supabase SAML SSO path; callback adapter (Cycle 3); pilot admin + smoke (Cycle 4) |
 | R3 | GA SSO | Admin self-service IdP config, domain verification |
 
 **Evidence today:** `app/login/`, `actions/auth.ts`, [`rbac-permission-architecture.md`](./rbac-permission-architecture.md).
 
-**Procurement answer:** “SSO/SAML is on the roadmap; current production auth is email/session-based with role-based workspace permissions.”
+**Procurement answer:** “SSO/SAML is **not** in production today. R1 spike and Era 16 R2 design define the Supabase SAML SSO pilot path; current auth is email/session-based with role-based workspace permissions.”
 
 ---
 
@@ -108,6 +170,67 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 ---
 
+## Era 16 webhook security matrix (2026-05-28)
+
+**Policy:** `era16-webhook-security-matrix-v1` — `lib/security/webhook-security-matrix.ts`
+
+| Topic | Era 16 stance |
+|-------|---------------|
+| Route inventory | **46 webhook routes** classified on disk |
+| Signature validation | Commerce (Stripe, WooCommerce, Shopify), delivery (Resend, Uber), platform (Slack, SCIM bearer), experimental bearer routes |
+| Replay protection | Documented per route — commerce uses `billingEvent` / `webhook_event_store`; **not** full replay monitoring ops |
+| Artifact | `npm run cert:webhook-security-era16` → `artifacts/webhook-security-matrix-summary.json` |
+| CI | `test:ci:webhook-security-era16:cert` (in `test:security`) |
+
+**Procurement stance:** webhook ingress risk is visible and test-backed; buyers must not assume centralized replay monitoring until future hardening cycles.
+
+---
+
+## Mutation registry linter (Era 16 Cycle 8)
+
+**Policy:** `era16-mutation-registry-linter-v1` — `lib/permissions/mutation-registry-linter.ts`
+
+| Topic | Era 16 stance |
+|-------|---------------|
+| Scope | Static scan of `actions/` for Prisma-write server mutations |
+| Governance | Requires `requireMutationPermission`, domain actor helper, documented allowlist marker, or approved public/platform guard |
+| Artifact | `npm run cert:mutation-registry-linter-era16` → `artifacts/mutation-registry-linter-summary.json` |
+| CI | `test:ci:mutation-registry-linter-era16:cert` (in `test:security`) |
+
+**Procurement stance:** new sensitive server actions cannot silently bypass registry discipline; this does **not** replace wave-4 action RBAC tests.
+
+---
+
+## Commercial pilot evidence pack (Era 16 Cycle 9)
+
+**Policy:** `era16-commercial-pilot-evidence-pack-v1` — `lib/commercial/commercial-pilot-evidence-pack.ts`
+
+| Topic | Era 16 stance |
+|-------|---------------|
+| Purpose | Single-page GO/NO-GO for paid pilots — role checklists, allowed features, forbidden claims |
+| Roles | Owner, manager, cashier, kitchen, support/platform admin |
+| Artifact | `npm run cert:commercial-pilot-evidence-era16` → `artifacts/commercial-pilot-evidence-pack-summary.json` |
+| CI | `test:ci:commercial-pilot-evidence-era16:cert` (in `test:ci:commercial-pilot-runbook:cert`) |
+
+**Procurement stance:** buyers evaluating a pilot should use [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) Era 16 sections — not deprecated `docs/PILOT_*` checklists.
+
+---
+
+## Operational sign-off (Era 16 Cycle 10)
+
+**Policy:** `era16-operational-signoff-v1` — `lib/operations/operational-signoff-summary.ts`
+
+| Topic | Era 16 stance |
+|-------|---------------|
+| Scope | Unified KDS + production calendar operational sign-off |
+| Artifact | `npm run smoke:operational-signoff-era16` → `artifacts/operational-signoff-summary.json` |
+| CI | `test:ci:operational-signoff-era16:cert` (in `test:ci:kds-staging-smoke:cert`) |
+| Manual staging | Requires `OPERATIONAL_SIGNOFF_STAGING_URL` + operator email |
+
+**Procurement stance:** qualified operational smoke only — not rush-hour or multi-station kitchen certification.
+
+---
+
 ## SOC 2 readiness roadmap
 
 **KitchenOS is not SOC 2 Type II certified and does not claim SOC 2 compliance today.**
@@ -116,7 +239,7 @@ Readiness work is **internal control mapping**, not customer-facing attestation:
 
 | Trust service criteria (high level) | Current evidence | Gap |
 |------------------------------------|------------------|-----|
-| Security | RBAC, cron auth, webhook signatures, CI security suite | Formal control owners, pen test cadence |
+| Security | RBAC, cron auth, webhook signatures, **Era 16 webhook security matrix** (`era16-webhook-security-matrix-v1`), CI security suite | Formal control owners, pen test cadence |
 | Availability | Vercel hosting, health routes, incident runbooks (devops doc) | Public status page, SLO reporting |
 | Confidentiality | Tenant scoping, PII encryption on orders (integration tests) | Enterprise DLP, formal key rotation |
 | Processing integrity | Order spine, payment webhooks, inventory depletion policy | Broader reconciliation dashboards |
@@ -155,6 +278,7 @@ Readiness work is **internal control mapping**, not customer-facing attestation:
 - `requireTenantActor` resolves session user → data owner → `workspaceId`
 - List/mutation queries use workspace scope helpers (`lib/scope/workspace-*-scope.ts`)
 - Public API v1 enforces bearer auth + tenant scope — `test:ci:public-api-v1:cert`, `tests/unit/public-api-tenant-isolation.test.ts`
+- **Era 16 partner confidence:** `era16-public-api-partner-confidence-v1` — partner readiness pack, OpenAPI bearer scheme, standard error/rate-limit docs (`docs/API_WEBHOOK_DEVELOPER_CONTRACT_MATURITY.md`); **beta** — no production SLA or unlimited throughput claim
 
 **Honest limits:**
 

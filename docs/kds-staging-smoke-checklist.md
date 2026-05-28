@@ -1,7 +1,7 @@
 # KDS staging smoke checklist
 
 Status: canonical operational smoke for KDS v1 daily-service tickets  
-Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); Era 10 recert: `era10-kds-staging-smoke-recert-v1`; Era 15 recert: `era15-kds-staging-smoke-recert-v1` (`lib/kitchen/kds-staging-smoke-era15-policy.ts`); `npm run smoke:kds-staging`; realtime/poll: `era6-kds-realtime-smoke-v1`; Realtime Playwright E2E: `era8-kds-realtime-e2e-staging-v1` + `era11-kds-realtime-e2e-staging-v1` (**staging-only**, **not in default CI**); workflow secrets: `era13-kds-staging-workflow-secrets-align-v1`  
+Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); Era 10 recert: `era10-kds-staging-smoke-recert-v1`; Era 15 recert: `era15-kds-staging-smoke-recert-v1` (`lib/kitchen/kds-staging-smoke-era15-policy.ts`); **Era 16 operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`); `npm run smoke:kds-staging`; realtime/poll: `era6-kds-realtime-smoke-v1`; Realtime Playwright E2E: `era8-kds-realtime-e2e-staging-v1` + `era11-kds-realtime-e2e-staging-v1` (**staging-only**, **not in default CI**); workflow secrets: `era13-kds-staging-workflow-secrets-align-v1`  
 Scope boundary: `docs/kds-v1-scope.md`
 
 ## What this proves

@@ -3,6 +3,148 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 16 — Commercial identity / SSO R2
+
+### KOS-E16-014 — Staging workflows first green evidence (P0)
+- ID: `KOS-E16-014`
+- Title: Add Era 16 staging workflows first green summary artifact and orchestrator
+- Module: CI / E2E staging
+- Priority: P0 (Era 16 Cycle 14 — closes strategic priority #5 gap post-scorecard)
+- Status: **completed**
+- Decision: `era16-staging-workflows-first-green-v1` — wiring cert + optional `/api/health` when secrets set; GitHub first green remains operator-run; `JOB_OMITTED_SECRETS_MISSING` honesty preserved; not in default `ci.yml`
+- Evidence: `lib/ci/staging-workflows-first-green-summary.ts`, `scripts/smoke-staging-workflows-first-green-era16.ts`, `artifacts/staging-workflows-first-green-summary.json`, `test:ci:staging-workflows-first-green-era16:cert`
+- Next: **Era 17** — record first green PASS from GitHub Actions with secrets configured
+
+### KOS-E16-013 — Era 16 scorecard refresh (P1)
+- ID: `KOS-E16-013`
+- Title: Add Era 16 scorecard refresh and Era 17 handoff input
+- Module: Governance
+- Priority: P1 (Era 16 Cycle 13)
+- Status: **completed**
+- Decision: `era16-scorecard-refresh-v1` — 12 delivery cycles scored; overall 100 sustained; recommend Era 17; defer full re-audit
+- Evidence: `lib/governance/era16-scorecard-policy.ts`, `docs/era16-cycle-completion-scorecard-2026-05-28.md`, `docs/next-master-prompt-input-2026-05-28-era16.md`, `test:ci:scorecard:cert`
+- Next: **Era 17** — staging first green / SSO IdP smoke / ops proof (credential-dependent)
+
+### KOS-E16-012 — Public API partner confidence (P0)
+- ID: `KOS-E16-012`
+- Title: Add Era 16 public API partner readiness pack with auth/error/rate-limit clarity
+- Module: Developer platform / API
+- Priority: P0 (Era 16 Cycle 12)
+- Status: **completed**
+- Decision: `era16-public-api-partner-confidence-v1` — v1 registry; partner checklist; OpenAPI bearer scheme; live smoke SKIPPED WITH REASON without key; **beta** — no SLA claim
+- Evidence: `lib/api-public/public-api-partner-confidence-pack.ts`, `scripts/cert-public-api-partner-confidence-era16.ts`, `test:ci:public-api-partner-confidence-era16:cert`
+- Next: Era 16 Cycle 13 — scorecard / next-era handoff (completed)
+
+### KOS-E16-011 — Typecheck slice parallel reporting (P0)
+- ID: `KOS-E16-011`
+- Title: Add Era 16 typecheck slice report with per-slice PASSED/FAILED summary
+- Module: DevOps / CI
+- Priority: P0 (Era 16 Cycle 11)
+- Status: **completed**
+- Decision: `era16-typecheck-slice-report-v1` — `typecheck:ci:slices` runs all four slices without stopping at first failure; writes `artifacts/typecheck-slice-summary.json`; **does not replace** `typecheck:full`
+- Evidence: `lib/ci/typecheck-slice-report.ts`, `scripts/run-typecheck-slices-report-era16.ts`, `test:ci:typecheck-slice-era16:cert`
+- Next: Era 16 Cycle 12 — public API / partner confidence (completed)
+
+### KOS-E16-010 — KDS / production calendar operational sign-off (P0)
+- ID: `KOS-E16-010`
+- Title: Add Era 16 unified operational sign-off artifact for KDS + production calendar
+- Module: Kitchen / Production / Ops
+- Priority: P0 (Era 16 Cycle 10)
+- Status: **completed**
+- Decision: `era16-operational-signoff-v1` — `operational-signoff-summary`; PASSED/FAILED/SKIPPED WITH REASON; sign-off template; not rush-hour certified
+- Evidence: `lib/operations/operational-signoff-summary.ts`, `scripts/smoke-operational-signoff-era16.ts`, `test:ci:operational-signoff-era16:cert`
+- Next: Era 16 Cycle 11 — typecheck slice improvement (completed)
+
+### KOS-E16-009 — Commercial pilot GO/NO-GO evidence pack (P0)
+- ID: `KOS-E16-009`
+- Title: Add Era 16 single-page pilot decision pack with role checklists
+- Module: GTM / Operations
+- Priority: P0 (Era 16 Cycle 9)
+- Status: **completed**
+- Decision: `era16-commercial-pilot-evidence-pack-v1` — owner/manager/cashier/kitchen/support_admin checklists; allowed/forbidden features; rollback + escalation; GO/NO-GO evaluator; cert in `test:ci:commercial-pilot-runbook:cert`
+- Evidence: `lib/commercial/commercial-pilot-evidence-pack.ts`, `scripts/cert-commercial-pilot-evidence-era16.ts`, `docs/commercial-pilot-runbook.md`
+- Next: Era 16 Cycle 10 — operational sign-off (completed)
+
+### KOS-E16-008 — Mutation registry linter (P0)
+- ID: `KOS-E16-008`
+- Title: Add Era 16 static linter for sensitive action mutation governance
+- Module: Platform / RBAC
+- Priority: P0 (Era 16 Cycle 8)
+- Status: **completed**
+- Decision: `era16-mutation-registry-linter-v1` — scans `actions/` for Prisma-write server mutations; requires registry helper, public guard, or documented allowlist; cert in `test:security`
+- Evidence: `lib/permissions/mutation-registry-linter.ts`, `scripts/cert-mutation-registry-linter-era16.ts`, `test:ci:mutation-registry-linter-era16:cert`
+- Next: Era 16 Cycle 9 — commercial pilot evidence pack (completed)
+
+### KOS-E16-007 — Webhook replay hardening (P0)
+- ID: `KOS-E16-007`
+- Title: Add ingress dedupe for Uber Direct and Slack platform webhook routes
+- Module: Platform / Security
+- Priority: P0 (Era 16 Cycle 7)
+- Status: **completed**
+- Decision: `era16-webhook-replay-hardening-v1` — `WebhookIngressDedupe`; `recordWebhookIngressOrDuplicate`; Uber Direct + Slack handlers; invalid signature/replay tests; Uber Direct remains placeholder
+- Evidence: `lib/webhooks/webhook-ingress-replay-guard.ts`, `prisma/migrations/20260528130000_webhook_ingress_dedupe/`, `test:ci:webhook-replay-hardening-era16:cert`
+- Next: Era 16 Cycle 9 — commercial pilot evidence pack (completed)
+
+### KOS-E16-006 — Webhook security matrix (P0)
+- ID: `KOS-E16-006`
+- Title: Add Era 16 webhook ingress security matrix with signature/replay classification
+- Module: Platform / Security
+- Priority: P0 (Era 16 Cycle 6)
+- Status: **completed**
+- Decision: `era16-webhook-security-matrix-v1` — 46 routes inventoried; P0/P1 commerce/delivery classified; `artifacts/webhook-security-matrix-summary.json`; SCIM bearer invalid-token test; cert in `test:security`
+- Evidence: `lib/security/webhook-security-matrix.ts`, `scripts/cert-webhook-security-era16.ts`, `test:ci:webhook-security-era16:cert`
+- Next: Era 16 Cycle 7 — webhook replay hardening for highest-risk P1 gaps (Uber Direct, Slack)
+
+### KOS-E16-005 — Live Woo/Shopify smoke proof (P0)
+- ID: `KOS-E16-005`
+- Title: Add Era 16 live channel smoke orchestrator with explicit skip/fail summary
+- Module: Integrations / Channels
+- Priority: P0 (Era 16 Cycle 5)
+- Status: **completed**
+- Decision: `era16-channel-live-smoke-v1` — `smoke:woo-shopify-live`; `artifacts/channel-live-smoke-summary.json`; SKIPPED WITH REASON when credentials missing; FAILED on real cert failure; workflow_dispatch staging smoke
+- Evidence: `lib/integrations/channel-live-smoke-summary.ts`, `scripts/smoke-woo-shopify-live-era16.ts`, `.github/workflows/woo-shopify-staging-smoke.yml`, `test:ci:channel-live-smoke-era16:cert`
+- Next: Era 16 Cycle 6 — staging first green evidence or webhook security matrix (per priority)
+
+### KOS-E16-004 — SSO R2 pilot admin wiring (P0)
+- ID: `KOS-E16-004`
+- Title: Add admin-safe SSO pilot configuration and gated login entry
+- Module: Platform / Security / Enterprise
+- Priority: P0 (Era 16 Cycle 4)
+- Status: **completed**
+- Decision: `era16-enterprise-sso-r2-admin-v1` — Settings → Security → SSO pilot; `ssoOidc` gate; `/login` Sign in with SSO; `smoke:enterprise-sso-r2-pilot`; delivery **pilot_foundation**
+- Evidence: `lib/enterprise/workspace-sso-admin-service.ts`, `actions/workspace-sso.ts`, `app/dashboard/settings/security/sso/page.tsx`, `components/auth/sso-login-entry.tsx`, `test:ci:enterprise-sso-r2-admin-era16:cert`
+- Next: Era 16 Cycle 5 — staging IdP smoke proof (live login → dashboard → guarded mutation)
+
+### KOS-E16-003 — SSO R2 runtime callback adapter (P0)
+- ID: `KOS-E16-003`
+- Title: Add Supabase SSO callback adapter with tenant/domain guardrails
+- Module: Platform / Security / Enterprise
+- Priority: P0 (Era 16 Cycle 3)
+- Status: **completed**
+- Decision: `era16-enterprise-sso-r2-runtime-v1` — callback adapter + audit events; delivery **pilot_foundation**; fail-closed gate; **no** production SSO UI
+- Evidence: `lib/enterprise/workspace-sso-runtime-adapter.ts`, `lib/enterprise/workspace-sso-callback-service.ts`, `app/auth/callback/route.ts`, `test:ci:enterprise-sso-r2-runtime-era16:cert`
+- Next: Era 16 Cycle 4 — SSO pilot admin/runtime wiring + staging smoke
+
+### KOS-E16-002 — SSO R2 schema foundation (P0)
+- ID: `KOS-E16-002`
+- Title: Add workspace SSO settings and IdP identity mapping schema
+- Module: Platform / Security / Enterprise
+- Priority: P0 (Era 16 Cycle 2)
+- Status: **completed**
+- Decision: `era16-enterprise-sso-r2-schema-v1` — `WorkspaceSsoSettings`, `SsoIdentity`; R2 **schema_ready**; delivery **pilot_foundation**; defaults disabled
+- Evidence: `prisma/schema.prisma`, `prisma/migrations/20260528120000_enterprise_sso_r2_schema/`, `lib/enterprise/workspace-sso-foundation.ts`, `test:ci:enterprise-sso-r2-schema-era16:cert`
+- Next: Era 16 Cycle 3 — SSO callback adapter + runtime gate wiring
+
+### KOS-E16-001 — SSO R2 pilot path decision (P0)
+- ID: `KOS-E16-001`
+- Title: Lock SSO R2 pilot integration path after auth architecture inspection
+- Module: Platform / Security / Enterprise
+- Priority: P0 (Era 16 Cycle 1)
+- Status: **completed**
+- Decision: `era16-enterprise-sso-r2-pilot-v1` — R2 **design_locked**; path **`supabase_saml_sso`**; SSO delivery **not_implemented**; pilot IdP Okta or Entra ID
+- Evidence: `lib/enterprise/enterprise-sso-r2-pilot-era16-policy.ts`, `docs/enterprise-sso-r2-pilot-design.md`, `test:ci:enterprise-sso-r2-pilot-era16:cert`
+- Next: Era 16 Cycle 2 — schema + workspace SSO settings model
+
 ## Era 15 — KDS / enterprise / DevOps
 
 ### KOS-E15-006 — Era 15 scorecard refresh (P1)

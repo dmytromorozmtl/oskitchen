@@ -118,11 +118,13 @@ sequenceDiagram
 
 ## R2 pilot prerequisites
 
-1. Security review of chosen bridge (Option A or B).
-2. Schema migration for IdP link table + workspace SSO settings (if needed).
+1. Security review of chosen bridge (Option A — **locked Era 16** as `supabase_saml_sso`).
+2. Schema migration for IdP link table + workspace SSO settings (Era 16 Cycle 2).
 3. Pilot tenant with one IdP and written break-glass runbook.
 4. E2E smoke: login → dashboard → one guarded mutation → logout.
 5. Update `era6-enterprise-identity-roadmap-v1` delivery table only when R2 ships code + tests.
+
+**R2 design (Era 16):** [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md) — `era16-enterprise-sso-r2-pilot-v1`.
 
 ---
 

@@ -12,6 +12,7 @@ import {
   TYPECHECK_SLICE_ERA11_POLICY_ID,
   TYPECHECK_SLICE_ERA11_UNIT_TESTS,
 } from "@/lib/ci/typecheck-slice-era11-policy";
+import { TYPECHECK_SLICE_ERA16_RUNNER_SCRIPT } from "@/lib/ci/typecheck-slice-era16-policy";
 import {
   TYPECHECK_SLICE_CI_BUNDLE_SCRIPT,
   TYPECHECK_SLICES,
@@ -39,7 +40,7 @@ describe("typecheck slice era11 CI certification (live repo)", () => {
     }
     expect(scripts["test:ci:typecheck-slice:cert"]).toContain("typecheck-slice-era11-cert-live");
     expect(scripts["typecheck:slice:platform-auth"]).toContain(TYPECHECK_SLICE_ERA11_NEW_SLICE_TSCONFIG);
-    expect(scripts[TYPECHECK_SLICE_CI_BUNDLE_SCRIPT]).toContain("typecheck:slice:platform-auth");
+    expect(scripts[TYPECHECK_SLICE_CI_BUNDLE_SCRIPT]).toContain(TYPECHECK_SLICE_ERA16_RUNNER_SCRIPT);
     expect(governanceBundlesIncludesCert(scripts, "test:ci:typecheck-slice:cert")).toBe(true);
   });
 

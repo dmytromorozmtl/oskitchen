@@ -1,6 +1,11 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
+import {
+  PUBLIC_API_V1_RESOURCES,
+  type PublicApiV1HttpMethod,
+} from "@/lib/api-public/public-api-v1-registry";
+
 import manifest from "./openapi-manifest.json";
 
 export type ApiRouteEntry = {
@@ -10,6 +15,39 @@ export type ApiRouteEntry = {
 };
 
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
+
+function publicApiV1Operation(
+  method: PublicApiV1HttpMethod,
+  path: string,
+  tag: string,
+): Record<string, unknown> {
+  return {
+    tags: [tag],
+    summary: `${method} ${path}`,
+    operationId: `${method.toLowerCase()}_${path.replace(/[^a-zA-Z0-9]/g, "_")}`,
+    security: [{ bearerApiKey: [] }],
+    responses: {
+      "200": { description: "Success" },
+      "400": { description: "Invalid request body (POST routes)" },
+      "401": { description: "Unauthorized — invalid or unentitled API key" },
+      "429": { description: "Rate limit exceeded — Retry-After header set" },
+      "503": { description: "Rate limiting misconfigured — fail-closed" },
+    },
+  };
+}
+
+function applyPublicApiV1Paths(paths: Record<string, Record<string, unknown>>): void {
+  for (const resource of PUBLIC_API_V1_RESOURCES) {
+    paths[resource.path] = {};
+    for (const method of resource.methods) {
+      paths[resource.path][method.toLowerCase()] = publicApiV1Operation(
+        method,
+        resource.path,
+        "public",
+      );
+    }
+  }
+}
 
 function collectRouteFiles(dir: string, acc: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
@@ -91,6 +129,8 @@ export function buildOpenApiDocument(): Record<string, unknown> {
     }
   }
 
+  applyPublicApiV1Paths(paths);
+
   const tags = [...new Set(routes.map((r) => r.tag))].sort().map((name) => ({
     name,
     description: `KitchenOS ${name} API routes`,
@@ -102,13 +142,18 @@ export function buildOpenApiDocument(): Record<string, unknown> {
       title: "KitchenOS API",
       version: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "1.0.0",
       description:
-        "Auto-generated route manifest for partner integrations. Method list is indicative — inspect each route handler for supported verbs.",
+        "Auto-generated route manifest for partner integrations. Public API v1 routes (`/api/public/v1/*`) require `Authorization: Bearer kos_...` with Enterprise entitlement. Method list is indicative for non-v1 routes — inspect each handler for supported verbs.",
     },
     servers: [{ url: "https://os-kitchen.com", description: "Production" }],
     tags,
     paths,
     components: {
       securitySchemes: {
+        bearerApiKey: {
+          type: "http",
+          scheme: "bearer",
+          description: "Workspace API key — `Authorization: Bearer kos_...` (Enterprise entitlement required)",
+        },
         sessionCookie: { type: "apiKey", in: "cookie", name: "sb-access-token" },
         cronSecret: { type: "http", scheme: "bearer", description: "CRON_SECRET for /api/cron/*" },
       },

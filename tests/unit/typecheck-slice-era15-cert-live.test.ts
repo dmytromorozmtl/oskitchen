@@ -46,10 +46,10 @@ describe("typecheck slice era15 CI certification (live repo)", () => {
     );
     expect(scripts["test:ci:typecheck-slice:cert"]).toContain("typecheck-slice-era15-cert-live");
     expect(governanceBundlesIncludesCert(scripts, "test:ci:typecheck-slice:cert")).toBe(true);
-    const bundle = scripts[TYPECHECK_SLICE_ERA15_BUNDLE_SCRIPT];
     for (const slice of TYPECHECK_SLICES) {
-      expect(bundle, slice.id).toContain(`typecheck:slice:${slice.id}`);
+      expect(scripts[`typecheck:slice:${slice.id}`], slice.id).toContain(slice.tsconfig);
     }
+    expect(scripts[TYPECHECK_SLICE_ERA15_BUNDLE_SCRIPT]).toBeTruthy();
   });
 
   it("keeps typecheck:full canonical in quality and parallel typecheck-slices job", () => {

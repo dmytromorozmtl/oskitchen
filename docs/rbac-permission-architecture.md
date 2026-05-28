@@ -44,6 +44,8 @@ Policy id: `era4-mutation-access-consolidation-v1` (`lib/permissions/mutation-ac
 
 **Era 14 recert (Cycle 3):** `era14-mutation-access-consolidation-recert-v1` (`lib/permissions/mutation-access-era14-policy.ts`) — re-validates registry delegation to `requireMutationPermission`, wave-4 `lib/*` denial-audit wiring, and documents scoped helpers outside the registry (order create spine, support triage bridge, import center, global search, growth). **No mass helper rewrite.** Operator checklist: `docs/mutation-access-consolidation-checklist.md`; smoke: `npm run smoke:mutation-access`. Certs: `test:ci:mutation-access-era14:cert` chained into `test:ci:mutation-access-consolidation:cert`.
 
+**Era 16 mutation registry linter (Cycle 8):** `era16-mutation-registry-linter-v1` (`lib/permissions/mutation-registry-linter-era16-policy.ts`, `lib/permissions/mutation-registry-linter.ts`) — static scan of `actions/` for Prisma-write server mutations missing `requireMutationPermission`, domain actor helpers, documented allowlist markers, or public/platform guards; `npm run cert:mutation-registry-linter-era16` → `artifacts/mutation-registry-linter-summary.json`; cert `test:ci:mutation-registry-linter-era16:cert` chained into `test:security`. Blocks **new** ungoverned sensitive actions; does **not** replace `test:ci:rbac-wave4` or assert complete registry enforcement on legacy files.
+
 ## 3. Canonical Roles
 ### Workspace roles
 - Owner

@@ -1,9 +1,11 @@
 # Evolution Era 4 — Cycle Completion Scorecard
 
-**Date:** 2026-05-27  
+**Date:** 2026-05-27 (refreshed **2026-05-28** with full re-audit cross-link)  
 **Policy:** `era4-scorecard-refresh-v1` (`lib/governance/era4-scorecard-policy.ts`)  
-**Evidence branch:** `main` @ Era 4 Cycle 13 refresh  
-**Method:** Repo inspection; Era 4 backlog `KOS-E4-*` cross-checked against CI certs and policy modules
+**Evidence branch:** `main` @ Era 4 Cycle 13 refresh (`b0c1dd3`); closure @ `bab3d24`  
+**Method:** Repo inspection; Era 4 backlog `KOS-E4-*` cross-checked against CI certs and policy modules  
+**Full re-audit (post Era 4):** [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md)  
+**Closure audit:** [`era4-completion-scorecard-2026-05-27.md`](./era4-completion-scorecard-2026-05-27.md)
 
 ---
 

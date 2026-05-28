@@ -122,7 +122,19 @@ npm run test:ci:pos-money-path:e2e
 
 **Staging workflows first-run ops (Era 13 + Era 15):** `era13-staging-workflows-first-run-ops-v1` + `era15-staging-workflows-first-run-recert-v1` — optional `e2e-staging.yml`, `playwright-kds-staging.yml`, `closed-beta-gate.yml` `staging-smoke`; `JOB_OMITTED_SECRETS_MISSING` when secrets unset; `npm run smoke:staging-workflows`; cert `test:ci:staging-workflows-first-run-era15:cert` (in `test:ci:e2e-staging-secrets-era12:cert`). See `docs/GITHUB_E2E_STAGING_SECRETS.md`.
 
+**Staging workflows first green evidence (Era 16 Cycle 14 — not in default CI):** `lib/ci/staging-workflows-first-green-era16-policy.ts` (`era16-staging-workflows-first-green-v1`) — `npm run smoke:staging-workflows-first-green`; writes `artifacts/staging-workflows-first-green-summary.json` with **PASSED** / **FAILED** / **SKIPPED WITH REASON**; optional local `GET /api/health` when E2E secrets set; GitHub first green remains operator-run; cert `test:ci:staging-workflows-first-green-era16:cert` (chained in `test:ci:e2e-staging-secrets-era12:cert`).
+
 **Channel staging smoke (Era 12 Cycle 3 — not in default CI):** `lib/integrations/channel-golden-path-smoke-era12-policy.ts` (`era12-channel-golden-path-smoke-v1`) — `npm run smoke:woo-shopify`; optional `--skip-live`; requires `DATABASE_URL`; cert `test:ci:channel-golden-path-smoke-era12:cert` (in `test:ci:channel-golden-path:cert`). Not wired to `ci.yml`.
+
+**Channel live smoke orchestrator (Era 16 Cycle 5 — not in default CI):** `lib/integrations/channel-live-smoke-era16-policy.ts` (`era16-channel-live-smoke-v1`) — `npm run smoke:woo-shopify-live`; synthetic golden-path cert + optional live tenant certification; writes `artifacts/channel-live-smoke-summary.json` with **PASSED** / **FAILED** / **SKIPPED WITH REASON**; optional `workflow_dispatch` `.github/workflows/woo-shopify-staging-smoke.yml`; cert `test:ci:channel-live-smoke-era16:cert` (chained in `test:ci:channel-golden-path:cert`).
+
+**Webhook security matrix (Era 16 Cycle 6):** `lib/security/webhook-security-era16-policy.ts` (`era16-webhook-security-matrix-v1`) — `lib/security/webhook-security-matrix.ts` inventories **46 webhook routes** with signature validation + replay protection classification; `npm run cert:webhook-security-era16` → `artifacts/webhook-security-matrix-summary.json`; cert `test:ci:webhook-security-era16:cert` (chained in `test:security`). Does **not** claim full replay monitoring ops.
+
+**Webhook replay hardening (Era 16 Cycle 7):** `lib/security/webhook-replay-hardening-era16-policy.ts` (`era16-webhook-replay-hardening-v1`) — `lib/webhooks/webhook-ingress-replay-guard.ts` + `webhook_ingress_dedupe` **ingress dedupe** via `recordWebhookIngressOrDuplicate` for `/api/webhooks/uber-direct` and `/api/webhooks/slack/experiment-interactive`; duplicate deliveries return `{ ok: true, duplicate: true }`; cert `test:ci:webhook-replay-hardening-era16:cert` (chained in `test:ci:webhook-security-era16:cert`). Uber Direct remains **placeholder**.
+
+**Mutation registry linter (Era 16 Cycle 8):** `lib/permissions/mutation-registry-linter-era16-policy.ts` + `lib/permissions/mutation-registry-linter.ts` (`era16-mutation-registry-linter-v1`) — static scan of `actions/` for Prisma-write server mutations missing registry helpers or documented allowlist markers; `npm run cert:mutation-registry-linter-era16` → `artifacts/mutation-registry-linter-summary.json`; cert `test:ci:mutation-registry-linter-era16:cert` (chained in `test:security`). Blocks **new** ungoverned sensitive actions; does **not** replace wave-4 RBAC tests.
+
+**Commercial pilot evidence pack (Era 16 Cycle 9):** `lib/commercial/commercial-pilot-evidence-pack-era16-policy.ts` + `lib/commercial/commercial-pilot-evidence-pack.ts` (`era16-commercial-pilot-evidence-pack-v1`) — role checklists (owner, manager, cashier, kitchen, support_admin); allowed/forbidden features; rollback + escalation; `npm run cert:commercial-pilot-evidence-era16` → `artifacts/commercial-pilot-evidence-pack-summary.json`; cert `test:ci:commercial-pilot-evidence-era16:cert` (chained in `test:ci:commercial-pilot-runbook:cert`).
 
 ## Money-path certification mapping
 
@@ -134,6 +146,8 @@ npm run test:ci:pos-money-path:e2e
 | POS recipe inventory depletion | ✅ `pos-recipe-depletion.test.ts` | — | ✅ `pos-inventory-depletion.integration.test.ts` |
 | Storefront / API / manual inventory depletion | — | — | **Not certified** — POS-only policy (`era4-pos-only-v1`; Era 4 Cycle 1) |
 | Stripe webhook fail-closed | — | — | ✅ in `test:security` |
+| Webhook security matrix (46 routes) | ✅ `webhook-security-matrix.test.ts` | — | ✅ `test:ci:webhook-security-era16:cert` in `test:security` |
+| Webhook replay hardening (Uber Direct + Slack) | ✅ `webhook-ingress-replay-guard.test.ts` | — | ✅ `test:ci:webhook-replay-hardening-era16:cert` |
 
 ## Tier 1b — Cron hygiene (`quality` job)
 
@@ -197,6 +211,8 @@ npm run test:ci:pos-money-path:e2e
 **Policy (Era 4 Cycle 10):** `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`). **Era 10 recert:** `era10-kds-staging-smoke-recert-v1`. **Era 15 recert:** `era15-kds-staging-smoke-recert-v1` — bump/recall integration + optional Playwright workflow secrets parity; **not in default CI**. **Prerequisites:** `test:ci:kds-v1:integration`. **Staging/manual:** `docs/kds-staging-smoke-checklist.md`; `npm run smoke:kds-staging`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`. **Not certified:** rush-hour, multi-station, Playwright realtime KDS in default CI.
 
 **Wiring certification (tier 0):** `test:ci:kds-staging-smoke:cert` + `test:ci:kds-staging-smoke` chained in `test:ci:governance-bundles`.
+
+**Operational sign-off (Era 16 Cycle 10):** `lib/operations/operational-signoff-era16-policy.ts` + `lib/operations/operational-signoff-summary.ts` (`era16-operational-signoff-v1`) — unified KDS + production calendar sign-off; `npm run smoke:operational-signoff-era16` → `artifacts/operational-signoff-summary.json` with **PASSED** / **FAILED** / **SKIPPED WITH REASON**; cert `test:ci:operational-signoff-era16:cert` (chained in `test:ci:kds-staging-smoke:cert`). Manual staging UI requires `OPERATIONAL_SIGNOFF_STAGING_URL` + `OPERATIONAL_SIGNOFF_OPERATOR_EMAIL`. **Not** rush-hour certified.
 
 ## Tier 1c3 — Production calendar operator (`partition-product-kds` via governance bundles)
 
@@ -264,11 +280,12 @@ npm run test:ci:pos-money-path:e2e
 |-------|---------|-------|
 | Typecheck slice wiring cert | `npm run test:ci:typecheck-slice:cert` | Policy `era11-typecheck-slice-v3`, `tsconfig.base.json`, four slice tsconfigs, `typecheck:full` + slice scripts |
 | Era 15 typecheck slice recert | `npm run test:ci:typecheck-slice-era15:cert` | `era15-typecheck-slice-recert-v1`; `smoke:typecheck-slices`; full gate unchanged |
+| Era 16 typecheck slice reporting | `npm run test:ci:typecheck-slice-era16:cert` | `era16-typecheck-slice-report-v1` (`lib/ci/typecheck-slice-report.ts`); `typecheck:report:slices`; summary artifact; full gate unchanged |
 | Typecheck slice unit | `npm run test:ci:typecheck-slice` | Policy registry, strict base inheritance |
 
 **Local fast path:** `npm run typecheck:slice:*` — 6GB heap per slice. **CI canonical gate:** `quality` job → `npm run typecheck` → `typecheck:full` (8GB, full repo).
 
-**Policy:** `era11-typecheck-slice-v3` (extends `era5-typecheck-slice-v2`). **Parallel CI job (Era 6 Cycle 3):** `typecheck-slices` job → `npm run typecheck:ci:slices` (all four slices at 6GB); policy `era6-typecheck-slice-ci-v1`; does **not** replace full typecheck. **Era 11:** adds `platform-auth` slice.
+**Policy:** `era11-typecheck-slice-v3` (extends `era5-typecheck-slice-v2`). **Parallel CI job (Era 6 Cycle 3):** `typecheck-slices` job → `npm run typecheck:ci:slices` (all four slices at 6GB via Era 16 report runner); policy `era6-typecheck-slice-ci-v1`; does **not** replace full typecheck. **Era 16:** `era16-typecheck-slice-report-v1` — per-slice PASSED/FAILED summary in `artifacts/typecheck-slice-summary.json`. **Era 11:** adds `platform-auth` slice.
 
 **Wiring certification (tier 0):** `test:ci:typecheck-slice:cert` + `test:ci:typecheck-slice` chained in `test:ci:governance-bundles`.
 
@@ -327,9 +344,12 @@ npm run test:ci:pos-money-path:e2e
 
 | Suite | Command | Notes |
 |-------|---------|-------|
-| Public API wiring cert | `npm run test:ci:public-api-v1:cert` | Eight v1 routes, `guardPublicApi` fail-closed, unit bundle script alignment |
+| Era 16 public API partner confidence | `npm run test:ci:public-api-partner-confidence-era16:cert` | `era16-public-api-partner-confidence-v1`; partner checklist; OpenAPI bearer; live smoke skip honesty |
+| Public API wiring cert | `npm run test:ci:public-api-v1:cert` | Eight v1 routes, `guardPublicApi` fail-closed, unit bundle script alignment; chains era16 partner cert |
 | Public API v1 unit | `npm run test:ci:public-api-v1` | Auth, pagination, tenant scope, cross-tenant isolation, orders/recipes/webhooks contracts |
 
 **Canonical guard:** `lib/api-public/guard.ts` — 401 without bearer auth, 429 rate limit, 503 when distributed rate limiting misconfigured.
 
 **Wiring certification (tier 0):** `test:ci:public-api-v1:cert` + `test:ci:public-api-v1` chained in `test:ci:governance-bundles`.
+
+**Era 16 partner readiness:** `era16-public-api-partner-confidence-v1` — integration-led pilot checklist; artifact `artifacts/public-api-partner-confidence-summary.json`.

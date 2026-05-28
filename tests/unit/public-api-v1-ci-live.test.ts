@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
+
 const ROOT = process.cwd();
 const GUARD = join(ROOT, "lib/api-public/guard.ts");
 const MATURITY_MATRIX = join(ROOT, "docs/feature-maturity-matrix.md");
@@ -54,16 +56,20 @@ describe("public API v1 CI certification (live repo)", () => {
     expect(scripts["test:ci:public-api-v1"]).toContain("public-api-v1-resources-contract.test.ts");
     expect(scripts["test:ci:public-api-v1"]).toContain("public-api-auth.test.ts");
     expect(scripts["test:ci:public-api-v1"]).toContain("public-api-tenant-isolation.test.ts");
+    expect(scripts["test:ci:public-api-v1:cert"]).toContain(
+      "test:ci:public-api-partner-confidence-era16:cert",
+    );
   });
 
-  it("includes public API v1 cert before unit bundle in default quality governance bundles", () => {
+  it("includes public API v1 cert before unit bundle in governance bundles partition", () => {
     const scripts = readPackageScripts();
-    const bundle = scripts["test:ci:governance-bundles"];
-    expect(bundle).toContain("test:ci:public-api-v1:cert");
-    expect(bundle).toContain("npm run test:ci:public-api-v1 &&");
-    expect(bundle.indexOf("test:ci:public-api-v1:cert")).toBeLessThan(
-      bundle.indexOf("npm run test:ci:public-api-v1 &&"),
+    const partition = scripts["test:ci:governance-bundles:partition-platform"];
+    expect(partition).toContain("test:ci:public-api-v1:cert");
+    expect(partition).toContain("npm run test:ci:public-api-v1 &&");
+    expect(partition.indexOf("test:ci:public-api-v1:cert")).toBeLessThan(
+      partition.indexOf("npm run test:ci:public-api-v1 &&"),
     );
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:public-api-v1:cert")).toBe(true);
   });
 
   it("guards all eight v1 resources with guardPublicApi fail-closed wiring", () => {

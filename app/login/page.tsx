@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { LoginForm } from "@/components/auth/login-form";
+import { SsoLoginEntry } from "@/components/auth/sso-login-entry";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getSessionUser } from "@/lib/auth";
 import { APP_NAME } from "@/lib/constants";
@@ -51,6 +52,11 @@ export default async function LoginPage() {
         <div className="rounded-2xl border border-border/80 bg-card/90 p-8 shadow-lg backdrop-blur">
           <Suspense fallback={null}>
             <LoginForm />
+          </Suspense>
+          <Suspense fallback={null}>
+            <div className="mt-6">
+              <SsoLoginEntry />
+            </div>
           </Suspense>
           <p className="mt-6 text-center text-xs text-muted-foreground">
             New to KitchenOS?{" "}

@@ -67,6 +67,25 @@ Cert: `npm run test:ci:staging-workflows-first-run-era13:cert` + `test:ci:stagin
 
 **Ops:** Run `npm run smoke:staging-workflows` before telling buyers staging browser E2E is certified.
 
+## Era 16 staging workflows first green evidence (2026-05-28)
+
+**Policy:** `era16-staging-workflows-first-green-v1` (`lib/ci/staging-workflows-first-green-era16-policy.ts`, `lib/ci/staging-workflows-first-green-summary.ts`)  
+**Smoke:** `npm run smoke:staging-workflows-first-green` — runs wiring cert (`smoke:staging-workflows`) + optional `GET /api/health` when `E2E_STAGING_BASE_URL` + login secrets are set locally  
+**Artifact:** `artifacts/staging-workflows-first-green-summary.json` (`PASSED` / `FAILED` / `SKIPPED WITH REASON` per step); marker `staging-workflows-first-green`
+
+| Step | Local smoke | GitHub Actions |
+|------|-------------|----------------|
+| Wiring cert | `smoke:staging-workflows` | N/A (repo cert only) |
+| Staging secrets | Env check | `JOB_OMITTED_SECRETS_MISSING` when unset |
+| Staging health | Optional `GET …/api/health` | N/A |
+| First green recorded | **SKIPPED** — operator must run workflows | E2E Staging / KDS Staging / optional Woo Shopify Staging Smoke |
+
+**Optional workflows in first-green registry:** `e2e-staging.yml`, `playwright-kds-staging.yml`, `closed-beta-gate.yml` (`staging-smoke`), `woo-shopify-staging-smoke.yml`.
+
+Cert: `npm run test:ci:staging-workflows-first-green-era16:cert` (chained in `test:ci:e2e-staging-secrets-era12:cert`).
+
+**Honest scope:** Does **not** claim staging E2E is green without a real GitHub workflow PASS. Does **not** add staging jobs to default `ci.yml`.
+
 ## Workflow steps (Era 12 Cycle 4)
 
 When secrets are set, the job runs in order:
@@ -105,7 +124,8 @@ Artifact on completion: `kds-realtime-e2e-staging-summary` (`PASSED` / `SKIPPED`
 
 ## CI certification
 
-- `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert` (includes `test:ci:staging-workflows-first-run-era13:cert`)
+- `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert` (includes era13/era15 first-run certs + `test:ci:staging-workflows-first-green-era16:cert`)
+- `npm run test:ci:staging-workflows-first-green-era16` + `test:ci:staging-workflows-first-green-era16:cert`
 - `npm run test:ci:staging-workflows-first-run-era13` + `test:ci:staging-workflows-first-run-era13:cert`
 - `npm run test:ci:e2e-staging-auth-era12` + `test:ci:e2e-staging-auth-era12:cert` (wired in `test:ci:governance-bundles:partition-platform`)
 - `npm run test:ci:kds-staging-workflow-secrets-era13:cert` (chained in `test:ci:kds-realtime-e2e-staging-era11:cert`)

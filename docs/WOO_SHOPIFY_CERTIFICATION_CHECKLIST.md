@@ -8,6 +8,8 @@
 
 **Staging smoke (Era 12 Cycle 3 — not in default CI):** policy `era12-channel-golden-path-smoke-v1`; `npm run smoke:woo-shopify` (`scripts/smoke-woo-shopify-certification.ts`) with `DATABASE_URL` + saved connection; use `--skip-live` for credentials-only checks. Cert wiring: `test:ci:channel-golden-path-smoke-era12:cert` (chained in `test:ci:channel-golden-path:cert`). Does **not** certify full live marketplace ops.
 
+**Live smoke orchestrator (Era 16 Cycle 5 — not in default CI):** policy `era16-channel-live-smoke-v1`; `npm run smoke:woo-shopify-live` runs synthetic cert + optional live tenant certification; missing `DATABASE_URL` / tenant selector → **SKIPPED WITH REASON** (exit 0); real certification failure → **FAILED** (exit 1); summary artifact `artifacts/channel-live-smoke-summary.json`. Optional GitHub Actions: `woo-shopify-staging-smoke.yml` (`workflow_dispatch`). Cert: `test:ci:channel-live-smoke-era16:cert`.
+
 Do not market as production-certified until this checklist is signed per tenant.
 
 ## Automated checks (in-app)

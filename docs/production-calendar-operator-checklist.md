@@ -1,6 +1,6 @@
 # Production calendar — operator checklist (pilot / staging)
 
-**Policies:** `era13-production-calendar-operator-depth-v1`, `era15-production-calendar-operator-recert-v1` (`lib/production/production-calendar-operator-depth-era13-policy.ts`, `lib/production/production-calendar-operator-depth-era15-policy.ts`)
+**Policies:** `era13-production-calendar-operator-depth-v1`, `era15-production-calendar-operator-recert-v1` (`lib/production/production-calendar-operator-depth-era13-policy.ts`, `lib/production/production-calendar-operator-depth-era15-policy.ts`); **Era 16 operational sign-off:** `era16-operational-signoff-v1` (`lib/operations/operational-signoff-summary.ts`, `npm run smoke:operational-signoff-era16`)
 
 **Page:** `/dashboard/production/calendar` (`app/dashboard/production/calendar/page.tsx`)
 

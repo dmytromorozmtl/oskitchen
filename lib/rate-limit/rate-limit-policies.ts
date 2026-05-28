@@ -3,6 +3,8 @@ export type RateLimitPolicy = { windowMs: number; max: number };
 export const RATE_LIMIT_POLICIES = {
   beta_application: { windowMs: 60_000, max: 8 },
   book_demo: { windowMs: 60_000, max: 6 },
+  /** Advisory board application — per IP. */
+  advisory_board: { windowMs: 60_000, max: 6 },
   contact_sales: { windowMs: 60_000, max: 6 },
   partner_lead: { windowMs: 60_000, max: 6 },
   /** ROI calculator marketing lead — per IP. */

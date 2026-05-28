@@ -47,7 +47,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 
 | Doc | Purpose |
 |-----|---------|
-| [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
+| [`full-strategic-reaudit-2026-05-28-era4.md`](./full-strategic-reaudit-2026-05-28-era4.md) | **Current** post–Era 4 maximum-depth re-audit (blended overall 86/100) |
+| [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100 — inventory baseline |
+| [`next-master-prompt-input-2026-05-28-era5.md`](./next-master-prompt-input-2026-05-28-era5.md) | Post–Era 4 re-audit Era 5 input (Eras 5–15 executed; use era15 for Era 16) |
 | [`next-master-prompt-input-2026-05-27-era14.md`](./next-master-prompt-input-2026-05-27-era14.md) | Facts and constraints for Evolution Era 15 master prompt |
 | [`era14-cycle-completion-scorecard-2026-05-27.md`](./era14-cycle-completion-scorecard-2026-05-27.md) | Era 14 GTM honesty / recert (cycles 1–5) + score 100/100 sustained |
 | [`next-master-prompt-input-2026-05-27-era13.md`](./next-master-prompt-input-2026-05-27-era13.md) | **Superseded** by era14 input for recurring prompts |
@@ -164,6 +166,21 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **3** | **Cron surface recert** | `era9-cron-surface-recert-v1`; `test:ci:cron-hygiene:cert` |
 | **4** | **RBAC wave 4 recert** | `era9-rbac-wave4-recert-v1`; `test:ci:rbac-wave4:cert` |
 | **5** | **Scorecard refresh** | `era9-scorecard-refresh-v1`; this §Scorecard Era 9 |
+
+## Evolution Era 16 cycle ledger (in progress)
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **SSO R2 pilot path decision** | `era16-enterprise-sso-r2-pilot-v1`; `docs/enterprise-sso-r2-pilot-design.md`; R2 **design_locked**; delivery **not_implemented** |
+| **2** | **SSO R2 schema foundation** | `era16-enterprise-sso-r2-schema-v1`; `WorkspaceSsoSettings`, `SsoIdentity`; R2 **schema_ready**; delivery **pilot_foundation** |
+| **3** | **SSO R2 runtime callback adapter** | `era16-enterprise-sso-r2-runtime-v1`; `validateSsoCallbackSession`; `/auth/callback`; delivery **pilot_foundation** |
+| **4** | **SSO R2 pilot admin wiring** | `era16-enterprise-sso-r2-admin-v1`; Settings → Security → SSO pilot; **Sign in with SSO**; `smoke:enterprise-sso-r2-pilot` |
+| **5** | **Live Woo/Shopify smoke proof** | `era16-channel-live-smoke-v1`; `smoke:woo-shopify-live`; `channel-live-smoke-summary`; **SKIPPED WITH REASON** / **FAILED**; `woo-shopify-staging-smoke.yml` |
+| **6** | **Webhook security matrix** | `era16-webhook-security-matrix-v1`; 46 routes; signature/replay classification; `webhook-security-matrix-summary`; `test:ci:webhook-security-era16:cert` in `test:security` |
+| **7** | **Webhook replay hardening** | `era16-webhook-replay-hardening-v1`; `WebhookIngressDedupe`; Uber Direct + Slack ingress dedupe; `test:ci:webhook-replay-hardening-era16:cert` |
+| **8** | **Mutation registry linter** | `era16-mutation-registry-linter-v1`; static scan of `actions/`; `mutation-registry-linter-summary`; `test:ci:mutation-registry-linter-era16:cert` in `test:security` |
+| **9** | **Commercial pilot evidence pack** | `era16-commercial-pilot-evidence-pack-v1`; role checklists; GO/NO-GO decision; `commercial-pilot-evidence-pack-summary`; `test:ci:commercial-pilot-evidence-era16:cert` |
+| **10** | **Operational sign-off (KDS + production calendar)** | `era16-operational-signoff-v1`; `operational-signoff-summary`; `smoke:operational-signoff-era16`; `test:ci:operational-signoff-era16:cert` in kds-staging-smoke cert |
 
 ## Evolution Era 10 cycle ledger
 
@@ -509,7 +526,28 @@ Incremental refresh after Era 15 cycles 1–5 (ops / certification recert from e
 | Marketing/sales | 83 | **83** | +0 | unchanged |
 | Storefront | 83 | **83** | +0 | unchanged |
 
-**Re-audit decision:** defer full repo re-audit until Era 16 delivery theme or major release; use `docs/next-master-prompt-input-2026-05-27-era15.md`.
+**Re-audit decision:** defer full repo re-audit until Era 17 delivery theme or major release; use `docs/next-master-prompt-input-2026-05-28-era16.md`.
+
+## Scorecard (Evolution Era 16 end — 2026-05-28)
+
+Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-defensibility from era15 handoff). Baseline = Era 15 end **100** overall.
+
+| Area | Era 15 end | Era 16 end | Δ | Key evidence |
+|------|----------:|-----------:|--:|--------------|
+| Overall | 100 | **100** | +0 | twelve delivery cycles; overall plateau |
+| Security | 82 | **85** | +3 | webhook matrix + replay + mutation linter |
+| QA | 94 | **96** | +2 | pilot GO/NO-GO pack + operational sign-off |
+| DevOps | 100 | **100** | +0 | typecheck slice reporting observability |
+| RBAC | 90 | **91** | +1 | mutation registry linter |
+| Inventory | 72 | **72** | +0 | POS-only policy unchanged |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 60 | **62** | +2 | live channel smoke orchestrator |
+| KDS | 74 | **75** | +1 | era16 operational sign-off |
+| Enterprise readiness | 67 | **72** | +5 | SSO R2 pilot_foundation + partner API pack |
+| Marketing/sales | 83 | **85** | +2 | commercial pilot evidence pack |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 17 delivery or repo scale shift; use `docs/next-master-prompt-input-2026-05-28-era16.md`. **Next era:** recommend **Era 17** (staging first green / SSO IdP ops proof).
 
 ---
 
@@ -594,3 +632,17 @@ Incremental refresh after Era 15 cycles 1–5 (ops / certification recert from e
 | 2026-05-27 | Era 15 Cycle 4: `era15-typecheck-slice-recert-v1` — four strict slices; full typecheck canonical; smoke:typecheck-slices |
 | 2026-05-27 | Era 15 Cycle 5: `era15-production-calendar-operator-recert-v1` — pilot checklist recert; smoke:production-calendar |
 | 2026-05-27 | Era 15 Cycle 6: `era15-scorecard-refresh-v1` — score 100/100 sustained; DevOps 100; era16 handoff |
+| 2026-05-28 | Era 16 Cycle 1: `era16-enterprise-sso-r2-pilot-v1` — SSO R2 path **design_locked** (`supabase_saml_sso`); delivery **not_implemented** |
+| 2026-05-28 | Era 16 Cycle 2: `era16-enterprise-sso-r2-schema-v1` — `WorkspaceSsoSettings` + `SsoIdentity`; R2 **schema_ready**; delivery **pilot_foundation** |
+| 2026-05-28 | Era 16 Cycle 3: `era16-enterprise-sso-r2-runtime-v1` — SSO callback adapter; delivery **pilot_foundation**; login UI not wired |
+| 2026-05-28 | Era 16 Cycle 4: `era16-enterprise-sso-r2-admin-v1` — SSO pilot admin + gated login entry; delivery **pilot_foundation** |
+| 2026-05-28 | Era 16 Cycle 5: `era16-channel-live-smoke-v1` — Woo/Shopify live smoke orchestrator; SKIPPED WITH REASON / FAILED summary |
+| 2026-05-28 | Era 16 Cycle 6: `era16-webhook-security-matrix-v1` — 46 webhook routes; signature/replay classification; cert in test:security |
+| 2026-05-28 | Era 16 Cycle 7: `era16-webhook-replay-hardening-v1` — Uber Direct + Slack ingress dedupe; WebhookIngressDedupe |
+| 2026-05-28 | Era 16 Cycle 8: `era16-mutation-registry-linter-v1` — static scan blocks new ungoverned sensitive actions; cert in test:security |
+| 2026-05-28 | Era 16 Cycle 9: `era16-commercial-pilot-evidence-pack-v1` — role checklists + GO/NO-GO evidence pack; cert in commercial-pilot-runbook |
+| 2026-05-28 | Era 16 Cycle 10: `era16-operational-signoff-v1` — KDS + production calendar sign-off artifact; not rush-hour certified |
+| 2026-05-28 | Era 16 Cycle 11: `era16-typecheck-slice-report-v1` — parallel slice PASSED/FAILED summary; full typecheck canonical unchanged |
+| 2026-05-28 | Era 16 Cycle 12: `era16-public-api-partner-confidence-v1` — partner readiness pack; OpenAPI bearer; live smoke skip honesty |
+| 2026-05-28 | Era 16 Cycle 13: `era16-scorecard-refresh-v1` — score 100/100 sustained; recommend Era 17; era16 handoff |
+| 2026-05-28 | Era 16 Cycle 14: `era16-staging-workflows-first-green-v1` — first green summary artifact; wiring cert + optional staging health; GitHub PASS remains ops |

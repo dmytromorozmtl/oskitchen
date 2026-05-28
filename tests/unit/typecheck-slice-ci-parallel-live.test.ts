@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { TYPECHECK_SLICE_ERA16_RUNNER_SCRIPT } from "@/lib/ci/typecheck-slice-era16-policy";
 import {
   TYPECHECK_SLICE_CI_BUNDLE_SCRIPT,
   TYPECHECK_SLICE_CI_JOB_HEAP_MB,
@@ -33,8 +34,9 @@ describe("typecheck slice parallel CI certification (live repo)", () => {
     const scripts = readPackageScripts();
     const bundle = scripts[TYPECHECK_SLICE_CI_BUNDLE_SCRIPT];
     expect(bundle).toBeTruthy();
+    expect(bundle).toContain(TYPECHECK_SLICE_ERA16_RUNNER_SCRIPT);
     for (const slice of TYPECHECK_SLICES) {
-      expect(bundle, slice.id).toContain(`typecheck:slice:${slice.id}`);
+      expect(scripts[`typecheck:slice:${slice.id}`], slice.id).toContain(slice.tsconfig);
     }
   });
 

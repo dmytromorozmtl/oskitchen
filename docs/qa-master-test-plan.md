@@ -170,6 +170,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Era 13 recert: `lib/enterprise/enterprise-identity-era13-policy.ts` (`era13-enterprise-identity-recert-v1`) — roadmap_only; R2 pilot not_started; cert `test:ci:enterprise-identity-era13:cert` (in `test:ci:enterprise-identity-roadmap:cert`)
 - Era 13 staging ops: `lib/ci/staging-workflows-first-run-era13-policy.ts` (`era13-staging-workflows-first-run-ops-v1`) — optional `e2e-staging.yml` / `playwright-kds-staging.yml` / `closed-beta-gate.yml`; `JOB_OMITTED_SECRETS_MISSING` when secrets unset; cert `test:ci:staging-workflows-first-run-era13:cert` (in `test:ci:e2e-staging-secrets-era12:cert`)
 - era15 recert: `lib/ci/staging-workflows-first-run-era15-policy.ts` (`era15-staging-workflows-first-run-recert-v1`); `npm run smoke:staging-workflows`
+- Era 16 first green: `lib/ci/staging-workflows-first-green-era16-policy.ts` (`era16-staging-workflows-first-green-v1`); `npm run smoke:staging-workflows-first-green`; cert `test:ci:staging-workflows-first-green-era16:cert` (in `test:ci:e2e-staging-secrets-era12:cert`)
 
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)
@@ -182,6 +183,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - policy: `lib/ci/typecheck-slice-policy.ts` (`era11-typecheck-slice-v3`; extends `era5-typecheck-slice-v2` — services-core, dashboard-services-api, storefront-marketing, **platform-auth**)
 - era11 cert: `test:ci:typecheck-slice-era11:cert` (chained in `test:ci:typecheck-slice:cert`)
 - era15 recert: `lib/ci/typecheck-slice-era15-policy.ts` (`era15-typecheck-slice-recert-v1`); `npm run smoke:typecheck-slices`
+- era16 reporting: `lib/ci/typecheck-slice-era16-policy.ts` / `lib/ci/typecheck-slice-report.ts` (`era16-typecheck-slice-report-v1`); `npm run typecheck:report:slices`; artifact `artifacts/typecheck-slice-summary.json`
 - wiring cert: `test:ci:typecheck-slice:cert` (in `test:ci:governance-bundles`)
 - local slice: `npm run typecheck:slice:platform-auth` (6GB; platform admin + login/onboarding)
 - parallel CI: `typecheck-slices` job → `npm run typecheck:ci:slices` (all four slices); **canonical gate:** `quality` → `typecheck:full` (8GB)
@@ -189,7 +191,8 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 ### 8d. Public API v1 contracts
 - routes: `app/api/public/v1/` (orders, products, customers, inventory, locations, recipes, staff, webhooks)
 - guard: `lib/api-public/guard.ts` (401 without auth, 429 rate limit, 503 when rate limit misconfigured)
-- wiring cert: `npm run test:ci:public-api-v1:cert` (in `test:ci:governance-bundles`, before unit bundle)
+- wiring cert: `npm run test:ci:public-api-v1:cert` (in `test:ci:governance-bundles`, before unit bundle; chains `test:ci:public-api-partner-confidence-era16:cert`)
+- era16 partner confidence: `lib/api-public/public-api-partner-confidence-era16-policy.ts` (`era16-public-api-partner-confidence-v1`); `npm run smoke:public-api-live`; artifact `artifacts/public-api-partner-confidence-summary.json`
 - unit bundle: `npm run test:ci:public-api-v1`
 - coverage: auth fail-closed per resource, tenant-scoped list queries, customers pagination envelope, recipes/webhooks POST validation, existing orders/auth/cross-tenant suites
 

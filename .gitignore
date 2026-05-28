@@ -60,6 +60,7 @@ prisma/*.db
 prisma/*.db-journal
 
 # additional local artifacts
+/artifacts/*-summary.json
 .env.development.local
 .env.test.local
 .env.production.local

@@ -24,6 +24,22 @@ export function LoginForm() {
     const err = searchParams.get("error");
     if (err === "auth" || err === "confirmation_failed") {
       toast.error("Authentication failed. Try signing in again.");
+      return;
+    }
+    if (err === "sso_domain_denied") {
+      toast.error("Your email domain is not allowed for this workspace SSO.");
+      return;
+    }
+    if (err === "sso_entitlement_denied") {
+      toast.error("SSO is not enabled for this workspace subscription.");
+      return;
+    }
+    if (err === "sso_workspace_denied") {
+      toast.error("You do not have access to this workspace via SSO.");
+      return;
+    }
+    if (err?.startsWith("sso_")) {
+      toast.error("SSO sign-in was denied. Use email/password or contact your admin.");
     }
   }, [searchParams]);
 

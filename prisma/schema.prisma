@@ -1402,6 +1402,19 @@ enum WorkspaceMemberRole {
   PARTNER
 }
 
+/// Pilot IdP vendor for workspace SSO (R2 — one per workspace).
+enum SsoIdpVendor {
+  OKTA
+  ENTRA_ID
+}
+
+/// Workspace SSO rollout phase — default DISABLED; no production SSO until runtime cycles wire login.
+enum SsoPilotPhase {
+  DISABLED
+  PILOT_CONFIGURED
+  PILOT_ACTIVE
+}
+
 enum GoLiveTestRunStatus {
   DRAFT
   PASSED
@@ -2284,6 +2297,8 @@ model UserProfile {
   restaurantTables        RestaurantTable[]
   posTabs                 PosTab[]
   pickupWindows           PickupWindow[]
+  ssoIdentities           SsoIdentity[]
+  workspaceSsoSettingsConfigured WorkspaceSsoSettings[] @relation("WorkspaceSsoSettingsConfiguredBy")
 
   @@map("users")
 }
@@ -3395,6 +3410,18 @@ model WebhookEvent {
   @@index([connectionId, receivedAt])
   @@unique([connectionId, externalEventId])
   @@map("webhook_events")
+}
+
+/// Era 16 — platform/bearer webhook ingress dedupe (routes without connection tenant scope).
+model WebhookIngressDedupe {
+  id              String   @id @default(uuid()) @db.Uuid
+  routeKey        String   @map("route_key") @db.VarChar(120)
+  externalEventId String   @map("external_event_id") @db.VarChar(512)
+  receivedAt      DateTime @default(now()) @map("received_at")
+
+  @@unique([routeKey, externalEventId])
+  @@index([routeKey, receivedAt])
+  @@map("webhook_ingress_dedupe")
 }
 
 model WebhookProcessingJob {
@@ -10178,6 +10205,8 @@ model Workspace {
   printedLabelsByWorkspace PrintedLabel[] @relation("PrintedLabelWorkspace")
   packingVerificationSessionsByWorkspace PackingVerificationSession[] @relation("PackingVerificationSessionWorkspace")
   templateApplicationEventsByWorkspace TemplateApplicationEvent[] @relation("TemplateApplicationEventWorkspace")
+  ssoSettings              WorkspaceSsoSettings?
+  ssoIdentities            SsoIdentity[]
 
   @@index([ownerUserId])
   @@index([organizationId])
@@ -10198,6 +10227,52 @@ model WorkspaceMember {
   @@unique([workspaceId, userId])
   @@index([userId])
   @@map("workspace_members")
+}
+
+/// Per-workspace SSO configuration (R2 pilot foundation — disabled by default).
+model WorkspaceSsoSettings {
+  id                     String        @id @default(uuid()) @db.Uuid
+  workspaceId            String        @unique @map("workspace_id") @db.Uuid
+  enabled                Boolean       @default(false)
+  idpVendor              SsoIdpVendor? @map("idp_vendor")
+  allowedEmailDomains    String[]      @default([]) @map("allowed_email_domains")
+  /// Supabase Auth SSO provider reference (dashboard-configured; not raw SAML metadata).
+  supabaseSsoProviderRef String?       @map("supabase_sso_provider_ref") @db.VarChar(255)
+  breakGlassOwnerEnabled Boolean       @default(true) @map("break_glass_owner_enabled")
+  pilotPhase             SsoPilotPhase @default(DISABLED) @map("pilot_phase")
+  loginHintDomain        String?       @map("login_hint_domain") @db.VarChar(255)
+  notes                  String?       @db.Text
+  configuredByUserId     String?       @map("configured_by_user_id") @db.Uuid
+  configuredAt           DateTime?     @map("configured_at")
+  createdAt              DateTime      @default(now()) @map("created_at")
+  updatedAt              DateTime      @updatedAt @map("updated_at")
+
+  workspace    Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  configuredBy UserProfile? @relation("WorkspaceSsoSettingsConfiguredBy", fields: [configuredByUserId], references: [id], onDelete: SetNull)
+
+  @@map("workspace_sso_settings")
+}
+
+/// Links IdP subject (SAML NameID / OIDC sub) to KitchenOS user within a workspace.
+model SsoIdentity {
+  id          String       @id @default(uuid()) @db.Uuid
+  workspaceId String       @map("workspace_id") @db.Uuid
+  userId      String       @map("user_id") @db.Uuid
+  idpVendor   SsoIdpVendor @map("idp_vendor")
+  idpSubject  String       @map("idp_subject") @db.VarChar(512)
+  emailAtLink String?      @map("email_at_link") @db.VarChar(255)
+  lastLoginAt DateTime?    @map("last_login_at")
+  linkedAt    DateTime     @default(now()) @map("linked_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, idpVendor, idpSubject])
+  @@unique([workspaceId, userId, idpVendor])
+  @@index([userId])
+  @@map("sso_identities")
 }
 
 model Brand {

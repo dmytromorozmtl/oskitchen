@@ -7,8 +7,10 @@ import { z } from "zod";
 
 import { asVoidFormAction } from "@/lib/actions/server-form-action";
 import { getSessionUser } from "@/lib/auth";
+import { getRequestClientIp } from "@/lib/rate-limit/client-ip";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
+import { consumeRateLimitToken } from "@/services/security/rate-limit-service";
 
 const advisorySchema = z.object({
   fullName: z.string().min(2).max(255),
@@ -33,6 +35,13 @@ export async function submitAdvisoryBoardApplication(formData: FormData) {
       whyInterested: formData.get("whyInterested"),
     });
     if (!parsed.success) return { error: "Please check the advisory board application." };
+
+    const ip = await getRequestClientIp();
+    const rl = await consumeRateLimitToken(`advisory_board:${ip}`, "advisory_board");
+    if (!rl.ok) {
+      return { error: "Too many submissions from this network. Please try again in a few minutes." };
+    }
+
     const session = await getSessionUser();
     const d = parsed.data;
     await prisma.advisoryBoardApplication.create({

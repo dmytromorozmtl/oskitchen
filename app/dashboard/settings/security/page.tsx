@@ -11,7 +11,7 @@ import { canUseSettings } from "@/lib/settings/settings-permissions";
 const SECURITY_CHECKLIST = [
   { label: "Two-factor authentication", description: "Manage in Supabase auth — Settings linkout coming." },
   { label: "Active sessions", description: "Sign out other devices from the user profile." },
-  { label: "IP allowlists", description: "Available on Enterprise plan." },
+  { label: "Enterprise SSO (pilot)", description: "Configure Supabase SAML SSO for one pilot tenant — not production for all customers." },
   { label: "Audit logs", description: "Inspect sensitive workspace events." },
   { label: "Webhook secrets", description: "Resend, Stripe, integration secrets are environment-managed." },
 ];
@@ -47,6 +47,7 @@ export default async function SecuritySettingsBridgePage() {
         ]}
         secondaryActions={[
           { label: "API keys", href: "/dashboard/developer/api-keys" },
+          { label: "SSO pilot (Enterprise)", href: "/dashboard/settings/security/sso" },
         ]}
       />
       <Card>
