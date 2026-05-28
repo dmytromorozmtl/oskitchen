@@ -4,6 +4,7 @@ import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-brief
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
+import { LaunchWizardTodayStrip } from "@/components/dashboard/launch-wizard/launch-wizard-today-strip";
 import {
   loadPilotIntegrationHealthStripModelForWorkspace,
   shouldShowPilotIntegrationHealthStrip,
@@ -18,6 +19,7 @@ import {
   resolveOwnerDailyBriefingVisibility,
 } from "@/services/briefing/owner-daily-briefing-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
+import { loadLaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 
 export const dynamic = "force-dynamic";
 
@@ -49,8 +51,9 @@ export default async function TodayOperationsPage({
     persona,
     granted: actor.granted,
   });
+  const showLaunchWizardStrip = actor.workspaceRole === "OWNER";
   const data = await loadTodayCommandCenter(dataUserId);
-  const [profile, integrationHealthModel, ownerBriefing] = await Promise.all([
+  const [profile, integrationHealthModel, ownerBriefing, launchWizardModel] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: dataUserId },
       select: { createdAt: true },
@@ -66,6 +69,7 @@ export default async function TodayOperationsPage({
           workspaceRole: actor.workspaceRole,
         })
       : Promise.resolve(null),
+    showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId) : Promise.resolve(null),
   ]);
   const gettingStarted = await loadGettingStartedStatus(
     dataUserId,
@@ -83,6 +87,7 @@ export default async function TodayOperationsPage({
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
+        {launchWizardModel ? <LaunchWizardTodayStrip model={launchWizardModel} /> : null}
         <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
         <TodayCommandCenterView
           userId={dataUserId}

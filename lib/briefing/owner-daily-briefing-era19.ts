@@ -256,7 +256,7 @@ export function buildOwnerDailyBriefingTiles(
       input.readinessOverall >= 85
         ? "Setup looks strong — validate launch checklist."
         : "Complete setup categories before pilot cutover.",
-    href: "/dashboard/go-live",
+    href: "/dashboard/launch-wizard",
     availability: "available",
     tone: input.readinessOverall >= 85 ? "success" : input.readinessOverall >= 60 ? "neutral" : "attention",
     priority: 16,
@@ -271,7 +271,7 @@ export function buildOwnerDailyBriefingTiles(
       input.pilotAttentionCount > 0
         ? "Channel, SSO, or launch validation needs attention."
         : "No pilot readiness gaps surfaced.",
-    href: "/dashboard/implementation",
+    href: "/dashboard/launch-wizard",
     availability: "available",
     tone: input.pilotHasUrgent ? "attention" : input.pilotAttentionCount > 0 ? "neutral" : "success",
     priority: input.pilotHasUrgent ? 5 : 17,

@@ -9,7 +9,6 @@ import type {
 } from "@/lib/implementation/implementation-pilot-readiness-focus-era18";
 import {
   IMPLEMENTATION_GO_LIVE_ROUTE,
-  IMPLEMENTATION_PILOT_READINESS_ROUTE,
 } from "@/lib/implementation/implementation-pilot-readiness-focus-era18-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { GettingStartedPilotSsoFocus } from "@/lib/onboarding/getting-started-pilot-sso-era18";
@@ -85,7 +84,7 @@ function commercialOpsLaneItems(
         decision === "NO-GO"
           ? `${ops.goNoGo.summary?.blockers.length ?? 0} commercial blocker(s) — resolve evidence gates before paid pilot cutover.`
           : "Run smoke:pilot-gono-go — never assume GO without the summary artifact.",
-      href: IMPLEMENTATION_PILOT_READINESS_ROUTE,
+      href: LAUNCH_WIZARD_ROUTE,
       tone: "urgent",
       category: "commercial",
     });
@@ -100,7 +99,7 @@ function commercialOpsLaneItems(
         p0.allMissingEnvVars.length > 0
           ? `${p0.allMissingEnvVars.length} ops env var(s) missing — engineering proof still blocked.`
           : "SSO IdP, GitHub first-green, or channel live smoke incomplete.",
-      href: IMPLEMENTATION_PILOT_READINESS_ROUTE,
+      href: "/dashboard/integration-health#engineering-smoke-artifacts",
       tone: "urgent",
       category: "commercial",
     });

@@ -45,6 +45,9 @@ const emptySignals: LaunchWizardSignals = {
     hasUrgent: false,
     commercialDecision: "UNKNOWN",
     p0Blocked: false,
+    customerExecutionStatus: "skipped_missing_customer",
+    ssoProofBlocked: false,
+    channelLiveProofBlocked: false,
   },
 };
 
@@ -93,31 +96,37 @@ describe("launch wizard era19", () => {
     const steps = buildLaunchWizardSteps({
       ...emptySignals,
       pilotReadiness: {
-        workspaceAttentionCount: 0,
-        hasUrgent: false,
+        ...emptySignals.pilotReadiness,
         commercialDecision: "UNKNOWN",
-        p0Blocked: false,
       },
     });
     const pilot = steps.find((step) => step.id === "pilot-readiness");
-    expect(pilot?.status).toBe("in_progress");
+    expect(pilot?.status).toBe("blocked");
     expect(pilot?.missingItems.some((item) => item.includes("smoke:pilot-gono-go"))).toBe(true);
+    expect(pilot?.missingItems.some((item) => item.includes("Paid pilot customer"))).toBe(true);
   });
 
   it("blocks pilot readiness on commercial NO-GO and P0 proof", () => {
     const steps = buildLaunchWizardSteps({
       ...emptySignals,
       pilotReadiness: {
+        ...emptySignals.pilotReadiness,
         workspaceAttentionCount: 2,
         hasUrgent: true,
         commercialDecision: "NO-GO",
         p0Blocked: true,
+        ssoProofBlocked: true,
+        channelLiveProofBlocked: true,
       },
     });
     const pilot = steps.find((step) => step.id === "pilot-readiness");
     expect(pilot?.status).toBe("blocked");
+    expect(pilot?.ctaLabel).toBe("Review commercial blockers");
+    expect(pilot?.href).toBe(LAUNCH_WIZARD_ROUTE);
     expect(pilot?.missingItems.some((item) => item.includes("NO-GO"))).toBe(true);
     expect(pilot?.missingItems.some((item) => item.includes("P0"))).toBe(true);
+    expect(pilot?.missingItems.some((item) => item.includes("SSO"))).toBe(true);
+    expect(pilot?.missingItems.some((item) => item.includes("Woo/Shopify"))).toBe(true);
   });
 
   it("picks blocked step before not-started step", () => {
@@ -151,7 +160,7 @@ describe("launch wizard era19", () => {
     });
     const progress = summarizeLaunchWizardProgress(steps);
     expect(progress.completedCount).toBe(1);
-    expect(progress.blockedCount).toBe(1);
+    expect(progress.blockedCount).toBe(2);
     expect(launchWizardHeadline(progress)).toContain("blocked");
   });
 });

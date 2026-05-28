@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, AlertTriangle, Rocket } from "lucide-react";
 
+import { LaunchWizardCommercialBlockersPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,6 +87,8 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
         </CardContent>
       </Card>
 
+      <LaunchWizardCommercialBlockersPanel slice={model.commercialBlockers} compact={compact} />
+
       <div className={cn("grid gap-3", compact ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2")}>
         {model.steps.map((step) => (
           <LaunchWizardStepCard key={step.id} step={step} compact={compact} />
@@ -102,11 +105,12 @@ function LaunchWizardStepCard(props: { step: LaunchWizardStep; compact?: boolean
   return (
     <Card
       className={cn(
-        "border-border/80 shadow-sm",
+        "border-border/80 shadow-sm scroll-mt-24",
         step.status === "blocked" && "border-amber-200/80 bg-amber-50/20 dark:border-amber-900/40",
         step.status === "complete" && "border-emerald-200/60 bg-emerald-50/10 dark:border-emerald-900/30",
       )}
       data-testid={`launch-wizard-step-${step.id}`}
+      id={`launch-wizard-step-${step.id}`}
     >
       <CardHeader className={cn("pb-2", compact && "py-3")}>
         <div className="flex items-start justify-between gap-3">

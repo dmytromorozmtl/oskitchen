@@ -2,6 +2,11 @@ import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-regis
 import { resolveCommercialPilotOpsDecision } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import { buildPilotIntegrationLiveProofRows } from "@/lib/integrations/pilot-integration-health-live-proof-era18";
 import {
+  buildLaunchWizardCommercialBlockersSlice,
+  resolveLaunchWizardChannelLiveProofBlocked,
+  resolveLaunchWizardSsoProofBlocked,
+} from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
+import {
   buildLaunchWizardSteps,
   launchWizardHeadline,
   pickLaunchWizardNextStep,
@@ -29,6 +34,7 @@ import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commerc
 import { listChannelPilotLiveProofSlices } from "@/services/developer/integration-health-service";
 import { listProjects, workbenchSnapshot } from "@/services/go-live/go-live-service";
 import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
+import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 
 export type LaunchWizardModel = {
   policyId: typeof LAUNCH_WIZARD_ERA19_POLICY_ID;
@@ -37,9 +43,13 @@ export type LaunchWizardModel = {
   progress: ReturnType<typeof summarizeLaunchWizardProgress>;
   headline: string;
   nextStep: LaunchWizardStep | null;
+  commercialBlockers: LaunchWizardCommercialBlockersSlice;
 };
 
-async function loadLaunchWizardSignals(userId: string): Promise<LaunchWizardSignals> {
+async function loadLaunchWizardContext(userId: string): Promise<{
+  signals: LaunchWizardSignals;
+  commercialOps: Awaited<ReturnType<typeof loadCommercialPilotOpsStatusModel>> | null;
+}> {
   const liveProviderFilter = {
     provider: { in: [...LIVE_CAPABLE_INTEGRATION_PROVIDERS] },
   };
@@ -123,6 +133,9 @@ async function loadLaunchWizardSignals(userId: string): Promise<LaunchWizardSign
   const commercialDecision = commercialOps
     ? resolveCommercialPilotOpsDecision(commercialOps.goNoGo)
     : null;
+  const p0Summary = commercialOps?.p0Staging.summary ?? null;
+  const customerExecutionStatus =
+    commercialOps?.goNoGo.summary?.customerExecutionStatus ?? null;
 
   const criticalBlockerCount =
     goLiveSnapshot?.validation?.blockers.filter(
@@ -137,6 +150,7 @@ async function loadLaunchWizardSignals(userId: string): Promise<LaunchWizardSign
     : 0;
 
   return {
+    signals: {
     businessProfile: {
       businessName: settings?.businessName ?? null,
       businessType: settings?.businessType ?? null,
@@ -174,18 +188,27 @@ async function loadLaunchWizardSignals(userId: string): Promise<LaunchWizardSign
       workspaceAttentionCount: pilotSummary.totalSignals,
       hasUrgent: pilotSummary.hasUrgent,
       commercialDecision,
-      p0Blocked:
-        commercialOps?.p0Staging.summary?.p0ProofStatus !== "proof_passed" &&
-        commercialOps?.p0Staging.artifactPresent === true,
+      p0Blocked: p0Summary?.p0ProofStatus !== "proof_passed",
+      customerExecutionStatus,
+      ssoProofBlocked: resolveLaunchWizardSsoProofBlocked(p0Summary),
+      channelLiveProofBlocked: resolveLaunchWizardChannelLiveProofBlocked(p0Summary),
     },
+    },
+    commercialOps,
   };
 }
 
 export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizardModel> {
-  const signals = await loadLaunchWizardSignals(userId);
+  const { signals, commercialOps } = await loadLaunchWizardContext(userId);
   const steps = buildLaunchWizardSteps(signals);
   const progress = summarizeLaunchWizardProgress(steps);
   const nextStep = pickLaunchWizardNextStep(steps);
+  const commercialBlockers = buildLaunchWizardCommercialBlockersSlice({
+    commercialOps,
+    p0Blocked: signals.pilotReadiness.p0Blocked,
+    ssoProofBlocked: signals.pilotReadiness.ssoProofBlocked,
+    channelLiveProofBlocked: signals.pilotReadiness.channelLiveProofBlocked,
+  });
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -194,5 +217,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     progress,
     headline: launchWizardHeadline(progress),
     nextStep,
+    commercialBlockers,
   };
 }

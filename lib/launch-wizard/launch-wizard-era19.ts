@@ -1,5 +1,7 @@
 import type { CommercialPilotOpsDecision } from "@/lib/commercial/commercial-pilot-ops-status-era18";
+import type { PilotGoNoGoCustomerStatus } from "@/lib/commercial/pilot-gono-go-summary";
 import {
+  LAUNCH_WIZARD_ROUTE,
   LAUNCH_WIZARD_STEP_DEFINITIONS,
   launchWizardStepDefinition,
   type LaunchWizardStepId,
@@ -63,6 +65,9 @@ export type LaunchWizardSignals = {
     hasUrgent: boolean;
     commercialDecision: CommercialPilotOpsDecision | null;
     p0Blocked: boolean;
+    customerExecutionStatus: PilotGoNoGoCustomerStatus | null;
+    ssoProofBlocked: boolean;
+    channelLiveProofBlocked: boolean;
   };
 };
 
@@ -257,30 +262,50 @@ export function buildLaunchWizardPilotReadinessStep(
   if (signals.commercialDecision === "UNKNOWN") {
     missing.push("Run smoke:pilot-gono-go for commercial decision artifact");
   }
+  if (signals.customerExecutionStatus === "skipped_missing_customer") {
+    missing.push("Paid pilot customer not recorded in GO/NO-GO artifact");
+  }
   if (signals.p0Blocked) {
     missing.push("P0 staging proof blocked — ops credentials required");
+  }
+  if (signals.ssoProofBlocked) {
+    missing.push("SSO IdP staging proof incomplete");
+  }
+  if (signals.channelLiveProofBlocked) {
+    missing.push("Woo/Shopify engineering live smoke not passed");
   }
 
   const blocked =
     signals.hasUrgent ||
     signals.commercialDecision === "NO-GO" ||
-    signals.p0Blocked;
+    signals.p0Blocked ||
+    signals.ssoProofBlocked ||
+    signals.channelLiveProofBlocked ||
+    signals.customerExecutionStatus === "skipped_missing_customer";
   const complete =
     signals.workspaceAttentionCount === 0 &&
     signals.commercialDecision === "GO" &&
-    !signals.p0Blocked;
+    !signals.p0Blocked &&
+    !signals.ssoProofBlocked &&
+    !signals.channelLiveProofBlocked &&
+    signals.customerExecutionStatus === "recorded";
 
   let status: LaunchWizardStepStatus = "not_started";
   if (complete) status = "complete";
   else if (blocked) status = "blocked";
-  else if (signals.workspaceAttentionCount > 0 || signals.commercialDecision === "UNKNOWN") {
+  else if (
+    signals.workspaceAttentionCount > 0 ||
+    signals.commercialDecision === "UNKNOWN" ||
+    signals.customerExecutionStatus === "skipped_missing_customer"
+  ) {
     status = "in_progress";
   }
 
   return step("pilot-readiness", {
     status,
     missingItems: complete ? [] : missing,
-    ctaLabel: blocked ? "Review blockers" : "Open implementation hub",
+    ctaLabel: blocked ? "Review commercial blockers" : "Open launch wizard",
+    href: LAUNCH_WIZARD_ROUTE,
   });
 }
 

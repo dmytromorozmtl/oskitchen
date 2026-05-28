@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-009 — Launch Wizard commercial blockers + Today strip (P1 WOW)
+- ID: `KOS-E19-009`
+- Title: Era 19 Workstream C Cycle 9 — commercial GO/NO-GO blockers lane + owner Today strip
+- Module: Onboarding / Launch / Commercial pilot / Operator UX
+- Priority: P1 (WOW pillar — time-to-first-order + pilot readiness)
+- Status: **commercial_blockers_wired**
+- Decision: `era19-launch-wizard-commercial-blockers-v1` — explicit P0/SSO/channel/customer blockers on launch wizard; compact Today strip for owners; briefing tiles deep-link to launch wizard; no fake GO
+- Evidence: `lib/launch-wizard/launch-wizard-commercial-blockers-era19.ts`, commercial blockers panel, `LaunchWizardTodayStrip` on `/dashboard/today`
+- Next: Briefing B1 tile deep-link audit or Integration Health D3 support admin mode
+
 ### KOS-E19-008 — Integration Health channel readiness cards (P1 WOW)
 - ID: `KOS-E19-008`
 - Title: Era 19 Workstream D Cycle 8 — per-channel readiness cards on integration health
