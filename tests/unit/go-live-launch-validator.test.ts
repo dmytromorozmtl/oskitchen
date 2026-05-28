@@ -106,4 +106,21 @@ describe("go-live launch validator", () => {
     expect(report.canApprove).toBe(false);
     expect(report.recommendedStatus).toBe("IN_PROGRESS");
   });
+
+  it("blocks approval when enterprise SSO entitlement exists but pilot is inactive", () => {
+    const report = validateLaunch(
+      {
+        ...baseInputs(),
+        ssoOidcEntitlementEnabled: true,
+        ssoPilotConfigured: true,
+        ssoPilotActive: false,
+      },
+      "RESTAURANT",
+      "IN_PROGRESS",
+    );
+
+    expect(report.canApprove).toBe(false);
+    expect(report.blockers.some((blocker) => blocker.key === "sso_pilot_incomplete")).toBe(true);
+    expect(report.readiness.required.missing.some((signal) => signal.key === "sso_pilot_active")).toBe(true);
+  });
 });

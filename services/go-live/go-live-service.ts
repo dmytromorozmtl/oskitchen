@@ -17,6 +17,7 @@ import type {
 import { prisma } from "@/lib/prisma";
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { summariseImplementationExternalCertification } from "@/lib/implementation/external-integration-certification";
+import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import { kitchenCustomerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
 import { printedLabelListWhereForOwner } from "@/lib/scope/workspace-printed-label-scope";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
@@ -243,6 +244,11 @@ export async function loadReadinessInputs(
   const { loadBillingReadinessSnapshot } = await import("@/services/billing/billing-readiness-service");
   const billingSnap = await loadBillingReadinessSnapshot(userId);
 
+  const workspaceId = await resolveOwnerWorkspaceId(userId);
+  const ssoView = workspaceId
+    ? await getWorkspaceSsoAdminView({ workspaceId, ownerUserId: userId })
+    : null;
+
   return {
     hasBusinessProfile,
     hasFulfillmentRules,
@@ -292,6 +298,9 @@ export async function loadReadinessInputs(
     billingHasCustomer: billingSnap.hasCustomer,
     billingMode: billingSnap.mode,
     billingTrialDaysRemaining: billingSnap.trialDaysRemaining,
+    ssoOidcEntitlementEnabled: ssoView?.ssoEntitlementEnabled ?? false,
+    ssoPilotConfigured: ssoView?.configured ?? false,
+    ssoPilotActive: ssoView?.active ?? false,
   };
 }
 

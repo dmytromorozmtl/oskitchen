@@ -1,5 +1,7 @@
 import type { BusinessType, GoLiveLaunchStage } from "@prisma/client";
 
+import { goLiveSsoPilotActionRoute } from "@/lib/go-live/go-live-sso-pilot-focus-era18";
+
 export type ReadinessSignal = {
   /** Stable key for the signal. */
   key: string;
@@ -73,6 +75,10 @@ export type ReadinessInputs = {
   billingHasCustomer?: boolean;
   billingMode?: string;
   billingTrialDaysRemaining?: number | null;
+  /** Enterprise SSO pilot snapshot when ssoOidc entitlement exists. */
+  ssoOidcEntitlementEnabled?: boolean;
+  ssoPilotConfigured?: boolean;
+  ssoPilotActive?: boolean;
 };
 
 /** Per-business-type weights applied multiplicatively to the base weight. */
@@ -113,6 +119,7 @@ export const CATEGORY_OF_SIGNAL: Record<string, string> = {
   storefront_published: "storefront",
   webhooks_healthy: "integrations",
   external_integrations_certified: "integrations",
+  sso_pilot_active: "staffing",
   approvals: "ownership",
   training_coverage: "staffing",
   certifications_active: "staffing",
@@ -407,6 +414,26 @@ export function buildReadinessSignals(inputs: ReadinessInputs): ReadinessSignal[
             ? "Live-capable external providers have health-check and sync/webhook evidence."
             : "No live-capable external integrations currently require certification.",
     },
+    ...(inputs.ssoOidcEntitlementEnabled
+      ? [
+          {
+            key: "sso_pilot_active",
+            label: "Enterprise SSO pilot active",
+            stage: "STAFF_TRAINING" as const,
+            value: inputs.ssoPilotActive ?? false,
+            satisfied: Boolean(inputs.ssoPilotActive),
+            required: true,
+            weight: 3,
+            actionRoute: goLiveSsoPilotActionRoute(Boolean(inputs.ssoPilotConfigured)),
+            reason:
+              inputs.ssoPilotActive === false
+                ? inputs.ssoPilotConfigured
+                  ? "SSO pilot is configured but not activated."
+                  : "SSO pilot IdP settings are not saved yet."
+                : null,
+          },
+        ]
+      : []),
     {
       key: "approvals",
       label: "Approvals captured",

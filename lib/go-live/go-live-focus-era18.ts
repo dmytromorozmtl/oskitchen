@@ -3,6 +3,7 @@ import {
   rankSeverity,
   type LaunchBlocker,
 } from "@/lib/go-live/blocker-engine";
+import { resolveGoLiveSsoPilotBlockerRowNextAction } from "@/lib/go-live/go-live-sso-pilot-focus-era18";
 import type { ValidationReport } from "@/lib/go-live/launch-validator";
 
 export type GoLiveFocusSnapshot = {
@@ -334,6 +335,9 @@ export function resolveGoLiveBlockerRowNextAction(
   blocker: LaunchBlocker,
 ): GoLiveBlockerRowNextAction | null {
   if (!blocker.actionRoute) return null;
+
+  const ssoPilotAction = resolveGoLiveSsoPilotBlockerRowNextAction(blocker);
+  if (ssoPilotAction) return ssoPilotAction;
 
   if (blocker.severity === "CRITICAL") {
     return { label: "Fix blocker", href: blocker.actionRoute, tone: "urgent" };

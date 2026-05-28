@@ -1,5 +1,6 @@
 import type { GoLiveBlockerSeverity, GoLiveLaunchStage } from "@prisma/client";
 
+import { detectGoLiveSsoPilotBlocker } from "@/lib/go-live/go-live-sso-pilot-focus-era18";
 import type { ReadinessInputs } from "@/lib/go-live/readiness-engine";
 
 export type LaunchBlocker = {
@@ -265,6 +266,11 @@ export function detectBlockers(inputs: ReadinessInputs): LaunchBlocker[] {
       actionRoute: "/dashboard/go-live/approvals",
       detail: `${inputs.approvalsRequired - inputs.approvalsCount} approval(s) outstanding.`,
     });
+  }
+
+  const ssoPilotBlocker = detectGoLiveSsoPilotBlocker(inputs);
+  if (ssoPilotBlocker) {
+    blockers.push(ssoPilotBlocker);
   }
 
   return blockers;

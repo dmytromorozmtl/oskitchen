@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-045 — Go-live SSO pilot gate (P0)
+- ID: `KOS-E18-045`
+- Title: Era 18 Workstream O Cycle 45 — go-live launch validation surfaces incomplete SSO pilot when ssoOidc entitled
+- Module: Go-live / Enterprise identity
+- Priority: P0 (enterprise launch readiness + SSO proof UX continuity)
+- Status: **go_live_sso_pilot_gate_wired**
+- Decision: `era18-go-live-sso-pilot-focus-v1` — HIGH_RISK blocker + required readiness signal; does not claim IdP login PASS or pilot_ready
+- Evidence: `lib/go-live/go-live-sso-pilot-focus-era18.ts`, `services/go-live/go-live-service.ts`, `tests/unit/go-live-sso-pilot-focus-era18.test.ts`
+- Next: Ops completes Cycle 2 IdP login proof on staging; validate go-live blocker clears after pilot activation
+
 ### KOS-E18-044 — Enterprise SSO callback error recovery (P0)
 - ID: `KOS-E18-044`
 - Title: Era 18 Workstream A Cycle 44 — /auth/callback SSO deny recovery on /login
