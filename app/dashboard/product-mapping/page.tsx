@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { MappingRowNextAction } from "@/components/dashboard/product-mapping/mapping-row-next-action";
+import { ProductMappingAttentionStrip } from "@/components/dashboard/product-mapping/product-mapping-attention-strip";
 import { WorkbenchKpiGrid } from "@/components/dashboard/product-mapping/kpi-grid";
 import { ConfidenceBadge, MappingStatusBadge } from "@/components/dashboard/product-mapping/status-badge";
 import { SuggestionForm } from "@/components/dashboard/product-mapping/suggestion-form";
@@ -7,6 +9,9 @@ import { MappingRowActions } from "@/components/dashboard/product-mapping/mappin
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { channelConflictWhereForOwner } from "@/lib/scope/channel-import-scope";
+import { BULK_APPROVABLE } from "@/lib/product-mapping/matching-confidence";
+import { buildProductMappingFocusSnapshot } from "@/lib/product-mapping/product-mapping-focus-era18";
+import { productMappingListWhereForOwner } from "@/lib/scope/workspace-product-mapping-scope";
 import { canUseProductMapping } from "@/lib/product-mapping/mapping-permissions";
 import { requireProductMappingPageAccess } from "@/lib/product-mapping/mapping-page-access";
 import {
@@ -21,7 +26,7 @@ export default async function ProductMappingPage() {
   const access = await requireProductMappingPageAccess("mapping.view");
   if (!access.ok) return access.deny;
   const dataUserId = access.userId;
-  const [kpis, recent, candidates, blockedConflicts] = await Promise.all([
+  const [kpis, recent, candidates, blockedConflicts, highConfidenceSuggested] = await Promise.all([
     workbenchKpis(dataUserId),
     listMappings(dataUserId, {
       take: 20,
@@ -36,9 +41,25 @@ export default async function ProductMappingPage() {
         ],
       },
     }),
+    prisma.productMapping.count({
+      where: {
+        AND: [
+          await productMappingListWhereForOwner(dataUserId),
+          { status: "SUGGESTED", confidenceLabel: { in: BULK_APPROVABLE } },
+        ],
+      },
+    }),
   ]);
 
   const kpiTiles = { ...kpis, blockedOrderLines: blockedConflicts };
+  const focusSnapshot = buildProductMappingFocusSnapshot({
+    unmapped: kpis.unmapped,
+    suggested: kpis.suggested,
+    needsReview: kpis.needsReview,
+    conflicts: kpis.conflicts,
+    blockedOrderLines: blockedConflicts,
+    highConfidenceSuggested,
+  });
 
   return (
     <div className="space-y-8">
@@ -61,6 +82,8 @@ export default async function ProductMappingPage() {
       </div>
 
       <WorkbenchKpiGrid tiles={kpiTiles} />
+
+      <ProductMappingAttentionStrip snapshot={focusSnapshot} />
 
       {canUseProductMapping(access.scope, "mapping.create") ? <SuggestionForm /> : null}
 
@@ -91,7 +114,7 @@ export default async function ProductMappingPage() {
           ) : (
             <ul className="space-y-4">
               {recent.map((mapping) => (
-                <li key={mapping.id} className="rounded-lg border p-4">
+                <li key={mapping.id} id={`mapping-${mapping.id}`} className="rounded-lg border p-4">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="font-medium">{mapping.externalTitle}</p>
@@ -101,6 +124,15 @@ export default async function ProductMappingPage() {
                         SKU {mapping.externalSku ?? "—"} · ext {mapping.externalProductId}
                         {mapping.externalVariantTitle ? ` · ${mapping.externalVariantTitle}` : ""}
                       </p>
+                      <MappingRowNextAction
+                        row={{
+                          id: mapping.id,
+                          status: mapping.status,
+                          confidenceLabel: mapping.confidenceLabel,
+                          hasCandidate: Boolean(mapping.internalProductId),
+                        }}
+                        basePath="/dashboard/product-mapping"
+                      />
                       {mapping.internalProduct ? (
                         <p className="text-xs text-muted-foreground">
                           Candidate:{" "}

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-038 — Product mapping workbench focus (P0)
+- ID: `KOS-E18-038`
+- Title: Era 18 Workstream C Cycle 38 — catalog mapping attention + row next actions
+- Module: Product mapping / Integrations
+- Priority: P0 (channel proof blocker — unmapped SKUs block order hub sync)
+- Status: **product_mapping_focus_attention_wired**
+- Decision: `era18-product-mapping-focus-v1` — blocked orders, conflicts, unmapped queue prioritization; row next actions on workbench + unmapped lists
+- Evidence: `lib/product-mapping/product-mapping-focus-era18.ts`, `components/dashboard/product-mapping/product-mapping-attention-strip.tsx`, workbench + unmapped pages
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-037 — Import center and webhook queue focus (P0)
 - ID: `KOS-E18-037`
 - Title: Era 18 Workstream P/C Cycle 37 — import job + webhook event row next actions
