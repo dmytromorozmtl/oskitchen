@@ -484,6 +484,8 @@
     "test:ci:era20-first-paid-pilot-package:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-first-paid-pilot-package-cert-live.test.ts",
     "test:ci:era20-operator-golden-path-proof": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-operator-golden-path-proof-era20.test.ts tests/unit/launch-wizard-golden-path-era20.test.ts",
     "test:ci:era20-operator-golden-path-proof:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-operator-golden-path-proof-cert-live.test.ts",
+    "test:ci:era20-storefront-fulfillment-flow-proof": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-storefront-fulfillment-flow-proof.test.ts",
+    "test:ci:era20-storefront-fulfillment-flow-proof:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/era20-storefront-fulfillment-flow-proof-cert-live.test.ts",
     "test:ci:pilot-forbidden-claims-enforcement-era17": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-forbidden-claims-enforcement-era17-policy.test.ts tests/unit/pilot-forbidden-claims-enforcement-summary.test.ts",
     "test:ci:pilot-forbidden-claims-enforcement-era17:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-forbidden-claims-enforcement-era17-cert-live.test.ts",
     "test:ci:pilot-metrics-baseline-era17": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-metrics-baseline-era17-policy.test.ts tests/unit/pilot-metrics-baseline-summary.test.ts",

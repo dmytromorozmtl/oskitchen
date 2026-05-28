@@ -28,7 +28,13 @@ import {
 } from "@/lib/ux/permission-denied-page-access-era19";
 import { IntegrationProvider } from "@prisma/client";
 import { OrderHubExportButton } from "@/components/dashboard/order-hub-export-button";
+import { OrderHubFulfillmentFlowProofPanel } from "@/components/dashboard/order-hub/order-hub-fulfillment-flow-proof-panel";
 import { OrderHubAttentionStrip } from "@/components/dashboard/order-hub-attention-strip";
+import {
+  buildStorefrontFulfillmentFlowProofSlice,
+  resolveP0ChannelProofPassed,
+} from "@/lib/commercial/era20-storefront-fulfillment-flow-proof-era20";
+import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 import { loadStorefrontSummariesForOrderIds } from "@/lib/storefront/order-hub-commerce";
 import {
   resolveExternalOrderHubRowNextAction,
@@ -72,10 +78,20 @@ export default async function OrderHubPage({
   const sp = (await searchParams) ?? {};
   const tab = typeof sp.tab === "string" ? sp.tab : "all";
 
-  const [{ internalOrders, externalOrders, mappingBlockedCount }, exactTabCounts] = await Promise.all([
-    loadOrderHubPageData(dataUserId),
-    loadOrderHubExactTabCounts(dataUserId),
-  ]);
+  const [{ internalOrders, externalOrders, mappingBlockedCount }, exactTabCounts, commercialOps] =
+    await Promise.all([
+      loadOrderHubPageData(dataUserId),
+      loadOrderHubExactTabCounts(dataUserId),
+      loadCommercialPilotOpsStatusModel().catch(() => null),
+    ]);
+
+  const p0 = commercialOps?.p0Staging.summary ?? null;
+  const fulfillmentFlowProof = buildStorefrontFulfillmentFlowProofSlice({
+    p0ChannelProofPassed: resolveP0ChannelProofPassed(
+      p0?.p0ProofStatus,
+      p0?.children?.channelLive?.proofStatus ?? null,
+    ),
+  });
 
   const storefrontSummaries = await loadStorefrontSummariesForOrderIds(
     dataUserId,
@@ -181,6 +197,8 @@ export default async function OrderHubPage({
           </>
         ) : null}
       </div>
+
+      <OrderHubFulfillmentFlowProofPanel slice={fulfillmentFlowProof} />
 
       <OrderHubAttentionStrip mappingBlockedCount={mappingBlockedCount} exactTabCounts={exactTabCounts} />
 

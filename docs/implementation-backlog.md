@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 11 — Workstream G: storefront → KDS → packing flow proof (2026-05-28)
+
+- Title: Era 20 Cycle 11 — five-hop fulfillment proof panel on Order hub
+- Status: **done**
+- Policy: `era20-storefront-fulfillment-flow-proof-v1` (`KOS-E20-011`)
+- Doc: `docs/era20-storefront-fulfillment-flow-proof-2026-05-28.md`
+- Tests: `test:ci:era20-storefront-fulfillment-flow-proof`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR POS checkout → inventory flow proof (Workstream G)
+
 ### Cycle 10 — Workstream H: permission-denied pilot hubs (2026-05-28)
 
 - Title: Era 20 Cycle 10 — implementation, staff, go-live, CRM, billing guard-before-query
