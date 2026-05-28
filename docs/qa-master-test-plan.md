@@ -260,6 +260,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 
+### 8c4k. Era 9 scorecard refresh (Era 9 Cycle 5)
+- Policy: `lib/governance/era9-scorecard-policy.ts` (`era9-scorecard-refresh-v1`)
+- Docs: `docs/era9-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era9.md`
+- Wiring cert: `test:ci:scorecard:cert` (last in `test:ci:governance-bundles:partition-product-kds`)
+- Unit: `tests/unit/era9-scorecard-policy.test.ts`, `tests/unit/era9-scorecard-ci-live.test.ts`
+
 ### 8c4j. RBAC wave 4 recert (Era 9 Cycle 4)
 - Policy: `lib/security/rbac-wave4-era9-policy.ts` (`era9-rbac-wave4-recert-v1`)
 - Bundle: `npm run test:ci:rbac-wave4` (15 negative/deny tests incl. production-calendar form deny)

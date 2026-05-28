@@ -48,7 +48,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era8.md`](./next-master-prompt-input-2026-05-27-era8.md) | Facts and constraints for Evolution Era 9 master prompt |
+| [`next-master-prompt-input-2026-05-27-era9.md`](./next-master-prompt-input-2026-05-27-era9.md) | Facts and constraints for Evolution Era 10 master prompt |
+| [`era9-cycle-completion-scorecard-2026-05-27.md`](./era9-cycle-completion-scorecard-2026-05-27.md) | Era 9 enterprise / DevOps / security recert (cycles 1–4) + score 96/100 |
+| [`next-master-prompt-input-2026-05-27-era8.md`](./next-master-prompt-input-2026-05-27-era8.md) | **Superseded** by era9 input for recurring prompts |
 | [`era8-cycle-completion-scorecard-2026-05-27.md`](./era8-cycle-completion-scorecard-2026-05-27.md) | Era 8 operator depth / GTM hygiene (cycles 1–4) + score 94/100 |
 | [`next-master-prompt-input-2026-05-27-era7.md`](./next-master-prompt-input-2026-05-27-era7.md) | **Superseded** by era8 input for recurring prompts |
 | [`era7-cycle-completion-scorecard-2026-05-27.md`](./era7-cycle-completion-scorecard-2026-05-27.md) | Era 7 commercial readiness (cycles 1–4) + score 92/100 |
@@ -147,6 +149,9 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **SSO architecture spike (R1)** | `era9-enterprise-sso-architecture-spike-v1`; `docs/enterprise-sso-architecture-spike-r1.md` |
 | **2** | **Governance bundles partition** | `era9-governance-bundles-partition-v1`; job `governance-bundles-partitions` |
+| **3** | **Cron surface recert** | `era9-cron-surface-recert-v1`; `test:ci:cron-hygiene:cert` |
+| **4** | **RBAC wave 4 recert** | `era9-rbac-wave4-recert-v1`; `test:ci:rbac-wave4:cert` |
+| **5** | **Scorecard refresh** | `era9-scorecard-refresh-v1`; this §Scorecard Era 9 |
 
 ## Evolution Era 7 cycle ledger
 
@@ -337,6 +342,27 @@ Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from 
 
 **Re-audit decision:** defer full repo re-audit until Era 9 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era8.md`.
 
+## Scorecard (Evolution Era 9 end — 2026-05-27)
+
+Incremental refresh after Era 9 cycles 1–4 (enterprise / DevOps / security recert from era8 handoff). Baseline = Era 8 end **94** overall.
+
+| Area | Era 8 end | Era 9 end | Δ | Key evidence |
+|------|----------:|----------:|--:|--------------|
+| Overall | 94 | **96** | +2 | SSO R1 spike + governance partitions + cron/RBAC recert |
+| Security | 81 | **82** | +1 | `era9-rbac-wave4-recert-v1` |
+| QA | 88 | **88** | +0 | unchanged |
+| DevOps | 93 | **95** | +2 | governance partitions + cron recert |
+| RBAC | 87 | **88** | +1 | wave-4 guard inventory |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | optional browser E2E unchanged — **do not re-run Era 4 Cycle 2** |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 68 | **68** | +0 | unchanged |
+| Enterprise readiness | 62 | **65** | +3 | SSO R1 architecture spike (design only) |
+| Marketing/sales | 81 | **81** | +0 | unchanged |
+| Storefront | 83 | **83** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 10 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era9.md`.
+
 ---
 
 ## Validation
@@ -387,3 +413,4 @@ Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from 
 | 2026-05-27 | Era 9 Cycle 2: `era9-governance-bundles-partition-v1` — parallel governance CI partitions |
 | 2026-05-27 | Era 9 Cycle 3: `era9-cron-surface-recert-v1` — cron archive posture recert (no new routes) |
 | 2026-05-27 | Era 9 Cycle 4: `era9-rbac-wave4-recert-v1` — wave-4 mutation guard inventory + cert |
+| 2026-05-27 | Era 9 Cycle 5: scorecard refresh 96/100 + `next-master-prompt-input-2026-05-27-era9.md` |

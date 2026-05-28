@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   ERA4_COMPLETED_CYCLES,
   ERA4_GOVERNANCE_CERT_SCRIPTS,
@@ -50,13 +51,13 @@ describe("scorecard CI certification (live repo)", () => {
       expect(scripts[name], `missing package.json script "${name}"`).toBeTruthy();
     }
     expect(scripts["test:ci:scorecard:cert"]).toContain("scorecard-ci-live.test.ts");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:scorecard:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:scorecard:cert")).toBe(true);
   });
 
   it("chains Era 4 governance cert scripts in default quality governance bundles", () => {
-    const bundle = readPackageScripts()["test:ci:governance-bundles"];
+    const scripts = readPackageScripts();
     for (const script of ERA4_GOVERNANCE_CERT_SCRIPTS) {
-      expect(bundle, script).toContain(script);
+      expect(governanceBundlesIncludesCert(scripts, script), script).toBe(true);
     }
   });
 

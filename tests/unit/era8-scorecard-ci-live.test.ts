@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   ERA8_GOVERNANCE_CERT_ADDITIONS,
   ERA8_REAUDIT_DECISION,
@@ -39,7 +40,7 @@ describe("era8 scorecard CI certification (live repo)", () => {
     const scripts = readPackageScripts();
     expect(scripts["test:ci:scorecard:cert"]).toContain("era8-scorecard-ci-live.test.ts");
     expect(scripts["test:ci:scorecard:cert"]).toContain("era8-scorecard-policy.test.ts");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:scorecard:cert");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:scorecard:cert")).toBe(true);
   });
 
   it("publishes Era 8 scorecard increment consistently across canonical docs", () => {
@@ -68,9 +69,9 @@ describe("era8 scorecard CI certification (live repo)", () => {
   });
 
   it("retains era8 governance cert additions in governance bundles", () => {
-    const bundle = readPackageScripts()["test:ci:governance-bundles"];
+    const scripts = readPackageScripts();
     for (const script of ERA8_GOVERNANCE_CERT_ADDITIONS) {
-      expect(bundle, script).toContain(script);
+      expect(governanceBundlesIncludesCert(scripts, script), script).toBe(true);
     }
   });
 

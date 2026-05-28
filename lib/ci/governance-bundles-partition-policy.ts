@@ -89,3 +89,15 @@ export function governanceBundlesPartitionScript(
   if (!partition) throw new Error(`Unknown governance partition: ${id}`);
   return partition.script;
 }
+
+/** True when `needle` appears in full bundle or any partition script (post–Era 9 partition). */
+export function governanceBundlesIncludesCert(
+  scripts: Record<string, string>,
+  needle: string,
+): boolean {
+  const full = scripts[GOVERNANCE_BUNDLES_FULL_SCRIPT] ?? "";
+  if (full.includes(needle)) return true;
+  return GOVERNANCE_BUNDLES_PARTITIONS.some((p) =>
+    (scripts[p.script] ?? "").includes(needle),
+  );
+}

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 9 — Enterprise delivery / DevOps
 
+### KOS-E9-005 — Era 9 scorecard refresh (P0)
+- ID: `KOS-E9-005`
+- Title: Document Era 9 completion, score deltas, and Era 10 master prompt input
+- Module: Platform / GTM / engineering
+- Priority: P0 (Era 9 Cycle 5)
+- Status: **completed**
+- Decision: `era9-scorecard-refresh-v1` — 96/100 overall; Era 10 handoff doc
+- Evidence: `docs/era9-cycle-completion-scorecard-2026-05-27.md`, `lib/governance/era9-scorecard-policy.ts`, `test:ci:scorecard:cert`
+- Next: Era 10 theme selection (SSO R2, cross-channel rewards, operator depth)
+
 ### KOS-E9-004 — RBAC wave 4 recert (P1)
 - ID: `KOS-E9-004`
 - Title: Era 9 wave-4 sensitive mutation recert (inventory + cert drift fix)
