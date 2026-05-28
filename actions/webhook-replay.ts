@@ -4,6 +4,7 @@
 import { fail, ok } from "@/lib/action-result";
 import { z } from "zod";
 
+import { requireIntegrationsActor } from "@/lib/integrations/require-integrations-actor";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { requirePlatformAccess } from "@/lib/platform/platform-guards";
 import { hasPlatformPermission } from "@/lib/platform/platform-permissions";
@@ -56,6 +57,13 @@ export async function replayWebhookEventAction(
     return { ok: true, message: "Replay recorded. Async jobs will process on the next cron tick when enabled." };
   }
 
+  const integrations = await requireIntegrationsActor({
+    operation: "webhooks.replay",
+    metadata: { surface: "workspace", webhookEventId: d.webhookEventId },
+  });
+  if (!integrations.ok) {
+    return { ok: false, error: integrations.error };
+  }
   const { sessionUser: user } = await requireTenantActor();
   const event = await prisma.webhookEvent.findUnique({
     where: { id: d.webhookEventId },
