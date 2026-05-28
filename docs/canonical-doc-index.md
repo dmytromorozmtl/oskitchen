@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 6 Cycle 5 — enterprise identity annual review)  
+**Updated:** 2026-05-27 (Era 6 Cycle 6 — scorecard refresh)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -47,9 +47,11 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era5.md`](./next-master-prompt-input-2026-05-27-era5.md) | Facts and constraints for Evolution Era 6 master prompt |
+| [`next-master-prompt-input-2026-05-27-era6.md`](./next-master-prompt-input-2026-05-27-era6.md) | Facts and constraints for Evolution Era 7 master prompt |
+| [`era6-cycle-completion-scorecard-2026-05-27.md`](./era6-cycle-completion-scorecard-2026-05-27.md) | Era 6 P0 completion (cycles 1–5) + score 90/100 |
+| [`next-master-prompt-input-2026-05-27-era5.md`](./next-master-prompt-input-2026-05-27-era5.md) | **Superseded** by era6 input for recurring prompts |
 | [`era5-cycle-completion-scorecard-2026-05-27.md`](./era5-cycle-completion-scorecard-2026-05-27.md) | Era 5 P0 completion (cycles 1–5) + score 86/100 |
-| [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | **Superseded** by era5 input for recurring prompts |
+| [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | **Superseded** by era6 input for recurring prompts |
 | [`era4-cycle-completion-scorecard-2026-05-27.md`](./era4-cycle-completion-scorecard-2026-05-27.md) | Era 4 execution map completion (cycles 1–12) + score 82/100 |
 | [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | **Superseded** by era5 input for recurring prompts |
 | [`era2-cycle-completion-scorecard-2026-05-27.md`](./era2-cycle-completion-scorecard-2026-05-27.md) | Era 2 execution map completion + post wave-3 scorecard |
@@ -133,6 +135,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **3** | **Typecheck slices parallel CI** | `era6-typecheck-slice-ci-v1`; job `typecheck-slices` |
 | **4** | **Production calendar form deny** | `era6-production-calendar-form-deny-v1`; `test:ci:rbac-wave4` |
 | **5** | **Enterprise identity annual review** | `era6-enterprise-identity-roadmap-v1`; `test:ci:enterprise-identity-roadmap:cert` |
+| **6** | **Scorecard refresh** | `era6-scorecard-refresh-v1`; this §Scorecard Era 6 |
 
 ## Evolution Era 5 cycle ledger (P0 closure)
 
@@ -239,6 +242,27 @@ Incremental refresh after Era 5 cycles 1–5 (P0 closure from era4 handoff). Bas
 
 **Re-audit decision:** defer full repo re-audit until Era 6 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era5.md`.
 
+## Scorecard (Evolution Era 6 end — 2026-05-27)
+
+Incremental refresh after Era 6 cycles 1–5 (P0 closure from era5 handoff). Baseline = Era 5 end **86** overall.
+
+| Area | Era 5 end | Era 6 end | Δ | Key evidence |
+|------|----------:|----------:|--:|--------------|
+| Overall | 86 | **90** | +4 | All E6 P0 closed; production calendar P1 |
+| Security | 78 | **81** | +3 | form deny UX; identity annual review |
+| QA | 84 | **86** | +2 | KDS realtime + rewards GTM cert |
+| DevOps | 88 | **91** | +3 | `typecheck-slices` parallel CI job |
+| RBAC | 83 | **86** | +3 | production calendar void-form deny |
+| Inventory | 72 | **72** | +0 | storefront hook deferred |
+| POS | 74 | **74** | +0 | unchanged |
+| Integrations | 58 | **58** | +0 | unchanged |
+| KDS | 64 | **67** | +3 | poll fallback + Tier D checklist |
+| Enterprise readiness | 55 | **62** | +7 | `roadmap_only` identity review |
+| Marketing/sales | 71 | **74** | +3 | dual-ledger GTM lock |
+| Storefront | 80 | **80** | +0 | unchanged |
+
+**Re-audit decision:** defer full repo re-audit until Era 7 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era6.md`.
+
 ---
 
 ## Validation
@@ -274,3 +298,4 @@ Incremental refresh after Era 5 cycles 1–5 (P0 closure from era4 handoff). Bas
 | 2026-05-27 | Era 6 Cycle 3: `era6-typecheck-slice-ci-v1` — parallel `typecheck-slices` CI job |
 | 2026-05-27 | Era 6 Cycle 4: `era6-production-calendar-form-deny-v1` — void form redirect on deny |
 | 2026-05-27 | Era 6 Cycle 5: `era6-enterprise-identity-roadmap-v1` — SSO/SCIM/SOC2 roadmap_only review |
+| 2026-05-27 | Era 6 Cycle 6: scorecard refresh 90/100 + `next-master-prompt-input-2026-05-27-era6.md` |

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 6 — Customer value honesty
 
+### KOS-E6-006 — Era 6 scorecard refresh
+- ID: `KOS-E6-006`
+- Title: Document Era 6 P0 completion, score deltas, and Era 7 prompt input
+- Module: Platform / GTM / engineering
+- Priority: P0 (Era 6 Cycle 6)
+- Status: **completed**
+- Decision: `era6-scorecard-refresh-v1` — 5/5 E6 P0 closed; overall **90/100**; defer full re-audit
+- Evidence: `docs/era6-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era6.md`, `lib/governance/era6-scorecard-policy.ts`
+- Next: pick Era 7 cycle 1 theme from era6 prompt input §4
+
 ### KOS-E6-005 — Enterprise identity annual review (E6-5)
 - ID: `KOS-E6-005`
 - Title: Annual SSO/SCIM/SOC2 roadmap review — roadmap_only delivery decision
