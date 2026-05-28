@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 9 — Enterprise delivery / DevOps
+
+### KOS-E9-001 — SSO architecture spike R1 (P0)
+- ID: `KOS-E9-001`
+- Title: Document SAML/OIDC target architecture (design only)
+- Module: Enterprise / security / GTM
+- Priority: P0 (Era 9 Cycle 1)
+- Status: **completed**
+- Decision: `era9-enterprise-sso-architecture-spike-v1` — delivery `not_implemented`; R2 pilot prerequisites documented
+- Evidence: `docs/enterprise-sso-architecture-spike-r1.md`, `test:ci:enterprise-sso-spike:cert`
+- Next: R2 SSO pilot era (explicit budget) or CI governance bundle partitioning
+
 ## Era 8 — Operator depth / GTM hygiene
 
 ### KOS-E8-005 — Era 8 scorecard refresh

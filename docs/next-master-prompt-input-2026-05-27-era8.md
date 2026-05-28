@@ -24,16 +24,24 @@ All four Era 8 operator-depth / GTM hygiene cycles from era7 prompt input **comp
 
 ---
 
-## 2. What Remains Open (P0 for Era 9 consideration)
+## 2. Era 9 Progress (Facts)
+
+| Cycle | Outcome |
+|-------|---------|
+| **1** | **SSO architecture spike (R1)** — `era9-enterprise-sso-architecture-spike-v1`; design doc only; delivery `not_implemented` |
+
+---
+
+## 3. What Remains Open (P0 for Era 9 consideration)
 
 | ID | Item | Notes |
 |----|------|-------|
 | E8-1 | Storefront inventory hook | Only if `era5-pos-only-gtm-lock-v1` lifted by explicit era decision |
-| E8-2 | SSO/SAML pilot implementation | Requires dedicated era — not `roadmap_only` delivery in one cycle |
+| E8-2 | SSO/SAML pilot implementation (R2+) | R1 spike **done** (`era9-enterprise-sso-architecture-spike-v1`); production IdP requires dedicated era budget |
 
 ---
 
-## 3. What Remains Open (P1)
+## 4. What Remains Open (P1)
 
 - KDS Playwright Realtime spec (`e2e/kds-realtime-*.spec.ts`) — staging-only; explicit era decision.
 - Unified rewards product/schema era (if dual-ledger lock reversed).
@@ -55,9 +63,9 @@ Pick **one theme per cycle**; do not reopen Era 4–8 unless regression proven.
 
 ---
 
-## 5. CI / Governance Facts
+## 6. CI / Governance Facts
 
-- Default quality job: `npm run test:ci:governance-bundles` (27 `:cert` gates + unit bundles; scorecard cert last).
+- Default quality job: `npm run test:ci:governance-bundles` (28 `:cert` gates incl. `enterprise-sso-spike` + unit bundles; scorecard cert last).
 - Scorecard cert: `npm run test:ci:scorecard:cert` (era4–era8 policy tests).
 - Commercial pilot: `test:ci:commercial-pilot-runbook:cert`; preflight runs strict `verify-claims`.
 - Storefront money path: pay-later always-on; Stripe browser optional — `storefront-stripe-e2e-summary`.
@@ -65,7 +73,7 @@ Pick **one theme per cycle**; do not reopen Era 4–8 unless regression proven.
 
 ---
 
-## 6. Documentation Rules
+## 7. Documentation Rules
 
 - Update **canonical doc set** + `docs/canonical-doc-index.md` only.
 - Maturity claims must match policy IDs and CI certs.
@@ -73,7 +81,7 @@ Pick **one theme per cycle**; do not reopen Era 4–8 unless regression proven.
 
 ---
 
-## 7. Re-audit Decision
+## 8. Re-audit Decision
 
 **Full re-audit now?** **No** — Era 8 scorecard + this input sufficient until Era 9 selects a theme or repo scale changes materially.
 

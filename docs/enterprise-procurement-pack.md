@@ -1,9 +1,9 @@
 # KitchenOS Enterprise Procurement Pack
 
 **Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
-**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-identity-roadmap-policy.ts`)  
+**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-identity-roadmap-policy.ts`, `lib/enterprise/enterprise-sso-architecture-spike-policy.ts`)  
 **Companion:** [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) (release gates, runbooks)  
-**Updated:** 2026-05-27 (Era 6 Cycle 5 — annual identity review)
+**Updated:** 2026-05-27 (Era 9 Cycle 1 — SSO R1 architecture spike)
 
 Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
@@ -33,7 +33,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 | Capability | Delivery status | Era 6 decision |
 |------------|-----------------|----------------|
-| SSO / SAML | **not_implemented** | Continue R1 architecture spike; no production IdP in this era |
+| SSO / SAML | **not_implemented** | R1 architecture spike **completed** — [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md); R2 pilot not started |
 | SCIM | **not_implemented** | Remains after SSO pilot (dependency unchanged) |
 | SOC 2 Type II | **not_certified** | Internal readiness mapping only; no customer attestation |
 
@@ -52,7 +52,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 | Phase | Target | Scope |
 |-------|--------|--------|
 | R0 (now) | Document posture | This pack; narrow auth claims in GTM |
-| R1 | Architecture spike | IdP metadata, session bridge, break-glass owner login |
+| R1 | Architecture spike | **Complete (Era 9)** — see [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md); design only |
 | R2 | Pilot SSO | One IdP (Okta or Entra ID), owner + staff login via SAML |
 | R3 | GA SSO | Admin self-service IdP config, domain verification |
 

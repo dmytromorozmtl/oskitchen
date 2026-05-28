@@ -141,6 +141,12 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **4** | **Production calendar move UI** | `era8-production-calendar-move-ui-v1`; `movePlanTaskAction` week-column controls |
 | **5** | **Scorecard refresh** | `era8-scorecard-refresh-v1`; this §Scorecard Era 8 |
 
+## Evolution Era 9 cycle ledger
+
+| Cycle | Outcome | Evidence |
+|-------|---------|----------|
+| **1** | **SSO architecture spike (R1)** | `era9-enterprise-sso-architecture-spike-v1`; `docs/enterprise-sso-architecture-spike-r1.md` |
+
 ## Evolution Era 7 cycle ledger
 
 | Cycle | Outcome | Evidence |
@@ -376,3 +382,4 @@ Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from 
 | 2026-05-27 | Era 8 Cycle 3: `era8-pilot-preflight-claims-strict-v1` — strict `verify-claims` in paid pilot preflight |
 | 2026-05-27 | Era 8 Cycle 4: `era8-production-calendar-move-ui-v1` — move task UI on production calendar |
 | 2026-05-27 | Era 8 Cycle 5: scorecard refresh 94/100 + `next-master-prompt-input-2026-05-27-era8.md` |
+| 2026-05-27 | Era 9 Cycle 1: `era9-enterprise-sso-architecture-spike-v1` — SSO R1 design spike (not production) |

@@ -150,6 +150,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - wiring cert: `test:ci:commercial-pilot-runbook:cert` (in `test:ci:governance-bundles`)
 - unit: `npm run test:ci:commercial-pilot-runbook` — required sections + forbidden pilot headline claims
 
+### 8c4f2. Enterprise SSO architecture spike R1 (Era 9 Cycle 1)
+- Policy: `lib/enterprise/enterprise-sso-architecture-spike-policy.ts` (`era9-enterprise-sso-architecture-spike-v1`)
+- Doc: `docs/enterprise-sso-architecture-spike-r1.md` — design only; delivery `not_implemented`
+- Wiring cert: `test:ci:enterprise-sso-spike:cert` (in `test:ci:governance-bundles`)
+- Extends: `era6-enterprise-identity-roadmap-v1` — no live SSO/SAML procurement claims
+
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)
 - canonical pack: `docs/enterprise-procurement-pack.md`

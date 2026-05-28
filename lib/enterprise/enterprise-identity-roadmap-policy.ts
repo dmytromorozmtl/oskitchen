@@ -25,6 +25,7 @@ export const ENTERPRISE_IDENTITY_PROCUREMENT_DOC = "docs/enterprise-procurement-
 
 export const ENTERPRISE_IDENTITY_REQUIRED_MARKERS = [
   "era4-procurement-honesty-v1",
+  "era9-enterprise-sso-architecture-spike-v1",
   "era6-enterprise-identity-roadmap-v1",
   ENTERPRISE_IDENTITY_DELIVERY_DECISION,
   "not_implemented",
