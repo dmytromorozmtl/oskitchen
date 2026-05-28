@@ -277,6 +277,8 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **Procurement stance:** qualified operational smoke only — not rush-hour or multi-station kitchen certification.
 
+**Era 17 KDS sales one-pager:** `era17-kds-qualified-sales-onepager-v1` — `docs/kds-qualified-sales-onepager-era17.md`; **sales_onepager_ready** — qualified pilot wording for buyer-facing materials; no rush-hour claim.
+
 ---
 
 ## SOC 2 readiness roadmap

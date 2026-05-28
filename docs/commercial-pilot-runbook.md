@@ -165,6 +165,18 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; Playwright proof **SKIPPED WITH REASON** (staging secrets + GitHub run URL unset). Artifact: `artifacts/kds-staging-playwright-proof-summary.json`.
 
+### Era 17 KDS qualified sales one-pager (2026-05-28)
+
+**Policy:** `era17-kds-qualified-sales-onepager-v1` — **sales_onepager_ready**; sales-safe KDS pilot wording for qualified contracts.
+
+1. Use **`docs/kds-qualified-sales-onepager-era17.md`** — allowed/forbidden claims, evidence paths, sign-off checklist.
+2. Safe wording: daily-service bump/recall — **qualified pilot path**; **not rush-hour certified**.
+3. Engineering: `npm run test:ci:kds-staging-smoke:cert` + `npm run smoke:kds-staging`.
+4. Staging: optional `playwright-kds-staging.yml` + `smoke:kds-staging-playwright` — SKIPPED WITH REASON without secrets.
+5. Pre-signature: `npm run smoke:pilot-forbidden-claims-enforcement` must PASS.
+
+**Enforcement:** `test:ci:kds-qualified-sales-onepager-era17:cert` (chained in `test:ci:kds-staging-smoke:cert`)
+
 ### Era 17 operational sign-off staging proof (2026-05-28)
 
 **Policy:** `era17-operational-signoff-staging-proof-v1` — **awaiting_staging_operator_signoff**; real staging URL + operator identity for KDS + production calendar.

@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-027 — KDS qualified sales one-pager (P1)
+- ID: `KOS-E17-027`
+- Title: Era 17 Cycle 27 — sales-safe KDS pilot wording + evidence paths
+- Module: Kitchen / GTM
+- Priority: P1 (Workstream F Cycle 28)
+- Status: **sales_onepager_ready**
+- Decision: `era17-kds-qualified-sales-onepager-v1` — qualified pilot wording; no rush-hour claim
+- Evidence: `docs/kds-qualified-sales-onepager-era17.md`, `test:ci:kds-qualified-sales-onepager-era17:cert`
+- Next: KDS GitHub Playwright PASS when staging secrets available (KOS-E17-015)
+
 ### KOS-E17-026 — Partner webhook integration docs (P1)
 - ID: `KOS-E17-026`
 - Title: Era 17 Cycle 26 — partner-facing inbound/outbound webhook contract
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **partner_webhook_docs_ready**
 - Decision: `era17-partner-webhook-docs-v1` — partner doc + pack + smoke summary
 - Evidence: `docs/partner-webhook-integration-era17.md`, `test:ci:partner-webhook-docs-era17:cert`
-- Next: Workstream F KDS staging Playwright proof (P1) or P0 credential-blocked smokes
+- Next: KDS qualified sales one-pager (Cycle 28) — **done**; see KOS-E17-027; Playwright proof remains ops-blocked (KOS-E17-015)
 
 ### KOS-E17-025 — POS receipt / shift closeout spot check (P1)
 - ID: `KOS-E17-025`

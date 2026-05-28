@@ -222,6 +222,7 @@ KDS v1 is complete when **all** are true:
 | `docs/rbac-permission-architecture.md` | Permission definitions |
 | `docs/implementation-backlog.md` | `KOS-P1-002` execution tracker |
 | `docs/qa-master-test-plan.md` | CI and manual QA tiers |
+| `docs/kds-qualified-sales-onepager-era17.md` | **Era 17:** sales-safe pilot wording (`era17-kds-qualified-sales-onepager-v1`); no rush-hour claim |
 | `docs/knowledge-base/16-kds-basics.md` | Operator-facing; update after v1 lands |
 
 ## Recommended Execution Sequence
