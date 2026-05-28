@@ -6,6 +6,11 @@ import {
 } from "@/lib/api/webhook-guard";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
+import {
+  extractResendExternalEventId,
+  recordWebhookIngressOrDuplicate,
+  WEBHOOK_INGRESS_ROUTE_KEYS,
+} from "@/lib/webhooks/webhook-ingress-replay-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -71,6 +76,16 @@ export async function POST(req: Request) {
     payload = JSON.parse(rawBody) as ResendWebhookPayload;
   } catch {
     return NextResponse.json({ ok: false, reason: "invalid_json" }, { status: 400 });
+  }
+
+  const svixId = req.headers.get("svix-id");
+  const ingressEventId = extractResendExternalEventId(payload, rawBody, svixId);
+  const ingressReplay = await recordWebhookIngressOrDuplicate({
+    routeKey: WEBHOOK_INGRESS_ROUTE_KEYS.RESEND,
+    externalEventId: ingressEventId,
+  });
+  if (ingressReplay.duplicate) {
+    return NextResponse.json({ ok: true, duplicate: true });
   }
 
   const eventType = payload.type;

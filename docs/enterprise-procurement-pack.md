@@ -196,7 +196,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 |-------|---------------|
 | Route inventory | **46 webhook routes** classified on disk |
 | Signature validation | Commerce (Stripe, WooCommerce, Shopify), delivery (Resend, Uber), platform (Slack, SCIM bearer), experimental bearer routes |
-| Replay protection | Documented per route — commerce uses `billingEvent` / `webhook_event_store`; **not** full replay monitoring ops |
+| Replay protection | Documented per route — commerce uses `billingEvent` / `webhook_event_store`; Era 17 adds Resend **ingress dedupe** (`era17-webhook-replay-p1-expansion-v1`); **not** full replay monitoring ops |
 | Artifact | `npm run cert:webhook-security-era16` → `artifacts/webhook-security-matrix-summary.json` |
 | CI | `test:ci:webhook-security-era16:cert` (in `test:security`) |
 

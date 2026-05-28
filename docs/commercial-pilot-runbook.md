@@ -352,6 +352,19 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+## Era 17 webhook replay P1 expansion (2026-05-28)
+
+**Policy:** `era17-webhook-replay-p1-expansion-v1` — **p1_ingress_dedupe_expanded**; extends Era 16 guard to matrix P1 delivery routes.
+
+1. `/api/webhooks/resend` — signature verify + **ingress dedupe** (`WEBHOOK_INGRESS_ROUTE_KEYS.RESEND`) + existing `notificationEvent` providerEventId idempotency; duplicate replays return `{ ok: true, duplicate: true }`.
+2. `/api/webhooks/uber-eats/orders` — **webhook_event_store** duplicate short-circuit (cert-tested; marketplace remains placeholder).
+3. Run **`npm run smoke:webhook-replay-p1-expansion`** → review **`artifacts/webhook-replay-p1-expansion-summary.json`**.
+4. Do **not** claim full replay monitoring ops or live Uber Eats marketplace delivery.
+
+**Enforcement:** `test:ci:webhook-replay-p1-expansion-era17:cert` (chained in `test:ci:webhook-security-era16:cert`)
+
+---
+
 ## Era 16 mutation registry linter (2026-05-28)
 
 **Policy:** `era16-mutation-registry-linter-v1` — `lib/permissions/mutation-registry-linter.ts`

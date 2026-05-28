@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  extractResendExternalEventId,
   extractSlackInteractiveExternalEventId,
   extractUberDirectExternalEventId,
   hashWebhookIngressBody,
@@ -35,5 +36,17 @@ describe("webhook ingress replay guard", () => {
         user: { id: "U123" },
       }),
     ).toBe("U123:approve:exp-1");
+  });
+
+  it("extracts resend provider event_id when present", () => {
+    const body = JSON.stringify({ type: "email.delivered", data: { event_id: "evt-resend-1" } });
+    expect(
+      extractResendExternalEventId(JSON.parse(body), body, null),
+    ).toBe("evt-resend-1");
+  });
+
+  it("falls back to svix-id header for resend replay dedupe", () => {
+    const body = JSON.stringify({ type: "email.delivered", data: { email_id: "em_1" } });
+    expect(extractResendExternalEventId(JSON.parse(body), body, "msg_abc")).toBe("svix:msg_abc");
   });
 });

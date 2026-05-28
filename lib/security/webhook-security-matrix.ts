@@ -178,7 +178,7 @@ export function classifyWebhookRoute(routePath: string): WebhookSecurityClassifi
       rateLimited: false,
       riskTier: "P1",
       testCoverage: "guard_only",
-      nextAction: "Extend Resend replay tests when notification delivery becomes pilot-critical.",
+      nextAction: "Era 17 ingress dedupe + providerEventId — extend replay tests when notification delivery is pilot-critical.",
     };
   }
 

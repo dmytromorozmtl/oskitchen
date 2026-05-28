@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-018 — Webhook replay P1 expansion (P1)
+- ID: `KOS-E17-018`
+- Title: Era 17 Cycle 18 — Resend ingress dedupe + Uber Eats replay cert
+- Module: Security / Platform
+- Priority: P1 (Workstream C Cycle 11)
+- Status: **p1_ingress_dedupe_expanded**
+- Decision: `era17-webhook-replay-p1-expansion-v1` — extends Era 16 guard to matrix P1 routes
+- Evidence: `lib/security/webhook-replay-p1-expansion-era17-policy.ts`, Resend route ingress dedupe, `test:ci:webhook-replay-p1-expansion-era17:cert`
+- Next: Commerce webhook drill (Cycle 12); remaining P1 routes when pilot-critical
+
 ### KOS-E17-017 — Production calendar operator drill on staging (P1)
 - ID: `KOS-E17-017`
 - Title: Era 17 Cycle 17 — production calendar manual checklist on staging

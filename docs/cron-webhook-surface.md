@@ -35,6 +35,8 @@ Prefix examples: `hypergraph-*`, `multiverse-*`, `eu-ai-*`, `zk-dna*`, `iso-4200
 
 **Era 16 replay hardening (2026-05-28):** `era16-webhook-replay-hardening-v1` — `lib/webhooks/webhook-ingress-replay-guard.ts` + `webhook_ingress_dedupe` ingress dedupe for Uber Direct and Slack; duplicate deliveries return `{ ok: true, duplicate: true }`. Cert: `test:ci:webhook-replay-hardening-era16:cert`.
 
+**Era 17 replay P1 expansion (2026-05-28):** `era17-webhook-replay-p1-expansion-v1` — Resend ingress dedupe + Uber Eats webhook_event_store cert; `npm run smoke:webhook-replay-p1-expansion`; cert `test:ci:webhook-replay-p1-expansion-era17:cert` (in `test:ci:webhook-security-era16:cert`). Not full replay monitoring ops.
+
 Verify per provider in route handlers:
 
 | Provider | Verification | Replay / idempotency |

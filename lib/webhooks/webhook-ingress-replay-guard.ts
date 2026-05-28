@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 export const WEBHOOK_INGRESS_ROUTE_KEYS = {
   UBER_DIRECT: "uber-direct",
   SLACK_EXPERIMENT_INTERACTIVE: "slack/experiment-interactive",
+  RESEND: "resend",
 } as const;
 
 export type WebhookIngressRouteKey =
@@ -45,6 +46,28 @@ export function extractSlackInteractiveExternalEventId(payload: {
     return payload.callback_id.trim();
   }
   return null;
+}
+
+export function extractResendExternalEventId(
+  payload: {
+    type?: string;
+    data?: { event_id?: string; id?: string; email_id?: string };
+  } | null,
+  rawBody: string,
+  svixId: string | null,
+): string {
+  const providerEventId = payload?.data?.event_id?.trim();
+  if (providerEventId) return providerEventId;
+
+  const headerId = svixId?.trim();
+  if (headerId) return `svix:${headerId}`;
+
+  const emailId = payload?.data?.email_id ?? payload?.data?.id;
+  if (typeof emailId === "string" && emailId.trim() && payload?.type?.trim()) {
+    return `${payload.type.trim()}:${emailId.trim()}`;
+  }
+
+  return `body:${hashWebhookIngressBody(rawBody)}`;
 }
 
 export async function recordWebhookIngressOrDuplicate(input: {
