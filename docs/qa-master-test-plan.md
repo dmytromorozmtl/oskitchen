@@ -166,6 +166,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Wiring cert: `test:ci:enterprise-sso-spike:cert` (in `test:ci:governance-bundles`)
 - Extends: `era6-enterprise-identity-roadmap-v1` — no live SSO/SAML procurement claims
 - Era 13 recert: `lib/enterprise/enterprise-identity-era13-policy.ts` (`era13-enterprise-identity-recert-v1`) — roadmap_only; R2 pilot not_started; cert `test:ci:enterprise-identity-era13:cert` (in `test:ci:enterprise-identity-roadmap:cert`)
+- Era 13 staging ops: `lib/ci/staging-workflows-first-run-era13-policy.ts` (`era13-staging-workflows-first-run-ops-v1`) — optional `e2e-staging.yml` / `playwright-kds-staging.yml` / `closed-beta-gate.yml`; `JOB_OMITTED_SECRETS_MISSING` when secrets unset; cert `test:ci:staging-workflows-first-run-era13:cert` (in `test:ci:e2e-staging-secrets-era12:cert`)
 
 ### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
 - policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)

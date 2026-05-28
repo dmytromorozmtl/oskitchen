@@ -27,6 +27,34 @@ Workflow: `.github/workflows/e2e-staging.yml` (daily 06:00 UTC + manual).
 3. **Variables** tab → add `E2E_STOREFRONT_SLUG` if not `hello`
 4. **Actions** → **E2E Staging** → **Run workflow** → confirm green (job skipped entirely when secrets missing — not a silent pass)
 
+## First-run ops (Era 13 Cycle 3)
+
+**Policy:** `era13-staging-workflows-first-run-ops-v1` (`lib/ci/staging-workflows-first-run-era13-policy.ts`)
+
+| Outcome | Meaning |
+|---------|---------|
+| `JOB_OMITTED_SECRETS_MISSING` | Required E2E secrets unset — the staging job **does not appear** in the workflow run (not a green pass) |
+| `PASSED` | Job ran; all steps succeeded |
+| `FAILED` | Job ran; at least one step failed |
+| `SKIPPED WITH REASON` | KDS only — see `kds-realtime-e2e-staging-summary` artifact (`playwright-kds-staging.yml`) |
+
+**Optional workflows (not in `ci.yml`):**
+
+| Workflow | Job | Schedule / trigger |
+|----------|-----|-------------------|
+| `e2e-staging.yml` | `staging-e2e` | Daily 06:00 UTC + manual |
+| `playwright-kds-staging.yml` | `kds-realtime-staging` | Weekly Monday 07:00 UTC + manual |
+| `closed-beta-gate.yml` | `staging-smoke` | Manual after `security-bundle` |
+
+**First green run checklist:**
+
+1. Set `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, `E2E_LOGIN_PASSWORD` (or legacy `E2E_PASSWORD`) in GitHub Actions secrets.
+2. **E2E Staging** → Run workflow → confirm `staging-e2e` job appears and completes green.
+3. **Playwright KDS Staging** → Run workflow → confirm `kds-realtime-staging` + download `kds-realtime-e2e-staging-summary`.
+4. **Closed Beta Gate** → Run workflow → `security-bundle` always; `staging-smoke` only when E2E secrets are set.
+
+Cert: `npm run test:ci:staging-workflows-first-run-era13:cert` (chained in `test:ci:e2e-staging-secrets-era12:cert`).
+
 ## Workflow steps (Era 12 Cycle 4)
 
 When secrets are set, the job runs in order:
@@ -65,6 +93,7 @@ Artifact on completion: `kds-realtime-e2e-staging-summary` (`PASSED` / `SKIPPED`
 
 ## CI certification
 
-- `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert`
+- `npm run test:ci:e2e-staging-secrets-era12` + `test:ci:e2e-staging-secrets-era12:cert` (includes `test:ci:staging-workflows-first-run-era13:cert`)
+- `npm run test:ci:staging-workflows-first-run-era13` + `test:ci:staging-workflows-first-run-era13:cert`
 - `npm run test:ci:e2e-staging-auth-era12` + `test:ci:e2e-staging-auth-era12:cert` (wired in `test:ci:governance-bundles:partition-platform`)
 - `npm run test:ci:kds-staging-workflow-secrets-era13:cert` (chained in `test:ci:kds-realtime-e2e-staging-era11:cert`)

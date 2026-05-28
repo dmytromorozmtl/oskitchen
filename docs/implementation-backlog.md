@@ -23,7 +23,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era13-kds-staging-workflow-secrets-align-v1` — legacy `E2E_PASSWORD` alias; job-level `E2E_LOGIN_PASSWORD` env
 - Evidence: `lib/ci/kds-staging-workflow-secrets-era13-policy.ts`, `test:ci:kds-staging-workflow-secrets-era13:cert`
-- Next: first green KDS staging workflow run when secrets configured (ops)
+- Next: ~~first green KDS staging workflow run when secrets configured~~ — ops checklist documented Era 13 Cycle 3
+
+### KOS-E13-003 — Staging workflows first-run ops (P1)
+- ID: `KOS-E13-003`
+- Title: Document first green run outcomes for optional staging GitHub workflows
+- Module: DevOps / QA
+- Priority: P1 (Era 13 Cycle 3)
+- Status: **completed**
+- Decision: `era13-staging-workflows-first-run-ops-v1` — `JOB_OMITTED_SECRETS_MISSING` when secrets unset; explicit PASSED/FAILED/SKIPPED WITH REASON; not in default `ci.yml`
+- Evidence: `lib/ci/staging-workflows-first-run-era13-policy.ts`, `test:ci:staging-workflows-first-run-era13:cert`, `docs/GITHUB_E2E_STAGING_SECRETS.md`
+- Next: operator runs first green `e2e-staging.yml` + `playwright-kds-staging.yml` when repo secrets configured (ops only)
 
 ## Era 12 — Integration hardening / enterprise
 

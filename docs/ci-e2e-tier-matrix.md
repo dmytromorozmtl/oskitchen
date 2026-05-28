@@ -120,6 +120,8 @@ npm run test:ci:pos-money-path:e2e
 
 **E2E staging auth policy (Era 12 Cycle 4):** `lib/ci/e2e-staging-auth-era12-policy.ts` (`era12-e2e-staging-auth-wiring-v1`) — runs `e2e/auth.setup.ts` (`--project=setup`) then `e2e/dashboard-auth.spec.ts` (`chromium-authed`) in `e2e-staging.yml`; read-only authed smoke; excludes POS checkout and remediation IDOR; cert `test:ci:e2e-staging-auth-era12:cert`.
 
+**Staging workflows first-run ops (Era 13 Cycle 3):** `lib/ci/staging-workflows-first-run-era13-policy.ts` (`era13-staging-workflows-first-run-ops-v1`) — optional `e2e-staging.yml`, `playwright-kds-staging.yml`, `closed-beta-gate.yml` `staging-smoke`; job omitted when E2E secrets missing (`JOB_OMITTED_SECRETS_MISSING`, not a green pass); KDS summary artifact `PASSED` / `FAILED` / `SKIPPED WITH REASON`; cert `test:ci:staging-workflows-first-run-era13:cert` (in `test:ci:e2e-staging-secrets-era12:cert`). See `docs/GITHUB_E2E_STAGING_SECRETS.md`.
+
 **Channel staging smoke (Era 12 Cycle 3 — not in default CI):** `lib/integrations/channel-golden-path-smoke-era12-policy.ts` (`era12-channel-golden-path-smoke-v1`) — `npm run smoke:woo-shopify`; optional `--skip-live`; requires `DATABASE_URL`; cert `test:ci:channel-golden-path-smoke-era12:cert` (in `test:ci:channel-golden-path:cert`). Not wired to `ci.yml`.
 
 ## Money-path certification mapping

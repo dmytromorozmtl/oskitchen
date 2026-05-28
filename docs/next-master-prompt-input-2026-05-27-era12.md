@@ -30,6 +30,7 @@ All four Era 12 integration / staging E2E cycles from era11 handoff **completed*
 |-------|---------|
 | **1** | **Enterprise identity recert** — `era13-enterprise-identity-recert-v1`; roadmap_only; SSO R2 pilot not_started |
 | **2** | **KDS staging workflow secrets** — `era13-kds-staging-workflow-secrets-align-v1`; `playwright-kds-staging.yml` password alias parity |
+| **3** | **Staging workflows first-run ops** — `era13-staging-workflows-first-run-ops-v1`; `JOB_OMITTED_SECRETS_MISSING` vs PASSED/FAILED/SKIPPED WITH REASON |
 
 ---
 
@@ -46,8 +47,9 @@ All four Era 12 integration / staging E2E cycles from era11 handoff **completed*
 
 - SSO/SAML R2 pilot implementation — explicit era budget only (Era 13 Cycle 1 recert confirms **not_started**).
 - Unified cross-channel rewards E2E — still `deferred_locked` after Era 10 Cycle 1.
-- First green staging workflow runs — `e2e-staging.yml` + `playwright-kds-staging.yml` require repo secrets (ops).
+- First green staging workflow runs — ops only; checklist in `docs/GITHUB_E2E_STAGING_SECRETS.md` (`era13-staging-workflows-first-run-ops-v1`).
 - ~~KDS staging workflow secret mismatch~~ — **Done** Era 13 Cycle 2 (`era13-kds-staging-workflow-secrets-align-v1`).
+- ~~Staging workflow skip vs pass ambiguity~~ — **Done** Era 13 Cycle 3 (`era13-staging-workflows-first-run-ops-v1`).
 - Live Woo/Shopify test shop smoke — ops via `npm run smoke:woo-shopify` when credentials available.
 - ~~Channel golden path order hub recert~~ — **Done** Era 12 Cycle 1.
 - ~~E2E staging secrets / auth wiring~~ — **Done** Era 12 Cycles 2–4.
