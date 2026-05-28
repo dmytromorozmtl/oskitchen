@@ -1,4 +1,17 @@
-import type { IntegrationHealthCard, IntegrationHealthSummary } from "@/services/developer/integration-health-service";
+import type { UserRole } from "@prisma/client";
+
+import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
+import { getServerEnv } from "@/lib/env";
+import { hasPermission } from "@/lib/permissions/guards";
+import type { PermissionKey } from "@/lib/permissions/permissions";
+import { prisma } from "@/lib/prisma";
+import { getCachedWebhookEventListWhere } from "@/lib/scope/cached-workspace-resource-scope";
+import {
+  listIntegrationHealthCards,
+  summarizeIntegrationHealth,
+  type IntegrationHealthCard,
+  type IntegrationHealthSummary,
+} from "@/services/developer/integration-health-service";
 
 export type PilotIntegrationHealthStripModel = {
   overall: IntegrationHealthSummary["overall"];
@@ -59,4 +72,44 @@ export function buildPilotIntegrationHealthStripModel(input: {
       hasError: Boolean(card.lastError?.trim()) || card.status === "ERROR",
     })),
   };
+}
+
+/** Owners, managers, and integration readers see the compact pilot health strip. */
+export function shouldShowPilotIntegrationHealthStrip(input: {
+  workspaceRole: UserRole;
+  persona: OperatorHomePersona;
+  granted: ReadonlySet<PermissionKey>;
+}): boolean {
+  if (input.workspaceRole === "OWNER") return true;
+  if (input.persona === "manager") return true;
+  return (
+    hasPermission(input.granted, "integrations.read") ||
+    hasPermission(input.granted, "integrations.manage")
+  );
+}
+
+export async function loadPilotIntegrationHealthStripModelForWorkspace(
+  dataUserId: string,
+): Promise<PilotIntegrationHealthStripModel> {
+  const env = getServerEnv();
+  const webhookWhere = await getCachedWebhookEventListWhere();
+  const [healthCards, failedWebhookCount] = await Promise.all([
+    listIntegrationHealthCards(dataUserId),
+    prisma.webhookEvent.count({
+      where: { AND: [webhookWhere, { processed: false }] },
+    }),
+  ]);
+  const stripeConfigured = Boolean(
+    env.STRIPE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim(),
+  );
+  const emailConfigured = Boolean(env.RESEND_API_KEY?.trim() && env.RESEND_FROM_EMAIL?.trim());
+  const summary = summarizeIntegrationHealth(healthCards, {
+    stripe: stripeConfigured,
+    email: emailConfigured,
+  });
+  return buildPilotIntegrationHealthStripModel({
+    summary,
+    cards: healthCards,
+    failedWebhookCount,
+  });
 }

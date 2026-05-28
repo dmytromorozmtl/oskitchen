@@ -3,7 +3,10 @@ import { describe, expect, it } from "vitest";
 import {
   buildPilotIntegrationHealthStripModel,
   formatPilotIntegrationLastSync,
+  shouldShowPilotIntegrationHealthStrip,
 } from "@/lib/integrations/pilot-integration-health-strip-era18";
+import { PILOT_INTEGRATION_HEALTH_TODAY_ERA18_POLICY_ID } from "@/lib/integrations/pilot-integration-health-today-era18-policy";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 
 describe("pilot integration health strip era18", () => {
   it("formats recent sync times for operator scan", () => {
@@ -52,5 +55,47 @@ describe("pilot integration health strip era18", () => {
     expect(model.failedWebhookCount).toBe(2);
     expect(model.connections).toHaveLength(2);
     expect(model.connections[1]?.hasError).toBe(true);
+  });
+
+  it("shows strip for owners, managers, and integration readers", () => {
+    const granted = (...keys: PermissionKey[]) => new Set(keys) as ReadonlySet<PermissionKey>;
+
+    expect(
+      shouldShowPilotIntegrationHealthStrip({
+        workspaceRole: "OWNER",
+        persona: "owner",
+        granted: granted(),
+      }),
+    ).toBe(true);
+
+    expect(
+      shouldShowPilotIntegrationHealthStrip({
+        workspaceRole: "STAFF",
+        persona: "manager",
+        granted: granted("orders.manage"),
+      }),
+    ).toBe(true);
+
+    expect(
+      shouldShowPilotIntegrationHealthStrip({
+        workspaceRole: "STAFF",
+        persona: "cashier",
+        granted: granted("integrations.read"),
+      }),
+    ).toBe(true);
+
+    expect(
+      shouldShowPilotIntegrationHealthStrip({
+        workspaceRole: "STAFF",
+        persona: "kitchen",
+        granted: granted("kitchen.view"),
+      }),
+    ).toBe(false);
+  });
+
+  it("locks today command center policy id", () => {
+    expect(PILOT_INTEGRATION_HEALTH_TODAY_ERA18_POLICY_ID).toBe(
+      "era18-pilot-integration-health-today-v1",
+    );
   });
 });

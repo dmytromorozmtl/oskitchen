@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-011 — Pilot integration health on Today command center (P1)
+- ID: `KOS-E18-011`
+- Title: Era 18 Workstream C Cycle 11 — integration health strip on manager/owner Today landing
+- Module: Integrations / Dashboard
+- Priority: P1 (integration observability + operator landing continuity)
+- Status: **pilot_integration_health_today_wired**
+- Decision: `era18-pilot-integration-health-today-v1` — strip on `/dashboard/today` for owners, managers, integration readers; shared loader with operator home
+- Evidence: `app/dashboard/today/page.tsx`, `loadPilotIntegrationHealthStripModelForWorkspace`, `shouldShowPilotIntegrationHealthStrip`
+- Next: P0 staging proof ops execution (cannot fake PASS)
+
 ### KOS-E18-010 — Shift close CSV export (P1)
 - ID: `KOS-E18-010`
 - Title: Era 18 Workstream F Cycle 10 — bookkeeper CSV export for closed shifts

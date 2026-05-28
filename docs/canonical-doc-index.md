@@ -770,4 +770,5 @@ Incremental refresh after Era 17 cycles 1–43 (commercial ops proof from era16 
 | 2026-05-28 | Era 18 Cycle 7 / Workstream G: `era18-kds-queue-clarity-v1` — KDS queue strip, prep/expo sections, ticket numbers; **kds_queue_clarity_wired** |
 | 2026-05-28 | Era 18 Cycle 6 / Workstream F: `era18-pos-shift-closeout-preview-v1` — live shift closeout expected/variance preview; **shift_closeout_preview_wired** |
 | 2026-05-28 | Era 18 Cycle 5 / Workstream J: `era18-operator-default-landing-v1` — persona post-auth landing (cashier → POS terminal, kitchen → KDS); **operator_default_landing_wired** |
+| 2026-05-28 | Era 18 Cycle 11 / Workstream C: `era18-pilot-integration-health-today-v1` — integration health strip on Today command center for managers/owners |
 | 2026-05-28 | Era 18 Cycle 4 / Workstream C: `era18-pilot-integration-health-strip-v1` — manager pilot integration health strip; handoff doc sections restored for Tier 0 scorecard cert |

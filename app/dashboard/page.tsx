@@ -5,16 +5,12 @@ import {
   listOperatorHomeActions,
   resolveOperatorHomePersona,
 } from "@/lib/navigation/operator-home-era18";
-import { getServerEnv } from "@/lib/env";
-import { buildPilotIntegrationHealthStripModel } from "@/lib/integrations/pilot-integration-health-strip-era18";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { getCachedWebhookEventListWhere } from "@/lib/scope/cached-workspace-resource-scope";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { prisma } from "@/lib/prisma";
 import {
-  listIntegrationHealthCards,
-  summarizeIntegrationHealth,
-} from "@/services/developer/integration-health-service";
+  loadPilotIntegrationHealthStripModelForWorkspace,
+  shouldShowPilotIntegrationHealthStrip,
+} from "@/lib/integrations/pilot-integration-health-strip-era18";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { getTenantActor } from "@/lib/scope/cached-tenant";
 
 export default async function DashboardHomePage() {
   const [{ dataUserId }, actor] = await Promise.all([
@@ -36,30 +32,16 @@ export default async function DashboardHomePage() {
   const actions = listOperatorHomeActions(persona, actor.granted);
 
   let integrationHealthStrip = null;
-  if (persona === "manager") {
-    const env = getServerEnv();
-    const webhookWhere = await getCachedWebhookEventListWhere();
-    const [healthCards, failedWebhookCount] = await Promise.all([
-      listIntegrationHealthCards(dataUserId),
-      prisma.webhookEvent.count({
-        where: { AND: [webhookWhere, { processed: false }] },
-      }),
-    ]);
-    const stripeConfigured = Boolean(
-      env.STRIPE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim(),
-    );
-    const emailConfigured = Boolean(env.RESEND_API_KEY?.trim() && env.RESEND_FROM_EMAIL?.trim());
-    const summary = summarizeIntegrationHealth(healthCards, {
-      stripe: stripeConfigured,
-      email: emailConfigured,
-    });
+  if (
+    shouldShowPilotIntegrationHealthStrip({
+      workspaceRole: actor.workspaceRole,
+      persona,
+      granted: actor.granted,
+    })
+  ) {
     integrationHealthStrip = (
       <PilotIntegrationHealthStrip
-        model={buildPilotIntegrationHealthStripModel({
-          summary,
-          cards: healthCards,
-          failedWebhookCount,
-        })}
+        model={await loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)}
       />
     );
   }
