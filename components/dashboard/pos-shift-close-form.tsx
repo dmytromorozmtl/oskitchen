@@ -15,6 +15,8 @@ import {
   shiftVarianceToneClassName,
 } from "@/lib/pos/pos-shift-closeout-preview";
 import { resolveShiftVarianceGuidance } from "@/lib/pos/pos-shift-close-focus-era18";
+import { posShiftCloseVarianceToneLabel } from "@/lib/pos/pos-shift-close-clarity-era19";
+import { PosShiftCloseChecklist } from "@/components/dashboard/pos-shift-close-checklist";
 import type { OpenShiftCloseoutPreview } from "@/services/pos/pos-shift-service";
 
 type StaffOption = { id: string; name: string };
@@ -66,6 +68,13 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
 
   return (
     <form action={formAction} className="space-y-4" data-testid="pos-shift-close-form">
+      <PosShiftCloseChecklist
+        hasOpenShift={previews.length > 0}
+        preview={livePreview}
+        varianceAcknowledged={varianceAcknowledged}
+        notes={notes}
+      />
+
       <div className="space-y-2">
         <Label htmlFor="shiftId">Open shift</Label>
         {previews.length === 0 ? (
@@ -135,6 +144,14 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
                   : `${livePreview.variance >= 0 ? "+" : ""}${formatShiftCloseoutMoney(livePreview.variance)} · ${shiftVarianceLabel(livePreview.tone)}`}
               </span>
             </div>
+          ) : null}
+          {livePreview && posShiftCloseVarianceToneLabel(livePreview.tone) ? (
+            <p
+              className="mt-2 text-xs font-medium text-muted-foreground"
+              data-testid="pos-shift-variance-tone-label"
+            >
+              {posShiftCloseVarianceToneLabel(livePreview.tone)}
+            </p>
           ) : null}
           {needsNote ? (
             <p className="mt-2 text-xs text-amber-700 dark:text-amber-500">
@@ -242,15 +259,17 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
         </div>
       ) : null}
 
-      <Button
-        type="submit"
-        variant="secondary"
-        className="rounded-full"
-        disabled={previews.length === 0 || !canSubmit}
-        data-testid="pos-shift-close-submit"
-      >
-        Close shift
-      </Button>
+      <div className="sticky bottom-3 z-10 -mx-1 rounded-2xl border border-border/80 bg-background/95 p-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+        <Button
+          type="submit"
+          variant="secondary"
+          className="w-full rounded-full sm:w-auto"
+          disabled={previews.length === 0 || !canSubmit}
+          data-testid="pos-shift-close-submit"
+        >
+          Close shift
+        </Button>
+      </div>
     </form>
   );
 }

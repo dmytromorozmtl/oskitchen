@@ -1,5 +1,6 @@
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
 import { PosShiftCloseAttentionStrip } from "@/components/dashboard/pos-shift-close-attention-strip";
+import { PosShiftCloseHero } from "@/components/dashboard/pos-shift-close-hero";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PosShiftCloseForm } from "@/components/dashboard/pos-shift-close-form";
 import { PosShiftCloseHistoryPanel } from "@/components/dashboard/pos-shift-close-history-panel";
@@ -16,6 +17,8 @@ import {
   SHIFT_CLOSE_HISTORY_RANGE_LABEL,
 } from "@/lib/pos/pos-shift-close-history-range-era18";
 import { buildPosShiftCloseFocusSnapshot } from "@/lib/pos/pos-shift-close-focus-era18";
+import { shouldPrioritizePosShiftCloseSection } from "@/lib/pos/pos-shift-close-clarity-era19";
+import { POS_SHIFT_CLOSE_FORM_ANCHOR } from "@/lib/pos/pos-shift-close-clarity-era19-policy";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
 import {
@@ -64,6 +67,90 @@ export default async function PosShiftsPage({
     openPreviews: closeoutPreviews,
     closedHistory: closedShiftHistory,
   });
+  const prioritizeCloseout = shouldPrioritizePosShiftCloseSection(closeoutPreviews.length);
+
+  const closeShiftCard = canCloseShift ? (
+    <Card
+      className="max-w-lg border-border/80 shadow-sm lg:max-w-none"
+      id={POS_SHIFT_CLOSE_FORM_ANCHOR}
+    >
+      <CardHeader>
+        <CardTitle>Close shift</CardTitle>
+        <CardDescription>
+          Follow the checklist — count the drawer, review expected cash, then close. Card sales stay
+          out of expected cash.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <PosShiftCloseForm
+          staff={staff}
+          previews={closeoutPreviews}
+          formAction={posCloseShiftFormAction}
+        />
+      </CardContent>
+    </Card>
+  ) : null;
+
+  const openShiftCard = canOpenShift ? (
+    <Card className="max-w-lg border-border/80 shadow-sm lg:max-w-none">
+      <CardHeader>
+        <CardTitle>Open shift</CardTitle>
+        <CardDescription>Requires Team plan entitlement for `pos_shifts`.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={posOpenShiftFormAction} className="space-y-3">
+          <div className="space-y-2">
+            <Label htmlFor="registerId">Register</Label>
+            <select
+              id="registerId"
+              name="registerId"
+              required
+              className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm"
+            >
+              {registers.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="staffId">Opened by</Label>
+            <select
+              id="staffId"
+              name="staffId"
+              required
+              className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm"
+            >
+              {staff.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="openingCash">Opening cash</Label>
+            <Input
+              id="openingCash"
+              name="openingCash"
+              type="number"
+              step="0.01"
+              defaultValue="0"
+              className="rounded-xl"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="notes">Notes</Label>
+            <Input id="notes" name="notes" className="rounded-xl" />
+          </div>
+          <Button type="submit" className="rounded-full">
+            Open shift
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  ) : null;
 
   return (
     <div className="space-y-6">
@@ -74,81 +161,27 @@ export default async function PosShiftsPage({
         </p>
       </div>
 
+      {canCloseShift && closeoutPreviews.length > 0 ? (
+        <PosShiftCloseHero previews={closeoutPreviews} />
+      ) : null}
+
       {canCloseShift || canViewShiftHistory ? (
         <PosShiftCloseAttentionStrip focus={shiftCloseFocus} />
       ) : null}
 
-      {canOpenShift ? (
-        <Card className="max-w-lg border-border/80 shadow-sm">
-          <CardHeader>
-            <CardTitle>Open shift</CardTitle>
-            <CardDescription>Requires Team plan entitlement for `pos_shifts`.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form action={posOpenShiftFormAction} className="space-y-3">
-              <div className="space-y-2">
-                <Label htmlFor="registerId">Register</Label>
-                <select
-                  id="registerId"
-                  name="registerId"
-                  required
-                  className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm"
-                >
-                  {registers.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="staffId">Opened by</Label>
-                <select
-                  id="staffId"
-                  name="staffId"
-                  required
-                  className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm"
-                >
-                  {staff.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="openingCash">Opening cash</Label>
-                <Input id="openingCash" name="openingCash" type="number" step="0.01" defaultValue="0" className="rounded-xl" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
-                <Input id="notes" name="notes" className="rounded-xl" />
-              </div>
-              <Button type="submit" className="rounded-full">
-                Open shift
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      ) : null}
-
-      {canCloseShift ? (
-        <Card className="max-w-lg border-border/80 shadow-sm" id="pos-shift-close">
-          <CardHeader>
-            <CardTitle>Close shift</CardTitle>
-            <CardDescription>
-              Count the drawer, review expected cash, then close. Card sales are excluded from expected cash.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PosShiftCloseForm
-              staff={staff}
-              previews={closeoutPreviews}
-              formAction={posCloseShiftFormAction}
-            />
-          </CardContent>
-        </Card>
-      ) : null}
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+        {prioritizeCloseout ? (
+          <>
+            {closeShiftCard}
+            {openShiftCard}
+          </>
+        ) : (
+          <>
+            {openShiftCard}
+            {closeShiftCard}
+          </>
+        )}
+      </div>
 
       {canViewShiftHistory ? (
         <Card className="border-border/80 shadow-sm">

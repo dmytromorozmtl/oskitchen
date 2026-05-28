@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-019 — POS shift closeout clarity (P1 operator speed)
+- ID: `KOS-E19-019`
+- Title: Era 19 Workstream E Cycle 19 — closeout checklist, end-of-shift hero, tablet sticky submit
+- Module: POS / Shifts / Closeout UX
+- Priority: P1 (operator speed — end-of-shift drawer clarity)
+- Status: **pos_shift_close_clarity_wired**
+- Decision: `era19-pos-shift-close-clarity-v1` — 4-step checklist wired to live preview; closeout hero when shifts open; close-first layout; sticky mobile submit; no automated approval claims
+- Evidence: `lib/pos/pos-shift-close-clarity-era19.ts`, `PosShiftCloseChecklist`, `PosShiftCloseHero`, updated shifts page + close form
+- Next: P0 proof unblock when ops credentials available, or owner Today ↔ Launch Wizard cross-link
+
 ### KOS-E19-018 — Briefing cashier pack POS speed mode integration (P1 WOW)
 - ID: `KOS-E19-018`
 - Title: Era 19 Workstream B Cycle 18 — cashier briefing tile + ranked actions deep-link to POS speed mode
