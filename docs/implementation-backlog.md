@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 6 — Customer value honesty
 
+### KOS-E6-003 — Typecheck slices parallel CI job (E6-3)
+- ID: `KOS-E6-003`
+- Title: Add optional `typecheck-slices` CI job; keep `typecheck:full` canonical in `quality`
+- Module: DevOps / engineering
+- Priority: P0 (Era 6 Cycle 3)
+- Status: **completed**
+- Decision: `era6-typecheck-slice-ci-v1` — `npm run typecheck:ci:slices` in parallel job at 6GB; `quality` still runs `npm run typecheck`
+- Evidence: `.github/workflows/ci.yml`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`
+- Next: production-calendar void-form deny UX (P1) or SSO/SOC2 roadmap review (E6-5)
+
 ### KOS-E6-002 — KDS realtime / poll fallback smoke (E6-2)
 - ID: `KOS-E6-002`
 - Title: Certify KDS poll fallback intervals and Realtime channel wiring; add Tier D checklist

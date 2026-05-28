@@ -150,6 +150,29 @@ jobs:
       #     DEMO_AUDIT_WORKSPACE_ID: ${{ secrets.DEMO_AUDIT_WORKSPACE_ID }}
       #     DEMO_DB_AUDIT_ALLOW_PRODUCTION: "true"
 
+  # Era 6 — optional parallel strict slices at 6GB heap (canonical gate remains quality → typecheck:full).
+  typecheck-slices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Typecheck strict slices (parallel memory path)
+        run: npm run typecheck:ci:slices
+
   security-db:
     runs-on: ubuntu-latest
     timeout-minutes: 25

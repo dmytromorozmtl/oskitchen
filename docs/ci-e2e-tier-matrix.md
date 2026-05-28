@@ -231,7 +231,9 @@ npm run test:ci:pos-money-path:e2e
 | Typecheck slice wiring cert | `npm run test:ci:typecheck-slice:cert` | Policy `era5-typecheck-slice-v2`, `tsconfig.base.json`, three slice tsconfigs, `typecheck:full` + slice scripts |
 | Typecheck slice unit | `npm run test:ci:typecheck-slice` | Policy registry, strict base inheritance |
 
-**Local fast path (Cycle 7):** `npm run typecheck:slice:dashboard-services-api` — 4GB heap, operational spine only. **CI/release:** `npm run typecheck` → `typecheck:full` (8GB, full repo) unchanged.
+**Local fast path:** `npm run typecheck:slice:*` — 6GB heap per slice. **CI canonical gate:** `quality` job → `npm run typecheck` → `typecheck:full` (8GB, full repo).
+
+**Parallel CI job (Era 6 Cycle 3):** `typecheck-slices` job → `npm run typecheck:ci:slices` (all three slices at 6GB); policy `era6-typecheck-slice-ci-v1`; does **not** replace full typecheck.
 
 **Wiring certification (tier 0):** `test:ci:typecheck-slice:cert` + `test:ci:typecheck-slice` chained in `test:ci:governance-bundles`.
 

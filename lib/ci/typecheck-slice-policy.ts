@@ -83,3 +83,25 @@ export function findTypecheckSlice(sliceId: TypecheckSliceId): TypecheckSliceDef
   }
   return slice;
 }
+
+/**
+ * Era 6 Cycle 3 — optional parallel CI job for strict slices at lower heap.
+ * Full `npm run typecheck` in the `quality` job remains the canonical release gate.
+ */
+export const TYPECHECK_SLICE_CI_PARALLEL_POLICY_ID = "era6-typecheck-slice-ci-v1" as const;
+
+export const TYPECHECK_SLICE_CI_JOB_ID = "typecheck-slices" as const;
+
+export const TYPECHECK_SLICE_CI_WORKFLOW = ".github/workflows/ci.yml" as const;
+
+export const TYPECHECK_SLICE_CI_BUNDLE_SCRIPT = "typecheck:ci:slices" as const;
+
+/** Heap (MB) for the parallel CI slice job — per-slice scripts also set 6144. */
+export const TYPECHECK_SLICE_CI_JOB_HEAP_MB = 6144 as const;
+
+export const TYPECHECK_SLICE_CI_QUALITY_STEP = "npm run typecheck" as const;
+
+export const TYPECHECK_SLICE_CI_UNIT_TESTS = [
+  "tests/unit/typecheck-slice-ci-live.test.ts",
+  "tests/unit/typecheck-slice-ci-parallel-live.test.ts",
+] as const;

@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 6 Cycle 2 — KDS realtime smoke)  
+**Updated:** 2026-05-27 (Era 6 Cycle 3 — typecheck slices parallel CI)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -130,6 +130,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 |-------|---------|----------|
 | **1** | **Dual-ledger rewards GTM lock** | `era6-dual-ledger-gtm-lock-v1`; `test:ci:cross-channel-rewards:cert` |
 | **2** | **KDS realtime / poll smoke** | `era6-kds-realtime-smoke-v1`; `test:ci:kds-realtime-smoke:cert` |
+| **3** | **Typecheck slices parallel CI** | `era6-typecheck-slice-ci-v1`; job `typecheck-slices` |
 
 ## Evolution Era 5 cycle ledger (P0 closure)
 
@@ -268,3 +269,4 @@ Incremental refresh after Era 5 cycles 1–5 (P0 closure from era4 handoff). Bas
 | 2026-05-27 | Era 5 Cycle 6: scorecard refresh 86/100 + `next-master-prompt-input-2026-05-27-era5.md` |
 | 2026-05-27 | Era 6 Cycle 1: `era6-dual-ledger-gtm-lock-v1` — permanent dual-ledger rewards GTM lock |
 | 2026-05-27 | Era 6 Cycle 2: `era6-kds-realtime-smoke-v1` — poll fallback + Realtime channel unit cert |
+| 2026-05-27 | Era 6 Cycle 3: `era6-typecheck-slice-ci-v1` — parallel `typecheck-slices` CI job |

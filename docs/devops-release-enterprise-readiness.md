@@ -20,7 +20,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - **Slice B — dashboard / API spine:** `npm run typecheck:slice:dashboard-services-api` — dashboard + API + components + shared spine; **6GB** heap. Strictness inherited from `tsconfig.base.json` (`strict: true`).
 - **Slice C — storefront / marketing:** `npm run typecheck:slice:storefront-marketing` — public storefront (`app/s`, `app/b`), GTM/marketing pages, `app/dashboard/storefront`, storefront API routes; **6GB** heap.
 - **Wiring cert (tier 0):** `npm run test:ci:typecheck-slice:cert` + `npm run test:ci:typecheck-slice` (in `test:ci:governance-bundles`).
-- **Not yet:** CI does not replace full typecheck with slices; optional parallel CI slice job remains future work.
+- **Parallel CI job (Era 6 Cycle 3):** `era6-typecheck-slice-ci-v1` — workflow job `typecheck-slices` runs `npm run typecheck:ci:slices` at **6GB** heap in parallel with `quality`; **does not** replace `npm run typecheck` → `typecheck:full` (8GB) as canonical gate.
 
 ## Build Verification
 - continue prebuilt release discipline until memory pressure is resolved
