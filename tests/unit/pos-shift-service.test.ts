@@ -5,6 +5,7 @@ vi.mock("@/lib/prisma", () => ({
   prisma: {
     pOSShift: {
       findFirst: vi.fn(),
+      findMany: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
     },
@@ -32,7 +33,7 @@ vi.mock("@/lib/scope/workspace-resource-scope", () => ({
 import { prisma } from "@/lib/prisma";
 import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
 import { ownerScopedAnd, posRegisterByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
-import { closePosShift, openPosShift } from "@/services/pos/pos-shift-service";
+import { closePosShift, listOpenShiftCloseoutPreviews, openPosShift } from "@/services/pos/pos-shift-service";
 
 describe("pos-shift-service", () => {
   beforeEach(() => {
@@ -234,5 +235,36 @@ describe("pos-shift-service", () => {
         },
       },
     });
+  });
+
+  it("lists open shift closeout previews without closing shifts", async () => {
+    vi.mocked(prisma.pOSShift.findMany).mockResolvedValue([
+      {
+        id: "shift-1",
+        registerId: "reg-1",
+        openingCashAmount: new Prisma.Decimal(50),
+        openedAt: new Date("2026-05-28T09:00:00.000Z"),
+        register: { name: "Front counter" },
+      },
+    ] as never);
+    vi.mocked(prisma.pOSTransaction.findMany).mockResolvedValue([
+      { total: new Prisma.Decimal(20) },
+      { total: new Prisma.Decimal(10) },
+    ] as never);
+
+    const previews = await listOpenShiftCloseoutPreviews("owner-1");
+
+    expect(previews).toEqual([
+      {
+        shiftId: "shift-1",
+        registerName: "Front counter",
+        openedAtIso: "2026-05-28T09:00:00.000Z",
+        openingCash: 50,
+        cashSalesTotal: 30,
+        expectedCash: 80,
+        cashTransactionCount: 2,
+      },
+    ]);
+    expect(prisma.pOSShift.update).not.toHaveBeenCalled();
   });
 });

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-006 — Shift closeout variance preview UI (P1)
+- ID: `KOS-E18-006`
+- Title: Era 18 Workstream F Cycle 6 — live expected cash and variance preview on shift close
+- Module: POS
+- Priority: P1 (shift workflow / financial clarity)
+- Status: **shift_closeout_preview_wired**
+- Decision: `era18-pos-shift-closeout-preview-v1` — opening + cash sales + expected + live variance; note prompt for non-zero variance
+- Evidence: `components/dashboard/pos-shift-close-form.tsx`, `lib/pos/pos-shift-closeout-preview.ts`, `services/pos/pos-shift-service.ts` (`listOpenShiftCloseoutPreviews`)
+- Next: Bounded manager variance acknowledgment (no automated approval claim)
+
 ### KOS-E18-005 — Persona default landing redirect (P1)
 - ID: `KOS-E18-005`
 - Title: Era 18 Workstream J Cycle 5 — staff post-auth lands on persona primary workflow
@@ -73,7 +83,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **terminal_discount_ui_wired**
 - Decision: `era18-pos-manager-discount-ui-v1` — fixed/percent/comp controls gated by `pos.discount.apply`; uses existing `pos-discount-guard`
 - Evidence: `components/dashboard/pos-terminal-client.tsx`, `lib/pos/pos-terminal-discount-ui.ts`, `tests/unit/pos-terminal-discount-ui.test.ts`
-- Next: Shift variance approval UI (bounded); no Toast parity claim
+- Next: Bounded manager variance acknowledgment UI; no Toast parity claim
 
 ### KOS-E18-001 — Era 18 P0 staging proof ops checklist (P0)
 - ID: `KOS-E18-001`

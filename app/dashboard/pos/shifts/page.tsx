@@ -1,5 +1,6 @@
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PosShiftCloseForm } from "@/components/dashboard/pos-shift-close-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
 import { listPosRegisters } from "@/services/pos/pos-register-service";
+import { listOpenShiftCloseoutPreviews } from "@/services/pos/pos-shift-service";
 
 export default async function PosShiftsPage() {
   const actor = await requireWorkspacePermissionActor();
@@ -24,25 +26,23 @@ export default async function PosShiftsPage() {
     );
   }
 
-  const [registers, staff, openShifts] = await Promise.all([
+  const [registers, staff, closeoutPreviews] = await Promise.all([
     listPosRegisters(actor.userId),
     prisma.staffMember.findMany({
       where: { userId: actor.userId, status: "ACTIVE", archivedAt: null },
       orderBy: { name: "asc" },
       select: { id: true, name: true },
     }),
-    prisma.pOSShift.findMany({
-      where: { userId: actor.userId, status: "OPEN" },
-      orderBy: { openedAt: "desc" },
-      include: { register: { select: { name: true } } },
-    }),
+    canCloseShift ? listOpenShiftCloseoutPreviews(actor.userId) : Promise.resolve([]),
   ]);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">POS shifts</h1>
-        <p className="text-sm text-muted-foreground">Open and close shifts to reconcile expected vs counted cash.</p>
+        <p className="text-sm text-muted-foreground">
+          Open and close shifts — expected drawer cash and variance preview before close.
+        </p>
       </div>
 
       {canOpenShift ? (
@@ -103,55 +103,16 @@ export default async function PosShiftsPage() {
         <Card className="max-w-lg border-border/80 shadow-sm">
           <CardHeader>
             <CardTitle>Close shift</CardTitle>
+            <CardDescription>
+              Count the drawer, review expected cash, then close. Card sales are excluded from expected cash.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <form action={posCloseShiftFormAction} className="space-y-3">
-              <div className="space-y-2">
-                <Label htmlFor="shiftId">Open shift</Label>
-                {openShifts.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No open shifts.</p>
-                ) : (
-                  <select
-                    id="shiftId"
-                    name="shiftId"
-                    required
-                    className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm"
-                  >
-                    {openShifts.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.register.name} · {s.openedAt.toISOString().slice(0, 16)}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="staffIdClose">Closed by</Label>
-                <select
-                  id="staffIdClose"
-                  name="staffId"
-                  required
-                  className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm"
-                >
-                  {staff.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="closingCash">Closing cash counted</Label>
-                <Input id="closingCash" name="closingCash" type="number" step="0.01" required className="rounded-xl" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="notesClose">Notes</Label>
-                <Input id="notesClose" name="notes" className="rounded-xl" />
-              </div>
-              <Button type="submit" variant="secondary" className="rounded-full" disabled={openShifts.length === 0}>
-                Close shift
-              </Button>
-            </form>
+            <PosShiftCloseForm
+              staff={staff}
+              previews={closeoutPreviews}
+              formAction={posCloseShiftFormAction}
+            />
           </CardContent>
         </Card>
       ) : null}

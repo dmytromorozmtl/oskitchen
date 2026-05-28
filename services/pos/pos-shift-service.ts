@@ -81,19 +81,13 @@ export async function closePosShift(input: {
   });
   if (!shift) return { ok: false as const, error: "Open shift not found." };
 
-  const txnWhere = (await ownerScopedAnd(input.userId, {
+  const { cashSalesTotals } = await loadShiftCashSales(input.userId, {
+    id: shift.id,
     registerId: shift.registerId,
-    shiftId: shift.id,
-    paymentMode: "CASH",
-    status: "COMPLETED",
-  })) as Prisma.POSTransactionWhereInput;
-  const cashRows = await prisma.pOSTransaction.findMany({
-    where: txnWhere,
-    select: { total: true },
   });
   const closeout = computeShiftCloseout({
     openingCash: Number(shift.openingCashAmount),
-    cashSalesTotals: cashRows.map((row) => Number(row.total)),
+    cashSalesTotals,
     closingCash: input.closingCashAmount,
   });
 
@@ -134,4 +128,71 @@ export async function closePosShift(input: {
   });
 
   return { ok: true as const, shift: updated };
+}
+
+export type OpenShiftCloseoutPreview = {
+  shiftId: string;
+  registerName: string;
+  openedAtIso: string;
+  openingCash: number;
+  cashSalesTotal: number;
+  expectedCash: number;
+  cashTransactionCount: number;
+};
+
+async function loadShiftCashSales(
+  userId: string,
+  shift: { id: string; registerId: string },
+): Promise<{ cashSalesTotals: number[]; cashTransactionCount: number }> {
+  const txnWhere = (await ownerScopedAnd(userId, {
+    registerId: shift.registerId,
+    shiftId: shift.id,
+    paymentMode: "CASH",
+    status: "COMPLETED",
+  })) as Prisma.POSTransactionWhereInput;
+  const cashRows = await prisma.pOSTransaction.findMany({
+    where: txnWhere,
+    select: { total: true },
+  });
+  return {
+    cashSalesTotals: cashRows.map((row) => Number(row.total)),
+    cashTransactionCount: cashRows.length,
+  };
+}
+
+/** Closeout snapshot for open shifts — same cash math as closePosShift, no close mutation. */
+export async function listOpenShiftCloseoutPreviews(
+  userId: string,
+): Promise<OpenShiftCloseoutPreview[]> {
+  const shiftWhere = (await ownerScopedAnd(userId, {
+    status: "OPEN",
+  })) as Prisma.POSShiftWhereInput;
+  const openShifts = await prisma.pOSShift.findMany({
+    where: shiftWhere,
+    orderBy: { openedAt: "desc" },
+    include: { register: { select: { name: true } } },
+  });
+
+  return Promise.all(
+    openShifts.map(async (shift) => {
+      const { cashSalesTotals, cashTransactionCount } = await loadShiftCashSales(userId, {
+        id: shift.id,
+        registerId: shift.registerId,
+      });
+      const closeout = computeShiftCloseout({
+        openingCash: Number(shift.openingCashAmount),
+        cashSalesTotals,
+        closingCash: 0,
+      });
+      return {
+        shiftId: shift.id,
+        registerName: shift.register.name,
+        openedAtIso: shift.openedAt.toISOString(),
+        openingCash: Number(shift.openingCashAmount),
+        cashSalesTotal: closeout.cashSalesTotal,
+        expectedCash: closeout.expectedCash,
+        cashTransactionCount,
+      };
+    }),
+  );
 }
