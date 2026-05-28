@@ -16,13 +16,17 @@ function SubmitButton() {
   );
 }
 
-export function StartSupportSessionPanel({ workspaceId }: { workspaceId: string }) {
+export function StartSupportSessionPanel(props: {
+  workspaceId: string;
+  redirectTo?: string;
+}) {
   return (
     <form
       action={startPlatformSupportSessionAction}
       className="space-y-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 text-sm text-zinc-200"
     >
-      <input type="hidden" name="workspaceId" value={workspaceId} />
+      <input type="hidden" name="workspaceId" value={props.workspaceId} />
+      {props.redirectTo ? <input type="hidden" name="redirectTo" value={props.redirectTo} /> : null}
       <input type="hidden" name="mode" value="READ_ONLY" />
       <div>
         <Label htmlFor="support-reason" className="text-zinc-300">

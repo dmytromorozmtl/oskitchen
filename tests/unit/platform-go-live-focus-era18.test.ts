@@ -88,7 +88,7 @@ describe("buildPlatformGoLiveKpiSnapshot", () => {
 describe("resolvePlatformGoLiveRowNextAction", () => {
   it("links to workspace when workspaceId exists", () => {
     const action = resolvePlatformGoLiveRowNextAction(row());
-    expect(action.href).toBe("/platform/workspaces/ws-1");
+    expect(action.href).toBe("/platform/workspaces/ws-1#go-live-project-proj-1");
   });
 
   it("links to tenant preview when workspace is missing", () => {

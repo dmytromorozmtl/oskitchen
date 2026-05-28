@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
+import { sanitizePlatformSupportSessionRedirect } from "@/lib/platform/platform-impersonation-redirect";
 import { SUPPORT_SESSION_COOKIE } from "@/lib/platform/support-session-types";
 import {
   endPlatformSupportSession,
@@ -45,8 +46,14 @@ export async function startPlatformSupportSessionAction(formData: FormData): Pro
     maxAge: hours * 3600,
   });
 
+  const defaultRedirect = `/platform/workspaces/${workspaceId}`;
+  const redirectTo = sanitizePlatformSupportSessionRedirect(
+    String(formData.get("redirectTo") ?? "").trim() || undefined,
+    defaultRedirect,
+  );
+
   revalidatePath("/platform");
-  redirect(`/platform/workspaces/${workspaceId}`);
+  redirect(redirectTo);
 }
 
 export async function endPlatformSupportSessionAction(): Promise<void> {

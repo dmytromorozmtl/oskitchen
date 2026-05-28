@@ -5,6 +5,7 @@ import {
   PLATFORM_GO_LIVE_ROUTE,
   platformGoLiveProjectAnchor,
 } from "@/lib/go-live/platform-go-live-focus-era18-policy";
+import { platformGoLiveTenantProjectHref } from "@/lib/go-live/platform-go-live-support-deep-link-era18-policy";
 
 export type PlatformGoLiveProjectRow = {
   id: string;
@@ -46,6 +47,17 @@ export type PlatformGoLiveRowNextAction = {
   label: string;
   href: string;
   tone: "urgent" | "normal";
+};
+
+export type PlatformGoLiveRowActionKind = "workspace" | "tenant_go_live" | "start_support_session";
+
+export type PlatformGoLiveRowAction = PlatformGoLiveRowNextAction & {
+  kind: PlatformGoLiveRowActionKind;
+  /** Impersonation target when kind is tenant_go_live */
+  impersonationTargetUserId?: string;
+  /** Support session hidden fields when kind is start_support_session */
+  supportSessionWorkspaceId?: string;
+  supportSessionRedirectTo?: string;
 };
 
 const TERMINAL_STATUSES = new Set<GoLiveLaunchStatus>([
@@ -103,6 +115,14 @@ export function platformGoLiveWorkspaceHref(row: PlatformGoLiveProjectRow): stri
   return `/platform/preview/${row.userId}`;
 }
 
+export function platformGoLiveWorkspaceProjectHref(row: PlatformGoLiveProjectRow): string {
+  const base = platformGoLiveWorkspaceHref(row);
+  if (row.workspaceId) {
+    return `${base}${platformGoLiveProjectAnchor(row.id)}`;
+  }
+  return base;
+}
+
 export function platformGoLiveProjectLabel(row: PlatformGoLiveProjectRow): string {
   const parts = [row.brandName, row.locationName, row.workspaceName].filter(Boolean);
   return parts[0] ?? row.ownerEmail;
@@ -112,18 +132,59 @@ export function resolvePlatformGoLiveRowNextAction(
   row: PlatformGoLiveProjectRow,
   now = Date.now(),
 ): PlatformGoLiveRowNextAction {
+  const actions = resolvePlatformGoLiveRowActions(row, { activeSupportWorkspaceId: null }, now);
+  return actions[0] ?? {
+    label: row.workspaceId ? "Open workspace" : "Preview tenant",
+    href: platformGoLiveWorkspaceHref(row),
+    tone: "normal",
+  };
+}
+
+export function resolvePlatformGoLiveRowActions(
+  row: PlatformGoLiveProjectRow,
+  context: { activeSupportWorkspaceId: string | null; canImpersonate?: boolean },
+  now = Date.now(),
+): PlatformGoLiveRowAction[] {
   const days = daysUntilLaunch(row.launchDate, now);
   const urgent =
     row.status === "BLOCKED" ||
     row.openIncidentCount > 0 ||
     (days !== null && days < 0 && isPlatformGoLiveProjectActive(row.status)) ||
     (days !== null && days <= 7 && row.readinessScore < 70);
+  const tone: PlatformGoLiveRowAction["tone"] = urgent ? "urgent" : "normal";
 
-  return {
-    label: row.workspaceId ? "Open workspace" : "Preview tenant",
-    href: platformGoLiveWorkspaceHref(row),
-    tone: urgent ? "urgent" : "normal",
-  };
+  const sessionActive =
+    Boolean(row.workspaceId) && context.activeSupportWorkspaceId === row.workspaceId;
+
+  const actions: PlatformGoLiveRowAction[] = [
+    {
+      kind: "workspace",
+      label: sessionActive ? "Open workspace (session)" : row.workspaceId ? "Open workspace" : "Preview tenant",
+      href: platformGoLiveWorkspaceProjectHref(row),
+      tone,
+    },
+  ];
+
+  if (context.canImpersonate) {
+    actions.push({
+      kind: "tenant_go_live",
+      label: "Open tenant go-live",
+      href: platformGoLiveTenantProjectHref(row.id),
+      tone,
+      impersonationTargetUserId: row.userId,
+    });
+  } else if (row.workspaceId && !sessionActive) {
+    actions.push({
+      kind: "start_support_session",
+      label: "Start support session",
+      href: platformGoLiveWorkspaceProjectHref(row),
+      tone: "normal",
+      supportSessionWorkspaceId: row.workspaceId,
+      supportSessionRedirectTo: platformGoLiveWorkspaceProjectHref(row),
+    });
+  }
+
+  return actions;
 }
 
 export function summarizePlatformGoLiveFocus(

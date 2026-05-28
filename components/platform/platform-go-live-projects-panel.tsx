@@ -1,13 +1,11 @@
-import Link from "next/link";
-
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlatformGoLiveRowActions } from "@/components/platform/platform-go-live-row-actions";
 import { LAUNCH_STATUS_LABEL, RISK_LEVEL_LABEL } from "@/lib/go-live/launch-stages";
 import { PLATFORM_GO_LIVE_PROJECTS_ANCHOR } from "@/lib/go-live/platform-go-live-focus-era18-policy";
 import {
   isPlatformGoLiveProjectActive,
   platformGoLiveProjectLabel,
-  resolvePlatformGoLiveRowNextAction,
   type PlatformGoLiveCommandCenterModel,
 } from "@/lib/go-live/platform-go-live-focus-era18";
 
@@ -18,7 +16,11 @@ function statusVariant(status: string): "default" | "destructive" | "secondary" 
   return "outline";
 }
 
-export function PlatformGoLiveProjectsPanel(props: { model: PlatformGoLiveCommandCenterModel }) {
+export function PlatformGoLiveProjectsPanel(props: {
+  model: PlatformGoLiveCommandCenterModel;
+  activeSupportWorkspaceId: string | null;
+  canImpersonate: boolean;
+}) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -47,8 +49,8 @@ export function PlatformGoLiveProjectsPanel(props: { model: PlatformGoLiveComman
         <CardHeader>
           <CardTitle className="text-white">Cross-tenant launch projects</CardTitle>
           <CardDescription className="text-zinc-400">
-            Latest 50 projects sorted by launch date and readiness. Open workspace to support tenant
-            go-live validation — platform view does not bypass tenant RBAC.
+            Latest 50 projects sorted by launch date and readiness. Open workspace for read-only
+            support context, then impersonate (super-admin + MFA) to review tenant go-live validation.
           </CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
@@ -69,7 +71,6 @@ export function PlatformGoLiveProjectsPanel(props: { model: PlatformGoLiveComman
               </thead>
               <tbody>
                 {props.model.projects.map((row) => {
-                  const nextAction = resolvePlatformGoLiveRowNextAction(row);
                   const active = isPlatformGoLiveProjectActive(row.status);
                   return (
                     <tr
@@ -99,17 +100,11 @@ export function PlatformGoLiveProjectsPanel(props: { model: PlatformGoLiveComman
                       </td>
                       <td className="py-2 pr-4 text-zinc-400">{row.openIncidentCount}</td>
                       <td className="py-2">
-                        <Link
-                          href={nextAction.href}
-                          data-testid={`platform-go-live-next-${row.id}`}
-                          className={
-                            nextAction.tone === "urgent"
-                              ? "font-medium text-amber-300 underline-offset-2 hover:underline"
-                              : "text-primary underline-offset-2 hover:underline"
-                          }
-                        >
-                          {nextAction.label}
-                        </Link>
+                        <PlatformGoLiveRowActions
+                          row={row}
+                          activeSupportWorkspaceId={props.activeSupportWorkspaceId}
+                          canImpersonate={props.canImpersonate}
+                        />
                       </td>
                     </tr>
                   );

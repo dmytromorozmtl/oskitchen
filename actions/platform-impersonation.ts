@@ -15,6 +15,7 @@ import {
   PLATFORM_IMPERSONATION_MAX_SECONDS,
 } from "@/lib/platform/platform-impersonation";
 import { verifyImpersonationMfa } from "@/lib/platform/impersonation-mfa";
+import { sanitizePlatformImpersonationRedirect } from "@/lib/platform/platform-impersonation-redirect";
 
 export async function startPlatformImpersonation(
   targetUserId: string,
@@ -104,7 +105,10 @@ export async function startImpersonationFormAction(formData: FormData): Promise<
   const stepUpToken = String(formData.get("stepUpToken") ?? "").trim() || undefined;
   const totpCode = String(formData.get("totpCode") ?? "").trim() || undefined;
   if (!targetUserId) return;
+  const redirectTo = sanitizePlatformImpersonationRedirect(
+    String(formData.get("redirectTo") ?? "").trim() || undefined,
+  );
   const r = await startPlatformImpersonation(targetUserId, reason, stepUpToken, totpCode);
   if (!r.ok) return;
-  redirect("/platform/dashboard");
+  redirect(redirectTo);
 }

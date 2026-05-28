@@ -1,16 +1,30 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 
 import { PlatformGoLiveAttentionStrip } from "@/components/platform/platform-go-live-attention-strip";
 import { PlatformGoLiveProjectsPanel } from "@/components/platform/platform-go-live-projects-panel";
 import { Button } from "@/components/ui/button";
+import { getSessionUser } from "@/lib/auth";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
+import { isSuperAdminUser } from "@/lib/platform-super-bypass";
+import { SUPPORT_SESSION_COOKIE } from "@/lib/platform/support-session-types";
 import { loadPlatformGoLiveCommandCenterModel } from "@/services/platform/platform-go-live-service";
+import { getActiveSupportSessionForActor } from "@/services/platform/platform-support-session-service";
 
 export default async function PlatformGoLivePage() {
   const ctx = await requirePlatformAccess();
   assertPlatformPermission(ctx, "platform:workspaces:read");
 
   const model = await loadPlatformGoLiveCommandCenterModel();
+  const me = await getSessionUser();
+  const canImpersonate = me ? await isSuperAdminUser(me.id, me.email) : false;
+
+  const jar = await cookies();
+  const supportSessionId = jar.get(SUPPORT_SESSION_COOKIE)?.value;
+  const supportSession = supportSessionId
+    ? await getActiveSupportSessionForActor(ctx.userId, supportSessionId)
+    : null;
+  const activeSupportWorkspaceId = supportSession?.workspace.id ?? null;
 
   return (
     <div className="space-y-8">
@@ -34,7 +48,11 @@ export default async function PlatformGoLivePage() {
 
       <PlatformGoLiveAttentionStrip model={model} />
 
-      <PlatformGoLiveProjectsPanel model={model} />
+      <PlatformGoLiveProjectsPanel
+        model={model}
+        activeSupportWorkspaceId={activeSupportWorkspaceId}
+        canImpersonate={canImpersonate}
+      />
     </div>
   );
 }
