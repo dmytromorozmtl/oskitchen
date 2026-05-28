@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-008 — Shift variance acknowledgment gate (P1)
+- ID: `KOS-E18-008`
+- Title: Era 18 Workstream F Cycle 8 — bounded manager ack + note for non-zero variance
+- Module: POS
+- Priority: P1 (shift audit / financial trust)
+- Status: **shift_variance_ack_wired**
+- Decision: `era18-pos-shift-variance-ack-v1` — checkbox + note required; server validates via `getShiftCloseoutVariance`
+- Evidence: `components/dashboard/pos-shift-close-form.tsx`, `actions/pos.ts`, `lib/pos/pos-shift-closeout-preview.ts`
+- Next: Shift close history list with variance badges (bounded)
+
 ### KOS-E18-007 — KDS queue clarity polish (P1)
 - ID: `KOS-E18-007`
 - Title: Era 18 Workstream G Cycle 7 — queue strip, ticket numbers, prep/expo sections
@@ -53,7 +63,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **shift_closeout_preview_wired**
 - Decision: `era18-pos-shift-closeout-preview-v1` — opening + cash sales + expected + live variance; note prompt for non-zero variance
 - Evidence: `components/dashboard/pos-shift-close-form.tsx`, `lib/pos/pos-shift-closeout-preview.ts`, `services/pos/pos-shift-service.ts` (`listOpenShiftCloseoutPreviews`)
-- Next: Bounded manager variance acknowledgment (no automated approval claim)
+- Next: Shift close history with variance badges (bounded); no automated approval claim
 
 ### KOS-E18-005 — Persona default landing redirect (P1)
 - ID: `KOS-E18-005`

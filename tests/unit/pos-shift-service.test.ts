@@ -33,7 +33,7 @@ vi.mock("@/lib/scope/workspace-resource-scope", () => ({
 import { prisma } from "@/lib/prisma";
 import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
 import { ownerScopedAnd, posRegisterByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
-import { closePosShift, listOpenShiftCloseoutPreviews, openPosShift } from "@/services/pos/pos-shift-service";
+import { closePosShift, getShiftCloseoutVariance, listOpenShiftCloseoutPreviews, openPosShift } from "@/services/pos/pos-shift-service";
 
 describe("pos-shift-service", () => {
   beforeEach(() => {
@@ -266,5 +266,26 @@ describe("pos-shift-service", () => {
       },
     ]);
     expect(prisma.pOSShift.update).not.toHaveBeenCalled();
+  });
+
+  it("computes closeout variance for server-side ack validation", async () => {
+    vi.mocked(prisma.pOSShift.findFirst).mockResolvedValue({
+      id: "shift-1",
+      registerId: "reg-1",
+      openingCashAmount: new Prisma.Decimal(50),
+    } as never);
+    vi.mocked(prisma.pOSTransaction.findMany).mockResolvedValue([
+      { total: new Prisma.Decimal(20) },
+      { total: new Prisma.Decimal(10) },
+    ] as never);
+
+    const result = await getShiftCloseoutVariance("owner-1", "shift-1", 75);
+
+    expect(result).toEqual({
+      ok: true,
+      variance: -5,
+      expectedCash: 80,
+      cashSalesTotal: 30,
+    });
   });
 });

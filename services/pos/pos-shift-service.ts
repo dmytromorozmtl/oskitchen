@@ -196,3 +196,42 @@ export async function listOpenShiftCloseoutPreviews(
     }),
   );
 }
+
+/** Server-side variance for close validation — same math as closePosShift. */
+export async function getShiftCloseoutVariance(
+  userId: string,
+  shiftId: string,
+  closingCashAmount: number,
+): Promise<
+  | { ok: true; variance: number; expectedCash: number; cashSalesTotal: number }
+  | { ok: false; error: string }
+> {
+  const shiftWhere = (await ownerScopedAnd(userId, {
+    id: shiftId,
+    status: "OPEN",
+  })) as Prisma.POSShiftWhereInput;
+  const shift = await prisma.pOSShift.findFirst({
+    where: shiftWhere,
+    select: { id: true, registerId: true, openingCashAmount: true },
+  });
+  if (!shift) {
+    return { ok: false, error: "Open shift not found." };
+  }
+
+  const { cashSalesTotals } = await loadShiftCashSales(userId, {
+    id: shift.id,
+    registerId: shift.registerId,
+  });
+  const closeout = computeShiftCloseout({
+    openingCash: Number(shift.openingCashAmount),
+    cashSalesTotals,
+    closingCash: closingCashAmount,
+  });
+
+  return {
+    ok: true,
+    variance: closeout.variance,
+    expectedCash: closeout.expectedCash,
+    cashSalesTotal: closeout.cashSalesTotal,
+  };
+}

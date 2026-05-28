@@ -23,7 +23,12 @@ import {
 import { refundPosTransaction } from "@/services/pos/pos-refund-service";
 import { voidPosTransaction } from "@/services/pos/pos-void-service";
 import { createPosRegister } from "@/services/pos/pos-register-service";
-import { closePosShift, openPosShift } from "@/services/pos/pos-shift-service";
+import {
+  parseShiftVarianceAcknowledged,
+  shiftCloseoutRequiresVarianceAck,
+  validateShiftVarianceCloseoutAck,
+} from "@/lib/pos/pos-shift-closeout-preview";
+import { closePosShift, getShiftCloseoutVariance, openPosShift } from "@/services/pos/pos-shift-service";
 
 const checkoutSchema = z.object({
   registerId: z.string().uuid(),
@@ -222,13 +227,26 @@ export async function posCloseShiftAction(formData: FormData) {
     const shiftId = String(formData.get("shiftId") ?? "");
     const staffId = String(formData.get("staffId") ?? "");
     const closing = Number(formData.get("closingCash") ?? "0");
+    const notesRaw = String(formData.get("notes") ?? "").trim();
+    const varianceAcknowledged = parseShiftVarianceAcknowledged(formData.get("varianceAcknowledged"));
     if (!shiftId || !staffId) return { error: "Shift and staff are required." };
+
+    const closeoutPreview = await getShiftCloseoutVariance(actor.userId, shiftId, closing);
+    if (!closeoutPreview.ok) return { error: closeoutPreview.error };
+
+    const ackError = validateShiftVarianceCloseoutAck({
+      variance: closeoutPreview.variance,
+      varianceAcknowledged,
+      notes: notesRaw,
+    });
+    if (ackError) return { error: ackError };
+
     const res = await closePosShift({
       userId: actor.userId,
       shiftId,
       closedByStaffId: staffId,
       closingCashAmount: closing,
-      notes: String(formData.get("notes") ?? "") || undefined,
+      notes: notesRaw || undefined,
     });
     if (!res.ok) return { error: res.error };
     await logPosShiftEvent(actor, {
@@ -241,6 +259,9 @@ export async function posCloseShiftAction(formData: FormData) {
         closingCashAmount: serializeAuditNumeric(res.shift.closingCashAmount),
         expectedCashAmount: serializeAuditNumeric(res.shift.expectedCashAmount),
         varianceAmount: serializeAuditNumeric(res.shift.varianceAmount),
+        ...(shiftCloseoutRequiresVarianceAck(closeoutPreview.variance)
+          ? { varianceAcknowledged: true, varianceNote: notesRaw }
+          : {}),
       },
     });
     revalidatePath("/dashboard/pos/shifts");

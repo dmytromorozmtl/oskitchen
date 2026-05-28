@@ -6,6 +6,7 @@ const checkoutPosSale = vi.hoisted(() => vi.fn());
 const createPosRegister = vi.hoisted(() => vi.fn());
 const openPosShift = vi.hoisted(() => vi.fn());
 const closePosShift = vi.hoisted(() => vi.fn());
+const getShiftCloseoutVariance = vi.hoisted(() => vi.fn());
 const refundPosTransaction = vi.hoisted(() => vi.fn());
 const voidPosTransaction = vi.hoisted(() => vi.fn());
 const revalidatePath = vi.hoisted(() => vi.fn());
@@ -18,7 +19,7 @@ vi.mock("@/lib/permissions/mutation-access", () => ({ requireMutationPermission 
 vi.mock("@/lib/plans/feature-registry", () => ({ canUseFeature }));
 vi.mock("@/services/pos/pos-checkout-service", () => ({ checkoutPosSale }));
 vi.mock("@/services/pos/pos-register-service", () => ({ createPosRegister }));
-vi.mock("@/services/pos/pos-shift-service", () => ({ openPosShift, closePosShift }));
+vi.mock("@/services/pos/pos-shift-service", () => ({ openPosShift, closePosShift, getShiftCloseoutVariance }));
 vi.mock("@/services/pos/pos-refund-service", () => ({ refundPosTransaction }));
 vi.mock("@/services/pos/pos-void-service", () => ({ voidPosTransaction }));
 vi.mock("@/services/pos/pos-permission-audit", () => ({
@@ -96,6 +97,12 @@ describe("POS action RBAC", () => {
         expectedCashAmount: 80,
         varianceAmount: -25,
       },
+    });
+    getShiftCloseoutVariance.mockResolvedValue({
+      ok: true,
+      variance: -25,
+      expectedCash: 80,
+      cashSalesTotal: 30,
     });
     refundPosTransaction.mockResolvedValue({ ok: true });
     voidPosTransaction.mockResolvedValue({ ok: true });
@@ -287,16 +294,19 @@ describe("POS action RBAC", () => {
         shiftId: "shift-1",
         staffId: "staff-1",
         closingCash: "55",
+        varianceAcknowledged: "1",
+        notes: "Counted short after payout",
       }),
     );
 
     expect(result).toEqual({ ok: true });
+    expect(getShiftCloseoutVariance).toHaveBeenCalledWith("owner-user-1", "shift-1", 55);
     expect(closePosShift).toHaveBeenCalledWith({
       userId: "owner-user-1",
       shiftId: "shift-1",
       closedByStaffId: "staff-1",
       closingCashAmount: 55,
-      notes: undefined,
+      notes: "Counted short after payout",
     });
     expect(logPosShiftEvent).toHaveBeenCalledWith(actor, {
       action: AUDIT_ACTIONS.POS_SHIFT_CLOSED,
@@ -308,8 +318,71 @@ describe("POS action RBAC", () => {
         closingCashAmount: 55,
         expectedCashAmount: 80,
         varianceAmount: -25,
+        varianceAcknowledged: true,
+        varianceNote: "Counted short after payout",
       },
     });
+  });
+
+  it("blocks shift close with non-zero variance until acknowledged", async () => {
+    requireMutationPermission.mockResolvedValueOnce({ ok: true, actor });
+    getShiftCloseoutVariance.mockResolvedValueOnce({
+      ok: true,
+      variance: -5,
+      expectedCash: 80,
+      cashSalesTotal: 30,
+    });
+
+    const result = await posCloseShiftAction(
+      formDataFrom({
+        shiftId: "shift-1",
+        staffId: "staff-1",
+        closingCash: "75",
+      }),
+    );
+
+    expect(result).toEqual({
+      error: "Acknowledge the cash variance before closing this shift.",
+    });
+    expect(closePosShift).not.toHaveBeenCalled();
+  });
+
+  it("allows balanced shift close without variance acknowledgment", async () => {
+    requireMutationPermission.mockResolvedValueOnce({ ok: true, actor });
+    getShiftCloseoutVariance.mockResolvedValueOnce({
+      ok: true,
+      variance: 0,
+      expectedCash: 80,
+      cashSalesTotal: 30,
+    });
+    closePosShift.mockResolvedValueOnce({
+      ok: true,
+      shift: {
+        id: "shift-1",
+        registerId: "reg-1",
+        closedByStaffId: "staff-1",
+        closingCashAmount: 80,
+        expectedCashAmount: 80,
+        varianceAmount: 0,
+      },
+    });
+
+    const result = await posCloseShiftAction(
+      formDataFrom({
+        shiftId: "shift-1",
+        staffId: "staff-1",
+        closingCash: "80",
+      }),
+    );
+
+    expect(result).toEqual({ ok: true });
+    expect(closePosShift).toHaveBeenCalled();
+    expect(logPosShiftEvent).toHaveBeenCalledWith(
+      actor,
+      expect.objectContaining({
+        metadata: expect.not.objectContaining({ varianceAcknowledged: true }),
+      }),
+    );
   });
 
   it("blocks refunds without refund permission", async () => {

@@ -85,3 +85,45 @@ export function computeShiftCloseoutLivePreview(input: {
 export function shiftCloseoutNeedsVarianceNote(preview: ShiftCloseoutLivePreview): boolean {
   return preview.tone === "short" || preview.tone === "over";
 }
+
+export const SHIFT_VARIANCE_NOTE_MIN_LENGTH = 3;
+
+export function shiftCloseoutRequiresVarianceAck(variance: number | null): boolean {
+  if (variance === null) return false;
+  return Math.abs(variance) >= MONEY_EPSILON;
+}
+
+export function parseShiftVarianceAcknowledged(raw: FormDataEntryValue | null): boolean {
+  return raw === "1" || raw === "on" || raw === "true";
+}
+
+/** Bounded manager acknowledgment — not automated approval. */
+export function validateShiftVarianceCloseoutAck(input: {
+  variance: number;
+  varianceAcknowledged: boolean;
+  notes: string;
+}): string | null {
+  if (!shiftCloseoutRequiresVarianceAck(input.variance)) {
+    return null;
+  }
+  if (!input.varianceAcknowledged) {
+    return "Acknowledge the cash variance before closing this shift.";
+  }
+  if (input.notes.trim().length < SHIFT_VARIANCE_NOTE_MIN_LENGTH) {
+    return "Add a note explaining the variance for the audit trail.";
+  }
+  return null;
+}
+
+export function canSubmitShiftCloseWithPreview(input: {
+  preview: ShiftCloseoutLivePreview | null;
+  varianceAcknowledged: boolean;
+  notes: string;
+}): boolean {
+  if (!input.preview || input.preview.closingCash === null) return false;
+  if (!shiftCloseoutRequiresVarianceAck(input.preview.variance)) return true;
+  return (
+    input.varianceAcknowledged &&
+    input.notes.trim().length >= SHIFT_VARIANCE_NOTE_MIN_LENGTH
+  );
+}

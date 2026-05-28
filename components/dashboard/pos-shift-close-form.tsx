@@ -3,9 +3,11 @@
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  canSubmitShiftCloseWithPreview,
   computeShiftCloseoutLivePreview,
   formatShiftCloseoutMoney,
   shiftCloseoutNeedsVarianceNote,
@@ -25,6 +27,8 @@ type PosShiftCloseFormProps = {
 export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftCloseFormProps) {
   const [shiftId, setShiftId] = React.useState(previews[0]?.shiftId ?? "");
   const [closingCashInput, setClosingCashInput] = React.useState("");
+  const [notes, setNotes] = React.useState("");
+  const [varianceAcknowledged, setVarianceAcknowledged] = React.useState(false);
 
   const selected = previews.find((preview) => preview.shiftId === shiftId) ?? previews[0] ?? null;
 
@@ -38,6 +42,11 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
     }
   }, [previews, shiftId]);
 
+  React.useEffect(() => {
+    setVarianceAcknowledged(false);
+    setNotes("");
+  }, [shiftId, closingCashInput]);
+
   const livePreview = selected
     ? computeShiftCloseoutLivePreview({
         cashSalesTotal: selected.cashSalesTotal,
@@ -47,6 +56,11 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
     : null;
 
   const needsNote = livePreview ? shiftCloseoutNeedsVarianceNote(livePreview) : false;
+  const canSubmit = canSubmitShiftCloseWithPreview({
+    preview: livePreview,
+    varianceAcknowledged,
+    notes,
+  });
 
   return (
     <form action={formAction} className="space-y-4" data-testid="pos-shift-close-form">
@@ -122,7 +136,7 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
           ) : null}
           {needsNote ? (
             <p className="mt-2 text-xs text-amber-700 dark:text-amber-500">
-              Non-zero variance — add a note below before closing (manager review).
+              Non-zero variance — acknowledge and explain before closing.
             </p>
           ) : null}
         </div>
@@ -160,19 +174,52 @@ export function PosShiftCloseForm({ staff, previews, formAction }: PosShiftClose
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="notesClose">Notes</Label>
+        <Label htmlFor="notesClose">
+          Notes{needsNote ? " (required for variance)" : ""}
+        </Label>
         <Input
           id="notesClose"
           name="notes"
           className="rounded-xl"
+          value={notes}
+          onChange={(event) => setNotes(event.target.value)}
+          required={needsNote}
           placeholder={needsNote ? "Explain variance for audit trail" : "Optional"}
+          data-testid="pos-shift-close-notes"
         />
       </div>
+
+      {needsNote ? (
+        <div
+          className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/80 p-3 dark:border-amber-900 dark:bg-amber-950/30"
+          data-testid="pos-shift-variance-ack"
+        >
+          <Checkbox
+            id="varianceAcknowledged"
+            checked={varianceAcknowledged}
+            onCheckedChange={(checked) => setVarianceAcknowledged(checked === true)}
+            data-testid="pos-shift-variance-ack-checkbox"
+          />
+          <div className="space-y-1">
+            <Label htmlFor="varianceAcknowledged" className="text-sm font-medium leading-snug">
+              I acknowledge this cash variance and have counted the drawer.
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              Manager review only — not an automated approval.
+            </p>
+            {varianceAcknowledged ? (
+              <input type="hidden" name="varianceAcknowledged" value="1" />
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+
       <Button
         type="submit"
         variant="secondary"
         className="rounded-full"
-        disabled={previews.length === 0}
+        disabled={previews.length === 0 || !canSubmit}
+        data-testid="pos-shift-close-submit"
       >
         Close shift
       </Button>
