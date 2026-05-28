@@ -75,6 +75,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/go-live/platform-support-session-banner-go-live-era18.ts`, `components/platform/support-session-platform-banner.tsx`, `tests/unit/platform-support-session-banner-go-live-era18.test.ts`
 - Next: Cross-link platform implementations panel to workspace go-live section for blocked pilot tenants
 
+### KOS-E18-057 — Commercial pilot ops ↔ go-live bridge (P0)
+- ID: `KOS-E18-057`
+- Title: Era 18 Workstream D Cycle 57 — implementations panel links to blocked tenant workspace go-live
+- Module: Commercial / Platform ops / Go-live
+- Priority: P0 (paid pilot execution — connect evidence gates to tenant launch blockers)
+- Status: **commercial_pilot_ops_go_live_bridge_wired**
+- Decision: `era18-commercial-pilot-ops-go-live-bridge-v1` — blocked launch panel + attention strip + GO/NO-GO cross-link; does not fake PASS
+- Evidence: `lib/commercial/commercial-pilot-ops-go-live-bridge-era18.ts`, `components/platform/commercial-pilot-blocked-launch-panel.tsx`, `tests/unit/commercial-pilot-ops-go-live-bridge-era18.test.ts`
+- Next: P0 staging proof ops run when vault credentials available; re-run smoke:pilot-gono-go after proof
+
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)
 - ID: `KOS-E18-052`
 - Title: Era 18 Workstream D Cycle 52 — honest GO/NO-GO + P0 staging proof on platform implementations

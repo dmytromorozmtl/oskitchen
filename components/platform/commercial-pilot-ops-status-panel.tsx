@@ -4,6 +4,10 @@ import { ClipboardList } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  buildCommercialPilotOpsGoLiveBridgeRows,
+  resolveCommercialPilotOpsGoNoGoLaunchNextAction,
+} from "@/lib/commercial/commercial-pilot-ops-go-live-bridge-era18";
+import {
   COMMERCIAL_PILOT_GONOGO_ANCHOR,
   COMMERCIAL_PILOT_OPS_P0_CHECKLIST_DOC,
   COMMERCIAL_PILOT_P0_STAGING_ANCHOR,
@@ -14,6 +18,7 @@ import {
   resolveCommercialPilotOpsDecision,
   type CommercialPilotOpsStatusModel,
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
+import type { PlatformGoLiveProjectRow } from "@/lib/go-live/platform-go-live-focus-era18";
 
 function decisionBadgeVariant(
   decision: ReturnType<typeof resolveCommercialPilotOpsDecision>,
@@ -23,11 +28,21 @@ function decisionBadgeVariant(
   return "secondary";
 }
 
-export function CommercialPilotOpsStatusPanel(props: { model: CommercialPilotOpsStatusModel }) {
+export function CommercialPilotOpsStatusPanel(props: {
+  model: CommercialPilotOpsStatusModel;
+  launchBlockerProjects?: readonly PlatformGoLiveProjectRow[];
+}) {
   const decision = resolveCommercialPilotOpsDecision(props.model.goNoGo);
   const gateRows = buildCommercialPilotOpsGateRows(props.model);
   const goNoGo = props.model.goNoGo.summary;
   const p0 = props.model.p0Staging.summary;
+  const launchBlockerCount = props.launchBlockerProjects
+    ? buildCommercialPilotOpsGoLiveBridgeRows(props.launchBlockerProjects).length
+    : 0;
+  const launchNextAction = resolveCommercialPilotOpsGoNoGoLaunchNextAction({
+    decision,
+    blockerCount: launchBlockerCount,
+  });
 
   return (
     <div className="space-y-6">
@@ -59,7 +74,20 @@ export function CommercialPilotOpsStatusPanel(props: { model: CommercialPilotOps
                   <li key={blocker}>{blocker}</li>
                 ))}
               </ul>
+              {launchNextAction ? (
+                <p className="mt-3">
+                  <Link href={launchNextAction.href} className="text-sm font-medium text-amber-300 underline-offset-2 hover:underline">
+                    {launchNextAction.label}
+                  </Link>
+                </p>
+              ) : null}
             </div>
+          ) : launchNextAction ? (
+            <p>
+              <Link href={launchNextAction.href} className="text-sm font-medium text-amber-300 underline-offset-2 hover:underline">
+                {launchNextAction.label}
+              </Link>
+            </p>
           ) : null}
 
           {goNoGo?.warnings.length ? (

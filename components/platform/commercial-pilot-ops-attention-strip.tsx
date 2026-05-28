@@ -3,15 +3,28 @@ import { AlertTriangle, ArrowRight } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  mergeCommercialPilotOpsAttentionItems,
+  pickCommercialPilotOpsGoLiveBridgeAttentionItems,
+} from "@/lib/commercial/commercial-pilot-ops-go-live-bridge-era18";
+import {
   pickCommercialPilotOpsAttentionItems,
   summarizeCommercialPilotOpsStatus,
   type CommercialPilotOpsStatusModel,
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
+import type { PlatformGoLiveProjectRow } from "@/lib/go-live/platform-go-live-focus-era18";
 
 export function CommercialPilotOpsAttentionStrip(props: {
   model: CommercialPilotOpsStatusModel;
+  launchBlockerProjects?: readonly PlatformGoLiveProjectRow[];
 }) {
-  const items = pickCommercialPilotOpsAttentionItems(props.model);
+  const opsItems = pickCommercialPilotOpsAttentionItems(props.model);
+  const bridgeItems = props.launchBlockerProjects
+    ? pickCommercialPilotOpsGoLiveBridgeAttentionItems({
+        opsModel: props.model,
+        blockerProjects: props.launchBlockerProjects,
+      })
+    : [];
+  const items = mergeCommercialPilotOpsAttentionItems(opsItems, bridgeItems);
   const summary = summarizeCommercialPilotOpsStatus(props.model);
 
   if (items.length === 0) return null;

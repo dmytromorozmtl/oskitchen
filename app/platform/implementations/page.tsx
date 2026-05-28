@@ -1,16 +1,22 @@
 import Link from "next/link";
 
+import { CommercialPilotBlockedLaunchPanel } from "@/components/platform/commercial-pilot-blocked-launch-panel";
 import { CommercialPilotOpsAttentionStrip } from "@/components/platform/commercial-pilot-ops-attention-strip";
 import { CommercialPilotOpsStatusPanel } from "@/components/platform/commercial-pilot-ops-status-panel";
 import { Button } from "@/components/ui/button";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
+import { loadPlatformGoLiveCommandCenterModel } from "@/services/platform/platform-go-live-service";
 
 export default async function PlatformImplementationsPage() {
   const ctx = await requirePlatformAccess();
   assertPlatformPermission(ctx, "platform:workspaces:read");
 
-  const model = await loadCommercialPilotOpsStatusModel();
+  const [model, goLiveModel] = await Promise.all([
+    loadCommercialPilotOpsStatusModel(),
+    loadPlatformGoLiveCommandCenterModel(),
+  ]);
+  const launchBlockerProjects = goLiveModel.projects;
 
   return (
     <div className="space-y-8">
@@ -33,9 +39,11 @@ export default async function PlatformImplementationsPage() {
         </div>
       </div>
 
-      <CommercialPilotOpsAttentionStrip model={model} />
+      <CommercialPilotOpsAttentionStrip model={model} launchBlockerProjects={launchBlockerProjects} />
 
-      <CommercialPilotOpsStatusPanel model={model} />
+      <CommercialPilotOpsStatusPanel model={model} launchBlockerProjects={launchBlockerProjects} />
+
+      <CommercialPilotBlockedLaunchPanel projects={launchBlockerProjects} />
     </div>
   );
 }
