@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type { LaunchWizardStep, LaunchWizardStepStatus } from "@/lib/launch-wizard/launch-wizard-era19";
+import type { LaunchWizardOperatorLink } from "@/lib/launch-wizard/launch-wizard-kds-production-era19";
 import {
   launchWizardProgressAriaLabel,
   launchWizardStepStatusAriaLabel,
@@ -182,6 +183,16 @@ function LaunchWizardStepCard(props: { step: LaunchWizardStep; compact?: boolean
         ) : (
           <p className="text-sm text-muted-foreground">No missing items for this step.</p>
         )}
+        {step.setupGuidance ? (
+          <p className="text-sm text-muted-foreground">{step.setupGuidance}</p>
+        ) : null}
+        {step.operatorLinks && step.operatorLinks.length > 0 ? (
+          <LaunchWizardOperatorLinksPanel
+            stepId={step.id}
+            links={step.operatorLinks}
+            anchor={step.operatorLinksAnchor}
+          />
+        ) : null}
         <Button
           asChild
           variant={step.status === "blocked" ? "default" : "outline"}
@@ -195,5 +206,46 @@ function LaunchWizardStepCard(props: { step: LaunchWizardStep; compact?: boolean
         </Button>
       </CardContent>
     </Card>
+  );
+}
+
+function LaunchWizardOperatorLinksPanel(props: {
+  stepId: string;
+  links: readonly LaunchWizardOperatorLink[];
+  anchor?: string;
+}) {
+  const panelId = props.anchor ?? `launch-wizard-step-${props.stepId}-operator-links`;
+
+  return (
+    <div
+      id={panelId}
+      className="space-y-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-3"
+      data-testid={`launch-wizard-step-${props.stepId}-operator-links`}
+    >
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        Operator workflows
+      </p>
+      <ul className="space-y-2" aria-label="Operator workflow links">
+        {props.links.map((link) => (
+          <li key={link.id} className="space-y-1">
+            {link.blocked ? (
+              <div className="text-sm">
+                <p className="font-medium text-muted-foreground">{link.label}</p>
+                <p className="text-xs text-muted-foreground">{link.blockedReason ?? link.detail}</p>
+              </div>
+            ) : (
+              <Link
+                href={link.href}
+                className="group block rounded-md text-sm transition-colors hover:bg-background/80"
+                data-testid={`launch-wizard-operator-link-${link.id}`}
+              >
+                <span className="font-medium text-foreground group-hover:underline">{link.label}</span>
+                <span className="mt-0.5 block text-xs text-muted-foreground">{link.detail}</span>
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

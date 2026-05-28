@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-028 — Launch Wizard KDS/production operator cross-links (P1 WOW)
+- ID: `KOS-E19-028`
+- Title: Era 19 Workstream C Cycle 28 — KDS/production wizard step links to priority lane + POS manager override
+- Module: Launch Wizard / KDS / POS / Production onboarding
+- Priority: P1 (time-to-first-order — connect setup step to real operator workflows)
+- Status: **launch_wizard_kds_production_crosslink_wired**
+- Decision: `era19-launch-wizard-kds-production-v1` — operator workflow panel on kds-production step; blocked KDS/override links until POS first use; honest missing items; primary CTA routes to POS → production → KDS priority lane
+- Evidence: `lib/launch-wizard/launch-wizard-kds-production-era19.ts`, updated `launch-wizard-era19.ts`, `launch-wizard-view.tsx`
+- Next: P0 proof unblock when ops credentials available, or production calendar drill UX
+
 ### KOS-E19-027 — POS manager override clarity checklist (P1 operator speed)
 - ID: `KOS-E19-027`
 - Title: Era 19 Workstream E Cycle 27 — manager discount/comp override checklist + review hero on POS terminal
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **pos_manager_override_clarity_wired**
 - Decision: `era19-pos-manager-override-clarity-v1` — 4-step override checklist, review hero when comp/discount active, `#pos-manager-override` anchor; preserves pos.discount.apply RBAC
 - Evidence: `lib/pos/pos-manager-override-clarity-era19.ts`, `PosManagerOverrideChecklist`, `PosManagerOverrideHero`, updated POS terminal
-- Next: P0 proof unblock when ops credentials available, or Launch Wizard KDS setup step cross-link
+- Next: P0 proof unblock when ops credentials available, or briefing cashier pack → POS manager override deep link
 
 ### KOS-E19-026 — Briefing owner pack ↔ KDS priority lane cross-link (P1 WOW)
 - ID: `KOS-E19-026`

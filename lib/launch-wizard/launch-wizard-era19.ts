@@ -1,5 +1,7 @@
 import type { CommercialPilotOpsDecision } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import type { PilotGoNoGoCustomerStatus } from "@/lib/commercial/pilot-gono-go-summary";
+import { enrichLaunchWizardKdsProductionStep } from "@/lib/launch-wizard/launch-wizard-kds-production-era19";
+import type { LaunchWizardOperatorLink } from "@/lib/launch-wizard/launch-wizard-kds-production-era19";
 import {
   LAUNCH_WIZARD_ROUTE,
   LAUNCH_WIZARD_STEP_DEFINITIONS,
@@ -24,6 +26,11 @@ export type LaunchWizardStep = {
   ownerRole: LaunchWizardStepOwnerRole;
   evidenceSource: string;
   order: number;
+  /** Era 19 Cycle 28 — KDS/production operator workflow cross-links */
+  setupGuidance?: string;
+  operatorLinks?: readonly LaunchWizardOperatorLink[];
+  operatorLinksAnchor?: string;
+  policyId?: string;
 };
 
 export type LaunchWizardSignals = {
@@ -310,7 +317,7 @@ export function buildLaunchWizardPilotReadinessStep(
 }
 
 export function buildLaunchWizardSteps(signals: LaunchWizardSignals): LaunchWizardStep[] {
-  return [
+  const steps: LaunchWizardStep[] = [
     buildLaunchWizardBusinessProfileStep(signals.businessProfile),
     buildLaunchWizardMenuCatalogStep(signals.menuCatalog),
     buildLaunchWizardStorefrontStep(signals.storefront),
@@ -320,6 +327,12 @@ export function buildLaunchWizardSteps(signals: LaunchWizardSignals): LaunchWiza
     buildLaunchWizardGoLiveProofStep(signals.goLive),
     buildLaunchWizardPilotReadinessStep(signals.pilotReadiness),
   ];
+
+  return steps.map((row) =>
+    row.id === "kds-production"
+      ? enrichLaunchWizardKdsProductionStep(row, signals.pos, signals.production)
+      : row,
+  );
 }
 
 export function summarizeLaunchWizardProgress(steps: readonly LaunchWizardStep[]): LaunchWizardProgress {
