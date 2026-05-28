@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { GoLiveKpiGrid } from "@/components/dashboard/go-live/kpi-grid";
+import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
 import { CreateProjectForm } from "@/components/dashboard/go-live/create-project-form";
 import { LaunchStatusBadge, RiskBadge } from "@/components/dashboard/go-live/status-badges";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +18,7 @@ import {
 } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { LAUNCH_MODE_LABEL } from "@/lib/go-live/launch-stages";
+import { buildGoLiveFocusSnapshot } from "@/lib/go-live/go-live-focus-era18";
 import {
   listProjects,
   workbenchSnapshot,
@@ -151,6 +153,14 @@ export default async function GoLivePage() {
           </div>
         </div>
 
+        <GoLiveAttentionStrip
+          legacyChecks={LEGACY_CHECKS.map(([label, href]) => ({
+            label,
+            href,
+            done: completed.has(label),
+          }))}
+        />
+
         <Card className="border-dashed">
           <CardHeader>
             <CardTitle className="text-lg">No launch project yet</CardTitle>
@@ -199,6 +209,11 @@ export default async function GoLivePage() {
   const primary = projects[0];
   const snapshot = await workbenchSnapshot(userId, primary.id, primary.businessType ?? null, primary.status);
   const criticalBlockers = snapshot.validation.blockers.filter((b) => b.severity === "CRITICAL").length;
+  const approvalsPending = Math.max(
+    0,
+    snapshot.inputs.approvalsRequired - snapshot.inputs.approvalsCount,
+  );
+  const goLiveFocus = buildGoLiveFocusSnapshot(snapshot.validation, approvalsPending);
   const launchEta = primary.launchDate ? primary.launchDate.toISOString().slice(0, 10) : "Not set";
   const externalTargetProviders = snapshot.inputs.externalTargetProviderCount ?? 0;
   const externalCertifiedProviders = snapshot.inputs.externalCertifiedProviderCount ?? 0;
@@ -234,6 +249,8 @@ export default async function GoLivePage() {
         </div>
       </div>
 
+      <GoLiveAttentionStrip focus={goLiveFocus} blockers={snapshot.validation.blockers} />
+
       <GoLiveKpiGrid
         tiles={{
           readiness: snapshot.validation.readiness.score,
@@ -245,10 +262,7 @@ export default async function GoLivePage() {
           simulationStatus: latestSimulation?.result ?? "Not run",
           launchEta,
           unresolvedIncidents: incidentCount,
-          approvalsPending: Math.max(
-            0,
-            snapshot.inputs.approvalsRequired - snapshot.inputs.approvalsCount,
-          ),
+          approvalsPending,
         }}
       />
 

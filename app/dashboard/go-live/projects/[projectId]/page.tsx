@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ApprovalButtons } from "@/components/dashboard/go-live/approval-buttons";
+import { GoLiveAttentionStrip } from "@/components/dashboard/go-live/go-live-attention-strip";
+import { GoLiveBlockerNextAction } from "@/components/dashboard/go-live/go-live-blocker-next-action";
 import { ChecklistRow } from "@/components/dashboard/go-live/checklist-row";
 import { IncidentForm, IncidentRowActions } from "@/components/dashboard/go-live/incident-form";
 import { GoLiveKpiGrid } from "@/components/dashboard/go-live/kpi-grid";
@@ -28,6 +30,7 @@ import {
   stageRank,
 } from "@/lib/go-live/launch-stages";
 import { parseGoLiveAuditSnapshot } from "@/lib/go-live/audit-snapshot";
+import { buildGoLiveFocusSnapshot } from "@/lib/go-live/go-live-focus-era18";
 import {
   SIMULATION_TYPE_LABEL,
 } from "@/lib/go-live/simulation-engine";
@@ -70,6 +73,8 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
         : `${externalMissingProviders} provider(s) still missing certification.${placeholderScopeCount > 0 ? ` ${placeholderScopeCount} placeholder integration(s) remain in scope.` : ""}`;
   const certificationTone =
     externalTargetProviders === 0 || externalMissingProviders === 0 ? "success" : "danger";
+  const approvalsPending = Math.max(0, snapshot.inputs.approvalsRequired - snapshot.inputs.approvalsCount);
+  const goLiveFocus = buildGoLiveFocusSnapshot(snapshot.validation, approvalsPending);
 
   const itemsByStage = new Map<string, typeof project.checklistItems>();
   for (const it of project.checklistItems) {
@@ -135,9 +140,11 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           simulationStatus: project.simulations[0]?.result ?? "Not run",
           launchEta,
           unresolvedIncidents: incidentOpen.length,
-          approvalsPending: Math.max(0, snapshot.inputs.approvalsRequired - snapshot.inputs.approvalsCount),
+          approvalsPending,
         }}
       />
+
+      <GoLiveAttentionStrip focus={goLiveFocus} blockers={blockers} />
 
       <Card>
         <CardHeader>
@@ -151,7 +158,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="go-live-validation">
         <CardHeader>
           <CardTitle className="text-base">Validation report</CardTitle>
           <CardDescription>
@@ -170,7 +177,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
           ) : (
             <ul className="space-y-2 text-sm">
               {blockers.map((b) => (
-                <li key={b.key} className="rounded-lg border p-3">
+                <li key={b.key} id={`go-live-blocker-${b.key}`} className="scroll-mt-24 rounded-lg border p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <p className="font-medium">{b.title}</p>
@@ -180,13 +187,9 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
                       <p className="text-xs">{b.resolution}</p>
                       {b.detail ? <p className="text-xs text-muted-foreground">{b.detail}</p> : null}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col items-end gap-2">
                       <BlockerSeverityBadge severity={b.severity} />
-                      {b.actionRoute ? (
-                        <Link href={b.actionRoute} className="text-xs font-medium text-primary underline-offset-4 hover:underline">
-                          Open
-                        </Link>
-                      ) : null}
+                      <GoLiveBlockerNextAction blocker={b} />
                     </div>
                   </div>
                 </li>
@@ -281,7 +284,7 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="go-live-approvals">
         <CardHeader>
           <CardTitle className="text-base">Approvals</CardTitle>
           <CardDescription>

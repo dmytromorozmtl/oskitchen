@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-029 — Go-live blocker attention strip (P1)
+- ID: `KOS-E18-029`
+- Title: Era 18 Workstream L Cycle 29 — launch blocker prioritization + validation row next actions
+- Module: Go-live / Pilot deployment
+- Priority: P1 (pilot deployment speed + commercial readiness)
+- Status: **go_live_focus_attention_wired**
+- Decision: `era18-go-live-focus-v1` — critical/high-risk blocker ordering; legacy checklist strip; blocker row next actions on project validation report
+- Evidence: `lib/go-live/go-live-focus-era18.ts`, `components/dashboard/go-live/go-live-attention-strip.tsx`, `app/dashboard/go-live/page.tsx`, `app/dashboard/go-live/projects/[projectId]/page.tsx`
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-028 — Getting started pilot channel step (P1)
 - ID: `KOS-E18-028`
 - Title: Era 18 Workstream L Cycle 28 — sales channel onboarding step + channel readiness attention strip
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **getting_started_pilot_channel_wired**
 - Decision: `era18-getting-started-pilot-channel-v1` — integration step in golden path; attention strip for errors and connect prompts on Today
 - Evidence: `lib/onboarding/getting-started-pilot-channel-era18.ts`, `components/dashboard/getting-started-attention-strip.tsx`, `services/onboarding/getting-started-status.ts`, `app/dashboard/today/page.tsx`
-- Next: P0 staging proof ops execution when vault ready; go-live blocker attention strip (P1)
+- Next: P0 staging proof ops execution when vault ready; go-live blocker attention strip — **done** (KOS-E18-029)
 
 ### KOS-E18-027 — POS shift close focus strip (P1)
 - ID: `KOS-E18-027`
