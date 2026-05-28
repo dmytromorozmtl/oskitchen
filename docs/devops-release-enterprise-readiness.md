@@ -125,29 +125,39 @@ Each environment should have:
 - internal health surfaces are real
 - public status posture should remain honest until status/public incident process is formalized
 
+## Enterprise procurement (Era 4 Cycle 8)
+
+- **Canonical pack:** [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — policy `era4-procurement-honesty-v1`
+- **CI:** `npm run test:ci:enterprise-procurement:cert` (in `test:ci:governance-bundles`) — scans pack for required sections and forbidden false certification claims
+- **Rule:** questionnaires, RFPs, and sales decks must align with the pack; do not cite deprecated `docs/ENTERPRISE_*_FINAL.md` or `enterprise-full-audit-*` for current posture
+
 ## SSO / SAML Roadmap
-- architecture/roadmap only today
-- not sell-ready as a current enterprise capability
+
+See procurement pack § SSO — **not available today**; phased roadmap only.
 
 ## SCIM Roadmap
-- architecture/roadmap only today
-- not sell-ready as a current enterprise capability
+
+See procurement pack § SCIM — **not available today**; depends on SSO pilot.
+
+## SOC 2 Readiness
+
+See procurement pack § SOC 2 — **not certified**; internal readiness mapping only.
 
 ## Audit Export
-- audit logging exists, but export maturity and governance need continued work
-- enterprise readiness should require scoped, permissioned audit export
+
+See procurement pack § Audit — logging + permission-gated export (`audit.export`); no SIEM-by-default.
 
 ## Data Retention
-- retention policy and deletion/DSAR posture must remain honest
-- do not imply automated enterprise-grade retention governance unless implemented
+
+See procurement pack § Data retention — honest limits; no enterprise retention SKU.
 
 ## DPA / Privacy Support
-- privacy support is currently more roadmap/process than enterprise productized flow
-- keep claims modest until policies, exports, and request handling are formalized
+
+See procurement pack § Data retention and privacy — process + gated exports; not a full privacy center.
 
 ## Security Questionnaire Support
-- provide architecture-backed answers only
-- avoid attestation language beyond implemented evidence and published roadmap
+
+See procurement pack § Security questionnaire guide — evidence pointers only, no attestation language.
 
 ## Immediate Readiness Priorities
 1. canonicalize RBAC and permission enforcement

@@ -195,6 +195,17 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:typecheck-slice:cert` + `test:ci:typecheck-slice` chained in `test:ci:governance-bundles`.
 
+## Tier 1e4 — Enterprise procurement honesty (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Enterprise procurement wiring cert | `npm run test:ci:enterprise-procurement:cert` | Policy `era4-procurement-honesty-v1`, pack on disk, canon index + devops links |
+| Enterprise procurement unit | `npm run test:ci:enterprise-procurement` | Required pack sections; no forbidden false certification claims |
+
+**Canonical pack:** [`docs/enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — SSO/SCIM/SOC2 roadmaps, audit, tenant isolation, retention, backup, incident, questionnaire, FAQ.
+
+**Wiring certification (tier 0):** `test:ci:enterprise-procurement:cert` + `test:ci:enterprise-procurement` chained in `test:ci:governance-bundles`.
+
 ## Tier 1f — Doc canon (`quality` job via governance bundles)
 
 | Suite | Command | Notes |

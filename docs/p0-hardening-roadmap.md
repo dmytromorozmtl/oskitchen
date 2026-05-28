@@ -299,6 +299,17 @@ Priority rule:
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
 - **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
 
+## Era 4 — Enterprise procurement basics (Cycle 8)
+
+- **Completed (2026-05-27):** Canonical [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) with honest SSO/SCIM/SOC2 roadmaps, audit/tenant/retention/backup/incident/questionnaire/FAQ sections; policy `era4-procurement-honesty-v1`; CI cert `test:ci:enterprise-procurement:cert` forbids false affirmative certification claims in the pack.
+- **Evidence:** `lib/enterprise/enterprise-procurement-policy.ts`, `docs/devops-release-enterprise-readiness.md` (links), `docs/canonical-doc-index.md` (core canon #13).
+- **Rule:** RFP and security questionnaire answers must trace to the pack — no SOC 2 / SSO / SCIM “available today” language.
+
+## Era 4 — Typecheck slices (Cycle 7)
+
+- **Completed (2026-05-27):** `era4-typecheck-slice-v1` — `typecheck:slice:services-core` and `typecheck:slice:dashboard-services-api` (6GB); `typecheck:full` remains CI canonical (8GB).
+- **Evidence:** `tsconfig.base.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`.
+
 ## Era 4 — RBAC wave 4 residuals batch 2 (P0-3)
 
 - **Completed (Cycle 6, 2026-05-27):** Restaurant table mutations require `pos.access` (`lib/restaurant/require-restaurant-table-mutation.ts`); customer subscription mutations require `customers.manage` via `requireCrmMutation`; storefront experiment ethics review requires `storefront.manage` via `requireStorefrontManageActor`.

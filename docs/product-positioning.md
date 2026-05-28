@@ -181,7 +181,7 @@ KitchenOS is pilot-ready for operator-led businesses that need one system for di
 KitchenOS is SMB-ready where the operator values unified workflow more than deep hardware ecosystem parity. Best-fit SMBs are restaurants, cafes, catering teams, and ghost kitchens running direct online ordering plus staff-operated order flows.
 
 ## 17. Enterprise-Ready Positioning
-Enterprise-ready messaging should remain future-facing and architecture-led, not certification-led. Safe language today is: multi-location architecture, platform governance direction, public API/webhook foundation, and phased enterprise roadmap. Avoid procurement-style promises beyond that. Evidence: `docs/ENTERPRISE_READINESS_AUDIT_FINAL.md`, `docs/ENTERPRISE_SECURITY_ROADMAP.md`.
+Enterprise-ready messaging should remain future-facing and architecture-led, not certification-led. Safe language today is: multi-location architecture, platform governance direction, public API/webhook foundation, and phased enterprise roadmap. **Canonical procurement source:** [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) (`era4-procurement-honesty-v1`). Do not cite deprecated `docs/ENTERPRISE_*_FINAL.md` for current SSO/SOC2 posture.
 
 ## 18. Website Messaging
 - Headline: "Run your food business from one operating platform."

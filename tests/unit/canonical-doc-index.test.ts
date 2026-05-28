@@ -15,6 +15,7 @@ const CANONICAL_DOC_PATHS = [
   "docs/definition-of-done.md",
   "docs/qa-master-test-plan.md",
   "docs/devops-release-enterprise-readiness.md",
+  "docs/enterprise-procurement-pack.md",
   "docs/product-positioning.md",
   "docs/competitor-feature-gap-matrix.md",
   "docs/kds-v1-scope.md",

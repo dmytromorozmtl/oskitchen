@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 4 Cycle 1)  
+**Updated:** 2026-05-27 (Era 4 Cycle 8)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -15,7 +15,7 @@
 
 ---
 
-## Core canon (12)
+## Core canon (13)
 
 Operational source of truth for day-to-day hardening and release gating.
 
@@ -29,6 +29,7 @@ Operational source of truth for day-to-day hardening and release gating.
 | [`definition-of-done.md`](./definition-of-done.md) | Completion standard for product, eng, QA, GTM | Product/QA |
 | [`qa-master-test-plan.md`](./qa-master-test-plan.md) | Test suite taxonomy and CI bundle references | QA |
 | [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) | Release, ops, and enterprise readiness checklist | DevOps |
+| [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) | Honest enterprise procurement / security questionnaire pack (`era4-procurement-honesty-v1`) | Product/Security/GTM |
 | [`product-positioning.md`](./product-positioning.md) | Market positioning tied to implementation reality | Product/GTM |
 | [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md) | Honest competitor gap framing | Product |
 | [`kds-v1-scope.md`](./kds-v1-scope.md) | KDS v1 in/out scope, workflow, permissions, tests | Kitchen/Ops |

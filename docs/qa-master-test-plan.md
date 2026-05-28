@@ -74,6 +74,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c4. Enterprise procurement honesty (Era 4 Cycle 8)
+- policy: `lib/enterprise/enterprise-procurement-policy.ts` (`era4-procurement-honesty-v1`)
+- canonical pack: `docs/enterprise-procurement-pack.md`
+- wiring cert: `test:ci:enterprise-procurement:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:enterprise-procurement` — required sections present; forbidden false SOC2/SSO/SCIM affirmative claims absent
+
 ### 8c3. Typecheck slices (Era 4 Cycle 7)
 - policy: `lib/ci/typecheck-slice-policy.ts` (`era4-typecheck-slice-v1`)
 - wiring cert: `test:ci:typecheck-slice:cert` (in `test:ci:governance-bundles`)

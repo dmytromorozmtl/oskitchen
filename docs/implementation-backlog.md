@@ -71,6 +71,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `tsconfig.base.json`, `tsconfig.slice.dashboard-services-api.json`, `lib/ci/typecheck-slice-policy.ts`, `test:ci:typecheck-slice:cert`
 - Next: storefront/marketing slices or wire optional CI parallel slice job
 
+### KOS-E4-008 — Enterprise procurement basics
+- ID: `KOS-E4-008`
+- Title: Canonical enterprise procurement pack without false SSO/SOC2/SCIM claims
+- Module: Product / security / GTM
+- Priority: P0 (Era 4 Cycle 8)
+- Status: **completed**
+- Decision: `era4-procurement-honesty-v1` — single canonical pack for questionnaires and RFPs; deprecated enterprise audit family for posture
+- Evidence: `docs/enterprise-procurement-pack.md`, `lib/enterprise/enterprise-procurement-policy.ts`, `test:ci:enterprise-procurement:cert`
+- Next: cross-channel loyalty/gift card E2E or KDS staging smoke
+
 ## P0 — Platform Safety
 ### KOS-P0-001 — Canonical RBAC rollout for sensitive mutations
 - ID: `KOS-P0-001`
