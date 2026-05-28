@@ -69,4 +69,4 @@ Runs wired unit/cert tests (`test:ci:production-calendar-move-ui:cert` + era15 o
 4. Re-run with `PRODUCTION_CALENDAR_DRILL_MANUAL=passed` when checklist complete.
 5. **Do not claim drag-and-drop, KDS sync, delete-task UI, or rush-hour certification.**
 
-**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; drill **SKIPPED WITH REASON** (`drillProofStatus: proof_skipped_missing_prerequisites`). Missing: `PRODUCTION_CALENDAR_DRILL_STAGING_URL`, `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`.
+**Execution status (2026-05-28):** smoke re-run → **overall: SKIPPED** (`drillProofStatus: proof_skipped_missing_prerequisites`; wiring cert PASSED). Missing: `PRODUCTION_CALENDAR_DRILL_STAGING_URL`, `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`.

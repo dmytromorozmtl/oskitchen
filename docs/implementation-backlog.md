@@ -170,9 +170,9 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Title: Era 17 Cycle 17 — production calendar manual checklist on staging
 - Module: Production / Ops
 - Priority: P1 (Workstream F Cycle 27)
-- Status: **awaiting_staging_operator_drill**
+- Status: **awaiting_staging_operator_drill** — honest skip re-run; `overall: SKIPPED` when drill prerequisites missing
 - Decision: `era17-production-calendar-operator-drill-v1` — wiring cert + staging URL + manual attestation
-- Evidence: `lib/production/production-calendar-operator-drill-era17-policy.ts`, `scripts/smoke-production-calendar-operator-drill-era17.ts`, `artifacts/production-calendar-operator-drill-summary.json` (**drillProofStatus: proof_skipped_missing_prerequisites** locally 2026-05-28)
+- Evidence: `lib/production/production-calendar-operator-drill-summary.ts` (overall honesty gate), `scripts/smoke-production-calendar-operator-drill-era17.ts`, `artifacts/production-calendar-operator-drill-summary.json` (**overall: SKIPPED**, `drillProofStatus: proof_skipped_missing_prerequisites` re-run 2026-05-28)
 - Next: Operator sets drill URL + email; completes seven-step checklist; re-run with `PRODUCTION_CALENDAR_DRILL_MANUAL=passed`
 
 ### KOS-E17-016 — Operational sign-off staging proof (P1)

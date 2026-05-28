@@ -693,6 +693,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 22: `era17-pos-manager-discount-v1` — manager discount guard + COMPED RBAC edge cases; **discount_guard_depth_enforced** |
 | 2026-05-28 | Era 17 Cycle 23: `era17-public-post-abuse-v1` — P1 public POST route rate limits; **p1_public_post_guards_expanded** |
 | 2026-05-28 | Era 17 Cycle 24: `era17-pos-operator-runbook-v1` — software-only POS golden path runbook; **operator_runbook_ready** |
+| 2026-05-28 | Era 17 P1 #7 re-run: production calendar operator drill → **overall: SKIPPED** honesty fix; wiring cert PASSED; awaiting staging URL + operator |
 | 2026-05-28 | Era 17 P1 #6 re-run: KDS Playwright proof → **overall: SKIPPED** honesty fix; wiring cert PASSED; GitHub proof awaiting secrets |
 | 2026-05-28 | Era 17 P0 #5: forbidden-claims enforcement wired into GO/NO-GO evaluator; smoke re-run **proof_passed**; **forbidden_claims_enforcement_wired** |
 | 2026-05-28 | Era 17 P0 #4 re-run: paid pilot GO/NO-GO → **NO-GO**; tier preflight `overall: SKIPPED` honesty fix |

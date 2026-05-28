@@ -126,19 +126,25 @@ export function buildProductionCalendarOperatorDrillSummary(
   const stagingHealthPassed = stagingHealthStep?.status === "PASSED";
   const stagingHealthSkipped = stagingHealthStep?.status === "SKIPPED";
   const manualAttestation = input?.manualAttestation ?? "skipped";
+  const drillProofStatus = resolveProductionCalendarOperatorDrillProofStatus({
+    prerequisitesMet,
+    wiringCertPassed,
+    stagingHealthPassed,
+    stagingHealthSkipped,
+    manualAttestation,
+  });
+
+  let overall = resolveProductionCalendarOperatorDrillOverall(steps);
+  if (drillProofStatus !== "proof_passed" && overall === "PASSED") {
+    overall = drillProofStatus === "proof_failed" ? "FAILED" : "SKIPPED";
+  }
 
   return {
     version: PRODUCTION_CALENDAR_OPERATOR_DRILL_SUMMARY_VERSION,
     runAt: runAt.toISOString(),
     commitSha: input?.commitSha?.trim() || null,
-    overall: resolveProductionCalendarOperatorDrillOverall(steps),
-    drillProofStatus: resolveProductionCalendarOperatorDrillProofStatus({
-      prerequisitesMet,
-      wiringCertPassed,
-      stagingHealthPassed,
-      stagingHealthSkipped,
-      manualAttestation,
-    }),
+    overall,
+    drillProofStatus,
     stagingUrl: input?.stagingUrl?.trim() || null,
     operatorEmail: input?.operatorEmail?.trim() || null,
     manualAttestation,

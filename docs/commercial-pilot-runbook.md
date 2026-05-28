@@ -284,7 +284,7 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 4. Re-run with `PRODUCTION_CALENDAR_DRILL_MANUAL=passed` when all seven steps pass.
 5. **Do not claim rush-hour or drag-and-drop production calendar certification.**
 
-**Execution status (2026-05-28):** local smoke → wiring cert **PASSED**; drill **SKIPPED WITH REASON** (staging URL + operator email unset).
+**Execution status (2026-05-28):** smoke re-run → **overall: SKIPPED** (`drillProofStatus: proof_skipped_missing_prerequisites`; wiring cert PASSED). Missing: `PRODUCTION_CALENDAR_DRILL_STAGING_URL`, `PRODUCTION_CALENDAR_DRILL_OPERATOR_EMAIL`. Artifact: `artifacts/production-calendar-operator-drill-summary.json`. **Do not claim staging operator drill PASS without manual attestation.**
 
 ### Era 17 pilot metrics baseline (2026-05-28)
 
