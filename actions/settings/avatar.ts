@@ -3,7 +3,7 @@
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireSelfAccountMutation } from "@/lib/settings/require-self-account-mutation";
 import { uploadKitchenAsset } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
 import { enforceUploadContentSafety } from "@/lib/upload-policy/enforce-upload-content-safety";
@@ -21,7 +21,10 @@ export async function uploadAvatarAction(
     return fail("Please choose an image file");
   }
 
-  const { sessionUser, workspaceId } = await requireTenantActor();
+  const account = await requireSelfAccountMutation("settings_avatar.upload");
+  if (!account.ok) return fail(account.error);
+
+  const { sessionUser, workspaceId } = account;
   const bytes = new Uint8Array(await file.arrayBuffer());
   const validated = validateProfileAvatarUpload({
     bytes,
@@ -107,7 +110,9 @@ export async function uploadAvatarAction(
 }
 
 export async function removeAvatarAction(): Promise<ActionResult<void>> {
-  await requireTenantActor();
+  const account = await requireSelfAccountMutation("settings_avatar.remove");
+  if (!account.ok) return fail(account.error);
+
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({
     data: { avatar_url: null },

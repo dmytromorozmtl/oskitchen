@@ -5,7 +5,7 @@ import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireSelfAccountMutation } from "@/lib/settings/require-self-account-mutation";
 import { createClient } from "@/lib/supabase/server";
 
 const prefsSchema = z.object({
@@ -27,7 +27,9 @@ export async function saveAccountNotificationPrefsAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  await requireTenantActor();
+  const account = await requireSelfAccountMutation("settings_account_notifications.save");
+  if (!account.ok) return fail(account.error);
+
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({
     data: { notification_prefs: parsed.data },

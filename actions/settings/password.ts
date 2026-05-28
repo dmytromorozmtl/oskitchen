@@ -4,7 +4,7 @@
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireSelfAccountMutation } from "@/lib/settings/require-self-account-mutation";
 import { createClient } from "@/lib/supabase/server";
 
 const passwordSchema = z.object({
@@ -20,7 +20,10 @@ export async function changePasswordAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  const { sessionUser } = await requireTenantActor();
+  const account = await requireSelfAccountMutation("settings_password.change");
+  if (!account.ok) return fail(account.error);
+
+  const { sessionUser } = account;
   const email = sessionUser.email;
   if (!email) return fail("No email on account");
 

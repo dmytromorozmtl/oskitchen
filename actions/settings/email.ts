@@ -5,7 +5,7 @@ import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { requireSelfAccountMutation } from "@/lib/settings/require-self-account-mutation";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,7 +21,10 @@ export async function changeEmailAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  const { sessionUser } = await requireTenantActor();
+  const account = await requireSelfAccountMutation("settings_email.change");
+  if (!account.ok) return fail(account.error);
+
+  const { sessionUser } = account;
   const nextEmail = parsed.data.email.toLowerCase();
 
   if (nextEmail === sessionUser.email?.toLowerCase()) {

@@ -5,7 +5,10 @@ import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import {
+  requireOwnerProfileBusinessMutation,
+  requireSelfAccountMutation,
+} from "@/lib/settings/require-self-account-mutation";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 
@@ -23,8 +26,15 @@ export async function updateProfileAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid input");
   }
 
-  const { sessionUser } = await requireTenantActor();
-  const { fullName, companyName, phone } = parsed.data;
+  const companyName = parsed.data.companyName?.trim();
+  const account =
+    companyName && companyName.length > 0
+      ? await requireOwnerProfileBusinessMutation("settings_profile.update_company")
+      : await requireSelfAccountMutation("settings_profile.update");
+  if (!account.ok) return fail(account.error);
+
+  const { sessionUser } = account;
+  const { fullName, phone } = parsed.data;
 
   await prisma.userProfile.update({
     where: { id: sessionUser.id },
