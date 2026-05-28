@@ -4,14 +4,34 @@
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 
+import { recordAuditLog } from "@/lib/audit-log";
+import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
 import { kitchenSettingsSchema } from "@/lib/schemas";
 import { safeError } from "@/lib/security";
 
+async function requireKitchenSettingsManageAccess(operation: string) {
+  const access = await requireMutationPermission("workspace.settings");
+  if (!access.ok) {
+    await recordAuditLog({
+      userId: access.actor?.sessionUserId ?? null,
+      workspaceId: access.actor?.workspaceId ?? null,
+      action: "kitchen_settings.permission_denied",
+      entityType: "KitchenSettings",
+      metadata: { operation, requiredPermission: "workspace.settings" },
+    });
+    return { ok: false as const, error: access.error };
+  }
+  const actor = await requireTenantActor();
+  return { ok: true as const, ...actor };
+}
+
 export async function updateKitchenSettings(formData: FormData) {
   try {
-    const { sessionUser: user, dataUserId } = await requireTenantActor();
+    const manage = await requireKitchenSettingsManageAccess("kitchen_settings.update");
+    if (!manage.ok) return { error: manage.error };
+    const { sessionUser: user, dataUserId } = manage;
 
     const parsed = kitchenSettingsSchema.safeParse({
       businessType: formData.get("businessType") ?? undefined,
