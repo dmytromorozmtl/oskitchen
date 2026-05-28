@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 10 — Customer value loop / GTM honesty
 
+### KOS-E10-002 — Production calendar cross-week UI (P1)
+- ID: `KOS-E10-002`
+- Title: Week navigation and cross-week task reschedule on production calendar
+- Module: Production / operator depth
+- Priority: P1 (Era 10 Cycle 2)
+- Status: **completed**
+- Decision: `era10-production-calendar-cross-week-ui-v1` — `?week=` query + prev/next week links; ←/→ on Mon/Sun crosses weeks via existing `movePlanTaskAction`
+- Evidence: `lib/production/production-calendar-week-navigation.ts`, `app/dashboard/production/calendar/page.tsx`, `test:ci:production-calendar-cross-week-ui:cert`
+- Next: task status workflow UI (separate cycle); no drag-and-drop claim
+
 ### KOS-E10-001 — Cross-channel rewards recert (P1)
 - ID: `KOS-E10-001`
 - Title: Re-certify dual-ledger rewards honesty (POS certified; no unified E2E claim)

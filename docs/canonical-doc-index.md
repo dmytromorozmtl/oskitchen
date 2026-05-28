@@ -158,6 +158,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | Cycle | Outcome | Evidence |
 |-------|---------|----------|
 | **1** | **Cross-channel rewards recert** | `era10-cross-channel-rewards-recert-v1`; `test:ci:cross-channel-rewards:cert` |
+| **2** | **Production calendar cross-week UI** | `era10-production-calendar-cross-week-ui-v1`; `test:ci:production-calendar-cross-week-ui:cert` |
 
 ## Evolution Era 7 cycle ledger
 
@@ -421,3 +422,4 @@ Incremental refresh after Era 9 cycles 1–4 (enterprise / DevOps / security rec
 | 2026-05-27 | Era 9 Cycle 4: `era9-rbac-wave4-recert-v1` — wave-4 mutation guard inventory + cert |
 | 2026-05-27 | Era 9 Cycle 5: scorecard refresh 96/100 + `next-master-prompt-input-2026-05-27-era9.md` |
 | 2026-05-27 | Era 10 Cycle 1: `era10-cross-channel-rewards-recert-v1` — dual-ledger rewards honesty recert |
+| 2026-05-27 | Era 10 Cycle 2: `era10-production-calendar-cross-week-ui-v1` — week nav + cross-week moves |
