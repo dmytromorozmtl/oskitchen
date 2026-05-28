@@ -22,6 +22,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
     "revenue-snapshot",
     "pilot-status",
     "integration-health",
+    "fulfillment-command-flow",
     "kds-priority-lane",
     "stuck-orders",
     "go-live-readiness",
@@ -30,6 +31,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
     "low-stock",
   ],
   manager: [
+    "fulfillment-command-flow",
     "kds-priority-lane",
     "manager-packing-qc-handoff",
     "pos-manager-override-supervisor",

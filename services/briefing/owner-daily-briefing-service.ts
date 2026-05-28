@@ -81,6 +81,12 @@ import {
   enrichBriefingLaunchWizardPackTiles,
 } from "@/lib/launch-wizard/launch-wizard-onboarding-convergence-era19";
 import {
+  buildOwnerDailyBriefingFulfillmentCommandFlowActions,
+  enrichBriefingFulfillmentCommandFlowPackTiles,
+  mergeBriefingFulfillmentCommandFlowTopActions,
+  type FulfillmentCommandFlowBriefingInput,
+} from "@/lib/briefing/owner-daily-briefing-fulfillment-command-flow-era19";
+import {
   buildBriefingSmokeNextActionRankedAction,
   mergeBriefingSmokeNextTopActions,
 } from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
@@ -359,6 +365,14 @@ export async function loadOwnerDailyBriefing(
     productionWorkOpen: today.kpis.productionWorkOpen,
   };
 
+  const fulfillmentCommandFlowInput: FulfillmentCommandFlowBriefingInput = {
+    ...kdsBriefingInput,
+    activeOrders: today.kpis.activeOrders,
+    ordersToday: today.kpis.ordersToday,
+    blockedOrdersApprox: today.kpis.blockedOrdersApprox,
+    posKitchenQueueToday: today.kpis.posKitchenQueueToday,
+  };
+
   const baseTiles =
     rolePack === "support_admin"
       ? buildOwnerDailyBriefingSupportAdminTiles({
@@ -383,21 +397,27 @@ export async function loadOwnerDailyBriefing(
             kdsBriefingInput,
           )
         : rolePack === "manager"
-          ? enrichBriefingManagerPackingQcPackTiles(
-              enrichBriefingManagerOverridePackTiles(
-                enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput),
-                managerOverrideInput,
+          ? enrichBriefingFulfillmentCommandFlowPackTiles(
+              enrichBriefingManagerPackingQcPackTiles(
+                enrichBriefingManagerOverridePackTiles(
+                  enrichBriefingManagerPackTiles(baseTiles, kdsBriefingInput),
+                  managerOverrideInput,
+                ),
+                kdsBriefingInput,
               ),
-              kdsBriefingInput,
+              fulfillmentCommandFlowInput,
             )
           : rolePack === "owner"
-            ? options?.launchWizard
-              ? enrichBriefingLaunchWizardPackTiles({
-                  tiles: enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
-                  nextStep: options.launchWizard.nextStep,
-                  progress: options.launchWizard.progress,
-                })
-              : enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput)
+            ? enrichBriefingFulfillmentCommandFlowPackTiles(
+                options?.launchWizard
+                  ? enrichBriefingLaunchWizardPackTiles({
+                      tiles: enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
+                      nextStep: options.launchWizard.nextStep,
+                      progress: options.launchWizard.progress,
+                    })
+                  : enrichBriefingOwnerPackTiles(baseTiles, kdsBriefingInput),
+                fulfillmentCommandFlowInput,
+              )
             : baseTiles;
   const allAlerts =
     rolePack === "support_admin"
@@ -516,9 +536,23 @@ export async function loadOwnerDailyBriefing(
     allTopActions = mergeBriefingSmokeNextTopActions(smokeNextActionRanked, allTopActions);
   }
   if (rolePack === "owner") {
-    allTopActions = mergeBriefingOwnerKdsTopActions(
-      buildOwnerDailyBriefingOwnerKdsActions(kdsBriefingInput),
+    allTopActions = mergeBriefingFulfillmentCommandFlowTopActions(
+      mergeBriefingOwnerKdsTopActions(
+        buildOwnerDailyBriefingOwnerKdsActions(kdsBriefingInput),
+        allTopActions,
+      ),
+      buildOwnerDailyBriefingFulfillmentCommandFlowActions(
+        fulfillmentCommandFlowInput,
+        "owner",
+      ),
+    );
+  } else if (rolePack === "manager") {
+    allTopActions = mergeBriefingFulfillmentCommandFlowTopActions(
       allTopActions,
+      buildOwnerDailyBriefingFulfillmentCommandFlowActions(
+        fulfillmentCommandFlowInput,
+        "manager",
+      ),
     );
   }
 

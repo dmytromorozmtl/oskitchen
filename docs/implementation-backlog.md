@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-038 — Fulfillment command flow convergence (Convergence Pillar 1+4)
+- ID: `KOS-E19-038`
+- Title: Era 19 Convergence Cycle 38 — unify storefront order → KDS → packing deep-links on Today for owner and manager packs
+- Module: Owner Daily Briefing / Operational command flows / Fulfillment pipeline
+- Priority: P1 convergence (operational nervous system — one path from intake to outbound QC)
+- Status: **briefing_fulfillment_command_flow_convergence_wired**
+- Decision: `era19-owner-daily-briefing-fulfillment-command-flow-v1` — command-flow tile + ranked action when orders, kitchen, and packing align; bottleneck routing to Order Hub, KDS priority lane, or packing QC
+- Evidence: `owner-daily-briefing-fulfillment-command-flow-era19.ts`, updated briefing service + role packs + tile-links
+- Next: P0 proof unblock when ops credentials available, or integration health recovery deep-link convergence in briefing
+
 ### KOS-E19-037 — Launch Wizard onboarding convergence (Convergence Pillar 1+2)
 - ID: `KOS-E19-037`
 - Title: Era 19 Convergence Cycle 37 — unify Today briefing + launch wizard onboarding path with next-step deep links and fear-reduction hero

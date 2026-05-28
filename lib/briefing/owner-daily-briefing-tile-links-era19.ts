@@ -31,6 +31,12 @@ export const BRIEFING_TILE_LINK_DEFINITIONS: Record<string, BriefingTileLinkDefi
     whyItMatters: "Stuck orders block revenue and customer promises — triage in Order Hub first.",
     rolePacks: ["owner", "manager", "cashier"],
   },
+  "fulfillment-command-flow": {
+    href: "/dashboard/order-hub",
+    whyItMatters:
+      "Storefront intake, kitchen tickets, and outbound packing must move as one chain — clear the bottleneck stage first.",
+    rolePacks: ["owner", "manager"],
+  },
   "kds-pressure": {
     href: "/dashboard/kitchen",
     whyItMatters: "Kitchen queue depth predicts ticket delays and missed handoffs to packing.",
@@ -171,6 +177,9 @@ export function resolveBriefingTileCanonicalHref(
     return fallbackHref;
   }
   if (tileId === "packing-status" && fallbackHref.includes("#")) {
+    return fallbackHref;
+  }
+  if (tileId === "fulfillment-command-flow" && fallbackHref.startsWith("/dashboard")) {
     return fallbackHref;
   }
   if (tileId === "kds-priority-lane") {
