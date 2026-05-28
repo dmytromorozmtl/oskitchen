@@ -14,6 +14,8 @@ import {
 } from "@/actions/packing";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { PackingExportsPanel } from "@/components/dashboard/packing-client";
+import { PackingAttentionStrip } from "@/components/packing/packing-attention-strip";
+import { PackingTaskNextAction } from "@/components/packing/packing-task-next-action";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +23,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { PackingKpis } from "@/lib/packing/packing-kpis";
+import {
+  buildPackingFocusSnapshot,
+  shouldShowPackingAttentionStrip,
+} from "@/lib/packing/packing-focus-era18";
 import {
   PACKING_COMMAND_MODES,
   packingEmptyStateForBusiness,
@@ -127,6 +133,26 @@ export function PackingCommandCenter({
   }
 
   const lanes = partitionFulfillment(orders);
+  const packingFocusTasks = React.useMemo(
+    () =>
+      tasks.map((task) => ({
+        id: task.id,
+        title: task.title,
+        status: task.status,
+        customerName: task.customerName,
+        requiresLabel: task.requiresLabel,
+        requiresNutritionLabel: task.requiresNutritionLabel,
+        requiresAllergenCheck: task.requiresAllergenCheck,
+        labelPrintedAt: task.labelPrintedAt,
+        fulfillmentType: task.fulfillmentType,
+      })),
+    [tasks],
+  );
+  const packingFocus = React.useMemo(
+    () => buildPackingFocusSnapshot(packingFocusTasks),
+    [packingFocusTasks],
+  );
+  const showPackingAttentionStrip = shouldShowPackingAttentionStrip(packingFocus);
 
   return (
     <div className="space-y-8">
@@ -216,6 +242,14 @@ export function PackingCommandCenter({
         <Kpi label="Delivery ready (orders)" value={kpis.deliveryReadyOrders} />
       </div>
 
+      {showPackingAttentionStrip ? (
+        <PackingAttentionStrip
+          focus={packingFocus}
+          tasks={packingFocusTasks}
+          kpis={kpis}
+        />
+      ) : null}
+
       {showEmpty ? (
         <EmptyState
           icon={Package}
@@ -259,7 +293,7 @@ export function PackingCommandCenter({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="queue" className="mt-4 space-y-4">
+        <TabsContent value="queue" className="mt-4 space-y-4" id="packing-queue">
           {tasks.length === 0 ? (
             <Card className="border-dashed p-6 text-center text-sm text-muted-foreground">
               No packing tasks for this day yet. Generate a queue above, or pick another date.
@@ -267,7 +301,7 @@ export function PackingCommandCenter({
           ) : (
             <div className="space-y-3">
               {tasks.map((t) => (
-                <Card key={t.id} className="border-border/80 shadow-sm">
+                <Card key={t.id} id={`packing-task-${t.id}`} className="scroll-mt-24 border-border/80 shadow-sm">
                   <CardContent className="flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="min-w-0 flex-1 space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
@@ -284,6 +318,19 @@ export function PackingCommandCenter({
                         {t.batchTitle ? ` · ${t.batchTitle}` : ""}
                         {t.routeLabel ? ` · ${t.routeLabel}` : ""}
                       </p>
+                      <PackingTaskNextAction
+                        task={{
+                          id: t.id,
+                          title: t.title,
+                          status: t.status,
+                          customerName: t.customerName,
+                          requiresLabel: t.requiresLabel,
+                          requiresNutritionLabel: t.requiresNutritionLabel,
+                          requiresAllergenCheck: t.requiresAllergenCheck,
+                          labelPrintedAt: t.labelPrintedAt,
+                          fulfillmentType: t.fulfillmentType,
+                        }}
+                      />
                       {t.allergenSummary ? (
                         <p className="text-xs text-amber-800 dark:text-amber-200">Allergens (product): {t.allergenSummary}</p>
                       ) : null}
