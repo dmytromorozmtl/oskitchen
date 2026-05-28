@@ -4,6 +4,8 @@
 **Proof status:** `tablet_ux_polished` (code + cert; manual tablet sign-off optional)  
 **Honest scope:** web-first POS on tablets/browsers you own — **not** proprietary hardware certification or offline POS.
 
+Full daily golden path (shifts, receipts, closeout): **`docs/pos-software-only-operator-runbook-era17.md`** (`era17-pos-operator-runbook-v1`).
+
 ---
 
 ## Before opening the terminal

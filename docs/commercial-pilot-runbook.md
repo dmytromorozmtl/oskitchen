@@ -354,6 +354,25 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+---
+
+## Era 17 POS software-only operator runbook (2026-05-28)
+
+**Policy:** `era17-pos-operator-runbook-v1` — **operator_runbook_ready**; daily golden path for web-first POS via `pos-operator-runbook-summary`.
+
+1. **Golden path** — open shift → cash sale → transaction/receipt verify → close shift with variance review.
+2. **Permissions** — `pos.access`, `pos.checkout`, `pos.shift.open`/`close`, `pos.refund`, `pos.void` (see operator doc table).
+3. **Companion docs** — tablet UX runbook + manager discount guide linked from main runbook.
+4. Run **`npm run smoke:pos-operator-runbook`** → review **`artifacts/pos-operator-runbook-summary.json`** (`posOperatorProofStatus`).
+5. Missing `POS_OPERATOR_RUNBOOK_OPERATOR_EMAIL` → **SKIPPED WITH REASON** (awaiting_operator_golden_path_execution).
+6. **Forbidden:** hardware POS certification, offline POS, rush-hour throughput, Toast/Square parity.
+
+**Enforcement:** `test:ci:pos-operator-runbook-era17:cert` (chained in `test:ci:pos-money-path:cert`)
+
+**Operator doc:** `docs/pos-software-only-operator-runbook-era17.md`
+
+---
+
 ## Era 17 POS manager discount depth (2026-05-28)
 
 **Policy:** `era17-pos-manager-discount-v1` — **discount_guard_depth_enforced**; action-layer RBAC via `pos-discount-guard` for explicit discounts and COMPED checkout.

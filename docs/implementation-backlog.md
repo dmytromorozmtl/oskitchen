@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-024 — POS software-only operator runbook (P1)
+- ID: `KOS-E17-024`
+- Title: Era 17 Cycle 24 — daily golden path operator runbook for web-first POS
+- Module: POS / Ops
+- Priority: P1 (Workstream E Cycle 23)
+- Status: **operator_runbook_ready**
+- Decision: `era17-pos-operator-runbook-v1` — shifts, checkout, receipts, closeout + smoke summary
+- Evidence: `docs/pos-software-only-operator-runbook-era17.md`, `test:ci:pos-operator-runbook-era17:cert`
+- Next: Receipt / shift report spot check (Cycle 24)
+
 ### KOS-E17-023 — Public POST abuse review (P1)
 - ID: `KOS-E17-023`
 - Title: Era 17 Cycle 23 — rate limits on high-risk public POST routes
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **p1_public_post_guards_expanded**
 - Decision: `era17-public-post-abuse-v1` — experiment auto-conclude, IoT ingest, billing portal guards
 - Evidence: `lib/security/public-post-abuse-matrix.ts`, `docs/public-post-abuse-review-era17.md`, `test:ci:public-post-abuse-era17:cert`
-- Next: Partner webhook docs (Cycle 14); POS operator runbook (Workstream E Cycle 23)
+- Next: Partner webhook docs (Cycle 14)
 
 ### KOS-E17-022 — POS manager discount / override depth (P1)
 - ID: `KOS-E17-022`
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **tablet_ux_polished**
 - Decision: `era17-pos-tablet-ux-v1` — terminal UX + PosAccessCard + operator runbook
 - Evidence: `lib/pos/pos-tablet-ux-era17-policy.ts`, `docs/pos-tablet-ux-operator-runbook-era17.md`, `test:ci:pos-tablet-ux-era17:cert`
-- Next: POS operator runbook depth (Cycle 23); manual tablet sign-off on staging optional
+- Next: POS operator runbook depth (Cycle 23) — **done**; see KOS-E17-024
 
 ### KOS-E17-019 — Public API per-route scope enforcement (P1)
 - ID: `KOS-E17-019`
