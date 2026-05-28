@@ -1,10 +1,18 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { startOfDay } from "date-fns";
 
+import { PlatformWorkspaceGoLivePanel } from "@/components/platform/platform-workspace-go-live-panel";
+import { getSessionUser } from "@/lib/auth";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
+import { isImpersonationMfaConfigured } from "@/lib/platform/impersonation-mfa";
 import { hasPlatformPermission } from "@/lib/platform/platform-permissions";
+import { isSuperAdminUser } from "@/lib/platform-super-bypass";
+import { SUPPORT_SESSION_COOKIE } from "@/lib/platform/support-session-types";
 import { prisma } from "@/lib/prisma";
+import { loadPlatformWorkspaceGoLiveProjects } from "@/services/platform/platform-go-live-service";
+import { getActiveSupportSessionForActor } from "@/services/platform/platform-support-session-service";
 import { platformGetWorkspace } from "@/services/platform/platform-workspace-service";
 import { resolveAllChannels } from "@/lib/channels/channel-runtime";
 import { maturityTierFromResolvedChannel } from "@/lib/integrations/integration-maturity-matrix";
@@ -46,6 +54,21 @@ export default async function PlatformWorkspaceDetailPage({
   ]);
 
   const resolvedChannels = resolveAllChannels(ownerConnections, ownerKitchen?.demoMode ?? false);
+
+  const me = await getSessionUser();
+  const canImpersonate = me ? await isSuperAdminUser(me.id, me.email) : false;
+  const canStartSupportSession = hasPlatformPermission(ctx.permissions, "platform:support-session:start");
+
+  const jar = await cookies();
+  const supportSessionId = jar.get(SUPPORT_SESSION_COOKIE)?.value;
+  const supportSession = supportSessionId
+    ? await getActiveSupportSessionForActor(ctx.userId, supportSessionId)
+    : null;
+  const activeSupportWorkspaceId =
+    supportSession?.workspace.id === workspaceId ? supportSession.workspace.id : null;
+  const supportSessionActive = activeSupportWorkspaceId === workspaceId;
+
+  const goLiveProjects = await loadPlatformWorkspaceGoLiveProjects(workspaceId);
 
   return (
     <div className="space-y-6">
@@ -161,7 +184,7 @@ export default async function PlatformWorkspaceDetailPage({
           </div>
         </section>
 
-        {hasPlatformPermission(ctx.permissions, "platform:support-session:start") ? (
+        {canStartSupportSession ? (
           <section className="rounded-xl border border-sky-800/50 bg-sky-950/25 p-4 md:col-span-2">
             <h2 className="text-sm font-semibold text-sky-100">Audited support session</h2>
             <p className="mt-1 text-xs text-zinc-500">
@@ -169,10 +192,26 @@ export default async function PlatformWorkspaceDetailPage({
               dashboard notice while active. Assisted edit stays disabled in this release.
             </p>
             <div className="mt-3 max-w-lg">
-              <StartSupportSessionPanel workspaceId={workspaceId} />
+              <StartSupportSessionPanel
+                workspaceId={workspaceId}
+                redirectTo={`/platform/workspaces/${workspaceId}#platform-workspace-go-live`}
+              />
             </div>
           </section>
         ) : null}
+
+        <PlatformWorkspaceGoLivePanel
+          workspaceId={workspaceId}
+          projects={goLiveProjects}
+          supportSessionActive={supportSessionActive}
+          impersonationMfaRequired={isImpersonationMfaConfigured()}
+          context={{
+            workspaceId,
+            activeSupportWorkspaceId,
+            canImpersonate,
+            canStartSupportSession,
+          }}
+        />
 
         <section className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 md:col-span-2">
           <h2 className="text-sm font-semibold text-zinc-200">Organization</h2>

@@ -55,6 +55,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/go-live/platform-go-live-support-deep-link-era18-policy.ts`, `components/platform/platform-go-live-row-actions.tsx`, `tests/unit/platform-go-live-support-deep-link-era18.test.ts`
 - Next: Workspace detail go-live section with one-click impersonation from active support session context
 
+### KOS-E18-055 — Platform workspace go-live section (P0)
+- ID: `KOS-E18-055`
+- Title: Era 18 Workstream O Cycle 55 — workspace detail launch projects + session-aware tenant review
+- Module: Go-live / Platform ops
+- Priority: P0 (pilot deployment speed — workspace → tenant launch validation)
+- Status: **platform_workspace_go_live_section_wired**
+- Decision: `era18-platform-workspace-go-live-focus-v1` — workspace detail panel with support session gate + impersonation deep link; MFA unchanged in production
+- Evidence: `lib/go-live/platform-workspace-go-live-focus-era18.ts`, `components/platform/platform-workspace-go-live-panel.tsx`, `tests/unit/platform-workspace-go-live-focus-era18.test.ts`
+- Next: Support session banner quick link to active workspace go-live section when session open
+
 ### KOS-E18-052 — Commercial pilot ops status panel (P0)
 - ID: `KOS-E18-052`
 - Title: Era 18 Workstream D Cycle 52 — honest GO/NO-GO + P0 staging proof on platform implementations
