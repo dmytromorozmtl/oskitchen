@@ -25,9 +25,11 @@ describe("enterprise SSO procurement sync era17 policy", () => {
   it("validates marker and forbidden-claim helpers", () => {
     const good = `
       era17-enterprise-sso-procurement-sync-v1
+      era17-enterprise-sso-pilot-ready-v1
       pilot_foundation qualified pilot only
       not production SSO for all tenants
       awaiting_operator_proof
+      awaiting_idp_login_proof
     `;
     expect(enterpriseSsoProcurementPackCoversRequiredMarkers(good)).toBe(true);
     expect(enterpriseSsoProcurementPackAvoidsForbiddenClaims(good)).toBe(true);

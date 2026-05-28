@@ -35,15 +35,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/p0-staging-proof-unblock-era17-policy.ts`, `scripts/smoke-p0-staging-proof-unblock-era17.ts`, `artifacts/p0-staging-proof-unblock-summary.json` (`p0ProofStatus: awaiting_ops_credentials`, `overall: SKIPPED`)
 - Next: Ops configures staging/IdP/channel secrets; re-run `smoke:p0-staging-proof-unblock`; then Cycle 2 IdP login proof + Cycle 3 `pilot_ready` gate when SSO artifact shows `proof_passed`
 
-### KOS-E17-041 — Enterprise SSO procurement sync (Workstream A Cycle 6)
+### KOS-E17-041 — Enterprise SSO procurement sync (Workstream A Cycle 6 + Cycle 3 gate)
 - ID: `KOS-E17-041`
-- Title: Era 17 Workstream A Cycle 6 — procurement pack FAQ sync for pilot_foundation SSO
+- Title: Era 17 Workstream A Cycle 6 — procurement pack FAQ sync for pilot_foundation SSO (+ Cycle 3 gate section)
 - Module: Enterprise identity / GTM
-- Priority: P0 support depth (Workstream A Cycle 6)
+- Priority: P0 support depth (Workstream A Cycle 6 / Cycle 3 procurement)
 - Status: **procurement_sync_complete**
-- Decision: `era17-enterprise-sso-procurement-sync-v1` — buyer FAQ + security questionnaire aligned; delivery **pilot_foundation** unchanged
-- Evidence: `docs/enterprise-procurement-pack.md`, `lib/enterprise/enterprise-sso-procurement-sync-era17-policy.ts`, `test:ci:enterprise-sso-procurement-sync-era17:cert`
-- Next: P0 Cycle 2 IdP login proof when staging credentials available; Workstream A complete pending Cycle 2–3 only
+- Decision: `era17-enterprise-sso-procurement-sync-v1` — buyer FAQ + security questionnaire aligned; extends `era17-enterprise-sso-pilot-ready-v1`; delivery **pilot_foundation** unchanged
+- Evidence: `docs/enterprise-procurement-pack.md` (gate section + authoritative stance), `lib/enterprise/enterprise-sso-procurement-sync-era17-policy.ts`, `test:ci:enterprise-sso-procurement-sync-era17:cert`
+- Next: P0 Cycle 2 IdP login proof when staging credentials available; re-run procurement cert after gate promotionAllowed
 
 ### KOS-E17-040 — Enterprise SSO tenant mapping hardening (Workstream A Cycle 5)
 - ID: `KOS-E17-040`

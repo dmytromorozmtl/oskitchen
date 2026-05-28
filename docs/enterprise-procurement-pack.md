@@ -181,6 +181,20 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **Guard:** `validateSsoCallbackSession` in `lib/enterprise/workspace-sso-runtime-adapter.ts`.
 
+## Era 17 SSO pilot_ready gate (2026-05-28)
+
+**Policy:** `era17-enterprise-sso-pilot-ready-v1` — evaluates Cycle 2 IdP staging artifact before any qualified pilot-ready SSO delivery claim. **Does not** advance buyer-facing delivery beyond **pilot_foundation** until `promotionAllowed: true`.
+
+| Capability | Delivery status | Era 17 Workstream A Cycle 3 |
+|------------|-----------------|------------------------------|
+| SSO / SAML | **pilot_foundation** (unchanged) | **awaiting_idp_login_proof** — gate wired; `smoke:enterprise-sso-pilot-ready-gate` |
+
+**Procurement stance:** Cycle 3 gate exists; buyer-facing SSO availability remains **pilot_foundation** until Cycle 2 staging artifact shows `loginProofStatus: proof_passed` and gate summary shows `promotionAllowed: true`. Do **not** contract for qualified pilot-ready SSO delivery without that artifact pair.
+
+**Smoke:** `npm run smoke:enterprise-sso-pilot-ready-gate` — reads `artifacts/enterprise-sso-idp-staging-smoke-summary.json`; writes `artifacts/enterprise-sso-pilot-ready-gate-summary.json`.
+
+**CI:** `test:ci:enterprise-sso-pilot-ready-era17:cert` (chained in `test:ci:enterprise-sso-idp-staging-era17:cert`).
+
 ## Era 17 SSO procurement sync (2026-05-28)
 
 **Policy:** `era17-enterprise-sso-procurement-sync-v1` — authoritative buyer FAQ + security questionnaire alignment for SSO. **Does not** advance delivery beyond **pilot_foundation** or claim production SSO.
@@ -191,9 +205,9 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 **Authoritative buyer stance:**
 
-- SSO delivery status: **pilot_foundation** — not qualified pilot-ready until Cycle 2 IdP login artifact + Cycle 3 gate (`era17-enterprise-sso-pilot-ready-v1`).
+- SSO delivery status: **pilot_foundation** — does not advance to qualified pilot-ready delivery until Cycle 2 IdP login artifact + Cycle 3 gate (`era17-enterprise-sso-pilot-ready-v1`) show `promotionAllowed: true`.
+- Cycle 3 gate status: **awaiting_idp_login_proof** — gate wired; Cycle 2 **awaiting_operator_proof** (6 prerequisite env vars unset locally).
 - Qualified **SSO pilot** may be offered for **one workspace** with Okta or Entra ID **test tenant** — **not production SSO for all tenants**.
-- Staging IdP login proof: **awaiting_operator_proof** (6 prerequisite env vars unset locally).
 - SCIM and SOC 2 Type II: **unchanged** — not delivered.
 
 **Historical sections:** Era 13/15 tables record point-in-time recert; **this section wins** for RFP/security questionnaire responses when SSO is asked.
@@ -210,12 +224,12 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 |-------|--------|--------|
 | R0 (now) | Document posture | This pack; narrow auth claims in GTM |
 | R1 | Architecture spike | **Complete (Era 9)** — see [`enterprise-sso-architecture-spike-r1.md`](./enterprise-sso-architecture-spike-r1.md); design only |
-| R2 | Pilot SSO | **pilot_foundation (Era 16–17)** — schema + callback + admin wiring + IdP staging plan + operator runbook + tenant mapping tests; staging IdP login **awaiting_operator_proof** |
+| R2 | Pilot SSO | **pilot_foundation (Era 16–17)** — schema + callback + admin wiring + IdP staging plan + operator runbook + tenant mapping tests + pilot_ready gate; staging IdP login **awaiting_operator_proof**; gate **awaiting_idp_login_proof** |
 | R3 | GA SSO | Admin self-service IdP config, domain verification |
 
 **Evidence today:** `app/login/`, `actions/workspace-sso.ts`, `/auth/callback?sso_workspace_id=`, [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md), `smoke:enterprise-sso-idp-staging`.
 
-**Procurement answer:** “SSO/SAML is **pilot_foundation** only — qualified pilot for one workspace with Okta or Entra ID test tenant; **not production SSO for all tenants**. Staging IdP login proof is **awaiting_operator_proof**. Default auth remains email/session with workspace RBAC.”
+**Procurement answer:** “SSO/SAML is **pilot_foundation** only — qualified pilot for one workspace with Okta or Entra ID test tenant; **not production SSO for all tenants**. Staging IdP login proof is **awaiting_operator_proof**; Cycle 3 gate is **awaiting_idp_login_proof**. Default auth remains email/session with workspace RBAC.”
 
 ---
 
@@ -478,7 +492,7 @@ Software POS money path is CI-certified (unit/integration/inventory); browser E2
 No. Shopify/Woo have webhook golden-path certification; DoorDash/Uber/Grubhub surfaces are **placeholder** (`test:ci:integration-honesty:cert`).
 
 **Do you support SSO in contract?**  
-Qualified SSO pilot may be offered as a milestone-limited engagement for one workspace with Okta or Entra ID test tenant — delivery status **pilot_foundation**, not production SSO for all tenants. Staging IdP login proof is **awaiting_operator_proof**; do not contract for enterprise-wide SSO until Cycle 3 qualified pilot gate with IdP artifact (`era17-enterprise-sso-pilot-ready-v1`).
+Qualified SSO pilot may be offered as a milestone-limited engagement for one workspace with Okta or Entra ID test tenant — delivery status **pilot_foundation**, not production SSO for all tenants. Staging IdP login proof is **awaiting_operator_proof**; Cycle 3 gate is **awaiting_idp_login_proof** — do not contract for qualified pilot-ready SSO delivery until gate shows `promotionAllowed: true` (`era17-enterprise-sso-pilot-ready-v1`).
 
 **Can you sign our DPA?**  
 Use legal review; product capabilities in this pack define what is technically true today.

@@ -8,6 +8,7 @@
 import { ENTERPRISE_PROCUREMENT_PACK_DOC } from "@/lib/enterprise/enterprise-procurement-policy";
 import { ENTERPRISE_SSO_IDP_LOGIN_PROOF_ERA17_POLICY_ID } from "@/lib/enterprise/enterprise-sso-idp-login-proof-era17-policy";
 import { ENTERPRISE_SSO_OPERATOR_RUNBOOK_ERA17_POLICY_ID } from "@/lib/enterprise/enterprise-sso-operator-runbook-era17-policy";
+import { ENTERPRISE_SSO_PILOT_READY_ERA17_POLICY_ID } from "@/lib/enterprise/enterprise-sso-pilot-ready-era17-policy";
 import { ENTERPRISE_SSO_TENANT_MAPPING_ERA17_POLICY_ID } from "@/lib/enterprise/enterprise-sso-tenant-mapping-era17-policy";
 
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_POLICY_ID =
@@ -19,6 +20,7 @@ export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_EXTENDS_POLICIES = [
   ENTERPRISE_SSO_OPERATOR_RUNBOOK_ERA17_POLICY_ID,
   ENTERPRISE_SSO_TENANT_MAPPING_ERA17_POLICY_ID,
   ENTERPRISE_SSO_IDP_LOGIN_PROOF_ERA17_POLICY_ID,
+  ENTERPRISE_SSO_PILOT_READY_ERA17_POLICY_ID,
 ] as const;
 
 /** Buyer-facing SSO delivery — unchanged until Cycle 3 pilot_ready gate with IdP proof. */
@@ -35,9 +37,11 @@ export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_PACK_DOC =
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_REQUIRED_MARKERS = [
   ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_POLICY_ID,
   ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_SSO_DELIVERY_STATUS,
+  ENTERPRISE_SSO_PILOT_READY_ERA17_POLICY_ID,
   "qualified pilot only",
   "not production SSO for all tenants",
   "awaiting_operator_proof",
+  "awaiting_idp_login_proof",
   "pilot_foundation",
 ] as const;
 
@@ -56,7 +60,10 @@ export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_SSO_CONTRACT_FAQ =
 
 /** Security questionnaire row guidance for SSO/SAML. */
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_QUESTIONNAIRE_SSO_ANSWER =
-  "Qualified pilot only — pilot_foundation (one workspace, Okta/Entra test tenant); not production SSO for all tenants; staging IdP login proof awaiting_operator_proof." as const;
+  "Qualified pilot only — pilot_foundation (one workspace, Okta/Entra test tenant); not production SSO for all tenants; staging IdP login proof awaiting_operator_proof; pilot_ready gate awaiting_idp_login_proof until Cycle 2 artifact proof_passed." as const;
+
+export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_GATE_REVIEW_SECTION =
+  "Era 17 SSO pilot_ready gate (2026-05-28)" as const;
 
 export const ENTERPRISE_SSO_PROCUREMENT_SYNC_ERA17_FORBIDDEN_CLAIMS = [
   "production sso for all tenants",
