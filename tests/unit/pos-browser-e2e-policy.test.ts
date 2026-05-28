@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  POS_BROWSER_E2E_ACCEPT_FORK_SKIP_WITHOUT_SECRETS,
   POS_BROWSER_E2E_POLICY_ID,
+  POS_BROWSER_E2E_SECRETS_POLICY_ID,
   POS_MONEY_PATH_ALWAYS_ON_SCRIPTS,
   buildPosBrowserE2eCiSummary,
   exitCodeForPosBrowserE2eCiStatus,
@@ -11,6 +13,8 @@ import {
 describe("POS browser E2E CI policy", () => {
   it("uses era4 tier-2b optional policy id", () => {
     expect(POS_BROWSER_E2E_POLICY_ID).toBe("era4-tier2b-optional-v1");
+    expect(POS_BROWSER_E2E_SECRETS_POLICY_ID).toBe("era5-pos-e2e-secrets-accept-v1");
+    expect(POS_BROWSER_E2E_ACCEPT_FORK_SKIP_WITHOUT_SECRETS).toBe(true);
     expect(POS_MONEY_PATH_ALWAYS_ON_SCRIPTS).toHaveLength(3);
   });
 

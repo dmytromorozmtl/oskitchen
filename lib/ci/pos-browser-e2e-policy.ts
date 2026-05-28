@@ -105,3 +105,45 @@ export function buildPosBrowserE2eCiSummary(
 export function exitCodeForPosBrowserE2eCiStatus(status: PosBrowserE2eCiStatus): number {
   return status === "FAILED" ? 1 : 0;
 }
+
+/**
+ * Era 5 Cycle 5 — explicit decision on repository secrets for optional browser tier.
+ * Forks without `E2E_LOGIN_*` stay green when tier-2b always-on certs pass; the policy
+ * artifact must report SKIPPED (never silent pass).
+ */
+export const POS_BROWSER_E2E_SECRETS_POLICY_ID = "era5-pos-e2e-secrets-accept-v1" as const;
+
+export const POS_BROWSER_E2E_ACCEPT_FORK_SKIP_WITHOUT_SECRETS = true as const;
+
+export const POS_BROWSER_E2E_CANONICAL_DOC_PATHS = [
+  "docs/ci-e2e-tier-matrix.md",
+  "docs/TESTING.md",
+] as const;
+
+export const POS_BROWSER_E2E_MATRIX_DOC = "docs/feature-maturity-matrix.md" as const;
+
+export const POS_BROWSER_E2E_MATRIX_MARKERS = [
+  POS_BROWSER_E2E_POLICY_ID,
+  POS_BROWSER_E2E_SECRETS_POLICY_ID,
+  "E2E_LOGIN_EMAIL",
+  "E2E_LOGIN_PASSWORD",
+] as const;
+
+export const POS_BROWSER_E2E_CANONICAL_DOC_MARKERS = [
+  POS_BROWSER_E2E_POLICY_ID,
+  POS_BROWSER_E2E_SECRETS_POLICY_ID,
+  "E2E_LOGIN_EMAIL",
+  "E2E_LOGIN_PASSWORD",
+  "pos-browser-e2e-summary",
+  "PASSED",
+  "SKIPPED",
+  "FAILED",
+] as const;
+
+/** Phrases that must not appear in canonical POS CI/GTM docs (false browser certification). */
+export const POS_BROWSER_E2E_FORBIDDEN_MATURITY_PHRASES = [
+  "browser e2e always runs in ci",
+  "playwright pos certified on every pr",
+  "production-certified hardware pos",
+  "green ci proves browser pos e2e passed",
+] as const;

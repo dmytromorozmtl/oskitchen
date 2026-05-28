@@ -58,7 +58,7 @@ npm run test:ci:storefront-money-path:e2e
 
 **CI workflow:** `.github/workflows/ci.yml` → job `pos-money-path`.
 
-**Browser E2E policy (Era 4 Cycle 2):** policy id `era4-tier2b-optional-v1` in `lib/ci/pos-browser-e2e-policy.ts`. Unit + integration + inventory are **always-on** tier-2b certification. Browser E2E does **not** run without dashboard auth secrets; the always-on policy step prints and uploads explicit status so green jobs cannot silently imply Playwright POS E2E passed. Artifact: `pos-browser-e2e-summary` (GitHub Actions).
+**Browser E2E policy (Era 4 Cycle 2 + Era 5 Cycle 5):** `era4-tier2b-optional-v1` + `era5-pos-e2e-secrets-accept-v1` in `lib/ci/pos-browser-e2e-policy.ts`. Unit + integration + inventory are **always-on** tier-2b certification. Browser E2E does **not** run without repository secrets `E2E_LOGIN_EMAIL` + `E2E_LOGIN_PASSWORD`; forks without secrets stay green when always-on certs pass and the policy artifact reports **`SKIPPED`** (explicit skip accepted — not a silent pass). Artifact: `pos-browser-e2e-summary` (GitHub Actions).
 
 **Wiring certification (tier 0):** `npm run test:ci:pos-money-path:cert` → `tests/unit/pos-money-path-ci-live.test.ts` + `tests/unit/pos-browser-e2e-policy.test.ts` (included in `test:ci:governance-bundles`).
 

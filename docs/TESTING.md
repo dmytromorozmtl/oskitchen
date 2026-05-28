@@ -159,7 +159,11 @@ An **always-on** policy step (`npm run test:ci:pos-browser-e2e:policy`) runs at 
 - writes **`ci-artifacts/pos-browser-e2e-summary.json`** (uploaded as GitHub artifact **`pos-browser-e2e-summary`**),
 - fails the job only when browser E2E was required to run and failed (`FAILED`).
 
-Policy id: **`era4-tier2b-optional-v1`** (`lib/ci/pos-browser-e2e-policy.ts`). See **`docs/ci-e2e-tier-matrix.md`** tier 2b.
+Policy ids: **`era4-tier2b-optional-v1`** (status artifact) and **`era5-pos-e2e-secrets-accept-v1`** (forks without secrets may stay green when tier-2b always-on certs pass; browser tier must report **`SKIPPED`** in `pos-browser-e2e-summary`, never a silent pass). See **`docs/ci-e2e-tier-matrix.md`** tier 2b.
+
+**Fork / PR without secrets (accepted):** do not add `E2E_LOGIN_*` unless you intend to run Playwright POS checkout in CI. Unit + integration + inventory still certify the software money path.
+
+**Enable browser tier on `main` or staging forks:** add repository secrets **`E2E_LOGIN_EMAIL`** and **`E2E_LOGIN_PASSWORD`** (dashboard user with POS access). Optional **`E2E_CI_POS_USER_ID`** for `npm run db:seed:e2e-pos` fixture alignment. After `pos-money-path` runs, download artifact **`pos-browser-e2e-summary`** and confirm status **`PASSED`** (not **`SKIPPED`**).
 
 ### Hosted production tenant smoke
 

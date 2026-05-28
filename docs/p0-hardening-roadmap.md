@@ -354,6 +354,7 @@ Priority rule:
 - **Rationale:** Forks without dashboard auth secrets must not imply browser POS E2E passed; failures must fail the job; skips must be explicit in logs and artifacts.
 - **Evidence:** `lib/ci/pos-browser-e2e-policy.ts`, `scripts/pos-browser-e2e-ci-policy.ts`, `.github/workflows/ci.yml` (`pos_browser_e2e` + policy summary), `test:ci:pos-browser-e2e:policy`, `test:ci:pos-money-path:cert`.
 - **Acceptance:** CI output and artifact distinguish browser tier from always-on certification; matrix/docs match workflow.
+- **Era 5 Cycle 5 (2026-05-27):** `era5-pos-e2e-secrets-accept-v1` — explicit acceptance of fork skip without `E2E_LOGIN_*`; secrets + forbidden false-claim scan in `pos-e2e-secrets-policy-cert-live`.
 
 ## Era 4 — Inventory depletion channel truth (P0-1)
 

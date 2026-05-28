@@ -371,7 +371,7 @@
     "test:ci:public-post-fail-closed": "node ./node_modules/vitest/vitest.mjs run tests/unit/public-post-fail-closed.test.ts tests/unit/iot-temperature-route-fail-closed.test.ts tests/unit/nps-route-fail-closed.test.ts tests/unit/roi-lead-route-fail-closed.test.ts",
     "test:ci:pos-money-path:e2e": "playwright test e2e/auth.setup.ts e2e/pos-checkout-flow.spec.ts --project=setup --project=chromium-authed",
     "test:ci:pos-browser-e2e:policy": "tsx scripts/pos-browser-e2e-ci-policy.ts",
-    "test:ci:pos-money-path:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-money-path-ci-live.test.ts tests/unit/pos-browser-e2e-policy.test.ts",
+    "test:ci:pos-money-path:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-money-path-ci-live.test.ts tests/unit/pos-browser-e2e-policy.test.ts tests/unit/pos-e2e-secrets-policy-cert-live.test.ts",
     "test:ci:inventory-depletion:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/inventory-depletion-cert-live.test.ts tests/unit/inventory-depletion-gtm-lock-cert-live.test.ts tests/unit/inventory-depletion-policy.test.ts",
     "test:e2e:storefront-stripe": "STOREFRONT_E2E_STRIPE=1 playwright test e2e/storefront-checkout-stripe.spec.ts",
     "test:e2e:storefront-policies": "playwright test e2e/storefront-policies.spec.ts",

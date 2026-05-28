@@ -33,7 +33,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era5-copilot-form-deny-v1` — `assertCopilotFormGate` redirects with `copilot_error`; refresh action returns `{ ok, error }` for client UI
 - Evidence: `lib/ai/copilot-form-mutation.ts`, `actions/copilot.ts`, `tests/unit/copilot-form-deny.test.ts`, wave-4 bundle extended
-- Next: E5-5 POS E2E secrets policy documentation closure
+- Next: Era 5 scorecard refresh or unified rewards product decision
+
+### KOS-E5-005 — POS E2E secrets policy closure (E5-5)
+- ID: `KOS-E5-005`
+- Title: Accept explicit fork skip for optional POS browser E2E; document required secrets
+- Module: POS / CI / QA
+- Priority: P0 (Era 5 Cycle 5)
+- Status: **completed**
+- Decision: `era5-pos-e2e-secrets-accept-v1` — forks without `E2E_LOGIN_*` stay green when tier-2b always-on passes; artifact must report SKIPPED; secrets documented in TESTING + tier matrix
+- Evidence: `lib/ci/pos-browser-e2e-policy.ts`, `tests/unit/pos-e2e-secrets-policy-cert-live.test.ts`, `test:ci:pos-money-path:cert`
+- Next: Era 5 scorecard / next-era theme selection
 
 ### KOS-E5-003 — Permanent POS-only inventory GTM lock (E5-1)
 - ID: `KOS-E5-003`

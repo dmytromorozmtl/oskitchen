@@ -81,7 +81,7 @@ Evolution Era 4 (cycles 1–12) **completed all 11 strategic priorities** from t
 ## Top Risks After Era 4 (honest)
 
 1. ~~**Storefront inventory depletion GTM**~~ — **Era 5 Cycle 3:** permanent POS-only lock (`era5-pos-only-gtm-lock-v1`); hook deferred; CI scans GTM docs.
-2. **POS browser E2E** — still secrets-optional; green CI ≠ browser proof without `E2E_LOGIN_*`.
+2. ~~**POS browser E2E secrets policy**~~ — **Era 5 Cycle 5:** explicit fork skip accepted (`era5-pos-e2e-secrets-accept-v1`); download `pos-browser-e2e-summary` to verify PASSED vs SKIPPED.
 3. **Cross-channel rewards** — dual ledger; not unified gift/loyalty across channels.
 4. **KDS** — no rush-hour or realtime Playwright certification.
 5. ~~**RBAC wave 4 in security-db**~~ — **closed Era 5 Cycle 1:** `test:ci:rbac-wave4` chained in `test:security`.
