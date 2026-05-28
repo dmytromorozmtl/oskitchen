@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { canManageProductionIncidentsForUser } from "@/actions/production-incidents";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
+import { PlatformErrorRecoveryAttentionStrip } from "@/components/platform/platform-error-recovery-attention-strip";
 import { PlatformProductionIncidentPanel } from "@/components/platform/production-incident-panel";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
 import { Button } from "@/components/ui/button";
@@ -10,17 +11,29 @@ import {
   listProductionIncidentAssignees,
   loadProductionIncidentRollup,
 } from "@/services/incidents/production-incident-rollup-service";
+import { listPlatformErrorEvents } from "@/services/observability/error-event-service";
 import { getPlatformDashboardSnapshot } from "@/services/platform/platform-service";
 
 export default async function PlatformErrorRecoveryPage() {
   const ctx = await requirePlatformAccess();
   assertPlatformPermission(ctx, "platform:access");
-  const [s, incidentRollup, assignees, canManageIncidents] = await Promise.all([
+  const [s, incidentRollup, assignees, canManageIncidents, recentEvents] = await Promise.all([
     getPlatformDashboardSnapshot(),
     loadProductionIncidentRollup(),
     listProductionIncidentAssignees(),
     canManageProductionIncidentsForUser({ id: ctx.userId, email: ctx.email }),
+    listPlatformErrorEvents(8),
   ]);
+
+  const snapshot = {
+    webhookPending: s.webhookPending,
+    integrationErrors: s.integrationErrors,
+    automationFailures: s.automationFailures,
+    openTickets: s.openTickets,
+    criticalTickets: s.criticalTickets,
+    activeIncidents: s.activeIncidents,
+    criticalProductionIncidents: s.criticalProductionIncidents,
+  } as const;
 
   const tiles = [
     {
@@ -76,6 +89,8 @@ export default async function PlatformErrorRecoveryPage() {
           <IntegrationActionButton action="integration_retry" context={{ isPlatform: true }} variant="inline" />
         </div>
       </div>
+
+      <PlatformErrorRecoveryAttentionStrip snapshot={snapshot} recentEvents={recentEvents} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {tiles.map((t) => (

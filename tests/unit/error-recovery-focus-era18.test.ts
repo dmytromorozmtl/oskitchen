@@ -4,14 +4,36 @@ import {
   ERROR_RECOVERY_FOCUS_ERA18_BACKLOG_ID,
   ERROR_RECOVERY_FOCUS_ERA18_POLICY_ID,
   ERROR_RECOVERY_FOCUS_ERA18_PROOF_STATUS,
+  PLATFORM_ERROR_RECOVERY_FOCUS_ERA18_BACKLOG_ID,
+  PLATFORM_ERROR_RECOVERY_FOCUS_ERA18_POLICY_ID,
+  PLATFORM_ERROR_RECOVERY_FOCUS_ERA18_PROOF_STATUS,
 } from "@/lib/error-recovery/error-recovery-focus-era18-policy";
 import {
   pickErrorRecoveryAttentionItems,
   pickErrorRecoveryEventNextActions,
+  pickPlatformErrorRecoveryAttentionItems,
+  pickPlatformErrorRecoveryEventNextActions,
   summarizeErrorRecoverySnapshot,
+  summarizePlatformErrorRecoverySnapshot,
   type ErrorRecoverySnapshot,
+  type PlatformErrorRecoverySnapshot,
 } from "@/lib/error-recovery/error-recovery-focus-era18";
 import type { ObservabilityErrorEvent } from "@/services/observability/error-event-service";
+
+function emptyPlatformSnapshot(
+  over: Partial<PlatformErrorRecoverySnapshot> = {},
+): PlatformErrorRecoverySnapshot {
+  return {
+    webhookPending: 0,
+    integrationErrors: 0,
+    automationFailures: 0,
+    openTickets: 0,
+    criticalTickets: 0,
+    activeIncidents: 0,
+    criticalProductionIncidents: 0,
+    ...over,
+  };
+}
 
 function emptySnapshot(over: Partial<ErrorRecoverySnapshot> = {}): ErrorRecoverySnapshot {
   return {
@@ -55,6 +77,16 @@ describe("error-recovery-focus-era18 policy", () => {
     expect(ERROR_RECOVERY_FOCUS_ERA18_POLICY_ID).toBe("era18-error-recovery-focus-v1");
     expect(ERROR_RECOVERY_FOCUS_ERA18_PROOF_STATUS).toBe("error_recovery_focus_attention_wired");
     expect(ERROR_RECOVERY_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-019");
+  });
+
+  it("registers era18 platform error recovery focus proof", () => {
+    expect(PLATFORM_ERROR_RECOVERY_FOCUS_ERA18_POLICY_ID).toBe(
+      "era18-platform-error-recovery-focus-v1",
+    );
+    expect(PLATFORM_ERROR_RECOVERY_FOCUS_ERA18_PROOF_STATUS).toBe(
+      "platform_error_recovery_focus_attention_wired",
+    );
+    expect(PLATFORM_ERROR_RECOVERY_FOCUS_ERA18_BACKLOG_ID).toBe("KOS-E18-020");
   });
 });
 
@@ -147,5 +179,48 @@ describe("summarizeErrorRecoverySnapshot", () => {
     );
     expect(summary.hasUrgent).toBe(true);
     expect(summary.totalSignals).toBe(1);
+  });
+});
+
+describe("pickPlatformErrorRecoveryAttentionItems", () => {
+  it("prioritizes critical production incidents and critical tickets", () => {
+    const items = pickPlatformErrorRecoveryAttentionItems(
+      emptyPlatformSnapshot({
+        criticalProductionIncidents: 1,
+        criticalTickets: 3,
+        integrationErrors: 5,
+      }),
+    );
+
+    expect(items[0]?.id).toBe("production-critical");
+    expect(items.some((item) => item.id === "critical-tickets")).toBe(true);
+    expect(items[0]?.href).toBe("/platform/incidents");
+  });
+
+  it("returns empty when platform signals are clear", () => {
+    expect(pickPlatformErrorRecoveryAttentionItems(emptyPlatformSnapshot())).toEqual([]);
+  });
+});
+
+describe("pickPlatformErrorRecoveryEventNextActions", () => {
+  it("prefixes workspace label for cross-tenant triage", () => {
+    const actions = pickPlatformErrorRecoveryEventNextActions([
+      sampleEvent({
+        workspaceLabel: "Pilot Cafe",
+        safeRetryHref: "/platform/webhooks",
+      }),
+    ]);
+
+    expect(actions[0]?.title).toContain("[Pilot Cafe]");
+    expect(actions[0]?.href).toBe("/platform/webhooks");
+  });
+});
+
+describe("summarizePlatformErrorRecoverySnapshot", () => {
+  it("flags urgent when critical tickets or integrations fail", () => {
+    const summary = summarizePlatformErrorRecoverySnapshot(
+      emptyPlatformSnapshot({ criticalTickets: 2 }),
+    );
+    expect(summary.hasUrgent).toBe(true);
   });
 });

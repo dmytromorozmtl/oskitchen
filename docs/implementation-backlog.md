@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-020 — Platform error recovery attention strip (P0)
+- ID: `KOS-E18-020`
+- Title: Era 18 Workstream N Cycle 20 — cross-tenant triage parity on platform error recovery
+- Module: Platform / System health
+- Priority: P0 (support visibility + enterprise trust)
+- Status: **platform_error_recovery_focus_attention_wired**
+- Decision: `era18-platform-error-recovery-focus-v1` — production incidents → critical tickets → integrations ordering; recent cross-tenant events with workspace labels
+- Evidence: `lib/error-recovery/error-recovery-focus-era18.ts`, `components/platform/platform-error-recovery-attention-strip.tsx`, `app/platform/error-recovery/page.tsx`
+- Next: Wired replay/retry when audited cross-tenant mutations land; P0 staging proof ops execution
+
 ### KOS-E18-019 — Error recovery hub attention strip (P0)
 - ID: `KOS-E18-019`
 - Title: Era 18 Workstream N Cycle 19 — prioritized failure categories + recent-event next actions
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **error_recovery_focus_attention_wired**
 - Decision: `era18-error-recovery-focus-v1` — category attention strip ordered by production/cron/channel impact; recent observability events with safe retry links
 - Evidence: `lib/error-recovery/error-recovery-focus-era18.ts`, `components/dashboard/error-recovery-attention-strip.tsx`, `app/dashboard/error-recovery/page.tsx`
-- Next: Platform error recovery parity strip; wired replay/retry when audited mutations land
+- Next: Wired replay/retry when audited mutations land
 
 ### KOS-E18-018 — KDS bump-next expo polish (P1)
 - ID: `KOS-E18-018`
