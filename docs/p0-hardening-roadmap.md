@@ -299,6 +299,12 @@ Priority rule:
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
 - **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
 
+## Era 4 — Scorecard refresh (Cycle 13)
+
+- **Completed (2026-05-27):** `era4-scorecard-refresh-v1` — all 11 Era 4 execution priorities documented as completed; overall score **82/100**; `docs/next-master-prompt-input-2026-05-27-era4.md` for Era 5.
+- **Evidence:** `npm run test:ci:scorecard:cert`.
+- **Re-audit:** deferred until Era 5 theme or major release.
+
 ## Era 4 — Nav / page maturity sweep (Cycle 12)
 
 - **Completed (2026-05-27):** `era4-page-maturity-sweep-v1` — preview/placeholder dashboard routes show in-page honesty (`PageMaturityRouteNotice`) aligned with `NAV_MATURITY_RULES`; DoorDash/Grubhub inline banners remain single-source.

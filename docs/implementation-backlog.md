@@ -99,7 +99,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-kds-staging-smoke-v1` — automated queue→bump in `test:ci:kds-v1:integration`; staging checklist + `smoke:kds-daily`; **not** rush-hour or realtime Playwright certified
 - Evidence: `lib/kitchen/kds-staging-smoke-policy.ts`, `docs/kds-staging-smoke-checklist.md`, `test:ci:kds-staging-smoke:cert`
-- Next: Era 4 scorecard refresh
+- Next: Era 5 theme selection (see `docs/next-master-prompt-input-2026-05-27-era4.md`)
+
+### KOS-E4-013 — Era 4 scorecard refresh
+- ID: `KOS-E4-013`
+- Title: Document Era 4 completion, score deltas, and Era 5 prompt input
+- Module: Platform / GTM / engineering
+- Priority: P0 (Era 4 Cycle 13)
+- Status: **completed**
+- Decision: `era4-scorecard-refresh-v1` — 12/12 execution map items closed; overall **82/100**; defer full re-audit
+- Evidence: `docs/era4-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era4.md`, `lib/governance/era4-scorecard-policy.ts`
+- Next: pick Era 5 cycle 1 theme from era4 prompt input §4
 
 ### KOS-E4-012 — Nav / page maturity sweep
 - ID: `KOS-E4-012`

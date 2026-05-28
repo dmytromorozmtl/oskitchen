@@ -1,5 +1,7 @@
 # Next Master Prompt Input — KitchenOS Era 4
 
+> **Superseded for recurring prompts** by `docs/next-master-prompt-input-2026-05-27-era4.md` (Era 4 completed). Retained for archaeology.
+
 **Date:** 2026-05-27  
 **Purpose:** Canonical facts, priorities, and constraints for authoring the **next NEW MASTER PROMPT** (post Era 2 + Era 3 RBAC wave)  
 **Full audit:** `docs/full-strategic-reaudit-2026-05-27-era2.md`  

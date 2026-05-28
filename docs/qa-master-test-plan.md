@@ -74,6 +74,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c9. Era 4 scorecard refresh (Era 4 Cycle 13)
+- policy: `lib/governance/era4-scorecard-policy.ts` (`era4-scorecard-refresh-v1`)
+- docs: `docs/era4-cycle-completion-scorecard-2026-05-27.md`, `docs/next-master-prompt-input-2026-05-27-era4.md`
+- wiring cert: `test:ci:scorecard:cert` (last in `test:ci:governance-bundles`)
+- unit: includes `tests/unit/era4-scorecard-policy.test.ts`
+
 ### 8c8. Page maturity sweep (Era 4 Cycle 12)
 - policy: `lib/navigation/page-maturity-sweep-policy.ts` (`era4-page-maturity-sweep-v1`)
 - wiring cert: `test:ci:page-maturity-sweep:cert` (in `test:ci:governance-bundles`)

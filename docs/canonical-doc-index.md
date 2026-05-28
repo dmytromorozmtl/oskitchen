@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 4 Cycle 8)  
+**Updated:** 2026-05-27 (Era 4 Cycle 13 — scorecard refresh)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -47,7 +47,9 @@ Master-prompt inputs and scorecard evidence. Refresh at era boundaries (re-audit
 | Doc | Purpose |
 |-----|---------|
 | [`full-strategic-reaudit-2026-05-27-era2.md`](./full-strategic-reaudit-2026-05-27-era2.md) | Era 2+3 live re-audit, scorecard 76/100, Era 4 execution map |
-| [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | Facts and constraints for Evolution Era 4 master prompt |
+| [`next-master-prompt-input-2026-05-27-era4.md`](./next-master-prompt-input-2026-05-27-era4.md) | Facts and constraints for Evolution Era 5 master prompt |
+| [`era4-cycle-completion-scorecard-2026-05-27.md`](./era4-cycle-completion-scorecard-2026-05-27.md) | Era 4 execution map completion (cycles 1–12) + score 82/100 |
+| [`next-master-prompt-input-2026-05-27-era3.md`](./next-master-prompt-input-2026-05-27-era3.md) | **Superseded** by era4 input for recurring prompts |
 | [`era2-cycle-completion-scorecard-2026-05-27.md`](./era2-cycle-completion-scorecard-2026-05-27.md) | Era 2 execution map completion + post wave-3 scorecard |
 | [`full-strategic-reaudit-2026-05-27.md`](./full-strategic-reaudit-2026-05-27.md) | **Superseded** by era2 re-audit for strategic decisions |
 | [`next-master-prompt-input-2026-05-27.md`](./next-master-prompt-input-2026-05-27.md) | **Superseded** by era3 input for recurring prompts |
@@ -110,6 +112,15 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | **2** | **POS browser E2E CI policy** | `lib/ci/pos-browser-e2e-policy.ts` (`era4-tier2b-optional-v1`); `test:ci:pos-browser-e2e:policy`; `pos-browser-e2e-summary` artifact |
 | **3** | **RBAC wave 4 residuals (batch 1)** | `test:ci:rbac-wave4`; routes/copilot/demo/feedback/integration-menu-sync/production-calendar/holiday-packages |
 | **4** | **Cron experimental archive** | 121 routes → `archive/cron-routes/`; `era4-active-production-only-v1`; 16 active production crons |
+| **5** | **Shopify/Woo golden path** | `era4-channel-golden-path-v1`; `test:ci:channel-golden-path:cert` |
+| **6** | **RBAC wave 4 batch 2** | tables, subscriptions, ethics; `test:ci:rbac-wave4` |
+| **7** | **Typecheck slice 1** | `era4-typecheck-slice-v1`; `test:ci:typecheck-slice:cert` |
+| **8** | **Enterprise procurement pack** | `era4-procurement-honesty-v1`; `docs/enterprise-procurement-pack.md` |
+| **9** | **Cross-channel rewards honesty** | `era4-cross-channel-rewards-v1`; dual ledger |
+| **10** | **KDS staging smoke** | `era4-kds-staging-smoke-v1`; `docs/kds-staging-smoke-checklist.md` |
+| **11** | **Mutation access consolidation** | `era4-mutation-access-consolidation-v1`; domain registry |
+| **12** | **Page maturity sweep** | `era4-page-maturity-sweep-v1`; `PageMaturityRouteNotice` |
+| **13** | **Scorecard refresh** | `era4-scorecard-refresh-v1`; this §Scorecard Era 4 |
 
 ## Evolution Era 3 cycle ledger (governance CI certification)
 
@@ -163,6 +174,27 @@ Incremental refresh after Era 3 cycles 42–52 (governance CI certification wiri
 
 **Re-audit decision (unchanged):** defer full repo re-audit until Q3 2026 or a major release; use incremental scorecard updates via `test:ci:scorecard:cert`.
 
+## Scorecard (Evolution Era 4 end — 2026-05-27)
+
+Incremental refresh after Era 4 cycles 1–12 (cross-channel truth, governance expansion). Baseline = Era 3 increment **73** overall.
+
+| Area | Era 3 end | Era 4 end | Δ | Key evidence |
+|------|----------:|----------:|--:|--------------|
+| Overall | 73 | **82** | +9 | 18 `:cert` gates; all Era 4 execution items closed |
+| Security | 67 | **74** | +7 | RBAC wave 4, mutation registry |
+| QA | 75 | **82** | +7 | channel, rewards, KDS smoke, page maturity certs |
+| DevOps | 78 | **85** | +7 | cron archive, typecheck slice, POS E2E policy |
+| RBAC | 76 | **80** | +4 | wave 4 + `logDomainMutationDenied` |
+| Inventory | 62 | **68** | +6 | POS-only depletion policy |
+| Integrations | 51 | **58** | +7 | Woo/Shopify golden path |
+| POS | 64 | **70** | +6 | explicit browser E2E status artifact |
+| KDS | 58 | **64** | +6 | staging smoke checklist |
+| Enterprise readiness | 46 | **55** | +9 | procurement pack |
+| Marketing/sales | 63 | **70** | +7 | page + nav maturity honesty |
+| Storefront | 78 | **79** | +1 | rewards scoped (not unified) |
+
+**Re-audit decision:** defer full repo re-audit until Era 5 theme or major release; use `docs/next-master-prompt-input-2026-05-27-era4.md`.
+
 ---
 
 ## Validation
@@ -185,3 +217,5 @@ Incremental refresh after Era 3 cycles 42–52 (governance CI certification wiri
 | 2026-05-27 | Era 4 Cycle 2: POS browser E2E explicit PASSED/SKIPPED/FAILED policy + CI artifact |
 | 2026-05-27 | Era 4 Cycle 3: RBAC wave 4 batch 1 + `test:ci:rbac-wave4` |
 | 2026-05-27 | Era 4 Cycle 4: experimental cron archive (121 off App Router) + surface cert |
+| 2026-05-27 | Era 4 Cycles 5–12: channel golden path, typecheck slice, procurement, rewards, KDS smoke, mutation registry, page maturity |
+| 2026-05-27 | Era 4 Cycle 13: scorecard refresh 82/100 + `next-master-prompt-input-2026-05-27-era4.md` |
