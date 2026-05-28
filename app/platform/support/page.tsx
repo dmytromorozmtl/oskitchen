@@ -1,17 +1,38 @@
 import Link from "next/link";
 
+import { PlatformSupportInboxAttentionStrip } from "@/components/platform/platform-support-inbox-attention-strip";
+import { PlatformSupportTicketNextAction } from "@/components/platform/platform-support-ticket-next-action";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
-import { listPlatformSupportTickets } from "@/services/platform/platform-support-service";
+import { buildPlatformSupportInboxFocusSnapshot } from "@/lib/support/platform-support-inbox-focus-era18";
+import {
+  getPlatformSupportInboxSnapshot,
+  listPlatformSupportTickets,
+} from "@/services/platform/platform-support-service";
 
 export default async function PlatformSupportPage() {
   const ctx = await requirePlatformAccess();
   assertPlatformPermission(ctx, "platform:support:read");
-  const tickets = await listPlatformSupportTickets({}, 100);
+  const [snapshot, tickets] = await Promise.all([
+    getPlatformSupportInboxSnapshot(ctx.userId),
+    listPlatformSupportTickets({}, 100),
+  ]);
+  const focus = buildPlatformSupportInboxFocusSnapshot(
+    snapshot,
+    tickets.map((t) => ({
+      id: t.id,
+      status: t.status,
+      priority: t.priority,
+      category: t.category,
+      assignedToId: t.assignedToId,
+      slaDueAt: t.slaDueAt?.toISOString() ?? null,
+    })),
+  );
 
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold text-white">Support inbox</h1>
       <p className="text-sm text-zinc-400">All tickets across tenants — click a row to reply.</p>
+      <PlatformSupportInboxAttentionStrip focus={focus} />
       {tickets.length === 0 ? (
         <p className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 text-sm text-zinc-500">
           No tickets yet. Customer support requests across all workspaces will appear here.
@@ -27,6 +48,7 @@ export default async function PlatformSupportPage() {
                 <th className="px-3 py-2">Account</th>
                 <th className="px-3 py-2">Status</th>
                 <th className="px-3 py-2">Priority</th>
+                <th className="px-3 py-2">Next action</th>
               </tr>
             </thead>
             <tbody>
@@ -42,6 +64,18 @@ export default async function PlatformSupportPage() {
                   <td className="px-3 py-2 font-mono text-xs">{t.userProfile?.email ?? "—"}</td>
                   <td className="px-3 py-2">{t.status}</td>
                   <td className="px-3 py-2">{t.priority}</td>
+                  <td className="px-3 py-2">
+                    <PlatformSupportTicketNextAction
+                      ticket={{
+                        id: t.id,
+                        status: t.status,
+                        priority: t.priority,
+                        category: t.category,
+                        assignedToId: t.assignedToId,
+                        slaDueAt: t.slaDueAt?.toISOString() ?? null,
+                      }}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>

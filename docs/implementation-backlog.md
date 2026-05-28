@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-026 — Platform support inbox attention strip (P0)
+- ID: `KOS-E18-026`
+- Title: Era 18 Workstream P Cycle 26 — cross-tenant support queue prioritization + ticket row next actions
+- Module: Platform / Support
+- Priority: P0 (support visibility + enterprise trust)
+- Status: **platform_support_inbox_focus_attention_wired**
+- Decision: `era18-platform-support-inbox-focus-v1` — SLA → critical → escalated → integration → unassigned urgent ordering; platform routes on attention strip and row actions
+- Evidence: `lib/support/platform-support-inbox-focus-era18.ts`, `components/platform/platform-support-inbox-attention-strip.tsx`, `app/platform/support/page.tsx`, `app/platform/support/queue/page.tsx`
+- Next: P0 staging proof ops execution when vault ready; POS shift close variance UX polish (P1)
+
 ### KOS-E18-025 — Support inbox attention strip (P0)
 - ID: `KOS-E18-025`
 - Title: Era 18 Workstream P Cycle 25 — support queue prioritization + ticket row next actions
@@ -43,7 +53,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **support_inbox_focus_attention_wired**
 - Decision: `era18-support-inbox-focus-v1` — SLA overdue → critical → integration → unassigned urgent ordering; row next actions on all ticket tables
 - Evidence: `lib/support/support-inbox-focus-era18.ts`, `components/support/support-inbox-attention-strip.tsx`, `components/support/support-center-client.tsx`
-- Next: Platform support inbox parity; P0 staging proof ops execution when vault ready
+- Next: Platform support inbox parity — **done** (KOS-E18-026); P0 staging proof ops execution when vault ready
 
 ### KOS-E18-024 — Sales channels health next actions (P1)
 - ID: `KOS-E18-024`

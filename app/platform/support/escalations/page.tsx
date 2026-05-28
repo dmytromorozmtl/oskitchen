@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { PlatformSupportTicketNextAction } from "@/components/platform/platform-support-ticket-next-action";
 import { assertPlatformPermission, requirePlatformAccess } from "@/lib/platform/platform-guards";
 import { listPlatformSupportTickets } from "@/services/platform/platform-support-service";
 
@@ -19,6 +20,7 @@ export default async function PlatformSupportEscalationsPage() {
               <th className="px-3 py-2">Subject</th>
               <th className="px-3 py-2">Workspace</th>
               <th className="px-3 py-2">Priority</th>
+              <th className="px-3 py-2">Next action</th>
             </tr>
           </thead>
           <tbody>
@@ -31,6 +33,18 @@ export default async function PlatformSupportEscalationsPage() {
                 </td>
                 <td className="px-3 py-2 text-xs">{t.workspace?.name ?? "—"}</td>
                 <td className="px-3 py-2">{t.priority}</td>
+                <td className="px-3 py-2">
+                  <PlatformSupportTicketNextAction
+                    ticket={{
+                      id: t.id,
+                      status: t.status,
+                      priority: t.priority,
+                      category: t.category,
+                      assignedToId: t.assignedToId,
+                      slaDueAt: t.slaDueAt?.toISOString() ?? null,
+                    }}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>

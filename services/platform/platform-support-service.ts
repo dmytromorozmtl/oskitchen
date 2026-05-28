@@ -1,7 +1,88 @@
 import type { Prisma } from "@prisma/client";
+import { SupportTicketStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { PLATFORM_OPEN_TICKET_STATUSES } from "@/services/platform/platform-service";
+
+export type PlatformSupportInboxSnapshot = {
+  kpis: {
+    openTickets: number;
+    awaitingResponse: number;
+    assignedToMe: number;
+    overdueSla: number;
+    criticalIssues: number;
+    integrationIssues: number;
+    escalatedTickets: number;
+  };
+};
+
+const AWAITING_RESPONSE_STATUSES = [
+  SupportTicketStatus.NEW,
+  SupportTicketStatus.TRIAGED,
+  SupportTicketStatus.WAITING_ON_SUPPORT,
+  SupportTicketStatus.IN_PROGRESS,
+  SupportTicketStatus.ESCALATED,
+  SupportTicketStatus.OPEN,
+  SupportTicketStatus.WAITING,
+] as const;
+
+/** Cross-tenant support inbox KPIs for platform operators. */
+export async function getPlatformSupportInboxSnapshot(
+  actorUserId: string,
+): Promise<PlatformSupportInboxSnapshot> {
+  const openWhere = { status: { in: PLATFORM_OPEN_TICKET_STATUSES } };
+
+  const [
+    openTickets,
+    awaitingResponse,
+    assignedToMe,
+    overdueSla,
+    criticalIssues,
+    integrationIssues,
+    escalatedTickets,
+  ] = await Promise.all([
+    prisma.supportTicket.count({ where: openWhere }),
+    prisma.supportTicket.count({
+      where: { status: { in: [...AWAITING_RESPONSE_STATUSES] } },
+    }),
+    prisma.supportTicket.count({
+      where: { AND: [openWhere, { assignedToId: actorUserId }] },
+    }),
+    prisma.supportTicket.count({
+      where: {
+        AND: [openWhere, { slaDueAt: { lt: new Date() } }],
+      },
+    }),
+    prisma.supportTicket.count({
+      where: {
+        AND: [
+          openWhere,
+          {
+            OR: [{ priority: "CRITICAL" }, { category: "SECURITY" }],
+          },
+        ],
+      },
+    }),
+    prisma.supportTicket.count({
+      where: { AND: [openWhere, { category: "INTEGRATION" }] },
+    }),
+    prisma.supportTicket.count({
+      where: { AND: [openWhere, { status: SupportTicketStatus.ESCALATED }] },
+    }),
+  ]);
+
+  return {
+    kpis: {
+      openTickets,
+      awaitingResponse,
+      assignedToMe,
+      overdueSla,
+      criticalIssues,
+      integrationIssues,
+      escalatedTickets,
+    },
+  };
+}
 
 const ticketListInclude = {
   workspace: { select: { id: true, name: true } },
