@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-021 — System health integration observability strip (P1)
+- ID: `KOS-E18-021`
+- Title: Era 18 Workstream O Cycle 21 — prioritized integration/production attention on system health
+- Module: System health / Integration observability
+- Priority: P1 (integration transparency + dashboard clarity)
+- Status: **system_health_focus_attention_wired**
+- Decision: `era18-system-health-focus-v1` — integration/sync/webhook signals first; observability event next actions on `/dashboard/system-health`
+- Evidence: `lib/system-health/system-health-focus-era18.ts`, `components/dashboard/system-health-attention-strip.tsx`, `app/dashboard/system-health/page.tsx`
+- Next: Platform system health parity; P0 staging proof ops execution when vault ready
+
 ### KOS-E18-020 — Platform error recovery attention strip (P0)
 - ID: `KOS-E18-020`
 - Title: Era 18 Workstream N Cycle 20 — cross-tenant triage parity on platform error recovery

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { canManageProductionIncidentsForUser } from "@/actions/production-incidents";
+import { SystemHealthAttentionStrip } from "@/components/dashboard/system-health-attention-strip";
 import { ProductionIncidentWorkflowForm } from "@/components/system/production-incident-workflow-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,22 @@ export default async function SystemHealthPage() {
   const startupReadinessIncidents = incidentRollup.items.filter(
     (item) => item.source === "startup_readiness",
   );
+
+  const snapshot = {
+    rollup,
+    failedWebhooks: today.kpis.failedWebhooks,
+    errorIntegrations: today.kpis.errorIntegrations,
+    integrityIssueCount: today.kpis.integrityIssueCount,
+    openSupportTickets: today.kpis.openSupportTickets,
+    unmatchedExternalProducts: today.kpis.unmatchedExternalProducts,
+    webhookProcessingErrors7d: obs.counts.webhookProcessingErrors7d,
+    openWebhookJobRecoveries: obs.counts.openWebhookJobRecoveries,
+    channelSyncFailed: obs.counts.channelSyncFailed,
+    notificationFailures7d: obs.counts.notificationFailures7d,
+    productionIncidentsCritical: incidentRollup.summary.critical,
+    productionIncidentsOpen: incidentRollup.summary.open,
+    startupReadinessIncidents: startupReadinessIncidents.length,
+  } as const;
 
   const label =
     rollup === "HEALTHY" ? "Healthy" : rollup === "DEGRADED" ? "Needs attention" : "Critical path";
@@ -49,6 +66,8 @@ export default async function SystemHealthPage() {
           </Button>
         </div>
       </div>
+
+      <SystemHealthAttentionStrip snapshot={snapshot} recentEvents={obs.events} />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Metric title="Failed webhooks" value={today.kpis.failedWebhooks} href="/dashboard/sales-channels/webhooks" />
