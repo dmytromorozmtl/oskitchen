@@ -50,6 +50,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - staging must only run when required secrets and URLs are valid
 - preflight scripts should fail early on env mismatch
 - staging smoke should cover auth, storefront, and at least one protected dashboard path
+- **Era 12 Cycle 2:** `era12-e2e-staging-secrets-align-v1` — `.github/workflows/e2e-staging.yml` and `closed-beta-gate.yml` require `E2E_STAGING_BASE_URL`, `E2E_LOGIN_EMAIL`, and `E2E_LOGIN_PASSWORD` (legacy GitHub secret `E2E_PASSWORD` accepted); job env always sets `E2E_LOGIN_PASSWORD` for Playwright parity with POS/KDS staging. Cert: `test:ci:e2e-staging-secrets-era12:cert`. Docs: `docs/GITHUB_E2E_STAGING_SECRETS.md`.
 
 ## Production Smoke
 - public health route

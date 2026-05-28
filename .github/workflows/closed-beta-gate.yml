@@ -1,5 +1,5 @@
 # Closed-beta security + optional staging smoke (workflow_dispatch).
-# Secrets (optional staging): E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_PASSWORD, DATABASE_URL
+# Secrets (optional staging): E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD (legacy E2E_PASSWORD alias), DATABASE_URL
 
 name: Closed Beta Gate
 
@@ -37,7 +37,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   staging-smoke:
-    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_PASSWORD != '' }}
+    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && (secrets.E2E_LOGIN_PASSWORD != '' || secrets.E2E_PASSWORD != '') }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     needs: security-bundle
@@ -55,7 +55,7 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
           E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
-          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
 
       - name: Delivery IDOR + export streaming
         run: npx playwright test tests/e2e/remediation-delivery-idor.spec.ts tests/e2e/beta-export-streaming.spec.ts --project=chromium-authed

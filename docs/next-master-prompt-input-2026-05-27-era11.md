@@ -29,6 +29,7 @@ All four Era 11 DevOps / RBAC / KDS staging cycles from era10 handoff **complete
 | Cycle | Outcome |
 |-------|---------|
 | **1** | **Channel golden path recert** — `era12-channel-golden-path-recert-v1`; order hub visibility stage certified |
+| **2** | **E2E staging secrets alignment** — `era12-e2e-staging-secrets-align-v1`; `e2e-staging.yml` + `closed-beta-gate.yml` map `E2E_LOGIN_PASSWORD` (legacy `E2E_PASSWORD` alias) |
 
 ---
 
@@ -45,7 +46,8 @@ All four Era 11 DevOps / RBAC / KDS staging cycles from era10 handoff **complete
 
 - SSO/SAML R2 pilot — explicit era budget only.
 - Unified cross-channel rewards E2E — still `deferred_locked` after Era 10 Cycle 1.
-- KDS staging workflow first run — requires `E2E_STAGING_BASE_URL` + `E2E_LOGIN_*` repo secrets.
+- KDS staging workflow first run — requires `E2E_STAGING_BASE_URL` + `E2E_LOGIN_EMAIL` + `E2E_LOGIN_PASSWORD` (legacy `E2E_PASSWORD` alias in workflows).
+- ~~E2E staging workflow secret mismatch~~ — **Done** Era 12 Cycle 2 (`era12-e2e-staging-secrets-align-v1`).
 - ~~Typecheck platform-auth slice~~ — **Done** Era 11 Cycle 1.
 - ~~Mutation access recert~~ — **Done** Era 11 Cycle 2.
 - ~~KDS Playwright staging spec + workflow~~ — **Done** Era 11 Cycles 3–4.

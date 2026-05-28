@@ -26,6 +26,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 4. E2E
 - user journeys through auth, storefront, POS, dashboard, packing, and critical support flows
+- **Era 12 staging secrets:** `lib/ci/e2e-staging-secrets-era12-policy.ts` (`era12-e2e-staging-secrets-align-v1`) — `e2e-staging.yml` / `closed-beta-gate.yml` map GitHub password secret to `E2E_LOGIN_PASSWORD`; cert `test:ci:e2e-staging-secrets-era12:cert` (governance platform partition)
 
 ### 5. Visual Regression
 - marketing pages

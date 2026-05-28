@@ -15,6 +15,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/integrations/channel-golden-path-era12-policy.ts`, `test:ci:channel-golden-path-era12:cert`
 - Next: live store smoke only via `scripts/smoke-woo-shopify-certification.ts` when credentials available
 
+### KOS-E12-002 — E2E staging secrets alignment (P1)
+- ID: `KOS-E12-002`
+- Title: Align staging workflow GitHub secrets with Playwright `E2E_LOGIN_PASSWORD`
+- Module: DevOps / E2E
+- Priority: P1 (Era 12 Cycle 2)
+- Status: **completed**
+- Decision: `era12-e2e-staging-secrets-align-v1` — `e2e-staging.yml` + `closed-beta-gate.yml` accept canonical or legacy password secret; env always `E2E_LOGIN_PASSWORD`
+- Evidence: `lib/ci/e2e-staging-secrets-era12-policy.ts`, `test:ci:e2e-staging-secrets-era12:cert`, `docs/GITHUB_E2E_STAGING_SECRETS.md`
+- Next: rename repo secret `E2E_PASSWORD` → `E2E_LOGIN_PASSWORD` when convenient (optional ops)
+
 ## Era 11 — DevOps scale / RBAC recert
 
 ### KOS-E11-005 — Era 11 scorecard refresh (P1)

@@ -1,5 +1,6 @@
 # Staging E2E — runs when repository secrets are configured.
-# Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_PASSWORD
+# Required secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD
+# Legacy: E2E_PASSWORD accepted as alias for E2E_LOGIN_PASSWORD (era12-e2e-staging-secrets-align-v1)
 # Optional: E2E_STOREFRONT_SLUG (default hello), DATABASE_URL for DB-backed checks
 
 name: E2E Staging
@@ -11,7 +12,7 @@ on:
 
 jobs:
   staging-e2e:
-    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_PASSWORD != '' }}
+    if: ${{ secrets.E2E_STAGING_BASE_URL != '' && secrets.E2E_LOGIN_EMAIL != '' && (secrets.E2E_LOGIN_PASSWORD != '' || secrets.E2E_PASSWORD != '') }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -31,7 +32,7 @@ jobs:
           CI: "1"
           PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
           E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
-          E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
 
       - name: Storefront smoke
         if: ${{ vars.E2E_STOREFRONT_SLUG != '' }}
