@@ -260,6 +260,12 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
 
+### 8c4o. KDS staging smoke recert (Era 10 Cycle 4)
+- Policy: `lib/kitchen/kds-staging-smoke-era10-policy.ts` (`era10-kds-staging-smoke-recert-v1`; extends `era4-kds-staging-smoke-v1`)
+- Integration: `tests/integration/kds-daily-queue-bump.integration.test.ts` (bump + recall + allergen)
+- Wiring cert: `test:ci:kds-staging-smoke-era10:cert` (chained in `test:ci:kds-staging-smoke:cert`)
+- Honest gap: no Playwright KDS spec in default CI; Tier E manual only
+
 ### 8c4n. Production calendar status workflow UI (Era 10 Cycle 3)
 - Policy: `lib/production/production-calendar-status-workflow-ui-policy.ts` (`era10-production-calendar-status-workflow-ui-v1`; extends cross-week)
 - Status allowlist: `lib/production/production-plan-task-status.ts`

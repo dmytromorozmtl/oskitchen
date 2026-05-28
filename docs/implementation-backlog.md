@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 10 — Customer value loop / GTM honesty
 
+### KOS-E10-004 — KDS staging smoke recert (P1)
+- ID: `KOS-E10-004`
+- Title: Re-certify KDS operational smoke (bump + recall integration, honest gaps)
+- Module: Kitchen / KDS
+- Priority: P1 (Era 10 Cycle 4)
+- Status: **completed**
+- Decision: `era10-kds-staging-smoke-recert-v1` — extends `era4-kds-staging-smoke-v1`; adds recall integration test; no Playwright in default CI
+- Evidence: `lib/kitchen/kds-staging-smoke-era10-policy.ts`, `test:ci:kds-staging-smoke-era10:cert`
+- Next: Playwright KDS Realtime spec only with explicit era decision (Tier E)
+
 ### KOS-E10-003 — Production calendar status workflow UI (P1)
 - ID: `KOS-E10-003`
 - Title: Scheduled / in-progress / completed status controls on production calendar tasks

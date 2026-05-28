@@ -134,6 +134,91 @@ describe.skipIf(!run)("KDS daily queue → bump (integration)", () => {
     expect(bumped?.status).toBe("READY");
   });
 
+  it("reflects PREPARING after recall from READY on today's queue", async () => {
+    const suffix = randomUUID().slice(0, 8);
+    const ownerId = randomUUID();
+    cleanupUserIds.add(ownerId);
+
+    await prisma.userProfile.create({
+      data: {
+        id: ownerId,
+        email: `kds-recall-${suffix}@example.com`,
+        fullName: `KDS Recall ${suffix}`,
+        role: "OWNER",
+      },
+    });
+
+    const workspace = await prisma.workspace.create({
+      data: { ownerUserId: ownerId, name: `KDS Recall WS ${suffix}` },
+      select: { id: true },
+    });
+    cleanupWorkspaceIds.add(workspace.id);
+
+    const menu = await prisma.menu.create({
+      data: {
+        userId: ownerId,
+        workspaceId: workspace.id,
+        title: `Recall Menu ${suffix}`,
+        startDate: new Date("2026-01-01T00:00:00.000Z"),
+        endDate: new Date("2026-12-31T00:00:00.000Z"),
+        preorderDeadline: new Date("2025-12-31T00:00:00.000Z"),
+        active: true,
+        published: true,
+      },
+      select: { id: true },
+    });
+    cleanupMenuIds.add(menu.id);
+
+    const product = await prisma.product.create({
+      data: {
+        menuId: menu.id,
+        workspaceId: workspace.id,
+        title: `Salad ${suffix}`,
+        preparedDate: new Date(),
+        price: 12,
+        active: true,
+      },
+      select: { id: true },
+    });
+    cleanupProductIds.add(product.id);
+
+    const order = await prisma.order.create({
+      data: {
+        userId: ownerId,
+        workspaceId: workspace.id,
+        customerName: `Recall Guest ${suffix}`,
+        customerEmail: `recall-${suffix}@example.com`,
+        total: 12,
+        status: "READY",
+        fulfillmentType: "PICKUP",
+        orderItems: {
+          create: {
+            productId: product.id,
+            quantity: 1,
+            title: `Salad ${suffix}`,
+            unitPrice: 12,
+            lineTotal: 12,
+          },
+        },
+      },
+      select: { id: true },
+    });
+    cleanupOrderIds.add(order.id);
+
+    const readyQueue = await getTodayQueue(ownerId);
+    expect(readyQueue.find((row) => row.id === order.id)?.status).toBe("READY");
+
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { status: "PREPARING" },
+    });
+
+    const recalledQueue = await getTodayQueue(ownerId);
+    const recalled = recalledQueue.find((row) => row.id === order.id);
+    expect(recalled).toBeDefined();
+    expect(recalled?.status).toBe("PREPARING");
+  });
+
   it("flags allergen conflict when customer allergies match product allergens", async () => {
     const suffix = randomUUID().slice(0, 8);
     const ownerId = randomUUID();

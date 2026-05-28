@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { governanceBundlesIncludesCert } from "@/lib/ci/governance-bundles-partition-policy";
 import {
   KDS_STAGING_SMOKE_CI_SCRIPTS,
   KDS_STAGING_SMOKE_POLICY_ID,
@@ -34,8 +35,8 @@ describe("KDS staging smoke CI certification (live repo)", () => {
 
   it("includes staging smoke cert in governance bundles", () => {
     const scripts = readPackageScripts();
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-staging-smoke:cert");
-    expect(scripts["test:ci:governance-bundles"]).toContain("test:ci:kds-staging-smoke");
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-staging-smoke:cert")).toBe(true);
+    expect(governanceBundlesIncludesCert(scripts, "test:ci:kds-staging-smoke")).toBe(true);
   });
 
   it("has policy, checklist, smoke script, and unit tests on disk", () => {

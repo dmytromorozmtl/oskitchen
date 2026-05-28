@@ -180,7 +180,7 @@ npm run test:ci:pos-money-path:e2e
 | Staging smoke policy + wiring | `npm run test:ci:kds-staging-smoke` | Checklist tiers, `smoke:kds-daily` script, permissioned actions |
 | Staging smoke wiring cert | `npm run test:ci:kds-staging-smoke:cert` | Policy id, governance bundle, maturity matrix honesty |
 
-**Policy (Era 4 Cycle 10):** `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`). **Prerequisites:** `test:ci:kds-v1:integration` (queue→bump). **Staging/manual:** `docs/kds-staging-smoke-checklist.md`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`. **Not certified:** rush-hour, multi-station, Playwright realtime KDS.
+**Policy (Era 4 Cycle 10):** `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`). **Era 10 recert:** `era10-kds-staging-smoke-recert-v1` — integration covers queue→bump + recall (`test:ci:kds-staging-smoke-era10:cert`). **Prerequisites:** `test:ci:kds-v1:integration`. **Staging/manual:** `docs/kds-staging-smoke-checklist.md`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`. **Not certified:** rush-hour, multi-station, Playwright realtime KDS in default CI.
 
 **Wiring certification (tier 0):** `test:ci:kds-staging-smoke:cert` + `test:ci:kds-staging-smoke` chained in `test:ci:governance-bundles`.
 

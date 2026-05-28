@@ -31,6 +31,7 @@ All four Era 9 enterprise / DevOps / security cycles from era8 prompt input **co
 | **1** | **Cross-channel rewards recert** — `era10-cross-channel-rewards-recert-v1`; dual ledger honest; no unified E2E |
 | **2** | **Production calendar cross-week UI** — `era10-production-calendar-cross-week-ui-v1`; `?week=` nav + boundary moves |
 | **3** | **Production calendar status workflow UI** — `era10-production-calendar-status-workflow-ui-v1`; per-task status select |
+| **4** | **KDS staging smoke recert** — `era10-kds-staging-smoke-recert-v1`; bump + recall integration; no Playwright in CI |
 
 ---
 
@@ -46,7 +47,7 @@ All four Era 9 enterprise / DevOps / security cycles from era8 prompt input **co
 ## 4. What Remains Open (P1)
 
 - ~~Cross-channel loyalty/gift card E2E or honest gap doc~~ — **Done** Cycle 1 (`era10-cross-channel-rewards-recert-v1`); unified E2E still `deferred_locked`.
-- KDS Playwright Realtime spec — staging-only; explicit era decision.
+- KDS Playwright Realtime spec — staging-only; explicit era decision (Era 10 Cycle 4 recertified bump/recall integration only).
 - ~~Production calendar cross-week reschedule / status workflow UI~~ — **Done** Cycles 2–3 (`era10-production-calendar-cross-week-ui-v1`, `era10-production-calendar-status-workflow-ui-v1`).
 - ~~Governance bundle partition~~ — **Done** Era 9 Cycle 2.
 - ~~Cron / RBAC recert~~ — **Done** Era 9 Cycles 3–4.
