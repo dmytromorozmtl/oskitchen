@@ -22,7 +22,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - cron hygiene live gates: `tests/unit/cron-hygiene-live.test.ts`, `validate:production-crons`, `validate:cron-inventory`, bundle `test:ci:cron-hygiene`
 - doc canon gate: wiring cert `test:ci:doc-canon:cert` + unit `test:ci:doc-canon` (`tests/unit/doc-canon-ci-live.test.ts`, `tests/unit/canonical-doc-index.test.ts`), index `docs/canonical-doc-index.md`
 - scorecard gate: `test:ci:scorecard:cert` (`tests/unit/scorecard-ci-live.test.ts`) — Era 3 increment consistency across canonical docs
-- **CI quality job bundle:** `npm run test:ci:governance-bundles` (doc-canon + public-api-v1 + nav-governance + integration-honesty); **Era 3 RBAC wave 3:** `npm run test:ci:rbac-wave3`; **public POST fail-closed:** `npm run test:ci:public-post-fail-closed` (IoT/NPS/ROI guards + route wiring)
+- **CI quality job bundle:** `npm run test:ci:governance-bundles` (doc-canon + public-api-v1 + nav-governance + integration-honesty); **Era 9 Cycle 2:** four parallel partitions (`test:ci:governance-bundles:partition-*`) in job `governance-bundles-partitions` — `quality` keeps full sequential bundle; **Era 3 RBAC wave 3:** `npm run test:ci:rbac-wave3`; **public POST fail-closed:** `npm run test:ci:public-post-fail-closed` (IoT/NPS/ROI guards + route wiring)
 
 ### 4. E2E
 - user journeys through auth, storefront, POS, dashboard, packing, and critical support flows
@@ -259,6 +259,14 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - Policy: `lib/production/production-calendar-move-ui-policy.ts` (`era8-production-calendar-move-ui-v1`)
 - UI: week-column ←/→ on `/dashboard/production/calendar` via `movePlanTaskAction`
 - Wiring cert: `test:ci:production-calendar-move-ui:cert` (in `test:ci:governance-bundles`)
+
+### 8c4h. Governance bundles partition (Era 9 Cycle 2)
+- Policy: `lib/ci/governance-bundles-partition-policy.ts` (`era9-governance-bundles-partition-v1`)
+- Parallel CI job: `governance-bundles-partitions` (matrix: platform, money-path, security-rbac, product-kds)
+- Canonical gate unchanged: `quality` → `npm run test:ci:governance-bundles` (four partitions sequential)
+- Local fast path: `npm run test:ci:governance-bundles:partition-platform` (etc.)
+- Wiring cert: `test:ci:governance-bundles-partition:cert` (via `test:ci:typecheck-slice:cert`)
+
 5. POS permission-negative role matrix — terminal API route denials covered; deeper workflow-role gaps remain
 5. upload/media malicious file denial coverage — validators and upload audit denial/success events covered by unit tests; E2E denial matrix still open
 6. kitchen/KDS permission and realtime behavior — daily KDS fetch/bump RBAC and page deny state covered by unit tests; recall/configure and realtime E2E still open

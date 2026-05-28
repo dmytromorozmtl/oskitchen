@@ -29,6 +29,7 @@ All four Era 8 operator-depth / GTM hygiene cycles from era7 prompt input **comp
 | Cycle | Outcome |
 |-------|---------|
 | **1** | **SSO architecture spike (R1)** — `era9-enterprise-sso-architecture-spike-v1`; design doc only; delivery `not_implemented` |
+| **2** | **Governance bundles partition** — `era9-governance-bundles-partition-v1`; parallel CI job; `quality` keeps full bundle |
 
 ---
 
@@ -46,7 +47,7 @@ All four Era 8 operator-depth / GTM hygiene cycles from era7 prompt input **comp
 - KDS Playwright Realtime spec (`e2e/kds-realtime-*.spec.ts`) — staging-only; explicit era decision.
 - Unified rewards product/schema era (if dual-ledger lock reversed).
 - Production calendar cross-week reschedule / status workflow UI.
-- CI workflow runtime optimization (`typecheck-slices`, governance bundle split).
+- ~~CI workflow runtime optimization (governance bundle split)~~ — **Done** Cycle 2 (`era9-governance-bundles-partition-v1`); typecheck parallel job unchanged (`era6-typecheck-slice-ci-v1`).
 
 ---
 

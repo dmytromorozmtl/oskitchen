@@ -146,6 +146,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | Cycle | Outcome | Evidence |
 |-------|---------|----------|
 | **1** | **SSO architecture spike (R1)** | `era9-enterprise-sso-architecture-spike-v1`; `docs/enterprise-sso-architecture-spike-r1.md` |
+| **2** | **Governance bundles partition** | `era9-governance-bundles-partition-v1`; job `governance-bundles-partitions` |
 
 ## Evolution Era 7 cycle ledger
 
@@ -383,3 +384,4 @@ Incremental refresh after Era 8 cycles 1–4 (operator depth / GTM hygiene from 
 | 2026-05-27 | Era 8 Cycle 4: `era8-production-calendar-move-ui-v1` — move task UI on production calendar |
 | 2026-05-27 | Era 8 Cycle 5: scorecard refresh 94/100 + `next-master-prompt-input-2026-05-27-era8.md` |
 | 2026-05-27 | Era 9 Cycle 1: `era9-enterprise-sso-architecture-spike-v1` — SSO R1 design spike (not production) |
+| 2026-05-27 | Era 9 Cycle 2: `era9-governance-bundles-partition-v1` — parallel governance CI partitions |

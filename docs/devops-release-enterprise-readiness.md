@@ -26,6 +26,7 @@ Primary evidence: `package.json`, `.github/workflows/ci.yml`, `.github/workflows
 - **Slice C — storefront / marketing:** `npm run typecheck:slice:storefront-marketing` — public storefront (`app/s`, `app/b`), GTM/marketing pages, `app/dashboard/storefront`, storefront API routes; **6GB** heap.
 - **Wiring cert (tier 0):** `npm run test:ci:typecheck-slice:cert` + `npm run test:ci:typecheck-slice` (in `test:ci:governance-bundles`).
 - **Parallel CI job (Era 6 Cycle 3):** `era6-typecheck-slice-ci-v1` — workflow job `typecheck-slices` runs `npm run typecheck:ci:slices` at **6GB** heap in parallel with `quality`; **does not** replace `npm run typecheck` → `typecheck:full` (8GB) as canonical gate.
+- **Governance bundle partitions (Era 9 Cycle 2):** `era9-governance-bundles-partition-v1` — job `governance-bundles-partitions` runs four matrix partitions in parallel; **`quality` still runs** `npm run test:ci:governance-bundles` (full sequential composition). Local fast path: `npm run test:ci:governance-bundles:partition-platform` (etc.). Cert: `test:ci:governance-bundles-partition:cert` (via `test:ci:typecheck-slice:cert`).
 
 ## Build Verification
 - continue prebuilt release discipline until memory pressure is resolved

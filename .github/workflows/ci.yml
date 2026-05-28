@@ -173,6 +173,31 @@ jobs:
       - name: Typecheck strict slices (parallel memory path)
         run: npm run typecheck:ci:slices
 
+  # Era 9 — optional parallel governance partitions (canonical gate remains quality → test:ci:governance-bundles).
+  governance-bundles-partitions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        partition: [platform, money-path, security-rbac, product-kds]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Governance bundle partition (${{ matrix.partition }})
+        run: npm run test:ci:governance-bundles:partition-${{ matrix.partition }}
+
   security-db:
     runs-on: ubuntu-latest
     timeout-minutes: 25

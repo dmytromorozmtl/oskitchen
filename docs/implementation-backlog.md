@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 9 — Enterprise delivery / DevOps
 
+### KOS-E9-002 — Governance bundles partition (P1)
+- ID: `KOS-E9-002`
+- Title: Split governance bundles for parallel CI without weakening quality gate
+- Module: DevOps / CI
+- Priority: P1 (Era 9 Cycle 2)
+- Status: **completed**
+- Decision: `era9-governance-bundles-partition-v1` — four matrix partitions; `quality` keeps `test:ci:governance-bundles`
+- Evidence: `lib/ci/governance-bundles-partition-policy.ts`, `.github/workflows/ci.yml` job `governance-bundles-partitions`
+- Next: local dev subset scripts or Era 9 scorecard refresh after more cycles
+
 ### KOS-E9-001 — SSO architecture spike R1 (P0)
 - ID: `KOS-E9-001`
 - Title: Document SAML/OIDC target architecture (design only)
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era9-enterprise-sso-architecture-spike-v1` — delivery `not_implemented`; R2 pilot prerequisites documented
 - Evidence: `docs/enterprise-sso-architecture-spike-r1.md`, `test:ci:enterprise-sso-spike:cert`
-- Next: R2 SSO pilot era (explicit budget) or CI governance bundle partitioning
+- Next: R2 SSO pilot era (explicit budget)
 
 ## Era 8 — Operator depth / GTM hygiene
 
