@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
 import { runIntegrationHealthCheckFormAction } from "@/actions/integration-health";
+import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
 import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,8 +15,13 @@ import {
 import { getServerEnv } from "@/lib/env";
 import {
   buildIntegrationHealthFocusSnapshot,
-  resolveSalesChannelHealthConnectionNextAction,
 } from "@/lib/integrations/integration-health-focus-era18";
+import {
+  liveProofSliceForProvider,
+  mergeLiveProofIntoIntegrationHealthSnapshot,
+  resolveSalesChannelHealthConnectionNextActionWithLiveProof,
+  salesChannelHealthLiveProofPanelHref,
+} from "@/lib/integrations/integration-health-live-proof-focus-era18";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
   getCachedIntegrationConnectionListWhere,
@@ -24,6 +30,7 @@ import {
 import { loadSalesChannelMetrics } from "@/lib/channels/sales-channel-metrics";
 import { prisma } from "@/lib/prisma";
 import {
+  listChannelPilotLiveProofSlices,
   listIntegrationHealthCards,
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
@@ -36,7 +43,7 @@ export default async function SalesChannelsHealthPage() {
     getCachedIntegrationConnectionListWhere(),
     getCachedWebhookEventListWhere(),
   ]);
-  const [connections, webhookFailCount, unprocessedWebhookCount, metrics, healthCards] =
+  const [connections, webhookFailCount, unprocessedWebhookCount, metrics, healthCards, liveProofSlices] =
     await Promise.all([
       prisma.integrationConnection.findMany({
         where: connectionWhere,
@@ -53,6 +60,7 @@ export default async function SalesChannelsHealthPage() {
       }),
       loadSalesChannelMetrics(userId),
       listIntegrationHealthCards(dataUserId),
+      listChannelPilotLiveProofSlices(dataUserId),
     ]);
 
   const stripeConfigured = Boolean(
@@ -63,12 +71,16 @@ export default async function SalesChannelsHealthPage() {
     stripe: stripeConfigured,
     email: emailConfigured,
   });
-  const focusSnapshot = buildIntegrationHealthFocusSnapshot({
-    summary: healthSummary,
-    cards: healthCards,
-    failedWebhookCount: unprocessedWebhookCount,
-  });
+  const focusSnapshot = mergeLiveProofIntoIntegrationHealthSnapshot(
+    buildIntegrationHealthFocusSnapshot({
+      summary: healthSummary,
+      cards: healthCards,
+      failedWebhookCount: unprocessedWebhookCount,
+    }),
+    liveProofSlices,
+  );
   const healthCardById = new Map(healthCards.map((card) => [card.id, card]));
+  const liveProofPanelHref = salesChannelHealthLiveProofPanelHref();
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -85,7 +97,12 @@ export default async function SalesChannelsHealthPage() {
         </Button>
       </div>
 
-      <IntegrationHealthAttentionStrip snapshot={focusSnapshot} />
+      <IntegrationHealthAttentionStrip
+        snapshot={focusSnapshot}
+        liveProofPanelHref={liveProofPanelHref}
+      />
+
+      <ChannelLiveProofStatusPanel slices={liveProofSlices} />
 
       {webhookFailCount > 0 ? (
         <Card className="border-amber-500/40 bg-amber-500/5">
@@ -116,8 +133,15 @@ export default async function SalesChannelsHealthPage() {
         {connections.map((c) => {
           const last = c.healthChecks[0];
           const healthCard = healthCardById.get(c.id);
+          const liveProofSlice = healthCard
+            ? liveProofSliceForProvider(liveProofSlices, healthCard.provider)
+            : null;
           const nextAction = healthCard
-            ? resolveSalesChannelHealthConnectionNextAction(healthCard, last ?? null)
+            ? resolveSalesChannelHealthConnectionNextActionWithLiveProof(
+                healthCard,
+                liveProofSlice,
+                last ?? null,
+              )
             : null;
 
           return (

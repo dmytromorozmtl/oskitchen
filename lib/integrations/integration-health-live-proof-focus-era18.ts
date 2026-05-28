@@ -24,7 +24,10 @@ import {
   isWebhookPilotProvider,
   pickIntegrationHealthAttentionItems,
   resolveIntegrationHealthRowNextAction,
+  resolveSalesChannelHealthConnectionNextAction,
+  type SalesChannelHealthProbe,
 } from "@/lib/integrations/integration-health-focus-era18";
+import { SALES_CHANNEL_HEALTH_LIVE_PROOF_ROUTE } from "@/lib/integrations/sales-channel-health-live-proof-focus-era18-policy";
 
 export type IntegrationHealthCard = {
   id: string;
@@ -115,9 +118,17 @@ export function mergeLiveProofIntoIntegrationHealthSnapshot(
   };
 }
 
+export function salesChannelHealthLiveProofPanelHref(): string {
+  return `${SALES_CHANNEL_HEALTH_LIVE_PROOF_ROUTE}${INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR}`;
+}
+
 export function pickIntegrationHealthLiveProofAttentionItems(
   slices: readonly ChannelPilotLiveProofSlice[],
+  options?: { liveProofPanelHref?: string },
 ): IntegrationHealthAttentionItem[] {
+  const liveProofPanelHref =
+    options?.liveProofPanelHref ??
+    `/dashboard/integration-health${INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR}`;
   const items: IntegrationHealthAttentionItem[] = [];
 
   for (const slice of slices) {
@@ -154,7 +165,7 @@ export function pickIntegrationHealthLiveProofAttentionItems(
         title: `${label} in-app pilot ready — live smoke pending`,
         detail:
           "Operator certification is complete in-app. Engineering live smoke (npm run smoke:woo-shopify-live) must PASS before sales claims live Woo/Shopify proof.",
-        href: `/dashboard/integration-health${INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR}`,
+        href: liveProofPanelHref,
         priority: 9,
         tone: "normal",
       });
@@ -166,10 +177,11 @@ export function pickIntegrationHealthLiveProofAttentionItems(
 
 export function pickIntegrationHealthAttentionItemsWithLiveProof(
   snapshot: IntegrationHealthFocusSnapshot,
+  options?: { liveProofPanelHref?: string },
 ): IntegrationHealthAttentionItem[] {
   const merged = [
     ...pickIntegrationHealthAttentionItems(snapshot),
-    ...pickIntegrationHealthLiveProofAttentionItems(snapshot.liveProofSlices ?? []),
+    ...pickIntegrationHealthLiveProofAttentionItems(snapshot.liveProofSlices ?? [], options),
   ];
 
   return merged.sort((a, b) => a.priority - b.priority).slice(0, 5);
@@ -179,7 +191,12 @@ export function pickIntegrationHealthAttentionItemsWithLiveProof(
 export function resolveIntegrationHealthRowNextActionWithLiveProof(
   card: IntegrationHealthCard,
   slice: ChannelPilotLiveProofSlice | null,
+  options?: { liveProofPanelHref?: string },
 ): IntegrationHealthRowNextAction | null {
+  const liveProofPanelHref =
+    options?.liveProofPanelHref ??
+    `/dashboard/integration-health${INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR}`;
+
   const base = resolveIntegrationHealthRowNextAction(card);
   if (base?.tone === "urgent") {
     return base;
@@ -206,7 +223,7 @@ export function resolveIntegrationHealthRowNextActionWithLiveProof(
   if (slice?.operatorStatus === "awaiting_engineering_live_smoke") {
     return {
       label: "Review live proof status",
-      href: `/dashboard/integration-health${INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR}`,
+      href: liveProofPanelHref,
       tone: "normal",
     };
   }
@@ -220,6 +237,31 @@ export function resolveIntegrationHealthRowNextActionWithLiveProof(
   }
 
   return null;
+}
+
+/** Sales channels health cards — live proof row CTAs plus manual probe fallback. */
+export function resolveSalesChannelHealthConnectionNextActionWithLiveProof(
+  card: IntegrationHealthCard,
+  slice: ChannelPilotLiveProofSlice | null,
+  probe?: SalesChannelHealthProbe | null,
+): IntegrationHealthRowNextAction | null {
+  const liveProof = resolveIntegrationHealthRowNextActionWithLiveProof(card, slice, {
+    liveProofPanelHref: salesChannelHealthLiveProofPanelHref(),
+  });
+  if (liveProof?.tone === "urgent") {
+    return liveProof;
+  }
+
+  const probeAction = resolveSalesChannelHealthConnectionNextAction(card, probe);
+  if (probeAction?.tone === "urgent") {
+    return probeAction;
+  }
+
+  if (liveProof) {
+    return liveProof;
+  }
+
+  return probeAction;
 }
 
 export function formatChannelLiveProofOperatorStatus(

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-050 — Sales channel health live proof (P0)
+- ID: `KOS-E18-050`
+- Title: Era 18 Workstream C Cycle 50 — Woo/Shopify live proof on sales channel health page
+- Module: Integrations / Sales channels
+- Priority: P0 (live proof operator arc parity — connection test UI)
+- Status: **sales_channel_health_live_proof_operator_wired**
+- Decision: `era18-sales-channel-health-live-proof-focus-v1` — live proof panel + attention strip + row CTAs on `/dashboard/sales-channels/health`; does not claim live PASS
+- Evidence: `lib/integrations/sales-channel-health-live-proof-focus-era18-policy.ts`, `app/dashboard/sales-channels/health/page.tsx`, `tests/unit/sales-channel-health-live-proof-focus-era18.test.ts`
+- Next: Ops configures channel smoke env vars; run `npm run smoke:woo-shopify-live` for proof_passed artifact
+
 ### KOS-E18-049 — Go-live channel pilot gate (P0)
 - ID: `KOS-E18-049`
 - Title: Era 18 Workstream O Cycle 49 — go-live launch validation surfaces incomplete Woo/Shopify pilot wizard

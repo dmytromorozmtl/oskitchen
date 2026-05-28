@@ -11,10 +11,13 @@ import { pickIntegrationHealthAttentionItemsWithLiveProof } from "@/lib/integrat
 
 export function IntegrationHealthAttentionStrip(props: {
   snapshot: IntegrationHealthFocusSnapshot;
+  liveProofPanelHref?: string;
 }) {
   const summary = summarizeIntegrationHealthFocus(props.snapshot);
   const items = props.snapshot.liveProofSlices
-    ? pickIntegrationHealthAttentionItemsWithLiveProof(props.snapshot)
+    ? pickIntegrationHealthAttentionItemsWithLiveProof(props.snapshot, {
+        liveProofPanelHref: props.liveProofPanelHref,
+      })
     : pickIntegrationHealthAttentionItems(props.snapshot);
 
   if (items.length === 0) return null;
