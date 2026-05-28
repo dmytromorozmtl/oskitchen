@@ -48,6 +48,7 @@ Interpretation rule:
 - **Era 19 Cycle 18 (2026-05-28):** Briefing cashier pack speed mode — `era19-owner-daily-briefing-cashier-v1`; POS register tile + cashier-ranked actions deep-link to speed terminal when shift open; shift closeout guidance.
 - **Era 19 Cycle 19 (2026-05-28):** POS shift closeout clarity — `era19-pos-shift-close-clarity-v1`; 4-step closeout checklist, end-of-shift hero, close-first layout, sticky mobile submit on shifts page.
 - **Era 19 Cycle 20 (2026-05-28):** Owner Today ↔ Launch Wizard cross-link — `era19-launch-wizard-today-strip-v1` + `era19-owner-daily-briefing-launch-wizard-v1`; commercial unblock in owner top actions; setup-only Today strip when briefing owns blockers.
+- **Era 19 Cycle 27 (2026-05-28):** POS manager override clarity — `era19-pos-manager-override-clarity-v1`; 4-step override checklist + review hero on POS terminal; no PIN/Toast parity claims.
 - **Era 19 Cycle 26 (2026-05-28):** Briefing owner pack priority lane — `era19-owner-daily-briefing-owner-kds-v1`; owner tile + top action deep-link to KDS priority lane from real queue data.
 - **Era 19 Cycle 25 (2026-05-28):** Briefing manager pack priority lane — `era19-owner-daily-briefing-manager-kds-v1`; manager tile + top actions deep-link to KDS priority lane from real queue data.
 - **Era 19 Cycle 24 (2026-05-28):** Briefing kitchen pack priority lane — `era19-owner-daily-briefing-kitchen-v1`; kitchen tile + top actions deep-link to KDS priority lane from real queue data.

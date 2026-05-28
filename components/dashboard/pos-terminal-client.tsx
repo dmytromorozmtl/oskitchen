@@ -45,6 +45,13 @@ import {
   shouldShowPosTerminalSecondaryPanels,
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 import { POS_CASHIER_SPEED_MODE_ALL_CATEGORY } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
+import { PosManagerOverrideChecklist } from "@/components/dashboard/pos-manager-override-checklist";
+import { PosManagerOverrideHero } from "@/components/dashboard/pos-manager-override-hero";
+import {
+  shouldShowPosManagerOverrideHero,
+  type PosManagerOverrideChecklistInput,
+} from "@/lib/pos/pos-manager-override-clarity-era19";
+import { POS_MANAGER_OVERRIDE_ANCHOR } from "@/lib/pos/pos-manager-override-clarity-era19-policy";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -371,6 +378,37 @@ export function PosTerminalClient(props: {
     discountMode === "percent" &&
     percentDiscountInput.trim().length > 0 &&
     parsePosTerminalPercentDiscountInput(percentDiscountInput) == null;
+
+  const managerOverrideInput = useMemo<PosManagerOverrideChecklistInput>(
+    () => ({
+      canApplyPosDiscount,
+      discountMode,
+      paymentMode,
+      cartSubtotal: cartTotal,
+      cartItemCount: cart.length,
+      fixedDiscountInvalid,
+      percentDiscountInvalid,
+      fixedDiscountInput,
+      percentDiscountInput,
+      appliedDiscountAmount,
+      amountDue,
+    }),
+    [
+      canApplyPosDiscount,
+      discountMode,
+      paymentMode,
+      cartTotal,
+      cart.length,
+      fixedDiscountInvalid,
+      percentDiscountInvalid,
+      fixedDiscountInput,
+      percentDiscountInput,
+      appliedDiscountAmount,
+      amountDue,
+    ],
+  );
+
+  const showManagerOverrideHero = shouldShowPosManagerOverrideHero(managerOverrideInput);
 
   useEffect(() => {
     if (!availablePaymentModes.includes(paymentMode)) {
@@ -939,7 +977,12 @@ export function PosTerminalClient(props: {
           </div>
 
           {showSecondaryPanels ? (
-          <div className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3">
+          <div
+            id={POS_MANAGER_OVERRIDE_ANCHOR}
+            className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3 scroll-mt-24"
+          >
+            <PosManagerOverrideChecklist {...managerOverrideInput} />
+            {showManagerOverrideHero ? <PosManagerOverrideHero {...managerOverrideInput} /> : null}
             <div className="flex items-center justify-between gap-2">
               <Label className="flex items-center gap-2">
                 <Tag className="h-4 w-4 text-muted-foreground" aria-hidden />

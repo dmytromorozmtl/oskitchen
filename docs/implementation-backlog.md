@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-027 — POS manager override clarity checklist (P1 operator speed)
+- ID: `KOS-E19-027`
+- Title: Era 19 Workstream E Cycle 27 — manager discount/comp override checklist + review hero on POS terminal
+- Module: POS / Manager override / Discount UX
+- Priority: P1 (operator speed — manager discount clarity without PIN/hardware claims)
+- Status: **pos_manager_override_clarity_wired**
+- Decision: `era19-pos-manager-override-clarity-v1` — 4-step override checklist, review hero when comp/discount active, `#pos-manager-override` anchor; preserves pos.discount.apply RBAC
+- Evidence: `lib/pos/pos-manager-override-clarity-era19.ts`, `PosManagerOverrideChecklist`, `PosManagerOverrideHero`, updated POS terminal
+- Next: P0 proof unblock when ops credentials available, or Launch Wizard KDS setup step cross-link
+
 ### KOS-E19-026 — Briefing owner pack ↔ KDS priority lane cross-link (P1 WOW)
 - ID: `KOS-E19-026`
 - Title: Era 19 Workstream B Cycle 26 — owner briefing tile + ranked action deep-link to KDS priority lane
