@@ -60,7 +60,16 @@ function availabilityLabel(availability: OwnerDailyBriefingTile["availability"])
 
 export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayload }) {
   const { briefing } = props;
-  const { nextAction, topActions, heroTiles, summary, rolePackLabel, rolePackHeadline } = briefing;
+  const {
+    nextAction,
+    topActions,
+    heroTiles,
+    summary,
+    rolePackLabel,
+    rolePackHeadline,
+    p0ProofBlockedLabel,
+    operationalEmptyState,
+  } = briefing;
 
   return (
     <section className="space-y-4" data-testid="owner-daily-briefing-hero">
@@ -81,6 +90,15 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
               <Badge variant="outline" className="rounded-full tabular-nums">
                 Readiness {summary.readinessOverall}%
               </Badge>
+              {p0ProofBlockedLabel ? (
+                <Badge
+                  variant="secondary"
+                  className="rounded-full text-[10px] text-amber-900 dark:text-amber-100"
+                  data-testid="owner-briefing-p0-proof-blocked"
+                >
+                  {p0ProofBlockedLabel}
+                </Badge>
+              ) : null}
             </div>
           </div>
         </CardHeader>
@@ -118,6 +136,21 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
             {topActions.map((action, index) => (
               <RankedActionRow key={action.id} action={action} rank={index + 1} />
             ))}
+          </CardContent>
+        </Card>
+      ) : operationalEmptyState ? (
+        <Card
+          className="border-emerald-200/70 bg-emerald-50/15 shadow-sm dark:border-emerald-900/40"
+          data-testid="owner-briefing-operational-empty-state"
+        >
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">{operationalEmptyState.title}</CardTitle>
+            <CardDescription>{operationalEmptyState.detail}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href={operationalEmptyState.href}>{operationalEmptyState.ctaLabel}</Link>
+            </Button>
           </CardContent>
         </Card>
       ) : null}

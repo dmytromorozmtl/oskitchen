@@ -21,7 +21,11 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { formatCustomerPrimaryLabel } from "@/lib/customers/customer-display";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import {
+  hasOrderHubPageAccess,
+  loadWorkspacePermissionPageActor,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { IntegrationProvider } from "@prisma/client";
 import { OrderHubExportButton } from "@/components/dashboard/order-hub-export-button";
 import { OrderHubAttentionStrip } from "@/components/dashboard/order-hub-attention-strip";
@@ -59,7 +63,12 @@ export default async function OrderHubPage({
 }: {
   searchParams?: Promise<{ tab?: string }>;
 }) {
-  const { sessionUser: user, dataUserId } = await getTenantActor();
+  const actor = await loadWorkspacePermissionPageActor();
+  if (!hasOrderHubPageAccess(actor)) {
+    return <PermissionDeniedSurfaceCard surfaceId="order_hub" />;
+  }
+
+  const { sessionUser: user, dataUserId } = actor;
   const sp = (await searchParams) ?? {};
   const tab = typeof sp.tab === "string" ? sp.tab : "all";
 

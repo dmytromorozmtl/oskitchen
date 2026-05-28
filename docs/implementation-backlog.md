@@ -3,6 +3,85 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 20 — Proof execution + first paid pilot
+
+### Cycle 7 — Workstream H: reports + inventory guard-before-query (2026-05-28)
+
+- Title: Era 20 Cycle 7 — reports hub + inventory layout RBAC guard
+- Status: **done**
+- Surfaces: `reports_hub`, `inventory_operations` (`app/dashboard/inventory/layout.tsx`)
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR launch wizard production-grade pass
+
+### Cycle 6 — Workstream D: Owner Daily Briefing production-grade (2026-05-28)
+
+- Title: Era 20 Cycle 6 — briefing top-action dedupe, hero category dedupe, P0 chip, empty state
+- Status: **done**
+- Policy: `era20-owner-daily-briefing-production-grade-v1`
+- Doc: `docs/era20-owner-daily-briefing-production-grade-2026-05-28.md`
+- Tests: `test:ci:owner-daily-briefing-production-grade-era20`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops P0 vault OR inventory/reports permission-denied (Workstream H)
+
+### Cycle 5 — Workstream F: Integration Health trust layer (2026-05-28)
+
+- Title: Era 20 Cycle 5 — P0 trust banner + smoke-honest channel cards (no fake green)
+- Status: **done**
+- Policy: `era20-integration-health-trust-layer-v1`
+- Doc: `docs/era20-integration-health-trust-layer-2026-05-28.md`
+- UI: `IntegrationHealthP0TrustBannerPanel` on `/dashboard/integration-health`
+- Code: `lib/integrations/integration-health-trust-layer-era20.ts`
+- Tests: `test:ci:integration-health-trust-layer-era20`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials` — banner surfaces missing vars honestly
+- Next: Ops vault → P0 PASS; or Workstream D briefing production pass
+
+### Cycle 4 — Workstream H + B: permission-denied + forbidden-claims runner (2026-05-28)
+
+- Title: Era 20 Cycle 4 — Order Hub + Integration Health guard-before-query; smoke runner without npm on PATH
+- Status: **done**
+- Policy: `era20-permission-denied-order-hub-integration-health-v1`
+- Security: Order Hub and Integration Health no longer query tenant orders/connections before RBAC check
+- Script: `scripts/lib/run-package-script.ts` — `smoke:pilot-forbidden-claims-enforcement` uses node/tsx/vitest entrypoints
+- Tests: `test:ci:permission-denied-ux-era20`, `test:ci:permission-denied-ux-era20:cert`
+- P0 unchanged: `awaiting_ops_credentials`
+- Next: Ops vault P0 OR inventory/reports permission-denied gaps
+
+### Cycle 3 — Workstream G: operator golden path proof (2026-05-28)
+
+- Title: Era 20 Cycle 3 — operator golden path proof crosswalk + Launch Wizard Tier 2 mapping
+- Status: **done**
+- Policy: `era20-operator-golden-path-proof-v1`
+- Doc: `docs/era20-operator-golden-path-proof-2026-05-28.md`
+- Code: `lib/commercial/era20-operator-golden-path-proof-era20*.ts`, `lib/launch-wizard/launch-wizard-golden-path-era20.ts`, `launch-wizard-golden-path-panel`
+- Tests: `test:ci:era20-operator-golden-path-proof`, `test:ci:era20-operator-golden-path-proof:cert`
+- Proof status: `workflow_map_ready_awaiting_tier2_execution` — does **not** claim Tier 2 PASS
+- Next: Ops P0 vault OR execute `smoke:pilot-operator-golden-path` on staging with manual phase env vars
+
+### Cycle 2 — Workstream A + B: P0 re-run + GO/NO-GO taxonomy (2026-05-28)
+
+- Title: Era 20 Cycle 2 — fix Tier 0 gate independence; GO/NO-GO blocker taxonomy + ICP example template
+- Status: **done**
+- Policy: `era20-pilot-gono-go-blocker-taxonomy-v1`
+- P0 smoke re-run: **SKIPPED** `awaiting_ops_credentials` (11 vars) — artifact refreshed @ Cycle 2
+- Product fix: `deriveTier0Pass` uses `tier0ProofStatus` only (removes false Tier 0 blocker when engineering passed)
+- Docs: `docs/era20-pilot-gono-go-blocker-playbook-2026-05-28.md`
+- Template: `config/commercial/pilot-icp-qualified-example.template.json`
+- Tests: `tests/unit/pilot-gono-go-blocker-taxonomy-era20.test.ts`
+- Next: Ops vault → P0 PASS; qualify real prospect with ICP JSON
+
+### Cycle 1 — Workstream C: first paid pilot package (2026-05-28)
+
+- Title: Era 20 Cycle 1 — first paid pilot package + honest prospect placeholder on GO/NO-GO
+- Status: **done**
+- Policy: `era20-first-paid-pilot-package-v1`
+- Doc: `docs/era20-first-paid-pilot-package-2026-05-28.md`
+- Code: `lib/commercial/era20-first-paid-pilot-package*.ts`, `pilot-gono-go-summary` prospect fields, `PILOT_GONOGO_PROSPECT_NAME`
+- Tests: `test:ci:era20-first-paid-pilot-package`, `test:ci:era20-first-paid-pilot-package:cert` (chained in `test:ci:commercial-pilot-runbook:cert`)
+- Blocker unchanged: P0 `awaiting_ops_credentials` (11 env vars); GO/NO-GO remains NO-GO without customer
+- Next: Workstream A — ops vault + `smoke:p0-staging-proof-unblock` when credentials available
+
+---
+
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
 ### KOS-E19-039 — Integration health recovery convergence (Convergence Pillar 1+3)

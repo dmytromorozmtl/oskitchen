@@ -4,8 +4,10 @@ import type { ChannelLiveSmokeSummary } from "@/lib/integrations/channel-live-sm
 import {
   buildIntegrationHealthChannelCardsModel,
   listStripeMissingEnvVars,
-  type IntegrationHealthChannelCardsModel,
 } from "@/lib/integrations/integration-health-channel-cards-era19";
+import { enrichIntegrationHealthChannelCardsWithTrustLayer } from "@/lib/integrations/integration-health-trust-layer-era20";
+import type { IntegrationHealthChannelCardsModel } from "@/lib/integrations/integration-health-channel-cards-era19";
+import type { IntegrationHealthTrustLayerSlice } from "@/lib/integrations/integration-health-trust-layer-era20";
 import { INTEGRATION_HEALTH_SMOKE_ARTIFACT_PATHS } from "@/lib/integrations/integration-health-smoke-artifacts-era19-policy";
 import { getServerEnv } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
@@ -29,9 +31,12 @@ function readJsonArtifact<T>(relativePath: string): T | null {
   }
 }
 
+export type IntegrationHealthChannelCardsViewModel = IntegrationHealthChannelCardsModel &
+  IntegrationHealthTrustLayerSlice;
+
 export async function loadIntegrationHealthChannelCardsModel(
   userId: string,
-): Promise<IntegrationHealthChannelCardsModel> {
+): Promise<IntegrationHealthChannelCardsViewModel> {
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
   const workspaceId = await resolveOwnerWorkspaceId(userId);
@@ -72,7 +77,7 @@ export async function loadIntegrationHealthChannelCardsModel(
     publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   });
 
-  return buildIntegrationHealthChannelCardsModel({
+  const base = buildIntegrationHealthChannelCardsModel({
     stripeConfigured: stripeMissingEnvVars.length === 0,
     stripeMissingEnvVars,
     failedWebhookCount,
@@ -89,4 +94,6 @@ export async function loadIntegrationHealthChannelCardsModel(
         }
       : null,
   });
+
+  return enrichIntegrationHealthChannelCardsWithTrustLayer(base, p0Staging);
 }

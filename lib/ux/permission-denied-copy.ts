@@ -9,6 +9,10 @@ export type PermissionDeniedSurfaceId =
   | "pos_hub"
   | "pos_layout"
   | "kds"
+  | "order_hub"
+  | "integration_health"
+  | "reports_hub"
+  | "inventory_operations"
   | "packing_command"
   | "packing_verify"
   | "production_calendar"
@@ -55,6 +59,40 @@ export const PERMISSION_DENIED_SURFACES: Record<
     permissionKey: "kitchen.view",
     primaryHref: "/dashboard/today",
     primaryLabel: "Back to Today",
+  },
+  order_hub: {
+    id: "order_hub",
+    title: "Order hub",
+    permissionKey: "orders.manage",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/kitchen",
+    secondaryLabel: "Open kitchen",
+  },
+  integration_health: {
+    id: "integration_health",
+    title: "Integration health",
+    permissionKey: "integrations.read",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/sales-channels/connected",
+    secondaryLabel: "Sales channels",
+  },
+  reports_hub: {
+    id: "reports_hub",
+    title: "Reports",
+    permissionKey: "reports.read.operations",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+  },
+  inventory_operations: {
+    id: "inventory_operations",
+    title: "Inventory",
+    permissionKey: "production.manage",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/production",
+    secondaryLabel: "Open production",
   },
   packing_command: {
     id: "packing_command",

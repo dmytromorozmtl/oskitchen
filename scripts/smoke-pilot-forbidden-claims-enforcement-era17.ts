@@ -8,6 +8,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
 
+import { runPackageScript } from "./lib/run-package-script";
 import {
   PILOT_FORBIDDEN_CLAIMS_ENFORCEMENT_ERA17_CYCLE_RUNBOOK_STEPS,
   PILOT_FORBIDDEN_CLAIMS_ENFORCEMENT_ERA17_NPM_SCRIPT,
@@ -21,14 +22,6 @@ import {
   formatPilotForbiddenClaimsEnforcementReportLines,
   type PilotForbiddenClaimsEnforcementStep,
 } from "../lib/commercial/pilot-forbidden-claims-enforcement-summary";
-
-function runNpmScript(script: string, extraEnv?: Record<string, string>): number {
-  const result = spawnSync("npm", ["run", script], {
-    stdio: "inherit",
-    env: { ...process.env, ...extraEnv },
-  });
-  return result.status ?? 1;
-}
 
 function hasFlag(name: string): boolean {
   return process.argv.includes(name);
@@ -103,7 +96,7 @@ Era 17 pilot forbidden-claims enforcement (P0 #5)
     console.log(
       `\n→ ${PILOT_FORBIDDEN_CLAIMS_ENFORCEMENT_ERA17_STRICT_ENV}=${PILOT_FORBIDDEN_CLAIMS_ENFORCEMENT_ERA17_STRICT_ENV_VALUE} npm run verify-claims\n`,
     );
-    const claimsCode = runNpmScript("verify-claims", strictEnv);
+    const claimsCode = runPackageScript("verify-claims", strictEnv);
     steps.push({
       id: "verify_claims_strict",
       label: "Marketing claims strict verify",
@@ -112,7 +105,7 @@ Era 17 pilot forbidden-claims enforcement (P0 #5)
     });
 
     console.log("\n→ npm run audit:marketing-claims\n");
-    const auditCode = runNpmScript("audit:marketing-claims");
+    const auditCode = runPackageScript("audit:marketing-claims");
     steps.push({
       id: "audit_marketing_claims",
       label: "Marketing claims registry audit",
@@ -130,7 +123,7 @@ Era 17 pilot forbidden-claims enforcement (P0 #5)
 
   for (const entry of certScripts) {
     console.log(`\n→ npm run ${entry.script}\n`);
-    const code = runNpmScript(entry.script);
+    const code = runPackageScript(entry.script);
     steps.push({
       id: entry.id,
       label: entry.label,

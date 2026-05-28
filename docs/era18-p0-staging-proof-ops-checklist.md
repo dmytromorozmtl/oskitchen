@@ -16,7 +16,7 @@ Configure the **11 prerequisite env vars** that block P0 staging proof. This che
 
 ---
 
-## Current blocker snapshot (2026-05-28 — Era 19 Cycle 8 re-run)
+## Current blocker snapshot (2026-05-28 — Era 20 Cycle 5 re-confirm)
 
 | Field | Value |
 |-------|-------|
@@ -25,7 +25,11 @@ Configure the **11 prerequisite env vars** that block P0 staging proof. This che
 | SSO child | `proof_skipped_missing_prerequisites` (6 vars) |
 | Staging workflows child | `proof_skipped_missing_prerequisites` (3 vars) |
 | Channel live child | `proof_skipped_missing_prerequisites` (3 vars) |
-| Era 19 action | Ops must configure vault secrets — **no fake PASS** |
+| Era 20 action | **Workstream A** — ops vault secrets; product cycle blocked on proof until PASS |
+| Era 20 parallel | IHC P0 trust banner (`era20-integration-health-trust-layer-v1`) surfaces same 11 vars — not a PASS |
+| Era 20 parallel | Pilot package + golden path + permission-denied wired — do not substitute P0 |
+
+**Previous snapshot (Era 19 Cycle 8):** same 11 vars; no regression claimed without fresh smoke run in credentialed environment.
 
 **Previous snapshot (Era 18 audit):**
 

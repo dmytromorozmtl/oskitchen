@@ -1,4 +1,5 @@
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import { normalizeBriefingActionPath } from "@/lib/briefing/owner-daily-briefing-production-grade-era20";
 import type { OwnerDailyBriefingTile } from "@/lib/briefing/owner-daily-briefing-era19";
 import type { OwnerDailyBriefingIntegrationHealthSlice } from "@/lib/briefing/owner-daily-briefing-integration-health-era19";
 import { OWNER_DAILY_BRIEFING_INTEGRATION_HEALTH_HREF } from "@/lib/briefing/owner-daily-briefing-integration-health-era19";
@@ -168,12 +169,16 @@ export function mergeBriefingIntegrationRecoveryTopActions(
       !action.id.startsWith("briefing-smoke-"),
   );
 
-  const seen = new Set<string>();
+  const seenIds = new Set<string>();
+  const seenPaths = new Set<string>();
   const merged: OwnerDailyBriefingRankedAction[] = [];
 
   for (const action of [...convergedActions, ...withoutDuplicates]) {
-    if (seen.has(action.id)) continue;
-    seen.add(action.id);
+    if (seenIds.has(action.id)) continue;
+    const path = normalizeBriefingActionPath(action.href);
+    if (seenPaths.has(path)) continue;
+    seenIds.add(action.id);
+    seenPaths.add(path);
     merged.push(action);
   }
 

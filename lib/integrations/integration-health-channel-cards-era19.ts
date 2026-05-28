@@ -149,11 +149,18 @@ function buildPilotChannelCard(input: {
           }
         : { label: "Open channel health", href: "/dashboard/sales-channels/health", tone: "normal" as const });
 
+  let stateTone = connectionStateTone(input.connection?.status ?? null);
+  if (smokeStatus === "FAILED") {
+    stateTone = "down";
+  } else if (smokeStatus === "SKIPPED WITH REASON" && stateTone === "healthy") {
+    stateTone = "degraded";
+  }
+
   return {
     id: input.provider === "WOOCOMMERCE" ? "woocommerce" : "shopify",
     label,
     currentState,
-    stateTone: connectionStateTone(input.connection?.status ?? null),
+    stateTone,
     lastSyncLabel: input.connection?.lastSyncAt
       ? formatPilotIntegrationLastSync(input.connection.lastSyncAt)
       : null,
@@ -259,11 +266,18 @@ export function buildSsoChannelCard(input: {
   else if (input.sso.configured) currentState = "Configured — activation pending";
   else currentState = "Pilot setup incomplete";
 
+  let stateTone: IntegrationHealthChannelCardStateTone = input.sso.active ? "healthy" : "degraded";
+  if (smokeStatus === "FAILED") {
+    stateTone = "down";
+  } else if (smokeStatus === "SKIPPED WITH REASON" && stateTone === "healthy") {
+    stateTone = "degraded";
+  }
+
   return {
     id: "sso",
     label: "Enterprise SSO",
     currentState,
-    stateTone: input.sso.active ? "healthy" : "degraded",
+    stateTone,
     lastSyncLabel: null,
     lastError: null,
     smokeStatus,

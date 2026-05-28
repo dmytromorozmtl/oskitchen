@@ -16,6 +16,31 @@ export function hasProductionManagePageAccess(actor: WorkspacePermissionActor): 
   return hasPermission(actor.granted, "production.manage");
 }
 
+export function hasOrderHubPageAccess(actor: WorkspacePermissionActor): boolean {
+  return hasPermission(actor.granted, "orders.manage");
+}
+
+export function hasIntegrationHealthPageAccess(actor: WorkspacePermissionActor): boolean {
+  return (
+    hasPermission(actor.granted, "integrations.read") ||
+    hasPermission(actor.granted, "integrations.manage")
+  );
+}
+
+export function hasReportsHubPageAccess(actor: WorkspacePermissionActor): boolean {
+  return (
+    hasPermission(actor.granted, "reports.read.operations") ||
+    hasPermission(actor.granted, "reports.read.financial") ||
+    hasPermission(actor.granted, "reports.read.customer_pii") ||
+    hasPermission(actor.granted, "reports.read.audit")
+  );
+}
+
+/** Inventory routes align with production.manage capability gate (inventoryWrite). */
+export function hasInventoryOperationsPageAccess(actor: WorkspacePermissionActor): boolean {
+  return hasPermission(actor.granted, "production.manage");
+}
+
 export function resolvePackingDeniedSurfaceId(
   page: "command" | "verify" | "scanner" | "reports",
 ): PermissionDeniedSurfaceId {

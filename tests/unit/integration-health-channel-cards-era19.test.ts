@@ -108,8 +108,11 @@ describe("integration health channel cards era19", () => {
 
     expect(woo?.smokeStatus).toBe("SKIPPED WITH REASON");
     expect(shopify?.smokeStatus).toBe("SKIPPED WITH REASON");
+    expect(woo?.stateTone).not.toBe("healthy");
+    expect(shopify?.stateTone).not.toBe("healthy");
     expect(sso?.smokeStatus).toBe("SKIPPED WITH REASON");
     expect(sso?.missingEnvVars).toContain("SSO_STAGING_WORKSPACE_ID");
+    expect(sso?.stateTone).not.toBe("healthy");
   });
 
   it("summarizes degraded headline when smoke blocked", () => {

@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
+import { IntegrationHealthP0TrustBannerPanel } from "@/components/dashboard/integration-health-p0-trust-banner";
 import { IntegrationHealthChannelCardsPanel } from "@/components/dashboard/integration-health-channel-cards-panel";
 import { IntegrationHealthSmokeArtifactViewer } from "@/components/dashboard/integration-health-smoke-artifact-viewer";
 import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
@@ -26,7 +27,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { hasIntegrationHealthPageAccess } from "@/lib/ux/permission-denied-page-access-era19";
 import { getCachedWebhookEventListWhere } from "@/lib/scope/cached-workspace-resource-scope";
 import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { resolveAllChannels } from "@/lib/channels/channel-runtime";
@@ -85,8 +87,12 @@ export default async function IntegrationHealthDashboardPage({
 }: {
   searchParams?: Promise<{ mode?: string }>;
 }) {
-  const { dataUserId } = await getTenantActor();
   const actor = await requireWorkspacePermissionActor();
+  if (!hasIntegrationHealthPageAccess(actor)) {
+    return <PermissionDeniedSurfaceCard surfaceId="integration_health" />;
+  }
+
+  const { dataUserId } = actor;
   const resolvedSearchParams = (await searchParams) ?? {};
   const supportCompact = resolvedSearchParams.mode === "support";
   const env = getServerEnv();
@@ -149,6 +155,10 @@ export default async function IntegrationHealthDashboardPage({
       <IntegrationHealthSupportAdminPanel model={supportAdmin} compact={supportCompact} />
 
       <IntegrationHealthSummaryPanel summary={healthSummary} />
+
+      {channelCards.p0Trust ? (
+        <IntegrationHealthP0TrustBannerPanel banner={channelCards.p0Trust} />
+      ) : null}
 
       <IntegrationHealthChannelCardsPanel model={channelCards} />
 

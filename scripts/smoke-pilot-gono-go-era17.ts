@@ -59,7 +59,9 @@ Era 17 paid pilot GO/NO-GO evaluator
 Env:
   PILOT_GONOGO_CUSTOMER_NAME
   PILOT_GONOGO_LOI_SIGNED_DATE
+  PILOT_GONOGO_PROSPECT_NAME  (era20 — prospect only; does NOT satisfy customer gate)
   PILOT_GONOGO_ICP_INPUT_JSON
+  PILOT_GONOGO_PROSPECT_NAME  (era20 — prospect only; does NOT satisfy customer gate)
   PILOT_GONOGO_ROLE_CHECKLISTS_COMPLETE=1
   PILOT_GONOGO_FORBIDDEN_CLAIMS_IN_CONTRACT=1
   PILOT_GONOGO_TIER3_PASS=1
@@ -103,6 +105,7 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
     icpInput: parsePilotIcpInputFromJson(process.env.PILOT_GONOGO_ICP_INPUT_JSON),
     customerName: process.env.PILOT_GONOGO_CUSTOMER_NAME ?? null,
     loiSignedDate: process.env.PILOT_GONOGO_LOI_SIGNED_DATE ?? null,
+    prospectName: process.env.PILOT_GONOGO_PROSPECT_NAME ?? null,
     roleChecklistsComplete: parseEnvBoolean(process.env.PILOT_GONOGO_ROLE_CHECKLISTS_COMPLETE),
     forbiddenClaimsInContract: parseEnvBoolean(
       process.env.PILOT_GONOGO_FORBIDDEN_CLAIMS_IN_CONTRACT,

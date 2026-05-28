@@ -1,7 +1,11 @@
 import Link from "next/link";
 
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import {
+  hasReportsHubPageAccess,
+  loadWorkspacePermissionPageActor,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { prisma } from "@/lib/prisma";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { reportTerminologyForMode } from "@/lib/reports/report-terminology";
@@ -13,7 +17,11 @@ import {
 import { listReportDefinitions } from "@/lib/reports/report-registry";
 
 export default async function ReportsCommandCenterPage() {
-  const actor = await requireWorkspacePermissionActor();
+  const actor = await loadWorkspacePermissionPageActor();
+  if (!hasReportsHubPageAccess(actor)) {
+    return <PermissionDeniedSurfaceCard surfaceId="reports_hub" />;
+  }
+
   const { userId } = actor;
   const scope = createReportActorScope(actor);
 

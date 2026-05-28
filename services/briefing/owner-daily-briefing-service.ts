@@ -145,6 +145,13 @@ import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commerc
 import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 import { getDailyKdsOrders } from "@/services/kitchen-screen/daily-kds-service";
+import {
+  buildOwnerDailyBriefingOperationalEmptyState,
+  dedupeOwnerDailyBriefingHeroTilesByCategory,
+  finalizeOwnerDailyBriefingTopActions,
+  resolveBriefingP0ProofBlockedLabel,
+} from "@/lib/briefing/owner-daily-briefing-production-grade-era20";
+import { OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID } from "@/lib/briefing/owner-daily-briefing-production-grade-era20-policy";
 
 export type OwnerDailyBriefingPayload = {
   loadedAt: string;
@@ -170,6 +177,9 @@ export type OwnerDailyBriefingPayload = {
     riskSignalCount: number;
     readinessOverall: number;
   };
+  productionGradePolicyId: typeof OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID;
+  p0ProofBlockedLabel: string | null;
+  operationalEmptyState: ReturnType<typeof buildOwnerDailyBriefingOperationalEmptyState>;
 };
 
 async function countLowStockIngredients(userId: string): Promise<{
@@ -591,8 +601,12 @@ export async function loadOwnerDailyBriefing(
 
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
   const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);
-  const topActions = filterBriefingActionsForRolePack(allTopActions, rolePack).slice(0, 3);
-  const heroTiles = pickBriefingHeroTilesForRolePack(tiles, rolePack, pickOwnerDailyBriefingHeroTiles);
+  const topActions = finalizeOwnerDailyBriefingTopActions(
+    filterBriefingActionsForRolePack(allTopActions, rolePack),
+  );
+  const heroTiles = dedupeOwnerDailyBriefingHeroTilesByCategory(
+    pickBriefingHeroTilesForRolePack(tiles, rolePack, pickOwnerDailyBriefingHeroTiles),
+  );
   const showProductionCalendarLane =
     shouldShowBriefingProductionCalendarLane(rolePack) && productionCalendarSlice.hasPlanTasks;
   const showPilotReadinessLane = shouldShowBriefingPilotReadinessLane(rolePack);
@@ -654,6 +668,17 @@ export async function loadOwnerDailyBriefing(
         lowStockCount: lowStock.lowStockCount,
       });
 
+  const operationalEmptyState = buildOwnerDailyBriefingOperationalEmptyState({
+    topActionsCount: topActions.length,
+    activeOrders: today.kpis.activeOrders,
+    readinessOverall: today.readiness.overall,
+    riskAllClear: riskRadar?.allClear ?? true,
+  });
+
+  const p0ProofBlockedLabel = resolveBriefingP0ProofBlockedLabel(
+    commercialOps?.p0Staging?.summary?.p0ProofStatus,
+  );
+
   return {
     loadedAt: new Date().toISOString(),
     rolePack,
@@ -678,6 +703,9 @@ export async function loadOwnerDailyBriefing(
       riskSignalCount: riskRadar?.totalSignals ?? 0,
       readinessOverall: today.readiness.overall,
     },
+    productionGradePolicyId: OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID,
+    p0ProofBlockedLabel,
+    operationalEmptyState,
   };
 }
 

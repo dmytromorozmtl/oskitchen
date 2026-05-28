@@ -27,6 +27,7 @@ describe("pilot gono-go summary", () => {
     });
     expect(summary.decision).toBe("NO-GO");
     expect(summary.customerExecutionStatus).toBe("skipped_missing_customer");
+    expect(summary.prospectExecutionStatus).toBe("none");
     expect(summary.blockers.some((item) => item.includes("LOI"))).toBe(true);
   });
 
@@ -42,6 +43,15 @@ describe("pilot gono-go summary", () => {
     const gate = deriveTier0Pass({
       overall: "PASSED",
       tier0ProofStatus: "proof_passed",
+    });
+    expect(gate.pass).toBe(true);
+  });
+
+  it("passes tier0 when tier0 proof_passed even if overall SKIPPED (era20)", () => {
+    const gate = deriveTier0Pass({
+      overall: "SKIPPED",
+      tier0ProofStatus: "proof_passed",
+      tier1ProofStatus: "proof_skipped_missing_prerequisites",
     });
     expect(gate.pass).toBe(true);
   });

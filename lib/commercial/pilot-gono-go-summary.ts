@@ -12,10 +12,18 @@ import {
   type PilotIcpQualificationInput,
   type PilotIcpQualificationResult,
 } from "@/lib/commercial/pilot-icp-contract-era17";
+import { buildEra20ProspectPlaceholder } from "@/lib/commercial/era20-first-paid-pilot-package";
+import {
+  buildPilotGoNoGoBlockerTaxonomy,
+  formatPilotGoNoGoBlockerTaxonomyLines,
+  type PilotGoNoGoCategorizedBlocker,
+} from "@/lib/commercial/pilot-gono-go-blocker-taxonomy-era20";
 
 export const PILOT_GONOGO_SUMMARY_VERSION = "era17-pilot-gono-go-v1" as const;
 
 export type PilotGoNoGoCustomerStatus = "recorded" | "skipped_missing_customer";
+
+export type PilotGoNoGoProspectStatus = "none" | "prospect_placeholder";
 
 export type PilotGoNoGoEvidenceGate = {
   id: string;
@@ -33,9 +41,16 @@ export type PilotGoNoGoSummary = {
   customerExecutionStatus: PilotGoNoGoCustomerStatus;
   customerName: string | null;
   loiSignedDate: string | null;
+  prospectExecutionStatus: PilotGoNoGoProspectStatus;
+  prospectName: string | null;
   icpQualification: PilotIcpQualificationResult;
   evidenceGates: PilotGoNoGoEvidenceGate[];
   evaluatorInput: CommercialPilotGoNoGoInput;
+  blockerTaxonomy?: {
+    policyId: string;
+    categorizedBlockers: PilotGoNoGoCategorizedBlocker[];
+    categorizedWarnings: PilotGoNoGoCategorizedBlocker[];
+  };
 };
 
 export type PilotTierPreflightArtifact = {
@@ -111,14 +126,13 @@ export function deriveTier0Pass(preflight: PilotTierPreflightArtifact | null): P
       reason: "artifacts/pilot-tier-preflight-summary.json missing — run smoke:pilot-tier-preflight",
     };
   }
-  const pass =
-    preflight.overall === "PASSED" && preflight.tier0ProofStatus === "proof_passed";
+  const pass = preflight.tier0ProofStatus === "proof_passed";
   return {
     id: "tier0",
     label: "Tier 0 engineering gate",
     pass,
     reason: pass
-      ? "tier0ProofStatus proof_passed"
+      ? "tier0ProofStatus proof_passed (Tier 0 evaluated independently of Tier 1 staging env)"
       : `tier0ProofStatus=${preflight.tier0ProofStatus ?? "unknown"} overall=${preflight.overall ?? "unknown"}`,
   };
 }
@@ -386,6 +400,7 @@ export function buildPilotGoNoGoSummary(input: {
   icpInput: PilotIcpQualificationInput;
   customerName?: string | null;
   loiSignedDate?: string | null;
+  prospectName?: string | null;
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
   tier3Pass?: boolean;
@@ -396,6 +411,7 @@ export function buildPilotGoNoGoSummary(input: {
     customerName: input.customerName,
     loiSignedDate: input.loiSignedDate,
   });
+  const prospectPlaceholder = buildEra20ProspectPlaceholder(input.prospectName);
   const built = buildPilotGoNoGoEvaluatorInput(input);
   const evaluation = evaluateCommercialPilotGoNoGo(built.evaluatorInput);
 
@@ -404,6 +420,12 @@ export function buildPilotGoNoGoSummary(input: {
 
   if (customer.status === "skipped_missing_customer") {
     blockers.push("No signed LOI / customer on record (era17-pilot-gono-go-v1)");
+  }
+
+  if (prospectPlaceholder) {
+    warnings.push(
+      `Prospect placeholder: ${prospectPlaceholder.prospectName} — ${prospectPlaceholder.disclaimer}`,
+    );
   }
 
   const forbiddenClaimsGate = built.evidenceGates.find(
@@ -442,7 +464,7 @@ export function buildPilotGoNoGoSummary(input: {
     decision = "GO";
   }
 
-  return {
+  const summaryCore = {
     version: PILOT_GONOGO_SUMMARY_VERSION,
     runAt: (input.runAt ?? new Date()).toISOString(),
     decision,
@@ -451,9 +473,21 @@ export function buildPilotGoNoGoSummary(input: {
     customerExecutionStatus: customer.status,
     customerName: customer.customerName,
     loiSignedDate: customer.loiSignedDate,
+    prospectExecutionStatus: prospectPlaceholder ? "prospect_placeholder" : "none",
+    prospectName: prospectPlaceholder?.prospectName ?? null,
     icpQualification: built.icpQualification,
     evidenceGates: built.evidenceGates,
     evaluatorInput: built.evaluatorInput,
+  } satisfies Omit<PilotGoNoGoSummary, "blockerTaxonomy">;
+
+  const taxonomy = buildPilotGoNoGoBlockerTaxonomy(summaryCore);
+  return {
+    ...summaryCore,
+    blockerTaxonomy: {
+      policyId: taxonomy.policyId,
+      categorizedBlockers: taxonomy.categorizedBlockers,
+      categorizedWarnings: taxonomy.categorizedWarnings,
+    },
   };
 }
 
@@ -462,6 +496,9 @@ export function formatPilotGoNoGoReportLines(summary: PilotGoNoGoSummary): strin
     `Pilot GO/NO-GO (${summary.version}) — decision: ${summary.decision}`,
     `Run at: ${summary.runAt}`,
     `Customer execution: ${summary.customerExecutionStatus}`,
+    `Prospect execution: ${summary.prospectExecutionStatus}${
+      summary.prospectName ? ` (${summary.prospectName})` : ""
+    }`,
     `ICP qualified: ${summary.icpQualification.qualified ? "yes" : "no"}`,
     "",
     ...summary.evidenceGates.map(
@@ -474,5 +511,9 @@ export function formatPilotGoNoGoReportLines(summary: PilotGoNoGoSummary): strin
     ...(summary.warnings.length > 0
       ? ["Warnings:", ...summary.warnings.map((item) => `  - ${item}`)]
       : []),
+    "",
+    ...formatPilotGoNoGoBlockerTaxonomyLines(
+      buildPilotGoNoGoBlockerTaxonomy(summary),
+    ),
   ];
 }

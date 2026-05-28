@@ -35,6 +35,70 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Execution status (2026-05-28 Era 18 Cycle 1):** local smoke → **overall: FAILED** (`p0ProofStatus: proof_failed`; 11 missing env vars documented in ops checklist). Child smokes skipped for missing SSO (6), staging workflows (3), and channel live (3). **Do not treat as paid pilot GO or P0 proof complete.**
 
+**Era 20 Cycle 1 re-confirm:** artifact `artifacts/p0-staging-proof-unblock-summary.json` still **`awaiting_ops_credentials`** / **SKIPPED** — npm smoke not re-run in uncredentialed CI agent; ops checklist unchanged. See [`era20-first-paid-pilot-package-2026-05-28.md`](./era20-first-paid-pilot-package-2026-05-28.md).
+
+## Era 20 first paid pilot package (2026-05-28)
+
+**Policy:** `era20-first-paid-pilot-package-v1` — **pilot_package_ready_awaiting_p0_and_customer**
+
+1. Read **[`era20-first-paid-pilot-package-2026-05-28.md`](./era20-first-paid-pilot-package-2026-05-28.md)** — ICP segments, included/excluded modules, onboarding via Launch Wizard, training/support checklists, pricing hypothesis, forbidden claims, rollback.
+2. Pair with **[`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md)** for contract clauses.
+3. **Prospect tracking (not a customer):** set `PILOT_GONOGO_PROSPECT_NAME` when running `npm run smoke:pilot-gono-go` — records `prospect_placeholder` warning only; **does not** clear LOI/customer blocker.
+4. **Signed pilot:** set `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` after legal signature — never fake.
+5. Cert: `npm run test:ci:era20-first-paid-pilot-package:cert` (chained in `test:ci:commercial-pilot-runbook:cert`).
+
+## Era 20 operator golden path proof (2026-05-28)
+
+**Policy:** `era20-operator-golden-path-proof-v1` — **workflow_map_ready_awaiting_tier2_execution**
+
+1. Read **[`era20-operator-golden-path-proof-2026-05-28.md`](./era20-operator-golden-path-proof-2026-05-28.md)** — eight workflow rows (UI ↔ services ↔ tests ↔ blockers).
+2. Execute Tier 2 checklist: **[`pilot-operator-golden-path-era17.md`](./pilot-operator-golden-path-era17.md)** + `npm run smoke:pilot-operator-golden-path`.
+3. **Launch Wizard:** `/dashboard/launch-wizard` shows Tier 2 phase mapping per step — does not claim phase PASS without manual env vars.
+4. **P0 dependency:** live channel + SSO workflows stay SKIPPED until `smoke:p0-staging-proof-unblock` is `proof_passed`.
+5. Cert: `npm run test:ci:era20-operator-golden-path-proof:cert` (chained in `test:ci:commercial-pilot-runbook:cert`).
+
+## Era 20 permission denied UX — dashboard pilot surfaces (2026-05-28)
+
+**Policy:** `era20-permission-denied-order-hub-integration-health-v1`
+
+1. **Order Hub** (`/dashboard/order-hub`) — guard **before** `loadOrderHubPageData`; requires `orders.manage`; denial surface `order_hub`.
+2. **Integration Health** (`/dashboard/integration-health`) — guard **before** Prisma queries; requires `integrations.read` or `integrations.manage`; denial surface `integration_health`.
+3. **Reports hub** (`/dashboard/reports`) — requires any `reports.read.*` permission; surface `reports_hub`.
+4. **Inventory section** (`app/dashboard/inventory/layout.tsx`) — requires `production.manage`; surface `inventory_operations`.
+5. Recovery links route to **Today** — not back into gated routes (tenant data leak prevention).
+4. Cert: `npm run test:ci:permission-denied-ux-era20:cert` (chained in `test:ci:permission-denied-ux-era17:cert`).
+
+## Era 20 Integration Health trust layer (2026-05-28)
+
+**Policy:** `era20-integration-health-trust-layer-v1` — **trust_layer_wired_awaiting_p0_proof**
+
+1. Read **[`era20-integration-health-trust-layer-2026-05-28.md`](./era20-integration-health-trust-layer-2026-05-28.md)** — P0 banner, smoke-honest channel tones, no fake green.
+2. `/dashboard/integration-health` shows **P0 staging proof — not passed** when `p0ProofStatus !== proof_passed`.
+3. Woo/Shopify/SSO cards downgrade to **degraded/down** when engineering smoke is SKIPPED/FAILED.
+4. UI test id: `integration-health-p0-trust-banner` — lists missing env vars from P0 artifact.
+5. Cert: `npm run test:ci:integration-health-trust-layer-era20:cert` (wired in `test:ci:integration-health-smoke-artifacts-era19`).
+
+## Era 20 Owner Daily Briefing production-grade pass (2026-05-28)
+
+**Policy:** `era20-owner-daily-briefing-production-grade-v1`
+
+1. Today briefing dedupes top actions (`finalizeOwnerDailyBriefingTopActions`) and hero KPI categories — real data only.
+2. P0 blocked chip on owner briefing when staging proof is not passed.
+3. Operational empty state when no ranked blockers (calm shift, not fake GO) — `owner-briefing-operational-empty-state`.
+4. Cert: `npm run test:ci:owner-daily-briefing-production-grade-era20:cert` (wired in `test:ci:owner-daily-briefing-era19`).
+
+**Forbidden:** Using prospect placeholder as paid pilot customer; claiming GO while P0 SKIPPED.
+
+## Era 20 GO/NO-GO blocker taxonomy (2026-05-28)
+
+**Policy:** `era20-pilot-gono-go-blocker-taxonomy-v1`
+
+1. **Tier 0 independence (Cycle 2):** `tier0ProofStatus: proof_passed` passes the Tier 0 gate even when Tier 1 `overall: SKIPPED` (staging env missing). Do not conflate engineering CI with staging credentials.
+2. Run `npm run smoke:pilot-gono-go` — report includes **Blocker taxonomy** with owner + next action.
+3. Artifact field: `blockerTaxonomy` on `artifacts/pilot-gono-go-summary.json`.
+4. ICP example (not a customer): `config/commercial/pilot-icp-qualified-example.template.json` → `PILOT_GONOGO_ICP_INPUT_JSON`.
+5. Playbook: [`era20-pilot-gono-go-blocker-playbook-2026-05-28.md`](./era20-pilot-gono-go-blocker-playbook-2026-05-28.md).
+
 ### Enterprise SSO pilot (optional — Era 16)
 
 **Policy:** `era16-enterprise-sso-r2-admin-v1` — **pilot_admin_wiring** only; delivery **pilot_foundation**.

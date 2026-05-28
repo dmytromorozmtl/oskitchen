@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, AlertTriangle, Rocket } from "lucide-react";
 
 import { LaunchWizardCommercialBlockersPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel";
+import { LaunchWizardGoldenPathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-golden-path-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
 import { LaunchWizardProgressStrip } from "@/components/dashboard/launch-wizard/launch-wizard-progress-strip";
 import { Badge } from "@/components/ui/badge";
@@ -123,6 +124,8 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
         setup={model.commercialSetup}
         compact={compact}
       />
+
+      <LaunchWizardGoldenPathPanel steps={model.steps} compact={compact} />
 
       <div
         className={cn("grid gap-3", compact ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2")}
