@@ -5,6 +5,15 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 20 — Proof execution + first paid pilot
 
+### Cycle 8 — Workstream E: Launch Wizard production-grade (2026-05-28)
+
+- Title: Era 20 Cycle 8 — launch wizard production-grade banner, P0 chip, CTA finalization, launch_wizard RBAC
+- Status: **done**
+- Policy: `era20-launch-wizard-production-grade-v1` (`KOS-E20-008`)
+- Tests: `test:ci:launch-wizard-production-grade-era20`, `:cert`
+- P0 unchanged: `awaiting_ops_credentials` (11 env vars)
+- Next: Ops P0 vault OR pilot metrics baseline / support-rollback package (P1)
+
 ### Cycle 7 — Workstream H: reports + inventory guard-before-query (2026-05-28)
 
 - Title: Era 20 Cycle 7 — reports hub + inventory layout RBAC guard

@@ -4,6 +4,7 @@ import type { PermissionKey } from "@/lib/permissions/permissions";
 import {
   hasIntegrationHealthPageAccess,
   hasInventoryOperationsPageAccess,
+  hasLaunchWizardPageAccess,
   hasOrderHubPageAccess,
   hasReportsHubPageAccess,
 } from "@/lib/ux/permission-denied-page-access-era19";
@@ -61,5 +62,21 @@ describe("permission-denied-page-access-era20", () => {
   it("routes denied reports users to Today", () => {
     const surface = resolvePermissionDeniedSurface("reports_hub");
     expect(surface.primaryHref).toBe("/dashboard/today");
+  });
+
+  it("requires owner or workspace.view for launch wizard", () => {
+    const ownerActor = {
+      workspaceRole: "OWNER",
+      granted: new Set<PermissionKey>(),
+    } as Parameters<typeof hasLaunchWizardPageAccess>[0];
+    expect(hasLaunchWizardPageAccess(ownerActor)).toBe(true);
+    expect(hasLaunchWizardPageAccess(actorWith(["workspace.view"]))).toBe(true);
+    expect(hasLaunchWizardPageAccess(actorWith(["kitchen.view"]))).toBe(false);
+  });
+
+  it("routes denied launch wizard users to Today", () => {
+    const surface = resolvePermissionDeniedSurface("launch_wizard");
+    expect(surface.primaryHref).toBe("/dashboard/today");
+    expect(surface.secondaryHref).toBe("/dashboard/implementation");
   });
 });

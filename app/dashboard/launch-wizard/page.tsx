@@ -1,7 +1,9 @@
 import { LaunchWizardView } from "@/components/dashboard/launch-wizard/launch-wizard-view";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { hasPermission } from "@/lib/permissions/guards";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import {
+  hasLaunchWizardPageAccess,
+  loadWorkspacePermissionPageActor,
+} from "@/lib/ux/permission-denied-page-access-era19";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadLaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 
@@ -14,18 +16,11 @@ export default async function LaunchWizardPage({
 }) {
   const [{ dataUserId }, actor] = await Promise.all([
     getTenantActor(),
-    requireWorkspacePermissionActor(),
+    loadWorkspacePermissionPageActor(),
   ]);
 
-  if (actor.workspaceRole !== "OWNER" && !hasPermission(actor.granted, "workspace.view")) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>No access</CardTitle>
-          <CardDescription>You do not have permission to view the launch wizard.</CardDescription>
-        </CardHeader>
-      </Card>
-    );
+  if (!hasLaunchWizardPageAccess(actor)) {
+    return <PermissionDeniedSurfaceCard surfaceId="launch_wizard" />;
   }
 
   const resolvedSearchParams = (await searchParams) ?? {};

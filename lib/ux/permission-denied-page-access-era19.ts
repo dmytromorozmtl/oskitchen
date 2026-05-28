@@ -27,6 +27,10 @@ export function hasIntegrationHealthPageAccess(actor: WorkspacePermissionActor):
   );
 }
 
+export function hasLaunchWizardPageAccess(actor: WorkspacePermissionActor): boolean {
+  return actor.workspaceRole === "OWNER" || hasPermission(actor.granted, "workspace.view");
+}
+
 export function hasReportsHubPageAccess(actor: WorkspacePermissionActor): boolean {
   return (
     hasPermission(actor.granted, "reports.read.operations") ||

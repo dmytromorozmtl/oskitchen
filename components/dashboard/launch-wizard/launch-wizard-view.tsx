@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, Circle, AlertTriangle, Rocket } from "lucide-
 import { LaunchWizardCommercialBlockersPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel";
 import { LaunchWizardGoldenPathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-golden-path-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
+import { LaunchWizardProductionGradeBanner } from "@/components/dashboard/launch-wizard/launch-wizard-production-grade-banner";
 import { LaunchWizardProgressStrip } from "@/components/dashboard/launch-wizard/launch-wizard-progress-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -60,6 +61,8 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
   return (
     <div className="space-y-6" data-testid="launch-wizard-view">
       <LaunchWizardProgressStrip model={model} compact={compact} />
+
+      <LaunchWizardProductionGradeBanner snapshot={model.productionGrade} compact={compact} />
 
       {onboardingHero ? <LaunchWizardOnboardingHero model={onboardingHero} /> : null}
 

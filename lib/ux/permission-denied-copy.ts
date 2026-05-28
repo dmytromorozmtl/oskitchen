@@ -13,6 +13,7 @@ export type PermissionDeniedSurfaceId =
   | "integration_health"
   | "reports_hub"
   | "inventory_operations"
+  | "launch_wizard"
   | "packing_command"
   | "packing_verify"
   | "production_calendar"
@@ -93,6 +94,15 @@ export const PERMISSION_DENIED_SURFACES: Record<
     primaryLabel: "Back to Today",
     secondaryHref: "/dashboard/production",
     secondaryLabel: "Open production",
+  },
+  launch_wizard: {
+    id: "launch_wizard",
+    title: "Launch wizard",
+    permissionKey: "workspace.view",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/implementation",
+    secondaryLabel: "Implementation hub",
   },
   packing_command: {
     id: "packing_command",

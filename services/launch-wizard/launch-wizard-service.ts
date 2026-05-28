@@ -40,9 +40,16 @@ import {
   type LaunchWizardCommercialSetupSlice,
 } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
+import {
+  buildLaunchWizardProductionGradeSnapshot,
+  finalizeLaunchWizardStepsForProductionGrade,
+  type LaunchWizardProductionGradeSnapshot,
+} from "@/lib/launch-wizard/launch-wizard-production-grade-era20";
+import { LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID } from "@/lib/launch-wizard/launch-wizard-production-grade-era20-policy";
 
 export type LaunchWizardModel = {
   policyId: typeof LAUNCH_WIZARD_ERA19_POLICY_ID;
+  productionGradePolicyId: typeof LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID;
   loadedAt: string;
   steps: LaunchWizardStep[];
   progress: ReturnType<typeof summarizeLaunchWizardProgress>;
@@ -50,6 +57,7 @@ export type LaunchWizardModel = {
   nextStep: LaunchWizardStep | null;
   commercialBlockers: LaunchWizardCommercialBlockersSlice;
   commercialSetup: LaunchWizardCommercialSetupSlice;
+  productionGrade: LaunchWizardProductionGradeSnapshot;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -208,9 +216,11 @@ async function loadLaunchWizardContext(userId: string): Promise<{
 
 export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizardModel> {
   const { signals, commercialOps, goLiveBlockers } = await loadLaunchWizardContext(userId);
-  const steps = buildLaunchWizardSteps(signals);
+  const rawSteps = buildLaunchWizardSteps(signals);
+  const steps = finalizeLaunchWizardStepsForProductionGrade(rawSteps);
   const progress = summarizeLaunchWizardProgress(steps);
   const nextStep = pickLaunchWizardNextStep(steps);
+  const p0Summary = commercialOps?.p0Staging.summary ?? null;
   const baseCommercialBlockers = buildLaunchWizardCommercialBlockersSlice({
     commercialOps,
     p0Blocked: signals.pilotReadiness.p0Blocked,
@@ -233,8 +243,15 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     blockers: commercialBlockers.blockers,
   });
 
+  const productionGrade = buildLaunchWizardProductionGradeSnapshot({
+    steps,
+    commercialBlockerCount: commercialBlockers.blockers.length,
+    p0: p0Summary,
+  });
+
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
+    productionGradePolicyId: LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID,
     loadedAt: new Date().toISOString(),
     steps,
     progress,
@@ -242,5 +259,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     nextStep,
     commercialBlockers,
     commercialSetup,
+    productionGrade,
   };
 }
