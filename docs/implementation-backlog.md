@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-030 — Costing pilot spot check (P1)
+- ID: `KOS-E17-030`
+- Title: Era 17 Cycle 31 — recipe → margin report pilot menu spot check
+- Module: Costing / Ops
+- Priority: P1 (Workstream G Cycle 31)
+- Status: **pilot_menu_margin_spotcheck_documented**
+- Decision: `era17-costing-pilot-spotcheck-v1` — fixture math + operator checklist
+- Evidence: `docs/costing-pilot-spotcheck-era17.md`, `test:ci:costing-pilot-spotcheck-era17:cert`
+- Next: Workstream H nav maturity sweep (Cycle 32) or P0 credential-blocked smokes
+
 ### KOS-E17-029 — Pilot inventory messaging (P1)
 - ID: `KOS-E17-029`
 - Title: Era 17 Cycle 29 — sales training for POS-only depletion
@@ -13,7 +23,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **pilot_inventory_messaging_ready**
 - Decision: `era17-pilot-inventory-messaging-v1` — safe/forbidden phrases + demo script
 - Evidence: `docs/pilot-inventory-messaging-era17.md`, `test:ci:pilot-inventory-messaging-era17:cert`
-- Next: Costing pilot spot check (Cycle 31) or P0 credential-blocked smokes
+- Next: Costing pilot spot check (Cycle 31) — **done**; see KOS-E17-030
 
 ### KOS-E17-028 — POS-only inventory lock recert (P1)
 - ID: `KOS-E17-028`

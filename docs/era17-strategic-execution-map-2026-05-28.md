@@ -92,7 +92,7 @@
 |------------|------|-------|---------------------|------------|-------|-------|
 | **29** | Reconfirm POS-only lock | No storefront hook without era unlock | `test:ci:inventory-depletion:cert` | cert PASS | Accidental unlock | Platform |
 | **30** | Pilot inventory messaging | Train sales on POS-only depletion | Matrix + claims aligned | `test:ci:pilot-inventory-messaging-era17:cert` + `smoke:pilot-inventory-messaging` | Unified stock claim | GTM | **Done** — `era17-pilot-inventory-messaging-v1` |
-| **31** | Costing pilot spot-check | Recipe → margin report for pilot menu | Manual QA on staging | costing RBAC tests | Bad data | Ops |
+| **31** | Costing pilot spot-check | Recipe → margin report for pilot menu | Manual QA on staging | `test:ci:costing-pilot-spotcheck-era17:cert` + `smoke:costing-pilot-spotcheck` | Bad data | Ops | **Done** — `era17-costing-pilot-spotcheck-v1` |
 
 ---
 

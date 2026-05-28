@@ -1,5 +1,7 @@
 # Costing reports
 
+**Era 17 pilot spot check:** `era17-costing-pilot-spotcheck-v1` — see [`costing-pilot-spotcheck-era17.md`](./costing-pilot-spotcheck-era17.md) for recipe → margin report operator checklist.
+
 Current reporting surfaces:
 
 - **Command center** — latest run KPIs + item table.  

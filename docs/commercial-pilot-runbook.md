@@ -206,6 +206,21 @@ Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns 
 
 **Enforcement:** `test:ci:pilot-inventory-messaging-era17:cert` (chained in `test:ci:inventory-depletion:cert`)
 
+---
+
+## Era 17 costing pilot spot check (2026-05-28)
+
+**Policy:** `era17-costing-pilot-spotcheck-v1` — **pilot_menu_margin_spotcheck_documented**; recipe → margin report math for pilot menu.
+
+1. Configure pilot menu items with active recipes + ingredient costs on staging.
+2. Run **Recalculate costing** (`reports.read.financial` required).
+3. Open **`/dashboard/reports/margin_report`** — spot-check food cost % and margin % formulas (`costing-pilot-menu-spotcheck-math`, `marginReportRowConsistent`).
+4. Operator doc: **`docs/costing-pilot-spotcheck-era17.md`**
+5. Run **`npm run smoke:costing-pilot-spotcheck`** → **`artifacts/costing-pilot-spotcheck-summary.json`**
+6. **Forbidden:** accountant-certified food cost, Lightspeed costing parity.
+
+**Enforcement:** `test:ci:costing-pilot-spotcheck-era17:cert` (chained in `test:ci:rbac-wave3`)
+
 ### Era 17 operational sign-off staging proof (2026-05-28)
 
 **Policy:** `era17-operational-signoff-staging-proof-v1` — **awaiting_staging_operator_signoff**; real staging URL + operator identity for KDS + production calendar.

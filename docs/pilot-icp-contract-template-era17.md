@@ -54,6 +54,7 @@ Use **qualified** wording only — cross-check matrix Notes column:
 | Production calendar | Prep scheduling — qualified depth |
 | Woo/Shopify | **Test shop** golden path — not full marketplace live ops |
 | Inventory | **POS-only depletion** — explain policy (`era17-pilot-inventory-messaging-v1`, [`pilot-inventory-messaging-era17.md`](./pilot-inventory-messaging-era17.md)) |
+| Costing / margin | **Qualified beta** — recipe costing + margin report (`era17-costing-pilot-spotcheck-v1`, [`costing-pilot-spotcheck-era17.md`](./costing-pilot-spotcheck-era17.md)) |
 | Gift cards / loyalty | **Dual ledger** — not unified cross-channel |
 | SSO (optional add-on) | Pilot wiring only — activated tenants; not production SSO for all |
 

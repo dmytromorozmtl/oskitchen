@@ -332,6 +332,7 @@ Readiness work is **internal control mapping**, not customer-facing attestation:
 - **Era 17 partner webhook docs:** `era17-partner-webhook-docs-v1` — inbound Stripe/Woo/Shopify contract + outbound event taxonomy (`docs/partner-webhook-integration-era17.md`); **partner_webhook_docs_ready** — no production webhook SLA or guaranteed delivery claim
 - **Era 17 POS-only inventory lock:** `era17-pos-only-inventory-lock-v1` — recertified POS-only depletion; storefront hook **deferred_locked** — no unified stock claim
 - **Era 17 pilot inventory messaging:** `era17-pilot-inventory-messaging-v1` — sales training for POS-only depletion; **pilot_inventory_messaging_ready**
+- **Era 17 costing pilot spot check:** `era17-costing-pilot-spotcheck-v1` — recipe → margin report pilot menu QA; **pilot_menu_margin_spotcheck_documented** — qualified beta, not accountant-certified
 - **Era 17 scope enforcement:** `era17-public-api-per-route-scope-v1` — high-risk writes (`orders:write`, `webhooks:receive`) require matching `scopes_json`; no full scope admin UI claim
 
 **Honest limits:**
