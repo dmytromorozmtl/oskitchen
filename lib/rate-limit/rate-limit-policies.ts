@@ -18,6 +18,10 @@ export const RATE_LIMIT_POLICIES = {
   public_api_v1_post: { windowMs: 60_000, max: 120 },
   /** SaaS billing Stripe checkout session — per authenticated user + IP. */
   billing_checkout: { windowMs: 60_000, max: 15 },
+  /** Stripe billing portal session — per authenticated user + IP. */
+  billing_portal: { windowMs: 60_000, max: 10 },
+  /** IoT temperature ingest — per IP + device id. */
+  iot_ingest: { windowMs: 60_000, max: 120 },
   /** Uber Direct / delivery adapter — per authenticated owner + IP. */
   delivery_api: { windowMs: 60_000, max: 40 },
   /** High ceiling for verified webhook ingress — only enforced when Upstash is configured (see rate-limit service). */
@@ -76,6 +80,8 @@ export const PRODUCTION_CRITICAL_RATE_LIMIT_POLICIES: RateLimitPolicyKey[] = [
   "storefront_invite_magic",
   "storefront_guest_account",
   "storefront_account_session",
+  "billing_portal",
+  "iot_ingest",
 ];
 
 export function isProductionCriticalRateLimitPolicy(

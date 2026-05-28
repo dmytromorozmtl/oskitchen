@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { requireIngestBearerSecret } from "@/lib/api/public-post-guard";
+import { requireIngestBearerSecret, enforceIngestRateLimit } from "@/lib/api/public-post-guard";
 import { prisma } from "@/lib/prisma";
 import { ingestIotTemperatureReading } from "@/services/food-safety/iot-temperature-service";
 
@@ -26,6 +26,13 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
+
+  const rateError = await enforceIngestRateLimit(request, {
+    policyKey: "iot_ingest",
+    bucketPrefix: "iot_ingest",
+    scopeSuffix: parsed.data.deviceId,
+  });
+  if (rateError) return rateError;
 
   let userId = parsed.data.userId;
   if (!userId) {

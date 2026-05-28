@@ -47,6 +47,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const rate = await enforceStorefrontRouteRateLimit(request, "experiment");
+  if (!rate.ok) {
+    return NextResponse.json({ error: rate.message }, { status: 429 });
+  }
+
   const url = new URL(request.url);
   let token = (await readApprovalToken(request))?.trim();
   let storefrontId = url.searchParams.get("storefrontId")?.trim();

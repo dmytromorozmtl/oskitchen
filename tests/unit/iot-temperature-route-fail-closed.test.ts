@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const requireIngestBearerSecret = vi.hoisted(() => vi.fn());
+const enforceIngestRateLimit = vi.hoisted(() => vi.fn());
 const ingestIotTemperatureReading = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/api/public-post-guard", () => ({
   requireIngestBearerSecret,
+  enforceIngestRateLimit,
 }));
 
 vi.mock("@/lib/prisma", () => ({
@@ -22,6 +24,7 @@ import { POST } from "@/app/api/iot/temperature/route";
 describe("IoT temperature route fail-closed", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    enforceIngestRateLimit.mockResolvedValue(null);
   });
 
   it("returns guard response when ingest secret is missing", async () => {

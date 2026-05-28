@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { enforceBillingApiRateLimit } from "@/lib/billing/billing-api-rate-limit";
 import { requireBillingApiAccess } from "@/lib/billing/require-billing-api-access";
 import { SITE_URL } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
@@ -7,7 +8,7 @@ import { logger } from "@/lib/logger";
 import { getStripeClient, safeStripeError } from "@/lib/billing/stripe-client";
 import { recordBillingEvent } from "@/services/billing/billing-service";
 
-export async function POST() {
+export async function POST(request: Request) {
   const stripe = getStripeClient();
   if (!stripe) {
     return NextResponse.json(
@@ -21,6 +22,9 @@ export async function POST() {
     return billingAccess.response;
   }
   const { userId } = billingAccess;
+
+  const rateError = await enforceBillingApiRateLimit(request, userId, "billing_portal");
+  if (rateError) return rateError;
 
   const subscription = await prisma.subscription.findUnique({ where: { userId } });
   if (!subscription?.stripeCustomerId) {

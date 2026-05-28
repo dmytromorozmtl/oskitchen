@@ -690,6 +690,7 @@ Incremental refresh after Era 16 cycles 1–12 (commercial proof / enterprise-de
 | 2026-05-28 | Era 17 Cycle 17: `era17-production-calendar-operator-drill-v1` — staging operator drill; **awaiting_staging_operator_drill** |
 | 2026-05-28 | Era 17 Cycle 21: `era17-commerce-webhook-drill-v1` — Stripe/Woo/Shopify incident operator checklist; **awaiting_commerce_webhook_drill_execution** |
 | 2026-05-28 | Era 17 Cycle 22: `era17-pos-manager-discount-v1` — manager discount guard + COMPED RBAC edge cases; **discount_guard_depth_enforced** |
+| 2026-05-28 | Era 17 Cycle 23: `era17-public-post-abuse-v1` — P1 public POST route rate limits; **p1_public_post_guards_expanded** |
 | 2026-05-28 | Era 17 Cycle 20: `era17-pos-tablet-ux-v1` — tablet touch targets + checkout status UX + operator runbook; **tablet_ux_polished** |
 | 2026-05-28 | Era 17 Cycle 19: `era17-public-api-per-route-scope-v1` — per-route scope guard on all v1 routes; **per_route_scope_enforced** |
 | 2026-05-28 | Era 17 Cycle 18: `era17-webhook-replay-p1-expansion-v1` — Resend ingress dedupe + Uber Eats cert; **p1_ingress_dedupe_expanded** |

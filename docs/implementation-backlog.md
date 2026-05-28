@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 17 — Commercial identity / SSO IdP staging
 
+### KOS-E17-023 — Public POST abuse review (P1)
+- ID: `KOS-E17-023`
+- Title: Era 17 Cycle 23 — rate limits on high-risk public POST routes
+- Module: Security / Platform
+- Priority: P1 (Workstream C Cycle 13)
+- Status: **p1_public_post_guards_expanded**
+- Decision: `era17-public-post-abuse-v1` — experiment auto-conclude, IoT ingest, billing portal guards
+- Evidence: `lib/security/public-post-abuse-matrix.ts`, `docs/public-post-abuse-review-era17.md`, `test:ci:public-post-abuse-era17:cert`
+- Next: Partner webhook docs (Cycle 14); POS operator runbook (Workstream E Cycle 23)
+
 ### KOS-E17-022 — POS manager discount / override depth (P1)
 - ID: `KOS-E17-022`
 - Title: Era 17 Cycle 22 — manager discount guard + COMPED RBAC edge cases
@@ -23,7 +33,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **awaiting_commerce_webhook_drill_execution**
 - Decision: `era17-commerce-webhook-drill-v1` — six-step incident drill + summary artifact
 - Evidence: `lib/security/commerce-webhook-drill-era17-policy.ts`, `docs/commerce-webhook-incident-drill-era17.md`, `test:ci:commerce-webhook-drill-era17:cert`
-- Next: Public POST abuse review (Cycle 13); operator tabletop on staging
+- Next: Partner webhook docs (Cycle 14)
 
 ### KOS-E17-020 — POS tablet UX polish + operator runbook (P1)
 - ID: `KOS-E17-020`

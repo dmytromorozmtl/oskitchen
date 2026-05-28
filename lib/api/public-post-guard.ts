@@ -76,6 +76,31 @@ export async function enforcePublicMarketingPostGuard(
   return null;
 }
 
+/** Per-IP (+ optional suffix) token bucket for bearer-protected public ingest POSTs. */
+export async function enforceIngestRateLimit(
+  request: Request,
+  options: {
+    policyKey: RateLimitPolicyKey;
+    bucketPrefix: string;
+    scopeSuffix?: string;
+  },
+): Promise<NextResponse | null> {
+  const ip = getClientIpFromRequest(request);
+  const bucket = options.scopeSuffix
+    ? `${options.bucketPrefix}:${ip}:${options.scopeSuffix}`
+    : `${options.bucketPrefix}:${ip}`;
+  const rl = await consumeRateLimitToken(bucket, options.policyKey);
+  if (rl.ok) return null;
+
+  return NextResponse.json(
+    { ok: false, error: "Too many requests. Please try again shortly." },
+    {
+      status: 429,
+      headers: { "Retry-After": String(Math.ceil(rl.retryAfterMs / 1000)) },
+    },
+  );
+}
+
 /**
  * Authenticated dashboard POST or optional bearer ingest secret.
  * Fails closed when neither session nor `NPS_INGEST_SECRET` is configured.

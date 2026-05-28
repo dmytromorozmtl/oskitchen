@@ -398,6 +398,21 @@ Runbook tiers map to matrix **certified** rows when Tier 0 money-path / governan
 
 ---
 
+## Era 17 public POST abuse review (2026-05-28)
+
+**Policy:** `era17-public-post-abuse-v1` — **p1_public_post_guards_expanded**; rate limits on high-risk public POST routes via `public-post-abuse-matrix`.
+
+1. **Experiment auto-conclude** — approve/reject email links use `storefront_experiment_api` rate limit on GET+POST.
+2. **Orchestrator approve** — POST now rate limited (GET already guarded).
+3. **IoT temperature ingest** — bearer secret + `iot_ingest` per IP/device bucket (`enforceIngestRateLimit`).
+4. **Billing portal** — `billing_portal` limit on `/api/billing/portal` and legacy `/api/billing-portal`.
+5. Matrix: **`lib/security/public-post-abuse-matrix.ts`** · operator doc: **`docs/public-post-abuse-review-era17.md`**
+6. **Forbidden:** DDoS immunity, WAF parity, global webhook rate limiting.
+
+**Enforcement:** `test:ci:public-post-abuse-era17:cert` (chained in `test:ci:public-post-fail-closed`)
+
+---
+
 ## Era 17 commerce webhook incident drill (2026-05-28)
 
 **Policy:** `era17-commerce-webhook-drill-v1` — **awaiting_commerce_webhook_drill_execution**; operator checklist for Stripe / Woo / Shopify webhook incidents.

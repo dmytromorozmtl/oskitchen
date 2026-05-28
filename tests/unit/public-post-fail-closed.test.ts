@@ -13,6 +13,7 @@ vi.mock("@/lib/storefront/turnstile", () => ({
 }));
 
 import {
+  enforceIngestRateLimit,
   enforcePublicMarketingPostGuard,
   requireIngestBearerSecret,
   requireSessionOrIngestBearer,
@@ -169,6 +170,27 @@ describe("public POST fail-closed guards", () => {
       if (!result.ok) {
         expect(result.response.status).toBe(401);
       }
+    });
+  });
+
+  describe("enforceIngestRateLimit", () => {
+    beforeEach(() => {
+      consumeRateLimitToken.mockResolvedValue({ ok: true });
+    });
+
+    it("returns 429 when ingest rate limit exceeded", async () => {
+      consumeRateLimitToken.mockResolvedValue({ ok: false, retryAfterMs: 45_000 });
+
+      const response = await enforceIngestRateLimit(
+        new Request("https://example.com"),
+        { policyKey: "iot_ingest", bucketPrefix: "iot_ingest", scopeSuffix: "sensor-1" },
+      );
+
+      expect(response?.status).toBe(429);
+      await expect(response?.json()).resolves.toEqual({
+        ok: false,
+        error: "Too many requests. Please try again shortly.",
+      });
     });
   });
 });

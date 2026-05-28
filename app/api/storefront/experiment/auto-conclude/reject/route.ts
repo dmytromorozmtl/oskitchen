@@ -7,10 +7,16 @@ import {
   experimentApproveConfirmHtml,
   readApprovalToken,
 } from "@/lib/storefront/experiment-approve-confirm";
+import { enforceStorefrontRouteRateLimit } from "@/lib/storefront/storefront-rate-limit";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const rate = await enforceStorefrontRouteRateLimit(request, "experiment");
+  if (!rate.ok) {
+    return NextResponse.json({ error: rate.message }, { status: 429 });
+  }
+
   const url = new URL(request.url);
   const token = url.searchParams.get("token")?.trim();
   if (!token) {
@@ -27,6 +33,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const rate = await enforceStorefrontRouteRateLimit(request, "experiment");
+  if (!rate.ok) {
+    return NextResponse.json({ error: rate.message }, { status: 429 });
+  }
+
   const token = (await readApprovalToken(request))?.trim();
   if (!token) {
     return NextResponse.json({ error: "Missing token" }, { status: 400 });
