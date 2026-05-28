@@ -506,3 +506,4 @@ Incremental refresh after Era 12 cycles 1–4 (integration hardening + staging E
 | 2026-05-27 | Era 12 Cycle 3: `era12-channel-golden-path-smoke-v1` — Woo/Shopify staging smoke wiring cert (not in default CI) |
 | 2026-05-27 | Era 12 Cycle 4: `era12-e2e-staging-auth-wiring-v1` — e2e-staging auth.setup + dashboard-authed smoke |
 | 2026-05-27 | Era 12 Cycle 5: `era12-scorecard-refresh-v1` — score 99/100; era13 handoff |
+| 2026-05-27 | Era 13 Cycle 1: `era13-enterprise-identity-recert-v1` — roadmap_only identity recert; R2 pilot not_started |

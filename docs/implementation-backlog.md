@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 13 — Enterprise delivery / identity
+
+### KOS-E13-001 — Enterprise identity Era 13 recert (P1)
+- ID: `KOS-E13-001`
+- Title: Re-certify enterprise identity roadmap_only posture after Era 12
+- Module: Enterprise / procurement
+- Priority: P1 (Era 13 Cycle 1)
+- Status: **completed**
+- Decision: `era13-enterprise-identity-recert-v1` — SSO/SCIM `not_implemented`; SOC2 `not_certified`; R2 pilot `not_started`; no fake delivery claims
+- Evidence: `lib/enterprise/enterprise-identity-era13-policy.ts`, `test:ci:enterprise-identity-era13:cert`, `docs/enterprise-procurement-pack.md`
+- Next: SSO/SAML R2 **implementation** only with explicit era budget (E8-2)
+
 ## Era 12 — Integration hardening / enterprise
 
 ### KOS-E12-001 — Channel golden path Era 12 recert (P1)

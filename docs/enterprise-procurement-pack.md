@@ -1,9 +1,9 @@
 # KitchenOS Enterprise Procurement Pack
 
 **Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
-**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-identity-roadmap-policy.ts`, `lib/enterprise/enterprise-sso-architecture-spike-policy.ts`)  
+**Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-identity-roadmap-policy.ts`, `lib/enterprise/enterprise-sso-architecture-spike-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`)  
 **Companion:** [`devops-release-enterprise-readiness.md`](./devops-release-enterprise-readiness.md) (release gates, runbooks)  
-**Updated:** 2026-05-27 (Era 9 Cycle 1 — SSO R1 architecture spike)
+**Updated:** 2026-05-27 (Era 13 Cycle 1 — enterprise identity recert; SSO R2 pilot **not_started**)
 
 Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
@@ -42,6 +42,20 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 **Next scheduled review:** 2027-05-27 or after a major release / enterprise pilot requiring identity delivery.
 
 **CI:** `npm run test:ci:enterprise-identity-roadmap:cert` (forbidden delivery-claim scan + pack markers).
+
+## Era 13 enterprise identity recert (2026-05-27)
+
+**Policy:** `era13-enterprise-identity-recert-v1` — **delivery decision: `roadmap_only`** (unchanged)
+
+| Capability | Delivery status | Era 13 recert |
+|------------|-----------------|---------------|
+| SSO / SAML | **not_implemented** | R1 spike (`era9-enterprise-sso-architecture-spike-v1`) still valid; **R2 pilot not_started** |
+| SCIM | **not_implemented** | Remains after SSO R2 pilot |
+| SOC 2 Type II | **not_certified** | Internal readiness mapping only |
+
+**Procurement stance:** No contract language implying live SSO, SCIM, or SOC 2 Type II. Era 12 integration/staging E2E work does **not** change enterprise identity delivery.
+
+**CI:** `test:ci:enterprise-identity-era13:cert` (chained in `test:ci:enterprise-identity-roadmap:cert`).
 
 ---
 
