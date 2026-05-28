@@ -85,7 +85,7 @@ export default async function ShopifyIntegrationPage() {
         </Card>
       ) : null}
 
-      <Card className="border-border/80 bg-card/90 shadow-sm">
+      <Card id="channel-pilot-connection" className="border-border/80 bg-card/90 shadow-sm scroll-mt-24">
         <CardHeader>
           <CardTitle>Store connection</CardTitle>
           <CardDescription>
@@ -161,7 +161,7 @@ export default async function ShopifyIntegrationPage() {
         isOwner={isOwner}
       />
 
-      <Card>
+      <Card id="channel-pilot-webhooks" className="scroll-mt-24">
         <CardHeader>
           <CardTitle className="text-base">Webhook endpoints</CardTitle>
           <CardDescription>
@@ -209,7 +209,7 @@ export default async function ShopifyIntegrationPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="channel-pilot-tools" className="scroll-mt-24">
         <CardHeader>
           <CardTitle className="text-base">Tools</CardTitle>
         </CardHeader>

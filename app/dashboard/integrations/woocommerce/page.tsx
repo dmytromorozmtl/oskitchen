@@ -94,7 +94,7 @@ export default async function WooCommerceIntegrationPage() {
         </Card>
       ) : null}
 
-      <Card className="border-border/80 bg-card/90 shadow-sm">
+      <Card id="channel-pilot-connection" className="border-border/80 bg-card/90 shadow-sm scroll-mt-24">
         <CardHeader>
           <CardTitle>Connection</CardTitle>
           <CardDescription>
@@ -206,7 +206,7 @@ export default async function WooCommerceIntegrationPage() {
       />
 
       {webhookUrl ? (
-        <Card>
+        <Card id="channel-pilot-webhooks" className="scroll-mt-24">
           <CardHeader>
             <CardTitle className="text-base">Webhook URL</CardTitle>
             <CardDescription>
@@ -251,7 +251,7 @@ export default async function WooCommerceIntegrationPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="channel-pilot-tools" className="scroll-mt-24">
         <CardHeader>
           <CardTitle className="text-base">Tools</CardTitle>
         </CardHeader>

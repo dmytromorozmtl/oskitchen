@@ -83,7 +83,7 @@ export function IntegrationCertificationPanel({
   const signed = certificationSignOffComplete(certification?.signOff);
 
   return (
-    <Card className="border-border/80 bg-card/90 shadow-sm">
+    <Card id="channel-pilot-certification" className="scroll-mt-24 border-border/80 bg-card/90 shadow-sm">
       <CardHeader>
         <div className="flex flex-wrap items-center gap-2">
           <CardTitle className="text-base">Test shop certification</CardTitle>

@@ -35,6 +35,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Evidence: `lib/commercial/pilot-gono-go-summary.ts` (`deriveP0StagingProofPass`, child gates), updated smoke orchestrator
 - Next: Ops configures staging secrets; re-run `smoke:p0-staging-proof-unblock` then `smoke:pilot-gono-go` when all P0 proofs pass
 
+### KOS-E18-035 — Channel pilot setup wizard focus (P1)
+- ID: `KOS-E18-035`
+- Title: Era 18 Workstream C Cycle 35 — Woo/Shopify pilot setup attention + step row next actions
+- Module: Integrations / Onboarding
+- Priority: P1 (pilot deployment speed + channel proof path clarity)
+- Status: **channel_pilot_setup_focus_attention_wired**
+- Decision: `era18-channel-pilot-setup-focus-v1` — current step prioritization; contextual row next actions on pilot setup wizard
+- Evidence: `lib/integrations/channel-pilot-setup-focus-era18.ts`, `components/integrations/channel-pilot-setup-attention-strip.tsx`, `components/integrations/channel-pilot-setup-wizard.tsx`
+- Next: P0 staging proof ops execution when vault ready
+
 ### KOS-E18-034 — Packing verify console focus strip (P1)
 - ID: `KOS-E18-034`
 - Title: Era 18 Workstream G Cycle 34 — packing verify QC attention + session/item row next actions

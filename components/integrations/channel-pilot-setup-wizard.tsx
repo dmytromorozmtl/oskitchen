@@ -15,6 +15,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { ConnectionCertificationRecord } from "@/lib/integrations/channel-certification-types";
+import { ChannelPilotSetupAttentionStrip } from "@/components/integrations/channel-pilot-setup-attention-strip";
+import { ChannelPilotSetupStepNextAction } from "@/components/integrations/channel-pilot-setup-step-next-action";
+import {
+  buildChannelPilotSetupFocusSnapshot,
+  shouldShowChannelPilotSetupAttentionStrip,
+} from "@/lib/integrations/channel-pilot-setup-focus-era18";
 import {
   evaluateChannelPilotSetupProgress,
   stepsForProvider,
@@ -50,6 +56,8 @@ export function ChannelPilotSetupWizard({
   });
 
   const stepDefs = stepsForProvider(provider);
+  const setupFocus = buildChannelPilotSetupFocusSnapshot(progress);
+  const showSetupAttentionStrip = shouldShowChannelPilotSetupAttentionStrip(setupFocus);
 
   async function copyWebhookUrl() {
     if (!webhookUrl) {
@@ -85,6 +93,13 @@ export function ChannelPilotSetupWizard({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
+        {showSetupAttentionStrip ? (
+          <ChannelPilotSetupAttentionStrip
+            focus={setupFocus}
+            progress={progress}
+            stepDefs={stepDefs}
+          />
+        ) : null}
         <ol className="space-y-2">
           {stepDefs.map((def) => {
             const status = progress.steps.find((s) => s.id === def.id);
@@ -93,7 +108,8 @@ export function ChannelPilotSetupWizard({
             return (
               <li
                 key={def.id}
-                className={`flex gap-3 rounded-lg border px-3 py-2 text-sm ${
+                id={`channel-pilot-step-${def.id}`}
+                className={`scroll-mt-24 flex gap-3 rounded-lg border px-3 py-2 text-sm ${
                   isCurrent ? "border-primary/40 bg-background" : "border-border/60"
                 }`}
                 data-step-id={def.id}
@@ -107,6 +123,13 @@ export function ChannelPilotSetupWizard({
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{def.title}</p>
                   <p className="text-muted-foreground">{def.description}</p>
+                  <div className="mt-1">
+                    <ChannelPilotSetupStepNextAction
+                      def={def}
+                      complete={complete}
+                      isCurrent={isCurrent}
+                    />
+                  </div>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {def.id === "configure_webhooks" && webhookUrl ? (
                       <Button
