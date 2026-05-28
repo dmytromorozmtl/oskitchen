@@ -48,6 +48,7 @@ Interpretation rule:
 - **Era 19 Cycle 18 (2026-05-28):** Briefing cashier pack speed mode — `era19-owner-daily-briefing-cashier-v1`; POS register tile + cashier-ranked actions deep-link to speed terminal when shift open; shift closeout guidance.
 - **Era 19 Cycle 19 (2026-05-28):** POS shift closeout clarity — `era19-pos-shift-close-clarity-v1`; 4-step closeout checklist, end-of-shift hero, close-first layout, sticky mobile submit on shifts page.
 - **Era 19 Cycle 20 (2026-05-28):** Owner Today ↔ Launch Wizard cross-link — `era19-launch-wizard-today-strip-v1` + `era19-owner-daily-briefing-launch-wizard-v1`; commercial unblock in owner top actions; setup-only Today strip when briefing owns blockers.
+- **Era 19 Cycle 22 (2026-05-28):** Briefing smoke action cross-link — `era19-owner-daily-briefing-smoke-action-v1`; risk radar + top actions wire Integration Health next smoke script anchor; P0/live smoke signal enrichment.
 - **Era 19 Cycle 21 (2026-05-28):** Integration Health smoke artifact depth — `era19-integration-health-smoke-artifacts-depth-v1`; P0 child proofs, GitHub run links, deduped missing env vars, next smoke action hero.
 - **Era 18 handoff:** `era17-era18-handoff-input-v1` — [`next-master-prompt-input-2026-05-28-era18.md`](./next-master-prompt-input-2026-05-28-era18.md); theme **staging_proof_and_first_paid_pilot**.
 - **Era 18 Cycle 18 (2026-05-28):** KDS bump-next expo — `era18-kds-bump-next-v1`; oldest-ticket hero + action error feedback.

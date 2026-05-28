@@ -311,6 +311,9 @@ function RiskSignalRow(props: { signal: OwnerDailyBriefingRiskSignal }) {
         {signal.honestNote ? (
           <p className="text-[11px] text-muted-foreground/90">{signal.honestNote}</p>
         ) : null}
+        {signal.smokeScript ? (
+          <p className="font-mono text-[11px] text-muted-foreground">{signal.smokeScript}</p>
+        ) : null}
       </div>
       <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground sm:ml-2" aria-hidden />
     </Link>

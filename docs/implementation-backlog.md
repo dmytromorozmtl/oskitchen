@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-022 — Briefing risk radar ↔ Integration Health smoke action cross-link (P1 WOW)
+- ID: `KOS-E19-022`
+- Title: Era 19 Workstream B Cycle 22 — risk radar + top actions wire Integration Health next smoke script
+- Module: Owner Daily Briefing / Integration Health / Engineering proof
+- Priority: P1 (WOW pillar — owner command center ↔ smoke proof honesty)
+- Status: **briefing_smoke_action_crosslink_wired**
+- Decision: `era19-owner-daily-briefing-smoke-action-v1` — enrich P0/live smoke risk signals with next smoke script + `#integration-health-smoke-next-action` anchor; owner/support_admin ranked action; no fake PASS
+- Evidence: `lib/briefing/owner-daily-briefing-smoke-action-era19.ts`, updated briefing service + risk radar + hero UI
+- Next: P0 proof unblock when ops credentials available, or KDS priority lane (Workstream E)
+
 ### KOS-E19-021 — Integration Health smoke artifact viewer depth (P1 WOW)
 - ID: `KOS-E19-021`
 - Title: Era 19 Workstream D Cycle 21 — child proof breakdown, GitHub run links, next smoke action hero

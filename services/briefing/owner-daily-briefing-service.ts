@@ -40,6 +40,10 @@ import {
   buildOwnerDailyBriefingLaunchWizardCommercialAction,
   mergeBriefingLaunchWizardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-launch-wizard-era19";
+import {
+  buildBriefingSmokeNextActionRankedAction,
+  mergeBriefingSmokeNextTopActions,
+} from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import {
@@ -81,6 +85,7 @@ import { getProductionCalendarOpenThroughToday } from "@/services/production/pro
 import { loadPilotIntegrationHealthStripModelForWorkspace } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import { getLaborRealtimeData } from "@/services/labor/labor-realtime-service";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
+import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 
 export type OwnerDailyBriefingPayload = {
@@ -206,7 +211,7 @@ export async function loadOwnerDailyBriefing(
 
   const needsCommercialOps = rolePack === "owner" || rolePack === "support_admin";
 
-  const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts, commercialOps] =
+  const [today, pilotReadiness, lowStock, labor, calendarRows, openPosShifts, commercialOps, smokeArtifacts] =
     await Promise.all([
     options?.today ?? loadTodayCommandCenter(userId),
     loadImplementationPilotReadinessModel(userId),
@@ -217,7 +222,12 @@ export async function loadOwnerDailyBriefing(
     needsCommercialOps
       ? loadCommercialPilotOpsStatusModel().catch(() => null)
       : Promise.resolve(null),
+    needsCommercialOps
+      ? loadIntegrationHealthSmokeArtifactsModel().catch(() => null)
+      : Promise.resolve(null),
   ]);
+
+  const smokeNextAction = smokeArtifacts?.depth.nextSmokeAction ?? null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -340,10 +350,18 @@ export async function loadOwnerDailyBriefing(
         })
       : null;
 
-  const allTopActions =
-    rolePack === "owner" && launchWizardCommercialAction
-      ? mergeBriefingLaunchWizardTopActions(launchWizardCommercialAction, allTopActionsBase)
-      : allTopActionsBase;
+  const smokeNextActionRanked =
+    needsCommercialOps && smokeNextAction
+      ? buildBriefingSmokeNextActionRankedAction(smokeNextAction)
+      : null;
+
+  let allTopActions = allTopActionsBase;
+  if (rolePack === "owner" && launchWizardCommercialAction) {
+    allTopActions = mergeBriefingLaunchWizardTopActions(launchWizardCommercialAction, allTopActions);
+  }
+  if (needsCommercialOps && smokeNextActionRanked) {
+    allTopActions = mergeBriefingSmokeNextTopActions(smokeNextActionRanked, allTopActions);
+  }
 
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
   const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);
@@ -385,6 +403,7 @@ export async function loadOwnerDailyBriefing(
           ssoConfigured: pilotReadiness.pilotSso.configured,
           lowStockCount: lowStock.lowStockCount,
           ingredientParConfigured: lowStock.ingredientParConfigured,
+          smokeNextAction,
         });
         const filteredSignals = filterBriefingRiskSignalsForRolePack(base.signals, rolePack);
         const summary = summarizeOwnerDailyBriefingRiskRadar(filteredSignals);

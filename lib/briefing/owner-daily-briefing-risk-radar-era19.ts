@@ -12,6 +12,8 @@ import {
 } from "@/lib/briefing/owner-daily-briefing-risk-radar-era19-policy";
 import { INTEGRATION_HEALTH_RECOVERY_ANCHOR } from "@/lib/integrations/integration-health-recovery-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import type { IntegrationHealthSmokeNextAction } from "@/lib/integrations/integration-health-smoke-artifacts-depth-era19";
+import { enrichBriefingRiskSignalsWithSmokeNextAction } from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
 import type { TodayBlocker } from "@/services/today/today-command-center-service";
 
 export const OWNER_DAILY_BRIEFING_RISK_RADAR_AGGREGATOR_ERA19_POLICY_ID =
@@ -29,6 +31,7 @@ export type OwnerDailyBriefingRiskSignal = {
   severity: OwnerDailyBriefingRiskSeverity;
   statusLabel: string;
   honestNote?: string;
+  smokeScript?: string;
   priority: number;
 };
 
@@ -358,6 +361,7 @@ export function buildOwnerDailyBriefingRiskSignals(input: {
   ssoConfigured: boolean;
   lowStockCount: number;
   ingredientParConfigured: boolean;
+  smokeNextAction?: IntegrationHealthSmokeNextAction | null;
 }): OwnerDailyBriefingRiskSignal[] {
   const signals: OwnerDailyBriefingRiskSignal[] = [];
   const seen = new Set<string>();
@@ -377,7 +381,9 @@ export function buildOwnerDailyBriefingRiskSignals(input: {
     pushUniqueSignal(signals, seen, signal);
   }
 
-  return sortOwnerDailyBriefingRiskSignals(signals).slice(0, MAX_RISK_SIGNALS);
+  return sortOwnerDailyBriefingRiskSignals(
+    enrichBriefingRiskSignalsWithSmokeNextAction(signals, input.smokeNextAction ?? null),
+  ).slice(0, MAX_RISK_SIGNALS);
 }
 
 export function buildOwnerDailyBriefingRiskRadarSlice(input: {
@@ -392,6 +398,7 @@ export function buildOwnerDailyBriefingRiskRadarSlice(input: {
   ssoConfigured: boolean;
   lowStockCount: number;
   ingredientParConfigured: boolean;
+  smokeNextAction?: IntegrationHealthSmokeNextAction | null;
 }): OwnerDailyBriefingRiskRadarSlice {
   const signals = buildOwnerDailyBriefingRiskSignals(input);
   const summary = summarizeOwnerDailyBriefingRiskRadar(signals);
