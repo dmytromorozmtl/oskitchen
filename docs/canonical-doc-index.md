@@ -35,6 +35,7 @@ Operational source of truth for day-to-day hardening and release gating.
 | [`kds-v1-scope.md`](./kds-v1-scope.md) | KDS v1 in/out scope, workflow, permissions, tests | Kitchen/Ops |
 | [`kds-staging-smoke-checklist.md`](./kds-staging-smoke-checklist.md) | Staging/manual KDS operational smoke (Era 4 Cycle 10) | Kitchen/Ops/QA |
 | Domain mutation registry | `lib/permissions/domain-mutation-registry.ts` + §2a in [`rbac-permission-architecture.md`](./rbac-permission-architecture.md) | Platform/Security |
+| Page maturity sweep | `lib/navigation/page-maturity-honesty.ts`, `lib/navigation/page-maturity-sweep-policy.ts` | Product/UX/GTM |
 | [`ci-e2e-tier-matrix.md`](./ci-e2e-tier-matrix.md) | Money-path and smoke E2E tiers by CI job | QA/DevOps |
 
 ---

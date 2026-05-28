@@ -99,7 +99,17 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Status: **completed**
 - Decision: `era4-kds-staging-smoke-v1` — automated queue→bump in `test:ci:kds-v1:integration`; staging checklist + `smoke:kds-daily`; **not** rush-hour or realtime Playwright certified
 - Evidence: `lib/kitchen/kds-staging-smoke-policy.ts`, `docs/kds-staging-smoke-checklist.md`, `test:ci:kds-staging-smoke:cert`
-- Next: nav/page maturity sweep
+- Next: Era 4 scorecard refresh
+
+### KOS-E4-012 — Nav / page maturity sweep
+- ID: `KOS-E4-012`
+- Title: In-page honesty for preview/placeholder dashboard routes
+- Module: Product / UX / GTM
+- Priority: P0 (Era 4 Cycle 12)
+- Status: **completed**
+- Decision: `era4-page-maturity-sweep-v1` — `PageMaturityRouteNotice` in dashboard layout; honesty copy from `NAV_MATURITY_RULES`; inline PlaceholderBanner pages exempt from duplicate
+- Evidence: `lib/navigation/page-maturity-honesty.ts`, `test:ci:page-maturity-sweep:cert`
+- Next: Era 4 scorecard refresh
 
 ### KOS-E4-011 — Permission helper consolidation
 - ID: `KOS-E4-011`

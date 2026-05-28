@@ -141,6 +141,17 @@ npm run test:ci:pos-money-path:e2e
 
 **Wiring certification (tier 0):** `test:ci:kds-v1:cert` + `test:ci:kds-v1:unit` + `test:ci:kds-v1:prototype:cert` chained in `test:ci:governance-bundles`.
 
+## Tier 1c4 — Page maturity sweep (`quality` job via governance bundles)
+
+| Suite | Command | Notes |
+|-------|---------|-------|
+| Page maturity honesty | `npm run test:ci:page-maturity-sweep` | Preview/placeholder in-page copy; inline banner exceptions |
+| Page maturity wiring cert | `npm run test:ci:page-maturity-sweep:cert` | Layout wiring, policy id, matrix alignment |
+
+**Policy (Era 4 Cycle 12):** `lib/navigation/page-maturity-sweep-policy.ts`. **UI:** `PageMaturityRouteNotice` + existing nav badges (`test:ci:nav-governance`).
+
+**Wiring certification (tier 0):** `test:ci:page-maturity-sweep:cert` + `test:ci:page-maturity-sweep` chained in `test:ci:governance-bundles`.
+
 ## Tier 1c3 — Mutation access consolidation (`quality` job via governance bundles)
 
 | Suite | Command | Notes |

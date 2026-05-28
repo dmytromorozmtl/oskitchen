@@ -74,6 +74,13 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - honest scope: does **not** certify kitchen `Order` auto-create from Woo/Shopify webhooks; certifies external order + staging + order hub external list path
 - staging smoke (optional live API): `npx tsx scripts/smoke-woo-shopify-certification.ts` (`--skip-live` for credentials-only checks)
 
+### 8c8. Page maturity sweep (Era 4 Cycle 12)
+- policy: `lib/navigation/page-maturity-sweep-policy.ts` (`era4-page-maturity-sweep-v1`)
+- wiring cert: `test:ci:page-maturity-sweep:cert` (in `test:ci:governance-bundles`)
+- unit: `npm run test:ci:page-maturity-sweep` — preview/placeholder honesty + nav rule alignment
+- UI: `PageMaturityRouteNotice` in `app/dashboard/layout.tsx`
+- complements: `test:ci:nav-governance` (sidebar badges)
+
 ### 8c7. Mutation access consolidation (Era 4 Cycle 11)
 - policy: `lib/permissions/mutation-access-policy.ts` (`era4-mutation-access-consolidation-v1`)
 - registry: `lib/permissions/domain-mutation-registry.ts`

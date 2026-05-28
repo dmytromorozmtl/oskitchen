@@ -299,6 +299,12 @@ Priority rule:
 - **Evidence:** `npm run test:ci:rbac-wave4`, `npm run test:ci:rbac-wave4:cert`.
 - **Next:** ~~Batch 2~~ — completed in Cycle 6 (see below).
 
+## Era 4 — Nav / page maturity sweep (Cycle 12)
+
+- **Completed (2026-05-27):** `era4-page-maturity-sweep-v1` — preview/placeholder dashboard routes show in-page honesty (`PageMaturityRouteNotice`) aligned with `NAV_MATURITY_RULES`; DoorDash/Grubhub inline banners remain single-source.
+- **Evidence:** `npm run test:ci:page-maturity-sweep`, `npm run test:ci:page-maturity-sweep:cert`.
+- **Sales rule:** preview nav badge plus in-page banner required before treating a surface as production-ready.
+
 ## Era 4 — Permission helper consolidation (Cycle 11)
 
 - **Completed (2026-05-27):** `era4-mutation-access-consolidation-v1` — domain mutation registry, unified RBAC narrative, shared `logDomainMutationDenied` for wave-4 canonical helpers.

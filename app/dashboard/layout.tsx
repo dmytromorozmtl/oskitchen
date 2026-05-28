@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { DemoBanner } from "@/components/demo/demo-banner";
 import { NpsSurveyPrompt } from "@/components/dashboard/nps-survey-prompt";
 import { SupportWidget } from "@/components/dashboard/support-widget";
+import { PageMaturityRouteNotice } from "@/components/dashboard/page-maturity-route-notice";
 import { PilotReleaseRouteNotice } from "@/components/dashboard/pilot-release-route-notice";
 import { PlatformImpersonationNotice } from "@/components/dashboard/platform-impersonation-notice";
 import { SupportSessionCustomerNotice } from "@/components/dashboard/support-session-customer-notice";
@@ -146,6 +147,7 @@ export default async function DashboardLayout({
       <SupportSessionCustomerNotice userId={sessionUser.id} />
       <PageShell>
         <PilotReleaseRouteNotice navReleaseProfile={navReleaseProfile} />
+        <PageMaturityRouteNotice />
         <ModuleRouteGate
           blockedPathPrefixes={blockedPathPrefixes}
           userRole={profile?.role ?? UserRole.OWNER}
