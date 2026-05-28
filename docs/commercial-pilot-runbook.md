@@ -66,7 +66,7 @@ bash scripts/ops/pilot-preflight.sh
 | Storefront | Publish menu, test checkout | — | Storefront (`beta` / qualified) |
 | Integrations | Woo **or** Shopify test shop only | — | Integrations (`era4-channel-golden-path-v1`, `era14-channel-golden-path-recert-v1`); `npm run smoke:channel-golden-path`; staging `npm run smoke:woo-shopify` (`era12-channel-golden-path-smoke-v1`, not in default CI) |
 | POS | Open POS terminal, checkout test sale | RBAC deny spot check | POS (`beta`), inventory POS-only |
-| KDS | Kitchen display bump/recall | — | KDS (`era4-kds-staging-smoke-v1`, `era6-kds-realtime-smoke-v1`) |
+| KDS | Kitchen display bump/recall | — | KDS (`era15-kds-staging-smoke-recert-v1`; `npm run smoke:kds-staging`; no rush-hour claim) |
 
 **Sign-off template:** environment URL, date, owner email, PASS/FAIL per phase, notes on permission denials or missing badges.
 

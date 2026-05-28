@@ -192,8 +192,9 @@ npm run test:ci:pos-money-path:e2e
 |-------|---------|-------|
 | Staging smoke policy + wiring | `npm run test:ci:kds-staging-smoke` | Checklist tiers, `smoke:kds-daily` script, permissioned actions |
 | Staging smoke wiring cert | `npm run test:ci:kds-staging-smoke:cert` | Policy id, governance bundle, maturity matrix honesty |
+| Era 15 KDS staging smoke recert | `npm run test:ci:kds-staging-smoke-era15:cert` | `era15-kds-staging-smoke-recert-v1`; `npm run smoke:kds-staging`; chains into staging-smoke cert |
 
-**Policy (Era 4 Cycle 10):** `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`). **Era 10 recert:** `era10-kds-staging-smoke-recert-v1` — integration covers queue→bump + recall (`test:ci:kds-staging-smoke-era10:cert`). **Prerequisites:** `test:ci:kds-v1:integration`. **Staging/manual:** `docs/kds-staging-smoke-checklist.md`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`. **Not certified:** rush-hour, multi-station, Playwright realtime KDS in default CI.
+**Policy (Era 4 Cycle 10):** `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`). **Era 10 recert:** `era10-kds-staging-smoke-recert-v1`. **Era 15 recert:** `era15-kds-staging-smoke-recert-v1` — bump/recall integration + optional Playwright workflow secrets parity; **not in default CI**. **Prerequisites:** `test:ci:kds-v1:integration`. **Staging/manual:** `docs/kds-staging-smoke-checklist.md`; `npm run smoke:kds-staging`; optional `npm run smoke:kds-daily -- --ephemeral` with `DATABASE_URL`. **Not certified:** rush-hour, multi-station, Playwright realtime KDS in default CI.
 
 **Wiring certification (tier 0):** `test:ci:kds-staging-smoke:cert` + `test:ci:kds-staging-smoke` chained in `test:ci:governance-bundles`.
 

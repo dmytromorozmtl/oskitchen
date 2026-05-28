@@ -277,6 +277,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ### 8c4o. KDS staging smoke recert (Era 10 Cycle 4)
 - Policy: `lib/kitchen/kds-staging-smoke-era10-policy.ts` (`era10-kds-staging-smoke-recert-v1`; extends `era4-kds-staging-smoke-v1`)
+- era15 recert: `lib/kitchen/kds-staging-smoke-era15-policy.ts` (`era15-kds-staging-smoke-recert-v1`); `npm run smoke:kds-staging`
 - Integration: `tests/integration/kds-daily-queue-bump.integration.test.ts` (bump + recall + allergen)
 - Wiring cert: `test:ci:kds-staging-smoke-era10:cert` (chained in `test:ci:kds-staging-smoke:cert`)
 - Honest gap: Playwright KDS spec is staging-only (not default CI); no rush-hour or production Realtime SLO claim

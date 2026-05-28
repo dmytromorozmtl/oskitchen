@@ -3,6 +3,18 @@
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
 
+## Era 15 — KDS / enterprise / DevOps
+
+### KOS-E15-001 — KDS staging smoke Era 15 recert (P1)
+- ID: `KOS-E15-001`
+- Title: Re-certify KDS staging operational smoke and honest scope
+- Module: Kitchen / KDS / DevOps
+- Priority: P1 (Era 15 Cycle 1)
+- Status: **completed**
+- Decision: `era15-kds-staging-smoke-recert-v1` — bump/recall CI path; Playwright optional; `npm run smoke:kds-staging`; no rush-hour certification
+- Evidence: `lib/kitchen/kds-staging-smoke-era15-policy.ts`, `test:ci:kds-staging-smoke-era15:cert`, `docs/kds-staging-smoke-checklist.md`
+- Next: manual Tier B/E on staging when credentials available
+
 ## Era 14 — Nav / page maturity / RBAC / cron / integrations recert
 
 ### KOS-E14-006 — Era 14 scorecard refresh (P1)

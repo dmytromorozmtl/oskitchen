@@ -1,12 +1,12 @@
 # KDS staging smoke checklist
 
 Status: canonical operational smoke for KDS v1 daily-service tickets  
-Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); Era 10 recert: `lib/kitchen/kds-staging-smoke-era10-policy.ts` (`era10-kds-staging-smoke-recert-v1`); realtime/poll: `lib/kitchen/kds-realtime-smoke-policy.ts` (`era6-kds-realtime-smoke-v1`); Realtime Playwright E2E: `lib/kitchen/kds-realtime-e2e-staging-policy.ts` (`era8-kds-realtime-e2e-staging-v1`, **staging-only**, **not in default CI**)  
+Policy: `lib/kitchen/kds-staging-smoke-policy.ts` (`era4-kds-staging-smoke-v1`); Era 10 recert: `era10-kds-staging-smoke-recert-v1`; Era 15 recert: `era15-kds-staging-smoke-recert-v1` (`lib/kitchen/kds-staging-smoke-era15-policy.ts`); `npm run smoke:kds-staging`; realtime/poll: `era6-kds-realtime-smoke-v1`; Realtime Playwright E2E: `era8-kds-realtime-e2e-staging-v1` + `era11-kds-realtime-e2e-staging-v1` (**staging-only**, **not in default CI**); workflow secrets: `era13-kds-staging-workflow-secrets-align-v1`  
 Scope boundary: `docs/kds-v1-scope.md`
 
 ## What this proves
 
-One **qualified** operational path: today's active order appears on the daily KDS queue, bump moves it to `READY`, recall returns it to `PREPARING`. **Era 10:** CI integration recertifies bump + recall (`tests/integration/kds-daily-queue-bump.integration.test.ts`). Suitable for staging pilots and pre-release kitchen ops sign-off.
+One **qualified** operational path: today's active order appears on the daily KDS queue, bump moves it to `READY`, **recall_to_preparing** returns it to `PREPARING`. **Era 10:** CI integration recertifies bump + recall (`tests/integration/kds-daily-queue-bump.integration.test.ts`). **Era 15:** `npm run smoke:kds-staging` chains unit + integration + optional realtime E2E cert wiring. Suitable for staging pilots and pre-release kitchen ops sign-off.
 
 ## What this does not prove
 
