@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 7 — Commercial readiness
 
+### KOS-E7-002 — Storefront Stripe live-card E2E CI policy (E7-4)
+- ID: `KOS-E7-002`
+- Title: Honest optional Stripe browser E2E tier with PASSED/SKIPPED/FAILED artifact
+- Module: Storefront / CI / QA
+- Priority: P0 (Era 7 Cycle 2)
+- Status: **completed**
+- Decision: `era7-storefront-stripe-optional-v1` + `era7-storefront-stripe-secrets-accept-v1` — pay-later always-on; Stripe E2E when `STRIPE_SECRET_KEY` set; explicit `storefront-stripe-e2e-summary` artifact
+- Evidence: `lib/ci/storefront-stripe-e2e-policy.ts`, `.github/workflows/ci.yml` (`storefront-money-path`), `test:ci:storefront-stripe-e2e:policy`, extended `test:ci:storefront-money-path:cert`
+- Next: repo hygiene cert for `tests/node_modules/` or Era 7 scorecard after more cycles
+
 ### KOS-E7-001 — Commercial pilot runbook (E7-3)
 - ID: `KOS-E7-001`
 - Title: Canonical paid-pilot GO/NO-GO runbook aligned with feature maturity matrix

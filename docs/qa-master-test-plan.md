@@ -114,6 +114,11 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 - unit: `npm run test:ci:cross-channel-rewards` — POS kitchen-ledger redeem wiring + storefront dual-ledger honesty (no unified codes)
 - not in scope: Playwright storefront↔POS E2E (separate ledgers; storefront checkout gift redeem unwired)
 
+### 8c4b. Storefront Stripe E2E CI policy (Era 7 Cycle 2)
+- policy: `lib/ci/storefront-stripe-e2e-policy.ts` (`era7-storefront-stripe-optional-v1`, `era7-storefront-stripe-secrets-accept-v1`)
+- optional Playwright: `test:ci:storefront-money-path:stripe-e2e` when `STRIPE_SECRET_KEY` + `STOREFRONT_E2E_STRIPE=1`
+- wiring: extended `test:ci:storefront-money-path:cert`; policy script `test:ci:storefront-stripe-e2e:policy`; artifact `storefront-stripe-e2e-summary`
+
 ### 8c4a. Commercial pilot runbook (Era 7 Cycle 1)
 - policy: `lib/commercial/commercial-pilot-runbook-policy.ts` (`era7-commercial-pilot-runbooks-v1`)
 - canonical runbook: `docs/commercial-pilot-runbook.md` (Tier 0–3; matrix alignment; deprecated `docs/PILOT_*` family)
@@ -215,7 +220,7 @@ Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, 
 
 ## Current Highest-Priority Additions
 1. ~~POS money-path CI wiring + browser E2E policy~~ — tier 2b unit + integration + inventory always in CI; optional Playwright when `E2E_LOGIN_*` secrets set; explicit `PASSED`/`SKIPPED`/`FAILED` via `test:ci:pos-browser-e2e:policy` + `pos-browser-e2e-summary` artifact (Era 4 Cycle 2)
-2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration + tier 2 pay-later E2E in CI; live wiring gate `test:ci:storefront-money-path:cert`; staging Stripe E2E optional
+2. ~~storefront payment failure and retry matrix~~ — tier 2 unit + tier 1 integration + tier 2 pay-later E2E in CI; live wiring gate `test:ci:storefront-money-path:cert`; **Era 7 Cycle 2:** optional Stripe live-card E2E with `storefront-stripe-e2e-summary` artifact (`era7-storefront-stripe-optional-v1`)
 3. ~~inventory depletion POS proof + channel policy~~ — unit + integration in CI; live gate `test:ci:inventory-depletion:cert`; **Era 4 Cycle 1:** POS-only policy (`era4-pos-only-v1` in `lib/inventory/inventory-depletion-policy.ts`); storefront/API/manual do not deplete
 4. ~~RBAC wave 4~~ — `test:ci:rbac-wave4` batch 1 + batch 2; **Era 5 Cycle 1:** bundle in `test:security`; **Era 5 Cycle 4:** copilot void-form deny (`era5-copilot-form-deny-v1`); **Era 6 Cycle 4:** production calendar void-form deny (`era6-production-calendar-form-deny-v1`)
 5. POS permission-negative role matrix — terminal API route denials covered; deeper workflow-role gaps remain

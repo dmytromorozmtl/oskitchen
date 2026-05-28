@@ -82,6 +82,8 @@ npm run test:ci:pos-money-path:cert
 
 POS browser E2E may be **SKIPPED** without secrets — check `pos-browser-e2e-summary` artifact; do not claim browser E2E passed if skipped (`era5-pos-e2e-secrets-accept-v1`).
 
+Storefront Stripe live-card E2E may be **SKIPPED** without `STRIPE_SECRET_KEY` — check `storefront-stripe-e2e-summary` artifact; pay-later E2E still certifies tier-2 (`era7-storefront-stripe-secrets-accept-v1`).
+
 ---
 
 ## Maturity matrix alignment

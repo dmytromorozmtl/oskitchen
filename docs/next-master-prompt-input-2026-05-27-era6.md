@@ -30,6 +30,7 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 | Cycle | Outcome |
 |-------|---------|
 | **1** | **Commercial pilot runbook** — `era7-commercial-pilot-runbooks-v1`; `docs/commercial-pilot-runbook.md`; `test:ci:commercial-pilot-runbook:cert` |
+| **2** | **Storefront Stripe E2E CI policy** — `era7-storefront-stripe-optional-v1`; `storefront-stripe-e2e-summary` artifact; `test:ci:storefront-money-path:cert` extended |
 
 ## 3. What Remains Open (P0 for Era 7 consideration)
 
@@ -38,7 +39,7 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 | E7-1 | Storefront inventory hook | Only if `era5-pos-only-gtm-lock-v1` lifted by explicit era decision |
 | E7-2 | SSO/SAML pilot implementation | Requires dedicated era — not roadmap_only |
 | ~~E7-3~~ | ~~Commercial pilot runbooks~~ | **Done** — Cycle 1 (`KOS-E7-001`) |
-| E7-4 | Stripe live-card storefront E2E | Honest tier; secrets + slug documented |
+| ~~E7-4~~ | ~~Stripe live-card storefront E2E~~ | **Done** — Cycle 2 (`KOS-E7-002`) |
 
 ---
 
@@ -55,7 +56,7 @@ All five Era 6 P0 items from era5 prompt input **completed** (cycles 1–5). Pol
 
 Pick **one theme per cycle**; do not reopen Era 4–6 unless regression proven.
 
-1. **Commercial readiness** — ~~pilot runbooks~~ (Cycle 1 done); claim validator expansion, sales enablement, E7-4 storefront E2E.
+1. **Commercial readiness** — ~~pilot runbooks~~ + ~~Stripe E2E policy~~ (Cycles 1–2 done); claim validator expansion, sales enablement.
 2. **Operator depth** — storefront E2E, inventory hook (if unlocked), KDS UI polish.
 3. **Enterprise delivery** — SSO architecture spike (R1) — only with explicit era budget.
 4. **CI hygiene** — gitignore, workflow runtime, slice optimization.

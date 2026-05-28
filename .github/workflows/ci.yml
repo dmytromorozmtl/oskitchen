@@ -285,6 +285,31 @@ jobs:
           done
           npm run test:ci:storefront-money-path:e2e
 
+      - name: Storefront Stripe live-card E2E (optional — STRIPE_SECRET_KEY required)
+        id: storefront_stripe_e2e
+        if: ${{ secrets.STRIPE_SECRET_KEY != '' }}
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STOREFRONT_E2E_STRIPE: "1"
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+        run: npm run test:ci:storefront-money-path:stripe-e2e
+
+      - name: Storefront Stripe E2E CI policy summary
+        if: always()
+        env:
+          STOREFRONT_STRIPE_E2E_STEP_OUTCOME: ${{ steps.storefront_stripe_e2e.outcome }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STOREFRONT_E2E_STRIPE: ${{ secrets.STRIPE_SECRET_KEY != '' && '1' || '' }}
+        run: npm run test:ci:storefront-stripe-e2e:policy
+
+      - name: Upload storefront Stripe E2E summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storefront-stripe-e2e-summary
+          path: ci-artifacts/storefront-stripe-e2e-summary.json
+          if-no-files-found: warn
+
   pos-money-path:
     runs-on: ubuntu-latest
     timeout-minutes: 30

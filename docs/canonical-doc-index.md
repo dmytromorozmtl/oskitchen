@@ -1,7 +1,7 @@
 # KitchenOS Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
-**Updated:** 2026-05-27 (Era 7 Cycle 1 — commercial pilot runbook)  
+**Updated:** 2026-05-27 (Era 7 Cycle 2 — storefront Stripe E2E CI policy)  
 **Rule:** Do not create new ad-hoc `docs/*AUDIT*.md` files. Update this index and the canonical set below.
 
 ---
@@ -132,6 +132,7 @@ Use when a canonical doc points here. Do **not** promote readiness claims from t
 | Cycle | Outcome | Evidence |
 |-------|---------|----------|
 | **1** | **Commercial pilot runbook** | `era7-commercial-pilot-runbooks-v1`; `docs/commercial-pilot-runbook.md` |
+| **2** | **Storefront Stripe E2E CI policy** | `era7-storefront-stripe-optional-v1`; `storefront-stripe-e2e-summary` artifact |
 
 ## Evolution Era 6 cycle ledger
 
@@ -307,3 +308,4 @@ Incremental refresh after Era 6 cycles 1–5 (P0 closure from era5 handoff). Bas
 | 2026-05-27 | Era 6 Cycle 5: `era6-enterprise-identity-roadmap-v1` — SSO/SCIM/SOC2 roadmap_only review |
 | 2026-05-27 | Era 6 Cycle 6: scorecard refresh 90/100 + `next-master-prompt-input-2026-05-27-era6.md` |
 | 2026-05-27 | Era 7 Cycle 1: `era7-commercial-pilot-runbooks-v1` — canonical commercial pilot runbook |
+| 2026-05-27 | Era 7 Cycle 2: `era7-storefront-stripe-optional-v1` — honest Stripe browser E2E tier + summary artifact |

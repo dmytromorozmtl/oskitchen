@@ -63,7 +63,7 @@ Upload malware/content-safety scans run by default on all hardened upload paths 
 | `E2E_STOREFRONT_SLUG` | Public storefront slug (default `hello`) |
 | `E2E_SEED_USER_ID` | `db:seed:e2e-pos` fixture user UUID |
 | `CRON_SECRET` | Cron route tests (optional) |
-| `STOREFRONT_E2E_STRIPE=1` + `STRIPE_SECRET_KEY` | Live Stripe iframe checkout |
+| `STOREFRONT_E2E_STRIPE=1` + `STRIPE_SECRET_KEY` | Live Stripe iframe checkout (optional CI tier when secret configured) |
 | `PLAYWRIGHT_BASE_URL` / `SMOKE_BASE_URL` | Remote smoke against staging/production |
 
 ### Storefront order E2E
@@ -148,6 +148,30 @@ Workflow **`.github/workflows/e2e-remote-smoke.yml`** (`workflow_dispatch`):
    (needs **`E2E_DATABASE_URL`** + **`E2E_SEED_USER_ID`** on the runner; staging only).
 
 The default PR **CI** workflow does not start a server or hit the network; use the manual remote workflow for hosted smoke.
+
+### Storefront money-path job (`storefront-money-path`)
+
+Dedicated job **`.github/workflows/ci.yml` → `storefront-money-path`** always runs tier-2 **unit** tests and **pay-later** Playwright E2E. **Stripe live-card checkout** E2E runs only when repository secret **`STRIPE_SECRET_KEY`** is configured.
+
+An **always-on** policy step (`npm run test:ci:storefront-stripe-e2e:policy`) runs at the end of every `storefront-money-path` job and:
+
+- prints **`Storefront Stripe E2E CI: PASSED | SKIPPED | FAILED`** with a reason,
+- writes **`ci-artifacts/storefront-stripe-e2e-summary.json`** (uploaded as **`storefront-stripe-e2e-summary`**),
+- fails the job only when Stripe E2E was required to run and failed (`FAILED`).
+
+Policy ids: **`era7-storefront-stripe-optional-v1`** and **`era7-storefront-stripe-secrets-accept-v1`**. Forks without `STRIPE_SECRET_KEY` may stay green when pay-later E2E passes; the artifact must report **`SKIPPED`**, not a silent pass. See **`docs/ci-e2e-tier-matrix.md`** tier 2.
+
+**Optional local Stripe E2E:**
+
+```bash
+unset TURNSTILE_SECRET_KEY
+export STRIPE_SECRET_KEY=sk_test_...
+export STOREFRONT_E2E_STRIPE=1
+export E2E_STOREFRONT_SLUG=hello
+npm run build && npm run start -- -p 3000 &
+export PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000
+npm run test:ci:storefront-money-path:stripe-e2e
+```
 
 ### POS money-path job (`pos-money-path`)
 

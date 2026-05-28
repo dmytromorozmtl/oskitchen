@@ -61,6 +61,9 @@ describe("storefront money-path CI certification (live repo)", () => {
     expect(job).toContain("storefront:seed-ci-checkout");
     expect(job).toContain("test:ci:storefront-money-path:unit");
     expect(job).toContain("test:ci:storefront-money-path:e2e");
+    expect(job).toContain("test:ci:storefront-stripe-e2e:policy");
+    expect(job).toContain("storefront-stripe-e2e-summary");
+    expect(job).toContain("secrets.STRIPE_SECRET_KEY != ''");
     expect(job).toContain("npm run build");
     expect(job).toContain("npm run start");
   });

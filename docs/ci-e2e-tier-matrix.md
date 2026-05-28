@@ -25,10 +25,14 @@ Status: canonical money-path and smoke E2E tiers for Evolution Era 2 certificati
 |-------|---------|-----|-------|
 | Payment recovery unit | `npm run test:ci:storefront-money-path:unit` | No | Stripe retry/cancel guards |
 | Pay-later checkout E2E | `npm run test:ci:storefront-money-path:e2e` | Postgres + seed | `storefront:seed-ci-checkout` then `e2e/storefront-checkout-pay-later.spec.ts` |
+| Stripe live-card E2E (browser) | `npm run test:ci:storefront-money-path:stripe-e2e` | Postgres + seed + Stripe secret | **Optional tier** — runs only when repository secret `STRIPE_SECRET_KEY` is set and step sets `STOREFRONT_E2E_STRIPE=1`; `TURNSTILE_SECRET_KEY` must be unset |
+| Storefront Stripe E2E policy summary | `npm run test:ci:storefront-stripe-e2e:policy` | None | **Always runs** at end of `storefront-money-path` job; writes `ci-artifacts/storefront-stripe-e2e-summary.json` with `PASSED` / `SKIPPED` / `FAILED` |
 
 **CI workflow:** `.github/workflows/ci.yml` → job `storefront-money-path`.
 
-**Wiring certification (tier 0):** `npm run test:ci:storefront-money-path:cert` → `tests/unit/storefront-money-path-ci-live.test.ts` (included in `test:ci:governance-bundles`).
+**Stripe E2E policy (Era 7 Cycle 2):** `era7-storefront-stripe-optional-v1` + `era7-storefront-stripe-secrets-accept-v1` in `lib/ci/storefront-stripe-e2e-policy.ts`. Unit + pay-later E2E are **always-on** tier-2 certification. Stripe iframe checkout E2E does **not** run without `STRIPE_SECRET_KEY`; forks without the secret stay green when always-on certs pass and the policy artifact reports **`SKIPPED`** (explicit skip — not a silent pass). Artifact: `storefront-stripe-e2e-summary` (GitHub Actions).
+
+**Wiring certification (tier 0):** `npm run test:ci:storefront-money-path:cert` → `tests/unit/storefront-money-path-ci-live.test.ts` + `tests/unit/storefront-stripe-e2e-policy.test.ts` + `tests/unit/storefront-stripe-e2e-secrets-policy-cert-live.test.ts` (included in `test:ci:governance-bundles`).
 
 **Local focused run:**
 
@@ -102,7 +106,7 @@ npm run test:ci:pos-money-path:e2e
 
 | Suite | Reason |
 |-------|--------|
-| Full Stripe live checkout E2E | Requires Stripe secrets + Connect; run via `STOREFRONT_E2E_STRIPE=1` on staging |
+| Full Stripe live checkout E2E without policy artifact | Superseded — optional tier in `storefront-money-path` when `STRIPE_SECRET_KEY` is set; check `storefront-stripe-e2e-summary` for `PASSED`/`SKIPPED`/`FAILED` |
 | POS hardware terminal | No hardware certification claim; tier 2b covers software POS unit + DB integration; browser E2E when auth secrets configured |
 
 ## Money-path certification mapping
