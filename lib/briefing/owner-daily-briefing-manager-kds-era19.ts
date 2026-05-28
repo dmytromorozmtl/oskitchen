@@ -7,6 +7,7 @@ import {
   type OwnerDailyBriefingKitchenInput,
 } from "@/lib/briefing/owner-daily-briefing-kitchen-era19";
 import { BRIEFING_KITCHEN_KDS_PRIORITY_TILE_ID } from "@/lib/briefing/owner-daily-briefing-kitchen-era19";
+import { resolveBriefingOverdueProductionHref } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import { OWNER_DAILY_BRIEFING_MANAGER_KDS_ERA19_POLICY_ID } from "@/lib/briefing/owner-daily-briefing-manager-kds-era19-policy";
 import { BRIEFING_KDS_PRIORITY_LANE_HREF } from "@/lib/kitchen/kds-priority-lane-era19-policy";
 
@@ -67,7 +68,9 @@ export function buildOwnerDailyBriefingManagerKdsActions(
       reason: `${input.productionCalendarOverdue} calendar batch(es) past due — prep gaps affect ticket times.`,
       severity: "high",
       ownerRole: "manager",
-      href: "/dashboard/production/calendar",
+      href: resolveBriefingOverdueProductionHref({
+        overdue: input.productionCalendarOverdue,
+      }),
       status: "open",
       unblockCondition: "Reschedule or complete overdue batches before rush-hour intake.",
       priority: 3,

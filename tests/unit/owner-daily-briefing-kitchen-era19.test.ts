@@ -148,6 +148,18 @@ describe("buildOwnerDailyBriefingKitchenActions", () => {
     expect(actions[0]?.href).toBe(BRIEFING_KDS_PRIORITY_LANE_HREF);
     expect(actions[0]?.severity).toBe("critical");
   });
+
+  it("deep-links overdue production action to calendar drill anchor", () => {
+    const actions = buildOwnerDailyBriefingKitchenActions({
+      kdsOrders: [],
+      productionCalendarOverdue: 2,
+      productionCalendarDueToday: 1,
+      packingQueueOpen: 0,
+      productionWorkOpen: 0,
+    });
+    const overdue = actions.find((action) => action.id === "kitchen-overdue-production");
+    expect(overdue?.href).toContain("#production-calendar-drill");
+  });
 });
 
 describe("enrichBriefingKitchenPackTiles", () => {

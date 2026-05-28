@@ -161,6 +161,8 @@ describe("owner daily briefing risk radar era19", () => {
 
     expect(signals.some((signal) => signal.category === "stuck_orders")).toBe(true);
     expect(signals.some((signal) => signal.category === "overdue_production")).toBe(true);
+    const overdueProduction = signals.find((signal) => signal.id === "risk-overdue-production");
+    expect(overdueProduction?.href).toContain("#production-calendar-drill");
     expect(signals.some((signal) => signal.category === "integration_failure")).toBe(true);
     expect(signals.some((signal) => signal.category === "support_sla")).toBe(true);
     expect(signals.some((signal) => signal.category === "low_stock")).toBe(true);

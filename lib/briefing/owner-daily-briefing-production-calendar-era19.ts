@@ -175,3 +175,31 @@ export function productionCalendarActionsForBriefing(
 export function productionCalendarTaskDeepLink(task: ProductionCalendarFocusTask): string {
   return productionCalendarTaskHref(task);
 }
+
+export function resolveBriefingOverdueProductionHref(input: {
+  overdue: number;
+  calendarHref?: string;
+  taskHref?: string | null;
+}): string {
+  return resolveProductionCalendarBriefingDrillHref({
+    overdue: input.overdue,
+    calendarHref: input.calendarHref ?? "/dashboard/production/calendar",
+    taskHref: input.taskHref ?? null,
+  });
+}
+
+export function enrichBriefingProductionCalendarPackTiles(
+  tiles: readonly OwnerDailyBriefingTile[],
+  slice: OwnerDailyBriefingProductionCalendarSlice,
+): OwnerDailyBriefingTile[] {
+  const calendarTile = buildProductionCalendarBriefingTile(slice);
+  const index = tiles.findIndex((tile) => tile.id === "production-calendar-today");
+
+  if (index >= 0) {
+    const next = [...tiles];
+    next[index] = calendarTile;
+    return next;
+  }
+
+  return [...tiles, calendarTile];
+}

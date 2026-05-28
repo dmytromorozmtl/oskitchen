@@ -20,6 +20,7 @@ import {
   type KdsPriorityReason,
   type KdsPriorityTicket,
 } from "@/lib/kitchen/kds-priority-lane-era19";
+import { resolveBriefingOverdueProductionHref } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import { OWNER_DAILY_BRIEFING_KITCHEN_ERA19_POLICY_ID } from "@/lib/briefing/owner-daily-briefing-kitchen-era19-policy";
 
 export const OWNER_DAILY_BRIEFING_KITCHEN_AGGREGATOR_ERA19_POLICY_ID =
@@ -235,7 +236,9 @@ export function buildOwnerDailyBriefingKitchenActions(
       reason: `${input.productionCalendarOverdue} calendar batch(es) past due — prep gaps block fulfillment.`,
       severity: "high",
       ownerRole: "kitchen",
-      href: "/dashboard/production/calendar",
+      href: resolveBriefingOverdueProductionHref({
+        overdue: input.productionCalendarOverdue,
+      }),
       status: "open",
       unblockCondition: "Complete or reschedule overdue batches on the production calendar.",
       priority: 3,

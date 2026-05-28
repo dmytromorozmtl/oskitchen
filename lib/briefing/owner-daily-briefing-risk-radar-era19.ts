@@ -14,6 +14,7 @@ import { INTEGRATION_HEALTH_RECOVERY_ANCHOR } from "@/lib/integrations/integrati
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { IntegrationHealthSmokeNextAction } from "@/lib/integrations/integration-health-smoke-artifacts-depth-era19";
 import { enrichBriefingRiskSignalsWithSmokeNextAction } from "@/lib/briefing/owner-daily-briefing-smoke-action-era19";
+import { resolveBriefingOverdueProductionHref } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import type { TodayBlocker } from "@/services/today/today-command-center-service";
 
 export const OWNER_DAILY_BRIEFING_RISK_RADAR_AGGREGATOR_ERA19_POLICY_ID =
@@ -231,7 +232,9 @@ function operationalRiskSignals(input: {
       categoryLabel: OWNER_DAILY_BRIEFING_RISK_CATEGORY_LABEL.overdue_production,
       title: "Overdue production batches",
       detail: `${input.productionCalendarSummary.overdue} batch(es) past due on the production calendar.`,
-      href: "/dashboard/production/calendar",
+      href: resolveBriefingOverdueProductionHref({
+        overdue: input.productionCalendarSummary.overdue,
+      }),
       severity: "high",
       statusLabel: `${input.productionCalendarSummary.overdue} overdue`,
       priority: 6,

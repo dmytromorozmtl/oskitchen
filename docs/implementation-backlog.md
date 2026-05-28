@@ -5,6 +5,16 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 
 ## Era 19 — Breakthrough: proof + Owner Daily Briefing WOW pillar
 
+### KOS-E19-036 — Briefing production drill convergence (Convergence Pillar 1+4)
+- ID: `KOS-E19-036`
+- Title: Era 19 Convergence Cycle 36 — unify overdue production deep-links to operator drill across briefing tiles, role actions, and risk radar
+- Module: Owner Daily Briefing / Production calendar / Operational command flows
+- Priority: P0 convergence (operational nervous system — one path from Today to production drill)
+- Status: **briefing_production_drill_convergence_wired**
+- Decision: `era19-owner-daily-briefing-production-drill-convergence-v1` — service wires `buildProductionCalendarBriefingTile`; kitchen/manager/risk radar overdue links to `#production-calendar-drill`
+- Evidence: `enrichBriefingProductionCalendarPackTiles`, `resolveBriefingOverdueProductionHref`, updated briefing service + kitchen/manager/risk modules
+- Next: P0 proof unblock when ops credentials available, or Launch Wizard onboarding simplification
+
 ### KOS-E19-035 — Permission-denied UX on packing/production surfaces (P1 operator speed)
 - ID: `KOS-E19-035`
 - Title: Era 19 Workstream E Cycle 35 — standard PermissionDeniedSurfaceCard on packing + production routes

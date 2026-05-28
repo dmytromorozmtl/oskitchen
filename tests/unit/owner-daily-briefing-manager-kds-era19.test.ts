@@ -114,6 +114,18 @@ describe("buildOwnerDailyBriefingManagerKdsActions", () => {
     expect(actions.some((action) => action.id === "manager-packing-kds-handoff")).toBe(false);
   });
 
+  it("deep-links overdue production action to calendar drill anchor", () => {
+    const actions = buildOwnerDailyBriefingManagerKdsActions({
+      kdsOrders: [freshPrep],
+      productionCalendarOverdue: 3,
+      productionCalendarDueToday: 0,
+      packingQueueOpen: 0,
+      productionWorkOpen: 0,
+    });
+    const overdue = actions.find((action) => action.id === "manager-overdue-production");
+    expect(overdue?.href).toContain("#production-calendar-drill");
+  });
+
   it("returns no priority action when queue is steady", () => {
     const actions = buildOwnerDailyBriefingManagerKdsActions({
       kdsOrders: [freshPrep],

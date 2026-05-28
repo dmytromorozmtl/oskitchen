@@ -4,9 +4,11 @@ import {
   buildOwnerDailyBriefingProductionCalendarSlice,
   buildProductionCalendarBriefingHref,
   buildProductionCalendarBriefingTile,
+  enrichBriefingProductionCalendarPackTiles,
   OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_POLICY_ID,
   productionCalendarActionsForBriefing,
   productionCalendarAlertsForBriefing,
+  resolveBriefingOverdueProductionHref,
 } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
 import { buildOwnerDailyBriefingTiles } from "@/lib/briefing/owner-daily-briefing-era19";
 
@@ -66,7 +68,8 @@ describe("owner daily briefing production calendar era19", () => {
       tasks: [task({ planDate: "2026-05-26" })],
       today: new Date("2026-05-28T12:00:00"),
     });
-    const tiles = buildOwnerDailyBriefingTiles({
+    const tiles = enrichBriefingProductionCalendarPackTiles(
+      buildOwnerDailyBriefingTiles({
       kpis: {
         ordersToday: 0,
         ordersDueToday: 0,
@@ -107,8 +110,12 @@ describe("owner daily briefing production calendar era19", () => {
         calendarHref: slice.calendarHref,
         primaryHref: slice.attentionItems[0]?.href ?? slice.calendarHref,
       },
-    });
-    expect(tiles.some((row) => row.id === "production-calendar-today")).toBe(true);
+      }),
+      slice,
+    );
+    const calendarTile = tiles.find((row) => row.id === "production-calendar-today");
+    expect(calendarTile).toBeTruthy();
+    expect(calendarTile?.href).toContain("#production-calendar-drill");
 
     const alerts = productionCalendarAlertsForBriefing(slice);
     expect(alerts.some((row) => row.id === "production-calendar-overdue-batches")).toBe(true);
@@ -122,5 +129,17 @@ describe("owner daily briefing production calendar era19", () => {
     const href = buildProductionCalendarBriefingHref(new Date("2026-05-28T12:00:00"));
     expect(href).toContain("week=2026-05-25");
     expect(href).toContain("#day-2026-05-28");
+  });
+
+  it("resolves overdue production href to operator drill anchor", () => {
+    expect(
+      resolveBriefingOverdueProductionHref({ overdue: 2 }).includes("#production-calendar-drill"),
+    ).toBe(true);
+    expect(
+      resolveBriefingOverdueProductionHref({
+        overdue: 0,
+        calendarHref: "/dashboard/production/calendar?week=2026-05-25",
+      }),
+    ).toBe("/dashboard/production/calendar?week=2026-05-25");
   });
 });

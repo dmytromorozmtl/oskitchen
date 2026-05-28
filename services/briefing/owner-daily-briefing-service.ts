@@ -21,6 +21,7 @@ import {
 } from "@/lib/briefing/owner-daily-briefing-pilot-readiness-era19";
 import {
   buildOwnerDailyBriefingProductionCalendarSlice,
+  enrichBriefingProductionCalendarPackTiles,
   mapProductionPlanTasksToFocusTasks,
   productionCalendarActionsForBriefing,
   productionCalendarAlertsForBriefing,
@@ -356,7 +357,10 @@ export async function loadOwnerDailyBriefing(
           errorIntegrations: today.kpis.errorIntegrations,
           commercialOps,
         })
-      : buildOwnerDailyBriefingTiles(briefingInput);
+      : enrichBriefingProductionCalendarPackTiles(
+          buildOwnerDailyBriefingTiles(briefingInput),
+          productionCalendarSlice,
+        );
   const allTiles =
     rolePack === "cashier"
       ? enrichBriefingCashierManagerOverridePackTiles(
