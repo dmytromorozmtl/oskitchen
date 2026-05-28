@@ -2,9 +2,15 @@ import Link from "next/link";
 
 import { resolveGoLiveBlockerRowNextAction } from "@/lib/go-live/go-live-focus-era18";
 import type { LaunchBlocker } from "@/lib/go-live/blocker-engine";
+import type { ChannelPilotLiveProofSlice } from "@/lib/integrations/integration-health-live-proof-focus-era18";
 
-export function GoLiveBlockerNextAction(props: { blocker: LaunchBlocker }) {
-  const action = resolveGoLiveBlockerRowNextAction(props.blocker);
+export function GoLiveBlockerNextAction(props: {
+  blocker: LaunchBlocker;
+  channelPilotLiveProofSlices?: readonly ChannelPilotLiveProofSlice[];
+}) {
+  const action = resolveGoLiveBlockerRowNextAction(props.blocker, {
+    channelPilotLiveProofSlices: props.channelPilotLiveProofSlices,
+  });
 
   if (!action) {
     return <span className="text-muted-foreground">—</span>;

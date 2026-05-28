@@ -1,5 +1,6 @@
 import type { GoLiveBlockerSeverity, GoLiveLaunchStage } from "@prisma/client";
 
+import { detectGoLiveChannelPilotBlockers } from "@/lib/go-live/go-live-channel-pilot-focus-era18";
 import { detectGoLiveSsoPilotBlocker } from "@/lib/go-live/go-live-sso-pilot-focus-era18";
 import type { ReadinessInputs } from "@/lib/go-live/readiness-engine";
 
@@ -272,6 +273,8 @@ export function detectBlockers(inputs: ReadinessInputs): LaunchBlocker[] {
   if (ssoPilotBlocker) {
     blockers.push(ssoPilotBlocker);
   }
+
+  blockers.push(...detectGoLiveChannelPilotBlockers(inputs));
 
   return blockers;
 }

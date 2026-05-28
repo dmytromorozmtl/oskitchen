@@ -18,6 +18,7 @@ import { prisma } from "@/lib/prisma";
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { summariseImplementationExternalCertification } from "@/lib/implementation/external-integration-certification";
 import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
+import { listChannelPilotLiveProofSlices } from "@/services/developer/integration-health-service";
 import { kitchenCustomerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
 import { printedLabelListWhereForOwner } from "@/lib/scope/workspace-printed-label-scope";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
@@ -245,9 +246,12 @@ export async function loadReadinessInputs(
   const billingSnap = await loadBillingReadinessSnapshot(userId);
 
   const workspaceId = await resolveOwnerWorkspaceId(userId);
-  const ssoView = workspaceId
-    ? await getWorkspaceSsoAdminView({ workspaceId, ownerUserId: userId })
-    : null;
+  const [ssoView, channelPilotLiveProofSlices] = await Promise.all([
+    workspaceId
+      ? getWorkspaceSsoAdminView({ workspaceId, ownerUserId: userId })
+      : Promise.resolve(null),
+    listChannelPilotLiveProofSlices(userId),
+  ]);
 
   return {
     hasBusinessProfile,
@@ -301,6 +305,7 @@ export async function loadReadinessInputs(
     ssoOidcEntitlementEnabled: ssoView?.ssoEntitlementEnabled ?? false,
     ssoPilotConfigured: ssoView?.configured ?? false,
     ssoPilotActive: ssoView?.active ?? false,
+    channelPilotLiveProofSlices,
   };
 }
 

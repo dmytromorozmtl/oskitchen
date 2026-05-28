@@ -1,6 +1,10 @@
 import type { BusinessType, GoLiveLaunchStage } from "@prisma/client";
 
+import { channelPilotLiveProofSetupHref } from "@/lib/integrations/integration-health-live-proof-focus-era18";
+import type { ChannelPilotLiveProofSlice } from "@/lib/integrations/integration-health-live-proof-focus-era18";
+import { connectedChannelPilotSlices } from "@/lib/go-live/go-live-channel-pilot-focus-era18";
 import { goLiveSsoPilotActionRoute } from "@/lib/go-live/go-live-sso-pilot-focus-era18";
+import { INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR } from "@/lib/integrations/integration-health-live-proof-focus-era18-policy";
 
 export type ReadinessSignal = {
   /** Stable key for the signal. */
@@ -79,6 +83,8 @@ export type ReadinessInputs = {
   ssoOidcEntitlementEnabled?: boolean;
   ssoPilotConfigured?: boolean;
   ssoPilotActive?: boolean;
+  /** Woo/Shopify pilot live proof slices for connected channels. */
+  channelPilotLiveProofSlices?: readonly ChannelPilotLiveProofSlice[];
 };
 
 /** Per-business-type weights applied multiplicatively to the base weight. */
@@ -119,6 +125,7 @@ export const CATEGORY_OF_SIGNAL: Record<string, string> = {
   storefront_published: "storefront",
   webhooks_healthy: "integrations",
   external_integrations_certified: "integrations",
+  channel_pilot_in_app_ready: "integrations",
   sso_pilot_active: "staffing",
   approvals: "ownership",
   training_coverage: "staffing",
@@ -132,6 +139,18 @@ export const CATEGORY_OF_SIGNAL: Record<string, string> = {
   billing_plan_active: "billing",
   billing_customer_present: "billing",
 };
+
+function goLiveChannelPilotReadinessActionRoute(
+  slices: readonly ChannelPilotLiveProofSlice[],
+): string {
+  const incomplete = connectedChannelPilotSlices(slices).find((slice) => !slice.progress.pilotReady);
+  if (!incomplete) {
+    return `/dashboard/integration-health${INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR}`;
+  }
+
+  const step = incomplete.progress.currentStepId ?? "save_credentials";
+  return channelPilotLiveProofSetupHref(incomplete.provider, step);
+}
 
 export function buildReadinessSignals(inputs: ReadinessInputs): ReadinessSignal[] {
   return [
@@ -414,6 +433,31 @@ export function buildReadinessSignals(inputs: ReadinessInputs): ReadinessSignal[
             ? "Live-capable external providers have health-check and sync/webhook evidence."
             : "No live-capable external integrations currently require certification.",
     },
+    ...(connectedChannelPilotSlices(inputs.channelPilotLiveProofSlices).length > 0
+      ? [
+          {
+            key: "channel_pilot_in_app_ready",
+            label: "Connected channel pilots in-app ready",
+            stage: "CHANNEL_INTEGRATIONS" as const,
+            value: connectedChannelPilotSlices(inputs.channelPilotLiveProofSlices).every(
+              (slice) => slice.progress.pilotReady,
+            ),
+            satisfied: connectedChannelPilotSlices(inputs.channelPilotLiveProofSlices).every(
+              (slice) => slice.progress.pilotReady,
+            ),
+            required: true,
+            weight: 3,
+            actionRoute: goLiveChannelPilotReadinessActionRoute(
+              inputs.channelPilotLiveProofSlices ?? [],
+            ),
+            reason: connectedChannelPilotSlices(inputs.channelPilotLiveProofSlices).some(
+              (slice) => !slice.progress.pilotReady,
+            )
+              ? "Finish the Woo/Shopify pilot wizard for connected channels."
+              : null,
+          },
+        ]
+      : []),
     ...(inputs.ssoOidcEntitlementEnabled
       ? [
           {

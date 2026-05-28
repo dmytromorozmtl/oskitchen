@@ -200,7 +200,10 @@ export default async function GoLiveProjectPage({ params }: PageProps) {
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <BlockerSeverityBadge severity={b.severity} />
-                      <GoLiveBlockerNextAction blocker={b} />
+                      <GoLiveBlockerNextAction
+                        blocker={b}
+                        channelPilotLiveProofSlices={snapshot.inputs.channelPilotLiveProofSlices}
+                      />
                     </div>
                   </div>
                 </li>

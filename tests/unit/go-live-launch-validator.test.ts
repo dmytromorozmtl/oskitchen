@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { validateLaunch } from "@/lib/go-live/launch-validator";
 import type { ReadinessInputs } from "@/lib/go-live/readiness-engine";
+import { evaluateChannelPilotSetupProgress } from "@/lib/integrations/channel-pilot-setup-wizard-steps";
 
 function baseInputs(): ReadinessInputs {
   return {
@@ -122,5 +123,48 @@ describe("go-live launch validator", () => {
     expect(report.canApprove).toBe(false);
     expect(report.blockers.some((blocker) => blocker.key === "sso_pilot_incomplete")).toBe(true);
     expect(report.readiness.required.missing.some((signal) => signal.key === "sso_pilot_active")).toBe(true);
+  });
+
+  it("blocks approval when connected Woo pilot wizard is incomplete", () => {
+    const progress = evaluateChannelPilotSetupProgress({
+      provider: "woocommerce",
+      hasConnection: true,
+      hasCredentials: true,
+      hasWebhookSecret: true,
+      hasStoreIdentity: true,
+      certification: null,
+    });
+
+    const report = validateLaunch(
+      {
+        ...baseInputs(),
+        channelPilotLiveProofSlices: [
+          {
+            provider: "WOOCOMMERCE",
+            card: {
+              id: "c1",
+              provider: "WOOCOMMERCE",
+              name: "Pilot Woo",
+              status: "CONNECTED",
+              lastSyncAt: new Date("2026-05-28T11:00:00.000Z"),
+              lastError: null,
+              hasWebhookSecret: true,
+            },
+            progress,
+            operatorStatus: "wizard_incomplete",
+          },
+        ],
+      },
+      "GHOST_KITCHEN",
+      "IN_PROGRESS",
+    );
+
+    expect(report.canApprove).toBe(false);
+    expect(
+      report.blockers.some((blocker) => blocker.key === "channel_pilot_incomplete_woocommerce"),
+    ).toBe(true);
+    expect(
+      report.readiness.required.missing.some((signal) => signal.key === "channel_pilot_in_app_ready"),
+    ).toBe(true);
   });
 });

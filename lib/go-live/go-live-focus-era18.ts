@@ -3,8 +3,13 @@ import {
   rankSeverity,
   type LaunchBlocker,
 } from "@/lib/go-live/blocker-engine";
+import {
+  resolveGoLiveChannelPilotBlockerRowNextAction,
+  resolveGoLiveExternalIntegrationsBlockerRowNextAction,
+} from "@/lib/go-live/go-live-channel-pilot-focus-era18";
 import { resolveGoLiveSsoPilotBlockerRowNextAction } from "@/lib/go-live/go-live-sso-pilot-focus-era18";
 import type { ValidationReport } from "@/lib/go-live/launch-validator";
+import type { ChannelPilotLiveProofSlice } from "@/lib/integrations/integration-health-live-proof-focus-era18";
 
 export type GoLiveFocusSnapshot = {
   criticalBlockerCount: number;
@@ -333,11 +338,23 @@ export function pickGoLiveLegacyAttentionItems(
 /** Row-level next action for launch blocker lists. */
 export function resolveGoLiveBlockerRowNextAction(
   blocker: LaunchBlocker,
+  context?: {
+    channelPilotLiveProofSlices?: readonly ChannelPilotLiveProofSlice[];
+  },
 ): GoLiveBlockerRowNextAction | null {
   if (!blocker.actionRoute) return null;
 
   const ssoPilotAction = resolveGoLiveSsoPilotBlockerRowNextAction(blocker);
   if (ssoPilotAction) return ssoPilotAction;
+
+  const channelPilotAction = resolveGoLiveChannelPilotBlockerRowNextAction(blocker);
+  if (channelPilotAction) return channelPilotAction;
+
+  const externalIntegrationsAction = resolveGoLiveExternalIntegrationsBlockerRowNextAction(
+    blocker,
+    context?.channelPilotLiveProofSlices,
+  );
+  if (externalIntegrationsAction) return externalIntegrationsAction;
 
   if (blocker.severity === "CRITICAL") {
     return { label: "Fix blocker", href: blocker.actionRoute, tone: "urgent" };
