@@ -39,6 +39,7 @@ export const BRIEFING_ROLE_PACK_TILE_IDS: Record<BriefingRolePack, readonly stri
     "low-stock",
   ],
   kitchen: [
+    "kds-priority-lane",
     "kds-pressure",
     "production-priorities",
     "production-calendar-today",

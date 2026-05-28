@@ -24,6 +24,7 @@ export function KdsPriorityLaneStrip(props: { items: readonly KdsPriorityLaneIte
 
   return (
     <Card
+      id="kds-priority-lane-strip"
       className="border-violet-200/80 bg-violet-50/30 shadow-sm dark:border-violet-900/40 dark:bg-violet-950/20"
       data-testid="kds-priority-lane-strip"
     >

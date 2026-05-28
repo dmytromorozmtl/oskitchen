@@ -18,3 +18,10 @@ export const KDS_PRIORITY_LANE_ERA19_EXTENDS_POLICIES = [
 ] as const;
 
 export const KDS_PRIORITY_LANE_MAX_ITEMS = 3 as const;
+
+export const KDS_PRIORITY_LANE_ANCHOR = "kds-priority-lane-strip" as const;
+
+export const KDS_KITCHEN_ROUTE = "/dashboard/kitchen" as const;
+
+export const BRIEFING_KDS_PRIORITY_LANE_HREF =
+  `${KDS_KITCHEN_ROUTE}#${KDS_PRIORITY_LANE_ANCHOR}` as const;

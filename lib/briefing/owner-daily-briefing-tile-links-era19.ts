@@ -1,4 +1,5 @@
 import { BRIEFING_CASHIER_POS_SPEED_TERMINAL_HREF } from "@/lib/briefing/owner-daily-briefing-cashier-era19";
+import { BRIEFING_KDS_PRIORITY_LANE_HREF } from "@/lib/kitchen/kds-priority-lane-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { BriefingRolePack } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import type {
@@ -33,6 +34,12 @@ export const BRIEFING_TILE_LINK_DEFINITIONS: Record<string, BriefingTileLinkDefi
     href: "/dashboard/kitchen",
     whyItMatters: "Kitchen queue depth predicts ticket delays and missed handoffs to packing.",
     rolePacks: ["owner", "manager", "kitchen"],
+  },
+  "kds-priority-lane": {
+    href: BRIEFING_KDS_PRIORITY_LANE_HREF,
+    whyItMatters:
+      "Allergy alerts and overdue tickets must bump first — the priority lane shows the exact queue order.",
+    rolePacks: ["kitchen"],
   },
   "production-priorities": {
     href: "/dashboard/production",
@@ -142,6 +149,9 @@ export function resolveBriefingTileCanonicalHref(
     return fallbackHref;
   }
   if (tileId === "pos-terminal-register") {
+    return fallbackHref;
+  }
+  if (tileId === "kds-priority-lane") {
     return fallbackHref;
   }
   return briefingTileLinkDefinition(tileId)?.href ?? fallbackHref;

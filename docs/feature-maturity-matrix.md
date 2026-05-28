@@ -48,6 +48,7 @@ Interpretation rule:
 - **Era 19 Cycle 18 (2026-05-28):** Briefing cashier pack speed mode — `era19-owner-daily-briefing-cashier-v1`; POS register tile + cashier-ranked actions deep-link to speed terminal when shift open; shift closeout guidance.
 - **Era 19 Cycle 19 (2026-05-28):** POS shift closeout clarity — `era19-pos-shift-close-clarity-v1`; 4-step closeout checklist, end-of-shift hero, close-first layout, sticky mobile submit on shifts page.
 - **Era 19 Cycle 20 (2026-05-28):** Owner Today ↔ Launch Wizard cross-link — `era19-launch-wizard-today-strip-v1` + `era19-owner-daily-briefing-launch-wizard-v1`; commercial unblock in owner top actions; setup-only Today strip when briefing owns blockers.
+- **Era 19 Cycle 24 (2026-05-28):** Briefing kitchen pack priority lane — `era19-owner-daily-briefing-kitchen-v1`; kitchen tile + top actions deep-link to KDS priority lane from real queue data.
 - **Era 19 Cycle 23 (2026-05-28):** KDS priority lane — `era19-kds-priority-lane-v1`; allergen + overdue scoring for prep/expo columns; top-3 priority lane strip.
 - **Era 19 Cycle 22 (2026-05-28):** Briefing smoke action cross-link — `era19-owner-daily-briefing-smoke-action-v1`; risk radar + top actions wire Integration Health next smoke script anchor; P0/live smoke signal enrichment.
 - **Era 19 Cycle 21 (2026-05-28):** Integration Health smoke artifact depth — `era19-integration-health-smoke-artifacts-depth-v1`; P0 child proofs, GitHub run links, deduped missing env vars, next smoke action hero.
