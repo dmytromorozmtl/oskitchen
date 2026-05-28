@@ -1,5 +1,11 @@
 import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/pilot-gono-go-era17-policy";
+import { TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import type { ChannelLiveSmokeSummary } from "@/lib/integrations/channel-live-smoke-summary";
 import {
   buildIntegrationHealthChannelCardsModel,
@@ -48,6 +54,10 @@ export async function loadIntegrationHealthChannelCardsModel(
     apiKeysActive,
     channelSmoke,
     p0Staging,
+    tier2Staging,
+    goNoGoSummary,
+    metricsBaseline,
+    caseStudyDraft,
     ssoView,
   ] = await Promise.all([
     listIntegrationHealthCards(userId),
@@ -64,6 +74,20 @@ export async function loadIntegrationHealthChannelCardsModel(
     Promise.resolve(
       readJsonArtifact<P0StagingProofUnblockSummary>(
         INTEGRATION_HEALTH_SMOKE_ARTIFACT_PATHS.p0Staging,
+      ),
+    ),
+    Promise.resolve(
+      readJsonArtifact<Tier2StagingGoldenPathSummary>(TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT),
+    ),
+    Promise.resolve(readJsonArtifact<PilotGoNoGoSummary>(PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT)),
+    Promise.resolve(
+      readJsonArtifact<PilotMetricsBaselineSummary>(
+        "artifacts/pilot-metrics-baseline-summary.json",
+      ),
+    ),
+    Promise.resolve(
+      readJsonArtifact<PilotCaseStudyDraftSummary>(
+        "artifacts/pilot-case-study-draft-summary.json",
       ),
     ),
     workspaceId
@@ -95,5 +119,9 @@ export async function loadIntegrationHealthChannelCardsModel(
       : null,
   });
 
-  return enrichIntegrationHealthChannelCardsWithTrustLayer(base, p0Staging);
+  return enrichIntegrationHealthChannelCardsWithTrustLayer(base, p0Staging, tier2Staging, {
+    goNoGoSummary,
+    metricsBaseline,
+    caseStudyDraft,
+  });
 }

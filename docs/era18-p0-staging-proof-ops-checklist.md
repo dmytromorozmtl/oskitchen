@@ -72,6 +72,7 @@ Set in **ops vault** + local shell and/or **GitHub Actions secrets** (never comm
 - SSO (vars 4–8): [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md)
 - Staging workflows (vars 1–3): [`GITHUB_E2E_STAGING_SECRETS.md`](./GITHUB_E2E_STAGING_SECRETS.md)
 - Channel live (vars 9–11): [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) § Era 17 channel live smoke
+- **Full step-by-step playbook:** [`p0-ops-vault-execution-playbook-2026-05-28.md`](./p0-ops-vault-execution-playbook-2026-05-28.md)
 
 ---
 

@@ -1,0 +1,33 @@
+# P0 ops vault env validation — workflow_dispatch only (no fake PASS).
+# Validates which GitHub Secrets are configured without printing values.
+
+name: P0 Ops Vault Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-p0-vault-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate P0 ops vault env (JSON summary)
+        run: npm run ops:validate-p0-vault-env -- --json
+        env:
+          E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+          E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+          E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          CHANNEL_SMOKE_OWNER_EMAIL: ${{ secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+          SSO_STAGING_WORKSPACE_ID: ${{ secrets.SSO_STAGING_WORKSPACE_ID }}
+          SSO_STAGING_IDP_VENDOR: ${{ secrets.SSO_STAGING_IDP_VENDOR }}
+          SSO_STAGING_ALLOWED_DOMAIN: ${{ secrets.SSO_STAGING_ALLOWED_DOMAIN }}
+          SSO_STAGING_TEST_EMAIL: ${{ secrets.SSO_STAGING_TEST_EMAIL }}
+          SSO_STAGING_SUPABASE_PROVIDER_REF: ${{ secrets.SSO_STAGING_SUPABASE_PROVIDER_REF }}

@@ -1,5 +1,6 @@
 import { LoyaltyRulesForm } from "@/components/customers/loyalty-rules-form";
 import { LoyaltyTransactionHistory } from "@/components/customers/loyalty-transaction-history";
+import { PolicyLockedHonestyBanner } from "@/components/dashboard/policy-locked-honesty-banner";
 import { requireLoyaltyPageAccess } from "@/lib/crm/rewards-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
@@ -36,10 +37,12 @@ export default async function CustomerLoyaltyPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
+      <PolicyLockedHonestyBanner variant="rewards_dual_ledger" />
       <div>
         <h1 className="text-2xl font-semibold">Loyalty program</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Configure how customers earn and redeem points on POS and storefront orders.
+          Configure kitchen-ledger loyalty for POS checkout. Storefront uses a separate ledger — not
+          interchangeable with POS codes until unified rewards ship in a future era.
         </p>
       </div>
 

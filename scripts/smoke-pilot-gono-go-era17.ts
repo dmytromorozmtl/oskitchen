@@ -19,6 +19,8 @@ import type {
   PilotMetricsBaselineGoNoGoArtifact,
   PilotRollbackDrillGoNoGoArtifact,
 } from "../lib/commercial/era20-pilot-execution-readiness";
+import { TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT } from "../lib/commercial/tier2-staging-golden-path-era20-policy";
+import type { Tier2StagingGoldenPathSummary } from "../lib/commercial/tier2-staging-golden-path-summary";
 import {
   buildPilotGoNoGoSummary,
   formatPilotGoNoGoReportLines,
@@ -106,9 +108,14 @@ ${PILOT_GONOGO_ERA17_INPUT_ARTIFACTS.map((path) => `  - ${path}`).join("\n")}
     "artifacts/pilot-rollback-drill-summary.json",
   );
 
+  const tier2StagingGoldenPath = loadArtifact<Tier2StagingGoldenPathSummary>(
+    TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT,
+  );
+
   const summary = buildPilotGoNoGoSummary({
     preflight,
     goldenPath,
+    tier2StagingGoldenPath,
     forbiddenClaimsEnforcement,
     p0StagingProof,
     ssoPilotReadyGate,

@@ -26,10 +26,11 @@ export type LaunchWizardCommercialSetupSlice = {
 const COMMERCIAL_BLOCKER_PRIORITY: Record<string, number> = {
   "gono-go-no-go": 1,
   "p0-staging-blocked": 2,
-  "channel-live-proof-blocked": 3,
-  "sso-proof-blocked": 4,
-  "pilot-customer-missing": 5,
-  "gono-go-artifact-missing": 6,
+  "tier2-staging-blocked": 3,
+  "channel-live-proof-blocked": 4,
+  "sso-proof-blocked": 5,
+  "pilot-customer-missing": 6,
+  "gono-go-artifact-missing": 7,
 };
 
 function blockerPriority(id: string): number {

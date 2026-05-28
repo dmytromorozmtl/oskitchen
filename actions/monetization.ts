@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { randomBytes } from "crypto";
 
 import { hashApiKey } from "@/lib/api-public/auth";
+import { isDeveloperApiScope, serializeApiKeyScopes } from "@/lib/api-public/public-api-scopes";
+import { DEVELOPER_API_SCOPES } from "@/lib/developer/api-scopes";
 import { requireBillingActor } from "@/lib/billing/require-billing-actor";
 import { isBillingBypassed } from "@/lib/billing/dev-bypass";
 import { getBillingAccess } from "@/lib/billing/access";
@@ -129,6 +131,15 @@ export async function createApiKeyForm(
     const name = String(formData.get("name") ?? "").trim().slice(0, 120);
     if (!name) return { error: "Name required." };
 
+    const scopeValues = formData.getAll("scopes");
+    const scopes = scopeValues.filter(isDeveloperApiScope);
+    const scopesJson =
+      scopes.length > 0 && scopes.length < DEVELOPER_API_SCOPES.length
+        ? serializeApiKeyScopes(scopes)
+        : scopes.length === DEVELOPER_API_SCOPES.length
+          ? serializeApiKeyScopes(scopes)
+          : null;
+
     const raw = `kos_${randomBytes(24).toString("base64url")}`;
     const prefix = raw.slice(0, 12);
     const keyHash = hashApiKey(raw);
@@ -139,6 +150,7 @@ export async function createApiKeyForm(
         name,
         keyHash,
         prefix,
+        scopesJson,
       },
     });
 

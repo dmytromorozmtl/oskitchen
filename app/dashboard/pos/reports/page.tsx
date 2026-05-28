@@ -1,4 +1,5 @@
 import React from "react";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -9,14 +10,7 @@ import { prisma } from "@/lib/prisma";
 export default async function PosReportsPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
-    return (
-      <PosAccessCard
-        title="POS reports"
-        description="You do not have permission to view POS reports."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   const gate = await canUseFeature(actor.userId, "pos_reports");

@@ -11,6 +11,7 @@ import {
   IMPLEMENTATION_GO_LIVE_ROUTE,
 } from "@/lib/implementation/implementation-pilot-readiness-focus-era18-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { P0_OPS_VAULT_INTEGRATION_HEALTH_ANCHOR } from "@/lib/commercial/p0-ops-vault-ui-era21";
 import type { GettingStartedPilotSsoFocus } from "@/lib/onboarding/getting-started-pilot-sso-era18";
 
 export const OWNER_DAILY_BRIEFING_PILOT_READINESS_ERA19_POLICY_ID =
@@ -97,10 +98,31 @@ function commercialOpsLaneItems(
       title: `P0 staging proof — ${p0.p0ProofStatus.replaceAll("_", " ")}`,
       detail:
         p0.allMissingEnvVars.length > 0
-          ? `${p0.allMissingEnvVars.length} ops env var(s) missing — engineering proof still blocked.`
+          ? `${p0.allMissingEnvVars.length} ops env var(s) missing — configure ops vault phases 1–4.`
           : "SSO IdP, GitHub first-green, or channel live smoke incomplete.",
-      href: "/dashboard/integration-health#engineering-smoke-artifacts",
+      href: `/dashboard/integration-health${P0_OPS_VAULT_INTEGRATION_HEALTH_ANCHOR}`,
       tone: "urgent",
+      category: "commercial",
+    });
+  }
+
+  const tier2 = ops.tier2Staging.summary;
+  if (tier2 && tier2.tier2ProofStatus !== "proof_passed" && p0?.p0ProofStatus === "proof_passed") {
+    items.push({
+      id: "commercial-tier2-golden-path",
+      title: `Tier 2 golden path — ${tier2.tier2ProofStatus.replaceAll("_", " ")}`,
+      detail: "Execute Woo → Order Hub → KDS → Packing on staging. See tier2 playbook.",
+      href: LAUNCH_WIZARD_ROUTE,
+      tone: "urgent",
+      category: "commercial",
+    });
+  } else if (tier2?.tier2ProofStatus === "proof_passed") {
+    items.push({
+      id: "commercial-tier2-passed",
+      title: "Tier 2 staging golden path — proof passed",
+      detail: "Eligible for ICP + LOI + smoke:pilot-gono-go.",
+      href: LAUNCH_WIZARD_ROUTE,
+      tone: "normal",
       category: "commercial",
     });
   }

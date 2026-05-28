@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { PolicyLockedHonestyBanner } from "@/components/dashboard/policy-locked-honesty-banner";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import {
   hasInventoryOperationsPageAccess,
@@ -13,5 +14,10 @@ export default async function InventorySectionLayout(props: { children: ReactNod
     return <PermissionDeniedSurfaceCard surfaceId="inventory_operations" />;
   }
 
-  return props.children;
+  return (
+    <div className="space-y-4">
+      <PolicyLockedHonestyBanner variant="inventory_pos_only" />
+      {props.children}
+    </div>
+  );
 }

@@ -46,6 +46,43 @@ import {
   type LaunchWizardProductionGradeSnapshot,
 } from "@/lib/launch-wizard/launch-wizard-production-grade-era20";
 import { LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID } from "@/lib/launch-wizard/launch-wizard-production-grade-era20-policy";
+import {
+  buildLaunchWizardTier2StatusSlice,
+  type LaunchWizardTier2StatusSlice,
+} from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
+import {
+  buildCommercialGoClosureUiSlice,
+  type CommercialGoClosureUiSlice,
+} from "@/lib/commercial/commercial-go-closure-ui-era21";
+import {
+  buildPilotWeek1ExecutionUiSlice,
+  type PilotWeek1ExecutionUiSlice,
+} from "@/lib/commercial/pilot-week1-execution-ui-era21";
+import {
+  buildMonth2MarketReadinessUiSlice,
+  type Month2MarketReadinessUiSlice,
+} from "@/lib/commercial/month2-market-readiness-ui-era21";
+import {
+  buildScaleReadinessUiSlice,
+  type ScaleReadinessUiSlice,
+} from "@/lib/commercial/scale-readiness-ui-era21";
+import {
+  buildSeriesAPartnerExpansionUiSlice,
+  type SeriesAPartnerExpansionUiSlice,
+} from "@/lib/commercial/series-a-partner-expansion-ui-era21";
+import {
+  buildMarketLeaderPositioningUiSlice,
+  type MarketLeaderPositioningUiSlice,
+} from "@/lib/commercial/market-leader-positioning-ui-era21";
+import {
+  buildSustainedOperationalExcellenceUiSlice,
+  type SustainedOperationalExcellenceUiSlice,
+} from "@/lib/commercial/sustained-operational-excellence-ui-era21";
+import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
+import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
+import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
+import { readMarketLeaderPositioningArtifacts } from "@/scripts/ops/validate-market-leader-positioning-env";
+import { readSustainedOperationalExcellenceArtifacts } from "@/scripts/ops/validate-sustained-operational-excellence-env";
 
 export type LaunchWizardModel = {
   policyId: typeof LAUNCH_WIZARD_ERA19_POLICY_ID;
@@ -58,6 +95,14 @@ export type LaunchWizardModel = {
   commercialBlockers: LaunchWizardCommercialBlockersSlice;
   commercialSetup: LaunchWizardCommercialSetupSlice;
   productionGrade: LaunchWizardProductionGradeSnapshot;
+  tier2Status: LaunchWizardTier2StatusSlice;
+  commercialGoClosure: CommercialGoClosureUiSlice | null;
+  pilotWeek1: PilotWeek1ExecutionUiSlice | null;
+  month2MarketReadiness: Month2MarketReadinessUiSlice | null;
+  scaleReadiness: ScaleReadinessUiSlice | null;
+  seriesAPartnerExpansion: SeriesAPartnerExpansionUiSlice | null;
+  marketLeaderPositioning: MarketLeaderPositioningUiSlice | null;
+  sustainedOperationalExcellence: SustainedOperationalExcellenceUiSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -249,6 +294,131 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     p0: p0Summary,
   });
 
+  const tier2Status = buildLaunchWizardTier2StatusSlice({
+    tier2Summary: commercialOps?.tier2Staging.summary ?? null,
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+  });
+
+  const commercialGoClosure = buildCommercialGoClosureUiSlice({
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+  });
+  const pilotWeek1 = buildPilotWeek1ExecutionUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    metricsBaseline: null,
+    caseStudyDraft: null,
+  });
+  const month2Artifacts = readMonth2MarketReadinessArtifacts();
+  const month2MarketReadiness = buildMonth2MarketReadinessUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    metricsBaseline: month2Artifacts.metricsBaseline,
+    caseStudyDraft: month2Artifacts.caseStudyDraft,
+    investorOnepager: month2Artifacts.investorOnepager,
+  });
+  const scaleArtifacts = readScaleReadinessArtifacts();
+  const scaleReadiness = buildScaleReadinessUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0Staging: scaleArtifacts.p0Staging ?? p0Summary,
+    tier2Summary: scaleArtifacts.tier2Summary ?? commercialOps?.tier2Staging.summary ?? null,
+    metricsBaseline: scaleArtifacts.metricsBaseline ?? month2Artifacts.metricsBaseline,
+    caseStudyDraft: scaleArtifacts.caseStudyDraft ?? month2Artifacts.caseStudyDraft,
+    investorOnepager: scaleArtifacts.investorOnepager ?? month2Artifacts.investorOnepager,
+    rollbackDrill: scaleArtifacts.rollbackDrill,
+  });
+  const seriesAArtifacts = readSeriesAPartnerExpansionArtifacts();
+  const seriesAPartnerExpansion = buildSeriesAPartnerExpansionUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0Staging: seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0Summary,
+    tier2Summary:
+      seriesAArtifacts.tier2Summary ?? scaleArtifacts.tier2Summary ?? commercialOps?.tier2Staging.summary ?? null,
+    metricsBaseline:
+      seriesAArtifacts.metricsBaseline ?? scaleArtifacts.metricsBaseline ?? month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      seriesAArtifacts.caseStudyDraft ?? scaleArtifacts.caseStudyDraft ?? month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill: seriesAArtifacts.rollbackDrill ?? scaleArtifacts.rollbackDrill,
+    competitorMatrix: seriesAArtifacts.competitorMatrix,
+  });
+  const marketLeaderArtifacts = readMarketLeaderPositioningArtifacts();
+  const marketLeaderPositioning = buildMarketLeaderPositioningUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0Staging:
+      marketLeaderArtifacts.p0Staging ?? seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0Summary,
+    tier2Summary:
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      commercialOps?.tier2Staging.summary ??
+      null,
+    metricsBaseline:
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      marketLeaderArtifacts.rollbackDrill ?? seriesAArtifacts.rollbackDrill ?? scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      marketLeaderArtifacts.competitorMatrix ?? seriesAArtifacts.competitorMatrix,
+  });
+  const sustainedOpsArtifacts = readSustainedOperationalExcellenceArtifacts();
+  const sustainedOperationalExcellence = buildSustainedOperationalExcellenceUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0Staging:
+      sustainedOpsArtifacts.p0Staging ??
+      marketLeaderArtifacts.p0Staging ??
+      seriesAArtifacts.p0Staging ??
+      scaleArtifacts.p0Staging ??
+      p0Summary,
+    tier2Summary:
+      sustainedOpsArtifacts.tier2Summary ??
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      commercialOps?.tier2Staging.summary ??
+      null,
+    metricsBaseline:
+      sustainedOpsArtifacts.metricsBaseline ??
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      sustainedOpsArtifacts.caseStudyDraft ??
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      sustainedOpsArtifacts.investorOnepager ??
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      sustainedOpsArtifacts.rollbackDrill ??
+      marketLeaderArtifacts.rollbackDrill ??
+      seriesAArtifacts.rollbackDrill ??
+      scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      sustainedOpsArtifacts.competitorMatrix ??
+      marketLeaderArtifacts.competitorMatrix ??
+      seriesAArtifacts.competitorMatrix,
+  });
+
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
     productionGradePolicyId: LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID,
@@ -260,5 +430,13 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     commercialBlockers,
     commercialSetup,
     productionGrade,
+    tier2Status,
+    commercialGoClosure,
+    pilotWeek1,
+    month2MarketReadiness,
+    scaleReadiness,
+    seriesAPartnerExpansion,
+    marketLeaderPositioning,
+    sustainedOperationalExcellence,
   };
 }

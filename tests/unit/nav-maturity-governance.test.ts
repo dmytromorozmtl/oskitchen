@@ -62,7 +62,7 @@ describe("nav maturity governance", () => {
     ).toBe(true);
   });
 
-  it("filters placeholder links from default sidebar groups", () => {
+  it("filters placeholder and preview links from default sidebar groups", () => {
     const filtered = filterNavGroupsByMaturityGovernance(FINAL_NAVIGATION_GROUPS, {
       fullNavAccess: false,
       navScopeAll: false,
@@ -71,6 +71,40 @@ describe("nav maturity governance", () => {
     const hrefs = filtered.flatMap((g) => g.links.map((l) => l.href));
     expect(hrefs).not.toContain("/dashboard/integrations/doordash");
     expect(hrefs).not.toContain("/dashboard/integrations/grubhub");
-    expect(hrefs).toContain("/dashboard/pos/tabs");
+    expect(hrefs).not.toContain("/dashboard/pos/tabs");
+    expect(hrefs).not.toContain("/dashboard/copilot");
+    expect(hrefs).not.toContain("/dashboard/go-live");
+    expect(hrefs).toContain("/dashboard/launch-wizard");
+  });
+
+  it("shows go-live when navScopeAll is enabled", () => {
+    const filtered = filterNavGroupsByMaturityGovernance(FINAL_NAVIGATION_GROUPS, {
+      fullNavAccess: false,
+      navScopeAll: true,
+      gtmSurfaceAccess: false,
+    });
+    const hrefs = filtered.flatMap((g) => g.links.map((l) => l.href));
+    expect(hrefs).toContain("/dashboard/go-live");
+  });
+
+  it("shows preview routes when navScopeAll is enabled", () => {
+    expect(
+      shouldShowNavLinkByMaturity("/dashboard/pos/tabs", {
+        fullNavAccess: false,
+        navScopeAll: true,
+        gtmSurfaceAccess: false,
+      }),
+    ).toBe(true);
+  });
+
+  it("hides go-live from default nav — Launch Wizard is primary entry", () => {
+    expect(getNavMaturityExposure("/dashboard/go-live")).toBe("hidden_default");
+    expect(
+      shouldShowNavLinkByMaturity("/dashboard/go-live", {
+        fullNavAccess: false,
+        navScopeAll: false,
+        gtmSurfaceAccess: false,
+      }),
+    ).toBe(false);
   });
 });

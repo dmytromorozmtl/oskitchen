@@ -1,5 +1,5 @@
 import React from "react";
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { TabPanel } from "@/components/pos/tab-panel";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
@@ -10,14 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function PosTabsPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
-    return (
-      <PosAccessCard
-        title="Bar & table tabs"
-        description="You do not have permission to access POS tab workflows."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   const tabs = await getOpenTabs(actor.userId);

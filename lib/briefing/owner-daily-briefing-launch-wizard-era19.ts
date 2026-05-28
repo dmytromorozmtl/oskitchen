@@ -15,6 +15,7 @@ function commercialUnblockSeverity(
   if (
     blockerId === "gono-go-no-go" ||
     blockerId === "p0-staging-blocked" ||
+    blockerId === "tier2-staging-blocked" ||
     blockerId === "gono-go-artifact-missing"
   ) {
     return "critical";
@@ -32,9 +33,10 @@ function commercialUnblockSeverity(
 function commercialUnblockPriority(blockerId: string): number {
   if (blockerId === "gono-go-no-go" || blockerId === "gono-go-artifact-missing") return 1;
   if (blockerId === "p0-staging-blocked") return 2;
-  if (blockerId === "channel-live-proof-blocked") return 3;
-  if (blockerId === "sso-proof-blocked") return 4;
-  if (blockerId === "pilot-customer-missing") return 5;
+  if (blockerId === "tier2-staging-blocked") return 3;
+  if (blockerId === "channel-live-proof-blocked") return 4;
+  if (blockerId === "sso-proof-blocked") return 5;
+  if (blockerId === "pilot-customer-missing") return 6;
   if (blockerId.startsWith("golive-")) return 6;
   return 10;
 }

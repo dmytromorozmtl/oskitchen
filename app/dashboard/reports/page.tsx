@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { ReportsHubNextActionsPanel } from "@/components/dashboard/reports-hub-next-actions-panel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   hasReportsHubPageAccess,
@@ -15,6 +16,8 @@ import {
   listSavedReports,
 } from "@/services/reports/report-service";
 import { listReportDefinitions } from "@/lib/reports/report-registry";
+import { buildReportsHubNextActionCards } from "@/lib/reports/reports-hub-next-actions-era21";
+import { hasPermission } from "@/lib/permissions/guards";
 
 export default async function ReportsCommandCenterPage() {
   const actor = await loadWorkspacePermissionPageActor();
@@ -45,6 +48,13 @@ export default async function ReportsCommandCenterPage() {
   const definitions = listReportDefinitions();
   const pinned = saved.filter((s) => s.pinned);
   const lastExport = exportHistory[0] ?? null;
+  const nextActionCards = buildReportsHubNextActionCards({
+    monthExports,
+    pinnedCount: pinned.length,
+    visibleReportCount: visible.length,
+    hasFinancialAccess: hasPermission(actor.granted, "reports.read.financial"),
+    hasOperationsAccess: hasPermission(actor.granted, "reports.read.operations"),
+  });
 
   return (
     <div className="space-y-6">
@@ -70,6 +80,8 @@ export default async function ReportsCommandCenterPage() {
           </Link>
         </div>
       </header>
+
+      <ReportsHubNextActionsPanel cards={nextActionCards} />
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <KpiCard label="Reports this month" value={monthExports.toLocaleString()} />

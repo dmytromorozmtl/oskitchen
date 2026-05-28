@@ -1,0 +1,45 @@
+/**
+ * Tier 2 golden path — Era 21 product + CLI wiring (post-P0 execution).
+ */
+
+import { TIER2_STAGING_GOLDEN_PATH_ERA20_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
+import { TIER2_GOLDEN_PATH_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-phases-era21";
+import { TIER2_GOLDEN_PATH_UI_ERA21_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-ui-era21";
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_POLICY_ID = "era21-tier2-golden-path-v1" as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_BACKLOG_ID = "KOS-E21-002" as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_EXTENDS_POLICIES = [
+  TIER2_STAGING_GOLDEN_PATH_ERA20_POLICY_ID,
+  TIER2_GOLDEN_PATH_PHASES_ERA21_POLICY_ID,
+  TIER2_GOLDEN_PATH_UI_ERA21_POLICY_ID,
+] as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_STEP2_DOC =
+  "docs/next-step-2-after-p0-pass-2026-05-28.md" as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_OPS_SCRIPTS = [
+  "ops:validate-tier2-golden-path-env",
+  "ops:export-tier2-golden-path-env-template",
+  "ops:sync-tier2-golden-path-progress-report",
+] as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_CI_SCRIPTS = [
+  "test:ci:tier2-golden-path-era21",
+  "test:ci:tier2-golden-path-era21:cert",
+] as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_UNIT_TESTS = [
+  "tests/unit/tier2-staging-golden-path-era20.test.ts",
+  "tests/unit/tier2-golden-path-ui-era21.test.ts",
+  "tests/unit/owner-daily-briefing-tier2-golden-path-era21.test.ts",
+  "tests/unit/tier2-golden-path-era21-cert-live.test.ts",
+] as const;
+
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_PRODUCT_SURFACES = [
+  "components/dashboard/tier2-golden-path-phases-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-tier2-status-panel.tsx",
+  "components/dashboard/owner-daily-briefing-hero.tsx",
+  "components/platform/commercial-pilot-ops-status-panel.tsx",
+] as const;

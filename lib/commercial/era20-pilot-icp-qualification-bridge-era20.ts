@@ -5,6 +5,7 @@
 import {
   ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_ENV_VAR,
   ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_POLICY_ID,
+  ERA20_PILOT_ICP_PROSPECT_DRAFT_TEMPLATE_PATH,
   ERA20_PILOT_ICP_QUALIFIED_EXAMPLE_TEMPLATE_PATH,
 } from "@/lib/commercial/era20-pilot-icp-qualification-bridge-era20-policy";
 import { ERA20_FIRST_PAID_PILOT_PACKAGE_PROSPECT_DISCLAIMER } from "@/lib/commercial/era20-first-paid-pilot-package-policy";
@@ -42,6 +43,7 @@ export type Era20PilotIcpQualificationBridgeSlice = {
   envConfigured: boolean;
   envVarName: typeof ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_ENV_VAR;
   templatePath: typeof ERA20_PILOT_ICP_QUALIFIED_EXAMPLE_TEMPLATE_PATH;
+  prospectDraftTemplatePath: typeof ERA20_PILOT_ICP_PROSPECT_DRAFT_TEMPLATE_PATH;
   setupCommand: string;
   liveQualification: PilotIcpQualificationResult;
   exampleQualification: PilotIcpQualificationResult;
@@ -89,6 +91,7 @@ export function buildEra20PilotIcpQualificationBridgeSlice(input: {
     envConfigured,
     envVarName: ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_ENV_VAR,
     templatePath: ERA20_PILOT_ICP_QUALIFIED_EXAMPLE_TEMPLATE_PATH,
+    prospectDraftTemplatePath: ERA20_PILOT_ICP_PROSPECT_DRAFT_TEMPLATE_PATH,
     setupCommand,
     liveQualification,
     exampleQualification,

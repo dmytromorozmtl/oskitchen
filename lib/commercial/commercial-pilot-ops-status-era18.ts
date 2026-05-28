@@ -8,6 +8,7 @@ import type {
   PilotGoNoGoEvidenceGate,
   PilotGoNoGoSummary,
 } from "@/lib/commercial/pilot-gono-go-summary";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 
 export type CommercialPilotOpsGoNoGoSlice = {
   artifactPresent: boolean;
@@ -23,6 +24,10 @@ export type CommercialPilotOpsStatusModel = {
   loadedAt: string;
   goNoGo: CommercialPilotOpsGoNoGoSlice;
   p0Staging: CommercialPilotOpsP0StagingSlice;
+  tier2Staging: {
+    artifactPresent: boolean;
+    summary: Tier2StagingGoldenPathSummary | null;
+  };
 };
 
 export type CommercialPilotOpsDecision =
@@ -72,12 +77,17 @@ export function formatCommercialPilotOpsDecisionLabel(
 export function buildCommercialPilotOpsStatusModel(input: {
   goNoGo: CommercialPilotOpsGoNoGoSlice;
   p0Staging: CommercialPilotOpsP0StagingSlice;
+  tier2Staging?: {
+    artifactPresent: boolean;
+    summary: import("@/lib/commercial/tier2-staging-golden-path-summary").Tier2StagingGoldenPathSummary | null;
+  };
   loadedAt?: string;
 }): CommercialPilotOpsStatusModel {
   return {
     loadedAt: input.loadedAt ?? new Date().toISOString(),
     goNoGo: input.goNoGo,
     p0Staging: input.p0Staging,
+    tier2Staging: input.tier2Staging ?? { artifactPresent: false, summary: null },
   };
 }
 
@@ -108,8 +118,8 @@ export function resolveCommercialPilotOpsGateNextAction(
 
   if (gate.id === "tier2") {
     return {
-      label: "Open golden path checklist",
-      href: "/dashboard/getting-started",
+      label: "Open Launch Wizard Tier 2",
+      href: "/dashboard/launch-wizard",
       tone: "normal",
     };
   }
@@ -204,6 +214,21 @@ export function pickCommercialPilotOpsAttentionItems(
       href: platformHref(COMMERCIAL_PILOT_P0_STAGING_ANCHOR),
       priority: 4,
       tone: "urgent",
+    });
+  }
+
+  const tier2 = model.tier2Staging.summary;
+  if (tier2 && tier2.tier2ProofStatus !== "proof_passed") {
+    const p0Passed = p0?.p0ProofStatus === "proof_passed";
+    items.push({
+      id: "tier2-golden-path-blocked",
+      title: `Tier 2 golden path — ${tier2.tier2ProofStatus.replaceAll("_", " ")}`,
+      detail: p0Passed
+        ? "Run smoke:tier2-staging-golden-path — manual Woo → KDS → Packing on staging."
+        : "Blocked until P0 proof_passed.",
+      href: "/dashboard/launch-wizard",
+      priority: p0Passed ? 5 : 6,
+      tone: p0Passed ? "urgent" : "normal",
     });
   }
 

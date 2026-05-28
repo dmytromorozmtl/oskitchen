@@ -1,5 +1,5 @@
 import React from "react";
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { POS_HARDWARE_CATEGORIES } from "@/lib/pos/pos-hardware";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
@@ -9,14 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default async function PosHardwareSettingsPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.hardware.manage")) {
-    return (
-      <PosAccessCard
-        title="POS hardware"
-        description="You do not have permission to manage POS hardware readiness."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   return (

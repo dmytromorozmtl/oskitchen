@@ -1,0 +1,31 @@
+# Tier 2 golden path env validation — workflow_dispatch only (post-P0).
+# Validates manual phase env vars without faking proof_passed.
+
+name: Tier 2 Golden Path Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-tier2-golden-path-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Tier 2 golden path env (JSON summary)
+        run: npm run ops:validate-tier2-golden-path-env -- --json
+        env:
+          TIER2_CHANNEL_WEBHOOK_MANUAL: ${{ secrets.TIER2_CHANNEL_WEBHOOK_MANUAL }}
+          TIER2_KDS_BUMP_MANUAL: ${{ secrets.TIER2_KDS_BUMP_MANUAL }}
+          TIER2_PACKING_COMPLETE_MANUAL: ${{ secrets.TIER2_PACKING_COMPLETE_MANUAL }}
+          GITHUB_KDS_STAGING_RUN_URL: ${{ secrets.GITHUB_KDS_STAGING_RUN_URL }}
+          GITHUB_KDS_STAGING_RUN_OUTCOME: ${{ secrets.GITHUB_KDS_STAGING_RUN_OUTCOME }}
+          PILOT_GOLDEN_PATH_STAGING_URL: ${{ secrets.PILOT_GOLDEN_PATH_STAGING_URL }}
+          PILOT_GOLDEN_PATH_OPERATOR_EMAIL: ${{ secrets.PILOT_GOLDEN_PATH_OPERATOR_EMAIL }}
+          PILOT_GOLDEN_PATH_COMMIT_SHA: ${{ secrets.PILOT_GOLDEN_PATH_COMMIT_SHA }}
+          PILOT_GOLDEN_PATH_DURATION_MINUTES: ${{ secrets.PILOT_GOLDEN_PATH_DURATION_MINUTES }}

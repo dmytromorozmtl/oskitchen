@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { prisma } from "@/lib/prisma";
@@ -15,14 +15,7 @@ import { prisma } from "@/lib/prisma";
 export default async function PosReceiptsPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
-    return (
-      <PosAccessCard
-        title="POS receipts"
-        description="You do not have permission to view POS receipts."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   const rows = await prisma.pOSReceipt.findMany({

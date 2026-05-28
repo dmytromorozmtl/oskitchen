@@ -1,5 +1,6 @@
 import { LaunchWizardView } from "@/components/dashboard/launch-wizard/launch-wizard-view";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { buildLaunchWizardFromGoLiveBannerModel } from "@/lib/launch-wizard/launch-wizard-from-go-live-era21";
 import {
   hasLaunchWizardPageAccess,
   loadWorkspacePermissionPageActor,
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function LaunchWizardPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ mode?: string }>;
+  searchParams?: Promise<{ mode?: string; from?: string }>;
 }) {
   const [{ dataUserId }, actor] = await Promise.all([
     getTenantActor(),
@@ -25,11 +26,14 @@ export default async function LaunchWizardPage({
 
   const resolvedSearchParams = (await searchParams) ?? {};
   const compact = resolvedSearchParams.mode === "compact";
+  const fromGoLiveBanner = buildLaunchWizardFromGoLiveBannerModel({
+    fromGoLive: resolvedSearchParams.from === "go-live",
+  });
   const model = await loadLaunchWizardModel(dataUserId);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6 lg:px-0">
-      <LaunchWizardView model={model} compact={compact} />
+      <LaunchWizardView model={model} compact={compact} fromGoLiveBanner={fromGoLiveBanner} />
     </div>
   );
 }

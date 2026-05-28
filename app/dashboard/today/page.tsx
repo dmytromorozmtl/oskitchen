@@ -98,7 +98,9 @@ export default async function TodayOperationsPage({
         {integrationHealthModel && !ownerBriefing?.showIntegrationHealthLane ? (
           <PilotIntegrationHealthStrip model={integrationHealthModel} />
         ) : null}
-        {gettingStarted.showChecklist && !gettingStarted.allDone ? (
+        {gettingStarted.showChecklist &&
+        !gettingStarted.allDone &&
+        !ownerBriefing ? (
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
@@ -109,7 +111,9 @@ export default async function TodayOperationsPage({
             rolePack={ownerBriefing?.rolePack ?? null}
           />
         ) : null}
-        <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
+        {gettingStarted.showChecklist && !gettingStarted.allDone && !ownerBriefing ? (
+          <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
+        ) : null}
         <TodayCommandCenterView
           userId={dataUserId}
           email={sessionUser.email ?? null}

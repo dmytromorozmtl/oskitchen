@@ -1,9 +1,23 @@
 import Link from "next/link";
 import { ArrowRight, ShieldAlert } from "lucide-react";
 
+import { CommercialGoClosurePhasesPanel } from "@/components/dashboard/commercial-go-closure-phases-panel";
+import { Month2MarketReadinessPhasesPanel } from "@/components/dashboard/month2-market-readiness-phases-panel";
+import { ScaleReadinessPhasesPanel } from "@/components/dashboard/scale-readiness-phases-panel";
+import { SeriesAPartnerExpansionPhasesPanel } from "@/components/dashboard/series-a-partner-expansion-phases-panel";
+import { MarketLeaderPositioningPhasesPanel } from "@/components/dashboard/market-leader-positioning-phases-panel";
+import { SustainedOperationalExcellencePhasesPanel } from "@/components/dashboard/sustained-operational-excellence-phases-panel";
+import { PilotWeek1PhasesPanel } from "@/components/dashboard/pilot-week1-phases-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { CommercialGoClosureUiSlice } from "@/lib/commercial/commercial-go-closure-ui-era21";
+import type { PilotWeek1ExecutionUiSlice } from "@/lib/commercial/pilot-week1-execution-ui-era21";
+import type { Month2MarketReadinessUiSlice } from "@/lib/commercial/month2-market-readiness-ui-era21";
+import type { ScaleReadinessUiSlice } from "@/lib/commercial/scale-readiness-ui-era21";
+import type { SeriesAPartnerExpansionUiSlice } from "@/lib/commercial/series-a-partner-expansion-ui-era21";
+import type { MarketLeaderPositioningUiSlice } from "@/lib/commercial/market-leader-positioning-ui-era21";
+import type { SustainedOperationalExcellenceUiSlice } from "@/lib/commercial/sustained-operational-excellence-ui-era21";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import { LAUNCH_WIZARD_COMMERCIAL_OPS_CHECKLIST_DOC } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
@@ -12,9 +26,27 @@ import { cn } from "@/lib/utils";
 export function LaunchWizardCommercialBlockersPanel(props: {
   slice: LaunchWizardCommercialBlockersSlice;
   setup: LaunchWizardCommercialSetupSlice;
+  commercialGoClosure?: CommercialGoClosureUiSlice | null;
+  pilotWeek1?: PilotWeek1ExecutionUiSlice | null;
+  month2MarketReadiness?: Month2MarketReadinessUiSlice | null;
+  scaleReadiness?: ScaleReadinessUiSlice | null;
+  seriesAPartnerExpansion?: SeriesAPartnerExpansionUiSlice | null;
+  marketLeaderPositioning?: MarketLeaderPositioningUiSlice | null;
+  sustainedOperationalExcellence?: SustainedOperationalExcellenceUiSlice | null;
   compact?: boolean;
 }) {
-  const { slice, setup, compact = false } = props;
+  const {
+    slice,
+    setup,
+    commercialGoClosure = null,
+    pilotWeek1 = null,
+    month2MarketReadiness = null,
+    scaleReadiness = null,
+    seriesAPartnerExpansion = null,
+    marketLeaderPositioning = null,
+    sustainedOperationalExcellence = null,
+    compact = false,
+  } = props;
   const decisionVariant =
     slice.decision === "GO"
       ? "default"
@@ -133,6 +165,37 @@ export function LaunchWizardCommercialBlockersPanel(props: {
               <span className="font-mono">{LAUNCH_WIZARD_COMMERCIAL_OPS_CHECKLIST_DOC}</span>
             </p>
           </div>
+        ) : null}
+
+        {commercialGoClosure ? (
+          <CommercialGoClosurePhasesPanel slice={commercialGoClosure} variant="dashboard" />
+        ) : null}
+
+        {pilotWeek1 ? (
+          <PilotWeek1PhasesPanel slice={pilotWeek1} variant="dashboard" />
+        ) : null}
+
+        {month2MarketReadiness ? (
+          <Month2MarketReadinessPhasesPanel slice={month2MarketReadiness} variant="dashboard" />
+        ) : null}
+
+        {scaleReadiness ? (
+          <ScaleReadinessPhasesPanel slice={scaleReadiness} variant="dashboard" />
+        ) : null}
+
+        {seriesAPartnerExpansion ? (
+          <SeriesAPartnerExpansionPhasesPanel slice={seriesAPartnerExpansion} variant="dashboard" />
+        ) : null}
+
+        {marketLeaderPositioning ? (
+          <MarketLeaderPositioningPhasesPanel slice={marketLeaderPositioning} variant="dashboard" />
+        ) : null}
+
+        {sustainedOperationalExcellence ? (
+          <SustainedOperationalExcellencePhasesPanel
+            slice={sustainedOperationalExcellence}
+            variant="dashboard"
+          />
         ) : null}
       </CardContent>
     </Card>

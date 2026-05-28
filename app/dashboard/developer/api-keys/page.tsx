@@ -28,8 +28,8 @@ export default async function DeveloperApiKeysPage() {
         <CardHeader>
           <CardTitle className="text-base">Governance scopes</CardTitle>
           <CardDescription>
-            Recommended scope identifiers — enforce at the API edge as routing matures. Keys created today inherit
-            full workspace access until per-key scopes ship.
+            Select scopes when creating a key. Restricted keys are enforced at the public API edge when
+            scopesJson is set. Empty selection grants all documented scopes (legacy compatibility).
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-2 sm:grid-cols-2 text-sm text-muted-foreground">

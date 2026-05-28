@@ -1,10 +1,6 @@
-import Link from "next/link";
-
-import { PermissionDeniedShell } from "@/components/dashboard/permission-denied-shell";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PosSubnav } from "@/components/dashboard/pos-subnav";
-import { resolvePermissionDeniedSurface } from "@/lib/ux/permission-denied-copy";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { buildPosSubnavLinks } from "@/lib/pos/pos-subnav-links";
@@ -29,18 +25,7 @@ export default async function PosLayout({ children }: { children: React.ReactNod
   }
 
   if (!hasPermission(actor.granted, "pos.access")) {
-    const denied = resolvePermissionDeniedSurface("pos_layout");
-    return (
-      <PermissionDeniedShell surface="pos_layout">
-        <PosAccessCard
-          title={denied.title}
-          description={denied.description}
-          primaryHref={denied.primaryHref}
-          primaryLabel={denied.primaryLabel}
-          permissionKey={denied.permissionKey}
-        />
-      </PermissionDeniedShell>
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_layout" />;
   }
 
   const links = buildPosSubnavLinks(actor.granted);

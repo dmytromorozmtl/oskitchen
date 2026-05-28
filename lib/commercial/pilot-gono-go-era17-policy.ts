@@ -47,6 +47,7 @@ export const PILOT_GONOGO_ERA17_INPUT_ARTIFACTS = [
   "artifacts/p0-staging-proof-unblock-summary.json",
   "artifacts/enterprise-sso-pilot-ready-gate-summary.json",
   "artifacts/commercial-pilot-evidence-pack-summary.json",
+  "artifacts/tier2-staging-golden-path-summary.json",
 ] as const;
 
 export const PILOT_GONOGO_ERA17_OPTIONAL_EVIDENCE_ARTIFACTS = [
@@ -67,6 +68,7 @@ export const PILOT_GONOGO_ERA17_CUSTOMER_ENV_VARS = [
 
 export const PILOT_GONOGO_ERA17_CYCLE_RUNBOOK_STEPS = [
   "Run npm run smoke:p0-staging-proof-unblock — review artifacts/p0-staging-proof-unblock-summary.json (P0 #1–#3).",
+  "Run npm run smoke:tier2-staging-golden-path after P0 PASS — Woo → Order Hub → KDS → Packing on staging.",
   "Run Tier 0/1 preflight and Tier 2 golden path on staging; store summary artifacts.",
   "Run npm run smoke:pilot-forbidden-claims-enforcement on release branch before contract signature.",
   "Run npm run smoke:enterprise-sso-pilot-ready-gate when contract includes SSO pilot — review artifacts/enterprise-sso-pilot-ready-gate-summary.json.",

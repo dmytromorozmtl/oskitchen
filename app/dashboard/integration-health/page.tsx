@@ -4,6 +4,8 @@ import { formatDistanceToNow } from "date-fns";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
 import { IntegrationHealthP0TrustBannerPanel } from "@/components/dashboard/integration-health-p0-trust-banner";
+import { IntegrationHealthTier2GoldenPathBannerPanel } from "@/components/dashboard/integration-health-tier2-golden-path-banner";
+import { IntegrationHealthPilotWeek1BannerPanel } from "@/components/dashboard/integration-health-pilot-week1-banner";
 import { IntegrationHealthChannelCardsPanel } from "@/components/dashboard/integration-health-channel-cards-panel";
 import { IntegrationHealthSmokeArtifactViewer } from "@/components/dashboard/integration-health-smoke-artifact-viewer";
 import { IntegrationHealthAttentionStrip } from "@/components/dashboard/integration-health-attention-strip";
@@ -157,31 +159,11 @@ export default async function IntegrationHealthDashboardPage({
   const integrationRecoveryFlowProof = buildIntegrationHealthRecoveryFlowProofSlice({
     p0ChannelProofPassed: deriveP0ChannelProofFromSmokeRows(smokeArtifacts.rows),
   });
+  const ownerCompact =
+    actor.workspaceRole === "OWNER" && !supportCompact && !supportAdmin.visible;
 
   return (
     <div className="space-y-8">
-      <IntegrationHealthSupportAdminPanel model={supportAdmin} compact={supportCompact} />
-
-      <IntegrationHealthSummaryPanel summary={healthSummary} />
-
-      {channelCards.p0Trust ? (
-        <IntegrationHealthP0TrustBannerPanel banner={channelCards.p0Trust} />
-      ) : null}
-
-      <IntegrationHealthChannelCardsPanel model={channelCards} />
-
-      <IntegrationHealthRecoveryFlowProofPanel slice={integrationRecoveryFlowProof} />
-
-      <IntegrationHealthRecoveryPanel model={recoveryModel} />
-
-      <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
-
-      <IntegrationHealthSmokeArtifactViewer model={smokeArtifacts} />
-
-      <ChannelLiveProofStatusPanel slices={liveProofSlices} />
-
-      <CapabilityMatrixPanel rows={capabilities} title="Honest capability matrix" />
-
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Integration health</h1>
@@ -203,6 +185,51 @@ export default async function IntegrationHealthDashboardPage({
           </Button>
         </div>
       </div>
+
+      {ownerCompact ? (
+        <p
+          className="rounded-lg border border-border/70 bg-muted/30 px-3 py-2 text-sm text-muted-foreground"
+          data-testid="integration-health-owner-compact-notice"
+        >
+          Owner view — channel readiness and recovery steps only. Platform support uses{" "}
+          <Link href="/dashboard/integration-health?mode=support" className="text-primary underline-offset-4 hover:underline">
+            support triage mode
+          </Link>
+          .
+        </p>
+      ) : null}
+
+      <IntegrationHealthSupportAdminPanel model={supportAdmin} compact={supportCompact} />
+
+      <IntegrationHealthSummaryPanel summary={healthSummary} />
+
+      {channelCards.p0Trust ? (
+        <IntegrationHealthP0TrustBannerPanel banner={channelCards.p0Trust} />
+      ) : null}
+
+      {channelCards.tier2GoldenPath ? (
+        <IntegrationHealthTier2GoldenPathBannerPanel banner={channelCards.tier2GoldenPath} />
+      ) : null}
+
+      {channelCards.pilotWeek1 ? (
+        <IntegrationHealthPilotWeek1BannerPanel banner={channelCards.pilotWeek1} />
+      ) : null}
+
+      <IntegrationHealthChannelCardsPanel model={channelCards} />
+
+      <IntegrationHealthRecoveryPanel model={recoveryModel} />
+
+      {!ownerCompact ? (
+        <>
+          <IntegrationHealthRecoveryFlowProofPanel slice={integrationRecoveryFlowProof} />
+          <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
+          <IntegrationHealthSmokeArtifactViewer model={smokeArtifacts} />
+          <ChannelLiveProofStatusPanel slices={liveProofSlices} />
+          <CapabilityMatrixPanel rows={capabilities} title="Honest capability matrix" />
+        </>
+      ) : (
+        <IntegrationHealthAttentionStrip snapshot={integrationFocusSnapshot} />
+      )}
 
       <Card>
         <CardHeader>

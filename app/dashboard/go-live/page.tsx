@@ -1,4 +1,6 @@
+import { LaunchWizardPrimaryEntryBanner } from "@/components/dashboard/launch-wizard-primary-entry-banner";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { GoLiveProjectNextStepHeroCard } from "@/components/dashboard/go-live/go-live-project-next-step-hero";
@@ -49,11 +51,22 @@ const LEGACY_CHECKS = [
   ["Support contact confirmed", "/help"],
 ] as const;
 
-export default async function GoLivePage() {
+export default async function GoLivePage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ mode?: string }>;
+}) {
   const { actor, userId, canCreate, scope } = await getGoLivePageAccess();
   if (!hasGoLiveHubPageAccess(actor, scope)) {
     return <PermissionDeniedSurfaceCard surfaceId="go_live_hub" />;
   }
+
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const advancedMode = resolvedSearchParams.mode === "advanced";
+  if (actor.workspaceRole === "OWNER" && !actor.platformBypass && !advancedMode) {
+    redirect("/dashboard/launch-wizard?from=go-live");
+  }
+
   const isSuper = actor.platformBypass;
   const [projects, brands, locations, latestSimulation, incidentCount, pilotReadiness] = await Promise.all([
     listProjects(userId),
@@ -271,6 +284,7 @@ export default async function GoLivePage() {
 
   return (
     <div className="space-y-8">
+      <LaunchWizardPrimaryEntryBanner context="go_live" />
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Go-live Command Center</h1>

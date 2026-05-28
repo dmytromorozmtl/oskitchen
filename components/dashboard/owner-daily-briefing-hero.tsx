@@ -1,3 +1,16 @@
+import { BriefingTelemetryLink } from "@/components/dashboard/briefing-telemetry-link";
+import { P0OpsVaultPhasesPanel } from "@/components/dashboard/p0-ops-vault-phases-panel";
+import { Tier2GoldenPathPhasesPanel } from "@/components/dashboard/tier2-golden-path-phases-panel";
+import { CommercialGoClosurePhasesPanel } from "@/components/dashboard/commercial-go-closure-phases-panel";
+import { PilotWeek1PhasesPanel } from "@/components/dashboard/pilot-week1-phases-panel";
+import { Month2MarketReadinessPhasesPanel } from "@/components/dashboard/month2-market-readiness-phases-panel";
+import { ScaleReadinessPhasesPanel } from "@/components/dashboard/scale-readiness-phases-panel";
+import { SeriesAPartnerExpansionPhasesPanel } from "@/components/dashboard/series-a-partner-expansion-phases-panel";
+import { MarketLeaderPositioningPhasesPanel } from "@/components/dashboard/market-leader-positioning-phases-panel";
+import { SustainedOperationalExcellencePhasesPanel } from "@/components/dashboard/sustained-operational-excellence-phases-panel";
+import { ContinuousImprovementLoopPanel } from "@/components/dashboard/continuous-improvement-loop-panel";
+import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained-product-evolution-panel";
+import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
 import Link from "next/link";
 import { ArrowRight, LayoutDashboard } from "lucide-react";
 
@@ -9,6 +22,7 @@ import type {
   OwnerDailyBriefingRankedAction,
   OwnerDailyBriefingTile,
 } from "@/lib/briefing/owner-daily-briefing-era19";
+import type { BriefingRolePack } from "@/lib/briefing/owner-daily-briefing-role-packs-era19";
 import type { OwnerDailyBriefingPayload } from "@/services/briefing/owner-daily-briefing-service";
 import { briefingTileLinkStateLabel } from "@/lib/briefing/owner-daily-briefing-tile-links-era19";
 import type { OwnerDailyBriefingProductionCalendarSlice } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
@@ -68,6 +82,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
     rolePackLabel,
     rolePackHeadline,
     p0ProofBlockedLabel,
+    p0OpsVault,
     operationalEmptyState,
   } = briefing;
 
@@ -116,13 +131,109 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
             className="h-12 w-full rounded-2xl text-base sm:w-auto"
             variant={nextAction.tone === "success" ? "default" : "secondary"}
           >
-            <Link href={nextAction.href} data-testid="owner-daily-briefing-next-action">
+            <BriefingTelemetryLink
+              href={nextAction.href}
+              surface="next_action"
+              entityId={nextAction.id}
+              rolePack={briefing.rolePack}
+              linkState={nextAction.tone}
+              data-testid="owner-daily-briefing-next-action"
+              className="inline-flex items-center"
+            >
               {nextAction.ctaLabel}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-            </Link>
+            </BriefingTelemetryLink>
           </Button>
         </CardContent>
       </Card>
+
+      {p0OpsVault ? (
+        <P0OpsVaultPhasesPanel slice={p0OpsVault} variant="compact" title="Ops vault blocked" />
+      ) : null}
+
+      {briefing.tier2GoldenPath ? (
+        <Tier2GoldenPathPhasesPanel
+          slice={briefing.tier2GoldenPath}
+          variant="compact"
+          title="Tier 2 golden path"
+        />
+      ) : null}
+
+      {briefing.commercialGoClosure ? (
+        <CommercialGoClosurePhasesPanel
+          slice={briefing.commercialGoClosure}
+          variant="compact"
+          title="Commercial GO closure"
+        />
+      ) : null}
+
+      {briefing.pilotWeek1 ? (
+        <PilotWeek1PhasesPanel
+          slice={briefing.pilotWeek1}
+          variant="compact"
+          title="Pilot Week 1"
+        />
+      ) : null}
+
+      {briefing.month2MarketReadiness ? (
+        <Month2MarketReadinessPhasesPanel
+          slice={briefing.month2MarketReadiness}
+          variant="compact"
+          title="Month 2 market readiness"
+        />
+      ) : null}
+
+      {briefing.scaleReadiness ? (
+        <ScaleReadinessPhasesPanel
+          slice={briefing.scaleReadiness}
+          variant="compact"
+          title="Scale readiness"
+        />
+      ) : null}
+
+      {briefing.seriesAPartnerExpansion ? (
+        <SeriesAPartnerExpansionPhasesPanel
+          slice={briefing.seriesAPartnerExpansion}
+          variant="compact"
+          title="Series A / partner expansion"
+        />
+      ) : null}
+
+      {briefing.marketLeaderPositioning ? (
+        <MarketLeaderPositioningPhasesPanel
+          slice={briefing.marketLeaderPositioning}
+          variant="compact"
+          title="Market leader positioning"
+        />
+      ) : null}
+
+      {briefing.sustainedOperationalExcellence ? (
+        <SustainedOperationalExcellencePhasesPanel
+          slice={briefing.sustainedOperationalExcellence}
+          variant="compact"
+          title="Sustained operational excellence"
+        />
+      ) : null}
+
+      {briefing.continuousImprovementLoop ? (
+        <ContinuousImprovementLoopPanel
+          slice={briefing.continuousImprovementLoop}
+          variant="compact"
+          title="Continuous improvement loop"
+        />
+      ) : null}
+
+      {briefing.sustainedProductEvolution ? (
+        <SustainedProductEvolutionPanel
+          slice={briefing.sustainedProductEvolution}
+          variant="compact"
+          title="Sustained product evolution"
+        />
+      ) : null}
+
+      {briefing.maintenanceMode ? (
+        <MaintenanceModePanel slice={briefing.maintenanceMode} variant="compact" title="Maintenance mode" />
+      ) : null}
 
       {topActions.length > 0 ? (
         <Card className="border-border/80 bg-card/90 shadow-sm">
@@ -134,7 +245,12 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
           </CardHeader>
           <CardContent className="space-y-2">
             {topActions.map((action, index) => (
-              <RankedActionRow key={action.id} action={action} rank={index + 1} />
+              <RankedActionRow
+                key={action.id}
+                action={action}
+                rank={index + 1}
+                rolePack={briefing.rolePack}
+              />
             ))}
           </CardContent>
         </Card>
@@ -169,7 +285,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {heroTiles.map((tile) => (
-          <BriefingTileCard key={tile.id} tile={tile} />
+          <BriefingTileCard key={tile.id} tile={tile} rolePack={briefing.rolePack} />
         ))}
       </div>
 
@@ -180,12 +296,21 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
   );
 }
 
-function RankedActionRow(props: { action: OwnerDailyBriefingRankedAction; rank: number }) {
-  const { action, rank } = props;
+function RankedActionRow(props: {
+  action: OwnerDailyBriefingRankedAction;
+  rank: number;
+  rolePack: BriefingRolePack;
+}) {
+  const { action, rank, rolePack } = props;
 
   return (
-    <Link
+    <BriefingTelemetryLink
       href={action.href}
+      surface="ranked_action"
+      entityId={action.id}
+      rolePack={rolePack}
+      severity={action.severity}
+      rank={rank}
       data-testid={`owner-briefing-action-${action.id}`}
       className="flex flex-col gap-2 rounded-xl border border-border/70 bg-muted/15 px-3 py-3 text-sm transition-colors hover:bg-muted/35 sm:flex-row sm:items-start sm:justify-between"
     >
@@ -208,18 +333,23 @@ function RankedActionRow(props: { action: OwnerDailyBriefingRankedAction; rank: 
         </p>
       </div>
       <ArrowRight className="mt-0.5 hidden h-4 w-4 shrink-0 text-muted-foreground sm:block" aria-hidden />
-    </Link>
+    </BriefingTelemetryLink>
   );
 }
 
-function BriefingTileCard(props: { tile: OwnerDailyBriefingTile }) {
-  const { tile } = props;
+function BriefingTileCard(props: { tile: OwnerDailyBriefingTile; rolePack: BriefingRolePack }) {
+  const { tile, rolePack } = props;
   const availability = availabilityLabel(tile.availability);
   const linkStateLabel = briefingTileLinkStateLabel(tile.linkState);
 
   return (
-    <Link
+    <BriefingTelemetryLink
       href={tile.href}
+      surface="hero_tile"
+      entityId={tile.id}
+      rolePack={rolePack}
+      linkState={tile.linkState}
+      category={tile.category}
       data-testid={`owner-briefing-tile-${tile.id}`}
       className={`block rounded-2xl border px-3 py-3 transition-colors hover:bg-muted/30 ${tileToneClass(tile.tone)} ${
         tile.linkState === "blocked" ? "ring-1 ring-amber-200/60 dark:ring-amber-900/40" : ""
@@ -248,7 +378,7 @@ function BriefingTileCard(props: { tile: OwnerDailyBriefingTile }) {
       <p className="mt-2 text-2xl font-semibold tabular-nums">{tile.value}</p>
       <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{tile.detail}</p>
       <p className="mt-2 text-[11px] text-muted-foreground/90 line-clamp-2">{tile.whyItMatters}</p>
-    </Link>
+    </BriefingTelemetryLink>
   );
 }
 

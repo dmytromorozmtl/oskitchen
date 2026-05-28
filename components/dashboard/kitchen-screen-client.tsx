@@ -20,7 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { kitchenWorkItemActions } from "@/lib/kitchen-screen/kitchen-screen-actions";
+import { KdsRefreshHonestyBanner } from "@/components/kitchen/kds-refresh-honesty-banner";
+import { KDS_POLL_FALLBACK_MS } from "@/lib/kitchen/kds-realtime-smoke-policy";
 import {
   countLate,
   filterKitchenWorkItems,
@@ -159,7 +160,7 @@ export function KitchenScreenClient({
         router.refresh();
         setLastRefresh(new Date());
       });
-    }, 28_000);
+    }, KDS_POLL_FALLBACK_MS);
     return () => clearInterval(id);
   }, [router]);
 
@@ -200,6 +201,7 @@ export function KitchenScreenClient({
 
   const inner = (
     <div className={cn("kitchen-screen flex min-h-0 flex-1 flex-col gap-4", fullscreen ? "text-zinc-50" : "")}>
+      <KdsRefreshHonestyBanner pollIntervalMs={KDS_POLL_FALLBACK_MS} lastRefreshAt={lastRefresh} />
       <header
         className={cn(
           "sticky top-0 z-10 flex flex-col gap-3 border-b pb-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between",

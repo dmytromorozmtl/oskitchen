@@ -19,6 +19,11 @@ import {
   derivePilotIcpQualificationGate,
 } from "@/lib/commercial/era20-pilot-icp-qualification-bridge-era20";
 import {
+  mergeGoldenPathArtifactsForGoNoGo,
+  formatTier2GoldenPathGateReason,
+} from "@/lib/commercial/tier2-golden-path-gono-go-bridge-era20";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import {
   buildEra20PilotExecutionReadinessSlice,
   buildPilotExecutionReadinessGoNoGoWarnings,
   derivePilotMetricsBaselineGate,
@@ -172,24 +177,36 @@ export function deriveTier1Pass(preflight: PilotTierPreflightArtifact | null): P
   };
 }
 
-export function deriveTier2Pass(goldenPath: PilotGoldenPathArtifact | null): PilotGoNoGoEvidenceGate {
-  if (!goldenPath) {
+export function deriveTier2Pass(
+  goldenPath: PilotGoldenPathArtifact | null,
+  tier2StagingGoldenPath?: Pick<Tier2StagingGoldenPathSummary, "overall" | "tier2ProofStatus"> | null,
+): PilotGoNoGoEvidenceGate {
+  const effective = mergeGoldenPathArtifactsForGoNoGo({
+    operatorGoldenPath: goldenPath,
+    tier2StagingGoldenPath: tier2StagingGoldenPath ?? null,
+  });
+
+  if (!effective) {
     return {
       id: "tier2",
       label: "Tier 2 operator golden path",
       pass: false,
       reason:
-        "artifacts/pilot-operator-golden-path-summary.json missing — run smoke:pilot-operator-golden-path on staging",
+        "artifacts/pilot-operator-golden-path-summary.json and tier2-staging-golden-path-summary.json missing — run smoke:tier2-staging-golden-path on staging",
     };
   }
-  const pass = goldenPath.phaseProofStatus === "proof_passed";
+
+  const pass = effective.phaseProofStatus === "proof_passed";
+  const tier2Reason = formatTier2GoldenPathGateReason(goldenPath, tier2StagingGoldenPath ?? null);
+
   return {
     id: "tier2",
     label: "Tier 2 operator golden path",
     pass,
     reason: pass
-      ? "phaseProofStatus proof_passed"
-      : `phaseProofStatus=${goldenPath.phaseProofStatus ?? "unknown"}`,
+      ? (tier2Reason ?? "phaseProofStatus proof_passed")
+      : tier2Reason ??
+        `phaseProofStatus=${effective.phaseProofStatus ?? "unknown"} — run smoke:pilot-operator-golden-path or smoke:tier2-staging-golden-path`,
   };
 }
 
@@ -341,6 +358,10 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
   tier3Pass?: boolean;
+  tier2StagingGoldenPath?: Pick<
+    Tier2StagingGoldenPathSummary,
+    "overall" | "tier2ProofStatus" | "p0ProofStatus"
+  > | null;
 }): {
   evaluatorInput: CommercialPilotGoNoGoInput;
   icpQualification: PilotIcpQualificationResult;
@@ -348,7 +369,11 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
 } {
   const tier0 = deriveTier0Pass(input.preflight);
   const tier1 = deriveTier1Pass(input.preflight);
-  const tier2 = deriveTier2Pass(input.goldenPath);
+  const tier2 = deriveTier2Pass(input.goldenPath, input.tier2StagingGoldenPath);
+  const effectiveGoldenPath = mergeGoldenPathArtifactsForGoNoGo({
+    operatorGoldenPath: input.goldenPath,
+    tier2StagingGoldenPath: input.tier2StagingGoldenPath ?? null,
+  });
   const forbiddenClaimsEnforcement = deriveForbiddenClaimsEnforcementPass(
     input.forbiddenClaimsEnforcement,
   );
@@ -379,7 +404,7 @@ export function buildPilotGoNoGoEvaluatorInput(input: {
     icpEnvRaw: input.icpEnvRaw,
   });
 
-  const stagingUrl = input.goldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
+  const stagingUrl = effectiveGoldenPath?.signOffTemplate?.stagingUrl?.trim() || null;
   const commitSha =
     input.goldenPath?.signOffTemplate?.commitSha?.trim() ||
     input.preflight?.commitSha?.trim() ||
@@ -433,6 +458,10 @@ export function buildPilotGoNoGoSummary(input: {
   roleChecklistsComplete?: boolean;
   forbiddenClaimsInContract?: boolean;
   tier3Pass?: boolean;
+  tier2StagingGoldenPath?: Pick<
+    Tier2StagingGoldenPathSummary,
+    "overall" | "tier2ProofStatus" | "p0ProofStatus"
+  > | null;
   ssoPilotRequired?: boolean;
   runAt?: Date;
 }): PilotGoNoGoSummary {

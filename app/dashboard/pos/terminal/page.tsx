@@ -13,10 +13,11 @@ import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { loadPosTerminalBootstrap } from "@/services/pos/pos-session-service";
+import { resolveOperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 
 import {
-  posCashierSpeedModeFromSearchParam,
   posCashierSpeedModeHeadline,
+  resolvePosCashierSpeedMode,
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 
 export default async function PosTerminalPage({
@@ -24,13 +25,23 @@ export default async function PosTerminalPage({
 }: {
   searchParams?: Promise<{ speed?: string }>;
 }) {
-  const resolvedSearchParams = (await searchParams) ?? {};
-  const speedMode = posCashierSpeedModeFromSearchParam(resolvedSearchParams.speed);
   const actor = await requireWorkspacePermissionActor();
-  const { userId } = actor;
   if (!hasPermission(actor.granted, "pos.access")) {
     return <PermissionDeniedSurfaceCard surfaceId="pos_terminal" />;
   }
+
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const persona = resolveOperatorHomePersona({
+    workspaceRole: actor.workspaceRole,
+    granted: actor.granted,
+    staffRoleType: actor.staffRoleType,
+    platformBypass: actor.platformBypass,
+  });
+  const speedMode = resolvePosCashierSpeedMode({
+    speedParam: resolvedSearchParams.speed,
+    persona,
+  });
+  const { userId } = actor;
 
   const managerAuditFlowProof = buildManagerDiscountAuditFlowProofSlice({
     viewerCanApplyDiscount: hasPermission(actor.granted, "pos.discount.apply"),

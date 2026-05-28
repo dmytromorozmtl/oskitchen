@@ -19,6 +19,19 @@ export function posCashierSpeedModeFromSearchParam(value?: string | null): boole
   return value === "1" || value === "true";
 }
 
+/** Cashiers default to speed mode unless URL explicitly sets speed=0/false. */
+export function resolvePosCashierSpeedMode(input: {
+  speedParam?: string | null;
+  persona: "owner" | "manager" | "cashier" | "kitchen";
+}): boolean {
+  const raw = input.speedParam?.trim();
+  if (raw === "0" || raw === "false") return false;
+  if (raw != null && raw !== "") {
+    return posCashierSpeedModeFromSearchParam(raw);
+  }
+  return input.persona === "cashier";
+}
+
 export function posCashierSpeedModeToggleHref(currentSpeed: boolean): string {
   return currentSpeed ? POS_CASHIER_SPEED_MODE_ROUTE : `${POS_CASHIER_SPEED_MODE_ROUTE}?speed=1`;
 }

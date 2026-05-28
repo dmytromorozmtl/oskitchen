@@ -2,7 +2,10 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, AlertTriangle, Rocket } from "lucide-react";
 
 import { LaunchWizardCommercialBlockersPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel";
+import { LaunchWizardFromGoLiveBanner } from "@/components/dashboard/launch-wizard/launch-wizard-from-go-live-banner";
+import type { LaunchWizardFromGoLiveBannerModel } from "@/lib/launch-wizard/launch-wizard-from-go-live-era21";
 import { LaunchWizardGoldenPathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-golden-path-panel";
+import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
 import { LaunchWizardProductionGradeBanner } from "@/components/dashboard/launch-wizard/launch-wizard-production-grade-banner";
 import { LaunchWizardProgressStrip } from "@/components/dashboard/launch-wizard/launch-wizard-progress-strip";
@@ -49,8 +52,12 @@ function statusIcon(status: LaunchWizardStepStatus) {
   return <Circle className="h-5 w-5 text-muted-foreground" aria-hidden />;
 }
 
-export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: boolean }) {
-  const { model, compact = false } = props;
+export function LaunchWizardView(props: {
+  model: LaunchWizardModel;
+  compact?: boolean;
+  fromGoLiveBanner?: LaunchWizardFromGoLiveBannerModel | null;
+}) {
+  const { model, compact = false, fromGoLiveBanner = null } = props;
   const { progress, nextStep } = model;
   const onboardingHero = buildLaunchWizardOnboardingHeroModel({
     progress,
@@ -60,6 +67,8 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
 
   return (
     <div className="space-y-6" data-testid="launch-wizard-view">
+      {fromGoLiveBanner ? <LaunchWizardFromGoLiveBanner model={fromGoLiveBanner} /> : null}
+
       <LaunchWizardProgressStrip model={model} compact={compact} />
 
       <LaunchWizardProductionGradeBanner snapshot={model.productionGrade} compact={compact} />
@@ -125,8 +134,17 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
       <LaunchWizardCommercialBlockersPanel
         slice={model.commercialBlockers}
         setup={model.commercialSetup}
+        commercialGoClosure={model.commercialGoClosure}
+        pilotWeek1={model.pilotWeek1}
+        month2MarketReadiness={model.month2MarketReadiness}
+        scaleReadiness={model.scaleReadiness}
+        seriesAPartnerExpansion={model.seriesAPartnerExpansion}
+        marketLeaderPositioning={model.marketLeaderPositioning}
+        sustainedOperationalExcellence={model.sustainedOperationalExcellence}
         compact={compact}
       />
+
+      <LaunchWizardTier2StatusPanel slice={model.tier2Status} />
 
       <LaunchWizardGoldenPathPanel steps={model.steps} compact={compact} />
 
@@ -139,6 +157,17 @@ export function LaunchWizardView(props: { model: LaunchWizardModel; compact?: bo
           <LaunchWizardStepCard key={step.id} step={step} compact={compact} />
         ))}
       </div>
+
+      <p className="text-sm text-muted-foreground">
+        Advanced launch validation (go-live projects, simulations):{" "}
+        <Link
+          href="/dashboard/go-live?mode=advanced"
+          className="font-medium text-primary underline-offset-4 hover:underline"
+          data-testid="launch-wizard-advanced-go-live-link"
+        >
+          Open go-live hub
+        </Link>
+      </p>
     </div>
   );
 }

@@ -1,0 +1,25 @@
+# Steady-state operator loop validation — workflow_dispatch (Step 14, informational).
+
+name: Steady State Operator Loop Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-steady-state-operator-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate steady-state operator loop (JSON summary)
+        run: npm run ops:validate-steady-state-operator-loop -- --json
+        env:
+          SUSTAINED_OPS_DAILY_CADENCE_ATTESTED: ${{ secrets.SUSTAINED_OPS_DAILY_CADENCE_ATTESTED }}
+          SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED: ${{ secrets.SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED }}
+          SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED: ${{ secrets.SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED }}
+          SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED: ${{ secrets.SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED }}

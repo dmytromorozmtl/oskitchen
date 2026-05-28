@@ -1,0 +1,92 @@
+/**
+ * Commercial GO closure UI slice — Launch Wizard, Owner Briefing, Platform ops.
+ */
+import {
+  buildCommercialGoClosurePhaseStatuses,
+  COMMERCIAL_GO_CLOSURE_BLOCKER_PLAYBOOK_DOC,
+  COMMERCIAL_GO_CLOSURE_STEP3_DOC,
+  formatCommercialGoClosurePhaseBlockerDetail,
+  resolveCommercialGoClosurePrerequisites,
+  resolveNextIncompleteCommercialGoClosurePhase,
+  type CommercialGoClosurePhaseStatus,
+} from "@/lib/commercial/commercial-go-closure-phases-era21";
+import { PILOT_GONOGO_SUMMARY_ARTIFACT_PATH } from "@/lib/commercial/commercial-go-closure-phases-era21";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
+
+export const COMMERCIAL_GO_CLOSURE_UI_ERA21_POLICY_ID = "era21-commercial-go-closure-ui-v1" as const;
+
+export type CommercialGoClosureUiSlice = {
+  policyId: typeof COMMERCIAL_GO_CLOSURE_UI_ERA21_POLICY_ID;
+  visible: boolean;
+  blocked: boolean;
+  decision: string | null;
+  customerExecutionStatus: string | null;
+  phases: readonly CommercialGoClosurePhaseStatus[];
+  completedPhaseCount: number;
+  step3Doc: typeof COMMERCIAL_GO_CLOSURE_STEP3_DOC;
+  blockerPlaybookDoc: typeof COMMERCIAL_GO_CLOSURE_BLOCKER_PLAYBOOK_DOC;
+  validateCommand: string;
+  exportTemplateCommand: string;
+  syncProgressReportCommand: string;
+  orchestratorCommand: string;
+  implementationHref: string;
+  launchWizardHref: string;
+  nextPhase: CommercialGoClosurePhaseStatus | null;
+  nextPhaseDetail: string | null;
+  goNoGoArtifact: typeof PILOT_GONOGO_SUMMARY_ARTIFACT_PATH;
+};
+
+export function buildCommercialGoClosureUiSlice(input: {
+  p0ProofStatus: string | null;
+  tier2ProofStatus: string | null;
+  goNoGoSummary: PilotGoNoGoSummary | null;
+}): CommercialGoClosureUiSlice | null {
+  const prerequisites = resolveCommercialGoClosurePrerequisites({
+    p0ProofStatus: input.p0ProofStatus,
+    tier2ProofStatus: input.tier2ProofStatus,
+  });
+  if (!prerequisites.prerequisitesComplete) return null;
+
+  const decision = input.goNoGoSummary?.decision ?? null;
+  const blocked = decision !== "GO";
+
+  if (!blocked) return null;
+
+  const phases = buildCommercialGoClosurePhaseStatuses({
+    prerequisites,
+    goNoGoSummary: input.goNoGoSummary,
+  });
+  const completedPhaseCount = phases.filter((p) => p.complete).length;
+  const nextPhase = resolveNextIncompleteCommercialGoClosurePhase(phases);
+  const nextPhaseDetail = nextPhase
+    ? formatCommercialGoClosurePhaseBlockerDetail(nextPhase)
+    : null;
+
+  return {
+    policyId: COMMERCIAL_GO_CLOSURE_UI_ERA21_POLICY_ID,
+    visible: true,
+    blocked,
+    decision,
+    customerExecutionStatus: input.goNoGoSummary?.customerExecutionStatus ?? null,
+    phases,
+    completedPhaseCount,
+    step3Doc: COMMERCIAL_GO_CLOSURE_STEP3_DOC,
+    blockerPlaybookDoc: COMMERCIAL_GO_CLOSURE_BLOCKER_PLAYBOOK_DOC,
+    validateCommand: "npm run ops:validate-commercial-go-closure-env",
+    exportTemplateCommand: "npm run ops:export-commercial-go-closure-env-template -- --write",
+    syncProgressReportCommand: "npm run ops:sync-commercial-go-closure-progress-report -- --write",
+    orchestratorCommand: "npm run smoke:pilot-gono-go",
+    implementationHref: "/dashboard/implementation",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
+    nextPhase,
+    nextPhaseDetail,
+    goNoGoArtifact: PILOT_GONOGO_SUMMARY_ARTIFACT_PATH,
+  };
+}
+
+export function formatCommercialGoClosureProgressLabel(slice: CommercialGoClosureUiSlice): string {
+  const decisionLabel = slice.decision ?? "not evaluated";
+  return `Commercial GO ${slice.completedPhaseCount}/${slice.phases.length} phases · ${decisionLabel}`;
+}

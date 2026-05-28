@@ -10,7 +10,8 @@ export type ProductEventName =
   | "pilot_day_30"
   | "web_vitals"
   | "roi_lead_submitted"
-  | "nps_submitted";
+  | "nps_submitted"
+  | "briefing_click";
 
 export function captureProductEvent(
   name: ProductEventName,

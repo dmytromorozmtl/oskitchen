@@ -95,8 +95,60 @@ export function buildOwnerDailyBriefingOperationalEmptyState(input: {
   activeOrders: number;
   readinessOverall: number;
   riskAllClear: boolean;
+  pureOperationalMode?: boolean;
+  continuousImprovementHref?: string;
+  maintenanceModeActive?: boolean;
+  maintenanceModeHref?: string;
 }): OwnerDailyBriefingOperationalEmptyState | null {
   if (input.topActionsCount > 0) return null;
+
+  if (input.maintenanceModeActive) {
+    const title =
+      input.activeOrders > 0
+        ? "Maintenance mode — shift is moving"
+        : "Maintenance mode — commercial pilot path complete";
+
+    const detail =
+      input.activeOrders > 0
+        ? `${input.activeOrders} active order(s). Era21→era24 path complete — follow weekly/monthly rhythms on Platform ops.`
+        : `Go-live readiness ${input.readinessOverall}%. Repeat maintenance rhythms forever — no Step 13 gates.`;
+
+    return {
+      policyId: OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID,
+      title,
+      detail,
+      href: input.maintenanceModeHref ?? input.continuousImprovementHref ?? ORDER_HUB_PATH,
+      ctaLabel: input.maintenanceModeHref ? "Open maintenance mode" : "Open improvement loop",
+    };
+  }
+
+  if (input.pureOperationalMode) {
+    const title =
+      input.activeOrders > 0
+        ? "Pure operational mode — shift is moving"
+        : "Pure operational mode — no gate blockers";
+
+    const detail =
+      input.activeOrders > 0
+        ? `${input.activeOrders} active order(s). Risk radar is ${
+            input.riskAllClear ? "clear" : "shown below"
+          } — recurring improvement loop tracks integration, metrics, and governance.`
+        : `Go-live readiness ${input.readinessOverall}%. Era21 gate chain complete — follow the continuous improvement loop on Platform ops.`;
+
+    return {
+      policyId: OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID,
+      title,
+      detail,
+      href:
+        input.continuousImprovementHref ??
+        (input.activeOrders > 0 ? ORDER_HUB_PATH : LAUNCH_WIZARD_ROUTE),
+      ctaLabel: input.continuousImprovementHref
+        ? "Open improvement loop"
+        : input.activeOrders > 0
+          ? "Open Order Hub"
+          : "Open Launch Wizard",
+    };
+  }
 
   const title =
     input.activeOrders > 0 ? "No ranked blockers — shift is moving" : "No ranked blockers — ready to open";

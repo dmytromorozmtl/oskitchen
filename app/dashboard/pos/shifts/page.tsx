@@ -1,9 +1,9 @@
 import { posCloseShiftFormAction, posOpenShiftFormAction } from "@/actions/pos";
 import { PosShiftsCloseoutFlowProofPanel } from "@/components/dashboard/pos/pos-shifts-closeout-flow-proof-panel";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { buildShiftCloseoutFlowProofSlice } from "@/lib/commercial/era20-shift-closeout-flow-proof-era20";
 import { PosShiftCloseAttentionStrip } from "@/components/dashboard/pos-shift-close-attention-strip";
 import { PosShiftCloseHero } from "@/components/dashboard/pos-shift-close-hero";
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PosShiftCloseForm } from "@/components/dashboard/pos-shift-close-form";
 import { PosShiftCloseHistoryPanel } from "@/components/dashboard/pos-shift-close-history-panel";
 import { Button } from "@/components/ui/button";
@@ -40,14 +40,7 @@ export default async function PosShiftsPage({
   const canOpenShift = hasPermission(actor.granted, "pos.shift.open");
   const canCloseShift = hasPermission(actor.granted, "pos.shift.close");
   if (!canOpenShift && !canCloseShift) {
-    return (
-      <PosAccessCard
-        title="POS shifts"
-        description="You do not have permission to open or close POS shifts."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   const canViewShiftHistory = canOpenShift || canCloseShift;

@@ -18,6 +18,36 @@ import {
   resolveCommercialPilotOpsDecision,
   type CommercialPilotOpsStatusModel,
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
+import { buildP0OpsVaultUiSlice } from "@/lib/commercial/p0-ops-vault-ui-era21";
+import { buildTier2GoldenPathUiSlice } from "@/lib/commercial/tier2-staging-golden-path-ui-era21";
+import { buildCommercialGoClosureUiSlice } from "@/lib/commercial/commercial-go-closure-ui-era21";
+import { buildPilotWeek1ExecutionUiSlice } from "@/lib/commercial/pilot-week1-execution-ui-era21";
+import { buildMonth2MarketReadinessUiSlice } from "@/lib/commercial/month2-market-readiness-ui-era21";
+import { buildScaleReadinessUiSlice } from "@/lib/commercial/scale-readiness-ui-era21";
+import { buildSeriesAPartnerExpansionUiSlice } from "@/lib/commercial/series-a-partner-expansion-ui-era21";
+import { buildMarketLeaderPositioningUiSlice } from "@/lib/commercial/market-leader-positioning-ui-era21";
+import { buildSustainedOperationalExcellenceUiSlice } from "@/lib/commercial/sustained-operational-excellence-ui-era21";
+import { buildContinuousImprovementLoopUiSlice } from "@/lib/commercial/continuous-improvement-loop-ui-era22";
+import { buildSustainedProductEvolutionUiSlice } from "@/lib/commercial/sustained-product-evolution-ui-era23";
+import { buildMaintenanceModeUiSlice } from "@/lib/commercial/maintenance-mode-ui-era24";
+import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
+import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
+import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
+import { readMarketLeaderPositioningArtifacts } from "@/scripts/ops/validate-market-leader-positioning-env";
+import { readSustainedOperationalExcellenceArtifacts } from "@/scripts/ops/validate-sustained-operational-excellence-env";
+import { readContinuousImprovementLoopArtifacts } from "@/scripts/ops/validate-continuous-improvement-loop";
+import { P0OpsVaultPhasesPanel } from "@/components/dashboard/p0-ops-vault-phases-panel";
+import { Tier2GoldenPathPhasesPanel } from "@/components/dashboard/tier2-golden-path-phases-panel";
+import { CommercialGoClosurePhasesPanel } from "@/components/dashboard/commercial-go-closure-phases-panel";
+import { PilotWeek1PhasesPanel } from "@/components/dashboard/pilot-week1-phases-panel";
+import { Month2MarketReadinessPhasesPanel } from "@/components/dashboard/month2-market-readiness-phases-panel";
+import { ScaleReadinessPhasesPanel } from "@/components/dashboard/scale-readiness-phases-panel";
+import { SeriesAPartnerExpansionPhasesPanel } from "@/components/dashboard/series-a-partner-expansion-phases-panel";
+import { MarketLeaderPositioningPhasesPanel } from "@/components/dashboard/market-leader-positioning-phases-panel";
+import { SustainedOperationalExcellencePhasesPanel } from "@/components/dashboard/sustained-operational-excellence-phases-panel";
+import { ContinuousImprovementLoopPanel } from "@/components/dashboard/continuous-improvement-loop-panel";
+import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained-product-evolution-panel";
+import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
 import type { PlatformGoLiveProjectRow } from "@/lib/go-live/platform-go-live-focus-era18";
 
 function decisionBadgeVariant(
@@ -36,6 +66,276 @@ export function CommercialPilotOpsStatusPanel(props: {
   const gateRows = buildCommercialPilotOpsGateRows(props.model);
   const goNoGo = props.model.goNoGo.summary;
   const p0 = props.model.p0Staging.summary;
+  const tier2 = props.model.tier2Staging.summary;
+  const p0OpsVault = buildP0OpsVaultUiSlice(p0);
+  const tier2GoldenPath = buildTier2GoldenPathUiSlice({
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2Summary: tier2,
+  });
+  const commercialGoClosure = buildCommercialGoClosureUiSlice({
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
+    goNoGoSummary: props.model.goNoGo.summary,
+  });
+  const pilotWeek1 = buildPilotWeek1ExecutionUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    metricsBaseline: null,
+    caseStudyDraft: null,
+  });
+  const month2Artifacts = readMonth2MarketReadinessArtifacts();
+  const month2MarketReadiness = buildMonth2MarketReadinessUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    metricsBaseline: month2Artifacts.metricsBaseline,
+    caseStudyDraft: month2Artifacts.caseStudyDraft,
+    investorOnepager: month2Artifacts.investorOnepager,
+  });
+  const scaleArtifacts = readScaleReadinessArtifacts();
+  const scaleReadiness = buildScaleReadinessUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging: scaleArtifacts.p0Staging ?? p0,
+    tier2Summary: scaleArtifacts.tier2Summary ?? tier2,
+    metricsBaseline: scaleArtifacts.metricsBaseline ?? month2Artifacts.metricsBaseline,
+    caseStudyDraft: scaleArtifacts.caseStudyDraft ?? month2Artifacts.caseStudyDraft,
+    investorOnepager: scaleArtifacts.investorOnepager ?? month2Artifacts.investorOnepager,
+    rollbackDrill: scaleArtifacts.rollbackDrill,
+  });
+  const seriesAArtifacts = readSeriesAPartnerExpansionArtifacts();
+  const seriesAPartnerExpansion = buildSeriesAPartnerExpansionUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging: seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0,
+    tier2Summary: seriesAArtifacts.tier2Summary ?? scaleArtifacts.tier2Summary ?? tier2,
+    metricsBaseline:
+      seriesAArtifacts.metricsBaseline ?? scaleArtifacts.metricsBaseline ?? month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      seriesAArtifacts.caseStudyDraft ?? scaleArtifacts.caseStudyDraft ?? month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill: seriesAArtifacts.rollbackDrill ?? scaleArtifacts.rollbackDrill,
+    competitorMatrix: seriesAArtifacts.competitorMatrix,
+  });
+  const marketLeaderArtifacts = readMarketLeaderPositioningArtifacts();
+  const marketLeaderPositioning = buildMarketLeaderPositioningUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging:
+      marketLeaderArtifacts.p0Staging ?? seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0,
+    tier2Summary:
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      tier2,
+    metricsBaseline:
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      marketLeaderArtifacts.rollbackDrill ?? seriesAArtifacts.rollbackDrill ?? scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      marketLeaderArtifacts.competitorMatrix ?? seriesAArtifacts.competitorMatrix,
+  });
+  const sustainedOpsArtifacts = readSustainedOperationalExcellenceArtifacts();
+  const sustainedOperationalExcellence = buildSustainedOperationalExcellenceUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging:
+      sustainedOpsArtifacts.p0Staging ??
+      marketLeaderArtifacts.p0Staging ??
+      seriesAArtifacts.p0Staging ??
+      scaleArtifacts.p0Staging ??
+      p0,
+    tier2Summary:
+      sustainedOpsArtifacts.tier2Summary ??
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      tier2,
+    metricsBaseline:
+      sustainedOpsArtifacts.metricsBaseline ??
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      sustainedOpsArtifacts.caseStudyDraft ??
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      sustainedOpsArtifacts.investorOnepager ??
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      sustainedOpsArtifacts.rollbackDrill ??
+      marketLeaderArtifacts.rollbackDrill ??
+      seriesAArtifacts.rollbackDrill ??
+      scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      sustainedOpsArtifacts.competitorMatrix ??
+      marketLeaderArtifacts.competitorMatrix ??
+      seriesAArtifacts.competitorMatrix,
+  });
+  const loopArtifacts = readContinuousImprovementLoopArtifacts();
+  const continuousImprovementLoop = buildContinuousImprovementLoopUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging:
+      loopArtifacts.p0Staging ??
+      sustainedOpsArtifacts.p0Staging ??
+      marketLeaderArtifacts.p0Staging ??
+      seriesAArtifacts.p0Staging ??
+      scaleArtifacts.p0Staging ??
+      p0,
+    tier2Summary:
+      loopArtifacts.tier2Summary ??
+      sustainedOpsArtifacts.tier2Summary ??
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      tier2,
+    metricsBaseline:
+      loopArtifacts.metricsBaseline ??
+      sustainedOpsArtifacts.metricsBaseline ??
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      loopArtifacts.caseStudyDraft ??
+      sustainedOpsArtifacts.caseStudyDraft ??
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      loopArtifacts.investorOnepager ??
+      sustainedOpsArtifacts.investorOnepager ??
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      loopArtifacts.rollbackDrill ??
+      sustainedOpsArtifacts.rollbackDrill ??
+      marketLeaderArtifacts.rollbackDrill ??
+      seriesAArtifacts.rollbackDrill ??
+      scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      loopArtifacts.competitorMatrix ??
+      sustainedOpsArtifacts.competitorMatrix ??
+      marketLeaderArtifacts.competitorMatrix ??
+      seriesAArtifacts.competitorMatrix,
+  });
+  const sustainedProductEvolution = buildSustainedProductEvolutionUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging:
+      loopArtifacts.p0Staging ??
+      sustainedOpsArtifacts.p0Staging ??
+      marketLeaderArtifacts.p0Staging ??
+      seriesAArtifacts.p0Staging ??
+      scaleArtifacts.p0Staging ??
+      p0,
+    tier2Summary:
+      loopArtifacts.tier2Summary ??
+      sustainedOpsArtifacts.tier2Summary ??
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      tier2,
+    metricsBaseline:
+      loopArtifacts.metricsBaseline ??
+      sustainedOpsArtifacts.metricsBaseline ??
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      loopArtifacts.caseStudyDraft ??
+      sustainedOpsArtifacts.caseStudyDraft ??
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      loopArtifacts.investorOnepager ??
+      sustainedOpsArtifacts.investorOnepager ??
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      loopArtifacts.rollbackDrill ??
+      sustainedOpsArtifacts.rollbackDrill ??
+      marketLeaderArtifacts.rollbackDrill ??
+      seriesAArtifacts.rollbackDrill ??
+      scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      loopArtifacts.competitorMatrix ??
+      sustainedOpsArtifacts.competitorMatrix ??
+      marketLeaderArtifacts.competitorMatrix ??
+      seriesAArtifacts.competitorMatrix,
+  });
+  const maintenanceMode = buildMaintenanceModeUiSlice({
+    goNoGoSummary: props.model.goNoGo.summary,
+    p0Staging:
+      loopArtifacts.p0Staging ??
+      sustainedOpsArtifacts.p0Staging ??
+      marketLeaderArtifacts.p0Staging ??
+      seriesAArtifacts.p0Staging ??
+      scaleArtifacts.p0Staging ??
+      p0,
+    tier2Summary:
+      loopArtifacts.tier2Summary ??
+      sustainedOpsArtifacts.tier2Summary ??
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      tier2,
+    metricsBaseline:
+      loopArtifacts.metricsBaseline ??
+      sustainedOpsArtifacts.metricsBaseline ??
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      loopArtifacts.caseStudyDraft ??
+      sustainedOpsArtifacts.caseStudyDraft ??
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      loopArtifacts.investorOnepager ??
+      sustainedOpsArtifacts.investorOnepager ??
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      loopArtifacts.rollbackDrill ??
+      sustainedOpsArtifacts.rollbackDrill ??
+      marketLeaderArtifacts.rollbackDrill ??
+      seriesAArtifacts.rollbackDrill ??
+      scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      loopArtifacts.competitorMatrix ??
+      sustainedOpsArtifacts.competitorMatrix ??
+      marketLeaderArtifacts.competitorMatrix ??
+      seriesAArtifacts.competitorMatrix,
+  });
   const launchBlockerCount = props.launchBlockerProjects
     ? buildCommercialPilotOpsGoLiveBridgeRows(props.launchBlockerProjects).length
     : 0;
@@ -215,6 +515,91 @@ export function CommercialPilotOpsStatusPanel(props: {
             <p className="text-zinc-500">
               Run <span className="font-mono">npm run smoke:p0-staging-proof-unblock</span> after vault
               credentials are configured.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      {p0OpsVault ? <P0OpsVaultPhasesPanel slice={p0OpsVault} variant="platform" /> : null}
+
+      {tier2GoldenPath ? (
+        <Tier2GoldenPathPhasesPanel slice={tier2GoldenPath} variant="platform" />
+      ) : null}
+
+      {commercialGoClosure ? (
+        <CommercialGoClosurePhasesPanel slice={commercialGoClosure} variant="platform" />
+      ) : null}
+
+      {pilotWeek1 ? <PilotWeek1PhasesPanel slice={pilotWeek1} variant="platform" /> : null}
+
+      {month2MarketReadiness ? (
+        <Month2MarketReadinessPhasesPanel slice={month2MarketReadiness} variant="platform" />
+      ) : null}
+
+      {scaleReadiness ? (
+        <ScaleReadinessPhasesPanel slice={scaleReadiness} variant="platform" />
+      ) : null}
+
+      {seriesAPartnerExpansion ? (
+        <SeriesAPartnerExpansionPhasesPanel slice={seriesAPartnerExpansion} variant="platform" />
+      ) : null}
+
+      {marketLeaderPositioning ? (
+        <MarketLeaderPositioningPhasesPanel slice={marketLeaderPositioning} variant="platform" />
+      ) : null}
+
+      {sustainedOperationalExcellence ? (
+        <SustainedOperationalExcellencePhasesPanel
+          slice={sustainedOperationalExcellence}
+          variant="platform"
+        />
+      ) : null}
+
+      {continuousImprovementLoop ? (
+        <ContinuousImprovementLoopPanel slice={continuousImprovementLoop} variant="platform" />
+      ) : null}
+
+      {sustainedProductEvolution ? (
+        <SustainedProductEvolutionPanel slice={sustainedProductEvolution} variant="platform" />
+      ) : null}
+
+      {maintenanceMode ? <MaintenanceModePanel slice={maintenanceMode} variant="platform" /> : null}
+
+      <Card className="scroll-mt-24 border-zinc-800 bg-zinc-900/60" data-testid="commercial-pilot-tier2-panel">
+        <CardHeader>
+          <CardTitle className="text-white">Tier 2 staging golden path</CardTitle>
+          <CardDescription className="text-zinc-400">
+            Source:{" "}
+            <span className="font-mono text-xs">artifacts/tier2-staging-golden-path-summary.json</span>
+            {!props.model.tier2Staging.artifactPresent ? " · artifact not found on this host" : ""}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm text-zinc-300">
+          {tier2 ? (
+            <>
+              <div className="flex flex-wrap gap-2">
+                <Badge
+                  variant={tier2.tier2ProofStatus === "proof_passed" ? "default" : "secondary"}
+                  className="rounded-full"
+                >
+                  {tier2.tier2ProofStatus.replaceAll("_", " ")}
+                </Badge>
+                <span className="text-zinc-500">overall {tier2.overall}</span>
+              </div>
+              <p className="text-zinc-400">
+                Orchestrator:{" "}
+                <span className="font-mono text-xs">npm run smoke:tier2-staging-golden-path</span>
+              </p>
+              <p>
+                <Link href="/dashboard/launch-wizard" className="text-amber-300 underline-offset-2 hover:underline">
+                  Open Launch Wizard Tier 2 panel
+                </Link>
+              </p>
+            </>
+          ) : (
+            <p className="text-zinc-500">
+              Run after P0 PASS:{" "}
+              <span className="font-mono">npm run smoke:tier2-staging-golden-path</span>
             </p>
           )}
         </CardContent>

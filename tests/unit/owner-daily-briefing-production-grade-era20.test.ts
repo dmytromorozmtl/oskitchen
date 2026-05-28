@@ -109,6 +109,33 @@ describe("owner-daily-briefing-production-grade-era20", () => {
     expect(state?.href).toBe("/dashboard/order-hub");
   });
 
+  it("builds pure operational mode empty state with improvement loop CTA", () => {
+    const state = buildOwnerDailyBriefingOperationalEmptyState({
+      topActionsCount: 0,
+      activeOrders: 2,
+      readinessOverall: 92,
+      riskAllClear: true,
+      pureOperationalMode: true,
+      continuousImprovementHref: "/platform/commercial-pilot-ops#continuous-improvement-loop",
+    });
+    expect(state?.title).toContain("Pure operational mode");
+    expect(state?.ctaLabel).toBe("Open improvement loop");
+    expect(state?.href).toContain("#continuous-improvement-loop");
+  });
+
+  it("builds maintenance mode empty state with platform CTA", () => {
+    const state = buildOwnerDailyBriefingOperationalEmptyState({
+      topActionsCount: 0,
+      activeOrders: 1,
+      readinessOverall: 95,
+      riskAllClear: true,
+      maintenanceModeActive: true,
+      maintenanceModeHref: "/platform/commercial-pilot-ops#maintenance-mode",
+    });
+    expect(state?.title).toContain("Maintenance mode");
+    expect(state?.ctaLabel).toBe("Open maintenance mode");
+  });
+
   it("labels P0 blocked honestly", () => {
     expect(resolveBriefingP0ProofBlockedLabel("awaiting_ops_credentials")).toContain(
       "ops credentials",

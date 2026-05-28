@@ -145,4 +145,31 @@ describe("integration-health-trust-layer-era20", () => {
     expect(enriched.cards[0]?.stateTone).toBe("degraded");
     expect(enriched.headline).toContain("P0 staging proof blocked");
   });
+
+  it("shows tier2 golden path banner when P0 passed and tier2 incomplete", () => {
+    const p0Passed = { ...p0Awaiting, p0ProofStatus: "proof_passed", overall: "PASSED" };
+    const enriched = enrichIntegrationHealthChannelCardsWithTrustLayer(
+      {
+        policyId: "era19-integration-health-channel-cards-v1",
+        loadedAt: "2026-05-28T00:00:00.000Z",
+        headline: "test",
+        cards: [],
+      },
+      p0Passed,
+      {
+        version: "era20-tier2-staging-golden-path-v1",
+        runAt: "2026-05-28T00:00:00.000Z",
+        commitSha: null,
+        overall: "SKIPPED",
+        tier2ProofStatus: "awaiting_manual_phases",
+        p0ProofStatus: "proof_passed",
+        steps: [],
+        missingManualEnvVars: ["TIER2_CHANNEL_WEBHOOK_MANUAL"],
+        playbookDoc: "docs/tier2-staging-golden-path-execution-playbook-2026-05-28.md",
+      },
+    );
+    expect(enriched.p0Trust).toBeNull();
+    expect(enriched.tier2GoldenPath?.visible).toBe(true);
+    expect(enriched.headline).toContain("manual");
+  });
 });

@@ -1,5 +1,5 @@
 import { posCreateRegisterFormAction } from "@/actions/pos";
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,14 +12,7 @@ import { listPosRegisters } from "@/services/pos/pos-register-service";
 export default async function PosRegistersPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.register.manage")) {
-    return (
-      <PosAccessCard
-        title="POS registers"
-        description="You do not have permission to manage POS registers."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   const [rows, locations] = await Promise.all([

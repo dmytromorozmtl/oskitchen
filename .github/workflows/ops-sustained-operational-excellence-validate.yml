@@ -1,0 +1,31 @@
+# Sustained operational excellence env validation — workflow_dispatch (Step 9, post Market leader).
+
+name: Sustained Operational Excellence Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-sustained-operational-excellence-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Sustained operational excellence env (JSON summary)
+        run: npm run ops:validate-sustained-operational-excellence-env -- --json
+        env:
+          SCALE_PER_CUSTOMER_GO_ISOLATION: ${{ secrets.SCALE_PER_CUSTOMER_GO_ISOLATION }}
+          SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED: ${{ secrets.SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED }}
+          MARKET_LEADER_CATEGORY_NARRATIVE_REVIEWED: ${{ secrets.MARKET_LEADER_CATEGORY_NARRATIVE_REVIEWED }}
+          MARKET_LEADER_MOAT_DECK_REVIEWED: ${{ secrets.MARKET_LEADER_MOAT_DECK_REVIEWED }}
+          MARKET_LEADER_ANALYST_KIT_PUBLISHED: ${{ secrets.MARKET_LEADER_ANALYST_KIT_PUBLISHED }}
+          MARKET_LEADER_EXPANSION_MOTION_REVIEWED: ${{ secrets.MARKET_LEADER_EXPANSION_MOTION_REVIEWED }}
+          SUSTAINED_OPS_DAILY_CADENCE_ATTESTED: ${{ secrets.SUSTAINED_OPS_DAILY_CADENCE_ATTESTED }}
+          SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED: ${{ secrets.SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED }}
+          SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED: ${{ secrets.SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED }}
+          SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED: ${{ secrets.SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED }}

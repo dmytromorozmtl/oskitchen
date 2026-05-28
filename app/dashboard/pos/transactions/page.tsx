@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,14 +18,7 @@ import { prisma } from "@/lib/prisma";
 export default async function PosTransactionsPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
-    return (
-      <PosAccessCard
-        title="POS transactions"
-        description="You do not have permission to view POS transactions."
-        primaryHref="/dashboard/pos"
-        primaryLabel="Back to POS"
-      />
-    );
+    return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
   const rows = await prisma.pOSTransaction.findMany({

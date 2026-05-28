@@ -14,6 +14,9 @@ export const ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_BACKLOG_ID = "KOS-E20-015" as 
 export const ERA20_PILOT_ICP_QUALIFIED_EXAMPLE_TEMPLATE_PATH =
   "config/commercial/pilot-icp-qualified-example.template.json" as const;
 
+export const ERA20_PILOT_ICP_PROSPECT_DRAFT_TEMPLATE_PATH =
+  "config/commercial/pilot-icp-prospect-draft.template.json" as const;
+
 export const ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_ENV_VAR = "PILOT_GONOGO_ICP_INPUT_JSON" as const;
 
 export const ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_DOC =

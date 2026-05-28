@@ -1,0 +1,27 @@
+# Month 2 market readiness env validation — workflow_dispatch (Step 5, post Week 1).
+
+name: Month 2 Market Readiness Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-month2-market-readiness-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Month 2 market readiness env (JSON summary)
+        run: npm run ops:validate-month2-market-readiness-env -- --json
+        env:
+          MONTH2_INVESTOR_FOUNDER_SIGNOFF: ${{ secrets.MONTH2_INVESTOR_FOUNDER_SIGNOFF }}
+          MONTH2_GTM_GHOST_KITCHEN_LANDING_REVIEWED: ${{ secrets.MONTH2_GTM_GHOST_KITCHEN_LANDING_REVIEWED }}
+          MONTH2_GTM_MEAL_PREP_LANDING_REVIEWED: ${{ secrets.MONTH2_GTM_MEAL_PREP_LANDING_REVIEWED }}
+          MONTH2_API_RATE_LIMITS_DOC_REVIEWED: ${{ secrets.MONTH2_API_RATE_LIMITS_DOC_REVIEWED }}
+          PILOT_CASE_STUDY_CUSTOMER_APPROVAL: ${{ secrets.PILOT_CASE_STUDY_CUSTOMER_APPROVAL }}
+          MONTH2_SECOND_PROSPECT_QUEUED: ${{ secrets.MONTH2_SECOND_PROSPECT_QUEUED }}

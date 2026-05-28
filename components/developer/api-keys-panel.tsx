@@ -6,7 +6,8 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { createApiKeyForm, revokeApiKeyById } from "@/actions/monetization";
+import { DEVELOPER_API_SCOPES, DEVELOPER_API_SCOPE_LABEL } from "@/lib/developer/api-scopes";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,6 +33,18 @@ export function ApiKeysPanel({ keys }: { keys: Row[] }) {
   const router = useRouter();
   const [pending, startTransition] = React.useTransition();
   const [recentSecret, setRecentSecret] = React.useState<string | null>(null);
+  const [selectedScopes, setSelectedScopes] = React.useState<Set<string>>(
+    () => new Set(DEVELOPER_API_SCOPES),
+  );
+
+  const toggleScope = (scope: string) => {
+    setSelectedScopes((prev) => {
+      const next = new Set(prev);
+      if (next.has(scope)) next.delete(scope);
+      else next.add(scope);
+      return next;
+    });
+  };
 
   return (
     <div className="space-y-8">
@@ -61,6 +74,24 @@ export function ApiKeysPanel({ keys }: { keys: Row[] }) {
               className="min-w-[220px]"
             />
           </div>
+          <fieldset className="min-w-[280px] space-y-2 rounded-lg border border-border/60 p-3">
+            <legend className="px-1 text-xs font-medium text-muted-foreground">API scopes</legend>
+            {DEVELOPER_API_SCOPES.map((scope) => (
+              <label key={scope} className="flex items-start gap-2 text-xs">
+                <Checkbox
+                  checked={selectedScopes.has(scope)}
+                  onCheckedChange={() => toggleScope(scope)}
+                />
+                <span>
+                  <span className="font-mono">{scope}</span>
+                  <span className="ml-1 text-muted-foreground">— {DEVELOPER_API_SCOPE_LABEL[scope]}</span>
+                </span>
+                {selectedScopes.has(scope) ? (
+                  <input type="hidden" name="scopes" value={scope} />
+                ) : null}
+              </label>
+            ))}
+          </fieldset>
           <Button type="submit" disabled={pending} className="rounded-full">
             Generate
           </Button>

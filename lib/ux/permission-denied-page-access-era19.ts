@@ -93,6 +93,14 @@ export function hasInventoryOperationsPageAccess(actor: WorkspacePermissionActor
   return hasPermission(actor.granted, "production.manage");
 }
 
+export function hasPosHubPageAccess(actor: WorkspacePermissionActor): boolean {
+  return hasPermission(actor.granted, "pos.access");
+}
+
+export function hasKdsPageAccess(actor: WorkspacePermissionActor): boolean {
+  return hasPermission(actor.granted, "kitchen.view");
+}
+
 export function resolvePackingDeniedSurfaceId(
   page: "command" | "verify" | "scanner" | "reports",
 ): PermissionDeniedSurfaceId {

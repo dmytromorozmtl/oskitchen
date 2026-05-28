@@ -2,8 +2,8 @@ import type { NavGroupDef } from "@/lib/navigation/nav-types";
 
 /**
  * Nav exposure aligned with `docs/feature-maturity-matrix.md`.
- * `hidden_default` and `internal` links are omitted from focused sidebar IA;
- * `preview` / `placeholder` stay reachable and show honesty badges when visible.
+ * `hidden_default`, `placeholder`, and `preview` links are omitted from focused sidebar IA
+ * unless the operator enables “Show all modules” (`navScopeAll`).
  */
 export type NavMaturityExposure =
   | "default"
@@ -95,6 +95,16 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
     prefix: "/dashboard/developer",
     exposure: "internal",
     matrixRef: "Platform admin and support",
+  },
+  {
+    prefix: "/dashboard/launch-wizard",
+    exposure: "default",
+    matrixRef: "Launch Wizard — primary onboarding entry",
+  },
+  {
+    prefix: "/dashboard/go-live",
+    exposure: "hidden_default",
+    matrixRef: "Go-live projects — advanced validation (Launch Wizard primary)",
   },
   {
     prefix: "/dashboard/franchise",
@@ -213,7 +223,7 @@ export function shouldShowNavLinkByMaturity(
     return ctx.gtmSurfaceAccess;
   }
 
-  if (exposure === "hidden_default" || exposure === "placeholder") {
+  if (exposure === "hidden_default" || exposure === "placeholder" || exposure === "preview") {
     return ctx.navScopeAll;
   }
 

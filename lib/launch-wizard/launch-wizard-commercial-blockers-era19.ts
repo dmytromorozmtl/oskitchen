@@ -5,9 +5,21 @@ import {
   type CommercialPilotOpsStatusModel,
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import {
+  buildP0OpsVaultPhaseStatuses,
+  formatP0OpsVaultPhaseBlockerDetail,
+  resolveNextIncompleteP0OpsVaultPhase,
+} from "@/lib/commercial/p0-ops-vault-phases-era21";
 import type { PilotGoNoGoCustomerStatus } from "@/lib/commercial/pilot-gono-go-summary";
+import {
+  buildTier2GoldenPathPhaseStatuses,
+  formatTier2GoldenPathPhaseBlockerDetail,
+  resolveNextIncompleteTier2GoldenPathPhase,
+} from "@/lib/commercial/tier2-staging-golden-path-phases-era21";
+import { buildTier2GoldenPathUiSlice } from "@/lib/commercial/tier2-staging-golden-path-ui-era21";
 import { INTEGRATION_HEALTH_RECOVERY_ANCHOR } from "@/lib/integrations/integration-health-recovery-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
 
 export const LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ERA19_POLICY_ID =
   "era19-launch-wizard-commercial-blockers-v1" as const;
@@ -47,6 +59,16 @@ export function resolveLaunchWizardChannelLiveProofBlocked(
     proof !== "proof_passed/proof_passed" &&
     !(proof.includes("proof_passed") && !proof.includes("proof_skipped"))
   );
+}
+
+export function resolveLaunchWizardTier2ProofBlocked(
+  commercialOps: CommercialPilotOpsStatusModel | null | undefined,
+): boolean {
+  const p0 = commercialOps?.p0Staging.summary;
+  if (p0?.p0ProofStatus !== "proof_passed") return false;
+  const tier2 = commercialOps?.tier2Staging.summary;
+  if (!tier2) return true;
+  return tier2.tier2ProofStatus !== "proof_passed";
 }
 
 export function buildLaunchWizardCommercialBlockersSlice(input: {
@@ -99,15 +121,47 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
 
   if (input.p0Blocked) {
     const p0 = input.commercialOps?.p0Staging.summary;
+    const phases = buildP0OpsVaultPhaseStatuses({
+      missingEnvVars: p0?.allMissingEnvVars ?? [],
+    });
+    const nextPhase = resolveNextIncompleteP0OpsVaultPhase(phases);
+    const phaseDetail = nextPhase
+      ? formatP0OpsVaultPhaseBlockerDetail(nextPhase)
+      : p0 && p0.allMissingEnvVars.length > 0
+        ? `${p0.allMissingEnvVars.length} ops env var(s) missing.`
+        : "SSO IdP, GitHub first-green, or channel live smoke incomplete.";
     blockers.push({
       id: "p0-staging-blocked",
-      label: `P0 staging proof — ${p0?.p0ProofStatus.replaceAll("_", " ") ?? "blocked"}`,
-      detail:
-        p0 && p0.allMissingEnvVars.length > 0
-          ? `${p0.allMissingEnvVars.length} ops env var(s) missing.`
-          : "SSO IdP, GitHub first-green, or channel live smoke incomplete.",
+      label: nextPhase
+        ? `P0 ops vault — ${nextPhase.label.replace(/^Phase \d+ — /, "")}`
+        : `P0 staging proof — ${p0?.p0ProofStatus.replaceAll("_", " ") ?? "blocked"}`,
+      detail: phaseDetail,
       tone: "urgent",
       href: `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
+    });
+  }
+
+  if (resolveLaunchWizardTier2ProofBlocked(input.commercialOps)) {
+    const tier2 = input.commercialOps?.tier2Staging.summary;
+    const goldenPath = buildTier2GoldenPathUiSlice({
+      p0ProofStatus: "proof_passed",
+      tier2Summary: tier2 ?? null,
+    });
+    const phases = goldenPath?.phases ?? buildTier2GoldenPathPhaseStatuses({ tier2Summary: tier2 ?? null });
+    const nextPhase = resolveNextIncompleteTier2GoldenPathPhase(phases);
+    const phaseDetail = nextPhase
+      ? formatTier2GoldenPathPhaseBlockerDetail(nextPhase)
+      : tier2?.tier2ProofStatus === "awaiting_manual_phases"
+        ? `${tier2.missingManualEnvVars.length} manual phase env var(s) missing.`
+        : "Run npm run smoke:tier2-staging-golden-path after P0 PASS.";
+    blockers.push({
+      id: "tier2-staging-blocked",
+      label: nextPhase
+        ? `Tier 2 golden path — ${nextPhase.label.replace(/^Phase \d+ — /, "")}`
+        : `Tier 2 golden path — ${tier2?.tier2ProofStatus.replaceAll("_", " ") ?? "not started"}`,
+      detail: phaseDetail,
+      tone: "urgent",
+      href: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     });
   }
 
