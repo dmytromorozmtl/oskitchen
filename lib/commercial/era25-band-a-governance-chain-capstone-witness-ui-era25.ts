@@ -21,6 +21,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlice,
+  type Era25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlice,
+} from "@/lib/commercial/era25-post-band-a-governance-steady-product-mode-witness-ui-era25";
 import { LAUNCH_WIZARD_ERA25_BAND_A_GOVERNANCE_CHAIN_CAPSTONE_WITNESS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-band-a-governance-chain-capstone-witness-era66";
 
 export const ERA25_BAND_A_GOVERNANCE_CHAIN_CAPSTONE_WITNESS_ERA25_UI_POLICY_ID =
@@ -58,6 +62,7 @@ export type Era25BandAGovernanceChainCapstoneWitnessEra25UiSlice = {
   commercialOpsHref: string;
   todayHref: string;
   headline: string;
+  era25PostBandAGovernanceSteadyProductModeWitness: Era25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlice | null;
 };
 
 export function buildEra25BandAGovernanceChainCapstoneWitnessEra25UiSlice(input: {
@@ -109,6 +114,27 @@ export function buildEra25BandAGovernanceChainCapstoneWitnessEra25UiSlice(input:
   const capstoneWitnessComplete = capstoneWitnessIntegrity.era25BandAGovernanceChainCapstoneWitnessComplete;
   const capstoneWitnessBlocked = !capstoneWitnessComplete;
 
+  const era25PostBandAGovernanceSteadyProductModeWitness =
+    buildEra25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlice({
+      era25BandAGovernanceChainCapstoneWitnessVisible: true,
+      era25MarketProofGovernanceChainClosed: input.era25MarketProofGovernanceChainClosed,
+      bandAGovernanceChainCapstoneWitnessActive:
+        capstoneWitnessIntegrity.bandAGovernanceChainCapstoneWitnessActive,
+      era25GovernanceTrainSealed: capstoneWitnessIntegrity.era25GovernanceTrainSealed,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+      capstoneIntegritySummary: capstoneWitnessIntegrity,
+    });
+
   const headline = capstoneWitnessComplete
     ? "Band A governance chain capstone witness active · era61–AO stack closed · post-governance steady ops"
     : input.postTerminalSealCommercialOpsPermanenceActive
@@ -159,6 +185,7 @@ export function buildEra25BandAGovernanceChainCapstoneWitnessEra25UiSlice(input:
     commercialOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#commercial-pilot-ops`,
     todayHref: "/dashboard/today",
     headline,
+    era25PostBandAGovernanceSteadyProductModeWitness,
   };
 }
 

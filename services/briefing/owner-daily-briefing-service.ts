@@ -249,6 +249,10 @@ import {
   mergeBriefingEra25BandAGovernanceChainCapstoneWitnessTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-band-a-governance-chain-capstone-witness-era66";
 import {
+  buildOwnerDailyBriefingEra25PostBandAGovernanceSteadyProductModeWitnessAction,
+  mergeBriefingEra25PostBandAGovernanceSteadyProductModeWitnessTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-post-band-a-governance-steady-product-mode-witness-era67";
+import {
   buildOwnerDailyBriefingEra25BandAMarketProofExecutionSolePathAction,
   mergeBriefingEra25BandAMarketProofExecutionSolePathTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-band-a-market-proof-execution-sole-path-era61";
@@ -1376,6 +1380,33 @@ export async function loadOwnerDailyBriefing(
             null,
         )
       : null;
+  const era25PostBandAGovernanceSteadyProductModeWitnessRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25PostBandAGovernanceSteadyProductModeWitnessAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+            ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence
+            ?.marketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence
+            ?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+            ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+            ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
+            ?.era25ConvergenceGovernanceTerminusFreeze?.era25BandAMarketProofExecutionSolePath
+            ?.era25P0MarketProofHonestClosureCapstone?.era25PostMarketProofSteadyOperationalWitness
+            ?.era25GovernanceTrainTerminalSeal?.era25PostTerminalSealCommercialOpsPermanence
+            ?.era25BandAGovernanceChainCapstoneWitness?.era25PostBandAGovernanceSteadyProductModeWitness ??
+            sustainedOpsConvergenceEra25?.pureOperationalModeTerminus
+              ?.commercialPilotConvergenceTrainClosure?.sustainedProductEvolutionReentrant
+              ?.era25PostReentrantCharterLock?.era25SteadyStateOperatorLoopLock
+              ?.era25CommercialPilotConvergenceTrainCapstone?.era25ConvergenceGovernanceTerminusFreeze
+              ?.era25BandAMarketProofExecutionSolePath?.era25P0MarketProofHonestClosureCapstone
+              ?.era25PostMarketProofSteadyOperationalWitness?.era25GovernanceTrainTerminalSeal
+              ?.era25PostTerminalSealCommercialOpsPermanence?.era25BandAGovernanceChainCapstoneWitness
+              ?.era25PostBandAGovernanceSteadyProductModeWitness ??
+            null,
+        )
+      : null;
   const era25PostMarketProofSteadyOperationalWitnessRankedAction =
     rolePack === "owner"
       ? buildOwnerDailyBriefingEra25PostMarketProofSteadyOperationalWitnessAction(
@@ -1958,6 +1989,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25BandAGovernanceChainCapstoneWitnessRankedAction) {
     allTopActions = mergeBriefingEra25BandAGovernanceChainCapstoneWitnessTopActions(
       era25BandAGovernanceChainCapstoneWitnessRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25PostBandAGovernanceSteadyProductModeWitnessRankedAction) {
+    allTopActions = mergeBriefingEra25PostBandAGovernanceSteadyProductModeWitnessTopActions(
+      era25PostBandAGovernanceSteadyProductModeWitnessRankedAction,
       allTopActions,
     );
   }

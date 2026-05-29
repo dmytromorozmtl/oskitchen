@@ -71,7 +71,13 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 
 ---
 
-## Next step — Phase AQ (era67)
+## Next step — Phase AQ (era67) — **IMPLEMENTED**
+
+See [`docs/next-step-era25-post-band-a-governance-steady-product-mode-witness-phase-aq-product-2026-05-28.md`](./next-step-era25-post-band-a-governance-steady-product-mode-witness-phase-aq-product-2026-05-28.md).
+
+---
+
+## Next step — Phase AQ (era67) — archive preview
 
 **Era25 post-band-a-governance steady product mode witness integrity** — after capstone witness, attests post-governance steady product mode (improvement loop + honest commercial artifacts only, zero era25 env mutation).
 
@@ -79,11 +85,11 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 |------|-------|
 | Prerequisite milestone | Honest `era25-band-a-governance-chain-capstone-witness` baseline + dual cert green |
 | Parent evaluator | era66 Band A governance chain capstone witness integrity |
-| Platform anchor | `#era25-post-band-a-governance-steady-product-mode-witness` (planned) |
-| Briefing meta priority | **42** (planned) |
-| Env keys (planned) | `ERA25_POST_BAND_A_GOVERNANCE_STEADY_PRODUCT_MODE_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-post-band-a-governance-steady-product-mode-witness-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `steady_product_mode_witness_without_capstone`, `steady_product_mode_witness_claims_governance_reopen`, `fake_steady_product_mode_witness_*`, upstream era66 fail |
+| Platform anchor | `#era25-post-band-a-governance-steady-product-mode-witness` |
+| Briefing meta priority | **42** |
+| Env keys | `ERA25_POST_BAND_A_GOVERNANCE_STEADY_PRODUCT_MODE_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
+| Baseline artifact | `artifacts/era25-post-band-a-governance-steady-product-mode-witness-integrity-baseline.json` |
+| Violation IDs | `steady_product_mode_witness_without_capstone`, `steady_product_mode_witness_claims_governance_reopen`, `fake_steady_product_mode_witness_*`, upstream era66 fail |
 | CI | `test:ci:era25-post-band-a-governance-steady-product-mode-witness-integrity-era67` |
 
-**Human acceptance (preview):** Band A capstone witness PASS → attest post-governance steady product mode witness → validate JSON → operator playbook enters pure product improvement loop with zero era25 env mutation forever.
+**Human acceptance:** Band A capstone witness PASS → attest post-governance steady product mode witness → validate JSON → operator playbook enters pure product improvement loop with zero era25 env mutation forever.
