@@ -89,6 +89,8 @@ export function LaunchWizardTodayStrip(props: {
       props.model.era25BandAGovernanceChainCapstoneWitnessIntegrity,
     era25PostBandAGovernanceSteadyProductModeWitness:
       props.model.era25PostBandAGovernanceSteadyProductModeWitnessIntegrity,
+    era25PostSteadyProductModeCommercialOpsRhythmPermanence:
+      props.model.era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -634,6 +636,21 @@ export function LaunchWizardTodayStrip(props: {
               >
                 Steady product mode{" "}
                 {view.era25PostBandAGovernanceSteadyProductModeWitness.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25PostSteadyProductModeCommercialOpsRhythmPermanence ? (
+              <Badge
+                variant={
+                  view.era25PostSteadyProductModeCommercialOpsRhythmPermanence
+                    .era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-post-steady-product-mode-commercial-ops-rhythm-permanence"
+              >
+                Ops rhythm permanence{" "}
+                {view.era25PostSteadyProductModeCommercialOpsRhythmPermanence.progressLabel}
               </Badge>
             ) : null}
           </div>

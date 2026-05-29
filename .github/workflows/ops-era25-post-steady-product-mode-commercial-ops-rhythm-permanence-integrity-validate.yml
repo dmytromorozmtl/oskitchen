@@ -1,0 +1,26 @@
+# Era25 post-steady-product-mode commercial ops rhythm permanence integrity — blocks permanence before honest steady product mode witness.
+
+name: Era25 Post Steady Product Mode Commercial Ops Rhythm Permanence Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-post-steady-product-mode-commercial-ops-rhythm-permanence-integrity-baseline.json"
+      - "lib/commercial/era25-post-steady-product-mode-commercial-ops-rhythm-permanence-integrity-era68.ts"
+      - "lib/commercial/era25-post-steady-product-mode-commercial-ops-rhythm-permanence-phases-era68.ts"
+      - "scripts/ops/validate-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-integrity.ts"
+
+jobs:
+  validate-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 post-steady-product-mode commercial ops rhythm permanence integrity (JSON)
+        run: npm run ops:validate-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-integrity -- --json

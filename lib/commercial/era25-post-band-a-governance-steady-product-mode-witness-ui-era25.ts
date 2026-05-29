@@ -21,6 +21,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25PostSteadyProductModeCommercialOpsRhythmPermanenceEra25UiSlice,
+  type Era25PostSteadyProductModeCommercialOpsRhythmPermanenceEra25UiSlice,
+} from "@/lib/commercial/era25-post-steady-product-mode-commercial-ops-rhythm-permanence-ui-era25";
 import { LAUNCH_WIZARD_ERA25_POST_BAND_A_GOVERNANCE_STEADY_PRODUCT_MODE_WITNESS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-post-band-a-governance-steady-product-mode-witness-era67";
 
 export const ERA25_POST_BAND_A_GOVERNANCE_STEADY_PRODUCT_MODE_WITNESS_ERA25_UI_POLICY_ID =
@@ -58,6 +62,7 @@ export type Era25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlice = {
   commercialOpsHref: string;
   todayHref: string;
   headline: string;
+  era25PostSteadyProductModeCommercialOpsRhythmPermanence: Era25PostSteadyProductModeCommercialOpsRhythmPermanenceEra25UiSlice | null;
 };
 
 export function buildEra25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlice(input: {
@@ -108,6 +113,28 @@ export function buildEra25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlic
   const steadyProductModeWitnessComplete =
     steadyProductModeWitnessIntegrity.era25PostBandAGovernanceSteadyProductModeWitnessComplete;
   const steadyProductModeWitnessBlocked = !steadyProductModeWitnessComplete;
+
+  const era25PostSteadyProductModeCommercialOpsRhythmPermanence =
+    buildEra25PostSteadyProductModeCommercialOpsRhythmPermanenceEra25UiSlice({
+      era25PostBandAGovernanceSteadyProductModeWitnessVisible: true,
+      era25MarketProofGovernanceChainClosed: input.era25MarketProofGovernanceChainClosed,
+      postBandAGovernanceSteadyProductModeWitnessActive:
+        steadyProductModeWitnessIntegrity.postBandAGovernanceSteadyProductModeWitnessActive,
+      era25GovernanceTrainSealed: steadyProductModeWitnessIntegrity.era25GovernanceTrainSealed,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+      capstoneIntegritySummary: input.capstoneIntegritySummary ?? null,
+      steadyProductModeIntegritySummary: steadyProductModeWitnessIntegrity,
+    });
 
   const headline = steadyProductModeWitnessComplete
     ? "Post-governance steady product mode witness active · improvement loop + honest commercial artifacts only"
@@ -160,6 +187,7 @@ export function buildEra25PostBandAGovernanceSteadyProductModeWitnessEra25UiSlic
     commercialOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#commercial-pilot-ops`,
     todayHref: "/dashboard/today",
     headline,
+    era25PostSteadyProductModeCommercialOpsRhythmPermanence,
   };
 }
 
