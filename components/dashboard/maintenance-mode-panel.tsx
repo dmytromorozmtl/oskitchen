@@ -16,6 +16,7 @@ import { formatLinearPathPermanentlyClosedLabel } from "@/lib/commercial/linear-
 import { formatLinearChainTerminusGuardLabel } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import { formatEra25CharterExitLabel } from "@/lib/commercial/era25-charter-exit-ui-era24";
 import { formatEra25FirstCharterSliceReadinessLabel } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
+import { formatEra25EngineeringGatesLabel } from "@/lib/commercial/era25-engineering-gates-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -659,6 +660,84 @@ export function MaintenanceModePanel(props: {
                           No era25 engineering until{" "}
                           <span className="font-mono">era25_first_charter_slice_ready</span>
                         </p>
+
+                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                          .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                          .firstCharterSliceReadiness?.engineeringGates ? (
+                          <div
+                            id="era25-engineering-gates-require-signed-charter"
+                            className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-violet-800/50 px-3 py-3"
+                            data-testid="era25-engineering-gates-require-signed-charter-panel"
+                          >
+                            <p className="font-medium text-violet-100">
+                              era25 engineering gates — require signed charter
+                            </p>
+                            <p className="mt-1 text-violet-200/80">
+                              {formatEra25EngineeringGatesLabel(
+                                slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                  .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                  .firstCharterSliceReadiness.engineeringGates,
+                              )}
+                            </p>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              <Badge
+                                variant="outline"
+                                className="rounded-full font-mono text-[10px] text-violet-200"
+                              >
+                                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.era25EngineeringGatesMilestone.replaceAll(
+                                  "_",
+                                  " ",
+                                )}
+                              </Badge>
+                              <Badge
+                                variant="outline"
+                                className="rounded-full text-[10px] text-violet-300"
+                              >
+                                gates{" "}
+                                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                  .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                  .firstCharterSliceReadiness.engineeringGates.gatesBlocked
+                                  ? "blocked"
+                                  : "open"}
+                              </Badge>
+                            </div>
+                            <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.guardrails.map(
+                                (rule) => (
+                                  <li key={rule}>{rule}</li>
+                                ),
+                              )}
+                            </ul>
+                            <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                              <span>
+                                {
+                                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates
+                                    .postReadinessOrchestratorCommand
+                                }
+                              </span>
+                              <span>
+                                {
+                                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates.validateCommand
+                                }
+                              </span>
+                              <span>
+                                {
+                                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates.syncReportCommand
+                                }
+                              </span>
+                            </div>
+                            <p className="mt-2 text-violet-300/70">
+                              First era25 product slice only when{" "}
+                              <span className="font-mono">era25_engineering_gates_open</span>
+                            </p>
+                          </div>
+                        ) : null}
                       </div>
                     ) : null}
                   </div>

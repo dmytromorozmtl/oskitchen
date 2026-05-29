@@ -19,6 +19,10 @@ describe("era25-first-charter-slice-readiness-ui-era24", () => {
     );
     expect(slice?.era25FirstCharterSliceReadinessMilestone).toBe("charter_exit_blocked");
     expect(slice?.requiredSectionCount).toBe(10);
+    expect(slice?.engineeringGates).not.toBeNull();
+    expect(slice?.engineeringGates?.era25EngineeringGatesMilestone).toBe(
+      "charter_readiness_blocked",
+    );
   });
 
   it("formats readiness label", () => {

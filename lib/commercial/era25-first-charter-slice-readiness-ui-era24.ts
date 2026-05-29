@@ -2,6 +2,10 @@
  * era25 first charter slice readiness UI slice — charter section validation panel.
  */
 import {
+  buildEra25EngineeringGatesUiSlice,
+  type Era25EngineeringGatesUiSlice,
+} from "@/lib/commercial/era25-engineering-gates-ui-era24";
+import {
   ERA25_FIRST_CHARTER_SLICE_ENGINEERING_PATTERN,
   ERA25_FIRST_CHARTER_SLICE_FOREVER_COMMANDS,
   ERA25_FIRST_CHARTER_SLICE_GUARDRAILS,
@@ -41,6 +45,7 @@ export type Era25FirstCharterSliceReadinessUiSlice = {
   syncReportCommand: string;
   validateCharterExitCommand: string;
   platformOpsHref: string;
+  engineeringGates: Era25EngineeringGatesUiSlice | null;
 };
 
 export function buildEra25FirstCharterSliceReadinessUiSlice(input: {
@@ -50,6 +55,10 @@ export function buildEra25FirstCharterSliceReadinessUiSlice(input: {
   if (!input.charterExitVisible) return null;
 
   const result = evaluateEra25FirstCharterSliceReadinessWithMilestones(input.env);
+  const engineeringGates = buildEra25EngineeringGatesUiSlice({
+    readinessVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: ERA25_FIRST_CHARTER_SLICE_READINESS_UI_ERA24_POLICY_ID,
@@ -74,6 +83,7 @@ export function buildEra25FirstCharterSliceReadinessUiSlice(input: {
     validateCharterExitCommand:
       "npm run ops:validate-era25-charter-exit-outside-linear-path -- --json",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ERA25_FIRST_CHARTER_SLICE_READINESS_PLATFORM_ANCHOR}`,
+    engineeringGates,
   };
 }
 

@@ -97,15 +97,19 @@ File pattern: `docs/era25-<name>-charter-2026-*.md`
 
 ---
 
-## era25 engineering gates preview (after readiness healthy)
+## era25 engineering gates (enforcement — implemented)
 
 See [`next-era25-engineering-gates-require-signed-charter-2026-05-28.md`](./next-era25-engineering-gates-require-signed-charter-2026-05-28.md)
 
 **First era25 product engineering begins ONLY when:**
 
+- `era25EngineeringGatesMilestone: era25_engineering_gates_open`
 - `era25FirstCharterSliceReadinessMilestone: era25_first_charter_slice_ready`
 - Leadership sign-off documented in charter doc
+- Zero illegal era25 product artifacts
 - Terminus guard still PASS
+
+**Next after gates open:** [`next-era25-first-product-slice-blueprint-2026-05-28.md`](./next-era25-first-product-slice-blueprint-2026-05-28.md)
 
 ---
 
