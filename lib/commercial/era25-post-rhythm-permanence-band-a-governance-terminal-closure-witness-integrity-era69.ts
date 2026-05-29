@@ -8,7 +8,10 @@ import { join } from "node:path";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import { evaluateContinuousImprovementLoopIntegrity } from "@/lib/commercial/continuous-improvement-loop-integrity-era34";
 import type { Era25BandAGovernanceChainCapstoneWitnessIntegrityBaseline } from "@/lib/commercial/era25-band-a-governance-chain-capstone-witness-integrity-era66";
-import type { Era25PostBandAGovernanceSteadyProductModeWitnessIntegrityBaseline } from "@/lib/commercial/era25-post-band-a-governance-steady-product-mode-witness-integrity-era67";
+import type {
+  Era25PostBandAGovernanceSteadyProductModeWitnessIntegrityBaseline,
+  Era25PostBandAGovernanceSteadyProductModeWitnessIntegritySummary,
+} from "@/lib/commercial/era25-post-band-a-governance-steady-product-mode-witness-integrity-era67";
 import {
   evaluateEra25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrity,
   type Era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrityBaseline,
@@ -157,6 +160,7 @@ export function evaluateEra25PostRhythmPermanenceBandAGovernanceTerminalClosureW
     permanenceIntegrityBaselineOverride?: Era25PostTerminalSealCommercialOpsPermanenceIntegrityBaseline | null;
     capstoneIntegrityBaselineOverride?: Era25BandAGovernanceChainCapstoneWitnessIntegrityBaseline | null;
     steadyProductModeIntegrityBaselineOverride?: Era25PostBandAGovernanceSteadyProductModeWitnessIntegrityBaseline | null;
+    steadyProductModeIntegrityOverride?: Era25PostBandAGovernanceSteadyProductModeWitnessIntegritySummary | null;
     rhythmPermanenceIntegrityBaselineOverride?: Era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrityBaseline | null;
     rhythmPermanenceIntegrityOverride?: Era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegritySummary | null;
     baselineOverride?: Era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrityBaseline | null;
@@ -185,6 +189,7 @@ export function evaluateEra25PostRhythmPermanenceBandAGovernanceTerminalClosureW
       permanenceIntegrityBaselineOverride: options?.permanenceIntegrityBaselineOverride,
       capstoneIntegrityBaselineOverride: options?.capstoneIntegrityBaselineOverride,
       steadyProductModeIntegrityBaselineOverride: options?.steadyProductModeIntegrityBaselineOverride,
+      steadyProductModeIntegrityOverride: options?.steadyProductModeIntegrityOverride,
       baselineOverride: options?.rhythmPermanenceIntegrityBaselineOverride,
     });
 

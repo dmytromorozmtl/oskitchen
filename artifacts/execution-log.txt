@@ -461,3 +461,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — era25 witness UI steadyProductModeIntegrityBaselineOverride property name (cycle 36)
+
+---
+Cycle: 36
+Timestamp: 2026-05-30T01:30:00.000Z
+Action: fix: era69 terminal closure witness integrity — add steadyProductModeIntegrityOverride summary pass-through to era68 (matches era68 UI contract + terminal closure witness UI slice)
+Files: lib/commercial/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69.ts
+TS errors before: 29
+TS errors after: 28
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — evaluate-era25-charter-exit-outside-linear-path missing evaluateLinearChainTerminusGuardWithMilestones import (cycle 37)
