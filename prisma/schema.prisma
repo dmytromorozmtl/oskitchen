@@ -2057,6 +2057,7 @@ model UserProfile {
   cateringQuoteTemplates   CateringQuoteTemplate[]
   analyticsSnapshots       AnalyticsSnapshot[]
   analyticsEvents          AnalyticsEvent[]
+  briefingTelemetry        BriefingTelemetry[]
   analyticsSavedViews      AnalyticsSavedView[]
   analyticsAlerts          AnalyticsAlert[]
   forecastRuns             ForecastRun[]
@@ -10035,6 +10036,7 @@ model Workspace {
   companyAccounts    CompanyAccount[]
   commissaryTransfers CommissaryTransfer[]
   analyticsEvents    AnalyticsEvent[]
+  briefingTelemetry  BriefingTelemetry[]
   channelCredentialAudits ChannelCredentialAudit[]
   billingEvents      BillingEvent[]
   usageEvents        UsageEvent[]
@@ -11219,6 +11221,31 @@ model AnalyticsEvent {
   @@index([workspaceId, createdAt])
   @@index([sourceType])
   @@map("analytics_events")
+}
+
+model BriefingTelemetry {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  workspaceId  String?  @map("workspace_id") @db.Uuid
+  eventName    String   @default("briefing_click") @map("event_name") @db.VarChar(64)
+  surface      String   @db.VarChar(64)
+  entityId     String   @map("entity_id") @db.VarChar(255)
+  hrefPath     String?  @map("href_path") @db.VarChar(512)
+  rolePack     String?  @map("role_pack") @db.VarChar(64)
+  linkState    String?  @map("link_state") @db.VarChar(64)
+  category     String?  @db.VarChar(64)
+  severity     String?  @db.VarChar(64)
+  rank         Int?
+  metadataJson Json?    @map("metadata_json")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([workspaceId, createdAt])
+  @@index([surface, createdAt])
+  @@map("briefing_telemetry")
 }
 
 model AnalyticsSavedView {

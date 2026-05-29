@@ -193,3 +193,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 16)
+
+---
+Cycle: 16
+Timestamp: 2026-05-29T20:15:00.000Z
+Action: feat: briefing telemetry pipeline — BriefingTelemetry model in schema.prisma + POST app/api/telemetry/briefing/route.ts
+Files: prisma/schema.prisma, app/api/telemetry/briefing/route.ts
+TS errors before: 91
+TS errors after: 91
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 17)
