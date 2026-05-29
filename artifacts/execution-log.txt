@@ -245,3 +245,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 20)
+
+---
+Cycle: 20
+Timestamp: 2026-05-29T21:15:00.000Z
+Action: docs: forbidden claims training — created marketing/forbidden-claims-training.md for sales team
+Files: marketing/forbidden-claims-training.md
+TS errors before: 91
+TS errors after: 91
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 11 — create marketing/sales-deck-pillars.md (cycle 21)
