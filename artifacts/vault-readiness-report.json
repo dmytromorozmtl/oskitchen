@@ -1,6 +1,6 @@
 {
   "version": "vault-readiness-v2",
-  "generatedAt": "2026-05-29T15:28:01.502Z",
+  "generatedAt": "2026-05-29T17:29:09.648Z",
   "policyId": "era17-p0-staging-proof-unblock-v1",
   "opsChecklistDoc": "docs/era18-p0-staging-proof-ops-checklist.md",
   "vaultMatrixDoc": "docs/ops-vault-matrix.md",

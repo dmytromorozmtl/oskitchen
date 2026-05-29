@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { evaluateP0VaultEnv } from "@/scripts/ops/validate-p0-vault-env";
+import { formatP0OpsVaultEnvBlockerDetail } from "@/lib/commercial/p0-ops-vault-phases-era21";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/pilot-gono-go-era17-policy";
 import { evaluatePilotGoNoGoIntegrity } from "@/lib/commercial/pilot-gono-go-integrity-era28";
@@ -147,13 +148,16 @@ export function buildCommercialInflectionBlockers(input: {
       priority: "P0",
       role: "ops",
       title: "Configure 11 P0 ops vault env vars",
-      detail: input.p0Vault.allPresent
-        ? "All 11 vars present in current process env — run smoke to refresh artifact."
-        : `Missing ${input.p0Vault.missing.length}/11: ${input.p0Vault.missing.join(", ")}`,
+      detail: formatP0OpsVaultEnvBlockerDetail({
+        allPresent: input.p0Vault.allPresent,
+        missing: input.p0Vault.missing,
+      }),
       status: input.p0Vault.allPresent ? "attention" : "blocked",
-      validateCommand: "npm run ops:validate-p0-vault-env -- --json",
+      validateCommand: input.p0Vault.allPresent
+        ? "npm run ops:validate-p0-vault-env -- --json"
+        : "npm run check-vault-readiness -- --json",
       docPath: P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC,
-      artifactPath: "artifacts/p0-staging-proof-unblock-summary.json",
+      artifactPath: "artifacts/vault-readiness-report.json",
       platformRoute: "/platform/commercial-pilot-ops#p0-staging-proof",
     },
     {
@@ -465,6 +469,7 @@ export function evaluateCommercialInflectionReadiness(
 
   const recommendedCommands = !p0Vault.allPresent
     ? ([
+        "npm run check-vault-readiness -- --write",
         "npm run ops:validate-p0-vault-env -- --json",
         "npm run smoke:p0-staging-proof-unblock -- --checklist-only",
       ] as const)

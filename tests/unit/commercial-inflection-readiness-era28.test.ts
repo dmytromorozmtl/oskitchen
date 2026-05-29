@@ -18,6 +18,12 @@ describe("commercial-inflection-readiness-era28", () => {
     expect(result.p0ProofStatus).toBe("awaiting_ops_credentials");
     expect(result.p0VaultMissingCount).toBe(11);
     expect(result.goDecision).not.toBe("GO");
+    const vaultBlocker = result.blockers.find((row) => row.id === "p0_ops_vault_11_env");
+    expect(vaultBlocker?.detail).toContain("Phase 1 — Staging login");
+    expect(vaultBlocker?.detail).toContain("docs/GITHUB_E2E_STAGING_SECRETS.md");
+    expect(vaultBlocker?.validateCommand).toContain("check-vault-readiness");
+    expect(vaultBlocker?.artifactPath).toBe("artifacts/vault-readiness-report.json");
+    expect(result.recommendedCommands[0]).toContain("check-vault-readiness");
     expect(result.blockers.some((row) => row.id === "stop_skipped_as_pass")).toBe(true);
     const stopRule = result.blockers.find((row) => row.id === "stop_skipped_as_pass");
     expect(stopRule?.validateCommand).toContain("validate-p0-staging-proof-integrity");

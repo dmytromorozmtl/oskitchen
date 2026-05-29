@@ -97,3 +97,21 @@ export function formatP0OpsVaultPhaseBlockerDetail(phase: P0OpsVaultPhaseStatus)
   }
   return `${phase.label}: missing ${phase.missingKeys.join(", ")}.`;
 }
+
+export function formatP0OpsVaultEnvBlockerDetail(input: {
+  allPresent: boolean;
+  missing: readonly string[];
+}): string {
+  if (input.allPresent) {
+    return "All 11 vars present in current process env — run smoke to refresh artifact.";
+  }
+
+  const nextPhase = resolveNextIncompleteP0OpsVaultPhase(
+    buildP0OpsVaultPhaseStatuses({ missingEnvVars: input.missing }),
+  );
+  if (!nextPhase) {
+    return `Missing ${input.missing.length}/11: ${input.missing.join(", ")}`;
+  }
+
+  return `Missing ${input.missing.length}/11 — next ${nextPhase.label}: ${nextPhase.missingKeys.join(", ")} · ${nextPhase.docPath}`;
+}
