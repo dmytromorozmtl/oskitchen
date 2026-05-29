@@ -61,6 +61,8 @@ export function LaunchWizardTodayStrip(props: {
     era25ScaleReadinessConvergence: props.model.era25ScaleReadinessConvergenceIntegrity,
     era25SeriesAPartnerExpansionConvergence:
       props.model.era25SeriesAPartnerExpansionConvergenceIntegrity,
+    era25MarketLeaderPositioningConvergence:
+      props.model.era25MarketLeaderPositioningConvergenceIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -385,6 +387,20 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-series-a-partner-expansion-convergence"
               >
                 Series A {view.era25SeriesAPartnerExpansionConvergence.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25MarketLeaderPositioningConvergence ? (
+              <Badge
+                variant={
+                  view.era25MarketLeaderPositioningConvergence
+                    .marketLeaderPositioningConvergenceIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-market-leader-positioning-convergence"
+              >
+                Market leader {view.era25MarketLeaderPositioningConvergence.progressLabel}
               </Badge>
             ) : null}
           </div>

@@ -71,8 +71,8 @@ Workflow: `.github/workflows/ops-series-a-partner-expansion-convergence-integrit
 
 ---
 
-## Next step — Phase AB (era52)
+## Following — Phase AB (era52)
 
-**Market leader positioning convergence era25 integrity** — chains `evaluateSeriesAPartnerExpansionConvergenceIntegrity` (era51), Launch Wizard `#launch-wizard-era25-market-leader-positioning-convergence`, Owner Briefing priority **27**, maintenance nested under `#era25-series-a-partner-expansion-convergence` → `#era25-market-leader-positioning-convergence`.
+**IMPLEMENTED** — see [`docs/next-step-market-leader-positioning-convergence-phase-ab-product-2026-05-28.md`](./next-step-market-leader-positioning-convergence-phase-ab-product-2026-05-28.md).
 
-Prerequisite milestone: `series_a_partner_expansion_convergence_era25_ready` · env `MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_*` (to be added when Phase AB starts).
+**Next:** Phase AC (era53) sustained operational excellence convergence integrity.

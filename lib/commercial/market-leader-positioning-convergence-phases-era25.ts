@@ -14,6 +14,19 @@ export const MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_REPORT_PATH =
 export const MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_PLATFORM_ANCHOR =
   "#era25-market-leader-positioning-convergence" as const;
 
+export const MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_TRACKED_ENV_KEYS = [
+  "MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_ATTESTED",
+  "MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectMarketLeaderPositioningConvergenceEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export const MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_BACKLOG_ID =
   "KOS-E25-007-MARKET-LEADER" as const;
 
