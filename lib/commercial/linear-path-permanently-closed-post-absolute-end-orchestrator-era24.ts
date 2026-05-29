@@ -6,6 +6,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 import {
+  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES,
   type CommercialPilotPathAbsoluteEndMilestone,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
 import {
@@ -31,10 +32,43 @@ export const LINEAR_PATH_PERMANENTLY_CLOSED_POST_ABSOLUTE_END_ORCHESTRATOR_COMMA
   "npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator" as const;
 
 export type LinearPathPermanentlyClosedMilestone =
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
+  | "maintenance_mode_blocked"
+  | "engineering_terminus_blocked"
+  | "steady_state_blocked"
   | "absolute_end_blocked"
   | "attention_doc_chain"
   | "attention_terminus_guard"
   | "linear_path_permanently_closed_healthy";
+
+export const LINEAR_PATH_PERMANENTLY_CLOSED_ABSOLUTE_END_PREREQUISITE_MILESTONES: readonly CommercialPilotPathAbsoluteEndMilestone[] =
+  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES.filter(
+    (milestone) => milestone !== "absolute_end_blocked",
+  );
+
+export const LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES: readonly LinearPathPermanentlyClosedMilestone[] =
+  [
+    "era25_sustained_ops_convergence_blocked",
+    "product_evolution_blocked",
+    "maintenance_mode_blocked",
+    "engineering_terminus_blocked",
+    "steady_state_blocked",
+    "absolute_end_blocked",
+  ] as const;
+
+function isAbsoluteEndPrerequisiteBlocked(
+  milestone: CommercialPilotPathAbsoluteEndMilestone,
+): milestone is
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
+  | "maintenance_mode_blocked"
+  | "engineering_terminus_blocked"
+  | "steady_state_blocked" {
+  return (LINEAR_PATH_PERMANENTLY_CLOSED_ABSOLUTE_END_PREREQUISITE_MILESTONES as readonly string[]).includes(
+    milestone,
+  );
+}
 
 export type LinearPathPermanentlyClosedPostAbsoluteEndOrchestratorSummary = {
   policyId: typeof LINEAR_PATH_PERMANENTLY_CLOSED_POST_ABSOLUTE_END_ORCHESTRATOR_ERA24_POLICY_ID;
@@ -67,6 +101,10 @@ export function resolveLinearPathPermanentlyClosedMilestone(input: {
   missingDocChainDocs: readonly string[];
   terminusGuardPassed: boolean;
 }): LinearPathPermanentlyClosedMilestone {
+  if (isAbsoluteEndPrerequisiteBlocked(input.absoluteEndMilestone)) {
+    return input.absoluteEndMilestone;
+  }
+
   if (
     !input.terminalClosureActive ||
     input.absoluteEndMilestone !== "absolute_end_healthy"

@@ -11,10 +11,11 @@ import { evaluateLinearPathPermanentlyClosed } from "@/lib/commercial/evaluate-l
 import { evaluateLinearPathPermanentlyClosedWithMilestones } from "@/scripts/ops/validate-linear-path-permanently-closed";
 
 describe("linear-path-permanently-closed-post-absolute-end-orchestrator-era24", () => {
-  it("blocks when absolute end is not healthy", () => {
+  it("blocks with era25 prerequisite when absolute end chain not past vault", () => {
     const result = evaluateLinearPathPermanentlyClosedWithMilestones({});
-    expect(result.linearPathPermanentlyClosedMilestone).toBe("absolute_end_blocked");
+    expect(result.linearPathPermanentlyClosedMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.evaluation.terminalClosureActive).toBe(false);
+    expect(result.absoluteEnd.absoluteEndMilestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 
   it("resolves attention_doc_chain when docs are missing", () => {
@@ -62,7 +63,7 @@ describe("linear-path-permanently-closed-post-absolute-end-orchestrator-era24", 
       terminusGuardViolationCount: guard.violations.length,
       artifacts: { linearPathReportPresent: false },
     });
-    expect(summary.milestone).toBe("absolute_end_blocked");
+    expect(summary.milestone).toBe("steady_state_blocked");
     expect(summary.recommendedCommands[0]).toContain(
       "commercial-pilot-path-absolute-end-post-steady-state-orchestrator",
     );

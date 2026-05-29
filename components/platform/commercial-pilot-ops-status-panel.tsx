@@ -48,6 +48,8 @@ import { SustainedOperationalExcellencePhasesPanel } from "@/components/dashboar
 import { ContinuousImprovementLoopPanel } from "@/components/dashboard/continuous-improvement-loop-panel";
 import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained-product-evolution-panel";
 import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
+import { CommercialInflectionReadinessPanel } from "@/components/platform/commercial-inflection-readiness-panel";
+import { evaluateCommercialInflectionReadiness } from "@/lib/commercial/commercial-inflection-readiness-era28";
 import { PureOperationalModeTerminusEra25Strip } from "@/components/dashboard/launch-wizard/pure-operational-mode-terminus-era25-strip";
 import { buildPureOperationalModeTerminusEra25UiSlice } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { shouldSuppressEra21CommercialPilotGatePanels } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
@@ -353,9 +355,11 @@ export function CommercialPilotOpsStatusPanel(props: {
     decision,
     blockerCount: launchBlockerCount,
   });
+  const commercialInflection = evaluateCommercialInflectionReadiness();
 
   return (
     <div className="space-y-6">
+      <CommercialInflectionReadinessPanel summary={commercialInflection} />
       <Card
         id={COMMERCIAL_PILOT_GONOGO_ANCHOR.slice(1)}
         className="scroll-mt-24 border-zinc-800 bg-zinc-900/60"

@@ -10,6 +10,6 @@ describe("run-linear-path-permanently-closed-post-absolute-end-orchestrator", ()
     expect(summary.policyId).toBe(
       "era24-linear-path-permanently-closed-post-absolute-end-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("absolute_end_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });

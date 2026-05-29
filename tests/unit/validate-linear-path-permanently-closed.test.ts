@@ -19,7 +19,7 @@ describe("validate-linear-path-permanently-closed", () => {
 
   it("wraps milestones for validate JSON", () => {
     const result = evaluateLinearPathPermanentlyClosedWithMilestones({});
-    expect(result.linearPathPermanentlyClosedMilestone).toBe("absolute_end_blocked");
+    expect(result.linearPathPermanentlyClosedMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.readyForAbsoluteEndSmokes).toBe(true);
     expect(result.missingDocChainDocs).toEqual([]);
     expect(result.guard.guardPassed).toBe(true);

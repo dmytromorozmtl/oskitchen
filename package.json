@@ -65,6 +65,7 @@
     "smoke:pilot-tier-preflight": "tsx scripts/smoke-pilot-tier-preflight-era17.ts",
     "smoke:p0-staging-proof-unblock": "tsx scripts/smoke-p0-staging-proof-unblock-era17.ts",
     "ops:validate-p0-vault-env": "tsx scripts/ops/validate-p0-vault-env.ts",
+    "ops:validate-commercial-inflection-readiness": "tsx scripts/ops/validate-commercial-inflection-readiness.ts",
     "ops:run-p0-vault-day0-orchestrator": "tsx scripts/ops/run-p0-vault-day0-orchestrator.ts",
     "ops:check-p0-staging-health": "tsx scripts/ops/check-p0-staging-health.ts",
     "ops:export-p0-vault-day0-readiness-checklist": "tsx scripts/ops/export-p0-vault-day0-readiness-checklist.ts",

@@ -9,6 +9,8 @@
 
 ## Status
 
+**IMPLEMENTED (2026-05-28)** — absolute-end prerequisite milestones wired into linear closure orchestrator, validate JSON, and Platform ops `#linear-path-permanently-closed`.
+
 **There is no Step 17 engineering in this linear chain.**
 
 Step 16 is the **final engineering slice** in the commercial pilot linear path:
@@ -24,7 +26,12 @@ Step 16 is the **final engineering slice** in the commercial pilot linear path:
 
 | Milestone | Meaning | Orchestrator exit |
 |-----------|---------|-------------------|
-| `absolute_end_blocked` | Step 15 not ready | `2` |
+| `era25_sustained_ops_convergence_blocked` | era25 sustained ops not ready | `2` |
+| `product_evolution_blocked` | Step 11 not ready | `2` |
+| `maintenance_mode_blocked` | Step 12 not active | `2` |
+| `engineering_terminus_blocked` | Step 13 not healthy | `2` |
+| `steady_state_blocked` | Step 14 not healthy | `2` |
+| `absolute_end_blocked` | Step 15 not healthy (prerequisites OK) | `2` |
 | `attention_doc_chain` | Missing doc in 16-step chain | `0` |
 | `attention_terminus_guard` | Step 17 guard FAIL | `0` |
 | `linear_path_permanently_closed_healthy` | Doc chain complete + guard PASS | `0` |

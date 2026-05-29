@@ -8,6 +8,7 @@ import { join } from "node:path";
 
 import {
   buildLinearPathPermanentlyClosedPostAbsoluteEndOrchestratorSummary,
+  LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES,
   LINEAR_PATH_PERMANENTLY_CLOSED_POST_ABSOLUTE_END_ORCHESTRATOR_ERA24_POLICY_ID,
   resolveMissingDocChainDocs,
 } from "@/lib/commercial/linear-path-permanently-closed-post-absolute-end-orchestrator-era24";
@@ -57,7 +58,9 @@ function main() {
 
   if (jsonOutput) {
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.milestone === "absolute_end_blocked" ? 2 : 0);
+    process.exit(
+      LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES.includes(summary.milestone) ? 2 : 0,
+    );
     return;
   }
 
