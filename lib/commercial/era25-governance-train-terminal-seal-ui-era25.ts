@@ -21,6 +21,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25PostTerminalSealCommercialOpsPermanenceEra25UiSlice,
+  type Era25PostTerminalSealCommercialOpsPermanenceEra25UiSlice,
+} from "@/lib/commercial/era25-post-terminal-seal-commercial-ops-permanence-ui-era25";
 import { LAUNCH_WIZARD_ERA25_GOVERNANCE_TRAIN_TERMINAL_SEAL_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-governance-train-terminal-seal-era64";
 
 export const ERA25_GOVERNANCE_TRAIN_TERMINAL_SEAL_ERA25_UI_POLICY_ID =
@@ -103,6 +107,26 @@ export function buildEra25GovernanceTrainTerminalSealEra25UiSlice(input: {
   const sealComplete = sealIntegrity.era25GovernanceTrainTerminalSealComplete;
   const sealBlocked = !sealComplete;
 
+  const era25PostTerminalSealCommercialOpsPermanence =
+    buildEra25PostTerminalSealCommercialOpsPermanenceEra25UiSlice({
+      era25GovernanceTrainTerminalSealVisible: true,
+      era25MarketProofGovernanceChainClosed: input.era25MarketProofGovernanceChainClosed,
+      era25GovernanceTrainSealed: sealIntegrity.era25GovernanceTrainSealed,
+      postMarketProofSteadyOpsWitnessActive: sealIntegrity.postMarketProofSteadyOpsWitnessActive,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+      sealIntegritySummary: sealIntegrity,
+    });
+
   const headline = sealComplete
     ? "Era25 governance train terminal seal active · era47–AM train permanently closed"
     : input.postMarketProofSteadyOpsWitnessActive
@@ -149,6 +173,7 @@ export function buildEra25GovernanceTrainTerminalSealEra25UiSlice(input: {
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25PostTerminalSealCommercialOpsPermanence,
   };
 }
 

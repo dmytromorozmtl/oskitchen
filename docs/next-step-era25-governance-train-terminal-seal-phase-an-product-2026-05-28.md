@@ -71,19 +71,8 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 
 ---
 
-## Next step — Phase AO (era65)
+## Next step — Phase AO (era65) — **IMPLEMENTED**
 
-**Era25 post-terminal-seal commercial ops permanence integrity** — attests that after governance train terminal seal the platform sustains honest commercial artifact rhythm + improvement loop only, with zero era25 governance env mutation through permanence baseline.
+See [`docs/next-step-era25-post-terminal-seal-commercial-ops-permanence-phase-ao-product-2026-05-28.md`](./next-step-era25-post-terminal-seal-commercial-ops-permanence-phase-ao-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-governance-train-terminal-seal` baseline + dual cert green |
-| Parent evaluator | era64 governance train terminal seal integrity |
-| Platform anchor | `#era25-post-terminal-seal-commercial-ops-permanence` (planned) |
-| Briefing meta priority | **40** (planned) |
-| Env keys (planned) | `ERA25_POST_TERMINAL_SEAL_COMMERCIAL_OPS_PERMANENCE_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-post-terminal-seal-commercial-ops-permanence-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `permanence_without_terminal_seal`, `permanence_claims_governance_reopen`, `fake_permanence_attestation`, upstream era64 fail |
-| CI | `test:ci:era25-post-terminal-seal-commercial-ops-permanence-integrity-era65` |
-
-**Human acceptance (preview):** terminal seal PASS → attest commercial ops permanence → validate JSON → operator playbook sustains GO artifacts + improvement loop without reopening any era25 frozen governance env.
+**Next:** Phase AP (era66) — Era25 Band A governance chain capstone witness integrity (preview in AO doc).
