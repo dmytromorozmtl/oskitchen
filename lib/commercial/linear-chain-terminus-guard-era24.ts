@@ -20,6 +20,17 @@ export const LINEAR_CHAIN_TERMINUS_GUARD_REPORT_PATH =
 export const LINEAR_CHAIN_TERMINUS_GUARD_PLATFORM_ANCHOR =
   "#linear-chain-step17-forbidden" as const;
 
+export const LINEAR_CHAIN_TERMINUS_GUARD_TRACKED_ENV_KEYS = [
+  "LINEAR_CHAIN_TERMINUS_GUARD_STEP17_FORBIDDEN_ATTESTED",
+  "LINEAR_CHAIN_TERMINUS_GUARD_REPORT_REVIEWED",
+] as const;
+
+export function detectLinearChainTerminusGuardStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return LINEAR_CHAIN_TERMINUS_GUARD_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export const LINEAR_CHAIN_MAX_STEP = 16 as const;
 
 export const LINEAR_CHAIN_FORBIDDEN_PROPOSALS: readonly string[] = [

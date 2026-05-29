@@ -20,11 +20,14 @@ export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_OPS_SCRIPTS = [
   "ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator",
   "ops:validate-linear-chain-terminus-guard",
   "ops:sync-linear-chain-terminus-guard-report",
+  "ops:validate-linear-chain-terminus-guard-integrity",
+  "ops:sync-linear-chain-terminus-guard-integrity-baseline",
 ] as const;
 
 export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_CI_SCRIPTS = [
   "test:ci:linear-chain-terminus-guard-era24",
   "test:ci:linear-chain-terminus-guard-era24:cert",
+  "test:ci:linear-chain-terminus-guard-integrity-era41",
 ] as const;
 
 export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_UNIT_TESTS = [
@@ -37,6 +40,7 @@ export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_UNIT_TESTS = [
 ] as const;
 
 export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_PRODUCT_SURFACES = [
+  "components/dashboard/launch-wizard/launch-wizard-linear-chain-terminus-guard-panel.tsx",
   "components/dashboard/maintenance-mode-panel.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

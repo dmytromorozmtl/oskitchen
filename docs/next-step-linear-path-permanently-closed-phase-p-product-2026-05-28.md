@@ -71,7 +71,7 @@ npm run ops:sync-linear-path-permanently-closed-integrity-baseline -- --write
 
 ## Next step after Phase P PASS
 
-**Phase Q — Linear chain terminus guard integrity (`era41`)** — mirror era28–era40 on `linear-chain-terminus-guard-*`
+**Phase Q — Linear chain terminus guard integrity (`era41`)** — **IMPLEMENTED** · see [`docs/next-step-linear-chain-terminus-guard-phase-q-product-2026-05-28.md`](./next-step-linear-chain-terminus-guard-phase-q-product-2026-05-28.md)
 
 | Component | Planned artifact |
 |-----------|------------------|

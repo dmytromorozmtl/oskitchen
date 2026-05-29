@@ -22,6 +22,10 @@ describe("linear-chain-terminus-guard-ui-era24", () => {
     expect(slice?.guardPassed).toBe(true);
     expect(slice?.era25CharterExit).not.toBeNull();
     expect(slice?.era25CharterExit?.outsideLinearCatalog).toBe(true);
+    expect(slice?.integrityValidateCommand).toBe(
+      "npm run ops:validate-linear-chain-terminus-guard-integrity -- --json",
+    );
+    expect(slice?.launchWizardHref).toContain("#launch-wizard-linear-chain-terminus-guard");
   });
 
   it("formats guard label", () => {

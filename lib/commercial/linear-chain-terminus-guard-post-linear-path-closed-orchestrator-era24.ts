@@ -117,6 +117,8 @@ export function buildLinearChainTerminusGuardPostLinearPathClosedOrchestratorSum
             "npm run ops:validate-commercial-pilot-path -- --json",
           ] as const)
         : ([
+          "npm run ops:validate-linear-path-permanently-closed-integrity -- --json",
+          "npm run ops:validate-linear-chain-terminus-guard-integrity -- --json",
           "npm run ops:validate-linear-chain-terminus-guard -- --json",
           LINEAR_CHAIN_TERMINUS_GUARD_POST_LINEAR_PATH_CLOSED_ORCHESTRATOR_COMMAND + " -- --write",
           "npm run ops:sync-linear-chain-terminus-guard-report -- --write",

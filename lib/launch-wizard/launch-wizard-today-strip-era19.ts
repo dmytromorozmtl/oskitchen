@@ -19,6 +19,7 @@ import type { LaunchWizardEngineeringTerminusSlice } from "@/lib/launch-wizard/l
 import type { LaunchWizardPostTerminusSteadyStateSlice } from "@/lib/launch-wizard/launch-wizard-post-terminus-steady-state-era38";
 import type { LaunchWizardCommercialPilotPathAbsoluteEndSlice } from "@/lib/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-era39";
 import type { LaunchWizardLinearPathPermanentlyClosedSlice } from "@/lib/launch-wizard/launch-wizard-linear-path-permanently-closed-era40";
+import type { LaunchWizardLinearChainTerminusGuardSlice } from "@/lib/launch-wizard/launch-wizard-linear-chain-terminus-guard-era41";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -57,6 +58,7 @@ export type LaunchWizardTodayStripViewModel = {
   postTerminusSteadyState: LaunchWizardPostTerminusSteadyStateSlice | null;
   commercialPilotPathAbsoluteEnd: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
   linearPathPermanentlyClosed: LaunchWizardLinearPathPermanentlyClosedSlice | null;
+  linearChainTerminusGuard: LaunchWizardLinearChainTerminusGuardSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -110,6 +112,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   postTerminusSteadyState?: LaunchWizardPostTerminusSteadyStateSlice | null;
   commercialPilotPathAbsoluteEnd?: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
   linearPathPermanentlyClosed?: LaunchWizardLinearPathPermanentlyClosedSlice | null;
+  linearChainTerminusGuard?: LaunchWizardLinearChainTerminusGuardSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -165,6 +168,14 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const commercialPilotPathAbsoluteEnd = input.commercialPilotPathAbsoluteEnd ?? null;
   const commercialPilotPathAbsoluteEndSubline = commercialPilotPathAbsoluteEnd
     ? `Absolute end ${commercialPilotPathAbsoluteEnd.progressLabel}${commercialPilotPathAbsoluteEnd.commercialPilotPathAbsoluteEndIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const linearPathPermanentlyClosed = input.linearPathPermanentlyClosed ?? null;
+  const linearPathPermanentlyClosedSubline = linearPathPermanentlyClosed
+    ? `Linear path ${linearPathPermanentlyClosed.progressLabel}${linearPathPermanentlyClosed.linearPathPermanentlyClosedIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const linearChainTerminusGuard = input.linearChainTerminusGuard ?? null;
+  const linearChainTerminusGuardSubline = linearChainTerminusGuard
+    ? `Step 17 ${linearChainTerminusGuard.progressLabel}${linearChainTerminusGuard.linearChainTerminusGuardIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
@@ -254,7 +265,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : linearPathPermanentlyClosedSubline
+        : linearChainTerminusGuardSubline
+          ? linearPathPermanentlyClosedSubline
+            ? `${linearPathPermanentlyClosedSubline} · ${linearChainTerminusGuardSubline}`
+            : linearChainTerminusGuardSubline
+          : linearPathPermanentlyClosedSubline
           ? commercialPilotPathAbsoluteEndSubline
             ? `${commercialPilotPathAbsoluteEndSubline} · ${linearPathPermanentlyClosedSubline}`
             : linearPathPermanentlyClosedSubline

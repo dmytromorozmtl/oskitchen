@@ -108,6 +108,11 @@ import {
 } from "@/lib/launch-wizard/launch-wizard-linear-path-permanently-closed-era40";
 import type { LinearPathPermanentlyClosedUiSlice } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
 import {
+  buildLaunchWizardLinearChainTerminusGuardSlice,
+  type LaunchWizardLinearChainTerminusGuardSlice,
+} from "@/lib/launch-wizard/launch-wizard-linear-chain-terminus-guard-era41";
+import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -215,6 +220,8 @@ export type LaunchWizardModel = {
   commercialPilotPathAbsoluteEndIntegrity: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
   linearPathPermanentlyClosed: LinearPathPermanentlyClosedUiSlice | null;
   linearPathPermanentlyClosedIntegrity: LaunchWizardLinearPathPermanentlyClosedSlice | null;
+  linearChainTerminusGuard: import("@/lib/commercial/linear-chain-terminus-guard-ui-era24").LinearChainTerminusGuardUiSlice | null;
+  linearChainTerminusGuardIntegrity: LaunchWizardLinearChainTerminusGuardSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -903,6 +910,12 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     linearPathPermanentlyClosed,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const linearChainTerminusGuard =
+    commercialPilotPathAbsoluteEnd?.linearPathPermanentlyClosed?.step17Forbidden ?? null;
+  const linearChainTerminusGuardIntegrity = buildLaunchWizardLinearChainTerminusGuardSlice(
+    linearChainTerminusGuard,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -945,6 +958,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     commercialPilotPathAbsoluteEndIntegrity,
     linearPathPermanentlyClosed,
     linearPathPermanentlyClosedIntegrity,
+    linearChainTerminusGuard,
+    linearChainTerminusGuardIntegrity,
     paidPilotGoConvergence,
   };
 }

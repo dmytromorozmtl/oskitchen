@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  detectLinearChainTerminusGuardStarted,
   LINEAR_CHAIN_MAX_STEP,
   LINEAR_CHAIN_STEP17_FORBIDDEN_DOC,
   evaluateLinearChainTerminusGuard,
@@ -19,5 +20,14 @@ describe("linear-chain-terminus-guard-era24", () => {
 
   it("locks step 17 forbidden doc path", () => {
     expect(LINEAR_CHAIN_STEP17_FORBIDDEN_DOC).toContain("next-step-17-forbidden");
+  });
+
+  it("detects terminus guard started from env attestations", () => {
+    expect(
+      detectLinearChainTerminusGuardStarted({
+        LINEAR_CHAIN_TERMINUS_GUARD_STEP17_FORBIDDEN_ATTESTED: "true",
+      }),
+    ).toBe(true);
+    expect(detectLinearChainTerminusGuardStarted({})).toBe(false);
   });
 });

@@ -654,6 +654,20 @@ export function MaintenanceModePanel(props: {
                         .linearPathPermanentlyClosed.step17Forbidden.maxLinearStep
                     }
                   </Badge>
+                  {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.step17Forbidden
+                    .linearChainTerminusGuardIntegrityPassed ? (
+                    <Badge variant="destructive" className="rounded-full text-[10px]">
+                      Step 17 guard blocked
+                    </Badge>
+                  ) : null}
+                  {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.step17Forbidden
+                    .linearPathPermanentlyClosedIntegrityPassed ? (
+                    <Badge variant="destructive" className="rounded-full text-[10px]">
+                      Linear path integrity FAIL
+                    </Badge>
+                  ) : null}
                 </div>
                 <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
                   {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.forbiddenProposals.map(
@@ -686,6 +700,25 @@ export function MaintenanceModePanel(props: {
                     {
                       slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                         .linearPathPermanentlyClosed.step17Forbidden.exportEraCharterChecklistCommand
+                    }
+                  </span>
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden
+                        .validateLinearPathPermanentlyClosedIntegrityCommand
+                    }
+                  </span>
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.integrityValidateCommand
+                    }
+                  </span>
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.syncIntegrityBaselineCommand
                     }
                   </span>
                 </div>

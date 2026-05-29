@@ -165,6 +165,10 @@ import {
   mergeBriefingLinearPathPermanentlyClosedTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-path-permanently-closed-era40";
 import {
+  buildOwnerDailyBriefingLinearChainTerminusGuardAction,
+  mergeBriefingLinearChainTerminusGuardTopActions,
+} from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
+import {
   buildCommercialGoClosureUiSlice,
   type CommercialGoClosureUiSlice,
 } from "@/lib/commercial/commercial-go-closure-ui-era21";
@@ -923,6 +927,13 @@ export async function loadOwnerDailyBriefing(
             ?.linearPathPermanentlyClosed ?? null,
         )
       : null;
+  const linearChainTerminusGuardRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingLinearChainTerminusGuardAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden ?? null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1304,6 +1315,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && linearPathPermanentlyClosedRankedAction) {
     allTopActions = mergeBriefingLinearPathPermanentlyClosedTopActions(
       linearPathPermanentlyClosedRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && linearChainTerminusGuardRankedAction) {
+    allTopActions = mergeBriefingLinearChainTerminusGuardTopActions(
+      linearChainTerminusGuardRankedAction,
       allTopActions,
     );
   }

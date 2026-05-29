@@ -19,6 +19,7 @@ import { LaunchWizardEngineeringTerminusPanel } from "@/components/dashboard/lau
 import { LaunchWizardPostTerminusSteadyStatePanel } from "@/components/dashboard/launch-wizard/launch-wizard-post-terminus-steady-state-panel";
 import { LaunchWizardCommercialPilotPathAbsoluteEndPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-panel";
 import { LaunchWizardLinearPathPermanentlyClosedPanel } from "@/components/dashboard/launch-wizard/launch-wizard-linear-path-permanently-closed-panel";
+import { LaunchWizardLinearChainTerminusGuardPanel } from "@/components/dashboard/launch-wizard/launch-wizard-linear-chain-terminus-guard-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -208,6 +209,10 @@ export function LaunchWizardView(props: {
         <LaunchWizardLinearPathPermanentlyClosedPanel
           slice={model.linearPathPermanentlyClosedIntegrity}
         />
+      ) : null}
+
+      {model.linearChainTerminusGuardIntegrity ? (
+        <LaunchWizardLinearChainTerminusGuardPanel slice={model.linearChainTerminusGuardIntegrity} />
       ) : null}
 
       <LaunchWizardCommercialBlockersPanel
