@@ -21,6 +21,16 @@ If P0 not PASS — return to [`next-step-2-p0-staging-proof-execution-2026-05-29
 
 ## Execution sequence
 
+### 3.0 Tier 2 execution orchestrator (Step 3 assess)
+
+```bash
+npm run ops:run-tier2-staging-proof-execution -- --write
+```
+
+Review milestone in stdout. Expected progression when P0 passed:
+
+`p0_blocked` → `awaiting_child_smokes` → `awaiting_manual_fulfillment` → `awaiting_github_evidence` → `proof_passed`
+
 ### 3.1 Tier 2 post-P0 orchestrator
 
 ```bash

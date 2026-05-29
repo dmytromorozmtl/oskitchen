@@ -39,6 +39,8 @@ export type Tier2GoldenPathUiSlice = {
   orchestratorCommand: string;
   syncProgressReportCommand: string;
   postP0OrchestratorCommand: string;
+  tier2ExecutionCommand: string;
+  tier2ExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateP0GateCommand: string;
   tier2Milestone: Tier2GoldenPathMilestone;
@@ -90,6 +92,8 @@ export function buildTier2GoldenPathUiSlice(input: {
     orchestratorCommand: "npm run smoke:tier2-staging-golden-path",
     syncProgressReportCommand: "npm run ops:sync-tier2-golden-path-progress-report -- --write",
     postP0OrchestratorCommand: "npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write",
+    tier2ExecutionCommand: "npm run ops:run-tier2-staging-proof-execution -- --write",
+    tier2ExecutionArtifact: "artifacts/tier2-staging-proof-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-tier2-golden-path-readiness-checklist -- --write",
     validateP0GateCommand: "npm run ops:validate-p0-vault-env -- --json",

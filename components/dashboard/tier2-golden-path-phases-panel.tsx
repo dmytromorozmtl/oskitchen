@@ -118,6 +118,7 @@ export function Tier2GoldenPathPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.tier2ExecutionCommand}</li>
                 <li>{slice.postP0OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.integrityValidateCommand}</li>

@@ -67,6 +67,11 @@ function main() {
       }),
     );
     steps.push(runStep("p0-orchestrator", "npm run smoke:p0-staging-proof-unblock", { allowFail: true }));
+    steps.push(
+      runStep("tier2-execution", "npm run ops:run-tier2-staging-proof-execution -- --write", {
+        allowFail: true,
+      }),
+    );
     steps.push(runStep("tier2-golden-path", "npm run smoke:tier2-staging-golden-path", { allowFail: true }));
     steps.push(runStep("kds-playwright", "npm run smoke:kds-staging-playwright", { allowFail: true }));
   } else if (!skipSmokes) {
@@ -92,6 +97,9 @@ function main() {
   const p0 = readJson<{ p0ProofStatus?: string; overall?: string }>(
     "artifacts/p0-staging-proof-unblock-summary.json",
   );
+  const tier2 = readJson<{ tier2ProofStatus?: string; overall?: string }>(
+    "artifacts/tier2-staging-golden-path-summary.json",
+  );
   const gonoGo = readJson<{ decision?: string; blockers?: string[] }>(
     "artifacts/pilot-gono-go-summary.json",
   );
@@ -102,6 +110,8 @@ function main() {
     vaultReady: vaultReport.vaultReady,
     p0ProofStatus: p0?.p0ProofStatus ?? "missing",
     p0Overall: p0?.overall ?? "missing",
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? "missing",
+    tier2Overall: tier2?.overall ?? "missing",
     goDecision: gonoGo?.decision ?? "missing",
     goBlockers: gonoGo?.blockers ?? [],
     steps,
@@ -116,6 +126,7 @@ function main() {
   console.log("\n=== Production Pilot Ready execution summary ===\n");
   console.log(`Vault ready: ${summary.vaultReady}`);
   console.log(`P0: ${summary.p0ProofStatus} (${summary.p0Overall})`);
+  console.log(`Tier 2: ${summary.tier2ProofStatus} (${summary.tier2Overall})`);
   console.log(`GO/NO-GO: ${summary.goDecision}`);
   if (summary.goBlockers.length) {
     console.log(`Blockers: ${summary.goBlockers.join("; ")}`);
