@@ -14,6 +14,19 @@ export const PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_REPORT_PATH =
 export const PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_PLATFORM_ANCHOR =
   "#era25-pilot-week1-execution-convergence" as const;
 
+export const PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_TRACKED_ENV_KEYS = [
+  "PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_ATTESTED",
+  "PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectPilotWeek1ExecutionConvergenceEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export const PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_BACKLOG_ID = "KOS-E25-003-PILOT-W1" as const;
 
 export const PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_ERA21_REFERENCE_DOC =

@@ -70,8 +70,8 @@ Workflow: `.github/workflows/ops-paid-pilot-go-convergence-integrity-validate.ym
 
 ---
 
-## Next step — Phase X (era48)
+## Next product phase
 
-**Pilot week 1 execution convergence era25 integrity** — chains `evaluatePaidPilotGoConvergenceIntegrity`, Launch Wizard `#launch-wizard-era25-pilot-week1-execution-convergence`, Owner Briefing priority **23**, maintenance nested under `#era25-paid-pilot-go-convergence`.
+[`docs/next-step-pilot-week1-execution-convergence-phase-x-product-2026-05-28.md`](./next-step-pilot-week1-execution-convergence-phase-x-product-2026-05-28.md) — Phase X pilot week 1 execution convergence integrity (era48) **IMPLEMENTED**.
 
-Prerequisite milestone: `paid_pilot_go_convergence_era25_ready` · env `PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_*` (to be added in phases file when Phase X starts).
+**Following:** Phase Y month 2 market readiness convergence integrity (era49) on `#era25-month2-market-readiness-convergence`.

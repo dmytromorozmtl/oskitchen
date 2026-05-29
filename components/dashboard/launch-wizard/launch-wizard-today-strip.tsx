@@ -55,6 +55,7 @@ export function LaunchWizardTodayStrip(props: {
     era25FirstProductSliceBlueprint: props.model.era25FirstProductSliceBlueprintIntegrity,
     era25OwnerDailyBriefingBreakthrough: props.model.era25OwnerDailyBriefingBreakthroughIntegrity,
     era25PaidPilotGoConvergence: props.model.era25PaidPilotGoConvergenceIntegrity,
+    era25PilotWeek1ExecutionConvergence: props.model.era25PilotWeek1ExecutionConvergenceIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -326,6 +327,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-paid-pilot-go-convergence"
               >
                 GO convergence {view.era25PaidPilotGoConvergence.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25PilotWeek1ExecutionConvergence ? (
+              <Badge
+                variant={
+                  view.era25PilotWeek1ExecutionConvergence.pilotWeek1ExecutionConvergenceIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-pilot-week1-execution-convergence"
+              >
+                Week 1 {view.era25PilotWeek1ExecutionConvergence.progressLabel}
               </Badge>
             ) : null}
           </div>

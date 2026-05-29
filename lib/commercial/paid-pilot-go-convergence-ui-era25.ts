@@ -116,6 +116,16 @@ export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
   const pilotWeek1ExecutionConvergence = buildPilotWeek1ExecutionConvergenceEra25UiSlice({
     goConvergenceVisible: true,
     env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
   });
 
   return {

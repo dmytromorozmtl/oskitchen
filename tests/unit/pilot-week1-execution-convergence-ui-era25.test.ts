@@ -25,6 +25,21 @@ describe("pilot-week1-execution-convergence-ui-era25", () => {
     expect(slice?.postGoConvergenceOrchestratorCommand).toContain(
       "run-pilot-week1-execution-convergence-post-go-convergence-orchestrator-era25",
     );
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-pilot-week1-execution-convergence-integrity",
+    );
+    expect(slice?.launchWizardHref).toContain(
+      "#launch-wizard-era25-pilot-week1-execution-convergence",
+    );
+  });
+
+  it("builds slice when week 1 train started without go convergence visible", () => {
+    const slice = buildPilotWeek1ExecutionConvergenceEra25UiSlice({
+      goConvergenceVisible: false,
+      env: { PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_ATTESTED: "1" },
+    });
+    expect(slice).not.toBeNull();
+    expect(slice?.pilotWeek1ExecutionConvergenceIntegrityPassed).toBe(false);
   });
 
   it("formats convergence label", () => {

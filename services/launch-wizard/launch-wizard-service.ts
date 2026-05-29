@@ -139,6 +139,10 @@ import {
   buildLaunchWizardEra25PaidPilotGoConvergenceSlice,
   type LaunchWizardEra25PaidPilotGoConvergenceSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-paid-pilot-go-convergence-era47";
+import {
+  buildLaunchWizardEra25PilotWeek1ExecutionConvergenceSlice,
+  type LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-pilot-week1-execution-convergence-era48";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -201,6 +205,10 @@ import {
   buildPaidPilotGoConvergenceEra25UiSlice,
   type PaidPilotGoConvergenceEra25UiSlice,
 } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
+import {
+  buildPilotWeek1ExecutionConvergenceEra25UiSlice,
+  type PilotWeek1ExecutionConvergenceEra25UiSlice,
+} from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
 import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
 import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
@@ -263,6 +271,8 @@ export type LaunchWizardModel = {
   era25OwnerDailyBriefingBreakthroughIntegrity: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
   era25PaidPilotGoConvergenceIntegrity: LaunchWizardEra25PaidPilotGoConvergenceSlice | null;
+  era25PilotWeek1ExecutionConvergence: PilotWeek1ExecutionConvergenceEra25UiSlice | null;
+  era25PilotWeek1ExecutionConvergenceIntegrity: LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1041,6 +1051,65 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     paidPilotGoConvergence,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const era25PilotWeek1ExecutionConvergence =
+    paidPilotGoConvergence?.pilotWeek1ExecutionConvergence ??
+    buildPilotWeek1ExecutionConvergenceEra25UiSlice({
+      goConvergenceVisible: false,
+      goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+      p0Staging:
+        loopArtifacts.p0Staging ??
+        sustainedOpsArtifacts.p0Staging ??
+        marketLeaderArtifacts.p0Staging ??
+        seriesAArtifacts.p0Staging ??
+        scaleArtifacts.p0Staging ??
+        p0Summary,
+      tier2Summary:
+        loopArtifacts.tier2Summary ??
+        sustainedOpsArtifacts.tier2Summary ??
+        marketLeaderArtifacts.tier2Summary ??
+        seriesAArtifacts.tier2Summary ??
+        commercialOps?.tier2Staging.summary ??
+        null,
+      metricsBaseline:
+        loopArtifacts.metricsBaseline ??
+        sustainedOpsArtifacts.metricsBaseline ??
+        marketLeaderArtifacts.metricsBaseline ??
+        seriesAArtifacts.metricsBaseline ??
+        scaleArtifacts.metricsBaseline ??
+        month2Artifacts.metricsBaseline,
+      caseStudyDraft:
+        loopArtifacts.caseStudyDraft ??
+        sustainedOpsArtifacts.caseStudyDraft ??
+        marketLeaderArtifacts.caseStudyDraft ??
+        seriesAArtifacts.caseStudyDraft ??
+        scaleArtifacts.caseStudyDraft ??
+        month2Artifacts.caseStudyDraft,
+      investorOnepager:
+        loopArtifacts.investorOnepager ??
+        sustainedOpsArtifacts.investorOnepager ??
+        marketLeaderArtifacts.investorOnepager ??
+        seriesAArtifacts.investorOnepager ??
+        scaleArtifacts.investorOnepager ??
+        month2Artifacts.investorOnepager,
+      rollbackDrill:
+        loopArtifacts.rollbackDrill ??
+        sustainedOpsArtifacts.rollbackDrill ??
+        marketLeaderArtifacts.rollbackDrill ??
+        seriesAArtifacts.rollbackDrill ??
+        scaleArtifacts.rollbackDrill,
+      competitorMatrix:
+        loopArtifacts.competitorMatrix ??
+        sustainedOpsArtifacts.competitorMatrix ??
+        marketLeaderArtifacts.competitorMatrix ??
+        seriesAArtifacts.competitorMatrix,
+      p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+      tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
+    });
+  const era25PilotWeek1ExecutionConvergenceIntegrity =
+    buildLaunchWizardEra25PilotWeek1ExecutionConvergenceSlice(
+      era25PilotWeek1ExecutionConvergence,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1097,5 +1166,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25OwnerDailyBriefingBreakthroughIntegrity,
     paidPilotGoConvergence,
     era25PaidPilotGoConvergenceIntegrity,
+    era25PilotWeek1ExecutionConvergence,
+    era25PilotWeek1ExecutionConvergenceIntegrity,
   };
 }
