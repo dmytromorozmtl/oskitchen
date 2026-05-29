@@ -50,7 +50,7 @@ import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained
 import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
 import { CommercialInflectionReadinessPanel } from "@/components/platform/commercial-inflection-readiness-panel";
 import { VaultReadinessStatusStrip } from "@/components/platform/vault-readiness-status-strip";
-import { evaluateCommercialInflectionReadiness } from "@/lib/commercial/commercial-inflection-readiness-era28";
+import { buildCommercialPilotOpsInflectionSlice } from "@/lib/commercial/commercial-pilot-ops-inflection-era28";
 import { PureOperationalModeTerminusEra25Strip } from "@/components/dashboard/launch-wizard/pure-operational-mode-terminus-era25-strip";
 import { buildPureOperationalModeTerminusEra25UiSlice } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { shouldSuppressEra21CommercialPilotGatePanels } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
@@ -373,11 +373,15 @@ export function CommercialPilotOpsStatusPanel(props: {
     decision,
     blockerCount: launchBlockerCount,
   });
-  const commercialInflection = evaluateCommercialInflectionReadiness();
+  const commercialInflection = buildCommercialPilotOpsInflectionSlice(props.model);
 
   return (
     <div className="space-y-6">
-      <CommercialInflectionReadinessPanel summary={commercialInflection} />
+      <CommercialInflectionReadinessPanel
+        summary={commercialInflection.summary}
+        uiSlice={commercialInflection.uiSlice}
+        vaultHero={commercialInflection.vaultHero}
+      />
       {vaultReport ? (
         <VaultReadinessStatusStrip
           report={vaultReport}
