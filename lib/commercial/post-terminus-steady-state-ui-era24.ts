@@ -2,6 +2,10 @@
  * Post-terminus steady state UI slice — embedded in engineering path terminus panel.
  */
 import {
+  resolvePostTerminusSteadyStateMilestoneFromTrackStatuses,
+  type PostTerminusSteadyStateMilestone,
+} from "@/lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24";
+import {
   ERA_CHARTER_CRITERIA,
   POST_TERMINUS_STEADY_STATE_GUARDRAILS,
   POST_TERMINUS_STEADY_STATE_PLATFORM_ANCHOR,
@@ -13,6 +17,7 @@ import {
   buildCommercialPilotPathAbsoluteEndUiSlice,
   type CommercialPilotPathAbsoluteEndUiSlice,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
+import { evaluateCommercialPilotPathWithMilestones } from "@/scripts/ops/validate-commercial-pilot-path";
 import { evaluateSteadyStateOperatorLoop } from "@/lib/commercial/evaluate-steady-state-operator-loop";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -35,6 +40,9 @@ export type PostTerminusSteadyStateUiSlice = {
   nextAttentionTrack: SteadyStateTrackStatus | null;
   step14Doc: typeof POST_TERMINUS_STEADY_STATE_STEP14_DOC;
   validateCommand: string;
+  postEngineeringTerminusOrchestratorCommand: string;
+  validateEngineeringPathTerminusCommand: string;
+  steadyStateMilestone: PostTerminusSteadyStateMilestone;
   syncReportCommand: string;
   exportEraCharterChecklistCommand: string;
   platformOpsHref: string;
@@ -48,8 +56,16 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
   if (!input.engineeringTerminusActive) return null;
 
   const evaluation = evaluateSteadyStateOperatorLoop(input.env);
+  const pathEvaluation = evaluateCommercialPilotPathWithMilestones(input.env);
   const nextAttentionTrack =
     evaluation.tracks.find((track) => track.status === "overdue") ?? null;
+  const steadyStateMilestone = resolvePostTerminusSteadyStateMilestoneFromTrackStatuses(
+    evaluation.tracks,
+    {
+      steadyStateActive: evaluation.steadyStateActive,
+      engineeringPathTerminusMilestone: pathEvaluation.engineeringPathTerminusMilestone,
+    },
+  );
   const absolutePathEnd = buildCommercialPilotPathAbsoluteEndUiSlice({
     steadyStateActive: evaluation.steadyStateActive,
     env: input.env,
@@ -71,6 +87,10 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
     nextAttentionTrack,
     step14Doc: POST_TERMINUS_STEADY_STATE_STEP14_DOC,
     validateCommand: "npm run ops:validate-steady-state-operator-loop",
+    postEngineeringTerminusOrchestratorCommand:
+      "npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write",
+    validateEngineeringPathTerminusCommand: "npm run ops:validate-commercial-pilot-path -- --json",
+    steadyStateMilestone,
     syncReportCommand: "npm run ops:sync-steady-state-operator-loop-report -- --write",
     exportEraCharterChecklistCommand:
       "npm run ops:export-era-charter-readiness-checklist -- --write",
@@ -82,8 +102,9 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
 export function formatPostTerminusSteadyStateProgressLabel(
   slice: PostTerminusSteadyStateUiSlice,
 ): string {
+  const milestone = slice.steadyStateMilestone.replaceAll("_", " ");
   if (slice.overdueCount > 0) {
-    return `Steady state · ${slice.overdueCount} track(s) need attention · repeat forever`;
+    return `Steady state · ${slice.overdueCount} track(s) need attention · ${milestone}`;
   }
-  return `Steady state · post-terminus loop active · GO · repeat Step 12 rhythms`;
+  return `Steady state · ${milestone} · GO · repeat Step 12 rhythms`;
 }

@@ -11,6 +11,7 @@ import {
   MAINTENANCE_MODE_PLATFORM_ANCHOR,
 } from "@/lib/commercial/maintenance-mode-ui-era24";
 import { formatEngineeringPathTerminusProgressLabel } from "@/lib/commercial/engineering-path-terminus-ui-era24";
+import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
 type MaintenanceModePanelVariant = "dashboard" | "platform" | "compact";
@@ -221,10 +222,23 @@ export function MaintenanceModePanel(props: {
               Post-terminus steady state — repeat forever (Step 14)
             </p>
             <p className="mt-1 text-indigo-300/80">
-              {slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount > 0
-                ? `${slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount} track(s) need attention`
-                : "Steady state active — no era25 gates without charter"}
+              {formatPostTerminusSteadyStateProgressLabel(
+                slice.engineeringPathTerminus.postTerminusSteadyState,
+              )}
             </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Badge variant="outline" className="rounded-full font-mono text-[10px] text-indigo-200">
+                {slice.engineeringPathTerminus.postTerminusSteadyState.steadyStateMilestone.replaceAll(
+                  "_",
+                  " ",
+                )}
+              </Badge>
+              {slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount > 0 ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  {slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount} overdue
+                </Badge>
+              ) : null}
+            </div>
             <ul className="mt-3 space-y-1">
               {slice.engineeringPathTerminus.postTerminusSteadyState.tracks.map((track) => (
                 <li
@@ -243,8 +257,17 @@ export function MaintenanceModePanel(props: {
               ))}
             </ul>
             <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.postEngineeringTerminusOrchestratorCommand}
+              </span>
               <span>{slice.engineeringPathTerminus.postTerminusSteadyState.validateCommand}</span>
-              <span>{slice.engineeringPathTerminus.postTerminusSteadyState.exportEraCharterChecklistCommand}</span>
+              <span>{slice.engineeringPathTerminus.postTerminusSteadyState.syncReportCommand}</span>
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.validateEngineeringPathTerminusCommand}
+              </span>
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.exportEraCharterChecklistCommand}
+              </span>
             </div>
           </div>
         ) : null}

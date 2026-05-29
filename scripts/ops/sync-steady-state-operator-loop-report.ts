@@ -7,10 +7,10 @@ import {
   POST_TERMINUS_STEADY_STATE_STEP14_DOC,
   STEADY_STATE_RELEASE_TRAIN,
 } from "@/lib/commercial/post-terminus-steady-state-phases-era24";
-import { evaluateSteadyStateOperatorLoop } from "@/lib/commercial/evaluate-steady-state-operator-loop";
+import { evaluateSteadyStateOperatorLoopWithMilestones } from "@/scripts/ops/validate-steady-state-operator-loop";
 
 export function buildSteadyStateOperatorLoopReportMarkdown(
-  result: ReturnType<typeof evaluateSteadyStateOperatorLoop>,
+  result: ReturnType<typeof evaluateSteadyStateOperatorLoopWithMilestones>,
 ): string {
   const lines: string[] = [
     "# Steady-State Operator Loop — Report",
@@ -19,11 +19,15 @@ export function buildSteadyStateOperatorLoopReportMarkdown(
     "",
     "## Status",
     "",
-    `- Steady state active: **${result.steadyStateActive ? "yes" : "no"}**`,
-    `- Engineering terminus active: **${result.engineeringTerminusActive ? "yes" : "no"}**`,
-    `- GO decision: **${result.goDecision ?? "missing"}**`,
-    `- Overdue tracks: ${result.health.overdueCount}`,
-    `- Healthy tracks: ${result.health.healthyCount}`,
+    `- Steady state active: **${result.evaluation.steadyStateActive ? "yes" : "no"}**`,
+    `- Engineering terminus active: **${result.evaluation.engineeringTerminusActive ? "yes" : "no"}**`,
+    `- Steady state milestone: **${result.steadyStateMilestone}**`,
+    `- Engineering path milestone: **${result.pathEvaluation.engineeringPathTerminusMilestone}**`,
+    `- Ready for maintenance rhythm smokes: ${result.readyForMaintenanceRhythmSmokes ? "yes" : "no"}`,
+    `- Ready for upstream loop smokes: ${result.readyForUpstreamLoopSmokes ? "yes" : "no"}`,
+    `- GO decision: **${result.evaluation.goDecision ?? "missing"}**`,
+    `- Overdue tracks: ${result.evaluation.health.overdueCount}`,
+    `- Healthy tracks: ${result.evaluation.health.healthyCount}`,
     "",
     "## Release train",
     "",
@@ -35,7 +39,7 @@ export function buildSteadyStateOperatorLoopReportMarkdown(
     "",
   ];
 
-  for (const track of result.tracks) {
+  for (const track of result.evaluation.tracks) {
     lines.push(`### ${track.label}`);
     lines.push("");
     lines.push(`Owner: **${track.ownerRole}** · Status: **${track.status}**`);
@@ -52,7 +56,7 @@ export function buildSteadyStateOperatorLoopReportMarkdown(
 
 function main() {
   const write = process.argv.includes("--write");
-  const result = evaluateSteadyStateOperatorLoop();
+  const result = evaluateSteadyStateOperatorLoopWithMilestones();
   const markdown = buildSteadyStateOperatorLoopReportMarkdown(result);
 
   if (write) {

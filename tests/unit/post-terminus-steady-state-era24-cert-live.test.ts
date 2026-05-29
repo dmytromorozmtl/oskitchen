@@ -39,6 +39,9 @@ describe("post-terminus steady state era24 CI certification (live repo)", () => 
   it("documents step 14 execution", () => {
     const step14 = readFileSync(join(ROOT, POST_TERMINUS_STEADY_STATE_STEP14_DOC), "utf8");
     expect(step14).toContain("era24-post-terminus-steady-state-v1");
+    expect(step14).toContain(
+      "run-post-terminus-steady-state-post-engineering-terminus-orchestrator",
+    );
     expect(step14).toContain("ops:validate-steady-state-operator-loop");
     expect(step14).toContain("#post-terminus-steady-state");
   });

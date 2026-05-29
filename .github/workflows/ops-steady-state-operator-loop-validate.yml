@@ -23,3 +23,11 @@ jobs:
           SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED: ${{ secrets.SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED }}
           SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED: ${{ secrets.SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED }}
           SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED: ${{ secrets.SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED }}
+      - name: Post-terminus steady state post-engineering-terminus orchestrator (JSON summary)
+        run: npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --json
+        continue-on-error: true
+        env:
+          SUSTAINED_OPS_DAILY_CADENCE_ATTESTED: ${{ secrets.SUSTAINED_OPS_DAILY_CADENCE_ATTESTED }}
+          SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED: ${{ secrets.SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED }}
+          SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED: ${{ secrets.SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED }}
+          SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED: ${{ secrets.SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED }}

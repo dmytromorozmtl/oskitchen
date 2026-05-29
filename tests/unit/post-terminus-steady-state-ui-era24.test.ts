@@ -15,6 +15,9 @@ describe("post-terminus-steady-state-ui-era24", () => {
     expect(slice).not.toBeNull();
     expect(slice?.tracks).toHaveLength(6);
     expect(slice?.validateCommand).toBe("npm run ops:validate-steady-state-operator-loop");
+    expect(slice?.postEngineeringTerminusOrchestratorCommand).toContain(
+      "run-post-terminus-steady-state-post-engineering-terminus-orchestrator",
+    );
   });
 
   it("formats progress label", () => {

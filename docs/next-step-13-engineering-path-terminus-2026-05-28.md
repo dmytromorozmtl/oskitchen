@@ -143,8 +143,8 @@ See [`next-step-14-post-terminus-era-charter-process-2026-05-28.md`](./next-step
 
 | Component | Artifact |
 |-----------|----------|
-| Orchestrator lib | `lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24.ts` (planned) |
-| Policy | `era24-post-terminus-steady-state-post-engineering-terminus-orchestrator-v1` (planned) |
+| Orchestrator lib | `lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24.ts` |
+| Policy | `era24-post-terminus-steady-state-post-engineering-terminus-orchestrator-v1` |
 | Milestones | `engineering_terminus_blocked` → track attention → `steady_state_healthy` |
 | Validate | `ops:validate-steady-state-operator-loop -- --json` |
 | UI | `#post-terminus-steady-state` inside maintenance panel (already wired) |
