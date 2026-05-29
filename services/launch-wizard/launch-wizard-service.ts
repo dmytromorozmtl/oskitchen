@@ -83,6 +83,10 @@ import {
   type LaunchWizardImprovementLoopSlice,
 } from "@/lib/launch-wizard/launch-wizard-improvement-loop-era34";
 import {
+  buildLaunchWizardProductEvolutionSlice,
+  type LaunchWizardProductEvolutionSlice,
+} from "@/lib/launch-wizard/launch-wizard-product-evolution-era35";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -118,6 +122,10 @@ import {
   buildContinuousImprovementLoopUiSlice,
   type ContinuousImprovementLoopUiSlice,
 } from "@/lib/commercial/continuous-improvement-loop-ui-era22";
+import {
+  buildSustainedProductEvolutionUiSlice,
+  type SustainedProductEvolutionUiSlice,
+} from "@/lib/commercial/sustained-product-evolution-ui-era23";
 import {
   buildPaidPilotGoConvergenceEra25UiSlice,
   type PaidPilotGoConvergenceEra25UiSlice,
@@ -158,6 +166,8 @@ export type LaunchWizardModel = {
   sustainedOperationalExcellenceIntegrity: LaunchWizardSustainedOpsSlice | null;
   continuousImprovementLoop: ContinuousImprovementLoopUiSlice | null;
   continuousImprovementLoopIntegrity: LaunchWizardImprovementLoopSlice | null;
+  sustainedProductEvolution: SustainedProductEvolutionUiSlice | null;
+  sustainedProductEvolutionIntegrity: LaunchWizardProductEvolutionSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -537,6 +547,58 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       marketLeaderArtifacts.competitorMatrix ??
       seriesAArtifacts.competitorMatrix,
   });
+  const sustainedProductEvolution = buildSustainedProductEvolutionUiSlice({
+    goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
+    p0Staging:
+      loopArtifacts.p0Staging ??
+      sustainedOpsArtifacts.p0Staging ??
+      marketLeaderArtifacts.p0Staging ??
+      seriesAArtifacts.p0Staging ??
+      scaleArtifacts.p0Staging ??
+      p0Summary,
+    tier2Summary:
+      loopArtifacts.tier2Summary ??
+      sustainedOpsArtifacts.tier2Summary ??
+      marketLeaderArtifacts.tier2Summary ??
+      seriesAArtifacts.tier2Summary ??
+      scaleArtifacts.tier2Summary ??
+      commercialOps?.tier2Staging.summary ??
+      null,
+    metricsBaseline:
+      loopArtifacts.metricsBaseline ??
+      sustainedOpsArtifacts.metricsBaseline ??
+      marketLeaderArtifacts.metricsBaseline ??
+      seriesAArtifacts.metricsBaseline ??
+      scaleArtifacts.metricsBaseline ??
+      month2Artifacts.metricsBaseline,
+    caseStudyDraft:
+      loopArtifacts.caseStudyDraft ??
+      sustainedOpsArtifacts.caseStudyDraft ??
+      marketLeaderArtifacts.caseStudyDraft ??
+      seriesAArtifacts.caseStudyDraft ??
+      scaleArtifacts.caseStudyDraft ??
+      month2Artifacts.caseStudyDraft,
+    investorOnepager:
+      loopArtifacts.investorOnepager ??
+      sustainedOpsArtifacts.investorOnepager ??
+      marketLeaderArtifacts.investorOnepager ??
+      seriesAArtifacts.investorOnepager ??
+      scaleArtifacts.investorOnepager ??
+      month2Artifacts.investorOnepager,
+    rollbackDrill:
+      loopArtifacts.rollbackDrill ??
+      sustainedOpsArtifacts.rollbackDrill ??
+      marketLeaderArtifacts.rollbackDrill ??
+      seriesAArtifacts.rollbackDrill ??
+      scaleArtifacts.rollbackDrill,
+    competitorMatrix:
+      loopArtifacts.competitorMatrix ??
+      sustainedOpsArtifacts.competitorMatrix ??
+      marketLeaderArtifacts.competitorMatrix ??
+      seriesAArtifacts.competitorMatrix,
+  });
 
   const paidPilotGoConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
     breakthroughVisible: true,
@@ -556,6 +618,9 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   );
   const continuousImprovementLoopIntegrity = buildLaunchWizardImprovementLoopSlice(
     continuousImprovementLoop,
+  );
+  const sustainedProductEvolutionIntegrity = buildLaunchWizardProductEvolutionSlice(
+    sustainedProductEvolution,
   );
 
   return {
@@ -587,6 +652,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     sustainedOperationalExcellenceIntegrity,
     continuousImprovementLoop,
     continuousImprovementLoopIntegrity,
+    sustainedProductEvolution,
+    sustainedProductEvolutionIntegrity,
     paidPilotGoConvergence,
   };
 }

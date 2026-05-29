@@ -115,6 +115,8 @@ export function buildSustainedProductEvolutionPostImprovementLoopOrchestratorSum
 
   const recommendedCommands = input.evaluation.productEvolutionReady
     ? ([
+        "npm run ops:validate-continuous-improvement-loop-integrity -- --json",
+        "npm run ops:validate-sustained-product-evolution-integrity -- --json",
         "npm run ops:validate-continuous-improvement-loop -- --json",
         "npm run ops:validate-sustained-product-evolution -- --json",
         SUSTAINED_PRODUCT_EVOLUTION_POST_IMPROVEMENT_LOOP_ORCHESTRATOR_COMMAND + " -- --write",
@@ -179,7 +181,7 @@ export function buildSustainedProductEvolutionOrchestratorReportMarkdown(input: 
     "",
     `Generated: ${new Date().toISOString()}`,
     "",
-    "> **Informational only** — product-led growth tracks; no new briefing priority or env attestation keys.",
+    "> **Informational tracks + integrity guard (era35)** — product-led growth with honest Improvement loop prerequisite.",
     "",
     `Policy: \`${SUSTAINED_PRODUCT_EVOLUTION_POST_IMPROVEMENT_LOOP_ORCHESTRATOR_ERA23_POLICY_ID}\``,
     "",

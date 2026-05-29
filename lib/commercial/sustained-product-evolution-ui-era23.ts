@@ -13,12 +13,14 @@ import {
   CONTINUOUS_IMPROVEMENT_LOOP_RELEASE_CHECKLIST_DOC,
   CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC,
 } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
+import { evaluateSustainedProductEvolutionIntegrity } from "@/lib/commercial/sustained-product-evolution-integrity-era35";
 import {
   resolveSustainedProductEvolutionMilestoneFromTrackStatuses,
   type SustainedProductEvolutionMilestone,
 } from "@/lib/commercial/sustained-product-evolution-post-improvement-loop-orchestrator-era23";
 import {
   buildSustainedProductEvolutionTrackStatuses,
+  detectSustainedProductEvolutionStarted,
   formatSustainedProductEvolutionTrackDetail,
   IMPLEMENTATION_BACKLOG_DOC,
   resolveContinuousImprovementLoopActive,
@@ -40,6 +42,8 @@ import {
   SERIES_A_MEAL_PREP_LANDING_ROUTE,
 } from "@/lib/commercial/market-leader-positioning-phases-era21";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_PRODUCT_EVOLUTION_ANCHOR } from "@/lib/launch-wizard/launch-wizard-product-evolution-era35";
 
 export const SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID =
   "era23-sustained-product-evolution-ui-v1" as const;
@@ -72,12 +76,20 @@ export type SustainedProductEvolutionUiSlice = {
   exportOwnershipMatrixCommand: string;
   postImprovementLoopOrchestratorCommand: string;
   validateImprovementLoopCommand: string;
+  validateImprovementLoopIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  improvementLoopIntegrityPassed: boolean;
+  productEvolutionIntegrityPassed: boolean;
+  p0ProofStatus: string | null;
+  tier2ProofStatus: string | null;
   productEvolutionMilestone: SustainedProductEvolutionMilestone;
   sustainedOpsConvergenceReady: boolean;
   pureOperationalModeEra25Active: boolean;
   pureOperationalModeTerminusHref: string;
   validateTerminusCommand: string;
   todayHref: string;
+  launchWizardHref: string;
   platformOpsHref: string;
   improvementLoopHref: string;
   implementationHref: string;
@@ -90,6 +102,8 @@ export type SustainedProductEvolutionUiSlice = {
 
 export function buildSustainedProductEvolutionUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -99,10 +113,30 @@ export function buildSustainedProductEvolutionUiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): SustainedProductEvolutionUiSlice | null {
+  const env = input.env ?? process.env;
   const p0Staging = input.p0Staging ?? null;
   const tier2Summary = input.tier2Summary ?? null;
   const metricsBaseline = input.metricsBaseline ?? null;
   const competitorMatrix = input.competitorMatrix ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+
+  const productEvolutionIntegrity = evaluateSustainedProductEvolutionIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: p0Staging,
+    tier2SummaryOverride: tier2Summary,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: input.caseStudyDraft ?? null,
+    investorOnepagerOverride: input.investorOnepager ?? null,
+    rollbackDrillOverride: input.rollbackDrill ?? null,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
   const continuousImprovementLoopActive = resolveContinuousImprovementLoopActive({
     goNoGoSummary: input.goNoGoSummary,
     p0Staging,
@@ -112,16 +146,19 @@ export function buildSustainedProductEvolutionUiSlice(input: {
     investorOnepager: input.investorOnepager ?? null,
     rollbackDrill: input.rollbackDrill ?? null,
     competitorMatrix,
-    env: input.env,
+    env,
   });
   const goDecision = input.goNoGoSummary?.decision ?? null;
-  const era25 = resolveEra25PureOperationalModeContext(input.env);
+  const era25 = resolveEra25PureOperationalModeContext(env);
   const prerequisites = resolveSustainedProductEvolutionPrerequisites({
     goDecision,
     continuousImprovementLoopActive,
     era25,
   });
-  if (!prerequisites.productEvolutionReady) return null;
+  const productEvolutionReadyFromPhases = prerequisites.productEvolutionReady;
+  const productEvolutionExecutionStarted = detectSustainedProductEvolutionStarted(env);
+
+  if (!productEvolutionReadyFromPhases && !productEvolutionExecutionStarted) return null;
 
   const tracks = buildSustainedProductEvolutionTrackStatuses({
     metricsBaseline,
@@ -136,7 +173,7 @@ export function buildSustainedProductEvolutionUiSlice(input: {
   const productEvolutionMilestone = resolveSustainedProductEvolutionMilestoneFromTrackStatuses(
     tracks,
     {
-      productEvolutionReady: true,
+      productEvolutionReady: productEvolutionReadyFromPhases || productEvolutionExecutionStarted,
       sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
     },
   );
@@ -144,7 +181,7 @@ export function buildSustainedProductEvolutionUiSlice(input: {
   return {
     policyId: SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID,
     visible: true,
-    productEvolutionReady: true,
+    productEvolutionReady: productEvolutionReadyFromPhases,
     goDecision: "GO",
     customerName: input.goNoGoSummary?.customerName ?? null,
     tracks,
@@ -169,12 +206,23 @@ export function buildSustainedProductEvolutionUiSlice(input: {
     postImprovementLoopOrchestratorCommand:
       "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
     validateImprovementLoopCommand: "npm run ops:validate-continuous-improvement-loop -- --json",
+    validateImprovementLoopIntegrityCommand:
+      "npm run ops:validate-continuous-improvement-loop-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-sustained-product-evolution-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-sustained-product-evolution-integrity-baseline -- --write",
+    improvementLoopIntegrityPassed: productEvolutionIntegrity.improvementLoopIntegrityPassed,
+    productEvolutionIntegrityPassed: productEvolutionIntegrity.integrityPassed,
+    p0ProofStatus,
+    tier2ProofStatus,
     validateTerminusCommand: "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
     productEvolutionMilestone,
     sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
     pureOperationalModeEra25Active: prerequisites.pureOperationalModeEra25Active,
     pureOperationalModeTerminusHref: era25.platformOpsHref,
     todayHref: "/dashboard/today",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_PRODUCT_EVOLUTION_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${SUSTAINED_PRODUCT_EVOLUTION_PLATFORM_ANCHOR}`,
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     implementationHref: "/dashboard/implementation",

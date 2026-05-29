@@ -1,0 +1,26 @@
+# Sustained product evolution integrity — blocks product-led growth without honest Improvement loop.
+
+name: Sustained Product Evolution Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/competitor-feature-gap-matrix-summary.json"
+      - "artifacts/sustained-product-evolution-integrity-baseline.json"
+      - "lib/commercial/sustained-product-evolution-integrity-era35.ts"
+      - "scripts/ops/validate-sustained-product-evolution-integrity.ts"
+
+jobs:
+  validate-sustained-product-evolution-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Sustained product evolution integrity (JSON)
+        run: npm run ops:validate-sustained-product-evolution-integrity -- --json

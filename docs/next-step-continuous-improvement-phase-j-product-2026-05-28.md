@@ -51,7 +51,9 @@ npm run ops:sync-continuous-improvement-loop-integrity-baseline -- --write
 
 ## Next step after Phase J PASS
 
-1. Sustained product evolution integrity guard (Phase K) — mirror era28–era34 on `sustained-product-evolution-*`
+**Phase K IMPLEMENTED** — see [`docs/next-step-product-evolution-phase-k-product-2026-05-28.md`](./next-step-product-evolution-phase-k-product-2026-05-28.md)
+
+1. ~~Sustained product evolution integrity guard (Phase K)~~ **DONE** (`era35-sustained-product-evolution-integrity-v1`)
 2. `npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write`
 
-**Following engineering slice (optional):** era25 pure operational mode terminus reads integrity baseline · PostHog on track CTAs.
+**Following engineering slice:** Phase L Maintenance mode integrity (`era36`) · era25 terminus reads integrity baseline.

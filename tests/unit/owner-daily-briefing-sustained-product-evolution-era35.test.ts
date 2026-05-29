@@ -1,19 +1,33 @@
 import { describe, expect, it } from "vitest";
 
-import { formatSustainedProductEvolutionProgressLabel } from "@/lib/commercial/sustained-product-evolution-ui-era23";
+import { buildOwnerDailyBriefingSustainedProductEvolutionAction } from "@/lib/briefing/owner-daily-briefing-sustained-product-evolution-era35";
+import { SUSTAINED_PRODUCT_EVOLUTION_BRIEFING_ACTION_PRIORITY } from "@/lib/briefing/owner-daily-briefing-sustained-product-evolution-era35";
 import type { SustainedProductEvolutionUiSlice } from "@/lib/commercial/sustained-product-evolution-ui-era23";
 
-const slice = {
+const baseSlice = {
   policyId: "era23-sustained-product-evolution-ui-v1",
   visible: true,
   productEvolutionReady: true,
   goDecision: "GO",
   customerName: "Acme",
-  tracks: [],
-  healthyCount: 2,
+  tracks: [
+    {
+      id: "customer_feedback_backlog",
+      label: "Product — Customer feedback → implementation backlog",
+      frequency: "monthly" as const,
+      ownerRole: "product",
+      status: "overdue" as const,
+      docPath: "docs/implementation-backlog.md",
+      routes: ["/dashboard/reports"],
+      detail: "capture feedback",
+      artifactPath: "artifacts/pilot-metrics-baseline-summary.json",
+      lastRunAt: null,
+    },
+  ],
+  healthyCount: 0,
   dueSoonCount: 0,
-  overdueCount: 0,
-  guidanceCount: 4,
+  overdueCount: 1,
+  guidanceCount: 5,
   nextAttentionTrack: null,
   nextAttentionDetail: null,
   step11Doc: "docs/next-step-11-sustained-product-evolution-2026-05-28.md",
@@ -38,13 +52,13 @@ const slice = {
     "npm run ops:sync-sustained-product-evolution-integrity-baseline -- --write",
   improvementLoopIntegrityPassed: true,
   productEvolutionIntegrityPassed: true,
-  p0ProofStatus: null,
-  tier2ProofStatus: null,
+  p0ProofStatus: "proof_passed",
+  tier2ProofStatus: "proof_passed",
+  productEvolutionMilestone: "attention_customer_feedback",
   sustainedOpsConvergenceReady: true,
   pureOperationalModeEra25Active: true,
   pureOperationalModeTerminusHref: "/platform/commercial-pilot-ops#pure-operational-mode-terminus-era25",
   validateTerminusCommand: "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
-  productEvolutionMilestone: "product_evolution_healthy",
   todayHref: "/dashboard/today",
   launchWizardHref: "/dashboard/launch-wizard#launch-wizard-product-evolution",
   platformOpsHref: "/platform/commercial-pilot-ops#sustained-product-evolution",
@@ -57,11 +71,12 @@ const slice = {
   competitorMatrixArtifact: "artifacts/competitor-feature-gap-matrix-summary.json",
 } as SustainedProductEvolutionUiSlice;
 
-describe("sustained-product-evolution-ui-era23 labels", () => {
-  it("formats product-led growth label", () => {
-    expect(formatSustainedProductEvolutionProgressLabel(slice)).toContain("Product-led growth");
-    expect(formatSustainedProductEvolutionProgressLabel({ ...slice, overdueCount: 1 })).toContain(
-      "1 overdue",
-    );
+describe("owner-daily-briefing-sustained-product-evolution-era35", () => {
+  it("builds ranked action with priority 10", () => {
+    const action = buildOwnerDailyBriefingSustainedProductEvolutionAction(baseSlice);
+    expect(action).not.toBeNull();
+    expect(action!.priority).toBe(SUSTAINED_PRODUCT_EVOLUTION_BRIEFING_ACTION_PRIORITY);
+    expect(action!.severity).toBe("high");
+    expect(action!.href).toBe("/dashboard/reports");
   });
 });

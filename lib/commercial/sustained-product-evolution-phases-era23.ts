@@ -119,6 +119,17 @@ export const SUSTAINED_PRODUCT_EVOLUTION_STALE_THRESHOLDS_DAYS = {
   competitor_leapfrog_roadmap: { healthy: 80, dueSoon: 90 },
 } as const;
 
+export const SUSTAINED_PRODUCT_EVOLUTION_TRACKED_ENV_KEYS = [
+  "SUSTAINED_PRODUCT_EVOLUTION_PRODUCT_LED_GROWTH_ATTESTED",
+  "SUSTAINED_PRODUCT_EVOLUTION_OWNERSHIP_MATRIX_REVIEWED",
+] as const;
+
+export function detectSustainedProductEvolutionStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return SUSTAINED_PRODUCT_EVOLUTION_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type SustainedProductEvolutionTrackStatus = {
   id: string;
   label: string;

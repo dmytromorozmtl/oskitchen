@@ -141,6 +141,10 @@ import {
   mergeBriefingContinuousImprovementLoopTopActions,
 } from "@/lib/briefing/owner-daily-briefing-continuous-improvement-loop-era34";
 import {
+  buildOwnerDailyBriefingSustainedProductEvolutionAction,
+  mergeBriefingSustainedProductEvolutionTopActions,
+} from "@/lib/briefing/owner-daily-briefing-sustained-product-evolution-era35";
+import {
   buildCommercialGoClosureUiSlice,
   type CommercialGoClosureUiSlice,
 } from "@/lib/commercial/commercial-go-closure-ui-era21";
@@ -751,6 +755,8 @@ export async function loadOwnerDailyBriefing(
       : null;
   const sustainedProductEvolution = buildSustainedProductEvolutionUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging:
       loopArtifacts?.p0Staging ??
       sustainedOpsArtifacts?.p0Staging ??
@@ -805,6 +811,10 @@ export async function loadOwnerDailyBriefing(
       seriesAArtifacts?.competitorMatrix ??
       null,
   });
+  const sustainedProductEvolutionRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingSustainedProductEvolutionAction(sustainedProductEvolution)
+      : null;
   const maintenanceMode = buildMaintenanceModeUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
     p0Staging:
@@ -1206,6 +1216,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && continuousImprovementLoopRankedAction) {
     allTopActions = mergeBriefingContinuousImprovementLoopTopActions(
       continuousImprovementLoopRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && sustainedProductEvolutionRankedAction) {
+    allTopActions = mergeBriefingSustainedProductEvolutionTopActions(
+      sustainedProductEvolutionRankedAction,
       allTopActions,
     );
   }

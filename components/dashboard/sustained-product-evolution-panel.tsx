@@ -87,6 +87,16 @@ export function SustainedProductEvolutionPanel(props: {
                 customer: {slice.customerName}
               </Badge>
             ) : null}
+            {!slice.productEvolutionIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Product evolution blocked
+              </Badge>
+            ) : null}
+            {!slice.improvementLoopIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Improvement loop integrity FAIL
+              </Badge>
+            ) : null}
           </div>
         ) : (
           <p className="text-sm font-medium">{formatSustainedProductEvolutionProgressLabel(slice)}</p>
@@ -185,6 +195,9 @@ export function SustainedProductEvolutionPanel(props: {
                 <li>{slice.syncProgressReportCommand}</li>
                 <li>{slice.exportOwnershipMatrixCommand}</li>
                 <li>{slice.validateImprovementLoopCommand}</li>
+                <li>{slice.validateImprovementLoopIntegrityCommand}</li>
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.validateTerminusCommand}</li>
                 <li>npm run smoke:pilot-metrics-baseline</li>
                 <li>npm run smoke:competitor-feature-gap-matrix</li>
