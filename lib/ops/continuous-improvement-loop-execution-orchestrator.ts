@@ -431,7 +431,7 @@ export function buildContinuousImprovementLoopExecutionSummary(input: {
 
   if (milestone === "continuous_improvement_loop_passed") {
     recommendedCommands.push(
-      "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
+      "npm run ops:run-maintenance-mode-execution -- --write",
     );
   }
 

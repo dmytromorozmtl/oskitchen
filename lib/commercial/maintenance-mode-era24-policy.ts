@@ -19,6 +19,8 @@ export const MAINTENANCE_MODE_ERA24_EXTENDS_POLICIES = [
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_OPS_SCRIPTS = [
+  "ops:run-maintenance-mode-execution",
+  "ops:run-continuous-improvement-loop-execution",
   "ops:run-maintenance-mode-post-product-evolution-orchestrator",
   "ops:validate-maintenance-mode",
   "ops:sync-maintenance-mode-playbook-report",
@@ -26,11 +28,15 @@ export const MAINTENANCE_MODE_ERA24_OPS_SCRIPTS = [
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_CI_SCRIPTS = [
+  "test:ci:maintenance-mode-execution",
+  "test:ci:maintenance-mode-execution:cert",
   "test:ci:maintenance-mode-era24",
   "test:ci:maintenance-mode-era24:cert",
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_UNIT_TESTS = [
+  "tests/unit/maintenance-mode-execution-orchestrator.test.ts",
+  "tests/unit/maintenance-mode-execution-cert-live.test.ts",
   "tests/unit/maintenance-mode-post-product-evolution-orchestrator-era24.test.ts",
   "tests/unit/maintenance-mode-phases-era24.test.ts",
   "tests/unit/maintenance-mode-ui-era24.test.ts",

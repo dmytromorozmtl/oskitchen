@@ -55,6 +55,8 @@ export type EngineeringPathTerminusUiSlice = {
   step13Doc: typeof ENGINEERING_PATH_TERMINUS_STEP13_DOC;
   validateCommand: string;
   postMaintenanceModeOrchestratorCommand: string;
+  maintenanceModeExecutionCommand: string;
+  maintenanceModeExecutionArtifact: string;
   validateMaintenanceModeCommand: string;
   validateMaintenanceModeIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -179,6 +181,10 @@ export function buildEngineeringPathTerminusUiSlice(input: {
     validateCommand: "npm run ops:validate-commercial-pilot-path",
     postMaintenanceModeOrchestratorCommand:
       "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
+    maintenanceModeExecutionCommand:
+      "npm run ops:run-maintenance-mode-execution -- --write",
+    maintenanceModeExecutionArtifact:
+      "artifacts/maintenance-mode-execution-summary.json",
     validateMaintenanceModeCommand: "npm run ops:validate-maintenance-mode -- --json",
     validateMaintenanceModeIntegrityCommand:
       "npm run ops:validate-maintenance-mode-integrity -- --json",

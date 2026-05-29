@@ -129,6 +129,13 @@ function main() {
         { allowFail: true },
       ),
     );
+    steps.push(
+      runStep(
+        "maintenance-mode",
+        "npm run ops:run-maintenance-mode-execution -- --write",
+        { allowFail: true },
+      ),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

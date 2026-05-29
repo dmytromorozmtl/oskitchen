@@ -195,6 +195,7 @@ export function ContinuousImprovementLoopPanel(props: {
                 <li>{slice.integrityValidateCommand}</li>
                 <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.validateSustainedOpsIntegrityCommand}</li>
+                <li>{slice.maintenanceModeExecutionCommand}</li>
                 <li>{slice.ciLoopExecutionCommand}</li>
                 <li>{slice.productEvolutionExecutionCommand}</li>
                 <li>{slice.postSustainedOpsOrchestratorCommand}</li>

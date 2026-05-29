@@ -66,6 +66,8 @@ export type MaintenanceModeUiSlice = {
   postProductEvolutionOrchestratorCommand: string;
   ciLoopExecutionCommand: string;
   ciLoopExecutionArtifact: string;
+  maintenanceModeExecutionCommand: string;
+  maintenanceModeExecutionArtifact: string;
   validateProductEvolutionCommand: string;
   validateProductEvolutionIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -212,6 +214,10 @@ export function buildMaintenanceModeUiSlice(input: {
       "npm run ops:run-continuous-improvement-loop-execution -- --write",
     ciLoopExecutionArtifact:
       "artifacts/continuous-improvement-loop-execution-summary.json",
+    maintenanceModeExecutionCommand:
+      "npm run ops:run-maintenance-mode-execution -- --write",
+    maintenanceModeExecutionArtifact:
+      "artifacts/maintenance-mode-execution-summary.json",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
     validateProductEvolutionIntegrityCommand:
       "npm run ops:validate-sustained-product-evolution-integrity -- --json",

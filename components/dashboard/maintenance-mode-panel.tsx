@@ -5803,6 +5803,7 @@ export function MaintenanceModePanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.maintenanceModeExecutionCommand}</li>
                 <li>{slice.ciLoopExecutionCommand}</li>
                 <li>{slice.postProductEvolutionOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>

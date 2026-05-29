@@ -34,6 +34,7 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_EXECUTION_OPS_SCRIPTS = [
   "smoke:pilot-metrics-baseline",
   "smoke:pilot-gono-go",
   "smoke:competitor-feature-gap-matrix",
+  "ops:run-maintenance-mode-execution",
   "ops:run-maintenance-mode-post-product-evolution-orchestrator",
 ] as const;
 
