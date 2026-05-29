@@ -143,6 +143,13 @@ function main() {
         { allowFail: true },
       ),
     );
+    steps.push(
+      runStep(
+        "steady-state-operator-loop-lock",
+        "npm run ops:run-steady-state-operator-loop-lock-execution -- --write",
+        { allowFail: true },
+      ),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

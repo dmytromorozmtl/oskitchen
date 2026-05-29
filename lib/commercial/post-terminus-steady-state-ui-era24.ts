@@ -56,6 +56,8 @@ export type PostTerminusSteadyStateUiSlice = {
   validateCommand: string;
   productionPilotReadyClosureExecutionCommand: string;
   productionPilotReadyClosureExecutionArtifact: string;
+  steadyStateOperatorLoopLockExecutionCommand: string;
+  steadyStateOperatorLoopLockExecutionArtifact: string;
   postEngineeringTerminusOrchestratorCommand: string;
   validateEngineeringPathTerminusCommand: string;
   validateEngineeringPathTerminusIntegrityCommand: string;
@@ -161,6 +163,10 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
       "npm run ops:run-production-pilot-ready-closure-execution -- --write",
     productionPilotReadyClosureExecutionArtifact:
       "artifacts/production-pilot-ready-closure-execution-summary.json",
+    steadyStateOperatorLoopLockExecutionCommand:
+      "npm run ops:run-steady-state-operator-loop-lock-execution -- --write",
+    steadyStateOperatorLoopLockExecutionArtifact:
+      "artifacts/steady-state-operator-loop-lock-execution-summary.json",
     postEngineeringTerminusOrchestratorCommand:
       "npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write",
     validateEngineeringPathTerminusCommand: "npm run ops:validate-commercial-pilot-path -- --json",

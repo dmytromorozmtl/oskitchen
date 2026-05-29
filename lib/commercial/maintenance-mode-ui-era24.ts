@@ -70,6 +70,8 @@ export type MaintenanceModeUiSlice = {
   maintenanceModeExecutionArtifact: string;
   productionPilotReadyClosureExecutionCommand: string;
   productionPilotReadyClosureExecutionArtifact: string;
+  steadyStateOperatorLoopLockExecutionCommand: string;
+  steadyStateOperatorLoopLockExecutionArtifact: string;
   validateProductEvolutionCommand: string;
   validateProductEvolutionIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -224,6 +226,10 @@ export function buildMaintenanceModeUiSlice(input: {
       "npm run ops:run-production-pilot-ready-closure-execution -- --write",
     productionPilotReadyClosureExecutionArtifact:
       "artifacts/production-pilot-ready-closure-execution-summary.json",
+    steadyStateOperatorLoopLockExecutionCommand:
+      "npm run ops:run-steady-state-operator-loop-lock-execution -- --write",
+    steadyStateOperatorLoopLockExecutionArtifact:
+      "artifacts/steady-state-operator-loop-lock-execution-summary.json",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
     validateProductEvolutionIntegrityCommand:
       "npm run ops:validate-sustained-product-evolution-integrity -- --json",

@@ -34,6 +34,7 @@ export const PRODUCTION_PILOT_READY_CLOSURE_EXECUTION_OPS_SCRIPTS = [
   "smoke:pilot-gono-go",
   "smoke:pilot-forbidden-claims-enforcement",
   "ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator",
+  "ops:run-steady-state-operator-loop-lock-execution",
 ] as const;
 
 export const PRODUCTION_PILOT_READY_CLOSURE_EXECUTION_CI_SCRIPTS = [

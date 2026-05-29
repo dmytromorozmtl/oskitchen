@@ -587,6 +587,9 @@ export function buildProductionPilotReadyClosureExecutionSummary(input: {
 
   if (milestone === "production_pilot_ready_passed") {
     recommendedCommands.push(
+      "npm run ops:run-steady-state-operator-loop-lock-execution -- --write",
+    );
+    recommendedCommands.push(
       "npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write",
     );
   }

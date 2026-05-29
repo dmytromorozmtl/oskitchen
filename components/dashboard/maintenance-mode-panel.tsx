@@ -363,6 +363,12 @@ export function MaintenanceModePanel(props: {
             </ul>
             <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
               <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.productionPilotReadyClosureExecutionCommand}
+              </span>
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.steadyStateOperatorLoopLockExecutionCommand}
+              </span>
+              <span>
                 {slice.engineeringPathTerminus.postTerminusSteadyState.postEngineeringTerminusOrchestratorCommand}
               </span>
               <span>{slice.engineeringPathTerminus.postTerminusSteadyState.validateCommand}</span>
@@ -5806,6 +5812,7 @@ export function MaintenanceModePanel(props: {
               <ul className="mt-1 list-inside list-disc font-mono">
                 <li>{slice.maintenanceModeExecutionCommand}</li>
                 <li>{slice.productionPilotReadyClosureExecutionCommand}</li>
+                <li>{slice.steadyStateOperatorLoopLockExecutionCommand}</li>
                 <li>{slice.ciLoopExecutionCommand}</li>
                 <li>{slice.postProductEvolutionOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
