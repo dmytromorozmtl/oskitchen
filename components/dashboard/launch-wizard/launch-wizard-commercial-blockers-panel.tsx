@@ -17,6 +17,7 @@ import type { Month2MarketReadinessUiSlice } from "@/lib/commercial/month2-marke
 import type { ScaleReadinessUiSlice } from "@/lib/commercial/scale-readiness-ui-era21";
 import type { SeriesAPartnerExpansionUiSlice } from "@/lib/commercial/series-a-partner-expansion-ui-era21";
 import type { MarketLeaderPositioningUiSlice } from "@/lib/commercial/market-leader-positioning-ui-era21";
+import type { SustainedOperationalExcellenceUiSlice } from "@/lib/commercial/sustained-operational-excellence-ui-era21";
 import { PaidPilotGoConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/paid-pilot-go-convergence-era25-strip";
 import { PilotWeek1ExecutionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/pilot-week1-execution-convergence-era25-strip";
 import { Month2MarketReadinessConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/month2-market-readiness-convergence-era25-strip";
