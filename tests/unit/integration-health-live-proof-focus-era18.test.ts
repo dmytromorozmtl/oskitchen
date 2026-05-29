@@ -127,9 +127,13 @@ describe("evaluateChannelLiveProofOperatorStatus", () => {
 
 describe("pickIntegrationHealthLiveProofAttentionItems", () => {
   it("surfaces incomplete pilot wizard before live smoke pending", () => {
-    const items = pickIntegrationHealthLiveProofAttentionItems([slice()]);
+    const pilotSlice = slice();
+    const items = pickIntegrationHealthLiveProofAttentionItems([pilotSlice]);
+    const remainingSteps =
+      pilotSlice.progress.totalCount - pilotSlice.progress.completedCount;
     expect(items.some((item) => item.id === "woocommerce-pilot-setup")).toBe(true);
     expect(items[0]?.tone).toBe("urgent");
+    expect(items[0]?.detail).toContain(`${remainingSteps} step`);
   });
 
   it("surfaces live smoke pending when in-app pilot is ready", () => {

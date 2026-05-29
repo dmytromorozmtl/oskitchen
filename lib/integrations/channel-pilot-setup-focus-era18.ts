@@ -3,6 +3,7 @@ import type {
   ChannelPilotSetupStepDef,
   ChannelPilotSetupStepId,
 } from "@/lib/integrations/channel-pilot-setup-wizard-steps";
+import { channelPilotSetupIncompleteStepCount } from "@/lib/integrations/channel-pilot-setup-wizard-steps";
 import {
   CHANNEL_PILOT_CERTIFICATION_ANCHOR,
   CHANNEL_PILOT_CONNECTION_ANCHOR,
@@ -52,7 +53,7 @@ export function buildChannelPilotSetupFocusSnapshot(
   return {
     completedCount: progress.completedCount,
     totalCount: progress.totalCount,
-    incompleteCount: progress.totalCount - progress.completedCount,
+    incompleteCount: channelPilotSetupIncompleteStepCount(progress),
     currentStepId: progress.currentStepId,
     pilotReady: progress.pilotReady,
   };

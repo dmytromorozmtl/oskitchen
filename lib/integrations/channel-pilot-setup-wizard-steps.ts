@@ -102,6 +102,12 @@ export type ChannelPilotSetupProgress = {
   pilotReady: boolean;
 };
 
+export function channelPilotSetupIncompleteStepCount(
+  progress: Pick<ChannelPilotSetupProgress, "completedCount" | "totalCount">,
+): number {
+  return Math.max(0, progress.totalCount - progress.completedCount);
+}
+
 export type ChannelPilotSetupInput = {
   provider: ChannelPilotProvider;
   hasConnection: boolean;

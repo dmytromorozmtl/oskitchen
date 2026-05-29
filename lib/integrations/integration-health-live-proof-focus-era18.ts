@@ -11,6 +11,7 @@ import type {
   ChannelPilotSetupProgress,
   ChannelPilotSetupStepId,
 } from "@/lib/integrations/channel-pilot-setup-wizard-steps";
+import { channelPilotSetupIncompleteStepCount } from "@/lib/integrations/channel-pilot-setup-wizard-steps";
 import {
   INTEGRATION_HEALTH_LIVE_PROOF_ANCHOR,
 } from "@/lib/integrations/integration-health-live-proof-focus-era18-policy";
@@ -136,10 +137,11 @@ export function pickIntegrationHealthLiveProofAttentionItems(
 
     if (slice.operatorStatus === "wizard_incomplete" && slice.progress.completedCount > 0) {
       const step = slice.progress.currentStepId ?? "save_credentials";
+      const remainingSteps = channelPilotSetupIncompleteStepCount(slice.progress);
       items.push({
         id: `${slice.provider.toLowerCase()}-pilot-setup`,
         title: `${label} pilot setup incomplete`,
-        detail: `${slice.progress.incompleteCount} step${slice.progress.incompleteCount === 1 ? "" : "s"} remain — finish the pilot wizard before scaling channel orders.`,
+        detail: `${remainingSteps} step${remainingSteps === 1 ? "" : "s"} remain — finish the pilot wizard before scaling channel orders.`,
         href: channelPilotLiveProofSetupHref(slice.provider, step),
         priority: 2,
         tone: "urgent",
