@@ -74,6 +74,7 @@ export type ContinuousImprovementLoopUiSlice = {
   productEvolutionExecutionArtifact: string;
   ciLoopExecutionCommand: string;
   ciLoopExecutionArtifact: string;
+  maintenanceModeExecutionCommand: string;
   validateSustainedOpsCommand: string;
   validateSustainedOpsIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -210,6 +211,8 @@ export function buildContinuousImprovementLoopUiSlice(input: {
       "npm run ops:run-continuous-improvement-loop-execution -- --write",
     ciLoopExecutionArtifact:
       "artifacts/continuous-improvement-loop-execution-summary.json",
+    maintenanceModeExecutionCommand:
+      "npm run ops:run-maintenance-mode-execution -- --write",
     validateSustainedOpsCommand: "npm run ops:validate-sustained-operational-excellence-env -- --json",
     validateSustainedOpsIntegrityCommand:
       "npm run ops:validate-sustained-operational-excellence-integrity -- --json",
