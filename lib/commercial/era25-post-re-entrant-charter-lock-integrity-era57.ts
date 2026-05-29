@@ -132,7 +132,7 @@ export function evaluateEra25PostReentrantCharterLockIntegrity(
     tier2SummaryOverride?: Tier2StagingGoldenPathSummary | null;
     metricsBaselineOverride?: PilotMetricsBaselineSummary | null;
     caseStudyDraftOverride?: PilotCaseStudyDraftSummary | null;
-    investorOnepagerOverride?: InvestorOnepagerSummary | null;
+    investorOnepagerOverride?: InvestorNarrativeOnepagerSummary | null;
     rollbackDrillOverride?: PilotRollbackDrillSummary | null;
     competitorMatrixOverride?: CompetitorFeatureGapMatrixSummary | null;
     p0ProofStatusOverride?: string | null;

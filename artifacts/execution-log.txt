@@ -448,3 +448,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — era25-post-re-entrant-charter-lock-integrity-era57 InvestorOnepagerSummary import (cycle 35)
+
+---
+Cycle: 35
+Timestamp: 2026-05-30T01:15:00.000Z
+Action: fix: era25 post-re-entrant charter lock integrity — align investorOnepagerOverride type with InvestorNarrativeOnepagerSummary (era56 upstream contract)
+Files: lib/commercial/era25-post-re-entrant-charter-lock-integrity-era57.ts
+TS errors before: 30
+TS errors after: 29
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — era25 witness UI steadyProductModeIntegrityBaselineOverride property name (cycle 36)
