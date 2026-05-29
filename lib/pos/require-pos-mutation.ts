@@ -15,11 +15,14 @@ export async function requirePosMutation(input: {
   const access = await requireMutationPermission(input.required);
   if (!access.ok) {
     await logDomainMutationDenied({
+      action: "pos.permission_denied",
+      entityType: "PosTerminal",
       actor: access.actor,
-      requiredPermission: input.required,
-      operation: input.operation,
-      domain: "pos",
-      metadata: input.metadata,
+      metadata: {
+        operation: input.operation,
+        requiredPermission: input.required,
+        ...(input.metadata ?? {}),
+      },
     });
   }
   return access;

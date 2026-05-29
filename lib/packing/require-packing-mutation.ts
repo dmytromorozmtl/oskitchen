@@ -5,10 +5,10 @@ export async function requirePackingMutation(operation = "packing.mutation") {
   const access = await requireMutationPermission("packing.manage");
   if (!access.ok) {
     await logDomainMutationDenied({
+      action: "packing.permission_denied",
+      entityType: "PackingStation",
       actor: access.actor,
-      requiredPermission: "packing.manage",
-      operation,
-      domain: "packing",
+      metadata: { operation, requiredPermission: "packing.manage" },
     });
   }
   return access;
