@@ -18,6 +18,8 @@ describe("era25-charter-exit-ui-era24", () => {
       "run-era25-charter-exit-post-terminus-guard-orchestrator",
     );
     expect(slice?.era25CharterExitMilestone).toBe("terminus_guard_blocked");
+    expect(slice?.firstCharterSliceReadiness).not.toBeNull();
+    expect(slice?.firstCharterSliceReadiness?.requiredSectionCount).toBe(10);
   });
 
   it("formats charter exit label", () => {

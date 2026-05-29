@@ -2,6 +2,10 @@
  * era25 charter exit UI slice — outside linear catalog platform panel section.
  */
 import {
+  buildEra25FirstCharterSliceReadinessUiSlice,
+  type Era25FirstCharterSliceReadinessUiSlice,
+} from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
+import {
   ERA25_CHARTER_EXIT_FOREVER_COMMANDS,
   ERA25_CHARTER_EXIT_GUARDRAILS,
   ERA25_CHARTER_EXIT_HUMAN_STEPS,
@@ -46,6 +50,7 @@ export type Era25CharterExitUiSlice = {
   syncReportCommand: string;
   exportCharterChecklistCommand: string;
   platformOpsHref: string;
+  firstCharterSliceReadiness: Era25FirstCharterSliceReadinessUiSlice | null;
 };
 
 export function buildEra25CharterExitUiSlice(input: {
@@ -55,6 +60,10 @@ export function buildEra25CharterExitUiSlice(input: {
   if (!input.guardPassed) return null;
 
   const result = evaluateEra25CharterExitOutsideLinearPathWithMilestones(input.env);
+  const firstCharterSliceReadiness = buildEra25FirstCharterSliceReadinessUiSlice({
+    charterExitVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: ERA25_CHARTER_EXIT_UI_ERA24_POLICY_ID,
@@ -82,6 +91,7 @@ export function buildEra25CharterExitUiSlice(input: {
     exportCharterChecklistCommand:
       "npm run ops:export-era-charter-readiness-checklist -- --write",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ERA25_CHARTER_EXIT_PLATFORM_ANCHOR}`,
+    firstCharterSliceReadiness,
   };
 }
 

@@ -15,6 +15,7 @@ import { formatCommercialPilotPathAbsoluteEndLabel } from "@/lib/commercial/comm
 import { formatLinearPathPermanentlyClosedLabel } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
 import { formatLinearChainTerminusGuardLabel } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import { formatEra25CharterExitLabel } from "@/lib/commercial/era25-charter-exit-ui-era24";
+import { formatEra25FirstCharterSliceReadinessLabel } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -583,6 +584,83 @@ export function MaintenanceModePanel(props: {
                       {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                         .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.charterDocGlobHint}
                     </p>
+
+                    {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                      .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                      .firstCharterSliceReadiness ? (
+                      <div
+                        id="era25-first-charter-slice-readiness"
+                        className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-indigo-800/50 px-3 py-3"
+                        data-testid="era25-first-charter-slice-readiness-panel"
+                      >
+                        <p className="font-medium text-indigo-100">
+                          era25 first charter slice — section readiness
+                        </p>
+                        <p className="mt-1 text-indigo-200/80">
+                          {formatEra25FirstCharterSliceReadinessLabel(
+                            slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                              .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                              .firstCharterSliceReadiness,
+                          )}
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <Badge
+                            variant="outline"
+                            className="rounded-full font-mono text-[10px] text-indigo-200"
+                          >
+                            {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.era25FirstCharterSliceReadinessMilestone.replaceAll(
+                              "_",
+                              " ",
+                            )}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className="rounded-full text-[10px] text-indigo-300"
+                          >
+                            sections{" "}
+                            {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                              .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                              .firstCharterSliceReadiness.sectionsValid
+                              ? "valid"
+                              : "incomplete"}
+                          </Badge>
+                        </div>
+                        <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                          {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.guardrails.map(
+                            (rule) => (
+                              <li key={rule}>{rule}</li>
+                            ),
+                          )}
+                        </ul>
+                        <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                          <span>
+                            {
+                              slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                .firstCharterSliceReadiness.postCharterExitOrchestratorCommand
+                            }
+                          </span>
+                          <span>
+                            {
+                              slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                .firstCharterSliceReadiness.validateCommand
+                            }
+                          </span>
+                          <span>
+                            {
+                              slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                .firstCharterSliceReadiness.syncReportCommand
+                            }
+                          </span>
+                        </div>
+                        <p className="mt-2 text-indigo-300/70">
+                          No era25 engineering until{" "}
+                          <span className="font-mono">era25_first_charter_slice_ready</span>
+                        </p>
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
               </div>

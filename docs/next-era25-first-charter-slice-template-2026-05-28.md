@@ -1,77 +1,111 @@
-# KitchenOS — era25 First Charter Slice (template)
+# KitchenOS — era25 First Charter Slice (readiness orchestration)
 
-**Status:** **TEMPLATE ONLY · DO NOT IMPLEMENT UNTIL CHARTER SIGNED**
+**Status:** **Readiness orchestration · NO era25 engineering until charter sections validate**
 
-**Prerequisite:** `era25CharterExitMilestone: era25_charter_exit_healthy` + leadership sign-off on `docs/era25-<name>-charter-2026-*.md`
+**Policy:** `era24-era25-first-charter-slice-readiness-v1` · Orchestrator `era24-era25-first-charter-slice-readiness-post-charter-exit-orchestrator-v1`  
+**Backlog:** `KOS-E25-SLICE-READINESS` · **NOT in linear catalog · NOT Step 18**
+
+**Prerequisite:** era25 charter exit process active + terminus guard PASS
 
 ---
 
 ## Declaration
 
-This is the **first era25 engineering slice template** — outside the linear commercial pilot catalog (Steps 1–16).
+This slice **validates human-written charter docs** before any era25 engineering begins.
 
 | Rule | Verdict |
 |------|---------|
 | Add to `COMMERCIAL_PILOT_PATH_STEP_CATALOG` | **FORBIDDEN** |
 | Nest under Steps 1–16 panel anchors | **FORBIDDEN** |
-| Start era25 without signed charter doc | **FORBIDDEN** |
+| Start era25 code without validated charter | **FORBIDDEN** |
 | Keep terminus guard PASS | **REQUIRED** |
 
 ---
 
-## Charter doc minimum (human writes first)
+## Milestones (`era25FirstCharterSliceReadinessMilestone`)
 
-File: `docs/era25-<name>-charter-2026-*.md`
+| Milestone | Meaning | Orchestrator exit |
+|-----------|---------|-------------------|
+| `charter_exit_blocked` | era25 exit not ready (checklist/guard) | `2` |
+| `awaiting_signed_charter` | No `docs/era25-*-charter-*.md` yet (normal) | `0` |
+| `attention_charter_sections` | Charter doc missing required sections | `0` |
+| `era25_first_charter_slice_ready` | All 10 charter sections present | `0` |
 
-Required sections:
+**Smoke readiness flags:**
 
-1. **Charter name + era number** — e.g. `era25-enterprise-procurement`
-2. **Problem statement** — why era24 maintenance rhythms are insufficient
-3. **Success criteria** — measurable, honest (no fake PASS)
-4. **Policy IDs** — `era25-<name>-v1`, phases, ui, orchestrator
-5. **Backlog ID** — `KOS-E25-NNN`
-6. **Ops scripts** — `ops:validate-*`, `ops:run-*-orchestrator`, `ops:sync-*-report`
-7. **CI** — `test:ci:*-era25` + `:cert`
-8. **Briefing scheme** — separate from era21 priorities 0–8
-9. **Rollback / NO-GO** — explicit abort criteria
-10. **Leadership sign-off** — names + dates
+- `readyForCharterExitSmokes` — charter exit blocked
+- `readyForCharterSectionSmokes` — charter doc incomplete
 
 ---
 
-## First slice engineering pattern (when charter signed)
+## Ops commands
+
+```bash
+npm run ops:validate-era25-first-charter-slice-readiness -- --json
+npm run ops:run-era25-first-charter-slice-readiness-post-charter-exit-orchestrator -- --json
+npm run ops:run-era25-first-charter-slice-readiness-post-charter-exit-orchestrator -- --write
+npm run ops:sync-era25-first-charter-slice-readiness-report -- --write
+
+npm run test:ci:era25-first-charter-slice-readiness-era24
+npm run test:ci:era25-first-charter-slice-readiness-era24:cert
+```
+
+**Artifacts:** `artifacts/era25-first-charter-slice-readiness-report.md`
+
+**Workflow:** `.github/workflows/ops-era25-first-charter-slice-readiness-validate.yml`
+
+**Platform ops:** `#era25-first-charter-slice-readiness` (nested under `#era25-charter-exit-outside-linear-path`)
+
+---
+
+## Required charter sections (10 — automated validation)
+
+1. Charter name + era number (`era25`)
+2. Problem statement
+3. Success criteria
+4. Policy IDs (`era25-*-v1`)
+5. Backlog ID (`KOS-E25-NNN`)
+6. Ops scripts
+7. CI scripts (`test:ci:*-era25`)
+8. Briefing scheme
+9. Rollback / NO-GO
+10. Leadership sign-off
+
+File pattern: `docs/era25-<name>-charter-2026-*.md`
+
+---
+
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Section validator | `lib/commercial/validate-era25-charter-doc-sections-era24.ts` |
+| Orchestrator lib | `lib/commercial/era25-first-charter-slice-readiness-post-charter-exit-orchestrator-era24.ts` |
+| UI slice | `lib/commercial/era25-first-charter-slice-readiness-ui-era24.ts` |
+| Panel | `#era25-first-charter-slice-readiness` |
+
+---
+
+## First slice engineering pattern (only after `era25_first_charter_slice_ready`)
 
 | Component | Example artifact |
 |-----------|------------------|
 | Phases lib | `lib/commercial/<name>-phases-era25.ts` |
 | Orchestrator | `lib/commercial/<name>-post-<prev>-orchestrator-era25.ts` |
 | Policy | `era25-<name>-v1` |
-| Validate | `scripts/ops/validate-<name>.ts` |
-| UI slice | `lib/commercial/<name>-ui-era25.ts` |
-| Panel anchor | `#era25-<name>` on **new** platform route (not Steps 1–16) |
-| Workflow | `.github/workflows/ops-<name>-validate.yml` |
-
-**Milestones:** honest blocked → attention → healthy (never fake PASS)
+| Panel anchor | `#era25-<name>` on **new** platform route |
 
 ---
 
-## Ops prep before era25 slice 1
+## era25 engineering gates preview (after readiness healthy)
 
-```bash
-npm run ops:validate-era25-charter-exit-outside-linear-path -- --json
-npm run ops:run-era25-charter-exit-post-terminus-guard-orchestrator -- --write
-npm run ops:validate-linear-chain-terminus-guard -- --json
-npm run test:ci:commercial-pilot-runbook:cert
-```
+See [`next-era25-engineering-gates-require-signed-charter-2026-05-28.md`](./next-era25-engineering-gates-require-signed-charter-2026-05-28.md)
 
----
+**First era25 product engineering begins ONLY when:**
 
-## Guard verification before any era25 code
-
-- [ ] `COMMERCIAL_PILOT_PATH_STEP_CATALOG` still 16 steps
-- [ ] No `docs/next-step-18-*` linear docs
-- [ ] Signed charter doc present in repo
-- [ ] Charter checklist exported
-- [ ] Commercial pilot cert green
+- `era25FirstCharterSliceReadinessMilestone: era25_first_charter_slice_ready`
+- Leadership sign-off documented in charter doc
+- Terminus guard still PASS
 
 ---
 
@@ -84,4 +118,4 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ---
 
-**Template only. No era25 engineering until human charter sign-off.**
+**No era25 engineering until charter sections validate. Never fake PASS.**

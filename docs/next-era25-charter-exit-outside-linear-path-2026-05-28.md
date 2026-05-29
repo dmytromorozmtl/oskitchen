@@ -132,11 +132,17 @@ See template: [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-e
 
 ---
 
-## era25 first charter slice preview (after human sign-off)
+## era25 first charter slice readiness — implemented
 
 See [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md)
 
-**NOT auto-implemented.** First era25 engineering begins only when leadership signs charter doc.
+Readiness orchestrator: `era24-era25-first-charter-slice-readiness-post-charter-exit-orchestrator-v1` · Validates 10 charter doc sections · **No era25 engineering until `era25_first_charter_slice_ready`**
+
+---
+
+## era25 engineering gates preview (blocked until readiness healthy)
+
+See [`next-era25-engineering-gates-require-signed-charter-2026-05-28.md`](./next-era25-engineering-gates-require-signed-charter-2026-05-28.md) — **first era25 product code requires signed charter + section validation**
 
 ---
 
