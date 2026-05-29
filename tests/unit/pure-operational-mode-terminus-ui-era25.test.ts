@@ -45,6 +45,11 @@ describe("pure-operational-mode-terminus-ui-era25", () => {
         ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
         ?.era25SteadyStateOperatorLoopLock,
     ).toBeDefined();
+    expect(
+      sustained?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+        ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+        ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone,
+    ).toBeDefined();
   });
 
   it("suppresses era25 convergence surfaces when terminus active", () => {

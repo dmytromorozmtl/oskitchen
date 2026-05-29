@@ -36,6 +36,7 @@ import { LaunchWizardEra25PureOperationalModeTerminusPanel } from "@/components/
 import { LaunchWizardEra25CommercialPilotConvergenceTrainClosurePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-panel";
 import { LaunchWizardEra25SustainedProductEvolutionReentrantPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-panel";
 import { LaunchWizardEra25PostReentrantCharterLockPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-panel";
+import { LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-panel";
 import { LaunchWizardEra25SteadyStateOperatorLoopLockPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-steady-state-operator-loop-lock-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
@@ -327,6 +328,11 @@ export function LaunchWizardView(props: {
       {model.era25SteadyStateOperatorLoopLockIntegrity ? (
         <LaunchWizardEra25SteadyStateOperatorLoopLockPanel
           slice={model.era25SteadyStateOperatorLoopLockIntegrity}
+        />
+      ) : null}
+      {model.era25CommercialPilotConvergenceTrainCapstoneIntegrity ? (
+        <LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel
+          slice={model.era25CommercialPilotConvergenceTrainCapstoneIntegrity}
         />
       ) : null}
 

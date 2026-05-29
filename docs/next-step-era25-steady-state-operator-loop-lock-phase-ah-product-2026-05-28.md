@@ -73,19 +73,8 @@ Workflow: `.github/workflows/ops-era25-steady-state-operator-loop-lock-integrity
 
 ---
 
-## Next step — Phase AI (era59)
+## Next step — Phase AI (era59) — **IMPLEMENTED**
 
-**Era25 commercial pilot convergence train capstone attestation integrity** — single rollup attestation that era25 convergence train (era47–AH) is honestly closed with P0 proof gates referenced (does not fake `proof_passed`).
+See [`docs/next-step-era25-commercial-pilot-convergence-train-capstone-phase-ai-product-2026-05-28.md`](./next-step-era25-commercial-pilot-convergence-train-capstone-phase-ai-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-steady-state-operator-loop-lock` baseline + dual cert green |
-| Parent evaluator | era58 steady-state lock integrity |
-| Platform anchor | `#era25-commercial-pilot-convergence-train-capstone` (planned) |
-| Briefing meta priority | **34** (planned) |
-| Env keys (planned) | `ERA25_COMMERCIAL_PILOT_CONVERGENCE_TRAIN_CAPSTONE_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-commercial-pilot-convergence-train-capstone-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `capstone_without_steady_state_lock`, `capstone_claims_p0_pass_without_artifact`, `fake_capstone_attestation`, upstream era58 fail |
-| CI | `test:ci:era25-commercial-pilot-convergence-train-capstone-integrity-era59` + extend pure-ops era25 cert |
-
-**Human acceptance (preview):** steady-state lock PASS → attest train capstone → validate JSON → freeze entire era25 convergence governance chain until next major version policy; **execute P0 ops vault in parallel** for market proof.
+**Phase AJ (era60)** — era25 convergence governance terminus freeze (planned).
