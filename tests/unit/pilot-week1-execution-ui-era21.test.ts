@@ -17,14 +17,21 @@ const goSummary = {
   prospectExecutionStatus: "none" as const,
   prospectName: null,
   icpQualification: { qualified: true, missingCriteria: [], disqualifiers: [] },
-  evidenceGates: [],
+  evidenceGates: [
+    { id: "tier0", label: "t0", pass: true, reason: "ok" },
+    { id: "tier1", label: "t1", pass: true, reason: "ok" },
+    { id: "tier2", label: "t2", pass: true, reason: "ok" },
+    { id: "icp_qualification", label: "icp", pass: true, reason: "ok" },
+    { id: "forbidden_claims_enforcement", label: "fc", pass: true, reason: "ok" },
+    { id: "p0_staging_proof", label: "p0", pass: true, reason: "ok" },
+  ],
   evaluatorInput: {
     tier0Pass: true,
     tier1Pass: true,
     tier2Pass: true,
-    tier3Pass: false,
+    tier3Pass: true,
     roleChecklistsComplete: true,
-    forbiddenClaimsInContract: true,
+    forbiddenClaimsInContract: false,
     icpQualified: true,
     stagingUrl: "https://x.example.com",
     commitSha: "abc",
@@ -35,6 +42,8 @@ describe("pilot-week1-execution-ui-era21", () => {
   it("visible when GO and week1 incomplete", () => {
     const slice = buildPilotWeek1ExecutionUiSlice({
       goNoGoSummary: goSummary,
+      p0ProofStatus: "proof_passed",
+      tier2ProofStatus: "proof_passed",
     });
     expect(slice?.blocked).toBe(true);
     expect(slice?.phases.length).toBe(5);
@@ -56,6 +65,8 @@ describe("pilot-week1-execution-ui-era21", () => {
   it("hidden when week1 complete", () => {
     const slice = buildPilotWeek1ExecutionUiSlice({
       goNoGoSummary: goSummary,
+      p0ProofStatus: "proof_passed",
+      tier2ProofStatus: "proof_passed",
       metricsBaseline: {
         version: "era17-pilot-metrics-baseline-v1",
         policyId: "era17-pilot-metrics-baseline-v1",
@@ -65,7 +76,21 @@ describe("pilot-week1-execution-ui-era21", () => {
         pilotWeek: 1,
         customerRef: "Acme",
         capturedAt: new Date().toISOString(),
-        metrics: [],
+        metrics: [
+          "orders_per_day",
+          "storefront_checkout_success_rate",
+          "pos_checkout_completion",
+          "kds_bump_rate",
+          "support_tickets_per_week",
+          "operator_feedback_score",
+        ].map((id) => ({
+          id,
+          label: id,
+          status: "captured" as const,
+          value: 1,
+          unit: "n/a",
+          reason: "test fixture",
+        })),
         capturedCount: 6,
         missingCount: 0,
       },

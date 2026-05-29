@@ -84,6 +84,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   });
   const pilotWeek1 = buildPilotWeek1ExecutionUiSlice({
     goNoGoSummary: props.model.goNoGo.summary,
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
     metricsBaseline: null,
     caseStudyDraft: null,
   });

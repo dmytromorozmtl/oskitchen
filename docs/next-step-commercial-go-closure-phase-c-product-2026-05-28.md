@@ -52,7 +52,8 @@ npm run ops:validate-commercial-inflection-readiness -- --json
 
 ## Next step after Phase C PASS
 
-1. `npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write`
-2. Master execution train — [`docs/next-step-master-execution-2026-05-28.md`](./next-step-master-execution-2026-05-28.md)
+1. Pilot Week 1 Phase D — [`docs/next-step-pilot-week1-phase-d-product-2026-05-28.md`](./next-step-pilot-week1-phase-d-product-2026-05-28.md)
+2. `npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write`
+3. Master execution train — [`docs/next-step-master-execution-2026-05-28.md`](./next-step-master-execution-2026-05-28.md)
 
 **Following engineering slice (optional):** Pilot week-1 Today strip convergence · PostHog `briefing_click` on GO closure CTA.

@@ -6,6 +6,7 @@ import { LaunchWizardFromGoLiveBanner } from "@/components/dashboard/launch-wiza
 import type { LaunchWizardFromGoLiveBannerModel } from "@/lib/launch-wizard/launch-wizard-from-go-live-era21";
 import { LaunchWizardGoldenPathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-golden-path-panel";
 import { LaunchWizardCommercialGoClosurePanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-go-closure-panel";
+import { LaunchWizardPilotWeek1Panel } from "@/components/dashboard/launch-wizard/launch-wizard-pilot-week1-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -139,6 +140,10 @@ export function LaunchWizardView(props: {
 
       {model.commercialGoClosureIntegrity ? (
         <LaunchWizardCommercialGoClosurePanel slice={model.commercialGoClosureIntegrity} />
+      ) : null}
+
+      {model.pilotWeek1Integrity ? (
+        <LaunchWizardPilotWeek1Panel slice={model.pilotWeek1Integrity} />
       ) : null}
 
       <LaunchWizardCommercialBlockersPanel

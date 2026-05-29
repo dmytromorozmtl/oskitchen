@@ -6,6 +6,7 @@ import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/la
 import { LAUNCH_WIZARD_TODAY_STRIP_ERA19_POLICY_ID } from "@/lib/launch-wizard/launch-wizard-today-strip-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { LaunchWizardCommercialInflectionSlice } from "@/lib/launch-wizard/launch-wizard-commercial-inflection-era28";
+import type { LaunchWizardPilotWeek1Slice } from "@/lib/launch-wizard/launch-wizard-pilot-week1-era28";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -71,13 +72,18 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   commercialBlockers: LaunchWizardCommercialBlockersSlice;
   commercialSetup: LaunchWizardCommercialSetupSlice;
   commercialInflection?: LaunchWizardCommercialInflectionSlice | null;
+  pilotWeek1?: LaunchWizardPilotWeek1Slice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
 }): LaunchWizardTodayStripViewModel {
   const commercialInflection = input.commercialInflection ?? null;
+  const pilotWeek1 = input.pilotWeek1 ?? null;
   const inflectionSubline = commercialInflection
     ? `${commercialInflection.scorecardLabel} · registry LIVE ${commercialInflection.integrationRegistryLiveCount}`
+    : null;
+  const week1Subline = pilotWeek1
+    ? `Week 1 ${pilotWeek1.progressLabel}${pilotWeek1.week1IntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
@@ -130,6 +136,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       progressPercent: input.progress.percent,
       progressLabel,
       commercialInflection,
+      pilotWeek1,
     };
   }
 
@@ -143,7 +150,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : inflectionSubline ?? "Confirm commercial GO/NO-GO before pilot cutover.",
+        : week1Subline
+          ? inflectionSubline
+            ? `${inflectionSubline} · ${week1Subline}`
+            : week1Subline
+          : inflectionSubline ?? "Confirm commercial GO/NO-GO before pilot cutover.",
     href: resolveLaunchWizardTodayStripHref({ mode: "setup_complete" }),
     ctaLabel: "Review commercial proof",
     decisionLabel: input.commercialBlockers.decisionLabel,
@@ -152,5 +163,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     progressPercent: input.progress.percent,
     progressLabel,
     commercialInflection,
+    pilotWeek1,
   };
 }

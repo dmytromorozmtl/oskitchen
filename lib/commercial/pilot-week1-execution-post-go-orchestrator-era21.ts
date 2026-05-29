@@ -108,6 +108,8 @@ export function buildPilotWeek1PostGoOrchestratorSummary(input: {
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-pilot-gono-go-integrity -- --json",
+        "npm run ops:validate-pilot-week1-execution-integrity -- --json",
         "npm run ops:validate-commercial-go-closure-env -- --json",
         "npm run ops:validate-pilot-week1-env -- --json",
         PILOT_WEEK1_POST_GO_ORCHESTRATOR_COMMAND + " -- --write",

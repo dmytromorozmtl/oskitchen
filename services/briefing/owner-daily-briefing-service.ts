@@ -475,6 +475,8 @@ export async function loadOwnerDailyBriefing(
   const month2Artifacts = needsCommercialOps ? readMonth2MarketReadinessArtifacts() : null;
   const pilotWeek1 = buildPilotWeek1ExecutionUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     metricsBaseline: pilotArtifacts?.metricsBaseline ?? null,
     caseStudyDraft: pilotArtifacts?.caseStudyDraft ?? null,
   });

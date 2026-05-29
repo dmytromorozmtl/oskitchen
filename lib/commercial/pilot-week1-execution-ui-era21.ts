@@ -8,6 +8,7 @@ import {
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import { evaluatePilotWeek1ExecutionIntegrity } from "@/lib/commercial/pilot-week1-execution-integrity-era28";
 import {
   buildPilotWeek1ExecutionPhaseStatuses,
   formatPilotWeek1ExecutionPhaseBlockerDetail,
@@ -46,6 +47,12 @@ export type PilotWeek1ExecutionUiSlice = {
   postGoOrchestratorCommand: string;
   exportReadinessChecklistCommand: string;
   validateGoClosureCommand: string;
+  validateGoIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  goIntegrityPassed: boolean;
+  week1IntegrityPassed: boolean;
+  goIntegrityFailed: boolean;
   day5SmokesCommand: string;
   week1Milestone: PilotWeek1ExecutionMilestone;
   todayHref: string;
@@ -63,39 +70,65 @@ export type PilotWeek1ExecutionUiSlice = {
 
 export function buildPilotWeek1ExecutionUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
   caseStudyDraft?: PilotCaseStudyDraftSummary | null;
   env?: NodeJS.ProcessEnv;
 }): PilotWeek1ExecutionUiSlice | null {
+  const env = input.env ?? process.env;
   const goDecision = input.goNoGoSummary?.decision ?? null;
-  const prerequisites = resolvePilotWeek1ExecutionPrerequisites({ goDecision });
-  if (!prerequisites.prerequisitesComplete) return null;
-
-  const phases = buildPilotWeek1ExecutionPhaseStatuses({
-    prerequisites,
-    goNoGoSummary: input.goNoGoSummary,
-    metricsBaseline: input.metricsBaseline ?? null,
-    caseStudyDraft: input.caseStudyDraft ?? null,
-    env: input.env,
+  const week1Integrity = evaluatePilotWeek1ExecutionIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    metricsBaselineOverride: input.metricsBaseline ?? null,
+    caseStudyPresent: input.caseStudyDraft !== undefined && input.caseStudyDraft !== null,
+    p0ProofStatusOverride: input.p0ProofStatus,
+    tier2ProofStatusOverride: input.tier2ProofStatus,
   });
-  const week1Complete = resolvePilotWeek1ExecutionComplete(phases);
-  if (week1Complete) return null;
+  const goIntegrityPassed = week1Integrity.goIntegrityPassed;
+  const goHonest = goDecision === "GO" && goIntegrityPassed;
+
+  if (!goHonest && !week1Integrity.week1ExecutionStarted) return null;
+
+  const prerequisites = resolvePilotWeek1ExecutionPrerequisites({
+    goDecision: goHonest ? "GO" : goDecision,
+  });
+  if (!prerequisites.prerequisitesComplete && !week1Integrity.week1ExecutionStarted) {
+    return null;
+  }
+
+  const phases = goHonest
+    ? buildPilotWeek1ExecutionPhaseStatuses({
+        prerequisites,
+        goNoGoSummary: input.goNoGoSummary,
+        metricsBaseline: input.metricsBaseline ?? null,
+        caseStudyDraft: input.caseStudyDraft ?? null,
+        env,
+      })
+    : [];
+  const week1Complete = goHonest ? resolvePilotWeek1ExecutionComplete(phases) : false;
+  if (week1Complete && week1Integrity.integrityPassed) return null;
 
   const completedPhaseCount = phases.filter((phase) => phase.complete).length;
   const nextPhase = resolveNextIncompletePilotWeek1ExecutionPhase(phases);
   const nextPhaseDetail = nextPhase
     ? formatPilotWeek1ExecutionPhaseBlockerDetail(nextPhase)
-    : null;
-  const week1Milestone = resolvePilotWeek1ExecutionMilestoneFromPhaseStatuses(phases, {
-    prerequisitesComplete: true,
-    week1Complete: false,
-  });
+    : !goHonest
+      ? "Honest GO required before Week 1 — run pilot-gono-go integrity validate."
+      : null;
+  const week1Milestone = goHonest
+    ? resolvePilotWeek1ExecutionMilestoneFromPhaseStatuses(phases, {
+        prerequisitesComplete: true,
+        week1Complete: false,
+      })
+    : "go_blocked";
 
   return {
     policyId: PILOT_WEEK1_EXECUTION_UI_ERA21_POLICY_ID,
     visible: true,
     blocked: true,
-    goDecision: "GO",
+    goDecision: goHonest ? "GO" : (goDecision ?? "unknown"),
     customerName: input.goNoGoSummary?.customerName ?? null,
     phases,
     completedPhaseCount,
@@ -108,6 +141,13 @@ export function buildPilotWeek1ExecutionUiSlice(input: {
     postGoOrchestratorCommand: "npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write",
     exportReadinessChecklistCommand: "npm run ops:export-pilot-week1-readiness-checklist -- --write",
     validateGoClosureCommand: "npm run ops:validate-commercial-go-closure-env -- --json",
+    validateGoIntegrityCommand: "npm run ops:validate-pilot-gono-go-integrity -- --json",
+    integrityValidateCommand: "npm run ops:validate-pilot-week1-execution-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-pilot-week1-execution-integrity-baseline -- --write",
+    goIntegrityPassed,
+    week1IntegrityPassed: week1Integrity.integrityPassed,
+    goIntegrityFailed: goDecision === "GO" && !goIntegrityPassed,
     day5SmokesCommand: "npm run smoke:pilot-metrics-baseline && npm run smoke:pilot-case-study-draft && npm run smoke:pilot-gono-go",
     week1Milestone,
     todayHref: "/dashboard/today",

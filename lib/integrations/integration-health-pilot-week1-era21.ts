@@ -5,6 +5,7 @@
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import { evaluatePilotWeek1ExecutionIntegrity } from "@/lib/commercial/pilot-week1-execution-integrity-era28";
 import {
   buildPilotWeek1ExecutionUiSlice,
   PILOT_WEEK1_INTEGRATION_HEALTH_ANCHOR,
@@ -27,15 +28,27 @@ export type IntegrationHealthPilotWeek1Banner = {
 
 export function buildIntegrationHealthPilotWeek1Banner(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
   caseStudyDraft?: PilotCaseStudyDraftSummary | null;
 }): IntegrationHealthPilotWeek1Banner | null {
   const week1 = buildPilotWeek1ExecutionUiSlice({
     goNoGoSummary: input.goNoGoSummary,
+    p0ProofStatus: input.p0ProofStatus,
+    tier2ProofStatus: input.tier2ProofStatus,
     metricsBaseline: input.metricsBaseline ?? null,
     caseStudyDraft: input.caseStudyDraft ?? null,
   });
   if (!week1) return null;
+
+  const week1Integrity = evaluatePilotWeek1ExecutionIntegrity(process.cwd(), {
+    goNoGoOverride: input.goNoGoSummary,
+    metricsBaselineOverride: input.metricsBaseline ?? null,
+    caseStudyPresent: input.caseStudyDraft !== undefined && input.caseStudyDraft !== null,
+    p0ProofStatusOverride: input.p0ProofStatus,
+    tier2ProofStatusOverride: input.tier2ProofStatus,
+  });
 
   const nextPhaseId = week1.nextPhase?.id;
   const headline =
@@ -49,8 +62,9 @@ export function buildIntegrationHealthPilotWeek1Banner(input: {
     goDecision: week1.goDecision,
     customerName: week1.customerName,
     headline,
-    honestyNote:
-      "SKIPPED WITH REASON remains honest when engineering proof is missing — never upgrade to LIVE for sales narrative.",
+    honestyNote: week1Integrity.integrityPassed
+      ? "SKIPPED WITH REASON remains honest when engineering proof is missing — never upgrade to LIVE for sales narrative."
+      : `Week 1 integrity FAIL: ${week1Integrity.violations.map((row) => row.id).join(", ") || "check GO"} — ${week1.integrityValidateCommand}.`,
     week1,
     nextActions: [
       { label: "Owner Briefing", href: week1.todayHref },

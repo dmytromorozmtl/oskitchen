@@ -55,6 +55,10 @@ import {
   type LaunchWizardCommercialGoClosureSlice,
 } from "@/lib/launch-wizard/launch-wizard-commercial-go-closure-era28";
 import {
+  buildLaunchWizardPilotWeek1Slice,
+  type LaunchWizardPilotWeek1Slice,
+} from "@/lib/launch-wizard/launch-wizard-pilot-week1-era28";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -321,6 +325,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   });
   const pilotWeek1 = buildPilotWeek1ExecutionUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     metricsBaseline: null,
     caseStudyDraft: null,
   });
@@ -440,6 +446,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   const commercialInflection = buildLaunchWizardCommercialInflectionSlice();
   const commercialGoClosureIntegrity =
     buildLaunchWizardCommercialGoClosureSlice(commercialGoClosure);
+  const pilotWeek1Integrity = buildLaunchWizardPilotWeek1Slice(pilotWeek1);
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -457,6 +464,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     commercialGoClosure,
     commercialGoClosureIntegrity,
     pilotWeek1,
+    pilotWeek1Integrity,
     month2MarketReadiness,
     scaleReadiness,
     seriesAPartnerExpansion,

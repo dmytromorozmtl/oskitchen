@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   PILOT_WEEK1_EXECUTION_ERA21_CI_SCRIPTS,
   PILOT_WEEK1_EXECUTION_ERA21_OPS_SCRIPTS,
+  PILOT_WEEK1_EXECUTION_ERA21_PHASE_D_DOC,
   PILOT_WEEK1_EXECUTION_ERA21_POLICY_ID,
   PILOT_WEEK1_EXECUTION_ERA21_PRODUCT_SURFACES,
   PILOT_WEEK1_EXECUTION_ERA21_UNIT_TESTS,
@@ -34,6 +35,12 @@ describe("pilot week1 execution era21 CI certification (live repo)", () => {
     ]) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
+  });
+
+  it("documents phase D product doc", () => {
+    const phaseD = readFileSync(join(ROOT, PILOT_WEEK1_EXECUTION_ERA21_PHASE_D_DOC), "utf8");
+    expect(phaseD).toContain("validate-pilot-week1-execution-integrity");
+    expect(phaseD).toContain("launch-wizard-pilot-week1");
   });
 
   it("documents step 4 execution", () => {

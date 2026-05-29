@@ -52,6 +52,16 @@ export function PilotWeek1PhasesPanel(props: {
                 customer: {slice.customerName}
               </Badge>
             ) : null}
+            {slice.goIntegrityFailed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                GO integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.week1IntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Week 1 integrity FAIL
+              </Badge>
+            ) : null}
           </div>
         ) : (
           <p className="text-sm font-medium">{formatPilotWeek1ExecutionProgressLabel(slice)}</p>
@@ -129,6 +139,9 @@ export function PilotWeek1PhasesPanel(props: {
                 <li>{slice.postGoOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.validateGoClosureCommand}</li>
+                <li>{slice.validateGoIntegrityCommand}</li>
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>

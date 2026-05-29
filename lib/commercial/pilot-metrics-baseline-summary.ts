@@ -137,6 +137,12 @@ export function buildPilotMetricSnapshotValues(
   });
 }
 
+export function recomputePilotBaselineProofStatusFromSummary(
+  summary: PilotMetricsBaselineSummary,
+): PilotBaselineProofStatus {
+  return resolvePilotBaselineProofStatus(summary.metrics);
+}
+
 export function resolvePilotBaselineProofStatus(
   metrics: readonly PilotMetricSnapshotValue[],
 ): PilotBaselineProofStatus {

@@ -131,6 +131,8 @@ export function buildTrustLayerHeadline(
   const week1Banner = pilotWeek1Input
     ? buildIntegrationHealthPilotWeek1Banner({
         goNoGoSummary: pilotWeek1Input.goNoGoSummary,
+        p0ProofStatus: p0Staging?.p0ProofStatus ?? null,
+        tier2ProofStatus: tier2Summary?.tier2ProofStatus ?? null,
         metricsBaseline: pilotWeek1Input.metricsBaseline,
         caseStudyDraft: pilotWeek1Input.caseStudyDraft,
       })
@@ -180,6 +182,8 @@ export function enrichIntegrationHealthChannelCardsWithTrustLayer(
     pilotWeek1: pilotWeek1Input
       ? buildIntegrationHealthPilotWeek1Banner({
           goNoGoSummary: pilotWeek1Input.goNoGoSummary,
+          p0ProofStatus: p0Staging?.p0ProofStatus ?? null,
+          tier2ProofStatus: tier2Summary?.tier2ProofStatus ?? null,
           metricsBaseline: pilotWeek1Input.metricsBaseline,
           caseStudyDraft: pilotWeek1Input.caseStudyDraft,
         })

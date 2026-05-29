@@ -20,14 +20,20 @@ export const PILOT_WEEK1_EXECUTION_ERA21_EXTENDS_POLICIES = [
 export const PILOT_WEEK1_EXECUTION_ERA21_OPS_SCRIPTS = [
   "ops:run-pilot-week1-execution-post-go-orchestrator",
   "ops:validate-pilot-week1-env",
+  "ops:validate-pilot-week1-execution-integrity",
+  "ops:sync-pilot-week1-execution-integrity-baseline",
   "ops:export-pilot-week1-env-template",
   "ops:export-pilot-week1-readiness-checklist",
   "ops:sync-pilot-week1-progress-report",
 ] as const;
 
+export const PILOT_WEEK1_EXECUTION_ERA21_PHASE_D_DOC =
+  "docs/next-step-pilot-week1-phase-d-product-2026-05-28.md" as const;
+
 export const PILOT_WEEK1_EXECUTION_ERA21_CI_SCRIPTS = [
   "test:ci:pilot-week1-execution-era21",
   "test:ci:pilot-week1-execution-era21:cert",
+  "test:ci:pilot-week1-execution-integrity-era28",
 ] as const;
 
 export const PILOT_WEEK1_EXECUTION_ERA21_UNIT_TESTS = [
@@ -37,6 +43,8 @@ export const PILOT_WEEK1_EXECUTION_ERA21_UNIT_TESTS = [
   "tests/unit/owner-daily-briefing-pilot-week1-era21.test.ts",
   "tests/unit/run-pilot-week1-execution-post-go-orchestrator.test.ts",
   "tests/unit/pilot-week1-execution-era21-cert-live.test.ts",
+  "tests/unit/pilot-week1-execution-integrity-era28.test.ts",
+  "tests/unit/launch-wizard-pilot-week1-era28.test.ts",
 ] as const;
 
 export const PILOT_WEEK1_EXECUTION_ERA21_PRODUCT_SURFACES = [
@@ -45,4 +53,5 @@ export const PILOT_WEEK1_EXECUTION_ERA21_PRODUCT_SURFACES = [
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
   "components/dashboard/integration-health-pilot-week1-banner.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-pilot-week1-panel.tsx",
 ] as const;
