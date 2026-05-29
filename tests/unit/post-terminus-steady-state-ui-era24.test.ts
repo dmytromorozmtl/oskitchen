@@ -14,6 +14,9 @@ describe("post-terminus-steady-state-ui-era24", () => {
     const slice = buildPostTerminusSteadyStateUiSlice({ engineeringTerminusActive: true, env: {} });
     expect(slice).not.toBeNull();
     expect(slice?.tracks).toHaveLength(6);
+    expect(slice?.engineeringPathTerminusMilestone).toBeTruthy();
+    expect(slice).toHaveProperty("sustainedOpsConvergenceReady");
+    expect(slice?.pureOperationalModeTerminusHref).toContain("era25");
     expect(slice?.validateCommand).toBe("npm run ops:validate-steady-state-operator-loop");
     expect(slice?.postEngineeringTerminusOrchestratorCommand).toContain(
       "run-post-terminus-steady-state-post-engineering-terminus-orchestrator",

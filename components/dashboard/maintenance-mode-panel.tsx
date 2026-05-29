@@ -274,6 +274,21 @@ export function MaintenanceModePanel(props: {
                   " ",
                 )}
               </Badge>
+              <Badge variant="outline" className="rounded-full font-mono text-[10px] text-indigo-300/90">
+                {slice.engineeringPathTerminus.postTerminusSteadyState.engineeringPathTerminusMilestone.replaceAll(
+                  "_",
+                  " ",
+                )}
+              </Badge>
+              {slice.engineeringPathTerminus.postTerminusSteadyState.pureOperationalModeEra25Active ? (
+                <Badge variant="default" className="rounded-full font-mono text-[10px]">
+                  era25 pure ops
+                </Badge>
+              ) : slice.engineeringPathTerminus.postTerminusSteadyState.sustainedOpsConvergenceReady ? (
+                <Badge variant="secondary" className="rounded-full font-mono text-[10px]">
+                  era25 sustained ops
+                </Badge>
+              ) : null}
               {slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount > 0 ? (
                 <Badge variant="destructive" className="rounded-full text-[10px]">
                   {slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount} overdue
@@ -309,6 +324,17 @@ export function MaintenanceModePanel(props: {
               <span>
                 {slice.engineeringPathTerminus.postTerminusSteadyState.exportEraCharterChecklistCommand}
               </span>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link
+                  href={
+                    slice.engineeringPathTerminus.postTerminusSteadyState.pureOperationalModeTerminusHref
+                  }
+                >
+                  era25 terminus
+                </Link>
+              </Button>
             </div>
           </div>
         ) : null}

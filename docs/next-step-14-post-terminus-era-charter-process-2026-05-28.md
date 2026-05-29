@@ -8,6 +8,8 @@
 
 ## Status
 
+**IMPLEMENTED (2026-05-28)** — era25 sustained-ops prerequisite milestones wired into steady-state orchestrator, validate JSON, weekly report, and Platform ops `#post-terminus-steady-state` catalog.
+
 **There is no Step 15 engineering gate.**
 
 Step 14 adds **steady-state orchestration only** (embedded in `#post-terminus-steady-state` panel):
@@ -35,7 +37,10 @@ npm run ops:sync-steady-state-operator-loop-report -- --write
 
 | Milestone | Meaning | Exit code (orchestrator `--json`) |
 |-----------|---------|-----------------------------------|
-| `engineering_terminus_blocked` | Step 13 not healthy | `2` |
+| `era25_sustained_ops_convergence_blocked` | era25 sustained ops convergence not ready | `2` |
+| `product_evolution_blocked` | Step 11 not ready (era25 OK) | `2` |
+| `maintenance_mode_blocked` | Step 12 not active (GO / rhythms) | `2` |
+| `engineering_terminus_blocked` | Step 13 not healthy (prerequisites OK) | `2` |
 | `attention_maintenance_rhythm` | `weekly_maintenance` track overdue | `0` |
 | `attention_upstream_loop` | improvement/evolution tracks overdue | `0` |
 | `steady_state_healthy` | All measurable tracks fresh | `0` |

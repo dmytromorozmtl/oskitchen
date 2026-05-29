@@ -17,8 +17,10 @@ import {
   buildCommercialPilotPathAbsoluteEndUiSlice,
   type CommercialPilotPathAbsoluteEndUiSlice,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
+import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import { evaluateCommercialPilotPathWithMilestones } from "@/scripts/ops/validate-commercial-pilot-path";
 import { evaluateSteadyStateOperatorLoop } from "@/lib/commercial/evaluate-steady-state-operator-loop";
+import type { EngineeringPathTerminusMilestone } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
 export const POST_TERMINUS_STEADY_STATE_UI_ERA24_POLICY_ID =
@@ -43,6 +45,14 @@ export type PostTerminusSteadyStateUiSlice = {
   postEngineeringTerminusOrchestratorCommand: string;
   validateEngineeringPathTerminusCommand: string;
   steadyStateMilestone: PostTerminusSteadyStateMilestone;
+  engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<
+    typeof import("@/scripts/ops/validate-maintenance-mode").evaluateMaintenanceMode
+  >["maintenanceModeMilestone"];
+  pureOperationalModeTerminusHref: string;
   syncReportCommand: string;
   exportEraCharterChecklistCommand: string;
   platformOpsHref: string;
@@ -91,6 +101,14 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
       "npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write",
     validateEngineeringPathTerminusCommand: "npm run ops:validate-commercial-pilot-path -- --json",
     steadyStateMilestone,
+    engineeringPathTerminusMilestone: pathEvaluation.engineeringPathTerminusMilestone,
+    sustainedOpsConvergenceReady:
+      pathEvaluation.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active:
+      pathEvaluation.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+    productEvolutionReady: pathEvaluation.maintenanceMode.prerequisites.productEvolutionReady,
+    maintenanceModeMilestone: pathEvaluation.maintenanceMode.maintenanceModeMilestone,
+    pureOperationalModeTerminusHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
     syncReportCommand: "npm run ops:sync-steady-state-operator-loop-report -- --write",
     exportEraCharterChecklistCommand:
       "npm run ops:export-era-charter-readiness-checklist -- --write",

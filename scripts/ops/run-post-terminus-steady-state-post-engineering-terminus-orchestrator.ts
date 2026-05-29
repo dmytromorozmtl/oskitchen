@@ -9,6 +9,7 @@ import { join } from "node:path";
 import { evaluateSteadyStateOperatorLoop } from "@/lib/commercial/evaluate-steady-state-operator-loop";
 import {
   buildPostTerminusSteadyStatePostEngineeringTerminusOrchestratorSummary,
+  POST_TERMINUS_STEADY_STATE_BLOCKED_MILESTONES,
   POST_TERMINUS_STEADY_STATE_POST_ENGINEERING_TERMINUS_ORCHESTRATOR_ERA24_POLICY_ID,
 } from "@/lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24";
 import { POST_TERMINUS_STEADY_STATE_REPORT_PATH } from "@/lib/commercial/post-terminus-steady-state-phases-era24";
@@ -50,7 +51,9 @@ function main() {
 
   if (jsonOutput) {
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.milestone === "engineering_terminus_blocked" ? 2 : 0);
+    process.exit(
+      POST_TERMINUS_STEADY_STATE_BLOCKED_MILESTONES.includes(summary.milestone) ? 2 : 0,
+    );
     return;
   }
 

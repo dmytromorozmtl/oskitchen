@@ -12,10 +12,13 @@ import { evaluateCommercialPilotPathWithMilestones } from "@/scripts/ops/validat
 import { evaluateSteadyStateOperatorLoopWithMilestones } from "@/scripts/ops/validate-steady-state-operator-loop";
 
 describe("post-terminus-steady-state-post-engineering-terminus-orchestrator-era24", () => {
-  it("blocks when engineering path terminus is not healthy", () => {
+  it("blocks with era25 prerequisite when engineering path is not past era25 gate", () => {
     const result = evaluateSteadyStateOperatorLoopWithMilestones({});
-    expect(result.steadyStateMilestone).toBe("engineering_terminus_blocked");
+    expect(result.steadyStateMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.evaluation.steadyStateActive).toBe(false);
+    expect(result.pathEvaluation.engineeringPathTerminusMilestone).toBe(
+      "era25_sustained_ops_convergence_blocked",
+    );
   });
 
   it("resolves steady_state_healthy when measurable tracks are fresh", () => {
@@ -57,7 +60,7 @@ describe("post-terminus-steady-state-post-engineering-terminus-orchestrator-era2
     expect(milestone).toBe("attention_upstream_loop");
   });
 
-  it("builds orchestrator summary with Step 13 redirect when blocked", () => {
+  it("builds orchestrator summary with era25 redirect when prerequisite blocked", () => {
     const evaluation = evaluateSteadyStateOperatorLoop({});
     const pathEvaluation = evaluateCommercialPilotPathWithMilestones({});
     const summary = buildPostTerminusSteadyStatePostEngineeringTerminusOrchestratorSummary({
@@ -65,9 +68,9 @@ describe("post-terminus-steady-state-post-engineering-terminus-orchestrator-era2
       engineeringPathTerminusMilestone: pathEvaluation.engineeringPathTerminusMilestone,
       artifacts: { steadyStateReportPresent: false },
     });
-    expect(summary.milestone).toBe("engineering_terminus_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(summary.recommendedCommands[0]).toContain(
-      "engineering-path-terminus-post-maintenance-mode-orchestrator",
+      "sustained-operational-excellence-convergence-era25",
     );
   });
 

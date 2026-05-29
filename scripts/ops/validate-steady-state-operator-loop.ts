@@ -72,6 +72,13 @@ function main() {
           goDecision: result.evaluation.goDecision,
           steadyStateMilestone: result.steadyStateMilestone,
           engineeringPathTerminusMilestone: result.pathEvaluation.engineeringPathTerminusMilestone,
+          sustainedOpsConvergenceReady:
+            result.pathEvaluation.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+          pureOperationalModeEra25Active:
+            result.pathEvaluation.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+          productEvolutionReady:
+            result.pathEvaluation.maintenanceMode.prerequisites.productEvolutionReady,
+          maintenanceModeMilestone: result.pathEvaluation.maintenanceMode.maintenanceModeMilestone,
           readyForMaintenanceRhythmSmokes: result.readyForMaintenanceRhythmSmokes,
           readyForUpstreamLoopSmokes: result.readyForUpstreamLoopSmokes,
           health: result.evaluation.health,

@@ -14,7 +14,7 @@ describe("validate-steady-state-operator-loop", () => {
   it("reports honest not-in-steady-state locally", () => {
     const result = evaluateSteadyStateOperatorLoopWithMilestones({});
     expect(result.evaluation.steadyStateActive).toBe(false);
-    expect(result.steadyStateMilestone).toBe("engineering_terminus_blocked");
+    expect(result.steadyStateMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.readyForMaintenanceRhythmSmokes).toBe(false);
     expect(result.readyForUpstreamLoopSmokes).toBe(false);
     expect(result.evaluation.tracks).toHaveLength(6);

@@ -29,10 +29,39 @@ export const STEADY_STATE_MEASURABLE_TRACK_IDS = [
 ] as const;
 
 export type PostTerminusSteadyStateMilestone =
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
+  | "maintenance_mode_blocked"
   | "engineering_terminus_blocked"
   | "attention_maintenance_rhythm"
   | "attention_upstream_loop"
   | "steady_state_healthy";
+
+export const POST_TERMINUS_STEADY_STATE_ENGINEERING_PATH_PREREQUISITE_MILESTONES: readonly EngineeringPathTerminusMilestone[] =
+  [
+    "era25_sustained_ops_convergence_blocked",
+    "product_evolution_blocked",
+    "maintenance_mode_blocked",
+  ] as const;
+
+export const POST_TERMINUS_STEADY_STATE_BLOCKED_MILESTONES: readonly PostTerminusSteadyStateMilestone[] =
+  [
+    "era25_sustained_ops_convergence_blocked",
+    "product_evolution_blocked",
+    "maintenance_mode_blocked",
+    "engineering_terminus_blocked",
+  ] as const;
+
+function isEngineeringPathPrerequisiteBlocked(
+  milestone: EngineeringPathTerminusMilestone,
+): milestone is
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
+  | "maintenance_mode_blocked" {
+  return (POST_TERMINUS_STEADY_STATE_ENGINEERING_PATH_PREREQUISITE_MILESTONES as readonly string[]).includes(
+    milestone,
+  );
+}
 
 export type PostTerminusSteadyStatePostEngineeringTerminusOrchestratorSummary = {
   policyId: typeof POST_TERMINUS_STEADY_STATE_POST_ENGINEERING_TERMINUS_ORCHESTRATOR_ERA24_POLICY_ID;
@@ -40,6 +69,12 @@ export type PostTerminusSteadyStatePostEngineeringTerminusOrchestratorSummary = 
   steadyStateActive: boolean;
   engineeringTerminusActive: boolean;
   engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<
+    typeof import("@/scripts/ops/validate-maintenance-mode").evaluateMaintenanceMode
+  >["maintenanceModeMilestone"];
   readyForMaintenanceRhythmSmokes: boolean;
   readyForUpstreamLoopSmokes: boolean;
   goDecision: string | null;
@@ -64,6 +99,10 @@ export function resolvePostTerminusSteadyStateMilestone(input: {
   engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
   tracks: readonly Pick<SteadyStateTrackStatus, "id" | "status">[];
 }): PostTerminusSteadyStateMilestone {
+  if (isEngineeringPathPrerequisiteBlocked(input.engineeringPathTerminusMilestone)) {
+    return input.engineeringPathTerminusMilestone;
+  }
+
   if (
     !input.steadyStateActive ||
     input.engineeringPathTerminusMilestone !== "engineering_path_terminus_healthy"
@@ -124,7 +163,29 @@ export function buildPostTerminusSteadyStatePostEngineeringTerminusOrchestratorS
     input.evaluation.steadyStateActive &&
     (improvement?.status === "overdue" || evolution?.status === "overdue");
 
-  const recommendedCommands = input.evaluation.steadyStateActive
+  const recommendedCommands =
+    milestone === "era25_sustained_ops_convergence_blocked"
+      ? ([
+          "npm run ops:validate-sustained-operational-excellence-convergence-era25 -- --json",
+          "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
+          "npm run ops:validate-sustained-product-evolution -- --json",
+          "npm run ops:validate-maintenance-mode -- --json",
+          "npm run ops:validate-commercial-pilot-path -- --json",
+        ] as const)
+      : milestone === "product_evolution_blocked"
+        ? ([
+            "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+            "npm run ops:validate-sustained-product-evolution -- --json",
+            "npm run ops:validate-maintenance-mode -- --json",
+            "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
+          ] as const)
+        : milestone === "maintenance_mode_blocked"
+          ? ([
+              "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
+              "npm run ops:validate-maintenance-mode -- --json",
+              "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
+            ] as const)
+          : input.evaluation.steadyStateActive
     ? ([
         "npm run ops:validate-commercial-pilot-path -- --json",
         "npm run ops:validate-steady-state-operator-loop -- --json",
@@ -160,6 +221,12 @@ export function buildPostTerminusSteadyStatePostEngineeringTerminusOrchestratorS
     steadyStateActive: input.evaluation.steadyStateActive,
     engineeringTerminusActive: input.evaluation.engineeringTerminusActive,
     engineeringPathTerminusMilestone: input.engineeringPathTerminusMilestone,
+    sustainedOpsConvergenceReady:
+      input.evaluation.maintenance.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active:
+      input.evaluation.maintenance.prerequisites.pureOperationalModeEra25Active,
+    productEvolutionReady: input.evaluation.maintenance.prerequisites.productEvolutionReady,
+    maintenanceModeMilestone: input.evaluation.maintenance.maintenanceModeMilestone,
     readyForMaintenanceRhythmSmokes,
     readyForUpstreamLoopSmokes,
     goDecision: input.evaluation.goDecision,
@@ -192,6 +259,9 @@ export function buildPostTerminusSteadyStateOrchestratorReportMarkdown(input: {
     `- Steady state active: ${input.summary.steadyStateActive ? "yes" : "no"}`,
     `- Engineering terminus active: ${input.summary.engineeringTerminusActive ? "yes" : "no"}`,
     `- Engineering path milestone: ${input.summary.engineeringPathTerminusMilestone}`,
+    `- era25 sustained ops convergence ready: ${input.summary.sustainedOpsConvergenceReady ? "yes" : "no"}`,
+    `- Product evolution ready: ${input.summary.productEvolutionReady ? "yes" : "no"}`,
+    `- Maintenance mode milestone: ${input.summary.maintenanceModeMilestone}`,
     `- GO decision: ${input.summary.goDecision ?? "missing"}`,
     `- Overdue / healthy / guidance: ${input.summary.overdueCount} / ${input.summary.healthyCount} / ${input.summary.guidanceCount}`,
     `- Next attention: ${input.summary.nextAttentionTrackLabel ?? "none — measurable tracks fresh"}`,

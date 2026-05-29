@@ -10,6 +10,6 @@ describe("run-post-terminus-steady-state-post-engineering-terminus-orchestrator"
     expect(summary.policyId).toBe(
       "era24-post-terminus-steady-state-post-engineering-terminus-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("engineering_terminus_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });
