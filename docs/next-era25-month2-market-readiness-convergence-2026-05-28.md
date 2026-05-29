@@ -114,7 +114,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Next step (after convergence ready)
 
-See [`next-era25-scale-readiness-convergence-2026-05-28.md`](./next-era25-scale-readiness-convergence-2026-05-28.md) — **scale readiness on platform ops**
+See [`next-era25-series-a-partner-expansion-convergence-2026-05-28.md`](./next-era25-series-a-partner-expansion-convergence-2026-05-28.md) — **Series A / partner expansion on platform ops** (scale implemented — see [`next-era25-scale-readiness-convergence-2026-05-28.md`](./next-era25-scale-readiness-convergence-2026-05-28.md))
 
 ---
 

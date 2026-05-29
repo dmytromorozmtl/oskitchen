@@ -22,6 +22,7 @@ import { formatOwnerDailyBriefingBreakthroughEra25Label } from "@/lib/commercial
 import { formatPaidPilotGoConvergenceEra25Label } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
 import { formatPilotWeek1ExecutionConvergenceEra25Label } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import { formatMonth2MarketReadinessConvergenceEra25Label } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
+import { formatScaleReadinessConvergenceEra25Label } from "@/lib/commercial/scale-readiness-convergence-ui-era25";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -1189,6 +1190,131 @@ export function MaintenanceModePanel(props: {
                                                     month2_market_readiness_convergence_era25_ready
                                                   </span>
                                                 </p>
+
+                                                {slice.engineeringPathTerminus.postTerminusSteadyState
+                                                  .absolutePathEnd.linearPathPermanentlyClosed
+                                                  .step17Forbidden.era25CharterExit
+                                                  .firstCharterSliceReadiness.engineeringGates
+                                                  .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                                  .paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+                                                  ?.month2MarketReadinessConvergence
+                                                  ?.scaleReadinessConvergence ? (
+                                                  <div
+                                                    id="era25-scale-readiness-convergence"
+                                                    className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-emerald-800/50 px-3 py-3"
+                                                    data-testid="era25-scale-readiness-convergence-panel"
+                                                  >
+                                                    <p className="font-medium text-emerald-100">
+                                                      era25 scale readiness convergence
+                                                    </p>
+                                                    <p className="mt-1 text-emerald-200/80">
+                                                      {formatScaleReadinessConvergenceEra25Label(
+                                                        slice.engineeringPathTerminus
+                                                          .postTerminusSteadyState.absolutePathEnd
+                                                          .linearPathPermanentlyClosed.step17Forbidden
+                                                          .era25CharterExit.firstCharterSliceReadiness
+                                                          .engineeringGates.firstProductSliceBlueprint
+                                                          .ownerDailyBriefingBreakthrough
+                                                          .paidPilotGoConvergence
+                                                          .pilotWeek1ExecutionConvergence
+                                                          .month2MarketReadinessConvergence
+                                                          .scaleReadinessConvergence,
+                                                      )}
+                                                    </p>
+                                                    <div className="mt-2 flex flex-wrap gap-2">
+                                                      <Badge
+                                                        variant="outline"
+                                                        className="rounded-full font-mono text-[10px] text-emerald-200"
+                                                      >
+                                                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.paidPilotGoConvergence.pilotWeek1ExecutionConvergence.month2MarketReadinessConvergence.scaleReadinessConvergence.scaleReadinessConvergenceEra25Milestone.replaceAll(
+                                                          "_",
+                                                          " ",
+                                                        )}
+                                                      </Badge>
+                                                      <Badge
+                                                        variant="outline"
+                                                        className="rounded-full text-[10px] text-emerald-300"
+                                                      >
+                                                        {
+                                                          slice.engineeringPathTerminus
+                                                            .postTerminusSteadyState.absolutePathEnd
+                                                            .linearPathPermanentlyClosed
+                                                            .step17Forbidden.era25CharterExit
+                                                            .firstCharterSliceReadiness.engineeringGates
+                                                            .firstProductSliceBlueprint
+                                                            .ownerDailyBriefingBreakthrough
+                                                            .paidPilotGoConvergence
+                                                            .pilotWeek1ExecutionConvergence
+                                                            .month2MarketReadinessConvergence
+                                                            .scaleReadinessConvergence
+                                                            .completedBlockingCount
+                                                        }
+                                                        /
+                                                        {
+                                                          slice.engineeringPathTerminus
+                                                            .postTerminusSteadyState.absolutePathEnd
+                                                            .linearPathPermanentlyClosed
+                                                            .step17Forbidden.era25CharterExit
+                                                            .firstCharterSliceReadiness.engineeringGates
+                                                            .firstProductSliceBlueprint
+                                                            .ownerDailyBriefingBreakthrough
+                                                            .paidPilotGoConvergence
+                                                            .pilotWeek1ExecutionConvergence
+                                                            .month2MarketReadinessConvergence
+                                                            .scaleReadinessConvergence
+                                                            .totalBlockingCount
+                                                        }{" "}
+                                                        gates
+                                                      </Badge>
+                                                    </div>
+                                                    <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                                                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.paidPilotGoConvergence.pilotWeek1ExecutionConvergence.month2MarketReadinessConvergence.scaleReadinessConvergence.guardrails.map(
+                                                        (rule) => (
+                                                          <li key={rule}>{rule}</li>
+                                                        ),
+                                                      )}
+                                                    </ul>
+                                                    <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                                                      <span>
+                                                        {
+                                                          slice.engineeringPathTerminus
+                                                            .postTerminusSteadyState.absolutePathEnd
+                                                            .linearPathPermanentlyClosed
+                                                            .step17Forbidden.era25CharterExit
+                                                            .firstCharterSliceReadiness.engineeringGates
+                                                            .firstProductSliceBlueprint
+                                                            .ownerDailyBriefingBreakthrough
+                                                            .paidPilotGoConvergence
+                                                            .pilotWeek1ExecutionConvergence
+                                                            .month2MarketReadinessConvergence
+                                                            .scaleReadinessConvergence
+                                                            .postMonth2ConvergenceOrchestratorCommand
+                                                        }
+                                                      </span>
+                                                      <span>
+                                                        {
+                                                          slice.engineeringPathTerminus
+                                                            .postTerminusSteadyState.absolutePathEnd
+                                                            .linearPathPermanentlyClosed
+                                                            .step17Forbidden.era25CharterExit
+                                                            .firstCharterSliceReadiness.engineeringGates
+                                                            .firstProductSliceBlueprint
+                                                            .ownerDailyBriefingBreakthrough
+                                                            .paidPilotGoConvergence
+                                                            .pilotWeek1ExecutionConvergence
+                                                            .month2MarketReadinessConvergence
+                                                            .scaleReadinessConvergence.validateCommand
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                    <p className="mt-2 text-emerald-300/70">
+                                                      Convergence ready when{" "}
+                                                      <span className="font-mono">
+                                                        scale_readiness_convergence_era25_ready
+                                                      </span>
+                                                    </p>
+                                                  </div>
+                                                ) : null}
                                               </div>
                                             ) : null}
                                           </div>

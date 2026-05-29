@@ -20,9 +20,11 @@ import type { MarketLeaderPositioningUiSlice } from "@/lib/commercial/market-lea
 import { PaidPilotGoConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/paid-pilot-go-convergence-era25-strip";
 import { PilotWeek1ExecutionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/pilot-week1-execution-convergence-era25-strip";
 import { Month2MarketReadinessConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/month2-market-readiness-convergence-era25-strip";
+import { ScaleReadinessConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/scale-readiness-convergence-era25-strip";
 import type { PaidPilotGoConvergenceEra25UiSlice } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
 import type { PilotWeek1ExecutionConvergenceEra25UiSlice } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import type { Month2MarketReadinessConvergenceEra25UiSlice } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
+import type { ScaleReadinessConvergenceEra25UiSlice } from "@/lib/commercial/scale-readiness-convergence-ui-era25";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import { LAUNCH_WIZARD_COMMERCIAL_OPS_CHECKLIST_DOC } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
@@ -41,6 +43,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
   paidPilotGoConvergence?: PaidPilotGoConvergenceEra25UiSlice | null;
   pilotWeek1ExecutionConvergence?: PilotWeek1ExecutionConvergenceEra25UiSlice | null;
   month2MarketReadinessConvergence?: Month2MarketReadinessConvergenceEra25UiSlice | null;
+  scaleReadinessConvergence?: ScaleReadinessConvergenceEra25UiSlice | null;
   compact?: boolean;
 }) {
   const {
@@ -56,6 +59,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
     paidPilotGoConvergence = null,
     pilotWeek1ExecutionConvergence = null,
     month2MarketReadinessConvergence = null,
+    scaleReadinessConvergence = null,
     compact = false,
   } = props;
   const decisionVariant =
@@ -192,6 +196,10 @@ export function LaunchWizardCommercialBlockersPanel(props: {
 
         {month2MarketReadinessConvergence ? (
           <Month2MarketReadinessConvergenceEra25Strip slice={month2MarketReadinessConvergence} />
+        ) : null}
+
+        {scaleReadinessConvergence ? (
+          <ScaleReadinessConvergenceEra25Strip slice={scaleReadinessConvergence} />
         ) : null}
 
         {pilotWeek1 ? (

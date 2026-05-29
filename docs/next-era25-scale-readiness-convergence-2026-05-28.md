@@ -1,14 +1,17 @@
 # KitchenOS — era25 Scale Readiness Convergence
 
-**Status:** **BLOCKED until `month2_market_readiness_convergence_era25_ready` · NOT auto-implemented**
+**Status:** **Fifth era25 product slice · IMPLEMENTED · BLOCKED until month 2 convergence ready**
 
-**Prerequisite:** Month 2 convergence ready + honest GO still valid
+**Policy:** `era25-scale-readiness-convergence-v1` · Orchestrator `era25-scale-readiness-convergence-post-month2-convergence-orchestrator-v1`  
+**Backlog:** `KOS-E25-005-SCALE` · **NOT in linear catalog · NOT Step 18**
+
+**Prerequisite:** `month2_market_readiness_convergence_era25_ready` + honest GO still valid
 
 ---
 
 ## Declaration
 
-Fifth era25 product convergence slice — wires **Scale readiness gates** to platform ops after month 2 market readiness.
+Fifth **era25 product engineering slice** — wires **Scale readiness gates 1–5** to platform ops after month 2 market readiness.
 
 | Rule | Verdict |
 |------|---------|
@@ -19,43 +22,10 @@ Fifth era25 product convergence slice — wires **Scale readiness gates** to pla
 
 ---
 
-## Pre-flight
+## Milestones (`scaleReadinessConvergenceEra25Milestone`)
 
-```bash
-npm run ops:validate-month2-market-readiness-convergence-era25 -- --json
-npm run ops:validate-scale-readiness-env -- --json
-npm run test:ci:commercial-pilot-runbook:cert
-```
-
-Expected convergence JSON:
-
-```json
-{
-  "month2MarketReadinessConvergenceEra25Milestone": "month2_market_readiness_convergence_era25_ready",
-  "convergenceBlocked": false,
-  "month2Complete": true
-}
-```
-
----
-
-## Scope (preview)
-
-| Deliverable | Detail |
-|-------------|--------|
-| Scale gates panel | era25 nested under month 2 on platform ops |
-| Briefing ranked action | Open scale blocker when not ready (priority 5) |
-| Launch Wizard | Inline scale gates progress strip |
-| Policy | `era25-scale-readiness-convergence-v1` |
-| Backlog | `KOS-E25-005-SCALE` |
-| Anchor | `#era25-scale-readiness-convergence` |
-
----
-
-## Milestones (preview)
-
-| Milestone | Meaning | Exit |
-|-----------|---------|------|
+| Milestone | Meaning | Orchestrator exit |
+|-----------|---------|-------------------|
 | `month2_convergence_regression_blocked` | Month 2 slice not ready | `2` |
 | `gate1_per_customer_pilot_ops` | Per-customer GO isolation missing | `0` |
 | `gate2_soc2_readiness_track` | SOC2 readiness track not reviewed | `0` |
@@ -66,51 +36,14 @@ Expected convergence JSON:
 
 Optional Gate 6 (second paid pilot) does **not** block milestone resolution — same as era21.
 
----
+**Smoke readiness flags:**
 
-## Human gate
-
-1. Month 2 convergence `month2_market_readiness_convergence_era25_ready`
-2. `SCALE_PER_CUSTOMER_GO_ISOLATION=1` — separate GO per customer
-3. `SCALE_SOC2_READINESS_TRACK_REVIEWED=1` — honest SOC2 readiness track
-4. Enterprise SSO production cutover or documented deferral
-5. `smoke:pilot-rollback-drill` + webhook resilience attestation
-6. Investor/partner data room artifact chain published
+- `readyForMonth2ConvergenceRegressionSmokes` — month 2 convergence blocked
+- `readyForResilienceSmokes` — gates 1–3 complete, resilience smokes ready
 
 ---
 
-## Platform ops nesting (target)
-
-```
-#era25-engineering-gates
-  └── #era25-first-product-slice-blueprint
-        └── #era25-owner-daily-briefing-breakthrough
-              └── #era25-paid-pilot-go-convergence
-                    └── #era25-pilot-week1-execution-convergence
-                          └── #era25-month2-market-readiness-convergence
-                                └── #era25-scale-readiness-convergence  ← pending
-```
-
----
-
-## Engineering wiring (preview)
-
-| Component | Artifact (planned) |
-|-----------|-------------------|
-| Scale state loader | `lib/commercial/load-scale-readiness-convergence-state-era25.ts` |
-| Briefing + launch wizard | `lib/briefing/scale-readiness-convergence-briefing-era25.ts` |
-| Evaluation | `lib/commercial/evaluate-scale-readiness-convergence-era25.ts` |
-| Orchestrator | `lib/commercial/scale-readiness-convergence-post-month2-convergence-orchestrator-era25.ts` |
-| UI slice | `lib/commercial/scale-readiness-convergence-ui-era25.ts` |
-| Launch strip | `components/dashboard/launch-wizard/scale-readiness-convergence-era25-strip.tsx` |
-
-Reuses era21: `scale-readiness-phases-era21`, `validate-scale-readiness-env`, `run-scale-readiness-post-month2-orchestrator` chain.
-
-**Briefing suppression:** when era25 scale convergence slice is visible, era21 `buildOwnerDailyBriefingScaleReadinessAction` is suppressed.
-
----
-
-## Ops commands (preview)
+## Ops commands
 
 ```bash
 npm run ops:validate-scale-readiness-convergence-era25 -- --json
@@ -121,7 +54,67 @@ npm run ops:sync-scale-readiness-convergence-era25-report -- --write
 npm run test:ci:scale-readiness-convergence-era25
 npm run test:ci:scale-readiness-convergence-era25:cert
 npm run test:ci:month2-market-readiness-convergence-era25
+npm run test:ci:commercial-pilot-runbook:cert
 ```
+
+**Artifacts:** `artifacts/scale-readiness-convergence-era25-report.md` · reuses era21 `SCALE_*` env + rollback/data room artifacts
+
+**Workflow:** `.github/workflows/ops-scale-readiness-convergence-era25-validate.yml`
+
+**Platform ops:** `#era25-scale-readiness-convergence` (nested under `#era25-month2-market-readiness-convergence`)
+
+**Launch Wizard:** `#launch-wizard-commercial-blockers` + `ScaleReadinessConvergenceEra25Strip`
+
+---
+
+## Convergence targets
+
+| ID | Surface | KitchenOS link |
+|----|---------|----------------|
+| `scale_gates_panel` | Scale gates 1–5 on platform ops | Commercial pilot ops |
+| `briefing_action` | Ranked action on blocked gate | Owner Daily Briefing hero |
+| `launch_wizard` | Inline scale gates progress | `/dashboard/launch-wizard` |
+| `integration_health_sso` | Enterprise SSO production status | `/dashboard/integration-health` |
+
+---
+
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Scale state loader | `lib/commercial/load-scale-readiness-convergence-state-era25.ts` |
+| Briefing + launch wizard slice | `lib/briefing/scale-readiness-convergence-briefing-era25.ts` |
+| Evaluation | `lib/commercial/evaluate-scale-readiness-convergence-era25.ts` |
+| Orchestrator | `lib/commercial/scale-readiness-convergence-post-month2-convergence-orchestrator-era25.ts` |
+| UI slice | `lib/commercial/scale-readiness-convergence-ui-era25.ts` |
+| Launch strip | `components/dashboard/launch-wizard/scale-readiness-convergence-era25-strip.tsx` |
+
+**Platform ops nesting:**
+
+```
+#era25-engineering-gates
+  └── … → #era25-month2-market-readiness-convergence
+              └── #era25-scale-readiness-convergence
+```
+
+**Briefing suppression:** when era25 scale convergence slice is visible, era21 `buildOwnerDailyBriefingScaleReadinessAction` is suppressed (same pattern as month 2 / week 1).
+
+---
+
+## Human gate (never auto-PASS)
+
+1. `month2_market_readiness_convergence_era25_ready`
+2. `SCALE_PER_CUSTOMER_GO_ISOLATION=1` — separate GO per customer
+3. `SCALE_SOC2_READINESS_TRACK_REVIEWED=1` — honest SOC2 readiness track
+4. Enterprise SSO production cutover or documented deferral
+5. `smoke:pilot-rollback-drill` + webhook resilience attestation
+6. Investor/partner data room artifact chain published
+
+---
+
+## Next step (after convergence ready)
+
+See [`next-era25-series-a-partner-expansion-convergence-2026-05-28.md`](./next-era25-series-a-partner-expansion-convergence-2026-05-28.md) — **Series A / partner expansion on platform ops**
 
 ---
 

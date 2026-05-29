@@ -58,6 +58,12 @@ export const ALLOWED_ERA25_PROCESS_COMMERCIAL_FILES: readonly string[] = [
   "month2-market-readiness-convergence-era25-policy.ts",
   "evaluate-month2-market-readiness-convergence-era25.ts",
   "load-month2-market-readiness-convergence-state-era25.ts",
+  "scale-readiness-convergence-phases-era25.ts",
+  "scale-readiness-convergence-post-month2-convergence-orchestrator-era25.ts",
+  "scale-readiness-convergence-ui-era25.ts",
+  "scale-readiness-convergence-era25-policy.ts",
+  "evaluate-scale-readiness-convergence-era25.ts",
+  "load-scale-readiness-convergence-state-era25.ts",
 ] as const;
 
 const PRODUCT_ERA25_FILE_PATTERNS: readonly RegExp[] = [
@@ -93,6 +99,9 @@ const ALLOWED_ERA25_PROCESS_OPS_SCRIPTS: readonly string[] = [
   "validate-month2-market-readiness-convergence-era25.ts",
   "run-month2-market-readiness-convergence-post-week1-convergence-orchestrator-era25.ts",
   "sync-month2-market-readiness-convergence-era25-report.ts",
+  "validate-scale-readiness-convergence-era25.ts",
+  "run-scale-readiness-convergence-post-month2-convergence-orchestrator-era25.ts",
+  "sync-scale-readiness-convergence-era25-report.ts",
 ] as const;
 
 const ILLEGAL_ERA25_OPS_PATTERN = /^validate-.+-era25\.ts$|^run-.+-era25\.ts$/;

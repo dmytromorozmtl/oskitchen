@@ -18,6 +18,10 @@ import type { PilotWeek1ExecutionConvergenceEra25Milestone } from "@/lib/commerc
 import type { Month2MarketReadinessPhaseStatus } from "@/lib/commercial/month2-market-readiness-phases-era21";
 import type { LaunchWizardMonth2MarketReadinessConvergenceSlice } from "@/lib/briefing/month2-market-readiness-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import {
+  buildScaleReadinessConvergenceEra25UiSlice,
+  type ScaleReadinessConvergenceEra25UiSlice,
+} from "@/lib/commercial/scale-readiness-convergence-ui-era25";
 import { evaluateMonth2MarketReadinessConvergenceEra25WithMilestones } from "@/scripts/ops/validate-month2-market-readiness-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -58,6 +62,7 @@ export type Month2MarketReadinessConvergenceEra25UiSlice = {
   platformOpsHref: string;
   reportsHref: string;
   ghostKitchenLandingHref: string;
+  scaleReadinessConvergence: ScaleReadinessConvergenceEra25UiSlice | null;
 };
 
 export function buildMonth2MarketReadinessConvergenceEra25UiSlice(input: {
@@ -67,6 +72,10 @@ export function buildMonth2MarketReadinessConvergenceEra25UiSlice(input: {
   if (!input.week1ConvergenceVisible) return null;
 
   const result = evaluateMonth2MarketReadinessConvergenceEra25WithMilestones(input.env);
+  const scaleReadinessConvergence = buildScaleReadinessConvergenceEra25UiSlice({
+    month2ConvergenceVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UI_POLICY_ID,
@@ -107,6 +116,7 @@ export function buildMonth2MarketReadinessConvergenceEra25UiSlice(input: {
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_PLATFORM_ANCHOR}`,
     reportsHref: "/dashboard/reports",
     ghostKitchenLandingHref: "/solutions/ghost-kitchens",
+    scaleReadinessConvergence,
   };
 }
 
