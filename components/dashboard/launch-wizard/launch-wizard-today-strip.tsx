@@ -91,6 +91,8 @@ export function LaunchWizardTodayStrip(props: {
       props.model.era25PostBandAGovernanceSteadyProductModeWitnessIntegrity,
     era25PostSteadyProductModeCommercialOpsRhythmPermanence:
       props.model.era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrity,
+    era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness:
+      props.model.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -651,6 +653,21 @@ export function LaunchWizardTodayStrip(props: {
               >
                 Ops rhythm permanence{" "}
                 {view.era25PostSteadyProductModeCommercialOpsRhythmPermanence.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness ? (
+              <Badge
+                variant={
+                  view.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness
+                    .era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness"
+              >
+                Band A terminal closure{" "}
+                {view.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness.progressLabel}
               </Badge>
             ) : null}
           </div>

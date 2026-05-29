@@ -22,6 +22,8 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { buildEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessEra25UiSlice } from "@/lib/commercial/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-ui-era25";
+import type { Era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessEra25UiSlice } from "@/lib/commercial/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-ui-era25";
 import { LAUNCH_WIZARD_ERA25_POST_STEADY_PRODUCT_MODE_COMMERCIAL_OPS_RHYTHM_PERMANENCE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-era68";
 
 export const ERA25_POST_STEADY_PRODUCT_MODE_COMMERCIAL_OPS_RHYTHM_PERMANENCE_ERA25_UI_POLICY_ID =
@@ -59,6 +61,7 @@ export type Era25PostSteadyProductModeCommercialOpsRhythmPermanenceEra25UiSlice 
   commercialOpsHref: string;
   todayHref: string;
   headline: string;
+  era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness: Era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessEra25UiSlice | null;
 };
 
 export function buildEra25PostSteadyProductModeCommercialOpsRhythmPermanenceEra25UiSlice(input: {
@@ -116,6 +119,29 @@ export function buildEra25PostSteadyProductModeCommercialOpsRhythmPermanenceEra2
     rhythmPermanenceIntegrity.era25PostSteadyProductModeCommercialOpsRhythmPermanenceComplete;
   const rhythmPermanenceBlocked = !rhythmPermanenceComplete;
 
+  const era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness =
+    buildEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessEra25UiSlice({
+      era25PostSteadyProductModeCommercialOpsRhythmPermanenceVisible: true,
+      era25MarketProofGovernanceChainClosed: input.era25MarketProofGovernanceChainClosed,
+      postSteadyProductModeCommercialOpsRhythmPermanenceActive:
+        rhythmPermanenceIntegrity.postSteadyProductModeCommercialOpsRhythmPermanenceActive,
+      era25GovernanceTrainSealed: rhythmPermanenceIntegrity.era25GovernanceTrainSealed,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+      capstoneIntegritySummary: input.capstoneIntegritySummary ?? null,
+      steadyProductModeIntegritySummary: input.steadyProductModeIntegritySummary ?? null,
+      rhythmPermanenceIntegritySummary: rhythmPermanenceIntegrity,
+    });
+
   const headline = rhythmPermanenceComplete
     ? "Commercial ops rhythm permanence active · honest GO/commercial artifacts forever · improvement loop only"
     : input.postBandAGovernanceSteadyProductModeWitnessActive
@@ -167,6 +193,7 @@ export function buildEra25PostSteadyProductModeCommercialOpsRhythmPermanenceEra2
     commercialOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#commercial-pilot-ops`,
     todayHref: "/dashboard/today",
     headline,
+    era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness,
   };
 }
 

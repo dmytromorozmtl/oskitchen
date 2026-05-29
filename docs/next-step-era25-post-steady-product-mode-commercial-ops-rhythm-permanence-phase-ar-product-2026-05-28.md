@@ -71,19 +71,30 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 
 ---
 
-## Next step — Phase AS (era69)
+## Next step — Phase AS (era69) — **IMPLEMENTED**
 
-**Era25 post-rhythm-permanence band-a governance terminal closure witness integrity** — final witness that the full era61–AR governance stack is permanently closed; only pure product improvement loop + honest commercial artifacts remain.
+See [`docs/next-step-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-phase-as-product-2026-05-28.md`](./next-step-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-phase-as-product-2026-05-28.md).
+
+**Era25 post-rhythm-permanence Band A governance terminal closure witness integrity** — final witness that the full era61–AR governance stack is permanently closed.
 
 | Item | Value |
 |------|-------|
 | Prerequisite milestone | Honest `era25-post-steady-product-mode-commercial-ops-rhythm-permanence` baseline + dual cert green |
 | Parent evaluator | era68 post-steady-product-mode commercial ops rhythm permanence integrity |
-| Platform anchor | `#era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness` (planned) |
-| Briefing meta priority | **44** (planned) |
-| Env keys (planned) | `ERA25_POST_RHYTHM_PERMANENCE_BAND_A_GOVERNANCE_TERMINAL_CLOSURE_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `terminal_closure_witness_without_rhythm_permanence`, `terminal_closure_witness_claims_governance_reopen`, `fake_terminal_closure_witness_*`, upstream era68 fail |
+| Platform anchor | `#era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness` |
+| Briefing meta priority | **44** |
+| Env keys | `ERA25_POST_RHYTHM_PERMANENCE_BAND_A_GOVERNANCE_TERMINAL_CLOSURE_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
+| Baseline artifact | `artifacts/era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-baseline.json` |
 | CI | `test:ci:era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-era69` |
 
-**Human acceptance (preview):** commercial ops rhythm permanence PASS → attest Band A governance terminal closure witness → validate JSON → operator playbook enters pure post-governance steady state with zero era25 env mutation forever.
+---
+
+## Next step — Phase AT (era70) — preview
+
+**Era25 post-terminal-closure steady operator playbook lock integrity** — locks operator playbook into pure improvement-loop + commercial artifact rhythm forever.
+
+| Item | Planned |
+|------|---------|
+| Parent evaluator | era69 terminal closure witness integrity |
+| Briefing priority | **45** |
+| Anchor | `#era25-post-terminal-closure-steady-operator-playbook-lock` |

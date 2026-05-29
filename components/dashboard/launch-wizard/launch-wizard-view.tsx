@@ -43,6 +43,7 @@ import { LaunchWizardEra25PostTerminalSealCommercialOpsPermanencePanel } from "@
 import { LaunchWizardEra25BandAGovernanceChainCapstoneWitnessPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-band-a-governance-chain-capstone-witness-panel";
 import { LaunchWizardEra25PostBandAGovernanceSteadyProductModeWitnessPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-band-a-governance-steady-product-mode-witness-panel";
 import { LaunchWizardEra25PostSteadyProductModeCommercialOpsRhythmPermanencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-panel";
+import { LaunchWizardEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-panel";
 import { LaunchWizardEra25BandAMarketProofExecutionSolePathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-panel";
 import { LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-panel";
 import { LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-panel";
@@ -388,6 +389,11 @@ export function LaunchWizardView(props: {
       {model.era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrity ? (
         <LaunchWizardEra25PostSteadyProductModeCommercialOpsRhythmPermanencePanel
           slice={model.era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrity}
+        />
+      ) : null}
+      {model.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrity ? (
+        <LaunchWizardEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessPanel
+          slice={model.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrity}
         />
       ) : null}
 

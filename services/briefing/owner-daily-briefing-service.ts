@@ -257,6 +257,10 @@ import {
   mergeBriefingEra25PostSteadyProductModeCommercialOpsRhythmPermanenceTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-era68";
 import {
+  buildOwnerDailyBriefingEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessAction,
+  mergeBriefingEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-era69";
+import {
   buildOwnerDailyBriefingEra25BandAMarketProofExecutionSolePathAction,
   mergeBriefingEra25BandAMarketProofExecutionSolePathTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-band-a-market-proof-execution-sole-path-era61";
@@ -1440,6 +1444,37 @@ export async function loadOwnerDailyBriefing(
             null,
         )
       : null;
+  const era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+            ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence
+            ?.marketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence
+            ?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+            ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+            ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
+            ?.era25ConvergenceGovernanceTerminusFreeze?.era25BandAMarketProofExecutionSolePath
+            ?.era25P0MarketProofHonestClosureCapstone?.era25PostMarketProofSteadyOperationalWitness
+            ?.era25GovernanceTrainTerminalSeal?.era25PostTerminalSealCommercialOpsPermanence
+            ?.era25BandAGovernanceChainCapstoneWitness?.era25PostBandAGovernanceSteadyProductModeWitness
+            ?.era25PostSteadyProductModeCommercialOpsRhythmPermanence
+            ?.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness ??
+            sustainedOpsConvergenceEra25?.pureOperationalModeTerminus
+              ?.commercialPilotConvergenceTrainClosure?.sustainedProductEvolutionReentrant
+              ?.era25PostReentrantCharterLock?.era25SteadyStateOperatorLoopLock
+              ?.era25CommercialPilotConvergenceTrainCapstone?.era25ConvergenceGovernanceTerminusFreeze
+              ?.era25BandAMarketProofExecutionSolePath?.era25P0MarketProofHonestClosureCapstone
+              ?.era25PostMarketProofSteadyOperationalWitness?.era25GovernanceTrainTerminalSeal
+              ?.era25PostTerminalSealCommercialOpsPermanence?.era25BandAGovernanceChainCapstoneWitness
+              ?.era25PostBandAGovernanceSteadyProductModeWitness
+              ?.era25PostSteadyProductModeCommercialOpsRhythmPermanence
+              ?.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness ??
+            null,
+        )
+      : null;
   const era25PostMarketProofSteadyOperationalWitnessRankedAction =
     rolePack === "owner"
       ? buildOwnerDailyBriefingEra25PostMarketProofSteadyOperationalWitnessAction(
@@ -2034,6 +2069,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25PostSteadyProductModeCommercialOpsRhythmPermanenceRankedAction) {
     allTopActions = mergeBriefingEra25PostSteadyProductModeCommercialOpsRhythmPermanenceTopActions(
       era25PostSteadyProductModeCommercialOpsRhythmPermanenceRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessRankedAction) {
+    allTopActions = mergeBriefingEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessTopActions(
+      era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessRankedAction,
       allTopActions,
     );
   }

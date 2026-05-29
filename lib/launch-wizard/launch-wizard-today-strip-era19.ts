@@ -43,6 +43,7 @@ import type { LaunchWizardEra25PostTerminalSealCommercialOpsPermanenceSlice } fr
 import type { LaunchWizardEra25BandAGovernanceChainCapstoneWitnessSlice } from "@/lib/launch-wizard/launch-wizard-era25-band-a-governance-chain-capstone-witness-era66";
 import type { LaunchWizardEra25PostBandAGovernanceSteadyProductModeWitnessSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-band-a-governance-steady-product-mode-witness-era67";
 import type { LaunchWizardEra25PostSteadyProductModeCommercialOpsRhythmPermanenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-era68";
+import type { LaunchWizardEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-era69";
 import type { LaunchWizardEra25BandAMarketProofExecutionSolePathSlice } from "@/lib/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-era61";
 import type { LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice } from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
@@ -113,6 +114,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25BandAGovernanceChainCapstoneWitness: LaunchWizardEra25BandAGovernanceChainCapstoneWitnessSlice | null;
   era25PostBandAGovernanceSteadyProductModeWitness: LaunchWizardEra25PostBandAGovernanceSteadyProductModeWitnessSlice | null;
   era25PostSteadyProductModeCommercialOpsRhythmPermanence: LaunchWizardEra25PostSteadyProductModeCommercialOpsRhythmPermanenceSlice | null;
+  era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness: LaunchWizardEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -194,6 +196,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25BandAGovernanceChainCapstoneWitness?: LaunchWizardEra25BandAGovernanceChainCapstoneWitnessSlice | null;
   era25PostBandAGovernanceSteadyProductModeWitness?: LaunchWizardEra25PostBandAGovernanceSteadyProductModeWitnessSlice | null;
   era25PostSteadyProductModeCommercialOpsRhythmPermanence?: LaunchWizardEra25PostSteadyProductModeCommercialOpsRhythmPermanenceSlice | null;
+  era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness?: LaunchWizardEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -417,6 +420,8 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     input.era25PostBandAGovernanceSteadyProductModeWitness ?? null;
   const era25PostSteadyProductModeCommercialOpsRhythmPermanence =
     input.era25PostSteadyProductModeCommercialOpsRhythmPermanence ?? null;
+  const era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness =
+    input.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness ?? null;
   const era25P0MarketProofHonestClosureCapstoneSubline = era25P0MarketProofHonestClosureCapstone
     ? `P0 closure ${era25P0MarketProofHonestClosureCapstone.progressLabel}${era25P0MarketProofHonestClosureCapstone.era25P0MarketProofHonestClosureCapstoneIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
@@ -442,6 +447,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25PostSteadyProductModeCommercialOpsRhythmPermanence
       ? `Ops rhythm permanence ${era25PostSteadyProductModeCommercialOpsRhythmPermanence.progressLabel}${era25PostSteadyProductModeCommercialOpsRhythmPermanence.era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrityFailed ? " · integrity FAIL" : ""}`
       : null;
+  const era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSubline =
+    era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness
+      ? `Band A terminal closure ${era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness.progressLabel}${era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrityFailed ? " · integrity FAIL" : ""}`
+      : null;
+  if (era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSubline} · ${era25FullConvergenceSubline}`
+      : era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessSubline;
+  }
   if (era25PostSteadyProductModeCommercialOpsRhythmPermanenceSubline) {
     era25FullConvergenceSubline = era25FullConvergenceSubline
       ? `${era25PostSteadyProductModeCommercialOpsRhythmPermanenceSubline} · ${era25FullConvergenceSubline}`
@@ -756,5 +770,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25BandAGovernanceChainCapstoneWitness,
     era25PostBandAGovernanceSteadyProductModeWitness,
     era25PostSteadyProductModeCommercialOpsRhythmPermanence,
+    era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness,
   };
 }
