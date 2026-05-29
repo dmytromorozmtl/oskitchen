@@ -58,6 +58,40 @@ export function P0OpsVaultPhasesPanel(props: {
           <p className="text-sm font-medium">{formatP0OpsVaultProgressLabel(slice)}</p>
         )}
 
+        {slice.nextPhase && slice.nextPhase.missingKeys.length > 0 ? (
+          <div
+            className={cn(
+              "rounded-lg border px-4 py-3",
+              isPlatform
+                ? "border-amber-700/60 bg-amber-950/30"
+                : "border-amber-300/80 bg-amber-50/50 dark:border-amber-800/60 dark:bg-amber-950/20",
+            )}
+            data-testid="p0-ops-vault-next-phase-hero"
+          >
+            <p className={cn("text-sm font-semibold", isPlatform ? "text-amber-200" : "text-amber-950 dark:text-amber-100")}>
+              Start here — {slice.nextPhase.label}
+            </p>
+            <p className="mt-1 font-mono text-xs text-muted-foreground">
+              Configure: {slice.nextPhase.missingKeys.join(", ")}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Read <span className="font-mono">{slice.nextPhase.docPath}</span> · matrix{" "}
+              <span className="font-mono">{slice.vaultMatrixDoc}</span>
+            </p>
+            {slice.nextPhase.smokeScripts.length > 0 ? (
+              <p className="mt-1 text-xs text-muted-foreground">
+                Then run:{" "}
+                <span className="font-mono">
+                  {slice.nextPhase.smokeScripts.map((script) => `npm run ${script}`).join(" · ")}
+                </span>
+              </p>
+            ) : null}
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+              {slice.githubSecretsChecklistCommand} · {slice.vaultReadinessCommand}
+            </p>
+          </div>
+        ) : null}
+
         <ul className="space-y-2">
           {slice.phases.map((phase) => {
             const isNext = slice.nextPhase?.id === phase.id;

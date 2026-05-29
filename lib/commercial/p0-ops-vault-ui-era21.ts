@@ -53,6 +53,7 @@ export type P0OpsVaultUiSlice = {
   day0PartialComplete: boolean;
   integrationHealthHref: string;
   launchWizardHref: string;
+  platformOpsHref: string;
   nextPhase: P0OpsVaultPhaseStatus | null;
   nextPhaseDetail: string | null;
 };
@@ -108,9 +109,37 @@ export function buildP0OpsVaultUiSlice(
     day0PartialComplete,
     integrationHealthHref: `/dashboard/integration-health${P0_OPS_VAULT_INTEGRATION_HEALTH_ANCHOR}`,
     launchWizardHref: "/dashboard/launch-wizard",
+    platformOpsHref: "/platform/commercial-pilot-ops#p0-staging-proof",
     nextPhase,
     nextPhaseDetail,
   };
+}
+
+export function formatP0OpsVaultTrustBannerHeadline(slice: P0OpsVaultUiSlice): string {
+  if (slice.nextPhase && slice.nextPhase.missingKeys.length > 0) {
+    return `P0 blocked — start ${slice.nextPhase.label}: ${slice.nextPhase.missingKeys.join(", ")} · ${slice.nextPhase.docPath}`;
+  }
+  if (slice.missingCount >= slice.totalCount) {
+    return "P0 staging proof blocked — configure all 11 ops env vars before engineering PASS or LIVE claims.";
+  }
+  if (slice.missingCount > 0) {
+    return `P0 staging proof blocked — ${slice.missingCount} prerequisite env var(s) missing.`;
+  }
+  return "P0 staging proof not passed — review child smoke artifacts.";
+}
+
+export function resolveP0OpsVaultNextPhaseSmokeCommands(
+  slice: P0OpsVaultUiSlice,
+): readonly string[] {
+  const commands: string[] = [];
+  if (slice.nextPhase) {
+    for (const script of slice.nextPhase.smokeScripts) {
+      commands.push(`npm run ${script}`);
+    }
+  }
+  commands.push(slice.vaultReadinessCommand);
+  commands.push(slice.orchestratorCommand);
+  return commands;
 }
 
 export function formatP0OpsVaultProgressLabel(slice: P0OpsVaultUiSlice): string {

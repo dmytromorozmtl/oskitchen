@@ -5,6 +5,8 @@
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import {
   buildP0OpsVaultUiSlice,
+  formatP0OpsVaultTrustBannerHeadline,
+  resolveP0OpsVaultNextPhaseSmokeCommands,
   type P0OpsVaultUiSlice,
 } from "@/lib/commercial/p0-ops-vault-ui-era21";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
@@ -81,22 +83,13 @@ export function buildIntegrationHealthP0TrustBanner(
     overall: p0Staging.overall,
     missingEnvVars,
     missingCount,
-    headline:
-      missingCount >= 11
-        ? "P0 staging proof blocked — configure all 11 ops env vars before engineering PASS or LIVE claims."
-        : missingCount > 0
-          ? `P0 staging proof blocked — ${missingCount} prerequisite env var(s) missing.`
-          : "P0 staging proof not passed — review child smoke artifacts.",
+    headline: formatP0OpsVaultTrustBannerHeadline(opsVault),
     honestyNote:
       "SKIPPED WITH REASON is honest when credentials are missing — never shown as PASS or LIVE.",
-    smokeScripts: [
-      "npm run smoke:p0-staging-proof-unblock",
-      "npm run smoke:enterprise-sso-idp-staging",
-      "npm run smoke:staging-workflows-first-green",
-      "npm run smoke:woo-shopify-live",
-    ],
+    smokeScripts: resolveP0OpsVaultNextPhaseSmokeCommands(opsVault),
     nextActions: [
-      { label: "Launch Wizard blockers", href: "/dashboard/launch-wizard" },
+      { label: "VP Ops vault checklist", href: opsVault.platformOpsHref },
+      { label: "Launch Wizard blockers", href: opsVault.launchWizardHref },
       { label: "Recovery checklist", href: "/dashboard/integration-health#integration-recovery-checklist" },
     ],
     opsVault,

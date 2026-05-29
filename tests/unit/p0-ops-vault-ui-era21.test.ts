@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   buildP0OpsVaultUiSlice,
   formatP0OpsVaultProgressLabel,
+  formatP0OpsVaultTrustBannerHeadline,
+  resolveP0OpsVaultNextPhaseSmokeCommands,
 } from "@/lib/commercial/p0-ops-vault-ui-era21";
 import { buildP0OpsVaultPhaseStatuses } from "@/lib/commercial/p0-ops-vault-phases-era21";
 
@@ -44,7 +46,13 @@ describe("p0-ops-vault-ui-era21", () => {
     expect(slice?.phases.length).toBe(4);
     expect(slice?.day0Milestone).toBe("blocked");
     expect(slice?.day0OrchestratorCommand).toContain("ops:run-p0-vault-day0-orchestrator");
+    expect(slice?.platformOpsHref).toContain("commercial-pilot-ops");
+    expect(slice?.nextPhase?.id).toBe("staging_login");
     expect(formatP0OpsVaultProgressLabel(slice!)).toContain("vars missing");
+    expect(formatP0OpsVaultTrustBannerHeadline(slice!)).toContain("Phase 1 — Staging login");
+    expect(resolveP0OpsVaultNextPhaseSmokeCommands(slice!)[0]).toContain(
+      "staging-workflows-first-green",
+    );
   });
 
   it("returns null when proof passed", () => {

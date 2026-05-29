@@ -505,6 +505,23 @@ export function CommercialPilotOpsStatusPanel(props: {
                 <span className="text-zinc-500">overall {p0.overall}</span>
               </div>
 
+              {p0OpsVault?.nextPhase && p0OpsVault.nextPhase.missingKeys.length > 0 ? (
+                <div
+                  className="rounded-lg border border-amber-700/50 bg-amber-950/20 px-4 py-3"
+                  data-testid="commercial-pilot-p0-next-phase-callout"
+                >
+                  <p className="font-medium text-amber-200">
+                    VP Ops — start {p0OpsVault.nextPhase.label}
+                  </p>
+                  <p className="mt-1 font-mono text-xs text-zinc-400">
+                    {p0OpsVault.nextPhase.missingKeys.join(", ")}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-500">
+                    {p0OpsVault.nextPhase.docPath} · {p0OpsVault.vaultMatrixDoc}
+                  </p>
+                </div>
+              ) : null}
+
               {p0.allMissingEnvVars.length > 0 ? (
                 <div>
                   <p className="mb-2 font-medium text-amber-200">Missing env vars ({p0.allMissingEnvVars.length})</p>

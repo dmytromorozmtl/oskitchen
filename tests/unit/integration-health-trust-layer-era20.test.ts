@@ -76,7 +76,10 @@ describe("integration-health-trust-layer-era20", () => {
     const banner = buildIntegrationHealthP0TrustBanner(p0Awaiting);
     expect(banner?.visible).toBe(true);
     expect(banner?.missingCount).toBe(3);
-    expect(banner?.headline).toContain("env var");
+    expect(banner?.headline).toContain("Phase 1 — Staging login");
+    expect(banner?.headline).toContain("E2E_STAGING_BASE_URL");
+    expect(banner?.smokeScripts[0]).toContain("staging-workflows-first-green");
+    expect(banner?.nextActions[0]?.href).toContain("commercial-pilot-ops");
     expect(banner?.honestyNote.toLowerCase()).toContain("skipped");
   });
 
@@ -143,7 +146,7 @@ describe("integration-health-trust-layer-era20", () => {
     expect(enriched.trustLayerPolicyId).toBe(INTEGRATION_HEALTH_TRUST_LAYER_ERA20_POLICY_ID);
     expect(enriched.p0Trust?.missingEnvVars).toContain("E2E_STAGING_BASE_URL");
     expect(enriched.cards[0]?.stateTone).toBe("degraded");
-    expect(enriched.headline).toContain("P0 staging proof blocked");
+    expect(enriched.headline).toContain("P0 blocked");
   });
 
   it("shows tier2 golden path banner when P0 passed and tier2 incomplete", () => {
