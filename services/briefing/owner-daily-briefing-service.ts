@@ -2199,6 +2199,7 @@ export async function loadOwnerDailyBriefing(
 
   const nextAction = topActions[0]
     ? {
+        id: topActions[0].id,
         title: topActions[0].title,
         detail: topActions[0].reason,
         href: topActions[0].href,

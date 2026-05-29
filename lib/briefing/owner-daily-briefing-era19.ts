@@ -46,6 +46,7 @@ export type OwnerDailyBriefingAlert = {
 };
 
 export type OwnerDailyBriefingNextAction = {
+  id: string;
   title: string;
   detail: string;
   href: string;
@@ -481,6 +482,7 @@ export function buildOwnerDailyBriefingAlerts(input: {
 
 function rankedActionToNext(action: OwnerDailyBriefingRankedAction): OwnerDailyBriefingNextAction {
   return {
+    id: action.id,
     title: action.title,
     detail: action.reason,
     href: action.href,
@@ -718,6 +720,7 @@ export function pickOwnerDailyBriefingNextAction(input: {
   if (top) return rankedActionToNext(top);
 
   return {
+    id: "fallback-order-hub",
     title: "Run the shift from Order Hub",
     detail: `${input.kpis.activeOrders} active order(s) — monitor pipeline and kitchen handoff.`,
     href: "/dashboard/order-hub",

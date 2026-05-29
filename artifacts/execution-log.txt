@@ -115,3 +115,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Fix components/dashboard/owner-daily-briefing-hero.tsx — Property 'id' missing on OwnerDailyBriefingNextAction (cycle 10)
+
+---
+Cycle: 10
+Timestamp: 2026-05-29T18:45:00.000Z
+Action: fix: owner-daily-briefing-era19.ts — add id to OwnerDailyBriefingNextAction type and builders (ошибок: 94 → 93)
+Files: lib/briefing/owner-daily-briefing-era19.ts, services/briefing/owner-daily-briefing-service.ts
+TS errors before: 94
+TS errors after: 93
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix components/dashboard/pilot-integration-health-strip.tsx — Property 'scorecardLabel' missing (cycle 11)
