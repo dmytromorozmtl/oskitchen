@@ -27,6 +27,7 @@ import { LaunchWizardEra25FirstProductSliceBlueprintPanel } from "@/components/d
 import { LaunchWizardEra25OwnerDailyBriefingBreakthroughPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-owner-daily-briefing-breakthrough-panel";
 import { LaunchWizardEra25PaidPilotGoConvergencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-paid-pilot-go-convergence-panel";
 import { LaunchWizardEra25PilotWeek1ExecutionConvergencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-pilot-week1-execution-convergence-panel";
+import { LaunchWizardEra25Month2MarketReadinessConvergencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-month2-market-readiness-convergence-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -257,6 +258,12 @@ export function LaunchWizardView(props: {
       {model.era25PilotWeek1ExecutionConvergenceIntegrity ? (
         <LaunchWizardEra25PilotWeek1ExecutionConvergencePanel
           slice={model.era25PilotWeek1ExecutionConvergenceIntegrity}
+        />
+      ) : null}
+
+      {model.era25Month2MarketReadinessConvergenceIntegrity ? (
+        <LaunchWizardEra25Month2MarketReadinessConvergencePanel
+          slice={model.era25Month2MarketReadinessConvergenceIntegrity}
         />
       ) : null}
 

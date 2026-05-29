@@ -6,6 +6,7 @@ import {
   MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/month2-market-readiness-convergence-phases-era25";
 import { MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UI_POLICY_ID } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
+import { MONTH2_MARKET_READINESS_CONVERGENCE_INTEGRITY_ERA49_POLICY_ID } from "@/lib/commercial/month2-market-readiness-convergence-integrity-era49-policy";
 import { PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/pilot-week1-execution-convergence-era25-policy";
 
 export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_POLICY_ID =
@@ -17,6 +18,7 @@ export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_EXTENDS_POLICIES = [
   PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_POLICY_ID,
   MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_PHASES_POLICY_ID,
   MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UI_POLICY_ID,
+  MONTH2_MARKET_READINESS_CONVERGENCE_INTEGRITY_ERA49_POLICY_ID,
   "era25-month2-market-readiness-convergence-post-week1-convergence-orchestrator-v1",
   "era25-month2-market-readiness-convergence-briefing-v1",
   "era21-month2-market-readiness-phases-v1",
@@ -27,12 +29,16 @@ export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_OPS_SCRIPTS = [
   "ops:validate-month2-market-readiness-convergence-era25",
   "ops:sync-month2-market-readiness-convergence-era25-report",
   "ops:validate-pilot-week1-execution-convergence-era25",
+  "ops:validate-pilot-week1-execution-convergence-integrity",
+  "ops:validate-month2-market-readiness-convergence-integrity",
+  "ops:sync-month2-market-readiness-convergence-integrity-baseline",
   "ops:validate-month2-market-readiness-env",
 ] as const;
 
 export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_CI_SCRIPTS = [
   "test:ci:month2-market-readiness-convergence-era25",
   "test:ci:month2-market-readiness-convergence-era25:cert",
+  "test:ci:month2-market-readiness-convergence-integrity-era49",
 ] as const;
 
 export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UNIT_TESTS = [
@@ -45,12 +51,18 @@ export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UNIT_TESTS = [
   "tests/unit/validate-month2-market-readiness-convergence-era25.test.ts",
   "tests/unit/evaluate-month2-market-readiness-convergence-era25.test.ts",
   "tests/unit/month2-market-readiness-convergence-era25-cert-live.test.ts",
+  "tests/unit/month2-market-readiness-convergence-integrity-era49.test.ts",
+  "tests/unit/validate-month2-market-readiness-convergence-integrity.test.ts",
+  "tests/unit/month2-market-readiness-convergence-integrity-era49-cert-live.test.ts",
+  "tests/unit/launch-wizard-era25-month2-market-readiness-convergence-era49.test.ts",
+  "tests/unit/owner-daily-briefing-era25-month2-market-readiness-convergence-era49.test.ts",
 ] as const;
 
 export const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_PRODUCT_SURFACES = [
   "components/dashboard/maintenance-mode-panel.tsx",
   "components/dashboard/owner-daily-briefing-breakthrough-era25-panel.tsx",
   "components/dashboard/launch-wizard/month2-market-readiness-convergence-era25-strip.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-era25-month2-market-readiness-convergence-panel.tsx",
   "app/dashboard/today/page.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

@@ -69,8 +69,8 @@ Workflow: `.github/workflows/ops-pilot-week1-execution-convergence-integrity-val
 
 ---
 
-## Next step — Phase Y (era49)
+## Following — Phase Y (era49)
 
-**Month 2 market readiness convergence era25 integrity** — chains `evaluatePilotWeek1ExecutionConvergenceIntegrity`, Launch Wizard `#launch-wizard-era25-month2-market-readiness-convergence`, Owner Briefing priority **24**, maintenance nested under `#era25-pilot-week1-execution-convergence` → `#era25-month2-market-readiness-convergence`.
+**Done:** [`docs/next-step-month2-market-readiness-convergence-phase-y-product-2026-05-28.md`](./next-step-month2-market-readiness-convergence-phase-y-product-2026-05-28.md)
 
-Prerequisite milestone: `pilot_week1_execution_convergence_era25_ready` · env `MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_*` (to be added when Phase Y starts).
+**Next:** Phase Z scale readiness convergence integrity (era50) on `#era25-scale-readiness-convergence`.

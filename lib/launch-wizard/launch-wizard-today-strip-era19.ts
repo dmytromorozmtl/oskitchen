@@ -27,6 +27,7 @@ import type { LaunchWizardEra25FirstProductSliceBlueprintSlice } from "@/lib/lau
 import type { LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice } from "@/lib/launch-wizard/launch-wizard-era25-owner-daily-briefing-breakthrough-era46";
 import type { LaunchWizardEra25PaidPilotGoConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-paid-pilot-go-convergence-era47";
 import type { LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-pilot-week1-execution-convergence-era48";
+import type { LaunchWizardEra25Month2MarketReadinessConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-month2-market-readiness-convergence-era49";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -73,6 +74,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25OwnerDailyBriefingBreakthrough: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
   era25PaidPilotGoConvergence: LaunchWizardEra25PaidPilotGoConvergenceSlice | null;
   era25PilotWeek1ExecutionConvergence: LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice | null;
+  era25Month2MarketReadinessConvergence: LaunchWizardEra25Month2MarketReadinessConvergenceSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -134,6 +136,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25OwnerDailyBriefingBreakthrough?: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
   era25PaidPilotGoConvergence?: LaunchWizardEra25PaidPilotGoConvergenceSlice | null;
   era25PilotWeek1ExecutionConvergence?: LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice | null;
+  era25Month2MarketReadinessConvergence?: LaunchWizardEra25Month2MarketReadinessConvergenceSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -226,6 +229,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25PilotWeek1ExecutionConvergenceSubline = era25PilotWeek1ExecutionConvergence
     ? `Week 1 ${era25PilotWeek1ExecutionConvergence.progressLabel}${era25PilotWeek1ExecutionConvergence.pilotWeek1ExecutionConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25Month2MarketReadinessConvergence = input.era25Month2MarketReadinessConvergence ?? null;
+  const era25Month2MarketReadinessConvergenceSubline = era25Month2MarketReadinessConvergence
+    ? `Month 2 ${era25Month2MarketReadinessConvergence.progressLabel}${era25Month2MarketReadinessConvergence.month2MarketReadinessConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -274,6 +281,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25OwnerDailyBriefingBreakthrough,
       era25PaidPilotGoConvergence,
       era25PilotWeek1ExecutionConvergence,
+      era25Month2MarketReadinessConvergence,
     };
   }
 
@@ -326,7 +334,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25PilotWeek1ExecutionConvergenceSubline
+        : era25Month2MarketReadinessConvergenceSubline
+          ? era25PilotWeek1ExecutionConvergenceSubline
+            ? era25PaidPilotGoConvergenceSubline
+              ? era25OwnerDailyBriefingBreakthroughSubline
+                ? `${era25OwnerDailyBriefingBreakthroughSubline} · ${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline}`
+                : `${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline}`
+              : `${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline}`
+            : era25Month2MarketReadinessConvergenceSubline
+          : era25PilotWeek1ExecutionConvergenceSubline
           ? era25PaidPilotGoConvergenceSubline
             ? era25OwnerDailyBriefingBreakthroughSubline
               ? `${era25OwnerDailyBriefingBreakthroughSubline} · ${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline}`
@@ -461,5 +477,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25OwnerDailyBriefingBreakthrough,
     era25PaidPilotGoConvergence,
     era25PilotWeek1ExecutionConvergence,
+    era25Month2MarketReadinessConvergence,
   };
 }
