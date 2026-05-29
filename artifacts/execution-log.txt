@@ -258,3 +258,24 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 11 — create marketing/sales-deck-pillars.md (cycle 21)
+
+---
+Cycle: 21
+Timestamp: 2026-05-29T21:30:00.000Z
+Action: Branch 12 SKIPPED (honest gate) — pilot NOT ready; cannot set ready=true or score=100
+Blockers:
+  - TS errors: 91 (need 0)
+  - components/ui/LockedFeatureBanner.tsx: missing
+  - marketing/sales-deck-pillars.md: missing
+  - Vault: 0/11 (vaultReady: false)
+  - P0: awaiting_ops_credentials
+  - GO: NO-GO
+  - pilotExecutableScore: 24 (unchanged)
+Files: artifacts/execution-log.txt only
+TS errors before: 91
+TS errors after: 91
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Return to Branch 1 — fix first TS error (cycle 22) OR Branch 4 LockedFeatureBanner (cycle 22)
