@@ -29,6 +29,12 @@ export const ALLOWED_ERA25_PROCESS_COMMERCIAL_FILES: readonly string[] = [
   "era25-engineering-gates-require-signed-charter-era24-policy.ts",
   "evaluate-era25-engineering-gates-require-signed-charter.ts",
   "detect-illegal-era25-product-artifacts-era24.ts",
+  "era25-first-product-slice-blueprint-phases-era24.ts",
+  "era25-first-product-slice-blueprint-post-gates-orchestrator-era24.ts",
+  "era25-first-product-slice-blueprint-ui-era24.ts",
+  "era25-first-product-slice-blueprint-era24-policy.ts",
+  "evaluate-era25-first-product-slice-blueprint.ts",
+  "validate-era25-first-product-slice-staging-checklist-era24.ts",
 ] as const;
 
 const PRODUCT_ERA25_FILE_PATTERNS: readonly RegExp[] = [
@@ -49,6 +55,9 @@ const ALLOWED_ERA25_PROCESS_OPS_SCRIPTS: readonly string[] = [
   "validate-era25-engineering-gates-require-signed-charter.ts",
   "run-era25-engineering-gates-post-readiness-orchestrator.ts",
   "sync-era25-engineering-gates-require-signed-charter-report.ts",
+  "validate-era25-first-product-slice-blueprint.ts",
+  "run-era25-first-product-slice-blueprint-post-gates-orchestrator.ts",
+  "sync-era25-first-product-slice-blueprint-report.ts",
 ] as const;
 
 const ILLEGAL_ERA25_OPS_PATTERN = /^validate-.+-era25\.ts$|^run-.+-era25\.ts$/;

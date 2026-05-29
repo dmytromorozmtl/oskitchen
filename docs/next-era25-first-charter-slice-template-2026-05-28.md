@@ -109,7 +109,9 @@ See [`next-era25-engineering-gates-require-signed-charter-2026-05-28.md`](./next
 - Zero illegal era25 product artifacts
 - Terminus guard still PASS
 
-**Next after gates open:** [`next-era25-first-product-slice-blueprint-2026-05-28.md`](./next-era25-first-product-slice-blueprint-2026-05-28.md)
+**Next after gates open:** [`next-era25-first-product-slice-blueprint-2026-05-28.md`](./next-era25-first-product-slice-blueprint-2026-05-28.md) (implemented)
+
+**Next product slice:** [`next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md`](./next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md)
 
 ---
 

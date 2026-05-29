@@ -1,118 +1,109 @@
 # KitchenOS — era25 First Product Slice Blueprint
 
-**Status:** **BLOCKED until `era25_engineering_gates_open` · NOT auto-implemented**
+**Status:** **Blueprint orchestration · NO era25 product engineering until blueprint ready**
 
-**Prerequisite:** Engineering gates enforcement PASS + signed `docs/era25-<name>-charter-2026-*.md`
+**Policy:** `era24-era25-first-product-slice-blueprint-v1` · Orchestrator `era24-era25-first-product-slice-blueprint-post-gates-orchestrator-v1`  
+**Backlog:** `KOS-E25-SLICE-BLUEPRINT` · **NOT in linear catalog · NOT Step 18**
+
+**Prerequisite:** `era25_engineering_gates_open` + canonical charter + staging checklist
 
 ---
 
 ## Declaration
 
-This doc describes the **first era25 product engineering slice** — not process/gate orchestration.
+This slice **orchestrates the first era25 product blueprint** — it does not ship era25 product code.
+
+**Canonical first slice:** `owner-daily-briefing-breakthrough` · `KOS-E25-001-ODB-BREAKTHROUGH` · WOW pillar
 
 | Rule | Verdict |
 |------|---------|
-| Start before `era25_engineering_gates_open` | **FORBIDDEN** |
+| Ship `*-phases-era25.ts` before blueprint ready | **FORBIDDEN** |
 | Add Step 18+ to linear doc chain | **FORBIDDEN** |
 | Extend `COMMERCIAL_PILOT_PATH_STEP_CATALOG` | **FORBIDDEN** |
-| Re-use era21 briefing scheme 0–8 for era25 product | **FORBIDDEN** |
-| Nest under `#maintenance-mode` Steps 1–16 anchors | **FORBIDDEN** |
+| Hand-edit PASS in `artifacts/*.json` | **FORBIDDEN** |
 
 ---
 
-## Pre-flight verification (all must pass)
-
-```bash
-npm run ops:validate-era25-engineering-gates-require-signed-charter -- --json
-npm run ops:run-era25-engineering-gates-post-readiness-orchestrator -- --json
-npm run ops:validate-linear-chain-terminus-guard -- --json
-npm run test:ci:commercial-pilot-runbook:cert
-```
-
-Expected gates JSON:
-
-```json
-{
-  "era25EngineeringGatesMilestone": "era25_engineering_gates_open",
-  "gatesBlocked": false,
-  "illegalArtifacts": []
-}
-```
-
----
-
-## Naming convention (first slice `<name>`)
-
-| Artifact | Pattern |
-|----------|---------|
-| Phases lib | `lib/commercial/<name>-phases-era25.ts` |
-| UI slice | `lib/commercial/<name>-ui-era25.ts` |
-| Orchestrator | `lib/commercial/<name>-post-gates-orchestrator-era25.ts` |
-| Policy | `era25-<name>-v1` |
-| Backlog ID | `KOS-E25-NNN` |
-| Platform anchor | `#era25-<name>` on dedicated platform route |
-| Ops validate | `ops:validate-<name>-era25` |
-| Ops orchestrator | `ops:run-<name>-post-gates-orchestrator-era25` |
-| CI unit | `test:ci:<name>-era25` |
-| CI cert | `test:ci:<name>-era25:cert` |
-| Staging doc | `docs/era25-<name>-staging-proof-ops-checklist.md` |
-
----
-
-## Milestones (template — define per charter)
+## Milestones (`era25FirstProductSliceBlueprintMilestone`)
 
 | Milestone | Meaning | Orchestrator exit |
 |-----------|---------|-------------------|
-| `gates_regression_blocked` | Gates no longer open | `2` |
-| `awaiting_staging_proof` | Code wired, staging proof pending | `0` |
-| `attention_staging_gaps` | Staging checklist gaps | `0` |
-| `<name>_era25_slice_ready` | Staging proof + cert PASS | `0` |
+| `engineering_gates_blocked` | Gates not open | `2` |
+| `awaiting_canonical_charter_doc` | Missing canonical charter doc | `0` |
+| `attention_charter_sections_for_slice` | Charter sections incomplete | `0` |
+| `attention_staging_checklist_gaps` | Staging checklist incomplete | `0` |
+| `attention_premature_era25_product` | Illegal era25 product files | `0` |
+| `era25_first_product_slice_blueprint_ready` | Blueprint complete — product code may start | `0` |
+
+**Smoke readiness flags:**
+
+- `readyForEngineeringGatesSmokes` — gates blocked
+- `readyForCharterSectionSmokes` — charter doc incomplete
+- `readyForStagingChecklistSmokes` — staging checklist gaps
+- `readyForPrematureProductSmokes` — illegal era25 product artifacts
 
 ---
 
-## Engineering deliverables checklist
+## Ops commands
 
-1. **Charter alignment** — every policy ID in code matches signed charter doc section 4
-2. **Phases + guardrails** — human steps, forever commands, guardrails in phases lib
-3. **Evaluate lib** — honest evaluation, no fake PASS
-4. **Orchestrator** — milestone resolution, recommended commands, exit code `2` on primary block
-5. **Validate script** — `--json` with milestone + smoke readiness flags
-6. **Sync report** — `artifacts/<name>-era25-report.md`
-7. **UI slice** — platform anchor outside linear catalog nesting
-8. **Panel** — nested under `#era25-engineering-gates-require-signed-charter`, not Steps 1–16
-9. **Workflow** — `workflow_dispatch`, orchestrator `continue-on-error: true`
-10. **Cert test** — live repo wiring for ops scripts, workflow, product surfaces
-11. **Briefing scheme** — new era25 section documented separately from era21 0–8
-12. **Staging proof** — human checklist with honest NO-GO until vault + staging pass
+```bash
+npm run ops:validate-era25-first-product-slice-blueprint -- --json
+npm run ops:run-era25-first-product-slice-blueprint-post-gates-orchestrator -- --json
+npm run ops:run-era25-first-product-slice-blueprint-post-gates-orchestrator -- --write
+npm run ops:sync-era25-first-product-slice-blueprint-report -- --write
 
----
-
-## Platform ops nesting (after gates)
-
-```
-#era25-engineering-gates-require-signed-charter
-  └── #era25-<name>   ← first product slice panel
+npm run test:ci:era25-first-product-slice-blueprint-era24
+npm run test:ci:era25-first-product-slice-blueprint-era24:cert
 ```
 
----
+**Artifacts:** `artifacts/era25-first-product-slice-blueprint-report.md`
 
-## Human gate (non-negotiable)
+**Workflow:** `.github/workflows/ops-era25-first-product-slice-blueprint-validate.yml`
 
-Before merging first era25 product PR:
-
-1. Charter signed with all 10 sections (including leadership sign-off)
-2. Staging proof checklist reviewed by ops lead
-3. `test:ci:commercial-pilot-runbook:cert` PASS
-4. Confirm no regression on Steps 12–16 steady-state rhythms
+**Platform ops:** `#era25-first-product-slice-blueprint` (nested under `#era25-engineering-gates-require-signed-charter`)
 
 ---
 
-## Related docs
+## Canonical slice definition
 
-- [`next-era25-engineering-gates-require-signed-charter-2026-05-28.md`](./next-era25-engineering-gates-require-signed-charter-2026-05-28.md) — gate enforcement (current)
-- [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md) — charter readiness
-- [`next-step-1-ops-vault-day0-execution-2026-05-28.md`](./next-step-1-ops-vault-day0-execution-2026-05-28.md) — vault blocker if staging blocked
+| Field | Value |
+|-------|-------|
+| Slice name | `owner-daily-briefing-breakthrough` |
+| Backlog | `KOS-E25-001-ODB-BREAKTHROUGH` |
+| Policy family | `era25-owner-daily-briefing-breakthrough-v1` |
+| Platform anchor | `#era25-owner-daily-briefing-breakthrough` |
+| Charter doc | `docs/era25-owner-daily-briefing-breakthrough-charter-2026-*.md` |
+| Staging checklist | `docs/era25-owner-daily-briefing-breakthrough-staging-proof-ops-checklist.md` |
 
 ---
 
-**This doc is a blueprint. First era25 product code ships only after gates open and human charter sign-off.**
+## Links to existing KitchenOS functionality
+
+| Surface | Purpose |
+|---------|---------|
+| era19 briefing aggregator | Foundation for breakthrough evolution |
+| Integration Health Recovery | Convergence tiles in briefing |
+| Breakthrough map cycles 13–18 | WOW pillar scope |
+| era18 Today focus strips | Landing evolution target |
+
+---
+
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Staging checklist validator | `lib/commercial/validate-era25-first-product-slice-staging-checklist-era24.ts` |
+| Evaluation | `lib/commercial/evaluate-era25-first-product-slice-blueprint.ts` |
+| Orchestrator lib | `lib/commercial/era25-first-product-slice-blueprint-post-gates-orchestrator-era24.ts` |
+| UI slice | `lib/commercial/era25-first-product-slice-blueprint-ui-era24.ts` |
+| Panel | `#era25-first-product-slice-blueprint` |
+
+---
+
+## Next step (after blueprint ready)
+
+See [`next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md`](./next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md) — **first era25 product code**
+
+---
+
+**Blueprint orchestration only. era25 product ships only after `era25_first_product_slice_blueprint_ready`. Never fake PASS.**

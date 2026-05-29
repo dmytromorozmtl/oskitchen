@@ -1,0 +1,23 @@
+# era25 First Product Slice Blueprint Validate
+
+name: era25 First Product Slice Blueprint Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-era25-first-product-slice-blueprint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 first product slice blueprint (JSON summary)
+        run: npm run ops:validate-era25-first-product-slice-blueprint -- --json
+      - name: era25 first product slice blueprint post-gates orchestrator (JSON summary)
+        run: npm run ops:run-era25-first-product-slice-blueprint-post-gates-orchestrator -- --json
+        continue-on-error: true

@@ -17,6 +17,7 @@ import { formatLinearChainTerminusGuardLabel } from "@/lib/commercial/linear-cha
 import { formatEra25CharterExitLabel } from "@/lib/commercial/era25-charter-exit-ui-era24";
 import { formatEra25FirstCharterSliceReadinessLabel } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
 import { formatEra25EngineeringGatesLabel } from "@/lib/commercial/era25-engineering-gates-ui-era24";
+import { formatEra25FirstProductSliceBlueprintLabel } from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -736,6 +737,88 @@ export function MaintenanceModePanel(props: {
                               First era25 product slice only when{" "}
                               <span className="font-mono">era25_engineering_gates_open</span>
                             </p>
+
+                            {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                              .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                              .firstCharterSliceReadiness.engineeringGates
+                              .firstProductSliceBlueprint ? (
+                              <div
+                                id="era25-first-product-slice-blueprint"
+                                className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-fuchsia-800/50 px-3 py-3"
+                                data-testid="era25-first-product-slice-blueprint-panel"
+                              >
+                                <p className="font-medium text-fuchsia-100">
+                                  era25 first product slice — blueprint orchestration
+                                </p>
+                                <p className="mt-1 text-fuchsia-200/80">
+                                  {formatEra25FirstProductSliceBlueprintLabel(
+                                    slice.engineeringPathTerminus.postTerminusSteadyState
+                                      .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                      .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                      .firstProductSliceBlueprint,
+                                  )}
+                                </p>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  <Badge
+                                    variant="outline"
+                                    className="rounded-full font-mono text-[10px] text-fuchsia-200"
+                                  >
+                                    {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.era25FirstProductSliceBlueprintMilestone.replaceAll(
+                                      "_",
+                                      " ",
+                                    )}
+                                  </Badge>
+                                  <Badge
+                                    variant="outline"
+                                    className="rounded-full text-[10px] text-fuchsia-300"
+                                  >
+                                    {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                      .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                      .firstCharterSliceReadiness.engineeringGates
+                                      .firstProductSliceBlueprint.canonicalSliceName}
+                                  </Badge>
+                                </div>
+                                <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                                  {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.guardrails.map(
+                                    (rule) => (
+                                      <li key={rule}>{rule}</li>
+                                    ),
+                                  )}
+                                </ul>
+                                <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                                  <span>
+                                    {
+                                      slice.engineeringPathTerminus.postTerminusSteadyState
+                                        .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                        .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                        .firstProductSliceBlueprint.postGatesOrchestratorCommand
+                                    }
+                                  </span>
+                                  <span>
+                                    {
+                                      slice.engineeringPathTerminus.postTerminusSteadyState
+                                        .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                        .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                        .firstProductSliceBlueprint.validateCommand
+                                    }
+                                  </span>
+                                  <span>
+                                    {
+                                      slice.engineeringPathTerminus.postTerminusSteadyState
+                                        .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                        .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                        .firstProductSliceBlueprint.syncReportCommand
+                                    }
+                                  </span>
+                                </div>
+                                <p className="mt-2 text-fuchsia-300/70">
+                                  era25 product code only when{" "}
+                                  <span className="font-mono">
+                                    era25_first_product_slice_blueprint_ready
+                                  </span>
+                                </p>
+                              </div>
+                            ) : null}
                           </div>
                         ) : null}
                       </div>

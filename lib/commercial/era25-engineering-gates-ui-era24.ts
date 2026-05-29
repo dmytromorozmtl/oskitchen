@@ -2,6 +2,10 @@
  * era25 engineering gates UI slice — gate enforcement panel.
  */
 import {
+  buildEra25FirstProductSliceBlueprintUiSlice,
+  type Era25FirstProductSliceBlueprintUiSlice,
+} from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
+import {
   ERA25_ENGINEERING_GATES_FOREVER_COMMANDS,
   ERA25_ENGINEERING_GATES_GUARDRAILS,
   ERA25_ENGINEERING_GATES_HUMAN_STEPS,
@@ -40,6 +44,7 @@ export type Era25EngineeringGatesUiSlice = {
   syncReportCommand: string;
   validateReadinessCommand: string;
   platformOpsHref: string;
+  firstProductSliceBlueprint: Era25FirstProductSliceBlueprintUiSlice | null;
 };
 
 export function buildEra25EngineeringGatesUiSlice(input: {
@@ -49,6 +54,10 @@ export function buildEra25EngineeringGatesUiSlice(input: {
   if (!input.readinessVisible) return null;
 
   const result = evaluateEra25EngineeringGatesRequireSignedCharterWithMilestones(input.env);
+  const firstProductSliceBlueprint = buildEra25FirstProductSliceBlueprintUiSlice({
+    engineeringGatesVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: ERA25_ENGINEERING_GATES_UI_ERA24_POLICY_ID,
@@ -73,6 +82,7 @@ export function buildEra25EngineeringGatesUiSlice(input: {
     validateReadinessCommand:
       "npm run ops:validate-era25-first-charter-slice-readiness -- --json",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ERA25_ENGINEERING_GATES_PLATFORM_ANCHOR}`,
+    firstProductSliceBlueprint,
   };
 }
 
