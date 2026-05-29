@@ -1,0 +1,26 @@
+# Era25 convergence governance terminus freeze integrity — blocks freeze before honest train capstone.
+
+name: Era25 Convergence Governance Terminus Freeze Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-convergence-governance-terminus-freeze-integrity-baseline.json"
+      - "lib/commercial/era25-convergence-governance-terminus-freeze-integrity-era60.ts"
+      - "lib/commercial/era25-convergence-governance-terminus-freeze-phases-era60.ts"
+      - "scripts/ops/validate-era25-convergence-governance-terminus-freeze-integrity.ts"
+
+jobs:
+  validate-era25-convergence-governance-terminus-freeze-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 governance terminus freeze integrity (JSON)
+        run: npm run ops:validate-era25-convergence-governance-terminus-freeze-integrity -- --json

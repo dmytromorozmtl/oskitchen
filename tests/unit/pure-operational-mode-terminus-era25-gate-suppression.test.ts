@@ -47,6 +47,21 @@ describe("pure-operational-mode-terminus-era25-gate-suppression", () => {
     ).toBe(true);
   });
 
+  it("activates suppression when governance terminus freeze complete", () => {
+    expect(
+      shouldSuppressEra25ProductConvergenceSurfaces({
+        pureOperationalModeEra25Active: false,
+        era25ConvergenceGovernanceTerminusFreezeComplete: true,
+      }),
+    ).toBe(true);
+    expect(
+      shouldSuppressEra25ProductConvergenceSurfaces({
+        pureOperationalModeEra25Active: false,
+        era25ConvergenceGovernanceTerminusFreezeComplete: false,
+      }),
+    ).toBe(false);
+  });
+
   it("suppresses era21 commercial gate panels when terminus active", () => {
     expect(
       shouldSuppressEra21CommercialPilotGatePanels({ pureOperationalModeEra25Active: true }),

@@ -75,19 +75,8 @@ Workflow: `.github/workflows/ops-era25-commercial-pilot-convergence-train-capsto
 
 ---
 
-## Next step — Phase AJ (era60)
+## Next step — Phase AJ (era60) — **IMPLEMENTED**
 
-**Era25 convergence governance terminus freeze integrity** — final lock that entire era25 convergence env chain (era47–AI) is frozen; only Band A P0 execution + improvement loop surfaces remain mutable.
+See [`docs/next-step-era25-convergence-governance-terminus-freeze-phase-aj-product-2026-05-28.md`](./next-step-era25-convergence-governance-terminus-freeze-phase-aj-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-commercial-pilot-convergence-train-capstone` baseline + dual cert green |
-| Parent evaluator | era59 train capstone integrity |
-| Platform anchor | `#era25-convergence-governance-terminus-freeze` (planned) |
-| Briefing meta priority | **35** (planned) |
-| Env keys (planned) | `ERA25_CONVERGENCE_GOVERNANCE_TERMINUS_FREEZE_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-convergence-governance-terminus-freeze-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `terminus_freeze_without_capstone`, `terminus_claims_market_proof_without_p0_artifact`, `fake_terminus_freeze_attestation`, upstream era59 fail |
-| CI | `test:ci:era25-convergence-governance-terminus-freeze-integrity-era60` + extend pure-ops era25 cert |
-
-**Human acceptance (preview):** train capstone PASS → attest terminus freeze → validate JSON → era25 product convergence UI fully suppressed until next major policy version; **P0 ops vault remains the market-proof track**.
+**Phase AK (era61)** — Era25 Band A market proof execution sole-path attestation (planned).

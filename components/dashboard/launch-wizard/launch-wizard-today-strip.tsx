@@ -74,6 +74,8 @@ export function LaunchWizardTodayStrip(props: {
     era25SteadyStateOperatorLoopLock: props.model.era25SteadyStateOperatorLoopLockIntegrity,
     era25CommercialPilotConvergenceTrainCapstone:
       props.model.era25CommercialPilotConvergenceTrainCapstoneIntegrity,
+    era25ConvergenceGovernanceTerminusFreeze:
+      props.model.era25ConvergenceGovernanceTerminusFreezeIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -507,6 +509,20 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-commercial-pilot-convergence-train-capstone"
               >
                 Capstone {view.era25CommercialPilotConvergenceTrainCapstone.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25ConvergenceGovernanceTerminusFreeze ? (
+              <Badge
+                variant={
+                  view.era25ConvergenceGovernanceTerminusFreeze
+                    .era25ConvergenceGovernanceTerminusFreezeIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-convergence-governance-terminus-freeze"
+              >
+                Terminus {view.era25ConvergenceGovernanceTerminusFreeze.progressLabel}
               </Badge>
             ) : null}
           </div>

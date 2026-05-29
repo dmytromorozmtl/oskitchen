@@ -180,6 +180,10 @@ import {
   type LaunchWizardEra25PostReentrantCharterLockSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-era57";
 import {
+  buildLaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice,
+  type LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
+import {
   buildLaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice,
   type LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
@@ -344,6 +348,7 @@ export type LaunchWizardModel = {
   era25PostReentrantCharterLockIntegrity: LaunchWizardEra25PostReentrantCharterLockSlice | null;
   era25SteadyStateOperatorLoopLockIntegrity: LaunchWizardEra25SteadyStateOperatorLoopLockSlice | null;
   era25CommercialPilotConvergenceTrainCapstoneIntegrity: LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice | null;
+  era25ConvergenceGovernanceTerminusFreezeIntegrity: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1356,6 +1361,15 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
         ?.era25CommercialPilotConvergenceTrainCapstone ?? null,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const era25ConvergenceGovernanceTerminusFreezeIntegrity =
+    buildLaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice(
+      era25SustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus
+        ?.commercialPilotConvergenceTrainClosure?.sustainedProductEvolutionReentrant
+        ?.era25PostReentrantCharterLock?.era25SteadyStateOperatorLoopLock
+        ?.era25CommercialPilotConvergenceTrainCapstone?.era25ConvergenceGovernanceTerminusFreeze ??
+        null,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1430,5 +1444,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25PostReentrantCharterLockIntegrity,
     era25SteadyStateOperatorLoopLockIntegrity,
     era25CommercialPilotConvergenceTrainCapstoneIntegrity,
+    era25ConvergenceGovernanceTerminusFreezeIntegrity,
   };
 }

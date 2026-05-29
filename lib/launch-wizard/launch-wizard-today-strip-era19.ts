@@ -36,6 +36,7 @@ import type { LaunchWizardEra25PureOperationalModeTerminusSlice } from "@/lib/la
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-era55";
 import type { LaunchWizardEra25SustainedProductEvolutionReentrantSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-era56";
 import type { LaunchWizardEra25PostReentrantCharterLockSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-era57";
+import type { LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice } from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
 import type { LaunchWizardEra25SteadyStateOperatorLoopLockSlice } from "@/lib/launch-wizard/launch-wizard-era25-steady-state-operator-loop-lock-era58";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
@@ -95,6 +96,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25PostReentrantCharterLock: LaunchWizardEra25PostReentrantCharterLockSlice | null;
   era25SteadyStateOperatorLoopLock: LaunchWizardEra25SteadyStateOperatorLoopLockSlice | null;
   era25CommercialPilotConvergenceTrainCapstone: LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice | null;
+  era25ConvergenceGovernanceTerminusFreeze: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -167,6 +169,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25PostReentrantCharterLock?: LaunchWizardEra25PostReentrantCharterLockSlice | null;
   era25SteadyStateOperatorLoopLock?: LaunchWizardEra25SteadyStateOperatorLoopLockSlice | null;
   era25CommercialPilotConvergenceTrainCapstone?: LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice | null;
+  era25ConvergenceGovernanceTerminusFreeze?: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -415,6 +418,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25PostReentrantCharterLock,
       era25SteadyStateOperatorLoopLock,
       era25CommercialPilotConvergenceTrainCapstone,
+      era25ConvergenceGovernanceTerminusFreeze,
     };
   }
 
@@ -624,5 +628,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25PostReentrantCharterLock,
     era25SteadyStateOperatorLoopLock,
     era25CommercialPilotConvergenceTrainCapstone,
+    era25ConvergenceGovernanceTerminusFreeze,
   };
 }

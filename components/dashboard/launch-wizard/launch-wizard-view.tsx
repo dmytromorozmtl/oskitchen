@@ -36,7 +36,9 @@ import { LaunchWizardEra25PureOperationalModeTerminusPanel } from "@/components/
 import { LaunchWizardEra25CommercialPilotConvergenceTrainClosurePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-panel";
 import { LaunchWizardEra25SustainedProductEvolutionReentrantPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-panel";
 import { LaunchWizardEra25PostReentrantCharterLockPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-panel";
+import { LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-panel";
 import { LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-panel";
+import { shouldSuppressEra25ProductConvergenceSurfaces } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { LaunchWizardEra25SteadyStateOperatorLoopLockPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-steady-state-operator-loop-lock-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
@@ -335,6 +337,11 @@ export function LaunchWizardView(props: {
           slice={model.era25CommercialPilotConvergenceTrainCapstoneIntegrity}
         />
       ) : null}
+      {model.era25ConvergenceGovernanceTerminusFreezeIntegrity ? (
+        <LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel
+          slice={model.era25ConvergenceGovernanceTerminusFreezeIntegrity}
+        />
+      ) : null}
 
       <LaunchWizardCommercialBlockersPanel
         slice={model.commercialBlockers}
@@ -374,13 +381,17 @@ export function LaunchWizardView(props: {
             ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
             ?.sustainedOperationalExcellenceConvergence ?? null
         }
-        pureOperationalModeEra25Active={
-          model.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
-            ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
-            ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
-            ?.sustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus
-            ?.pureOperationalModeEra25Active ?? false
-        }
+        pureOperationalModeEra25Active={shouldSuppressEra25ProductConvergenceSurfaces({
+          pureOperationalModeEra25Active:
+            model.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+              ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
+              ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
+              ?.sustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus
+              ?.pureOperationalModeEra25Active ?? false,
+          era25ConvergenceGovernanceTerminusFreezeComplete:
+            model.era25ConvergenceGovernanceTerminusFreezeIntegrity
+              ?.era25ProductConvergenceSurfacesSuppressed ?? false,
+        })}
         compact={compact}
       />
 

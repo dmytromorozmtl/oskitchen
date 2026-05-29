@@ -198,8 +198,12 @@ export function buildPureOperationalModeTerminusEra25UiSlice(input: {
 /** When true, era25 convergence briefing actions and Launch Wizard gate strips are suppressed. */
 export function shouldSuppressEra25ProductConvergenceSurfaces(input: {
   pureOperationalModeEra25Active: boolean;
+  era25ConvergenceGovernanceTerminusFreezeComplete?: boolean;
 }): boolean {
-  return input.pureOperationalModeEra25Active;
+  return (
+    input.pureOperationalModeEra25Active ||
+    input.era25ConvergenceGovernanceTerminusFreezeComplete === true
+  );
 }
 
 /** When true, era21 commercial gate phase panels are hidden on steady-state surfaces. */

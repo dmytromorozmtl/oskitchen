@@ -50,6 +50,32 @@ describe("pure-operational-mode-terminus-ui-era25", () => {
         ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
         ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone,
     ).toBeDefined();
+    expect(
+      sustained?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+        ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+        ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
+        ?.era25ConvergenceGovernanceTerminusFreeze,
+    ).toBeDefined();
+  });
+
+  it("suppresses era25 convergence when governance terminus freeze complete", () => {
+    const sustained = buildSustainedOperationalExcellenceConvergenceEra25UiSlice({
+      marketLeaderConvergenceVisible: true,
+      env: {
+        ERA25_CONVERGENCE_GOVERNANCE_TERMINUS_FREEZE_ERA25_ATTESTED: "1",
+      },
+    });
+    const frozen =
+      sustained?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+        ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+        ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
+        ?.era25ConvergenceGovernanceTerminusFreeze;
+    expect(
+      shouldSuppressEra25ProductConvergenceSurfaces({
+        pureOperationalModeEra25Active: false,
+        era25ConvergenceGovernanceTerminusFreezeComplete: frozen?.terminusFreezeComplete ?? false,
+      }),
+    ).toBe(frozen?.terminusFreezeComplete === true);
   });
 
   it("suppresses era25 convergence surfaces when terminus active", () => {

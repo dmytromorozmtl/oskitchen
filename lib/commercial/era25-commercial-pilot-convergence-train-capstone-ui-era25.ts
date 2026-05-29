@@ -20,6 +20,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25ConvergenceGovernanceTerminusFreezeEra25UiSlice,
+  type Era25ConvergenceGovernanceTerminusFreezeEra25UiSlice,
+} from "@/lib/commercial/era25-convergence-governance-terminus-freeze-ui-era25";
 import { LAUNCH_WIZARD_ERA25_COMMERCIAL_PILOT_CONVERGENCE_TRAIN_CAPSTONE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
 
 export const ERA25_COMMERCIAL_PILOT_CONVERGENCE_TRAIN_CAPSTONE_ERA25_UI_POLICY_ID =
@@ -54,6 +58,7 @@ export type Era25CommercialPilotConvergenceTrainCapstoneEra25UiSlice = {
   p0OpsVaultHref: string;
   todayHref: string;
   headline: string;
+  era25ConvergenceGovernanceTerminusFreeze: Era25ConvergenceGovernanceTerminusFreezeEra25UiSlice | null;
 };
 
 export function buildEra25CommercialPilotConvergenceTrainCapstoneEra25UiSlice(input: {
@@ -100,6 +105,23 @@ export function buildEra25CommercialPilotConvergenceTrainCapstoneEra25UiSlice(in
     capstoneIntegrity.era25CommercialPilotConvergenceTrainCapstoneComplete;
   const trainCapstoneBlocked = !trainCapstoneComplete;
 
+  const era25ConvergenceGovernanceTerminusFreeze =
+    buildEra25ConvergenceGovernanceTerminusFreezeEra25UiSlice({
+      era25CommercialPilotConvergenceTrainCapstoneVisible: true,
+      trainCapstoneComplete,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+    });
+
   const headline = trainCapstoneComplete
     ? `Train capstone closed · era47–AH governance honest · P0 ${capstoneIntegrity.p0ProofStatus ?? "referenced"}`
     : input.steadyStateLockComplete
@@ -145,6 +167,7 @@ export function buildEra25CommercialPilotConvergenceTrainCapstoneEra25UiSlice(in
     p0OpsVaultHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#p0-ops-vault`,
     todayHref: "/dashboard/today",
     headline,
+    era25ConvergenceGovernanceTerminusFreeze,
   };
 }
 
