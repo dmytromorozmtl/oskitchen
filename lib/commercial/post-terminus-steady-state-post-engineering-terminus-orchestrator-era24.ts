@@ -187,6 +187,8 @@ export function buildPostTerminusSteadyStatePostEngineeringTerminusOrchestratorS
             ] as const)
           : input.evaluation.steadyStateActive
     ? ([
+        "npm run ops:validate-engineering-path-terminus-integrity -- --json",
+        "npm run ops:validate-post-terminus-steady-state-integrity -- --json",
         "npm run ops:validate-commercial-pilot-path -- --json",
         "npm run ops:validate-steady-state-operator-loop -- --json",
         POST_TERMINUS_STEADY_STATE_POST_ENGINEERING_TERMINUS_ORCHESTRATOR_COMMAND + " -- --write",

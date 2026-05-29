@@ -16,6 +16,7 @@ import { LaunchWizardImprovementLoopPanel } from "@/components/dashboard/launch-
 import { LaunchWizardProductEvolutionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-product-evolution-panel";
 import { LaunchWizardMaintenanceModePanel } from "@/components/dashboard/launch-wizard/launch-wizard-maintenance-mode-panel";
 import { LaunchWizardEngineeringTerminusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-engineering-terminus-panel";
+import { LaunchWizardPostTerminusSteadyStatePanel } from "@/components/dashboard/launch-wizard/launch-wizard-post-terminus-steady-state-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -189,6 +190,10 @@ export function LaunchWizardView(props: {
 
       {model.engineeringPathTerminusIntegrity ? (
         <LaunchWizardEngineeringTerminusPanel slice={model.engineeringPathTerminusIntegrity} />
+      ) : null}
+
+      {model.postTerminusSteadyStateIntegrity ? (
+        <LaunchWizardPostTerminusSteadyStatePanel slice={model.postTerminusSteadyStateIntegrity} />
       ) : null}
 
       <LaunchWizardCommercialBlockersPanel

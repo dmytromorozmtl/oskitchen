@@ -21,6 +21,12 @@ describe("post-terminus-steady-state-ui-era24", () => {
     expect(slice?.postEngineeringTerminusOrchestratorCommand).toContain(
       "run-post-terminus-steady-state-post-engineering-terminus-orchestrator",
     );
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-post-terminus-steady-state-integrity",
+    );
+    expect(slice?.validateEngineeringPathTerminusIntegrityCommand).toContain(
+      "validate-engineering-path-terminus-integrity",
+    );
   });
 
   it("formats progress label", () => {

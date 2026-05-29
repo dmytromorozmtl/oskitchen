@@ -16,6 +16,7 @@ import type { LaunchWizardImprovementLoopSlice } from "@/lib/launch-wizard/launc
 import type { LaunchWizardProductEvolutionSlice } from "@/lib/launch-wizard/launch-wizard-product-evolution-era35";
 import type { LaunchWizardMaintenanceModeSlice } from "@/lib/launch-wizard/launch-wizard-maintenance-mode-era36";
 import type { LaunchWizardEngineeringTerminusSlice } from "@/lib/launch-wizard/launch-wizard-engineering-terminus-era37";
+import type { LaunchWizardPostTerminusSteadyStateSlice } from "@/lib/launch-wizard/launch-wizard-post-terminus-steady-state-era38";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -50,6 +51,8 @@ export type LaunchWizardTodayStripViewModel = {
   improvementLoop: LaunchWizardImprovementLoopSlice | null;
   productEvolution: LaunchWizardProductEvolutionSlice | null;
   maintenanceMode: LaunchWizardMaintenanceModeSlice | null;
+  engineeringTerminus: LaunchWizardEngineeringTerminusSlice | null;
+  postTerminusSteadyState: LaunchWizardPostTerminusSteadyStateSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -100,6 +103,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   productEvolution?: LaunchWizardProductEvolutionSlice | null;
   maintenanceMode?: LaunchWizardMaintenanceModeSlice | null;
   engineeringTerminus?: LaunchWizardEngineeringTerminusSlice | null;
+  postTerminusSteadyState?: LaunchWizardPostTerminusSteadyStateSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -148,6 +152,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const engineeringTerminusSubline = engineeringTerminus
     ? `Engineering path ${engineeringTerminus.progressLabel}${engineeringTerminus.engineeringTerminusIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const postTerminusSteadyState = input.postTerminusSteadyState ?? null;
+  const postTerminusSteadyStateSubline = postTerminusSteadyState
+    ? `Steady state ${postTerminusSteadyState.progressLabel}${postTerminusSteadyState.postTerminusSteadyStateIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -184,6 +192,8 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       improvementLoop,
       productEvolution,
       maintenanceMode,
+      engineeringTerminus,
+      postTerminusSteadyState,
     };
   }
 
@@ -218,6 +228,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       productEvolution,
       maintenanceMode,
       engineeringTerminus,
+      postTerminusSteadyState,
     };
   }
 
@@ -231,7 +242,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : maintenanceModeSubline
+        : postTerminusSteadyStateSubline
+          ? engineeringTerminusSubline
+            ? `${engineeringTerminusSubline} · ${postTerminusSteadyStateSubline}`
+            : postTerminusSteadyStateSubline
+          : engineeringTerminusSubline
+          ? maintenanceModeSubline
+            ? `${maintenanceModeSubline} · ${engineeringTerminusSubline}`
+            : engineeringTerminusSubline
+          : maintenanceModeSubline
           ? productEvolutionSubline
             ? `${productEvolutionSubline} · ${maintenanceModeSubline}`
             : maintenanceModeSubline
@@ -297,5 +316,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     productEvolution,
     maintenanceMode,
     engineeringTerminus,
+    postTerminusSteadyState,
   };
 }

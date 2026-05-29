@@ -70,20 +70,9 @@ npm run ops:sync-engineering-path-terminus-integrity-baseline -- --write
 
 ## Next step after Phase M PASS
 
-**Phase N — Post-terminus steady state integrity (`era38`)** — mirror era28–era37 on `post-terminus-steady-state-*`
+**Phase N IMPLEMENTED** — see [`docs/next-step-post-terminus-steady-state-phase-n-product-2026-05-28.md`](./next-step-post-terminus-steady-state-phase-n-product-2026-05-28.md)
 
-| Component | Planned artifact |
-|-----------|------------------|
-| Evaluator | `post-terminus-steady-state-integrity-era38.ts` — chain via `evaluateEngineeringPathTerminusIntegrity` |
-| Env keys | `POST_TERMINUS_STEADY_STATE_*` tracked keys + `detectPostTerminusSteadyStateStarted()` |
-| Violations | `steady_state_started_without_engineering_terminus`, `engineering_path_terminus_integrity_fail`, chain to GO |
-| Launch Wizard | `#launch-wizard-post-terminus-steady-state` |
-| Briefing | priority **13** |
-| Prerequisite | honest engineering path terminus (Phase M) + `engineering_path_terminus_healthy` milestone |
+1. ~~Post-terminus steady state integrity guard (Phase N)~~ **DONE** (`era38-post-terminus-steady-state-integrity-v1`)
+2. `npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write`
 
-```bash
-npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write
-npm run ops:validate-steady-state-operator-loop -- --json
-```
-
-**Following engineering slice:** Commercial pilot path absolute end reads engineering terminus integrity baseline · linear path permanently closed validation.
+**Following engineering slice:** Phase O Commercial pilot path absolute end integrity (`era39`).

@@ -5,7 +5,9 @@ import {
   resolvePostTerminusSteadyStateMilestoneFromTrackStatuses,
   type PostTerminusSteadyStateMilestone,
 } from "@/lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24";
+import { evaluatePostTerminusSteadyStateIntegrity } from "@/lib/commercial/post-terminus-steady-state-integrity-era38";
 import {
+  detectPostTerminusSteadyStateStarted,
   ERA_CHARTER_CRITERIA,
   POST_TERMINUS_STEADY_STATE_GUARDRAILS,
   POST_TERMINUS_STEADY_STATE_PLATFORM_ANCHOR,
@@ -17,11 +19,21 @@ import {
   buildCommercialPilotPathAbsoluteEndUiSlice,
   type CommercialPilotPathAbsoluteEndUiSlice,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
+import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
+import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
+import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import { evaluateCommercialPilotPathWithMilestones } from "@/scripts/ops/validate-commercial-pilot-path";
 import { evaluateSteadyStateOperatorLoop } from "@/lib/commercial/evaluate-steady-state-operator-loop";
 import type { EngineeringPathTerminusMilestone } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_POST_TERMINUS_STEADY_STATE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-post-terminus-steady-state-era38";
 
 export const POST_TERMINUS_STEADY_STATE_UI_ERA24_POLICY_ID =
   "era24-post-terminus-steady-state-ui-v1" as const;
@@ -44,6 +56,11 @@ export type PostTerminusSteadyStateUiSlice = {
   validateCommand: string;
   postEngineeringTerminusOrchestratorCommand: string;
   validateEngineeringPathTerminusCommand: string;
+  validateEngineeringPathTerminusIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  postTerminusSteadyStateIntegrityPassed: boolean;
+  engineeringPathTerminusIntegrityPassed: boolean;
   steadyStateMilestone: PostTerminusSteadyStateMilestone;
   engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
   sustainedOpsConvergenceReady: boolean;
@@ -55,18 +72,49 @@ export type PostTerminusSteadyStateUiSlice = {
   pureOperationalModeTerminusHref: string;
   syncReportCommand: string;
   exportEraCharterChecklistCommand: string;
+  todayHref: string;
+  launchWizardHref: string;
   platformOpsHref: string;
   absolutePathEnd: CommercialPilotPathAbsoluteEndUiSlice | null;
 };
 
 export function buildPostTerminusSteadyStateUiSlice(input: {
   engineeringTerminusActive: boolean;
+  goNoGoSummary?: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
+  p0Staging?: P0StagingProofUnblockSummary | null;
+  tier2Summary?: Tier2StagingGoldenPathSummary | null;
+  metricsBaseline?: PilotMetricsBaselineSummary | null;
+  caseStudyDraft?: PilotCaseStudyDraftSummary | null;
+  investorOnepager?: InvestorNarrativeOnepagerSummary | null;
+  rollbackDrill?: PilotRollbackDrillSummary | null;
+  competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): PostTerminusSteadyStateUiSlice | null {
-  if (!input.engineeringTerminusActive) return null;
+  const env = input.env ?? process.env;
+  const p0ProofStatus = input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus = input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+  const postTerminusSteadyStateStarted = detectPostTerminusSteadyStateStarted(env);
 
-  const evaluation = evaluateSteadyStateOperatorLoop(input.env);
-  const pathEvaluation = evaluateCommercialPilotPathWithMilestones(input.env);
+  const postTerminusSteadyStateIntegrity = evaluatePostTerminusSteadyStateIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary ?? null,
+    p0StagingOverride: input.p0Staging ?? null,
+    tier2SummaryOverride: input.tier2Summary ?? null,
+    metricsBaselineOverride: input.metricsBaseline ?? null,
+    caseStudyDraftOverride: input.caseStudyDraft ?? null,
+    investorOnepagerOverride: input.investorOnepager ?? null,
+    rollbackDrillOverride: input.rollbackDrill ?? null,
+    competitorMatrixOverride: input.competitorMatrix ?? null,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  if (!input.engineeringTerminusActive && !postTerminusSteadyStateStarted) return null;
+
+  const evaluation = evaluateSteadyStateOperatorLoop(env);
+  const pathEvaluation = evaluateCommercialPilotPathWithMilestones(env);
   const nextAttentionTrack =
     evaluation.tracks.find((track) => track.status === "overdue") ?? null;
   const steadyStateMilestone = resolvePostTerminusSteadyStateMilestoneFromTrackStatuses(
@@ -78,7 +126,7 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
   );
   const absolutePathEnd = buildCommercialPilotPathAbsoluteEndUiSlice({
     steadyStateActive: evaluation.steadyStateActive,
-    env: input.env,
+    env,
   });
 
   return {
@@ -100,6 +148,14 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
     postEngineeringTerminusOrchestratorCommand:
       "npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write",
     validateEngineeringPathTerminusCommand: "npm run ops:validate-commercial-pilot-path -- --json",
+    validateEngineeringPathTerminusIntegrityCommand:
+      "npm run ops:validate-engineering-path-terminus-integrity -- --json",
+    integrityValidateCommand: "npm run ops:validate-post-terminus-steady-state-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-post-terminus-steady-state-integrity-baseline -- --write",
+    postTerminusSteadyStateIntegrityPassed: postTerminusSteadyStateIntegrity.integrityPassed,
+    engineeringPathTerminusIntegrityPassed:
+      postTerminusSteadyStateIntegrity.engineeringPathTerminusIntegrityPassed,
     steadyStateMilestone,
     engineeringPathTerminusMilestone: pathEvaluation.engineeringPathTerminusMilestone,
     sustainedOpsConvergenceReady:
@@ -112,6 +168,8 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
     syncReportCommand: "npm run ops:sync-steady-state-operator-loop-report -- --write",
     exportEraCharterChecklistCommand:
       "npm run ops:export-era-charter-readiness-checklist -- --write",
+    todayHref: "/dashboard/today",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_POST_TERMINUS_STEADY_STATE_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${POST_TERMINUS_STEADY_STATE_PLATFORM_ANCHOR}`,
     absolutePathEnd,
   };

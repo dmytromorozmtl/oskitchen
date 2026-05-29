@@ -45,6 +45,7 @@ export function LaunchWizardTodayStrip(props: {
     productEvolution: props.model.sustainedProductEvolutionIntegrity,
     maintenanceMode: props.model.maintenanceModeIntegrity,
     engineeringTerminus: props.model.engineeringPathTerminusIntegrity,
+    postTerminusSteadyState: props.model.postTerminusSteadyStateIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -188,6 +189,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-engineering-terminus"
               >
                 Engineering path {view.engineeringTerminus.progressLabel}
+              </Badge>
+            ) : null}
+            {view.postTerminusSteadyState ? (
+              <Badge
+                variant={
+                  view.postTerminusSteadyState.postTerminusSteadyStateIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-post-terminus-steady-state"
+              >
+                Steady state {view.postTerminusSteadyState.progressLabel}
               </Badge>
             ) : null}
           </div>

@@ -1,0 +1,26 @@
+# Post-terminus steady state integrity — blocks Step 14 attestation without honest Engineering path terminus.
+
+name: Post-Terminus Steady State Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/post-terminus-steady-state-integrity-baseline.json"
+      - "artifacts/steady-state-operator-loop-report.md"
+      - "lib/commercial/post-terminus-steady-state-integrity-era38.ts"
+      - "scripts/ops/validate-post-terminus-steady-state-integrity.ts"
+
+jobs:
+  validate-post-terminus-steady-state-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Post-terminus steady state integrity (JSON)
+        run: npm run ops:validate-post-terminus-steady-state-integrity -- --json

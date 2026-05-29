@@ -27,6 +27,17 @@ export const ERA_CHARTER_READINESS_CHECKLIST_PATH =
 export const POST_TERMINUS_STEADY_STATE_PLATFORM_ANCHOR =
   "#post-terminus-steady-state" as const;
 
+export const POST_TERMINUS_STEADY_STATE_TRACKED_ENV_KEYS = [
+  "POST_TERMINUS_STEADY_STATE_OPERATOR_LOOP_ATTESTED",
+  "POST_TERMINUS_STEADY_STATE_ERA_CHARTER_REVIEWED",
+] as const;
+
+export function detectPostTerminusSteadyStateStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return POST_TERMINUS_STEADY_STATE_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type SteadyStateTrackFrequency =
   | "per_release"
   | "weekly"

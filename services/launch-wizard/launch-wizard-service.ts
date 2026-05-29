@@ -95,6 +95,10 @@ import {
   type LaunchWizardEngineeringTerminusSlice,
 } from "@/lib/launch-wizard/launch-wizard-engineering-terminus-era37";
 import {
+  buildLaunchWizardPostTerminusSteadyStateSlice,
+  type LaunchWizardPostTerminusSteadyStateSlice,
+} from "@/lib/launch-wizard/launch-wizard-post-terminus-steady-state-era38";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -143,6 +147,10 @@ import {
   type EngineeringPathTerminusUiSlice,
 } from "@/lib/commercial/engineering-path-terminus-ui-era24";
 import {
+  buildPostTerminusSteadyStateUiSlice,
+  type PostTerminusSteadyStateUiSlice,
+} from "@/lib/commercial/post-terminus-steady-state-ui-era24";
+import {
   buildPaidPilotGoConvergenceEra25UiSlice,
   type PaidPilotGoConvergenceEra25UiSlice,
 } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
@@ -188,6 +196,8 @@ export type LaunchWizardModel = {
   maintenanceModeIntegrity: LaunchWizardMaintenanceModeSlice | null;
   engineeringPathTerminus: EngineeringPathTerminusUiSlice | null;
   engineeringPathTerminusIntegrity: LaunchWizardEngineeringTerminusSlice | null;
+  postTerminusSteadyState: PostTerminusSteadyStateUiSlice | null;
+  postTerminusSteadyStateIntegrity: LaunchWizardPostTerminusSteadyStateSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -752,6 +762,65 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     engineeringPathTerminus,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const postTerminusSteadyState =
+    engineeringPathTerminus?.postTerminusSteadyState ??
+    buildPostTerminusSteadyStateUiSlice({
+      engineeringTerminusActive: maintenanceMode?.maintenanceModeActive ?? false,
+      goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+      p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+      tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
+      p0Staging:
+        loopArtifacts.p0Staging ??
+        sustainedOpsArtifacts.p0Staging ??
+        marketLeaderArtifacts.p0Staging ??
+        seriesAArtifacts.p0Staging ??
+        scaleArtifacts.p0Staging ??
+        p0Summary,
+      tier2Summary:
+        loopArtifacts.tier2Summary ??
+        sustainedOpsArtifacts.tier2Summary ??
+        marketLeaderArtifacts.tier2Summary ??
+        seriesAArtifacts.tier2Summary ??
+        scaleArtifacts.tier2Summary ??
+        commercialOps?.tier2Staging.summary ??
+        null,
+      metricsBaseline:
+        loopArtifacts.metricsBaseline ??
+        sustainedOpsArtifacts.metricsBaseline ??
+        marketLeaderArtifacts.metricsBaseline ??
+        seriesAArtifacts.metricsBaseline ??
+        scaleArtifacts.metricsBaseline ??
+        month2Artifacts.metricsBaseline,
+      caseStudyDraft:
+        loopArtifacts.caseStudyDraft ??
+        sustainedOpsArtifacts.caseStudyDraft ??
+        marketLeaderArtifacts.caseStudyDraft ??
+        seriesAArtifacts.caseStudyDraft ??
+        scaleArtifacts.caseStudyDraft ??
+        month2Artifacts.caseStudyDraft,
+      investorOnepager:
+        loopArtifacts.investorOnepager ??
+        sustainedOpsArtifacts.investorOnepager ??
+        marketLeaderArtifacts.investorOnepager ??
+        seriesAArtifacts.investorOnepager ??
+        scaleArtifacts.investorOnepager ??
+        month2Artifacts.investorOnepager,
+      rollbackDrill:
+        loopArtifacts.rollbackDrill ??
+        sustainedOpsArtifacts.rollbackDrill ??
+        marketLeaderArtifacts.rollbackDrill ??
+        seriesAArtifacts.rollbackDrill ??
+        scaleArtifacts.rollbackDrill,
+      competitorMatrix:
+        loopArtifacts.competitorMatrix ??
+        sustainedOpsArtifacts.competitorMatrix ??
+        marketLeaderArtifacts.competitorMatrix ??
+        seriesAArtifacts.competitorMatrix,
+    });
+  const postTerminusSteadyStateIntegrity = buildLaunchWizardPostTerminusSteadyStateSlice(
+    postTerminusSteadyState,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -788,6 +857,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     maintenanceModeIntegrity,
     engineeringPathTerminus,
     engineeringPathTerminusIntegrity,
+    postTerminusSteadyState,
+    postTerminusSteadyStateIntegrity,
     paidPilotGoConvergence,
   };
 }

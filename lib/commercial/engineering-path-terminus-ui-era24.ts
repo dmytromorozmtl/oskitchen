@@ -145,6 +145,16 @@ export function buildEngineeringPathTerminusUiSlice(input: {
   const postTerminusSteadyState = buildPostTerminusSteadyStateUiSlice({
     engineeringTerminusActive:
       engineeringTerminusReadyFromPhases || engineeringPathTerminusExecutionStarted,
+    goNoGoSummary: input.goNoGoSummary ?? null,
+    p0ProofStatus,
+    tier2ProofStatus,
+    p0Staging,
+    tier2Summary,
+    metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft ?? null,
+    investorOnepager: input.investorOnepager ?? null,
+    rollbackDrill: input.rollbackDrill ?? null,
+    competitorMatrix,
     env,
   });
   const engineeringPathTerminusMilestone = resolveEngineeringPathTerminusMilestoneFromSummary({

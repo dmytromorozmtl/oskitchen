@@ -317,6 +317,16 @@ export function MaintenanceModePanel(props: {
                   {slice.engineeringPathTerminus.postTerminusSteadyState.overdueCount} overdue
                 </Badge>
               ) : null}
+              {!slice.engineeringPathTerminus.postTerminusSteadyState.postTerminusSteadyStateIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Steady state blocked
+                </Badge>
+              ) : null}
+              {!slice.engineeringPathTerminus.postTerminusSteadyState.engineeringPathTerminusIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Engineering terminus integrity FAIL
+                </Badge>
+              ) : null}
             </div>
             <ul className="mt-3 space-y-1">
               {slice.engineeringPathTerminus.postTerminusSteadyState.tracks.map((track) => (
@@ -346,6 +356,13 @@ export function MaintenanceModePanel(props: {
               </span>
               <span>
                 {slice.engineeringPathTerminus.postTerminusSteadyState.exportEraCharterChecklistCommand}
+              </span>
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.validateEngineeringPathTerminusIntegrityCommand}
+              </span>
+              <span>{slice.engineeringPathTerminus.postTerminusSteadyState.integrityValidateCommand}</span>
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.syncIntegrityBaselineCommand}
               </span>
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
