@@ -180,3 +180,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 15)
+
+---
+Cycle: 15
+Timestamp: 2026-05-29T20:00:00.000Z
+Action: feat: webhook replay service — created services/webhook-replay.ts with logWebhook() and replayWebhook()
+Files: services/webhook-replay.ts
+TS errors before: 91
+TS errors after: 91
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 16)
