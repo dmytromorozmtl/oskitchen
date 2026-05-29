@@ -18,6 +18,10 @@ import type { PaidPilotGoConvergenceEra25Milestone } from "@/lib/commercial/paid
 import type { PilotWeek1ExecutionPhaseStatus } from "@/lib/commercial/pilot-week1-execution-phases-era21";
 import type { LaunchWizardPilotWeek1ExecutionConvergenceSlice } from "@/lib/briefing/pilot-week1-execution-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import {
+  buildMonth2MarketReadinessConvergenceEra25UiSlice,
+  type Month2MarketReadinessConvergenceEra25UiSlice,
+} from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
 import { evaluatePilotWeek1ExecutionConvergenceEra25WithMilestones } from "@/scripts/ops/validate-pilot-week1-execution-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -57,6 +61,7 @@ export type PilotWeek1ExecutionConvergenceEra25UiSlice = {
   launchWizardHref: string;
   platformOpsHref: string;
   integrationHealthHref: string;
+  month2MarketReadinessConvergence: Month2MarketReadinessConvergenceEra25UiSlice | null;
 };
 
 export function buildPilotWeek1ExecutionConvergenceEra25UiSlice(input: {
@@ -66,6 +71,10 @@ export function buildPilotWeek1ExecutionConvergenceEra25UiSlice(input: {
   if (!input.goConvergenceVisible) return null;
 
   const result = evaluatePilotWeek1ExecutionConvergenceEra25WithMilestones(input.env);
+  const month2MarketReadinessConvergence = buildMonth2MarketReadinessConvergenceEra25UiSlice({
+    week1ConvergenceVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_UI_POLICY_ID,
@@ -105,6 +114,7 @@ export function buildPilotWeek1ExecutionConvergenceEra25UiSlice(input: {
     launchWizardHref: result.evaluation.launchWizardSlice.href,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_PLATFORM_ANCHOR}`,
     integrationHealthHref: "/dashboard/integration-health#integration-health-pilot-week1",
+    month2MarketReadinessConvergence,
   };
 }
 

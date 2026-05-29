@@ -145,6 +145,10 @@ export function LaunchWizardView(props: {
         pilotWeek1ExecutionConvergence={
           model.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence ?? null
         }
+        month2MarketReadinessConvergence={
+          model.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+            ?.month2MarketReadinessConvergence ?? null
+        }
         compact={compact}
       />
 

@@ -92,6 +92,10 @@ import {
 } from "@/lib/briefing/pilot-week1-execution-convergence-briefing-era25";
 import { buildPaidPilotGoConvergenceEra25UiSlice } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
 import { buildPilotWeek1ExecutionConvergenceEra25UiSlice } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
+import { buildMonth2MarketReadinessConvergenceEra25UiSlice } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
+import {
+  mergeBriefingMonth2MarketReadinessConvergenceEra25TopActions,
+} from "@/lib/briefing/month2-market-readiness-convergence-briefing-era25";
 import {
   buildOwnerDailyBriefingMonth2MarketReadinessAction,
   mergeBriefingMonth2MarketReadinessTopActions,
@@ -449,6 +453,11 @@ export async function loadOwnerDailyBriefing(
   });
   const pilotWeek1ConvergenceEra25RankedAction =
     rolePack === "owner" ? pilotWeek1ConvergenceEra25?.briefingAction ?? null : null;
+  const month2ConvergenceEra25 = buildMonth2MarketReadinessConvergenceEra25UiSlice({
+    week1ConvergenceVisible: true,
+  });
+  const month2ConvergenceEra25RankedAction =
+    rolePack === "owner" ? month2ConvergenceEra25?.briefingAction ?? null : null;
   const pilotWeek1RankedAction =
     rolePack === "owner" && !pilotWeek1ConvergenceEra25
       ? buildOwnerDailyBriefingPilotWeek1Action(pilotWeek1)
@@ -460,7 +469,7 @@ export async function loadOwnerDailyBriefing(
     investorOnepager: month2Artifacts?.investorOnepager ?? null,
   });
   const month2MarketReadinessRankedAction =
-    rolePack === "owner"
+    rolePack === "owner" && !month2ConvergenceEra25
       ? buildOwnerDailyBriefingMonth2MarketReadinessAction(month2MarketReadiness)
       : null;
   const scaleArtifacts = needsCommercialOps ? readScaleReadinessArtifacts() : null;
@@ -1046,6 +1055,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && pilotWeek1ConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingPilotWeek1ExecutionConvergenceEra25TopActions(
       pilotWeek1ConvergenceEra25RankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && month2ConvergenceEra25RankedAction) {
+    allTopActions = mergeBriefingMonth2MarketReadinessConvergenceEra25TopActions(
+      month2ConvergenceEra25RankedAction,
       allTopActions,
     );
   }

@@ -102,7 +102,7 @@ npm run test:ci:paid-pilot-go-convergence-era25
 
 ## Next step (after convergence ready)
 
-See [`next-era25-month2-market-readiness-convergence-2026-05-28.md`](./next-era25-month2-market-readiness-convergence-2026-05-28.md) — **month 2 market readiness on platform ops**
+See [`next-era25-scale-readiness-convergence-2026-05-28.md`](./next-era25-scale-readiness-convergence-2026-05-28.md) — **scale readiness on platform ops** (month 2 implemented — see [`next-era25-month2-market-readiness-convergence-2026-05-28.md`](./next-era25-month2-market-readiness-convergence-2026-05-28.md))
 
 ---
 
