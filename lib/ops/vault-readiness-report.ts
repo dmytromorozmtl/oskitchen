@@ -226,6 +226,7 @@ export function buildVaultReadinessReport(input: {
     recommendedNextSteps.push("npm run smoke:enterprise-sso-idp-staging");
     recommendedNextSteps.push("npm run smoke:staging-workflows-first-green");
     recommendedNextSteps.push("npm run smoke:woo-shopify-live");
+    recommendedNextSteps.push("npm run ops:run-p0-staging-proof-execution -- --write");
     recommendedNextSteps.push("npm run smoke:p0-staging-proof-unblock");
     recommendedNextSteps.push("npm run ops:validate-p0-staging-proof-integrity");
   }

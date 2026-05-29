@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>KitchenOS P0 Staging Proof Execution</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
+    .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+    .banner-pass { background: #ecfdf5; border: 1px solid #6ee7b7; }
+    .banner-blocked { background: #fff7ed; border: 1px solid #fdba74; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9rem; }
+    th, td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+    th { background: #f9fafb; }
+    .status-pass { color: #047857; font-weight: 700; }
+    .status-blocked { color: #b45309; font-weight: 700; }
+    code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+    .honesty { font-size: 0.85rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>P0 Staging Proof — Step 2 Execution</h1>
+  <p class="honesty">Policy era30-p0-staging-proof-execution-v1 · Generated 2026-05-29T13:35:02.043Z</p>
+
+  <div class="banner banner-blocked">
+    <strong>Milestone:</strong> vault_blocked<br />
+    <strong>Vault ready:</strong> NO<br />
+    <strong>P0 proof:</strong> awaiting_ops_credentials (SKIPPED)<br />
+    <strong>Integrity:</strong> PASS<br />
+    <strong>Staging health:</strong> SKIPPED
+  </div>
+
+  <p class="honesty">PASS &gt; SKIPPED — Step 2 never fabricates proof_passed. Use --execute only when vault is ready.</p>
+
+  <h2>Execution phases</h2>
+  <table>
+    <thead><tr><th></th><th>Phase</th><th>Owner</th><th>Proof</th><th>Detail</th><th>Smoke</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.0 — Vault gate (11 secrets)</td>
+        <td>VP Operations</td>
+        <td>awaiting_ops_credentials</td>
+        <td>Configure 11 secrets — see docs/ops-vault-matrix.md</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.1a — Staging /api/health</td>
+        <td>DevOps</td>
+        <td>proof_skipped_missing_prerequisites</td>
+        <td>Set E2E_STAGING_BASE_URL and run ops:check-p0-staging-health</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.1b — GitHub staging workflows first green</td>
+        <td>DevOps</td>
+        <td>proof_skipped_missing_prerequisites</td>
+        <td>Run smoke:staging-workflows-first-green after staging health PASS.</td>
+        <td><code>npm run smoke:staging-workflows-first-green</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.2 — Woo/Shopify live channel smoke</td>
+        <td>Integration engineer</td>
+        <td>proof_skipped_missing_prerequisites/proof_skipped_missing_prerequisites</td>
+        <td>Run smoke:woo-shopify-live with DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL.</td>
+        <td><code>npm run smoke:woo-shopify-live</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.3 — SSO IdP staging login</td>
+        <td>Security / CTO</td>
+        <td>proof_skipped_missing_prerequisites</td>
+        <td>Run smoke:enterprise-sso-idp-staging with SSO_STAGING_* vars.</td>
+        <td><code>npm run smoke:enterprise-sso-idp-staging</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.4 — P0 orchestrator aggregation</td>
+        <td>DevOps</td>
+        <td>awaiting_ops_credentials</td>
+        <td>Run smoke:p0-staging-proof-unblock after child smokes PASS.</td>
+        <td><code>npm run smoke:p0-staging-proof-unblock</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Step 2.5 — P0 integrity validation</td>
+        <td>Engineering</td>
+        <td>integrity_passed</td>
+        <td>Run ops:validate-p0-staging-proof-integrity after P0 PASS.</td>
+        <td>—</td>
+      </tr></tbody>
+  </table>
+
+  <h2>Recommended commands</h2>
+  <ol><li><code>npm run check-vault-readiness -- --write</code></li><li><code>npm run ops:run-p0-vault-day0-orchestrator -- --write</code></li></ol>
+</body>
+</html>

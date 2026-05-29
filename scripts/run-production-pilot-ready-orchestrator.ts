@@ -61,6 +61,11 @@ function main() {
   });
 
   if (!skipSmokes && vaultReport.vaultReady) {
+    steps.push(
+      runStep("p0-execution", "npm run ops:run-p0-staging-proof-execution -- --write", {
+        allowFail: true,
+      }),
+    );
     steps.push(runStep("p0-orchestrator", "npm run smoke:p0-staging-proof-unblock", { allowFail: true }));
     steps.push(runStep("tier2-golden-path", "npm run smoke:tier2-staging-golden-path", { allowFail: true }));
     steps.push(runStep("kds-playwright", "npm run smoke:kds-staging-playwright", { allowFail: true }));

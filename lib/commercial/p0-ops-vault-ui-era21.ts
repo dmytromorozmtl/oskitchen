@@ -47,6 +47,8 @@ export type P0OpsVaultUiSlice = {
   vaultReadinessCommand: string;
   vaultReadinessArtifact: string;
   vaultMatrixDoc: string;
+  p0ExecutionCommand: string;
+  p0ExecutionArtifact: string;
   day0Milestone: P0VaultDay0Milestone;
   day0PartialComplete: boolean;
   integrationHealthHref: string;
@@ -100,6 +102,8 @@ export function buildP0OpsVaultUiSlice(
     vaultReadinessCommand: "npm run check-vault-readiness -- --write",
     vaultReadinessArtifact: "artifacts/vault-readiness-report.json",
     vaultMatrixDoc: "docs/ops-vault-matrix.md",
+    p0ExecutionCommand: "npm run ops:run-p0-staging-proof-execution -- --write",
+    p0ExecutionArtifact: "artifacts/p0-staging-proof-execution-summary.json",
     day0Milestone,
     day0PartialComplete,
     integrationHealthHref: `/dashboard/integration-health${P0_OPS_VAULT_INTEGRATION_HEALTH_ANCHOR}`,
