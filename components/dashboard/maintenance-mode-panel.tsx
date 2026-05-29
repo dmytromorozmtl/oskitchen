@@ -207,6 +207,15 @@ export function MaintenanceModePanel(props: {
               <Badge variant="outline" className="rounded-full font-mono text-[10px] text-slate-200">
                 {slice.engineeringPathTerminus.engineeringPathTerminusMilestone.replaceAll("_", " ")}
               </Badge>
+              {slice.engineeringPathTerminus.pureOperationalModeEra25Active ? (
+                <Badge variant="default" className="rounded-full font-mono text-[10px]">
+                  era25 pure ops
+                </Badge>
+              ) : slice.engineeringPathTerminus.sustainedOpsConvergenceReady ? (
+                <Badge variant="secondary" className="rounded-full font-mono text-[10px]">
+                  era25 sustained ops
+                </Badge>
+              ) : null}
               <Badge variant="outline" className="rounded-full text-[10px] text-slate-300">
                 gate chain {slice.engineeringPathTerminus.gateStepsComplete ? "complete" : "blocked"}
               </Badge>
@@ -233,6 +242,13 @@ export function MaintenanceModePanel(props: {
               <span>{slice.engineeringPathTerminus.validateCommand}</span>
               <span>{slice.engineeringPathTerminus.syncStatusReportCommand}</span>
               <span>{slice.engineeringPathTerminus.validateMaintenanceModeCommand}</span>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link href={slice.engineeringPathTerminus.pureOperationalModeTerminusHref}>
+                  era25 terminus
+                </Link>
+              </Button>
             </div>
           </div>
         ) : null}

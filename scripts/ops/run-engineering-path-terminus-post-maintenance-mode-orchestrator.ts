@@ -9,6 +9,7 @@ import { join } from "node:path";
 import { evaluateCommercialPilotPath } from "@/lib/commercial/evaluate-commercial-pilot-path";
 import {
   buildEngineeringPathTerminusPostMaintenanceModeOrchestratorSummary,
+  ENGINEERING_PATH_TERMINUS_BLOCKED_MILESTONES,
   ENGINEERING_PATH_TERMINUS_POST_MAINTENANCE_MODE_ORCHESTRATOR_ERA24_POLICY_ID,
 } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
 import { COMMERCIAL_PILOT_PATH_STATUS_REPORT_PATH } from "@/lib/commercial/engineering-path-terminus-era24";
@@ -47,7 +48,9 @@ function main() {
 
   if (jsonOutput) {
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.milestone === "maintenance_mode_blocked" ? 2 : 0);
+    process.exit(
+      ENGINEERING_PATH_TERMINUS_BLOCKED_MILESTONES.includes(summary.milestone) ? 2 : 0,
+    );
     return;
   }
 

@@ -26,10 +26,19 @@ export const ENGINEERING_PATH_TERMINUS_INFORMATIONAL_STEP_IDS = [
 ] as const;
 
 export type EngineeringPathTerminusMilestone =
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
   | "maintenance_mode_blocked"
   | "attention_gate_chain"
   | "attention_informational_stack"
   | "engineering_path_terminus_healthy";
+
+export const ENGINEERING_PATH_TERMINUS_BLOCKED_MILESTONES: readonly EngineeringPathTerminusMilestone[] =
+  [
+    "era25_sustained_ops_convergence_blocked",
+    "product_evolution_blocked",
+    "maintenance_mode_blocked",
+  ] as const;
 
 export type EngineeringPathTerminusPostMaintenanceModeOrchestratorSummary = {
   policyId: typeof ENGINEERING_PATH_TERMINUS_POST_MAINTENANCE_MODE_ORCHESTRATOR_ERA24_POLICY_ID;
@@ -38,6 +47,10 @@ export type EngineeringPathTerminusPostMaintenanceModeOrchestratorSummary = {
   pathComplete: boolean;
   gateStepsComplete: boolean;
   maintenanceModeActive: boolean;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<typeof evaluateMaintenanceMode>["maintenanceModeMilestone"];
   readyForGateChainSmokes: boolean;
   readyForMaintenanceRhythmSmokes: boolean;
   goDecision: string | null;
@@ -52,13 +65,24 @@ export type EngineeringPathTerminusPostMaintenanceModeOrchestratorSummary = {
 };
 
 export function resolveEngineeringPathTerminusMilestone(input: {
-  maintenanceModeActive: boolean;
+  maintenanceMode: ReturnType<typeof evaluateMaintenanceMode>;
   summary: Pick<
     CommercialPilotPathSummary,
     "firstBlockedStep" | "firstBlockedGateStep" | "engineeringTerminusActive"
   >;
 }): EngineeringPathTerminusMilestone {
-  if (!input.maintenanceModeActive || !input.summary.engineeringTerminusActive) {
+  if (!input.maintenanceMode.prerequisites.sustainedOpsConvergenceReady) {
+    return "era25_sustained_ops_convergence_blocked";
+  }
+
+  if (!input.maintenanceMode.prerequisites.productEvolutionReady) {
+    return "product_evolution_blocked";
+  }
+
+  if (
+    !input.maintenanceMode.maintenanceModeActive ||
+    !input.summary.engineeringTerminusActive
+  ) {
     return "maintenance_mode_blocked";
   }
 
@@ -78,11 +102,11 @@ export function resolveEngineeringPathTerminusMilestone(input: {
 }
 
 export function resolveEngineeringPathTerminusMilestoneFromSummary(input: {
-  maintenanceModeActive: boolean;
+  maintenanceMode: ReturnType<typeof evaluateMaintenanceMode>;
   summary: CommercialPilotPathSummary;
 }): EngineeringPathTerminusMilestone {
   return resolveEngineeringPathTerminusMilestone({
-    maintenanceModeActive: input.maintenanceModeActive,
+    maintenanceMode: input.maintenanceMode,
     summary: input.summary,
   });
 }
@@ -93,7 +117,7 @@ export function buildEngineeringPathTerminusPostMaintenanceModeOrchestratorSumma
   artifacts: { statusReportPresent: boolean };
 }): EngineeringPathTerminusPostMaintenanceModeOrchestratorSummary {
   const milestone = resolveEngineeringPathTerminusMilestone({
-    maintenanceModeActive: input.maintenanceMode.maintenanceModeActive,
+    maintenanceMode: input.maintenanceMode,
     summary: input.evaluation.summary,
   });
 
@@ -102,7 +126,21 @@ export function buildEngineeringPathTerminusPostMaintenanceModeOrchestratorSumma
     input.maintenanceMode.maintenanceModeActive &&
     input.maintenanceMode.maintenanceModeMilestone !== "maintenance_mode_healthy";
 
-  const recommendedCommands = input.maintenanceMode.maintenanceModeActive
+  const recommendedCommands =
+    milestone === "era25_sustained_ops_convergence_blocked"
+      ? ([
+          "npm run ops:validate-sustained-operational-excellence-convergence-era25 -- --json",
+          "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
+          "npm run ops:validate-sustained-product-evolution -- --json",
+          "npm run ops:validate-maintenance-mode -- --json",
+        ] as const)
+      : milestone === "product_evolution_blocked"
+        ? ([
+            "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+            "npm run ops:validate-sustained-product-evolution -- --json",
+            "npm run ops:validate-maintenance-mode -- --json",
+          ] as const)
+        : input.maintenanceMode.maintenanceModeActive
     ? ([
         "npm run ops:validate-maintenance-mode -- --json",
         "npm run ops:validate-commercial-pilot-path -- --json",
@@ -139,6 +177,10 @@ export function buildEngineeringPathTerminusPostMaintenanceModeOrchestratorSumma
     pathComplete: input.evaluation.summary.pathComplete,
     gateStepsComplete: input.evaluation.summary.gateStepsComplete,
     maintenanceModeActive: input.maintenanceMode.maintenanceModeActive,
+    sustainedOpsConvergenceReady: input.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: input.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+    productEvolutionReady: input.maintenanceMode.prerequisites.productEvolutionReady,
+    maintenanceModeMilestone: input.maintenanceMode.maintenanceModeMilestone,
     readyForGateChainSmokes,
     readyForMaintenanceRhythmSmokes,
     goDecision: input.evaluation.summary.goDecision,
@@ -172,6 +214,9 @@ export function buildEngineeringPathTerminusOrchestratorReportMarkdown(input: {
     `- Milestone: **${input.summary.milestone}**`,
     `- Engineering terminus active: ${input.summary.engineeringTerminusActive ? "yes" : "no"}`,
     `- Maintenance mode active: ${input.summary.maintenanceModeActive ? "yes" : "no"}`,
+    `- era25 sustained ops convergence ready: ${input.summary.sustainedOpsConvergenceReady ? "yes" : "no"}`,
+    `- Product evolution ready: ${input.summary.productEvolutionReady ? "yes" : "no"}`,
+    `- Maintenance mode milestone: ${input.summary.maintenanceModeMilestone}`,
     `- Gate chain complete: ${input.summary.gateStepsComplete ? "yes" : "no"}`,
     `- Path complete: ${input.summary.pathComplete ? "yes" : "no"}`,
     `- Steps complete: ${input.summary.completedSteps}/${input.summary.totalSteps}`,

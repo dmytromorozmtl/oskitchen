@@ -16,7 +16,7 @@ describe("validate-commercial-pilot-path", () => {
     expect(result.evaluation.summary.pathComplete).toBe(false);
     expect(result.evaluation.summary.firstBlockedStep?.step).toBe(1);
     expect(result.evaluation.summary.gateStepsComplete).toBe(false);
-    expect(result.engineeringPathTerminusMilestone).toBe("maintenance_mode_blocked");
+    expect(result.engineeringPathTerminusMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.readyForGateChainSmokes).toBe(true);
     expect(result.readyForMaintenanceRhythmSmokes).toBe(false);
   });

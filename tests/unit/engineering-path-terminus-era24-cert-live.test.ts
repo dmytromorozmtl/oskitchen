@@ -44,6 +44,7 @@ describe("engineering path terminus era24 CI certification (live repo)", () => {
     );
     expect(step13).toContain("ops:validate-commercial-pilot-path");
     expect(step13).toContain("#engineering-path-terminus");
+    expect(step13).toContain("era25_sustained_ops_convergence_blocked");
   });
 
   it("wires product surfaces and workflow", () => {

@@ -24,6 +24,8 @@ export function buildCommercialPilotPathStatusReportMarkdown(
     `- Engineering terminus active: **${result.evaluation.summary.engineeringTerminusActive ? "yes" : "no"}**`,
     `- Engineering path milestone: **${result.engineeringPathTerminusMilestone}**`,
     `- Maintenance mode milestone: **${result.maintenanceMode.maintenanceModeMilestone}**`,
+    `- era25 sustained ops convergence ready: **${result.maintenanceMode.prerequisites.sustainedOpsConvergenceReady ? "yes" : "no"}**`,
+    `- Product evolution ready: **${result.maintenanceMode.prerequisites.productEvolutionReady ? "yes" : "no"}**`,
     `- Ready for gate chain smokes: ${result.readyForGateChainSmokes ? "yes" : "no"}`,
     `- Ready for maintenance rhythm smokes: ${result.readyForMaintenanceRhythmSmokes ? "yes" : "no"}`,
     `- GO decision: **${result.evaluation.summary.goDecision ?? "missing"}**`,

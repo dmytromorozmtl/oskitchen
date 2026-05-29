@@ -22,7 +22,7 @@ export function evaluateCommercialPilotPathWithMilestones(env: NodeJS.ProcessEnv
   const evaluation = evaluateCommercialPilotPath(env);
   const maintenanceMode = evaluateMaintenanceMode(env);
   const engineeringPathTerminusMilestone = resolveEngineeringPathTerminusMilestone({
-    maintenanceModeActive: maintenanceMode.maintenanceModeActive,
+    maintenanceMode,
     summary: evaluation.summary,
   });
   const readyForGateChainSmokes = evaluation.summary.firstBlockedGateStep !== null;
@@ -49,6 +49,9 @@ function main() {
         {
           policyId: ENGINEERING_PATH_TERMINUS_ERA24_POLICY_ID,
           engineeringPathTerminusMilestone: result.engineeringPathTerminusMilestone,
+          sustainedOpsConvergenceReady: result.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+          pureOperationalModeEra25Active: result.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+          productEvolutionReady: result.maintenanceMode.prerequisites.productEvolutionReady,
           readyForGateChainSmokes: result.readyForGateChainSmokes,
           readyForMaintenanceRhythmSmokes: result.readyForMaintenanceRhythmSmokes,
           maintenanceModeMilestone: result.maintenanceMode.maintenanceModeMilestone,

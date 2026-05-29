@@ -15,6 +15,7 @@ export const ENGINEERING_PATH_TERMINUS_ERA24_BACKLOG_ID = "KOS-E24-013" as const
 
 export const ENGINEERING_PATH_TERMINUS_ERA24_EXTENDS_POLICIES = [
   MAINTENANCE_MODE_ERA24_POLICY_ID,
+  "era25-pure-operational-mode-terminus-v1",
   "era24-post-terminus-steady-state-v1",
   ENGINEERING_PATH_TERMINUS_UI_ERA24_POLICY_ID,
   "era24-engineering-path-terminus-post-maintenance-mode-orchestrator-v1",
@@ -38,6 +39,7 @@ export const ENGINEERING_PATH_TERMINUS_ERA24_UNIT_TESTS = [
   "tests/unit/run-engineering-path-terminus-post-maintenance-mode-orchestrator.test.ts",
   "tests/unit/validate-commercial-pilot-path.test.ts",
   "tests/unit/engineering-path-terminus-era24-cert-live.test.ts",
+  "tests/unit/engineering-path-terminus-era25-integration.test.ts",
 ] as const;
 
 export const ENGINEERING_PATH_TERMINUS_ERA24_PRODUCT_SURFACES = [

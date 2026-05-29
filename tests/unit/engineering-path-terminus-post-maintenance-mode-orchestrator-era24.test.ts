@@ -15,16 +15,25 @@ describe("engineering-path-terminus-post-maintenance-mode-orchestrator-era24", (
     const maintenanceMode = evaluateMaintenanceMode({});
     expect(maintenanceMode.maintenanceModeActive).toBe(false);
     const milestone = resolveEngineeringPathTerminusMilestone({
-      maintenanceModeActive: false,
+      maintenanceMode,
       summary: evaluation.summary,
     });
-    expect(milestone).toBe("maintenance_mode_blocked");
+    expect(milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 
   it("resolves attention_gate_chain when first gate step blocked", () => {
     const evaluation = evaluateCommercialPilotPath({});
+    const maintenanceMode = evaluateMaintenanceMode({});
     const milestone = resolveEngineeringPathTerminusMilestoneFromSummary({
-      maintenanceModeActive: true,
+      maintenanceMode: {
+        ...maintenanceMode,
+        maintenanceModeActive: true,
+        prerequisites: {
+          ...maintenanceMode.prerequisites,
+          sustainedOpsConvergenceReady: true,
+          productEvolutionReady: true,
+        },
+      },
       summary: {
         ...evaluation.summary,
         engineeringTerminusActive: true,
@@ -36,8 +45,17 @@ describe("engineering-path-terminus-post-maintenance-mode-orchestrator-era24", (
 
   it("resolves engineering_path_terminus_healthy when gate chain complete", () => {
     const evaluation = evaluateCommercialPilotPath({});
+    const maintenanceMode = evaluateMaintenanceMode({});
     const milestone = resolveEngineeringPathTerminusMilestoneFromSummary({
-      maintenanceModeActive: true,
+      maintenanceMode: {
+        ...maintenanceMode,
+        maintenanceModeActive: true,
+        prerequisites: {
+          ...maintenanceMode.prerequisites,
+          sustainedOpsConvergenceReady: true,
+          productEvolutionReady: true,
+        },
+      },
       summary: {
         ...evaluation.summary,
         engineeringTerminusActive: true,
@@ -57,9 +75,9 @@ describe("engineering-path-terminus-post-maintenance-mode-orchestrator-era24", (
       maintenanceMode,
       artifacts: { statusReportPresent: false },
     });
-    expect(summary.milestone).toBe("maintenance_mode_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(summary.recommendedCommands[0]).toContain(
-      "maintenance-mode-post-product-evolution-orchestrator",
+      "sustained-operational-excellence-convergence-era25",
     );
   });
 

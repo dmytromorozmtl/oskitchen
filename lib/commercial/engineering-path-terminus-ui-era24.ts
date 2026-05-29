@@ -13,7 +13,9 @@ import {
   type CommercialPilotPathSummary,
 } from "@/lib/commercial/engineering-path-terminus-era24";
 import { evaluateCommercialPilotPath } from "@/lib/commercial/evaluate-commercial-pilot-path";
+import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import { buildPostTerminusSteadyStateUiSlice } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
+import { evaluateMaintenanceMode } from "@/scripts/ops/validate-maintenance-mode";
 import type { PostTerminusSteadyStateUiSlice } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -38,6 +40,11 @@ export type EngineeringPathTerminusUiSlice = {
   postMaintenanceModeOrchestratorCommand: string;
   validateMaintenanceModeCommand: string;
   engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<typeof evaluateMaintenanceMode>["maintenanceModeMilestone"];
+  pureOperationalModeTerminusHref: string;
   syncStatusReportCommand: string;
   platformOpsHref: string;
   postTerminusSteadyState: PostTerminusSteadyStateUiSlice | null;
@@ -50,12 +57,13 @@ export function buildEngineeringPathTerminusUiSlice(input: {
   if (!input.maintenanceModeActive) return null;
 
   const evaluation = evaluateCommercialPilotPath(input.env);
+  const maintenanceMode = evaluateMaintenanceMode(input.env);
   const postTerminusSteadyState = buildPostTerminusSteadyStateUiSlice({
     engineeringTerminusActive: evaluation.summary.engineeringTerminusActive,
     env: input.env,
   });
   const engineeringPathTerminusMilestone = resolveEngineeringPathTerminusMilestoneFromSummary({
-    maintenanceModeActive: input.maintenanceModeActive,
+    maintenanceMode,
     summary: evaluation.summary,
   });
 
@@ -78,6 +86,11 @@ export function buildEngineeringPathTerminusUiSlice(input: {
       "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
     validateMaintenanceModeCommand: "npm run ops:validate-maintenance-mode -- --json",
     engineeringPathTerminusMilestone,
+    sustainedOpsConvergenceReady: maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+    productEvolutionReady: maintenanceMode.prerequisites.productEvolutionReady,
+    maintenanceModeMilestone: maintenanceMode.maintenanceModeMilestone,
+    pureOperationalModeTerminusHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
     syncStatusReportCommand: "npm run ops:sync-commercial-pilot-path-status-report -- --write",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ENGINEERING_PATH_TERMINUS_PLATFORM_ANCHOR}`,
     postTerminusSteadyState,

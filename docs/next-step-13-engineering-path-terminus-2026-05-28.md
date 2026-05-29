@@ -8,6 +8,8 @@
 
 ## Status
 
+**IMPLEMENTED (2026-05-28)** — era25 sustained-ops prerequisite gate wired into master validate, orchestrator milestones, status report, and Platform ops `#engineering-path-terminus` catalog.
+
 **The commercial pilot engineering path UI terminates at Step 12 (`era24-maintenance-mode-v1`).**
 
 Step 13 adds **master orchestration only** (embedded in `#maintenance-mode` panel):
@@ -36,7 +38,9 @@ npm run ops:sync-commercial-pilot-path-status-report -- --write
 
 | Milestone | Meaning | Exit code (orchestrator `--json`) |
 |-----------|---------|-----------------------------------|
-| `maintenance_mode_blocked` | Step 12 not active | `2` |
+| `era25_sustained_ops_convergence_blocked` | era25 sustained ops convergence not ready | `2` |
+| `product_evolution_blocked` | Step 11 not ready (era25 OK) | `2` |
+| `maintenance_mode_blocked` | Step 12 not active (GO / rhythms) | `2` |
 | `attention_gate_chain` | First blocked gate step (Steps 1–9) | `0` |
 | `attention_informational_stack` | Gate chain OK but Steps 10–12 blocked | `0` |
 | `engineering_path_terminus_healthy` | Terminus active · gate chain complete · stack fresh | `0` |

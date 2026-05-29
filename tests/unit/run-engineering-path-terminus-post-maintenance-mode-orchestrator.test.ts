@@ -10,6 +10,6 @@ describe("run-engineering-path-terminus-post-maintenance-mode-orchestrator", () 
     expect(summary.policyId).toBe(
       "era24-engineering-path-terminus-post-maintenance-mode-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("maintenance_mode_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });
