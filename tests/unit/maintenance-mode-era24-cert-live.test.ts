@@ -36,6 +36,9 @@ describe("maintenance mode era24 CI certification (live repo)", () => {
   it("documents step 12 execution", () => {
     const step12 = readFileSync(join(ROOT, MAINTENANCE_MODE_STEP12_DOC), "utf8");
     expect(step12).toContain("era24-maintenance-mode-v1");
+    expect(step12).toContain(
+      "run-maintenance-mode-post-product-evolution-orchestrator",
+    );
     expect(step12).toContain("#maintenance-mode");
     expect(step12).toContain("ops:validate-maintenance-mode");
   });

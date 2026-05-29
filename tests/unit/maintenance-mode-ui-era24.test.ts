@@ -23,6 +23,10 @@ const slice = {
   step12Doc: "docs/next-step-12-commercial-pilot-path-complete-2026-05-28.md",
   rhythmCalendarDoc: "docs/maintenance-mode-rhythm-calendar-era24.md",
   validateCommand: "npm run ops:validate-maintenance-mode",
+  postProductEvolutionOrchestratorCommand:
+    "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
+  validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
+  maintenanceModeMilestone: "maintenance_mode_healthy",
   syncPlaybookReportCommand: "npm run ops:sync-maintenance-mode-playbook-report -- --write",
   exportRhythmCalendarCommand: "npm run ops:export-maintenance-mode-rhythm-calendar -- --write",
   todayHref: "/dashboard/today",
@@ -36,7 +40,7 @@ const slice = {
 
 describe("maintenance-mode-ui-era24 labels", () => {
   it("formats path complete label", () => {
-    expect(formatMaintenanceModeProgressLabel(slice)).toContain("path complete");
+    expect(formatMaintenanceModeProgressLabel(slice)).toContain("maintenance mode healthy");
     expect(formatMaintenanceModeProgressLabel({ ...slice, overdueCount: 2 })).toContain(
       "2 rhythm(s) need attention",
     );

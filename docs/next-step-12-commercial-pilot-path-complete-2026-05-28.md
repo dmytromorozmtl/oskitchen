@@ -1,6 +1,6 @@
 # KitchenOS — Шаг 12: Maintenance mode (commercial pilot path complete)
 
-**Policy:** `era24-maintenance-mode-v1` · **Backlog:** `KOS-E24-012`  
+**Policy:** `era24-maintenance-mode-v1` · **Orchestrator:** `era24-maintenance-mode-post-product-evolution-orchestrator-v1` · **Backlog:** `KOS-E24-012`  
 **Предусловие:** Product evolution ready (Step 11 active) · GO valid  
 **Цель:** Final informational layer — operator rhythms + guardrails forever
 
@@ -21,7 +21,7 @@ Maintenance mode (Step 12, era24 — path complete)
         └── Per new pilot GO isolation
                 │
                 ▼
-         Repeat forever — Step 13 is engineering terminus (no code)
+         Repeat forever — Step 13 is engineering terminus (no code gates)
 ```
 
 ---
@@ -44,20 +44,37 @@ Maintenance mode (Step 12, era24 — path complete)
 ```bash
 npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --json   # productEvolutionMilestone: product_evolution_healthy
 npm run ops:validate-sustained-product-evolution -- --json   # productEvolutionReady: true
-npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write   # planned — Step 12 orchestrator
+npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write
 npm run ops:validate-maintenance-mode -- --json
 npm run ops:export-maintenance-mode-rhythm-calendar -- --write
 npm run ops:sync-maintenance-mode-playbook-report -- --write
 ```
 
-**Planned post-product-evolution orchestrator milestones (`maintenanceModeMilestone`):**
+**Post-product-evolution orchestrator milestones (`maintenanceModeMilestone`):**
 
-| Milestone | Meaning | Exit code |
-|-----------|---------|-----------|
+| Milestone | Meaning | Exit code (orchestrator `--json`) |
+|-----------|---------|-----------------------------------|
 | `product_evolution_blocked` | Step 11 not ready | `2` |
 | `attention_weekly_rhythm` | Mon/Wed/Fri operator rhythms due | `0` |
 | `attention_monthly_cadence` | W1–W4 monthly cadence due | `0` |
-| `maintenance_mode_healthy` | All 10 rhythms current | `0` |
+| `maintenance_mode_healthy` | All measurable rhythms current | `0` |
+
+**Smoke readiness flags in validate JSON (informational):**
+
+- `readyForWeeklyRhythmSmokes`: maintenance active + `weekly_wed_integration_health` overdue/due soon
+- `readyForMonthlyCadenceSmokes`: maintenance active + `monthly_w1_metrics_baseline` or `monthly_w2_feedback_triage` overdue/due soon
+
+**Guidance rhythms (manual cadence):** quarterly governance · per release cert · per new pilot isolation — no automatic milestone.
+
+**Product surfaces when maintenance mode active:**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Maintenance compact panel (slate, path complete stack top) |
+| `/platform/commercial-pilot-ops` | `#maintenance-mode` panel + engineering path terminus catalog |
+| `/dashboard/order-hub` | Mon shift handoffs |
+| `/dashboard/integration-health` | Wed integration review |
+| `/dashboard/reports` | W1 metrics + W2 feedback triage |
 
 ---
 
@@ -90,6 +107,7 @@ npm run ops:sync-maintenance-mode-playbook-report -- --write
 ## Ops commands
 
 ```bash
+npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write
 npm run ops:validate-maintenance-mode -- --json
 npm run ops:sync-maintenance-mode-playbook-report -- --write
 npm run ops:export-maintenance-mode-rhythm-calendar -- --write
@@ -97,9 +115,24 @@ npm run test:ci:maintenance-mode-era24
 npm run test:ci:maintenance-mode-era24:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-maintenance-mode-validate.yml`
+GitHub workflow: `.github/workflows/ops-maintenance-mode-validate.yml` (includes orchestrator step with `continue-on-error: true`)
 
 Platform anchor: `#maintenance-mode`
+
+**Playbook artifact:** `artifacts/maintenance-mode-playbook-report.md` (generated via sync script)
+
+**Rhythm calendar:** `docs/maintenance-mode-rhythm-calendar-era24.md` (generated via export script)
+
+---
+
+## Deliverables checklist
+
+- [ ] Weekly Mon/Wed/Fri rhythms executed per customer
+- [ ] Monthly W1–W4 cadence reviewed on Platform ops
+- [ ] Integration smokes re-run after credential rotation
+- [ ] `artifacts/maintenance-mode-playbook-report.md` synced weekly
+- [ ] `docs/maintenance-mode-rhythm-calendar-era24.md` updated on process change
+- [ ] Release train includes `test:ci:commercial-pilot-runbook:cert`
 
 ---
 
@@ -118,7 +151,17 @@ Platform anchor: `#maintenance-mode`
 
 See [`next-step-13-engineering-path-terminus-2026-05-28.md`](./next-step-13-engineering-path-terminus-2026-05-28.md)
 
-**No Step 13 engineering** — era21→era24 stack is the commercial pilot path terminus.
+**Next engineering slice (Step 13 — master orchestration only, no new gates):**
+
+| Component | Artifact |
+|-----------|----------|
+| Master validate | `ops:validate-commercial-pilot-path -- --json` |
+| Status report | `ops:sync-commercial-pilot-path-status-report -- --write` |
+| Policy | `era24-engineering-path-terminus-v1` |
+| UI catalog | `#engineering-path-terminus` inside maintenance panel (already wired) |
+| Briefing | **No new priority** — visible when Step 12 maintenance mode active |
+
+**Human gate before Step 13:** `maintenanceModeMilestone: maintenance_mode_healthy` OR weekly/monthly rhythms refreshed via smokes.
 
 **Immediate action if product evolution inactive:** [`next-step-11-sustained-product-evolution-2026-05-28.md`](./next-step-11-sustained-product-evolution-2026-05-28.md)
 

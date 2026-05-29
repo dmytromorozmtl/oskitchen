@@ -139,8 +139,8 @@ See [`next-step-12-commercial-pilot-path-complete-2026-05-28.md`](./next-step-12
 
 **Next engineering slice (Step 12 — final informational layer):**
 
-| Component | Planned artifact |
-|-----------|------------------|
+| Component | Artifact |
+|-----------|----------|
 | Orchestrator lib | `lib/commercial/maintenance-mode-post-product-evolution-orchestrator-era24.ts` |
 | Policy | `era24-maintenance-mode-post-product-evolution-orchestrator-v1` |
 | Milestones | `product_evolution_blocked` → rhythm attention tracks → `maintenance_mode_healthy` |

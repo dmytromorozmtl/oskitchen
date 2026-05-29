@@ -14,9 +14,11 @@ export const MAINTENANCE_MODE_ERA24_EXTENDS_POLICIES = [
   "era24-engineering-path-terminus-v1",
   MAINTENANCE_MODE_PHASES_ERA24_POLICY_ID,
   MAINTENANCE_MODE_UI_ERA24_POLICY_ID,
+  "era24-maintenance-mode-post-product-evolution-orchestrator-v1",
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_OPS_SCRIPTS = [
+  "ops:run-maintenance-mode-post-product-evolution-orchestrator",
   "ops:validate-maintenance-mode",
   "ops:sync-maintenance-mode-playbook-report",
   "ops:export-maintenance-mode-rhythm-calendar",
@@ -28,8 +30,10 @@ export const MAINTENANCE_MODE_ERA24_CI_SCRIPTS = [
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_UNIT_TESTS = [
+  "tests/unit/maintenance-mode-post-product-evolution-orchestrator-era24.test.ts",
   "tests/unit/maintenance-mode-phases-era24.test.ts",
   "tests/unit/maintenance-mode-ui-era24.test.ts",
+  "tests/unit/run-maintenance-mode-post-product-evolution-orchestrator.test.ts",
   "tests/unit/validate-maintenance-mode.test.ts",
   "tests/unit/maintenance-mode-era24-cert-live.test.ts",
 ] as const;

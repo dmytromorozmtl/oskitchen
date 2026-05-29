@@ -26,6 +26,10 @@ import {
   buildEngineeringPathTerminusUiSlice,
   type EngineeringPathTerminusUiSlice,
 } from "@/lib/commercial/engineering-path-terminus-ui-era24";
+import {
+  resolveMaintenanceModeMilestoneFromRhythmStatuses,
+  type MaintenanceModeMilestone,
+} from "@/lib/commercial/maintenance-mode-post-product-evolution-orchestrator-era24";
 import { buildSustainedProductEvolutionUiSlice } from "@/lib/commercial/sustained-product-evolution-ui-era23";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -53,6 +57,9 @@ export type MaintenanceModeUiSlice = {
   step12Doc: typeof MAINTENANCE_MODE_STEP12_DOC;
   rhythmCalendarDoc: typeof MAINTENANCE_MODE_RHYTHM_CALENDAR_DOC;
   validateCommand: string;
+  postProductEvolutionOrchestratorCommand: string;
+  validateProductEvolutionCommand: string;
+  maintenanceModeMilestone: MaintenanceModeMilestone;
   syncPlaybookReportCommand: string;
   exportRhythmCalendarCommand: string;
   todayHref: string;
@@ -113,6 +120,10 @@ export function buildMaintenanceModeUiSlice(input: {
     maintenanceModeActive: true,
     env: input.env,
   });
+  const maintenanceModeMilestone = resolveMaintenanceModeMilestoneFromRhythmStatuses(rhythms, {
+    maintenanceModeActive: true,
+    productEvolutionReady: true,
+  });
 
   return {
     policyId: MAINTENANCE_MODE_UI_ERA24_POLICY_ID,
@@ -134,6 +145,10 @@ export function buildMaintenanceModeUiSlice(input: {
     step12Doc: MAINTENANCE_MODE_STEP12_DOC,
     rhythmCalendarDoc: MAINTENANCE_MODE_RHYTHM_CALENDAR_DOC,
     validateCommand: "npm run ops:validate-maintenance-mode",
+    postProductEvolutionOrchestratorCommand:
+      "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
+    validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
+    maintenanceModeMilestone,
     syncPlaybookReportCommand: "npm run ops:sync-maintenance-mode-playbook-report -- --write",
     exportRhythmCalendarCommand: "npm run ops:export-maintenance-mode-rhythm-calendar -- --write",
     todayHref: "/dashboard/today",
@@ -147,8 +162,9 @@ export function buildMaintenanceModeUiSlice(input: {
 }
 
 export function formatMaintenanceModeProgressLabel(slice: MaintenanceModeUiSlice): string {
+  const milestone = slice.maintenanceModeMilestone.replaceAll("_", " ");
   if (slice.overdueCount > 0) {
-    return `Maintenance mode · ${slice.overdueCount} rhythm(s) need attention · path complete`;
+    return `Maintenance mode · ${slice.overdueCount} rhythm(s) need attention · ${milestone} · path complete`;
   }
-  return `Maintenance mode · commercial pilot path complete · GO · ${slice.customerName ?? "customer"}`;
+  return `Maintenance mode · ${milestone} · GO · ${slice.customerName ?? "customer"}`;
 }

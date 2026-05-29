@@ -1,13 +1,14 @@
 #!/usr/bin/env npx tsx
-import { evaluateContinuousImprovementLoop } from "@/scripts/ops/validate-continuous-improvement-loop";
-import { evaluateSustainedProductEvolution } from "@/scripts/ops/validate-sustained-product-evolution";
+import { resolveMaintenanceModeMilestone } from "@/lib/commercial/maintenance-mode-post-product-evolution-orchestrator-era24";
 import {
   buildMaintenanceModeRhythmStatuses,
   resolveMaintenanceModeHealthSummary,
   resolveMaintenanceModePrerequisites,
   resolveProductEvolutionReady,
 } from "@/lib/commercial/maintenance-mode-phases-era24";
+import { evaluateContinuousImprovementLoop } from "@/scripts/ops/validate-continuous-improvement-loop";
 import { readContinuousImprovementLoopArtifacts } from "@/scripts/ops/validate-continuous-improvement-loop";
+import { evaluateSustainedProductEvolution } from "@/scripts/ops/validate-sustained-product-evolution";
 
 export function evaluateMaintenanceMode(env: NodeJS.ProcessEnv = process.env): {
   prerequisites: ReturnType<typeof resolveMaintenanceModePrerequisites>;
@@ -18,6 +19,9 @@ export function evaluateMaintenanceMode(env: NodeJS.ProcessEnv = process.env): {
   productEvolution: ReturnType<typeof evaluateSustainedProductEvolution>;
   rhythms: ReturnType<typeof buildMaintenanceModeRhythmStatuses>;
   health: ReturnType<typeof resolveMaintenanceModeHealthSummary>;
+  readyForWeeklyRhythmSmokes: boolean;
+  readyForMonthlyCadenceSmokes: boolean;
+  maintenanceModeMilestone: ReturnType<typeof resolveMaintenanceModeMilestone>;
 } {
   const artifacts = readContinuousImprovementLoopArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -48,6 +52,22 @@ export function evaluateMaintenanceMode(env: NodeJS.ProcessEnv = process.env): {
     customerName: artifacts.goNoGoSummary?.customerName ?? null,
   });
   const health = resolveMaintenanceModeHealthSummary(rhythms);
+  const wedIntegration = rhythms.find((rhythm) => rhythm.id === "weekly_wed_integration_health");
+  const monthlyW1 = rhythms.find((rhythm) => rhythm.id === "monthly_w1_metrics_baseline");
+  const monthlyW2 = rhythms.find((rhythm) => rhythm.id === "monthly_w2_feedback_triage");
+  const readyForWeeklyRhythmSmokes =
+    prerequisites.maintenanceModeActive &&
+    (wedIntegration?.status === "overdue" || wedIntegration?.status === "due_soon");
+  const readyForMonthlyCadenceSmokes =
+    prerequisites.maintenanceModeActive &&
+    [monthlyW1, monthlyW2].some(
+      (rhythm) => rhythm?.status === "overdue" || rhythm?.status === "due_soon",
+    );
+  const maintenanceModeMilestone = resolveMaintenanceModeMilestone({
+    maintenanceModeActive: prerequisites.maintenanceModeActive,
+    productEvolutionReady: productEvolution.productEvolutionReady,
+    rhythms,
+  });
 
   return {
     prerequisites,
@@ -58,6 +78,9 @@ export function evaluateMaintenanceMode(env: NodeJS.ProcessEnv = process.env): {
     productEvolution,
     rhythms,
     health,
+    readyForWeeklyRhythmSmokes,
+    readyForMonthlyCadenceSmokes,
+    maintenanceModeMilestone,
   };
 }
 
@@ -73,6 +96,9 @@ function main() {
           maintenanceModeActive: result.maintenanceModeActive,
           commercialPilotPathComplete: result.commercialPilotPathComplete,
           goDecision: result.goDecision,
+          maintenanceModeMilestone: result.maintenanceModeMilestone,
+          readyForWeeklyRhythmSmokes: result.readyForWeeklyRhythmSmokes,
+          readyForMonthlyCadenceSmokes: result.readyForMonthlyCadenceSmokes,
           upstream: {
             improvementLoopOverdue: result.improvementLoop.health.overdueCount,
             productEvolutionOverdue: result.productEvolution.health.overdueCount,
@@ -110,6 +136,7 @@ function main() {
   }
 
   console.log("Commercial pilot path complete — repeat maintenance rhythms forever.\n");
+  console.log(`Maintenance mode milestone: ${result.maintenanceModeMilestone}\n`);
 
   for (const rhythm of result.rhythms) {
     console.log(`[${rhythm.status}] ${rhythm.label} (${rhythm.ownerRole})`);
