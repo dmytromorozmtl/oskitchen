@@ -18,7 +18,7 @@ import {
 } from "@/lib/commercial/era25-steady-state-operator-loop-lock-integrity-era58";
 import { loadPilotGoNoGoSummaryArtifact } from "@/lib/commercial/load-paid-pilot-go-convergence-state-era25";
 import { PILOT_GONOGO_SUMMARY_ARTIFACT_PATH } from "@/lib/commercial/market-leader-positioning-phases-era21";
-import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import { loadP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -120,7 +120,7 @@ function resolveDiskP0ProofStatus(
   p0StagingOverride?: P0StagingProofUnblockSummary | null,
 ): P0StagingProofUnblockSummary | null {
   if (p0StagingOverride !== undefined) return p0StagingOverride;
-  return loadP0StagingProofArtifact(root);
+  return loadP0StagingProofUnblockSummary(root, p0StagingOverride);
 }
 
 function pushUpstreamSteadyStateViolations(

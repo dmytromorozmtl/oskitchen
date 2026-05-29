@@ -15,7 +15,7 @@ import {
   detectEra25FrozenEnvMutationAfterClosureCapstone,
   detectEra25P0MarketProofHonestClosureCapstoneStarted,
 } from "@/lib/commercial/era25-p0-market-proof-honest-closure-capstone-phases-era62";
-import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import { loadP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { PILOT_GONOGO_SUMMARY_ARTIFACT_PATH } from "@/lib/commercial/market-leader-positioning-phases-era21";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
@@ -117,7 +117,7 @@ function resolveDiskP0(
   p0StagingOverride?: P0StagingProofUnblockSummary | null,
 ): P0StagingProofUnblockSummary | null {
   if (p0StagingOverride !== undefined) return p0StagingOverride;
-  return loadP0StagingProofArtifact(root);
+  return loadP0StagingProofUnblockSummary(root, p0StagingOverride);
 }
 
 function pushUpstreamSolePathViolations(

@@ -5,9 +5,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import {
+  loadP0StagingProofUnblockSummary,
   resolveP0StagingProofUnblockStatus,
   type P0StagingProofUnblockStatus,
   type P0StagingProofUnblockSummary,
@@ -84,12 +84,7 @@ export function evaluateP0StagingProofIntegrity(
   const artifact =
     options?.artifactOverride !== undefined
       ? options.artifactOverride
-      : loadP0StagingProofArtifact(root) ??
-        (existsSync(join(root, P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT))
-          ? (JSON.parse(
-              readFileSync(join(root, P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT), "utf8"),
-            ) as P0StagingProofUnblockSummary)
-          : null);
+      : loadP0StagingProofUnblockSummary(root);
 
   const baseline =
     options?.baselineOverride !== undefined

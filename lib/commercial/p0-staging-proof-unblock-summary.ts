@@ -2,9 +2,14 @@
  * P0 staging proof unblock summary — aggregates Era 17 P0 smoke artifacts.
  */
 
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
 import {
   P0_STAGING_PROOF_UNBLOCK_ERA17_POLICY_ID,
   P0_STAGING_PROOF_UNBLOCK_ERA17_PROOF_STATUS,
+  P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT,
 } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 
 export const P0_STAGING_PROOF_UNBLOCK_SUMMARY_VERSION =
@@ -39,6 +44,26 @@ export type P0StagingProofUnblockSummary = {
     channelLive: P0StagingProofChildSnapshot;
   };
 };
+
+/** Load typed P0 aggregate artifact — full JSON first, then day0 partial loader fallback. */
+export function loadP0StagingProofUnblockSummary(
+  root: string = process.cwd(),
+  override?: P0StagingProofUnblockSummary | null,
+): P0StagingProofUnblockSummary | null {
+  if (override !== undefined) return override;
+
+  try {
+    const absolutePath = join(root, P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT);
+    if (existsSync(absolutePath)) {
+      return JSON.parse(readFileSync(absolutePath, "utf8")) as P0StagingProofUnblockSummary;
+    }
+  } catch {
+    // fall through to day0 partial loader
+  }
+
+  const partial = loadP0StagingProofArtifact(root);
+  return (partial as P0StagingProofUnblockSummary | null) ?? null;
+}
 
 type LooseArtifact = {
   overall?: string;

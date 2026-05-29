@@ -6,14 +6,16 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { evaluateP0VaultEnv } from "@/scripts/ops/validate-p0-vault-env";
-import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
-import { P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC, P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
+import { P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/pilot-gono-go-era17-policy";
 import { evaluatePilotGoNoGoIntegrity } from "@/lib/commercial/pilot-gono-go-integrity-era28";
 import { evaluateTier2StagingGoldenPathIntegrity } from "@/lib/commercial/tier2-staging-golden-path-integrity-era28";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
-import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import {
+  loadP0StagingProofUnblockSummary,
+  type P0StagingProofUnblockSummary,
+} from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { INTEGRATION_REGISTRY } from "@/lib/integrations/integration-registry";
@@ -116,22 +118,6 @@ function countIntegrationRegistryLive(): number {
 
 function countChannelRegistryLive(): number {
   return CHANNEL_REGISTRY_ENTRIES.filter((entry) => entry.statusType === "LIVE").length;
-}
-
-function resolveCommercialInflectionP0StagingArtifact(
-  root: string,
-  override?: P0StagingProofUnblockSummary | null,
-): P0StagingProofUnblockSummary | null {
-  if (override !== undefined) return override;
-
-  const fromJson = readJsonArtifact<P0StagingProofUnblockSummary>(
-    root,
-    P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT,
-  );
-  if (fromJson) return fromJson;
-
-  const partial = loadP0StagingProofArtifact(root);
-  return (partial as P0StagingProofUnblockSummary | null) ?? null;
 }
 
 export function buildCommercialInflectionBlockers(input: {
@@ -418,7 +404,7 @@ export function evaluateCommercialInflectionReadiness(
   },
 ): CommercialInflectionReadinessSummary {
   const p0Vault = evaluateP0VaultEnv(env);
-  const p0Artifact = resolveCommercialInflectionP0StagingArtifact(root, artifactOverrides?.p0Staging);
+  const p0Artifact = loadP0StagingProofUnblockSummary(root, artifactOverrides?.p0Staging);
   const tier2Artifact =
     artifactOverrides?.tier2Staging ??
     readJsonArtifact<Tier2StagingGoldenPathSummary>(

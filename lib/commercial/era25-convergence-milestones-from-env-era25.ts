@@ -2,7 +2,7 @@
  * Resolves era25 convergence milestones from env attestations + lib evaluators.
  * Avoids validate-script cycles through commercial pilot path.
  */
-import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import { loadP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import {
   resolveEra25CharterExitMilestone,
   type Era25CharterExitMilestone,
@@ -147,7 +147,7 @@ export function resolveOwnerDailyBriefingBreakthroughEra25MilestoneFromEnv(
   root: string = process.cwd(),
 ): OwnerDailyBriefingBreakthroughEra25Milestone {
   const blueprintMilestone = resolveEra25FirstProductSliceBlueprintMilestoneFromEnv(env, root);
-  const p0Artifact = loadP0StagingProofArtifact(root);
+  const p0Artifact = loadP0StagingProofUnblockSummary(root);
   const p0ProofStatus = p0Artifact?.p0ProofStatus ?? "awaiting_ops_credentials";
   const goState = derivePaidPilotGoConvergenceState(root);
   const briefingTiles = buildOwnerDailyBriefingBreakthroughEra25Tiles({
@@ -204,6 +204,7 @@ export function resolveMonth2MarketReadinessConvergenceEra25MilestoneFromEnv(
     pilotWeek1ExecutionConvergenceEra25Milestone:
       resolvePilotWeek1ExecutionConvergenceEra25MilestoneFromEnv(env),
     month2Complete: month2State.month2Complete,
+    metricsBaselinePassed: month2State.metricsBaselinePassed,
     phases: month2State.phases,
   });
 }

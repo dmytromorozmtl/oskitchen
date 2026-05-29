@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildP0StagingProofUnblockSummary,
+  loadP0StagingProofUnblockSummary,
   resolveP0StagingProofUnblockOverall,
   resolveP0StagingProofUnblockStatus,
 } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -86,5 +87,20 @@ describe("p0 staging proof unblock summary", () => {
       ]),
     );
     expect(summary.children.ssoIdpStaging.missingEnvVars).toHaveLength(2);
+  });
+
+  it("loadP0StagingProofUnblockSummary prefers override then disk JSON", () => {
+    const override = buildP0StagingProofUnblockSummary({
+      ssoArtifact: { overall: "PASSED", loginProofStatus: "proof_passed" },
+      workflowsArtifact: { overall: "PASSED", firstGreenProofStatus: "proof_passed" },
+      channelArtifact: {
+        overall: "PASSED",
+        wooLiveProofStatus: "proof_passed",
+        shopifyLiveProofStatus: "proof_passed",
+      },
+    });
+    const loaded = loadP0StagingProofUnblockSummary(process.cwd(), override);
+    expect(loaded?.overall).toBe("PASSED");
+    expect(loaded?.p0ProofStatus).toBe("proof_passed");
   });
 });

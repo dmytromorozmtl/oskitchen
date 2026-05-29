@@ -16,11 +16,11 @@ import {
   type Era25ConvergenceGovernanceTerminusFreezeIntegrityBaseline,
   type Era25ConvergenceGovernanceTerminusFreezeIntegritySummary,
 } from "@/lib/commercial/era25-convergence-governance-terminus-freeze-integrity-era60";
-import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import { loadP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { PILOT_GONOGO_SUMMARY_ARTIFACT_PATH } from "@/lib/commercial/market-leader-positioning-phases-era21";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
-import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
@@ -115,7 +115,7 @@ function resolveDiskP0(
   p0StagingOverride?: P0StagingProofUnblockSummary | null,
 ): P0StagingProofUnblockSummary | null {
   if (p0StagingOverride !== undefined) return p0StagingOverride;
-  return loadP0StagingProofArtifact(root);
+  return loadP0StagingProofUnblockSummary(root, p0StagingOverride);
 }
 
 function pushUpstreamTerminusViolations(

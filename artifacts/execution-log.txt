@@ -422,3 +422,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — shared P0 artifact resolver for era25 integrity modules (cycle 33)
+
+---
+Cycle: 33
+Timestamp: 2026-05-30T00:45:00.000Z
+Action: fix: canonical loadP0StagingProofUnblockSummary — typed disk JSON + day0 fallback; migrate era25 integrity modules + convergence milestones; add metricsBaselinePassed to month2 resolver
+Files: lib/commercial/p0-staging-proof-unblock-summary.ts, lib/commercial/commercial-inflection-readiness-era28.ts, lib/commercial/p0-staging-proof-integrity-era28.ts, lib/commercial/era25-band-a-market-proof-execution-sole-path-integrity-era61.ts, lib/commercial/era25-commercial-pilot-convergence-train-capstone-integrity-era59.ts, lib/commercial/era25-convergence-governance-terminus-freeze-integrity-era60.ts, lib/commercial/era25-p0-market-proof-honest-closure-capstone-integrity-era62.ts, lib/commercial/era25-convergence-milestones-from-env-era25.ts, tests/unit/p0-staging-proof-unblock-summary.test.ts
+TS errors before: 48
+TS errors after: 40
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — sustained-product-evolution-phases-era23 barrel re-exports for era23 UI (cycle 34)
