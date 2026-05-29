@@ -435,3 +435,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — sustained-product-evolution-phases-era23 barrel re-exports for era23 UI (cycle 34)
+
+---
+Cycle: 34
+Timestamp: 2026-05-30T01:00:00.000Z
+Action: fix: barrel re-export era21 governance constants from sustained-product-evolution-phases-era23 for orchestrator/UI post-improvement-loop
+Files: lib/commercial/sustained-product-evolution-phases-era23.ts, tests/unit/sustained-product-evolution-phases-era23.test.ts
+TS errors before: 40
+TS errors after: 30
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — era25-post-re-entrant-charter-lock-integrity-era57 InvestorOnepagerSummary import (cycle 35)

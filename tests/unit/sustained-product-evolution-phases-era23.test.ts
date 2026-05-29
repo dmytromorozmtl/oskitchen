@@ -2,9 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildSustainedProductEvolutionTrackStatuses,
+  COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
   resolveContinuousImprovementLoopActive,
   resolveNextSustainedProductEvolutionAttentionTrack,
   resolveSustainedProductEvolutionPrerequisites,
+  SERIES_A_FEATURE_MATURITY_DOC,
+  SERIES_A_FORBIDDEN_CLAIMS_DOC,
+  SERIES_A_PLATFORM_OPS_ROUTE,
   SUSTAINED_PRODUCT_EVOLUTION_TRACKS,
 } from "@/lib/commercial/sustained-product-evolution-phases-era23";
 import { buildSustainedProductEvolutionUiSlice } from "@/lib/commercial/sustained-product-evolution-ui-era23";
@@ -190,6 +194,13 @@ describe("sustained-product-evolution-phases-era23", () => {
   it("defines six product evolution tracks with owner roles", () => {
     expect(SUSTAINED_PRODUCT_EVOLUTION_TRACKS).toHaveLength(6);
     expect(SUSTAINED_PRODUCT_EVOLUTION_TRACKS.every((track) => track.ownerRole.length > 0)).toBe(true);
+  });
+
+  it("re-exports era21 governance paths for orchestrator barrels", () => {
+    expect(COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH).toContain("competitor-feature-gap");
+    expect(SERIES_A_PLATFORM_OPS_ROUTE).toBe("/platform/commercial-pilot-ops");
+    expect(SERIES_A_FEATURE_MATURITY_DOC).toContain("feature-maturity");
+    expect(SERIES_A_FORBIDDEN_CLAIMS_DOC).toContain("forbidden");
   });
 
   it("requires improvement loop and era25 sustained ops for product evolution", () => {
