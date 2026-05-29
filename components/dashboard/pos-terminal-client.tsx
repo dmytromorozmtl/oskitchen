@@ -45,6 +45,7 @@ import {
   shouldShowPosTerminalSecondaryPanels,
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 import { POS_CASHIER_SPEED_MODE_ALL_CATEGORY } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
+import { matchPosShortcut } from "@/lib/keyboard/shortcuts";
 import { PosManagerOverrideChecklist } from "@/components/dashboard/pos-manager-override-checklist";
 import { PosManagerOverrideHero } from "@/components/dashboard/pos-manager-override-hero";
 import {
