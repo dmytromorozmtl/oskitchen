@@ -474,7 +474,7 @@ async function loadLaunchWizardContext(userId: string): Promise<{
 
   const latestSimulation = primaryGoLive
     ? await prisma.goLiveSimulation.findFirst({
-        where: { projectId: primaryGoLive.id, result: GoLiveSimulationResult.PASS },
+        where: { projectId: primaryGoLive.id, result: GoLiveSimulationResult.PASSED },
         select: { id: true },
       })
     : null;
