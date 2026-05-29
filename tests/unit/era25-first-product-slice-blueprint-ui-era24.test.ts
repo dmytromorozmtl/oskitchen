@@ -25,6 +25,12 @@ describe("era25-first-product-slice-blueprint-ui-era24", () => {
     );
     expect(slice?.era25FirstProductSliceBlueprintMilestone).toBe("engineering_gates_blocked");
     expect(slice?.blueprintBlocked).toBe(true);
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-era25-first-product-slice-blueprint-integrity",
+    );
+    expect(slice?.launchWizardHref).toContain(
+      "#launch-wizard-era25-first-product-slice-blueprint",
+    );
     expect(slice?.ownerDailyBriefingBreakthrough).not.toBeNull();
     expect(slice?.ownerDailyBriefingBreakthrough?.briefingSchemeCount).toBe(5);
   });

@@ -1,6 +1,7 @@
 # KitchenOS — Phase T: Era25 engineering gates require signed charter (post-honest first charter slice)
 
 **Status:** Product surfaces + engineering gates integrity guard **IMPLEMENTED** · Human gates attestation **REQUIRED**  
+**Implemented follow-on:** [`docs/next-step-era25-first-product-slice-blueprint-phase-u-product-2026-05-28.md`](./next-step-era25-first-product-slice-blueprint-phase-u-product-2026-05-28.md) (Phase U · era45)  
 **Policy:** `era24-era25-engineering-gates-require-signed-charter-v1` · Integrity `era44-era25-engineering-gates-integrity-v1`  
 **Playbook:** [`docs/next-era25-engineering-gates-require-signed-charter-2026-05-28.md`](./next-era25-engineering-gates-require-signed-charter-2026-05-28.md)  
 **Prerequisite:** [`docs/next-step-era25-first-charter-slice-readiness-phase-s-product-2026-05-28.md`](./next-step-era25-first-charter-slice-readiness-phase-s-product-2026-05-28.md) → honest `era25_first_charter_slice_ready`

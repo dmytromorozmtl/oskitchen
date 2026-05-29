@@ -177,6 +177,10 @@ import {
   mergeBriefingEra25EngineeringGatesTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-engineering-gates-era44";
 import {
+  buildOwnerDailyBriefingEra25FirstProductSliceBlueprintAction,
+  mergeBriefingEra25FirstProductSliceBlueprintTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-first-product-slice-blueprint-era45";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -961,6 +965,22 @@ export async function loadOwnerDailyBriefing(
             null,
         )
       : null;
+  const era25EngineeringGatesRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25EngineeringGatesAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates ?? null,
+        )
+      : null;
+  const era25FirstProductSliceBlueprintRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25FirstProductSliceBlueprintAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint ?? null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1366,6 +1386,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25EngineeringGatesRankedAction) {
     allTopActions = mergeBriefingEra25EngineeringGatesTopActions(
       era25EngineeringGatesRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25FirstProductSliceBlueprintRankedAction) {
+    allTopActions = mergeBriefingEra25FirstProductSliceBlueprintTopActions(
+      era25FirstProductSliceBlueprintRankedAction,
       allTopActions,
     );
   }

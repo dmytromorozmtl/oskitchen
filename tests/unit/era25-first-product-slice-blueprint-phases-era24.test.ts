@@ -7,6 +7,7 @@ import {
   ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_PHASES_ERA24_POLICY_ID,
   ERA25_FIRST_PRODUCT_SLICE_BACKLOG_ID,
   ERA25_FIRST_PRODUCT_SLICE_EXISTING_SURFACES,
+  detectEra25FirstProductSliceBlueprintStarted,
 } from "@/lib/commercial/era25-first-product-slice-blueprint-phases-era24";
 
 describe("era25-first-product-slice-blueprint-phases-era24", () => {
@@ -39,5 +40,14 @@ describe("era25-first-product-slice-blueprint-phases-era24", () => {
     expect(ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_DOC).toContain(
       "next-era25-first-product-slice-blueprint",
     );
+  });
+
+  it("detects blueprint train from tracked env keys", () => {
+    expect(detectEra25FirstProductSliceBlueprintStarted({})).toBe(false);
+    expect(
+      detectEra25FirstProductSliceBlueprintStarted({
+        ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_ATTESTED: "1",
+      }),
+    ).toBe(true);
   });
 });

@@ -23,6 +23,7 @@ import { LaunchWizardLinearChainTerminusGuardPanel } from "@/components/dashboar
 import { LaunchWizardEra25CharterExitPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-charter-exit-panel";
 import { LaunchWizardEra25FirstCharterSlicePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-first-charter-slice-panel";
 import { LaunchWizardEra25EngineeringGatesPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-engineering-gates-panel";
+import { LaunchWizardEra25FirstProductSliceBlueprintPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-first-product-slice-blueprint-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -230,6 +231,12 @@ export function LaunchWizardView(props: {
 
       {model.era25EngineeringGatesIntegrity ? (
         <LaunchWizardEra25EngineeringGatesPanel slice={model.era25EngineeringGatesIntegrity} />
+      ) : null}
+
+      {model.era25FirstProductSliceBlueprintIntegrity ? (
+        <LaunchWizardEra25FirstProductSliceBlueprintPanel
+          slice={model.era25FirstProductSliceBlueprintIntegrity}
+        />
       ) : null}
 
       <LaunchWizardCommercialBlockersPanel

@@ -1106,6 +1106,22 @@ export function MaintenanceModePanel(props: {
                                       .firstCharterSliceReadiness.engineeringGates
                                       .firstProductSliceBlueprint.canonicalSliceName}
                                   </Badge>
+                                  {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                    .era25FirstProductSliceBlueprintIntegrityPassed ? null : (
+                                    <Badge variant="destructive" className="rounded-full text-[10px]">
+                                      blueprint integrity FAIL
+                                    </Badge>
+                                  )}
+                                  {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                    .era25EngineeringGatesIntegrityPassed ? null : (
+                                    <Badge variant="destructive" className="rounded-full text-[10px]">
+                                      gates integrity FAIL
+                                    </Badge>
+                                  )}
                                 </div>
                                 <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
                                   {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.guardrails.map(
@@ -1137,6 +1153,30 @@ export function MaintenanceModePanel(props: {
                                         .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
                                         .era25CharterExit.firstCharterSliceReadiness.engineeringGates
                                         .firstProductSliceBlueprint.syncReportCommand
+                                    }
+                                  </span>
+                                  <span>
+                                    {
+                                      slice.engineeringPathTerminus.postTerminusSteadyState
+                                        .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                        .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                        .firstProductSliceBlueprint.validateEngineeringGatesIntegrityCommand
+                                    }
+                                  </span>
+                                  <span>
+                                    {
+                                      slice.engineeringPathTerminus.postTerminusSteadyState
+                                        .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                        .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                        .firstProductSliceBlueprint.integrityValidateCommand
+                                    }
+                                  </span>
+                                  <span>
+                                    {
+                                      slice.engineeringPathTerminus.postTerminusSteadyState
+                                        .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                        .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                        .firstProductSliceBlueprint.syncIntegrityBaselineCommand
                                     }
                                   </span>
                                 </div>

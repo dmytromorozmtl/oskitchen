@@ -23,6 +23,7 @@ import type { LaunchWizardLinearChainTerminusGuardSlice } from "@/lib/launch-wiz
 import type { LaunchWizardEra25CharterExitSlice } from "@/lib/launch-wizard/launch-wizard-era25-charter-exit-era42";
 import type { LaunchWizardEra25FirstCharterSliceSlice } from "@/lib/launch-wizard/launch-wizard-era25-first-charter-slice-era43";
 import type { LaunchWizardEra25EngineeringGatesSlice } from "@/lib/launch-wizard/launch-wizard-era25-engineering-gates-era44";
+import type { LaunchWizardEra25FirstProductSliceBlueprintSlice } from "@/lib/launch-wizard/launch-wizard-era25-first-product-slice-blueprint-era45";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -65,6 +66,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25CharterExit: LaunchWizardEra25CharterExitSlice | null;
   era25FirstCharterSliceReadiness: LaunchWizardEra25FirstCharterSliceSlice | null;
   era25EngineeringGates: LaunchWizardEra25EngineeringGatesSlice | null;
+  era25FirstProductSliceBlueprint: LaunchWizardEra25FirstProductSliceBlueprintSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -122,6 +124,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25CharterExit?: LaunchWizardEra25CharterExitSlice | null;
   era25FirstCharterSliceReadiness?: LaunchWizardEra25FirstCharterSliceSlice | null;
   era25EngineeringGates?: LaunchWizardEra25EngineeringGatesSlice | null;
+  era25FirstProductSliceBlueprint?: LaunchWizardEra25FirstProductSliceBlueprintSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -242,6 +245,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25CharterExit,
       era25FirstCharterSliceReadiness,
       era25EngineeringGates,
+      era25FirstProductSliceBlueprint,
     };
   }
 
@@ -294,7 +298,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25EngineeringGatesSubline
+        : era25FirstProductSliceBlueprintSubline
+          ? era25EngineeringGatesSubline
+            ? `${era25EngineeringGatesSubline} · ${era25FirstProductSliceBlueprintSubline}`
+            : era25FirstProductSliceBlueprintSubline
+          : era25EngineeringGatesSubline
           ? era25FirstCharterSliceSubline
             ? `${era25FirstCharterSliceSubline} · ${era25EngineeringGatesSubline}`
             : era25EngineeringGatesSubline
@@ -405,5 +413,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25CharterExit,
     era25FirstCharterSliceReadiness,
     era25EngineeringGates,
+    era25FirstProductSliceBlueprint,
   };
 }

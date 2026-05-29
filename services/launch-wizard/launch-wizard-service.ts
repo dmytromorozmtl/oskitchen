@@ -125,7 +125,12 @@ import {
   buildLaunchWizardEra25EngineeringGatesSlice,
   type LaunchWizardEra25EngineeringGatesSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-engineering-gates-era44";
+import {
+  buildLaunchWizardEra25FirstProductSliceBlueprintSlice,
+  type LaunchWizardEra25FirstProductSliceBlueprintSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-first-product-slice-blueprint-era45";
 import type { Era25EngineeringGatesUiSlice } from "@/lib/commercial/era25-engineering-gates-ui-era24";
+import type { Era25FirstProductSliceBlueprintUiSlice } from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
   buildLaunchWizardTier2StatusSlice,
@@ -243,6 +248,8 @@ export type LaunchWizardModel = {
   era25FirstCharterSliceReadinessIntegrity: LaunchWizardEra25FirstCharterSliceSlice | null;
   era25EngineeringGates: Era25EngineeringGatesUiSlice | null;
   era25EngineeringGatesIntegrity: LaunchWizardEra25EngineeringGatesSlice | null;
+  era25FirstProductSliceBlueprint: Era25FirstProductSliceBlueprintUiSlice | null;
+  era25FirstProductSliceBlueprintIntegrity: LaunchWizardEra25FirstProductSliceBlueprintSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -947,6 +954,19 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25FirstCharterSliceReadiness,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const era25EngineeringGates =
+    era25FirstCharterSliceReadiness?.engineeringGates ?? null;
+  const era25EngineeringGatesIntegrity = buildLaunchWizardEra25EngineeringGatesSlice(
+    era25EngineeringGates,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
+  const era25FirstProductSliceBlueprint =
+    era25EngineeringGates?.firstProductSliceBlueprint ?? null;
+  const era25FirstProductSliceBlueprintIntegrity =
+    buildLaunchWizardEra25FirstProductSliceBlueprintSlice(
+      era25FirstProductSliceBlueprint,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -997,6 +1017,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25FirstCharterSliceReadinessIntegrity,
     era25EngineeringGates,
     era25EngineeringGatesIntegrity,
+    era25FirstProductSliceBlueprint,
+    era25FirstProductSliceBlueprintIntegrity,
     paidPilotGoConvergence,
   };
 }

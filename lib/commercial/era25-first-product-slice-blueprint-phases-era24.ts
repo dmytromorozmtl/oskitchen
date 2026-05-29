@@ -14,6 +14,19 @@ export const ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_REPORT_PATH =
 export const ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_PLATFORM_ANCHOR =
   "#era25-first-product-slice-blueprint" as const;
 
+export const ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_TRACKED_ENV_KEYS = [
+  "ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_ATTESTED",
+  "ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_REPORT_REVIEWED",
+] as const;
+
+export function detectEra25FirstProductSliceBlueprintStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 /** Canonical first era25 product slice — WOW pillar from breakthrough map. */
 export const ERA25_FIRST_PRODUCT_SLICE_CANONICAL_NAME =
   "owner-daily-briefing-breakthrough" as const;

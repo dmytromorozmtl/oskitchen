@@ -1,0 +1,52 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { describe, expect, it } from "vitest";
+
+import {
+  ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_CI_SCRIPTS,
+  ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_OPS_SCRIPTS,
+  ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_POLICY_ID,
+  ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_UNIT_TESTS,
+} from "@/lib/commercial/era25-first-product-slice-blueprint-integrity-era45-policy";
+
+const ROOT = process.cwd();
+
+function readPackageScripts(): Record<string, string> {
+  const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
+    scripts?: Record<string, string>;
+  };
+  return pkg.scripts ?? {};
+}
+
+describe("era25 first product slice blueprint integrity era45 CI certification (live repo)", () => {
+  it("locks integrity policy id", () => {
+    expect(ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_POLICY_ID).toBe(
+      "era45-era25-first-product-slice-blueprint-integrity-v1",
+    );
+  });
+
+  it("defines ops and ci scripts", () => {
+    const scripts = readPackageScripts();
+    for (const name of [
+      ...ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_OPS_SCRIPTS,
+      ...ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_CI_SCRIPTS,
+    ]) {
+      expect(scripts[name], `missing ${name}`).toBeTruthy();
+    }
+  });
+
+  it("wires workflow and unit tests", () => {
+    expect(
+      existsSync(
+        join(
+          ROOT,
+          ".github/workflows/ops-era25-first-product-slice-blueprint-integrity-validate.yml",
+        ),
+      ),
+    ).toBe(true);
+    for (const path of ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_INTEGRITY_ERA45_UNIT_TESTS) {
+      expect(existsSync(join(ROOT, path)), `missing ${path}`).toBe(true);
+    }
+  });
+});
