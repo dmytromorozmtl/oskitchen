@@ -2,6 +2,9 @@
 
 **Date:** 2026-05-28 · **Policy:** `commercial-inflection-readiness-v1`  
 **Validate:** `npm run ops:validate-commercial-inflection-readiness -- --json`  
+**Orchestrator:** `npm run ops:run-commercial-inflection-readiness-orchestrator -- --write`  
+**Report:** `artifacts/commercial-inflection-readiness-report.md`  
+**Execution doc:** [`docs/next-step-commercial-inflection-execution-2026-05-28.md`](./next-step-commercial-inflection-execution-2026-05-28.md)  
 **Platform UI:** `/platform/commercial-pilot-ops#commercial-inflection-readiness`
 
 ---
@@ -129,6 +132,21 @@ Steps 12–16 are **orchestration only** — no substitute for P0 PASS.
 | 16 | `#linear-path-permanently-closed` | Doc chain + Step 17 forbidden |
 
 All prerequisite milestones (`era25_*` → `steady_state_blocked`) surface in validate JSON when upstream blocked.
+
+---
+
+## Ops orchestration (implemented)
+
+```bash
+npm run ops:validate-commercial-inflection-readiness -- --json
+npm run ops:run-commercial-inflection-readiness-orchestrator -- --json
+npm run ops:sync-commercial-inflection-readiness-report -- --write
+npm run test:ci:commercial-inflection-readiness
+```
+
+Workflow: `.github/workflows/ops-commercial-inflection-readiness-validate.yml`
+
+Step 17 guard surfaces `era25_sustained_ops_convergence_blocked` until vault + linear prerequisites clear — then redirects to inflection validate for market blockers.
 
 ---
 

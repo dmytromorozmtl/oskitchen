@@ -27,7 +27,7 @@ export function buildEra25FirstProductSliceBlueprintReportMarkdown(
     `- Gates milestone: **${result.evaluation.gates.era25EngineeringGatesMilestone}**`,
     `- Canonical slice: **${ERA25_FIRST_PRODUCT_SLICE_CANONICAL_NAME}**`,
     `- Blueprint blocked: **${result.evaluation.blueprintBlocked ? "yes" : "no"}**`,
-    `- Gates blocked: **${result.evaluation.gates.evaluation.gatesBlocked ? "yes" : "no"}**`,
+    `- Gates blocked: **${result.evaluation.gates.gatesBlocked ? "yes" : "no"}**`,
     `- Canonical charter doc: **${result.evaluation.canonicalCharterDocPath ?? "missing"}**`,
     `- Charter sections valid: **${result.evaluation.charterSectionsValid ? "yes" : "no"}**`,
     `- Staging checklist present: **${result.evaluation.stagingChecklist.checklistPresent ? "yes" : "no"}**`,

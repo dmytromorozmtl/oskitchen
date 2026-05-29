@@ -17,7 +17,7 @@ describe("validate-linear-chain-terminus-guard", () => {
 
   it("wraps milestones for validate JSON", () => {
     const result = evaluateLinearChainTerminusGuardWithMilestones({});
-    expect(result.linearChainTerminusGuardMilestone).toBe("linear_path_closure_blocked");
+    expect(result.linearChainTerminusGuardMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.readyForLinearPathClosureSmokes).toBe(true);
     expect(result.guard.guardPassed).toBe(true);
   });

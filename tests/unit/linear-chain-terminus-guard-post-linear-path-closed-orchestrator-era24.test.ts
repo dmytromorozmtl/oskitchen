@@ -11,7 +11,18 @@ import { evaluateLinearChainTerminusGuardWithMilestones } from "@/scripts/ops/va
 describe("linear-chain-terminus-guard-post-linear-path-closed-orchestrator-era24", () => {
   it("blocks when linear path is not healthy", () => {
     const result = evaluateLinearChainTerminusGuardWithMilestones({});
-    expect(result.linearChainTerminusGuardMilestone).toBe("linear_path_closure_blocked");
+    expect(result.linearChainTerminusGuardMilestone).toBe("era25_sustained_ops_convergence_blocked");
+  });
+
+  it("recommends commercial inflection validate when era25 blocked", () => {
+    const guard = evaluateLinearChainTerminusGuard();
+    const summary = buildLinearChainTerminusGuardPostLinearPathClosedOrchestratorSummary({
+      guard,
+      linearPathPermanentlyClosedMilestone: "era25_sustained_ops_convergence_blocked",
+      artifacts: { terminusGuardReportPresent: false },
+    });
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
+    expect(summary.recommendedCommands[0]).toContain("validate-commercial-inflection-readiness");
   });
 
   it("resolves attention_catalog_integrity when guard fails", () => {
@@ -37,7 +48,7 @@ describe("linear-chain-terminus-guard-post-linear-path-closed-orchestrator-era24
       linearPathPermanentlyClosedMilestone: "absolute_end_blocked",
       artifacts: { terminusGuardReportPresent: false },
     });
-    expect(summary.milestone).toBe("linear_path_closure_blocked");
+    expect(summary.milestone).toBe("absolute_end_blocked");
     expect(summary.recommendedCommands[0]).toContain(
       "linear-path-permanently-closed-post-absolute-end-orchestrator",
     );

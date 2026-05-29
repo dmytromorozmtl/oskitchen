@@ -3,6 +3,7 @@
  * Commercial inflection readiness — honest P0 blocker matrix (never fakes PASS).
  */
 import {
+  COMMERCIAL_INFLECTION_BLOCKED_MILESTONES,
   COMMERCIAL_INFLECTION_MASTER_MATRIX_DOC,
   COMMERCIAL_INFLECTION_READINESS_POLICY_ID,
   evaluateCommercialInflectionReadiness,
@@ -17,7 +18,7 @@ function main() {
   if (jsonOutput) {
     console.log(JSON.stringify(result, null, 2));
     process.exit(
-      result.milestone === "commercial_inflection_ready" ? 0 : 2,
+      COMMERCIAL_INFLECTION_BLOCKED_MILESTONES.includes(result.milestone) ? 2 : 0,
     );
     return;
   }

@@ -29,9 +29,13 @@ Step 17 engineering = **terminus guard orchestration only** (repo integrity, not
 
 | Milestone | Meaning | Orchestrator exit |
 |-----------|---------|-------------------|
-| `linear_path_closure_blocked` | Step 16 not healthy | `2` |
+| `era25_sustained_ops_convergence_blocked` | era25 sustained ops not ready (passthrough) | `2` |
+| `product_evolution_blocked` … `absolute_end_blocked` | Steps 11–15 prerequisites (passthrough) | `2` |
+| `linear_path_closure_blocked` | Step 16 blocked (unknown milestone) | `2` |
 | `attention_catalog_integrity` | Guard violations | `0` |
 | `step17_forbidden_healthy` | Step 16 healthy + guard PASS | `0` |
+
+When `era25_sustained_ops_convergence_blocked`, recommended commands include `ops:validate-commercial-inflection-readiness` and P0 vault smokes.
 
 **Smoke readiness flags:**
 

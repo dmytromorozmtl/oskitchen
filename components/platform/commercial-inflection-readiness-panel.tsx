@@ -20,6 +20,7 @@ export function CommercialInflectionReadinessPanel(props: {
   summary: CommercialInflectionReadinessSummary;
 }) {
   const p0Rows = props.summary.blockers.filter((row) => row.priority === "P0");
+  const p1Rows = props.summary.blockers.filter((row) => row.priority === "P1");
   const stopRows = props.summary.blockers.filter((row) => row.priority === "STOP");
 
   return (
@@ -81,6 +82,25 @@ export function CommercialInflectionReadinessPanel(props: {
               </li>
             ))}
           </ul>
+        </div>
+
+        {p1Rows.length > 0 ? (
+          <div>
+            <p className="mb-2 font-medium text-slate-200">P1 — before pilot scale</p>
+            <ul className="space-y-1 text-xs text-muted-foreground">
+              {p1Rows.map((row) => (
+                <li key={row.id}>
+                  <strong>{row.title}</strong> — {row.status}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className="font-mono text-[10px] text-muted-foreground">
+          <div>npm run ops:run-commercial-inflection-readiness-orchestrator -- --write</div>
+          <div>npm run ops:sync-commercial-inflection-readiness-report -- --write</div>
+          <div>npm run ops:run-p0-vault-day0-orchestrator -- --write</div>
         </div>
 
         {stopRows.length > 0 ? (

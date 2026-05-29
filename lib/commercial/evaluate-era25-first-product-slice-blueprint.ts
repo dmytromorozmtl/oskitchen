@@ -40,7 +40,7 @@ export function evaluateEra25FirstProductSliceBlueprint(
   env: NodeJS.ProcessEnv = process.env,
   root: string = process.cwd(),
 ): {
-  gates: ReturnType<typeof evaluateEra25EngineeringGatesRequireSignedCharterWithMilestones>;
+  gates: ReturnType<typeof evaluateEra25EngineeringGatesRequireSignedCharter>;
   illegalArtifacts: ReturnType<typeof discoverIllegalEra25ProductArtifacts>;
   canonicalCharterDocPath: string | null;
   charterSectionsValid: boolean;
@@ -79,7 +79,7 @@ export function evaluateEra25FirstProductSliceBlueprint(
 
   const gatesOpen =
     gates.era25EngineeringGatesMilestone === "era25_engineering_gates_open" &&
-    !gates.evaluation.gatesBlocked;
+    !gates.gatesBlocked;
 
   const blueprintReady =
     gatesOpen &&

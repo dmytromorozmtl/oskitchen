@@ -18,7 +18,7 @@ describe("linear-chain-terminus-guard-ui-era24", () => {
     expect(slice?.postLinearPathClosedOrchestratorCommand).toContain(
       "run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator",
     );
-    expect(slice?.linearChainTerminusGuardMilestone).toBe("linear_path_closure_blocked");
+    expect(slice?.linearChainTerminusGuardMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(slice?.guardPassed).toBe(true);
     expect(slice?.era25CharterExit).not.toBeNull();
     expect(slice?.era25CharterExit?.outsideLinearCatalog).toBe(true);

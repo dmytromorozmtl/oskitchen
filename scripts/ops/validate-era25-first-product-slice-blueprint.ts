@@ -71,7 +71,7 @@ function main() {
           era25FirstProductSliceBlueprintMilestone: result.era25FirstProductSliceBlueprintMilestone,
           era25EngineeringGatesMilestone: result.evaluation.gates.era25EngineeringGatesMilestone,
           blueprintBlocked: result.evaluation.blueprintBlocked,
-          gatesBlocked: result.evaluation.gates.evaluation.gatesBlocked,
+          gatesBlocked: result.evaluation.gates.gatesBlocked,
           canonicalSliceName: ERA25_FIRST_PRODUCT_SLICE_CANONICAL_NAME,
           canonicalCharterDocPath: result.evaluation.canonicalCharterDocPath,
           charterSectionsValid: result.evaluation.charterSectionsValid,

@@ -102,7 +102,7 @@ export function buildEra25FirstProductSliceBlueprintPostGatesOrchestratorSummary
 }): Era25FirstProductSliceBlueprintPostGatesOrchestratorSummary {
   const milestone = resolveEra25FirstProductSliceBlueprintMilestone({
     era25EngineeringGatesMilestone: input.evaluation.gates.era25EngineeringGatesMilestone,
-    gatesBlocked: input.evaluation.gates.evaluation.gatesBlocked,
+    gatesBlocked: input.evaluation.gates.gatesBlocked,
     illegalArtifactCount: input.evaluation.illegalArtifacts.length,
     canonicalCharterDocPath: input.evaluation.canonicalCharterDocPath,
     charterSectionsValid: input.evaluation.charterSectionsValid,
@@ -156,7 +156,7 @@ export function buildEra25FirstProductSliceBlueprintPostGatesOrchestratorSummary
     milestone,
     era25EngineeringGatesMilestone: input.evaluation.gates.era25EngineeringGatesMilestone,
     blueprintBlocked: input.evaluation.blueprintBlocked,
-    gatesBlocked: input.evaluation.gates.evaluation.gatesBlocked,
+    gatesBlocked: input.evaluation.gates.gatesBlocked,
     canonicalSliceName: input.evaluation.canonicalSliceName,
     canonicalCharterDocPath: input.evaluation.canonicalCharterDocPath,
     charterSectionsValid: input.evaluation.charterSectionsValid,

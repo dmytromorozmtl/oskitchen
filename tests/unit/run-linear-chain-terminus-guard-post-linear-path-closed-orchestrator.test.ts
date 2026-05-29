@@ -10,7 +10,7 @@ describe("run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator",
     expect(summary.policyId).toBe(
       "era24-linear-chain-terminus-guard-post-linear-path-closed-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("linear_path_closure_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(summary.step17Forbidden).toBe(true);
   });
 });

@@ -14,6 +14,7 @@ import {
   evaluateLinearChainTerminusGuard,
 } from "@/lib/commercial/linear-chain-terminus-guard-era24";
 import {
+  LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES,
   type LinearPathPermanentlyClosedMilestone,
 } from "@/lib/commercial/linear-path-permanently-closed-post-absolute-end-orchestrator-era24";
 import { LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC } from "@/lib/commercial/linear-path-permanently-closed-phases-era24";
@@ -27,9 +28,16 @@ export const LINEAR_CHAIN_TERMINUS_GUARD_POST_LINEAR_PATH_CLOSED_ORCHESTRATOR_CO
   "npm run ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator" as const;
 
 export type LinearChainTerminusGuardMilestone =
+  | LinearPathPermanentlyClosedMilestone
   | "linear_path_closure_blocked"
   | "attention_catalog_integrity"
   | "step17_forbidden_healthy";
+
+export const LINEAR_CHAIN_TERMINUS_GUARD_BLOCKED_MILESTONES: readonly LinearChainTerminusGuardMilestone[] =
+  [
+    ...LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES,
+    "linear_path_closure_blocked",
+  ] as const;
 
 export type LinearChainTerminusGuardPostLinearPathClosedOrchestratorSummary = {
   policyId: typeof LINEAR_CHAIN_TERMINUS_GUARD_POST_LINEAR_PATH_CLOSED_ORCHESTRATOR_ERA24_POLICY_ID;
@@ -56,6 +64,13 @@ export function resolveLinearChainTerminusGuardMilestone(input: {
   guardPassed: boolean;
 }): LinearChainTerminusGuardMilestone {
   if (input.linearPathPermanentlyClosedMilestone !== "linear_path_permanently_closed_healthy") {
+    if (
+      (LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES as readonly string[]).includes(
+        input.linearPathPermanentlyClosedMilestone,
+      )
+    ) {
+      return input.linearPathPermanentlyClosedMilestone;
+    }
     return "linear_path_closure_blocked";
   }
 
@@ -82,14 +97,26 @@ export function buildLinearChainTerminusGuardPostLinearPathClosedOrchestratorSum
   const firstViolation = input.guard.violations[0] ?? null;
 
   const recommendedCommands =
-    milestone === "linear_path_closure_blocked"
+    milestone === "era25_sustained_ops_convergence_blocked"
       ? ([
-          "npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --write",
-          "npm run ops:validate-linear-path-permanently-closed -- --json",
-          "npm run ops:validate-commercial-pilot-path-absolute-end -- --json",
-          "npm run ops:validate-commercial-pilot-path -- --json",
+          "npm run ops:validate-commercial-inflection-readiness -- --json",
+          "npm run ops:validate-p0-vault-env -- --json",
+          "npm run ops:run-p0-vault-day0-orchestrator -- --json",
+          "npm run smoke:p0-staging-proof-unblock",
         ] as const)
-      : ([
+      : milestone === "linear_path_closure_blocked" ||
+          milestone === "absolute_end_blocked" ||
+          milestone === "steady_state_blocked" ||
+          milestone === "engineering_terminus_blocked" ||
+          milestone === "maintenance_mode_blocked" ||
+          milestone === "product_evolution_blocked"
+        ? ([
+            "npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --write",
+            "npm run ops:validate-linear-path-permanently-closed -- --json",
+            "npm run ops:validate-commercial-pilot-path-absolute-end -- --json",
+            "npm run ops:validate-commercial-pilot-path -- --json",
+          ] as const)
+        : ([
           "npm run ops:validate-linear-chain-terminus-guard -- --json",
           LINEAR_CHAIN_TERMINUS_GUARD_POST_LINEAR_PATH_CLOSED_ORCHESTRATOR_COMMAND + " -- --write",
           "npm run ops:sync-linear-chain-terminus-guard-report -- --write",

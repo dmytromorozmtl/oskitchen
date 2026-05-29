@@ -8,6 +8,7 @@ import { join } from "node:path";
 
 import {
   buildLinearChainTerminusGuardPostLinearPathClosedOrchestratorSummary,
+  LINEAR_CHAIN_TERMINUS_GUARD_BLOCKED_MILESTONES,
   LINEAR_CHAIN_TERMINUS_GUARD_POST_LINEAR_PATH_CLOSED_ORCHESTRATOR_ERA24_POLICY_ID,
 } from "@/lib/commercial/linear-chain-terminus-guard-post-linear-path-closed-orchestrator-era24";
 import { LINEAR_CHAIN_TERMINUS_GUARD_REPORT_PATH } from "@/lib/commercial/linear-chain-terminus-guard-era24";
@@ -52,7 +53,9 @@ function main() {
 
   if (jsonOutput) {
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.milestone === "linear_path_closure_blocked" ? 2 : 0);
+    process.exit(
+      LINEAR_CHAIN_TERMINUS_GUARD_BLOCKED_MILESTONES.includes(summary.milestone) ? 2 : 0,
+    );
     return;
   }
 

@@ -23,6 +23,15 @@ export const COMMERCIAL_INFLECTION_READINESS_POLICY_ID =
 export const COMMERCIAL_INFLECTION_MASTER_MATRIX_DOC =
   "docs/commercial-inflection-master-blocker-matrix-2026-05-28.md" as const;
 
+export const COMMERCIAL_INFLECTION_EXECUTION_STEP_DOC =
+  "docs/next-step-commercial-inflection-execution-2026-05-28.md" as const;
+
+export const COMMERCIAL_INFLECTION_READINESS_REPORT_PATH =
+  "artifacts/commercial-inflection-readiness-report.md" as const;
+
+export const COMMERCIAL_INFLECTION_READINESS_PLATFORM_ANCHOR =
+  "#commercial-inflection-readiness" as const;
+
 export type CommercialInflectionBlockerRole =
   | "engineering"
   | "qa"
@@ -61,6 +70,15 @@ export type CommercialInflectionMilestone =
   | "pilot_gono_go_blocked"
   | "commercial_inflection_attention"
   | "commercial_inflection_ready";
+
+export const COMMERCIAL_INFLECTION_BLOCKED_MILESTONES: readonly CommercialInflectionMilestone[] =
+  [
+    "p0_ops_vault_blocked",
+    "p0_staging_proof_blocked",
+    "tier2_golden_path_blocked",
+    "pilot_gono_go_blocked",
+    "commercial_inflection_attention",
+  ] as const;
 
 export type CommercialInflectionReadinessSummary = {
   policyId: typeof COMMERCIAL_INFLECTION_READINESS_POLICY_ID;

@@ -86,7 +86,7 @@ export function buildEra25FirstProductSliceBlueprintUiSlice(input: {
     era25FirstProductSliceBlueprintMilestone: result.era25FirstProductSliceBlueprintMilestone,
     era25EngineeringGatesMilestone: result.evaluation.gates.era25EngineeringGatesMilestone,
     blueprintBlocked: result.evaluation.blueprintBlocked,
-    gatesBlocked: result.evaluation.gates.evaluation.gatesBlocked,
+    gatesBlocked: result.evaluation.gates.gatesBlocked,
     canonicalSliceName: result.evaluation.canonicalSliceName,
     backlogId: result.evaluation.backlogId,
     policyFamily: result.evaluation.policyFamily,
