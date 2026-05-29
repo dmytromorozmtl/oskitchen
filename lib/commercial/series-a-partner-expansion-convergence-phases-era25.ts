@@ -14,6 +14,19 @@ export const SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_REPORT_PATH =
 export const SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_PLATFORM_ANCHOR =
   "#era25-series-a-partner-expansion-convergence" as const;
 
+export const SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_TRACKED_ENV_KEYS = [
+  "SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_ATTESTED",
+  "SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectSeriesAPartnerExpansionConvergenceEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export const SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_BACKLOG_ID =
   "KOS-E25-006-SERIES-A" as const;
 

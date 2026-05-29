@@ -151,6 +151,10 @@ import {
   buildLaunchWizardEra25ScaleReadinessConvergenceSlice,
   type LaunchWizardEra25ScaleReadinessConvergenceSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-scale-readiness-convergence-era50";
+import {
+  buildLaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice,
+  type LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-series-a-partner-expansion-convergence-era51";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -225,6 +229,7 @@ import {
   buildScaleReadinessConvergenceEra25UiSlice,
   type ScaleReadinessConvergenceEra25UiSlice,
 } from "@/lib/commercial/scale-readiness-convergence-ui-era25";
+import type { SeriesAPartnerExpansionConvergenceEra25UiSlice } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
 import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
 import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
 import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
@@ -293,6 +298,8 @@ export type LaunchWizardModel = {
   era25Month2MarketReadinessConvergenceIntegrity: LaunchWizardEra25Month2MarketReadinessConvergenceSlice | null;
   era25ScaleReadinessConvergence: ScaleReadinessConvergenceEra25UiSlice | null;
   era25ScaleReadinessConvergenceIntegrity: LaunchWizardEra25ScaleReadinessConvergenceSlice | null;
+  era25SeriesAPartnerExpansionConvergence: SeriesAPartnerExpansionConvergenceEra25UiSlice | null;
+  era25SeriesAPartnerExpansionConvergenceIntegrity: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1247,6 +1254,13 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25ScaleReadinessConvergence,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const era25SeriesAPartnerExpansionConvergence =
+    era25ScaleReadinessConvergence?.seriesAPartnerExpansionConvergence ?? null;
+  const era25SeriesAPartnerExpansionConvergenceIntegrity =
+    buildLaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice(
+      era25SeriesAPartnerExpansionConvergence,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1309,5 +1323,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25Month2MarketReadinessConvergenceIntegrity,
     era25ScaleReadinessConvergence,
     era25ScaleReadinessConvergenceIntegrity,
+    era25SeriesAPartnerExpansionConvergence,
+    era25SeriesAPartnerExpansionConvergenceIntegrity,
   };
 }

@@ -69,8 +69,8 @@ Workflow: `.github/workflows/ops-scale-readiness-convergence-integrity-validate.
 
 ---
 
-## Next step — Phase AA (era51)
+## Following — Phase AA (era51)
 
-**Series A partner expansion convergence era25 integrity** — chains `evaluateScaleReadinessConvergenceIntegrity`, Launch Wizard `#launch-wizard-era25-series-a-partner-expansion-convergence`, Owner Briefing priority **26**, maintenance nested under `#era25-scale-readiness-convergence` → `#era25-series-a-partner-expansion-convergence`.
+**IMPLEMENTED** — see [`docs/next-step-series-a-partner-expansion-convergence-phase-aa-product-2026-05-28.md`](./next-step-series-a-partner-expansion-convergence-phase-aa-product-2026-05-28.md).
 
-Prerequisite milestone: `scale_readiness_convergence_era25_ready` · env `SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_*` (to be added when Phase AA starts).
+**Next:** Phase AB (era52) market leader positioning convergence integrity.

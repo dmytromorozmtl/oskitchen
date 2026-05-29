@@ -29,6 +29,7 @@ import type { LaunchWizardEra25PaidPilotGoConvergenceSlice } from "@/lib/launch-
 import type { LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-pilot-week1-execution-convergence-era48";
 import type { LaunchWizardEra25Month2MarketReadinessConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-month2-market-readiness-convergence-era49";
 import type { LaunchWizardEra25ScaleReadinessConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-scale-readiness-convergence-era50";
+import type { LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-series-a-partner-expansion-convergence-era51";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -77,6 +78,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25PilotWeek1ExecutionConvergence: LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice | null;
   era25Month2MarketReadinessConvergence: LaunchWizardEra25Month2MarketReadinessConvergenceSlice | null;
   era25ScaleReadinessConvergence: LaunchWizardEra25ScaleReadinessConvergenceSlice | null;
+  era25SeriesAPartnerExpansionConvergence: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -140,6 +142,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25PilotWeek1ExecutionConvergence?: LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice | null;
   era25Month2MarketReadinessConvergence?: LaunchWizardEra25Month2MarketReadinessConvergenceSlice | null;
   era25ScaleReadinessConvergence?: LaunchWizardEra25ScaleReadinessConvergenceSlice | null;
+  era25SeriesAPartnerExpansionConvergence?: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -240,6 +243,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25ScaleReadinessConvergenceSubline = era25ScaleReadinessConvergence
     ? `Scale ${era25ScaleReadinessConvergence.progressLabel}${era25ScaleReadinessConvergence.scaleReadinessConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25SeriesAPartnerExpansionConvergence = input.era25SeriesAPartnerExpansionConvergence ?? null;
+  const era25SeriesAPartnerExpansionConvergenceSubline = era25SeriesAPartnerExpansionConvergence
+    ? `Series A ${era25SeriesAPartnerExpansionConvergence.progressLabel}${era25SeriesAPartnerExpansionConvergence.seriesAPartnerExpansionConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const era25ScaleWithSeriesAConvergenceSubline = era25ScaleReadinessConvergenceSubline
+    ? era25SeriesAPartnerExpansionConvergenceSubline
+      ? `${era25SeriesAPartnerExpansionConvergenceSubline} · ${era25ScaleReadinessConvergenceSubline}`
+      : era25ScaleReadinessConvergenceSubline
+    : era25SeriesAPartnerExpansionConvergenceSubline;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -290,6 +302,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25PilotWeek1ExecutionConvergence,
       era25Month2MarketReadinessConvergence,
       era25ScaleReadinessConvergence,
+      era25SeriesAPartnerExpansionConvergence,
     };
   }
 
@@ -342,16 +355,16 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25ScaleReadinessConvergenceSubline
+        : era25ScaleWithSeriesAConvergenceSubline
           ? era25Month2MarketReadinessConvergenceSubline
             ? era25PilotWeek1ExecutionConvergenceSubline
               ? era25PaidPilotGoConvergenceSubline
                 ? era25OwnerDailyBriefingBreakthroughSubline
-                  ? `${era25OwnerDailyBriefingBreakthroughSubline} · ${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleReadinessConvergenceSubline}`
-                  : `${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleReadinessConvergenceSubline}`
-                : `${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleReadinessConvergenceSubline}`
-              : `${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleReadinessConvergenceSubline}`
-            : era25ScaleReadinessConvergenceSubline
+                  ? `${era25OwnerDailyBriefingBreakthroughSubline} · ${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAConvergenceSubline}`
+                  : `${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAConvergenceSubline}`
+                : `${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAConvergenceSubline}`
+              : `${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAConvergenceSubline}`
+            : era25ScaleWithSeriesAConvergenceSubline
           : era25Month2MarketReadinessConvergenceSubline
           ? era25PilotWeek1ExecutionConvergenceSubline
           ? era25PaidPilotGoConvergenceSubline
@@ -490,5 +503,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25PilotWeek1ExecutionConvergence,
     era25Month2MarketReadinessConvergence,
     era25ScaleReadinessConvergence,
+    era25SeriesAPartnerExpansionConvergence,
   };
 }
