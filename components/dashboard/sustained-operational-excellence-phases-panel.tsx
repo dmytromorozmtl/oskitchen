@@ -151,6 +151,7 @@ export function SustainedOperationalExcellencePhasesPanel(props: {
                 <li>{slice.integrityValidateCommand}</li>
                 <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.validateMarketLeaderIntegrityCommand}</li>
+                <li>{slice.sustainedOpsExecutionCommand}</li>
                 <li>{slice.marketLeaderExecutionCommand}</li>
                 <li>{slice.postMarketLeaderOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>

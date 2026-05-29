@@ -190,6 +190,7 @@ export function SustainedProductEvolutionPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.sustainedOpsExecutionCommand}</li>
                 <li>{slice.postImprovementLoopOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>

@@ -62,6 +62,8 @@ export type SustainedOperationalExcellenceUiSlice = {
   postMarketLeaderOrchestratorCommand: string;
   marketLeaderExecutionCommand: string;
   marketLeaderExecutionArtifact: string;
+  sustainedOpsExecutionCommand: string;
+  sustainedOpsExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateMarketLeaderCommand: string;
   validateMarketLeaderIntegrityCommand: string;
@@ -203,6 +205,10 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
       "npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write",
     marketLeaderExecutionCommand: "npm run ops:run-market-leader-positioning-execution -- --write",
     marketLeaderExecutionArtifact: "artifacts/market-leader-positioning-execution-summary.json",
+    sustainedOpsExecutionCommand:
+      "npm run ops:run-sustained-operational-excellence-execution -- --write",
+    sustainedOpsExecutionArtifact:
+      "artifacts/sustained-operational-excellence-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write",
     validateMarketLeaderCommand: "npm run ops:validate-market-leader-positioning-env -- --json",

@@ -18,6 +18,8 @@ export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_EXTENDS_POLICIES = [
 ] as const;
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_OPS_SCRIPTS = [
+  "ops:run-sustained-operational-excellence-execution",
+  "ops:run-market-leader-positioning-execution",
   "ops:run-sustained-operational-excellence-post-market-leader-orchestrator",
   "ops:validate-sustained-operational-excellence-env",
   "ops:validate-sustained-operational-excellence-integrity",
@@ -28,12 +30,16 @@ export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_OPS_SCRIPTS = [
 ] as const;
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_CI_SCRIPTS = [
+  "test:ci:sustained-operational-excellence-execution",
+  "test:ci:sustained-operational-excellence-execution:cert",
   "test:ci:sustained-operational-excellence-era21",
   "test:ci:sustained-operational-excellence-era21:cert",
   "test:ci:sustained-operational-excellence-integrity-era33",
 ] as const;
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_UNIT_TESTS = [
+  "tests/unit/sustained-operational-excellence-execution-orchestrator.test.ts",
+  "tests/unit/sustained-operational-excellence-execution-cert-live.test.ts",
   "tests/unit/sustained-operational-excellence-post-market-leader-orchestrator-era21.test.ts",
   "tests/unit/sustained-operational-excellence-phases-era21.test.ts",
   "tests/unit/sustained-operational-excellence-ui-era21.test.ts",

@@ -306,7 +306,7 @@ export function buildMarketLeaderPositioningExecutionSummary(input: {
 
   if (milestone === "market_leader_positioning_passed") {
     recommendedCommands.push(
-      "npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write",
+      "npm run ops:run-sustained-operational-excellence-execution -- --write",
     );
   }
 

@@ -75,6 +75,8 @@ export type SustainedProductEvolutionUiSlice = {
   syncProgressReportCommand: string;
   exportOwnershipMatrixCommand: string;
   postImprovementLoopOrchestratorCommand: string;
+  sustainedOpsExecutionCommand: string;
+  sustainedOpsExecutionArtifact: string;
   validateImprovementLoopCommand: string;
   validateImprovementLoopIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -205,6 +207,10 @@ export function buildSustainedProductEvolutionUiSlice(input: {
       "npm run ops:export-sustained-product-evolution-ownership-matrix -- --write",
     postImprovementLoopOrchestratorCommand:
       "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+    sustainedOpsExecutionCommand:
+      "npm run ops:run-sustained-operational-excellence-execution -- --write",
+    sustainedOpsExecutionArtifact:
+      "artifacts/sustained-operational-excellence-execution-summary.json",
     validateImprovementLoopCommand: "npm run ops:validate-continuous-improvement-loop -- --json",
     validateImprovementLoopIntegrityCommand:
       "npm run ops:validate-continuous-improvement-loop-integrity -- --json",

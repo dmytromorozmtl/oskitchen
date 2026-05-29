@@ -33,7 +33,8 @@ export const MARKET_LEADER_POSITIONING_EXECUTION_OPS_SCRIPTS = [
   "smoke:pilot-forbidden-claims-enforcement",
   "smoke:investor-narrative-onepager",
   "smoke:pilot-metrics-baseline",
-  "ops:run-sustained-operational-excellence-post-market-leader-orchestrator",
+  "ops:run-sustained-operational-excellence-execution",
+  "ops:run-sustained-product-evolution-post-improvement-loop-orchestrator",
 ] as const;
 
 export const MARKET_LEADER_POSITIONING_EXECUTION_CI_SCRIPTS = [
