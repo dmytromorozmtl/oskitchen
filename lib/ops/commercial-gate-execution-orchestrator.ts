@@ -24,6 +24,9 @@ export const COMMERCIAL_GATE_EXECUTION_DOC =
 export const COMMERCIAL_GATE_EXECUTION_STEP5_DOC =
   "docs/next-step-5-pilot-week1-2026-05-29.md" as const;
 
+export const COMMERCIAL_GATE_EXECUTION_STEP6_DOC =
+  "docs/next-step-6-pilot-scale-expansion-2026-05-29.md" as const;
+
 export const COMMERCIAL_GATE_EXECUTION_SUMMARY_ARTIFACT =
   "artifacts/commercial-gate-execution-summary.json" as const;
 
@@ -264,6 +267,7 @@ export function buildCommercialGateExecutionSummary(input: {
   }
 
   if (milestone === "commercial_gate_passed") {
+    recommendedCommands.push("npm run ops:run-pilot-week1-execution -- --write");
     recommendedCommands.push("npm run run:production-pilot-ready");
   }
 

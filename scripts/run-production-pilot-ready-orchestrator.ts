@@ -79,6 +79,11 @@ function main() {
         allowFail: true,
       }),
     );
+    steps.push(
+      runStep("pilot-week1", "npm run ops:run-pilot-week1-execution -- --write", {
+        allowFail: true,
+      }),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

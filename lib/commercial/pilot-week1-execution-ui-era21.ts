@@ -45,6 +45,8 @@ export type PilotWeek1ExecutionUiSlice = {
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
   postGoOrchestratorCommand: string;
+  week1ExecutionCommand: string;
+  week1ExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateGoClosureCommand: string;
   validateGoIntegrityCommand: string;
@@ -139,6 +141,8 @@ export function buildPilotWeek1ExecutionUiSlice(input: {
     exportTemplateCommand: "npm run ops:export-pilot-week1-env-template -- --write",
     syncProgressReportCommand: "npm run ops:sync-pilot-week1-progress-report -- --write",
     postGoOrchestratorCommand: "npm run ops:run-pilot-week1-execution-post-go-orchestrator -- --write",
+    week1ExecutionCommand: "npm run ops:run-pilot-week1-execution -- --write",
+    week1ExecutionArtifact: "artifacts/pilot-week1-execution-summary.json",
     exportReadinessChecklistCommand: "npm run ops:export-pilot-week1-readiness-checklist -- --write",
     validateGoClosureCommand: "npm run ops:validate-commercial-go-closure-env -- --json",
     validateGoIntegrityCommand: "npm run ops:validate-pilot-gono-go-integrity -- --json",

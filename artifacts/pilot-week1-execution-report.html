@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>KitchenOS Pilot Week 1 Execution</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
+    .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+    .banner-pass { background: #ecfdf5; border: 1px solid #6ee7b7; }
+    .banner-blocked { background: #fff7ed; border: 1px solid #fdba74; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9rem; }
+    th, td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+    th { background: #f9fafb; }
+    .status-pass { color: #047857; font-weight: 700; }
+    .status-blocked { color: #b45309; font-weight: 700; }
+    code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+    .honesty { font-size: 0.85rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Pilot Week 1 — Step 5 Execution</h1>
+  <p class="honesty">Policy era33-pilot-week1-execution-v1 · Generated 2026-05-29T13:48:02.670Z</p>
+
+  <div class="banner banner-blocked">
+    <strong>Milestone:</strong> commercial_gate_blocked<br />
+    <strong>Commercial gate:</strong> tier2_execution_blocked<br />
+    <strong>GO:</strong> NO-GO · Customer: not recorded<br />
+    <strong>Week 1 days:</strong> in progress<br />
+    <strong>Checkpoint:</strong> operator proof_skipped_missing_prerequisites · rollback proof_passed<br />
+    <strong>CS sign-off:</strong> no · integrity FAIL
+  </div>
+
+  <p class="honesty">PASS &gt; SKIPPED — Week 1 PASS requires production orders, executable rollback drill, and CS sign-off. Applies to all F&amp;B formats (restaurant, bar, café, bakery, catering, ghost kitchen).</p>
+
+  <h2>Execution gates</h2>
+  <table>
+    <thead><tr><th></th><th>Gate</th><th>Proof</th><th>Detail</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Commercial gate execution complete</td>
+        <td>tier2_execution_blocked</td>
+        <td>Complete Step 4 — ICP + LOI + GO with integrity PASS.</td>
+        <td><code>npm run ops:run-commercial-gate-execution -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-pass">✓</td>
+        <td>GO integrity validation</td>
+        <td>integrity_passed</td>
+        <td>Honest GO requires P0 + Tier 2 artifact truth — no fake GO.</td>
+        <td><code>npm run ops:validate-pilot-gono-go-integrity -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 1 day phases (TTV → metrics)</td>
+        <td>in_progress</td>
+        <td>Record Day 1–5 milestones — never estimate TTV or fake order IDs.</td>
+        <td><code>npm run ops:validate-pilot-week1-env -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 1 checkpoint — operator golden path (production)</td>
+        <td>proof_skipped_missing_prerequisites</td>
+        <td>Run smoke:pilot-operator-golden-path on production — not staging replay.</td>
+        <td><code>npm run smoke:pilot-operator-golden-path</code></td>
+      </tr>
+      <tr>
+        <td class="status-pass">✓</td>
+        <td>Week 1 checkpoint — rollback drill</td>
+        <td>proof_passed</td>
+        <td>Rollback drill executable and documented.</td>
+        <td><code>npm run smoke:pilot-rollback-drill</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>CS + COO Week 1 sign-off</td>
+        <td>pending</td>
+        <td>Set PILOT_WEEK1_CHECKPOINT_DATE + PILOT_WEEK1_OPERATOR_SATISFACTION after Day 7 review.</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 1 execution integrity</td>
+        <td>integrity_pending</td>
+        <td>No fake metrics PASS or Week 1 started without honest GO.</td>
+        <td><code>npm run ops:validate-pilot-week1-execution-integrity -- --json</code></td>
+      </tr></tbody>
+  </table>
+
+  <h2>Week 1 day phases</h2>
+  <table>
+    <thead><tr><th></th><th>Phase</th><th>Detail</th><th>Smoke</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Day 1 — TTV + onboarding (Launch Wizard → first order)</td>
+        <td>Record real hours-to-first-order and Order Hub ID after Launch Wizard onboarding — never estimate</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Day 2 — Integration Health cadence</td>
+        <td>Review /dashboard/integration-health, then export PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED=1</td>
+        <td><code>npm run smoke:woo-shopify-live</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Day 3 — POS shift open → sale → closeout</td>
+        <td>Open shift → sale → close at /dashboard/pos/shifts, then PILOT_WEEK1_POS_CLOSEOUT_STATUS=pass</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Day 4 — Reports weekly export + copy review</td>
+        <td>Export from /dashboard/reports, confirm forbidden claims still accurate, then PILOT_WEEK1_REPORTS_WEEKLY_EXPORT=1</td>
+        <td><code>npm run smoke:pilot-forbidden-claims-enforcement</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Day 5 — Metrics baseline + case study + GO re-run</td>
+        <td>Run Day 5 smokes — missing: artifacts/pilot-metrics-baseline-summary.json → overall: PASSED; artifacts/pilot-gono-go-summary.json → decision: GO</td>
+        <td><code>npm run smoke:pilot-metrics-baseline</code><br /><code>npm run smoke:pilot-case-study-draft</code><br /><code>npm run smoke:pilot-gono-go</code></td>
+      </tr></tbody>
+  </table>
+
+  <h2>Product surfaces</h2>
+  <ul><li><code>/dashboard/today</code></li><li><code>/dashboard/launch-wizard</code></li><li><code>/dashboard/kitchen</code></li><li><code>/dashboard/pos</code></li><li><code>/dashboard/integration-health#integration-health-pilot-week1</code></li><li><code>/platform/commercial-pilot-ops</code></li></ul>
+
+  <h2>Recommended commands</h2>
+  <ol><li><code>npm run ops:run-commercial-gate-execution -- --write</code></li><li><code>npm run ops:run-commercial-gate-execution -- --execute</code></li></ol>
+</body>
+</html>

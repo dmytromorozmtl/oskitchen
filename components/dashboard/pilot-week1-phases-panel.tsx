@@ -136,6 +136,7 @@ export function PilotWeek1PhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.week1ExecutionCommand}</li>
                 <li>{slice.postGoOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.validateGoClosureCommand}</li>

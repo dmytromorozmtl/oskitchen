@@ -18,6 +18,7 @@ export const PILOT_WEEK1_EXECUTION_ERA21_EXTENDS_POLICIES = [
 ] as const;
 
 export const PILOT_WEEK1_EXECUTION_ERA21_OPS_SCRIPTS = [
+  "ops:run-pilot-week1-execution",
   "ops:run-pilot-week1-execution-post-go-orchestrator",
   "ops:validate-pilot-week1-env",
   "ops:validate-pilot-week1-execution-integrity",
@@ -31,12 +32,16 @@ export const PILOT_WEEK1_EXECUTION_ERA21_PHASE_D_DOC =
   "docs/next-step-pilot-week1-phase-d-product-2026-05-28.md" as const;
 
 export const PILOT_WEEK1_EXECUTION_ERA21_CI_SCRIPTS = [
+  "test:ci:pilot-week1-execution-orchestrator",
+  "test:ci:pilot-week1-execution-orchestrator:cert",
   "test:ci:pilot-week1-execution-era21",
   "test:ci:pilot-week1-execution-era21:cert",
   "test:ci:pilot-week1-execution-integrity-era28",
 ] as const;
 
 export const PILOT_WEEK1_EXECUTION_ERA21_UNIT_TESTS = [
+  "tests/unit/pilot-week1-execution-orchestrator.test.ts",
+  "tests/unit/pilot-week1-execution-orchestrator-cert-live.test.ts",
   "tests/unit/pilot-week1-execution-post-go-orchestrator-era21.test.ts",
   "tests/unit/pilot-week1-execution-phases-era21.test.ts",
   "tests/unit/pilot-week1-execution-ui-era21.test.ts",

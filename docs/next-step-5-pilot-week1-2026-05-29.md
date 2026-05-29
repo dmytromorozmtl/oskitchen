@@ -21,6 +21,16 @@ If commercial gate not PASS — return to [`next-step-4-commercial-gate-2026-05-
 
 ## Execution sequence
 
+### 5.0 Pilot Week 1 execution orchestrator (Step 5 assess)
+
+```bash
+npm run ops:run-pilot-week1-execution -- --write
+```
+
+Review milestone in stdout. Expected progression when commercial gate passed:
+
+`commercial_gate_blocked` → `day1_ttv_onboarding` → … → `day5_metrics_narrative` → `awaiting_checkpoint_smokes` → `week1_execution_passed`
+
 ### 5.1 Pilot kickoff (Day 0)
 
 | Task | Owner | Deliverable |
