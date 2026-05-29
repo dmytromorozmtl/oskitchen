@@ -110,35 +110,19 @@ npm run ops:sync-steady-state-operator-loop-report -- --write
 
 ---
 
-## Step 17 preview — FORBIDDEN (meta-doc only)
+## Step 17 — FORBIDDEN guard orchestrator (implemented)
 
 See [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md)
 
-**There is no Step 17 engineering gate.**
+Step 17 guard orchestrator: `era24-linear-chain-terminus-guard-post-linear-path-closed-orchestrator-v1` · **NOT a catalog step** · Milestones: `linear_path_closure_blocked` → `attention_catalog_integrity` → `step17_forbidden_healthy`
 
-| Action | Verdict |
-|--------|---------|
-| Add Step 17 to linear chain | **FORBIDDEN** |
-| Add Step 18+ docs | **FORBIDDEN** |
-| Add era25+ code without charter | **FORBIDDEN** |
-| Repeat Step 12–16 rhythms | **REQUIRED** |
+**Human gate before healthy guard:** `linearPathPermanentlyClosedMilestone: linear_path_permanently_closed_healthy` + guard report synced.
 
-**Guard (already wired):**
+---
 
-```bash
-npm run ops:validate-linear-chain-terminus-guard -- --json
-```
+## era25+ preview — Charter exit (outside linear path)
 
-Policy: `era24-linear-chain-terminus-guard-v1` · Panel shows guard PASS/FAIL in `#linear-path-permanently-closed`
-
-**If an agent proposes "Step 17":** Reject. Redirect to Step 16 terminal closure or Step 1 P0 vault if path blocked.
-
-**era25+ exit (only path for new gates):**
-
-1. `npm run ops:export-era-charter-readiness-checklist -- --write`
-2. `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16
-3. New policy IDs `era25-*` with separate briefing scheme
-4. Honest NO-GO until human execution
+See [`next-era25-charter-exit-outside-linear-path-2026-05-28.md`](./next-era25-charter-exit-outside-linear-path-2026-05-28.md) — **process only · human charter sign-off · no Step 18**
 
 ---
 

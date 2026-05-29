@@ -13,6 +13,7 @@ import {
 import { formatEngineeringPathTerminusProgressLabel } from "@/lib/commercial/engineering-path-terminus-ui-era24";
 import { formatCommercialPilotPathAbsoluteEndLabel } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
 import { formatLinearPathPermanentlyClosedLabel } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
+import { formatLinearChainTerminusGuardLabel } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -423,6 +424,82 @@ export function MaintenanceModePanel(props: {
                   .linearPathPermanentlyClosed.missingDocChainDocCount
               }
             </p>
+
+            {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+              .linearPathPermanentlyClosed.step17Forbidden ? (
+              <div
+                id="linear-chain-step17-forbidden"
+                className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-zinc-700/60 px-3 py-3"
+                data-testid="linear-chain-step17-forbidden-panel"
+              >
+                <p className="font-medium text-zinc-200">
+                  Step 17 FORBIDDEN — linear chain terminus guard
+                </p>
+                <p className="mt-1 text-zinc-400">
+                  {formatLinearChainTerminusGuardLabel(
+                    slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                      .linearPathPermanentlyClosed.step17Forbidden,
+                  )}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full font-mono text-[10px] text-zinc-300"
+                  >
+                    {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.linearChainTerminusGuardMilestone.replaceAll(
+                      "_",
+                      " ",
+                    )}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-full text-[10px] text-zinc-400">
+                    catalog{" "}
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.catalogStepCount
+                    }
+                    / max{" "}
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.maxLinearStep
+                    }
+                  </Badge>
+                </div>
+                <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                  {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.forbiddenProposals.map(
+                    (proposal) => (
+                      <li key={proposal}>{proposal}</li>
+                    ),
+                  )}
+                </ul>
+                <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden
+                        .postLinearPathClosedOrchestratorCommand
+                    }
+                  </span>
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.validateCommand
+                    }
+                  </span>
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.syncReportCommand
+                    }
+                  </span>
+                  <span>
+                    {
+                      slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.exportEraCharterChecklistCommand
+                    }
+                  </span>
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : null}
 

@@ -21,8 +21,9 @@ describe("linear-path-permanently-closed-ui-era24", () => {
     expect(slice?.linearPathPermanentlyClosedMilestone).toBe("absolute_end_blocked");
     expect(slice?.terminusGuardPassed).toBe(true);
     expect(slice?.terminusGuardValidateCommand).toBe(
-      "npm run ops:validate-linear-chain-terminus-guard",
+      "npm run ops:validate-linear-chain-terminus-guard -- --json",
     );
+    expect(slice?.step17Forbidden).toBeNull();
   });
 
   it("formats terminal label", () => {

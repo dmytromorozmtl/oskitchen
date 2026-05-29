@@ -1,14 +1,16 @@
 # KitchenOS — Step 17: FORBIDDEN (linear chain terminus)
 
-**Status:** **DO NOT IMPLEMENT · DO NOT DOCUMENT STEP 18+**
+**Status:** **DO NOT ADD TO CATALOG · DO NOT DOCUMENT STEP 18+**
 
+**Policy:** `era24-linear-chain-terminus-guard-v1` · Orchestrator `era24-linear-chain-terminus-guard-post-linear-path-closed-orchestrator-v1`  
+**Backlog:** `KOS-E24-017-GUARD` (guard slice — not a catalog step)  
 **Prerequisite:** Step 16 `linear_path_permanently_closed_healthy` (or honest blocked milestone until P0 vault)
 
 ---
 
 ## Declaration
 
-**Step 17 does not exist.**
+**Step 17 does not exist in `COMMERCIAL_PILOT_PATH_STEP_CATALOG`.**
 
 The KitchenOS commercial pilot linear doc chain **ends at Step 16**.
 
@@ -19,44 +21,58 @@ The KitchenOS commercial pilot linear doc chain **ends at Step 16**.
 | Add era25+ code without charter | **FORBIDDEN** |
 | Repeat Step 12–16 rhythms | **REQUIRED** |
 
----
-
-## What to do instead
-
-### Steady-state operations (forever)
-
-```bash
-npm run test:ci:commercial-pilot-runbook:cert
-npm run ops:validate-linear-path-permanently-closed -- --json
-npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --write
-npm run ops:validate-steady-state-operator-loop -- --json
-npm run ops:sync-linear-path-permanently-closed-report -- --write
-```
-
-Surfaces: `/dashboard/today` · `/platform/commercial-pilot-ops#linear-path-permanently-closed`
-
-### New commercial gates (era25+)
-
-Only via **separate era charter** — not Steps 1–17:
-
-1. Leadership sign-off
-2. `npm run ops:export-era-charter-readiness-checklist -- --write`
-3. `docs/era25-<name>-charter-2026-*.md`
-4. New `era25-*` policies outside this path
+Step 17 engineering = **terminus guard orchestration only** (repo integrity, not a path step).
 
 ---
 
-## Guard (Step 17 FORBIDDEN — not a path step)
+## Milestones (`linearChainTerminusGuardMilestone`)
+
+| Milestone | Meaning | Orchestrator exit |
+|-----------|---------|-------------------|
+| `linear_path_closure_blocked` | Step 16 not healthy | `2` |
+| `attention_catalog_integrity` | Guard violations | `0` |
+| `step17_forbidden_healthy` | Step 16 healthy + guard PASS | `0` |
+
+**Smoke readiness flags:**
+
+- `readyForLinearPathClosureSmokes` — Step 16 not at healthy milestone
+- `readyForCatalogIntegritySmokes` — guard FAIL
+
+---
+
+## Ops commands (Step 17 guard)
 
 ```bash
 npm run ops:validate-linear-chain-terminus-guard -- --json
+npm run ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator -- --json
+npm run ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator -- --write
+npm run ops:sync-linear-chain-terminus-guard-report -- --write
+
+npm run test:ci:linear-chain-terminus-guard-era24
+npm run test:ci:linear-chain-terminus-guard-era24:cert
 ```
 
-Verifies catalog locked at **16 steps**, Step 17 forbidden doc present, no Step 18+ linear docs.
+**Artifacts:**
 
-Policy: `era24-linear-chain-terminus-guard-v1`
+- `artifacts/linear-chain-terminus-guard-report.md`
 
-**Guard checks (automated):**
+**Workflow:** `.github/workflows/ops-linear-chain-terminus-guard-validate.yml`
+
+---
+
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Guard lib | `lib/commercial/linear-chain-terminus-guard-era24.ts` |
+| Orchestrator lib | `lib/commercial/linear-chain-terminus-guard-post-linear-path-closed-orchestrator-era24.ts` |
+| UI slice | `lib/commercial/linear-chain-terminus-guard-ui-era24.ts` |
+| Panel | `#linear-chain-step17-forbidden` nested under `#linear-path-permanently-closed` |
+| Policy | `lib/commercial/linear-chain-terminus-guard-era24-policy.ts` |
+
+---
+
+## Guard checks (automated)
 
 | Check | Expected |
 |-------|----------|
@@ -67,7 +83,21 @@ Policy: `era24-linear-chain-terminus-guard-v1`
 | `docs/next-step-16-linear-path-permanently-closed-2026-05-28.md` | present |
 | `docs/next-step-18-*` linear docs | absent |
 
-Panel: `#linear-path-permanently-closed` shows guard PASS/FAIL + `linearPathPermanentlyClosedMilestone`
+---
+
+## What to do instead
+
+### Steady-state operations (forever)
+
+```bash
+npm run test:ci:commercial-pilot-runbook:cert
+npm run ops:validate-linear-path-permanently-closed -- --json
+npm run ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator -- --write
+npm run ops:validate-steady-state-operator-loop -- --json
+npm run ops:sync-linear-chain-terminus-guard-report -- --write
+```
+
+Surfaces: `/dashboard/today` · `/platform/commercial-pilot-ops#linear-chain-step17-forbidden`
 
 ---
 
@@ -75,19 +105,36 @@ Panel: `#linear-path-permanently-closed` shows guard PASS/FAIL + `linearPathPerm
 
 Weekly:
 
-1. Review `linearPathPermanentlyClosedMilestone` from validate JSON
-2. Run orchestrator `--write` to sync reports
-3. Confirm terminus guard PASS
+1. Review `linearChainTerminusGuardMilestone` from validate JSON
+2. Confirm terminus guard PASS
+3. Run orchestrator `--write` to sync reports
 4. Run `test:ci:commercial-pilot-runbook:cert` on release train
 
 **No new linear steps.** If product needs new gates → era25 charter process only.
 
 ---
 
-## If an agent proposes "Step 17"
+## era25+ preview — Charter exit (outside linear path)
+
+See [`next-era25-charter-exit-outside-linear-path-2026-05-28.md`](./next-era25-charter-exit-outside-linear-path-2026-05-28.md)
+
+**NOT a linear catalog step.** Human-gated process for new commercial gates:
+
+1. Leadership sign-off (explicit decision not to extend era24 rhythms)
+2. `npm run ops:export-era-charter-readiness-checklist -- --write`
+3. `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16
+4. New `era25-*` policies + separate briefing scheme
+5. Honest NO-GO until human execution
+
+**Guard must stay PASS** — era25 never adds Step 18+ to linear chain.
+
+---
+
+## If an agent proposes "Step 17" as a catalog step
 
 **Reject.** Redirect to:
 
+- This doc — guard orchestration only
 - [`next-step-16-linear-path-permanently-closed-2026-05-28.md`](./next-step-16-linear-path-permanently-closed-2026-05-28.md) — terminal closure
 - [`next-step-1-ops-vault-day0-execution-2026-05-28.md`](./next-step-1-ops-vault-day0-execution-2026-05-28.md) — if path blocked
 

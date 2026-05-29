@@ -14,6 +14,10 @@ import {
 import {
   LINEAR_CHAIN_STEP17_FORBIDDEN_DOC,
 } from "@/lib/commercial/linear-chain-terminus-guard-era24";
+import {
+  buildLinearChainTerminusGuardUiSlice,
+  type LinearChainTerminusGuardUiSlice,
+} from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import { evaluateLinearPathPermanentlyClosedWithMilestones } from "@/scripts/ops/validate-linear-path-permanently-closed";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -42,6 +46,7 @@ export type LinearPathPermanentlyClosedUiSlice = {
   terminusGuardPassed: boolean;
   step17ForbiddenDoc: typeof LINEAR_CHAIN_STEP17_FORBIDDEN_DOC;
   terminusGuardValidateCommand: string;
+  step17Forbidden: LinearChainTerminusGuardUiSlice | null;
 };
 
 export function buildLinearPathPermanentlyClosedUiSlice(input: {
@@ -51,6 +56,10 @@ export function buildLinearPathPermanentlyClosedUiSlice(input: {
   if (!input.absoluteEndActive) return null;
 
   const result = evaluateLinearPathPermanentlyClosedWithMilestones(input.env);
+  const step17Forbidden = buildLinearChainTerminusGuardUiSlice({
+    terminalClosureActive: result.evaluation.terminalClosureActive,
+    env: input.env,
+  });
 
   return {
     policyId: LINEAR_PATH_PERMANENTLY_CLOSED_UI_ERA24_POLICY_ID,
@@ -74,7 +83,8 @@ export function buildLinearPathPermanentlyClosedUiSlice(input: {
     missingDocChainDocCount: result.missingDocChainDocs.length,
     terminusGuardPassed: result.guard.guardPassed,
     step17ForbiddenDoc: LINEAR_CHAIN_STEP17_FORBIDDEN_DOC,
-    terminusGuardValidateCommand: "npm run ops:validate-linear-chain-terminus-guard",
+    terminusGuardValidateCommand: "npm run ops:validate-linear-chain-terminus-guard -- --json",
+    step17Forbidden,
   };
 }
 

@@ -16,6 +16,12 @@ export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_POLICY_ID =
 export const LINEAR_CHAIN_STEP17_FORBIDDEN_DOC =
   "docs/next-step-17-forbidden-linear-chain-terminus-2026-05-28.md" as const;
 
+export const LINEAR_CHAIN_TERMINUS_GUARD_REPORT_PATH =
+  "artifacts/linear-chain-terminus-guard-report.md" as const;
+
+export const LINEAR_CHAIN_TERMINUS_GUARD_PLATFORM_ANCHOR =
+  "#linear-chain-step17-forbidden" as const;
+
 export const LINEAR_CHAIN_MAX_STEP = 16 as const;
 
 export const LINEAR_CHAIN_FORBIDDEN_PROPOSALS: readonly string[] = [
@@ -23,6 +29,14 @@ export const LINEAR_CHAIN_FORBIDDEN_PROPOSALS: readonly string[] = [
   "Add docs/next-step-18-*.md to the linear chain",
   "Add era25+ panels without explicit era charter",
   "Re-open era21 gate chain for steady-state customers",
+] as const;
+
+export const LINEAR_CHAIN_TERMINUS_GUARD_FOREVER_COMMANDS: readonly string[] = [
+  "test:ci:commercial-pilot-runbook:cert",
+  "ops:validate-linear-chain-terminus-guard",
+  "ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator",
+  "ops:validate-linear-path-permanently-closed",
+  "ops:sync-linear-chain-terminus-guard-report",
 ] as const;
 
 export type LinearChainTerminusGuardViolation = {
