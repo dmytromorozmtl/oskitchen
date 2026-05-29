@@ -5,8 +5,11 @@ import {
   PURE_OPERATIONAL_MODE_TERMINUS_ERA25_DOC,
   PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
-import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_UI_POLICY_ID } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/sustained-operational-excellence-convergence-era25-policy";
+
+/** Inline — importing from ui-era25 creates a policy → ui → ops → policy cycle at build time. */
+const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_UI_POLICY_ID =
+  "era25-pure-operational-mode-terminus-ui-v1" as const;
 
 export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_POLICY_ID =
   "era25-pure-operational-mode-terminus-v1" as const;

@@ -3,7 +3,8 @@
  */
 
 import { MONTH2_MARKET_READINESS_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/month2-market-readiness-phases-era21";
-import { MONTH2_MARKET_READINESS_UI_ERA21_POLICY_ID } from "@/lib/commercial/month2-market-readiness-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const MONTH2_MARKET_READINESS_UI_ERA21_POLICY_ID = "era21-month2-market-readiness-ui-v1" as const;
 
 export const MONTH2_MARKET_READINESS_ERA21_POLICY_ID = "era21-month2-market-readiness-v1" as const;
 

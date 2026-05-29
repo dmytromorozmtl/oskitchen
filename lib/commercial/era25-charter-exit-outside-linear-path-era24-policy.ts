@@ -5,7 +5,8 @@ import {
   ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_DOC,
   ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_PHASES_ERA24_POLICY_ID,
 } from "@/lib/commercial/era25-charter-exit-outside-linear-path-phases-era24";
-import { ERA25_CHARTER_EXIT_UI_ERA24_POLICY_ID } from "@/lib/commercial/era25-charter-exit-ui-era24";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const ERA25_CHARTER_EXIT_UI_ERA24_POLICY_ID = "era24-era25-charter-exit-outside-linear-path-ui-v1" as const;
 import { LINEAR_CHAIN_TERMINUS_GUARD_ERA24_POLICY_ID } from "@/lib/commercial/linear-chain-terminus-guard-era24-policy";
 
 export const ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_ERA24_POLICY_ID =

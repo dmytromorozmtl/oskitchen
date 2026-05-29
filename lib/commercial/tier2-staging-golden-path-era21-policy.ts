@@ -4,7 +4,8 @@
 
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import { TIER2_GOLDEN_PATH_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-phases-era21";
-import { TIER2_GOLDEN_PATH_UI_ERA21_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const TIER2_GOLDEN_PATH_UI_ERA21_POLICY_ID = "era21-tier2-golden-path-ui-v1" as const;
 
 export const TIER2_STAGING_GOLDEN_PATH_ERA21_POLICY_ID = "era21-tier2-golden-path-v1" as const;
 

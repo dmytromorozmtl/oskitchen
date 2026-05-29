@@ -3,7 +3,8 @@
  */
 
 import { COMMERCIAL_GO_CLOSURE_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/commercial-go-closure-phases-era21";
-import { COMMERCIAL_GO_CLOSURE_UI_ERA21_POLICY_ID } from "@/lib/commercial/commercial-go-closure-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const COMMERCIAL_GO_CLOSURE_UI_ERA21_POLICY_ID = "era21-commercial-go-closure-ui-v1" as const;
 
 export const COMMERCIAL_GO_CLOSURE_ERA21_POLICY_ID = "era21-commercial-go-closure-v1" as const;
 

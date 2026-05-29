@@ -5,7 +5,8 @@ import {
   MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_DOC,
   MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/market-leader-positioning-convergence-phases-era25";
-import { MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_UI_POLICY_ID } from "@/lib/commercial/market-leader-positioning-convergence-ui-era25";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_UI_POLICY_ID = "era25-market-leader-positioning-convergence-ui-v1" as const;
 import { SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/series-a-partner-expansion-convergence-era25-policy";
 
 export const MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_POLICY_ID =

@@ -3,7 +3,8 @@
  */
 
 import { SERIES_A_PARTNER_EXPANSION_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/series-a-partner-expansion-phases-era21";
-import { SERIES_A_PARTNER_EXPANSION_UI_ERA21_POLICY_ID } from "@/lib/commercial/series-a-partner-expansion-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const SERIES_A_PARTNER_EXPANSION_UI_ERA21_POLICY_ID = "era21-series-a-partner-expansion-ui-v1" as const;
 
 export const SERIES_A_PARTNER_EXPANSION_ERA21_POLICY_ID =
   "era21-series-a-partner-expansion-v1" as const;

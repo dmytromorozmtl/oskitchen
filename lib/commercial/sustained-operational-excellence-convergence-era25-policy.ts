@@ -5,7 +5,8 @@ import {
   SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_DOC,
   SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/sustained-operational-excellence-convergence-phases-era25";
-import { SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_UI_POLICY_ID } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_UI_POLICY_ID = "era25-sustained-operational-excellence-convergence-ui-v1" as const;
 import { MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/market-leader-positioning-convergence-era25-policy";
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_POLICY_ID =

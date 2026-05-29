@@ -5,7 +5,8 @@ import {
   MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_DOC,
   MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/month2-market-readiness-convergence-phases-era25";
-import { MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UI_POLICY_ID } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const MONTH2_MARKET_READINESS_CONVERGENCE_ERA25_UI_POLICY_ID = "era25-month2-market-readiness-convergence-ui-v1" as const;
 import { MONTH2_MARKET_READINESS_CONVERGENCE_INTEGRITY_ERA49_POLICY_ID } from "@/lib/commercial/month2-market-readiness-convergence-integrity-era49-policy";
 import { PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/pilot-week1-execution-convergence-era25-policy";
 

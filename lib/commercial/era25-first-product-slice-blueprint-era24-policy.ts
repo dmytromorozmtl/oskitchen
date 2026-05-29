@@ -5,7 +5,8 @@ import {
   ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_DOC,
   ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_PHASES_ERA24_POLICY_ID,
 } from "@/lib/commercial/era25-first-product-slice-blueprint-phases-era24";
-import { ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_UI_ERA24_POLICY_ID } from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_UI_ERA24_POLICY_ID = "era24-era25-first-product-slice-blueprint-ui-v1" as const;
 import { ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_POLICY_ID } from "@/lib/commercial/era25-engineering-gates-require-signed-charter-era24-policy";
 
 export const ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_ERA24_POLICY_ID =

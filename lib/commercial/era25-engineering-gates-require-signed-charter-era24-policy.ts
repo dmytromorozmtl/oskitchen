@@ -5,7 +5,8 @@ import {
   ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_DOC,
   ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_PHASES_ERA24_POLICY_ID,
 } from "@/lib/commercial/era25-engineering-gates-require-signed-charter-phases-era24";
-import { ERA25_ENGINEERING_GATES_UI_ERA24_POLICY_ID } from "@/lib/commercial/era25-engineering-gates-ui-era24";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const ERA25_ENGINEERING_GATES_UI_ERA24_POLICY_ID = "era24-era25-engineering-gates-ui-v1" as const;
 import { ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_POLICY_ID } from "@/lib/commercial/era25-first-charter-slice-readiness-era24-policy";
 
 export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_POLICY_ID =

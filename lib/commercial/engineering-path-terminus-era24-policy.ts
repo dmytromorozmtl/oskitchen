@@ -6,7 +6,8 @@ import {
   ENGINEERING_PATH_TERMINUS_ERA24_POLICY_ID,
   ENGINEERING_PATH_TERMINUS_STEP13_DOC,
 } from "@/lib/commercial/engineering-path-terminus-era24";
-import { ENGINEERING_PATH_TERMINUS_UI_ERA24_POLICY_ID } from "@/lib/commercial/engineering-path-terminus-ui-era24";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const ENGINEERING_PATH_TERMINUS_UI_ERA24_POLICY_ID = "era24-engineering-path-terminus-ui-v1" as const;
 import { MAINTENANCE_MODE_ERA24_POLICY_ID } from "@/lib/commercial/maintenance-mode-era24-policy";
 
 export { ENGINEERING_PATH_TERMINUS_ERA24_POLICY_ID, ENGINEERING_PATH_TERMINUS_STEP13_DOC };

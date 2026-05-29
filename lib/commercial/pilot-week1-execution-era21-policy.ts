@@ -3,7 +3,8 @@
  */
 
 import { PILOT_WEEK1_EXECUTION_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/pilot-week1-execution-phases-era21";
-import { PILOT_WEEK1_EXECUTION_UI_ERA21_POLICY_ID } from "@/lib/commercial/pilot-week1-execution-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const PILOT_WEEK1_EXECUTION_UI_ERA21_POLICY_ID = "era21-pilot-week1-execution-ui-v1" as const;
 
 export const PILOT_WEEK1_EXECUTION_ERA21_POLICY_ID = "era21-pilot-week1-execution-v1" as const;
 

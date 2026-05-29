@@ -3,7 +3,8 @@
  */
 
 import { MARKET_LEADER_POSITIONING_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/market-leader-positioning-phases-era21";
-import { MARKET_LEADER_POSITIONING_UI_ERA21_POLICY_ID } from "@/lib/commercial/market-leader-positioning-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const MARKET_LEADER_POSITIONING_UI_ERA21_POLICY_ID = "era21-market-leader-positioning-ui-v1" as const;
 
 export const MARKET_LEADER_POSITIONING_ERA21_POLICY_ID =
   "era21-market-leader-positioning-v1" as const;

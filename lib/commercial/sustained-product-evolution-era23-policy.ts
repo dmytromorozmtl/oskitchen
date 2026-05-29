@@ -3,7 +3,8 @@
  */
 
 import { SUSTAINED_PRODUCT_EVOLUTION_PHASES_ERA23_POLICY_ID } from "@/lib/commercial/sustained-product-evolution-phases-era23";
-import { SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID } from "@/lib/commercial/sustained-product-evolution-ui-era23";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID = "era23-sustained-product-evolution-ui-v1" as const;
 
 export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_POLICY_ID =
   "era23-sustained-product-evolution-v1" as const;

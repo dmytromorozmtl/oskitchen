@@ -47,7 +47,7 @@ import { LaunchWizardEra25PostRhythmPermanenceBandAGovernanceTerminalClosureWitn
 import { LaunchWizardEra25BandAMarketProofExecutionSolePathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-panel";
 import { LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-panel";
 import { LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-panel";
-import { shouldSuppressEra25ProductConvergenceSurfaces } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
+import { shouldSuppressEra25ProductConvergenceSurfaces } from "@/lib/commercial/era25-gate-suppression-era25";
 import { LaunchWizardEra25SteadyStateOperatorLoopLockPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-steady-state-operator-loop-lock-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";

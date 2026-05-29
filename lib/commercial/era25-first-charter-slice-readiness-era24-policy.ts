@@ -5,7 +5,8 @@ import {
   ERA25_FIRST_CHARTER_SLICE_READINESS_PHASES_ERA24_POLICY_ID,
   ERA25_FIRST_CHARTER_SLICE_TEMPLATE_DOC,
 } from "@/lib/commercial/era25-first-charter-slice-readiness-phases-era24";
-import { ERA25_FIRST_CHARTER_SLICE_READINESS_UI_ERA24_POLICY_ID } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const ERA25_FIRST_CHARTER_SLICE_READINESS_UI_ERA24_POLICY_ID = "era24-era25-first-charter-slice-readiness-ui-v1" as const;
 import { ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_ERA24_POLICY_ID } from "@/lib/commercial/era25-charter-exit-outside-linear-path-era24-policy";
 
 export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_POLICY_ID =

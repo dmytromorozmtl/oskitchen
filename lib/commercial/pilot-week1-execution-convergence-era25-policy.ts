@@ -5,7 +5,8 @@ import {
   PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_DOC,
   PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/pilot-week1-execution-convergence-phases-era25";
-import { PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_UI_POLICY_ID } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const PILOT_WEEK1_EXECUTION_CONVERGENCE_ERA25_UI_POLICY_ID = "era25-pilot-week1-execution-convergence-ui-v1" as const;
 import { PILOT_WEEK1_EXECUTION_CONVERGENCE_INTEGRITY_ERA48_POLICY_ID } from "@/lib/commercial/pilot-week1-execution-convergence-integrity-era48-policy";
 import { PAID_PILOT_GO_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/paid-pilot-go-convergence-era25-policy";
 

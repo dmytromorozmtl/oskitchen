@@ -3,7 +3,8 @@
  */
 
 import { CONTINUOUS_IMPROVEMENT_LOOP_PHASES_ERA22_POLICY_ID } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
-import { CONTINUOUS_IMPROVEMENT_LOOP_UI_ERA22_POLICY_ID } from "@/lib/commercial/continuous-improvement-loop-ui-era22";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const CONTINUOUS_IMPROVEMENT_LOOP_UI_ERA22_POLICY_ID = "era22-continuous-improvement-loop-ui-v1" as const;
 
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_POLICY_ID =
   "era22-continuous-improvement-loop-v1" as const;

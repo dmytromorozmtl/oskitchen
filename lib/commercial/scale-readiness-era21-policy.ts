@@ -3,7 +3,8 @@
  */
 
 import { SCALE_READINESS_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/scale-readiness-phases-era21";
-import { SCALE_READINESS_UI_ERA21_POLICY_ID } from "@/lib/commercial/scale-readiness-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const SCALE_READINESS_UI_ERA21_POLICY_ID = "era21-scale-readiness-ui-v1" as const;
 
 export const SCALE_READINESS_ERA21_POLICY_ID = "era21-scale-readiness-v1" as const;
 

@@ -5,7 +5,8 @@ import {
   SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_DOC,
   SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/series-a-partner-expansion-convergence-phases-era25";
-import { SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_UI_POLICY_ID } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_UI_POLICY_ID = "era25-series-a-partner-expansion-convergence-ui-v1" as const;
 import { SCALE_READINESS_CONVERGENCE_ERA25_POLICY_ID } from "@/lib/commercial/scale-readiness-convergence-era25-policy";
 
 export const SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_POLICY_ID =

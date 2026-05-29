@@ -5,7 +5,8 @@
  * No manager PIN flow, Toast override parity, or offline POS claims.
  */
 
-import { POS_MANAGER_DISCOUNT_UI_ERA18_POLICY_ID } from "@/lib/pos/pos-manager-discount-ui-era18-policy";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const POS_MANAGER_DISCOUNT_UI_ERA18_POLICY_ID = "era18-pos-manager-discount-ui-v1" as const;
 
 export const POS_MANAGER_OVERRIDE_CLARITY_ERA19_POLICY_ID =
   "era19-pos-manager-override-clarity-v1" as const;

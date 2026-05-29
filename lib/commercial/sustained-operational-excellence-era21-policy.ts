@@ -3,7 +3,8 @@
  */
 
 import { SUSTAINED_OPERATIONAL_EXCELLENCE_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
-import { SUSTAINED_OPERATIONAL_EXCELLENCE_UI_ERA21_POLICY_ID } from "@/lib/commercial/sustained-operational-excellence-ui-era21";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const SUSTAINED_OPERATIONAL_EXCELLENCE_UI_ERA21_POLICY_ID = "era21-sustained-operational-excellence-ui-v1" as const;
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_POLICY_ID =
   "era21-sustained-operational-excellence-v1" as const;

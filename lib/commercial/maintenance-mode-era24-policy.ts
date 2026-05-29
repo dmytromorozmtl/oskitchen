@@ -3,7 +3,8 @@
  */
 
 import { MAINTENANCE_MODE_PHASES_ERA24_POLICY_ID } from "@/lib/commercial/maintenance-mode-phases-era24";
-import { MAINTENANCE_MODE_UI_ERA24_POLICY_ID } from "@/lib/commercial/maintenance-mode-ui-era24";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const MAINTENANCE_MODE_UI_ERA24_POLICY_ID = "era24-maintenance-mode-ui-v1" as const;
 
 export const MAINTENANCE_MODE_ERA24_POLICY_ID = "era24-maintenance-mode-v1" as const;
 

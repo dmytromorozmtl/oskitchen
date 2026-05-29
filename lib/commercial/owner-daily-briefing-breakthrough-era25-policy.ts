@@ -5,7 +5,8 @@ import {
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_DOC,
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_PHASES_POLICY_ID,
 } from "@/lib/commercial/owner-daily-briefing-breakthrough-phases-era25";
-import { OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_UI_POLICY_ID } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
+/** Inline — avoids policy → ui → ops → policy TDZ at build time. */
+const OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_UI_POLICY_ID = "era25-owner-daily-briefing-breakthrough-ui-v1" as const;
 import { OWNER_DAILY_BRIEFING_BREAKTHROUGH_INTEGRITY_ERA46_POLICY_ID } from "@/lib/commercial/owner-daily-briefing-breakthrough-integrity-era46-policy";
 import { ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_ERA24_POLICY_ID } from "@/lib/commercial/era25-first-product-slice-blueprint-era24-policy";
 
