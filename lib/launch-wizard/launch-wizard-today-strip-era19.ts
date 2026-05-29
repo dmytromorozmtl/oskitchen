@@ -40,7 +40,7 @@ import type { LaunchWizardEra25P0MarketProofHonestClosureCapstoneSlice } from "@
 import type { LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-market-proof-steady-operational-witness-era63";
 import type { LaunchWizardEra25GovernanceTrainTerminalSealSlice } from "@/lib/launch-wizard/launch-wizard-era25-governance-train-terminal-seal-era64";
 import type { LaunchWizardEra25PostTerminalSealCommercialOpsPermanenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-terminal-seal-commercial-ops-permanence-era65";
-import type { LaunchWizardEra25GovernanceTrainTerminalSealSlice } from "@/lib/launch-wizard/launch-wizard-era25-governance-train-terminal-seal-era64";
+import type { LaunchWizardEra25BandAGovernanceChainCapstoneWitnessSlice } from "@/lib/launch-wizard/launch-wizard-era25-band-a-governance-chain-capstone-witness-era66";
 import type { LaunchWizardEra25BandAMarketProofExecutionSolePathSlice } from "@/lib/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-era61";
 import type { LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice } from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
@@ -108,6 +108,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25PostMarketProofSteadyOperationalWitness: LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice | null;
   era25GovernanceTrainTerminalSeal: LaunchWizardEra25GovernanceTrainTerminalSealSlice | null;
   era25PostTerminalSealCommercialOpsPermanence: LaunchWizardEra25PostTerminalSealCommercialOpsPermanenceSlice | null;
+  era25BandAGovernanceChainCapstoneWitness: LaunchWizardEra25BandAGovernanceChainCapstoneWitnessSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -186,6 +187,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25PostMarketProofSteadyOperationalWitness?: LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice | null;
   era25GovernanceTrainTerminalSeal?: LaunchWizardEra25GovernanceTrainTerminalSealSlice | null;
   era25PostTerminalSealCommercialOpsPermanence?: LaunchWizardEra25PostTerminalSealCommercialOpsPermanenceSlice | null;
+  era25BandAGovernanceChainCapstoneWitness?: LaunchWizardEra25BandAGovernanceChainCapstoneWitnessSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -403,6 +405,8 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25GovernanceTrainTerminalSeal = input.era25GovernanceTrainTerminalSeal ?? null;
   const era25PostTerminalSealCommercialOpsPermanence =
     input.era25PostTerminalSealCommercialOpsPermanence ?? null;
+  const era25BandAGovernanceChainCapstoneWitness =
+    input.era25BandAGovernanceChainCapstoneWitness ?? null;
   const era25P0MarketProofHonestClosureCapstoneSubline = era25P0MarketProofHonestClosureCapstone
     ? `P0 closure ${era25P0MarketProofHonestClosureCapstone.progressLabel}${era25P0MarketProofHonestClosureCapstone.era25P0MarketProofHonestClosureCapstoneIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
@@ -417,6 +421,14 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25PostTerminalSealCommercialOpsPermanence
       ? `Ops permanence ${era25PostTerminalSealCommercialOpsPermanence.progressLabel}${era25PostTerminalSealCommercialOpsPermanence.era25PostTerminalSealCommercialOpsPermanenceIntegrityFailed ? " · integrity FAIL" : ""}`
       : null;
+  const era25BandAGovernanceChainCapstoneWitnessSubline = era25BandAGovernanceChainCapstoneWitness
+    ? `Band A capstone ${era25BandAGovernanceChainCapstoneWitness.progressLabel}${era25BandAGovernanceChainCapstoneWitness.era25BandAGovernanceChainCapstoneWitnessIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  if (era25BandAGovernanceChainCapstoneWitnessSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25BandAGovernanceChainCapstoneWitnessSubline} · ${era25FullConvergenceSubline}`
+      : era25BandAGovernanceChainCapstoneWitnessSubline;
+  }
   if (era25PostTerminalSealCommercialOpsPermanenceSubline) {
     era25FullConvergenceSubline = era25FullConvergenceSubline
       ? `${era25PostTerminalSealCommercialOpsPermanenceSubline} · ${era25FullConvergenceSubline}`
@@ -713,5 +725,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25PostMarketProofSteadyOperationalWitness,
     era25GovernanceTrainTerminalSeal,
     era25PostTerminalSealCommercialOpsPermanence,
+    era25BandAGovernanceChainCapstoneWitness,
   };
 }

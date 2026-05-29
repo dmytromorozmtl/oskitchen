@@ -40,6 +40,7 @@ import { LaunchWizardEra25P0MarketProofHonestClosureCapstonePanel } from "@/comp
 import { LaunchWizardEra25PostMarketProofSteadyOperationalWitnessPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-market-proof-steady-operational-witness-panel";
 import { LaunchWizardEra25GovernanceTrainTerminalSealPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-governance-train-terminal-seal-panel";
 import { LaunchWizardEra25PostTerminalSealCommercialOpsPermanencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-terminal-seal-commercial-ops-permanence-panel";
+import { LaunchWizardEra25BandAGovernanceChainCapstoneWitnessPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-band-a-governance-chain-capstone-witness-panel";
 import { LaunchWizardEra25BandAMarketProofExecutionSolePathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-panel";
 import { LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-panel";
 import { LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-panel";
@@ -370,6 +371,11 @@ export function LaunchWizardView(props: {
       {model.era25PostTerminalSealCommercialOpsPermanenceIntegrity ? (
         <LaunchWizardEra25PostTerminalSealCommercialOpsPermanencePanel
           slice={model.era25PostTerminalSealCommercialOpsPermanenceIntegrity}
+        />
+      ) : null}
+      {model.era25BandAGovernanceChainCapstoneWitnessIntegrity ? (
+        <LaunchWizardEra25BandAGovernanceChainCapstoneWitnessPanel
+          slice={model.era25BandAGovernanceChainCapstoneWitnessIntegrity}
         />
       ) : null}
 

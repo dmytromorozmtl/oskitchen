@@ -71,7 +71,13 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 
 ---
 
-## Next step — Phase AP (era66)
+## Next step — Phase AP (era66) — **IMPLEMENTED**
+
+See [`docs/next-step-era25-band-a-governance-chain-capstone-witness-phase-ap-product-2026-05-28.md`](./next-step-era25-band-a-governance-chain-capstone-witness-phase-ap-product-2026-05-28.md).
+
+---
+
+## Next step — Phase AP (era66) — archive preview
 
 **Era25 band-a governance chain capstone witness integrity** — terminal witness that the full Band A governance stack (era61 sole-path → era62 closure → era63 witness → era64 seal → era65 permanence) is honestly closed and only product/commercial steady-state ops remain.
 
@@ -79,11 +85,11 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 |------|-------|
 | Prerequisite milestone | Honest `era25-post-terminal-seal-commercial-ops-permanence` baseline + dual cert green |
 | Parent evaluator | era65 post-terminal-seal commercial ops permanence integrity |
-| Platform anchor | `#era25-band-a-governance-chain-capstone-witness` (planned) |
-| Briefing meta priority | **41** (planned) |
-| Env keys (planned) | `ERA25_BAND_A_GOVERNANCE_CHAIN_CAPSTONE_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-band-a-governance-chain-capstone-witness-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `capstone_witness_without_permanence`, `capstone_witness_claims_governance_reopen`, `fake_capstone_witness_attestation`, upstream era65 fail |
+| Platform anchor | `#era25-band-a-governance-chain-capstone-witness` |
+| Briefing meta priority | **41** |
+| Env keys | `ERA25_BAND_A_GOVERNANCE_CHAIN_CAPSTONE_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
+| Baseline artifact | `artifacts/era25-band-a-governance-chain-capstone-witness-integrity-baseline.json` |
+| Violation IDs | `capstone_witness_without_permanence`, `capstone_witness_claims_governance_reopen`, `fake_capstone_witness_attestation`, upstream era65 fail |
 | CI | `test:ci:era25-band-a-governance-chain-capstone-witness-integrity-era66` |
 
-**Human acceptance (preview):** commercial ops permanence PASS → attest Band A governance chain capstone witness → validate JSON → operator playbook enters post-governance steady product mode with zero era25 env mutation.
+**Human acceptance:** commercial ops permanence PASS → attest Band A governance chain capstone witness → validate JSON → operator playbook enters post-governance steady product mode with zero era25 env mutation.

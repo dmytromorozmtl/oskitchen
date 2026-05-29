@@ -21,6 +21,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25BandAGovernanceChainCapstoneWitnessEra25UiSlice,
+  type Era25BandAGovernanceChainCapstoneWitnessEra25UiSlice,
+} from "@/lib/commercial/era25-band-a-governance-chain-capstone-witness-ui-era25";
 import { LAUNCH_WIZARD_ERA25_POST_TERMINAL_SEAL_COMMERCIAL_OPS_PERMANENCE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-post-terminal-seal-commercial-ops-permanence-era65";
 
 export const ERA25_POST_TERMINAL_SEAL_COMMERCIAL_OPS_PERMANENCE_ERA25_UI_POLICY_ID =
@@ -58,6 +62,7 @@ export type Era25PostTerminalSealCommercialOpsPermanenceEra25UiSlice = {
   commercialOpsHref: string;
   todayHref: string;
   headline: string;
+  era25BandAGovernanceChainCapstoneWitness: Era25BandAGovernanceChainCapstoneWitnessEra25UiSlice | null;
 };
 
 export function buildEra25PostTerminalSealCommercialOpsPermanenceEra25UiSlice(input: {
@@ -109,6 +114,26 @@ export function buildEra25PostTerminalSealCommercialOpsPermanenceEra25UiSlice(in
   const permanenceComplete = permanenceIntegrity.era25PostTerminalSealCommercialOpsPermanenceComplete;
   const permanenceBlocked = !permanenceComplete;
 
+  const era25BandAGovernanceChainCapstoneWitness = buildEra25BandAGovernanceChainCapstoneWitnessEra25UiSlice({
+    era25PostTerminalSealCommercialOpsPermanenceVisible: true,
+    era25MarketProofGovernanceChainClosed: input.era25MarketProofGovernanceChainClosed,
+    postTerminalSealCommercialOpsPermanenceActive:
+      permanenceIntegrity.postTerminalSealCommercialOpsPermanenceActive,
+    era25GovernanceTrainSealed: permanenceIntegrity.era25GovernanceTrainSealed,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+    permanenceIntegritySummary: permanenceIntegrity,
+  });
+
   const headline = permanenceComplete
     ? "Post-terminal-seal commercial ops permanence active · honest artifacts + improvement loop only"
     : input.era25GovernanceTrainSealed
@@ -158,6 +183,7 @@ export function buildEra25PostTerminalSealCommercialOpsPermanenceEra25UiSlice(in
     commercialOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#commercial-pilot-ops`,
     todayHref: "/dashboard/today",
     headline,
+    era25BandAGovernanceChainCapstoneWitness,
   };
 }
 

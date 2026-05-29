@@ -85,6 +85,8 @@ export function LaunchWizardTodayStrip(props: {
     era25GovernanceTrainTerminalSeal: props.model.era25GovernanceTrainTerminalSealIntegrity,
     era25PostTerminalSealCommercialOpsPermanence:
       props.model.era25PostTerminalSealCommercialOpsPermanenceIntegrity,
+    era25BandAGovernanceChainCapstoneWitness:
+      props.model.era25BandAGovernanceChainCapstoneWitnessIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -601,6 +603,20 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-post-terminal-seal-commercial-ops-permanence"
               >
                 Ops permanence {view.era25PostTerminalSealCommercialOpsPermanence.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25BandAGovernanceChainCapstoneWitness ? (
+              <Badge
+                variant={
+                  view.era25BandAGovernanceChainCapstoneWitness
+                    .era25BandAGovernanceChainCapstoneWitnessIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-band-a-governance-chain-capstone-witness"
+              >
+                Band A capstone {view.era25BandAGovernanceChainCapstoneWitness.progressLabel}
               </Badge>
             ) : null}
           </div>
