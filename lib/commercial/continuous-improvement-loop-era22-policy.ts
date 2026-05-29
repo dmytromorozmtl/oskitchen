@@ -14,9 +14,11 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_EXTENDS_POLICIES = [
   "era21-sustained-operational-excellence-v1",
   CONTINUOUS_IMPROVEMENT_LOOP_PHASES_ERA22_POLICY_ID,
   CONTINUOUS_IMPROVEMENT_LOOP_UI_ERA22_POLICY_ID,
+  "era22-continuous-improvement-loop-post-sustained-ops-orchestrator-v1",
 ] as const;
 
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_OPS_SCRIPTS = [
+  "ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator",
   "ops:validate-continuous-improvement-loop",
   "ops:sync-continuous-improvement-loop-progress-report",
   "ops:export-continuous-improvement-loop-release-checklist",
@@ -28,8 +30,10 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_CI_SCRIPTS = [
 ] as const;
 
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_UNIT_TESTS = [
+  "tests/unit/continuous-improvement-loop-post-sustained-ops-orchestrator-era22.test.ts",
   "tests/unit/continuous-improvement-loop-phases-era22.test.ts",
   "tests/unit/continuous-improvement-loop-ui-era22.test.ts",
+  "tests/unit/run-continuous-improvement-loop-post-sustained-ops-orchestrator.test.ts",
   "tests/unit/validate-continuous-improvement-loop.test.ts",
   "tests/unit/continuous-improvement-loop-era22-cert-live.test.ts",
 ] as const;

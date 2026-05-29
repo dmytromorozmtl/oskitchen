@@ -28,6 +28,10 @@ const slice = {
   syncProgressReportCommand: "npm run ops:sync-continuous-improvement-loop-progress-report -- --write",
   exportReleaseChecklistCommand:
     "npm run ops:export-continuous-improvement-loop-release-checklist -- --write",
+  postSustainedOpsOrchestratorCommand:
+    "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
+  validateSustainedOpsCommand: "npm run ops:validate-sustained-operational-excellence-env -- --json",
+  improvementLoopMilestone: "loop_all_healthy",
   todayHref: "/dashboard/today",
   platformOpsHref: "/platform/commercial-pilot-ops#continuous-improvement-loop",
   integrationHealthHref: "/dashboard/integration-health",

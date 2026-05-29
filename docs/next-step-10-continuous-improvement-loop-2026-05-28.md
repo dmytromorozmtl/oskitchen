@@ -43,11 +43,37 @@ Track health uses **artifact freshness** (runAt age) — never hand-edited PASS.
 ## Preflight
 
 ```bash
+npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write
 npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --json   # sustainedOpsComplete: true
 npm run ops:validate-sustained-operational-excellence-env -- --json   # sustainedOpsMilestone: sustained_ops_complete
 npm run ops:validate-continuous-improvement-loop -- --json
 npm run ops:export-continuous-improvement-loop-release-checklist -- --write
 ```
+
+**Post-Sustained-ops orchestrator milestones (`improvementLoopMilestone`):**
+
+| Milestone | Meaning | Exit code (orchestrator `--json`) |
+|-----------|---------|-----------------------------------|
+| `sustained_ops_blocked` | Step 9 cadences A–D incomplete | `2` |
+| `attention_weekly_integration` | Weekly integration track overdue/due soon | `0` |
+| `attention_monthly_metrics` | Monthly metrics track overdue/due soon | `0` |
+| `attention_quarterly_governance` | Quarterly governance track overdue/due soon | `0` |
+| `loop_all_healthy` | All artifact-backed tracks fresh | `0` |
+
+**Smoke readiness flags in validate JSON (informational — never blocks release):**
+
+- `readyForWeeklySmokes`: pure operational mode + weekly track overdue/due soon
+- `readyForMetricsSmokes`: pure operational mode + monthly track overdue/due soon
+- `readyForGovernanceSmokes`: pure operational mode + quarterly track overdue/due soon
+
+**Product surfaces when pure operational mode active:**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Improvement loop compact panel (no era21 gate) |
+| `/platform/commercial-pilot-ops` | `#continuous-improvement-loop` panel |
+| Order Hub + production calendar | Daily shift ops guidance track |
+| Integration Health | Weekly integration track |
 
 **Prerequisite from Step 9 orchestrator:**
 
@@ -80,6 +106,7 @@ Stale thresholds (informational): weekly 7d · monthly 35d · quarterly 90d.
 ## Ops commands
 
 ```bash
+npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write
 npm run ops:validate-continuous-improvement-loop -- --json
 npm run ops:sync-continuous-improvement-loop-progress-report -- --write
 npm run ops:export-continuous-improvement-loop-release-checklist -- --write
@@ -87,9 +114,11 @@ npm run test:ci:continuous-improvement-loop-era22
 npm run test:ci:continuous-improvement-loop-era22:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-continuous-improvement-loop-validate.yml`
+GitHub workflow: `.github/workflows/ops-continuous-improvement-loop-validate.yml` (includes orchestrator step with `continue-on-error: true`)
 
 Platform anchor: `#continuous-improvement-loop`
+
+**Release checklist artifact:** `docs/continuous-improvement-loop-release-checklist-era22.md` (generated via export script)
 
 ---
 
@@ -112,12 +141,13 @@ See [`next-step-11-sustained-product-evolution-2026-05-28.md`](./next-step-11-su
 
 | Component | Planned artifact |
 |-----------|------------------|
-| Policy | `era23-sustained-product-evolution-v1` (already wired) |
+| Orchestrator lib | `lib/commercial/sustained-product-evolution-post-improvement-loop-orchestrator-era23.ts` |
+| Policy | `era23-sustained-product-evolution-post-improvement-loop-orchestrator-v1` |
+| Milestones | `improvement_loop_blocked` → track attention → `product_evolution_healthy` |
+| Ops scripts | `ops:run-sustained-product-evolution-post-improvement-loop-orchestrator` |
 | UI panel | `#sustained-product-evolution` on Today + Platform ops |
-| Validate | artifact freshness for feature maturity + backlog alignment |
 | Briefing | **No new priority** — visible when Step 10 loop is active |
-| Env keys | None — uses `docs/feature-maturity-matrix.md` + implementation backlog |
 
-**Human gate before Step 11:** Step 10 improvement loop tracks show green freshness (weekly/monthly/quarterly thresholds).
+**Human gate before Step 11:** `improvementLoopMilestone: loop_all_healthy` OR overdue tracks refreshed via smokes.
 
 **Immediate action if Sustained ops incomplete:** [`next-step-9-sustained-operational-excellence-2026-05-28.md`](./next-step-9-sustained-operational-excellence-2026-05-28.md)

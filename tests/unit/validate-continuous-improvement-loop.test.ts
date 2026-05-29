@@ -11,6 +11,7 @@ describe("validate-continuous-improvement-loop", () => {
     const result = evaluateContinuousImprovementLoop({});
     expect(result.pureOperationalMode).toBe(false);
     expect(result.tracks).toHaveLength(7);
+    expect(result.improvementLoopMilestone).toBe("sustained_ops_blocked");
     expect(result.goDecision === "NO-GO" || result.goDecision === null).toBe(true);
   });
 });

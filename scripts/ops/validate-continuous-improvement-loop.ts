@@ -13,6 +13,7 @@ import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary"
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { resolveContinuousImprovementLoopMilestone } from "@/lib/commercial/continuous-improvement-loop-post-sustained-ops-orchestrator-era22";
 import {
   buildContinuousImprovementLoopTrackStatuses,
   resolveContinuousImprovementLoopHealthSummary,
@@ -75,6 +76,10 @@ export function evaluateContinuousImprovementLoop(
   pureOperationalMode: boolean;
   tracks: ReturnType<typeof buildContinuousImprovementLoopTrackStatuses>;
   health: ReturnType<typeof resolveContinuousImprovementLoopHealthSummary>;
+  readyForWeeklySmokes: boolean;
+  readyForMetricsSmokes: boolean;
+  readyForGovernanceSmokes: boolean;
+  improvementLoopMilestone: ReturnType<typeof resolveContinuousImprovementLoopMilestone>;
 } {
   const artifacts = readContinuousImprovementLoopArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -101,6 +106,22 @@ export function evaluateContinuousImprovementLoop(
     customerName: artifacts.goNoGoSummary?.customerName ?? null,
   });
   const health = resolveContinuousImprovementLoopHealthSummary(tracks);
+  const weekly = tracks.find((track) => track.id === "weekly_integration");
+  const monthly = tracks.find((track) => track.id === "monthly_metrics");
+  const quarterly = tracks.find((track) => track.id === "quarterly_governance");
+  const readyForWeeklySmokes =
+    prerequisites.pureOperationalMode &&
+    (weekly?.status === "overdue" || weekly?.status === "due_soon");
+  const readyForMetricsSmokes =
+    prerequisites.pureOperationalMode &&
+    (monthly?.status === "overdue" || monthly?.status === "due_soon");
+  const readyForGovernanceSmokes =
+    prerequisites.pureOperationalMode &&
+    (quarterly?.status === "overdue" || quarterly?.status === "due_soon");
+  const improvementLoopMilestone = resolveContinuousImprovementLoopMilestone({
+    pureOperationalMode: prerequisites.pureOperationalMode,
+    tracks,
+  });
 
   return {
     prerequisites,
@@ -109,6 +130,10 @@ export function evaluateContinuousImprovementLoop(
     pureOperationalMode: prerequisites.pureOperationalMode,
     tracks,
     health,
+    readyForWeeklySmokes,
+    readyForMetricsSmokes,
+    readyForGovernanceSmokes,
+    improvementLoopMilestone,
   };
 }
 
@@ -124,6 +149,10 @@ function main() {
           pureOperationalMode: result.pureOperationalMode,
           sustainedOpsComplete: result.sustainedOpsComplete,
           goDecision: result.goDecision,
+          improvementLoopMilestone: result.improvementLoopMilestone,
+          readyForWeeklySmokes: result.readyForWeeklySmokes,
+          readyForMetricsSmokes: result.readyForMetricsSmokes,
+          readyForGovernanceSmokes: result.readyForGovernanceSmokes,
           health: result.health,
           tracks: result.tracks.map((track) => ({
             id: track.id,
@@ -153,6 +182,7 @@ function main() {
   }
 
   console.log(`Pure operational mode active · GO · ${result.health.overdueCount} overdue track(s)\n`);
+  console.log(`Improvement loop milestone: ${result.improvementLoopMilestone}\n`);
 
   for (const track of result.tracks) {
     console.log(`[${track.status}] ${track.label}`);

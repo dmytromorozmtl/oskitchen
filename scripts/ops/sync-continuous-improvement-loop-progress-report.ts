@@ -24,6 +24,10 @@ export function buildContinuousImprovementLoopProgressReportMarkdown(
     `- Overdue tracks: ${result.health.overdueCount}`,
     `- Due soon: ${result.health.dueSoonCount}`,
     `- Healthy: ${result.health.healthyCount}`,
+    `- improvementLoopMilestone: **${result.improvementLoopMilestone}**`,
+    `- Ready for weekly smokes: ${result.readyForWeeklySmokes ? "yes" : "no"}`,
+    `- Ready for metrics smokes: ${result.readyForMetricsSmokes ? "yes" : "no"}`,
+    `- Ready for governance smokes: ${result.readyForGovernanceSmokes ? "yes" : "no"}`,
     "",
     "## Recurring tracks",
     "",
@@ -53,6 +57,7 @@ export function buildContinuousImprovementLoopProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write");
   lines.push("npm run ops:validate-continuous-improvement-loop -- --json");
   lines.push("npm run smoke:woo-shopify-live");
   lines.push("npm run smoke:pilot-metrics-baseline");

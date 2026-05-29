@@ -43,10 +43,22 @@ Evidence tracks use artifact freshness + `operator_feedback_score` from metrics 
 ## Preflight
 
 ```bash
+npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --json   # improvementLoopMilestone: loop_all_healthy
 npm run ops:validate-continuous-improvement-loop -- --json   # pureOperationalMode: true
+npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write   # planned — Step 11 orchestrator
 npm run ops:validate-sustained-product-evolution -- --json
 npm run ops:export-sustained-product-evolution-ownership-matrix -- --write
 ```
+
+**Planned post-improvement-loop orchestrator milestones (`productEvolutionMilestone`):**
+
+| Milestone | Track | Exit code |
+|-----------|-------|-----------|
+| `improvement_loop_blocked` | Step 10 not in pure operational mode | `2` |
+| `attention_customer_feedback` | operator_feedback_score stale | `0` |
+| `attention_competitor_leapfrog` | leapfrog doc review overdue | `0` |
+| `attention_gtm_alignment` | landing pages vs forbidden claims | `0` |
+| `product_evolution_healthy` | All 6 tracks fresh | `0` |
 
 ---
 
@@ -68,6 +80,7 @@ Stale thresholds: customer feedback 35d · competitor leapfrog 90d.
 ## Ops commands
 
 ```bash
+npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write   # planned
 npm run ops:validate-sustained-product-evolution -- --json
 npm run ops:sync-sustained-product-evolution-progress-report -- --write
 npm run ops:export-sustained-product-evolution-ownership-matrix -- --write
@@ -75,7 +88,7 @@ npm run test:ci:sustained-product-evolution-era23
 npm run test:ci:sustained-product-evolution-era23:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-sustained-product-evolution-validate.yml`
+GitHub workflow: `.github/workflows/ops-sustained-product-evolution-validate.yml` (+ planned orchestrator step)
 
 Platform anchor: `#sustained-product-evolution`
 
@@ -106,7 +119,15 @@ Platform anchor: `#sustained-product-evolution`
 
 See [`next-step-12-commercial-pilot-path-complete-2026-05-28.md`](./next-step-12-commercial-pilot-path-complete-2026-05-28.md)
 
-**Engineering wired:** `era24-maintenance-mode-v1` — maintenance panel on Today + Platform ops (`#maintenance-mode`). Visible when Step 11 product evolution is active.
+**Next engineering slice (Step 12 — era24 TERMINUS):**
+
+| Component | Planned artifact |
+|-----------|------------------|
+| Policy | `era24-maintenance-mode-v1` (already wired) |
+| Orchestrator | `era24-maintenance-mode-post-product-evolution-orchestrator-v1` |
+| UI panel | `#maintenance-mode` on Today + Platform ops |
+| Briefing | **No new priority** — visible when Steps 10–11 loops active |
+| Prerequisite | Step 11 product evolution tracks healthy |
 
 **Immediate action if improvement loop inactive:** [`next-step-10-continuous-improvement-loop-2026-05-28.md`](./next-step-10-continuous-improvement-loop-2026-05-28.md)
 

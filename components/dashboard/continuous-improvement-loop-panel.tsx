@@ -68,6 +68,9 @@ export function ContinuousImprovementLoopPanel(props: {
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               pure operational mode
             </Badge>
+            <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+              {slice.improvementLoopMilestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
               decision: {slice.goDecision}
             </Badge>
@@ -168,17 +171,38 @@ export function ContinuousImprovementLoopPanel(props: {
         </ul>
 
         {!isCompact ? (
-          <div className="flex flex-wrap gap-2 pt-1">
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <Link href={slice.platformOpsHref}>Platform ops loop</Link>
-            </Button>
-            <Button asChild size="sm" variant="ghost" className="rounded-full">
-              <Link href={slice.integrationHealthHref}>Integration Health</Link>
-            </Button>
-            <Button asChild size="sm" variant="ghost" className="rounded-full">
-              <Link href={slice.orderHubHref}>Order Hub</Link>
-            </Button>
-          </div>
+          <>
+            <div
+              className={cn(
+                "rounded-lg border px-3 py-2 text-xs text-muted-foreground",
+                isPlatform ? "border-zinc-800" : "border-border/60 bg-muted/20",
+              )}
+            >
+              <p className={cn("font-medium", isPlatform ? "text-zinc-300" : "text-foreground")}>
+                Ops commands
+              </p>
+              <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postSustainedOpsOrchestratorCommand}</li>
+                <li>{slice.validateCommand}</li>
+                <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.exportReleaseChecklistCommand}</li>
+                <li>{slice.validateSustainedOpsCommand}</li>
+                <li>npm run smoke:woo-shopify-live</li>
+                <li>npm run test:ci:commercial-pilot-runbook:cert</li>
+              </ul>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link href={slice.platformOpsHref}>Platform ops loop</Link>
+              </Button>
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link href={slice.integrationHealthHref}>Integration Health</Link>
+              </Button>
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link href={slice.orderHubHref}>Order Hub</Link>
+              </Button>
+            </div>
+          </>
         ) : null}
       </CardContent>
     </Card>

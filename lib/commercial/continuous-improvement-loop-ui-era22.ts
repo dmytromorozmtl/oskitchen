@@ -10,6 +10,10 @@ import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import {
+  resolveContinuousImprovementLoopMilestoneFromTrackStatuses,
+  type ContinuousImprovementLoopMilestone,
+} from "@/lib/commercial/continuous-improvement-loop-post-sustained-ops-orchestrator-era22";
+import {
   buildContinuousImprovementLoopTrackStatuses,
   CONTINUOUS_IMPROVEMENT_LOOP_RELEASE_CHECKLIST_DOC,
   CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC,
@@ -60,6 +64,9 @@ export type ContinuousImprovementLoopUiSlice = {
   validateCommand: string;
   syncProgressReportCommand: string;
   exportReleaseChecklistCommand: string;
+  postSustainedOpsOrchestratorCommand: string;
+  validateSustainedOpsCommand: string;
+  improvementLoopMilestone: ContinuousImprovementLoopMilestone;
   todayHref: string;
   platformOpsHref: string;
   integrationHealthHref: string;
@@ -117,6 +124,10 @@ export function buildContinuousImprovementLoopUiSlice(input: {
   const nextAttentionDetail = nextAttentionTrack
     ? formatContinuousImprovementLoopTrackDetail(nextAttentionTrack)
     : null;
+  const improvementLoopMilestone = resolveContinuousImprovementLoopMilestoneFromTrackStatuses(
+    tracks,
+    { pureOperationalMode: true },
+  );
 
   return {
     policyId: CONTINUOUS_IMPROVEMENT_LOOP_UI_ERA22_POLICY_ID,
@@ -140,6 +151,10 @@ export function buildContinuousImprovementLoopUiSlice(input: {
     syncProgressReportCommand: "npm run ops:sync-continuous-improvement-loop-progress-report -- --write",
     exportReleaseChecklistCommand:
       "npm run ops:export-continuous-improvement-loop-release-checklist -- --write",
+    postSustainedOpsOrchestratorCommand:
+      "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
+    validateSustainedOpsCommand: "npm run ops:validate-sustained-operational-excellence-env -- --json",
+    improvementLoopMilestone,
     todayHref: "/dashboard/today",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${CONTINUOUS_IMPROVEMENT_LOOP_PLATFORM_ANCHOR}`,
     integrationHealthHref: "/dashboard/integration-health",

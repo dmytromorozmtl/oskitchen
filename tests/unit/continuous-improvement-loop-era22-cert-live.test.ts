@@ -39,6 +39,9 @@ describe("continuous improvement loop era22 CI certification (live repo)", () =>
   it("documents step 10 execution", () => {
     const step10 = readFileSync(join(ROOT, CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC), "utf8");
     expect(step10).toContain("era22-continuous-improvement-loop-v1");
+    expect(step10).toContain(
+      "run-continuous-improvement-loop-post-sustained-ops-orchestrator",
+    );
     expect(step10).toContain("test:ci:commercial-pilot-runbook:cert");
     expect(step10).toContain("#continuous-improvement-loop");
   });
