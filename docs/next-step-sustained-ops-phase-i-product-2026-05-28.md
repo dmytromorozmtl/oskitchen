@@ -52,7 +52,7 @@ npm run ops:sync-sustained-operational-excellence-integrity-baseline -- --write
 
 ## Next step after Phase I PASS
 
-1. Continuous improvement loop integrity guard (Phase J) — mirror era28–era33 on `continuous-improvement-loop-*`
+1. Continuous improvement loop integrity guard (Phase J) — **IMPLEMENTED** — see [`docs/next-step-continuous-improvement-phase-j-product-2026-05-28.md`](./next-step-continuous-improvement-phase-j-product-2026-05-28.md)
 2. `npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write`
 
 **Following engineering slice (optional):** era25 sustained-ops convergence reads integrity baseline · PostHog on cadence CTAs.

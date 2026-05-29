@@ -118,6 +118,8 @@ export function buildContinuousImprovementLoopPostSustainedOpsOrchestratorSummar
 
   const recommendedCommands = input.evaluation.pureOperationalMode
     ? ([
+        "npm run ops:validate-sustained-operational-excellence-integrity -- --json",
+        "npm run ops:validate-continuous-improvement-loop-integrity -- --json",
         "npm run ops:validate-sustained-operational-excellence-env -- --json",
         "npm run ops:validate-continuous-improvement-loop -- --json",
         CONTINUOUS_IMPROVEMENT_LOOP_POST_SUSTAINED_OPS_ORCHESTRATOR_COMMAND + " -- --write",

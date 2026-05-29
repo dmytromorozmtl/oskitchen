@@ -121,6 +121,17 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_TRACKS: readonly ContinuousImprovementL
   },
 ] as const;
 
+export const CONTINUOUS_IMPROVEMENT_LOOP_TRACKED_ENV_KEYS = [
+  "CONTINUOUS_IMPROVEMENT_LOOP_PURE_MODE_ATTESTED",
+  "CONTINUOUS_IMPROVEMENT_LOOP_RELEASE_CADENCE_REVIEWED",
+] as const;
+
+export function detectContinuousImprovementLoopStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return CONTINUOUS_IMPROVEMENT_LOOP_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export const CONTINUOUS_IMPROVEMENT_LOOP_STALE_THRESHOLDS_DAYS = {
   weekly_integration: { healthy: 5, dueSoon: 7 },
   monthly_metrics: { healthy: 28, dueSoon: 35 },

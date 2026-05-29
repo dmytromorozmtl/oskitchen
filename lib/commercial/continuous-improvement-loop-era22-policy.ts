@@ -20,6 +20,8 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_EXTENDS_POLICIES = [
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_OPS_SCRIPTS = [
   "ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator",
   "ops:validate-continuous-improvement-loop",
+  "ops:validate-continuous-improvement-loop-integrity",
+  "ops:sync-continuous-improvement-loop-integrity-baseline",
   "ops:sync-continuous-improvement-loop-progress-report",
   "ops:export-continuous-improvement-loop-release-checklist",
 ] as const;
@@ -27,6 +29,7 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_OPS_SCRIPTS = [
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_CI_SCRIPTS = [
   "test:ci:continuous-improvement-loop-era22",
   "test:ci:continuous-improvement-loop-era22:cert",
+  "test:ci:continuous-improvement-loop-integrity-era34",
 ] as const;
 
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_UNIT_TESTS = [
@@ -36,10 +39,18 @@ export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_UNIT_TESTS = [
   "tests/unit/run-continuous-improvement-loop-post-sustained-ops-orchestrator.test.ts",
   "tests/unit/validate-continuous-improvement-loop.test.ts",
   "tests/unit/continuous-improvement-loop-era22-cert-live.test.ts",
+  "tests/unit/continuous-improvement-loop-integrity-era34.test.ts",
+  "tests/unit/validate-continuous-improvement-loop-integrity.test.ts",
+  "tests/unit/continuous-improvement-loop-integrity-era34-cert-live.test.ts",
+  "tests/unit/launch-wizard-improvement-loop-era34.test.ts",
+  "tests/unit/owner-daily-briefing-continuous-improvement-loop-era34.test.ts",
 ] as const;
 
 export const CONTINUOUS_IMPROVEMENT_LOOP_ERA22_PRODUCT_SURFACES = [
   "components/dashboard/continuous-improvement-loop-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-improvement-loop-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-view.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-today-strip.tsx",
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

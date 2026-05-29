@@ -79,6 +79,16 @@ export function ContinuousImprovementLoopPanel(props: {
                 customer: {slice.customerName}
               </Badge>
             ) : null}
+            {!slice.sustainedOpsIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Sustained ops integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.improvementLoopIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Improvement loop integrity FAIL
+              </Badge>
+            ) : null}
             {slice.overdueCount > 0 ? (
               <Badge variant="destructive" className="rounded-full text-[10px]">
                 {slice.overdueCount} overdue
@@ -182,6 +192,9 @@ export function ContinuousImprovementLoopPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
+                <li>{slice.validateSustainedOpsIntegrityCommand}</li>
                 <li>{slice.postSustainedOpsOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>

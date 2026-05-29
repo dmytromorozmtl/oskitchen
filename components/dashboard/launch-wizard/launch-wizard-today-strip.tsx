@@ -41,6 +41,7 @@ export function LaunchWizardTodayStrip(props: {
     seriesA: props.model.seriesAPartnerExpansionIntegrity,
     marketLeader: props.model.marketLeaderPositioningIntegrity,
     sustainedOps: props.model.sustainedOperationalExcellenceIntegrity,
+    improvementLoop: props.model.continuousImprovementLoopIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -138,6 +139,17 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-sustained-ops"
               >
                 Sustained ops {view.sustainedOps.progressLabel}
+              </Badge>
+            ) : null}
+            {view.improvementLoop ? (
+              <Badge
+                variant={
+                  view.improvementLoop.improvementLoopIntegrityFailed ? "destructive" : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-improvement-loop"
+              >
+                Improvement loop {view.improvementLoop.progressLabel}
               </Badge>
             ) : null}
           </div>

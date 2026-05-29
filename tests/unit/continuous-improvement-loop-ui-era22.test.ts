@@ -12,6 +12,7 @@ const slice = {
   pureOperationalMode: true,
   goDecision: "GO",
   customerName: "Acme",
+  sustainedOpsComplete: true,
   tracks: [],
   healthyCount: 3,
   dueSoonCount: 0,
@@ -31,6 +32,16 @@ const slice = {
   postSustainedOpsOrchestratorCommand:
     "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
   validateSustainedOpsCommand: "npm run ops:validate-sustained-operational-excellence-env -- --json",
+  validateSustainedOpsIntegrityCommand:
+    "npm run ops:validate-sustained-operational-excellence-integrity -- --json",
+  integrityValidateCommand:
+    "npm run ops:validate-continuous-improvement-loop-integrity -- --json",
+  syncIntegrityBaselineCommand:
+    "npm run ops:sync-continuous-improvement-loop-integrity-baseline -- --write",
+  sustainedOpsIntegrityPassed: true,
+  improvementLoopIntegrityPassed: true,
+  p0ProofStatus: null,
+  tier2ProofStatus: null,
   improvementLoopMilestone: "loop_all_healthy",
   todayHref: "/dashboard/today",
   platformOpsHref: "/platform/commercial-pilot-ops#continuous-improvement-loop",

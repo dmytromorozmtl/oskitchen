@@ -2,6 +2,7 @@
  * Continuous improvement loop UI slice — pure operational mode surfaces (Step 10).
  */
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
+import { evaluateContinuousImprovementLoopIntegrity } from "@/lib/commercial/continuous-improvement-loop-integrity-era34";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
@@ -17,6 +18,7 @@ import {
   buildContinuousImprovementLoopTrackStatuses,
   CONTINUOUS_IMPROVEMENT_LOOP_RELEASE_CHECKLIST_DOC,
   CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC,
+  detectContinuousImprovementLoopStarted,
   formatContinuousImprovementLoopTrackDetail,
   resolveContinuousImprovementLoopHealthSummary,
   resolveContinuousImprovementLoopPrerequisites,
@@ -37,6 +39,8 @@ import {
   SUSTAINED_OPS_ORDER_HUB_ROUTE,
   SUSTAINED_OPS_PRODUCTION_CALENDAR_ROUTE,
 } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
 
 export const CONTINUOUS_IMPROVEMENT_LOOP_UI_ERA22_POLICY_ID =
   "era22-continuous-improvement-loop-ui-v1" as const;
@@ -49,6 +53,7 @@ export type ContinuousImprovementLoopUiSlice = {
   pureOperationalMode: boolean;
   goDecision: string;
   customerName: string | null;
+  sustainedOpsComplete: boolean;
   tracks: readonly ContinuousImprovementLoopTrackStatus[];
   healthyCount: number;
   dueSoonCount: number;
@@ -66,6 +71,13 @@ export type ContinuousImprovementLoopUiSlice = {
   exportReleaseChecklistCommand: string;
   postSustainedOpsOrchestratorCommand: string;
   validateSustainedOpsCommand: string;
+  validateSustainedOpsIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  sustainedOpsIntegrityPassed: boolean;
+  improvementLoopIntegrityPassed: boolean;
+  p0ProofStatus: string | null;
+  tier2ProofStatus: string | null;
   improvementLoopMilestone: ContinuousImprovementLoopMilestone;
   todayHref: string;
   platformOpsHref: string;
@@ -81,6 +93,8 @@ export type ContinuousImprovementLoopUiSlice = {
 
 export function buildContinuousImprovementLoopUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -90,27 +104,56 @@ export function buildContinuousImprovementLoopUiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): ContinuousImprovementLoopUiSlice | null {
+  const env = input.env ?? process.env;
   const p0Staging = input.p0Staging ?? null;
   const tier2Summary = input.tier2Summary ?? null;
   const metricsBaseline = input.metricsBaseline ?? null;
+  const caseStudyDraft = input.caseStudyDraft ?? null;
+  const investorOnepager = input.investorOnepager ?? null;
+  const rollbackDrill = input.rollbackDrill ?? null;
   const competitorMatrix = input.competitorMatrix ?? null;
-  const sustainedOpsComplete = resolveSustainedOpsCompleteForContinuousImprovement({
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+
+  const improvementLoopIntegrity = evaluateContinuousImprovementLoopIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: p0Staging,
+    tier2SummaryOverride: tier2Summary,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: caseStudyDraft,
+    investorOnepagerOverride: investorOnepager,
+    rollbackDrillOverride: rollbackDrill,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  const sustainedOpsCompleteFromPhases = resolveSustainedOpsCompleteForContinuousImprovement({
     goNoGoSummary: input.goNoGoSummary,
     p0Staging,
     tier2Summary,
     metricsBaseline,
-    caseStudyDraft: input.caseStudyDraft ?? null,
-    investorOnepager: input.investorOnepager ?? null,
-    rollbackDrill: input.rollbackDrill ?? null,
+    caseStudyDraft,
+    investorOnepager,
+    rollbackDrill,
     competitorMatrix,
-    env: input.env,
+    env,
   });
+  const improvementLoopExecutionStarted = detectContinuousImprovementLoopStarted(env);
+
+  if (!sustainedOpsCompleteFromPhases && !improvementLoopExecutionStarted) return null;
+
   const goDecision = input.goNoGoSummary?.decision ?? null;
   const prerequisites = resolveContinuousImprovementLoopPrerequisites({
-    goDecision,
-    sustainedOpsComplete,
+    goDecision: sustainedOpsCompleteFromPhases ? "GO" : goDecision,
+    sustainedOpsComplete: sustainedOpsCompleteFromPhases,
   });
-  if (!prerequisites.pureOperationalMode) return null;
+  if (!prerequisites.pureOperationalMode && !improvementLoopExecutionStarted) {
+    return null;
+  }
 
   const tracks = buildContinuousImprovementLoopTrackStatuses({
     p0Staging,
@@ -126,15 +169,16 @@ export function buildContinuousImprovementLoopUiSlice(input: {
     : null;
   const improvementLoopMilestone = resolveContinuousImprovementLoopMilestoneFromTrackStatuses(
     tracks,
-    { pureOperationalMode: true },
+    { pureOperationalMode: sustainedOpsCompleteFromPhases || improvementLoopExecutionStarted },
   );
 
   return {
     policyId: CONTINUOUS_IMPROVEMENT_LOOP_UI_ERA22_POLICY_ID,
     visible: true,
-    pureOperationalMode: true,
+    pureOperationalMode: sustainedOpsCompleteFromPhases,
     goDecision: "GO",
     customerName: input.goNoGoSummary?.customerName ?? null,
+    sustainedOpsComplete: sustainedOpsCompleteFromPhases,
     tracks,
     healthyCount: health.healthyCount,
     dueSoonCount: health.dueSoonCount,
@@ -148,12 +192,23 @@ export function buildContinuousImprovementLoopUiSlice(input: {
     forbiddenClaimsDoc: SERIES_A_FORBIDDEN_CLAIMS_DOC,
     competitorLeapfrogDoc: SERIES_A_COMPETITOR_LEAPFROG_DOC,
     validateCommand: "npm run ops:validate-continuous-improvement-loop",
-    syncProgressReportCommand: "npm run ops:sync-continuous-improvement-loop-progress-report -- --write",
+    syncProgressReportCommand:
+      "npm run ops:sync-continuous-improvement-loop-progress-report -- --write",
     exportReleaseChecklistCommand:
       "npm run ops:export-continuous-improvement-loop-release-checklist -- --write",
     postSustainedOpsOrchestratorCommand:
       "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
     validateSustainedOpsCommand: "npm run ops:validate-sustained-operational-excellence-env -- --json",
+    validateSustainedOpsIntegrityCommand:
+      "npm run ops:validate-sustained-operational-excellence-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-continuous-improvement-loop-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-continuous-improvement-loop-integrity-baseline -- --write",
+    sustainedOpsIntegrityPassed: improvementLoopIntegrity.sustainedOpsIntegrityPassed,
+    improvementLoopIntegrityPassed: improvementLoopIntegrity.integrityPassed,
+    p0ProofStatus,
+    tier2ProofStatus,
     improvementLoopMilestone,
     todayHref: "/dashboard/today",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${CONTINUOUS_IMPROVEMENT_LOOP_PLATFORM_ANCHOR}`,
@@ -161,7 +216,7 @@ export function buildContinuousImprovementLoopUiSlice(input: {
     reportsHref: "/dashboard/reports",
     orderHubHref: SUSTAINED_OPS_ORDER_HUB_ROUTE,
     productionCalendarHref: SUSTAINED_OPS_PRODUCTION_CALENDAR_ROUTE,
-    launchWizardHref: "/dashboard/launch-wizard",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     goNoGoArtifact: PILOT_GONOGO_SUMMARY_ARTIFACT_PATH,
     metricsBaselineArtifact: PILOT_METRICS_BASELINE_ARTIFACT_PATH,
     competitorMatrixArtifact: COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
