@@ -87,4 +87,6 @@ npm run ops:validate-owner-daily-briefing-breakthrough-era25 -- --json
 npm run ops:sync-owner-daily-briefing-breakthrough-era25-report -- --write
 ```
 
-**Following convergence:** Paid pilot GO convergence era25 · pilot week1 execution convergence — each on dedicated `#era25-*` anchors with separate integrity phases (V+1, V+2…).
+**Next product phase:** [`docs/next-step-owner-daily-briefing-breakthrough-phase-v-product-2026-05-28.md`](./next-step-owner-daily-briefing-breakthrough-phase-v-product-2026-05-28.md) — Phase V breakthrough integrity (era46) **IMPLEMENTED**.
+
+**Following convergence:** Paid pilot GO convergence era25 · pilot week1 execution convergence — each on dedicated `#era25-*` anchors with separate integrity phases (W, W+1…).

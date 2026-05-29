@@ -53,6 +53,7 @@ export function LaunchWizardTodayStrip(props: {
     era25FirstCharterSliceReadiness: props.model.era25FirstCharterSliceReadinessIntegrity,
     era25EngineeringGates: props.model.era25EngineeringGatesIntegrity,
     era25FirstProductSliceBlueprint: props.model.era25FirstProductSliceBlueprintIntegrity,
+    era25OwnerDailyBriefingBreakthrough: props.model.era25OwnerDailyBriefingBreakthroughIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -298,6 +299,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-first-product-slice-blueprint"
               >
                 Blueprint {view.era25FirstProductSliceBlueprint.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25OwnerDailyBriefingBreakthrough ? (
+              <Badge
+                variant={
+                  view.era25OwnerDailyBriefingBreakthrough.ownerDailyBriefingBreakthroughIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-owner-daily-briefing-breakthrough"
+              >
+                Breakthrough {view.era25OwnerDailyBriefingBreakthrough.progressLabel}
               </Badge>
             ) : null}
           </div>

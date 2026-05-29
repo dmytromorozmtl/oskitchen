@@ -1,0 +1,26 @@
+# Owner daily briefing breakthrough era25 integrity — blocks breakthrough attestation without honest blueprint.
+
+name: Owner Daily Briefing Breakthrough Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/owner-daily-briefing-breakthrough-integrity-baseline.json"
+      - "artifacts/owner-daily-briefing-breakthrough-report.md"
+      - "lib/commercial/owner-daily-briefing-breakthrough-integrity-era46.ts"
+      - "scripts/ops/validate-owner-daily-briefing-breakthrough-integrity.ts"
+
+jobs:
+  validate-owner-daily-briefing-breakthrough-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate owner daily briefing breakthrough integrity (JSON)
+        run: npm run ops:validate-owner-daily-briefing-breakthrough-integrity -- --json

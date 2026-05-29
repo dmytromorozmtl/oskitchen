@@ -24,6 +24,7 @@ import type { LaunchWizardEra25CharterExitSlice } from "@/lib/launch-wizard/laun
 import type { LaunchWizardEra25FirstCharterSliceSlice } from "@/lib/launch-wizard/launch-wizard-era25-first-charter-slice-era43";
 import type { LaunchWizardEra25EngineeringGatesSlice } from "@/lib/launch-wizard/launch-wizard-era25-engineering-gates-era44";
 import type { LaunchWizardEra25FirstProductSliceBlueprintSlice } from "@/lib/launch-wizard/launch-wizard-era25-first-product-slice-blueprint-era45";
+import type { LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice } from "@/lib/launch-wizard/launch-wizard-era25-owner-daily-briefing-breakthrough-era46";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -67,6 +68,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25FirstCharterSliceReadiness: LaunchWizardEra25FirstCharterSliceSlice | null;
   era25EngineeringGates: LaunchWizardEra25EngineeringGatesSlice | null;
   era25FirstProductSliceBlueprint: LaunchWizardEra25FirstProductSliceBlueprintSlice | null;
+  era25OwnerDailyBriefingBreakthrough: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -125,6 +127,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25FirstCharterSliceReadiness?: LaunchWizardEra25FirstCharterSliceSlice | null;
   era25EngineeringGates?: LaunchWizardEra25EngineeringGatesSlice | null;
   era25FirstProductSliceBlueprint?: LaunchWizardEra25FirstProductSliceBlueprintSlice | null;
+  era25OwnerDailyBriefingBreakthrough?: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -201,6 +204,14 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25EngineeringGatesSubline = era25EngineeringGates
     ? `Gates ${era25EngineeringGates.progressLabel}${era25EngineeringGates.era25EngineeringGatesIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25FirstProductSliceBlueprint = input.era25FirstProductSliceBlueprint ?? null;
+  const era25FirstProductSliceBlueprintSubline = era25FirstProductSliceBlueprint
+    ? `Blueprint ${era25FirstProductSliceBlueprint.progressLabel}${era25FirstProductSliceBlueprint.era25FirstProductSliceBlueprintIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const era25OwnerDailyBriefingBreakthrough = input.era25OwnerDailyBriefingBreakthrough ?? null;
+  const era25OwnerDailyBriefingBreakthroughSubline = era25OwnerDailyBriefingBreakthrough
+    ? `Breakthrough ${era25OwnerDailyBriefingBreakthrough.progressLabel}${era25OwnerDailyBriefingBreakthrough.ownerDailyBriefingBreakthroughIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -246,6 +257,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25FirstCharterSliceReadiness,
       era25EngineeringGates,
       era25FirstProductSliceBlueprint,
+      era25OwnerDailyBriefingBreakthrough,
     };
   }
 
@@ -298,7 +310,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25FirstProductSliceBlueprintSubline
+        : era25OwnerDailyBriefingBreakthroughSubline
+          ? era25FirstProductSliceBlueprintSubline
+            ? `${era25FirstProductSliceBlueprintSubline} · ${era25OwnerDailyBriefingBreakthroughSubline}`
+            : era25OwnerDailyBriefingBreakthroughSubline
+          : era25FirstProductSliceBlueprintSubline
           ? era25EngineeringGatesSubline
             ? `${era25EngineeringGatesSubline} · ${era25FirstProductSliceBlueprintSubline}`
             : era25FirstProductSliceBlueprintSubline
@@ -414,5 +430,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25FirstCharterSliceReadiness,
     era25EngineeringGates,
     era25FirstProductSliceBlueprint,
+    era25OwnerDailyBriefingBreakthrough,
   };
 }

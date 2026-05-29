@@ -181,6 +181,10 @@ import {
   mergeBriefingEra25FirstProductSliceBlueprintTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-first-product-slice-blueprint-era45";
 import {
+  buildOwnerDailyBriefingEra25OwnerDailyBriefingBreakthroughAction,
+  mergeBriefingEra25OwnerDailyBriefingBreakthroughTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-owner-daily-briefing-breakthrough-era46";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -981,6 +985,14 @@ export async function loadOwnerDailyBriefing(
             ?.engineeringGates?.firstProductSliceBlueprint ?? null,
         )
       : null;
+  const era25OwnerDailyBriefingBreakthroughRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25OwnerDailyBriefingBreakthroughAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough ?? null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1392,6 +1404,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25FirstProductSliceBlueprintRankedAction) {
     allTopActions = mergeBriefingEra25FirstProductSliceBlueprintTopActions(
       era25FirstProductSliceBlueprintRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25OwnerDailyBriefingBreakthroughRankedAction) {
+    allTopActions = mergeBriefingEra25OwnerDailyBriefingBreakthroughTopActions(
+      era25OwnerDailyBriefingBreakthroughRankedAction,
       allTopActions,
     );
   }

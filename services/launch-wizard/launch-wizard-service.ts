@@ -131,6 +131,11 @@ import {
 } from "@/lib/launch-wizard/launch-wizard-era25-first-product-slice-blueprint-era45";
 import type { Era25EngineeringGatesUiSlice } from "@/lib/commercial/era25-engineering-gates-ui-era24";
 import type { Era25FirstProductSliceBlueprintUiSlice } from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
+import {
+  buildLaunchWizardEra25OwnerDailyBriefingBreakthroughSlice,
+  type LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-owner-daily-briefing-breakthrough-era46";
+import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
   buildLaunchWizardTier2StatusSlice,
@@ -250,6 +255,8 @@ export type LaunchWizardModel = {
   era25EngineeringGatesIntegrity: LaunchWizardEra25EngineeringGatesSlice | null;
   era25FirstProductSliceBlueprint: Era25FirstProductSliceBlueprintUiSlice | null;
   era25FirstProductSliceBlueprintIntegrity: LaunchWizardEra25FirstProductSliceBlueprintSlice | null;
+  era25OwnerDailyBriefingBreakthrough: OwnerDailyBriefingBreakthroughEra25UiSlice | null;
+  era25OwnerDailyBriefingBreakthroughIntegrity: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -967,6 +974,13 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       era25FirstProductSliceBlueprint,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const era25OwnerDailyBriefingBreakthrough =
+    era25FirstProductSliceBlueprint?.ownerDailyBriefingBreakthrough ?? null;
+  const era25OwnerDailyBriefingBreakthroughIntegrity =
+    buildLaunchWizardEra25OwnerDailyBriefingBreakthroughSlice(
+      era25OwnerDailyBriefingBreakthrough,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1019,6 +1033,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25EngineeringGatesIntegrity,
     era25FirstProductSliceBlueprint,
     era25FirstProductSliceBlueprintIntegrity,
+    era25OwnerDailyBriefingBreakthrough,
+    era25OwnerDailyBriefingBreakthroughIntegrity,
     paidPilotGoConvergence,
   };
 }

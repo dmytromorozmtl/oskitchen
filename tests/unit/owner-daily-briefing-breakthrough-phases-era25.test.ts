@@ -5,6 +5,7 @@ import {
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_DOC,
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_PLATFORM_ANCHOR,
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_PHASES_POLICY_ID,
+  detectOwnerDailyBriefingBreakthroughEra25Started,
 } from "@/lib/commercial/owner-daily-briefing-breakthrough-phases-era25";
 
 describe("owner-daily-briefing-breakthrough-phases-era25", () => {
@@ -30,5 +31,19 @@ describe("owner-daily-briefing-breakthrough-phases-era25", () => {
     expect(OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_DOC).toContain(
       "next-era25-owner-daily-briefing-breakthrough",
     );
+  });
+
+  it("detects breakthrough train started from env keys", () => {
+    expect(detectOwnerDailyBriefingBreakthroughEra25Started({})).toBe(false);
+    expect(
+      detectOwnerDailyBriefingBreakthroughEra25Started({
+        OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_ATTESTED: "1",
+      }),
+    ).toBe(true);
+    expect(
+      detectOwnerDailyBriefingBreakthroughEra25Started({
+        OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_REPORT_REVIEWED: "1",
+      }),
+    ).toBe(true);
   });
 });

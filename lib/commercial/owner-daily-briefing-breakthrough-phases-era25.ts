@@ -14,6 +14,19 @@ export const OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_REPORT_PATH =
 export const OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_PLATFORM_ANCHOR =
   "#era25-owner-daily-briefing-breakthrough" as const;
 
+export const OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_TRACKED_ENV_KEYS = [
+  "OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_ATTESTED",
+  "OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectOwnerDailyBriefingBreakthroughEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export const OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_BACKLOG_ID =
   "KOS-E25-001-ODB-BREAKTHROUGH" as const;
 

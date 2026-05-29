@@ -27,6 +27,21 @@ describe("owner-daily-briefing-breakthrough-ui-era25", () => {
       "blueprint_regression_blocked",
     );
     expect(slice?.paidPilotGoConvergence).not.toBeNull();
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-owner-daily-briefing-breakthrough-integrity",
+    );
+    expect(slice?.launchWizardHref).toContain(
+      "#launch-wizard-era25-owner-daily-briefing-breakthrough",
+    );
+  });
+
+  it("builds slice when breakthrough train started without blueprint visible", () => {
+    const slice = buildOwnerDailyBriefingBreakthroughEra25UiSlice({
+      blueprintVisible: false,
+      env: { OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_ATTESTED: "1" },
+    });
+    expect(slice).not.toBeNull();
+    expect(slice?.ownerDailyBriefingBreakthroughIntegrityPassed).toBe(false);
   });
 
   it("formats product slice label", () => {

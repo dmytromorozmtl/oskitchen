@@ -1236,6 +1236,24 @@ export function MaintenanceModePanel(props: {
                                             .briefingSchemeCount
                                         }
                                       </Badge>
+                                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                        .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                        .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                        .ownerDailyBriefingBreakthrough
+                                        .ownerDailyBriefingBreakthroughIntegrityPassed ? null : (
+                                        <Badge variant="destructive" className="rounded-full text-[10px]">
+                                          breakthrough integrity FAIL
+                                        </Badge>
+                                      )}
+                                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                        .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                        .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                        .ownerDailyBriefingBreakthrough
+                                        .era25FirstProductSliceBlueprintIntegrityPassed ? null : (
+                                        <Badge variant="destructive" className="rounded-full text-[10px]">
+                                          blueprint integrity FAIL
+                                        </Badge>
+                                      )}
                                     </div>
                                     <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
                                       {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.guardrails.map(
@@ -1261,6 +1279,33 @@ export function MaintenanceModePanel(props: {
                                             .era25CharterExit.firstCharterSliceReadiness.engineeringGates
                                             .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
                                             .validateCommand
+                                        }
+                                      </span>
+                                      <span>
+                                        {
+                                          slice.engineeringPathTerminus.postTerminusSteadyState
+                                            .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                            .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                            .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                            .validateBlueprintIntegrityCommand
+                                        }
+                                      </span>
+                                      <span>
+                                        {
+                                          slice.engineeringPathTerminus.postTerminusSteadyState
+                                            .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                            .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                            .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                            .integrityValidateCommand
+                                        }
+                                      </span>
+                                      <span>
+                                        {
+                                          slice.engineeringPathTerminus.postTerminusSteadyState
+                                            .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                            .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                            .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                            .syncIntegrityBaselineCommand
                                         }
                                       </span>
                                     </div>
