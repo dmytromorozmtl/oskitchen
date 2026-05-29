@@ -114,19 +114,17 @@ Weekly:
 
 ---
 
-## era25+ preview — Charter exit (outside linear path)
+## era25+ charter exit — implemented (outside linear path)
 
 See [`next-era25-charter-exit-outside-linear-path-2026-05-28.md`](./next-era25-charter-exit-outside-linear-path-2026-05-28.md)
 
-**NOT a linear catalog step.** Human-gated process for new commercial gates:
+Process orchestrator: `era24-era25-charter-exit-post-terminus-guard-orchestrator-v1` · **NOT Step 18** · Milestones: `terminus_guard_blocked` → checklist → `awaiting_signed_charter` → `era25_charter_exit_healthy`
 
-1. Leadership sign-off (explicit decision not to extend era24 rhythms)
-2. `npm run ops:export-era-charter-readiness-checklist -- --write`
-3. `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16
-4. New `era25-*` policies + separate briefing scheme
-5. Honest NO-GO until human execution
+---
 
-**Guard must stay PASS** — era25 never adds Step 18+ to linear chain.
+## era25 first charter slice preview (template only)
+
+See [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md) — **human charter sign-off required before any era25 engineering**
 
 ---
 

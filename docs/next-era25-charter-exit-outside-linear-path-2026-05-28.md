@@ -2,7 +2,9 @@
 
 **Status:** **Process only · NOT Steps 1–17 · NOT a linear catalog step**
 
-**Prerequisite:** Step 16 terminal closure + Step 17 guard PASS (or honest blocked milestones until P0 vault)
+**Policy:** `era24-era25-charter-exit-outside-linear-path-v1` · Orchestrator `era24-era25-charter-exit-post-terminus-guard-orchestrator-v1`  
+**Backlog:** `KOS-E25-EXIT-PROCESS` (process slice — not era25 engineering until charter signed)  
+**Prerequisite:** Step 17 guard `step17_forbidden_healthy` (or honest blocked milestones until P0 vault)
 
 ---
 
@@ -13,6 +15,58 @@ The commercial pilot **linear doc chain ends at Step 16**.
 Step 17 is **FORBIDDEN** as a catalog step — see [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md).
 
 **era25+ is the only exit** for new commercial gates — via explicit era charter, never by adding Step 18+ to the linear chain.
+
+---
+
+## Milestones (`era25CharterExitMilestone`)
+
+| Milestone | Meaning | Orchestrator exit |
+|-----------|---------|-------------------|
+| `terminus_guard_blocked` | Step 17 guard not healthy | `2` |
+| `attention_charter_checklist` | Checklist artifact missing | `0` |
+| `awaiting_signed_charter` | Checklist exported, no era25 charter doc yet (normal) | `0` |
+| `era25_charter_exit_healthy` | Checklist + signed `docs/era25-*-charter-*.md` | `0` |
+
+**Smoke readiness flags:**
+
+- `readyForTerminusGuardSmokes` — terminus guard not at healthy milestone
+- `readyForCharterChecklistSmokes` — checklist artifact missing
+
+---
+
+## Ops commands (era25 exit process)
+
+```bash
+npm run ops:validate-era25-charter-exit-outside-linear-path -- --json
+npm run ops:run-era25-charter-exit-post-terminus-guard-orchestrator -- --json
+npm run ops:run-era25-charter-exit-post-terminus-guard-orchestrator -- --write
+npm run ops:sync-era25-charter-exit-outside-linear-path-report -- --write
+npm run ops:export-era-charter-readiness-checklist -- --write
+npm run ops:validate-linear-chain-terminus-guard -- --json
+
+npm run test:ci:era25-charter-exit-outside-linear-path-era24
+npm run test:ci:era25-charter-exit-outside-linear-path-era24:cert
+```
+
+**Artifacts:**
+
+- `artifacts/era25-charter-exit-outside-linear-path-report.md`
+- `docs/era-charter-readiness-checklist-era24.md` (on `--write` export)
+
+**Workflow:** `.github/workflows/ops-era25-charter-exit-outside-linear-path-validate.yml`
+
+---
+
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Phases lib | `lib/commercial/era25-charter-exit-outside-linear-path-phases-era24.ts` |
+| Orchestrator lib | `lib/commercial/era25-charter-exit-post-terminus-guard-orchestrator-era24.ts` |
+| Evaluate | `lib/commercial/evaluate-era25-charter-exit-outside-linear-path.ts` |
+| UI slice | `lib/commercial/era25-charter-exit-ui-era24.ts` |
+| Panel | `#era25-charter-exit-outside-linear-path` nested under `#linear-chain-step17-forbidden` |
+| Policy | `lib/commercial/era25-charter-exit-outside-linear-path-era24-policy.ts` |
 
 ---
 
@@ -40,22 +94,11 @@ Step 17 is **FORBIDDEN** as a catalog step — see [`next-step-17-forbidden-line
 npm run ops:export-era-charter-readiness-checklist -- --write
 ```
 
-**Artifact:** `docs/era-charter-readiness-checklist-era24.md`
-
 ### 3. Write era25 charter doc
 
 `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16
 
-Minimum sections:
-
-- Charter name + era number (`era25`)
-- Problem statement (why era24 rhythms insufficient)
-- Success criteria (measurable, honest)
-- Policy IDs (`era25-<name>-v1`, phases, ui, orchestrator)
-- Backlog ID (`KOS-E25-NNN`)
-- Ops scripts + `test:ci:*-era25` + `:cert`
-- Briefing priority scheme (separate from era21 0–8)
-- Rollback / NO-GO criteria
+See template: [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md)
 
 ### 4. Engineering (only after charter signed)
 
@@ -68,21 +111,32 @@ Minimum sections:
 
 - Staging proof checklist for era25 scope
 - `test:ci:commercial-pilot-runbook:cert` still green
-- Terminus guard still PASS (`ops:validate-linear-chain-terminus-guard -- --json`)
+- Terminus guard still PASS
 
 ---
 
-## Ops commands (era25 prep)
+## Platform surfaces
 
-```bash
-npm run ops:validate-linear-chain-terminus-guard -- --json
-npm run ops:run-linear-chain-terminus-guard-post-linear-path-closed-orchestrator -- --json
-npm run ops:export-era-charter-readiness-checklist -- --write
-npm run ops:validate-linear-path-permanently-closed -- --json
-npm run test:ci:commercial-pilot-runbook:cert
-```
+- `/platform/commercial-pilot-ops#era25-charter-exit-outside-linear-path`
+- `/dashboard/today` — maintenance compact (nested under Step 17 guard)
 
-**Platform ops:** `#linear-chain-step17-forbidden` → era25 exit commands
+---
+
+## Weekly operator checklist
+
+- [ ] Review `era25CharterExitMilestone` from validate JSON
+- [ ] Terminus guard PASS
+- [ ] Charter checklist exported when considering era25
+- [ ] No fake signed charter — human writes `docs/era25-*-charter-*.md`
+- [ ] Release train includes commercial pilot cert
+
+---
+
+## era25 first charter slice preview (after human sign-off)
+
+See [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md)
+
+**NOT auto-implemented.** First era25 engineering begins only when leadership signs charter doc.
 
 ---
 
@@ -98,9 +152,9 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Related docs
 
-- [`next-step-16-linear-path-permanently-closed-2026-05-28.md`](./next-step-16-linear-path-permanently-closed-2026-05-28.md) — terminal closure
-- [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md) — Step 17 forbidden
-- [`next-step-14-post-terminus-era-charter-process-2026-05-28.md`](./next-step-14-post-terminus-era-charter-process-2026-05-28.md) — original charter process
+- [`next-step-16-linear-path-permanently-closed-2026-05-28.md`](./next-step-16-linear-path-permanently-closed-2026-05-28.md)
+- [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md)
+- [`next-step-14-post-terminus-era-charter-process-2026-05-28.md`](./next-step-14-post-terminus-era-charter-process-2026-05-28.md)
 
 **Human blocker:** [`next-step-1-ops-vault-day0-execution-2026-05-28.md`](./next-step-1-ops-vault-day0-execution-2026-05-28.md)
 

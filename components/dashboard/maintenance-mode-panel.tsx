@@ -14,6 +14,7 @@ import { formatEngineeringPathTerminusProgressLabel } from "@/lib/commercial/eng
 import { formatCommercialPilotPathAbsoluteEndLabel } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
 import { formatLinearPathPermanentlyClosedLabel } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
 import { formatLinearChainTerminusGuardLabel } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
+import { formatEra25CharterExitLabel } from "@/lib/commercial/era25-charter-exit-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -498,6 +499,92 @@ export function MaintenanceModePanel(props: {
                     }
                   </span>
                 </div>
+
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                  .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit ? (
+                  <div
+                    id="era25-charter-exit-outside-linear-path"
+                    className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-violet-800/50 px-3 py-3"
+                    data-testid="era25-charter-exit-outside-linear-path-panel"
+                  >
+                    <p className="font-medium text-violet-100">
+                      era25+ charter exit — outside linear catalog
+                    </p>
+                    <p className="mt-1 text-violet-200/80">
+                      {formatEra25CharterExitLabel(
+                        slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                          .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit,
+                      )}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <Badge
+                        variant="outline"
+                        className="rounded-full font-mono text-[10px] text-violet-200"
+                      >
+                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.era25CharterExitMilestone.replaceAll(
+                          "_",
+                          " ",
+                        )}
+                      </Badge>
+                      <Badge variant="outline" className="rounded-full text-[10px] text-violet-300">
+                        checklist{" "}
+                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                          .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                          .charterChecklistPresent
+                          ? "yes"
+                          : "no"}
+                      </Badge>
+                      <Badge variant="outline" className="rounded-full text-[10px] text-violet-300">
+                        signed charter{" "}
+                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                          .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                          .signedCharterPresent
+                          ? "yes"
+                          : "no"}
+                      </Badge>
+                    </div>
+                    <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.humanSteps.map(
+                        (step) => (
+                          <li key={step}>{step}</li>
+                        ),
+                      )}
+                    </ul>
+                    <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                            .postTerminusGuardOrchestratorCommand
+                        }
+                      </span>
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.validateCommand
+                        }
+                      </span>
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.syncReportCommand
+                        }
+                      </span>
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                            .exportCharterChecklistCommand
+                        }
+                      </span>
+                    </div>
+                    <p className="mt-2 text-violet-300/70">
+                      NOT Step 18 · charter template{" "}
+                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.charterDocGlobHint}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>

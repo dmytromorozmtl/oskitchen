@@ -120,13 +120,17 @@ Step 17 guard orchestrator: `era24-linear-chain-terminus-guard-post-linear-path-
 
 ---
 
-## era25+ preview — Charter exit (outside linear path)
+## era25+ charter exit — implemented (outside linear path)
 
-See [`next-era25-charter-exit-outside-linear-path-2026-05-28.md`](./next-era25-charter-exit-outside-linear-path-2026-05-28.md) — **process only · human charter sign-off · no Step 18**
+See [`next-era25-charter-exit-outside-linear-path-2026-05-28.md`](./next-era25-charter-exit-outside-linear-path-2026-05-28.md)
+
+**Human gate before era25 engineering:** `era25CharterExitMilestone: era25_charter_exit_healthy` + signed `docs/era25-*-charter-*.md`
+
+Preview: [`next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md)
 
 ---
 
-## era25+ (only exit from closed path)
+## era25+ (only exit from closed path — summary)
 
 1. `npm run ops:export-era-charter-readiness-checklist -- --write`
 2. `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16

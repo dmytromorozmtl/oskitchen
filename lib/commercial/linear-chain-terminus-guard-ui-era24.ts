@@ -2,6 +2,10 @@
  * Linear chain terminus guard UI slice — Step 17 FORBIDDEN platform panel section.
  */
 import {
+  buildEra25CharterExitUiSlice,
+  type Era25CharterExitUiSlice,
+} from "@/lib/commercial/era25-charter-exit-ui-era24";
+import {
   LINEAR_CHAIN_FORBIDDEN_PROPOSALS,
   LINEAR_CHAIN_MAX_STEP,
   LINEAR_CHAIN_STEP17_FORBIDDEN_DOC,
@@ -38,6 +42,7 @@ export type LinearChainTerminusGuardUiSlice = {
   syncReportCommand: string;
   exportEraCharterChecklistCommand: string;
   platformOpsHref: string;
+  era25CharterExit: Era25CharterExitUiSlice | null;
 };
 
 export function buildLinearChainTerminusGuardUiSlice(input: {
@@ -47,6 +52,10 @@ export function buildLinearChainTerminusGuardUiSlice(input: {
   if (!input.terminalClosureActive) return null;
 
   const result = evaluateLinearChainTerminusGuardWithMilestones(input.env);
+  const era25CharterExit = buildEra25CharterExitUiSlice({
+    guardPassed: result.guard.guardPassed,
+    env: input.env,
+  });
 
   return {
     policyId: LINEAR_CHAIN_TERMINUS_GUARD_UI_ERA24_POLICY_ID,
@@ -68,6 +77,7 @@ export function buildLinearChainTerminusGuardUiSlice(input: {
     exportEraCharterChecklistCommand:
       "npm run ops:export-era-charter-readiness-checklist -- --write",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${LINEAR_CHAIN_TERMINUS_GUARD_PLATFORM_ANCHOR}`,
+    era25CharterExit,
   };
 }
 
