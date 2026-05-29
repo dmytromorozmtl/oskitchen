@@ -10,6 +10,7 @@ import {
   formatMaintenanceModeProgressLabel,
   MAINTENANCE_MODE_PLATFORM_ANCHOR,
 } from "@/lib/commercial/maintenance-mode-ui-era24";
+import { formatEngineeringPathTerminusProgressLabel } from "@/lib/commercial/engineering-path-terminus-ui-era24";
 import { cn } from "@/lib/utils";
 
 type MaintenanceModePanelVariant = "dashboard" | "platform" | "compact";
@@ -173,11 +174,17 @@ export function MaintenanceModePanel(props: {
               Engineering path terminus — master orchestration (Step 13)
             </p>
             <p className="mt-1 text-slate-400">
-              {slice.engineeringPathTerminus.completedSteps}/{slice.engineeringPathTerminus.totalSteps}{" "}
-              steps · gate chain{" "}
-              {slice.engineeringPathTerminus.gateStepsComplete ? "complete" : "blocked"} · no era25
+              {formatEngineeringPathTerminusProgressLabel(slice.engineeringPathTerminus)} · no era25
               gates without charter
             </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Badge variant="outline" className="rounded-full font-mono text-[10px] text-slate-200">
+                {slice.engineeringPathTerminus.engineeringPathTerminusMilestone.replaceAll("_", " ")}
+              </Badge>
+              <Badge variant="outline" className="rounded-full text-[10px] text-slate-300">
+                gate chain {slice.engineeringPathTerminus.gateStepsComplete ? "complete" : "blocked"}
+              </Badge>
+            </div>
             <ul className="mt-3 max-h-64 space-y-1 overflow-y-auto">
               {slice.engineeringPathTerminus.steps.map((step) => (
                 <li
@@ -196,8 +203,10 @@ export function MaintenanceModePanel(props: {
               ))}
             </ul>
             <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+              <span>{slice.engineeringPathTerminus.postMaintenanceModeOrchestratorCommand}</span>
               <span>{slice.engineeringPathTerminus.validateCommand}</span>
               <span>{slice.engineeringPathTerminus.syncStatusReportCommand}</span>
+              <span>{slice.engineeringPathTerminus.validateMaintenanceModeCommand}</span>
             </div>
           </div>
         ) : null}

@@ -6,10 +6,10 @@ import {
   COMMERCIAL_PILOT_PATH_STATUS_REPORT_PATH,
   ENGINEERING_PATH_TERMINUS_STEP13_DOC,
 } from "@/lib/commercial/engineering-path-terminus-era24";
-import { evaluateCommercialPilotPath } from "@/lib/commercial/evaluate-commercial-pilot-path";
+import { evaluateCommercialPilotPathWithMilestones } from "@/scripts/ops/validate-commercial-pilot-path";
 
 export function buildCommercialPilotPathStatusReportMarkdown(
-  result: ReturnType<typeof evaluateCommercialPilotPath>,
+  result: ReturnType<typeof evaluateCommercialPilotPathWithMilestones>,
 ): string {
   const lines: string[] = [
     "# Commercial Pilot Path — Status Report",
@@ -18,29 +18,33 @@ export function buildCommercialPilotPathStatusReportMarkdown(
     "",
     "## Summary",
     "",
-    `- Steps complete: **${result.summary.completedSteps}/${result.summary.totalSteps}**`,
-    `- Gate chain complete: **${result.summary.gateStepsComplete ? "yes" : "no"}**`,
-    `- Commercial pilot path complete: **${result.summary.pathComplete ? "yes" : "no"}**`,
-    `- Engineering terminus active: **${result.summary.engineeringTerminusActive ? "yes" : "no"}**`,
-    `- GO decision: **${result.summary.goDecision ?? "missing"}**`,
+    `- Steps complete: **${result.evaluation.summary.completedSteps}/${result.evaluation.summary.totalSteps}**`,
+    `- Gate chain complete: **${result.evaluation.summary.gateStepsComplete ? "yes" : "no"}**`,
+    `- Commercial pilot path complete: **${result.evaluation.summary.pathComplete ? "yes" : "no"}**`,
+    `- Engineering terminus active: **${result.evaluation.summary.engineeringTerminusActive ? "yes" : "no"}**`,
+    `- Engineering path milestone: **${result.engineeringPathTerminusMilestone}**`,
+    `- Maintenance mode milestone: **${result.maintenanceMode.maintenanceModeMilestone}**`,
+    `- Ready for gate chain smokes: ${result.readyForGateChainSmokes ? "yes" : "no"}`,
+    `- Ready for maintenance rhythm smokes: ${result.readyForMaintenanceRhythmSmokes ? "yes" : "no"}`,
+    `- GO decision: **${result.evaluation.summary.goDecision ?? "missing"}**`,
     "",
   ];
 
-  if (result.summary.firstBlockedStep) {
+  if (result.evaluation.summary.firstBlockedStep) {
     lines.push("## First blocked step");
     lines.push("");
     lines.push(
-      `Step **${result.summary.firstBlockedStep.step}** — ${result.summary.firstBlockedStep.label}`,
+      `Step **${result.evaluation.summary.firstBlockedStep.step}** — ${result.evaluation.summary.firstBlockedStep.label}`,
     );
     lines.push("");
-    lines.push(result.summary.firstBlockedStep.detail);
+    lines.push(result.evaluation.summary.firstBlockedStep.detail);
     lines.push("");
   }
 
   lines.push("## Step catalog");
   lines.push("");
 
-  for (const step of result.steps) {
+  for (const step of result.evaluation.steps) {
     lines.push(`### Step ${step.step} — ${step.label}`);
     lines.push("");
     lines.push(`- Kind: **${step.kind}**`);
@@ -68,7 +72,7 @@ export function buildCommercialPilotPathStatusReportMarkdown(
 
 function main() {
   const write = process.argv.includes("--write");
-  const result = evaluateCommercialPilotPath();
+  const result = evaluateCommercialPilotPathWithMilestones();
   const markdown = buildCommercialPilotPathStatusReportMarkdown(result);
 
   if (write) {

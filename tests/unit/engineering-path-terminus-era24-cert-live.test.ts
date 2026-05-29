@@ -39,6 +39,9 @@ describe("engineering path terminus era24 CI certification (live repo)", () => {
   it("documents step 13 execution with master orchestration", () => {
     const step13 = readFileSync(join(ROOT, ENGINEERING_PATH_TERMINUS_STEP13_DOC), "utf8");
     expect(step13).toContain("era24-engineering-path-terminus-v1");
+    expect(step13).toContain(
+      "run-engineering-path-terminus-post-maintenance-mode-orchestrator",
+    );
     expect(step13).toContain("ops:validate-commercial-pilot-path");
     expect(step13).toContain("#engineering-path-terminus");
   });

@@ -17,9 +17,11 @@ export const ENGINEERING_PATH_TERMINUS_ERA24_EXTENDS_POLICIES = [
   MAINTENANCE_MODE_ERA24_POLICY_ID,
   "era24-post-terminus-steady-state-v1",
   ENGINEERING_PATH_TERMINUS_UI_ERA24_POLICY_ID,
+  "era24-engineering-path-terminus-post-maintenance-mode-orchestrator-v1",
 ] as const;
 
 export const ENGINEERING_PATH_TERMINUS_ERA24_OPS_SCRIPTS = [
+  "ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator",
   "ops:validate-commercial-pilot-path",
   "ops:sync-commercial-pilot-path-status-report",
 ] as const;
@@ -30,8 +32,10 @@ export const ENGINEERING_PATH_TERMINUS_ERA24_CI_SCRIPTS = [
 ] as const;
 
 export const ENGINEERING_PATH_TERMINUS_ERA24_UNIT_TESTS = [
+  "tests/unit/engineering-path-terminus-post-maintenance-mode-orchestrator-era24.test.ts",
   "tests/unit/engineering-path-terminus-era24.test.ts",
   "tests/unit/engineering-path-terminus-ui-era24.test.ts",
+  "tests/unit/run-engineering-path-terminus-post-maintenance-mode-orchestrator.test.ts",
   "tests/unit/validate-commercial-pilot-path.test.ts",
   "tests/unit/engineering-path-terminus-era24-cert-live.test.ts",
 ] as const;

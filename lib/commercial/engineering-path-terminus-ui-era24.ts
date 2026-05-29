@@ -2,6 +2,10 @@
  * Engineering path terminus UI slice — embedded in maintenance mode platform panel.
  */
 import {
+  resolveEngineeringPathTerminusMilestoneFromSummary,
+  type EngineeringPathTerminusMilestone,
+} from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
+import {
   ENGINEERING_PATH_TERMINUS_ERA24_POLICY_ID,
   ENGINEERING_PATH_TERMINUS_PLATFORM_ANCHOR,
   ENGINEERING_PATH_TERMINUS_STEP13_DOC,
@@ -31,6 +35,9 @@ export type EngineeringPathTerminusUiSlice = {
   summary: CommercialPilotPathSummary;
   step13Doc: typeof ENGINEERING_PATH_TERMINUS_STEP13_DOC;
   validateCommand: string;
+  postMaintenanceModeOrchestratorCommand: string;
+  validateMaintenanceModeCommand: string;
+  engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
   syncStatusReportCommand: string;
   platformOpsHref: string;
   postTerminusSteadyState: PostTerminusSteadyStateUiSlice | null;
@@ -46,6 +53,10 @@ export function buildEngineeringPathTerminusUiSlice(input: {
   const postTerminusSteadyState = buildPostTerminusSteadyStateUiSlice({
     engineeringTerminusActive: evaluation.summary.engineeringTerminusActive,
     env: input.env,
+  });
+  const engineeringPathTerminusMilestone = resolveEngineeringPathTerminusMilestoneFromSummary({
+    maintenanceModeActive: input.maintenanceModeActive,
+    summary: evaluation.summary,
   });
 
   return {
@@ -63,6 +74,10 @@ export function buildEngineeringPathTerminusUiSlice(input: {
     summary: evaluation.summary,
     step13Doc: ENGINEERING_PATH_TERMINUS_STEP13_DOC,
     validateCommand: "npm run ops:validate-commercial-pilot-path",
+    postMaintenanceModeOrchestratorCommand:
+      "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
+    validateMaintenanceModeCommand: "npm run ops:validate-maintenance-mode -- --json",
+    engineeringPathTerminusMilestone,
     syncStatusReportCommand: "npm run ops:sync-commercial-pilot-path-status-report -- --write",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ENGINEERING_PATH_TERMINUS_PLATFORM_ANCHOR}`,
     postTerminusSteadyState,
@@ -72,5 +87,9 @@ export function buildEngineeringPathTerminusUiSlice(input: {
 export function formatEngineeringPathTerminusProgressLabel(
   slice: EngineeringPathTerminusUiSlice,
 ): string {
-  return `Engineering path · ${slice.completedSteps}/${slice.totalSteps} steps · terminus active`;
+  const milestone = slice.engineeringPathTerminusMilestone.replaceAll("_", " ");
+  if (slice.firstBlockedGateStep) {
+    return `Engineering path · gate blocked S${slice.firstBlockedGateStep.step} · ${milestone} · ${slice.completedSteps}/${slice.totalSteps}`;
+  }
+  return `Engineering path · ${slice.completedSteps}/${slice.totalSteps} steps · ${milestone}`;
 }

@@ -155,9 +155,11 @@ See [`next-step-13-engineering-path-terminus-2026-05-28.md`](./next-step-13-engi
 
 | Component | Artifact |
 |-----------|----------|
+| Orchestrator lib | `lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24.ts` |
+| Policy | `era24-engineering-path-terminus-post-maintenance-mode-orchestrator-v1` |
+| Milestones | `maintenance_mode_blocked` → gate/informational attention → `engineering_path_terminus_healthy` |
 | Master validate | `ops:validate-commercial-pilot-path -- --json` |
 | Status report | `ops:sync-commercial-pilot-path-status-report -- --write` |
-| Policy | `era24-engineering-path-terminus-v1` |
 | UI catalog | `#engineering-path-terminus` inside maintenance panel (already wired) |
 | Briefing | **No new priority** — visible when Step 12 maintenance mode active |
 

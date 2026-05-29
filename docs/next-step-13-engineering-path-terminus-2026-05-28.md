@@ -1,7 +1,7 @@
 # KitchenOS — Шаг 13: Engineering path terminus (конец era21→era24)
 
+**Policy:** `era24-engineering-path-terminus-v1` · **Orchestrator:** `era24-engineering-path-terminus-post-maintenance-mode-orchestrator-v1` · Backlog `KOS-E24-013`  
 **Предусловие:** Maintenance mode active (Step 12) · `maintenanceModeMilestone` healthy or rhythms refreshed · GO valid  
-**Policy:** `era24-engineering-path-terminus-v1` · Backlog `KOS-E24-013`  
 **Цель:** Master ops orchestration — **no new gates, env keys, or briefing priorities**
 
 ---
@@ -10,13 +10,13 @@
 
 **The commercial pilot engineering path UI terminates at Step 12 (`era24-maintenance-mode-v1`).**
 
-Step 13 adds **orchestration only** (already partially wired in `#maintenance-mode` panel):
+Step 13 adds **master orchestration only** (embedded in `#maintenance-mode` panel):
 
-- Master validate across Steps 1–12
+- Master validate across Steps 1–16
 - Status report artifact
-- Platform ops catalog `#engineering-path-terminus` inside maintenance panel
+- Platform ops catalog `#engineering-path-terminus`
 
-There is **no Step 14 code gate**, no `era25-*` panels, and no additional briefing priorities.
+There is **no Step 14 gate**, no `era25-*` panels, and no additional briefing priorities.
 
 Any future commercial gates require an **explicit new era charter** (e.g. `era25-*`) approved outside this path.
 
@@ -27,11 +27,32 @@ Any future commercial gates require an **explicit new era charter** (e.g. `era25
 ```bash
 npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --json   # maintenanceModeMilestone: maintenance_mode_healthy
 npm run ops:validate-maintenance-mode -- --json   # maintenanceModeActive: true
+npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write
 npm run ops:validate-commercial-pilot-path -- --json
 npm run ops:sync-commercial-pilot-path-status-report -- --write
 ```
 
-**Step 13 does NOT add a new orchestrator policy** — it aggregates existing Step 1–12 validators.
+**Post-maintenance-mode orchestrator milestones (`engineeringPathTerminusMilestone`):**
+
+| Milestone | Meaning | Exit code (orchestrator `--json`) |
+|-----------|---------|-----------------------------------|
+| `maintenance_mode_blocked` | Step 12 not active | `2` |
+| `attention_gate_chain` | First blocked gate step (Steps 1–9) | `0` |
+| `attention_informational_stack` | Gate chain OK but Steps 10–12 blocked | `0` |
+| `engineering_path_terminus_healthy` | Terminus active · gate chain complete · stack fresh | `0` |
+
+**Smoke readiness flags in validate JSON (informational):**
+
+- `readyForGateChainSmokes`: first blocked gate step present (P0 → sustained ops env smokes)
+- `readyForMaintenanceRhythmSmokes`: maintenance active + maintenance mode milestone not healthy
+
+**Product surfaces when engineering terminus active:**
+
+| Surface | Expected |
+|---------|----------|
+| `/platform/commercial-pilot-ops#maintenance-mode` | `#engineering-path-terminus` catalog + milestone badge |
+| `/dashboard/today` | Maintenance compact panel (catalog on Platform ops) |
+| `/dashboard/launch-wizard` | New pilots only · isolated GO artifacts |
 
 ---
 
@@ -46,9 +67,9 @@ era23 Step 11     Sustained product evolution (#sustained-product-evolution)
         ↓
 era24 Step 12     Maintenance mode (#maintenance-mode) ← UI TERMINUS
         ↓
-era24 Step 13     Engineering path terminus (#engineering-path-terminus) ← OPS ORCHESTRATION ONLY
+era24 Step 13     Engineering path terminus (#engineering-path-terminus) ← MASTER ORCHESTRATION
         ↓
-era24 Step 14     Post-terminus steady state (#post-terminus-steady-state) ← STEADY-STATE ORCHESTRATION ONLY
+era24 Step 14     Post-terminus steady state (#post-terminus-steady-state) ← STEADY-STATE ORCHESTRATION
         ↓
 Step 15           Absolute path end — doc only
 ```
@@ -58,24 +79,20 @@ Step 15           Absolute path end — doc only
 ## Ops commands (Step 13)
 
 ```bash
-# Master orchestration — honest status for all 12 commercial steps + terminus meta
+npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write
 npm run ops:validate-commercial-pilot-path -- --json
-
-# Weekly status report (never hand-edit PASS in artifacts/*.json)
 npm run ops:sync-commercial-pilot-path-status-report -- --write
-
-# Step 12 rhythm sync (upstream dependency)
 npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write
 npm run ops:sync-maintenance-mode-playbook-report -- --write
-
-# Cert
 npm run test:ci:engineering-path-terminus-era24
 npm run test:ci:engineering-path-terminus-era24:cert
 ```
 
 **Artifact:** `artifacts/commercial-pilot-path-status-report.md`
 
-**GitHub workflow:** `.github/workflows/ops-commercial-pilot-path-validate.yml` (workflow_dispatch)
+**GitHub workflow:** `.github/workflows/ops-commercial-pilot-path-validate.yml` (includes orchestrator step with `continue-on-error: true`)
+
+Platform anchor: `#engineering-path-terminus`
 
 ---
 
@@ -108,20 +125,32 @@ npm run ops:sync-commercial-pilot-path-status-report -- --write
 
 ---
 
+## Deliverables checklist
+
+- [ ] Master validate JSON reviewed weekly (`engineeringPathTerminusMilestone`)
+- [ ] `artifacts/commercial-pilot-path-status-report.md` synced
+- [ ] First blocked gate step addressed honestly (never hand-edit PASS)
+- [ ] Step 12 maintenance rhythms current when terminus healthy
+- [ ] Release train includes commercial pilot cert
+
+---
+
 ## Step 14 preview — Post-terminus steady state
 
 See [`next-step-14-post-terminus-era-charter-process-2026-05-28.md`](./next-step-14-post-terminus-era-charter-process-2026-05-28.md)
 
-**Next slice (Step 14 — steady-state orchestration only):**
+**Next engineering slice (Step 14 — steady-state orchestration only):**
 
-| Component | Role |
-|-----------|------|
-| Policy | `era24-post-terminus-steady-state-v1` |
+| Component | Artifact |
+|-----------|----------|
+| Orchestrator lib | `lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24.ts` (planned) |
+| Policy | `era24-post-terminus-steady-state-post-engineering-terminus-orchestrator-v1` (planned) |
+| Milestones | `engineering_terminus_blocked` → track attention → `steady_state_healthy` |
+| Validate | `ops:validate-steady-state-operator-loop -- --json` |
 | UI | `#post-terminus-steady-state` inside maintenance panel (already wired) |
-| Validate | `ops:validate-post-terminus-steady-state -- --json` |
 | Briefing | **No new priority** |
 
-**Human gate before Step 14:** Step 13 master validate green + status report synced.
+**Human gate before Step 14:** `engineeringPathTerminusMilestone: engineering_path_terminus_healthy` + status report synced.
 
 ---
 

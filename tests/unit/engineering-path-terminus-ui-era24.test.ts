@@ -15,6 +15,9 @@ describe("engineering-path-terminus-ui-era24", () => {
     expect(slice).not.toBeNull();
     expect(slice?.steps).toHaveLength(16);
     expect(slice?.validateCommand).toBe("npm run ops:validate-commercial-pilot-path");
+    expect(slice?.postMaintenanceModeOrchestratorCommand).toContain(
+      "run-engineering-path-terminus-post-maintenance-mode-orchestrator",
+    );
     expect(slice?.syncStatusReportCommand).toContain("sync-commercial-pilot-path-status-report");
   });
 
