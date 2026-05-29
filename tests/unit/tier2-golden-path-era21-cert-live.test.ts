@@ -8,6 +8,7 @@ import {
   TIER2_STAGING_GOLDEN_PATH_ERA21_OPS_SCRIPTS,
   TIER2_STAGING_GOLDEN_PATH_ERA21_POLICY_ID,
   TIER2_STAGING_GOLDEN_PATH_ERA21_PRODUCT_SURFACES,
+  TIER2_STAGING_GOLDEN_PATH_ERA21_PHASE_B_DOC,
   TIER2_STAGING_GOLDEN_PATH_ERA21_STEP2_DOC,
   TIER2_STAGING_GOLDEN_PATH_ERA21_UNIT_TESTS,
 } from "@/lib/commercial/tier2-staging-golden-path-era21-policy";
@@ -34,6 +35,12 @@ describe("tier2 golden path era21 CI certification (live repo)", () => {
     ]) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
+  });
+
+  it("documents phase B product doc", () => {
+    const phaseB = readFileSync(join(ROOT, TIER2_STAGING_GOLDEN_PATH_ERA21_PHASE_B_DOC), "utf8");
+    expect(phaseB).toContain("validate-tier2-staging-golden-path-integrity");
+    expect(phaseB).toContain("stop_tier2_fake_pass");
   });
 
   it("documents step 2 execution playbook chain", () => {

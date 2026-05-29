@@ -33,6 +33,8 @@ export type Tier2GoldenPathUiSlice = {
   missingManualEnvVars: readonly string[];
   playbookDoc: typeof TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC;
   validateCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
   exportTemplateCommand: string;
   orchestratorCommand: string;
   syncProgressReportCommand: string;
@@ -80,6 +82,10 @@ export function buildTier2GoldenPathUiSlice(input: {
     missingManualEnvVars: input.tier2Summary?.missingManualEnvVars ?? [],
     playbookDoc: TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC,
     validateCommand: "npm run ops:validate-tier2-golden-path-env",
+    integrityValidateCommand:
+      "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-tier2-staging-golden-path-integrity-baseline -- --write",
     exportTemplateCommand: "npm run ops:export-tier2-golden-path-env-template -- --write",
     orchestratorCommand: "npm run smoke:tier2-staging-golden-path",
     syncProgressReportCommand: "npm run ops:sync-tier2-golden-path-progress-report -- --write",

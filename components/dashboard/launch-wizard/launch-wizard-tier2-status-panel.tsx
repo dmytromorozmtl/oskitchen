@@ -38,6 +38,11 @@ export function LaunchWizardTier2StatusPanel(props: { slice: LaunchWizardTier2St
               blocked on P0
             </Badge>
           ) : null}
+          {!slice.blockedOnP0 && !slice.tier2IntegrityPassed ? (
+            <Badge variant="destructive" className="rounded-full text-[10px]">
+              integrity FAIL
+            </Badge>
+          ) : null}
         </div>
 
         <ul className="space-y-2">
@@ -68,7 +73,9 @@ export function LaunchWizardTier2StatusPanel(props: { slice: LaunchWizardTier2St
 
         <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2 font-mono text-xs text-muted-foreground">
           <p>{slice.orchestratorCommand}</p>
+          <p className="mt-1">{slice.integrityValidateCommand}</p>
           <p className="mt-1">npm run ops:validate-tier2-golden-path-env</p>
+          <p className="mt-1">{slice.syncIntegrityBaselineCommand}</p>
           <p className="mt-1">Playbook: {slice.playbookDoc}</p>
         </div>
 

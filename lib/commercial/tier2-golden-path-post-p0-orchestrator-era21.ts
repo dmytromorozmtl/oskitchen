@@ -96,6 +96,8 @@ export function buildTier2GoldenPathPostP0OrchestratorSummary(input: {
 
   const recommendedCommands = input.evaluation.p0GatePassed
     ? ([
+        "npm run ops:validate-p0-staging-proof-integrity -- --json",
+        "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
         "npm run ops:validate-p0-vault-env -- --json",
         "npm run ops:validate-tier2-golden-path-env -- --json",
         TIER2_GOLDEN_PATH_POST_P0_ORCHESTRATOR_COMMAND + " -- --write",

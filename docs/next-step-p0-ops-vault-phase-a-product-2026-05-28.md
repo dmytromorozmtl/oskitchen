@@ -49,7 +49,7 @@ npm run ops:run-commercial-inflection-readiness-orchestrator -- --write
 ## Next step after Phase A PASS
 
 1. `npm run ops:sync-p0-staging-proof-integrity-baseline -- --write` (regression guard)
-2. Tier 2 golden path — [`docs/tier2-staging-golden-path-execution-playbook-2026-05-28.md`](./tier2-staging-golden-path-execution-playbook-2026-05-28.md)
+2. Tier 2 golden path Phase B — [`docs/next-step-tier2-golden-path-phase-b-product-2026-05-28.md`](./next-step-tier2-golden-path-phase-b-product-2026-05-28.md) · playbook [`docs/tier2-staging-golden-path-execution-playbook-2026-05-28.md`](./tier2-staging-golden-path-execution-playbook-2026-05-28.md)
 3. Pilot GO/NO-GO smoke with real artifact
 4. Master execution train — [`docs/next-step-master-execution-2026-05-28.md`](./next-step-master-execution-2026-05-28.md)
 

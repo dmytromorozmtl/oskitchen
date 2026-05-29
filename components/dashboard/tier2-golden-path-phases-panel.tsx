@@ -120,6 +120,8 @@ export function Tier2GoldenPathPhasesPanel(props: {
               <ul className="mt-1 list-inside list-disc font-mono">
                 <li>{slice.postP0OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.validateP0GateCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>

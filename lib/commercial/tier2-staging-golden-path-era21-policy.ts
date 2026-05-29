@@ -20,9 +20,14 @@ export const TIER2_STAGING_GOLDEN_PATH_ERA21_EXTENDS_POLICIES = [
 export const TIER2_STAGING_GOLDEN_PATH_ERA21_STEP2_DOC =
   "docs/next-step-2-after-p0-pass-2026-05-28.md" as const;
 
+export const TIER2_STAGING_GOLDEN_PATH_ERA21_PHASE_B_DOC =
+  "docs/next-step-tier2-golden-path-phase-b-product-2026-05-28.md" as const;
+
 export const TIER2_STAGING_GOLDEN_PATH_ERA21_OPS_SCRIPTS = [
   "ops:run-tier2-golden-path-post-p0-orchestrator",
   "ops:validate-tier2-golden-path-env",
+  "ops:validate-tier2-staging-golden-path-integrity",
+  "ops:sync-tier2-staging-golden-path-integrity-baseline",
   "ops:export-tier2-golden-path-env-template",
   "ops:export-tier2-golden-path-readiness-checklist",
   "ops:sync-tier2-golden-path-progress-report",
@@ -31,6 +36,7 @@ export const TIER2_STAGING_GOLDEN_PATH_ERA21_OPS_SCRIPTS = [
 export const TIER2_STAGING_GOLDEN_PATH_ERA21_CI_SCRIPTS = [
   "test:ci:tier2-golden-path-era21",
   "test:ci:tier2-golden-path-era21:cert",
+  "test:ci:tier2-staging-golden-path-integrity-era28",
 ] as const;
 
 export const TIER2_STAGING_GOLDEN_PATH_ERA21_UNIT_TESTS = [
@@ -41,6 +47,9 @@ export const TIER2_STAGING_GOLDEN_PATH_ERA21_UNIT_TESTS = [
   "tests/unit/tier2-staging-golden-path-phases-era21.test.ts",
   "tests/unit/run-tier2-golden-path-post-p0-orchestrator.test.ts",
   "tests/unit/tier2-golden-path-era21-cert-live.test.ts",
+  "tests/unit/tier2-staging-golden-path-integrity-era28.test.ts",
+  "tests/unit/validate-tier2-staging-golden-path-integrity.test.ts",
+  "tests/unit/tier2-staging-golden-path-integrity-era28-cert-live.test.ts",
 ] as const;
 
 export const TIER2_STAGING_GOLDEN_PATH_ERA21_PRODUCT_SURFACES = [

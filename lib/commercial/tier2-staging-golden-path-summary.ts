@@ -123,6 +123,30 @@ export function buildTier2StagingGoldenPathSummary(input: {
   };
 }
 
+export function recomputeTier2ProofStatusFromSummary(
+  summary: Tier2StagingGoldenPathSummary,
+): Tier2StagingGoldenPathSummary["tier2ProofStatus"] {
+  const anyFailed = summary.steps.some((step) => step.status === "FAILED");
+  if (summary.p0ProofStatus !== "proof_passed") {
+    return TIER2_STAGING_GOLDEN_PATH_ERA20_PROOF_STATUS;
+  }
+  if (anyFailed) {
+    return "awaiting_manual_phases";
+  }
+
+  const manualSteps = summary.steps.filter((step) => step.kind === "manual_phase");
+  const githubStep = summary.steps.find((step) => step.kind === "github_evidence");
+  const allManualPassed =
+    manualSteps.length > 0 && manualSteps.every((step) => step.status === "PASSED");
+  const githubPassed = githubStep?.status === "PASSED";
+
+  if (allManualPassed && githubPassed) {
+    return "proof_passed";
+  }
+
+  return "awaiting_manual_phases";
+}
+
 export function formatTier2StagingGoldenPathReportLines(
   summary: Tier2StagingGoldenPathSummary,
 ): string[] {

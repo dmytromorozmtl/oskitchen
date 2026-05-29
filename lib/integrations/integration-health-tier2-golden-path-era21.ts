@@ -4,6 +4,7 @@
 
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { evaluateTier2StagingGoldenPathIntegrity } from "@/lib/commercial/tier2-staging-golden-path-integrity-era28";
 import {
   buildTier2GoldenPathUiSlice,
   type Tier2GoldenPathUiSlice,
@@ -45,8 +46,9 @@ export function buildIntegrationHealthTier2GoldenPathBanner(input: {
       goldenPath.tier2ProofStatus === "awaiting_manual_phases"
         ? "P0 passed — complete manual Woo → Order Hub → KDS → Packing phases on staging."
         : "Tier 2 staging golden path incomplete — run orchestrator and record manual sign-off env vars.",
-    honestyNote:
-      "Manual TIER2_* env vars are operator attestations after real staging execution — never auto-PASS.",
+    honestyNote: integrity.integrityPassed
+      ? "Manual TIER2_* env vars are operator attestations after real staging execution — never auto-PASS."
+      : `Tier 2 integrity FAIL: ${integrity.violations.map((row) => row.id).join(", ") || "check artifact"} — run ${goldenPath.integrityValidateCommand}.`,
     goldenPath,
     nextActions: [
       { label: "Launch Wizard Tier 2", href: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}` },

@@ -2,6 +2,7 @@
  * Launch Wizard — Tier 2 staging golden path status slice.
  */
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
+import { evaluateTier2StagingGoldenPathIntegrity } from "@/lib/commercial/tier2-staging-golden-path-integrity-era28";
 import { buildTier2GoldenPathUiSlice, type Tier2GoldenPathUiSlice } from "@/lib/commercial/tier2-staging-golden-path-ui-era21";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 
@@ -24,6 +25,9 @@ export type LaunchWizardTier2StatusSlice = {
   headline: string;
   playbookDoc: string;
   orchestratorCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  tier2IntegrityPassed: boolean;
   rows: LaunchWizardTier2StatusRow[];
   blockedOnP0: boolean;
   goldenPathUi: Tier2GoldenPathUiSlice | null;
@@ -86,6 +90,11 @@ export function buildLaunchWizardTier2StatusSlice(input: {
     headline,
     playbookDoc: TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC,
     orchestratorCommand: "npm run smoke:tier2-staging-golden-path",
+    integrityValidateCommand:
+      "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-tier2-staging-golden-path-integrity-baseline -- --write",
+    tier2IntegrityPassed: tier2Integrity.integrityPassed,
     rows,
     blockedOnP0,
     goldenPathUi: buildTier2GoldenPathUiSlice({
