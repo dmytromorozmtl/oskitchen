@@ -513,3 +513,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — post-terminus-steady-state orchestrator findTrack tracks Pick missing label (cycle 40)
+
+---
+Cycle: 40
+Timestamp: 2026-05-30T02:30:00.000Z
+Action: fix: post-terminus steady state findTrack — accept id+status only Pick (milestone resolution never reads label; matches slim track inputs from resolver + lock orchestrator)
+Files: lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24.ts
+TS errors before: 25
+TS errors after: 22
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — sustained-operational-excellence-convergence-integrity-era53 wrong property name (cycle 41)

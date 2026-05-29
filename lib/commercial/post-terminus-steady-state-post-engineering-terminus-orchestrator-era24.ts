@@ -88,9 +88,9 @@ export type PostTerminusSteadyStatePostEngineeringTerminusOrchestratorSummary = 
 };
 
 function findTrack(
-  tracks: readonly Pick<SteadyStateTrackStatus, "id" | "status" | "label">[],
+  tracks: readonly Pick<SteadyStateTrackStatus, "id" | "status">[],
   id: string,
-): Pick<SteadyStateTrackStatus, "id" | "status" | "label"> | undefined {
+): Pick<SteadyStateTrackStatus, "id" | "status"> | undefined {
   return tracks.find((track) => track.id === id);
 }
 
