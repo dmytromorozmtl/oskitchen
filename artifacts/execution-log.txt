@@ -318,3 +318,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix components/developer/api-keys-panel.tsx — Cannot find name 'createApiKeyForm' (cycle 25)
+
+---
+Cycle: 25
+Timestamp: 2026-05-29T22:45:00.000Z
+Action: fix: resolve TS errors in api-keys-panel — import createApiKeyForm and revokeApiKeyById from actions/monetization (Enterprise API key create/revoke wiring)
+Files: components/developer/api-keys-panel.tsx
+TS errors before: 83
+TS errors after: 81
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — fix lib/api-public/public-api-partner-confidence-pack.ts — RATE_LIMIT_POLICIES string index (cycle 26)
