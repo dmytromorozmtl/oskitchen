@@ -170,7 +170,7 @@ export function PosTerminalClient(props: {
   const [discountMode, setDiscountMode] = useState<PosTerminalDiscountMode>("none");
   const [fixedDiscountInput, setFixedDiscountInput] = useState("");
   const [percentDiscountInput, setPercentDiscountInput] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState(POS_CASHIER_SPEED_MODE_ALL_CATEGORY);
+  const [categoryFilter, setCategoryFilter] = useState<string>(POS_CASHIER_SPEED_MODE_ALL_CATEGORY);
 
   function showCheckoutStatus(text: string, kind?: PosCheckoutStatusKind) {
     setCheckoutStatus(toPosCheckoutStatus(text, kind));
@@ -429,7 +429,7 @@ export function PosTerminalClient(props: {
     ]);
   }
 
-  function addProduct(p: PosTerminalProduct) {
+  function addProduct(p: Pick<PosTerminalProduct, "id" | "title" | "price">) {
     setCart((prev) => {
       const existing = prev.find((l) => l.productId === p.id);
       if (existing) {

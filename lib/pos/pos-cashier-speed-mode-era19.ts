@@ -61,11 +61,11 @@ export function normalizePosProductCategory(category: string): string {
   return category?.trim() || "Uncategorized";
 }
 
-export function filterPosProductsForCashierSpeed(input: {
-  products: readonly PosCashierSpeedProduct[];
+export function filterPosProductsForCashierSpeed<T extends PosCashierSpeedProduct>(input: {
+  products: readonly T[];
   query: string;
   category: string;
-}): PosCashierSpeedProduct[] {
+}): T[] {
   let list = input.products;
   if (input.category !== POS_CASHIER_SPEED_MODE_ALL_CATEGORY) {
     list = list.filter(

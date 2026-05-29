@@ -305,3 +305,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix pos-terminal-client.tsx PosCashierSpeedProduct vs PosTerminalProduct (cycle 24)
+
+---
+Cycle: 24
+Timestamp: 2026-05-29T22:30:00.000Z
+Action: fix: resolve TS errors in pos-terminal-client — generic speed-mode filter preserves PosTerminalProduct; categoryFilter typed string; addProduct accepts cart fields only
+Files: lib/pos/pos-cashier-speed-mode-era19.ts, components/dashboard/pos-terminal-client.tsx
+TS errors before: 86
+TS errors after: 83
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — fix components/developer/api-keys-panel.tsx — Cannot find name 'createApiKeyForm' (cycle 25)
