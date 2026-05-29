@@ -9,6 +9,7 @@ import {
   PUBLIC_API_PARTNER_CHECKLIST,
   PUBLIC_API_STANDARD_ERRORS,
   buildPublicApiPartnerConfidenceSummary,
+  collectPublicApiRateLimitSnapshot,
   evaluatePublicApiPartnerReadiness,
   validatePublicApiPartnerConfidenceStructure,
 } from "@/lib/api-public/public-api-partner-confidence-pack";
@@ -58,6 +59,23 @@ describe("public API partner confidence pack", () => {
     expect(summary.partnerChecklistCount).toBe(PUBLIC_API_PARTNER_CHECKLIST.length);
     expect(summary.forbiddenClaimCount).toBe(
       PUBLIC_API_PARTNER_CONFIDENCE_ERA16_FORBIDDEN_CLAIMS.length,
+    );
+  });
+
+  it("collects partner-facing rate limits from the v1 registry", () => {
+    const snapshot = collectPublicApiRateLimitSnapshot();
+    expect(snapshot.public_api_v1_get).toEqual({ windowMs: 60_000, max: 120 });
+    expect(snapshot.public_api_orders_get).toEqual({ windowMs: 60_000, max: 120 });
+    expect(snapshot.public_api_orders_post).toEqual({ windowMs: 60_000, max: 120 });
+    expect(snapshot.public_api_customers_get).toEqual({ windowMs: 60_000, max: 60 });
+    expect(Object.keys(snapshot).sort()).toEqual(
+      [
+        "public_api_customers_get",
+        "public_api_orders_get",
+        "public_api_orders_post",
+        "public_api_v1_get",
+        "public_api_v1_post",
+      ].sort(),
     );
   });
 });

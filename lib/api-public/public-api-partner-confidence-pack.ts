@@ -13,7 +13,7 @@ import {
   PUBLIC_API_V1_RESOURCE_COUNT,
   PUBLIC_API_V1_RESOURCES,
 } from "@/lib/api-public/public-api-v1-registry";
-import { RATE_LIMIT_POLICIES } from "@/lib/rate-limit/rate-limit-policies";
+import { RATE_LIMIT_POLICIES, type RateLimitPolicyKey } from "@/lib/rate-limit/rate-limit-policies";
 import { DEVELOPER_API_SCOPES } from "@/lib/developer/api-scopes";
 
 export type PublicApiStandardError = {
@@ -196,6 +196,17 @@ export function validatePublicApiPartnerConfidenceStructure(): {
     if (resource.methods.length === 0) {
       errors.push(`Resource ${resource.id} must expose at least one HTTP method`);
     }
+    if (!(resource.rateLimitPolicy in RATE_LIMIT_POLICIES)) {
+      errors.push(`Unknown rate limit policy for ${resource.id}: ${resource.rateLimitPolicy}`);
+    }
+    if (
+      resource.postRateLimitPolicy &&
+      !(resource.postRateLimitPolicy in RATE_LIMIT_POLICIES)
+    ) {
+      errors.push(
+        `Unknown POST rate limit policy for ${resource.id}: ${resource.postRateLimitPolicy}`,
+      );
+    }
   }
 
   if (PUBLIC_API_PARTNER_CHECKLIST.filter((item) => item.integrationBlocker).length < 4) {
@@ -209,16 +220,15 @@ export function validatePublicApiPartnerConfidenceStructure(): {
   return { ok: errors.length === 0, errors };
 }
 
-export function collectPublicApiRateLimitSnapshot(): Record<
-  string,
-  { windowMs: number; max: number }
+export function collectPublicApiRateLimitSnapshot(): Partial<
+  Record<RateLimitPolicyKey, { windowMs: number; max: number }>
 > {
-  const keys = new Set<string>();
+  const keys = new Set<RateLimitPolicyKey>();
   for (const resource of PUBLIC_API_V1_RESOURCES) {
     keys.add(resource.rateLimitPolicy);
     if (resource.postRateLimitPolicy) keys.add(resource.postRateLimitPolicy);
   }
-  const snapshot: Record<string, { windowMs: number; max: number }> = {};
+  const snapshot: Partial<Record<RateLimitPolicyKey, { windowMs: number; max: number }>> = {};
   for (const key of keys) {
     const policy = RATE_LIMIT_POLICIES[key];
     snapshot[key] = { windowMs: policy.windowMs, max: policy.max };

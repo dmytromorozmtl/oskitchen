@@ -331,3 +331,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix lib/api-public/public-api-partner-confidence-pack.ts — RATE_LIMIT_POLICIES string index (cycle 26)
+
+---
+Cycle: 26
+Timestamp: 2026-05-29T23:00:00.000Z
+Action: fix: type public API rate limit snapshot with RateLimitPolicyKey — registry↔policy validation in partner confidence cert; unit test for partner-facing limits
+Files: lib/api-public/public-api-partner-confidence-pack.ts, tests/unit/public-api-partner-confidence-pack.test.ts
+TS errors before: 81
+TS errors after: 80
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — fix owner-daily-briefing-kitchen-era19.ts — invalid availability/tone literals (cycle 27)
