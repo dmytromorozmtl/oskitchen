@@ -31,6 +31,7 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getCachedWebhookEventListWhere } from "@/lib/scope/cached-workspace-resource-scope";
 import { CHANNEL_REGISTRY_ENTRIES } from "@/lib/channels/channel-registry";
 import { SITE_URL } from "@/lib/constants";
+import { buildWebhookQueueFocusSnapshot } from "@/lib/integrations/webhook-queue-focus-era18";
 import { prisma } from "@/lib/prisma";
 import { toSafeErrorPreview } from "@/lib/security/sensitive-redaction";
 

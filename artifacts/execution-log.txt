@@ -63,3 +63,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Fix app/dashboard/sales-channels/webhooks/page.tsx — missing buildWebhookQueueFocusSnapshot import (cycle 6)
+
+---
+Cycle: 6
+Timestamp: 2026-05-29T17:45:00.000Z
+Action: fix: sales-channels/webhooks/page.tsx — add missing buildWebhookQueueFocusSnapshot import (ошибок: 98 → 97)
+Files: app/dashboard/sales-channels/webhooks/page.tsx
+TS errors before: 98
+TS errors after: 97
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix components/dashboard/continuous-improvement-loop-panel.tsx — missing maintenanceModeExecutionCommand on ContinuousImprovementLoopUiSlice (cycle 7)
