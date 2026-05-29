@@ -89,3 +89,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Fix components/dashboard/kitchen-screen-client.tsx — missing kitchenWorkItemActions (cycle 8)
+
+---
+Cycle: 8
+Timestamp: 2026-05-29T18:15:00.000Z
+Action: fix: kitchen-screen-client.tsx — add missing kitchenWorkItemActions import (ошибок: 96 → 95)
+Files: components/dashboard/kitchen-screen-client.tsx
+TS errors before: 96
+TS errors after: 95
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel.tsx — missing SustainedOperationalExcellenceUiSlice import (cycle 9)
