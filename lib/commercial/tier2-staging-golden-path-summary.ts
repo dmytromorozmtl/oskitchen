@@ -17,15 +17,18 @@ export type Tier2StagingGoldenPathStep = {
   reason: string;
 };
 
+export type Tier2StagingGoldenPathProofStatus =
+  | typeof TIER2_STAGING_GOLDEN_PATH_ERA20_PROOF_STATUS
+  | "awaiting_manual_phases"
+  | "proof_passed"
+  | "proof_failed";
+
 export type Tier2StagingGoldenPathSummary = {
   version: typeof TIER2_STAGING_GOLDEN_PATH_ERA20_POLICY_ID;
   runAt: string;
   commitSha: string | null;
   overall: "PASSED" | "FAILED" | "SKIPPED";
-  tier2ProofStatus:
-    | typeof TIER2_STAGING_GOLDEN_PATH_ERA20_PROOF_STATUS
-    | "awaiting_manual_phases"
-    | "proof_passed";
+  tier2ProofStatus: Tier2StagingGoldenPathProofStatus;
   p0ProofStatus: string | null;
   steps: Tier2StagingGoldenPathStep[];
   missingManualEnvVars: string[];
@@ -96,7 +99,9 @@ export function buildTier2StagingGoldenPathSummary(input: {
 
   let tier2ProofStatus: Tier2StagingGoldenPathSummary["tier2ProofStatus"] =
     TIER2_STAGING_GOLDEN_PATH_ERA20_PROOF_STATUS;
-  if (p0Passed && !anyFailed) {
+  if (anyFailed) {
+    tier2ProofStatus = "proof_failed";
+  } else if (p0Passed) {
     const allManualPassed = manualSteps.every((s) => s.status === "PASSED");
     const githubPassed = githubStep.status === "PASSED";
     if (allManualPassed && githubPassed) {
@@ -131,7 +136,7 @@ export function recomputeTier2ProofStatusFromSummary(
     return TIER2_STAGING_GOLDEN_PATH_ERA20_PROOF_STATUS;
   }
   if (anyFailed) {
-    return "awaiting_manual_phases";
+    return "proof_failed";
   }
 
   const manualSteps = summary.steps.filter((step) => step.kind === "manual_phase");

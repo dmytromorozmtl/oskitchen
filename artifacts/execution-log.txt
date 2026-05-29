@@ -539,3 +539,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — tier2-staging-golden-path tier2ProofStatus union add proof_failed (cycle 42)
+
+---
+Cycle: 42
+Timestamp: 2026-05-30T03:00:00.000Z
+Action: fix: tier2 proof status union — add proof_failed to summary/recompute/builder; tier2 UI milestone uses tier2GatePassed false when blocked; GO bridge maps proof_failed honestly
+Files: lib/commercial/tier2-staging-golden-path-summary.ts, lib/commercial/tier2-staging-golden-path-ui-era21.ts, lib/commercial/tier2-golden-path-gono-go-bridge-era20.ts, tests/unit/tier2-staging-golden-path-era20.test.ts, tests/unit/tier2-staging-golden-path-integrity-era28.test.ts
+TS errors before: 21
+TS errors after: 19
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — integration-health-tier2-golden-path-era21 undefined integrity variable (cycle 43)

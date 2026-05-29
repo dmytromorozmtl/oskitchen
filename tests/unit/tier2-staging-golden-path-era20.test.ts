@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildTier2StagingGoldenPathSummary,
   formatTier2StagingGoldenPathReportLines,
+  recomputeTier2ProofStatusFromSummary,
 } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_POLICY_ID } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import { buildReportsHubNextActionCards } from "@/lib/reports/reports-hub-next-actions-era21";
@@ -63,6 +64,31 @@ describe("tier2-staging-golden-path-summary", () => {
       childSteps: [],
     });
     expect(summary.version).toBe(TIER2_STAGING_GOLDEN_PATH_ERA20_POLICY_ID);
+  });
+
+  it("marks proof_failed when any step FAILED", () => {
+    const summary = buildTier2StagingGoldenPathSummary({
+      p0ProofStatus: "proof_passed",
+      p0GateStep: {
+        id: "p0_proof_gate",
+        label: "P0",
+        kind: "p0_gate",
+        status: "PASSED",
+        reason: "ok",
+      },
+      childSteps: [
+        {
+          id: "woo-shopify-live",
+          label: "smoke:woo-shopify-live",
+          kind: "child_smoke",
+          status: "FAILED",
+          reason: "exit 1",
+        },
+      ],
+    });
+    expect(summary.tier2ProofStatus).toBe("proof_failed");
+    expect(summary.overall).toBe("FAILED");
+    expect(recomputeTier2ProofStatusFromSummary(summary)).toBe("proof_failed");
   });
 });
 

@@ -91,4 +91,20 @@ describe("tier2-staging-golden-path-integrity-era28", () => {
     expect(result.integrityPassed).toBe(true);
     expect(result.violations.some((row) => row.id === "artifact_missing")).toBe(true);
   });
+
+  it("flags proof_failed_recorded when tier2 artifact records proof_failed", () => {
+    const summary = fakePassedTier2Summary();
+    summary.steps[1] = { ...summary.steps[1]!, status: "FAILED", reason: "channel webhook failed" };
+    const failedSummary: Tier2StagingGoldenPathSummary = {
+      ...summary,
+      overall: "FAILED",
+      tier2ProofStatus: "proof_failed",
+    };
+    const result = evaluateTier2StagingGoldenPathIntegrity(process.cwd(), {
+      artifactOverride: failedSummary,
+      p0ProofStatusOverride: "proof_passed",
+    });
+    expect(result.integrityPassed).toBe(false);
+    expect(result.violations.some((row) => row.id === "proof_failed_recorded")).toBe(true);
+  });
 });

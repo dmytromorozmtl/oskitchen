@@ -32,11 +32,13 @@ export function mergeGoldenPathArtifactsForGoNoGo(input: {
   if (tier2StagingGoldenPath) {
     const tier2Status = tier2StagingGoldenPath.tier2ProofStatus;
     const mappedPhaseStatus =
-      tier2Status === "awaiting_manual_phases"
-        ? "proof_partial"
-        : tier2Status === "awaiting_p0_proof_passed"
-          ? "proof_skipped_missing_prerequisites"
-          : operatorGoldenPath?.phaseProofStatus ?? "proof_skipped_missing_prerequisites";
+      tier2Status === "proof_failed"
+        ? "proof_failed"
+        : tier2Status === "awaiting_manual_phases"
+          ? "proof_partial"
+          : tier2Status === "awaiting_p0_proof_passed"
+            ? "proof_skipped_missing_prerequisites"
+            : operatorGoldenPath?.phaseProofStatus ?? "proof_skipped_missing_prerequisites";
 
     return {
       overall: tier2StagingGoldenPath.overall ?? operatorGoldenPath?.overall,

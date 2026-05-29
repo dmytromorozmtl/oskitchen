@@ -69,7 +69,7 @@ export function buildTier2GoldenPathUiSlice(input: {
   const nextPhaseDetail = nextPhase ? formatTier2GoldenPathPhaseBlockerDetail(nextPhase) : null;
   const tier2Milestone = resolveTier2GoldenPathMilestoneFromPhaseStatuses(phases, {
     p0GatePassed: true,
-    tier2GatePassed: tier2ProofStatus === "proof_passed",
+    tier2GatePassed: false,
   });
 
   return {
