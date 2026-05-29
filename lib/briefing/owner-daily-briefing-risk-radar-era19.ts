@@ -20,6 +20,8 @@ import type { TodayBlocker } from "@/services/today/today-command-center-service
 export const OWNER_DAILY_BRIEFING_RISK_RADAR_AGGREGATOR_ERA19_POLICY_ID =
   "era19-owner-daily-briefing-risk-radar-aggregator-v1" as const;
 
+export type { OwnerDailyBriefingRiskCategory } from "@/lib/briefing/owner-daily-briefing-risk-radar-era19-policy";
+
 export type OwnerDailyBriefingRiskSeverity = "critical" | "high" | "normal";
 
 export type OwnerDailyBriefingRiskSignal = {
@@ -390,7 +392,13 @@ export function buildOwnerDailyBriefingRiskSignals(input: {
   if (ssoSignal) pushUniqueSignal(signals, seen, ssoSignal);
 
   for (const signal of operationalRiskSignals({
-    ...input,
+    kpis: input.kpis,
+    blockers: input.blockers,
+    integrationOverall: input.integrationOverall,
+    integrationHealth: input.integrationHealth,
+    productionCalendarSummary: input.productionCalendarSummary,
+    lowStockCount: input.lowStockCount,
+    ingredientParConfigured: input.ingredientParConfigured,
     integrationRecoveryHref,
   })) {
     pushUniqueSignal(signals, seen, signal);

@@ -370,3 +370,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix owner-daily-briefing-risk-radar-era19.ts operationalRiskSignals input + export OwnerDailyBriefingRiskCategory (cycle 29)
+
+---
+Cycle: 29
+Timestamp: 2026-05-29T23:45:00.000Z
+Action: fix: risk radar signal pipeline — re-export OwnerDailyBriefingRiskCategory for role packs; pass explicit operational subset to operationalRiskSignals (commercial/SSO stay separate)
+Files: lib/briefing/owner-daily-briefing-risk-radar-era19.ts
+TS errors before: 77
+TS errors after: 75
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — fix commercial-inflection-readiness-era28.ts — P0 artifact typing + missing goNoGoIntegrity (cycle 30)
