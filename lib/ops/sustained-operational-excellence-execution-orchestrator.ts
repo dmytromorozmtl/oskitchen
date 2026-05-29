@@ -315,7 +315,7 @@ export function buildSustainedOperationalExcellenceExecutionSummary(input: {
 
   if (milestone === "sustained_operational_excellence_passed") {
     recommendedCommands.push(
-      "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+      "npm run ops:run-sustained-product-evolution-execution -- --write",
     );
   }
 
