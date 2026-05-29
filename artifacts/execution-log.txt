@@ -141,3 +141,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Fix components/dashboard/pilot-integration-health-strip.tsx — Property 'scorecardLabel' missing (cycle 12)
+
+---
+Cycle: 12
+Timestamp: 2026-05-29T19:15:00.000Z
+Action: docs: vault matrix created — expanded docs/ops-vault-matrix.md with per-secret VP Ops instructions (name, where to get, how to verify) for all 11 secrets
+Files: docs/ops-vault-matrix.md
+TS errors before: 91
+TS errors after: 91
+Vault: false (0/11 — human gate; matrix ready for VP Ops)
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix components/dashboard/pilot-integration-health-strip.tsx — Property 'scorecardLabel' missing (cycle 13, branch 1)
