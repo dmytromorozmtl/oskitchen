@@ -97,6 +97,7 @@ export function buildEra25FirstCharterSliceReadinessPostCharterExitOrchestratorS
           "npm run ops:validate-linear-chain-terminus-guard -- --json",
         ] as const)
       : ([
+          "npm run ops:validate-era25-first-charter-slice-readiness-integrity -- --json",
           "npm run ops:validate-era25-first-charter-slice-readiness -- --json",
           ERA25_FIRST_CHARTER_SLICE_READINESS_POST_CHARTER_EXIT_ORCHESTRATOR_COMMAND +
             " -- --write",

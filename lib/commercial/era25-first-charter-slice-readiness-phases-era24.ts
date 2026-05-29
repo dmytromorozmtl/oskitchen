@@ -14,6 +14,17 @@ export const ERA25_FIRST_CHARTER_SLICE_READINESS_REPORT_PATH =
 export const ERA25_FIRST_CHARTER_SLICE_READINESS_PLATFORM_ANCHOR =
   "#era25-first-charter-slice-readiness" as const;
 
+export const ERA25_FIRST_CHARTER_SLICE_TRACKED_ENV_KEYS = [
+  "ERA25_FIRST_CHARTER_SLICE_READINESS_ATTESTED",
+  "ERA25_FIRST_CHARTER_SLICE_READINESS_REPORT_REVIEWED",
+] as const;
+
+export function detectEra25FirstCharterSliceStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return ERA25_FIRST_CHARTER_SLICE_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type Era25CharterRequiredSectionDef = {
   id: string;
   label: string;

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  detectEra25FirstCharterSliceStarted,
   ERA25_CHARTER_REQUIRED_SECTIONS,
   ERA25_FIRST_CHARTER_SLICE_READINESS_PHASES_ERA24_POLICY_ID,
   ERA25_FIRST_CHARTER_SLICE_TEMPLATE_DOC,
@@ -18,5 +19,14 @@ describe("era25-first-charter-slice-readiness-phases-era24", () => {
       "next-era25-first-charter-slice-template",
     );
     expect(ERA25_CHARTER_REQUIRED_SECTIONS.length).toBe(10);
+  });
+
+  it("detects first charter slice started from env attestations", () => {
+    expect(
+      detectEra25FirstCharterSliceStarted({
+        ERA25_FIRST_CHARTER_SLICE_READINESS_ATTESTED: "true",
+      }),
+    ).toBe(true);
+    expect(detectEra25FirstCharterSliceStarted({})).toBe(false);
   });
 });

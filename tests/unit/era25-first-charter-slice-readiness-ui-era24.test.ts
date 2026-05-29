@@ -17,6 +17,10 @@ describe("era25-first-charter-slice-readiness-ui-era24", () => {
     expect(slice?.postCharterExitOrchestratorCommand).toContain(
       "run-era25-first-charter-slice-readiness-post-charter-exit-orchestrator",
     );
+    expect(slice?.integrityValidateCommand).toBe(
+      "npm run ops:validate-era25-first-charter-slice-readiness-integrity -- --json",
+    );
+    expect(slice?.launchWizardHref).toContain("#launch-wizard-era25-first-charter-slice");
     expect(slice?.era25FirstCharterSliceReadinessMilestone).toBe("charter_exit_blocked");
     expect(slice?.requiredSectionCount).toBe(10);
     expect(slice?.engineeringGates).not.toBeNull();

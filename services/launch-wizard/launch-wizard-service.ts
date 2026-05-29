@@ -116,6 +116,11 @@ import {
   type LaunchWizardEra25CharterExitSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-charter-exit-era42";
 import type { Era25CharterExitUiSlice } from "@/lib/commercial/era25-charter-exit-ui-era24";
+import type { Era25FirstCharterSliceReadinessUiSlice } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
+import {
+  buildLaunchWizardEra25FirstCharterSliceSlice,
+  type LaunchWizardEra25FirstCharterSliceSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-first-charter-slice-era43";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
   buildLaunchWizardTier2StatusSlice,
@@ -227,6 +232,10 @@ export type LaunchWizardModel = {
   linearPathPermanentlyClosedIntegrity: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   linearChainTerminusGuard: import("@/lib/commercial/linear-chain-terminus-guard-ui-era24").LinearChainTerminusGuardUiSlice | null;
   linearChainTerminusGuardIntegrity: LaunchWizardLinearChainTerminusGuardSlice | null;
+  era25CharterExit: Era25CharterExitUiSlice | null;
+  era25CharterExitIntegrity: LaunchWizardEra25CharterExitSlice | null;
+  era25FirstCharterSliceReadiness: Era25FirstCharterSliceReadinessUiSlice | null;
+  era25FirstCharterSliceReadinessIntegrity: LaunchWizardEra25FirstCharterSliceSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -921,6 +930,16 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     linearChainTerminusGuard,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const era25CharterExit = linearChainTerminusGuard?.era25CharterExit ?? null;
+  const era25CharterExitIntegrity = buildLaunchWizardEra25CharterExitSlice(
+    era25CharterExit,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
+  const era25FirstCharterSliceReadiness = era25CharterExit?.firstCharterSliceReadiness ?? null;
+  const era25FirstCharterSliceReadinessIntegrity = buildLaunchWizardEra25FirstCharterSliceSlice(
+    era25FirstCharterSliceReadiness,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -967,6 +986,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     linearChainTerminusGuardIntegrity,
     era25CharterExit,
     era25CharterExitIntegrity,
+    era25FirstCharterSliceReadiness,
+    era25FirstCharterSliceReadinessIntegrity,
     paidPilotGoConvergence,
   };
 }

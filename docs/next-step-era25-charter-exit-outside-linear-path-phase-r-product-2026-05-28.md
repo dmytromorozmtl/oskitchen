@@ -71,7 +71,7 @@ npm run ops:sync-era25-charter-exit-outside-linear-path-integrity-baseline -- --
 
 ## Next step after Phase R PASS
 
-**Phase S — Era25 first charter slice readiness integrity (`era43`)** — mirror era28–era42 on `era25-first-charter-slice-readiness-*`
+**Phase S — Era25 first charter slice readiness integrity (`era43`)** — **IMPLEMENTED** · see [`docs/next-step-era25-first-charter-slice-readiness-phase-s-product-2026-05-28.md`](./next-step-era25-first-charter-slice-readiness-phase-s-product-2026-05-28.md)
 
 | Component | Planned artifact |
 |-----------|------------------|

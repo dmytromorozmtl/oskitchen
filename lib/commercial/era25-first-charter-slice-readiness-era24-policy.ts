@@ -26,6 +26,8 @@ export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_EXTENDS_POLICIES = [
 export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_OPS_SCRIPTS = [
   "ops:run-era25-first-charter-slice-readiness-post-charter-exit-orchestrator",
   "ops:validate-era25-first-charter-slice-readiness",
+  "ops:validate-era25-first-charter-slice-readiness-integrity",
+  "ops:sync-era25-first-charter-slice-readiness-integrity-baseline",
   "ops:sync-era25-first-charter-slice-readiness-report",
   "ops:validate-era25-charter-exit-outside-linear-path",
 ] as const;
@@ -33,6 +35,7 @@ export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_OPS_SCRIPTS = [
 export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_CI_SCRIPTS = [
   "test:ci:era25-first-charter-slice-readiness-era24",
   "test:ci:era25-first-charter-slice-readiness-era24:cert",
+  "test:ci:era25-first-charter-slice-readiness-integrity-era43",
 ] as const;
 
 export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_UNIT_TESTS = [
@@ -43,10 +46,16 @@ export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_UNIT_TESTS = [
   "tests/unit/validate-era25-first-charter-slice-readiness.test.ts",
   "tests/unit/validate-era25-charter-doc-sections-era24.test.ts",
   "tests/unit/evaluate-era25-first-charter-slice-readiness.test.ts",
+  "tests/unit/era25-first-charter-slice-readiness-integrity-era43.test.ts",
+  "tests/unit/validate-era25-first-charter-slice-readiness-integrity.test.ts",
+  "tests/unit/era25-first-charter-slice-readiness-integrity-era43-cert-live.test.ts",
+  "tests/unit/launch-wizard-era25-first-charter-slice-era43.test.ts",
+  "tests/unit/owner-daily-briefing-era25-first-charter-slice-era43.test.ts",
   "tests/unit/era25-first-charter-slice-readiness-era24-cert-live.test.ts",
 ] as const;
 
 export const ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_PRODUCT_SURFACES = [
+  "components/dashboard/launch-wizard/launch-wizard-era25-first-charter-slice-panel.tsx",
   "components/dashboard/maintenance-mode-panel.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

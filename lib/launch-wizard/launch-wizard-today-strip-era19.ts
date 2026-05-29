@@ -21,6 +21,7 @@ import type { LaunchWizardCommercialPilotPathAbsoluteEndSlice } from "@/lib/laun
 import type { LaunchWizardLinearPathPermanentlyClosedSlice } from "@/lib/launch-wizard/launch-wizard-linear-path-permanently-closed-era40";
 import type { LaunchWizardLinearChainTerminusGuardSlice } from "@/lib/launch-wizard/launch-wizard-linear-chain-terminus-guard-era41";
 import type { LaunchWizardEra25CharterExitSlice } from "@/lib/launch-wizard/launch-wizard-era25-charter-exit-era42";
+import type { LaunchWizardEra25FirstCharterSliceSlice } from "@/lib/launch-wizard/launch-wizard-era25-first-charter-slice-era43";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -61,6 +62,7 @@ export type LaunchWizardTodayStripViewModel = {
   linearPathPermanentlyClosed: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   linearChainTerminusGuard: LaunchWizardLinearChainTerminusGuardSlice | null;
   era25CharterExit: LaunchWizardEra25CharterExitSlice | null;
+  era25FirstCharterSliceReadiness: LaunchWizardEra25FirstCharterSliceSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -116,6 +118,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   linearPathPermanentlyClosed?: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   linearChainTerminusGuard?: LaunchWizardLinearChainTerminusGuardSlice | null;
   era25CharterExit?: LaunchWizardEra25CharterExitSlice | null;
+  era25FirstCharterSliceReadiness?: LaunchWizardEra25FirstCharterSliceSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -184,6 +187,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25CharterExitSubline = era25CharterExit
     ? `Era25 exit ${era25CharterExit.progressLabel}${era25CharterExit.era25CharterExitIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25FirstCharterSliceReadiness = input.era25FirstCharterSliceReadiness ?? null;
+  const era25FirstCharterSliceSubline = era25FirstCharterSliceReadiness
+    ? `First slice ${era25FirstCharterSliceReadiness.progressLabel}${era25FirstCharterSliceReadiness.era25FirstCharterSliceIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -226,6 +233,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       linearPathPermanentlyClosed,
       linearChainTerminusGuard,
       era25CharterExit,
+      era25FirstCharterSliceReadiness,
     };
   }
 
@@ -278,7 +286,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25CharterExitSubline
+        : era25FirstCharterSliceSubline
+          ? era25CharterExitSubline
+            ? linearChainTerminusGuardSubline
+              ? linearPathPermanentlyClosedSubline
+                ? `${linearPathPermanentlyClosedSubline} · ${linearChainTerminusGuardSubline} · ${era25CharterExitSubline} · ${era25FirstCharterSliceSubline}`
+                : `${linearChainTerminusGuardSubline} · ${era25CharterExitSubline} · ${era25FirstCharterSliceSubline}`
+              : `${era25CharterExitSubline} · ${era25FirstCharterSliceSubline}`
+            : era25FirstCharterSliceSubline
+          : era25CharterExitSubline
           ? linearChainTerminusGuardSubline
             ? linearPathPermanentlyClosedSubline
               ? `${linearPathPermanentlyClosedSubline} · ${linearChainTerminusGuardSubline} · ${era25CharterExitSubline}`
@@ -375,5 +391,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     linearPathPermanentlyClosed,
     linearChainTerminusGuard,
     era25CharterExit,
+    era25FirstCharterSliceReadiness,
   };
 }

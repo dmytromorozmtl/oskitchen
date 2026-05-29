@@ -1,0 +1,26 @@
+# Era25 first charter slice readiness integrity — blocks slice attestation without honest charter exit.
+
+name: Era25 First Charter Slice Readiness Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-first-charter-slice-readiness-integrity-baseline.json"
+      - "artifacts/era25-first-charter-slice-readiness-report.md"
+      - "lib/commercial/era25-first-charter-slice-readiness-integrity-era43.ts"
+      - "scripts/ops/validate-era25-first-charter-slice-readiness-integrity.ts"
+
+jobs:
+  validate-era25-first-charter-slice-readiness-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 first charter slice readiness integrity (JSON)
+        run: npm run ops:validate-era25-first-charter-slice-readiness-integrity -- --json
