@@ -16,6 +16,7 @@ import {
   type WorkspaceSsoSettingsSnapshot,
 } from "@/lib/enterprise/workspace-sso-foundation";
 import { prisma } from "@/lib/prisma";
+import { toInputJsonValue } from "@/lib/prisma/json";
 import { entitlementSnapshot } from "@/services/billing/entitlement-service";
 
 export type WorkspaceSsoAdminView = {
@@ -51,7 +52,7 @@ async function auditSsoSettingsEvent(input: {
     action: input.action,
     entityType: "workspace_sso",
     entityId: input.workspaceId,
-    metadata: input.metadata ?? {},
+    metadata: toInputJsonValue(input.metadata ?? {}),
   }).catch(() => undefined);
 }
 
