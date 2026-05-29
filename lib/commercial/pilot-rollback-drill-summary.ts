@@ -123,6 +123,12 @@ export function buildPilotRollbackDrillSteps(
   });
 }
 
+export function recomputePilotRollbackProofStatusFromSummary(
+  summary: PilotRollbackDrillSummary,
+): PilotRollbackProofStatus {
+  return resolvePilotRollbackProofStatus(summary.steps);
+}
+
 export function resolvePilotRollbackProofStatus(
   steps: readonly PilotRollbackDrillStep[],
 ): PilotRollbackProofStatus {

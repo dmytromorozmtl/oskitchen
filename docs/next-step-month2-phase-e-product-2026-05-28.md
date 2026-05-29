@@ -51,7 +51,8 @@ npm run ops:sync-month2-market-readiness-integrity-baseline -- --write
 
 ## Next step after Phase E PASS
 
-1. Scale readiness integrity guard (Phase F) — mirror era28/era29 for `scale-readiness-ui-era21`
-2. `npm run ops:run-scale-readiness-post-month2-orchestrator -- --write`
+1. [`docs/next-step-scale-phase-f-product-2026-05-28.md`](./next-step-scale-phase-f-product-2026-05-28.md) — Scale integrity + product wiring
+2. [`docs/next-step-6-scale-readiness-2026-05-28.md`](./next-step-6-scale-readiness-2026-05-28.md)
+3. `npm run ops:run-scale-readiness-post-month2-orchestrator -- --write`
 
-**Following engineering slice (optional):** Scale integrity · PostHog `briefing_click` on Month 2 workstream CTAs.
+**Following engineering slice (optional):** Series A integrity (Phase G) · PostHog `briefing_click` on Month 2 workstream CTAs.

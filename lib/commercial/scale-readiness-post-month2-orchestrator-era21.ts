@@ -128,6 +128,8 @@ export function buildScaleReadinessPostMonth2OrchestratorSummary(input: {
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-month2-market-readiness-integrity -- --json",
+        "npm run ops:validate-scale-readiness-integrity -- --json",
         "npm run ops:validate-month2-market-readiness-env -- --json",
         "npm run ops:validate-scale-readiness-env -- --json",
         SCALE_READINESS_POST_MONTH2_ORCHESTRATOR_COMMAND + " -- --write",

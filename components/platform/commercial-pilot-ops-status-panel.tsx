@@ -101,6 +101,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   const scaleArtifacts = readScaleReadinessArtifacts();
   const scaleReadiness = buildScaleReadinessUiSlice({
     goNoGoSummary: props.model.goNoGo.summary,
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
     p0Staging: scaleArtifacts.p0Staging ?? p0,
     tier2Summary: scaleArtifacts.tier2Summary ?? tier2,
     metricsBaseline: scaleArtifacts.metricsBaseline ?? month2Artifacts.metricsBaseline,

@@ -55,8 +55,18 @@ export function ScaleReadinessPhasesPanel(props: {
               {slice.scaleMilestone.replaceAll("_", " ")}
             </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
-              Month 2 complete
+              Month 2 {slice.month2Complete ? "complete" : "blocked"}
             </Badge>
+            {!slice.month2IntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Month 2 integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.scaleIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Scale integrity FAIL
+              </Badge>
+            ) : null}
             {slice.customerName ? (
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 customer: {slice.customerName}
@@ -141,6 +151,9 @@ export function ScaleReadinessPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
+                <li>{slice.validateMonth2IntegrityCommand}</li>
                 <li>{slice.postMonth2OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>

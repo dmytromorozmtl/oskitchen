@@ -540,6 +540,8 @@ export async function loadOwnerDailyBriefing(
   const scaleArtifacts = needsCommercialOps ? readScaleReadinessArtifacts() : null;
   const scaleReadiness = buildScaleReadinessUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging: scaleArtifacts?.p0Staging ?? commercialOps?.p0Staging.summary ?? null,
     tier2Summary: scaleArtifacts?.tier2Summary ?? commercialOps?.tier2Staging.summary ?? null,
     metricsBaseline: scaleArtifacts?.metricsBaseline ?? month2Artifacts?.metricsBaseline ?? null,

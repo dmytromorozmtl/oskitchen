@@ -8,6 +8,7 @@ import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-pol
 import type { LaunchWizardCommercialInflectionSlice } from "@/lib/launch-wizard/launch-wizard-commercial-inflection-era28";
 import type { LaunchWizardPilotWeek1Slice } from "@/lib/launch-wizard/launch-wizard-pilot-week1-era28";
 import type { LaunchWizardMonth2Slice } from "@/lib/launch-wizard/launch-wizard-month2-era29";
+import type { LaunchWizardScaleSlice } from "@/lib/launch-wizard/launch-wizard-scale-era30";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -35,6 +36,7 @@ export type LaunchWizardTodayStripViewModel = {
   commercialInflection: LaunchWizardCommercialInflectionSlice | null;
   pilotWeek1: LaunchWizardPilotWeek1Slice | null;
   month2: LaunchWizardMonth2Slice | null;
+  scale: LaunchWizardScaleSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -77,6 +79,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   commercialInflection?: LaunchWizardCommercialInflectionSlice | null;
   pilotWeek1?: LaunchWizardPilotWeek1Slice | null;
   month2?: LaunchWizardMonth2Slice | null;
+  scale?: LaunchWizardScaleSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -92,6 +95,9 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     : null;
   const month2Subline = month2
     ? `Month 2 ${month2.progressLabel}${month2.month2IntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const scaleSubline = scale
+    ? `Scale ${scale.progressLabel}${scale.scaleIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
@@ -120,6 +126,9 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       progressPercent: input.progress.percent,
       progressLabel,
       commercialInflection,
+      pilotWeek1,
+      month2,
+      scale,
     };
   }
 
@@ -145,6 +154,8 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       progressLabel,
       commercialInflection,
       pilotWeek1,
+      month2,
+      scale,
     };
   }
 
@@ -158,11 +169,17 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : month2Subline
-          ? week1Subline
-            ? `${week1Subline} · ${month2Subline}`
-            : month2Subline
-          : week1Subline
+        : scaleSubline
+          ? month2Subline
+            ? week1Subline
+              ? `${week1Subline} · ${month2Subline} · ${scaleSubline}`
+              : `${month2Subline} · ${scaleSubline}`
+            : scaleSubline
+          : month2Subline
+            ? week1Subline
+              ? `${week1Subline} · ${month2Subline}`
+              : month2Subline
+            : week1Subline
             ? inflectionSubline
               ? `${inflectionSubline} · ${week1Subline}`
               : week1Subline
@@ -177,5 +194,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     commercialInflection,
     pilotWeek1,
     month2,
+    scale,
   };
 }

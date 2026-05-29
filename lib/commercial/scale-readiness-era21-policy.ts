@@ -20,6 +20,8 @@ export const SCALE_READINESS_ERA21_EXTENDS_POLICIES = [
 export const SCALE_READINESS_ERA21_OPS_SCRIPTS = [
   "ops:run-scale-readiness-post-month2-orchestrator",
   "ops:validate-scale-readiness-env",
+  "ops:validate-scale-readiness-integrity",
+  "ops:sync-scale-readiness-integrity-baseline",
   "ops:export-scale-readiness-env-template",
   "ops:export-scale-readiness-readiness-checklist",
   "ops:sync-scale-readiness-progress-report",
@@ -28,6 +30,7 @@ export const SCALE_READINESS_ERA21_OPS_SCRIPTS = [
 export const SCALE_READINESS_ERA21_CI_SCRIPTS = [
   "test:ci:scale-readiness-era21",
   "test:ci:scale-readiness-era21:cert",
+  "test:ci:scale-readiness-integrity-era30",
 ] as const;
 
 export const SCALE_READINESS_ERA21_UNIT_TESTS = [
@@ -37,11 +40,18 @@ export const SCALE_READINESS_ERA21_UNIT_TESTS = [
   "tests/unit/owner-daily-briefing-scale-readiness-era21.test.ts",
   "tests/unit/run-scale-readiness-post-month2-orchestrator.test.ts",
   "tests/unit/scale-readiness-era21-cert-live.test.ts",
+  "tests/unit/scale-readiness-integrity-era30.test.ts",
+  "tests/unit/validate-scale-readiness-integrity.test.ts",
+  "tests/unit/scale-readiness-integrity-era30-cert-live.test.ts",
+  "tests/unit/launch-wizard-scale-era30.test.ts",
 ] as const;
 
 export const SCALE_READINESS_ERA21_PRODUCT_SURFACES = [
   "components/dashboard/scale-readiness-phases-panel.tsx",
   "components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-scale-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-view.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-today-strip.tsx",
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

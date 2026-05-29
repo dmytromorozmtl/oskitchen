@@ -63,6 +63,10 @@ import {
   type LaunchWizardMonth2Slice,
 } from "@/lib/launch-wizard/launch-wizard-month2-era29";
 import {
+  buildLaunchWizardScaleSlice,
+  type LaunchWizardScaleSlice,
+} from "@/lib/launch-wizard/launch-wizard-scale-era30";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -124,6 +128,7 @@ export type LaunchWizardModel = {
   month2MarketReadiness: Month2MarketReadinessUiSlice | null;
   month2MarketReadinessIntegrity: LaunchWizardMonth2Slice | null;
   scaleReadiness: ScaleReadinessUiSlice | null;
+  scaleReadinessIntegrity: LaunchWizardScaleSlice | null;
   seriesAPartnerExpansion: SeriesAPartnerExpansionUiSlice | null;
   marketLeaderPositioning: MarketLeaderPositioningUiSlice | null;
   sustainedOperationalExcellence: SustainedOperationalExcellenceUiSlice | null;
@@ -348,6 +353,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   const scaleArtifacts = readScaleReadinessArtifacts();
   const scaleReadiness = buildScaleReadinessUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging: scaleArtifacts.p0Staging ?? p0Summary,
     tier2Summary: scaleArtifacts.tier2Summary ?? commercialOps?.tier2Staging.summary ?? null,
     metricsBaseline: scaleArtifacts.metricsBaseline ?? month2Artifacts.metricsBaseline,
@@ -476,6 +483,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     month2MarketReadiness,
     month2MarketReadinessIntegrity,
     scaleReadiness,
+    scaleReadinessIntegrity,
     seriesAPartnerExpansion,
     marketLeaderPositioning,
     sustainedOperationalExcellence,

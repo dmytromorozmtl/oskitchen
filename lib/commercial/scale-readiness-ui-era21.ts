@@ -11,6 +11,7 @@ import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-stu
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
+import { evaluateScaleReadinessIntegrity } from "@/lib/commercial/scale-readiness-integrity-era30";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import {
   buildScaleReadinessPhaseStatuses,
@@ -57,6 +58,11 @@ export type ScaleReadinessUiSlice = {
   postMonth2OrchestratorCommand: string;
   exportReadinessChecklistCommand: string;
   validateMonth2Command: string;
+  validateMonth2IntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  month2IntegrityPassed: boolean;
+  scaleIntegrityPassed: boolean;
   scaleMilestone: ScaleReadinessMilestone;
   todayHref: string;
   launchWizardHref: string;
@@ -77,6 +83,8 @@ export type ScaleReadinessUiSlice = {
 
 export function buildScaleReadinessUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -85,36 +93,62 @@ export function buildScaleReadinessUiSlice(input: {
   rollbackDrill?: PilotRollbackDrillSummary | null;
   env?: NodeJS.ProcessEnv;
 }): ScaleReadinessUiSlice | null {
+  const env = input.env ?? process.env;
   const metricsBaseline = input.metricsBaseline ?? null;
   const caseStudyDraft = input.caseStudyDraft ?? null;
   const investorOnepager = input.investorOnepager ?? null;
-  const month2Complete = resolveMonth2CompleteForScale({
+  const rollbackDrill = input.rollbackDrill ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+  const scaleIntegrity = evaluateScaleReadinessIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: input.p0Staging ?? null,
+    tier2SummaryOverride: input.tier2Summary ?? null,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: caseStudyDraft,
+    investorOnepagerOverride: investorOnepager,
+    rollbackDrillOverride: rollbackDrill,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+  const month2CompleteFromPhases = resolveMonth2CompleteForScale({
     goNoGoSummary: input.goNoGoSummary,
     metricsBaseline,
     caseStudyDraft,
     investorOnepager,
-    env: input.env,
+    env,
   });
+  const month2Honest = month2CompleteFromPhases && scaleIntegrity.month2IntegrityPassed;
   const goDecision = input.goNoGoSummary?.decision ?? null;
-  const prerequisites = resolveScaleReadinessPrerequisites({
-    goDecision,
-    month2Complete,
-  });
-  if (!prerequisites.prerequisitesComplete) return null;
 
-  const phases = buildScaleReadinessPhaseStatuses({
-    prerequisites,
-    goNoGoSummary: input.goNoGoSummary,
-    p0Staging: input.p0Staging ?? null,
-    tier2Summary: input.tier2Summary ?? null,
-    metricsBaseline,
-    caseStudyDraft,
-    investorOnepager,
-    rollbackDrill: input.rollbackDrill ?? null,
-    env: input.env,
+  if (!month2Honest && !scaleIntegrity.scaleExecutionStarted) return null;
+
+  const prerequisites = resolveScaleReadinessPrerequisites({
+    goDecision: month2Honest ? "GO" : goDecision,
+    month2Complete: month2Honest,
   });
-  const scaleComplete = resolveScaleReadinessComplete(phases);
-  if (scaleComplete) return null;
+  if (!prerequisites.prerequisitesComplete && !scaleIntegrity.scaleExecutionStarted) {
+    return null;
+  }
+
+  const phases = month2Honest
+    ? buildScaleReadinessPhaseStatuses({
+        prerequisites,
+        goNoGoSummary: input.goNoGoSummary,
+        p0Staging: input.p0Staging ?? null,
+        tier2Summary: input.tier2Summary ?? null,
+        metricsBaseline,
+        caseStudyDraft,
+        investorOnepager,
+        rollbackDrill,
+        env,
+      })
+    : [];
+  const scaleComplete = month2Honest ? resolveScaleReadinessComplete(phases) : false;
+  if (scaleComplete && scaleIntegrity.integrityPassed) return null;
 
   const blockingPhases = phases.filter((phase) => !phase.optional);
   const completedBlockingPhaseCount = blockingPhases.filter((phase) => phase.complete).length;
@@ -147,6 +181,12 @@ export function buildScaleReadinessUiSlice(input: {
     exportReadinessChecklistCommand:
       "npm run ops:export-scale-readiness-readiness-checklist -- --write",
     validateMonth2Command: "npm run ops:validate-month2-market-readiness-env -- --json",
+    validateMonth2IntegrityCommand:
+      "npm run ops:validate-month2-market-readiness-integrity -- --json",
+    integrityValidateCommand: "npm run ops:validate-scale-readiness-integrity -- --json",
+    syncIntegrityBaselineCommand: "npm run ops:sync-scale-readiness-integrity-baseline -- --write",
+    month2IntegrityPassed: scaleIntegrity.month2IntegrityPassed,
+    scaleIntegrityPassed: scaleIntegrity.integrityPassed,
     scaleMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
