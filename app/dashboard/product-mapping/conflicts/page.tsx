@@ -85,7 +85,7 @@ export default async function ConflictsPage() {
                       row={{
                         id: m.id,
                         status: m.status,
-                        confidenceLabel: m.confidenceLabel,
+                        confidenceLabel: m.confidenceLabel ?? "NONE",
                         hasCandidate: Boolean(m.internalProductId),
                       }}
                       basePath="/dashboard/product-mapping/conflicts"

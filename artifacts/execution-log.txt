@@ -11,3 +11,16 @@ P0 status: awaiting_ops_credentials
 GO decision: NO-GO
 pilotExecutableScore: 24
 Next step: Fix lib/api-public/auth.ts scopesJson select (same Prisma drift) — cycle 2
+
+---
+Cycle: 2
+Timestamp: 2026-05-29T16:45:00.000Z
+Action: fix: product-mapping/conflicts/page.tsx — confidenceLabel null coalesce to NONE (ошибок: 102 → 101)
+Files: app/dashboard/product-mapping/conflicts/page.tsx
+TS errors before: 102
+TS errors after: 101
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix app/dashboard/product-mapping/page.tsx — same confidenceLabel | null (cycle 3)
