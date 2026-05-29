@@ -1,0 +1,26 @@
+# Era25 post-re-entrant operator charter lock integrity — blocks lock before honest re-entrant.
+
+name: Era25 Post-re-entrant Charter Lock Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-post-re-entrant-charter-lock-integrity-baseline.json"
+      - "lib/commercial/era25-post-re-entrant-charter-lock-integrity-era57.ts"
+      - "lib/commercial/era25-post-re-entrant-charter-lock-phases-era57.ts"
+      - "scripts/ops/validate-era25-post-re-entrant-charter-lock-integrity.ts"
+
+jobs:
+  validate-era25-post-re-entrant-charter-lock-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 post-re-entrant charter lock integrity (JSON)
+        run: npm run ops:validate-era25-post-re-entrant-charter-lock-integrity -- --json

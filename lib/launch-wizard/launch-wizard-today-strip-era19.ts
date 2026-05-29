@@ -35,6 +35,7 @@ import type { LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice } 
 import type { LaunchWizardEra25PureOperationalModeTerminusSlice } from "@/lib/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-era54";
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-era55";
 import type { LaunchWizardEra25SustainedProductEvolutionReentrantSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-era56";
+import type { LaunchWizardEra25PostReentrantCharterLockSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-era57";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -89,6 +90,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25PureOperationalModeTerminus: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
   era25CommercialPilotConvergenceTrainClosure: LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice | null;
   era25SustainedProductEvolutionReentrant: LaunchWizardEra25SustainedProductEvolutionReentrantSlice | null;
+  era25PostReentrantCharterLock: LaunchWizardEra25PostReentrantCharterLockSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -158,6 +160,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25PureOperationalModeTerminus?: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
   era25CommercialPilotConvergenceTrainClosure?: LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice | null;
   era25SustainedProductEvolutionReentrant?: LaunchWizardEra25SustainedProductEvolutionReentrantSlice | null;
+  era25PostReentrantCharterLock?: LaunchWizardEra25PostReentrantCharterLockSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -318,6 +321,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       ? `${era25SustainedProductEvolutionReentrantSubline} · ${era25FullConvergenceSubline}`
       : era25SustainedProductEvolutionReentrantSubline;
   }
+  const era25PostReentrantCharterLock = input.era25PostReentrantCharterLock ?? null;
+  const era25PostReentrantCharterLockSubline = era25PostReentrantCharterLock
+    ? `Charter lock ${era25PostReentrantCharterLock.progressLabel}${era25PostReentrantCharterLock.era25PostReentrantCharterLockIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  if (era25PostReentrantCharterLockSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25PostReentrantCharterLockSubline} · ${era25FullConvergenceSubline}`
+      : era25PostReentrantCharterLockSubline;
+  }
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -374,6 +386,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25PureOperationalModeTerminus,
       era25CommercialPilotConvergenceTrainClosure,
       era25SustainedProductEvolutionReentrant,
+      era25PostReentrantCharterLock,
     };
   }
 
@@ -580,5 +593,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25PureOperationalModeTerminus,
     era25CommercialPilotConvergenceTrainClosure,
     era25SustainedProductEvolutionReentrant,
+    era25PostReentrantCharterLock,
   };
 }

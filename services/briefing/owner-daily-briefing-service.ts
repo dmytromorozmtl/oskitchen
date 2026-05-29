@@ -225,6 +225,10 @@ import {
   mergeBriefingEra25SustainedProductEvolutionReentrantTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-sustained-product-evolution-re-entrant-era56";
 import {
+  buildOwnerDailyBriefingEra25PostReentrantCharterLockAction,
+  mergeBriefingEra25PostReentrantCharterLockTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-post-re-entrant-charter-lock-era57";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -1173,6 +1177,23 @@ export async function loadOwnerDailyBriefing(
             null,
         )
       : null;
+  const era25PostReentrantCharterLockRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25PostReentrantCharterLockAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+            ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence
+            ?.marketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence
+            ?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+            ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock ??
+            sustainedOpsConvergenceEra25?.pureOperationalModeTerminus
+              ?.commercialPilotConvergenceTrainClosure?.sustainedProductEvolutionReentrant
+              ?.era25PostReentrantCharterLock ??
+            null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1650,6 +1671,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25SustainedProductEvolutionReentrantRankedAction) {
     allTopActions = mergeBriefingEra25SustainedProductEvolutionReentrantTopActions(
       era25SustainedProductEvolutionReentrantRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25PostReentrantCharterLockRankedAction) {
+    allTopActions = mergeBriefingEra25PostReentrantCharterLockTopActions(
+      era25PostReentrantCharterLockRankedAction,
       allTopActions,
     );
   }

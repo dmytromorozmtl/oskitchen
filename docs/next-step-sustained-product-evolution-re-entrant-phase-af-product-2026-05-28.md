@@ -70,19 +70,8 @@ Workflow: `.github/workflows/ops-sustained-product-evolution-re-entrant-integrit
 
 ---
 
-## Next step — Phase AG (era57)
+## Following — Phase AG (era57)
 
-**Era25 post-re-entrant operator charter lock integrity** — freeze era25 linear convergence artifacts and charter-adjacent env keys after honest re-entrant baseline; governance-bundle cert only.
+**IMPLEMENTED** — see [`docs/next-step-era25-post-re-entrant-charter-lock-phase-ag-product-2026-05-28.md`](./next-step-era25-post-re-entrant-charter-lock-phase-ag-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `sustained-product-evolution-re-entrant` baseline + runbook cert green |
-| Parent evaluator | era56 re-entrant integrity |
-| Platform anchor | `#era25-post-re-entrant-charter-lock` |
-| Briefing meta priority | **32** |
-| Env keys (planned) | `ERA25_POST_REENTRANT_CHARTER_LOCK_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-post-re-entrant-charter-lock-integrity-baseline.json` |
-| Violation IDs (planned) | `charter_lock_without_reentrant_honest`, `era25_linear_env_mutation_after_lock`, `fake_charter_lock_attestation`, upstream era56 fail |
-| CI | `test:ci:era25-post-re-entrant-charter-lock-integrity-era57` + extend governance-bundles cert |
-
-**Human acceptance (preview):** re-entrant integrity PASS → attest charter lock → validate JSON → zero mutable era25 linear convergence env until next major version policy.
+**Next:** Phase AH — era25 steady-state operator loop convergence lock (era58).

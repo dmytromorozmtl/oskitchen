@@ -20,6 +20,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { SUSTAINED_PRODUCT_EVOLUTION_PLATFORM_ANCHOR } from "@/lib/commercial/sustained-product-evolution-ui-era23";
+import {
+  buildEra25PostReentrantCharterLockEra25UiSlice,
+  type Era25PostReentrantCharterLockEra25UiSlice,
+} from "@/lib/commercial/era25-post-re-entrant-charter-lock-ui-era25";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import { LAUNCH_WIZARD_ERA25_SUSTAINED_PRODUCT_EVOLUTION_REENTRANT_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-era56";
 
@@ -55,6 +59,7 @@ export type SustainedProductEvolutionReentrantEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25PostReentrantCharterLock: Era25PostReentrantCharterLockEra25UiSlice | null;
 };
 
 export function buildSustainedProductEvolutionReentrantEra25UiSlice(input: {
@@ -96,6 +101,22 @@ export function buildSustainedProductEvolutionReentrantEra25UiSlice(input: {
 
   const reentrantComplete = reentrantIntegrity.sustainedProductEvolutionReentrantComplete;
   const reentrantBlocked = !reentrantComplete;
+
+  const era25PostReentrantCharterLock = buildEra25PostReentrantCharterLockEra25UiSlice({
+    sustainedProductEvolutionReentrantVisible: true,
+    reentrantComplete,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+  });
 
   const headline = reentrantComplete
     ? `Product evolution re-entrant · improvement loop active · GO ${reentrantIntegrity.goDecision ?? "GO"}`
@@ -142,6 +163,7 @@ export function buildSustainedProductEvolutionReentrantEra25UiSlice(input: {
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25PostReentrantCharterLock,
   };
 }
 
