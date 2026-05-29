@@ -591,3 +591,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — re-export LaunchWizardStepId from launch-wizard-era19 for golden-path-era20 (cycle 46)
+
+---
+Cycle: 46
+Timestamp: 2026-05-30T04:00:00.000Z
+Action: fix: re-export LaunchWizardStepId + LaunchWizardStepOwnerRole from launch-wizard-era19 — unblocks golden-path-era20 crosswalk indexing
+Files: lib/launch-wizard/launch-wizard-era19.ts
+TS errors before: 10
+TS errors after: 7
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — launch-wizard-today-strip-era19 ViewModel missing era25 slices (cycle 47)

@@ -13,6 +13,8 @@ import {
 export const LAUNCH_WIZARD_AGGREGATOR_ERA19_POLICY_ID =
   "era19-launch-wizard-aggregator-v1" as const;
 
+export type { LaunchWizardStepId, LaunchWizardStepOwnerRole } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+
 export type LaunchWizardStepStatus = "complete" | "in_progress" | "blocked" | "not_started";
 
 export type LaunchWizardStep = {
