@@ -29,11 +29,13 @@ import {
 import { IntegrationProvider } from "@prisma/client";
 import { OrderHubExportButton } from "@/components/dashboard/order-hub-export-button";
 import { OrderHubFulfillmentFlowProofPanel } from "@/components/dashboard/order-hub/order-hub-fulfillment-flow-proof-panel";
+import { OrderHubCommercialOpsStrip } from "@/components/dashboard/order-hub/order-hub-commercial-ops-strip";
 import { OrderHubAttentionStrip } from "@/components/dashboard/order-hub-attention-strip";
 import {
   buildStorefrontFulfillmentFlowProofSlice,
   resolveP0ChannelProofPassed,
 } from "@/lib/commercial/era20-storefront-fulfillment-flow-proof-era20";
+import { buildOrderHubCommercialOpsStripSlice } from "@/lib/order-hub/order-hub-commercial-ops-era28";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 import { loadStorefrontSummariesForOrderIds } from "@/lib/storefront/order-hub-commerce";
 import {
@@ -92,6 +94,7 @@ export default async function OrderHubPage({
       p0?.children?.channelLive?.proofStatus ?? null,
     ),
   });
+  const commercialOpsStrip = buildOrderHubCommercialOpsStripSlice(commercialOps);
 
   const storefrontSummaries = await loadStorefrontSummariesForOrderIds(
     dataUserId,
@@ -199,6 +202,8 @@ export default async function OrderHubPage({
       </div>
 
       <OrderHubFulfillmentFlowProofPanel slice={fulfillmentFlowProof} />
+
+      {commercialOpsStrip ? <OrderHubCommercialOpsStrip slice={commercialOpsStrip} /> : null}
 
       <OrderHubAttentionStrip mappingBlockedCount={mappingBlockedCount} exactTabCounts={exactTabCounts} />
 
