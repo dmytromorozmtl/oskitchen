@@ -18,6 +18,10 @@ import type { SeriesAPartnerExpansionConvergenceEra25Milestone } from "@/lib/com
 import type { MarketLeaderPositioningPhaseStatus } from "@/lib/commercial/market-leader-positioning-phases-era21";
 import type { LaunchWizardMarketLeaderPositioningConvergenceSlice } from "@/lib/briefing/market-leader-positioning-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import {
+  buildSustainedOperationalExcellenceConvergenceEra25UiSlice,
+  type SustainedOperationalExcellenceConvergenceEra25UiSlice,
+} from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
 import { evaluateMarketLeaderPositioningConvergenceEra25WithMilestones } from "@/scripts/ops/validate-market-leader-positioning-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -61,6 +65,7 @@ export type MarketLeaderPositioningConvergenceEra25UiSlice = {
   integrationHealthHref: string;
   implementationHref: string;
   ghostKitchenLandingHref: string;
+  sustainedOperationalExcellenceConvergence: SustainedOperationalExcellenceConvergenceEra25UiSlice | null;
 };
 
 export function buildMarketLeaderPositioningConvergenceEra25UiSlice(input: {
@@ -70,6 +75,11 @@ export function buildMarketLeaderPositioningConvergenceEra25UiSlice(input: {
   if (!input.seriesAConvergenceVisible) return null;
 
   const result = evaluateMarketLeaderPositioningConvergenceEra25WithMilestones(input.env);
+  const sustainedOperationalExcellenceConvergence =
+    buildSustainedOperationalExcellenceConvergenceEra25UiSlice({
+      marketLeaderConvergenceVisible: true,
+      env: input.env,
+    });
 
   return {
     policyId: MARKET_LEADER_POSITIONING_CONVERGENCE_ERA25_UI_POLICY_ID,
@@ -114,6 +124,7 @@ export function buildMarketLeaderPositioningConvergenceEra25UiSlice(input: {
     integrationHealthHref: "/dashboard/integration-health",
     implementationHref: "/dashboard/implementation",
     ghostKitchenLandingHref: "/solutions/ghost-kitchens",
+    sustainedOperationalExcellenceConvergence,
   };
 }
 

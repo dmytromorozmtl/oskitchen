@@ -113,7 +113,7 @@ Reuses era21: `market-leader-positioning-phases-era21`, `validate-market-leader-
 
 ## Next step (after convergence ready)
 
-See [`next-era25-sustained-operational-excellence-convergence-2026-05-28.md`](./next-era25-sustained-operational-excellence-convergence-2026-05-28.md) — **sustained operational excellence on platform ops**
+See [`next-era25-pure-operational-mode-terminus-2026-05-28.md`](./next-era25-pure-operational-mode-terminus-2026-05-28.md) — **pure operational mode terminus + improvement loop wiring**
 
 ---
 

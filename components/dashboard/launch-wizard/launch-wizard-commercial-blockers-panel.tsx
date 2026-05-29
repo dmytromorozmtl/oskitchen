@@ -23,12 +23,14 @@ import { Month2MarketReadinessConvergenceEra25Strip } from "@/components/dashboa
 import { ScaleReadinessConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/scale-readiness-convergence-era25-strip";
 import { SeriesAPartnerExpansionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/series-a-partner-expansion-convergence-era25-strip";
 import { MarketLeaderPositioningConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/market-leader-positioning-convergence-era25-strip";
+import { SustainedOperationalExcellenceConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/sustained-operational-excellence-convergence-era25-strip";
 import type { PaidPilotGoConvergenceEra25UiSlice } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
 import type { PilotWeek1ExecutionConvergenceEra25UiSlice } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import type { Month2MarketReadinessConvergenceEra25UiSlice } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
 import type { ScaleReadinessConvergenceEra25UiSlice } from "@/lib/commercial/scale-readiness-convergence-ui-era25";
 import type { SeriesAPartnerExpansionConvergenceEra25UiSlice } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
 import type { MarketLeaderPositioningConvergenceEra25UiSlice } from "@/lib/commercial/market-leader-positioning-convergence-ui-era25";
+import type { SustainedOperationalExcellenceConvergenceEra25UiSlice } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import { LAUNCH_WIZARD_COMMERCIAL_OPS_CHECKLIST_DOC } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
@@ -50,6 +52,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
   scaleReadinessConvergence?: ScaleReadinessConvergenceEra25UiSlice | null;
   seriesAPartnerExpansionConvergence?: SeriesAPartnerExpansionConvergenceEra25UiSlice | null;
   marketLeaderPositioningConvergence?: MarketLeaderPositioningConvergenceEra25UiSlice | null;
+  sustainedOperationalExcellenceConvergence?: SustainedOperationalExcellenceConvergenceEra25UiSlice | null;
   compact?: boolean;
 }) {
   const {
@@ -68,6 +71,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
     scaleReadinessConvergence = null,
     seriesAPartnerExpansionConvergence = null,
     marketLeaderPositioningConvergence = null,
+    sustainedOperationalExcellenceConvergence = null,
     compact = false,
   } = props;
   const decisionVariant =
@@ -219,6 +223,12 @@ export function LaunchWizardCommercialBlockersPanel(props: {
         {marketLeaderPositioningConvergence ? (
           <MarketLeaderPositioningConvergenceEra25Strip
             slice={marketLeaderPositioningConvergence}
+          />
+        ) : null}
+
+        {sustainedOperationalExcellenceConvergence ? (
+          <SustainedOperationalExcellenceConvergenceEra25Strip
+            slice={sustainedOperationalExcellenceConvergence}
           />
         ) : null}
 
