@@ -1,6 +1,10 @@
 /**
  * Sustained operational excellence UI slice — final era21 ops cadence surfaces.
  */
+import {
+  resolveSustainedOperationalExcellenceMilestoneFromPhaseStatuses,
+  type SustainedOperationalExcellenceMilestone,
+} from "@/lib/commercial/sustained-operational-excellence-post-market-leader-orchestrator-era21";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -53,6 +57,10 @@ export type SustainedOperationalExcellenceUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
+  postMarketLeaderOrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateMarketLeaderCommand: string;
+  sustainedOpsMilestone: SustainedOperationalExcellenceMilestone;
   todayHref: string;
   launchWizardHref: string;
   platformOpsHref: string;
@@ -116,6 +124,14 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
   const nextPhaseDetail = nextPhase
     ? formatSustainedOperationalExcellencePhaseBlockerDetail(nextPhase)
     : null;
+  const sustainedOpsMilestone = resolveSustainedOperationalExcellenceMilestoneFromPhaseStatuses(
+    phases,
+    {
+      prerequisitesComplete: true,
+      marketLeaderComplete: true,
+      sustainedOpsComplete: false,
+    },
+  );
 
   return {
     policyId: SUSTAINED_OPERATIONAL_EXCELLENCE_UI_ERA21_POLICY_ID,
@@ -136,6 +152,12 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
       "npm run ops:export-sustained-operational-excellence-env-template -- --write",
     syncProgressReportCommand:
       "npm run ops:sync-sustained-operational-excellence-progress-report -- --write",
+    postMarketLeaderOrchestratorCommand:
+      "npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write",
+    validateMarketLeaderCommand: "npm run ops:validate-market-leader-positioning-env -- --json",
+    sustainedOpsMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${SUSTAINED_OPERATIONAL_EXCELLENCE_PLATFORM_ANCHOR}`,
@@ -155,5 +177,5 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
 export function formatSustainedOperationalExcellenceProgressLabel(
   slice: SustainedOperationalExcellenceUiSlice,
 ): string {
-  return `Sustained ops ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} cadences · GO · ${slice.customerName ?? "customer"}`;
+  return `Sustained ops ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} cadences · ${slice.sustainedOpsMilestone.replaceAll("_", " ")} · GO · ${slice.customerName ?? "customer"}`;
 }

@@ -30,6 +30,7 @@ import {
   resolveSustainedOperationalExcellencePrerequisites,
   SUSTAINED_OPERATIONAL_EXCELLENCE_TRACKED_ENV_KEYS,
 } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { resolveSustainedOperationalExcellenceMilestone } from "@/lib/commercial/sustained-operational-excellence-post-market-leader-orchestrator-era21";
 
 function readJson<T>(path: string): T | null {
   const full = join(process.cwd(), path);
@@ -77,6 +78,9 @@ export function evaluateSustainedOperationalExcellenceEnv(
   phases: ReturnType<typeof buildSustainedOperationalExcellencePhaseStatuses>;
   goDecision: string | null;
   sustainedOpsComplete: boolean;
+  readyForIntegrationSmokes: boolean;
+  readyForMetricsSmokes: boolean;
+  sustainedOpsMilestone: ReturnType<typeof resolveSustainedOperationalExcellenceMilestone>;
 } {
   const artifacts = readSustainedOperationalExcellenceArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -111,6 +115,32 @@ export function evaluateSustainedOperationalExcellenceEnv(
     env,
   });
   const sustainedOpsComplete = resolveSustainedOperationalExcellenceComplete(phases);
+  const cadenceB = phases.find((phase) => phase.id === "cadence_b_weekly_integration");
+  const cadenceC = phases.find((phase) => phase.id === "cadence_c_monthly_metrics");
+  const channelLivePassed = artifacts.p0Staging?.children.channelLive.overall === "PASSED";
+  const tier2Passed = artifacts.tier2Summary?.tier2ProofStatus === "proof_passed";
+  const integrationHonest = channelLivePassed || tier2Passed;
+  const weeklyReviewAttested = Boolean(env.SUSTAINED_OPS_WEEKLY_INTEGRATION_REVIEWED?.trim());
+  const metricsPassed = artifacts.metricsBaseline?.overall === "PASSED";
+  const monthlyRefreshAttested = Boolean(env.SUSTAINED_OPS_MONTHLY_METRICS_REFRESHED?.trim());
+  const readyForIntegrationSmokes =
+    prerequisites.prerequisitesComplete &&
+    !sustainedOpsComplete &&
+    cadenceB?.complete !== true &&
+    integrationHonest &&
+    !weeklyReviewAttested;
+  const readyForMetricsSmokes =
+    prerequisites.prerequisitesComplete &&
+    !sustainedOpsComplete &&
+    cadenceC?.complete !== true &&
+    metricsPassed &&
+    !monthlyRefreshAttested;
+  const sustainedOpsMilestone = resolveSustainedOperationalExcellenceMilestone({
+    prerequisitesComplete: prerequisites.prerequisitesComplete,
+    marketLeaderComplete,
+    sustainedOpsComplete,
+    phases,
+  });
 
   return {
     prerequisites,
@@ -120,6 +150,9 @@ export function evaluateSustainedOperationalExcellenceEnv(
     phases,
     goDecision,
     sustainedOpsComplete,
+    readyForIntegrationSmokes,
+    readyForMetricsSmokes,
+    sustainedOpsMilestone,
   };
 }
 
@@ -136,6 +169,9 @@ function main() {
           marketLeaderComplete: result.marketLeaderComplete,
           goDecision: result.goDecision,
           sustainedOpsComplete: result.sustainedOpsComplete,
+          readyForIntegrationSmokes: result.readyForIntegrationSmokes,
+          readyForMetricsSmokes: result.readyForMetricsSmokes,
+          sustainedOpsMilestone: result.sustainedOpsMilestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -166,6 +202,8 @@ function main() {
     console.log("Blocked — decision must be GO in artifacts/pilot-gono-go-summary.json.\n");
     process.exit(2);
   }
+
+  console.log(`Sustained ops milestone: ${result.sustainedOpsMilestone}\n`);
 
   for (const phase of result.phases) {
     const marker = phase.complete ? "✓" : phase.optional ? "○ (optional)" : "○";

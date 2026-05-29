@@ -51,6 +51,9 @@ export function SustainedOperationalExcellencePhasesPanel(props: {
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               decision: {slice.goDecision}
             </Badge>
+            <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+              {slice.sustainedOpsMilestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
               Market leader complete
             </Badge>
@@ -135,12 +138,16 @@ export function SustainedOperationalExcellencePhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postMarketLeaderOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.validateMarketLeaderCommand}</li>
                 <li>npm run smoke:woo-shopify-live</li>
                 <li>npm run smoke:pilot-metrics-baseline</li>
                 <li>npm run smoke:pilot-forbidden-claims-enforcement</li>
+                <li>npm run test:ci:commercial-pilot-runbook:cert</li>
               </ul>
             </div>
             <div className="flex flex-wrap gap-2">

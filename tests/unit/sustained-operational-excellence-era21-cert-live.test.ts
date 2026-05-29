@@ -42,6 +42,9 @@ describe("sustained operational excellence era21 CI certification (live repo)", 
     const step9 = readFileSync(join(ROOT, SUSTAINED_OPERATIONAL_EXCELLENCE_STEP9_DOC), "utf8");
     expect(step9).toContain("SUSTAINED_OPS_DAILY_CADENCE_ATTESTED");
     expect(step9).toContain("era21-sustained-operational-excellence-v1");
+    expect(step9).toContain(
+      "run-sustained-operational-excellence-post-market-leader-orchestrator",
+    );
     expect(step9).toContain("smoke:pilot-metrics-baseline");
   });
 

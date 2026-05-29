@@ -39,34 +39,42 @@ After Step 9 complete → **pure operational mode** (only `operationalEmptyState
 ## Preflight
 
 ```bash
-npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write   # planned — Step 9 orchestrator
+npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write
 npm run ops:validate-market-leader-positioning-env -- --json   # marketLeaderComplete: true
 npm run ops:validate-sustained-operational-excellence-env -- --json
 npm run ops:export-sustained-operational-excellence-env-template -- --write
 npm run ops:sync-sustained-operational-excellence-progress-report -- --write
-npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write   # planned
+npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write
 npm run smoke:pilot-metrics-baseline
 npm run smoke:pilot-forbidden-claims-enforcement
 npm run test:ci:commercial-pilot-runbook:cert
 ```
 
-**Planned post-Market-leader orchestrator milestones (`sustainedOpsMilestone`):**
+**Post-Market-leader orchestrator milestones (`sustainedOpsMilestone`):**
 
 | Milestone | Cadence | Exit code (orchestrator `--json`) |
 |-----------|---------|-----------------------------------|
 | `market_leader_blocked` | Market leader pillars 1–4 incomplete | `2` |
-| `cadence_a_daily_ops` | Today + Order Hub + daily attestation | `0` |
+| `cadence_a_daily_operational` | Today + Order Hub + daily attestation | `0` |
 | `cadence_b_weekly_integration` | integration health + webhook smokes | `0` |
 | `cadence_c_monthly_metrics` | rolling metrics baseline refresh | `0` |
-| `cadence_d_quarterly_audit` | forbidden-claims + maturity matrix | `0` |
+| `cadence_d_quarterly_governance` | forbidden-claims + maturity matrix | `0` |
 | `sustained_ops_complete` | Cadences A–D done | `0` |
 
-**Smoke readiness flags (planned in validate env JSON):**
+**Smoke readiness flags in validate env JSON:**
 
-- `readyForIntegrationSmokes`: cadence B incomplete + channel credentials present but weekly review not attested
-- `readyForMetricsSmokes`: cadence C incomplete + prior baseline captured but monthly refresh missing
+- `readyForIntegrationSmokes`: cadence B incomplete + channel/tier2 artifacts honest but weekly review not attested
+- `readyForMetricsSmokes`: cadence C incomplete + metrics baseline PASSED but monthly refresh missing
 
-**Wiring surfaces when sustained ops incomplete:** briefing priority **8**, Launch Wizard commercial blockers, Platform `#sustained-operational-excellence`. Redirect to Market leader orchestrator when `market_leader_blocked`.
+**Product surfaces active after Market leader complete (sustained ops incomplete):**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Sustained ops ranked action (priority 8) + compact panel |
+| `/dashboard/launch-wizard` | Cadences in commercial blockers |
+| Platform → Pilot ops | `#sustained-operational-excellence` panel |
+| `/dashboard/order-hub` + `/dashboard/production-calendar` | Cadence A daily ops |
+| `/dashboard/integration-health` | Cadence B weekly review |
 
 ---
 
@@ -127,18 +135,18 @@ Review: `docs/feature-maturity-matrix.md`, `docs/sales-forbidden-claims-training
 ## Ops commands
 
 ```bash
-npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write   # planned
+npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write
 npm run ops:validate-sustained-operational-excellence-env -- --json
 npm run ops:export-sustained-operational-excellence-env-template -- --write
 npm run ops:sync-sustained-operational-excellence-progress-report -- --write
-npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write   # planned
+npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write
 npm run test:ci:sustained-operational-excellence-era21
 npm run test:ci:sustained-operational-excellence-era21:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-sustained-operational-excellence-validate.yml` (+ planned orchestrator step)
+GitHub workflow: `.github/workflows/ops-sustained-operational-excellence-validate.yml` (includes orchestrator step with `continue-on-error: true`)
 
-**Readiness checklist artifact (planned):** `docs/sustained-operational-excellence-readiness-checklist.md`
+**Readiness checklist artifact:** `docs/sustained-operational-excellence-readiness-checklist.md` (generated via export script — do not hand-edit PASS states)
 
 ---
 
@@ -155,19 +163,20 @@ GitHub workflow: `.github/workflows/ops-sustained-operational-excellence-validat
 
 ---
 
-## Step 10 preview — Continuous improvement loop (informational only)
+## Step 10 preview — Continuous improvement loop (era22 informational)
 
 See [`next-step-10-continuous-improvement-loop-2026-05-28.md`](./next-step-10-continuous-improvement-loop-2026-05-28.md)
 
-**Engineering slice (Step 10 — era22, not era21 gate):**
+**Next engineering slice (Step 10 — no new era21 gate):**
 
-| Component | Artifact |
-|-----------|----------|
-| Policy | `era22-continuous-improvement-loop-v1` |
+| Component | Planned artifact |
+|-----------|------------------|
+| Policy | `era22-continuous-improvement-loop-v1` (already wired) |
+| Validate | `ops:validate-continuous-improvement-loop -- --json` (artifact freshness, not env attestation) |
 | UI panel | `#continuous-improvement-loop` on Today + Platform ops |
 | Briefing | **No new priority** — informational loop after Step 9 complete |
-| Env keys | None — uses existing metrics + forbidden-claims smokes as inputs |
+| Env keys | None — uses existing smokes + `runAt` age thresholds |
 
-**Human gate before Step 10:** `sustainedOpsComplete: true` via Step 9 orchestrator.
+**Human gate before Step 10:** `sustainedOpsComplete: true` via Step 9 orchestrator (`sustained_ops_complete` milestone).
 
 **Immediate action if Market leader incomplete:** [`next-step-8-market-leader-positioning-2026-05-28.md`](./next-step-8-market-leader-positioning-2026-05-28.md)

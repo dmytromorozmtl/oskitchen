@@ -24,6 +24,7 @@ describe("validate-sustained-operational-excellence-env", () => {
     expect(result.missing).toEqual(SUSTAINED_OPERATIONAL_EXCELLENCE_TRACKED_ENV_KEYS);
     expect(result.sustainedOpsComplete).toBe(false);
     expect(result.prerequisites.prerequisitesComplete).toBe(false);
+    expect(result.sustainedOpsMilestone).toBe("market_leader_blocked");
   });
 
   it("does not mark sustained ops complete without all cadences attested", () => {

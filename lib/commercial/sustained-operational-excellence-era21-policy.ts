@@ -14,11 +14,14 @@ export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_EXTENDS_POLICIES = [
   "era21-market-leader-positioning-v1",
   SUSTAINED_OPERATIONAL_EXCELLENCE_PHASES_ERA21_POLICY_ID,
   SUSTAINED_OPERATIONAL_EXCELLENCE_UI_ERA21_POLICY_ID,
+  "era21-sustained-operational-excellence-post-market-leader-orchestrator-v1",
 ] as const;
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_OPS_SCRIPTS = [
+  "ops:run-sustained-operational-excellence-post-market-leader-orchestrator",
   "ops:validate-sustained-operational-excellence-env",
   "ops:export-sustained-operational-excellence-env-template",
+  "ops:export-sustained-operational-excellence-readiness-checklist",
   "ops:sync-sustained-operational-excellence-progress-report",
 ] as const;
 
@@ -28,9 +31,11 @@ export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_CI_SCRIPTS = [
 ] as const;
 
 export const SUSTAINED_OPERATIONAL_EXCELLENCE_ERA21_UNIT_TESTS = [
+  "tests/unit/sustained-operational-excellence-post-market-leader-orchestrator-era21.test.ts",
   "tests/unit/sustained-operational-excellence-phases-era21.test.ts",
   "tests/unit/sustained-operational-excellence-ui-era21.test.ts",
   "tests/unit/owner-daily-briefing-sustained-operational-excellence-era21.test.ts",
+  "tests/unit/run-sustained-operational-excellence-post-market-leader-orchestrator.test.ts",
   "tests/unit/sustained-operational-excellence-era21-cert-live.test.ts",
   "tests/unit/validate-sustained-operational-excellence-env.test.ts",
 ] as const;

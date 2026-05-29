@@ -43,10 +43,21 @@ Track health uses **artifact freshness** (runAt age) — never hand-edited PASS.
 ## Preflight
 
 ```bash
-npm run ops:validate-sustained-operational-excellence-env -- --json   # sustainedOpsComplete: true
+npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --json   # sustainedOpsComplete: true
+npm run ops:validate-sustained-operational-excellence-env -- --json   # sustainedOpsMilestone: sustained_ops_complete
 npm run ops:validate-continuous-improvement-loop -- --json
 npm run ops:export-continuous-improvement-loop-release-checklist -- --write
 ```
+
+**Prerequisite from Step 9 orchestrator:**
+
+| Field | Required value |
+|-------|----------------|
+| `sustainedOpsMilestone` | `sustained_ops_complete` |
+| `sustainedOpsComplete` | `true` |
+| All cadences A–D | attested + artifact chain honest |
+
+After Step 9 complete, era21 gate panels (priorities 0–8) hide — only operational tiles + era22 informational loop remain.
 
 ---
 
@@ -93,19 +104,20 @@ Platform anchor: `#continuous-improvement-loop`
 
 ---
 
-## era21 + era22 path summary
-
-| Step | Policy | Gate? |
-|------|--------|-------|
-| 1–9 | `era21-*` | Yes — mutually exclusive briefing priorities 0–8 |
-| 10 | `era22-continuous-improvement-loop-v1` | **No** — informational loop only |
-
----
-
-## Step 11 preview — Sustained product evolution
+## Step 11 preview — Sustained product evolution (era23 informational)
 
 See [`next-step-11-sustained-product-evolution-2026-05-28.md`](./next-step-11-sustained-product-evolution-2026-05-28.md)
 
-**Engineering wired:** `era23-sustained-product-evolution-v1` — product evolution panel on Today + Platform ops (`#sustained-product-evolution`). Visible when Step 10 improvement loop is active.
+**Next engineering slice (Step 11 — no new briefing priority):**
+
+| Component | Planned artifact |
+|-----------|------------------|
+| Policy | `era23-sustained-product-evolution-v1` (already wired) |
+| UI panel | `#sustained-product-evolution` on Today + Platform ops |
+| Validate | artifact freshness for feature maturity + backlog alignment |
+| Briefing | **No new priority** — visible when Step 10 loop is active |
+| Env keys | None — uses `docs/feature-maturity-matrix.md` + implementation backlog |
+
+**Human gate before Step 11:** Step 10 improvement loop tracks show green freshness (weekly/monthly/quarterly thresholds).
 
 **Immediate action if Sustained ops incomplete:** [`next-step-9-sustained-operational-excellence-2026-05-28.md`](./next-step-9-sustained-operational-excellence-2026-05-28.md)

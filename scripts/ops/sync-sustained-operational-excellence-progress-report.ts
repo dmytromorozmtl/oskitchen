@@ -21,6 +21,9 @@ export function buildSustainedOperationalExcellenceProgressReportMarkdown(
     `- Market leader complete: **${result.marketLeaderComplete ? "yes" : "no"}**`,
     `- GO decision: **${result.goDecision ?? "missing"}**`,
     `- Sustained ops complete: ${result.sustainedOpsComplete ? "yes" : "no"}`,
+    `- sustainedOpsMilestone: **${result.sustainedOpsMilestone}**`,
+    `- Ready for integration smokes: ${result.readyForIntegrationSmokes ? "yes" : "no"}`,
+    `- Ready for metrics smokes: ${result.readyForMetricsSmokes ? "yes" : "no"}`,
     "",
     "## Cadence checklist",
     "",
@@ -48,7 +51,9 @@ export function buildSustainedOperationalExcellenceProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write");
   lines.push("npm run ops:validate-sustained-operational-excellence-env");
+  lines.push("npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write");
   lines.push("npm run smoke:woo-shopify-live");
   lines.push("npm run smoke:pilot-metrics-baseline");
   lines.push("npm run smoke:pilot-forbidden-claims-enforcement");
