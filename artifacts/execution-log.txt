@@ -487,3 +487,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — pilot-gono-go-summary tier2 pick missing p0ProofStatus (cycle 38)
+
+---
+Cycle: 38
+Timestamp: 2026-05-30T02:00:00.000Z
+Action: fix: deriveTier2Pass tier2StagingGoldenPath Pick — include p0ProofStatus to match mergeGoldenPathArtifactsForGoNoGo bridge contract
+Files: lib/commercial/pilot-gono-go-summary.ts
+TS errors before: 27
+TS errors after: 26
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — pilot-week1-execution-convergence-integrity-era48 resolvePilotWeek1ExecutionConvergenceEra25MilestoneFromEnv arg count (cycle 39)

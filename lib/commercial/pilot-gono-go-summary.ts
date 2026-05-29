@@ -179,7 +179,10 @@ export function deriveTier1Pass(preflight: PilotTierPreflightArtifact | null): P
 
 export function deriveTier2Pass(
   goldenPath: PilotGoldenPathArtifact | null,
-  tier2StagingGoldenPath?: Pick<Tier2StagingGoldenPathSummary, "overall" | "tier2ProofStatus"> | null,
+  tier2StagingGoldenPath?: Pick<
+    Tier2StagingGoldenPathSummary,
+    "overall" | "tier2ProofStatus" | "p0ProofStatus"
+  > | null,
 ): PilotGoNoGoEvidenceGate {
   const effective = mergeGoldenPathArtifactsForGoNoGo({
     operatorGoldenPath: goldenPath,
