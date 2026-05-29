@@ -20,6 +20,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25SteadyStateOperatorLoopLockEra25UiSlice,
+  type Era25SteadyStateOperatorLoopLockEra25UiSlice,
+} from "@/lib/commercial/era25-steady-state-operator-loop-lock-ui-era25";
 import { LAUNCH_WIZARD_ERA25_POST_REENTRANT_CHARTER_LOCK_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-era57";
 
 export const ERA25_POST_REENTRANT_CHARTER_LOCK_ERA25_UI_POLICY_ID =
@@ -49,6 +53,7 @@ export type Era25PostReentrantCharterLockEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25SteadyStateOperatorLoopLock: Era25SteadyStateOperatorLoopLockEra25UiSlice | null;
 };
 
 export function buildEra25PostReentrantCharterLockEra25UiSlice(input: {
@@ -91,6 +96,22 @@ export function buildEra25PostReentrantCharterLockEra25UiSlice(input: {
   const charterLockComplete = charterLockIntegrity.era25PostReentrantCharterLockComplete;
   const charterLockBlocked = !charterLockComplete;
 
+  const era25SteadyStateOperatorLoopLock = buildEra25SteadyStateOperatorLoopLockEra25UiSlice({
+    postReentrantCharterLockVisible: true,
+    charterLockComplete,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+  });
+
   const headline = charterLockComplete
     ? `Era25 charter locked · frozen env guard PASS · GO ${charterLockIntegrity.goDecision ?? "GO"}`
     : input.reentrantComplete
@@ -127,6 +148,7 @@ export function buildEra25PostReentrantCharterLockEra25UiSlice(input: {
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25SteadyStateOperatorLoopLock,
   };
 }
 

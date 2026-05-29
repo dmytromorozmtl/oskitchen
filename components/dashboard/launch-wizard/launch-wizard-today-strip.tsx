@@ -71,6 +71,7 @@ export function LaunchWizardTodayStrip(props: {
     era25SustainedProductEvolutionReentrant:
       props.model.era25SustainedProductEvolutionReentrantIntegrity,
     era25PostReentrantCharterLock: props.model.era25PostReentrantCharterLockIntegrity,
+    era25SteadyStateOperatorLoopLock: props.model.era25SteadyStateOperatorLoopLockIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -477,6 +478,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-post-re-entrant-charter-lock"
               >
                 Charter lock {view.era25PostReentrantCharterLock.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25SteadyStateOperatorLoopLock ? (
+              <Badge
+                variant={
+                  view.era25SteadyStateOperatorLoopLock.era25SteadyStateOperatorLoopLockIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-steady-state-operator-loop-lock"
+              >
+                Steady-state {view.era25SteadyStateOperatorLoopLock.progressLabel}
               </Badge>
             ) : null}
           </div>

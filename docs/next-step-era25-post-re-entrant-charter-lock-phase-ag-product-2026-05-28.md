@@ -66,19 +66,8 @@ Workflow: `.github/workflows/ops-era25-post-re-entrant-charter-lock-integrity-va
 
 ---
 
-## Next step — Phase AH (era58)
+## Following — Phase AH (era58)
 
-**Era25 steady-state operator loop convergence lock** — lock improvement-loop rhythms and operator cadence after charter lock baseline; dual cert via governance-bundles + commercial-pilot-runbook.
+**IMPLEMENTED** — see [`docs/next-step-era25-steady-state-operator-loop-lock-phase-ah-product-2026-05-28.md`](./next-step-era25-steady-state-operator-loop-lock-phase-ah-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-post-re-entrant-charter-lock` baseline + governance-bundles cert green |
-| Parent evaluator | era57 charter lock integrity |
-| Platform anchor | `#era25-steady-state-operator-loop-lock` (planned) |
-| Briefing meta priority | **33** (planned) |
-| Env keys (planned) | `ERA25_STEADY_STATE_OPERATOR_LOOP_LOCK_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-steady-state-operator-loop-lock-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `steady_state_lock_without_charter_lock`, `improvement_loop_rhythm_mutation_after_lock`, `fake_steady_state_lock_attestation`, upstream era57 fail |
-| CI | `test:ci:era25-steady-state-operator-loop-lock-integrity-era58` + extend runbook cert |
-
-**Human acceptance (preview):** charter lock PASS → attest steady-state loop lock → validate JSON → sustain improvement loop only with frozen era25 charter env.
+**Next:** Phase AI — era25 commercial pilot convergence train capstone attestation (era59).
