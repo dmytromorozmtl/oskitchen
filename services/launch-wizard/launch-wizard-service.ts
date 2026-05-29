@@ -78,6 +78,10 @@ import {
   buildSustainedOperationalExcellenceUiSlice,
   type SustainedOperationalExcellenceUiSlice,
 } from "@/lib/commercial/sustained-operational-excellence-ui-era21";
+import {
+  buildPaidPilotGoConvergenceEra25UiSlice,
+  type PaidPilotGoConvergenceEra25UiSlice,
+} from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
 import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
 import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
 import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
@@ -103,6 +107,7 @@ export type LaunchWizardModel = {
   seriesAPartnerExpansion: SeriesAPartnerExpansionUiSlice | null;
   marketLeaderPositioning: MarketLeaderPositioningUiSlice | null;
   sustainedOperationalExcellence: SustainedOperationalExcellenceUiSlice | null;
+  paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -419,6 +424,10 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       seriesAArtifacts.competitorMatrix,
   });
 
+  const paidPilotGoConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
+    breakthroughVisible: true,
+  });
+
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
     productionGradePolicyId: LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID,
@@ -438,5 +447,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     seriesAPartnerExpansion,
     marketLeaderPositioning,
     sustainedOperationalExcellence,
+    paidPilotGoConvergence,
   };
 }

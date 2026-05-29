@@ -26,6 +26,7 @@ describe("owner-daily-briefing-breakthrough-ui-era25", () => {
     expect(slice?.ownerDailyBriefingBreakthroughEra25Milestone).toBe(
       "blueprint_regression_blocked",
     );
+    expect(slice?.paidPilotGoConvergence).not.toBeNull();
   });
 
   it("formats product slice label", () => {

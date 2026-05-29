@@ -40,6 +40,12 @@ export const ALLOWED_ERA25_PROCESS_COMMERCIAL_FILES: readonly string[] = [
   "owner-daily-briefing-breakthrough-ui-era25.ts",
   "owner-daily-briefing-breakthrough-era25-policy.ts",
   "evaluate-owner-daily-briefing-breakthrough-era25.ts",
+  "paid-pilot-go-convergence-phases-era25.ts",
+  "paid-pilot-go-convergence-post-breakthrough-orchestrator-era25.ts",
+  "paid-pilot-go-convergence-ui-era25.ts",
+  "paid-pilot-go-convergence-era25-policy.ts",
+  "evaluate-paid-pilot-go-convergence-era25.ts",
+  "load-paid-pilot-go-convergence-state-era25.ts",
 ] as const;
 
 const PRODUCT_ERA25_FILE_PATTERNS: readonly RegExp[] = [
@@ -65,6 +71,10 @@ const ALLOWED_ERA25_PROCESS_OPS_SCRIPTS: readonly string[] = [
   "sync-era25-first-product-slice-blueprint-report.ts",
   "validate-owner-daily-briefing-breakthrough-era25.ts",
   "run-owner-daily-briefing-breakthrough-post-gates-orchestrator-era25.ts",
+  "sync-owner-daily-briefing-breakthrough-era25-report.ts",
+  "validate-paid-pilot-go-convergence-era25.ts",
+  "run-paid-pilot-go-convergence-post-breakthrough-orchestrator-era25.ts",
+  "sync-paid-pilot-go-convergence-era25-report.ts",
 ] as const;
 
 const ILLEGAL_ERA25_OPS_PATTERN = /^validate-.+-era25\.ts$|^run-.+-era25\.ts$/;

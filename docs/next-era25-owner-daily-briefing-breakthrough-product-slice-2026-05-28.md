@@ -97,7 +97,7 @@ npm run test:ci:owner-daily-briefing-breakthrough-era25:cert
 
 ## Next step (after product slice ready)
 
-See [`next-era25-paid-pilot-go-convergence-2026-05-28.md`](./next-era25-paid-pilot-go-convergence-2026-05-28.md) — **paid pilot GO convergence on B3 tile**
+See [`next-era25-pilot-week1-execution-convergence-2026-05-28.md`](./next-era25-pilot-week1-execution-convergence-2026-05-28.md) — **pilot week 1 execution convergence** (after [`paid_pilot_go_convergence_era25_ready`](./next-era25-paid-pilot-go-convergence-2026-05-28.md))
 
 ---
 

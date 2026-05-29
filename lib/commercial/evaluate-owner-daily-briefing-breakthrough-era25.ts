@@ -15,6 +15,7 @@ import {
   countWiredBreakthroughBriefingTiles,
 } from "@/lib/briefing/owner-daily-briefing-breakthrough-era25";
 import { evaluateEra25FirstProductSliceBlueprintWithMilestones } from "@/scripts/ops/validate-era25-first-product-slice-blueprint";
+import { derivePaidPilotGoConvergenceState } from "@/lib/commercial/load-paid-pilot-go-convergence-state-era25";
 
 export function evaluateOwnerDailyBriefingBreakthroughEra25(
   env: NodeJS.ProcessEnv = process.env,
@@ -36,6 +37,7 @@ export function evaluateOwnerDailyBriefingBreakthroughEra25(
   const p0Artifact = loadP0StagingProofArtifact(root);
   const p0ProofStatus = p0Artifact?.p0ProofStatus ?? "awaiting_ops_credentials";
   const briefingSchemeCount = OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_BRIEFING_SCHEME.length;
+  const goState = derivePaidPilotGoConvergenceState(root);
 
   const briefingTiles = buildOwnerDailyBriefingBreakthroughEra25Tiles({
     blueprintMilestone: blueprint.era25FirstProductSliceBlueprintMilestone,
@@ -43,6 +45,7 @@ export function evaluateOwnerDailyBriefingBreakthroughEra25(
     blueprintBlocked: blueprint.evaluation.blueprintBlocked,
     p0ProofStatus,
     briefingSchemeCount,
+    goState,
   });
 
   const wiredBriefingTileCount = countWiredBreakthroughBriefingTiles(briefingTiles);

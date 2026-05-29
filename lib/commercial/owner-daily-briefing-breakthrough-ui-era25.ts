@@ -2,6 +2,10 @@
  * era25 Owner Daily Briefing Breakthrough UI slice.
  */
 import {
+  buildPaidPilotGoConvergenceEra25UiSlice,
+  type PaidPilotGoConvergenceEra25UiSlice,
+} from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
+import {
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_DOC,
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_FOREVER_COMMANDS,
   OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_GUARDRAILS,
@@ -47,6 +51,7 @@ export type OwnerDailyBriefingBreakthroughEra25UiSlice = {
   validateBlueprintCommand: string;
   todayHref: string;
   platformOpsHref: string;
+  paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
 export function buildOwnerDailyBriefingBreakthroughEra25UiSlice(input: {
@@ -56,6 +61,10 @@ export function buildOwnerDailyBriefingBreakthroughEra25UiSlice(input: {
   if (!input.blueprintVisible) return null;
 
   const result = evaluateOwnerDailyBriefingBreakthroughEra25WithMilestones(input.env);
+  const paidPilotGoConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
+    breakthroughVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_UI_POLICY_ID,
@@ -87,6 +96,7 @@ export function buildOwnerDailyBriefingBreakthroughEra25UiSlice(input: {
       "npm run ops:validate-era25-first-product-slice-blueprint -- --json",
     todayHref: `/dashboard/today${OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_PLATFORM_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_PLATFORM_ANCHOR}`,
+    paidPilotGoConvergence,
   };
 }
 

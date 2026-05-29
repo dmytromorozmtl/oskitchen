@@ -141,6 +141,7 @@ export function LaunchWizardView(props: {
         seriesAPartnerExpansion={model.seriesAPartnerExpansion}
         marketLeaderPositioning={model.marketLeaderPositioning}
         sustainedOperationalExcellence={model.sustainedOperationalExcellence}
+        paidPilotGoConvergence={model.paidPilotGoConvergence}
         compact={compact}
       />
 
