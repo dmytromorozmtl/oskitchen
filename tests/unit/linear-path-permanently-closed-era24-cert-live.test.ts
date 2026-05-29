@@ -42,7 +42,11 @@ describe("linear path permanently closed era24 CI certification (live repo)", ()
   it("documents step 16 with ops wiring", () => {
     const step16 = readFileSync(join(ROOT, LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC), "utf8");
     expect(step16).toContain("era24-linear-path-permanently-closed-v1");
+    expect(step16).toContain(
+      "run-linear-path-permanently-closed-post-absolute-end-orchestrator",
+    );
     expect(step16).toContain("ops:validate-linear-path-permanently-closed");
+    expect(step16).toContain("linearPathPermanentlyClosedMilestone");
     expect(step16).toContain("#linear-path-permanently-closed");
   });
 

@@ -1,7 +1,8 @@
 # KitchenOS — Шаг 16: Linear path permanently closed
 
-**Предусловие:** Step 15 absolute end active · Steady state · All era24 orchestration  
-**Policy:** `era24-linear-path-permanently-closed-v1` · Backlog `KOS-E24-016`  
+**Предусловие:** Step 15 absolute end active · `absoluteEndMilestone: absolute_end_healthy`  
+**Policy:** `era24-linear-path-permanently-closed-v1` · Orchestrator `era24-linear-path-permanently-closed-post-absolute-end-orchestrator-v1`  
+**Backlog:** `KOS-E24-016`  
 **Цель:** Terminal closure — **doc chain terminus, Step 17+ forbidden**
 
 ---
@@ -10,12 +11,28 @@
 
 **There is no Step 17 engineering in this linear chain.**
 
-Step 16 adds **terminal closure orchestration**:
+Step 16 is the **final engineering slice** in the commercial pilot linear path:
 
-- 16-step doc chain validation
-- Terminal closure report artifact
-- Platform ops `#linear-path-permanently-closed`
-- Explicit **Step 17+ forbidden** declaration
+- 16-step doc chain validation + missing-doc detection
+- Terminal closure orchestrator + report artifact
+- Platform ops `#linear-path-permanently-closed` with milestone badge
+- Explicit **Step 17+ forbidden** declaration (meta-doc + guard)
+
+---
+
+## Milestones (`linearPathPermanentlyClosedMilestone`)
+
+| Milestone | Meaning | Orchestrator exit |
+|-----------|---------|-------------------|
+| `absolute_end_blocked` | Step 15 not ready | `2` |
+| `attention_doc_chain` | Missing doc in 16-step chain | `0` |
+| `attention_terminus_guard` | Step 17 guard FAIL | `0` |
+| `linear_path_permanently_closed_healthy` | Doc chain complete + guard PASS | `0` |
+
+**Smoke readiness flags:**
+
+- `readyForAbsoluteEndSmokes` — absolute end not healthy
+- `readyForDocChainSmokes` — missing docs in `LINEAR_PATH_DOC_CHAIN_STEP_DOCS`
 
 ---
 
@@ -23,15 +40,35 @@ Step 16 adds **terminal closure orchestration**:
 
 ```bash
 npm run ops:validate-linear-path-permanently-closed -- --json
+npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --json
+npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --write
 npm run ops:sync-linear-path-permanently-closed-report -- --write
+npm run ops:validate-linear-chain-terminus-guard -- --json
 
 npm run test:ci:linear-path-permanently-closed-era24
 npm run test:ci:linear-path-permanently-closed-era24:cert
 ```
 
-**Artifact:** `artifacts/linear-path-permanently-closed-report.md`
+**Artifacts:**
+
+- `artifacts/linear-path-permanently-closed-report.md` — terminal closure report (milestones + doc chain)
+- Orchestrator report embedded in `--write` sync path
 
 **Workflow:** `.github/workflows/ops-linear-path-permanently-closed-validate.yml`
+
+---
+
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Orchestrator lib | `lib/commercial/linear-path-permanently-closed-post-absolute-end-orchestrator-era24.ts` |
+| Run script | `scripts/ops/run-linear-path-permanently-closed-post-absolute-end-orchestrator.ts` |
+| Validate + milestones | `scripts/ops/validate-linear-path-permanently-closed.ts` → `evaluateLinearPathPermanentlyClosedWithMilestones()` |
+| UI slice | `lib/commercial/linear-path-permanently-closed-ui-era24.ts` |
+| Panel | `components/dashboard/maintenance-mode-panel.tsx` → `#linear-path-permanently-closed` |
+| Terminus guard | `lib/commercial/linear-chain-terminus-guard-era24.ts` (Step 17 FORBIDDEN — not a path step) |
+| Policy | `lib/commercial/linear-path-permanently-closed-era24-policy.ts` |
 
 ---
 
@@ -48,12 +85,60 @@ Master catalog: **16 steps** (`ops:validate-commercial-pilot-path -- --json`)
 ```bash
 npm run test:ci:commercial-pilot-runbook:cert
 npm run ops:validate-linear-path-permanently-closed -- --json
+npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --write
 npm run ops:validate-steady-state-operator-loop -- --json
 npm run ops:sync-linear-path-permanently-closed-report -- --write
 npm run ops:sync-steady-state-operator-loop-report -- --write
 ```
 
 **Platform ops:** `#linear-path-permanently-closed`
+
+**Product surfaces:**
+
+- `/platform/commercial-pilot-ops#linear-path-permanently-closed` — terminal closure panel
+- `/dashboard/today` — maintenance compact (nested under absolute end)
+
+---
+
+## Weekly operator checklist
+
+- [ ] Validate JSON reviewed (`linearPathPermanentlyClosedMilestone`)
+- [ ] Terminus guard PASS (`ops:validate-linear-chain-terminus-guard -- --json`)
+- [ ] `artifacts/linear-path-permanently-closed-report.md` synced
+- [ ] 16-step doc chain cert green (never hand-edit PASS)
+- [ ] Release train includes commercial pilot cert
+
+---
+
+## Step 17 preview — FORBIDDEN (meta-doc only)
+
+See [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md)
+
+**There is no Step 17 engineering gate.**
+
+| Action | Verdict |
+|--------|---------|
+| Add Step 17 to linear chain | **FORBIDDEN** |
+| Add Step 18+ docs | **FORBIDDEN** |
+| Add era25+ code without charter | **FORBIDDEN** |
+| Repeat Step 12–16 rhythms | **REQUIRED** |
+
+**Guard (already wired):**
+
+```bash
+npm run ops:validate-linear-chain-terminus-guard -- --json
+```
+
+Policy: `era24-linear-chain-terminus-guard-v1` · Panel shows guard PASS/FAIL in `#linear-path-permanently-closed`
+
+**If an agent proposes "Step 17":** Reject. Redirect to Step 16 terminal closure or Step 1 P0 vault if path blocked.
+
+**era25+ exit (only path for new gates):**
+
+1. `npm run ops:export-era-charter-readiness-checklist -- --write`
+2. `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16
+3. New policy IDs `era25-*` with separate briefing scheme
+4. Honest NO-GO until human execution
 
 ---
 
@@ -63,8 +148,6 @@ npm run ops:sync-steady-state-operator-loop-report -- --write
 2. `docs/era25-<name>-charter-2026-*.md` — **outside** Steps 1–16
 3. New policy IDs + briefing scheme
 4. Honest NO-GO until human execution
-
-See [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md)
 
 ---
 

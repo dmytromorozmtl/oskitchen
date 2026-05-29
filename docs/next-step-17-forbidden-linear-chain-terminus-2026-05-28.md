@@ -2,6 +2,8 @@
 
 **Status:** **DO NOT IMPLEMENT · DO NOT DOCUMENT STEP 18+**
 
+**Prerequisite:** Step 16 `linear_path_permanently_closed_healthy` (or honest blocked milestone until P0 vault)
+
 ---
 
 ## Declaration
@@ -26,6 +28,7 @@ The KitchenOS commercial pilot linear doc chain **ends at Step 16**.
 ```bash
 npm run test:ci:commercial-pilot-runbook:cert
 npm run ops:validate-linear-path-permanently-closed -- --json
+npm run ops:run-linear-path-permanently-closed-post-absolute-end-orchestrator -- --write
 npm run ops:validate-steady-state-operator-loop -- --json
 npm run ops:sync-linear-path-permanently-closed-report -- --write
 ```
@@ -52,6 +55,32 @@ npm run ops:validate-linear-chain-terminus-guard -- --json
 Verifies catalog locked at **16 steps**, Step 17 forbidden doc present, no Step 18+ linear docs.
 
 Policy: `era24-linear-chain-terminus-guard-v1`
+
+**Guard checks (automated):**
+
+| Check | Expected |
+|-------|----------|
+| `COMMERCIAL_PILOT_PATH_STEP_CATALOG` count | 16 |
+| Max catalog step | 16 |
+| Step 17 in catalog | absent |
+| `docs/next-step-17-forbidden-linear-chain-terminus-2026-05-28.md` | present |
+| `docs/next-step-16-linear-path-permanently-closed-2026-05-28.md` | present |
+| `docs/next-step-18-*` linear docs | absent |
+
+Panel: `#linear-path-permanently-closed` shows guard PASS/FAIL + `linearPathPermanentlyClosedMilestone`
+
+---
+
+## Operator rhythm after Step 16
+
+Weekly:
+
+1. Review `linearPathPermanentlyClosedMilestone` from validate JSON
+2. Run orchestrator `--write` to sync reports
+3. Confirm terminus guard PASS
+4. Run `test:ci:commercial-pilot-runbook:cert` on release train
+
+**No new linear steps.** If product needs new gates → era25 charter process only.
 
 ---
 

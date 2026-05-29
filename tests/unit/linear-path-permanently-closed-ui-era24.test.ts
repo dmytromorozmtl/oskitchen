@@ -14,7 +14,11 @@ describe("linear-path-permanently-closed-ui-era24", () => {
     const slice = buildLinearPathPermanentlyClosedUiSlice({ absoluteEndActive: true, env: {} });
     expect(slice).not.toBeNull();
     expect(slice?.docChainSteps).toBe(16);
-    expect(slice?.validateCommand).toBe("npm run ops:validate-linear-path-permanently-closed");
+    expect(slice?.validateCommand).toBe("npm run ops:validate-linear-path-permanently-closed -- --json");
+    expect(slice?.postAbsoluteEndOrchestratorCommand).toContain(
+      "run-linear-path-permanently-closed-post-absolute-end-orchestrator",
+    );
+    expect(slice?.linearPathPermanentlyClosedMilestone).toBe("absolute_end_blocked");
     expect(slice?.terminusGuardPassed).toBe(true);
     expect(slice?.terminusGuardValidateCommand).toBe(
       "npm run ops:validate-linear-chain-terminus-guard",
@@ -26,5 +30,6 @@ describe("linear-path-permanently-closed-ui-era24", () => {
     expect(slice).not.toBeNull();
     if (!slice) return;
     expect(formatLinearPathPermanentlyClosedLabel(slice)).toContain("Step 17+ forbidden");
+    expect(formatLinearPathPermanentlyClosedLabel(slice)).toContain("absolute end blocked");
   });
 });

@@ -12,6 +12,7 @@ import {
 } from "@/lib/commercial/maintenance-mode-ui-era24";
 import { formatEngineeringPathTerminusProgressLabel } from "@/lib/commercial/engineering-path-terminus-ui-era24";
 import { formatCommercialPilotPathAbsoluteEndLabel } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
+import { formatLinearPathPermanentlyClosedLabel } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -355,11 +356,33 @@ export function MaintenanceModePanel(props: {
               Linear path permanently closed — doc chain terminus (Step 16)
             </p>
             <p className="mt-1 text-rose-200/80">
-              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
-                .linearPathPermanentlyClosed.linearPathPermanentlyClosed
-                ? `${slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.docChainSteps}-step doc chain · Step 17+ forbidden`
-                : "Complete absolute end first"}
+              {formatLinearPathPermanentlyClosedLabel(
+                slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                  .linearPathPermanentlyClosed,
+              )}
             </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Badge variant="outline" className="rounded-full font-mono text-[10px] text-rose-200">
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.linearPathPermanentlyClosedMilestone.replaceAll(
+                  "_",
+                  " ",
+                )}
+              </Badge>
+              <Badge variant="outline" className="rounded-full text-[10px] text-rose-300">
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.docChainSteps
+                }
+                -step doc chain
+              </Badge>
+              <Badge variant="outline" className="rounded-full text-[10px] text-rose-300">
+                guard{" "}
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                  .linearPathPermanentlyClosed.terminusGuardPassed
+                  ? "PASS"
+                  : "FAIL"}
+              </Badge>
+            </div>
             <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-400">
               {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.forbiddenActions.map(
                 (rule) => (
@@ -371,7 +394,19 @@ export function MaintenanceModePanel(props: {
               <span>
                 {
                   slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.postAbsoluteEndOrchestratorCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                     .linearPathPermanentlyClosed.validateCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.syncReportCommand
                 }
               </span>
               <span>
@@ -382,12 +417,11 @@ export function MaintenanceModePanel(props: {
               </span>
             </div>
             <p className="mt-2 text-rose-300/70">
-              Step 17 FORBIDDEN · guard{" "}
-              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
-                .linearPathPermanentlyClosed.terminusGuardPassed
-                ? "PASS"
-                : "FAIL"}{" "}
-              · max linear step 16
+              Step 17 FORBIDDEN · max linear step 16 · missing docs{" "}
+              {
+                slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                  .linearPathPermanentlyClosed.missingDocChainDocCount
+              }
             </p>
           </div>
         ) : null}

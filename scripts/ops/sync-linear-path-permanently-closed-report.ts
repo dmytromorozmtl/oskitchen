@@ -10,10 +10,10 @@ import {
   TERMINAL_FORBIDDEN_ACTIONS,
   TERMINAL_FOREVER_COMMANDS,
 } from "@/lib/commercial/linear-path-permanently-closed-phases-era24";
-import { evaluateLinearPathPermanentlyClosed } from "@/lib/commercial/evaluate-linear-path-permanently-closed";
+import { evaluateLinearPathPermanentlyClosedWithMilestones } from "@/scripts/ops/validate-linear-path-permanently-closed";
 
 export function buildLinearPathPermanentlyClosedReportMarkdown(
-  result: ReturnType<typeof evaluateLinearPathPermanentlyClosed>,
+  result: ReturnType<typeof evaluateLinearPathPermanentlyClosedWithMilestones>,
 ): string {
   const lines: string[] = [
     "# Linear Path — Permanently Closed Report",
@@ -22,11 +22,17 @@ export function buildLinearPathPermanentlyClosedReportMarkdown(
     "",
     "## Terminal status",
     "",
-    `- Terminal closure active: **${result.terminalClosureActive ? "yes" : "no"}**`,
-    `- Linear path permanently closed: **${result.linearPathPermanentlyClosed ? "yes" : "no"}**`,
-    `- Doc chain steps: **${result.docChainSteps}**`,
-    `- Path progress: **${result.completedSteps}/${result.totalSteps}**`,
-    `- GO decision: **${result.goDecision ?? "missing"}**`,
+    `- Terminal closure active: **${result.evaluation.terminalClosureActive ? "yes" : "no"}**`,
+    `- Linear path permanently closed: **${result.evaluation.linearPathPermanentlyClosed ? "yes" : "no"}**`,
+    `- Linear path milestone: **${result.linearPathPermanentlyClosedMilestone}**`,
+    `- Absolute end milestone: **${result.absoluteEnd.absoluteEndMilestone}**`,
+    `- Doc chain steps: **${result.evaluation.docChainSteps}**`,
+    `- Missing docs: **${result.missingDocChainDocs.length}**`,
+    `- Terminus guard: **${result.guard.guardPassed ? "PASS" : "FAIL"}**`,
+    `- Path progress: **${result.evaluation.completedSteps}/${result.evaluation.totalSteps}**`,
+    `- GO decision: **${result.evaluation.goDecision ?? "missing"}**`,
+    `- Ready for absolute end smokes: **${result.readyForAbsoluteEndSmokes ? "yes" : "no"}**`,
+    `- Ready for doc chain smokes: **${result.readyForDocChainSmokes ? "yes" : "no"}**`,
     "",
     "## Doc chain (Steps 1–16)",
     "",
@@ -65,7 +71,7 @@ export function buildLinearPathPermanentlyClosedReportMarkdown(
 
 function main() {
   const write = process.argv.includes("--write");
-  const result = evaluateLinearPathPermanentlyClosed();
+  const result = evaluateLinearPathPermanentlyClosedWithMilestones();
   const markdown = buildLinearPathPermanentlyClosedReportMarkdown(result);
 
   if (write) {

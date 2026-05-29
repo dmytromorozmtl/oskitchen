@@ -121,22 +121,19 @@ npm run ops:sync-commercial-pilot-path-absolute-end-report -- --write
 
 ---
 
-## Step 16 preview — Linear path permanently closed
+## Step 16 — Linear path permanently closed (implemented)
 
 See [`next-step-16-linear-path-permanently-closed-2026-05-28.md`](./next-step-16-linear-path-permanently-closed-2026-05-28.md)
 
-**Next engineering slice (Step 16 — terminal closure orchestration only):**
+Step 16 orchestrator: `era24-linear-path-permanently-closed-post-absolute-end-orchestrator-v1` · Milestones: `absolute_end_blocked` → doc chain / guard attention → `linear_path_permanently_closed_healthy`
 
-| Component | Artifact |
-|-----------|----------|
-| Orchestrator lib | `lib/commercial/linear-path-permanently-closed-post-absolute-end-orchestrator-era24.ts` (planned) |
-| Policy | `era24-linear-path-permanently-closed-post-absolute-end-orchestrator-v1` (planned) |
-| Milestones | `absolute_end_blocked` → doc chain attention → `linear_path_permanently_closed_healthy` |
-| Validate | `ops:validate-linear-path-permanently-closed -- --json` |
-| UI | `#linear-path-permanently-closed` inside absolute end panel (already wired) |
-| Briefing | **No new priority** · **Step 17+ forbidden** |
+**Human gate before healthy closure:** `absoluteEndMilestone: absolute_end_healthy` + doc chain cert green + terminus guard PASS.
 
-**Human gate before Step 16:** `absoluteEndMilestone: absolute_end_healthy` + absolute end report synced.
+---
+
+## Step 17 — FORBIDDEN (meta-doc only)
+
+See [`next-step-17-forbidden-linear-chain-terminus-2026-05-28.md`](./next-step-17-forbidden-linear-chain-terminus-2026-05-28.md) — **no engineering gate · no Step 18**
 
 ---
 
