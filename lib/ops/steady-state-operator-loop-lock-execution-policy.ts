@@ -32,6 +32,7 @@ export const STEADY_STATE_OPERATOR_LOOP_LOCK_EXECUTION_OPS_SCRIPTS = [
   "ops:sync-steady-state-operator-loop-report",
   "smoke:pilot-gono-go",
   "ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator",
+  "ops:run-commercial-pilot-path-absolute-end-lock-execution",
 ] as const;
 
 export const STEADY_STATE_OPERATOR_LOOP_LOCK_EXECUTION_CI_SCRIPTS = [

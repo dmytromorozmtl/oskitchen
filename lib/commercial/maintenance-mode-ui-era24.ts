@@ -72,6 +72,8 @@ export type MaintenanceModeUiSlice = {
   productionPilotReadyClosureExecutionArtifact: string;
   steadyStateOperatorLoopLockExecutionCommand: string;
   steadyStateOperatorLoopLockExecutionArtifact: string;
+  commercialPilotPathAbsoluteEndLockExecutionCommand: string;
+  commercialPilotPathAbsoluteEndLockExecutionArtifact: string;
   validateProductEvolutionCommand: string;
   validateProductEvolutionIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -230,6 +232,10 @@ export function buildMaintenanceModeUiSlice(input: {
       "npm run ops:run-steady-state-operator-loop-lock-execution -- --write",
     steadyStateOperatorLoopLockExecutionArtifact:
       "artifacts/steady-state-operator-loop-lock-execution-summary.json",
+    commercialPilotPathAbsoluteEndLockExecutionCommand:
+      "npm run ops:run-commercial-pilot-path-absolute-end-lock-execution -- --write",
+    commercialPilotPathAbsoluteEndLockExecutionArtifact:
+      "artifacts/commercial-pilot-path-absolute-end-lock-execution-summary.json",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
     validateProductEvolutionIntegrityCommand:
       "npm run ops:validate-sustained-product-evolution-integrity -- --json",

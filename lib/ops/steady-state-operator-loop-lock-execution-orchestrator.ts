@@ -430,6 +430,9 @@ export function buildSteadyStateOperatorLoopLockExecutionSummary(input: {
 
   if (milestone === "steady_state_operator_loop_passed") {
     recommendedCommands.push(
+      "npm run ops:run-commercial-pilot-path-absolute-end-lock-execution -- --write",
+    );
+    recommendedCommands.push(
       "npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write",
     );
   }

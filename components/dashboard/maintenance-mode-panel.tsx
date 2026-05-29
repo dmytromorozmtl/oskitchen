@@ -480,6 +480,12 @@ export function MaintenanceModePanel(props: {
               <span>
                 {
                   slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .commercialPilotPathAbsoluteEndLockExecutionCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                     .postSteadyStateOrchestratorCommand
                 }
               </span>
@@ -5813,6 +5819,7 @@ export function MaintenanceModePanel(props: {
                 <li>{slice.maintenanceModeExecutionCommand}</li>
                 <li>{slice.productionPilotReadyClosureExecutionCommand}</li>
                 <li>{slice.steadyStateOperatorLoopLockExecutionCommand}</li>
+                <li>{slice.commercialPilotPathAbsoluteEndLockExecutionCommand}</li>
                 <li>{slice.ciLoopExecutionCommand}</li>
                 <li>{slice.postProductEvolutionOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>

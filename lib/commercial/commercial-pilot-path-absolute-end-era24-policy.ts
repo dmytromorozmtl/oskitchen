@@ -6,10 +6,12 @@ import {
   COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PHASES_ERA24_POLICY_ID,
   COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-phases-era24";
-import { COMMERCIAL_PILOT_PATH_ABSOLUTE_END_UI_ERA24_POLICY_ID } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
 
 export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_POLICY_ID =
   "era24-commercial-pilot-path-absolute-end-v1" as const;
+
+export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_UI_ERA24_POLICY_ID =
+  "era24-commercial-pilot-path-absolute-end-ui-v1" as const;
 
 export { COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC };
 
@@ -25,6 +27,7 @@ export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_EXTENDS_POLICIES = [
 ] as const;
 
 export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_OPS_SCRIPTS = [
+  "ops:run-commercial-pilot-path-absolute-end-lock-execution",
   "ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator",
   "ops:validate-commercial-pilot-path-absolute-end",
   "ops:sync-commercial-pilot-path-absolute-end-report",

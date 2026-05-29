@@ -61,6 +61,8 @@ export type EngineeringPathTerminusUiSlice = {
   productionPilotReadyClosureExecutionArtifact: string;
   steadyStateOperatorLoopLockExecutionCommand: string;
   steadyStateOperatorLoopLockExecutionArtifact: string;
+  commercialPilotPathAbsoluteEndLockExecutionCommand: string;
+  commercialPilotPathAbsoluteEndLockExecutionArtifact: string;
   validateMaintenanceModeCommand: string;
   validateMaintenanceModeIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -197,6 +199,10 @@ export function buildEngineeringPathTerminusUiSlice(input: {
       "npm run ops:run-steady-state-operator-loop-lock-execution -- --write",
     steadyStateOperatorLoopLockExecutionArtifact:
       "artifacts/steady-state-operator-loop-lock-execution-summary.json",
+    commercialPilotPathAbsoluteEndLockExecutionCommand:
+      "npm run ops:run-commercial-pilot-path-absolute-end-lock-execution -- --write",
+    commercialPilotPathAbsoluteEndLockExecutionArtifact:
+      "artifacts/commercial-pilot-path-absolute-end-lock-execution-summary.json",
     validateMaintenanceModeCommand: "npm run ops:validate-maintenance-mode -- --json",
     validateMaintenanceModeIntegrityCommand:
       "npm run ops:validate-maintenance-mode-integrity -- --json",

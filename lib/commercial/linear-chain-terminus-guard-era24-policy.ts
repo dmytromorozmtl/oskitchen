@@ -2,15 +2,16 @@
  * Linear chain terminus guard policy — Step 17 FORBIDDEN (not a catalog step).
  */
 import { LINEAR_CHAIN_TERMINUS_GUARD_ERA24_POLICY_ID } from "@/lib/commercial/linear-chain-terminus-guard-era24";
-import { LINEAR_CHAIN_TERMINUS_GUARD_UI_ERA24_POLICY_ID } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
-import { LINEAR_PATH_PERMANENTLY_CLOSED_ERA24_POLICY_ID } from "@/lib/commercial/linear-path-permanently-closed-era24-policy";
 
 export { LINEAR_CHAIN_TERMINUS_GUARD_ERA24_POLICY_ID };
+
+export const LINEAR_CHAIN_TERMINUS_GUARD_UI_ERA24_POLICY_ID =
+  "era24-linear-chain-terminus-guard-ui-v1" as const;
 
 export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_BACKLOG_ID = "KOS-E24-017-GUARD" as const;
 
 export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_EXTENDS_POLICIES = [
-  LINEAR_PATH_PERMANENTLY_CLOSED_ERA24_POLICY_ID,
+  "era24-linear-path-permanently-closed-v1",
   LINEAR_CHAIN_TERMINUS_GUARD_ERA24_POLICY_ID,
   LINEAR_CHAIN_TERMINUS_GUARD_UI_ERA24_POLICY_ID,
   "era24-linear-chain-terminus-guard-post-linear-path-closed-orchestrator-v1",

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>KitchenOS Commercial Pilot Path Absolute End Lock</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
+    .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+    .banner-pass { background: #ecfdf5; border: 1px solid #6ee7b7; }
+    .banner-blocked { background: #fff7ed; border: 1px solid #fdba74; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9rem; }
+    th, td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+    th { background: #f9fafb; }
+    .status-pass { color: #047857; font-weight: 700; }
+    .status-blocked { color: #b45309; font-weight: 700; }
+    code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+    .honesty { font-size: 0.85rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Commercial Pilot Path Absolute End Lock — Step 16</h1>
+  <p class="honesty">Policy era44-commercial-pilot-path-absolute-end-lock-execution-v1 · Generated 2026-05-29T15:02:54.876Z</p>
+
+  <div class="banner banner-blocked">
+    <strong>Milestone:</strong> steady_state_operator_loop_blocked<br />
+    <strong>Steady-state loop lock:</strong> production_pilot_ready_blocked<br />
+    <strong>Absolute end:</strong> era25_sustained_ops_convergence_blocked · path 0/16<br />
+    <strong>GO:</strong> NO-GO · Customer: not recorded<br />
+    <strong>Report:</strong> missing · engineering closed: yes<br />
+    <strong>Commercial inflection:</strong> p0_ops_vault_blocked · score 24/100
+  </div>
+
+  <p class="honesty">PASS &gt; SKIPPED — Step 16 requires steady_state_operator_loop_passed. Never fabricate absolute end or linear path closure artifacts. Per-pilot GO isolation mandatory. ICP = all F&amp;B formats.</p>
+
+  <h2>Execution gates</h2>
+  <table>
+    <thead><tr><th></th><th>Gate</th><th>Proof</th><th>Detail</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Steady-state operator loop lock (Step 15)</td>
+        <td>production_pilot_ready_blocked</td>
+        <td>Complete Step 15 — steady-state operator loop lock execution.</td>
+        <td><code>npm run ops:run-steady-state-operator-loop-lock-execution -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Commercial pilot path absolute end active</td>
+        <td>era25_sustained_ops_convergence_blocked</td>
+        <td>Run absolute end post-steady-state orchestrator.</td>
+        <td><code>npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Commercial pilot path layers complete</td>
+        <td>path_blocked</td>
+        <td>Steps 1–11 gate validators and path catalog must be complete.</td>
+        <td><code>npm run ops:validate-commercial-pilot-path-absolute-end -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Absolute end milestone healthy</td>
+        <td>era25_sustained_ops_convergence_blocked</td>
+        <td>No upstream steady-state or path closure blockers.</td>
+        <td><code>npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-pass">✓</td>
+        <td>Post-terminus steady state integrity (era38)</td>
+        <td>integrity_passed</td>
+        <td>Absolute end lock requires honest post-terminus steady state chain.</td>
+        <td><code>npm run ops:validate-post-terminus-steady-state-integrity -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-pass">✓</td>
+        <td>Commercial pilot path absolute end integrity (era39)</td>
+        <td>integrity_passed</td>
+        <td>No absolute end attestation without honest steady-state integrity.</td>
+        <td><code>npm run ops:validate-commercial-pilot-path-absolute-end-integrity -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Absolute end closure report</td>
+        <td>missing</td>
+        <td>ops:sync-commercial-pilot-path-absolute-end-report documents honest closure.</td>
+        <td><code>npm run ops:sync-commercial-pilot-path-absolute-end-report -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Per-pilot GO isolation (Scale Gate 1)</td>
+        <td>pending</td>
+        <td>SCALE_PER_CUSTOMER_GO_ISOLATION=1 before absolute end lock sign-off.</td>
+        <td><code>npm run smoke:pilot-gono-go</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>GO decision maintained</td>
+        <td>NO-GO</td>
+        <td>Honest GO/NO-GO after steady-state operator loop lock.</td>
+        <td><code>npm run smoke:pilot-gono-go</code></td>
+      </tr>
+      <tr>
+        <td class="status-pass">✓</td>
+        <td>Linear path permanently closed integrity (era40)</td>
+        <td>integrity_passed</td>
+        <td>No fake linear path closure before absolute end lock baseline.</td>
+        <td><code>npm run ops:validate-linear-path-permanently-closed-integrity -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Linear engineering path closed</td>
+        <td>era25_sustained_ops_convergence_blocked</td>
+        <td>Commercial pilot path absolute end marks linear engineering closure.</td>
+        <td><code>npm run ops:validate-commercial-pilot-path-absolute-end -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Commercial pilot runbook cert chain</td>
+        <td>blocked</td>
+        <td>test:ci:commercial-pilot-runbook:cert on every release train.</td>
+        <td><code>npm run test:ci:commercial-pilot-runbook:cert</code></td>
+      </tr></tbody>
+  </table>
+
+  <h2>Path absolute end layers</h2>
+  <table>
+    <thead><tr><th>Step</th><th>Layer</th><th>Policy</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>S12</td>
+        <td>Maintenance mode</td>
+        <td><code>era24-maintenance-mode-v1</code></td>
+        <td>UI terminus</td>
+      </tr>
+      <tr>
+        <td>S13</td>
+        <td>Engineering path terminus</td>
+        <td><code>era24-engineering-path-terminus-v1</code></td>
+        <td>Master path orchestration</td>
+      </tr>
+      <tr>
+        <td>S14</td>
+        <td>Post-terminus steady state</td>
+        <td><code>era24-post-terminus-steady-state-v1</code></td>
+        <td>Repeat forever loop</td>
+      </tr>
+      <tr>
+        <td>S15</td>
+        <td>Commercial pilot path absolute end</td>
+        <td><code>era24-commercial-pilot-path-absolute-end-v1</code></td>
+        <td>Linear engineering closed</td>
+      </tr></tbody>
+  </table>
+
+  <h2>Recommended commands</h2>
+  <ul><li><code>npm run ops:run-steady-state-operator-loop-lock-execution -- --write</code></li><li><code>npm run ops:run-production-pilot-ready-closure-execution -- --write</code></li></ul>
+</body>
+</html>

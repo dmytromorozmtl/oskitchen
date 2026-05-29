@@ -6,10 +6,12 @@ import {
   POST_TERMINUS_STEADY_STATE_PHASES_ERA24_POLICY_ID,
   POST_TERMINUS_STEADY_STATE_STEP14_DOC,
 } from "@/lib/commercial/post-terminus-steady-state-phases-era24";
-import { POST_TERMINUS_STEADY_STATE_UI_ERA24_POLICY_ID } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 
 export const POST_TERMINUS_STEADY_STATE_ERA24_POLICY_ID =
   "era24-post-terminus-steady-state-v1" as const;
+
+export const POST_TERMINUS_STEADY_STATE_UI_ERA24_POLICY_ID =
+  "era24-post-terminus-steady-state-ui-v1" as const;
 
 export { POST_TERMINUS_STEADY_STATE_STEP14_DOC };
 

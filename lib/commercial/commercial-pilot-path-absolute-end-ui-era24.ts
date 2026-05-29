@@ -54,6 +54,8 @@ export type CommercialPilotPathAbsoluteEndUiSlice = {
   era25ExitSteps: readonly string[];
   guardrails: readonly string[];
   step15Doc: typeof COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC;
+  commercialPilotPathAbsoluteEndLockExecutionCommand: string;
+  commercialPilotPathAbsoluteEndLockExecutionArtifact: string;
   validateCommand: string;
   postSteadyStateOrchestratorCommand: string;
   validateSteadyStateCommand: string;
@@ -154,6 +156,10 @@ export function buildCommercialPilotPathAbsoluteEndUiSlice(input: {
     era25ExitSteps: PATH_ABSOLUTE_END_ERA25_EXIT,
     guardrails: PATH_ABSOLUTE_END_GUARDRAILS,
     step15Doc: COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC,
+    commercialPilotPathAbsoluteEndLockExecutionCommand:
+      "npm run ops:run-commercial-pilot-path-absolute-end-lock-execution -- --write",
+    commercialPilotPathAbsoluteEndLockExecutionArtifact:
+      "artifacts/commercial-pilot-path-absolute-end-lock-execution-summary.json",
     validateCommand: "npm run ops:validate-commercial-pilot-path-absolute-end",
     postSteadyStateOrchestratorCommand:
       "npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write",

@@ -150,6 +150,13 @@ function main() {
         { allowFail: true },
       ),
     );
+    steps.push(
+      runStep(
+        "commercial-pilot-path-absolute-end-lock",
+        "npm run ops:run-commercial-pilot-path-absolute-end-lock-execution -- --write",
+        { allowFail: true },
+      ),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

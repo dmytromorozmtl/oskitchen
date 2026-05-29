@@ -6,18 +6,19 @@ import {
   LINEAR_PATH_PERMANENTLY_CLOSED_PHASES_ERA24_POLICY_ID,
   LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC,
 } from "@/lib/commercial/linear-path-permanently-closed-phases-era24";
-import { LINEAR_PATH_PERMANENTLY_CLOSED_UI_ERA24_POLICY_ID } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
-import { COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_POLICY_ID } from "@/lib/commercial/commercial-pilot-path-absolute-end-era24-policy";
 
 export const LINEAR_PATH_PERMANENTLY_CLOSED_ERA24_POLICY_ID =
   "era24-linear-path-permanently-closed-v1" as const;
+
+export const LINEAR_PATH_PERMANENTLY_CLOSED_UI_ERA24_POLICY_ID =
+  "era24-linear-path-permanently-closed-ui-v1" as const;
 
 export { LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC };
 
 export const LINEAR_PATH_PERMANENTLY_CLOSED_ERA24_BACKLOG_ID = "KOS-E24-016" as const;
 
 export const LINEAR_PATH_PERMANENTLY_CLOSED_ERA24_EXTENDS_POLICIES = [
-  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_POLICY_ID,
+  "era24-commercial-pilot-path-absolute-end-v1",
   LINEAR_PATH_PERMANENTLY_CLOSED_PHASES_ERA24_POLICY_ID,
   LINEAR_PATH_PERMANENTLY_CLOSED_UI_ERA24_POLICY_ID,
   "era24-linear-path-permanently-closed-post-absolute-end-orchestrator-v1",
