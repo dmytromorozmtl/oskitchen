@@ -18,7 +18,9 @@ import type { ScaleReadinessUiSlice } from "@/lib/commercial/scale-readiness-ui-
 import type { SeriesAPartnerExpansionUiSlice } from "@/lib/commercial/series-a-partner-expansion-ui-era21";
 import type { MarketLeaderPositioningUiSlice } from "@/lib/commercial/market-leader-positioning-ui-era21";
 import { PaidPilotGoConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/paid-pilot-go-convergence-era25-strip";
+import { PilotWeek1ExecutionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/pilot-week1-execution-convergence-era25-strip";
 import type { PaidPilotGoConvergenceEra25UiSlice } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
+import type { PilotWeek1ExecutionConvergenceEra25UiSlice } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import type { LaunchWizardCommercialBlockersSlice } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
 import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import { LAUNCH_WIZARD_COMMERCIAL_OPS_CHECKLIST_DOC } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
@@ -35,6 +37,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
   marketLeaderPositioning?: MarketLeaderPositioningUiSlice | null;
   sustainedOperationalExcellence?: SustainedOperationalExcellenceUiSlice | null;
   paidPilotGoConvergence?: PaidPilotGoConvergenceEra25UiSlice | null;
+  pilotWeek1ExecutionConvergence?: PilotWeek1ExecutionConvergenceEra25UiSlice | null;
   compact?: boolean;
 }) {
   const {
@@ -48,6 +51,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
     marketLeaderPositioning = null,
     sustainedOperationalExcellence = null,
     paidPilotGoConvergence = null,
+    pilotWeek1ExecutionConvergence = null,
     compact = false,
   } = props;
   const decisionVariant =
@@ -176,6 +180,10 @@ export function LaunchWizardCommercialBlockersPanel(props: {
 
         {paidPilotGoConvergence ? (
           <PaidPilotGoConvergenceEra25Strip slice={paidPilotGoConvergence} />
+        ) : null}
+
+        {pilotWeek1ExecutionConvergence ? (
+          <PilotWeek1ExecutionConvergenceEra25Strip slice={pilotWeek1ExecutionConvergence} />
         ) : null}
 
         {pilotWeek1 ? (

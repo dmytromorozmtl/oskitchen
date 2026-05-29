@@ -85,6 +85,14 @@ import {
   mergeBriefingPilotWeek1TopActions,
 } from "@/lib/briefing/owner-daily-briefing-pilot-week1-era21";
 import {
+  mergeBriefingPaidPilotGoConvergenceTopActions,
+} from "@/lib/briefing/paid-pilot-go-convergence-briefing-era25";
+import {
+  mergeBriefingPilotWeek1ExecutionConvergenceEra25TopActions,
+} from "@/lib/briefing/pilot-week1-execution-convergence-briefing-era25";
+import { buildPaidPilotGoConvergenceEra25UiSlice } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
+import { buildPilotWeek1ExecutionConvergenceEra25UiSlice } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
+import {
   buildOwnerDailyBriefingMonth2MarketReadinessAction,
   mergeBriefingMonth2MarketReadinessTopActions,
 } from "@/lib/briefing/owner-daily-briefing-month2-market-readiness-era21";
@@ -431,8 +439,20 @@ export async function loadOwnerDailyBriefing(
     metricsBaseline: pilotArtifacts?.metricsBaseline ?? null,
     caseStudyDraft: pilotArtifacts?.caseStudyDraft ?? null,
   });
+  const paidPilotGoConvergenceEra25 = buildPaidPilotGoConvergenceEra25UiSlice({
+    breakthroughVisible: true,
+  });
+  const paidPilotGoConvergenceEra25RankedAction =
+    rolePack === "owner" ? paidPilotGoConvergenceEra25?.briefingAction ?? null : null;
+  const pilotWeek1ConvergenceEra25 = buildPilotWeek1ExecutionConvergenceEra25UiSlice({
+    goConvergenceVisible: true,
+  });
+  const pilotWeek1ConvergenceEra25RankedAction =
+    rolePack === "owner" ? pilotWeek1ConvergenceEra25?.briefingAction ?? null : null;
   const pilotWeek1RankedAction =
-    rolePack === "owner" ? buildOwnerDailyBriefingPilotWeek1Action(pilotWeek1) : null;
+    rolePack === "owner" && !pilotWeek1ConvergenceEra25
+      ? buildOwnerDailyBriefingPilotWeek1Action(pilotWeek1)
+      : null;
   const month2MarketReadiness = buildMonth2MarketReadinessUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
     metricsBaseline: month2Artifacts?.metricsBaseline ?? null,
@@ -1014,6 +1034,18 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && commercialGoClosureRankedAction) {
     allTopActions = mergeBriefingCommercialGoClosureTopActions(
       commercialGoClosureRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && paidPilotGoConvergenceEra25RankedAction) {
+    allTopActions = mergeBriefingPaidPilotGoConvergenceTopActions(
+      paidPilotGoConvergenceEra25RankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && pilotWeek1ConvergenceEra25RankedAction) {
+    allTopActions = mergeBriefingPilotWeek1ExecutionConvergenceEra25TopActions(
+      pilotWeek1ConvergenceEra25RankedAction,
       allTopActions,
     );
   }

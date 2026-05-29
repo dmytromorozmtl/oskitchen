@@ -21,6 +21,7 @@ describe("paid-pilot-go-convergence-ui-era25", () => {
     expect(slice?.postBreakthroughOrchestratorCommand).toContain(
       "run-paid-pilot-go-convergence-post-breakthrough-orchestrator-era25",
     );
+    expect(slice?.pilotWeek1ExecutionConvergence).not.toBeNull();
   });
 
   it("formats convergence label", () => {

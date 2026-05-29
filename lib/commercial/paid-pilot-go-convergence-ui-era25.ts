@@ -17,6 +17,10 @@ import {
 import type { OwnerDailyBriefingBreakthroughEra25Milestone } from "@/lib/commercial/owner-daily-briefing-breakthrough-post-gates-orchestrator-era25";
 import type { LaunchWizardPaidPilotGoConvergenceSlice } from "@/lib/briefing/paid-pilot-go-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import {
+  buildPilotWeek1ExecutionConvergenceEra25UiSlice,
+  type PilotWeek1ExecutionConvergenceEra25UiSlice,
+} from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import { evaluatePaidPilotGoConvergenceEra25WithMilestones } from "@/scripts/ops/validate-paid-pilot-go-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -52,6 +56,7 @@ export type PaidPilotGoConvergenceEra25UiSlice = {
   validateBreakthroughCommand: string;
   launchWizardHref: string;
   platformOpsHref: string;
+  pilotWeek1ExecutionConvergence: PilotWeek1ExecutionConvergenceEra25UiSlice | null;
 };
 
 export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
@@ -61,6 +66,10 @@ export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
   if (!input.breakthroughVisible) return null;
 
   const result = evaluatePaidPilotGoConvergenceEra25WithMilestones(input.env);
+  const pilotWeek1ExecutionConvergence = buildPilotWeek1ExecutionConvergenceEra25UiSlice({
+    goConvergenceVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: PAID_PILOT_GO_CONVERGENCE_ERA25_UI_POLICY_ID,
@@ -94,6 +103,7 @@ export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
       "npm run ops:validate-owner-daily-briefing-breakthrough-era25 -- --json",
     launchWizardHref: result.evaluation.launchWizardSlice.href,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PAID_PILOT_GO_CONVERGENCE_ERA25_PLATFORM_ANCHOR}`,
+    pilotWeek1ExecutionConvergence,
   };
 }
 

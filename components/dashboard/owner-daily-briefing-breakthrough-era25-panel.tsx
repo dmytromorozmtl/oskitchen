@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PaidPilotGoConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/paid-pilot-go-convergence-era25-strip";
+import { PilotWeek1ExecutionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/pilot-week1-execution-convergence-era25-strip";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -77,6 +78,11 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
         </p>
         {slice.paidPilotGoConvergence ? (
           <PaidPilotGoConvergenceEra25Strip slice={slice.paidPilotGoConvergence} />
+        ) : null}
+        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence ? (
+          <PilotWeek1ExecutionConvergenceEra25Strip
+            slice={slice.paidPilotGoConvergence.pilotWeek1ExecutionConvergence}
+          />
         ) : null}
       </CardContent>
     </Card>

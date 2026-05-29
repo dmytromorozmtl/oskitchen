@@ -105,7 +105,7 @@ npm run test:ci:owner-daily-briefing-breakthrough-era25
 
 ## Next step (after convergence ready)
 
-See [`next-era25-pilot-week1-execution-convergence-2026-05-28.md`](./next-era25-pilot-week1-execution-convergence-2026-05-28.md) — **pilot week 1 execution on platform ops**
+See [`next-era25-pilot-week1-execution-convergence-2026-05-28.md`](./next-era25-pilot-week1-execution-convergence-2026-05-28.md) — **pilot week 1 execution on platform ops** (implemented — see [`next-era25-month2-market-readiness-convergence-2026-05-28.md`](./next-era25-month2-market-readiness-convergence-2026-05-28.md) for next)
 
 ---
 

@@ -96,3 +96,21 @@ export function buildLaunchWizardPaidPilotGoConvergenceSlice(
     href: `/dashboard/launch-wizard#launch-wizard-commercial-blockers`,
   };
 }
+
+export function mergeBriefingPaidPilotGoConvergenceTopActions(
+  goConvergenceAction: OwnerDailyBriefingRankedAction | null,
+  generalActions: readonly OwnerDailyBriefingRankedAction[],
+): OwnerDailyBriefingRankedAction[] {
+  if (!goConvergenceAction) return [...generalActions];
+
+  const seen = new Set<string>();
+  const merged: OwnerDailyBriefingRankedAction[] = [];
+
+  for (const action of [goConvergenceAction, ...generalActions]) {
+    if (seen.has(action.id)) continue;
+    seen.add(action.id);
+    merged.push(action);
+  }
+
+  return merged.sort((a, b) => a.priority - b.priority);
+}
