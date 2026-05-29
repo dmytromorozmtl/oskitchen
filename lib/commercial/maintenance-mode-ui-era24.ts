@@ -64,6 +64,8 @@ export type MaintenanceModeUiSlice = {
   rhythmCalendarDoc: typeof MAINTENANCE_MODE_RHYTHM_CALENDAR_DOC;
   validateCommand: string;
   postProductEvolutionOrchestratorCommand: string;
+  ciLoopExecutionCommand: string;
+  ciLoopExecutionArtifact: string;
   validateProductEvolutionCommand: string;
   validateProductEvolutionIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -206,6 +208,10 @@ export function buildMaintenanceModeUiSlice(input: {
     validateCommand: "npm run ops:validate-maintenance-mode",
     postProductEvolutionOrchestratorCommand:
       "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
+    ciLoopExecutionCommand:
+      "npm run ops:run-continuous-improvement-loop-execution -- --write",
+    ciLoopExecutionArtifact:
+      "artifacts/continuous-improvement-loop-execution-summary.json",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
     validateProductEvolutionIntegrityCommand:
       "npm run ops:validate-sustained-product-evolution-integrity -- --json",

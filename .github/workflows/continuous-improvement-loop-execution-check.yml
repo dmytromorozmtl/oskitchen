@@ -1,0 +1,36 @@
+name: Continuous Improvement Loop Execution Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/ops/continuous-improvement-loop-execution-*.ts"
+      - "scripts/ops/run-continuous-improvement-loop-execution.ts"
+      - "artifacts/continuous-improvement-loop-execution-summary.json"
+  pull_request:
+    paths:
+      - "lib/ops/continuous-improvement-loop-execution-*.ts"
+      - "scripts/ops/run-continuous-improvement-loop-execution.ts"
+  workflow_dispatch:
+
+jobs:
+  continuous-improvement-loop-execution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Assess continuous improvement loop execution (honest blocked state in CI)
+        run: npm run ops:run-continuous-improvement-loop-execution -- --write || true
+      - name: Upload execution report artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: continuous-improvement-loop-execution-report
+          path: |
+            artifacts/continuous-improvement-loop-execution-summary.json
+            artifacts/continuous-improvement-loop-execution-report.html
+          if-no-files-found: warn

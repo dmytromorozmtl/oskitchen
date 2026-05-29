@@ -32,6 +32,7 @@ export const SUSTAINED_PRODUCT_EVOLUTION_EXECUTION_OPS_SCRIPTS = [
   "smoke:pilot-metrics-baseline",
   "smoke:competitor-feature-gap-matrix",
   "smoke:pilot-forbidden-claims-enforcement",
+  "ops:run-continuous-improvement-loop-execution",
   "ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator",
 ] as const;
 

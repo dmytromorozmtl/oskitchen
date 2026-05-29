@@ -389,7 +389,7 @@ export function buildSustainedProductEvolutionExecutionSummary(input: {
 
   if (milestone === "sustained_product_evolution_passed") {
     recommendedCommands.push(
-      "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
+      "npm run ops:run-continuous-improvement-loop-execution -- --write",
     );
   }
 

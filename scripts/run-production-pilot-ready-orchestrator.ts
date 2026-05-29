@@ -122,6 +122,13 @@ function main() {
         { allowFail: true },
       ),
     );
+    steps.push(
+      runStep(
+        "continuous-improvement-loop",
+        "npm run ops:run-continuous-improvement-loop-execution -- --write",
+        { allowFail: true },
+      ),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",
