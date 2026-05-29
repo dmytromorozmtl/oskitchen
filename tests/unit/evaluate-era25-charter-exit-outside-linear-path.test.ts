@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   discoverEra25CharterDocs,
   evaluateEra25CharterExitOutsideLinearPath,
+  type Era25CharterExitTerminusGuardSnapshot,
 } from "@/lib/commercial/evaluate-era25-charter-exit-outside-linear-path";
 
 describe("evaluate-era25-charter-exit-outside-linear-path", () => {
@@ -21,5 +22,16 @@ describe("evaluate-era25-charter-exit-outside-linear-path", () => {
     const result = evaluateEra25CharterExitOutsideLinearPath({});
     expect(result.criteriaCount).toBe(5);
     expect(result.processDoc).toContain("next-era25-charter-exit");
+  });
+
+  it("builds lightweight terminus guard snapshot without heavy orchestrator imports", () => {
+    const result = evaluateEra25CharterExitOutsideLinearPath({});
+    const snapshot: Era25CharterExitTerminusGuardSnapshot = result.terminusGuard;
+    expect(snapshot.guard.guardPassed).toBe(true);
+    expect(snapshot.linearPath.linearPathPermanentlyClosedMilestone).toBe(
+      snapshot.linearPathPermanentlyClosedMilestone,
+    );
+    expect(typeof snapshot.readyForLinearPathClosureSmokes).toBe("boolean");
+    expect(typeof snapshot.readyForCatalogIntegritySmokes).toBe("boolean");
   });
 });
