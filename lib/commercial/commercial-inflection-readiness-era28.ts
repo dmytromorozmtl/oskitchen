@@ -9,6 +9,7 @@ import { evaluateP0VaultEnv } from "@/scripts/ops/validate-p0-vault-env";
 import { loadP0StagingProofArtifact } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/pilot-gono-go-era17-policy";
+import { evaluatePilotGoNoGoIntegrity } from "@/lib/commercial/pilot-gono-go-integrity-era28";
 import { evaluateTier2StagingGoldenPathIntegrity } from "@/lib/commercial/tier2-staging-golden-path-integrity-era28";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
 import { TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC } from "@/lib/commercial/tier2-staging-golden-path-era20-policy";
@@ -123,13 +124,18 @@ export function buildCommercialInflectionBlockers(input: {
   tier2Artifact: Tier2StagingGoldenPathSummary | null;
   goNoGoArtifact: PilotGoNoGoSummary | null;
   tier2IntegrityPassed?: boolean;
+  goNoGoIntegrityPassed?: boolean;
 }): CommercialInflectionBlocker[] {
   const p0ProofStatus = input.p0Artifact?.p0ProofStatus ?? "awaiting_ops_credentials";
   const p0Passed = p0ProofStatus === "proof_passed";
   const tier2IntegrityPassed = input.tier2IntegrityPassed ?? true;
+  const goNoGoIntegrityPassed = input.goNoGoIntegrityPassed ?? true;
   const tier2Passed =
     input.tier2Artifact?.tier2ProofStatus === "proof_passed" && tier2IntegrityPassed;
-  const goDecision = input.goNoGoArtifact?.decision ?? null;
+  const goDecisionRaw = input.goNoGoArtifact?.decision ?? null;
+  const goDecision =
+    goDecisionRaw === "GO" && goNoGoIntegrityPassed ? "GO" : goDecisionRaw;
+  const goPassed = goDecision === "GO";
   const integrationLive = countIntegrationRegistryLive();
   const channelLive = countChannelRegistryLive();
 
@@ -227,11 +233,12 @@ export function buildCommercialInflectionBlockers(input: {
       priority: "P0",
       role: "pm",
       title: "ICP qualification + signed LOI",
-      detail:
-        goDecision === "GO"
-          ? "GO artifact includes customer execution."
+      detail: goPassed
+        ? "GO artifact includes customer execution — integrity guard PASS."
+        : !goNoGoIntegrityPassed && goDecisionRaw === "GO"
+          ? "GO artifact integrity FAIL — fake GO or missing LOI/evidence."
           : "No paid pilot customer — Era 20 ICP bridge template only.",
-      status: goDecision === "GO" ? "done" : "human_required",
+      status: goPassed ? "done" : "human_required",
       validateCommand: "npm run smoke:pilot-gono-go",
       docPath: "docs/era20-first-paid-pilot-package-2026-05-28.md",
       artifactPath: PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT,
@@ -276,6 +283,20 @@ export function buildCommercialInflectionBlockers(input: {
       docPath: TIER2_STAGING_GOLDEN_PATH_ERA20_PLAYBOOK_DOC,
       artifactPath: TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT,
       platformRoute: "/platform/commercial-pilot-ops#tier2-golden-path",
+    },
+    {
+      id: "stop_pilot_gono_go_fake_go",
+      priority: "STOP",
+      role: "stop",
+      title: "Pilot GO requires LOI + evidence gates + engineering prerequisites",
+      detail: goNoGoIntegrityPassed
+        ? "GO integrity guard PASS — decision GO only when recomputed from evidence."
+        : "GO artifact without customer, blockers, or failed gates — CI blocks merge.",
+      status: goNoGoIntegrityPassed ? "done" : input.goNoGoArtifact ? "blocked" : "done",
+      validateCommand: "npm run ops:validate-pilot-gono-go-integrity -- --json",
+      docPath: "docs/era20-pilot-gono-go-blocker-playbook-2026-05-28.md",
+      artifactPath: PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT,
+      platformRoute: "/platform/commercial-pilot-ops#pilot-gono-go",
     },
     {
       id: "stop_ux_cycles_before_p0",
@@ -415,7 +436,9 @@ export function evaluateCommercialInflectionReadiness(
   const p0ProofPassed = p0ProofStatus === "proof_passed";
   const tier2ProofPassed =
     tier2Artifact?.tier2ProofStatus === "proof_passed" && tier2Integrity.integrityPassed;
-  const goDecision = goNoGoArtifact?.decision ?? null;
+  const goDecisionRaw = goNoGoArtifact?.decision ?? null;
+  const goDecision =
+    goDecisionRaw === "GO" && goNoGoIntegrity.integrityPassed ? "GO" : goDecisionRaw;
 
   const blockedP0Count = blockers.filter(
     (row) => row.priority === "P0" && (row.status === "blocked" || row.status === "human_required"),
@@ -456,7 +479,17 @@ export function evaluateCommercialInflectionReadiness(
               "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
             ] as const)
         : goDecision !== "GO"
-          ? (["npm run smoke:pilot-gono-go", "npm run smoke:pilot-forbidden-claims-enforcement"] as const)
+          ? !goNoGoIntegrity.integrityPassed
+            ? ([
+                "npm run ops:validate-pilot-gono-go-integrity -- --json",
+                "npm run smoke:pilot-gono-go",
+                "npm run smoke:pilot-forbidden-claims-enforcement",
+              ] as const)
+            : ([
+                "npm run smoke:pilot-gono-go",
+                "npm run smoke:pilot-forbidden-claims-enforcement",
+                "npm run ops:validate-pilot-gono-go-integrity -- --json",
+              ] as const)
           : ([
               "npm run test:ci:commercial-pilot-runbook:cert",
               "npm run ops:validate-commercial-inflection-readiness -- --json",

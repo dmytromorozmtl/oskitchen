@@ -27,6 +27,8 @@ export type LaunchWizardCommercialInflectionSlice = {
   integrationHealthHref: string;
   validateCommand: string;
   integrityValidateCommand: string;
+  tier2IntegrityValidateCommand: string;
+  goIntegrityValidateCommand: string;
 };
 
 export function buildLaunchWizardCommercialInflectionSlice(
@@ -48,6 +50,9 @@ export function buildLaunchWizardCommercialInflectionSlice(
     integrationHealthHref: uiSlice.integrationHealthHref,
     validateCommand: uiSlice.validateCommand,
     integrityValidateCommand: "npm run ops:validate-p0-staging-proof-integrity -- --json",
+    tier2IntegrityValidateCommand:
+      "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
+    goIntegrityValidateCommand: "npm run ops:validate-pilot-gono-go-integrity -- --json",
   };
 }
 

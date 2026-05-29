@@ -22,6 +22,7 @@ describe("commercial-inflection-readiness-era28", () => {
     const stopRule = result.blockers.find((row) => row.id === "stop_skipped_as_pass");
     expect(stopRule?.validateCommand).toContain("validate-p0-staging-proof-integrity");
     expect(result.blockers.some((row) => row.id === "stop_tier2_fake_pass")).toBe(true);
+    expect(result.blockers.some((row) => row.id === "stop_pilot_gono_go_fake_go")).toBe(true);
   });
 
   it("blocks tier2 PASS when integrity detects fake proof_passed", () => {

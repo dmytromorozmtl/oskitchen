@@ -52,8 +52,8 @@ npm run ops:validate-commercial-inflection-readiness -- --json
 
 ## Next step after Phase B PASS
 
-1. `npm run smoke:pilot-gono-go` with real customer evidence
-2. `npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write`
+1. Commercial GO closure Phase C — [`docs/next-step-commercial-go-closure-phase-c-product-2026-05-28.md`](./next-step-commercial-go-closure-phase-c-product-2026-05-28.md)
+2. `npm run smoke:pilot-gono-go` with real customer evidence + GO integrity baseline
 3. Master execution train — [`docs/next-step-master-execution-2026-05-28.md`](./next-step-master-execution-2026-05-28.md)
 
 **Following engineering slice (optional):** PostHog `briefing_click` on Tier 2 / inflection CTAs · commercial inflection report auto-sync on tier2 artifact change.

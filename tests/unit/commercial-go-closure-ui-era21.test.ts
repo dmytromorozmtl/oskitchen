@@ -49,6 +49,37 @@ describe("commercial-go-closure-ui-era21", () => {
     expect(formatCommercialGoClosureProgressLabel(slice!)).toContain("NO-GO");
   });
 
+  it("visible when decision GO but integrity fails", () => {
+    const slice = buildCommercialGoClosureUiSlice({
+      p0ProofStatus: "proof_passed",
+      tier2ProofStatus: "proof_passed",
+      goNoGoSummary: {
+        version: "era17-pilot-gono-go-v1",
+        runAt: new Date().toISOString(),
+        decision: "GO",
+        blockers: ["No signed LOI"],
+        warnings: [],
+        customerExecutionStatus: "skipped_missing_customer",
+        customerName: null,
+        loiSignedDate: null,
+        prospectExecutionStatus: "none",
+        prospectName: null,
+        icpQualification: { qualified: false, missingCriteria: [], disqualifiers: [] },
+        evidenceGates: [],
+        evaluatorInput: {
+          tier0Pass: true,
+          tier1Pass: true,
+          tier2Pass: true,
+          roleChecklistsComplete: true,
+          forbiddenClaimsInContract: true,
+          icpQualified: true,
+        },
+      },
+    });
+    expect(slice?.goIntegrityFailed).toBe(true);
+    expect(slice?.blocked).toBe(true);
+  });
+
   it("hidden when decision is GO", () => {
     expect(
       buildCommercialGoClosureUiSlice({
@@ -70,14 +101,26 @@ describe("commercial-go-closure-ui-era21", () => {
             missingCriteria: [],
             disqualifiers: [],
           },
-          evidenceGates: [],
+          evidenceGates: [
+            { id: "tier0", label: "Tier 0", pass: true, reason: "ok" },
+            { id: "tier1", label: "Tier 1", pass: true, reason: "ok" },
+            { id: "tier2", label: "Tier 2", pass: true, reason: "ok" },
+            { id: "icp_qualification", label: "ICP", pass: true, reason: "ok" },
+            {
+              id: "forbidden_claims_enforcement",
+              label: "Forbidden claims",
+              pass: true,
+              reason: "ok",
+            },
+            { id: "p0_staging_proof", label: "P0", pass: true, reason: "ok" },
+          ],
           evaluatorInput: {
             tier0Pass: true,
             tier1Pass: true,
             tier2Pass: true,
-            tier3Pass: false,
+            tier3Pass: true,
             roleChecklistsComplete: true,
-            forbiddenClaimsInContract: true,
+            forbiddenClaimsInContract: false,
             icpQualified: true,
             stagingUrl: "https://x.example.com",
             commitSha: "abc",

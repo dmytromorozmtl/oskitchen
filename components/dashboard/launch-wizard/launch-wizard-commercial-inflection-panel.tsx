@@ -53,6 +53,8 @@ export function LaunchWizardCommercialInflectionPanel(props: {
           </Button>
         </div>
         <p className="font-mono text-[10px] text-muted-foreground">{slice.integrityValidateCommand}</p>
+        <p className="font-mono text-[10px] text-muted-foreground">{slice.tier2IntegrityValidateCommand}</p>
+        <p className="font-mono text-[10px] text-muted-foreground">{slice.goIntegrityValidateCommand}</p>
       </CardContent>
     </Card>
   );

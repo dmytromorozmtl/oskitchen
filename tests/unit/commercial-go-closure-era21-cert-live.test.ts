@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   COMMERCIAL_GO_CLOSURE_ERA21_CI_SCRIPTS,
   COMMERCIAL_GO_CLOSURE_ERA21_OPS_SCRIPTS,
+  COMMERCIAL_GO_CLOSURE_ERA21_PHASE_C_DOC,
   COMMERCIAL_GO_CLOSURE_ERA21_POLICY_ID,
   COMMERCIAL_GO_CLOSURE_ERA21_PRODUCT_SURFACES,
   COMMERCIAL_GO_CLOSURE_ERA21_UNIT_TESTS,
@@ -34,6 +35,12 @@ describe("commercial go closure era21 CI certification (live repo)", () => {
     ]) {
       expect(scripts[name], `missing ${name}`).toBeTruthy();
     }
+  });
+
+  it("documents phase C product doc", () => {
+    const phaseC = readFileSync(join(ROOT, COMMERCIAL_GO_CLOSURE_ERA21_PHASE_C_DOC), "utf8");
+    expect(phaseC).toContain("validate-pilot-gono-go-integrity");
+    expect(phaseC).toContain("stop_pilot_gono_go_fake_go");
   });
 
   it("documents step 3 execution", () => {

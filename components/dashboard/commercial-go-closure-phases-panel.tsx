@@ -53,6 +53,11 @@ export function CommercialGoClosurePhasesPanel(props: {
                 customer: {slice.customerExecutionStatus}
               </Badge>
             ) : null}
+            {slice.goIntegrityFailed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                GO integrity FAIL
+              </Badge>
+            ) : null}
           </div>
         ) : (
           <p className="text-sm font-medium">{formatCommercialGoClosureProgressLabel(slice)}</p>
@@ -115,6 +120,9 @@ export function CommercialGoClosurePhasesPanel(props: {
                 <li>{slice.postTier2OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.validateTier2GateCommand}</li>
+                <li>{slice.validateTier2IntegrityCommand}</li>
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>

@@ -91,6 +91,8 @@ export function buildCommercialGoClosurePostTier2OrchestratorSummary(input: {
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
+        "npm run ops:validate-pilot-gono-go-integrity -- --json",
         "npm run ops:validate-tier2-golden-path-env -- --json",
         "npm run ops:validate-commercial-go-closure-env -- --json",
         COMMERCIAL_GO_CLOSURE_POST_TIER2_ORCHESTRATOR_COMMAND + " -- --write",

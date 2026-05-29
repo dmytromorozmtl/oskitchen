@@ -15,6 +15,7 @@ import {
   type CommercialGoClosurePhaseStatus,
 } from "@/lib/commercial/commercial-go-closure-phases-era21";
 import { PILOT_GONOGO_SUMMARY_ARTIFACT_PATH } from "@/lib/commercial/commercial-go-closure-phases-era21";
+import { evaluatePilotGoNoGoIntegrity } from "@/lib/commercial/pilot-gono-go-integrity-era28";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
@@ -57,8 +58,16 @@ export function buildCommercialGoClosureUiSlice(input: {
   });
   if (!prerequisites.prerequisitesComplete) return null;
 
+  const goIntegrity = evaluatePilotGoNoGoIntegrity(process.cwd(), {
+    artifactOverride: input.goNoGoSummary,
+    p0ProofStatusOverride: input.p0ProofStatus,
+    tier2ProofStatusOverride: input.tier2ProofStatus,
+  });
+
   const decision = input.goNoGoSummary?.decision ?? null;
-  const blocked = decision !== "GO";
+  const goHonest = decision === "GO" && goIntegrity.integrityPassed;
+  const blocked = !goHonest;
+  const goIntegrityFailed = decision === "GO" && !goIntegrity.integrityPassed;
 
   if (!blocked) return null;
 
@@ -94,7 +103,13 @@ export function buildCommercialGoClosureUiSlice(input: {
     exportReadinessChecklistCommand:
       "npm run ops:export-commercial-go-closure-readiness-checklist -- --write",
     validateTier2GateCommand: "npm run ops:validate-tier2-golden-path-env -- --json",
+    validateTier2IntegrityCommand:
+      "npm run ops:validate-tier2-staging-golden-path-integrity -- --json",
     forbiddenClaimsCommand: "npm run smoke:pilot-forbidden-claims-enforcement",
+    integrityValidateCommand: "npm run ops:validate-pilot-gono-go-integrity -- --json",
+    syncIntegrityBaselineCommand: "npm run ops:sync-pilot-gono-go-integrity-baseline -- --write",
+    goIntegrityPassed: goIntegrity.integrityPassed,
+    goIntegrityFailed,
     goClosureMilestone,
     orchestratorCommand: "npm run smoke:pilot-gono-go",
     implementationHref: "/dashboard/implementation",

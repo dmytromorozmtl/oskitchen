@@ -568,6 +568,68 @@ export function buildPilotGoNoGoSummary(input: {
   };
 }
 
+const PILOT_GONOGO_CRITICAL_EVIDENCE_GATE_IDS = [
+  "tier0",
+  "tier1",
+  "tier2",
+  "icp_qualification",
+  "forbidden_claims_enforcement",
+  "p0_staging_proof",
+] as const;
+
+export function recomputePilotGoNoGoDecisionFromSummary(
+  summary: PilotGoNoGoSummary,
+): PilotGoNoGoSummary["decision"] {
+  const evaluation = evaluateCommercialPilotGoNoGo(summary.evaluatorInput);
+  const blockers = [...evaluation.blockers];
+
+  if (summary.customerExecutionStatus === "skipped_missing_customer") {
+    blockers.push("No signed LOI / customer on record (era17-pilot-gono-go-v1)");
+  }
+
+  const forbiddenClaimsGate = summary.evidenceGates.find(
+    (gate) => gate.id === "forbidden_claims_enforcement",
+  );
+  if (forbiddenClaimsGate && !forbiddenClaimsGate.pass) {
+    blockers.push(
+      "Pre-sales forbidden-claims enforcement not passed (era17-pilot-forbidden-claims-enforcement-v1)",
+    );
+  }
+
+  const p0StagingProofGate = summary.evidenceGates.find((gate) => gate.id === "p0_staging_proof");
+  if (p0StagingProofGate && !p0StagingProofGate.pass) {
+    blockers.push(
+      "P0 staging proof not passed (era17-p0-staging-proof-unblock-v1) — SSO IdP, GitHub first-green, or channel live smoke incomplete",
+    );
+  }
+
+  for (const gateId of PILOT_GONOGO_CRITICAL_EVIDENCE_GATE_IDS) {
+    const gate = summary.evidenceGates.find((row) => row.id === gateId);
+    if (gate && !gate.pass) {
+      blockers.push(`${gate.label} not passed (${gate.id})`);
+    }
+  }
+
+  if (summary.blockers.length > 0) {
+    for (const blocker of summary.blockers) {
+      if (!blockers.includes(blocker)) {
+        blockers.push(blocker);
+      }
+    }
+  }
+
+  if (blockers.length > 0) {
+    return "NO-GO";
+  }
+
+  const warnings = [...evaluation.warnings, ...summary.warnings];
+  if (warnings.length > 0) {
+    return "CONDITIONAL";
+  }
+
+  return "GO";
+}
+
 export function formatPilotGoNoGoReportLines(summary: PilotGoNoGoSummary): string[] {
   return [
     `Pilot GO/NO-GO (${summary.version}) — decision: ${summary.decision}`,

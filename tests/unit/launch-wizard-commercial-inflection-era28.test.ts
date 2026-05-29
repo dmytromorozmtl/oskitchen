@@ -11,6 +11,7 @@ describe("launch-wizard-commercial-inflection-era28", () => {
     const slice = buildLaunchWizardCommercialInflectionSlice();
     expect(slice?.policyId).toBe(LAUNCH_WIZARD_COMMERCIAL_INFLECTION_ERA28_POLICY_ID);
     expect(slice?.integrityValidateCommand).toContain("validate-p0-staging-proof-integrity");
+    expect(slice?.goIntegrityValidateCommand).toContain("validate-pilot-gono-go-integrity");
     expect(slice?.platformOpsHref).toContain("commercial-inflection-readiness");
   });
 
