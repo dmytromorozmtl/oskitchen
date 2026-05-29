@@ -12,7 +12,7 @@ import { evaluateMaintenanceMode } from "@/scripts/ops/validate-maintenance-mode
 describe("maintenance-mode-post-product-evolution-orchestrator-era24", () => {
   it("blocks when product evolution is not ready", () => {
     const evaluation = evaluateMaintenanceMode({});
-    expect(evaluation.maintenanceModeMilestone).toBe("product_evolution_blocked");
+    expect(evaluation.maintenanceModeMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(evaluation.maintenanceModeActive).toBe(false);
   });
 
@@ -36,6 +36,7 @@ describe("maintenance-mode-post-product-evolution-orchestrator-era24", () => {
     const milestone = resolveMaintenanceModeMilestone({
       maintenanceModeActive: true,
       productEvolutionReady: true,
+      sustainedOpsConvergenceReady: true,
       rhythms,
     });
     expect(milestone).toBe("maintenance_mode_healthy");
@@ -44,7 +45,7 @@ describe("maintenance-mode-post-product-evolution-orchestrator-era24", () => {
   it("resolves attention_weekly_rhythm when Wed integration is overdue", () => {
     const milestone = resolveMaintenanceModeMilestoneFromRhythmStatuses(
       [{ id: "weekly_wed_integration_health", status: "overdue" }],
-      { maintenanceModeActive: true, productEvolutionReady: true },
+      { maintenanceModeActive: true, productEvolutionReady: true, sustainedOpsConvergenceReady: true },
     );
     expect(milestone).toBe("attention_weekly_rhythm");
   });
@@ -52,7 +53,7 @@ describe("maintenance-mode-post-product-evolution-orchestrator-era24", () => {
   it("resolves attention_monthly_cadence when W1 metrics baseline is due soon", () => {
     const milestone = resolveMaintenanceModeMilestoneFromRhythmStatuses(
       [{ id: "monthly_w1_metrics_baseline", status: "due_soon" }],
-      { maintenanceModeActive: true, productEvolutionReady: true },
+      { maintenanceModeActive: true, productEvolutionReady: true, sustainedOpsConvergenceReady: true },
     );
     expect(milestone).toBe("attention_monthly_cadence");
   });
@@ -66,9 +67,9 @@ describe("maintenance-mode-post-product-evolution-orchestrator-era24", () => {
         rhythmCalendarDocPresent: true,
       },
     });
-    expect(summary.milestone).toBe("product_evolution_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(summary.recommendedCommands[0]).toContain(
-      "sustained-product-evolution-post-improvement-loop-orchestrator",
+      "sustained-operational-excellence-convergence-era25",
     );
   });
 

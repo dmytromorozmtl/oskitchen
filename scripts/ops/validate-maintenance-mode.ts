@@ -6,6 +6,7 @@ import {
   resolveMaintenanceModePrerequisites,
   resolveProductEvolutionReady,
 } from "@/lib/commercial/maintenance-mode-phases-era24";
+import { resolveEra25PureOperationalModeContext } from "@/lib/commercial/sustained-product-evolution-phases-era23";
 import { evaluateContinuousImprovementLoop } from "@/scripts/ops/validate-continuous-improvement-loop";
 import { readContinuousImprovementLoopArtifacts } from "@/scripts/ops/validate-continuous-improvement-loop";
 import { evaluateSustainedProductEvolution } from "@/scripts/ops/validate-sustained-product-evolution";
@@ -36,9 +37,11 @@ export function evaluateMaintenanceMode(env: NodeJS.ProcessEnv = process.env): {
     competitorMatrix: artifacts.competitorMatrix,
     env,
   });
+  const era25 = resolveEra25PureOperationalModeContext(env);
   const prerequisites = resolveMaintenanceModePrerequisites({
     goDecision,
     productEvolutionReady,
+    era25,
   });
   const improvementLoop = evaluateContinuousImprovementLoop(env);
   const productEvolution = evaluateSustainedProductEvolution(env);
@@ -66,6 +69,7 @@ export function evaluateMaintenanceMode(env: NodeJS.ProcessEnv = process.env): {
   const maintenanceModeMilestone = resolveMaintenanceModeMilestone({
     maintenanceModeActive: prerequisites.maintenanceModeActive,
     productEvolutionReady: productEvolution.productEvolutionReady,
+    sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
     rhythms,
   });
 
@@ -96,6 +100,9 @@ function main() {
           maintenanceModeActive: result.maintenanceModeActive,
           commercialPilotPathComplete: result.commercialPilotPathComplete,
           goDecision: result.goDecision,
+          sustainedOpsConvergenceReady: result.prerequisites.sustainedOpsConvergenceReady,
+          pureOperationalModeEra25Active: result.prerequisites.pureOperationalModeEra25Active,
+          productEvolutionReady: result.prerequisites.productEvolutionReady,
           maintenanceModeMilestone: result.maintenanceModeMilestone,
           readyForWeeklyRhythmSmokes: result.readyForWeeklyRhythmSmokes,
           readyForMonthlyCadenceSmokes: result.readyForMonthlyCadenceSmokes,

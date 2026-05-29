@@ -22,6 +22,7 @@ import {
   resolveProductEvolutionReady,
   type MaintenanceModeRhythmStatus,
 } from "@/lib/commercial/maintenance-mode-phases-era24";
+import { resolveEra25PureOperationalModeContext } from "@/lib/commercial/sustained-product-evolution-phases-era23";
 import {
   buildEngineeringPathTerminusUiSlice,
   type EngineeringPathTerminusUiSlice,
@@ -31,6 +32,7 @@ import {
   type MaintenanceModeMilestone,
 } from "@/lib/commercial/maintenance-mode-post-product-evolution-orchestrator-era24";
 import { buildSustainedProductEvolutionUiSlice } from "@/lib/commercial/sustained-product-evolution-ui-era23";
+import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
 export const MAINTENANCE_MODE_UI_ERA24_POLICY_ID = "era24-maintenance-mode-ui-v1" as const;
@@ -60,6 +62,9 @@ export type MaintenanceModeUiSlice = {
   postProductEvolutionOrchestratorCommand: string;
   validateProductEvolutionCommand: string;
   maintenanceModeMilestone: MaintenanceModeMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  pureOperationalModeTerminusHref: string;
   syncPlaybookReportCommand: string;
   exportRhythmCalendarCommand: string;
   todayHref: string;
@@ -94,9 +99,11 @@ export function buildMaintenanceModeUiSlice(input: {
     env: input.env,
   });
   const goDecision = input.goNoGoSummary?.decision ?? null;
+  const era25 = resolveEra25PureOperationalModeContext(input.env);
   const prerequisites = resolveMaintenanceModePrerequisites({
     goDecision,
     productEvolutionReady,
+    era25,
   });
   if (!prerequisites.maintenanceModeActive) return null;
 
@@ -123,6 +130,7 @@ export function buildMaintenanceModeUiSlice(input: {
   const maintenanceModeMilestone = resolveMaintenanceModeMilestoneFromRhythmStatuses(rhythms, {
     maintenanceModeActive: true,
     productEvolutionReady: true,
+    sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
   });
 
   return {
@@ -149,6 +157,9 @@ export function buildMaintenanceModeUiSlice(input: {
       "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
     maintenanceModeMilestone,
+    sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: prerequisites.pureOperationalModeEra25Active,
+    pureOperationalModeTerminusHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
     syncPlaybookReportCommand: "npm run ops:sync-maintenance-mode-playbook-report -- --write",
     exportRhythmCalendarCommand: "npm run ops:export-maintenance-mode-rhythm-calendar -- --write",
     todayHref: "/dashboard/today",

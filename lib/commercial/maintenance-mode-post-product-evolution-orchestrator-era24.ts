@@ -36,6 +36,7 @@ export const MAINTENANCE_MODE_MONTHLY_CADENCE_RHYTHM_IDS = [
 ] as const;
 
 export type MaintenanceModeMilestone =
+  | "era25_sustained_ops_convergence_blocked"
   | "product_evolution_blocked"
   | "attention_weekly_rhythm"
   | "attention_monthly_cadence"
@@ -47,6 +48,8 @@ export type MaintenanceModePostProductEvolutionOrchestratorSummary = {
   maintenanceModeActive: boolean;
   commercialPilotPathComplete: boolean;
   productEvolutionReady: boolean;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
   readyForWeeklyRhythmSmokes: boolean;
   readyForMonthlyCadenceSmokes: boolean;
   goDecision: string | null;
@@ -78,8 +81,13 @@ function rhythmNeedsAttention(
 export function resolveMaintenanceModeMilestone(input: {
   maintenanceModeActive: boolean;
   productEvolutionReady: boolean;
+  sustainedOpsConvergenceReady: boolean;
   rhythms: readonly Pick<MaintenanceModeRhythmStatus, "id" | "status">[];
 }): MaintenanceModeMilestone {
+  if (!input.sustainedOpsConvergenceReady) {
+    return "era25_sustained_ops_convergence_blocked";
+  }
+
   if (!input.maintenanceModeActive || !input.productEvolutionReady) {
     return "product_evolution_blocked";
   }
@@ -97,11 +105,16 @@ export function resolveMaintenanceModeMilestone(input: {
 
 export function resolveMaintenanceModeMilestoneFromRhythmStatuses(
   rhythms: readonly Pick<MaintenanceModeRhythmStatus, "id" | "status">[],
-  input: { maintenanceModeActive: boolean; productEvolutionReady: boolean },
+  input: {
+    maintenanceModeActive: boolean;
+    productEvolutionReady: boolean;
+    sustainedOpsConvergenceReady?: boolean;
+  },
 ): MaintenanceModeMilestone {
   return resolveMaintenanceModeMilestone({
     maintenanceModeActive: input.maintenanceModeActive,
     productEvolutionReady: input.productEvolutionReady,
+    sustainedOpsConvergenceReady: input.sustainedOpsConvergenceReady ?? false,
     rhythms,
   });
 }
@@ -117,6 +130,7 @@ export function buildMaintenanceModePostProductEvolutionOrchestratorSummary(inpu
   const milestone = resolveMaintenanceModeMilestone({
     maintenanceModeActive: input.evaluation.maintenanceModeActive,
     productEvolutionReady: input.evaluation.productEvolution.productEvolutionReady,
+    sustainedOpsConvergenceReady: input.evaluation.prerequisites.sustainedOpsConvergenceReady,
     rhythms: input.evaluation.rhythms,
   });
 
@@ -139,7 +153,15 @@ export function buildMaintenanceModePostProductEvolutionOrchestratorSummary(inpu
       (rhythm) => rhythm?.status === "overdue" || rhythm?.status === "due_soon",
     );
 
-  const recommendedCommands = input.evaluation.maintenanceModeActive
+  const recommendedCommands =
+    milestone === "era25_sustained_ops_convergence_blocked"
+      ? ([
+          "npm run ops:validate-sustained-operational-excellence-convergence-era25 -- --json",
+          "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
+          "npm run ops:run-pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25 -- --write",
+          "npm run ops:validate-sustained-product-evolution -- --json",
+        ] as const)
+      : input.evaluation.maintenanceModeActive
     ? ([
         "npm run ops:validate-sustained-product-evolution -- --json",
         "npm run ops:validate-maintenance-mode -- --json",
@@ -166,6 +188,8 @@ export function buildMaintenanceModePostProductEvolutionOrchestratorSummary(inpu
     maintenanceModeActive: input.evaluation.maintenanceModeActive,
     commercialPilotPathComplete: input.evaluation.commercialPilotPathComplete,
     productEvolutionReady: input.evaluation.productEvolution.productEvolutionReady,
+    sustainedOpsConvergenceReady: input.evaluation.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: input.evaluation.prerequisites.pureOperationalModeEra25Active,
     readyForWeeklyRhythmSmokes,
     readyForMonthlyCadenceSmokes,
     goDecision: input.evaluation.goDecision,

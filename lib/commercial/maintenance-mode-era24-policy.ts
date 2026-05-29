@@ -11,6 +11,7 @@ export const MAINTENANCE_MODE_ERA24_BACKLOG_ID = "KOS-E24-012" as const;
 
 export const MAINTENANCE_MODE_ERA24_EXTENDS_POLICIES = [
   "era23-sustained-product-evolution-v1",
+  "era25-pure-operational-mode-terminus-v1",
   "era24-engineering-path-terminus-v1",
   MAINTENANCE_MODE_PHASES_ERA24_POLICY_ID,
   MAINTENANCE_MODE_UI_ERA24_POLICY_ID,
@@ -36,6 +37,7 @@ export const MAINTENANCE_MODE_ERA24_UNIT_TESTS = [
   "tests/unit/run-maintenance-mode-post-product-evolution-orchestrator.test.ts",
   "tests/unit/validate-maintenance-mode.test.ts",
   "tests/unit/maintenance-mode-era24-cert-live.test.ts",
+  "tests/unit/maintenance-mode-era25-integration.test.ts",
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_PRODUCT_SURFACES = [

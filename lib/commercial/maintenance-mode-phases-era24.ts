@@ -18,6 +18,7 @@ import {
   resolveEra25PureOperationalModeContext,
   resolveSustainedProductEvolutionPrerequisites,
   SUSTAINED_PRODUCT_EVOLUTION_STEP11_DOC,
+  type Era25PureOperationalModeContext,
 } from "@/lib/commercial/sustained-product-evolution-phases-era23";
 import {
   SERIES_A_FEATURE_MATURITY_DOC,
@@ -191,6 +192,8 @@ export type MaintenanceModeRhythmStatus = {
 export type MaintenanceModePrerequisiteStatus = {
   goDecision: string | null;
   improvementLoopActive: boolean;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
   productEvolutionReady: boolean;
   maintenanceModeActive: boolean;
   commercialPilotPathComplete: boolean;
@@ -241,11 +244,22 @@ export function resolveProductEvolutionReady(input: {
 export function resolveMaintenanceModePrerequisites(input: {
   goDecision: string | null;
   productEvolutionReady: boolean;
+  era25?: Pick<
+    Era25PureOperationalModeContext,
+    "sustainedOpsConvergenceReady" | "pureOperationalModeEra25Active"
+  >;
 }): MaintenanceModePrerequisiteStatus {
-  const maintenanceModeActive = input.goDecision === "GO" && input.productEvolutionReady;
+  const sustainedOpsConvergenceReady = input.era25?.sustainedOpsConvergenceReady ?? false;
+  const pureOperationalModeEra25Active = input.era25?.pureOperationalModeEra25Active ?? false;
+  const maintenanceModeActive =
+    input.goDecision === "GO" &&
+    input.productEvolutionReady &&
+    sustainedOpsConvergenceReady;
   return {
     goDecision: input.goDecision,
     improvementLoopActive: input.productEvolutionReady,
+    sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active,
     productEvolutionReady: input.productEvolutionReady,
     maintenanceModeActive,
     commercialPilotPathComplete: maintenanceModeActive,

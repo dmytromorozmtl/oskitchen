@@ -1,7 +1,9 @@
 # KitchenOS — Шаг 12: Maintenance mode (commercial pilot path complete)
 
+**Status:** IMPLEMENTED (2026-05-28) — era25 sustained-ops gate wired into Step 12 prerequisites, validate JSON, orchestrator milestones, UI/panel, CI integration tests.
+
 **Policy:** `era24-maintenance-mode-v1` · **Orchestrator:** `era24-maintenance-mode-post-product-evolution-orchestrator-v1` · **Backlog:** `KOS-E24-012`  
-**Предусловие:** Product evolution ready (Step 11 active) · GO valid  
+**Предусловие:** era25 `sustained_operational_excellence_convergence_era25_ready` → Step 11 product evolution → GO  
 **Цель:** Final informational layer — operator rhythms + guardrails forever
 
 ---
@@ -54,7 +56,8 @@ npm run ops:sync-maintenance-mode-playbook-report -- --write
 
 | Milestone | Meaning | Exit code (orchestrator `--json`) |
 |-----------|---------|-----------------------------------|
-| `product_evolution_blocked` | Step 11 not ready | `2` |
+| `era25_sustained_ops_convergence_blocked` | era25 sustained ops convergence not ready | `2` |
+| `product_evolution_blocked` | Step 11 not ready (era25 OK) | `2` |
 | `attention_weekly_rhythm` | Mon/Wed/Fri operator rhythms due | `0` |
 | `attention_monthly_cadence` | W1–W4 monthly cadence due | `0` |
 | `maintenance_mode_healthy` | All measurable rhythms current | `0` |

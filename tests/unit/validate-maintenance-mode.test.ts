@@ -11,7 +11,7 @@ describe("validate-maintenance-mode", () => {
     const result = evaluateMaintenanceMode({});
     expect(result.maintenanceModeActive).toBe(false);
     expect(result.commercialPilotPathComplete).toBe(false);
-    expect(result.maintenanceModeMilestone).toBe("product_evolution_blocked");
+    expect(result.maintenanceModeMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.readyForWeeklyRhythmSmokes).toBe(false);
     expect(result.readyForMonthlyCadenceSmokes).toBe(false);
     expect(result.rhythms).toHaveLength(10);

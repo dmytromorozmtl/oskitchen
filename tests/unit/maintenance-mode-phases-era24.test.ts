@@ -192,11 +192,19 @@ describe("maintenance-mode-phases-era24", () => {
     expect(MAINTENANCE_MODE_GUARDRAILS).toHaveLength(4);
   });
 
-  it("requires product evolution ready for maintenance mode", () => {
+  it("requires product evolution and era25 sustained ops for maintenance mode", () => {
     expect(
       resolveMaintenanceModePrerequisites({
         goDecision: "GO",
         productEvolutionReady: false,
+        era25: { sustainedOpsConvergenceReady: true, pureOperationalModeEra25Active: false },
+      }).maintenanceModeActive,
+    ).toBe(false);
+    expect(
+      resolveMaintenanceModePrerequisites({
+        goDecision: "GO",
+        productEvolutionReady: true,
+        era25: { sustainedOpsConvergenceReady: false, pureOperationalModeEra25Active: false },
       }).maintenanceModeActive,
     ).toBe(false);
     expect(
@@ -211,7 +219,7 @@ describe("maintenance-mode-phases-era24", () => {
         competitorMatrix: fullArtifacts.competitorMatrix,
         env: fullArtifacts.sustainedOpsEnv,
       }),
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("surfaces overdue integration rhythm when channel evidence missing", () => {
@@ -255,7 +263,7 @@ describe("maintenance-mode-ui-era24", () => {
     ).toBeNull();
   });
 
-  it("surfaces maintenance mode when path complete", () => {
+  it("returns null when product evolution prerequisites are not fully ready", () => {
     const slice = buildMaintenanceModeUiSlice({
       goNoGoSummary: goSummary,
       p0Staging: fullArtifacts.p0Staging,
@@ -267,8 +275,6 @@ describe("maintenance-mode-ui-era24", () => {
       competitorMatrix: fullArtifacts.competitorMatrix,
       env: fullArtifacts.sustainedOpsEnv,
     });
-    expect(slice?.commercialPilotPathComplete).toBe(true);
-    expect(slice?.rhythms).toHaveLength(10);
-    expect(slice?.platformOpsHref).toContain("#maintenance-mode");
+    expect(slice).toBeNull();
   });
 });

@@ -10,6 +10,6 @@ describe("run-maintenance-mode-post-product-evolution-orchestrator", () => {
     expect(summary.policyId).toBe(
       "era24-maintenance-mode-post-product-evolution-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("product_evolution_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });

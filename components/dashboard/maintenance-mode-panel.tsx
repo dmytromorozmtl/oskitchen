@@ -95,6 +95,15 @@ export function MaintenanceModePanel(props: {
             <Badge variant="outline" className="rounded-full text-[10px]">
               era24 maintenance mode
             </Badge>
+            {slice.pureOperationalModeEra25Active ? (
+              <Badge variant="default" className="rounded-full font-mono text-[10px]">
+                era25 pure ops
+              </Badge>
+            ) : slice.sustainedOpsConvergenceReady ? (
+              <Badge variant="secondary" className="rounded-full font-mono text-[10px]">
+                era25 sustained ops
+              </Badge>
+            ) : null}
             {slice.improvementLoopOverdue + slice.productEvolutionOverdue > 0 ? (
               <Badge variant="destructive" className="rounded-full text-[10px]">
                 {slice.improvementLoopOverdue + slice.productEvolutionOverdue} upstream overdue
@@ -1986,6 +1995,9 @@ export function MaintenanceModePanel(props: {
               </Button>
               <Button asChild size="sm" variant="ghost" className="rounded-full">
                 <Link href={slice.productEvolutionHref}>Product evolution</Link>
+              </Button>
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link href={slice.pureOperationalModeTerminusHref}>era25 terminus</Link>
               </Button>
               <Button asChild size="sm" variant="ghost" className="rounded-full">
                 <Link href={slice.orderHubHref}>Order Hub</Link>

@@ -41,6 +41,7 @@ describe("maintenance mode era24 CI certification (live repo)", () => {
     );
     expect(step12).toContain("#maintenance-mode");
     expect(step12).toContain("ops:validate-maintenance-mode");
+    expect(step12).toContain("era25_sustained_ops_convergence_blocked");
   });
 
   it("wires product surfaces", () => {
