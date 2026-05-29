@@ -5,9 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PilotIntegrationHealthStripModel } from "@/lib/integrations/pilot-integration-health-strip-era18";
+import type { PilotIntegrationHealthCommercialInflectionFootnote } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { cn } from "@/lib/utils";
 
-export function PilotIntegrationHealthStrip(props: { model: PilotIntegrationHealthStripModel }) {
+export function PilotIntegrationHealthStrip(props: {
+  model: PilotIntegrationHealthStripModel & {
+    commercialInflection?: PilotIntegrationHealthCommercialInflectionFootnote | null;
+  };
+}) {
   const { model } = props;
   const Icon =
     model.overall === "healthy" ? CheckCircle2 : model.overall === "degraded" ? AlertTriangle : XCircle;
