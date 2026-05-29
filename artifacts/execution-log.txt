@@ -383,3 +383,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix commercial-inflection-readiness-era28.ts — P0 artifact typing + missing goNoGoIntegrity (cycle 30)
+
+---
+Cycle: 30
+Timestamp: 2026-05-30T00:00:00.000Z
+Action: fix: commercial inflection readiness evaluate pipeline — resolve P0 artifact via typed loader; wire evaluatePilotGoNoGoIntegrity into blockers + GO decision (never fake GO)
+Files: lib/commercial/commercial-inflection-readiness-era28.ts
+TS errors before: 75
+TS errors after: 72
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — fix commercial-inflection-readiness-post-linear-closure-orchestrator-era28.ts policyId intersection (cycle 31)
