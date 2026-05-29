@@ -203,8 +203,11 @@ export function resolveBriefingTileCanonicalHref(
 }
 
 export function resolveBriefingTileLinkState(
-  tile: Pick<OwnerDailyBriefingTile, "availability" | "tone" | "value">,
+  tile: Pick<OwnerDailyBriefingTile, "id" | "availability" | "tone" | "value">,
 ): BriefingTileLinkState {
+  if (tile.id === "kds-priority-lane" && tile.value === "No tickets") {
+    return "empty";
+  }
   if (tile.availability === "not_configured") return "setup_needed";
   if (tile.availability === "unavailable") return "blocked";
   if (

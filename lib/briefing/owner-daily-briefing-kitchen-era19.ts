@@ -122,8 +122,8 @@ export function buildBriefingKitchenPriorityLaneTile(
       value: "No tickets",
       detail: "Kitchen display is clear — new POS orders appear here when they fire.",
       href: KDS_KITCHEN_ROUTE,
-      availability: "empty",
-      tone: "normal",
+      availability: "available",
+      tone: "success",
       priority: 1,
     });
   }

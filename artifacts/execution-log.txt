@@ -344,3 +344,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix owner-daily-briefing-kitchen-era19.ts — invalid availability/tone literals (cycle 27)
+
+---
+Cycle: 27
+Timestamp: 2026-05-29T23:15:00.000Z
+Action: fix: KDS priority lane briefing tile types — availability available + tone success; linkState empty via tile-links resolver for No tickets
+Files: lib/briefing/owner-daily-briefing-kitchen-era19.ts, lib/briefing/owner-daily-briefing-tile-links-era19.ts, tests/unit/owner-daily-briefing-kitchen-era19.test.ts, tests/unit/owner-daily-briefing-tile-links-era19.test.ts
+TS errors before: 80
+TS errors after: 78
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — create owner-daily-briefing-production-calendar-era19-policy.ts (cycle 28)

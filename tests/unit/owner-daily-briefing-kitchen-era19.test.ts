@@ -119,7 +119,9 @@ describe("buildBriefingKitchenPriorityLaneTile", () => {
 
   it("uses standard kitchen route when queue is empty", () => {
     const tile = buildBriefingKitchenPriorityLaneTile(buildBriefingKitchenKdsSummary([]));
-    expect(tile.availability).toBe("empty");
+    expect(tile.availability).toBe("available");
+    expect(tile.linkState).toBe("empty");
+    expect(tile.tone).toBe("success");
     expect(tile.href).toBe("/dashboard/kitchen");
   });
 });

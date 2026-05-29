@@ -165,8 +165,16 @@ describe("owner-daily-briefing-tile-links-era19", () => {
     expect(
       resolveBriefingTileCanonicalHref("integration-health", "/legacy", "available"),
     ).toBe("/dashboard/integration-health");
-    expect(resolveBriefingTileLinkState({ availability: "unavailable", tone: "neutral", value: "—" })).toBe(
+    expect(resolveBriefingTileLinkState({ id: "orders-today", availability: "unavailable", tone: "neutral", value: "—" })).toBe(
       "blocked",
     );
+    expect(
+      resolveBriefingTileLinkState({
+        id: "kds-priority-lane",
+        availability: "available",
+        tone: "success",
+        value: "No tickets",
+      }),
+    ).toBe("empty");
   });
 });
