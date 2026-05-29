@@ -500,3 +500,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — pilot-week1-execution-convergence-integrity-era48 resolvePilotWeek1ExecutionConvergenceEra25MilestoneFromEnv arg count (cycle 39)
+
+---
+Cycle: 39
+Timestamp: 2026-05-30T02:15:00.000Z
+Action: fix: resolvePilotWeek1ExecutionConvergenceEra25MilestoneFromEnv — add optional root param; pass through to paid pilot GO milestone resolver for honest disk artifact loading in era48 integrity
+Files: lib/commercial/era25-convergence-milestones-from-env-era25.ts
+TS errors before: 26
+TS errors after: 25
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — post-terminus-steady-state orchestrator findTrack tracks Pick missing label (cycle 40)

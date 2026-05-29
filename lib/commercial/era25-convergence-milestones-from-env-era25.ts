@@ -185,11 +185,15 @@ export function resolvePaidPilotGoConvergenceEra25MilestoneFromEnv(
 
 export function resolvePilotWeek1ExecutionConvergenceEra25MilestoneFromEnv(
   env: NodeJS.ProcessEnv = process.env,
+  root: string = process.cwd(),
 ): PilotWeek1ExecutionConvergenceEra25Milestone {
   const week1State = derivePilotWeek1ExecutionConvergenceState(env);
 
   return resolvePilotWeek1ExecutionConvergenceEra25Milestone({
-    paidPilotGoConvergenceEra25Milestone: resolvePaidPilotGoConvergenceEra25MilestoneFromEnv(env),
+    paidPilotGoConvergenceEra25Milestone: resolvePaidPilotGoConvergenceEra25MilestoneFromEnv(
+      env,
+      root,
+    ),
     week1Complete: week1State.week1Complete,
     nextPhaseId: week1State.nextPhaseId,
   });
