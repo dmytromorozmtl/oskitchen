@@ -33,6 +33,7 @@ import type { LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice } from "@
 import type { LaunchWizardEra25MarketLeaderPositioningConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-market-leader-positioning-convergence-era52";
 import type { LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-operational-excellence-convergence-era53";
 import type { LaunchWizardEra25PureOperationalModeTerminusSlice } from "@/lib/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-era54";
+import type { LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-era55";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -85,6 +86,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25MarketLeaderPositioningConvergence: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
   era25SustainedOperationalExcellenceConvergence: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
   era25PureOperationalModeTerminus: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
+  era25CommercialPilotConvergenceTrainClosure: LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -152,6 +154,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25MarketLeaderPositioningConvergence?: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
   era25SustainedOperationalExcellenceConvergence?: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
   era25PureOperationalModeTerminus?: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
+  era25CommercialPilotConvergenceTrainClosure?: LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -280,6 +283,12 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25PureOperationalModeTerminusSubline = era25PureOperationalModeTerminus
     ? `Pure ops ${era25PureOperationalModeTerminus.progressLabel}${era25PureOperationalModeTerminus.pureOperationalModeTerminusConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25CommercialPilotConvergenceTrainClosure =
+    input.era25CommercialPilotConvergenceTrainClosure ?? null;
+  const era25CommercialPilotConvergenceTrainClosureSubline =
+    era25CommercialPilotConvergenceTrainClosure
+      ? `Train closure ${era25CommercialPilotConvergenceTrainClosure.progressLabel}${era25CommercialPilotConvergenceTrainClosure.era25CommercialPilotConvergenceTrainClosureIntegrityFailed ? " · integrity FAIL" : ""}`
+      : null;
   let era25FullConvergenceSubline = era25ScaleWithSeriesAAndMarketLeaderSubline;
   if (era25SustainedOperationalExcellenceConvergenceSubline) {
     era25FullConvergenceSubline = era25FullConvergenceSubline
@@ -290,6 +299,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25FullConvergenceSubline = era25FullConvergenceSubline
       ? `${era25PureOperationalModeTerminusSubline} · ${era25FullConvergenceSubline}`
       : era25PureOperationalModeTerminusSubline;
+  }
+  if (era25CommercialPilotConvergenceTrainClosureSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25CommercialPilotConvergenceTrainClosureSubline} · ${era25FullConvergenceSubline}`
+      : era25CommercialPilotConvergenceTrainClosureSubline;
   }
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
@@ -345,6 +359,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25MarketLeaderPositioningConvergence,
       era25SustainedOperationalExcellenceConvergence,
       era25PureOperationalModeTerminus,
+      era25CommercialPilotConvergenceTrainClosure,
     };
   }
 
@@ -549,5 +564,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25MarketLeaderPositioningConvergence,
     era25SustainedOperationalExcellenceConvergence,
     era25PureOperationalModeTerminus,
+    era25CommercialPilotConvergenceTrainClosure,
   };
 }

@@ -167,6 +167,10 @@ import {
   buildLaunchWizardEra25PureOperationalModeTerminusSlice,
   type LaunchWizardEra25PureOperationalModeTerminusSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-era54";
+import {
+  buildLaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice,
+  type LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-era55";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -319,6 +323,7 @@ export type LaunchWizardModel = {
   era25SustainedOperationalExcellenceConvergence: SustainedOperationalExcellenceConvergenceEra25UiSlice | null;
   era25SustainedOperationalExcellenceConvergenceIntegrity: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
   era25PureOperationalModeTerminusIntegrity: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
+  era25CommercialPilotConvergenceTrainClosureIntegrity: LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1298,6 +1303,12 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25SustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus ?? null,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const era25CommercialPilotConvergenceTrainClosureIntegrity =
+    buildLaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice(
+      era25SustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus
+        ?.commercialPilotConvergenceTrainClosure ?? null,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1367,5 +1378,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25SustainedOperationalExcellenceConvergence,
     era25SustainedOperationalExcellenceConvergenceIntegrity,
     era25PureOperationalModeTerminusIntegrity,
+    era25CommercialPilotConvergenceTrainClosureIntegrity,
   };
 }

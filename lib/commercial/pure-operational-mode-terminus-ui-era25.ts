@@ -31,6 +31,10 @@ import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operatio
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import { LAUNCH_WIZARD_ERA25_PURE_OPERATIONAL_MODE_TERMINUS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-era54";
 import { detectPureOperationalModeTerminusConvergenceEra25Started } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
+import {
+  buildEra25CommercialPilotConvergenceTrainClosureEra25UiSlice,
+  type Era25CommercialPilotConvergenceTrainClosureEra25UiSlice,
+} from "@/lib/commercial/era25-commercial-pilot-convergence-train-closure-ui-era25";
 
 export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_UI_POLICY_ID =
   "era25-pure-operational-mode-terminus-ui-v1" as const;
@@ -73,6 +77,7 @@ export type PureOperationalModeTerminusEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  commercialPilotConvergenceTrainClosure: Era25CommercialPilotConvergenceTrainClosureEra25UiSlice | null;
 };
 
 export function buildPureOperationalModeTerminusEra25UiSlice(input: {
@@ -113,6 +118,24 @@ export function buildPureOperationalModeTerminusEra25UiSlice(input: {
     });
 
   const result = evaluatePureOperationalModeTerminusEra25WithMilestones(env);
+  const commercialPilotConvergenceTrainClosure = buildEra25CommercialPilotConvergenceTrainClosureEra25UiSlice(
+    {
+      pureOperationalModeTerminusVisible: true,
+      pureOperationalModeEra25Active: result.evaluation.pureOperationalModeEra25Active,
+      pureOperationalModeTerminusEra25Milestone: result.pureOperationalModeTerminusEra25Milestone,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+    },
+  );
 
   const headline = result.evaluation.pureOperationalModeEra25Active
     ? "Pure operational mode active — era25 product convergence chain complete"
@@ -168,6 +191,7 @@ export function buildPureOperationalModeTerminusEra25UiSlice(input: {
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${CONTINUOUS_IMPROVEMENT_LOOP_PLATFORM_ANCHOR}`,
     todayHref: "/dashboard/today",
     headline,
+    commercialPilotConvergenceTrainClosure,
   };
 }
 

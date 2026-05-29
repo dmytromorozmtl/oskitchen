@@ -73,18 +73,8 @@ Workflow: `.github/workflows/ops-pure-operational-mode-terminus-convergence-inte
 
 ---
 
-## Next step — Phase AE (era55)
+## Following — Phase AE (era55)
 
-**Era25 commercial pilot convergence train closure integrity** — rollup cert that all era47–era54 convergence integrity baselines are present, non-regressed, and wired in `test:ci:commercial-pilot-runbook:cert`.
+**IMPLEMENTED** — see [`docs/next-step-era25-commercial-pilot-convergence-train-closure-phase-ae-product-2026-05-28.md`](./next-step-era25-commercial-pilot-convergence-train-closure-phase-ae-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | `pure_operational_mode_era25_active` |
-| Parent evaluator | era54 pure ops terminus convergence integrity |
-| Anchor | `#era25-commercial-pilot-convergence-train-closure` (platform ops rollup panel) |
-| Briefing meta priority | **30** |
-| Baseline artifact | `artifacts/era25-commercial-pilot-convergence-train-closure-integrity-baseline.json` |
-| Violation IDs (planned) | `convergence_train_closure_without_pure_ops_active`, `missing_convergence_integrity_baseline`, `convergence_integrity_baseline_regression`, upstream era47–era54 chain fails |
-| CI | `test:ci:era25-commercial-pilot-convergence-train-closure-integrity-era55` + extend commercial-pilot-runbook cert matrix |
-
-**Human acceptance (preview):** pure ops integrity PASS → sync all era25 convergence integrity baselines (GO → pure ops) → single closure validate JSON → commercial-pilot-runbook cert green → sustained product evolution re-entrant checks only via improvement loop.
+**Next:** Phase AF — sustained product evolution re-entrant integrity (era56), sketched in the AE doc.
