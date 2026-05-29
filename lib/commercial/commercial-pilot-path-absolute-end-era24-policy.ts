@@ -16,6 +16,7 @@ export { COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC };
 export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_BACKLOG_ID = "KOS-E24-015" as const;
 
 export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_EXTENDS_POLICIES = [
+  "era25-pure-operational-mode-terminus-v1",
   "era24-post-terminus-steady-state-v1",
   "era24-linear-path-permanently-closed-v1",
   COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PHASES_ERA24_POLICY_ID,
@@ -40,6 +41,7 @@ export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ERA24_UNIT_TESTS = [
   "tests/unit/commercial-pilot-path-absolute-end-ui-era24.test.ts",
   "tests/unit/run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator.test.ts",
   "tests/unit/validate-commercial-pilot-path-absolute-end.test.ts",
+  "tests/unit/commercial-pilot-path-absolute-end-era25-integration.test.ts",
   "tests/unit/commercial-pilot-path-absolute-end-era24-cert-live.test.ts",
 ] as const;
 

@@ -9,8 +9,10 @@ import {
   STEADY_STATE_PRODUCT_SURFACES,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-phases-era24";
 import {
+  POST_TERMINUS_STEADY_STATE_BLOCKED_MILESTONES,
   type PostTerminusSteadyStateMilestone,
 } from "@/lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24";
+import type { EngineeringPathTerminusMilestone } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
 import { POST_TERMINUS_STEADY_STATE_STEP14_DOC } from "@/lib/commercial/post-terminus-steady-state-phases-era24";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import type { evaluateCommercialPilotPathAbsoluteEnd } from "@/lib/commercial/evaluate-commercial-pilot-path-absolute-end";
@@ -22,9 +24,32 @@ export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_POST_STEADY_STATE_ORCHESTRATOR_C
   "npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator" as const;
 
 export type CommercialPilotPathAbsoluteEndMilestone =
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
+  | "maintenance_mode_blocked"
+  | "engineering_terminus_blocked"
   | "steady_state_blocked"
   | "attention_path_closure"
   | "absolute_end_healthy";
+
+export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES: readonly CommercialPilotPathAbsoluteEndMilestone[] =
+  [
+    "era25_sustained_ops_convergence_blocked",
+    "product_evolution_blocked",
+    "maintenance_mode_blocked",
+    "engineering_terminus_blocked",
+    "steady_state_blocked",
+  ] as const;
+
+function isSteadyStatePrerequisiteBlocked(
+  milestone: PostTerminusSteadyStateMilestone,
+): milestone is
+  | "era25_sustained_ops_convergence_blocked"
+  | "product_evolution_blocked"
+  | "maintenance_mode_blocked"
+  | "engineering_terminus_blocked" {
+  return (POST_TERMINUS_STEADY_STATE_BLOCKED_MILESTONES as readonly string[]).includes(milestone);
+}
 
 export type CommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary = {
   policyId: typeof COMMERCIAL_PILOT_PATH_ABSOLUTE_END_POST_STEADY_STATE_ORCHESTRATOR_ERA24_POLICY_ID;
@@ -32,6 +57,13 @@ export type CommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary = {
   absoluteEndActive: boolean;
   pathEngineeringClosed: boolean;
   steadyStateMilestone: PostTerminusSteadyStateMilestone;
+  engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<
+    typeof import("@/scripts/ops/validate-maintenance-mode").evaluateMaintenanceMode
+  >["maintenanceModeMilestone"];
   readyForSteadyStateSmokes: boolean;
   readyForPathClosureSmokes: boolean;
   goDecision: string | null;
@@ -51,6 +83,10 @@ export function resolveCommercialPilotPathAbsoluteEndMilestone(input: {
   firstBlockedStep: { step: number; label: string } | null;
   firstBlockedGateStep: { step: number; label: string } | null;
 }): CommercialPilotPathAbsoluteEndMilestone {
+  if (isSteadyStatePrerequisiteBlocked(input.steadyStateMilestone)) {
+    return input.steadyStateMilestone;
+  }
+
   if (!input.absoluteEndActive || input.steadyStateMilestone !== "steady_state_healthy") {
     return "steady_state_blocked";
   }
@@ -65,6 +101,13 @@ export function resolveCommercialPilotPathAbsoluteEndMilestone(input: {
 export function buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary(input: {
   evaluation: ReturnType<typeof evaluateCommercialPilotPathAbsoluteEnd>;
   steadyStateMilestone: PostTerminusSteadyStateMilestone;
+  engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<
+    typeof import("@/scripts/ops/validate-maintenance-mode").evaluateMaintenanceMode
+  >["maintenanceModeMilestone"];
   artifacts: { absoluteEndReportPresent: boolean };
 }): CommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary {
   const milestone = resolveCommercialPilotPathAbsoluteEndMilestone({
@@ -81,7 +124,33 @@ export function buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSu
   const readyForPathClosureSmokes =
     input.evaluation.path.summary.firstBlockedGateStep !== null;
 
-  const recommendedCommands = input.evaluation.absoluteEndActive
+  const recommendedCommands =
+    milestone === "era25_sustained_ops_convergence_blocked"
+      ? ([
+          "npm run ops:validate-sustained-operational-excellence-convergence-era25 -- --json",
+          "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
+          "npm run ops:validate-steady-state-operator-loop -- --json",
+          "npm run ops:validate-commercial-pilot-path-absolute-end -- --json",
+        ] as const)
+      : milestone === "product_evolution_blocked"
+        ? ([
+            "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+            "npm run ops:validate-sustained-product-evolution -- --json",
+            "npm run ops:validate-steady-state-operator-loop -- --json",
+          ] as const)
+        : milestone === "maintenance_mode_blocked"
+          ? ([
+              "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
+              "npm run ops:validate-maintenance-mode -- --json",
+              "npm run ops:run-post-terminus-steady-state-post-engineering-terminus-orchestrator -- --write",
+            ] as const)
+          : milestone === "engineering_terminus_blocked"
+            ? ([
+                "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
+                "npm run ops:validate-commercial-pilot-path -- --json",
+                "npm run ops:validate-steady-state-operator-loop -- --json",
+              ] as const)
+            : input.evaluation.absoluteEndActive
     ? ([
         "npm run ops:validate-steady-state-operator-loop -- --json",
         "npm run ops:validate-commercial-pilot-path-absolute-end -- --json",
@@ -116,6 +185,11 @@ export function buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSu
     absoluteEndActive: input.evaluation.absoluteEndActive,
     pathEngineeringClosed: input.evaluation.pathEngineeringClosed,
     steadyStateMilestone: input.steadyStateMilestone,
+    engineeringPathTerminusMilestone: input.engineeringPathTerminusMilestone,
+    sustainedOpsConvergenceReady: input.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: input.pureOperationalModeEra25Active,
+    productEvolutionReady: input.productEvolutionReady,
+    maintenanceModeMilestone: input.maintenanceModeMilestone,
     readyForSteadyStateSmokes,
     readyForPathClosureSmokes,
     goDecision: input.evaluation.goDecision,
@@ -149,6 +223,10 @@ export function buildCommercialPilotPathAbsoluteEndOrchestratorReportMarkdown(in
     `- Absolute end active: ${input.summary.absoluteEndActive ? "yes" : "no"}`,
     `- Path engineering closed: ${input.summary.pathEngineeringClosed ? "yes" : "no"}`,
     `- Steady state milestone: ${input.summary.steadyStateMilestone}`,
+    `- Engineering path milestone: ${input.summary.engineeringPathTerminusMilestone}`,
+    `- era25 sustained ops convergence ready: ${input.summary.sustainedOpsConvergenceReady ? "yes" : "no"}`,
+    `- Product evolution ready: ${input.summary.productEvolutionReady ? "yes" : "no"}`,
+    `- Maintenance mode milestone: ${input.summary.maintenanceModeMilestone}`,
     `- Steps complete: ${input.summary.completedSteps}/${input.summary.totalSteps}`,
     `- GO decision: ${input.summary.goDecision ?? "missing"}`,
     `- First blocked: ${input.summary.firstBlockedStepLabel ?? "none"}`,

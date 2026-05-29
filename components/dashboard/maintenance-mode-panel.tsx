@@ -362,6 +362,23 @@ export function MaintenanceModePanel(props: {
                   " ",
                 )}
               </Badge>
+              <Badge variant="outline" className="rounded-full font-mono text-[10px] text-emerald-300/90">
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.steadyStateMilestone.replaceAll(
+                  "_",
+                  " ",
+                )}
+              </Badge>
+              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                .pureOperationalModeEra25Active ? (
+                <Badge variant="default" className="rounded-full font-mono text-[10px]">
+                  era25 pure ops
+                </Badge>
+              ) : slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                  .sustainedOpsConvergenceReady ? (
+                <Badge variant="secondary" className="rounded-full font-mono text-[10px]">
+                  era25 sustained ops
+                </Badge>
+              ) : null}
               <Badge variant="outline" className="rounded-full text-[10px] text-emerald-300">
                 {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.completedSteps}/
                 {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.totalSteps} steps
@@ -404,6 +421,18 @@ export function MaintenanceModePanel(props: {
                     .validateSteadyStateCommand
                 }
               </span>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link
+                  href={
+                    slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                      .pureOperationalModeTerminusHref
+                  }
+                >
+                  era25 terminus
+                </Link>
+              </Button>
             </div>
           </div>
         ) : null}

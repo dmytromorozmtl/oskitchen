@@ -8,6 +8,8 @@
 
 ## Status
 
+**IMPLEMENTED (2026-05-28)** — era25 sustained-ops prerequisite milestones wired into absolute-end orchestrator, validate JSON, closure report, and Platform ops `#commercial-pilot-path-absolute-end` catalog.
+
 **There is no Step 16 engineering gate.**
 
 Step 15 adds **closure orchestration only** (embedded in `#commercial-pilot-path-absolute-end` panel):
@@ -33,7 +35,11 @@ npm run ops:sync-commercial-pilot-path-absolute-end-report -- --write
 
 | Milestone | Meaning | Exit code (orchestrator `--json`) |
 |-----------|---------|-------------------------------------|
-| `steady_state_blocked` | Step 14 not healthy | `2` |
+| `era25_sustained_ops_convergence_blocked` | era25 sustained ops convergence not ready | `2` |
+| `product_evolution_blocked` | Step 11 not ready (era25 OK) | `2` |
+| `maintenance_mode_blocked` | Step 12 not active (GO / rhythms) | `2` |
+| `engineering_terminus_blocked` | Step 13 not healthy (prerequisites OK) | `2` |
+| `steady_state_blocked` | Step 14 not healthy (prerequisites OK) | `2` |
 | `attention_path_closure` | Blocked step in 16-step catalog (gate or informational) | `0` |
 | `absolute_end_healthy` | Steady state healthy + catalog complete | `0` |
 

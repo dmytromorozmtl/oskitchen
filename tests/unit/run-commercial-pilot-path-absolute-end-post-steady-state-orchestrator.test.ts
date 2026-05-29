@@ -10,6 +10,6 @@ describe("run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator"
     expect(summary.policyId).toBe(
       "era24-commercial-pilot-path-absolute-end-post-steady-state-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("steady_state_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });

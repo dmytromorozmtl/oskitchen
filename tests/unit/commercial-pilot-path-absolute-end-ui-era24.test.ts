@@ -14,6 +14,9 @@ describe("commercial-pilot-path-absolute-end-ui-era24", () => {
     const slice = buildCommercialPilotPathAbsoluteEndUiSlice({ steadyStateActive: true, env: {} });
     expect(slice).not.toBeNull();
     expect(slice?.pathLayers).toHaveLength(4);
+    expect(slice?.steadyStateMilestone).toBeTruthy();
+    expect(slice).toHaveProperty("sustainedOpsConvergenceReady");
+    expect(slice?.pureOperationalModeTerminusHref).toContain("era25");
     expect(slice?.productSurfaces).toHaveLength(7);
     expect(slice?.validateCommand).toBe("npm run ops:validate-commercial-pilot-path-absolute-end");
     expect(slice?.postSteadyStateOrchestratorCommand).toContain(

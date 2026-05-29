@@ -8,6 +8,7 @@ import { join } from "node:path";
 
 import {
   buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary,
+  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES,
   COMMERCIAL_PILOT_PATH_ABSOLUTE_END_POST_STEADY_STATE_ORCHESTRATOR_ERA24_POLICY_ID,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
 import { COMMERCIAL_PILOT_PATH_ABSOLUTE_END_REPORT_PATH } from "@/lib/commercial/commercial-pilot-path-absolute-end-phases-era24";
@@ -32,6 +33,14 @@ export function runCommercialPilotPathAbsoluteEndPostSteadyStateOrchestrator(opt
   return buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary({
     evaluation,
     steadyStateMilestone: steadyState.steadyStateMilestone,
+    engineeringPathTerminusMilestone: steadyState.pathEvaluation.engineeringPathTerminusMilestone,
+    sustainedOpsConvergenceReady:
+      steadyState.pathEvaluation.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active:
+      steadyState.pathEvaluation.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+    productEvolutionReady:
+      steadyState.pathEvaluation.maintenanceMode.prerequisites.productEvolutionReady,
+    maintenanceModeMilestone: steadyState.pathEvaluation.maintenanceMode.maintenanceModeMilestone,
     artifacts: {
       absoluteEndReportPresent: existsSync(
         join(process.cwd(), COMMERCIAL_PILOT_PATH_ABSOLUTE_END_REPORT_PATH),
@@ -50,7 +59,9 @@ function main() {
 
   if (jsonOutput) {
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.milestone === "steady_state_blocked" ? 2 : 0);
+    process.exit(
+      COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES.includes(summary.milestone) ? 2 : 0,
+    );
     return;
   }
 

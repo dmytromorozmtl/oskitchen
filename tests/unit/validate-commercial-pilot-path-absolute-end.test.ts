@@ -16,7 +16,7 @@ describe("validate-commercial-pilot-path-absolute-end", () => {
     expect(result.evaluation.pathEngineeringClosed).toBe(true);
     expect(result.evaluation.totalSteps).toBe(16);
     expect(result.evaluation.path.steps).toHaveLength(16);
-    expect(result.absoluteEndMilestone).toBe("steady_state_blocked");
+    expect(result.absoluteEndMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.readyForSteadyStateSmokes).toBe(true);
     expect(result.readyForPathClosureSmokes).toBe(true);
   });

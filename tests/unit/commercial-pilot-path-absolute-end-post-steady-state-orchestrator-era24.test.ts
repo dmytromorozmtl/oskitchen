@@ -10,10 +10,11 @@ import { evaluateCommercialPilotPathAbsoluteEndWithMilestones } from "@/scripts/
 import { evaluateSteadyStateOperatorLoopWithMilestones } from "@/scripts/ops/validate-steady-state-operator-loop";
 
 describe("commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24", () => {
-  it("blocks when steady state is not healthy", () => {
+  it("blocks with era25 prerequisite when steady state is not past era25 gate", () => {
     const result = evaluateCommercialPilotPathAbsoluteEndWithMilestones({});
-    expect(result.absoluteEndMilestone).toBe("steady_state_blocked");
+    expect(result.absoluteEndMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(result.evaluation.absoluteEndActive).toBe(false);
+    expect(result.steadyState.steadyStateMilestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 
   it("resolves attention_path_closure when gate chain blocked", () => {
@@ -37,17 +38,25 @@ describe("commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era2
     expect(milestone).toBe("absolute_end_healthy");
   });
 
-  it("builds orchestrator summary with Step 14 redirect when blocked", () => {
+  it("builds orchestrator summary with era25 redirect when prerequisite blocked", () => {
     const evaluation = evaluateCommercialPilotPathAbsoluteEnd({});
     const steadyState = evaluateSteadyStateOperatorLoopWithMilestones({});
     const summary = buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary({
       evaluation,
       steadyStateMilestone: steadyState.steadyStateMilestone,
+      engineeringPathTerminusMilestone: steadyState.pathEvaluation.engineeringPathTerminusMilestone,
+      sustainedOpsConvergenceReady:
+        steadyState.pathEvaluation.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+      pureOperationalModeEra25Active:
+        steadyState.pathEvaluation.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+      productEvolutionReady:
+        steadyState.pathEvaluation.maintenanceMode.prerequisites.productEvolutionReady,
+      maintenanceModeMilestone: steadyState.pathEvaluation.maintenanceMode.maintenanceModeMilestone,
       artifacts: { absoluteEndReportPresent: false },
     });
-    expect(summary.milestone).toBe("steady_state_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(summary.recommendedCommands[0]).toContain(
-      "post-terminus-steady-state-post-engineering-terminus-orchestrator",
+      "sustained-operational-excellence-convergence-era25",
     );
   });
 
@@ -57,6 +66,14 @@ describe("commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era2
     const summary = buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSummary({
       evaluation,
       steadyStateMilestone: steadyState.steadyStateMilestone,
+      engineeringPathTerminusMilestone: steadyState.pathEvaluation.engineeringPathTerminusMilestone,
+      sustainedOpsConvergenceReady:
+        steadyState.pathEvaluation.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+      pureOperationalModeEra25Active:
+        steadyState.pathEvaluation.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+      productEvolutionReady:
+        steadyState.pathEvaluation.maintenanceMode.prerequisites.productEvolutionReady,
+      maintenanceModeMilestone: steadyState.pathEvaluation.maintenanceMode.maintenanceModeMilestone,
       artifacts: { absoluteEndReportPresent: false },
     });
     const markdown = buildCommercialPilotPathAbsoluteEndOrchestratorReportMarkdown({

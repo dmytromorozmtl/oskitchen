@@ -2,7 +2,6 @@
  * Linear path permanently closed — Step 16 terminal closure (era24).
  * Doc chain terminus · no Step 17+ engineering in this linear path.
  */
-import { COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC } from "@/lib/commercial/commercial-pilot-path-absolute-end-phases-era24";
 
 export const LINEAR_PATH_PERMANENTLY_CLOSED_PHASES_ERA24_POLICY_ID =
   "era24-linear-path-permanently-closed-phases-v1" as const;
@@ -32,7 +31,7 @@ export const LINEAR_PATH_DOC_CHAIN_STEP_DOCS: readonly string[] = [
   "docs/next-step-12-commercial-pilot-path-complete-2026-05-28.md",
   "docs/next-step-13-engineering-path-terminus-2026-05-28.md",
   "docs/next-step-14-post-terminus-era-charter-process-2026-05-28.md",
-  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC,
+  "docs/next-step-15-commercial-pilot-path-absolute-end-2026-05-28.md",
   LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC,
 ] as const;
 

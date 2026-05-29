@@ -18,6 +18,9 @@ import {
   buildLinearPathPermanentlyClosedUiSlice,
   type LinearPathPermanentlyClosedUiSlice,
 } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
+import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
+import type { EngineeringPathTerminusMilestone } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
+import type { PostTerminusSteadyStateMilestone } from "@/lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24";
 import { evaluateCommercialPilotPathAbsoluteEnd } from "@/lib/commercial/evaluate-commercial-pilot-path-absolute-end";
 import { evaluateSteadyStateOperatorLoopWithMilestones } from "@/scripts/ops/validate-steady-state-operator-loop";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
@@ -86,6 +89,16 @@ export function buildCommercialPilotPathAbsoluteEndUiSlice(input: {
       "npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write",
     validateSteadyStateCommand: "npm run ops:validate-steady-state-operator-loop -- --json",
     absoluteEndMilestone,
+    steadyStateMilestone: steadyState.steadyStateMilestone,
+    engineeringPathTerminusMilestone: steadyState.pathEvaluation.engineeringPathTerminusMilestone,
+    sustainedOpsConvergenceReady:
+      steadyState.pathEvaluation.maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active:
+      steadyState.pathEvaluation.maintenanceMode.prerequisites.pureOperationalModeEra25Active,
+    productEvolutionReady:
+      steadyState.pathEvaluation.maintenanceMode.prerequisites.productEvolutionReady,
+    maintenanceModeMilestone: steadyState.pathEvaluation.maintenanceMode.maintenanceModeMilestone,
+    pureOperationalModeTerminusHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
     syncReportCommand: "npm run ops:sync-commercial-pilot-path-absolute-end-report -- --write",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PLATFORM_ANCHOR}`,
     linearPathPermanentlyClosed,
