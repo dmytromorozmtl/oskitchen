@@ -69,8 +69,8 @@ Workflow: `.github/workflows/ops-month2-market-readiness-convergence-integrity-v
 
 ---
 
-## Next step — Phase Z (era50)
+## Following — Phase Z (era50)
 
-**Scale readiness convergence era25 integrity** — chains `evaluateMonth2MarketReadinessConvergenceIntegrity`, Launch Wizard `#launch-wizard-era25-scale-readiness-convergence`, Owner Briefing priority **25**, maintenance nested under `#era25-month2-market-readiness-convergence` → `#era25-scale-readiness-convergence`.
+**Done:** [`docs/next-step-scale-readiness-convergence-phase-z-product-2026-05-28.md`](./next-step-scale-readiness-convergence-phase-z-product-2026-05-28.md)
 
-Prerequisite milestone: `month2_market_readiness_convergence_era25_ready` · env `SCALE_READINESS_CONVERGENCE_ERA25_*` (to be added when Phase Z starts).
+**Next:** Phase AA Series A partner expansion convergence integrity (era51) on `#era25-series-a-partner-expansion-convergence`.

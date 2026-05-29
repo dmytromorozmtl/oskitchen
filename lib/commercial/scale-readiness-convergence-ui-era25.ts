@@ -1,6 +1,8 @@
 /**
  * era25 Scale Readiness Convergence UI slice.
  */
+import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
+import { evaluateScaleReadinessConvergenceIntegrity } from "@/lib/commercial/scale-readiness-convergence-integrity-era50";
 import {
   SCALE_READINESS_CONVERGENCE_ERA25_CONVERGENCE_TARGETS,
   SCALE_READINESS_CONVERGENCE_ERA25_DOC,
@@ -10,6 +12,7 @@ import {
   SCALE_READINESS_CONVERGENCE_ERA25_PLATFORM_ANCHOR,
   SCALE_READINESS_CONVERGENCE_ERA25_BACKLOG_ID,
   SCALE_READINESS_CONVERGENCE_ERA25_ERA21_REFERENCE_DOC,
+  detectScaleReadinessConvergenceEra25Started,
 } from "@/lib/commercial/scale-readiness-convergence-phases-era25";
 import {
   type ScaleReadinessConvergenceEra25Milestone,
@@ -18,12 +21,21 @@ import type { Month2MarketReadinessConvergenceEra25Milestone } from "@/lib/comme
 import type { ScaleReadinessPhaseStatus } from "@/lib/commercial/scale-readiness-phases-era21";
 import type { LaunchWizardScaleReadinessConvergenceSlice } from "@/lib/briefing/scale-readiness-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
+import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import {
   buildSeriesAPartnerExpansionConvergenceEra25UiSlice,
   type SeriesAPartnerExpansionConvergenceEra25UiSlice,
 } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
 import { evaluateScaleReadinessConvergenceEra25WithMilestones } from "@/scripts/ops/validate-scale-readiness-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_ERA25_SCALE_READINESS_CONVERGENCE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-scale-readiness-convergence-era50";
 
 export const SCALE_READINESS_CONVERGENCE_ERA25_UI_POLICY_ID =
   "era25-scale-readiness-convergence-ui-v1" as const;
@@ -57,7 +69,12 @@ export type ScaleReadinessConvergenceEra25UiSlice = {
   postMonth2ConvergenceOrchestratorCommand: string;
   syncReportCommand: string;
   validateMonth2ConvergenceCommand: string;
+  validateMonth2ConvergenceIntegrityCommand: string;
   validateScaleEnvCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  scaleReadinessConvergenceIntegrityPassed: boolean;
+  month2MarketReadinessConvergenceIntegrityPassed: boolean;
   launchWizardHref: string;
   platformOpsHref: string;
   integrationHealthHref: string;
@@ -68,13 +85,46 @@ export type ScaleReadinessConvergenceEra25UiSlice = {
 export function buildScaleReadinessConvergenceEra25UiSlice(input: {
   month2ConvergenceVisible: boolean;
   env?: NodeJS.ProcessEnv;
+  goNoGoSummary?: PilotGoNoGoSummary | null;
+  p0Staging?: P0StagingProofUnblockSummary | null;
+  tier2Summary?: Tier2StagingGoldenPathSummary | null;
+  metricsBaseline?: PilotMetricsBaselineSummary | null;
+  caseStudyDraft?: PilotCaseStudyDraftSummary | null;
+  investorOnepager?: InvestorNarrativeOnepagerSummary | null;
+  rollbackDrill?: PilotRollbackDrillSummary | null;
+  competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
 }): ScaleReadinessConvergenceEra25UiSlice | null {
-  if (!input.month2ConvergenceVisible) return null;
+  const env = input.env ?? process.env;
+  const scaleStarted = detectScaleReadinessConvergenceEra25Started(env);
 
-  const result = evaluateScaleReadinessConvergenceEra25WithMilestones(input.env);
+  if (!input.month2ConvergenceVisible && !scaleStarted) return null;
+
+  const p0ProofStatus = input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus = input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+
+  const scaleReadinessConvergenceIntegrity = evaluateScaleReadinessConvergenceIntegrity(
+    process.cwd(),
+    {
+      env,
+      goNoGoOverride: input.goNoGoSummary ?? null,
+      p0StagingOverride: input.p0Staging ?? null,
+      tier2SummaryOverride: input.tier2Summary ?? null,
+      metricsBaselineOverride: input.metricsBaseline ?? null,
+      caseStudyDraftOverride: input.caseStudyDraft ?? null,
+      investorOnepagerOverride: input.investorOnepager ?? null,
+      rollbackDrillOverride: input.rollbackDrill ?? null,
+      competitorMatrixOverride: input.competitorMatrix ?? null,
+      p0ProofStatusOverride: p0ProofStatus,
+      tier2ProofStatusOverride: tier2ProofStatus,
+    },
+  );
+
+  const result = evaluateScaleReadinessConvergenceEra25WithMilestones(env);
   const seriesAPartnerExpansionConvergence = buildSeriesAPartnerExpansionConvergenceEra25UiSlice({
     scaleConvergenceVisible: true,
-    env: input.env,
+    env,
   });
 
   return {
@@ -87,7 +137,8 @@ export function buildScaleReadinessConvergenceEra25UiSlice(input: {
     convergenceBlocked: result.evaluation.convergenceBlocked,
     month2ConvergenceReady: result.evaluation.month2ConvergenceReady,
     scaleComplete: result.evaluation.scaleState.scaleComplete,
-    goDecision: result.evaluation.scaleState.goDecision,
+    goDecision:
+      scaleReadinessConvergenceIntegrity.goDecision ?? result.evaluation.scaleState.goDecision,
     completedBlockingCount: result.evaluation.scaleState.completedBlockingCount,
     totalBlockingCount: result.evaluation.scaleState.totalBlockingCount,
     phases: result.evaluation.scaleState.phases,
@@ -109,8 +160,17 @@ export function buildScaleReadinessConvergenceEra25UiSlice(input: {
     syncReportCommand: "npm run ops:sync-scale-readiness-convergence-era25-report -- --write",
     validateMonth2ConvergenceCommand:
       "npm run ops:validate-month2-market-readiness-convergence-era25 -- --json",
+    validateMonth2ConvergenceIntegrityCommand:
+      "npm run ops:validate-month2-market-readiness-convergence-integrity -- --json",
     validateScaleEnvCommand: "npm run ops:validate-scale-readiness-env -- --json",
-    launchWizardHref: result.evaluation.launchWizardSlice.href,
+    integrityValidateCommand:
+      "npm run ops:validate-scale-readiness-convergence-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-scale-readiness-convergence-integrity-baseline -- --write",
+    scaleReadinessConvergenceIntegrityPassed: scaleReadinessConvergenceIntegrity.integrityPassed,
+    month2MarketReadinessConvergenceIntegrityPassed:
+      scaleReadinessConvergenceIntegrity.month2MarketReadinessConvergenceIntegrityPassed,
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_ERA25_SCALE_READINESS_CONVERGENCE_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${SCALE_READINESS_CONVERGENCE_ERA25_PLATFORM_ANCHOR}`,
     integrationHealthHref: "/dashboard/integration-health",
     implementationHref: "/dashboard/implementation",

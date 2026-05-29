@@ -147,6 +147,10 @@ import {
   buildLaunchWizardEra25Month2MarketReadinessConvergenceSlice,
   type LaunchWizardEra25Month2MarketReadinessConvergenceSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-month2-market-readiness-convergence-era49";
+import {
+  buildLaunchWizardEra25ScaleReadinessConvergenceSlice,
+  type LaunchWizardEra25ScaleReadinessConvergenceSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-scale-readiness-convergence-era50";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -217,6 +221,10 @@ import {
   buildMonth2MarketReadinessConvergenceEra25UiSlice,
   type Month2MarketReadinessConvergenceEra25UiSlice,
 } from "@/lib/commercial/month2-market-readiness-convergence-ui-era25";
+import {
+  buildScaleReadinessConvergenceEra25UiSlice,
+  type ScaleReadinessConvergenceEra25UiSlice,
+} from "@/lib/commercial/scale-readiness-convergence-ui-era25";
 import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
 import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
 import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
@@ -283,6 +291,8 @@ export type LaunchWizardModel = {
   era25PilotWeek1ExecutionConvergenceIntegrity: LaunchWizardEra25PilotWeek1ExecutionConvergenceSlice | null;
   era25Month2MarketReadinessConvergence: Month2MarketReadinessConvergenceEra25UiSlice | null;
   era25Month2MarketReadinessConvergenceIntegrity: LaunchWizardEra25Month2MarketReadinessConvergenceSlice | null;
+  era25ScaleReadinessConvergence: ScaleReadinessConvergenceEra25UiSlice | null;
+  era25ScaleReadinessConvergenceIntegrity: LaunchWizardEra25ScaleReadinessConvergenceSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1179,6 +1189,64 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       era25Month2MarketReadinessConvergence,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const era25ScaleReadinessConvergence =
+    era25Month2MarketReadinessConvergence?.scaleReadinessConvergence ??
+    buildScaleReadinessConvergenceEra25UiSlice({
+      month2ConvergenceVisible: false,
+      goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+      p0Staging:
+        loopArtifacts.p0Staging ??
+        sustainedOpsArtifacts.p0Staging ??
+        marketLeaderArtifacts.p0Staging ??
+        seriesAArtifacts.p0Staging ??
+        scaleArtifacts.p0Staging ??
+        p0Summary,
+      tier2Summary:
+        loopArtifacts.tier2Summary ??
+        sustainedOpsArtifacts.tier2Summary ??
+        marketLeaderArtifacts.tier2Summary ??
+        seriesAArtifacts.tier2Summary ??
+        commercialOps?.tier2Staging.summary ??
+        null,
+      metricsBaseline:
+        loopArtifacts.metricsBaseline ??
+        sustainedOpsArtifacts.metricsBaseline ??
+        marketLeaderArtifacts.metricsBaseline ??
+        seriesAArtifacts.metricsBaseline ??
+        scaleArtifacts.metricsBaseline ??
+        month2Artifacts.metricsBaseline,
+      caseStudyDraft:
+        loopArtifacts.caseStudyDraft ??
+        sustainedOpsArtifacts.caseStudyDraft ??
+        marketLeaderArtifacts.caseStudyDraft ??
+        seriesAArtifacts.caseStudyDraft ??
+        scaleArtifacts.caseStudyDraft ??
+        month2Artifacts.caseStudyDraft,
+      investorOnepager:
+        loopArtifacts.investorOnepager ??
+        sustainedOpsArtifacts.investorOnepager ??
+        marketLeaderArtifacts.investorOnepager ??
+        seriesAArtifacts.investorOnepager ??
+        scaleArtifacts.investorOnepager ??
+        month2Artifacts.investorOnepager,
+      rollbackDrill:
+        loopArtifacts.rollbackDrill ??
+        sustainedOpsArtifacts.rollbackDrill ??
+        marketLeaderArtifacts.rollbackDrill ??
+        seriesAArtifacts.rollbackDrill ??
+        scaleArtifacts.rollbackDrill,
+      competitorMatrix:
+        loopArtifacts.competitorMatrix ??
+        sustainedOpsArtifacts.competitorMatrix ??
+        marketLeaderArtifacts.competitorMatrix ??
+        seriesAArtifacts.competitorMatrix,
+      p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+      tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
+    });
+  const era25ScaleReadinessConvergenceIntegrity = buildLaunchWizardEra25ScaleReadinessConvergenceSlice(
+    era25ScaleReadinessConvergence,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1239,5 +1307,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25PilotWeek1ExecutionConvergenceIntegrity,
     era25Month2MarketReadinessConvergence,
     era25Month2MarketReadinessConvergenceIntegrity,
+    era25ScaleReadinessConvergence,
+    era25ScaleReadinessConvergenceIntegrity,
   };
 }

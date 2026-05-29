@@ -197,6 +197,10 @@ import {
   mergeBriefingEra25Month2MarketReadinessConvergenceTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-month2-market-readiness-convergence-era49";
 import {
+  buildOwnerDailyBriefingEra25ScaleReadinessConvergenceAction,
+  mergeBriefingEra25ScaleReadinessConvergenceTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-scale-readiness-convergence-era50";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -1040,6 +1044,19 @@ export async function loadOwnerDailyBriefing(
             null,
         )
       : null;
+  const era25ScaleReadinessConvergenceRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25ScaleReadinessConvergenceAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+            ?.scaleReadinessConvergence ??
+            paidPilotGoConvergenceEra25?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+              ?.scaleReadinessConvergence ??
+            null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1475,6 +1492,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25Month2MarketReadinessConvergenceRankedAction) {
     allTopActions = mergeBriefingEra25Month2MarketReadinessConvergenceTopActions(
       era25Month2MarketReadinessConvergenceRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25ScaleReadinessConvergenceRankedAction) {
+    allTopActions = mergeBriefingEra25ScaleReadinessConvergenceTopActions(
+      era25ScaleReadinessConvergenceRankedAction,
       allTopActions,
     );
   }

@@ -1,0 +1,26 @@
+# Scale readiness convergence era25 integrity — blocks scale attestation without honest month 2.
+
+name: Scale Readiness Convergence Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/scale-readiness-convergence-integrity-baseline.json"
+      - "artifacts/scale-readiness-convergence-era25-report.md"
+      - "lib/commercial/scale-readiness-convergence-integrity-era50.ts"
+      - "scripts/ops/validate-scale-readiness-convergence-integrity.ts"
+
+jobs:
+  validate-scale-readiness-convergence-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate scale readiness convergence integrity (JSON)
+        run: npm run ops:validate-scale-readiness-convergence-integrity -- --json

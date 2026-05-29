@@ -58,6 +58,7 @@ export function LaunchWizardTodayStrip(props: {
     era25PilotWeek1ExecutionConvergence: props.model.era25PilotWeek1ExecutionConvergenceIntegrity,
     era25Month2MarketReadinessConvergence:
       props.model.era25Month2MarketReadinessConvergenceIntegrity,
+    era25ScaleReadinessConvergence: props.model.era25ScaleReadinessConvergenceIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -355,6 +356,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-month2-market-readiness-convergence"
               >
                 Month 2 {view.era25Month2MarketReadinessConvergence.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25ScaleReadinessConvergence ? (
+              <Badge
+                variant={
+                  view.era25ScaleReadinessConvergence.scaleReadinessConvergenceIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-scale-readiness-convergence"
+              >
+                Scale {view.era25ScaleReadinessConvergence.progressLabel}
               </Badge>
             ) : null}
           </div>

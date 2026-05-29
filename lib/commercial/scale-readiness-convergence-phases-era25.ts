@@ -14,6 +14,19 @@ export const SCALE_READINESS_CONVERGENCE_ERA25_REPORT_PATH =
 export const SCALE_READINESS_CONVERGENCE_ERA25_PLATFORM_ANCHOR =
   "#era25-scale-readiness-convergence" as const;
 
+export const SCALE_READINESS_CONVERGENCE_ERA25_TRACKED_ENV_KEYS = [
+  "SCALE_READINESS_CONVERGENCE_ERA25_ATTESTED",
+  "SCALE_READINESS_CONVERGENCE_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectScaleReadinessConvergenceEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return SCALE_READINESS_CONVERGENCE_ERA25_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export const SCALE_READINESS_CONVERGENCE_ERA25_BACKLOG_ID = "KOS-E25-005-SCALE" as const;
 
 export const SCALE_READINESS_CONVERGENCE_ERA25_ERA21_REFERENCE_DOC =
