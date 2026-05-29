@@ -48,7 +48,7 @@ import {
 } from "@/lib/launch-wizard/launch-wizard-production-grade-era20";
 import { LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID } from "@/lib/launch-wizard/launch-wizard-production-grade-era20-policy";
 import {
-  buildLaunchWizardCommercialInflectionSlice,
+  buildLaunchWizardCommercialInflectionSliceFromCommercialOps,
   type LaunchWizardCommercialInflectionSlice,
 } from "@/lib/launch-wizard/launch-wizard-commercial-inflection-era28";
 import {
@@ -878,7 +878,9 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       seriesAArtifacts.competitorMatrix,
   });
 
-  const commercialInflection = buildLaunchWizardCommercialInflectionSlice();
+  const commercialInflection = buildLaunchWizardCommercialInflectionSliceFromCommercialOps(
+    commercialOps,
+  );
   const commercialGoClosureIntegrity =
     buildLaunchWizardCommercialGoClosureSlice(commercialGoClosure);
   const pilotWeek1Integrity = buildLaunchWizardPilotWeek1Slice(pilotWeek1);

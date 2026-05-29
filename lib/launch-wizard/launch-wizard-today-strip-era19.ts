@@ -205,7 +205,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const pilotWeek1 = input.pilotWeek1 ?? null;
   const month2 = input.month2 ?? null;
   const inflectionSubline = commercialInflection
-    ? `${commercialInflection.scorecardLabel} · registry LIVE ${commercialInflection.integrationRegistryLiveCount}`
+    ? `${commercialInflection.scorecardLabel} · registry LIVE ${commercialInflection.integrationRegistryLiveCount}${
+        commercialInflection.p0VaultMissingCount > 0
+          ? ` · ${commercialInflection.topBlockerTitle}`
+          : ""
+      }`
     : null;
   const week1Subline = pilotWeek1
     ? `Week 1 ${pilotWeek1.progressLabel}${pilotWeek1.week1IntegrityFailed ? " · integrity FAIL" : ""}`

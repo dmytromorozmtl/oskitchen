@@ -117,6 +117,7 @@ export function buildTrustLayerHeadline(
       : buildIntegrationHealthCommercialInflectionBanner({
           p0Staging,
           tier2Summary,
+          vaultReport,
         });
   if (inflectionBanner) return `${inflectionBanner.headline} ${cardsHeadline}`;
   const tier2Banner = buildIntegrationHealthTier2GoldenPathBanner({
@@ -172,6 +173,7 @@ export function enrichIntegrationHealthChannelCardsWithTrustLayer(
       p0Staging,
       tier2Summary,
       goNoGoSummary: pilotWeek1Input?.goNoGoSummary,
+      vaultReport,
     }),
     tier2GoldenPath: buildIntegrationHealthTier2GoldenPathBanner({
       p0Staging,

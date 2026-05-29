@@ -6,7 +6,11 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { evaluateP0VaultEnv } from "@/scripts/ops/validate-p0-vault-env";
-import { formatP0OpsVaultEnvBlockerDetail } from "@/lib/commercial/p0-ops-vault-phases-era21";
+import {
+  formatP0OpsVaultEnvBlockerDetail,
+  formatP0OpsVaultPhaseBlockerDetail,
+  type P0OpsVaultPhaseStatus,
+} from "@/lib/commercial/p0-ops-vault-phases-era21";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT } from "@/lib/commercial/pilot-gono-go-era17-policy";
 import { evaluatePilotGoNoGoIntegrity } from "@/lib/commercial/pilot-gono-go-integrity-era28";
@@ -21,6 +25,7 @@ import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary"
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { INTEGRATION_REGISTRY } from "@/lib/integrations/integration-registry";
 import { CHANNEL_REGISTRY_ENTRIES } from "@/lib/channels/channel-registry";
+import type { VaultReadinessReport } from "@/lib/ops/vault-readiness-report";
 
 export const COMMERCIAL_INFLECTION_READINESS_POLICY_ID =
   "commercial-inflection-readiness-v1" as const;
@@ -121,8 +126,23 @@ function countChannelRegistryLive(): number {
   return CHANNEL_REGISTRY_ENTRIES.filter((entry) => entry.statusType === "LIVE").length;
 }
 
+function resolveP0VaultSnapshot(
+  env: NodeJS.ProcessEnv,
+  vaultReport?: VaultReadinessReport | null,
+): { allPresent: boolean; missing: string[] } {
+  if (vaultReport) {
+    return {
+      allPresent: vaultReport.vaultReady,
+      missing: [...vaultReport.missingKeys],
+    };
+  }
+  const live = evaluateP0VaultEnv(env);
+  return { allPresent: live.allPresent, missing: [...live.missing] };
+}
+
 export function buildCommercialInflectionBlockers(input: {
-  p0Vault: ReturnType<typeof evaluateP0VaultEnv>;
+  p0Vault: { allPresent: boolean; missing: readonly string[] };
+  p0VaultNextPhase?: P0OpsVaultPhaseStatus | null;
   p0Artifact: P0StagingProofUnblockSummary | null;
   tier2Artifact: Tier2StagingGoldenPathSummary | null;
   goNoGoArtifact: PilotGoNoGoSummary | null;
@@ -147,11 +167,15 @@ export function buildCommercialInflectionBlockers(input: {
       id: "p0_ops_vault_11_env",
       priority: "P0",
       role: "ops",
-      title: "Configure 11 P0 ops vault env vars",
-      detail: formatP0OpsVaultEnvBlockerDetail({
-        allPresent: input.p0Vault.allPresent,
-        missing: input.p0Vault.missing,
-      }),
+      title: input.p0VaultNextPhase
+        ? `P0 ops vault — ${input.p0VaultNextPhase.label.replace(/^Phase \d+ — /, "")}`
+        : "Configure 11 P0 ops vault env vars",
+      detail: input.p0VaultNextPhase
+        ? `${formatP0OpsVaultPhaseBlockerDetail(input.p0VaultNextPhase)} · ${input.p0VaultNextPhase.docPath}`
+        : formatP0OpsVaultEnvBlockerDetail({
+            allPresent: input.p0Vault.allPresent,
+            missing: input.p0Vault.missing,
+          }),
       status: input.p0Vault.allPresent ? "attention" : "blocked",
       validateCommand: input.p0Vault.allPresent
         ? "npm run ops:validate-p0-vault-env -- --json"
@@ -405,9 +429,11 @@ export function evaluateCommercialInflectionReadiness(
     p0Staging?: P0StagingProofUnblockSummary | null;
     tier2Staging?: Tier2StagingGoldenPathSummary | null;
     goNoGo?: PilotGoNoGoSummary | null;
+    vaultReport?: VaultReadinessReport | null;
   },
 ): CommercialInflectionReadinessSummary {
-  const p0Vault = evaluateP0VaultEnv(env);
+  const vaultReport = artifactOverrides?.vaultReport ?? null;
+  const p0Vault = resolveP0VaultSnapshot(env, vaultReport);
   const p0Artifact = loadP0StagingProofUnblockSummary(root, artifactOverrides?.p0Staging);
   const tier2Artifact =
     artifactOverrides?.tier2Staging ??
@@ -432,6 +458,7 @@ export function evaluateCommercialInflectionReadiness(
 
   const blockers = buildCommercialInflectionBlockers({
     p0Vault,
+    p0VaultNextPhase: vaultReport?.nextPhase ?? null,
     p0Artifact,
     tier2Artifact,
     goNoGoArtifact,

@@ -346,6 +346,7 @@ import {
   buildCommercialInflectionReadinessUiSlice,
   type CommercialInflectionReadinessUiSlice,
 } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
+import { evaluateCommercialInflectionReadiness } from "@/lib/commercial/commercial-inflection-readiness-era28";
 import {
   buildOwnerDailyBriefingLaunchWizardSetupAction,
   enrichBriefingLaunchWizardPackTiles,
@@ -610,7 +611,18 @@ export async function loadOwnerDailyBriefing(
     rolePack === "owner" ? buildOwnerDailyBriefingTier2GoldenPathAction(tier2GoldenPath) : null;
   const commercialInflection =
     rolePack === "owner" && needsCommercialOps
-      ? buildCommercialInflectionReadinessUiSlice()
+      ? buildCommercialInflectionReadinessUiSlice(
+          evaluateCommercialInflectionReadiness(process.env, process.cwd(), {
+            p0Staging: commercialOps?.p0Staging.summary ?? null,
+            tier2Staging: commercialOps?.tier2Staging.summary ?? null,
+            goNoGo: commercialOps?.goNoGo.summary ?? null,
+            vaultReport: commercialOps?.vaultReadiness.report ?? null,
+          }),
+          {
+            vaultReport: commercialOps?.vaultReadiness.report ?? null,
+            p0Staging: commercialOps?.p0Staging.summary ?? null,
+          },
+        )
       : null;
   const commercialInflectionRankedAction = buildOwnerDailyBriefingCommercialInflectionAction(
     commercialInflection,

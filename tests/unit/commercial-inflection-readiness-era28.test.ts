@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { buildP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import {
   COMMERCIAL_INFLECTION_READINESS_POLICY_ID,
   evaluateCommercialInflectionReadiness,
@@ -29,6 +30,58 @@ describe("commercial-inflection-readiness-era28", () => {
     expect(stopRule?.validateCommand).toContain("validate-p0-staging-proof-integrity");
     expect(result.blockers.some((row) => row.id === "stop_tier2_fake_pass")).toBe(true);
     expect(result.blockers.some((row) => row.id === "stop_pilot_gono_go_fake_go")).toBe(true);
+  });
+
+  it("uses vault report artifact for missing count and phased blocker when provided", () => {
+    const p0Staging = buildP0StagingProofUnblockSummary({
+      ssoArtifact: { overall: "SKIPPED", loginProofStatus: "proof_skipped" },
+      workflowsArtifact: { overall: "SKIPPED", firstGreenProofStatus: "proof_skipped" },
+      channelArtifact: {
+        overall: "SKIPPED",
+        wooLiveProofStatus: "proof_skipped",
+        shopifyLiveProofStatus: "proof_skipped",
+      },
+    });
+    const result = evaluateCommercialInflectionReadiness(
+      {},
+      process.cwd(),
+      {
+        p0Staging,
+        vaultReport: {
+          version: "vault-readiness-v2",
+          generatedAt: "2026-05-28T00:00:00.000Z",
+          policyId: "era17-p0-staging-proof-unblock-v1",
+          opsChecklistDoc: "docs/era18-p0-staging-proof-ops-checklist.md",
+          vaultMatrixDoc: "docs/ops-vault-matrix.md",
+          vaultReady: false,
+          presentCount: 0,
+          totalCount: 11,
+          missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+          day0Milestone: "blocked",
+          day0PartialComplete: false,
+          p0ProofStatus: "awaiting_ops_credentials",
+          p0ArtifactOverall: "SKIPPED",
+          nextPhase: {
+            id: "staging_login",
+            label: "Phase 1 — Staging login",
+            complete: false,
+            presentKeys: [],
+            missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+            docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+            smokeScripts: ["smoke:staging-workflows-first-green"],
+          },
+          phases: [],
+          childSmokes: [],
+          recommendedNextSteps: [],
+          secrets: [],
+          honestyNote: "test",
+        },
+      },
+    );
+    expect(result.p0VaultMissingCount).toBe(3);
+    const vaultBlocker = result.blockers.find((row) => row.id === "p0_ops_vault_11_env");
+    expect(vaultBlocker?.title).toContain("Staging login");
+    expect(vaultBlocker?.detail).toContain("GITHUB_E2E_STAGING_SECRETS.md");
   });
 
   it("blocks tier2 PASS when integrity detects fake proof_passed", () => {
