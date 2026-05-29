@@ -57,6 +57,16 @@ export function SustainedOperationalExcellencePhasesPanel(props: {
             <Badge variant="outline" className="rounded-full text-[10px]">
               Market leader complete
             </Badge>
+            {!slice.marketLeaderIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Market leader integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.sustainedOpsIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Sustained ops integrity FAIL
+              </Badge>
+            ) : null}
             {slice.customerName ? (
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 customer: {slice.customerName}
@@ -138,6 +148,9 @@ export function SustainedOperationalExcellencePhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
+                <li>{slice.validateMarketLeaderIntegrityCommand}</li>
                 <li>{slice.postMarketLeaderOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>

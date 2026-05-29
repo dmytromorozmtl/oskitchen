@@ -629,6 +629,8 @@ export async function loadOwnerDailyBriefing(
     : null;
   const sustainedOperationalExcellence = buildSustainedOperationalExcellenceUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging:
       sustainedOpsArtifacts?.p0Staging ??
       marketLeaderArtifacts?.p0Staging ??

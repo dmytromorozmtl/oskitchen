@@ -5,6 +5,7 @@ import {
   resolveSustainedOperationalExcellenceMilestoneFromPhaseStatuses,
   type SustainedOperationalExcellenceMilestone,
 } from "@/lib/commercial/sustained-operational-excellence-post-market-leader-orchestrator-era21";
+import { evaluateSustainedOperationalExcellenceIntegrity } from "@/lib/commercial/sustained-operational-excellence-integrity-era33";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -16,6 +17,7 @@ import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-stagi
 import {
   buildSustainedOperationalExcellencePhaseStatuses,
   COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
+  detectSustainedOperationalExcellenceStarted,
   formatSustainedOperationalExcellencePhaseBlockerDetail,
   PILOT_GONOGO_SUMMARY_ARTIFACT_PATH,
   PILOT_METRICS_BASELINE_ARTIFACT_PATH,
@@ -60,6 +62,13 @@ export type SustainedOperationalExcellenceUiSlice = {
   postMarketLeaderOrchestratorCommand: string;
   exportReadinessChecklistCommand: string;
   validateMarketLeaderCommand: string;
+  validateMarketLeaderIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  marketLeaderIntegrityPassed: boolean;
+  sustainedOpsIntegrityPassed: boolean;
+  p0ProofStatus: string | null;
+  tier2ProofStatus: string | null;
   sustainedOpsMilestone: SustainedOperationalExcellenceMilestone;
   todayHref: string;
   launchWizardHref: string;
@@ -78,6 +87,8 @@ export type SustainedOperationalExcellenceUiSlice = {
 
 export function buildSustainedOperationalExcellenceUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -87,36 +98,70 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): SustainedOperationalExcellenceUiSlice | null {
+  const env = input.env ?? process.env;
   const metricsBaseline = input.metricsBaseline ?? null;
-  const marketLeaderComplete = resolveMarketLeaderCompleteForSustainedOps({
+  const caseStudyDraft = input.caseStudyDraft ?? null;
+  const investorOnepager = input.investorOnepager ?? null;
+  const rollbackDrill = input.rollbackDrill ?? null;
+  const competitorMatrix = input.competitorMatrix ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+
+  const sustainedOpsIntegrity = evaluateSustainedOperationalExcellenceIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: input.p0Staging ?? null,
+    tier2SummaryOverride: input.tier2Summary ?? null,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: caseStudyDraft,
+    investorOnepagerOverride: investorOnepager,
+    rollbackDrillOverride: rollbackDrill,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  const marketLeaderCompleteFromPhases = resolveMarketLeaderCompleteForSustainedOps({
     goNoGoSummary: input.goNoGoSummary,
     p0Staging: input.p0Staging ?? null,
     tier2Summary: input.tier2Summary ?? null,
     metricsBaseline,
-    caseStudyDraft: input.caseStudyDraft ?? null,
-    investorOnepager: input.investorOnepager ?? null,
-    rollbackDrill: input.rollbackDrill ?? null,
-    competitorMatrix: input.competitorMatrix ?? null,
-    env: input.env,
+    caseStudyDraft,
+    investorOnepager,
+    rollbackDrill,
+    competitorMatrix,
+    env,
   });
+  const sustainedOpsExecutionStarted = detectSustainedOperationalExcellenceStarted(env);
+
+  if (!marketLeaderCompleteFromPhases && !sustainedOpsExecutionStarted) return null;
+
   const goDecision = input.goNoGoSummary?.decision ?? null;
   const prerequisites = resolveSustainedOperationalExcellencePrerequisites({
-    goDecision,
-    marketLeaderComplete,
+    goDecision: marketLeaderCompleteFromPhases ? "GO" : goDecision,
+    marketLeaderComplete: marketLeaderCompleteFromPhases,
   });
-  if (!prerequisites.prerequisitesComplete) return null;
+  if (!prerequisites.prerequisitesComplete && !sustainedOpsExecutionStarted) {
+    return null;
+  }
 
-  const phases = buildSustainedOperationalExcellencePhaseStatuses({
-    prerequisites,
-    goNoGoSummary: input.goNoGoSummary,
-    p0Staging: input.p0Staging ?? null,
-    tier2Summary: input.tier2Summary ?? null,
-    metricsBaseline,
-    competitorMatrix: input.competitorMatrix ?? null,
-    env: input.env,
-  });
-  const sustainedOpsComplete = resolveSustainedOperationalExcellenceComplete(phases);
-  if (sustainedOpsComplete) return null;
+  const phases = marketLeaderCompleteFromPhases
+    ? buildSustainedOperationalExcellencePhaseStatuses({
+        prerequisites,
+        goNoGoSummary: input.goNoGoSummary,
+        p0Staging: input.p0Staging ?? null,
+        tier2Summary: input.tier2Summary ?? null,
+        metricsBaseline,
+        competitorMatrix,
+        env,
+      })
+    : [];
+  const sustainedOpsComplete = marketLeaderCompleteFromPhases
+    ? resolveSustainedOperationalExcellenceComplete(phases)
+    : false;
+  if (sustainedOpsComplete && sustainedOpsIntegrity.integrityPassed) return null;
 
   const blockingPhases = phases.filter((phase) => !phase.optional);
   const completedBlockingPhaseCount = blockingPhases.filter((phase) => phase.complete).length;
@@ -127,8 +172,8 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
   const sustainedOpsMilestone = resolveSustainedOperationalExcellenceMilestoneFromPhaseStatuses(
     phases,
     {
-      prerequisitesComplete: true,
-      marketLeaderComplete: true,
+      prerequisitesComplete: marketLeaderCompleteFromPhases,
+      marketLeaderComplete: marketLeaderCompleteFromPhases,
       sustainedOpsComplete: false,
     },
   );
@@ -139,7 +184,7 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
     blocked: true,
     goDecision: "GO",
     customerName: input.goNoGoSummary?.customerName ?? null,
-    marketLeaderComplete: true,
+    marketLeaderComplete: marketLeaderCompleteFromPhases,
     phases,
     completedBlockingPhaseCount,
     blockingPhaseCount: blockingPhases.length,
@@ -157,6 +202,16 @@ export function buildSustainedOperationalExcellenceUiSlice(input: {
     exportReadinessChecklistCommand:
       "npm run ops:export-sustained-operational-excellence-readiness-checklist -- --write",
     validateMarketLeaderCommand: "npm run ops:validate-market-leader-positioning-env -- --json",
+    validateMarketLeaderIntegrityCommand:
+      "npm run ops:validate-market-leader-positioning-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-sustained-operational-excellence-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-sustained-operational-excellence-integrity-baseline -- --write",
+    marketLeaderIntegrityPassed: sustainedOpsIntegrity.marketLeaderIntegrityPassed,
+    sustainedOpsIntegrityPassed: sustainedOpsIntegrity.integrityPassed,
+    p0ProofStatus,
+    tier2ProofStatus,
     sustainedOpsMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,

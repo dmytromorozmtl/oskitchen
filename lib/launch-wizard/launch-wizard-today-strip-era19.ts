@@ -11,6 +11,7 @@ import type { LaunchWizardMonth2Slice } from "@/lib/launch-wizard/launch-wizard-
 import type { LaunchWizardScaleSlice } from "@/lib/launch-wizard/launch-wizard-scale-era30";
 import type { LaunchWizardSeriesASlice } from "@/lib/launch-wizard/launch-wizard-series-a-era31";
 import type { LaunchWizardMarketLeaderSlice } from "@/lib/launch-wizard/launch-wizard-market-leader-era32";
+import type { LaunchWizardSustainedOpsSlice } from "@/lib/launch-wizard/launch-wizard-sustained-ops-era33";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -41,6 +42,7 @@ export type LaunchWizardTodayStripViewModel = {
   scale: LaunchWizardScaleSlice | null;
   seriesA: LaunchWizardSeriesASlice | null;
   marketLeader: LaunchWizardMarketLeaderSlice | null;
+  sustainedOps: LaunchWizardSustainedOpsSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -113,6 +115,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const marketLeaderSubline = marketLeader
     ? `Market leader ${marketLeader.progressLabel}${marketLeader.marketLeaderIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const sustainedOps = input.sustainedOps ?? null;
+  const sustainedOpsSubline = sustainedOps
+    ? `Sustained ops ${sustainedOps.progressLabel}${sustainedOps.sustainedOpsIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -145,6 +151,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       scale,
       seriesA,
       marketLeader,
+      sustainedOps,
     };
   }
 
@@ -173,6 +180,8 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       month2,
       scale,
       seriesA,
+      marketLeader,
+      sustainedOps,
     };
   }
 
@@ -186,15 +195,26 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : seriesASubline
-          ? scaleSubline
-            ? month2Subline
-              ? week1Subline
-                ? `${week1Subline} · ${month2Subline} · ${scaleSubline} · ${seriesASubline}`
-                : `${month2Subline} · ${scaleSubline} · ${seriesASubline}`
-              : scaleSubline
-                ? `${scaleSubline} · ${seriesASubline}`
-                : seriesASubline
+        : sustainedOpsSubline
+          ? marketLeaderSubline
+            ? seriesASubline
+              ? `${seriesASubline} · ${marketLeaderSubline} · ${sustainedOpsSubline}`
+              : marketLeaderSubline
+                ? `${marketLeaderSubline} · ${sustainedOpsSubline}`
+                : sustainedOpsSubline
+            : sustainedOpsSubline
+          : seriesASubline
+            ? marketLeaderSubline
+              ? scaleSubline
+                ? month2Subline
+                  ? week1Subline
+                    ? `${week1Subline} · ${month2Subline} · ${scaleSubline} · ${seriesASubline} · ${marketLeaderSubline}`
+                    : `${month2Subline} · ${scaleSubline} · ${seriesASubline} · ${marketLeaderSubline}`
+                  : scaleSubline
+                    ? `${scaleSubline} · ${seriesASubline} · ${marketLeaderSubline}`
+                    : `${seriesASubline} · ${marketLeaderSubline}`
+                : `${seriesASubline} · ${marketLeaderSubline}`
+              : marketLeaderSubline
             : seriesASubline
           : scaleSubline
             ? month2Subline
@@ -224,5 +244,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     scale,
     seriesA,
     marketLeader,
+    sustainedOps,
   };
 }

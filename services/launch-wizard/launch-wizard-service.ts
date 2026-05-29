@@ -75,6 +75,10 @@ import {
   type LaunchWizardMarketLeaderSlice,
 } from "@/lib/launch-wizard/launch-wizard-market-leader-era32";
 import {
+  buildLaunchWizardSustainedOpsSlice,
+  type LaunchWizardSustainedOpsSlice,
+} from "@/lib/launch-wizard/launch-wizard-sustained-ops-era33";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -140,7 +144,9 @@ export type LaunchWizardModel = {
   seriesAPartnerExpansion: SeriesAPartnerExpansionUiSlice | null;
   seriesAPartnerExpansionIntegrity: LaunchWizardSeriesASlice | null;
   marketLeaderPositioning: MarketLeaderPositioningUiSlice | null;
+  marketLeaderPositioningIntegrity: LaunchWizardMarketLeaderSlice | null;
   sustainedOperationalExcellence: SustainedOperationalExcellenceUiSlice | null;
+  sustainedOperationalExcellenceIntegrity: LaunchWizardSustainedOpsSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -478,6 +484,12 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   const month2MarketReadinessIntegrity = buildLaunchWizardMonth2Slice(month2MarketReadiness);
   const scaleReadinessIntegrity = buildLaunchWizardScaleSlice(scaleReadiness);
   const seriesAPartnerExpansionIntegrity = buildLaunchWizardSeriesASlice(seriesAPartnerExpansion);
+  const marketLeaderPositioningIntegrity = buildLaunchWizardMarketLeaderSlice(
+    marketLeaderPositioning,
+  );
+  const sustainedOperationalExcellenceIntegrity = buildLaunchWizardSustainedOpsSlice(
+    sustainedOperationalExcellence,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -505,6 +517,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     marketLeaderPositioning,
     marketLeaderPositioningIntegrity,
     sustainedOperationalExcellence,
+    sustainedOperationalExcellenceIntegrity,
     paidPilotGoConvergence,
   };
 }

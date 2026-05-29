@@ -113,6 +113,12 @@ export const SUSTAINED_OPERATIONAL_EXCELLENCE_TRACKED_ENV_KEYS = [
   "SUSTAINED_OPS_QUARTERLY_GOVERNANCE_AUDITED",
 ] as const;
 
+export function detectSustainedOperationalExcellenceStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return SUSTAINED_OPERATIONAL_EXCELLENCE_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type SustainedOperationalExcellencePhaseStatus = {
   id: string;
   label: string;

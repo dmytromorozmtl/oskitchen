@@ -11,6 +11,7 @@ import { LaunchWizardMonth2Panel } from "@/components/dashboard/launch-wizard/la
 import { LaunchWizardScalePanel } from "@/components/dashboard/launch-wizard/launch-wizard-scale-panel";
 import { LaunchWizardSeriesAPanel } from "@/components/dashboard/launch-wizard/launch-wizard-series-a-panel";
 import { LaunchWizardMarketLeaderPanel } from "@/components/dashboard/launch-wizard/launch-wizard-market-leader-panel";
+import { LaunchWizardSustainedOpsPanel } from "@/components/dashboard/launch-wizard/launch-wizard-sustained-ops-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -164,6 +165,10 @@ export function LaunchWizardView(props: {
 
       {model.marketLeaderPositioningIntegrity ? (
         <LaunchWizardMarketLeaderPanel slice={model.marketLeaderPositioningIntegrity} />
+      ) : null}
+
+      {model.sustainedOperationalExcellenceIntegrity ? (
+        <LaunchWizardSustainedOpsPanel slice={model.sustainedOperationalExcellenceIntegrity} />
       ) : null}
 
       <LaunchWizardCommercialBlockersPanel

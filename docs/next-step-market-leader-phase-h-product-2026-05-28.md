@@ -51,7 +51,7 @@ npm run ops:sync-market-leader-positioning-integrity-baseline -- --write
 
 ## Next step after Phase H PASS
 
-1. Sustained operational excellence integrity guard (Phase I) — mirror era28–era32
+1. Sustained operational excellence integrity guard (Phase I) — **IMPLEMENTED** — see [`docs/next-step-sustained-ops-phase-i-product-2026-05-28.md`](./next-step-sustained-ops-phase-i-product-2026-05-28.md)
 2. `npm run ops:run-sustained-operational-excellence-post-market-leader-orchestrator -- --write`
 
 **Following engineering slice (optional):** era25 convergence reads integrity baseline · PostHog on pillar CTAs.

@@ -140,9 +140,9 @@ describe("owner-daily-briefing-sustained-operational-excellence-era21", () => {
         rollbackReason: null,
         commitSha: "abc",
         retrospective: { outcome: null, lessons: null, recorded: false },
-        steps: [],
-        passedStepCount: 5,
-        totalSteps: 5,
+        steps: [{ order: 1, action: "isolate", owner: "ops", status: "PASSED" as const, reason: null }],
+        passedStepCount: 1,
+        totalSteps: 1,
       },
       competitorMatrix: {
         version: "era17-competitor-feature-gap-matrix-v1",

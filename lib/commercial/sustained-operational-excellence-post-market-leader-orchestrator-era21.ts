@@ -124,6 +124,8 @@ export function buildSustainedOperationalExcellencePostMarketLeaderOrchestratorS
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-market-leader-positioning-integrity -- --json",
+        "npm run ops:validate-sustained-operational-excellence-integrity -- --json",
         "npm run ops:validate-market-leader-positioning-env -- --json",
         "npm run ops:validate-sustained-operational-excellence-env -- --json",
         SUSTAINED_OPERATIONAL_EXCELLENCE_POST_MARKET_LEADER_ORCHESTRATOR_COMMAND + " -- --write",
