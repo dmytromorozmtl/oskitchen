@@ -113,6 +113,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   const seriesAArtifacts = readSeriesAPartnerExpansionArtifacts();
   const seriesAPartnerExpansion = buildSeriesAPartnerExpansionUiSlice({
     goNoGoSummary: props.model.goNoGo.summary,
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
     p0Staging: seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0,
     tier2Summary: seriesAArtifacts.tier2Summary ?? scaleArtifacts.tier2Summary ?? tier2,
     metricsBaseline:

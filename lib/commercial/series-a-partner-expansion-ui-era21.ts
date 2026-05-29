@@ -5,6 +5,7 @@ import {
   resolveSeriesAPartnerExpansionMilestoneFromPhaseStatuses,
   type SeriesAPartnerExpansionMilestone,
 } from "@/lib/commercial/series-a-partner-expansion-post-scale-orchestrator-era21";
+import { evaluateSeriesAPartnerExpansionIntegrity } from "@/lib/commercial/series-a-partner-expansion-integrity-era31";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -16,6 +17,7 @@ import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-stagi
 import {
   buildSeriesAPartnerExpansionPhaseStatuses,
   COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
+  detectSeriesAPartnerExpansionStarted,
   formatSeriesAPartnerExpansionPhaseBlockerDetail,
   INVESTOR_NARRATIVE_ONEPAGER_ARTIFACT_PATH,
   PILOT_CASE_STUDY_DRAFT_ARTIFACT_PATH,
@@ -66,6 +68,11 @@ export type SeriesAPartnerExpansionUiSlice = {
   postScaleOrchestratorCommand: string;
   exportReadinessChecklistCommand: string;
   validateScaleCommand: string;
+  validateScaleIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  scaleIntegrityPassed: boolean;
+  seriesAIntegrityPassed: boolean;
   seriesAMilestone: SeriesAPartnerExpansionMilestone;
   todayHref: string;
   launchWizardHref: string;
@@ -89,6 +96,8 @@ export type SeriesAPartnerExpansionUiSlice = {
 
 export function buildSeriesAPartnerExpansionUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -98,39 +107,72 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): SeriesAPartnerExpansionUiSlice | null {
+  const env = input.env ?? process.env;
   const metricsBaseline = input.metricsBaseline ?? null;
   const caseStudyDraft = input.caseStudyDraft ?? null;
   const investorOnepager = input.investorOnepager ?? null;
-  const scaleComplete = resolveScaleCompleteForSeriesA({
-    goNoGoSummary: input.goNoGoSummary,
-    p0Staging: input.p0Staging ?? null,
-    tier2Summary: input.tier2Summary ?? null,
-    metricsBaseline,
-    caseStudyDraft,
-    investorOnepager,
-    rollbackDrill: input.rollbackDrill ?? null,
-    env: input.env,
-  });
-  const goDecision = input.goNoGoSummary?.decision ?? null;
-  const prerequisites = resolveSeriesAPartnerExpansionPrerequisites({
-    goDecision,
-    scaleComplete,
-  });
-  if (!prerequisites.prerequisitesComplete) return null;
+  const rollbackDrill = input.rollbackDrill ?? null;
+  const competitorMatrix = input.competitorMatrix ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
 
-  const phases = buildSeriesAPartnerExpansionPhaseStatuses({
-    prerequisites,
+  const seriesAIntegrity = evaluateSeriesAPartnerExpansionIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: input.p0Staging ?? null,
+    tier2SummaryOverride: input.tier2Summary ?? null,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: caseStudyDraft,
+    investorOnepagerOverride: investorOnepager,
+    rollbackDrillOverride: rollbackDrill,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  const scaleCompleteFromPhases = resolveScaleCompleteForSeriesA({
     goNoGoSummary: input.goNoGoSummary,
     p0Staging: input.p0Staging ?? null,
     tier2Summary: input.tier2Summary ?? null,
     metricsBaseline,
     caseStudyDraft,
     investorOnepager,
-    competitorMatrix: input.competitorMatrix ?? null,
-    env: input.env,
+    rollbackDrill,
+    env,
   });
-  const seriesAComplete = resolveSeriesAPartnerExpansionComplete(phases);
-  if (seriesAComplete) return null;
+  const scaleHonest = scaleCompleteFromPhases && seriesAIntegrity.scaleIntegrityPassed;
+  const goDecision = input.goNoGoSummary?.decision ?? null;
+  const seriesAExecutionStarted = detectSeriesAPartnerExpansionStarted(env, {
+    competitorMatrix,
+  });
+
+  if (!scaleHonest && !seriesAExecutionStarted) return null;
+
+  const prerequisites = resolveSeriesAPartnerExpansionPrerequisites({
+    goDecision: scaleHonest ? "GO" : goDecision,
+    scaleComplete: scaleHonest,
+  });
+  if (!prerequisites.prerequisitesComplete && !seriesAExecutionStarted) {
+    return null;
+  }
+
+  const phases = scaleHonest
+    ? buildSeriesAPartnerExpansionPhaseStatuses({
+        prerequisites,
+        goNoGoSummary: input.goNoGoSummary,
+        p0Staging: input.p0Staging ?? null,
+        tier2Summary: input.tier2Summary ?? null,
+        metricsBaseline,
+        caseStudyDraft,
+        investorOnepager,
+        competitorMatrix,
+        env,
+      })
+    : [];
+  const seriesAComplete = scaleHonest ? resolveSeriesAPartnerExpansionComplete(phases) : false;
+  if (seriesAComplete && seriesAIntegrity.integrityPassed) return null;
 
   const blockingPhases = phases.filter((phase) => !phase.optional);
   const completedBlockingPhaseCount = blockingPhases.filter((phase) => phase.complete).length;
@@ -139,8 +181,8 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
     ? formatSeriesAPartnerExpansionPhaseBlockerDetail(nextPhase)
     : null;
   const seriesAMilestone = resolveSeriesAPartnerExpansionMilestoneFromPhaseStatuses(phases, {
-    prerequisitesComplete: true,
-    scaleComplete: true,
+    prerequisitesComplete: scaleHonest,
+    scaleComplete: scaleHonest,
     seriesAComplete: false,
   });
 
@@ -150,7 +192,7 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
     blocked: true,
     goDecision: "GO",
     customerName: input.goNoGoSummary?.customerName ?? null,
-    scaleComplete: true,
+    scaleComplete: scaleHonest,
     phases,
     completedBlockingPhaseCount,
     blockingPhaseCount: blockingPhases.length,
@@ -168,6 +210,13 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
     exportReadinessChecklistCommand:
       "npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write",
     validateScaleCommand: "npm run ops:validate-scale-readiness-env -- --json",
+    validateScaleIntegrityCommand: "npm run ops:validate-scale-readiness-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-series-a-partner-expansion-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-series-a-partner-expansion-integrity-baseline -- --write",
+    scaleIntegrityPassed: seriesAIntegrity.scaleIntegrityPassed,
+    seriesAIntegrityPassed: seriesAIntegrity.integrityPassed,
     seriesAMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,

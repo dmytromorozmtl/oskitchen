@@ -117,6 +117,20 @@ export const SERIES_A_PARTNER_EXPANSION_TRACKED_ENV_KEYS = [
   "SERIES_A_CS_PLAYBOOK_REVIEWED",
 ] as const;
 
+export function detectSeriesAPartnerExpansionStarted(
+  env: NodeJS.ProcessEnv = process.env,
+  options?: {
+    competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
+  },
+): boolean {
+  const envStarted = SERIES_A_PARTNER_EXPANSION_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+  const competitorStarted =
+    options?.competitorMatrix !== undefined && options.competitorMatrix !== null;
+  return envStarted || competitorStarted;
+}
+
 export type SeriesAPartnerExpansionPhaseStatus = {
   id: string;
   label: string;

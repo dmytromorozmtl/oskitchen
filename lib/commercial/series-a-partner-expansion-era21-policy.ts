@@ -21,6 +21,8 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_EXTENDS_POLICIES = [
 export const SERIES_A_PARTNER_EXPANSION_ERA21_OPS_SCRIPTS = [
   "ops:run-series-a-partner-expansion-post-scale-orchestrator",
   "ops:validate-series-a-partner-expansion-env",
+  "ops:validate-series-a-partner-expansion-integrity",
+  "ops:sync-series-a-partner-expansion-integrity-baseline",
   "ops:export-series-a-partner-expansion-env-template",
   "ops:export-series-a-partner-expansion-readiness-checklist",
   "ops:sync-series-a-partner-expansion-progress-report",
@@ -29,6 +31,7 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_OPS_SCRIPTS = [
 export const SERIES_A_PARTNER_EXPANSION_ERA21_CI_SCRIPTS = [
   "test:ci:series-a-partner-expansion-era21",
   "test:ci:series-a-partner-expansion-era21:cert",
+  "test:ci:series-a-partner-expansion-integrity-era31",
 ] as const;
 
 export const SERIES_A_PARTNER_EXPANSION_ERA21_UNIT_TESTS = [
@@ -38,11 +41,18 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_UNIT_TESTS = [
   "tests/unit/owner-daily-briefing-series-a-partner-expansion-era21.test.ts",
   "tests/unit/run-series-a-partner-expansion-post-scale-orchestrator.test.ts",
   "tests/unit/series-a-partner-expansion-era21-cert-live.test.ts",
+  "tests/unit/series-a-partner-expansion-integrity-era31.test.ts",
+  "tests/unit/validate-series-a-partner-expansion-integrity.test.ts",
+  "tests/unit/series-a-partner-expansion-integrity-era31-cert-live.test.ts",
+  "tests/unit/launch-wizard-series-a-era31.test.ts",
 ] as const;
 
 export const SERIES_A_PARTNER_EXPANSION_ERA21_PRODUCT_SURFACES = [
   "components/dashboard/series-a-partner-expansion-phases-panel.tsx",
   "components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-series-a-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-view.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-today-strip.tsx",
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

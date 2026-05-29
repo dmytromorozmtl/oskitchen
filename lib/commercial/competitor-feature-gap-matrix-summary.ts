@@ -27,6 +27,12 @@ export function resolveCompetitorMatrixProofStatus(certPassed: boolean): Competi
   return certPassed ? "evidence_aligned_era17" : "proof_failed_cert";
 }
 
+export function recomputeCompetitorMatrixProofStatusFromSummary(
+  summary: CompetitorFeatureGapMatrixSummary,
+): CompetitorMatrixProofStatus {
+  return resolveCompetitorMatrixProofStatus(summary.certPassed);
+}
+
 export function resolveCompetitorMatrixOverall(
   matrixProofStatus: CompetitorMatrixProofStatus,
 ): CompetitorFeatureGapMatrixOverall {

@@ -556,6 +556,8 @@ export async function loadOwnerDailyBriefing(
   const seriesAArtifacts = needsCommercialOps ? readSeriesAPartnerExpansionArtifacts() : null;
   const seriesAPartnerExpansion = buildSeriesAPartnerExpansionUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging: seriesAArtifacts?.p0Staging ?? scaleArtifacts?.p0Staging ?? commercialOps?.p0Staging.summary ?? null,
     tier2Summary:
       seriesAArtifacts?.tier2Summary ?? scaleArtifacts?.tier2Summary ?? commercialOps?.tier2Staging.summary ?? null,

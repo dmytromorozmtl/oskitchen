@@ -22,35 +22,76 @@ const scaleCompleteEnv = {
   SCALE_DATA_ROOM_INDEX_PUBLISHED: "1",
 };
 
+const honestGo = {
+  version: "era17-pilot-gono-go-v1" as const,
+  runAt: new Date().toISOString(),
+  decision: "GO" as const,
+  blockers: [] as string[],
+  warnings: [] as string[],
+  customerExecutionStatus: "recorded" as const,
+  customerName: "Acme Kitchen",
+  loiSignedDate: "2026-06-01",
+  prospectExecutionStatus: "none" as const,
+  prospectName: null,
+  icpQualification: { qualified: true, missingCriteria: [], disqualifiers: [] },
+  evidenceGates: [
+    { id: "tier0", label: "t0", pass: true, reason: "ok" },
+    { id: "tier1", label: "t1", pass: true, reason: "ok" },
+    { id: "tier2", label: "t2", pass: true, reason: "ok" },
+    { id: "icp_qualification", label: "icp", pass: true, reason: "ok" },
+    { id: "forbidden_claims_enforcement", label: "fc", pass: true, reason: "ok" },
+    { id: "p0_staging_proof", label: "p0", pass: true, reason: "ok" },
+  ],
+  evaluatorInput: {
+    tier0Pass: true,
+    tier1Pass: true,
+    tier2Pass: true,
+    tier3Pass: true,
+    roleChecklistsComplete: true,
+    forbiddenClaimsInContract: false,
+    icpQualified: true,
+    stagingUrl: "https://x.example.com",
+    commitSha: "abc",
+  },
+};
+
+const capturedMetrics = [
+  "orders_per_day",
+  "storefront_checkout_success_rate",
+  "pos_checkout_completion",
+  "kds_bump_rate",
+  "support_tickets_per_week",
+  "operator_feedback_score",
+].map((id) => ({
+  id,
+  label: id,
+  status: "captured" as const,
+  value: 1,
+  unit: "n/a",
+  reason: "test fixture",
+}));
+
+const honestRollback = {
+  version: "era17-pilot-rollback-drill-v1" as const,
+  policyId: "era17-pilot-rollback-drill-v1" as const,
+  runAt: new Date().toISOString(),
+  drillMode: "tabletop" as const,
+  rollbackProofStatus: "proof_passed" as const,
+  stagingUrl: null,
+  operatorEmail: null,
+  rollbackReason: null,
+  commitSha: "abc",
+  retrospective: { outcome: null, lessons: null, recorded: false },
+  steps: [{ order: 1, action: "isolate", owner: "ops", status: "PASSED" as const, reason: null }],
+  passedStepCount: 1,
+  totalSteps: 1,
+};
+
 describe("series-a-partner-expansion-ui-era21", () => {
   it("returns null when scale is incomplete", () => {
     expect(
       buildSeriesAPartnerExpansionUiSlice({
-        goNoGoSummary: {
-          version: "era17-pilot-gono-go-v1",
-          runAt: new Date().toISOString(),
-          decision: "GO",
-          blockers: [],
-          warnings: [],
-          customerExecutionStatus: "recorded",
-          customerName: "Acme",
-          loiSignedDate: "2026-06-01",
-          prospectExecutionStatus: "none",
-          prospectName: null,
-          icpQualification: { qualified: true, missingCriteria: [], disqualifiers: [] },
-          evidenceGates: [],
-          evaluatorInput: {
-            tier0Pass: true,
-            tier1Pass: true,
-            tier2Pass: true,
-            tier3Pass: false,
-            roleChecklistsComplete: true,
-            forbiddenClaimsInContract: true,
-            icpQualified: true,
-            stagingUrl: "https://x.example.com",
-            commitSha: "abc",
-          },
-        },
+        goNoGoSummary: honestGo,
         env: {},
       }),
     ).toBeNull();
@@ -58,31 +99,9 @@ describe("series-a-partner-expansion-ui-era21", () => {
 
   it("visible when Scale complete and Series A tracks remain", () => {
     const slice = buildSeriesAPartnerExpansionUiSlice({
-      goNoGoSummary: {
-        version: "era17-pilot-gono-go-v1",
-        runAt: new Date().toISOString(),
-        decision: "GO",
-        blockers: [],
-        warnings: [],
-        customerExecutionStatus: "recorded",
-        customerName: "Acme Kitchen",
-        loiSignedDate: "2026-06-01",
-        prospectExecutionStatus: "none",
-        prospectName: null,
-        icpQualification: { qualified: true, missingCriteria: [], disqualifiers: [] },
-        evidenceGates: [],
-        evaluatorInput: {
-          tier0Pass: true,
-          tier1Pass: true,
-          tier2Pass: true,
-          tier3Pass: false,
-          roleChecklistsComplete: true,
-          forbiddenClaimsInContract: true,
-          icpQualified: true,
-          stagingUrl: "https://x.example.com",
-          commitSha: "abc",
-        },
-      },
+      goNoGoSummary: honestGo,
+      p0ProofStatus: "proof_passed",
+      tier2ProofStatus: "proof_passed",
       p0Staging: {
         version: "era17-p0-staging-proof-unblock-v1",
         runAt: new Date().toISOString(),
@@ -135,7 +154,7 @@ describe("series-a-partner-expansion-ui-era21", () => {
         pilotWeek: 8,
         customerRef: "Acme",
         capturedAt: new Date().toISOString(),
-        metrics: [],
+        metrics: capturedMetrics,
         capturedCount: 6,
         missingCount: 0,
       },
@@ -163,21 +182,7 @@ describe("series-a-partner-expansion-ui-era21", () => {
         pilotMetricsCapturedCount: 6,
         certPassed: true,
       },
-      rollbackDrill: {
-        version: "era17-pilot-rollback-drill-v1",
-        policyId: "era17-pilot-rollback-drill-v1",
-        runAt: new Date().toISOString(),
-        drillMode: "tabletop",
-        rollbackProofStatus: "proof_passed",
-        stagingUrl: null,
-        operatorEmail: null,
-        rollbackReason: null,
-        commitSha: "abc",
-        retrospective: { outcome: null, lessons: null, recorded: false },
-        steps: [],
-        passedStepCount: 5,
-        totalSteps: 5,
-      },
+      rollbackDrill: honestRollback,
       env: scaleCompleteEnv,
     });
     expect(slice?.blocked).toBe(true);
@@ -186,6 +191,21 @@ describe("series-a-partner-expansion-ui-era21", () => {
     expect(slice?.postScaleOrchestratorCommand).toContain(
       "run-series-a-partner-expansion-post-scale-orchestrator",
     );
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-series-a-partner-expansion-integrity",
+    );
     expect(formatSeriesAPartnerExpansionProgressLabel(slice!)).toContain("Acme Kitchen");
+  });
+
+  it("visible when Series A env present but Scale incomplete (integrity blocked)", () => {
+    const slice = buildSeriesAPartnerExpansionUiSlice({
+      goNoGoSummary: honestGo,
+      p0ProofStatus: "proof_passed",
+      tier2ProofStatus: "proof_passed",
+      env: { SERIES_A_PARTNER_ONEPAGER_REVIEWED: "1" },
+    });
+    expect(slice?.visible).toBe(true);
+    expect(slice?.scaleComplete).toBe(false);
+    expect(slice?.seriesAIntegrityPassed).toBe(false);
   });
 });

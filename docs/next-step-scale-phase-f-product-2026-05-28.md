@@ -50,7 +50,7 @@ npm run ops:sync-scale-readiness-integrity-baseline -- --write
 
 ## Next step after Phase F PASS
 
-1. Series A partner expansion integrity guard (Phase G) — mirror era28–era30
+1. Series A partner expansion integrity guard (Phase G) — **IMPLEMENTED** — see [`docs/next-step-series-a-phase-g-product-2026-05-28.md`](./next-step-series-a-phase-g-product-2026-05-28.md)
 2. `npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write`
 
-**Following engineering slice (optional):** Market leader positioning integrity · PostHog on Scale gate CTAs.
+**Following engineering slice (optional):** Market leader positioning integrity (Phase H) · PostHog on Scale gate CTAs.

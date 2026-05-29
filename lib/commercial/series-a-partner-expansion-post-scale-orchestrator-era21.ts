@@ -128,6 +128,8 @@ export function buildSeriesAPartnerExpansionPostScaleOrchestratorSummary(input: 
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-scale-readiness-integrity -- --json",
+        "npm run ops:validate-series-a-partner-expansion-integrity -- --json",
         "npm run ops:validate-scale-readiness-env -- --json",
         "npm run ops:validate-series-a-partner-expansion-env -- --json",
         SERIES_A_PARTNER_EXPANSION_POST_SCALE_ORCHESTRATOR_COMMAND + " -- --write",

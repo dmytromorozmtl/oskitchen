@@ -1,10 +1,27 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  buildOwnerDailyBriefingSeriesAPartnerExpansionAction,
-  SERIES_A_PARTNER_EXPANSION_BRIEFING_ACTION_PRIORITY,
-} from "@/lib/briefing/owner-daily-briefing-series-a-partner-expansion-era21";
 import { buildSeriesAPartnerExpansionUiSlice } from "@/lib/commercial/series-a-partner-expansion-ui-era21";
+import {
+  buildLaunchWizardSeriesASlice,
+  launchWizardSeriesAHref,
+} from "@/lib/launch-wizard/launch-wizard-series-a-era31";
+
+const scaleCompleteEnv = {
+  PILOT_WEEK1_TTV_HOURS: "6",
+  PILOT_WEEK1_FIRST_ORDER_ID: "ord_123",
+  PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED: "1",
+  PILOT_WEEK1_POS_CLOSEOUT_STATUS: "pass",
+  PILOT_WEEK1_REPORTS_WEEKLY_EXPORT: "1",
+  MONTH2_INVESTOR_FOUNDER_SIGNOFF: "1",
+  MONTH2_GTM_GHOST_KITCHEN_LANDING_REVIEWED: "1",
+  MONTH2_GTM_MEAL_PREP_LANDING_REVIEWED: "1",
+  PILOT_CASE_STUDY_CUSTOMER_APPROVAL: "signed",
+  SCALE_PER_CUSTOMER_GO_ISOLATION: "1",
+  SCALE_SOC2_READINESS_TRACK_REVIEWED: "1",
+  SCALE_SSO_PRODUCTION_STATUS: "pass",
+  SCALE_RESILIENCE_DRILLS_ATTESTED: "1",
+  SCALE_DATA_ROOM_INDEX_PUBLISHED: "1",
+};
 
 const honestGo = {
   version: "era17-pilot-gono-go-v1" as const,
@@ -55,9 +72,9 @@ const capturedMetrics = [
   reason: "test fixture",
 }));
 
-describe("owner-daily-briefing-series-a-partner-expansion-era21", () => {
-  it("builds ranked action with priority 6 when series A expansion active", () => {
-    const slice = buildSeriesAPartnerExpansionUiSlice({
+describe("launch-wizard-series-a-era31", () => {
+  it("builds slice with integrity flags when Series A active", () => {
+    const seriesA = buildSeriesAPartnerExpansionUiSlice({
       goNoGoSummary: honestGo,
       p0ProofStatus: "proof_passed",
       tier2ProofStatus: "proof_passed",
@@ -152,30 +169,16 @@ describe("owner-daily-briefing-series-a-partner-expansion-era21", () => {
         rollbackReason: null,
         commitSha: "abc",
         retrospective: { outcome: null, lessons: null, recorded: false },
-        steps: [{ order: 1, action: "isolate", owner: "ops", status: "PASSED", reason: null }],
+        steps: [{ order: 1, action: "a", owner: "ops", status: "PASSED", reason: null }],
         passedStepCount: 1,
         totalSteps: 1,
       },
-      env: {
-        PILOT_WEEK1_TTV_HOURS: "6",
-        PILOT_WEEK1_FIRST_ORDER_ID: "ord_123",
-        PILOT_WEEK1_INTEGRATION_HEALTH_REVIEWED: "1",
-        PILOT_WEEK1_POS_CLOSEOUT_STATUS: "pass",
-        PILOT_WEEK1_REPORTS_WEEKLY_EXPORT: "1",
-        MONTH2_INVESTOR_FOUNDER_SIGNOFF: "1",
-        MONTH2_GTM_GHOST_KITCHEN_LANDING_REVIEWED: "1",
-        MONTH2_GTM_MEAL_PREP_LANDING_REVIEWED: "1",
-        PILOT_CASE_STUDY_CUSTOMER_APPROVAL: "signed",
-        SCALE_PER_CUSTOMER_GO_ISOLATION: "1",
-        SCALE_SOC2_READINESS_TRACK_REVIEWED: "1",
-        SCALE_SSO_PRODUCTION_STATUS: "pass",
-        SCALE_RESILIENCE_DRILLS_ATTESTED: "1",
-        SCALE_DATA_ROOM_INDEX_PUBLISHED: "1",
-      },
+      env: { ...scaleCompleteEnv, SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED: "1" },
     });
-    const action = buildOwnerDailyBriefingSeriesAPartnerExpansionAction(slice);
-    expect(action?.id).toBe("series-a-partner-expansion");
-    expect(action?.priority).toBe(SERIES_A_PARTNER_EXPANSION_BRIEFING_ACTION_PRIORITY);
-    expect(action?.title).toContain("Series A");
+    const slice = buildLaunchWizardSeriesASlice(seriesA);
+    expect(slice).not.toBeNull();
+    expect(slice!.seriesAIntegrityFailed).toBe(false);
+    expect(slice?.progressLabel).toContain("/");
+    expect(launchWizardSeriesAHref()).toContain("#launch-wizard-series-a");
   });
 });

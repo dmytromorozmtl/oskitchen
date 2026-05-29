@@ -57,6 +57,16 @@ export function SeriesAPartnerExpansionPhasesPanel(props: {
             <Badge variant="outline" className="rounded-full text-[10px]">
               Scale complete
             </Badge>
+            {!slice.scaleIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Scale integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.seriesAIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Series A integrity FAIL
+              </Badge>
+            ) : null}
             {slice.customerName ? (
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 customer: {slice.customerName}
@@ -141,6 +151,9 @@ export function SeriesAPartnerExpansionPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
+                <li>{slice.validateScaleIntegrityCommand}</li>
                 <li>{slice.postScaleOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>
