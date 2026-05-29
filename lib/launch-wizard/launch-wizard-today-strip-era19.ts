@@ -37,6 +37,7 @@ import type { LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice } fro
 import type { LaunchWizardEra25SustainedProductEvolutionReentrantSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-era56";
 import type { LaunchWizardEra25PostReentrantCharterLockSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-era57";
 import type { LaunchWizardEra25P0MarketProofHonestClosureCapstoneSlice } from "@/lib/launch-wizard/launch-wizard-era25-p0-market-proof-honest-closure-capstone-era62";
+import type { LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-market-proof-steady-operational-witness-era63";
 import type { LaunchWizardEra25BandAMarketProofExecutionSolePathSlice } from "@/lib/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-era61";
 import type { LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice } from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
@@ -101,6 +102,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25ConvergenceGovernanceTerminusFreeze: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
   era25BandAMarketProofExecutionSolePath: LaunchWizardEra25BandAMarketProofExecutionSolePathSlice | null;
   era25P0MarketProofHonestClosureCapstone: LaunchWizardEra25P0MarketProofHonestClosureCapstoneSlice | null;
+  era25PostMarketProofSteadyOperationalWitness: LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -176,6 +178,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25ConvergenceGovernanceTerminusFreeze?: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
   era25BandAMarketProofExecutionSolePath?: LaunchWizardEra25BandAMarketProofExecutionSolePathSlice | null;
   era25P0MarketProofHonestClosureCapstone?: LaunchWizardEra25P0MarketProofHonestClosureCapstoneSlice | null;
+  era25PostMarketProofSteadyOperationalWitness?: LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -388,9 +391,20 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   }
   const era25P0MarketProofHonestClosureCapstone =
     input.era25P0MarketProofHonestClosureCapstone ?? null;
+  const era25PostMarketProofSteadyOperationalWitness =
+    input.era25PostMarketProofSteadyOperationalWitness ?? null;
   const era25P0MarketProofHonestClosureCapstoneSubline = era25P0MarketProofHonestClosureCapstone
     ? `P0 closure ${era25P0MarketProofHonestClosureCapstone.progressLabel}${era25P0MarketProofHonestClosureCapstone.era25P0MarketProofHonestClosureCapstoneIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25PostMarketProofSteadyOperationalWitnessSubline =
+    era25PostMarketProofSteadyOperationalWitness
+      ? `Steady witness ${era25PostMarketProofSteadyOperationalWitness.progressLabel}${era25PostMarketProofSteadyOperationalWitness.era25PostMarketProofSteadyOperationalWitnessIntegrityFailed ? " · integrity FAIL" : ""}`
+      : null;
+  if (era25PostMarketProofSteadyOperationalWitnessSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25PostMarketProofSteadyOperationalWitnessSubline} · ${era25FullConvergenceSubline}`
+      : era25PostMarketProofSteadyOperationalWitnessSubline;
+  }
   if (era25P0MarketProofHonestClosureCapstoneSubline) {
     era25FullConvergenceSubline = era25FullConvergenceSubline
       ? `${era25P0MarketProofHonestClosureCapstoneSubline} · ${era25FullConvergenceSubline}`
@@ -669,5 +683,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25ConvergenceGovernanceTerminusFreeze,
     era25BandAMarketProofExecutionSolePath,
     era25P0MarketProofHonestClosureCapstone,
+    era25PostMarketProofSteadyOperationalWitness,
   };
 }

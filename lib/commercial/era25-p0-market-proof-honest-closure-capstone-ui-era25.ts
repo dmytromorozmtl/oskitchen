@@ -21,6 +21,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25PostMarketProofSteadyOperationalWitnessEra25UiSlice,
+  type Era25PostMarketProofSteadyOperationalWitnessEra25UiSlice,
+} from "@/lib/commercial/era25-post-market-proof-steady-operational-witness-ui-era25";
 import { LAUNCH_WIZARD_ERA25_P0_MARKET_PROOF_HONEST_CLOSURE_CAPSTONE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-p0-market-proof-honest-closure-capstone-era62";
 
 export const ERA25_P0_MARKET_PROOF_HONEST_CLOSURE_CAPSTONE_ERA25_UI_POLICY_ID =
@@ -57,6 +61,7 @@ export type Era25P0MarketProofHonestClosureCapstoneEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25PostMarketProofSteadyOperationalWitness: Era25PostMarketProofSteadyOperationalWitnessEra25UiSlice | null;
 };
 
 export function buildEra25P0MarketProofHonestClosureCapstoneEra25UiSlice(input: {
@@ -102,6 +107,24 @@ export function buildEra25P0MarketProofHonestClosureCapstoneEra25UiSlice(input: 
 
   const closureCapstoneComplete = closureIntegrity.era25P0MarketProofHonestClosureCapstoneComplete;
   const closureCapstoneBlocked = !closureCapstoneComplete;
+
+  const era25PostMarketProofSteadyOperationalWitness =
+    buildEra25PostMarketProofSteadyOperationalWitnessEra25UiSlice({
+      era25P0MarketProofHonestClosureCapstoneVisible: true,
+      era25MarketProofGovernanceChainClosed: closureIntegrity.era25MarketProofGovernanceChainClosed,
+      env,
+      goNoGoSummary: input.goNoGoSummary,
+      p0Staging: input.p0Staging,
+      tier2Summary: input.tier2Summary,
+      metricsBaseline: input.metricsBaseline,
+      caseStudyDraft: input.caseStudyDraft,
+      investorOnepager: input.investorOnepager,
+      rollbackDrill: input.rollbackDrill,
+      competitorMatrix: input.competitorMatrix,
+      p0ProofStatus,
+      tier2ProofStatus,
+      closureCapstoneIntegritySummary: closureIntegrity,
+    });
 
   const headline = closureCapstoneComplete
     ? "P0 market proof closure capstone complete · era25 governance chain closed for Band A"
@@ -149,6 +172,7 @@ export function buildEra25P0MarketProofHonestClosureCapstoneEra25UiSlice(input: 
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25PostMarketProofSteadyOperationalWitness,
   };
 }
 

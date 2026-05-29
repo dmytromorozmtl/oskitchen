@@ -184,6 +184,10 @@ import {
   type LaunchWizardEra25P0MarketProofHonestClosureCapstoneSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-p0-market-proof-honest-closure-capstone-era62";
 import {
+  buildLaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice,
+  type LaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-post-market-proof-steady-operational-witness-era63";
+import {
   buildLaunchWizardEra25BandAMarketProofExecutionSolePathSlice,
   type LaunchWizardEra25BandAMarketProofExecutionSolePathSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-era61";
@@ -1398,6 +1402,16 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
         ?.era25BandAMarketProofExecutionSolePath?.era25P0MarketProofHonestClosureCapstone ?? null,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const era25PostMarketProofSteadyOperationalWitnessIntegrity =
+    buildLaunchWizardEra25PostMarketProofSteadyOperationalWitnessSlice(
+      era25SustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus
+        ?.commercialPilotConvergenceTrainClosure?.sustainedProductEvolutionReentrant
+        ?.era25PostReentrantCharterLock?.era25SteadyStateOperatorLoopLock
+        ?.era25CommercialPilotConvergenceTrainCapstone?.era25ConvergenceGovernanceTerminusFreeze
+        ?.era25BandAMarketProofExecutionSolePath?.era25P0MarketProofHonestClosureCapstone
+        ?.era25PostMarketProofSteadyOperationalWitness ?? null,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1475,5 +1489,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25ConvergenceGovernanceTerminusFreezeIntegrity,
     era25BandAMarketProofExecutionSolePathIntegrity,
     era25P0MarketProofHonestClosureCapstoneIntegrity,
+    era25PostMarketProofSteadyOperationalWitnessIntegrity,
   };
 }

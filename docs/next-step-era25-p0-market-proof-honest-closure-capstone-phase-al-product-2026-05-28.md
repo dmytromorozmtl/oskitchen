@@ -71,19 +71,8 @@ Workflow: `.github/workflows/ops-era25-p0-market-proof-honest-closure-capstone-i
 
 ---
 
-## Next step — Phase AM (era63)
+## Next step — Phase AM (era63) — **IMPLEMENTED**
 
-**Era25 post-market-proof steady operational witness integrity** — attests that after honest P0 closure capstone the platform runs in post-Band-A steady ops mode (improvement loop rhythm + commercial ops on frozen governance artifacts only).
+See [`docs/next-step-era25-post-market-proof-steady-operational-witness-phase-am-product-2026-05-28.md`](./next-step-era25-post-market-proof-steady-operational-witness-phase-am-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-p0-market-proof-honest-closure-capstone` baseline + dual cert green |
-| Parent evaluator | era62 P0 closure capstone integrity |
-| Platform anchor | `#era25-post-market-proof-steady-operational-witness` (planned) |
-| Briefing meta priority | **38** (planned) |
-| Env keys (planned) | `ERA25_POST_MARKET_PROOF_STEADY_OPERATIONAL_WITNESS_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-post-market-proof-steady-operational-witness-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `witness_without_closure_capstone`, `witness_claims_governance_reopen`, `fake_witness_attestation`, upstream era62 fail |
-| CI | `test:ci:era25-post-market-proof-steady-operational-witness-integrity-era63` |
-
-**Human acceptance (preview):** closure capstone PASS → attest steady operational witness → validate JSON → operator playbook sustains improvement loop + honest commercial artifacts without reopening era25 convergence env.
+**Next:** Phase AN (era64) — Era25 governance train terminal seal integrity (preview in AM doc).
