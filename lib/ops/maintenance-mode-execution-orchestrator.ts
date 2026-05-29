@@ -472,6 +472,9 @@ export function buildMaintenanceModeExecutionSummary(input: {
 
   if (milestone === "maintenance_mode_passed") {
     recommendedCommands.push(
+      "npm run ops:run-production-pilot-ready-closure-execution -- --write",
+    );
+    recommendedCommands.push(
       "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
     );
   }

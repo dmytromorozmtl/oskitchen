@@ -57,6 +57,8 @@ export type EngineeringPathTerminusUiSlice = {
   postMaintenanceModeOrchestratorCommand: string;
   maintenanceModeExecutionCommand: string;
   maintenanceModeExecutionArtifact: string;
+  productionPilotReadyClosureExecutionCommand: string;
+  productionPilotReadyClosureExecutionArtifact: string;
   validateMaintenanceModeCommand: string;
   validateMaintenanceModeIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -185,6 +187,10 @@ export function buildEngineeringPathTerminusUiSlice(input: {
       "npm run ops:run-maintenance-mode-execution -- --write",
     maintenanceModeExecutionArtifact:
       "artifacts/maintenance-mode-execution-summary.json",
+    productionPilotReadyClosureExecutionCommand:
+      "npm run ops:run-production-pilot-ready-closure-execution -- --write",
+    productionPilotReadyClosureExecutionArtifact:
+      "artifacts/production-pilot-ready-closure-execution-summary.json",
     validateMaintenanceModeCommand: "npm run ops:validate-maintenance-mode -- --json",
     validateMaintenanceModeIntegrityCommand:
       "npm run ops:validate-maintenance-mode-integrity -- --json",

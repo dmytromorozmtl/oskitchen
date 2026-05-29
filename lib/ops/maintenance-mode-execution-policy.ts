@@ -33,6 +33,7 @@ export const MAINTENANCE_MODE_EXECUTION_OPS_SCRIPTS = [
   "smoke:pilot-metrics-baseline",
   "smoke:pilot-gono-go",
   "ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator",
+  "ops:run-production-pilot-ready-closure-execution",
 ] as const;
 
 export const MAINTENANCE_MODE_EXECUTION_CI_SCRIPTS = [

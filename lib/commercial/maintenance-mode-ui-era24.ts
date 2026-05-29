@@ -68,6 +68,8 @@ export type MaintenanceModeUiSlice = {
   ciLoopExecutionArtifact: string;
   maintenanceModeExecutionCommand: string;
   maintenanceModeExecutionArtifact: string;
+  productionPilotReadyClosureExecutionCommand: string;
+  productionPilotReadyClosureExecutionArtifact: string;
   validateProductEvolutionCommand: string;
   validateProductEvolutionIntegrityCommand: string;
   integrityValidateCommand: string;
@@ -218,6 +220,10 @@ export function buildMaintenanceModeUiSlice(input: {
       "npm run ops:run-maintenance-mode-execution -- --write",
     maintenanceModeExecutionArtifact:
       "artifacts/maintenance-mode-execution-summary.json",
+    productionPilotReadyClosureExecutionCommand:
+      "npm run ops:run-production-pilot-ready-closure-execution -- --write",
+    productionPilotReadyClosureExecutionArtifact:
+      "artifacts/production-pilot-ready-closure-execution-summary.json",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
     validateProductEvolutionIntegrityCommand:
       "npm run ops:validate-sustained-product-evolution-integrity -- --json",

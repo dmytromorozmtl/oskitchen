@@ -22,6 +22,7 @@ export const ENGINEERING_PATH_TERMINUS_ERA24_EXTENDS_POLICIES = [
 ] as const;
 
 export const ENGINEERING_PATH_TERMINUS_ERA24_OPS_SCRIPTS = [
+  "ops:run-production-pilot-ready-closure-execution",
   "ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator",
   "ops:validate-commercial-pilot-path",
   "ops:sync-commercial-pilot-path-status-report",

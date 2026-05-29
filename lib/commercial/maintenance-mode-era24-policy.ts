@@ -19,6 +19,7 @@ export const MAINTENANCE_MODE_ERA24_EXTENDS_POLICIES = [
 ] as const;
 
 export const MAINTENANCE_MODE_ERA24_OPS_SCRIPTS = [
+  "ops:run-production-pilot-ready-closure-execution",
   "ops:run-maintenance-mode-execution",
   "ops:run-continuous-improvement-loop-execution",
   "ops:run-maintenance-mode-post-product-evolution-orchestrator",
