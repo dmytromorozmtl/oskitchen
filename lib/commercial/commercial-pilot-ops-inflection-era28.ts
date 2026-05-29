@@ -46,3 +46,9 @@ export function buildCommercialPilotOpsInflectionSlice(
     vaultHero,
   };
 }
+
+export function resolveTodayCommercialInflectionUiSlice(
+  model: CommercialPilotOpsStatusModel,
+): CommercialInflectionReadinessUiSlice | null {
+  return buildCommercialPilotOpsInflectionSlice(model).uiSlice;
+}

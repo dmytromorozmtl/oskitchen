@@ -39,6 +39,11 @@ export function CommercialInflectionTodayStrip(props: {
           <Badge variant="secondary" className="rounded-full text-[10px] tabular-nums">
             {formatCommercialInflectionScorecardLabel(slice)}
           </Badge>
+          {slice.p0VaultMissingCount > 0 ? (
+            <Badge variant="destructive" className="rounded-full text-[10px] tabular-nums">
+              vault {slice.p0VaultMissingCount}/11 missing
+            </Badge>
+          ) : null}
           <Badge variant="outline" className="rounded-full text-[10px]">
             P0 proof: {slice.p0ProofStatus.replaceAll("_", " ")}
           </Badge>
@@ -56,7 +61,12 @@ export function CommercialInflectionTodayStrip(props: {
         ) : null}
         <div className="flex flex-wrap gap-2">
           <Button asChild size="sm" variant="default" className="rounded-full">
-            <Link href={slice.platformOpsHref}>Inflection matrix</Link>
+            <Link href={slice.platformOpsHref}>
+              {slice.milestone === "p0_ops_vault_blocked" &&
+              slice.platformOpsHref.includes("p0-staging-proof")
+                ? "P0 staging proof ops"
+                : "Inflection matrix"}
+            </Link>
           </Button>
           <Button asChild size="sm" variant="outline" className="rounded-full">
             <Link href={slice.integrationHealthHref}>Integration health</Link>

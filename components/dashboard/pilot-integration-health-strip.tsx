@@ -117,9 +117,18 @@ export function PilotIntegrationHealthStrip(props: {
             </p>
             <p className="mt-1 text-muted-foreground">
               {model.commercialInflection.registryHonestyLine} · {model.commercialInflection.topBlockerTitle}
+              {model.commercialInflection.p0VaultMissingCount > 0
+                ? ` · vault ${model.commercialInflection.p0VaultMissingCount}/11 missing`
+                : ""}
             </p>
+            <p className="mt-1 text-muted-foreground">{model.commercialInflection.topBlockerDetail}</p>
             <Button asChild variant="link" size="sm" className="mt-1 h-auto p-0 text-xs">
-              <Link href={model.commercialInflection.platformOpsHref}>Commercial inflection matrix</Link>
+              <Link href={model.commercialInflection.platformOpsHref}>
+                {model.commercialInflection.milestone === "p0_ops_vault_blocked" &&
+                model.commercialInflection.platformOpsHref.includes("p0-staging-proof")
+                  ? "Open P0 staging proof ops"
+                  : "Commercial inflection matrix"}
+              </Link>
             </Button>
           </div>
         ) : null}

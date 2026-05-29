@@ -2,6 +2,7 @@
  * Today pilot integration health strip — commercial inflection footnote (registry LIVE honesty).
  */
 
+import type { CommercialInflectionMilestone } from "@/lib/commercial/commercial-inflection-readiness-era28";
 import type { CommercialInflectionReadinessUiSlice } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
 import { formatCommercialInflectionScorecardLabel } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
 import type { PilotIntegrationHealthStripModel } from "@/lib/integrations/pilot-integration-health-strip-era18";
@@ -14,6 +15,9 @@ export type PilotIntegrationHealthCommercialInflectionFootnote = {
   scorecardLabel: string;
   registryHonestyLine: string;
   topBlockerTitle: string;
+  topBlockerDetail: string;
+  milestone: CommercialInflectionMilestone;
+  p0VaultMissingCount: number;
   platformOpsHref: string;
   integrationHealthHref: string;
 };
@@ -28,6 +32,9 @@ export function buildPilotIntegrationHealthCommercialInflectionFootnote(
     scorecardLabel: formatCommercialInflectionScorecardLabel(slice),
     registryHonestyLine: `Registry LIVE: integrations ${slice.integrationRegistryLiveCount} · channels ${slice.channelRegistryLiveCount}`,
     topBlockerTitle: slice.topBlockerTitle,
+    topBlockerDetail: slice.topBlockerDetail,
+    milestone: slice.milestone,
+    p0VaultMissingCount: slice.p0VaultMissingCount,
     platformOpsHref: slice.platformOpsHref,
     integrationHealthHref: slice.integrationHealthHref,
   };
@@ -44,7 +51,10 @@ export function augmentPilotIntegrationHealthStripWithCommercialInflection(
     return { ...model, commercialInflection: null };
   }
 
-  const headline = `${model.headline} ${footnote.registryHonestyLine}.`;
+  const headline =
+    footnote.milestone === "p0_ops_vault_blocked"
+      ? `${model.headline} Market inflection blocked — ${footnote.topBlockerTitle} (${footnote.p0VaultMissingCount}/11 vault). ${footnote.registryHonestyLine}.`
+      : `${model.headline} ${footnote.registryHonestyLine}.`;
 
   return {
     ...model,

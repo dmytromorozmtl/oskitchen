@@ -5,6 +5,7 @@ import { OwnerDailyBriefingBreakthroughEra25Panel } from "@/components/dashboard
 import { buildOwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
 import { buildCommercialInflectionReadinessUiSlice } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
+import { resolveTodayCommercialInflectionUiSlice } from "@/lib/commercial/commercial-pilot-ops-inflection-era28";
 import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
@@ -25,6 +26,7 @@ import {
 } from "@/services/briefing/owner-daily-briefing-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 import { loadLaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
+import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 
 export const dynamic = "force-dynamic";
 
@@ -61,8 +63,9 @@ export default async function TodayOperationsPage({
     supportAdmin,
   });
   const showLaunchWizardStrip = actor.workspaceRole === "OWNER";
+  const needsCommercialInflection = showOwnerBriefing && showIntegrationHealth;
   const data = await loadTodayCommandCenter(dataUserId);
-  const [profile, integrationHealthModel, launchWizardModel] = await Promise.all([
+  const [profile, integrationHealthModel, launchWizardModel, commercialOps] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: dataUserId },
       select: { createdAt: true },
@@ -71,6 +74,7 @@ export default async function TodayOperationsPage({
       ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)
       : Promise.resolve(null),
     showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId) : Promise.resolve(null),
+    needsCommercialInflection ? loadCommercialPilotOpsStatusModel() : Promise.resolve(null),
   ]);
   const ownerBriefing = showOwnerBriefing
     ? await loadOwnerDailyBriefing(dataUserId, {
@@ -97,11 +101,14 @@ export default async function TodayOperationsPage({
   const breakthroughEra25 = showOwnerBriefing
     ? buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true })
     : null;
+  const commercialInflectionUiSlice = commercialOps
+    ? resolveTodayCommercialInflectionUiSlice(commercialOps)
+    : buildCommercialInflectionReadinessUiSlice();
   const integrationHealthStripModel =
     integrationHealthModel && showOwnerBriefing
       ? augmentPilotIntegrationHealthStripWithCommercialInflection(
           integrationHealthModel,
-          buildCommercialInflectionReadinessUiSlice(),
+          commercialInflectionUiSlice,
         )
       : integrationHealthModel;
 
