@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildContinuousImprovementLoopTrackStatuses,
+  COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
   CONTINUOUS_IMPROVEMENT_LOOP_TRACKS,
+  SERIES_A_PLATFORM_OPS_ROUTE,
   resolveContinuousImprovementLoopHealthSummary,
   resolveContinuousImprovementLoopPrerequisites,
   resolveNextContinuousImprovementLoopAttentionTrack,
@@ -191,6 +193,11 @@ describe("continuous-improvement-loop-phases-era22", () => {
   it("defines seven recurring tracks without env attestation keys", () => {
     expect(CONTINUOUS_IMPROVEMENT_LOOP_TRACKS).toHaveLength(7);
     expect(CONTINUOUS_IMPROVEMENT_LOOP_TRACKS.every((track) => !track.id.includes("env"))).toBe(true);
+  });
+
+  it("re-exports era21 governance paths for orchestrator barrels", () => {
+    expect(COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH).toContain("competitor-feature-gap");
+    expect(SERIES_A_PLATFORM_OPS_ROUTE).toBe("/platform/commercial-pilot-ops");
   });
 
   it("requires sustained ops complete for pure operational mode", () => {

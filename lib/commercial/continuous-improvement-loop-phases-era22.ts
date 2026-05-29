@@ -424,3 +424,18 @@ export function formatContinuousImprovementLoopTrackDetail(
 ): string {
   return `${track.label}: ${track.detail}`;
 }
+
+/** Barrel re-exports for era22 orchestrator/UI — canonical paths live in era21 modules. */
+export {
+  COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
+  PILOT_METRICS_BASELINE_ARTIFACT_PATH,
+  SERIES_A_COMPETITOR_LEAPFROG_DOC,
+} from "@/lib/commercial/market-leader-positioning-phases-era21";
+
+export {
+  SERIES_A_FEATURE_MATURITY_DOC,
+  SERIES_A_FORBIDDEN_CLAIMS_DOC,
+  SERIES_A_PLATFORM_OPS_ROUTE,
+  SUSTAINED_OPS_ORDER_HUB_ROUTE,
+  SUSTAINED_OPS_PRODUCTION_CALENDAR_ROUTE,
+} from "@/lib/commercial/sustained-operational-excellence-phases-era21";

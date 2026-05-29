@@ -409,3 +409,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — re-export continuous-improvement-loop-phases-era22 constants for era22 orchestrator/UI (cycle 32)
+
+---
+Cycle: 32
+Timestamp: 2026-05-30T00:30:00.000Z
+Action: fix: barrel re-export era21 governance constants from continuous-improvement-loop-phases-era22 for orchestrator/UI/pure-operational-mode terminus
+Files: lib/commercial/continuous-improvement-loop-phases-era22.ts, tests/unit/continuous-improvement-loop-phases-era22.test.ts
+TS errors before: 56
+TS errors after: 48
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — shared P0 artifact resolver for era25 integrity modules (cycle 33)
