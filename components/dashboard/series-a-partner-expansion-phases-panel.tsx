@@ -151,6 +151,7 @@ export function SeriesAPartnerExpansionPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.productionGaExecutionCommand}</li>
                 <li>{slice.integrityValidateCommand}</li>
                 <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.validateScaleIntegrityCommand}</li>

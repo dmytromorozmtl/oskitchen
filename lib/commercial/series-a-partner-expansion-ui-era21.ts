@@ -66,6 +66,8 @@ export type SeriesAPartnerExpansionUiSlice = {
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
   postScaleOrchestratorCommand: string;
+  productionGaExecutionCommand: string;
+  productionGaExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateScaleCommand: string;
   validateScaleIntegrityCommand: string;
@@ -207,6 +209,8 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
       "npm run ops:sync-series-a-partner-expansion-progress-report -- --write",
     postScaleOrchestratorCommand:
       "npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write",
+    productionGaExecutionCommand: "npm run ops:run-production-ga-execution -- --write",
+    productionGaExecutionArtifact: "artifacts/production-ga-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write",
     validateScaleCommand: "npm run ops:validate-scale-readiness-env -- --json",

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>KitchenOS Production GA Execution</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
+    .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+    .banner-pass { background: #ecfdf5; border: 1px solid #6ee7b7; }
+    .banner-blocked { background: #fff7ed; border: 1px solid #fdba74; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9rem; }
+    th, td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+    th { background: #f9fafb; }
+    .status-pass { color: #047857; font-weight: 700; }
+    .status-blocked { color: #b45309; font-weight: 700; }
+    code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+    .honesty { font-size: 0.85rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Production GA Readiness — Step 7 Execution</h1>
+  <p class="honesty">Policy era35-production-ga-execution-v1 · Generated 2026-05-29T14:04:53.689Z</p>
+
+  <div class="banner banner-blocked">
+    <strong>Milestone:</strong> scale_expansion_blocked<br />
+    <strong>Scale expansion:</strong> week1_execution_blocked<br />
+    <strong>GO:</strong> NO-GO · Customer: not recorded<br />
+    <strong>GA phases:</strong> in progress · P0: awaiting_ops_credentials · Tier 2: missing<br />
+    <strong>Commercial inflection:</strong> p0_ops_vault_blocked · score 24/100
+  </div>
+
+  <p class="honesty">PASS &gt; SKIPPED — never claim SOC2 Type II until audit complete. Public claims must pass smoke:pilot-forbidden-claims-enforcement. ICP = all F&amp;B formats.</p>
+
+  <h2>Execution gates</h2>
+  <table>
+    <thead><tr><th></th><th>Gate</th><th>Proof</th><th>Detail</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Pilot scale expansion complete (Step 6)</td>
+        <td>week1_execution_blocked</td>
+        <td>Complete Step 6 — pilot scale expansion execution.</td>
+        <td><code>npm run ops:run-pilot-scale-expansion-execution -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Production engineering gates (P0 + Tier 2 + scale)</td>
+        <td>blocked</td>
+        <td>P0, Tier 2, and scale readiness must all be proof_passed before GA.</td>
+        <td><code>npm run run:production-pilot-ready</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Production GA checklist phases</td>
+        <td>in_progress</td>
+        <td>Complete production GA attestation phases — all F&amp;B ICP formats.</td>
+        <td><code>npm run ops:run-production-ga-execution -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-pass">✓</td>
+        <td>Rollback drill proof_passed</td>
+        <td>proof_passed</td>
+        <td>Rollback path documented and drill within 90 days — never fake proof_passed.</td>
+        <td><code>npm run smoke:pilot-rollback-drill</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Scale readiness integrity</td>
+        <td>integrity_pending</td>
+        <td>No fake scale PASS or shared GO across customers.</td>
+        <td><code>npm run ops:validate-scale-readiness-integrity -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Commercial inflection readiness</td>
+        <td>p0_ops_vault_blocked</td>
+        <td>Resolve remaining commercial inflection blockers.</td>
+        <td><code>npm run ops:run-commercial-inflection-readiness-orchestrator -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>GO decision still honest</td>
+        <td>NO-GO</td>
+        <td>GO must remain valid through GA — re-run smoke:pilot-gono-go if artifacts drift.</td>
+        <td><code>npm run smoke:pilot-gono-go</code></td>
+      </tr></tbody>
+  </table>
+
+  <h2>Production GA phases</h2>
+  <table>
+    <thead><tr><th></th><th>Phase</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Engineering gates — P0 + Tier 2 + scale readiness PASS on production</td>
+        <td>P0 staging proof not proof_passed — configure ops vault and run ops:run-p0-staging-proof-execution</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Ops runbooks — GA cutover documented</td>
+        <td>COO updates commercial-pilot-runbook with GA cutover, then PRODUCTION_GA_OPS_RUNBOOK_REVIEWED=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Cron + monitoring — production gate PASS</td>
+        <td>Run npm run test:ci:cron-hygiene, then PRODUCTION_GA_CRON_MONITORING_REVIEWED=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Rollback path — documented + drill within 90 days</td>
+        <td>Document rollback path in runbook, then PRODUCTION_GA_ROLLBACK_PATH_REVIEWED=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Security review — forbidden claims + SOC2 readiness track (not Type II)</td>
+        <td>Review forbidden claims + SOC2 roadmap, then SCALE_SOC2_READINESS_TRACK_REVIEWED=1 — never claim Type II</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Pricing + packaging — tiers documented, ICP all F&amp;B formats</td>
+        <td>Founder + Sales finalize pricing tiers, then PRODUCTION_GA_PRICING_PACKAGING_REVIEWED=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Public launch narrative — investor onepager + forbidden claims PASS</td>
+        <td>Run npm run smoke:investor-narrative-onepager until overall: PASSED</td>
+      </tr></tbody>
+  </table>
+
+  <h2>Recommended commands</h2>
+  <ol><li><code>npm run ops:run-pilot-scale-expansion-execution -- --write</code></li><li><code>npm run ops:run-pilot-scale-expansion-execution -- --execute</code></li></ol>
+</body>
+</html>

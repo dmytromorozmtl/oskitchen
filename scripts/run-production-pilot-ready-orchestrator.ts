@@ -89,6 +89,11 @@ function main() {
         allowFail: true,
       }),
     );
+    steps.push(
+      runStep("production-ga", "npm run ops:run-production-ga-execution -- --write", {
+        allowFail: true,
+      }),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

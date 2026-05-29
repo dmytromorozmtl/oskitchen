@@ -268,7 +268,7 @@ export function buildPilotScaleExpansionExecutionSummary(input: {
   }
 
   if (milestone === "pilot_scale_expansion_passed") {
-    recommendedCommands.push("npm run run:production-pilot-ready");
+    recommendedCommands.push("npm run ops:run-production-ga-execution -- --write");
   }
 
   return {
