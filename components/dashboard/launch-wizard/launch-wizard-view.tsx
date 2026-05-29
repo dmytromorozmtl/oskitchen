@@ -36,6 +36,7 @@ import { LaunchWizardEra25PureOperationalModeTerminusPanel } from "@/components/
 import { LaunchWizardEra25CommercialPilotConvergenceTrainClosurePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-panel";
 import { LaunchWizardEra25SustainedProductEvolutionReentrantPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-panel";
 import { LaunchWizardEra25PostReentrantCharterLockPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-panel";
+import { LaunchWizardEra25BandAMarketProofExecutionSolePathPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-panel";
 import { LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-panel";
 import { LaunchWizardEra25CommercialPilotConvergenceTrainCapstonePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-panel";
 import { shouldSuppressEra25ProductConvergenceSurfaces } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
@@ -340,6 +341,11 @@ export function LaunchWizardView(props: {
       {model.era25ConvergenceGovernanceTerminusFreezeIntegrity ? (
         <LaunchWizardEra25ConvergenceGovernanceTerminusFreezePanel
           slice={model.era25ConvergenceGovernanceTerminusFreezeIntegrity}
+        />
+      ) : null}
+      {model.era25BandAMarketProofExecutionSolePathIntegrity ? (
+        <LaunchWizardEra25BandAMarketProofExecutionSolePathPanel
+          slice={model.era25BandAMarketProofExecutionSolePathIntegrity}
         />
       ) : null}
 

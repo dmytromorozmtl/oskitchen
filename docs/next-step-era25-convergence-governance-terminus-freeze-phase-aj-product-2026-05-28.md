@@ -73,19 +73,8 @@ Workflow: `.github/workflows/ops-era25-convergence-governance-terminus-freeze-in
 
 ---
 
-## Next step — Phase AK (era61)
+## Next step — Phase AK (era61) — **IMPLEMENTED**
 
-**Era25 Band A market proof execution sole-path attestation integrity** — attests that after governance terminus freeze only improvement loop + P0 ops vault execution paths remain operator-mutable (no new era25 convergence env).
+See [`docs/next-step-era25-band-a-market-proof-execution-sole-path-phase-ak-product-2026-05-28.md`](./next-step-era25-band-a-market-proof-execution-sole-path-phase-ak-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-convergence-governance-terminus-freeze` baseline + dual cert green |
-| Parent evaluator | era60 governance terminus freeze integrity |
-| Platform anchor | `#era25-band-a-market-proof-execution-sole-path` (planned) |
-| Briefing meta priority | **36** (planned) |
-| Env keys (planned) | `ERA25_BAND_A_MARKET_PROOF_EXECUTION_SOLE_PATH_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-band-a-market-proof-execution-sole-path-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `sole_path_without_terminus_freeze`, `sole_path_claims_p0_complete_without_artifact`, `fake_sole_path_attestation`, upstream era60 fail |
-| CI | `test:ci:era25-band-a-market-proof-execution-sole-path-integrity-era61` + extend pure-ops era25 cert |
-
-**Human acceptance (preview):** terminus freeze PASS → attest sole-path → validate JSON → operator playbook locks to P0 vault + improvement loop only until `proof_passed` on artifact.
+**Phase AL (era62)** — Era25 P0 market proof honest closure capstone (planned).

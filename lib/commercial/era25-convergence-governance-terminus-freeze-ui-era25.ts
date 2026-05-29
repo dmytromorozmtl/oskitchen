@@ -20,6 +20,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25BandAMarketProofExecutionSolePathEra25UiSlice,
+  type Era25BandAMarketProofExecutionSolePathEra25UiSlice,
+} from "@/lib/commercial/era25-band-a-market-proof-execution-sole-path-ui-era25";
 import { LAUNCH_WIZARD_ERA25_CONVERGENCE_GOVERNANCE_TERMINUS_FREEZE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
 
 export const ERA25_CONVERGENCE_GOVERNANCE_TERMINUS_FREEZE_ERA25_UI_POLICY_ID =
@@ -56,6 +60,7 @@ export type Era25ConvergenceGovernanceTerminusFreezeEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25BandAMarketProofExecutionSolePath: Era25BandAMarketProofExecutionSolePathEra25UiSlice | null;
 };
 
 export function buildEra25ConvergenceGovernanceTerminusFreezeEra25UiSlice(input: {
@@ -102,6 +107,23 @@ export function buildEra25ConvergenceGovernanceTerminusFreezeEra25UiSlice(input:
 
   const terminusFreezeComplete = terminusIntegrity.era25ConvergenceGovernanceTerminusFreezeComplete;
   const terminusFreezeBlocked = !terminusFreezeComplete;
+
+  const era25BandAMarketProofExecutionSolePath = buildEra25BandAMarketProofExecutionSolePathEra25UiSlice({
+    era25ConvergenceGovernanceTerminusFreezeVisible: true,
+    terminusFreezeComplete,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+    terminusIntegritySummary: terminusIntegrity,
+  });
 
   const headline = terminusFreezeComplete
     ? `Governance terminus frozen · era25 convergence UI suppressed · P0 ${terminusIntegrity.p0ProofStatus ?? "Band A"}`
@@ -152,6 +174,7 @@ export function buildEra25ConvergenceGovernanceTerminusFreezeEra25UiSlice(input:
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25BandAMarketProofExecutionSolePath,
   };
 }
 

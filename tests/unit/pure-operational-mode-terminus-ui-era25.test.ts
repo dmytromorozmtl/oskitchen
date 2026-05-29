@@ -56,6 +56,12 @@ describe("pure-operational-mode-terminus-ui-era25", () => {
         ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
         ?.era25ConvergenceGovernanceTerminusFreeze,
     ).toBeDefined();
+    expect(
+      sustained?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+        ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+        ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
+        ?.era25ConvergenceGovernanceTerminusFreeze?.era25BandAMarketProofExecutionSolePath,
+    ).toBeDefined();
   });
 
   it("suppresses era25 convergence when governance terminus freeze complete", () => {

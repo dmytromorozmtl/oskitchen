@@ -36,6 +36,7 @@ import type { LaunchWizardEra25PureOperationalModeTerminusSlice } from "@/lib/la
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainClosureSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-era55";
 import type { LaunchWizardEra25SustainedProductEvolutionReentrantSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-era56";
 import type { LaunchWizardEra25PostReentrantCharterLockSlice } from "@/lib/launch-wizard/launch-wizard-era25-post-re-entrant-charter-lock-era57";
+import type { LaunchWizardEra25BandAMarketProofExecutionSolePathSlice } from "@/lib/launch-wizard/launch-wizard-era25-band-a-market-proof-execution-sole-path-era61";
 import type { LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice } from "@/lib/launch-wizard/launch-wizard-era25-convergence-governance-terminus-freeze-era60";
 import type { LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-capstone-era59";
 import type { LaunchWizardEra25SteadyStateOperatorLoopLockSlice } from "@/lib/launch-wizard/launch-wizard-era25-steady-state-operator-loop-lock-era58";
@@ -97,6 +98,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25SteadyStateOperatorLoopLock: LaunchWizardEra25SteadyStateOperatorLoopLockSlice | null;
   era25CommercialPilotConvergenceTrainCapstone: LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice | null;
   era25ConvergenceGovernanceTerminusFreeze: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
+  era25BandAMarketProofExecutionSolePath: LaunchWizardEra25BandAMarketProofExecutionSolePathSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -170,6 +172,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25SteadyStateOperatorLoopLock?: LaunchWizardEra25SteadyStateOperatorLoopLockSlice | null;
   era25CommercialPilotConvergenceTrainCapstone?: LaunchWizardEra25CommercialPilotConvergenceTrainCapstoneSlice | null;
   era25ConvergenceGovernanceTerminusFreeze?: LaunchWizardEra25ConvergenceGovernanceTerminusFreezeSlice | null;
+  era25BandAMarketProofExecutionSolePath?: LaunchWizardEra25BandAMarketProofExecutionSolePathSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -359,6 +362,27 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       ? `${era25CommercialPilotConvergenceTrainCapstoneSubline} · ${era25FullConvergenceSubline}`
       : era25CommercialPilotConvergenceTrainCapstoneSubline;
   }
+  const era25ConvergenceGovernanceTerminusFreeze =
+    input.era25ConvergenceGovernanceTerminusFreeze ?? null;
+  const era25ConvergenceGovernanceTerminusFreezeSubline =
+    era25ConvergenceGovernanceTerminusFreeze
+      ? `Terminus ${era25ConvergenceGovernanceTerminusFreeze.progressLabel}${era25ConvergenceGovernanceTerminusFreeze.era25ConvergenceGovernanceTerminusFreezeIntegrityFailed ? " · integrity FAIL" : ""}`
+      : null;
+  if (era25ConvergenceGovernanceTerminusFreezeSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25ConvergenceGovernanceTerminusFreezeSubline} · ${era25FullConvergenceSubline}`
+      : era25ConvergenceGovernanceTerminusFreezeSubline;
+  }
+  const era25BandAMarketProofExecutionSolePath =
+    input.era25BandAMarketProofExecutionSolePath ?? null;
+  const era25BandAMarketProofExecutionSolePathSubline = era25BandAMarketProofExecutionSolePath
+    ? `Band A ${era25BandAMarketProofExecutionSolePath.progressLabel}${era25BandAMarketProofExecutionSolePath.era25BandAMarketProofExecutionSolePathIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  if (era25BandAMarketProofExecutionSolePathSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25BandAMarketProofExecutionSolePathSubline} · ${era25FullConvergenceSubline}`
+      : era25BandAMarketProofExecutionSolePathSubline;
+  }
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -419,6 +443,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25SteadyStateOperatorLoopLock,
       era25CommercialPilotConvergenceTrainCapstone,
       era25ConvergenceGovernanceTerminusFreeze,
+      era25BandAMarketProofExecutionSolePath,
     };
   }
 
@@ -629,5 +654,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25SteadyStateOperatorLoopLock,
     era25CommercialPilotConvergenceTrainCapstone,
     era25ConvergenceGovernanceTerminusFreeze,
+    era25BandAMarketProofExecutionSolePath,
   };
 }
