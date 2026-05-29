@@ -16,6 +16,9 @@ describe("commercial-pilot-path-absolute-end-ui-era24", () => {
     expect(slice?.pathLayers).toHaveLength(4);
     expect(slice?.productSurfaces).toHaveLength(7);
     expect(slice?.validateCommand).toBe("npm run ops:validate-commercial-pilot-path-absolute-end");
+    expect(slice?.postSteadyStateOrchestratorCommand).toContain(
+      "run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator",
+    );
   });
 
   it("formats absolute end label", () => {

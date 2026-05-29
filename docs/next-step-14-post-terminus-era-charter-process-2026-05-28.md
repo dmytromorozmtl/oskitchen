@@ -149,8 +149,8 @@ See [`next-step-15-commercial-pilot-path-absolute-end-2026-05-28.md`](./next-ste
 
 | Component | Artifact |
 |-----------|----------|
-| Orchestrator lib | `lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24.ts` (planned) |
-| Policy | `era24-commercial-pilot-path-absolute-end-post-steady-state-orchestrator-v1` (planned) |
+| Orchestrator lib | `lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24.ts` |
+| Policy | `era24-commercial-pilot-path-absolute-end-post-steady-state-orchestrator-v1` |
 | Milestones | `steady_state_blocked` → path closure attention → `absolute_end_healthy` |
 | Validate | `ops:validate-commercial-pilot-path-absolute-end -- --json` |
 | UI | `#commercial-pilot-path-absolute-end` inside steady-state panel (already wired) |

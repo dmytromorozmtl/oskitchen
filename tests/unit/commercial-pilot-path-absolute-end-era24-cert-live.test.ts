@@ -41,6 +41,9 @@ describe("commercial pilot path absolute end era24 CI certification (live repo)"
   it("documents step 15 with ops wiring", () => {
     const step15 = readFileSync(join(ROOT, COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC), "utf8");
     expect(step15).toContain("era24-commercial-pilot-path-absolute-end-v1");
+    expect(step15).toContain(
+      "run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator",
+    );
     expect(step15).toContain("ops:validate-commercial-pilot-path-absolute-end");
     expect(step15).toContain("#commercial-pilot-path-absolute-end");
   });

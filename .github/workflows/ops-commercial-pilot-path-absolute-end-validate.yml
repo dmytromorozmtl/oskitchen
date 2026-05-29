@@ -18,3 +18,6 @@ jobs:
       - run: npm ci
       - name: Validate path absolute end (JSON summary)
         run: npm run ops:validate-commercial-pilot-path-absolute-end -- --json
+      - name: Commercial pilot path absolute end post-steady-state orchestrator (JSON summary)
+        run: npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --json
+        continue-on-error: true

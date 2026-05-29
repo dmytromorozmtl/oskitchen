@@ -9,10 +9,10 @@ import {
   PATH_ABSOLUTE_END_GUARDRAILS,
   STEADY_STATE_PRODUCT_SURFACES,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-phases-era24";
-import { evaluateCommercialPilotPathAbsoluteEnd } from "@/lib/commercial/evaluate-commercial-pilot-path-absolute-end";
+import { evaluateCommercialPilotPathAbsoluteEndWithMilestones } from "@/scripts/ops/validate-commercial-pilot-path-absolute-end";
 
 export function buildCommercialPilotPathAbsoluteEndReportMarkdown(
-  result: ReturnType<typeof evaluateCommercialPilotPathAbsoluteEnd>,
+  result: ReturnType<typeof evaluateCommercialPilotPathAbsoluteEndWithMilestones>,
 ): string {
   const lines: string[] = [
     "# Commercial Pilot Path — Absolute End Report",
@@ -21,16 +21,20 @@ export function buildCommercialPilotPathAbsoluteEndReportMarkdown(
     "",
     "## Status",
     "",
-    `- Absolute end active: **${result.absoluteEndActive ? "yes" : "no"}**`,
-    `- Path engineering closed: **${result.pathEngineeringClosed ? "yes" : "no"}**`,
-    `- Steps complete: **${result.completedSteps}/${result.totalSteps}**`,
-    `- GO decision: **${result.goDecision ?? "missing"}**`,
+    `- Absolute end active: **${result.evaluation.absoluteEndActive ? "yes" : "no"}**`,
+    `- Path engineering closed: **${result.evaluation.pathEngineeringClosed ? "yes" : "no"}**`,
+    `- Steps complete: **${result.evaluation.completedSteps}/${result.evaluation.totalSteps}**`,
+    `- Absolute end milestone: **${result.absoluteEndMilestone}**`,
+    `- Steady state milestone: **${result.steadyState.steadyStateMilestone}**`,
+    `- Ready for steady state smokes: ${result.readyForSteadyStateSmokes ? "yes" : "no"}`,
+    `- Ready for path closure smokes: ${result.readyForPathClosureSmokes ? "yes" : "no"}`,
+    `- GO decision: **${result.evaluation.goDecision ?? "missing"}**`,
     "",
     "## Path layers (Steps 12–15)",
     "",
   ];
 
-  for (const layer of result.pathLayers) {
+  for (const layer of result.evaluation.pathLayers) {
     lines.push(`- **Step ${layer.step}** — ${layer.label} · \`${layer.policyId}\` · ${layer.role}`);
   }
 
@@ -68,7 +72,7 @@ export function buildCommercialPilotPathAbsoluteEndReportMarkdown(
 
 function main() {
   const write = process.argv.includes("--write");
-  const result = evaluateCommercialPilotPathAbsoluteEnd();
+  const result = evaluateCommercialPilotPathAbsoluteEndWithMilestones();
   const markdown = buildCommercialPilotPathAbsoluteEndReportMarkdown(result);
 
   if (write) {

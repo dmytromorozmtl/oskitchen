@@ -11,6 +11,7 @@ import {
   MAINTENANCE_MODE_PLATFORM_ANCHOR,
 } from "@/lib/commercial/maintenance-mode-ui-era24";
 import { formatEngineeringPathTerminusProgressLabel } from "@/lib/commercial/engineering-path-terminus-ui-era24";
+import { formatCommercialPilotPathAbsoluteEndLabel } from "@/lib/commercial/commercial-pilot-path-absolute-end-ui-era24";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -284,10 +285,22 @@ export function MaintenanceModePanel(props: {
               Commercial pilot path absolute end (Step 15)
             </p>
             <p className="mt-1 text-emerald-300/80">
-              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.pathEngineeringClosed
-                ? `Linear engineering closed · ${slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.completedSteps}/${slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.totalSteps} steps`
-                : "Complete steady state first"}
+              {formatCommercialPilotPathAbsoluteEndLabel(
+                slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd,
+              )}
             </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Badge variant="outline" className="rounded-full font-mono text-[10px] text-emerald-200">
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.absoluteEndMilestone.replaceAll(
+                  "_",
+                  " ",
+                )}
+              </Badge>
+              <Badge variant="outline" className="rounded-full text-[10px] text-emerald-300">
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.completedSteps}/
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.totalSteps} steps
+              </Badge>
+            </div>
             <ul className="mt-3 space-y-1">
               {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.pathLayers.map(
                 (layer) => (
@@ -308,10 +321,22 @@ export function MaintenanceModePanel(props: {
             </ul>
             <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
               <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .postSteadyStateOrchestratorCommand
+                }
+              </span>
+              <span>
                 {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.validateCommand}
               </span>
               <span>
                 {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.syncReportCommand}
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .validateSteadyStateCommand
+                }
               </span>
             </div>
           </div>
