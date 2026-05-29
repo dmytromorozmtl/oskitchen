@@ -128,3 +128,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Fix components/dashboard/pilot-integration-health-strip.tsx — Property 'scorecardLabel' missing (cycle 11)
+
+---
+Cycle: 11
+Timestamp: 2026-05-29T19:00:00.000Z
+Action: fix: prisma generate восстановлен — удалён node_modules/.prisma, установлен effect@3.21.0 (HKT.js), prisma generate OK; scopesJson ошибки 2 → 0 (ошибок: 93 → 91)
+Files: package.json, package-lock.json
+TS errors before: 93
+TS errors after: 91
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix components/dashboard/pilot-integration-health-strip.tsx — Property 'scorecardLabel' missing (cycle 12)
