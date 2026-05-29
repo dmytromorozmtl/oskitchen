@@ -32,7 +32,8 @@ export const SERIES_A_PARTNER_EXPANSION_EXECUTION_OPS_SCRIPTS = [
   "smoke:woo-shopify-live",
   "smoke:pilot-forbidden-claims-enforcement",
   "smoke:pilot-metrics-baseline",
-  "ops:run-market-leader-positioning-post-series-a-orchestrator",
+  "ops:run-market-leader-positioning-execution",
+  "ops:run-sustained-operational-excellence-post-market-leader-orchestrator",
 ] as const;
 
 export const SERIES_A_PARTNER_EXPANSION_EXECUTION_CI_SCRIPTS = [

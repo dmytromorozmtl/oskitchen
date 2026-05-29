@@ -275,7 +275,7 @@ export function buildSeriesAPartnerExpansionExecutionSummary(input: {
 
   if (milestone === "series_a_partner_expansion_passed") {
     recommendedCommands.push(
-      "npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write",
+      "npm run ops:run-market-leader-positioning-execution -- --write",
     );
   }
 

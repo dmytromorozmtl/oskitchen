@@ -101,6 +101,13 @@ function main() {
         { allowFail: true },
       ),
     );
+    steps.push(
+      runStep(
+        "market-leader-positioning",
+        "npm run ops:run-market-leader-positioning-execution -- --write",
+        { allowFail: true },
+      ),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

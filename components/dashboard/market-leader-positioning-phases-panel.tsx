@@ -151,6 +151,7 @@ export function MarketLeaderPositioningPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.marketLeaderExecutionCommand}</li>
                 <li>{slice.seriesAExpansionExecutionCommand}</li>
                 <li>{slice.integrityValidateCommand}</li>
                 <li>{slice.syncIntegrityBaselineCommand}</li>
