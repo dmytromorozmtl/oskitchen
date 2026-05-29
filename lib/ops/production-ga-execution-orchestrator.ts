@@ -313,7 +313,7 @@ export function buildProductionGaExecutionSummary(input: {
 
   if (milestone === "production_ga_passed") {
     recommendedCommands.push(
-      "npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write",
+      "npm run ops:run-series-a-partner-expansion-execution -- --write",
     );
   }
 

@@ -66,6 +66,8 @@ export type MarketLeaderPositioningUiSlice = {
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
   postSeriesAOrchestratorCommand: string;
+  seriesAExpansionExecutionCommand: string;
+  seriesAExpansionExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateSeriesACommand: string;
   validateSeriesAIntegrityCommand: string;
@@ -209,6 +211,10 @@ export function buildMarketLeaderPositioningUiSlice(input: {
       "npm run ops:sync-market-leader-positioning-progress-report -- --write",
     postSeriesAOrchestratorCommand:
       "npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write",
+    seriesAExpansionExecutionCommand:
+      "npm run ops:run-series-a-partner-expansion-execution -- --write",
+    seriesAExpansionExecutionArtifact:
+      "artifacts/series-a-partner-expansion-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-market-leader-positioning-readiness-checklist -- --write",
     validateSeriesACommand: "npm run ops:validate-series-a-partner-expansion-env -- --json",

@@ -68,6 +68,8 @@ export type SeriesAPartnerExpansionUiSlice = {
   postScaleOrchestratorCommand: string;
   productionGaExecutionCommand: string;
   productionGaExecutionArtifact: string;
+  seriesAExpansionExecutionCommand: string;
+  seriesAExpansionExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateScaleCommand: string;
   validateScaleIntegrityCommand: string;
@@ -211,6 +213,10 @@ export function buildSeriesAPartnerExpansionUiSlice(input: {
       "npm run ops:run-series-a-partner-expansion-post-scale-orchestrator -- --write",
     productionGaExecutionCommand: "npm run ops:run-production-ga-execution -- --write",
     productionGaExecutionArtifact: "artifacts/production-ga-execution-summary.json",
+    seriesAExpansionExecutionCommand:
+      "npm run ops:run-series-a-partner-expansion-execution -- --write",
+    seriesAExpansionExecutionArtifact:
+      "artifacts/series-a-partner-expansion-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-series-a-partner-expansion-readiness-checklist -- --write",
     validateScaleCommand: "npm run ops:validate-scale-readiness-env -- --json",

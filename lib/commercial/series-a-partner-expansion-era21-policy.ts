@@ -20,6 +20,7 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_EXTENDS_POLICIES = [
 
 export const SERIES_A_PARTNER_EXPANSION_ERA21_OPS_SCRIPTS = [
   "ops:run-production-ga-execution",
+  "ops:run-series-a-partner-expansion-execution",
   "ops:run-series-a-partner-expansion-post-scale-orchestrator",
   "ops:validate-series-a-partner-expansion-env",
   "ops:validate-series-a-partner-expansion-integrity",
@@ -32,6 +33,8 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_OPS_SCRIPTS = [
 export const SERIES_A_PARTNER_EXPANSION_ERA21_CI_SCRIPTS = [
   "test:ci:production-ga-execution",
   "test:ci:production-ga-execution:cert",
+  "test:ci:series-a-partner-expansion-execution",
+  "test:ci:series-a-partner-expansion-execution:cert",
   "test:ci:series-a-partner-expansion-era21",
   "test:ci:series-a-partner-expansion-era21:cert",
   "test:ci:series-a-partner-expansion-integrity-era31",
@@ -40,6 +43,8 @@ export const SERIES_A_PARTNER_EXPANSION_ERA21_CI_SCRIPTS = [
 export const SERIES_A_PARTNER_EXPANSION_ERA21_UNIT_TESTS = [
   "tests/unit/production-ga-execution-orchestrator.test.ts",
   "tests/unit/production-ga-execution-cert-live.test.ts",
+  "tests/unit/series-a-partner-expansion-execution-orchestrator.test.ts",
+  "tests/unit/series-a-partner-expansion-execution-cert-live.test.ts",
   "tests/unit/series-a-partner-expansion-post-scale-orchestrator-era21.test.ts",
   "tests/unit/series-a-partner-expansion-phases-era21.test.ts",
   "tests/unit/series-a-partner-expansion-ui-era21.test.ts",

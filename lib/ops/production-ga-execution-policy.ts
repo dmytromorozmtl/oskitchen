@@ -31,7 +31,7 @@ export const PRODUCTION_GA_EXECUTION_OPS_SCRIPTS = [
   "test:ci:cron-hygiene",
   "test:security",
   "ops:run-commercial-inflection-readiness-orchestrator",
-  "ops:run-series-a-partner-expansion-post-scale-orchestrator",
+  "ops:run-series-a-partner-expansion-execution",
 ] as const;
 
 export const PRODUCTION_GA_EXECUTION_CI_SCRIPTS = [

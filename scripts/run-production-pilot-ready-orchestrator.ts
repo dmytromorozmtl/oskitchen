@@ -94,6 +94,13 @@ function main() {
         allowFail: true,
       }),
     );
+    steps.push(
+      runStep(
+        "series-a-expansion",
+        "npm run ops:run-series-a-partner-expansion-execution -- --write",
+        { allowFail: true },
+      ),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",
