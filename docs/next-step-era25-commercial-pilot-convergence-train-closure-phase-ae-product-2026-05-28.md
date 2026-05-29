@@ -76,19 +76,8 @@ Workflow: `.github/workflows/ops-era25-commercial-pilot-convergence-train-closur
 
 ---
 
-## Next step — Phase AF (era56)
+## Following — Phase AF (era56)
 
-**Sustained product evolution re-entrant integrity** — after honest train closure, product evolution and charter-adjacent surfaces re-enter only through the continuous improvement loop; no illegal re-opening of era25 linear convergence panels.
+**IMPLEMENTED** — see [`docs/next-step-sustained-product-evolution-re-entrant-phase-af-product-2026-05-28.md`](./next-step-sustained-product-evolution-re-entrant-phase-af-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-commercial-pilot-convergence-train-closure` baseline + `test:ci:commercial-pilot-runbook:cert` green |
-| Parent evaluator | era55 train closure integrity |
-| Platform anchor | `#sustained-product-evolution-re-entrant` (improvement-loop nested) |
-| Briefing meta priority | **31** |
-| Env keys (planned) | `SUSTAINED_PRODUCT_EVOLUTION_REENTRANT_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/sustained-product-evolution-re-entrant-integrity-baseline.json` |
-| Violation IDs (planned) | `reentrant_evolution_without_train_closure`, `linear_convergence_surface_reopened`, `fake_reentrant_attestation`, upstream era55 fail |
-| CI | `test:ci:sustained-product-evolution-re-entrant-integrity-era56` + extend pure-ops / runbook cert matrix |
-
-**Human acceptance (preview):** train closure integrity PASS → improvement-loop-only product evolution attest → validate re-entrant integrity JSON → no era25 convergence Launch Wizard / briefing strips outside improvement loop.
+**Next:** Phase AG — era25 post-re-entrant operator charter lock integrity (era57), sketched in the AF doc.

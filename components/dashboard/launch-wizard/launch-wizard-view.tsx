@@ -34,6 +34,7 @@ import { LaunchWizardEra25MarketLeaderPositioningConvergencePanel } from "@/comp
 import { LaunchWizardEra25SustainedOperationalExcellenceConvergencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-sustained-operational-excellence-convergence-panel";
 import { LaunchWizardEra25PureOperationalModeTerminusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-panel";
 import { LaunchWizardEra25CommercialPilotConvergenceTrainClosurePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-panel";
+import { LaunchWizardEra25SustainedProductEvolutionReentrantPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-sustained-product-evolution-re-entrant-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -306,6 +307,12 @@ export function LaunchWizardView(props: {
       {model.era25CommercialPilotConvergenceTrainClosureIntegrity ? (
         <LaunchWizardEra25CommercialPilotConvergenceTrainClosurePanel
           slice={model.era25CommercialPilotConvergenceTrainClosureIntegrity}
+        />
+      ) : null}
+
+      {model.era25SustainedProductEvolutionReentrantIntegrity ? (
+        <LaunchWizardEra25SustainedProductEvolutionReentrantPanel
+          slice={model.era25SustainedProductEvolutionReentrantIntegrity}
         />
       ) : null}
 

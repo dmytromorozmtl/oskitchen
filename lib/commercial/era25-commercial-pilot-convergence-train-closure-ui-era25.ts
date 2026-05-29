@@ -23,6 +23,10 @@ import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-stagi
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import { LAUNCH_WIZARD_ERA25_COMMERCIAL_PILOT_CONVERGENCE_TRAIN_CLOSURE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-commercial-pilot-convergence-train-closure-era55";
+import {
+  buildSustainedProductEvolutionReentrantEra25UiSlice,
+  type SustainedProductEvolutionReentrantEra25UiSlice,
+} from "@/lib/commercial/sustained-product-evolution-re-entrant-ui-era25";
 
 export const ERA25_COMMERCIAL_PILOT_CONVERGENCE_TRAIN_CLOSURE_ERA25_UI_POLICY_ID =
   "era25-commercial-pilot-convergence-train-closure-ui-v1" as const;
@@ -51,6 +55,7 @@ export type Era25CommercialPilotConvergenceTrainClosureEra25UiSlice = {
   platformOpsHref: string;
   todayHref: string;
   headline: string;
+  sustainedProductEvolutionReentrant: SustainedProductEvolutionReentrantEra25UiSlice | null;
 };
 
 export function buildEra25CommercialPilotConvergenceTrainClosureEra25UiSlice(input: {
@@ -96,6 +101,21 @@ export function buildEra25CommercialPilotConvergenceTrainClosureEra25UiSlice(inp
 
   const trainClosureComplete = trainClosureIntegrity.era25CommercialPilotConvergenceTrainClosureComplete;
   const trainClosureBlocked = !trainClosureComplete;
+  const sustainedProductEvolutionReentrant = buildSustainedProductEvolutionReentrantEra25UiSlice({
+    commercialPilotConvergenceTrainClosureVisible: true,
+    trainClosureComplete,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+  });
 
   const headline = trainClosureComplete
     ? `Era25 convergence train closed · ${trainClosureIntegrity.convergenceIntegrityBaselinesHonestCount}/${trainClosureIntegrity.convergenceIntegrityBaselinesTotalCount} baselines honest · GO ${trainClosureIntegrity.goDecision ?? "GO"}`
@@ -133,6 +153,7 @@ export function buildEra25CommercialPilotConvergenceTrainClosureEra25UiSlice(inp
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ERA25_COMMERCIAL_PILOT_CONVERGENCE_TRAIN_CLOSURE_PLATFORM_ANCHOR}`,
     todayHref: "/dashboard/today",
     headline,
+    sustainedProductEvolutionReentrant,
   };
 }
 
