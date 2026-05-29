@@ -5,6 +5,7 @@ import { PilotWeek1ExecutionConvergenceEra25Strip } from "@/components/dashboard
 import { Month2MarketReadinessConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/month2-market-readiness-convergence-era25-strip";
 import { ScaleReadinessConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/scale-readiness-convergence-era25-strip";
 import { SeriesAPartnerExpansionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/series-a-partner-expansion-convergence-era25-strip";
+import { MarketLeaderPositioningConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/market-leader-positioning-convergence-era25-strip";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -113,6 +114,17 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
               slice.paidPilotGoConvergence.pilotWeek1ExecutionConvergence
                 .month2MarketReadinessConvergence.scaleReadinessConvergence
                 .seriesAPartnerExpansionConvergence
+            }
+          />
+        ) : null}
+        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+          ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
+          ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence ? (
+          <MarketLeaderPositioningConvergenceEra25Strip
+            slice={
+              slice.paidPilotGoConvergence.pilotWeek1ExecutionConvergence
+                .month2MarketReadinessConvergence.scaleReadinessConvergence
+                .seriesAPartnerExpansionConvergence.marketLeaderPositioningConvergence
             }
           />
         ) : null}

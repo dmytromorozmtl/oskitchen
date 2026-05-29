@@ -18,6 +18,10 @@ import type { ScaleReadinessConvergenceEra25Milestone } from "@/lib/commercial/s
 import type { SeriesAPartnerExpansionPhaseStatus } from "@/lib/commercial/series-a-partner-expansion-phases-era21";
 import type { LaunchWizardSeriesAPartnerExpansionConvergenceSlice } from "@/lib/briefing/series-a-partner-expansion-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import {
+  buildMarketLeaderPositioningConvergenceEra25UiSlice,
+  type MarketLeaderPositioningConvergenceEra25UiSlice,
+} from "@/lib/commercial/market-leader-positioning-convergence-ui-era25";
 import { evaluateSeriesAPartnerExpansionConvergenceEra25WithMilestones } from "@/scripts/ops/validate-series-a-partner-expansion-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 
@@ -60,6 +64,7 @@ export type SeriesAPartnerExpansionConvergenceEra25UiSlice = {
   reportsHref: string;
   integrationHealthHref: string;
   implementationHref: string;
+  marketLeaderPositioningConvergence: MarketLeaderPositioningConvergenceEra25UiSlice | null;
 };
 
 export function buildSeriesAPartnerExpansionConvergenceEra25UiSlice(input: {
@@ -69,6 +74,10 @@ export function buildSeriesAPartnerExpansionConvergenceEra25UiSlice(input: {
   if (!input.scaleConvergenceVisible) return null;
 
   const result = evaluateSeriesAPartnerExpansionConvergenceEra25WithMilestones(input.env);
+  const marketLeaderPositioningConvergence = buildMarketLeaderPositioningConvergenceEra25UiSlice({
+    seriesAConvergenceVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: SERIES_A_PARTNER_EXPANSION_CONVERGENCE_ERA25_UI_POLICY_ID,
@@ -112,6 +121,7 @@ export function buildSeriesAPartnerExpansionConvergenceEra25UiSlice(input: {
     reportsHref: "/dashboard/reports",
     integrationHealthHref: "/dashboard/integration-health",
     implementationHref: "/dashboard/implementation",
+    marketLeaderPositioningConvergence,
   };
 }
 

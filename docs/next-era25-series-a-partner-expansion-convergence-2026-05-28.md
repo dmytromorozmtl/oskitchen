@@ -111,7 +111,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Next step (after convergence ready)
 
-See [`next-era25-market-leader-positioning-convergence-2026-05-28.md`](./next-era25-market-leader-positioning-convergence-2026-05-28.md) — **market leader positioning on platform ops**
+See [`next-era25-sustained-operational-excellence-convergence-2026-05-28.md`](./next-era25-sustained-operational-excellence-convergence-2026-05-28.md) — **sustained operational excellence on platform ops** (via market leader convergence first: [`next-era25-market-leader-positioning-convergence-2026-05-28.md`](./next-era25-market-leader-positioning-convergence-2026-05-28.md))
 
 ---
 
