@@ -3,14 +3,15 @@
  * No env attestation gates · repeat Step 12 rhythms forever.
  */
 import { CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
-import {
-  MAINTENANCE_MODE_PLAYBOOK_REPORT_PATH,
-  MAINTENANCE_MODE_STEP12_DOC,
-} from "@/lib/commercial/maintenance-mode-phases-era24";
-import {
-  SUSTAINED_PRODUCT_EVOLUTION_STEP11_DOC,
-} from "@/lib/commercial/sustained-product-evolution-phases-era23";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+
+/** Inline paths — avoid maintenance-mode / sustained-product-evolution import cycles. */
+const MAINTENANCE_MODE_STEP12_DOC =
+  "docs/next-step-12-commercial-pilot-path-complete-2026-05-28.md" as const;
+const SUSTAINED_PRODUCT_EVOLUTION_STEP11_DOC =
+  "docs/next-step-11-sustained-product-evolution-2026-05-28.md" as const;
+const MAINTENANCE_MODE_PLAYBOOK_REPORT_PATH =
+  "artifacts/maintenance-mode-playbook-report.md" as const;
 
 export const POST_TERMINUS_STEADY_STATE_PHASES_ERA24_POLICY_ID =
   "era24-post-terminus-steady-state-phases-v1" as const;

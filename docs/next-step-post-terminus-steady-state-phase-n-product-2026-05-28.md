@@ -71,20 +71,9 @@ npm run ops:sync-post-terminus-steady-state-integrity-baseline -- --write
 
 ## Next step after Phase N PASS
 
-**Phase O — Commercial pilot path absolute end integrity (`era39`)** — mirror era28–era38 on `commercial-pilot-path-absolute-end-*`
+**Phase O IMPLEMENTED** — see [`docs/next-step-commercial-pilot-path-absolute-end-phase-o-product-2026-05-28.md`](./next-step-commercial-pilot-path-absolute-end-phase-o-product-2026-05-28.md)
 
-| Component | Planned artifact |
-|-----------|------------------|
-| Evaluator | `commercial-pilot-path-absolute-end-integrity-era39.ts` — chain via `evaluatePostTerminusSteadyStateIntegrity` |
-| Env keys | `COMMERCIAL_PILOT_PATH_ABSOLUTE_END_*` tracked keys + `detectCommercialPilotPathAbsoluteEndStarted()` |
-| Violations | `absolute_end_started_without_steady_state`, `post_terminus_steady_state_integrity_fail`, chain to GO |
-| Launch Wizard | `#launch-wizard-commercial-pilot-path-absolute-end` |
-| Briefing | priority **14** |
-| Prerequisite | honest post-terminus steady state (Phase N) + `steady_state_healthy` milestone |
+1. ~~Commercial pilot path absolute end integrity guard (Phase O)~~ **DONE** (`era39-commercial-pilot-path-absolute-end-integrity-v1`)
+2. `npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write`
 
-```bash
-npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write
-npm run ops:validate-commercial-pilot-path-absolute-end -- --json
-```
-
-**Following engineering slice:** Linear path permanently closed reads absolute end integrity baseline · era25 charter exit validation.
+**Following engineering slice:** Phase P Linear path permanently closed integrity (`era40`).

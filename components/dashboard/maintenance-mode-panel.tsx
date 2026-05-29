@@ -423,6 +423,18 @@ export function MaintenanceModePanel(props: {
                 {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.completedSteps}/
                 {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.totalSteps} steps
               </Badge>
+              {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                .commercialPilotPathAbsoluteEndIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Absolute end blocked
+                </Badge>
+              ) : null}
+              {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                .postTerminusSteadyStateIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Steady state integrity FAIL
+                </Badge>
+              ) : null}
             </div>
             <ul className="mt-3 space-y-1">
               {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.pathLayers.map(
@@ -459,6 +471,21 @@ export function MaintenanceModePanel(props: {
                 {
                   slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                     .validateSteadyStateCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .validatePostTerminusSteadyStateIntegrityCommand
+                }
+              </span>
+              <span>
+                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.integrityValidateCommand}
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .syncIntegrityBaselineCommand
                 }
               </span>
             </div>

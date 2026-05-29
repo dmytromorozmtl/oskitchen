@@ -16,6 +16,19 @@ export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_REPORT_PATH =
 export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PLATFORM_ANCHOR =
   "#commercial-pilot-path-absolute-end" as const;
 
+export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_TRACKED_ENV_KEYS = [
+  "COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PATH_CLOSURE_ATTESTED",
+  "COMMERCIAL_PILOT_PATH_ABSOLUTE_END_REPORT_REVIEWED",
+] as const;
+
+export function detectCommercialPilotPathAbsoluteEndStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return COMMERCIAL_PILOT_PATH_ABSOLUTE_END_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export type PathAbsoluteEndLayer = {
   step: number;
   label: string;

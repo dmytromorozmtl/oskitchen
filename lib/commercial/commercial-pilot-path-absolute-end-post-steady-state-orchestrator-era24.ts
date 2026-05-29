@@ -152,6 +152,8 @@ export function buildCommercialPilotPathAbsoluteEndPostSteadyStateOrchestratorSu
               ] as const)
             : input.evaluation.absoluteEndActive
     ? ([
+        "npm run ops:validate-post-terminus-steady-state-integrity -- --json",
+        "npm run ops:validate-commercial-pilot-path-absolute-end-integrity -- --json",
         "npm run ops:validate-steady-state-operator-loop -- --json",
         "npm run ops:validate-commercial-pilot-path-absolute-end -- --json",
         COMMERCIAL_PILOT_PATH_ABSOLUTE_END_POST_STEADY_STATE_ORCHESTRATOR_COMMAND + " -- --write",

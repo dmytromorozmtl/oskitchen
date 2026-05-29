@@ -5,7 +5,9 @@ import {
   resolveCommercialPilotPathAbsoluteEndMilestone,
   type CommercialPilotPathAbsoluteEndMilestone,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
+import { evaluateCommercialPilotPathAbsoluteEndIntegrity } from "@/lib/commercial/commercial-pilot-path-absolute-end-integrity-era39";
 import {
+  detectCommercialPilotPathAbsoluteEndStarted,
   COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PLATFORM_ANCHOR,
   COMMERCIAL_PILOT_PATH_ABSOLUTE_END_STEP15_DOC,
   PATH_ABSOLUTE_END_ERA25_EXIT,
@@ -18,12 +20,22 @@ import {
   buildLinearPathPermanentlyClosedUiSlice,
   type LinearPathPermanentlyClosedUiSlice,
 } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
+import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
+import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
+import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import type { EngineeringPathTerminusMilestone } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
 import type { PostTerminusSteadyStateMilestone } from "@/lib/commercial/post-terminus-steady-state-post-engineering-terminus-orchestrator-era24";
 import { evaluateCommercialPilotPathAbsoluteEnd } from "@/lib/commercial/evaluate-commercial-pilot-path-absolute-end";
 import { evaluateSteadyStateOperatorLoopWithMilestones } from "@/scripts/ops/validate-steady-state-operator-loop";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-era39";
 
 export const COMMERCIAL_PILOT_PATH_ABSOLUTE_END_UI_ERA24_POLICY_ID =
   "era24-commercial-pilot-path-absolute-end-ui-v1" as const;
@@ -45,20 +57,68 @@ export type CommercialPilotPathAbsoluteEndUiSlice = {
   validateCommand: string;
   postSteadyStateOrchestratorCommand: string;
   validateSteadyStateCommand: string;
+  validatePostTerminusSteadyStateIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  commercialPilotPathAbsoluteEndIntegrityPassed: boolean;
+  postTerminusSteadyStateIntegrityPassed: boolean;
   absoluteEndMilestone: CommercialPilotPathAbsoluteEndMilestone;
+  steadyStateMilestone: PostTerminusSteadyStateMilestone;
+  engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  productEvolutionReady: boolean;
+  maintenanceModeMilestone: ReturnType<
+    typeof import("@/scripts/ops/validate-maintenance-mode").evaluateMaintenanceMode
+  >["maintenanceModeMilestone"];
+  pureOperationalModeTerminusHref: string;
   syncReportCommand: string;
+  todayHref: string;
+  launchWizardHref: string;
   platformOpsHref: string;
   linearPathPermanentlyClosed: LinearPathPermanentlyClosedUiSlice | null;
 };
 
 export function buildCommercialPilotPathAbsoluteEndUiSlice(input: {
   steadyStateActive: boolean;
+  goNoGoSummary?: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
+  p0Staging?: P0StagingProofUnblockSummary | null;
+  tier2Summary?: Tier2StagingGoldenPathSummary | null;
+  metricsBaseline?: PilotMetricsBaselineSummary | null;
+  caseStudyDraft?: PilotCaseStudyDraftSummary | null;
+  investorOnepager?: InvestorNarrativeOnepagerSummary | null;
+  rollbackDrill?: PilotRollbackDrillSummary | null;
+  competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): CommercialPilotPathAbsoluteEndUiSlice | null {
-  if (!input.steadyStateActive) return null;
+  const env = input.env ?? process.env;
+  const p0ProofStatus = input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus = input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+  const absoluteEndStarted = detectCommercialPilotPathAbsoluteEndStarted(env);
 
-  const evaluation = evaluateCommercialPilotPathAbsoluteEnd(input.env);
-  const steadyState = evaluateSteadyStateOperatorLoopWithMilestones(input.env);
+  const commercialPilotPathAbsoluteEndIntegrity = evaluateCommercialPilotPathAbsoluteEndIntegrity(
+    process.cwd(),
+    {
+      env,
+      goNoGoOverride: input.goNoGoSummary ?? null,
+      p0StagingOverride: input.p0Staging ?? null,
+      tier2SummaryOverride: input.tier2Summary ?? null,
+      metricsBaselineOverride: input.metricsBaseline ?? null,
+      caseStudyDraftOverride: input.caseStudyDraft ?? null,
+      investorOnepagerOverride: input.investorOnepager ?? null,
+      rollbackDrillOverride: input.rollbackDrill ?? null,
+      competitorMatrixOverride: input.competitorMatrix ?? null,
+      p0ProofStatusOverride: p0ProofStatus,
+      tier2ProofStatusOverride: tier2ProofStatus,
+    },
+  );
+
+  if (!input.steadyStateActive && !absoluteEndStarted) return null;
+
+  const evaluation = evaluateCommercialPilotPathAbsoluteEnd(env);
+  const steadyState = evaluateSteadyStateOperatorLoopWithMilestones(env);
   const absoluteEndMilestone = resolveCommercialPilotPathAbsoluteEndMilestone({
     absoluteEndActive: evaluation.absoluteEndActive,
     steadyStateMilestone: steadyState.steadyStateMilestone,
@@ -67,7 +127,7 @@ export function buildCommercialPilotPathAbsoluteEndUiSlice(input: {
   });
   const linearPathPermanentlyClosed = buildLinearPathPermanentlyClosedUiSlice({
     absoluteEndActive: evaluation.absoluteEndActive,
-    env: input.env,
+    env,
   });
 
   return {
@@ -88,6 +148,16 @@ export function buildCommercialPilotPathAbsoluteEndUiSlice(input: {
     postSteadyStateOrchestratorCommand:
       "npm run ops:run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator -- --write",
     validateSteadyStateCommand: "npm run ops:validate-steady-state-operator-loop -- --json",
+    validatePostTerminusSteadyStateIntegrityCommand:
+      "npm run ops:validate-post-terminus-steady-state-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-commercial-pilot-path-absolute-end-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-commercial-pilot-path-absolute-end-integrity-baseline -- --write",
+    commercialPilotPathAbsoluteEndIntegrityPassed:
+      commercialPilotPathAbsoluteEndIntegrity.integrityPassed,
+    postTerminusSteadyStateIntegrityPassed:
+      commercialPilotPathAbsoluteEndIntegrity.postTerminusSteadyStateIntegrityPassed,
     absoluteEndMilestone,
     steadyStateMilestone: steadyState.steadyStateMilestone,
     engineeringPathTerminusMilestone: steadyState.pathEvaluation.engineeringPathTerminusMilestone,
@@ -100,6 +170,8 @@ export function buildCommercialPilotPathAbsoluteEndUiSlice(input: {
     maintenanceModeMilestone: steadyState.pathEvaluation.maintenanceMode.maintenanceModeMilestone,
     pureOperationalModeTerminusHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
     syncReportCommand: "npm run ops:sync-commercial-pilot-path-absolute-end-report -- --write",
+    todayHref: "/dashboard/today",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_PILOT_PATH_ABSOLUTE_END_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${COMMERCIAL_PILOT_PATH_ABSOLUTE_END_PLATFORM_ANCHOR}`,
     linearPathPermanentlyClosed,
   };

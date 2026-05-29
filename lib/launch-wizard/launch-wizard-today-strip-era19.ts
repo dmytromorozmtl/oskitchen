@@ -17,6 +17,7 @@ import type { LaunchWizardProductEvolutionSlice } from "@/lib/launch-wizard/laun
 import type { LaunchWizardMaintenanceModeSlice } from "@/lib/launch-wizard/launch-wizard-maintenance-mode-era36";
 import type { LaunchWizardEngineeringTerminusSlice } from "@/lib/launch-wizard/launch-wizard-engineering-terminus-era37";
 import type { LaunchWizardPostTerminusSteadyStateSlice } from "@/lib/launch-wizard/launch-wizard-post-terminus-steady-state-era38";
+import type { LaunchWizardCommercialPilotPathAbsoluteEndSlice } from "@/lib/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-era39";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -53,6 +54,7 @@ export type LaunchWizardTodayStripViewModel = {
   maintenanceMode: LaunchWizardMaintenanceModeSlice | null;
   engineeringTerminus: LaunchWizardEngineeringTerminusSlice | null;
   postTerminusSteadyState: LaunchWizardPostTerminusSteadyStateSlice | null;
+  commercialPilotPathAbsoluteEnd: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -104,6 +106,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   maintenanceMode?: LaunchWizardMaintenanceModeSlice | null;
   engineeringTerminus?: LaunchWizardEngineeringTerminusSlice | null;
   postTerminusSteadyState?: LaunchWizardPostTerminusSteadyStateSlice | null;
+  commercialPilotPathAbsoluteEnd?: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -156,6 +159,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const postTerminusSteadyStateSubline = postTerminusSteadyState
     ? `Steady state ${postTerminusSteadyState.progressLabel}${postTerminusSteadyState.postTerminusSteadyStateIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const commercialPilotPathAbsoluteEnd = input.commercialPilotPathAbsoluteEnd ?? null;
+  const commercialPilotPathAbsoluteEndSubline = commercialPilotPathAbsoluteEnd
+    ? `Absolute end ${commercialPilotPathAbsoluteEnd.progressLabel}${commercialPilotPathAbsoluteEnd.commercialPilotPathAbsoluteEndIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -194,6 +201,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       maintenanceMode,
       engineeringTerminus,
       postTerminusSteadyState,
+      commercialPilotPathAbsoluteEnd,
     };
   }
 
@@ -229,6 +237,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       maintenanceMode,
       engineeringTerminus,
       postTerminusSteadyState,
+      commercialPilotPathAbsoluteEnd,
     };
   }
 
@@ -242,7 +251,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : postTerminusSteadyStateSubline
+        : commercialPilotPathAbsoluteEndSubline
+          ? postTerminusSteadyStateSubline
+            ? `${postTerminusSteadyStateSubline} · ${commercialPilotPathAbsoluteEndSubline}`
+            : commercialPilotPathAbsoluteEndSubline
+          : postTerminusSteadyStateSubline
           ? engineeringTerminusSubline
             ? `${engineeringTerminusSubline} · ${postTerminusSteadyStateSubline}`
             : postTerminusSteadyStateSubline
@@ -317,5 +330,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     maintenanceMode,
     engineeringTerminus,
     postTerminusSteadyState,
+    commercialPilotPathAbsoluteEnd,
   };
 }

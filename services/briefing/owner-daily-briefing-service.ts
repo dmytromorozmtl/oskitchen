@@ -157,6 +157,10 @@ import {
   mergeBriefingPostTerminusSteadyStateTopActions,
 } from "@/lib/briefing/owner-daily-briefing-post-terminus-steady-state-era38";
 import {
+  buildOwnerDailyBriefingCommercialPilotPathAbsoluteEndAction,
+  mergeBriefingCommercialPilotPathAbsoluteEndTopActions,
+} from "@/lib/briefing/owner-daily-briefing-commercial-pilot-path-absolute-end-era39";
+import {
   buildCommercialGoClosureUiSlice,
   type CommercialGoClosureUiSlice,
 } from "@/lib/commercial/commercial-go-closure-ui-era21";
@@ -901,6 +905,13 @@ export async function loadOwnerDailyBriefing(
           maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState ?? null,
         )
       : null;
+  const commercialPilotPathAbsoluteEndRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingCommercialPilotPathAbsoluteEndAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd ??
+            null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1270,6 +1281,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && postTerminusSteadyStateRankedAction) {
     allTopActions = mergeBriefingPostTerminusSteadyStateTopActions(
       postTerminusSteadyStateRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && commercialPilotPathAbsoluteEndRankedAction) {
+    allTopActions = mergeBriefingCommercialPilotPathAbsoluteEndTopActions(
+      commercialPilotPathAbsoluteEndRankedAction,
       allTopActions,
     );
   }

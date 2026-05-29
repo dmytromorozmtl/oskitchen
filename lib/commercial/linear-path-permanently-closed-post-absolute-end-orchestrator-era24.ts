@@ -5,10 +5,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
-import {
-  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES,
-  type CommercialPilotPathAbsoluteEndMilestone,
-} from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
+import type { CommercialPilotPathAbsoluteEndMilestone } from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
 import {
   LINEAR_PATH_DOC_CHAIN_STEP_DOCS,
   LINEAR_PATH_PERMANENTLY_CLOSED_REPORT_PATH,
@@ -42,10 +39,15 @@ export type LinearPathPermanentlyClosedMilestone =
   | "attention_terminus_guard"
   | "linear_path_permanently_closed_healthy";
 
+/** Inlined from post-steady-state orchestrator — breaks era25 ↔ absolute-end import cycle. */
 export const LINEAR_PATH_PERMANENTLY_CLOSED_ABSOLUTE_END_PREREQUISITE_MILESTONES: readonly CommercialPilotPathAbsoluteEndMilestone[] =
-  COMMERCIAL_PILOT_PATH_ABSOLUTE_END_BLOCKED_MILESTONES.filter(
-    (milestone) => milestone !== "absolute_end_blocked",
-  );
+  [
+    "era25_sustained_ops_convergence_blocked",
+    "product_evolution_blocked",
+    "maintenance_mode_blocked",
+    "engineering_terminus_blocked",
+    "steady_state_blocked",
+  ] as const;
 
 export const LINEAR_PATH_PERMANENTLY_CLOSED_BLOCKED_MILESTONES: readonly LinearPathPermanentlyClosedMilestone[] =
   [

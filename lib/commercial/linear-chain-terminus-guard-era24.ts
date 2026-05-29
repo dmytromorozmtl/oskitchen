@@ -5,9 +5,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
-import {
-  COMMERCIAL_PILOT_PATH_STEP_CATALOG,
-} from "@/lib/commercial/engineering-path-terminus-era24";
+import { COMMERCIAL_PILOT_PATH_STEP_CATALOG } from "@/lib/commercial/commercial-pilot-path-step-catalog-era24";
 import { LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC } from "@/lib/commercial/linear-path-permanently-closed-phases-era24";
 
 export const LINEAR_CHAIN_TERMINUS_GUARD_ERA24_POLICY_ID =

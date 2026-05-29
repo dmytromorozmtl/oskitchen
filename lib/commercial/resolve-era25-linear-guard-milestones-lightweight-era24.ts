@@ -5,10 +5,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
-import {
-  resolveCommercialPilotPathAbsoluteEndMilestone,
-  type CommercialPilotPathAbsoluteEndMilestone,
-} from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
+import type { CommercialPilotPathAbsoluteEndMilestone } from "@/lib/commercial/commercial-pilot-path-absolute-end-post-steady-state-orchestrator-era24";
 import {
   resolveCommercialPilotPathAbsoluteEndPrerequisites,
 } from "@/lib/commercial/commercial-pilot-path-absolute-end-phases-era24";
@@ -31,6 +28,17 @@ import {
 } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
 import { readContinuousImprovementLoopArtifacts } from "@/scripts/ops/validate-continuous-improvement-loop";
 import { PAID_PILOT_GO_CONVERGENCE_ERA25_KICKOFF_CHECKLIST_DOC } from "@/lib/commercial/paid-pilot-go-convergence-phases-era25";
+
+/** Lightweight absolute-end milestone — avoids post-steady-state orchestrator import cycle. */
+function resolveAbsoluteEndMilestoneLightweight(input: {
+  absoluteEndActive: boolean;
+  steadyStateHealthy: boolean;
+}): CommercialPilotPathAbsoluteEndMilestone {
+  if (!input.absoluteEndActive || !input.steadyStateHealthy) {
+    return "steady_state_blocked";
+  }
+  return "absolute_end_healthy";
+}
 
 export type LinearGuardMilestonesLightweight = {
   guard: ReturnType<typeof evaluateLinearChainTerminusGuard>;
@@ -65,11 +73,9 @@ export function resolveLinearGuardMilestonesLightweight(
   const absoluteEndActive = resolveCommercialPilotPathAbsoluteEndPrerequisites({
     steadyStateActive,
   }).absoluteEndActive;
-  const absoluteEndMilestone = resolveCommercialPilotPathAbsoluteEndMilestone({
+  const absoluteEndMilestone = resolveAbsoluteEndMilestoneLightweight({
     absoluteEndActive,
-    steadyStateMilestone: steadyStateActive ? "steady_state_healthy" : "steady_state_blocked",
-    firstBlockedStep: null,
-    firstBlockedGateStep: null,
+    steadyStateHealthy: steadyStateActive,
   });
   const terminalClosureActive = resolveLinearPathPermanentlyClosedPrerequisites({
     absoluteEndActive,

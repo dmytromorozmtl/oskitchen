@@ -22,6 +22,12 @@ describe("commercial-pilot-path-absolute-end-ui-era24", () => {
     expect(slice?.postSteadyStateOrchestratorCommand).toContain(
       "run-commercial-pilot-path-absolute-end-post-steady-state-orchestrator",
     );
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-commercial-pilot-path-absolute-end-integrity",
+    );
+    expect(slice?.validatePostTerminusSteadyStateIntegrityCommand).toContain(
+      "validate-post-terminus-steady-state-integrity",
+    );
   });
 
   it("formats absolute end label", () => {

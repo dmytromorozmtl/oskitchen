@@ -126,6 +126,16 @@ export function buildPostTerminusSteadyStateUiSlice(input: {
   );
   const absolutePathEnd = buildCommercialPilotPathAbsoluteEndUiSlice({
     steadyStateActive: evaluation.steadyStateActive,
+    goNoGoSummary: input.goNoGoSummary ?? null,
+    p0ProofStatus,
+    tier2ProofStatus,
+    p0Staging: input.p0Staging ?? null,
+    tier2Summary: input.tier2Summary ?? null,
+    metricsBaseline: input.metricsBaseline ?? null,
+    caseStudyDraft: input.caseStudyDraft ?? null,
+    investorOnepager: input.investorOnepager ?? null,
+    rollbackDrill: input.rollbackDrill ?? null,
+    competitorMatrix: input.competitorMatrix ?? null,
     env,
   });
 
