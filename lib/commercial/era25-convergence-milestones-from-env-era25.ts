@@ -63,6 +63,11 @@ import {
   resolveSustainedOperationalExcellenceConvergenceEra25Milestone,
   type SustainedOperationalExcellenceConvergenceEra25Milestone,
 } from "@/lib/commercial/sustained-operational-excellence-convergence-post-market-leader-convergence-orchestrator-era25";
+import {
+  resolvePureOperationalModeTerminusEra25Milestone,
+  type PureOperationalModeTerminusEra25Milestone,
+} from "@/lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25";
+import { derivePureOperationalModeTerminusState } from "@/lib/commercial/load-pure-operational-mode-terminus-state-era25";
 import { derivePaidPilotGoConvergenceState } from "@/lib/commercial/load-paid-pilot-go-convergence-state-era25";
 import { derivePilotWeek1ExecutionConvergenceState } from "@/lib/commercial/load-pilot-week1-execution-convergence-state-era25";
 import { deriveMonth2MarketReadinessConvergenceState } from "@/lib/commercial/load-month2-market-readiness-convergence-state-era25";
@@ -251,5 +256,18 @@ export function resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFr
       resolveMarketLeaderPositioningConvergenceEra25MilestoneFromEnv(env),
     sustainedOpsComplete: sustainedOpsState.sustainedOpsComplete,
     phases: sustainedOpsState.phases,
+  });
+}
+
+export function resolvePureOperationalModeTerminusEra25MilestoneFromEnv(
+  env: NodeJS.ProcessEnv = process.env,
+): PureOperationalModeTerminusEra25Milestone {
+  const terminusState = derivePureOperationalModeTerminusState(env);
+
+  return resolvePureOperationalModeTerminusEra25Milestone({
+    sustainedOperationalExcellenceConvergenceEra25Milestone:
+      resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv(env),
+    sustainedOpsConvergenceReady: terminusState.sustainedOpsConvergenceReady,
+    tracks: terminusState.tracks,
   });
 }

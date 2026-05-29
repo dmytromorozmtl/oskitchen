@@ -163,6 +163,10 @@ import {
   buildLaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice,
   type LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-sustained-operational-excellence-convergence-era53";
+import {
+  buildLaunchWizardEra25PureOperationalModeTerminusSlice,
+  type LaunchWizardEra25PureOperationalModeTerminusSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-era54";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -314,6 +318,7 @@ export type LaunchWizardModel = {
   era25MarketLeaderPositioningConvergenceIntegrity: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
   era25SustainedOperationalExcellenceConvergence: SustainedOperationalExcellenceConvergenceEra25UiSlice | null;
   era25SustainedOperationalExcellenceConvergenceIntegrity: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
+  era25PureOperationalModeTerminusIntegrity: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1289,6 +1294,10 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       era25SustainedOperationalExcellenceConvergence,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const era25PureOperationalModeTerminusIntegrity = buildLaunchWizardEra25PureOperationalModeTerminusSlice(
+    era25SustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus ?? null,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1357,5 +1366,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25MarketLeaderPositioningConvergenceIntegrity,
     era25SustainedOperationalExcellenceConvergence,
     era25SustainedOperationalExcellenceConvergenceIntegrity,
+    era25PureOperationalModeTerminusIntegrity,
   };
 }

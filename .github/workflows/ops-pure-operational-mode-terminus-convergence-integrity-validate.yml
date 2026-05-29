@@ -1,0 +1,26 @@
+# Pure operational mode terminus convergence era25 integrity — blocks terminus attestation without honest sustained ops.
+
+name: Pure Operational Mode Terminus Convergence Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/pure-operational-mode-terminus-convergence-integrity-baseline.json"
+      - "artifacts/pure-operational-mode-terminus-era25-report.md"
+      - "lib/commercial/pure-operational-mode-terminus-convergence-integrity-era54.ts"
+      - "scripts/ops/validate-pure-operational-mode-terminus-convergence-integrity.ts"
+
+jobs:
+  validate-pure-operational-mode-terminus-convergence-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate pure operational mode terminus convergence integrity (JSON)
+        run: npm run ops:validate-pure-operational-mode-terminus-convergence-integrity -- --json

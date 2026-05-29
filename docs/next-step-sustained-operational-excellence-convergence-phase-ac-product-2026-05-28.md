@@ -73,20 +73,8 @@ Workflow: `.github/workflows/ops-sustained-operational-excellence-convergence-in
 
 ---
 
-## Next step — Phase AD (era54)
+## Following — Phase AD (era54)
 
-**Pure operational mode terminus convergence integrity** — chains `evaluateSustainedOperationalExcellenceConvergenceIntegrity` (era53).
+**IMPLEMENTED** — see [`docs/next-step-pure-operational-mode-terminus-convergence-phase-ad-product-2026-05-28.md`](./next-step-pure-operational-mode-terminus-convergence-phase-ad-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | `sustained_operational_excellence_convergence_era25_ready` |
-| Parent evaluator | era53 sustained ops convergence integrity |
-| Platform anchor | `#era25-pure-operational-mode-terminus` |
-| Launch Wizard anchor | `#launch-wizard-era25-pure-operational-mode-terminus` (confirm in `pure-operational-mode-terminus-phases-era25.ts` at implementation) |
-| Owner Briefing meta priority | **29** (cadence/track action remains era25 pure-ops briefing module) |
-| Tracked env keys | `PURE_OPERATIONAL_MODE_TERMINUS_ERA25_*` (add when Phase AD starts) |
-| Maintenance nesting | Under `#era25-sustained-operational-excellence-convergence` → pure ops terminus panel |
-| Violation IDs (planned) | `pure_ops_started_without_sustained_ops_convergence_ready`, `fake_pure_ops_convergence_attestation`, `fake_pure_ops_convergence_report_attestation`, upstream chain fails, `baseline_regression` |
-| Baseline artifact | `artifacts/pure-operational-mode-terminus-convergence-integrity-baseline.json` |
-
-**Human acceptance (preview):** sustained ops integrity PASS → orchestrator `ops:run-pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25` → honest terminus milestone → sync integrity baseline → `test:ci:pure-operational-mode-terminus-convergence-era25` + cert.
+**Next:** Phase AE (era55) era25 commercial pilot convergence train closure integrity.

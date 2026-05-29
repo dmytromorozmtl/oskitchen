@@ -32,6 +32,7 @@ import type { LaunchWizardEra25ScaleReadinessConvergenceSlice } from "@/lib/laun
 import type { LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-series-a-partner-expansion-convergence-era51";
 import type { LaunchWizardEra25MarketLeaderPositioningConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-market-leader-positioning-convergence-era52";
 import type { LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-operational-excellence-convergence-era53";
+import type { LaunchWizardEra25PureOperationalModeTerminusSlice } from "@/lib/launch-wizard/launch-wizard-era25-pure-operational-mode-terminus-era54";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -83,6 +84,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25SeriesAPartnerExpansionConvergence: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
   era25MarketLeaderPositioningConvergence: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
   era25SustainedOperationalExcellenceConvergence: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
+  era25PureOperationalModeTerminus: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -149,6 +151,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25SeriesAPartnerExpansionConvergence?: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
   era25MarketLeaderPositioningConvergence?: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
   era25SustainedOperationalExcellenceConvergence?: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
+  era25PureOperationalModeTerminus?: LaunchWizardEra25PureOperationalModeTerminusSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -273,11 +276,21 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25SustainedOperationalExcellenceConvergence
       ? `Sustained ops ${era25SustainedOperationalExcellenceConvergence.progressLabel}${era25SustainedOperationalExcellenceConvergence.sustainedOperationalExcellenceConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
       : null;
-  const era25FullConvergenceSubline = era25ScaleWithSeriesAAndMarketLeaderSubline
-    ? era25SustainedOperationalExcellenceConvergenceSubline
-      ? `${era25SustainedOperationalExcellenceConvergenceSubline} · ${era25ScaleWithSeriesAAndMarketLeaderSubline}`
-      : era25ScaleWithSeriesAAndMarketLeaderSubline
-    : era25SustainedOperationalExcellenceConvergenceSubline;
+  const era25PureOperationalModeTerminus = input.era25PureOperationalModeTerminus ?? null;
+  const era25PureOperationalModeTerminusSubline = era25PureOperationalModeTerminus
+    ? `Pure ops ${era25PureOperationalModeTerminus.progressLabel}${era25PureOperationalModeTerminus.pureOperationalModeTerminusConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  let era25FullConvergenceSubline = era25ScaleWithSeriesAAndMarketLeaderSubline;
+  if (era25SustainedOperationalExcellenceConvergenceSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25SustainedOperationalExcellenceConvergenceSubline} · ${era25FullConvergenceSubline}`
+      : era25SustainedOperationalExcellenceConvergenceSubline;
+  }
+  if (era25PureOperationalModeTerminusSubline) {
+    era25FullConvergenceSubline = era25FullConvergenceSubline
+      ? `${era25PureOperationalModeTerminusSubline} · ${era25FullConvergenceSubline}`
+      : era25PureOperationalModeTerminusSubline;
+  }
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -331,6 +344,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25SeriesAPartnerExpansionConvergence,
       era25MarketLeaderPositioningConvergence,
       era25SustainedOperationalExcellenceConvergence,
+      era25PureOperationalModeTerminus,
     };
   }
 
@@ -534,5 +548,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25SeriesAPartnerExpansionConvergence,
     era25MarketLeaderPositioningConvergence,
     era25SustainedOperationalExcellenceConvergence,
+    era25PureOperationalModeTerminus,
   };
 }

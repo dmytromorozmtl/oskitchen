@@ -14,6 +14,19 @@ export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_REPORT_PATH =
 export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR =
   "#era25-pure-operational-mode-terminus" as const;
 
+export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_TRACKED_ENV_KEYS = [
+  "PURE_OPERATIONAL_MODE_TERMINUS_ERA25_ATTESTED",
+  "PURE_OPERATIONAL_MODE_TERMINUS_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectPureOperationalModeTerminusConvergenceEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return PURE_OPERATIONAL_MODE_TERMINUS_ERA25_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_BACKLOG_ID =
   "KOS-E25-009-TERMINUS" as const;
 
