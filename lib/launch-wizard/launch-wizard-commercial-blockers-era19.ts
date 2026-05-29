@@ -6,10 +6,9 @@ import {
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import {
-  buildP0OpsVaultPhaseStatuses,
   formatP0OpsVaultPhaseBlockerDetail,
-  resolveNextIncompleteP0OpsVaultPhase,
 } from "@/lib/commercial/p0-ops-vault-phases-era21";
+import { buildP0OpsVaultUiSlice } from "@/lib/commercial/p0-ops-vault-ui-era21";
 import type { PilotGoNoGoCustomerStatus } from "@/lib/commercial/pilot-gono-go-summary";
 import {
   buildTier2GoldenPathPhaseStatuses,
@@ -121,12 +120,13 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
 
   if (input.p0Blocked) {
     const p0 = input.commercialOps?.p0Staging.summary;
-    const phases = buildP0OpsVaultPhaseStatuses({
-      missingEnvVars: p0?.allMissingEnvVars ?? [],
-    });
-    const nextPhase = resolveNextIncompleteP0OpsVaultPhase(phases);
+    const opsVault = buildP0OpsVaultUiSlice(
+      p0,
+      input.commercialOps?.vaultReadiness.report ?? null,
+    );
+    const nextPhase = opsVault?.nextPhase ?? null;
     const phaseDetail = nextPhase
-      ? formatP0OpsVaultPhaseBlockerDetail(nextPhase)
+      ? `${formatP0OpsVaultPhaseBlockerDetail(nextPhase)} · ${nextPhase.docPath}`
       : p0 && p0.allMissingEnvVars.length > 0
         ? `${p0.allMissingEnvVars.length} ops env var(s) missing.`
         : "SSO IdP, GitHub first-green, or channel live smoke incomplete.";
@@ -137,7 +137,9 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
         : `P0 staging proof — ${p0?.p0ProofStatus.replaceAll("_", " ") ?? "blocked"}`,
       detail: phaseDetail,
       tone: "urgent",
-      href: `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
+      href:
+        opsVault?.platformOpsHref ??
+        `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
     });
   }
 

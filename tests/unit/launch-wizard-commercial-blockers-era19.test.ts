@@ -8,6 +8,7 @@ import {
   resolveLaunchWizardChannelLiveProofBlocked,
   resolveLaunchWizardSsoProofBlocked,
 } from "@/lib/launch-wizard/launch-wizard-commercial-blockers-era19";
+import { buildLaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 
 const baseGoNoGo: PilotGoNoGoSummary = {
@@ -50,6 +51,16 @@ const baseGoNoGo: PilotGoNoGoSummary = {
   },
 };
 
+const emptyVaultSlice = {
+  artifactPresent: false,
+  report: null,
+} as const;
+
+const emptyTier2Slice = {
+  artifactPresent: false,
+  summary: null,
+} as const;
+
 describe("launch-wizard-commercial-blockers-era19", () => {
   it("flags SSO and channel live proof from P0 child snapshots", () => {
     const p0 = buildP0StagingProofUnblockSummary({
@@ -86,6 +97,8 @@ describe("launch-wizard-commercial-blockers-era19", () => {
             },
           }),
         },
+        tier2Staging: emptyTier2Slice,
+        vaultReadiness: emptyVaultSlice,
       },
       p0Blocked: true,
       ssoProofBlocked: true,
@@ -115,6 +128,8 @@ describe("launch-wizard-commercial-blockers-era19", () => {
           },
         },
         p0Staging: { artifactPresent: true, summary: null },
+        tier2Staging: emptyTier2Slice,
+        vaultReadiness: emptyVaultSlice,
       },
       p0Blocked: false,
       ssoProofBlocked: false,
@@ -131,5 +146,74 @@ describe("launch-wizard-commercial-blockers-era19", () => {
     expect(launchWizardTodayStripHref("menu-catalog")).toBe(
       `${LAUNCH_WIZARD_ROUTE}?mode=compact#launch-wizard-step-menu-catalog`,
     );
+  });
+
+  it("uses vault report next phase for P0 blocker and commercial setup nextUnblock", () => {
+    const p0Summary = buildP0StagingProofUnblockSummary({
+      ssoArtifact: { overall: "SKIPPED", loginProofStatus: "proof_skipped" },
+      workflowsArtifact: { overall: "SKIPPED", firstGreenProofStatus: "proof_skipped" },
+      channelArtifact: {
+        overall: "SKIPPED",
+        wooLiveProofStatus: "proof_skipped",
+        shopifyLiveProofStatus: "proof_skipped",
+      },
+    });
+    const slice = buildLaunchWizardCommercialBlockersSlice({
+      commercialOps: {
+        loadedAt: "2026-05-28T00:00:00.000Z",
+        goNoGo: { artifactPresent: false, summary: null },
+        p0Staging: { artifactPresent: true, summary: p0Summary },
+        tier2Staging: emptyTier2Slice,
+        vaultReadiness: {
+          artifactPresent: true,
+          report: {
+            version: "vault-readiness-v2",
+            generatedAt: "2026-05-28T00:00:00.000Z",
+            policyId: "era17-p0-staging-proof-unblock-v1",
+            opsChecklistDoc: "docs/era18-p0-staging-proof-ops-checklist.md",
+            vaultMatrixDoc: "docs/ops-vault-matrix.md",
+            vaultReady: false,
+            presentCount: 0,
+            totalCount: 11,
+            missingKeys: [
+              "E2E_STAGING_BASE_URL",
+              "E2E_LOGIN_EMAIL",
+              "E2E_LOGIN_PASSWORD",
+            ],
+            day0Milestone: "blocked",
+            day0PartialComplete: false,
+            p0ProofStatus: "awaiting_ops_credentials",
+            p0ArtifactOverall: "SKIPPED",
+            nextPhase: {
+              id: "staging_login",
+              label: "Phase 1 — Staging login",
+              complete: false,
+              presentKeys: [],
+              missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+              docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+              smokeScripts: ["smoke:staging-workflows-first-green"],
+            },
+            phases: [],
+            childSmokes: [],
+            recommendedNextSteps: [],
+            secrets: [],
+            honestyNote: "test",
+          },
+        },
+      },
+      p0Blocked: true,
+      ssoProofBlocked: true,
+      channelLiveProofBlocked: true,
+    });
+
+    const p0Blocker = slice.blockers.find((row) => row.id === "p0-staging-blocked");
+    expect(p0Blocker?.label).toContain("Staging login");
+    expect(p0Blocker?.detail).toContain("GITHUB_E2E_STAGING_SECRETS.md");
+    expect(p0Blocker?.href).toContain("commercial-pilot-ops");
+
+    const setup = buildLaunchWizardCommercialSetupSlice({ blockers: slice.blockers });
+    expect(setup.nextUnblock?.blockerId).toBe("p0-staging-blocked");
+    expect(setup.nextUnblock?.detail).toContain("E2E_LOGIN_EMAIL");
+    expect(setup.nextUnblock?.href).toContain("commercial-pilot-ops");
   });
 });

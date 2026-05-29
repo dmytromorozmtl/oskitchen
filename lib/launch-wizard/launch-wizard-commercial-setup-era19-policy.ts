@@ -44,6 +44,7 @@ export const LAUNCH_WIZARD_COMMERCIAL_RECOVERY_LINKS = [
 export function launchWizardCommercialBlockerHref(blockerId: string): string {
   switch (blockerId) {
     case "p0-staging-blocked":
+      return "/platform/commercial-pilot-ops#p0-staging-proof";
     case "channel-live-proof-blocked":
       return `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`;
     case "sso-proof-blocked":
