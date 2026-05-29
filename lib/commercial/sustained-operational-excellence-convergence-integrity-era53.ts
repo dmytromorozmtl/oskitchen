@@ -339,7 +339,7 @@ function pushUpstreamMarketLeaderIntegrityViolations(
       detail: "Series A partner expansion convergence integrity FAIL — complete Phase AA before sustained operational excellence convergence.",
     });
   }
-  if (!marketLeaderIntegrity.marketLeaderPositioningConvergenceIntegrityPassed) {
+  if (!marketLeaderIntegrity.integrityPassed) {
     violations.push({
       id: "market_leader_positioning_convergence_integrity_fail",
       detail: "Market leader positioning convergence integrity FAIL — complete Phase AB before sustained operational excellence convergence.",

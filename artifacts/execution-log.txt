@@ -526,3 +526,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — sustained-operational-excellence-convergence-integrity-era53 wrong property name (cycle 41)
+
+---
+Cycle: 41
+Timestamp: 2026-05-30T02:45:00.000Z
+Action: fix: era53 upstream market leader violations — use integrityPassed for Phase AB check (maps to marketLeaderPositioningConvergenceIntegrityPassed on era53 summary)
+Files: lib/commercial/sustained-operational-excellence-convergence-integrity-era53.ts
+TS errors before: 22
+TS errors after: 21
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — tier2-staging-golden-path tier2ProofStatus union add proof_failed (cycle 42)
