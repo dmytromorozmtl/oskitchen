@@ -565,3 +565,29 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — integration-health-live-proof-focus-era18 incompleteCount (cycle 44)
+
+---
+Cycle: 44
+Timestamp: 2026-05-30T03:30:00.000Z
+Action: fix: channel pilot incomplete step count — canonical channelPilotSetupIncompleteStepCount helper; wire Integration Health live proof attention + setup focus snapshot
+Files: lib/integrations/channel-pilot-setup-wizard-steps.ts, lib/integrations/integration-health-live-proof-focus-era18.ts, lib/integrations/channel-pilot-setup-focus-era18.ts, tests/unit/integration-health-live-proof-focus-era18.test.ts
+TS errors before: 15
+TS errors after: 14
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — launch-wizard-era19 step() href optional via Omit (cycle 45)
+
+---
+Cycle: 45
+Timestamp: 2026-05-30T03:45:00.000Z
+Action: fix: launch wizard step() builder — omit href from required input; default to policy workflowHref when builders omit contextual override
+Files: lib/launch-wizard/launch-wizard-era19.ts
+TS errors before: 14
+TS errors after: 10
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — re-export LaunchWizardStepId from launch-wizard-era19 for golden-path-era20 (cycle 46)

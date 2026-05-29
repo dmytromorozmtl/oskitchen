@@ -87,7 +87,10 @@ export type LaunchWizardProgress = {
 
 function step(
   id: LaunchWizardStepId,
-  input: Omit<LaunchWizardStep, "id" | "title" | "summary" | "ownerRole" | "evidenceSource" | "order"> &
+  input: Omit<
+    LaunchWizardStep,
+    "id" | "title" | "summary" | "ownerRole" | "evidenceSource" | "order" | "href"
+  > &
     Partial<Pick<LaunchWizardStep, "href">>,
 ): LaunchWizardStep {
   const def = launchWizardStepDefinition(id);
