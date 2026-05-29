@@ -50,3 +50,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Fix app/dashboard/product-mapping/unmapped/page.tsx — same confidenceLabel | null (cycle 5)
+
+---
+Cycle: 5
+Timestamp: 2026-05-29T17:30:00.000Z
+Action: fix: product-mapping/unmapped/page.tsx — confidenceLabel null coalesce to NONE (ошибок: 99 → 98)
+Files: app/dashboard/product-mapping/unmapped/page.tsx
+TS errors before: 99
+TS errors after: 98
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Fix app/dashboard/sales-channels/webhooks/page.tsx — missing buildWebhookQueueFocusSnapshot import (cycle 6)

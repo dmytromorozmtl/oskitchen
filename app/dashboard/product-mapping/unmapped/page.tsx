@@ -100,7 +100,7 @@ export default async function UnmappedQueuePage() {
                         row={{
                           id: mapping.id,
                           status: mapping.status,
-                          confidenceLabel: mapping.confidenceLabel,
+                          confidenceLabel: mapping.confidenceLabel ?? "NONE",
                           hasCandidate: Boolean(mapping.internalProductId),
                         }}
                         basePath={PRODUCT_MAPPING_UNMAPPED_ROUTE}
