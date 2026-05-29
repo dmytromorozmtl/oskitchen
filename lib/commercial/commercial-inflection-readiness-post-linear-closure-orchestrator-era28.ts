@@ -20,8 +20,13 @@ export const COMMERCIAL_INFLECTION_READINESS_POST_LINEAR_CLOSURE_ORCHESTRATOR_PO
 export const COMMERCIAL_INFLECTION_READINESS_POST_LINEAR_CLOSURE_ORCHESTRATOR_COMMAND =
   "npm run ops:run-commercial-inflection-readiness-orchestrator" as const;
 
-export type CommercialInflectionReadinessOrchestratorSummary = CommercialInflectionReadinessSummary & {
+export type CommercialInflectionReadinessOrchestratorSummary = Omit<
+  CommercialInflectionReadinessSummary,
+  "policyId"
+> & {
   policyId: typeof COMMERCIAL_INFLECTION_READINESS_POST_LINEAR_CLOSURE_ORCHESTRATOR_POLICY_ID;
+  /** Underlying readiness evaluation policy — distinct from orchestrator wrapper policyId. */
+  readinessPolicyId: typeof COMMERCIAL_INFLECTION_READINESS_POLICY_ID;
   inflectionReportPresent: boolean;
 };
 
@@ -32,6 +37,7 @@ export function buildCommercialInflectionReadinessOrchestratorSummary(input: {
   return {
     ...input.evaluation,
     policyId: COMMERCIAL_INFLECTION_READINESS_POST_LINEAR_CLOSURE_ORCHESTRATOR_POLICY_ID,
+    readinessPolicyId: COMMERCIAL_INFLECTION_READINESS_POLICY_ID,
     inflectionReportPresent: input.artifacts.inflectionReportPresent,
     recommendedCommands: [
       COMMERCIAL_INFLECTION_READINESS_POST_LINEAR_CLOSURE_ORCHESTRATOR_COMMAND + " -- --write",

@@ -17,6 +17,7 @@ describe("commercial-inflection-readiness-orchestrator-era28", () => {
     expect(summary.policyId).toBe(
       COMMERCIAL_INFLECTION_READINESS_POST_LINEAR_CLOSURE_ORCHESTRATOR_POLICY_ID,
     );
+    expect(summary.readinessPolicyId).toBe("commercial-inflection-readiness-v1");
     expect(summary.milestone).toBe("p0_ops_vault_blocked");
     expect(summary.recommendedCommands[0]).toContain(
       "run-commercial-inflection-readiness-orchestrator",

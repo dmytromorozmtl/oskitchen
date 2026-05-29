@@ -396,3 +396,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — fix commercial-inflection-readiness-post-linear-closure-orchestrator-era28.ts policyId intersection (cycle 31)
+
+---
+Cycle: 31
+Timestamp: 2026-05-30T00:15:00.000Z
+Action: fix: commercial inflection orchestrator summary types — Omit conflicting policyId; add readinessPolicyId for evaluation traceability in JSON artifacts
+Files: lib/commercial/commercial-inflection-readiness-post-linear-closure-orchestrator-era28.ts, tests/unit/commercial-inflection-readiness-orchestrator-era28.test.ts
+TS errors before: 72
+TS errors after: 56
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — re-export continuous-improvement-loop-phases-era22 constants for era22 orchestrator/UI (cycle 32)
