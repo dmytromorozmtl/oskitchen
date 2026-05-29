@@ -71,19 +71,8 @@ Cert chains: `test:ci:governance-bundles:partition-platform`, `test:ci:commercia
 
 ---
 
-## Next step — Phase AN (era64)
+## Next step — Phase AN (era64) — **IMPLEMENTED**
 
-**Era25 governance train terminal seal integrity** — final seal that the era25 commercial-pilot convergence governance train (era47–AM) cannot re-open after post-market steady ops witness; attests terminal seal on frozen artifacts + improvement loop + commercial ops only.
+See [`docs/next-step-era25-governance-train-terminal-seal-phase-an-product-2026-05-28.md`](./next-step-era25-governance-train-terminal-seal-phase-an-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-post-market-proof-steady-operational-witness` baseline + dual cert green |
-| Parent evaluator | era63 post-market steady operational witness integrity |
-| Platform anchor | `#era25-governance-train-terminal-seal` (planned) |
-| Briefing meta priority | **39** (planned) |
-| Env keys (planned) | `ERA25_GOVERNANCE_TRAIN_TERMINAL_SEAL_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-governance-train-terminal-seal-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `seal_without_steady_witness`, `seal_claims_governance_reopen`, `fake_seal_attestation`, upstream era63 fail |
-| CI | `test:ci:era25-governance-train-terminal-seal-integrity-era64` |
-
-**Human acceptance (preview):** steady witness PASS → attest terminal seal → validate JSON → operator playbook sustains improvement loop without mutating any era25 frozen governance env through era64 seal baseline.
+**Next:** Phase AO (era65) — Era25 post-terminal-seal commercial ops permanence integrity (preview in AN doc).

@@ -237,6 +237,10 @@ import {
   mergeBriefingEra25PostMarketProofSteadyOperationalWitnessTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-post-market-proof-steady-operational-witness-era63";
 import {
+  buildOwnerDailyBriefingEra25GovernanceTrainTerminalSealAction,
+  mergeBriefingEra25GovernanceTrainTerminalSealTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-governance-train-terminal-seal-era64";
+import {
   buildOwnerDailyBriefingEra25BandAMarketProofExecutionSolePathAction,
   mergeBriefingEra25BandAMarketProofExecutionSolePathTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-band-a-market-proof-execution-sole-path-era61";
@@ -1877,6 +1881,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25PostMarketProofSteadyOperationalWitnessRankedAction) {
     allTopActions = mergeBriefingEra25PostMarketProofSteadyOperationalWitnessTopActions(
       era25PostMarketProofSteadyOperationalWitnessRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25GovernanceTrainTerminalSealRankedAction) {
+    allTopActions = mergeBriefingEra25GovernanceTrainTerminalSealTopActions(
+      era25GovernanceTrainTerminalSealRankedAction,
       allTopActions,
     );
   }

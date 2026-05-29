@@ -82,6 +82,7 @@ export function LaunchWizardTodayStrip(props: {
       props.model.era25P0MarketProofHonestClosureCapstoneIntegrity,
     era25PostMarketProofSteadyOperationalWitness:
       props.model.era25PostMarketProofSteadyOperationalWitnessIntegrity,
+    era25GovernanceTrainTerminalSeal: props.model.era25GovernanceTrainTerminalSealIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -571,6 +572,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-post-market-proof-steady-operational-witness"
               >
                 Steady witness {view.era25PostMarketProofSteadyOperationalWitness.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25GovernanceTrainTerminalSeal ? (
+              <Badge
+                variant={
+                  view.era25GovernanceTrainTerminalSeal.era25GovernanceTrainTerminalSealIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-governance-train-terminal-seal"
+              >
+                Train seal {view.era25GovernanceTrainTerminalSeal.progressLabel}
               </Badge>
             ) : null}
           </div>

@@ -21,6 +21,10 @@ import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import {
+  buildEra25GovernanceTrainTerminalSealEra25UiSlice,
+  type Era25GovernanceTrainTerminalSealEra25UiSlice,
+} from "@/lib/commercial/era25-governance-train-terminal-seal-ui-era25";
 import { LAUNCH_WIZARD_ERA25_POST_MARKET_PROOF_STEADY_OPERATIONAL_WITNESS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-post-market-proof-steady-operational-witness-era63";
 
 export const ERA25_POST_MARKET_PROOF_STEADY_OPERATIONAL_WITNESS_ERA25_UI_POLICY_ID =
@@ -55,6 +59,7 @@ export type Era25PostMarketProofSteadyOperationalWitnessEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25GovernanceTrainTerminalSeal: Era25GovernanceTrainTerminalSealEra25UiSlice | null;
 };
 
 export function buildEra25PostMarketProofSteadyOperationalWitnessEra25UiSlice(input: {
@@ -104,6 +109,24 @@ export function buildEra25PostMarketProofSteadyOperationalWitnessEra25UiSlice(in
   const witnessComplete = witnessIntegrity.era25PostMarketProofSteadyOperationalWitnessComplete;
   const witnessBlocked = !witnessComplete;
 
+  const era25GovernanceTrainTerminalSeal = buildEra25GovernanceTrainTerminalSealEra25UiSlice({
+    era25PostMarketProofSteadyOperationalWitnessVisible: true,
+    era25MarketProofGovernanceChainClosed: input.era25MarketProofGovernanceChainClosed,
+    postMarketProofSteadyOpsWitnessActive: witnessIntegrity.postMarketProofSteadyOpsWitnessActive,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+    witnessIntegritySummary: witnessIntegrity,
+  });
+
   const headline = witnessComplete
     ? "Post-market-proof steady ops witness active · era25 governance frozen · improvement loop only"
     : input.era25MarketProofGovernanceChainClosed
@@ -149,6 +172,7 @@ export function buildEra25PostMarketProofSteadyOperationalWitnessEra25UiSlice(in
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25GovernanceTrainTerminalSeal,
   };
 }
 
