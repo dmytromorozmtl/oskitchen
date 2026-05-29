@@ -1,0 +1,23 @@
+# era25 Owner Daily Briefing Breakthrough Validate
+
+name: era25 Owner Daily Briefing Breakthrough Validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-owner-daily-briefing-breakthrough-era25:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 owner daily briefing breakthrough (JSON summary)
+        run: npm run ops:validate-owner-daily-briefing-breakthrough-era25 -- --json
+      - name: era25 owner daily briefing breakthrough post-gates orchestrator (JSON summary)
+        run: npm run ops:run-owner-daily-briefing-breakthrough-post-gates-orchestrator-era25 -- --json
+        continue-on-error: true

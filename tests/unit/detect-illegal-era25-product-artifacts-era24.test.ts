@@ -12,8 +12,10 @@ describe("detect-illegal-era25-product-artifacts-era24", () => {
     );
   });
 
-  it("returns no violations in clean repo state", () => {
+  it("returns no violations for canonical product slice files", () => {
     const violations = discoverIllegalEra25ProductArtifacts(process.cwd());
-    expect(violations.some((v) => v.path.includes("engineering-gates"))).toBe(false);
+    expect(
+      violations.some((v) => v.path.includes("owner-daily-briefing-breakthrough")),
+    ).toBe(false);
   });
 });

@@ -2,6 +2,10 @@
  * era25 first product slice blueprint UI slice — blueprint orchestration panel.
  */
 import {
+  buildOwnerDailyBriefingBreakthroughEra25UiSlice,
+  type OwnerDailyBriefingBreakthroughEra25UiSlice,
+} from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
+import {
   ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_DOC,
   ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_FOREVER_COMMANDS,
   ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_GUARDRAILS,
@@ -60,6 +64,7 @@ export type Era25FirstProductSliceBlueprintUiSlice = {
   syncReportCommand: string;
   validateGatesCommand: string;
   platformOpsHref: string;
+  ownerDailyBriefingBreakthrough: OwnerDailyBriefingBreakthroughEra25UiSlice | null;
 };
 
 export function buildEra25FirstProductSliceBlueprintUiSlice(input: {
@@ -69,6 +74,10 @@ export function buildEra25FirstProductSliceBlueprintUiSlice(input: {
   if (!input.engineeringGatesVisible) return null;
 
   const result = evaluateEra25FirstProductSliceBlueprintWithMilestones(input.env);
+  const ownerDailyBriefingBreakthrough = buildOwnerDailyBriefingBreakthroughEra25UiSlice({
+    blueprintVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_UI_ERA24_POLICY_ID,
@@ -104,6 +113,7 @@ export function buildEra25FirstProductSliceBlueprintUiSlice(input: {
     validateGatesCommand:
       "npm run ops:validate-era25-engineering-gates-require-signed-charter -- --json",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_PLATFORM_ANCHOR}`,
+    ownerDailyBriefingBreakthrough,
   };
 }
 

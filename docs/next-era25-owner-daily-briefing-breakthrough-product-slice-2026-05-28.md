@@ -1,10 +1,11 @@
 # KitchenOS — era25 Owner Daily Briefing Breakthrough (product slice)
 
-**Status:** **BLOCKED until `era25_first_product_slice_blueprint_ready` · NOT auto-implemented**
+**Status:** **First era25 product slice · BLOCKED until blueprint + P0 PASS**
 
-**Policy:** `era25-owner-daily-briefing-breakthrough-v1`  
-**Backlog:** `KOS-E25-001-ODB-BREAKTHROUGH`  
-**Platform anchor:** `#era25-owner-daily-briefing-breakthrough`
+**Policy:** `era25-owner-daily-briefing-breakthrough-v1` · Orchestrator `era25-owner-daily-briefing-breakthrough-post-gates-orchestrator-v1`  
+**Backlog:** `KOS-E25-001-ODB-BREAKTHROUGH` · **NOT in linear catalog · NOT Step 18**
+
+**Prerequisite:** `era25_first_product_slice_blueprint_ready` + P0 `proof_passed`
 
 ---
 
@@ -15,41 +16,9 @@ First **era25 product engineering slice** — evolves Owner Daily Briefing into 
 | Rule | Verdict |
 |------|---------|
 | Start before blueprint ready | **FORBIDDEN** |
-| Re-use era21 briefing scheme 0–8 | **FORBIDDEN** |
+| Re-use era21 briefing scheme 0–8 for era25 tiles | **FORBIDDEN** |
 | Nest under Steps 1–16 anchors | **FORBIDDEN** |
 | Fake PASS in artifacts | **FORBIDDEN** |
-
----
-
-## Links to existing KitchenOS surfaces
-
-| Surface | Path |
-|---------|------|
-| Briefing aggregator (era19) | `lib/briefing/owner-daily-briefing-integration-recovery-convergence-era19.ts` |
-| Integration recovery | `lib/integrations/integration-health-recovery-era19.ts` |
-| Integration Health dashboard | `app/dashboard/integration-health/page.tsx` |
-| Breakthrough map (cycles 13–18) | `docs/next-50-cycle-global-breakthrough-map-2026-05-28.md` |
-| Today page / focus strips (era18) | Owner landing evolution target |
-
----
-
-## Pre-flight (all must pass)
-
-```bash
-npm run ops:validate-era25-first-product-slice-blueprint -- --json
-npm run ops:run-era25-first-product-slice-blueprint-post-gates-orchestrator -- --json
-npm run test:ci:commercial-pilot-runbook:cert
-```
-
-Expected blueprint JSON:
-
-```json
-{
-  "era25FirstProductSliceBlueprintMilestone": "era25_first_product_slice_blueprint_ready",
-  "blueprintBlocked": false,
-  "canonicalSliceName": "owner-daily-briefing-breakthrough"
-}
-```
 
 ---
 
@@ -57,65 +26,79 @@ Expected blueprint JSON:
 
 | Milestone | Meaning | Orchestrator exit |
 |-----------|---------|-------------------|
-| `blueprint_regression_blocked` | Blueprint no longer ready | `2` |
-| `awaiting_staging_proof` | Code wired, staging proof pending | `0` |
-| `attention_briefing_gaps` | Briefing tiles incomplete vs charter | `0` |
-| `owner_daily_briefing_breakthrough_era25_ready` | Staging + cert PASS | `0` |
+| `blueprint_regression_blocked` | Blueprint not ready | `2` |
+| `awaiting_staging_proof` | P0 ops vault not PASS | `0` |
+| `attention_briefing_gaps` | B0–B4 tiles incomplete | `0` |
+| `owner_daily_briefing_breakthrough_era25_ready` | Blueprint + briefing + P0 PASS | `0` |
+
+**Smoke readiness flags:**
+
+- `readyForBlueprintRegressionSmokes` — blueprint blocked
+- `readyForStagingProofSmokes` — P0 not passed
+- `readyForBriefingGapSmokes` — briefing tiles gaps
 
 ---
 
-## Engineering deliverables
-
-| Component | Artifact |
-|-----------|----------|
-| Phases lib | `lib/commercial/owner-daily-briefing-breakthrough-phases-era25.ts` |
-| UI slice | `lib/commercial/owner-daily-briefing-breakthrough-ui-era25.ts` |
-| Orchestrator | `lib/commercial/owner-daily-briefing-breakthrough-post-gates-orchestrator-era25.ts` |
-| Evaluate | `lib/commercial/evaluate-owner-daily-briefing-breakthrough-era25.ts` |
-| Today page integration | Briefing hero evolution on `/dashboard/today` |
-| Panel | `#era25-owner-daily-briefing-breakthrough` nested under blueprint |
-| Staging checklist | `docs/era25-owner-daily-briefing-breakthrough-staging-proof-ops-checklist.md` |
-
----
-
-## Ops commands (when implemented)
+## Ops commands
 
 ```bash
 npm run ops:validate-owner-daily-briefing-breakthrough-era25 -- --json
+npm run ops:run-owner-daily-briefing-breakthrough-post-gates-orchestrator-era25 -- --json
 npm run ops:run-owner-daily-briefing-breakthrough-post-gates-orchestrator-era25 -- --write
 npm run ops:sync-owner-daily-briefing-breakthrough-era25-report -- --write
+
 npm run test:ci:owner-daily-briefing-breakthrough-era25
 npm run test:ci:owner-daily-briefing-breakthrough-era25:cert
 ```
 
----
+**Artifacts:** `artifacts/owner-daily-briefing-breakthrough-era25-report.md`
 
-## era25 briefing scheme (separate from era21 0–8)
+**Workflow:** `.github/workflows/ops-owner-daily-briefing-breakthrough-era25-validate.yml`
 
-Document in charter section 8:
+**Today:** `/dashboard/today#era25-owner-daily-briefing-breakthrough`
 
-- **B0** — Breakthrough readiness ring (gates + blueprint status)
-- **B1** — Owner priority tiles (orders, KDS, integrations, go-live)
-- **B2** — Integration recovery convergence (era19 deep links)
-- **B3** — Pilot GO/NO-GO honest status
-- **B4** — Staging proof snapshot (P0 vault)
+**Platform ops:** `#era25-owner-daily-briefing-breakthrough` (nested under `#era25-first-product-slice-blueprint`)
 
 ---
 
-## Human gate
+## era25 briefing scheme B0–B4
 
-1. Signed charter with all 10 sections
-2. Blueprint milestone `era25_first_product_slice_blueprint_ready`
-3. P0 ops vault PASS
-4. Leadership sign-off on staging checklist
-
----
-
-## Related docs
-
-- [`next-era25-first-product-slice-blueprint-2026-05-28.md`](./next-era25-first-product-slice-blueprint-2026-05-28.md) — blueprint orchestration (current)
-- [`era25-owner-daily-briefing-breakthrough-staging-proof-ops-checklist.md`](./era25-owner-daily-briefing-breakthrough-staging-proof-ops-checklist.md)
+| ID | Label | KitchenOS link |
+|----|-------|----------------|
+| B0 | Breakthrough readiness ring | Platform ops blueprint |
+| B1 | Owner priority tiles | Today + era19 briefing |
+| B2 | Integration recovery convergence | Integration Health recovery |
+| B3 | Pilot GO/NO-GO honest status | Commercial pilot ops |
+| B4 | Staging proof snapshot | P0 ops vault |
 
 ---
 
-**Product slice only after blueprint ready. Never fake PASS.**
+## Engineering wiring
+
+| Component | Artifact |
+|-----------|----------|
+| Briefing tiles | `lib/briefing/owner-daily-briefing-breakthrough-era25.ts` |
+| Phases | `lib/commercial/owner-daily-briefing-breakthrough-phases-era25.ts` |
+| Evaluation | `lib/commercial/evaluate-owner-daily-briefing-breakthrough-era25.ts` |
+| Orchestrator | `lib/commercial/owner-daily-briefing-breakthrough-post-gates-orchestrator-era25.ts` |
+| UI slice | `lib/commercial/owner-daily-briefing-breakthrough-ui-era25.ts` |
+| Today panel | `components/dashboard/owner-daily-briefing-breakthrough-era25-panel.tsx` |
+
+---
+
+## Links to existing surfaces
+
+- era19 briefing aggregator + integration recovery convergence
+- era18 Today page + focus strips
+- Breakthrough map cycles 13–18 (WOW pillar)
+- P0 ops vault + staging proof checklist
+
+---
+
+## Next step (after product slice ready)
+
+See [`next-era25-paid-pilot-go-convergence-2026-05-28.md`](./next-era25-paid-pilot-go-convergence-2026-05-28.md) — **paid pilot GO convergence on B3 tile**
+
+---
+
+**Honest BLOCKED until blueprint + P0 PASS. Never fake GO.**

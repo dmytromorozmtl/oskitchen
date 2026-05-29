@@ -18,6 +18,7 @@ import { formatEra25CharterExitLabel } from "@/lib/commercial/era25-charter-exit
 import { formatEra25FirstCharterSliceReadinessLabel } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
 import { formatEra25EngineeringGatesLabel } from "@/lib/commercial/era25-engineering-gates-ui-era24";
 import { formatEra25FirstProductSliceBlueprintLabel } from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
+import { formatOwnerDailyBriefingBreakthroughEra25Label } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -817,6 +818,92 @@ export function MaintenanceModePanel(props: {
                                     era25_first_product_slice_blueprint_ready
                                   </span>
                                 </p>
+
+                                {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                  .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                  .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                  ?.ownerDailyBriefingBreakthrough ? (
+                                  <div
+                                    id="era25-owner-daily-briefing-breakthrough"
+                                    className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-pink-800/50 px-3 py-3"
+                                    data-testid="era25-owner-daily-briefing-breakthrough-panel"
+                                  >
+                                    <p className="font-medium text-pink-100">
+                                      era25 owner daily briefing breakthrough — product slice
+                                    </p>
+                                    <p className="mt-1 text-pink-200/80">
+                                      {formatOwnerDailyBriefingBreakthroughEra25Label(
+                                        slice.engineeringPathTerminus.postTerminusSteadyState
+                                          .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                          .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                          .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough,
+                                      )}
+                                    </p>
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                      <Badge
+                                        variant="outline"
+                                        className="rounded-full font-mono text-[10px] text-pink-200"
+                                      >
+                                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.ownerDailyBriefingBreakthroughEra25Milestone.replaceAll(
+                                          "_",
+                                          " ",
+                                        )}
+                                      </Badge>
+                                      <Badge
+                                        variant="outline"
+                                        className="rounded-full text-[10px] text-pink-300"
+                                      >
+                                        B{" "}
+                                        {slice.engineeringPathTerminus.postTerminusSteadyState
+                                          .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                          .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                          .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                          .wiredBriefingTileCount}
+                                        /
+                                        {
+                                          slice.engineeringPathTerminus.postTerminusSteadyState
+                                            .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                            .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                            .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                            .briefingSchemeCount
+                                        }
+                                      </Badge>
+                                    </div>
+                                    <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.guardrails.map(
+                                        (rule) => (
+                                          <li key={rule}>{rule}</li>
+                                        ),
+                                      )}
+                                    </ul>
+                                    <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                                      <span>
+                                        {
+                                          slice.engineeringPathTerminus.postTerminusSteadyState
+                                            .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                            .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                            .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                            .postGatesOrchestratorCommand
+                                        }
+                                      </span>
+                                      <span>
+                                        {
+                                          slice.engineeringPathTerminus.postTerminusSteadyState
+                                            .absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden
+                                            .era25CharterExit.firstCharterSliceReadiness.engineeringGates
+                                            .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
+                                            .validateCommand
+                                        }
+                                      </span>
+                                    </div>
+                                    <p className="mt-2 text-pink-300/70">
+                                      WOW pillar ready when{" "}
+                                      <span className="font-mono">
+                                        owner_daily_briefing_breakthrough_era25_ready
+                                      </span>
+                                    </p>
+                                  </div>
+                                ) : null}
                               </div>
                             ) : null}
                           </div>

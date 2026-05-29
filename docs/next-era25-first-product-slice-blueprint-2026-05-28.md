@@ -102,7 +102,9 @@ npm run test:ci:era25-first-product-slice-blueprint-era24:cert
 
 ## Next step (after blueprint ready)
 
-See [`next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md`](./next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md) — **first era25 product code**
+See [`next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md`](./next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md) — **first era25 product slice (implemented)**
+
+**Following:** [`next-era25-paid-pilot-go-convergence-2026-05-28.md`](./next-era25-paid-pilot-go-convergence-2026-05-28.md)
 
 ---
 

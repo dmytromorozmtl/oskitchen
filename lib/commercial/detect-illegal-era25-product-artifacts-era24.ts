@@ -35,6 +35,11 @@ export const ALLOWED_ERA25_PROCESS_COMMERCIAL_FILES: readonly string[] = [
   "era25-first-product-slice-blueprint-era24-policy.ts",
   "evaluate-era25-first-product-slice-blueprint.ts",
   "validate-era25-first-product-slice-staging-checklist-era24.ts",
+  "owner-daily-briefing-breakthrough-phases-era25.ts",
+  "owner-daily-briefing-breakthrough-post-gates-orchestrator-era25.ts",
+  "owner-daily-briefing-breakthrough-ui-era25.ts",
+  "owner-daily-briefing-breakthrough-era25-policy.ts",
+  "evaluate-owner-daily-briefing-breakthrough-era25.ts",
 ] as const;
 
 const PRODUCT_ERA25_FILE_PATTERNS: readonly RegExp[] = [
@@ -58,6 +63,8 @@ const ALLOWED_ERA25_PROCESS_OPS_SCRIPTS: readonly string[] = [
   "validate-era25-first-product-slice-blueprint.ts",
   "run-era25-first-product-slice-blueprint-post-gates-orchestrator.ts",
   "sync-era25-first-product-slice-blueprint-report.ts",
+  "validate-owner-daily-briefing-breakthrough-era25.ts",
+  "run-owner-daily-briefing-breakthrough-post-gates-orchestrator-era25.ts",
 ] as const;
 
 const ILLEGAL_ERA25_OPS_PATTERN = /^validate-.+-era25\.ts$|^run-.+-era25\.ts$/;

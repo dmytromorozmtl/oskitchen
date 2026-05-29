@@ -25,6 +25,8 @@ describe("era25-first-product-slice-blueprint-ui-era24", () => {
     );
     expect(slice?.era25FirstProductSliceBlueprintMilestone).toBe("engineering_gates_blocked");
     expect(slice?.blueprintBlocked).toBe(true);
+    expect(slice?.ownerDailyBriefingBreakthrough).not.toBeNull();
+    expect(slice?.ownerDailyBriefingBreakthrough?.briefingSchemeCount).toBe(5);
   });
 
   it("formats blueprint label", () => {

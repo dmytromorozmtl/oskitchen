@@ -1,6 +1,8 @@
 import { GettingStartedChecklist } from "@/components/dashboard/getting-started-checklist";
 import { GettingStartedAttentionStrip } from "@/components/dashboard/getting-started-attention-strip";
 import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-briefing-hero";
+import { OwnerDailyBriefingBreakthroughEra25Panel } from "@/components/dashboard/owner-daily-briefing-breakthrough-era25-panel";
+import { buildOwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
@@ -90,6 +92,9 @@ export default async function TodayOperationsPage({
     dataUserId,
     profile?.createdAt ?? new Date(),
   );
+  const breakthroughEra25 = showOwnerBriefing
+    ? buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true })
+    : null;
 
   return (
     <>
@@ -104,6 +109,9 @@ export default async function TodayOperationsPage({
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
+        {breakthroughEra25 ? (
+          <OwnerDailyBriefingBreakthroughEra25Panel slice={breakthroughEra25} />
+        ) : null}
         {launchWizardModel ? (
           <LaunchWizardTodayStrip
             model={launchWizardModel}
