@@ -109,7 +109,7 @@ export default async function TodayOperationsPage({
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
-        {breakthroughEra25 ? (
+        {breakthroughEra25 && !ownerBriefing?.pureOperationalModeEra25Active ? (
           <OwnerDailyBriefingBreakthroughEra25Panel slice={breakthroughEra25} />
         ) : null}
         {launchWizardModel ? (

@@ -48,6 +48,9 @@ import { SustainedOperationalExcellencePhasesPanel } from "@/components/dashboar
 import { ContinuousImprovementLoopPanel } from "@/components/dashboard/continuous-improvement-loop-panel";
 import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained-product-evolution-panel";
 import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
+import { PureOperationalModeTerminusEra25Strip } from "@/components/dashboard/launch-wizard/pure-operational-mode-terminus-era25-strip";
+import { buildPureOperationalModeTerminusEra25UiSlice } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
+import { shouldSuppressEra21CommercialPilotGatePanels } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import type { PlatformGoLiveProjectRow } from "@/lib/go-live/platform-go-live-focus-era18";
 
 function decisionBadgeVariant(
@@ -336,6 +339,13 @@ export function CommercialPilotOpsStatusPanel(props: {
       marketLeaderArtifacts.competitorMatrix ??
       seriesAArtifacts.competitorMatrix,
   });
+  const pureOperationalModeTerminus = buildPureOperationalModeTerminusEra25UiSlice({
+    sustainedOpsConvergenceVisible: true,
+  });
+  const suppressEra21GatePanels = shouldSuppressEra21CommercialPilotGatePanels({
+    pureOperationalModeEra25Active:
+      pureOperationalModeTerminus?.pureOperationalModeEra25Active ?? false,
+  });
   const launchBlockerCount = props.launchBlockerProjects
     ? buildCommercialPilotOpsGoLiveBridgeRows(props.launchBlockerProjects).length
     : 0;
@@ -526,33 +536,45 @@ export function CommercialPilotOpsStatusPanel(props: {
         <Tier2GoldenPathPhasesPanel slice={tier2GoldenPath} variant="platform" />
       ) : null}
 
-      {commercialGoClosure ? (
+      {!suppressEra21GatePanels && commercialGoClosure ? (
         <CommercialGoClosurePhasesPanel slice={commercialGoClosure} variant="platform" />
       ) : null}
 
-      {pilotWeek1 ? <PilotWeek1PhasesPanel slice={pilotWeek1} variant="platform" /> : null}
+      {!suppressEra21GatePanels && pilotWeek1 ? (
+        <PilotWeek1PhasesPanel slice={pilotWeek1} variant="platform" />
+      ) : null}
 
-      {month2MarketReadiness ? (
+      {!suppressEra21GatePanels && month2MarketReadiness ? (
         <Month2MarketReadinessPhasesPanel slice={month2MarketReadiness} variant="platform" />
       ) : null}
 
-      {scaleReadiness ? (
+      {!suppressEra21GatePanels && scaleReadiness ? (
         <ScaleReadinessPhasesPanel slice={scaleReadiness} variant="platform" />
       ) : null}
 
-      {seriesAPartnerExpansion ? (
+      {!suppressEra21GatePanels && seriesAPartnerExpansion ? (
         <SeriesAPartnerExpansionPhasesPanel slice={seriesAPartnerExpansion} variant="platform" />
       ) : null}
 
-      {marketLeaderPositioning ? (
+      {!suppressEra21GatePanels && marketLeaderPositioning ? (
         <MarketLeaderPositioningPhasesPanel slice={marketLeaderPositioning} variant="platform" />
       ) : null}
 
-      {sustainedOperationalExcellence ? (
+      {!suppressEra21GatePanels && sustainedOperationalExcellence ? (
         <SustainedOperationalExcellencePhasesPanel
           slice={sustainedOperationalExcellence}
           variant="platform"
         />
+      ) : null}
+
+      {pureOperationalModeTerminus ? (
+        <div
+          id="era25-pure-operational-mode-terminus"
+          className="scroll-mt-24"
+          data-testid="commercial-pilot-ops-pure-operational-mode-terminus"
+        >
+          <PureOperationalModeTerminusEra25Strip slice={pureOperationalModeTerminus} />
+        </div>
       ) : null}
 
       {continuousImprovementLoop ? (

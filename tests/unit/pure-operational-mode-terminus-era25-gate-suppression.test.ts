@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildPureOperationalModeTerminusEra25UiSlice,
+  shouldSuppressEra21CommercialPilotGatePanels,
   shouldSuppressEra25ProductConvergenceSurfaces,
 } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { resolvePureOperationalModeTerminusEra25Milestone } from "@/lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25";
@@ -44,6 +45,15 @@ describe("pure-operational-mode-terminus-era25-gate-suppression", () => {
         pureOperationalModeEra25Active: activeMilestone === "pure_operational_mode_era25_active",
       }),
     ).toBe(true);
+  });
+
+  it("suppresses era21 commercial gate panels when terminus active", () => {
+    expect(
+      shouldSuppressEra21CommercialPilotGatePanels({ pureOperationalModeEra25Active: true }),
+    ).toBe(true);
+    expect(
+      shouldSuppressEra21CommercialPilotGatePanels({ pureOperationalModeEra25Active: false }),
+    ).toBe(false);
   });
 
   it("exposes pureOperationalModeEra25Active on UI slice from evaluation", () => {

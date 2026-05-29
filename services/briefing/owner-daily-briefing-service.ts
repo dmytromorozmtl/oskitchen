@@ -109,7 +109,10 @@ import {
   mergeBriefingMarketLeaderPositioningConvergenceEra25TopActions,
 } from "@/lib/briefing/market-leader-positioning-convergence-briefing-era25";
 import { buildSustainedOperationalExcellenceConvergenceEra25UiSlice } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
-import { shouldSuppressEra25ProductConvergenceSurfaces } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
+import {
+  shouldSuppressEra25ProductConvergenceSurfaces,
+  type PureOperationalModeTerminusEra25UiSlice,
+} from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import {
   mergeBriefingSustainedOperationalExcellenceConvergenceEra25TopActions,
 } from "@/lib/briefing/sustained-operational-excellence-convergence-briefing-era25";
@@ -1324,6 +1327,9 @@ export async function loadOwnerDailyBriefing(
     continuousImprovementLoop,
     sustainedProductEvolution,
     maintenanceMode,
+    pureOperationalModeEra25Active,
+    pureOperationalModeTerminus:
+      sustainedOpsConvergenceEra25?.pureOperationalModeTerminus ?? null,
     operationalEmptyState,
   };
 }

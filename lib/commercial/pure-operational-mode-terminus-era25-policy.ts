@@ -43,12 +43,14 @@ export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_UNIT_TESTS = [
   "tests/unit/validate-pure-operational-mode-terminus-era25.test.ts",
   "tests/unit/evaluate-pure-operational-mode-terminus-era25.test.ts",
   "tests/unit/pure-operational-mode-terminus-era25-gate-suppression.test.ts",
+  "tests/unit/pure-operational-mode-terminus-era25-steady-state-stack-era25.test.ts",
   "tests/unit/pure-operational-mode-terminus-era25-cert-live.test.ts",
 ] as const;
 
 export const PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PRODUCT_SURFACES = [
   "components/dashboard/maintenance-mode-panel.tsx",
   "components/dashboard/owner-daily-briefing-breakthrough-era25-panel.tsx",
+  "components/dashboard/owner-daily-briefing-hero.tsx",
   "app/dashboard/today/page.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
   "components/dashboard/launch-wizard/launch-wizard-view.tsx",

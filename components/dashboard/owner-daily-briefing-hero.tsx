@@ -11,6 +11,8 @@ import { SustainedOperationalExcellencePhasesPanel } from "@/components/dashboar
 import { ContinuousImprovementLoopPanel } from "@/components/dashboard/continuous-improvement-loop-panel";
 import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained-product-evolution-panel";
 import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
+import { PureOperationalModeTerminusEra25Strip } from "@/components/dashboard/launch-wizard/pure-operational-mode-terminus-era25-strip";
+import { shouldSuppressEra21CommercialPilotGatePanels } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import Link from "next/link";
 import { ArrowRight, LayoutDashboard } from "lucide-react";
 
@@ -84,7 +86,11 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
     p0ProofBlockedLabel,
     p0OpsVault,
     operationalEmptyState,
+    pureOperationalModeEra25Active,
   } = briefing;
+  const suppressEra21GatePanels = shouldSuppressEra21CommercialPilotGatePanels({
+    pureOperationalModeEra25Active,
+  });
 
   return (
     <section className="space-y-4" data-testid="owner-daily-briefing-hero">
@@ -159,7 +165,11 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.commercialGoClosure ? (
+      {briefing.pureOperationalModeTerminus ? (
+        <PureOperationalModeTerminusEra25Strip slice={briefing.pureOperationalModeTerminus} />
+      ) : null}
+
+      {!suppressEra21GatePanels && briefing.commercialGoClosure ? (
         <CommercialGoClosurePhasesPanel
           slice={briefing.commercialGoClosure}
           variant="compact"
@@ -167,7 +177,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.pilotWeek1 ? (
+      {!suppressEra21GatePanels && briefing.pilotWeek1 ? (
         <PilotWeek1PhasesPanel
           slice={briefing.pilotWeek1}
           variant="compact"
@@ -183,7 +193,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.scaleReadiness ? (
+      {!suppressEra21GatePanels && briefing.scaleReadiness ? (
         <ScaleReadinessPhasesPanel
           slice={briefing.scaleReadiness}
           variant="compact"
@@ -191,7 +201,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.seriesAPartnerExpansion ? (
+      {!suppressEra21GatePanels && briefing.seriesAPartnerExpansion ? (
         <SeriesAPartnerExpansionPhasesPanel
           slice={briefing.seriesAPartnerExpansion}
           variant="compact"
@@ -199,7 +209,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.marketLeaderPositioning ? (
+      {!suppressEra21GatePanels && briefing.marketLeaderPositioning ? (
         <MarketLeaderPositioningPhasesPanel
           slice={briefing.marketLeaderPositioning}
           variant="compact"
@@ -207,7 +217,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.sustainedOperationalExcellence ? (
+      {!suppressEra21GatePanels && briefing.sustainedOperationalExcellence ? (
         <SustainedOperationalExcellencePhasesPanel
           slice={briefing.sustainedOperationalExcellence}
           variant="compact"

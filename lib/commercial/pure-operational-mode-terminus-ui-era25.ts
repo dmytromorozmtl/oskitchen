@@ -116,6 +116,13 @@ export function shouldSuppressEra25ProductConvergenceSurfaces(input: {
   return input.pureOperationalModeEra25Active;
 }
 
+/** When true, era21 commercial gate phase panels are hidden on steady-state surfaces. */
+export function shouldSuppressEra21CommercialPilotGatePanels(input: {
+  pureOperationalModeEra25Active: boolean;
+}): boolean {
+  return input.pureOperationalModeEra25Active;
+}
+
 export function formatPureOperationalModeTerminusEra25Label(
   slice: PureOperationalModeTerminusEra25UiSlice,
 ): string {
