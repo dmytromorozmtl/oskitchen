@@ -1,6 +1,6 @@
 # KitchenOS — Phase A: P0 Ops Vault (human + product surfaces)
 
-**Status:** Product surfaces **IMPLEMENTED** · Human credentials **REQUIRED**  
+**Status:** Product surfaces + integrity guard **IMPLEMENTED** · Human credentials **REQUIRED**  
 **Policy:** `era17-p0-staging-proof-unblock-v1` · Inflection `commercial-inflection-readiness-v1`  
 **Playbook:** [`docs/p0-ops-vault-execution-playbook-2026-05-28.md`](./p0-ops-vault-execution-playbook-2026-05-28.md)
 
@@ -48,6 +48,9 @@ npm run ops:run-commercial-inflection-readiness-orchestrator -- --write
 
 ## Next step after Phase A PASS
 
-1. Tier 2 golden path — [`docs/tier2-staging-golden-path-execution-playbook-2026-05-28.md`](./tier2-staging-golden-path-execution-playbook-2026-05-28.md)
-2. Pilot GO/NO-GO smoke with real artifact
-3. Master execution train — [`docs/next-step-master-execution-2026-05-28.md`](./next-step-master-execution-2026-05-28.md)
+1. `npm run ops:sync-p0-staging-proof-integrity-baseline -- --write` (regression guard)
+2. Tier 2 golden path — [`docs/tier2-staging-golden-path-execution-playbook-2026-05-28.md`](./tier2-staging-golden-path-execution-playbook-2026-05-28.md)
+3. Pilot GO/NO-GO smoke with real artifact
+4. Master execution train — [`docs/next-step-master-execution-2026-05-28.md`](./next-step-master-execution-2026-05-28.md)
+
+**Following engineering slice (optional):** Launch Wizard Tier 2 panel deep-link convergence · Today briefing telemetry `briefing_click` on inflection CTA.

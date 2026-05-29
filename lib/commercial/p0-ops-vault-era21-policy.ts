@@ -5,7 +5,6 @@
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_POLICY_ID } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
 import { P0_OPS_VAULT_PHASES_ERA21_POLICY_ID } from "@/lib/commercial/p0-ops-vault-phases-era21";
 import { P0_OPS_VAULT_UI_ERA21_POLICY_ID } from "@/lib/commercial/p0-ops-vault-ui-era21";
-import { P0_OPS_VAULT_UI_ERA21_POLICY_ID } from "@/lib/commercial/p0-ops-vault-ui-era21";
 
 export const P0_OPS_VAULT_ERA21_POLICY_ID = "era21-p0-ops-vault-v1" as const;
 
@@ -62,5 +61,6 @@ export const P0_OPS_VAULT_ERA21_PRODUCT_SURFACES = [
   "app/dashboard/integration-health/page.tsx",
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/dashboard/launch-wizard/launch-wizard-view.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-today-strip.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

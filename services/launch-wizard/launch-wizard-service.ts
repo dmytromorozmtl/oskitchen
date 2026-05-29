@@ -47,6 +47,10 @@ import {
 } from "@/lib/launch-wizard/launch-wizard-production-grade-era20";
 import { LAUNCH_WIZARD_PRODUCTION_GRADE_ERA20_POLICY_ID } from "@/lib/launch-wizard/launch-wizard-production-grade-era20-policy";
 import {
+  buildLaunchWizardCommercialInflectionSlice,
+  type LaunchWizardCommercialInflectionSlice,
+} from "@/lib/launch-wizard/launch-wizard-commercial-inflection-era28";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -100,6 +104,7 @@ export type LaunchWizardModel = {
   commercialSetup: LaunchWizardCommercialSetupSlice;
   productionGrade: LaunchWizardProductionGradeSnapshot;
   tier2Status: LaunchWizardTier2StatusSlice;
+  commercialInflection: LaunchWizardCommercialInflectionSlice | null;
   commercialGoClosure: CommercialGoClosureUiSlice | null;
   pilotWeek1: PilotWeek1ExecutionUiSlice | null;
   month2MarketReadiness: Month2MarketReadinessUiSlice | null;
@@ -427,6 +432,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   const paidPilotGoConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
     breakthroughVisible: true,
   });
+  const commercialInflection = buildLaunchWizardCommercialInflectionSlice();
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -440,6 +446,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     commercialSetup,
     productionGrade,
     tier2Status,
+    commercialInflection,
     commercialGoClosure,
     pilotWeek1,
     month2MarketReadiness,

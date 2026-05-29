@@ -18,6 +18,8 @@ describe("commercial-inflection-readiness-era28", () => {
     expect(result.p0VaultMissingCount).toBe(11);
     expect(result.goDecision).not.toBe("GO");
     expect(result.blockers.some((row) => row.id === "stop_skipped_as_pass")).toBe(true);
+    const stopRule = result.blockers.find((row) => row.id === "stop_skipped_as_pass");
+    expect(stopRule?.validateCommand).toContain("validate-p0-staging-proof-integrity");
   });
 
   it("orders milestones after vault before proof", () => {

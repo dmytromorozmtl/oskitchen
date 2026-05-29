@@ -198,6 +198,7 @@ export function buildP0VaultDay0OrchestratorSummary(input: {
 
   const recommendedCommands = [
     "npm run ops:validate-commercial-inflection-readiness -- --json",
+    "npm run ops:validate-p0-staging-proof-integrity -- --json",
     "npm run ops:run-commercial-inflection-readiness-orchestrator -- --json",
     "npm run ops:export-p0-vault-env-template -- --write",
     "npm run ops:validate-p0-vault-env -- --json",

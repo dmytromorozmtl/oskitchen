@@ -34,6 +34,7 @@ export function LaunchWizardTodayStrip(props: {
   const view = buildLaunchWizardTodayStripViewModel({
     commercialBlockers: props.model.commercialBlockers,
     commercialSetup: props.model.commercialSetup,
+    commercialInflection: props.model.commercialInflection,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -68,6 +69,15 @@ export function LaunchWizardTodayStrip(props: {
             {view.blockerCount > 0 ? (
               <Badge variant="destructive" className="rounded-full tabular-nums">
                 {view.blockerCount} commercial blocker{view.blockerCount === 1 ? "" : "s"}
+              </Badge>
+            ) : null}
+            {view.commercialInflection ? (
+              <Badge
+                variant="outline"
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-inflection"
+              >
+                {view.commercialInflection.milestoneLabel}
               </Badge>
             ) : null}
           </div>

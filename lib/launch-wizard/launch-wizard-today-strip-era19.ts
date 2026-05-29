@@ -5,6 +5,7 @@ import type { LaunchWizardCommercialSetupSlice } from "@/lib/launch-wizard/launc
 import { LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-commercial-setup-era19-policy";
 import { LAUNCH_WIZARD_TODAY_STRIP_ERA19_POLICY_ID } from "@/lib/launch-wizard/launch-wizard-today-strip-era19-policy";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import type { LaunchWizardCommercialInflectionSlice } from "@/lib/launch-wizard/launch-wizard-commercial-inflection-era28";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -29,6 +30,7 @@ export type LaunchWizardTodayStripViewModel = {
   blockerCount: number;
   progressPercent: number;
   progressLabel: string;
+  commercialInflection: LaunchWizardCommercialInflectionSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -68,10 +70,15 @@ export function resolveLaunchWizardTodayStripHref(input: {
 export function buildLaunchWizardTodayStripViewModel(input: {
   commercialBlockers: LaunchWizardCommercialBlockersSlice;
   commercialSetup: LaunchWizardCommercialSetupSlice;
+  commercialInflection?: LaunchWizardCommercialInflectionSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
 }): LaunchWizardTodayStripViewModel {
+  const commercialInflection = input.commercialInflection ?? null;
+  const inflectionSubline = commercialInflection
+    ? `${commercialInflection.scorecardLabel} · registry LIVE ${commercialInflection.integrationRegistryLiveCount}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -98,6 +105,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       blockerCount,
       progressPercent: input.progress.percent,
       progressLabel,
+      commercialInflection,
     };
   }
 
@@ -121,6 +129,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       blockerCount: displayMode === "setup_only" ? 0 : blockerCount,
       progressPercent: input.progress.percent,
       progressLabel,
+      commercialInflection,
     };
   }
 
@@ -131,8 +140,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     headline: "Setup steps complete",
     subline:
       blockerCount > 0
-        ? input.commercialBlockers.headline
-        : "Confirm commercial GO/NO-GO before pilot cutover.",
+        ? inflectionSubline
+          ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
+          : input.commercialBlockers.headline
+        : inflectionSubline ?? "Confirm commercial GO/NO-GO before pilot cutover.",
     href: resolveLaunchWizardTodayStripHref({ mode: "setup_complete" }),
     ctaLabel: "Review commercial proof",
     decisionLabel: input.commercialBlockers.decisionLabel,
@@ -140,5 +151,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     blockerCount: displayMode === "setup_only" ? 0 : blockerCount,
     progressPercent: input.progress.percent,
     progressLabel,
+    commercialInflection,
   };
 }

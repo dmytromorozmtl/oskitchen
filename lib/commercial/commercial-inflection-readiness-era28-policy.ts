@@ -13,6 +13,7 @@ export { COMMERCIAL_INFLECTION_MASTER_MATRIX_DOC, COMMERCIAL_INFLECTION_READINES
 export const COMMERCIAL_INFLECTION_READINESS_ERA28_BACKLOG_ID = "KOS-INFLECTION-001" as const;
 
 export const COMMERCIAL_INFLECTION_READINESS_ERA28_EXTENDS_POLICIES = [
+  "era28-p0-staging-proof-integrity-v1",
   "era21-p0-ops-vault-v1",
   "era17-p0-staging-proof-unblock-v1",
   "era20-tier2-staging-golden-path-v1",
@@ -56,6 +57,7 @@ export const COMMERCIAL_INFLECTION_READINESS_ERA28_PRODUCT_SURFACES = [
   "docs/next-step-commercial-inflection-execution-2026-05-28.md",
   "docs/p0-ops-vault-execution-playbook-2026-05-28.md",
   "docs/next-step-p0-ops-vault-phase-a-product-2026-05-28.md",
+  "components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel.tsx",
 ] as const;
 
 export { COMMERCIAL_INFLECTION_READINESS_POLICY_ID };

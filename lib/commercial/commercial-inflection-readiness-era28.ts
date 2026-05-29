@@ -250,7 +250,7 @@ export function buildCommercialInflectionBlockers(input: {
       title: "Never commit SKIPPED artifacts as PASS",
       detail: "artifacts/*.json must reflect real PASSED runs — governance enforced in CI.",
       status: "done",
-      validateCommand: "npm run smoke:pilot-forbidden-claims-enforcement",
+      validateCommand: "npm run ops:validate-p0-staging-proof-integrity -- --json",
       docPath: COMMERCIAL_INFLECTION_MASTER_MATRIX_DOC,
       artifactPath: null,
       platformRoute: null,
