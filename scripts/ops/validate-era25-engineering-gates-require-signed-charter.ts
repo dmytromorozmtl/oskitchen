@@ -2,10 +2,7 @@
 /**
  * Validates era25 engineering gates require signed charter (enforcement — informational).
  */
-import {
-  resolveEra25EngineeringGatesMilestone,
-  type Era25EngineeringGatesMilestone,
-} from "@/lib/commercial/era25-engineering-gates-post-readiness-orchestrator-era24";
+import type { Era25EngineeringGatesMilestone } from "@/lib/commercial/era25-engineering-gates-post-readiness-orchestrator-era24";
 import { ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_POLICY_ID } from "@/lib/commercial/era25-engineering-gates-require-signed-charter-era24-policy";
 import {
   ERA25_ENGINEERING_GATES_GUARDRAILS,
@@ -25,11 +22,7 @@ export function evaluateEra25EngineeringGatesRequireSignedCharterWithMilestones(
   readyForIllegalArtifactSmokes: boolean;
 } {
   const evaluation = evaluateEra25EngineeringGatesRequireSignedCharter(env);
-  const era25EngineeringGatesMilestone = resolveEra25EngineeringGatesMilestone({
-    era25FirstCharterSliceReadinessMilestone:
-      evaluation.readiness.era25FirstCharterSliceReadinessMilestone,
-    illegalArtifactCount: evaluation.illegalArtifacts.length,
-  });
+  const era25EngineeringGatesMilestone = evaluation.era25EngineeringGatesMilestone;
 
   const readyForCharterReadinessSmokes =
     evaluation.readiness.era25FirstCharterSliceReadinessMilestone ===

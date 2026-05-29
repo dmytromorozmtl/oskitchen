@@ -18,7 +18,9 @@ import {
   type SustainedProductEvolutionTrackStatus,
 } from "@/lib/commercial/sustained-product-evolution-phases-era23";
 import { CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
+import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_POST_SUSTAINED_OPS_CONVERGENCE_ORCHESTRATOR_COMMAND } from "@/lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25";
 import { PILOT_GONOGO_SUMMARY_ARTIFACT_PATH } from "@/lib/commercial/market-leader-positioning-phases-era21";
+import { SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_POST_MARKET_LEADER_CONVERGENCE_ORCHESTRATOR_COMMAND } from "@/lib/commercial/sustained-operational-excellence-convergence-post-market-leader-convergence-orchestrator-era25";
 import type { evaluateSustainedProductEvolution } from "@/scripts/ops/validate-sustained-product-evolution";
 
 export const SUSTAINED_PRODUCT_EVOLUTION_POST_IMPROVEMENT_LOOP_ORCHESTRATOR_ERA23_POLICY_ID =
@@ -31,6 +33,7 @@ export const SUSTAINED_PRODUCT_EVOLUTION_OWNERSHIP_MATRIX_EXPORT_COMMAND =
   "npm run ops:export-sustained-product-evolution-ownership-matrix -- --write" as const;
 
 export type SustainedProductEvolutionMilestone =
+  | "era25_sustained_ops_convergence_blocked"
   | "improvement_loop_blocked"
   | "attention_customer_feedback"
   | "attention_competitor_leapfrog"
@@ -41,6 +44,8 @@ export type SustainedProductEvolutionPostImprovementLoopOrchestratorSummary = {
   milestone: SustainedProductEvolutionMilestone;
   productEvolutionReady: boolean;
   continuousImprovementLoopActive: boolean;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
   readyForFeedbackSmokes: boolean;
   readyForLeapfrogSmokes: boolean;
   goDecision: string | null;
@@ -58,8 +63,10 @@ export type SustainedProductEvolutionPostImprovementLoopOrchestratorSummary = {
 
 export function resolveSustainedProductEvolutionMilestone(input: {
   productEvolutionReady: boolean;
+  sustainedOpsConvergenceReady: boolean;
   tracks: readonly Pick<SustainedProductEvolutionTrackStatus, "id" | "status">[];
 }): SustainedProductEvolutionMilestone {
+  if (!input.sustainedOpsConvergenceReady) return "era25_sustained_ops_convergence_blocked";
   if (!input.productEvolutionReady) return "improvement_loop_blocked";
 
   const attention = resolveNextSustainedProductEvolutionAttentionTrack(
@@ -79,10 +86,11 @@ export function resolveSustainedProductEvolutionMilestone(input: {
 
 export function resolveSustainedProductEvolutionMilestoneFromTrackStatuses(
   tracks: readonly Pick<SustainedProductEvolutionTrackStatus, "id" | "status">[],
-  input: { productEvolutionReady: boolean },
+  input: { productEvolutionReady: boolean; sustainedOpsConvergenceReady?: boolean },
 ): SustainedProductEvolutionMilestone {
   return resolveSustainedProductEvolutionMilestone({
     productEvolutionReady: input.productEvolutionReady,
+    sustainedOpsConvergenceReady: input.sustainedOpsConvergenceReady ?? false,
     tracks,
   });
 }
@@ -98,6 +106,7 @@ export function buildSustainedProductEvolutionPostImprovementLoopOrchestratorSum
   const attention = resolveNextSustainedProductEvolutionAttentionTrack(input.evaluation.tracks);
   const milestone = resolveSustainedProductEvolutionMilestone({
     productEvolutionReady: input.evaluation.productEvolutionReady,
+    sustainedOpsConvergenceReady: input.evaluation.prerequisites.sustainedOpsConvergenceReady,
     tracks: input.evaluation.tracks,
   });
 
@@ -122,17 +131,29 @@ export function buildSustainedProductEvolutionPostImprovementLoopOrchestratorSum
           : ([] as const)),
         "npm run test:ci:commercial-pilot-runbook:cert",
       ] as const)
-    : ([
-        "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
-        "npm run ops:validate-continuous-improvement-loop -- --json",
-        "npm run smoke:pilot-metrics-baseline",
-      ] as const);
+    : milestone === "era25_sustained_ops_convergence_blocked"
+      ? ([
+          SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_POST_MARKET_LEADER_CONVERGENCE_ORCHESTRATOR_COMMAND +
+            " -- --write",
+          "npm run ops:validate-sustained-operational-excellence-convergence-era25 -- --json",
+          PURE_OPERATIONAL_MODE_TERMINUS_ERA25_POST_SUSTAINED_OPS_CONVERGENCE_ORCHESTRATOR_COMMAND +
+            " -- --write",
+          "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
+        ] as const)
+      : ([
+          "npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --write",
+          "npm run ops:validate-continuous-improvement-loop -- --json",
+          "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
+          "npm run smoke:pilot-metrics-baseline",
+        ] as const);
 
   return {
     policyId: SUSTAINED_PRODUCT_EVOLUTION_POST_IMPROVEMENT_LOOP_ORCHESTRATOR_ERA23_POLICY_ID,
     milestone,
     productEvolutionReady: input.evaluation.productEvolutionReady,
     continuousImprovementLoopActive: input.evaluation.continuousImprovementLoopActive,
+    sustainedOpsConvergenceReady: input.evaluation.prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: input.evaluation.prerequisites.pureOperationalModeEra25Active,
     readyForFeedbackSmokes,
     readyForLeapfrogSmokes,
     goDecision: input.evaluation.goDecision,
@@ -167,6 +188,8 @@ export function buildSustainedProductEvolutionOrchestratorReportMarkdown(input: 
     `- Milestone: **${input.summary.milestone}**`,
     `- Product evolution ready: ${input.summary.productEvolutionReady ? "yes" : "no"}`,
     `- Improvement loop active: ${input.summary.continuousImprovementLoopActive ? "yes" : "no"}`,
+    `- Sustained ops convergence ready: ${input.summary.sustainedOpsConvergenceReady ? "yes" : "no"}`,
+    `- Pure operational mode era25 active: ${input.summary.pureOperationalModeEra25Active ? "yes" : "no"}`,
     `- GO decision: ${input.summary.goDecision ?? "missing"}`,
     `- Overdue / due soon / healthy: ${input.summary.overdueCount} / ${input.summary.dueSoonCount} / ${input.summary.healthyCount}`,
     `- Next attention: ${input.summary.nextAttentionTrackLabel ?? "none — measurable tracks fresh"}`,

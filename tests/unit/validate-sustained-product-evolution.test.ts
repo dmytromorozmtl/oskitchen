@@ -11,6 +11,6 @@ describe("validate-sustained-product-evolution", () => {
     const result = evaluateSustainedProductEvolution({});
     expect(result.productEvolutionReady).toBe(false);
     expect(result.tracks).toHaveLength(6);
-    expect(result.productEvolutionMilestone).toBe("improvement_loop_blocked");
+    expect(result.productEvolutionMilestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });

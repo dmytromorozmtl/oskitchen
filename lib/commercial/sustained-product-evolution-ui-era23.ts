@@ -22,6 +22,7 @@ import {
   formatSustainedProductEvolutionTrackDetail,
   IMPLEMENTATION_BACKLOG_DOC,
   resolveContinuousImprovementLoopActive,
+  resolveEra25PureOperationalModeContext,
   resolveNextSustainedProductEvolutionAttentionTrack,
   resolveSustainedProductEvolutionHealthSummary,
   resolveSustainedProductEvolutionPrerequisites,
@@ -72,6 +73,10 @@ export type SustainedProductEvolutionUiSlice = {
   postImprovementLoopOrchestratorCommand: string;
   validateImprovementLoopCommand: string;
   productEvolutionMilestone: SustainedProductEvolutionMilestone;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  pureOperationalModeTerminusHref: string;
+  validateTerminusCommand: string;
   todayHref: string;
   platformOpsHref: string;
   improvementLoopHref: string;
@@ -110,9 +115,11 @@ export function buildSustainedProductEvolutionUiSlice(input: {
     env: input.env,
   });
   const goDecision = input.goNoGoSummary?.decision ?? null;
+  const era25 = resolveEra25PureOperationalModeContext(input.env);
   const prerequisites = resolveSustainedProductEvolutionPrerequisites({
     goDecision,
     continuousImprovementLoopActive,
+    era25,
   });
   if (!prerequisites.productEvolutionReady) return null;
 
@@ -128,7 +135,10 @@ export function buildSustainedProductEvolutionUiSlice(input: {
     : null;
   const productEvolutionMilestone = resolveSustainedProductEvolutionMilestoneFromTrackStatuses(
     tracks,
-    { productEvolutionReady: true },
+    {
+      productEvolutionReady: true,
+      sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
+    },
   );
 
   return {
@@ -159,7 +169,11 @@ export function buildSustainedProductEvolutionUiSlice(input: {
     postImprovementLoopOrchestratorCommand:
       "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
     validateImprovementLoopCommand: "npm run ops:validate-continuous-improvement-loop -- --json",
+    validateTerminusCommand: "npm run ops:validate-pure-operational-mode-terminus-era25 -- --json",
     productEvolutionMilestone,
+    sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active: prerequisites.pureOperationalModeEra25Active,
+    pureOperationalModeTerminusHref: era25.platformOpsHref,
     todayHref: "/dashboard/today",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${SUSTAINED_PRODUCT_EVOLUTION_PLATFORM_ANCHOR}`,
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,

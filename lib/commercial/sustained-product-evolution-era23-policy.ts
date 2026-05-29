@@ -12,6 +12,7 @@ export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_BACKLOG_ID = "KOS-E23-011" as con
 
 export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_EXTENDS_POLICIES = [
   "era22-continuous-improvement-loop-v1",
+  "era25-pure-operational-mode-terminus-v1",
   SUSTAINED_PRODUCT_EVOLUTION_PHASES_ERA23_POLICY_ID,
   SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID,
   "era23-sustained-product-evolution-post-improvement-loop-orchestrator-v1",
@@ -36,6 +37,7 @@ export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_UNIT_TESTS = [
   "tests/unit/run-sustained-product-evolution-post-improvement-loop-orchestrator.test.ts",
   "tests/unit/validate-sustained-product-evolution.test.ts",
   "tests/unit/sustained-product-evolution-era23-cert-live.test.ts",
+  "tests/unit/sustained-product-evolution-era25-integration.test.ts",
 ] as const;
 
 export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_PRODUCT_SURFACES = [

@@ -14,14 +14,19 @@ import {
   buildOwnerDailyBriefingBreakthroughEra25Tiles,
   countWiredBreakthroughBriefingTiles,
 } from "@/lib/briefing/owner-daily-briefing-breakthrough-era25";
-import { evaluateEra25FirstProductSliceBlueprintWithMilestones } from "@/scripts/ops/validate-era25-first-product-slice-blueprint";
+import { resolveEra25FirstProductSliceBlueprintMilestoneFromEnv } from "@/lib/commercial/era25-convergence-milestones-from-env-era25";
+import { evaluateEra25FirstProductSliceBlueprint } from "@/lib/commercial/evaluate-era25-first-product-slice-blueprint";
 import { derivePaidPilotGoConvergenceState } from "@/lib/commercial/load-paid-pilot-go-convergence-state-era25";
 
 export function evaluateOwnerDailyBriefingBreakthroughEra25(
   env: NodeJS.ProcessEnv = process.env,
   root: string = process.cwd(),
 ): {
-  blueprint: ReturnType<typeof evaluateEra25FirstProductSliceBlueprintWithMilestones>;
+  blueprint: ReturnType<typeof evaluateEra25FirstProductSliceBlueprint> & {
+    era25FirstProductSliceBlueprintMilestone: ReturnType<
+      typeof resolveEra25FirstProductSliceBlueprintMilestoneFromEnv
+    >;
+  };
   p0ProofStatus: string | null;
   briefingTiles: ReturnType<typeof buildOwnerDailyBriefingBreakthroughEra25Tiles>;
   wiredBriefingTileCount: number;
@@ -33,7 +38,14 @@ export function evaluateOwnerDailyBriefingBreakthroughEra25(
   productDoc: typeof OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_DOC;
   existingLinks: typeof OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_EXISTING_LINKS;
 } {
-  const blueprint = evaluateEra25FirstProductSliceBlueprintWithMilestones(env);
+  const blueprintEvaluation = evaluateEra25FirstProductSliceBlueprint(env, root);
+  const blueprint = {
+    ...blueprintEvaluation,
+    era25FirstProductSliceBlueprintMilestone: resolveEra25FirstProductSliceBlueprintMilestoneFromEnv(
+      env,
+      root,
+    ),
+  };
   const p0Artifact = loadP0StagingProofArtifact(root);
   const p0ProofStatus = p0Artifact?.p0ProofStatus ?? "awaiting_ops_credentials";
   const briefingSchemeCount = OWNER_DAILY_BRIEFING_BREAKTHROUGH_ERA25_BRIEFING_SCHEME.length;
@@ -41,8 +53,8 @@ export function evaluateOwnerDailyBriefingBreakthroughEra25(
 
   const briefingTiles = buildOwnerDailyBriefingBreakthroughEra25Tiles({
     blueprintMilestone: blueprint.era25FirstProductSliceBlueprintMilestone,
-    gatesMilestone: blueprint.evaluation.gates.era25EngineeringGatesMilestone,
-    blueprintBlocked: blueprint.evaluation.blueprintBlocked,
+    gatesMilestone: blueprint.gates.era25EngineeringGatesMilestone,
+    blueprintBlocked: blueprint.blueprintBlocked,
     p0ProofStatus,
     briefingSchemeCount,
     goState,

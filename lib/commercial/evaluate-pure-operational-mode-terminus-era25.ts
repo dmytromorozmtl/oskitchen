@@ -11,13 +11,21 @@ import {
   derivePureOperationalModeTerminusState,
   type PureOperationalModeTerminusState,
 } from "@/lib/commercial/load-pure-operational-mode-terminus-state-era25";
-import { evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones } from "@/scripts/ops/validate-sustained-operational-excellence-convergence-era25";
+import { resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv } from "@/lib/commercial/era25-convergence-milestones-from-env-era25";
 import { resolvePureOperationalModeTerminusEra25Milestone } from "@/lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25";
 
 export function evaluatePureOperationalModeTerminusEra25(
   env: NodeJS.ProcessEnv = process.env,
 ): {
-  sustainedOpsConvergence: ReturnType<typeof evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones>;
+  sustainedOperationalExcellenceConvergenceEra25Milestone: ReturnType<
+    typeof resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv
+  >;
+  /** @deprecated Use sustainedOperationalExcellenceConvergenceEra25Milestone — compat shim */
+  sustainedOpsConvergence: {
+    sustainedOperationalExcellenceConvergenceEra25Milestone: ReturnType<
+      typeof resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv
+    >;
+  };
   terminusState: PureOperationalModeTerminusState;
   sustainedOpsConvergenceReady: boolean;
   pureOperationalModeEra25Active: boolean;
@@ -27,13 +35,13 @@ export function evaluatePureOperationalModeTerminusEra25(
   humanSteps: typeof PURE_OPERATIONAL_MODE_TERMINUS_ERA25_HUMAN_STEPS;
   convergenceDoc: typeof PURE_OPERATIONAL_MODE_TERMINUS_ERA25_DOC;
 } {
-  const sustainedOpsConvergence = evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones(env);
+  const sustainedOperationalExcellenceConvergenceEra25Milestone =
+    resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv(env);
   const terminusState = derivePureOperationalModeTerminusState(env);
   const sustainedOpsConvergenceReady = terminusState.sustainedOpsConvergenceReady;
 
   const milestone = resolvePureOperationalModeTerminusEra25Milestone({
-    sustainedOperationalExcellenceConvergenceEra25Milestone:
-      sustainedOpsConvergence.sustainedOperationalExcellenceConvergenceEra25Milestone,
+    sustainedOperationalExcellenceConvergenceEra25Milestone,
     sustainedOpsConvergenceReady,
     tracks: terminusState.tracks,
   });
@@ -41,7 +49,10 @@ export function evaluatePureOperationalModeTerminusEra25(
   const terminusBlocked = !pureOperationalModeEra25Active;
 
   return {
-    sustainedOpsConvergence,
+    sustainedOperationalExcellenceConvergenceEra25Milestone,
+    sustainedOpsConvergence: {
+      sustainedOperationalExcellenceConvergenceEra25Milestone,
+    },
     terminusState,
     sustainedOpsConvergenceReady,
     pureOperationalModeEra25Active,

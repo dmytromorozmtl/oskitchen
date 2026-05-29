@@ -55,7 +55,12 @@ function main() {
 
   if (jsonOutput) {
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.milestone === "improvement_loop_blocked" ? 2 : 0);
+    process.exit(
+      summary.milestone === "improvement_loop_blocked" ||
+        summary.milestone === "era25_sustained_ops_convergence_blocked"
+        ? 2
+        : 0,
+    );
     return;
   }
 

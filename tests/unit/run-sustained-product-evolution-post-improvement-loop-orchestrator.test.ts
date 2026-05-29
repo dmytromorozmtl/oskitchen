@@ -10,6 +10,6 @@ describe("run-sustained-product-evolution-post-improvement-loop-orchestrator", (
     expect(summary.policyId).toBe(
       "era23-sustained-product-evolution-post-improvement-loop-orchestrator-v1",
     );
-    expect(summary.milestone).toBe("improvement_loop_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
   });
 });

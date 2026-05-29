@@ -10,10 +10,11 @@ import { buildSustainedProductEvolutionTrackStatuses } from "@/lib/commercial/su
 import { evaluateSustainedProductEvolution } from "@/scripts/ops/validate-sustained-product-evolution";
 
 describe("sustained-product-evolution-post-improvement-loop-orchestrator-era23", () => {
-  it("blocks when improvement loop is not active", () => {
+  it("blocks when era25 sustained ops convergence is not ready", () => {
     const evaluation = evaluateSustainedProductEvolution({});
-    expect(evaluation.productEvolutionMilestone).toBe("improvement_loop_blocked");
+    expect(evaluation.productEvolutionMilestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(evaluation.productEvolutionReady).toBe(false);
+    expect(evaluation.prerequisites.sustainedOpsConvergenceReady).toBe(false);
   });
 
   it("resolves product_evolution_healthy when measurable tracks are fresh", () => {
@@ -41,12 +42,13 @@ describe("sustained-product-evolution-post-improvement-loop-orchestrator-era23",
     });
     const milestone = resolveSustainedProductEvolutionMilestone({
       productEvolutionReady: true,
+      sustainedOpsConvergenceReady: true,
       tracks,
     });
     expect(milestone).toBe("product_evolution_healthy");
   });
 
-  it("builds orchestrator summary with Step 10 redirect when blocked", () => {
+  it("builds orchestrator summary with era25 redirect when sustained ops not ready", () => {
     const evaluation = evaluateSustainedProductEvolution({});
     const summary = buildSustainedProductEvolutionPostImprovementLoopOrchestratorSummary({
       evaluation,
@@ -56,10 +58,11 @@ describe("sustained-product-evolution-post-improvement-loop-orchestrator-era23",
         competitorMatrixPresent: false,
       },
     });
-    expect(summary.milestone).toBe("improvement_loop_blocked");
+    expect(summary.milestone).toBe("era25_sustained_ops_convergence_blocked");
     expect(summary.recommendedCommands[0]).toContain(
-      "continuous-improvement-loop-post-sustained-ops-orchestrator",
+      "sustained-operational-excellence-convergence",
     );
+    expect(summary.recommendedCommands.join(" ")).toContain("pure-operational-mode-terminus");
   });
 
   it("builds orchestrator report markdown", () => {
@@ -83,7 +86,7 @@ describe("sustained-product-evolution-post-improvement-loop-orchestrator-era23",
   it("resolves milestone from track statuses for UI", () => {
     const milestone = resolveSustainedProductEvolutionMilestoneFromTrackStatuses(
       [{ id: "customer_feedback_backlog", status: "overdue" }],
-      { productEvolutionReady: true },
+      { productEvolutionReady: true, sustainedOpsConvergenceReady: true },
     );
     expect(milestone).toBe("attention_customer_feedback");
   });

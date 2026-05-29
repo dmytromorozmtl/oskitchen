@@ -12,7 +12,7 @@ import {
   ERA_CHARTER_CRITERIA,
   ERA_CHARTER_READINESS_CHECKLIST_PATH,
 } from "@/lib/commercial/era25-charter-exit-outside-linear-path-phases-era24";
-import { evaluateLinearChainTerminusGuardWithMilestones } from "@/scripts/ops/validate-linear-chain-terminus-guard";
+import { resolveLinearGuardMilestonesLightweight } from "@/lib/commercial/resolve-era25-linear-guard-milestones-lightweight-era24";
 
 const ERA25_CHARTER_DOC_PATTERN = /^era25-.+-charter-2026-.+\.md$/;
 
@@ -41,7 +41,18 @@ export function evaluateEra25CharterExitOutsideLinearPath(
   charterDocGlobHint: typeof ERA25_CHARTER_DOC_GLOB_HINT;
   criteria: typeof ERA_CHARTER_CRITERIA;
 } {
-  const terminusGuard = evaluateLinearChainTerminusGuardWithMilestones(env);
+  const linearGuard = resolveLinearGuardMilestonesLightweight(env, root);
+  const terminusGuard = {
+    guard: linearGuard.guard,
+    linearPath: {
+      linearPathPermanentlyClosedMilestone: linearGuard.linearPathPermanentlyClosedMilestone,
+    },
+    linearChainTerminusGuardMilestone: linearGuard.linearChainTerminusGuardMilestone,
+    linearPathPermanentlyClosedMilestone: linearGuard.linearPathPermanentlyClosedMilestone,
+    readyForLinearPathClosureSmokes:
+      linearGuard.linearPathPermanentlyClosedMilestone !== "linear_path_permanently_closed_healthy",
+    readyForCatalogIntegritySmokes: !linearGuard.guard.guardPassed,
+  };
   const era25CharterDocs = discoverEra25CharterDocs(root);
 
   return {

@@ -3,7 +3,7 @@
  */
 import type { ContinuousImprovementLoopTrackStatus } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
 import { evaluateContinuousImprovementLoop } from "@/scripts/ops/validate-continuous-improvement-loop";
-import { evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones } from "@/scripts/ops/validate-sustained-operational-excellence-convergence-era25";
+import { resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv } from "@/lib/commercial/era25-convergence-milestones-from-env-era25";
 
 export type PureOperationalModeTerminusState = {
   goDecision: string | null;
@@ -25,10 +25,9 @@ export type PureOperationalModeTerminusState = {
 export function derivePureOperationalModeTerminusState(
   env: NodeJS.ProcessEnv = process.env,
 ): PureOperationalModeTerminusState {
-  const sustainedOpsConvergence = evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones(env);
   const improvementLoop = evaluateContinuousImprovementLoop(env);
   const sustainedOpsConvergenceReady =
-    sustainedOpsConvergence.sustainedOperationalExcellenceConvergenceEra25Milestone ===
+    resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv(env) ===
     "sustained_operational_excellence_convergence_era25_ready";
 
   const attention = improvementLoop.tracks.find(

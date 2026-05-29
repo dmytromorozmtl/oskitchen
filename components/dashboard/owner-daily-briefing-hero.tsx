@@ -165,10 +165,6 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.pureOperationalModeTerminus ? (
-        <PureOperationalModeTerminusEra25Strip slice={briefing.pureOperationalModeTerminus} />
-      ) : null}
-
       {!suppressEra21GatePanels && briefing.commercialGoClosure ? (
         <CommercialGoClosurePhasesPanel
           slice={briefing.commercialGoClosure}
@@ -223,6 +219,10 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
           variant="compact"
           title="Sustained operational excellence"
         />
+      ) : null}
+
+      {briefing.pureOperationalModeTerminus ? (
+        <PureOperationalModeTerminusEra25Strip slice={briefing.pureOperationalModeTerminus} />
       ) : null}
 
       {briefing.continuousImprovementLoop ? (

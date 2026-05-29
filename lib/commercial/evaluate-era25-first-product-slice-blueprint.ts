@@ -20,7 +20,7 @@ import {
 } from "@/lib/commercial/era25-first-product-slice-blueprint-phases-era24";
 import { validateEra25FirstProductSliceStagingChecklist } from "@/lib/commercial/validate-era25-first-product-slice-staging-checklist-era24";
 import { validateEra25CharterDocSections } from "@/lib/commercial/validate-era25-charter-doc-sections-era24";
-import { evaluateEra25EngineeringGatesRequireSignedCharterWithMilestones } from "@/scripts/ops/validate-era25-engineering-gates-require-signed-charter";
+import { evaluateEra25EngineeringGatesRequireSignedCharter } from "@/lib/commercial/evaluate-era25-engineering-gates-require-signed-charter";
 
 export function discoverCanonicalFirstProductSliceCharterDoc(
   root: string = process.cwd(),
@@ -59,7 +59,7 @@ export function evaluateEra25FirstProductSliceBlueprint(
   humanSteps: typeof ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_HUMAN_STEPS;
   blueprintDoc: typeof ERA25_FIRST_PRODUCT_SLICE_BLUEPRINT_DOC;
 } {
-  const gates = evaluateEra25EngineeringGatesRequireSignedCharterWithMilestones(env);
+  const gates = evaluateEra25EngineeringGatesRequireSignedCharter(env, root);
   const illegalArtifacts = discoverIllegalEra25ProductArtifacts(root);
   const canonicalCharterDocPath = discoverCanonicalFirstProductSliceCharterDoc(root);
 

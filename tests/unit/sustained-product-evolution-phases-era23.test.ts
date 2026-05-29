@@ -192,13 +192,28 @@ describe("sustained-product-evolution-phases-era23", () => {
     expect(SUSTAINED_PRODUCT_EVOLUTION_TRACKS.every((track) => track.ownerRole.length > 0)).toBe(true);
   });
 
-  it("requires improvement loop active for product evolution", () => {
+  it("requires improvement loop and era25 sustained ops for product evolution", () => {
     expect(
       resolveSustainedProductEvolutionPrerequisites({
         goDecision: "GO",
         continuousImprovementLoopActive: false,
+        era25: { sustainedOpsConvergenceReady: true, pureOperationalModeEra25Active: false },
       }).productEvolutionReady,
     ).toBe(false);
+    expect(
+      resolveSustainedProductEvolutionPrerequisites({
+        goDecision: "GO",
+        continuousImprovementLoopActive: true,
+        era25: { sustainedOpsConvergenceReady: false, pureOperationalModeEra25Active: false },
+      }).productEvolutionReady,
+    ).toBe(false);
+    expect(
+      resolveSustainedProductEvolutionPrerequisites({
+        goDecision: "GO",
+        continuousImprovementLoopActive: true,
+        era25: { sustainedOpsConvergenceReady: true, pureOperationalModeEra25Active: true },
+      }).productEvolutionReady,
+    ).toBe(true);
     expect(
       resolveContinuousImprovementLoopActive({
         goNoGoSummary: goSummary,
@@ -248,7 +263,7 @@ describe("sustained-product-evolution-ui-era23", () => {
     ).toBeNull();
   });
 
-  it("surfaces product evolution slice when improvement loop active", () => {
+  it("returns null when improvement loop is active but era25 sustained ops convergence is pending", () => {
     const slice = buildSustainedProductEvolutionUiSlice({
       goNoGoSummary: goSummary,
       p0Staging: fullArtifacts.p0Staging,
@@ -260,8 +275,6 @@ describe("sustained-product-evolution-ui-era23", () => {
       competitorMatrix: fullArtifacts.competitorMatrix,
       env: fullArtifacts.sustainedOpsEnv,
     });
-    expect(slice?.productEvolutionReady).toBe(true);
-    expect(slice?.tracks).toHaveLength(6);
-    expect(slice?.platformOpsHref).toContain("#sustained-product-evolution");
+    expect(slice).toBeNull();
   });
 });

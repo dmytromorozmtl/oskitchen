@@ -74,6 +74,11 @@ export function SustainedProductEvolutionPanel(props: {
             <Badge variant="outline" className="rounded-full font-mono text-[10px]">
               {slice.productEvolutionMilestone.replaceAll("_", " ")}
             </Badge>
+            {slice.pureOperationalModeEra25Active ? (
+              <Badge variant="default" className="rounded-full font-mono text-[10px]">
+                era25 pure ops
+              </Badge>
+            ) : null}
             <Badge variant="outline" className="rounded-full text-[10px]">
               decision: {slice.goDecision}
             </Badge>
@@ -180,6 +185,7 @@ export function SustainedProductEvolutionPanel(props: {
                 <li>{slice.syncProgressReportCommand}</li>
                 <li>{slice.exportOwnershipMatrixCommand}</li>
                 <li>{slice.validateImprovementLoopCommand}</li>
+                <li>{slice.validateTerminusCommand}</li>
                 <li>npm run smoke:pilot-metrics-baseline</li>
                 <li>npm run smoke:competitor-feature-gap-matrix</li>
                 <li>npm run test:ci:commercial-pilot-runbook:cert</li>
@@ -191,6 +197,9 @@ export function SustainedProductEvolutionPanel(props: {
               </Button>
               <Button asChild size="sm" variant="ghost" className="rounded-full">
                 <Link href={slice.improvementLoopHref}>Improvement loop</Link>
+              </Button>
+              <Button asChild size="sm" variant="ghost" className="rounded-full">
+                <Link href={slice.pureOperationalModeTerminusHref}>era25 terminus</Link>
               </Button>
               <Button asChild size="sm" variant="ghost" className="rounded-full">
                 <Link href={slice.reportsHref}>Reports</Link>

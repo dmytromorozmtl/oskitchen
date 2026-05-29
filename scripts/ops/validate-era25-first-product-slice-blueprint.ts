@@ -31,7 +31,7 @@ export function evaluateEra25FirstProductSliceBlueprintWithMilestones(
   const evaluation = evaluateEra25FirstProductSliceBlueprint(env);
   const era25FirstProductSliceBlueprintMilestone = resolveEra25FirstProductSliceBlueprintMilestone({
     era25EngineeringGatesMilestone: evaluation.gates.era25EngineeringGatesMilestone,
-    gatesBlocked: evaluation.gates.evaluation.gatesBlocked,
+    gatesBlocked: evaluation.gates.gatesBlocked,
     illegalArtifactCount: evaluation.illegalArtifacts.length,
     canonicalCharterDocPath: evaluation.canonicalCharterDocPath,
     charterSectionsValid: evaluation.charterSectionsValid,
@@ -39,7 +39,7 @@ export function evaluateEra25FirstProductSliceBlueprintWithMilestones(
   });
 
   const readyForEngineeringGatesSmokes =
-    evaluation.gates.evaluation.gatesBlocked ||
+    evaluation.gates.gatesBlocked ||
     evaluation.gates.era25EngineeringGatesMilestone !== "era25_engineering_gates_open";
   const readyForCharterSectionSmokes =
     evaluation.canonicalCharterDocPath !== null && !evaluation.charterSectionsValid;

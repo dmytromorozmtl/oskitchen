@@ -25,6 +25,11 @@ import {
   SERIES_A_FORBIDDEN_CLAIMS_DOC,
   SERIES_A_PLATFORM_OPS_ROUTE,
 } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
+import type { PureOperationalModeTerminusEra25Milestone } from "@/lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25";
+import { resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv } from "@/lib/commercial/era25-convergence-milestones-from-env-era25";
+import { derivePureOperationalModeTerminusState } from "@/lib/commercial/load-pure-operational-mode-terminus-state-era25";
+import { resolvePureOperationalModeTerminusEra25Milestone } from "@/lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25";
 
 export const SUSTAINED_PRODUCT_EVOLUTION_PHASES_ERA23_POLICY_ID =
   "era23-sustained-product-evolution-phases-v1" as const;
@@ -127,11 +132,62 @@ export type SustainedProductEvolutionTrackStatus = {
   lastRunAt: string | null;
 };
 
+export type Era25PureOperationalModeContext = {
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
+  pureOperationalModeTerminusEra25Milestone: PureOperationalModeTerminusEra25Milestone;
+  platformOpsHref: string;
+};
+
 export type SustainedProductEvolutionPrerequisiteStatus = {
   goDecision: string | null;
   continuousImprovementLoopActive: boolean;
+  sustainedOpsConvergenceReady: boolean;
+  pureOperationalModeEra25Active: boolean;
   productEvolutionReady: boolean;
 };
+
+let resolvingEra25PureOperationalModeContext = false;
+
+const ERA25_PURE_OPERATIONAL_MODE_CONTEXT_REENTRANT_DEFAULT: Era25PureOperationalModeContext = {
+  sustainedOpsConvergenceReady: false,
+  pureOperationalModeEra25Active: false,
+  pureOperationalModeTerminusEra25Milestone: "sustained_ops_convergence_regression_blocked",
+  platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
+};
+
+export function resolveEra25PureOperationalModeContext(
+  env: NodeJS.ProcessEnv = process.env,
+): Era25PureOperationalModeContext {
+  if (resolvingEra25PureOperationalModeContext) {
+    return ERA25_PURE_OPERATIONAL_MODE_CONTEXT_REENTRANT_DEFAULT;
+  }
+
+  resolvingEra25PureOperationalModeContext = true;
+  try {
+    const terminusState = derivePureOperationalModeTerminusState(env);
+    const sustainedOperationalExcellenceConvergenceEra25Milestone =
+      resolveSustainedOperationalExcellenceConvergenceEra25MilestoneFromEnv(env);
+    const sustainedOpsConvergenceReady =
+      sustainedOperationalExcellenceConvergenceEra25Milestone ===
+      "sustained_operational_excellence_convergence_era25_ready";
+    const pureOperationalModeTerminusEra25Milestone = resolvePureOperationalModeTerminusEra25Milestone({
+      sustainedOperationalExcellenceConvergenceEra25Milestone,
+      sustainedOpsConvergenceReady,
+      tracks: terminusState.tracks,
+    });
+
+    return {
+      sustainedOpsConvergenceReady,
+      pureOperationalModeEra25Active:
+        pureOperationalModeTerminusEra25Milestone === "pure_operational_mode_era25_active",
+      pureOperationalModeTerminusEra25Milestone,
+      platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
+    };
+  } finally {
+    resolvingEra25PureOperationalModeContext = false;
+  }
+}
 
 function daysSince(iso: string | null | undefined): number | null {
   if (!iso) return null;
@@ -184,12 +240,22 @@ export function resolveContinuousImprovementLoopActive(input: {
 export function resolveSustainedProductEvolutionPrerequisites(input: {
   goDecision: string | null;
   continuousImprovementLoopActive: boolean;
+  era25?: Pick<
+    Era25PureOperationalModeContext,
+    "sustainedOpsConvergenceReady" | "pureOperationalModeEra25Active"
+  >;
 }): SustainedProductEvolutionPrerequisiteStatus {
+  const sustainedOpsConvergenceReady = input.era25?.sustainedOpsConvergenceReady ?? false;
+  const pureOperationalModeEra25Active = input.era25?.pureOperationalModeEra25Active ?? false;
   return {
     goDecision: input.goDecision,
     continuousImprovementLoopActive: input.continuousImprovementLoopActive,
+    sustainedOpsConvergenceReady,
+    pureOperationalModeEra25Active,
     productEvolutionReady:
-      input.goDecision === "GO" && input.continuousImprovementLoopActive,
+      input.goDecision === "GO" &&
+      input.continuousImprovementLoopActive &&
+      sustainedOpsConvergenceReady,
   };
 }
 

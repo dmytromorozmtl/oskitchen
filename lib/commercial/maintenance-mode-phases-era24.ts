@@ -15,6 +15,7 @@ import {
 import { SERIES_A_COMPETITOR_LEAPFROG_DOC } from "@/lib/commercial/market-leader-positioning-phases-era21";
 import {
   IMPLEMENTATION_BACKLOG_DOC,
+  resolveEra25PureOperationalModeContext,
   resolveSustainedProductEvolutionPrerequisites,
   SUSTAINED_PRODUCT_EVOLUTION_STEP11_DOC,
 } from "@/lib/commercial/sustained-product-evolution-phases-era23";
@@ -229,9 +230,11 @@ export function resolveProductEvolutionReady(input: {
     goDecision,
     sustainedOpsComplete,
   }).pureOperationalMode;
+  const era25 = resolveEra25PureOperationalModeContext(input.env);
   return resolveSustainedProductEvolutionPrerequisites({
     goDecision,
     continuousImprovementLoopActive: improvementLoopActive,
+    era25,
   }).productEvolutionReady;
 }
 

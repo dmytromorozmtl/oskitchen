@@ -7,6 +7,7 @@ import { readContinuousImprovementLoopArtifacts } from "@/scripts/ops/validate-c
 import {
   buildSustainedProductEvolutionTrackStatuses,
   resolveContinuousImprovementLoopActive,
+  resolveEra25PureOperationalModeContext,
   resolveSustainedProductEvolutionHealthSummary,
   resolveSustainedProductEvolutionPrerequisites,
 } from "@/lib/commercial/sustained-product-evolution-phases-era23";
@@ -35,9 +36,11 @@ export function evaluateSustainedProductEvolution(env: NodeJS.ProcessEnv = proce
     competitorMatrix: artifacts.competitorMatrix,
     env,
   });
+  const era25 = resolveEra25PureOperationalModeContext(env);
   const prerequisites = resolveSustainedProductEvolutionPrerequisites({
     goDecision,
     continuousImprovementLoopActive,
+    era25,
   });
   const tracks = buildSustainedProductEvolutionTrackStatuses({
     metricsBaseline: artifacts.metricsBaseline,
@@ -55,6 +58,7 @@ export function evaluateSustainedProductEvolution(env: NodeJS.ProcessEnv = proce
     (leapfrog?.status === "overdue" || leapfrog?.status === "due_soon");
   const productEvolutionMilestone = resolveSustainedProductEvolutionMilestone({
     productEvolutionReady: prerequisites.productEvolutionReady,
+    sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
     tracks,
   });
 
@@ -82,6 +86,8 @@ function main() {
           policyId: "era23-sustained-product-evolution-v1",
           productEvolutionReady: result.productEvolutionReady,
           continuousImprovementLoopActive: result.continuousImprovementLoopActive,
+          sustainedOpsConvergenceReady: result.prerequisites.sustainedOpsConvergenceReady,
+          pureOperationalModeEra25Active: result.prerequisites.pureOperationalModeEra25Active,
           goDecision: result.goDecision,
           productEvolutionMilestone: result.productEvolutionMilestone,
           readyForFeedbackSmokes: result.readyForFeedbackSmokes,

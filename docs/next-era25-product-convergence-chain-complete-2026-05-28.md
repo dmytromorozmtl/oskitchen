@@ -55,9 +55,9 @@ Human blocker unchanged: **Step 1 P0 Ops Vault** (11 env vars) for first paid pi
 
 ---
 
-## Handoff — Step 11 Sustained Product Evolution (era23)
+## Handoff — Step 11 Sustained Product Evolution (era23) · IMPLEMENTED
 
-**Outside** era25 gate chain. Already implemented — informational tracks only.
+**Outside** era25 gate chain. Wired to era25 terminus prerequisites (`sustainedOpsConvergenceReady`).
 
 | Doc | Purpose |
 |-----|---------|

@@ -44,6 +44,8 @@ describe("sustained product evolution era23 CI certification (live repo)", () =>
     );
     expect(step11).toContain("operator_feedback_score");
     expect(step11).toContain("#sustained-product-evolution");
+    expect(step11).toContain("era25_sustained_ops_convergence_blocked");
+    expect(step11).toContain("validate-pure-operational-mode-terminus-era25");
   });
 
   it("wires product surfaces", () => {

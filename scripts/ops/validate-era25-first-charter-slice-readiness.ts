@@ -2,53 +2,20 @@
 /**
  * Validates era25 first charter slice readiness (charter doc sections — informational).
  */
-import {
-  resolveEra25FirstCharterSliceReadinessMilestone,
-  type Era25FirstCharterSliceReadinessMilestone,
-} from "@/lib/commercial/era25-first-charter-slice-readiness-post-charter-exit-orchestrator-era24";
 import { ERA25_FIRST_CHARTER_SLICE_READINESS_ERA24_POLICY_ID } from "@/lib/commercial/era25-first-charter-slice-readiness-era24-policy";
 import {
   ERA25_FIRST_CHARTER_SLICE_GUARDRAILS,
   ERA25_CHARTER_REQUIRED_SECTIONS,
 } from "@/lib/commercial/era25-first-charter-slice-readiness-phases-era24";
-import { evaluateEra25FirstCharterSliceReadiness } from "@/lib/commercial/evaluate-era25-first-charter-slice-readiness";
-import { evaluateEra25CharterExitOutsideLinearPathWithMilestones } from "@/scripts/ops/validate-era25-charter-exit-outside-linear-path";
+import {
+  evaluateEra25FirstCharterSliceReadiness,
+  evaluateEra25FirstCharterSliceReadinessWithMilestones,
+} from "@/lib/commercial/evaluate-era25-engineering-gates-require-signed-charter";
 
-export { evaluateEra25FirstCharterSliceReadiness };
-
-export function evaluateEra25FirstCharterSliceReadinessWithMilestones(
-  env: NodeJS.ProcessEnv = process.env,
-): {
-  evaluation: ReturnType<typeof evaluateEra25FirstCharterSliceReadiness>;
-  era25CharterExitMilestone: ReturnType<
-    typeof evaluateEra25CharterExitOutsideLinearPathWithMilestones
-  >["era25CharterExitMilestone"];
-  era25FirstCharterSliceReadinessMilestone: Era25FirstCharterSliceReadinessMilestone;
-  readyForCharterExitSmokes: boolean;
-  readyForCharterSectionSmokes: boolean;
-} {
-  const evaluation = evaluateEra25FirstCharterSliceReadiness(env);
-  const charterExit = evaluateEra25CharterExitOutsideLinearPathWithMilestones(env);
-  const era25FirstCharterSliceReadinessMilestone = resolveEra25FirstCharterSliceReadinessMilestone({
-    era25CharterExitMilestone: charterExit.era25CharterExitMilestone,
-    signedCharterPresent: evaluation.charterExit.signedCharterPresent,
-    sectionsValid: evaluation.charterValidation.sectionsValid,
-  });
-
-  const readyForCharterExitSmokes =
-    charterExit.era25CharterExitMilestone === "terminus_guard_blocked" ||
-    charterExit.era25CharterExitMilestone === "attention_charter_checklist";
-  const readyForCharterSectionSmokes =
-    evaluation.charterExit.signedCharterPresent && !evaluation.charterValidation.sectionsValid;
-
-  return {
-    evaluation,
-    era25CharterExitMilestone: charterExit.era25CharterExitMilestone,
-    era25FirstCharterSliceReadinessMilestone,
-    readyForCharterExitSmokes,
-    readyForCharterSectionSmokes,
-  };
-}
+export {
+  evaluateEra25FirstCharterSliceReadiness,
+  evaluateEra25FirstCharterSliceReadinessWithMilestones,
+};
 
 function main() {
   const jsonOutput = process.argv.includes("--json");
