@@ -5,6 +5,7 @@ import {
   PAID_PILOT_GO_CONVERGENCE_ERA25_PLATFORM_ANCHOR,
   PAID_PILOT_GO_CONVERGENCE_ERA25_PHASES_POLICY_ID,
   PAID_PILOT_GO_CONVERGENCE_ERA25_KICKOFF_CHECKLIST_DOC,
+  detectPaidPilotGoConvergenceEra25Started,
 } from "@/lib/commercial/paid-pilot-go-convergence-phases-era25";
 
 describe("paid-pilot-go-convergence-phases-era25", () => {
@@ -28,5 +29,19 @@ describe("paid-pilot-go-convergence-phases-era25", () => {
     expect(PAID_PILOT_GO_CONVERGENCE_ERA25_KICKOFF_CHECKLIST_DOC).toContain(
       "era25-paid-pilot-kickoff-checklist",
     );
+  });
+
+  it("detects convergence train started from env keys", () => {
+    expect(detectPaidPilotGoConvergenceEra25Started({})).toBe(false);
+    expect(
+      detectPaidPilotGoConvergenceEra25Started({
+        PAID_PILOT_GO_CONVERGENCE_ERA25_ATTESTED: "1",
+      }),
+    ).toBe(true);
+    expect(
+      detectPaidPilotGoConvergenceEra25Started({
+        PAID_PILOT_GO_CONVERGENCE_ERA25_REPORT_REVIEWED: "1",
+      }),
+    ).toBe(true);
   });
 });

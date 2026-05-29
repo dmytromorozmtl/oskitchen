@@ -22,6 +22,17 @@ describe("paid-pilot-go-convergence-ui-era25", () => {
       "run-paid-pilot-go-convergence-post-breakthrough-orchestrator-era25",
     );
     expect(slice?.pilotWeek1ExecutionConvergence).not.toBeNull();
+    expect(slice?.integrityValidateCommand).toContain("validate-paid-pilot-go-convergence-integrity");
+    expect(slice?.launchWizardHref).toContain("#launch-wizard-era25-paid-pilot-go-convergence");
+  });
+
+  it("builds slice when convergence train started without breakthrough visible", () => {
+    const slice = buildPaidPilotGoConvergenceEra25UiSlice({
+      breakthroughVisible: false,
+      env: { PAID_PILOT_GO_CONVERGENCE_ERA25_ATTESTED: "1" },
+    });
+    expect(slice).not.toBeNull();
+    expect(slice?.paidPilotGoConvergenceIntegrityPassed).toBe(false);
   });
 
   it("formats convergence label", () => {

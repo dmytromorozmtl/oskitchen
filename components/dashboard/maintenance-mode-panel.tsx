@@ -1361,6 +1361,24 @@ export function MaintenanceModePanel(props: {
                                               .firstProductSliceBlueprint.ownerDailyBriefingBreakthrough
                                               .paidPilotGoConvergence.goDecision ?? "NO ARTIFACT"}
                                           </Badge>
+                                          {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                            .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                            .ownerDailyBriefingBreakthrough.paidPilotGoConvergence
+                                            .paidPilotGoConvergenceIntegrityPassed ? null : (
+                                            <Badge variant="destructive" className="rounded-full text-[10px]">
+                                              GO convergence integrity FAIL
+                                            </Badge>
+                                          )}
+                                          {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                            .firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint
+                                            .ownerDailyBriefingBreakthrough.paidPilotGoConvergence
+                                            .ownerDailyBriefingBreakthroughIntegrityPassed ? null : (
+                                            <Badge variant="destructive" className="rounded-full text-[10px]">
+                                              breakthrough integrity FAIL
+                                            </Badge>
+                                          )}
                                         </div>
                                         <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
                                           {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.paidPilotGoConvergence.guardrails.map(
@@ -1390,6 +1408,39 @@ export function MaintenanceModePanel(props: {
                                                 .firstProductSliceBlueprint
                                                 .ownerDailyBriefingBreakthrough.paidPilotGoConvergence
                                                 .validateCommand
+                                            }
+                                          </span>
+                                          <span>
+                                            {
+                                              slice.engineeringPathTerminus.postTerminusSteadyState
+                                                .absolutePathEnd.linearPathPermanentlyClosed
+                                                .step17Forbidden.era25CharterExit
+                                                .firstCharterSliceReadiness.engineeringGates
+                                                .firstProductSliceBlueprint
+                                                .ownerDailyBriefingBreakthrough.paidPilotGoConvergence
+                                                .validateBreakthroughIntegrityCommand
+                                            }
+                                          </span>
+                                          <span>
+                                            {
+                                              slice.engineeringPathTerminus.postTerminusSteadyState
+                                                .absolutePathEnd.linearPathPermanentlyClosed
+                                                .step17Forbidden.era25CharterExit
+                                                .firstCharterSliceReadiness.engineeringGates
+                                                .firstProductSliceBlueprint
+                                                .ownerDailyBriefingBreakthrough.paidPilotGoConvergence
+                                                .integrityValidateCommand
+                                            }
+                                          </span>
+                                          <span>
+                                            {
+                                              slice.engineeringPathTerminus.postTerminusSteadyState
+                                                .absolutePathEnd.linearPathPermanentlyClosed
+                                                .step17Forbidden.era25CharterExit
+                                                .firstCharterSliceReadiness.engineeringGates
+                                                .firstProductSliceBlueprint
+                                                .ownerDailyBriefingBreakthrough.paidPilotGoConvergence
+                                                .syncIntegrityBaselineCommand
                                             }
                                           </span>
                                         </div>

@@ -185,6 +185,10 @@ import {
   mergeBriefingEra25OwnerDailyBriefingBreakthroughTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-owner-daily-briefing-breakthrough-era46";
 import {
+  buildOwnerDailyBriefingEra25PaidPilotGoConvergenceAction,
+  mergeBriefingEra25PaidPilotGoConvergenceTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-paid-pilot-go-convergence-era47";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -993,6 +997,17 @@ export async function loadOwnerDailyBriefing(
             ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough ?? null,
         )
       : null;
+  const era25PaidPilotGoConvergenceRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25PaidPilotGoConvergenceAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence ??
+            paidPilotGoConvergenceEra25 ??
+            null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1410,6 +1425,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25OwnerDailyBriefingBreakthroughRankedAction) {
     allTopActions = mergeBriefingEra25OwnerDailyBriefingBreakthroughTopActions(
       era25OwnerDailyBriefingBreakthroughRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25PaidPilotGoConvergenceRankedAction) {
+    allTopActions = mergeBriefingEra25PaidPilotGoConvergenceTopActions(
+      era25PaidPilotGoConvergenceRankedAction,
       allTopActions,
     );
   }

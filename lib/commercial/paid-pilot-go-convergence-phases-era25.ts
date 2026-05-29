@@ -14,6 +14,17 @@ export const PAID_PILOT_GO_CONVERGENCE_ERA25_REPORT_PATH =
 export const PAID_PILOT_GO_CONVERGENCE_ERA25_PLATFORM_ANCHOR =
   "#era25-paid-pilot-go-convergence" as const;
 
+export const PAID_PILOT_GO_CONVERGENCE_ERA25_TRACKED_ENV_KEYS = [
+  "PAID_PILOT_GO_CONVERGENCE_ERA25_ATTESTED",
+  "PAID_PILOT_GO_CONVERGENCE_ERA25_REPORT_REVIEWED",
+] as const;
+
+export function detectPaidPilotGoConvergenceEra25Started(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return PAID_PILOT_GO_CONVERGENCE_ERA25_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export const PAID_PILOT_GO_CONVERGENCE_ERA25_BACKLOG_ID = "KOS-E25-002-PILOT-GO" as const;
 
 export const PAID_PILOT_GO_CONVERGENCE_ERA25_KICKOFF_CHECKLIST_DOC =

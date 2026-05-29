@@ -116,6 +116,16 @@ export function buildOwnerDailyBriefingBreakthroughEra25UiSlice(input: {
   const paidPilotGoConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
     breakthroughVisible: true,
     env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
   });
 
   return {

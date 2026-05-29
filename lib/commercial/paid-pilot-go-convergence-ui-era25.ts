@@ -1,6 +1,8 @@
 /**
  * era25 Paid Pilot GO Convergence UI slice.
  */
+import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
+import { evaluatePaidPilotGoConvergenceIntegrity } from "@/lib/commercial/paid-pilot-go-convergence-integrity-era47";
 import {
   PAID_PILOT_GO_CONVERGENCE_ERA25_CONVERGENCE_TARGETS,
   PAID_PILOT_GO_CONVERGENCE_ERA25_DOC,
@@ -10,7 +12,15 @@ import {
   PAID_PILOT_GO_CONVERGENCE_ERA25_PLATFORM_ANCHOR,
   PAID_PILOT_GO_CONVERGENCE_ERA25_BACKLOG_ID,
   PAID_PILOT_GO_CONVERGENCE_ERA25_KICKOFF_CHECKLIST_DOC,
+  detectPaidPilotGoConvergenceEra25Started,
 } from "@/lib/commercial/paid-pilot-go-convergence-phases-era25";
+import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
+import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import {
   type PaidPilotGoConvergenceEra25Milestone,
 } from "@/lib/commercial/paid-pilot-go-convergence-post-breakthrough-orchestrator-era25";
@@ -23,6 +33,8 @@ import {
 } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 import { evaluatePaidPilotGoConvergenceEra25WithMilestones } from "@/scripts/ops/validate-paid-pilot-go-convergence-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_ERA25_PAID_PILOT_GO_CONVERGENCE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-era25-paid-pilot-go-convergence-era47";
 
 export const PAID_PILOT_GO_CONVERGENCE_ERA25_UI_POLICY_ID =
   "era25-paid-pilot-go-convergence-ui-v1" as const;
@@ -54,6 +66,11 @@ export type PaidPilotGoConvergenceEra25UiSlice = {
   postBreakthroughOrchestratorCommand: string;
   syncReportCommand: string;
   validateBreakthroughCommand: string;
+  validateBreakthroughIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  paidPilotGoConvergenceIntegrityPassed: boolean;
+  ownerDailyBriefingBreakthroughIntegrityPassed: boolean;
   launchWizardHref: string;
   platformOpsHref: string;
   pilotWeek1ExecutionConvergence: PilotWeek1ExecutionConvergenceEra25UiSlice | null;
@@ -62,13 +79,43 @@ export type PaidPilotGoConvergenceEra25UiSlice = {
 export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
   breakthroughVisible: boolean;
   env?: NodeJS.ProcessEnv;
+  goNoGoSummary?: PilotGoNoGoSummary | null;
+  p0Staging?: P0StagingProofUnblockSummary | null;
+  tier2Summary?: Tier2StagingGoldenPathSummary | null;
+  metricsBaseline?: PilotMetricsBaselineSummary | null;
+  caseStudyDraft?: PilotCaseStudyDraftSummary | null;
+  investorOnepager?: InvestorNarrativeOnepagerSummary | null;
+  rollbackDrill?: PilotRollbackDrillSummary | null;
+  competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
 }): PaidPilotGoConvergenceEra25UiSlice | null {
-  if (!input.breakthroughVisible) return null;
+  const env = input.env ?? process.env;
+  const convergenceStarted = detectPaidPilotGoConvergenceEra25Started(env);
 
-  const result = evaluatePaidPilotGoConvergenceEra25WithMilestones(input.env);
+  if (!input.breakthroughVisible && !convergenceStarted) return null;
+
+  const p0ProofStatus = input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus = input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+
+  const paidPilotGoConvergenceIntegrity = evaluatePaidPilotGoConvergenceIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary ?? null,
+    p0StagingOverride: input.p0Staging ?? null,
+    tier2SummaryOverride: input.tier2Summary ?? null,
+    metricsBaselineOverride: input.metricsBaseline ?? null,
+    caseStudyDraftOverride: input.caseStudyDraft ?? null,
+    investorOnepagerOverride: input.investorOnepager ?? null,
+    rollbackDrillOverride: input.rollbackDrill ?? null,
+    competitorMatrixOverride: input.competitorMatrix ?? null,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  const result = evaluatePaidPilotGoConvergenceEra25WithMilestones(env);
   const pilotWeek1ExecutionConvergence = buildPilotWeek1ExecutionConvergenceEra25UiSlice({
     goConvergenceVisible: true,
-    env: input.env,
+    env,
   });
 
   return {
@@ -79,7 +126,7 @@ export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
     ownerDailyBriefingBreakthroughEra25Milestone:
       result.evaluation.breakthrough.ownerDailyBriefingBreakthroughEra25Milestone,
     convergenceBlocked: result.evaluation.convergenceBlocked,
-    goDecision: result.evaluation.goState.decision,
+    goDecision: paidPilotGoConvergenceIntegrity.goDecision ?? result.evaluation.goState.decision,
     icpQualified: result.evaluation.goState.icpQualified,
     loiRecorded: result.evaluation.goState.loiRecorded,
     forbiddenClaimsPassed: result.evaluation.goState.forbiddenClaimsPassed,
@@ -101,7 +148,16 @@ export function buildPaidPilotGoConvergenceEra25UiSlice(input: {
     syncReportCommand: "npm run ops:sync-paid-pilot-go-convergence-era25-report -- --write",
     validateBreakthroughCommand:
       "npm run ops:validate-owner-daily-briefing-breakthrough-era25 -- --json",
-    launchWizardHref: result.evaluation.launchWizardSlice.href,
+    validateBreakthroughIntegrityCommand:
+      "npm run ops:validate-owner-daily-briefing-breakthrough-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-paid-pilot-go-convergence-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-paid-pilot-go-convergence-integrity-baseline -- --write",
+    paidPilotGoConvergenceIntegrityPassed: paidPilotGoConvergenceIntegrity.integrityPassed,
+    ownerDailyBriefingBreakthroughIntegrityPassed:
+      paidPilotGoConvergenceIntegrity.ownerDailyBriefingBreakthroughIntegrityPassed,
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_ERA25_PAID_PILOT_GO_CONVERGENCE_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PAID_PILOT_GO_CONVERGENCE_ERA25_PLATFORM_ANCHOR}`,
     pilotWeek1ExecutionConvergence,
   };

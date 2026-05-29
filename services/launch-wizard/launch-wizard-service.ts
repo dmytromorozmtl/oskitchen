@@ -135,6 +135,10 @@ import {
   buildLaunchWizardEra25OwnerDailyBriefingBreakthroughSlice,
   type LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-owner-daily-briefing-breakthrough-era46";
+import {
+  buildLaunchWizardEra25PaidPilotGoConvergenceSlice,
+  type LaunchWizardEra25PaidPilotGoConvergenceSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-paid-pilot-go-convergence-era47";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -258,6 +262,7 @@ export type LaunchWizardModel = {
   era25OwnerDailyBriefingBreakthrough: OwnerDailyBriefingBreakthroughEra25UiSlice | null;
   era25OwnerDailyBriefingBreakthroughIntegrity: LaunchWizardEra25OwnerDailyBriefingBreakthroughSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
+  era25PaidPilotGoConvergenceIntegrity: LaunchWizardEra25PaidPilotGoConvergenceSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -741,9 +746,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       seriesAArtifacts.competitorMatrix,
   });
 
-  const paidPilotGoConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
-    breakthroughVisible: true,
-  });
   const commercialInflection = buildLaunchWizardCommercialInflectionSlice();
   const commercialGoClosureIntegrity =
     buildLaunchWizardCommercialGoClosureSlice(commercialGoClosure);
@@ -981,6 +983,64 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       era25OwnerDailyBriefingBreakthrough,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const paidPilotGoConvergence =
+    era25OwnerDailyBriefingBreakthrough?.paidPilotGoConvergence ??
+    buildPaidPilotGoConvergenceEra25UiSlice({
+      breakthroughVisible: false,
+      goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+      p0Staging:
+        loopArtifacts.p0Staging ??
+        sustainedOpsArtifacts.p0Staging ??
+        marketLeaderArtifacts.p0Staging ??
+        seriesAArtifacts.p0Staging ??
+        scaleArtifacts.p0Staging ??
+        p0Summary,
+      tier2Summary:
+        loopArtifacts.tier2Summary ??
+        sustainedOpsArtifacts.tier2Summary ??
+        marketLeaderArtifacts.tier2Summary ??
+        seriesAArtifacts.tier2Summary ??
+        commercialOps?.tier2Staging.summary ??
+        null,
+      metricsBaseline:
+        loopArtifacts.metricsBaseline ??
+        sustainedOpsArtifacts.metricsBaseline ??
+        marketLeaderArtifacts.metricsBaseline ??
+        seriesAArtifacts.metricsBaseline ??
+        scaleArtifacts.metricsBaseline ??
+        month2Artifacts.metricsBaseline,
+      caseStudyDraft:
+        loopArtifacts.caseStudyDraft ??
+        sustainedOpsArtifacts.caseStudyDraft ??
+        marketLeaderArtifacts.caseStudyDraft ??
+        seriesAArtifacts.caseStudyDraft ??
+        scaleArtifacts.caseStudyDraft ??
+        month2Artifacts.caseStudyDraft,
+      investorOnepager:
+        loopArtifacts.investorOnepager ??
+        sustainedOpsArtifacts.investorOnepager ??
+        marketLeaderArtifacts.investorOnepager ??
+        seriesAArtifacts.investorOnepager ??
+        scaleArtifacts.investorOnepager ??
+        month2Artifacts.investorOnepager,
+      rollbackDrill:
+        loopArtifacts.rollbackDrill ??
+        sustainedOpsArtifacts.rollbackDrill ??
+        marketLeaderArtifacts.rollbackDrill ??
+        seriesAArtifacts.rollbackDrill ??
+        scaleArtifacts.rollbackDrill,
+      competitorMatrix:
+        loopArtifacts.competitorMatrix ??
+        sustainedOpsArtifacts.competitorMatrix ??
+        marketLeaderArtifacts.competitorMatrix ??
+        seriesAArtifacts.competitorMatrix,
+      p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+      tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
+    });
+  const era25PaidPilotGoConvergenceIntegrity = buildLaunchWizardEra25PaidPilotGoConvergenceSlice(
+    paidPilotGoConvergence,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1036,5 +1096,6 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25OwnerDailyBriefingBreakthrough,
     era25OwnerDailyBriefingBreakthroughIntegrity,
     paidPilotGoConvergence,
+    era25PaidPilotGoConvergenceIntegrity,
   };
 }

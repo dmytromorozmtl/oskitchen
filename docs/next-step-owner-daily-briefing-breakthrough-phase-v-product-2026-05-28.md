@@ -67,8 +67,8 @@ Workflow: `.github/workflows/ops-owner-daily-briefing-breakthrough-integrity-val
 
 ---
 
-## Next step — Phase W (era47)
+## Next product phase
 
-**Paid pilot GO convergence era25 integrity** — chains `evaluateOwnerDailyBriefingBreakthroughIntegrity`, Launch Wizard `#launch-wizard-era25-paid-pilot-go-convergence`, Owner Briefing priority **22**, maintenance nested under breakthrough panel.
+[`docs/next-step-paid-pilot-go-convergence-phase-w-product-2026-05-28.md`](./next-step-paid-pilot-go-convergence-phase-w-product-2026-05-28.md) — Phase W paid pilot GO convergence integrity (era47) **IMPLEMENTED**.
 
-See planned doc: `docs/next-step-paid-pilot-go-convergence-phase-w-product-2026-05-28.md` (to be created when Phase W starts).
+**Following:** Phase X pilot week1 execution convergence integrity (era48) on `#era25-pilot-week1-execution-convergence`.

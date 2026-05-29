@@ -25,6 +25,7 @@ import { LaunchWizardEra25FirstCharterSlicePanel } from "@/components/dashboard/
 import { LaunchWizardEra25EngineeringGatesPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-engineering-gates-panel";
 import { LaunchWizardEra25FirstProductSliceBlueprintPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-first-product-slice-blueprint-panel";
 import { LaunchWizardEra25OwnerDailyBriefingBreakthroughPanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-owner-daily-briefing-breakthrough-panel";
+import { LaunchWizardEra25PaidPilotGoConvergencePanel } from "@/components/dashboard/launch-wizard/launch-wizard-era25-paid-pilot-go-convergence-panel";
 import { LaunchWizardCommercialInflectionPanel } from "@/components/dashboard/launch-wizard/launch-wizard-commercial-inflection-panel";
 import { LaunchWizardTier2StatusPanel } from "@/components/dashboard/launch-wizard/launch-wizard-tier2-status-panel";
 import { LaunchWizardOnboardingHero } from "@/components/dashboard/launch-wizard/launch-wizard-onboarding-hero";
@@ -243,6 +244,12 @@ export function LaunchWizardView(props: {
       {model.era25OwnerDailyBriefingBreakthroughIntegrity ? (
         <LaunchWizardEra25OwnerDailyBriefingBreakthroughPanel
           slice={model.era25OwnerDailyBriefingBreakthroughIntegrity}
+        />
+      ) : null}
+
+      {model.era25PaidPilotGoConvergenceIntegrity ? (
+        <LaunchWizardEra25PaidPilotGoConvergencePanel
+          slice={model.era25PaidPilotGoConvergenceIntegrity}
         />
       ) : null}
 
