@@ -357,3 +357,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 1 — create owner-daily-briefing-production-calendar-era19-policy.ts (cycle 28)
+
+---
+Cycle: 28
+Timestamp: 2026-05-29T23:30:00.000Z
+Action: fix: add owner-daily-briefing-production-calendar-era19-policy.ts — Era 19 policy chain for production calendar briefing (extends today-focus + drill-clarity); re-export from main module
+Files: lib/briefing/owner-daily-briefing-production-calendar-era19-policy.ts, lib/briefing/owner-daily-briefing-production-calendar-era19.ts, tests/unit/owner-daily-briefing-production-calendar-era19.test.ts
+TS errors before: 78
+TS errors after: 77
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 1 — fix owner-daily-briefing-risk-radar-era19.ts operationalRiskSignals input + export OwnerDailyBriefingRiskCategory (cycle 29)

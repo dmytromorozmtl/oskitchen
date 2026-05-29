@@ -10,6 +10,11 @@ import {
   productionCalendarAlertsForBriefing,
   resolveBriefingOverdueProductionHref,
 } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19";
+import {
+  OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_EXTENDS_POLICIES,
+} from "@/lib/briefing/owner-daily-briefing-production-calendar-era19-policy";
+import { PRODUCTION_CALENDAR_DRILL_CLARITY_ERA19_POLICY_ID } from "@/lib/production/production-calendar-drill-clarity-era19-policy";
+import { PRODUCTION_CALENDAR_TODAY_FOCUS_ERA18_POLICY_ID } from "@/lib/production/production-calendar-today-focus-era18-policy";
 import { buildOwnerDailyBriefingTiles } from "@/lib/briefing/owner-daily-briefing-era19";
 
 function task(
@@ -35,6 +40,10 @@ describe("owner daily briefing production calendar era19", () => {
     expect(OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_POLICY_ID).toBe(
       "era19-owner-daily-briefing-production-calendar-v1",
     );
+    expect(OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_EXTENDS_POLICIES).toEqual([
+      PRODUCTION_CALENDAR_TODAY_FOCUS_ERA18_POLICY_ID,
+      PRODUCTION_CALENDAR_DRILL_CLARITY_ERA19_POLICY_ID,
+    ]);
   });
 
   it("summarizes overdue and due-today batches for briefing slice", () => {

@@ -20,9 +20,9 @@ import {
   summarizeProductionCalendarFocus,
 } from "@/lib/production/production-calendar-today-focus-era18";
 import { resolveProductionCalendarBriefingDrillHref } from "@/lib/production/production-calendar-drill-clarity-era19";
+import { OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_POLICY_ID } from "@/lib/briefing/owner-daily-briefing-production-calendar-era19-policy";
 
-export const OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_POLICY_ID =
-  "era19-owner-daily-briefing-production-calendar-v1" as const;
+export { OWNER_DAILY_BRIEFING_PRODUCTION_CALENDAR_ERA19_POLICY_ID };
 
 export type OwnerDailyBriefingProductionCalendarSlice = {
   summary: ProductionCalendarFocusSummary;
