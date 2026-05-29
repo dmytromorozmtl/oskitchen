@@ -6,6 +6,7 @@ import {
   mergeCommercialPilotOpsAttentionItems,
   pickCommercialPilotOpsGoLiveBridgeAttentionItems,
 } from "@/lib/commercial/commercial-pilot-ops-go-live-bridge-era18";
+import { buildCommercialPilotOpsInflectionSlice } from "@/lib/commercial/commercial-pilot-ops-inflection-era28";
 import {
   pickCommercialPilotOpsAttentionItems,
   summarizeCommercialPilotOpsStatus,
@@ -17,6 +18,7 @@ export function CommercialPilotOpsAttentionStrip(props: {
   model: CommercialPilotOpsStatusModel;
   launchBlockerProjects?: readonly PlatformGoLiveProjectRow[];
 }) {
+  const inflection = buildCommercialPilotOpsInflectionSlice(props.model);
   const opsItems = pickCommercialPilotOpsAttentionItems(props.model);
   const bridgeItems = props.launchBlockerProjects
     ? pickCommercialPilotOpsGoLiveBridgeAttentionItems({
@@ -26,8 +28,17 @@ export function CommercialPilotOpsAttentionStrip(props: {
     : [];
   const items = mergeCommercialPilotOpsAttentionItems(opsItems, bridgeItems);
   const summary = summarizeCommercialPilotOpsStatus(props.model);
+  const vaultHero = inflection.vaultHero;
+  const vaultBlocked = inflection.summary.milestone === "p0_ops_vault_blocked";
 
   if (items.length === 0) return null;
+
+  const description =
+    vaultBlocked && vaultHero?.nextPhase
+      ? `VP Ops — start ${vaultHero.nextPhase.label}: ${vaultHero.nextPhase.missingKeys.join(", ")} · ${inflection.summary.p0VaultMissingCount}/11 vault vars missing before LIVE claims.`
+      : summary.hasUrgent
+        ? "Evidence from local/CI smoke artifacts only — never infer GO without pilot-gono-go-summary.json."
+        : `${summary.totalSignals} open signal${summary.totalSignals === 1 ? "" : "s"} before first paid pilot.`;
 
   return (
     <Card
@@ -39,13 +50,27 @@ export function CommercialPilotOpsAttentionStrip(props: {
           <AlertTriangle className="h-5 w-5 text-amber-400" aria-hidden />
           Paid pilot execution — resolve these first
         </CardTitle>
-        <CardDescription className="text-zinc-400">
-          {summary.hasUrgent
-            ? "Evidence from local/CI smoke artifacts only — never infer GO without pilot-gono-go-summary.json."
-            : `${summary.totalSignals} open signal${summary.totalSignals === 1 ? "" : "s"} before first paid pilot.`}
+        <CardDescription className="text-zinc-400" data-testid="commercial-pilot-ops-attention-description">
+          {description}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
+        {vaultBlocked && vaultHero?.nextPhase ? (
+          <div
+            className="rounded-lg border border-amber-700/50 bg-amber-950/20 px-3 py-2 text-xs text-zinc-300"
+            data-testid="commercial-pilot-ops-attention-vault-hero"
+          >
+            <p className="font-medium text-amber-200">
+              Commercial inflection blocked — {inflection.uiSlice?.topBlockerTitle ?? vaultHero.nextPhase.label}
+            </p>
+            <p className="mt-1 font-mono text-[11px] text-zinc-400">
+              {vaultHero.nextPhase.missingKeys.join(", ")}
+            </p>
+            <p className="mt-1 text-zinc-500">
+              {vaultHero.nextPhase.docPath} · Pilot score {inflection.summary.pilotExecutableScore}/100
+            </p>
+          </div>
+        ) : null}
         {items.map((item) => (
           <Link
             key={item.id}

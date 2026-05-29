@@ -3,6 +3,8 @@ import {
   COMMERCIAL_PILOT_OPS_STATUS_PLATFORM_ROUTE,
   COMMERCIAL_PILOT_P0_STAGING_ANCHOR,
 } from "@/lib/commercial/commercial-pilot-ops-status-era18-policy";
+import { formatP0OpsVaultPhaseBlockerDetail } from "@/lib/commercial/p0-ops-vault-phases-era21";
+import { buildP0OpsVaultUiSlice } from "@/lib/commercial/p0-ops-vault-ui-era21";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type {
   PilotGoNoGoEvidenceGate,
@@ -213,15 +215,20 @@ export function pickCommercialPilotOpsAttentionItems(
       tone: "urgent",
     });
   } else if (p0 && p0.p0ProofStatus !== "proof_passed") {
+    const opsVault = buildP0OpsVaultUiSlice(p0, model.vaultReadiness.report);
+    const nextPhase = opsVault?.nextPhase ?? null;
     items.push({
       id: "p0-staging-blocked",
-      title: `P0 staging proof — ${p0.p0ProofStatus.replaceAll("_", " ")}`,
-      detail:
-        p0.allMissingEnvVars.length > 0
+      title: nextPhase
+        ? `VP Ops — ${nextPhase.label}`
+        : `P0 staging proof — ${p0.p0ProofStatus.replaceAll("_", " ")}`,
+      detail: nextPhase
+        ? `${formatP0OpsVaultPhaseBlockerDetail(nextPhase)} · ${nextPhase.docPath}`
+        : p0.allMissingEnvVars.length > 0
           ? `${p0.allMissingEnvVars.length} env var(s) still missing — see ops checklist.`
           : "SSO IdP, GitHub first-green, or channel live smoke incomplete.",
-      href: platformHref(COMMERCIAL_PILOT_P0_STAGING_ANCHOR),
-      priority: 4,
+      href: opsVault?.platformOpsHref ?? platformHref(COMMERCIAL_PILOT_P0_STAGING_ANCHOR),
+      priority: nextPhase ? 1 : 4,
       tone: "urgent",
     });
   }

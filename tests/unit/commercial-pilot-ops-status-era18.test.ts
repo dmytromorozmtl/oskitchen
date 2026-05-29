@@ -14,7 +14,9 @@ import {
   summarizeCommercialPilotOpsStatus,
 } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import { buildP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { VaultReadinessReport } from "@/lib/ops/vault-readiness-report";
 
 const sampleGoNoGo: PilotGoNoGoSummary = {
   version: "era17-pilot-gono-go-v1",
@@ -98,6 +100,7 @@ const sampleP0: P0StagingProofUnblockSummary = {
 function modelWith(over: {
   goNoGo?: Partial<{ artifactPresent: boolean; summary: PilotGoNoGoSummary | null }>;
   p0Staging?: Partial<{ artifactPresent: boolean; summary: P0StagingProofUnblockSummary | null }>;
+  vaultReadiness?: Partial<{ artifactPresent: boolean; report: VaultReadinessReport | null }>;
 }) {
   return buildCommercialPilotOpsStatusModel({
     goNoGo: {
@@ -107,6 +110,10 @@ function modelWith(over: {
     p0Staging: {
       artifactPresent: over.p0Staging?.artifactPresent ?? true,
       summary: over.p0Staging?.summary ?? sampleP0,
+    },
+    vaultReadiness: {
+      artifactPresent: over.vaultReadiness?.artifactPresent ?? false,
+      report: over.vaultReadiness?.report ?? null,
     },
   });
 }
@@ -165,6 +172,60 @@ describe("pickCommercialPilotOpsAttentionItems", () => {
 
     expect(items.some((item) => item.id === "gono-go-artifact-missing")).toBe(true);
     expect(items.some((item) => item.id === "p0-artifact-missing")).toBe(true);
+  });
+
+  it("prioritizes vault phased P0 blocker when vault report has next phase", () => {
+    const p0Summary = buildP0StagingProofUnblockSummary({
+      ssoArtifact: { overall: "SKIPPED", loginProofStatus: "proof_skipped" },
+      workflowsArtifact: { overall: "SKIPPED", firstGreenProofStatus: "proof_skipped" },
+      channelArtifact: {
+        overall: "SKIPPED",
+        wooLiveProofStatus: "proof_skipped",
+        shopifyLiveProofStatus: "proof_skipped",
+      },
+    });
+    const items = pickCommercialPilotOpsAttentionItems(
+      modelWith({
+        p0Staging: { artifactPresent: true, summary: p0Summary },
+        vaultReadiness: {
+          artifactPresent: true,
+          report: {
+            version: "vault-readiness-v2",
+            generatedAt: "2026-05-28T00:00:00.000Z",
+            policyId: "era17-p0-staging-proof-unblock-v1",
+            opsChecklistDoc: "docs/era18-p0-staging-proof-ops-checklist.md",
+            vaultMatrixDoc: "docs/ops-vault-matrix.md",
+            vaultReady: false,
+            presentCount: 0,
+            totalCount: 11,
+            missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+            day0Milestone: "blocked",
+            day0PartialComplete: false,
+            p0ProofStatus: "awaiting_ops_credentials",
+            p0ArtifactOverall: "SKIPPED",
+            nextPhase: {
+              id: "staging_login",
+              label: "Phase 1 — Staging login",
+              complete: false,
+              presentKeys: [],
+              missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+              docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+              smokeScripts: ["smoke:staging-workflows-first-green"],
+            },
+            phases: [],
+            childSmokes: [],
+            recommendedNextSteps: [],
+            secrets: [],
+            honestyNote: "test",
+          },
+        },
+      }),
+    );
+    const p0Item = items.find((item) => item.id === "p0-staging-blocked");
+    expect(p0Item?.title).toContain("Staging login");
+    expect(p0Item?.detail).toContain("GITHUB_E2E_STAGING_SECRETS.md");
+    expect(p0Item?.href).toContain("p0-staging-proof");
+    expect(items[0]?.id).toBe("p0-staging-blocked");
   });
 });
 

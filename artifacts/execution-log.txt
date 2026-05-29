@@ -760,3 +760,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 2 — commercial-pilot-ops-attention-strip vault phased headline (cycle 60); VP Ops Phase 1 GitHub secrets (human gate)
+
+---
+Cycle: 60
+Timestamp: 2026-05-30T07:15:00.000Z
+Action: fix: commercial-pilot-ops attention strip vault phased headline — pickCommercialPilotOpsAttentionItems + vault hero callout on platform implementations
+Files: lib/commercial/commercial-pilot-ops-status-era18.ts, components/platform/commercial-pilot-ops-attention-strip.tsx, tests/unit/commercial-pilot-ops-status-era18.test.ts, tests/unit/commercial-pilot-ops-attention-strip-era28.test.ts
+TS errors before: 0
+TS errors after: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 2 — order-hub commercial ops strip vault phased CTA (cycle 61); VP Ops Phase 1 GitHub secrets (human gate)
