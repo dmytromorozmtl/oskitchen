@@ -100,6 +100,10 @@ import { buildScaleReadinessConvergenceEra25UiSlice } from "@/lib/commercial/sca
 import {
   mergeBriefingScaleReadinessConvergenceEra25TopActions,
 } from "@/lib/briefing/scale-readiness-convergence-briefing-era25";
+import { buildSeriesAPartnerExpansionConvergenceEra25UiSlice } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
+import {
+  mergeBriefingSeriesAPartnerExpansionConvergenceEra25TopActions,
+} from "@/lib/briefing/series-a-partner-expansion-convergence-briefing-era25";
 import {
   buildOwnerDailyBriefingMonth2MarketReadinessAction,
   mergeBriefingMonth2MarketReadinessTopActions,
@@ -467,6 +471,11 @@ export async function loadOwnerDailyBriefing(
   });
   const scaleConvergenceEra25RankedAction =
     rolePack === "owner" ? scaleConvergenceEra25?.briefingAction ?? null : null;
+  const seriesAConvergenceEra25 = buildSeriesAPartnerExpansionConvergenceEra25UiSlice({
+    scaleConvergenceVisible: true,
+  });
+  const seriesAConvergenceEra25RankedAction =
+    rolePack === "owner" ? seriesAConvergenceEra25?.briefingAction ?? null : null;
   const pilotWeek1RankedAction =
     rolePack === "owner" && !pilotWeek1ConvergenceEra25
       ? buildOwnerDailyBriefingPilotWeek1Action(pilotWeek1)
@@ -514,7 +523,7 @@ export async function loadOwnerDailyBriefing(
     competitorMatrix: seriesAArtifacts?.competitorMatrix ?? null,
   });
   const seriesAPartnerExpansionRankedAction =
-    rolePack === "owner"
+    rolePack === "owner" && !seriesAConvergenceEra25
       ? buildOwnerDailyBriefingSeriesAPartnerExpansionAction(seriesAPartnerExpansion)
       : null;
   const marketLeaderArtifacts = needsCommercialOps ? readMarketLeaderPositioningArtifacts() : null;
@@ -1078,6 +1087,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && scaleConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingScaleReadinessConvergenceEra25TopActions(
       scaleConvergenceEra25RankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && seriesAConvergenceEra25RankedAction) {
+    allTopActions = mergeBriefingSeriesAPartnerExpansionConvergenceEra25TopActions(
+      seriesAConvergenceEra25RankedAction,
       allTopActions,
     );
   }
