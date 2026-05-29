@@ -35,7 +35,7 @@ export const ERA20_PILOT_ICP_QUALIFIED_EXAMPLE_INPUT: PilotIcpQualificationInput
 };
 
 export const ERA20_PILOT_ICP_QUALIFIED_EXAMPLE_LABEL =
-  "Example Ghost Kitchen (prospect template)" as const;
+  "Example F&B operator (prospect template)" as const;
 
 export type Era20PilotIcpQualificationBridgeSlice = {
   policyId: typeof ERA20_PILOT_ICP_QUALIFICATION_BRIDGE_POLICY_ID;

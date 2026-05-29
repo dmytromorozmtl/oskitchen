@@ -40,6 +40,7 @@ export async function runP0VaultDay0Orchestrator(options: {
     execSync("npm run ops:export-p0-vault-day0-readiness-checklist -- --write", {
       stdio: "inherit",
     });
+    execSync("npm run check-vault-readiness -- --write", { stdio: "inherit" });
   }
 
   return buildP0VaultDay0OrchestratorSummary({ env, artifact, stagingHealth });

@@ -1,0 +1,289 @@
+{
+  "version": "vault-readiness-v2",
+  "generatedAt": "2026-05-29T13:29:05.721Z",
+  "policyId": "era17-p0-staging-proof-unblock-v1",
+  "opsChecklistDoc": "docs/era18-p0-staging-proof-ops-checklist.md",
+  "vaultMatrixDoc": "docs/ops-vault-matrix.md",
+  "vaultReady": false,
+  "presentCount": 0,
+  "totalCount": 11,
+  "missingKeys": [
+    "E2E_STAGING_BASE_URL",
+    "E2E_LOGIN_EMAIL",
+    "E2E_LOGIN_PASSWORD",
+    "SSO_STAGING_WORKSPACE_ID",
+    "SSO_STAGING_IDP_VENDOR",
+    "SSO_STAGING_ALLOWED_DOMAIN",
+    "SSO_STAGING_TEST_EMAIL",
+    "SSO_STAGING_SUPABASE_PROVIDER_REF",
+    "DATABASE_URL",
+    "ENCRYPTION_KEY",
+    "CHANNEL_SMOKE_OWNER_EMAIL"
+  ],
+  "day0Milestone": "blocked",
+  "day0PartialComplete": false,
+  "p0ProofStatus": "awaiting_ops_credentials",
+  "p0ArtifactOverall": "SKIPPED",
+  "nextPhase": {
+    "id": "staging_login",
+    "label": "Phase 1 — Staging login",
+    "complete": false,
+    "presentKeys": [],
+    "missingKeys": [
+      "E2E_STAGING_BASE_URL",
+      "E2E_LOGIN_EMAIL",
+      "E2E_LOGIN_PASSWORD"
+    ],
+    "docPath": "docs/GITHUB_E2E_STAGING_SECRETS.md",
+    "smokeScripts": [
+      "smoke:staging-workflows-first-green"
+    ]
+  },
+  "phases": [
+    {
+      "id": "staging_login",
+      "label": "Phase 1 — Staging login",
+      "complete": false,
+      "presentKeys": [],
+      "missingKeys": [
+        "E2E_STAGING_BASE_URL",
+        "E2E_LOGIN_EMAIL",
+        "E2E_LOGIN_PASSWORD"
+      ],
+      "docPath": "docs/GITHUB_E2E_STAGING_SECRETS.md",
+      "smokeScripts": [
+        "smoke:staging-workflows-first-green"
+      ]
+    },
+    {
+      "id": "database_encryption",
+      "label": "Phase 2 — Database + encryption",
+      "complete": false,
+      "presentKeys": [],
+      "missingKeys": [
+        "DATABASE_URL",
+        "ENCRYPTION_KEY"
+      ],
+      "docPath": "docs/commercial-pilot-runbook.md",
+      "smokeScripts": [
+        "smoke:woo-shopify-live"
+      ]
+    },
+    {
+      "id": "channel_live",
+      "label": "Phase 3 — Channel tenant",
+      "complete": false,
+      "presentKeys": [],
+      "missingKeys": [
+        "CHANNEL_SMOKE_OWNER_EMAIL"
+      ],
+      "docPath": "docs/commercial-pilot-runbook.md",
+      "smokeScripts": [
+        "smoke:woo-shopify-live"
+      ]
+    },
+    {
+      "id": "sso_idp",
+      "label": "Phase 4 — SSO IdP",
+      "complete": false,
+      "presentKeys": [],
+      "missingKeys": [
+        "SSO_STAGING_WORKSPACE_ID",
+        "SSO_STAGING_IDP_VENDOR",
+        "SSO_STAGING_ALLOWED_DOMAIN",
+        "SSO_STAGING_TEST_EMAIL",
+        "SSO_STAGING_SUPABASE_PROVIDER_REF"
+      ],
+      "docPath": "docs/enterprise-sso-idp-staging-smoke-plan.md",
+      "smokeScripts": [
+        "smoke:enterprise-sso-idp-staging"
+      ]
+    }
+  ],
+  "childSmokes": [
+    {
+      "id": "ssoIdpStaging",
+      "smokeScript": "smoke:enterprise-sso-idp-staging",
+      "artifactPath": "artifacts/enterprise-sso-idp-staging-smoke-summary.json",
+      "overall": "SKIPPED",
+      "proofStatus": "proof_skipped_missing_prerequisites",
+      "missingEnvVars": [
+        "E2E_STAGING_BASE_URL",
+        "SSO_STAGING_WORKSPACE_ID",
+        "SSO_STAGING_IDP_VENDOR",
+        "SSO_STAGING_ALLOWED_DOMAIN",
+        "SSO_STAGING_TEST_EMAIL",
+        "SSO_STAGING_SUPABASE_PROVIDER_REF"
+      ]
+    },
+    {
+      "id": "stagingWorkflowsFirstGreen",
+      "smokeScript": "smoke:staging-workflows-first-green",
+      "artifactPath": "artifacts/staging-workflows-first-green-summary.json",
+      "overall": "SKIPPED",
+      "proofStatus": "proof_skipped_missing_prerequisites",
+      "missingEnvVars": [
+        "E2E_STAGING_BASE_URL",
+        "E2E_LOGIN_EMAIL",
+        "E2E_LOGIN_PASSWORD"
+      ]
+    },
+    {
+      "id": "channelLive",
+      "smokeScript": "smoke:woo-shopify-live",
+      "artifactPath": "artifacts/channel-live-smoke-summary.json",
+      "overall": "SKIPPED",
+      "proofStatus": "proof_skipped_missing_prerequisites/proof_skipped_missing_prerequisites",
+      "missingEnvVars": [
+        "DATABASE_URL",
+        "ENCRYPTION_KEY",
+        "CHANNEL_SMOKE_OWNER_EMAIL"
+      ]
+    }
+  ],
+  "recommendedNextSteps": [
+    "Complete Phase 1 — Staging login: missing E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD",
+    "Read docs/GITHUB_E2E_STAGING_SECRETS.md",
+    "Configure missing secrets (11/11): E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD, SSO_STAGING_WORKSPACE_ID, SSO_STAGING_IDP_VENDOR, SSO_STAGING_ALLOWED_DOMAIN, SSO_STAGING_TEST_EMAIL, SSO_STAGING_SUPABASE_PROVIDER_REF, DATABASE_URL, ENCRYPTION_KEY, CHANNEL_SMOKE_OWNER_EMAIL",
+    "Read docs/era18-p0-staging-proof-ops-checklist.md",
+    "npm run ops:validate-p0-vault-env",
+    "npm run ops:run-p0-vault-day0-orchestrator -- --write",
+    "npm run smoke:pilot-gono-go"
+  ],
+  "secrets": [
+    {
+      "key": "E2E_STAGING_BASE_URL",
+      "description": "Staging KitchenOS base URL for SSO and E2E workflows",
+      "childSmokes": [
+        "smoke:enterprise-sso-idp-staging",
+        "smoke:staging-workflows-first-green"
+      ],
+      "configureIn": "GitHub Actions secret + local ops shell",
+      "docPath": "docs/GITHUB_E2E_STAGING_SECRETS.md",
+      "owner": "DevOps",
+      "verifyCommand": "test -n \"$E2E_STAGING_BASE_URL\"",
+      "present": false
+    },
+    {
+      "key": "E2E_LOGIN_EMAIL",
+      "description": "Dashboard login email for staging Playwright workflows",
+      "childSmokes": [
+        "smoke:staging-workflows-first-green"
+      ],
+      "configureIn": "GitHub Actions secret + local ops shell",
+      "docPath": "docs/GITHUB_E2E_STAGING_SECRETS.md",
+      "owner": "DevOps",
+      "verifyCommand": "test -n \"$E2E_LOGIN_EMAIL\"",
+      "present": false
+    },
+    {
+      "key": "E2E_LOGIN_PASSWORD",
+      "description": "Dashboard login password for staging Playwright workflows",
+      "childSmokes": [
+        "smoke:staging-workflows-first-green"
+      ],
+      "configureIn": "GitHub Actions secret + local ops shell (legacy alias E2E_PASSWORD in CI)",
+      "docPath": "docs/GITHUB_E2E_STAGING_SECRETS.md",
+      "owner": "DevOps",
+      "verifyCommand": "test -n \"$E2E_LOGIN_PASSWORD\"",
+      "present": false
+    },
+    {
+      "key": "SSO_STAGING_WORKSPACE_ID",
+      "description": "Pilot workspace UUID for tenant-bound SSO smoke",
+      "childSmokes": [
+        "smoke:enterprise-sso-idp-staging"
+      ],
+      "configureIn": "Ops vault + local ops shell",
+      "docPath": "docs/enterprise-sso-idp-staging-smoke-plan.md",
+      "owner": "Security / CTO",
+      "verifyCommand": "test -n \"$SSO_STAGING_WORKSPACE_ID\"",
+      "present": false
+    },
+    {
+      "key": "SSO_STAGING_IDP_VENDOR",
+      "description": "IdP vendor label (OKTA or ENTRA_ID)",
+      "childSmokes": [
+        "smoke:enterprise-sso-idp-staging"
+      ],
+      "configureIn": "Ops vault + local ops shell",
+      "docPath": "docs/enterprise-sso-idp-staging-smoke-plan.md",
+      "owner": "Security / CTO",
+      "verifyCommand": "test -n \"$SSO_STAGING_IDP_VENDOR\"",
+      "present": false
+    },
+    {
+      "key": "SSO_STAGING_ALLOWED_DOMAIN",
+      "description": "Allowed email domain for SSO test user",
+      "childSmokes": [
+        "smoke:enterprise-sso-idp-staging"
+      ],
+      "configureIn": "Ops vault + local ops shell",
+      "docPath": "docs/enterprise-sso-idp-staging-smoke-plan.md",
+      "owner": "Security / CTO",
+      "verifyCommand": "test -n \"$SSO_STAGING_ALLOWED_DOMAIN\"",
+      "present": false
+    },
+    {
+      "key": "SSO_STAGING_TEST_EMAIL",
+      "description": "Staff test user in allowed SSO domain",
+      "childSmokes": [
+        "smoke:enterprise-sso-idp-staging"
+      ],
+      "configureIn": "Ops vault + local ops shell",
+      "docPath": "docs/enterprise-sso-idp-staging-smoke-plan.md",
+      "owner": "Security / CTO",
+      "verifyCommand": "test -n \"$SSO_STAGING_TEST_EMAIL\"",
+      "present": false
+    },
+    {
+      "key": "SSO_STAGING_SUPABASE_PROVIDER_REF",
+      "description": "Supabase Auth SAML provider reference",
+      "childSmokes": [
+        "smoke:enterprise-sso-idp-staging"
+      ],
+      "configureIn": "Ops vault + local ops shell",
+      "docPath": "docs/enterprise-sso-idp-staging-smoke-plan.md",
+      "owner": "Security / CTO",
+      "verifyCommand": "test -n \"$SSO_STAGING_SUPABASE_PROVIDER_REF\"",
+      "present": false
+    },
+    {
+      "key": "DATABASE_URL",
+      "description": "Staging Postgres connection for channel live smoke",
+      "childSmokes": [
+        "smoke:woo-shopify-live"
+      ],
+      "configureIn": "Ops vault + local ops shell / GitHub secret",
+      "docPath": "docs/commercial-pilot-runbook.md",
+      "owner": "DevOps",
+      "verifyCommand": "test -n \"$DATABASE_URL\"",
+      "present": false
+    },
+    {
+      "key": "ENCRYPTION_KEY",
+      "description": "App encryption key for integration credential rows",
+      "childSmokes": [
+        "smoke:woo-shopify-live"
+      ],
+      "configureIn": "Ops vault + local ops shell / GitHub secret",
+      "docPath": "docs/commercial-pilot-runbook.md",
+      "owner": "DevOps",
+      "verifyCommand": "test -n \"$ENCRYPTION_KEY\"",
+      "present": false
+    },
+    {
+      "key": "CHANNEL_SMOKE_OWNER_EMAIL",
+      "description": "Workspace owner email for Woo/Shopify tenant selector",
+      "childSmokes": [
+        "smoke:woo-shopify-live"
+      ],
+      "configureIn": "Ops vault + local ops shell / GitHub secret",
+      "docPath": "docs/commercial-pilot-runbook.md",
+      "owner": "Integration engineer",
+      "verifyCommand": "test -n \"$CHANNEL_SMOKE_OWNER_EMAIL\"",
+      "present": false
+    }
+  ],
+  "honestyNote": "PASS > SKIPPED — this report never fabricates proof_passed. Configure ops vault secrets, then re-run child smokes."
+}

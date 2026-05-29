@@ -76,8 +76,8 @@ export function ImplementationPilotIcpQualificationPanel(props: {
 
         <p className="text-xs text-muted-foreground">
           Example template: {slice.templatePath} · Real prospect draft:{" "}
-          {slice.prospectDraftTemplatePath} — example qualifies ghost kitchen profile only; does not
-          replace signed LOI or PILOT_GONOGO_CUSTOMER_NAME.
+          {slice.prospectDraftTemplatePath} — ICP covers all F&B formats (restaurants, bars, cafés,
+          bakeries, catering, and similar); does not replace signed LOI or PILOT_GONOGO_CUSTOMER_NAME.
         </p>
       </CardContent>
     </Card>

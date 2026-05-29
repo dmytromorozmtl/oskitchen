@@ -24,6 +24,7 @@ export const P0_OPS_VAULT_ERA21_DAY0_DOC =
   "docs/next-step-1-ops-vault-day0-execution-2026-05-28.md" as const;
 
 export const P0_OPS_VAULT_ERA21_OPS_SCRIPTS = [
+  "check-vault-readiness",
   "ops:run-p0-vault-day0-orchestrator",
   "ops:validate-p0-vault-env",
   "ops:check-p0-staging-health",

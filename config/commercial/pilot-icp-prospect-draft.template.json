@@ -4,7 +4,7 @@
     "companyName": "REPLACE — e.g. Harbor Meal Prep LLC",
     "contactName": "REPLACE — owner operator name",
     "contactEmail": "REPLACE — owner@company.com",
-    "icpSegment": "ghost_kitchen | meal_prep | full_service | catering",
+    "icpSegment": "full_service_restaurant | bar | cafe | bakery | catering | ghost_kitchen | meal_prep",
     "locations": 1,
     "monthlyOrderVolumeEstimate": "REPLACE — e.g. 800-1200",
     "targetPilotStartDate": "REPLACE — YYYY-MM-DD",

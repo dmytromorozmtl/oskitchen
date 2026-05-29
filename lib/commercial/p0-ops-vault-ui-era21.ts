@@ -44,6 +44,9 @@ export type P0OpsVaultUiSlice = {
   day0OrchestratorCommand: string;
   stagingHealthCheckCommand: string;
   exportDay0ReadinessChecklistCommand: string;
+  vaultReadinessCommand: string;
+  vaultReadinessArtifact: string;
+  vaultMatrixDoc: string;
   day0Milestone: P0VaultDay0Milestone;
   day0PartialComplete: boolean;
   integrationHealthHref: string;
@@ -94,6 +97,9 @@ export function buildP0OpsVaultUiSlice(
     day0OrchestratorCommand: "npm run ops:run-p0-vault-day0-orchestrator -- --write",
     stagingHealthCheckCommand: P0_OPS_VAULT_STAGING_HEALTH_COMMAND,
     exportDay0ReadinessChecklistCommand: P0_OPS_VAULT_DAY0_READINESS_EXPORT_COMMAND,
+    vaultReadinessCommand: "npm run check-vault-readiness -- --write",
+    vaultReadinessArtifact: "artifacts/vault-readiness-report.json",
+    vaultMatrixDoc: "docs/ops-vault-matrix.md",
     day0Milestone,
     day0PartialComplete,
     integrationHealthHref: `/dashboard/integration-health${P0_OPS_VAULT_INTEGRATION_HEALTH_ANCHOR}`,

@@ -123,6 +123,7 @@ export function P0OpsVaultPhasesPanel(props: {
                 <li>{slice.githubSecretsChecklistCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
                 <li>{slice.exportDay0ReadinessChecklistCommand}</li>
+                <li>{slice.vaultReadinessCommand}</li>
                 <li>{slice.orchestratorCommand}</li>
               </ul>
             </div>
