@@ -40,6 +40,7 @@ describe("market leader positioning era21 CI certification (live repo)", () => {
     const step8 = readFileSync(join(ROOT, MARKET_LEADER_POSITIONING_STEP8_DOC), "utf8");
     expect(step8).toContain("MARKET_LEADER_CATEGORY_NARRATIVE_REVIEWED");
     expect(step8).toContain("era21-market-leader-positioning-v1");
+    expect(step8).toContain("run-market-leader-positioning-post-series-a-orchestrator");
     expect(step8).toContain("smoke:pilot-forbidden-claims-enforcement");
   });
 

@@ -21,6 +21,9 @@ export function buildMarketLeaderPositioningProgressReportMarkdown(
     `- Series A complete: **${result.seriesAComplete ? "yes" : "no"}**`,
     `- GO decision: **${result.goDecision ?? "missing"}**`,
     `- Market leader complete: ${result.marketLeaderComplete ? "yes" : "no"}`,
+    `- marketLeaderMilestone: **${result.marketLeaderMilestone}**`,
+    `- Ready for moat smokes: ${result.readyForMoatSmokes ? "yes" : "no"}`,
+    `- Ready for analyst kit smokes: ${result.readyForAnalystKitSmokes ? "yes" : "no"}`,
     "",
     "## Pillar checklist",
     "",
@@ -48,7 +51,9 @@ export function buildMarketLeaderPositioningProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write");
   lines.push("npm run ops:validate-market-leader-positioning-env");
+  lines.push("npm run ops:export-market-leader-positioning-readiness-checklist -- --write");
   lines.push("npm run smoke:pilot-case-study-draft");
   lines.push("npm run smoke:pilot-forbidden-claims-enforcement");
   lines.push("npm run test:ci:commercial-pilot-runbook:cert");

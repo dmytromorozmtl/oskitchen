@@ -51,6 +51,9 @@ export function MarketLeaderPositioningPhasesPanel(props: {
             <Badge variant="default" className="rounded-full font-mono text-[10px]">
               decision: {slice.goDecision}
             </Badge>
+            <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+              {slice.marketLeaderMilestone.replaceAll("_", " ")}
+            </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
               Series A complete
             </Badge>
@@ -138,9 +141,12 @@ export function MarketLeaderPositioningPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.postSeriesAOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
+                <li>{slice.exportReadinessChecklistCommand}</li>
                 <li>{slice.exportTemplateCommand}</li>
                 <li>{slice.syncProgressReportCommand}</li>
+                <li>{slice.validateSeriesACommand}</li>
                 <li>npm run smoke:pilot-case-study-draft</li>
                 <li>npm run smoke:pilot-forbidden-claims-enforcement</li>
                 <li>npm run test:ci:commercial-pilot-runbook:cert</li>

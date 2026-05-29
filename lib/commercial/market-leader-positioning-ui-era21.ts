@@ -1,6 +1,10 @@
 /**
  * Market leader positioning UI slice — Owner Briefing, Launch Wizard, Platform ops.
  */
+import {
+  resolveMarketLeaderPositioningMilestoneFromPhaseStatuses,
+  type MarketLeaderPositioningMilestone,
+} from "@/lib/commercial/market-leader-positioning-post-series-a-orchestrator-era21";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -59,6 +63,10 @@ export type MarketLeaderPositioningUiSlice = {
   validateCommand: string;
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
+  postSeriesAOrchestratorCommand: string;
+  exportReadinessChecklistCommand: string;
+  validateSeriesACommand: string;
+  marketLeaderMilestone: MarketLeaderPositioningMilestone;
   todayHref: string;
   launchWizardHref: string;
   platformOpsHref: string;
@@ -132,6 +140,11 @@ export function buildMarketLeaderPositioningUiSlice(input: {
   const nextPhaseDetail = nextPhase
     ? formatMarketLeaderPositioningPhaseBlockerDetail(nextPhase)
     : null;
+  const marketLeaderMilestone = resolveMarketLeaderPositioningMilestoneFromPhaseStatuses(phases, {
+    prerequisitesComplete: true,
+    seriesAComplete: true,
+    marketLeaderComplete: false,
+  });
 
   return {
     policyId: MARKET_LEADER_POSITIONING_UI_ERA21_POLICY_ID,
@@ -152,6 +165,12 @@ export function buildMarketLeaderPositioningUiSlice(input: {
     exportTemplateCommand: "npm run ops:export-market-leader-positioning-env-template -- --write",
     syncProgressReportCommand:
       "npm run ops:sync-market-leader-positioning-progress-report -- --write",
+    postSeriesAOrchestratorCommand:
+      "npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write",
+    exportReadinessChecklistCommand:
+      "npm run ops:export-market-leader-positioning-readiness-checklist -- --write",
+    validateSeriesACommand: "npm run ops:validate-series-a-partner-expansion-env -- --json",
+    marketLeaderMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${MARKET_LEADER_POSITIONING_PLATFORM_ANCHOR}`,
@@ -176,5 +195,5 @@ export function buildMarketLeaderPositioningUiSlice(input: {
 export function formatMarketLeaderPositioningProgressLabel(
   slice: MarketLeaderPositioningUiSlice,
 ): string {
-  return `Market leader ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} pillars · GO · ${slice.customerName ?? "customer"}`;
+  return `Market leader ${slice.completedBlockingPhaseCount}/${slice.blockingPhaseCount} pillars · ${slice.marketLeaderMilestone.replaceAll("_", " ")} · GO · ${slice.customerName ?? "customer"}`;
 }

@@ -13,6 +13,7 @@ import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary"
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import { resolveMarketLeaderPositioningMilestone } from "@/lib/commercial/market-leader-positioning-post-series-a-orchestrator-era21";
 import {
   buildMarketLeaderPositioningPhaseStatuses,
   COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
@@ -73,6 +74,9 @@ export function evaluateMarketLeaderPositioningEnv(env: NodeJS.ProcessEnv = proc
   phases: ReturnType<typeof buildMarketLeaderPositioningPhaseStatuses>;
   goDecision: string | null;
   marketLeaderComplete: boolean;
+  readyForMoatSmokes: boolean;
+  readyForAnalystKitSmokes: boolean;
+  marketLeaderMilestone: ReturnType<typeof resolveMarketLeaderPositioningMilestone>;
 } {
   const artifacts = readMarketLeaderPositioningArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -108,6 +112,38 @@ export function evaluateMarketLeaderPositioningEnv(env: NodeJS.ProcessEnv = proc
     env,
   });
   const marketLeaderComplete = resolveMarketLeaderPositioningComplete(phases);
+  const pillar2 = phases.find((phase) => phase.id === "pillar2_competitive_moat_proof");
+  const pillar3 = phases.find((phase) => phase.id === "pillar3_analyst_press_kit");
+  const p0Passed = artifacts.p0Staging?.p0ProofStatus === "proof_passed";
+  const tier2Passed = artifacts.tier2Summary?.tier2ProofStatus === "proof_passed";
+  const rollbackPassed = artifacts.rollbackDrill?.rollbackProofStatus === "proof_passed";
+  const week1Ttv = Boolean(env.PILOT_WEEK1_TTV_HOURS?.trim());
+  const posCloseout = env.PILOT_WEEK1_POS_CLOSEOUT_STATUS?.trim().toLowerCase() === "pass";
+  const moatEvidence = p0Passed && tier2Passed && rollbackPassed && week1Ttv && posCloseout;
+  const dataRoomBundle = Boolean(env.SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED?.trim());
+  const investorReady =
+    artifacts.investorOnepager?.overall === "PASSED" &&
+    artifacts.investorOnepager.narrativeProofStatus === "proof_ready_with_metrics";
+  const competitorAligned =
+    artifacts.competitorMatrix?.overall === "PASSED" &&
+    artifacts.competitorMatrix.matrixProofStatus === "evidence_aligned_era17";
+  const readyForMoatSmokes =
+    prerequisites.prerequisitesComplete &&
+    !marketLeaderComplete &&
+    pillar2?.complete !== true &&
+    !moatEvidence;
+  const readyForAnalystKitSmokes =
+    prerequisites.prerequisitesComplete &&
+    !marketLeaderComplete &&
+    pillar3?.complete !== true &&
+    dataRoomBundle &&
+    (!investorReady || !competitorAligned);
+  const marketLeaderMilestone = resolveMarketLeaderPositioningMilestone({
+    prerequisitesComplete: prerequisites.prerequisitesComplete,
+    seriesAComplete,
+    marketLeaderComplete,
+    phases,
+  });
 
   return {
     prerequisites,
@@ -117,6 +153,9 @@ export function evaluateMarketLeaderPositioningEnv(env: NodeJS.ProcessEnv = proc
     phases,
     goDecision,
     marketLeaderComplete,
+    readyForMoatSmokes,
+    readyForAnalystKitSmokes,
+    marketLeaderMilestone,
   };
 }
 
@@ -133,6 +172,9 @@ function main() {
           seriesAComplete: result.seriesAComplete,
           goDecision: result.goDecision,
           marketLeaderComplete: result.marketLeaderComplete,
+          readyForMoatSmokes: result.readyForMoatSmokes,
+          readyForAnalystKitSmokes: result.readyForAnalystKitSmokes,
+          marketLeaderMilestone: result.marketLeaderMilestone,
           presentCount: result.present.length,
           missing: result.missing,
           phases: result.phases.map((phase) => ({
@@ -161,6 +203,8 @@ function main() {
     console.log("Blocked — decision must be GO in artifacts/pilot-gono-go-summary.json.\n");
     process.exit(2);
   }
+
+  console.log(`Market leader milestone: ${result.marketLeaderMilestone}\n`);
 
   for (const phase of result.phases) {
     const marker = phase.complete ? "✓" : phase.optional ? "○ (optional)" : "○";

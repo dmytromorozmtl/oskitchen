@@ -14,11 +14,14 @@ export const MARKET_LEADER_POSITIONING_ERA21_EXTENDS_POLICIES = [
   "era21-series-a-partner-expansion-v1",
   MARKET_LEADER_POSITIONING_PHASES_ERA21_POLICY_ID,
   MARKET_LEADER_POSITIONING_UI_ERA21_POLICY_ID,
+  "era21-market-leader-positioning-post-series-a-orchestrator-v1",
 ] as const;
 
 export const MARKET_LEADER_POSITIONING_ERA21_OPS_SCRIPTS = [
+  "ops:run-market-leader-positioning-post-series-a-orchestrator",
   "ops:validate-market-leader-positioning-env",
   "ops:export-market-leader-positioning-env-template",
+  "ops:export-market-leader-positioning-readiness-checklist",
   "ops:sync-market-leader-positioning-progress-report",
 ] as const;
 
@@ -28,9 +31,11 @@ export const MARKET_LEADER_POSITIONING_ERA21_CI_SCRIPTS = [
 ] as const;
 
 export const MARKET_LEADER_POSITIONING_ERA21_UNIT_TESTS = [
+  "tests/unit/market-leader-positioning-post-series-a-orchestrator-era21.test.ts",
   "tests/unit/market-leader-positioning-phases-era21.test.ts",
   "tests/unit/market-leader-positioning-ui-era21.test.ts",
   "tests/unit/owner-daily-briefing-market-leader-positioning-era21.test.ts",
+  "tests/unit/run-market-leader-positioning-post-series-a-orchestrator.test.ts",
   "tests/unit/market-leader-positioning-era21-cert-live.test.ts",
 ] as const;
 
