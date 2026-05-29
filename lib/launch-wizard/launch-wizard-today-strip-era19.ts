@@ -20,6 +20,7 @@ import type { LaunchWizardPostTerminusSteadyStateSlice } from "@/lib/launch-wiza
 import type { LaunchWizardCommercialPilotPathAbsoluteEndSlice } from "@/lib/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-era39";
 import type { LaunchWizardLinearPathPermanentlyClosedSlice } from "@/lib/launch-wizard/launch-wizard-linear-path-permanently-closed-era40";
 import type { LaunchWizardLinearChainTerminusGuardSlice } from "@/lib/launch-wizard/launch-wizard-linear-chain-terminus-guard-era41";
+import type { LaunchWizardEra25CharterExitSlice } from "@/lib/launch-wizard/launch-wizard-era25-charter-exit-era42";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -59,6 +60,7 @@ export type LaunchWizardTodayStripViewModel = {
   commercialPilotPathAbsoluteEnd: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
   linearPathPermanentlyClosed: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   linearChainTerminusGuard: LaunchWizardLinearChainTerminusGuardSlice | null;
+  era25CharterExit: LaunchWizardEra25CharterExitSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -113,6 +115,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   commercialPilotPathAbsoluteEnd?: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
   linearPathPermanentlyClosed?: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   linearChainTerminusGuard?: LaunchWizardLinearChainTerminusGuardSlice | null;
+  era25CharterExit?: LaunchWizardEra25CharterExitSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -177,6 +180,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const linearChainTerminusGuardSubline = linearChainTerminusGuard
     ? `Step 17 ${linearChainTerminusGuard.progressLabel}${linearChainTerminusGuard.linearChainTerminusGuardIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25CharterExit = input.era25CharterExit ?? null;
+  const era25CharterExitSubline = era25CharterExit
+    ? `Era25 exit ${era25CharterExit.progressLabel}${era25CharterExit.era25CharterExitIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -216,6 +223,9 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       engineeringTerminus,
       postTerminusSteadyState,
       commercialPilotPathAbsoluteEnd,
+      linearPathPermanentlyClosed,
+      linearChainTerminusGuard,
+      era25CharterExit,
     };
   }
 
@@ -252,6 +262,9 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       engineeringTerminus,
       postTerminusSteadyState,
       commercialPilotPathAbsoluteEnd,
+      linearPathPermanentlyClosed,
+      linearChainTerminusGuard,
+      era25CharterExit,
     };
   }
 
@@ -265,7 +278,13 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : linearChainTerminusGuardSubline
+        : era25CharterExitSubline
+          ? linearChainTerminusGuardSubline
+            ? linearPathPermanentlyClosedSubline
+              ? `${linearPathPermanentlyClosedSubline} · ${linearChainTerminusGuardSubline} · ${era25CharterExitSubline}`
+              : `${linearChainTerminusGuardSubline} · ${era25CharterExitSubline}`
+            : era25CharterExitSubline
+          : linearChainTerminusGuardSubline
           ? linearPathPermanentlyClosedSubline
             ? `${linearPathPermanentlyClosedSubline} · ${linearChainTerminusGuardSubline}`
             : linearChainTerminusGuardSubline
@@ -353,5 +372,8 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     engineeringTerminus,
     postTerminusSteadyState,
     commercialPilotPathAbsoluteEnd,
+    linearPathPermanentlyClosed,
+    linearChainTerminusGuard,
+    era25CharterExit,
   };
 }

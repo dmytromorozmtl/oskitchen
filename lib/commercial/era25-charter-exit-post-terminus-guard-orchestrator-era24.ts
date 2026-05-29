@@ -98,6 +98,7 @@ export function buildEra25CharterExitPostTerminusGuardOrchestratorSummary(input:
           "npm run ops:validate-commercial-pilot-path -- --json",
         ] as const)
       : ([
+          "npm run ops:validate-era25-charter-exit-outside-linear-path-integrity -- --json",
           "npm run ops:validate-era25-charter-exit-outside-linear-path -- --json",
           ERA25_CHARTER_EXIT_POST_TERMINUS_GUARD_ORCHESTRATOR_COMMAND + " -- --write",
           "npm run ops:sync-era25-charter-exit-outside-linear-path-report -- --write",

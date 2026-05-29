@@ -17,6 +17,10 @@ describe("era25-charter-exit-ui-era24", () => {
     expect(slice?.postTerminusGuardOrchestratorCommand).toContain(
       "run-era25-charter-exit-post-terminus-guard-orchestrator",
     );
+    expect(slice?.integrityValidateCommand).toBe(
+      "npm run ops:validate-era25-charter-exit-outside-linear-path-integrity -- --json",
+    );
+    expect(slice?.launchWizardHref).toContain("#launch-wizard-era25-charter-exit");
     expect(slice?.era25CharterExitMilestone).toBe("terminus_guard_blocked");
     expect(slice?.firstCharterSliceReadiness).not.toBeNull();
     expect(slice?.firstCharterSliceReadiness?.requiredSectionCount).toBe(10);

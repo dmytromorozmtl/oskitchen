@@ -1,0 +1,26 @@
+# Era25 charter exit outside linear path integrity — blocks charter exit attestation without honest Step 17 guard.
+
+name: Era25 Charter Exit Outside Linear Path Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/era25-charter-exit-outside-linear-path-integrity-baseline.json"
+      - "artifacts/era25-charter-exit-outside-linear-path-report.md"
+      - "lib/commercial/era25-charter-exit-outside-linear-path-integrity-era42.ts"
+      - "scripts/ops/validate-era25-charter-exit-outside-linear-path-integrity.ts"
+
+jobs:
+  validate-era25-charter-exit-outside-linear-path-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate era25 charter exit outside linear path integrity (JSON)
+        run: npm run ops:validate-era25-charter-exit-outside-linear-path-integrity -- --json

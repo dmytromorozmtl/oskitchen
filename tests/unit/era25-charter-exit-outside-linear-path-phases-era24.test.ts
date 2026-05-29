@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  detectEra25CharterExitStarted,
   ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_DOC,
   ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_PHASES_ERA24_POLICY_ID,
   ERA25_CHARTER_DOC_GLOB_HINT,
@@ -25,5 +26,14 @@ describe("era25-charter-exit-outside-linear-path-phases-era24", () => {
     expect(ERA25_CHARTER_EXIT_GUARDRAILS.length).toBeGreaterThanOrEqual(6);
     expect(ERA25_CHARTER_EXIT_HUMAN_STEPS.length).toBe(5);
     expect(ERA25_CHARTER_EXIT_GUARDRAILS[0]).toContain("Step 18+");
+  });
+
+  it("detects charter exit started from env attestations", () => {
+    expect(
+      detectEra25CharterExitStarted({
+        ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_ATTESTED: "true",
+      }),
+    ).toBe(true);
+    expect(detectEra25CharterExitStarted({})).toBe(false);
   });
 });

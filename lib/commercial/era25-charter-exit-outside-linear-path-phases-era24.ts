@@ -19,6 +19,17 @@ export const ERA25_CHARTER_EXIT_REPORT_PATH =
 export const ERA25_CHARTER_EXIT_PLATFORM_ANCHOR =
   "#era25-charter-exit-outside-linear-path" as const;
 
+export const ERA25_CHARTER_EXIT_TRACKED_ENV_KEYS = [
+  "ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_ATTESTED",
+  "ERA25_CHARTER_EXIT_OUTSIDE_LINEAR_PATH_REPORT_REVIEWED",
+] as const;
+
+export function detectEra25CharterExitStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return ERA25_CHARTER_EXIT_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 /** Glob pattern for human-written era25 charter docs (outside linear chain). */
 export const ERA25_CHARTER_DOC_GLOB_HINT = "docs/era25-*-charter-2026-*.md" as const;
 

@@ -22,6 +22,9 @@ describe("linear-chain-terminus-guard-ui-era24", () => {
     expect(slice?.guardPassed).toBe(true);
     expect(slice?.era25CharterExit).not.toBeNull();
     expect(slice?.era25CharterExit?.outsideLinearCatalog).toBe(true);
+    expect(slice?.era25CharterExit?.integrityValidateCommand).toBe(
+      "npm run ops:validate-era25-charter-exit-outside-linear-path-integrity -- --json",
+    );
     expect(slice?.integrityValidateCommand).toBe(
       "npm run ops:validate-linear-chain-terminus-guard-integrity -- --json",
     );

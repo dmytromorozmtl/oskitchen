@@ -111,6 +111,11 @@ import {
   buildLaunchWizardLinearChainTerminusGuardSlice,
   type LaunchWizardLinearChainTerminusGuardSlice,
 } from "@/lib/launch-wizard/launch-wizard-linear-chain-terminus-guard-era41";
+import {
+  buildLaunchWizardEra25CharterExitSlice,
+  type LaunchWizardEra25CharterExitSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-charter-exit-era42";
+import type { Era25CharterExitUiSlice } from "@/lib/commercial/era25-charter-exit-ui-era24";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
   buildLaunchWizardTier2StatusSlice,
@@ -960,6 +965,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     linearPathPermanentlyClosedIntegrity,
     linearChainTerminusGuard,
     linearChainTerminusGuardIntegrity,
+    era25CharterExit,
+    era25CharterExitIntegrity,
     paidPilotGoConvergence,
   };
 }

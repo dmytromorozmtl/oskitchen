@@ -107,6 +107,16 @@ export function buildLinearChainTerminusGuardUiSlice(input: {
   const era25CharterExit = buildEra25CharterExitUiSlice({
     guardPassed: result.guard.guardPassed,
     env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
   });
 
   return {

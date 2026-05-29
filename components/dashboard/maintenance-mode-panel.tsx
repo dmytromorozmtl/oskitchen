@@ -765,6 +765,20 @@ export function MaintenanceModePanel(props: {
                           ? "yes"
                           : "no"}
                       </Badge>
+                      {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                        .era25CharterExitIntegrityPassed ? (
+                        <Badge variant="destructive" className="rounded-full text-[10px]">
+                          Charter exit blocked
+                        </Badge>
+                      ) : null}
+                      {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                        .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                        .linearChainTerminusGuardIntegrityPassed ? (
+                        <Badge variant="destructive" className="rounded-full text-[10px]">
+                          Step 17 guard integrity FAIL
+                        </Badge>
+                      ) : null}
                     </div>
                     <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
                       {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.humanSteps.map(
@@ -798,6 +812,27 @@ export function MaintenanceModePanel(props: {
                           slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                             .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
                             .exportCharterChecklistCommand
+                        }
+                      </span>
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                            .validateLinearChainTerminusGuardIntegrityCommand
+                        }
+                      </span>
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                            .integrityValidateCommand
+                        }
+                      </span>
+                      <span>
+                        {
+                          slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                            .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                            .syncIntegrityBaselineCommand
                         }
                       </span>
                     </div>

@@ -71,7 +71,7 @@ npm run ops:sync-linear-chain-terminus-guard-integrity-baseline -- --write
 
 ## Next step after Phase Q PASS
 
-**Phase R — Era25 charter exit outside linear path integrity (`era42`)** — mirror era28–era41 on `era25-charter-exit-outside-linear-path-*`
+**Phase R — Era25 charter exit outside linear path integrity (`era42`)** — **IMPLEMENTED** · see [`docs/next-step-era25-charter-exit-outside-linear-path-phase-r-product-2026-05-28.md`](./next-step-era25-charter-exit-outside-linear-path-phase-r-product-2026-05-28.md)
 
 | Component | Planned artifact |
 |-----------|------------------|

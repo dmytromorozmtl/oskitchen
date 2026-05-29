@@ -165,6 +165,10 @@ import {
   mergeBriefingLinearPathPermanentlyClosedTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-path-permanently-closed-era40";
 import {
+  buildOwnerDailyBriefingEra25CharterExitAction,
+  mergeBriefingEra25CharterExitTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-charter-exit-era42";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -934,6 +938,13 @@ export async function loadOwnerDailyBriefing(
             ?.linearPathPermanentlyClosed?.step17Forbidden ?? null,
         )
       : null;
+  const era25CharterExitRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25CharterExitAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit ?? null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1321,6 +1332,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && linearChainTerminusGuardRankedAction) {
     allTopActions = mergeBriefingLinearChainTerminusGuardTopActions(
       linearChainTerminusGuardRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25CharterExitRankedAction) {
+    allTopActions = mergeBriefingEra25CharterExitTopActions(
+      era25CharterExitRankedAction,
       allTopActions,
     );
   }
