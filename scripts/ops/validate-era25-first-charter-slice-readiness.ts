@@ -7,10 +7,8 @@ import {
   ERA25_FIRST_CHARTER_SLICE_GUARDRAILS,
   ERA25_CHARTER_REQUIRED_SECTIONS,
 } from "@/lib/commercial/era25-first-charter-slice-readiness-phases-era24";
-import {
-  evaluateEra25FirstCharterSliceReadiness,
-  evaluateEra25FirstCharterSliceReadinessWithMilestones,
-} from "@/lib/commercial/evaluate-era25-engineering-gates-require-signed-charter";
+import { evaluateEra25FirstCharterSliceReadiness } from "@/lib/commercial/evaluate-era25-first-charter-slice-readiness";
+import { evaluateEra25FirstCharterSliceReadinessWithMilestones } from "@/lib/commercial/evaluate-era25-engineering-gates-require-signed-charter";
 
 export {
   evaluateEra25FirstCharterSliceReadiness,

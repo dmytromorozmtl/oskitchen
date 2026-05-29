@@ -60,6 +60,7 @@ export type Era25GovernanceTrainTerminalSealEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25PostTerminalSealCommercialOpsPermanence: Era25PostTerminalSealCommercialOpsPermanenceEra25UiSlice | null;
 };
 
 export function buildEra25GovernanceTrainTerminalSealEra25UiSlice(input: {

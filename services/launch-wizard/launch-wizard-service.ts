@@ -1,3 +1,4 @@
+import { GoLiveSimulationResult } from "@prisma/client";
 import { LIVE_CAPABLE_INTEGRATION_PROVIDERS } from "@/lib/channels/channel-registry";
 import { resolveCommercialPilotOpsDecision } from "@/lib/commercial/commercial-pilot-ops-status-era18";
 import { buildPilotIntegrationLiveProofRows } from "@/lib/integrations/pilot-integration-health-live-proof-era18";
@@ -473,7 +474,7 @@ async function loadLaunchWizardContext(userId: string): Promise<{
 
   const latestSimulation = primaryGoLive
     ? await prisma.goLiveSimulation.findFirst({
-        where: { projectId: primaryGoLive.id, result: "PASS" },
+        where: { projectId: primaryGoLive.id, result: GoLiveSimulationResult.PASS },
         select: { id: true },
       })
     : null;

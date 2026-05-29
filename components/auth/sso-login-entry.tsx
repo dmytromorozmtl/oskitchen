@@ -58,7 +58,7 @@ export function SsoLoginEntry() {
     if (!callbackErrorCode) return null;
     return resolveSsoCallbackLoginErrorRecovery({
       errorCode: callbackErrorCode,
-      workspaceId: prefilledWorkspaceId ?? workspaceId.trim() || null,
+      workspaceId: (prefilledWorkspaceId ?? workspaceId.trim()) || null,
     });
   }, [callbackErrorCode, prefilledWorkspaceId, workspaceId]);
 
@@ -66,7 +66,7 @@ export function SsoLoginEntry() {
     if (!callbackErrorCode) return;
     const recovery = resolveSsoCallbackLoginErrorRecovery({
       errorCode: callbackErrorCode,
-      workspaceId: prefilledWorkspaceId ?? workspaceId.trim() || null,
+      workspaceId: (prefilledWorkspaceId ?? workspaceId.trim()) || null,
     });
     if (!recovery) return;
     setErrorRecovery(recovery);

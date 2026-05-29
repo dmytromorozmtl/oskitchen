@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChatThread } from "@/components/dashboard/copilot/chat-thread";
 import { AiStatusBadges } from "@/components/dashboard/copilot/ai-status-badges";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   hasCopilotChatPageAccess,
   loadCopilotPageActor,

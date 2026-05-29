@@ -3,6 +3,7 @@
 
 import { revalidatePath } from "next/cache";
 import { randomBytes } from "crypto";
+import type { Prisma } from "@prisma/client";
 
 import { hashApiKey } from "@/lib/api-public/auth";
 import { isDeveloperApiScope, serializeApiKeyScopes } from "@/lib/api-public/public-api-scopes";
@@ -151,7 +152,7 @@ export async function createApiKeyForm(
         keyHash,
         prefix,
         scopesJson,
-      },
+      } as Prisma.ApiKeyUncheckedCreateInput,
     });
 
     revalidatePath("/dashboard/developer/api-keys");

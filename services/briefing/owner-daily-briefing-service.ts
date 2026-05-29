@@ -108,7 +108,10 @@ import { buildMarketLeaderPositioningConvergenceEra25UiSlice } from "@/lib/comme
 import {
   mergeBriefingMarketLeaderPositioningConvergenceEra25TopActions,
 } from "@/lib/briefing/market-leader-positioning-convergence-briefing-era25";
-import { buildSustainedOperationalExcellenceConvergenceEra25UiSlice } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
+import {
+  buildSustainedOperationalExcellenceConvergenceEra25UiSlice,
+  type SustainedOperationalExcellenceConvergenceEra25UiSlice,
+} from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
 import {
   shouldSuppressEra25ProductConvergenceSurfaces,
   type PureOperationalModeTerminusEra25UiSlice,
@@ -455,6 +458,7 @@ export type OwnerDailyBriefingPayload = {
   productionGradePolicyId: typeof OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID;
   p0ProofBlockedLabel: string | null;
   p0OpsVault: P0OpsVaultUiSlice | null;
+  commercialInflection: CommercialInflectionReadinessUiSlice | null;
   tier2GoldenPath: Tier2GoldenPathUiSlice | null;
   commercialGoClosure: CommercialGoClosureUiSlice | null;
   pilotWeek1: PilotWeek1ExecutionUiSlice | null;
@@ -466,6 +470,8 @@ export type OwnerDailyBriefingPayload = {
   continuousImprovementLoop: ContinuousImprovementLoopUiSlice | null;
   sustainedProductEvolution: SustainedProductEvolutionUiSlice | null;
   maintenanceMode: MaintenanceModeUiSlice | null;
+  pureOperationalModeEra25Active: boolean;
+  pureOperationalModeTerminus: SustainedOperationalExcellenceConvergenceEra25UiSlice["pureOperationalModeTerminus"];
   operationalEmptyState: ReturnType<typeof buildOwnerDailyBriefingOperationalEmptyState>;
 };
 
@@ -496,7 +502,7 @@ async function countLowStockIngredients(userId: string): Promise<{
 }
 
 async function countOpenPosShifts(userId: string): Promise<number> {
-  const where = await ownerScopedAnd(userId, { status: "OPEN" });
+  const where = await ownerScopedAnd(userId, { status: "OPEN" as const });
   return prisma.pOSShift.count({ where });
 }
 
@@ -528,7 +534,7 @@ async function loadLaborBriefingSlice(userId: string) {
       activeStaff: 0,
       scheduledShiftsToday: 0,
       laborPercent: 0,
-      status: null as const,
+      status: null,
     };
   }
 }
@@ -1495,6 +1501,30 @@ export async function loadOwnerDailyBriefing(
               ?.era25CommercialPilotConvergenceTrainCapstone?.era25ConvergenceGovernanceTerminusFreeze
               ?.era25BandAMarketProofExecutionSolePath?.era25P0MarketProofHonestClosureCapstone
               ?.era25PostMarketProofSteadyOperationalWitness ??
+            null,
+        )
+      : null;
+  const era25GovernanceTrainTerminalSealRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25GovernanceTrainTerminalSealAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+            ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence
+            ?.marketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence
+            ?.pureOperationalModeTerminus?.commercialPilotConvergenceTrainClosure
+            ?.sustainedProductEvolutionReentrant?.era25PostReentrantCharterLock
+            ?.era25SteadyStateOperatorLoopLock?.era25CommercialPilotConvergenceTrainCapstone
+            ?.era25ConvergenceGovernanceTerminusFreeze?.era25BandAMarketProofExecutionSolePath
+            ?.era25P0MarketProofHonestClosureCapstone?.era25PostMarketProofSteadyOperationalWitness
+            ?.era25GovernanceTrainTerminalSeal ??
+            sustainedOpsConvergenceEra25?.pureOperationalModeTerminus
+              ?.commercialPilotConvergenceTrainClosure?.sustainedProductEvolutionReentrant
+              ?.era25PostReentrantCharterLock?.era25SteadyStateOperatorLoopLock
+              ?.era25CommercialPilotConvergenceTrainCapstone?.era25ConvergenceGovernanceTerminusFreeze
+              ?.era25BandAMarketProofExecutionSolePath?.era25P0MarketProofHonestClosureCapstone
+              ?.era25PostMarketProofSteadyOperationalWitness?.era25GovernanceTrainTerminalSeal ??
             null,
         )
       : null;
