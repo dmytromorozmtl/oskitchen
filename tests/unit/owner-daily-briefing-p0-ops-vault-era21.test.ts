@@ -48,6 +48,9 @@ describe("owner-daily-briefing-p0-ops-vault-era21", () => {
     expect(action?.priority).toBe(P0_OPS_VAULT_BRIEFING_ACTION_PRIORITY);
     expect(action?.title).toContain("Staging login");
     expect(action?.reason).toContain("E2E_STAGING_BASE_URL");
+    expect(action?.href).toContain("commercial-pilot-ops");
+    expect(action?.ctaLabel).toContain("VP Ops");
+    expect(action?.unblockCondition).toContain("vault-readiness-report.json");
   });
 
   it("returns null when proof passed", () => {

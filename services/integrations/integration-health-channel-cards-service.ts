@@ -1,5 +1,5 @@
 import { getWorkspaceSsoAdminView } from "@/lib/enterprise/workspace-sso-admin-service";
-import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import { loadP0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
@@ -14,6 +14,7 @@ import {
 import { enrichIntegrationHealthChannelCardsWithTrustLayer } from "@/lib/integrations/integration-health-trust-layer-era20";
 import type { IntegrationHealthChannelCardsModel } from "@/lib/integrations/integration-health-channel-cards-era19";
 import type { IntegrationHealthTrustLayerSlice } from "@/lib/integrations/integration-health-trust-layer-era20";
+import { loadVaultReadinessReport } from "@/lib/ops/vault-readiness-report";
 import { INTEGRATION_HEALTH_SMOKE_ARTIFACT_PATHS } from "@/lib/integrations/integration-health-smoke-artifacts-era19-policy";
 import { getServerEnv } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
@@ -47,13 +48,16 @@ export async function loadIntegrationHealthChannelCardsModel(
   const webhookWhere = await getCachedWebhookEventListWhere();
   const workspaceId = await resolveOwnerWorkspaceId(userId);
 
+  const root = process.cwd();
+  const p0Staging = loadP0StagingProofUnblockSummary(root);
+  const vaultReport = loadVaultReadinessReport(root);
+
   const [
     healthCards,
     liveProofSlices,
     failedWebhookCount,
     apiKeysActive,
     channelSmoke,
-    p0Staging,
     tier2Staging,
     goNoGoSummary,
     metricsBaseline,
@@ -69,11 +73,6 @@ export async function loadIntegrationHealthChannelCardsModel(
     Promise.resolve(
       readJsonArtifact<ChannelLiveSmokeSummary>(
         INTEGRATION_HEALTH_SMOKE_ARTIFACT_PATHS.channelLive,
-      ),
-    ),
-    Promise.resolve(
-      readJsonArtifact<P0StagingProofUnblockSummary>(
-        INTEGRATION_HEALTH_SMOKE_ARTIFACT_PATHS.p0Staging,
       ),
     ),
     Promise.resolve(
@@ -123,5 +122,5 @@ export async function loadIntegrationHealthChannelCardsModel(
     goNoGoSummary,
     metricsBaseline,
     caseStudyDraft,
-  });
+  }, vaultReport);
 }

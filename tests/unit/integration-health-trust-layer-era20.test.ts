@@ -83,6 +83,46 @@ describe("integration-health-trust-layer-era20", () => {
     expect(banner?.honestyNote.toLowerCase()).toContain("skipped");
   });
 
+  it("merges vault report missing keys into P0 trust banner", () => {
+    const banner = buildIntegrationHealthP0TrustBanner(p0Awaiting, {
+      version: "vault-readiness-v2",
+      generatedAt: "2026-05-28T00:00:00.000Z",
+      policyId: "era17-p0-staging-proof-unblock-v1",
+      opsChecklistDoc: "docs/era18-p0-staging-proof-ops-checklist.md",
+      vaultMatrixDoc: "docs/ops-vault-matrix.md",
+      vaultReady: false,
+      presentCount: 0,
+      totalCount: 11,
+      missingKeys: [
+        "E2E_STAGING_BASE_URL",
+        "E2E_LOGIN_EMAIL",
+        "E2E_LOGIN_PASSWORD",
+        "DATABASE_URL",
+      ],
+      day0Milestone: "blocked",
+      day0PartialComplete: false,
+      p0ProofStatus: "awaiting_ops_credentials",
+      p0ArtifactOverall: "SKIPPED",
+      nextPhase: {
+        id: "staging_login",
+        label: "Phase 1 — Staging login",
+        complete: false,
+        presentKeys: [],
+        missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+        docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+        smokeScripts: ["smoke:staging-workflows-first-green"],
+      },
+      phases: [],
+      childSmokes: [],
+      recommendedNextSteps: [],
+      secrets: [],
+      honestyNote: "test",
+    });
+    expect(banner?.missingCount).toBe(4);
+    expect(banner?.missingEnvVars).toContain("E2E_LOGIN_EMAIL");
+    expect(banner?.headline).toContain("E2E_LOGIN_EMAIL");
+  });
+
   it("hides P0 banner when proof passed", () => {
     expect(
       buildIntegrationHealthP0TrustBanner({

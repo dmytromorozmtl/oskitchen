@@ -596,7 +596,10 @@ export async function loadOwnerDailyBriefing(
   ]);
 
   const smokeNextAction = smokeArtifacts?.depth.nextSmokeAction ?? null;
-  const p0OpsVault = buildP0OpsVaultUiSlice(commercialOps?.p0Staging?.summary ?? null);
+  const p0OpsVault = buildP0OpsVaultUiSlice(
+    commercialOps?.p0Staging?.summary ?? null,
+    commercialOps?.vaultReadiness.report ?? null,
+  );
   const tier2GoldenPath = buildTier2GoldenPathUiSlice({
     p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
     tier2Summary: commercialOps?.tier2Staging.summary ?? null,

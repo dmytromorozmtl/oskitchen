@@ -1,8 +1,5 @@
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
-import {
-  formatP0OpsVaultPhaseBlockerDetail,
-  resolveNextIncompleteP0OpsVaultPhase,
-} from "@/lib/commercial/p0-ops-vault-phases-era21";
+import { formatP0OpsVaultPhaseBlockerDetail } from "@/lib/commercial/p0-ops-vault-phases-era21";
 import {
   formatP0OpsVaultProgressLabel,
   type P0OpsVaultUiSlice,
@@ -18,9 +15,9 @@ export function buildOwnerDailyBriefingP0OpsVaultAction(
 ): OwnerDailyBriefingRankedAction | null {
   if (!slice?.blocked) return null;
 
-  const nextPhase = resolveNextIncompleteP0OpsVaultPhase(slice.phases);
+  const nextPhase = slice.nextPhase;
   const phaseDetail = nextPhase
-    ? formatP0OpsVaultPhaseBlockerDetail(nextPhase)
+    ? `${formatP0OpsVaultPhaseBlockerDetail(nextPhase)} · ${nextPhase.docPath}`
     : formatP0OpsVaultProgressLabel(slice);
 
   return {
@@ -31,12 +28,11 @@ export function buildOwnerDailyBriefingP0OpsVaultAction(
     reason: `${formatP0OpsVaultProgressLabel(slice)}. ${phaseDetail}`,
     severity: "critical",
     ownerRole: "owner",
-    href: slice.integrationHealthHref,
+    href: slice.platformOpsHref,
     status: "open",
-    unblockCondition:
-      "Configure all 11 GitHub Secrets / ops vault vars, then run npm run smoke:p0-staging-proof-unblock.",
+    unblockCondition: `Configure ${slice.missingCount}/${slice.totalCount} ops vault vars (${slice.vaultReadinessArtifact}), then ${slice.orchestratorCommand}.`,
     priority: P0_OPS_VAULT_BRIEFING_ACTION_PRIORITY,
-    ctaLabel: "Open ops vault checklist",
+    ctaLabel: "Open VP Ops vault checklist",
     tone: "urgent",
   };
 }

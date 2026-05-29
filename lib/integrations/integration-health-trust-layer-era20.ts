@@ -9,6 +9,7 @@ import {
   resolveP0OpsVaultNextPhaseSmokeCommands,
   type P0OpsVaultUiSlice,
 } from "@/lib/commercial/p0-ops-vault-ui-era21";
+import type { VaultReadinessReport } from "@/lib/ops/vault-readiness-report";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import type {
   IntegrationHealthChannelCard,
@@ -66,15 +67,16 @@ export function applySmokeHonestyToChannelCard(
 
 export function buildIntegrationHealthP0TrustBanner(
   p0Staging: P0StagingProofUnblockSummary | null,
+  vaultReport?: VaultReadinessReport | null,
 ): IntegrationHealthP0TrustBanner | null {
   if (!p0Staging) return null;
   if (p0Staging.p0ProofStatus === "proof_passed") return null;
 
-  const opsVault = buildP0OpsVaultUiSlice(p0Staging);
+  const opsVault = buildP0OpsVaultUiSlice(p0Staging, vaultReport);
   if (!opsVault) return null;
 
-  const missingEnvVars = p0Staging.allMissingEnvVars;
-  const missingCount = missingEnvVars.length;
+  const missingEnvVars = opsVault.missingEnvVars;
+  const missingCount = opsVault.missingCount;
 
   return {
     policyId: INTEGRATION_HEALTH_TRUST_LAYER_ERA20_POLICY_ID,
@@ -105,8 +107,9 @@ export function buildTrustLayerHeadline(
     metricsBaseline: PilotMetricsBaselineSummary | null;
     caseStudyDraft: PilotCaseStudyDraftSummary | null;
   },
+  vaultReport?: VaultReadinessReport | null,
 ): string {
-  const p0Banner = buildIntegrationHealthP0TrustBanner(p0Staging);
+  const p0Banner = buildIntegrationHealthP0TrustBanner(p0Staging, vaultReport);
   if (p0Banner) return `${p0Banner.headline} ${cardsHeadline}`;
   const inflectionBanner =
     p0Staging?.p0ProofStatus === "proof_passed"
@@ -151,6 +154,7 @@ export function enrichIntegrationHealthChannelCardsWithTrustLayer(
     metricsBaseline: PilotMetricsBaselineSummary | null;
     caseStudyDraft: PilotCaseStudyDraftSummary | null;
   },
+  vaultReport?: VaultReadinessReport | null,
 ): IntegrationHealthChannelCardsModel & IntegrationHealthTrustLayerSlice {
   const cards = model.cards.map(applySmokeHonestyToChannelCard);
   return {
@@ -161,8 +165,9 @@ export function enrichIntegrationHealthChannelCardsWithTrustLayer(
       tier2Summary,
       summarizeWithSmokeBlocked(cards),
       pilotWeek1Input,
+      vaultReport,
     ),
-    p0Trust: buildIntegrationHealthP0TrustBanner(p0Staging),
+    p0Trust: buildIntegrationHealthP0TrustBanner(p0Staging, vaultReport),
     commercialInflection: buildIntegrationHealthCommercialInflectionBanner({
       p0Staging,
       tier2Summary,
