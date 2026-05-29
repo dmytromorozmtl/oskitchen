@@ -1,8 +1,11 @@
 # KitchenOS — era25 Pure Operational Mode Terminus
 
-**Status:** **BLOCKED until `sustained_operational_excellence_convergence_era25_ready` · NOT auto-implemented**
+**Status:** **Ninth and final era25 product slice · IMPLEMENTED · BLOCKED until sustained ops convergence ready**
 
-**Prerequisite:** Sustained ops convergence ready + era22 continuous improvement loop reviewed
+**Policy:** `era25-pure-operational-mode-terminus-v1` · Orchestrator `era25-pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-v1`  
+**Backlog:** `KOS-E25-009-TERMINUS` · **NOT in linear catalog · NOT Step 18**
+
+**Prerequisite:** `sustained_operational_excellence_convergence_era25_ready` + era22 continuous improvement loop reviewed
 
 ---
 
@@ -40,20 +43,7 @@ Expected convergence JSON:
 
 ---
 
-## Scope (preview)
-
-| Deliverable | Detail |
-|-------------|--------|
-| Terminus panel | era25 nested under sustained ops on platform ops |
-| era21 gate suppression | Hide P0→Sustained ops panels when terminus active |
-| Improvement loop panel | Wire `#continuous-improvement-loop` (informational) |
-| Policy | `era25-pure-operational-mode-terminus-v1` |
-| Backlog | `KOS-E25-009-TERMINUS` |
-| Anchor | `#era25-pure-operational-mode-terminus` |
-
----
-
-## Milestones (preview)
+## Milestones (`pureOperationalModeTerminusEra25Milestone`)
 
 Maps from era22 `continuous-improvement-loop` track health (informational):
 
@@ -70,42 +60,42 @@ Maps from era22 `continuous-improvement-loop` track health (informational):
 ## Human gate
 
 1. Sustained ops convergence `sustained_operational_excellence_convergence_era25_ready`
-2. Verify era21 commercial gate panels hidden on Today + Launch Wizard
+2. Verify era21 commercial gate panels hidden on Today + Launch Wizard when terminus active
 3. Verify `#continuous-improvement-loop` panel shows artifact freshness (not env attestation)
 4. Per release: `npm run test:ci:commercial-pilot-runbook:cert`
 5. Per new pilot: Scale Gate 1 isolation (`SCALE_PER_CUSTOMER_GO_ISOLATION=1`)
 
 ---
 
-## Platform ops nesting (target)
+## Platform ops nesting
 
 ```
 #era25-engineering-gates
   └── … → #era25-sustained-operational-excellence-convergence
-              └── #era25-pure-operational-mode-terminus  ← pending · FINAL era25 slice
+              └── #era25-pure-operational-mode-terminus  ← FINAL era25 slice
 ```
 
 ---
 
-## Engineering wiring (preview)
+## Engineering wiring (implemented)
 
-| Component | Artifact (planned) |
-|-----------|-------------------|
+| Component | Artifact |
+|-----------|----------|
 | Terminus state loader | `lib/commercial/load-pure-operational-mode-terminus-state-era25.ts` |
 | Evaluation | `lib/commercial/evaluate-pure-operational-mode-terminus-era25.ts` |
 | Orchestrator | `lib/commercial/pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25.ts` |
 | UI slice | `lib/commercial/pure-operational-mode-terminus-ui-era25.ts` |
-| Gate suppression | Suppress era25 convergence briefing actions when terminus active |
+| Gate suppression | `shouldSuppressEra25ProductConvergenceSurfaces` — briefing + Launch Wizard |
 
 Reuses era22: `continuous-improvement-loop-phases-era22`, `validate-continuous-improvement-loop`, post-sustained-ops orchestrator chain.
 
-**Explicitly NOT wired:** new briefing priority, new SUSTAINED_OPS_* keys, Launch Wizard blocker strips for improvement loop.
+**Explicitly NOT wired:** new briefing ranked action, new SUSTAINED_OPS_* keys, Launch Wizard convergence strips when terminus active.
 
-**Parent nesting:** Add `pureOperationalModeTerminus` to `lib/commercial/sustained-operational-excellence-convergence-ui-era25.ts`.
+**Parent nesting:** `pureOperationalModeTerminus` on `lib/commercial/sustained-operational-excellence-convergence-ui-era25.ts`.
 
 ---
 
-## Ops commands (preview)
+## Ops commands
 
 ```bash
 npm run ops:validate-pure-operational-mode-terminus-era25 -- --json
@@ -119,14 +109,21 @@ npm run test:ci:sustained-operational-excellence-convergence-era25
 
 ---
 
-## Product surfaces after terminus (target)
+## Product surfaces after terminus
 
 | Surface | Expected |
 |---------|----------|
-| `/dashboard/today` | Improvement loop compact panel + `operationalEmptyState` |
+| `/dashboard/today` | Improvement loop compact panel + `operationalEmptyState` when pure mode |
 | Platform → Pilot ops | `#era25-pure-operational-mode-terminus` + `#continuous-improvement-loop` |
-| Launch Wizard | No era25 convergence strips (gates complete) |
+| Launch Wizard | No era25 convergence strips when `pure_operational_mode_era25_active` |
 | era21 gate panels | Hidden when `pure_operational_mode_era25_active` |
+| Owner breakthrough panel | Terminus strip only (no convergence chain) when active |
+
+---
+
+## Next step (informational)
+
+- [`next-era25-product-convergence-chain-complete-2026-05-28.md`](./next-era25-product-convergence-chain-complete-2026-05-28.md) — era25 gate chain complete; handoff to era23 sustained product evolution
 
 ---
 

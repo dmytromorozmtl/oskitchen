@@ -109,6 +109,7 @@ import {
   mergeBriefingMarketLeaderPositioningConvergenceEra25TopActions,
 } from "@/lib/briefing/market-leader-positioning-convergence-briefing-era25";
 import { buildSustainedOperationalExcellenceConvergenceEra25UiSlice } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
+import { shouldSuppressEra25ProductConvergenceSurfaces } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import {
   mergeBriefingSustainedOperationalExcellenceConvergenceEra25TopActions,
 } from "@/lib/briefing/sustained-operational-excellence-convergence-briefing-era25";
@@ -494,6 +495,12 @@ export async function loadOwnerDailyBriefing(
   });
   const sustainedOpsConvergenceEra25RankedAction =
     rolePack === "owner" ? sustainedOpsConvergenceEra25?.briefingAction ?? null : null;
+  const pureOperationalModeEra25Active =
+    sustainedOpsConvergenceEra25?.pureOperationalModeTerminus?.pureOperationalModeEra25Active ??
+    false;
+  const suppressEra25ConvergenceBriefing = shouldSuppressEra25ProductConvergenceSurfaces({
+    pureOperationalModeEra25Active,
+  });
   const pilotWeek1RankedAction =
     rolePack === "owner" && !pilotWeek1ConvergenceEra25
       ? buildOwnerDailyBriefingPilotWeek1Action(pilotWeek1)
@@ -1084,43 +1091,43 @@ export async function loadOwnerDailyBriefing(
       allTopActions,
     );
   }
-  if (rolePack === "owner" && paidPilotGoConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && paidPilotGoConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingPaidPilotGoConvergenceTopActions(
       paidPilotGoConvergenceEra25RankedAction,
       allTopActions,
     );
   }
-  if (rolePack === "owner" && pilotWeek1ConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && pilotWeek1ConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingPilotWeek1ExecutionConvergenceEra25TopActions(
       pilotWeek1ConvergenceEra25RankedAction,
       allTopActions,
     );
   }
-  if (rolePack === "owner" && month2ConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && month2ConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingMonth2MarketReadinessConvergenceEra25TopActions(
       month2ConvergenceEra25RankedAction,
       allTopActions,
     );
   }
-  if (rolePack === "owner" && scaleConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && scaleConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingScaleReadinessConvergenceEra25TopActions(
       scaleConvergenceEra25RankedAction,
       allTopActions,
     );
   }
-  if (rolePack === "owner" && seriesAConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && seriesAConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingSeriesAPartnerExpansionConvergenceEra25TopActions(
       seriesAConvergenceEra25RankedAction,
       allTopActions,
     );
   }
-  if (rolePack === "owner" && marketLeaderConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && marketLeaderConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingMarketLeaderPositioningConvergenceEra25TopActions(
       marketLeaderConvergenceEra25RankedAction,
       allTopActions,
     );
   }
-  if (rolePack === "owner" && sustainedOpsConvergenceEra25RankedAction) {
+  if (rolePack === "owner" && !suppressEra25ConvergenceBriefing && sustainedOpsConvergenceEra25RankedAction) {
     allTopActions = mergeBriefingSustainedOperationalExcellenceConvergenceEra25TopActions(
       sustainedOpsConvergenceEra25RankedAction,
       allTopActions,
@@ -1268,7 +1275,8 @@ export async function loadOwnerDailyBriefing(
     activeOrders: today.kpis.activeOrders,
     readinessOverall: today.readiness.overall,
     riskAllClear: riskRadar?.allClear ?? true,
-    pureOperationalMode: continuousImprovementLoop?.pureOperationalMode ?? false,
+    pureOperationalMode:
+      pureOperationalModeEra25Active || (continuousImprovementLoop?.pureOperationalMode ?? false),
     continuousImprovementHref: continuousImprovementLoop?.platformOpsHref,
     maintenanceModeActive: maintenanceMode?.maintenanceModeActive ?? false,
     maintenanceModeHref: maintenanceMode?.platformOpsHref,

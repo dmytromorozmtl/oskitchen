@@ -169,6 +169,13 @@ export function LaunchWizardView(props: {
             ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
             ?.sustainedOperationalExcellenceConvergence ?? null
         }
+        pureOperationalModeEra25Active={
+          model.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+            ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
+            ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
+            ?.sustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus
+            ?.pureOperationalModeEra25Active ?? false
+        }
         compact={compact}
       />
 

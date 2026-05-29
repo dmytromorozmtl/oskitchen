@@ -22,5 +22,9 @@ describe("sustained-operational-excellence-convergence-ui-era25", () => {
     expect(slice?.platformOpsHref).toContain(
       "#era25-sustained-operational-excellence-convergence",
     );
+    expect(slice?.pureOperationalModeTerminus?.visible).toBe(true);
+    expect(slice?.pureOperationalModeTerminus?.platformOpsHref).toContain(
+      "#era25-pure-operational-mode-terminus",
+    );
   });
 });

@@ -18,6 +18,10 @@ import type { MarketLeaderPositioningConvergenceEra25Milestone } from "@/lib/com
 import type { SustainedOperationalExcellencePhaseStatus } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
 import type { LaunchWizardSustainedOperationalExcellenceConvergenceSlice } from "@/lib/briefing/sustained-operational-excellence-convergence-briefing-era25";
 import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import {
+  buildPureOperationalModeTerminusEra25UiSlice,
+  type PureOperationalModeTerminusEra25UiSlice,
+} from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones } from "@/scripts/ops/validate-sustained-operational-excellence-convergence-era25";
 import {
   SERIES_A_PLATFORM_OPS_ROUTE,
@@ -67,6 +71,7 @@ export type SustainedOperationalExcellenceConvergenceEra25UiSlice = {
   integrationHealthHref: string;
   reportsHref: string;
   implementationHref: string;
+  pureOperationalModeTerminus: PureOperationalModeTerminusEra25UiSlice | null;
 };
 
 export function buildSustainedOperationalExcellenceConvergenceEra25UiSlice(input: {
@@ -76,6 +81,10 @@ export function buildSustainedOperationalExcellenceConvergenceEra25UiSlice(input
   if (!input.marketLeaderConvergenceVisible) return null;
 
   const result = evaluateSustainedOperationalExcellenceConvergenceEra25WithMilestones(input.env);
+  const pureOperationalModeTerminus = buildPureOperationalModeTerminusEra25UiSlice({
+    sustainedOpsConvergenceVisible: true,
+    env: input.env,
+  });
 
   return {
     policyId: SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_UI_POLICY_ID,
@@ -123,6 +132,7 @@ export function buildSustainedOperationalExcellenceConvergenceEra25UiSlice(input
     integrationHealthHref: "/dashboard/integration-health",
     reportsHref: "/dashboard/reports",
     implementationHref: "/dashboard/implementation",
+    pureOperationalModeTerminus,
   };
 }
 

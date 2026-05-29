@@ -53,6 +53,7 @@ export function LaunchWizardCommercialBlockersPanel(props: {
   seriesAPartnerExpansionConvergence?: SeriesAPartnerExpansionConvergenceEra25UiSlice | null;
   marketLeaderPositioningConvergence?: MarketLeaderPositioningConvergenceEra25UiSlice | null;
   sustainedOperationalExcellenceConvergence?: SustainedOperationalExcellenceConvergenceEra25UiSlice | null;
+  pureOperationalModeEra25Active?: boolean;
   compact?: boolean;
 }) {
   const {
@@ -72,8 +73,11 @@ export function LaunchWizardCommercialBlockersPanel(props: {
     seriesAPartnerExpansionConvergence = null,
     marketLeaderPositioningConvergence = null,
     sustainedOperationalExcellenceConvergence = null,
+    pureOperationalModeEra25Active = false,
     compact = false,
   } = props;
+  const suppressEra25ConvergenceStrips = pureOperationalModeEra25Active;
+  const suppressEra21CommercialGatePanels = pureOperationalModeEra25Active;
   const decisionVariant =
     slice.decision === "GO"
       ? "default"
@@ -194,65 +198,65 @@ export function LaunchWizardCommercialBlockersPanel(props: {
           </div>
         ) : null}
 
-        {commercialGoClosure ? (
+        {!suppressEra21CommercialGatePanels && commercialGoClosure ? (
           <CommercialGoClosurePhasesPanel slice={commercialGoClosure} variant="dashboard" />
         ) : null}
 
-        {paidPilotGoConvergence ? (
+        {!suppressEra25ConvergenceStrips && paidPilotGoConvergence ? (
           <PaidPilotGoConvergenceEra25Strip slice={paidPilotGoConvergence} />
         ) : null}
 
-        {pilotWeek1ExecutionConvergence ? (
+        {!suppressEra25ConvergenceStrips && pilotWeek1ExecutionConvergence ? (
           <PilotWeek1ExecutionConvergenceEra25Strip slice={pilotWeek1ExecutionConvergence} />
         ) : null}
 
-        {month2MarketReadinessConvergence ? (
+        {!suppressEra25ConvergenceStrips && month2MarketReadinessConvergence ? (
           <Month2MarketReadinessConvergenceEra25Strip slice={month2MarketReadinessConvergence} />
         ) : null}
 
-        {scaleReadinessConvergence ? (
+        {!suppressEra25ConvergenceStrips && scaleReadinessConvergence ? (
           <ScaleReadinessConvergenceEra25Strip slice={scaleReadinessConvergence} />
         ) : null}
 
-        {seriesAPartnerExpansionConvergence ? (
+        {!suppressEra25ConvergenceStrips && seriesAPartnerExpansionConvergence ? (
           <SeriesAPartnerExpansionConvergenceEra25Strip
             slice={seriesAPartnerExpansionConvergence}
           />
         ) : null}
 
-        {marketLeaderPositioningConvergence ? (
+        {!suppressEra25ConvergenceStrips && marketLeaderPositioningConvergence ? (
           <MarketLeaderPositioningConvergenceEra25Strip
             slice={marketLeaderPositioningConvergence}
           />
         ) : null}
 
-        {sustainedOperationalExcellenceConvergence ? (
+        {!suppressEra25ConvergenceStrips && sustainedOperationalExcellenceConvergence ? (
           <SustainedOperationalExcellenceConvergenceEra25Strip
             slice={sustainedOperationalExcellenceConvergence}
           />
         ) : null}
 
-        {pilotWeek1 ? (
+        {!suppressEra21CommercialGatePanels && pilotWeek1 ? (
           <PilotWeek1PhasesPanel slice={pilotWeek1} variant="dashboard" />
         ) : null}
 
-        {month2MarketReadiness ? (
+        {!suppressEra21CommercialGatePanels && month2MarketReadiness ? (
           <Month2MarketReadinessPhasesPanel slice={month2MarketReadiness} variant="dashboard" />
         ) : null}
 
-        {scaleReadiness ? (
+        {!suppressEra21CommercialGatePanels && scaleReadiness ? (
           <ScaleReadinessPhasesPanel slice={scaleReadiness} variant="dashboard" />
         ) : null}
 
-        {seriesAPartnerExpansion ? (
+        {!suppressEra21CommercialGatePanels && seriesAPartnerExpansion ? (
           <SeriesAPartnerExpansionPhasesPanel slice={seriesAPartnerExpansion} variant="dashboard" />
         ) : null}
 
-        {marketLeaderPositioning ? (
+        {!suppressEra21CommercialGatePanels && marketLeaderPositioning ? (
           <MarketLeaderPositioningPhasesPanel slice={marketLeaderPositioning} variant="dashboard" />
         ) : null}
 
-        {sustainedOperationalExcellence ? (
+        {!suppressEra21CommercialGatePanels && sustainedOperationalExcellence ? (
           <SustainedOperationalExcellencePhasesPanel
             slice={sustainedOperationalExcellence}
             variant="dashboard"

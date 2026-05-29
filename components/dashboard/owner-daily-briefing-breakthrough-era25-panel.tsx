@@ -7,6 +7,7 @@ import { ScaleReadinessConvergenceEra25Strip } from "@/components/dashboard/laun
 import { SeriesAPartnerExpansionConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/series-a-partner-expansion-convergence-era25-strip";
 import { MarketLeaderPositioningConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/market-leader-positioning-convergence-era25-strip";
 import { SustainedOperationalExcellenceConvergenceEra25Strip } from "@/components/dashboard/launch-wizard/sustained-operational-excellence-convergence-era25-strip";
+import { PureOperationalModeTerminusEra25Strip } from "@/components/dashboard/launch-wizard/pure-operational-mode-terminus-era25-strip";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -29,6 +30,12 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
   slice: OwnerDailyBriefingBreakthroughEra25UiSlice;
 }) {
   const { slice } = props;
+  const pureOperationalModeTerminus =
+    slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+      ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
+      ?.sustainedOperationalExcellenceConvergence?.pureOperationalModeTerminus ?? null;
+  const pureOperationalModeEra25Active =
+    pureOperationalModeTerminus?.pureOperationalModeEra25Active ?? false;
 
   return (
     <Card
@@ -81,15 +88,19 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
             {slice.era25FirstProductSliceBlueprintMilestone.replaceAll("_", " ")}
           </span>
         </p>
-        {slice.paidPilotGoConvergence ? (
+        {pureOperationalModeEra25Active && pureOperationalModeTerminus ? (
+          <PureOperationalModeTerminusEra25Strip slice={pureOperationalModeTerminus} />
+        ) : null}
+        {!pureOperationalModeEra25Active && slice.paidPilotGoConvergence ? (
           <PaidPilotGoConvergenceEra25Strip slice={slice.paidPilotGoConvergence} />
         ) : null}
-        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence ? (
+        {!pureOperationalModeEra25Active && slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence ? (
           <PilotWeek1ExecutionConvergenceEra25Strip
             slice={slice.paidPilotGoConvergence.pilotWeek1ExecutionConvergence}
           />
         ) : null}
-        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+        {!pureOperationalModeEra25Active &&
+        slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
           ?.month2MarketReadinessConvergence ? (
           <Month2MarketReadinessConvergenceEra25Strip
             slice={
@@ -98,7 +109,8 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
             }
           />
         ) : null}
-        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+        {!pureOperationalModeEra25Active &&
+        slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
           ?.month2MarketReadinessConvergence?.scaleReadinessConvergence ? (
           <ScaleReadinessConvergenceEra25Strip
             slice={
@@ -107,7 +119,8 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
             }
           />
         ) : null}
-        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+        {!pureOperationalModeEra25Active &&
+        slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
           ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
           ?.seriesAPartnerExpansionConvergence ? (
           <SeriesAPartnerExpansionConvergenceEra25Strip
@@ -118,7 +131,8 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
             }
           />
         ) : null}
-        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+        {!pureOperationalModeEra25Active &&
+        slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
           ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
           ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence ? (
           <MarketLeaderPositioningConvergenceEra25Strip
@@ -129,7 +143,8 @@ export function OwnerDailyBriefingBreakthroughEra25Panel(props: {
             }
           />
         ) : null}
-        {slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
+        {!pureOperationalModeEra25Active &&
+        slice.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence
           ?.month2MarketReadinessConvergence?.scaleReadinessConvergence
           ?.seriesAPartnerExpansionConvergence?.marketLeaderPositioningConvergence
           ?.sustainedOperationalExcellenceConvergence ? (

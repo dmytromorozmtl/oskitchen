@@ -82,6 +82,12 @@ export const ALLOWED_ERA25_PROCESS_COMMERCIAL_FILES: readonly string[] = [
   "sustained-operational-excellence-convergence-era25-policy.ts",
   "evaluate-sustained-operational-excellence-convergence-era25.ts",
   "load-sustained-operational-excellence-convergence-state-era25.ts",
+  "pure-operational-mode-terminus-phases-era25.ts",
+  "pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25.ts",
+  "pure-operational-mode-terminus-ui-era25.ts",
+  "pure-operational-mode-terminus-era25-policy.ts",
+  "evaluate-pure-operational-mode-terminus-era25.ts",
+  "load-pure-operational-mode-terminus-state-era25.ts",
 ] as const;
 
 const PRODUCT_ERA25_FILE_PATTERNS: readonly RegExp[] = [
@@ -129,6 +135,9 @@ const ALLOWED_ERA25_PROCESS_OPS_SCRIPTS: readonly string[] = [
   "validate-sustained-operational-excellence-convergence-era25.ts",
   "run-sustained-operational-excellence-convergence-post-market-leader-convergence-orchestrator-era25.ts",
   "sync-sustained-operational-excellence-convergence-era25-report.ts",
+  "validate-pure-operational-mode-terminus-era25.ts",
+  "run-pure-operational-mode-terminus-post-sustained-ops-convergence-orchestrator-era25.ts",
+  "sync-pure-operational-mode-terminus-era25-report.ts",
 ] as const;
 
 const ILLEGAL_ERA25_OPS_PATTERN = /^validate-.+-era25\.ts$|^run-.+-era25\.ts$/;

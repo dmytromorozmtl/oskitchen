@@ -26,6 +26,7 @@ import { formatScaleReadinessConvergenceEra25Label } from "@/lib/commercial/scal
 import { formatSeriesAPartnerExpansionConvergenceEra25Label } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
 import { formatMarketLeaderPositioningConvergenceEra25Label } from "@/lib/commercial/market-leader-positioning-convergence-ui-era25";
 import { formatSustainedOperationalExcellenceConvergenceEra25Label } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
+import { formatPureOperationalModeTerminusEra25Label } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
 import { formatPostTerminusSteadyStateProgressLabel } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { cn } from "@/lib/utils";
 
@@ -1750,6 +1751,176 @@ export function MaintenanceModePanel(props: {
                                                                     sustained_operational_excellence_convergence_era25_ready
                                                                   </span>
                                                                 </p>
+                                                                {slice.engineeringPathTerminus
+                                                                  .postTerminusSteadyState
+                                                                  .absolutePathEnd
+                                                                  .linearPathPermanentlyClosed
+                                                                  .step17Forbidden.era25CharterExit
+                                                                  .firstCharterSliceReadiness
+                                                                  .engineeringGates
+                                                                  .firstProductSliceBlueprint
+                                                                  .ownerDailyBriefingBreakthrough
+                                                                  .paidPilotGoConvergence
+                                                                  .pilotWeek1ExecutionConvergence
+                                                                  .month2MarketReadinessConvergence
+                                                                  .scaleReadinessConvergence
+                                                                  .seriesAPartnerExpansionConvergence
+                                                                  .marketLeaderPositioningConvergence
+                                                                  .sustainedOperationalExcellenceConvergence
+                                                                  ?.pureOperationalModeTerminus ? (
+                                                                  <div
+                                                                    id="era25-pure-operational-mode-terminus"
+                                                                    className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-slate-700/60 px-3 py-3"
+                                                                    data-testid="era25-pure-operational-mode-terminus-panel"
+                                                                  >
+                                                                    <p className="font-medium text-slate-200">
+                                                                      era25 pure operational mode terminus
+                                                                    </p>
+                                                                    <p className="mt-1 text-slate-300/80">
+                                                                      {formatPureOperationalModeTerminusEra25Label(
+                                                                        slice.engineeringPathTerminus
+                                                                          .postTerminusSteadyState
+                                                                          .absolutePathEnd
+                                                                          .linearPathPermanentlyClosed
+                                                                          .step17Forbidden
+                                                                          .era25CharterExit
+                                                                          .firstCharterSliceReadiness
+                                                                          .engineeringGates
+                                                                          .firstProductSliceBlueprint
+                                                                          .ownerDailyBriefingBreakthrough
+                                                                          .paidPilotGoConvergence
+                                                                          .pilotWeek1ExecutionConvergence
+                                                                          .month2MarketReadinessConvergence
+                                                                          .scaleReadinessConvergence
+                                                                          .seriesAPartnerExpansionConvergence
+                                                                          .marketLeaderPositioningConvergence
+                                                                          .sustainedOperationalExcellenceConvergence
+                                                                          .pureOperationalModeTerminus,
+                                                                      )}
+                                                                    </p>
+                                                                    <div className="mt-2 flex flex-wrap gap-2">
+                                                                      <Badge
+                                                                        variant="outline"
+                                                                        className="rounded-full font-mono text-[10px] text-slate-200"
+                                                                      >
+                                                                        {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.paidPilotGoConvergence.pilotWeek1ExecutionConvergence.month2MarketReadinessConvergence.scaleReadinessConvergence.seriesAPartnerExpansionConvergence.marketLeaderPositioningConvergence.sustainedOperationalExcellenceConvergence.pureOperationalModeTerminus.pureOperationalModeTerminusEra25Milestone.replaceAll(
+                                                                          "_",
+                                                                          " ",
+                                                                        )}
+                                                                      </Badge>
+                                                                      <Badge
+                                                                        variant="outline"
+                                                                        className="rounded-full text-[10px] text-slate-300"
+                                                                      >
+                                                                        {
+                                                                          slice.engineeringPathTerminus
+                                                                            .postTerminusSteadyState
+                                                                            .absolutePathEnd
+                                                                            .linearPathPermanentlyClosed
+                                                                            .step17Forbidden
+                                                                            .era25CharterExit
+                                                                            .firstCharterSliceReadiness
+                                                                            .engineeringGates
+                                                                            .firstProductSliceBlueprint
+                                                                            .ownerDailyBriefingBreakthrough
+                                                                            .paidPilotGoConvergence
+                                                                            .pilotWeek1ExecutionConvergence
+                                                                            .month2MarketReadinessConvergence
+                                                                            .scaleReadinessConvergence
+                                                                            .seriesAPartnerExpansionConvergence
+                                                                            .marketLeaderPositioningConvergence
+                                                                            .sustainedOperationalExcellenceConvergence
+                                                                            .pureOperationalModeTerminus
+                                                                            .healthyCount
+                                                                        }
+                                                                        /
+                                                                        {
+                                                                          slice.engineeringPathTerminus
+                                                                            .postTerminusSteadyState
+                                                                            .absolutePathEnd
+                                                                            .linearPathPermanentlyClosed
+                                                                            .step17Forbidden
+                                                                            .era25CharterExit
+                                                                            .firstCharterSliceReadiness
+                                                                            .engineeringGates
+                                                                            .firstProductSliceBlueprint
+                                                                            .ownerDailyBriefingBreakthrough
+                                                                            .paidPilotGoConvergence
+                                                                            .pilotWeek1ExecutionConvergence
+                                                                            .month2MarketReadinessConvergence
+                                                                            .scaleReadinessConvergence
+                                                                            .seriesAPartnerExpansionConvergence
+                                                                            .marketLeaderPositioningConvergence
+                                                                            .sustainedOperationalExcellenceConvergence
+                                                                            .pureOperationalModeTerminus.tracks
+                                                                            .length
+                                                                        }{" "}
+                                                                        tracks fresh
+                                                                      </Badge>
+                                                                    </div>
+                                                                    <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
+                                                                      {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.firstProductSliceBlueprint.ownerDailyBriefingBreakthrough.paidPilotGoConvergence.pilotWeek1ExecutionConvergence.month2MarketReadinessConvergence.scaleReadinessConvergence.seriesAPartnerExpansionConvergence.marketLeaderPositioningConvergence.sustainedOperationalExcellenceConvergence.pureOperationalModeTerminus.guardrails.map(
+                                                                        (rule) => (
+                                                                          <li key={rule}>{rule}</li>
+                                                                        ),
+                                                                      )}
+                                                                    </ul>
+                                                                    <div className="mt-3 flex flex-wrap gap-2 font-mono text-[10px] text-slate-500">
+                                                                      <span>
+                                                                        {
+                                                                          slice.engineeringPathTerminus
+                                                                            .postTerminusSteadyState
+                                                                            .absolutePathEnd
+                                                                            .linearPathPermanentlyClosed
+                                                                            .step17Forbidden
+                                                                            .era25CharterExit
+                                                                            .firstCharterSliceReadiness
+                                                                            .engineeringGates
+                                                                            .firstProductSliceBlueprint
+                                                                            .ownerDailyBriefingBreakthrough
+                                                                            .paidPilotGoConvergence
+                                                                            .pilotWeek1ExecutionConvergence
+                                                                            .month2MarketReadinessConvergence
+                                                                            .scaleReadinessConvergence
+                                                                            .seriesAPartnerExpansionConvergence
+                                                                            .marketLeaderPositioningConvergence
+                                                                            .sustainedOperationalExcellenceConvergence
+                                                                            .pureOperationalModeTerminus
+                                                                            .postSustainedOpsConvergenceOrchestratorCommand
+                                                                        }
+                                                                      </span>
+                                                                      <span>
+                                                                        {
+                                                                          slice.engineeringPathTerminus
+                                                                            .postTerminusSteadyState
+                                                                            .absolutePathEnd
+                                                                            .linearPathPermanentlyClosed
+                                                                            .step17Forbidden
+                                                                            .era25CharterExit
+                                                                            .firstCharterSliceReadiness
+                                                                            .engineeringGates
+                                                                            .firstProductSliceBlueprint
+                                                                            .ownerDailyBriefingBreakthrough
+                                                                            .paidPilotGoConvergence
+                                                                            .pilotWeek1ExecutionConvergence
+                                                                            .month2MarketReadinessConvergence
+                                                                            .scaleReadinessConvergence
+                                                                            .seriesAPartnerExpansionConvergence
+                                                                            .marketLeaderPositioningConvergence
+                                                                            .sustainedOperationalExcellenceConvergence
+                                                                            .pureOperationalModeTerminus
+                                                                            .validateCommand
+                                                                        }
+                                                                      </span>
+                                                                    </div>
+                                                                    <p className="mt-2 text-slate-400/70">
+                                                                      Terminus active when{" "}
+                                                                      <span className="font-mono">
+                                                                        pure_operational_mode_era25_active
+                                                                      </span>
+                                                                    </p>
+                                                                  </div>
+                                                                ) : null}
                                                               </div>
                                                             ) : null}
                                                           </div>
