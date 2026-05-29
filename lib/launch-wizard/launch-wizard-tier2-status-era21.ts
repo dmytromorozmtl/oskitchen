@@ -40,6 +40,10 @@ export function buildLaunchWizardTier2StatusSlice(input: {
   const { tier2Summary, p0ProofStatus } = input;
   const blockedOnP0 = p0ProofStatus !== "proof_passed";
   const artifactPresent = tier2Summary !== null;
+  const tier2Integrity = evaluateTier2StagingGoldenPathIntegrity(process.cwd(), {
+    artifactOverride: tier2Summary,
+    p0ProofStatusOverride: p0ProofStatus,
+  });
 
   const rows: LaunchWizardTier2StatusRow[] = [];
 
@@ -74,6 +78,9 @@ export function buildLaunchWizardTier2StatusSlice(input: {
     "Tier 2 golden path (Woo → Order Hub → KDS → Packing) awaits P0 proof_passed.";
   if (!blockedOnP0 && tier2Summary?.tier2ProofStatus === "proof_passed") {
     headline = "Tier 2 staging golden path proof_passed — eligible for pilot GO review.";
+  } else if (!blockedOnP0 && tier2Summary?.tier2ProofStatus === "proof_failed") {
+    headline =
+      "Tier 2 proof_failed — fix failed staging smokes before manual sign-off or GO review.";
   } else if (!blockedOnP0 && tier2Summary?.tier2ProofStatus === "awaiting_manual_phases") {
     headline =
       "P0 passed — complete manual phases on staging and record TIER2_* env vars + GitHub KDS URL.";

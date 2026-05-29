@@ -37,18 +37,25 @@ export function buildIntegrationHealthTier2GoldenPathBanner(input: {
   });
   if (!goldenPath) return null;
 
+  const tier2Integrity = evaluateTier2StagingGoldenPathIntegrity(process.cwd(), {
+    artifactOverride: input.tier2Summary,
+    p0ProofStatusOverride: p0ProofStatus,
+  });
+
   return {
     policyId: INTEGRATION_HEALTH_TIER2_GOLDEN_PATH_ERA21_POLICY_ID,
     visible: true,
     tier2ProofStatus: goldenPath.tier2ProofStatus,
     overall: goldenPath.overall,
     headline:
-      goldenPath.tier2ProofStatus === "awaiting_manual_phases"
-        ? "P0 passed — complete manual Woo → Order Hub → KDS → Packing phases on staging."
-        : "Tier 2 staging golden path incomplete — run orchestrator and record manual sign-off env vars.",
-    honestyNote: integrity.integrityPassed
+      goldenPath.tier2ProofStatus === "proof_failed"
+        ? "Tier 2 staging proof failed — fix Woo → Order Hub → KDS → Packing smokes on staging."
+        : goldenPath.tier2ProofStatus === "awaiting_manual_phases"
+          ? "P0 passed — complete manual Woo → Order Hub → KDS → Packing phases on staging."
+          : "Tier 2 staging golden path incomplete — run orchestrator and record manual sign-off env vars.",
+    honestyNote: tier2Integrity.integrityPassed
       ? "Manual TIER2_* env vars are operator attestations after real staging execution — never auto-PASS."
-      : `Tier 2 integrity FAIL: ${integrity.violations.map((row) => row.id).join(", ") || "check artifact"} — run ${goldenPath.integrityValidateCommand}.`,
+      : `Tier 2 integrity FAIL: ${tier2Integrity.violations.map((row) => row.id).join(", ") || "check artifact"} — run ${goldenPath.integrityValidateCommand}.`,
     goldenPath,
     nextActions: [
       { label: "Launch Wizard Tier 2", href: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}` },
