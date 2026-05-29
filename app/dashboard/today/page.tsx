@@ -4,6 +4,8 @@ import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-brief
 import { OwnerDailyBriefingBreakthroughEra25Panel } from "@/components/dashboard/owner-daily-briefing-breakthrough-era25-panel";
 import { buildOwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
+import { buildCommercialInflectionReadinessUiSlice } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
+import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
 import { LaunchWizardTodayStrip } from "@/components/dashboard/launch-wizard/launch-wizard-today-strip";
@@ -95,13 +97,20 @@ export default async function TodayOperationsPage({
   const breakthroughEra25 = showOwnerBriefing
     ? buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true })
     : null;
+  const integrationHealthStripModel =
+    integrationHealthModel && showOwnerBriefing
+      ? augmentPilotIntegrationHealthStripWithCommercialInflection(
+          integrationHealthModel,
+          buildCommercialInflectionReadinessUiSlice(),
+        )
+      : integrationHealthModel;
 
   return (
     <>
       <OperatorTourLauncher />
       <div className="space-y-6">
-        {integrationHealthModel && !ownerBriefing?.showIntegrationHealthLane ? (
-          <PilotIntegrationHealthStrip model={integrationHealthModel} />
+        {integrationHealthStripModel && !ownerBriefing?.showIntegrationHealthLane ? (
+          <PilotIntegrationHealthStrip model={integrationHealthStripModel} />
         ) : null}
         {gettingStarted.showChecklist &&
         !gettingStarted.allDone &&

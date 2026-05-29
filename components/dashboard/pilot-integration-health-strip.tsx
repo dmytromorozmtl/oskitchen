@@ -101,6 +101,23 @@ export function PilotIntegrationHealthStrip(props: { model: PilotIntegrationHeal
             flow in.
           </p>
         )}
+
+        {"commercialInflection" in model && model.commercialInflection ? (
+          <div
+            className="rounded-xl border border-violet-200/70 bg-violet-50/30 px-3 py-2 text-xs dark:border-violet-900/40 dark:bg-violet-950/20"
+            data-testid="pilot-integration-commercial-inflection-footnote"
+          >
+            <p className="font-medium text-violet-950 dark:text-violet-100">
+              {model.commercialInflection.scorecardLabel}
+            </p>
+            <p className="mt-1 text-muted-foreground">
+              {model.commercialInflection.registryHonestyLine} · {model.commercialInflection.topBlockerTitle}
+            </p>
+            <Button asChild variant="link" size="sm" className="mt-1 h-auto p-0 text-xs">
+              <Link href={model.commercialInflection.platformOpsHref}>Commercial inflection matrix</Link>
+            </Button>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );

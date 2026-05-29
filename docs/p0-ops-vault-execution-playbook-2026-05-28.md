@@ -4,6 +4,8 @@
 **Текущий блокер:** `p0ProofStatus: awaiting_ops_credentials` (11 env vars)  
 **Правило:** SKIPPED WITH REASON — честно. **FAILED** — exit 1. **Никогда** не коммитить fake PASS.
 
+**Product surfaces:** `/dashboard/today#today-commercial-inflection` · `/dashboard/integration-health#integration-health-commercial-inflection` · `/platform/commercial-pilot-ops#commercial-inflection-readiness` · validate: `npm run ops:validate-commercial-inflection-readiness -- --json`
+
 ---
 
 ## Роли и ответственность

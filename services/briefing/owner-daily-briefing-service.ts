@@ -192,6 +192,14 @@ import {
   mergeBriefingTier2GoldenPathTopActions,
 } from "@/lib/briefing/owner-daily-briefing-tier2-golden-path-era21";
 import {
+  buildOwnerDailyBriefingCommercialInflectionAction,
+  mergeBriefingCommercialInflectionTopActions,
+} from "@/lib/briefing/owner-daily-briefing-commercial-inflection-era28";
+import {
+  buildCommercialInflectionReadinessUiSlice,
+  type CommercialInflectionReadinessUiSlice,
+} from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
+import {
   buildOwnerDailyBriefingLaunchWizardSetupAction,
   enrichBriefingLaunchWizardPackTiles,
 } from "@/lib/launch-wizard/launch-wizard-onboarding-convergence-era19";
@@ -447,6 +455,13 @@ export async function loadOwnerDailyBriefing(
     rolePack === "owner" ? buildOwnerDailyBriefingP0OpsVaultAction(p0OpsVault) : null;
   const tier2GoldenPathRankedAction =
     rolePack === "owner" ? buildOwnerDailyBriefingTier2GoldenPathAction(tier2GoldenPath) : null;
+  const commercialInflection =
+    rolePack === "owner" && needsCommercialOps
+      ? buildCommercialInflectionReadinessUiSlice()
+      : null;
+  const commercialInflectionRankedAction = buildOwnerDailyBriefingCommercialInflectionAction(
+    commercialInflection,
+  );
   const commercialGoClosure = buildCommercialGoClosureUiSlice({
     p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
     tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
@@ -1316,6 +1331,7 @@ export async function loadOwnerDailyBriefing(
     productionGradePolicyId: OWNER_DAILY_BRIEFING_PRODUCTION_GRADE_ERA20_POLICY_ID,
     p0ProofBlockedLabel,
     p0OpsVault,
+    commercialInflection,
     tier2GoldenPath,
     commercialGoClosure,
     pilotWeek1,

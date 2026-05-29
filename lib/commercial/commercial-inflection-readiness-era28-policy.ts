@@ -35,14 +35,27 @@ export const COMMERCIAL_INFLECTION_READINESS_ERA28_UNIT_TESTS = [
   "tests/unit/commercial-inflection-readiness-era28.test.ts",
   "tests/unit/commercial-inflection-readiness-orchestrator-era28.test.ts",
   "tests/unit/run-commercial-inflection-readiness-orchestrator.test.ts",
+  "tests/unit/validate-commercial-inflection-readiness.test.ts",
+  "tests/unit/commercial-inflection-readiness-ui-era28.test.ts",
+  "tests/unit/owner-daily-briefing-commercial-inflection-era28.test.ts",
+  "tests/unit/integration-health-commercial-inflection-era28.test.ts",
+  "tests/unit/pilot-integration-health-commercial-inflection-era28.test.ts",
   "tests/unit/commercial-inflection-readiness-era28-cert-live.test.ts",
 ] as const;
 
 export const COMMERCIAL_INFLECTION_READINESS_ERA28_PRODUCT_SURFACES = [
   "components/platform/commercial-inflection-readiness-panel.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
+  "components/dashboard/commercial-inflection-today-strip.tsx",
+  "components/dashboard/integration-health-commercial-inflection-banner.tsx",
+  "components/dashboard/owner-daily-briefing-hero.tsx",
+  "components/dashboard/pilot-integration-health-strip.tsx",
+  "app/dashboard/today/page.tsx",
+  "app/dashboard/integration-health/page.tsx",
   "docs/commercial-inflection-master-blocker-matrix-2026-05-28.md",
   "docs/next-step-commercial-inflection-execution-2026-05-28.md",
+  "docs/p0-ops-vault-execution-playbook-2026-05-28.md",
+  "docs/next-step-p0-ops-vault-phase-a-product-2026-05-28.md",
 ] as const;
 
 export { COMMERCIAL_INFLECTION_READINESS_POLICY_ID };

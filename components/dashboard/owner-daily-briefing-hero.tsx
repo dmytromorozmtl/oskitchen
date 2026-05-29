@@ -1,4 +1,5 @@
 import { BriefingTelemetryLink } from "@/components/dashboard/briefing-telemetry-link";
+import { CommercialInflectionTodayStrip } from "@/components/dashboard/commercial-inflection-today-strip";
 import { P0OpsVaultPhasesPanel } from "@/components/dashboard/p0-ops-vault-phases-panel";
 import { Tier2GoldenPathPhasesPanel } from "@/components/dashboard/tier2-golden-path-phases-panel";
 import { CommercialGoClosurePhasesPanel } from "@/components/dashboard/commercial-go-closure-phases-panel";
@@ -85,6 +86,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
     rolePackHeadline,
     p0ProofBlockedLabel,
     p0OpsVault,
+    commercialInflection,
     operationalEmptyState,
     pureOperationalModeEra25Active,
   } = briefing;
@@ -152,6 +154,8 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
           </Button>
         </CardContent>
       </Card>
+
+      {commercialInflection ? <CommercialInflectionTodayStrip slice={commercialInflection} /> : null}
 
       {p0OpsVault ? (
         <P0OpsVaultPhasesPanel slice={p0OpsVault} variant="compact" title="Ops vault blocked" />

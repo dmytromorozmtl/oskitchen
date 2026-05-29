@@ -352,22 +352,29 @@ export function resolveCommercialInflectionMilestone(input: {
 export function evaluateCommercialInflectionReadiness(
   env: NodeJS.ProcessEnv = process.env,
   root: string = process.cwd(),
+  artifactOverrides?: {
+    p0Staging?: P0StagingProofUnblockSummary | null;
+    tier2Staging?: Tier2StagingGoldenPathSummary | null;
+    goNoGo?: PilotGoNoGoSummary | null;
+  },
 ): CommercialInflectionReadinessSummary {
   const p0Vault = evaluateP0VaultEnv(env);
   const p0Artifact =
+    artifactOverrides?.p0Staging ??
     loadP0StagingProofArtifact(root) ??
     readJsonArtifact<P0StagingProofUnblockSummary>(
       root,
       "artifacts/p0-staging-proof-unblock-summary.json",
     );
-  const tier2Artifact = readJsonArtifact<Tier2StagingGoldenPathSummary>(
-    root,
-    TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT,
-  );
-  const goNoGoArtifact = readJsonArtifact<PilotGoNoGoSummary>(
-    root,
-    PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT,
-  );
+  const tier2Artifact =
+    artifactOverrides?.tier2Staging ??
+    readJsonArtifact<Tier2StagingGoldenPathSummary>(
+      root,
+      TIER2_STAGING_GOLDEN_PATH_ERA20_SUMMARY_ARTIFACT,
+    );
+  const goNoGoArtifact =
+    artifactOverrides?.goNoGo ??
+    readJsonArtifact<PilotGoNoGoSummary>(root, PILOT_GONOGO_ERA17_SUMMARY_ARTIFACT);
 
   const blockers = buildCommercialInflectionBlockers({
     p0Vault,

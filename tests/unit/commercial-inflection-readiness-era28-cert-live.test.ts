@@ -42,6 +42,7 @@ describe("commercial inflection readiness era28 CI certification (live repo)", (
     expect(execution).toContain("run-commercial-inflection-readiness-orchestrator");
     expect(execution).toContain("ops:validate-commercial-inflection-readiness");
     expect(execution).toContain("#commercial-inflection-readiness");
+    expect(execution).toContain("#integration-health-commercial-inflection");
     expect(execution).toContain("p0_ops_vault_blocked");
   });
 

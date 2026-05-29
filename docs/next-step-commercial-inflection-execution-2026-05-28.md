@@ -75,9 +75,23 @@ npm run test:ci:commercial-inflection-readiness:cert
 |---------|-----------------|
 | Commercial pilot ops | `/platform/commercial-pilot-ops#commercial-inflection-readiness` |
 | P0 vault day0 | `npm run ops:run-p0-vault-day0-orchestrator -- --write` |
-| Integration Health | `/dashboard/integration-health` |
+| Integration Health banner | `/dashboard/integration-health#integration-health-commercial-inflection` |
+| Owner Today strip | `/dashboard/today#today-commercial-inflection` |
+| Pilot health footnote | Today page strip when owner briefing active |
 | Owner Today + GO/NO-GO | `/dashboard/today` |
 | Launch Wizard TTV | `/dashboard/launch-wizard` |
+
+**Product wiring (implemented):** `commercial-inflection-readiness-ui-era28` · `owner-daily-briefing-commercial-inflection-era28` · `integration-health-commercial-inflection-era28` · `pilot-integration-health-commercial-inflection-era28`
+
+---
+
+## Phase A product surfaces (implemented)
+
+Owners see **governance ≠ market ready** on:
+
+- Today hero: `CommercialInflectionTodayStrip` + existing `P0OpsVaultPhasesPanel`
+- Integration Health: banner with registry LIVE honesty (`integration LIVE=0` until proof)
+- Briefing ranked actions: inflection action after P0 vault clears (tier2 / GO milestones)
 
 ---
 

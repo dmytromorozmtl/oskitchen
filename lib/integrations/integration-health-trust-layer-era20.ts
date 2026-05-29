@@ -25,6 +25,10 @@ import {
   buildIntegrationHealthTier2GoldenPathBanner,
   type IntegrationHealthTier2GoldenPathBanner,
 } from "@/lib/integrations/integration-health-tier2-golden-path-era21";
+import {
+  buildIntegrationHealthCommercialInflectionBanner,
+  type IntegrationHealthCommercialInflectionBanner,
+} from "@/lib/integrations/integration-health-commercial-inflection-era28";
 import { INTEGRATION_HEALTH_TRUST_LAYER_ERA20_POLICY_ID } from "@/lib/integrations/integration-health-trust-layer-era20-policy";
 
 export type IntegrationHealthP0TrustBanner = {
@@ -111,6 +115,14 @@ export function buildTrustLayerHeadline(
 ): string {
   const p0Banner = buildIntegrationHealthP0TrustBanner(p0Staging);
   if (p0Banner) return `${p0Banner.headline} ${cardsHeadline}`;
+  const inflectionBanner =
+    p0Staging?.p0ProofStatus === "proof_passed"
+      ? null
+      : buildIntegrationHealthCommercialInflectionBanner({
+          p0Staging,
+          tier2Summary,
+        });
+  if (inflectionBanner) return `${inflectionBanner.headline} ${cardsHeadline}`;
   const tier2Banner = buildIntegrationHealthTier2GoldenPathBanner({
     p0Staging,
     tier2Summary,
@@ -130,6 +142,7 @@ export function buildTrustLayerHeadline(
 export type IntegrationHealthTrustLayerSlice = {
   trustLayerPolicyId: typeof INTEGRATION_HEALTH_TRUST_LAYER_ERA20_POLICY_ID;
   p0Trust: IntegrationHealthP0TrustBanner | null;
+  commercialInflection: IntegrationHealthCommercialInflectionBanner | null;
   tier2GoldenPath: IntegrationHealthTier2GoldenPathBanner | null;
   pilotWeek1: IntegrationHealthPilotWeek1Banner | null;
 };
@@ -155,6 +168,11 @@ export function enrichIntegrationHealthChannelCardsWithTrustLayer(
       pilotWeek1Input,
     ),
     p0Trust: buildIntegrationHealthP0TrustBanner(p0Staging),
+    commercialInflection: buildIntegrationHealthCommercialInflectionBanner({
+      p0Staging,
+      tier2Summary,
+      goNoGoSummary: pilotWeek1Input?.goNoGoSummary,
+    }),
     tier2GoldenPath: buildIntegrationHealthTier2GoldenPathBanner({
       p0Staging,
       tier2Summary,

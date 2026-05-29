@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
 import { ChannelLiveProofStatusPanel } from "@/components/dashboard/channel-live-proof-status-panel";
 import { IntegrationHealthP0TrustBannerPanel } from "@/components/dashboard/integration-health-p0-trust-banner";
+import { IntegrationHealthCommercialInflectionBannerPanel } from "@/components/dashboard/integration-health-commercial-inflection-banner";
 import { IntegrationHealthTier2GoldenPathBannerPanel } from "@/components/dashboard/integration-health-tier2-golden-path-banner";
 import { IntegrationHealthPilotWeek1BannerPanel } from "@/components/dashboard/integration-health-pilot-week1-banner";
 import { IntegrationHealthChannelCardsPanel } from "@/components/dashboard/integration-health-channel-cards-panel";
@@ -205,6 +206,10 @@ export default async function IntegrationHealthDashboardPage({
 
       {channelCards.p0Trust ? (
         <IntegrationHealthP0TrustBannerPanel banner={channelCards.p0Trust} />
+      ) : null}
+
+      {channelCards.commercialInflection ? (
+        <IntegrationHealthCommercialInflectionBannerPanel banner={channelCards.commercialInflection} />
       ) : null}
 
       {channelCards.tier2GoldenPath ? (
