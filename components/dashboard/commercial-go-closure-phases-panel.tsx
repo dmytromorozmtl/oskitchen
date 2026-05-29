@@ -117,6 +117,7 @@ export function CommercialGoClosurePhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.commercialGateExecutionCommand}</li>
                 <li>{slice.postTier2OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.validateTier2GateCommand}</li>

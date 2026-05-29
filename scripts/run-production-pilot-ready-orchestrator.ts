@@ -74,6 +74,11 @@ function main() {
     );
     steps.push(runStep("tier2-golden-path", "npm run smoke:tier2-staging-golden-path", { allowFail: true }));
     steps.push(runStep("kds-playwright", "npm run smoke:kds-staging-playwright", { allowFail: true }));
+    steps.push(
+      runStep("commercial-gate", "npm run ops:run-commercial-gate-execution -- --write", {
+        allowFail: true,
+      }),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

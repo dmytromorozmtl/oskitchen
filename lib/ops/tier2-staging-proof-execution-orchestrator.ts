@@ -221,6 +221,7 @@ export function buildTier2StagingProofExecutionSummary(input: {
   }
 
   if (milestone === "proof_passed") {
+    recommendedCommands.push("npm run ops:run-commercial-gate-execution -- --write");
     recommendedCommands.push("npm run icp-qualification-check");
     recommendedCommands.push("npm run smoke:pilot-gono-go");
   }

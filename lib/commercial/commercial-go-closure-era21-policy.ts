@@ -17,6 +17,7 @@ export const COMMERCIAL_GO_CLOSURE_ERA21_EXTENDS_POLICIES = [
 ] as const;
 
 export const COMMERCIAL_GO_CLOSURE_ERA21_OPS_SCRIPTS = [
+  "ops:run-commercial-gate-execution",
   "ops:run-commercial-go-closure-post-tier2-orchestrator",
   "ops:validate-commercial-go-closure-env",
   "ops:validate-pilot-gono-go-integrity",
@@ -30,12 +31,16 @@ export const COMMERCIAL_GO_CLOSURE_ERA21_PHASE_C_DOC =
   "docs/next-step-commercial-go-closure-phase-c-product-2026-05-28.md" as const;
 
 export const COMMERCIAL_GO_CLOSURE_ERA21_CI_SCRIPTS = [
+  "test:ci:commercial-gate-execution",
+  "test:ci:commercial-gate-execution:cert",
   "test:ci:commercial-go-closure-era21",
   "test:ci:commercial-go-closure-era21:cert",
   "test:ci:pilot-gono-go-integrity-era28",
 ] as const;
 
 export const COMMERCIAL_GO_CLOSURE_ERA21_UNIT_TESTS = [
+  "tests/unit/commercial-gate-execution-orchestrator.test.ts",
+  "tests/unit/commercial-gate-execution-cert-live.test.ts",
   "tests/unit/commercial-go-closure-post-tier2-orchestrator-era21.test.ts",
   "tests/unit/commercial-go-closure-phases-era21.test.ts",
   "tests/unit/commercial-go-closure-ui-era21.test.ts",

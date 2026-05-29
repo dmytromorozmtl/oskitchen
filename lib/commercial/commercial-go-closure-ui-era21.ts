@@ -36,9 +36,17 @@ export type CommercialGoClosureUiSlice = {
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
   postTier2OrchestratorCommand: string;
+  commercialGateExecutionCommand: string;
+  commercialGateExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateTier2GateCommand: string;
+  validateTier2IntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  orchestratorCommand: string;
   forbiddenClaimsCommand: string;
+  goIntegrityPassed: boolean;
+  goIntegrityFailed: boolean;
   goClosureMilestone: CommercialGoClosureMilestone;
   implementationHref: string;
   launchWizardHref: string;
@@ -100,6 +108,8 @@ export function buildCommercialGoClosureUiSlice(input: {
     syncProgressReportCommand: "npm run ops:sync-commercial-go-closure-progress-report -- --write",
     postTier2OrchestratorCommand:
       "npm run ops:run-commercial-go-closure-post-tier2-orchestrator -- --write",
+    commercialGateExecutionCommand: "npm run ops:run-commercial-gate-execution -- --write",
+    commercialGateExecutionArtifact: "artifacts/commercial-gate-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-commercial-go-closure-readiness-checklist -- --write",
     validateTier2GateCommand: "npm run ops:validate-tier2-golden-path-env -- --json",

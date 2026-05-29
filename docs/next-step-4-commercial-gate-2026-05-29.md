@@ -21,6 +21,16 @@ If Tier 2 not PASS — return to [`next-step-3-tier2-staging-proof-band-2026-05-
 
 ## Execution sequence
 
+### 4.0 Commercial gate execution orchestrator (Step 4 assess)
+
+```bash
+npm run ops:run-commercial-gate-execution -- --write
+```
+
+Review milestone in stdout. Expected progression when Tier 2 passed:
+
+`tier2_execution_blocked` → `awaiting_icp_qualification` → `awaiting_loi_customer` → `awaiting_go_orchestrator` → `commercial_gate_passed`
+
 ### 4.1 ICP qualification (all F&B formats)
 
 Qualify a real operator prospect — restaurant, bar, café, bakery, catering, ghost kitchen, or multi-format group.
