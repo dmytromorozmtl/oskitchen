@@ -22,6 +22,7 @@ import type { LaunchWizardLinearPathPermanentlyClosedSlice } from "@/lib/launch-
 import type { LaunchWizardLinearChainTerminusGuardSlice } from "@/lib/launch-wizard/launch-wizard-linear-chain-terminus-guard-era41";
 import type { LaunchWizardEra25CharterExitSlice } from "@/lib/launch-wizard/launch-wizard-era25-charter-exit-era42";
 import type { LaunchWizardEra25FirstCharterSliceSlice } from "@/lib/launch-wizard/launch-wizard-era25-first-charter-slice-era43";
+import type { LaunchWizardEra25EngineeringGatesSlice } from "@/lib/launch-wizard/launch-wizard-era25-engineering-gates-era44";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -63,6 +64,7 @@ export type LaunchWizardTodayStripViewModel = {
   linearChainTerminusGuard: LaunchWizardLinearChainTerminusGuardSlice | null;
   era25CharterExit: LaunchWizardEra25CharterExitSlice | null;
   era25FirstCharterSliceReadiness: LaunchWizardEra25FirstCharterSliceSlice | null;
+  era25EngineeringGates: LaunchWizardEra25EngineeringGatesSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -119,6 +121,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   linearChainTerminusGuard?: LaunchWizardLinearChainTerminusGuardSlice | null;
   era25CharterExit?: LaunchWizardEra25CharterExitSlice | null;
   era25FirstCharterSliceReadiness?: LaunchWizardEra25FirstCharterSliceSlice | null;
+  era25EngineeringGates?: LaunchWizardEra25EngineeringGatesSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -191,6 +194,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const era25FirstCharterSliceSubline = era25FirstCharterSliceReadiness
     ? `First slice ${era25FirstCharterSliceReadiness.progressLabel}${era25FirstCharterSliceReadiness.era25FirstCharterSliceIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const era25EngineeringGates = input.era25EngineeringGates ?? null;
+  const era25EngineeringGatesSubline = era25EngineeringGates
+    ? `Gates ${era25EngineeringGates.progressLabel}${era25EngineeringGates.era25EngineeringGatesIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -234,6 +241,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       linearChainTerminusGuard,
       era25CharterExit,
       era25FirstCharterSliceReadiness,
+      era25EngineeringGates,
     };
   }
 
@@ -286,7 +294,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25FirstCharterSliceSubline
+        : era25EngineeringGatesSubline
+          ? era25FirstCharterSliceSubline
+            ? `${era25FirstCharterSliceSubline} · ${era25EngineeringGatesSubline}`
+            : era25EngineeringGatesSubline
+          : era25FirstCharterSliceSubline
           ? era25CharterExitSubline
             ? linearChainTerminusGuardSubline
               ? linearPathPermanentlyClosedSubline
@@ -392,5 +404,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     linearChainTerminusGuard,
     era25CharterExit,
     era25FirstCharterSliceReadiness,
+    era25EngineeringGates,
   };
 }

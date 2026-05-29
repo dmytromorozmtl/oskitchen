@@ -19,6 +19,10 @@ describe("era25-engineering-gates-ui-era24", () => {
     );
     expect(slice?.era25EngineeringGatesMilestone).toBe("charter_readiness_blocked");
     expect(slice?.gatesBlocked).toBe(true);
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-era25-engineering-gates-integrity",
+    );
+    expect(slice?.launchWizardHref).toContain("#launch-wizard-era25-engineering-gates");
     expect(slice?.firstProductSliceBlueprint).not.toBeNull();
     expect(slice?.firstProductSliceBlueprint?.canonicalSliceName).toBe(
       "owner-daily-briefing-breakthrough",

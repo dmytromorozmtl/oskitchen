@@ -991,6 +991,22 @@ export function MaintenanceModePanel(props: {
                                   ? "blocked"
                                   : "open"}
                               </Badge>
+                              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                .firstCharterSliceReadiness.engineeringGates
+                                .era25EngineeringGatesIntegrityPassed ? null : (
+                                <Badge variant="destructive" className="rounded-full text-[10px]">
+                                  gates integrity FAIL
+                                </Badge>
+                              )}
+                              {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                .firstCharterSliceReadiness.engineeringGates
+                                .era25FirstCharterSliceIntegrityPassed ? null : (
+                                <Badge variant="destructive" className="rounded-full text-[10px]">
+                                  first slice integrity FAIL
+                                </Badge>
+                              )}
                             </div>
                             <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-500">
                               {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.step17Forbidden.era25CharterExit.firstCharterSliceReadiness.engineeringGates.guardrails.map(
@@ -1020,6 +1036,29 @@ export function MaintenanceModePanel(props: {
                                   slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                                     .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
                                     .firstCharterSliceReadiness.engineeringGates.syncReportCommand
+                                }
+                              </span>
+                              <span>
+                                {
+                                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates
+                                    .validateFirstCharterSliceIntegrityCommand
+                                }
+                              </span>
+                              <span>
+                                {
+                                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates.integrityValidateCommand
+                                }
+                              </span>
+                              <span>
+                                {
+                                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                                    .linearPathPermanentlyClosed.step17Forbidden.era25CharterExit
+                                    .firstCharterSliceReadiness.engineeringGates
+                                    .syncIntegrityBaselineCommand
                                 }
                               </span>
                             </div>

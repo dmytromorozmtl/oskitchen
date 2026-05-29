@@ -26,6 +26,8 @@ export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_EXTENDS_POLICI
 export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_OPS_SCRIPTS = [
   "ops:run-era25-engineering-gates-post-readiness-orchestrator",
   "ops:validate-era25-engineering-gates-require-signed-charter",
+  "ops:validate-era25-engineering-gates-integrity",
+  "ops:sync-era25-engineering-gates-integrity-baseline",
   "ops:sync-era25-engineering-gates-require-signed-charter-report",
   "ops:validate-era25-first-charter-slice-readiness",
 ] as const;
@@ -33,6 +35,7 @@ export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_OPS_SCRIPTS = 
 export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_CI_SCRIPTS = [
   "test:ci:era25-engineering-gates-require-signed-charter-era24",
   "test:ci:era25-engineering-gates-require-signed-charter-era24:cert",
+  "test:ci:era25-engineering-gates-integrity-era44",
 ] as const;
 
 export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_UNIT_TESTS = [
@@ -44,9 +47,16 @@ export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_UNIT_TESTS = [
   "tests/unit/detect-illegal-era25-product-artifacts-era24.test.ts",
   "tests/unit/evaluate-era25-engineering-gates-require-signed-charter.test.ts",
   "tests/unit/era25-engineering-gates-require-signed-charter-era24-cert-live.test.ts",
+  "tests/unit/era25-engineering-gates-integrity-era44.test.ts",
+  "tests/unit/validate-era25-engineering-gates-integrity.test.ts",
+  "tests/unit/era25-engineering-gates-integrity-era44-cert-live.test.ts",
+  "tests/unit/launch-wizard-era25-engineering-gates-era44.test.ts",
+  "tests/unit/owner-daily-briefing-era25-engineering-gates-era44.test.ts",
 ] as const;
 
 export const ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ERA24_PRODUCT_SURFACES = [
+  "components/dashboard/launch-wizard/launch-wizard-era25-engineering-gates-panel.tsx",
   "components/dashboard/maintenance-mode-panel.tsx",
+  "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

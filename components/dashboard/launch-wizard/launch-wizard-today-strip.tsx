@@ -51,6 +51,7 @@ export function LaunchWizardTodayStrip(props: {
     linearChainTerminusGuard: props.model.linearChainTerminusGuardIntegrity,
     era25CharterExit: props.model.era25CharterExitIntegrity,
     era25FirstCharterSliceReadiness: props.model.era25FirstCharterSliceReadinessIntegrity,
+    era25EngineeringGates: props.model.era25EngineeringGatesIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -270,6 +271,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-first-charter-slice"
               >
                 First slice {view.era25FirstCharterSliceReadiness.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25EngineeringGates ? (
+              <Badge
+                variant={
+                  view.era25EngineeringGates.era25EngineeringGatesIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-engineering-gates"
+              >
+                Gates {view.era25EngineeringGates.progressLabel}
               </Badge>
             ) : null}
           </div>

@@ -14,6 +14,17 @@ export const ERA25_ENGINEERING_GATES_REPORT_PATH =
 export const ERA25_ENGINEERING_GATES_PLATFORM_ANCHOR =
   "#era25-engineering-gates-require-signed-charter" as const;
 
+export const ERA25_ENGINEERING_GATES_TRACKED_ENV_KEYS = [
+  "ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_ATTESTED",
+  "ERA25_ENGINEERING_GATES_REQUIRE_SIGNED_CHARTER_REPORT_REVIEWED",
+] as const;
+
+export function detectEra25EngineeringGatesStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return ERA25_ENGINEERING_GATES_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 /** Minimum deliverables for first era25 product slice (when gates open). */
 export const ERA25_FIRST_PRODUCT_SLICE_REQUIREMENTS: readonly {
   id: string;

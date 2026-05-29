@@ -121,6 +121,11 @@ import {
   buildLaunchWizardEra25FirstCharterSliceSlice,
   type LaunchWizardEra25FirstCharterSliceSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-first-charter-slice-era43";
+import {
+  buildLaunchWizardEra25EngineeringGatesSlice,
+  type LaunchWizardEra25EngineeringGatesSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-engineering-gates-era44";
+import type { Era25EngineeringGatesUiSlice } from "@/lib/commercial/era25-engineering-gates-ui-era24";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
   buildLaunchWizardTier2StatusSlice,
@@ -236,6 +241,8 @@ export type LaunchWizardModel = {
   era25CharterExitIntegrity: LaunchWizardEra25CharterExitSlice | null;
   era25FirstCharterSliceReadiness: Era25FirstCharterSliceReadinessUiSlice | null;
   era25FirstCharterSliceReadinessIntegrity: LaunchWizardEra25FirstCharterSliceSlice | null;
+  era25EngineeringGates: Era25EngineeringGatesUiSlice | null;
+  era25EngineeringGatesIntegrity: LaunchWizardEra25EngineeringGatesSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -988,6 +995,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25CharterExitIntegrity,
     era25FirstCharterSliceReadiness,
     era25FirstCharterSliceReadinessIntegrity,
+    era25EngineeringGates,
+    era25EngineeringGatesIntegrity,
     paidPilotGoConvergence,
   };
 }

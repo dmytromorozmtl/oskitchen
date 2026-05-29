@@ -173,6 +173,10 @@ import {
   mergeBriefingEra25FirstCharterSliceTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-first-charter-slice-era43";
 import {
+  buildOwnerDailyBriefingEra25EngineeringGatesAction,
+  mergeBriefingEra25EngineeringGatesTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-engineering-gates-era44";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -1356,6 +1360,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25FirstCharterSliceRankedAction) {
     allTopActions = mergeBriefingEra25FirstCharterSliceTopActions(
       era25FirstCharterSliceRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25EngineeringGatesRankedAction) {
+    allTopActions = mergeBriefingEra25EngineeringGatesTopActions(
+      era25EngineeringGatesRankedAction,
       allTopActions,
     );
   }

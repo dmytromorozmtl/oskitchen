@@ -1,6 +1,7 @@
 # KitchenOS — Phase S: Era25 first charter slice readiness (post-honest charter exit)
 
 **Status:** Product surfaces + first charter slice integrity guard **IMPLEMENTED** · Human slice attestation **REQUIRED**  
+**Implemented follow-on:** [`docs/next-step-era25-engineering-gates-phase-t-product-2026-05-28.md`](./next-step-era25-engineering-gates-phase-t-product-2026-05-28.md) (Phase T · era44)  
 **Policy:** `era24-era25-first-charter-slice-readiness-v1` · Integrity `era43-era25-first-charter-slice-readiness-integrity-v1`  
 **Playbook:** [`docs/next-era25-first-charter-slice-template-2026-05-28.md`](./next-era25-first-charter-slice-template-2026-05-28.md)  
 **Prerequisite:** [`docs/next-step-era25-charter-exit-outside-linear-path-phase-r-product-2026-05-28.md`](./next-step-era25-charter-exit-outside-linear-path-phase-r-product-2026-05-28.md) → honest era25 charter exit complete
