@@ -20,6 +20,8 @@ export const MONTH2_MARKET_READINESS_ERA21_EXTENDS_POLICIES = [
 export const MONTH2_MARKET_READINESS_ERA21_OPS_SCRIPTS = [
   "ops:run-month2-market-readiness-post-week1-orchestrator",
   "ops:validate-month2-market-readiness-env",
+  "ops:validate-month2-market-readiness-integrity",
+  "ops:sync-month2-market-readiness-integrity-baseline",
   "ops:export-month2-market-readiness-env-template",
   "ops:export-month2-market-readiness-readiness-checklist",
   "ops:sync-month2-market-readiness-progress-report",
@@ -28,6 +30,7 @@ export const MONTH2_MARKET_READINESS_ERA21_OPS_SCRIPTS = [
 export const MONTH2_MARKET_READINESS_ERA21_CI_SCRIPTS = [
   "test:ci:month2-market-readiness-era21",
   "test:ci:month2-market-readiness-era21:cert",
+  "test:ci:month2-market-readiness-integrity-era29",
 ] as const;
 
 export const MONTH2_MARKET_READINESS_ERA21_UNIT_TESTS = [
@@ -37,11 +40,18 @@ export const MONTH2_MARKET_READINESS_ERA21_UNIT_TESTS = [
   "tests/unit/owner-daily-briefing-month2-market-readiness-era21.test.ts",
   "tests/unit/run-month2-market-readiness-post-week1-orchestrator.test.ts",
   "tests/unit/month2-market-readiness-era21-cert-live.test.ts",
+  "tests/unit/month2-market-readiness-integrity-era29.test.ts",
+  "tests/unit/validate-month2-market-readiness-integrity.test.ts",
+  "tests/unit/month2-market-readiness-integrity-era29-cert-live.test.ts",
+  "tests/unit/launch-wizard-month2-era29.test.ts",
 ] as const;
 
 export const MONTH2_MARKET_READINESS_ERA21_PRODUCT_SURFACES = [
   "components/dashboard/month2-market-readiness-phases-panel.tsx",
   "components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-month2-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-view.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-today-strip.tsx",
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

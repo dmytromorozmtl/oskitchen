@@ -113,6 +113,8 @@ export function buildMonth2MarketReadinessPostWeek1OrchestratorSummary(input: {
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-pilot-week1-execution-integrity -- --json",
+        "npm run ops:validate-month2-market-readiness-integrity -- --json",
         "npm run ops:validate-pilot-week1-env -- --json",
         "npm run ops:validate-month2-market-readiness-env -- --json",
         MONTH2_MARKET_READINESS_POST_WEEK1_ORCHESTRATOR_COMMAND + " -- --write",

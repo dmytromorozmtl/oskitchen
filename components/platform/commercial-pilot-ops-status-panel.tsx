@@ -92,6 +92,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   const month2Artifacts = readMonth2MarketReadinessArtifacts();
   const month2MarketReadiness = buildMonth2MarketReadinessUiSlice({
     goNoGoSummary: props.model.goNoGo.summary,
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
     metricsBaseline: month2Artifacts.metricsBaseline,
     caseStudyDraft: month2Artifacts.caseStudyDraft,
     investorOnepager: month2Artifacts.investorOnepager,

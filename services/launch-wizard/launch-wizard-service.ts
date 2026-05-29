@@ -59,6 +59,10 @@ import {
   type LaunchWizardPilotWeek1Slice,
 } from "@/lib/launch-wizard/launch-wizard-pilot-week1-era28";
 import {
+  buildLaunchWizardMonth2Slice,
+  type LaunchWizardMonth2Slice,
+} from "@/lib/launch-wizard/launch-wizard-month2-era29";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -116,7 +120,9 @@ export type LaunchWizardModel = {
   commercialGoClosure: CommercialGoClosureUiSlice | null;
   commercialGoClosureIntegrity: LaunchWizardCommercialGoClosureSlice | null;
   pilotWeek1: PilotWeek1ExecutionUiSlice | null;
+  pilotWeek1Integrity: LaunchWizardPilotWeek1Slice | null;
   month2MarketReadiness: Month2MarketReadinessUiSlice | null;
+  month2MarketReadinessIntegrity: LaunchWizardMonth2Slice | null;
   scaleReadiness: ScaleReadinessUiSlice | null;
   seriesAPartnerExpansion: SeriesAPartnerExpansionUiSlice | null;
   marketLeaderPositioning: MarketLeaderPositioningUiSlice | null;
@@ -333,6 +339,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   const month2Artifacts = readMonth2MarketReadinessArtifacts();
   const month2MarketReadiness = buildMonth2MarketReadinessUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     metricsBaseline: month2Artifacts.metricsBaseline,
     caseStudyDraft: month2Artifacts.caseStudyDraft,
     investorOnepager: month2Artifacts.investorOnepager,
@@ -466,6 +474,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     pilotWeek1,
     pilotWeek1Integrity,
     month2MarketReadiness,
+    month2MarketReadinessIntegrity,
     scaleReadiness,
     seriesAPartnerExpansion,
     marketLeaderPositioning,

@@ -34,6 +34,16 @@ export type InvestorNarrativeOnepagerSummary = {
   certPassed: boolean;
 };
 
+export function recomputeInvestorNarrativeProofStatusFromSummary(
+  summary: InvestorNarrativeOnepagerSummary,
+): InvestorNarrativeProofStatus {
+  return resolveInvestorNarrativeProofStatus({
+    pilotMetricsArtifactLoaded: summary.pilotMetricsArtifactLoaded,
+    pilotMetricsOverall: summary.pilotMetricsOverall,
+    certPassed: summary.certPassed,
+  });
+}
+
 export function resolveInvestorNarrativeProofStatus(input: {
   pilotMetricsArtifactLoaded: boolean;
   pilotMetricsOverall: string | null;

@@ -53,8 +53,18 @@ export function Month2MarketReadinessPhasesPanel(props: {
               {slice.month2Milestone.replaceAll("_", " ")}
             </Badge>
             <Badge variant="outline" className="rounded-full text-[10px]">
-              Week 1 complete
+              Week 1 {slice.week1Complete ? "complete" : "blocked"}
             </Badge>
+            {!slice.week1IntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Week 1 integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.month2IntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Month 2 integrity FAIL
+              </Badge>
+            ) : null}
             {slice.customerName ? (
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 customer: {slice.customerName}
@@ -139,6 +149,9 @@ export function Month2MarketReadinessPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
+                <li>{slice.validateWeek1IntegrityCommand}</li>
                 <li>{slice.postWeek1OrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>

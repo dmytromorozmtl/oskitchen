@@ -36,6 +36,7 @@ export function LaunchWizardTodayStrip(props: {
     commercialSetup: props.model.commercialSetup,
     commercialInflection: props.model.commercialInflection,
     pilotWeek1: props.model.pilotWeek1Integrity,
+    month2: props.model.month2MarketReadinessIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -88,6 +89,15 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-week1"
               >
                 Week 1 {view.pilotWeek1.progressLabel}
+              </Badge>
+            ) : null}
+            {view.month2 ? (
+              <Badge
+                variant={view.month2.month2IntegrityFailed ? "destructive" : "outline"}
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-month2"
+              >
+                Month 2 {view.month2.progressLabel}
               </Badge>
             ) : null}
           </div>

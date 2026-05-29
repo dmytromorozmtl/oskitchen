@@ -9,6 +9,7 @@ import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor
 import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
 import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
 import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import { evaluateMonth2MarketReadinessIntegrity } from "@/lib/commercial/month2-market-readiness-integrity-era29";
 import {
   buildMonth2MarketReadinessPhaseStatuses,
   formatMonth2MarketReadinessPhaseBlockerDetail,
@@ -55,6 +56,11 @@ export type Month2MarketReadinessUiSlice = {
   postWeek1OrchestratorCommand: string;
   exportReadinessChecklistCommand: string;
   validateWeek1Command: string;
+  validateWeek1IntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  week1IntegrityPassed: boolean;
+  month2IntegrityPassed: boolean;
   month2Milestone: Month2MarketReadinessMilestone;
   todayHref: string;
   launchWizardHref: string;
@@ -72,57 +78,81 @@ export type Month2MarketReadinessUiSlice = {
 
 export function buildMonth2MarketReadinessUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
   caseStudyDraft?: PilotCaseStudyDraftSummary | null;
   investorOnepager?: InvestorNarrativeOnepagerSummary | null;
   env?: NodeJS.ProcessEnv;
 }): Month2MarketReadinessUiSlice | null {
+  const env = input.env ?? process.env;
   const metricsBaseline = input.metricsBaseline ?? null;
   const caseStudyDraft = input.caseStudyDraft ?? null;
   const investorOnepager = input.investorOnepager ?? null;
-  const week1Complete = resolveWeek1CompleteForMonth2({
+  const month2Integrity = evaluateMonth2MarketReadinessIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: caseStudyDraft,
+    investorOnepagerOverride: investorOnepager,
+    p0ProofStatusOverride: input.p0ProofStatus,
+    tier2ProofStatusOverride: input.tier2ProofStatus,
+  });
+  const week1CompleteFromPhases = resolveWeek1CompleteForMonth2({
     goNoGoSummary: input.goNoGoSummary,
     metricsBaseline,
     caseStudyDraft,
-    env: input.env,
+    env,
   });
+  const week1Honest = week1CompleteFromPhases && month2Integrity.week1IntegrityPassed;
   const goDecision = input.goNoGoSummary?.decision ?? null;
-  const prerequisites = resolveMonth2MarketReadinessPrerequisites({
-    goDecision,
-    week1Complete,
-  });
-  if (!prerequisites.prerequisitesComplete) return null;
 
-  const phases = buildMonth2MarketReadinessPhaseStatuses({
-    prerequisites,
-    goNoGoSummary: input.goNoGoSummary,
-    metricsBaseline,
-    caseStudyDraft,
-    investorOnepager,
-    env: input.env,
+  if (!week1Honest && !month2Integrity.month2ExecutionStarted) return null;
+
+  const prerequisites = resolveMonth2MarketReadinessPrerequisites({
+    goDecision: week1Honest ? "GO" : goDecision,
+    week1Complete: week1Honest,
   });
-  const month2Complete = resolveMonth2MarketReadinessComplete(phases);
-  if (month2Complete) return null;
+  if (!prerequisites.prerequisitesComplete && !month2Integrity.month2ExecutionStarted) {
+    return null;
+  }
+
+  const phases = week1Honest
+    ? buildMonth2MarketReadinessPhaseStatuses({
+        prerequisites,
+        goNoGoSummary: input.goNoGoSummary,
+        metricsBaseline,
+        caseStudyDraft,
+        investorOnepager,
+        env,
+      })
+    : [];
+  const month2Complete = week1Honest ? resolveMonth2MarketReadinessComplete(phases) : false;
+  if (month2Complete && month2Integrity.integrityPassed) return null;
 
   const blockingPhases = phases.filter((phase) => !phase.optional);
   const completedBlockingPhaseCount = blockingPhases.filter((phase) => phase.complete).length;
   const nextPhase = resolveNextIncompleteMonth2MarketReadinessPhase(phases);
   const nextPhaseDetail = nextPhase
     ? formatMonth2MarketReadinessPhaseBlockerDetail(nextPhase)
-    : null;
-  const month2Milestone = resolveMonth2MarketReadinessMilestoneFromPhaseStatuses(phases, {
-    prerequisitesComplete: true,
-    week1Complete: true,
-    month2Complete: false,
-  });
+    : !week1Honest
+      ? "Honest Week 1 required before Month 2 — run pilot-week1 execution integrity validate."
+      : null;
+  const month2Milestone = week1Honest
+    ? resolveMonth2MarketReadinessMilestoneFromPhaseStatuses(phases, {
+        prerequisitesComplete: true,
+        week1Complete: true,
+        month2Complete: false,
+      })
+    : "week1_blocked";
 
   return {
     policyId: MONTH2_MARKET_READINESS_UI_ERA21_POLICY_ID,
     visible: true,
     blocked: true,
-    goDecision: "GO",
+    goDecision: week1Honest ? "GO" : (goDecision ?? "unknown"),
     customerName: input.goNoGoSummary?.customerName ?? null,
-    week1Complete: true,
+    week1Complete: week1Honest,
     phases,
     completedBlockingPhaseCount,
     blockingPhaseCount: blockingPhases.length,
@@ -138,6 +168,12 @@ export function buildMonth2MarketReadinessUiSlice(input: {
     exportReadinessChecklistCommand:
       "npm run ops:export-month2-market-readiness-readiness-checklist -- --write",
     validateWeek1Command: "npm run ops:validate-pilot-week1-env -- --json",
+    validateWeek1IntegrityCommand: "npm run ops:validate-pilot-week1-execution-integrity -- --json",
+    integrityValidateCommand: "npm run ops:validate-month2-market-readiness-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-month2-market-readiness-integrity-baseline -- --write",
+    week1IntegrityPassed: month2Integrity.week1IntegrityPassed,
+    month2IntegrityPassed: month2Integrity.integrityPassed,
     month2Milestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,

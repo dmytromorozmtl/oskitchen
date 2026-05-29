@@ -51,7 +51,8 @@ npm run ops:sync-pilot-week1-execution-integrity-baseline -- --write
 
 ## Next step after Phase D PASS
 
-1. [`docs/next-step-5-month2-market-readiness-2026-05-28.md`](./next-step-5-month2-market-readiness-2026-05-28.md) (when present) or master train
-2. `npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --write`
+1. [`docs/next-step-month2-phase-e-product-2026-05-28.md`](./next-step-month2-phase-e-product-2026-05-28.md) — Month 2 integrity + product wiring
+2. [`docs/next-step-5-month2-market-readiness-2026-05-28.md`](./next-step-5-month2-market-readiness-2026-05-28.md)
+3. `npm run ops:run-month2-market-readiness-post-week1-orchestrator -- --write`
 
-**Following engineering slice (optional):** Month 2 integrity guard · PostHog `briefing_click` on Week 1 day CTAs.
+**Following engineering slice (optional):** Scale readiness integrity (Phase F) · PostHog `briefing_click` on Week 1 day CTAs.

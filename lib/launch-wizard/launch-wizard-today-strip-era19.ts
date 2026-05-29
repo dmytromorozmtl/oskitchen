@@ -7,6 +7,7 @@ import { LAUNCH_WIZARD_TODAY_STRIP_ERA19_POLICY_ID } from "@/lib/launch-wizard/l
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 import type { LaunchWizardCommercialInflectionSlice } from "@/lib/launch-wizard/launch-wizard-commercial-inflection-era28";
 import type { LaunchWizardPilotWeek1Slice } from "@/lib/launch-wizard/launch-wizard-pilot-week1-era28";
+import type { LaunchWizardMonth2Slice } from "@/lib/launch-wizard/launch-wizard-month2-era29";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -32,6 +33,8 @@ export type LaunchWizardTodayStripViewModel = {
   progressPercent: number;
   progressLabel: string;
   commercialInflection: LaunchWizardCommercialInflectionSlice | null;
+  pilotWeek1: LaunchWizardPilotWeek1Slice | null;
+  month2: LaunchWizardMonth2Slice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -73,17 +76,22 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   commercialSetup: LaunchWizardCommercialSetupSlice;
   commercialInflection?: LaunchWizardCommercialInflectionSlice | null;
   pilotWeek1?: LaunchWizardPilotWeek1Slice | null;
+  month2?: LaunchWizardMonth2Slice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
 }): LaunchWizardTodayStripViewModel {
   const commercialInflection = input.commercialInflection ?? null;
   const pilotWeek1 = input.pilotWeek1 ?? null;
+  const month2 = input.month2 ?? null;
   const inflectionSubline = commercialInflection
     ? `${commercialInflection.scorecardLabel} · registry LIVE ${commercialInflection.integrationRegistryLiveCount}`
     : null;
   const week1Subline = pilotWeek1
     ? `Week 1 ${pilotWeek1.progressLabel}${pilotWeek1.week1IntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const month2Subline = month2
+    ? `Month 2 ${month2.progressLabel}${month2.month2IntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
@@ -150,11 +158,15 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : week1Subline
-          ? inflectionSubline
-            ? `${inflectionSubline} · ${week1Subline}`
-            : week1Subline
-          : inflectionSubline ?? "Confirm commercial GO/NO-GO before pilot cutover.",
+        : month2Subline
+          ? week1Subline
+            ? `${week1Subline} · ${month2Subline}`
+            : month2Subline
+          : week1Subline
+            ? inflectionSubline
+              ? `${inflectionSubline} · ${week1Subline}`
+              : week1Subline
+            : inflectionSubline ?? "Confirm commercial GO/NO-GO before pilot cutover.",
     href: resolveLaunchWizardTodayStripHref({ mode: "setup_complete" }),
     ctaLabel: "Review commercial proof",
     decisionLabel: input.commercialBlockers.decisionLabel,
@@ -164,5 +176,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     progressLabel,
     commercialInflection,
     pilotWeek1,
+    month2,
   };
 }

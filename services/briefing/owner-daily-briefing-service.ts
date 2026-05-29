@@ -527,6 +527,8 @@ export async function loadOwnerDailyBriefing(
       : null;
   const month2MarketReadiness = buildMonth2MarketReadinessUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     metricsBaseline: month2Artifacts?.metricsBaseline ?? null,
     caseStudyDraft: month2Artifacts?.caseStudyDraft ?? null,
     investorOnepager: month2Artifacts?.investorOnepager ?? null,

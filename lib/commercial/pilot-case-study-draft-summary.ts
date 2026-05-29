@@ -54,6 +54,16 @@ export function resolveCaseStudyProofStatus(certPassed: boolean): CaseStudyProof
   return certPassed ? "internal_draft_ready" : "proof_failed_cert";
 }
 
+export function recomputePublishProofStatusFromSummary(
+  summary: PilotCaseStudyDraftSummary,
+): PublishProofStatus {
+  return resolvePublishProofStatus({
+    pilotMetricsArtifactLoaded: summary.pilotMetricsArtifactLoaded,
+    pilotMetricsOverall: summary.pilotMetricsOverall,
+    customerApprovalStatus: summary.customerApprovalStatus,
+  });
+}
+
 export function resolvePublishProofStatus(input: {
   pilotMetricsArtifactLoaded: boolean;
   pilotMetricsOverall: string | null;
