@@ -2296,6 +2296,7 @@ model UserProfile {
   posInventoryImpacts     PosInventoryImpactEvent[]
   posShifts               POSShift[]
   restaurantTables        RestaurantTable[]
+  floorPlans              FloorPlan[]
   posTabs                 PosTab[]
   pickupWindows           PickupWindow[]
   ssoIdentities           SsoIdentity[]
@@ -4483,6 +4484,7 @@ model Location {
       staffShifts        StaffShift[]      @relation("StaffShiftLocation")
       posTerminals       POSTerminal[]
       posRegisters       POSRegister[]
+      floorPlans         FloorPlan[]
 
   @@unique([userId, slug])
   @@index([userId])
@@ -10161,6 +10163,7 @@ model Workspace {
   referralCodes            ReferralCode[] @relation("ReferralCodeWorkspace")
   reorderQueueItems        ReorderQueueItem[] @relation("ReorderQueueItemWorkspace")
   restaurantTables         RestaurantTable[] @relation("RestaurantTableWorkspace")
+  floorPlans               FloorPlan[] @relation("FloorPlanWorkspace")
   savedReports             SavedReport[] @relation("SavedReportWorkspace")
   sOPAcknowledgements      SOPAcknowledgement[] @relation("SOPAcknowledgementWorkspace")
   sOPDocuments             SOPDocument[] @relation("SOPDocumentWorkspace")
@@ -12293,6 +12296,64 @@ model PosInventoryImpactEvent {
   @@index([userId, createdAt])
   @@index([orderId])
   @@map("pos_inventory_impact_events")
+}
+
+model FloorPlan {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  workspaceId String?  @map("workspace_id") @db.Uuid
+  locationId  String?  @map("location_id") @db.Uuid
+  name        String   @db.VarChar(120)
+  isActive    Boolean  @default(true) @map("is_active")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  userProfile UserProfile        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace?         @relation("FloorPlanWorkspace", fields: [workspaceId], references: [id], onDelete: SetNull)
+  location    Location?          @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  sections    FloorPlanSection[]
+
+  @@index([userId])
+  @@index([workspaceId])
+  @@index([locationId])
+  @@map("floor_plans")
+}
+
+model FloorPlanSection {
+  id          String   @id @default(uuid()) @db.Uuid
+  floorPlanId String   @map("floor_plan_id") @db.Uuid
+  name        String   @db.VarChar(120)
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  floorPlan FloorPlan        @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
+  tables    FloorPlanTable[]
+
+  @@index([floorPlanId])
+  @@map("floor_plan_sections")
+}
+
+model FloorPlanTable {
+  id        String      @id @default(uuid()) @db.Uuid
+  sectionId String      @map("section_id") @db.Uuid
+  name      String      @db.VarChar(40)
+  capacity  Int         @default(4)
+  status    TableStatus @default(AVAILABLE)
+  shape     TableShape  @default(RECTANGLE)
+  positionX Float       @default(0) @map("position_x")
+  positionY Float       @default(0) @map("position_y")
+  width     Float       @default(120)
+  height    Float       @default(120)
+  sortOrder Int         @default(0) @map("sort_order")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  section FloorPlanSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId])
+  @@map("floor_plan_tables")
 }
 
 model RestaurantTable {
