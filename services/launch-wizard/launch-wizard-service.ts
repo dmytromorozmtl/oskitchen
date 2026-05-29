@@ -71,6 +71,10 @@ import {
   type LaunchWizardSeriesASlice,
 } from "@/lib/launch-wizard/launch-wizard-series-a-era31";
 import {
+  buildLaunchWizardMarketLeaderSlice,
+  type LaunchWizardMarketLeaderSlice,
+} from "@/lib/launch-wizard/launch-wizard-market-leader-era32";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -389,6 +393,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
   const marketLeaderArtifacts = readMarketLeaderPositioningArtifacts();
   const marketLeaderPositioning = buildMarketLeaderPositioningUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: p0Summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging:
       marketLeaderArtifacts.p0Staging ?? seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0Summary,
     tier2Summary:
@@ -497,6 +503,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     seriesAPartnerExpansion,
     seriesAPartnerExpansionIntegrity,
     marketLeaderPositioning,
+    marketLeaderPositioningIntegrity,
     sustainedOperationalExcellence,
     paidPilotGoConvergence,
   };

@@ -6,34 +6,61 @@ import {
 } from "@/lib/briefing/owner-daily-briefing-market-leader-positioning-era21";
 import { buildMarketLeaderPositioningUiSlice } from "@/lib/commercial/market-leader-positioning-ui-era21";
 
+const honestGo = {
+  version: "era17-pilot-gono-go-v1" as const,
+  runAt: new Date().toISOString(),
+  decision: "GO" as const,
+  blockers: [] as string[],
+  warnings: [] as string[],
+  customerExecutionStatus: "recorded" as const,
+  customerName: "Acme",
+  loiSignedDate: "2026-06-01",
+  prospectExecutionStatus: "none" as const,
+  prospectName: null,
+  icpQualification: { qualified: true, missingCriteria: [], disqualifiers: [] },
+  evidenceGates: [
+    { id: "tier0", label: "t0", pass: true, reason: "ok" },
+    { id: "tier1", label: "t1", pass: true, reason: "ok" },
+    { id: "tier2", label: "t2", pass: true, reason: "ok" },
+    { id: "icp_qualification", label: "icp", pass: true, reason: "ok" },
+    { id: "forbidden_claims_enforcement", label: "fc", pass: true, reason: "ok" },
+    { id: "p0_staging_proof", label: "p0", pass: true, reason: "ok" },
+  ],
+  evaluatorInput: {
+    tier0Pass: true,
+    tier1Pass: true,
+    tier2Pass: true,
+    tier3Pass: true,
+    roleChecklistsComplete: true,
+    forbiddenClaimsInContract: false,
+    icpQualified: true,
+    stagingUrl: "https://x.example.com",
+    commitSha: "abc",
+  },
+};
+
+const capturedMetrics = [
+  "orders_per_day",
+  "storefront_checkout_success_rate",
+  "pos_checkout_completion",
+  "kds_bump_rate",
+  "support_tickets_per_week",
+  "operator_feedback_score",
+].map((id) => ({
+  id,
+  label: id,
+  status: "captured" as const,
+  value: 1,
+  unit: "n/a",
+  reason: "test fixture",
+}));
+
 describe("owner-daily-briefing-market-leader-positioning-era21", () => {
   it("builds ranked action with priority 7 when market leader positioning active", () => {
     const slice = buildMarketLeaderPositioningUiSlice({
-      goNoGoSummary: {
-        version: "era17-pilot-gono-go-v1",
-        runAt: new Date().toISOString(),
-        decision: "GO",
-        blockers: [],
-        warnings: [],
-        customerExecutionStatus: "recorded",
-        customerName: "Acme",
-        loiSignedDate: "2026-06-01",
-        prospectExecutionStatus: "none",
-        prospectName: null,
-        icpQualification: { qualified: true, missingCriteria: [], disqualifiers: [] },
-        evidenceGates: [],
-        evaluatorInput: {
-          tier0Pass: true,
-          tier1Pass: true,
-          tier2Pass: true,
-          tier3Pass: false,
-          roleChecklistsComplete: true,
-          forbiddenClaimsInContract: true,
-          icpQualified: true,
-          stagingUrl: "https://x.example.com",
-          commitSha: "abc",
-        },
-      },
+      goNoGoSummary: honestGo,
+      p0ProofStatus: "proof_passed",
+      tier2ProofStatus: "proof_passed",
       p0Staging: {
         version: "era17-p0-staging-proof-unblock-v1",
         runAt: new Date().toISOString(),
@@ -86,22 +113,7 @@ describe("owner-daily-briefing-market-leader-positioning-era21", () => {
         pilotWeek: 8,
         customerRef: "Acme",
         capturedAt: new Date().toISOString(),
-        metrics: [
-          {
-            id: "operator_feedback_score",
-            label: "Operator feedback score",
-            status: "captured",
-            value: 4.2,
-            unit: "score_1_5",
-          },
-          {
-            id: "support_tickets_per_week",
-            label: "Support tickets per week",
-            status: "captured",
-            value: 3,
-            unit: "tickets/week",
-          },
-        ],
+        metrics: capturedMetrics,
         capturedCount: 6,
         missingCount: 0,
       },
@@ -140,9 +152,9 @@ describe("owner-daily-briefing-market-leader-positioning-era21", () => {
         rollbackReason: null,
         commitSha: "abc",
         retrospective: { outcome: null, lessons: null, recorded: false },
-        steps: [],
-        passedStepCount: 5,
-        totalSteps: 5,
+        steps: [{ order: 1, action: "isolate", owner: "ops", status: "PASSED", reason: null }],
+        passedStepCount: 1,
+        totalSteps: 1,
       },
       competitorMatrix: {
         version: "era17-competitor-feature-gap-matrix-v1",
@@ -173,6 +185,7 @@ describe("owner-daily-briefing-market-leader-positioning-era21", () => {
         SERIES_A_MULTI_REGION_PLAYBOOK_DRAFTED: "1",
         SERIES_A_MARKETING_CLAIMS_STRICT_REVIEWED: "1",
         SERIES_A_CS_PLAYBOOK_REVIEWED: "1",
+        MARKET_LEADER_CATEGORY_NARRATIVE_REVIEWED: "1",
       },
     });
     const action = buildOwnerDailyBriefingMarketLeaderPositioningAction(slice);

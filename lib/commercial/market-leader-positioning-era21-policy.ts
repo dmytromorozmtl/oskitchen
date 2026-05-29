@@ -20,6 +20,8 @@ export const MARKET_LEADER_POSITIONING_ERA21_EXTENDS_POLICIES = [
 export const MARKET_LEADER_POSITIONING_ERA21_OPS_SCRIPTS = [
   "ops:run-market-leader-positioning-post-series-a-orchestrator",
   "ops:validate-market-leader-positioning-env",
+  "ops:validate-market-leader-positioning-integrity",
+  "ops:sync-market-leader-positioning-integrity-baseline",
   "ops:export-market-leader-positioning-env-template",
   "ops:export-market-leader-positioning-readiness-checklist",
   "ops:sync-market-leader-positioning-progress-report",
@@ -28,6 +30,7 @@ export const MARKET_LEADER_POSITIONING_ERA21_OPS_SCRIPTS = [
 export const MARKET_LEADER_POSITIONING_ERA21_CI_SCRIPTS = [
   "test:ci:market-leader-positioning-era21",
   "test:ci:market-leader-positioning-era21:cert",
+  "test:ci:market-leader-positioning-integrity-era32",
 ] as const;
 
 export const MARKET_LEADER_POSITIONING_ERA21_UNIT_TESTS = [
@@ -37,11 +40,18 @@ export const MARKET_LEADER_POSITIONING_ERA21_UNIT_TESTS = [
   "tests/unit/owner-daily-briefing-market-leader-positioning-era21.test.ts",
   "tests/unit/run-market-leader-positioning-post-series-a-orchestrator.test.ts",
   "tests/unit/market-leader-positioning-era21-cert-live.test.ts",
+  "tests/unit/market-leader-positioning-integrity-era32.test.ts",
+  "tests/unit/validate-market-leader-positioning-integrity.test.ts",
+  "tests/unit/market-leader-positioning-integrity-era32-cert-live.test.ts",
+  "tests/unit/launch-wizard-market-leader-era32.test.ts",
 ] as const;
 
 export const MARKET_LEADER_POSITIONING_ERA21_PRODUCT_SURFACES = [
   "components/dashboard/market-leader-positioning-phases-panel.tsx",
   "components/dashboard/launch-wizard/launch-wizard-commercial-blockers-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-market-leader-panel.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-view.tsx",
+  "components/dashboard/launch-wizard/launch-wizard-today-strip.tsx",
   "components/dashboard/owner-daily-briefing-hero.tsx",
   "components/platform/commercial-pilot-ops-status-panel.tsx",
 ] as const;

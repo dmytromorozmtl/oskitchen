@@ -580,6 +580,8 @@ export async function loadOwnerDailyBriefing(
   const marketLeaderArtifacts = needsCommercialOps ? readMarketLeaderPositioningArtifacts() : null;
   const marketLeaderPositioning = buildMarketLeaderPositioningUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging:
       marketLeaderArtifacts?.p0Staging ??
       seriesAArtifacts?.p0Staging ??

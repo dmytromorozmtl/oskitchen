@@ -133,6 +133,8 @@ export function buildMarketLeaderPositioningPostSeriesAOrchestratorSummary(input
 
   const recommendedCommands = input.evaluation.prerequisites.prerequisitesComplete
     ? ([
+        "npm run ops:validate-series-a-partner-expansion-integrity -- --json",
+        "npm run ops:validate-market-leader-positioning-integrity -- --json",
         "npm run ops:validate-series-a-partner-expansion-env -- --json",
         "npm run ops:validate-market-leader-positioning-env -- --json",
         MARKET_LEADER_POSITIONING_POST_SERIES_A_ORCHESTRATOR_COMMAND + " -- --write",

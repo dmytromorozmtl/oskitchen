@@ -116,6 +116,12 @@ export const MARKET_LEADER_POSITIONING_TRACKED_ENV_KEYS = [
   "MARKET_LEADER_EXPANSION_MOTION_REVIEWED",
 ] as const;
 
+export function detectMarketLeaderPositioningStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return MARKET_LEADER_POSITIONING_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type MarketLeaderPositioningPhaseStatus = {
   id: string;
   label: string;

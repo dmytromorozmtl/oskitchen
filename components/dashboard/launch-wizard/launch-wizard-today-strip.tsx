@@ -39,6 +39,7 @@ export function LaunchWizardTodayStrip(props: {
     month2: props.model.month2MarketReadinessIntegrity,
     scale: props.model.scaleReadinessIntegrity,
     seriesA: props.model.seriesAPartnerExpansionIntegrity,
+    marketLeader: props.model.marketLeaderPositioningIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -118,6 +119,15 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-series-a"
               >
                 Series A {view.seriesA.progressLabel}
+              </Badge>
+            ) : null}
+            {view.marketLeader ? (
+              <Badge
+                variant={view.marketLeader.marketLeaderIntegrityFailed ? "destructive" : "outline"}
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-market-leader"
+              >
+                Market leader {view.marketLeader.progressLabel}
               </Badge>
             ) : null}
           </div>

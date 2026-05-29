@@ -5,6 +5,7 @@ import {
   resolveMarketLeaderPositioningMilestoneFromPhaseStatuses,
   type MarketLeaderPositioningMilestone,
 } from "@/lib/commercial/market-leader-positioning-post-series-a-orchestrator-era21";
+import { evaluateMarketLeaderPositioningIntegrity } from "@/lib/commercial/market-leader-positioning-integrity-era32";
 import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
 import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
 import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
@@ -16,6 +17,7 @@ import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-stagi
 import {
   buildMarketLeaderPositioningPhaseStatuses,
   COMPETITOR_FEATURE_GAP_MATRIX_ARTIFACT_PATH,
+  detectMarketLeaderPositioningStarted,
   formatMarketLeaderPositioningPhaseBlockerDetail,
   INVESTOR_NARRATIVE_ONEPAGER_ARTIFACT_PATH,
   MARKET_LEADER_POSITIONING_STEP8_DOC,
@@ -66,6 +68,11 @@ export type MarketLeaderPositioningUiSlice = {
   postSeriesAOrchestratorCommand: string;
   exportReadinessChecklistCommand: string;
   validateSeriesACommand: string;
+  validateSeriesAIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  seriesAIntegrityPassed: boolean;
+  marketLeaderIntegrityPassed: boolean;
   marketLeaderMilestone: MarketLeaderPositioningMilestone;
   todayHref: string;
   launchWizardHref: string;
@@ -89,6 +96,8 @@ export type MarketLeaderPositioningUiSlice = {
 
 export function buildMarketLeaderPositioningUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -98,41 +107,74 @@ export function buildMarketLeaderPositioningUiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): MarketLeaderPositioningUiSlice | null {
+  const env = input.env ?? process.env;
   const metricsBaseline = input.metricsBaseline ?? null;
   const caseStudyDraft = input.caseStudyDraft ?? null;
   const investorOnepager = input.investorOnepager ?? null;
-  const seriesAComplete = resolveSeriesACompleteForMarketLeader({
-    goNoGoSummary: input.goNoGoSummary,
-    p0Staging: input.p0Staging ?? null,
-    tier2Summary: input.tier2Summary ?? null,
-    metricsBaseline,
-    caseStudyDraft,
-    investorOnepager,
-    rollbackDrill: input.rollbackDrill ?? null,
-    competitorMatrix: input.competitorMatrix ?? null,
-    env: input.env,
-  });
-  const goDecision = input.goNoGoSummary?.decision ?? null;
-  const prerequisites = resolveMarketLeaderPositioningPrerequisites({
-    goDecision,
-    seriesAComplete,
-  });
-  if (!prerequisites.prerequisitesComplete) return null;
+  const rollbackDrill = input.rollbackDrill ?? null;
+  const competitorMatrix = input.competitorMatrix ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
 
-  const phases = buildMarketLeaderPositioningPhaseStatuses({
-    prerequisites,
+  const marketLeaderIntegrity = evaluateMarketLeaderPositioningIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: input.p0Staging ?? null,
+    tier2SummaryOverride: input.tier2Summary ?? null,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: caseStudyDraft,
+    investorOnepagerOverride: investorOnepager,
+    rollbackDrillOverride: rollbackDrill,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  const seriesACompleteFromPhases = resolveSeriesACompleteForMarketLeader({
     goNoGoSummary: input.goNoGoSummary,
     p0Staging: input.p0Staging ?? null,
     tier2Summary: input.tier2Summary ?? null,
     metricsBaseline,
     caseStudyDraft,
     investorOnepager,
-    rollbackDrill: input.rollbackDrill ?? null,
-    competitorMatrix: input.competitorMatrix ?? null,
-    env: input.env,
+    rollbackDrill,
+    competitorMatrix,
+    env,
   });
-  const marketLeaderComplete = resolveMarketLeaderPositioningComplete(phases);
-  if (marketLeaderComplete) return null;
+  const seriesAHonest = seriesACompleteFromPhases && marketLeaderIntegrity.seriesAIntegrityPassed;
+  const goDecision = input.goNoGoSummary?.decision ?? null;
+  const marketLeaderExecutionStarted = detectMarketLeaderPositioningStarted(env);
+
+  if (!seriesACompleteFromPhases && !marketLeaderExecutionStarted) return null;
+
+  const prerequisites = resolveMarketLeaderPositioningPrerequisites({
+    goDecision: seriesACompleteFromPhases ? "GO" : goDecision,
+    seriesAComplete: seriesACompleteFromPhases,
+  });
+  if (!prerequisites.prerequisitesComplete && !marketLeaderExecutionStarted) {
+    return null;
+  }
+
+  const phases = seriesACompleteFromPhases
+    ? buildMarketLeaderPositioningPhaseStatuses({
+        prerequisites,
+        goNoGoSummary: input.goNoGoSummary,
+        p0Staging: input.p0Staging ?? null,
+        tier2Summary: input.tier2Summary ?? null,
+        metricsBaseline,
+        caseStudyDraft,
+        investorOnepager,
+        rollbackDrill,
+        competitorMatrix,
+        env,
+      })
+    : [];
+  const marketLeaderComplete = seriesACompleteFromPhases
+    ? resolveMarketLeaderPositioningComplete(phases)
+    : false;
+  if (marketLeaderComplete && marketLeaderIntegrity.integrityPassed) return null;
 
   const blockingPhases = phases.filter((phase) => !phase.optional);
   const completedBlockingPhaseCount = blockingPhases.filter((phase) => phase.complete).length;
@@ -141,8 +183,8 @@ export function buildMarketLeaderPositioningUiSlice(input: {
     ? formatMarketLeaderPositioningPhaseBlockerDetail(nextPhase)
     : null;
   const marketLeaderMilestone = resolveMarketLeaderPositioningMilestoneFromPhaseStatuses(phases, {
-    prerequisitesComplete: true,
-    seriesAComplete: true,
+    prerequisitesComplete: seriesACompleteFromPhases,
+    seriesAComplete: seriesACompleteFromPhases,
     marketLeaderComplete: false,
   });
 
@@ -152,7 +194,7 @@ export function buildMarketLeaderPositioningUiSlice(input: {
     blocked: true,
     goDecision: "GO",
     customerName: input.goNoGoSummary?.customerName ?? null,
-    seriesAComplete: true,
+    seriesAComplete: seriesACompleteFromPhases,
     phases,
     completedBlockingPhaseCount,
     blockingPhaseCount: blockingPhases.length,
@@ -170,6 +212,14 @@ export function buildMarketLeaderPositioningUiSlice(input: {
     exportReadinessChecklistCommand:
       "npm run ops:export-market-leader-positioning-readiness-checklist -- --write",
     validateSeriesACommand: "npm run ops:validate-series-a-partner-expansion-env -- --json",
+    validateSeriesAIntegrityCommand:
+      "npm run ops:validate-series-a-partner-expansion-integrity -- --json",
+    integrityValidateCommand:
+      "npm run ops:validate-market-leader-positioning-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-market-leader-positioning-integrity-baseline -- --write",
+    seriesAIntegrityPassed: marketLeaderIntegrity.seriesAIntegrityPassed,
+    marketLeaderIntegrityPassed: marketLeaderIntegrity.integrityPassed,
     marketLeaderMilestone,
     todayHref: "/dashboard/today",
     launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR}`,

@@ -131,6 +131,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   const marketLeaderArtifacts = readMarketLeaderPositioningArtifacts();
   const marketLeaderPositioning = buildMarketLeaderPositioningUiSlice({
     goNoGoSummary: props.model.goNoGo.summary,
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
     p0Staging:
       marketLeaderArtifacts.p0Staging ?? seriesAArtifacts.p0Staging ?? scaleArtifacts.p0Staging ?? p0,
     tier2Summary:

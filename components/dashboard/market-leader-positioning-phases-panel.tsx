@@ -57,6 +57,16 @@ export function MarketLeaderPositioningPhasesPanel(props: {
             <Badge variant="outline" className="rounded-full text-[10px]">
               Series A complete
             </Badge>
+            {!slice.seriesAIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Series A integrity FAIL
+              </Badge>
+            ) : null}
+            {!slice.marketLeaderIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Market leader integrity FAIL
+              </Badge>
+            ) : null}
             {slice.customerName ? (
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 customer: {slice.customerName}
@@ -141,6 +151,9 @@ export function MarketLeaderPositioningPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
+                <li>{slice.validateSeriesAIntegrityCommand}</li>
                 <li>{slice.postSeriesAOrchestratorCommand}</li>
                 <li>{slice.validateCommand}</li>
                 <li>{slice.exportReadinessChecklistCommand}</li>

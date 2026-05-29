@@ -50,7 +50,7 @@ npm run ops:sync-series-a-partner-expansion-integrity-baseline -- --write
 
 ## Next step after Phase G PASS
 
-1. Market leader positioning integrity guard (Phase H) — mirror era28–era31
+1. Market leader positioning integrity guard (Phase H) — **IMPLEMENTED** — see [`docs/next-step-market-leader-phase-h-product-2026-05-28.md`](./next-step-market-leader-phase-h-product-2026-05-28.md)
 2. `npm run ops:run-market-leader-positioning-post-series-a-orchestrator -- --write`
 
-**Following engineering slice (optional):** PostHog on Series A track CTAs · era25 convergence reads integrity baseline.
+**Following engineering slice (optional):** Sustained operational excellence integrity (Phase I) · PostHog on Series A track CTAs.

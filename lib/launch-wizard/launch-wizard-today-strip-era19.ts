@@ -10,6 +10,7 @@ import type { LaunchWizardPilotWeek1Slice } from "@/lib/launch-wizard/launch-wiz
 import type { LaunchWizardMonth2Slice } from "@/lib/launch-wizard/launch-wizard-month2-era29";
 import type { LaunchWizardScaleSlice } from "@/lib/launch-wizard/launch-wizard-scale-era30";
 import type { LaunchWizardSeriesASlice } from "@/lib/launch-wizard/launch-wizard-series-a-era31";
+import type { LaunchWizardMarketLeaderSlice } from "@/lib/launch-wizard/launch-wizard-market-leader-era32";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -39,6 +40,7 @@ export type LaunchWizardTodayStripViewModel = {
   month2: LaunchWizardMonth2Slice | null;
   scale: LaunchWizardScaleSlice | null;
   seriesA: LaunchWizardSeriesASlice | null;
+  marketLeader: LaunchWizardMarketLeaderSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -107,6 +109,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const seriesASubline = seriesA
     ? `Series A ${seriesA.progressLabel}${seriesA.seriesAIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const marketLeader = input.marketLeader ?? null;
+  const marketLeaderSubline = marketLeader
+    ? `Market leader ${marketLeader.progressLabel}${marketLeader.marketLeaderIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -138,6 +144,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       month2,
       scale,
       seriesA,
+      marketLeader,
     };
   }
 
@@ -216,5 +223,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     month2,
     scale,
     seriesA,
+    marketLeader,
   };
 }
