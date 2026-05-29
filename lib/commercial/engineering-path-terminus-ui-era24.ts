@@ -1,11 +1,14 @@
 /**
  * Engineering path terminus UI slice — embedded in maintenance mode platform panel.
  */
+import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competitor-feature-gap-matrix-summary";
+import { evaluateEngineeringPathTerminusIntegrity } from "@/lib/commercial/engineering-path-terminus-integrity-era37";
 import {
   resolveEngineeringPathTerminusMilestoneFromSummary,
   type EngineeringPathTerminusMilestone,
 } from "@/lib/commercial/engineering-path-terminus-post-maintenance-mode-orchestrator-era24";
 import {
+  detectEngineeringPathTerminusStarted,
   ENGINEERING_PATH_TERMINUS_ERA24_POLICY_ID,
   ENGINEERING_PATH_TERMINUS_PLATFORM_ANCHOR,
   ENGINEERING_PATH_TERMINUS_STEP13_DOC,
@@ -15,9 +18,23 @@ import {
 import { evaluateCommercialPilotPath } from "@/lib/commercial/evaluate-commercial-pilot-path";
 import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import { buildPostTerminusSteadyStateUiSlice } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
+import {
+  resolveMaintenanceModePrerequisites,
+  resolveProductEvolutionReady,
+} from "@/lib/commercial/maintenance-mode-phases-era24";
+import type { InvestorNarrativeOnepagerSummary } from "@/lib/commercial/investor-narrative-onepager-summary";
+import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import type { PilotCaseStudyDraftSummary } from "@/lib/commercial/pilot-case-study-draft-summary";
+import type { PilotGoNoGoSummary } from "@/lib/commercial/pilot-gono-go-summary";
+import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics-baseline-summary";
+import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
+import { resolveEra25PureOperationalModeContext } from "@/lib/commercial/sustained-product-evolution-phases-era23";
+import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { evaluateMaintenanceMode } from "@/scripts/ops/validate-maintenance-mode";
 import type { PostTerminusSteadyStateUiSlice } from "@/lib/commercial/post-terminus-steady-state-ui-era24";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_ENGINEERING_TERMINUS_ANCHOR } from "@/lib/launch-wizard/launch-wizard-engineering-terminus-era37";
 
 export const ENGINEERING_PATH_TERMINUS_UI_ERA24_POLICY_ID =
   "era24-engineering-path-terminus-ui-v1" as const;
@@ -39,6 +56,13 @@ export type EngineeringPathTerminusUiSlice = {
   validateCommand: string;
   postMaintenanceModeOrchestratorCommand: string;
   validateMaintenanceModeCommand: string;
+  validateMaintenanceModeIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  engineeringPathTerminusIntegrityPassed: boolean;
+  maintenanceModeIntegrityPassed: boolean;
+  p0ProofStatus: string | null;
+  tier2ProofStatus: string | null;
   engineeringPathTerminusMilestone: EngineeringPathTerminusMilestone;
   sustainedOpsConvergenceReady: boolean;
   pureOperationalModeEra25Active: boolean;
@@ -46,21 +70,82 @@ export type EngineeringPathTerminusUiSlice = {
   maintenanceModeMilestone: ReturnType<typeof evaluateMaintenanceMode>["maintenanceModeMilestone"];
   pureOperationalModeTerminusHref: string;
   syncStatusReportCommand: string;
+  todayHref: string;
+  launchWizardHref: string;
   platformOpsHref: string;
+  maintenanceModeHref: string;
   postTerminusSteadyState: PostTerminusSteadyStateUiSlice | null;
 };
 
 export function buildEngineeringPathTerminusUiSlice(input: {
-  maintenanceModeActive: boolean;
+  goNoGoSummary?: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
+  p0Staging?: P0StagingProofUnblockSummary | null;
+  tier2Summary?: Tier2StagingGoldenPathSummary | null;
+  metricsBaseline?: PilotMetricsBaselineSummary | null;
+  caseStudyDraft?: PilotCaseStudyDraftSummary | null;
+  investorOnepager?: InvestorNarrativeOnepagerSummary | null;
+  rollbackDrill?: PilotRollbackDrillSummary | null;
+  competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
+  /** @deprecated use full input — kept for tests */
+  maintenanceModeActive?: boolean;
 }): EngineeringPathTerminusUiSlice | null {
-  if (!input.maintenanceModeActive) return null;
+  const env = input.env ?? process.env;
+  const p0Staging = input.p0Staging ?? null;
+  const tier2Summary = input.tier2Summary ?? null;
+  const metricsBaseline = input.metricsBaseline ?? null;
+  const competitorMatrix = input.competitorMatrix ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
 
-  const evaluation = evaluateCommercialPilotPath(input.env);
-  const maintenanceMode = evaluateMaintenanceMode(input.env);
+  const engineeringPathTerminusIntegrity = evaluateEngineeringPathTerminusIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary ?? null,
+    p0StagingOverride: p0Staging,
+    tier2SummaryOverride: tier2Summary,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: input.caseStudyDraft ?? null,
+    investorOnepagerOverride: input.investorOnepager ?? null,
+    rollbackDrillOverride: input.rollbackDrill ?? null,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
+  const productEvolutionReady = resolveProductEvolutionReady({
+    goNoGoSummary: input.goNoGoSummary ?? null,
+    p0Staging,
+    tier2Summary,
+    metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft ?? null,
+    investorOnepager: input.investorOnepager ?? null,
+    rollbackDrill: input.rollbackDrill ?? null,
+    competitorMatrix,
+    env,
+  });
+  const goDecision = input.goNoGoSummary?.decision ?? null;
+  const era25 = resolveEra25PureOperationalModeContext(env);
+  const prerequisites = resolveMaintenanceModePrerequisites({
+    goDecision,
+    productEvolutionReady,
+    era25,
+  });
+  const engineeringTerminusReadyFromPhases =
+    input.maintenanceModeActive ?? prerequisites.maintenanceModeActive;
+  const engineeringPathTerminusExecutionStarted = detectEngineeringPathTerminusStarted(env);
+
+  if (!engineeringTerminusReadyFromPhases && !engineeringPathTerminusExecutionStarted) return null;
+
+  const evaluation = evaluateCommercialPilotPath(env);
+  const maintenanceMode = evaluateMaintenanceMode(env);
   const postTerminusSteadyState = buildPostTerminusSteadyStateUiSlice({
-    engineeringTerminusActive: evaluation.summary.engineeringTerminusActive,
-    env: input.env,
+    engineeringTerminusActive:
+      engineeringTerminusReadyFromPhases || engineeringPathTerminusExecutionStarted,
+    env,
   });
   const engineeringPathTerminusMilestone = resolveEngineeringPathTerminusMilestoneFromSummary({
     maintenanceMode,
@@ -70,7 +155,7 @@ export function buildEngineeringPathTerminusUiSlice(input: {
   return {
     policyId: ENGINEERING_PATH_TERMINUS_UI_ERA24_POLICY_ID,
     visible: true,
-    engineeringTerminusActive: evaluation.summary.engineeringTerminusActive,
+    engineeringTerminusActive: engineeringTerminusReadyFromPhases,
     pathComplete: evaluation.summary.pathComplete,
     completedSteps: evaluation.summary.completedSteps,
     totalSteps: evaluation.summary.totalSteps,
@@ -85,6 +170,15 @@ export function buildEngineeringPathTerminusUiSlice(input: {
     postMaintenanceModeOrchestratorCommand:
       "npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write",
     validateMaintenanceModeCommand: "npm run ops:validate-maintenance-mode -- --json",
+    validateMaintenanceModeIntegrityCommand:
+      "npm run ops:validate-maintenance-mode-integrity -- --json",
+    integrityValidateCommand: "npm run ops:validate-engineering-path-terminus-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-engineering-path-terminus-integrity-baseline -- --write",
+    engineeringPathTerminusIntegrityPassed: engineeringPathTerminusIntegrity.integrityPassed,
+    maintenanceModeIntegrityPassed: engineeringPathTerminusIntegrity.maintenanceModeIntegrityPassed,
+    p0ProofStatus,
+    tier2ProofStatus,
     engineeringPathTerminusMilestone,
     sustainedOpsConvergenceReady: maintenanceMode.prerequisites.sustainedOpsConvergenceReady,
     pureOperationalModeEra25Active: maintenanceMode.prerequisites.pureOperationalModeEra25Active,
@@ -92,7 +186,10 @@ export function buildEngineeringPathTerminusUiSlice(input: {
     maintenanceModeMilestone: maintenanceMode.maintenanceModeMilestone,
     pureOperationalModeTerminusHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR}`,
     syncStatusReportCommand: "npm run ops:sync-commercial-pilot-path-status-report -- --write",
+    todayHref: "/dashboard/today",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_ENGINEERING_TERMINUS_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${ENGINEERING_PATH_TERMINUS_PLATFORM_ANCHOR}`,
+    maintenanceModeHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#maintenance-mode`,
     postTerminusSteadyState,
   };
 }

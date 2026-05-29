@@ -165,8 +165,18 @@ export function buildMaintenanceModeUiSlice(input: {
     ? formatMaintenanceModeRhythmDetail(nextAttentionRhythm)
     : null;
   const engineeringPathTerminus = buildEngineeringPathTerminusUiSlice({
-    maintenanceModeActive: true,
-    env: input.env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0ProofStatus,
+    tier2ProofStatus,
+    p0Staging,
+    tier2Summary,
+    metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft ?? null,
+    investorOnepager: input.investorOnepager ?? null,
+    rollbackDrill: input.rollbackDrill ?? null,
+    competitorMatrix,
+    env,
+    maintenanceModeActive: maintenanceModeReadyFromPhases,
   });
   const maintenanceModeMilestone = resolveMaintenanceModeMilestoneFromRhythmStatuses(rhythms, {
     maintenanceModeActive: maintenanceModeReadyFromPhases || maintenanceModeExecutionStarted,

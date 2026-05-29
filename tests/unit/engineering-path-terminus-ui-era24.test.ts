@@ -19,6 +19,12 @@ describe("engineering-path-terminus-ui-era24", () => {
       "run-engineering-path-terminus-post-maintenance-mode-orchestrator",
     );
     expect(slice?.syncStatusReportCommand).toContain("sync-commercial-pilot-path-status-report");
+    expect(slice?.integrityValidateCommand).toContain(
+      "validate-engineering-path-terminus-integrity",
+    );
+    expect(slice?.validateMaintenanceModeIntegrityCommand).toContain(
+      "validate-maintenance-mode-integrity",
+    );
   });
 
   it("formats progress label", () => {

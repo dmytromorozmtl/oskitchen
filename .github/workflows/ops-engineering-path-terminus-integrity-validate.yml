@@ -1,0 +1,26 @@
+# Engineering path terminus integrity — blocks master path attestation without honest Maintenance mode.
+
+name: Engineering Path Terminus Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/engineering-path-terminus-integrity-baseline.json"
+      - "artifacts/commercial-pilot-path-status-report.md"
+      - "lib/commercial/engineering-path-terminus-integrity-era37.ts"
+      - "scripts/ops/validate-engineering-path-terminus-integrity.ts"
+
+jobs:
+  validate-engineering-path-terminus-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Engineering path terminus integrity (JSON)
+        run: npm run ops:validate-engineering-path-terminus-integrity -- --json

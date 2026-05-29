@@ -143,6 +143,8 @@ export function buildEngineeringPathTerminusPostMaintenanceModeOrchestratorSumma
         : input.maintenanceMode.maintenanceModeActive
     ? ([
         "npm run ops:validate-maintenance-mode -- --json",
+        "npm run ops:validate-maintenance-mode-integrity -- --json",
+        "npm run ops:validate-engineering-path-terminus-integrity -- --json",
         "npm run ops:validate-commercial-pilot-path -- --json",
         ENGINEERING_PATH_TERMINUS_POST_MAINTENANCE_MODE_ORCHESTRATOR_COMMAND + " -- --write",
         "npm run ops:sync-commercial-pilot-path-status-report -- --write",

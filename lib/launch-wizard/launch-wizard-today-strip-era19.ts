@@ -15,6 +15,7 @@ import type { LaunchWizardSustainedOpsSlice } from "@/lib/launch-wizard/launch-w
 import type { LaunchWizardImprovementLoopSlice } from "@/lib/launch-wizard/launch-wizard-improvement-loop-era34";
 import type { LaunchWizardProductEvolutionSlice } from "@/lib/launch-wizard/launch-wizard-product-evolution-era35";
 import type { LaunchWizardMaintenanceModeSlice } from "@/lib/launch-wizard/launch-wizard-maintenance-mode-era36";
+import type { LaunchWizardEngineeringTerminusSlice } from "@/lib/launch-wizard/launch-wizard-engineering-terminus-era37";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -98,6 +99,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   improvementLoop?: LaunchWizardImprovementLoopSlice | null;
   productEvolution?: LaunchWizardProductEvolutionSlice | null;
   maintenanceMode?: LaunchWizardMaintenanceModeSlice | null;
+  engineeringTerminus?: LaunchWizardEngineeringTerminusSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -141,6 +143,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const maintenanceMode = input.maintenanceMode ?? null;
   const maintenanceModeSubline = maintenanceMode
     ? `Maintenance mode ${maintenanceMode.progressLabel}${maintenanceMode.maintenanceModeIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
+  const engineeringTerminus = input.engineeringTerminus ?? null;
+  const engineeringTerminusSubline = engineeringTerminus
+    ? `Engineering path ${engineeringTerminus.progressLabel}${engineeringTerminus.engineeringTerminusIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
@@ -211,6 +217,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       improvementLoop,
       productEvolution,
       maintenanceMode,
+      engineeringTerminus,
     };
   }
 
@@ -289,5 +296,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     improvementLoop,
     productEvolution,
     maintenanceMode,
+    engineeringTerminus,
   };
 }

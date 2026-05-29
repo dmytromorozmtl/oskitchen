@@ -229,6 +229,16 @@ export function MaintenanceModePanel(props: {
               <Badge variant="outline" className="rounded-full text-[10px] text-slate-300">
                 gate chain {slice.engineeringPathTerminus.gateStepsComplete ? "complete" : "blocked"}
               </Badge>
+              {!slice.engineeringPathTerminus.engineeringPathTerminusIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Engineering terminus blocked
+                </Badge>
+              ) : null}
+              {!slice.engineeringPathTerminus.maintenanceModeIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Maintenance mode integrity FAIL
+                </Badge>
+              ) : null}
             </div>
             <ul className="mt-3 max-h-64 space-y-1 overflow-y-auto">
               {slice.engineeringPathTerminus.steps.map((step) => (
@@ -252,6 +262,9 @@ export function MaintenanceModePanel(props: {
               <span>{slice.engineeringPathTerminus.validateCommand}</span>
               <span>{slice.engineeringPathTerminus.syncStatusReportCommand}</span>
               <span>{slice.engineeringPathTerminus.validateMaintenanceModeCommand}</span>
+              <span>{slice.engineeringPathTerminus.validateMaintenanceModeIntegrityCommand}</span>
+              <span>{slice.engineeringPathTerminus.integrityValidateCommand}</span>
+              <span>{slice.engineeringPathTerminus.syncIntegrityBaselineCommand}</span>
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
               <Button asChild size="sm" variant="ghost" className="rounded-full">

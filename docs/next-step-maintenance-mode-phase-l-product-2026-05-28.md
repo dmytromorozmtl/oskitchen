@@ -63,18 +63,9 @@ npm run ops:sync-maintenance-mode-integrity-baseline -- --write
 
 ## Next step after Phase L PASS
 
-1. **Phase M — Engineering path terminus integrity (`era37`)** — mirror era28–era36 on `engineering-path-terminus-*`
+**Phase M IMPLEMENTED** — see [`docs/next-step-engineering-path-terminus-phase-m-product-2026-05-28.md`](./next-step-engineering-path-terminus-phase-m-product-2026-05-28.md)
+
+1. ~~Engineering path terminus integrity guard (Phase M)~~ **DONE** (`era37-engineering-path-terminus-integrity-v1`)
 2. `npm run ops:run-engineering-path-terminus-post-maintenance-mode-orchestrator -- --write`
 
-### Phase M preview (Engineering path terminus integrity)
-
-| Component | Planned artifact |
-|-----------|------------------|
-| Evaluator | `engineering-path-terminus-integrity-era37.ts` — chain via `evaluateMaintenanceModeIntegrity` |
-| Env keys | `ENGINEERING_PATH_TERMINUS_*` tracked keys + `detectEngineeringPathTerminusStarted()` |
-| Violations | `terminus_started_without_maintenance_mode`, `maintenance_mode_integrity_fail`, chain to GO |
-| Launch Wizard | `#launch-wizard-engineering-terminus` |
-| Briefing | priority **12** |
-| Prerequisite | honest maintenance mode (Phase L) + `maintenance_mode_healthy` milestone |
-
-**Following engineering slice (optional):** Post-terminus steady state reads maintenance integrity baseline · commercial pilot path absolute end validation.
+**Following engineering slice:** Phase N Post-terminus steady state integrity (`era38`).

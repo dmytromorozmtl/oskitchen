@@ -31,6 +31,17 @@ export const COMMERCIAL_PILOT_PATH_STATUS_REPORT_PATH =
 
 export const ENGINEERING_PATH_TERMINUS_PLATFORM_ANCHOR = "#engineering-path-terminus" as const;
 
+export const ENGINEERING_PATH_TERMINUS_TRACKED_ENV_KEYS = [
+  "ENGINEERING_PATH_TERMINUS_MASTER_PATH_ATTESTED",
+  "ENGINEERING_PATH_TERMINUS_STATUS_REPORT_REVIEWED",
+] as const;
+
+export function detectEngineeringPathTerminusStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return ENGINEERING_PATH_TERMINUS_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type CommercialPilotPathStepKind = "gate" | "informational";
 
 export type CommercialPilotPathStepDef = {
