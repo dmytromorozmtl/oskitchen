@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>KitchenOS Pilot Scale Expansion Execution</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
+    .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+    .banner-pass { background: #ecfdf5; border: 1px solid #6ee7b7; }
+    .banner-blocked { background: #fff7ed; border: 1px solid #fdba74; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.9rem; }
+    th, td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+    th { background: #f9fafb; }
+    .status-pass { color: #047857; font-weight: 700; }
+    .status-blocked { color: #b45309; font-weight: 700; }
+    code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+    .honesty { font-size: 0.85rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Pilot Scale + Expansion — Step 6 Execution</h1>
+  <p class="honesty">Policy era34-pilot-scale-expansion-execution-v1 · Generated 2026-05-29T13:56:40.779Z</p>
+
+  <div class="banner banner-blocked">
+    <strong>Milestone:</strong> week1_execution_blocked<br />
+    <strong>Week 1 execution:</strong> commercial_gate_blocked<br />
+    <strong>GO:</strong> NO-GO · Customer: not recorded<br />
+    <strong>Week 2–4:</strong> in progress · Scale: in progress<br />
+    <strong>Commercial inflection:</strong> p0_ops_vault_blocked · score 24/100
+  </div>
+
+  <p class="honesty">PASS &gt; SKIPPED — expansion LOI requires signed documents; multi-location LIVE per channel only. All F&amp;B formats supported.</p>
+
+  <h2>Execution gates</h2>
+  <table>
+    <thead><tr><th></th><th>Gate</th><th>Proof</th><th>Detail</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Pilot Week 1 execution complete</td>
+        <td>commercial_gate_blocked</td>
+        <td>Complete Step 5 — production pilot Week 1 checkpoint.</td>
+        <td><code>npm run ops:run-pilot-week1-execution -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 2–4 usage review phases</td>
+        <td>in_progress</td>
+        <td>Record Week 2–4 milestones with real operator usage — all F&amp;B formats.</td>
+        <td><code>npm run ops:validate-scale-readiness-env -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Pilot metrics baseline PASS</td>
+        <td>pending</td>
+        <td>Week 3 metrics trend requires honest pilot-metrics-baseline artifact.</td>
+        <td><code>npm run smoke:pilot-metrics-baseline</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Scale readiness gates (enterprise expansion)</td>
+        <td>in_progress</td>
+        <td>Complete scale readiness gates after Week 2–4 review.</td>
+        <td><code>npm run ops:run-scale-readiness-post-month2-orchestrator -- --write</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Scale readiness integrity</td>
+        <td>integrity_pending</td>
+        <td>No fake scale PASS or shared GO across customers.</td>
+        <td><code>npm run ops:validate-scale-readiness-integrity -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Commercial inflection readiness</td>
+        <td>p0_ops_vault_blocked</td>
+        <td>Resolve remaining commercial inflection blockers.</td>
+        <td><code>npm run ops:run-commercial-inflection-readiness-orchestrator -- --json</code></td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>GO decision still honest</td>
+        <td>NO-GO</td>
+        <td>GO must remain valid through scale phase — re-run smoke:pilot-gono-go if artifacts drift.</td>
+        <td><code>npm run smoke:pilot-gono-go</code></td>
+      </tr></tbody>
+  </table>
+
+  <h2>Week 2–4 expansion phases</h2>
+  <table>
+    <thead><tr><th></th><th>Phase</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 2 — Daily ops cadence (Owner Briefing + Integration Health)</td>
+        <td>Review /dashboard/today + /dashboard/integration-health, then PILOT_SCALE_WEEK2_OPS_REVIEWED=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 3 — Reports + metrics trend vs baseline</td>
+        <td>Run npm run smoke:pilot-metrics-baseline until overall: PASSED</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Week 4 — Expansion readiness (second location or format)</td>
+        <td>Sales + Founder review expansion path, then PILOT_SCALE_WEEK4_EXPANSION_READINESS=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Multi-location onboarding (if locationCount &gt; 1) (optional)</td>
+        <td>Set PILOT_SCALE_MULTI_LOCATION_STATUS=pass|skipped_single_location|deferred_honest</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Expansion LOI + scope sign-off</td>
+        <td>Sign expansion LOI, then set PILOT_SCALE_EXPANSION_LOI_SIGNED_DATE + PILOT_SCALE_EXPANSION_SCOPE — never fake</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Feature maturity matrix review (pilot evidence)</td>
+        <td>PM reviews maturity scores with operator evidence, then PILOT_SCALE_MATURITY_MATRIX_REVIEWED=1</td>
+      </tr></tbody>
+  </table>
+
+  <h2>Scale readiness gates</h2>
+  <table>
+    <thead><tr><th></th><th>Gate</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Gate 1 — Per-customer GO artifacts (no shared GO)</td>
+        <td>Set SCALE_PER_CUSTOMER_GO_ISOLATION=1 after documenting separate GO artifact per customer — never reuse across prospects</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Gate 2 — SOC2 readiness track (no false certification claims)</td>
+        <td>Review forbidden claims + SOC2 roadmap, then SCALE_SOC2_READINESS_TRACK_REVIEWED=1</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Gate 3 — Enterprise SSO production cutover</td>
+        <td>Complete P0 SSO staging smoke first — artifacts/p0-staging-proof-unblock-summary.json</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Gate 4 — Rollback + webhook resilience drills</td>
+        <td>Set SCALE_RESILIENCE_DRILLS_ATTESTED=1 after staging/tabletop drills</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Gate 5 — Investor/partner data room artifact chain</td>
+        <td>Fix artifact chain: artifacts/p0-staging-proof-unblock-summary.json → proof_passed; artifacts/tier2-staging-golden-path-summary.json → proof_passed; artifacts/pilot-metrics-baseline-summary.json → overall: PASSED; artifacts/investor-narrative-onepager-summary.json → proof_ready_with_metrics; artifacts/pilot-gono-go-summary.json → decision: GO</td>
+      </tr>
+      <tr>
+        <td class="status-blocked">✗</td>
+        <td>Gate 6 — Second paid pilot validation (optional) (optional)</td>
+        <td>Optional: queue second prospect or SCALE_SECOND_PAID_PILOT_SKIPPED=1</td>
+      </tr></tbody>
+  </table>
+
+  <h2>Recommended commands</h2>
+  <ol><li><code>npm run ops:run-pilot-week1-execution -- --write</code></li><li><code>npm run ops:run-pilot-week1-execution -- --execute</code></li></ol>
+</body>
+</html>

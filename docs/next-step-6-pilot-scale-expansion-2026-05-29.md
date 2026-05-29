@@ -21,6 +21,16 @@ If Week 1 not PASS — return to [`next-step-5-pilot-week1-2026-05-29.md`](./nex
 
 ## Execution sequence
 
+### 6.0 Pilot scale expansion execution orchestrator (Step 6 assess)
+
+```bash
+npm run ops:run-pilot-scale-expansion-execution -- --write
+```
+
+Review milestone in stdout. Expected progression when Week 1 passed:
+
+`week1_execution_blocked` → `awaiting_week2_daily_ops` → … → `scale_complete` → `pilot_scale_expansion_passed`
+
 ### 6.1 Week 2–4 usage review
 
 | Week | Focus | Owner |

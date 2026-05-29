@@ -18,6 +18,7 @@ export const SCALE_READINESS_ERA21_EXTENDS_POLICIES = [
 ] as const;
 
 export const SCALE_READINESS_ERA21_OPS_SCRIPTS = [
+  "ops:run-pilot-scale-expansion-execution",
   "ops:run-scale-readiness-post-month2-orchestrator",
   "ops:validate-scale-readiness-env",
   "ops:validate-scale-readiness-integrity",
@@ -28,12 +29,16 @@ export const SCALE_READINESS_ERA21_OPS_SCRIPTS = [
 ] as const;
 
 export const SCALE_READINESS_ERA21_CI_SCRIPTS = [
+  "test:ci:pilot-scale-expansion-execution",
+  "test:ci:pilot-scale-expansion-execution:cert",
   "test:ci:scale-readiness-era21",
   "test:ci:scale-readiness-era21:cert",
   "test:ci:scale-readiness-integrity-era30",
 ] as const;
 
 export const SCALE_READINESS_ERA21_UNIT_TESTS = [
+  "tests/unit/pilot-scale-expansion-execution-orchestrator.test.ts",
+  "tests/unit/pilot-scale-expansion-execution-cert-live.test.ts",
   "tests/unit/scale-readiness-post-month2-orchestrator-era21.test.ts",
   "tests/unit/scale-readiness-phases-era21.test.ts",
   "tests/unit/scale-readiness-ui-era21.test.ts",

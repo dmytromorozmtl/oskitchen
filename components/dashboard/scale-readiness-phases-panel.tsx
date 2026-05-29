@@ -151,6 +151,7 @@ export function ScaleReadinessPhasesPanel(props: {
                 Ops commands
               </p>
               <ul className="mt-1 list-inside list-disc font-mono">
+                <li>{slice.scaleExpansionExecutionCommand}</li>
                 <li>{slice.integrityValidateCommand}</li>
                 <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>{slice.validateMonth2IntegrityCommand}</li>

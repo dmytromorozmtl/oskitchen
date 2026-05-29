@@ -56,6 +56,8 @@ export type ScaleReadinessUiSlice = {
   exportTemplateCommand: string;
   syncProgressReportCommand: string;
   postMonth2OrchestratorCommand: string;
+  scaleExpansionExecutionCommand: string;
+  scaleExpansionExecutionArtifact: string;
   exportReadinessChecklistCommand: string;
   validateMonth2Command: string;
   validateMonth2IntegrityCommand: string;
@@ -178,6 +180,8 @@ export function buildScaleReadinessUiSlice(input: {
     syncProgressReportCommand: "npm run ops:sync-scale-readiness-progress-report -- --write",
     postMonth2OrchestratorCommand:
       "npm run ops:run-scale-readiness-post-month2-orchestrator -- --write",
+    scaleExpansionExecutionCommand: "npm run ops:run-pilot-scale-expansion-execution -- --write",
+    scaleExpansionExecutionArtifact: "artifacts/pilot-scale-expansion-execution-summary.json",
     exportReadinessChecklistCommand:
       "npm run ops:export-scale-readiness-readiness-checklist -- --write",
     validateMonth2Command: "npm run ops:validate-month2-market-readiness-env -- --json",

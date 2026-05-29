@@ -84,6 +84,11 @@ function main() {
         allowFail: true,
       }),
     );
+    steps.push(
+      runStep("pilot-scale-expansion", "npm run ops:run-pilot-scale-expansion-execution -- --write", {
+        allowFail: true,
+      }),
+    );
   } else if (!skipSmokes) {
     steps.push({
       id: "p0-orchestrator",

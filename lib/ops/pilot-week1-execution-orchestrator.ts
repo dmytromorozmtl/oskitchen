@@ -285,6 +285,7 @@ export function buildPilotWeek1ExecutionOrchestratorSummary(input: {
   }
 
   if (milestone === "week1_execution_passed") {
+    recommendedCommands.push("npm run ops:run-pilot-scale-expansion-execution -- --write");
     recommendedCommands.push("npm run run:production-pilot-ready");
   }
 
