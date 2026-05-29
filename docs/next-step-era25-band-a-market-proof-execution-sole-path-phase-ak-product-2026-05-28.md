@@ -72,19 +72,8 @@ Workflow: `.github/workflows/ops-era25-band-a-market-proof-execution-sole-path-i
 
 ---
 
-## Next step — Phase AL (era62)
+## Next step — Phase AL (era62) — **IMPLEMENTED**
 
-**Era25 P0 market proof honest closure capstone integrity** — records honest `proof_passed` on P0 artifact as the terminal Band A closure milestone after sole-path lock (no new era25 env; closure is artifact-driven).
+See [`docs/next-step-era25-p0-market-proof-honest-closure-capstone-phase-al-product-2026-05-28.md`](./next-step-era25-p0-market-proof-honest-closure-capstone-phase-al-product-2026-05-28.md).
 
-| Item | Value |
-|------|-------|
-| Prerequisite milestone | Honest `era25-band-a-market-proof-execution-sole-path` baseline + dual cert green |
-| Parent evaluator | era61 Band A sole-path integrity |
-| Platform anchor | `#era25-p0-market-proof-honest-closure-capstone` (planned) |
-| Briefing meta priority | **37** (planned) |
-| Env keys (planned) | `ERA25_P0_MARKET_PROOF_HONEST_CLOSURE_CAPSTONE_ERA25_ATTESTED`, `..._REPORT_REVIEWED` |
-| Baseline artifact | `artifacts/era25-p0-market-proof-honest-closure-capstone-integrity-baseline.json` (planned) |
-| Violation IDs (planned) | `closure_without_sole_path`, `closure_claims_proof_passed_without_artifact`, `fake_closure_attestation`, upstream era61 fail |
-| CI | `test:ci:era25-p0-market-proof-honest-closure-capstone-integrity-era62` + extend pure-ops era25 cert |
-
-**Human acceptance (preview):** sole-path PASS → P0 vault + smoke until artifact `proof_passed` → attest closure capstone only with honest artifact → validate JSON → era25 governance chain fully closed for market proof.
+**Phase AM (era63)** — Era25 post-market-proof steady operational witness (planned).

@@ -30,6 +30,7 @@ import { formatPureOperationalModeTerminusEra25Label } from "@/lib/commercial/pu
 import { formatEra25CommercialPilotConvergenceTrainClosureEra25Label } from "@/lib/commercial/era25-commercial-pilot-convergence-train-closure-ui-era25";
 import { formatEra25PostReentrantCharterLockEra25Label } from "@/lib/commercial/era25-post-re-entrant-charter-lock-ui-era25";
 import { formatEra25CommercialPilotConvergenceTrainCapstoneEra25Label } from "@/lib/commercial/era25-commercial-pilot-convergence-train-capstone-ui-era25";
+import { formatEra25P0MarketProofHonestClosureCapstoneEra25Label } from "@/lib/commercial/era25-p0-market-proof-honest-closure-capstone-ui-era25";
 import { formatEra25BandAMarketProofExecutionSolePathEra25Label } from "@/lib/commercial/era25-band-a-market-proof-execution-sole-path-ui-era25";
 import { formatEra25ConvergenceGovernanceTerminusFreezeEra25Label } from "@/lib/commercial/era25-convergence-governance-terminus-freeze-ui-era25";
 import { formatEra25SteadyStateOperatorLoopLockEra25Label } from "@/lib/commercial/era25-steady-state-operator-loop-lock-ui-era25";
@@ -4254,6 +4255,173 @@ export function MaintenanceModePanel(props: {
                                                                                                       .integrityValidateCommand
                                                                                                   }
                                                                                                 </p>
+                                                                                                {slice.engineeringPathTerminus
+                                                                                                  .postTerminusSteadyState
+                                                                                                  .absolutePathEnd
+                                                                                                  .linearPathPermanentlyClosed
+                                                                                                  .step17Forbidden
+                                                                                                  .era25CharterExit
+                                                                                                  .firstCharterSliceReadiness
+                                                                                                  .engineeringGates
+                                                                                                  .firstProductSliceBlueprint
+                                                                                                  .ownerDailyBriefingBreakthrough
+                                                                                                  .paidPilotGoConvergence
+                                                                                                  .pilotWeek1ExecutionConvergence
+                                                                                                  .month2MarketReadinessConvergence
+                                                                                                  .scaleReadinessConvergence
+                                                                                                  .seriesAPartnerExpansionConvergence
+                                                                                                  .marketLeaderPositioningConvergence
+                                                                                                  .sustainedOperationalExcellenceConvergence
+                                                                                                  .pureOperationalModeTerminus
+                                                                                                  .commercialPilotConvergenceTrainClosure
+                                                                                                  .sustainedProductEvolutionReentrant
+                                                                                                  .era25PostReentrantCharterLock
+                                                                                                  .era25SteadyStateOperatorLoopLock
+                                                                                                  .era25CommercialPilotConvergenceTrainCapstone
+                                                                                                  .era25ConvergenceGovernanceTerminusFreeze
+                                                                                                  .era25BandAMarketProofExecutionSolePath
+                                                                                                  ?.era25P0MarketProofHonestClosureCapstone ? (
+                                                                                                  <div
+                                                                                                    id="era25-p0-market-proof-honest-closure-capstone"
+                                                                                                    className="mt-3 scroll-mt-24 rounded-lg border border-dashed border-amber-600/40 px-3 py-3"
+                                                                                                    data-testid="era25-p0-market-proof-honest-closure-capstone-panel"
+                                                                                                  >
+                                                                                                    <p className="font-medium text-amber-200/90">
+                                                                                                      era25 P0 market proof honest closure capstone
+                                                                                                    </p>
+                                                                                                    <p className="mt-1 text-amber-300/80">
+                                                                                                      {formatEra25P0MarketProofHonestClosureCapstoneEra25Label(
+                                                                                                        slice.engineeringPathTerminus
+                                                                                                          .postTerminusSteadyState
+                                                                                                          .absolutePathEnd
+                                                                                                          .linearPathPermanentlyClosed
+                                                                                                          .step17Forbidden
+                                                                                                          .era25CharterExit
+                                                                                                          .firstCharterSliceReadiness
+                                                                                                          .engineeringGates
+                                                                                                          .firstProductSliceBlueprint
+                                                                                                          .ownerDailyBriefingBreakthrough
+                                                                                                          .paidPilotGoConvergence
+                                                                                                          .pilotWeek1ExecutionConvergence
+                                                                                                          .month2MarketReadinessConvergence
+                                                                                                          .scaleReadinessConvergence
+                                                                                                          .seriesAPartnerExpansionConvergence
+                                                                                                          .marketLeaderPositioningConvergence
+                                                                                                          .sustainedOperationalExcellenceConvergence
+                                                                                                          .pureOperationalModeTerminus
+                                                                                                          .commercialPilotConvergenceTrainClosure
+                                                                                                          .sustainedProductEvolutionReentrant
+                                                                                                          .era25PostReentrantCharterLock
+                                                                                                          .era25SteadyStateOperatorLoopLock
+                                                                                                          .era25CommercialPilotConvergenceTrainCapstone
+                                                                                                          .era25ConvergenceGovernanceTerminusFreeze
+                                                                                                          .era25BandAMarketProofExecutionSolePath
+                                                                                                          .era25P0MarketProofHonestClosureCapstone,
+                                                                                                      )}
+                                                                                                    </p>
+                                                                                                    <div className="mt-2 flex flex-wrap gap-2">
+                                                                                                      {!slice.engineeringPathTerminus
+                                                                                                        .postTerminusSteadyState
+                                                                                                        .absolutePathEnd
+                                                                                                        .linearPathPermanentlyClosed
+                                                                                                        .step17Forbidden
+                                                                                                        .era25CharterExit
+                                                                                                        .firstCharterSliceReadiness
+                                                                                                        .engineeringGates
+                                                                                                        .firstProductSliceBlueprint
+                                                                                                        .ownerDailyBriefingBreakthrough
+                                                                                                        .paidPilotGoConvergence
+                                                                                                        .pilotWeek1ExecutionConvergence
+                                                                                                        .month2MarketReadinessConvergence
+                                                                                                        .scaleReadinessConvergence
+                                                                                                        .seriesAPartnerExpansionConvergence
+                                                                                                        .marketLeaderPositioningConvergence
+                                                                                                        .sustainedOperationalExcellenceConvergence
+                                                                                                        .pureOperationalModeTerminus
+                                                                                                        .commercialPilotConvergenceTrainClosure
+                                                                                                        .sustainedProductEvolutionReentrant
+                                                                                                        .era25PostReentrantCharterLock
+                                                                                                        .era25SteadyStateOperatorLoopLock
+                                                                                                        .era25CommercialPilotConvergenceTrainCapstone
+                                                                                                        .era25ConvergenceGovernanceTerminusFreeze
+                                                                                                        .era25BandAMarketProofExecutionSolePath
+                                                                                                        .era25P0MarketProofHonestClosureCapstone
+                                                                                                        .era25P0MarketProofHonestClosureCapstoneIntegrityPassed ? null : (
+                                                                                                        <Badge
+                                                                                                          variant="destructive"
+                                                                                                          className="rounded-full text-[10px]"
+                                                                                                        >
+                                                                                                          closure integrity FAIL
+                                                                                                        </Badge>
+                                                                                                      )}
+                                                                                                      {slice.engineeringPathTerminus
+                                                                                                        .postTerminusSteadyState
+                                                                                                        .absolutePathEnd
+                                                                                                        .linearPathPermanentlyClosed
+                                                                                                        .step17Forbidden
+                                                                                                        .era25CharterExit
+                                                                                                        .firstCharterSliceReadiness
+                                                                                                        .engineeringGates
+                                                                                                        .firstProductSliceBlueprint
+                                                                                                        .ownerDailyBriefingBreakthrough
+                                                                                                        .paidPilotGoConvergence
+                                                                                                        .pilotWeek1ExecutionConvergence
+                                                                                                        .month2MarketReadinessConvergence
+                                                                                                        .scaleReadinessConvergence
+                                                                                                        .seriesAPartnerExpansionConvergence
+                                                                                                        .marketLeaderPositioningConvergence
+                                                                                                        .sustainedOperationalExcellenceConvergence
+                                                                                                        .pureOperationalModeTerminus
+                                                                                                        .commercialPilotConvergenceTrainClosure
+                                                                                                        .sustainedProductEvolutionReentrant
+                                                                                                        .era25PostReentrantCharterLock
+                                                                                                        .era25SteadyStateOperatorLoopLock
+                                                                                                        .era25CommercialPilotConvergenceTrainCapstone
+                                                                                                        .era25ConvergenceGovernanceTerminusFreeze
+                                                                                                        .era25BandAMarketProofExecutionSolePath
+                                                                                                        .era25P0MarketProofHonestClosureCapstone
+                                                                                                        .era25MarketProofGovernanceChainClosed ? (
+                                                                                                        <Badge
+                                                                                                          variant="secondary"
+                                                                                                          className="rounded-full text-[10px]"
+                                                                                                        >
+                                                                                                          governance closed
+                                                                                                        </Badge>
+                                                                                                      ) : null}
+                                                                                                    </div>
+                                                                                                    <p className="mt-2 font-mono text-[10px] text-slate-500">
+                                                                                                      {
+                                                                                                        slice.engineeringPathTerminus
+                                                                                                          .postTerminusSteadyState
+                                                                                                          .absolutePathEnd
+                                                                                                          .linearPathPermanentlyClosed
+                                                                                                          .step17Forbidden
+                                                                                                          .era25CharterExit
+                                                                                                          .firstCharterSliceReadiness
+                                                                                                          .engineeringGates
+                                                                                                          .firstProductSliceBlueprint
+                                                                                                          .ownerDailyBriefingBreakthrough
+                                                                                                          .paidPilotGoConvergence
+                                                                                                          .pilotWeek1ExecutionConvergence
+                                                                                                          .month2MarketReadinessConvergence
+                                                                                                          .scaleReadinessConvergence
+                                                                                                          .seriesAPartnerExpansionConvergence
+                                                                                                          .marketLeaderPositioningConvergence
+                                                                                                          .sustainedOperationalExcellenceConvergence
+                                                                                                          .pureOperationalModeTerminus
+                                                                                                          .commercialPilotConvergenceTrainClosure
+                                                                                                          .sustainedProductEvolutionReentrant
+                                                                                                          .era25PostReentrantCharterLock
+                                                                                                          .era25SteadyStateOperatorLoopLock
+                                                                                                          .era25CommercialPilotConvergenceTrainCapstone
+                                                                                                          .era25ConvergenceGovernanceTerminusFreeze
+                                                                                                          .era25BandAMarketProofExecutionSolePath
+                                                                                                          .era25P0MarketProofHonestClosureCapstone
+                                                                                                          .integrityValidateCommand
+                                                                                                      }
+                                                                                                    </p>
+                                                                                                  </div>
+                                                                                                ) : null}
                                                                                               </div>
                                                                                             ) : null}
                                                                                           </div>

@@ -5,6 +5,10 @@ import type { CompetitorFeatureGapMatrixSummary } from "@/lib/commercial/competi
 import { evaluateEra25BandAMarketProofExecutionSolePathIntegrity } from "@/lib/commercial/era25-band-a-market-proof-execution-sole-path-integrity-era61";
 import type { Era25ConvergenceGovernanceTerminusFreezeIntegritySummary } from "@/lib/commercial/era25-convergence-governance-terminus-freeze-integrity-era60";
 import {
+  buildEra25P0MarketProofHonestClosureCapstoneEra25UiSlice,
+  type Era25P0MarketProofHonestClosureCapstoneEra25UiSlice,
+} from "@/lib/commercial/era25-p0-market-proof-honest-closure-capstone-ui-era25";
+import {
   ERA25_BAND_A_MARKET_PROOF_EXECUTION_SOLE_PATH_DOC,
   ERA25_BAND_A_MARKET_PROOF_EXECUTION_SOLE_PATH_FOREVER_COMMANDS,
   ERA25_BAND_A_MARKET_PROOF_EXECUTION_SOLE_PATH_GUARDRAILS,
@@ -57,6 +61,7 @@ export type Era25BandAMarketProofExecutionSolePathEra25UiSlice = {
   improvementLoopHref: string;
   todayHref: string;
   headline: string;
+  era25P0MarketProofHonestClosureCapstone: Era25P0MarketProofHonestClosureCapstoneEra25UiSlice | null;
 };
 
 export function buildEra25BandAMarketProofExecutionSolePathEra25UiSlice(input: {
@@ -73,6 +78,7 @@ export function buildEra25BandAMarketProofExecutionSolePathEra25UiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   p0ProofStatus?: string | null;
   tier2ProofStatus?: string | null;
+  terminusIntegritySummary?: Era25ConvergenceGovernanceTerminusFreezeIntegritySummary | null;
 }): Era25BandAMarketProofExecutionSolePathEra25UiSlice | null {
   const env = input.env ?? process.env;
   const solePathStarted = detectEra25BandAMarketProofExecutionSolePathStarted(env);
@@ -101,6 +107,23 @@ export function buildEra25BandAMarketProofExecutionSolePathEra25UiSlice(input: {
 
   const solePathComplete = solePathIntegrity.era25BandAMarketProofExecutionSolePathComplete;
   const solePathBlocked = !solePathComplete;
+
+  const era25P0MarketProofHonestClosureCapstone = buildEra25P0MarketProofHonestClosureCapstoneEra25UiSlice({
+    era25BandAMarketProofExecutionSolePathVisible: true,
+    bandAExecutionSolePathLocked: solePathIntegrity.bandAExecutionSolePathLocked,
+    env,
+    goNoGoSummary: input.goNoGoSummary,
+    p0Staging: input.p0Staging,
+    tier2Summary: input.tier2Summary,
+    metricsBaseline: input.metricsBaseline,
+    caseStudyDraft: input.caseStudyDraft,
+    investorOnepager: input.investorOnepager,
+    rollbackDrill: input.rollbackDrill,
+    competitorMatrix: input.competitorMatrix,
+    p0ProofStatus,
+    tier2ProofStatus,
+    solePathIntegritySummary: solePathIntegrity,
+  });
 
   const headline = solePathComplete
     ? `Band A sole-path locked · execute P0 ops vault until proof_passed (${solePathIntegrity.p0ProofStatus ?? "awaiting"})`
@@ -149,6 +172,7 @@ export function buildEra25BandAMarketProofExecutionSolePathEra25UiSlice(input: {
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     todayHref: "/dashboard/today",
     headline,
+    era25P0MarketProofHonestClosureCapstone,
   };
 }
 

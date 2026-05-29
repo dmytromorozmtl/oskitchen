@@ -78,6 +78,8 @@ export function LaunchWizardTodayStrip(props: {
       props.model.era25ConvergenceGovernanceTerminusFreezeIntegrity,
     era25BandAMarketProofExecutionSolePath:
       props.model.era25BandAMarketProofExecutionSolePathIntegrity,
+    era25P0MarketProofHonestClosureCapstone:
+      props.model.era25P0MarketProofHonestClosureCapstoneIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -539,6 +541,20 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-band-a-market-proof-execution-sole-path"
               >
                 Band A {view.era25BandAMarketProofExecutionSolePath.progressLabel}
+              </Badge>
+            ) : null}
+            {view.era25P0MarketProofHonestClosureCapstone ? (
+              <Badge
+                variant={
+                  view.era25P0MarketProofHonestClosureCapstone
+                    .era25P0MarketProofHonestClosureCapstoneIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-era25-p0-market-proof-honest-closure-capstone"
+              >
+                P0 closure {view.era25P0MarketProofHonestClosureCapstone.progressLabel}
               </Badge>
             ) : null}
           </div>
