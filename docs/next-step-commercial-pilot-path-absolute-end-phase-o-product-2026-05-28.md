@@ -70,7 +70,7 @@ npm run ops:sync-commercial-pilot-path-absolute-end-integrity-baseline -- --writ
 
 ## Next step after Phase O PASS
 
-**Phase P — Linear path permanently closed integrity (`era40`)** — mirror era28–era39 on `linear-path-permanently-closed-*`
+**Phase P — Linear path permanently closed integrity (`era40`)** — **IMPLEMENTED** · see [`docs/next-step-linear-path-permanently-closed-phase-p-product-2026-05-28.md`](./next-step-linear-path-permanently-closed-phase-p-product-2026-05-28.md)
 
 | Component | Planned artifact |
 |-----------|------------------|

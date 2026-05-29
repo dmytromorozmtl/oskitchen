@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  detectLinearPathPermanentlyClosedStarted,
   LINEAR_PATH_DOC_CHAIN_STEP_DOCS,
   LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC,
   TERMINAL_FORBIDDEN_ACTIONS,
@@ -12,6 +13,15 @@ describe("linear-path-permanently-closed-phases-era24", () => {
     expect(LINEAR_PATH_DOC_CHAIN_STEP_DOCS).toHaveLength(16);
     expect(LINEAR_PATH_DOC_CHAIN_STEP_DOCS[15]).toBe(LINEAR_PATH_PERMANENTLY_CLOSED_STEP16_DOC);
     expect(TERMINAL_FORBIDDEN_ACTIONS.length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("detects linear path env attestation", () => {
+    expect(detectLinearPathPermanentlyClosedStarted({})).toBe(false);
+    expect(
+      detectLinearPathPermanentlyClosedStarted({
+        LINEAR_PATH_PERMANENTLY_CLOSED_TERMINAL_CLOSURE_ATTESTED: "1",
+      }),
+    ).toBe(true);
   });
 
   it("requires absolute end for terminal closure", () => {

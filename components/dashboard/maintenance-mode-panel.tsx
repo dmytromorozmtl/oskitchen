@@ -543,6 +543,18 @@ export function MaintenanceModePanel(props: {
                   ? "PASS"
                   : "FAIL"}
               </Badge>
+              {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                .linearPathPermanentlyClosed.linearPathPermanentlyClosedIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Linear path blocked
+                </Badge>
+              ) : null}
+              {!slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                .linearPathPermanentlyClosed.commercialPilotPathAbsoluteEndIntegrityPassed ? (
+                <Badge variant="destructive" className="rounded-full text-[10px]">
+                  Absolute end integrity FAIL
+                </Badge>
+              ) : null}
             </div>
             <ul className="mt-3 list-disc space-y-1 pl-4 text-slate-400">
               {slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd.linearPathPermanentlyClosed.forbiddenActions.map(
@@ -574,6 +586,25 @@ export function MaintenanceModePanel(props: {
                 {
                   slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
                     .linearPathPermanentlyClosed.terminusGuardValidateCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed
+                    .validateCommercialPilotPathAbsoluteEndIntegrityCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.integrityValidateCommand
+                }
+              </span>
+              <span>
+                {
+                  slice.engineeringPathTerminus.postTerminusSteadyState.absolutePathEnd
+                    .linearPathPermanentlyClosed.syncIntegrityBaselineCommand
                 }
               </span>
             </div>

@@ -15,6 +15,19 @@ export const LINEAR_PATH_PERMANENTLY_CLOSED_REPORT_PATH =
 export const LINEAR_PATH_PERMANENTLY_CLOSED_PLATFORM_ANCHOR =
   "#linear-path-permanently-closed" as const;
 
+export const LINEAR_PATH_PERMANENTLY_CLOSED_TRACKED_ENV_KEYS = [
+  "LINEAR_PATH_PERMANENTLY_CLOSED_TERMINAL_CLOSURE_ATTESTED",
+  "LINEAR_PATH_PERMANENTLY_CLOSED_REPORT_REVIEWED",
+] as const;
+
+export function detectLinearPathPermanentlyClosedStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return LINEAR_PATH_PERMANENTLY_CLOSED_TRACKED_ENV_KEYS.some((key) =>
+    Boolean(env[key]?.trim()),
+  );
+}
+
 /** Full linear doc chain Steps 1–16 — cert verifies these exist. */
 export const LINEAR_PATH_DOC_CHAIN_STEP_DOCS: readonly string[] = [
   "docs/next-step-1-ops-vault-day0-execution-2026-05-28.md",

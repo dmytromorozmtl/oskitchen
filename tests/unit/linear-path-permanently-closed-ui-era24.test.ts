@@ -23,6 +23,10 @@ describe("linear-path-permanently-closed-ui-era24", () => {
     expect(slice?.terminusGuardValidateCommand).toBe(
       "npm run ops:validate-linear-chain-terminus-guard -- --json",
     );
+    expect(slice?.integrityValidateCommand).toBe(
+      "npm run ops:validate-linear-path-permanently-closed-integrity -- --json",
+    );
+    expect(slice?.launchWizardHref).toContain("#launch-wizard-linear-path-permanently-closed");
     expect(slice?.step17Forbidden).toBeNull();
   });
 

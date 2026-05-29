@@ -147,6 +147,8 @@ export function buildLinearPathPermanentlyClosedPostAbsoluteEndOrchestratorSumma
 
   const recommendedCommands = input.evaluation.terminalClosureActive
     ? ([
+        "npm run ops:validate-commercial-pilot-path-absolute-end-integrity -- --json",
+        "npm run ops:validate-linear-path-permanently-closed-integrity -- --json",
         "npm run ops:validate-commercial-pilot-path-absolute-end -- --json",
         "npm run ops:validate-linear-chain-terminus-guard -- --json",
         LINEAR_PATH_PERMANENTLY_CLOSED_POST_ABSOLUTE_END_ORCHESTRATOR_COMMAND + " -- --write",

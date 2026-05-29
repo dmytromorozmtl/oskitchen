@@ -18,6 +18,7 @@ import type { LaunchWizardMaintenanceModeSlice } from "@/lib/launch-wizard/launc
 import type { LaunchWizardEngineeringTerminusSlice } from "@/lib/launch-wizard/launch-wizard-engineering-terminus-era37";
 import type { LaunchWizardPostTerminusSteadyStateSlice } from "@/lib/launch-wizard/launch-wizard-post-terminus-steady-state-era38";
 import type { LaunchWizardCommercialPilotPathAbsoluteEndSlice } from "@/lib/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-era39";
+import type { LaunchWizardLinearPathPermanentlyClosedSlice } from "@/lib/launch-wizard/launch-wizard-linear-path-permanently-closed-era40";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -55,6 +56,7 @@ export type LaunchWizardTodayStripViewModel = {
   engineeringTerminus: LaunchWizardEngineeringTerminusSlice | null;
   postTerminusSteadyState: LaunchWizardPostTerminusSteadyStateSlice | null;
   commercialPilotPathAbsoluteEnd: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
+  linearPathPermanentlyClosed: LaunchWizardLinearPathPermanentlyClosedSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -107,6 +109,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   engineeringTerminus?: LaunchWizardEngineeringTerminusSlice | null;
   postTerminusSteadyState?: LaunchWizardPostTerminusSteadyStateSlice | null;
   commercialPilotPathAbsoluteEnd?: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
+  linearPathPermanentlyClosed?: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -251,7 +254,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : commercialPilotPathAbsoluteEndSubline
+        : linearPathPermanentlyClosedSubline
+          ? commercialPilotPathAbsoluteEndSubline
+            ? `${commercialPilotPathAbsoluteEndSubline} · ${linearPathPermanentlyClosedSubline}`
+            : linearPathPermanentlyClosedSubline
+          : commercialPilotPathAbsoluteEndSubline
           ? postTerminusSteadyStateSubline
             ? `${postTerminusSteadyStateSubline} · ${commercialPilotPathAbsoluteEndSubline}`
             : commercialPilotPathAbsoluteEndSubline

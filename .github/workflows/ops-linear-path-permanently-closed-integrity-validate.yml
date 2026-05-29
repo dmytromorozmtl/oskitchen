@@ -1,0 +1,26 @@
+# Linear path permanently closed integrity — blocks Step 16 attestation without honest Commercial pilot path absolute end.
+
+name: Linear Path Permanently Closed Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/linear-path-permanently-closed-integrity-baseline.json"
+      - "artifacts/linear-path-permanently-closed-report.md"
+      - "lib/commercial/linear-path-permanently-closed-integrity-era40.ts"
+      - "scripts/ops/validate-linear-path-permanently-closed-integrity.ts"
+
+jobs:
+  validate-linear-path-permanently-closed-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Linear path permanently closed integrity (JSON)
+        run: npm run ops:validate-linear-path-permanently-closed-integrity -- --json

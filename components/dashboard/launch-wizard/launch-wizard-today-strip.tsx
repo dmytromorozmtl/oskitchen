@@ -47,6 +47,7 @@ export function LaunchWizardTodayStrip(props: {
     engineeringTerminus: props.model.engineeringPathTerminusIntegrity,
     postTerminusSteadyState: props.model.postTerminusSteadyStateIntegrity,
     commercialPilotPathAbsoluteEnd: props.model.commercialPilotPathAbsoluteEndIntegrity,
+    linearPathPermanentlyClosed: props.model.linearPathPermanentlyClosedIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
     displayMode,
@@ -216,6 +217,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-commercial-pilot-path-absolute-end"
               >
                 Absolute end {view.commercialPilotPathAbsoluteEnd.progressLabel}
+              </Badge>
+            ) : null}
+            {view.linearPathPermanentlyClosed ? (
+              <Badge
+                variant={
+                  view.linearPathPermanentlyClosed.linearPathPermanentlyClosedIntegrityFailed
+                    ? "destructive"
+                    : "outline"
+                }
+                className="rounded-full text-[10px] font-normal"
+                data-testid="launch-wizard-today-strip-linear-path-permanently-closed"
+              >
+                Linear path {view.linearPathPermanentlyClosed.progressLabel}
               </Badge>
             ) : null}
           </div>

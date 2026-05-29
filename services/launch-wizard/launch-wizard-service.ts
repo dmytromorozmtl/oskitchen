@@ -103,6 +103,11 @@ import {
   type LaunchWizardCommercialPilotPathAbsoluteEndSlice,
 } from "@/lib/launch-wizard/launch-wizard-commercial-pilot-path-absolute-end-era39";
 import {
+  buildLaunchWizardLinearPathPermanentlyClosedSlice,
+  type LaunchWizardLinearPathPermanentlyClosedSlice,
+} from "@/lib/launch-wizard/launch-wizard-linear-path-permanently-closed-era40";
+import type { LinearPathPermanentlyClosedUiSlice } from "@/lib/commercial/linear-path-permanently-closed-ui-era24";
+import {
   buildLaunchWizardTier2StatusSlice,
   type LaunchWizardTier2StatusSlice,
 } from "@/lib/launch-wizard/launch-wizard-tier2-status-era21";
@@ -208,6 +213,8 @@ export type LaunchWizardModel = {
   postTerminusSteadyStateIntegrity: LaunchWizardPostTerminusSteadyStateSlice | null;
   commercialPilotPathAbsoluteEnd: CommercialPilotPathAbsoluteEndUiSlice | null;
   commercialPilotPathAbsoluteEndIntegrity: LaunchWizardCommercialPilotPathAbsoluteEndSlice | null;
+  linearPathPermanentlyClosed: LinearPathPermanentlyClosedUiSlice | null;
+  linearPathPermanentlyClosedIntegrity: LaunchWizardLinearPathPermanentlyClosedSlice | null;
   paidPilotGoConvergence: PaidPilotGoConvergenceEra25UiSlice | null;
 };
 
@@ -890,6 +897,12 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     commercialPilotPathAbsoluteEnd,
     commercialOps?.goNoGo.summary?.customerName ?? null,
   );
+  const linearPathPermanentlyClosed =
+    commercialPilotPathAbsoluteEnd?.linearPathPermanentlyClosed ?? null;
+  const linearPathPermanentlyClosedIntegrity = buildLaunchWizardLinearPathPermanentlyClosedSlice(
+    linearPathPermanentlyClosed,
+    commercialOps?.goNoGo.summary?.customerName ?? null,
+  );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -930,6 +943,8 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     postTerminusSteadyStateIntegrity,
     commercialPilotPathAbsoluteEnd,
     commercialPilotPathAbsoluteEndIntegrity,
+    linearPathPermanentlyClosed,
+    linearPathPermanentlyClosedIntegrity,
     paidPilotGoConvergence,
   };
 }
