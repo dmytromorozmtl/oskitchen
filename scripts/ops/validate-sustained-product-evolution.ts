@@ -2,6 +2,7 @@
 /**
  * Validates sustained product evolution tracks (Step 11, informational).
  */
+import { resolveSustainedProductEvolutionMilestone } from "@/lib/commercial/sustained-product-evolution-post-improvement-loop-orchestrator-era23";
 import { readContinuousImprovementLoopArtifacts } from "@/scripts/ops/validate-continuous-improvement-loop";
 import {
   buildSustainedProductEvolutionTrackStatuses,
@@ -17,6 +18,9 @@ export function evaluateSustainedProductEvolution(env: NodeJS.ProcessEnv = proce
   productEvolutionReady: boolean;
   tracks: ReturnType<typeof buildSustainedProductEvolutionTrackStatuses>;
   health: ReturnType<typeof resolveSustainedProductEvolutionHealthSummary>;
+  readyForFeedbackSmokes: boolean;
+  readyForLeapfrogSmokes: boolean;
+  productEvolutionMilestone: ReturnType<typeof resolveSustainedProductEvolutionMilestone>;
 } {
   const artifacts = readContinuousImprovementLoopArtifacts();
   const goDecision = artifacts.goNoGoSummary?.decision ?? null;
@@ -41,6 +45,18 @@ export function evaluateSustainedProductEvolution(env: NodeJS.ProcessEnv = proce
     customerName: artifacts.goNoGoSummary?.customerName ?? null,
   });
   const health = resolveSustainedProductEvolutionHealthSummary(tracks);
+  const feedback = tracks.find((track) => track.id === "customer_feedback_backlog");
+  const leapfrog = tracks.find((track) => track.id === "competitor_leapfrog_roadmap");
+  const readyForFeedbackSmokes =
+    prerequisites.productEvolutionReady &&
+    (feedback?.status === "overdue" || feedback?.status === "due_soon");
+  const readyForLeapfrogSmokes =
+    prerequisites.productEvolutionReady &&
+    (leapfrog?.status === "overdue" || leapfrog?.status === "due_soon");
+  const productEvolutionMilestone = resolveSustainedProductEvolutionMilestone({
+    productEvolutionReady: prerequisites.productEvolutionReady,
+    tracks,
+  });
 
   return {
     prerequisites,
@@ -49,6 +65,9 @@ export function evaluateSustainedProductEvolution(env: NodeJS.ProcessEnv = proce
     productEvolutionReady: prerequisites.productEvolutionReady,
     tracks,
     health,
+    readyForFeedbackSmokes,
+    readyForLeapfrogSmokes,
+    productEvolutionMilestone,
   };
 }
 
@@ -64,6 +83,9 @@ function main() {
           productEvolutionReady: result.productEvolutionReady,
           continuousImprovementLoopActive: result.continuousImprovementLoopActive,
           goDecision: result.goDecision,
+          productEvolutionMilestone: result.productEvolutionMilestone,
+          readyForFeedbackSmokes: result.readyForFeedbackSmokes,
+          readyForLeapfrogSmokes: result.readyForLeapfrogSmokes,
           health: result.health,
           tracks: result.tracks.map((track) => ({
             id: track.id,
@@ -90,6 +112,8 @@ function main() {
     console.log(`  goDecision: ${result.goDecision ?? "missing"}\n`);
     process.exit(0);
   }
+
+  console.log(`Product evolution milestone: ${result.productEvolutionMilestone}\n`);
 
   for (const track of result.tracks) {
     console.log(`[${track.status}] ${track.label} (${track.ownerRole})`);

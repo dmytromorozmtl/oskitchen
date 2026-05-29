@@ -22,6 +22,9 @@ export function buildSustainedProductEvolutionProgressReportMarkdown(
     `- Improvement loop active: **${result.continuousImprovementLoopActive ? "yes" : "no"}**`,
     `- GO decision: **${result.goDecision ?? "missing"}**`,
     `- Overdue tracks: ${result.health.overdueCount}`,
+    `- productEvolutionMilestone: **${result.productEvolutionMilestone}**`,
+    `- Ready for feedback smokes: ${result.readyForFeedbackSmokes ? "yes" : "no"}`,
+    `- Ready for leapfrog smokes: ${result.readyForLeapfrogSmokes ? "yes" : "no"}`,
     "",
     "## Product evolution tracks",
     "",
@@ -47,6 +50,7 @@ export function buildSustainedProductEvolutionProgressReportMarkdown(
   lines.push("## Next commands");
   lines.push("");
   lines.push("```bash");
+  lines.push("npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write");
   lines.push("npm run ops:validate-sustained-product-evolution -- --json");
   lines.push("npm run ops:export-sustained-product-evolution-ownership-matrix -- --write");
   lines.push("npm run smoke:pilot-metrics-baseline");

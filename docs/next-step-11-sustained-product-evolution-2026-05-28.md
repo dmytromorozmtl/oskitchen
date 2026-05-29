@@ -43,22 +43,38 @@ Evidence tracks use artifact freshness + `operator_feedback_score` from metrics 
 ## Preflight
 
 ```bash
+npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write
 npm run ops:run-continuous-improvement-loop-post-sustained-ops-orchestrator -- --json   # improvementLoopMilestone: loop_all_healthy
 npm run ops:validate-continuous-improvement-loop -- --json   # pureOperationalMode: true
-npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write   # planned — Step 11 orchestrator
 npm run ops:validate-sustained-product-evolution -- --json
 npm run ops:export-sustained-product-evolution-ownership-matrix -- --write
 ```
 
-**Planned post-improvement-loop orchestrator milestones (`productEvolutionMilestone`):**
+**Post-improvement-loop orchestrator milestones (`productEvolutionMilestone`):**
 
-| Milestone | Track | Exit code |
-|-----------|-------|-----------|
+| Milestone | Track | Exit code (orchestrator `--json`) |
+|-----------|-------|-----------------------------------|
 | `improvement_loop_blocked` | Step 10 not in pure operational mode | `2` |
-| `attention_customer_feedback` | operator_feedback_score stale | `0` |
-| `attention_competitor_leapfrog` | leapfrog doc review overdue | `0` |
-| `attention_gtm_alignment` | landing pages vs forbidden claims | `0` |
-| `product_evolution_healthy` | All 6 tracks fresh | `0` |
+| `attention_customer_feedback` | `operator_feedback_score` stale | `0` |
+| `attention_competitor_leapfrog` | competitor leapfrog review overdue | `0` |
+| `product_evolution_healthy` | Measurable tracks fresh | `0` |
+
+**Smoke readiness flags in validate JSON (informational):**
+
+- `readyForFeedbackSmokes`: product evolution ready + customer feedback track overdue/due soon
+- `readyForLeapfrogSmokes`: product evolution ready + competitor leapfrog track overdue/due soon
+
+**Guidance tracks (manual cadence):** feature maturity · GTM landing alignment · implementation hub · ownership matrix — no automatic milestone.
+
+**Product surfaces when product evolution ready:**
+
+| Surface | Expected |
+|---------|----------|
+| `/dashboard/today` | Product evolution compact panel (violet, below improvement loop) |
+| `/platform/commercial-pilot-ops` | `#sustained-product-evolution` panel |
+| `/dashboard/implementation` | feature maturity + rollout cadence |
+| `/solutions/ghost-kitchens` + `/solutions/meal-prep` | GTM vs forbidden claims |
+| `docs/implementation-backlog.md` | operator_feedback_score triage |
 
 ---
 
@@ -80,7 +96,7 @@ Stale thresholds: customer feedback 35d · competitor leapfrog 90d.
 ## Ops commands
 
 ```bash
-npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write   # planned
+npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write
 npm run ops:validate-sustained-product-evolution -- --json
 npm run ops:sync-sustained-product-evolution-progress-report -- --write
 npm run ops:export-sustained-product-evolution-ownership-matrix -- --write
@@ -88,9 +104,11 @@ npm run test:ci:sustained-product-evolution-era23
 npm run test:ci:sustained-product-evolution-era23:cert
 ```
 
-GitHub workflow: `.github/workflows/ops-sustained-product-evolution-validate.yml` (+ planned orchestrator step)
+GitHub workflow: `.github/workflows/ops-sustained-product-evolution-validate.yml` (includes orchestrator step with `continue-on-error: true`)
 
 Platform anchor: `#sustained-product-evolution`
+
+**Ownership matrix artifact:** `docs/sustained-product-evolution-ownership-matrix-era23.md` (generated via export script)
 
 ---
 
@@ -115,19 +133,22 @@ Platform anchor: `#sustained-product-evolution`
 
 ---
 
-## Step 12 preview — Maintenance mode (path complete)
+## Step 12 preview — Maintenance mode (era24 TERMINUS)
 
 See [`next-step-12-commercial-pilot-path-complete-2026-05-28.md`](./next-step-12-commercial-pilot-path-complete-2026-05-28.md)
 
-**Next engineering slice (Step 12 — era24 TERMINUS):**
+**Next engineering slice (Step 12 — final informational layer):**
 
 | Component | Planned artifact |
 |-----------|------------------|
-| Policy | `era24-maintenance-mode-v1` (already wired) |
-| Orchestrator | `era24-maintenance-mode-post-product-evolution-orchestrator-v1` |
-| UI panel | `#maintenance-mode` on Today + Platform ops |
-| Briefing | **No new priority** — visible when Steps 10–11 loops active |
-| Prerequisite | Step 11 product evolution tracks healthy |
+| Orchestrator lib | `lib/commercial/maintenance-mode-post-product-evolution-orchestrator-era24.ts` |
+| Policy | `era24-maintenance-mode-post-product-evolution-orchestrator-v1` |
+| Milestones | `product_evolution_blocked` → rhythm attention tracks → `maintenance_mode_healthy` |
+| Ops scripts | `ops:run-maintenance-mode-post-product-evolution-orchestrator`, `ops:export-maintenance-mode-rhythm-calendar`, `ops:sync-maintenance-mode-playbook-report` |
+| UI panel | `#maintenance-mode` on Today + Platform ops (aggregates era22 + era23 health) |
+| Briefing | **No new priority** — visible when Step 11 product evolution ready |
+
+**Human gate before Step 12:** `productEvolutionMilestone: product_evolution_healthy` OR attention tracks refreshed via smokes.
 
 **Immediate action if improvement loop inactive:** [`next-step-10-continuous-improvement-loop-2026-05-28.md`](./next-step-10-continuous-improvement-loop-2026-05-28.md)
 

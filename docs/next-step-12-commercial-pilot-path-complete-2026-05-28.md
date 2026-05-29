@@ -42,11 +42,22 @@ Maintenance mode (Step 12, era24 — path complete)
 ## Preflight
 
 ```bash
+npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --json   # productEvolutionMilestone: product_evolution_healthy
 npm run ops:validate-sustained-product-evolution -- --json   # productEvolutionReady: true
+npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write   # planned — Step 12 orchestrator
 npm run ops:validate-maintenance-mode -- --json
 npm run ops:export-maintenance-mode-rhythm-calendar -- --write
 npm run ops:sync-maintenance-mode-playbook-report -- --write
 ```
+
+**Planned post-product-evolution orchestrator milestones (`maintenanceModeMilestone`):**
+
+| Milestone | Meaning | Exit code |
+|-----------|---------|-----------|
+| `product_evolution_blocked` | Step 11 not ready | `2` |
+| `attention_weekly_rhythm` | Mon/Wed/Fri operator rhythms due | `0` |
+| `attention_monthly_cadence` | W1–W4 monthly cadence due | `0` |
+| `maintenance_mode_healthy` | All 10 rhythms current | `0` |
 
 ---
 

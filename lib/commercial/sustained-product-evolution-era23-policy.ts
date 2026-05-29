@@ -14,9 +14,11 @@ export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_EXTENDS_POLICIES = [
   "era22-continuous-improvement-loop-v1",
   SUSTAINED_PRODUCT_EVOLUTION_PHASES_ERA23_POLICY_ID,
   SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID,
+  "era23-sustained-product-evolution-post-improvement-loop-orchestrator-v1",
 ] as const;
 
 export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_OPS_SCRIPTS = [
+  "ops:run-sustained-product-evolution-post-improvement-loop-orchestrator",
   "ops:validate-sustained-product-evolution",
   "ops:sync-sustained-product-evolution-progress-report",
   "ops:export-sustained-product-evolution-ownership-matrix",
@@ -28,8 +30,10 @@ export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_CI_SCRIPTS = [
 ] as const;
 
 export const SUSTAINED_PRODUCT_EVOLUTION_ERA23_UNIT_TESTS = [
+  "tests/unit/sustained-product-evolution-post-improvement-loop-orchestrator-era23.test.ts",
   "tests/unit/sustained-product-evolution-phases-era23.test.ts",
   "tests/unit/sustained-product-evolution-ui-era23.test.ts",
+  "tests/unit/run-sustained-product-evolution-post-improvement-loop-orchestrator.test.ts",
   "tests/unit/validate-sustained-product-evolution.test.ts",
   "tests/unit/sustained-product-evolution-era23-cert-live.test.ts",
 ] as const;

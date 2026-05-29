@@ -28,6 +28,10 @@ const slice = {
   syncProgressReportCommand: "npm run ops:sync-sustained-product-evolution-progress-report -- --write",
   exportOwnershipMatrixCommand:
     "npm run ops:export-sustained-product-evolution-ownership-matrix -- --write",
+  postImprovementLoopOrchestratorCommand:
+    "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+  validateImprovementLoopCommand: "npm run ops:validate-continuous-improvement-loop -- --json",
+  productEvolutionMilestone: "product_evolution_healthy",
   todayHref: "/dashboard/today",
   platformOpsHref: "/platform/commercial-pilot-ops#sustained-product-evolution",
   improvementLoopHref: "/platform/commercial-pilot-ops#continuous-improvement-loop",

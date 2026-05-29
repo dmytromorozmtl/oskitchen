@@ -14,6 +14,10 @@ import {
   CONTINUOUS_IMPROVEMENT_LOOP_STEP10_DOC,
 } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
 import {
+  resolveSustainedProductEvolutionMilestoneFromTrackStatuses,
+  type SustainedProductEvolutionMilestone,
+} from "@/lib/commercial/sustained-product-evolution-post-improvement-loop-orchestrator-era23";
+import {
   buildSustainedProductEvolutionTrackStatuses,
   formatSustainedProductEvolutionTrackDetail,
   IMPLEMENTATION_BACKLOG_DOC,
@@ -65,6 +69,9 @@ export type SustainedProductEvolutionUiSlice = {
   validateCommand: string;
   syncProgressReportCommand: string;
   exportOwnershipMatrixCommand: string;
+  postImprovementLoopOrchestratorCommand: string;
+  validateImprovementLoopCommand: string;
+  productEvolutionMilestone: SustainedProductEvolutionMilestone;
   todayHref: string;
   platformOpsHref: string;
   improvementLoopHref: string;
@@ -119,6 +126,10 @@ export function buildSustainedProductEvolutionUiSlice(input: {
   const nextAttentionDetail = nextAttentionTrack
     ? formatSustainedProductEvolutionTrackDetail(nextAttentionTrack)
     : null;
+  const productEvolutionMilestone = resolveSustainedProductEvolutionMilestoneFromTrackStatuses(
+    tracks,
+    { productEvolutionReady: true },
+  );
 
   return {
     policyId: SUSTAINED_PRODUCT_EVOLUTION_UI_ERA23_POLICY_ID,
@@ -145,6 +156,10 @@ export function buildSustainedProductEvolutionUiSlice(input: {
     syncProgressReportCommand: "npm run ops:sync-sustained-product-evolution-progress-report -- --write",
     exportOwnershipMatrixCommand:
       "npm run ops:export-sustained-product-evolution-ownership-matrix -- --write",
+    postImprovementLoopOrchestratorCommand:
+      "npm run ops:run-sustained-product-evolution-post-improvement-loop-orchestrator -- --write",
+    validateImprovementLoopCommand: "npm run ops:validate-continuous-improvement-loop -- --json",
+    productEvolutionMilestone,
     todayHref: "/dashboard/today",
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${SUSTAINED_PRODUCT_EVOLUTION_PLATFORM_ANCHOR}`,
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
@@ -160,11 +175,12 @@ export function buildSustainedProductEvolutionUiSlice(input: {
 export function formatSustainedProductEvolutionProgressLabel(
   slice: SustainedProductEvolutionUiSlice,
 ): string {
+  const milestone = slice.productEvolutionMilestone.replaceAll("_", " ");
   if (slice.overdueCount > 0) {
-    return `Product evolution · ${slice.overdueCount} overdue · GO · ${slice.customerName ?? "customer"}`;
+    return `Product evolution · ${slice.overdueCount} overdue · ${milestone} · GO · ${slice.customerName ?? "customer"}`;
   }
   if (slice.dueSoonCount > 0) {
-    return `Product evolution · ${slice.dueSoonCount} due soon · GO · ${slice.customerName ?? "customer"}`;
+    return `Product evolution · ${slice.dueSoonCount} due soon · ${milestone} · GO · ${slice.customerName ?? "customer"}`;
   }
-  return `Product-led growth · ${slice.healthyCount} healthy tracks · GO · ${slice.customerName ?? "customer"}`;
+  return `Product-led growth · ${slice.healthyCount} healthy tracks · ${milestone} · GO · ${slice.customerName ?? "customer"}`;
 }
