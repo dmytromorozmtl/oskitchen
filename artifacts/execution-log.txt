@@ -167,3 +167,16 @@ P0: awaiting_ops_credentials
 GO: NO-GO
 Score: 24
 Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 14)
+
+---
+Cycle: 14
+Timestamp: 2026-05-29T19:45:00.000Z
+Action: fix: cashier speed mode default — created services/pos/resolvePosCashierSpeedMode.ts (cashier + no override → true)
+Files: services/pos/resolvePosCashierSpeedMode.ts
+TS errors before: 91
+TS errors after: 91
+Vault: false
+P0: awaiting_ops_credentials
+GO: NO-GO
+Score: 24
+Next: Branch 4 — create components/ui/LockedFeatureBanner.tsx (cycle 15)
