@@ -159,6 +159,10 @@ import {
   buildLaunchWizardEra25MarketLeaderPositioningConvergenceSlice,
   type LaunchWizardEra25MarketLeaderPositioningConvergenceSlice,
 } from "@/lib/launch-wizard/launch-wizard-era25-market-leader-positioning-convergence-era52";
+import {
+  buildLaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice,
+  type LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice,
+} from "@/lib/launch-wizard/launch-wizard-era25-sustained-operational-excellence-convergence-era53";
 import type { OwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import type { LinearChainTerminusGuardUiSlice } from "@/lib/commercial/linear-chain-terminus-guard-ui-era24";
 import {
@@ -235,6 +239,7 @@ import {
 } from "@/lib/commercial/scale-readiness-convergence-ui-era25";
 import type { SeriesAPartnerExpansionConvergenceEra25UiSlice } from "@/lib/commercial/series-a-partner-expansion-convergence-ui-era25";
 import type { MarketLeaderPositioningConvergenceEra25UiSlice } from "@/lib/commercial/market-leader-positioning-convergence-ui-era25";
+import type { SustainedOperationalExcellenceConvergenceEra25UiSlice } from "@/lib/commercial/sustained-operational-excellence-convergence-ui-era25";
 import { readMonth2MarketReadinessArtifacts } from "@/scripts/ops/validate-month2-market-readiness-env";
 import { readScaleReadinessArtifacts } from "@/scripts/ops/validate-scale-readiness-env";
 import { readSeriesAPartnerExpansionArtifacts } from "@/scripts/ops/validate-series-a-partner-expansion-env";
@@ -307,6 +312,8 @@ export type LaunchWizardModel = {
   era25SeriesAPartnerExpansionConvergenceIntegrity: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
   era25MarketLeaderPositioningConvergence: MarketLeaderPositioningConvergenceEra25UiSlice | null;
   era25MarketLeaderPositioningConvergenceIntegrity: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
+  era25SustainedOperationalExcellenceConvergence: SustainedOperationalExcellenceConvergenceEra25UiSlice | null;
+  era25SustainedOperationalExcellenceConvergenceIntegrity: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
 };
 
 async function loadLaunchWizardContext(userId: string): Promise<{
@@ -1275,6 +1282,13 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
       era25MarketLeaderPositioningConvergence,
       commercialOps?.goNoGo.summary?.customerName ?? null,
     );
+  const era25SustainedOperationalExcellenceConvergence =
+    era25MarketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence ?? null;
+  const era25SustainedOperationalExcellenceConvergenceIntegrity =
+    buildLaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice(
+      era25SustainedOperationalExcellenceConvergence,
+      commercialOps?.goNoGo.summary?.customerName ?? null,
+    );
 
   return {
     policyId: LAUNCH_WIZARD_ERA19_POLICY_ID,
@@ -1341,5 +1355,7 @@ export async function loadLaunchWizardModel(userId: string): Promise<LaunchWizar
     era25SeriesAPartnerExpansionConvergenceIntegrity,
     era25MarketLeaderPositioningConvergence,
     era25MarketLeaderPositioningConvergenceIntegrity,
+    era25SustainedOperationalExcellenceConvergence,
+    era25SustainedOperationalExcellenceConvergenceIntegrity,
   };
 }

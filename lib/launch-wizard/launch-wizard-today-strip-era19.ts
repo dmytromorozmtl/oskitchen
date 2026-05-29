@@ -31,6 +31,7 @@ import type { LaunchWizardEra25Month2MarketReadinessConvergenceSlice } from "@/l
 import type { LaunchWizardEra25ScaleReadinessConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-scale-readiness-convergence-era50";
 import type { LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-series-a-partner-expansion-convergence-era51";
 import type { LaunchWizardEra25MarketLeaderPositioningConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-market-leader-positioning-convergence-era52";
+import type { LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice } from "@/lib/launch-wizard/launch-wizard-era25-sustained-operational-excellence-convergence-era53";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -81,6 +82,7 @@ export type LaunchWizardTodayStripViewModel = {
   era25ScaleReadinessConvergence: LaunchWizardEra25ScaleReadinessConvergenceSlice | null;
   era25SeriesAPartnerExpansionConvergence: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
   era25MarketLeaderPositioningConvergence: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
+  era25SustainedOperationalExcellenceConvergence: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -146,6 +148,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   era25ScaleReadinessConvergence?: LaunchWizardEra25ScaleReadinessConvergenceSlice | null;
   era25SeriesAPartnerExpansionConvergence?: LaunchWizardEra25SeriesAPartnerExpansionConvergenceSlice | null;
   era25MarketLeaderPositioningConvergence?: LaunchWizardEra25MarketLeaderPositioningConvergenceSlice | null;
+  era25SustainedOperationalExcellenceConvergence?: LaunchWizardEra25SustainedOperationalExcellenceConvergenceSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -264,6 +267,17 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       ? `${era25MarketLeaderPositioningConvergenceSubline} · ${era25ScaleWithSeriesAConvergenceSubline}`
       : era25ScaleWithSeriesAConvergenceSubline
     : era25MarketLeaderPositioningConvergenceSubline;
+  const era25SustainedOperationalExcellenceConvergence =
+    input.era25SustainedOperationalExcellenceConvergence ?? null;
+  const era25SustainedOperationalExcellenceConvergenceSubline =
+    era25SustainedOperationalExcellenceConvergence
+      ? `Sustained ops ${era25SustainedOperationalExcellenceConvergence.progressLabel}${era25SustainedOperationalExcellenceConvergence.sustainedOperationalExcellenceConvergenceIntegrityFailed ? " · integrity FAIL" : ""}`
+      : null;
+  const era25FullConvergenceSubline = era25ScaleWithSeriesAAndMarketLeaderSubline
+    ? era25SustainedOperationalExcellenceConvergenceSubline
+      ? `${era25SustainedOperationalExcellenceConvergenceSubline} · ${era25ScaleWithSeriesAAndMarketLeaderSubline}`
+      : era25ScaleWithSeriesAAndMarketLeaderSubline
+    : era25SustainedOperationalExcellenceConvergenceSubline;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -316,6 +330,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       era25ScaleReadinessConvergence,
       era25SeriesAPartnerExpansionConvergence,
       era25MarketLeaderPositioningConvergence,
+      era25SustainedOperationalExcellenceConvergence,
     };
   }
 
@@ -368,16 +383,16 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : era25ScaleWithSeriesAAndMarketLeaderSubline
+        : era25FullConvergenceSubline
           ? era25Month2MarketReadinessConvergenceSubline
             ? era25PilotWeek1ExecutionConvergenceSubline
               ? era25PaidPilotGoConvergenceSubline
                 ? era25OwnerDailyBriefingBreakthroughSubline
-                  ? `${era25OwnerDailyBriefingBreakthroughSubline} · ${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAAndMarketLeaderSubline}`
-                  : `${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAAndMarketLeaderSubline}`
-                : `${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAAndMarketLeaderSubline}`
-              : `${era25Month2MarketReadinessConvergenceSubline} · ${era25ScaleWithSeriesAAndMarketLeaderSubline}`
-            : era25ScaleWithSeriesAAndMarketLeaderSubline
+                  ? `${era25OwnerDailyBriefingBreakthroughSubline} · ${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25FullConvergenceSubline}`
+                  : `${era25PaidPilotGoConvergenceSubline} · ${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25FullConvergenceSubline}`
+                : `${era25PilotWeek1ExecutionConvergenceSubline} · ${era25Month2MarketReadinessConvergenceSubline} · ${era25FullConvergenceSubline}`
+              : `${era25Month2MarketReadinessConvergenceSubline} · ${era25FullConvergenceSubline}`
+            : era25FullConvergenceSubline
           : era25Month2MarketReadinessConvergenceSubline
           ? era25PilotWeek1ExecutionConvergenceSubline
           ? era25PaidPilotGoConvergenceSubline
@@ -518,5 +533,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     era25ScaleReadinessConvergence,
     era25SeriesAPartnerExpansionConvergence,
     era25MarketLeaderPositioningConvergence,
+    era25SustainedOperationalExcellenceConvergence,
   };
 }

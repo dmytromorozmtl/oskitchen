@@ -209,6 +209,10 @@ import {
   mergeBriefingEra25MarketLeaderPositioningConvergenceTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-market-leader-positioning-convergence-era52";
 import {
+  buildOwnerDailyBriefingEra25SustainedOperationalExcellenceConvergenceAction,
+  mergeBriefingEra25SustainedOperationalExcellenceConvergenceTopActions,
+} from "@/lib/briefing/owner-daily-briefing-era25-sustained-operational-excellence-convergence-era53";
+import {
   buildOwnerDailyBriefingLinearChainTerminusGuardAction,
   mergeBriefingLinearChainTerminusGuardTopActions,
 } from "@/lib/briefing/owner-daily-briefing-linear-chain-terminus-guard-era41";
@@ -1093,6 +1097,21 @@ export async function loadOwnerDailyBriefing(
             null,
         )
       : null;
+  const era25SustainedOperationalExcellenceConvergenceRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingEra25SustainedOperationalExcellenceConvergenceAction(
+          maintenanceMode?.engineeringPathTerminus?.postTerminusSteadyState?.absolutePathEnd
+            ?.linearPathPermanentlyClosed?.step17Forbidden?.era25CharterExit?.firstCharterSliceReadiness
+            ?.engineeringGates?.firstProductSliceBlueprint?.ownerDailyBriefingBreakthrough
+            ?.paidPilotGoConvergence?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+            ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence
+            ?.marketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence ??
+            paidPilotGoConvergenceEra25?.pilotWeek1ExecutionConvergence?.month2MarketReadinessConvergence
+              ?.scaleReadinessConvergence?.seriesAPartnerExpansionConvergence
+              ?.marketLeaderPositioningConvergence?.sustainedOperationalExcellenceConvergence ??
+            null,
+        )
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1546,6 +1565,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && era25MarketLeaderPositioningConvergenceRankedAction) {
     allTopActions = mergeBriefingEra25MarketLeaderPositioningConvergenceTopActions(
       era25MarketLeaderPositioningConvergenceRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && era25SustainedOperationalExcellenceConvergenceRankedAction) {
+    allTopActions = mergeBriefingEra25SustainedOperationalExcellenceConvergenceTopActions(
+      era25SustainedOperationalExcellenceConvergenceRankedAction,
       allTopActions,
     );
   }

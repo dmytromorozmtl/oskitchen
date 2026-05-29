@@ -71,8 +71,8 @@ Workflow: `.github/workflows/ops-market-leader-positioning-convergence-integrity
 
 ---
 
-## Next step — Phase AC (era53)
+## Following — Phase AC (era53)
 
-**Sustained operational excellence convergence era25 integrity** — chains `evaluateMarketLeaderPositioningConvergenceIntegrity` (era52), Launch Wizard `#launch-wizard-era25-sustained-operational-excellence-convergence`, Owner Briefing priority **28**, maintenance nested under `#era25-market-leader-positioning-convergence` → `#era25-sustained-operational-excellence-convergence`.
+**IMPLEMENTED** — see [`docs/next-step-sustained-operational-excellence-convergence-phase-ac-product-2026-05-28.md`](./next-step-sustained-operational-excellence-convergence-phase-ac-product-2026-05-28.md).
 
-Prerequisite milestone: `market_leader_positioning_convergence_era25_ready` · env `SUSTAINED_OPERATIONAL_EXCELLENCE_CONVERGENCE_ERA25_*` (to be added when Phase AC starts).
+**Next:** Phase AD (era54) pure operational mode terminus convergence integrity.
