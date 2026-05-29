@@ -1,21 +1,34 @@
 import { describe, expect, it } from "vitest";
 
-import { formatMaintenanceModeProgressLabel } from "@/lib/commercial/maintenance-mode-ui-era24";
+import { buildOwnerDailyBriefingMaintenanceModeAction } from "@/lib/briefing/owner-daily-briefing-maintenance-mode-era36";
+import { MAINTENANCE_MODE_BRIEFING_ACTION_PRIORITY } from "@/lib/briefing/owner-daily-briefing-maintenance-mode-era36";
 import type { MaintenanceModeUiSlice } from "@/lib/commercial/maintenance-mode-ui-era24";
 
-const slice = {
+const baseSlice = {
   policyId: "era24-maintenance-mode-ui-v1",
   visible: true,
   maintenanceModeActive: true,
   commercialPilotPathComplete: true,
   goDecision: "GO",
   customerName: "Acme",
-  rhythms: [],
+  rhythms: [
+    {
+      id: "weekly_wed_integration_health",
+      label: "Weekly Wed — Integration Health review",
+      frequency: "weekly" as const,
+      ownerRole: "ops",
+      status: "overdue" as const,
+      docPath: "docs/next-step-10-continuous-improvement-loop-2026-05-28.md",
+      routes: ["/dashboard/integration-health"],
+      commands: ["smoke:woo-shopify-live"],
+      detail: "integration overdue",
+    },
+  ],
   guardrails: [],
-  healthyCount: 2,
+  healthyCount: 0,
   dueSoonCount: 0,
-  overdueCount: 0,
-  guidanceCount: 8,
+  overdueCount: 1,
+  guidanceCount: 9,
   improvementLoopOverdue: 0,
   productEvolutionOverdue: 0,
   nextAttentionRhythm: null,
@@ -32,12 +45,12 @@ const slice = {
   syncIntegrityBaselineCommand: "npm run ops:sync-maintenance-mode-integrity-baseline -- --write",
   maintenanceModeIntegrityPassed: true,
   productEvolutionIntegrityPassed: true,
-  p0ProofStatus: null,
-  tier2ProofStatus: null,
+  p0ProofStatus: "proof_passed",
+  tier2ProofStatus: "proof_passed",
+  maintenanceModeMilestone: "attention_weekly_rhythm",
   sustainedOpsConvergenceReady: true,
   pureOperationalModeEra25Active: true,
   pureOperationalModeTerminusHref: "/platform/commercial-pilot-ops#pure-operational-mode-terminus-era25",
-  maintenanceModeMilestone: "maintenance_mode_healthy",
   syncPlaybookReportCommand: "npm run ops:sync-maintenance-mode-playbook-report -- --write",
   exportRhythmCalendarCommand: "npm run ops:export-maintenance-mode-rhythm-calendar -- --write",
   todayHref: "/dashboard/today",
@@ -50,11 +63,12 @@ const slice = {
   engineeringPathTerminus: null,
 } as MaintenanceModeUiSlice;
 
-describe("maintenance-mode-ui-era24 labels", () => {
-  it("formats path complete label", () => {
-    expect(formatMaintenanceModeProgressLabel(slice)).toContain("maintenance mode healthy");
-    expect(formatMaintenanceModeProgressLabel({ ...slice, overdueCount: 2 })).toContain(
-      "2 rhythm(s) need attention",
-    );
+describe("owner-daily-briefing-maintenance-mode-era36", () => {
+  it("builds ranked action with priority 11", () => {
+    const action = buildOwnerDailyBriefingMaintenanceModeAction(baseSlice);
+    expect(action).not.toBeNull();
+    expect(action!.priority).toBe(MAINTENANCE_MODE_BRIEFING_ACTION_PRIORITY);
+    expect(action!.severity).toBe("high");
+    expect(action!.href).toBe("/dashboard/integration-health");
   });
 });

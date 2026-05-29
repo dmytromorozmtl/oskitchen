@@ -62,18 +62,9 @@ npm run ops:sync-sustained-product-evolution-integrity-baseline -- --write
 
 ## Next step after Phase K PASS
 
-1. **Phase L — Maintenance mode integrity (`era36`)** — mirror era28–era35 on `maintenance-mode-*`
+**Phase L IMPLEMENTED** — see [`docs/next-step-maintenance-mode-phase-l-product-2026-05-28.md`](./next-step-maintenance-mode-phase-l-product-2026-05-28.md)
+
+1. ~~Maintenance mode integrity guard (Phase L)~~ **DONE** (`era36-maintenance-mode-integrity-v1`)
 2. `npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write`
 
-### Phase L preview (Maintenance mode integrity)
-
-| Component | Planned artifact |
-|-----------|------------------|
-| Evaluator | `maintenance-mode-integrity-era36.ts` — chain via `evaluateSustainedProductEvolutionIntegrity` |
-| Env keys | `MAINTENANCE_MODE_*` tracked keys + `detectMaintenanceModeStarted()` |
-| Violations | `maintenance_started_without_product_evolution`, `product_evolution_integrity_fail`, chain to GO |
-| Launch Wizard | `#launch-wizard-maintenance-mode` |
-| Briefing | priority **11** |
-| Prerequisite | honest product evolution (Phase K) + `product_evolution_healthy` milestone |
-
-**Following engineering slice (optional):** era25 pure operational mode terminus reads product evolution integrity baseline · PostHog on track CTAs.
+**Following engineering slice:** Phase M Engineering path terminus integrity (`era37`).

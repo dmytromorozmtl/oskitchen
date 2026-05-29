@@ -145,6 +145,10 @@ import {
   mergeBriefingSustainedProductEvolutionTopActions,
 } from "@/lib/briefing/owner-daily-briefing-sustained-product-evolution-era35";
 import {
+  buildOwnerDailyBriefingMaintenanceModeAction,
+  mergeBriefingMaintenanceModeTopActions,
+} from "@/lib/briefing/owner-daily-briefing-maintenance-mode-era36";
+import {
   buildCommercialGoClosureUiSlice,
   type CommercialGoClosureUiSlice,
 } from "@/lib/commercial/commercial-go-closure-ui-era21";
@@ -817,6 +821,8 @@ export async function loadOwnerDailyBriefing(
       : null;
   const maintenanceMode = buildMaintenanceModeUiSlice({
     goNoGoSummary: commercialOps?.goNoGo.summary ?? null,
+    p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
+    tier2ProofStatus: commercialOps?.tier2Staging.summary?.tier2ProofStatus ?? null,
     p0Staging:
       loopArtifacts?.p0Staging ??
       sustainedOpsArtifacts?.p0Staging ??
@@ -871,6 +877,10 @@ export async function loadOwnerDailyBriefing(
       seriesAArtifacts?.competitorMatrix ??
       null,
   });
+  const maintenanceModeRankedAction =
+    rolePack === "owner"
+      ? buildOwnerDailyBriefingMaintenanceModeAction(maintenanceMode)
+      : null;
 
   const productionCalendarSlice = buildOwnerDailyBriefingProductionCalendarSlice({
     tasks: mapProductionPlanTasksToFocusTasks(calendarRows),
@@ -1222,6 +1232,12 @@ export async function loadOwnerDailyBriefing(
   if (rolePack === "owner" && sustainedProductEvolutionRankedAction) {
     allTopActions = mergeBriefingSustainedProductEvolutionTopActions(
       sustainedProductEvolutionRankedAction,
+      allTopActions,
+    );
+  }
+  if (rolePack === "owner" && maintenanceModeRankedAction) {
+    allTopActions = mergeBriefingMaintenanceModeTopActions(
+      maintenanceModeRankedAction,
       allTopActions,
     );
   }

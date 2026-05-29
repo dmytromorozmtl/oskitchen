@@ -109,6 +109,16 @@ export function MaintenanceModePanel(props: {
                 {slice.improvementLoopOverdue + slice.productEvolutionOverdue} upstream overdue
               </Badge>
             ) : null}
+            {!slice.maintenanceModeIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Maintenance mode blocked
+              </Badge>
+            ) : null}
+            {!slice.productEvolutionIntegrityPassed ? (
+              <Badge variant="destructive" className="rounded-full text-[10px]">
+                Product evolution integrity FAIL
+              </Badge>
+            ) : null}
           </div>
         ) : (
           <p className="text-sm font-medium">{formatMaintenanceModeProgressLabel(slice)}</p>
@@ -2055,6 +2065,9 @@ export function MaintenanceModePanel(props: {
                 <li>{slice.syncPlaybookReportCommand}</li>
                 <li>{slice.exportRhythmCalendarCommand}</li>
                 <li>{slice.validateProductEvolutionCommand}</li>
+                <li>{slice.validateProductEvolutionIntegrityCommand}</li>
+                <li>{slice.integrityValidateCommand}</li>
+                <li>{slice.syncIntegrityBaselineCommand}</li>
                 <li>npm run smoke:woo-shopify-live</li>
                 <li>npm run smoke:commerce-webhook-drill</li>
                 <li>npm run test:ci:commercial-pilot-runbook:cert</li>

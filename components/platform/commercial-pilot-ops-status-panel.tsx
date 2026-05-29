@@ -308,6 +308,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   });
   const maintenanceMode = buildMaintenanceModeUiSlice({
     goNoGoSummary: props.model.goNoGo.summary,
+    p0ProofStatus: p0?.p0ProofStatus ?? null,
+    tier2ProofStatus: tier2?.tier2ProofStatus ?? null,
     p0Staging:
       loopArtifacts.p0Staging ??
       sustainedOpsArtifacts.p0Staging ??

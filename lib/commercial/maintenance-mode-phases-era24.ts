@@ -177,6 +177,17 @@ export const MAINTENANCE_MODE_GUARDRAILS = [
   "Never add Step 13+ gate engineering without explicit new era charter",
 ] as const;
 
+export const MAINTENANCE_MODE_TRACKED_ENV_KEYS = [
+  "MAINTENANCE_MODE_COMMERCIAL_PILOT_PATH_ATTESTED",
+  "MAINTENANCE_MODE_RHYTHM_CALENDAR_REVIEWED",
+] as const;
+
+export function detectMaintenanceModeStarted(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  return MAINTENANCE_MODE_TRACKED_ENV_KEYS.some((key) => Boolean(env[key]?.trim()));
+}
+
 export type MaintenanceModeRhythmStatus = {
   id: string;
   label: string;

@@ -10,8 +10,10 @@ import type { PilotMetricsBaselineSummary } from "@/lib/commercial/pilot-metrics
 import type { PilotRollbackDrillSummary } from "@/lib/commercial/pilot-rollback-drill-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
 import { buildContinuousImprovementLoopUiSlice } from "@/lib/commercial/continuous-improvement-loop-ui-era22";
+import { evaluateMaintenanceModeIntegrity } from "@/lib/commercial/maintenance-mode-integrity-era36";
 import {
   buildMaintenanceModeRhythmStatuses,
+  detectMaintenanceModeStarted,
   formatMaintenanceModeRhythmDetail,
   MAINTENANCE_MODE_GUARDRAILS,
   MAINTENANCE_MODE_RHYTHM_CALENDAR_DOC,
@@ -34,6 +36,8 @@ import {
 import { buildSustainedProductEvolutionUiSlice } from "@/lib/commercial/sustained-product-evolution-ui-era23";
 import { PURE_OPERATIONAL_MODE_TERMINUS_ERA25_PLATFORM_ANCHOR } from "@/lib/commercial/pure-operational-mode-terminus-phases-era25";
 import { SERIES_A_PLATFORM_OPS_ROUTE } from "@/lib/commercial/sustained-operational-excellence-phases-era21";
+import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
+import { LAUNCH_WIZARD_MAINTENANCE_MODE_ANCHOR } from "@/lib/launch-wizard/launch-wizard-maintenance-mode-era36";
 
 export const MAINTENANCE_MODE_UI_ERA24_POLICY_ID = "era24-maintenance-mode-ui-v1" as const;
 
@@ -61,6 +65,13 @@ export type MaintenanceModeUiSlice = {
   validateCommand: string;
   postProductEvolutionOrchestratorCommand: string;
   validateProductEvolutionCommand: string;
+  validateProductEvolutionIntegrityCommand: string;
+  integrityValidateCommand: string;
+  syncIntegrityBaselineCommand: string;
+  maintenanceModeIntegrityPassed: boolean;
+  productEvolutionIntegrityPassed: boolean;
+  p0ProofStatus: string | null;
+  tier2ProofStatus: string | null;
   maintenanceModeMilestone: MaintenanceModeMilestone;
   sustainedOpsConvergenceReady: boolean;
   pureOperationalModeEra25Active: boolean;
@@ -68,6 +79,7 @@ export type MaintenanceModeUiSlice = {
   syncPlaybookReportCommand: string;
   exportRhythmCalendarCommand: string;
   todayHref: string;
+  launchWizardHref: string;
   platformOpsHref: string;
   improvementLoopHref: string;
   productEvolutionHref: string;
@@ -78,6 +90,8 @@ export type MaintenanceModeUiSlice = {
 
 export function buildMaintenanceModeUiSlice(input: {
   goNoGoSummary: PilotGoNoGoSummary | null;
+  p0ProofStatus?: string | null;
+  tier2ProofStatus?: string | null;
   p0Staging?: P0StagingProofUnblockSummary | null;
   tier2Summary?: Tier2StagingGoldenPathSummary | null;
   metricsBaseline?: PilotMetricsBaselineSummary | null;
@@ -87,25 +101,52 @@ export function buildMaintenanceModeUiSlice(input: {
   competitorMatrix?: CompetitorFeatureGapMatrixSummary | null;
   env?: NodeJS.ProcessEnv;
 }): MaintenanceModeUiSlice | null {
+  const env = input.env ?? process.env;
+  const p0Staging = input.p0Staging ?? null;
+  const tier2Summary = input.tier2Summary ?? null;
+  const metricsBaseline = input.metricsBaseline ?? null;
+  const competitorMatrix = input.competitorMatrix ?? null;
+  const p0ProofStatus =
+    input.p0ProofStatus ?? input.p0Staging?.p0ProofStatus ?? null;
+  const tier2ProofStatus =
+    input.tier2ProofStatus ?? input.tier2Summary?.tier2ProofStatus ?? null;
+
+  const maintenanceModeIntegrity = evaluateMaintenanceModeIntegrity(process.cwd(), {
+    env,
+    goNoGoOverride: input.goNoGoSummary,
+    p0StagingOverride: p0Staging,
+    tier2SummaryOverride: tier2Summary,
+    metricsBaselineOverride: metricsBaseline,
+    caseStudyDraftOverride: input.caseStudyDraft ?? null,
+    investorOnepagerOverride: input.investorOnepager ?? null,
+    rollbackDrillOverride: input.rollbackDrill ?? null,
+    competitorMatrixOverride: competitorMatrix,
+    p0ProofStatusOverride: p0ProofStatus,
+    tier2ProofStatusOverride: tier2ProofStatus,
+  });
+
   const productEvolutionReady = resolveProductEvolutionReady({
     goNoGoSummary: input.goNoGoSummary,
-    p0Staging: input.p0Staging ?? null,
-    tier2Summary: input.tier2Summary ?? null,
-    metricsBaseline: input.metricsBaseline ?? null,
+    p0Staging,
+    tier2Summary,
+    metricsBaseline,
     caseStudyDraft: input.caseStudyDraft ?? null,
     investorOnepager: input.investorOnepager ?? null,
     rollbackDrill: input.rollbackDrill ?? null,
-    competitorMatrix: input.competitorMatrix ?? null,
-    env: input.env,
+    competitorMatrix,
+    env,
   });
   const goDecision = input.goNoGoSummary?.decision ?? null;
-  const era25 = resolveEra25PureOperationalModeContext(input.env);
+  const era25 = resolveEra25PureOperationalModeContext(env);
   const prerequisites = resolveMaintenanceModePrerequisites({
     goDecision,
     productEvolutionReady,
     era25,
   });
-  if (!prerequisites.maintenanceModeActive) return null;
+  const maintenanceModeReadyFromPhases = prerequisites.maintenanceModeActive;
+  const maintenanceModeExecutionStarted = detectMaintenanceModeStarted(env);
+
+  if (!maintenanceModeReadyFromPhases && !maintenanceModeExecutionStarted) return null;
 
   const improvementLoop = buildContinuousImprovementLoopUiSlice(input);
   const productEvolution = buildSustainedProductEvolutionUiSlice(input);
@@ -128,16 +169,16 @@ export function buildMaintenanceModeUiSlice(input: {
     env: input.env,
   });
   const maintenanceModeMilestone = resolveMaintenanceModeMilestoneFromRhythmStatuses(rhythms, {
-    maintenanceModeActive: true,
-    productEvolutionReady: true,
+    maintenanceModeActive: maintenanceModeReadyFromPhases || maintenanceModeExecutionStarted,
+    productEvolutionReady: maintenanceModeReadyFromPhases || maintenanceModeExecutionStarted,
     sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
   });
 
   return {
     policyId: MAINTENANCE_MODE_UI_ERA24_POLICY_ID,
     visible: true,
-    maintenanceModeActive: true,
-    commercialPilotPathComplete: true,
+    maintenanceModeActive: maintenanceModeReadyFromPhases,
+    commercialPilotPathComplete: maintenanceModeReadyFromPhases,
     goDecision: "GO",
     customerName: input.goNoGoSummary?.customerName ?? null,
     rhythms,
@@ -156,6 +197,15 @@ export function buildMaintenanceModeUiSlice(input: {
     postProductEvolutionOrchestratorCommand:
       "npm run ops:run-maintenance-mode-post-product-evolution-orchestrator -- --write",
     validateProductEvolutionCommand: "npm run ops:validate-sustained-product-evolution -- --json",
+    validateProductEvolutionIntegrityCommand:
+      "npm run ops:validate-sustained-product-evolution-integrity -- --json",
+    integrityValidateCommand: "npm run ops:validate-maintenance-mode-integrity -- --json",
+    syncIntegrityBaselineCommand:
+      "npm run ops:sync-maintenance-mode-integrity-baseline -- --write",
+    maintenanceModeIntegrityPassed: maintenanceModeIntegrity.integrityPassed,
+    productEvolutionIntegrityPassed: maintenanceModeIntegrity.productEvolutionIntegrityPassed,
+    p0ProofStatus,
+    tier2ProofStatus,
     maintenanceModeMilestone,
     sustainedOpsConvergenceReady: prerequisites.sustainedOpsConvergenceReady,
     pureOperationalModeEra25Active: prerequisites.pureOperationalModeEra25Active,
@@ -163,6 +213,7 @@ export function buildMaintenanceModeUiSlice(input: {
     syncPlaybookReportCommand: "npm run ops:sync-maintenance-mode-playbook-report -- --write",
     exportRhythmCalendarCommand: "npm run ops:export-maintenance-mode-rhythm-calendar -- --write",
     todayHref: "/dashboard/today",
+    launchWizardHref: `${LAUNCH_WIZARD_ROUTE}${LAUNCH_WIZARD_MAINTENANCE_MODE_ANCHOR}`,
     platformOpsHref: `${SERIES_A_PLATFORM_OPS_ROUTE}${MAINTENANCE_MODE_PLATFORM_ANCHOR}`,
     improvementLoopHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#continuous-improvement-loop`,
     productEvolutionHref: `${SERIES_A_PLATFORM_OPS_ROUTE}#sustained-product-evolution`,

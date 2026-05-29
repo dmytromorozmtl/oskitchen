@@ -163,6 +163,8 @@ export function buildMaintenanceModePostProductEvolutionOrchestratorSummary(inpu
         ] as const)
       : input.evaluation.maintenanceModeActive
     ? ([
+        "npm run ops:validate-sustained-product-evolution-integrity -- --json",
+        "npm run ops:validate-maintenance-mode-integrity -- --json",
         "npm run ops:validate-sustained-product-evolution -- --json",
         "npm run ops:validate-maintenance-mode -- --json",
         MAINTENANCE_MODE_POST_PRODUCT_EVOLUTION_ORCHESTRATOR_COMMAND + " -- --write",
@@ -216,7 +218,7 @@ export function buildMaintenanceModeOrchestratorReportMarkdown(input: {
     "",
     `Generated: ${new Date().toISOString()}`,
     "",
-    "> **Informational only** — operator rhythms forever; no new briefing priority or env attestation keys.",
+    "> **Operator rhythms + integrity guard (era36)** — commercial pilot path complete with honest Product evolution prerequisite.",
     "",
     `Policy: \`${MAINTENANCE_MODE_POST_PRODUCT_EVOLUTION_ORCHESTRATOR_ERA24_POLICY_ID}\``,
     "",

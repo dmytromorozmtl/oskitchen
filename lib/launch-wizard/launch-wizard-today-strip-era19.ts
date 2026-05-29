@@ -14,6 +14,7 @@ import type { LaunchWizardMarketLeaderSlice } from "@/lib/launch-wizard/launch-w
 import type { LaunchWizardSustainedOpsSlice } from "@/lib/launch-wizard/launch-wizard-sustained-ops-era33";
 import type { LaunchWizardImprovementLoopSlice } from "@/lib/launch-wizard/launch-wizard-improvement-loop-era34";
 import type { LaunchWizardProductEvolutionSlice } from "@/lib/launch-wizard/launch-wizard-product-evolution-era35";
+import type { LaunchWizardMaintenanceModeSlice } from "@/lib/launch-wizard/launch-wizard-maintenance-mode-era36";
 import type { LaunchWizardStep } from "@/lib/launch-wizard/launch-wizard-era19";
 
 export const LAUNCH_WIZARD_TODAY_STRIP_AGGREGATOR_ERA19_POLICY_ID =
@@ -47,6 +48,7 @@ export type LaunchWizardTodayStripViewModel = {
   sustainedOps: LaunchWizardSustainedOpsSlice | null;
   improvementLoop: LaunchWizardImprovementLoopSlice | null;
   productEvolution: LaunchWizardProductEvolutionSlice | null;
+  maintenanceMode: LaunchWizardMaintenanceModeSlice | null;
 };
 
 export function resolveLaunchWizardTodayStripDecisionTone(
@@ -95,6 +97,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   sustainedOps?: LaunchWizardSustainedOpsSlice | null;
   improvementLoop?: LaunchWizardImprovementLoopSlice | null;
   productEvolution?: LaunchWizardProductEvolutionSlice | null;
+  maintenanceMode?: LaunchWizardMaintenanceModeSlice | null;
   nextStep: LaunchWizardStep | null;
   progress: { completedCount: number; totalCount: number; percent: number };
   displayMode?: LaunchWizardTodayStripDisplayMode;
@@ -135,6 +138,10 @@ export function buildLaunchWizardTodayStripViewModel(input: {
   const productEvolutionSubline = productEvolution
     ? `Product evolution ${productEvolution.progressLabel}${productEvolution.productEvolutionIntegrityFailed ? " · integrity FAIL" : ""}`
     : null;
+  const maintenanceMode = input.maintenanceMode ?? null;
+  const maintenanceModeSubline = maintenanceMode
+    ? `Maintenance mode ${maintenanceMode.progressLabel}${maintenanceMode.maintenanceModeIntegrityFailed ? " · integrity FAIL" : ""}`
+    : null;
   const displayMode = input.displayMode ?? "full";
   const nextUnblock = input.commercialSetup.nextUnblock;
   const blockerCount = input.commercialBlockers.blockers.length;
@@ -170,6 +177,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       sustainedOps,
       improvementLoop,
       productEvolution,
+      maintenanceMode,
     };
   }
 
@@ -202,6 +210,7 @@ export function buildLaunchWizardTodayStripViewModel(input: {
       sustainedOps,
       improvementLoop,
       productEvolution,
+      maintenanceMode,
     };
   }
 
@@ -215,7 +224,11 @@ export function buildLaunchWizardTodayStripViewModel(input: {
         ? inflectionSubline
           ? `${input.commercialBlockers.headline} · ${inflectionSubline}`
           : input.commercialBlockers.headline
-        : productEvolutionSubline
+        : maintenanceModeSubline
+          ? productEvolutionSubline
+            ? `${productEvolutionSubline} · ${maintenanceModeSubline}`
+            : maintenanceModeSubline
+          : productEvolutionSubline
           ? improvementLoopSubline
             ? `${improvementLoopSubline} · ${productEvolutionSubline}`
             : productEvolutionSubline
@@ -275,5 +288,6 @@ export function buildLaunchWizardTodayStripViewModel(input: {
     sustainedOps,
     improvementLoop,
     productEvolution,
+    maintenanceMode,
   };
 }

@@ -1,0 +1,26 @@
+# Maintenance mode integrity — blocks commercial pilot path attestation without honest Product evolution.
+
+name: Maintenance Mode Integrity Validate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "artifacts/pilot-metrics-baseline-summary.json"
+      - "artifacts/maintenance-mode-integrity-baseline.json"
+      - "lib/commercial/maintenance-mode-integrity-era36.ts"
+      - "scripts/ops/validate-maintenance-mode-integrity.ts"
+
+jobs:
+  validate-maintenance-mode-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate Maintenance mode integrity (JSON)
+        run: npm run ops:validate-maintenance-mode-integrity -- --json
