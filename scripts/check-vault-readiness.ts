@@ -3,38 +3,18 @@
  * Vault readiness check — writes JSON + optional HTML artifacts.
  * Policy: era29-vault-readiness-v1
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import { renderVaultReadinessHtml } from "@/lib/ops/vault-readiness-html";
 import { VAULT_READINESS_HTML_ARTIFACT } from "@/lib/ops/vault-readiness-policy";
 import {
-  buildVaultReadinessReport,
+  resolveVaultReadinessReport,
   formatVaultReadinessReportLines,
   VAULT_READINESS_REPORT_ARTIFACT,
 } from "@/lib/ops/vault-readiness-report";
 
-type LooseChildArtifact = {
-  overall?: string;
-  loginProofStatus?: string;
-  firstGreenProofStatus?: string;
-  wooLiveProofStatus?: string;
-  shopifyLiveProofStatus?: string;
-  missingEnvVars?: string[];
-};
-
-function loadJson<T>(relativePath: string): T | null {
-  const path = join(process.cwd(), relativePath);
-  if (!existsSync(path)) return null;
-  try {
-    return JSON.parse(readFileSync(path, "utf8")) as T;
-  } catch {
-    return null;
-  }
-}
-
-function writeArtifacts(report: ReturnType<typeof buildVaultReadinessReport>, writeHtml: boolean): void {
+function writeArtifacts(report: ReturnType<typeof resolveVaultReadinessReport>, writeHtml: boolean): void {
   const jsonPath = join(process.cwd(), VAULT_READINESS_REPORT_ARTIFACT);
   mkdirSync(dirname(jsonPath), { recursive: true });
   writeFileSync(jsonPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
@@ -48,21 +28,8 @@ function writeArtifacts(report: ReturnType<typeof buildVaultReadinessReport>, wr
 export function runVaultReadinessCheck(options?: {
   env?: NodeJS.ProcessEnv;
   writeHtml?: boolean;
-}): ReturnType<typeof buildVaultReadinessReport> {
-  const p0Artifact = loadJson<P0StagingProofUnblockSummary>(
-    "artifacts/p0-staging-proof-unblock-summary.json",
-  );
-  const report = buildVaultReadinessReport({
-    env: options?.env,
-    p0Artifact,
-    ssoArtifact: loadJson<LooseChildArtifact>(
-      "artifacts/enterprise-sso-idp-staging-smoke-summary.json",
-    ),
-    workflowsArtifact: loadJson<LooseChildArtifact>(
-      "artifacts/staging-workflows-first-green-summary.json",
-    ),
-    channelArtifact: loadJson<LooseChildArtifact>("artifacts/channel-live-smoke-summary.json"),
-  });
+}): ReturnType<typeof resolveVaultReadinessReport> {
+  const report = resolveVaultReadinessReport(process.cwd(), { env: options?.env });
   writeArtifacts(report, options?.writeHtml ?? false);
   return report;
 }

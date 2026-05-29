@@ -9,6 +9,7 @@ import type {
   PilotGoNoGoSummary,
 } from "@/lib/commercial/pilot-gono-go-summary";
 import type { Tier2StagingGoldenPathSummary } from "@/lib/commercial/tier2-staging-golden-path-summary";
+import type { VaultReadinessReport } from "@/lib/ops/vault-readiness-report";
 
 export type CommercialPilotOpsGoNoGoSlice = {
   artifactPresent: boolean;
@@ -20,6 +21,11 @@ export type CommercialPilotOpsP0StagingSlice = {
   summary: P0StagingProofUnblockSummary | null;
 };
 
+export type CommercialPilotOpsVaultReadinessSlice = {
+  artifactPresent: boolean;
+  report: VaultReadinessReport | null;
+};
+
 export type CommercialPilotOpsStatusModel = {
   loadedAt: string;
   goNoGo: CommercialPilotOpsGoNoGoSlice;
@@ -28,6 +34,7 @@ export type CommercialPilotOpsStatusModel = {
     artifactPresent: boolean;
     summary: Tier2StagingGoldenPathSummary | null;
   };
+  vaultReadiness: CommercialPilotOpsVaultReadinessSlice;
 };
 
 export type CommercialPilotOpsDecision =
@@ -81,6 +88,7 @@ export function buildCommercialPilotOpsStatusModel(input: {
     artifactPresent: boolean;
     summary: import("@/lib/commercial/tier2-staging-golden-path-summary").Tier2StagingGoldenPathSummary | null;
   };
+  vaultReadiness?: CommercialPilotOpsVaultReadinessSlice;
   loadedAt?: string;
 }): CommercialPilotOpsStatusModel {
   return {
@@ -88,6 +96,7 @@ export function buildCommercialPilotOpsStatusModel(input: {
     goNoGo: input.goNoGo,
     p0Staging: input.p0Staging,
     tier2Staging: input.tier2Staging ?? { artifactPresent: false, summary: null },
+    vaultReadiness: input.vaultReadiness ?? { artifactPresent: false, report: null },
   };
 }
 

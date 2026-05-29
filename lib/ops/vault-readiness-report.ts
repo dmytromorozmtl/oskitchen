@@ -3,6 +3,9 @@
  * Policy: era29-vault-readiness-v1 (extends era21-p0-ops-vault-v1)
  */
 
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import {
   P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG,
   P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC,
@@ -17,7 +20,10 @@ import {
   resolveNextIncompleteP0OpsVaultPhase,
   type P0OpsVaultPhaseStatus,
 } from "@/lib/commercial/p0-ops-vault-phases-era21";
-import type { P0StagingProofUnblockSummary } from "@/lib/commercial/p0-staging-proof-unblock-summary";
+import {
+  loadP0StagingProofUnblockSummary,
+  type P0StagingProofUnblockSummary,
+} from "@/lib/commercial/p0-staging-proof-unblock-summary";
 import { evaluateP0VaultEnv } from "@/scripts/ops/validate-p0-vault-env";
 
 export const VAULT_READINESS_REPORT_ARTIFACT = "artifacts/vault-readiness-report.json" as const;
@@ -115,6 +121,81 @@ type LooseChildArtifact = {
   shopifyLiveProofStatus?: string;
   missingEnvVars?: string[];
 };
+
+export type VaultReadinessLooseChildArtifact = LooseChildArtifact;
+
+const VAULT_CHILD_ARTIFACT_PATHS = {
+  sso: "artifacts/enterprise-sso-idp-staging-smoke-summary.json",
+  workflows: "artifacts/staging-workflows-first-green-summary.json",
+  channel: "artifacts/channel-live-smoke-summary.json",
+} as const;
+
+function readJsonArtifact<T>(root: string, relativePath: string): T | null {
+  try {
+    const absolutePath = join(root, relativePath);
+    if (!existsSync(absolutePath)) return null;
+    return JSON.parse(readFileSync(absolutePath, "utf8")) as T;
+  } catch {
+    return null;
+  }
+}
+
+export function isVaultReadinessReport(value: unknown): value is VaultReadinessReport {
+  if (!value || typeof value !== "object") return false;
+  const row = value as VaultReadinessReport;
+  return row.version === "vault-readiness-v2" && Array.isArray(row.secrets);
+}
+
+export function loadVaultReadinessChildArtifacts(root: string = process.cwd()): {
+  p0Artifact: P0StagingProofUnblockSummary | null;
+  ssoArtifact: LooseChildArtifact | null;
+  workflowsArtifact: LooseChildArtifact | null;
+  channelArtifact: LooseChildArtifact | null;
+} {
+  return {
+    p0Artifact: loadP0StagingProofUnblockSummary(root),
+    ssoArtifact: readJsonArtifact<LooseChildArtifact>(root, VAULT_CHILD_ARTIFACT_PATHS.sso),
+    workflowsArtifact: readJsonArtifact<LooseChildArtifact>(
+      root,
+      VAULT_CHILD_ARTIFACT_PATHS.workflows,
+    ),
+    channelArtifact: readJsonArtifact<LooseChildArtifact>(root, VAULT_CHILD_ARTIFACT_PATHS.channel),
+  };
+}
+
+/** Load committed vault-readiness artifact first, then recompute from env + P0 child smokes. */
+export function loadVaultReadinessReport(
+  root: string = process.cwd(),
+  override?: VaultReadinessReport | null,
+  options?: { env?: NodeJS.ProcessEnv; preferLive?: boolean },
+): VaultReadinessReport {
+  if (override !== undefined && override !== null) {
+    return override;
+  }
+
+  if (!options?.preferLive) {
+    const disk = readJsonArtifact<VaultReadinessReport>(root, VAULT_READINESS_REPORT_ARTIFACT);
+    if (disk && isVaultReadinessReport(disk)) {
+      return disk;
+    }
+  }
+
+  return buildVaultReadinessReport({
+    env: options?.env,
+    ...loadVaultReadinessChildArtifacts(root),
+  });
+}
+
+/** Always recompute vault readiness from live env + artifacts (never disk-only). */
+export function resolveVaultReadinessReport(
+  root: string = process.cwd(),
+  options?: { env?: NodeJS.ProcessEnv },
+): VaultReadinessReport {
+  return buildVaultReadinessReport({
+    env: options?.env,
+    ...loadVaultReadinessChildArtifacts(root),
+  });
+}
 
 function readChildProofStatus(artifact: LooseChildArtifact | null): string | null {
   if (!artifact) return null;

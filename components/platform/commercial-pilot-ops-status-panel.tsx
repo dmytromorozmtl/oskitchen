@@ -49,6 +49,7 @@ import { ContinuousImprovementLoopPanel } from "@/components/dashboard/continuou
 import { SustainedProductEvolutionPanel } from "@/components/dashboard/sustained-product-evolution-panel";
 import { MaintenanceModePanel } from "@/components/dashboard/maintenance-mode-panel";
 import { CommercialInflectionReadinessPanel } from "@/components/platform/commercial-inflection-readiness-panel";
+import { VaultReadinessStatusStrip } from "@/components/platform/vault-readiness-status-strip";
 import { evaluateCommercialInflectionReadiness } from "@/lib/commercial/commercial-inflection-readiness-era28";
 import { PureOperationalModeTerminusEra25Strip } from "@/components/dashboard/launch-wizard/pure-operational-mode-terminus-era25-strip";
 import { buildPureOperationalModeTerminusEra25UiSlice } from "@/lib/commercial/pure-operational-mode-terminus-ui-era25";
@@ -72,7 +73,8 @@ export function CommercialPilotOpsStatusPanel(props: {
   const goNoGo = props.model.goNoGo.summary;
   const p0 = props.model.p0Staging.summary;
   const tier2 = props.model.tier2Staging.summary;
-  const p0OpsVault = buildP0OpsVaultUiSlice(p0);
+  const vaultReport = props.model.vaultReadiness.report;
+  const p0OpsVault = buildP0OpsVaultUiSlice(p0, vaultReport);
   const tier2GoldenPath = buildTier2GoldenPathUiSlice({
     p0ProofStatus: p0?.p0ProofStatus ?? null,
     tier2Summary: tier2,
@@ -376,6 +378,12 @@ export function CommercialPilotOpsStatusPanel(props: {
   return (
     <div className="space-y-6">
       <CommercialInflectionReadinessPanel summary={commercialInflection} />
+      {vaultReport ? (
+        <VaultReadinessStatusStrip
+          report={vaultReport}
+          artifactPresent={props.model.vaultReadiness.artifactPresent}
+        />
+      ) : null}
       <Card
         id={COMMERCIAL_PILOT_GONOGO_ANCHOR.slice(1)}
         className="scroll-mt-24 border-zinc-800 bg-zinc-900/60"

@@ -9,6 +9,7 @@ import {
   resolveP0VaultDay0MilestoneFromPhaseStatuses,
   type P0VaultDay0Milestone,
 } from "@/lib/commercial/p0-ops-vault-day0-orchestrator-era21";
+import type { VaultReadinessReport } from "@/lib/ops/vault-readiness-report";
 import {
   buildP0OpsVaultPhaseStatuses,
   formatP0OpsVaultPhaseBlockerDetail,
@@ -60,24 +61,30 @@ export type P0OpsVaultUiSlice = {
 
 export function buildP0OpsVaultUiSlice(
   p0Staging: P0StagingProofUnblockSummary | null | undefined,
+  vaultReport?: VaultReadinessReport | null,
 ): P0OpsVaultUiSlice | null {
   if (!p0Staging) return null;
 
   const blocked = p0Staging.p0ProofStatus !== "proof_passed";
   if (!blocked) return null;
 
-  const missingEnvVars = p0Staging.allMissingEnvVars;
-  const phases = buildP0OpsVaultPhaseStatuses({ missingEnvVars });
+  const missingEnvVars =
+    vaultReport && vaultReport.missingKeys.length > 0
+      ? vaultReport.missingKeys
+      : p0Staging.allMissingEnvVars;
+  const phases = vaultReport?.phases ?? buildP0OpsVaultPhaseStatuses({ missingEnvVars });
   const completedPhaseCount = phases.filter((p) => p.complete).length;
-  const nextPhase = resolveNextIncompleteP0OpsVaultPhase(phases);
+  const nextPhase =
+    vaultReport?.nextPhase ?? resolveNextIncompleteP0OpsVaultPhase(phases);
   const nextPhaseDetail = nextPhase ? formatP0OpsVaultPhaseBlockerDetail(nextPhase) : null;
-  const day0Milestone = resolveP0VaultDay0MilestoneFromPhaseStatuses(
-    phases,
-    p0Staging.p0ProofStatus,
-  );
-  const day0PartialComplete = phases
-    .filter((phase) => phase.id === "staging_login" || phase.id === "database_encryption")
-    .every((phase) => phase.complete);
+  const day0Milestone =
+    vaultReport?.day0Milestone ??
+    resolveP0VaultDay0MilestoneFromPhaseStatuses(phases, p0Staging.p0ProofStatus);
+  const day0PartialComplete =
+    vaultReport?.day0PartialComplete ??
+    phases
+      .filter((phase) => phase.id === "staging_login" || phase.id === "database_encryption")
+      .every((phase) => phase.complete);
 
   return {
     policyId: P0_OPS_VAULT_UI_ERA21_POLICY_ID,
@@ -86,8 +93,8 @@ export function buildP0OpsVaultUiSlice(
     p0ProofStatus: p0Staging.p0ProofStatus,
     overall: p0Staging.overall,
     missingEnvVars,
-    missingCount: missingEnvVars.length,
-    totalCount: P0_OPS_VAULT_ENV_KEYS.length,
+    missingCount: vaultReport?.missingKeys.length ?? missingEnvVars.length,
+    totalCount: vaultReport?.totalCount ?? P0_OPS_VAULT_ENV_KEYS.length,
     phases,
     completedPhaseCount,
     opsChecklistDoc: P0_STAGING_PROOF_UNBLOCK_ERA17_OPS_CHECKLIST_DOC,

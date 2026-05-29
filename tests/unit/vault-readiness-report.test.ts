@@ -4,6 +4,10 @@ import {
   buildVaultReadinessChildSnapshots,
   buildVaultReadinessReport,
   formatVaultReadinessReportLines,
+  isVaultReadinessReport,
+  loadVaultReadinessReport,
+  resolveVaultReadinessReport,
+  VAULT_READINESS_REPORT_ARTIFACT,
 } from "@/lib/ops/vault-readiness-report";
 import { renderVaultReadinessHtml } from "@/lib/ops/vault-readiness-html";
 import { P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG } from "@/lib/commercial/p0-staging-proof-unblock-era17-policy";
@@ -99,5 +103,31 @@ describe("vault-readiness-report", () => {
     expect(html).toContain("fabricates proof_passed");
     const lines = formatVaultReadinessReportLines(report);
     expect(lines[0]).toContain("NOT READY");
+  });
+
+  it("loads committed vault-readiness artifact when present", () => {
+    const report = loadVaultReadinessReport(process.cwd());
+    expect(isVaultReadinessReport(report)).toBe(true);
+    expect(report.version).toBe("vault-readiness-v2");
+    expect(report.secrets).toHaveLength(11);
+  });
+
+  it("resolveVaultReadinessReport always recomputes from env", () => {
+    const report = resolveVaultReadinessReport(process.cwd(), { env: {} });
+    expect(report.vaultReady).toBe(false);
+    expect(report.missingKeys).toHaveLength(11);
+  });
+
+  it("loadVaultReadinessReport honors explicit override", () => {
+    const custom = buildVaultReadinessReport({
+      env: Object.fromEntries(
+        P0_STAGING_PROOF_UNBLOCK_ERA17_ENV_VAR_CATALOG.map((entry) => [entry.key, "x"]),
+      ) as NodeJS.ProcessEnv,
+    });
+    expect(loadVaultReadinessReport(process.cwd(), custom).vaultReady).toBe(true);
+  });
+
+  it("exports canonical artifact path", () => {
+    expect(VAULT_READINESS_REPORT_ARTIFACT).toBe("artifacts/vault-readiness-report.json");
   });
 });
