@@ -54,7 +54,7 @@ npm run check-vault-readiness -- --write   # artifacts/vault-readiness-report.js
 
 **Where to get it**
 
-- Vercel **staging** deployment URL for KitchenOS (e.g. `https://staging.kitchenos.app` or your preview hostname).
+- Vercel **staging** deployment URL for OS Kitchen (e.g. `https://staging.kitchenos.app` or your preview hostname).
 - Must serve `GET /api/health` → HTTP 200.
 
 **Where to set it**
@@ -68,7 +68,7 @@ npm run check-vault-readiness -- --write   # artifacts/vault-readiness-report.js
 test -n "$E2E_STAGING_BASE_URL" && curl -fsS "$E2E_STAGING_BASE_URL/api/health" | head -c 200
 ```
 
-Deep dive: [`GITHUB_E2E_STAGING_SECRETS.md`](./GITHUB_E2E_STAGING_SECRETS.md)
+Deep dive: [`staging-environment-setup.md`](./staging-environment-setup.md) (full provisioning) · [`GITHUB_E2E_STAGING_SECRETS.md`](./GITHUB_E2E_STAGING_SECRETS.md) (GitHub secrets only)
 
 ---
 
@@ -142,7 +142,7 @@ Deep dive: [`GITHUB_E2E_STAGING_SECRETS.md`](./GITHUB_E2E_STAGING_SECRETS.md)
 
 - UUID of the **pilot workspace** on staging Postgres (`Workspace.id`).
 - Query (with staging `DATABASE_URL`): `SELECT id, name FROM "Workspace" WHERE … LIMIT 5;`
-- Or copy from KitchenOS admin / platform ops for the designated SSO pilot tenant.
+- Or copy from OS Kitchen admin / platform ops for the designated SSO pilot tenant.
 
 **Where to set it**
 
@@ -172,7 +172,7 @@ Deep dive: [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-sta
 **Where to get it**
 
 - IdP vendor for this pilot: **`OKTA`** or **`ENTRA_ID`** (one per workspace).
-- Must match `WorkspaceSsoSettings` vendor enum in KitchenOS staging.
+- Must match `WorkspaceSsoSettings` vendor enum in OS Kitchen staging.
 
 **Where to set it**
 
@@ -229,7 +229,7 @@ Deep dive: [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-sta
 **Where to get it**
 
 - Staff test user email in the **allowed domain** (provisioned in Okta or Entra ID).
-- User must be assignable to the SAML app and exist as KitchenOS staff on the pilot workspace.
+- User must be assignable to the SAML app and exist as OS Kitchen staff on the pilot workspace.
 
 **Where to set it**
 
@@ -257,7 +257,7 @@ Deep dive: [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-sta
 **Where to get it**
 
 - Supabase staging project → **Authentication → SSO / SAML** → provider reference / UUID after uploading IdP metadata.
-- Must match **Supabase provider ref** in KitchenOS workspace SSO pilot settings.
+- Must match **Supabase provider ref** in OS Kitchen workspace SSO pilot settings.
 
 **Where to set it**
 
