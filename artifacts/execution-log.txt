@@ -886,3 +886,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: KDS WebSocket RFC docs/kds-websocket-rfc.md (cycle 70)
+
+---
+Cycle: 70
+Timestamp: 2026-05-31T00:00:00.000Z
+Priority: P1
+Action: docs: KDS WebSocket RFC — Supabase Realtime vs Pusher vs self-hosted (cost, latency, complexity); recommend Supabase for pilot + NEXT_PUBLIC_KDS_REALTIME_ENABLED flag
+Files changed: 2 (docs/kds-websocket-rfc.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: KDS WebSocket foundation services/kds-websocket.ts (cycle 71)
