@@ -12,6 +12,10 @@ import {
 } from "@/lib/integrations/integration-health-smoke-artifacts-era19-policy";
 import type { IntegrationHealthChannelCardsModel } from "@/lib/integrations/integration-health-channel-cards-era19";
 import type { IntegrationHealthSmokeArtifactsModel } from "@/lib/integrations/integration-health-smoke-artifacts-era19";
+import {
+  buildIntegrationHealthSupportAdminVaultOpsSlice,
+  type IntegrationHealthSupportAdminVaultOpsSlice,
+} from "@/lib/integrations/integration-health-support-admin-commercial-ops-era28";
 import { LAUNCH_WIZARD_ROUTE } from "@/lib/launch-wizard/launch-wizard-era19-policy";
 
 export const INTEGRATION_HEALTH_SUPPORT_ADMIN_ERA19_POLICY_ID =
@@ -62,6 +66,7 @@ export type IntegrationHealthSupportAdminModel = {
   triageRows: IntegrationHealthSupportAdminTriageRow[];
   platformLinks: IntegrationHealthSupportAdminPlatformLink[];
   opsChecklistDoc: string;
+  vaultOpsSlice: IntegrationHealthSupportAdminVaultOpsSlice | null;
 };
 
 export function resolveIntegrationHealthSupportAdminVisibility(input: {
@@ -228,10 +233,15 @@ export function buildIntegrationHealthSupportAdminModel(input: {
       })
     : [];
   const smokeSummary = summarizeIntegrationHealthSmokeForSupportAdmin(input.smokeArtifacts);
+  const vaultOpsSlice = input.visible
+    ? buildIntegrationHealthSupportAdminVaultOpsSlice(input.commercialOps)
+    : null;
 
   let headline: string;
   if (!input.visible) {
     headline = "Support admin triage is hidden for standard workspace operators.";
+  } else if (vaultOpsSlice?.vaultPhaseLabel && vaultOpsSlice.vaultMissingCount > 0) {
+    headline = vaultOpsSlice.headline;
   } else if (triageRows.length === 0) {
     headline = "No urgent integration or commercial proof signals for this workspace.";
   } else {
@@ -258,5 +268,6 @@ export function buildIntegrationHealthSupportAdminModel(input: {
     triageRows,
     platformLinks: buildIntegrationHealthSupportAdminPlatformLinks(input.mode),
     opsChecklistDoc: INTEGRATION_HEALTH_SMOKE_OPS_CHECKLIST_DOC,
+    vaultOpsSlice,
   };
 }

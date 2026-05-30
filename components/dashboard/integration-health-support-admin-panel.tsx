@@ -49,6 +49,33 @@ export function IntegrationHealthSupportAdminPanel(props: {
         <CardContent className={cn("space-y-4", compact && "pt-0")}>
           {compact ? <p className="text-sm text-muted-foreground">{model.headline}</p> : null}
 
+          {model.vaultOpsSlice?.visible &&
+          model.vaultOpsSlice.vaultPhaseLabel &&
+          model.vaultOpsSlice.vaultMissingCount > 0 ? (
+            <div
+              className="rounded-xl border border-amber-200/80 bg-amber-50/30 px-3 py-2.5 dark:border-amber-900/40 dark:bg-amber-950/15"
+              data-testid="integration-health-support-admin-vault-hero"
+            >
+              <p className="font-medium text-amber-900 dark:text-amber-200">
+                VP Ops — start {model.vaultOpsSlice.vaultPhaseLabel}
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">{model.vaultOpsSlice.detail}</p>
+              {model.vaultOpsSlice.missingKeys.length > 0 ? (
+                <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                  {model.vaultOpsSlice.missingKeys.join(", ")}
+                </p>
+              ) : null}
+              {model.vaultOpsSlice.docPath ? (
+                <p className="mt-1 text-xs text-muted-foreground">{model.vaultOpsSlice.docPath}</p>
+              ) : null}
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button asChild variant="default" size="sm" className="rounded-full">
+                  <Link href={model.vaultOpsSlice.platformOpsHref}>P0 staging proof ops</Link>
+                </Button>
+              </div>
+            </div>
+          ) : null}
+
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <TenantStat
               label="Workspace"
