@@ -1085,3 +1085,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: human vault gate (11/11) → P0 proof → SSO smoke (step 15); ~40 assertion failures remain (workspace scope, dashboard shell, cert-live docs) — separate from timeout fix
+
+---
+Cycle: 88
+Timestamp: 2026-05-31T09:00:00.000Z
+Priority: P2
+Action: chore: uncommitted audit — refreshed artifacts/uncommitted-audit.md (978 files, base ce1b9973; +1 untracked scripts/debug-today-page-prod.ts; cycles 64–87 on main; vitest 42 failed)
+Files changed: 2 (artifacts/uncommitted-audit.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: human vault gate → P0 proof; rebrand batch 1 when ready; step 27 only after vaultReady + p0ProofPassed
