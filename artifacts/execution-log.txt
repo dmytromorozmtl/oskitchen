@@ -1030,3 +1030,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: domain map — docs/domain-map.md (cycle 83)
+
+---
+Cycle: 83
+Timestamp: 2026-05-31T06:30:00.000Z
+Priority: P1
+Action: docs: domain map — docs/domain-map.md (619 services → 12 domains, merge matrix P0–P3, _experiments quarantine)
+Files changed: 2 (docs/domain-map.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: soft delete standard — docs/soft-delete-standard.md (cycle 84)
