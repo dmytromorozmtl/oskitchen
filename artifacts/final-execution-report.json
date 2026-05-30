@@ -1,6 +1,6 @@
 {
-  "version": "final-execution-orchestrator-v2",
-  "timestamp": "2026-05-31T08:00:00.000Z",
+  "version": "final-execution-orchestrator-v3",
+  "timestamp": "2026-05-31T09:30:00.000Z",
   "allPhasesPassed": false,
   "ready": false,
   "p0ProofStatus": "awaiting_ops_credentials",
@@ -12,19 +12,22 @@
     "status": "agent_deliverables_complete",
     "note": "All decision-tree agent steps have committed artifacts. Production pilot remains blocked on human vault + P0 proof."
   },
-  "honestyNote": "Agent checklist 26/26 complete (cycles 1–86). ready:false and score≠100 because vault 0/11 and P0 SKIPPED — do not claim PRODUCTION PILOT READY in sales or procurement.",
+  "honestyNote": "Agent checklist 26/26 complete (cycles 1–88). ready:false and score≠100 because vault 0/11 and P0 SKIPPED — do not claim PRODUCTION PILOT READY in sales or procurement.",
   "phases": [
     {
       "phase": "Phase 0: Code Fixes",
       "status": "PASS",
       "completed": [
-        "TS clean on typecheck slice (0 errors at cycle 86 diagnostic)",
+        "TS clean on typecheck slice (0 errors at cycle 89 diagnostic)",
+        "Vitest era governance timeouts fixed — testTimeout 60s (cycle 87; 120→42 failures)",
         "Pilot E2E: webhook replay, KDS, POS checkout, offline queue, cross-tenant isolation",
         "Rate limiting facade lib/rate-limit.ts + Public API / webhook headers",
         "Prisma performance audit script + artifact",
         "Floor plan editor /dashboard/floor-plans"
       ],
-      "blocked": []
+      "blocked": [
+        "~42 vitest assertion failures remain (workspace scope, dashboard shell, cert-live docs)"
+      ]
     },
     {
       "phase": "Phase 1: Vault Unblock",
@@ -72,11 +75,11 @@
         "docs/soft-delete-standard.md",
         "docs/vercel-env-vars.md",
         "docs/staging-environment-setup.md",
-        "artifacts/uncommitted-audit.md"
+        "artifacts/uncommitted-audit.md",
+        "vitest.config.ts (testTimeout 60s — cycle 87)"
       ],
       "skippedWithReason": [
-        "Step 15 SSO smoke — vault=0, SSO_STAGING_* unset",
-        "Step 20 test timeouts — not triggered (>50 failures unverified)"
+        "Step 15 SSO smoke — vault=0, SSO_STAGING_* unset"
       ]
     },
     {
@@ -86,9 +89,16 @@
     }
   ],
   "workingTree": {
-    "uncommittedFiles": 977,
+    "uncommittedFiles": 978,
     "auditArtifact": "artifacts/uncommitted-audit.md",
-    "note": "OS Kitchen rebrand batch orthogonal to pilot cycles — see uncommitted audit"
+    "lastAuditCommit": "f04a8b41",
+    "note": "OS Kitchen rebrand batch orthogonal to pilot cycles — see uncommitted audit (cycle 88)"
+  },
+  "testHealth": {
+    "vitestFailed": 42,
+    "vitestPassed": 4932,
+    "vitestTotal": 4993,
+    "note": "Down from 120 failures after cycle 87 timeout fix; remaining are assertion failures not timeouts"
   },
   "humanActionsRequired": [
     "Configure 11 ops vault secrets (P0 blocker)",
