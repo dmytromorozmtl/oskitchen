@@ -851,3 +851,15 @@ Tests failing: 0 (smoke-woocommerce-live unit test PASS)
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: Shopify live smoke scripts/smoke-shopify-live.ts (cycle 67); VP Ops configure vault (human gate)
+
+---
+Cycle: 67
+Timestamp: 2026-05-30T22:48:00.000Z
+Priority: P1
+Action: feat: Shopify live smoke — scripts/smoke-shopify-live.ts (draft order → signed staging webhook → ExternalOrder), SKIPPED without credentials
+Files changed: 3 (scripts/smoke-shopify-live.ts, tests/unit/smoke-shopify-live.test.ts, artifacts/execution-log.txt)
+TS errors: 0
+Tests failing: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: webhook replay E2E e2e/webhook-replay.spec.ts (cycle 68)
