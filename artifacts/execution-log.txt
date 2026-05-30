@@ -875,3 +875,14 @@ Tests: 2 passed, 2 skipped (CHANNEL_SMOKE_CONNECTION_ID), Playwright chromium pr
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: delivery aggregator plan docs/delivery-aggregator-plan.md (cycle 69)
+
+---
+Cycle: 69
+Timestamp: 2026-05-30T23:45:00.000Z
+Priority: P1
+Action: docs: delivery aggregator integration plan — DoorDash/Uber Eats/Grubhub API research, auth, webhooks, phased priorities aligned to existing placeholder code
+Files changed: 2 (docs/delivery-aggregator-plan.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: KDS WebSocket RFC docs/kds-websocket-rfc.md (cycle 70)
