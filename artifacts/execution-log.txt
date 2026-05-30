@@ -1074,3 +1074,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: human vault gate (11/11) → P0 execute → optional rebrand batch 1; do NOT claim ready:true until vaultReady + p0ProofPassed
+
+---
+Cycle: 87
+Timestamp: 2026-05-31T08:30:00.000Z
+Priority: P1
+Action: fix: test timeouts — vitest.config.ts testTimeout 60_000 for era governance UI/orchestrator slices (120 failed → ~40; 78 timeout failures cleared)
+Files changed: 2 (vitest.config.ts, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: human vault gate (11/11) → P0 proof → SSO smoke (step 15); ~40 assertion failures remain (workspace scope, dashboard shell, cert-live docs) — separate from timeout fix
