@@ -863,3 +863,15 @@ Tests failing: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: webhook replay E2E e2e/webhook-replay.spec.ts (cycle 68)
+
+---
+Cycle: 68
+Timestamp: 2026-05-30T23:15:00.000Z
+Priority: P1
+Action: test: webhook replay E2E — e2e/webhook-replay.spec.ts (404 + cross-tenant + invalid sig + replay success), e2e/webhook-replay-authed.spec.ts (UI affordance), playwright.config.ts project split
+Files changed: 4 (e2e/webhook-replay.spec.ts, e2e/webhook-replay-authed.spec.ts, playwright.config.ts, artifacts/execution-log.txt)
+TS errors: 0
+Tests: 2 passed, 2 skipped (CHANNEL_SMOKE_CONNECTION_ID), Playwright chromium project
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: delivery aggregator plan docs/delivery-aggregator-plan.md (cycle 69)

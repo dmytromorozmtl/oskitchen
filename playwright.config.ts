@@ -67,6 +67,7 @@ if (dashboardE2EEnabled) {
         "**/kds-realtime-staging.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
+        "**/webhook-replay-authed.spec.ts",
       ],
       use: {
         ...desktop,
@@ -163,6 +164,7 @@ projects.push({
     "**/menu-item-media-authed.spec.ts",
     "**/sprint5-webhook-authed.spec.ts",
     "**/sprint5-experiment-lifecycle.spec.ts",
+    "**/webhook-replay-authed.spec.ts",
   ],
 });
 
