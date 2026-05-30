@@ -964,3 +964,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: floor plan editor app/dashboard/floor-plans/ (cycle 77)
+
+---
+Cycle: 77
+Timestamp: 2026-05-31T03:30:00.000Z
+Priority: P1
+Action: feat: floor plan editor — app/dashboard/floor-plans/page.tsx, components/restaurant/floor-plan-editor.tsx (drag-and-drop canvas, status, order links), revalidate floor-plans path
+Files changed: 4 (app/dashboard/floor-plans/page.tsx, components/restaurant/floor-plan-editor.tsx, actions/restaurant/tables.ts, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: SSO smoke (step 15) or SCIM RFC if vault=0 — docs/scim-provisioning-rfc.md (cycle 78)

@@ -39,6 +39,7 @@ export async function createRestaurantTable(formData: FormData) {
   try {
     const table = await tableService.createTable(userId, parsed.data);
     revalidatePath('/dashboard/tables');
+    revalidatePath('/dashboard/floor-plans');
     return ok({
       table: {
         id: table.id,
@@ -70,6 +71,7 @@ export async function updateTablePosition(formData: FormData) {
   try {
     await tableService.updateTablePosition(parsed.data.tableId, userId, parsed.data);
     revalidatePath('/dashboard/tables');
+    revalidatePath('/dashboard/floor-plans');
     return ok(undefined);
   } catch {
     return fail("Failed to update table");
@@ -90,6 +92,7 @@ export async function updateTableStatusAction(formData: FormData) {
       parsed.data.status as TableStatus,
     );
     revalidatePath('/dashboard/tables');
+    revalidatePath('/dashboard/floor-plans');
     return ok(undefined);
   } catch {
     return fail("Failed to update table status");
@@ -106,6 +109,7 @@ export async function deleteRestaurantTable(formData: FormData) {
   try {
     await tableService.deleteTable(parsed.data.tableId, userId);
     revalidatePath('/dashboard/tables');
+    revalidatePath('/dashboard/floor-plans');
     return ok(undefined);
   } catch {
     return fail("Failed to delete table");
