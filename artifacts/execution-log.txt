@@ -997,3 +997,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: cross-tenant E2E — e2e/cross-tenant-isolation.spec.ts (cycle 80)
+
+---
+Cycle: 80
+Timestamp: 2026-05-31T05:00:00.000Z
+Priority: P1
+Action: test: cross-tenant E2E — e2e/cross-tenant-isolation.spec.ts (scopedIdWhere, order detail 404, public API optional, impersonation audit row), playwright.config authed project
+Files changed: 3 (e2e/cross-tenant-isolation.spec.ts, playwright.config.ts, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: rate limiting — lib/rate-limit.ts (cycle 81)

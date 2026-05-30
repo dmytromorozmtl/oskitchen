@@ -68,6 +68,7 @@ if (dashboardE2EEnabled) {
         "**/pos-offline-queue.spec.ts",
         "**/kds-realtime-staging.spec.ts",
         "**/kds-staging.spec.ts",
+        "**/cross-tenant-isolation.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
         "**/webhook-replay-authed.spec.ts",
@@ -171,6 +172,7 @@ projects.push({
     "**/sprint5-experiment-lifecycle.spec.ts",
     "**/kds-realtime-staging.spec.ts",
     "**/kds-staging.spec.ts",
+    "**/cross-tenant-isolation.spec.ts",
     "**/webhook-replay-authed.spec.ts",
   ],
 });
