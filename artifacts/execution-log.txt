@@ -975,3 +975,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: SSO smoke (step 15) or SCIM RFC if vault=0 — docs/scim-provisioning-rfc.md (cycle 78)
+
+---
+Cycle: 78
+Timestamp: 2026-05-31T04:00:00.000Z
+Priority: P1
+Action: docs: SCIM RFC — docs/scim-provisioning-rfc.md (RFC 7644 endpoints, workspace-scoped Users/Groups, 4–6 week timeline, exit criteria)
+Files changed: 2 (docs/scim-provisioning-rfc.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: pen test plan — docs/pen-test-plan.md (cycle 79)
