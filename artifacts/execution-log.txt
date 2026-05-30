@@ -1008,3 +1008,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: rate limiting — lib/rate-limit.ts (cycle 81)
+
+---
+Cycle: 81
+Timestamp: 2026-05-31T05:30:00.000Z
+Priority: P1
+Action: feat: rate limiting — lib/rate-limit.ts (enforceRateLimit, X-RateLimit-* headers), public API guard + Woo/Shopify/Stripe/Resend webhooks
+Files changed: 9 (lib/rate-limit.ts, lib/api-public/guard.ts, lib/webhooks/woocommerce-handler.ts, lib/webhooks/shopify-handler.ts, app/api/webhooks/stripe/route.ts, app/api/webhooks/resend/route.ts, tests/unit/rate-limit-facade.test.ts, docs/RATE_LIMITING.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: test fixes or Prisma audit — check failing test count (cycle 82)

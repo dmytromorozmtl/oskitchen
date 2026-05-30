@@ -4,6 +4,7 @@ import {
   requireConfiguredWebhookSecret,
   verifyResendWebhookSignature,
 } from "@/lib/api/webhook-guard";
+import { enforceWebhookIpRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
 import {
@@ -61,6 +62,11 @@ export async function POST(req: Request) {
   if (!configured.ok) {
     logger.warn("RESEND_WEBHOOK_SECRET missing — rejecting webhook.");
     return configured.response;
+  }
+
+  const ipLimit = await enforceWebhookIpRateLimit(req, "resend");
+  if (!ipLimit.ok) {
+    return rateLimitedJsonResponse({ error: "Too many requests" }, 429, ipLimit.headers);
   }
 
   const signatureHeader =

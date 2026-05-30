@@ -10,8 +10,8 @@ import { findPublicApiV1Resource } from "@/lib/api-public/public-api-v1-registry
 import { apiKeyHasScope } from "@/lib/api-public/public-api-scopes";
 import type { DeveloperApiScope } from "@/lib/developer/api-scopes";
 import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
+import { enforceRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
 import type { RateLimitPolicyKey } from "@/lib/rate-limit/rate-limit-policies";
-import { consumeRateLimitToken } from "@/services/security/rate-limit-service";
 
 export type PublicApiGuardResult =
   | { userId: string }
@@ -46,23 +46,22 @@ export async function guardPublicApi(
   const userId = credential.userId;
 
   const ip = getClientIpFromRequest(request);
-  const rl = await consumeRateLimitToken(`${rateLimitKey}:${userId}:${ip}`, policyKey);
+  const rl = await enforceRateLimit(`${rateLimitKey}:${userId}:${ip}`, policyKey);
   if (!rl.ok) {
     if (rl.reason === "misconfigured") {
       return {
-        response: NextResponse.json(
+        response: rateLimitedJsonResponse(
           { error: "Public API temporarily unavailable: distributed rate limiting is not configured." },
-          { status: 503 },
+          503,
+          rl.headers,
         ),
       };
     }
     return {
-      response: NextResponse.json(
+      response: rateLimitedJsonResponse(
         { error: "Too many requests. Please slow down." },
-        {
-          status: 429,
-          headers: { "Retry-After": String(Math.ceil(rl.retryAfterMs / 1000)) },
-        },
+        429,
+        rl.headers,
       ),
     };
   }

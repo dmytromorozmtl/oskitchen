@@ -14,7 +14,7 @@ import { isWebhookAsyncQueueEnabled } from "@/lib/webhooks/webhook-queue-mode";
 import { executeShopifyWebhookBusinessLogic } from "@/lib/webhooks/shopify-webhook-processor";
 import { prisma } from "@/lib/prisma";
 import { enqueueShopifyWebhookJob } from "@/services/webhooks/webhook-ingest-service";
-import { checkWebhookIngestDistributedLimit } from "@/services/security/rate-limit-service";
+import { enforceWebhookIngestRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
 import { emitWebhookSignatureInvalid } from "@/services/observability/ops-signals";
 import { verifyShopifyHmac } from "@/services/integrations/shopify";
 
@@ -81,19 +81,13 @@ export async function handleShopifyWebhook(req: Request, topic: string) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 
-  const ingestLimit = await checkWebhookIngestDistributedLimit({
+  const ingestLimit = await enforceWebhookIngestRateLimit({
     provider: "shopify",
     connectionId: conn.id,
     topic,
   });
   if (!ingestLimit.ok) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      {
-        status: 429,
-        headers: { "Retry-After": String(Math.max(1, Math.ceil(ingestLimit.retryAfterMs / 1000))) },
-      },
-    );
+    return rateLimitedJsonResponse({ error: "Too many requests" }, 429, ingestLimit.headers);
   }
 
   if (isWebhookAsyncQueueEnabled()) {

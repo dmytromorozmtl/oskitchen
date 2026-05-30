@@ -4,6 +4,7 @@ import type Stripe from "stripe";
 
 import { markTrialConverted } from "@/lib/billing/access";
 import { getStripeClient } from "@/lib/billing/stripe-client";
+import { enforceWebhookIpRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger";
 import { recordBillingEvent } from "@/services/billing/billing-service";
@@ -54,6 +55,11 @@ export async function POST(request: Request) {
   if (!webhookSecret) {
     logger.error("Stripe webhook received but STRIPE_WEBHOOK_SECRET is missing");
     return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
+  }
+
+  const ipLimit = await enforceWebhookIpRateLimit(request, "stripe");
+  if (!ipLimit.ok) {
+    return rateLimitedJsonResponse({ error: "Too many requests" }, 429, ipLimit.headers);
   }
 
   const body = await request.text();

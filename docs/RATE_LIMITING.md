@@ -1,6 +1,6 @@
 # Rate limiting
 
-KitchenOS uses a pluggable adapter selected by environment variables.
+OS Kitchen uses a pluggable adapter selected by environment variables.
 
 ## Adapters
 
@@ -10,9 +10,11 @@ KitchenOS uses a pluggable adapter selected by environment variables.
 | Upstash REST | `RATE_LIMIT_ADAPTER=upstash`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | `services/security/rate-limit-redis-adapter.ts` |
 | TCP Redis | `RATE_LIMIT_ADAPTER=redis`, `REDIS_URL` | `services/security/rate-limit-tcp-redis-adapter.ts` |
 
-Entry: `getActiveRateLimitAdapter()` in `services/security/rate-limit-adapter.ts`.  
+Entry: `lib/rate-limit.ts` (facade) → `getActiveRateLimitAdapter()` in `services/security/rate-limit-adapter.ts`.  
 Policies: `lib/rate-limit/rate-limit-policies.ts`.  
-Consumption: `consumeRateLimitToken()` in `services/security/rate-limit-service.ts`.
+Consumption: `enforceRateLimit()` / `enforceWebhookIngestRateLimit()` in `lib/rate-limit.ts`; legacy `consumeRateLimitToken()` in `services/security/rate-limit-service.ts`.
+
+429 responses include **`X-RateLimit-Limit`**, **`X-RateLimit-Remaining`**, **`X-RateLimit-Reset`**, and **`Retry-After`** on Public API and webhook ingress.
 
 ## Production requirements
 
