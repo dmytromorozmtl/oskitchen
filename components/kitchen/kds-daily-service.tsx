@@ -34,15 +34,9 @@ import {
   kdsTicketAgeClassName,
   summarizeKdsQueue,
 } from "@/lib/kitchen/kds-queue-clarity-era18";
-import {
-  getKdsConnectionStatusLabel,
-  getKdsPollIntervalMs,
-  getKdsRealtimeChannelName,
-  KDS_REALTIME_ORDERS_SCHEMA,
-  KDS_REALTIME_ORDERS_TABLE,
-} from "@/lib/kitchen/kds-realtime-smoke-policy";
+import { getKdsConnectionStatusLabel } from "@/lib/kitchen/kds-realtime-smoke-policy";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
-import { createClient } from "@/lib/supabase/client";
+import { subscribeKdsOrderUpdates } from "@/services/kds-websocket";
 import { cn } from "@/lib/utils";
 
 function playNewOrderChime() {
@@ -140,35 +134,12 @@ export function KdsDailyService({
   }, [soundEnabled]);
 
   useEffect(() => {
-    const supabase = createClient();
-    let pollMs = getKdsPollIntervalMs(false);
-
-    const channel = supabase
-      .channel(getKdsRealtimeChannelName(userId))
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: KDS_REALTIME_ORDERS_SCHEMA,
-          table: KDS_REALTIME_ORDERS_TABLE,
-          filter: `user_id=eq.${userId}`,
-        },
-        () => {
-          refresh();
-        },
-      )
-      .subscribe((status) => {
-        const live = status === "SUBSCRIBED";
-        setRealtimeConnected(live);
-        pollMs = getKdsPollIntervalMs(live);
-      });
-
-    const fallback = setInterval(refresh, pollMs);
-
-    return () => {
-      clearInterval(fallback);
-      void supabase.removeChannel(channel);
-    };
+    const subscription = subscribeKdsOrderUpdates({
+      userId,
+      onRefresh: refresh,
+      onConnectionChange: setRealtimeConnected,
+    });
+    return () => subscription.disconnect();
   }, [userId, refresh]);
 
   useEffect(() => {

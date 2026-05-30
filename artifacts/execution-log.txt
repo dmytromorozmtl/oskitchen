@@ -897,3 +897,15 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: KDS WebSocket foundation services/kds-websocket.ts (cycle 71)
+
+---
+Cycle: 71
+Timestamp: 2026-05-31T00:30:00.000Z
+Priority: P1
+Action: feat: KDS WebSocket foundation — services/kds-websocket.ts (NEXT_PUBLIC_KDS_REALTIME_ENABLED + Supabase Realtime + polling fallback), kds-daily-service refactor, unit tests
+Files changed: 5 (services/kds-websocket.ts, components/kitchen/kds-daily-service.tsx, tests/unit/kds-websocket.test.ts, tests/unit/kds-realtime-smoke-wiring.test.ts, artifacts/execution-log.txt)
+TS errors: 0
+Tests: 10 passed (kds-websocket + realtime smoke wiring)
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: KDS Playwright E2E e2e/kds-staging.spec.ts (cycle 72)
