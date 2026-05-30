@@ -65,6 +65,7 @@ if (dashboardE2EEnabled) {
         "**/workspace-post-not-null-smoke.spec.ts",
         "**/pos-checkout-flow.spec.ts",
         "**/kds-realtime-staging.spec.ts",
+        "**/kds-staging.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
         "**/webhook-replay-authed.spec.ts",
@@ -164,6 +165,8 @@ projects.push({
     "**/menu-item-media-authed.spec.ts",
     "**/sprint5-webhook-authed.spec.ts",
     "**/sprint5-experiment-lifecycle.spec.ts",
+    "**/kds-realtime-staging.spec.ts",
+    "**/kds-staging.spec.ts",
     "**/webhook-replay-authed.spec.ts",
   ],
 });
