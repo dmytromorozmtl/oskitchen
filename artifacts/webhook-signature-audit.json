@@ -1,0 +1,683 @@
+{
+  "version": "webhook-signature-static-audit-v1",
+  "generatedAt": "2026-05-30T22:44:45.916Z",
+  "expectedRouteCount": 46,
+  "totalRoutes": 46,
+  "verifiedCount": 46,
+  "missingVerificationCount": 0,
+  "matrixMismatchCount": 0,
+  "overall": "PASSED",
+  "honestyNote": "Static source scan only — does not replace live penetration testing or provider replay drills.",
+  "missingVerification": [],
+  "matrixMismatches": [],
+  "routes": [
+    {
+      "apiPath": "/api/webhooks/bigquery-bayesian-prior",
+      "routeFile": "app/api/webhooks/bigquery-bayesian-prior/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-causal-discovery-outcomes",
+      "routeFile": "app/api/webhooks/bigquery-causal-discovery-outcomes/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-causal-lift",
+      "routeFile": "app/api/webhooks/bigquery-causal-lift/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-causal-posteriors",
+      "routeFile": "app/api/webhooks/bigquery-causal-posteriors/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-federated-gradients",
+      "routeFile": "app/api/webhooks/bigquery-federated-gradients/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-ga4-parity",
+      "routeFile": "app/api/webhooks/bigquery-ga4-parity/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-global-mesh-outcomes",
+      "routeFile": "app/api/webhooks/bigquery-global-mesh-outcomes/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-homomorphic-metrics",
+      "routeFile": "app/api/webhooks/bigquery-homomorphic-metrics/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-interference-matrix",
+      "routeFile": "app/api/webhooks/bigquery-interference-matrix/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-linucb-weights",
+      "routeFile": "app/api/webhooks/bigquery-linucb-weights/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-off-policy",
+      "routeFile": "app/api/webhooks/bigquery-off-policy/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-spillover-daily",
+      "routeFile": "app/api/webhooks/bigquery-spillover-daily/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/bigquery-workspace-acl",
+      "routeFile": "app/api/webhooks/bigquery-workspace-acl/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/cen-cenelec-digital-product-governance-registry",
+      "routeFile": "app/api/webhooks/cen-cenelec-digital-product-governance-registry/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/eu-ai-act-art71-pmm-live",
+      "routeFile": "app/api/webhooks/eu-ai-act-art71-pmm-live/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/eu-ai-act-live-registry",
+      "routeFile": "app/api/webhooks/eu-ai-act-live-registry/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/eu-ai-office-conformity-sync",
+      "routeFile": "app/api/webhooks/eu-ai-office-conformity-sync/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-cislunar-dtn-bundle",
+      "routeFile": "app/api/webhooks/experiment-cislunar-dtn-bundle/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-dtn-bundle",
+      "routeFile": "app/api/webhooks/experiment-dtn-bundle/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-feature-stream-flink",
+      "routeFile": "app/api/webhooks/experiment-feature-stream-flink/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-feature-stream",
+      "routeFile": "app/api/webhooks/experiment-feature-stream/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-heliopause-dtn-bundle",
+      "routeFile": "app/api/webhooks/experiment-heliopause-dtn-bundle/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-holdout-ws-push",
+      "routeFile": "app/api/webhooks/experiment-holdout-ws-push/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/experiment-scientist-proposal",
+      "routeFile": "app/api/webhooks/experiment-scientist-proposal/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/icao-imo-ai-aviation-registry",
+      "routeFile": "app/api/webhooks/icao-imo-ai-aviation-registry/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/iso-42001-cert-body-attest",
+      "routeFile": "app/api/webhooks/iso-42001-cert-body-attest/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/iso-iec-ai-standards-harmonization-registry",
+      "routeFile": "app/api/webhooks/iso-iec-ai-standards-harmonization-registry/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/itu-uncitral-digital-commerce-ai-registry",
+      "routeFile": "app/api/webhooks/itu-uncitral-digital-commerce-ai-registry/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/nist-ai-rmf-live-control-feed",
+      "routeFile": "app/api/webhooks/nist-ai-rmf-live-control-feed/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/oecd-state-ag-ai-transparency-mesh",
+      "routeFile": "app/api/webhooks/oecd-state-ag-ai-transparency-mesh/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/resend",
+      "routeFile": "app/api/webhooks/resend/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_configured_webhook_secret",
+        "verify_resend_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "resend_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P1",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/scim/experiment-auditor",
+      "routeFile": "app/api/webhooks/scim/experiment-auditor/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "scim_bearer_provision"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "scim_bearer",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P2",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/app-uninstalled",
+      "routeFile": "app/api/webhooks/shopify/app-uninstalled/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/orders-create",
+      "routeFile": "app/api/webhooks/shopify/orders-create/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/orders-updated",
+      "routeFile": "app/api/webhooks/shopify/orders-updated/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/products-update",
+      "routeFile": "app/api/webhooks/shopify/products-update/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/slack/experiment-interactive",
+      "routeFile": "app/api/webhooks/slack/experiment-interactive/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/slack-experiment-interactive-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_slack_signature",
+        "slack_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "slack_signature",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P2",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/stripe",
+      "routeFile": "app/api/webhooks/stripe/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "stripe_construct_event"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "stripe_construct_event",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/uber-direct",
+      "routeFile": "app/api/webhooks/uber-direct/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/uber-direct-webhook-handler.ts"
+      ],
+      "detectedSignals": [
+        "require_bearer_webhook_secret",
+        "uber_direct_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P1",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/uber-eats/orders",
+      "routeFile": "app/api/webhooks/uber-eats/orders/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/webhook-event-store.ts"
+      ],
+      "detectedSignals": [
+        "verify_uber_eats_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "uber_eats_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P1",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/uk-dsit-algorithmic-transparency",
+      "routeFile": "app/api/webhooks/uk-dsit-algorithmic-transparency/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/un-ai-office-global-registry-mesh",
+      "routeFile": "app/api/webhooks/un-ai-office-global-registry-mesh/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/us-ftc-ai-transparency-live",
+      "routeFile": "app/api/webhooks/us-ftc-ai-transparency-live/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/vertex-ml-model",
+      "routeFile": "app/api/webhooks/vertex-ml-model/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/woocommerce",
+      "routeFile": "app/api/webhooks/woocommerce/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/woocommerce-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_woocommerce_hmac",
+        "woocommerce_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "woocommerce_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/wto-upu-cross-border-ai-trade-registry",
+      "routeFile": "app/api/webhooks/wto-upu-cross-border-ai-trade-registry/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "require_bearer_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    }
+  ]
+}
