@@ -1041,3 +1041,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: soft delete standard — docs/soft-delete-standard.md (cycle 84)
+
+---
+Cycle: 84
+Timestamp: 2026-05-31T07:00:00.000Z
+Priority: P1
+Action: docs: soft delete standard — docs/soft-delete-standard.md (deletedAt schema, query rules, migration audit checklist, phased rollout)
+Files changed: 2 (docs/soft-delete-standard.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: Vercel env vars — docs/vercel-env-vars.md (cycle 85)
