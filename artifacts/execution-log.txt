@@ -1019,3 +1019,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: test fixes or Prisma audit — check failing test count (cycle 82)
+
+---
+Cycle: 82
+Timestamp: 2026-05-31T06:00:00.000Z
+Priority: P1
+Action: chore: Prisma audit — scripts/audit-prisma-performance.ts + scripts/lib/prisma-performance-audit.ts → artifacts/prisma-performance-audit.json (indexes, N+1, soft delete, OOM heuristics)
+Files changed: 5 (scripts/audit-prisma-performance.ts, scripts/lib/prisma-performance-audit.ts, artifacts/prisma-performance-audit.json, tests/unit/prisma-performance-audit.test.ts, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: domain map — docs/domain-map.md (cycle 83)
