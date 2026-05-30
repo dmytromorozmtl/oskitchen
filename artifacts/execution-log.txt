@@ -953,3 +953,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: Stripe Terminal plan docs/stripe-terminal-plan.md (cycle 76)
+
+---
+Cycle: 76
+Timestamp: 2026-05-31T03:00:00.000Z
+Priority: P1
+Action: docs: Stripe Terminal plan — SDK (@stripe/terminal-js), API routes, hardware (S700/M2), PCI/certification, phased rollout
+Files changed: 2 (docs/stripe-terminal-plan.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: floor plan editor app/dashboard/floor-plans/ (cycle 77)
