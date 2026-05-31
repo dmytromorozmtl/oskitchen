@@ -1430,3 +1430,22 @@ Cycle: 20260531-160100
 Action: docs: KDS WebSocket implementation plan — Supabase Realtime, 3-week staging proof (Item 4 CLOSED)
 Files: docs/kds-websocket-implementation-plan.md
 Next: Item 5 P0 orchestrator (blocked on vault 11/11)
+---
+Cycle: 20260531-164800
+Action: docs: competitor tracker reconciliation (Item 9 CLOSED)
+Commit: 06e3f083
+---
+Cycle: 20260531-164900
+Action: docs: Stripe Terminal implementation plan (Item 11 CLOSED)
+Commit: a9404b7f
+---
+Cycle: 20260531-165000
+Action: test: cross-tenant isolation E2E staging mock (Item 12 CLOSED)
+Commit: 22c8b701 — 7/7 Playwright pass, no vault
+---
+Cycle: 20260531-165100
+Action: chore: all non-vault items complete
+Non-vault: Build ✅ Tests ✅ Vault doc ✅ KDS plan ✅ Tracker reconciliation ✅ Stripe Terminal plan ✅ Cross-tenant E2E mock ✅
+Blocked on vault: P0 proof, live smoke, SSO IdP, GO decision
+Vault: 0/11
+Next: VP Ops vault → Item 5 P0 orchestrator
