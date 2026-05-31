@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import {
   addWaitlistEntryAction,
   createReservationAction,
+  getReservationAvailabilityAction,
   rescheduleReservationAction,
   updateReservationStatusAction,
   updateWaitlistStatusAction,
@@ -37,11 +38,21 @@ export type WaitlistRow = {
 
 const STATUS_OPTIONS = ["PENDING", "CONFIRMED", "SEATED", "COMPLETED", "CANCELLED", "NO_SHOW"] as const;
 
+type AvailabilitySlot = {
+  reservedAt: string;
+  label: string;
+  available: boolean;
+  reason?: string;
+};
+
 export function ReservationsCalendarClient(props: {
   reservations: ReservationRow[];
   waitlist: WaitlistRow[];
 }) {
   const [message, setMessage] = useState<string | null>(null);
+  const [availabilityDate, setAvailabilityDate] = useState("");
+  const [availabilityParty, setAvailabilityParty] = useState(2);
+  const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>([]);
   const [pending, startTransition] = useTransition();
 
   const grouped = useMemo(() => {
@@ -54,6 +65,19 @@ export function ReservationsCalendarClient(props: {
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
   }, [props.reservations]);
+
+  function loadAvailability(date: string, partySize: number) {
+    if (!date) return;
+    startTransition(async () => {
+      const res = await getReservationAvailabilityAction({ date, partySize });
+      if (res.ok) {
+        setAvailabilitySlots(res.availability.slots);
+      } else {
+        setAvailabilitySlots([]);
+        setMessage(res.error);
+      }
+    });
+  }
 
   function onCreate(formData: FormData) {
     setMessage(null);
@@ -103,19 +127,63 @@ export function ReservationsCalendarClient(props: {
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="partySize">Party size</Label>
-                  <Input id="partySize" name="partySize" type="number" min={1} defaultValue={2} required />
+                  <Input
+                    id="partySize"
+                    name="partySize"
+                    type="number"
+                    min={1}
+                    defaultValue={2}
+                    required
+                    onChange={(e) => {
+                      const next = Number(e.target.value) || 2;
+                      setAvailabilityParty(next);
+                      if (availabilityDate) loadAvailability(availabilityDate, next);
+                    }}
+                  />
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
                   <Label htmlFor="date">Date</Label>
-                  <Input id="date" name="date" type="date" required />
+                  <Input
+                    id="date"
+                    name="date"
+                    type="date"
+                    required
+                    onChange={(e) => {
+                      setAvailabilityDate(e.target.value);
+                      loadAvailability(e.target.value, availabilityParty);
+                    }}
+                  />
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="time">Time</Label>
                   <Input id="time" name="time" type="time" defaultValue="18:00" required />
                 </div>
               </div>
+              {availabilityDate ? (
+                <div className="space-y-2 rounded-xl border p-3">
+                  <p className="text-xs font-medium text-muted-foreground">Availability preview</p>
+                  <div className="flex flex-wrap gap-2">
+                    {availabilitySlots.length === 0 ? (
+                      <span className="text-xs text-muted-foreground">No slots for this date.</span>
+                    ) : (
+                      availabilitySlots.map((slot) => (
+                        <span
+                          key={slot.reservedAt}
+                          className={`rounded-full px-2 py-1 text-xs ${
+                            slot.available
+                              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+                              : "bg-muted text-muted-foreground line-through"
+                          }`}
+                        >
+                          {slot.label}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                </div>
+              ) : null}
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
                   <Label htmlFor="guestEmail">Email</Label>

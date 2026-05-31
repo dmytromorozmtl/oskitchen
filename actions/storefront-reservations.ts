@@ -1,7 +1,5 @@
 "use server";
 
-
-import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -16,6 +14,7 @@ import {
   type ReservationStatus,
   type WaitlistStatus,
 } from "@/services/storefront/reservation-service";
+import { loadOwnerReservationAvailability } from "@/services/storefront/reservation-public-service";
 
 const createSchema = z.object({
   guestName: z.string().min(1).max(255),
@@ -50,9 +49,38 @@ const waitlistStatusSchema = z.object({
   status: z.enum(["WAITING", "NOTIFIED", "SEATED", "CANCELLED"]),
 });
 
+const availabilitySchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  partySize: z.coerce.number().int().min(1).max(50).default(2),
+});
+
 async function requireStorefrontForReservations() {
-  const { sf } = await requireAdminStorefrontRow("storefront.settings", { id: true, userId: true });
+  const { sf } = await requireAdminStorefrontRow("storefront.settings", {
+    id: true,
+    userId: true,
+    settingsCenterJson: true,
+  });
   return sf;
+}
+
+export async function getReservationAvailabilityAction(raw: z.infer<typeof availabilitySchema>) {
+  try {
+    await requireTenantActor();
+    const input = availabilitySchema.parse(raw);
+    const sf = await requireStorefrontForReservations();
+    const availability = await loadOwnerReservationAvailability(
+      sf.id,
+      sf.settingsCenterJson,
+      input.date,
+      input.partySize,
+    );
+    return { ok: true as const, availability };
+  } catch (e) {
+    return {
+      ok: false as const,
+      error: e instanceof Error ? e.message : "Failed to load availability.",
+    };
+  }
 }
 
 export async function createReservationAction(raw: z.infer<typeof createSchema>) {
