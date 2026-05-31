@@ -1,36 +1,35 @@
 # Uncommitted Changes Audit
 
-**Generated:** 2026-05-31 (Cycle 95)  
-**Base commit:** `1842db9c` — refactor: marketing and dashboard chrome for OS Kitchen rebrand  
-**Total uncommitted:** **871** files (866 modified, 5 untracked)  
-**Diff size:** +2,025 / −1,629 lines across modified files  
-**Prior audit:** Cycle 93 (`41ee9ae1` base) — −93 files after rebrand batch 2 (cycle 94)
+**Generated:** 2026-05-31 (Cycle 98)  
+**Base commit:** `b1a52ba0` — chore: script and service string alignment for OS Kitchen rebrand  
+**Total uncommitted:** **659** files (655 modified, 4 untracked)  
+**Diff size:** +1,165 / −1,240 lines across modified files  
+**Prior audit:** Cycle 95 (`1842db9c` base) — −212 files after batches 3–4 (cycles 96–97)
 
 ---
 
 ## Executive summary
 
-Rebrand **batches 1–2 landed** on `main`. **871 files** remain — primarily app page metadata, docs sweep, scripts/services strings.
+Rebrand **batches 1–4 landed** on `main` (316 files total). **659 files** remain — mostly docs era-session string sweeps, remaining lib/, tests, and root config.
 
-| Batch | Status | Files |
-|-------|--------|-------|
-| 1 — brand, logo, home, header | ✅ cycle 92 | 11 |
-| 2 — marketing + dashboard chrome | ✅ cycle 94 | 93 |
-| 3 — app metadata/titles | **Next** | ~151 |
-| 4 — scripts + services | Pending | ~61 |
-| 5 — docs sweep | Pending | ~485 |
-| 6 — tests + config | Pending | ~6 |
+| Batch | Status | Files | Cycle |
+|-------|--------|-------|-------|
+| 1 — brand, logo, home, header | ✅ | 11 | 92 |
+| 2 — marketing + dashboard chrome | ✅ | 93 | 94 |
+| 3 — app metadata/titles | ✅ | 151 | 96 |
+| 4 — scripts + services | ✅ | 61 | 97 |
+| 5 — docs sweep | **Next** | ~529 | — |
+| 6 — tests + config + lib remainder | Pending | ~113 | — |
 
-**Do not** blind-commit remaining 871 files.
+**Do not** blind-commit remaining 659 files.
 
 ---
 
-## Untracked files (5)
+## Untracked files (4)
 
 | Path | Verdict |
 |------|---------|
 | `.deploy-state/predeploy-ready.json` | **Ignore** |
-| `app/dashboard/not-found.tsx` | Batch 3 |
 | `artifacts/deploy-readiness.md` | Deploy PR |
 | `docs/allreport30may.md` | Batch 5 |
 | `scripts/debug-today-page-prod.ts` | **Exclude** |
@@ -39,15 +38,13 @@ Rebrand **batches 1–2 landed** on `main`. **871 files** remain — primarily a
 
 ## By category (remaining)
 
-| Category | Modified (approx) | Notes |
-|----------|-------------------|-------|
-| **docs/** | ~485 | Era logs, ABSOLUTE_FINAL_* string swaps |
-| **app/** | ~151 | Page titles, metadata, dashboard routes |
-| **lib/** | ~120 | Non-marketing lib (ops, commercial, storefront) |
-| **scripts/** | ~33 | String alignment |
-| **services/** | ~25 | String alignment |
-| **tests/** | ~6 | Rebrand assertion updates |
-| **config/root** | ~7 | package.json, README, CHANGELOG, etc. |
+| Category | Count (approx) | Notes |
+|----------|----------------|-------|
+| **docs/** | 529 | Era logs, ABSOLUTE_FINAL_*, audit string swaps |
+| **lib/** | 100 | ops, commercial, storefront (non-marketing committed) |
+| **tests/** | 7 | Rebrand assertion updates |
+| **config/root** | ~15 | README, CHANGELOG, package.json, tailwind, etc. |
+| **actions/e2e/other** | ~8 | Minor |
 
 ---
 
@@ -58,7 +55,7 @@ Rebrand **batches 1–2 landed** on `main`. **871 files** remain — primarily a
 | Vault | **0/11** |
 | P0 | `awaiting_ops_credentials` |
 | Score | **85** |
-| Uncommitted | **871** |
+| Uncommitted | **659** |
 | GO | **NO-GO** |
 
 ---
@@ -66,5 +63,5 @@ Rebrand **batches 1–2 landed** on `main`. **871 files** remain — primarily a
 ## Next recommendation
 
 1. **Human:** Vault 11/11 per `docs/ops-vault-matrix.md`
-2. **Engineering:** Rebrand batch 3 — `app/` metadata (~151 files)
+2. **Engineering:** Rebrand batch 5 — `docs/` sweep (~529 files)
 3. **Agent:** Do **not** claim `ready:true` until vaultReady + p0ProofPassed
