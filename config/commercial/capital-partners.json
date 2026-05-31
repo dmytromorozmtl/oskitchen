@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31T12:00:00.000Z",
+  "hubTitle": "Restaurant financing resources",
+  "hubSubtitle": "Third-party options and education — OS Kitchen does not originate loans or make credit decisions.",
+  "referralFeeDisclosure": "KitchenOS may receive referral compensation from some partners in the future. Any active referral relationships will be disclosed on this page before launch.",
+  "hubDisclosures": [
+    "OS Kitchen is not a lender, broker, or financial advisor.",
+    "Links open third-party websites governed by their own terms and privacy policies.",
+    "Revenue figures shown in your dashboard are operational summaries — not lender-certified attestations.",
+    "Approval, rates, and repayment terms are determined solely by the financing provider.",
+    "Consult qualified legal and accounting advisors before signing any financing agreement."
+  ],
+  "forbiddenMarketingClaims": [
+    "instant funding",
+    "guaranteed loan approval",
+    "kitchenos capital",
+    "pre-approved loan offer",
+    "revenue-based loan approval"
+  ],
+  "partners": [
+    {
+      "slug": "sba-funding-programs",
+      "name": "U.S. Small Business Administration — Funding programs",
+      "category": "government",
+      "description": "Federal small-business loan programs, Lender Match, and disaster assistance resources for restaurant operators in the United States.",
+      "href": "https://www.sba.gov/funding-programs",
+      "regions": ["US"],
+      "disclosure": "U.S. government resource — KitchenOS is not affiliated with the SBA.",
+      "referralFee": false,
+      "featured": true
+    },
+    {
+      "slug": "sba-restaurant-guide",
+      "name": "SBA — Restaurant industry guide",
+      "category": "education",
+      "description": "Planning, licensing, and capital planning guides for food-service businesses evaluating SBA-backed options.",
+      "href": "https://www.sba.gov/business-guide/launch-your-business/choose-your-business-structure/restaurants",
+      "regions": ["US"],
+      "disclosure": "Educational resource only.",
+      "referralFee": false,
+      "featured": false
+    },
+    {
+      "slug": "score-mentoring",
+      "name": "SCORE — Free business mentoring",
+      "category": "education",
+      "description": "Volunteer mentors help operators prepare financial statements and lender conversations before applying for working capital.",
+      "href": "https://www.score.org/find-mentor",
+      "regions": ["US"],
+      "disclosure": "Nonprofit mentoring network — not a lender.",
+      "referralFee": false,
+      "featured": true
+    },
+    {
+      "slug": "cfdi-canada",
+      "name": "Canada — Business development programs",
+      "category": "government",
+      "description": "Provincial and federal small-business financing directories for Canadian restaurant operators.",
+      "href": "https://ised-isde.canada.ca/site/canada-small-business-financing-program/en",
+      "regions": ["CA"],
+      "disclosure": "Government of Canada resource.",
+      "referralFee": false,
+      "featured": false
+    },
+    {
+      "slug": "uk-british-business-bank",
+      "name": "British Business Bank — Start Up Loans",
+      "category": "government",
+      "description": "UK government-backed guidance and loan programs for hospitality businesses.",
+      "href": "https://www.british-business-bank.co.uk/start-up-loans/",
+      "regions": ["UK"],
+      "disclosure": "UK government-backed programs — verify eligibility with the provider.",
+      "referralFee": false,
+      "featured": false
+    },
+    {
+      "slug": "os-kitchen-attestation-waitlist",
+      "name": "OS Kitchen — Verified revenue export (waitlist)",
+      "category": "platform",
+      "description": "Join the waitlist for signed KitchenOS revenue summaries you can share with lenders. Phase 2 beta — not a lending product.",
+      "href": "/contact-sales?topic=capital-attestation",
+      "regions": ["US", "CA", "UK", "EU"],
+      "disclosure": "Internal waitlist — KitchenOS does not guarantee lender acceptance.",
+      "referralFee": false,
+      "featured": true,
+      "internal": true
+    }
+  ],
+  "educationTopics": [
+    {
+      "title": "Working capital vs. equipment financing",
+      "body": "Working capital covers payroll gaps and inventory spikes; equipment loans are collateralized by assets. Match the product to the use case before applying."
+    },
+    {
+      "title": "Revenue-based financing (RBF) basics",
+      "body": "Some POS platforms offer advances repaid via daily sales holdbacks. Compare effective APR, holdback percentage, and personal guarantee requirements."
+    },
+    {
+      "title": "What lenders typically ask for",
+      "body": "Trailing sales history, bank statements, time in business, and location count. KitchenOS analytics can help you prepare — export attestation is on the Phase 2 roadmap."
+    },
+    {
+      "title": "Connect analytics to your application",
+      "body": "Use Revenue and Advanced analytics in OS Kitchen to understand gross order volume, cancellation rate, and channel mix before speaking with a lender."
+    }
+  ]
+}

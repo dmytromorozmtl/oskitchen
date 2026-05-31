@@ -74,6 +74,13 @@
       "notes": "Useful today, but still expanding toward investor-grade and prime-cost views."
     },
     {
+      "id": "capital_resources",
+      "label": "Financing resources hub",
+      "status": "BETA",
+      "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "FULL_SERVICE", "COMMISSARY", "FOOD_TRUCK", "BAKERY"],
+      "notes": "Third-party financing resources and revenue context — not a lending product."
+    },
+    {
       "id": "copilot",
       "label": "AI Copilot",
       "status": "PILOT_ONLY",

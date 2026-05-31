@@ -24,6 +24,14 @@
     "status": "verified"
   },
   {
+    "claim": "OS Kitchen provides third-party restaurant financing resources — not loans or credit decisions.",
+    "page": "/resources/restaurant-financing",
+    "evidenceType": "product-page",
+    "evidenceSource": "app/resources/restaurant-financing/page.tsx + docs/commercial/capital-partner-disclosures.md",
+    "dateVerified": "2026-05-31",
+    "status": "verified"
+  },
+  {
     "claim": "OS Kitchen reduces food cost by a measurable percentage.",
     "page": "/pricing",
     "evidenceType": "illustrative-roi",

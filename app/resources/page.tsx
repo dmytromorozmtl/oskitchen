@@ -19,6 +19,11 @@ export const metadata: Metadata = marketingPageMetadata({
 
 const RESOURCE_HUB_LINKS = [
   {
+    title: 'Restaurant financing resources',
+    description: 'Third-party working-capital education — OS Kitchen does not originate loans.',
+    href: '/resources/restaurant-financing',
+  },
+  {
     title: 'Get started by business type',
     description: 'Choose trial, demo, or sales path for your segment.',
     href: '/get-started',

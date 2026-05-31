@@ -71,6 +71,7 @@ export function marketingSitemapPaths(): Array<{
     { path: '/blog/restaurant-pos-comparison-2026', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/blog/reduce-food-waste-with-production-planning', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/resources', priority: 0.7, changeFrequency: 'weekly' },
+    { path: '/resources/restaurant-financing', priority: 0.65, changeFrequency: 'monthly' },
     { path: '/support', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/trust', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/partners', priority: 0.6, changeFrequency: 'monthly' },

@@ -66,6 +66,10 @@ export const MARKETING_CLAIMS_FORBIDDEN_PHRASES = [
   "live doordash integration",
   "live uber eats sync",
   "toast-class kds at rush hour",
+  "instant funding",
+  "guaranteed loan approval",
+  "kitchenos capital",
+  "pre-approved loan offer",
 ] as const;
 
 export const MARKETING_CLAIMS_CI_SCRIPTS = [

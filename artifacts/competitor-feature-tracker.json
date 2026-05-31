@@ -50,6 +50,8 @@
   "shopify-markets-phase3ShippedAt": "2026-05-31T11:00:00.000Z",
   "shopify-markets-phase4": "done",
   "shopify-markets-phase4ShippedAt": "2026-05-31T12:00:00.000Z",
-  "postParityPhase": "shopify-markets-phase4",
-  "nextRecommendedStep": "restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing OR shopify-markets-bidirectional"
+  "restaurant-capital-resources-hub": "done",
+  "restaurant-capital-resources-hubShippedAt": "2026-05-31T13:00:00.000Z",
+  "postParityPhase": "restaurant-capital-resources-hub",
+  "nextRecommendedStep": "restaurant-capital-phase2-attestation OR app-marketplace-phase5-partner-billing OR shopify-markets-bidirectional"
 }

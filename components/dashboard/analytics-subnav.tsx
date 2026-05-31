@@ -19,6 +19,7 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/analytics/inventory", label: "Inventory & Margin" },
   { href: "/dashboard/analytics/forecasting", label: "Forecasting" },
   { href: "/dashboard/analytics/advanced", label: "Advanced" },
+  { href: "/dashboard/analytics/capital", label: "Financing resources" },
   { href: "/dashboard/analytics/reports", label: "Reports" },
   { href: "/dashboard/analytics/saved-views", label: "Saved Views" },
 ];
