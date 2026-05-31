@@ -11,9 +11,9 @@ import { FINAL_NAVIGATION_GROUPS } from "@/lib/navigation/final-navigation-group
 describe("nav maturity governance", () => {
   it("classifies marketplace integrations by maturity", () => {
     expect(getNavMaturityExposure("/dashboard/integrations/doordash")).toBe("preview");
+    expect(getNavMaturityExposure("/dashboard/integrations/uber-eats")).toBe("preview");
     expect(getNavMaturityExposure("/dashboard/integrations/grubhub")).toBe("placeholder");
-    expect(getNavMaturityExposure("/dashboard/integrations/uber-eats")).toBe("placeholder");
-    expect(navMaturityBadgeForHref("/dashboard/integrations/doordash")).toBe("Preview");
+    expect(navMaturityBadgeForHref("/dashboard/integrations/uber-eats")).toBe("Preview");
   });
 
   it("hides preview and placeholder integrations from focused default nav", () => {

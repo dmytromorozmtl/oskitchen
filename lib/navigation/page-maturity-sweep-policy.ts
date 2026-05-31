@@ -17,6 +17,7 @@ export const PAGE_MATURITY_INLINE_HONESTY_ROUTES = [
   "/dashboard/settings/security/sso",
   "/dashboard/inventory/pos-impacts",
   "/dashboard/integrations/doordash",
+  "/dashboard/integrations/uber-eats",
 ] as const;
 
 export const PAGE_MATURITY_SWEEP_CI_SCRIPTS = [

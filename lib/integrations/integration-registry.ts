@@ -29,8 +29,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "uber-eats",
     name: "Uber Eats",
-    status: "PLACEHOLDER",
-    requiredEnv: [],
+    status: "BETA",
+    requiredEnv: [
+      "UBER_EATS_CLIENT_ID",
+      "UBER_EATS_CLIENT_SECRET",
+      "UBER_EATS_STORE_ID",
+      "UBER_EATS_WEBHOOK_SECRET",
+    ],
     setupRoute: "/dashboard/integrations/uber-eats",
   },
   {

@@ -6,6 +6,8 @@ import { saveUberEatsSettings } from "@/actions/integrations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import {
   Card,
   CardContent,
@@ -15,11 +17,12 @@ import {
 } from "@/components/ui/card";
 import { isEncryptionConfigured } from "@/lib/crypto";
 import { SITE_URL } from "@/lib/constants";
-import { CapabilityBadge } from "@/components/capabilities/capability-badge";
-import { PlanGate } from "@/components/plans/plan-gate";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
+import {
+  getUberEatsCapabilitySnapshot,
+} from "@/services/integrations/uber-eats/uber-eats-service";
 import { IntegrationProvider } from "@prisma/client";
 
 export default async function UberEatsIntegrationPage() {
@@ -36,21 +39,28 @@ export default async function UberEatsIntegrationPage() {
     orderIngestionEnabled?: boolean;
   };
 
+  const capability = getUberEatsCapabilitySnapshot();
+
   const webhookUrl = conn
     ? `${SITE_URL}/api/webhooks/uber-eats/orders?cid=${conn.id}`
     : null;
 
   return (
-    <PlanGate userId={userId} feature="uber_eats" title="Uber Eats">
     <div className="mx-auto max-w-2xl space-y-6">
+      {capability.placeholderMode ? (
+        <PlaceholderBanner
+          feature="Uber Eats integration"
+          detail="Configure UBER_EATS_CLIENT_ID, UBER_EATS_CLIENT_SECRET, and UBER_EATS_STORE_ID to enable BETA order ingest and menu sync."
+        />
+      ) : null}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight">Uber Eats</h1>
-            <CapabilityBadge status="PARTNER_ACCESS_REQUIRED" />
+            <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>BETA</Badge>
           </div>
           <p className="text-sm text-muted-foreground">
-            Marketplace adapter — partner credentials required for production.
+            Marketplace BETA — OAuth order ingest, menu sync, signed webhooks.
           </p>
         </div>
         <Button asChild variant="ghost" size="sm" className="rounded-full">
@@ -58,22 +68,18 @@ export default async function UberEatsIntegrationPage() {
         </Button>
       </div>
 
-      <Card className="border-amber-500/40 bg-amber-500/10">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-base">Partner access</CardTitle>
-          <CardDescription className="text-amber-950 dark:text-amber-50">
-            Request Uber Eats developer / integration access for your brand. Until then,
-            OS Kitchen stores configuration only and shows graceful placeholders in sync and
-            test actions.
-          </CardDescription>
+          <CardTitle className="text-base">Readiness</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          <ul className="list-inside list-disc space-y-1">
-            <li>Confirm marketplace participation with Uber.</li>
-            <li>Obtain OAuth client credentials and store UUID.</li>
-            <li>Configure webhook URL below once Uber provisions signing.</li>
-            <li>Replace stub normalizers with official payload shapes.</li>
-          </ul>
+        <CardContent className="space-y-2 text-sm">
+          <ChecklistItem label="OAuth credentials saved" done={Boolean(conn?.consumerKeyEncrypted)} />
+          <ChecklistItem label="Store UUID configured" done={Boolean(conn?.externalStoreId?.trim())} />
+          <ChecklistItem label="Webhook order ingest" done={capability.liveImportReady} />
+          <ChecklistItem label="Menu sync API" done={capability.liveMenuReady} />
+          <p className="pt-2 text-muted-foreground">
+            Uber partner approval is still required before claiming production LIVE marketplace traffic.
+          </p>
         </CardContent>
       </Card>
 
@@ -156,7 +162,7 @@ export default async function UberEatsIntegrationPage() {
                   className="h-4 w-4 rounded border border-input"
                 />
                 <Label htmlFor="menuSyncEnabled" className="font-normal">
-                  Menu sync (placeholder)
+                  Menu sync (BETA)
                 </Label>
               </div>
               <div className="flex items-center gap-2">
@@ -164,11 +170,11 @@ export default async function UberEatsIntegrationPage() {
                   id="orderIngestionEnabled"
                   name="orderIngestionEnabled"
                   type="checkbox"
-                  defaultChecked={settings.orderIngestionEnabled ?? false}
+                  defaultChecked={settings.orderIngestionEnabled ?? true}
                   className="h-4 w-4 rounded border border-input"
                 />
                 <Label htmlFor="orderIngestionEnabled" className="font-normal">
-                  Order ingestion webhook (stub)
+                  Order ingestion webhook (BETA)
                 </Label>
               </div>
             </div>
@@ -183,8 +189,18 @@ export default async function UberEatsIntegrationPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Webhook URL</CardTitle>
+            <CardDescription>
+              Register in Uber developer portal for order.placed and order.status_update events.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="break-all font-mono text-xs">{webhookUrl}</CardContent>
+          <CardContent className="space-y-3 break-all font-mono text-xs">
+            {webhookUrl}
+            <p>
+              <Link className="font-sans text-sm text-primary underline" href="/dashboard/integration-health">
+                Integration health & recovery
+              </Link>
+            </p>
+          </CardContent>
         </Card>
       ) : null}
 
@@ -194,6 +210,21 @@ export default async function UberEatsIntegrationPage() {
         </div>
       ) : null}
     </div>
-    </PlanGate>
+  );
+}
+
+function ChecklistItem({ label, done }: { label: string; done: boolean }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span
+        aria-hidden
+        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border text-xs ${
+          done ? "border-emerald-500 bg-emerald-500/10 text-emerald-600" : "border-border text-muted-foreground"
+        }`}
+      >
+        {done ? "✓" : ""}
+      </span>
+      <span className={done ? "text-foreground" : "text-muted-foreground"}>{label}</span>
+    </div>
   );
 }

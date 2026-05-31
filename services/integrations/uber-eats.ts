@@ -1,8 +1,7 @@
 import { createHmac, timingSafeEqual } from "crypto";
 
-import { IntegrationProvider, NormalizedOrderStatus } from "@prisma/client";
-
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
+import { normalizeUberEatsMarketplaceOrder } from "@/services/integrations/uber-eats/uber-eats-marketplace";
 
 export type UberEatsCredentials = {
   clientId?: string | null;
@@ -10,10 +9,7 @@ export type UberEatsCredentials = {
   storeId?: string | null;
 };
 
-/**
- * Adapter skeleton for Uber Eats Marketplace.
- * Live calls require Uber partner-approved credentials and base URLs from Uber documentation.
- */
+/** OAuth health check — verifies token endpoint when credentials are saved. */
 export async function testConnection(creds: UberEatsCredentials): Promise<{
   ok: boolean;
   message: string;
@@ -25,11 +21,36 @@ export async function testConnection(creds: UberEatsCredentials): Promise<{
         "Uber Eats Marketplace APIs require partner-approved credentials. Save client ID and secret when your integration is provisioned.",
     };
   }
-  return {
-    ok: false,
-    message:
-      "Credentials stored. Live health check is disabled until partner API host and OAuth flow are configured for your account.",
-  };
+  const tokenUrl = process.env.UBER_EATS_TOKEN_URL ?? "https://login.uber.com/oauth/v2/token";
+  try {
+    const body = new URLSearchParams({
+      client_id: creds.clientId.trim(),
+      client_secret: creds.clientSecret.trim(),
+      grant_type: "client_credentials",
+      scope: "eats.store eats.order",
+    });
+    const res = await fetch(tokenUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+      cache: "no-store",
+    });
+    if (res.ok) {
+      return {
+        ok: true,
+        message: "OAuth token exchange succeeded (BETA). Confirm store UUID and webhook signing in Uber developer portal.",
+      };
+    }
+    return {
+      ok: false,
+      message: `OAuth token exchange failed (${res.status}). Verify Uber partner credentials and scopes.`,
+    };
+  } catch (e) {
+    return {
+      ok: false,
+      message: e instanceof Error ? e.message : "Uber Eats connection test failed",
+    };
+  }
 }
 
 export async function fetchStore(_creds: UberEatsCredentials, _storeId: string) {
@@ -41,33 +62,72 @@ export async function fetchOrders(_creds: UberEatsCredentials, _storeId: string)
 }
 
 export function normalizeUberEatsOrder(raw: Record<string, unknown>): NormalizedKitchenOrder {
-  const id = String(raw.id ?? raw.uuid ?? "unknown");
-  return {
-    provider: IntegrationProvider.UBER_EATS,
-    externalOrderId: id,
-    externalOrderNumber: raw.display_id != null ? String(raw.display_id) : id,
-    sourceStatus: raw.state != null ? String(raw.state) : null,
-    normalizedStatus: NormalizedOrderStatus.OPEN,
-    customer: {},
-    lineItems: [],
-    fulfillment: { type: "PICKUP", pickupTime: null, deliveryTime: null, deliveryAddress: null },
-    totals: {},
-    raw,
-  };
+  return normalizeUberEatsMarketplaceOrder(raw);
 }
 
 export async function updateOrderStatus(
-  _creds: UberEatsCredentials,
-  _orderId: string,
-  _status: string,
+  creds: UberEatsCredentials,
+  orderId: string,
+  status: string,
 ) {
-  return { ok: false as const, message: "Placeholder until partner API is configured." };
+  if (!creds.clientId?.trim() || !creds.clientSecret?.trim() || !creds.storeId?.trim()) {
+    return { ok: false as const, message: "Uber Eats credentials or store ID missing." };
+  }
+  const tokenUrl = process.env.UBER_EATS_TOKEN_URL ?? "https://login.uber.com/oauth/v2/token";
+  const body = new URLSearchParams({
+    client_id: creds.clientId.trim(),
+    client_secret: creds.clientSecret.trim(),
+    grant_type: "client_credentials",
+    scope: "eats.order",
+  });
+  const tokenRes = await fetch(tokenUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+    cache: "no-store",
+  });
+  if (!tokenRes.ok) {
+    return { ok: false as const, message: `OAuth failed (${tokenRes.status})` };
+  }
+  const tokenJson = (await tokenRes.json()) as { access_token?: string };
+  const token = tokenJson.access_token;
+  if (!token) return { ok: false as const, message: "Missing access token" };
+
+  const base =
+    process.env.UBER_EATS_ORDERS_API_BASE ?? "https://api.uber.com/v2/eats/stores";
+  const res = await fetch(
+    `${base}/${encodeURIComponent(creds.storeId.trim())}/orders/${encodeURIComponent(orderId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+      cache: "no-store",
+    },
+  );
+  return {
+    ok: res.ok,
+    message: res.ok ? `Status updated to ${status}` : `Uber status update failed (${res.status})`,
+  };
 }
 
-export async function menuSyncPlaceholder(_creds: UberEatsCredentials, _storeId: string) {
+export async function menuSyncPlaceholder(creds: UberEatsCredentials, storeId: string) {
+  if (!creds.clientId?.trim() || !creds.clientSecret?.trim()) {
+    return {
+      ok: false as const,
+      message: "Menu sync requires Uber Eats OAuth credentials.",
+    };
+  }
+  const { UberEatsMenuSyncService } = await import(
+    "@/services/integrations/uber-eats/menu-sync.service"
+  );
+  const svc = new UberEatsMenuSyncService(creds);
+  const result = await svc.pushMenu("system", storeId || creds.storeId || "");
   return {
-    ok: false as const,
-    message: "Menu sync requires Uber Eats menu APIs and partner approval.",
+    ok: result.ok,
+    message: result.message ?? "Menu sync complete",
   };
 }
 

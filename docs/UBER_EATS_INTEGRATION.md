@@ -1,30 +1,38 @@
-# Uber Eats integration
+# Uber Eats integration (BETA)
 
-OS Kitchen includes an **adapter skeleton** for Uber Eats Marketplace. Without Uber partner-approved credentials and official API hosts, live behavior is limited by design.
+OS Kitchen ships a **BETA** Uber Eats Marketplace connector: OAuth order ingest, signed webhooks, menu push, and status updates. Production traffic still requires Uber partner approval.
 
-## What ships today
+## Competitor parity
 
-- Encrypted storage for client ID/secret, webhook signing secret, and store identifier fields.
-- Webhook endpoint (with `cid` query) that records **`WebhookEvent`** rows and runs **stub** payload normalization into `external_orders`.
-- UI messaging that explains partner approval requirements.
+| Capability | Competitors | OS Kitchen Uber Eats BETA |
+|------------|-------------|---------------------------|
+| Order ingest | Native apps | Webhook + poll → `external_orders` + kitchen `orders` |
+| Menu sync | Partner portal | `PUT /api/integrations/uber-eats/menu` |
+| Webhook security | HMAC | `verifyUberEatsWebhookSignature` + idempotent events |
+| Status updates | API PATCH | `updateOrderStatus` via OAuth |
 
-## What you need from Uber
-
-- Developer program access and OAuth/client credentials for your organization.
-- Store UUID / merchant context for menu + order APIs.
-- Documented webhook signing algorithm for your integration tier.
-
-## Next implementation steps
-
-1. Replace `normalizeUberEatsOrder` with the official order JSON contract.
-2. Verify signatures on ingress (do not process unsigned traffic in production).
-3. Implement menu sync using Uber’s menu endpoints behind feature flags.
-4. Map Uber fulfillment states to `NormalizedOrderStatus`.
-
-## Endpoint
+## Endpoints
 
 ```text
 POST /api/webhooks/uber-eats/orders?cid=<connection-id>
+PUT  /api/integrations/uber-eats/menu
 ```
 
-Treat this URL as **staging-only** until Uber validates your integration.
+## Required environment
+
+```bash
+UBER_EATS_CLIENT_ID=
+UBER_EATS_CLIENT_SECRET=
+UBER_EATS_STORE_ID=
+UBER_EATS_WEBHOOK_SECRET=
+```
+
+## How to test
+
+```bash
+node ./node_modules/vitest/vitest.mjs run tests/unit/uber-eats-order-import-canonical.test.ts tests/unit/uber-eats-webhook-signature.test.ts
+```
+
+## Honesty
+
+Registry status is **BETA**, not LIVE. OS Kitchen does not claim Uber official partnership until your integration is certified.

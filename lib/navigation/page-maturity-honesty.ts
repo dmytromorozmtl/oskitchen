@@ -39,7 +39,7 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
   "/dashboard/integrations/grubhub":
     "Grubhub marketplace integration is a placeholder — no live order ingest or menu sync.",
   "/dashboard/integrations/uber-eats":
-    "Uber Eats marketplace integration is a placeholder — connection UI may exist without production partner certification.",
+    "Uber Eats BETA — OAuth order ingest, menu sync, and signed webhooks require Uber partner approval; not certified production LIVE.",
   "/dashboard/integrations/uber-direct":
     "Uber Direct dispatch is a placeholder — workflow rehearsal only, not live courier APIs.",
   "/dashboard/routes/uber-direct":

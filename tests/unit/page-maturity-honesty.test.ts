@@ -13,14 +13,13 @@ describe("page maturity honesty", () => {
     expect(tables?.detail).toMatch(/table-service/i);
   });
 
-  it("returns placeholder honesty for uber-eats integration page", () => {
-    const uber = getPageMaturityHonesty("/dashboard/integrations/uber-eats");
-    expect(uber?.exposure).toBe("placeholder");
-    expect(uber?.detail).toMatch(/placeholder/i);
+  it("returns null for grubhub when inline PlaceholderBanner is rendered", () => {
+    expect(getPageMaturityHonesty("/dashboard/integrations/grubhub")).toBeNull();
   });
 
   it("skips duplicate banner when page already has inline honesty copy", () => {
     expect(getPageMaturityHonesty("/dashboard/integrations/doordash")).toBeNull();
+    expect(getPageMaturityHonesty("/dashboard/integrations/uber-eats")).toBeNull();
     expect(getPageMaturityHonesty("/dashboard/integrations/grubhub")).toBeNull();
   });
 

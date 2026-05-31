@@ -16,23 +16,16 @@ import {
 
 describe("integration honesty alignment", () => {
   it("lists marketplace placeholders in the honesty registry (DoorDash graduated to BETA)", () => {
-    expect(MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS).toEqual([
-      "grubhub",
-      "uber-eats",
-      "uber-direct",
-    ]);
-    expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual([
-      "grubhub",
-      "uber-eats",
-      "uber-direct",
-    ]);
+    expect(MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS).toEqual(["grubhub", "uber-direct"]);
+    expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual(["grubhub", "uber-direct"]);
   });
 
-  it("marks remaining marketplace integrations as PLACEHOLDER in integration registry", () => {
+  it("marks remaining marketplace integrations as PLACEHOLDER; Uber Eats is BETA", () => {
     for (const id of MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS) {
       expect(getIntegrationById(id)?.status).toBe("PLACEHOLDER");
     }
     expect(getIntegrationById("doordash")?.status).toBe("BETA");
+    expect(getIntegrationById("uber-eats")?.status).toBe("BETA");
   });
 
   it("includes Grubhub in channel catalog as placeholder", () => {
@@ -56,6 +49,8 @@ describe("integration honesty alignment", () => {
 
     const doordash = resolved.find((c) => c.providerKey === "doordash");
     expect(doordash?.isPlaceholder).toBe(false);
+    const uberEats = resolved.find((c) => c.providerKey === "uber-eats");
+    expect(uberEats?.isPlaceholder).toBe(false);
   });
 
   it("maps integration ids to honest preparation pages", () => {
@@ -63,7 +58,8 @@ describe("integration honesty alignment", () => {
       "/dashboard/integrations/grubhub",
     );
     expect(isMarketplacePlaceholderIntegration("doordash")).toBe(false);
-    expect(isMarketplacePlaceholderProvider("uber-eats")).toBe(true);
+    expect(isMarketplacePlaceholderProvider("uber-eats")).toBe(false);
+    expect(isMarketplacePlaceholderProvider("grubhub")).toBe(true);
     expect(isMarketplacePlaceholderIntegration("shopify")).toBe(false);
   });
 
