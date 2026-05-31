@@ -3,7 +3,7 @@ import { join, relative } from "node:path";
 
 export const WEBHOOK_ROUTE_ROOT = "app/api/webhooks" as const;
 
-export const WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT = 46 as const;
+export const WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT = 52 as const;
 
 export type WebhookSecurityCategory =
   | "commerce_critical"
@@ -224,6 +224,36 @@ export function classifyWebhookRoute(routePath: string): WebhookSecurityClassifi
       riskTier: "P2",
       testCoverage: "dedicated",
       nextAction: "Slack ingress dedupe active — still not production commerce ingress.",
+    };
+  }
+
+  if (slug.startsWith("capital-lender/")) {
+    return {
+      category: "platform_internal",
+      signatureKind: "bearer_secret",
+      signatureValidated: true,
+      replayProtection: "ingress_dedupe",
+      tenantMapping: "payload_scoped",
+      structuredLogging: true,
+      rateLimited: false,
+      riskTier: "P2",
+      testCoverage: "guard_only",
+      nextAction: "Capital lender offer webhooks — partner-scoped secret rotation.",
+    };
+  }
+
+  if (slug === "doordash/orders" || slug === "grubhub/orders") {
+    return {
+      category: "commerce_critical",
+      signatureKind: "bearer_secret",
+      signatureValidated: true,
+      replayProtection: "webhook_event_store",
+      tenantMapping: "connection_cid",
+      structuredLogging: true,
+      rateLimited: true,
+      riskTier: "P0",
+      testCoverage: "none",
+      nextAction: "Marketplace BETA — continue live channel smoke when staging credentials exist.",
     };
   }
 

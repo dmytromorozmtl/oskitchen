@@ -45,9 +45,9 @@ describe("webhook security matrix", () => {
     const entries = buildWebhookSecurityMatrix();
     const summary = buildWebhookSecurityMatrixSummary(WEBHOOK_SECURITY_ERA16_POLICY_ID, entries);
     expect(summary.policyId).toBe(WEBHOOK_SECURITY_ERA16_POLICY_ID);
-    expect(summary.commerceRoutesWithReplay).toBe(6);
-    expect(summary.byRiskTier.P0).toBe(6);
-    expect(summary.byCategory.commerce_critical).toBe(6);
+    expect(summary.commerceRoutesWithReplay).toBe(11);
+    expect(summary.byRiskTier.P0).toBe(11);
+    expect(summary.byCategory.commerce_critical).toBe(11);
   });
 
   it("maps route files to api paths", () => {
