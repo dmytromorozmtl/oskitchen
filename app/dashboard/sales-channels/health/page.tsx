@@ -36,7 +36,7 @@ import {
 } from "@/services/developer/integration-health-service";
 
 export default async function SalesChannelsHealthPage() {
-  const { userId, dataUserId } = await getTenantActor();
+  const { userId } = await getTenantActor();
   const env = getServerEnv();
 
   const [connectionWhere, webhookWhere] = await Promise.all([
@@ -59,8 +59,8 @@ export default async function SalesChannelsHealthPage() {
         where: { AND: [webhookWhere, { processed: false }] },
       }),
       loadSalesChannelMetrics(userId),
-      listIntegrationHealthCards(dataUserId),
-      listChannelPilotLiveProofSlices(dataUserId),
+      listIntegrationHealthCards(userId),
+      listChannelPilotLiveProofSlices(userId),
     ]);
 
   const stripeConfigured = Boolean(

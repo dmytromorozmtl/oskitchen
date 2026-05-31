@@ -317,7 +317,7 @@ describe("dashboard userId-first cleanup", () => {
 
     expect(detail).toContain("getTaskForUser({ userId }, taskId)");
 
-    expect(settings).toContain("where: { id: userId }");
+    expect(settings).toContain("where: { id: actor.userId }");
     expect(templates).toContain("where: { id: userId }");
 
     expect(my).toContain("where: { userId, email: user.email ?? undefined }");
@@ -379,22 +379,20 @@ describe("dashboard userId-first cleanup", () => {
     const chat = read("app/dashboard/copilot/chat/page.tsx");
     const actions = read("actions/copilot.ts");
 
-    expect(overview).toContain("const actor = await requireWorkspacePermissionActor()");
-    expect(overview).toContain("const scope = createCopilotActorScope(actor)");
+    expect(overview).toContain("const { actor, scope } = await loadCopilotPageActor()");
     expect(overview).toContain("buildDeterministicSnapshot(userId)");
     expect(overview).toContain("where: { id: userId }");
 
-    expect(insights).toContain("const scope = createCopilotActorScope(actor)");
-    expect(audit).toContain("const scope = createCopilotActorScope(actor)");
-    expect(settings).toContain("const scope = createCopilotActorScope(actor)");
+    expect(insights).toContain("loadCopilotPageActor()");
+    expect(audit).toContain("loadCopilotPageActor()");
+    expect(settings).toContain("loadCopilotPageActor()");
     expect(summaries).toContain("buildDeterministicSnapshot(userId)");
     expect(summaries).toContain("where: { id: userId }");
-    expect(drafts).toContain("const scope = createCopilotActorScope(actor)");
-    expect(sources).toContain("const scope = createCopilotActorScope(actor)");
-    expect(chat).toContain("const scope = createCopilotActorScope(actor)");
+    expect(drafts).toContain("loadCopilotPageActor()");
+    expect(sources).toContain("loadCopilotPageActor()");
+    expect(chat).toContain("loadCopilotPageActor()");
 
-    expect(actions).toContain("const actor = await requireWorkspacePermissionActor()");
-    expect(actions).toContain("return createCopilotActorScope(actor)");
+    expect(actions).toContain("requireCopilotMutation");
     expect(actions).not.toContain("requireTenantActor");
     expect(actions).not.toContain("isOwner: true");
   });
@@ -416,7 +414,7 @@ describe("dashboard userId-first cleanup", () => {
     const exportRoute = read("app/api/export/report/route.ts");
     const pnlExportRoute = read("app/api/export/restaurant-pnl/route.ts");
 
-    expect(overview).toContain("const actor = await requireWorkspacePermissionActor()");
+    expect(overview).toContain("const actor = await loadWorkspacePermissionPageActor()");
     expect(overview).toContain("const scope = createReportActorScope(actor)");
     expect(overview).toContain("where: { id: userId }");
     expect(overview).toContain("listReportExportHistory(userId, 5)");
@@ -424,25 +422,25 @@ describe("dashboard userId-first cleanup", () => {
 
     expect(library).toContain("const scope = createReportActorScope(actor)");
     expect(library).toContain("where: { id: userId }");
-    expect(generator).toContain("const scope = createReportActorScope(actor)");
+    expect(generator).toContain("requireReportGeneratorPageAccess(reportKey)");
     expect(generator).toContain("runReport(reportKey, { userId, scope, filters })");
     expect(generator).toContain("where: { workspace: { ownerUserId: userId } }");
     expect(generator).toContain("where: { userId }");
 
-    expect(financial).toContain('canDoReports(scope, "reports.read.financial")');
-    expect(executive).toContain('canDoReports(scope, "reports.read.financial")');
-    expect(operations).toContain("const scope = createReportActorScope(actor)");
-    expect(saved).toContain('canDoReports(scope, "reports.saved.manage")');
+    expect(financial).toContain('requireReportsPageAccess("reports.read.financial")');
+    expect(executive).toContain('requireReportsPageAccess("reports.read.financial")');
+    expect(operations).toContain('requireReportsPageAccess("reports.read.operations")');
+    expect(saved).toContain('requireReportsPageAccess("reports.saved.manage")');
     expect(saved).toContain("listSavedReports(userId)");
     expect(history).toContain("canExportReports(actor)");
     expect(history).toContain("listReportExportHistory(userId, 100)");
     expect(settings).toContain("where: { id: userId }");
-    expect(enterprise).toContain('canDoReports(scope, "reports.read.financial")');
+    expect(enterprise).toContain('requireReportsPageAccess("reports.read.financial")');
     expect(enterprise).toContain("prisma.order.count({ where: { userId } })");
     expect(enterprise).toContain("prisma.brand.count({ where: { workspace: { ownerUserId: userId } } })");
-    expect(menuEngineering).toContain('canDoReports(scope, "reports.read.financial")');
+    expect(menuEngineering).toContain('requireReportsPageAccess("reports.read.financial")');
     expect(menuEngineering).toContain("getMenuEngineeringMatrix(userId)");
-    expect(pnl).toContain('canDoReports(scope, "reports.read.financial")');
+    expect(pnl).toContain('requireReportsPageAccess("reports.read.financial")');
     expect(pnl).toContain("refreshPnlSnapshot(userId, period)");
     expect(pnl).toContain("getRestaurantPnLStatement(userId, period)");
 
@@ -481,11 +479,11 @@ describe("dashboard userId-first cleanup", () => {
     const projectRisks = read("app/dashboard/implementation/[projectId]/risks/page.tsx");
     const actions = read("actions/implementation-center.ts");
 
-    expect(layout).toContain("const actor = await requireWorkspacePermissionActor()");
+    expect(layout).toContain("const actor = await loadWorkspacePermissionPageActor()");
     expect(layout).toContain("const scope = createImplementationActorScope(actor)");
-    expect(layout).toContain('canUseImplementation(scope, "implementation.view")');
+    expect(layout).toContain("hasImplementationHubPageAccess(scope)");
 
-    expect(overview).toContain("const scope = createImplementationActorScope(actor)");
+    expect(overview).toContain("loadWorkspacePermissionPageActor()");
     expect(overview).toContain("getActiveProject(userId)");
     expect(overview).toContain("projectKpis(userId)");
     expect(overview).toContain("getLatestReadiness({ userId, projectId: active.id })");

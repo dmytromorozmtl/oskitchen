@@ -18,7 +18,7 @@ export default async function SalesChannelsAvailablePage() {
     return access.deny;
   }
   const actor = access.actor;
-  const { dataUserId: userId } = actor;
+  const { userId } = actor;
   const canManage = canManageIntegrations(actor.granted);
   const [connections, kitchen] = await Promise.all([
     prisma.integrationConnection.findMany({
