@@ -1,6 +1,8 @@
 "use client";
 
-export { StripeTerminalCheckout } from "@/components/pos/stripe-terminal-reader";
+import { StripeTerminalCheckout } from "@/components/pos/stripe-terminal-reader";
+
+export { StripeTerminalCheckout };
 
 /** @deprecated Use StripeTerminalCheckout inside StripeTerminalProvider */
 export function TapToPayButton(props: {

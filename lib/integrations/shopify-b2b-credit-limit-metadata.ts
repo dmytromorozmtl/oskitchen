@@ -56,7 +56,7 @@ export function buildB2bArCreditLimitRows(
 
       const utilizationPct = Math.round((company.openAmountCents / limitCents) * 100);
       const headroomCents = Math.max(0, limitCents - company.openAmountCents);
-      const status =
+      const status: B2bArCreditLimitRow["status"] =
         utilizationPct >= 100 ? "blocked" : utilizationPct >= 85 ? "warning" : "ok";
 
       return {

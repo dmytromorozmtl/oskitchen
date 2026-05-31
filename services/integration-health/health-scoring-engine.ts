@@ -194,7 +194,7 @@ export function scoreIntegrationHealth(input: IntegrationHealthSignalInput): Int
     alerts: [],
   };
 
-  base.alerts = predictIntegrationHealthAlerts(base, now);
+  base.alerts = predictIntegrationHealthAlerts(base);
   return base;
 }
 

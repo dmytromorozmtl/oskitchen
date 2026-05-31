@@ -27,7 +27,7 @@ export function mapReaderStatus(params: {
   return "online";
 }
 
-export function useSimulatedTerminalReaders(): boolean {
+export function isSimulatedTerminalReadersEnabled(): boolean {
   if (typeof process === "undefined") return false;
   const flag = process.env.NEXT_PUBLIC_STRIPE_TERMINAL_SIMULATED?.trim().toLowerCase();
   return flag === "true" || flag === "1" || flag === "yes";
@@ -93,11 +93,14 @@ export async function captureTerminalPaymentViaApi(params: {
 
 export async function discoverTerminalReaders(
   terminal: Terminal,
-  simulated = useSimulatedTerminalReaders(),
+  simulated = isSimulatedTerminalReadersEnabled(),
 ): Promise<Reader[]> {
   const result = await terminal.discoverReaders({ simulated });
   if ("error" in result && result.error) {
     throw new Error(result.error.message);
+  }
+  if (!("discoveredReaders" in result)) {
+    return [];
   }
   return result.discoveredReaders ?? [];
 }
@@ -109,6 +112,9 @@ export async function connectTerminalReader(
   const result = await terminal.connectReader(reader);
   if ("error" in result && result.error) {
     throw new Error(result.error.message);
+  }
+  if (!("reader" in result)) {
+    throw new Error("Reader connection failed");
   }
   return result.reader;
 }
@@ -133,10 +139,16 @@ export async function processTerminalCardPayment(params: {
   if ("error" in collectResult && collectResult.error) {
     throw new Error(collectResult.error.message);
   }
+  if (!("paymentIntent" in collectResult)) {
+    throw new Error("Payment collection failed");
+  }
 
   const processResult = await params.terminal.processPayment(collectResult.paymentIntent);
   if ("error" in processResult && processResult.error) {
     throw new Error(processResult.error.message);
+  }
+  if (!("paymentIntent" in processResult)) {
+    throw new Error("Payment processing failed");
   }
 
   const transaction = await captureTerminalPaymentViaApi({

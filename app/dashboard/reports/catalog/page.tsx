@@ -13,10 +13,12 @@ import {
   getRecommendedReportsForRole,
   listReportCatalog,
   mergeRegistryIntoCatalogSummary,
+  type ReportCatalogEntry,
 } from "@/services/analytics/report-catalog-service";
 import { REPORT_REGISTRY } from "@/lib/reports/report-registry";
+import type { ReportKey } from "@/lib/reports/report-types";
 
-function catalogEntryForRegistryKey(key: string) {
+function catalogEntryForRegistryKey(key: ReportKey) {
   const catalog = listReportCatalog();
   return (
     catalog.find((entry) => entry.registryKey === key) ??
@@ -25,10 +27,28 @@ function catalogEntryForRegistryKey(key: string) {
   );
 }
 
+function recentCatalogFallback(key: ReportKey): ReportCatalogEntry {
+  const def = REPORT_REGISTRY[key];
+  return {
+    id: key,
+    title: def?.title ?? key,
+    description: def?.description ?? "Recently run report",
+    category: "Sales",
+    metrics: ["revenue"],
+    groupBy: ["day"],
+    exportFormats: ["csv", "pdf", "xlsx"],
+    registryKey: key,
+    generatorRoute: def?.generatorRoute ?? `/dashboard/reports/${key}`,
+    status: "available",
+    recommendedRoles: ["owner"],
+    tags: ["recent"],
+  };
+}
+
 export default async function ReportCatalogPage() {
   const actor = await loadWorkspacePermissionPageActor();
   if (!hasReportsHubPageAccess(actor)) {
-    return <PermissionDeniedSurfaceCard surfaceId="reports_catalog" />;
+    return <PermissionDeniedSurfaceCard surfaceId="reports_hub" />;
   }
 
   const profile = await prisma.userProfile.findUnique({
@@ -48,20 +68,7 @@ export default async function ReportCatalogPage() {
   const recommended = getRecommendedReportsForRole(role);
   const recentKeys = getRecentlyRunReportKeys();
   const recentlyRun = recentKeys
-    .map((key) => catalogEntryForRegistryKey(key) ?? {
-      id: key,
-      title: REPORT_REGISTRY[key]?.title ?? key,
-      description: REPORT_REGISTRY[key]?.description ?? "Recently run report",
-      category: "Sales" as const,
-      metrics: ["revenue"],
-      groupBy: ["day"],
-      exportFormats: ["csv", "pdf"] as const,
-      registryKey: key,
-      generatorRoute: REPORT_REGISTRY[key]?.generatorRoute ?? `/dashboard/reports/${key}`,
-      status: "available" as const,
-      recommendedRoles: ["owner"],
-      tags: ["recent"],
-    })
+    .map((key) => catalogEntryForRegistryKey(key) ?? recentCatalogFallback(key))
     .slice(0, 6);
 
   return (

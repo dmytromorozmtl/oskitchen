@@ -397,8 +397,8 @@ export async function stressTestOfflineQueue(input: {
     locationId: null,
     brandId: null,
     customerId: null,
-    fulfillmentDetail: "pickup",
-    paymentMode: "cash",
+    fulfillmentDetail: "PICKUP",
+    paymentMode: "CASH",
     lines: [{ title: "Stress item", quantity: 1, unitPrice: 9.99 }],
   };
 

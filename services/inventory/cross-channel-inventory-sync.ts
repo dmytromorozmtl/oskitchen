@@ -699,8 +699,8 @@ async function kitchenProductsForOwner(userId: string) {
   const products =
     productIds.length > 0
       ? await prisma.product.findMany({
-          where: { id: { in: productIds }, userId },
-          select: { id: true, title: true, sku: true, maxStorefrontQuantity: true },
+          where: { id: { in: productIds }, menu: { userId } },
+          select: { id: true, title: true, barcode: true, maxStorefrontQuantity: true },
         })
       : [];
   const productById = new Map(products.map((p) => [p.id, p]));
@@ -715,7 +715,7 @@ async function kitchenProductsForOwner(userId: string) {
     if (!product) continue;
     masterByProduct.set(item.productId, {
       title: product.title,
-      sku: product.sku,
+      sku: product.barcode,
       quantity: item.quantity,
       lowStockThreshold: item.lowStockAt ?? 5,
     });
@@ -725,7 +725,7 @@ async function kitchenProductsForOwner(userId: string) {
     if (masterByProduct.has(product.id)) continue;
     masterByProduct.set(product.id, {
       title: product.title,
-      sku: product.sku,
+      sku: product.barcode,
       quantity: product.maxStorefrontQuantity ?? 0,
       lowStockThreshold: 5,
     });
@@ -914,7 +914,7 @@ export async function notifyCrossChannelInventoryConflicts(
   snapshot: CrossChannelSyncSnapshot,
 ): Promise<{ sent: boolean; skipped: boolean; reason?: string }> {
   const connections = await loadCrossChannelConnections(userId);
-  const owner = await prisma.user.findUnique({
+  const owner = await prisma.userProfile.findUnique({
     where: { id: userId },
     select: { email: true },
   });
@@ -983,7 +983,7 @@ export async function sendCrossChannelDailyReconciliationEmail(
   if (connections.length === 0) return { sent: false, skipped: true, reason: "no_connections" };
   if (!isEmailConfigured()) return { sent: false, skipped: true, reason: "email_not_configured" };
 
-  const owner = await prisma.user.findUnique({
+  const owner = await prisma.userProfile.findUnique({
     where: { id: userId },
     select: { email: true },
   });

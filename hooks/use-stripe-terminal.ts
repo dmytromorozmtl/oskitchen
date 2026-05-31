@@ -28,7 +28,7 @@ import {
   nextReconnectDelayMs,
   processTerminalCardPayment,
   type StripeTerminalReaderStatus,
-  useSimulatedTerminalReaders,
+  isSimulatedTerminalReadersEnabled,
 } from "@/lib/payments/stripe-terminal-client";
 
 export type UseStripeTerminalOptions = {
@@ -103,7 +103,7 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
         void (async () => {
           try {
             setStatus("connecting");
-            const readers = await discoverTerminalReaders(term, useSimulatedTerminalReaders());
+            const readers = await discoverTerminalReaders(term, isSimulatedTerminalReadersEnabled());
             if (readers.length === 0) {
               setStatus("offline");
               return;
@@ -161,7 +161,7 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
     const term = terminalRef.current;
     if (!term) throw new Error("Terminal not initialized");
     setError(null);
-    const readers = await discoverTerminalReaders(term, useSimulatedTerminalReaders());
+    const readers = await discoverTerminalReaders(term, isSimulatedTerminalReadersEnabled());
     setDiscoveredReaders(readers);
     return readers;
   }, []);
@@ -174,7 +174,7 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
     try {
       let candidates = discoveredReaders;
       if (candidates.length === 0) {
-        candidates = await discoverTerminalReaders(term, useSimulatedTerminalReaders());
+        candidates = await discoverTerminalReaders(term, isSimulatedTerminalReadersEnabled());
         setDiscoveredReaders(candidates);
       }
       if (candidates.length === 0) {
@@ -285,7 +285,7 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
         if (cancelled || !shouldAutoConnect || !terminalRef.current) return;
         const readers = await discoverTerminalReaders(
           terminalRef.current,
-          useSimulatedTerminalReaders(),
+          isSimulatedTerminalReadersEnabled(),
         );
         if (cancelled || readers.length === 0) {
           if (!cancelled) setStatus("offline");
