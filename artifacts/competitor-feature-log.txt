@@ -49,3 +49,13 @@ Priority: P1
 Files: 14
 Result: IMPLEMENTED
 Next: handheld-ordering (P1)
+
+---
+Cycle: 7
+Timestamp: 2026-05-31T23:10:00.000Z
+Feature: handheld-ordering
+Competitor: Toast/Square handheld waiter
+Priority: P1
+Files: 12
+Result: IMPLEMENTED
+Next: bill-splitting-complete (P1)

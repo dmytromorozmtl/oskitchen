@@ -18,6 +18,7 @@ export const posTouchCompactClass = cn(
 /** Surfaces that must import touch helpers — checked by era17 cert. */
 export const POS_TOUCH_TARGET_CONSUMERS = [
   "components/dashboard/pos-terminal-client.tsx",
+  "components/pos/handheld-ordering-client.tsx",
   "components/pos/tab-panel.tsx",
   "components/pos/quick-order-buttons.tsx",
 ] as const;

@@ -17,7 +17,7 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
   "/dashboard/pos/tabs":
     "Bar and table tabs are a preview workflow. Do not sell full tab-service parity until certified in the feature maturity matrix.",
   "/dashboard/pos/handheld":
-    "Handheld ordering is a preview shell that links to the main POS terminal. No offline or native device certification.",
+    "Handheld ordering BETA — mobile waiter UI with offline cash queue and installable PWA. Tab fire requires connectivity; not certified native handheld hardware.",
   "/dashboard/tables":
     "Floor plan preview only — not production table-service, split checks, or rush-hour FOH certification.",
   "/dashboard/copilot":

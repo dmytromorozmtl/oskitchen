@@ -1,9 +1,32 @@
 import React from "react";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 
+import { HandheldOrderingClient } from "@/components/pos/handheld-ordering-client";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
+import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadHandheldOrderingBootstrap } from "@/services/pos/handheld-ordering-service";
+
+export const metadata: Metadata = {
+  title: "Handheld POS",
+  description: "Mobile-first tableside ordering with offline cash checkout.",
+  manifest: "/dashboard/pos/handheld/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Waiter POS",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FF5F1F",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export default async function HandheldPOSPage() {
   const actor = await requireWorkspacePermissionActor();
@@ -11,28 +34,44 @@ export default async function HandheldPOSPage() {
     return <PermissionDeniedSurfaceCard surfaceId="pos_hub" />;
   }
 
-  return (
-    <div className="mx-auto max-w-md space-y-4 pb-20">
-      <div className="text-center py-4">
-        <h1 className="text-xl font-bold">Handheld POS</h1>
-        <p className="text-sm text-muted-foreground">Take orders at the table</p>
-      </div>
+  const boot = await loadHandheldOrderingBootstrap(actor.userId);
 
-      <div className="rounded-xl border bg-card p-4">
-        <p className="mb-3 text-sm font-medium">Quick Products</p>
-        <p className="mb-4 text-xs text-muted-foreground">
-          Handheld POS loads the same products as the main POS terminal. Open this page on a tablet
-          or phone to take orders tableside.
-        </p>
-        <div className="py-8 text-center text-muted-foreground">
-          <p>Handheld mode reuses the POS Terminal interface.</p>
-          <p className="mt-1 text-sm">
-            <Link href="/dashboard/pos/terminal" className="text-primary hover:underline">
-              Open POS Terminal →
-            </Link>
-          </p>
-        </div>
+  if (!boot.registers.length) {
+    return (
+      <div className="mx-auto max-w-md space-y-4 pb-20">
+        <h1 className="text-xl font-bold">Handheld POS</h1>
+        <p className="text-sm text-muted-foreground">Create a register before taking tableside orders.</p>
+        <Button asChild className="rounded-full">
+          <Link href="/dashboard/pos/registers">Add register</Link>
+        </Button>
       </div>
+    );
+  }
+
+  if (!boot.staff.length) {
+    return (
+      <div className="mx-auto max-w-md space-y-4 pb-20">
+        <h1 className="text-xl font-bold">Handheld POS</h1>
+        <p className="text-sm text-muted-foreground">Add staff to attribute handheld sales.</p>
+        <Button asChild className="rounded-full">
+          <Link href="/dashboard/staff">Open staff</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-md pb-4">
+      <HandheldOrderingClient
+        registers={boot.registers}
+        staff={boot.staff}
+        products={boot.products}
+        tables={boot.tables}
+        tabs={boot.tabs}
+        openShiftsByRegisterId={boot.openShiftsByRegisterId}
+        offlineQueueEnabled={boot.offlineQueueEnabled}
+        conflictResolution={boot.conflictResolution}
+      />
     </div>
   );
 }
