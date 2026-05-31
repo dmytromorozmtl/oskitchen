@@ -17,7 +17,7 @@ const FEATURES = [
   {
     icon: "🛵",
     title: "Delivery",
-    body: "Yandex, Uber Eats, pickup — merged into a single stream.",
+    body: "Storefront and WooCommerce today — Uber Eats / DoorDash partner-gated, not live today.",
   },
   {
     icon: "👥",
@@ -54,7 +54,7 @@ const FAQS = [
   },
   {
     q: "Which delivery apps integrate?",
-    a: "Yandex, Delivery Club, Uber Eats, DoorDash, and more.",
+    a: "WooCommerce and Shopify connect today. Uber Eats and DoorDash are partner-gated on our roadmap — not sold as live integrations yet.",
   },
   {
     q: "Can I use my existing POS?",
