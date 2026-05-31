@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   isKdsRealtimeEnabled,
+  nextKdsReconnectDelayMs,
   resolveKdsTransport,
 } from "@/services/kds-websocket";
 
@@ -55,10 +56,18 @@ describe("kds websocket transport", () => {
     ).toBe("polling");
   });
 
+  it("computes exponential reconnect backoff capped at 30s", () => {
+    expect(nextKdsReconnectDelayMs(0)).toBe(1_000);
+    expect(nextKdsReconnectDelayMs(1)).toBe(2_000);
+    expect(nextKdsReconnectDelayMs(4)).toBe(16_000);
+    expect(nextKdsReconnectDelayMs(10)).toBe(30_000);
+  });
+
   it("wires Supabase channel helpers in the websocket service", () => {
     const source = readFileSync(join(ROOT, "services/kds-websocket.ts"), "utf8");
     expect(source).toContain("kds-realtime-smoke-policy");
     expect(source).toContain("getKdsRealtimeChannelName");
+    expect(source).toContain("nextKdsReconnectDelayMs");
     expect(source).toContain("KDS_REALTIME_ORDERS_TABLE");
     expect(source).toContain("NEXT_PUBLIC_KDS_REALTIME_ENABLED");
   });

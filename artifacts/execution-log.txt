@@ -1467,3 +1467,9 @@ Action: test: Stripe Terminal E2E + sales one-pager (Critical Features Cycle 3)
 Files: e2e/stripe-terminal-payment.spec.ts, e2e/helpers/stripe-terminal-mock.ts, docs/stripe-terminal-sales-one-pager.md
 Tracker: hardware-terminal-e2e=done (3/13) — Hardware Terminal feature COMPLETE
 Next: Cycle 4 KDS WebSocket via Supabase Realtime (use-kds-realtime.ts)
+---
+Cycle: 20260531-162400
+Action: feat: KDS WebSocket via Supabase Realtime (Critical Features Cycle 4)
+Files: hooks/use-kds-realtime.ts, services/kds-websocket.ts (auto-reconnect + polling fallback), components/kitchen/kds-daily-service.tsx, tests/unit/use-kds-realtime.test.ts, tests/unit/kds-websocket.test.ts, tests/unit/kds-realtime-smoke-wiring.test.ts
+Tracker: websocket-kds-infra=done (4/13)
+Next: Cycle 5 KDS real-time UI (live indicator, animations, sound, LIVE/POLLING badge)

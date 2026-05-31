@@ -34,9 +34,8 @@ import {
   kdsTicketAgeClassName,
   summarizeKdsQueue,
 } from "@/lib/kitchen/kds-queue-clarity-era18";
-import { getKdsConnectionStatusLabel } from "@/lib/kitchen/kds-realtime-smoke-policy";
+import { useKdsRealtime } from "@/hooks/use-kds-realtime";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
-import { subscribeKdsOrderUpdates } from "@/services/kds-websocket";
 import { cn } from "@/lib/utils";
 
 function playNewOrderChime() {
@@ -96,7 +95,6 @@ export function KdsDailyService({
 }) {
   const [orders, setOrders] = useState(initialOrders);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [realtimeConnected, setRealtimeConnected] = useState(false);
   const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [, startBump] = useTransition();
@@ -133,14 +131,10 @@ export function KdsDailyService({
     });
   }, [soundEnabled]);
 
-  useEffect(() => {
-    const subscription = subscribeKdsOrderUpdates({
-      userId,
-      onRefresh: refresh,
-      onConnectionChange: setRealtimeConnected,
-    });
-    return () => subscription.disconnect();
-  }, [userId, refresh]);
+  const { isLive: realtimeConnected, connectionLabel } = useKdsRealtime({
+    userId,
+    onRefresh: refresh,
+  });
 
   useEffect(() => {
     const tick = setInterval(() => {
@@ -223,7 +217,7 @@ export function KdsDailyService({
       <KdsQueueStatusStrip
         summary={queueSummary}
         realtimeConnected={realtimeConnected}
-        connectionLabel={getKdsConnectionStatusLabel(realtimeConnected)}
+        connectionLabel={connectionLabel}
       />
 
       {actionError ? (

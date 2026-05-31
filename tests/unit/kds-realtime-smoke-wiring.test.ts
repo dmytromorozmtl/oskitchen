@@ -14,10 +14,9 @@ const ROOT = process.cwd();
 describe("kds realtime smoke wiring", () => {
   it("wires transport subscription into the daily KDS client component", () => {
     const source = readFileSync(join(ROOT, KDS_REALTIME_COMPONENT), "utf8");
-    expect(source).toContain("kds-realtime-smoke-policy");
-    expect(source).toContain("getKdsConnectionStatusLabel");
-    expect(source).toContain("kds-websocket");
-    expect(source).toContain("subscribeKdsOrderUpdates");
+    expect(source).toContain("useKdsRealtime");
+    expect(source).toContain("use-kds-realtime");
+    expect(source).toContain("connectionLabel");
   });
 
   it("matches documented poll intervals in status copy", () => {

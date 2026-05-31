@@ -21,6 +21,11 @@ type KdsRealtimeEnv = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY?: string;
 };
 
+/** Exponential backoff for Realtime reconnect (1s → 30s cap). */
+export function nextKdsReconnectDelayMs(attempt: number): number {
+  return Math.min(30_000, 1_000 * 2 ** Math.max(0, attempt));
+}
+
 /** Whether Supabase Realtime subscription is allowed (default: on when Supabase is configured). */
 export function isKdsRealtimeEnabled(env: KdsRealtimeEnv = process.env as KdsRealtimeEnv): boolean {
   const flag = env.NEXT_PUBLIC_KDS_REALTIME_ENABLED?.trim().toLowerCase();
@@ -38,6 +43,8 @@ export type SubscribeKdsOrderUpdatesOptions = {
   userId: string;
   onRefresh: () => void;
   onConnectionChange: (live: boolean) => void;
+  onReconnectAttempt?: (attempt: number) => void;
+  maxReconnectAttempts?: number;
 };
 
 export type KdsOrderUpdatesSubscription = {
@@ -49,13 +56,17 @@ export type KdsOrderUpdatesSubscription = {
  * Subscribe to KDS queue updates. Always runs a poll safety net; optionally
  * attaches Supabase Realtime when enabled. Restarts poll interval when live
  * state changes (15s disconnected · 60s when Realtime is SUBSCRIBED).
+ * Reconnects Realtime with exponential backoff on channel errors.
  */
 export function subscribeKdsOrderUpdates(
   opts: SubscribeKdsOrderUpdatesOptions,
 ): KdsOrderUpdatesSubscription {
   const transport = resolveKdsTransport();
   let pollTimer: ReturnType<typeof setInterval> | null = null;
+  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   let disposed = false;
+  let reconnectAttempt = 0;
+  const maxReconnectAttempts = opts.maxReconnectAttempts ?? 5;
 
   const schedulePoll = (live: boolean) => {
     if (pollTimer) clearInterval(pollTimer);
@@ -80,30 +91,73 @@ export function subscribeKdsOrderUpdates(
   }
 
   const supabase = createClient();
-  const channel = supabase
-    .channel(getKdsRealtimeChannelName(opts.userId))
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: KDS_REALTIME_ORDERS_SCHEMA,
-        table: KDS_REALTIME_ORDERS_TABLE,
-        filter: `user_id=eq.${opts.userId}`,
-      },
-      () => {
-        opts.onRefresh();
-      },
-    )
-    .subscribe((status) => {
-      setLive(status === "SUBSCRIBED");
+  let channel: ReturnType<typeof supabase.channel> | null = null;
+
+  const clearReconnectTimer = () => {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
+  };
+
+  const attachRealtimeChannel = () => {
+    if (disposed) return;
+
+    const removePromise = channel
+      ? supabase.removeChannel(channel)
+      : Promise.resolve();
+
+    void removePromise.finally(() => {
+      if (disposed) return;
+
+      setLive(false);
+
+      channel = supabase
+        .channel(getKdsRealtimeChannelName(opts.userId))
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: KDS_REALTIME_ORDERS_SCHEMA,
+            table: KDS_REALTIME_ORDERS_TABLE,
+            filter: `user_id=eq.${opts.userId}`,
+          },
+          () => {
+            opts.onRefresh();
+          },
+        )
+        .subscribe((status) => {
+          if (status === "SUBSCRIBED") {
+            reconnectAttempt = 0;
+            clearReconnectTimer();
+            setLive(true);
+            return;
+          }
+
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+            setLive(false);
+            if (disposed || reconnectAttempt >= maxReconnectAttempts) return;
+
+            reconnectAttempt += 1;
+            opts.onReconnectAttempt?.(reconnectAttempt);
+            clearReconnectTimer();
+            reconnectTimer = setTimeout(() => {
+              attachRealtimeChannel();
+            }, nextKdsReconnectDelayMs(reconnectAttempt - 1));
+          }
+        });
     });
+  };
+
+  attachRealtimeChannel();
 
   return {
     transport,
     disconnect: () => {
       disposed = true;
+      clearReconnectTimer();
       if (pollTimer) clearInterval(pollTimer);
-      void supabase.removeChannel(channel);
+      if (channel) void supabase.removeChannel(channel);
     },
   };
 }
