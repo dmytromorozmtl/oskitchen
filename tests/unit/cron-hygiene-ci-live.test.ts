@@ -87,7 +87,7 @@ describe("cron hygiene CI certification (live repo)", () => {
     expect(matrix).toContain("Tier 1b — Cron hygiene");
     expect(matrix).toContain("validate:production-crons");
     expect(matrix).toContain("validate:cron-inventory");
-    expect(matrix).toContain("19 allowlisted slugs");
+    expect(matrix).toContain("21 allowlisted slugs");
   });
 
   it("requires cron hygiene artifacts on disk", () => {

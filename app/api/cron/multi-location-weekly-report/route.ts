@@ -6,7 +6,7 @@ import { runMultiLocationWeeklyReportBatch } from "@/services/analytics/multi-lo
 
 export const dynamic = "force-dynamic";
 
-/** Weekly multi-location comparison email — Mondays (experimental cron). */
+/** Weekly multi-location comparison email — Mondays. */
 async function handleCron(request: Request) {
   return runCronRoute(request, async () => {
     const result = await runMultiLocationWeeklyReportBatch();

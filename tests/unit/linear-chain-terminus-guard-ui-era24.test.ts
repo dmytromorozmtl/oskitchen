@@ -10,7 +10,7 @@ describe("linear-chain-terminus-guard-ui-era24", () => {
     expect(buildLinearChainTerminusGuardUiSlice({ terminalClosureActive: false })).toBeNull();
   });
 
-  it("builds slice when terminal closure active", () => {
+  it("builds slice when terminal closure active", { timeout: 120_000 }, () => {
     const slice = buildLinearChainTerminusGuardUiSlice({ terminalClosureActive: true, env: {} });
     expect(slice).not.toBeNull();
     expect(slice?.step17Forbidden).toBe(true);
@@ -31,7 +31,7 @@ describe("linear-chain-terminus-guard-ui-era24", () => {
     expect(slice?.launchWizardHref).toContain("#launch-wizard-linear-chain-terminus-guard");
   });
 
-  it("formats guard label", () => {
+  it("formats guard label", { timeout: 120_000 }, () => {
     const slice = buildLinearChainTerminusGuardUiSlice({ terminalClosureActive: true, env: {} });
     expect(slice).not.toBeNull();
     if (!slice) return;

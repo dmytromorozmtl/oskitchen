@@ -26,6 +26,8 @@ export const ALLOWED_PRODUCTION_CRON_SLUGS = [
   "shopify-b2b-dunning",
   "shopify-b2b-collector-digest",
   "outbound-webhook-deliveries",
+  "cross-channel-inventory-reconciliation",
+  "multi-location-weekly-report",
 ] as const;
 
 export type ProductionCronSlug = (typeof ALLOWED_PRODUCTION_CRON_SLUGS)[number];
@@ -67,6 +69,8 @@ export const PRODUCTION_CRON_SCHEDULES: Record<ProductionCronSlug, string> = {
   "shopify-b2b-dunning": "0 9 * * *",
   "shopify-b2b-collector-digest": "0 10 * * *",
   "outbound-webhook-deliveries": "*/5 * * * *",
+  "cross-channel-inventory-reconciliation": "15 5 * * *",
+  "multi-location-weekly-report": "0 8 * * 1",
 };
 
 export type ProductionCronEntry = { path: string; schedule: string };

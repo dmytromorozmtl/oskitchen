@@ -565,7 +565,7 @@ bash scripts/ops/pilot-preflight.sh
 | Staging env | `verify:staging-env` exit 0 |
 | Workspace scope | `npm run workspace:backfill:status` exit 0 (if migration pilot) |
 | Nav honesty | Preview/placeholder routes show badges (`era4-page-maturity-sweep-v1`) |
-| Cron surface | `pilot-preflight.sh` PASS — `ENABLE_EXPERIMENTAL_CRONS` not `true`; 19 production crons only (`era9-cron-surface-recert-v1`, `era14-cron-surface-recert-v1`; `npm run smoke:cron-surface`) |
+| Cron surface | `pilot-preflight.sh` PASS — `ENABLE_EXPERIMENTAL_CRONS` not `true`; 21 production crons only (`era9-cron-surface-recert-v1`, `era14-cron-surface-recert-v1`; `npm run smoke:cron-surface`) |
 | Staging E2E wiring | `npm run smoke:staging-workflows-first-green` — review `artifacts/staging-workflows-first-green-summary.json` (`era16-staging-workflows-first-green-v1`, `era17-staging-workflows-first-green-v1`); record `GITHUB_*_RUN_URL` + outcome after workflow_dispatch — see `docs/GITHUB_E2E_STAGING_SECRETS.md` |
 
 ---

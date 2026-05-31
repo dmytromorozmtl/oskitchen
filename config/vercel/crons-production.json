@@ -74,5 +74,13 @@
   {
     "path": "/api/cron/outbound-webhook-deliveries",
     "schedule": "*/5 * * * *"
+  },
+  {
+    "path": "/api/cron/cross-channel-inventory-reconciliation",
+    "schedule": "15 5 * * *"
+  },
+  {
+    "path": "/api/cron/multi-location-weekly-report",
+    "schedule": "0 8 * * 1"
   }
 ]

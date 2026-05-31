@@ -7,7 +7,7 @@ import { runCrossChannelDailyReconciliationBatch } from "@/services/inventory/cr
 export const dynamic = "force-dynamic";
 
 /**
- * Daily cross-channel inventory reconciliation email (experimental cron).
+ * Daily cross-channel inventory reconciliation email.
  * Sends digest to workspace owners with connected Shopify/Woo/DoorDash channels.
  */
 async function handleCron(request: Request) {

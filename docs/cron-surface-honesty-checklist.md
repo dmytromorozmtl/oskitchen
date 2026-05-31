@@ -4,7 +4,7 @@
 
 **Extends:** `era4-active-production-only-v1`, `era9-cron-surface-recert-v1`
 
-**Posture:** **19 production** App Router crons only; **121+ experimental** handlers archived under `archive/cron-routes/`; **0** experimental routes on disk.
+**Posture:** **21 production** App Router crons only; **121+ experimental** handlers archived under `archive/cron-routes/`; **0** experimental routes on disk.
 
 ## Certified today
 
