@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { withOwnerWorkspaceAnd, withWorkspaceScope } from "@/lib/scope/with-workspace-scope";
+import { legacyAwareOwnerScope } from "@/tests/helpers/owner-scoped-where";
 
 describe("withWorkspaceScope", () => {
   it("AND-merges workspace scope when workspaceId is set", () => {
@@ -9,7 +10,7 @@ describe("withWorkspaceScope", () => {
       { status: "CONFIRMED" },
     );
     expect(where).toEqual({
-      AND: [{ workspaceId: "ws-1" }, { status: "CONFIRMED" }],
+      AND: [legacyAwareOwnerScope("owner-1", "ws-1"), { status: "CONFIRMED" }],
     });
   });
 

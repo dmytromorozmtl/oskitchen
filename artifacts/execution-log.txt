@@ -1107,3 +1107,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: human vault gate (11/11) → P0 execute → SSO smoke; fix ~42 vitest assertion failures; rebrand batch 1 optional
+
+---
+Cycle: 90
+Timestamp: 2026-05-31T10:00:00.000Z
+Priority: P1
+Action: fix: workspace legacy OR scope — buildOwnerScopedWhere default includes null workspace_id rows; aligned 10 test files + rate-limit facade test (decision tree exhausted; post-tree vitest fix per cycle 89)
+Files changed: 13 (lib/scope/workspace-resource-scope.ts, tests/helpers/owner-scoped-where.ts, 10 test files, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: human vault gate; remaining failures (dashboard-shell/os-kitchen-logo, cert-live docs, order-pii rebrand); rebrand batch 1

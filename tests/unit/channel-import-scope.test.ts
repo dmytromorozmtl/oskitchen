@@ -5,6 +5,7 @@ import {
   channelImportBatchByIdWhereForOwner,
   channelImportBatchListWhereForOwner,
 } from "@/lib/scope/channel-import-scope";
+import { legacyAwareOwnerScope } from "@/tests/helpers/owner-scoped-where";
 
 vi.mock("@/lib/scope/resolve-owner-workspace-id", () => ({
   resolveOwnerWorkspaceId: vi.fn(),
@@ -19,9 +20,9 @@ describe("channel-import-scope", () => {
 
   it("channelImportBatchListWhereForOwner uses workspaceId when workspace exists", async () => {
     vi.mocked(resolveOwnerWorkspaceId).mockResolvedValue("ws-1");
-    await expect(channelImportBatchListWhereForOwner("owner-1")).resolves.toEqual({
-      workspaceId: "ws-1",
-    });
+    await expect(channelImportBatchListWhereForOwner("owner-1")).resolves.toEqual(
+      legacyAwareOwnerScope("owner-1", "ws-1"),
+    );
   });
 
   it("channelImportBatchByIdWhereForOwner ANDs batch id", async () => {
@@ -33,8 +34,8 @@ describe("channel-import-scope", () => {
 
   it("channelConflictWhereForOwner uses workspaceId when workspace exists", async () => {
     vi.mocked(resolveOwnerWorkspaceId).mockResolvedValue("ws-1");
-    await expect(channelConflictWhereForOwner("owner-1")).resolves.toEqual({
-      workspaceId: "ws-1",
-    });
+    await expect(channelConflictWhereForOwner("owner-1")).resolves.toEqual(
+      legacyAwareOwnerScope("owner-1", "ws-1"),
+    );
   });
 });

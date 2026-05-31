@@ -7,6 +7,7 @@ import {
   whereOwnedByUser,
 } from "@/lib/scope/user-owned-guards";
 import { scopedIdWhere } from "@/lib/scope/tenant-scope";
+import { legacyAwareOwnerScope } from "@/tests/helpers/owner-scoped-where";
 
 vi.mock("@/lib/scope/resolve-owner-workspace-id", () => ({
   resolveOwnerWorkspaceId: vi.fn(),
@@ -22,7 +23,7 @@ describe("owned order guard", () => {
   it("uses workspaceId when workspace present", async () => {
     vi.mocked(resolveOwnerWorkspaceId).mockResolvedValue("ws-1");
     await expect(whereOwnedOrderForOwner("u1", "o1")).resolves.toEqual({
-      AND: [{ workspaceId: "ws-1" }, { id: "o1" }],
+      AND: [legacyAwareOwnerScope("u1", "ws-1"), { id: "o1" }],
     });
   });
 

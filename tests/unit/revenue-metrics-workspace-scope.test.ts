@@ -5,6 +5,7 @@ import {
   whereOrdersInWindow,
   whereOrdersInWindowForOwner,
 } from "@/lib/analytics/revenue-metrics";
+import { legacyAwareOwnerScope } from "@/tests/helpers/owner-scoped-where";
 
 vi.mock("@/lib/scope/resolve-owner-workspace-id", () => ({
   resolveOwnerWorkspaceId: vi.fn(),
@@ -23,7 +24,7 @@ describe("revenue-metrics workspace scope", () => {
     expect(
       whereOrdersInWindow({ userId: "owner-1", workspaceId: "ws-1", from, to }),
     ).toEqual({
-      AND: [{ workspaceId: "ws-1" }, { createdAt: { gte: from, lte: to } }],
+      AND: [legacyAwareOwnerScope("owner-1", "ws-1"), { createdAt: { gte: from, lte: to } }],
     });
   });
 
@@ -35,7 +36,7 @@ describe("revenue-metrics workspace scope", () => {
       whereOrdersInWindowForOwner({ userId: "owner-1", from, to, extra: { status: "CONFIRMED" } }),
     ).resolves.toEqual({
       AND: [
-        { workspaceId: "ws-9" },
+        legacyAwareOwnerScope("owner-1", "ws-9"),
         { createdAt: { gte: from, lte: to } },
         { status: "CONFIRMED" },
       ],

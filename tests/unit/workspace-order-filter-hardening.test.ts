@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { encryptOrderCustomerEmail } from "@/lib/orders/order-pii";
 import { orderListWhereForOwnerAnd } from "@/lib/scope/workspace-order-scope";
+import { legacyAwareOwnerScope } from "@/tests/helpers/owner-scoped-where";
 
 vi.mock("@/lib/scope/resolve-owner-workspace-id", () => ({
   resolveOwnerWorkspaceId: vi.fn(),
@@ -26,7 +27,7 @@ describe("workspace order filter hardening", () => {
       }),
     ).resolves.toEqual({
       AND: [
-        { workspaceId: "ws-1" },
+        legacyAwareOwnerScope("user-1", "ws-1"),
         {
           OR: [
             { customerEmail: encryptOrderCustomerEmail("jane@example.com") },

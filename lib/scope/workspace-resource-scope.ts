@@ -14,19 +14,20 @@ export type OwnerScopedWhereInput = {
  * Canonical owner-scoped Prisma filters after workspace_id NOT NULL migration.
  * Prefer `workspaceId` when the owner has a workspace; otherwise fall back to `userId`.
  *
- * Set `WORKSPACE_SCOPE_LEGACY_OR=1` only during rollback before NOT NULL is restored on a DB.
+ * Default includes legacy rows (`workspaceId: null`) for the same owner until backfill completes.
+ * Set `WORKSPACE_SCOPE_STRICT=1` for workspace-only filtering post-backfill.
  */
 export function buildOwnerScopedWhere(
   ownerUserId: string,
   workspaceId: string | null,
 ): OwnerScopedWhereInput {
   if (workspaceId) {
-    if (process.env.WORKSPACE_SCOPE_LEGACY_OR === "1") {
-      return {
-        OR: [{ workspaceId }, { userId: ownerUserId, workspaceId: null }],
-      };
+    if (process.env.WORKSPACE_SCOPE_STRICT === "1") {
+      return { workspaceId };
     }
-    return { workspaceId };
+    return {
+      OR: [{ workspaceId }, { userId: ownerUserId, workspaceId: null }],
+    };
   }
   return { userId: ownerUserId };
 }

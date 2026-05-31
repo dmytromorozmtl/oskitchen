@@ -22,22 +22,24 @@ describe("workspace-resource-scope", () => {
   beforeEach(() => {
     vi.mocked(resolveOwnerWorkspaceId).mockReset();
     delete process.env.WORKSPACE_SCOPE_LEGACY_OR;
+    delete process.env.WORKSPACE_SCOPE_STRICT;
   });
 
   afterEach(() => {
     if (prevLegacy === undefined) delete process.env.WORKSPACE_SCOPE_LEGACY_OR;
     else process.env.WORKSPACE_SCOPE_LEGACY_OR = prevLegacy;
+    delete process.env.WORKSPACE_SCOPE_STRICT;
   });
 
   it("buildOwnerScopedWhere uses workspaceId when workspace exists", () => {
-    expect(buildOwnerScopedWhere("owner-1", "ws-1")).toEqual({ workspaceId: "ws-1" });
-  });
-
-  it("buildOwnerScopedWhere supports legacy OR when env set", () => {
-    process.env.WORKSPACE_SCOPE_LEGACY_OR = "1";
     expect(buildOwnerScopedWhere("owner-1", "ws-1")).toEqual({
       OR: [{ workspaceId: "ws-1" }, { userId: "owner-1", workspaceId: null }],
     });
+  });
+
+  it("buildOwnerScopedWhere supports strict workspace-only when env set", () => {
+    process.env.WORKSPACE_SCOPE_STRICT = "1";
+    expect(buildOwnerScopedWhere("owner-1", "ws-1")).toEqual({ workspaceId: "ws-1" });
   });
 
   it("buildOwnerScopedWhere falls back to userId only", () => {
@@ -47,7 +49,10 @@ describe("workspace-resource-scope", () => {
   it("ownerScopedAnd merges extra filters when workspace exists", async () => {
     vi.mocked(resolveOwnerWorkspaceId).mockResolvedValue("ws-1");
     await expect(ownerScopedAnd("owner-1", { status: "OPEN" })).resolves.toEqual({
-      AND: [{ workspaceId: "ws-1" }, { status: "OPEN" }],
+      AND: [
+        { OR: [{ workspaceId: "ws-1" }, { userId: "owner-1", workspaceId: null }] },
+        { status: "OPEN" },
+      ],
     });
   });
 
@@ -60,7 +65,9 @@ describe("workspace-resource-scope", () => {
 
   it("orderListWhereForOwner resolves workspace", async () => {
     vi.mocked(resolveOwnerWorkspaceId).mockResolvedValue("ws-9");
-    await expect(orderListWhereForOwner("owner-1")).resolves.toEqual({ workspaceId: "ws-9" });
+    await expect(orderListWhereForOwner("owner-1")).resolves.toEqual({
+      OR: [{ workspaceId: "ws-9" }, { userId: "owner-1", workspaceId: null }],
+    });
   });
 
   it("buildProductOwnerScopedWhere uses workspaceId", () => {

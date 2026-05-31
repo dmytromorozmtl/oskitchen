@@ -20,7 +20,8 @@ describe("lib/rate-limit facade", () => {
   it("computes resetAt at next window boundary", () => {
     const windowMs = 60_000;
     const nowMs = 1_700_000_025_000;
-    expect(computeResetAt(windowMs, nowMs)).toBe(Math.ceil((1_700_000_060_000) / 1000));
+    const windowStart = Math.floor(nowMs / windowMs) * windowMs;
+    expect(computeResetAt(windowMs, nowMs)).toBe(Math.ceil((windowStart + windowMs) / 1000));
   });
 
   it("snapshotForPolicy sets remaining to zero when limited", () => {
