@@ -73,6 +73,9 @@ export default async function StaffSchedulePage({
           <Link href={`?week=${nextWeek.toISOString().slice(0, 10)}`} className="rounded-md border px-2 py-1">
             Next →
           </Link>
+          <Link href="/dashboard/staff/ai-scheduling" className="rounded-md border px-2 py-1">
+            AI scheduling →
+          </Link>
         </div>
       </div>
 

@@ -89,3 +89,13 @@ Priority: P1
 Files: 8
 Result: IMPLEMENTED
 Next: ai-scheduling (P1)
+
+---
+Cycle: 11
+Timestamp: 2026-05-31T00:00:00.000Z
+Feature: ai-scheduling
+Competitor: Toast/7shifts AI labor scheduling
+Priority: P1
+Files: 7
+Result: IMPLEMENTED
+Next: tip-pooling (P1)

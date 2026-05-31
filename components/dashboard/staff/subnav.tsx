@@ -11,6 +11,8 @@ const LINKS = [
   { href: "/dashboard/staff/roles", label: "Roles & permissions" },
   { href: "/dashboard/staff/availability", label: "Availability" },
   { href: "/dashboard/staff/shifts", label: "Shifts" },
+  { href: "/dashboard/staff/schedule", label: "Schedule" },
+  { href: "/dashboard/staff/ai-scheduling", label: "AI scheduling" },
   { href: "/dashboard/staff/certifications", label: "Certifications" },
   { href: "/dashboard/staff/drivers", label: "Drivers" },
   { href: "/dashboard/staff/reports", label: "Reports" },
