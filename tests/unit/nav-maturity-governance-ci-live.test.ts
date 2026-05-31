@@ -23,12 +23,17 @@ const REQUIRED_FILES = [
 ] as const;
 
 const PLACEHOLDER_PREFIXES = [
+  "/dashboard/integrations/uber-direct",
+  "/dashboard/routes/uber-direct",
+] as const;
+
+const PREVIEW_PREFIXES = [
+  "/dashboard/pos/tabs",
+  "/dashboard/pos/handheld",
   "/dashboard/integrations/doordash",
   "/dashboard/integrations/grubhub",
   "/dashboard/integrations/uber-eats",
 ] as const;
-
-const PREVIEW_PREFIXES = ["/dashboard/pos/tabs", "/dashboard/pos/handheld"] as const;
 
 function readPackageScripts(): Record<string, string> {
   const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
