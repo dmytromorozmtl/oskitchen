@@ -62,7 +62,10 @@ describe("public API scope guard", () => {
       "orders:write",
     );
 
-    expect(result).toEqual({ userId: "owner-1" });
+    expect(result).toEqual({
+      userId: "owner-1",
+      credential: { userId: "owner-1", scopes: ["orders:write"] },
+    });
     expect(consumeRateLimitToken).toHaveBeenCalled();
   });
 
