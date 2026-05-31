@@ -104,6 +104,15 @@ const healthySync: ShopifyMarketsSyncSettings = {
   lastB2bReconcileResult: null,
   b2bCompanyConflicts: {},
   b2bCompanyLinks: {},
+  b2bLocationAuthority: "kitchenos",
+  lastB2bLocationImportAt: null,
+  b2bLocationImportError: null,
+  b2bLocationImports: {},
+  lastB2bLocationReconcileAt: null,
+  lastB2bLocationReconcileError: null,
+  lastB2bLocationReconcileResult: null,
+  b2bLocationConflicts: {},
+  b2bLocationLinks: {},
 };
 
 describe("shopify-markets-health-dashboard", () => {
@@ -114,6 +123,7 @@ describe("shopify-markets-health-dashboard", () => {
       openTaxConflicts: 0,
       openHostnameConflicts: 0,
       openB2bConflicts: 0,
+      openB2bLocationConflicts: 0,
       webhookMissingOrWrong: 1,
       webhookStaleOrNever: 0,
       discoveryError: false,

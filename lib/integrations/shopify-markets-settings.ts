@@ -160,6 +160,47 @@ export type ShopifyB2bCompanyConflictRow = {
   b2bAuthority: "shopify" | "kitchenos" | "manual";
 };
 
+export type ShopifyB2bLocationImportRow = {
+  shopifyLocationId: string;
+  shopifyCompanyId: string;
+  companyName: string;
+  locationName: string;
+  countryCode: string | null;
+  city: string | null;
+  suggestedOsMarketId: string | null;
+  suggestedCompanyAccountId: string | null;
+  importedAt: string;
+  locationHash: string;
+};
+
+export type ShopifyB2bLocationLinkRow = {
+  shopifyLocationId: string;
+  shopifyCompanyId: string;
+  osMarketId: string | null;
+  companyAccountId: string | null;
+  linkedAt: string;
+};
+
+export type ShopifyB2bLocationConflictType =
+  | "REGION_UNMAPPED"
+  | "MARKET_MISMATCH"
+  | "LOCATION_ORPHAN"
+  | "COMPANY_UNLINKED";
+
+export type ShopifyB2bLocationConflictRow = {
+  conflictKey: string;
+  shopifyLocationId: string;
+  shopifyCompanyId: string;
+  osMarketId: string | null;
+  companyAccountId: string | null;
+  conflictType: ShopifyB2bLocationConflictType;
+  shopifySummary: string;
+  kitchenosSummary: string;
+  detectedAt: string;
+  status: "open" | "resolved_shopify" | "resolved_kitchenos" | "ignored";
+  b2bLocationAuthority: "shopify" | "kitchenos" | "manual";
+};
+
 export type ShopifyMarketsWebhookRegistryRow = {
   topic: string;
   graphqlTopic: string;
@@ -243,6 +284,15 @@ export type ShopifyMarketsSyncSettings = {
   lastB2bReconcileResult: string | null;
   b2bCompanyConflicts: Record<string, ShopifyB2bCompanyConflictRow>;
   b2bCompanyLinks: Record<string, string>;
+  b2bLocationAuthority: "shopify" | "kitchenos" | "manual";
+  lastB2bLocationImportAt: string | null;
+  b2bLocationImportError: string | null;
+  b2bLocationImports: Record<string, ShopifyB2bLocationImportRow>;
+  lastB2bLocationReconcileAt: string | null;
+  lastB2bLocationReconcileError: string | null;
+  lastB2bLocationReconcileResult: string | null;
+  b2bLocationConflicts: Record<string, ShopifyB2bLocationConflictRow>;
+  b2bLocationLinks: Record<string, ShopifyB2bLocationLinkRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -356,6 +406,29 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? b2bAuthorityRaw
       : "kitchenos";
 
+  const b2bLocationImports =
+    raw.b2bLocationImports && typeof raw.b2bLocationImports === "object"
+      ? (raw.b2bLocationImports as Record<string, ShopifyB2bLocationImportRow>)
+      : {};
+
+  const b2bLocationConflicts =
+    raw.b2bLocationConflicts && typeof raw.b2bLocationConflicts === "object"
+      ? (raw.b2bLocationConflicts as Record<string, ShopifyB2bLocationConflictRow>)
+      : {};
+
+  const b2bLocationLinks =
+    raw.b2bLocationLinks && typeof raw.b2bLocationLinks === "object"
+      ? (raw.b2bLocationLinks as Record<string, ShopifyB2bLocationLinkRow>)
+      : {};
+
+  const b2bLocationAuthorityRaw = raw.b2bLocationAuthority ?? raw.b2bAuthority;
+  const b2bLocationAuthority =
+    b2bLocationAuthorityRaw === "shopify" ||
+    b2bLocationAuthorityRaw === "kitchenos" ||
+    b2bLocationAuthorityRaw === "manual"
+      ? b2bLocationAuthorityRaw
+      : b2bAuthority;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -460,6 +533,20 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       typeof raw.lastB2bReconcileResult === "string" ? raw.lastB2bReconcileResult : null,
     b2bCompanyConflicts,
     b2bCompanyLinks,
+    b2bLocationAuthority,
+    lastB2bLocationImportAt:
+      typeof raw.lastB2bLocationImportAt === "string" ? raw.lastB2bLocationImportAt : null,
+    b2bLocationImportError:
+      typeof raw.b2bLocationImportError === "string" ? raw.b2bLocationImportError : null,
+    b2bLocationImports,
+    lastB2bLocationReconcileAt:
+      typeof raw.lastB2bLocationReconcileAt === "string" ? raw.lastB2bLocationReconcileAt : null,
+    lastB2bLocationReconcileError:
+      typeof raw.lastB2bLocationReconcileError === "string" ? raw.lastB2bLocationReconcileError : null,
+    lastB2bLocationReconcileResult:
+      typeof raw.lastB2bLocationReconcileResult === "string" ? raw.lastB2bLocationReconcileResult : null,
+    b2bLocationConflicts,
+    b2bLocationLinks,
   };
 }
 

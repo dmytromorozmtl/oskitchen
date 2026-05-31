@@ -307,6 +307,7 @@ Required Shopify scopes (verify at implementation):
 | 2026-06-01 | **Phase 9 (webhook registry) shipped:** Admin subscription sync, drift detection, register missing, delivery health from webhook event log |
 | 2026-06-01 | **Phase 10 (health dashboard) shipped:** weighted health score, domain status cards, full reconcile orchestration on Storefront → Markets |
 | 2026-06-01 | **Phase 11 (B2B company guard) shipped:** Shopify companies import, KitchenOS CompanyAccount linking, conflict guard, health domain |
+| 2026-06-01 | **Phase 12 (B2B location routing) shipped:** location→market mapping, order `_kitchenosB2bRouting` hints, full reconcile step |
 
 ---
 
@@ -376,7 +377,7 @@ Required Shopify scopes (verify at implementation):
 |-----------|------|
 | Feature flag | `SHOPIFY_MARKETS_HEALTH_DASHBOARD=1` (default on in non-production) |
 | Snapshot builder | `shopify-markets-health-service.ts` — `buildShopifyMarketsHealthSnapshot` |
-| Full reconcile | `runFullShopifyMarketsReconcileForConnection` — discovery → webhooks → prices → catalog → tax → hostname → b2b |
+| Full reconcile | `runFullShopifyMarketsReconcileForConnection` — discovery → webhooks → prices → catalog → tax → hostname → b2b → b2b-locations |
 | UI | `shopify-markets-health-dashboard.tsx` on Storefront → Markets |
 | Settings audit | `lastFullMarketsReconcileAt/Result/Error` on `marketsSync` |
 
@@ -404,4 +405,26 @@ Required Shopify scopes (verify at implementation):
 
 **Scopes:** `read_companies` (Shopify Plus B2B required)
 
-**Conscious limits:** No outbound company creation in Shopify; no order routing by company location in this phase; catering quotes rollup is a follow-on.
+**Conscious limits:** No outbound company creation in Shopify; catering quotes rollup is a follow-on.
+
+---
+
+## Phase 12 — B2B company location routing (shipped)
+
+**Goal:** Map Shopify B2B company locations to OS Kitchen markets and attach routing hints on inbound B2B orders.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_LOCATION_ROUTING=1` (default on in non-production) |
+| Location import | `shopify-market-b2b-location-service.ts` |
+| Routing reconcile | `shopify-markets-b2b-location-routing-service.ts` |
+| Order enrichment | `shopify-b2b-order-routing.ts` → `_kitchenosB2bRouting` on order raw payload |
+| Settings cache | `b2bLocationImports`, `b2bLocationLinks`, `b2bLocationConflicts` |
+| UI | `#shopify-markets-b2b-location-routing` on Integrations → Shopify |
+| Full reconcile | After B2B company guard |
+
+**Conflict types:** `REGION_UNMAPPED`, `MARKET_MISMATCH`, `LOCATION_ORPHAN`, `COMPANY_UNLINKED`
+
+**Market suggestion:** ship-to `country` → OS market `region` or linked Shopify market `regionCodes`
+
+**Conscious limits:** No outbound location writes to Shopify; net terms / PO numbers deferred to Phase 13.

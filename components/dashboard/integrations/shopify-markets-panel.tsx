@@ -9,6 +9,7 @@ import {
   applySuggestedShopifyMarketHostnameAction,
   discoverShopifyMarketsAction,
   importShopifyB2bCompaniesAction,
+  importShopifyB2bLocationsAction,
   importShopifyMarketCatalogAction,
   importShopifyMarketHostnameAction,
   importShopifyMarketPricesAction,
@@ -18,9 +19,11 @@ import {
   reconcileBidirectionalShopifyMarketCatalogAction,
   reconcileBidirectionalShopifyMarketsAction,
   reconcileShopifyB2bGuardAction,
+  reconcileShopifyB2bLocationRoutingAction,
   reconcileShopifyMarketHostnameGuardAction,
   reconcileShopifyMarketTaxGuardAction,
   resolveShopifyB2bCompanyConflictAction,
+  resolveShopifyB2bLocationConflictAction,
   resolveShopifyMarketCatalogConflictAction,
   resolveShopifyMarketHostnameConflictAction,
   resolveShopifyMarketPriceConflictAction,
@@ -30,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SHOPIFY_MARKET_B2B_GUARD_HONESTY } from "@/lib/commercial/shopify-market-b2b-guard";
+import { SHOPIFY_MARKET_B2B_LOCATION_ROUTING_HONESTY } from "@/lib/commercial/shopify-market-b2b-location-routing";
 import { SHOPIFY_MARKET_HOSTNAME_GUARD_HONESTY } from "@/lib/commercial/shopify-market-hostname-guard";
 import { SHOPIFY_MARKET_TAX_GUARD_HONESTY } from "@/lib/commercial/shopify-market-tax-guard";
 import {
@@ -92,7 +96,9 @@ export function ShopifyMarketsPanel({
   const [hostnameApplyPending, startHostnameApply] = useTransition();
   const [b2bImportPending, startB2bImport] = useTransition();
   const [b2bReconcilePending, startB2bReconcile] = useTransition();
-  const [b2bResolvePending, startB2bResolve] = useTransition();
+  const [b2bLocationImportPending, startB2bLocationImport] = useTransition();
+  const [b2bLocationReconcilePending, startB2bLocationReconcile] = useTransition();
+  const [b2bLocationResolvePending, startB2bLocationResolve] = useTransition();
   const pending =
     discoverPending ||
     importPending ||
@@ -112,7 +118,10 @@ export function ShopifyMarketsPanel({
     hostnameApplyPending ||
     b2bImportPending ||
     b2bReconcilePending ||
-    b2bResolvePending;
+    b2bResolvePending ||
+    b2bLocationImportPending ||
+    b2bLocationReconcilePending ||
+    b2bLocationResolvePending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
   const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
@@ -137,6 +146,11 @@ export function ShopifyMarketsPanel({
     (row) => row.status === "open",
   );
   const linkedB2bCount = Object.keys(syncSettings.b2bCompanyLinks ?? {}).length;
+  const importedB2bLocations = Object.values(syncSettings.b2bLocationImports ?? {});
+  const openB2bLocationConflicts = Object.values(syncSettings.b2bLocationConflicts ?? {}).filter(
+    (row) => row.status === "open",
+  );
+  const linkedB2bLocationCount = Object.keys(syncSettings.b2bLocationLinks ?? {}).length;
   const totalMappedPrices = importedMarkets.reduce(
     (sum, row) => sum + row.mappedProductCount,
     0,
@@ -447,6 +461,44 @@ export function ShopifyMarketsPanel({
                 <Scale className="h-4 w-4" />
               )}
               <span className="ml-2">Reconcile B2B guard</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startB2bLocationImport(async () => {
+                  await importShopifyB2bLocationsAction(connectionId);
+                })
+              }
+            >
+              {b2bLocationImportPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Building2 className="h-4 w-4" />
+              )}
+              <span className="ml-2">Import B2B locations</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startB2bLocationReconcile(async () => {
+                  await reconcileShopifyB2bLocationRoutingAction(connectionId);
+                })
+              }
+            >
+              {b2bLocationReconcilePending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Globe2 className="h-4 w-4" />
+              )}
+              <span className="ml-2">Reconcile location routing</span>
             </Button>
           </div>
         ) : null}
@@ -788,6 +840,111 @@ export function ShopifyMarketsPanel({
               </Link>
             </div>
           ) : null}
+
+          <div id="shopify-markets-b2b-location-routing" className="scroll-mt-24 space-y-3 border-t border-border/60 pt-3">
+            <p className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+              {SHOPIFY_MARKET_B2B_LOCATION_ROUTING_HONESTY}
+            </p>
+
+            {syncSettings.lastB2bLocationReconcileAt ? (
+              <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+                <p>
+                  Last location routing reconcile{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bLocationReconcileAt), {
+                    addSuffix: true,
+                  })}
+                  {syncSettings.lastB2bLocationReconcileResult ? (
+                    <> · {syncSettings.lastB2bLocationReconcileResult}</>
+                  ) : null}
+                  {linkedB2bLocationCount > 0 ? <> · {linkedB2bLocationCount} linked</> : null}
+                </p>
+                {syncSettings.lastB2bLocationReconcileError ? (
+                  <p className="mt-1 text-destructive">{syncSettings.lastB2bLocationReconcileError}</p>
+                ) : null}
+              </div>
+            ) : null}
+
+            {openB2bLocationConflicts.length > 0 ? (
+              <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+                <p className="font-medium text-foreground">
+                  Open B2B location conflicts ({openB2bLocationConflicts.length})
+                </p>
+                {openB2bLocationConflicts.map((conflict) => (
+                  <div
+                    key={conflict.conflictKey}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-muted-foreground"
+                  >
+                    <span>
+                      <span className="font-mono">{conflict.conflictType}</span> · Shopify{" "}
+                      {conflict.shopifySummary} vs KitchenOS {conflict.kitchenosSummary}
+                    </span>
+                    {canManage && connectionId ? (
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="rounded-full"
+                          disabled={b2bLocationResolvePending}
+                          onClick={() =>
+                            startB2bLocationResolve(async () => {
+                              await resolveShopifyB2bLocationConflictAction({
+                                connectionId,
+                                conflictKey: conflict.conflictKey,
+                                resolution: "shopify",
+                                osMarketId: conflict.osMarketId ?? undefined,
+                                companyAccountId: conflict.companyAccountId ?? undefined,
+                              });
+                            })
+                          }
+                        >
+                          Apply routing
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="rounded-full"
+                          disabled={b2bLocationResolvePending}
+                          onClick={() =>
+                            startB2bLocationResolve(async () => {
+                              await resolveShopifyB2bLocationConflictAction({
+                                connectionId,
+                                conflictKey: conflict.conflictKey,
+                                resolution: "kitchenos",
+                              });
+                            })
+                          }
+                        >
+                          Keep KitchenOS
+                        </Button>
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            {importedB2bLocations.length > 0 ? (
+              <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs text-muted-foreground">
+                <p className="font-medium text-foreground">Cached B2B location hints</p>
+                {importedB2bLocations.map((row) => (
+                  <div key={row.shopifyLocationId} className="flex flex-wrap justify-between gap-2">
+                    <span>
+                      {row.companyName} — {row.locationName}
+                      {row.countryCode ? ` · ${row.countryCode}` : ""}
+                    </span>
+                    <span>
+                      {row.suggestedOsMarketId
+                        ? `→ market ${row.suggestedOsMarketId}`
+                        : "no market match"}
+                      {syncSettings.b2bLocationLinks?.[row.shopifyLocationId] ? " · linked" : ""}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

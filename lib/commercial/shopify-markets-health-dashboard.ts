@@ -48,6 +48,7 @@ export type ShopifyMarketsHealthSnapshot = {
   openTaxConflicts: number;
   openHostnameConflicts: number;
   openB2bConflicts: number;
+  openB2bLocationConflicts: number;
   webhookDriftCount: number;
   recommendations: string[];
 };
@@ -84,6 +85,7 @@ export function computeMarketsHealthScore(input: {
   openTaxConflicts: number;
   openHostnameConflicts: number;
   openB2bConflicts: number;
+  openB2bLocationConflicts: number;
   webhookMissingOrWrong: number;
   webhookStaleOrNever: number;
   discoveryError: boolean;
@@ -98,6 +100,7 @@ export function computeMarketsHealthScore(input: {
   score -= Math.min(input.openTaxConflicts * 10, 20);
   score -= Math.min(input.openHostnameConflicts * 10, 20);
   score -= Math.min(input.openB2bConflicts * 8, 16);
+  score -= Math.min(input.openB2bLocationConflicts * 6, 12);
   score -= Math.min(input.webhookMissingOrWrong * 15, 30);
   score -= Math.min(input.webhookStaleOrNever * 5, 15);
 
