@@ -23,6 +23,7 @@ const prismaMock = vi.hoisted(() => ({
   pOSRegister: { findFirst: vi.fn() },
   pOSShift: { findFirst: vi.fn() },
   order: { findFirst: vi.fn() },
+  orderItem: { findMany: vi.fn() },
   $transaction: vi.fn(),
 }));
 
@@ -90,6 +91,9 @@ function seedHappyPath() {
     orderItems: [{ title: "Coffee", quantity: 1, unitPrice: 5, lineTotal: 5, product: null }],
     kitchenCustomer: null,
   });
+  prismaMock.orderItem.findMany.mockResolvedValue([
+    { title: "Coffee", productId: null, quantity: 1, lineTotal: 5 },
+  ]);
   decryptOrderPiiFields.mockReturnValue({
     customerName: "Guest",
     customerEmail: "g@example.com",
