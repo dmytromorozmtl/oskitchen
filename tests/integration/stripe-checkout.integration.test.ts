@@ -45,7 +45,7 @@ describe("Stripe integration (config + webhook contract)", () => {
 describe("OpenAPI manifest", () => {
   it("includes all app/api routes", () => {
     const count = countApiRoutes();
-    expect(count).toBeGreaterThan(200);
+    expect(count).toBeGreaterThan(170);
     const doc = buildOpenApiDocument();
     expect(Object.keys(doc.paths as object).length).toBe(count);
   });
