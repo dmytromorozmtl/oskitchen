@@ -1,6 +1,10 @@
 import type { PermissionKey } from "@/lib/permissions/permissions";
 
 import { MUTATION_ACCESS_DOCUMENTED_EXCEPTIONS } from "@/lib/permissions/mutation-access-policy";
+import {
+  ACTION_MUTATION_OPERATIONS,
+  type ActionMutationOperationEntry,
+} from "@/lib/permissions/action-mutation-registry";
 
 export type DomainMutationBacking =
   | { kind: "canonical"; permissions: readonly PermissionKey[] }
@@ -219,4 +223,29 @@ export function getDocumentedMutationException(exceptionId: string) {
 
 export function getDomainMutationHelper(id: string): DomainMutationHelperEntry | undefined {
   return DOMAIN_MUTATION_HELPERS.find((h) => h.id === id);
+}
+
+export type EnterpriseMutationRegistryEntry =
+  | { kind: "domain_helper"; entry: DomainMutationHelperEntry }
+  | { kind: "action_operation"; entry: ActionMutationOperationEntry };
+
+/** Unified enterprise registry: domain helpers + governed action operations. */
+export const ENTERPRISE_MUTATION_REGISTRY: readonly EnterpriseMutationRegistryEntry[] = [
+  ...DOMAIN_MUTATION_HELPERS.map(
+    (entry): EnterpriseMutationRegistryEntry => ({ kind: "domain_helper", entry }),
+  ),
+  ...ACTION_MUTATION_OPERATIONS.map(
+    (entry): EnterpriseMutationRegistryEntry => ({ kind: "action_operation", entry }),
+  ),
+];
+
+export const ENTERPRISE_MUTATION_REGISTRY_COUNTS = {
+  domainHelpers: DOMAIN_MUTATION_HELPERS.length,
+  actionOperations: ACTION_MUTATION_OPERATIONS.length,
+  total: ENTERPRISE_MUTATION_REGISTRY.length,
+  minimumEnterpriseTarget: 100,
+} as const;
+
+export function isEnterpriseMutationRegistryComplete(): boolean {
+  return ENTERPRISE_MUTATION_REGISTRY_COUNTS.total >= ENTERPRISE_MUTATION_REGISTRY_COUNTS.minimumEnterpriseTarget;
 }

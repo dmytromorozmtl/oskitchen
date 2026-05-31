@@ -1515,3 +1515,9 @@ Action: feat: integration recovery playbooks (Critical Features Cycle 11)
 Files: services/integration-health/recovery-playbook-service.ts, lib/integration-health/recovery-playbook-policy.ts, tests/unit/integration-health-recovery-playbook.test.ts, tests/unit/integration-health-recovery-wiring.test.ts
 Tracker: integration-health-recovery=done (11/13) — Integration health feature COMPLETE
 Next: Cycle 12 mutation registry 100+ entries + dashboard
+---
+Cycle: 20260531-165400
+Action: feat: mutation registry 100+ entries + dashboard + enterprise sales (Critical Features Cycle 12)
+Files: lib/permissions/action-mutation-registry.ts, lib/permissions/domain-mutation-registry.ts, app/dashboard/platform/mutation-registry/page.tsx, services/platform/mutation-registry-dashboard-service.ts, docs/mutation-registry-enterprise-sales.md
+Tracker: rbac-mutation-expansion=done (12/13)
+Next: Cycle 13 Shopify B2B AR dashboard + wholesale sales deck
