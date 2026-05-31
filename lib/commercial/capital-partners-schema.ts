@@ -23,6 +23,16 @@ export const capitalPartnerSchema = z.object({
   offerDisclosure: z.string().max(800).optional(),
   offerAmountLabel: z.string().max(200).optional(),
   webhookSecretEnvKey: z.string().max(80).optional(),
+  applyUrlEnvKey: z.string().max(80).optional(),
   offerLifecycleStatus: z.enum(CAPITAL_OFFER_LIFECYCLE_STATUSES).optional().default("sandbox"),
   sortOrder: z.number().int().min(0).max(9999).optional().default(100),
+  /** ISO date when partner agreement became effective — required for live lenders. */
+  partnerAgreementEffectiveDate: z.string().max(32).optional(),
+  /** Partner-hosted state lending ad disclosures URL — shown on merchant cards when live. */
+  stateDisclosureUrl: z.string().max(500).optional(),
+  /** Referral fee in basis points — accrual-only billing on FUNDED webhook. */
+  referralFeeBps: z.number().int().min(0).max(10_000).optional(),
+  contactEmail: z.string().email().max(255).optional(),
+  /** Optional CIDR allowlist for partner pull API — empty means no IP restriction. */
+  pullIpAllowlist: z.array(z.string().max(64)).optional(),
 });

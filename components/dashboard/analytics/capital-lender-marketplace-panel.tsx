@@ -50,6 +50,16 @@ function lifecycleBadge(status: CapitalPartner["offerLifecycleStatus"]) {
   }
 }
 
+function referralFeeBadge(partner: CapitalPartner) {
+  if (!partner.referralFee) return null;
+  const bps = partner.referralFeeBps;
+  return (
+    <Badge variant="outline" className="border-amber-500/40 text-amber-700 dark:text-amber-200">
+      Referral fee{bps != null ? ` ${(bps / 100).toFixed(2)}%` : ""}
+    </Badge>
+  );
+}
+
 function statusLabel(status: CapitalMarketplaceReferralRow["status"]) {
   switch (status) {
     case "CONSENTED":
@@ -112,6 +122,7 @@ function LenderOfferCard({
           </CardTitle>
           <div className="flex flex-wrap gap-2">
             {lifecycleBadge(partner.offerLifecycleStatus)}
+            {referralFeeBadge(partner)}
             <Badge variant="outline">{partner.regions.join(", ")}</Badge>
           </div>
         </div>
@@ -122,6 +133,18 @@ function LenderOfferCard({
           <p className="text-sm font-medium">{partner.offerAmountLabel}</p>
         ) : null}
         <p className="text-xs text-muted-foreground">{partner.offerDisclosure}</p>
+        {partner.stateDisclosureUrl ? (
+          <p className="text-xs">
+            <a
+              href={partner.stateDisclosureUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              View lender state disclosures
+            </a>
+          </p>
+        ) : null}
 
         {existingReferral ? (
           <div className="space-y-3 rounded-lg border border-border/70 bg-muted/10 p-3 text-sm">
@@ -295,11 +318,11 @@ export function CapitalLenderMarketplacePanel({
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <Handshake className="h-4 w-4" />
-          Lender marketplace (Phase 4 BETA)
+          Lender marketplace
         </CardTitle>
         <CardDescription>
-          Compare financing partners by region, share signed revenue exports with consent, and track
-          referral status in one inbox.
+          Compare live financing partners by region, share signed revenue exports with consent, and
+          track referral status in one inbox. Sandbox partners appear in development only.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

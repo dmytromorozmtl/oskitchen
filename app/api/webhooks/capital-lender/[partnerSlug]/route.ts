@@ -9,6 +9,11 @@ import {
 } from "@/lib/commercial/capital-lender-offers";
 import { applyCapitalLenderWebhookUpdate } from "@/services/commercial/capital-lender-offers-service";
 import {
+  claimCapitalLenderWebhookDelivery,
+  finalizeCapitalLenderWebhookDelivery,
+  hashCapitalLenderWebhookPayload,
+} from "@/services/commercial/capital-partner-billing-service";
+import {
   type CapitalWebhookOfferInput,
   upsertCapitalPartnerOffersFromWebhook,
 } from "@/services/commercial/capital-multi-lender-service";
@@ -35,6 +40,7 @@ const webhookBodySchema = z.object({
   offerTitle: z.string().max(255).optional().nullable(),
   offerSummary: z.string().max(500).optional().nullable(),
   offerDeepLink: z.string().max(2000).optional().nullable(),
+  fundedAmountCents: z.coerce.number().int().nonnegative().optional().nullable(),
   offers: z.array(webhookOfferSchema).max(12).optional(),
 });
 
@@ -76,6 +82,22 @@ export async function POST(request: Request, context: RouteContext) {
     return NextResponse.json({ error: "Invalid webhook payload." }, { status: 400 });
   }
 
+  const idempotencyKey =
+    request.headers.get("X-KitchenOS-Idempotency-Key")?.trim() ??
+    request.headers.get("x-kitchenos-idempotency-key")?.trim() ??
+    hashCapitalLenderWebhookPayload(rawBody);
+
+  const claim = await claimCapitalLenderWebhookDelivery({
+    partnerSlug: slug,
+    idempotencyKey,
+    referralId: parsed.data.referralId,
+    payloadHash: hashCapitalLenderWebhookPayload(rawBody),
+  });
+
+  if (claim.duplicate) {
+    return NextResponse.json({ ok: true, duplicate: true, offersUpserted: 0 });
+  }
+
   const result = await applyCapitalLenderWebhookUpdate({
     partnerSlug: slug,
     referralId: parsed.data.referralId,
@@ -84,19 +106,37 @@ export async function POST(request: Request, context: RouteContext) {
     offerTitle: parsed.data.offerTitle,
     offerSummary: parsed.data.offerSummary,
     offerDeepLink: parsed.data.offerDeepLink,
+    fundedAmountCents: parsed.data.fundedAmountCents,
+    webhookIdempotencyKey: idempotencyKey,
   });
 
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 404 });
   }
 
+  let offersUpserted = 0;
   if (parsed.data.offers?.length) {
-    await upsertCapitalPartnerOffersFromWebhook({
+    const upsert = await upsertCapitalPartnerOffersFromWebhook({
       partnerSlug: slug,
       referralId: parsed.data.referralId,
       offers: parsed.data.offers as CapitalWebhookOfferInput[],
     });
+    offersUpserted = upsert.upserted;
   }
 
-  return NextResponse.json({ ok: true, offersUpserted: parsed.data.offers?.length ?? 0 });
+  const responseBody = {
+    ok: true,
+    duplicate: false,
+    offersUpserted,
+    billingRecorded: result.billingRecorded ?? false,
+  };
+
+  if (claim.deliveryId) {
+    await finalizeCapitalLenderWebhookDelivery({
+      deliveryId: claim.deliveryId,
+      response: responseBody,
+    });
+  }
+
+  return NextResponse.json(responseBody);
 }

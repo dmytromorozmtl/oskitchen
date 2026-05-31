@@ -4,6 +4,7 @@ import {
   mapCountryToCapitalRegion,
   resetCapitalPartnersConfigCache,
   listLenderOfferPartners,
+  listLiveLenderOfferPartners,
 } from "@/lib/commercial/capital-partners";
 
 describe("capital-multi-lender region helpers", () => {
@@ -26,6 +27,9 @@ describe("capital-multi-lender region helpers", () => {
 
     const ukPartners = listLenderOfferPartners({ region: "UK" });
     expect(ukPartners.some((partner) => partner.slug === "pilot-working-capital-uk")).toBe(true);
-    expect(ukPartners[0]?.offerLifecycleStatus).toBe("live");
+    expect(ukPartners[0]?.offerLifecycleStatus).toBe("sandbox");
+
+    const liveUs = listLiveLenderOfferPartners({ region: "US" });
+    expect(liveUs.some((partner) => partner.slug === "flexcap-rbf-us")).toBe(true);
   });
 });

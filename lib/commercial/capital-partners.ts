@@ -70,18 +70,65 @@ function sortLenderPartners(partners: CapitalPartner[]): CapitalPartner[] {
 export function listLenderOfferPartners(input?: {
   region?: CapitalRegion | null;
   includePaused?: boolean;
+  lifecycle?: CapitalOfferLifecycleStatus | "all";
 }): CapitalPartner[] {
   const region = input?.region ?? null;
   const includePaused = input?.includePaused ?? false;
+  const lifecycle = input?.lifecycle ?? "all";
 
   const partners = loadCapitalPartnersConfig().partners.filter((partner) => {
     if (!partner.offersEnabled) return false;
     if (!includePaused && partner.offerLifecycleStatus === "paused") return false;
+    if (lifecycle !== "all" && partner.offerLifecycleStatus !== lifecycle) return false;
     if (region && !partner.regions.includes(region)) return false;
     return true;
   });
 
   return sortLenderPartners(partners);
+}
+
+/** True when merchant-facing surfaces should hide sandbox lender partners. */
+export function isCapitalProductionMerchantView(): boolean {
+  if (process.env.CAPITAL_SHOW_SANDBOX_LENDERS === "true") return false;
+  return process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production";
+}
+
+/** Lender partners visible to merchants — live-only in production unless override env is set. */
+export function listMerchantVisibleLenderPartners(input?: {
+  region?: CapitalRegion | null;
+}): CapitalPartner[] {
+  if (isCapitalProductionMerchantView()) {
+    return listLenderOfferPartners({ ...input, lifecycle: "live" });
+  }
+  return listLenderOfferPartners(input);
+}
+
+export function listLiveLenderOfferPartners(input?: {
+  region?: CapitalRegion | null;
+}): CapitalPartner[] {
+  return listLenderOfferPartners({ ...input, lifecycle: "live" });
+}
+
+export function isLiveCapitalLenderPartner(partner: CapitalPartner): boolean {
+  return partner.offersEnabled && partner.offerLifecycleStatus === "live";
+}
+
+export function assertMerchantCanConsentToLenderPartner(partner: CapitalPartner): void {
+  if (!partner.offersEnabled) {
+    throw new Error("This financing partner is not enabled for embedded offers.");
+  }
+  if (isCapitalProductionMerchantView() && partner.offerLifecycleStatus === "sandbox") {
+    throw new Error("This sandbox financing partner is not available in production.");
+  }
+  if (partner.offerLifecycleStatus === "paused") {
+    throw new Error("This financing partner is temporarily paused.");
+  }
+  if (
+    partner.offerLifecycleStatus === "live" &&
+    !partner.partnerAgreementEffectiveDate?.trim()
+  ) {
+    throw new Error("Live partner is missing agreement metadata — contact KitchenOS support.");
+  }
 }
 
 export function mapCountryToCapitalRegion(country: string | null | undefined): CapitalRegion {
@@ -153,6 +200,14 @@ export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): st
     }
     if (partner.offersEnabled && !partner.offerDisclosure?.trim()) {
       errors.push(`${partner.slug}: offersEnabled requires offerDisclosure`);
+    }
+    if (partner.offerLifecycleStatus === "live") {
+      if (!partner.partnerAgreementEffectiveDate?.trim()) {
+        errors.push(`${partner.slug}: live lenders require partnerAgreementEffectiveDate`);
+      }
+      if (partner.referralFee && (partner.referralFeeBps == null || partner.referralFeeBps <= 0)) {
+        errors.push(`${partner.slug}: referralFee live lenders require referralFeeBps`);
+      }
     }
     for (const region of partner.regions) {
       if (!CAPITAL_REGIONS.includes(region as CapitalRegion)) {

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31T19:00:00.000Z",
+  "defaultCurrency": "USD",
+  "defaultReferralFeeBps": 250,
+  "disclosure": "Capital partner referral billing is accrual-only in Phase 5 BETA — statements summarize funded referral fees, not tax documents or wire transfers.",
+  "partners": [
+    {
+      "partnerSlug": "flexcap-rbf-us",
+      "referralFeeBps": 250,
+      "currency": "USD"
+    }
+  ]
+}

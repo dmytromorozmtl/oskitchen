@@ -91,6 +91,7 @@ export const PLATFORM_NAV_GROUPS: PlatformNavGroup[] = [
     items: [
       { href: "/platform/billing", label: "Billing", permission: "platform:billing:read" },
       { href: "/platform/partner-billing", label: "Partner billing", permission: "platform:billing:read" },
+      { href: "/platform/capital-partners", label: "Capital partners", permission: "platform:billing:read" },
       { href: "/platform/plans", label: "Plans", permission: "platform:billing:read" },
       { href: "/platform/entitlements", label: "Entitlements", permission: "platform:billing:read" },
       { href: "/platform/trials", label: "Trials", permission: "platform:billing:read" },

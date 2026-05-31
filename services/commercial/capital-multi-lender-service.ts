@@ -3,7 +3,7 @@ import { CapitalPartnerReferralStatus, Prisma } from "@prisma/client";
 import { recordAuditLog } from "@/lib/audit-log";
 import {
   getCapitalPartnerBySlug,
-  listLenderOfferPartners,
+  listMerchantVisibleLenderPartners,
   mapCountryToCapitalRegion,
   type CapitalPartner,
   type CapitalRegion,
@@ -100,7 +100,7 @@ export async function loadCapitalMarketplaceSnapshot(input: {
 }): Promise<CapitalMarketplaceSnapshot> {
   const detectedRegion = await resolveCapitalRegionForOwner(input.userId);
   const region = input.region ?? detectedRegion;
-  const partners = listLenderOfferPartners({ region });
+  const partners = listMerchantVisibleLenderPartners({ region });
   const referrals = await listCapitalMarketplaceReferralsForOwner(input.userId);
 
   return {

@@ -3,7 +3,7 @@
   "updatedAt": "2026-05-31T12:00:00.000Z",
   "hubTitle": "Restaurant financing resources",
   "hubSubtitle": "Third-party options and education — OS Kitchen does not originate loans or make credit decisions.",
-  "referralFeeDisclosure": "KitchenOS may receive referral compensation from some partners in the future. Any active referral relationships will be disclosed on this page before launch.",
+  "referralFeeDisclosure": "KitchenOS may receive referral compensation from financing partners marked with a referral fee badge. Amounts are disclosed on each partner card before you continue.",
   "hubDisclosures": [
     "OS Kitchen is not a lender, broker, or financial advisor.",
     "Links open third-party websites governed by their own terms and privacy policies.",
@@ -87,6 +87,30 @@
       "internal": true
     },
     {
+      "slug": "flexcap-rbf-us",
+      "name": "FlexCap — Revenue-based financing (US)",
+      "category": "lender",
+      "description": "Live US revenue-based financing partner for restaurant operators with trailing KitchenOS order history. Compare illustrative terms before sharing your signed revenue export.",
+      "href": "https://apply.flexcap.example/kitchenos",
+      "regions": ["US"],
+      "disclosure": "FlexCap is a third-party lender — KitchenOS does not guarantee approval, rates, or funding timelines.",
+      "referralFee": true,
+      "referralFeeBps": 250,
+      "featured": true,
+      "offersEnabled": true,
+      "offerProgramName": "FlexCap revenue-based financing",
+      "offerApplyUrlTemplate": "https://apply.flexcap.example/kitchenos/apply?referralId={{referralId}}&shareToken={{shareToken}}",
+      "applyUrlEnvKey": "CAPITAL_LENDER_FLEXCAP_US_APPLY_URL",
+      "offerDisclosure": "KitchenOS receives referral compensation from FlexCap. By continuing you leave OS Kitchen and apply directly with FlexCap. Terms and eligibility are set solely by the lender.",
+      "offerAmountLabel": "Offers from $10k–$500k based on trailing KitchenOS revenue",
+      "webhookSecretEnvKey": "CAPITAL_LENDER_FLEXCAP_US_WEBHOOK_SECRET",
+      "offerLifecycleStatus": "live",
+      "partnerAgreementEffectiveDate": "2026-05-31",
+      "stateDisclosureUrl": "https://www.flexcap.example/legal/lending-disclosures",
+      "contactEmail": "partnerships@flexcap.example",
+      "sortOrder": 5
+    },
+    {
       "slug": "pilot-rbf-partner",
       "name": "Pilot — Revenue-based financing (sandbox)",
       "category": "lender",
@@ -140,7 +164,7 @@
       "offerDisclosure": "KitchenOS may receive referral compensation. Terms set solely by the lender.",
       "offerAmountLabel": "Illustrative offers from £5k–£150k based on trailing revenue",
       "webhookSecretEnvKey": "CAPITAL_LENDER_UK_WEBHOOK_SECRET",
-      "offerLifecycleStatus": "live",
+      "offerLifecycleStatus": "sandbox",
       "sortOrder": 30
     }
   ],

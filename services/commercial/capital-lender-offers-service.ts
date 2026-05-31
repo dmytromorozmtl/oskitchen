@@ -1,19 +1,22 @@
 import { CapitalPartnerReferralStatus } from "@prisma/client";
 
 import {
-  buildPartnerApplyUrl,
+  buildCapitalPartnerApplyUrl,
+  resolveCapitalPartnerApplyUrlTemplate,
   attestationShareExpiresAt,
   generateCapitalAttestationShareToken,
 } from "@/lib/commercial/capital-lender-offers";
 import {
+  assertMerchantCanConsentToLenderPartner,
   getCapitalPartnerBySlug,
-  listLenderOfferPartners,
+  listMerchantVisibleLenderPartners,
   type CapitalPartner,
 } from "@/lib/commercial/capital-partners";
 import { recordAuditLog } from "@/lib/audit-log";
 import { prisma } from "@/lib/prisma";
 import { toInputJsonValue } from "@/lib/prisma/json";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
+import { recordCapitalReferralFundedMeter } from "@/services/commercial/capital-partner-billing-service";
 import {
   verifyRevenueAttestationDocument,
   type RevenueAttestationExportDocument,
@@ -42,7 +45,7 @@ const ALLOWED_WEBHOOK_STATUSES: CapitalPartnerReferralStatus[] = [
 ];
 
 export function listConfiguredLenderOfferPartners(): CapitalPartner[] {
-  return listLenderOfferPartners();
+  return listMerchantVisibleLenderPartners();
 }
 
 export async function listCapitalLenderOffersForOwner(userId: string): Promise<CapitalLenderOfferRow[]> {
@@ -90,6 +93,7 @@ export async function createCapitalLenderReferralWithConsent(input: {
   if (!partner?.offersEnabled) {
     throw new Error("This financing partner is not enabled for embedded offers.");
   }
+  assertMerchantCanConsentToLenderPartner(partner);
 
   const workspaceId = await resolveOwnerWorkspaceId(input.userId);
   if (!workspaceId) {
@@ -114,8 +118,8 @@ export async function createCapitalLenderReferralWithConsent(input: {
 
   const now = new Date();
   let shareToken: string | null = null;
-  let offerDeepLink = partner.offerApplyUrlTemplate
-    ? buildPartnerApplyUrl(partner.offerApplyUrlTemplate, { referralId: "pending" })
+  let offerDeepLink = resolveCapitalPartnerApplyUrlTemplate(partner)
+    ? buildCapitalPartnerApplyUrl(partner, { referralId: "pending" })
     : partner.href;
 
   const referral = await prisma.$transaction(async (tx) => {
@@ -141,7 +145,7 @@ export async function createCapitalLenderReferralWithConsent(input: {
       },
     });
 
-    if (attestationId && partner.offerApplyUrlTemplate) {
+    if (attestationId && resolveCapitalPartnerApplyUrlTemplate(partner)) {
       const token = generateCapitalAttestationShareToken();
       shareToken = token;
       await tx.capitalAttestationShare.create({
@@ -152,15 +156,17 @@ export async function createCapitalLenderReferralWithConsent(input: {
           expiresAt: attestationShareExpiresAt(now),
         },
       });
-      offerDeepLink = buildPartnerApplyUrl(partner.offerApplyUrlTemplate, {
-        referralId: created.id,
-        shareToken: token,
-      });
-    } else if (partner.offerApplyUrlTemplate) {
-      offerDeepLink = buildPartnerApplyUrl(partner.offerApplyUrlTemplate, {
-        referralId: created.id,
-        shareToken: null,
-      });
+      offerDeepLink =
+        buildCapitalPartnerApplyUrl(partner, {
+          referralId: created.id,
+          shareToken: token,
+        }) ?? offerDeepLink;
+    } else if (resolveCapitalPartnerApplyUrlTemplate(partner)) {
+      offerDeepLink =
+        buildCapitalPartnerApplyUrl(partner, {
+          referralId: created.id,
+          shareToken: null,
+        }) ?? offerDeepLink;
     }
 
     await tx.capitalPartnerReferral.update({
@@ -278,7 +284,9 @@ export async function applyCapitalLenderWebhookUpdate(input: {
   offerTitle?: string | null;
   offerSummary?: string | null;
   offerDeepLink?: string | null;
-}): Promise<{ ok: true } | { ok: false; error: string }> {
+  fundedAmountCents?: number | null;
+  webhookIdempotencyKey?: string | null;
+}): Promise<{ ok: true; billingRecorded?: boolean } | { ok: false; error: string }> {
   if (!ALLOWED_WEBHOOK_STATUSES.includes(input.status)) {
     return { ok: false, error: "Unsupported referral status for webhook update." };
   }
@@ -312,8 +320,38 @@ export async function applyCapitalLenderWebhookUpdate(input: {
       partnerSlug: input.partnerSlug,
       status: input.status,
       offerId: input.offerId ?? null,
+      webhookIdempotencyKey: input.webhookIdempotencyKey ?? null,
     },
   });
 
-  return { ok: true };
+  let billingRecorded = false;
+  if (input.status === CapitalPartnerReferralStatus.FUNDED) {
+    const idempotencyKey =
+      input.webhookIdempotencyKey?.trim() ||
+      `funded:${input.partnerSlug}:${input.referralId}`;
+    const billing = await recordCapitalReferralFundedMeter({
+      partnerSlug: input.partnerSlug,
+      referralId: referral.id,
+      workspaceId: referral.workspaceId,
+      fundedAmountCents: input.fundedAmountCents ?? 0,
+      idempotencyKey,
+    });
+    billingRecorded = billing.created;
+    if (billing.created && billing.referralFeeCents > 0) {
+      await recordAuditLog({
+        userId: referral.userId,
+        workspaceId: referral.workspaceId,
+        action: "capital.partner_referral_fee_accrued",
+        entityType: "CapitalPartnerReferral",
+        entityId: referral.id,
+        metadata: {
+          partnerSlug: input.partnerSlug,
+          referralFeeCents: billing.referralFeeCents,
+          fundedAmountCents: input.fundedAmountCents ?? 0,
+        },
+      });
+    }
+  }
+
+  return { ok: true, billingRecorded };
 }

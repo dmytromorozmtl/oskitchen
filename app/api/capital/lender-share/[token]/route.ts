@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 
 import { getCapitalPartnerBySlug } from "@/lib/commercial/capital-partners";
 import {
+  isCapitalPartnerPullIpAllowed,
   resolveCapitalLenderWebhookSecret,
   verifyCapitalLenderPartnerPull,
 } from "@/lib/commercial/capital-lender-offers";
+import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
 import { revenueAttestationToDownloadJson } from "@/services/commercial/revenue-attestation-service";
 import { loadSharedAttestationForPartner } from "@/services/commercial/capital-lender-offers-service";
 
@@ -39,6 +41,11 @@ export async function GET(request: Request, context: RouteContext) {
 
   if (!verifyCapitalLenderPartnerPull(partnerSlug, shareToken, signature, secret)) {
     return NextResponse.json({ error: "Invalid partner signature." }, { status: 401 });
+  }
+
+  const clientIp = getClientIpFromRequest(request);
+  if (!isCapitalPartnerPullIpAllowed(partner, clientIp)) {
+    return NextResponse.json({ error: "Partner IP not allowlisted." }, { status: 403 });
   }
 
   try {

@@ -35,6 +35,37 @@ export function buildPartnerApplyUrl(
     .replaceAll("{{shareToken}}", encodeURIComponent(vars.shareToken ?? ""));
 }
 
+/** Resolve apply URL template — prefers env override for live partners in production. */
+export function resolveCapitalPartnerApplyUrlTemplate(partner: CapitalPartner): string | null {
+  const envKey = partner.applyUrlEnvKey?.trim();
+  if (envKey) {
+    const fromEnv = process.env[envKey]?.trim();
+    if (fromEnv) return fromEnv;
+  }
+  return partner.offerApplyUrlTemplate?.trim() || null;
+}
+
+export function buildCapitalPartnerApplyUrl(
+  partner: CapitalPartner,
+  vars: { referralId: string; shareToken?: string | null },
+): string | null {
+  const template = resolveCapitalPartnerApplyUrlTemplate(partner);
+  if (!template) return null;
+  return buildPartnerApplyUrl(template, vars);
+}
+
+/** Basic IP allowlist check — exact match only (CIDR expansion deferred). */
+export function isCapitalPartnerPullIpAllowed(
+  partner: CapitalPartner,
+  clientIp: string | null,
+): boolean {
+  const allowlist = partner.pullIpAllowlist?.filter(Boolean) ?? [];
+  if (allowlist.length === 0) return true;
+  if (!clientIp?.trim()) return false;
+  const normalized = clientIp.trim();
+  return allowlist.some((entry) => entry.trim() === normalized);
+}
+
 export function signCapitalLenderWebhookBody(rawBody: string, secret: string): string {
   return createHmac("sha256", secret).update(rawBody, "utf8").digest("hex");
 }

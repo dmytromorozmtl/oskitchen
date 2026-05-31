@@ -92,14 +92,6 @@ APIs:
 | `GET /api/capital/marketplace?region=` | Marketplace snapshot for dashboard |
 | `GET /api/capital/lender-referrals` | Referral inbox with offer snapshots |
 
-## Partner onboarding checklist (future)
-
-- [ ] Signed partner agreement reviewed by counsel
-- [ ] State lending ad disclosures supplied by partner
-- [ ] UDAAP review for targeting and copy
-- [x] Data-sharing consent flow (Phase 3 prerequisite)
-- [ ] Support macro for merchant questions
-
 ## Marketing blocklist
 
 The following must **not** appear in sales or marketing without legal approval:
@@ -131,4 +123,26 @@ When merchants ask about financing:
 | 2 (shipped) | Signed revenue attestation export | Required — medium |
 | 3 (shipped) | Embedded lender offers + partner pull API | Required — full program |
 | 4 (shipped) | Multi-lender marketplace, region filter, offer comparison inbox | Required — full program |
-| 5 | Partner billing / live lender onboarding | Required — full program |
+| 5 (shipped) | Live lenders, referral billing, platform onboarding | Required — full program |
+
+## Phase 5 — Live lenders (shipped)
+
+| Capability | Detail |
+|------------|--------|
+| Live partner | `flexcap-rbf-us` — agreement date, state disclosures, 2.5% referral fee |
+| Production gating | Sandbox lenders hidden unless `CAPITAL_SHOW_SANDBOX_LENDERS=true` |
+| Referral billing | `FUNDED` webhook accrues `CapitalReferralBillingMeterEvent` |
+| Idempotency | `X-KitchenOS-Idempotency-Key` on partner webhooks |
+| Platform | `/platform/capital-partners` onboarding + statement sync |
+
+Integration guide: [`capital-partner-integration-guide.md`](./capital-partner-integration-guide.md)
+
+## Partner onboarding checklist
+
+- [x] Data-sharing consent flow (Phase 3)
+- [x] Referral fee accrual on funded webhooks (Phase 5)
+- [x] Sandbox vs live merchant gating (Phase 5)
+- [ ] Signed partner agreement reviewed by counsel
+- [ ] State lending ad disclosures (URL field wired — content pending counsel)
+- [ ] UDAAP review for targeting and copy
+- [ ] Support macro for merchant questions
