@@ -73,6 +73,12 @@ export default async function ReportsCommandCenterPage() {
             {terminology.primaryCtaLabel}
           </Link>
           <Link
+            href="/dashboard/reports/catalog"
+            className="rounded-md border border-border px-4 py-2 text-sm font-medium"
+          >
+            Report catalog (100+)
+          </Link>
+          <Link
             href="/dashboard/reports/history"
             className="rounded-md border border-border px-4 py-2 text-sm font-medium"
           >
