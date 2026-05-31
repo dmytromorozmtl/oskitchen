@@ -64,12 +64,16 @@ describe("POS settings RBAC pages", () => {
     const settingsMarkup = await renderPage(PosSettingsPage());
     const hardwareMarkup = await renderPage(PosHardwareSettingsPage());
 
-    expect(settingsMarkup).toContain("You do not have permission to manage POS settings or hardware readiness.");
-    expect(settingsMarkup).toContain("Back to POS");
+    expect(settingsMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
+    expect(settingsMarkup).toContain("Back to dashboard");
     expect(settingsMarkup).not.toContain("/dashboard/pos/settings/hardware");
 
-    expect(hardwareMarkup).toContain("You do not have permission to manage POS hardware readiness.");
-    expect(hardwareMarkup).toContain("Back to POS");
+    expect(hardwareMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
+    expect(hardwareMarkup).toContain("Back to dashboard");
     expect(hardwareMarkup).not.toContain("Stripe Terminal");
   });
 

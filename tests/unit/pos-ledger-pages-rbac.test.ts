@@ -85,9 +85,15 @@ describe("POS ledger page RBAC", () => {
     const receiptsMarkup = await renderPage(PosReceiptsPage());
     const reportsMarkup = await renderPage(PosReportsPage());
 
-    expect(transactionsMarkup).toContain("You do not have permission to view POS transactions.");
-    expect(receiptsMarkup).toContain("You do not have permission to view POS receipts.");
-    expect(reportsMarkup).toContain("You do not have permission to view POS reports.");
+    expect(transactionsMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
+    expect(receiptsMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
+    expect(reportsMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
 
     expect(prismaMock.pOSTransaction.findMany).not.toHaveBeenCalled();
     expect(prismaMock.pOSReceipt.findMany).not.toHaveBeenCalled();

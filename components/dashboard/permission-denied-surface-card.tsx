@@ -1,3 +1,5 @@
+import React from "react";
+
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { PermissionDeniedShell } from "@/components/dashboard/permission-denied-shell";
 import {

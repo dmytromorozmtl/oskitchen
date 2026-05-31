@@ -87,12 +87,18 @@ describe("POS handheld and tabs RBAC pages", () => {
     const handheldMarkup = await renderPage(HandheldPOSPage());
     const tabsMarkup = await renderPage(PosTabsPage());
 
-    expect(handheldMarkup).toContain("You do not have permission to use handheld POS surfaces.");
-    expect(handheldMarkup).toContain("Back to POS");
+    expect(handheldMarkup).toContain("POS workspace");
+    expect(handheldMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
+    expect(handheldMarkup).toContain("Back to dashboard");
     expect(handheldMarkup).not.toContain("/dashboard/pos/terminal");
 
-    expect(tabsMarkup).toContain("You do not have permission to access POS tab workflows.");
-    expect(tabsMarkup).toContain("Back to POS");
+    expect(tabsMarkup).toContain("POS workspace");
+    expect(tabsMarkup).toContain(
+      "You do not have permission for this workspace surface (pos.access)",
+    );
+    expect(tabsMarkup).toContain("Back to dashboard");
     expect(getOpenTabs).not.toHaveBeenCalled();
     expect(tabPanelMock).not.toHaveBeenCalled();
   });
