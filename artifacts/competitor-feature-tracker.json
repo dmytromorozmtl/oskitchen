@@ -34,8 +34,10 @@
   "restaurant-loyalty": "done",
   "app-marketplace-rfc": "done",
   "restaurant-capital-rfc": "done",
-  "postParityPhase": "app-marketplace-phase1",
+  "postParityPhase": "app-marketplace-phase2",
   "app-marketplace-phase1": "done",
   "app-marketplace-phase1ShippedAt": "2026-05-31T05:00:00.000Z",
-  "nextRecommendedStep": "app-marketplace-phase2-outbound-webhooks OR shopify-markets-phase1 OR restaurant-capital-resources-hub"
+  "app-marketplace-phase2": "done",
+  "app-marketplace-phase2ShippedAt": "2026-05-31T06:00:00.000Z",
+  "nextRecommendedStep": "app-marketplace-phase3-oauth-apps OR shopify-markets-phase1 OR restaurant-capital-resources-hub"
 }

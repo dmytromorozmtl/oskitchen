@@ -490,6 +490,24 @@ export async function createOrderViaCenter(
 
   await runCanonicalOrderSideEffects(ctx, input, order);
 
+  const { emitOrderCreatedOutboundWebhook } = await import(
+    "@/services/webhooks/outbound-webhook-emitters"
+  );
+  await emitOrderCreatedOutboundWebhook({
+    ownerUserId: ctx.userId,
+    workspaceId: order.workspaceId,
+    orderId: order.orderId,
+    status: toDbOrderStatus(statusKey),
+    statusDetail: statusKey,
+    total: order.total,
+    fulfillmentType: toDbFulfillmentType(fulfillmentDetail),
+    fulfillmentDetail,
+    creationSource: resolveCreationSource(input),
+    lineCount: linesR.lines.length,
+    brandId: order.brandId,
+    locationId: order.locationId,
+  }).catch(() => undefined);
+
   return {
     ok: true,
     orderId: order.orderId,

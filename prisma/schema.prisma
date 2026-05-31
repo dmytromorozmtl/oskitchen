@@ -269,6 +269,14 @@ enum WebhookProcessingJobStatus {
   CANCELLED
 }
 
+enum OutboundWebhookDeliveryStatus {
+  QUEUED
+  DELIVERING
+  SUCCEEDED
+  FAILED
+  DEAD
+}
+
 enum ErrorRecoverySource {
   WEBHOOK_JOB
 }
@@ -2017,6 +2025,8 @@ model UserProfile {
   orderChannels          OrderChannel[]
   webhookEvents          WebhookEvent[]
   webhookProcessingJobs  WebhookProcessingJob[]
+  outboundWebhookSubscriptions OutboundWebhookSubscription[]
+  outboundWebhookDeliveries    OutboundWebhookDelivery[]
   errorRecoveryItems     ErrorRecoveryItem[]
   acknowledgedCronHeartbeats CronExecutionHeartbeat[] @relation("CronExecutionHeartbeatAcknowledger")
   cronExecutionEventsActed CronExecutionEvent[] @relation("CronExecutionEventActor")
@@ -3451,6 +3461,61 @@ model WebhookProcessingJob {
   @@index([workspaceId])
   @@index([userId, createdAt])
   @@map("webhook_processing_jobs")
+}
+
+model OutboundWebhookSubscription {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  workspaceId     String?  @map("workspace_id") @db.Uuid
+  name            String   @db.VarChar(255)
+  url             String   @db.Text
+  events          String[]
+  secretEncrypted String   @map("secret_encrypted") @db.Text
+  active          Boolean  @default(true)
+  description     String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  lastDeliveryAt  DateTime? @map("last_delivery_at")
+  lastSuccessAt   DateTime? @map("last_success_at")
+  lastFailureAt   DateTime? @map("last_failure_at")
+  consecutiveFailures Int  @default(0) @map("consecutive_failures")
+
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+  deliveries  OutboundWebhookDelivery[]
+
+  @@index([userId])
+  @@index([workspaceId])
+  @@index([workspaceId, active])
+  @@map("outbound_webhook_subscriptions")
+}
+
+model OutboundWebhookDelivery {
+  id             String                        @id @default(uuid()) @db.Uuid
+  subscriptionId String                        @map("subscription_id") @db.Uuid
+  userId         String                        @map("user_id") @db.Uuid
+  workspaceId    String?                       @map("workspace_id") @db.Uuid
+  eventType      String                        @map("event_type") @db.VarChar(128)
+  payloadJson    Json                          @map("payload_json")
+  status         OutboundWebhookDeliveryStatus @default(QUEUED)
+  attemptCount   Int                           @default(0) @map("attempt_count")
+  maxAttempts    Int                           @default(8) @map("max_attempts")
+  nextAttemptAt  DateTime?                     @map("next_attempt_at")
+  httpStatus     Int?                          @map("http_status")
+  responseSnippet String?                      @map("response_snippet") @db.Text
+  lastError      String?                       @map("last_error") @db.Text
+  deliveredAt    DateTime?                     @map("delivered_at")
+  createdAt      DateTime                      @default(now()) @map("created_at")
+  updatedAt      DateTime                      @updatedAt @map("updated_at")
+
+  subscription OutboundWebhookSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  userProfile  UserProfile                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace    Workspace?                  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+
+  @@index([status, nextAttemptAt])
+  @@index([subscriptionId, createdAt])
+  @@index([userId, createdAt])
+  @@map("outbound_webhook_deliveries")
 }
 
 model CronExecutionHeartbeat {
@@ -10020,6 +10085,8 @@ model Workspace {
   products           Product[]
   integrationConnections IntegrationConnection[]
   webhookEvents      WebhookEvent[]
+  outboundWebhookSubscriptions OutboundWebhookSubscription[]
+  outboundWebhookDeliveries    OutboundWebhookDelivery[]
   subscriptions      Subscription[]
   kitchenCustomers   KitchenCustomer[]
   externalOrders     ExternalOrder[]

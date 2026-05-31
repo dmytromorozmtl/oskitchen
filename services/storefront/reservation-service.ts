@@ -63,7 +63,7 @@ export async function createStorefrontReservation(
     throw new Error("This time slot overlaps an existing reservation.");
   }
 
-  return prisma.storefrontReservation.create({
+  const reservation = await prisma.storefrontReservation.create({
     data: {
       userId: ownerUserId,
       storefrontId,
@@ -78,6 +78,20 @@ export async function createStorefrontReservation(
       status: "PENDING",
     },
   });
+
+  const { emitReservationCreatedOutboundWebhook } = await import(
+    "@/services/webhooks/outbound-webhook-emitters"
+  );
+  await emitReservationCreatedOutboundWebhook({
+    ownerUserId,
+    reservationId: reservation.id,
+    storefrontId,
+    partySize: reservation.partySize,
+    reservedAt: reservation.reservedAt,
+    status: reservation.status,
+  }).catch(() => undefined);
+
+  return reservation;
 }
 
 export async function updateStorefrontReservationStatus(
@@ -146,8 +160,22 @@ export async function updateWaitlistStatus(
   });
   if (!row) throw new Error("Waitlist entry not found.");
 
-  return prisma.storefrontWaitlistEntry.update({
+  const updated = await prisma.storefrontWaitlistEntry.update({
     where: { id: entryId },
     data: { status },
   });
+
+  if (status === "SEATED") {
+    const { emitWaitlistSeatedOutboundWebhook } = await import(
+      "@/services/webhooks/outbound-webhook-emitters"
+    );
+    await emitWaitlistSeatedOutboundWebhook({
+      ownerUserId,
+      entryId: updated.id,
+      storefrontId: updated.storefrontId,
+      partySize: updated.partySize,
+    }).catch(() => undefined);
+  }
+
+  return updated;
 }

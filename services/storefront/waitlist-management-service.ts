@@ -83,6 +83,18 @@ export async function createPublicWaitlistEntry(
     estimatedMinutes: queueItem?.estimatedWaitMinutes ?? config.baseMinutes,
   });
 
+  const { emitWaitlistJoinedOutboundWebhook } = await import(
+    "@/services/webhooks/outbound-webhook-emitters"
+  );
+  await emitWaitlistJoinedOutboundWebhook({
+    ownerUserId: sf.userId,
+    entryId: entry.id,
+    storefrontId: sf.id,
+    partySize: entry.partySize,
+    position: queueItem?.position ?? 1,
+    estimatedWaitMinutes: queueItem?.estimatedWaitMinutes ?? config.baseMinutes,
+  }).catch(() => undefined);
+
   return {
     entry,
     position: queueItem?.position ?? 1,
@@ -217,6 +229,18 @@ export async function addOwnerWaitlistEntryWithEstimates(
 
   const summary = await refreshWaitlistQuotes(storefrontId, settingsCenterJson);
   const queueItem = summary.find((item) => item.id === entry.id);
+
+  const { emitWaitlistJoinedOutboundWebhook } = await import(
+    "@/services/webhooks/outbound-webhook-emitters"
+  );
+  await emitWaitlistJoinedOutboundWebhook({
+    ownerUserId,
+    entryId: entry.id,
+    storefrontId,
+    partySize: entry.partySize,
+    position: queueItem?.position ?? 1,
+    estimatedWaitMinutes: queueItem?.estimatedWaitMinutes ?? DEFAULT_QUOTED_PLACEHOLDER,
+  }).catch(() => undefined);
 
   return {
     entry: await prisma.storefrontWaitlistEntry.findUniqueOrThrow({ where: { id: entry.id } }),

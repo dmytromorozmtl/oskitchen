@@ -212,6 +212,9 @@ export default async function SalesChannelsOverviewPage() {
           <Link href="/dashboard/order-hub">Order hub</Link>
         </Button>
         <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Link href="/dashboard/integrations/outbound-webhooks">Outbound webhooks</Link>
+        </Button>
+        <Button asChild variant="outline" size="sm" className="rounded-full">
           <Link href="/dashboard/integrations/extensions">Extensions catalog</Link>
         </Button>
         <Button asChild variant="outline" size="sm" className="rounded-full">

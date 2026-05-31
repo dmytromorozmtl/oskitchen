@@ -88,7 +88,7 @@
       "category": "developer",
       "status": "ROADMAP",
       "description": "Merchant-configured outbound events (order.created, inventory.updated) with HMAC signing and retries.",
-      "setupRoute": "/developers/webhooks",
+      "setupRoute": "/dashboard/integrations/outbound-webhooks",
       "externalUrl": null,
       "tags": ["webhooks", "api", "phase-2"],
       "honestyNote": "Phase 2 — documented in app marketplace RFC; Enterprise API remains separate."

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31",
+  "signatureHeader": "X-KitchenOS-Signature",
+  "timestampHeader": "X-KitchenOS-Timestamp",
+  "eventHeader": "X-KitchenOS-Event",
+  "deliveryIdHeader": "X-KitchenOS-Delivery-Id",
+  "timestampToleranceSeconds": 300,
+  "maxPayloadBytes": 65536,
+  "events": [
+    {
+      "type": "order.created",
+      "label": "Order created",
+      "category": "orders",
+      "description": "Fires when a new order is persisted via storefront, POS, manual entry, or channel import.",
+      "sampleFields": ["orderId", "status", "total", "fulfillmentType", "lineCount", "creationSource"]
+    },
+    {
+      "type": "order.updated",
+      "label": "Order updated",
+      "category": "orders",
+      "description": "Fires when an order status changes through dashboard or automation paths.",
+      "sampleFields": ["orderId", "previousStatus", "status", "updatedAt"]
+    },
+    {
+      "type": "reservation.created",
+      "label": "Reservation created",
+      "category": "hospitality",
+      "description": "Public or dashboard reservation hold confirmed on a storefront.",
+      "sampleFields": ["reservationId", "storefrontId", "partySize", "reservedAt", "status"]
+    },
+    {
+      "type": "waitlist.joined",
+      "label": "Waitlist joined",
+      "category": "hospitality",
+      "description": "Guest added to the storefront waitlist queue.",
+      "sampleFields": ["entryId", "storefrontId", "partySize", "position", "estimatedWaitMinutes"]
+    },
+    {
+      "type": "waitlist.seated",
+      "label": "Waitlist seated",
+      "category": "hospitality",
+      "description": "Host marks a waitlist entry as seated.",
+      "sampleFields": ["entryId", "storefrontId", "partySize", "status"]
+    },
+    {
+      "type": "inventory.updated",
+      "label": "Inventory updated",
+      "category": "operations",
+      "description": "Bidirectional Shopify/Woo inventory sync completed with level changes.",
+      "sampleFields": ["provider", "connectionId", "pushed", "pulled", "conflictCount"]
+    }
+  ]
+}

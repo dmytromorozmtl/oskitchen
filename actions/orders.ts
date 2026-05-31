@@ -254,6 +254,17 @@ export async function updateOrderStatus(
       to: nextStatus,
     });
 
+    const { emitOrderUpdatedOutboundWebhook } = await import(
+      "@/services/webhooks/outbound-webhook-emitters"
+    );
+    await emitOrderUpdatedOutboundWebhook({
+      ownerUserId: userId,
+      workspaceId: prev.workspaceId,
+      orderId: prev.id,
+      previousStatus: prev.status,
+      status: nextStatus,
+    }).catch(() => undefined);
+
     if (nextStatus === "COMPLETED") {
       await recomputeMetricsForOrderEmail(userId, prevPii.customerEmail);
     }

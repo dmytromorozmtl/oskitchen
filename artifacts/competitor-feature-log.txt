@@ -265,3 +265,15 @@ Result: PASS
 Summary: Curated partner directory + extensions catalog hub at /dashboard/integrations/extensions; merges first-party INTEGRATION_REGISTRY, Shopify/Woo/inventory-sync, certified SI partners from config/commercial/partner-apps.json, and honest roadmap rows
 Tests: tests/unit/extensions-catalog-service.test.ts
 Next: app-marketplace-phase2-outbound-webhooks (RFC Option B) OR shopify-markets-phase1 OR restaurant-capital-resources-hub
+
+---
+Post-parity cycle: 2
+Timestamp: 2026-05-31T06:00:00.000Z
+Feature: app-marketplace-phase2-outbound-webhooks
+Source: docs/app-marketplace-rfc.md Option B
+Priority: POST-PARITY
+Files: 28
+Result: PASS
+Summary: Outbound webhook subscriptions with HMAC signing, delivery logs, cron retries, dashboard hub at /dashboard/integrations/outbound-webhooks; emits order/reservation/waitlist/inventory events
+Tests: tests/unit/outbound-webhook-signing.test.ts
+Next: app-marketplace-phase3-oauth-apps OR shopify-markets-phase1 OR restaurant-capital-resources-hub

@@ -37,6 +37,9 @@ export default async function IntegrationsExtensionsPage() {
             <Link href="/partners">Partner program</Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/dashboard/integrations/outbound-webhooks">Outbound webhooks</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
             <Link href="/developers">Developer roadmap</Link>
           </Button>
         </div>

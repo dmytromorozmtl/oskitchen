@@ -263,6 +263,18 @@ export async function runInventorySyncPush(
     },
   });
 
+  const { emitInventoryUpdatedOutboundWebhook } = await import(
+    "@/services/webhooks/outbound-webhook-emitters"
+  );
+  await emitInventoryUpdatedOutboundWebhook({
+    ownerUserId: userId,
+    provider: conn.provider,
+    connectionId: conn.id,
+    pushed,
+    pulled,
+    conflictCount: remaining.remainingConflicts.length,
+  }).catch(() => undefined);
+
   return {
     ok: true,
     message: `Sync complete — pushed ${pushed}, pulled ${pulled}.`,
