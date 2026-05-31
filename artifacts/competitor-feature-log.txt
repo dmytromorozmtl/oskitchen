@@ -480,3 +480,12 @@ Action: Created docs/woocommerce-credentials-guide.md; added npm run smoke:woo-l
 Artifact: artifacts/woocommerce-live-smoke-summary.json → overall SKIPPED
 Missing env: DATABASE_URL, E2E_STAGING_BASE_URL, WOOCOMMERCE_*, ENCRYPTION_KEY, CHANNEL_SMOKE_*
 Next: Configure ops vault per guide → re-run smoke:woo-live → PASS → Cycle 2 Shopify live smoke
+
+---
+Gap Closure v12 — Cycle 2 | live-smoke-shopify | 2026-05-31T12:30:00.000Z
+Program: v12.0 (docs/competitor-gap-closure-v12.md)
+Step: 2 — Shopify live smoke SKIPPED (no SHOPIFY_* / staging vault)
+Result: SKIPPED (credentials guide shipped)
+Action: Created docs/shopify-credentials-guide.md; refreshed artifacts/shopify-live-smoke-summary.json
+Missing env: E2E_STAGING_BASE_URL, SHOPIFY_SHOP_DOMAIN, SHOPIFY_ADMIN_ACCESS_TOKEN, SHOPIFY_APP_SECRET, ENCRYPTION_KEY, CHANNEL_SMOKE_*
+Next: Configure ops vault → smoke:shopify-live PASS → cycle 3 combined channel smoke

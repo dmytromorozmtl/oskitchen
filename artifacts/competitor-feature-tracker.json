@@ -1,7 +1,7 @@
 {
   "gapClosureProgram": "v12.0",
   "gapClosureStartedAt": "2026-05-31T12:00:00.000Z",
-  "gapClosureCycle": 1,
+  "gapClosureCycle": 2,
   "auditReconciliation": {
     "report": "artifacts/competitor-audit-report.md",
     "salesSafeDone": 1,
@@ -99,6 +99,6 @@
   "restaurant-capital-phase5LiveLendersShippedAt": "2026-05-31T19:00:00.000Z",
   "restaurant-capital-phase6-lender-oauth": "done",
   "restaurant-capital-phase6LenderOauthShippedAt": "2026-05-31T22:00:00.000Z",
-  "postParityPhase": "gap-closure-v12-cycle-1",
-  "nextRecommendedStep": "Configure Woo live smoke env per docs/woocommerce-credentials-guide.md then re-run npm run smoke:woo-live"
+  "postParityPhase": "gap-closure-v12-cycle-2",
+  "nextRecommendedStep": "Configure Shopify live smoke env per docs/shopify-credentials-guide.md then npm run smoke:shopify-live; or cycle 3 combined channel smoke"
 }
