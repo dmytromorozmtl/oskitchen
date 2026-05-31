@@ -6,6 +6,7 @@ import {
   addWaitlistEntryAction,
   createReservationAction,
   getReservationAvailabilityAction,
+  notifyWaitlistSmsAction,
   rescheduleReservationAction,
   updateReservationStatusAction,
   updateWaitlistStatusAction,
@@ -34,6 +35,7 @@ export type WaitlistRow = {
   quotedMinutes: number;
   status: string;
   createdAt: string;
+  position: number | null;
 };
 
 const STATUS_OPTIONS = ["PENDING", "CONFIRMED", "SEATED", "COMPLETED", "CANCELLED", "NO_SHOW"] as const;
@@ -105,7 +107,11 @@ export function ReservationsCalendarClient(props: {
         customerPhone: String(formData.get("customerPhone") ?? ""),
         partySize: Number(formData.get("waitPartySize") ?? 2),
       });
-      setMessage(res.ok ? "Added to waitlist." : res.error);
+      setMessage(
+        res.ok
+          ? `Added to waitlist — #${res.position ?? "?"} · ~${res.estimatedWaitMinutes ?? "?"} min.`
+          : res.error,
+      );
     });
   }
 
@@ -231,27 +237,67 @@ export function ReservationsCalendarClient(props: {
             </form>
             <ul className="space-y-2">
               {props.waitlist.map((w) => (
-                <li key={w.id} className="flex items-center justify-between rounded-xl border p-3 text-sm">
-                  <span>
-                    {w.customerName} · {w.partySize} · ~{w.quotedMinutes}m
-                  </span>
-                  <select
-                    className="rounded-md border bg-background px-2 py-1 text-xs"
-                    defaultValue={w.status}
-                    onChange={(e) => {
-                      startTransition(async () => {
-                        await updateWaitlistStatusAction({
-                          entryId: w.id,
-                          status: e.target.value as "WAITING" | "NOTIFIED" | "SEATED" | "CANCELLED",
+                <li key={w.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3 text-sm">
+                  <div>
+                    <p className="font-medium">{w.customerName}</p>
+                    <p className="text-muted-foreground">
+                      {w.position != null ? `#${w.position} · ` : ""}
+                      Party {w.partySize} · ~{w.quotedMinutes}m · {w.customerPhone}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {w.status === "WAITING" ? (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full"
+                        disabled={pending}
+                        onClick={() => {
+                          startTransition(async () => {
+                            const res = await notifyWaitlistSmsAction({ entryId: w.id });
+                            if (!res.ok) {
+                              setMessage(res.error);
+                              return;
+                            }
+                            setMessage(
+                              res.smsSent
+                                ? "Table-ready SMS sent."
+                                : res.smsSkipped
+                                  ? "Guest marked notified (SMS not configured)."
+                                  : "Guest marked notified.",
+                            );
+                          });
+                        }}
+                      >
+                        Text ready
+                      </Button>
+                    ) : null}
+                    <select
+                      className="rounded-md border bg-background px-2 py-1 text-xs"
+                      defaultValue={w.status}
+                      onChange={(e) => {
+                        startTransition(async () => {
+                          const res = await updateWaitlistStatusAction({
+                            entryId: w.id,
+                            status: e.target.value as "WAITING" | "NOTIFIED" | "SEATED" | "CANCELLED",
+                          });
+                          if (!res.ok) {
+                            setMessage(res.error);
+                            return;
+                          }
+                          if ("smsSent" in res && res.smsSent) {
+                            setMessage("Table-ready SMS sent.");
+                          }
                         });
-                      });
-                    }}
-                  >
+                      }}
+                    >
                     <option value="WAITING">Waiting</option>
                     <option value="NOTIFIED">Notified</option>
                     <option value="SEATED">Seated</option>
                     <option value="CANCELLED">Cancelled</option>
-                  </select>
+                    </select>
+                  </div>
                 </li>
               ))}
             </ul>

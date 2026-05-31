@@ -6,7 +6,6 @@ import { z } from "zod";
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
-  addStorefrontWaitlistEntry,
   createStorefrontReservation,
   rescheduleStorefrontReservation,
   updateStorefrontReservationStatus,
@@ -15,6 +14,11 @@ import {
   type WaitlistStatus,
 } from "@/services/storefront/reservation-service";
 import { loadOwnerReservationAvailability } from "@/services/storefront/reservation-public-service";
+import {
+  addOwnerWaitlistEntryWithEstimates,
+  notifyWaitlistGuestWithSms,
+  refreshWaitlistQuotes,
+} from "@/services/storefront/waitlist-management-service";
 
 const createSchema = z.object({
   guestName: z.string().min(1).max(255),
@@ -47,6 +51,10 @@ const waitlistSchema = z.object({
 const waitlistStatusSchema = z.object({
   entryId: z.string().uuid(),
   status: z.enum(["WAITING", "NOTIFIED", "SEATED", "CANCELLED"]),
+});
+
+const waitlistNotifySchema = z.object({
+  entryId: z.string().uuid(),
 });
 
 const availabilitySchema = z.object({
@@ -150,12 +158,40 @@ export async function addWaitlistEntryAction(raw: z.infer<typeof waitlistSchema>
     const input = waitlistSchema.parse(raw);
     const sf = await requireStorefrontForReservations();
 
-    await addStorefrontWaitlistEntry(sf.userId, sf.id, input);
+    const result = await addOwnerWaitlistEntryWithEstimates(sf.userId, sf.id, sf.settingsCenterJson, {
+      customerName: input.customerName,
+      customerPhone: input.customerPhone,
+      partySize: input.partySize,
+    });
 
     revalidatePath("/dashboard/reservations");
-    return { ok: true as const };
+    return {
+      ok: true as const,
+      position: result.position,
+      estimatedWaitMinutes: result.estimatedWaitMinutes,
+    };
   } catch (e) {
     return { ok: false as const, error: e instanceof Error ? e.message : "Failed to add waitlist entry." };
+  }
+}
+
+export async function notifyWaitlistSmsAction(raw: z.infer<typeof waitlistNotifySchema>) {
+  try {
+    await requireTenantActor();
+    const input = waitlistNotifySchema.parse(raw);
+    const sf = await requireStorefrontForReservations();
+
+    const result = await notifyWaitlistGuestWithSms(sf.userId, input.entryId);
+
+    revalidatePath("/dashboard/reservations");
+    return {
+      ok: true as const,
+      smsSent: result.sms.ok,
+      smsSkipped: "skipped" in result.sms ? result.sms.skipped === true : false,
+      smsError: result.sms.ok ? undefined : result.sms.error,
+    };
+  } catch (e) {
+    return { ok: false as const, error: e instanceof Error ? e.message : "Failed to notify guest." };
   }
 }
 
@@ -165,7 +201,18 @@ export async function updateWaitlistStatusAction(raw: z.infer<typeof waitlistSta
     const input = waitlistStatusSchema.parse(raw);
     const sf = await requireStorefrontForReservations();
 
+    if (input.status === "NOTIFIED") {
+      const result = await notifyWaitlistGuestWithSms(sf.userId, input.entryId);
+      revalidatePath("/dashboard/reservations");
+      return {
+        ok: true as const,
+        smsSent: result.sms.ok,
+        smsSkipped: "skipped" in result.sms ? result.sms.skipped === true : false,
+      };
+    }
+
     await updateWaitlistStatus(sf.userId, input.entryId, input.status as WaitlistStatus);
+    await refreshWaitlistQuotes(sf.id, sf.settingsCenterJson);
 
     revalidatePath("/dashboard/reservations");
     return { ok: true as const };

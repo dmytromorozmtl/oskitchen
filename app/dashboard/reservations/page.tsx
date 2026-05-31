@@ -8,12 +8,13 @@ import {
   getStorefrontReservationsForOwner,
   getStorefrontWaitlistForOwner,
 } from "@/services/storefront/reservation-service";
+import { buildWaitlistQueueSummary, parseWaitlistConfig } from "@/services/storefront/waitlist-service";
 
 export const dynamic = "force-dynamic";
 
 export default async function ReservationsPage() {
   const { sessionUser: user } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true, userId: true });
+  const sf = await findAdminStorefront(user.id, { id: true, userId: true, settingsCenterJson: true });
 
   if (!sf) {
     return (
@@ -32,12 +33,24 @@ export default async function ReservationsPage() {
     getStorefrontWaitlistForOwner(sf.userId, sf.id),
   ]);
 
+  const waitlistConfig = parseWaitlistConfig(sf.settingsCenterJson);
+  const queueSummary = buildWaitlistQueueSummary(
+    waitlist.map((w) => ({
+      id: w.id,
+      partySize: w.partySize,
+      createdAt: w.createdAt,
+      status: w.status,
+    })),
+    waitlistConfig,
+  );
+  const queueById = new Map(queueSummary.map((item) => [item.id, item]));
+
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Reservations</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Calendar, waitlist, drag-reschedule, and overlap detection for your dining room.
+          Calendar, waitlist with SMS notify, estimated wait times, and overlap detection for your dining room.
         </p>
       </div>
       <ReservationsCalendarClient
@@ -56,9 +69,10 @@ export default async function ReservationsPage() {
           customerName: w.customerName,
           customerPhone: w.customerPhone,
           partySize: w.partySize,
-          quotedMinutes: w.quotedMinutes,
+          quotedMinutes: queueById.get(w.id)?.estimatedWaitMinutes ?? w.quotedMinutes,
           status: w.status,
           createdAt: w.createdAt.toISOString(),
+          position: queueById.get(w.id)?.position ?? null,
         }))}
       />
     </div>

@@ -25,9 +25,9 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
   "/dashboard/forecast":
     "Forecasting is preview-scoped. Treat projections as directional until provenance and operator trust tests expand.",
   "/dashboard/storefront/reservations":
-    "Reservations BETA — calendar, capacity-aware availability, and public booking widget. SMS reminders and deep POS table sync are not certified yet.",
+    "Reservations BETA — calendar, availability, public booking, and waitlist SMS with estimated wait times. Deep POS table sync is not certified yet.",
   "/dashboard/reservations":
-    "Reservations BETA — calendar, capacity-aware availability, and public booking widget. SMS reminders and deep POS table sync are not certified yet.",
+    "Reservations BETA — calendar, availability, public booking, and waitlist SMS with estimated wait times. Deep POS table sync is not certified yet.",
   "/dashboard/food-safety":
     "Food safety tools are preview-scoped — not a certified HACCP or audit-export suite.",
   "/dashboard/staff/payroll":
