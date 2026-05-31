@@ -23,6 +23,7 @@ const prismaMock = vi.hoisted(() => ({
   pOSRegister: { findFirst: vi.fn() },
   pOSShift: { findFirst: vi.fn() },
   order: { findFirst: vi.fn() },
+  orderItem: { findMany: vi.fn() },
   $transaction: vi.fn(),
 }));
 
@@ -120,6 +121,9 @@ describe("checkoutPosSale", () => {
       ],
       kitchenCustomer: null,
     });
+    prismaMock.orderItem.findMany.mockResolvedValue([
+      { title: "Counter coffee", productId: null, quantity: 1, lineTotal: 5 },
+    ]);
     decryptOrderPiiFields.mockReturnValue({
       customerName: "Counter Guest",
       customerEmail: "guest@example.com",
@@ -346,6 +350,16 @@ describe("checkoutPosSale", () => {
       "55555555-5555-4555-8555-555555555555",
       "ord-1",
       12.8,
+      {
+        lines: [
+          {
+            title: "Counter coffee",
+            productId: null,
+            quantity: 1,
+            lineTotal: 5,
+          },
+        ],
+      },
     );
   });
 
