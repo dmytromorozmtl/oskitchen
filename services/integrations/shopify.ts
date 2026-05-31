@@ -124,6 +124,8 @@ export async function fetchProductsGraphQL(creds: ShopifyCredentials, first = 25
                   sku
                   title
                   price
+                  inventoryQuantity
+                  inventoryItem { id }
                 }
               }
             }

@@ -62,6 +62,9 @@ export default async function ShopifyIntegrationPage() {
         <Button asChild variant="ghost" size="sm" className="rounded-full">
           <Link href="/dashboard/sales-channels">← Back</Link>
         </Button>
+        <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Link href="/dashboard/integrations/inventory-sync">Inventory sync →</Link>
+        </Button>
       </div>
 
       <ChannelPilotSetupWizard
