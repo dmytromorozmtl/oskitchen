@@ -305,6 +305,7 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 7 (tax/duty guard) shipped:** read-only Shopify tax hint import, `taxAuthority`, conflict queue (`RATE_MISMATCH`, `JURISDICTION_MISSING`, `DUTY_UNCONFIGURED`, `MODE_MISMATCH`), checkout honesty — KitchenOS tax engine always wins |
 | 2026-05-31 | **Phase 8 (market hostname) shipped:** Shopify handle → suggested subdomain/slug, `hostnameAuthority`, conflict queue, manual Apply + reconcile auto-apply when shopify wins |
 | 2026-06-01 | **Phase 9 (webhook registry) shipped:** Admin subscription sync, drift detection, register missing, delivery health from webhook event log |
+| 2026-06-01 | **Phase 10 (health dashboard) shipped:** weighted health score, domain status cards, full reconcile orchestration on Storefront → Markets |
 
 ---
 
@@ -363,3 +364,21 @@ Required Shopify scopes (verify at implementation):
 **Drift statuses:** `missing`, `wrong_url`, `stale` (>24h), `never_delivered`
 
 **Scopes:** `read_webhooks`, `write_webhooks` for programmatic registration.
+
+---
+
+## Phase 10 — Markets health dashboard (shipped)
+
+**Goal:** Single operational cockpit for Phases 1–9 with weighted health score and one-click full reconcile.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_HEALTH_DASHBOARD=1` (default on in non-production) |
+| Snapshot builder | `shopify-markets-health-service.ts` — `buildShopifyMarketsHealthSnapshot` |
+| Full reconcile | `runFullShopifyMarketsReconcileForConnection` — discovery → webhooks → prices → catalog → tax → hostname |
+| UI | `shopify-markets-health-dashboard.tsx` on Storefront → Markets |
+| Settings audit | `lastFullMarketsReconcileAt/Result/Error` on `marketsSync` |
+
+**Health domains:** discovery, prices, catalog, tax, hostname, webhooks
+
+**Score weights:** open price/catalog conflicts (−20 each), tax/hostname (−10), webhook missing/wrong (−15), stale delivery (−5)

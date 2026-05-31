@@ -44,6 +44,7 @@ import {
   registerMissingShopifyMarketsWebhooks,
   syncShopifyMarketsWebhookRegistryForConnection,
 } from "@/services/integrations/shopify-markets-webhook-registry-service";
+import { runFullShopifyMarketsReconcileForConnection } from "@/services/integrations/shopify-markets-health-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
@@ -711,5 +712,67 @@ export async function registerShopifyMarketsWebhooksAction(connectionId: string)
     registered: result.registered,
     skipped: result.skipped,
     errors: result.errors,
+  };
+}
+
+export async function runFullShopifyMarketsReconcileAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.full_reconcile" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before reconcile." };
+  }
+
+  const primaryStoreSlug = await resolvePrimaryStoreSlugForOwner(access.actor.userId);
+  if (!primaryStoreSlug) {
+    return { ok: false as const, error: "Publish storefront overview with a slug first." };
+  }
+
+  const kitchen = await prisma.kitchenSettings.findUnique({
+    where: { userId: access.actor.userId },
+    select: { settingsCenterJson: true },
+  });
+
+  const result = await runFullShopifyMarketsReconcileForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    primaryStoreSlug,
+    settingsCenterJson: kitchen?.settingsCenterJson,
+  });
+
+  if (!result.ok) {
+    await prisma.integrationConnection.update({
+      where: { id: conn.id },
+      data: {
+        settingsJson: toInputJsonValue(
+          mergeShopifyMarketsSyncSettings(conn.settingsJson, {
+            lastFullMarketsReconcileAt: new Date().toISOString(),
+            lastFullMarketsReconcileError: result.error,
+          }),
+        ),
+      },
+    });
+    return { ok: false as const, error: result.error, steps: result.steps };
+  }
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  revalidatePath("/dashboard/storefront/domains");
+
+  return {
+    ok: true as const,
+    steps: result.steps,
+    overallScore: result.snapshot.overallScore,
+    overallLevel: result.snapshot.overallLevel,
   };
 }

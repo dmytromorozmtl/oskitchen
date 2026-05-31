@@ -200,6 +200,9 @@ export type ShopifyMarketsSyncSettings = {
   lastWebhookRegistryRegisterError: string | null;
   lastWebhookRegistryDriftCount: number | null;
   marketWebhookRegistry: Record<string, ShopifyMarketsWebhookRegistryRow>;
+  lastFullMarketsReconcileAt: string | null;
+  lastFullMarketsReconcileResult: string | null;
+  lastFullMarketsReconcileError: string | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -377,6 +380,12 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastWebhookRegistryDriftCount:
       typeof raw.lastWebhookRegistryDriftCount === "number" ? raw.lastWebhookRegistryDriftCount : null,
     marketWebhookRegistry,
+    lastFullMarketsReconcileAt:
+      typeof raw.lastFullMarketsReconcileAt === "string" ? raw.lastFullMarketsReconcileAt : null,
+    lastFullMarketsReconcileResult:
+      typeof raw.lastFullMarketsReconcileResult === "string" ? raw.lastFullMarketsReconcileResult : null,
+    lastFullMarketsReconcileError:
+      typeof raw.lastFullMarketsReconcileError === "string" ? raw.lastFullMarketsReconcileError : null,
   };
 }
 

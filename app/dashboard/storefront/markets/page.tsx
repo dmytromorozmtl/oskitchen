@@ -1,15 +1,20 @@
 import Link from "next/link";
 
 import { seedDefaultMarketFormAction } from "@/actions/storefront-markets";
+import { ShopifyMarketsHealthDashboard } from "@/components/dashboard/storefront/shopify-markets-health-dashboard";
 import { ShopifyMarketsMappingSummary } from "@/components/dashboard/storefront/shopify-markets-mapping-summary";
 import { StorefrontMarketsEditor } from "@/components/dashboard/storefront/storefront-markets-editor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { isShopifyMarketsHealthDashboardEnabled } from "@/lib/commercial/shopify-markets-health-dashboard";
+import { canManageIntegrations } from "@/lib/integrations/integrations-page-access";
 import { parseShopifyMarketsSyncSettings } from "@/lib/integrations/shopify-markets-settings";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { parseStorefrontMarketsFromSettingsCenter } from "@/lib/storefront/markets";
 import { menuListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
+import { buildShopifyMarketsHealthSnapshot } from "@/services/integrations/shopify-markets-health-service";
 import { prisma } from "@/lib/prisma";
 import { IntegrationProvider } from "@prisma/client";
 
@@ -18,6 +23,8 @@ export default async function StorefrontMarketsPage() {
   if (!pageAccess.ok) return pageAccess.deny;
 
   const ownerUserId = pageAccess.userId;
+  const permissionActor = await requireWorkspacePermissionActor();
+  const canManageIntegrationsChannel = canManageIntegrations(permissionActor.granted);
   const plannerMenuWhere = await menuListWhereForOwnerAnd(ownerUserId, { catalogOnly: false });
   const [sf, kitchen, menus, shopifyConn] = await Promise.all([
     prisma.storefrontSettings.findUnique({
@@ -51,6 +58,15 @@ export default async function StorefrontMarketsPage() {
 
   const markets = parseStorefrontMarketsFromSettingsCenter(kitchen?.settingsCenterJson);
   const shopifySync = parseShopifyMarketsSyncSettings(shopifyConn?.settingsJson);
+  const shopifyConnected = Boolean(shopifyConn?.accessTokenEncrypted);
+  const healthSnapshot =
+    isShopifyMarketsHealthDashboardEnabled()
+      ? buildShopifyMarketsHealthSnapshot({
+          syncSettings: shopifyConn ? shopifySync : null,
+          osMarkets: markets,
+          shopifyConnected,
+        })
+      : null;
   const shopifyMarkets = shopifySync.discoveredMarkets.map((m) => ({
     id: m.id,
     name: m.name,
@@ -76,11 +92,21 @@ export default async function StorefrontMarketsPage() {
         <p className="text-muted-foreground">Publish storefront overview first.</p>
       ) : (
         <>
+          {healthSnapshot ? (
+            <ShopifyMarketsHealthDashboard
+              connectionId={shopifyConn?.id ?? null}
+              hasCredentials={shopifyConnected}
+              canManage={canManageIntegrationsChannel}
+              snapshot={healthSnapshot}
+              syncSettings={shopifyConn ? shopifySync : null}
+            />
+          ) : null}
+
           <ShopifyMarketsMappingSummary
             osMarkets={markets}
             shopifyMarkets={shopifySync.discoveredMarkets}
             syncSettings={shopifyConn ? shopifySync : null}
-            shopifyConnected={Boolean(shopifyConn?.accessTokenEncrypted)}
+            shopifyConnected={shopifyConnected}
           />
 
           <Card className="border-border/80 shadow-sm">
