@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { grubhubDeliveryListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 
+import { GrubhubMenuSyncService } from "@/services/integrations/grubhub/menu-sync.service";
+import { importGrubhubOrdersForUser } from "@/services/integrations/grubhub/order-import.service";
+
 export type GrubhubCredentials = {
   apiKey?: string | null;
   merchantId?: string | null;
@@ -8,9 +11,9 @@ export type GrubhubCredentials = {
 
 export type GrubhubCapabilitySnapshot = {
   hasCredentials: boolean;
-  liveOrderReady: false;
-  liveMenuReady: false;
-  placeholderMode: true;
+  liveOrderReady: boolean;
+  liveMenuReady: boolean;
+  placeholderMode: boolean;
 };
 
 function credsFromEnv(): GrubhubCredentials {
@@ -27,18 +30,26 @@ export function isGrubhubConfigured(creds: GrubhubCredentials = credsFromEnv()):
 export function getGrubhubCapabilitySnapshot(
   env: NodeJS.ProcessEnv = process.env,
 ): GrubhubCapabilitySnapshot {
+  const hasCredentials = Boolean(env.GRUBHUB_API_KEY?.trim() && env.GRUBHUB_MERCHANT_ID?.trim());
   return {
-    hasCredentials: Boolean(env.GRUBHUB_API_KEY?.trim() && env.GRUBHUB_MERCHANT_ID?.trim()),
-    liveOrderReady: false,
-    liveMenuReady: false,
-    placeholderMode: true,
+    hasCredentials,
+    liveOrderReady: hasCredentials,
+    liveMenuReady: hasCredentials,
+    placeholderMode: !hasCredentials,
   };
 }
 
-export function getGrubhubPlaceholderMessage(hasCredentials = getGrubhubCapabilitySnapshot().hasCredentials): string {
+export function getGrubhubBetaMessage(
+  hasCredentials = getGrubhubCapabilitySnapshot().hasCredentials,
+): string {
   return hasCredentials
-    ? "Grubhub credentials are present, but OS Kitchen still keeps Grubhub in placeholder mode. Live sync and order ingestion are not production-ready."
-    : "Grubhub is still placeholder-only. Credentials can be prepared, but OS Kitchen does not run live Grubhub flows yet.";
+    ? "Grubhub BETA is enabled. Live API traffic requires Grubhub partner approval and correct API hosts."
+    : "Configure GRUBHUB_API_KEY and GRUBHUB_MERCHANT_ID to enable Grubhub BETA (order webhooks, import, menu sync).";
+}
+
+/** @deprecated use getGrubhubBetaMessage */
+export function getGrubhubPlaceholderMessage(hasCredentials?: boolean): string {
+  return getGrubhubBetaMessage(hasCredentials);
 }
 
 export async function createGrubhubOrder(
@@ -46,21 +57,71 @@ export async function createGrubhubOrder(
   orderData: { externalOrderId?: string },
   creds: GrubhubCredentials = credsFromEnv(),
 ) {
+  if (!isGrubhubConfigured(creds)) {
+    return {
+      ok: false as const,
+      delivery: null,
+      message: getGrubhubBetaMessage(false),
+      userId,
+      externalOrderId: orderData.externalOrderId ?? null,
+    };
+  }
+
+  const delivery = await prisma.grubhubDelivery.create({
+    data: {
+      userId,
+      externalOrderId: orderData.externalOrderId ?? undefined,
+      status: "PENDING",
+    },
+  });
+
   return {
-    ok: false as const,
-    delivery: null,
-    message: getGrubhubPlaceholderMessage(isGrubhubConfigured(creds)),
+    ok: true as const,
+    delivery,
+    message: "Grubhub delivery record created (BETA).",
     userId,
     externalOrderId: orderData.externalOrderId ?? null,
   };
 }
 
-export async function getGrubhubMenu(_userId: string) {
+export async function getGrubhubMenu(userId: string) {
+  const creds = credsFromEnv();
+  if (!isGrubhubConfigured(creds)) {
+    return {
+      ok: false as const,
+      items: [] as Array<{ id: string; name: string }>,
+      message: getGrubhubBetaMessage(false),
+    };
+  }
+
+  const svc = new GrubhubMenuSyncService(creds);
+  const result = await svc.pushMenu(userId, creds.merchantId!.trim());
   return {
-    ok: false as const,
-    items: [] as Array<{ id: string; name: string }>,
-    message: getGrubhubPlaceholderMessage(),
+    ok: result.ok,
+    items: [],
+    message: result.message,
   };
+}
+
+export async function syncMenuToGrubhub(userId: string, menuId?: string) {
+  const creds = credsFromEnv();
+  if (!isGrubhubConfigured(creds)) {
+    throw new Error(getGrubhubBetaMessage(false));
+  }
+  const svc = new GrubhubMenuSyncService(creds);
+  const result = await svc.pushMenu(userId, creds.merchantId!.trim(), menuId ?? null);
+  if (!result.ok) {
+    throw new Error(result.message ?? "Grubhub menu sync failed");
+  }
+  return result;
+}
+
+export async function fetchGrubhubOrders(userId: string) {
+  const capability = getGrubhubCapabilitySnapshot();
+  if (capability.placeholderMode) {
+    throw new Error(`Grubhub order import disabled for ${userId}: ${getGrubhubBetaMessage(false)}`);
+  }
+  return importGrubhubOrdersForUser(userId);
 }
 
 export async function listGrubhubDeliveries(userId: string) {

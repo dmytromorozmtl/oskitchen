@@ -13,7 +13,7 @@ describe("page maturity honesty", () => {
     expect(tables?.detail).toMatch(/table-service/i);
   });
 
-  it("returns null for grubhub when inline PlaceholderBanner is rendered", () => {
+  it("returns null for grubhub when inline honesty copy is rendered", () => {
     expect(getPageMaturityHonesty("/dashboard/integrations/grubhub")).toBeNull();
   });
 

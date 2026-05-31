@@ -1,34 +1,53 @@
-import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
+import Link from "next/link";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getIntegrationById } from "@/lib/integrations/integration-registry";
+import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { prisma } from "@/lib/prisma";
 import {
   getGrubhubCapabilitySnapshot,
   listGrubhubDeliveries,
 } from "@/services/integrations/grubhub/grubhub-service";
+import { IntegrationProvider } from "@prisma/client";
 
 export default async function GrubhubIntegrationPage() {
   const { userId } = await getTenantActor();
   const integration = getIntegrationById("grubhub");
   const capability = getGrubhubCapabilitySnapshot();
   const deliveries = await listGrubhubDeliveries(userId);
+  const connectionWhere = await integrationConnectionByProviderWhereForOwner(
+    userId,
+    IntegrationProvider.GRUBHUB,
+  );
+  const connection = await prisma.integrationConnection.findFirst({
+    where: connectionWhere,
+    select: { id: true, status: true, lastError: true },
+  });
+
+  const webhookUrl = connection
+    ? `/api/webhooks/grubhub/orders?cid=${connection.id}`
+    : "/api/webhooks/grubhub/orders?cid=<connection-id>";
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <PlaceholderBanner
-        feature="Grubhub integration"
-        detail="OS Kitchen keeps Grubhub in placeholder mode. Credentials can be prepared, but live sync and order ingestion are not production-ready."
-      />
+      {capability.placeholderMode ? (
+        <PlaceholderBanner
+          feature="Grubhub integration"
+          detail="Configure GRUBHUB_API_KEY, GRUBHUB_MERCHANT_ID, and GRUBHUB_WEBHOOK_SECRET to enable Grubhub BETA."
+        />
+      ) : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Grubhub integration</h1>
           <p className="text-sm text-muted-foreground">
-            {integration?.name} · {integration?.status} · honest placeholder
+            {integration?.name} · {integration?.status} · marketplace ingest + menu sync
           </p>
         </div>
         <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>
-          {capability.hasCredentials ? "Credentials present" : "Credentials missing"}
+          {capability.hasCredentials ? "BETA credentials configured" : "Credentials missing"}
         </Badge>
       </div>
 
@@ -38,37 +57,47 @@ export default async function GrubhubIntegrationPage() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <ChecklistItem label="Environment credentials saved" done={capability.hasCredentials} />
-          <ChecklistItem label="Live order ingestion implemented" done={capability.liveOrderReady} />
-          <ChecklistItem label="Live menu sync implemented" done={capability.liveMenuReady} />
+          <ChecklistItem label="Webhook order ingest" done={capability.liveOrderReady} />
+          <ChecklistItem label="Marketplace poll import" done={capability.liveOrderReady} />
+          <ChecklistItem label="Menu sync API" done={capability.liveMenuReady} />
           <p className="pt-2 text-muted-foreground">
-            {capability.hasCredentials
-              ? "Credentials are visible to the app, but they do not unlock live provider sync yet."
-              : "Save GRUBHUB_API_KEY and GRUBHUB_MERCHANT_ID only to prepare the workspace. The provider still stays placeholder-only."}
+            Grubhub BETA requires partner-approved API credentials. OS Kitchen verifies webhook
+            signatures — it does not claim production LIVE until your merchant program certifies traffic.
           </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">What is intentionally disabled</CardTitle>
+          <CardTitle className="text-base">Connection & webhooks</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>OS Kitchen does not create new local Grubhub delivery rows just to simulate a live integration.</p>
-          <p>This page is preparation-only until the provider implementation is actually shipped and verified.</p>
+        <CardContent className="space-y-3 text-sm">
+          <p>
+            Connection status:{" "}
+            <span className="font-medium">{connection?.status ?? "Not connected"}</span>
+          </p>
+          <p className="text-muted-foreground">
+            Register this webhook URL in the Grubhub developer portal:
+          </p>
+          <code className="block overflow-x-auto rounded-md bg-muted px-3 py-2 text-xs">{webhookUrl}</code>
+          {connection?.lastError ? (
+            <p className="text-destructive">Last error: {connection.lastError}</p>
+          ) : null}
+          <p>
+            <Link className="text-primary underline" href="/dashboard/integration-health">
+              Integration health & recovery
+            </Link>
+          </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">History</CardTitle>
+          <CardTitle className="text-base">Delivery history</CardTitle>
         </CardHeader>
         <CardContent className="text-sm space-y-2">
-          <p className="text-muted-foreground">
-            Historical local rows from earlier scaffolding remain visible for audit only. New live provider records are not
-            created from this page until Grubhub support is actually shipped.
-          </p>
           {deliveries.length === 0 ? (
-            <p className="text-muted-foreground">No historical Grubhub records found.</p>
+            <p className="text-muted-foreground">No Grubhub delivery records yet.</p>
           ) : (
             deliveries.map((d) => (
               <div key={d.id} className="flex justify-between border-b py-2">

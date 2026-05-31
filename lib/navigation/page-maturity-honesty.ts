@@ -37,7 +37,7 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
   "/dashboard/integrations/doordash":
     "DoorDash BETA — webhook order ingest, menu sync, and Drive delivery require partner-approved credentials; not certified production LIVE.",
   "/dashboard/integrations/grubhub":
-    "Grubhub marketplace integration is a placeholder — no live order ingest or menu sync.",
+    "Grubhub BETA — webhook order ingest, menu sync, and poll import require Grubhub partner approval; not certified production LIVE.",
   "/dashboard/integrations/uber-eats":
     "Uber Eats BETA — OAuth order ingest, menu sync, and signed webhooks require Uber partner approval; not certified production LIVE.",
   "/dashboard/integrations/uber-direct":

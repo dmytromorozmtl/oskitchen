@@ -4,7 +4,6 @@
  * and `docs/feature-maturity-matrix.md`.
  */
 export const MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS = [
-  "grubhub",
   "uber-direct",
 ] as const;
 
@@ -13,7 +12,6 @@ export type MarketplacePlaceholderIntegrationId =
 
 /** Channel catalog provider keys that must never appear as live connectors. */
 export const MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS = [
-  "grubhub",
   "uber-direct",
 ] as const;
 
@@ -21,7 +19,6 @@ export type MarketplacePlaceholderProviderKey =
   (typeof MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS)[number];
 
 const INTEGRATION_PAGE_BY_ID: Partial<Record<MarketplacePlaceholderIntegrationId, string>> = {
-  grubhub: "/dashboard/integrations/grubhub",
   "uber-direct": "/dashboard/integrations/uber-direct",
 };
 

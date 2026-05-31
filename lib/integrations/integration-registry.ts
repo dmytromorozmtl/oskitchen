@@ -22,8 +22,8 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "grubhub",
     name: "Grubhub",
-    status: "PLACEHOLDER",
-    requiredEnv: ["GRUBHUB_API_KEY", "GRUBHUB_MERCHANT_ID"],
+    status: "BETA",
+    requiredEnv: ["GRUBHUB_API_KEY", "GRUBHUB_MERCHANT_ID", "GRUBHUB_WEBHOOK_SECRET"],
     setupRoute: "/dashboard/integrations/grubhub",
   },
   {

@@ -12,7 +12,7 @@ describe("nav maturity governance", () => {
   it("classifies marketplace integrations by maturity", () => {
     expect(getNavMaturityExposure("/dashboard/integrations/doordash")).toBe("preview");
     expect(getNavMaturityExposure("/dashboard/integrations/uber-eats")).toBe("preview");
-    expect(getNavMaturityExposure("/dashboard/integrations/grubhub")).toBe("placeholder");
+    expect(getNavMaturityExposure("/dashboard/integrations/grubhub")).toBe("preview");
     expect(navMaturityBadgeForHref("/dashboard/integrations/uber-eats")).toBe("Preview");
   });
 

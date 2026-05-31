@@ -11,7 +11,7 @@ describe("page maturity sweep policy", () => {
     expect(PAGE_MATURITY_SWEEP_POLICY_ID).toBe("era4-page-maturity-sweep-v1");
   });
 
-  it("aligns inline placeholder exceptions with grubhub nav rules", () => {
+  it("aligns inline placeholder exceptions with uber-direct nav rules", () => {
     for (const route of PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES) {
       const rule = NAV_MATURITY_RULES.find((r) => r.prefix === route);
       expect(rule?.exposure, route).toBe("placeholder");

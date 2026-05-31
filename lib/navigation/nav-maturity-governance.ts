@@ -53,8 +53,8 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
   },
   {
     prefix: "/dashboard/integrations/grubhub",
-    exposure: "placeholder",
-    matrixRef: "Uber / DoorDash provider surfaces",
+    exposure: "preview",
+    matrixRef: "Grubhub marketplace BETA",
   },
   {
     prefix: "/dashboard/integrations/uber-eats",

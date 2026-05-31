@@ -220,6 +220,7 @@ enum IntegrationProvider {
   UBER_EATS
   UBER_DIRECT
   DOORDASH
+  GRUBHUB
   MANUAL
 }
 
