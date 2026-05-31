@@ -471,3 +471,12 @@ Result: PASS
 Summary: API_REQUEST + WEBHOOK_DELIVERY meters, revenueShareBps publisher share accrual, guard + delivery hooks, outbound webhook partner attribution, platform billing UI gross/share breakdown
 Tests: tests/unit/partner-billing-meter-math.test.ts
 Next: shopify-markets-tax-duty-guard OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics
+
+---
+Gap Closure v12 — Cycle 1 | live-smoke-woocommerce | 2026-05-31T12:00:00.000Z
+Program: v12.0 (docs/competitor-gap-closure-v12.md)
+Result: SKIPPED (awaiting staging credentials)
+Action: Created docs/woocommerce-credentials-guide.md; added npm run smoke:woo-live; reconciled tracker to sales-safe baseline (1/25 done)
+Artifact: artifacts/woocommerce-live-smoke-summary.json → overall SKIPPED
+Missing env: DATABASE_URL, E2E_STAGING_BASE_URL, WOOCOMMERCE_*, ENCRYPTION_KEY, CHANNEL_SMOKE_*
+Next: Configure ops vault per guide → re-run smoke:woo-live → PASS → Cycle 2 Shopify live smoke
