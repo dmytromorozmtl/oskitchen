@@ -46,6 +46,7 @@ describe("runCronRoute cron auth audit wiring", () => {
   it("logs cron.auth_denied when bearer auth fails", () => {
     const source = readFileSync(join(process.cwd(), "lib/api/run-cron.ts"), "utf8");
     expect(source).toContain("logCronAuthDenied");
-    expect(source).toContain('"reason" in auth');
+    expect(source).toContain("reason: auth.reason");
+    expect(source).toContain('auth.reason !== "experimental_disabled"');
   });
 });
