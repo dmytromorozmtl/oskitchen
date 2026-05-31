@@ -1418,3 +1418,15 @@ Tests: npm test exit 0 — 5239 passed | 0 failed | 19 skipped
 Build: PASS
 Vault: 0/11
 Next: item 3 vault one-pager
+---
+Cycle: 20260531-160000
+Action: docs: vault one-pager for VP Ops — 11 secrets, 2-4 hours, unblocks everything (Item 3 CLOSED)
+Files: docs/vault-one-pager.md
+Commit: 31f996d2
+Vault: 0/11 (human gate — doc ready for VP Ops)
+Next: Item 4 KDS WebSocket implementation plan
+---
+Cycle: 20260531-160100
+Action: docs: KDS WebSocket implementation plan — Supabase Realtime, 3-week staging proof (Item 4 CLOSED)
+Files: docs/kds-websocket-implementation-plan.md
+Next: Item 5 P0 orchestrator (blocked on vault 11/11)
