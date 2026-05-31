@@ -415,6 +415,22 @@ export type ShopifyMarketsSyncSettings = {
     skippedRecentDigest: number;
     skippedNoTasks: number;
   } | null;
+  b2bConsolidatedPayEnabled: boolean;
+  b2bConsolidatedPayTokenTtlDays: number | null;
+  lastB2bConsolidatedPayCheckoutAt: string | null;
+  b2bConsolidatedPayBatches: Record<
+    string,
+    import("@/lib/integrations/shopify-b2b-consolidated-pay-metadata").B2bConsolidatedPayBatch
+  > | null;
+  b2bConsolidatedPayStats: {
+    batchesMinted: number;
+    checkoutStarted: number;
+    checkoutCompleted: number;
+    staleCheckoutOpen: number;
+    skippedAlreadyPaid: number;
+    skippedMixedCurrency: number;
+    skippedTooFew: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -787,6 +803,44 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         }
       : null;
 
+  const b2bConsolidatedPayEnabled = raw.b2bConsolidatedPayEnabled !== false;
+  const b2bConsolidatedPayTokenTtlDays =
+    typeof raw.b2bConsolidatedPayTokenTtlDays === "number" &&
+    Number.isFinite(raw.b2bConsolidatedPayTokenTtlDays) &&
+    raw.b2bConsolidatedPayTokenTtlDays >= 7
+      ? raw.b2bConsolidatedPayTokenTtlDays
+      : null;
+
+  const consolidatedBatchesRaw = raw.b2bConsolidatedPayBatches;
+  const b2bConsolidatedPayBatches =
+    consolidatedBatchesRaw &&
+    typeof consolidatedBatchesRaw === "object" &&
+    !Array.isArray(consolidatedBatchesRaw)
+      ? (consolidatedBatchesRaw as Record<
+          string,
+          import("@/lib/integrations/shopify-b2b-consolidated-pay-metadata").B2bConsolidatedPayBatch
+        >)
+      : null;
+
+  const consolidatedStatsRaw = raw.b2bConsolidatedPayStats;
+  const b2bConsolidatedPayStats =
+    consolidatedStatsRaw && typeof consolidatedStatsRaw === "object"
+      ? {
+          batchesMinted: Number((consolidatedStatsRaw as Record<string, unknown>).batchesMinted) || 0,
+          checkoutStarted:
+            Number((consolidatedStatsRaw as Record<string, unknown>).checkoutStarted) || 0,
+          checkoutCompleted:
+            Number((consolidatedStatsRaw as Record<string, unknown>).checkoutCompleted) || 0,
+          staleCheckoutOpen:
+            Number((consolidatedStatsRaw as Record<string, unknown>).staleCheckoutOpen) || 0,
+          skippedAlreadyPaid:
+            Number((consolidatedStatsRaw as Record<string, unknown>).skippedAlreadyPaid) || 0,
+          skippedMixedCurrency:
+            Number((consolidatedStatsRaw as Record<string, unknown>).skippedMixedCurrency) || 0,
+          skippedTooFew: Number((consolidatedStatsRaw as Record<string, unknown>).skippedTooFew) || 0,
+        }
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -972,6 +1026,14 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bCollectorDigestAt:
       typeof raw.lastB2bCollectorDigestAt === "string" ? raw.lastB2bCollectorDigestAt : null,
     b2bCollectorQueueStats,
+    b2bConsolidatedPayEnabled,
+    b2bConsolidatedPayTokenTtlDays,
+    lastB2bConsolidatedPayCheckoutAt:
+      typeof raw.lastB2bConsolidatedPayCheckoutAt === "string"
+        ? raw.lastB2bConsolidatedPayCheckoutAt
+        : null,
+    b2bConsolidatedPayBatches,
+    b2bConsolidatedPayStats,
   };
 }
 

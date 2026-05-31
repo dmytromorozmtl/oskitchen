@@ -678,17 +678,36 @@ Required Shopify scopes (verify at implementation):
 
 ---
 
-## Phase 25 — B2B multi-invoice consolidated pay link (planned)
+## Phase 25 — B2B multi-invoice consolidated pay link (shipped)
 
 **Goal:** Allow buyers to pay multiple open B2B invoices in one Stripe Checkout session from receivables dashboard selections.
 
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_CONSOLIDATED_PAY=1` (default on in non-production) |
+| Token | `shopify-b2b-consolidated-pay-token.ts` — HMAC v2 batch token (max 10, 90-day TTL) |
+| Route | `/pay/b2b/batch/[token]` — multi-line checkout view |
+| Checkout API | `POST /api/pay/b2b/batch/[token]/checkout` |
+| Webhook | Stripe `purpose=b2b_invoice_batch` → mark each draft paid |
+| UI | Receivables bulk action “Consolidated pay link” (min 2 invoices) |
+| Settings | `b2bConsolidatedPayBatches`, `b2bConsolidatedPayStats`, `lastB2bConsolidatedPayCheckoutAt` |
+| Health | Attention when `staleCheckoutOpen > 0` (48h started, not completed) |
+| Full reconcile | Refreshes stale consolidated checkout count |
+
+**Conscious limits:** Same Stripe Connect as single pay portal; same currency required; no partial batch settlement in v1.
+
+---
+
+## Phase 26 — B2B AR write-back honesty & Shopify payment sync policy (planned)
+
+**Goal:** Document and enforce read-only Shopify financial mirror with explicit operator policy when drift or consolidated pay completes — no silent write-back.
+
 | Component | Plan |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_CONSOLIDATED_PAY=1` |
-| Token | HMAC-signed multi-order pay token (max 10 invoices, 90-day TTL) |
-| Route | `/pay/b2b/batch/[token]` — line items per invoice draft |
-| Webhook | Stripe `purpose=b2b_invoice_batch` → mark each draft paid atomically |
-| UI | Receivables bulk action “Mint consolidated pay link” |
-| Health | Attention when consolidated checkout started but not completed > 48h |
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_SYNC_POLICY=1` |
+| Policy UI | Receivables + Shopify settings — “KitchenOS is AR source of truth” vs “Shopify mirror advisory only” |
+| Drift actions | Guided resolution: mark paid in KitchenOS, or note Shopify-only payment |
+| Audit | Billing events for drift resolution + consolidated pay completion |
+| Health | Attention when unresolved drift > 0 after 7 days |
 
-**Conscious limits:** Same Stripe Connect account as single pay portal; no partial batch settlement in v1.
+**Conscious limits:** No Shopify Admin payment write API in v1; policy is operator workflow only.

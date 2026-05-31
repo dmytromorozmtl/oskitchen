@@ -2,13 +2,15 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { Download, Link2, Mail, Users } from "lucide-react";
+import { Download, Link2, Layers, Mail, Users } from "lucide-react";
 
 import {
   assignB2bArCollectorAction,
   bulkMintB2bArPayLinksAction,
   bulkSendB2bArRemindersAction,
 } from "@/actions/shopify-b2b-ar-dashboard";
+import { mintB2bConsolidatedPayLinkAction } from "@/actions/shopify-b2b-consolidated-pay";
+import { B2B_CONSOLIDATED_PAY_MIN_INVOICES } from "@/lib/commercial/shopify-market-b2b-consolidated-pay";
 import { OrderB2bInvoiceMarkPaidButton } from "@/components/orders/order-b2b-invoice-mark-paid-button";
 import { OrderB2bInvoicePayLinkButton } from "@/components/orders/order-b2b-invoice-pay-link-button";
 import { OrderB2bInvoiceSendReminderButton } from "@/components/orders/order-b2b-invoice-send-reminder-button";
@@ -26,6 +28,7 @@ import {
 } from "@/components/ui/table";
 import { SHOPIFY_MARKET_B2B_AR_DASHBOARD_HONESTY } from "@/lib/commercial/shopify-market-b2b-ar-dashboard";
 import { SHOPIFY_MARKET_B2B_FINANCIAL_MIRROR_HONESTY } from "@/lib/commercial/shopify-market-b2b-financial-mirror";
+import { SHOPIFY_MARKET_B2B_CONSOLIDATED_PAY_HONESTY } from "@/lib/commercial/shopify-market-b2b-consolidated-pay";
 import type { B2bArAgingBucket } from "@/lib/integrations/shopify-b2b-ar-aging-metadata";
 import type { B2bArDashboardSnapshot } from "@/lib/integrations/shopify-b2b-ar-dashboard-metadata";
 import { formatCurrency } from "@/lib/utils";
@@ -68,14 +71,34 @@ export function B2bReceivablesDashboard({
     });
   }
 
-  function runBulk(action: "reminders" | "pay-links") {
+  function runBulk(action: "reminders" | "pay-links" | "consolidated-pay") {
     const orderIds = selected.size > 0 ? [...selected] : overdueOrderIds.slice(0, 25);
     if (orderIds.length === 0) {
       setMessage("No overdue invoices selected.");
       return;
     }
+    if (action === "consolidated-pay" && orderIds.length < B2B_CONSOLIDATED_PAY_MIN_INVOICES) {
+      setMessage(`Select at least ${B2B_CONSOLIDATED_PAY_MIN_INVOICES} invoices for consolidated pay.`);
+      return;
+    }
     setMessage(null);
     startTransition(async () => {
+      if (action === "consolidated-pay") {
+        const result = await mintB2bConsolidatedPayLinkAction(orderIds.slice(0, 10));
+        if (!result.ok) {
+          setMessage(result.error);
+          return;
+        }
+        setMessage(
+          `Consolidated pay link minted for ${result.data.invoiceCount} invoice(s). URL copied to clipboard.`,
+        );
+        try {
+          await navigator.clipboard.writeText(result.data.url);
+        } catch {
+          setMessage(`Consolidated pay link: ${result.data.url}`);
+        }
+        return;
+      }
       const result =
         action === "reminders"
           ? await bulkSendB2bArRemindersAction(orderIds)
@@ -98,7 +121,8 @@ export function B2bReceivablesDashboard({
         <CardHeader>
           <CardTitle>B2B receivables command center</CardTitle>
           <CardDescription className="max-w-3xl">
-            {SHOPIFY_MARKET_B2B_AR_DASHBOARD_HONESTY} {SHOPIFY_MARKET_B2B_FINANCIAL_MIRROR_HONESTY}
+            {SHOPIFY_MARKET_B2B_AR_DASHBOARD_HONESTY} {SHOPIFY_MARKET_B2B_FINANCIAL_MIRROR_HONESTY}{" "}
+            {SHOPIFY_MARKET_B2B_CONSOLIDATED_PAY_HONESTY}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -166,6 +190,17 @@ export function B2bReceivablesDashboard({
         >
           <Link2 className="size-3.5" aria-hidden />
           <span className="ml-1.5">Bulk mint pay links</span>
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="rounded-full"
+          disabled={pending}
+          onClick={() => runBulk("consolidated-pay")}
+        >
+          <Layers className="size-3.5" aria-hidden />
+          <span className="ml-1.5">Consolidated pay link</span>
         </Button>
         <Button asChild size="sm" variant="outline" className="rounded-full">
           <a href="/api/dashboard/receivables/export" download>

@@ -97,6 +97,13 @@ export async function POST(request: Request) {
           await applyB2bPayPortalCheckoutCompleted(session, { stripeEventId: event.id });
           break;
         }
+        if (session.metadata?.purpose === "b2b_invoice_batch" && session.metadata?.batchId) {
+          const { applyB2bConsolidatedPayCheckoutCompleted } = await import(
+            "@/services/integrations/shopify-b2b-consolidated-pay-service"
+          );
+          await applyB2bConsolidatedPayCheckoutCompleted(session, { stripeEventId: event.id });
+          break;
+        }
         await applyStripeCheckoutCompleted(session, { stripeEventId: event.id });
         const userId = session.metadata?.userId as string | undefined;
         if (userId) void markTrialConverted(userId);

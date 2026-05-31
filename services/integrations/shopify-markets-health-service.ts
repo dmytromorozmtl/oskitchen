@@ -52,6 +52,7 @@ import { refreshB2bPaymentCollectionOverdueStats } from "@/services/integrations
 import { refreshB2bArAgingStatsForConnection } from "@/services/integrations/shopify-b2b-ar-aging-service";
 import { refreshB2bShopifyFinancialMirrorForConnection } from "@/services/integrations/shopify-b2b-financial-mirror-service";
 import { buildB2bArDashboardSnapshotForOwner } from "@/services/integrations/shopify-b2b-ar-dashboard-service";
+import { refreshB2bConsolidatedPayStaleStats } from "@/services/integrations/shopify-b2b-consolidated-pay-service";
 import { resolveB2bArHealthLevel } from "@/lib/integrations/shopify-b2b-ar-dashboard-metadata";
 
 function countSyncModes(markets: StorefrontMarket[]) {
@@ -365,6 +366,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       `${collectorSlaBreached} B2B collector task(s) breached SLA — assign follow-up on Receivables dashboard.`,
     );
   }
+  if ((sync?.b2bConsolidatedPayStats?.staleCheckoutOpen ?? 0) > 0) {
+    recommendations.push(
+      `${sync?.b2bConsolidatedPayStats?.staleCheckoutOpen} consolidated B2B pay checkout(s) started 48+ hours ago without completion — follow up with buyers or reissue links.`,
+    );
+  }
   if ((sync?.b2bCollectorQueueStats?.skippedEmailOff ?? 0) > 0) {
     recommendations.push(
       "Configure Resend so daily B2B collector task digests can send to your operator inbox.",
@@ -655,6 +661,11 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
     userId: input.userId,
     recordView: false,
   }).catch(() => undefined);
+
+  const staleConsolidated = await refreshB2bConsolidatedPayStaleStats(conn.id).catch(() => 0);
+  if (staleConsolidated > 0) {
+    steps.push(`b2b-consolidated-pay: stale_checkouts=${staleConsolidated}`);
+  }
 
   const resultSummary = steps.join("; ");
   await prisma.integrationConnection.update({

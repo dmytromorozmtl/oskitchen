@@ -1116,6 +1116,12 @@ export function ShopifyMarketsPanel({
               {syncSettings.b2bFinancialMirrorStats?.capturedAtPromote ? (
                 <> · {syncSettings.b2bFinancialMirrorStats.capturedAtPromote} mirror capture(s)</>
               ) : null}
+              {syncSettings.b2bConsolidatedPayStats?.batchesMinted ? (
+                <> · {syncSettings.b2bConsolidatedPayStats.batchesMinted} consolidated pay batch(es)</>
+              ) : null}
+              {syncSettings.b2bConsolidatedPayStats?.staleCheckoutOpen ? (
+                <> · {syncSettings.b2bConsolidatedPayStats.staleCheckoutOpen} stale checkout(s)</>
+              ) : null}
               {syncSettings.b2bArDashboardStats
                 ? ` · ${syncSettings.b2bArDashboardStats.views} view(s) · ${syncSettings.b2bArDashboardStats.csvExports} export(s)`
                 : ""}
