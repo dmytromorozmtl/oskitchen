@@ -10,6 +10,7 @@ import {
   mergeVariantPricesIntoProductMap,
   parseShopifyMarketPricesGraphQLResponse,
 } from "@/services/integrations/shopify-market-prices-service";
+import { computeShopifyMarketPriceHash } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const fixture = JSON.parse(
   readFileSync(join(process.cwd(), "tests/fixtures/shopify/market-prices-response.json"), "utf8"),
@@ -38,6 +39,7 @@ describe("shopify-market-prices-service", () => {
   });
 
   it("persists market price imports in connection settings", () => {
+    const productPrices = { "11111111-1111-1111-1111-111111111111": "14.99" };
     const settings = mergeShopifyMarketsSyncSettings(
       { apiVersion: "2025-01" },
       {
@@ -51,7 +53,8 @@ describe("shopify-market-prices-service", () => {
             importedAt: "2026-05-31T10:00:00.000Z",
             variantCount: 2,
             mappedProductCount: 1,
-            productPrices: { "11111111-1111-1111-1111-111111111111": "14.99" },
+            productPrices,
+            priceHash: computeShopifyMarketPriceHash(productPrices),
           },
         },
       },
@@ -59,5 +62,18 @@ describe("shopify-market-prices-service", () => {
     const parsed = parseShopifyMarketsSyncSettings(settings);
     expect(parsed.lastPriceImportAt).toBe("2026-05-31T10:00:00.000Z");
     expect(parsed.marketPriceImports.ca?.mappedProductCount).toBe(1);
+    expect(parsed.marketPriceImports.ca?.priceHash).toHaveLength(16);
+  });
+
+  it("stores webhook import metadata in sync settings", () => {
+    const settings = mergeShopifyMarketsSyncSettings({}, {
+      lastWebhookPriceImportAt: "2026-05-31T12:00:00.000Z",
+      lastWebhookPriceImportTopic: "products/update",
+      lastWebhookPriceImportTriggeredAt: "2026-05-31T12:00:00.000Z",
+      lastWebhookPriceImportSkippedReason: "unchanged",
+    });
+    const parsed = parseShopifyMarketsSyncSettings(settings);
+    expect(parsed.lastWebhookPriceImportTopic).toBe("products/update");
+    expect(parsed.lastWebhookPriceImportSkippedReason).toBe("unchanged");
   });
 });

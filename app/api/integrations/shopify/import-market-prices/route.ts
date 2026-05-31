@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { allStorefrontCatalogTags } from "@/lib/storefront/cache-tags";
-import { loadMarketsForStorefrontOwner } from "@/lib/storefront/market-resolve";
 import { requireConnectionOwner } from "@/lib/integrations/api-helpers";
 import { getShopifyCredentials } from "@/lib/integrations/decrypt-connection";
-import { prisma } from "@/lib/prisma";
+import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 import { importShopifyMarketPricesForConnection } from "@/services/integrations/shopify-market-prices-service";
-import { revalidatePath, revalidateTag } from "next/cache";
 
 const bodySchema = z.object({
   connectionId: z.string().uuid(),
@@ -40,19 +38,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
-    const sf = await prisma.storefrontSettings.findFirst({
-      where: { userId: owned.conn.userId, enabled: true },
-      select: { storeSlug: true },
-    });
-    if (sf?.storeSlug) {
-      const markets = await loadMarketsForStorefrontOwner(owned.conn.userId);
-      for (const tag of allStorefrontCatalogTags(
-        sf.storeSlug,
-        markets.map((m) => m.id),
-      )) {
-        revalidateTag(tag);
-      }
-    }
+    await revalidateStorefrontCatalogForOwner(owned.conn.userId);
 
     revalidatePath("/dashboard/integrations/shopify");
     revalidatePath("/dashboard/storefront/markets");

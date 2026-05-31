@@ -261,3 +261,4 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | RFC accepted as Phase 0; implementation deferred; recommend Option B for first engineering slice |
 | 2026-05-31 | **Phase 1 shipped:** `shopify-markets-service`, discovery cache on connection, mapping UI on storefront markets + Shopify integration card |
 | 2026-05-31 | **Phase 2 shipped:** `shopify-market-prices-service`, price list import, storefront catalog overrides for syncMode=import |
+| 2026-05-31 | **Phase 3 shipped:** webhook-driven price re-import (`products/update`, `markets/*`), 60s debounce, SHA price-hash skip, catalog cache revalidation |

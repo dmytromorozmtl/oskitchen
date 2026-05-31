@@ -325,3 +325,15 @@ Result: PASS
 Summary: Shopify market price list import via Admin GraphQL, cached on connection, storefront catalog overrides when syncMode=import and external products mapped; hooks product sync + import API
 Tests: tests/unit/shopify-market-prices-service.test.ts
 Next: shopify-markets-phase3-webhooks OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing
+
+---
+Post-parity cycle: 7
+Timestamp: 2026-05-31T11:00:00.000Z
+Feature: shopify-markets-phase3-webhooks
+Source: docs/shopify-markets-rfc.md Option C (webhook slice)
+Priority: POST-PARITY
+Files: 18
+Result: PASS
+Summary: Webhook-driven Shopify market price re-import (products/update + markets/*), 60s debounce, SHA price-hash skip, shared catalog revalidation helper, dashboard webhook status
+Tests: tests/unit/shopify-markets-webhook-service.test.ts, tests/unit/shopify-market-prices-service.test.ts
+Next: shopify-markets-phase4-push-prices OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing

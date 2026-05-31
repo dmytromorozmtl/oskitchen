@@ -64,11 +64,11 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 2 BETA
+              Shopify Markets — Phase 3 BETA
             </CardTitle>
             <CardDescription>
               Discover Shopify markets, link them on Storefront → Markets, set syncMode to import, then
-              pull market-specific prices for mapped external products.
+              pull market-specific prices. Webhooks re-import with 60s debounce and skip unchanged hashes.
             </CardDescription>
           </div>
           <Badge variant="outline">markets_sync BETA</Badge>
@@ -151,11 +151,41 @@ export function ShopifyMarketsPanel({
 
         {syncSettings.lastPriceImportAt ? (
           <p className="text-xs text-muted-foreground">
-            Last price import{" "}
+            Last manual price import{" "}
             {formatDistanceToNow(new Date(syncSettings.lastPriceImportAt), { addSuffix: true })}
             {totalMappedPrices > 0 ? ` · ${totalMappedPrices} mapped product price(s)` : ""}
           </p>
         ) : null}
+
+        {syncSettings.lastWebhookPriceImportAt ? (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              Last webhook price sync{" "}
+              {formatDistanceToNow(new Date(syncSettings.lastWebhookPriceImportAt), { addSuffix: true })}
+              {syncSettings.lastWebhookPriceImportTopic ? (
+                <>
+                  {" "}
+                  · topic{" "}
+                  <code className="rounded bg-muted px-1">{syncSettings.lastWebhookPriceImportTopic}</code>
+                </>
+              ) : null}
+            </p>
+            {syncSettings.lastWebhookPriceImportSkippedReason === "debounced" ? (
+              <p className="mt-1 text-amber-700 dark:text-amber-200">
+                Skipped — another webhook triggered import within the last 60 seconds.
+              </p>
+            ) : null}
+            {syncSettings.lastWebhookPriceImportSkippedReason === "unchanged" ? (
+              <p className="mt-1">Skipped — price hash unchanged for all import-mode markets.</p>
+            ) : null}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            Register <code className="rounded bg-muted px-1">products/update</code> and{" "}
+            <code className="rounded bg-muted px-1">markets/*</code> webhooks below to auto-refresh
+            import-mode prices.
+          </p>
+        )}
 
         {syncSettings.priceImportError ? (
           <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-sm text-muted-foreground">
@@ -185,6 +215,12 @@ export function ShopifyMarketsPanel({
                 </span>
                 <span>
                   {row.mappedProductCount}/{row.variantCount} mapped · {row.currencyCode ?? "—"}
+                  {row.priceHash ? (
+                    <>
+                      {" "}
+                      · hash <span className="font-mono">{row.priceHash.slice(0, 8)}</span>
+                    </>
+                  ) : null}
                 </span>
               </div>
             ))}

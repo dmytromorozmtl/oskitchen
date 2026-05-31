@@ -16,9 +16,7 @@ import { listShopifyMarkets } from "@/services/integrations/shopify-markets-serv
 import {
   importShopifyMarketPricesForConnection,
 } from "@/services/integrations/shopify-market-prices-service";
-import { allStorefrontCatalogTags } from "@/lib/storefront/cache-tags";
-import { loadMarketsForStorefrontOwner } from "@/lib/storefront/market-resolve";
-import { revalidateTag } from "next/cache";
+import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
   connectionId: z.string().uuid(),
@@ -101,19 +99,7 @@ export async function importShopifyMarketPricesAction(connectionId: string) {
 
   if (!result.ok) return { ok: false as const, error: result.error };
 
-  const sf = await prisma.storefrontSettings.findFirst({
-    where: { userId: access.actor.userId, enabled: true },
-    select: { storeSlug: true },
-  });
-  if (sf?.storeSlug) {
-    const markets = await loadMarketsForStorefrontOwner(access.actor.userId);
-    for (const tag of allStorefrontCatalogTags(
-      sf.storeSlug,
-      markets.map((m) => m.id),
-    )) {
-      revalidateTag(tag);
-    }
-  }
+  await revalidateStorefrontCatalogForOwner(access.actor.userId);
 
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");

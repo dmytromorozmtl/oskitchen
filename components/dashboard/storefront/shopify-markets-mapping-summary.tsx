@@ -31,8 +31,8 @@ export function ShopifyMarketsMappingSummary({
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 2 — link OS Kitchen markets to Shopify, set syncMode import, and apply Shopify price list
-          overrides on mapped products at checkout/menu display.
+          Phase 3 — link OS Kitchen markets to Shopify, set syncMode import, apply Shopify price list
+          overrides on mapped products. Webhooks keep prices fresh with debounce + hash skip.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -60,7 +60,21 @@ export function ShopifyMarketsMappingSummary({
             </div>
             {syncSettings?.lastPriceImportAt ? (
               <p className="text-xs text-muted-foreground">
-                Last price import: {new Date(syncSettings.lastPriceImportAt).toLocaleString()}
+                Last manual price import: {new Date(syncSettings.lastPriceImportAt).toLocaleString()}
+              </p>
+            ) : null}
+            {syncSettings?.lastWebhookPriceImportAt ? (
+              <p className="text-xs text-muted-foreground">
+                Last webhook price sync:{" "}
+                {new Date(syncSettings.lastWebhookPriceImportAt).toLocaleString()}
+                {syncSettings.lastWebhookPriceImportTopic
+                  ? ` (${syncSettings.lastWebhookPriceImportTopic})`
+                  : ""}
+                {syncSettings.lastWebhookPriceImportSkippedReason === "debounced"
+                  ? " — debounced"
+                  : syncSettings.lastWebhookPriceImportSkippedReason === "unchanged"
+                    ? " — unchanged"
+                    : ""}
               </p>
             ) : null}
             {syncSettings?.priceImportError ? (

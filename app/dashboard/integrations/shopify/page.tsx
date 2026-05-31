@@ -190,6 +190,9 @@ export default async function ShopifyIntegrationPage() {
           <div>orders-create</div>
           <div>orders-updated</div>
           <div>products-update</div>
+          <div>markets-create</div>
+          <div>markets-update</div>
+          <div>markets-delete</div>
           <div>app-uninstalled</div>
         </CardContent>
       </Card>
@@ -213,14 +216,22 @@ export default async function ShopifyIntegrationPage() {
             markets with syncMode=import — applies to mapped external products on public storefront.
           </p>
           <p>
-            <span className="font-medium text-foreground">Not yet:</span> automatic internal Order
-            creation for every Shopify row, inventory reservations, market-specific price import, and
-            marketplace-specific adjustments.
+            <span className="font-medium text-foreground">Phase 3 Webhooks:</span>{" "}
+            <code className="rounded bg-muted px-1 text-xs">products/update</code> and{" "}
+            <code className="rounded bg-muted px-1 text-xs">markets/*</code> trigger debounced
+            (60s) price re-import with SHA hash skip when nothing changed. Catalog cache revalidates
+            only on actual price updates.
           </p>
           <p>
-            <span className="font-medium text-foreground">Setup checklist:</span> custom app scopes
-            for orders and products, webhook topics listed above, store domain match, then run sync
-            and review staging.
+            <span className="font-medium text-foreground">Not yet:</span> automatic internal Order
+            creation for every Shopify row, inventory reservations, push KitchenOS → Shopify prices,
+            and marketplace-specific adjustments.
+          </p>
+          <p>
+            <span className="font-medium text-foreground">Setup checklist:</span> custom app scopes{" "}
+            <code className="rounded bg-muted px-1 text-xs">read_markets</code>,{" "}
+            <code className="rounded bg-muted px-1 text-xs">read_products</code>, orders/products
+            webhooks, market webhooks listed above, store domain match, then run sync and review staging.
           </p>
           <p>
             <span className="font-medium text-foreground">Troubleshooting:</span> 401 on webhook →

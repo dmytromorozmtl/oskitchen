@@ -9,6 +9,7 @@ export type ShopifyMarketPriceImportRow = {
   variantCount: number;
   mappedProductCount: number;
   productPrices: Record<string, string>;
+  priceHash: string;
 };
 
 export type ShopifyMarketsSyncSettings = {
@@ -20,6 +21,10 @@ export type ShopifyMarketsSyncSettings = {
   lastPriceImportAt: string | null;
   priceImportError: string | null;
   marketPriceImports: Record<string, ShopifyMarketPriceImportRow>;
+  lastWebhookPriceImportAt: string | null;
+  lastWebhookPriceImportTopic: string | null;
+  lastWebhookPriceImportTriggeredAt: string | null;
+  lastWebhookPriceImportSkippedReason: string | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -56,6 +61,18 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastPriceImportAt: typeof raw.lastPriceImportAt === "string" ? raw.lastPriceImportAt : null,
     priceImportError: typeof raw.priceImportError === "string" ? raw.priceImportError : null,
     marketPriceImports,
+    lastWebhookPriceImportAt:
+      typeof raw.lastWebhookPriceImportAt === "string" ? raw.lastWebhookPriceImportAt : null,
+    lastWebhookPriceImportTopic:
+      typeof raw.lastWebhookPriceImportTopic === "string" ? raw.lastWebhookPriceImportTopic : null,
+    lastWebhookPriceImportTriggeredAt:
+      typeof raw.lastWebhookPriceImportTriggeredAt === "string"
+        ? raw.lastWebhookPriceImportTriggeredAt
+        : null,
+    lastWebhookPriceImportSkippedReason:
+      typeof raw.lastWebhookPriceImportSkippedReason === "string"
+        ? raw.lastWebhookPriceImportSkippedReason
+        : null,
   };
 }
 

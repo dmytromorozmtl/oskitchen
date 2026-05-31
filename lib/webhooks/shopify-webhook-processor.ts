@@ -10,6 +10,9 @@ import { prisma } from "@/lib/prisma";
 import { integrationConnectionByIdWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { stageWebhookOrderIngest } from "@/lib/channels/import-staging";
 import {
+  handleShopifyMarketsWebhookEvent,
+} from "@/lib/webhooks/shopify-markets-webhook-service";
+import {
   normalizeShopifyRestOrder,
 } from "@/services/integrations/shopify";
 
@@ -38,6 +41,23 @@ export async function executeShopifyWebhookBusinessLogic(params: {
         status: IntegrationStatus.NEEDS_AUTH,
         lastError: "Shopify app uninstalled",
       },
+    });
+    return;
+  }
+
+  if (
+    params.topic === "markets/create" ||
+    params.topic === "markets/update" ||
+    params.topic === "markets/delete"
+  ) {
+    await handleShopifyMarketsWebhookEvent({
+      userId: params.userId,
+      connection: conn,
+      topic: params.topic,
+    });
+    await prisma.integrationConnection.update({
+      where: { id: conn.id },
+      data: { lastError: null },
     });
     return;
   }
@@ -113,6 +133,11 @@ export async function executeShopifyWebhookBusinessLogic(params: {
         });
       }
     }
+    await handleShopifyMarketsWebhookEvent({
+      userId: params.userId,
+      connection: conn,
+      topic: params.topic,
+    });
     await prisma.integrationConnection.update({
       where: { id: conn.id },
       data: { lastError: null },

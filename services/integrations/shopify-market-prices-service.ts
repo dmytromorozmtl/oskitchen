@@ -6,6 +6,9 @@ import {
   type ShopifyMarketPriceImportRow,
 } from "@/lib/integrations/shopify-markets-settings";
 import {
+  computeShopifyMarketPriceHash,
+} from "@/lib/storefront/revalidate-shopify-market-catalog";
+import {
   parseStorefrontMarketsFromSettingsCenter,
   type StorefrontMarket,
 } from "@/lib/storefront/markets";
@@ -201,10 +204,12 @@ export async function importShopifyMarketPricesForConnection(input: {
   userId: string;
   connection: IntegrationConnection;
   creds: ShopifyCredentials;
+  skipUnchanged?: boolean;
 }): Promise<
   | {
       ok: true;
       marketsImported: number;
+      marketsUnchanged: number;
       totalProductPrices: number;
       imports: ShopifyMarketPriceImportRow[];
     }
@@ -243,7 +248,9 @@ export async function importShopifyMarketPricesForConnection(input: {
   const now = new Date().toISOString();
   const imports: ShopifyMarketPriceImportRow[] = [];
   let totalProductPrices = 0;
+  let marketsUnchanged = 0;
   const errors: string[] = [];
+  const current = parseShopifyMarketsSyncSettings(input.connection.settingsJson);
 
   for (const market of importableMarkets) {
     const shopifyMarketId = market.shopifyMarketId!.trim();
@@ -254,6 +261,13 @@ export async function importShopifyMarketPricesForConnection(input: {
     }
 
     const productPrices = mergeVariantPricesIntoProductMap(fetched.prices, variantToProductId);
+    const priceHash = computeShopifyMarketPriceHash(productPrices);
+    const previous = current.marketPriceImports[market.id];
+    if (input.skipUnchanged && previous?.priceHash === priceHash) {
+      marketsUnchanged += 1;
+      continue;
+    }
+
     const currencyCode =
       fetched.prices.find((p) => p.currencyCode)?.currencyCode ??
       market.currency ??
@@ -268,19 +282,19 @@ export async function importShopifyMarketPricesForConnection(input: {
       variantCount: fetched.prices.length,
       mappedProductCount: Object.keys(productPrices).length,
       productPrices,
+      priceHash,
     };
     imports.push(importRow);
     totalProductPrices += Object.keys(productPrices).length;
   }
 
-  if (imports.length === 0) {
+  if (imports.length === 0 && marketsUnchanged === 0) {
     return {
       ok: false,
       error: errors[0] ?? "No market prices imported.",
     };
   }
 
-  const current = parseShopifyMarketsSyncSettings(input.connection.settingsJson);
   const marketPriceImports: Record<string, ShopifyMarketPriceImportRow> = {
     ...current.marketPriceImports,
   };
@@ -289,7 +303,7 @@ export async function importShopifyMarketPricesForConnection(input: {
   }
 
   const settings = mergeShopifyMarketsSyncSettings(input.connection.settingsJson, {
-    lastPriceImportAt: now,
+    lastPriceImportAt: imports.length > 0 ? now : current.lastPriceImportAt,
     priceImportError: errors.length > 0 ? errors.join(" · ") : null,
     marketPriceImports,
   });
@@ -302,6 +316,7 @@ export async function importShopifyMarketPricesForConnection(input: {
   return {
     ok: true,
     marketsImported: imports.length,
+    marketsUnchanged,
     totalProductPrices,
     imports,
   };
