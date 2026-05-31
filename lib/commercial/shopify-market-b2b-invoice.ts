@@ -1,5 +1,5 @@
 export const SHOPIFY_MARKET_B2B_INVOICE_HONESTY =
-  "Complete Shopify B2B kitchen orders with net terms receive a DRAFT receivable invoice in KitchenOS — operators review and collect payment outside Shopify (Phase 18).";
+  "Complete Shopify B2B kitchen orders with net terms receive a DRAFT receivable invoice in KitchenOS — operators mark paid in Order Hub after collecting payment outside Shopify.";
 
 export function isShopifyMarketsB2bInvoiceEnabled(): boolean {
   if (process.env.SHOPIFY_MARKETS_B2B_INVOICE === "1") return true;

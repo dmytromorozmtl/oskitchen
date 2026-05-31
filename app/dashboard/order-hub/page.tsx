@@ -22,6 +22,7 @@ import {
 import { readKitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
 import { OrderB2bCommercialTermsBadges } from "@/components/orders/order-b2b-commercial-terms";
 import { OrderB2bInvoiceDraftBadges } from "@/components/orders/order-b2b-invoice-draft-banner";
+import { OrderB2bInvoiceMarkPaidButton } from "@/components/orders/order-b2b-invoice-mark-paid-button";
 import { formatCustomerPrimaryLabel } from "@/lib/customers/customer-display";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import {
@@ -278,7 +279,7 @@ export default async function OrderHubPage({
                             </Badge>
                           ) : null}
                           <OrderB2bCommercialTermsBadges sourceMetadataJson={o.sourceMetadataJson} />
-                          <OrderB2bInvoiceDraftBadges sourceMetadataJson={o.sourceMetadataJson} />
+                          <OrderB2bInvoiceDraftBadges sourceMetadataJson={o.sourceMetadataJson} paymentStatus={o.paymentStatus} />
                           {o.isChannelTestOrder ? (
                             <Badge variant="outline" className="rounded-full text-[10px] uppercase">
                               Test
@@ -355,9 +356,17 @@ export default async function OrderHubPage({
                       </TableCell>
                       <TableCell className="text-right font-medium">{String(o.total)}</TableCell>
                       <TableCell className="text-right">
-                        <Button asChild variant="outline" size="sm" className="rounded-full">
-                          <Link href={`/dashboard/orders/${o.id}`}>Open</Link>
-                        </Button>
+                        <div className="flex flex-wrap items-center justify-end gap-1">
+                          <OrderB2bInvoiceMarkPaidButton
+                            orderId={o.id}
+                            sourceMetadataJson={o.sourceMetadataJson}
+                            paymentStatus={o.paymentStatus}
+                            compact
+                          />
+                          <Button asChild variant="outline" size="sm" className="rounded-full">
+                            <Link href={`/dashboard/orders/${o.id}`}>Open</Link>
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

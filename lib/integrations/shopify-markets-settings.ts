@@ -335,6 +335,15 @@ export type ShopifyMarketsSyncSettings = {
     skippedMissingPo: number;
     skippedDisabled: number;
   } | null;
+  b2bInvoiceOverdueGraceDays: number | null;
+  lastB2bPaymentCollectedAt: string | null;
+  b2bPaymentCollectionStats: {
+    markedPaid: number;
+    markedPartial: number;
+    skippedAlreadyPaid: number;
+    skippedNoDraft: number;
+    overdueOpen: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -547,6 +556,26 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
 
   const b2bAutoGenerateInvoice = raw.b2bAutoGenerateInvoice !== false;
 
+  const paymentCollectionStatsRaw = raw.b2bPaymentCollectionStats;
+  const b2bPaymentCollectionStats =
+    paymentCollectionStatsRaw && typeof paymentCollectionStatsRaw === "object"
+      ? {
+          markedPaid: Number((paymentCollectionStatsRaw as Record<string, unknown>).markedPaid) || 0,
+          markedPartial:
+            Number((paymentCollectionStatsRaw as Record<string, unknown>).markedPartial) || 0,
+          skippedAlreadyPaid:
+            Number((paymentCollectionStatsRaw as Record<string, unknown>).skippedAlreadyPaid) || 0,
+          skippedNoDraft:
+            Number((paymentCollectionStatsRaw as Record<string, unknown>).skippedNoDraft) || 0,
+          overdueOpen:
+            Number((paymentCollectionStatsRaw as Record<string, unknown>).overdueOpen) || 0,
+        }
+      : null;
+
+  const overdueGraceRaw = raw.b2bInvoiceOverdueGraceDays;
+  const b2bInvoiceOverdueGraceDays =
+    typeof overdueGraceRaw === "number" && overdueGraceRaw >= 0 ? overdueGraceRaw : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -685,6 +714,10 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bInvoiceGeneratedAt:
       typeof raw.lastB2bInvoiceGeneratedAt === "string" ? raw.lastB2bInvoiceGeneratedAt : null,
     b2bInvoiceStats,
+    b2bInvoiceOverdueGraceDays,
+    lastB2bPaymentCollectedAt:
+      typeof raw.lastB2bPaymentCollectedAt === "string" ? raw.lastB2bPaymentCollectedAt : null,
+    b2bPaymentCollectionStats,
   };
 }
 

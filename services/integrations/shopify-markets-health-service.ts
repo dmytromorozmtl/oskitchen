@@ -48,6 +48,7 @@ import { countOpenShopifyB2bCompanyConflicts } from "@/services/integrations/sho
 import { countOpenShopifyB2bLocationConflicts } from "@/services/integrations/shopify-markets-b2b-location-routing-service";
 import { countWebhookRegistryDrift } from "@/services/integrations/shopify-markets-webhook-registry-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
+import { refreshB2bPaymentCollectionOverdueStats } from "@/services/integrations/shopify-b2b-invoice-payment-service";
 
 function countSyncModes(markets: StorefrontMarket[]) {
   return {
@@ -245,7 +246,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
                   ? `${sync.b2bNetTermsStats.missingPoWhenRequired} B2B order(s) missing required PO`
                   : sync?.b2bInvoiceStats?.draftsCreated
                     ? `${sync.b2bInvoiceStats.draftsCreated} B2B invoice draft(s) · ${sync.b2bInvoiceStats.skippedMissingPo} skipped (missing PO)`
-                    : sync?.b2bCateringRollupStats?.quotesCreated
+                    : sync?.b2bPaymentCollectionStats?.overdueOpen
+                      ? `${sync.b2bPaymentCollectionStats.overdueOpen} overdue B2B invoice(s) open`
+                      : sync?.b2bPaymentCollectionStats?.markedPaid
+                        ? `${sync.b2bPaymentCollectionStats.markedPaid} B2B invoice(s) marked paid`
+                        : sync?.b2bCateringRollupStats?.quotesCreated
                   ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
                   : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
                 ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
@@ -322,7 +327,12 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   }
   if ((sync?.b2bInvoiceStats?.draftsCreated ?? 0) > 0) {
     recommendations.push(
-      "Review B2B net-terms invoice drafts in Order Hub — send to clients and mark paid when collected (Phase 18).",
+      "Review B2B net-terms invoice drafts in Order Hub — send to clients and mark paid when collected.",
+    );
+  }
+  if ((sync?.b2bPaymentCollectionStats?.overdueOpen ?? 0) > 0) {
+    recommendations.push(
+      `${sync?.b2bPaymentCollectionStats?.overdueOpen} B2B invoice(s) are past due — follow up with company buyers in Order Hub.`,
     );
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {
@@ -548,6 +558,11 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
 
   conn =
     (await prisma.integrationConnection.findUnique({ where: { id: conn.id } })) ?? conn;
+
+  await refreshB2bPaymentCollectionOverdueStats({
+    userId: input.userId,
+    connectionId: conn.id,
+  }).catch(() => undefined);
 
   const resultSummary = steps.join("; ");
   await prisma.integrationConnection.update({

@@ -82,6 +82,8 @@
   "shopify-markets-phase16B2bNetTermsPoShippedAt": "2026-06-01T08:00:00.000Z",
   "shopify-markets-phase17-b2b-invoice-generation": "done",
   "shopify-markets-phase17B2bInvoiceGenerationShippedAt": "2026-06-01T09:00:00.000Z",
+  "shopify-markets-phase18-b2b-payment-collection": "done",
+  "shopify-markets-phase18B2bPaymentCollectionShippedAt": "2026-06-01T10:00:00.000Z",
   "restaurant-capital-resources-hub": "done",
   "restaurant-capital-resources-hubShippedAt": "2026-05-31T13:00:00.000Z",
   "restaurant-capital-phase2-attestation": "done",
@@ -94,6 +96,6 @@
   "restaurant-capital-phase5LiveLendersShippedAt": "2026-05-31T19:00:00.000Z",
   "restaurant-capital-phase6-lender-oauth": "done",
   "restaurant-capital-phase6LenderOauthShippedAt": "2026-05-31T22:00:00.000Z",
-  "postParityPhase": "shopify-markets-phase17-b2b-invoice-generation",
-  "nextRecommendedStep": "shopify-markets-phase18-b2b-payment-collection OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
+  "postParityPhase": "shopify-markets-phase18-b2b-payment-collection",
+  "nextRecommendedStep": "shopify-markets-phase19-b2b-ar-aging-reminders OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
 }

@@ -1026,6 +1026,24 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bPaymentCollectionStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B payment collection: {syncSettings.b2bPaymentCollectionStats.markedPaid} paid ·{" "}
+              {syncSettings.b2bPaymentCollectionStats.markedPartial} partial
+              {syncSettings.b2bPaymentCollectionStats.overdueOpen > 0 ? (
+                <> · {syncSettings.b2bPaymentCollectionStats.overdueOpen} overdue open</>
+              ) : null}
+              {syncSettings.lastB2bPaymentCollectedAt ? (
+                <>
+                  {" "}
+                  · last{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bPaymentCollectedAt), {
+                    addSuffix: true,
+                  })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

@@ -1,16 +1,20 @@
 import type { KitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
 import type { B2bPaymentTermsSnapshot } from "@/lib/integrations/shopify-b2b-net-terms-extract";
 
-export type B2bInvoiceDraftStatus = "draft";
+export type B2bInvoiceDraftStatus = "draft" | "partial" | "paid";
 
 export type B2bInvoiceDraftLink = {
   invoiceId: string;
   invoiceNumber: string;
   status: B2bInvoiceDraftStatus;
   amountCents: number;
+  paidAmountCents?: number;
   currency: string;
   dueAt: string | null;
   generatedAt: string;
+  paidAt?: string | null;
+  paymentReference?: string | null;
+  markedPaidById?: string | null;
   paymentTermsLabel: string | null;
   poNumber: string | null;
   companyName: string | null;
@@ -23,6 +27,14 @@ export type B2bInvoiceStats = {
   skippedAlreadyLinked: number;
   skippedMissingPo: number;
   skippedDisabled: number;
+};
+
+export type B2bPaymentCollectionStats = {
+  markedPaid: number;
+  markedPartial: number;
+  skippedAlreadyPaid: number;
+  skippedNoDraft: number;
+  overdueOpen: number;
 };
 
 export function buildB2bInvoiceNumber(input: {
@@ -82,6 +94,64 @@ export function incrementB2bInvoiceStats(
     skippedAlreadyLinked: base.skippedAlreadyLinked + (patch.skippedAlreadyLinked ?? 0),
     skippedMissingPo: base.skippedMissingPo + (patch.skippedMissingPo ?? 0),
     skippedDisabled: base.skippedDisabled + (patch.skippedDisabled ?? 0),
+  };
+}
+
+export function incrementB2bPaymentCollectionStats(
+  current: B2bPaymentCollectionStats | null | undefined,
+  patch: Partial<B2bPaymentCollectionStats>,
+): B2bPaymentCollectionStats {
+  const base: B2bPaymentCollectionStats = current ?? {
+    markedPaid: 0,
+    markedPartial: 0,
+    skippedAlreadyPaid: 0,
+    skippedNoDraft: 0,
+    overdueOpen: 0,
+  };
+  return {
+    markedPaid: base.markedPaid + (patch.markedPaid ?? 0),
+    markedPartial: base.markedPartial + (patch.markedPartial ?? 0),
+    skippedAlreadyPaid: base.skippedAlreadyPaid + (patch.skippedAlreadyPaid ?? 0),
+    skippedNoDraft: base.skippedNoDraft + (patch.skippedNoDraft ?? 0),
+    overdueOpen: patch.overdueOpen ?? base.overdueOpen,
+  };
+}
+
+export function isB2bInvoiceDraftOpen(draft: B2bInvoiceDraftLink): boolean {
+  return draft.status === "draft" || draft.status === "partial";
+}
+
+export function isB2bInvoiceOverdue(
+  draft: B2bInvoiceDraftLink,
+  nowMs: number,
+  graceDays = 0,
+): boolean {
+  if (!isB2bInvoiceDraftOpen(draft) || !draft.dueAt) return false;
+  const dueMs = new Date(draft.dueAt).getTime();
+  if (!Number.isFinite(dueMs)) return false;
+  const graceMs = graceDays * 86400000;
+  return nowMs > dueMs + graceMs;
+}
+
+export function patchInvoiceDraftPayment(
+  draft: B2bInvoiceDraftLink,
+  input: {
+    paidAmountCents: number;
+    paidAt: string;
+    paymentReference?: string | null;
+    markedPaidById?: string | null;
+  },
+): B2bInvoiceDraftLink {
+  const paidAmountCents = Math.max(0, Math.min(input.paidAmountCents, draft.amountCents));
+  const status: B2bInvoiceDraftStatus =
+    paidAmountCents >= draft.amountCents ? "paid" : paidAmountCents > 0 ? "partial" : draft.status;
+  return {
+    ...draft,
+    status,
+    paidAmountCents,
+    paidAt: input.paidAt,
+    paymentReference: input.paymentReference ?? draft.paymentReference ?? null,
+    markedPaidById: input.markedPaidById ?? draft.markedPaidById ?? null,
   };
 }
 

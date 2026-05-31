@@ -534,18 +534,37 @@ Required Shopify scopes (verify at implementation):
 
 ---
 
-## Phase 18 — B2B payment collection (planned)
+## Phase 18 — B2B payment collection (shipped)
 
-**Goal:** Close the AR loop — operators mark B2B net-terms invoices paid from Order Hub, sync `paymentStatus`, and optionally emit customer timeline events.
+**Goal:** Close the AR loop — operators mark B2B net-terms invoice drafts paid from Order Hub, sync `paymentStatus`, and emit customer timeline events.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_PAYMENT_COLLECTION=1` (default on in non-production) |
+| Trigger | Manual action on orders with `b2b.invoiceDraft` and `paymentStatus=UNPAID` |
+| Service | `shopify-b2b-invoice-payment-service.ts` — `markB2bInvoiceDraftPaid` |
+| Order | `paymentStatus: PAID` or `PARTIAL`, `b2b.invoiceDraft.paidAt`, optional `paymentReference` |
+| Audit | `BillingEvent` `B2B_INVOICE_MARKED_PAID` / `B2B_INVOICE_MARKED_PARTIAL` |
+| Customer CRM | `CustomerTimelineEvent` on linked `KitchenCustomer` |
+| Settings | `b2bInvoiceOverdueGraceDays`, `b2bPaymentCollectionStats`, `lastB2bPaymentCollectedAt` |
+| UI | Order detail banner + Order Hub inline “Mark invoice paid” |
+| Health | Overdue open count refreshed on full reconcile; recommends follow-up |
+
+**Conscious limits:** No Stripe Connect charge for B2B buyer; no Shopify payment write-back.
+
+---
+
+## Phase 19 — B2B AR aging & overdue reminders (planned)
+
+**Goal:** Proactive collections — surface aging buckets for open B2B receivables and send operator-triggered reminder emails before escalation.
 
 | Component | Plan |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_PAYMENT_COLLECTION=1` |
-| Trigger | Manual action on orders with `b2b.invoiceDraft` and `paymentStatus=UNPAID` |
-| Service | `shopify-b2b-invoice-payment-service.ts` — mark paid, patch `invoiceDraft.status`, timeline |
-| Order | `paymentStatus: PAID`, `b2b.invoiceDraft.paidAt`, optional partial payments |
-| UI | Order detail “Mark invoice paid” + Order Hub bulk action |
-| Health | Overdue net-terms drafts past `dueAt` without payment |
-| Settings | `b2bInvoiceOverdueDays`, `b2bPaymentCollectionStats` |
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_AGING=1` |
+| Service | `shopify-b2b-ar-aging-service.ts` — bucket orders 0–30 / 31–60 / 61+ days past due |
+| Email | Reuse kitchen email transport — template with invoice #, PO, company, amount due |
+| UI | Order Hub “AR aging” strip + company customer profile overdue summary |
+| Health | Critical when 61+ bucket non-zero |
+| Settings | `b2bArReminderEnabled`, `b2bArAgingStats`, `lastB2bArReminderAt` |
 
-**Conscious limits:** No Stripe Connect charge for B2B buyer; no Shopify payment write-back.
+**Conscious limits:** No automated dunning schedule (Phase 20); no buyer self-serve pay link.
