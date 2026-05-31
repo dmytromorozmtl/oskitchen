@@ -25,6 +25,9 @@ export default async function PosInventoryImpactsPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-3 text-sm">
+          <Link href="/dashboard/inventory/cross-channel" className="text-primary hover:underline">
+            Cross-channel sync →
+          </Link>
           <Link href="/dashboard/inventory/counts" className="text-primary hover:underline">
             Physical counts →
           </Link>

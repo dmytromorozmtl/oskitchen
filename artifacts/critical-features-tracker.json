@@ -6,7 +6,7 @@
   "websocket-kds-ui": "done",
   "websocket-kds-slo": "done",
   "cross-channel-inventory-engine": "done",
-  "cross-channel-inventory-ui": "todo",
+  "cross-channel-inventory-ui": "done",
   "cross-channel-inventory-e2e": "todo",
   "integration-health-scoring": "todo",
   "integration-health-recovery": "todo",

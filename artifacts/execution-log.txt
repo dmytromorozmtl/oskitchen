@@ -1491,3 +1491,9 @@ Action: feat: cross-channel inventory sync engine (Critical Features Cycle 7)
 Files: services/inventory/cross-channel-inventory-sync.ts, lib/inventory/cross-channel-inventory-settings.ts, tests/unit/cross-channel-inventory-sync.test.ts, tests/unit/cross-channel-inventory-sync-wiring.test.ts
 Tracker: cross-channel-inventory-engine=done (7/13)
 Next: Cycle 8 cross-channel inventory UI
+---
+Cycle: 20260531-164400
+Action: feat: cross-channel inventory UI (Critical Features Cycle 8)
+Files: app/dashboard/inventory/cross-channel/page.tsx, components/inventory/cross-channel-inventory-panel.tsx, actions/inventory/cross-channel-inventory.ts, lib/navigation/final-navigation-groups.ts, tests/unit/cross-channel-inventory-ui-wiring.test.ts
+Tracker: cross-channel-inventory-ui=done (8/13)
+Next: Cycle 9 cross-channel inventory E2E + sales one-pager

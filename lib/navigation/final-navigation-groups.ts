@@ -147,6 +147,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     title: "Inventory & finance",
     links: [
       { href: "/dashboard/inventory/demand", labelKey: "nav.inventoryDemand", icon: Package },
+      { href: "/dashboard/inventory/cross-channel", labelKey: "nav.inventoryCrossChannel", icon: Package },
       { href: "/dashboard/inventory/pos-impacts", labelKey: "nav.inventoryPosImpacts", icon: Package },
       { href: "/dashboard/inventory/waste", labelKey: "nav.inventoryWaste", icon: Package },
       { href: "/dashboard/inventory/counts", labelKey: "nav.inventoryCounts", icon: Package },
