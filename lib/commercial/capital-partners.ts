@@ -13,6 +13,12 @@ const capitalPartnerSchema = z.object({
   referralFee: z.boolean(),
   featured: z.boolean().optional().default(false),
   internal: z.boolean().optional().default(false),
+  offersEnabled: z.boolean().optional().default(false),
+  offerProgramName: z.string().max(200).optional(),
+  offerApplyUrlTemplate: z.string().max(500).optional(),
+  offerDisclosure: z.string().max(800).optional(),
+  offerAmountLabel: z.string().max(200).optional(),
+  webhookSecretEnvKey: z.string().max(80).optional(),
 });
 
 const capitalPartnersConfigSchema = z.object({
@@ -59,6 +65,10 @@ export function listFeaturedCapitalPartners(): CapitalPartner[] {
   return loadCapitalPartnersConfig().partners.filter((partner) => partner.featured);
 }
 
+export function listLenderOfferPartners(): CapitalPartner[] {
+  return loadCapitalPartnersConfig().partners.filter((partner) => partner.offersEnabled === true);
+}
+
 export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): string[] {
   const errors: string[] = [];
   const slugs = new Set<string>();
@@ -69,6 +79,12 @@ export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): st
     slugs.add(partner.slug);
     if (!partner.internal && !partner.href.startsWith("https://") && !partner.href.startsWith("/")) {
       errors.push(`${partner.slug}: external partners must use https href or internal path`);
+    }
+    if (partner.offersEnabled && !partner.offerApplyUrlTemplate?.trim()) {
+      errors.push(`${partner.slug}: offersEnabled requires offerApplyUrlTemplate`);
+    }
+    if (partner.offersEnabled && !partner.offerDisclosure?.trim()) {
+      errors.push(`${partner.slug}: offersEnabled requires offerDisclosure`);
     }
   }
   return errors;

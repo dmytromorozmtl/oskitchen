@@ -85,6 +85,23 @@
       "referralFee": false,
       "featured": true,
       "internal": true
+    },
+    {
+      "slug": "pilot-rbf-partner",
+      "name": "Pilot — Revenue-based financing (sandbox)",
+      "category": "lender",
+      "description": "Beta sandbox for KitchenOS embedded lender offers. Requires explicit consent before sharing your signed revenue export.",
+      "href": "https://partners.example.com/kitchenos",
+      "regions": ["US"],
+      "disclosure": "Sandbox pilot partner — not a live funding guarantee. Terms and eligibility are set solely by the lender.",
+      "referralFee": false,
+      "featured": true,
+      "offersEnabled": true,
+      "offerProgramName": "KitchenOS revenue-based financing pilot",
+      "offerApplyUrlTemplate": "https://partners.example.com/kitchenos/apply?referralId={{referralId}}&shareToken={{shareToken}}",
+      "offerDisclosure": "By continuing you leave OS Kitchen and apply directly with the lender. OS Kitchen does not guarantee approval, rates, or funding timelines.",
+      "offerAmountLabel": "Illustrative offers from $5k–$250k based on trailing KitchenOS revenue",
+      "webhookSecretEnvKey": "CAPITAL_LENDER_PILOT_WEBHOOK_SECRET"
     }
   ],
   "educationTopics": [

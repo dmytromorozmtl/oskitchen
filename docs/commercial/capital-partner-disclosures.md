@@ -35,12 +35,32 @@ If KitchenOS receives referral fees from a partner:
 2. Mark `referralFee: true` in `capital-partners.json`.
 3. Update this document with effective date and partner name.
 
+## Phase 3 — Lender offers (shipped)
+
+Merchant flow on `/dashboard/analytics/capital#lender-offers`:
+
+1. Generate signed revenue export (Phase 2).
+2. Select lender offer partner and accept consent copy.
+3. KitchenOS creates `CapitalPartnerReferral`, optional `CapitalAttestationShare` (7-day token).
+4. Merchant opens partner apply URL with `referralId` + `shareToken` query params.
+
+Partner integration:
+
+| Endpoint | Auth | Purpose |
+|----------|------|---------|
+| `GET /api/capital/lender-share/[token]?partnerSlug=` | HMAC header `X-KitchenOS-Capital-Signature` over `{partnerSlug}:{token}` | Pull signed attestation JSON |
+| `POST /api/webhooks/capital-lender/[partnerSlug]` | HMAC header over raw JSON body | Update referral status (`APPLIED`, `FUNDED`, `DECLINED`, etc.) |
+
+Env: `CAPITAL_LENDER_WEBHOOK_SECRET` or per-partner `webhookSecretEnvKey` in `capital-partners.json`.
+
+Audit actions: `capital.lender_consent_granted`, `capital.lender_webhook_status`.
+
 ## Partner onboarding checklist (future)
 
 - [ ] Signed partner agreement reviewed by counsel
 - [ ] State lending ad disclosures supplied by partner
 - [ ] UDAAP review for targeting and copy
-- [ ] Data-sharing consent flow (Phase 3 prerequisite)
+- [x] Data-sharing consent flow (Phase 3 prerequisite)
 - [ ] Support macro for merchant questions
 
 ## Marketing blocklist
@@ -72,4 +92,5 @@ When merchants ask about financing:
 |-------|-------------|--------------|
 | 1 (shipped) | Resource hub + disclosures | Required — lightweight |
 | 2 (shipped) | Signed revenue attestation export | Required — medium |
-| 3 | Embedded lender offers | Required — full program |
+| 3 (shipped) | Embedded lender offers + partner pull API | Required — full program |
+| 4 | Multi-lender marketplace | Required — full program |

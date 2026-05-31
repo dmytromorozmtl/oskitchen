@@ -319,3 +319,4 @@ Engage counsel **before Phase 3**. Phase 1–2 are lower risk but still need rev
 | 2026-05-31 | RFC accepted as Phase 0; no lending origination; recommend Option A → B for first commercial slices |
 | 2026-05-31 | **Phase 1 shipped:** `/dashboard/analytics/capital`, `/resources/restaurant-financing`, partner config, audit-logged outbound links, revenue context panel |
 | 2026-05-31 | **Phase 2 shipped:** `RevenueAttestation` model, HMAC-signed JSON export, verify API, 30-day expiry, audit log on generate |
+| 2026-05-31 | **Phase 3 shipped:** `CapitalPartnerReferral` + `CapitalAttestationShare`, consent modal, partner apply deep links, lender pull API (`GET /api/capital/lender-share/[token]`), status webhook (`POST /api/webhooks/capital-lender/[partnerSlug]`), pilot sandbox partner in config |

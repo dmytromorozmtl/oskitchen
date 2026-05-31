@@ -373,3 +373,15 @@ Result: PASS
 Summary: RevenueAttestation model, HMAC-signed JSON export (3/6/12mo), download + public verify API, dashboard panel wired to revenue-metrics aggregation and audit log
 Tests: tests/unit/revenue-attestation-service.test.ts
 Next: restaurant-capital-phase3-lender-offers OR app-marketplace-phase5-partner-billing OR shopify-markets-bidirectional
+
+---
+Post-parity cycle: 11
+Timestamp: 2026-05-31T15:00:00.000Z
+Feature: restaurant-capital-phase3-lender-offers
+Source: docs/restaurant-capital-rfc.md Option C
+Priority: POST-PARITY
+Files: 18
+Result: PASS
+Summary: CapitalPartnerReferral + CapitalAttestationShare models, consent flow, lender offers panel, partner pull API with HMAC auth, status webhook, pilot sandbox partner config, audit logs on consent and webhook updates
+Tests: tests/unit/capital-lender-offers.test.ts, tests/unit/capital-partners-config.test.ts
+Next: restaurant-capital-phase4-multi-lender OR app-marketplace-phase5-partner-billing OR shopify-markets-bidirectional

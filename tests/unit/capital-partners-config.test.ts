@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   getCapitalPartnerBySlug,
+  listLenderOfferPartners,
   loadCapitalPartnersConfig,
   resetCapitalPartnersConfigCache,
   validateCapitalPartnersConfig,
@@ -30,5 +31,16 @@ describe("capital-partners config", () => {
     expect(resolveCapitalPartnerOutboundHref("os-kitchen-revenue-export")).toBe(
       "/dashboard/analytics/capital#revenue-attestation",
     );
+  });
+
+  it("registers lender offer partners with required disclosure fields", () => {
+    resetCapitalPartnersConfigCache();
+    const offers = listLenderOfferPartners();
+    expect(offers.length).toBeGreaterThan(0);
+    for (const partner of offers) {
+      expect(partner.offerApplyUrlTemplate?.length).toBeGreaterThan(0);
+      expect(partner.offerDisclosure?.length).toBeGreaterThan(0);
+    }
+    expect(getCapitalPartnerBySlug("pilot-rbf-partner")?.offersEnabled).toBe(true);
   });
 });

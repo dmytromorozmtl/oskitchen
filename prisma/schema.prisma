@@ -2222,6 +2222,7 @@ model UserProfile {
   auditLogs                 AuditLog[]
   auditExportsRequested     AuditExport[]         @relation("AuditExportRequester")
   revenueAttestationsCreated RevenueAttestation[] @relation("RevenueAttestationCreator")
+  capitalPartnerReferralsCreated CapitalPartnerReferral[] @relation("CapitalPartnerReferralCreator")
   advisoryBoardApplications AdvisoryBoardApplication[]
   automationRules         AutomationRule[]
   platformUserRoles       PlatformUserRole[]
@@ -10165,6 +10166,7 @@ model Workspace {
   auditRetentionPolicy AuditRetentionPolicy?
   auditExports         AuditExport[]
   revenueAttestations  RevenueAttestation[]
+  capitalPartnerReferrals CapitalPartnerReferral[]
   featureOverrides WorkspaceFeatureOverride[]
   storefronts StorefrontSettings[]
   teamInvites StorefrontTeamInvite[]
@@ -10609,11 +10611,71 @@ model RevenueAttestation {
 
   workspace Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   createdBy UserProfile @relation("RevenueAttestationCreator", fields: [userId], references: [id], onDelete: Cascade)
+  partnerReferrals CapitalPartnerReferral[]
+  attestationShares CapitalAttestationShare[]
 
   @@index([workspaceId, createdAt])
   @@index([userId, createdAt])
   @@index([expiresAt])
   @@map("revenue_attestations")
+}
+
+enum CapitalPartnerReferralStatus {
+  CONSENTED
+  ATTESTATION_SHARED
+  OFFER_VIEWED
+  APPLIED
+  FUNDED
+  DECLINED
+  WITHDRAWN
+}
+
+model CapitalPartnerReferral {
+  id                  String                       @id @default(uuid()) @db.Uuid
+  workspaceId         String                       @map("workspace_id") @db.Uuid
+  userId              String                       @map("user_id") @db.Uuid
+  partnerSlug         String                       @map("partner_slug") @db.VarChar(80)
+  attestationId       String?                      @map("attestation_id") @db.Uuid
+  consentAt           DateTime                     @map("consent_at")
+  attestationSharedAt DateTime?                    @map("attestation_shared_at")
+  offerId             String?                      @map("offer_id") @db.VarChar(128)
+  offerTitle          String?                      @map("offer_title") @db.VarChar(255)
+  offerSummary        String?                      @map("offer_summary") @db.VarChar(500)
+  offerDeepLink       String?                      @map("offer_deep_link") @db.Text
+  status              CapitalPartnerReferralStatus @default(CONSENTED)
+  statusUpdatedAt     DateTime                     @default(now()) @map("status_updated_at")
+  metadataJson        Json?                        @map("metadata_json")
+  createdAt           DateTime                     @default(now()) @map("created_at")
+  updatedAt           DateTime                     @updatedAt @map("updated_at")
+
+  workspace   Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy   UserProfile        @relation("CapitalPartnerReferralCreator", fields: [userId], references: [id], onDelete: Cascade)
+  attestation RevenueAttestation? @relation(fields: [attestationId], references: [id], onDelete: SetNull)
+  shareLinks  CapitalAttestationShare[]
+
+  @@index([workspaceId, createdAt])
+  @@index([workspaceId, partnerSlug, status])
+  @@index([partnerSlug, statusUpdatedAt])
+  @@map("capital_partner_referrals")
+}
+
+model CapitalAttestationShare {
+  id           String   @id @default(uuid()) @db.Uuid
+  referralId   String   @map("referral_id") @db.Uuid
+  attestationId String  @map("attestation_id") @db.Uuid
+  shareToken   String   @unique @map("share_token") @db.VarChar(64)
+  expiresAt    DateTime @map("expires_at")
+  accessedAt   DateTime? @map("accessed_at")
+  accessCount  Int      @default(0) @map("access_count")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  referral    CapitalPartnerReferral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  attestation RevenueAttestation     @relation(fields: [attestationId], references: [id], onDelete: Cascade)
+
+  @@index([referralId])
+  @@index([attestationId])
+  @@index([expiresAt])
+  @@map("capital_attestation_shares")
 }
 
 model AuditLog {

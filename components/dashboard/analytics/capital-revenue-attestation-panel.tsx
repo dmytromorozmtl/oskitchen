@@ -112,6 +112,11 @@ export function CapitalRevenueAttestationPanel({
                 </span>
                 <div className="flex items-center gap-2">
                   {row.expired ? <Badge variant="outline">Expired</Badge> : null}
+                  {!row.expired ? (
+                    <Button asChild size="sm" variant="ghost" className="rounded-full">
+                      <Link href="/dashboard/analytics/capital#lender-offers">Share with lender</Link>
+                    </Button>
+                  ) : null}
                   <Button asChild size="sm" variant="outline" className="rounded-full">
                     <Link href={`/api/capital/revenue-attestation/${row.id}/download`}>
                       <Download className="h-3.5 w-3.5" />

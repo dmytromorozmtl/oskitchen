@@ -168,7 +168,9 @@ export function CapitalResourcesHub({
           Third-party sites — verify terms, eligibility, and disclosures with each provider.
         </p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          {featuredPartners.map((partner) => (
+          {featuredPartners
+            .filter((partner) => !partner.offersEnabled)
+            .map((partner) => (
             <PartnerCard key={partner.slug} partner={partner} />
           ))}
         </div>
@@ -177,7 +179,7 @@ export function CapitalResourcesHub({
       <div>
         <h2 className="text-lg font-semibold">All partner resources</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          {config.partners.map((partner) => (
+          {config.partners.filter((partner) => !partner.offersEnabled).map((partner) => (
             <PartnerCard key={partner.slug} partner={partner} />
           ))}
         </div>
