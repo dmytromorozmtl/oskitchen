@@ -139,3 +139,13 @@ Priority: P1
 Files: 12
 Result: IMPLEMENTED
 Next: shopify-markets-rfc (P2)
+
+---
+Cycle: 16
+Timestamp: 2026-05-31T02:20:00.000Z
+Feature: shopify-markets-rfc
+Competitor: Shopify Markets
+Priority: P2
+Files: 1
+Result: IMPLEMENTED
+Next: woocommerce-subscriptions-rfc (P2)
