@@ -1396,3 +1396,25 @@ Tests: pending (item 2 next)
 Cycle: 20260531-142649
 Action: fix: nav-maturity-governance-ci-live.test.ts — delivery integrations preview not placeholder
 Tests: nav-maturity-governance-ci-live.test.ts PASS (6/6)
+---
+Cycle: 20260531-152738
+Action: fix: classify new webhook routes and update expected count to 52 (cycles 2)
+Tests: audit-webhook-signatures + webhook-security-matrix PASS (6/6)
+Commit: cc792bf0
+---
+Cycle: 20260531-152817
+Action: fix: align cron surface policy and docs with 19 production routes (cycle 3)
+Tests: cron-hygiene + era9/era14 policy PASS (20/20)
+Commit: db391dbc
+---
+Cycle: 20260531-153500
+Action: fix remaining 6 test files — capability, integrations RBAC, page maturity, POS mocks, public API guard (cycles 4–9)
+Tests: 5258 total — 5239 passed, 0 failed, 19 skipped (1493 files)
+Commit: 38caf5ff (final test fix in series)
+---
+Cycle: 20260531-154100
+Action: fix: all tests passing — 0 failures (item 2 TEST FIX CLOSED)
+Tests: npm test exit 0 — 5239 passed | 0 failed | 19 skipped
+Build: PASS
+Vault: 0/11
+Next: item 3 vault one-pager
