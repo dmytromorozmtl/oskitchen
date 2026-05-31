@@ -1461,3 +1461,9 @@ Action: feat: POS terminal Stripe reader UI — connect, pay, receipt (Critical 
 Files: components/pos/stripe-terminal-reader.tsx, components/dashboard/pos-terminal-client.tsx, hooks/use-stripe-terminal.ts (enabled lazy init)
 Tracker: hardware-terminal-ui=done (2/13)
 Next: Cycle 3 Stripe Terminal E2E + sales one-pager
+---
+Cycle: 20260531-161800
+Action: test: Stripe Terminal E2E + sales one-pager (Critical Features Cycle 3)
+Files: e2e/stripe-terminal-payment.spec.ts, e2e/helpers/stripe-terminal-mock.ts, docs/stripe-terminal-sales-one-pager.md
+Tracker: hardware-terminal-e2e=done (3/13) — Hardware Terminal feature COMPLETE
+Next: Cycle 4 KDS WebSocket via Supabase Realtime (use-kds-realtime.ts)

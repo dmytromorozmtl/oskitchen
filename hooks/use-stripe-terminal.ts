@@ -4,6 +4,21 @@ import { loadStripeTerminal } from "@stripe/terminal-js";
 import type { Reader, Terminal } from "@stripe/terminal-js/types/terminal";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+type StripeTerminalJs = Awaited<ReturnType<typeof loadStripeTerminal>>;
+
+declare global {
+  interface Window {
+    __KOS_STRIPE_TERMINAL_MOCK__?: StripeTerminalJs;
+  }
+}
+
+async function loadStripeTerminalSdk(): Promise<StripeTerminalJs | null> {
+  if (typeof window !== "undefined" && window.__KOS_STRIPE_TERMINAL_MOCK__) {
+    return window.__KOS_STRIPE_TERMINAL_MOCK__;
+  }
+  return loadStripeTerminal();
+}
+
 import {
   connectTerminalReader,
   discoverTerminalReaders,
@@ -117,7 +132,7 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
     setError(null);
     setStatus("connecting");
     try {
-      const StripeTerminal = await loadStripeTerminal();
+      const StripeTerminal = await loadStripeTerminalSdk();
       if (!StripeTerminal) throw new Error("Stripe Terminal.js failed to load");
 
       const term = StripeTerminal.create({
