@@ -1503,3 +1503,9 @@ Action: test: cross-channel inventory E2E + sales one-pager (Critical Features C
 Files: e2e/cross-channel-inventory.spec.ts, e2e/helpers/cross-channel-inventory-mock.ts, docs/cross-channel-inventory-sales-one-pager.md, playwright.config.ts, tests/unit/cross-channel-inventory-e2e-wiring.test.ts
 Tracker: cross-channel-inventory-e2e=done (9/13) — Cross-channel inventory feature COMPLETE
 Next: Cycle 10 integration health scoring + sales deck
+---
+Cycle: 20260531-164800
+Action: feat: integration health scoring + sales deck (Critical Features Cycle 10)
+Files: services/integration-health/health-scoring-engine.ts, lib/integration-health/health-scoring-policy.ts, docs/integration-health-sales-deck.md, tests/unit/integration-health-scoring-engine.test.ts, tests/unit/integration-health-scoring-wiring.test.ts
+Tracker: integration-health-scoring=done (10/13)
+Next: Cycle 11 integration recovery playbooks
