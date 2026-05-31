@@ -58,6 +58,17 @@ export default async function LaborReportsHubPage() {
         </Card>
         <Card>
           <CardHeader>
+            <CardTitle className="text-lg">Labor cost tracker</CardTitle>
+            <CardDescription>Real-time labor % vs sales and weekly overtime prediction.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="rounded-full">
+              <Link href="/dashboard/staff/labor-realtime">Open labor tracker</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
             <CardTitle className="text-lg">Time clock</CardTitle>
             <CardDescription>Explicit roadmap — not enabled as a compliance clock in this MVP.</CardDescription>
           </CardHeader>

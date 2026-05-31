@@ -411,7 +411,7 @@ import {
 import { loadImplementationPilotReadinessModel } from "@/services/implementation/implementation-pilot-readiness-service";
 import { getProductionCalendarOpenThroughToday } from "@/services/production/production-calendar-service";
 import { loadPilotIntegrationHealthStripModelForWorkspace } from "@/lib/integrations/pilot-integration-health-strip-era18";
-import { getLaborRealtimeData } from "@/services/labor/labor-realtime-service";
+import { getLaborRealtimeData } from "@/services/labor/labor-realtime-load";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
 import {
   buildP0OpsVaultUiSlice,

@@ -1,23 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Minus, TrendingDown, TrendingUp, Users } from "lucide-react";
+import { AlertTriangle, Minus, TrendingDown, TrendingUp, Users } from "lucide-react";
 
-interface LaborData {
-  activeStaff: number;
-  activeStaffNames: string[];
-  totalLaborHours: number;
-  laborCost: number;
-  totalRevenue: number;
-  laborPercent: number;
-  scheduledLaborCost: number;
-  scheduledLaborPercent: number;
-  targetLaborPercent: number;
-  status: "OVER" | "ON_TRACK" | "UNDER";
-}
+import type { LaborRealtimeSnapshot } from "@/services/labor/labor-realtime-service";
 
-export function LaborRealtimeWidget() {
-  const [data, setData] = useState<LaborData | null>(null);
+type Props = {
+  compact?: boolean;
+};
+
+export function LaborRealtimeWidget({ compact = false }: Props) {
+  const [data, setData] = useState<LaborRealtimeSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,7 +19,7 @@ export function LaborRealtimeWidget() {
       try {
         const res = await fetch("/api/labor/realtime");
         if (res.ok) {
-          const json = (await res.json()) as LaborData;
+          const json = (await res.json()) as LaborRealtimeSnapshot;
           setData(json);
         }
       } finally {
@@ -51,27 +45,26 @@ export function LaborRealtimeWidget() {
         ? "text-blue-600 bg-blue-50 dark:bg-blue-950/40"
         : "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40";
   const statusLabel =
-    data.status === "OVER"
-      ? "Over Target"
-      : data.status === "UNDER"
-        ? "Under Target"
-        : "On Track";
+    data.status === "OVER" ? "Over Target" : data.status === "UNDER" ? "Under Target" : "On Track";
+
+  const otCount = data.overtimePredictions.length;
+  const criticalOt = data.overtimePredictions.filter((o) => o.severity === "critical").length;
 
   return (
     <div className="rounded-2xl border bg-card p-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Labor Cost (Today)
+          Labor cost (today)
         </h3>
         <span
-          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${statusColor}`}
+          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${statusColor}`}
         >
           <StatusIcon className="h-3 w-3" />
           {statusLabel}
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="mb-4 grid grid-cols-2 gap-4">
         <div>
           <p className="text-2xl font-bold">{data.laborPercent}%</p>
           <p className="text-xs text-muted-foreground">Target: {data.targetLaborPercent}%</p>
@@ -82,16 +75,16 @@ export function LaborRealtimeWidget() {
         </div>
       </div>
 
-      <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className={`h-full transition-all rounded-full ${data.laborPercent > data.targetLaborPercent ? "bg-rose-500" : "bg-emerald-500"}`}
+          className={`h-full rounded-full transition-all ${data.laborPercent > data.targetLaborPercent ? "bg-rose-500" : "bg-emerald-500"}`}
           style={{
-            width: `${Math.min((data.laborPercent / data.targetLaborPercent) * 100, 100)}%`,
+            width: `${Math.min((data.laborPercent / Math.max(data.targetLaborPercent, 1)) * 100, 100)}%`,
           }}
         />
       </div>
 
-      <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
+      <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Users className="h-3 w-3" />
           {data.activeStaff} clocked in
@@ -99,15 +92,38 @@ export function LaborRealtimeWidget() {
         <span>{data.totalLaborHours}h today</span>
       </div>
 
-      {data.activeStaffNames.length > 0 ? (
-        <div className="flex flex-wrap gap-1 mt-2">
-          {data.activeStaffNames.map((name) => (
-            <span key={name} className="text-[10px] bg-muted px-2 py-0.5 rounded-full">
-              {name}
-            </span>
-          ))}
+      {otCount > 0 && (
+        <div
+          className={`mt-3 flex items-start gap-2 rounded-lg border px-3 py-2 text-xs ${
+            criticalOt > 0
+              ? "border-amber-500/50 bg-amber-500/5 text-amber-900 dark:text-amber-100"
+              : "border-border bg-muted/30"
+          }`}
+        >
+          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <div>
+            <p className="font-medium">
+              OT risk: {otCount} staff{criticalOt > 0 ? ` (${criticalOt} critical)` : ""}
+            </p>
+            {!compact && (
+              <p className="mt-0.5 text-muted-foreground">
+                {data.overtimePredictions
+                  .slice(0, 2)
+                  .map((o) => `${o.staffName} → ${o.projectedWeekHours}h`)
+                  .join(" · ")}
+              </p>
+            )}
+          </div>
         </div>
-      ) : null}
+      )}
+
+      {!compact && (
+        <div className="mt-3 text-xs">
+          <Link href="/dashboard/staff/labor-realtime" className="text-primary hover:underline">
+            Open labor tracker →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
