@@ -10,6 +10,7 @@ import {
   isExperimentalCronSlug,
   listExperimentalCronPathsOnDisk,
 } from "@/services/cron/production-manifest";
+import { partitionCronRouteSlugs } from "@/services/cron/cron-route-inventory";
 
 describe("cron production manifest", () => {
   it("parses cron slug from pathname", () => {
@@ -38,10 +39,13 @@ describe("cron production manifest", () => {
 
   it("lists experimental paths disjoint from production allowlist", () => {
     const experimental = listExperimentalCronPathsOnDisk();
-    expect(experimental.length).toBeGreaterThan(0);
+    const partition = partitionCronRouteSlugs();
     for (const path of experimental) {
       expect(path.startsWith("/api/cron/")).toBe(true);
       expect(ALLOWED_PRODUCTION_CRON_PATHS).not.toContain(path);
     }
+    // Every on-disk cron route.ts folder is production-tier today; experimental inventory may be empty.
+    expect(partition.production.length).toBeGreaterThan(0);
+    expect(experimental.every((path) => !ALLOWED_PRODUCTION_CRON_PATHS.includes(path))).toBe(true);
   });
 });
