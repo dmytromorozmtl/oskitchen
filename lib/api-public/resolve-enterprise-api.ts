@@ -15,6 +15,10 @@ export async function resolveEnterpriseApiCredential(
   const credential = await resolvePublicApiCredential(authHeader);
   if (!credential) return null;
 
+  if (credential.authKind === "partner_oauth") {
+    return credential;
+  }
+
   const { userId } = credential;
   if (isBillingBypassed()) return credential;
   if (await isSuperAdminUser(userId)) return credential;

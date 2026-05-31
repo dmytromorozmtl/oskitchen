@@ -48,6 +48,9 @@ export default async function OutboundWebhooksPage() {
           <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/sales-channels/webhooks">Inbound webhooks</Link>
           </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/integrations/oauth-apps">OAuth apps</Link>
+          </Button>
           <Button asChild variant="ghost" size="sm" className="rounded-full">
             <Link href="/developers/webhooks">Developer docs</Link>
           </Button>

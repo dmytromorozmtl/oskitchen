@@ -277,6 +277,11 @@ enum OutboundWebhookDeliveryStatus {
   DEAD
 }
 
+enum PartnerAppInstallationStatus {
+  ACTIVE
+  REVOKED
+}
+
 enum ErrorRecoverySource {
   WEBHOOK_JOB
 }
@@ -2027,6 +2032,9 @@ model UserProfile {
   webhookProcessingJobs  WebhookProcessingJob[]
   outboundWebhookSubscriptions OutboundWebhookSubscription[]
   outboundWebhookDeliveries    OutboundWebhookDelivery[]
+  partnerAppInstallations      PartnerAppInstallation[]
+  partnerAppsInstalled         PartnerAppInstallation[] @relation("PartnerAppInstalledBy")
+  oauthAuthorizationCodes      OAuthAuthorizationCode[]
   errorRecoveryItems     ErrorRecoveryItem[]
   acknowledgedCronHeartbeats CronExecutionHeartbeat[] @relation("CronExecutionHeartbeatAcknowledger")
   cronExecutionEventsActed CronExecutionEvent[] @relation("CronExecutionEventActor")
@@ -3516,6 +3524,55 @@ model OutboundWebhookDelivery {
   @@index([subscriptionId, createdAt])
   @@index([userId, createdAt])
   @@map("outbound_webhook_deliveries")
+}
+
+model PartnerAppInstallation {
+  id                String                       @id @default(uuid()) @db.Uuid
+  clientId          String                       @map("client_id") @db.VarChar(128)
+  userId            String                       @map("user_id") @db.Uuid
+  workspaceId       String?                      @map("workspace_id") @db.Uuid
+  installedByUserId String                       @map("installed_by_user_id") @db.Uuid
+  scopesGranted     String[]                     @map("scopes_granted")
+  accessTokenHash   String                       @unique @map("access_token_hash") @db.VarChar(128)
+  tokenPrefix       String                       @map("token_prefix") @db.VarChar(16)
+  status            PartnerAppInstallationStatus @default(ACTIVE)
+  installedAt       DateTime                     @default(now()) @map("installed_at")
+  revokedAt         DateTime?                    @map("revoked_at")
+  lastUsedAt        DateTime?                    @map("last_used_at")
+  createdAt         DateTime                     @default(now()) @map("created_at")
+  updatedAt         DateTime                     @updatedAt @map("updated_at")
+
+  userProfile   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace     Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+  installedBy   UserProfile @relation("PartnerAppInstalledBy", fields: [installedByUserId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, clientId])
+  @@index([userId])
+  @@index([clientId])
+  @@index([status])
+  @@map("partner_app_installations")
+}
+
+model OAuthAuthorizationCode {
+  id                  String    @id @default(uuid()) @db.Uuid
+  codeHash            String    @unique @map("code_hash") @db.VarChar(128)
+  clientId            String    @map("client_id") @db.VarChar(128)
+  userId              String    @map("user_id") @db.Uuid
+  workspaceId         String?   @map("workspace_id") @db.Uuid
+  installedByUserId   String    @map("installed_by_user_id") @db.Uuid
+  scopes              String[]
+  redirectUri         String    @map("redirect_uri") @db.Text
+  state               String?   @db.VarChar(512)
+  expiresAt           DateTime  @map("expires_at")
+  consumedAt          DateTime? @map("consumed_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+
+  @@index([clientId, expiresAt])
+  @@index([userId])
+  @@map("oauth_authorization_codes")
 }
 
 model CronExecutionHeartbeat {
@@ -10087,6 +10144,8 @@ model Workspace {
   webhookEvents      WebhookEvent[]
   outboundWebhookSubscriptions OutboundWebhookSubscription[]
   outboundWebhookDeliveries    OutboundWebhookDelivery[]
+  partnerAppInstallations      PartnerAppInstallation[]
+  oauthAuthorizationCodes      OAuthAuthorizationCode[]
   subscriptions      Subscription[]
   kitchenCustomers   KitchenCustomer[]
   externalOrders     ExternalOrder[]

@@ -107,6 +107,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/sales-channels", labelKey: "nav.integrations", icon: Plug },
       { href: "/dashboard/integrations/extensions", labelKey: "nav.extensions", icon: Plug },
       { href: "/dashboard/integrations/outbound-webhooks", labelKey: "nav.outboundWebhooks", icon: Plug },
+      { href: "/dashboard/integrations/oauth-apps", labelKey: "nav.oauthApps", icon: Plug },
       { href: "/dashboard/integrations/doordash", labelKey: "nav.doordash", icon: Truck },
       { href: "/dashboard/integrations/grubhub", labelKey: "nav.grubhub", icon: Truck },
       { href: "/dashboard/orders/hub", labelKey: "nav.ordersHub", icon: LayoutGrid },

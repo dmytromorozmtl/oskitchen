@@ -40,6 +40,7 @@ const KIND_OPTIONS: Array<{ value: ExtensionKind | "all"; label: string }> = [
   { value: "all", label: "All types" },
   { value: "first_party", label: "OS Kitchen built" },
   { value: "partner", label: "Certified partners" },
+  { value: "oauth_app", label: "OAuth apps" },
   { value: "roadmap", label: "Roadmap" },
 ];
 
@@ -140,7 +141,7 @@ function ExtensionCard({ item, canManage }: { item: ExtensionCatalogItem; canMan
               ) : (
                 <Button asChild size="sm" className="rounded-full">
                   <Link href={primaryHref}>
-                    {item.kind === "roadmap" ? "Read roadmap" : item.kind === "partner" ? "Learn more" : "Open setup"}
+                    {item.kind === "roadmap" ? "Read roadmap" : item.kind === "partner" ? "Learn more" : item.kind === "oauth_app" ? "Install OAuth app" : "Open setup"}
                   </Link>
                 </Button>
               )

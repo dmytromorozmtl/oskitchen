@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31",
+  "apps": [
+    {
+      "clientId": "sandbox-opsbridge-connector",
+      "name": "OpsBridge Connector",
+      "publisher": "KitchenOS Certified SI — OpsBridge",
+      "status": "SANDBOX",
+      "description": "Sandbox OAuth app for Slack ops alerts and order event fan-out. For pilot partners only.",
+      "redirectUris": [
+        "http://localhost:3000/api/oauth/callback/sandbox",
+        "https://hooks.example.com/oauth/kitchenos/callback"
+      ],
+      "allowedScopes": ["read:orders", "manage:webhooks"],
+      "honestyNote": "Sandbox — not a production app store listing. Requires integrations.manage to install."
+    },
+    {
+      "clientId": "sandbox-growthkitchen-sync",
+      "name": "GrowthKitchen CRM Sync",
+      "publisher": "KitchenOS Certified SI — GrowthKitchen",
+      "status": "SANDBOX",
+      "description": "Sandbox OAuth app for order + customer read paths into Klaviyo-style journeys.",
+      "redirectUris": [
+        "http://localhost:3000/api/oauth/callback/sandbox",
+        "https://partners.example.com/oauth/callback"
+      ],
+      "allowedScopes": ["read:orders", "read:products", "read:inventory"],
+      "honestyNote": "Sandbox — customer PII remains minimized on API responses."
+    }
+  ]
+}

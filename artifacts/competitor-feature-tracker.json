@@ -39,5 +39,8 @@
   "app-marketplace-phase1ShippedAt": "2026-05-31T05:00:00.000Z",
   "app-marketplace-phase2": "done",
   "app-marketplace-phase2ShippedAt": "2026-05-31T06:00:00.000Z",
-  "nextRecommendedStep": "app-marketplace-phase3-oauth-apps OR shopify-markets-phase1 OR restaurant-capital-resources-hub"
+  "app-marketplace-phase3": "done",
+  "app-marketplace-phase3ShippedAt": "2026-05-31T07:00:00.000Z",
+  "postParityPhase": "app-marketplace-phase3",
+  "nextRecommendedStep": "app-marketplace-phase4-embed-review OR shopify-markets-phase1 OR restaurant-capital-resources-hub"
 }

@@ -7,6 +7,9 @@ import { prisma } from "@/lib/prisma";
 export type PublicApiCredential = {
   userId: string;
   scopes: readonly DeveloperApiScope[];
+  authKind?: "api_key" | "partner_oauth";
+  installationId?: string;
+  clientId?: string;
 };
 
 function legacyHashApiKey(raw: string): string {
@@ -39,12 +42,18 @@ export function hashApiKeyCandidates(raw: string): string[] {
   return next === legacy ? [next] : [next, legacy];
 }
 
-/** Returns workspace credential when the bearer API key is valid and active. */
+/** Returns workspace credential when the bearer API key or partner OAuth token is valid. */
 export async function resolvePublicApiCredential(
   authHeader: string | null,
 ): Promise<PublicApiCredential | null> {
   if (!authHeader?.startsWith("Bearer ")) return null;
   const raw = authHeader.slice("Bearer ".length).trim();
+
+  if (raw.startsWith("koa_")) {
+    const { resolvePartnerOAuthCredential } = await import("@/lib/oauth/partner-oauth-auth");
+    return resolvePartnerOAuthCredential(authHeader);
+  }
+
   if (!raw.startsWith("kos_") || raw.length < 16) return null;
 
   const digests = hashApiKeyCandidates(raw);
@@ -70,6 +79,7 @@ export async function resolvePublicApiCredential(
   return {
     userId: row.userId,
     scopes: parseApiKeyScopesJson(row.scopesJson),
+    authKind: "api_key",
   };
 }
 

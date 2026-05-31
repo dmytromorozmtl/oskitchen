@@ -1,4 +1,4 @@
-import type { IntegrationProvider, IntegrationStatus } from "@prisma/client";
+import type { IntegrationProvider, IntegrationStatus, Prisma } from "@prisma/client";
 
 import {
   certificationLabel,
@@ -12,10 +12,11 @@ import {
   INTEGRATION_REGISTRY,
   type IntegrationRegistryEntry,
 } from "@/lib/integrations/integration-registry";
-import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { integrationConnectionListWhereForOwner, resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
+import { listPartnerOAuthAppDefinitions } from "@/lib/oauth/partner-oauth-app-catalog";
 import { prisma } from "@/lib/prisma";
 
-export type ExtensionKind = "first_party" | "partner" | "roadmap";
+export type ExtensionKind = "first_party" | "partner" | "oauth_app" | "roadmap";
 
 export type ExtensionStatus =
   | "LIVE"
@@ -224,6 +225,25 @@ function buildPartnerCatalog(): ExtensionCatalogItem[] {
   }));
 }
 
+function buildOAuthAppCatalog(
+  activeInstallations: Set<string>,
+): ExtensionCatalogItem[] {
+  return listPartnerOAuthAppDefinitions().map((app) => ({
+    id: app.clientId,
+    name: app.name,
+    publisher: app.publisher,
+    category: "developer" as ExtensionCategory,
+    kind: "oauth_app" as const,
+    status: app.status === "PUBLISHED" ? "LIVE" : "BETA",
+    description: app.description,
+    setupRoute: "/dashboard/integrations/oauth-apps",
+    externalUrl: null,
+    tags: [...app.allowedScopes, "oauth"],
+    connectionState: activeInstallations.has(app.clientId) ? "connected" : "not_connected",
+    honestyNote: app.honestyNote,
+  }));
+}
+
 function buildRoadmapCatalog(): ExtensionCatalogItem[] {
   return listRoadmapExtensions().map((item) => ({
     id: item.id,
@@ -243,16 +263,19 @@ function buildRoadmapCatalog(): ExtensionCatalogItem[] {
 
 export function mergeExtensionsCatalog(
   connections: Array<{ provider: IntegrationProvider; status: IntegrationStatus }>,
+  activeOAuthInstallations: Set<string> = new Set(),
 ): ExtensionCatalogItem[] {
   return [
     ...buildFirstPartyCatalog(connections),
     ...buildPartnerCatalog(),
+    ...buildOAuthAppCatalog(activeOAuthInstallations),
     ...buildRoadmapCatalog(),
   ].sort((a, b) => {
     const kindOrder: Record<ExtensionKind, number> = {
       first_party: 0,
       partner: 1,
-      roadmap: 2,
+      oauth_app: 2,
+      roadmap: 3,
     };
     const kindDiff = kindOrder[a.kind] - kindOrder[b.kind];
     if (kindDiff !== 0) return kindDiff;
@@ -274,11 +297,19 @@ export function summarizeExtensionsCatalog(items: ExtensionCatalogItem[]): Exten
 export async function getExtensionsCatalogForOwner(
   userId: string,
 ): Promise<{ items: ExtensionCatalogItem[]; summary: ExtensionsCatalogSummary }> {
-  const connections = await prisma.integrationConnection.findMany({
-    where: await integrationConnectionListWhereForOwner(userId),
-    select: { provider: true, status: true },
-  });
-  const items = mergeExtensionsCatalog(connections);
+  const scope = await resolveOwnerScopedWhere(userId);
+  const [connections, oauthInstallations] = await Promise.all([
+    prisma.integrationConnection.findMany({
+      where: scope as Prisma.IntegrationConnectionWhereInput,
+      select: { provider: true, status: true },
+    }),
+    prisma.partnerAppInstallation.findMany({
+      where: { AND: [scope, { status: "ACTIVE" }] } as Prisma.PartnerAppInstallationWhereInput,
+      select: { clientId: true },
+    }),
+  ]);
+  const activeOAuth = new Set(oauthInstallations.map((row) => row.clientId));
+  const items = mergeExtensionsCatalog(connections, activeOAuth);
   return { items, summary: summarizeExtensionsCatalog(items) };
 }
 

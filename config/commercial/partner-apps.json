@@ -76,10 +76,10 @@
       "category": "developer",
       "status": "ROADMAP",
       "description": "Self-serve partner OAuth consent, scoped API tokens, and install/uninstall lifecycle per workspace.",
-      "setupRoute": "/developers",
+      "setupRoute": "/dashboard/integrations/oauth-apps",
       "externalUrl": null,
-      "tags": ["oauth", "platform", "phase-3"],
-      "honestyNote": "Phase 3 — not available for pilot merchants."
+      "tags": ["oauth", "platform", "phase-3-shipped"],
+      "honestyNote": "Phase 3 BETA — sandbox OAuth install available in dashboard."
     },
     {
       "id": "roadmap-outbound-webhooks",

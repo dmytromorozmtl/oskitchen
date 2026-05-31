@@ -277,3 +277,15 @@ Result: PASS
 Summary: Outbound webhook subscriptions with HMAC signing, delivery logs, cron retries, dashboard hub at /dashboard/integrations/outbound-webhooks; emits order/reservation/waitlist/inventory events
 Tests: tests/unit/outbound-webhook-signing.test.ts
 Next: app-marketplace-phase3-oauth-apps OR shopify-markets-phase1 OR restaurant-capital-resources-hub
+
+---
+Post-parity cycle: 3
+Timestamp: 2026-05-31T07:00:00.000Z
+Feature: app-marketplace-phase3-oauth-apps
+Source: docs/app-marketplace-rfc.md Option C
+Priority: POST-PARITY
+Files: 32
+Result: PASS
+Summary: OAuth authorization_code flow with sandbox apps, consent UI, token endpoint (koa_ tokens), installation revoke, public API scope mapping; wired into extensions catalog
+Tests: tests/unit/partner-oauth-service.test.ts
+Next: app-marketplace-phase4-embed-review OR shopify-markets-phase1 OR restaurant-capital-resources-hub
