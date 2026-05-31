@@ -1,5 +1,5 @@
 export type ActionResult<T = void> =
-  | { ok: true; data?: T }
+  | (T extends void ? { ok: true } : { ok: true; data: T })
   | {
       ok: false;
       error: string;
@@ -8,8 +8,10 @@ export type ActionResult<T = void> =
     };
 
 export function success<T>(data?: T): ActionResult<T> {
-  if (data === undefined) return { ok: true };
-  return { ok: true, data };
+  if (data === undefined) {
+    return { ok: true } as ActionResult<T>;
+  }
+  return { ok: true, data } as ActionResult<T>;
 }
 
 /** Alias for master execution / new actions */
@@ -51,7 +53,7 @@ export function getActionError(result: unknown): string | undefined {
 
 export function isActionSuccess<T = unknown>(
   result: unknown,
-): result is { ok: true; data?: T } {
+): result is T extends void ? { ok: true } : { ok: true; data: T } {
   return Boolean(result && typeof result === "object" && "ok" in result && (result as { ok?: boolean }).ok === true);
 }
 

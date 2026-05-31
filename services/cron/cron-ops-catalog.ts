@@ -166,6 +166,33 @@ export const PRODUCTION_CRON_OPS_CATALOG: Record<ProductionCronSlug, ProductionC
     ownerTeam: "system_health",
     ownerRolePriority: ["PLATFORM_ADMIN", "SUPER_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN"],
   },
+  "shopify-b2b-dunning": {
+    label: "Shopify B2B dunning",
+    summary: "Runs B2B AR operator digest and auto-reminder cadence for overdue invoices.",
+    ownerHref: "/dashboard/receivables",
+    ownerLabel: "Open receivables",
+    responseHint: "Review B2B dunning settings, reminder templates, and Shopify mirror state.",
+    ownerTeam: "channels",
+    ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
+  },
+  "shopify-b2b-collector-digest": {
+    label: "Shopify B2B collector digest",
+    summary: "Delivers collector queue digest for assigned B2B AR follow-up.",
+    ownerHref: "/dashboard/receivables",
+    ownerLabel: "Open receivables",
+    responseHint: "Inspect collector assignments, SLA breaches, and digest delivery health.",
+    ownerTeam: "channels",
+    ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
+  },
+  "outbound-webhook-deliveries": {
+    label: "Outbound webhook deliveries",
+    summary: "Drains the outbound webhook delivery queue and retries failed fan-out.",
+    ownerHref: "/dashboard/sales-channels/webhooks",
+    ownerLabel: "Open webhooks",
+    responseHint: "Check outbound webhook backlog, signing secrets, and partner endpoint health.",
+    ownerTeam: "channels",
+    ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
+  },
 };
 
 export function getProductionCronOpsMetadata(slug: ProductionCronSlug): ProductionCronOpsMetadata {

@@ -10,6 +10,8 @@ const LABELS: Record<ChannelCapability, string> = {
   payments: "Payments",
   customer_sync: "Customers",
   inventory_sync: "Inventory",
+  markets_sync: "Markets",
+  menu_sync: "Menu sync",
 };
 
 export function channelCapabilityLabel(cap: ChannelCapability): string {

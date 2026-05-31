@@ -4,11 +4,11 @@ import {
   defaultTrailingYearWindow,
 } from "@/lib/commercial/capital-revenue-aggregation";
 import {
-  getCapitalPartnerBySlug,
   listFeaturedCapitalPartners,
   loadCapitalPartnersConfig,
   type CapitalPartner,
 } from "@/lib/commercial/capital-partners";
+import { resolveCapitalPartnerOutboundHrefBySlug } from "@/lib/commercial/capital-partner-outbound";
 import {
   loadCapitalMarketplaceSnapshot,
   type CapitalMarketplaceSnapshot,
@@ -73,8 +73,8 @@ export async function loadCapitalResourcesHubData(
 }
 
 export function resolveCapitalPartnerOutboundHref(slug: string): string | null {
-  const partner = getCapitalPartnerBySlug(slug);
-  if (!partner) return null;
-  if (partner.internal) return partner.href;
-  return `/api/capital/partner-outbound?slug=${encodeURIComponent(partner.slug)}`;
+  return resolveCapitalPartnerOutboundHrefBySlug(
+    slug,
+    loadCapitalPartnersConfig().partners,
+  );
 }

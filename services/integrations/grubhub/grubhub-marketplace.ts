@@ -45,7 +45,8 @@ export function normalizeGrubhubOrder(raw: Record<string, unknown>): NormalizedK
   const id = String(order.uuid ?? order.id ?? order.order_id ?? "unknown");
   const customer = (order.customer ?? order.diner ?? {}) as Record<string, unknown>;
   const fulfillmentInfo = (order.fulfillment ?? order.delivery ?? {}) as Record<string, unknown>;
-  const items = (order.charges?.line_items ??
+  const charges = (order.charges ?? order.totals ?? {}) as Record<string, unknown>;
+  const items = (charges.line_items ??
     order.line_items ??
     order.items ??
     []) as Record<string, unknown>[];
@@ -58,7 +59,6 @@ export function normalizeGrubhubOrder(raw: Record<string, unknown>): NormalizedK
         : null;
 
   const fulfillment: FulfillmentType = deliveryAddress ? "DELIVERY" : "PICKUP";
-  const charges = (order.charges ?? order.totals ?? {}) as Record<string, unknown>;
   const total = moneyToMajor(charges.total ?? charges.grand_total ?? order.total);
 
   return {

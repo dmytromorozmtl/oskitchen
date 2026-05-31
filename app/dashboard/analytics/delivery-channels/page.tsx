@@ -108,7 +108,7 @@ export default async function DeliveryChannelsAnalyticsPage({
           </CardHeader>
           <CardContent>
             <AnalyticsDailyArea
-              rows={snapshot.dailyTrend.map((d) => ({ date: d.date, value: d.orders }))}
+              data={snapshot.dailyTrend.map((d) => ({ date: d.date, value: d.orders }))}
               formatValue={(n) => `${n} orders`}
             />
           </CardContent>

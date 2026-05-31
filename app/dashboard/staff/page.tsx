@@ -17,6 +17,8 @@ import {
 import { listStaff, listRoles, staffKpis } from "@/services/staff/staff-service";
 import { loadTeamCommunicationFeed } from "@/services/team/team-communication-load";
 
+type StaffListItem = Awaited<ReturnType<typeof listStaff>>[number];
+
 export default async function StaffPage() {
   const { userId, workspaceId, canManage, actor } = await getStaffPageAccess();
   const isSuper = actor.platformBypass;
@@ -82,7 +84,7 @@ export default async function StaffPage() {
               <StaffForm
                 brands={brands}
                 locations={locations}
-                customRoles={roles.map((r) => ({ id: r.id, label: r.label }))}
+                customRoles={roles.map((r: { id: string; label: string }) => ({ id: r.id, label: r.label }))}
               />
               ) : (
                 <p className="text-sm text-muted-foreground">
@@ -108,7 +110,7 @@ export default async function StaffPage() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
-                  {staff.slice(0, 8).map((s) => (
+                  {staff.slice(0, 8).map((s: StaffListItem) => (
                     <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-2">
                       <div>
                         <p className="font-medium">{s.name}</p>

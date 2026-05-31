@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 
 import type { Prisma } from "@prisma/client";
 
+import { recordAuditLog } from "@/lib/audit-log";
 import {
   resolveSingleWebhookCapablePartnerInstallForWorkspace,
 } from "@/lib/platform/outbound-webhook-partner-attribution";

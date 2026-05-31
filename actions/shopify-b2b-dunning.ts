@@ -16,15 +16,16 @@ export async function previewB2bDunningDigestAction(
   connectionId: string,
 ): Promise<ActionResult<B2bOperatorDigestPreview>> {
   try {
-    const actor = await requireIntegrationsActor();
+    const access = await requireIntegrationsActor({ operation: "shopify.b2b.dunning.preview" });
+    if (!access.ok) return fail(access.error);
     const conn = await prisma.integrationConnection.findFirst({
-      where: await integrationConnectionByIdWhereForOwner(actor.userId, connectionId),
+      where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
       select: { id: true },
     });
     if (!conn) return fail("Shopify connection not found.");
 
     const preview = await buildB2bOperatorDigestPreviewForConnection({
-      userId: actor.userId,
+      userId: access.actor.userId,
       connectionId,
     });
     if (!preview) return fail("B2B dunning is not enabled.");
@@ -41,16 +42,17 @@ export async function runB2bDunningNowAction(
   ActionResult<{ digestSent: boolean; autoRemindersSent: number; skippedReason?: string }>
 > {
   try {
-    const actor = await requireIntegrationsActor();
+    const access = await requireIntegrationsActor({ operation: "shopify.b2b.dunning.run" });
+    if (!access.ok) return fail(access.error);
     const conn = await prisma.integrationConnection.findFirst({
-      where: await integrationConnectionByIdWhereForOwner(actor.userId, connectionId),
+      where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
       select: { id: true },
     });
     if (!conn) return fail("Shopify connection not found.");
 
     const result = await runB2bDunningForConnection({
-      userId: actor.userId,
-      workspaceId: actor.workspaceId,
+      userId: access.actor.userId,
+      workspaceId: access.actor.workspaceId,
       connectionId,
       forceDigest: options?.forceDigest,
     });

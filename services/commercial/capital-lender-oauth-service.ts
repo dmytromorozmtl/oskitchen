@@ -1,6 +1,7 @@
 import { CapitalPartnerReferralStatus } from "@prisma/client";
 
 import { recordAuditLog } from "@/lib/audit-log";
+import { prisma } from "@/lib/prisma";
 import {
   buildCapitalOAuthState,
   defaultCapitalOAuthScopes,

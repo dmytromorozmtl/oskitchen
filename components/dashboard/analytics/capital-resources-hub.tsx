@@ -18,10 +18,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { CapitalPartner } from "@/lib/commercial/capital-partners";
-import type { CapitalPartnersConfig } from "@/lib/commercial/capital-partners";
+import type { CapitalPartner, CapitalPartnersConfig } from "@/lib/commercial/capital-partners";
+import { resolveCapitalPartnerOutboundHref } from "@/lib/commercial/capital-partner-outbound";
 import type { CapitalRevenueContext } from "@/services/commercial/restaurant-capital-resources-service";
-import { resolveCapitalPartnerOutboundHref } from "@/services/commercial/restaurant-capital-resources-service";
 import { formatCurrency } from "@/lib/utils";
 
 type CapitalResourcesHubProps = {
@@ -45,7 +44,7 @@ function categoryIcon(category: CapitalPartner["category"]) {
 
 function PartnerCard({ partner }: { partner: CapitalPartner }) {
   const [pending, startTransition] = useTransition();
-  const href = resolveCapitalPartnerOutboundHref(partner.slug) ?? partner.href;
+  const href = resolveCapitalPartnerOutboundHref(partner);
   const external = !partner.internal;
 
   return (
@@ -208,7 +207,12 @@ export function CapitalResourcesHub({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4" action={submitCapitalInterestAction}>
+          <form
+            className="grid gap-4"
+            action={async (formData) => {
+              await submitCapitalInterestAction(formData);
+            }}
+          >
             <div className="space-y-2">
               <Label htmlFor="useCase">Use case</Label>
               <select

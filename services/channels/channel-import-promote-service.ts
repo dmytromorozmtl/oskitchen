@@ -426,7 +426,9 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
       customerEmail: email,
       customerPhone: normalized.customer.phone ?? null,
       fulfillmentDetail: normalized.fulfillment.type === "DELIVERY" ? "DELIVERY" : "PICKUP",
-      deliveryAddressJson: normalized.fulfillment.deliveryAddress ?? undefined,
+      deliveryAddressJson: normalized.fulfillment.deliveryAddress
+        ? (normalized.fulfillment.deliveryAddress as Prisma.InputJsonValue)
+        : undefined,
       notes: normalized.notes ?? undefined,
       subtotal: normalized.totals.subtotal ?? total,
       taxAmount: normalized.totals.tax ?? 0,

@@ -78,7 +78,7 @@ export async function offlineSyncSummary(): Promise<{
   const rows = await listOfflinePosCheckouts();
   const conflicts = rows.filter((row) => row.syncStatus === "conflict");
   return {
-    queuedCount: rows.filter((row) => row.syncStatus !== "synced").length,
+    queuedCount: rows.length,
     conflictCount: conflicts.length,
     conflicts,
   };

@@ -8,6 +8,7 @@ import {
   marketCatalogCacheKey,
   resolveActiveMarket,
 } from "@/lib/storefront/market-resolve";
+import type { StorefrontMarket } from "@/lib/storefront/markets";
 import { loadShopifyMarketPriceOverridesForMarket } from "@/lib/storefront/shopify-market-price-overrides";
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
 import { prisma } from "@/lib/prisma";

@@ -1,4 +1,4 @@
-import { IntegrationProvider } from "@prisma/client";
+import { IntegrationProvider, type Prisma } from "@prisma/client";
 
 import { persistNormalizedExternalOrder } from "@/lib/integrations/persist-external-order";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -72,7 +72,9 @@ export async function importGrubhubOrdersForUser(userId: string): Promise<{
         customerEmail: normalized.customer.email ?? `grubhub@import.local`,
         customerPhone: normalized.customer.phone ?? null,
         fulfillmentDetail: normalized.fulfillment.type === "DELIVERY" ? "DELIVERY" : "PICKUP",
-        deliveryAddressJson: normalized.fulfillment.deliveryAddress ?? undefined,
+        deliveryAddressJson: normalized.fulfillment.deliveryAddress
+          ? (normalized.fulfillment.deliveryAddress as Prisma.InputJsonValue)
+          : undefined,
         notes: normalized.notes ?? null,
         subtotal: normalized.totals.subtotal ?? total,
         taxAmount: normalized.totals.tax ?? 0,
@@ -80,7 +82,10 @@ export async function importGrubhubOrdersForUser(userId: string): Promise<{
         total,
         channelProvider: "GRUBHUB",
         externalOrderId: normalized.externalOrderId,
-        sourceMetadataJson: { provider: "grubhub", rawEvent: normalized.raw },
+        sourceMetadataJson: {
+          provider: "grubhub",
+          rawEvent: normalized.raw,
+        } as Prisma.InputJsonValue,
         lines: normalized.lineItems.map((line) => ({
           productId: null,
           title: line.title,

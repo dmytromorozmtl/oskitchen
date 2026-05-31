@@ -383,7 +383,7 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   }
   if ((sync?.b2bArAgingStats?.bucket61Plus ?? 0) > 0) {
     recommendations.push(
-      `${sync.b2bArAgingStats?.bucket61Plus} B2B invoice(s) are 61+ days past due — escalate collections immediately.`,
+      `${sync?.b2bArAgingStats?.bucket61Plus} B2B invoice(s) are 61+ days past due — escalate collections immediately.`,
     );
   }
   if ((sync?.b2bDunningStats?.skippedEmailOff ?? 0) > 0) {
@@ -582,7 +582,6 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
   const hostnameReconcile = await reconcileShopifyMarketHostnameGuardForConnection({
     userId: input.userId,
     connection: conn,
-    creds: input.creds,
     primaryStoreSlug: input.primaryStoreSlug,
     origin: "manual",
     skipUnchanged: false,
@@ -652,7 +651,7 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
   steps.push(
     mirrorRefresh.ok
       ? `b2b-financial-mirror: refreshed=${mirrorRefresh.refreshed} drift=${mirrorRefresh.driftCount}${mirrorRefresh.capped ? " capped" : ""}`
-      : mirrorRefresh.unavailable
+      : "unavailable" in mirrorRefresh && mirrorRefresh.unavailable
         ? "b2b-financial-mirror: unavailable"
         : `b2b-financial-mirror: skipped/failed (${mirrorRefresh.error})`,
   );

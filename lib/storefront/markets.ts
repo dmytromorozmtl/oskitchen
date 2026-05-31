@@ -62,5 +62,11 @@ export function defaultPilotMarket(storeSlug: string, currency: string): Storefr
     currency,
     enabled: true,
     storeSlug,
+    syncMode: "none",
+    priceAuthority: "kitchenos",
+    catalogAuthority: "kitchenos",
+    taxAuthority: "kitchenos",
+    dutyAuthority: "kitchenos",
+    hostnameAuthority: "kitchenos",
   };
 }

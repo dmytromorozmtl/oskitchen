@@ -77,8 +77,8 @@ export function PartnerBillingPanel({
               startTransition(async () => {
                 setMessage(null);
                 const result = await syncPartnerBillingMetersAction();
-                if ("error" in result && result.error) {
-                  setMessage(result.error);
+                if (!("ok" in result) || !result.ok) {
+                  setMessage("error" in result ? (result.error ?? "Sync failed.") : "Sync failed.");
                   return;
                 }
                 setMessage(
@@ -147,8 +147,8 @@ export function PartnerBillingPanel({
                             const result = await startPartnerStripeConnectAction({
                               publisherKey: row.publisherKey,
                             });
-                            if ("error" in result && result.error) {
-                              setMessage(result.error);
+                            if (!("ok" in result) || !result.ok) {
+                              setMessage("error" in result ? (result.error ?? "Connect failed.") : "Connect failed.");
                               return;
                             }
                             window.location.href = result.url;

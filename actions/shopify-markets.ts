@@ -242,7 +242,7 @@ export async function reconcileBidirectionalShopifyMarketsAction(connectionId: s
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");
 
-  return { ok: true as const, ...result };
+  return result;
 }
 
 export async function resolveShopifyMarketPriceConflictAction(input: {
@@ -393,7 +393,7 @@ export async function reconcileBidirectionalShopifyMarketCatalogAction(connectio
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");
 
-  return { ok: true as const, ...result };
+  return result;
 }
 
 export async function resolveShopifyMarketCatalogConflictAction(input: {
@@ -497,7 +497,7 @@ export async function reconcileShopifyMarketTaxGuardAction(connectionId: string)
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");
 
-  return { ok: true as const, ...result };
+  return result;
 }
 
 export async function resolveShopifyMarketTaxConflictAction(input: {
@@ -596,7 +596,7 @@ export async function reconcileShopifyMarketHostnameGuardAction(connectionId: st
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");
 
-  return { ok: true as const, ...result };
+  return result;
 }
 
 export async function resolveShopifyMarketHostnameConflictAction(input: {
@@ -740,7 +740,7 @@ export async function reconcileShopifyB2bGuardAction(connectionId: string) {
   revalidatePath("/dashboard/storefront/markets");
   revalidatePath("/dashboard/customers/companies");
 
-  return { ok: true as const, ...result };
+  return result;
 }
 
 export async function resolveShopifyB2bCompanyConflictAction(input: {
@@ -858,7 +858,7 @@ export async function reconcileShopifyB2bLocationRoutingAction(connectionId: str
   revalidatePath("/dashboard/storefront/markets");
   revalidatePath("/dashboard/customers/companies");
 
-  return { ok: true as const, ...result };
+  return result;
 }
 
 export async function resolveShopifyB2bLocationConflictAction(input: {

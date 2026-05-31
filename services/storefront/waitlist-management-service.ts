@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { loadKitchenSettingsCenterJson } from "@/lib/storefront/kitchen-settings-center";
 import { getStorefrontForPublic } from "@/lib/storefront/public-access";
 import { sendSmsNotification, type SmsSendResult } from "@/services/notifications/sms-service";
 import {
@@ -72,9 +73,10 @@ export async function createPublicWaitlistEntry(
     },
   });
 
-  const summary = await refreshWaitlistQuotes(sf.id, sf.settingsCenterJson);
+  const settingsCenterJson = await loadKitchenSettingsCenterJson(sf.userId);
+  const summary = await refreshWaitlistQuotes(sf.id, settingsCenterJson);
   const queueItem = summary.find((item) => item.id === entry.id);
-  const config = parseWaitlistConfig(sf.settingsCenterJson);
+  const config = parseWaitlistConfig(settingsCenterJson);
 
   const sms = await sendWaitlistJoinedSms({
     storeName: sf.publicName,
@@ -115,7 +117,7 @@ export async function loadPublicWaitlistStatus(
       id: true,
       enabled: true,
       published: true,
-      settingsCenterJson: true,
+      userId: true,
     },
   });
   if (!sf?.enabled || !sf.published) return null;
@@ -126,7 +128,7 @@ export async function loadPublicWaitlistStatus(
   if (!entry) return null;
 
   const entries = await loadActiveWaitlistEntries(sf.id);
-  const config = parseWaitlistConfig(sf.settingsCenterJson);
+  const config = parseWaitlistConfig(await loadKitchenSettingsCenterJson(sf.userId));
   const queueItem =
     entry.status === "WAITING" ? findQueueItemForEntry(entry.id, entries, config) : null;
 
@@ -152,7 +154,7 @@ export async function notifyWaitlistGuestWithSms(
         select: {
           id: true,
           publicName: true,
-          settingsCenterJson: true,
+          userId: true,
         },
       },
     },
@@ -162,7 +164,8 @@ export async function notifyWaitlistGuestWithSms(
     throw new Error("Waitlist entry is no longer active.");
   }
 
-  const config = parseWaitlistConfig(row.storefront.settingsCenterJson);
+  const settingsCenterJson = await loadKitchenSettingsCenterJson(row.storefront.userId);
+  const config = parseWaitlistConfig(settingsCenterJson);
   const sms = await sendWaitlistReadySms({
     storeName: row.storefront.publicName,
     customerPhone: row.customerPhone,
@@ -174,7 +177,7 @@ export async function notifyWaitlistGuestWithSms(
     data: { status: "NOTIFIED" },
   });
 
-  await refreshWaitlistQuotes(row.storefront.id, row.storefront.settingsCenterJson);
+  await refreshWaitlistQuotes(row.storefront.id, settingsCenterJson);
 
   return { entry, sms };
 }

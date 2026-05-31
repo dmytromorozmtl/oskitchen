@@ -12,6 +12,7 @@ import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalid
 import { safeError } from "@/lib/security";
 import { prisma } from "@/lib/prisma";
 import { toInputJsonValue } from "@/lib/prisma/json";
+import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 
 const marketsPayloadSchema = z.object({
   marketsJson: z.string().max(20000),

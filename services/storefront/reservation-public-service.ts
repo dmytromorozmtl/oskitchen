@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { loadKitchenSettingsCenterJson } from "@/lib/storefront/kitchen-settings-center";
 import { getStorefrontForPublic } from "@/lib/storefront/public-access";
 import {
   buildDailySlotTimes,
@@ -35,12 +36,13 @@ export async function loadPublicReservationAvailability(
       enabled: true,
       published: true,
       userId: true,
-      settingsCenterJson: true,
     },
   });
   if (!sf?.enabled || !sf.published) return null;
 
-  const config = parseReservationAvailabilityConfig(sf.settingsCenterJson);
+  const config = parseReservationAvailabilityConfig(
+    await loadKitchenSettingsCenterJson(sf.userId),
+  );
   if (!isReservationDateBookable(dateIso, config)) {
     return {
       date: dateIso,
@@ -87,7 +89,9 @@ export async function createPublicStorefrontReservation(
     throw new Error("Storefront not found.");
   }
 
-  const config = parseReservationAvailabilityConfig(sf.settingsCenterJson);
+  const config = parseReservationAvailabilityConfig(
+    await loadKitchenSettingsCenterJson(sf.userId),
+  );
   if (input.partySize > config.maxPartySize) {
     throw new Error(`Party size cannot exceed ${config.maxPartySize}.`);
   }
@@ -166,3 +170,4 @@ function publicConfigSummary(config: ReservationAvailabilityConfig) {
     slotIntervalMinutes: config.slotIntervalMinutes,
   };
 }
+

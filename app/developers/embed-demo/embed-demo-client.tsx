@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-import { PublicShell } from "@/components/marketing/public-page";
+import { PublicShellClient } from "@/components/marketing/public-shell-client";
 import { Badge } from "@/components/ui/badge";
 
 type VerifyResponse =
@@ -55,7 +55,7 @@ export default function PartnerEmbedDemoClient() {
   }, [result]);
 
   return (
-    <PublicShell>
+    <PublicShellClient>
       <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
         <Badge variant="outline" className="mb-3 rounded-full">
           Embed demo · Phase 4
@@ -95,6 +95,6 @@ export default function PartnerEmbedDemoClient() {
           </div>
         ) : null}
       </div>
-    </PublicShell>
+    </PublicShellClient>
   );
 }

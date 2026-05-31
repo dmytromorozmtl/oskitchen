@@ -15,13 +15,14 @@ import { createClient } from "@/lib/supabase/client";
 
 export type KdsRealtimeTransport = "supabase" | "polling";
 
-type KdsRealtimeEnv = Pick<
-  NodeJS.ProcessEnv,
-  "NEXT_PUBLIC_KDS_REALTIME_ENABLED" | "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_ANON_KEY"
->;
+type KdsRealtimeEnv = {
+  NEXT_PUBLIC_KDS_REALTIME_ENABLED?: string;
+  NEXT_PUBLIC_SUPABASE_URL?: string;
+  NEXT_PUBLIC_SUPABASE_ANON_KEY?: string;
+};
 
 /** Whether Supabase Realtime subscription is allowed (default: on when Supabase is configured). */
-export function isKdsRealtimeEnabled(env: KdsRealtimeEnv = process.env): boolean {
+export function isKdsRealtimeEnabled(env: KdsRealtimeEnv = process.env as KdsRealtimeEnv): boolean {
   const flag = env.NEXT_PUBLIC_KDS_REALTIME_ENABLED?.trim().toLowerCase();
   if (flag === "false" || flag === "0" || flag === "no") return false;
   return Boolean(
@@ -29,7 +30,7 @@ export function isKdsRealtimeEnabled(env: KdsRealtimeEnv = process.env): boolean
   );
 }
 
-export function resolveKdsTransport(env: KdsRealtimeEnv = process.env): KdsRealtimeTransport {
+export function resolveKdsTransport(env: KdsRealtimeEnv = process.env as KdsRealtimeEnv): KdsRealtimeTransport {
   return isKdsRealtimeEnabled(env) ? "supabase" : "polling";
 }
 

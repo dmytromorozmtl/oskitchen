@@ -97,9 +97,12 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
     pureOperationalModeEra25Active,
   } = briefing;
   const topActions = internalOps ? rawTopActions : filterCustomerFacingLinks(rawTopActions);
-  const nextAction = internalOps
+  const nextAction: OwnerDailyBriefingNextAction = internalOps
     ? rawNextAction
-    : pickCustomerFacingNextAction(rawNextAction, topActions);
+    : pickCustomerFacingNextAction(
+        rawNextAction,
+        topActions.map((action) => ({ ...action, detail: action.reason })),
+      );
   const displayRolePackLabel = internalOps ? rolePackLabel : "Today overview";
   const displayRolePackHeadline = internalOps
     ? rolePackHeadline

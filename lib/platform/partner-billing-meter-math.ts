@@ -30,6 +30,6 @@ export function partnerBillingMeterKindLabel(kind: PartnerBillingMeterKind): str
     case "WEBHOOK_DELIVERY":
       return "Webhook deliveries";
     default:
-      return kind.replaceAll("_", " ").toLowerCase();
+      return String(kind).replace(/_/g, " ").toLowerCase();
   }
 }

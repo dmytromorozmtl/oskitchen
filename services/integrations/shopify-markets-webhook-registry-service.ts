@@ -166,7 +166,7 @@ export async function fetchLastWebhookDeliveriesByTopic(connectionId: string): P
       signatureValid: true,
       topic: { in: SHOPIFY_MARKETS_WEBHOOK_TOPICS.map((t) => t.topic) },
     },
-    _max: { createdAt: true },
+    _max: { receivedAt: true },
     _count: { _all: true },
   });
 
@@ -184,9 +184,9 @@ export async function fetchLastWebhookDeliveriesByTopic(connectionId: string): P
   const map = new Map<string, { lastDeliveryAt: string; failureCount: number }>();
 
   for (const row of rows) {
-    if (!row._max.createdAt) continue;
+    if (!row._max.receivedAt) continue;
     map.set(row.topic, {
-      lastDeliveryAt: row._max.createdAt.toISOString(),
+      lastDeliveryAt: row._max.receivedAt.toISOString(),
       failureCount: failureByTopic.get(row.topic) ?? 0,
     });
   }

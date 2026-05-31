@@ -1,8 +1,10 @@
-import type { OrderStatus } from "@prisma/client";
+import type { OrderStatus, Prisma } from "@prisma/client";
 
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
 import { movingAverage, type DailySeriesPoint } from "@/lib/analytics/forecasting";
 import { orderContributesToRevenue, whereOrdersInWindowForOwner } from "@/lib/analytics/revenue-metrics";
+import { decimalToNumber } from "@/lib/catering/quote-calculations";
+import { prisma } from "@/lib/prisma";
 import { evaluateAnalyticsAlerts } from "@/services/analytics/alerts-service";
 import { detectOperationalAnomalies } from "@/services/ai/anomaly-ai-service";
 
@@ -38,7 +40,7 @@ export type AdvancedReportingSnapshot = {
 
 type OrderRow = {
   status: OrderStatus;
-  total: unknown;
+  total: Prisma.Decimal | null;
   createdAt: Date;
 };
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Bell, Megaphone } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { TeamCommunicationFeed } from "@/services/team/team-communication-service";
+import type { TeamCommunicationFeed } from "@/lib/team/team-communication-types";
 
 export function TeamCommunicationWidget({ feed }: { feed: TeamCommunicationFeed }) {
   const latest = feed.items.slice(0, 3);

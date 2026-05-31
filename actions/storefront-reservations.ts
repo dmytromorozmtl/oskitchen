@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
+import { loadKitchenSettingsCenterJson } from "@/lib/storefront/kitchen-settings-center";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import {
   createStorefrontReservation,
@@ -66,7 +67,6 @@ async function requireStorefrontForReservations() {
   const { sf } = await requireAdminStorefrontRow("storefront.settings", {
     id: true,
     userId: true,
-    settingsCenterJson: true,
   });
   return sf;
 }
@@ -76,9 +76,10 @@ export async function getReservationAvailabilityAction(raw: z.infer<typeof avail
     await requireTenantActor();
     const input = availabilitySchema.parse(raw);
     const sf = await requireStorefrontForReservations();
+    const settingsCenterJson = await loadKitchenSettingsCenterJson(sf.userId);
     const availability = await loadOwnerReservationAvailability(
       sf.id,
-      sf.settingsCenterJson,
+      settingsCenterJson,
       input.date,
       input.partySize,
     );
@@ -157,8 +158,9 @@ export async function addWaitlistEntryAction(raw: z.infer<typeof waitlistSchema>
     await requireTenantActor();
     const input = waitlistSchema.parse(raw);
     const sf = await requireStorefrontForReservations();
+    const settingsCenterJson = await loadKitchenSettingsCenterJson(sf.userId);
 
-    const result = await addOwnerWaitlistEntryWithEstimates(sf.userId, sf.id, sf.settingsCenterJson, {
+    const result = await addOwnerWaitlistEntryWithEstimates(sf.userId, sf.id, settingsCenterJson, {
       customerName: input.customerName,
       customerPhone: input.customerPhone,
       partySize: input.partySize,
@@ -212,7 +214,7 @@ export async function updateWaitlistStatusAction(raw: z.infer<typeof waitlistSta
     }
 
     await updateWaitlistStatus(sf.userId, input.entryId, input.status as WaitlistStatus);
-    await refreshWaitlistQuotes(sf.id, sf.settingsCenterJson);
+    await refreshWaitlistQuotes(sf.id, await loadKitchenSettingsCenterJson(sf.userId));
 
     revalidatePath("/dashboard/reservations");
     return { ok: true as const };

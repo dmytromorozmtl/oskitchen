@@ -4,6 +4,7 @@
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import type { Prisma } from "@prisma/client";
 
 import { requireRewardsMutation } from "@/lib/crm/require-rewards-mutation";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
@@ -97,7 +98,10 @@ export async function updateRestaurantLoyaltyConfigAction(
     where: { userId: dataUserId },
     select: { settingsCenterJson: true },
   });
-  const merged = mergeRestaurantLoyaltyIntoSettingsCenter(kitchen?.settingsCenterJson, config);
+  const merged = mergeRestaurantLoyaltyIntoSettingsCenter(
+    kitchen?.settingsCenterJson,
+    config,
+  ) as Prisma.InputJsonValue;
   await prisma.kitchenSettings.upsert({
     where: { userId: dataUserId },
     create: { userId: dataUserId, settingsCenterJson: merged },

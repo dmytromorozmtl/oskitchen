@@ -18,7 +18,6 @@ export function b2bInvoiceOverdueReminderTemplate(params: {
   poNumber?: string | null;
   companyName?: string | null;
   paymentTermsLabel?: string | null;
-  businessName?: string | null;
   payNowUrl?: string | null;
 }) {
   const brand = params.businessName ?? "OS Kitchen";

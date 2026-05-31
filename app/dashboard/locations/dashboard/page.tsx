@@ -81,8 +81,8 @@ export default async function MultiLocationDashboardPage({
             </CardHeader>
             <CardContent>
               <AnalyticsDailyArea
-                rows={snapshot.dailyTrend.map((row) => ({ date: row.date, value: row.revenue }))}
-                formatValue={formatCurrency}
+                data={snapshot.dailyTrend.map((row) => ({ date: row.date, value: row.revenue }))}
+                formatValue={(n) => formatCurrency(n)}
               />
             </CardContent>
           </Card>

@@ -74,8 +74,8 @@ export function CapitalPartnersPlatformPanel({
               startTransition(async () => {
                 setMessage(null);
                 const result = await syncCapitalPartnerBillingStatementsAction();
-                if ("error" in result && result.error) {
-                  setMessage(result.error);
+                if (!("ok" in result) || !result.ok) {
+                  setMessage("error" in result ? (result.error ?? "Sync failed.") : "Sync failed.");
                   return;
                 }
                 setMessage(`Synced ${result.upserted} draft statement(s).`);

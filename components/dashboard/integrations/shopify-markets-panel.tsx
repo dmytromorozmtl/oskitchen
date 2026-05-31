@@ -110,6 +110,7 @@ export function ShopifyMarketsPanel({
   const [hostnameApplyPending, startHostnameApply] = useTransition();
   const [b2bImportPending, startB2bImport] = useTransition();
   const [b2bReconcilePending, startB2bReconcile] = useTransition();
+  const [b2bResolvePending, startB2bResolve] = useTransition();
   const [b2bLocationImportPending, startB2bLocationImport] = useTransition();
   const [b2bLocationReconcilePending, startB2bLocationReconcile] = useTransition();
   const [b2bLocationResolvePending, startB2bLocationResolve] = useTransition();

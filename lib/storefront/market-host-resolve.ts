@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { compositeMarketHostLabel } from "@/lib/storefront/market-host-label";
 import { loadMarketsForStorefrontOwner } from "@/lib/storefront/market-resolve";
 
 export type MarketHostResolution = {
@@ -6,10 +7,7 @@ export type MarketHostResolution = {
   marketId: string;
 };
 
-/** Vanity host label: `{storeSlug}-{marketId}` e.g. hello-weekday.kitchenos.com */
-export function compositeMarketHostLabel(storeSlug: string, marketId: string): string {
-  return `${storeSlug}-${marketId}`.toLowerCase();
-}
+export { compositeMarketHostLabel } from "@/lib/storefront/market-host-label";
 
 /**
  * Resolve a subdomain label to storefront slug + market id.

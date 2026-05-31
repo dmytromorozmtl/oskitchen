@@ -1,4 +1,4 @@
-import type { FulfillmentType, LocationStatus, LocationType, OrderStatus } from "@prisma/client";
+import type { FulfillmentType, LocationStatus, LocationType, OrderStatus, Prisma } from "@prisma/client";
 
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
 import { orderContributesToRevenue } from "@/lib/analytics/revenue-metrics";
@@ -45,7 +45,7 @@ type LocationMeta = {
 type OrderRow = {
   locationId: string | null;
   status: OrderStatus;
-  total: unknown;
+  total: Prisma.Decimal | null;
   fulfillmentType: FulfillmentType | null;
   createdAt: Date;
 };

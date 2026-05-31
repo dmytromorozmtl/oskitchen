@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Bell, Megaphone, MessageSquare } from "lucide-react";
 
 import { markTeamCommunicationReadAction, postTeamCommunicationAction } from "@/actions/team/communication";
-import type { TeamCommunicationItem } from "@/lib/team/team-communication-types";
-import type { TeamCommunicationFeed } from "@/services/team/team-communication-service";
+import type { TeamCommunicationFeed, TeamCommunicationItem } from "@/lib/team/team-communication-types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type StaffOption = { id: string; name: string };

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import type { Prisma } from "@prisma/client";
 
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 import {
@@ -54,7 +55,7 @@ export async function saveTipPoolRulesAction(formData: FormData): Promise<void> 
     select: { settingsCenterJson: true },
   });
 
-  const merged = mergeTipPoolIntoSettingsCenter(kitchen?.settingsCenterJson, rules);
+  const merged = mergeTipPoolIntoSettingsCenter(kitchen?.settingsCenterJson, rules) as Prisma.InputJsonValue;
 
   await prisma.kitchenSettings.upsert({
     where: { userId: dataUserId },

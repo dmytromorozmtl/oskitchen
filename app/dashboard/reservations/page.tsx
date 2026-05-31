@@ -4,6 +4,7 @@ import { ReservationsCalendarClient } from "@/components/storefront/reservations
 import { Button } from "@/components/ui/button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
+import { loadKitchenSettingsCenterJson } from "@/lib/storefront/kitchen-settings-center";
 import {
   getStorefrontReservationsForOwner,
   getStorefrontWaitlistForOwner,
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ReservationsPage() {
   const { sessionUser: user } = await getTenantActor();
-  const sf = await findAdminStorefront(user.id, { id: true, userId: true, settingsCenterJson: true });
+  const sf = await findAdminStorefront(user.id, { id: true, userId: true });
 
   if (!sf) {
     return (
@@ -33,7 +34,7 @@ export default async function ReservationsPage() {
     getStorefrontWaitlistForOwner(sf.userId, sf.id),
   ]);
 
-  const waitlistConfig = parseWaitlistConfig(sf.settingsCenterJson);
+  const waitlistConfig = parseWaitlistConfig(await loadKitchenSettingsCenterJson(sf.userId));
   const queueSummary = buildWaitlistQueueSummary(
     waitlist.map((w) => ({
       id: w.id,

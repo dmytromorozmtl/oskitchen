@@ -48,7 +48,9 @@ export type ChannelCapability =
   | "status_sync"
   | "payments"
   | "customer_sync"
-  | "inventory_sync";
+  | "inventory_sync"
+  | "markets_sync"
+  | "menu_sync";
 
 export type ChannelSetupType =
   | "NATIVE"

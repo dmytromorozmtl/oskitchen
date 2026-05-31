@@ -1,4 +1,4 @@
-import { compositeMarketHostLabel } from "@/lib/storefront/market-host-resolve";
+import { compositeMarketHostLabel } from "@/lib/storefront/market-host-label";
 
 export const SHOPIFY_MARKET_HOSTNAME_GUARD_HONESTY =
   "Shopify hostname hints never change DNS automatically — apply suggested subdomains manually or via hostnameAuthority reconcile.";

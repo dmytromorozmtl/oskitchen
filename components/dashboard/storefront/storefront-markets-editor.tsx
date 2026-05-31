@@ -19,6 +19,12 @@ function emptyMarket(storeSlug: string, currency: string): StorefrontMarket {
     enabled: true,
     currency,
     storeSlug,
+    syncMode: "none",
+    priceAuthority: "kitchenos",
+    catalogAuthority: "kitchenos",
+    taxAuthority: "kitchenos",
+    dutyAuthority: "kitchenos",
+    hostnameAuthority: "kitchenos",
   };
 }
 

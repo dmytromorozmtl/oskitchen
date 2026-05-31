@@ -102,12 +102,12 @@ export async function resolveKitchenosCatalogProductIds(input: {
   const menuId = input.market.activeMenuId ?? sf?.activeMenuId;
   if (!menuId) return [];
 
-  const menuProducts = await prisma.menuProduct.findMany({
-    where: { menuId },
-    select: { productId: true },
+  const menuProducts = await prisma.product.findMany({
+    where: { menuId, active: true },
+    select: { id: true },
     orderBy: { sortOrder: "asc" },
   });
-  return menuProducts.map((row) => row.productId);
+  return menuProducts.map((row) => row.id);
 }
 
 async function mutatePublication(input: {

@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { readKitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
+import { cn } from "@/lib/utils";
 import { OrderB2bCommercialTermsBadges } from "@/components/orders/order-b2b-commercial-terms";
 import { OrderB2bInvoiceDraftBadges } from "@/components/orders/order-b2b-invoice-draft-banner";
 import { OrderB2bInvoiceMarkPaidButton } from "@/components/orders/order-b2b-invoice-mark-paid-button";

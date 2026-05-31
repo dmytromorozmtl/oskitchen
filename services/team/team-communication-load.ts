@@ -1,17 +1,15 @@
 import type { Prisma } from "@prisma/client";
 
 import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
-import { parseTeamCommunicationMetadata } from "@/lib/team/team-communication-types";
+import { parseTeamCommunicationMetadata, type TeamCommunicationFeed, type TeamCommunicationKind } from "@/lib/team/team-communication-types";
 import { prisma } from "@/lib/prisma";
 import { staffEventListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import {
   buildCreateMetadata,
   buildTeamCommunicationFeed,
   eventTypeForKind,
-  type TeamCommunicationFeed,
   type TeamEventRow,
 } from "@/services/team/team-communication-service";
-import type { TeamCommunicationKind } from "@/lib/team/team-communication-types";
 
 const TEAM_EVENT_PREFIX = "team.";
 

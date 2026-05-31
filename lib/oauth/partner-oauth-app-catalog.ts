@@ -52,7 +52,7 @@ export function validatePartnerOAuthAppDefinition(app: PartnerOAuthAppDefinition
   const scopeErrors = validatePartnerOAuthScopes(app.allowedScopes ?? []);
   errors.push(...scopeErrors);
   for (const forbidden of PARTNER_OAUTH_FORBIDDEN_SCOPES) {
-    if ((app.allowedScopes ?? []).includes(forbidden)) {
+    if ((app.allowedScopes as readonly string[]).includes(forbidden)) {
       errors.push(`forbidden scope in app manifest: ${forbidden}`);
     }
   }

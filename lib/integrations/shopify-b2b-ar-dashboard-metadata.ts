@@ -33,7 +33,7 @@ export type B2bArCompanyRollup = {
   };
 };
 
-export type B2bArDashboardSnapshot = B2bArAgingSnapshot & {
+export type B2bArDashboardSnapshot = Omit<B2bArAgingSnapshot, "rows"> & {
   rows: B2bArDashboardRow[];
   companies: B2bArCompanyRollup[];
   healthScore: number;

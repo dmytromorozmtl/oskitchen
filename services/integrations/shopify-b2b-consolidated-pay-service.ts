@@ -216,6 +216,7 @@ export async function mintB2bConsolidatedPayLink(input: {
     select: {
       id: true,
       userId: true,
+      workspaceId: true,
       sourceMetadataJson: true,
       channelTraceJson: true,
       paymentStatus: true,

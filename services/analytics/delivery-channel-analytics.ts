@@ -1,4 +1,4 @@
-import type { ExternalSyncStatus, FulfillmentType, IntegrationProvider, OrderStatus } from "@prisma/client";
+import type { ExternalSyncStatus, FulfillmentType, IntegrationProvider, OrderStatus, Prisma } from "@prisma/client";
 
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
 import { orderContributesToRevenue } from "@/lib/analytics/revenue-metrics";
@@ -54,17 +54,17 @@ export type DeliveryChannelAnalyticsSnapshot = {
 
 type InternalOrderRow = {
   status: OrderStatus;
-  total: unknown;
+  total: Prisma.Decimal | null;
   fulfillmentType: FulfillmentType | null;
   createdAt: Date;
-  importedFromExternal: { provider: IntegrationProvider; deliveryFee: unknown } | null;
+  importedFromExternal: { provider: IntegrationProvider; deliveryFee: Prisma.Decimal | null } | null;
 };
 
 type ExternalOrderRow = {
   provider: IntegrationProvider;
   syncStatus: ExternalSyncStatus;
-  total: unknown;
-  deliveryFee: unknown;
+  total: Prisma.Decimal | null;
+  deliveryFee: Prisma.Decimal | null;
   fulfillmentType: FulfillmentType | null;
   importedOrderId: string | null;
 };

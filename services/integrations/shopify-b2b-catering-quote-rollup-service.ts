@@ -23,6 +23,7 @@ import {
   parseShopifyMarketsSyncSettings,
 } from "@/lib/integrations/shopify-markets-settings";
 import { prisma } from "@/lib/prisma";
+import { addQuoteLine, createQuote } from "@/services/catering/quote-service";
 import { cateringQuoteListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { formatB2bCommercialNotes } from "@/lib/integrations/shopify-b2b-net-terms-extract";
 
@@ -222,7 +223,7 @@ export async function maybeRollupB2bOrderToCateringQuote(input: {
       { userId: input.userId },
       quote.id,
       {
-        title: item.title,
+        title: item.title ?? "Imported line item",
         productId: item.productId,
         quantity: item.quantity,
         unitPrice: Number(item.unitPrice),

@@ -89,13 +89,18 @@ export function B2bReceivablesDashboard({
           setMessage(result.error);
           return;
         }
+        const consolidated = result.data;
+        if (!consolidated) {
+          setMessage("Consolidated pay link minted, but response was incomplete.");
+          return;
+        }
         setMessage(
-          `Consolidated pay link minted for ${result.data.invoiceCount} invoice(s). URL copied to clipboard.`,
+          `Consolidated pay link minted for ${consolidated.invoiceCount} invoice(s). URL copied to clipboard.`,
         );
         try {
-          await navigator.clipboard.writeText(result.data.url);
+          await navigator.clipboard.writeText(consolidated.url);
         } catch {
-          setMessage(`Consolidated pay link: ${result.data.url}`);
+          setMessage(`Consolidated pay link: ${consolidated.url}`);
         }
         return;
       }
@@ -107,10 +112,15 @@ export function B2bReceivablesDashboard({
         setMessage(result.error);
         return;
       }
+      const bulk = result.data;
+      if (!bulk) {
+        setMessage("Bulk action completed, but response was incomplete.");
+        return;
+      }
       setMessage(
         action === "reminders"
-          ? `Sent ${result.data.succeeded} reminder(s), skipped ${result.data.skipped}.`
-          : `Minted ${result.data.succeeded} pay link(s), skipped ${result.data.skipped}.`,
+          ? `Sent ${bulk.succeeded} reminder(s), skipped ${bulk.skipped}.`
+          : `Minted ${bulk.succeeded} pay link(s), skipped ${bulk.skipped}.`,
       );
     });
   }

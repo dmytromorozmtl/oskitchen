@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { IntegrationProvider, UserRole } from "@prisma/client";
 
 import { DisconnectIntegrationButton } from "@/components/dashboard/disconnect-integration-button";
 import { IntegrationClientForm } from "@/components/dashboard/integration-client-form";

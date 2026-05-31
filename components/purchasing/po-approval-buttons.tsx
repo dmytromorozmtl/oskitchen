@@ -1,6 +1,6 @@
 "use client";
 
-import { type ActionResult, getActionError } from "@/lib/action-result";
+import { getActionError } from "@/lib/action-result";
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -19,9 +19,7 @@ export function POApprovalButtons({ poId, status }: { poId: string; status: stri
   const [rejectNotes, setRejectNotes] = useState("");
   const [showReject, setShowReject] = useState(false);
 
-  function run(
-    action: (fd: FormData) => Promise<ActionResult<unknown> | { error?: string }>,
-  ) {
+  function run(action: (fd: FormData) => Promise<unknown>) {
     startTransition(async () => {
       const fd = new FormData();
       fd.append("purchaseOrderId", poId);
