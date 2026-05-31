@@ -397,3 +397,15 @@ Result: PASS
 Summary: CapitalPartnerOffer model, multi-lender marketplace panel with region filter and compare table, referral inbox timeline, webhook v2 offers[] upsert, offer selection action, CA+UK pilot partners, marketplace and lender-referrals APIs
 Tests: tests/unit/capital-multi-lender.test.ts, tests/unit/capital-partners-config.test.ts
 Next: app-marketplace-phase5-partner-billing OR shopify-markets-bidirectional OR restaurant-capital-phase5-live-lenders
+
+---
+Post-parity cycle: 13
+Timestamp: 2026-05-31T17:00:00.000Z
+Feature: app-marketplace-phase5-partner-billing
+Source: docs/app-marketplace-rfc.md Phase 5
+Priority: POST-PARITY
+Files: 16
+Result: PASS
+Summary: PartnerBillingAccount + meter events + statements, install/revoke billing hooks on OAuth flow, platform partner billing dashboard, config rate cards, statement finalize/paid workflow with audit logs
+Tests: tests/unit/partner-billing-config.test.ts
+Next: shopify-markets-bidirectional OR restaurant-capital-phase5-live-lenders OR app-marketplace-phase6-stripe-connect

@@ -290,6 +290,21 @@ enum PartnerOAuthAppRegistryStatus {
   SUSPENDED
 }
 
+enum PartnerBillingMeterKind {
+  INSTALL_NEW
+  INSTALL_ACTIVE
+  INSTALL_REVOKED
+  API_REQUEST
+  WEBHOOK_DELIVERY
+}
+
+enum PartnerBillingStatementStatus {
+  DRAFT
+  FINALIZED
+  PAID
+  VOID
+}
+
 enum ErrorRecoverySource {
   WEBHOOK_JOB
 }
@@ -3611,6 +3626,69 @@ model PartnerOAuthAppRegistry {
 
   @@index([status, submittedAt])
   @@map("partner_oauth_app_registry")
+}
+
+model PartnerBillingAccount {
+  id                               String   @id @default(uuid()) @db.Uuid
+  publisherKey                     String   @unique @map("publisher_key") @db.VarChar(120)
+  publisherName                    String   @map("publisher_name") @db.VarChar(255)
+  contactEmail                     String?  @map("contact_email") @db.VarChar(255)
+  revenueShareBps                  Int      @default(1500) @map("revenue_share_bps")
+  monthlyPlatformFeeCentsPerInstall Int     @default(500) @map("monthly_platform_fee_cents_per_install")
+  currency                         String   @default("USD") @db.VarChar(8)
+  status                           String   @default("active") @db.VarChar(32)
+  metadataJson                     Json?    @map("metadata_json")
+  createdAt                        DateTime @default(now()) @map("created_at")
+  updatedAt                        DateTime @updatedAt @map("updated_at")
+
+  meterEvents  PartnerBillingMeterEvent[]
+  statements   PartnerBillingStatement[]
+
+  @@index([status])
+  @@map("partner_billing_accounts")
+}
+
+model PartnerBillingMeterEvent {
+  id              String                 @id @default(uuid()) @db.Uuid
+  publisherKey    String                 @map("publisher_key") @db.VarChar(120)
+  clientId        String?                @map("client_id") @db.VarChar(128)
+  workspaceId     String?                @map("workspace_id") @db.Uuid
+  installationId  String?                @map("installation_id") @db.Uuid
+  kind            PartnerBillingMeterKind
+  quantity        Int                    @default(1)
+  unitAmountCents Int                    @default(0) @map("unit_amount_cents")
+  currency        String                 @default("USD") @db.VarChar(8)
+  periodMonth     String                 @map("period_month") @db.VarChar(7)
+  idempotencyKey  String                 @unique @map("idempotency_key") @db.VarChar(200)
+  metadataJson    Json?                  @map("metadata_json")
+  recordedAt      DateTime               @default(now()) @map("recorded_at")
+
+  account PartnerBillingAccount @relation(fields: [publisherKey], references: [publisherKey], onDelete: Cascade)
+
+  @@index([publisherKey, periodMonth])
+  @@index([clientId, periodMonth])
+  @@index([installationId])
+  @@map("partner_billing_meter_events")
+}
+
+model PartnerBillingStatement {
+  id                String                        @id @default(uuid()) @db.Uuid
+  publisherKey      String                        @map("publisher_key") @db.VarChar(120)
+  periodMonth       String                        @map("period_month") @db.VarChar(7)
+  status            PartnerBillingStatementStatus @default(DRAFT)
+  totalAccruedCents Int                           @map("total_accrued_cents")
+  currency          String                        @default("USD") @db.VarChar(8)
+  lineItemsJson     Json                          @map("line_items_json")
+  finalizedAt       DateTime?                     @map("finalized_at")
+  paidAt            DateTime?                     @map("paid_at")
+  createdAt         DateTime                      @default(now()) @map("created_at")
+  updatedAt         DateTime                      @updatedAt @map("updated_at")
+
+  account PartnerBillingAccount @relation(fields: [publisherKey], references: [publisherKey], onDelete: Cascade)
+
+  @@unique([publisherKey, periodMonth])
+  @@index([status, periodMonth])
+  @@map("partner_billing_statements")
 }
 
 model CronExecutionHeartbeat {

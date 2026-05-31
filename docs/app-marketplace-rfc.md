@@ -176,6 +176,7 @@ App Bridge–style iframe embeds in dashboard, partner billing, app review pipel
 | **2** | Outbound webhooks + documented partner API keys | Merchant can register URL; events deliver with HMAC | “Partner webhooks beta” |
 | **3** | OAuth app registration + install flow | Sandbox app installs in test workspace | “Developer platform beta” |
 | **4** | Review pipeline + optional embed host | 1–2 lighthouse partner apps live | “App marketplace pilot” |
+| **5 (shipped)** | Partner billing meters + publisher statements | Platform accrues install fees; statements finalize/paid workflow | “Partner billing beta” |
 
 ---
 
@@ -311,3 +312,4 @@ Developer docs surface:
 | 2026-05-31 | **Phase 2 shipped:** outbound webhook subscriptions + delivery worker + `/dashboard/integrations/outbound-webhooks` |
 | 2026-05-31 | **Phase 3 shipped:** OAuth sandbox apps + consent + token endpoint + `koa_` API tokens |
 | 2026-05-31 | **Phase 4 shipped:** `PartnerOAuthAppRegistry` review pipeline, `/platform/partner-apps`, `/developers/apps/register`, embedded admin host + `POST /api/embed/partner-app/verify` |
+| 2026-05-31 | **Phase 5 shipped:** `PartnerBillingAccount` + meter events + statements, install/revoke hooks, `/platform/partner-billing`, config rates in `config/platform/partner-billing.json` |

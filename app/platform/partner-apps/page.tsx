@@ -42,6 +42,9 @@ export default async function PlatformPartnerAppsPage() {
           <Link href="/platform/integrations" className="text-amber-200/90 hover:underline">
             Platform integrations
           </Link>
+          <Link href="/platform/partner-billing" className="text-amber-200/90 hover:underline">
+            Partner billing
+          </Link>
         </div>
       </div>
 

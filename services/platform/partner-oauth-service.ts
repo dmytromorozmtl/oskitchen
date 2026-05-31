@@ -15,6 +15,10 @@ import {
   getMergedPartnerOAuthAppByClientId,
   isPartnerOAuthAppInstallable,
 } from "@/services/platform/partner-oauth-app-registry-service";
+import {
+  recordPartnerAppInstallBillingMeter,
+  recordPartnerAppRevokeBillingMeter,
+} from "@/services/platform/partner-billing-service";
 import { isRedirectUriAllowed, resolvePartnerOAuthClientSecret } from "@/lib/oauth/partner-oauth-app-catalog";
 import type { PartnerOAuthAppDefinition } from "@/lib/oauth/partner-oauth-app-catalog";
 import { prisma } from "@/lib/prisma";
@@ -198,46 +202,55 @@ export async function exchangePartnerOAuthAuthorizationCode(input: {
     });
 
     if (existing?.status === PartnerAppInstallationStatus.ACTIVE) {
-      return tx.partnerAppInstallation.update({
-        where: { id: existing.id },
-        data: {
-          scopesGranted: scopes,
-          accessTokenHash: tokenHash,
-          tokenPrefix,
-          installedByUserId: codeRow.installedByUserId,
-          revokedAt: null,
-          status: PartnerAppInstallationStatus.ACTIVE,
-        },
-      });
+      return {
+        row: await tx.partnerAppInstallation.update({
+          where: { id: existing.id },
+          data: {
+            scopesGranted: scopes,
+            accessTokenHash: tokenHash,
+            tokenPrefix,
+            installedByUserId: codeRow.installedByUserId,
+            revokedAt: null,
+            status: PartnerAppInstallationStatus.ACTIVE,
+          },
+        }),
+        isNewInstall: false,
+      };
     }
 
     if (existing) {
-      return tx.partnerAppInstallation.update({
-        where: { id: existing.id },
+      return {
+        row: await tx.partnerAppInstallation.update({
+          where: { id: existing.id },
+          data: {
+            scopesGranted: scopes,
+            accessTokenHash: tokenHash,
+            tokenPrefix,
+            installedByUserId: codeRow.installedByUserId,
+            revokedAt: null,
+            status: PartnerAppInstallationStatus.ACTIVE,
+            installedAt: new Date(),
+          },
+        }),
+        isNewInstall: true,
+      };
+    }
+
+    return {
+      row: await tx.partnerAppInstallation.create({
         data: {
+          clientId: app.clientId,
+          userId: codeRow.userId,
+          workspaceId: codeRow.workspaceId,
+          installedByUserId: codeRow.installedByUserId,
           scopesGranted: scopes,
           accessTokenHash: tokenHash,
           tokenPrefix,
-          installedByUserId: codeRow.installedByUserId,
-          revokedAt: null,
           status: PartnerAppInstallationStatus.ACTIVE,
-          installedAt: new Date(),
         },
-      });
-    }
-
-    return tx.partnerAppInstallation.create({
-      data: {
-        clientId: app.clientId,
-        userId: codeRow.userId,
-        workspaceId: codeRow.workspaceId,
-        installedByUserId: codeRow.installedByUserId,
-        scopesGranted: scopes,
-        accessTokenHash: tokenHash,
-        tokenPrefix,
-        status: PartnerAppInstallationStatus.ACTIVE,
-      },
-    });
+      }),
+      isNewInstall: true,
+    };
   });
 
   await recordAuditLog({
@@ -245,8 +258,15 @@ export async function exchangePartnerOAuthAuthorizationCode(input: {
     workspaceId: codeRow.workspaceId,
     action: "PARTNER_OAUTH_APP_INSTALLED",
     entityType: "PartnerAppInstallation",
-    entityId: installation.id,
+    entityId: installation.row.id,
     metadata: { clientId: app.clientId, scopes },
+  });
+
+  await recordPartnerAppInstallBillingMeter({
+    clientId: app.clientId,
+    installationId: installation.row.id,
+    workspaceId: installation.row.workspaceId,
+    isNewInstall: installation.isNewInstall,
   });
 
   return {
@@ -254,7 +274,7 @@ export async function exchangePartnerOAuthAuthorizationCode(input: {
     accessToken,
     tokenType: "Bearer",
     scope: scopes.join(" "),
-    installationId: installation.id,
+    installationId: installation.row.id,
   };
 }
 
@@ -313,6 +333,12 @@ export async function revokePartnerAppInstallation(input: {
     entityType: "PartnerAppInstallation",
     entityId: row.id,
     metadata: { clientId: row.clientId },
+  });
+
+  await recordPartnerAppRevokeBillingMeter({
+    clientId: row.clientId,
+    installationId: row.id,
+    workspaceId: row.workspaceId,
   });
 
   return { ok: true };

@@ -51,9 +51,9 @@ export default async function PartnerOAuthAppsPage() {
       </div>
 
       <PilotBetaSurfaceBanner
-        title="Developer platform — Phase 4 BETA"
+        title="Developer platform — Phase 4–5 BETA"
         status="BETA"
-        description="Sandbox + reviewed partner apps. OAuth tokens bypass Enterprise API billing gate when installation is active. Embedded admin uses short-lived signed tokens — not a full Toast/Square marketplace yet."
+        description="Sandbox + reviewed partner apps. OAuth tokens bypass Enterprise API billing gate when installation is active. Platform accrues partner billing meters on install/revoke (Phase 5) — see /platform/partner-billing."
       />
 
       <PartnerOAuthAppsPanel

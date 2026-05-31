@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31T17:00:00.000Z",
+  "defaultCurrency": "USD",
+  "defaultRevenueShareBps": 1500,
+  "defaultMonthlyPlatformFeeCentsPerInstall": 500,
+  "installActivationFeeCents": 0,
+  "disclosure": "Partner billing is accrual-only in Phase 5 BETA — statements are operational summaries, not tax documents or Stripe invoices.",
+  "apps": [
+    {
+      "clientId": "sandbox-opsbridge-connector",
+      "publisherKey": "kitchenos-certified-si-opsbridge",
+      "revenueShareBps": 2000,
+      "monthlyPlatformFeeCentsPerInstall": 500
+    },
+    {
+      "clientId": "sandbox-growthkitchen-sync",
+      "publisherKey": "kitchenos-certified-si-growthkitchen",
+      "revenueShareBps": 1800,
+      "monthlyPlatformFeeCentsPerInstall": 500
+    }
+  ]
+}
