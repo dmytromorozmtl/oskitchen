@@ -1,0 +1,11 @@
+# Competitor feature parity execution log
+
+---
+Cycle: 1
+Timestamp: 2026-05-31T21:45:00.000Z
+Feature: doordash-ingest
+Competitor: Ghost kitchen aggregators (DoorDash)
+Priority: P0
+Files: 18
+Result: IMPLEMENTED
+Next: uber-eats-ingest (P0)

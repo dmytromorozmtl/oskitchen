@@ -4,7 +4,6 @@
  * and `docs/feature-maturity-matrix.md`.
  */
 export const MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS = [
-  "doordash",
   "grubhub",
   "uber-eats",
   "uber-direct",
@@ -15,7 +14,6 @@ export type MarketplacePlaceholderIntegrationId =
 
 /** Channel catalog provider keys that must never appear as live connectors. */
 export const MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS = [
-  "doordash",
   "grubhub",
   "uber-eats",
   "uber-direct",
@@ -24,8 +22,7 @@ export const MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS = [
 export type MarketplacePlaceholderProviderKey =
   (typeof MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS)[number];
 
-const INTEGRATION_PAGE_BY_ID: Record<MarketplacePlaceholderIntegrationId, string> = {
-  doordash: "/dashboard/integrations/doordash",
+const INTEGRATION_PAGE_BY_ID: Partial<Record<MarketplacePlaceholderIntegrationId, string>> = {
   grubhub: "/dashboard/integrations/grubhub",
   "uber-eats": "/dashboard/integrations/uber-eats",
   "uber-direct": "/dashboard/integrations/uber-direct",
@@ -46,7 +43,7 @@ export function isMarketplacePlaceholderProvider(
 export function marketplacePlaceholderIntegrationPage(
   id: MarketplacePlaceholderIntegrationId,
 ): string {
-  return INTEGRATION_PAGE_BY_ID[id];
+  return INTEGRATION_PAGE_BY_ID[id] ?? `/dashboard/integrations/${id}`;
 }
 
 export function marketplacePlaceholderHonestyLabel(): string {

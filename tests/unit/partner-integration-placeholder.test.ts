@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { getIntegrationById } from "@/lib/integrations/integration-registry";
 import {
@@ -19,22 +19,29 @@ afterEach(() => {
 });
 
 describe("partner integration placeholder truth", () => {
-  it("marks DoorDash and Grubhub registry entries as placeholders", () => {
-    expect(getIntegrationById("doordash")?.status).toBe("PLACEHOLDER");
+  it("marks DoorDash as BETA and Grubhub as placeholder in registry", () => {
+    expect(getIntegrationById("doordash")?.status).toBe("BETA");
     expect(getIntegrationById("grubhub")?.status).toBe("PLACEHOLDER");
   });
 
-  it("keeps DoorDash placeholder-only even when credentials exist", async () => {
+  it("enables DoorDash BETA flows when credentials exist", async () => {
     process.env.DOORDASH_API_KEY = "door-api-key";
     process.env.DOORDASH_MERCHANT_ID = "merchant-1";
 
-    expect(getDoorDashCapabilitySnapshot()).toEqual({
+    expect(getDoorDashCapabilitySnapshot()).toMatchObject({
       hasCredentials: true,
-      liveQuoteReady: false,
-      liveDeliveryReady: false,
-      liveImportReady: false,
-      placeholderMode: true,
+      liveImportReady: true,
+      placeholderMode: false,
     });
+
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        json: async () => ({}),
+      }),
+    );
 
     await expect(getDoorDashQuote("123 Main St", "456 Oak Ave")).resolves.toMatchObject({
       ok: false,
@@ -52,6 +59,8 @@ describe("partner integration placeholder truth", () => {
       delivery: null,
       trackingUrl: null,
     });
+
+    vi.unstubAllGlobals();
   });
 
   it("keeps Grubhub placeholder-only even when credentials exist", async () => {

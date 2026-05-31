@@ -19,7 +19,7 @@ describe("page maturity honesty", () => {
     expect(uber?.detail).toMatch(/placeholder/i);
   });
 
-  it("skips duplicate banner when page already has inline PlaceholderBanner", () => {
+  it("skips duplicate banner when page already has inline honesty copy", () => {
     expect(getPageMaturityHonesty("/dashboard/integrations/doordash")).toBeNull();
     expect(getPageMaturityHonesty("/dashboard/integrations/grubhub")).toBeNull();
   });

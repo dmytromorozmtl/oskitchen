@@ -1,34 +1,53 @@
-import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
+import Link from "next/link";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getIntegrationById } from "@/lib/integrations/integration-registry";
+import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { prisma } from "@/lib/prisma";
 import {
   getDoorDashCapabilitySnapshot,
   listDoorDashDeliveries,
 } from "@/services/integrations/doordash/doordash-service";
+import { IntegrationProvider } from "@prisma/client";
 
 export default async function DoorDashIntegrationPage() {
   const { userId } = await getTenantActor();
   const integration = getIntegrationById("doordash");
   const capability = getDoorDashCapabilitySnapshot();
   const deliveries = await listDoorDashDeliveries(userId);
+  const connectionWhere = await integrationConnectionByProviderWhereForOwner(
+    userId,
+    IntegrationProvider.DOORDASH,
+  );
+  const connection = await prisma.integrationConnection.findFirst({
+    where: connectionWhere,
+    select: { id: true, status: true, lastError: true },
+  });
+
+  const webhookUrl = connection
+    ? `/api/webhooks/doordash/orders?cid=${connection.id}`
+    : "/api/webhooks/doordash/orders?cid=<connection-id>";
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <PlaceholderBanner
-        feature="DoorDash integration"
-        detail="OS Kitchen keeps DoorDash in placeholder mode. Credentials can be prepared, but live Drive quotes, deliveries, menu sync, and order import are not production-ready."
-      />
+      {capability.placeholderMode ? (
+        <PlaceholderBanner
+          feature="DoorDash integration"
+          detail="Configure DOORDASH_API_KEY, DOORDASH_MERCHANT_ID, and DOORDASH_WEBHOOK_SECRET to enable DoorDash BETA."
+        />
+      ) : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold">DoorDash integration</h1>
           <p className="text-sm text-muted-foreground">
-            {integration?.name} · {integration?.status} · honest placeholder
+            {integration?.name} · {integration?.status} · marketplace ingest + Drive delivery
           </p>
         </div>
         <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>
-          {capability.hasCredentials ? "Credentials present" : "Credentials missing"}
+          {capability.hasCredentials ? "BETA credentials configured" : "Credentials missing"}
         </Badge>
       </div>
 
@@ -38,25 +57,40 @@ export default async function DoorDashIntegrationPage() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <ChecklistItem label="Environment credentials saved" done={capability.hasCredentials} />
-          <ChecklistItem label="Live quote flow implemented" done={capability.liveQuoteReady} />
-          <ChecklistItem label="Live delivery creation implemented" done={capability.liveDeliveryReady} />
-          <ChecklistItem label="Marketplace import / cron ingestion implemented" done={capability.liveImportReady} />
+          <ChecklistItem label="Webhook order ingest" done={capability.liveImportReady} />
+          <ChecklistItem label="Marketplace poll import" done={capability.liveImportReady} />
+          <ChecklistItem label="Menu sync API" done={capability.liveImportReady} />
+          <ChecklistItem label="Drive delivery creation" done={capability.liveDeliveryReady} />
           <p className="pt-2 text-muted-foreground">
-            {capability.hasCredentials
-              ? "Credentials are visible to the app, but they do not unlock live provider traffic yet."
-              : "Save DOORDASH_API_KEY and DOORDASH_MERCHANT_ID only to prepare the workspace. The provider still stays placeholder-only."}
+            DoorDash BETA requires partner-approved API credentials. OS Kitchen verifies webhook
+            signatures and normalizes orders — it does not claim production LIVE until your merchant
+            program certifies traffic.
           </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">What is intentionally disabled</CardTitle>
+          <CardTitle className="text-base">Connection & webhooks</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>OS Kitchen does not expose live quote or delivery buttons here while the provider remains placeholder-only.</p>
-          <p>It also does not create new local delivery rows just to simulate success.</p>
-          <p>When live partner support ships, this page will switch from preparation guidance to real provider-backed actions.</p>
+        <CardContent className="space-y-3 text-sm">
+          <p>
+            Connection status:{" "}
+            <span className="font-medium">{connection?.status ?? "Not connected"}</span>
+          </p>
+          <p className="text-muted-foreground">
+            Register this webhook URL in the DoorDash developer portal (order.created,
+            order.updated, order.cancelled):
+          </p>
+          <code className="block overflow-x-auto rounded-md bg-muted px-3 py-2 text-xs">{webhookUrl}</code>
+          {connection?.lastError ? (
+            <p className="text-destructive">Last error: {connection.lastError}</p>
+          ) : null}
+          <p>
+            <Link className="text-primary underline" href="/dashboard/integration-health">
+              Integration health & recovery
+            </Link>
+          </p>
         </CardContent>
       </Card>
 
@@ -65,12 +99,8 @@ export default async function DoorDashIntegrationPage() {
           <CardTitle className="text-base">Delivery history</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 overflow-x-auto">
-          <p className="text-sm text-muted-foreground">
-            Historical local rows from earlier scaffolding remain visible for audit only. New live provider records are not
-            created from this page until DoorDash support is actually shipped.
-          </p>
           {deliveries.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No historical DoorDash records found.</p>
+            <p className="text-sm text-muted-foreground">No DoorDash Drive deliveries yet.</p>
           ) : (
             <table className="w-full text-sm">
               <thead>

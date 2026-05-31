@@ -1,6 +1,10 @@
 import { resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
+import { DoorDashMenuSyncService } from "@/services/integrations/doordash/menu-sync.service";
+import { importDoorDashOrdersForUser } from "@/services/integrations/doordash/order-import.service";
+import { DoorDashSyncService } from "@/services/integrations/doordash/order-sync.service";
+
 export type DoorDashCredentials = {
   apiKey?: string | null;
   merchantId?: string | null;
@@ -8,10 +12,10 @@ export type DoorDashCredentials = {
 
 export type DoorDashCapabilitySnapshot = {
   hasCredentials: boolean;
-  liveQuoteReady: false;
-  liveDeliveryReady: false;
-  liveImportReady: false;
-  placeholderMode: true;
+  liveQuoteReady: boolean;
+  liveDeliveryReady: boolean;
+  liveImportReady: boolean;
+  placeholderMode: boolean;
 };
 
 function credsFromEnv(): DoorDashCredentials {
@@ -24,12 +28,13 @@ function credsFromEnv(): DoorDashCredentials {
 export function getDoorDashCapabilitySnapshot(
   env: NodeJS.ProcessEnv = process.env,
 ): DoorDashCapabilitySnapshot {
+  const hasCredentials = Boolean(env.DOORDASH_API_KEY?.trim() && env.DOORDASH_MERCHANT_ID?.trim());
   return {
-    hasCredentials: Boolean(env.DOORDASH_API_KEY?.trim() && env.DOORDASH_MERCHANT_ID?.trim()),
-    liveQuoteReady: false,
-    liveDeliveryReady: false,
-    liveImportReady: false,
-    placeholderMode: true,
+    hasCredentials,
+    liveQuoteReady: hasCredentials,
+    liveDeliveryReady: hasCredentials,
+    liveImportReady: hasCredentials,
+    placeholderMode: !hasCredentials,
   };
 }
 
@@ -39,8 +44,8 @@ export function isDoorDashConfigured(creds: DoorDashCredentials = credsFromEnv()
 
 export function getDoorDashPlaceholderMessage(hasCredentials = getDoorDashCapabilitySnapshot().hasCredentials): string {
   return hasCredentials
-    ? "DoorDash credentials are present, but OS Kitchen still keeps DoorDash in placeholder mode. Live quotes, deliveries, menu sync, and order import are not production-ready."
-    : "DoorDash is still placeholder-only. Credentials can be prepared, but OS Kitchen does not run live DoorDash flows yet.";
+    ? "DoorDash BETA is enabled with credentials. Live API calls require DoorDash partner approval and correct API hosts for your merchant program."
+    : "Configure DOORDASH_API_KEY and DOORDASH_MERCHANT_ID to enable DoorDash BETA (order webhooks, import, menu sync, Drive delivery).";
 }
 
 export async function getDoorDashQuote(
@@ -48,9 +53,26 @@ export async function getDoorDashQuote(
   deliveryAddress: string,
   creds: DoorDashCredentials = credsFromEnv(),
 ) {
+  if (!isDoorDashConfigured(creds)) {
+    return {
+      ok: false as const,
+      message: getDoorDashPlaceholderMessage(false),
+      fee: null,
+      etaMinutes: null,
+    };
+  }
+
+  const svc = new DoorDashSyncService(creds);
+  const probe = await svc.createDelivery("quote-probe", "system", {
+    pickupAddress,
+    deliveryAddress,
+  });
+
   return {
-    ok: false as const,
-    message: getDoorDashPlaceholderMessage(isDoorDashConfigured(creds)),
+    ok: probe.ok,
+    message: probe.ok
+      ? "DoorDash Drive quote request accepted (BETA)."
+      : probe.message,
     fee: null,
     etaMinutes: null,
   };
@@ -62,11 +84,50 @@ export async function createDoorDashDelivery(
   input: { pickupAddress: string; deliveryAddress: string },
   creds: DoorDashCredentials = credsFromEnv(),
 ) {
+  if (!isDoorDashConfigured(creds)) {
+    return {
+      ok: false as const,
+      message: getDoorDashPlaceholderMessage(false),
+      delivery: null,
+      trackingUrl: null,
+      orderId,
+      input,
+      userId,
+    };
+  }
+
+  const svc = new DoorDashSyncService(creds);
+  const externalId = orderId ?? `kitchenos-${userId.slice(0, 8)}-${Date.now()}`;
+  const result = await svc.createDelivery(externalId, userId, input);
+
+  if (!result.ok) {
+    return {
+      ok: false as const,
+      message: result.message,
+      delivery: null,
+      trackingUrl: null,
+      orderId,
+      input,
+      userId,
+    };
+  }
+
+  const delivery = await prisma.doorDashDelivery.create({
+    data: {
+      userId,
+      orderId: orderId ?? undefined,
+      externalDeliveryId: result.externalId,
+      status: "CONFIRMED",
+      pickupAddress: input.pickupAddress,
+      deliveryAddress: input.deliveryAddress,
+    },
+  });
+
   return {
-    ok: false as const,
-    message: getDoorDashPlaceholderMessage(isDoorDashConfigured(creds)),
-    delivery: null,
-    trackingUrl: null,
+    ok: true as const,
+    message: result.message,
+    delivery,
+    trackingUrl: delivery.trackingUrl,
     orderId,
     input,
     userId,
@@ -97,16 +158,26 @@ export async function listDoorDashDeliveries(userId: string, take = 25) {
   });
 }
 
-/**
- * Sync menu to DoorDash Marketplace.
- */
-export async function syncMenuToDoorDash(userId: string, _menuId?: string) {
-  throw new Error(`DoorDash menu sync disabled for ${userId}: ${getDoorDashPlaceholderMessage()}`);
+/** Push active menus to DoorDash Marketplace (BETA). */
+export async function syncMenuToDoorDash(userId: string, menuId?: string) {
+  const creds = credsFromEnv();
+  if (!isDoorDashConfigured(creds)) {
+    throw new Error(getDoorDashPlaceholderMessage(false));
+  }
+
+  const svc = new DoorDashMenuSyncService(creds);
+  const result = await svc.pushMenu(userId, creds.merchantId!.trim(), menuId ?? null);
+  if (!result.ok) {
+    throw new Error(result.message ?? "DoorDash menu sync failed");
+  }
+  return result;
 }
 
-/**
- * Fetch DoorDash orders and import them into OS Kitchen.
- */
+/** Poll DoorDash Marketplace and import orders into kitchen + external_orders. */
 export async function fetchDoorDashOrders(userId: string) {
-  throw new Error(`DoorDash order import disabled for ${userId}: ${getDoorDashPlaceholderMessage()}`);
+  const capability = getDoorDashCapabilitySnapshot();
+  if (capability.placeholderMode) {
+    throw new Error(`DoorDash order import disabled for ${userId}: ${getDoorDashPlaceholderMessage(false)}`);
+  }
+  return importDoorDashOrdersForUser(userId);
 }

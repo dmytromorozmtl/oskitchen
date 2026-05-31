@@ -15,25 +15,24 @@ import {
 } from "@/lib/integrations/integration-honesty";
 
 describe("integration honesty alignment", () => {
-  it("lists all marketplace placeholders in the honesty registry", () => {
+  it("lists marketplace placeholders in the honesty registry (DoorDash graduated to BETA)", () => {
     expect(MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS).toEqual([
-      "doordash",
       "grubhub",
       "uber-eats",
       "uber-direct",
     ]);
     expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual([
-      "doordash",
       "grubhub",
       "uber-eats",
       "uber-direct",
     ]);
   });
 
-  it("marks marketplace integrations as PLACEHOLDER in integration registry", () => {
+  it("marks remaining marketplace integrations as PLACEHOLDER in integration registry", () => {
     for (const id of MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS) {
       expect(getIntegrationById(id)?.status).toBe("PLACEHOLDER");
     }
+    expect(getIntegrationById("doordash")?.status).toBe("BETA");
   });
 
   it("includes Grubhub in channel catalog as placeholder", () => {
@@ -54,16 +53,16 @@ describe("integration honesty alignment", () => {
       expect(row?.effectiveStatus).not.toBe("LIVE");
       expect(row?.effectiveStatus).not.toBe("CONNECTED");
     }
+
+    const doordash = resolved.find((c) => c.providerKey === "doordash");
+    expect(doordash?.isPlaceholder).toBe(false);
   });
 
   it("maps integration ids to honest preparation pages", () => {
-    expect(marketplacePlaceholderIntegrationPage("doordash")).toBe(
-      "/dashboard/integrations/doordash",
-    );
     expect(marketplacePlaceholderIntegrationPage("grubhub")).toBe(
       "/dashboard/integrations/grubhub",
     );
-    expect(isMarketplacePlaceholderIntegration("doordash")).toBe(true);
+    expect(isMarketplacePlaceholderIntegration("doordash")).toBe(false);
     expect(isMarketplacePlaceholderProvider("uber-eats")).toBe(true);
     expect(isMarketplacePlaceholderIntegration("shopify")).toBe(false);
   });

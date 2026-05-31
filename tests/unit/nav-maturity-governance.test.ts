@@ -9,14 +9,14 @@ import {
 import { FINAL_NAVIGATION_GROUPS } from "@/lib/navigation/final-navigation-groups";
 
 describe("nav maturity governance", () => {
-  it("classifies marketplace placeholders", () => {
-    expect(getNavMaturityExposure("/dashboard/integrations/doordash")).toBe("placeholder");
+  it("classifies marketplace integrations by maturity", () => {
+    expect(getNavMaturityExposure("/dashboard/integrations/doordash")).toBe("preview");
     expect(getNavMaturityExposure("/dashboard/integrations/grubhub")).toBe("placeholder");
     expect(getNavMaturityExposure("/dashboard/integrations/uber-eats")).toBe("placeholder");
-    expect(navMaturityBadgeForHref("/dashboard/integrations/doordash")).toBe("Placeholder");
+    expect(navMaturityBadgeForHref("/dashboard/integrations/doordash")).toBe("Preview");
   });
 
-  it("hides placeholder integrations from focused default nav", () => {
+  it("hides preview and placeholder integrations from focused default nav", () => {
     expect(
       shouldShowNavLinkByMaturity("/dashboard/integrations/doordash", {
         fullNavAccess: false,

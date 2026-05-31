@@ -61,7 +61,6 @@ describe("integration honesty CI certification (live repo)", () => {
       expect(navRule?.exposure).toBe("placeholder");
     }
     expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual([
-      "doordash",
       "grubhub",
       "uber-eats",
       "uber-direct",

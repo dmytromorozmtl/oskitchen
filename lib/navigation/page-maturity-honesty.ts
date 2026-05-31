@@ -35,7 +35,7 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
   "/dashboard/marketing/email-campaigns":
     "Email campaigns are preview-scoped — Klaviyo-dependent flows; not certified full marketing automation.",
   "/dashboard/integrations/doordash":
-    "DoorDash marketplace integration is a placeholder — no live order ingest or menu sync.",
+    "DoorDash BETA — webhook order ingest, menu sync, and Drive delivery require partner-approved credentials; not certified production LIVE.",
   "/dashboard/integrations/grubhub":
     "Grubhub marketplace integration is a placeholder — no live order ingest or menu sync.",
   "/dashboard/integrations/uber-eats":

@@ -9,6 +9,7 @@ import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/worksp
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { DoorDashSyncService } from "@/services/integrations/doordash/order-sync.service";
+import { syncMenuToDoorDash } from "@/services/integrations/doordash/doordash-service";
 import { UberEatsMenuSyncService } from "@/services/integrations/uber-eats/menu-sync.service";
 import type { UberEatsCredentials } from "@/services/integrations/uber-eats";
 
@@ -54,6 +55,26 @@ export async function testDoorDashConnectionAction(): Promise<ActionResult<{ mes
     const result = await svc.acceptOrder(`kitchenos-ping-${dataUserId.slice(0, 8)}`);
     revalidatePath("/dashboard/integrations/health");
     return ok({ message: result.message });
+  } catch (e) {
+    return fail(safeError(e));
+  }
+}
+
+export async function forceDoorDashMenuSyncAction(): Promise<
+  ActionResult<{ categoriesCount?: number; itemsCount?: number; message?: string }>
+> {
+  try {
+    const gate = await requireIntegrationsActor({ operation: "integrations.doordash_menu_sync" });
+    if (!gate.ok) return fail(gate.error);
+    const { userId: dataUserId } = gate.actor;
+    const result = await syncMenuToDoorDash(dataUserId);
+    revalidatePath("/dashboard/integrations/health");
+    revalidatePath("/dashboard/integrations/doordash");
+    return ok({
+      categoriesCount: result.categoriesCount,
+      itemsCount: result.itemsCount,
+      message: result.message,
+    });
   } catch (e) {
     return fail(safeError(e));
   }
