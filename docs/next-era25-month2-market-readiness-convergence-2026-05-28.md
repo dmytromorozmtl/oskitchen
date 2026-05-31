@@ -1,4 +1,4 @@
-# KitchenOS — era25 Month 2 Market Readiness Convergence
+# OS Kitchen — era25 Month 2 Market Readiness Convergence
 
 **Status:** **Fourth era25 product slice · IMPLEMENTED · BLOCKED until week 1 convergence ready**
 
@@ -66,7 +66,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `month2_workstreams_panel` | Month 2 workstreams A–E on platform ops | Commercial pilot ops |
 | `briefing_action` | Ranked action on blocked workstream | Owner Daily Briefing hero |

@@ -1,4 +1,4 @@
-# KitchenOS — Product Roadmap 2026
+# OS Kitchen — Product Roadmap 2026
 
 **Authors:** CPO / Principal Architecture  
 **Date:** 19 May 2026  
@@ -10,7 +10,7 @@
 
 ## Executive summary
 
-KitchenOS enters **paid pilot** with a **production-grade core** (orders → production → packing → billing) and a **honest integration tier** (WooCommerce/Shopify BETA, Stripe env-dependent, no SMS/offline POS/marketplace natives). The next six months prioritize:
+OS Kitchen enters **paid pilot** with a **production-grade core** (orders → production → packing → billing) and a **honest integration tier** (WooCommerce/Shopify BETA, Stripe env-dependent, no SMS/offline POS/marketplace natives). The next six months prioritize:
 
 1. **Pilot learning** — structured feedback, activation/retention metrics, kill misleading claims.
 2. **Hardening to GA** — capabilities that are code-complete but env- or process-dependent.
@@ -23,7 +23,7 @@ KitchenOS enters **paid pilot** with a **production-grade core** (orders → pro
 
 ## Market context
 
-| Segment | Primary job-to-be-done | KitchenOS fit today | 2026 focus |
+| Segment | Primary job-to-be-done | OS Kitchen fit today | 2026 focus |
 |---------|------------------------|---------------------|------------|
 | **Meal prep** | Weekly menu → batch production → delivery/pickup | **Strong** (today, production, routes) | Activation, menu cadence, labels |
 | **Catering** | Quotes → events → fulfillment | **Moderate** (quotes module, partial) | Quote→order bridge, deposits |
@@ -86,7 +86,7 @@ KitchenOS enters **paid pilot** with a **production-grade core** (orders → pro
 |------------|--------|-----------|
 | **SMS notifications** | NOT_AVAILABLE | TCPA, provider cost, low pilot signal — use email + in-app |
 | **POS offline mode** | NOT_AVAILABLE | Architectural cost; pilot is online-first |
-| **Stripe Terminal (hardware)** | ROADMAP | KitchenOS POS is software counter UX, not reader SDK |
+| **Stripe Terminal (hardware)** | ROADMAP | OS Kitchen POS is software counter UX, not reader SDK |
 | **SOC 2 attestation** | ROADMAP | Foundations only; sell “security program in progress” |
 | **SCIM** | ROADMAP | After SSO; no demand without enterprise ARR |
 

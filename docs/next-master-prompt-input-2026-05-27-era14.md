@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 15
+# Next Master Prompt Input — OS Kitchen Era 15
 
 **Date:** 2026-05-27  
 **Purpose:** Canonical facts for the **next** master prompt after Evolution Era 14 completion  

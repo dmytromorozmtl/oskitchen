@@ -1,4 +1,4 @@
-# KitchenOS Feature Maturity Matrix
+# OS Kitchen Feature Maturity Matrix
 
 Status vocabulary:
 - `production_certified`

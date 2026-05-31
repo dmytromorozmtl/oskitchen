@@ -1,6 +1,6 @@
 # Settings Module Audit (Pre-Settings-Center)
 
-Snapshot of the **pre-rebuild** Settings surface, the gaps that block KitchenOS from being a real enterprise admin, and the priority of each fix. This is the source of truth for the Settings Center transformation.
+Snapshot of the **pre-rebuild** Settings surface, the gaps that block OS Kitchen from being a real enterprise admin, and the priority of each fix. This is the source of truth for the Settings Center transformation.
 
 > Hard constraints respected by every recommendation:
 >

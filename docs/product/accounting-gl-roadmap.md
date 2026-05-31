@@ -2,7 +2,7 @@
 
 ## Current State
 
-KitchenOS has accounting-adjacent operations, but should not claim a full native
+OS Kitchen has accounting-adjacent operations, but should not claim a full native
 general ledger today.
 
 Existing strengths:

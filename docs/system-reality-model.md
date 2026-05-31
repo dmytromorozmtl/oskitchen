@@ -1,4 +1,4 @@
-# KitchenOS System Reality Model
+# OS Kitchen System Reality Model
 
 **Updated:** 2026-05-27 (Era 3 Cycle 52 scorecard increment)  
 Status: canonical current-state audit for the next hardening cycle  
@@ -20,7 +20,7 @@ Status: canonical current-state audit for the next hardening cycle
 | Evolution Era 3 cycles | 42–52 | governance CI certification + scorecard refresh |
 
 ## Scope
-This document summarizes the current, code-backed reality of KitchenOS before additional implementation work. It is based on direct inspection of the active repository surface and reconciliation with existing audit materials, not on aspirational product claims.
+This document summarizes the current, code-backed reality of OS Kitchen before additional implementation work. It is based on direct inspection of the active repository surface and reconciliation with existing audit materials, not on aspirational product claims.
 
 Primary evidence sources:
 - Runtime and build: `package.json`, `package-lock.json`, `tsconfig.json`, `tsconfig.typecheck.json`, `next.config.ts`, `middleware.ts`, `instrumentation.ts`, `vercel.json`, `.vercelignore`
@@ -30,8 +30,8 @@ Primary evidence sources:
 - Historical audits used as supporting evidence: `docs/enterprise-full-audit-26mayafter.md`, `docs/RBAC_FINAL_ARCHITECTURE.md`, `docs/MODULE_MATURITY_REPORT.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/POS_ARCHITECTURE.md`, `docs/QA_TEST_COVERAGE_AUDIT.md`, `docs/OBSERVABILITY_RELEASE_OPS_AUDIT.md`
 
 ## 1. Product Summary
-- KitchenOS is no longer a narrow meal-prep MVP. The active route and service surface already spans restaurant POS, storefront commerce, order hub, delivery, catering, CRM, inventory, staff, reports, platform administration, and a large experimental/storefront operations layer. Evidence: `app/`, `app/dashboard/`, `app/platform/`, `app/s/[storeSlug]/`, `services/`, `docs/enterprise-full-audit-26mayafter.md`.
-- The current market-safe summary is: KitchenOS is a broad food-operations platform with a comparatively strong storefront and order core, plus emerging restaurant operations modules that are unevenly hardened. Evidence: `README.md`, `app/dashboard/pos/terminal/page.tsx`, `app/s/[storeSlug]/checkout/page.tsx`, `services/orders/order-creation-service.ts`.
+- OS Kitchen is no longer a narrow meal-prep MVP. The active route and service surface already spans restaurant POS, storefront commerce, order hub, delivery, catering, CRM, inventory, staff, reports, platform administration, and a large experimental/storefront operations layer. Evidence: `app/`, `app/dashboard/`, `app/platform/`, `app/s/[storeSlug]/`, `services/`, `docs/enterprise-full-audit-26mayafter.md`.
+- The current market-safe summary is: OS Kitchen is a broad food-operations platform with a comparatively strong storefront and order core, plus emerging restaurant operations modules that are unevenly hardened. Evidence: `README.md`, `app/dashboard/pos/terminal/page.tsx`, `app/s/[storeSlug]/checkout/page.tsx`, `services/orders/order-creation-service.ts`.
 - The repo still carries a founder-pilot bias: many surfaces exist, but several remain operational beta, roadmap, or placeholder-only even when UI exposure is broad. Evidence: `docs/MODULE_MATURITY_REPORT.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/POS_ARCHITECTURE.md`, `actions/integrations.ts`.
 
 ## 2. Architecture Summary
@@ -221,6 +221,6 @@ Primary evidence sources:
 - Fourth, standardize upload/media security and failure handling before expanding storefront and asset-heavy sales motion. Evidence: `actions/upload.ts`, `lib/storefront/asset-validation.ts`, `services/storefront/storefront-media-upload-service.ts`.
 
 ## Current-State Conclusion
-KitchenOS already contains enough breadth to become a category-level restaurant operating platform. **Evolution Era 2 (cycles 1–30) completed** platform-safety and money-path certification on the existing spine: publish API RBAC, email-bypass removal, public POST fail-closed, money-path CI tiers, cron hygiene, KDS v1 scope/prototype, nav/integration honesty, public API contracts, and doc canon.
+OS Kitchen already contains enough breadth to become a category-level restaurant operating platform. **Evolution Era 2 (cycles 1–30) completed** platform-safety and money-path certification on the existing spine: publish API RBAC, email-bypass removal, public POST fail-closed, money-path CI tiers, cron hygiene, KDS v1 scope/prototype, nav/integration honesty, public API contracts, and doc canon.
 
 The next phase (**Era 3**) is not feature sprawl. Priorities: finish RBAC migration on remaining tenant-only actions (~80 files), wire focused test bundles into default CI, typecheck slicing, and incremental scorecard updates via [`docs/canonical-doc-index.md`](./canonical-doc-index.md).

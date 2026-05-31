@@ -1,4 +1,4 @@
-# KitchenOS — Phase AI: Era25 commercial pilot convergence train capstone (era59)
+# OS Kitchen — Phase AI: Era25 commercial pilot convergence train capstone (era59)
 
 **Status:** Product surfaces + train capstone integrity guard **IMPLEMENTED** · Human capstone attestation **REQUIRED**  
 **Policy:** `era59-era25-commercial-pilot-convergence-train-capstone-phases-v1` · Integrity `era59-era25-commercial-pilot-convergence-train-capstone-integrity-v1`  

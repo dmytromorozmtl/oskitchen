@@ -14,7 +14,7 @@ Required for `RATE_LIMIT_ADAPTER=upstash` on Vercel staging.
 2. Copy **UPSTASH_REDIS_REST_URL** (ends with `.upstash.io`)  
 3. Copy **UPSTASH_REDIS_REST_TOKEN**
 
-## 3. Save locally (KitchenOS)
+## 3. Save locally (OS Kitchen)
 
 ```bash
 # Paste REAL values from Upstash console (not doc placeholders):

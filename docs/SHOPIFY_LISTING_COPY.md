@@ -1,12 +1,12 @@
 # Shopify listing copy draft
 
-App name: KitchenOS Fulfillment Sync
+App name: OS Kitchen Fulfillment Sync
 
 Tagline: Turn Shopify food orders into kitchen production, packing, and fulfillment workflows.
 
-Short description: KitchenOS helps food businesses operationalize Shopify orders after checkout.
+Short description: OS Kitchen helps food businesses operationalize Shopify orders after checkout.
 
-Long description: Connect Shopify order/product data to KitchenOS, map products, plan production, print packing labels, and review fulfillment health. KitchenOS does not claim official Shopify marketplace approval until listing review is complete.
+Long description: Connect Shopify order/product data to OS Kitchen, map products, plan production, print packing labels, and review fulfillment health. OS Kitchen does not claim official Shopify marketplace approval until listing review is complete.
 
 Screenshots checklist:
 - Order hub

@@ -1,4 +1,4 @@
-# KitchenOS — Phase AK: Era25 Band A market proof execution sole-path (era61)
+# OS Kitchen — Phase AK: Era25 Band A market proof execution sole-path (era61)
 
 **Status:** Product surfaces + Band A sole-path integrity guard **IMPLEMENTED** · Human sole-path attestation **REQUIRED**  
 **Policy:** `era61-era25-band-a-market-proof-execution-sole-path-phases-v1` · Integrity `era61-era25-band-a-market-proof-execution-sole-path-integrity-v1`  

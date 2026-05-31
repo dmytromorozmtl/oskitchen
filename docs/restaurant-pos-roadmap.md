@@ -4,7 +4,7 @@ Status: phased path from current POS beta to restaurant-grade maturity
 Primary evidence: `app/dashboard/pos/terminal/page.tsx`, `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `services/pos/pos-checkout-service.ts`, `services/orders/order-creation-service.ts`, `docs/POS_ARCHITECTURE.md`, `docs/system-reality-model.md`
 
 ## Goal
-Move KitchenOS POS from a credible operational beta into a restaurant-grade FOH system that preserves KitchenOS’s unified order, storefront, CRM, and kitchen advantages.
+Move OS Kitchen POS from a credible operational beta into a restaurant-grade FOH system that preserves OS Kitchen’s unified order, storefront, CRM, and kitchen advantages.
 
 ## A. Core POS
 | Capability bundle | Current state | Gap | Model changes | Service changes | UI changes | Permission changes | Audit logs | Tests | Acceptance criteria |

@@ -1,4 +1,4 @@
-# KitchenOS — Phase AD: Era25 pure operational mode terminus convergence (post-honest sustained ops)
+# OS Kitchen — Phase AD: Era25 pure operational mode terminus convergence (post-honest sustained ops)
 
 **Status:** Product surfaces + pure ops terminus convergence integrity guard **IMPLEMENTED** · Human pure ops attestation **REQUIRED**  
 **Policy:** `era25-pure-operational-mode-terminus-v1` · Integrity `era54-pure-operational-mode-terminus-convergence-integrity-v1`  

@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 6: Scale readiness (после Month 2 complete)
+# OS Kitchen — Шаг 6: Scale readiness (после Month 2 complete)
 
 **Policy:** `era21-scale-readiness-v1` · **Backlog:** `KOS-E21-006`  
 **Предусловие:** Month 2 blocking workstreams A + B + D complete; GO still valid  

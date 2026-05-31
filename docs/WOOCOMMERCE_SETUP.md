@@ -4,7 +4,7 @@
 
 - WooCommerce REST API keys (**Read/Write** as needed).
 - HTTPS storefront.
-- `ENCRYPTION_KEY` set in the environment running KitchenOS.
+- `ENCRYPTION_KEY` set in the environment running OS Kitchen.
 
 ## Dashboard steps
 

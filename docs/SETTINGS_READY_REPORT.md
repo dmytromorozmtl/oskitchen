@@ -1,6 +1,6 @@
 # Settings Center — Ready Report
 
-The Settings Center transformation is complete. KitchenOS now ships a 25-route
+The Settings Center transformation is complete. OS Kitchen now ships a 25-route
 sidebar-driven admin that controls workspace identity, operations, fulfillment,
 customers, storefront, platform integrations, security, compliance, and
 developer tooling — without rebuilding the rest of the app.

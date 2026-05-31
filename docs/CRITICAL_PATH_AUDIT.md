@@ -1,4 +1,4 @@
-# Critical path audit (KitchenOS)
+# Critical path audit (OS Kitchen)
 
 This audit ties the **five commercial pillars** to persistence, permissions, and operator UX. Prisma `OrderStatus` remains the **write model**; FoodOps stages in `lib/orders/*` are the **read/UX model**.
 

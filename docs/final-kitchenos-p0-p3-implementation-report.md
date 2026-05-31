@@ -1,4 +1,4 @@
-# KitchenOS P0-P3 Implementation Report
+# OS Kitchen P0-P3 Implementation Report
 
 ## Executive Summary
 
@@ -639,4 +639,4 @@ Take one focused follow-up sprint for:
 
 ## Next Cursor Prompt
 
-`Continue KitchenOS P1 hardening. Use docs/kitchenos-p0-p3-readiness-audit.md and docs/final-kitchenos-p0-p3-implementation-report.md as baseline. Focus next on the remaining adjacent owner-scope consumers that still rely on legacy aliases after the heavy domains, storefront admin/settings bundle, production/task bundle, integration/channel bundle, playbooks/notifications bundle, storefront content/media bundle, residual storefront builder/ops bundle, smaller storefront surfaces bundle, multi-store bundle, lifecycle/impersonation hardening pass, dashboard shell regression pass, and Lighthouse public-funnel coverage expansion were cleaned. Prioritize the remaining task/support consumers first, then any truly scattered residual storefront surfaces that need separate review. Preserve production behavior, prefer userId-first cleanup where requireTenantActor()/requireChannelActor() already resolve the owner identity, and add focused tests/docs for every change.`
+`Continue OS Kitchen P1 hardening. Use docs/kitchenos-p0-p3-readiness-audit.md and docs/final-kitchenos-p0-p3-implementation-report.md as baseline. Focus next on the remaining adjacent owner-scope consumers that still rely on legacy aliases after the heavy domains, storefront admin/settings bundle, production/task bundle, integration/channel bundle, playbooks/notifications bundle, storefront content/media bundle, residual storefront builder/ops bundle, smaller storefront surfaces bundle, multi-store bundle, lifecycle/impersonation hardening pass, dashboard shell regression pass, and Lighthouse public-funnel coverage expansion were cleaned. Prioritize the remaining task/support consumers first, then any truly scattered residual storefront surfaces that need separate review. Preserve production behavior, prefer userId-first cleanup where requireTenantActor()/requireChannelActor() already resolve the owner identity, and add focused tests/docs for every change.`

@@ -1,4 +1,4 @@
-# KitchenOS — Full Functional Audit
+# OS Kitchen — Full Functional Audit
 
 **Date:** 20 May 2026  
 **Production:** https://os-kitchen.com  

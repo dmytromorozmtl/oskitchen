@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 15: Commercial pilot path — absolute end
+# OS Kitchen — Шаг 15: Commercial pilot path — absolute end
 
 **Policy:** `era24-commercial-pilot-path-absolute-end-v1` · **Orchestrator:** `era24-commercial-pilot-path-absolute-end-post-steady-state-orchestrator-v1` · Backlog `KOS-E24-015`  
 **Предусловие:** Step 14 active · `steadyStateMilestone: steady_state_healthy` · All era24 orchestration wired  
@@ -16,7 +16,7 @@ Step 15 adds **closure orchestration only** (embedded in `#commercial-pilot-path
 
 - Path absolute end validate (16-step catalog status)
 - Absolute end report artifact
-- Product surface map linked to KitchenOS routes
+- Product surface map linked to OS Kitchen routes
 - Platform ops section `#commercial-pilot-path-absolute-end`
 
 ---
@@ -122,7 +122,7 @@ npm run ops:sync-commercial-pilot-path-absolute-end-report -- --write
 - [ ] Absolute end validate JSON reviewed weekly (`absoluteEndMilestone`)
 - [ ] `artifacts/commercial-pilot-path-absolute-end-report.md` synced
 - [ ] 16-step catalog status honest (never hand-edit PASS)
-- [ ] Product surface map matches KitchenOS routes
+- [ ] Product surface map matches OS Kitchen routes
 - [ ] Release train includes commercial pilot cert
 
 ---

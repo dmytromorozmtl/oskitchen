@@ -1,4 +1,4 @@
-# KitchenOS — Phase Y: Era25 month 2 market readiness convergence (post-honest week 1)
+# OS Kitchen — Phase Y: Era25 month 2 market readiness convergence (post-honest week 1)
 
 **Status:** Product surfaces + month 2 convergence integrity guard **IMPLEMENTED** · Human month 2 attestation **REQUIRED**  
 **Policy:** `era25-month2-market-readiness-convergence-v1` · Integrity `era49-month2-market-readiness-convergence-integrity-v1`  

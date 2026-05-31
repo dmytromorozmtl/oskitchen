@@ -1,4 +1,4 @@
-# KitchenOS Era 17 Product Gap and Competitor Map
+# OS Kitchen Era 17 Product Gap and Competitor Map
 
 **Date:** 2026-05-28  
 **HEAD:** `5e00dd4` @ `main`  
@@ -9,7 +9,7 @@
 
 ## Competitor Comparison Matrix
 
-| Competitor | Category | Competitor Strength | KitchenOS Gap | KitchenOS Advantage | Add/Improve | Priority |
+| Competitor | Category | Competitor Strength | OS Kitchen Gap | OS Kitchen Advantage | Add/Improve | Priority |
 |------------|----------|---------------------|---------------|---------------------|-------------|----------|
 | **Toast** | POS + restaurant ops | Hardware, offline, KDS rush, payments ecosystem, table service depth | No terminal cert, no offline, no rush-hour KDS, FOH depth | Unified order spine; honest CI governance; broad ops modules | POS software depth, KDS ops sign-off; **do not** claim hardware | P1 software / defer hardware |
 | **Square for Restaurants** | SMB POS + payments | Terminal, SMB UX, payments familiarity, simplicity | Complexity, no Terminal cert, surface area | Storefront + kitchen spine; tier-2b money path | Role-based IA simplification, tablet UX (Era 17 started) | P1 |
@@ -39,7 +39,7 @@
 
 ---
 
-## Top 25 Competitor Features KitchenOS Should Add
+## Top 25 Competitor Features OS Kitchen Should Add
 
 1. SSO IdP staging login proof → qualified `pilot_ready` (not production-for-all)  
 2. Live Woo/Shopify smoke PASS on staging  
@@ -69,7 +69,7 @@
 
 ---
 
-## Top 25 Competitor Features KitchenOS Should NOT Add Now
+## Top 25 Competitor Features OS Kitchen Should NOT Add Now
 
 1. Toast-class offline POS  
 2. Full hardware terminal certification  

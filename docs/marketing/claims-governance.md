@@ -12,7 +12,7 @@ npm run audit:marketing-claims
 
 ## Why This Exists
 
-KitchenOS has enough product depth that marketing can easily outrun proof.
+OS Kitchen has enough product depth that marketing can easily outrun proof.
 Claims governance prevents the product, GTM, and fundraising narrative from
 drifting away from what is actually implemented or verified.
 

@@ -19,4 +19,4 @@
 
 ## Estimates vs accounting
 
-All persisted monetary fields are **operational estimates**. Tax and statutory reporting remain outside KitchenOS.
+All persisted monetary fields are **operational estimates**. Tax and statutory reporting remain outside OS Kitchen.

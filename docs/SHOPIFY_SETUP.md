@@ -23,7 +23,7 @@ Register HTTPS endpoints (same host as `NEXT_PUBLIC_APP_URL`):
 | Product update | `/api/webhooks/shopify/products-update` |
 | App uninstalled | `/api/webhooks/shopify/app-uninstalled` |
 
-KitchenOS verifies `X-Shopify-Hmac-Sha256` using your saved webhook secret and dedupes via `X-Shopify-Webhook-Id`.
+OS Kitchen verifies `X-Shopify-Hmac-Sha256` using your saved webhook secret and dedupes via `X-Shopify-Webhook-Id`.
 
 ## Notes
 

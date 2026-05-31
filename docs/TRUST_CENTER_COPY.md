@@ -1,6 +1,6 @@
 # Trust center copy
 
-KitchenOS is designed with security-conscious practices for B2B food operations.
+OS Kitchen is designed with security-conscious practices for B2B food operations.
 
 Use approved wording:
 - Stripe handles payment processing.

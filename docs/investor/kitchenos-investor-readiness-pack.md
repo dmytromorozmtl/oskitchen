@@ -1,8 +1,8 @@
-# KitchenOS Investor Readiness Pack
+# OS Kitchen Investor Readiness Pack
 
 ## Product Summary
 
-KitchenOS is a vertical SaaS operating system for food operators that combines:
+OS Kitchen is a vertical SaaS operating system for food operators that combines:
 
 - storefront
 - POS

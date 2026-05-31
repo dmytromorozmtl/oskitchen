@@ -5,7 +5,7 @@
 
 ---
 
-## KitchenOS — [Month YYYY]
+## OS Kitchen — [Month YYYY]
 
 ### Headline metrics
 

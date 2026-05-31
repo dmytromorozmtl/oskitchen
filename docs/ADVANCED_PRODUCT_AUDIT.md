@@ -1,4 +1,4 @@
-# Advanced product audit — KitchenOS
+# Advanced product audit — OS Kitchen
 
 Objective: move from “order dashboard” to **premium vertical ops** (planning, margin, fulfillment, B2B, optional AI) without breaking existing channels.
 

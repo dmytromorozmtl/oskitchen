@@ -2,7 +2,7 @@
 
 ## Summary
 
-KitchenOS now has a **first-class platform administration layer**: database-backed `PlatformRole`, automatic **SUPER_ADMIN** bootstrap for **`workspace.moroz@gmail.com`**, billing and feature **super-bypass**, `/platform` operational UI (dashboard, users, workspaces, organizations, support, integrations, automations, audit, tools), **impersonation sessions** with audit logging, and scaffolding for **feature flags** + **internal notes**.
+OS Kitchen now has a **first-class platform administration layer**: database-backed `PlatformRole`, automatic **SUPER_ADMIN** bootstrap for **`workspace.moroz@gmail.com`**, billing and feature **super-bypass**, `/platform` operational UI (dashboard, users, workspaces, organizations, support, integrations, automations, audit, tools), **impersonation sessions** with audit logging, and scaffolding for **feature flags** + **internal notes**.
 
 ## Platform role architecture
 

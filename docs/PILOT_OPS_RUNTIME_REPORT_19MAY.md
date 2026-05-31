@@ -1,4 +1,4 @@
-# KitchenOS — Ops Runtime Verification Report
+# OS Kitchen — Ops Runtime Verification Report
 
 **Role:** Lead DevOps / SRE  
 **Date:** 19 May 2026  

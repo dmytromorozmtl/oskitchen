@@ -25,7 +25,7 @@
 | `/dashboard/pos` | 8 | 9 | 7 | 8 | 7 | 6 | 7 | Cashier | 8 | 8 | Touch targets on small phones | P1 |
 | `/dashboard/orders` | 9 | 9 | 8 | 9 | **9** | 7 | 7 | Ops | 9 | 9 | Improved empty state this pass | — |
 | Order detail | 8 | 9 | 7 | 8 | 6 | 6 | 7 | Ops | 7 | 8 | Sticky mobile actions | P1 |
-| Order hub | 7 | 8 | 7 | 7 | 6 | 6 | 7 | Manager | 8 | 8 | Explain channel vs KitchenOS order | P1 |
+| Order hub | 7 | 8 | 7 | 7 | 6 | 6 | 7 | Manager | 8 | 8 | Explain channel vs OS Kitchen order | P1 |
 | Product mapping | 7 | 8 | 6 | 7 | 6 | 6 | 6 | Manager | 7 | 7 | Reduce jargon in empty rows | P2 |
 | Production | 8 | 9 | 7 | 8 | 6 | 6 | 7 | Kitchen | 8 | 8 | Empty → guided first batch | P1 |
 | Kitchen screen | 8 | 9 | 7 | 8 | 6 | 6 | 7 | Kitchen | 8 | 8 | Large tap targets audit | P1 |

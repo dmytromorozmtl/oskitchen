@@ -1,4 +1,4 @@
-# KitchenOS support SLA (pilots & paid)
+# OS Kitchen support SLA (pilots & paid)
 
 | Plan | Channels | Standard response | P1 (production down) |
 |------|----------|-------------------|----------------------|

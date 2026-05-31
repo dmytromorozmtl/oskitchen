@@ -6,7 +6,7 @@ Existing surface:
 
 - `/dashboard/storefront/builder`
 
-KitchenOS already owns a major competitive layer by having a native storefront
+OS Kitchen already owns a major competitive layer by having a native storefront
 builder instead of outsourcing storefront ownership to Shopify or WooCommerce.
 
 ## Next Enhancements
@@ -19,7 +19,7 @@ builder instead of outsourcing storefront ownership to Shopify or WooCommerce.
 
 ## Why This Matters
 
-Storefront ownership is one of KitchenOS's strongest differentiators:
+Storefront ownership is one of OS Kitchen's strongest differentiators:
 
 - revenue control
 - operator lock-in through owned commerce surface

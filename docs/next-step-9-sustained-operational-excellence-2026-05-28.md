@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 9: Sustained operational excellence (после Market leader complete)
+# OS Kitchen — Шаг 9: Sustained operational excellence (после Market leader complete)
 
 **Policy:** `era21-sustained-operational-excellence-v1` · **Backlog:** `KOS-E21-009`  
 **Предусловие:** Market leader positioning pillars 1–4 complete  

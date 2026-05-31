@@ -1,4 +1,4 @@
-# KitchenOS — Phase P: Linear path permanently closed (post-honest Commercial pilot path absolute end)
+# OS Kitchen — Phase P: Linear path permanently closed (post-honest Commercial pilot path absolute end)
 
 **Status:** Product surfaces + Linear path permanently closed integrity guard **IMPLEMENTED** · Human terminal-closure attestation **REQUIRED**  
 **Policy:** `era24-linear-path-permanently-closed-v1` · Integrity `era40-linear-path-permanently-closed-integrity-v1`  

@@ -1,7 +1,7 @@
 # POS Terminal — Ready Report
 
 **Date:** 2026-05-14  
-**Scope:** KitchenOS POS / front-of-house commerce layer (Phase 1–27 delivery against MVP, honest about gaps).
+**Scope:** OS Kitchen POS / front-of-house commerce layer (Phase 1–27 delivery against MVP, honest about gaps).
 
 ## What was added
 
@@ -95,4 +95,4 @@ See `docs/POS_PERMISSIONS.md` and `docs/POS_BILLING_ENTITLEMENTS.md`.
 
 ---
 
-**Conclusion:** KitchenOS now has a **connected POS lane** that creates real orders and operational side effects while staying truthful about hardware and payments. Further releases should deepen cashier UX, RBAC, and offline strategy without revisiting the core order spine.
+**Conclusion:** OS Kitchen now has a **connected POS lane** that creates real orders and operational side effects while staying truthful about hardware and payments. Further releases should deepen cashier UX, RBAC, and offline strategy without revisiting the core order spine.

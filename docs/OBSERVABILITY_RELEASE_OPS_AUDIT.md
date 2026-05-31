@@ -1,4 +1,4 @@
-# KitchenOS — Observability & Release Ops Audit
+# OS Kitchen — Observability & Release Ops Audit
 
 **Date:** 2026-05-15
 

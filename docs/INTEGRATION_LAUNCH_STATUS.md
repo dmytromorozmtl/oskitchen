@@ -1,6 +1,6 @@
 # Integration launch status
 
-KitchenOS must never imply a channel is **live** when only **demo credentials** or **simulated** payloads exist.
+OS Kitchen must never imply a channel is **live** when only **demo credentials** or **simulated** payloads exist.
 
 ## Status vocabulary
 

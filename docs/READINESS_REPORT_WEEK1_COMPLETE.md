@@ -1,4 +1,4 @@
-# KitchenOS — отчёт Week 1 + roadmap до 100/100
+# OS Kitchen — отчёт Week 1 + roadmap до 100/100
 
 **Дата:** 2026-05-17 · **Typecheck:** 0 ошибок · **Tests:** 491 passed
 
@@ -73,7 +73,7 @@ node scripts/verify-tenant-scope-coverage.mjs
 ### B. Staging smoke (без скобок в терминале)
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 npm run smoke:staging
 ```
 

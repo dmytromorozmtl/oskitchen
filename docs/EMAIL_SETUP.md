@@ -20,7 +20,7 @@ Implement gradually; keep UI honest when not wired:
 Set:
 
 - `RESEND_API_KEY`
-- `RESEND_FROM_EMAIL` — e.g. `KitchenOS <orders@yourdomain.com>` (verified domain)
+- `RESEND_FROM_EMAIL` — e.g. `OS Kitchen <orders@yourdomain.com>` (verified domain)
 
 ## Template system
 

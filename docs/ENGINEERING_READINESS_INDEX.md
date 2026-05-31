@@ -6,7 +6,7 @@
 ## 1. Start here
 
 - **Коммерческий hardening audit:** [`COMMERCIAL_RELEASE_HARDENING_AUDIT.md`](./COMMERCIAL_RELEASE_HARDENING_AUDIT.md)  
-- **Итоговое решение о релизе:** [`KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md`](./KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md)  
+- **Итоговое решение о релизе:** [`OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md`](./OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md)  
 - **Карта модулей → документы:** [`MODULE_DOCUMENTATION_MAP.md`](./MODULE_DOCUMENTATION_MAP.md)  
 - **Трекер (шаблон):** [`ENGINEERING_READINESS_DASHBOARD_TEMPLATE.md`](./ENGINEERING_READINESS_DASHBOARD_TEMPLATE.md)
 

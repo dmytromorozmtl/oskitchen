@@ -1,4 +1,4 @@
-# Training module audit (KitchenOS)
+# Training module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/training` and the three sub-pages

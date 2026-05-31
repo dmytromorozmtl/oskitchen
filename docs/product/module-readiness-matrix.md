@@ -139,7 +139,7 @@ Prioritize:
 
 Most important truth today:
 
-- KitchenOS is strongest in the combined operator loop:
+- OS Kitchen is strongest in the combined operator loop:
   `storefront + POS + production + packing + routes`
 - several adjacent modules are real but not yet category-complete:
   `copilot`, `food_safety`, `accounting`, `white_label`

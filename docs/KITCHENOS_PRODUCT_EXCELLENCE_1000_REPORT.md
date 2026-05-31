@@ -1,4 +1,4 @@
-# KitchenOS — Product Excellence 1000% Report
+# OS Kitchen — Product Excellence 1000% Report
 
 ## Summary
 

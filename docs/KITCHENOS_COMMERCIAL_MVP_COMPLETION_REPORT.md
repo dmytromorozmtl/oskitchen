@@ -1,15 +1,15 @@
-# KitchenOS — Commercial MVP Completion Report
+# OS Kitchen — Commercial MVP Completion Report
 
 **Date:** 2026-05-14  
 **Branch / workspace:** local development snapshot  
 
 ## Executive summary
 
-KitchenOS is positioned as **Commerce OS + Operations OS** for food businesses. This pass tightens the **order lifecycle** story (including **POS transaction** and **receipt** integrity signals), improves **Today** KPIs for POS-led operations, aligns the **marketing hero** with honest integration language, and publishes a **route-level audit** plus QA matrix for repeatable demos.
+OS Kitchen is positioned as **Commerce OS + Operations OS** for food businesses. This pass tightens the **order lifecycle** story (including **POS transaction** and **receipt** integrity signals), improves **Today** KPIs for POS-led operations, aligns the **marketing hero** with honest integration language, and publishes a **route-level audit** plus QA matrix for repeatable demos.
 
 ## Final audit summary
 
-See **`docs/KITCHENOS_FINAL_COMMERCIAL_MVP_AUDIT.md`**. Highest-risk themes: **truthful integrations**, **`/platform` isolation**, and **lifecycle coherence** across Orders, Today, Hub, Production, Packing, and Routes.
+See **`docs/OS Kitchen_FINAL_COMMERCIAL_MVP_AUDIT.md`**. Highest-risk themes: **truthful integrations**, **`/platform` isolation**, and **lifecycle coherence** across Orders, Today, Hub, Production, Packing, and Routes.
 
 ## Completed P0 / P1 issues (this pass)
 
@@ -42,7 +42,7 @@ See **`docs/ORDER_LIFECYCLE_ENGINE_FINAL.md`** (and legacy `ORDER_LIFECYCLE_ENGI
 
 ## QA results
 
-Structured checklist: **`docs/KITCHENOS_FINAL_QA_MATRIX.md`**.  
+Structured checklist: **`docs/OS Kitchen_FINAL_QA_MATRIX.md`**.  
 **Commands (required):** run `npm run typecheck` and `npm run build` after pull; fix any regressions before tag.
 
 ## Honest limitations

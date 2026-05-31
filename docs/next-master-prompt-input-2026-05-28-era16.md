@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 17
+# Next Master Prompt Input — OS Kitchen Era 17
 
 **Date:** 2026-05-28  
 **Purpose:** Canonical facts for Evolution Era 16 completion — **superseded** by `docs/next-master-prompt-input-2026-05-28-era17.md` for recurring prompts  

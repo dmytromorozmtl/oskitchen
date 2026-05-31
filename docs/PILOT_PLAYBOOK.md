@@ -1,4 +1,4 @@
-# KitchenOS — Pilot Playbook
+# OS Kitchen — Pilot Playbook
 
 **Version:** 1.0 · **Date:** 19 May 2026  
 **Production:** https://os-kitchen.com

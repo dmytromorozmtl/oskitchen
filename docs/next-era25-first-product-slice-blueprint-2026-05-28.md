@@ -1,4 +1,4 @@
-# KitchenOS — era25 First Product Slice Blueprint
+# OS Kitchen — era25 First Product Slice Blueprint
 
 **Status:** **Blueprint orchestration · NO era25 product engineering until blueprint ready**
 
@@ -77,7 +77,7 @@ npm run test:ci:era25-first-product-slice-blueprint-era24:cert
 
 ---
 
-## Links to existing KitchenOS functionality
+## Links to existing OS Kitchen functionality
 
 | Surface | Purpose |
 |---------|---------|

@@ -1,4 +1,4 @@
-# Ingredient demand audit (KitchenOS)
+# Ingredient demand audit (OS Kitchen)
 
 **Scope:** `/dashboard/inventory/demand`, calculation path, CSV, purchasing, recipes, inventory, production, empty states, performance, data model.
 

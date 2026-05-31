@@ -1,4 +1,4 @@
-# Meal Plans module audit (KitchenOS)
+# Meal Plans module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/meal-subscriptions`, `actions/customer-subscription.ts`,

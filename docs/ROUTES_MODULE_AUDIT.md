@@ -1,4 +1,4 @@
-# Routes module audit (KitchenOS)
+# Routes module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/routes`, `actions/delivery-route.ts`, Prisma `DeliveryRoute` / `DeliveryStop`, `DeliveryDispatch` (Uber Direct rows), nav + module-registry entries for routes, references in calendar/executive/today/reports.

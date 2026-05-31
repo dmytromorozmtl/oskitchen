@@ -4,7 +4,7 @@ Status: flagship commerce roadmap built on current storefront core
 Primary evidence: `app/s/[storeSlug]/`, `actions/storefront-order.ts`, `services/storefront/`, `middleware.ts`, `actions/storefront-domains.ts`, `actions/storefront-media.ts`, `actions/storefront-forms.ts`, `docs/STOREFRONT_COMPLETION_AUDIT.md`, `docs/system-reality-model.md`
 
 ## Goal
-Turn KitchenOS storefront from a strong pilot-ready commerce surface into a restaurant-grade omnichannel ordering system that feeds POS, KDS, order hub, CRM, and fulfillment without brittle side paths.
+Turn OS Kitchen storefront from a strong pilot-ready commerce surface into a restaurant-grade omnichannel ordering system that feeds POS, KDS, order hub, CRM, and fulfillment without brittle side paths.
 
 ## Capability Roadmap
 | Capability bundle | Current state | Gap | Model changes | Service changes | UI changes | Permission changes | Audit logs | Tests | Acceptance criteria |

@@ -2,7 +2,7 @@
 
 ## Positioning
 
-KitchenOS storefront is a **first-party commerce surface** for operators who want branded pickup/delivery without standing up a separate Shopify theme — **not** a generic website builder.
+OS Kitchen storefront is a **first-party commerce surface** for operators who want branded pickup/delivery without standing up a separate Shopify theme — **not** a generic website builder.
 
 ## Routes
 

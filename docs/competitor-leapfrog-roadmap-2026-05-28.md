@@ -1,4 +1,4 @@
-# KitchenOS Competitor Leapfrog Roadmap
+# OS Kitchen Competitor Leapfrog Roadmap
 
 **Date:** 2026-05-28  
 **HEAD:** `064af17` @ `main`  
@@ -9,7 +9,7 @@
 
 ## Competitor Benchmark Matrix
 
-| Competitor | Competitor Strength | KitchenOS Gap | KitchenOS Advantage | Copy | Leapfrog | Defer | Priority |
+| Competitor | Competitor Strength | OS Kitchen Gap | OS Kitchen Advantage | Copy | Leapfrog | Defer | Priority |
 |------------|---------------------|---------------|---------------------|------|----------|-------|----------|
 | **Toast** | POS hardware, offline, KDS rush, payments ecosystem | Hardware, offline, table depth, rush-hour | Unified order spine + governance honesty | Hardware ecosystem | One-spine ops narrative **with proof** | Offline POS | P0 proof, P1 depth |
 | **Square for Restaurants** | SMB UX, Terminal, payments simplicity | Surface complexity, no Terminal cert | Storefront + ops spine, Era 18 role landing | Terminal hardware | Role-based home + launch wizard | Terminal cert | P1 UX |
@@ -127,7 +127,7 @@
 
 ---
 
-## Top 30 KitchenOS Leapfrog Opportunities
+## Top 30 OS Kitchen Leapfrog Opportunities
 
 1. **One canonical order spine** across SF, POS, Woo, Shopify, API — with live proof artifacts  
 2. **Governance honesty CI** — maturity labels control nav, marketing, sales (competitors hide limits)  
@@ -225,4 +225,4 @@
 | Public API partner live smoke | SOC2 Type II marketing |
 | Case study after first pilot | Full Klaviyo parity |
 
-**Recommended competitor narrative:** "KitchenOS is the honest, unified order spine for restaurants that need storefront + kitchen + POS in one governed platform — not another terminal company."
+**Recommended competitor narrative:** "OS Kitchen is the honest, unified order spine for restaurants that need storefront + kitchen + POS in one governed platform — not another terminal company."

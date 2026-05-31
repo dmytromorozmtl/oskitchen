@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State
+# OS Kitchen — Absolute Final State
 
 **Date:** 19 May 2026  
 **Production:** https://os-kitchen.com  
@@ -91,7 +91,7 @@
 
 ## Sign-off
 
-This document certifies that KitchenOS has passed:
+This document certifies that OS Kitchen has passed:
 
 - Full system audit (600 pages, 243+ API routes, 618+ server actions)
 - Security hardening (CSP, open redirect fix, rate limiting, upload validation)

@@ -1,4 +1,4 @@
-# KitchenOS — Readiness Report (17 May 2026, final)
+# OS Kitchen — Readiness Report (17 May 2026, final)
 
 ## Executive summary
 

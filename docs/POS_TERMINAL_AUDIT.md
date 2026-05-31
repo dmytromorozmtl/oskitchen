@@ -1,6 +1,6 @@
-# POS Terminal — Strategic Audit (KitchenOS)
+# POS Terminal — Strategic Audit (OS Kitchen)
 
-This audit summarizes how KitchenOS behaved **before** the POS Terminal module and why each area matters for a connected front-of-house layer.
+This audit summarizes how OS Kitchen behaved **before** the POS Terminal module and why each area matters for a connected front-of-house layer.
 
 ## Orders and Order Hub
 

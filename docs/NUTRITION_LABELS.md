@@ -8,7 +8,7 @@
 - **Import stub** (`/dashboard/nutrition-labels/import`) — CSV header template.
 - **Reports** (`/dashboard/nutrition-labels/reports`) — light rollups.
 
-KitchenOS **does not certify regulatory compliance** — see `NUTRITION_AND_ALLERGEN_SAFETY_PRINCIPLES.md`.
+OS Kitchen **does not certify regulatory compliance** — see `NUTRITION_AND_ALLERGEN_SAFETY_PRINCIPLES.md`.
 
 ## Doc index
 

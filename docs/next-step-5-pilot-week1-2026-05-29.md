@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29  
 **Prerequisite:** Step 4 complete — `milestone: commercial_gate_passed` + GO integrity PASS  
-**Goal:** Paid pilot operator live on KitchenOS with Week 1 checkpoint  
+**Goal:** Paid pilot operator live on OS Kitchen with Week 1 checkpoint  
 **Audience:** CS, COO, Integration, QA
 
 ---

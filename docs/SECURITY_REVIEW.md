@@ -1,4 +1,4 @@
-# Security review — KitchenOS
+# Security review — OS Kitchen
 
 High-level review for production readiness. Complement with threat modeling before handling PCI-heavy flows.
 

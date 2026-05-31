@@ -6,4 +6,4 @@
 4. Run **Test connection** from API routes when available; watch **Webhook activity** for signature failures.
 5. Use **Product mapping** for unmatched SKUs before high-volume order ingest.
 
-Official WooCommerce trademark belongs to Automattic; KitchenOS is an independent integration layer.
+Official WooCommerce trademark belongs to Automattic; OS Kitchen is an independent integration layer.

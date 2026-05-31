@@ -16,7 +16,7 @@ When data is missing or checks cannot pass in good faith:
 
 ## Disclaimer
 
-KitchenOS surfaces **catalog-stored** allergen and nutrition metadata for operational speed. It does **not** replace:
+OS Kitchen surfaces **catalog-stored** allergen and nutrition metadata for operational speed. It does **not** replace:
 
 - Your legal allergen program,
 - Label artwork approval,

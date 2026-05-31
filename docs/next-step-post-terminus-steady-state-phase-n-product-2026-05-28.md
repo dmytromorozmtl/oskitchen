@@ -1,4 +1,4 @@
-# KitchenOS — Phase N: Post-terminus steady state (post-honest Engineering path terminus)
+# OS Kitchen — Phase N: Post-terminus steady state (post-honest Engineering path terminus)
 
 **Status:** Product surfaces + Post-terminus steady state integrity guard **IMPLEMENTED** · Human operator-loop attestation **REQUIRED**  
 **Policy:** `era24-post-terminus-steady-state-v1` · Integrity `era38-post-terminus-steady-state-integrity-v1`  

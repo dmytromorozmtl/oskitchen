@@ -1,4 +1,4 @@
-# Executive dashboard audit (KitchenOS)
+# Executive dashboard audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/executive`, `app/dashboard/executive/page.tsx`,

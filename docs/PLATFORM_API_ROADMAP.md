@@ -1,6 +1,6 @@
 # Platform API roadmap
 
-Vision: make KitchenOS a developer platform for food operations after checkout.
+Vision: make OS Kitchen a developer platform for food operations after checkout.
 
 Roadmap:
 - Public API v1 hardening.

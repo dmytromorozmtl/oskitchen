@@ -1,4 +1,4 @@
-# KitchenOS Remediation Fix Plan — 17 May 2026
+# OS Kitchen Remediation Fix Plan — 17 May 2026
 
 **Goal:** Stabilize for guided closed beta, then paid pilot.  
 **Node:** `>=22 <23` (verified on **v22.22.3**).  

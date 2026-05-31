@@ -2,7 +2,7 @@
 
 Route: `/dashboard/import-center`
 
-KitchenOS imports CSV first. XLSX should be converted to CSV before upload unless a future parser is added.
+OS Kitchen imports CSV first. XLSX should be converted to CSV before upload unless a future parser is added.
 
 Flow:
 1. Download a template from `/dashboard/import-center/templates`.

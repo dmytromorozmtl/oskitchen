@@ -8,7 +8,7 @@
 
 ## Competitor Matrix (Abbreviated)
 
-| Competitor | They do better | KitchenOS does better | Gap | Leapfrog | Copy? | Avoid? |
+| Competitor | They do better | OS Kitchen does better | Gap | Leapfrog | Copy? | Avoid? |
 |------------|----------------|----------------------|-----|----------|-------|--------|
 | Toast | Hardware, offline, rush KDS, table depth | Unified spine, briefing, integration honesty | Hardware/offline | **Ops nervous system** with proof | Patterns only | Hardware lock-in |
 | Square | SMB UX, Terminal, unified loyalty | Role landing, launch wizard, speed mode | Terminal, loyalty unity | Guided TTV wizard | Terminal defer | Closed ecosystem |
@@ -32,7 +32,7 @@
 
 ---
 
-## Top 30 Competitor Gaps (KitchenOS behind)
+## Top 30 Competitor Gaps (OS Kitchen behind)
 
 1. Toast offline POS queue  
 2. Toast proprietary hardware + Terminal ecosystem  
@@ -63,7 +63,7 @@
 27. WooCommerce plugin ecosystem hooks  
 28. Toast xtraCHEF-level invoice intelligence  
 29. Toast payroll integration depth  
-30. Competitor **proven** customer references (KitchenOS: zero paid pilots)
+30. Competitor **proven** customer references (OS Kitchen: zero paid pilots)
 
 ---
 

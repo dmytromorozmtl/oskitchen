@@ -1,10 +1,10 @@
-# KitchenOS Product Positioning
+# OS Kitchen Product Positioning
 
 Status: canonical positioning draft tied to current implementation reality
 Primary evidence: `docs/system-reality-model.md`, `README.md`, `app/dashboard/pos/terminal/page.tsx`, `app/s/[storeSlug]/checkout/page.tsx`, `services/orders/order-creation-service.ts`, `docs/MARKETING_PAGES_EXPANSION_HONESTY.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`
 
 ## 1. Core Positioning
-KitchenOS should be positioned as:
+OS Kitchen should be positioned as:
 
 > the modern operating platform for restaurants, cafes, bars, ghost kitchens, catering teams, and multi-location food businesses.
 
@@ -19,7 +19,7 @@ The most accurate strategic framing today is not "replacement for every incumben
 ## 3. Non-ICP For Early Stages
 - Large enterprise chains requiring production-certified offline POS, native hardware ecosystems, SSO/SCIM, and formal compliance attestations today. Evidence: `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/ENTERPRISE_SECURITY_ROADMAP.md`.
 - Operators whose primary buying criteria are native hardware breadth or deep accounting/GL replacement. Evidence: `docs/POS_ARCHITECTURE.md`, `docs/kitchenos-p0-p3-readiness-audit.md`.
-- Operators who only need a simple card-present POS with no interest in storefront, production, customer growth, or operational control. KitchenOS is stronger when the workflow is multi-surface. Evidence: `docs/system-reality-model.md`.
+- Operators who only need a simple card-present POS with no interest in storefront, production, customer growth, or operational control. OS Kitchen is stronger when the workflow is multi-surface. Evidence: `docs/system-reality-model.md`.
 
 ## 4. Primary Use Cases
 - Counter, pickup, and online-order operations with one shared order spine. Evidence: `actions/pos.ts`, `actions/storefront-order.ts`, `services/orders/order-creation-service.ts`.
@@ -129,25 +129,25 @@ Current truth: all of these surfaces exist, but RBAC canon, enterprise governanc
 ## 7. Differentiation Against Toast
 - Do not compete head-on on native hardware, offline depth, or ecosystem size yet. Evidence: `docs/POS_ARCHITECTURE.md`.
 - Compete on unified storefront + order hub + production + packing + CRM workflow, especially for operators who outgrow POS-only thinking. Evidence: `docs/system-reality-model.md`, `actions/pos.ts`, `actions/storefront-order.ts`.
-- Best narrative: KitchenOS is the operating layer for operators who need more than a terminal. It connects direct ordering, kitchen execution, packaging, delivery coordination, and customer growth in one system.
+- Best narrative: OS Kitchen is the operating layer for operators who need more than a terminal. It connects direct ordering, kitchen execution, packaging, delivery coordination, and customer growth in one system.
 
 ## 8. Differentiation Against Square
-- Square wins on simplicity and payment familiarity. KitchenOS should not deny that. Evidence: `docs/system-reality-model.md`.
-- KitchenOS should differentiate on operational breadth after checkout: production, packing, route planning, customer depth, and multi-surface order governance. Evidence: `app/dashboard/production/`, `app/dashboard/routes/`, `actions/customers.ts`.
+- Square wins on simplicity and payment familiarity. OS Kitchen should not deny that. Evidence: `docs/system-reality-model.md`.
+- OS Kitchen should differentiate on operational breadth after checkout: production, packing, route planning, customer depth, and multi-surface order governance. Evidence: `app/dashboard/production/`, `app/dashboard/routes/`, `actions/customers.ts`.
 
 ## 9. Differentiation Against Lightspeed
 - Lightspeed sets a stronger expectation for inventory and reporting depth.
-- KitchenOS should compete by unifying inventory and costing with commerce, storefront, and operational signals rather than by claiming equal maturity today. Evidence: `actions/costing.ts`, `actions/inventory.ts`, `docs/system-reality-model.md`.
+- OS Kitchen should compete by unifying inventory and costing with commerce, storefront, and operational signals rather than by claiming equal maturity today. Evidence: `actions/costing.ts`, `actions/inventory.ts`, `docs/system-reality-model.md`.
 
 ## 10. Differentiation Against TouchBistro
 - TouchBistro is restaurant-focused and table-service credible.
-- KitchenOS should differentiate on direct commerce, multi-channel order flows, catering/ghost-kitchen/meal-prep flexibility, and modern platform extensibility. Evidence: `app/s/[storeSlug]/`, `actions/catering-quotes.ts`, `app/api/public/v1/orders/route.ts`.
+- OS Kitchen should differentiate on direct commerce, multi-channel order flows, catering/ghost-kitchen/meal-prep flexibility, and modern platform extensibility. Evidence: `app/s/[storeSlug]/`, `actions/catering-quotes.ts`, `app/api/public/v1/orders/route.ts`.
 
 ## 11. Differentiation Against Shopify / WooCommerce
 - Shopify and WooCommerce are strong commerce ecosystems but not purpose-built restaurant operating systems.
-- KitchenOS should position itself as the operational brain after the order is captured: production, kitchen, fulfillment, packing verification, customer history, and operator control. Evidence: `actions/integrations.ts`, `services/orders/order-creation-service.ts`, `actions/packing-verification.ts`.
+- OS Kitchen should position itself as the operational brain after the order is captured: production, kitchen, fulfillment, packing verification, customer history, and operator control. Evidence: `actions/integrations.ts`, `services/orders/order-creation-service.ts`, `actions/packing-verification.ts`.
 
-## 12. What KitchenOS Should Not Claim Yet
+## 12. What OS Kitchen Should Not Claim Yet
 - Full Toast/Square replacement across all hardware and offline scenarios.
 - Production-certified native Stripe Terminal or restaurant hardware ecosystem.
 - Broad live marketplace coverage across DoorDash/Uber/Grubhub without partner certification and verified production flows.
@@ -158,7 +158,7 @@ Current truth: all of these surfaces exist, but RBAC canon, enterprise governanc
 
 Evidence: `docs/POS_ARCHITECTURE.md`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/ENTERPRISE_SECURITY_ROADMAP.md`, `services/ai/`.
 
-## 13. What KitchenOS Can Claim Safely Now
+## 13. What OS Kitchen Can Claim Safely Now
 - Unified direct ordering, manual ordering, and operational order management.
 - Branded storefront and online ordering foundation with one shared order model.
 - Real POS foundation with receipts, shifts, refunds, and canonical order creation.
@@ -178,10 +178,10 @@ Evidence: `services/orders/order-creation-service.ts`, `app/s/[storeSlug]/checko
 Evidence: `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/POS_ARCHITECTURE.md`, `docs/ENTERPRISE_READINESS_AUDIT_FINAL.md`.
 
 ## 15. Pilot-Ready Positioning
-KitchenOS is pilot-ready for operator-led businesses that need one system for direct ordering, order management, storefront, production/packing coordination, and customer growth. It is best sold with a defined module scope and explicit maturity language by module.
+OS Kitchen is pilot-ready for operator-led businesses that need one system for direct ordering, order management, storefront, production/packing coordination, and customer growth. It is best sold with a defined module scope and explicit maturity language by module.
 
 ## 16. SMB-Ready Positioning
-KitchenOS is SMB-ready where the operator values unified workflow more than deep hardware ecosystem parity. Best-fit SMBs are restaurants, cafes, catering teams, and ghost kitchens running direct online ordering plus staff-operated order flows.
+OS Kitchen is SMB-ready where the operator values unified workflow more than deep hardware ecosystem parity. Best-fit SMBs are restaurants, cafes, catering teams, and ghost kitchens running direct online ordering plus staff-operated order flows.
 
 ## 17. Enterprise-Ready Positioning
 Enterprise-ready messaging should remain future-facing and architecture-led, not certification-led. Safe language today is: multi-location architecture, platform governance direction, public API/webhook foundation, and phased enterprise roadmap. **Canonical procurement source:** [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) (`era4-procurement-honesty-v1`). Do not cite deprecated `docs/ENTERPRISE_*_FINAL.md` for current SSO/SOC2 posture.

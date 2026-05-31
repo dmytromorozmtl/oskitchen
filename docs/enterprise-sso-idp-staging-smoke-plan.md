@@ -29,7 +29,7 @@
 | Okta | `OKTA` | Okta Developer Edition org recommended for staging |
 | Microsoft Entra ID | `ENTRA_ID` | Azure AD / Entra test tenant; aliases `ENTRA`, `AZURE`, `MICROSOFT` accepted in smoke script |
 
-KitchenOS stores vendor as `SsoIdpVendor` enum (`OKTA` | `ENTRA_ID`) in `WorkspaceSsoSettings`.
+OS Kitchen stores vendor as `SsoIdpVendor` enum (`OKTA` | `ENTRA_ID`) in `WorkspaceSsoSettings`.
 
 ---
 
@@ -39,7 +39,7 @@ Set in local ops shell or GitHub Actions **secrets** (never commit values):
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `E2E_STAGING_BASE_URL` | Yes | Staging KitchenOS URL (e.g. `https://staging.kitchenos.app`) |
+| `E2E_STAGING_BASE_URL` | Yes | Staging OS Kitchen URL (e.g. `https://staging.kitchenos.app`) |
 | `SSO_STAGING_WORKSPACE_ID` | Yes | Pilot workspace UUID — tenant-bound SSO |
 | `SSO_STAGING_IDP_VENDOR` | Yes | `OKTA` or `ENTRA_ID` |
 | `SSO_STAGING_ALLOWED_DOMAIN` | Yes | Allowed email domain (e.g. `pilot.example.com`) |
@@ -98,12 +98,12 @@ After manual IdP login on staging, set these to record proof (never commit value
 1. Supabase project (staging) → **Authentication → SSO / SAML**.
 2. **Add provider** — upload IdP metadata from Okta or Entra.
 3. Note the **provider reference** → set `SSO_STAGING_SUPABASE_PROVIDER_REF`.
-4. Confirm redirect URLs include staging KitchenOS `/auth/callback`.
-5. **Do not** enable SSO globally for all Supabase users — workspace gate remains in KitchenOS (`PILOT_ACTIVE` + `ssoOidc` entitlement).
+4. Confirm redirect URLs include staging OS Kitchen `/auth/callback`.
+5. **Do not** enable SSO globally for all Supabase users — workspace gate remains in OS Kitchen (`PILOT_ACTIVE` + `ssoOidc` entitlement).
 
 ---
 
-## KitchenOS workspace SSO pilot wiring
+## OS Kitchen workspace SSO pilot wiring
 
 1. Confirm workspace owner has **`ssoOidc`** entitlement (Enterprise plan or billing override).
 2. **Settings → Security → SSO pilot:**

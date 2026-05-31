@@ -1,7 +1,7 @@
 # Product modifier mapping
 
 External marketplaces expose modifiers/options under different names.
-KitchenOS uses a canonical key set so that production, packaging,
+OS Kitchen uses a canonical key set so that production, packaging,
 costing, and storefront can rely on a stable contract.
 
 ## Canonical modifier keys

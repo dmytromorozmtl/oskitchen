@@ -1,4 +1,4 @@
-# KitchenOS — UX, UI & Navigation Audit
+# OS Kitchen — UX, UI & Navigation Audit
 
 **Date:** 2026-05-15
 

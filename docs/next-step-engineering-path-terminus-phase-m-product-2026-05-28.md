@@ -1,4 +1,4 @@
-# KitchenOS — Phase M: Engineering path terminus (post-honest Maintenance mode)
+# OS Kitchen — Phase M: Engineering path terminus (post-honest Maintenance mode)
 
 **Status:** Product surfaces + Engineering path terminus integrity guard **IMPLEMENTED** · Human master-path attestation **REQUIRED**  
 **Policy:** `era24-engineering-path-terminus-v1` · Integrity `era37-engineering-path-terminus-integrity-v1`  

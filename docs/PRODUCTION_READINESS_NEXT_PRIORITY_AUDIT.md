@@ -1,7 +1,7 @@
 > **DEPRECATED — Historical priority audit.** Do not use for release or sales decisions.  
 > **Canonical source:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md) → [`p0-hardening-roadmap.md`](./p0-hardening-roadmap.md), [`implementation-backlog.md`](./implementation-backlog.md).
 
-# Production readiness — next priority audit (KitchenOS)
+# Production readiness — next priority audit (OS Kitchen)
 
 This audit summarizes **current behavior**, **production risk**, **recommended fix**, **implementability**, **staging/provider needs**, and **priority tier** (P0–P3). It is intentionally honest: nothing here claims live partner certification.
 

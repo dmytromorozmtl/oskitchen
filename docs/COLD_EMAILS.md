@@ -6,7 +6,7 @@
 
 **Subject:** Fewer missed Shopify + Woo orders this week?  
 **Body:**  
-Hi {Name} — kitchens like {Company} usually juggle {Channel} orders alongside catering sheets. We built KitchenOS to centralize the queue into one production + packing flow (labels + analytics included on Pro).  
+Hi {Name} — kitchens like {Company} usually juggle {Channel} orders alongside catering sheets. We built OS Kitchen to centralize the queue into one production + packing flow (labels + analytics included on Pro).  
 Worth a 12-min demo?  
 — {You}
 

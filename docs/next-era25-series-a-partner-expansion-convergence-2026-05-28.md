@@ -1,4 +1,4 @@
-# KitchenOS — era25 Series A / Partner Expansion Convergence
+# OS Kitchen — era25 Series A / Partner Expansion Convergence
 
 **Status:** **Sixth era25 product slice · IMPLEMENTED · BLOCKED until scale convergence ready**
 
@@ -67,7 +67,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `series_a_tracks_panel` | Series A tracks A–D on platform ops | Commercial pilot ops |
 | `briefing_action` | Ranked action on blocked track | Owner Daily Briefing hero |

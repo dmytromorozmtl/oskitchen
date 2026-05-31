@@ -3,7 +3,7 @@
 ## General
 
 **Q: Do I need special hardware?**  
-A: No. KitchenOS runs in a browser on tablets, laptops, or phones.
+A: No. OS Kitchen runs in a browser on tablets, laptops, or phones.
 
 **Q: Is there a free trial?**  
 A: Yes — 14 days on all plans.

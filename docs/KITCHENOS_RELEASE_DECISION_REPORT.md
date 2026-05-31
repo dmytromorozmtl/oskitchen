@@ -1,4 +1,4 @@
-# KitchenOS release decision report
+# OS Kitchen release decision report
 
 ## Positioning
 **Recommended:** **Closed beta / paid pilot** for meal prep / preorder operators with white-glove onboarding. **Not recommended:** broad self-serve enterprise claims.

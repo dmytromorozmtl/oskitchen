@@ -1,4 +1,4 @@
-# Storefront Builder — детальный аудит (состояние кода KitchenOS)
+# Storefront Builder — детальный аудит (состояние кода OS Kitchen)
 
 Цель: зафиксировать **фактическое** поведение перед эволюцией в «конструктор витрины» (Shopify/Woo-уровень **по управляемости**, не по объёму кода). Источник истины — репозиторий `app/dashboard/storefront/*`, `app/s/[storeSlug]/*`, `prisma/schema.prisma`, `lib/storefront/*`.
 

@@ -15,7 +15,7 @@ This runbook covers **one pilot workspace** with:
 
 - `ssoOidc` entitlement (Enterprise plan or billing override)
 - Okta **or** Microsoft Entra ID test/staging tenant
-- Supabase SAML provider reference wired in KitchenOS admin
+- Supabase SAML provider reference wired in OS Kitchen admin
 - `PILOT_ACTIVE` tenant-scoped SSO pilot
 
 **Out of scope:** SCIM provisioning, SOC2 Type II, production SAML for every customer, cross-tenant SSO without workspace UUID.
@@ -83,7 +83,7 @@ Escalate to engineering when: callback errors persist after IdP metadata refresh
 | `allowedEmailDomains` | Workspace SSO settings | Users outside domain denied at callback |
 | `supabaseSsoProviderRef` | Workspace SSO settings | Initiation fails without provider ref |
 
-**Never** enable SSO globally in Supabase for all users — workspace gate remains in KitchenOS.
+**Never** enable SSO globally in Supabase for all users — workspace gate remains in OS Kitchen.
 
 ---
 
@@ -96,7 +96,7 @@ Escalate to engineering when: callback errors persist after IdP metadata refresh
 - Authorize pilot activation and rollback
 - Provide written pilot agreement scope (no production SSO claim)
 
-**KitchenOS support (qualified pilot):**
+**OS Kitchen support (qualified pilot):**
 
 - Verify env vars and smoke artifacts before citing SSO in contract
 - Run `smoke:enterprise-sso-idp-staging` after IdP changes

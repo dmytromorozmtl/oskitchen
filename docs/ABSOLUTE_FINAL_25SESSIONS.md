@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State (25 Sessions)
+# OS Kitchen — Absolute Final State (25 Sessions)
 
 **Date:** 19 May 2026  
 **Production:** https://os-kitchen.com  
@@ -114,7 +114,7 @@ Table Management, Tab Management, Multi-Brand Command Center, Handheld POS, Pre-
 
 ## Sign-off
 
-KitchenOS is **code-complete**, **UX-polished**, and **production-healthy**.  
+OS Kitchen is **code-complete**, **UX-polished**, and **production-healthy**.  
 System is ready for paid operators across all primary food-business segments.  
 **No F5 needed. No stale Tier 1 data. No silent mutation failures.**
 

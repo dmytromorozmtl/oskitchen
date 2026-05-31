@@ -1,4 +1,4 @@
-# KitchenOS Implementation Backlog
+# OS Kitchen Implementation Backlog
 
 Status: canonical execution backlog grouped by strategic priority
 Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`
@@ -1080,7 +1080,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Module: Order operations / Integrations / Order hub
 - Priority: P0 (workflow reliability + integration transparency)
 - Status: **order_hub_channel_next_actions_wired**
-- Decision: `era18-order-hub-channel-next-actions-v1` — channel table next-action column aligned with triage heuristics; links to import batch, staging, or KitchenOS order
+- Decision: `era18-order-hub-channel-next-actions-v1` — channel table next-action column aligned with triage heuristics; links to import batch, staging, or OS Kitchen order
 - Evidence: `resolveExternalOrderHubRowNextAction`, `app/dashboard/order-hub/page.tsx`, exported triage helpers
 - Next: Live Woo/Shopify proof (ops); deeper import approval UX from hub row if needed
 
@@ -2615,7 +2615,7 @@ Primary evidence: `docs/system-reality-model.md`, `docs/p0-hardening-roadmap.md`
 - Technical value: stabilizes a flagship path
 - User story: as a customer or operator, I need failed checkouts to be recoverable and visible
 - Current state: strong checkout validation, partial recovery/observability maturity
-- Progress update: initial online-checkout session failures now preserve the already-written `StorefrontOrder` plus internal `Order` pair instead of deleting them, the persisted storefront payment state is explicitly marked `FAILED`, public token-scoped retry now recreates Stripe Checkout only for the same order after a clear checkout-start failure, Stripe cancel now returns guests to the saved order page (`?canceled=1`) and idempotently marks still-pending online orders `FAILED` for same-token retry, workspace audit logs record `STOREFRONT_PAYMENT_FAILED` / `STOREFRONT_PAYMENT_RETRY_STARTED`, Order Hub surfaces payment failed/pending badges for storefront rows, focused recovery coverage now proves failed-to-pending-to-paid progression plus a guard that blocks retry while payment is still `PENDING` so KitchenOS does not mint duplicate live checkout sessions, same-cart duplicate submits now explicitly reuse the original order token with guest-visible duplicate guidance instead of silently dropping the customer onto status tracking, and focused webhook idempotency proof now covers both route-level duplicate Stripe-event acknowledgement and storefront completion-service no-op behavior once the order is already `PAID`; **Era 3 Cycle 42** certifies tier-2 storefront money path in CI via `storefront-money-path` job (pay-later E2E + unit recovery matrix) and live wiring gate `test:ci:storefront-money-path:cert`; staging Stripe live-card E2E remains optional.
+- Progress update: initial online-checkout session failures now preserve the already-written `StorefrontOrder` plus internal `Order` pair instead of deleting them, the persisted storefront payment state is explicitly marked `FAILED`, public token-scoped retry now recreates Stripe Checkout only for the same order after a clear checkout-start failure, Stripe cancel now returns guests to the saved order page (`?canceled=1`) and idempotently marks still-pending online orders `FAILED` for same-token retry, workspace audit logs record `STOREFRONT_PAYMENT_FAILED` / `STOREFRONT_PAYMENT_RETRY_STARTED`, Order Hub surfaces payment failed/pending badges for storefront rows, focused recovery coverage now proves failed-to-pending-to-paid progression plus a guard that blocks retry while payment is still `PENDING` so OS Kitchen does not mint duplicate live checkout sessions, same-cart duplicate submits now explicitly reuse the original order token with guest-visible duplicate guidance instead of silently dropping the customer onto status tracking, and focused webhook idempotency proof now covers both route-level duplicate Stripe-event acknowledgement and storefront completion-service no-op behavior once the order is already `PAID`; **Era 3 Cycle 42** certifies tier-2 storefront money path in CI via `storefront-money-path` job (pay-later E2E + unit recovery matrix) and live wiring gate `test:ci:storefront-money-path:cert`; staging Stripe live-card E2E remains optional.
 - Target state: deterministic payment failure lifecycle with retry and support guidance
 - Affected files: `actions/storefront-order.ts`, `services/storefront/storefront-payment-service.ts`, storefront checkout UI
 - Dependencies: none

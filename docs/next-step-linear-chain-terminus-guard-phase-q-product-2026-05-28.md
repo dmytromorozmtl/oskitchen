@@ -1,4 +1,4 @@
-# KitchenOS — Phase Q: Linear chain terminus guard (post-honest Linear path permanently closed)
+# OS Kitchen — Phase Q: Linear chain terminus guard (post-honest Linear path permanently closed)
 
 **Status:** Product surfaces + Linear chain terminus guard integrity guard **IMPLEMENTED** · Human Step 17 FORBIDDEN attestation **REQUIRED**  
 **Policy:** `era24-linear-chain-terminus-guard-v1` · Integrity `era41-linear-chain-terminus-guard-integrity-v1`  

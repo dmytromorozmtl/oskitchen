@@ -1,4 +1,4 @@
-# KitchenOS — Step 17: FORBIDDEN (linear chain terminus)
+# OS Kitchen — Step 17: FORBIDDEN (linear chain terminus)
 
 **Status:** **DO NOT ADD TO CATALOG · DO NOT DOCUMENT STEP 18+**
 
@@ -12,7 +12,7 @@
 
 **Step 17 does not exist in `COMMERCIAL_PILOT_PATH_STEP_CATALOG`.**
 
-The KitchenOS commercial pilot linear doc chain **ends at Step 16**.
+The OS Kitchen commercial pilot linear doc chain **ends at Step 16**.
 
 | Action | Verdict |
 |--------|---------|

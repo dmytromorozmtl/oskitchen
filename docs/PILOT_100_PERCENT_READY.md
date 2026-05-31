@@ -1,4 +1,4 @@
-# KitchenOS — 100% Pilot Readiness (Code + Ops Artifacts)
+# OS Kitchen — 100% Pilot Readiness (Code + Ops Artifacts)
 
 **Date:** 19 May 2026  
 **Owner:** Principal Full-Stack Architect + Lead DevOps  

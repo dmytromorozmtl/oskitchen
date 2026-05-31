@@ -1,4 +1,4 @@
-# Sales channels — final audit (KitchenOS)
+# Sales channels — final audit (OS Kitchen)
 
 This audit covers the **Channel command center** (`/dashboard/sales-channels`) and supporting libraries. Priorities: **P0** critical, **P1** high value, **P2** polish, **P3** future.
 

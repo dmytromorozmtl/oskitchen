@@ -1,4 +1,4 @@
-# KitchenOS — GTM layer ready report
+# OS Kitchen — GTM layer ready report
 
 Date reference: May 2026. This document summarizes what was added for the first 100 beta customers and how to operate it.
 

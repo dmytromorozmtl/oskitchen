@@ -6,7 +6,7 @@
 
 ## Disclaimers
 
-- Operators must verify nutrition and allergen data; KitchenOS does not provide legal compliance by default.
+- Operators must verify nutrition and allergen data; OS Kitchen does not provide legal compliance by default.
 
 ## Next
 

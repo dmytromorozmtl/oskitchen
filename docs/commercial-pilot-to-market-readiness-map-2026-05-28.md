@@ -1,4 +1,4 @@
-# KitchenOS Commercial Pilot → Market Readiness Map
+# OS Kitchen Commercial Pilot → Market Readiness Map
 
 **Date:** 2026-05-28  
 **HEAD:** `064af17` @ `main`  
@@ -10,7 +10,7 @@
 
 ## Executive Commercial Verdict
 
-KitchenOS has **best-in-class pilot governance** and **zero executed paid pilots**. Commercial readiness improved slightly (+1) from Era 18 honest ops panels (platform GO/NO-GO, blocked launch bridge, go-live pilot strips) but **market readiness remains blocked on ops credentials and customer record**.
+OS Kitchen has **best-in-class pilot governance** and **zero executed paid pilots**. Commercial readiness improved slightly (+1) from Era 18 honest ops panels (platform GO/NO-GO, blocked launch bridge, go-live pilot strips) but **market readiness remains blocked on ops credentials and customer record**.
 
 | Score | Value | Notes |
 |-------|------:|-------|

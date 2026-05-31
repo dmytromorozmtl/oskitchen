@@ -1,12 +1,12 @@
 # Advanced objection handling
 
-**We already use Shopify.** KitchenOS does not replace Shopify. It coordinates production and fulfillment after Shopify checkout.
+**We already use Shopify.** OS Kitchen does not replace Shopify. It coordinates production and fulfillment after Shopify checkout.
 
 **We use spreadsheets.** Keep your current process while importing CSVs, then move to production/packing workflows once validated.
 
 **We are too small.** Starter is for smaller weekly businesses; implementation packages are optional.
 
-**Uber Eats already gives orders.** KitchenOS helps the kitchen execute orders across channels. Uber Eats API access still requires appropriate partner credentials.
+**Uber Eats already gives orders.** OS Kitchen helps the kitchen execute orders across channels. Uber Eats API access still requires appropriate partner credentials.
 
 **My staff won't learn another tool.** Training mode splits kitchen, packing, and manager workflows.
 

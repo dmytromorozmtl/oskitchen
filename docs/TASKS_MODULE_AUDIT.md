@@ -1,4 +1,4 @@
-# Tasks module audit (KitchenOS)
+# Tasks module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/tasks`, `actions/kitchen-task.ts`, Prisma `KitchenTask`, `KitchenTaskType`, `KitchenTaskStatus`, `KitchenTaskPriority`, references in `app/dashboard/calendar`, `app/dashboard/executive`, `app/dashboard/reports/enterprise`.

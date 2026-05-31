@@ -1,6 +1,6 @@
 # WooCommerce & Shopify — tenant certification checklist
 
-**Product status in KitchenOS:** `BETA` (`lib/capabilities/capability-matrix.ts`).  
+**Product status in OS Kitchen:** `BETA` (`lib/capabilities/capability-matrix.ts`).  
 **In-app runner:** Dashboard → Integrations → WooCommerce/Shopify → **Test shop certification**.  
 **CLI:** `npx tsx scripts/smoke-woo-shopify-certification.ts --owner-email …`
 
@@ -70,7 +70,7 @@ Overall: **PASS** / **PARTIAL** (warnings) / **FAIL**.
 | 1 | App/webhook HMAC validated on all subscribed topics | Tenant |
 | 2 | Shop domain → tenant routing verified (`shopDomain` on connection) | QA |
 | 3 | GDPR/redact webhooks registered if app is public | Legal |
-| 4 | Inventory/fulfillment topics aligned with KitchenOS order model | Product |
+| 4 | Inventory/fulfillment topics aligned with OS Kitchen order model | Product |
 | 5 | Rate limits + retry behavior under burst (50+ webhooks/min) | QA |
 | 6 | Public marketing copy matches **BETA** badge (`/integrations/woocommerce`, `/integrations/shopify`) | Marketing |
 

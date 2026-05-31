@@ -1,4 +1,4 @@
-# KitchenOS Full Product Strategic Re-Audit — Post Evolution Era 17
+# OS Kitchen Full Product Strategic Re-Audit — Post Evolution Era 17
 
 **Date:** 2026-05-28  
 **Method:** Read-only inspection of live repository (`main` @ `5e00dd4`); inventory commands executed locally; smoke scripts run (`smoke:pilot-gono-go`, `smoke:p0-staging-proof-unblock`); **no** product code changes; **no** deploy/push/migrations  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-KitchenOS is a **large, production-shaped food-operations monolith** with an **exceptionally strong governance spine** (Eras 4–17) and **weak external market proof**. Era 17 completed 45 delivery cycles at the **policy and wiring layer** — SSO IdP smoke plan, pilot GO/NO-GO evaluator, forbidden-claims gate, webhook replay P1, Public API per-route scopes, POS commercial depth, GTM proof templates — but **failed all Era 17 success criteria** that require operator credentials, GitHub PASS URLs, or a paid customer.
+OS Kitchen is a **large, production-shaped food-operations monolith** with an **exceptionally strong governance spine** (Eras 4–17) and **weak external market proof**. Era 17 completed 45 delivery cycles at the **policy and wiring layer** — SSO IdP smoke plan, pilot GO/NO-GO evaluator, forbidden-claims gate, webhook replay P1, Public API per-route scopes, POS commercial depth, GTM proof templates — but **failed all Era 17 success criteria** that require operator credentials, GitHub PASS URLs, or a paid customer.
 
 **Live scale (2026-05-28, `5e00dd4`):** **700** pages, **175** API routes, **8** public API v1 routes, **46** webhook routes, **16** cron routes (= production allowlist), **145** action modules, **604** services, **748** components, **365** Prisma models, **268** enums, **823** Vitest + **36** Playwright specs (**881** total), **1,509** markdown docs, **646** package scripts (**60** smoke, **237** `test:ci:*`), **17** GitHub workflows, **59** RBAC permission keys, **18** domain mutation registry entries, **57** feature-maturity matrix rows, **8** integration registry entries (**4 PLACEHOLDER**, **4 BETA**, **0 LIVE**), **6** marketing claims registry entries.
 

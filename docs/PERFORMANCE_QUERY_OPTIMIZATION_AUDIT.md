@@ -1,4 +1,4 @@
-# KitchenOS — Performance & Query Optimization Audit
+# OS Kitchen — Performance & Query Optimization Audit
 
 **Date:** 2026-05-15
 

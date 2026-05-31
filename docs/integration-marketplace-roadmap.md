@@ -1,6 +1,6 @@
 # Integration Marketplace Roadmap
 
-Status: canonical maturity and certification roadmap for KitchenOS integrations
+Status: canonical maturity and certification roadmap for OS Kitchen integrations
 Primary evidence: `actions/integrations.ts`, `app/api/webhooks/`, `app/api/public/`, `docs/INTEGRATION_MATURITY_MATRIX.md`, `docs/API_WEBHOOK_DEVELOPER_CONTRACT_MATURITY.md`, `docs/PRODUCTION_READINESS_NEXT_PRIORITY_AUDIT.md`
 
 ## Marketplace Rules
@@ -52,7 +52,7 @@ Every integration record should have:
 | Public API / webhooks | webhooks / API | `beta` | API key and signed secrets | yes | yes | contract maturity and broader scope model | API usage metrics + webhook runbook | versioned contract certification |
 
 ## Certification Checklist Template
-For a provider to move from `preview` or `setup_ready` to `pilot_ready` or `live`, KitchenOS should require:
+For a provider to move from `preview` or `setup_ready` to `pilot_ready` or `live`, OS Kitchen should require:
 1. operator-facing setup guide
 2. secret and auth model documented
 3. env contract documented

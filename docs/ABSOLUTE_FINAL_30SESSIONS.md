@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State (30 Sessions)
+# OS Kitchen — Absolute Final State (30 Sessions)
 
 **Date:** 20 May 2026  
 **Production:** https://os-kitchen.com  
@@ -146,7 +146,7 @@ Inventory, labor, food safety, accounting, operations, integrations, marketing, 
 =========================================
 ```
 
-KitchenOS is **system-complete**. All gap-analysis items are closed. All ten additional systems are polished and bound to the backend. Production is healthy on `https://os-kitchen.com`.
+OS Kitchen is **system-complete**. All gap-analysis items are closed. All ten additional systems are polished and bound to the backend. Production is healthy on `https://os-kitchen.com`.
 
 The build phase is complete. The next step is real operators at:
 

@@ -1,4 +1,4 @@
-# KitchenOS — Phase AC: Era25 sustained operational excellence convergence (post-honest market leader)
+# OS Kitchen — Phase AC: Era25 sustained operational excellence convergence (post-honest market leader)
 
 **Status:** Product surfaces + sustained ops convergence integrity guard **IMPLEMENTED** · Human sustained ops attestation **REQUIRED**  
 **Policy:** `era25-sustained-operational-excellence-convergence-v1` · Integrity `era53-sustained-operational-excellence-convergence-integrity-v1`  

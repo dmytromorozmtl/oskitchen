@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 10: Continuous improvement loop (после Sustained ops complete)
+# OS Kitchen — Шаг 10: Continuous improvement loop (после Sustained ops complete)
 
 **Policy:** `era22-continuous-improvement-loop-v1` · **Backlog:** `KOS-E22-010`  
 **Предусловие:** Sustained operational excellence cadences A–D complete  

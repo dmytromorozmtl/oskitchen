@@ -1,4 +1,4 @@
-# Sellable-ready summary — KitchenOS
+# Sellable-ready summary — OS Kitchen
 
 Last verified: `next build` and `tsc --noEmit` succeed after `prisma generate`.
 

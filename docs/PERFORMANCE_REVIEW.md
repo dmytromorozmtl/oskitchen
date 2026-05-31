@@ -1,4 +1,4 @@
-# Performance review — KitchenOS
+# Performance review — OS Kitchen
 
 Target assumptions for beta: ~1k orders/month per workspace, ~100 products, ~1k customers, multiple channels, ~10 staff users.
 

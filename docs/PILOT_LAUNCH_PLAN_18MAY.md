@@ -1,4 +1,4 @@
-# KitchenOS Pilot Launch Plan — 18 May 2026
+# OS Kitchen Pilot Launch Plan — 18 May 2026
 
 **Code baseline:** post–18 May hardening (Phases U–Z verified 18 May 2026)  
 **Go/No-Go owner:** Release Commander + CEO  

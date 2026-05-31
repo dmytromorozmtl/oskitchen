@@ -13,7 +13,7 @@
 
 | Week | Asset | Keyword / goal |
 |------|--------|----------------|
-| W1 | KitchenOS vs commissary spreadsheets: real numbers | kitchen management software |
+| W1 | OS Kitchen vs commissary spreadsheets: real numbers | kitchen management software |
 | W2 | How [Pilot Name] went from 40 to 120 orders/week | case study (permission) |
 | W1 | Geo LP `/locations/chicago` | restaurant kitchen software Chicago |
 | W2 | Geo LP `/locations/toronto` | ghost kitchen software Toronto |

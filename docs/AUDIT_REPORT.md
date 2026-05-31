@@ -1,4 +1,4 @@
-# KitchenOS audit report
+# OS Kitchen audit report
 
 ## What works
 

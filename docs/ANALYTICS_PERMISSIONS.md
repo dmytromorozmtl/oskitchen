@@ -26,4 +26,4 @@ Workspace owners always have full access.
 ## No fake integrations
 
 We never call GA4, Stripe, QuickBooks, or any external system. Every
-number on every page comes from rows already in the KitchenOS database.
+number on every page comes from rows already in the OS Kitchen database.

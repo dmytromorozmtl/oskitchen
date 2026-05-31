@@ -6,7 +6,7 @@
 
 ## First message
 
-“Thanks for connecting — quick question: where do {Company} orders land today before they hit the line? We’re piloting KitchenOS with operators who saw packing mistakes spike after adding a second channel.”
+“Thanks for connecting — quick question: where do {Company} orders land today before they hit the line? We’re piloting OS Kitchen with operators who saw packing mistakes spike after adding a second channel.”
 
 ## Follow-up (7 days)
 

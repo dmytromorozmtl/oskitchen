@@ -1,4 +1,4 @@
-# KitchenOS — Manual OPS Actions (19 May 2026)
+# OS Kitchen — Manual OPS Actions (19 May 2026)
 
 Выполнить **до приглашения платных операторов**. Каждый пункт ~5–10 минут.
 
@@ -89,7 +89,7 @@ vercel env ls production | grep STRIPE_WEBHOOK
 ## 6. E2E with authentication
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 export PLAYWRIGHT_BASE_URL="https://os-kitchen.com"
 export E2E_PILOT_EMAIL="your-pilot-test@example.com"
 export E2E_PILOT_PASSWORD="YourSecureTestPassword123!"

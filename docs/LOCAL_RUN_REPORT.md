@@ -23,7 +23,7 @@ All verification must be done **on your Mac** using a real terminal.
 Run:
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 node -v
 npm -v
 npm run local-check
@@ -54,7 +54,7 @@ npm run dev
 ## Exact next command
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS && chmod +x scripts/local-check.sh && npm run local-check
+cd /Users/dmytro/Desktop/2026/OS Kitchen && chmod +x scripts/local-check.sh && npm run local-check
 ```
 
 If `npm` is missing, open `docs/LOCAL_NODE_SETUP.md` first.

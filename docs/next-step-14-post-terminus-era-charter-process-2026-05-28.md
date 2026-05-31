@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 14: Post-terminus steady state (repeat forever)
+# OS Kitchen — Шаг 14: Post-terminus steady state (repeat forever)
 
 **Policy:** `era24-post-terminus-steady-state-v1` · **Orchestrator:** `era24-post-terminus-steady-state-post-engineering-terminus-orchestrator-v1` · Backlog `KOS-E24-014`  
 **Предусловие:** Step 13 active · `engineeringPathTerminusMilestone: engineering_path_terminus_healthy` · Maintenance mode  

@@ -1,4 +1,4 @@
-# KitchenOS — Pilot Program
+# OS Kitchen — Pilot Program
 
 **Version:** 1.0 · **Date:** 23 May 2026  
 **Related:** [sales-deck.md](sales-deck.md) · [PILOT_PLAYBOOK.md](PILOT_PLAYBOOK.md) · [GTM_SALES_PLAYBOOK.md](GTM_SALES_PLAYBOOK.md)
@@ -85,13 +85,13 @@ Use after pilot month 2–3 when operator has measurable results.
 - **Size:** [orders/week, staff count]
 - **Plan:** [Starter / Pro / Team]
 
-## Before KitchenOS
+## Before OS Kitchen
 [2–3 sentences: chaos, tools used, pain points]
 - Spreadsheets for weekly demand
 - Manual packing lists
 - [Specific pain]
 
-## After KitchenOS
+## After OS Kitchen
 [2–3 sentences: workflow today]
 - Single order hub from storefront + POS
 - Production board drives batch prep
@@ -142,7 +142,7 @@ From [PRODUCT_ROADMAP_2026.md](PRODUCT_ROADMAP_2026.md):
 
 ### Objection: "We already have Toast/Square"
 
-> Most teams we talk to keep their payment POS but still run kitchen on paper or a second tablet. KitchenOS replaces the **second system** — production, preorder, and packing — on devices you own. We can start there and expand to full floor POS when you're ready.
+> Most teams we talk to keep their payment POS but still run kitchen on paper or a second tablet. OS Kitchen replaces the **second system** — production, preorder, and packing — on devices you own. We can start there and expand to full floor POS when you're ready.
 
 ---
 

@@ -1,6 +1,6 @@
 # Canonical Order Creation
 
-KitchenOS must treat order creation as a protected architectural boundary.
+OS Kitchen must treat order creation as a protected architectural boundary.
 
 Direct application-level writes such as `prisma.order.create(...)` or
 `prisma.order.upsert(...)` are forbidden outside the approved canonical layer,

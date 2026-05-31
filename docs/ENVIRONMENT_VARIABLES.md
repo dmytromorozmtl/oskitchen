@@ -1,6 +1,6 @@
 # Environment variables
 
-KitchenOS validates configuration in **`lib/env.ts`** (Zod).
+OS Kitchen validates configuration in **`lib/env.ts`** (Zod).
 
 - **PUBLIC** variables are safe for browser bundles (`NEXT_PUBLIC_*`).
 - **SECRET** variables must exist only on the server (Vercel: never expose to client).

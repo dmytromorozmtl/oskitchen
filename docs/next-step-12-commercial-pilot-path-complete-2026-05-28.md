@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 12: Maintenance mode (commercial pilot path complete)
+# OS Kitchen — Шаг 12: Maintenance mode (commercial pilot path complete)
 
 **Status:** IMPLEMENTED (2026-05-28) — era25 sustained-ops gate wired into Step 12 prerequisites, validate JSON, orchestrator milestones, UI/panel, CI integration tests.
 

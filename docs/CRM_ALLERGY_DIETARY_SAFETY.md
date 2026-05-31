@@ -1,6 +1,6 @@
 # CRM allergy &amp; dietary safety
 
-KitchenOS treats allergy and dietary preferences as **operational** data. They
+OS Kitchen treats allergy and dietary preferences as **operational** data. They
 must be visible where they affect food safety — not hidden behind a CRM page.
 
 ## Storage

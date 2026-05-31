@@ -1,4 +1,4 @@
-# KitchenOS Full Strategic Re-Audit — Post Evolution Era 4
+# OS Kitchen Full Strategic Re-Audit — Post Evolution Era 4
 
 **Date:** 2026-05-28  
 **Method:** Read-only inspection of live repository (commands run on `main`; no broad code changes)  
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-KitchenOS is a **large, production-shaped food-operations monolith** with a **certified governance spine** after Evolution Era 4 (cycles 1–12) and **sustained recertification** through Era 15. This is not an MVP; it is a broad platform with honest maturity labeling and CI-enforced claim boundaries.
+OS Kitchen is a **large, production-shaped food-operations monolith** with a **certified governance spine** after Evolution Era 4 (cycles 1–12) and **sustained recertification** through Era 15. This is not an MVP; it is a broad platform with honest maturity labeling and CI-enforced claim boundaries.
 
 **Live scale (2026-05-28):** **699** App Router pages, **175** API routes, **144** action modules, **604** services, **1,244** lib TS files, **743** components, **362** Prisma models, **266** enums, **653** Vitest files, **36** Playwright specs, **1,477** markdown docs, **16** production cron routes (disk aligned with validators), **49** webhook routes, **8** public API v1 routes.
 

@@ -1,4 +1,4 @@
-# KitchenOS — era25 Owner Daily Briefing Breakthrough (product slice)
+# OS Kitchen — era25 Owner Daily Briefing Breakthrough (product slice)
 
 **Status:** **First era25 product slice · BLOCKED until blueprint + P0 PASS**
 
@@ -63,7 +63,7 @@ npm run test:ci:owner-daily-briefing-breakthrough-era25:cert
 
 ## era25 briefing scheme B0–B4
 
-| ID | Label | KitchenOS link |
+| ID | Label | OS Kitchen link |
 |----|-------|----------------|
 | B0 | Breakthrough readiness ring | Platform ops blueprint |
 | B1 | Owner priority tiles | Today + era19 briefing |

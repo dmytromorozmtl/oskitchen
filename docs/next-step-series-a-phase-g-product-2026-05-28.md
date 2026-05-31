@@ -1,4 +1,4 @@
-# KitchenOS — Phase G: Series A / partner expansion (post-honest Scale)
+# OS Kitchen — Phase G: Series A / partner expansion (post-honest Scale)
 
 **Status:** Product surfaces + Series A integrity guard **IMPLEMENTED** · Human Gates A–D **REQUIRED**  
 **Policy:** `era21-series-a-partner-expansion-v1` · Integrity `era31-series-a-partner-expansion-integrity-v1`  

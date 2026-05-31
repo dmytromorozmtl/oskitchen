@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State (32 Sessions)
+# OS Kitchen — Absolute Final State (32 Sessions)
 
 **Date:** 21 May 2026  
 **Production:** https://os-kitchen.com  
@@ -117,7 +117,7 @@ Loyalty, Gift Cards, Changelog, Public API v1, Migration Wizard, Nutrition Label
 =========================================
 ```
 
-KitchenOS is **system-complete**. All gap-analysis items are closed. Production is healthy on `https://os-kitchen.com`.
+OS Kitchen is **system-complete**. All gap-analysis items are closed. Production is healthy on `https://os-kitchen.com`.
 
 The build phase is complete. The next step is real operators at:
 

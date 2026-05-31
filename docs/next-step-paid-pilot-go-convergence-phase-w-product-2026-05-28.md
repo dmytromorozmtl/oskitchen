@@ -1,4 +1,4 @@
-# KitchenOS — Phase W: Era25 paid pilot GO convergence (post-honest breakthrough)
+# OS Kitchen — Phase W: Era25 paid pilot GO convergence (post-honest breakthrough)
 
 **Status:** Product surfaces + GO convergence integrity guard **IMPLEMENTED** · Human convergence attestation **REQUIRED**  
 **Policy:** `era25-paid-pilot-go-convergence-v1` · Integrity `era47-paid-pilot-go-convergence-integrity-v1`  

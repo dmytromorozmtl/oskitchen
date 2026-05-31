@@ -1,4 +1,4 @@
-# KitchenOS — Food Operations Infrastructure Strategic Audit
+# OS Kitchen — Food Operations Infrastructure Strategic Audit
 
 **Positioning target:** “The operating system for modern food operations.”  
 **Audit date:** 2026-05-14 (repository snapshot).  
@@ -6,7 +6,7 @@
 
 ## Executive summary
 
-KitchenOS already spans **workspace dashboard**, **public storefront** (`/s/[slug]`), **partner**, **resources**, **pricing**, and a **gated `/platform`** console. Strength: **breadth** (orders, production, packing, routes, CRM, purchasing, ingredient demand, copilot, audits). Gaps: **naming consistency** across modules, **multi-location filters** not uniformly applied at UI/query level, **persisted order status enum** remains narrower than the **derived lifecycle stage** vocabulary, and **realtime** is mostly **polling/sync indicators** rather than channel subscriptions. None of these require a rebuild; they require **connection**, **RBAC tightening per surface**, and **documentation honesty**.
+OS Kitchen already spans **workspace dashboard**, **public storefront** (`/s/[slug]`), **partner**, **resources**, **pricing**, and a **gated `/platform`** console. Strength: **breadth** (orders, production, packing, routes, CRM, purchasing, ingredient demand, copilot, audits). Gaps: **naming consistency** across modules, **multi-location filters** not uniformly applied at UI/query level, **persisted order status enum** remains narrower than the **derived lifecycle stage** vocabulary, and **realtime** is mostly **polling/sync indicators** rather than channel subscriptions. None of these require a rebuild; they require **connection**, **RBAC tightening per surface**, and **documentation honesty**.
 
 ## Classification legend
 
@@ -207,7 +207,7 @@ Routes under `app/` include `pricing`, `resources/*`, `help/*`, `legal/*`, marke
 
 ## Module index (quick)
 
-**Customer:** `app/dashboard/**` (400+ routes) — see `docs/KITCHENOS_FOODOPS_PLATFORM_READY_REPORT.md` for phase mapping.  
+**Customer:** `app/dashboard/**` (400+ routes) — see `docs/OS Kitchen_FOODOPS_PLATFORM_READY_REPORT.md` for phase mapping.  
 **Platform:** `app/platform/**` — layout + new `system-health` / `error-recovery`.  
 **Public storefront:** `app/s/[storeSlug]/**`.  
 **Core services:** `services/orders/*`, `services/today/*`, `services/order-hub/*`, `services/integrity/*`, `services/platform/*`, `services/ai/*`.

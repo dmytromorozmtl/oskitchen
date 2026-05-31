@@ -1,6 +1,6 @@
 # Data retention policy (draft)
 
-This document explains **what KitchenOS stores**, **how tenants export**, and **how deletion should work**. Legal counsel must review before publishing externally.
+This document explains **what OS Kitchen stores**, **how tenants export**, and **how deletion should work**. Legal counsel must review before publishing externally.
 
 ## Stored categories
 

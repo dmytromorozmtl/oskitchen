@@ -1,4 +1,4 @@
-# KitchenOS — Database Model & Migration Audit
+# OS Kitchen — Database Model & Migration Audit
 
 **Date:** 2026-05-15
 

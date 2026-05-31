@@ -1,4 +1,4 @@
-# KitchenOS — Final OPS Actions (19 May 2026)
+# OS Kitchen — Final OPS Actions (19 May 2026)
 
 Выполнить эти действия **перед приглашением платных операторов**. Каждое ~2–5 минут.
 
@@ -48,7 +48,7 @@ http://localhost:3000/**
 🔗 https://console.upstash.com → Redis → **REST API** → copy **UPSTASH_REDIS_REST_TOKEN**
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 printf '%s' 'YOUR_TOKEN_HERE' | vercel env add UPSTASH_REDIS_REST_TOKEN production
 printf '%s' 'upstash' | vercel env add RATE_LIMIT_ADAPTER production
 vercel deploy --prebuilt --prod --yes   # or redeploy from Dashboard
@@ -111,7 +111,7 @@ grep STRIPE_WEBHOOK .env.vercel.production.local
 Requires confirmed Supabase user (after step 1):
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 export PLAYWRIGHT_BASE_URL="https://os-kitchen.com"
 export E2E_PILOT_EMAIL="test-operator@kitchenos-test.com"
 export E2E_PILOT_PASSWORD="TestPassword123!"

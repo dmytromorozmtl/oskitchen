@@ -11,4 +11,4 @@
 - Fix domain verification, rotate API key, retry from notifications retry UI where present.
 
 ## Customer template
-> Transactional email delivery was delayed. Orders remain in KitchenOS — you can verify status in your account.
+> Transactional email delivery was delayed. Orders remain in OS Kitchen — you can verify status in your account.

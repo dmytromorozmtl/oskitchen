@@ -1,4 +1,4 @@
-# KitchenOS — Phase AR: Era25 post-steady-product-mode commercial ops rhythm permanence (era68)
+# OS Kitchen — Phase AR: Era25 post-steady-product-mode commercial ops rhythm permanence (era68)
 
 **Status:** Product surfaces + commercial ops rhythm permanence integrity guard **IMPLEMENTED** · Human rhythm permanence attestation **REQUIRED** (steady product mode-driven)  
 **Policy:** `era68-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-phases-v1` · Integrity `era68-era25-post-steady-product-mode-commercial-ops-rhythm-permanence-integrity-v1`  

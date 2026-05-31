@@ -1,4 +1,4 @@
-# KitchenOS — Phase B: Tier 2 golden path (post-P0 PASS)
+# OS Kitchen — Phase B: Tier 2 golden path (post-P0 PASS)
 
 **Status:** Product surfaces + integrity guard **IMPLEMENTED** · Human staging execution **REQUIRED**  
 **Policy:** `era20-tier2-staging-golden-path-v1` · Integrity `era28-tier2-staging-golden-path-integrity-v1`  

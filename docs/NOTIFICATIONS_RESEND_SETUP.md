@@ -1,6 +1,6 @@
 # Resend setup
 
-KitchenOS uses [Resend](https://resend.com) as the transactional email
+OS Kitchen uses [Resend](https://resend.com) as the transactional email
 provider. All sends pass through `services/notifications/notification-service.ts`,
 which never falls back to a fake provider.
 
@@ -26,7 +26,7 @@ The Notification Center surfaces one of four modes:
 
 ## Webhook
 
-Point Resend at `https://<your-domain>/api/webhooks/resend`. KitchenOS
+Point Resend at `https://<your-domain>/api/webhooks/resend`. OS Kitchen
 verifies the Svix-style `t=…,v1=…` signature using
 `RESEND_WEBHOOK_SECRET` before mutating any rows.
 

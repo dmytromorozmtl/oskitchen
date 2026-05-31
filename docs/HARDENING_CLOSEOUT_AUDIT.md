@@ -1,6 +1,6 @@
 # Hardening closeout audit
 
-Date: 2026-05-14 · Scope: KitchenOS platform + dashboard integration surfaces, demo tooling, CI, support session foundation.
+Date: 2026-05-14 · Scope: OS Kitchen platform + dashboard integration surfaces, demo tooling, CI, support session foundation.
 
 ## 1. Demo scenario static checker
 

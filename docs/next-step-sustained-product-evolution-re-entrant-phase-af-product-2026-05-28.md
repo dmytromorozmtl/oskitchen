@@ -1,4 +1,4 @@
-# KitchenOS — Phase AF: Era25 sustained product evolution re-entrant integrity (post-train-closure)
+# OS Kitchen — Phase AF: Era25 sustained product evolution re-entrant integrity (post-train-closure)
 
 **Status:** Product surfaces + re-entrant integrity guard **IMPLEMENTED** · Human re-entrant attestation **REQUIRED**  
 **Policy:** `era56-sustained-product-evolution-re-entrant-phases-v1` · Integrity `era56-sustained-product-evolution-re-entrant-integrity-v1`  

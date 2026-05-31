@@ -1,6 +1,6 @@
-# KitchenOS Remediation Report — 17 May 2026 (Final)
+# OS Kitchen Remediation Report — 17 May 2026 (Final)
 
-**Node:** v22.22.3 · **Workspace:** `/Users/dmytro/Desktop/2026/KitchenOS`
+**Node:** v22.22.3 · **Workspace:** `/Users/dmytro/Desktop/2026/OS Kitchen`
 
 ## Executive summary
 

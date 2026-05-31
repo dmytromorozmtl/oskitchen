@@ -4,7 +4,7 @@
 # Enterprise Full Audit — 26 May
 Read-only audit based on direct code inspection, targeted command execution, and machine-generated repository inventories. No production code was modified.
 ## 1. Executive Summary
-KitchenOS is not a thin MVP. It is a very large, feature-broad Next.js 15 SaaS/POS platform with real billing, storefront checkout, canonical order creation, multi-workspace scoping, a large Prisma/Postgres schema, and a strong amount of docs/tests/audit intent already in place.
+OS Kitchen is not a thin MVP. It is a very large, feature-broad Next.js 15 SaaS/POS platform with real billing, storefront checkout, canonical order creation, multi-workspace scoping, a large Prisma/Postgres schema, and a strong amount of docs/tests/audit intent already in place.
 
 The strongest parts of the system today are:
 - the canonical order creation path and its reuse across manual, POS, storefront, and public API flows;
@@ -94,7 +94,7 @@ Key architectural observations:
 
 ### Feature: Auth and account bootstrap
 - Feature name: Auth and account bootstrap
-- Business purpose: Create and authenticate KitchenOS users, bootstrap app user/profile/workspace state, and route them into onboarding or dashboard.
+- Business purpose: Create and authenticate OS Kitchen users, bootstrap app user/profile/workspace state, and route them into onboarding or dashboard.
 - User roles: Owners, staff, platform admins
 - User flow: Signup/Login form -> `actions/auth.ts` -> Supabase auth -> `ensureAppUser` -> profile/subscription/settings/workspace bootstrap -> redirect.
 - UI elements: Login form, signup form, forgot-password flow, theme toggle, post-auth redirects.
@@ -14312,7 +14312,7 @@ Indicative commercial packaging read:
 - Full enterprise/compliance expansion beyond that is additional and role-dependent.
 
 ## 36. Final Verdict
-KitchenOS has real substance. This is already a significant product asset with credible replacement cost and several genuinely strong subsystems.
+OS Kitchen has real substance. This is already a significant product asset with credible replacement cost and several genuinely strong subsystems.
 
 The current state is best described as **feature-rich, commercially promising, governance-incomplete**.
 

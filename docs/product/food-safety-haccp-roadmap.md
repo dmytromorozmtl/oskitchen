@@ -27,6 +27,6 @@ Current truth:
 
 ## Competitive Gap
 
-KitchenOS trails Xenia and CrunchTime in compliance depth, but already has a
+OS Kitchen trails Xenia and CrunchTime in compliance depth, but already has a
 better chance to connect food-safety workflows to production, packing, and
 operator dashboards in one system.

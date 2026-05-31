@@ -11,7 +11,7 @@ Generated: 2026-05-18T09:38:05.024Z
 > node ./node_modules/vitest/vitest.mjs run
 
 
- RUN  v4.1.5 /Users/dmytro/Desktop/2026/KitchenOS
+ RUN  v4.1.5 /Users/dmytro/Desktop/2026/OS Kitchen
 
  ❯ tests/unit/staging-env-placeholders.test.ts (2 tests \| 1 failed) 4ms
      × a |

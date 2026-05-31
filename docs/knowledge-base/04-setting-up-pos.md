@@ -1,6 +1,6 @@
 # Setting Up POS
 
-KitchenOS POS runs in any modern browser — tablet, laptop, or phone.
+OS Kitchen POS runs in any modern browser — tablet, laptop, or phone.
 
 ## Create a register
 

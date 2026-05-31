@@ -2,7 +2,7 @@
 
 ## Goals
 
-Deliver a **tenant-safe Partner Operating System**: one dashboard for agencies, SIs, resellers, and franchise/regional operators to monitor many client workspaces without weakening KitchenOS multi-tenancy.
+Deliver a **tenant-safe Partner Operating System**: one dashboard for agencies, SIs, resellers, and franchise/regional operators to monitor many client workspaces without weakening OS Kitchen multi-tenancy.
 
 ## Layers
 

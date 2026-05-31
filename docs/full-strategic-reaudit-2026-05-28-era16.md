@@ -1,4 +1,4 @@
-# KitchenOS Full Strategic Re-Audit — Post Evolution Era 16
+# OS Kitchen Full Strategic Re-Audit — Post Evolution Era 16
 
 **Date:** 2026-05-28  
 **Method:** Read-only inspection of live repository (`main` @ `c88be6b`); inventory commands executed locally; **no** product code changes; **no** deploy/push/migrations  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-KitchenOS remains a **large, production-shaped food-operations monolith** with a **certified governance spine** through Evolution Era 16 (cycles 1–14). Era 16 converted **policy foundations** into CI-enforced commercial proof artifacts (SSO R2 pilot wiring, webhook matrix, mutation linter, pilot GO/NO-GO pack, operational sign-off paths). **It did not** deliver production enterprise SSO, live marketplace ops at scale, staging-first-green GitHub evidence, or Toast/Square feature parity.
+OS Kitchen remains a **large, production-shaped food-operations monolith** with a **certified governance spine** through Evolution Era 16 (cycles 1–14). Era 16 converted **policy foundations** into CI-enforced commercial proof artifacts (SSO R2 pilot wiring, webhook matrix, mutation linter, pilot GO/NO-GO pack, operational sign-off paths). **It did not** deliver production enterprise SSO, live marketplace ops at scale, staging-first-green GitHub evidence, or Toast/Square feature parity.
 
 **Live scale (2026-05-28, `c88be6b`):** **700** App Router pages, **175** API routes, **145** action modules under `actions/`, **604** service TS files, **745** component files, **365** Prisma models, **268** Prisma enums, **698** `*.test.ts` files, **58** Playwright specs, **1,482** markdown docs under `docs/`, **17** GitHub workflows, **16** production cron routes (disk = allowlist), **49** webhook route files, **8** public API v1 routes, **57** feature-maturity matrix rows, **18** domain mutation registry entries, **59** canonical permission keys.
 
@@ -170,7 +170,7 @@ Aligned with `docs/feature-maturity-matrix.md` (57 rows). Condensed:
 
 **Canonical matrix (Era 17):** `era17-competitor-feature-gap-matrix-refresh-v1` — full refresh in [`competitor-feature-gap-matrix.md`](./competitor-feature-gap-matrix.md).
 
-| Competitor | Stronger Than KitchenOS | KitchenOS Advantage | Gap | Leapfrog Opportunity | Era 17 Priority |
+| Competitor | Stronger Than OS Kitchen | OS Kitchen Advantage | Gap | Leapfrog Opportunity | Era 17 Priority |
 |------------|-------------------------|---------------------|-----|------------------------|-----------------|
 | Toast | POS hardware, offline, KDS rush, payments ecosystem | Broad ops modules on one spine; honesty CI | Hardware, offline, depth | Unified ops narrative **if** pilots prove | POS depth P1; hardware defer |
 | Square | Terminal, SMB UX, payments | Similar to Toast gap | Terminal cert | Partner API pack | Terminal preview only |

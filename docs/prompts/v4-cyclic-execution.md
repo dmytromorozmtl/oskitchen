@@ -1,4 +1,4 @@
-# KITCHENOS — CYCLIC SELF-HEALING EXECUTION PROMPT (v4.0)
+# OS Kitchen — CYCLIC SELF-HEALING EXECUTION PROMPT (v4.0)
 
 See parent chat for full prompt body. Each invocation: run diagnostics → fix ONE blocker → commit → append `artifacts/execution-log.txt`.
 

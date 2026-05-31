@@ -1,9 +1,9 @@
-# KitchenOS — Final product and competitor analysis
+# OS Kitchen — Final product and competitor analysis
 
 **Date:** 2026-05-14  
 **Disclaimer:** Competitor facts below are **directional** from public market knowledge. Where precise claims (pricing, feature depth, certification) could change or need verification, they appear in **TODO: verify via web research** at the end.
 
-## KitchenOS positioning (target)
+## OS Kitchen positioning (target)
 
 **Commerce OS + Operations OS** for modern food businesses — unified **POS + digital commerce + BOH execution** (production, packing, routes) with **honest integrations** and **workspace-grade** RBAC.
 
@@ -11,80 +11,80 @@
 
 ## Competitor / category matrix
 
-For each row: **core strengths** · **operational depth** · **POS maturity** · **integration maturity** · **production/kitchen** · **packing/routes** · **inventory/costing** · **labor/scheduling** · **CRM/retention** · **enterprise trust** · **implementation complexity** · **pricing/TCO** · **KitchenOS stronger** · **KitchenOS weaker** · **Do not compete yet** · **Differentiation**
+For each row: **core strengths** · **operational depth** · **POS maturity** · **integration maturity** · **production/kitchen** · **packing/routes** · **inventory/costing** · **labor/scheduling** · **CRM/retention** · **enterprise trust** · **implementation complexity** · **pricing/TCO** · **OS Kitchen stronger** · **OS Kitchen weaker** · **Do not compete yet** · **Differentiation**
 
 ### Toast (POS-first restaurant platform)
 
 - **Strengths:** Very mature US restaurant POS + payments ecosystem; deep hardware/partner orbit.  
-- **KitchenOS stronger:** Flexible multi-channel FoodOps narrative without being locked to Toast’s device/payment stack; faster **custom** workflows for hybrid operators *when* integrations are true.  
-- **KitchenOS weaker:** Table-service POS depth, certified payments hardware ecosystem, massive local field org.  
+- **OS Kitchen stronger:** Flexible multi-channel FoodOps narrative without being locked to Toast’s device/payment stack; faster **custom** workflows for hybrid operators *when* integrations are true.  
+- **OS Kitchen weaker:** Table-service POS depth, certified payments hardware ecosystem, massive local field org.  
 - **Do not compete yet:** Full-service floor plans, native payment processor parity, nationwide field service.  
 - **Differentiation:** “Operator-owned commerce + kitchen execution” for **hybrid** and **multi-brand** brands that still need credible **mapping + production** truth.
 
 ### Square for Restaurants
 
 - **Strengths:** Payments + SMB ease; broad app marketplace.  
-- **KitchenOS weaker:** Payments ubiquity, SMB acquisition funnel, scale of third-party apps.  
-- **KitchenOS stronger:** Purpose-built **order operations chain** (hub → mapping → BOH) in one product story.  
+- **OS Kitchen weaker:** Payments ubiquity, SMB acquisition funnel, scale of third-party apps.  
+- **OS Kitchen stronger:** Purpose-built **order operations chain** (hub → mapping → BOH) in one product story.  
 - **Do not compete yet:** Consumer wallet + Cash App ecosystem effects.  
 - **Differentiation:** Food-specific **execution OS** (not generic SMB OS).
 
 ### Lightspeed Restaurant / Clover / Lightspeed ecosystem
 
 - **Strengths:** Retail/restaurant hybrid in some segments; varied regional strength.  
-- **KitchenOS weaker:** Long-tail retail/restaurant feature parity per region.  
-- **KitchenOS stronger:** Catering + meal-prep shaped workflows if executed end-to-end honestly.  
+- **OS Kitchen weaker:** Long-tail retail/restaurant feature parity per region.  
+- **OS Kitchen stronger:** Catering + meal-prep shaped workflows if executed end-to-end honestly.  
 - **Differentiation:** **Catering/meal-prep + commissary** operational depth over time.
 
 ### Cuboh / Deliverect (aggregator / middleware)
 
 - **Strengths:** Aggregator normalization; menu sync; operational routing to POS/KDS partners.  
-- **KitchenOS weaker:** “Connect everything already” breadth without partner contracts and certified connectors.  
-- **KitchenOS stronger:** When KitchenOS is **system of record**, fewer handoffs; native mapping to **your** catalog.  
+- **OS Kitchen weaker:** “Connect everything already” breadth without partner contracts and certified connectors.  
+- **OS Kitchen stronger:** When OS Kitchen is **system of record**, fewer handoffs; native mapping to **your** catalog.  
 - **Do not compete yet:** Full marketplace of third-party tablets as first-class.  
 - **Differentiation:** Native **workspace** operations after intake — not only pass-through.
 
 ### Olo (digital ordering enterprise)
 
 - **Strengths:** Enterprise digital ordering; brand-level rollout patterns.  
-- **KitchenOS weaker:** Enterprise digital ordering maturity at national chain scale.  
-- **KitchenOS stronger:** Tighter coupling between **owned storefront**, **BOH**, and **routes** in a single codebase *as product matures*.  
+- **OS Kitchen weaker:** Enterprise digital ordering maturity at national chain scale.  
+- **OS Kitchen stronger:** Tighter coupling between **owned storefront**, **BOH**, and **routes** in a single codebase *as product matures*.  
 - **Differentiation:** Mid-market **hybrid** operators needing **ops OS**, not only ordering.
 
 ### Restaurant365 / MarketMan / xtraCHEF / Apicbase (inventory, recipes, back-office)
 
 - **Strengths:** Accounting/inventory depth (varies by vendor); invoice scanning; enterprise rollout.  
-- **KitchenOS weaker:** Full GL, deep invoice OCR at scale, mature vendor item master nationwide.  
-- **KitchenOS stronger:** Operational **moment-to-moment** truth (orders → production) if inventory signals are honest.  
+- **OS Kitchen weaker:** Full GL, deep invoice OCR at scale, mature vendor item master nationwide.  
+- **OS Kitchen stronger:** Operational **moment-to-moment** truth (orders → production) if inventory signals are honest.  
 - **Do not compete yet:** Full accounting replacement, payroll.  
 - **Differentiation:** **Operational shortage + demand** tied to real orders, not only periodic inventory.
 
 ### 7shifts / HotSchedules (labor)
 
 - **Strengths:** Scheduling, compliance messaging, shift marketplace integrations.  
-- **KitchenOS weaker:** Labor law depth per region; shift marketplace scale.  
-- **KitchenOS stronger:** Tie shifts to **production/packing** reality when modeled.  
+- **OS Kitchen weaker:** Labor law depth per region; shift marketplace scale.  
+- **OS Kitchen stronger:** Tie shifts to **production/packing** reality when modeled.  
 - **Do not compete yet:** Enterprise labor compliance as primary SKU.
 
 ### Shopify / WooCommerce ecosystem
 
 - **Strengths:** Commerce merchandising, SEO, app ecosystem.  
-- **KitchenOS weaker:** Merchandising breadth vs Shopify theme ecosystem.  
-- **KitchenOS stronger:** Post-checkout **operations** (production/packing/routes) inside operator workspace.  
-- **Differentiation:** **KitchenOS storefront** as controlled layer feeding **native ops**, not 20 plugins.
+- **OS Kitchen weaker:** Merchandising breadth vs Shopify theme ecosystem.  
+- **OS Kitchen stronger:** Post-checkout **operations** (production/packing/routes) inside operator workspace.  
+- **Differentiation:** **OS Kitchen storefront** as controlled layer feeding **native ops**, not 20 plugins.
 
 ### Generic restaurant CRMs
 
 - **Strengths:** Marketing automation scale.  
-- **KitchenOS weaker:** Full lifecycle marketing breadth.  
-- **KitchenOS stronger:** CRM anchored to **order graph** and **fulfillment outcomes**.  
+- **OS Kitchen weaker:** Full lifecycle marketing breadth.  
+- **OS Kitchen stronger:** CRM anchored to **order graph** and **fulfillment outcomes**.  
 - **Differentiation:** “CRM from operations truth”.
 
 ### Ghost kitchen tools
 
 - **Strengths:** Multi-brand throughput, sometimes marketplace dispatch integrations.  
-- **KitchenOS weaker:** Real-time dispatch partner depth without contracts.  
-- **KitchenOS stronger:** Honest integration health + mapping + internal routing model.  
+- **OS Kitchen weaker:** Real-time dispatch partner depth without contracts.  
+- **OS Kitchen stronger:** Honest integration health + mapping + internal routing model.  
 - **Differentiation:** Operator-owned reliability dashboards + recovery.
 
 ---

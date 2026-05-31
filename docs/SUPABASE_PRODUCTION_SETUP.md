@@ -42,7 +42,7 @@ Apply policies from `supabase/storage-policies.sql` **after review** (defaults a
 
 ## 8. RLS guidance
 
-KitchenOS MVP primarily uses **Prisma** with the database connection string (bypasses RLS). If you expose tables to the browser via Supabase JS:
+OS Kitchen MVP primarily uses **Prisma** with the database connection string (bypasses RLS). If you expose tables to the browser via Supabase JS:
 
 - Enable RLS per table.
 - Scope policies to `auth.uid()` matching your user IDs.

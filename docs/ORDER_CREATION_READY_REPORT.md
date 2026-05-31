@@ -85,7 +85,7 @@ paths, not the Center UI).
 
 ## Business modes
 
-All seven KitchenOS profiles (restaurant, café, bakery, bar, catering,
+All seven OS Kitchen profiles (restaurant, café, bakery, bar, catering,
 meal prep, ghost kitchen) are addressed through the modes config and
 order-type cards.
 

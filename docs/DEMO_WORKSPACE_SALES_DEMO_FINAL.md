@@ -2,7 +2,7 @@
 
 ## Goals
 
-- KitchenOS looks **alive** in a first meeting.  
+- OS Kitchen looks **alive** in a first meeting.  
 - Demo data is **obviously demo**, **resettable**, and **never silently contaminates** a real workspace.
 
 ## Modules (target)

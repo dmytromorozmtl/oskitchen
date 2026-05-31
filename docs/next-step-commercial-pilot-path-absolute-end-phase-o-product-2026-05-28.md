@@ -1,4 +1,4 @@
-# KitchenOS — Phase O: Commercial pilot path absolute end (post-honest Post-terminus steady state)
+# OS Kitchen — Phase O: Commercial pilot path absolute end (post-honest Post-terminus steady state)
 
 **Status:** Product surfaces + Commercial pilot path absolute end integrity guard **IMPLEMENTED** · Human path-closure attestation **REQUIRED**  
 **Policy:** `era24-commercial-pilot-path-absolute-end-v1` · Integrity `era39-commercial-pilot-path-absolute-end-integrity-v1`  

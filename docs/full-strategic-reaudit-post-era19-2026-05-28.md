@@ -1,4 +1,4 @@
-# KitchenOS Full Strategic Re-Audit — Post Era 19 Convergence
+# OS Kitchen Full Strategic Re-Audit — Post Era 19 Convergence
 
 **Date:** 2026-05-28  
 **Method:** Read-only inspection @ `7b17ffa` on `main`; inventory commands; artifact review; code path verification; **no** maturity inflation  
@@ -9,9 +9,9 @@
 
 ## Executive Summary
 
-KitchenOS has crossed a **product UX inflection** in Era 19: the five breakthrough pillars are **largely implemented in code** (Owner Daily Briefing, Launch Wizard, Integration Health Center, operational command-flow convergence, operational intelligence slices). The platform **still has not crossed a commercial inflection** — P0 staging proof, paid pilot GO, live channel smoke, and IdP SSO proof remain **ops-blocked** with honest SKIPPED artifacts.
+OS Kitchen has crossed a **product UX inflection** in Era 19: the five breakthrough pillars are **largely implemented in code** (Owner Daily Briefing, Launch Wizard, Integration Health Center, operational command-flow convergence, operational intelligence slices). The platform **still has not crossed a commercial inflection** — P0 staging proof, paid pilot GO, live channel smoke, and IdP SSO proof remain **ops-blocked** with honest SKIPPED artifacts.
 
-**Verdict:** KitchenOS is closer to feeling like an **operational nervous system** for owners/managers in the **dashboard**, but not yet for **market buyers** who require executed proof, a customer record, and competitor-depth in FOH/hardware/marketplace.
+**Verdict:** OS Kitchen is closer to feeling like an **operational nervous system** for owners/managers in the **dashboard**, but not yet for **market buyers** who require executed proof, a customer record, and competitor-depth in FOH/hardware/marketplace.
 
 | Dimension | Score | Δ vs Era 18 WOW audit |
 |-----------|------:|----------------------|

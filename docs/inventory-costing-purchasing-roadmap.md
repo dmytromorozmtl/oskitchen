@@ -4,7 +4,7 @@ Status: operational-finance roadmap from foundational inventory into dependable 
 Primary evidence: `actions/inventory.ts`, `actions/costing.ts`, `actions/purchasing.ts`, `services/inventory/`, `services/costing/`, `services/purchasing/`, `services/pos/pos-inventory-impact-service.ts`, `docs/system-reality-model.md`
 
 ## Goal
-Make KitchenOS stronger than standalone inventory or costing tools by tying sales, menu structure, purchasing, margin, and operational behavior into one model.
+Make OS Kitchen stronger than standalone inventory or costing tools by tying sales, menu structure, purchasing, margin, and operational behavior into one model.
 
 ## Capability Roadmap
 | Capability bundle | Current state | Gap | Model changes | Service changes | UI changes | Permission changes | Audit logs | Tests | Acceptance criteria |

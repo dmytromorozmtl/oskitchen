@@ -1,4 +1,4 @@
-# KitchenOS — Top 5 completion report
+# OS Kitchen — Top 5 completion report
 
 ## Scope
 
@@ -49,7 +49,7 @@ This pass focused on interconnecting:
 - `docs/PLATFORM_ADMIN_SUPPORT_COMPLETION.md`
 - `docs/CRITICAL_PATH_QA_MATRIX.md`
 - `docs/COMMERCIAL_MVP_CRITICAL_PATH_REPORT.md`
-- `docs/KITCHENOS_TOP_5_COMPLETION_REPORT.md` (this file)
+- `docs/OS Kitchen_TOP_5_COMPLETION_REPORT.md` (this file)
 
 ## QA results
 
@@ -72,4 +72,4 @@ This pass focused on interconnecting:
 
 ## Conclusion
 
-KitchenOS now presents a **single connected operating story** across orders, hub, detail, Today, and platform reads. Remaining work is mostly **deeper automation** (intents, subgraph persistence) rather than new modules.
+OS Kitchen now presents a **single connected operating story** across orders, hub, detail, Today, and platform reads. Remaining work is mostly **deeper automation** (intents, subgraph persistence) rather than new modules.

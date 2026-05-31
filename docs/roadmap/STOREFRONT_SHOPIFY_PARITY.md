@@ -1,6 +1,6 @@
 # Storefront ↔ Shopify parity roadmap
 
-KitchenOS storefront targets **preorder kitchen ICP**, not a full Shopify clone. This document tracks bek/front alignment, architecture rules, and sprint order.
+OS Kitchen storefront targets **preorder kitchen ICP**, not a full Shopify clone. This document tracks bek/front alignment, architecture rules, and sprint order.
 
 ## Architecture (mandatory for every feature)
 

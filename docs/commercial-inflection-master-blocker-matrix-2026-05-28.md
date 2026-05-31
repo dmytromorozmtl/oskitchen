@@ -11,7 +11,7 @@
 
 ## Executive summary
 
-KitchenOS is **demo-grade strong** but **commercial inflection blocked** on human ops credentials and paid pilot proof.
+OS Kitchen is **demo-grade strong** but **commercial inflection blocked** on human ops credentials and paid pilot proof.
 
 | Metric | Value | Meaning |
 |--------|-------|---------|
@@ -42,7 +42,7 @@ Configure in **GitHub Actions secrets** + ops shell (never commit values).
 
 ## P0 — engineering (after vault)
 
-| Item | KitchenOS surface | Honest status |
+| Item | OS Kitchen surface | Honest status |
 |------|-------------------|---------------|
 | P0 smoke orchestrator | `smoke:p0-staging-proof-unblock` | SKIPPED until vault |
 | Live channel ingest | `smoke:woo-shopify-live` | Synthetic CI only pre-PASS |

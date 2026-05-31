@@ -1,4 +1,4 @@
-# KitchenOS Public API v1
+# OS Kitchen Public API v1
 
 Authenticate with `Authorization: Bearer kos_...` (enterprise API key).
 

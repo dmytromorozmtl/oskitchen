@@ -16,7 +16,7 @@
 
 1. **Demo-first**: `/demo` → signup → onboarding → live channel connect.
 2. **Content**: “Replace spreadsheet production” SEO + LinkedIn teardown posts.
-3. **Agency**: Small Shopify meal-prep studios bundle KitchenOS as fulfillment OS.
+3. **Agency**: Small Shopify meal-prep studios bundle OS Kitchen as fulfillment OS.
 
 ## Success milestones
 

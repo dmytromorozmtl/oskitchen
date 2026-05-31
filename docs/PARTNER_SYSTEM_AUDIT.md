@@ -4,7 +4,7 @@ Date: 2026-05-13. Scope: `/dashboard/partner`, Prisma partner models, `lib/partn
 
 ## Executive summary
 
-KitchenOS already had `PartnerAccount`, `PartnerMember`, and `PartnerClient` as a thin program layer. The Partner Operating System extension adds typed lifecycle fields, revenue and managed-ticket tables, a command-center snapshot service, and a gated dashboard UI. Remaining gaps are mostly operational depth (server pagination, mutation APIs, payout automation, SSO) rather than missing tables.
+OS Kitchen already had `PartnerAccount`, `PartnerMember`, and `PartnerClient` as a thin program layer. The Partner Operating System extension adds typed lifecycle fields, revenue and managed-ticket tables, a command-center snapshot service, and a gated dashboard UI. Remaining gaps are mostly operational depth (server pagination, mutation APIs, payout automation, SSO) rather than missing tables.
 
 ## Findings
 

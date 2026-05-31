@@ -1,4 +1,4 @@
-# KitchenOS — GTM & Engineering Execution Plan
+# OS Kitchen — GTM & Engineering Execution Plan
 
 **Date:** 2026-05-24  
 **Source audit:** `docs/ultimate-audit-24may2026.md`  
@@ -96,7 +96,7 @@ flowchart TD
 | Week | Type | Topic | Target keyword |
 |------|------|-------|----------------|
 | W1 | How-to | Weekly meal prep order flow | meal prep software |
-| W2 | Compare | KitchenOS vs MarketMan (meal prep) | marketman alternative meal prep |
+| W2 | Compare | OS Kitchen vs MarketMan (meal prep) | marketman alternative meal prep |
 | W3 | Case study | Pilot #1 (anonymized OK) | ghost kitchen software |
 | W4 | How-to | KDS setup for small restaurant | kitchen display system |
 | W5–12 | Repeat | 2 posts/month | Rotate solution + compare |

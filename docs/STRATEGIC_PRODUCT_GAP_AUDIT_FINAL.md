@@ -1,12 +1,12 @@
 # Strategic Product Gap Audit — Final
 
-**Product:** KitchenOS  
+**Product:** OS Kitchen  
 **Positioning:** Commerce OS + Operations OS (not a Toast replacement).  
 **Date:** 2026-05-14  
 
 ## Executive summary
 
-KitchenOS already spans **POS, channels, order hub, mapping, production, packing, routes, CRM, analytics, purchasing, costing, platform admin, and support** in one codebase. Gaps vs market leaders are less about **surface area** and more about **depth, honesty, and demo narrative**: Cuboh/Deliverect win on **integration proof**, Toast/7shifts on **labor**, R365/MarketMan on **AvT + GL**, meal-prep tools on **subscription UX**.
+OS Kitchen already spans **POS, channels, order hub, mapping, production, packing, routes, CRM, analytics, purchasing, costing, platform admin, and support** in one codebase. Gaps vs market leaders are less about **surface area** and more about **depth, honesty, and demo narrative**: Cuboh/Deliverect win on **integration proof**, Toast/7shifts on **labor**, R365/MarketMan on **AvT + GL**, meal-prep tools on **subscription UX**.
 
 ## Classification legend
 

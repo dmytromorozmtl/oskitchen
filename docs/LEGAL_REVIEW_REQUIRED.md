@@ -1,6 +1,6 @@
 # Legal review required
 
-KitchenOS legal pages are starter templates. Counsel must review before broad commercial use.
+OS Kitchen legal pages are starter templates. Counsel must review before broad commercial use.
 
 Review required for:
 - Privacy policy

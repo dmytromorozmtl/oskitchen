@@ -1,4 +1,4 @@
-# Billing module audit (KitchenOS)
+# Billing module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/billing`, `/pricing`, `/api/checkout`,

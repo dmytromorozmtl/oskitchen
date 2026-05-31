@@ -1,4 +1,4 @@
-# KitchenOS — Phase AO: Era25 post-terminal-seal commercial ops permanence (era65)
+# OS Kitchen — Phase AO: Era25 post-terminal-seal commercial ops permanence (era65)
 
 **Status:** Product surfaces + commercial ops permanence integrity guard **IMPLEMENTED** · Human permanence attestation **REQUIRED** (seal-driven)  
 **Policy:** `era65-era25-post-terminal-seal-commercial-ops-permanence-phases-v1` · Integrity `era65-era25-post-terminal-seal-commercial-ops-permanence-integrity-v1`  

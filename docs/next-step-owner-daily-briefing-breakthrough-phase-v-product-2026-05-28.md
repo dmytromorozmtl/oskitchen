@@ -1,4 +1,4 @@
-# KitchenOS — Phase V: Era25 owner daily briefing breakthrough (post-honest blueprint)
+# OS Kitchen — Phase V: Era25 owner daily briefing breakthrough (post-honest blueprint)
 
 **Status:** Product surfaces + breakthrough integrity guard **IMPLEMENTED** · Human breakthrough attestation **REQUIRED**  
 **Policy:** `era25-owner-daily-briefing-breakthrough-v1` · Integrity `era46-owner-daily-briefing-breakthrough-integrity-v1`  

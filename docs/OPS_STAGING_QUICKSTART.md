@@ -1,4 +1,4 @@
-# KitchenOS Staging — Quickstart
+# OS Kitchen Staging — Quickstart
 
 Run **one command per line**. Do not paste `#` comment lines into the terminal.
 
@@ -9,7 +9,7 @@ Run **one command per line**. Do not paste `#` comment lines into the terminal.
 ## One-time setup
 
 ```bash
-cd /path/to/KitchenOS
+cd /path/to/OS Kitchen
 cp .env.staging.template .env.staging.local
 ```
 
@@ -74,4 +74,4 @@ npm run test:e2e:pilot
 | `DEPLOYMENT_NOT_FOUND` | [OPS_VERCEL_REDEPLOY.md](./OPS_VERCEL_REDEPLOY.md) |
 | `Missing DATABASE_URL` | Fill `.env.staging.local` |
 | `Invalid URL` in Playwright | `export PLAYWRIGHT_BASE_URL=https://...` |
-| `syntax error` on env source | Use `.env.staging.local`; quote `RESEND_FROM_EMAIL="KitchenOS <noreply@…>"` |
+| `syntax error` on env source | Use `.env.staging.local`; quote `RESEND_FROM_EMAIL="OS Kitchen <noreply@…>"` |

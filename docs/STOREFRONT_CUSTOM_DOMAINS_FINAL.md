@@ -1,6 +1,6 @@
 # Storefront custom domains — final checklist
 
-KitchenOS records desired domains in `StorefrontSettings` and `StorefrontDomain`. **You must still attach the hostname in your hosting provider (e.g. Vercel) and configure DNS at the registrar.**
+OS Kitchen records desired domains in `StorefrontSettings` and `StorefrontDomain`. **You must still attach the hostname in your hosting provider (e.g. Vercel) and configure DNS at the registrar.**
 
 ## Path mode (default)
 
@@ -12,7 +12,7 @@ KitchenOS records desired domains in `StorefrontSettings` and `StorefrontDomain`
 - Set `NEXT_PUBLIC_STOREFRONT_ROOT_DOMAIN` to your apex (e.g. `kitchenos.com`).
 - DNS: wildcard `*.kitchenos.com` → Vercel (or provider-specific target).
 - Vercel: add wildcard domain to the project.
-- KitchenOS: set `subdomain` + `primaryDomainMode=SUBDOMAIN`.
+- OS Kitchen: set `subdomain` + `primaryDomainMode=SUBDOMAIN`.
 
 ## Custom apex / www
 

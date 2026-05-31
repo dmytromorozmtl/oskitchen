@@ -4,7 +4,7 @@
 **Status:** `permission_denied_ux_consistent` — standardized denial cards on pilot surfaces  
 **Parent:** [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) · [`pos-tablet-ux-operator-runbook-era17.md`](./pos-tablet-ux-operator-runbook-era17.md)
 
-When an operator lacks RBAC permission, KitchenOS shows a **permission denied card** — not a blank page or generic 404. This is expected behavior, not a bug.
+When an operator lacks RBAC permission, OS Kitchen shows a **permission denied card** — not a blank page or generic 404. This is expected behavior, not a bug.
 
 ---
 

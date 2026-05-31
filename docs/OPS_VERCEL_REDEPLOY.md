@@ -9,7 +9,7 @@
 ## Option A — Vercel Dashboard (recommended)
 
 1. Open [https://vercel.com/dashboard](https://vercel.com/dashboard)
-2. Select the **KitchenOS** project
+2. Select the **OS Kitchen** project
 3. Open **Deployments**
 4. Find the latest deployment for branch `main` or `pilot-18may`
 5. If status is **Ready** — copy the **Visit** URL (ends with `.vercel.app`)
@@ -44,7 +44,7 @@ curl -s https://YOUR-NEW-PREVIEW.vercel.app/api/health | head -c 200
 ```bash
 npm i -g vercel
 vercel login
-cd /path/to/KitchenOS
+cd /path/to/OS Kitchen
 vercel link    # if not linked yet
 
 # Push env to Vercel staging (after .env.staging.local is filled)

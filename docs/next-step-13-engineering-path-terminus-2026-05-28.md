@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 13: Engineering path terminus (конец era21→era24)
+# OS Kitchen — Шаг 13: Engineering path terminus (конец era21→era24)
 
 **Policy:** `era24-engineering-path-terminus-v1` · **Orchestrator:** `era24-engineering-path-terminus-post-maintenance-mode-orchestrator-v1` · Backlog `KOS-E24-013`  
 **Предусловие:** Maintenance mode active (Step 12) · `maintenanceModeMilestone` healthy or rhythms refreshed · GO valid  

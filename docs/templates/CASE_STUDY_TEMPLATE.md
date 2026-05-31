@@ -1,4 +1,4 @@
-# Case Study Template — KitchenOS Pilot
+# Case Study Template — OS Kitchen Pilot
 
 **Permission:** Named or anonymized — get written approval before publish.  
 **Era 17 canonical gate:** `era17-pilot-case-study-draft-v1` — use [`pilot-case-study-draft-era17.md`](../pilot-case-study-draft-era17.md) for proof wiring; this legacy template remains reference-only.
@@ -12,7 +12,7 @@
 **Location:** City, State/Province  
 **Plan:** Starter | Pro | Team (pilot pricing)
 
-### Before KitchenOS
+### Before OS Kitchen
 
 - Orders/week: ___
 - Tools used: ___

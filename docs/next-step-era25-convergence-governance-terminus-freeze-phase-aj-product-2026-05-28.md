@@ -1,4 +1,4 @@
-# KitchenOS — Phase AJ: Era25 convergence governance terminus freeze (era60)
+# OS Kitchen — Phase AJ: Era25 convergence governance terminus freeze (era60)
 
 **Status:** Product surfaces + governance terminus freeze integrity guard **IMPLEMENTED** · Human terminus freeze attestation **REQUIRED**  
 **Policy:** `era60-era25-convergence-governance-terminus-freeze-phases-v1` · Integrity `era60-era25-convergence-governance-terminus-freeze-integrity-v1`  

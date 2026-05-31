@@ -1,4 +1,4 @@
-# KitchenOS — Final Acceptance Verdict (19 May 2026)
+# OS Kitchen — Final Acceptance Verdict (19 May 2026)
 
 **Role:** QA Director / Security Auditor (independent re-verification)  
 **Production:** https://os-kitchen.com  

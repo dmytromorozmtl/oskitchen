@@ -1,4 +1,4 @@
-# KitchenOS Canonical Documentation Index
+# OS Kitchen Canonical Documentation Index
 
 **Status:** canonical doc governance index for Evolution Era 2  
 **Updated:** 2026-05-28 (Era 17 full product re-audit — post Era 17 closure @ 5e00dd4)  

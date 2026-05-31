@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State (56+ Sessions)
+# OS Kitchen — Absolute Final State (56+ Sessions)
 
 **Date:** 23 May 2026  
 **Production:** https://os-kitchen.com  
@@ -64,7 +64,7 @@
 
 ## Sign-off
 
-KitchenOS is system-complete. All 195+ audit items closed. Production healthy.  
+OS Kitchen is system-complete. All 195+ audit items closed. Production healthy.  
 System ready for paid operators across all food-business segments.
 
 **Signed:** Principal Platform Architect  

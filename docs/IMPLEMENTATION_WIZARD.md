@@ -17,7 +17,7 @@ Server action: `actions/implementation-center.ts → createImplementationProject
 5. **Module scope** — Storefront, Orders, Menus, Production, Packing,
    Routes, CRM, Purchasing, Analytics, Costing, Catering, Meal Plans.
 6. **Integrations** — Shopify, WooCommerce, Uber Eats, Uber Direct,
-   KitchenOS Storefront, Webhooks, Email/notifications.
+   OS Kitchen Storefront, Webhooks, Email/notifications.
 7. **Training needs** — owner/admin, manager, kitchen lead, packer,
    driver, customer service, purchasing, sales/catering.
 8. **Go-live** — target date, owner, fulfillment types.

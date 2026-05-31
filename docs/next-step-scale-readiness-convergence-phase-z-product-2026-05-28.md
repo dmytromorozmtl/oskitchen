@@ -1,4 +1,4 @@
-# KitchenOS — Phase Z: Era25 scale readiness convergence (post-honest month 2)
+# OS Kitchen — Phase Z: Era25 scale readiness convergence (post-honest month 2)
 
 **Status:** Product surfaces + scale convergence integrity guard **IMPLEMENTED** · Human scale attestation **REQUIRED**  
 **Policy:** `era25-scale-readiness-convergence-v1` · Integrity `era50-scale-readiness-convergence-integrity-v1`  

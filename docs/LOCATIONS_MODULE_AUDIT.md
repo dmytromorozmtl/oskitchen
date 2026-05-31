@@ -1,4 +1,4 @@
-# Locations module audit (KitchenOS)
+# Locations module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/locations`, `actions/locations.ts`, Prisma `Location`, every model that already carries an optional `locationId` (Menu, Order, ProductionBatch/WorkItem/Station, PackingBatch/Task, ChannelOrder, InventoryStock, PurchaseOrder, KitchenTask, DeliveryRoute, ProfitabilityLine, CateringEvent, Brand), plus storefront / staff / sales-channel references.

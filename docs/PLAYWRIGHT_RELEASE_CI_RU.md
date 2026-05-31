@@ -1,4 +1,4 @@
-# Playwright и CI для релизного контура (KitchenOS)
+# Playwright и CI для релизного контура (OS Kitchen)
 
 **Версия:** 1.1  
 **Дата:** 2026-05-15

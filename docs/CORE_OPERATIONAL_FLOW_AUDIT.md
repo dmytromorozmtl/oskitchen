@@ -1,4 +1,4 @@
-# KitchenOS — Core Operational Flow Audit
+# OS Kitchen — Core Operational Flow Audit
 
 **Date:** 2026-05-15  
 **Scope:** End-to-end operational narratives for Commerce OS + Operations OS.

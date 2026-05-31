@@ -1,4 +1,4 @@
-# KITCHENOS — AUTONOMOUS LOOP EXECUTOR v5.0
+# OS Kitchen — AUTONOMOUS LOOP EXECUTOR v5.0
 
 Each invocation: read `artifacts/execution-log.txt` → diagnose → ONE fix → commit → append log.
 

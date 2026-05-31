@@ -1,4 +1,4 @@
-# KitchenOS — Security, RBAC & Multi-Tenant Isolation Audit
+# OS Kitchen — Security, RBAC & Multi-Tenant Isolation Audit
 
 **Date:** 2026-05-15
 
@@ -6,7 +6,7 @@
 
 ## 1. Executive summary
 
-KitchenOS uses **Supabase auth** + **server-side session** (`middleware.ts` → `updateSession`) and **Prisma-scoped queries** keyed by workspace/organization/location/brand IDs. **Platform** surfaces are gated in layout via `requirePlatformAccess()` (`lib/platform/platform-guards.ts`). Founder bootstrap is pinned to **`workspace.moroz@gmail.com`** (`lib/platform-owner.ts`).
+OS Kitchen uses **Supabase auth** + **server-side session** (`middleware.ts` → `updateSession`) and **Prisma-scoped queries** keyed by workspace/organization/location/brand IDs. **Platform** surfaces are gated in layout via `requirePlatformAccess()` (`lib/platform/platform-guards.ts`). Founder bootstrap is pinned to **`workspace.moroz@gmail.com`** (`lib/platform-owner.ts`).
 
 **No P0 client bypass** of `/platform` was identified in this pass: unauthenticated users hitting `/platform` should be forced through normal auth flows (E2E: `tests/e2e/platform-access-denial.spec.ts`).
 

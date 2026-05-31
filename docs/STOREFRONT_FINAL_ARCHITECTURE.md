@@ -23,4 +23,4 @@
 ## Non-goals (by design)
 
 - Not a full visual Webflow-style builder in v1.
-- No automatic DNS provisioning from KitchenOS.
+- No automatic DNS provisioning from OS Kitchen.

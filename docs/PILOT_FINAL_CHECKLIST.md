@@ -1,4 +1,4 @@
-# KitchenOS Pilot — Final Checklist
+# OS Kitchen Pilot — Final Checklist
 
 **Last updated:** 19 May 2026
 

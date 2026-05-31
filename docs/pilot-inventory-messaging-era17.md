@@ -5,13 +5,13 @@
 **Storefront hook:** **deferred_locked** (unchanged)  
 **Parent:** [`pos-only-inventory-lock-era17.md`](./pos-only-inventory-lock-era17.md) · [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md)
 
-Use this guide before demo calls, discovery decks, and pilot contracts. Inventory is a common source of overclaim — KitchenOS depletes stock on **POS sales only** during pilot.
+Use this guide before demo calls, discovery decks, and pilot contracts. Inventory is a common source of overclaim — OS Kitchen depletes stock on **POS sales only** during pilot.
 
 ---
 
 ## Purpose and honest scope
 
-KitchenOS supports **qualified pilot inventory** with:
+OS Kitchen supports **qualified pilot inventory** with:
 
 - Recipe-linked ingredient depletion on **POS checkout** (when products have active recipes)
 - Inventory counts, waste, and variance workflows (**beta**)

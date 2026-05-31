@@ -1,4 +1,4 @@
-# KitchenOS — Final QA Matrix (Commercial MVP)
+# OS Kitchen — Final QA Matrix (Commercial MVP)
 
 **Date:** 2026-05-14  
 Use this as a **manual demo script** and regression checklist. Mark pass/fail in your test run.

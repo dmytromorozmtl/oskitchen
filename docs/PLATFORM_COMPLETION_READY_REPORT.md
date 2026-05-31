@@ -1,4 +1,4 @@
-# KitchenOS — Platform Completion Ready Report
+# OS Kitchen — Platform Completion Ready Report
 
 **Date:** 2026-05-13  
 **Objective:** Cohesion + production readiness **without** breaking routes, removing modules, faking integrations, or exposing secrets.

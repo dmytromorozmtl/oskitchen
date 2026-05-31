@@ -1,4 +1,4 @@
-# KitchenOS — era25 Pilot Week 1 Execution Convergence
+# OS Kitchen — era25 Pilot Week 1 Execution Convergence
 
 **Status:** **Third era25 product slice · IMPLEMENTED · BLOCKED until GO convergence ready**
 
@@ -66,7 +66,7 @@ npm run test:ci:paid-pilot-go-convergence-era25
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `week1_phases_panel` | Week 1 day phases | Commercial pilot ops |
 | `briefing_action` | Ranked action on blocked day | Owner Daily Briefing hero |

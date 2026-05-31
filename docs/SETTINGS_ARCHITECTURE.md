@@ -1,6 +1,6 @@
 # Settings Center Architecture
 
-This document explains how the KitchenOS Settings Center is wired together — the
+This document explains how the OS Kitchen Settings Center is wired together — the
 section registry, permissions, JSON payload, services, actions, and UI surfaces.
 
 ## Goals

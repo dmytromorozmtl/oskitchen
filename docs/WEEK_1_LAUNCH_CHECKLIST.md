@@ -53,7 +53,7 @@ npm run gtm:week1
 | Lead tracker | `docs/outreach/pilot-tracker.md` | [ ] |
 | Pilot agreement | `docs/outreach/pilot-agreement-template.md` | [ ] |
 
-- [ ] PDF deck saved as `KitchenOS-Sales-Deck.pdf`
+- [ ] PDF deck saved as `OS Kitchen-Sales-Deck.pdf`
 - [ ] Attached to outbound Template 1–3
 
 ---

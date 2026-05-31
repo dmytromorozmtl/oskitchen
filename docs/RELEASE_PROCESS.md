@@ -1,6 +1,6 @@
 # Release process
 
-Lightweight checklist for shipping KitchenOS to preview or production.
+Lightweight checklist for shipping OS Kitchen to preview or production.
 
 ## Pre-merge
 

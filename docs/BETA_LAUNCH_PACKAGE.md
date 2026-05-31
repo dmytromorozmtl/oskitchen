@@ -42,7 +42,7 @@
 
 ## Weekly follow-up email
 
-> Subject: KitchenOS beta — quick pulse  
+> Subject: OS Kitchen beta — quick pulse  
 > Body: What was painful this week? Reply with 3 bullets. If blocked on integrations, say which channel.
 
 ## Success criteria

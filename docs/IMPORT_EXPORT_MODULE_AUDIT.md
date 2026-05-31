@@ -1,4 +1,4 @@
-# Import / Export module audit (KitchenOS)
+# Import / Export module audit (OS Kitchen)
 
 Date: 2026-05-07. Scope: `/dashboard/import-export`, `/api/export`, `/api/import-export/template`, Prisma `ImportJob` / `ExportJob` / preview rows, services under `services/import-export/`, `lib/import-export/`.
 

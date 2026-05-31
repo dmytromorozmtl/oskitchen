@@ -2,7 +2,7 @@
 
 ## Products & prices
 
-Create **Products** in Stripe for KitchenOS plans (monthly):
+Create **Products** in Stripe for OS Kitchen plans (monthly):
 
 | Plan | Suggested price | Entitlements (marketing) |
 |------|-----------------|---------------------------|

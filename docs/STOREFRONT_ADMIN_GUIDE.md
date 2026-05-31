@@ -30,7 +30,7 @@ Use `/dashboard/storefront` and the horizontal tabs:
 2. **Storefront → Overview** — enable storefront, set slug, publish toggle, branding, fulfillment toggles, tagline, SEO fields, minimum order, optional checkout terms.
 3. **Products** — set optional **public URL slugs** so guests can use `/s/{slug}/products/{slug}` as well as UUID links.
 4. **Preview** — open public URL; drafts visible only when signed in as the owner.
-5. **Domains** — read the checklist; configure DNS + hosting (e.g. Vercel), then set subdomain/custom domain fields. DNS is **not** automated from KitchenOS.
+5. **Domains** — read the checklist; configure DNS + hosting (e.g. Vercel), then set subdomain/custom domain fields. DNS is **not** automated from OS Kitchen.
 6. **Analytics** — view aggregate visit + funnel events (privacy-hashed IP/UA on visits).
 
 ## Discount codes (MVP)

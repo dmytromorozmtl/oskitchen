@@ -4,7 +4,7 @@ Route: `/dashboard/locations/assignment`
 
 ## Why this exists
 
-Most KitchenOS workspaces existed before the Location concept matured. Rows
+Most OS Kitchen workspaces existed before the Location concept matured. Rows
 across Menus, Orders, Brands, Production, Packing, Routes, Inventory, POs,
 and Tasks were created with `locationId = null`. This page lets operators
 tag them in bulk without writing SQL — and **never** destructively migrates.

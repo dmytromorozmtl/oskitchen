@@ -1,4 +1,4 @@
-# KitchenOS — Capability Sign-off (Sales & CS)
+# OS Kitchen — Capability Sign-off (Sales & CS)
 
 **Version:** 2.0 · **Date:** 19 May 2026  
 **Source of truth (code):** `lib/capabilities/capability-matrix.ts`  
@@ -81,7 +81,7 @@
 
 ### Redirect script (copy-paste)
 
-> “KitchenOS is built for **weekly preorder and kitchen operations** — menu, production, packing, and your own storefront. Marketplace connectors like Uber Eats and DoorDash require **separate partnership programs** we don’t sell as live today. Most pilots consolidate channels through **Shopify/WooCommerce** or manual orders. I’ll send you our capability sheet so we only commit to what’s live for your go-live.”
+> “OS Kitchen is built for **weekly preorder and kitchen operations** — menu, production, packing, and your own storefront. Marketplace connectors like Uber Eats and DoorDash require **separate partnership programs** we don’t sell as live today. Most pilots consolidate channels through **Shopify/WooCommerce** or manual orders. I’ll send you our capability sheet so we only commit to what’s live for your go-live.”
 
 ---
 

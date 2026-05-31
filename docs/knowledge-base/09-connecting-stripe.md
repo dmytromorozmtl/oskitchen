@@ -1,6 +1,6 @@
 # Connecting Stripe
 
-KitchenOS uses **Stripe Connect** — you receive payments directly.
+OS Kitchen uses **Stripe Connect** — you receive payments directly.
 
 ## Setup
 
@@ -11,7 +11,7 @@ KitchenOS uses **Stripe Connect** — you receive payments directly.
 ## Storefront checkout
 
 - Customers pay via Stripe Checkout on your storefront.
-- KitchenOS never stores card numbers (PCI SAQ-A path).
+- OS Kitchen never stores card numbers (PCI SAQ-A path).
 
 ## POS card payments
 

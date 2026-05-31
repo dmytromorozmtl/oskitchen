@@ -6,7 +6,7 @@
 
 ## Stance
 
-KitchenOS records Uber Direct buttons as **placeholder events** (`DeliveryEventType.UBER_QUOTE_REQUESTED_PLACEHOLDER`) for the audit trail. We do not call Uber APIs from these screens.
+OS Kitchen records Uber Direct buttons as **placeholder events** (`DeliveryEventType.UBER_QUOTE_REQUESTED_PLACEHOLDER`) for the audit trail. We do not call Uber APIs from these screens.
 
 ## Setup checklist
 

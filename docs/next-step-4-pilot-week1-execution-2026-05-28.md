@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 4: Pilot Week 1 (после GO decision)
+# OS Kitchen — Шаг 4: Pilot Week 1 (после GO decision)
 
 **Policy:** `era21-pilot-week1-execution-v1` · **Backlog:** `KOS-E21-004`  
 **Предусловие:** `artifacts/pilot-gono-go-summary.json` → `"decision": "GO"`  

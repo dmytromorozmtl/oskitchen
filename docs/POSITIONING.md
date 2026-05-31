@@ -1,6 +1,6 @@
-# KitchenOS positioning
+# OS Kitchen positioning
 
-KitchenOS is the **operations layer after the sale**. It does **not** replace Shopify, WooCommerce, Uber Eats, or POS systems — it centralizes production planning, packing, routing, and inventory truth once orders exist.
+OS Kitchen is the **operations layer after the sale**. It does **not** replace Shopify, WooCommerce, Uber Eats, or POS systems — it centralizes production planning, packing, routing, and inventory truth once orders exist.
 
 ## Narrative pillars
 

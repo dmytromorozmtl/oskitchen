@@ -5,7 +5,7 @@
 
 ## Context
 
-KitchenOS spans POS, KDS, storefront, accounting, and integrations. Team size is one founder; operational complexity must stay low.
+OS Kitchen spans POS, KDS, storefront, accounting, and integrations. Team size is one founder; operational complexity must stay low.
 
 ## Decision
 

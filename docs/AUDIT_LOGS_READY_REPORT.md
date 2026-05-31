@@ -2,7 +2,7 @@
 
 ## Summary
 
-KitchenOS now ships an enterprise-oriented **Audit Trail Center** at `/dashboard/audit-logs` with structured logging, redaction, retention/export primitives, privileged exports, and a security-focused tab preset. Legacy `/dashboard/security/audit-logs` redirects without breaking bookmarks.
+OS Kitchen now ships an enterprise-oriented **Audit Trail Center** at `/dashboard/audit-logs` with structured logging, redaction, retention/export primitives, privileged exports, and a security-focused tab preset. Legacy `/dashboard/security/audit-logs` redirects without breaking bookmarks.
 
 ## Data model
 

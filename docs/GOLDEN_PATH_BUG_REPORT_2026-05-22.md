@@ -31,7 +31,7 @@
 ### 1. Step 1 — Регистрация
 
 - **URL:** https://os-kitchen.com/signup  
-- **Описание:** После «Create account» показывается toast «Welcome to KitchenOS», через ~8 с редирект на `/onboarding`. Сообщения **«Check your email»** нет — email-подтверждение в production, похоже, отключено (мгновенная сессия Supabase).  
+- **Описание:** После «Create account» показывается toast «Welcome to OS Kitchen», через ~8 с редирект на `/onboarding`. Сообщения **«Check your email»** нет — email-подтверждение в production, похоже, отключено (мгновенная сессия Supabase).  
 - **Ожидание:** Сообщение «Check your email» и подтвержение адреса до первого входа (как в golden path spec).  
 - **Скриншот:** не требуется  
 

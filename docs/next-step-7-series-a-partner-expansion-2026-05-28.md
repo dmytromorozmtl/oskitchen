@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 7: Series A / partner expansion (после Scale readiness complete)
+# OS Kitchen — Шаг 7: Series A / partner expansion (после Scale readiness complete)
 
 **Policy:** `era21-series-a-partner-expansion-v1` · **Backlog:** `KOS-E21-007`  
 **Предусловие:** Scale readiness blocking gates 1–5 complete; data room index published  
@@ -97,7 +97,7 @@ export SERIES_A_DATA_ROOM_BUNDLE_PUBLISHED=1
 
 ## Track B — Partner channel expansion
 
-| Partner motion | KitchenOS surface |
+| Partner motion | OS Kitchen surface |
 |----------------|-------------------|
 | Woo/Shopify co-marketing | `/solutions/ghost-kitchens`, Integration Health |
 | POS hardware partners | `/integrations`, honest capability matrix |

@@ -1,4 +1,4 @@
-# KitchenOS — Phase U: Era25 first product slice blueprint (post-honest engineering gates)
+# OS Kitchen — Phase U: Era25 first product slice blueprint (post-honest engineering gates)
 
 **Status:** Product surfaces + blueprint integrity guard **IMPLEMENTED** · Human blueprint attestation **REQUIRED**  
 **Policy:** `era24-era25-first-product-slice-blueprint-v1` · Integrity `era45-era25-first-product-slice-blueprint-integrity-v1`  

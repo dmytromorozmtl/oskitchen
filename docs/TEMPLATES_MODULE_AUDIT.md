@@ -1,4 +1,4 @@
-# Quick-start Templates module audit (KitchenOS)
+# Quick-start Templates module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/templates`, `lib/business-templates.ts`, and

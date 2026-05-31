@@ -1,4 +1,4 @@
-# KitchenOS — CTO Fixes Applied (post-audit 17–18 May 2026)
+# OS Kitchen — CTO Fixes Applied (post-audit 17–18 May 2026)
 
 **Date:** 18 May 2026 (delta on 17 May baseline)  
 **Source audit:** `docs/audit1712may.md` (ops update § Paid pilot 18 May)  

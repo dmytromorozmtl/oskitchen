@@ -1,6 +1,6 @@
-# KitchenOS sales one-pager
+# OS Kitchen sales one-pager
 
-KitchenOS is the operations layer for food businesses after orders arrive.
+OS Kitchen is the operations layer for food businesses after orders arrive.
 
 Best-fit customers:
 - Meal prep brands
@@ -15,7 +15,7 @@ Core value:
 - Pack accurately with labels and verification.
 - Run implementation, import, mapping, and go-live workflows.
 
-What KitchenOS does not claim:
+What OS Kitchen does not claim:
 - Marketplace approval
 - Compliance certification
 - Tax, nutrition, allergen, or legal advice

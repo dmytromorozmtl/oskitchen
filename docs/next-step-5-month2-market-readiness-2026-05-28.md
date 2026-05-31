@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 5: Month 2 market readiness (после Week 1 complete)
+# OS Kitchen — Шаг 5: Month 2 market readiness (после Week 1 complete)
 
 **Policy:** `era21-month2-market-readiness-v1` · **Backlog:** `KOS-E21-005`  
 **Предусловие:** Pilot Week 1 complete — all 5 day phases + Day 5 artifacts  

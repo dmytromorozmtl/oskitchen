@@ -1,6 +1,6 @@
 # Task permissions
 
-Until KitchenOS exposes a true `WorkspaceMember.role`, task permissions are
+Until OS Kitchen exposes a true `WorkspaceMember.role`, task permissions are
 derived from a small actor scope:
 
 ```ts

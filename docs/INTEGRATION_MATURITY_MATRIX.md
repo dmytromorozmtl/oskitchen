@@ -1,6 +1,6 @@
 # Integration Maturity Matrix
 
-**Purpose:** Single vocabulary for **product**, **support**, and **engineering** so KitchenOS never displays “Connected” without proof.
+**Purpose:** Single vocabulary for **product**, **support**, and **engineering** so OS Kitchen never displays “Connected” without proof.
 
 ## Status vocabulary
 
@@ -26,7 +26,7 @@
 
 | Provider | Typical maturity | Notes |
 |----------|------------------|-------|
-| KitchenOS POS | LIVE (native) | First-party; not legacy Toast replacement. |
+| OS Kitchen POS | LIVE (native) | First-party; not legacy Toast replacement. |
 | Manual orders | LIVE | Always on. |
 | Storefront | LIVE / SETUP_READY | Depends on Stripe + domain. |
 | WooCommerce / Shopify | SETUP_READY → LIVE | OAuth + webhooks + mapping depth decides. |

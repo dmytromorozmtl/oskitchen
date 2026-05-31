@@ -2,7 +2,7 @@
 
 ## Positioning
 
-**KitchenOS = Commerce OS + Operations OS** for modern food businesses.
+**OS Kitchen = Commerce OS + Operations OS** for modern food businesses.
 
 ## Homepage (implemented direction)
 

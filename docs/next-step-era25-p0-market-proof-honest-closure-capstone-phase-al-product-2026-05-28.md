@@ -1,4 +1,4 @@
-# KitchenOS — Phase AL: Era25 P0 market proof honest closure capstone (era62)
+# OS Kitchen — Phase AL: Era25 P0 market proof honest closure capstone (era62)
 
 **Status:** Product surfaces + P0 honest closure capstone integrity guard **IMPLEMENTED** · Human closure attestation **REQUIRED** (artifact-driven)  
 **Policy:** `era62-era25-p0-market-proof-honest-closure-capstone-phases-v1` · Integrity `era62-era25-p0-market-proof-honest-closure-capstone-integrity-v1`  

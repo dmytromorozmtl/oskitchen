@@ -1,4 +1,4 @@
-# Final product gap audit (KitchenOS)
+# Final product gap audit (OS Kitchen)
 
 **Audience:** Release / product / engineering.  
 **Method:** Route inventory + architecture review (not every static marketing page enumerated line-by-line).  

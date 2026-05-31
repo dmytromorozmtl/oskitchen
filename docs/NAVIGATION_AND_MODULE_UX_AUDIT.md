@@ -1,4 +1,4 @@
-# Navigation and module UX audit — KitchenOS
+# Navigation and module UX audit — OS Kitchen
 
 **Scope:** Dashboard sidebar, module registry alignment, business-mode focus, role strip (OWNER vs STAFF), command palette, mobile drawer, accessibility, and performance boundaries.  
 **Date:** 2026-05-07

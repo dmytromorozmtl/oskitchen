@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 3 после Tier 2 PASS (28 May 2026)
+# OS Kitchen — Шаг 3 после Tier 2 PASS (28 May 2026)
 
 **Предусловие:** `artifacts/tier2-staging-golden-path-summary.json` → `tier2ProofStatus: "proof_passed"`  
 **Цель:** Commercial GO → signed LOI → Pilot Week 1 → case study

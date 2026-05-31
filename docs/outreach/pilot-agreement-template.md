@@ -1,4 +1,4 @@
-# KitchenOS — Pilot Agreement
+# OS Kitchen — Pilot Agreement
 
 **Template · Not legal advice — review with counsel before use**
 
@@ -16,9 +16,9 @@
 
 ---
 
-## What KitchenOS Provides
+## What OS Kitchen Provides
 
-- Full access to KitchenOS platform during pilot period
+- Full access to OS Kitchen platform during pilot period
 - White-glove onboarding (menu setup, product import, storefront configuration)
 - Weekly 30-minute check-in calls
 - Priority feature requests during pilot
@@ -31,7 +31,7 @@
 
 - Honest feedback on product usability, bugs, and feature gaps
 - Permission to publish **anonymized case study** with agreed metrics (or named, if preferred) — Era 17 gate: `era17-pilot-case-study-draft-v1`; see [`pilot-case-study-draft-era17.md`](../pilot-case-study-draft-era17.md)
-- Optional: permission to use company logo on KitchenOS website as "Pilot Partner"
+- Optional: permission to use company logo on OS Kitchen website as "Pilot Partner"
 - Participation in weekly check-in calls (or async feedback if scheduling conflicts)
 
 ---
@@ -41,7 +41,7 @@
 - **No long-term commitment** — either party may cancel with 30 days written notice
 - After pilot period, standard pricing applies unless otherwise agreed in writing ($29 / $79 / $199 per month)
 - Pilot discount does not auto-renew beyond the 3-month pilot window
-- Customer data remains owned by [Company]; KitchenOS acts as processor per [Privacy Policy](https://os-kitchen.com/legal/privacy)
+- Customer data remains owned by [Company]; OS Kitchen acts as processor per [Privacy Policy](https://os-kitchen.com/legal/privacy)
 - Beta features (catering deposits, certain integrations) disclosed as beta during onboarding
 - Payment via Stripe subscription; invoices emailed to [billing email]
 
@@ -51,7 +51,7 @@
 
 | Goal | Target |
 |------|--------|
-| Orders processed in KitchenOS | |
+| Orders processed in OS Kitchen | |
 | Storefront live | Yes / No |
 | Production board used weekly | Yes / No |
 | Primary pain reduced | [describe] |
@@ -60,7 +60,7 @@
 
 ## Signatures
 
-**KitchenOS**  
+**OS Kitchen**  
 Name: _________________________  
 Title: _________________________  
 Signature: _________________________  

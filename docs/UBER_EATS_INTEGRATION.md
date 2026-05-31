@@ -1,6 +1,6 @@
 # Uber Eats integration
 
-KitchenOS includes an **adapter skeleton** for Uber Eats Marketplace. Without Uber partner-approved credentials and official API hosts, live behavior is limited by design.
+OS Kitchen includes an **adapter skeleton** for Uber Eats Marketplace. Without Uber partner-approved credentials and official API hosts, live behavior is limited by design.
 
 ## What ships today
 

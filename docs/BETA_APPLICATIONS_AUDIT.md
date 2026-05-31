@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-KitchenOS previously exposed a **founder-only table** over `beta_applications` while the public `/beta` form wrote **`beta_leads`** via `submitBetaApplication`. That split meant the dashboard often looked empty despite healthy inbound. This release **unifies the command center on `beta_leads`**, extends the schema for a full beta-program lifecycle, and documents the legacy table.
+OS Kitchen previously exposed a **founder-only table** over `beta_applications` while the public `/beta` form wrote **`beta_leads`** via `submitBetaApplication`. That split meant the dashboard often looked empty despite healthy inbound. This release **unifies the command center on `beta_leads`**, extends the schema for a full beta-program lifecycle, and documents the legacy table.
 
 ---
 

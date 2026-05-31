@@ -1,6 +1,6 @@
 # Consent-Gated Script Loading
 
-KitchenOS marketing analytics and advertising tags must not load before consent
+OS Kitchen marketing analytics and advertising tags must not load before consent
 on public marketing surfaces where consent is required.
 
 ## Current Pattern
@@ -32,6 +32,6 @@ Relevant files:
 
 ## Remaining Follow-Up
 
-1. Region-aware consent mode if KitchenOS wants stricter geo-based defaults.
+1. Region-aware consent mode if OS Kitchen wants stricter geo-based defaults.
 2. Formal consent audit for all future third-party scripts.
 3. Test coverage for public layout-level tracker mounting behavior.

@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 5 (Post–Era 4 Re-Audit)
+# Next Master Prompt Input — OS Kitchen Era 5 (Post–Era 4 Re-Audit)
 
 **Date:** 2026-05-28  
 **Purpose:** Canonical facts for the **Evolution Era 5** master prompt, refreshed after `docs/full-strategic-reaudit-2026-05-28-era4.md`  

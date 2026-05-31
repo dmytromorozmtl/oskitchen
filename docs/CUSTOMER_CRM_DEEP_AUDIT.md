@@ -1,4 +1,4 @@
-# Customer CRM deep audit (KitchenOS)
+# Customer CRM deep audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/customers`, `/dashboard/customers/deduplication`,
@@ -44,7 +44,7 @@ workspaces.
 | 14 | Import / Export integration | CSV `CUSTOMERS` import already upserts `KitchenCustomer` | Missing dietary / allergies / tags / company columns | All | Document mapping; expand template later | P2 |
 | 15 | Catering quotes | `CateringQuote` carries `customerEmail` / `customerName` / `companyName` but no link to `KitchenCustomer` | Quote follow-ups don't show on the customer profile | Catering | Upsert `KitchenCustomer` + `CompanyAccount` on quote create; append timeline event | P1 |
 | 16 | Sales channels | `ChannelOrder` exists; channel imports do not upsert customers | Channel-derived buyers never join the CRM | Ghost / cloud / multi-brand | Add upsert hook on channel order ingest (documented integration point; main code path lands as the channel ingest evolves) | P1 |
-| 17 | Marketing emails | None automatic | Good — but we still need a place to record consent for when a real integration ships | All | Track consent + export "consented only" lists; never send from KitchenOS itself this pass | P0 (privacy) |
+| 17 | Marketing emails | None automatic | Good — but we still need a place to record consent for when a real integration ships | All | Track consent + export "consented only" lists; never send from OS Kitchen itself this pass | P0 (privacy) |
 | 18 | Empty states | Single empty state on overview | Confusing on segments / follow-ups / dedupe / companies | All | Per-tab empty states wired into the new pages | P2 |
 | 19 | Business-mode terminology | Hard-coded "Customer CRM" | "Guests" / "Clients" / "Subscribers" better matches certain modes | All | `crmTerminologyForMode()` helper, mirror of `tasksTerminologyForMode` | P2 |
 | 20 | Audit trail | `CustomerMergeEvent` only | No record of "consent changed" / "allergy edited" / "follow-up created" | Privacy-sensitive workspaces | `CustomerTimelineEvent` + `CustomerConsentEvent` cover everything; document scope | P1 |

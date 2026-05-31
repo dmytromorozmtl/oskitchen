@@ -58,6 +58,6 @@ Products/menus — how SKUs map for sync (conceptual).
 
 ## Follow-up email template
 
-> Thanks for walking through KitchenOS today.  
+> Thanks for walking through OS Kitchen today.  
 > Next steps: (1) invite link, (2) webhook checklist attachment, (3) proposed kickoff time.  
 > — {Name}

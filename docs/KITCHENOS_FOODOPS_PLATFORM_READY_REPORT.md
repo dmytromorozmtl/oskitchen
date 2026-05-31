@@ -1,11 +1,11 @@
-# KitchenOS FoodOps platform-ready report
+# OS Kitchen FoodOps platform-ready report
 
 **Date:** 2026-05-14  
 **Scope:** Strategic audit + operational layer + health surfaces + documentation bundle (no greenfield rebuild).
 
 ## Summary
 
-KitchenOS is **broadly market-ready for SMB operational demos** where buyers expect a connected workspace (orders → kitchen → fulfillment) with honest integrations. **Enterprise readiness** still depends on external trust artifacts (SSO/DPA/SLO) and deeper RBAC enforcement per surface—documented without claiming certifications.
+OS Kitchen is **broadly market-ready for SMB operational demos** where buyers expect a connected workspace (orders → kitchen → fulfillment) with honest integrations. **Enterprise readiness** still depends on external trust artifacts (SSO/DPA/SLO) and deeper RBAC enforcement per surface—documented without claiming certifications.
 
 ## What landed in this pass
 

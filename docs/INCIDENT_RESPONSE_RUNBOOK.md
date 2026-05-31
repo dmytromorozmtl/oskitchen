@@ -1,4 +1,4 @@
-# Incident response runbook — KitchenOS pilot
+# Incident response runbook — OS Kitchen pilot
 
 ## Roles
 

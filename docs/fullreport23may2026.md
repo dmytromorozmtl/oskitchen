@@ -1,4 +1,4 @@
-# KitchenOS — Full System Audit Report
+# OS Kitchen — Full System Audit Report
 
 **Date:** 2026-05-23  
 **Production:** https://os-kitchen.com  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-KitchenOS — multi-tenant restaurant operations platform (Next.js 15 App Router, Prisma, Supabase PostgreSQL, Stripe Connect, Vercel). Система включает **686 страниц**, **357 Prisma-моделей**, **286 API routes**, **672 unit-теста** и production health **ok** с PgBouncer pooler и Upstash rate limiting.
+OS Kitchen — multi-tenant restaurant operations platform (Next.js 15 App Router, Prisma, Supabase PostgreSQL, Stripe Connect, Vercel). Система включает **686 страниц**, **357 Prisma-моделей**, **286 API routes**, **672 unit-теста** и production health **ok** с PgBouncer pooler и Upstash rate limiting.
 
 **Финальный вердикт (Release Commander):** система готова к приёму платных операторов. Следующий шаг — https://os-kitchen.com/signup
 
@@ -606,7 +606,7 @@ Test Files  200 passed | 1 skipped (201)
 
 ### 10.3 — Конкурентный анализ
 
-| Конкурент | Сильные стороны | KitchenOS ответ |
+| Конкурент | Сильные стороны | OS Kitchen ответ |
 |-----------|----------------|-----------------|
 | Toast | Hardware POS, marketplace | Table mgmt, KDS, QR — без hardware lock-in |
 | Square | Free POS, payments ubiquity | Stripe Connect, counter + online |
@@ -724,9 +724,9 @@ Homepage → /pricing → /signup → Onboarding → First Product → First Ord
 |----------|----------|---------|---------------------|
 | Toast | $800–2000 upfront | $165–400/mo | $10,700–26,000 |
 | Square | $0–800 | $0–60/mo + fees | $0–4,400 + transaction fees |
-| KitchenOS | $0 | $29–199/mo | $1,740–11,940 |
+| OS Kitchen | $0 | $29–199/mo | $1,740–11,940 |
 
-### Revenue Model (для KitchenOS)
+### Revenue Model (для OS Kitchen)
 
 | Tier | Price | Target |
 |------|------:|--------|
@@ -765,7 +765,7 @@ Homepage → /pricing → /signup → Onboarding → First Product → First Ord
 
 ### 15.3 — Вердикт
 
-**KitchenOS готов к приёму платных операторов.**
+**OS Kitchen готов к приёму платных операторов.**
 
 Система прошла 15-экспертный аудит с конкретными метриками из codebase scan, 672 unit-тестов, и live production probes. Все P1 security/performance gaps закрыты. Storefront верифицирован на Shopify-level (theme customizer, page builder, custom CSS, SEO, 12/12 public routes).
 

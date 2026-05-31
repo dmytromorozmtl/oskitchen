@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State (38 Sessions)
+# OS Kitchen — Absolute Final State (38 Sessions)
 
 **Date:** 21 May 2026  
 **Production:** https://os-kitchen.com  
@@ -168,7 +168,7 @@ NEXT:   https://os-kitchen.com/signup
 
 ## Sign-off
 
-KitchenOS is **system-complete** for the 38-session build phase. All documented P1, P2, and P3 items are implemented and verified on production. Gap analysis and additional systems tracks are closed. The next step is real operator signup and pilot onboarding—not another engineering prompt cycle.
+OS Kitchen is **system-complete** for the 38-session build phase. All documented P1, P2, and P3 items are implemented and verified on production. Gap analysis and additional systems tracks are closed. The next step is real operator signup and pilot onboarding—not another engineering prompt cycle.
 
 **Signed:** Principal Platform Architect / Senior QA Director / Release Commander  
 **Date:** 21 May 2026

@@ -1,6 +1,6 @@
 # Trials
 
-KitchenOS has two trial concepts:
+OS Kitchen has two trial concepts:
 
 1. **Local app trial** (`TrialState`) — managed in `lib/billing/access.ts`.
    Starts when a user signs up, lasts 14 days, becomes EXPIRED on day 14

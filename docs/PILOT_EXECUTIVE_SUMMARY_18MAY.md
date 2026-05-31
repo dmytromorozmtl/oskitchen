@@ -1,4 +1,4 @@
-# KitchenOS Pilot Readiness — Executive Summary
+# OS Kitchen Pilot Readiness — Executive Summary
 
 **Date:** 18 May 2026  
 **Engineering status:** **READY FOR STAGING** · **READY FOR PILOT** after ops checklist (3–5 operators)  
@@ -6,9 +6,9 @@
 
 ---
 
-## What KitchenOS is
+## What OS Kitchen is
 
-KitchenOS is a B2B platform for food operators: branded storefront preorders, kitchen production, packing, and delivery coordination, with optional WooCommerce/Shopify import (beta). One system replaces spreadsheets plus disconnected tools for order-to-kitchen flow.
+OS Kitchen is a B2B platform for food operators: branded storefront preorders, kitchen production, packing, and delivery coordination, with optional WooCommerce/Shopify import (beta). One system replaces spreadsheets plus disconnected tools for order-to-kitchen flow.
 
 ---
 

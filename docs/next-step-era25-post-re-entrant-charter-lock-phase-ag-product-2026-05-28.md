@@ -1,4 +1,4 @@
-# KitchenOS — Phase AG: Era25 post-re-entrant operator charter lock integrity (era57)
+# OS Kitchen — Phase AG: Era25 post-re-entrant operator charter lock integrity (era57)
 
 **Status:** Product surfaces + charter lock integrity guard **IMPLEMENTED** · Human charter lock attestation **REQUIRED**  
 **Policy:** `era57-era25-post-re-entrant-charter-lock-phases-v1` · Integrity `era57-era25-post-re-entrant-charter-lock-integrity-v1`  

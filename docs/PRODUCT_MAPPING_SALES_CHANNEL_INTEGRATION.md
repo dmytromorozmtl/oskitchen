@@ -47,7 +47,7 @@ A `prisma.productMapping.groupBy` on `status` powers the new
 | `UBER_EATS` | Sales Channels (placeholder) | full (mapping + modifiers) |
 | `UBER_DIRECT` | Sales Channels | full |
 | `CSV` | Import Center | full |
-| `STOREFRONT` | KitchenOS storefront orders | full |
+| `STOREFRONT` | OS Kitchen storefront orders | full |
 | `MANUAL` | Manual workbench entry | full |
 | `DOORDASH_PLACEHOLDER` | not implemented | full (mapping only) |
 | `CUSTOM` | external CSV / API | full |

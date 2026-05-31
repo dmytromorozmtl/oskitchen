@@ -1,7 +1,7 @@
 # Staff architecture
 
 The Staff Workforce Management Center is organized in four layers, mirroring
-the rest of KitchenOS:
+the rest of OS Kitchen:
 
 ```
 lib/staff/*           pure helpers, no I/O

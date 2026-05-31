@@ -18,7 +18,7 @@
 
 ## Production-ready with external setup
 
-- **Custom domains / subdomains** — requires DNS + hosting (e.g. Vercel) configuration; KitchenOS stores intent and verification metadata only.
+- **Custom domains / subdomains** — requires DNS + hosting (e.g. Vercel) configuration; OS Kitchen stores intent and verification metadata only.
 - **Email** — optional Resend + verified sender domain.
 
 ## Placeholder / partial

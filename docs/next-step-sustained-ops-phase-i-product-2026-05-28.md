@@ -1,4 +1,4 @@
-# KitchenOS — Phase I: Sustained operational excellence (post-honest Market leader)
+# OS Kitchen — Phase I: Sustained operational excellence (post-honest Market leader)
 
 **Status:** Product surfaces + Sustained ops integrity guard **IMPLEMENTED** · Human Cadences A–D **REQUIRED**  
 **Policy:** `era21-sustained-operational-excellence-v1` · Integrity `era33-sustained-operational-excellence-integrity-v1`  

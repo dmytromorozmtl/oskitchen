@@ -1,6 +1,6 @@
 # RBAC diff — legacy vs workspace (17 May 2026)
 
-KitchenOS intentionally runs **two permission systems** until POS migrates to workspace roles.
+OS Kitchen intentionally runs **two permission systems** until POS migrates to workspace roles.
 
 | System | Import | `hasPermission` signature |
 |--------|--------|---------------------------|

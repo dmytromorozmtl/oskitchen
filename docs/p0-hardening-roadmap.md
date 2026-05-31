@@ -1,4 +1,4 @@
-# KitchenOS P0 Hardening Roadmap
+# OS Kitchen P0 Hardening Roadmap
 
 Status: canonical stabilization roadmap before major expansion
 Primary evidence: `docs/system-reality-model.md`, `package.json`, `README.md`, `.github/workflows/ci.yml`, `next.config.ts`, `lib/permissions/permissions.ts`, `lib/permissions/mutation-access.ts`, `actions/pos.ts`, `app/api/pos/terminal/route.ts`, `actions/upload.ts`, `services/storefront/storefront-media-upload-service.ts`, `lib/api/route-registry.ts`, `scripts/validate-production-crons.ts`

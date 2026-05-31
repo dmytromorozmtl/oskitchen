@@ -1,6 +1,6 @@
-# Copy review — KitchenOS
+# Copy review — OS Kitchen
 
-Voice for KitchenOS: **clear, confident, operations-first, practical**. Owners and kitchen leads should know what a screen does and what to do next.
+Voice for OS Kitchen: **clear, confident, operations-first, practical**. Owners and kitchen leads should know what a screen does and what to do next.
 
 ## Principles
 

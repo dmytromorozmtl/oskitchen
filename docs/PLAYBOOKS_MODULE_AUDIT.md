@@ -1,4 +1,4 @@
-# Operations Playbooks module audit (KitchenOS)
+# Operations Playbooks module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/playbooks`, `lib/operations-playbooks.ts`,

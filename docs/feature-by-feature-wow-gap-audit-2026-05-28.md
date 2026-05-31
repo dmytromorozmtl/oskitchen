@@ -1,4 +1,4 @@
-# KitchenOS Feature-by-Feature WOW Gap Audit
+# OS Kitchen Feature-by-Feature WOW Gap Audit
 
 **Date:** 2026-05-28  
 **HEAD:** `064af17` @ `main`  

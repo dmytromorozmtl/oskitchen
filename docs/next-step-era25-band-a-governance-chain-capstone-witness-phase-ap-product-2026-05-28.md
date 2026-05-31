@@ -1,4 +1,4 @@
-# KitchenOS — Phase AP: Era25 Band A governance chain capstone witness (era66)
+# OS Kitchen — Phase AP: Era25 Band A governance chain capstone witness (era66)
 
 **Status:** Product surfaces + Band A capstone witness integrity guard **IMPLEMENTED** · Human capstone witness attestation **REQUIRED** (permanence-driven)  
 **Policy:** `era66-era25-band-a-governance-chain-capstone-witness-phases-v1` · Integrity `era66-era25-band-a-governance-chain-capstone-witness-integrity-v1`  

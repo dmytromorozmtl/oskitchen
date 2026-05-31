@@ -20,4 +20,4 @@ See `lib/packing/label-types.ts`: item, bag, order, route, allergen, nutrition, 
 
 ## Compliance
 
-KitchenOS **does not** certify regulatory compliance. Nutrition/allergen outputs must be reviewed by the operator.
+OS Kitchen **does not** certify regulatory compliance. Nutrition/allergen outputs must be reviewed by the operator.

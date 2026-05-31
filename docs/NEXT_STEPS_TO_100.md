@@ -1,4 +1,4 @@
-# KitchenOS — план до 100/100
+# OS Kitchen — план до 100/100
 
 **Обновлено:** 2026-05-25 (Sprint 28 complete)  
 **Код / tenant:** **100%** · **Prod hotfix + redeploy:** complete · **Prod smoke:** health OK + tenant smoke OK + workspace smoke **7/7**

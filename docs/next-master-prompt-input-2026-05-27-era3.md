@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 4
+# Next Master Prompt Input — OS Kitchen Era 4
 
 > **Superseded for recurring prompts** by `docs/next-master-prompt-input-2026-05-27-era4.md` (Era 4 completed). Retained for archaeology.
 
@@ -11,7 +11,7 @@
 
 ## 1. Current Product Reality (Facts Only)
 
-- KitchenOS is a **Next.js 15 App Router monolith** (React 19, Prisma 6, Postgres, Supabase auth, Stripe).
+- OS Kitchen is a **Next.js 15 App Router monolith** (React 19, Prisma 6, Postgres, Supabase auth, Stripe).
 - **Scale (2026-05-27 live):** 699 pages, 296 API routes, 146 action modules, 604 services, 362 models, 266 enums, 505 Vitest files, 53 Playwright specs, 1,440 docs.
 - **Not an MVP:** POS, storefront, order hub, production, packing, CRM, inventory, purchasing, staff, billing, platform admin, and marketing all exist in code.
 - **Flagship:** Unified order spine via `services/orders/order-creation-service.ts` (manual, POS, storefront, public API).

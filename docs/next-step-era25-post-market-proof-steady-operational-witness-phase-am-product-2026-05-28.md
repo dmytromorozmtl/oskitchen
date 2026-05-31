@@ -1,4 +1,4 @@
-# KitchenOS — Phase AM: Era25 post-market-proof steady operational witness (era63)
+# OS Kitchen — Phase AM: Era25 post-market-proof steady operational witness (era63)
 
 **Status:** Product surfaces + post-market steady ops witness integrity guard **IMPLEMENTED** · Human witness attestation **REQUIRED** (closure-driven)  
 **Policy:** `era63-era25-post-market-proof-steady-operational-witness-phases-v1` · Integrity `era63-era25-post-market-proof-steady-operational-witness-integrity-v1`  

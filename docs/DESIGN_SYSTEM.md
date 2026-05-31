@@ -1,6 +1,6 @@
-# Design system (KitchenOS)
+# Design system (OS Kitchen)
 
-KitchenOS is built on **Tailwind CSS** + **shadcn/ui** primitives (`components/ui/*`). This document captures **semantic intent** so new screens stay visually aligned without ad-hoc styling.
+OS Kitchen is built on **Tailwind CSS** + **shadcn/ui** primitives (`components/ui/*`). This document captures **semantic intent** so new screens stay visually aligned without ad-hoc styling.
 
 ## Typography
 

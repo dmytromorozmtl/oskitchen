@@ -2,7 +2,7 @@
 
 ## Create repository
 
-1. Create a **private** GitHub repository for KitchenOS.
+1. Create a **private** GitHub repository for OS Kitchen.
 2. Do **not** commit `.env`, `.env.local`, or service role keys.
 
 ## Initial commit
@@ -10,7 +10,7 @@
 ```bash
 git init
 git add .
-git commit -m "Initial commit: KitchenOS"
+git commit -m "Initial commit: OS Kitchen"
 git branch -M main
 git remote add origin git@github.com:ORG/kitchenos.git
 git push -u origin main

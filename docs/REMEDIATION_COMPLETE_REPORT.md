@@ -1,4 +1,4 @@
-# KitchenOS — Remediation Complete Report (17 May 2026)
+# OS Kitchen — Remediation Complete Report (17 May 2026)
 
 Полный отчёт по выполнению Master Remediation Prompt. Baseline и финальная проверка выполнены локально.
 

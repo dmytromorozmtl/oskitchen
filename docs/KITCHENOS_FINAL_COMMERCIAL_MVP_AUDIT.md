@@ -1,4 +1,4 @@
-# KitchenOS — Final Commercial MVP Route Audit
+# OS Kitchen — Final Commercial MVP Route Audit
 
 **Date:** 2026-05-14  
 **Scope:** Customer workspace, internal platform, public marketing surfaces.  
@@ -134,5 +134,5 @@ Deep product routes under `/product/*` and `/solutions/*` — **spot-check** in 
 ## Related engineering docs
 
 - `docs/ORDER_LIFECYCLE_ENGINE_FINAL.md` — types, guards, transitions, services.  
-- `docs/KITCHENOS_COMMERCIAL_MVP_COMPLETION_REPORT.md` — completion snapshot.  
-- `docs/KITCHENOS_FINAL_QA_MATRIX.md` — persona × workflow tests.
+- `docs/OS Kitchen_COMMERCIAL_MVP_COMPLETION_REPORT.md` — completion snapshot.  
+- `docs/OS Kitchen_FINAL_QA_MATRIX.md` — persona × workflow tests.

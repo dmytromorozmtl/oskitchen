@@ -1,4 +1,4 @@
-# KitchenOS — Enterprise Readiness Audit (Final Pass)
+# OS Kitchen — Enterprise Readiness Audit (Final Pass)
 
 **Scope:** Post “Market Ready / Connected Flow” state — additive enterprise layer (reliability, multi-location, RBAC/approvals, automation, analytics, CRM lifecycle, go-live, developer contracts, trust, performance).  
 **Rules:** No rebuild; no fake integrations; `workspace.moroz@gmail.com` / `lib/platform-owner.ts` founder path unchanged; `/platform` remains server-gated.

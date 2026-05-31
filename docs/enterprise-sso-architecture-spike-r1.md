@@ -48,7 +48,7 @@
 
 ## Proposed target architecture
 
-**Goal (R2+):** Allow an enterprise tenant to authenticate staff via **SAML 2.0 or OIDC** while preserving the existing KitchenOS workspace RBAC model.
+**Goal (R2+):** Allow an enterprise tenant to authenticate staff via **SAML 2.0 or OIDC** while preserving the existing OS Kitchen workspace RBAC model.
 
 ```mermaid
 sequenceDiagram
@@ -56,7 +56,7 @@ sequenceDiagram
   participant IdP as Customer IdP (Okta / Entra)
   participant Bridge as SSO bridge (future)
   participant Supa as Supabase Auth (evaluated)
-  participant KOS as KitchenOS app + RBAC
+  participant KOS as OS Kitchen app + RBAC
 
   User->>IdP: SAML/OIDC login
   IdP->>Bridge: Assertion / tokens
@@ -81,7 +81,7 @@ sequenceDiagram
 
 1. **Stable subject key:** Map IdP `sub` / `NameID` → `UserProfile` or linked `ssoIdentity` row (schema TBD in R2).
 2. **Workspace binding:** SSO login must resolve **exactly one** workspace membership (or explicit workspace picker post-auth for multi-workspace staff — defer to R3).
-3. **Role source of truth:** KitchenOS `workspaceRole` / permission grants remain authoritative — IdP groups may **suggest** roles in R2 but must not bypass `requireMutationPermission`.
+3. **Role source of truth:** OS Kitchen `workspaceRole` / permission grants remain authoritative — IdP groups may **suggest** roles in R2 but must not bypass `requireMutationPermission`.
 4. **Invite parity:** Existing staff invite flow remains until SCIM (R2+ dependency per procurement pack).
 
 ---
@@ -92,7 +92,7 @@ sequenceDiagram
 |----------|------------------|
 | IdP outage | Retain **break-glass** email/password for designated `OWNER` accounts (config flag per workspace, audited) |
 | Misconfigured SAML | Fail closed — no silent downgrade to wrong tenant |
-| Offboarding | IdP deprovision does **not** auto-delete KitchenOS data in R2; session revoke + login deny (SCIM in later phase) |
+| Offboarding | IdP deprovision does **not** auto-delete OS Kitchen data in R2; session revoke + login deny (SCIM in later phase) |
 | Audit | Log `sso.login_success`, `sso.login_denied`, `sso.break_glass_used` via `recordAuditLog` (event names TBD in R2) |
 
 ---

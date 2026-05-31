@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 8: Market leader positioning (после Series A / partner expansion complete)
+# OS Kitchen — Шаг 8: Market leader positioning (после Series A / partner expansion complete)
 
 **Policy:** `era21-market-leader-positioning-v1` · **Backlog:** `KOS-E21-008`  
 **Предусловие:** Series A / partner expansion tracks A–D complete  

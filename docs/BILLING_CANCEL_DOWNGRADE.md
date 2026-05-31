@@ -4,7 +4,7 @@ Route: `/dashboard/billing/cancel`. Owner-only.
 
 ## Cancel
 
-Cancellation is performed through Stripe — KitchenOS never directly
+Cancellation is performed through Stripe — OS Kitchen never directly
 deletes a subscription. The "Open Stripe portal" CTA on this page lets
 the owner schedule a cancel-at-period-end or immediate cancel. Stripe
 sends `customer.subscription.deleted`, the webhook syncs the row, and

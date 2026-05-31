@@ -2,7 +2,7 @@
 
 ## Products & prices
 
-Create products aligned with KitchenOS tiers (**Starter**, **Pro**, **Team**, **Enterprise / contact sales**). Attach recurring prices:
+Create products aligned with OS Kitchen tiers (**Starter**, **Pro**, **Team**, **Enterprise / contact sales**). Attach recurring prices:
 
 - Monthly (required for current Checkout wiring)
 - Annual (optional — add separate price IDs and UI when ready)

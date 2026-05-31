@@ -1,4 +1,4 @@
-# Advanced readiness report — KitchenOS
+# Advanced readiness report — OS Kitchen
 
 Generated alongside the advanced vertical expansion (May 2026).
 
@@ -38,7 +38,7 @@ See `prisma/schema.prisma` migration `20260510180000_advanced_vertical_features`
 
 - `OPENAI_API_KEY` — Copilot narrative + optional enhancements around forecast explanations.
 - `GOOGLE_MAPS_API_KEY` — reserved for future optimized routing/embeds (consumer Maps links work without it).
-- Existing Stripe/Resend integrations remain optional per prior KitchenOS behavior.
+- Existing Stripe/Resend integrations remain optional per prior OS Kitchen behavior.
 
 ## Recommended next 30 days
 

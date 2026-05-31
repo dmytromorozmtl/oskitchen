@@ -12,7 +12,7 @@ This document is an **internal draft scaffold**. It is **not** a published custo
 
 ## Purpose and honest scope
 
-KitchenOS has **no verified paid-pilot case study** as of 2026-05-28. This draft prepares structure for the **first** pilot story once:
+OS Kitchen has **no verified paid-pilot case study** as of 2026-05-28. This draft prepares structure for the **first** pilot story once:
 
 1. A qualified paid pilot completes (GO/NO-GO artifact, signed agreement)
 2. Pilot metrics baseline is captured (`overall: PASSED`)
@@ -103,7 +103,7 @@ Enforced via `era17-pilot-forbidden-claims-enforcement-v1` and `MARKETING_CLAIMS
 **Location:** [City, Region — or "Anonymized pilot, US"]  
 **Plan:** [Starter | Pro | Team — pilot pricing per agreement]
 
-### Before KitchenOS
+### Before OS Kitchen
 
 - Orders/week: `[TBD — awaiting pilot week-2 snapshot]`
 - Tools used: `[TBD — discovery notes]`

@@ -14,7 +14,7 @@
 3. Verify connection status on Sales channels — disabled connections reject or no-op.
 
 ## Safe actions
-- Fix credentials / rotate webhook secrets in provider + KitchenOS.
+- Fix credentials / rotate webhook secrets in provider + OS Kitchen.
 - Use **audited replay** from Platform → Webhooks or Dashboard → Webhook activity (requires reason; may duplicate commerce writes — break-glass only).
 - Re-deliver from provider where supported when replay is not appropriate.
 

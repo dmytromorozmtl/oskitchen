@@ -1,4 +1,4 @@
-# KitchenOS — Phase X: Era25 pilot week 1 execution convergence (post-honest GO convergence)
+# OS Kitchen — Phase X: Era25 pilot week 1 execution convergence (post-honest GO convergence)
 
 **Status:** Product surfaces + week 1 convergence integrity guard **IMPLEMENTED** · Human week 1 attestation **REQUIRED**  
 **Policy:** `era25-pilot-week1-execution-convergence-v1` · Integrity `era48-pilot-week1-execution-convergence-integrity-v1`  

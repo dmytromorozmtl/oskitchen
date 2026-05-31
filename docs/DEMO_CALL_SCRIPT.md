@@ -14,7 +14,7 @@
 
 ## Transition
 
-“Based on that, here’s how KitchenOS routes orders → production → packing.” *(Follow `docs/DEMO_SCRIPT.md`)*
+“Based on that, here’s how OS Kitchen routes orders → production → packing.” *(Follow `docs/DEMO_SCRIPT.md`)*
 
 ## Pricing bridge
 

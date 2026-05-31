@@ -1,4 +1,4 @@
-# KitchenOS — Phase L: Maintenance mode (post-honest Product evolution)
+# OS Kitchen — Phase L: Maintenance mode (post-honest Product evolution)
 
 **Status:** Product surfaces + Maintenance mode integrity guard **IMPLEMENTED** · Human commercial pilot path attestation **REQUIRED**  
 **Policy:** `era24-maintenance-mode-v1` · Integrity `era36-maintenance-mode-integrity-v1`  

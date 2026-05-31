@@ -1,4 +1,4 @@
-# KitchenOS Remediation Status — 17 May 2026
+# OS Kitchen Remediation Status — 17 May 2026
 
 Crosswalk of **Master Remediation Prompt** blocks vs repository state. Source audit: `docs/audit17may.md`.
 

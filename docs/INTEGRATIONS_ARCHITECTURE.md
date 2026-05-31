@@ -1,6 +1,6 @@
 # Integrations architecture
 
-KitchenOS treats each storefront or logistics endpoint as an **`IntegrationConnection`** row owned by a **`UserProfile`** (`users` table). Secrets are stored **encrypted** (AES-256-GCM) in typed columns (`*_encrypted`); nothing sensitive is returned to the browser after save.
+OS Kitchen treats each storefront or logistics endpoint as an **`IntegrationConnection`** row owned by a **`UserProfile`** (`users` table). Secrets are stored **encrypted** (AES-256-GCM) in typed columns (`*_encrypted`); nothing sensitive is returned to the browser after save.
 
 ## Flow
 

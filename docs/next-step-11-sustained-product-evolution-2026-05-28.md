@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 11: Sustained product evolution (product-led growth)
+# OS Kitchen — Шаг 11: Sustained product evolution (product-led growth)
 
 **Status:** **IMPLEMENTED · wired to era25 pure operational mode terminus**
 
@@ -94,7 +94,7 @@ npm run ops:export-sustained-product-evolution-ownership-matrix -- --write
 
 ## Product evolution tracks (6)
 
-| Track | Owner | Frequency | KitchenOS surface |
+| Track | Owner | Frequency | OS Kitchen surface |
 |-------|-------|-----------|-------------------|
 | Feature maturity matrix | Product | Per ship | `/dashboard/implementation`, `docs/feature-maturity-matrix.md` |
 | Competitor leapfrog | Product | Quarterly | `docs/competitor-leapfrog-roadmap-2026-05-28.md` |

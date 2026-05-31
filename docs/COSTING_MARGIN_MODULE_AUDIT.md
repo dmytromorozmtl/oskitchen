@@ -1,7 +1,7 @@
 # Costing & margin module audit
 
 **Scope:** `/dashboard/costing` and related services, Prisma models, purchasing/demand touchpoints.  
-**Date:** 2026-05-07 (KitchenOS)
+**Date:** 2026-05-07 (OS Kitchen)
 
 ## Executive summary
 

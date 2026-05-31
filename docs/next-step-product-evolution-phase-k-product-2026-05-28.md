@@ -1,4 +1,4 @@
-# KitchenOS — Phase K: Sustained product evolution (post-honest Improvement loop)
+# OS Kitchen — Phase K: Sustained product evolution (post-honest Improvement loop)
 
 **Status:** Product surfaces + Product evolution integrity guard **IMPLEMENTED** · Human product-led growth attestation **REQUIRED**  
 **Policy:** `era23-sustained-product-evolution-v1` · Integrity `era35-sustained-product-evolution-integrity-v1`  

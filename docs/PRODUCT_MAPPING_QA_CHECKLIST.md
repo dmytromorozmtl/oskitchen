@@ -47,7 +47,7 @@
 ## Conflicts
 
 - [ ] Approving two external products with the same internal target
-      appears under "Duplicate KitchenOS target".
+      appears under "Duplicate OS Kitchen target".
 - [ ] An open `ChannelConflict` of type `missing_product_mapping`
       shows up in the Conflicts tab and in the Order Hub banner.
 

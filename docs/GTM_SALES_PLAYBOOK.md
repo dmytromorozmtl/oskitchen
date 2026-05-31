@@ -1,4 +1,4 @@
-# KitchenOS — GTM & Sales Playbook
+# OS Kitchen — GTM & Sales Playbook
 
 **Version:** 1.0 · **Date:** 20 May 2026  
 **Site:** https://os-kitchen.com  
@@ -10,7 +10,7 @@
 
 ## Positioning statement (use verbatim in decks)
 
-> KitchenOS is a **cloud POS and kitchen operations platform** for food businesses that need the floor, the line, and production to stay in sync — without proprietary terminal leases or a patchwork of apps.
+> OS Kitchen is a **cloud POS and kitchen operations platform** for food businesses that need the floor, the line, and production to stay in sync — without proprietary terminal leases or a patchwork of apps.
 
 ### Who we win with (ICP priority)
 
@@ -66,7 +66,7 @@ Until GA gates in roadmap: sell **paid pilot**, not self-serve enterprise SLA.
 
 ### “We already have a POS.”
 
-> Most teams keep a legacy POS for payments but still run kitchen on paper or a second tablet. KitchenOS replaces the **second system** — KDS, production, and preorder — on devices you own. We can start with kitchen + preorder while you evaluate full floor POS.
+> Most teams keep a legacy POS for payments but still run kitchen on paper or a second tablet. OS Kitchen replaces the **second system** — KDS, production, and preorder — on devices you own. We can start with kitchen + preorder while you evaluate full floor POS.
 
 ### “Do you work in [city]?”
 
@@ -136,7 +136,7 @@ Monograms = **segment type**, not client logos. Upgrade to `verified` + logo onl
 
 **After discovery**
 
-> Thanks for the time today. KitchenOS unifies **[POS / preorder / KDS / production]** for **[segment]**. Here’s our capability sheet so we only commit to what’s live for your go-live: [link to CAPABILITY_SIGNOFF_SALES]. Start a trial: https://os-kitchen.com/signup
+> Thanks for the time today. OS Kitchen unifies **[POS / preorder / KDS / production]** for **[segment]**. Here’s our capability sheet so we only commit to what’s live for your go-live: [link to CAPABILITY_SIGNOFF_SALES]. Start a trial: https://os-kitchen.com/signup
 
 **Hardware objection**
 

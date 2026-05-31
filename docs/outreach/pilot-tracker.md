@@ -1,4 +1,4 @@
-# KitchenOS — Pilot Tracker
+# OS Kitchen — Pilot Tracker
 
 **Version:** 1.0 · **Date:** 24 May 2026  
 **Related:** [pilot-program.md](../pilot-program.md) · [email-templates.md](email-templates.md) · [demo-call-script.md](demo-call-script.md)

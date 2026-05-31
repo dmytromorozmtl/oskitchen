@@ -10,4 +10,4 @@ The operational gap appears after checkout:
 - what products need mapping
 - what data must be imported safely
 
-KitchenOS targets this gap rather than replacing demand channels.
+OS Kitchen targets this gap rather than replacing demand channels.

@@ -23,7 +23,7 @@
 
 **Verdict:** Storefront is **100% complete** on production — guest pages, Theme Customizer APIs, Page Builder publish, and custom CSS/preview are live.
 
-**System verdict (session 47):** See `docs/KITCHENOS_ABSOLUTE_FINAL_VERDICT.md` — full-platform verification **100% COMPLETE**.
+**System verdict (session 47):** See `docs/OS Kitchen_ABSOLUTE_FINAL_VERDICT.md` — full-platform verification **100% COMPLETE**.
 
 ---
 
@@ -160,7 +160,7 @@ Theme **publish** for guests: `publishStorefrontThemeFormAction` (server action)
 ## Deploy command
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 npm run deploy:prod
 ```
 

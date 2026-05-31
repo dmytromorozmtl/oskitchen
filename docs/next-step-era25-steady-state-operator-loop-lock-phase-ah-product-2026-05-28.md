@@ -1,4 +1,4 @@
-# KitchenOS — Phase AH: Era25 steady-state operator loop convergence lock (era58)
+# OS Kitchen — Phase AH: Era25 steady-state operator loop convergence lock (era58)
 
 **Status:** Product surfaces + steady-state lock integrity guard **IMPLEMENTED** · Human steady-state lock attestation **REQUIRED**  
 **Policy:** `era58-era25-steady-state-operator-loop-lock-phases-v1` · Integrity `era58-era25-steady-state-operator-loop-lock-integrity-v1`  

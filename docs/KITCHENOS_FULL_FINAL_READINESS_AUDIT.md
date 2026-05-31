@@ -1,7 +1,7 @@
 > **DEPRECATED — Historical readiness audit (2026-05-14).** Do not use for release or sales decisions.  
 > **Canonical source:** [`docs/canonical-doc-index.md`](./canonical-doc-index.md) → [`feature-maturity-matrix.md`](./feature-maturity-matrix.md), [`p0-hardening-roadmap.md`](./p0-hardening-roadmap.md).
 
-# KitchenOS — Full final readiness audit
+# OS Kitchen — Full final readiness audit
 
 **Date:** 2026-05-14  
 **Scope:** Commercial + enterprise readiness snapshot across workspace, platform, and public marketing.  
@@ -168,6 +168,6 @@
 - `docs/PUBLIC_MARKETING_SITE_FINALIZATION.md`  
 - `docs/ENTERPRISE_TRUST_AUDIT_COMPLIANCE_FINAL.md`  
 - `docs/PRODUCT_EXCELLENCE_UX_FINAL_PASS.md`  
-- `docs/KITCHENOS_FULL_FINAL_QA_MATRIX.md`  
-- `docs/KITCHENOS_FINAL_PRODUCT_AND_COMPETITOR_ANALYSIS.md`  
-- `docs/KITCHENOS_FINAL_1000_PERCENT_COMPLETION_REPORT.md`
+- `docs/OS Kitchen_FULL_FINAL_QA_MATRIX.md`  
+- `docs/OS Kitchen_FINAL_PRODUCT_AND_COMPETITOR_ANALYSIS.md`  
+- `docs/OS Kitchen_FINAL_1000_PERCENT_COMPLETION_REPORT.md`

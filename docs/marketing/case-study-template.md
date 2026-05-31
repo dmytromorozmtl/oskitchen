@@ -1,4 +1,4 @@
-# KitchenOS Case Study Template
+# OS Kitchen Case Study Template
 
 ## Metadata
 
@@ -13,8 +13,8 @@
 
 ## Summary
 
-- Before KitchenOS:
-- Why they evaluated KitchenOS:
+- Before OS Kitchen:
+- Why they evaluated OS Kitchen:
 - What they implemented first:
 - Time to first value:
 

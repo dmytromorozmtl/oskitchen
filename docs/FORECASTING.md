@@ -11,7 +11,7 @@ No env vars required. Optionally pair with **AI Copilot** (`OPENAI_API_KEY`) for
 ## Limitations
 
 - Thin historical volume yields **low confidence** by design.
-- External channels without mirrored KitchenOS history trend low until synced.
+- External channels without mirrored OS Kitchen history trend low until synced.
 
 ## Future improvements
 

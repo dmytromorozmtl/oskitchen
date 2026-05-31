@@ -1,4 +1,4 @@
-# KitchenOS — QA & Test Coverage Audit
+# OS Kitchen — QA & Test Coverage Audit
 
 **Date:** 2026-05-15
 

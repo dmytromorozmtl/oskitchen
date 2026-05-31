@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 2 после P0 PASS (28 May 2026)
+# OS Kitchen — Шаг 2 после P0 PASS (28 May 2026)
 
 **Предусловие:** `artifacts/p0-staging-proof-unblock-summary.json` → `p0ProofStatus: "proof_passed"`  
 **Цель:** Tier 2 golden path PASS → commercial GO → Pilot Week 1

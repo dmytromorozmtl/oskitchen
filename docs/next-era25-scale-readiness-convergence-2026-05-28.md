@@ -1,4 +1,4 @@
-# KitchenOS — era25 Scale Readiness Convergence
+# OS Kitchen — era25 Scale Readiness Convergence
 
 **Status:** **Fifth era25 product slice · IMPLEMENTED · BLOCKED until month 2 convergence ready**
 
@@ -69,7 +69,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `scale_gates_panel` | Scale gates 1–5 on platform ops | Commercial pilot ops |
 | `briefing_action` | Ranked action on blocked gate | Owner Daily Briefing hero |

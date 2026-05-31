@@ -1,4 +1,4 @@
-# KitchenOS — Enterprise OS Completion Report
+# OS Kitchen — Enterprise OS Completion Report
 
 ## Executive summary
 

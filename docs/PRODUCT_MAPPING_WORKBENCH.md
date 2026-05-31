@@ -20,7 +20,7 @@ lives inside a Workbench shell with twelve tabs.
 | Approved | `/approved` | APPROVED + CONFIRMED rows in table form. |
 | Conflicts | `/conflicts` | Explicit + derived conflicts, plus Order Hub blocks. |
 | Bulk | `/bulk` | Multi-select table for bulk approve / ignore / archive. |
-| Modifiers | `/modifiers` | External modifiers ↔ canonical KitchenOS keys. |
+| Modifiers | `/modifiers` | External modifiers ↔ canonical OS Kitchen keys. |
 | Rules / aliases | `/aliases` | Alias dictionary with provider scoping. |
 | Import batches | `/batches` | Provider sync summaries. |
 | Sync health | `/health` | Per-provider mapping coverage + connection state. |
@@ -51,7 +51,7 @@ Three primary empty states (per the brief):
 `MappingRowActions` is a client component used on Overview, Unmapped,
 and Suggestions. It exposes:
 
-- Pick a KitchenOS target.
+- Pick a OS Kitchen target.
 - Change status (drop-down).
 - Approve (requires a target).
 - Reject with a reason.

@@ -1,4 +1,4 @@
-# Launch plan — KitchenOS
+# Launch plan — OS Kitchen
 
 ## Goals
 

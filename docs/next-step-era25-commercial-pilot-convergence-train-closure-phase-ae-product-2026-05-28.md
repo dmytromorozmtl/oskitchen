@@ -1,4 +1,4 @@
-# KitchenOS — Phase AE: Era25 commercial pilot convergence train closure integrity (post-pure ops terminus)
+# OS Kitchen — Phase AE: Era25 commercial pilot convergence train closure integrity (post-pure ops terminus)
 
 **Status:** Product surfaces + train closure rollup integrity guard **IMPLEMENTED** · Human train closure attestation **REQUIRED**  
 **Policy:** `era25-commercial-pilot-convergence-train-closure-phases-v1` · Integrity `era55-era25-commercial-pilot-convergence-train-closure-integrity-v1`  

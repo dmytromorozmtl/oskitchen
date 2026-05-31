@@ -1,4 +1,4 @@
-# KitchenOS — Phase 1 + Tier 1 Closure
+# OS Kitchen — Phase 1 + Tier 1 Closure
 
 **Date:** 19 May 2026  
 **Production:** https://os-kitchen.com  
@@ -81,7 +81,7 @@ Operating Mode (WEEKLY_PREORDER / DAILY_SERVICE), Daily Production View, Quick-O
 
 ## Sign-off
 
-KitchenOS is **code complete** for Phase 1 and Tier 1. All planned modules are deployed. Production is healthy. The system is ready for paid operators across all primary food-business segments.
+OS Kitchen is **code complete** for Phase 1 and Tier 1. All planned modules are deployed. Production is healthy. The system is ready for paid operators across all primary food-business segments.
 
 **Signed:** Principal Platform Architect  
 **Date:** 19 May 2026

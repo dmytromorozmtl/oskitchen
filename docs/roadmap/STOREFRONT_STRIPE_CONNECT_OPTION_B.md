@@ -2,7 +2,7 @@
 
 ## Current state (Option A — platform account)
 
-- Guest checkout uses **KitchenOS platform** Stripe keys (`STRIPE_SECRET_KEY`, webhook `/api/webhooks/stripe`).
+- Guest checkout uses **OS Kitchen platform** Stripe keys (`STRIPE_SECRET_KEY`, webhook `/api/webhooks/stripe`).
 - Funds settle to the platform; merchant payout is manual/off-platform.
 - Readiness: `storefrontPaymentReadiness()` in `services/storefront/storefront-payment-service.ts`.
 - Admin UI: **Dashboard → Storefront → Ordering** → “Stripe readiness”.
@@ -11,7 +11,7 @@ This is correct for **pilot / single merchant** when you control the bank accoun
 
 ## Target state (Option B — Stripe Connect)
 
-Aligns with Shopify Payments: each merchant connects their own Stripe account; KitchenOS takes an application fee.
+Aligns with Shopify Payments: each merchant connects their own Stripe account; OS Kitchen takes an application fee.
 
 ### Bek tasks
 

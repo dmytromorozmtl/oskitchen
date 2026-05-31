@@ -1,4 +1,4 @@
-# KitchenOS — Phase AS: Era25 post-rhythm-permanence Band A governance terminal closure witness (era69)
+# OS Kitchen — Phase AS: Era25 post-rhythm-permanence Band A governance terminal closure witness (era69)
 
 **Status:** Product surfaces + Band A governance terminal closure witness integrity guard **IMPLEMENTED** · Human terminal closure witness attestation **REQUIRED** (rhythm permanence-driven)  
 **Policy:** `era69-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-phases-v1` · Integrity `era69-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness-integrity-v1`  

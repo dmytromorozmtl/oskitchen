@@ -1,4 +1,4 @@
-# KitchenOS Closed Beta — Start Here
+# OS Kitchen Closed Beta — Start Here
 
 Единая точка входа для запуска closed beta (Day 1 → Week 4).
 

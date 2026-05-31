@@ -11,6 +11,6 @@
 ## Roadmap
 
 - SLA timers per `supportTier` on the managed client.  
-- Escalation paths to internal KitchenOS support with mirrored status.  
+- Escalation paths to internal OS Kitchen support with mirrored status.  
 - Customer-visible vs internal notes split + visibility enum.  
 - Integration failure ingestion from sync jobs into ticket suggestions.

@@ -1,4 +1,4 @@
-# Implementation / Onboarding module audit (KitchenOS)
+# Implementation / Onboarding module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/implementation`, `actions/implementation.ts`,

@@ -1,4 +1,4 @@
-# KitchenOS Phase 1 Hardening Release Checklist
+# OS Kitchen Phase 1 Hardening Release Checklist
 
 ## Scope
 Phase 1 hardens the platform foundation before competitor-parity work:

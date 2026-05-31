@@ -1,4 +1,4 @@
-# Sales playbook — KitchenOS
+# Sales playbook — OS Kitchen
 
 ## ICP
 
@@ -6,7 +6,7 @@ Independent food operators ($250k–$5M revenue) running **multi-channel** order
 
 ## Buyer personas
 
-| Persona | Pain | KitchenOS hook |
+| Persona | Pain | OS Kitchen hook |
 |---------|------|----------------|
 | Owner/GM | Margin erosion from mistakes | Single Order Hub + analytics |
 | Kitchen lead | Chaos on the line | Production board + packing |

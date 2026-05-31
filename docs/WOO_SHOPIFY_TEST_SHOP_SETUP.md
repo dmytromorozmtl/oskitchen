@@ -7,10 +7,10 @@ Use a **dedicated test shop** (never production customer data) before pilot sign
 1. Create a WooCommerce store on staging hosting (HTTPS required).
 2. **WooCommerce → Settings → Advanced → REST API** — create Read/Write keys.
 3. **WooCommerce → Settings → Advanced → Webhooks**:
-   - Delivery URL: copy from KitchenOS **Dashboard → Integrations → WooCommerce** (`/api/webhooks/woocommerce?cid=...`)
-   - Secret: generate and paste into KitchenOS **Webhook secret**
+   - Delivery URL: copy from OS Kitchen **Dashboard → Integrations → WooCommerce** (`/api/webhooks/woocommerce?cid=...`)
+   - Secret: generate and paste into OS Kitchen **Webhook secret**
    - Topics: `order.created`, `order.updated`, `product.updated` (or `order.*` / `product.*`)
-4. KitchenOS dashboard: save URL, keys, webhook secret → **Test connection** → **Sync products** → place test order on Woo.
+4. OS Kitchen dashboard: save URL, keys, webhook secret → **Test connection** → **Sync products** → place test order on Woo.
 5. **Sales channels → Webhooks** — confirm event with `signatureValid: true`.
 6. **Run certification checks** on the WooCommerce integration page.
 
@@ -24,14 +24,14 @@ Use a **dedicated test shop** (never production customer data) before pilot sign
 4. **Settings → Notifications → Webhooks** (or app config):
    - `orders/create`, `orders/updated`, `products/update`
    - URL base: `{SITE_URL}/api/webhooks/shopify/orders-create` (see dashboard list)
-   - Signing secret → KitchenOS **Webhook signing secret**
-5. KitchenOS: save domain, token, secret → **Test connection** → test order.
+   - Signing secret → OS Kitchen **Webhook signing secret**
+5. OS Kitchen: save domain, token, secret → **Test connection** → test order.
 6. **Run certification checks** on the Shopify integration page.
 
 ## CLI certification (staging DB)
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 npx tsx scripts/smoke-woo-shopify-certification.ts --owner-email workspace.moroz@gmail.com
 ```
 

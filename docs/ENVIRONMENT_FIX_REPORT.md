@@ -41,7 +41,7 @@ Local instability came from **Prisma reading `.env` only** while **Next.js prior
 ## Commands
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 npm run check-env
 npx prisma validate
 npx prisma generate

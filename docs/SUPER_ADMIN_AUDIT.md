@@ -1,8 +1,8 @@
-# Super-admin audit (KitchenOS)
+# Super-admin audit (OS Kitchen)
 
 ## Scope
 
-KitchenOS uses **Supabase Auth** (JWT) for identity, **`UserProfile`** (`users` table) as the app tenant anchor, **`UserRole` (OWNER/STAFF)** for kitchen-level permissions, **workspace / organization** membership for multi-tenant groundwork, **`getBillingAccess` + `canUseFeature`** for commercial gates, and **dashboard layout** redirects for onboarding and trial enforcement.
+OS Kitchen uses **Supabase Auth** (JWT) for identity, **`UserProfile`** (`users` table) as the app tenant anchor, **`UserRole` (OWNER/STAFF)** for kitchen-level permissions, **workspace / organization** membership for multi-tenant groundwork, **`getBillingAccess` + `canUseFeature`** for commercial gates, and **dashboard layout** redirects for onboarding and trial enforcement.
 
 ## Findings by area
 

@@ -1,6 +1,6 @@
 # Partner program architecture
 
-Purpose: allow agencies/consultants to help food businesses implement KitchenOS.
+Purpose: allow agencies/consultants to help food businesses implement OS Kitchen.
 
 Current foundations:
 - `PartnerAccount`

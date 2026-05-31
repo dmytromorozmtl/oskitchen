@@ -1,4 +1,4 @@
-# KitchenOS — Demo Call Script (15 minutes)
+# OS Kitchen — Demo Call Script (15 minutes)
 
 **Version:** 1.0 · **Date:** 24 May 2026  
 **Related:** [sales-deck.md](../sales-deck.md) · [pilot-program.md](../pilot-program.md) · [DEMO_STORYTELLING_INVESTOR_MODE.md](../DEMO_STORYTELLING_INVESTOR_MODE.md)
@@ -18,7 +18,7 @@
 ## Minute 2–5: Show the problem
 
 - "Most kitchens I talk to struggle with [their specific pain — orders from multiple channels, production planning, packing mistakes]."
-- "Let me show you how KitchenOS handles this."
+- "Let me show you how OS Kitchen handles this."
 
 **Mirror their words** — use their channel names (Shopify, walk-in, corporate lunch, etc.)
 
@@ -68,7 +68,7 @@ Use demo vertical matching their segment (`/demo` or seeded workspace).
 
 ### "We already use Toast/Square"
 
-> Toast is great for front-of-house. KitchenOS is built for the **kitchen** — production, packing, inventory. Most of our pilots use both: Toast for payments, KitchenOS for everything after the order comes in.
+> Toast is great for front-of-house. OS Kitchen is built for the **kitchen** — production, packing, inventory. Most of our pilots use both: Toast for payments, OS Kitchen for everything after the order comes in.
 
 See also: [GTM_SALES_PLAYBOOK.md](../GTM_SALES_PLAYBOOK.md)
 

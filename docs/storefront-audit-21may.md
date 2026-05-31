@@ -1,4 +1,4 @@
-# KitchenOS — Storefront Module Audit
+# OS Kitchen — Storefront Module Audit
 
 **Date:** 21 May 2026  
 **Auditor:** Senior Full-Stack Architect / QA Director  

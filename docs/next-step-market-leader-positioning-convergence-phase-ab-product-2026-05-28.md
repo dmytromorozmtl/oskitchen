@@ -1,4 +1,4 @@
-# KitchenOS — Phase AB: Era25 market leader positioning convergence (post-honest Series A)
+# OS Kitchen — Phase AB: Era25 market leader positioning convergence (post-honest Series A)
 
 **Status:** Product surfaces + market leader convergence integrity guard **IMPLEMENTED** · Human market leader attestation **REQUIRED**  
 **Policy:** `era25-market-leader-positioning-convergence-v1` · Integrity `era52-market-leader-positioning-convergence-integrity-v1`  

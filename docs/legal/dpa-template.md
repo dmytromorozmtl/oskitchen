@@ -5,7 +5,7 @@
 ## 1. Roles
 
 - **Customer:** Data Controller (operator)
-- **KitchenOS:** Data Processor
+- **OS Kitchen:** Data Processor
 
 ## 2. Subprocessors
 

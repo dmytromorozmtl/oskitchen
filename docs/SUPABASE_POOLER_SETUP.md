@@ -1,6 +1,6 @@
-# Supabase pooler setup for KitchenOS
+# Supabase pooler setup for OS Kitchen
 
-KitchenOS uses **two** Supabase connection strings:
+OS Kitchen uses **two** Supabase connection strings:
 
 | Purpose | Env var | Endpoint | Port |
 |---|---|---|---|

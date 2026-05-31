@@ -1,8 +1,8 @@
-# KitchenOS — Full System Audit Report
+# OS Kitchen — Full System Audit Report
 
 **Дата:** 18 May 2026  
 **Аудитор:** Senior Full-Stack Architect / QA Lead / UX Research  
-**Репозиторий:** `/Users/dmytro/Desktop/2026/KitchenOS`  
+**Репозиторий:** `/Users/dmytro/Desktop/2026/OS Kitchen`  
 **Метод:** Статический code review (599 `page.tsx`, 243 API routes, 103 action modules) + production smoke (`os-kitchen.com`) + перекрёстная проверка `docs/audit1712may.md` + выборочный runtime (e2e specs, health endpoints)  
 **Ограничение:** Полный ручной клик-тест **каждой** из 599 страниц **не выполнялся**; пилот-критичные маршруты разобраны по коду и цепочкам вызовов. Находки без runtime помечены `CODE_ONLY`.
 

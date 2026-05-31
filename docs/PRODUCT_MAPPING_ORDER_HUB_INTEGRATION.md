@@ -25,7 +25,7 @@ SKU. The pipeline then opens a `ChannelConflict` row with
 ## Resolution flow
 
 1. Operator opens the workbench unmapped queue.
-2. Picks a KitchenOS candidate and approves the mapping.
+2. Picks a OS Kitchen candidate and approves the mapping.
 3. Returns to the Order Hub (link provided on the conflict card).
 4. Reprocesses the order via the Sales Channels imports view, which
    re-runs validation — the channel pipeline now finds the mapping

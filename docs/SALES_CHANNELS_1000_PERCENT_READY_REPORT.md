@@ -13,7 +13,7 @@
 
 | Channel | Support level | Notes |
 |---------|---------------|-------|
-| KitchenOS storefront | LIVE_READY | Native |
+| OS Kitchen storefront | LIVE_READY | Native |
 | Manual orders | MANUAL_ONLY | Native |
 | WooCommerce | BUILDABLE_WITH_CREDENTIALS | Live path with encryption + webhooks |
 | Shopify | BUILDABLE_WITH_CREDENTIALS | Live path with encryption + webhooks |
@@ -44,4 +44,4 @@ Apply `20260507193000_channel_setup_and_credential_audit` to environments using 
 - Setup wizard shell writes progress table only when actions are added — schema is ready
 - Webhook replay / redacted payload viewer still minimal; event table is the source of truth
 
-KitchenOS does **not** claim third-party marketplace certification anywhere in this module.
+OS Kitchen does **not** claim third-party marketplace certification anywhere in this module.

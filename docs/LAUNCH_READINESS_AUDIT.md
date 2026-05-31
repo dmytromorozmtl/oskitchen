@@ -1,4 +1,4 @@
-# KitchenOS — Launch readiness audit
+# OS Kitchen — Launch readiness audit
 
 Snapshot for production deployment (Vercel + Supabase + Stripe + Resend). Status reflects **codebase intent**; verify against your live project before launch.
 

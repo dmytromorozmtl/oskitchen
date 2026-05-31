@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Evolution Era 17
+# Next Master Prompt Input — OS Kitchen Evolution Era 17
 
 **Date:** 2026-05-28  
 **Purpose:** Canonical facts for the **Evolution Era 17** master prompt and recurring cycle prompts  
@@ -86,7 +86,7 @@
 ## 7. Competitor Gaps (honest)
 
 - **Toast/Square:** hardware, offline, terminal ecosystem, rush-hour KDS polish
-- **Shopify/Woo:** native admin + app marketplace (KitchenOS wins on kitchen spine if webhooks work)
+- **Shopify/Woo:** native admin + app marketplace (OS Kitchen wins on kitchen spine if webhooks work)
 - **7shifts/Homebase:** labor depth
 - **Klaviyo:** marketing automation depth
 - **Oracle/Simphony:** enterprise scale + attestations

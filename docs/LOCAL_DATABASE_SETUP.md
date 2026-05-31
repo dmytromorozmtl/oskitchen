@@ -5,7 +5,7 @@ This project uses **two** env files for local development so both **Next.js** an
 ## Paths
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 ```
 
 ## Why two files?
@@ -31,7 +31,7 @@ Copy from Supabase: **Project Settings → Database** (use the pooler URI for `D
 ## Daily workflow
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 ```
 
 Optional: load vars into your shell if you run ad-hoc commands that expect them in the environment (only if your values are shell-safe):

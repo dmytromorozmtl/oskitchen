@@ -36,7 +36,7 @@ Skipped (SKIP_PILOT_CODE_READINESS=1). Run `npm run verify:pilot-readiness` sepa
 
 ## Workspace migration
 ```
-    KitchenOS staging workspace migration
+    OS Kitchen staging workspace migration
     DATABASE_URL host: aws-1-us-west-2.pooler.supabase.com
     
     == Preflight ==
@@ -63,7 +63,7 @@ Skipped (SKIP_PILOT_CODE_READINESS=1). Run `npm run verify:pilot-readiness` sepa
     Provisioned 0 workspace(s).
     
     == Migrate deploy ==
-    Unknown error during config file loading: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/dmytro/Desktop/2026/KitchenOS/node_modules/confbox/dist/ini.mjs' imported from /Users/dmytro/Desktop/2026/KitchenOS/node_modules/pkg-types/dist/index.mjs
+    Unknown error during config file loading: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/dmytro/Desktop/2026/OS Kitchen/node_modules/confbox/dist/ini.mjs' imported from /Users/dmytro/Desktop/2026/OS Kitchen/node_modules/pkg-types/dist/index.mjs
 ```
 
 ```

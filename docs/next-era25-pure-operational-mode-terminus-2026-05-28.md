@@ -1,4 +1,4 @@
-# KitchenOS — era25 Pure Operational Mode Terminus
+# OS Kitchen — era25 Pure Operational Mode Terminus
 
 **Status:** **Ninth and final era25 product slice · IMPLEMENTED · BLOCKED until sustained ops convergence ready**
 

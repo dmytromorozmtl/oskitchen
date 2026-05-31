@@ -1,4 +1,4 @@
-# KitchenOS — Phase AN: Era25 governance train terminal seal (era64)
+# OS Kitchen — Phase AN: Era25 governance train terminal seal (era64)
 
 **Status:** Product surfaces + governance train terminal seal integrity guard **IMPLEMENTED** · Human seal attestation **REQUIRED** (witness-driven)  
 **Policy:** `era64-era25-governance-train-terminal-seal-phases-v1` · Integrity `era64-era25-governance-train-terminal-seal-integrity-v1`  

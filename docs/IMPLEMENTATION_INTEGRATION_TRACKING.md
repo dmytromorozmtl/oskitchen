@@ -8,7 +8,7 @@ For each entry in `IMPLEMENTATION_INTEGRATIONS`:
 - **WooCommerce** (`WOOCOMMERCE`)
 - **Uber Eats** (placeholder)
 - **Uber Direct** (placeholder)
-- **KitchenOS Storefront** (`storefront_native`)
+- **OS Kitchen Storefront** (`storefront_native`)
 - **Webhooks**
 - **Email / notifications** (Resend-backed — configured under Notifications; no `IntegrationConnection` row)
 

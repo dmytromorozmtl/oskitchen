@@ -71,7 +71,7 @@ Automatic backups created by `scripts/migrate-direct-url-to-session-pooler.mjs`:
 
 - **Project pause.** Supabase pauses inactive free-tier projects, at which point both pooler DNS records disappear. The fix for that is the dashboard "Restore" button, not env changes.
 - **IPv4 add-on regression.** If someone later buys the Supabase IPv4 add-on and re-introduces the direct host into `DIRECT_URL`, migrations will still work but we lose the session-pooler IPv4 fallback. The startup warning in `lib/env.ts` makes that change visible.
-- **Connection limits.** The Session Pooler has a project-wide connection cap. KitchenOS only opens session-pooler connections during migrations / `prisma db execute`, so this is not a runtime concern.
+- **Connection limits.** The Session Pooler has a project-wide connection cap. OS Kitchen only opens session-pooler connections during migrations / `prisma db execute`, so this is not a runtime concern.
 
 ## Future recommendations
 

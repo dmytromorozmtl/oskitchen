@@ -1,4 +1,4 @@
-# KitchenOS — Integrations, Webhooks & Error Recovery Audit
+# OS Kitchen — Integrations, Webhooks & Error Recovery Audit
 
 **Date:** 2026-05-15
 

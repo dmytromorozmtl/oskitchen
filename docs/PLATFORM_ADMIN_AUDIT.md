@@ -1,6 +1,6 @@
 # Platform admin audit
 
-Internal-only `/platform/*` console for KitchenOS operators. This document audits the **current** implementation (not the full future roadmap).
+Internal-only `/platform/*` console for OS Kitchen operators. This document audits the **current** implementation (not the full future roadmap).
 
 ## Routes
 

@@ -8,7 +8,7 @@ All candidate URLs return **404** on `/api/health`, `/login`, `/`.
 
 ## Fix (Ops)
 
-1. [Vercel Dashboard](https://vercel.com) → KitchenOS project → **Deployments**
+1. [Vercel Dashboard](https://vercel.com) → OS Kitchen project → **Deployments**
 2. Find latest **staging** / **preview** deployment (or branch linked to staging)
 3. Click **⋯** → **Redeploy** (use existing build or trigger new from main/staging branch)
 4. Copy deployment URL (must end with `.vercel.app`)

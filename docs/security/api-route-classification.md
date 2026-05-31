@@ -2,7 +2,7 @@
 
 Every `app/api/**/route.ts` file must have an explicit authorization story.
 
-KitchenOS has too many API routes to rely on memory or code review discipline
+OS Kitchen has too many API routes to rely on memory or code review discipline
 alone. New routes must be classifiable by static audit before they are allowed
 to ship.
 
@@ -115,7 +115,7 @@ const guard = await guardPublicApi(request, "scope", "bucket");
 
 ## Relationship to Existing Registry
 
-KitchenOS already has a route-policy registry in:
+OS Kitchen already has a route-policy registry in:
 
 - `lib/api/route-registry.ts`
 

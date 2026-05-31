@@ -1,6 +1,6 @@
 # Location storefront support
 
-KitchenOS's storefront (`StorefrontSettings`) has historically been a
+OS Kitchen's storefront (`StorefrontSettings`) has historically been a
 one-per-workspace surface. With locations now first-class, we can wire
 location-aware storefronts.
 

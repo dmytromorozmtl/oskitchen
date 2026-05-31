@@ -1,4 +1,4 @@
-# KitchenOS — Phase 1 Closure
+# OS Kitchen — Phase 1 Closure
 
 **Date:** 19 May 2026  
 **Production:** https://os-kitchen.com  
@@ -115,7 +115,7 @@ Costing alerts · PO approval · Recipe scaling · Catering deposits · Supplier
 
 ## Sign-off
 
-This document certifies that **KitchenOS Phase 1 is CODE COMPLETE**.
+This document certifies that **OS Kitchen Phase 1 is CODE COMPLETE**.
 
 - All P0/P1 issues from audit are closed for this phase
 - Production deployment is healthy

@@ -1,4 +1,4 @@
-# KitchenOS — Phase C: Commercial GO closure (post-Tier 2 PASS)
+# OS Kitchen — Phase C: Commercial GO closure (post-Tier 2 PASS)
 
 **Status:** Product surfaces + GO integrity guard **IMPLEMENTED** · Human ICP/LOI/GO **REQUIRED**  
 **Policy:** `era21-commercial-go-closure-v1` · Integrity `era28-pilot-gono-go-integrity-v1`  

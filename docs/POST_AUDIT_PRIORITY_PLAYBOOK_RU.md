@@ -1,9 +1,9 @@
-# Плейбук приоритетов после аудита KitchenOS
+# Плейбук приоритетов после аудита OS Kitchen
 
 **Версия:** 1.0  
 **Дата:** 2026-05-15  
 **Аудитория:** основатель, продакт, техлид, безопасность, SRE  
-**Связанные артефакты:** `docs/FULL_SYSTEM_AUDIT_FINAL_REPORT.md`, `docs/KITCHENOS_FULL_SYSTEM_ANALYSIS_AND_ROADMAP.md`, `docs/SECURITY_RBAC_TENANCY_AUDIT.md`, [`docs/COMMERCIAL_RELEASE_HARDENING_AUDIT.md`](./COMMERCIAL_RELEASE_HARDENING_AUDIT.md), [`docs/ENGINEERING_READINESS_INDEX.md`](./ENGINEERING_READINESS_INDEX.md)
+**Связанные артефакты:** `docs/FULL_SYSTEM_AUDIT_FINAL_REPORT.md`, `docs/OS Kitchen_FULL_SYSTEM_ANALYSIS_AND_ROADMAP.md`, `docs/SECURITY_RBAC_TENANCY_AUDIT.md`, [`docs/COMMERCIAL_RELEASE_HARDENING_AUDIT.md`](./COMMERCIAL_RELEASE_HARDENING_AUDIT.md), [`docs/ENGINEERING_READINESS_INDEX.md`](./ENGINEERING_READINESS_INDEX.md)
 
 Этот документ **детализирует и профессионализирует** рекомендации из пост-аудитного списка: для каждого направления заданы **цель**, **объём работ**, **критерии приёмки**, **метрики**, **риски** и **порядок внедрения**. Документ можно использовать как **epic-описание** в трекере задач.
 
@@ -135,7 +135,7 @@
    - Юнит-тесты: `tests/unit/support-comment-guards.test.ts` — матрица ролей × visibility.
 
 2. **UI (рекомендации)**  
-   - Радиокнопки / сегмент с **явными подписями**: «Видит клиент», «Только команде KitchenOS», «Партнёр (если применимо)».  
+   - Радиокнопки / сегмент с **явными подписями**: «Видит клиент», «Только команде OS Kitchen», «Партнёр (если применимо)».  
    - Цветовая дифференциация ленты: internal — нейтральный фон, customer — «исходящее письмо».  
    - Подтверждение при переключении с internal на customer (опционально, P2).
 

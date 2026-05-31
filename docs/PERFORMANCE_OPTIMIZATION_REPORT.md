@@ -1,4 +1,4 @@
-# KitchenOS — Performance Optimization Report
+# OS Kitchen — Performance Optimization Report
 
 **Date:** 2026-05-24  
 **Production:** https://os-kitchen.com  
@@ -148,4 +148,4 @@ System is **production-fast for operators** with pooler, Redis rate limits, stor
 
 ---
 
-*Generated: 2026-05-24 · KitchenOS Performance Pass*
+*Generated: 2026-05-24 · OS Kitchen Performance Pass*

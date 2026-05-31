@@ -53,7 +53,7 @@ Set in **ops vault** + local shell and/or **GitHub Actions secrets** (never comm
 
 | # | Variable | Child smoke(s) | Where to set | Purpose |
 |---|----------|----------------|--------------|---------|
-| 1 | `E2E_STAGING_BASE_URL` | SSO, staging workflows | GitHub secret + local shell | Staging KitchenOS URL (e.g. `https://staging.kitchenos.app`) |
+| 1 | `E2E_STAGING_BASE_URL` | SSO, staging workflows | GitHub secret + local shell | Staging OS Kitchen URL (e.g. `https://staging.kitchenos.app`) |
 | 2 | `E2E_LOGIN_EMAIL` | staging workflows | GitHub secret + local shell | Dashboard login email for staging E2E |
 | 3 | `E2E_LOGIN_PASSWORD` | staging workflows | GitHub secret + local shell | Dashboard login password (legacy alias `E2E_PASSWORD` in CI only) |
 | 4 | `SSO_STAGING_WORKSPACE_ID` | SSO IdP | Ops vault + local shell | Pilot workspace UUID — tenant-bound SSO |

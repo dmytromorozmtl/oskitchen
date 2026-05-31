@@ -88,7 +88,7 @@ adds, edits, and lists modifier rows.
 
 ## Conflict resolution
 
-Explicit conflicts (status=CONFLICT), duplicate KitchenOS target,
+Explicit conflicts (status=CONFLICT), duplicate OS Kitchen target,
 duplicate external product, Order Hub blocks. Per-row actions:
 reject, archive, change target.
 

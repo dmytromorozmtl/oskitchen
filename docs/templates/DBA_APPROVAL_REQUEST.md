@@ -1,7 +1,7 @@
 # DBA Approval Request — Workspace Remediation Migrations
 
 **To:** Database / Platform team  
-**From:** KitchenOS Engineering  
+**From:** OS Kitchen Engineering  
 **Date:** _____________  
 **Ticket:** _____________
 

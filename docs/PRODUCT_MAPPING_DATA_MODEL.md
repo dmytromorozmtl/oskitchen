@@ -20,7 +20,7 @@ and `updateProductMappingStatus` actions continue to work.
 | `externalVariantTitle` *(new)* | Variant title for Shopify/Woo. |
 | `externalCategory` *(new)* | Category hint for matching. |
 | `externalRawJson` *(new)* | Original provider payload. |
-| `internalProductId` | Selected KitchenOS product. |
+| `internalProductId` | Selected OS Kitchen product. |
 | `internalVariantId` *(new)* | Reserved for future variant-aware matching. |
 | `confidence` | Legacy 0..1 numeric score. |
 | `confidenceLabel` *(new)* | `ProductMappingConfidence` enum. |
@@ -64,7 +64,7 @@ provider).
 ## `ProductModifierMapping`
 
 External modifiers (Shopify options, Woo attributes, Uber Eats
-modifiers, CSV options) mapped to canonical KitchenOS modifier keys
+modifiers, CSV options) mapped to canonical OS Kitchen modifier keys
 (`size`, `protein`, `side`, `spice`, `addon`, `substitution`,
 `drink`, `preparation`, `packaging`, `delivery_instruction`).
 

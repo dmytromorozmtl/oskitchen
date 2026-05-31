@@ -2,7 +2,7 @@
 
 ## Strategic Position
 
-KitchenOS is strongest where competitors split the operator workflow across
+OS Kitchen is strongest where competitors split the operator workflow across
 multiple tools:
 
 - storefront
@@ -16,7 +16,7 @@ commercially important gaps.
 
 ## Competitor Matrix
 
-| Competitor | Strongest Capabilities | KitchenOS Equivalent Today | Gap | Priority | Build / Integrate / Partner | Complexity | Revenue Impact | Retention Impact |
+| Competitor | Strongest Capabilities | OS Kitchen Equivalent Today | Gap | Priority | Build / Integrate / Partner | Complexity | Revenue Impact | Retention Impact |
 |------------|------------------------|----------------------------|-----|----------|-----------------------------|------------|----------------|------------------|
 | Restaurant365 | accounting, GL, payroll, labor forecasting, AI scheduling | finance ops, reporting, staff scheduling, copilot foundation | no full GL, no payroll ownership, no AI schedule publishing | P0/P1 | build selectively, integrate for payroll | High | High | High |
 | Toast | native POS hardware, QR ordering, kiosk, operator mobile | POS, storefront, handheld web, KDS | no native hardware/app ecosystem parity, no QR self-service at category depth | P1 | build | High | High | Medium |

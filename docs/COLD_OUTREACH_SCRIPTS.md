@@ -1,10 +1,10 @@
-# Cold outreach scripts — KitchenOS
+# Cold outreach scripts — OS Kitchen
 
 Tone: concise, operator-first, no jargon wall.
 
 ## LinkedIn connection note (≤300 chars)
 
-> We built KitchenOS for weekly meal prep + ghost kitchens — WooCommerce/Shopify orders → one production board. If kitchen ops ever feels like spreadsheet Jenga, happy to share a 90s demo.
+> We built OS Kitchen for weekly meal prep + ghost kitchens — WooCommerce/Shopify orders → one production board. If kitchen ops ever feels like spreadsheet Jenga, happy to share a 90s demo.
 
 ## LinkedIn DM (post-accept)
 
@@ -17,7 +17,7 @@ Tone: concise, operator-first, no jargon wall.
 
 Hi {{Name}} — noticed {{Brand}} runs weekly preorders. Many teams we talk to lose SKUs between Shopify/Woo and the kitchen whiteboard.
 
-KitchenOS pulls channels into one Order hub and pushes batches through kitchen + packing. Simulated demo (no keys): {{demo_link}}
+OS Kitchen pulls channels into one Order hub and pushes batches through kitchen + packing. Simulated demo (no keys): {{demo_link}}
 
 15-min fit call?
 
@@ -32,7 +32,7 @@ KitchenOS pulls channels into one Order hub and pushes batches through kitchen +
 
 ## Objections (quick)
 
-- **“We have a POS.”** KitchenOS complements preorder-heavy ecommerce; POS rarely owns batch prep.
+- **“We have a POS.”** OS Kitchen complements preorder-heavy ecommerce; POS rarely owns batch prep.
 - **“Too busy to switch.”** Demo mode runs beside live until you’re confident.
 
 ## Follow-up sequence

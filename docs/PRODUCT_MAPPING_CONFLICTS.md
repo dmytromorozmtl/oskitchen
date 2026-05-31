@@ -7,7 +7,7 @@ The Conflicts tab surfaces four categories of conflict.
 Mappings whose `status === "CONFLICT"`. The status can be set
 manually (`changeMappingStatus`) or by a future automatic detector.
 
-## 2. Duplicate KitchenOS target
+## 2. Duplicate OS Kitchen target
 
 `detectConflicts` groups approved mappings by `internalProductId` and
 returns any group with more than one external row. For marketplaces

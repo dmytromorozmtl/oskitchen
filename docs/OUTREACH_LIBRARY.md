@@ -1,4 +1,4 @@
-# Outreach content library (KitchenOS)
+# Outreach content library (OS Kitchen)
 
 Use these as starting points — personalize with business name, channel mix, and pain from **`BetaLead`** / **`DemoRequest`**. All growth copy generation also lives at **`/dashboard/growth/content-library`** and **`/dashboard/growth/outreach`**.
 
@@ -9,7 +9,7 @@ Use these as starting points — personalize with business name, channel mix, an
 **Subject:** Cut packing errors before Sunday prep  
 **Body:**  
 Hi {Name},  
-Meal prep shops usually break when labels, portions, and delivery handoffs fight each other. KitchenOS centralizes the weekly menu, production batches, and packing in one flow built for food, not generic ecommerce.  
+Meal prep shops usually break when labels, portions, and delivery handoffs fight each other. OS Kitchen centralizes the weekly menu, production batches, and packing in one flow built for food, not generic ecommerce.  
 Worth a 12-minute look this week?
 
 ---
@@ -19,7 +19,7 @@ Worth a 12-minute look this week?
 **Subject:** Catering fire drills without the spreadsheet chaos  
 **Body:**  
 Hi {Name},  
-When events stack up, the gap between “sold” and “kitchen-ready” is where margin disappears. We built KitchenOS so catering teams see confirmed orders, prep tasks, and packing exports in one place.  
+When events stack up, the gap between “sold” and “kitchen-ready” is where margin disappears. We built OS Kitchen so catering teams see confirmed orders, prep tasks, and packing exports in one place.  
 Open to a quick fit check?
 
 ---
@@ -29,7 +29,7 @@ Open to a quick fit check?
 **Subject:** Multiple brands, one production truth  
 **Body:**  
 Hi {Name},  
-Ghost kitchens feel the pain when each channel has its own reality. KitchenOS pulls orders into a single hub and pushes them through production and packing without double entry.  
+Ghost kitchens feel the pain when each channel has its own reality. OS Kitchen pulls orders into a single hub and pushes them through production and packing without double entry.  
 If you’re evaluating ops tooling, I’ll share how pilots run.
 
 ---
@@ -39,7 +39,7 @@ If you’re evaluating ops tooling, I’ll share how pilots run.
 **Subject:** Production boards that match your bake schedule  
 **Body:**  
 Hi {Name},  
-Bakeries live and die by prep windows. KitchenOS ties weekly menus to production tasks so the kitchen sees what’s due when — before packing and pickup.  
+Bakeries live and die by prep windows. OS Kitchen ties weekly menus to production tasks so the kitchen sees what’s due when — before packing and pickup.  
 Want a short walkthrough?
 
 ---
@@ -52,7 +52,7 @@ Hi {Name} — saw you’re on WooCommerce for food. We help teams turn weekly me
 
 ## LinkedIn DM — Shopify store
 
-Hi {Name} — Shopify handles the storefront; KitchenOS handles the kitchen. If fulfillment is getting messy as volume grows, happy to show how operators route orders into production.
+Hi {Name} — Shopify handles the storefront; OS Kitchen handles the kitchen. If fulfillment is getting messy as volume grows, happy to show how operators route orders into production.
 
 ---
 
@@ -69,7 +69,7 @@ Hi {Name} — Shopify handles the storefront; KitchenOS handles the kitchen. If 
 
 ## Objection: “We already use spreadsheets.”
 
-Totally fair — spreadsheets work until two people update the same tab. KitchenOS is the system of record when orders need to become kitchen tasks and packing outputs with an audit trail.
+Totally fair — spreadsheets work until two people update the same tab. OS Kitchen is the system of record when orders need to become kitchen tasks and packing outputs with an audit trail.
 
 ---
 
@@ -81,7 +81,7 @@ You shouldn’t need to be. The pilot path is: connect one channel or enter manu
 
 ## Onboarding email (after signup)
 
-Welcome to KitchenOS — your fastest path to value:  
+Welcome to OS Kitchen — your fastest path to value:  
 1) Finish business settings and timezone.  
 2) Create one weekly menu.  
 3) Enter one test order or connect a sandbox integration.  
@@ -92,7 +92,7 @@ Reply with your biggest operational bottleneck and we’ll prioritize configurat
 
 ## Beta follow-up
 
-Thanks for applying to the KitchenOS beta. We’re onboarding in small cohorts so each shop gets hands-on support. If you’re open to it, book a 15-minute fit call here: {book-demo link}.  
+Thanks for applying to the OS Kitchen beta. We’re onboarding in small cohorts so each shop gets hands-on support. If you’re open to it, book a 15-minute fit call here: {book-demo link}.  
 What we’ll cover: channels, weekly volume, and your #1 operational pain.
 
 ---

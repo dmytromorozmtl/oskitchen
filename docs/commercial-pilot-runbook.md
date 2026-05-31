@@ -1,4 +1,4 @@
-# KitchenOS Commercial Pilot Runbook
+# OS Kitchen Commercial Pilot Runbook
 
 **Status:** canonical operator + engineering onboarding for paid pilots  
 **Policy:** `era7-commercial-pilot-runbooks-v1` (`lib/commercial/commercial-pilot-runbook-policy.ts`)  

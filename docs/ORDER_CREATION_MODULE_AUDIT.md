@@ -1,4 +1,4 @@
-# Order creation audit (KitchenOS)
+# Order creation audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/orders/new`, `actions/orders.ts → createOrder`,

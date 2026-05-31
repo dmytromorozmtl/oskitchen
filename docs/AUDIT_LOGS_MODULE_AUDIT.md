@@ -2,7 +2,7 @@
 
 > **Update (implementation):** Canonical route `/dashboard/audit-logs` now exists; `/dashboard/security/audit-logs` redirects with `tab=security`. Model, writer, redaction, retention/export tables, and UI described below have been superseded by the Enterprise Audit Trail Center — see `docs/AUDIT_LOGS_READY_REPORT.md`.
 
-KitchenOS audit logging before the Enterprise Audit & Activity Trail transformation.
+OS Kitchen audit logging before the Enterprise Audit & Activity Trail transformation.
 
 ## Current routes and UI
 

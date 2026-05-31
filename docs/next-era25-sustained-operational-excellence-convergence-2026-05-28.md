@@ -1,4 +1,4 @@
-# KitchenOS — era25 Sustained Operational Excellence Convergence
+# OS Kitchen — era25 Sustained Operational Excellence Convergence
 
 **Status:** **Eighth era25 product slice · IMPLEMENTED · BLOCKED until market leader convergence ready**
 
@@ -67,7 +67,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `sustained_ops_cadences_panel` | Cadences A–D on platform ops | Commercial pilot ops |
 | `briefing_action` | Ranked action on blocked cadence | Owner Daily Briefing hero |

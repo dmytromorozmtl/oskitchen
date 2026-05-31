@@ -1,4 +1,4 @@
-# Инвентаризация мутаций и API (IDOR / tenant scope) — KitchenOS
+# Инвентаризация мутаций и API (IDOR / tenant scope) — OS Kitchen
 
 **Версия:** 1.3  
 **Дата:** 2026-05-17 (обновление волны remediation)  

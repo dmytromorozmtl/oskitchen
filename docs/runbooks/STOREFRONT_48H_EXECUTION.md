@@ -27,7 +27,7 @@
 
 ```bash
 export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use 22
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 
 export STOREFRONT_KNOWN_PRODUCTION_URL="https://YOUR-PROD.vercel.app"
 export STOREFRONT_KNOWN_STAGING_URL="https://YOUR-PREVIEW.vercel.app"

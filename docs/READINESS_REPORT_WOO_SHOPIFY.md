@@ -59,7 +59,7 @@ npm run smoke:woo-shopify -- --owner-email workspace.moroz@gmail.com
 | Шаг | Действие |
 |-----|----------|
 | 1 | Поднять Woo **или** Shopify dev store (HTTPS) |
-| 2 | Сохранить credentials в KitchenOS dashboard |
+| 2 | Сохранить credentials в OS Kitchen dashboard |
 | 3 | Настроить webhooks (URL + secret из dashboard) |
 | 4 | Тестовый заказ → проверить webhook log |
 | 5 | **Run certification checks** → цель `PASS` или `PARTIAL` |
@@ -75,7 +75,7 @@ npm run smoke:woo-shopify -- --owner-email workspace.moroz@gmail.com
 Команда для вашего staging owner:
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 npm run smoke:woo-shopify -- --owner-email workspace.moroz@gmail.com
 ```
 

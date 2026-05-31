@@ -1,4 +1,4 @@
-# KitchenOS — Go-to-market audit
+# OS Kitchen — Go-to-market audit
 
 Purpose: baseline what exists for acquiring the first 100 beta customers, gaps, business impact, and implementation priority.
 

@@ -1,4 +1,4 @@
-# KitchenOS Enterprise API (v1)
+# OS Kitchen Enterprise API (v1)
 
 Base URL: `https://<your-domain>/api/public/v1`
 

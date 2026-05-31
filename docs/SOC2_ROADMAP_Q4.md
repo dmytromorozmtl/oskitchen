@@ -7,7 +7,7 @@
 
 ## Phase 1 — Gap analysis (Week 1–2)
 
-| Trust criteria area | KitchenOS today | Gap |
+| Trust criteria area | OS Kitchen today | Gap |
 |---------------------|-----------------|-----|
 | Access control | RBAC, tenant actor | Formal access review process |
 | Change management | CI, PR reviews (solo) | Documented change policy |

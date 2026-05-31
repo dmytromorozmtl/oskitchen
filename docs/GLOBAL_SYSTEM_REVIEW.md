@@ -1,4 +1,4 @@
-# KitchenOS — Global System Review
+# OS Kitchen — Global System Review
 
 **Scope:** Architecture, UX, data, operations, and scalability signals across the current codebase (App Router, ~80+ Prisma models, `actions/*`, `services/*`, broad dashboard surface).
 

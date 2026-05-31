@@ -1,4 +1,4 @@
-# KitchenOS — Phase T: Era25 engineering gates require signed charter (post-honest first charter slice)
+# OS Kitchen — Phase T: Era25 engineering gates require signed charter (post-honest first charter slice)
 
 **Status:** Product surfaces + engineering gates integrity guard **IMPLEMENTED** · Human gates attestation **REQUIRED**  
 **Implemented follow-on:** [`docs/next-step-era25-first-product-slice-blueprint-phase-u-product-2026-05-28.md`](./next-step-era25-first-product-slice-blueprint-phase-u-product-2026-05-28.md) (Phase U · era45)  

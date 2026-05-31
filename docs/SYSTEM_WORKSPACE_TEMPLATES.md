@@ -1,6 +1,6 @@
 # System workspace templates
 
-The 7 starters shipped with KitchenOS today. See
+The 7 starters shipped with OS Kitchen today. See
 `docs/TEMPLATE_REGISTRY.md` for the canonical table.
 
 ## Restaurant starter

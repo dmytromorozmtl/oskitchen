@@ -10,7 +10,7 @@
 
 ## Purpose and honesty rules
 
-1. **Cycle 1 closes the R1 ambiguity** — KitchenOS now has a single locked R2 integration path; no code ships in this cycle.
+1. **Cycle 1 closes the R1 ambiguity** — OS Kitchen now has a single locked R2 integration path; no code ships in this cycle.
 2. **Procurement posture unchanged for delivery** — buyers may cite this design as engineering intent; it is **not** SSO availability.
 3. **Matrix wins** — `pilot_foundation` (schema only) until runtime login + staging smoke prove pilot readiness; **not** production SSO.
 4. **One IdP in pilot** — Okta **or** Microsoft Entra ID per pilot tenant, not both code paths simultaneously.
@@ -77,10 +77,10 @@ Option B may be revisited **only** if Supabase enterprise SSO cannot satisfy a s
 ```mermaid
 sequenceDiagram
   participant User as Staff browser
-  participant KOS as KitchenOS /login
+  participant KOS as OS Kitchen /login
   participant IdP as Pilot IdP (Okta or Entra)
   participant Supa as Supabase Auth (SSO)
-  participant App as KitchenOS app + RBAC
+  participant App as OS Kitchen app + RBAC
 
   User->>KOS: Enter workspace slug / email domain
   KOS->>Supa: Initiate SSO (workspace-bound)
@@ -104,7 +104,7 @@ sequenceDiagram
 
 1. **Subject key:** IdP `sub` / SAML `NameID` stored in `SsoIdentity` row linked to `UserProfile.id` (Supabase auth user id).
 2. **Workspace binding:** `WorkspaceSsoSettings` (R2 schema) holds IdP metadata reference, enabled flag, allowed email domains, pilot IdP vendor.
-3. **Role source of truth:** KitchenOS `workspaceRole` and permission grants — IdP groups may **suggest** roles in R3; R2 does not auto-elevate.
+3. **Role source of truth:** OS Kitchen `workspaceRole` and permission grants — IdP groups may **suggest** roles in R3; R2 does not auto-elevate.
 4. **Invite parity:** Manual staff invite flow remains until SCIM (post-R2).
 
 **No new permission keys in R2 design** — existing mutation registry unchanged.
@@ -142,7 +142,7 @@ sequenceDiagram
 
 ## R2 pilot acceptance criteria
 
-1. One pilot tenant with Okta **or** Entra ID configured in Supabase + KitchenOS workspace settings.
+1. One pilot tenant with Okta **or** Entra ID configured in Supabase + OS Kitchen workspace settings.
 2. Staff SSO login establishes Supabase session and passes `requireTenantActor` on dashboard.
 3. One guarded mutation (e.g. production calendar or orders) succeeds under SSO session with existing RBAC.
 4. Break-glass owner login works when IdP unavailable (staging drill).

@@ -1,4 +1,4 @@
-# KitchenOS — Ultimate Multi-Department Audit Report
+# OS Kitchen — Ultimate Multi-Department Audit Report
 
 **Date:** 2026-05-23  
 **Production:** https://os-kitchen.com  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-KitchenOS — это **крупномасштабный production-ready Next.js 15 монолит** для food-операторов (meal prep, restaurant, catering, ghost kitchen). Кодовая база значительно превосходит типичный seed-stage SaaS: **~5 000 TS-файлов**, **689 страниц**, **358 Prisma-моделей**, **675 unit-тестов PASS**.
+OS Kitchen — это **крупномасштабный production-ready Next.js 15 монолит** для food-операторов (meal prep, restaurant, catering, ghost kitchen). Кодовая база значительно превосходит типичный seed-stage SaaS: **~5 000 TS-файлов**, **689 страниц**, **358 Prisma-моделей**, **675 unit-тестов PASS**.
 
 **Сильная сторона:** технический фундамент (архитектура, инженерия, безопасность, ops-пути).  
 **Слабая сторона:** коммерциализация (продажи, CS, case studies, тракция).
@@ -727,7 +727,7 @@ Test Files  202 passed | 1 skipped (203)
 
 ### Рекомендация CEO
 
-KitchenOS — **технологически зрелый продукт на стадии pre-commercialization**. Кодовая база (4 973 TS files, 675 tests, 0 type escapes) превосходит 95% seed-stage SaaS. Production на https://os-kitchen.com стабилен.
+OS Kitchen — **технологически зрелый продукт на стадии pre-commercialization**. Кодовая база (4 973 TS files, 675 tests, 0 type escapes) превосходит 95% seed-stage SaaS. Production на https://os-kitchen.com стабилен.
 
 **Следующий шаг — не код, а go-to-market:**
 1. 3 paid pilots с white-glove onboarding
@@ -744,7 +744,7 @@ KitchenOS — **технологически зрелый продукт на с
 
 | Source | Details |
 |--------|---------|
-| Codebase scan | 2026-05-23, `/Users/dmytro/Desktop/2026/KitchenOS` |
+| Codebase scan | 2026-05-23, `/Users/dmytro/Desktop/2026/OS Kitchen` |
 | Production probes | `GET /api/health`, `/sitemap.xml`, security headers |
 | Unit tests | Vitest 4.1.5 — 675 passed |
 | Cross-reference | `docs/audit-full-functions-map.md` (2026-05-21) |
@@ -752,4 +752,4 @@ KitchenOS — **технологически зрелый продукт на с
 
 ---
 
-*Отчёт сгенерирован: 2026-05-23 · 20-Department Ultimate Audit · KitchenOS*
+*Отчёт сгенерирован: 2026-05-23 · 20-Department Ultimate Audit · OS Kitchen*

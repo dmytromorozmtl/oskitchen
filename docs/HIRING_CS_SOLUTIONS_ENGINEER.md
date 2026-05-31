@@ -7,7 +7,7 @@
 
 ## Role
 
-KitchenOS is a production-ready restaurant operations platform (POS, KDS, production, storefront). We need a **technical CS / solutions engineer** to white-glove pilot onboarding, reduce founder support load, and capture case studies.
+OS Kitchen is a production-ready restaurant operations platform (POS, KDS, production, storefront). We need a **technical CS / solutions engineer** to white-glove pilot onboarding, reduce founder support load, and capture case studies.
 
 ## You will
 

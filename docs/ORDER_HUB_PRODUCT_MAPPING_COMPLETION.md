@@ -4,7 +4,7 @@
 
 | Path | Responsibility |
 |------|----------------|
-| `services/order-hub/order-hub-service.ts` | Loads internal KitchenOS orders + external orders + mapping conflict count. |
+| `services/order-hub/order-hub-service.ts` | Loads internal OS Kitchen orders + external orders + mapping conflict count. |
 | `services/order-hub/order-triage-service.ts` | Tab metadata + pure filters for internal/external rows. |
 | `app/dashboard/order-hub/page.tsx` | Tab strip, mapping banner, dual tables, row links to `/dashboard/orders/[id]`. |
 

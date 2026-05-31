@@ -1,6 +1,6 @@
 # Sentry alert rules (ops signals)
 
-KitchenOS emits structured ops signals via `services/observability/ops-signals.ts`. Configure these in **Sentry → Alerts → Create Alert → Issues**.
+OS Kitchen emits structured ops signals via `services/observability/ops-signals.ts`. Configure these in **Sentry → Alerts → Create Alert → Issues**.
 
 ## 1. Cron failure (P1)
 

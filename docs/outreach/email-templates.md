@@ -1,4 +1,4 @@
-# KitchenOS — Outreach Email Templates
+# OS Kitchen — Outreach Email Templates
 
 **Version:** 1.0 · **Date:** 24 May 2026  
 **Related:** [pilot-program.md](../pilot-program.md) · [sales-deck.md](../sales-deck.md) · [GTM_SALES_PLAYBOOK.md](../GTM_SALES_PLAYBOOK.md)
@@ -13,7 +13,7 @@ Hi [Name],
 
 I came across [Company] and noticed you're doing meal prep — impressive menu!
 
-I'm building KitchenOS, a platform that helps meal prep kitchens manage orders, production, packing, and delivery from one dashboard. No hardware required — runs on tablets you already own.
+I'm building OS Kitchen, a platform that helps meal prep kitchens manage orders, production, packing, and delivery from one dashboard. No hardware required — runs on tablets you already own.
 
 We're looking for **3 pilot partners**:
 
@@ -38,7 +38,7 @@ Hi [Name],
 
 Running multiple brands from one kitchen is complex. Different menus, different packing, different delivery channels.
 
-KitchenOS gives you **one dashboard for all your virtual brands** — orders, production, packing, and dispatch. Multi-brand command center included.
+OS Kitchen gives you **one dashboard for all your virtual brands** — orders, production, packing, and dispatch. Multi-brand command center included.
 
 We're onboarding **3 pilot partners** at 50% off with free setup and weekly support. **10-minute demo?**
 
@@ -53,7 +53,7 @@ https://os-kitchen.com/demo
 
 Hi [Name],
 
-Most restaurant POS systems lock you into expensive hardware leases. KitchenOS runs on **tablets you already own** — POS, kitchen display, online ordering, and production board in one web-based platform.
+Most restaurant POS systems lock you into expensive hardware leases. OS Kitchen runs on **tablets you already own** — POS, kitchen display, online ordering, and production board in one web-based platform.
 
 **$29/month** to start. **14-day free trial.** No credit card.
 
@@ -90,7 +90,7 @@ Best,
 
 Hi [Name],
 
-Just circling back on my note about KitchenOS. I know you're busy running a kitchen — no worries if now isn't the right time.
+Just circling back on my note about OS Kitchen. I know you're busy running a kitchen — no worries if now isn't the right time.
 
 If you're curious, explore a live demo anytime: **https://os-kitchen.com/demo**
 

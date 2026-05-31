@@ -2,13 +2,13 @@
 
 ## Current State
 
-KitchenOS already has:
+OS Kitchen already has:
 
 - web app manifest
 - service-worker registration
 - handheld / operator web surfaces
 
-KitchenOS does not yet have:
+OS Kitchen does not yet have:
 
 - native iOS operator app
 - native Android operator app
@@ -45,7 +45,7 @@ Native apps should exist only if they materially improve:
 
 ## Positioning Rule
 
-Today KitchenOS should be positioned as:
+Today OS Kitchen should be positioned as:
 
 - strong operator web + PWA foundation
 

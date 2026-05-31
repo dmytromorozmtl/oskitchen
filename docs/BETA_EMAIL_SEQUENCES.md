@@ -7,7 +7,7 @@
 ## 1. Beta application received
 
 **Trigger:** `BetaLead` created  
-**Subject:** We received your KitchenOS beta application  
+**Subject:** We received your OS Kitchen beta application  
 **Body:**  
 Hi {Name},  
 Thanks for applying — we read every submission. We’re onboarding food businesses in cohorts so we can stay hands-on.  
@@ -21,7 +21,7 @@ We’ll follow up with next steps or a short fit call if it’s a mutual match.
 ## 2. Demo booked
 
 **Trigger:** Demo moved to SCHEDULED (manual or calendar)  
-**Subject:** KitchenOS demo — what to prep  
+**Subject:** OS Kitchen demo — what to prep  
 **Body:**  
 Hi {Name},  
 Looking forward to our demo. Bring:  
@@ -49,10 +49,10 @@ Next step: {call / sandbox invite / beta slot}.
 ## 4. Onboarding invitation
 
 **Trigger:** Beta approved  
-**Subject:** You’re invited — KitchenOS beta cohort  
+**Subject:** You’re invited — OS Kitchen beta cohort  
 **Body:**  
 Hi {Name},  
-Welcome to the KitchenOS beta. Your workspace is ready at {url}.  
+Welcome to the OS Kitchen beta. Your workspace is ready at {url}.  
 Week-one goal: complete one full operational cycle (menu → order → production → packing).  
 I’m your direct line for feedback — reply anytime.
 
@@ -61,7 +61,7 @@ I’m your direct line for feedback — reply anytime.
 ## 5. Activation reminder
 
 **Trigger:** Account idle 3–5 days; checklist incomplete  
-**Subject:** Quick win inside KitchenOS  
+**Subject:** Quick win inside OS Kitchen  
 **Body:**  
 Hi {Name},  
 The fastest “aha” is running one test order through production and packing. If anything feels blocking, tell me which step — we’ll unblock it.
@@ -97,14 +97,14 @@ Try it: {steps}.
 **Subject:** Before your trial ends  
 **Body:**  
 Hi {Name},  
-Your trial ends on {date}. If KitchenOS is saving time on {workflow}, we’d love to convert you to a paid workspace. If not, tell us what’s missing — we prioritize beta feedback.
+Your trial ends on {date}. If OS Kitchen is saving time on {workflow}, we’d love to convert you to a paid workspace. If not, tell us what’s missing — we prioritize beta feedback.
 
 ---
 
 ## 9. Conversion offer
 
 **Trigger:** Healthy activation + positive feedback  
-**Subject:** KitchenOS — founder pricing for beta  
+**Subject:** OS Kitchen — founder pricing for beta  
 **Body:**  
 Hi {Name},  
 You’ve activated {milestones}. As an early partner, here’s {offer summary}.  

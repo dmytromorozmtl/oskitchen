@@ -1,4 +1,4 @@
-# KitchenOS Feature-by-Feature Audit — Era 17 Baseline
+# OS Kitchen Feature-by-Feature Audit — Era 17 Baseline
 
 **Date:** 2026-05-28  
 **HEAD:** `5e00dd4` @ `main`  

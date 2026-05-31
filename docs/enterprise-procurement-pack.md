@@ -1,4 +1,4 @@
-# KitchenOS Enterprise Procurement Pack
+# OS Kitchen Enterprise Procurement Pack
 
 **Status:** canonical enterprise / investor procurement narrative (Evolution Era 4+)  
 **Policy ids:** `era4-procurement-honesty-v1`, `era6-enterprise-identity-roadmap-v1`, `era9-enterprise-sso-architecture-spike-v1`, `era13-enterprise-identity-recert-v1`, `era15-enterprise-procurement-recert-v1`, `era16-enterprise-sso-r2-pilot-v1`, `era16-enterprise-sso-r2-schema-v1`, `era16-enterprise-sso-r2-runtime-v1`, `era16-enterprise-sso-r2-admin-v1`, `era17-enterprise-sso-idp-staging-smoke-v1`, `era17-enterprise-sso-operator-runbook-v1`, `era17-enterprise-sso-tenant-mapping-v1`, `era17-enterprise-sso-procurement-sync-v1` (`lib/enterprise/enterprise-procurement-policy.ts`, `lib/enterprise/enterprise-procurement-era15-policy.ts`, `lib/enterprise/enterprise-identity-era13-policy.ts`, `lib/enterprise/enterprise-sso-r2-pilot-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-schema-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-runtime-era16-policy.ts`, `lib/enterprise/enterprise-sso-r2-admin-era16-policy.ts`, `lib/enterprise/enterprise-sso-procurement-sync-era17-policy.ts`)  
@@ -6,7 +6,7 @@
 **Smoke:** `npm run smoke:enterprise-procurement` (CI cert wiring — not a compliance attestation)  
 **Updated:** 2026-05-28 (Era 17 Workstream A Cycle 6 — SSO procurement sync; delivery **pilot_foundation**)
 
-Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. KitchenOS is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
+Use this document for security questionnaires, procurement reviews, and enterprise sales **discovery** — not as a compliance attestation. OS Kitchen is a **pilot-ready operational platform** with a **phased enterprise roadmap**, not a finished enterprise identity or compliance program.
 
 ---
 
@@ -22,7 +22,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 | Integrations | Shopify/Woo golden path certified; marketplace placeholders honest | Live partner connectors per maturity matrix |
 | Compliance attestation | **None** — no SOC 2 Type II, no ISO certificate | SOC 2 readiness mapping (internal) |
 
-**Safe headline:** KitchenOS provides **tenant-scoped restaurant operations** (orders, POS, storefront, kitchen, inventory policy) with **documented RBAC**, **audit hooks**, and **CI-certified money paths** where listed in [`feature-maturity-matrix.md`](./feature-maturity-matrix.md).
+**Safe headline:** OS Kitchen provides **tenant-scoped restaurant operations** (orders, POS, storefront, kitchen, inventory policy) with **documented RBAC**, **audit hooks**, and **CI-certified money paths** where listed in [`feature-maturity-matrix.md`](./feature-maturity-matrix.md).
 
 **Unsafe headline:** “Enterprise-certified,” “SOC 2 compliant,” “SSO included,” or “full marketplace integrations live.”
 
@@ -235,7 +235,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 ## SCIM roadmap
 
-**Not available today.** Staff lifecycle is managed inside KitchenOS (invites, staff records, workspace roles) — not via SCIM provisioning from an external IdP.
+**Not available today.** Staff lifecycle is managed inside OS Kitchen (invites, staff records, workspace roles) — not via SCIM provisioning from an external IdP.
 
 | Phase | Target |
 |-------|--------|
@@ -344,7 +344,7 @@ Use this document for security questionnaires, procurement reviews, and enterpri
 
 ## SOC 2 readiness roadmap
 
-**KitchenOS is not SOC 2 Type II certified and does not claim SOC 2 compliance today.**
+**OS Kitchen is not SOC 2 Type II certified and does not claim SOC 2 compliance today.**
 
 Readiness work is **internal control mapping**, not customer-facing attestation:
 
@@ -436,7 +436,7 @@ Readiness work is **internal control mapping**, not customer-facing attestation:
 - Confirm provider backup RPO/RTO with infrastructure owner
 - Periodic restore rehearsal — **recommended**, not productized in-app
 
-**Procurement answer:** “Backups are infrastructure-dependent; KitchenOS documents restore/rollback procedures. Formal RTO/RPO SLAs require enterprise agreement.”
+**Procurement answer:** “Backups are infrastructure-dependent; OS Kitchen documents restore/rollback procedures. Formal RTO/RPO SLAs require enterprise agreement.”
 
 ---
 
@@ -482,7 +482,7 @@ Answer from **evidence + roadmap only**:
 
 ## Procurement FAQ
 
-**Can we buy KitchenOS for a 500-location enterprise today?**  
+**Can we buy OS Kitchen for a 500-location enterprise today?**  
 Pilot/multi-location architecture exists; enterprise identity and compliance programs are roadmap. Start with phased pilot + honest maturity matrix.
 
 **Is POS production-certified?**  
@@ -504,7 +504,7 @@ CI tier matrix, feature maturity matrix, Era 4–15 policy certifications where 
 
 ## What we do not claim today
 
-KitchenOS **does not** claim, and sales/GTM **must not** imply:
+OS Kitchen **does not** claim, and sales/GTM **must not** imply:
 
 - SOC 2 Type II (or “SOC 2 compliant”) certification
 - SSO, SAML, or SCIM in production for tenants

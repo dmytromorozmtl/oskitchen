@@ -1,4 +1,4 @@
-# KitchenOS — era25 First Charter Slice (readiness orchestration)
+# OS Kitchen — era25 First Charter Slice (readiness orchestration)
 
 **Status:** **Readiness orchestration · NO era25 engineering until charter sections validate**
 

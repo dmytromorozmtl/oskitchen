@@ -5,4 +5,4 @@
 3. Register Shopify webhooks to the documented `/api/webhooks/shopify/*` endpoints with HMAC verification.
 4. Monitor **Webhook activity** for `orders/create`, `orders/updated`, `products/update`, and `app/uninstalled`.
 
-Shopify is a trademark of Shopify Inc. KitchenOS does not imply official partnership beyond standard API usage.
+Shopify is a trademark of Shopify Inc. OS Kitchen does not imply official partnership beyond standard API usage.

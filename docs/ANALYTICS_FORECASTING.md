@@ -1,6 +1,6 @@
 # Forecasting
 
-KitchenOS forecasting is **explicit and explainable**. We do not use
+OS Kitchen forecasting is **explicit and explainable**. We do not use
 opaque models, do not invent numbers, and do not surface a forecast
 when there isn't enough history.
 

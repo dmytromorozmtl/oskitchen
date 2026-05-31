@@ -1,4 +1,4 @@
-# KitchenOS — Phase AQ: Era25 post-band-a-governance steady product mode witness (era67)
+# OS Kitchen — Phase AQ: Era25 post-band-a-governance steady product mode witness (era67)
 
 **Status:** Product surfaces + steady product mode witness integrity guard **IMPLEMENTED** · Human steady product mode witness attestation **REQUIRED** (capstone-driven)  
 **Policy:** `era67-era25-post-band-a-governance-steady-product-mode-witness-phases-v1` · Integrity `era67-era25-post-band-a-governance-steady-product-mode-witness-integrity-v1`  

@@ -97,7 +97,7 @@ Cert: `npm run test:ci:staging-workflows-first-green-era16:cert` (chained in `te
 
 | Variable | Purpose |
 |----------|---------|
-| `E2E_STAGING_BASE_URL` | Staging KitchenOS URL |
+| `E2E_STAGING_BASE_URL` | Staging OS Kitchen URL |
 | `E2E_LOGIN_EMAIL` | Dashboard login email |
 | `E2E_LOGIN_PASSWORD` | Dashboard login password (legacy alias `E2E_PASSWORD`) |
 
@@ -202,7 +202,7 @@ Cert: `npm run test:ci:channel-github-workflow-first-green-era17:cert` (chained 
 
 | Variable | Purpose |
 |----------|---------|
-| `E2E_STAGING_BASE_URL` | Staging KitchenOS URL |
+| `E2E_STAGING_BASE_URL` | Staging OS Kitchen URL |
 | `SSO_STAGING_WORKSPACE_ID` | Pilot workspace UUID |
 | `SSO_STAGING_IDP_VENDOR` | `OKTA` or `ENTRA_ID` |
 | `SSO_STAGING_ALLOWED_DOMAIN` | Allowed email domain |

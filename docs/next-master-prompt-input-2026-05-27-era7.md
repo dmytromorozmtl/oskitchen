@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 8
+# Next Master Prompt Input — OS Kitchen Era 8
 
 **Status:** **Superseded** for recurring execution by [`next-master-prompt-input-2026-05-27-era8.md`](./next-master-prompt-input-2026-05-27-era8.md) (Era 9 handoff).
 

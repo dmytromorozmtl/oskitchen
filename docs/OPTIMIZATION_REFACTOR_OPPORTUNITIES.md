@@ -1,4 +1,4 @@
-# KitchenOS — Optimization & Refactor Opportunities
+# OS Kitchen — Optimization & Refactor Opportunities
 
 **Date:** 2026-05-15
 

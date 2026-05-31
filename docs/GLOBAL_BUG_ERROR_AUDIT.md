@@ -1,4 +1,4 @@
-# KitchenOS — Global Bug & Error Audit
+# OS Kitchen — Global Bug & Error Audit
 
 **Date:** 2026-05-15  
 **Verification:** `npm run typecheck`, `npm run build`, `npm run lint`, `npm test` (see `docs/FULL_SYSTEM_AUDIT_FINAL_REPORT.md`).

@@ -1,4 +1,4 @@
-# KitchenOS — era25+ Charter Exit (outside linear path)
+# OS Kitchen — era25+ Charter Exit (outside linear path)
 
 **Status:** **Process only · NOT Steps 1–17 · NOT a linear catalog step**
 

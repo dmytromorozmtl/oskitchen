@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 6
+# Next Master Prompt Input — OS Kitchen Era 6
 
 **Status:** **Superseded** by [`next-master-prompt-input-2026-05-27-era6.md`](./next-master-prompt-input-2026-05-27-era6.md) for recurring execution prompts.
 

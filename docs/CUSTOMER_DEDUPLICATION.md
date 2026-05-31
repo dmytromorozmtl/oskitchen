@@ -1,6 +1,6 @@
 # Customer deduplication
 
-KitchenOS provides two complementary paths:
+OS Kitchen provides two complementary paths:
 
 1. **Manual dedupe page** — `/dashboard/customers/dedupe`
    - Groups customers by normalized email / phone / name / external id.

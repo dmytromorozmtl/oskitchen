@@ -1,10 +1,10 @@
 # Shopify App Marketplace readiness
 
-KitchenOS is **not yet listed**. Use this matrix when preparing submission.
+OS Kitchen is **not yet listed**. Use this matrix when preparing submission.
 
 | Requirement | Notes |
 |--------------|-------|
-| App name | KitchenOS Fulfillment Sync |
+| App name | OS Kitchen Fulfillment Sync |
 | Description | Centralizes kitchen production after Shopify checkout |
 | App URL | Production HTTPS shell hosting embedded UI |
 | Privacy / Terms | Link to public legal pages |

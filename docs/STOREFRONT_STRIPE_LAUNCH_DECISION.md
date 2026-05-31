@@ -46,7 +46,7 @@ Launch tab → **Production & ops readiness** reflects live env on the server.
 | **Product** | Name: _________________ Date: _________ Signature: ☐ |
 | **Engineering** | Name: _________________ Date: _________ Signature: ☐ |
 
-**Default recommendation for first KitchenOS storefront release:** Option A unless card payment is a contractual requirement on day 1.
+**Default recommendation for first OS Kitchen storefront release:** Option A unless card payment is a contractual requirement on day 1.
 
 ### Recorded decision (edit when signed)
 

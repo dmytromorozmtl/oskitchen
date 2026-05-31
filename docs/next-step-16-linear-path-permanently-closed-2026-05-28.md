@@ -1,4 +1,4 @@
-# KitchenOS — Шаг 16: Linear path permanently closed
+# OS Kitchen — Шаг 16: Linear path permanently closed
 
 **Предусловие:** Step 15 absolute end active · `absoluteEndMilestone: absolute_end_healthy`  
 **Policy:** `era24-linear-path-permanently-closed-v1` · Orchestrator `era24-linear-path-permanently-closed-post-absolute-end-orchestrator-v1`  

@@ -1,11 +1,11 @@
-# Local Node.js setup (KitchenOS)
+# Local Node.js setup (OS Kitchen)
 
 The IDE agent runtime may **not** include `npm` or Homebrew. On your Mac, use **Terminal.app**, **iTerm**, or **Cursor’s integrated terminal** (which loads your login shell and `PATH`).
 
 ## 1. Quick check
 
 ```bash
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 pwd
 which node
 node -v

@@ -1,11 +1,11 @@
-# Commercial Release Hardening — KitchenOS (audit)
+# Commercial Release Hardening — OS Kitchen (audit)
 
 **Версия:** 1.0  
 **Дата:** 2026-05-15  
 **Аудитор:** Principal / multi-role pass (архитектура, security, QA, SRE, compliance narrative)  
 **Контекст:** перевод с «ранний B2B» к **disciplined closed beta / paid pilot**. Без ложных compliance-claims.
 
-Навигация: единая точка входа — [`docs/ENGINEERING_READINESS_INDEX.md`](./ENGINEERING_READINESS_INDEX.md). Итоговое решение о релизе — [`docs/KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md`](./KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md).
+Навигация: единая точка входа — [`docs/ENGINEERING_READINESS_INDEX.md`](./ENGINEERING_READINESS_INDEX.md). Итоговое решение о релизе — [`docs/OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md`](./OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md).
 
 ---
 
@@ -163,4 +163,4 @@
 | [`PERFORMANCE_OPTIMIZATION_REPORT.md`](./PERFORMANCE_OPTIMIZATION_REPORT.md) |
 | [`DEPENDENCY_SECURITY_UPDATE_PROCESS.md`](./DEPENDENCY_SECURITY_UPDATE_PROCESS.md) |
 | [`BACKUP_DISASTER_RECOVERY_PLAN.md`](./BACKUP_DISASTER_RECOVERY_PLAN.md) |
-| [`KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md`](./KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md) |
+| [`OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md`](./OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md) |

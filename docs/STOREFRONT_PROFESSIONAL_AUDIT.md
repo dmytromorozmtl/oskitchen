@@ -1,4 +1,4 @@
-# KitchenOS — Storefront Professional Audit (`/s/[storeSlug]`)
+# OS Kitchen — Storefront Professional Audit (`/s/[storeSlug]`)
 
 **Date:** 2026-05-15
 

@@ -1,6 +1,6 @@
 # Marketplace & POS channels (honest scope)
 
-**Uber Eats / Uber Direct:** Partner credentials and contracts required. KitchenOS exposes adapter endpoints and checklists — **no claim of Uber official approval**.
+**Uber Eats / Uber Direct:** Partner credentials and contracts required. OS Kitchen exposes adapter endpoints and checklists — **no claim of Uber official approval**.
 
 **DoorDash, Square, Toast, Clover, Lightspeed:** Roadmap placeholders only. Each has a `/dashboard/sales-channels/<provider>/setup` page with requirements and **Request integration** CTA.
 

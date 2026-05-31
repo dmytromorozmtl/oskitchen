@@ -1,6 +1,6 @@
 # CRM marketing consent &amp; privacy
 
-KitchenOS tracks consent but **never** sends marketing automatically.
+OS Kitchen tracks consent but **never** sends marketing automatically.
 
 ## Storage
 
@@ -12,7 +12,7 @@ KitchenOS tracks consent but **never** sends marketing automatically.
 
 ## Why we audit every change
 
-Even if KitchenOS never sends the email itself, regulators (CASL, GDPR, etc.)
+Even if OS Kitchen never sends the email itself, regulators (CASL, GDPR, etc.)
 require us to **prove** the consent existed at the moment a customer received
 an email. The audit log is append-only and records:
 

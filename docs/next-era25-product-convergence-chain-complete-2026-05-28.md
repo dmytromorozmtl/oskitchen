@@ -1,4 +1,4 @@
-# KitchenOS — era25 Product Convergence Chain Complete
+# OS Kitchen — era25 Product Convergence Chain Complete
 
 **Status:** **IMPLEMENTED · era25 linear gate chain closed · steady-state stack wired**
 

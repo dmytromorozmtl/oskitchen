@@ -4,7 +4,7 @@ Status: customer-growth roadmap tied to real ordering and profile data
 Primary evidence: `actions/customers.ts`, `actions/loyalty.ts`, `actions/gift-cards.ts`, `services/crm/`, `services/loyalty/`, `services/gift-cards/`, `services/pos/pos-crm-service.ts`, `docs/system-reality-model.md`
 
 ## Goal
-Turn KitchenOS customer data from a useful profile store into a revenue operating system that spans storefront, POS, and operator follow-up without violating consent or maturity honesty.
+Turn OS Kitchen customer data from a useful profile store into a revenue operating system that spans storefront, POS, and operator follow-up without violating consent or maturity honesty.
 
 ## Capability Roadmap
 | Capability bundle | Current state | Gap | Model changes | Service changes | UI changes | Permission changes | Audit logs | Tests | Acceptance criteria |

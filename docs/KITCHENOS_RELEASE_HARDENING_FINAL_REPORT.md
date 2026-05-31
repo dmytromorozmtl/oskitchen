@@ -1,4 +1,4 @@
-# KitchenOS — release hardening final report
+# OS Kitchen — release hardening final report
 
 **Версия:** 1.0  
 **Дата:** 2026-05-15  

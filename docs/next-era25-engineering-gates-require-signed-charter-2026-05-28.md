@@ -1,4 +1,4 @@
-# KitchenOS — era25 Engineering Gates (require signed charter)
+# OS Kitchen — era25 Engineering Gates (require signed charter)
 
 **Status:** **Gate enforcement orchestration · NO era25 product engineering until gates open**
 

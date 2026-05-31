@@ -1,4 +1,4 @@
-# Go-live module audit (KitchenOS)
+# Go-live module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/go-live`, `/dashboard/go-live/test-run`,

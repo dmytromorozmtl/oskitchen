@@ -29,7 +29,7 @@
 
 ## Invariants
 
-- Manual stop order only — KitchenOS does not call optimization APIs.
+- Manual stop order only — OS Kitchen does not call optimization APIs.
 - Uber Direct UI is a placeholder; no live dispatch from these screens.
 - Missing `GOOGLE_MAPS_API_KEY` falls back to external Google Maps links; embed disabled gracefully.
 - Existing `createDeliveryRouteFromOrdersAction` preserved for any external callers.

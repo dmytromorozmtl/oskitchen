@@ -1,7 +1,7 @@
 # Import Center commit flow
 
 Commit transforms a `VALIDATED` import job's preview rows into live
-KitchenOS records. The transformation is type-specific and never
+OS Kitchen records. The transformation is type-specific and never
 silent.
 
 ## Pre-conditions

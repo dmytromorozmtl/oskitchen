@@ -1,4 +1,4 @@
-# Purchasing module audit (KitchenOS)
+# Purchasing module audit (OS Kitchen)
 
 ## Current state (after command center pass)
 

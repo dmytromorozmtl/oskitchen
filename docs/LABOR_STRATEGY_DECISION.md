@@ -2,7 +2,7 @@
 
 ## Decision
 
-**Phase 1 (now):** deepen **KitchenOS-native MVP labor** — staff roster, roles (server-enforced), **POS shifts** (open/close, cash), **tasks** (kitchen/packing/driver assignment), **activity** — without claiming payroll or compliance scheduling.
+**Phase 1 (now):** deepen **OS Kitchen-native MVP labor** — staff roster, roles (server-enforced), **POS shifts** (open/close, cash), **tasks** (kitchen/packing/driver assignment), **activity** — without claiming payroll or compliance scheduling.
 
 **Phase 2 (partner-first):** optional integrations with **7shifts**, **When I Work**, or **UKG**-class systems via scoped API keys and read/write boundaries defined per integration.
 
@@ -15,4 +15,4 @@
 
 ## Risk statement
 
-Toast wins labor because of **density + compliance + payroll**. KitchenOS should **interoperate** or **stay narrow but true** — never a shallow clone.
+Toast wins labor because of **density + compliance + payroll**. OS Kitchen should **interoperate** or **stay narrow but true** — never a shallow clone.

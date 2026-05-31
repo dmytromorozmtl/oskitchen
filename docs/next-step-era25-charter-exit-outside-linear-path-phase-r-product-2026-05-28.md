@@ -1,4 +1,4 @@
-# KitchenOS — Phase R: Era25 charter exit outside linear path (post-honest Step 17 FORBIDDEN guard)
+# OS Kitchen — Phase R: Era25 charter exit outside linear path (post-honest Step 17 FORBIDDEN guard)
 
 **Status:** Product surfaces + era25 charter exit integrity guard **IMPLEMENTED** · Human charter exit attestation **REQUIRED**  
 **Policy:** `era24-era25-charter-exit-outside-linear-path-v1` · Integrity `era42-era25-charter-exit-outside-linear-path-integrity-v1`  

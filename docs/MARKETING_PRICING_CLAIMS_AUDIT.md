@@ -1,4 +1,4 @@
-# KitchenOS — Marketing, Pricing & Claims Audit
+# OS Kitchen — Marketing, Pricing & Claims Audit
 
 **Date:** 2026-05-15
 
@@ -14,7 +14,7 @@
 
 ## 2. Claim categories
 
-| Category | Guidance | KitchenOS stance |
+| Category | Guidance | OS Kitchen stance |
 |----------|----------|-------------------|
 | SOC2 / SSO / SCIM | Legal/compliance | **Do not claim shipped** unless trust page lists audited controls with dates. |
 | Offline POS / proprietary hardware | Hardware | **Avoid** — features.tsx already points readers to honest limitations. |

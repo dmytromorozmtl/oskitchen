@@ -1,4 +1,4 @@
-# Product Mapping module audit (KitchenOS)
+# Product Mapping module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/product-mapping`,

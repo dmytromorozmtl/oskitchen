@@ -1,6 +1,6 @@
 # WooCommerce extension readiness
 
-Position KitchenOS as a **production hub** reading Woo REST + webhooks.
+Position OS Kitchen as a **production hub** reading Woo REST + webhooks.
 
 ## Connection method
 
@@ -10,7 +10,7 @@ Position KitchenOS as a **production hub** reading Woo REST + webhooks.
 ## WordPress admin UX
 
 - Generate keys via WooCommerce → Settings → Advanced → REST API.
-- Document firewall allow-list for KitchenOS ingress IPs (infra-specific).
+- Document firewall allow-list for OS Kitchen ingress IPs (infra-specific).
 
 ## Security
 

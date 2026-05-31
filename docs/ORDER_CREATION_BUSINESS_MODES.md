@@ -1,6 +1,6 @@
 # Business mode adaptation
 
-KitchenOS supports a wide range of food businesses. The Order Creation
+OS Kitchen supports a wide range of food businesses. The Order Creation
 Center adapts to each through `lib/orders/order-creation-modes.ts`.
 
 ## Restaurant

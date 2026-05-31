@@ -1,4 +1,4 @@
-# KitchenOS — Ultimate Full-Product Forensic Audit (v2.0)
+# OS Kitchen — Ultimate Full-Product Forensic Audit (v2.0)
 
 **Output file:** `docs/fullreport29mayfriday.md`  
 **Audit mode:** Read-only — no mutations executed  
@@ -107,7 +107,7 @@ ESLint: **NOT EXECUTED** — `npx` unavailable in audit shell PATH (`npm`/`npx` 
 
 ### One-Sentence Verdict
 
-KitchenOS is a **governance-perfect, market-unproven restaurant operating system** that has spent Eras 25–44 building sixteen layered execution orchestrators and HTML proof reports while the ops vault remains **0/11 secrets configured**, P0 proof is **SKIPPED**, and **zero paid pilots** exist.
+OS Kitchen is a **governance-perfect, market-unproven restaurant operating system** that has spent Eras 25–44 building sixteen layered execution orchestrators and HTML proof reports while the ops vault remains **0/11 secrets configured**, P0 proof is **SKIPPED**, and **zero paid pilots** exist.
 
 ### Current State Scorecard
 
@@ -506,7 +506,7 @@ Policy enforcement artifact: `artifacts/pilot-forbidden-claims-enforcement-summa
 
 ### Role 10: VP Marketing
 - **What They Care About:** Positioning, competitive narrative, lead gen, case studies
-- **What KitchenOS Gives Them Now:** "Honest OS" story; Integration Health moat; demo funnel; forbidden-claims CI
+- **What OS Kitchen Gives Them Now:** "Honest OS" story; Integration Health moat; demo funnel; forbidden-claims CI
 - **Terrified Of:** Sales selling forbidden claims; zero references; "governance toy" dismissal
 - **Monday Top 10:** (1) Read `docs/commercial-readiness-audit-post-era19-2026-05-28.md` (2) Legal sign-off on honest narrative (3) Forbidden claims sales quiz (4) 3 design-partner ICPs (5) Review `app/page.tsx` + marketing for claims (6) Integration Health as headline differentiator (7) No "production-ready platform" headline (8) Staging proof before broad launch (9) ICP-specific landing drafts (10) Competitor hardware defer one-pager
 - **Score:** 2/10
@@ -734,18 +734,18 @@ Browser → Supabase session cookie → `requireTenantActor()` on server → wor
 
 ## 10. Competitor Feature-by-Feature Battle Map
 
-| Feature | KitchenOS | Toast | Square | Lightspeed | Winner | Leapfrog? |
+| Feature | OS Kitchen | Toast | Square | Lightspeed | Winner | Leapfrog? |
 |---------|-----------|-------|--------|------------|--------|-----------|
 | Offline POS | `not_implemented` | **LIVE** | **LIVE** | **LIVE** | Toast | NO — parity first |
-| Integration Health Center | `pilot_ready UX` | N/A | N/A | N/A | **KitchenOS** | **YES — sell hard** |
-| Owner Daily Briefing | `pilot_ready UX` | Partial | Partial | Partial | **KitchenOS** | YES |
+| Integration Health Center | `pilot_ready UX` | N/A | N/A | N/A | **OS Kitchen** | **YES — sell hard** |
+| Owner Daily Briefing | `pilot_ready UX` | Partial | Partial | Partial | **OS Kitchen** | YES |
 | Unified Loyalty | `locked` | **LIVE** | **LIVE** | N/A | Square | NO — defer 12mo |
 | KDS realtime | `15s poll beta` | **LIVE** | **LIVE** | **LIVE** | Toast | NO — honest banner |
 | Table service | `preview` | **LIVE** | **LIVE** | **LIVE** | TouchBistro | NO |
 | Cross-channel inventory | `POS-only locked` | **LIVE** | Partial | **LIVE** | Toast | NO — honest lock |
 | Woo/Shopify ingest | `synthetic CI` | Plugins | N/A | Integrations | Woo | YES after P0 PASS |
 | Enterprise SSO | `pilot_foundation` | **LIVE** | **LIVE** | **LIVE** | Toast | NO until IdP proof |
-| Governance / RBAC | `wave 4 certified` | Opaque | Basic | Varies | **KitchenOS** | YES for enterprise narrative |
+| Governance / RBAC | `wave 4 certified` | Opaque | Basic | Varies | **OS Kitchen** | YES for enterprise narrative |
 | Hardware terminals | `preview` | **LIVE** | **LIVE** | **LIVE** | Toast | NO — hide |
 | Public API | `beta no SLA` | Partner | Limited | API | Varies | NO SLA claim |
 | Paid customer references | **0** | Thousands | Millions | Many | Competitors | NO |
@@ -876,7 +876,7 @@ Offline POS; table service production; campaign automation; unified loyalty; cro
 ## Next Master Prompt
 
 ### Current Reality:
-KitchenOS @ b07fe14d is a governance-100 / market-0 system. Eras 29–44 built a 16-step commercial pilot execution orchestrator chain with HTML reports, but every artifact shows `vault_blocked`, `NO-GO`, and `pilotExecutableScore: 24`. The ops vault has **0/11 secrets**. P0, Tier 2, SSO IdP, and channel live smokes are **SKIPPED WITH REASON**. There are **zero paid pilots**. TypeScript has **8 errors** in `lib/ux/pos-page-access-era21.ts` (BLOCKER). Forbidden claims are correctly enforced in UI (disclaimers only).
+OS Kitchen @ b07fe14d is a governance-100 / market-0 system. Eras 29–44 built a 16-step commercial pilot execution orchestrator chain with HTML reports, but every artifact shows `vault_blocked`, `NO-GO`, and `pilotExecutableScore: 24`. The ops vault has **0/11 secrets**. P0, Tier 2, SSO IdP, and channel live smokes are **SKIPPED WITH REASON**. There are **zero paid pilots**. TypeScript has **8 errors** in `lib/ux/pos-page-access-era21.ts` (BLOCKER). Forbidden claims are correctly enforced in UI (disclaimers only).
 
 ### Biggest Blockers:
 1. Ops vault empty — cannot run P0 orchestrator with `--execute`

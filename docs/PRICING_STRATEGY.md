@@ -1,4 +1,4 @@
-# Pricing strategy — KitchenOS
+# Pricing strategy — OS Kitchen
 
 Maps to in-app plan enums (`STARTER`, `PRO`, `TEAM`, `ENTERPRISE`). Adjust Stripe Price IDs separately.
 

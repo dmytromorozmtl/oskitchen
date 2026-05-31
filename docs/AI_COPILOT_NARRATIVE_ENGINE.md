@@ -26,7 +26,7 @@ when it didn't.
 
 ```
 [system]
-You are KitchenOS Copilot ...
+You are OS Kitchen Copilot ...
 Operating constraints:
 - redacted operational summary only
 - no invented numbers

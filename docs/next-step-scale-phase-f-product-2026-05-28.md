@@ -1,4 +1,4 @@
-# KitchenOS — Phase F: Scale readiness (post-honest Month 2)
+# OS Kitchen — Phase F: Scale readiness (post-honest Month 2)
 
 **Status:** Product surfaces + Scale integrity guard **IMPLEMENTED** · Human Gates 1–5 **REQUIRED**  
 **Policy:** `era21-scale-readiness-v1` · Integrity `era30-scale-readiness-integrity-v1`  

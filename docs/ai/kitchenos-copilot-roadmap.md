@@ -1,4 +1,4 @@
-# KitchenOS Copilot Roadmap
+# OS Kitchen Copilot Roadmap
 
 ## Current State
 

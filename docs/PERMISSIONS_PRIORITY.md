@@ -1,6 +1,6 @@
 # Permissions priority
 
-KitchenOS uses two overlapping permission systems during the workspace migration. This document defines **which wins** when they disagree.
+OS Kitchen uses two overlapping permission systems during the workspace migration. This document defines **which wins** when they disagree.
 
 ## 1. Legacy `UserProfile.role` (deprecated)
 

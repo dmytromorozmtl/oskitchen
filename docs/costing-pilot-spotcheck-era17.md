@@ -5,7 +5,7 @@
 **Permission:** `reports.read.financial` for recalculate + margin report  
 **Parent:** [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) · [`COSTING_REPORTS.md`](./COSTING_REPORTS.md)
 
-Use this checklist before claiming costing/margin in pilot demos or contracts. KitchenOS costing is **beta** — operational estimates, not accountant-certified.
+Use this checklist before claiming costing/margin in pilot demos or contracts. OS Kitchen costing is **beta** — operational estimates, not accountant-certified.
 
 ---
 

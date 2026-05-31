@@ -1,13 +1,13 @@
 # Email template — P0 ops vault secrets (VP Operations)
 
 **To:** VP Operations, DevOps lead  
-**Subject:** ACTION REQUIRED — 11 staging secrets blocking paid pilot (KitchenOS P0)
+**Subject:** ACTION REQUIRED — 11 staging secrets blocking paid pilot (OS Kitchen P0)
 
 ---
 
 Hi team,
 
-KitchenOS is **blocked on paid pilot kickoff** until we configure **11 staging secrets** in the ops vault and GitHub Actions. All P0 child smokes currently report `awaiting_ops_credentials` — this is honest SKIPPED state, not a product defect.
+OS Kitchen is **blocked on paid pilot kickoff** until we configure **11 staging secrets** in the ops vault and GitHub Actions. All P0 child smokes currently report `awaiting_ops_credentials` — this is honest SKIPPED state, not a product defect.
 
 **Why this matters**
 

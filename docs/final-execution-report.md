@@ -8,7 +8,7 @@
 
 ## Executive summary
 
-KitchenOS **engineering infrastructure for pilot readiness is mature** (53 smoke scripts, GO/NO-GO evaluator, commercial inflection orchestrator, vault validators). **Commercial proof is not complete** — P0 staging remains `awaiting_ops_credentials` with all 11 ops vault secrets missing in CI/local default env.
+OS Kitchen **engineering infrastructure for pilot readiness is mature** (53 smoke scripts, GO/NO-GO evaluator, commercial inflection orchestrator, vault validators). **Commercial proof is not complete** — P0 staging remains `awaiting_ops_credentials` with all 11 ops vault secrets missing in CI/local default env.
 
 | Phase | Engineering status | Execution status |
 |-------|-------------------|------------------|

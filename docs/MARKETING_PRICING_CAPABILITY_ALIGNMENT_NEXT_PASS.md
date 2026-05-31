@@ -25,5 +25,5 @@ Source of truth: `lib/capabilities/capability-matrix.ts`.
 - **Uber Eats / Uber Direct** — partner-gated; no live dispatch without Uber program.
 - **SMS** — `NOT_AVAILABLE` in matrix.
 - **POS offline** — `NOT_AVAILABLE` / no offline checkout queue.
-- **Stripe Terminal** — roadmap; KitchenOS stays browser-first.
+- **Stripe Terminal** — roadmap; OS Kitchen stays browser-first.
 - **SSO / SCIM / SOC2** — roadmap / legal positioning only.

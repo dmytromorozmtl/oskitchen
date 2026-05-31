@@ -1,6 +1,6 @@
 # QA Master Test Plan
 
-Status: canonical QA plan for KitchenOS release gating
+Status: canonical QA plan for OS Kitchen release gating
 Primary evidence: `tests/`, `e2e/`, `package.json`, `.github/workflows/ci.yml`, `.github/workflows/e2e-staging.yml`, `docs/QA_TEST_COVERAGE_AUDIT.md`, `docs/system-reality-model.md`
 
 ## Test Suites

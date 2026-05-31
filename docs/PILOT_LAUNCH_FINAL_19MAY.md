@@ -1,4 +1,4 @@
-# KitchenOS — Pilot Launch Checklist (19 May 2026)
+# OS Kitchen — Pilot Launch Checklist (19 May 2026)
 
 ## Status: CODE READY — PENDING 6 MANUAL ACTIONS
 

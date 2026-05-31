@@ -1,4 +1,4 @@
-# KitchenOS stabilization audit
+# OS Kitchen stabilization audit
 
 Full-product review oriented toward **beta readiness** (UX cohesion, safety, testability). Findings are grouped by theme and prioritized **P0–P3**.
 

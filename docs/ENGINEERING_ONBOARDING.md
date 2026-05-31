@@ -1,4 +1,4 @@
-# Engineering onboarding — KitchenOS
+# Engineering onboarding — OS Kitchen
 
 ## Quick start (~5 minutes)
 

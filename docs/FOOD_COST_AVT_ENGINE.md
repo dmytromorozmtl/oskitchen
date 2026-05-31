@@ -2,7 +2,7 @@
 
 ## Honesty principle
 
-KitchenOS must **never** fabricate actual inventory precision. Reports show a **confidence** badge:
+OS Kitchen must **never** fabricate actual inventory precision. Reports show a **confidence** badge:
 
 - **HIGH:** active recipes **and** receiving history (`receivingEvent` rows).  
 - **MEDIUM:** recipes without enough receiving signal.  

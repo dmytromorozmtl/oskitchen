@@ -15,7 +15,7 @@
 
 ## Live-ready (no exaggeration)
 
-- KitchenOS storefront, manual orders, WooCommerce, Shopify (credentials + webhooks as implemented).
+- OS Kitchen storefront, manual orders, WooCommerce, Shopify (credentials + webhooks as implemented).
 - CSV / import center path.
 - Catering / event flows via native modules.
 

@@ -1,4 +1,4 @@
-# KitchenOS — Pilot Operator Feedback
+# OS Kitchen — Pilot Operator Feedback
 
 **Use this template for:** onboarding call (week 1), check-in (week 4), exit survey (week 12), or ad-hoc support.
 
@@ -18,7 +18,7 @@
 |----------|--------|
 | How many orders per week (approx.)? | |
 | Channels in use (check all) | ☐ Storefront  ☐ POS  ☐ WooCommerce  ☐ Shopify  ☐ Phone/manual  ☐ Other |
-| Team size using KitchenOS | |
+| Team size using OS Kitchen | |
 | Primary device | ☐ Desktop  ☐ Tablet  ☐ Phone |
 
 ---
@@ -146,7 +146,7 @@ Rate each: **1** = blocked / failed · **3** = painful but done · **5** = smoot
 
 ## 7. NPS and renewal intent
 
-**How likely are you to recommend KitchenOS to a peer kitchen? (0–10)**
+**How likely are you to recommend OS Kitchen to a peer kitchen? (0–10)**
 
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|---|

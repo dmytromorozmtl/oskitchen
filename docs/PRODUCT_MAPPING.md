@@ -2,13 +2,13 @@
 
 Route: `/dashboard/product-mapping`
 
-Purpose: map external product names/SKUs from WooCommerce, Shopify, Uber Eats, or CSV imports to internal KitchenOS products.
+Purpose: map external product names/SKUs from WooCommerce, Shopify, Uber Eats, or CSV imports to internal OS Kitchen products.
 
 Statuses:
-- `SUGGESTED` — KitchenOS found a likely match.
+- `SUGGESTED` — OS Kitchen found a likely match.
 - `CONFIRMED` — operator approved the mapping.
 - `NEEDS_REVIEW` — confidence is low or missing.
-- `IGNORED` — intentionally excluded from KitchenOS fulfillment.
+- `IGNORED` — intentionally excluded from OS Kitchen fulfillment.
 
 Matching logic:
 - Exact normalized title receives high confidence.

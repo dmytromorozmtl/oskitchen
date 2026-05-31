@@ -1,4 +1,4 @@
-# Customer success playbook — KitchenOS (beta)
+# Customer success playbook — OS Kitchen (beta)
 
 Lightweight guidance for onboarding food businesses during beta.
 

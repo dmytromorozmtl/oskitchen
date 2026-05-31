@@ -1,6 +1,6 @@
 # Versioning
 
-KitchenOS uses [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`).
+OS Kitchen uses [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`).
 
 - **MAJOR**: Breaking API or data migrations that require coordinated customer action.
 - **MINOR**: New features, backward-compatible schema additions, meaningful UX changes.

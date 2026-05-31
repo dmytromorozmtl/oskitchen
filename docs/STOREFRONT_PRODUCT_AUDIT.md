@@ -2,7 +2,7 @@
 
 ## Summary
 
-KitchenOS evolved the public storefront from a single preorder surface into a **commerce-oriented public site** with routing, SEO hooks, domain mapping, analytics events, and expanded persistence—while **keeping `/s/[storeSlug]`** as the canonical path.
+OS Kitchen evolved the public storefront from a single preorder surface into a **commerce-oriented public site** with routing, SEO hooks, domain mapping, analytics events, and expanded persistence—while **keeping `/s/[storeSlug]`** as the canonical path.
 
 | Area | Current state | Business impact | Priority |
 |------|----------------|-------------------|----------|

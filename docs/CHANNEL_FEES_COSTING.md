@@ -1,6 +1,6 @@
 # Channel fees (costing)
 
-KitchenOS **does not** embed Uber Eats / DoorDash / etc. fee schedules.
+OS Kitchen **does not** embed Uber Eats / DoorDash / etc. fee schedules.
 
 Operators create `ChannelFeeRule` rows:
 

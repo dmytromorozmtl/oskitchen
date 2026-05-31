@@ -14,7 +14,7 @@ Use this one-pager when a pilot contract includes **daily-service kitchen displa
 
 ## Purpose and honest scope
 
-KitchenOS KDS v1 supports **qualified daily-service pilots**:
+OS Kitchen KDS v1 supports **qualified daily-service pilots**:
 
 - Today's active order queue on `/dashboard/kitchen`
 - Bump → `READY` and recall → `PREPARING` with RBAC + audit

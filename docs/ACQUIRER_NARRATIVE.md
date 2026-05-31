@@ -1,6 +1,6 @@
 # Acquirer narrative
 
-KitchenOS is a vertical operating layer for food fulfillment after commerce.
+OS Kitchen is a vertical operating layer for food fulfillment after commerce.
 
 Potential acquirers:
 - Commerce platforms expanding into vertical operations.

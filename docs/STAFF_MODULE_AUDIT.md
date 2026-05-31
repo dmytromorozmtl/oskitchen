@@ -1,4 +1,4 @@
-# Staff module audit (KitchenOS)
+# Staff module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/staff`, the `StaffMember` Prisma model, and the

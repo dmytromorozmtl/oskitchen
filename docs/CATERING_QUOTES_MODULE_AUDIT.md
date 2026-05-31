@@ -1,4 +1,4 @@
-# Catering Quotes module audit (KitchenOS)
+# Catering Quotes module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/catering`, `app/quote/[token]/page.tsx`,

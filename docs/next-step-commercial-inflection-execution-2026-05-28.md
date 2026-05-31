@@ -1,4 +1,4 @@
-# KitchenOS — Commercial inflection execution (post linear closure)
+# OS Kitchen — Commercial inflection execution (post linear closure)
 
 **Status:** **IMPLEMENTED (2026-05-28)** — honest blocker matrix, orchestrator, report artifact, Platform ops panel.
 
@@ -69,7 +69,7 @@ npm run test:ci:commercial-inflection-readiness:cert
 
 ---
 
-## KitchenOS surfaces (sell with proof only)
+## OS Kitchen surfaces (sell with proof only)
 
 | Surface | Route / command |
 |---------|-----------------|

@@ -1,4 +1,4 @@
-# KitchenOS Operator UX Speed Audit
+# OS Kitchen Operator UX Speed Audit
 
 **Date:** 2026-05-28  
 **HEAD:** `064af17` @ `main`  
@@ -110,7 +110,7 @@ View queue, bump, recall, allergen tickets, station filter, production board ite
 
 ## Competitor UX Benchmark
 
-| Dimension | Toast/Square | KitchenOS Today | Gap |
+| Dimension | Toast/Square | OS Kitchen Today | Gap |
 |-----------|--------------|-----------------|-----|
 | Owner first-day setup | Hours (Square faster) | Days (nav complexity) | Launch wizard |
 | Cashier sale taps | 2–3 optimized | 3–5 acceptable | Speed mode |

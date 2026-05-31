@@ -1,6 +1,6 @@
 # FoodOps workflow finalization
 
-This document aligns the **commercial FoodOps narrative** (intake → analytics) with the **implemented TypeScript services** in KitchenOS. It is descriptive of current code; gaps are called out explicitly.
+This document aligns the **commercial FoodOps narrative** (intake → analytics) with the **implemented TypeScript services** in OS Kitchen. It is descriptive of current code; gaps are called out explicitly.
 
 ## Canonical chain (product language)
 

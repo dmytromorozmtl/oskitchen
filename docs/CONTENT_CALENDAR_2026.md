@@ -10,7 +10,7 @@
 | Week | Type | Title | Target keyword | Status |
 |------|------|-------|----------------|--------|
 | W1 | How-to | How meal prep kitchens cut packing errors with one order queue | meal prep software | ✅ `/blog/meal-prep-order-queue-cut-packing-errors` |
-| W2 | Compare | KitchenOS vs Deliverect for ghost kitchens | deliverect alternative | ✅ Page live `/compare/deliverect` |
+| W2 | Compare | OS Kitchen vs Deliverect for ghost kitchens | deliverect alternative | ✅ Page live `/compare/deliverect` |
 | W3 | Playbook | Weekly preorder cutoff checklist (PDF) | weekly meal prep orders | ⬜ |
 | W4 | Blog | Restaurant POS comparison 2026 update | restaurant pos comparison | ⬜ Refresh existing |
 
@@ -21,7 +21,7 @@
 | W1 | Case study | [Pilot 1 anonymized] | ⬜ Needs pilot |
 | W2 | Geo LP | Ghost kitchen software Los Angeles | ⬜ `/lp/...` |
 | W3 | How-to | KDS setup for small restaurants | kitchen display system small restaurant | ⬜ |
-| W4 | Compare | TouchBistro vs KitchenOS | ✅ `/compare/touchbistro` |
+| W4 | Compare | TouchBistro vs OS Kitchen | ✅ `/compare/touchbistro` |
 
 ## August 2026
 

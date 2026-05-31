@@ -20,7 +20,7 @@ See `docs/ANALYTICS_ARCHITECTURE.md`. Layered as
 ## KPIs
 
 17 canonical KPIs catalogued in `lib/analytics/kpi-definitions.ts`. Every
-KPI references a formula referencing only real KitchenOS data — no
+KPI references a formula referencing only real OS Kitchen data — no
 synthetic numbers.
 
 ## Dashboards

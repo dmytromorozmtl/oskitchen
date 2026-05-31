@@ -1,4 +1,4 @@
-# Import Center module audit (KitchenOS)
+# Import Center module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/import-center`, `actions/implementation.ts`

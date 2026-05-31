@@ -1,4 +1,4 @@
-# Stabilization complete report — KitchenOS
+# Stabilization complete report — OS Kitchen
 
 Date: 2026-05-06  
 Scope: Cohesion, documentation, shared UI primitives, navigation IA, testing foundation, and safe library helpers — **without** removing modules or rebuilding the app.

@@ -7,7 +7,7 @@ Run each block **as a whole** in Terminal. Do not paste lines starting with `#` 
 ```bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 nvm use 22
 ```
 

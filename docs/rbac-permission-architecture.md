@@ -1,10 +1,10 @@
-# KitchenOS RBAC And Permission Architecture
+# OS Kitchen RBAC And Permission Architecture
 
 Status: target canonical authorization model for phased implementation
 Primary evidence for current state: `lib/permissions/permissions.ts`, `lib/permissions/mutation-access.ts`, `lib/permissions/resolve-ui-permissions.ts`, `lib/scope/require-tenant-actor.ts`, `actions/pos.ts`, `actions/integrations.ts`, `actions/customers.ts`, `actions/billing.ts`, `app/api/pos/terminal/route.ts`
 
 ## 1. Problem Statement
-KitchenOS already has:
+OS Kitchen already has:
 - tenant/session resolution via `requireTenantActor()`
 - a small central permission registry in `lib/permissions/permissions.ts`
 - legacy fallback logic in `lib/permissions/mutation-access.ts`

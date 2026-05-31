@@ -1,6 +1,6 @@
-# Getting Started with KitchenOS
+# Getting Started with OS Kitchen
 
-Welcome to KitchenOS — your kitchen operations platform.
+Welcome to OS Kitchen — your kitchen operations platform.
 
 ## First login
 

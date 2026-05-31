@@ -1,4 +1,4 @@
-# KitchenOS Full Strategic Re-Audit
+# OS Kitchen Full Strategic Re-Audit
 
 **Date:** 2026-05-27  
 **Method:** Read-only inspection of live repository state (not prior audit docs alone)  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-KitchenOS is a **large, real, multi-surface food-operations monolith** — not an MVP skeleton. The codebase has **699 App Router pages**, **296 API routes**, **144 server action files**, **603 service files**, **362 Prisma models**, and **399 Vitest tests**. The **canonical order spine** and **storefront checkout** are the strongest production assets. **POS**, **RBAC**, and **KDS** improved materially in recent autonomous cycles but remain **below Toast/Square certification bar**. The largest structural risks are **permission fragmentation** (~85 action files still tenant-scoped without canonical mutation permissions), **cron/experiment surface bloat** (137 cron routes vs 15 production-scheduled), **CI/E2E gap** (57 Playwright specs, 3 in default CI), and **documentation sprawl** (1,434 markdown files, many stale).
+OS Kitchen is a **large, real, multi-surface food-operations monolith** — not an MVP skeleton. The codebase has **699 App Router pages**, **296 API routes**, **144 server action files**, **603 service files**, **362 Prisma models**, and **399 Vitest tests**. The **canonical order spine** and **storefront checkout** are the strongest production assets. **POS**, **RBAC**, and **KDS** improved materially in recent autonomous cycles but remain **below Toast/Square certification bar**. The largest structural risks are **permission fragmentation** (~85 action files still tenant-scoped without canonical mutation permissions), **cron/experiment surface bloat** (137 cron routes vs 15 production-scheduled), **CI/E2E gap** (57 Playwright specs, 3 in default CI), and **documentation sprawl** (1,434 markdown files, many stale).
 
 **Verdict:** A **new master prompt is required now**. The previous master prompt’s direction (platform safety → revenue paths → depth) remains valid, but assumptions about “RBAC not started” and “cron validation broken” are **outdated**. New prompt must emphasize **finishing RBAC canon**, **KDS productization**, **cron/archive hygiene**, **E2E gates for money paths**, and **sales/navigation governance** — not broad feature expansion.
 
@@ -376,7 +376,7 @@ KitchenOS is a **large, real, multi-surface food-operations monolith** — not a
 
 ## Step 16 — Competitor Re-Check (Summary)
 
-| Competitor | KitchenOS Position | Gap | Opportunity | Next Action |
+| Competitor | OS Kitchen Position | Gap | Opportunity | Next Action |
 |------------|-------------------|-----|-------------|-------------|
 | Toast | Behind on POS/KDS/hardware | Table service, certified KDS | Unified order spine | Finish POS RBAC + honest hardware |
 | Square | Behind on POS simplicity; **ahead** on ops breadth | Ease of use | Branded storefront + ops | Simplify nav; storefront flagship |

@@ -21,7 +21,7 @@
 These high-traffic files are explicitly marked deprecated at the file top:
 
 - `docs/enterprise-full-audit-26mayafter.md`
-- `docs/KITCHENOS_FULL_FINAL_READINESS_AUDIT.md`
+- `docs/OS Kitchen_FULL_FINAL_READINESS_AUDIT.md`
 - `docs/PRODUCTION_READINESS_NEXT_PRIORITY_AUDIT.md`
 
 ## Policy

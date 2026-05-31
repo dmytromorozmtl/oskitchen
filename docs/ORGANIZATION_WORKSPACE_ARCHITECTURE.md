@@ -1,6 +1,6 @@
 # Organization and workspace architecture
 
-KitchenOS remains backward-compatible with existing `userId` records.
+OS Kitchen remains backward-compatible with existing `userId` records.
 
 New structure:
 - `Organization`: customer, partner, or internal account.

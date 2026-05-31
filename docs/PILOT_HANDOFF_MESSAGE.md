@@ -1,8 +1,8 @@
-# Team — KitchenOS Pilot is Ready for Staging
+# Team — OS Kitchen Pilot is Ready for Staging
 
 **Updated:** 19 May 2026 (Phases **Α–Ε** — 100% readiness pack + ops scripts)
 
-Команда, кодовая база KitchenOS прошла **вторую независимую** финальную проверку и готова к **staging-развёртыванию сегодня**. Платные операторы — **не раньше 22 May** после зелёного staging 19–21 May.
+Команда, кодовая база OS Kitchen прошла **вторую независимую** финальную проверку и готова к **staging-развёртыванию сегодня**. Платные операторы — **не раньше 22 May** после зелёного staging 19–21 May.
 
 ## Что сделано (сессии 0–L + M–T + U–Z)
 

@@ -1,4 +1,4 @@
-# KitchenOS FoodOps full module audit
+# OS Kitchen FoodOps full module audit
 
 **Method:** Static review of routes under `app/dashboard`, supporting libs/actions, and Prisma models. This audit is **operational**, not a marketing claim of completeness.
 

@@ -125,7 +125,7 @@ Routes: `ERA20_PILOT_ONBOARDING_ROUTES` in `lib/commercial/era20-first-paid-pilo
 
 ---
 
-## Support checklist (KitchenOS)
+## Support checklist (OS Kitchen)
 
 - [ ] Pilot workspace ID recorded
 - [ ] Support boundaries doc shared with customer

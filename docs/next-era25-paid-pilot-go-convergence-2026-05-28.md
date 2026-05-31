@@ -1,4 +1,4 @@
-# KitchenOS — era25 Paid Pilot GO Convergence
+# OS Kitchen — era25 Paid Pilot GO Convergence
 
 **Status:** **Second era25 product slice · IMPLEMENTED · BLOCKED until breakthrough + honest GO**
 
@@ -70,7 +70,7 @@ npm run test:ci:owner-daily-briefing-breakthrough-era25
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `b3_tile` | B3 breakthrough tile live GO data | Today breakthrough panel |
 | `briefing_action` | Ranked action on NO-GO | Owner Daily Briefing hero |

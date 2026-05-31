@@ -1,7 +1,7 @@
-# KitchenOS — Full System Audit (Final Report)
+# OS Kitchen — Full System Audit (Final Report)
 
 **Date:** 2026-05-15  
-**Workspace:** `/Users/dmytro/Desktop/2026/KitchenOS`  
+**Workspace:** `/Users/dmytro/Desktop/2026/OS Kitchen`  
 **Git:** A `.git` directory was **not** detected in this workspace snapshot — file lists below are **manual** from the audit session (no commit performed per instructions).
 
 ---
@@ -37,7 +37,7 @@
 | `docs/MARKETING_PRICING_CLAIMS_AUDIT.md` | Claims & pricing honesty |
 | `docs/OBSERVABILITY_RELEASE_OPS_AUDIT.md` | Sentry, health, runbooks, release |
 | `docs/OPTIMIZATION_REFACTOR_OPPORTUNITIES.md` | Refactor backlog |
-| `docs/KITCHENOS_FULL_SYSTEM_ANALYSIS_AND_ROADMAP.md` | Executive analysis + roadmap + competitor framing |
+| `docs/OS Kitchen_FULL_SYSTEM_ANALYSIS_AND_ROADMAP.md` | Executive analysis + roadmap + competitor framing |
 | `docs/FULL_SYSTEM_AUDIT_FINAL_REPORT.md` | This file |
 
 ---

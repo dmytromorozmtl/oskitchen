@@ -1,4 +1,4 @@
-# KitchenOS P0-P3 Readiness Audit
+# OS Kitchen P0-P3 Readiness Audit
 
 Date: 2026-05-25
 
@@ -101,7 +101,7 @@ These should be deferred until after the above baseline is in place:
 ## Needs Product Decision
 
 1. Which modules should be `GA` vs `Beta` vs `Pilot-only` by business type.
-2. Whether KitchenOS should position toward freemium, extended trial, or sales-led motion.
+2. Whether OS Kitchen should position toward freemium, extended trial, or sales-led motion.
 3. Whether to build or partner for payroll/HR and deep accounting.
 4. Which competitor gaps should be built vs integrated vs intentionally deferred.
 5. What SLO/SLA targets the company is willing to publicly stand behind.
@@ -125,7 +125,7 @@ These scores reflect current repo + production reality, not aspirational roadmap
 
 ## Audit Verdict
 
-KitchenOS is no longer in the state implied by the older “everything is missing” list. A meaningful portion of the P0/P1 security and governance work is already implemented. The most valuable work now is not broad rewriting, but tightening the remaining weak seams:
+OS Kitchen is no longer in the state implied by the older “everything is missing” list. A meaningful portion of the P0/P1 security and governance work is already implemented. The most valuable work now is not broad rewriting, but tightening the remaining weak seams:
 
 1. make API-route policy more explicit and harder to bypass,
 2. finish the tenant/workspace migration story cleanly,

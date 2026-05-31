@@ -13,7 +13,7 @@ Use this playbook when a pilot contract includes **WooCommerce and/or Shopify te
 
 ## Purpose and honest scope
 
-KitchenOS supports **qualified test-shop integrations** for pilots:
+OS Kitchen supports **qualified test-shop integrations** for pilots:
 
 - Webhook ingest → external order visibility in order hub (golden path certified)
 - Credential save, connection test, product sync smoke
@@ -63,7 +63,7 @@ See [`channel-pilot-setup-wizard-era17.md`](./channel-pilot-setup-wizard-era17.m
 
 1. **Create / use test Woo store** (HTTPS). Never use a production customer store.
 2. **Dashboard → Integrations → WooCommerce** — save store URL, REST keys, webhook secret.
-3. **Woo admin → Webhooks** — point to KitchenOS URL from dashboard; topics: `order.created`, `order.updated`, `product.updated`.
+3. **Woo admin → Webhooks** — point to OS Kitchen URL from dashboard; topics: `order.created`, `order.updated`, `product.updated`.
 4. **Test connection** → **Sync products** (optional for pilot).
 5. Place a **test order** on Woo; confirm event in **Sales channels → Webhooks** with `signatureValid: true`.
 6. **Integration page → Run certification checks** — all automated checks green or documented skip.
@@ -140,7 +140,7 @@ Procurement alignment: [`enterprise-procurement-pack.md`](./enterprise-procureme
 
 1. Disable webhooks in Woo/Shopify admin.
 2. Revoke REST/API keys in provider admin.
-3. Disconnect or disable connection in KitchenOS Integrations.
+3. Disconnect or disable connection in OS Kitchen Integrations.
 4. Record date + reason in pilot tracker.
 
 ---

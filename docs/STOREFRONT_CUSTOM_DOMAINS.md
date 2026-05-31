@@ -1,6 +1,6 @@
 # Storefront custom domains
 
-KitchenOS **does not** automatically provision DNS or TLS. You must:
+OS Kitchen **does not** automatically provision DNS or TLS. You must:
 
 1. Add the hostname to your deployment (e.g. Vercel **Project → Domains**).
 2. At your DNS provider, create the records your host instructs (commonly `CNAME` to `cname.vercel-dns.com` for subdomains, or `A`/`ALIAS` for apex).

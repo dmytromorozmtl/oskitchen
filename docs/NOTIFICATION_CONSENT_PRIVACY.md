@@ -1,6 +1,6 @@
 # Consent and privacy
 
-KitchenOS splits notifications into two consent layers:
+OS Kitchen splits notifications into two consent layers:
 
 1. **Transactional** (`GUEST_TRANSACTIONAL`, internal, system,
    billing) — sent to anyone with an active relationship (order,

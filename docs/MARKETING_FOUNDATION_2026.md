@@ -1,4 +1,4 @@
-# KitchenOS — Marketing Foundation (2026)
+# OS Kitchen — Marketing Foundation (2026)
 
 **Site:** https://os-kitchen.com  
 **Positioning:** POS + Kitchen Operations  

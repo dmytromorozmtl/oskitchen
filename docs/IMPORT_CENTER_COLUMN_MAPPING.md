@@ -1,6 +1,6 @@
 # Import Center column mapping
 
-CSV headers rarely match KitchenOS field names exactly. The Import
+CSV headers rarely match OS Kitchen field names exactly. The Import
 Center resolves this with a deterministic auto-mapper and an
 override hook.
 
@@ -8,7 +8,7 @@ override hook.
 
 1. **`lib/import-center/import-templates.ts`** declares every canonical
    field per `ImportType`:
-   - `key` — canonical KitchenOS field name (e.g. `title`,
+   - `key` — canonical OS Kitchen field name (e.g. `title`,
      `cost_per_unit`, `customer_email`).
    - `label` — human label.
    - `required` — whether commit requires this column to be mapped.

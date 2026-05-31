@@ -1,4 +1,4 @@
-# KitchenOS — Final Sign-Off Before Pilot Launch
+# OS Kitchen — Final Sign-Off Before Pilot Launch
 
 **Date:** 18 May 2026  
 **Sign-off by:** Principal Platform Architect (Release Commander)  

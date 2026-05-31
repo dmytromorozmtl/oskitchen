@@ -1,4 +1,4 @@
-# KitchenOS Full Strategic Re-Audit — Evolution Era 2 Close + Era 3 RBAC Wave
+# OS Kitchen Full Strategic Re-Audit — Evolution Era 2 Close + Era 3 RBAC Wave
 
 **Date:** 2026-05-27  
 **Method:** Read-only inspection of live repository (not prior audit prose alone)  
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-KitchenOS remains a **large, production-shaped food-operations monolith** — not an MVP. Live scale: **699 App Router pages**, **296 API routes**, **146 action modules**, **604 services**, **362 Prisma models**, **266 enums**, **505 Vitest files**, **53 Playwright specs**, **1,440 markdown docs**, **137 cron route handlers** vs **16 production-scheduled** jobs.
+OS Kitchen remains a **large, production-shaped food-operations monolith** — not an MVP. Live scale: **699 App Router pages**, **296 API routes**, **146 action modules**, **604 services**, **362 Prisma models**, **266 enums**, **505 Vitest files**, **53 Playwright specs**, **1,440 markdown docs**, **137 cron route handlers** vs **16 production-scheduled** jobs.
 
 **Strongest assets:** unified order spine (`services/orders/order-creation-service.ts`), storefront checkout with CI-certified pay-later E2E, POS software money path with unit/integration/inventory certification, cron governance in CI, canonical doc index with 11 `:cert` wiring gates in default `quality` job.
 
@@ -490,7 +490,7 @@ OpenAPI: `lib/api/openapi-manifest.json` (minor uncommitted drift). CI: `test:ci
 
 ## 20. GTM / Sales / Competitor
 
-| Competitor | KitchenOS position | Stronger | Weaker | Do not claim yet | Opportunity | Next action |
+| Competitor | OS Kitchen position | Stronger | Weaker | Do not claim yet | Opportunity | Next action |
 |------------|-------------------|----------|--------|------------------|-------------|-------------|
 | Toast | Behind POS/KDS/hardware | Unified ops spine | Table service, certified KDS | Hardware/offline parity | Branded storefront + ops | Honest POS pilot |
 | Square | Behind POS simplicity | Depth (production, CRM) | Speed/ease | Full POS replacement | Storefront flagship | Nav simplification |

@@ -13,4 +13,4 @@
 
 ## Disclaimer (in-app)
 
-Verification tab includes explicit copy: operators must verify data; KitchenOS surfaces hints only.
+Verification tab includes explicit copy: operators must verify data; OS Kitchen surfaces hints only.

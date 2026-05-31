@@ -5,7 +5,7 @@
 **Extends:** `era4-pos-only-v1`, `era5-pos-only-gtm-lock-v1`  
 **Storefront hook:** **deferred_locked** (unchanged)
 
-KitchenOS recipe ingredient depletion on sale is **certified for POS checkout only**. Storefront, public API, manual, and integration order entrypoints must **not** call POS inventory impact recording until an explicit future era unlocks payment-timing + idempotency design.
+OS Kitchen recipe ingredient depletion on sale is **certified for POS checkout only**. Storefront, public API, manual, and integration order entrypoints must **not** call POS inventory impact recording until an explicit future era unlocks payment-timing + idempotency design.
 
 ---
 

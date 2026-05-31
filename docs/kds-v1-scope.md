@@ -1,6 +1,6 @@
 # KDS v1 Scope
 
-Status: canonical scope boundary for KitchenOS KDS v1 certification  
+Status: canonical scope boundary for OS Kitchen KDS v1 certification  
 Date: 2026-05-27  
 Primary evidence: `actions/kitchen-daily-kds.ts`, `components/kitchen/kds-daily-service.tsx`, `services/kitchen-screen/daily-kds-service.ts`, `services/production/daily-queue-service.ts`, `app/dashboard/kitchen/page.tsx`, `tests/unit/kitchen-daily-kds-rbac.test.ts`, `docs/kds-kitchen-ops-roadmap.md`, `docs/feature-maturity-matrix.md`
 

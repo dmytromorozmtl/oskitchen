@@ -16,7 +16,7 @@
 5. **Idempotency.** Each handled event is keyed by `stripeEventId` in
    `billing_events`. Duplicate deliveries are no-ops.
 6. **No raw card data.** Card management is delegated to the Stripe
-   customer portal. KitchenOS never sees PAN.
+   customer portal. OS Kitchen never sees PAN.
 7. **Audit log.** Every state mutation writes a `BillingEvent` row
    (Stripe-driven and admin-driven).
 8. **Permission gating.** `lib/billing/billing-permissions.ts` defines a

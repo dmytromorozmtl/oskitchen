@@ -1,6 +1,6 @@
-# KitchenOS FoodOps platform overview
+# OS Kitchen FoodOps platform overview
 
-KitchenOS is positioned as **one operating system for food businesses**: orders, menus, production, prep, packing, inventory, purchasing, delivery, reporting, and customer operations in a single workspace.
+OS Kitchen is positioned as **one operating system for food businesses**: orders, menus, production, prep, packing, inventory, purchasing, delivery, reporting, and customer operations in a single workspace.
 
 ## Operating modes
 

@@ -1,4 +1,4 @@
-# KitchenOS — Platform Completion Audit
+# OS Kitchen — Platform Completion Audit
 
 **Scope:** Full-surface cohesion pass (routes preserved, no fake integrations).  
 **Date:** 2026-05-13  
@@ -6,7 +6,7 @@
 
 ## Executive summary
 
-KitchenOS has broad module coverage. The largest gap is **cross-module narrative** (one operating story) rather than missing URLs. This audit classifies representative modules and records **priority** for follow-up.
+OS Kitchen has broad module coverage. The largest gap is **cross-module narrative** (one operating story) rather than missing URLs. This audit classifies representative modules and records **priority** for follow-up.
 
 | Priority | Meaning |
 |----------|---------|

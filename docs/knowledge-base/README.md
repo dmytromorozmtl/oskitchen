@@ -1,6 +1,6 @@
 # Operator Knowledge Base
 
-Help articles for KitchenOS operators. For internal engineering docs see `docs/`.
+Help articles for OS Kitchen operators. For internal engineering docs see `docs/`.
 
 | # | Article |
 |---|---------|

@@ -12,7 +12,7 @@ Use this one-pager for **honest** investor conversations. It is **not** a substi
 
 ## Purpose and honest scope
 
-KitchenOS is building a **qualified commercial pilot** path for small food operators: order hub, kitchen routing, POS software path, storefront, and channel integrations — with governance-backed maturity labels.
+OS Kitchen is building a **qualified commercial pilot** path for small food operators: order hub, kitchen routing, POS software path, storefront, and channel integrations — with governance-backed maturity labels.
 
 **Current investor posture (2026-05-28):**
 

@@ -1,4 +1,4 @@
-# Storefront final system audit (KitchenOS)
+# Storefront final system audit (OS Kitchen)
 
 **Scope:** Public storefront module (`/s/[storeSlug]…`), admin builder (`/dashboard/storefront…`), Prisma storefront models, middleware host resolution, checkout, SEO, analytics, forms, domains.  
 **Method:** Code review + schema review (2026-02). Not a substitute for pen-test or load testing.

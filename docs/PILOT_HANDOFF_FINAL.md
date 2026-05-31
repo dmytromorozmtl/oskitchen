@@ -1,4 +1,4 @@
-# KitchenOS Pilot — Handoff Package
+# OS Kitchen Pilot — Handoff Package
 
 **Date:** 19 May 2026  
 **Status:** **CODE 100% READY** — **AWAITING STAGING REDEPLOY**
@@ -7,7 +7,7 @@
 
 ## What this is
 
-KitchenOS is a B2B platform for food operators. **Application code, tests, docs, and ops scripts are complete.** Your job is to bring staging back online on Vercel, verify HTTP + E2E, then follow the Go/No-Go checklist.
+OS Kitchen is a B2B platform for food operators. **Application code, tests, docs, and ops scripts are complete.** Your job is to bring staging back online on Vercel, verify HTTP + E2E, then follow the Go/No-Go checklist.
 
 **Do not contact engineering for:** env template layout, deploy commands, or verification scripts — everything is below.
 
@@ -17,7 +17,7 @@ KitchenOS is a B2B platform for food operators. **Application code, tests, docs,
 
 ### Step 1 — Redeploy staging (~5 min)
 
-1. Open [Vercel Dashboard](https://vercel.com/dashboard) → project **KitchenOS** → **Deployments**
+1. Open [Vercel Dashboard](https://vercel.com/dashboard) → project **OS Kitchen** → **Deployments**
 2. **Redeploy** the latest `main` or `pilot-18may` build (or push to trigger CI)
 3. Copy the new preview URL (`https://….vercel.app`)
 
@@ -26,7 +26,7 @@ KitchenOS is a B2B platform for food operators. **Application code, tests, docs,
 ### Step 2 — Record the URL
 
 ```bash
-cd /path/to/KitchenOS
+cd /path/to/OS Kitchen
 echo "STAGING_URL=https://YOUR-NEW-PREVIEW.vercel.app" > .staging-deploy-url
 ```
 

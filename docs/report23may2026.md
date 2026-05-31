@@ -1,4 +1,4 @@
-# KitchenOS — Full System Audit
+# OS Kitchen — Full System Audit
 
 **Date:** 2026-05-23  
 **Production:** https://os-kitchen.com  
@@ -349,7 +349,7 @@ Cart → Checkout → Stripe → Webhook → Order Created
 
 ### 5.2 — Конкуренты
 
-| Конкурент | Сильные стороны | Что есть у KitchenOS |
+| Конкурент | Сильные стороны | Что есть у OS Kitchen |
 |-----------|----------------|---------------------|
 | Toast | Hardware POS, marketplace | Table management, KDS, QR menu (без hardware lock-in) |
 | Square | Free POS, payments ubiquity | Online counter POS, Stripe Connect |
@@ -357,7 +357,7 @@ Cart → Checkout → Stripe → Webhook → Order Created
 | CrunchTime | Labor, HACCP, operations audits | Time clock, food safety checklists, operations audits |
 | Restaurant365 | Native accounting, franchise | P&L, AP automation, franchise royalties |
 | Shopify | Themes, apps, shipping | Storefront builder, custom CSS, Google Fonts, native ops post-checkout |
-| Deliverect/Cuboh | Aggregator normalization | Native order hub + product mapping when KitchenOS is system of record |
+| Deliverect/Cuboh | Aggregator normalization | Native order hub + product mapping when OS Kitchen is system of record |
 
 **Differentiation:** Commerce OS + Operations OS — unified POS + digital commerce + BOH execution (production, packing, routes) с workspace-grade RBAC, без hardware lock-in.
 
@@ -406,7 +406,7 @@ Cart → Checkout → Stripe → Webhook → Order Created
 
 ## Финальный вердикт
 
-**KitchenOS — система готова к платным операторам.**
+**OS Kitchen — система готова к платным операторам.**
 
 | Критерий | Статус |
 |----------|--------|
@@ -428,4 +428,4 @@ Cart → Checkout → Stripe → Webhook → Order Created
 ---
 
 *Отчёт сгенерирован: 2026-05-23 (autonomous multi-layer audit)*  
-*Источники: codebase scan, Vitest run, production curl probes, `docs/KITCHENOS_ABSOLUTE_FINAL_VERDICT.md`, `docs/ABSOLUTE_FINAL_STOREFRONT_VERIFICATION.md`*
+*Источники: codebase scan, Vitest run, production curl probes, `docs/OS Kitchen_ABSOLUTE_FINAL_VERDICT.md`, `docs/ABSOLUTE_FINAL_STOREFRONT_VERIFICATION.md`*

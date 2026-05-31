@@ -1,4 +1,4 @@
-# Closed Beta Playbook — KitchenOS (steps 1–6)
+# Closed Beta Playbook — OS Kitchen (steps 1–6)
 
 Операционный runbook: **guided closed beta (1–3 kitchens)**.
 

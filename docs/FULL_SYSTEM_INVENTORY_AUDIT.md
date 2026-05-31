@@ -1,7 +1,7 @@
-# KitchenOS — Full System Inventory Audit
+# OS Kitchen — Full System Inventory Audit
 
 **Generated:** 2026-05-15 (automated + manual codebase pass)  
-**Scope:** Entire repository under `/Users/dmytro/Desktop/2026/KitchenOS` excluding `node_modules` / `.next`.  
+**Scope:** Entire repository under `/Users/dmytro/Desktop/2026/OS Kitchen` excluding `node_modules` / `.next`.  
 **Purpose:** Route, service, database, and UI inventory with notes on duplication, risk, and consolidation.
 
 ---

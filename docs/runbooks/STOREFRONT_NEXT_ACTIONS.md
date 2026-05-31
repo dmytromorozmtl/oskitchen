@@ -44,7 +44,7 @@ npm run storefront:diagnose-deploy
 
 ```bash
 export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use 22
-cd /Users/dmytro/Desktop/2026/KitchenOS
+cd /Users/dmytro/Desktop/2026/OS Kitchen
 
 npm run storefront:apply-deploy-urls
 npm run storefront:env:sync-local

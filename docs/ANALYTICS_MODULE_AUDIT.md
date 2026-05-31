@@ -1,4 +1,4 @@
-# Analytics module audit (KitchenOS)
+# Analytics module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/analytics`, related `Order`, `ExternalOrder`,

@@ -1,6 +1,6 @@
 # Pilot PR — commands (no git in this workspace)
 
-This copy of KitchenOS has **no `.git` directory**. Run these commands on the machine that holds the canonical repository remote.
+This copy of OS Kitchen has **no `.git` directory**. Run these commands on the machine that holds the canonical repository remote.
 
 ## 1. Verify clean state
 

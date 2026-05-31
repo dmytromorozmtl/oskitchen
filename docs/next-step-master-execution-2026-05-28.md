@@ -1,4 +1,4 @@
-# KitchenOS — Следующий шаг (master execution, 28 May 2026)
+# OS Kitchen — Следующий шаг (master execution, 28 May 2026)
 
 **Вердикт:** demo-grade сильный · pilot executable ~66/100 · **NO-GO** до P0 PASS  
 **Единственный критический путь:** ops vault → `proof_passed` → Tier 2 golden path → LOI → GO

@@ -1,4 +1,4 @@
-# KitchenOS — Product expansion audit
+# OS Kitchen — Product expansion audit
 
 This document audits the MVP baseline (post-integration expansion pass) against the vertical SaaS vision. Each row follows: **current state**, **gaps**, **recommended upgrade**, **priority** (P0–P3), **risk** (Low / Medium / High).
 

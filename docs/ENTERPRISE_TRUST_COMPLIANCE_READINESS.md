@@ -2,7 +2,7 @@
 
 ## Honest posture
 
-- KitchenOS is **not** marketed here as SOC 2 Type II certified or PCI Level 1 certified.  
+- OS Kitchen is **not** marketed here as SOC 2 Type II certified or PCI Level 1 certified.  
 - Card data flows belong to **Stripe** (or other PSP) — scope boundaries must stay explicit in `/trust` copy.
 
 ## Services (this pass)

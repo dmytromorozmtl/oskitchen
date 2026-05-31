@@ -1,4 +1,4 @@
-# KitchenOS — Sellable SaaS product audit
+# OS Kitchen — Sellable SaaS product audit
 
 Audience: founders, sales, and engineering preparing demos through first paid customers.  
 Date: May 2026. Scope: product experience vs launch readiness (not a security code review — see `SECURITY_REVIEW.md`).

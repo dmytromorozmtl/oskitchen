@@ -1,4 +1,4 @@
-# Privacy review — KitchenOS
+# Privacy review — OS Kitchen
 
 High-level data-handling notes for beta operators. Not legal advice.
 
@@ -7,7 +7,7 @@ High-level data-handling notes for beta operators. Not legal advice.
 - **Account**: email, name, authentication identifiers (via Supabase).
 - **Operational**: orders, customers, delivery addresses, production notes.
 - **Integrations**: tokens (encrypted at rest), webhook payloads for debugging.
-- **Billing**: Stripe customer references (no full card data in KitchenOS).
+- **Billing**: Stripe customer references (no full card data in OS Kitchen).
 
 ## Principles
 

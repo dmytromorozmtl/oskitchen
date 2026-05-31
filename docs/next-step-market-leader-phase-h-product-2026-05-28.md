@@ -1,4 +1,4 @@
-# KitchenOS — Phase H: Market leader positioning (post-honest Series A)
+# OS Kitchen — Phase H: Market leader positioning (post-honest Series A)
 
 **Status:** Product surfaces + Market leader integrity guard **IMPLEMENTED** · Human Pillars 1–4 **REQUIRED**  
 **Policy:** `era21-market-leader-positioning-v1` · Integrity `era32-market-leader-positioning-integrity-v1`  

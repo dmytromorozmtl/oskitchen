@@ -6,7 +6,7 @@
 lib/notifications/*               pure utilities (no I/O)
 services/notifications/*          Prisma + Resend
 actions/notifications-center.ts   Next.js server actions (auth + zod)
-app/api/webhooks/resend/route.ts  Resend → KitchenOS webhook
+app/api/webhooks/resend/route.ts  Resend → OS Kitchen webhook
 app/dashboard/notifications/*     Notification Center UI (server + client)
 components/dashboard/notifications/*  shared UI bits
 ```

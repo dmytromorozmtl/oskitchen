@@ -1,4 +1,4 @@
-# KitchenOS — era25 Market Leader Positioning Convergence
+# OS Kitchen — era25 Market Leader Positioning Convergence
 
 **Status:** **Seventh era25 product slice · IMPLEMENTED · BLOCKED until Series A convergence ready**
 
@@ -67,7 +67,7 @@ npm run test:ci:commercial-pilot-runbook:cert
 
 ## Convergence targets
 
-| ID | Surface | KitchenOS link |
+| ID | Surface | OS Kitchen link |
 |----|---------|----------------|
 | `positioning_pillars_panel` | Market leader pillars 1–4 on platform ops | Commercial pilot ops |
 | `briefing_action` | Ranked action on blocked pillar | Owner Daily Briefing hero |

@@ -1,4 +1,4 @@
-# Storefront completion audit (KitchenOS)
+# Storefront completion audit (OS Kitchen)
 
 This audit reflects the codebase after the storefront hardening pass. Priorities: **P0** trust / payments / delivery, **P1** completeness, **P2** SEO / analytics / UX maturity, **P3** future.
 

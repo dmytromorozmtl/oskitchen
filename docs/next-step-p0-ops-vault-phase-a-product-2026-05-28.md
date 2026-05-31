@@ -1,4 +1,4 @@
-# KitchenOS — Phase A: P0 Ops Vault (human + product surfaces)
+# OS Kitchen — Phase A: P0 Ops Vault (human + product surfaces)
 
 **Status:** Product surfaces + integrity guard **IMPLEMENTED** · Human credentials **REQUIRED**  
 **Policy:** `era17-p0-staging-proof-unblock-v1` · Inflection `commercial-inflection-readiness-v1`  

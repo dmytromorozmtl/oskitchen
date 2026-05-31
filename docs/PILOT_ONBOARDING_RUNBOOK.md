@@ -21,7 +21,7 @@ Use checklist from `docs/pilot-program.md`:
 
 ## Day 0 — Kickoff (60 min)
 
-| Step | Action | KitchenOS surface |
+| Step | Action | OS Kitchen surface |
 |------|--------|-------------------|
 | 1 | Create workspace + invite team | Settings → Team |
 | 2 | Connect Stripe Connect | Settings → Billing / Storefront |

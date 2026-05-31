@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Breakthrough Era 19
+# Next Master Prompt Input — OS Kitchen Breakthrough Era 19
 
 **Date:** 2026-05-28  
 **Purpose:** Canonical input for **Evolution Era 19 — BREAKTHROUGH** master prompt (supersedes Era 18 handoff for strategic direction)  

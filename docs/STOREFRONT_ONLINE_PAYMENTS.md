@@ -2,7 +2,7 @@
 
 ## Decision
 
-KitchenOS uses **real Stripe Checkout** (`mode=payment`) for storefront orders when:
+OS Kitchen uses **real Stripe Checkout** (`mode=payment`) for storefront orders when:
 
 - `onlinePaymentEnabled` is true,
 - `payLaterOnly` is false,

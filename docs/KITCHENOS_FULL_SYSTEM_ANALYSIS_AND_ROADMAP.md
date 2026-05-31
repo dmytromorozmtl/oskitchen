@@ -1,4 +1,4 @@
-# KitchenOS — Full System Analysis & Roadmap
+# OS Kitchen — Full System Analysis & Roadmap
 
 **Date:** 2026-05-15  
 **Classification:** Internal product + engineering strategy (non-binding financial forecast).
@@ -7,7 +7,7 @@
 
 ## 1. Executive summary
 
-KitchenOS is a **broad FoodOps + Commerce platform** implemented as a modern Next.js 15 / TypeScript / Prisma monolith with clear separation between **marketing**, **workspace dashboard**, **public storefront**, and **internal platform** surfaces. The codebase is **feature-rich** relative to typical early commercial MVPs; the primary risk is **surface-area complexity** (hundreds of Prisma models, deep dashboard navigation) rather than fundamental stack fragility.
+OS Kitchen is a **broad FoodOps + Commerce platform** implemented as a modern Next.js 15 / TypeScript / Prisma monolith with clear separation between **marketing**, **workspace dashboard**, **public storefront**, and **internal platform** surfaces. The codebase is **feature-rich** relative to typical early commercial MVPs; the primary risk is **surface-area complexity** (hundreds of Prisma models, deep dashboard navigation) rather than fundamental stack fragility.
 
 **Biggest strengths**
 
@@ -179,10 +179,10 @@ KitchenOS is a **broad FoodOps + Commerce platform** implemented as a modern Nex
 
 > **Important:** The comparisons below are **strategic positioning heuristics** based on common industry categories, **not** verified 2026 product facts. For pricing/feature parity claims in sales collateral, add customer-performed diligence.
 
-| Competitor / category | KitchenOS likely stronger at | KitchenOS likely weaker at (today) | Avoid competing on (now) | Differentiation angle |
+| Competitor / category | OS Kitchen likely stronger at | OS Kitchen likely weaker at (today) | Avoid competing on (now) | Differentiation angle |
 |-----------------------|-------------------------------|-------------------------------------|----------------------------|-------------------------|
 | Toast / Square / Lightspeed / Clover (incumbent POS) | Unified meal-ops + preorder + kitchen narrative; honest web POS scope | Mature offline POS, payment hardware ecosystems, massive app marketplaces | “Replace Toast end-to-end” | **Preorder + production + catering** OS layer *alongside* or *above* POS |
-| Cuboh / Deliverect (aggregator ops) | Owned storefront + native KitchenOS orders + mapping workbench | Deep marketplace order normalization maturity | “We replace Deliverect day one” | **Branded commerce + ops** for mid-market multi-brand groups |
+| Cuboh / Deliverect (aggregator ops) | Owned storefront + native OS Kitchen orders + mapping workbench | Deep marketplace order normalization maturity | “We replace Deliverect day one” | **Branded commerce + ops** for mid-market multi-brand groups |
 | Olo (digital ordering enterprise) | SMB speed + integrated kitchen workflow | Enterprise digital ordering scale proof | Enterprise drive-thru scale claims | **Catering + meal prep** digital + ops |
 | Restaurant365 / MarketMan / xtraCHEF / Apicbase (BOH financial & inventory) | Operational order-driven demand signals | Full accounting, deep inventory network effects | Being “the GL” | **Demand → purchasing suggestions** without accounting replacement claims |
 | 7shifts / HotSchedules (labor) | Cross-module staff surfaces | Dedicated labor compliance depth | Wage & hour law completeness | **Task + readiness** adjacent to production |

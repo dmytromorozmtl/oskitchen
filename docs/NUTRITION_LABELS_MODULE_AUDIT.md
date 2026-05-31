@@ -24,4 +24,4 @@
 
 ## Safety
 
-KitchenOS **never** certifies FDA/CFIA/EU compliance. Operators must retain supplier and lab records off-platform as required.
+OS Kitchen **never** certifies FDA/CFIA/EU compliance. Operators must retain supplier and lab records off-platform as required.

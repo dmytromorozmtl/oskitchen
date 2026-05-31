@@ -5,16 +5,16 @@
 **Audience:** integration partners, implementation leads, buyer security reviewers  
 **Parent:** [`API_WEBHOOK_DEVELOPER_CONTRACT_MATURITY.md`](./API_WEBHOOK_DEVELOPER_CONTRACT_MATURITY.md)
 
-This guide documents how partners connect **inbound** commerce webhooks to KitchenOS and how **outbound** event types are catalogued. It does **not** claim production webhook SLA, guaranteed delivery, SOC2 certification, or a full outbound subscription platform.
+This guide documents how partners connect **inbound** commerce webhooks to OS Kitchen and how **outbound** event types are catalogued. It does **not** claim production webhook SLA, guaranteed delivery, SOC2 certification, or a full outbound subscription platform.
 
 ---
 
 ## Two webhook directions
 
-| Direction | Who sends | KitchenOS role | Pilot scope |
+| Direction | Who sends | OS Kitchen role | Pilot scope |
 |-----------|-----------|----------------|-------------|
 | **Inbound (commerce)** | Stripe, WooCommerce, Shopify | Verify signature → persist `WebhookEvent` → normalize order | **pilot_ready** with live smoke attestation |
-| **Outbound (developer)** | KitchenOS → partner URL | Documented event taxonomy; delivery/retry notes | **beta** — taxonomy only, no SLA |
+| **Outbound (developer)** | OS Kitchen → partner URL | Documented event taxonomy; delivery/retry notes | **beta** — taxonomy only, no SLA |
 
 ---
 
@@ -22,7 +22,7 @@ This guide documents how partners connect **inbound** commerce webhooks to Kitch
 
 ### Routes and tenant mapping
 
-| Provider | KitchenOS URL | Signature | Tenant routing |
+| Provider | OS Kitchen URL | Signature | Tenant routing |
 |----------|---------------|-----------|----------------|
 | Stripe | `/api/webhooks/stripe` | Stripe `constructEvent` signing secret | Billing connection / Stripe account |
 | WooCommerce | `/api/webhooks/woocommerce?cid=<connection-uuid>` | `X-WC-Webhook-Signature` HMAC-SHA256 (raw body) | `cid` query param = `IntegrationConnection.id` |
@@ -33,15 +33,15 @@ Source: `lib/security/webhook-security-matrix.ts` · `lib/developer/partner-webh
 ### Setup checklist
 
 1. Save integration credentials in Dashboard → Sales channels (secrets encrypted at rest).
-2. Register the KitchenOS webhook URL at the provider admin (HTTPS required).
-3. Copy the provider signing secret into KitchenOS — must match exactly.
+2. Register the OS Kitchen webhook URL at the provider admin (HTTPS required).
+3. Copy the provider signing secret into OS Kitchen — must match exactly.
 4. For Woo, append `?cid=<uuid>` from the connection row — Woo cannot infer tenant from headers alone.
 5. Send a test order/event; confirm row appears in Dashboard → Developer → Webhooks monitor.
 6. Invalid signature must fail closed (401/400) with **no** order side effects.
 
 ### Idempotency and retries
 
-Providers retry on non-2xx or timeouts. KitchenOS dedupes using stable external IDs:
+Providers retry on non-2xx or timeouts. OS Kitchen dedupes using stable external IDs:
 
 - **Shopify** — webhook id header  
 - **WooCommerce** — `X-WC-Webhook-Delivery-Id`  
@@ -63,7 +63,7 @@ Operator doc: [`commerce-webhook-incident-drill-era17.md`](./commerce-webhook-in
 
 ## Outbound event taxonomy (beta)
 
-KitchenOS documents outbound webhook event types for partner planning. Full subscription UI and delivery SLA are **not** pilot-ready.
+OS Kitchen documents outbound webhook event types for partner planning. Full subscription UI and delivery SLA are **not** pilot-ready.
 
 **Source:** `lib/developer/webhook-event-types.ts` · `services/developer/webhook-contract-service.ts`
 
@@ -84,7 +84,7 @@ KitchenOS documents outbound webhook event types for partner planning. Full subs
 
 - Exponential backoff with jitter for transient 5xx/429 responses.  
 - Non-retryable 4xx (except 429) require manual intervention.  
-- Raw payloads are never echoed in KitchenOS UI — redacted previews only.
+- Raw payloads are never echoed in OS Kitchen UI — redacted previews only.
 
 **Not claimed:** guaranteed delivery, sub-second latency, production SLA, webhook signing for all outbound types.
 

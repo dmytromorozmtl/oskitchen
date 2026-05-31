@@ -1,6 +1,6 @@
 # Testing
 
-KitchenOS uses **Vitest** for unit tests and **Playwright** for end-to-end smoke tests.
+OS Kitchen uses **Vitest** for unit tests and **Playwright** for end-to-end smoke tests.
 
 ## Scripts
 
@@ -352,7 +352,7 @@ npx playwright test tests/visual/checkout-shell.spec.ts --project=visual --updat
 | Symptom | Fix |
 |---------|-----|
 | `Executable doesn't exist` … `chrome-headless-shell` | `npm run playwright:install` (or re-run `npm run test:visual` — `pretest:visual` installs Chromium) |
-| `Invalid project directory` … `KitchenOS/#` | You ran `npm run build` with a trailing `# comment` on the same line; run `npm run build` alone |
+| `Invalid project directory` … `OS Kitchen/#` | You ran `npm run build` with a trailing `# comment` on the same line; run `npm run build` alone |
 | `argument '#' is invalid` for `--update-snapshots` | Same issue: run `npm run test:visual:update` without `# …` on the line |
 | `net::ERR_CONNECTION_REFUSED` on `:3000` | Run `npm run build` first so `npm run start` (started by Playwright) can serve the app |
 | `Internal Server Error` / testids not found | Stop `npm run dev` on port 3000 — Playwright was reusing dev instead of `next start`. Or run `npm run build` then `npm run test:visual` (production server starts automatically) |

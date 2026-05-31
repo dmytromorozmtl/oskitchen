@@ -1,4 +1,4 @@
-# Notifications module audit (KitchenOS)
+# Notifications module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/notifications`, `/dashboard/notifications/rules`,

@@ -1,6 +1,6 @@
 # Channel reliability audit — Sales Channels / Channel Command Center
 
-KitchenOS, May 2026. Scope: ingestion from live WooCommerce/Shopify paths, staging, Order Hub, permissions, and operational controls **without** faking partner certifications.
+OS Kitchen, May 2026. Scope: ingestion from live WooCommerce/Shopify paths, staging, Order Hub, permissions, and operational controls **without** faking partner certifications.
 
 | Area | Current state | Failure mode | Business impact | Recommended fix | Priority |
 |------|---------------|--------------|-----------------|-----------------|----------|

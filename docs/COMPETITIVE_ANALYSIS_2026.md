@@ -1,4 +1,4 @@
-# KitchenOS — Competitive Analysis 2026
+# OS Kitchen — Competitive Analysis 2026
 
 **Version:** 1.0 · **Date:** 19 May 2026  
 **Authors:** Product Strategy / Competitive Intelligence  
@@ -8,7 +8,7 @@
 
 ## Strategic position
 
-KitchenOS competes as **the operating system for weekly preorder kitchens** — not as a restaurant POS (Toast/Square) or a pure inventory tool (MarketMan). The win condition is **one stack**: storefront → orders → production → packing → margin/costing → purchasing, with honest channel consolidation (Woo/Shopify BETA, no native Uber/DoorDash in 2026).
+OS Kitchen competes as **the operating system for weekly preorder kitchens** — not as a restaurant POS (Toast/Square) or a pure inventory tool (MarketMan). The win condition is **one stack**: storefront → orders → production → packing → margin/costing → purchasing, with honest channel consolidation (Woo/Shopify BETA, no native Uber/DoorDash in 2026).
 
 **ICP priority:** Meal prep (primary) → Catering / Bakery (secondary) → Ghost / multi-brand (tertiary, data model ready).
 
@@ -18,7 +18,7 @@ KitchenOS competes as **the operating system for weekly preorder kitchens** — 
 
 ### Group 1 — Direct competitors (meal prep / food ops)
 
-| Competitor | Strengths | Weakness vs KitchenOS | Lesson for KitchenOS |
+| Competitor | Strengths | Weakness vs OS Kitchen | Lesson for OS Kitchen |
 |------------|-----------|------------------------|----------------------|
 | **MarketMan** | Invoice OCR, supplier catalogs (US Foods, Sysco), A vs T costing, POS integrations | No production/packing, no native storefront, $200+/mo | Ship **A vs T + supplier price discipline**; skip invoice OCR in 2026 |
 | **xtraCHEF (Toast)** | Invoice PDF/email extraction, PO approvals, QuickBooks/Xero | Back-office only; no kitchen workflow | **PO approval workflow** + accounting export (Q3–Q4) |
@@ -28,7 +28,7 @@ KitchenOS competes as **the operating system for weekly preorder kitchens** — 
 
 ### Group 2 — Indirect competitors
 
-| Competitor | Strengths | Lesson for KitchenOS |
+| Competitor | Strengths | Lesson for OS Kitchen |
 |------------|-----------|----------------------|
 | **Toast** | Hardware POS, integration marketplace, labor | **Integration health** visibility; no hardware POS |
 | **Square** | Free POS tier, payments, Square Online | **Stripe-native** checkout + Starter tier already aligned |
@@ -36,7 +36,7 @@ KitchenOS competes as **the operating system for weekly preorder kitchens** — 
 
 ### Group 3 — Market trends (2026)
 
-| Trend | Who leads | KitchenOS response |
+| Trend | Who leads | OS Kitchen response |
 |-------|-----------|-------------------|
 | AI in kitchen | Galley, MarketMan | Copilot BETA → **demand forecasting** on order history (Q3) |
 | Sustainability | Galley, startups | **Food waste tracking** in production (Q3–Q4) |

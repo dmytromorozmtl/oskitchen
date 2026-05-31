@@ -1,6 +1,6 @@
 # Security posture
 
-KitchenOS security posture today:
+OS Kitchen security posture today:
 - Supabase Auth-backed sessions.
 - Prisma server-side data access.
 - Tenant scoping by `userId`, with workspace migration plan for future.

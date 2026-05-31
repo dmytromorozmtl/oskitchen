@@ -1,4 +1,4 @@
-# KitchenOS — Continuous improvement loop release checklist
+# OS Kitchen — Continuous improvement loop release checklist
 
 **Policy:** `era22-continuous-improvement-loop-v1` · **Backlog:** `KOS-E22-010`
 

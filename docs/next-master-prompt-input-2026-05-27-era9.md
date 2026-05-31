@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Era 10
+# Next Master Prompt Input — OS Kitchen Era 10
 
 > **Superseded for recurring execution** by `docs/next-master-prompt-input-2026-05-27-era10.md` (Era 11 handoff). Retained for Era 9→10 history.
 

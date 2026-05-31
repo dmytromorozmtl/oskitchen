@@ -1,4 +1,4 @@
-# KitchenOS — Phase D: Pilot Week 1 execution (post-honest GO)
+# OS Kitchen — Phase D: Pilot Week 1 execution (post-honest GO)
 
 **Status:** Product surfaces + Week 1 integrity guard **IMPLEMENTED** · Human Day 1–5 execution **REQUIRED**  
 **Policy:** `era21-pilot-week1-execution-v1` · Integrity `era28-pilot-week1-execution-integrity-v1`  

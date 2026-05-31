@@ -1,4 +1,4 @@
-# KitchenOS — Sales Deck
+# OS Kitchen — Sales Deck
 
 **Version:** 1.0 · **Date:** 23 May 2026  
 **Production:** https://os-kitchen.com  
@@ -10,7 +10,7 @@
 
 ## Slide 1: Title
 
-**KitchenOS**  
+**OS Kitchen**  
 Kitchen Operations Platform for Meal Prep, Ghost Kitchens & Preorder Businesses
 
 *One system for the floor, the line, and production — on devices you already own.*
@@ -31,7 +31,7 @@ Kitchen Operations Platform for Meal Prep, Ghost Kitchens & Preorder Businesses
 
 **One platform:** POS + Storefront + Production + Packing + Delivery
 
-KitchenOS connects front-of-house and back-of-house in real time — from the moment an order arrives until it leaves the door.
+OS Kitchen connects front-of-house and back-of-house in real time — from the moment an order arrives until it leaves the door.
 
 ---
 
@@ -51,7 +51,7 @@ KitchenOS connects front-of-house and back-of-house in real time — from the mo
 
 ## Slide 5: Before / After
 
-| Before KitchenOS | After KitchenOS |
+| Before OS Kitchen | After OS Kitchen |
 |------------------|-----------------|
 | Spreadsheets for weekly demand | Automated production board |
 | WhatsApp order chaos | Unified order hub |
@@ -121,7 +121,7 @@ See [pilot-program.md](pilot-program.md) for full terms.
 
 ## Slide 11: Why Not Toast / Square?
 
-| KitchenOS | Legacy POS |
+| OS Kitchen | Legacy POS |
 |-----------|------------|
 | $0 hardware upfront | Terminal lease $50–100/mo |
 | Built for **production kitchens** | Built for payment capture |

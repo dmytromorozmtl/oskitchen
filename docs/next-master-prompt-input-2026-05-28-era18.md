@@ -1,4 +1,4 @@
-# Next Master Prompt Input — KitchenOS Evolution Era 18
+# Next Master Prompt Input — OS Kitchen Evolution Era 18
 
 **Date:** 2026-05-28  
 **Purpose:** Canonical facts for the **Evolution Era 18** master prompt and recurring cycle prompts — **post full Era 17 re-audit**  
@@ -120,11 +120,11 @@ Defer full re-audit at Era 18 start. Trigger full re-audit when first paid pilot
 ## 7. Top Competitor Gaps
 
 - **Toast/Square:** hardware, offline, terminal ecosystem, rush-hour KDS, table service depth, SMB simplicity
-- **Shopify/Woo:** native admin + app marketplace (KitchenOS wins on kitchen spine **if** live webhooks proven)
+- **Shopify/Woo:** native admin + app marketplace (OS Kitchen wins on kitchen spine **if** live webhooks proven)
 - **7shifts/Homebase:** labor depth and compliance packaging
 - **Klaviyo/Mailchimp:** marketing automation depth
 - **Oracle/Simphony:** enterprise scale + attestations (SSO/SOC2/SCIM)
-- **Restaurant365/MarginEdge:** inventory/accounting depth (KitchenOS has POS-only depletion honesty)
+- **Restaurant365/MarginEdge:** inventory/accounting depth (OS Kitchen has POS-only depletion honesty)
 
 **Competitor readiness score: 58/100** — do not claim parity.
 

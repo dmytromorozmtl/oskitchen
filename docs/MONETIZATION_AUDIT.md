@@ -1,4 +1,4 @@
-# Monetization audit — KitchenOS
+# Monetization audit — OS Kitchen
 
 Each row lists **current state**, **revenue risk**, **recommended improvement**, and **priority**.
 

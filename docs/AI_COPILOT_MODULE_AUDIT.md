@@ -1,4 +1,4 @@
-# AI Copilot module audit (KitchenOS)
+# AI Copilot module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/copilot` (the existing AI Operations Copilot

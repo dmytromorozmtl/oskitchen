@@ -1,4 +1,4 @@
-# KitchenOS data room index
+# OS Kitchen data room index
 
 This folder is a preparation artifact for investors/acquirers. It contains placeholders and should not be treated as verified diligence material until reviewed.
 

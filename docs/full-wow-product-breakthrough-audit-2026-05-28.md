@@ -1,4 +1,4 @@
-# KitchenOS Full WOW Product Breakthrough Audit
+# OS Kitchen Full WOW Product Breakthrough Audit
 
 **Date:** 2026-05-28  
 **Method:** Read-only repo inspection (`main` @ `064af17`); inventory commands; smoke re-run (`smoke:p0-staging-proof-unblock`, `smoke:pilot-gono-go` artifacts); **no** code changes, deploy, or maturity inflation  
@@ -9,9 +9,9 @@
 
 ## Executive Summary
 
-KitchenOS is a **large, production-shaped restaurant operating system** with **world-class governance** and **weak market breakthrough evidence**. Era 18 has delivered **60 product cycles** — overwhelmingly **operator UX focus layers** (attention strips, next-action heroes, go-live command centers, platform pilot ops bridges) — while **P0 commercial proof remains ops-blocked**.
+OS Kitchen is a **large, production-shaped restaurant operating system** with **world-class governance** and **weak market breakthrough evidence**. Era 18 has delivered **60 product cycles** — overwhelmingly **operator UX focus layers** (attention strips, next-action heroes, go-live command centers, platform pilot ops bridges) — while **P0 commercial proof remains ops-blocked**.
 
-**The honest breakthrough verdict:** KitchenOS moved from “strong governed platform” toward “operator-aware platform,” but **not yet** toward “world-class, market-defining OS that challenges Toast/Square.” Policy + UX polish ≠ paid pilot, live integration proof, or competitor depth.
+**The honest breakthrough verdict:** OS Kitchen moved from “strong governed platform” toward “operator-aware platform,” but **not yet** toward “world-class, market-defining OS that challenges Toast/Square.” Policy + UX polish ≠ paid pilot, live integration proof, or competitor depth.
 
 **Live scale (@ `064af17`):** **700** pages · **176** API routes · **8** public API v1 · **49** webhook routes · **16** cron routes · **145** actions · **607** services · **814** components · **365** Prisma models · **268** enums · **876** Vitest + **36** Playwright (**912** total) · **1,514** docs · **646** package scripts (**60** smoke, **237** `test:ci:*`) · **17** CI workflows · **59** RBAC keys · **19** mutation registry entries · **57** feature-matrix rows · **8** integration registry entries (**4 PLACEHOLDER**, **4 BETA**, **0 LIVE**)
 

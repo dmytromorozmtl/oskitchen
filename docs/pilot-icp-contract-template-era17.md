@@ -125,17 +125,17 @@ Full steps: [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md#rollba
 
 ## Contract clause boilerplate
 
-> **Pilot scope.** Customer receives access to KitchenOS modules listed in Exhibit A. Capabilities are provided at maturity levels documented in KitchenOS Feature Maturity Matrix as of the pilot start date. “Pilot” means qualified evaluation — not production certification for all tenants.
+> **Pilot scope.** Customer receives access to OS Kitchen modules listed in Exhibit A. Capabilities are provided at maturity levels documented in OS Kitchen Feature Maturity Matrix as of the pilot start date. “Pilot” means qualified evaluation — not production certification for all tenants.
 >
 > **Qualified limitations.** Customer acknowledges POS is in-browser software without offline or hardware certification; inventory depletion applies to POS sales only unless explicitly unlocked in writing; gift/loyalty ledgers are not unified across channels; SSO (if included) is pilot wiring for activated workspace only.
 >
-> **Support.** Support hours and channels per Exhibit B. KitchenOS does not provide 24/7 rush-hour or marketplace live-ops on-call unless separately contracted.
+> **Support.** Support hours and channels per Exhibit B. OS Kitchen does not provide 24/7 rush-hour or marketplace live-ops on-call unless separately contracted.
 >
 > **Success criteria.** Parties agree success metrics in Exhibit C. Failure to meet metrics triggers review — not automatic SLA credits unless stated.
 >
-> **Termination / rollback.** Either party may terminate per notice in Exhibit D. KitchenOS will assist with rollback steps in commercial pilot runbook within reasonable business hours.
+> **Termination / rollback.** Either party may terminate per notice in Exhibit D. OS Kitchen will assist with rollback steps in commercial pilot runbook within reasonable business hours.
 >
-> **Claims.** Customer marketing may not represent KitchenOS capabilities beyond qualified pilot scope. Forbidden claims list in Exhibit E.
+> **Claims.** Customer marketing may not represent OS Kitchen capabilities beyond qualified pilot scope. Forbidden claims list in Exhibit E.
 
 *Legal must review before use — template only.*
 

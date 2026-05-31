@@ -1,4 +1,4 @@
-# KitchenOS — Final State Report (19 May 2026)
+# OS Kitchen — Final State Report (19 May 2026)
 
 **Role:** Principal Architect + Security + QA + Release  
 **Production:** https://os-kitchen.com  

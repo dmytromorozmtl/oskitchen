@@ -1,4 +1,4 @@
-# KitchenOS — Phase E: Month 2 market readiness (post-honest Week 1)
+# OS Kitchen — Phase E: Month 2 market readiness (post-honest Week 1)
 
 **Status:** Product surfaces + Month 2 integrity guard **IMPLEMENTED** · Human workstreams A–D **REQUIRED**  
 **Policy:** `era21-month2-market-readiness-v1` · Integrity `era29-month2-market-readiness-integrity-v1`  

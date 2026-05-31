@@ -1,4 +1,4 @@
-# KitchenOS Definition Of Done
+# OS Kitchen Definition Of Done
 
 Status: canonical completion standard for product, engineering, QA, and GTM
 Primary evidence: `docs/system-reality-model.md`, `docs/feature-maturity-matrix.md`, `docs/rbac-permission-architecture.md`, `docs/qa-master-test-plan.md`, `docs/devops-release-enterprise-readiness.md`
@@ -65,7 +65,7 @@ No feature is complete unless:
 20. No critical regression exists.
    - The release path that touches the feature passes the relevant quality gates and smoke tests.
 
-## Additional KitchenOS Rules
+## Additional OS Kitchen Rules
 - **Repository hygiene (`era7-tests-node-modules-hygiene-v1`):** never commit `tests/node_modules/` (nested Vitest/npm installs) or `ci-artifacts/`; CI gate `npm run test:ci:repo-hygiene:cert` fails if git tracks paths under `tests/node_modules/`.
 - If a feature touches POS, billing, storefront publishing, uploads, exports, integrations, or impersonation, permission-negative tests are mandatory.
 - If a feature changes a customer-facing revenue path, recovery behavior must be defined and tested.

@@ -1,4 +1,4 @@
-# KitchenOS Full Audit — 28 May 2026
+# OS Kitchen Full Audit — 28 May 2026
 
 **Date:** 2026-05-28  
 **Method:** Read-only repo inspection @ `70a467b` on `main`; inventory commands; artifact review; code path verification; synthesis of post–Era 19 audit family + Era 20 cycles 1–18  
@@ -10,9 +10,9 @@
 
 # 1. Executive Summary
 
-KitchenOS is a **Next.js App Router monolith** restaurant operating system: orders, POS, storefront, KDS, production, packing, inventory, CRM, labor, billing, integrations, and platform admin. Era 19 delivered five **real UX pillars** (Owner Daily Briefing, Launch Wizard, Integration Health Center, operational command-flow convergence, partial operational intelligence). Era 20 cycles 1–18 added **proof wiring, flow proofs, permission-denied guards, and pilot package docs** — but **P0 staging proof remains SKIPPED** (`awaiting_ops_credentials`, 11 env vars). **No paid pilot customer. GO/NO-GO remains NO-GO.**
+OS Kitchen is a **Next.js App Router monolith** restaurant operating system: orders, POS, storefront, KDS, production, packing, inventory, CRM, labor, billing, integrations, and platform admin. Era 19 delivered five **real UX pillars** (Owner Daily Briefing, Launch Wizard, Integration Health Center, operational command-flow convergence, partial operational intelligence). Era 20 cycles 1–18 added **proof wiring, flow proofs, permission-denied guards, and pilot package docs** — but **P0 staging proof remains SKIPPED** (`awaiting_ops_credentials`, 11 env vars). **No paid pilot customer. GO/NO-GO remains NO-GO.**
 
-**Verdict:** KitchenOS is an **impressive demo-grade operational nervous system** in the dashboard for owners/managers. It is **not commercially closed** for paid pilots, enterprise buyers, or competitor parity claims until ops vault credentials, live channel smoke, SSO IdP proof, and a signed LOI exist.
+**Verdict:** OS Kitchen is an **impressive demo-grade operational nervous system** in the dashboard for owners/managers. It is **not commercially closed** for paid pilots, enterprise buyers, or competitor parity claims until ops vault credentials, live channel smoke, SSO IdP proof, and a signed LOI exist.
 
 | Area | Current State | Score | Risk | Next Action |
 |------|---------------|------:|------|-------------|
@@ -424,7 +424,7 @@ Inspection of major interactive surfaces @ `70a467b`. **Verified pattern:** Era 
 
 # 8. Department-by-Department Audit
 
-**Scoring:** 0–100 honest departmental confidence in KitchenOS readiness for their function. **Evidence base:** repo @ `70a467b`, post-Era 19 audits, Era 20 proof wiring.
+**Scoring:** 0–100 honest departmental confidence in OS Kitchen readiness for their function. **Evidence base:** repo @ `70a467b`, post-Era 19 audits, Era 20 proof wiring.
 
 | Role | What They Care About | Current Concerns | Evidence Needed | Top 10 Actions | Score |
 |------|---------------------|------------------|-----------------|---------------|------:|
@@ -788,7 +788,7 @@ Inspection of major interactive surfaces @ `70a467b`. **Verified pattern:** Era 
 
 ## Competitor Matrix
 
-| Competitor | What They Do Better | KitchenOS Advantage | Gap | Copy? | Avoid? | Leapfrog Opportunity |
+| Competitor | What They Do Better | OS Kitchen Advantage | Gap | Copy? | Avoid? | Leapfrog Opportunity |
 |------------|---------------------|---------------------|-----|-------|--------|---------------------|
 | Toast | Hardware, offline, rush KDS, tables | Unified spine, briefing, integration honesty | Hardware/offline | Patterns only | Hardware lock-in | Ops nervous system with proof |
 | Square | SMB UX, Terminal, unified loyalty | Role landing, launch wizard, speed mode | Terminal, loyalty | Terminal defer | Closed ecosystem | Guided TTV wizard |
@@ -810,11 +810,11 @@ Inspection of major interactive surfaces @ `70a467b`. **Verified pattern:** Era 
 | Mailchimp | Email campaigns | CRM base | Automation | defer | — | — |
 | DoorDash/Uber/Grubhub | Marketplace ops | Placeholder honesty | Live APIs | — | Marketplace economics | Direct-order governance |
 
-## Top 30 Competitor Features KitchenOS Lacks
+## Top 30 Competitor Features OS Kitchen Lacks
 
-1. Toast offline POS queue 2. Toast proprietary hardware 3. Toast rush-hour KDS SLO 4. Toast table service depth 5. Square Terminal certification 6. Square unified loyalty 7. Square same-day onboarding proof 8. Shopify theme marketplace 9. Shopify checkout polish at scale 10. 7shifts labor compliance marketplace 11. Klaviyo flow builder 12. MarginEdge invoice OCR 13. MarketMan vendor catalog sync 14. R365 cross-location inventory truth 15. TouchBistro floor plan editor 16. Lightspeed multi-site transfers 17. DoorDash live order inject 18. Uber Eats tablet integration 19. QuickBooks live GL sync 20. Toast gift card network 21. Square mobile owner app 22. Toast labor vs sales realtime 23. Revel franchise permissions 24. Oracle menu engineering at scale 25. SpotOn marketing bundle 26. Clover app marketplace 27. Woo plugin ecosystem hooks 28. Toast xtraCHEF invoice intelligence 29. Toast payroll depth 30. **Competitor proven customer references (KitchenOS: zero paid pilots)**
+1. Toast offline POS queue 2. Toast proprietary hardware 3. Toast rush-hour KDS SLO 4. Toast table service depth 5. Square Terminal certification 6. Square unified loyalty 7. Square same-day onboarding proof 8. Shopify theme marketplace 9. Shopify checkout polish at scale 10. 7shifts labor compliance marketplace 11. Klaviyo flow builder 12. MarginEdge invoice OCR 13. MarketMan vendor catalog sync 14. R365 cross-location inventory truth 15. TouchBistro floor plan editor 16. Lightspeed multi-site transfers 17. DoorDash live order inject 18. Uber Eats tablet integration 19. QuickBooks live GL sync 20. Toast gift card network 21. Square mobile owner app 22. Toast labor vs sales realtime 23. Revel franchise permissions 24. Oracle menu engineering at scale 25. SpotOn marketing bundle 26. Clover app marketplace 27. Woo plugin ecosystem hooks 28. Toast xtraCHEF invoice intelligence 29. Toast payroll depth 30. **Competitor proven customer references (OS Kitchen: zero paid pilots)**
 
-## Top 30 Features KitchenOS Should Not Copy
+## Top 30 Features OS Kitchen Should Not Copy
 
 1. Toast hardware lock-in 2. Marketplace aggregator wedge 3. Oracle 12-month implementation 4. Unified loyalty before pilot proof 5. Cross-channel inventory claims 6. SOC2 claims pre-audit 7. SCIM sales before SSO pilot_ready 8. Public API SLA before partner smoke 9. Offline POS before software pilot stable 10. Rush-hour KDS SLO claims 11. Full Klaviyo clone 12. Full QuickBooks replacement 13. UX-only cycles without proof 14. Fake green integration status 15. Governance score inflation in GTM 16. Copilot auto-actions without approval 17. DoorDash live before direct-order proof 18. Hardware Terminal cert race 19. Woo plugin marketplace before spine proof 20. Enterprise franchise before single-loc pilot 21–30. *(See `competitor-gap-audit-post-era19-2026-05-28.md` avoid list)*
 
@@ -980,7 +980,7 @@ No customer; no LOI; no pilot revenue; no case study; no investor KPIs; pricing 
 
 ## 1. Current Reality
 
-KitchenOS @ `70a467b`: **701 pages**, **614 services**, **365 Prisma models**, unified restaurant OS with **real Era 19 WOW pillars** (Owner Daily Briefing, Launch Wizard, Integration Health) and **Era 20 cycles 1–18 proof wiring** (flow proofs, guard-before-query, trust layer, ICP bridge, pilot package). **P0 staging proof: `awaiting_ops_credentials` (11 env vars). GO/NO-GO: NO-GO. No paid pilot customer. Integration registry: 0 LIVE.**
+OS Kitchen @ `70a467b`: **701 pages**, **614 services**, **365 Prisma models**, unified restaurant OS with **real Era 19 WOW pillars** (Owner Daily Briefing, Launch Wizard, Integration Health) and **Era 20 cycles 1–18 proof wiring** (flow proofs, guard-before-query, trust layer, ICP bridge, pilot package). **P0 staging proof: `awaiting_ops_credentials` (11 env vars). GO/NO-GO: NO-GO. No paid pilot customer. Integration registry: 0 LIVE.**
 
 ## 2. Biggest Blockers
 
@@ -1025,7 +1025,7 @@ Read-only audit discipline; no fake PASS; no deploy/push unless requested; matri
 
 ## 10. Final Recommendation
 
-**Stop product polish. Execute proof.** KitchenOS has crossed a **UX inflection** but not a **commercial inflection**. The next master prompt theme remains **EVOLUTION ERA 20 — PROOF EXECUTION + FIRST PAID PILOT**. Controlled pilot is **ready in product UX** and **not ready in commercial execution**. New master prompt **is required** to prevent regression into Era 19 convergence loops.
+**Stop product polish. Execute proof.** OS Kitchen has crossed a **UX inflection** but not a **commercial inflection**. The next master prompt theme remains **EVOLUTION ERA 20 — PROOF EXECUTION + FIRST PAID PILOT**. Controlled pilot is **ready in product UX** and **not ready in commercial execution**. New master prompt **is required** to prevent regression into Era 19 convergence loops.
 
 ---
 

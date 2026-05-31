@@ -1,7 +1,7 @@
-# KitchenOS — Full final QA matrix (commercial + enterprise readiness)
+# OS Kitchen — Full final QA matrix (commercial + enterprise readiness)
 
 **Date:** 2026-05-14  
-**Supersedes / extends:** `docs/KITCHENOS_FINAL_QA_MATRIX.md` (commercial MVP baseline).
+**Supersedes / extends:** `docs/OS Kitchen_FINAL_QA_MATRIX.md` (commercial MVP baseline).
 
 Use this matrix for **manual regression**, **role-based UAT**, and **sales demo rehearsal**. Record pass/fail and evidence (screenshot or request id) per cell where failures occur.
 

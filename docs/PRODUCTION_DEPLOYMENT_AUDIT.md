@@ -1,6 +1,6 @@
 # Production deployment audit
 
-KitchenOS inventory for GitHub + Vercel + Supabase + Stripe + Resend. Priorities: **blocker** · **high** · **medium** · **low**.
+OS Kitchen inventory for GitHub + Vercel + Supabase + Stripe + Resend. Priorities: **blocker** · **high** · **medium** · **low**.
 
 | Area | Current status | Production risk | Recommended fix | Priority |
 |------|----------------|-----------------|-----------------|----------|

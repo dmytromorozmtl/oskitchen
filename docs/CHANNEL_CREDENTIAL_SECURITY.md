@@ -6,4 +6,4 @@
 - **Audit:** `ChannelCredentialAudit` records `SAVE`, `DISCONNECT`, etc., with JSON metadata **excluding** secrets/ciphertext.
 - **Production:** Save actions fail closed when encryption is not configured.
 
-Rotate credentials: operators should save new keys in the partner console, then paste into KitchenOS to overwrite ciphertext; document partner-side revocation separately.
+Rotate credentials: operators should save new keys in the partner console, then paste into OS Kitchen to overwrite ciphertext; document partner-side revocation separately.

@@ -1,4 +1,4 @@
-# Forecast module audit (KitchenOS)
+# Forecast module audit (OS Kitchen)
 
 **Date:** 2026-05-11
 **Scope:** `/dashboard/forecast`, `services/forecasting/production-forecast.ts`,
@@ -38,7 +38,7 @@ an estimate.
 | 6  | Manual adjustments | None | Operators can't model a holiday, rain day, or corporate order | All | `ForecastAdjustment` with PERCENT / FIXED_QUANTITY / OVERRIDE types and audit trail | P1 |
 | 7  | Buffer configuration | Hard-coded 10% | Cannot tune buffer per category, business, or high-risk SKU | All | `lib/forecast/forecast-buffers.ts` defaults per business mode + per-run override + future product-level rules | P1 |
 | 8  | Confidence labelling | `low`/`medium`/`high` derived only from order count | No notion of MANUAL or combined-source confidence | All | `lib/forecast/forecast-confidence.ts` — LOW / MEDIUM / HIGH / MANUAL | P2 |
-| 9  | Source attribution | Only "recent KitchenOS orders" | Operators can't see why a number was suggested | All | Each `ForecastLine` carries `sourceSummaryJson` describing contributions | P1 |
+| 9  | Source attribution | Only "recent OS Kitchen orders" | Operators can't see why a number was suggested | All | Each `ForecastLine` carries `sourceSummaryJson` describing contributions | P1 |
 | 10 | Integration with Production | None | Forecast has no "send to production" action | Meal Prep, Catering, Restaurant | Server action that copies recommended quantities into a `ProductionBatch` (creates draft) | P1 |
 | 11 | Integration with Ingredient Demand | None | Forecast has no "send to ingredient demand" action | All | Server action that copies forecasted product quantities into an `IngredientDemandRun` draft | P1 |
 | 12 | Catering integration | None | Accepted events do not shift forecast | Catering, Restaurant, Bakery, Meal Prep | Source `ACCEPTED_CATERING_EVENTS` — pulls quotes with status `ACCEPTED` / `CONVERTED_TO_ORDER` whose `eventDate` falls in window | P1 |

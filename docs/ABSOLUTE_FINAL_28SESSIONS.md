@@ -1,4 +1,4 @@
-# KitchenOS — Absolute Final State (28 Sessions)
+# OS Kitchen — Absolute Final State (28 Sessions)
 
 **Date:** 20 May 2026  
 **Production:** https://os-kitchen.com  
@@ -178,13 +178,13 @@ DoorDash, Grubhub, Order Aggregation Hub, AI Forecast, Sub-Recipe Costing
 
 ## Known scaffolds (not blockers)
 
-Live third-party APIs (DoorDash Drive, Grubhub, OCR) are still placeholder-only unless the capability matrix explicitly says otherwise. Credentials can be prepared, but KitchenOS should not imply live provider traffic from env presence or local scaffold rows.
+Live third-party APIs (DoorDash Drive, Grubhub, OCR) are still placeholder-only unless the capability matrix explicitly says otherwise. Credentials can be prepared, but OS Kitchen should not imply live provider traffic from env presence or local scaffold rows.
 
 ---
 
 ## Sign-off
 
-KitchenOS is **system-complete**. All **35 Gap Analysis** items are closed. Production is healthy. All planned modules are implemented, migrated, tested, and deployed.
+OS Kitchen is **system-complete**. All **35 Gap Analysis** items are closed. Production is healthy. All planned modules are implemented, migrated, tested, and deployed.
 
 The next step is not a prompt — it is a real operator signing up at https://os-kitchen.com/signup
 

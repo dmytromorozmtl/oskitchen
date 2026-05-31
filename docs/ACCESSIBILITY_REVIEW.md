@@ -1,4 +1,4 @@
-# Accessibility review — KitchenOS
+# Accessibility review — OS Kitchen
 
 Practical improvements toward WCAG-aligned patterns. This document does **not** constitute a legal compliance certification.
 

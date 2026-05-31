@@ -1,8 +1,8 @@
-# KitchenOS Extreme CTO-Grade Full System Audit — 17 May 2026
+# OS Kitchen Extreme CTO-Grade Full System Audit — 17 May 2026
 
 **Audit date:** 17 May 2026  
 **Auditor role:** Read-only CTO / security / SRE / product systems review  
-**Repository:** `/Users/dmytro/Desktop/2026/KitchenOS`  
+**Repository:** `/Users/dmytro/Desktop/2026/OS Kitchen`  
 **Scope:** Full static codebase + safe command verification (no writes except this file)  
 **Method:** Static inspection, grep/glob inventories, prior docs crosswalk, safe npm/prisma commands  
 
@@ -14,9 +14,9 @@
 
 ## Executive Summary
 
-KitchenOS is a **large, feature-dense B2B food-operations platform** built on **Next.js 15**, **React 19**, **Prisma 6**, **PostgreSQL (Supabase)**, with **~3,350** TypeScript/TSX source files, **297** Prisma models, **253** enums, **599** App Router pages, **241** API route handlers, **103** server action modules (**618** exported functions), and **466** service modules. The product spans **dashboard operations** (orders, POS, production, packing, routes), **native storefront commerce**, **integrations** (WooCommerce/Shopify beta paths), **platform admin**, and an unusually large **storefront theme-experiment / compliance scaffold** surface (131 cron routes, 60 quarantined experiment sync services).
+OS Kitchen is a **large, feature-dense B2B food-operations platform** built on **Next.js 15**, **React 19**, **Prisma 6**, **PostgreSQL (Supabase)**, with **~3,350** TypeScript/TSX source files, **297** Prisma models, **253** enums, **599** App Router pages, **241** API route handlers, **103** server action modules (**618** exported functions), and **466** service modules. The product spans **dashboard operations** (orders, POS, production, packing, routes), **native storefront commerce**, **integrations** (WooCommerce/Shopify beta paths), **platform admin**, and an unusually large **storefront theme-experiment / compliance scaffold** surface (131 cron routes, 60 quarantined experiment sync services).
 
-**Commercial posture (evidence-based):** Prior release decision docs recommend **closed beta / paid pilot** for meal-prep / preorder operators—not broad self-serve enterprise claims (`docs/KITCHENOS_RELEASE_DECISION_REPORT.md`). Capability matrix (`lib/capabilities/capability-matrix.ts`) is the honest integration source of truth.
+**Commercial posture (evidence-based):** Prior release decision docs recommend **closed beta / paid pilot** for meal-prep / preorder operators—not broad self-serve enterprise claims (`docs/OS Kitchen_RELEASE_DECISION_REPORT.md`). Capability matrix (`lib/capabilities/capability-matrix.ts`) is the honest integration source of truth.
 
 **Engineering health (17 May 2026 local verification):**
 
@@ -80,9 +80,9 @@ KitchenOS is a **large, feature-dense B2B food-operations platform** built on **
 |----------|---------|------|
 | `docs/audit17may.md` | **No** | Referenced by remediation; **not in repo** |
 | `docs/audit1712may.md` | Created by this audit | — |
-| `docs/KITCHENOS_FULL_SYSTEM_ANALYSIS_AND_ROADMAP.md` | Yes | Strategic roadmap |
-| `docs/KITCHENOS_RELEASE_DECISION_REPORT.md` | Yes | Closed beta decision |
-| `docs/KITCHENOS_RELEASE_HARDENING_FINAL_REPORT.md` | Yes | Hardening summary |
+| `docs/OS Kitchen_FULL_SYSTEM_ANALYSIS_AND_ROADMAP.md` | Yes | Strategic roadmap |
+| `docs/OS Kitchen_RELEASE_DECISION_REPORT.md` | Yes | Closed beta decision |
+| `docs/OS Kitchen_RELEASE_HARDENING_FINAL_REPORT.md` | Yes | Hardening summary |
 | `docs/IDOR_MUTATION_INVENTORY.md` | Yes v1.3 (2026-05-17) | Mutation security |
 | `docs/ENGINEERING_READINESS_INDEX.md` | Yes | Doc index |
 | `docs/MODULE_DOCUMENTATION_MAP.md` | Yes | Module→docs |
@@ -221,7 +221,7 @@ See **Appendix A** for generation commands and **Appendix B** for API grouping.
 | Duplicate catering actions | `actions/catering.ts` vs `catering-quotes.ts` | Consolidate or document |
 | Two location services | `services/location/` vs `services/locations/` | Merge long-term |
 | Experiment naming in crons | `martian-orbital-dtn-relay-sync` etc. | Mark experimental in ops docs only |
-| Docs proliferation | 15+ `KITCHENOS_*_COMPLETION_REPORT.md` | Archive; single canonical readiness index |
+| Docs proliferation | 15+ `OS Kitchen_*_COMPLETION_REPORT.md` | Archive; single canonical readiness index |
 
 ---
 
@@ -906,7 +906,7 @@ Source: `lib/capabilities/capability-matrix.ts` + `scripts/verify-marketing-clai
 
 *General category knowledge — **Requires market verification** for pricing/feature parity.*
 
-| Category | Competitor examples | KitchenOS wedge | Avoid competing |
+| Category | Competitor examples | OS Kitchen wedge | Avoid competing |
 |----------|---------------------|-----------------|---------------|
 | Restaurant POS | Toast, Square, Clover | Ops + preorder + kitchen workflow | Full offline POS, hardware |
 | Commerce | Shopify, Woo | **Integrated ops after sale** | Theme app store scale |
@@ -925,7 +925,7 @@ Source: `lib/capabilities/capability-matrix.ts` + `scripts/verify-marketing-clai
 
 **Best docs:** `IDOR_MUTATION_INVENTORY.md`, `CRON_INVENTORY.md`, `ENGINEERING_READINESS_INDEX.md`, `STOREFRONT_*` runbooks, beta playbooks.
 
-**Stale/duplicate:** Multiple `KITCHENOS_*_1000*` completion reports; missing `audit17may.md`.
+**Stale/duplicate:** Multiple `OS Kitchen_*_1000*` completion reports; missing `audit17may.md`.
 
 **Canonical set (recommended):** This audit + `ENGINEERING_READINESS_INDEX` + `capability-matrix.ts` + `MODULE_DOCUMENTATION_MAP.md`.
 
@@ -1163,9 +1163,9 @@ Major prefixes: `dashboard/`, `storefront/`, `pos/`, `ui/`, `permissions/`, `ord
 
 **Tier 1 (canonical):** `ENGINEERING_READINESS_INDEX.md`, `IDOR_MUTATION_INVENTORY.md`, `CRON_INVENTORY.md`, `MODULE_DOCUMENTATION_MAP.md`, `TESTING.md`, `BETA_START_HERE.md`, storefront runbooks.
 
-**Tier 2 (release):** `KITCHENOS_RELEASE_DECISION_REPORT.md`, `PRODUCTION_DEPLOY_CHECKLIST.md`, `READINESS_REPORT_17MAY_FINAL.md`.
+**Tier 2 (release):** `OS Kitchen_RELEASE_DECISION_REPORT.md`, `PRODUCTION_DEPLOY_CHECKLIST.md`, `READINESS_REPORT_17MAY_FINAL.md`.
 
-**Tier 3 (archive candidate):** `KITCHENOS_*_COMPLETION_REPORT.md` duplicates, old phase completion reports.
+**Tier 3 (archive candidate):** `OS Kitchen_*_COMPLETION_REPORT.md` duplicates, old phase completion reports.
 
 ---
 

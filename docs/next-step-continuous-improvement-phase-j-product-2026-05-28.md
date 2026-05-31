@@ -1,4 +1,4 @@
-# KitchenOS — Phase J: Continuous improvement loop (post-honest Sustained ops)
+# OS Kitchen — Phase J: Continuous improvement loop (post-honest Sustained ops)
 
 **Status:** Product surfaces + Improvement loop integrity guard **IMPLEMENTED** · Human pure-mode attestation **REQUIRED**  
 **Policy:** `era22-continuous-improvement-loop-v1` · Integrity `era34-continuous-improvement-loop-integrity-v1`  

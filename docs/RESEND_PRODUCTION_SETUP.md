@@ -8,7 +8,7 @@
 
 ## Sender
 
-- Set `RESEND_FROM_EMAIL` to an address on the verified domain, e.g. `KitchenOS <orders@yourdomain.com>`.
+- Set `RESEND_FROM_EMAIL` to an address on the verified domain, e.g. `OS Kitchen <orders@yourdomain.com>`.
 - Set `RESEND_API_KEY` in Vercel (**server only**).
 
 ## Local testing

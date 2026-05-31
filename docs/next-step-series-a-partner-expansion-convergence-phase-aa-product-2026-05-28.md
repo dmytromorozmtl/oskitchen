@@ -1,4 +1,4 @@
-# KitchenOS — Phase AA: Era25 Series A partner expansion convergence (post-honest scale)
+# OS Kitchen — Phase AA: Era25 Series A partner expansion convergence (post-honest scale)
 
 **Status:** Product surfaces + Series A convergence integrity guard **IMPLEMENTED** · Human Series A attestation **REQUIRED**  
 **Policy:** `era25-series-a-partner-expansion-convergence-v1` · Integrity `era51-series-a-partner-expansion-convergence-integrity-v1`  

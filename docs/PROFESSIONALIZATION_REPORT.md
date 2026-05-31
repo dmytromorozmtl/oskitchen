@@ -8,7 +8,7 @@
 
 ## Executive summary
 
-KitchenOS already spans authentication, operations, integrations, growth, and monetization. This pass **documents the global maturity picture**, **standardizes architectural landing zones**, **adds operational UX improvements on the dashboard home**, **introduces reliability helpers** (DB health, transactions, retry, typed errors), **lays an internal event bus**, **seeds automation templates in code**, and **ships an automation database foundation** for future rules engines.
+OS Kitchen already spans authentication, operations, integrations, growth, and monetization. This pass **documents the global maturity picture**, **standardizes architectural landing zones**, **adds operational UX improvements on the dashboard home**, **introduces reliability helpers** (DB health, transactions, retry, typed errors), **lays an internal event bus**, **seeds automation templates in code**, and **ships an automation database foundation** for future rules engines.
 
 Full delivery of Phases 4–15 (deep UX rebuilds across production, packing, delivery, CRM, etc.) is **intentionally staged** to avoid destabilizing a working commercial codebase in a single diff.
 

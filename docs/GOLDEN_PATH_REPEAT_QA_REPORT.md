@@ -27,7 +27,7 @@
 
 ## Notes
 
-- Signup toast: Welcome to KitchenOS! Let's set up your workspace.
+- Signup toast: Welcome to OS Kitchen! Let's set up your workspace.
 - Signup URL after 12s: https://os-kitchen.com/onboarding
 - Supabase auto-confirm enabled — check-email path not required
 
