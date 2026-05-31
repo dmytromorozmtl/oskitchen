@@ -114,7 +114,7 @@ async function main() {
       : `GET /deck → ${deck.status} — deploy latest main to enable`,
   });
 
-  console.log(`\nKitchenOS GTM GSC preflight — ${origin}\n`);
+  console.log(`\nOS Kitchen GTM GSC preflight — ${origin}\n`);
   let failed = 0;
   let warnings = 0;
   for (const c of checks) {

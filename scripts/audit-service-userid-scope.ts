@@ -90,7 +90,7 @@ function main() {
     // no baseline yet
   }
 
-  console.log("KitchenOS — service userId where audit\n");
+  console.log("OS Kitchen — service userId where audit\n");
   console.log(`Suspicious \`where: { userId\` hits: ${hits.length} (baseline max ${baseline})\n`);
 
   for (const h of hits.slice(0, 40)) {

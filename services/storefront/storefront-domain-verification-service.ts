@@ -77,7 +77,7 @@ export async function runStorefrontDomainVerification(storefrontId: string): Pro
   });
   const checkedAt = new Date();
   const sslNote =
-    "Automatic TLS certificate status is managed by your hosting provider (for example Vercel). KitchenOS does not query certificate chains from this dashboard.";
+    "Automatic TLS certificate status is managed by your hosting provider (for example Vercel). OS Kitchen does not query certificate chains from this dashboard.";
 
   if (!sf) {
     return {
@@ -166,7 +166,7 @@ export async function refreshStorefrontDomainRouting(storefrontId: string): Prom
   });
   const checkedAt = new Date();
   const sslNote =
-    "Automatic TLS certificate status is managed by your hosting provider. KitchenOS does not inspect certificates from here.";
+    "Automatic TLS certificate status is managed by your hosting provider. OS Kitchen does not inspect certificates from here.";
 
   if (!sf) {
     return {

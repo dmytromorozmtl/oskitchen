@@ -61,7 +61,7 @@ function baseMaturity(provider: IntegrationProvider): {
       return {
         maturity: "PARTNER_ACCESS_REQUIRED",
         works: "Operational data model and mapping surfaces for marketplace-shaped orders when partner access exists.",
-        gaps: "Uber Eats traffic requires appropriate partner/API access — KitchenOS does not imply marketplace approval.",
+        gaps: "Uber Eats traffic requires appropriate partner/API access — OS Kitchen does not imply marketplace approval.",
         note: "Treat as partner-gated; do not demo as live marketplace unless you have real credentials and scope.",
       };
     case "UBER_DIRECT":

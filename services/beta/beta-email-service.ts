@@ -17,7 +17,7 @@ export function betaApprovalEmailText(params: {
   const cohort = params.cohortName ? `\nCohort: ${params.cohortName}` : "";
   return {
     subject: `${APP_NAME} beta — you’re approved`,
-    text: `Hi ${params.contactName},\n\nThanks for applying on behalf of ${params.businessName}. You’re approved for the KitchenOS early-access program.${cohort}\n\nNext: our team will send onboarding steps and calendar options shortly.\n\n— KitchenOS founders`,
+    text: `Hi ${params.contactName},\n\nThanks for applying on behalf of ${params.businessName}. You’re approved for the OS Kitchen early-access program.${cohort}\n\nNext: our team will send onboarding steps and calendar options shortly.\n\n— OS Kitchen founders`,
   };
 }
 
@@ -27,7 +27,7 @@ export function betaWaitlistEmailText(params: {
 }): { subject: string; text: string } {
   return {
     subject: `${APP_NAME} beta — you’re on the waitlist`,
-    text: `Hi ${params.contactName},\n\nWe received your application for ${params.businessName}. Demand is high; you’re officially waitlisted and we’ll reach out as capacity opens.\n\n— KitchenOS founders`,
+    text: `Hi ${params.contactName},\n\nWe received your application for ${params.businessName}. Demand is high; you’re officially waitlisted and we’ll reach out as capacity opens.\n\n— OS Kitchen founders`,
   };
 }
 

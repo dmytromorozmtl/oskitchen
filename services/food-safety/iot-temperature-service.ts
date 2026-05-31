@@ -56,7 +56,7 @@ export async function ingestIotTemperatureReading(
   if (outOfRange && alertTo) {
     await sendSmsNotification({
       to: alertTo,
-      body: `KitchenOS: ${device.label ?? payload.deviceId} temp ${tempF.toFixed(1)}°F out of range.`,
+      body: `OS Kitchen: ${device.label ?? payload.deviceId} temp ${tempF.toFixed(1)}°F out of range.`,
     }).catch(() => undefined);
   }
 

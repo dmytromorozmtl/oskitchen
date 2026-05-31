@@ -30,7 +30,7 @@ function main(): void {
   });
   const summary = storefrontReleaseEnvSummary(checks);
 
-  console.log("KitchenOS — storefront env check (secrets not logged)\n");
+  console.log("OS Kitchen — storefront env check (secrets not logged)\n");
   if (loaded.length) {
     console.log(`Loaded: ${loaded.join(", ")}\n`);
   } else {

@@ -18,7 +18,7 @@ function main() {
   const allowlist = readJson<{ paths?: string[] }>("config/tenant-scope-pilot-allowlist.json");
   const allowPaths = allowlist?.paths?.length ?? 0;
 
-  console.log("KitchenOS — Paid pilot remaining work\n");
+  console.log("OS Kitchen — Paid pilot remaining work\n");
   console.log("CODE (repository) — expected complete");
   console.log("  • Phases 1–12 migrations + scope helpers");
   console.log("  • npm run verify:pilot-readiness");

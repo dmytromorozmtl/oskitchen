@@ -82,7 +82,7 @@ const PLAN = [
 
 function main() {
   console.log("╔══════════════════════════════════════════════════════════════╗");
-  console.log("║  KitchenOS — Closed Beta Day 1 (steps 1–6)                   ║");
+  console.log("║  OS Kitchen — Closed Beta Day 1 (steps 1–6)                   ║");
   console.log("╚══════════════════════════════════════════════════════════════╝\n");
 
   for (const row of PLAN) {

@@ -11,7 +11,7 @@ import { P0_OPS_VAULT_PHASES } from "@/lib/commercial/p0-ops-vault-phases-era21"
 
 function buildTemplate(): string {
   const lines: string[] = [
-    "# KitchenOS P0 ops vault template — NEVER commit real values",
+    "# OS Kitchen P0 ops vault template — NEVER commit real values",
     "# Policy: era17-p0-staging-proof-unblock-v1",
     "# Playbook: docs/p0-ops-vault-execution-playbook-2026-05-28.md",
     "",

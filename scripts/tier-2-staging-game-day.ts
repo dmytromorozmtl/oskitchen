@@ -5,7 +5,7 @@
  */
 
 const tier2StagingGameDay = {
-  title: "KitchenOS Tier 2 Staging Game-Day",
+  title: "OS Kitchen Tier 2 Staging Game-Day",
   store: process.env.STAGING_EXPERIMENT_STORE_SLUG ?? "<your-staging-store>",
   enable_order: [
     "THEME_EXPERIMENT_STRICT_PUBLISH_GATES=1",

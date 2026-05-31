@@ -202,7 +202,7 @@ export async function sendNotification(input: SendNotificationInput): Promise<Se
 
   // 6. Real send via Resend
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL ?? "KitchenOS <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM_EMAIL ?? "OS Kitchen <onboarding@resend.dev>";
   if (!key) {
     const logId = await recordLog(input, "SKIPPED", { subject: rendered.subject, errorMessage: "RESEND_API_KEY missing." });
     return { ok: false, status: "SKIPPED", logId, reason: "RESEND_API_KEY missing." };

@@ -599,7 +599,7 @@ export async function loadOwnerDailyBriefing(
   const smokeNextAction = smokeArtifacts?.depth.nextSmokeAction ?? null;
   const p0OpsVault = buildP0OpsVaultUiSlice(
     commercialOps?.p0Staging?.summary ?? null,
-    commercialOps?.vaultReadiness.report ?? null,
+    commercialOps?.vaultReadiness?.report ?? null,
   );
   const tier2GoldenPath = buildTier2GoldenPathUiSlice({
     p0ProofStatus: commercialOps?.p0Staging.summary?.p0ProofStatus ?? null,
@@ -616,10 +616,10 @@ export async function loadOwnerDailyBriefing(
             p0Staging: commercialOps?.p0Staging.summary ?? null,
             tier2Staging: commercialOps?.tier2Staging.summary ?? null,
             goNoGo: commercialOps?.goNoGo.summary ?? null,
-            vaultReport: commercialOps?.vaultReadiness.report ?? null,
+            vaultReport: commercialOps?.vaultReadiness?.report ?? null,
           }),
           {
-            vaultReport: commercialOps?.vaultReadiness.report ?? null,
+            vaultReport: commercialOps?.vaultReadiness?.report ?? null,
             p0Staging: commercialOps?.p0Staging.summary ?? null,
           },
         )

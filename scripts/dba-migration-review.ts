@@ -93,7 +93,7 @@ function migrateStatus(): string {
 function renderPacket(rows: MigrationRow[], status: string): string {
   const remediation = rows.filter((r) => r.remediation);
   const lines: string[] = [
-    "# DBA Migration Approval Packet — KitchenOS",
+    "# DBA Migration Approval Packet — OS Kitchen",
     "",
     `Generated: ${new Date().toISOString()}`,
     "",

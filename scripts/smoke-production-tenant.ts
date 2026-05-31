@@ -71,7 +71,7 @@ async function probe(path: string, label: string, assert: (res: Response) => boo
 }
 
 async function main() {
-  console.log(`KitchenOS production tenant smoke — ${base}\n`);
+  console.log(`OS Kitchen production tenant smoke — ${base}\n`);
 
   await probe("/api/health", "Health API", (r) => r.ok || r.status === 503);
   await probe("/login", "Login page", (r) => r.ok);

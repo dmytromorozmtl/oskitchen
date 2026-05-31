@@ -6,7 +6,9 @@ set -euo pipefail
 if [[ -n "${VERCEL:-}" ]]; then
   export NODE_OPTIONS="--max-old-space-size=14336"
   export NEXT_STATIC_GENERATION_MAX_CONCURRENCY="1"
-  echo "▶ Vercel remote build (${NODE_OPTIONS}, SSG concurrency=1)"
+  # Webpack cache warnings flood the build log (>4 MB) and fail the deployment on Vercel.
+  export NEXT_WEBPACK_CACHE=0
+  echo "▶ Vercel remote build (${NODE_OPTIONS}, SSG concurrency=1, webpack cache off)"
 else
   export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=8192}"
 fi
@@ -21,6 +23,21 @@ for f in .env.production.local .vercel/.env.production.local; do
     break
   fi
 done
+
+# Vercel env pull / dashboard can leave KEY="" — treat as unset.
+for _kos_var in NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY; do
+  if [[ -z "${!_kos_var//[[:space:]]/}" ]]; then
+    unset "$_kos_var"
+  fi
+done
+if [[ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" || -z "${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}" ]] && [[ -f .env.local ]]; then
+  set -a
+  # shellcheck source=/dev/null
+  source .env.local
+  set +a
+fi
+export NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL:-https://eycxwxxyrzdhhqcnxifz.supabase.co}"
+export NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-sb_publishable_dD4M3pNzWjB-8Ae4-ZIKKw_U8MXvFm4}"
 
 if [[ -f .next/BUILD_ID ]] && [[ -f .next/routes-manifest.json ]]; then
   echo "✓ Reusing existing Next.js build (.next/BUILD_ID=$(cat .next/BUILD_ID))"

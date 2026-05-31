@@ -221,7 +221,7 @@ async function checkIntegrations(userId: string, projectId: string): Promise<Rea
         required: false,
         status: "WARN",
         explanation:
-          "No live-capable sales-channel integrations configured. Optional if KitchenOS Storefront is the only launch channel.",
+          "No live-capable sales-channel integrations configured. Optional if OS Kitchen Storefront is the only launch channel.",
         actionRoute: "/dashboard/integrations",
         resultJson: { count: 0, liveCapableOnly: true },
       },

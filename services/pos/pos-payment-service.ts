@@ -8,7 +8,7 @@ export function posPaymentAllowedWhileOffline(mode: PaymentModeKey): boolean {
 
 export function describePosPaymentBlockReason(mode: PaymentModeKey): string {
   if (modeIsPlaceholder(mode)) {
-    return "In-app or integrated card flows are disabled offline so KitchenOS never records a false paid state.";
+    return "In-app or integrated card flows are disabled offline so OS Kitchen never records a false paid state.";
   }
   return "";
 }

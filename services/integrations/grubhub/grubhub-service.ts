@@ -37,8 +37,8 @@ export function getGrubhubCapabilitySnapshot(
 
 export function getGrubhubPlaceholderMessage(hasCredentials = getGrubhubCapabilitySnapshot().hasCredentials): string {
   return hasCredentials
-    ? "Grubhub credentials are present, but KitchenOS still keeps Grubhub in placeholder mode. Live sync and order ingestion are not production-ready."
-    : "Grubhub is still placeholder-only. Credentials can be prepared, but KitchenOS does not run live Grubhub flows yet.";
+    ? "Grubhub credentials are present, but OS Kitchen still keeps Grubhub in placeholder mode. Live sync and order ingestion are not production-ready."
+    : "Grubhub is still placeholder-only. Credentials can be prepared, but OS Kitchen does not run live Grubhub flows yet.";
 }
 
 export async function createGrubhubOrder(

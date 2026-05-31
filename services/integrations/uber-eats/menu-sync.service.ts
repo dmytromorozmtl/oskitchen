@@ -22,7 +22,7 @@ type UberMenuCategory = {
 const UBER_MENU_API =
   process.env.UBER_EATS_MENU_API_BASE ?? "https://api.uber.com/v2/eats/stores";
 
-/** Build Uber Eats Menu API v2 payload from KitchenOS menus/products. */
+/** Build Uber Eats Menu API v2 payload from OS Kitchen menus/products. */
 export async function buildUberEatsMenuPayload(
   ownerUserId: string,
   locationId?: string | null,

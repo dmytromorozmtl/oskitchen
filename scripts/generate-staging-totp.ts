@@ -21,7 +21,7 @@ function main() {
 
   const issuer =
     process.argv.find((a) => a.startsWith("--issuer="))?.split("=")[1] ??
-    "KitchenOS-Staging";
+    "OS Kitchen-Staging";
   const secret = authenticator.generateSecret();
   const uri = authenticator.keyuri("platform-admin", issuer, secret);
 

@@ -14,7 +14,7 @@ export function buildPosReceiptText(input: {
   paymentMode: PaymentModeKey;
   fulfillment: string;
 }): string {
-  const header = input.businessName ?? "KitchenOS";
+  const header = input.businessName ?? "OS Kitchen";
   const lines = input.lines
     .map((l) => `${l.quantity}× ${l.title} @ ${l.unitPrice.toFixed(2)} = ${l.lineTotal.toFixed(2)}`)
     .join("\n");

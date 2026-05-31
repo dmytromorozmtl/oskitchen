@@ -45,7 +45,7 @@ function main() {
   }
 
   const loaded = loadBetaEnv();
-  console.log("=== KitchenOS Beta Setup ===\n");
+  console.log("=== OS Kitchen Beta Setup ===\n");
   if (loaded.length) console.log(`Env loaded: ${loaded.join(", ")}\n`);
 
   if (fixEnv) {

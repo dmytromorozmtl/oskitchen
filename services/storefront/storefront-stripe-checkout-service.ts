@@ -69,7 +69,7 @@ export async function createStorefrontStripeCheckoutSession(
               currency,
               unit_amount: amountMinor,
               product_data: {
-                name: input.orderNumber ? `KitchenOS order ${input.orderNumber}` : "KitchenOS storefront order",
+                name: input.orderNumber ? `OS Kitchen order ${input.orderNumber}` : "OS Kitchen storefront order",
               },
             },
           },

@@ -2,12 +2,12 @@
  * Generate platform impersonation TOTP secret + otpauth URI (step 3).
  *
  *   npm run setup:impersonation-totp
- *   npm run setup:impersonation-totp -- --issuer=KitchenOS-Staging
+ *   npm run setup:impersonation-totp -- --issuer=OS Kitchen-Staging
  */
 import { authenticator } from "otplib";
 
 function main() {
-  const issuer = process.argv.find((a) => a.startsWith("--issuer="))?.split("=")[1] ?? "KitchenOS-Platform";
+  const issuer = process.argv.find((a) => a.startsWith("--issuer="))?.split("=")[1] ?? "OS Kitchen-Platform";
   const secret = authenticator.generateSecret();
   const label = `${issuer}:impersonation`;
 

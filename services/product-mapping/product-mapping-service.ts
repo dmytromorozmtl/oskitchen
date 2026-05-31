@@ -215,7 +215,7 @@ export async function approveMapping(input: ApproveInput): Promise<{ ok: boolean
   });
   if (!existing) return { ok: false, error: "Mapping not found" };
   const targetProductId = input.internalProductId ?? existing.internalProductId;
-  if (!targetProductId) return { ok: false, error: "Pick a KitchenOS product before approving." };
+  if (!targetProductId) return { ok: false, error: "Pick a OS Kitchen product before approving." };
 
   const product = await prisma.product.findFirst({
     where: await productByIdWhereForOwner(input.userId, targetProductId),

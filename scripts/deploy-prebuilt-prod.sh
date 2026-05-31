@@ -109,11 +109,22 @@ source .env.production.local 2>/dev/null || true
 # shellcheck source=/dev/null
 source .env.staging.local 2>/dev/null || true
 set +a
+# Vercel env pull can write KEY="" — treat whitespace-only as unset so defaults apply.
+for _kos_var in NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY; do
+  if [[ -z "${!_kos_var//[[:space:]]/}" ]]; then
+    unset "$_kos_var"
+  fi
+done
+if [[ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" || -z "${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}" ]] && [[ -f .env.local ]]; then
+  # shellcheck source=/dev/null
+  source .env.local
+fi
 export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://os-kitchen.com}"
 export NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV:-production}"
 export NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-sb_publishable_dD4M3pNzWjB-8Ae4-ZIKKw_U8MXvFm4}"
 export NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL:-https://eycxwxxyrzdhhqcnxifz.supabase.co}"
 export NEXT_TELEMETRY_DISABLED=1
+export NEXT_WEBPACK_CACHE="${NEXT_WEBPACK_CACHE:-0}"
 if [[ -x "./node_modules/.bin/vercel" ]]; then
   VERCEL_BIN="./node_modules/.bin/vercel"
 else

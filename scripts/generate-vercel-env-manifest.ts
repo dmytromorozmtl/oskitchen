@@ -97,7 +97,7 @@ function main(): void {
     "",
     "## Vercel UI — step by step",
     "",
-    "1. Open [Vercel Dashboard](https://vercel.com) → your KitchenOS project.",
+    "1. Open [Vercel Dashboard](https://vercel.com) → your OS Kitchen project.",
     "2. **Settings → Environment Variables**.",
     "3. For each row below with **✓ SET** locally: **Add** → name = variable → value from 1Password / `.env.production.local` → Environment = **Production** only (unless noted).",
     "4. **Deployments → … → Redeploy** Production (required after any env change).",

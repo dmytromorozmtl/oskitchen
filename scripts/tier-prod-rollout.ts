@@ -5,7 +5,7 @@
  */
 
 const tierProdRollout = {
-  title: "KitchenOS Theme Experiment — Tiered Prod Rollout",
+  title: "OS Kitchen Theme Experiment — Tiered Prod Rollout",
   tier_0_core_ab: {
     description: "Core A/B only — no advanced gates",
     env: {

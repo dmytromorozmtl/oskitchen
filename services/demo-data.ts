@@ -470,6 +470,7 @@ export async function seedDemoWorkspace(
       data: {
         id: randomUUID(),
         userId,
+        workspaceId,
         customerName: c.name,
         customerEmail: c.email,
         customerPhone: c.phone,

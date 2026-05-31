@@ -326,7 +326,7 @@ async function step6(): Promise<GateResult[]> {
 }
 
 function printReport(report: LaunchReport) {
-  console.log("\n=== KitchenOS Beta Launch Report ===\n");
+  console.log("\n=== OS Kitchen Beta Launch Report ===\n");
   for (const [stepId, block] of Object.entries(report.steps)) {
     const meta = LAUNCH_STEPS[Number(stepId) as LaunchStepId];
     console.log(`## Step ${stepId}: ${block.title} (${meta.owner})`);

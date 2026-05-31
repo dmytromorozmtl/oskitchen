@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { MAINTENANCE_MODE_RHYTHM_CALENDAR_DOC, MAINTENANCE_MODE_STEP12_DOC } from "@/lib/commercial/maintenance-mode-phases-era24";
 
 function buildRhythmCalendar(): string {
-  return `# KitchenOS — Maintenance mode rhythm calendar
+  return `# OS Kitchen — Maintenance mode rhythm calendar
 
 **Policy:** \`era24-maintenance-mode-v1\` · **Backlog:** \`KOS-E24-012\`
 

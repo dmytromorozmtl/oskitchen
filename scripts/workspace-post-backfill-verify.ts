@@ -102,7 +102,7 @@ async function main() {
     tables = tables.filter((t) => set.has(t.table) || set.has(t.model));
   }
 
-  console.log("KitchenOS — post-backfill workspace_id verification\n");
+  console.log("OS Kitchen — post-backfill workspace_id verification\n");
   console.log(`Checking ${tables.length} user-scoped tables…\n`);
 
   const failures: { table: string; model: string; nullCount: number }[] = [];

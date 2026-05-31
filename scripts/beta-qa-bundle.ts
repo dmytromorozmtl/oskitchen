@@ -12,7 +12,7 @@ function main() {
   if (withPlaywright) args.push("--with-playwright");
   args.push("--json");
 
-  console.log("=== KitchenOS beta QA bundle (step 4) ===\n");
+  console.log("=== OS Kitchen beta QA bundle (step 4) ===\n");
   const r = spawnSync("npm", args, {
     stdio: "inherit",
     env: process.env,

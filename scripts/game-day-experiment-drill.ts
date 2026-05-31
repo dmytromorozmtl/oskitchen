@@ -5,7 +5,7 @@
  */
 
 const drill = {
-  title: "KitchenOS experiment game day",
+  title: "OS Kitchen experiment game day",
   duration_minutes: 45,
   participants: ["storefront-oncall", "platform"],
   scenarios: [

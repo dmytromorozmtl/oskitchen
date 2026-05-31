@@ -39,8 +39,8 @@ export function isDoorDashConfigured(creds: DoorDashCredentials = credsFromEnv()
 
 export function getDoorDashPlaceholderMessage(hasCredentials = getDoorDashCapabilitySnapshot().hasCredentials): string {
   return hasCredentials
-    ? "DoorDash credentials are present, but KitchenOS still keeps DoorDash in placeholder mode. Live quotes, deliveries, menu sync, and order import are not production-ready."
-    : "DoorDash is still placeholder-only. Credentials can be prepared, but KitchenOS does not run live DoorDash flows yet.";
+    ? "DoorDash credentials are present, but OS Kitchen still keeps DoorDash in placeholder mode. Live quotes, deliveries, menu sync, and order import are not production-ready."
+    : "DoorDash is still placeholder-only. Credentials can be prepared, but OS Kitchen does not run live DoorDash flows yet.";
 }
 
 export async function getDoorDashQuote(
@@ -105,7 +105,7 @@ export async function syncMenuToDoorDash(userId: string, _menuId?: string) {
 }
 
 /**
- * Fetch DoorDash orders and import them into KitchenOS.
+ * Fetch DoorDash orders and import them into OS Kitchen.
  */
 export async function fetchDoorDashOrders(userId: string) {
   throw new Error(`DoorDash order import disabled for ${userId}: ${getDoorDashPlaceholderMessage()}`);

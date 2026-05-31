@@ -12,7 +12,7 @@ function main(): void {
 
   const issues = collectProductionReadinessIssues();
 
-  console.log("KitchenOS startup readiness\n");
+  console.log("OS Kitchen startup readiness\n");
   console.log(`NODE_ENV=${process.env.NODE_ENV ?? "unset"}`);
   console.log(`fatal_on_boot=${shouldFatalOnNodeStartup() ? "yes" : "no"}\n`);
 

@@ -26,7 +26,7 @@ const SAMPLE_DLQ_LOG = {
 };
 
 const config = {
-  name: "KitchenOS — storefront edge sync DLQ",
+  name: "OS Kitchen — storefront edge sync DLQ",
   description:
     "Forwards critical edge sync job failures to Slack. Matches logger.error('storefront_edge_sync_dlq', { alert_type: 'storefront_edge_sync_dlq', ... }).",
   vercelLogDrain: {
@@ -43,12 +43,12 @@ const config = {
   ].join("\n"),
   optionalDrains: [
     {
-      name: "KitchenOS — middleware arm assignment (sampled)",
+      name: "OS Kitchen — middleware arm assignment (sampled)",
       filterExpression: 'alert_type = "theme_experiment_arm_assigned"',
       env: "THEME_EXPERIMENT_ARM_LOG_SAMPLE=0.02",
     },
     {
-      name: "KitchenOS — experiment SRM traffic drift",
+      name: "OS Kitchen — experiment SRM traffic drift",
       filterExpression: 'alert_type = "storefront_experiment_srm_warn"',
       env: "STOREFRONT_EXPERIMENT_SRM_WEBHOOK_URL",
       cron: "/api/cron/storefront-experiment-srm",

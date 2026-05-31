@@ -144,7 +144,7 @@ function main(): void {
     (result) => result.source === "missing" || result.source === "strict_config_missing_proof",
   );
 
-  console.log("KitchenOS API route classification audit\n");
+  console.log("OS Kitchen API route classification audit\n");
   console.log(`Total routes: ${results.length}`);
   console.log(`Classified: ${results.length - missing.length}`);
   console.log(`Unclassified: ${missing.length}\n`);

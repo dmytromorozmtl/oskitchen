@@ -4,7 +4,7 @@ import {
 } from "@/lib/webhooks/webhook-queue-mode";
 
 /**
- * KitchenOS queue posture for launch honesty.
+ * OS Kitchen queue posture for launch honesty.
  *
  * - **DB-backed webhook jobs** — always required in production; optional in dev/test via
  *   `WEBHOOK_ASYNC_QUEUE=true`. Cron drains `/api/cron/webhook-jobs`.

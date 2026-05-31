@@ -27,7 +27,7 @@ function main() {
     return;
   }
 
-  console.log("KitchenOS — workspaceId migration audit\n");
+  console.log("OS Kitchen — workspaceId migration audit\n");
   console.log(`Total models: ${report.totalModels}`);
   console.log(`  ✅ workspaceId present: ${report.scoped}`);
   console.log(`  ⚠️  userId only (needs migration): ${report.needsMigration}`);

@@ -77,7 +77,7 @@ async function mergeWorkspaceIdOnTable(
 async function main() {
   const execute = process.argv.includes("--execute");
   const mode = execute ? "EXECUTE" : "DRY-RUN";
-  console.log(`KitchenOS — reconcile duplicate owner workspaces (${mode})\n`);
+  console.log(`OS Kitchen — reconcile duplicate owner workspaces (${mode})\n`);
 
   const dupOwners = await prisma.$queryRaw<{ owner_user_id: string; c: number }[]>`
     SELECT owner_user_id, COUNT(*)::int AS c

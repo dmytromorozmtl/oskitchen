@@ -36,7 +36,7 @@ export function buildProductionForecast(params: {
 }): ProductionForecastResult {
   const horizonDays = params.horizonDays ?? 7;
   const notes: string[] = [
-    "Forecast uses recent KitchenOS order history only — not medical or nutritional advice.",
+    "Forecast uses recent OS Kitchen order history only — not medical or nutritional advice.",
     "External channels without history here may skew lower until integrations sync.",
   ];
 

@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { CONTINUOUS_IMPROVEMENT_LOOP_RELEASE_CHECKLIST_DOC } from "@/lib/commercial/continuous-improvement-loop-phases-era22";
 
 function buildReleaseChecklist(): string {
-  return `# KitchenOS — Continuous improvement loop release checklist
+  return `# OS Kitchen — Continuous improvement loop release checklist
 
 **Policy:** \`era22-continuous-improvement-loop-v1\` · **Backlog:** \`KOS-E22-010\`
 

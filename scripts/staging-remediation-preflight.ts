@@ -28,7 +28,7 @@ function check(name: string): boolean {
 }
 
 function main() {
-  console.log("=== KitchenOS staging remediation preflight ===\n");
+  console.log("=== OS Kitchen staging remediation preflight ===\n");
 
   let fail = false;
   for (const key of requiredEnv) {

@@ -26,7 +26,7 @@ function main() {
   const failBelow = parseArg("--fail-below");
   const maxNeeds = parseArg("--max-needs-migration");
 
-  console.log("KitchenOS — workspaceId coverage check\n");
+  console.log("OS Kitchen — workspaceId coverage check\n");
   console.log(`User-scoped models: ${report.scoped + report.needsMigration}`);
   console.log(`  ✅ with workspaceId field: ${report.scoped}`);
   console.log(`  ⚠️  userId only (needs column): ${report.needsMigration}`);

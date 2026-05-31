@@ -27,7 +27,7 @@ export function getUberDirectCapabilitySnapshot(env: NodeJS.ProcessEnv = process
 }
 
 export function getUberDirectWebhookPlaceholderMessage(): string {
-  return "Uber Direct webhook is authenticated but not implemented yet. KitchenOS is still in honest placeholder mode for live Uber Direct dispatch.";
+  return "Uber Direct webhook is authenticated but not implemented yet. OS Kitchen is still in honest placeholder mode for live Uber Direct dispatch.";
 }
 
 export async function createDeliveryQuote(_creds: UberDirectCredentials, _input: unknown) {

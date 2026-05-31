@@ -145,7 +145,7 @@ export function buildFoodopsWorkflowView(input: BuildFoodopsWorkflowInput): { st
     mappingFix = firstFix(blockers, (b) => b.code === "UNMAPPED_PRODUCTS");
   } else {
     mappingRaw = "complete";
-    mappingExplanation = "Channel lines are mapped to KitchenOS menu items (no open mapping conflicts).";
+    mappingExplanation = "Channel lines are mapped to OS Kitchen menu items (no open mapping conflicts).";
   }
 
   let fulfillmentRaw: RawStepState;
@@ -228,7 +228,7 @@ export function buildFoodopsWorkflowView(input: BuildFoodopsWorkflowInput): { st
 
   const crmRaw: RawStepState = order.customerId ? "complete" : "not_required";
   const crmExplanation = order.customerId
-    ? "Linked KitchenOS customer profile — CRM history and follow-ups apply."
+    ? "Linked OS Kitchen customer profile — CRM history and follow-ups apply."
     : "Guest checkout — no CRM customer profile linked (not a blocker by itself).";
 
   const analyticsRaw: RawStepState = order.status === "COMPLETED" ? "complete" : "pending";

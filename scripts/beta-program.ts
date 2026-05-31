@@ -81,7 +81,7 @@ function printStatus() {
   const state = loadProgramState();
   const next = resolveNextAction(state);
 
-  console.log("=== KitchenOS Beta Program (steps 0–5) ===");
+  console.log("=== OS Kitchen Beta Program (steps 0–5) ===");
   console.log("Start: docs/BETA_START_HERE.md\n");
   console.log(`State: ${PROGRAM_STATE_PATH}\n`);
 

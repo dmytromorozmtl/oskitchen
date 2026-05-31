@@ -14,7 +14,7 @@ export async function trySendTicketCreatedConfirmation(params: {
   try {
     await sendRawEmail({
       to: params.to,
-      subject: `[KitchenOS] Ticket ${params.ticketRef}: ${params.subjectLine}`,
+      subject: `[OS Kitchen] Ticket ${params.ticketRef}: ${params.subjectLine}`,
       text: `We received your request (${params.ticketRef}). Our team will respond based on your issue priority.\n\nThis message was sent because outbound email is configured for this environment.`,
     });
     return { ok: true as const };

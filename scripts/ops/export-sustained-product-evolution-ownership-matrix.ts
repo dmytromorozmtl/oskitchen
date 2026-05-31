@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { SUSTAINED_PRODUCT_EVOLUTION_OWNERSHIP_MATRIX_DOC } from "@/lib/commercial/sustained-product-evolution-phases-era23";
 
 function buildOwnershipMatrix(): string {
-  return `# KitchenOS — Sustained product evolution ownership matrix
+  return `# OS Kitchen — Sustained product evolution ownership matrix
 
 **Policy:** \`era23-sustained-product-evolution-v1\` · **Backlog:** \`KOS-E23-011\`
 
@@ -29,7 +29,7 @@ Cross-functional ownership after pure operational mode (Step 10 improvement loop
 
 ---
 
-## Steady-state KitchenOS surfaces
+## Steady-state OS Kitchen surfaces
 
 | Route | Steady-state role |
 |-------|-------------------|

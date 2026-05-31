@@ -72,7 +72,7 @@ async function main() {
   }
 
   console.log("═══════════════════════════════════════════════════");
-  console.log(" KitchenOS — workspaceId migration dry-run report");
+  console.log(" OS Kitchen — workspaceId migration dry-run report");
   console.log("═══════════════════════════════════════════════════\n");
   console.log(`Schema coverage: ${coverage}% (${report.scoped} scoped / ${report.needsMigration} need column)`);
   console.log(`Total Prisma models: ${report.totalModels}\n`);

@@ -50,7 +50,7 @@ async function main() {
       const { error } = await resend.emails.send({
         from,
         to: probeTo,
-        subject: "KitchenOS storefront invite probe",
+        subject: "OS Kitchen storefront invite probe",
         text: "Resend probe — safe to ignore.",
       });
       if (error) {

@@ -15,10 +15,10 @@ export async function triggerKlaviyoFlow(
   if (!key) return { ok: false, error: "KLAVIYO_API_KEY not set" };
 
   const metricMap: Record<EmailFlowId, string> = {
-    welcome: "KitchenOS Welcome",
-    abandoned_cart: "KitchenOS Abandoned Cart",
-    post_purchase: "KitchenOS Post Purchase",
-    win_back: "KitchenOS Win Back",
+    welcome: "OS Kitchen Welcome",
+    abandoned_cart: "OS Kitchen Abandoned Cart",
+    post_purchase: "OS Kitchen Post Purchase",
+    win_back: "OS Kitchen Win Back",
   };
 
   const res = await fetch(`${KLAVIYO_BASE}/events/`, {

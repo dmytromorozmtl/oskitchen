@@ -95,7 +95,7 @@ function main(): void {
   const dbUrl = process.env.DATABASE_URL ?? fromFiles.DATABASE_URL;
   const directUrl = process.env.DIRECT_URL ?? fromFiles.DIRECT_URL;
 
-  console.log("KitchenOS — env check (connection strings not logged)\n");
+  console.log("OS Kitchen — env check (connection strings not logged)\n");
 
   for (const f of [".env", ".env.local"] as const) {
     const ok = existsSync(join(ROOT, f));

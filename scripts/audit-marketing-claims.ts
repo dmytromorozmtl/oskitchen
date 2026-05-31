@@ -23,7 +23,7 @@ function main(): void {
   const errors = validateClaimsRegistryRows(rows);
   const counts = countClaimsByStatus(rows);
 
-  console.log(`KitchenOS marketing claims registry audit (${CLAIMS_REGISTRY_POLICY_ID})\n`);
+  console.log(`OS Kitchen marketing claims registry audit (${CLAIMS_REGISTRY_POLICY_ID})\n`);
   console.log(`Claims tracked: ${rows.length}`);
   for (const [status, count] of Object.entries(counts).sort(([a], [b]) => a.localeCompare(b))) {
     console.log(`  ${status}: ${count}`);

@@ -23,6 +23,7 @@ import {
   staffMemberListWhereForOwner,
   storefrontSettingsListWhereForOwner,
 } from "@/lib/scope/workspace-resource-scope";
+import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { seedDemoWorkspace } from "@/services/demo-data";
 
 const DEMO_IMG =
@@ -72,6 +73,7 @@ export async function seedCommercialDemoWorkspace(
   vertical: DemoVerticalSlug = "restaurant",
 ): Promise<void> {
   await seedDemoWorkspace(userId, vertical);
+  const workspaceId = await resolveOwnerWorkspaceId(userId);
 
   const menuWhere = await menuListWhereForOwnerAnd(userId, {
     active: true,
@@ -124,6 +126,7 @@ export async function seedCommercialDemoWorkspace(
     await prisma.order.create({
       data: {
         userId,
+        workspaceId,
         customerName: `Demo Customer ${orderCount + o + 1}`,
         customerEmail: `demo${orderCount + o + 1}@example.com`,
         customerPhone: "+1 512-555-0199",

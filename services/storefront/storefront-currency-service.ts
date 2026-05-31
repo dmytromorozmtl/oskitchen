@@ -29,7 +29,7 @@ export function resolveStorefrontStripeCheckoutCurrency(sf: Pick<StorefrontSetti
       status: "unsupported",
       stripeCurrency: null,
       displayCurrency,
-      message: `Stripe Checkout does not support card charges in ${displayCurrency.toUpperCase()} in this KitchenOS build — use pay-later or change currency.`,
+      message: `Stripe Checkout does not support card charges in ${displayCurrency.toUpperCase()} in this OS Kitchen build — use pay-later or change currency.`,
     };
   }
   return {
