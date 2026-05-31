@@ -1538,3 +1538,9 @@ Action: feat: 100+ report catalog + custom builder
 Files: services/analytics/report-catalog-service.ts, components/dashboard/report-catalog-client.tsx, app/dashboard/reports/catalog/page.tsx, app/dashboard/reports/catalog/builder/page.tsx, app/dashboard/reports/page.tsx, docs/deep-reporting-competitive-positioning.md, tests/unit/report-catalog-service.test.ts
 Tracker: deep-reporting-100=done (6/8) — 108 catalog entries, 19 wired via registry, searchable UI + custom builder
 Next: Cycle 8 Shopify bundle landing page + sales guide (shopify-bundle-story)
+---
+Cycle: 20260531-174900 (Pain Point Elimination Cycle 8)
+Action: feat: Shopify bundle landing page + sales guide
+Files: app/shopify/page.tsx, components/marketing/shopify-bundle-landing.tsx, lib/marketing/shopify-bundle-content.ts, docs/shopify-bundle-sales-guide.md, tests/unit/shopify-bundle-landing.test.ts
+Tracker: shopify-bundle-story=done (7/8) — hero, pain, solution, features, testimonial, CTA, sales guide
+Next: transparent-pricing still todo (tree skipped step 2); or Cycle 9 all-done if only pricing remains
