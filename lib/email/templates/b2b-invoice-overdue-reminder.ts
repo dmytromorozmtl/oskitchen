@@ -18,6 +18,8 @@ export function b2bInvoiceOverdueReminderTemplate(params: {
   poNumber?: string | null;
   companyName?: string | null;
   paymentTermsLabel?: string | null;
+  businessName?: string | null;
+  payNowUrl?: string | null;
 }) {
   const brand = params.businessName ?? "OS Kitchen";
   const poLine = params.poNumber
@@ -42,6 +44,11 @@ export function b2bInvoiceOverdueReminderTemplate(params: {
     ${companyLine}
     ${poLine}
     ${termsLine}
+    ${
+      params.payNowUrl
+        ? `<p style="margin:20px 0;"><a href="${escapeHtml(params.payNowUrl)}" style="display:inline-block;padding:12px 20px;border-radius:999px;background:#0f172a;color:#fff;text-decoration:none;font-weight:600;">Pay invoice online</a></p>`
+        : ""
+    }
     <p>Please arrange payment at your earliest convenience. If you have already sent payment, reply to this email with your remittance reference so we can reconcile your account.</p>
     <p style="margin-top:24px;color:#64748b;font-size:13px;">Thank you for your business.</p>
   `;

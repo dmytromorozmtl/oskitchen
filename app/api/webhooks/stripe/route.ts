@@ -90,6 +90,13 @@ export async function POST(request: Request) {
           await applyStorefrontOrderCheckoutCompleted(session, { stripeEventId: event.id });
           break;
         }
+        if (session.metadata?.purpose === "b2b_invoice" && session.metadata?.orderId) {
+          const { applyB2bPayPortalCheckoutCompleted } = await import(
+            "@/services/integrations/shopify-b2b-invoice-pay-portal-service"
+          );
+          await applyB2bPayPortalCheckoutCompleted(session, { stripeEventId: event.id });
+          break;
+        }
         await applyStripeCheckoutCompleted(session, { stripeEventId: event.id });
         const userId = session.metadata?.userId as string | undefined;
         if (userId) void markTrialConverted(userId);

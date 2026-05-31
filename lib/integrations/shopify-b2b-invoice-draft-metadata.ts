@@ -17,6 +17,8 @@ export type B2bInvoiceDraftLink = {
   markedPaidById?: string | null;
   lastReminderAt?: string | null;
   reminderCount?: number;
+  payPortalIssuedAt?: string | null;
+  payPortalCheckoutStartedAt?: string | null;
   paymentTermsLabel: string | null;
   poNumber: string | null;
   companyName: string | null;
@@ -155,6 +157,49 @@ export function patchInvoiceDraftPayment(
     paymentReference: input.paymentReference ?? draft.paymentReference ?? null,
     markedPaidById: input.markedPaidById ?? draft.markedPaidById ?? null,
   };
+}
+
+export type B2bPayPortalStats = {
+  linksMinted: number;
+  checkoutStarted: number;
+  checkoutCompleted: number;
+  skippedNoStripe: number;
+  skippedAlreadyPaid: number;
+};
+
+export function incrementB2bPayPortalStats(
+  current: B2bPayPortalStats | null | undefined,
+  patch: Partial<B2bPayPortalStats>,
+): B2bPayPortalStats {
+  const base: B2bPayPortalStats = current ?? {
+    linksMinted: 0,
+    checkoutStarted: 0,
+    checkoutCompleted: 0,
+    skippedNoStripe: 0,
+    skippedAlreadyPaid: 0,
+  };
+  return {
+    linksMinted: base.linksMinted + (patch.linksMinted ?? 0),
+    checkoutStarted: base.checkoutStarted + (patch.checkoutStarted ?? 0),
+    checkoutCompleted: base.checkoutCompleted + (patch.checkoutCompleted ?? 0),
+    skippedNoStripe: base.skippedNoStripe + (patch.skippedNoStripe ?? 0),
+    skippedAlreadyPaid: base.skippedAlreadyPaid + (patch.skippedAlreadyPaid ?? 0),
+  };
+}
+
+export function patchInvoiceDraftPayPortalIssued(
+  draft: B2bInvoiceDraftLink,
+  issuedAt: string,
+): B2bInvoiceDraftLink {
+  return {
+    ...draft,
+    payPortalIssuedAt: issuedAt,
+  };
+}
+
+export function openB2bInvoiceAmountCents(draft: B2bInvoiceDraftLink): number {
+  const paid = draft.paidAmountCents ?? 0;
+  return Math.max(0, draft.amountCents - paid);
 }
 
 function readB2bBlock(sourceMetadataJson: unknown): Record<string, unknown> | null {

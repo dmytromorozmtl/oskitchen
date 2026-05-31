@@ -19,6 +19,7 @@ import {
 } from "@/lib/integrations/shopify-markets-settings";
 import { prisma } from "@/lib/prisma";
 import { recordBillingEvent } from "@/services/billing/billing-service";
+import { stampPayPortalOnInvoiceDraftGeneration } from "@/services/integrations/shopify-b2b-invoice-pay-portal-service";
 
 export type B2bInvoiceGenerationResult =
   | { ok: true; linked: B2bInvoiceDraftLink }
@@ -165,18 +166,21 @@ export async function maybeGenerateB2bInvoiceDraft(input: {
     paymentTerms: input.b2b.paymentTerms,
   });
 
-  const link: B2bInvoiceDraftLink = {
-    invoiceId,
-    invoiceNumber,
-    status: "draft",
-    amountCents,
-    currency,
-    dueAt,
-    generatedAt,
-    paymentTermsLabel: input.b2b.paymentTerms?.label ?? null,
-    poNumber: input.b2b.poNumber,
-    companyName: input.b2b.companyName,
-  };
+  const link: B2bInvoiceDraftLink = await stampPayPortalOnInvoiceDraftGeneration({
+    link: {
+      invoiceId,
+      invoiceNumber,
+      status: "draft",
+      amountCents,
+      currency,
+      dueAt,
+      generatedAt,
+      paymentTermsLabel: input.b2b.paymentTerms?.label ?? null,
+      poNumber: input.b2b.poNumber,
+      companyName: input.b2b.companyName,
+    },
+    connectionId: input.connectionId,
+  });
 
   await patchOrderInvoiceDraft({
     orderId: input.orderId,

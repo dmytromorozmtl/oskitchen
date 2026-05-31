@@ -8,6 +8,7 @@ import {
 } from "@/lib/integrations/shopify-b2b-invoice-draft-metadata";
 import { formatCurrency } from "@/lib/utils";
 import { OrderB2bInvoiceMarkPaidButton } from "@/components/orders/order-b2b-invoice-mark-paid-button";
+import { OrderB2bInvoicePayLinkButton } from "@/components/orders/order-b2b-invoice-pay-link-button";
 import { OrderB2bInvoiceSendReminderButton } from "@/components/orders/order-b2b-invoice-send-reminder-button";
 import { Badge } from "@/components/ui/badge";
 
@@ -112,7 +113,7 @@ export function OrderB2bInvoiceDraftBanner({
           </p>
           {!paid ? (
             <p className="text-xs text-muted-foreground">
-              Collect payment outside Shopify, then mark paid here to close the receivable on this order.
+              Share the pay link with the buyer for self-serve card or wire payment, or mark paid here after collecting offline.
               {draft.lastReminderAt ? (
                 <>
                   {" "}
@@ -132,6 +133,11 @@ export function OrderB2bInvoiceDraftBanner({
           ) : null}
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <OrderB2bInvoicePayLinkButton
+            orderId={orderId}
+            sourceMetadataJson={sourceMetadataJson}
+            paymentStatus={paymentStatus ?? null}
+          />
           <OrderB2bInvoiceSendReminderButton
             orderId={orderId}
             sourceMetadataJson={sourceMetadataJson}

@@ -32,6 +32,7 @@ import { decryptOrderPiiFields } from "@/lib/orders/order-pii";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import { formatCurrency } from "@/lib/utils";
 import { recordBillingEvent } from "@/services/billing/billing-service";
+import { ensureB2bInvoicePayPortalLink } from "@/services/integrations/shopify-b2b-invoice-pay-portal-service";
 
 export type B2bReminderResult =
   | { ok: true; sentAt: string; reminderCount: number }
@@ -289,6 +290,14 @@ export async function sendB2bInvoiceOverdueReminderForOrder(input: {
       })
     : "See invoice terms";
 
+  let payNowUrl: string | null = null;
+  const payLink = await ensureB2bInvoicePayPortalLink({
+    userId: input.userId,
+    orderId: order.id,
+    connectionId,
+  }).catch(() => null);
+  if (payLink?.ok) payNowUrl = payLink.url;
+
   const emailResult = await sendB2bInvoiceOverdueReminder({
     to: pii.customerEmail,
     customerName: pii.customerName || draft.companyName || "there",
@@ -300,6 +309,7 @@ export async function sendB2bInvoiceOverdueReminderForOrder(input: {
     companyName: draft.companyName,
     paymentTermsLabel: draft.paymentTermsLabel,
     businessName: settings?.businessName,
+    payNowUrl,
   });
 
   if ("skipped" in emailResult && emailResult.skipped) {

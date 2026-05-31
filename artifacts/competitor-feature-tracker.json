@@ -98,6 +98,6 @@
   "restaurant-capital-phase5LiveLendersShippedAt": "2026-05-31T19:00:00.000Z",
   "restaurant-capital-phase6-lender-oauth": "done",
   "restaurant-capital-phase6LenderOauthShippedAt": "2026-05-31T22:00:00.000Z",
-  "postParityPhase": "shopify-markets-phase20-b2b-automated-dunning",
-  "nextRecommendedStep": "shopify-markets-phase21-b2b-pay-portal OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
+  "postParityPhase": "shopify-markets-phase21-b2b-pay-portal",
+  "nextRecommendedStep": "shopify-markets-phase22-b2b-ar-dashboard OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
 }

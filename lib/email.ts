@@ -214,6 +214,7 @@ export async function sendB2bInvoiceOverdueReminder(params: {
   companyName?: string | null;
   paymentTermsLabel?: string | null;
   businessName?: string | null;
+  payNowUrl?: string | null;
 }) {
   const resend = getResend();
   if (!resend) return { skipped: true as const };
@@ -228,6 +229,7 @@ export async function sendB2bInvoiceOverdueReminder(params: {
     poNumber: params.poNumber,
     companyName: params.companyName,
     paymentTermsLabel: params.paymentTermsLabel,
+    payNowUrl: params.payNowUrl,
   });
 
   await resend.emails.send({

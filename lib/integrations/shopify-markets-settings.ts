@@ -368,6 +368,16 @@ export type ShopifyMarketsSyncSettings = {
     skippedRecentDigest: number;
     skippedNoOpenInvoices: number;
   } | null;
+  b2bPayPortalEnabled: boolean;
+  b2bPayPortalTokenTtlDays: number | null;
+  lastB2bPayPortalCheckoutAt: string | null;
+  b2bPayPortalStats: {
+    linksMinted: number;
+    checkoutStarted: number;
+    checkoutCompleted: number;
+    skippedNoStripe: number;
+    skippedAlreadyPaid: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -639,6 +649,24 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
 
   const b2bAutoDunningEnabled = raw.b2bAutoDunningEnabled === true;
   const b2bOperatorDigestEnabled = raw.b2bOperatorDigestEnabled !== false;
+  const b2bPayPortalEnabled = raw.b2bPayPortalEnabled !== false;
+  const b2bPayPortalTokenTtlDays =
+    typeof raw.b2bPayPortalTokenTtlDays === "number" && raw.b2bPayPortalTokenTtlDays > 0
+      ? raw.b2bPayPortalTokenTtlDays
+      : null;
+  const payPortalStatsRaw = raw.b2bPayPortalStats;
+  const b2bPayPortalStats =
+    payPortalStatsRaw && typeof payPortalStatsRaw === "object"
+      ? {
+          linksMinted: Number((payPortalStatsRaw as Record<string, unknown>).linksMinted) || 0,
+          checkoutStarted: Number((payPortalStatsRaw as Record<string, unknown>).checkoutStarted) || 0,
+          checkoutCompleted:
+            Number((payPortalStatsRaw as Record<string, unknown>).checkoutCompleted) || 0,
+          skippedNoStripe: Number((payPortalStatsRaw as Record<string, unknown>).skippedNoStripe) || 0,
+          skippedAlreadyPaid:
+            Number((payPortalStatsRaw as Record<string, unknown>).skippedAlreadyPaid) || 0,
+        }
+      : null;
 
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
@@ -794,6 +822,11 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bOperatorDigestAt:
       typeof raw.lastB2bOperatorDigestAt === "string" ? raw.lastB2bOperatorDigestAt : null,
     b2bDunningStats,
+    b2bPayPortalEnabled,
+    b2bPayPortalTokenTtlDays,
+    lastB2bPayPortalCheckoutAt:
+      typeof raw.lastB2bPayPortalCheckoutAt === "string" ? raw.lastB2bPayPortalCheckoutAt : null,
+    b2bPayPortalStats,
   };
 }
 

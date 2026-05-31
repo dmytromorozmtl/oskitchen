@@ -255,15 +255,17 @@ export function buildShopifyMarketsHealthSnapshot(input: {
                           ? `B2B dunning skipped — email not configured (${sync.b2bDunningStats.skippedEmailOff} run(s))`
                           : sync?.b2bDunningStats?.autoRemindersSent
                             ? `${sync.b2bDunningStats.autoRemindersSent} auto B2B reminder(s) sent · ${sync.b2bDunningStats.digestsSent} digest(s)`
-                            : sync?.b2bPaymentCollectionStats?.markedPaid
-                        ? `${sync.b2bPaymentCollectionStats.markedPaid} B2B invoice(s) marked paid`
-                        : sync?.b2bCateringRollupStats?.quotesCreated
-                  ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
-                  : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
-                ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
-                : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
-                  ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} company · ${Object.keys(sync?.b2bLocationImports ?? {}).length} location hint(s)`
-                  : "No B2B guard activity",
+                            : sync?.b2bPayPortalStats?.checkoutCompleted
+                              ? `${sync.b2bPayPortalStats.checkoutCompleted} B2B pay portal checkout(s) completed`
+                              : sync?.b2bPaymentCollectionStats?.markedPaid
+                                ? `${sync.b2bPaymentCollectionStats.markedPaid} B2B invoice(s) marked paid`
+                                : sync?.b2bCateringRollupStats?.quotesCreated
+                                  ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
+                                  : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
+                                    ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
+                                    : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
+                                      ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} company · ${Object.keys(sync?.b2bLocationImports ?? {}).length} location hint(s)`
+                                      : "No B2B guard activity",
       lastActivityAt:
         sync?.lastB2bLocationReconcileAt ?? sync?.lastB2bReconcileAt ?? sync?.lastB2bImportAt ?? null,
       openIssues: openB2bConflicts + openB2bLocationConflicts,
@@ -358,6 +360,16 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   ) {
     recommendations.push(
       "Enable B2B auto-dunning on Integrations → Shopify to send day-35/day-65 overdue reminders automatically.",
+    );
+  }
+  if ((sync?.b2bPayPortalStats?.skippedNoStripe ?? 0) > 0) {
+    recommendations.push(
+      "Connect Stripe on your storefront so B2B buyers can pay invoices by card — wire instructions remain available as fallback.",
+    );
+  }
+  if (sync?.b2bPayPortalEnabled === false && (sync?.b2bPaymentCollectionStats?.overdueOpen ?? 0) > 0) {
+    recommendations.push(
+      "Enable the B2B pay portal on Integrations → Shopify so buyers can self-serve pay open invoices.",
     );
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {

@@ -34,6 +34,8 @@ export const RATE_LIMIT_POLICIES = {
   storefront_checkout_submit: { windowMs: 60_000, max: 12 },
   /** Stripe checkout retry link — per IP + order token (stricter than first submit). */
   storefront_checkout_retry: { windowMs: 60_000, max: 6 },
+  /** Public B2B invoice pay portal — per IP + signed token. */
+  b2b_pay_portal_checkout: { windowMs: 60_000, max: 8 },
   /** First-party analytics beacon — per IP + store slug suffix applied at call site. */
   storefront_analytics_ingest: { windowMs: 60_000, max: 180 },
   /** Contact / catering legacy forms — per IP. */

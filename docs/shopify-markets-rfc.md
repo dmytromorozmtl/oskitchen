@@ -590,22 +590,44 @@ Required Shopify scopes (verify at implementation):
 | Health | Recommends Resend when `skippedEmailOff > 0`; nudges auto-dunning when overdue open |
 | Actions | `previewB2bDunningDigestAction`, `runB2bDunningNowAction` |
 
-**Conscious limits:** No legal collections escalation; no buyer portal payment link (Phase 21).
+**Conscious limits:** No legal collections escalation; buyer pay portal shipped in Phase 21.
 
 ---
 
-## Phase 21 — B2B buyer self-serve pay link (planned)
+## Phase 21 — B2B buyer self-serve pay portal (shipped)
 
 **Goal:** Hosted payment page for open B2B invoices — buyer pays without operator intervention; KitchenOS records payment locally (no Shopify write-back in v1).
 
-| Component | Plan |
+| Component | Path |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_PAY_PORTAL=1` |
-| Route | `/pay/b2b/[token]` — signed token from `invoiceDraft.payToken` |
-| Service | `shopify-b2b-invoice-pay-portal-service.ts` — token mint, Stripe Checkout or manual ACH instructions |
-| Order | `paymentStatus: PAID`, reuse `markB2bInvoiceDraftPaid` path |
-| Email | Reminder + digest templates link to pay portal when token present |
-| UI | Order detail “Copy pay link”; customer portal optional |
-| Health | Attention when overdue invoices lack pay tokens |
+| Feature flag | `SHOPIFY_MARKETS_B2B_PAY_PORTAL=1` (default on in non-production) |
+| Route | `/pay/b2b/[token]` — signed HMAC token (90-day default TTL) |
+| API | `POST /api/pay/b2b/[token]/checkout` — Stripe Connect one-time checkout |
+| Service | `shopify-b2b-invoice-pay-portal-service.ts` — mint link, view, checkout, webhook apply |
+| Token | `shopify-b2b-pay-portal-token.ts` |
+| Order metadata | `invoiceDraft.payPortalIssuedAt`, `payPortalCheckoutStartedAt` |
+| Payment | Reuses `markB2bInvoiceDraftPaid` via Stripe webhook `purpose=b2b_invoice` |
+| Audit | `BillingEvent` `B2B_INVOICE_PAY_PORTAL_CHECKOUT_COMPLETED` |
+| Settings | `b2bPayPortalEnabled`, `b2bPayPortalTokenTtlDays`, `b2bPayPortalStats` |
+| Email | Overdue reminders include “Pay invoice online” when portal link minted |
+| UI | Order detail “Copy pay link”; public pay page with card + wire fallback |
+| Health | Nudges Stripe Connect when `skippedNoStripe`; portal enable when overdue |
 
 **Conscious limits:** No Shopify payment write-back; no multi-invoice consolidated checkout in v1.
+
+---
+
+## Phase 22 — B2B consolidated AR dashboard & Shopify sync (planned)
+
+**Goal:** Operator-facing receivables command center across all B2B channels with optional Shopify payment status mirror.
+
+| Component | Plan |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_DASHBOARD=1` |
+| Route | `/dashboard/receivables` — cross-order aging, pay portal activity, collection tasks |
+| Service | `shopify-b2b-ar-dashboard-service.ts` — unified snapshot, export CSV |
+| Shopify sync | Read-only mirror of Shopify B2B order payment status where API allows |
+| UI | Aging heatmap, bulk send pay links, assign collector |
+| Health | Single B2B AR score in markets health rollup |
+
+**Conscious limits:** No legal collections workflow; no credit bureau integration.

@@ -1080,6 +1080,22 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bPayPortalStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B pay portal: {syncSettings.b2bPayPortalStats.linksMinted} link(s) ·{" "}
+              {syncSettings.b2bPayPortalStats.checkoutCompleted} paid online
+              {!syncSettings.b2bPayPortalEnabled ? " · portal off" : ""}
+              {syncSettings.lastB2bPayPortalCheckoutAt ? (
+                <>
+                  {" "}
+                  · last checkout{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bPayPortalCheckoutAt), {
+                    addSuffix: true,
+                  })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
           <ShopifyMarketsB2bDunningCard
             connectionId={connectionId}
             syncSettings={syncSettings}
