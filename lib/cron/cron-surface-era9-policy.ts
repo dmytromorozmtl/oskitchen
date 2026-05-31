@@ -1,7 +1,7 @@
 /**
  * Cron surface Era 9 recertification — Evolution Era 9 Cycle 3.
  *
- * Re-validates Era 4 archive posture: 18 production App Router crons only,
+ * Re-validates Era 4 archive posture: 19 production App Router crons only,
  * experimental handlers under archive/, production gate + pilot preflight honesty.
  * Does not add cron routes or weaken cron auth.
  */
@@ -10,7 +10,7 @@ export const CRON_SURFACE_ERA9_POLICY_ID = "era9-cron-surface-recert-v1" as cons
 
 export const CRON_SURFACE_ERA9_EXTENDS_POLICY_ID = "era4-active-production-only-v1" as const;
 
-export const CRON_SURFACE_ERA9_ACTIVE_ROUTE_COUNT = 18 as const;
+export const CRON_SURFACE_ERA9_ACTIVE_ROUTE_COUNT = 19 as const;
 
 export const CRON_SURFACE_ERA9_EXPERIMENTAL_ON_DISK_MAX = 0 as const;
 
@@ -40,7 +40,7 @@ export const CRON_SURFACE_ERA9_CANONICAL_DOC_PATHS = [
 export const CRON_SURFACE_ERA9_CANONICAL_MARKERS = [
   CRON_SURFACE_ERA9_POLICY_ID,
   CRON_SURFACE_ERA9_EXTENDS_POLICY_ID,
-  "18 production",
+  "19 production",
   "archive/cron-routes",
 ] as const;
 
