@@ -1,15 +1,21 @@
 "use client";
 
 import { useTransition } from "react";
-import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { DollarSign, Globe2, Loader2, RefreshCw } from "lucide-react";
+import { ArrowUpRight, DollarSign, Globe2, Loader2, RefreshCw } from "lucide-react";
 
-import { discoverShopifyMarketsAction, importShopifyMarketPricesAction } from "@/actions/shopify-markets";
+import {
+  discoverShopifyMarketsAction,
+  importShopifyMarketPricesAction,
+  pushShopifyMarketPricesAction,
+} from "@/actions/shopify-markets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { ShopifyMarketsSyncSettings } from "@/lib/integrations/shopify-markets-settings";
+import {
+  SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES,
+  type ShopifyMarketsSyncSettings,
+} from "@/lib/integrations/shopify-markets-settings";
 import type { ShopifyMarketRow } from "@/services/integrations/shopify-markets-service";
 
 type ShopifyMarketsPanelProps = {
@@ -49,11 +55,17 @@ export function ShopifyMarketsPanel({
 }: ShopifyMarketsPanelProps) {
   const [discoverPending, startDiscover] = useTransition();
   const [importPending, startImport] = useTransition();
-  const pending = discoverPending || importPending;
+  const [pushPending, startPush] = useTransition();
+  const pending = discoverPending || importPending || pushPending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
+  const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
   const totalMappedPrices = importedMarkets.reduce(
     (sum, row) => sum + row.mappedProductCount,
+    0,
+  );
+  const totalPushedVariants = exportedMarkets.reduce(
+    (sum, row) => sum + row.pushedVariantCount,
     0,
   );
 
@@ -64,11 +76,12 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 3 BETA
+              Shopify Markets — Phase 4 BETA
             </CardTitle>
             <CardDescription>
-              Discover Shopify markets, link them on Storefront → Markets, set syncMode to import, then
-              pull market-specific prices. Webhooks re-import with 60s debounce and skip unchanged hashes.
+              Discover Shopify markets, link them on Storefront → Markets, then import or push prices for
+              mapped external products. Webhooks keep import-mode markets fresh; push-mode sends KitchenOS
+              prices to Shopify price lists.
             </CardDescription>
           </div>
           <Badge variant="outline">markets_sync BETA</Badge>
@@ -77,8 +90,10 @@ export function ShopifyMarketsPanel({
       <CardContent className="space-y-4">
         <p className="text-xs text-muted-foreground">
           Scopes: <code className="rounded bg-muted px-1">read_markets</code>,{" "}
-          <code className="rounded bg-muted px-1">read_products</code>. Shopify wins on price when{" "}
-          <code className="rounded bg-muted px-1">syncMode=import</code> — menu composition stays OS Kitchen.
+          <code className="rounded bg-muted px-1">read_products</code>
+          {", "}
+          <code className="rounded bg-muted px-1">write_products</code> (push). Import = Shopify wins;
+          push = KitchenOS wins on mapped variants.
         </p>
 
         {!connectionId || !hasCredentials ? (
@@ -146,7 +161,68 @@ export function ShopifyMarketsPanel({
               )}
               <span className="ml-2">Import market prices</span>
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startPush(async () => {
+                  await pushShopifyMarketPricesAction(connectionId);
+                })
+              }
+            >
+              {pushPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ArrowUpRight className="h-4 w-4" />
+              )}
+              <span className="ml-2">Push market prices</span>
+            </Button>
           </div>
+        ) : null}
+
+        {syncSettings.lastPricePushAt ? (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              Last price push{" "}
+              {formatDistanceToNow(new Date(syncSettings.lastPricePushAt), { addSuffix: true })}
+              {totalPushedVariants > 0 ? ` · ${totalPushedVariants} variant(s)` : ""}
+              {syncSettings.lastPricePushOrigin ? (
+                <>
+                  {" "}
+                  · origin{" "}
+                  <code className="rounded bg-muted px-1">{syncSettings.lastPricePushOrigin}</code>
+                </>
+              ) : null}
+            </p>
+            {syncSettings.lastPricePushSkippedReason === "debounced" ? (
+              <p className="mt-1 text-amber-700 dark:text-amber-200">
+                Skipped — product update push debounced (30s window).
+              </p>
+            ) : null}
+            {syncSettings.lastPricePushSkippedReason === "unchanged" ? (
+              <p className="mt-1">Skipped — outgoing price hash unchanged for push-mode markets.</p>
+            ) : null}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            Set <code className="rounded bg-muted px-1">syncMode=push</code> on Storefront → Markets to
+            send KitchenOS prices to Shopify. Requires{" "}
+            {SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES.map((scope) => (
+              <code key={scope} className="mx-0.5 rounded bg-muted px-1">
+                {scope}
+              </code>
+            ))}
+            .
+          </p>
+        )}
+
+        {syncSettings.lastPricePushError ? (
+          <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-sm text-muted-foreground">
+            Push notes: {syncSettings.lastPricePushError}
+          </p>
         ) : null}
 
         {syncSettings.lastPriceImportAt ? (
@@ -227,9 +303,31 @@ export function ShopifyMarketsPanel({
           </div>
         ) : null}
 
+        {exportedMarkets.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs">
+            <p className="font-medium text-foreground">Cached price exports (push)</p>
+            {exportedMarkets.map((row) => (
+              <div key={row.osMarketId} className="flex flex-wrap justify-between gap-2 text-muted-foreground">
+                <span>
+                  OS market <span className="font-mono">{row.osMarketId}</span>
+                </span>
+                <span>
+                  {row.pushedVariantCount}/{row.variantCount} variants · {row.currencyCode ?? "—"}
+                  {row.priceHash ? (
+                    <>
+                      {" "}
+                      · hash <span className="font-mono">{row.priceHash.slice(0, 8)}</span>
+                    </>
+                  ) : null}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
         <p className="text-xs text-muted-foreground">
-          Product sync also attempts price import for import-mode markets. Map external products before
-          importing. Tax/duty settings are never overwritten.
+          Product sync imports for import-mode markets; product price saves auto-push for push-mode markets
+          (30s debounce). Map external products first. Tax/duty settings are never overwritten.
         </p>
       </CardContent>
     </Card>

@@ -12,6 +12,17 @@ export type ShopifyMarketPriceImportRow = {
   priceHash: string;
 };
 
+export type ShopifyMarketPriceExportRow = {
+  osMarketId: string;
+  shopifyMarketId: string;
+  shopifyPriceListId: string | null;
+  currencyCode: string | null;
+  pushedAt: string;
+  variantCount: number;
+  pushedVariantCount: number;
+  priceHash: string;
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
@@ -25,9 +36,20 @@ export type ShopifyMarketsSyncSettings = {
   lastWebhookPriceImportTopic: string | null;
   lastWebhookPriceImportTriggeredAt: string | null;
   lastWebhookPriceImportSkippedReason: string | null;
+  lastPricePushAt: string | null;
+  lastPricePushError: string | null;
+  lastPricePushTriggeredAt: string | null;
+  lastPricePushSkippedReason: string | null;
+  lastPricePushOrigin: string | null;
+  marketPriceExports: Record<string, ShopifyMarketPriceExportRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
+export const SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES = [
+  "read_markets",
+  "read_products",
+  "write_products",
+] as const;
 
 export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyMarketsSyncSettings {
   const root =
@@ -48,6 +70,11 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
   const marketPriceImports =
     raw.marketPriceImports && typeof raw.marketPriceImports === "object"
       ? (raw.marketPriceImports as Record<string, ShopifyMarketPriceImportRow>)
+      : {};
+
+  const marketPriceExports =
+    raw.marketPriceExports && typeof raw.marketPriceExports === "object"
+      ? (raw.marketPriceExports as Record<string, ShopifyMarketPriceExportRow>)
       : {};
 
   return {
@@ -73,6 +100,14 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       typeof raw.lastWebhookPriceImportSkippedReason === "string"
         ? raw.lastWebhookPriceImportSkippedReason
         : null,
+    lastPricePushAt: typeof raw.lastPricePushAt === "string" ? raw.lastPricePushAt : null,
+    lastPricePushError: typeof raw.lastPricePushError === "string" ? raw.lastPricePushError : null,
+    lastPricePushTriggeredAt:
+      typeof raw.lastPricePushTriggeredAt === "string" ? raw.lastPricePushTriggeredAt : null,
+    lastPricePushSkippedReason:
+      typeof raw.lastPricePushSkippedReason === "string" ? raw.lastPricePushSkippedReason : null,
+    lastPricePushOrigin: typeof raw.lastPricePushOrigin === "string" ? raw.lastPricePushOrigin : null,
+    marketPriceExports,
   };
 }
 

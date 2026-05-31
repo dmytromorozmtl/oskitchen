@@ -201,8 +201,9 @@ export function StorefrontMarketsEditor({
                           >
                             <option value="none">None — native OS Kitchen prices</option>
                             <option value="import">Import — Shopify price list wins on mapped products</option>
+                            <option value="push">Push — KitchenOS prices update Shopify price list</option>
                             <option value="bidirectional" disabled>
-                              Bidirectional (Phase 4+ — not available)
+                              Bidirectional (future — not available)
                             </option>
                           </select>
                         </div>

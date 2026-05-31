@@ -28,7 +28,7 @@ export const storefrontMarketSchema = z.object({
   /** Optional Shopify price list gid for Phase 2 */
   shopifyPriceListId: z.string().max(128).optional(),
   /** How Shopify data flows for this market once Phase 2+ ships */
-  syncMode: z.enum(["none", "import", "bidirectional"]).optional().default("none"),
+  syncMode: z.enum(["none", "import", "push", "bidirectional"]).optional().default("none"),
 });
 
 export type StorefrontMarket = z.infer<typeof storefrontMarketSchema>;

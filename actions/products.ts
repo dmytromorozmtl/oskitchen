@@ -1,6 +1,7 @@
 "use server";
 
 
+import { triggerShopifyMarketPricePushAfterProductUpdate } from "@/lib/integrations/shopify-market-prices-push-trigger";
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -208,6 +209,13 @@ export async function updateProduct(productId: string, formData: FormData) {
         price: d.price,
         image: d.image,
       },
+    });
+
+    void triggerShopifyMarketPricePushAfterProductUpdate({
+      userId,
+      productId,
+      previousPrice: existing.price.toFixed(2),
+      newPrice: d.price.toFixed(2),
     });
 
     await revalidateProductPaths(userId);

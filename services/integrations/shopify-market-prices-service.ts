@@ -37,6 +37,20 @@ export function gidTail(gid: string): string {
   return parts[parts.length - 1] ?? gid;
 }
 
+export function toShopifyVariantGid(externalVariantId: string): string {
+  const trimmed = externalVariantId.trim();
+  if (!trimmed) return trimmed;
+  if (trimmed.startsWith("gid://")) return trimmed;
+  return `gid://shopify/ProductVariant/${trimmed}`;
+}
+
+export function toShopifyPriceListGid(priceListId: string): string {
+  const trimmed = priceListId.trim();
+  if (!trimmed) return trimmed;
+  if (trimmed.startsWith("gid://")) return trimmed;
+  return `gid://shopify/PriceList/${trimmed}`;
+}
+
 const MARKET_PRICES_QUERY = `
   query KitchenOSMarketPrices($marketId: ID!, $first: Int!) {
     market(id: $marketId) {

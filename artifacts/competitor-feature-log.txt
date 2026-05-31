@@ -337,3 +337,15 @@ Result: PASS
 Summary: Webhook-driven Shopify market price re-import (products/update + markets/*), 60s debounce, SHA price-hash skip, shared catalog revalidation helper, dashboard webhook status
 Tests: tests/unit/shopify-markets-webhook-service.test.ts, tests/unit/shopify-market-prices-service.test.ts
 Next: shopify-markets-phase4-push-prices OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing
+
+---
+Post-parity cycle: 8
+Timestamp: 2026-05-31T12:00:00.000Z
+Feature: shopify-markets-phase4-push-prices
+Source: docs/shopify-markets-rfc.md Option C (push slice)
+Priority: POST-PARITY
+Files: 18
+Result: PASS
+Summary: KitchenOS → Shopify price list push for syncMode=push markets via priceListFixedPricesUpdate; manual action + product-update trigger with 30s debounce and outgoing hash skip
+Tests: tests/unit/shopify-market-prices-push-service.test.ts
+Next: restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing OR shopify-markets-bidirectional

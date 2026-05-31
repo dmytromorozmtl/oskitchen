@@ -1,6 +1,6 @@
 # Shopify Markets RFC — Multi-Region Commerce Integration
 
-**Status:** Phase 1–3 shipped (discovery + mapping + price import + webhook re-sync BETA) — Phase 4 push optional  
+**Status:** Phase 1–4 shipped (discovery + mapping + import + webhooks + push BETA) — bidirectional optional  
 **Audience:** Integrations, Storefront, Product, Commercial  
 **Tracker:** `shopify-markets-rfc` (competitor parity cycle 16)  
 **Related:** [`roadmap/STOREFRONT_SHOPIFY_PARITY.md`](./roadmap/STOREFRONT_SHOPIFY_PARITY.md) · [`storefront-audit-21may.md`](./storefront-audit-21may.md) · [`services/integrations/shopify.ts`](../services/integrations/shopify.ts) · [`lib/storefront/markets.ts`](../lib/storefront/markets.ts)
@@ -262,3 +262,4 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 1 shipped:** `shopify-markets-service`, discovery cache on connection, mapping UI on storefront markets + Shopify integration card |
 | 2026-05-31 | **Phase 2 shipped:** `shopify-market-prices-service`, price list import, storefront catalog overrides for syncMode=import |
 | 2026-05-31 | **Phase 3 shipped:** webhook-driven price re-import (`products/update`, `markets/*`), 60s debounce, SHA price-hash skip, catalog cache revalidation |
+| 2026-05-31 | **Phase 4 shipped:** KitchenOS → Shopify price list push (`syncMode=push`), manual + product-update trigger, 30s debounce, write_products scope |

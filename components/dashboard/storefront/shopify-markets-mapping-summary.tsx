@@ -23,16 +23,19 @@ export function ShopifyMarketsMappingSummary({
 }: ShopifyMarketsMappingSummaryProps) {
   const linked = osMarkets.filter((m) => m.shopifyMarketId).length;
   const importMode = osMarkets.filter((m) => m.syncMode === "import").length;
+  const pushMode = osMarkets.filter((m) => m.syncMode === "push").length;
   const priceRows = syncSettings ? Object.values(syncSettings.marketPriceImports ?? {}) : [];
+  const exportRows = syncSettings ? Object.values(syncSettings.marketPriceExports ?? {}) : [];
   const mappedPrices = priceRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
+  const pushedVariants = exportRows.reduce((sum, row) => sum + row.pushedVariantCount, 0);
 
   return (
     <Card className="border-border/80 bg-muted/10">
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 3 — link OS Kitchen markets to Shopify, set syncMode import, apply Shopify price list
-          overrides on mapped products. Webhooks keep prices fresh with debounce + hash skip.
+          Phase 4 — link OS Kitchen markets to Shopify, set syncMode import or push, and sync mapped
+          product prices via Shopify price lists.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -54,8 +57,14 @@ export function ShopifyMarketsMappingSummary({
               {importMode > 0 ? (
                 <Badge variant="secondary">{importMode} import-mode</Badge>
               ) : null}
+              {pushMode > 0 ? (
+                <Badge variant="secondary">{pushMode} push-mode</Badge>
+              ) : null}
               {mappedPrices > 0 ? (
                 <Badge variant="outline">{mappedPrices} Shopify price override(s)</Badge>
+              ) : null}
+              {pushedVariants > 0 ? (
+                <Badge variant="outline">{pushedVariants} variant(s) pushed</Badge>
               ) : null}
             </div>
             {syncSettings?.lastPriceImportAt ? (
@@ -76,6 +85,20 @@ export function ShopifyMarketsMappingSummary({
                     ? " — unchanged"
                     : ""}
               </p>
+            ) : null}
+            {syncSettings?.lastPricePushAt ? (
+              <p className="text-xs text-muted-foreground">
+                Last price push: {new Date(syncSettings.lastPricePushAt).toLocaleString()}
+                {syncSettings.lastPricePushOrigin ? ` (${syncSettings.lastPricePushOrigin})` : ""}
+                {syncSettings.lastPricePushSkippedReason === "debounced"
+                  ? " — debounced"
+                  : syncSettings.lastPricePushSkippedReason === "unchanged"
+                    ? " — unchanged"
+                    : ""}
+              </p>
+            ) : null}
+            {syncSettings?.lastPricePushError ? (
+              <p className="text-xs text-amber-700 dark:text-amber-200">{syncSettings.lastPricePushError}</p>
             ) : null}
             {syncSettings?.priceImportError ? (
               <p className="text-xs text-amber-700 dark:text-amber-200">{syncSettings.priceImportError}</p>

@@ -16,6 +16,9 @@ import { listShopifyMarkets } from "@/services/integrations/shopify-markets-serv
 import {
   importShopifyMarketPricesForConnection,
 } from "@/services/integrations/shopify-market-prices-service";
+import {
+  pushShopifyMarketPricesForConnection,
+} from "@/services/integrations/shopify-market-prices-push-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
@@ -108,5 +111,50 @@ export async function importShopifyMarketPricesAction(connectionId: string) {
     ok: true as const,
     marketsImported: result.marketsImported,
     totalProductPrices: result.totalProductPrices,
+  };
+}
+
+export async function pushShopifyMarketPricesAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.push_prices" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before push." };
+  }
+
+  const result = await pushShopifyMarketPricesForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    origin: "manual",
+    respectDebounce: false,
+  });
+
+  if (!result.ok) {
+    return {
+      ok: false as const,
+      error: result.error,
+      skippedReason: result.skippedReason,
+    };
+  }
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return {
+    ok: true as const,
+    marketsPushed: result.marketsPushed,
+    marketsUnchanged: result.marketsUnchanged,
+    totalVariantsPushed: result.totalVariantsPushed,
+    skippedReason: result.skippedReason,
   };
 }

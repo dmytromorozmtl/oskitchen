@@ -223,14 +223,21 @@ export default async function ShopifyIntegrationPage() {
             only on actual price updates.
           </p>
           <p>
+            <span className="font-medium text-foreground">Phase 4 Push:</span> markets with{" "}
+            <code className="rounded bg-muted px-1 text-xs">syncMode=push</code> send KitchenOS product
+            prices to Shopify price lists via Admin GraphQL. Product saves auto-push with 30s debounce;
+            requires <code className="rounded bg-muted px-1 text-xs">write_products</code>.
+          </p>
+          <p>
             <span className="font-medium text-foreground">Not yet:</span> automatic internal Order
-            creation for every Shopify row, inventory reservations, push KitchenOS → Shopify prices,
+            creation for every Shopify row, inventory reservations, bidirectional conflict resolution,
             and marketplace-specific adjustments.
           </p>
           <p>
             <span className="font-medium text-foreground">Setup checklist:</span> custom app scopes{" "}
             <code className="rounded bg-muted px-1 text-xs">read_markets</code>,{" "}
-            <code className="rounded bg-muted px-1 text-xs">read_products</code>, orders/products
+            <code className="rounded bg-muted px-1 text-xs">read_products</code>,{" "}
+            <code className="rounded bg-muted px-1 text-xs">write_products</code> (push), orders/products
             webhooks, market webhooks listed above, store domain match, then run sync and review staging.
           </p>
           <p>
