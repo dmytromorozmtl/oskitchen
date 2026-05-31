@@ -253,3 +253,15 @@ Files: 2
 Result: PASS
 Summary: Verification phase closed — 3 consecutive passes (cycles 24-26); no implementation steps remain
 Next: STOP — use pilot GTM / maintenance only
+
+---
+Post-parity cycle: 1
+Timestamp: 2026-05-31T05:00:00.000Z
+Feature: app-marketplace-phase1
+Source: docs/app-marketplace-rfc.md Option A
+Priority: POST-PARITY
+Files: 12
+Result: PASS
+Summary: Curated partner directory + extensions catalog hub at /dashboard/integrations/extensions; merges first-party INTEGRATION_REGISTRY, Shopify/Woo/inventory-sync, certified SI partners from config/commercial/partner-apps.json, and honest roadmap rows
+Tests: tests/unit/extensions-catalog-service.test.ts
+Next: app-marketplace-phase2-outbound-webhooks (RFC Option B) OR shopify-markets-phase1 OR restaurant-capital-resources-hub

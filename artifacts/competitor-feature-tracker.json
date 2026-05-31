@@ -33,5 +33,9 @@
   "waitlist-management": "done",
   "restaurant-loyalty": "done",
   "app-marketplace-rfc": "done",
-  "restaurant-capital-rfc": "done"
+  "restaurant-capital-rfc": "done",
+  "postParityPhase": "app-marketplace-phase1",
+  "app-marketplace-phase1": "done",
+  "app-marketplace-phase1ShippedAt": "2026-05-31T05:00:00.000Z",
+  "nextRecommendedStep": "app-marketplace-phase2-outbound-webhooks OR shopify-markets-phase1 OR restaurant-capital-resources-hub"
 }

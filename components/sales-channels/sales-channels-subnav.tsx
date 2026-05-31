@@ -19,6 +19,7 @@ const TABS: { href: string; label: string; manageOnly?: boolean }[] = [
   { href: "/dashboard/sales-channels/sync-jobs", label: "Sync jobs" },
   { href: "/dashboard/sales-channels/webhooks", label: "Webhooks" },
   { href: "/dashboard/sales-channels/mapping", label: "Mapping", manageOnly: true },
+  { href: "/dashboard/integrations/extensions", label: "Extensions" },
   { href: "/dashboard/sales-channels/analytics", label: "Analytics" },
   { href: "/dashboard/sales-channels/health", label: "Health" },
   { href: "/dashboard/sales-channels/reliability", label: "Reliability" },

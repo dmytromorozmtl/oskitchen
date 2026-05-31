@@ -1,6 +1,6 @@
 # App Marketplace RFC — Third-Party Extension Platform
 
-**Status:** Draft for engineering review — **not implemented**  
+**Status:** Phase 1 shipped (curated partner directory) — OAuth marketplace **not implemented**  
 **Audience:** Platform, Integrations, Security, Product, Commercial, Partnerships  
 **Tracker:** `app-marketplace-rfc` (competitor parity cycle 21)  
 **Related:** [`lib/integrations/integration-registry.ts`](../lib/integrations/integration-registry.ts) · [`lib/channels/channel-registry.ts`](../lib/channels/channel-registry.ts) · [`app/developers/page.tsx`](../app/developers/page.tsx) · [`docs/scim-provisioning-rfc.md`](./scim-provisioning-rfc.md) · [`docs/INTEGRATION_MATURITY_MATRIX.md`](./INTEGRATION_MATURITY_MATRIX.md)
@@ -307,3 +307,4 @@ Developer docs surface:
 | Date | Decision |
 |------|----------|
 | 2026-05-31 | RFC accepted as Phase 0; implementation deferred; recommend Option A (curated directory) for first GTM slice, Option B before OAuth |
+| 2026-05-31 | **Phase 1 shipped:** `config/commercial/partner-apps.json`, `services/platform/extensions-catalog-service.ts`, `/dashboard/integrations/extensions` |
