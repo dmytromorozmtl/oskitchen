@@ -40,6 +40,11 @@ import {
   resolveShopifyMarketHostnameConflict,
 } from "@/services/integrations/shopify-markets-hostname-guard-bidirectional-service";
 import { importShopifyMarketHostnameForConnection } from "@/services/integrations/shopify-market-hostname-service";
+import { importShopifyB2bCompaniesForConnection } from "@/services/integrations/shopify-market-b2b-service";
+import {
+  reconcileShopifyB2bGuardForConnection,
+  resolveShopifyB2bCompanyConflict,
+} from "@/services/integrations/shopify-markets-b2b-guard-bidirectional-service";
 import {
   registerMissingShopifyMarketsWebhooks,
   syncShopifyMarketsWebhookRegistryForConnection,
@@ -662,6 +667,110 @@ export async function applySuggestedShopifyMarketHostnameAction(input: {
   return { ok: true as const };
 }
 
+export async function importShopifyB2bCompaniesAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.import_b2b" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before import." };
+  }
+
+  const result = await importShopifyB2bCompaniesForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error, unavailable: result.unavailable };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  revalidatePath("/dashboard/customers/companies");
+
+  return {
+    ok: true as const,
+    companiesImported: result.companiesImported,
+    companiesUnchanged: result.companiesUnchanged,
+    companiesTotal: result.companiesTotal,
+  };
+}
+
+export async function reconcileShopifyB2bGuardAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.reconcile_b2b_guard" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before reconcile." };
+  }
+
+  const result = await reconcileShopifyB2bGuardForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    origin: "manual",
+    skipUnchanged: false,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error, unavailable: result.unavailable };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  revalidatePath("/dashboard/customers/companies");
+
+  return { ok: true as const, ...result };
+}
+
+export async function resolveShopifyB2bCompanyConflictAction(input: {
+  connectionId: string;
+  conflictKey: string;
+  resolution: "shopify" | "kitchenos" | "ignore";
+  companyAccountId?: string;
+}) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.resolve_b2b_conflict" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId: input.connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, input.connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const result = await resolveShopifyB2bCompanyConflict({
+    userId: access.actor.userId,
+    connection: conn,
+    conflictKey: input.conflictKey,
+    resolution: input.resolution,
+    companyAccountId: input.companyAccountId,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  revalidatePath("/dashboard/customers/companies");
+  return { ok: true as const, linked: result.linked, applied: result.applied };
+}
+
 export async function syncShopifyMarketsWebhookRegistryAction(connectionId: string) {
   const access = await requireIntegrationsActor({ operation: "shopify.markets.sync_webhook_registry" });
   if (!access.ok) return { ok: false as const, error: access.error };
@@ -768,6 +877,7 @@ export async function runFullShopifyMarketsReconcileAction(connectionId: string)
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");
   revalidatePath("/dashboard/storefront/domains");
+  revalidatePath("/dashboard/customers/companies");
 
   return {
     ok: true as const,

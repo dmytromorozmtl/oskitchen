@@ -94,6 +94,16 @@ const healthySync: ShopifyMarketsSyncSettings = {
   lastFullMarketsReconcileAt: null,
   lastFullMarketsReconcileResult: null,
   lastFullMarketsReconcileError: null,
+  b2bAuthority: "kitchenos",
+  b2bUnavailableReason: null,
+  lastB2bImportAt: null,
+  b2bImportError: null,
+  b2bCompanyImports: {},
+  lastB2bReconcileAt: null,
+  lastB2bReconcileError: null,
+  lastB2bReconcileResult: null,
+  b2bCompanyConflicts: {},
+  b2bCompanyLinks: {},
 };
 
 describe("shopify-markets-health-dashboard", () => {
@@ -103,11 +113,13 @@ describe("shopify-markets-health-dashboard", () => {
       openCatalogConflicts: 0,
       openTaxConflicts: 0,
       openHostnameConflicts: 0,
+      openB2bConflicts: 0,
       webhookMissingOrWrong: 1,
       webhookStaleOrNever: 0,
       discoveryError: false,
       linkedMarketsWithoutDiscovery: false,
       discoveryStale: false,
+      b2bUnavailable: false,
     });
     expect(score).toBe(65);
     expect(levelFromScore(score)).toBe("attention");
@@ -131,7 +143,7 @@ describe("shopify-markets-health-service", () => {
 
     expect(snapshot.overallScore).toBeGreaterThanOrEqual(85);
     expect(snapshot.linkedMarkets).toBe(1);
-    expect(snapshot.domains).toHaveLength(6);
+    expect(snapshot.domains).toHaveLength(7);
     expect(snapshot.domains.find((d) => d.key === "prices")?.level).toBe("healthy");
   });
 

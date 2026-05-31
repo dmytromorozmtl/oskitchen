@@ -306,6 +306,7 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 8 (market hostname) shipped:** Shopify handle → suggested subdomain/slug, `hostnameAuthority`, conflict queue, manual Apply + reconcile auto-apply when shopify wins |
 | 2026-06-01 | **Phase 9 (webhook registry) shipped:** Admin subscription sync, drift detection, register missing, delivery health from webhook event log |
 | 2026-06-01 | **Phase 10 (health dashboard) shipped:** weighted health score, domain status cards, full reconcile orchestration on Storefront → Markets |
+| 2026-06-01 | **Phase 11 (B2B company guard) shipped:** Shopify companies import, KitchenOS CompanyAccount linking, conflict guard, health domain |
 
 ---
 
@@ -375,10 +376,32 @@ Required Shopify scopes (verify at implementation):
 |-----------|------|
 | Feature flag | `SHOPIFY_MARKETS_HEALTH_DASHBOARD=1` (default on in non-production) |
 | Snapshot builder | `shopify-markets-health-service.ts` — `buildShopifyMarketsHealthSnapshot` |
-| Full reconcile | `runFullShopifyMarketsReconcileForConnection` — discovery → webhooks → prices → catalog → tax → hostname |
+| Full reconcile | `runFullShopifyMarketsReconcileForConnection` — discovery → webhooks → prices → catalog → tax → hostname → b2b |
 | UI | `shopify-markets-health-dashboard.tsx` on Storefront → Markets |
 | Settings audit | `lastFullMarketsReconcileAt/Result/Error` on `marketsSync` |
 
-**Health domains:** discovery, prices, catalog, tax, hostname, webhooks
+**Health domains:** discovery, prices, catalog, tax, hostname, webhooks, b2b
 
-**Score weights:** open price/catalog conflicts (−20 each), tax/hostname (−10), webhook missing/wrong (−15), stale delivery (−5)
+**Score weights:** open price/catalog conflicts (−20 each), tax/hostname (−10), b2b (−8), webhook missing/wrong (−15), stale delivery (−5)
+
+---
+
+## Phase 11 — B2B company guard (shipped)
+
+**Goal:** Read-only import of Shopify B2B companies with suggested links to KitchenOS `CompanyAccount` records — never auto-creates accounts unless `b2bAuthority=shopify`.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_GUARD=1` (default on in non-production) |
+| Import service | `shopify-market-b2b-service.ts` — GraphQL `companies` query |
+| Guard reconcile | `shopify-markets-b2b-guard-bidirectional-service.ts` |
+| Settings cache | `b2bCompanyImports`, `b2bCompanyLinks`, `b2bCompanyConflicts` on `marketsSync` |
+| UI | `#shopify-markets-b2b-guard` on Integrations → Shopify panel |
+| Health domain | `b2b` on Storefront → Markets health dashboard |
+| KitchenOS CRM | Links to `/dashboard/customers/companies` |
+
+**Conflict types:** `UNMAPPED`, `NAME_MISMATCH`, `EMAIL_MISMATCH`, `DUPLICATE_LINK`
+
+**Scopes:** `read_companies` (Shopify Plus B2B required)
+
+**Conscious limits:** No outbound company creation in Shopify; no order routing by company location in this phase; catering quotes rollup is a follow-on.

@@ -48,11 +48,11 @@ export function ShopifyMarketsHealthDashboard({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <HeartPulse className="h-4 w-4" />
-              Markets health — Phase 10 BETA
+              Markets health — Phase 10–11 BETA
             </CardTitle>
             <CardDescription>
               Operational snapshot across discovery, prices, catalog, tax guard, hostname routing,
-              and webhook registry for linked Shopify markets.
+              B2B companies, and webhook registry for linked Shopify markets.
             </CardDescription>
           </div>
           <div className="flex flex-wrap items-center gap-2">

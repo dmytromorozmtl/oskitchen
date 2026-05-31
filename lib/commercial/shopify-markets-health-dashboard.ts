@@ -1,5 +1,5 @@
 export const SHOPIFY_MARKETS_HEALTH_DASHBOARD_HONESTY =
-  "Health score reflects cached sync state — run full reconcile to refresh prices, catalog, tax, hostname, and webhook registry in one pass.";
+  "Health score reflects cached sync state — run full reconcile to refresh prices, catalog, tax, hostname, B2B companies, and webhook registry in one pass.";
 
 export const SHOPIFY_MARKETS_DISCOVERY_STALE_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -16,7 +16,8 @@ export type MarketsHealthDomainKey =
   | "catalog"
   | "tax"
   | "hostname"
-  | "webhooks";
+  | "webhooks"
+  | "b2b";
 
 export type MarketsHealthDomainStatus = {
   key: MarketsHealthDomainKey;
@@ -46,6 +47,7 @@ export type ShopifyMarketsHealthSnapshot = {
   openCatalogConflicts: number;
   openTaxConflicts: number;
   openHostnameConflicts: number;
+  openB2bConflicts: number;
   webhookDriftCount: number;
   recommendations: string[];
 };
@@ -81,11 +83,13 @@ export function computeMarketsHealthScore(input: {
   openCatalogConflicts: number;
   openTaxConflicts: number;
   openHostnameConflicts: number;
+  openB2bConflicts: number;
   webhookMissingOrWrong: number;
   webhookStaleOrNever: number;
   discoveryError: boolean;
   linkedMarketsWithoutDiscovery: boolean;
   discoveryStale: boolean;
+  b2bUnavailable: boolean;
 }): number {
   let score = 100;
 
@@ -93,12 +97,14 @@ export function computeMarketsHealthScore(input: {
   score -= Math.min(input.openCatalogConflicts * 20, 40);
   score -= Math.min(input.openTaxConflicts * 10, 20);
   score -= Math.min(input.openHostnameConflicts * 10, 20);
+  score -= Math.min(input.openB2bConflicts * 8, 16);
   score -= Math.min(input.webhookMissingOrWrong * 15, 30);
   score -= Math.min(input.webhookStaleOrNever * 5, 15);
 
   if (input.discoveryError) score -= 25;
   if (input.linkedMarketsWithoutDiscovery) score -= 15;
   if (input.discoveryStale) score -= 5;
+  if (input.b2bUnavailable) score -= 3;
 
   return Math.max(0, Math.min(100, score));
 }

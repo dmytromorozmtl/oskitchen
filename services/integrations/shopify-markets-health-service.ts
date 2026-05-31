@@ -32,6 +32,7 @@ import {
   countOpenShopifyMarketPriceConflicts,
 } from "@/services/integrations/shopify-markets-bidirectional-service";
 import { reconcileShopifyMarketHostnameGuardForConnection } from "@/services/integrations/shopify-markets-hostname-guard-bidirectional-service";
+import { reconcileShopifyB2bGuardForConnection } from "@/services/integrations/shopify-markets-b2b-guard-bidirectional-service";
 import { reconcileShopifyMarketTaxGuardForConnection } from "@/services/integrations/shopify-markets-tax-guard-bidirectional-service";
 import { syncShopifyMarketsWebhookRegistryForConnection } from "@/services/integrations/shopify-markets-webhook-registry-service";
 import { listShopifyMarkets } from "@/services/integrations/shopify-markets-service";
@@ -42,6 +43,7 @@ import {
 } from "@/services/integrations/shopify-markets-catalog-bidirectional-service";
 import { countOpenShopifyMarketTaxConflicts } from "@/services/integrations/shopify-markets-tax-guard-bidirectional-service";
 import { countOpenShopifyMarketHostnameConflicts } from "@/services/integrations/shopify-markets-hostname-guard-bidirectional-service";
+import { countOpenShopifyB2bCompanyConflicts } from "@/services/integrations/shopify-markets-b2b-guard-bidirectional-service";
 import { countWebhookRegistryDrift } from "@/services/integrations/shopify-markets-webhook-registry-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
@@ -94,6 +96,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   const openTaxConflicts = sync ? countOpenShopifyMarketTaxConflicts(sync.marketTaxConflicts ?? {}) : 0;
   const openHostnameConflicts = sync
     ? countOpenShopifyMarketHostnameConflicts(sync.marketHostnameConflicts ?? {})
+    : 0;
+  const openB2bConflicts = sync
+    ? countOpenShopifyB2bCompanyConflicts(sync.b2bCompanyConflicts ?? {})
     : 0;
 
   const drift = sync ? webhookDriftCounts(sync) : { missingOrWrong: 0, staleOrNever: 0, total: 0 };
@@ -214,6 +219,28 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       openIssues: drift.total,
       linkHref: "/dashboard/integrations/shopify#shopify-markets-webhook-registry",
     },
+    {
+      key: "b2b",
+      label: "B2B companies",
+      level: domainLevel(
+        openB2bConflicts,
+        Boolean(sync?.b2bImportError || sync?.lastB2bReconcileError),
+        Boolean(sync?.b2bUnavailableReason),
+      ),
+      summary:
+        sync?.b2bUnavailableReason
+          ? sync.b2bUnavailableReason
+          : openB2bConflicts > 0
+            ? `${openB2bConflicts} open B2B company conflict(s)`
+            : sync?.lastB2bReconcileAt
+              ? `Last reconcile ${sync.lastB2bReconcileResult ?? "ok"}`
+              : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
+                ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} Shopify B2B company hint(s) cached`
+                : "No B2B guard activity",
+      lastActivityAt: sync?.lastB2bReconcileAt ?? sync?.lastB2bImportAt ?? null,
+      openIssues: openB2bConflicts,
+      linkHref: "/dashboard/integrations/shopify#shopify-markets-b2b-guard",
+    },
   ];
 
   const overallScore = computeMarketsHealthScore({
@@ -221,11 +248,13 @@ export function buildShopifyMarketsHealthSnapshot(input: {
     openCatalogConflicts,
     openTaxConflicts,
     openHostnameConflicts,
+    openB2bConflicts,
     webhookMissingOrWrong: drift.missingOrWrong,
     webhookStaleOrNever: drift.staleOrNever,
     discoveryError: Boolean(sync?.discoveryError),
     linkedMarketsWithoutDiscovery: linkedWithoutDiscovery,
     discoveryStale,
+    b2bUnavailable: Boolean(sync?.b2bUnavailableReason),
   });
 
   const overallLevel = overallLevelFromDomains(domains);
@@ -253,6 +282,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   if (openTaxConflicts > 0 || openHostnameConflicts > 0) {
     recommendations.push("Review tax and hostname conflicts on Storefront → Markets.");
   }
+  if (openB2bConflicts > 0) {
+    recommendations.push(
+      "Link Shopify B2B companies to KitchenOS company accounts on Integrations → Shopify.",
+    );
+  }
   if (recommendations.length === 0 && linkedMarkets > 0) {
     recommendations.push("Run full reconcile weekly to keep import-mode markets fresh.");
   }
@@ -270,6 +304,7 @@ export function buildShopifyMarketsHealthSnapshot(input: {
     openCatalogConflicts,
     openTaxConflicts,
     openHostnameConflicts,
+    openB2bConflicts,
     webhookDriftCount: drift.total,
     recommendations,
   };
@@ -433,6 +468,24 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
     hostnameReconcile.ok
       ? `hostname: open=${hostnameReconcile.conflictsOpen} applied=${hostnameReconcile.appliedMarkets}`
       : `hostname: skipped/failed (${hostnameReconcile.error})`,
+  );
+
+  conn =
+    (await prisma.integrationConnection.findUnique({ where: { id: conn.id } })) ?? conn;
+
+  const b2bReconcile = await reconcileShopifyB2bGuardForConnection({
+    userId: input.userId,
+    connection: conn,
+    creds: input.creds,
+    origin: "full_reconcile",
+    skipUnchanged: false,
+  });
+  steps.push(
+    b2bReconcile.ok
+      ? `b2b: open=${b2bReconcile.conflictsOpen} links=${b2bReconcile.linksApplied}`
+      : b2bReconcile.unavailable
+        ? `b2b: unavailable (${b2bReconcile.error})`
+        : `b2b: skipped/failed (${b2bReconcile.error})`,
   );
 
   conn =

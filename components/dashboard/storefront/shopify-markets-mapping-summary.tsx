@@ -52,8 +52,8 @@ export function ShopifyMarketsMappingSummary({
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 10 — operational health dashboard below. Link OS Kitchen markets to Shopify, sync
-          prices, catalog, tax/duty hints, and hostname routing.
+          Phase 11 — B2B company guard on Integrations → Shopify. Link OS Kitchen markets to Shopify, sync
+          prices, catalog, tax/duty hints, hostname routing, and wholesale company accounts.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">

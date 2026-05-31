@@ -2,11 +2,13 @@
 
 import { useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, BookOpen, DollarSign, Globe2, Link2, Loader2, Receipt, RefreshCw, Scale } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, BookOpen, Building2, DollarSign, Globe2, Link2, Loader2, Receipt, RefreshCw, Scale } from "lucide-react";
 
 import {
   applySuggestedShopifyMarketHostnameAction,
   discoverShopifyMarketsAction,
+  importShopifyB2bCompaniesAction,
   importShopifyMarketCatalogAction,
   importShopifyMarketHostnameAction,
   importShopifyMarketPricesAction,
@@ -15,8 +17,10 @@ import {
   pushShopifyMarketPricesAction,
   reconcileBidirectionalShopifyMarketCatalogAction,
   reconcileBidirectionalShopifyMarketsAction,
+  reconcileShopifyB2bGuardAction,
   reconcileShopifyMarketHostnameGuardAction,
   reconcileShopifyMarketTaxGuardAction,
+  resolveShopifyB2bCompanyConflictAction,
   resolveShopifyMarketCatalogConflictAction,
   resolveShopifyMarketHostnameConflictAction,
   resolveShopifyMarketPriceConflictAction,
@@ -25,6 +29,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SHOPIFY_MARKET_B2B_GUARD_HONESTY } from "@/lib/commercial/shopify-market-b2b-guard";
 import { SHOPIFY_MARKET_HOSTNAME_GUARD_HONESTY } from "@/lib/commercial/shopify-market-hostname-guard";
 import { SHOPIFY_MARKET_TAX_GUARD_HONESTY } from "@/lib/commercial/shopify-market-tax-guard";
 import {
@@ -85,6 +90,9 @@ export function ShopifyMarketsPanel({
   const [hostnameReconcilePending, startHostnameReconcile] = useTransition();
   const [hostnameResolvePending, startHostnameResolve] = useTransition();
   const [hostnameApplyPending, startHostnameApply] = useTransition();
+  const [b2bImportPending, startB2bImport] = useTransition();
+  const [b2bReconcilePending, startB2bReconcile] = useTransition();
+  const [b2bResolvePending, startB2bResolve] = useTransition();
   const pending =
     discoverPending ||
     importPending ||
@@ -101,7 +109,10 @@ export function ShopifyMarketsPanel({
     hostnameImportPending ||
     hostnameReconcilePending ||
     hostnameResolvePending ||
-    hostnameApplyPending;
+    hostnameApplyPending ||
+    b2bImportPending ||
+    b2bReconcilePending ||
+    b2bResolvePending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
   const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
@@ -121,6 +132,11 @@ export function ShopifyMarketsPanel({
   const openHostnameConflicts = Object.values(syncSettings.marketHostnameConflicts ?? {}).filter(
     (row) => row.status === "open",
   );
+  const importedB2bCompanies = Object.values(syncSettings.b2bCompanyImports ?? {});
+  const openB2bConflicts = Object.values(syncSettings.b2bCompanyConflicts ?? {}).filter(
+    (row) => row.status === "open",
+  );
+  const linkedB2bCount = Object.keys(syncSettings.b2bCompanyLinks ?? {}).length;
   const totalMappedPrices = importedMarkets.reduce(
     (sum, row) => sum + row.mappedProductCount,
     0,
@@ -394,6 +410,44 @@ export function ShopifyMarketsPanel({
               )}
               <span className="ml-2">Reconcile hostname guard</span>
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startB2bImport(async () => {
+                  await importShopifyB2bCompaniesAction(connectionId);
+                })
+              }
+            >
+              {b2bImportPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Building2 className="h-4 w-4" />
+              )}
+              <span className="ml-2">Import B2B companies</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startB2bReconcile(async () => {
+                  await reconcileShopifyB2bGuardAction(connectionId);
+                })
+              }
+            >
+              {b2bReconcilePending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Scale className="h-4 w-4" />
+              )}
+              <span className="ml-2">Reconcile B2B guard</span>
+            </Button>
           </div>
         ) : null}
 
@@ -620,6 +674,121 @@ export function ShopifyMarketsPanel({
             {syncSettings.taxImportError ? ` · notes: ${syncSettings.taxImportError}` : ""}
           </p>
         ) : null}
+
+        <div id="shopify-markets-b2b-guard" className="scroll-mt-24 space-y-3">
+          <p className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            {SHOPIFY_MARKET_B2B_GUARD_HONESTY}
+          </p>
+
+          {syncSettings.b2bUnavailableReason ? (
+            <p className="text-xs text-amber-700 dark:text-amber-400">
+              B2B unavailable: {syncSettings.b2bUnavailableReason}. Requires Shopify Plus B2B and{" "}
+              <span className="font-mono">read_companies</span> scope.
+            </p>
+          ) : null}
+
+          {syncSettings.lastB2bReconcileAt ? (
+            <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+              <p>
+                Last B2B guard reconcile{" "}
+                {formatDistanceToNow(new Date(syncSettings.lastB2bReconcileAt), { addSuffix: true })}
+                {syncSettings.lastB2bReconcileResult ? (
+                  <> · {syncSettings.lastB2bReconcileResult}</>
+                ) : null}
+                {linkedB2bCount > 0 ? <> · {linkedB2bCount} linked</> : null}
+              </p>
+              {syncSettings.lastB2bReconcileError ? (
+                <p className="mt-1 text-destructive">{syncSettings.lastB2bReconcileError}</p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {openB2bConflicts.length > 0 ? (
+            <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+              <p className="font-medium text-foreground">
+                Open B2B company conflicts ({openB2bConflicts.length})
+              </p>
+              {openB2bConflicts.map((conflict) => (
+                <div
+                  key={conflict.conflictKey}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-muted-foreground"
+                >
+                  <span>
+                    <span className="font-mono">{conflict.conflictType}</span> · Shopify{" "}
+                    {conflict.shopifySummary} vs KitchenOS {conflict.kitchenosSummary}
+                  </span>
+                  {canManage && connectionId ? (
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full"
+                        disabled={b2bResolvePending}
+                        onClick={() =>
+                          startB2bResolve(async () => {
+                            await resolveShopifyB2bCompanyConflictAction({
+                              connectionId,
+                              conflictKey: conflict.conflictKey,
+                              resolution: "shopify",
+                              companyAccountId: conflict.companyAccountId ?? undefined,
+                            });
+                          })
+                        }
+                      >
+                        Link Shopify
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full"
+                        disabled={b2bResolvePending}
+                        onClick={() =>
+                          startB2bResolve(async () => {
+                            await resolveShopifyB2bCompanyConflictAction({
+                              connectionId,
+                              conflictKey: conflict.conflictKey,
+                              resolution: "kitchenos",
+                            });
+                          })
+                        }
+                      >
+                        Keep KitchenOS
+                      </Button>
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          {importedB2bCompanies.length > 0 ? (
+            <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs text-muted-foreground">
+              <p className="font-medium text-foreground">Cached B2B company hints</p>
+              {importedB2bCompanies.map((row) => (
+                <div key={row.shopifyCompanyId} className="flex flex-wrap justify-between gap-2">
+                  <span>
+                    {row.name}
+                    {row.mainContactEmail ? ` · ${row.mainContactEmail}` : ""}
+                  </span>
+                  <span>
+                    {row.locationCount} location(s)
+                    {row.suggestedCompanyAccountId ? " · match suggested" : " · unmapped"}
+                    {syncSettings.b2bCompanyLinks?.[row.shopifyCompanyId] ? " · linked" : ""}
+                  </span>
+                </div>
+              ))}
+              <Link
+                href="/dashboard/customers/companies"
+                className="inline-flex items-center gap-1 text-xs underline"
+              >
+                Manage KitchenOS company accounts
+                <ArrowUpRight className="h-3 w-3" />
+              </Link>
+            </div>
+          ) : null}
+        </div>
 
         {syncSettings.lastCatalogReconcileAt ? (
           <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">

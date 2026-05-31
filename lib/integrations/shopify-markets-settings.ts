@@ -130,6 +130,36 @@ export type ShopifyMarketHostnameConflictRow = {
   hostnameAuthority: "shopify" | "kitchenos" | "manual";
 };
 
+export type ShopifyB2bCompanyImportRow = {
+  shopifyCompanyId: string;
+  name: string;
+  externalId: string | null;
+  mainContactEmail: string | null;
+  locationCount: number;
+  locationCountries: string[];
+  suggestedCompanyAccountId: string | null;
+  importedAt: string;
+  companyHash: string;
+};
+
+export type ShopifyB2bCompanyConflictType =
+  | "UNMAPPED"
+  | "NAME_MISMATCH"
+  | "EMAIL_MISMATCH"
+  | "DUPLICATE_LINK";
+
+export type ShopifyB2bCompanyConflictRow = {
+  conflictKey: string;
+  shopifyCompanyId: string;
+  companyAccountId: string | null;
+  conflictType: ShopifyB2bCompanyConflictType;
+  shopifySummary: string;
+  kitchenosSummary: string;
+  detectedAt: string;
+  status: "open" | "resolved_shopify" | "resolved_kitchenos" | "ignored";
+  b2bAuthority: "shopify" | "kitchenos" | "manual";
+};
+
 export type ShopifyMarketsWebhookRegistryRow = {
   topic: string;
   graphqlTopic: string;
@@ -203,6 +233,16 @@ export type ShopifyMarketsSyncSettings = {
   lastFullMarketsReconcileAt: string | null;
   lastFullMarketsReconcileResult: string | null;
   lastFullMarketsReconcileError: string | null;
+  b2bAuthority: "shopify" | "kitchenos" | "manual";
+  b2bUnavailableReason: string | null;
+  lastB2bImportAt: string | null;
+  b2bImportError: string | null;
+  b2bCompanyImports: Record<string, ShopifyB2bCompanyImportRow>;
+  lastB2bReconcileAt: string | null;
+  lastB2bReconcileError: string | null;
+  lastB2bReconcileResult: string | null;
+  b2bCompanyConflicts: Record<string, ShopifyB2bCompanyConflictRow>;
+  b2bCompanyLinks: Record<string, string>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -295,6 +335,27 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? (raw.marketWebhookRegistry as Record<string, ShopifyMarketsWebhookRegistryRow>)
       : {};
 
+  const b2bCompanyImports =
+    raw.b2bCompanyImports && typeof raw.b2bCompanyImports === "object"
+      ? (raw.b2bCompanyImports as Record<string, ShopifyB2bCompanyImportRow>)
+      : {};
+
+  const b2bCompanyConflicts =
+    raw.b2bCompanyConflicts && typeof raw.b2bCompanyConflicts === "object"
+      ? (raw.b2bCompanyConflicts as Record<string, ShopifyB2bCompanyConflictRow>)
+      : {};
+
+  const b2bCompanyLinks =
+    raw.b2bCompanyLinks && typeof raw.b2bCompanyLinks === "object"
+      ? (raw.b2bCompanyLinks as Record<string, string>)
+      : {};
+
+  const b2bAuthorityRaw = raw.b2bAuthority;
+  const b2bAuthority =
+    b2bAuthorityRaw === "shopify" || b2bAuthorityRaw === "kitchenos" || b2bAuthorityRaw === "manual"
+      ? b2bAuthorityRaw
+      : "kitchenos";
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -386,6 +447,19 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       typeof raw.lastFullMarketsReconcileResult === "string" ? raw.lastFullMarketsReconcileResult : null,
     lastFullMarketsReconcileError:
       typeof raw.lastFullMarketsReconcileError === "string" ? raw.lastFullMarketsReconcileError : null,
+    b2bAuthority,
+    b2bUnavailableReason:
+      typeof raw.b2bUnavailableReason === "string" ? raw.b2bUnavailableReason : null,
+    lastB2bImportAt: typeof raw.lastB2bImportAt === "string" ? raw.lastB2bImportAt : null,
+    b2bImportError: typeof raw.b2bImportError === "string" ? raw.b2bImportError : null,
+    b2bCompanyImports,
+    lastB2bReconcileAt: typeof raw.lastB2bReconcileAt === "string" ? raw.lastB2bReconcileAt : null,
+    lastB2bReconcileError:
+      typeof raw.lastB2bReconcileError === "string" ? raw.lastB2bReconcileError : null,
+    lastB2bReconcileResult:
+      typeof raw.lastB2bReconcileResult === "string" ? raw.lastB2bReconcileResult : null,
+    b2bCompanyConflicts,
+    b2bCompanyLinks,
   };
 }
 
