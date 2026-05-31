@@ -3,8 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { SiteFooter } from "@/components/marketing/site-footer";
-import { SiteHeader } from "@/components/marketing/site-header";
 import { RoiCalculator } from "@/components/marketing/roi-calculator";
 import { CompareFaqSection } from "@/components/marketing/compare-faq-section";
 import { TcoCalculator } from "@/components/marketing/tco-calculator";
@@ -115,9 +113,7 @@ export function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteHeader />
-      <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">
             Transparent pricing
@@ -226,7 +222,7 @@ export function PricingPage() {
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Total cost of ownership</p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight">Hardware POS vs cloud — 5-year model</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Compare terminal bundles to KitchenOS on tablets you already own. Processing fees excluded.
+            Compare terminal bundles to OS Kitchen on tablets you already own. Processing fees excluded.
           </p>
           <div className="mt-8">
             <TcoCalculator />
@@ -259,7 +255,5 @@ export function PricingPage() {
           </Link>
         </p>
       </main>
-      <SiteFooter />
-    </div>
   );
 }

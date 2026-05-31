@@ -34,7 +34,7 @@ export function PlatformChrome({ navGroups }: PlatformChromeProps) {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 overflow-y-auto border-r border-zinc-800 bg-zinc-950/95 pt-14 lg:block">
       <div className="px-4 py-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">KitchenOS</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">OS Kitchen</p>
         <p className="text-sm font-medium text-zinc-200">Platform operations</p>
       </div>
       <nav className="flex flex-col gap-4 px-2 pb-8">

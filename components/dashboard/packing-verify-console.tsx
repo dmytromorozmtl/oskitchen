@@ -508,7 +508,7 @@ export function PackingVerifyConsole({
               <Card className="border-amber-500/40 bg-amber-500/5">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">Allergen & nutrition</CardTitle>
-                  <CardDescription>Operators must verify catalog data — KitchenOS does not certify compliance.</CardDescription>
+                  <CardDescription>Operators must verify catalog data — OS Kitchen does not certify compliance.</CardDescription>
                 </CardHeader>
               </Card>
 

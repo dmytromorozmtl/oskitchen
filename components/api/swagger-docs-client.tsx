@@ -43,7 +43,7 @@ export function SwaggerDocsClient({ routeCount }: { routeCount: number }) {
   return (
     <>
       <p className="px-4 py-2 font-sans text-sm text-neutral-500">
-        KitchenOS OpenAPI — {routeCount} routes (auto-generated manifest)
+        OS Kitchen OpenAPI — {routeCount} routes (auto-generated manifest)
       </p>
       <div id="swagger-ui" className="min-h-screen" />
     </>

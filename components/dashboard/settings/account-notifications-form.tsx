@@ -31,7 +31,7 @@ export function AccountNotificationsForm({ initial }: { initial: AccountNotifica
         <CardHeader>
           <CardTitle className="text-base">Your notification channels</CardTitle>
           <CardDescription>
-            Choose how KitchenOS reaches you. Workspace-wide customer notifications are managed in
+            Choose how OS Kitchen reaches you. Workspace-wide customer notifications are managed in
             the{" "}
             <Link href="/dashboard/notifications" className="text-primary hover:underline">
               Notification Center

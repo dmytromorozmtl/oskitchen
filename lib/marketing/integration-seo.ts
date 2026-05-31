@@ -19,7 +19,7 @@ export function integrationPageMetadata(slug: IntegrationSlug): Metadata {
   const label = SLUG_LABELS[slug];
 
   return marketingPageMetadata({
-    title: `${label} Integration — KitchenOS`,
+    title: `${label} Integration — OS Kitchen`,
     description: page.description.slice(0, 155),
     path: `/integrations/${slug}`,
     keywords: [`${label} kitchen software`, 'meal prep integrations', 'restaurant order import'],

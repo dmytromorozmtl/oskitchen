@@ -43,7 +43,7 @@ export function AliasForm({ candidates }: { candidates: { id: string; title: str
             required
             className="rounded-md border bg-background px-3 py-2 text-sm"
           >
-            <option value="">Choose KitchenOS product…</option>
+            <option value="">Choose OS Kitchen product…</option>
             {candidates.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.title}

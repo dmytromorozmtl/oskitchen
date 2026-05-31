@@ -31,7 +31,7 @@ export const GEO_CITIES: GeoCity[] = [
       "Weekly menus, route planning, and KDS throughput for NYC's five-borough delivery density.",
     marketStat: "Highest per-capita meal delivery spend in the US",
     localContext:
-      "Brooklyn commissaries and Manhattan ghost brands use KitchenOS to cut packing errors and scale borough routes.",
+      "Brooklyn commissaries and Manhattan ghost brands use OS Kitchen to cut packing errors and scale borough routes.",
     keywords: ["meal prep delivery software New York", "ghost kitchen NYC software"],
   },
   {
@@ -62,12 +62,12 @@ export const GEO_CITIES: GeoCity[] = [
     slug: "miami",
     name: "Miami",
     region: "Florida",
-    headline: "KitchenOS for Miami delivery-first brands",
+    headline: "OS Kitchen for Miami delivery-first brands",
     subheadline:
       "High-volume weekend spikes, catering, and multi-brand ghost kitchens on one production view.",
     marketStat: "Year-round tourism drives delivery volatility",
     localContext:
-      "South Florida operators use KitchenOS to align production with preorder windows and reduce ticket times on KDS.",
+      "South Florida operators use OS Kitchen to align production with preorder windows and reduce ticket times on KDS.",
     keywords: ["ghost kitchen software Miami", "restaurant POS Miami"],
   },
   {

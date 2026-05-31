@@ -342,7 +342,7 @@ export function BetaLeadForm({
               className="mt-1 h-4 w-4 rounded border-input"
             />
             <span className="text-muted-foreground">
-              I agree to be contacted about the KitchenOS beta and understand my details are stored for founder
+              I agree to be contacted about the OS Kitchen beta and understand my details are stored for founder
               outreach only.
             </span>
           </label>

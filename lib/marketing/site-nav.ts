@@ -34,3 +34,15 @@ export const SITE_HEADER_CTAS = {
   signIn: { label: 'Sign in', href: '/login' },
   trial: { label: 'Start free trial', href: '/signup' },
 } as const;
+
+/** Shown in marketing header when the visitor is already signed in. */
+export const SITE_AUTH_QUICK_LINKS = [
+  { label: 'Today', href: '/dashboard/today' },
+  { label: 'Orders', href: '/dashboard/orders' },
+  { label: 'Kitchen', href: '/dashboard/kitchen' },
+] as const;
+
+export const SITE_AUTH_DASHBOARD = {
+  label: 'Dashboard',
+  href: '/dashboard/today',
+} as const;

@@ -46,7 +46,7 @@ export const SOLUTION_SEO: Partial<Record<SolutionPageSlug, SolutionSeoConfig>> 
     breadcrumbLabel: "Bakeries",
   },
   restaurants: {
-    metaTitle: "Restaurant POS & Kitchen Management Software | KitchenOS",
+    metaTitle: "Restaurant POS & Kitchen Management Software | OS Kitchen",
     metaDescription:
       "Restaurant POS with kitchen display, table management, and QR ordering. Replace fragmented tools with one platform. 14-day free trial.",
     keywords: [
@@ -58,28 +58,28 @@ export const SOLUTION_SEO: Partial<Record<SolutionPageSlug, SolutionSeoConfig>> 
     breadcrumbLabel: "Restaurants",
   },
   bars: {
-    metaTitle: "Bar POS with Tab Management | KitchenOS",
+    metaTitle: "Bar POS with Tab Management | OS Kitchen",
     metaDescription:
       "Bar POS with tab management, quick-order drinks, split bills, and kitchen display. Web-based — no proprietary hardware. Free trial.",
     keywords: ["bar POS", "bar tab software", "nightclub POS", "bar management software"],
     breadcrumbLabel: "Bars",
   },
   cafes: {
-    metaTitle: "Café POS & Order-Ahead Software | KitchenOS",
+    metaTitle: "Café POS & Order-Ahead Software | OS Kitchen",
     metaDescription:
       "Café POS with quick-order buttons, QR ordering, kitchen display, and pickup windows. Built for coffee bars and counter service.",
     keywords: ["cafe POS", "coffee shop POS", "cafe order ahead", "coffee bar software"],
     breadcrumbLabel: "Cafés",
   },
   "fast-casual": {
-    metaTitle: "Fast-Casual POS & Kitchen Display | KitchenOS",
+    metaTitle: "Fast-Casual POS & Kitchen Display | OS Kitchen",
     metaDescription:
       "Fast-casual POS with quick-order buttons, KDS, and production board. High-throughput day-of service. 14-day free trial.",
     keywords: ["fast casual POS", "QSR software", "quick service restaurant POS", "kitchen display QSR"],
     breadcrumbLabel: "Fast-casual",
   },
   "ghost-kitchens": {
-    metaTitle: "Ghost Kitchen & Multi-Brand Software | KitchenOS",
+    metaTitle: "Ghost Kitchen & Multi-Brand Software | OS Kitchen",
     metaDescription:
       "Operate virtual brands from one kitchen. Multi-brand command center, channel imports, KDS, and production. Honest integration maturity.",
     keywords: [

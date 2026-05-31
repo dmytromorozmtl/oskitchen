@@ -41,7 +41,7 @@ const items = [
   },
   {
     title: "POS Terminal",
-    body: "Browser-first counter and pickup-desk sales — same KitchenOS orders as online channels. Stripe Terminal hardware / native drivers are not integrated; see /product/pos-terminal.",
+    body: "Browser-first counter and pickup-desk sales — same OS Kitchen orders as online channels. Stripe Terminal hardware / native drivers are not integrated; see /product/pos-terminal.",
     icon: ScanLine,
   },
   {
@@ -71,7 +71,7 @@ export function Features() {
             One workspace for the full food operations loop
           </h2>
           <p className="mt-4 text-muted-foreground">
-            KitchenOS is the operating system for modern food operations: run POS sales, online orders, production,
+            OS Kitchen is the operating system for modern food operations: run POS sales, online orders, production,
             packing, delivery, customers, and integrations from one place. What lights up depends on your plan,
             credentials, and data — not on vague &quot;fully automated&quot; promises.
           </p>

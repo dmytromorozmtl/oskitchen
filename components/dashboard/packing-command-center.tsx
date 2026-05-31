@@ -515,7 +515,7 @@ export function PackingCommandCenter({
               <Link href="/dashboard/nutrition-labels" className="font-medium text-primary underline-offset-4 hover:underline">
                 Nutrition labels
               </Link>{" "}
-              for compliance-oriented nutrition output. KitchenOS does not certify regulatory compliance.
+              for compliance-oriented nutrition output. OS Kitchen does not certify regulatory compliance.
             </p>
           </Card>
         </TabsContent>
@@ -524,7 +524,7 @@ export function PackingCommandCenter({
           <Card className="border-amber-700/30 bg-amber-50/40 p-4 dark:bg-amber-950/20">
             <p className="text-sm font-medium text-amber-950 dark:text-amber-100">Safety disclaimer</p>
             <p className="mt-2 text-sm text-amber-950/90 dark:text-amber-50/90">
-              Your business is responsible for verifying allergen and nutrition data on every pack-out. KitchenOS surfaces
+              Your business is responsible for verifying allergen and nutrition data on every pack-out. OS Kitchen surfaces
               product-level hints only; it does not replace label review, manager sign-off, or local regulatory obligations.
             </p>
           </Card>

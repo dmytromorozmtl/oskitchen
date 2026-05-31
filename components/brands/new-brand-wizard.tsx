@@ -279,7 +279,7 @@ export function NewBrandWizard({ templateHints }: { templateHints: BrandTemplate
               <div className="grid gap-2 md:grid-cols-2 md:gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="bc">Brand color</Label>
-                  <Input id="bc" value={draft.brandColor} onChange={(e) => set("brandColor", e.target.value)} placeholder="#286ab8" />
+                  <Input id="bc" value={draft.brandColor} onChange={(e) => set("brandColor", e.target.value)} placeholder="#FF5F1F" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="sc">Secondary color</Label>

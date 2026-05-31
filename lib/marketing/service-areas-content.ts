@@ -1,14 +1,14 @@
 /** Local / regional SEO content — cloud software; no physical storefront claims. */
 
 export const SERVICE_AREAS_COPY = {
-  metaTitle: 'Service Areas | KitchenOS — United States & Canada',
+  metaTitle: 'Service Areas | OS Kitchen — United States & Canada',
   metaDescription:
     'Cloud restaurant POS and kitchen operations for US and Canadian operators. English support, 14-day trial, no on-site install required.',
   headline: 'Built for food operators across North America',
   subheadline:
-    'KitchenOS delivers POS, kitchen display, and production workflows to restaurants, meal prep brands, caterers, and ghost kitchens — wherever you run a licensed kitchen with a reliable connection.',
+    'OS Kitchen delivers POS, kitchen display, and production workflows to restaurants, meal prep brands, caterers, and ghost kitchens — wherever you run a licensed kitchen with a reliable connection.',
   disclaimer:
-    'KitchenOS is cloud software delivered remotely. We do not operate restaurant locations. Support is provided in English with coverage aligned to US and Canadian business hours.',
+    'OS Kitchen is cloud software delivered remotely. We do not operate restaurant locations. Support is provided in English with coverage aligned to US and Canadian business hours.',
 } as const;
 
 export type ServiceRegion = {
@@ -34,7 +34,7 @@ export const SERVICE_REGIONS: ServiceRegion[] = [
     id: 'canada',
     name: 'Canada',
     description:
-      'Operators from coast to coast use KitchenOS for dine-in, meal prep batches, catering events, and multi-brand virtual kitchens — with the same cloud stack as US accounts.',
+      'Operators from coast to coast use OS Kitchen for dine-in, meal prep batches, catering events, and multi-brand virtual kitchens — with the same cloud stack as US accounts.',
     highlights: [
       'CAD-friendly operator workflows',
       'Bilingual menu content in product',

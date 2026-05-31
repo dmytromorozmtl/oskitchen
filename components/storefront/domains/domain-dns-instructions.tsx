@@ -15,7 +15,7 @@ export function DomainDnsInstructions({ hostname, txtName, tokenPreview }: Props
           <code className="rounded bg-muted px-1 font-mono text-xs">{tokenPreview || "—"}</code>).
         </li>
         <li>
-          <span className="text-foreground">CNAME or A</span> — point <code className="font-mono text-xs">{hostname}</code> to your hosting target per your provider (KitchenOS cannot guess the
+          <span className="text-foreground">CNAME or A</span> — point <code className="font-mono text-xs">{hostname}</code> to your hosting target per your provider (OS Kitchen cannot guess the
           correct target).
         </li>
       </ul>

@@ -189,7 +189,7 @@ export function BillingPanel({
           <CardContent className="space-y-4">
             <p className="text-3xl font-semibold">Custom</p>
             <Button className="w-full rounded-full" variant="outline" asChild>
-              <a href="mailto:sales@kitchenos.app?subject=KitchenOS%20Enterprise">
+              <a href="mailto:sales@kitchenos.app?subject=OS Kitchen%20Enterprise">
                 Contact sales
               </a>
             </Button>

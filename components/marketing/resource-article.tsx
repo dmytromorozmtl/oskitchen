@@ -18,11 +18,11 @@ export function ResourceArticle({ slug }: { slug: keyof typeof resourcePages }) 
         </div>
         {[
           "Most growing food businesses start with a sales channel and a spreadsheet. That works until weekly order volume, menu changes, customer notes, and fulfillment timing start competing for attention.",
-          "A strong operating system should separate sales from fulfillment. Shopify, WooCommerce, Google Forms, Square exports, and manual lists can remain the order source while KitchenOS becomes the production and packing control layer.",
+          "A strong operating system should separate sales from fulfillment. Shopify, WooCommerce, Google Forms, Square exports, and manual lists can remain the order source while OS Kitchen becomes the production and packing control layer.",
           "The first implementation step is clean data: products, customers, order history, weekly menus, and fulfillment rules. Import previews and product mapping reduce launch risk before live production data changes.",
           "The second step is staff alignment. Kitchen staff need production quantities, packing staff need labels and exceptions, managers need order hub visibility, and owners need reports.",
           "The safest rollout is a test production day. Use staged orders, confirm mappings, print sample labels, review route manifests, and document blockers before launch.",
-          "KitchenOS is designed to centralize these workflows without claiming to replace sales channels, legal review, tax advice, nutrition verification, or marketplace approval.",
+          "OS Kitchen is designed to centralize these workflows without claiming to replace sales channels, legal review, tax advice, nutrition verification, or marketplace approval.",
         ].map((p) => (
           <p key={p} className="leading-7 text-muted-foreground">{p}</p>
         ))}

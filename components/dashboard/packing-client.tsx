@@ -46,7 +46,7 @@ export function PackingExportsPanel({ orders }: { orders: PackingOrderDTO[] }) {
     doc.text(title, 40, 48);
     doc.setFontSize(10);
     doc.setTextColor(100);
-    doc.text("KitchenOS packing sheet", 40, 66);
+    doc.text("OS Kitchen packing sheet", 40, 66);
     doc.setTextColor(0);
     autoTable(doc, {
       startY: 84,

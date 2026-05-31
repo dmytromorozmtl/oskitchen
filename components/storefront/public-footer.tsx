@@ -16,7 +16,7 @@ export function StorefrontPublicFooter({
       <div className="mx-auto flex max-w-4xl flex-col gap-6 px-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
         <div>
           <p className="font-semibold text-foreground">{publicName}</p>
-          <p className="mt-1 max-w-sm">Preorder & catering powered by KitchenOS.</p>
+          <p className="mt-1 max-w-sm">Preorder & catering powered by OS Kitchen.</p>
         </div>
         <div className="flex flex-col gap-2">
           <span className="text-xs font-medium uppercase tracking-wide text-foreground/80">Explore</span>

@@ -6,7 +6,7 @@ export function PosComparison2026Content() {
       <p>
         Choosing a restaurant POS in 2026 is not only about payments. You are buying front-of-house
         speed, kitchen routing, reporting, and — increasingly — how honestly a vendor describes what is
-        actually included vs add-on. This comparison covers Toast, Square, and KitchenOS for US/CA
+        actually included vs add-on. This comparison covers Toast, Square, and OS Kitchen for US/CA
         operators evaluating their next stack.
       </p>
 
@@ -50,9 +50,9 @@ export function PosComparison2026Content() {
         planning for meal prep or ghost kitchens is not the core story.
       </p>
 
-      <h2>KitchenOS — best when POS and kitchen ops must be one web workspace</h2>
+      <h2>OS Kitchen — best when POS and kitchen ops must be one web workspace</h2>
       <p>
-        KitchenOS targets operators who want browser-based POS, kitchen display, table management, and
+        OS Kitchen targets operators who want browser-based POS, kitchen display, table management, and
         production tools without mandatory terminal purchases. Strong fit for meal prep, ghost kitchens,
         and restaurants modernizing without a hardware lease.
       </p>
@@ -69,13 +69,13 @@ export function PosComparison2026Content() {
       <p>
         See the detailed matrix on our{' '}
         <Link href="/compare/restaurant-pos">restaurant POS comparison page</Link>. Directionally: all three
-        cover core POS; KitchenOS differentiates on web-based deployment and kitchen/production depth.
+        cover core POS; OS Kitchen differentiates on web-based deployment and kitchen/production depth.
       </p>
 
       <h2>Pricing: compare total cost of ownership</h2>
       <p>
         Toast and Square often advertise $0 or low software with hardware and processing bundles.
-        KitchenOS publishes software from $29/mo with a 14-day trial — you supply tablets. Model five-year
+        OS Kitchen publishes software from $29/mo with a 14-day trial — you supply tablets. Model five-year
         TCO including terminals, swaps, and chargeback support before you decide.
       </p>
 
@@ -90,13 +90,13 @@ export function PosComparison2026Content() {
           terminals quickly.
         </li>
         <li>
-          <strong>Choose KitchenOS</strong> if you want POS + KDS + production in one web platform without
+          <strong>Choose OS Kitchen</strong> if you want POS + KDS + production in one web platform without
           proprietary hardware lock-in — especially multi-concept or high-prep operations.
         </li>
       </ul>
 
       <p>
-        <Link href="/demo">Try the KitchenOS demo</Link> or{' '}
+        <Link href="/demo">Try the OS Kitchen demo</Link> or{' '}
         <Link href="/signup">start a free trial</Link>. Compare{' '}
         <Link href="/pricing">plans</Link> for your volume.
       </p>

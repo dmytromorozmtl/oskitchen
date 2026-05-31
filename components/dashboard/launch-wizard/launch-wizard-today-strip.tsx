@@ -10,6 +10,7 @@ import {
   resolveLaunchWizardTodayStripDisplayMode,
   type LaunchWizardTodayStripDisplayMode,
 } from "@/lib/launch-wizard/launch-wizard-today-strip-era19";
+import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 import type { LaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 
 function decisionBadgeVariant(
@@ -30,6 +31,7 @@ export function LaunchWizardTodayStrip(props: {
     rolePack: props.rolePack ?? null,
     commercialBlockerCount: props.model.commercialBlockers.blockers.length,
   });
+  const internalOps = showInternalOpsDashboardUi();
 
   const view = buildLaunchWizardTodayStripViewModel({
     commercialBlockers: props.model.commercialBlockers,
@@ -95,320 +97,381 @@ export function LaunchWizardTodayStrip(props: {
       props.model.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrity,
     nextStep: props.model.nextStep,
     progress: props.model.progress,
-    displayMode,
+    displayMode: internalOps ? displayMode : "setup_only",
   });
+
+  const strip = internalOps
+    ? view
+    : {
+        ...view,
+        headline: view.progressPercent >= 100 ? "Setup complete" : "Setup progress",
+        subline:
+          view.progressPercent >= 100
+            ? "Your workspace is ready for daily operations."
+            : `${view.progressLabel} — complete the remaining steps to start taking orders.`,
+        ctaLabel: view.progressPercent >= 100 ? "Review setup" : "Continue setup",
+        href: "/dashboard/launch-wizard?mode=compact",
+        commercialInflection: null,
+        pilotWeek1: null,
+        month2: null,
+        scale: null,
+        seriesA: null,
+        marketLeader: null,
+        sustainedOps: null,
+        improvementLoop: null,
+        productEvolution: null,
+        maintenanceMode: null,
+        engineeringTerminus: null,
+        postTerminusSteadyState: null,
+        commercialPilotPathAbsoluteEnd: null,
+        linearPathPermanentlyClosed: null,
+        linearChainTerminusGuard: null,
+        era25CharterExit: null,
+        era25FirstCharterSliceReadiness: null,
+        era25EngineeringGates: null,
+        era25FirstProductSliceBlueprint: null,
+        era25OwnerDailyBriefingBreakthrough: null,
+        era25PaidPilotGoConvergence: null,
+        era25PilotWeek1ExecutionConvergence: null,
+        era25Month2MarketReadinessConvergence: null,
+        era25ScaleReadinessConvergence: null,
+        era25SeriesAPartnerExpansionConvergence: null,
+        era25MarketLeaderPositioningConvergence: null,
+        era25SustainedOperationalExcellenceConvergence: null,
+        era25PureOperationalModeTerminus: null,
+        era25CommercialPilotConvergenceTrainClosure: null,
+        era25SustainedProductEvolutionReentrant: null,
+        era25PostReentrantCharterLock: null,
+        era25SteadyStateOperatorLoopLock: null,
+        era25CommercialPilotConvergenceTrainCapstone: null,
+        era25ConvergenceGovernanceTerminusFreeze: null,
+        era25BandAMarketProofExecutionSolePath: null,
+        era25P0MarketProofHonestClosureCapstone: null,
+        era25PostMarketProofSteadyOperationalWitness: null,
+        era25GovernanceTrainTerminalSeal: null,
+        era25PostTerminalSealCommercialOpsPermanence: null,
+        era25BandAGovernanceChainCapstoneWitness: null,
+        era25PostBandAGovernanceSteadyProductModeWitness: null,
+        era25PostSteadyProductModeCommercialOpsRhythmPermanence: null,
+        era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness: null,
+        blockerCount: 0,
+        mode: "setup_next" as const,
+        displayMode: "setup_only" as const,
+      };
 
   return (
     <Card
       className="border-primary/20 bg-primary/[0.03] shadow-sm"
       data-testid="launch-wizard-today-strip"
-      data-strip-mode={view.mode}
-      data-strip-display={view.displayMode}
+      data-strip-mode={strip.mode}
+      data-strip-display={strip.displayMode}
     >
       <CardContent className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <Rocket className="h-4 w-4 text-muted-foreground" aria-hidden />
             <p className="font-medium">
-              {view.mode === "commercial_unblock" ? "Commercial unblock" : "Launch wizard"}
+              {internalOps && strip.mode === "commercial_unblock"
+                ? "Commercial unblock"
+                : "Workspace setup"}
             </p>
             <Badge variant="outline" className="rounded-full tabular-nums">
-              {view.progressLabel}
+              {strip.progressLabel}
             </Badge>
-            {view.displayMode === "full" ? (
+            {internalOps && strip.displayMode === "full" ? (
               <Badge
-                variant={decisionBadgeVariant(view.decisionTone)}
+                variant={decisionBadgeVariant(strip.decisionTone)}
                 className="rounded-full"
                 data-testid="launch-wizard-today-strip-decision"
               >
-                {view.decisionLabel}
+                {strip.decisionLabel}
               </Badge>
             ) : null}
-            {view.blockerCount > 0 ? (
+            {internalOps && strip.blockerCount > 0 ? (
               <Badge variant="destructive" className="rounded-full tabular-nums">
-                {view.blockerCount} commercial blocker{view.blockerCount === 1 ? "" : "s"}
+                {strip.blockerCount} commercial blocker{strip.blockerCount === 1 ? "" : "s"}
               </Badge>
             ) : null}
-            {view.commercialInflection ? (
+            {internalOps && strip.commercialInflection ? (
               <Badge
                 variant="outline"
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-inflection"
               >
-                {view.commercialInflection.milestoneLabel}
+                {strip.commercialInflection.milestoneLabel}
               </Badge>
             ) : null}
-            {view.pilotWeek1 ? (
+            {strip.pilotWeek1 ? (
               <Badge
-                variant={view.pilotWeek1.week1IntegrityFailed ? "destructive" : "outline"}
+                variant={strip.pilotWeek1.week1IntegrityFailed ? "destructive" : "outline"}
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-week1"
               >
-                Week 1 {view.pilotWeek1.progressLabel}
+                Week 1 {strip.pilotWeek1.progressLabel}
               </Badge>
             ) : null}
-            {view.month2 ? (
+            {strip.month2 ? (
               <Badge
-                variant={view.month2.month2IntegrityFailed ? "destructive" : "outline"}
+                variant={strip.month2.month2IntegrityFailed ? "destructive" : "outline"}
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-month2"
               >
-                Month 2 {view.month2.progressLabel}
+                Month 2 {strip.month2.progressLabel}
               </Badge>
             ) : null}
-            {view.scale ? (
+            {strip.scale ? (
               <Badge
-                variant={view.scale.scaleIntegrityFailed ? "destructive" : "outline"}
+                variant={strip.scale.scaleIntegrityFailed ? "destructive" : "outline"}
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-scale"
               >
-                Scale {view.scale.progressLabel}
+                Scale {strip.scale.progressLabel}
               </Badge>
             ) : null}
-            {view.seriesA ? (
+            {strip.seriesA ? (
               <Badge
-                variant={view.seriesA.seriesAIntegrityFailed ? "destructive" : "outline"}
+                variant={strip.seriesA.seriesAIntegrityFailed ? "destructive" : "outline"}
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-series-a"
               >
-                Series A {view.seriesA.progressLabel}
+                Series A {strip.seriesA.progressLabel}
               </Badge>
             ) : null}
-            {view.marketLeader ? (
+            {strip.marketLeader ? (
               <Badge
-                variant={view.marketLeader.marketLeaderIntegrityFailed ? "destructive" : "outline"}
+                variant={strip.marketLeader.marketLeaderIntegrityFailed ? "destructive" : "outline"}
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-market-leader"
               >
-                Market leader {view.marketLeader.progressLabel}
+                Market leader {strip.marketLeader.progressLabel}
               </Badge>
             ) : null}
-            {view.sustainedOps ? (
+            {strip.sustainedOps ? (
               <Badge
-                variant={view.sustainedOps.sustainedOpsIntegrityFailed ? "destructive" : "outline"}
+                variant={strip.sustainedOps.sustainedOpsIntegrityFailed ? "destructive" : "outline"}
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-sustained-ops"
               >
-                Sustained ops {view.sustainedOps.progressLabel}
+                Sustained ops {strip.sustainedOps.progressLabel}
               </Badge>
             ) : null}
-            {view.improvementLoop ? (
+            {strip.improvementLoop ? (
               <Badge
                 variant={
-                  view.improvementLoop.improvementLoopIntegrityFailed ? "destructive" : "outline"
+                  strip.improvementLoop.improvementLoopIntegrityFailed ? "destructive" : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-improvement-loop"
               >
-                Improvement loop {view.improvementLoop.progressLabel}
+                Improvement loop {strip.improvementLoop.progressLabel}
               </Badge>
             ) : null}
-            {view.productEvolution ? (
+            {strip.productEvolution ? (
               <Badge
                 variant={
-                  view.productEvolution.productEvolutionIntegrityFailed ? "destructive" : "outline"
+                  strip.productEvolution.productEvolutionIntegrityFailed ? "destructive" : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-product-evolution"
               >
-                Product evolution {view.productEvolution.progressLabel}
+                Product evolution {strip.productEvolution.progressLabel}
               </Badge>
             ) : null}
-            {view.maintenanceMode ? (
+            {strip.maintenanceMode ? (
               <Badge
                 variant={
-                  view.maintenanceMode.maintenanceModeIntegrityFailed ? "destructive" : "outline"
+                  strip.maintenanceMode.maintenanceModeIntegrityFailed ? "destructive" : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-maintenance-mode"
               >
-                Maintenance mode {view.maintenanceMode.progressLabel}
+                Maintenance mode {strip.maintenanceMode.progressLabel}
               </Badge>
             ) : null}
-            {view.engineeringTerminus ? (
+            {strip.engineeringTerminus ? (
               <Badge
                 variant={
-                  view.engineeringTerminus.engineeringTerminusIntegrityFailed
+                  strip.engineeringTerminus.engineeringTerminusIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-engineering-terminus"
               >
-                Engineering path {view.engineeringTerminus.progressLabel}
+                Engineering path {strip.engineeringTerminus.progressLabel}
               </Badge>
             ) : null}
-            {view.postTerminusSteadyState ? (
+            {strip.postTerminusSteadyState ? (
               <Badge
                 variant={
-                  view.postTerminusSteadyState.postTerminusSteadyStateIntegrityFailed
+                  strip.postTerminusSteadyState.postTerminusSteadyStateIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-post-terminus-steady-state"
               >
-                Steady state {view.postTerminusSteadyState.progressLabel}
+                Steady state {strip.postTerminusSteadyState.progressLabel}
               </Badge>
             ) : null}
-            {view.commercialPilotPathAbsoluteEnd ? (
+            {strip.commercialPilotPathAbsoluteEnd ? (
               <Badge
                 variant={
-                  view.commercialPilotPathAbsoluteEnd.commercialPilotPathAbsoluteEndIntegrityFailed
+                  strip.commercialPilotPathAbsoluteEnd.commercialPilotPathAbsoluteEndIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-commercial-pilot-path-absolute-end"
               >
-                Absolute end {view.commercialPilotPathAbsoluteEnd.progressLabel}
+                Absolute end {strip.commercialPilotPathAbsoluteEnd.progressLabel}
               </Badge>
             ) : null}
-            {view.linearPathPermanentlyClosed ? (
+            {strip.linearPathPermanentlyClosed ? (
               <Badge
                 variant={
-                  view.linearPathPermanentlyClosed.linearPathPermanentlyClosedIntegrityFailed
+                  strip.linearPathPermanentlyClosed.linearPathPermanentlyClosedIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-linear-path-permanently-closed"
               >
-                Linear path {view.linearPathPermanentlyClosed.progressLabel}
+                Linear path {strip.linearPathPermanentlyClosed.progressLabel}
               </Badge>
             ) : null}
-            {view.linearChainTerminusGuard ? (
+            {strip.linearChainTerminusGuard ? (
               <Badge
                 variant={
-                  view.linearChainTerminusGuard.linearChainTerminusGuardIntegrityFailed
+                  strip.linearChainTerminusGuard.linearChainTerminusGuardIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-linear-chain-terminus-guard"
               >
-                Step 17 {view.linearChainTerminusGuard.progressLabel}
+                Step 17 {strip.linearChainTerminusGuard.progressLabel}
               </Badge>
             ) : null}
-            {view.era25CharterExit ? (
+            {strip.era25CharterExit ? (
               <Badge
                 variant={
-                  view.era25CharterExit.era25CharterExitIntegrityFailed ? "destructive" : "outline"
+                  strip.era25CharterExit.era25CharterExitIntegrityFailed ? "destructive" : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-charter-exit"
               >
-                Era25 {view.era25CharterExit.progressLabel}
+                Era25 {strip.era25CharterExit.progressLabel}
               </Badge>
             ) : null}
-            {view.era25FirstCharterSliceReadiness ? (
+            {strip.era25FirstCharterSliceReadiness ? (
               <Badge
                 variant={
-                  view.era25FirstCharterSliceReadiness.era25FirstCharterSliceIntegrityFailed
+                  strip.era25FirstCharterSliceReadiness.era25FirstCharterSliceIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-first-charter-slice"
               >
-                First slice {view.era25FirstCharterSliceReadiness.progressLabel}
+                First slice {strip.era25FirstCharterSliceReadiness.progressLabel}
               </Badge>
             ) : null}
-            {view.era25EngineeringGates ? (
+            {strip.era25EngineeringGates ? (
               <Badge
                 variant={
-                  view.era25EngineeringGates.era25EngineeringGatesIntegrityFailed
+                  strip.era25EngineeringGates.era25EngineeringGatesIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-engineering-gates"
               >
-                Gates {view.era25EngineeringGates.progressLabel}
+                Gates {strip.era25EngineeringGates.progressLabel}
               </Badge>
             ) : null}
-            {view.era25FirstProductSliceBlueprint ? (
+            {strip.era25FirstProductSliceBlueprint ? (
               <Badge
                 variant={
-                  view.era25FirstProductSliceBlueprint.era25FirstProductSliceBlueprintIntegrityFailed
+                  strip.era25FirstProductSliceBlueprint.era25FirstProductSliceBlueprintIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-first-product-slice-blueprint"
               >
-                Blueprint {view.era25FirstProductSliceBlueprint.progressLabel}
+                Blueprint {strip.era25FirstProductSliceBlueprint.progressLabel}
               </Badge>
             ) : null}
-            {view.era25OwnerDailyBriefingBreakthrough ? (
+            {strip.era25OwnerDailyBriefingBreakthrough ? (
               <Badge
                 variant={
-                  view.era25OwnerDailyBriefingBreakthrough.ownerDailyBriefingBreakthroughIntegrityFailed
+                  strip.era25OwnerDailyBriefingBreakthrough.ownerDailyBriefingBreakthroughIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-owner-daily-briefing-breakthrough"
               >
-                Breakthrough {view.era25OwnerDailyBriefingBreakthrough.progressLabel}
+                Breakthrough {strip.era25OwnerDailyBriefingBreakthrough.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PaidPilotGoConvergence ? (
+            {strip.era25PaidPilotGoConvergence ? (
               <Badge
                 variant={
-                  view.era25PaidPilotGoConvergence.paidPilotGoConvergenceIntegrityFailed
+                  strip.era25PaidPilotGoConvergence.paidPilotGoConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-paid-pilot-go-convergence"
               >
-                GO convergence {view.era25PaidPilotGoConvergence.progressLabel}
+                GO convergence {strip.era25PaidPilotGoConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PilotWeek1ExecutionConvergence ? (
+            {strip.era25PilotWeek1ExecutionConvergence ? (
               <Badge
                 variant={
-                  view.era25PilotWeek1ExecutionConvergence.pilotWeek1ExecutionConvergenceIntegrityFailed
+                  strip.era25PilotWeek1ExecutionConvergence.pilotWeek1ExecutionConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-pilot-week1-execution-convergence"
               >
-                Week 1 {view.era25PilotWeek1ExecutionConvergence.progressLabel}
+                Week 1 {strip.era25PilotWeek1ExecutionConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25Month2MarketReadinessConvergence ? (
+            {strip.era25Month2MarketReadinessConvergence ? (
               <Badge
                 variant={
-                  view.era25Month2MarketReadinessConvergence.month2MarketReadinessConvergenceIntegrityFailed
+                  strip.era25Month2MarketReadinessConvergence.month2MarketReadinessConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-month2-market-readiness-convergence"
               >
-                Month 2 {view.era25Month2MarketReadinessConvergence.progressLabel}
+                Month 2 {strip.era25Month2MarketReadinessConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25ScaleReadinessConvergence ? (
+            {strip.era25ScaleReadinessConvergence ? (
               <Badge
                 variant={
-                  view.era25ScaleReadinessConvergence.scaleReadinessConvergenceIntegrityFailed
+                  strip.era25ScaleReadinessConvergence.scaleReadinessConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-scale-readiness-convergence"
               >
-                Scale {view.era25ScaleReadinessConvergence.progressLabel}
+                Scale {strip.era25ScaleReadinessConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25SeriesAPartnerExpansionConvergence ? (
+            {strip.era25SeriesAPartnerExpansionConvergence ? (
               <Badge
                 variant={
-                  view.era25SeriesAPartnerExpansionConvergence
+                  strip.era25SeriesAPartnerExpansionConvergence
                     .seriesAPartnerExpansionConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -416,13 +479,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-series-a-partner-expansion-convergence"
               >
-                Series A {view.era25SeriesAPartnerExpansionConvergence.progressLabel}
+                Series A {strip.era25SeriesAPartnerExpansionConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25MarketLeaderPositioningConvergence ? (
+            {strip.era25MarketLeaderPositioningConvergence ? (
               <Badge
                 variant={
-                  view.era25MarketLeaderPositioningConvergence
+                  strip.era25MarketLeaderPositioningConvergence
                     .marketLeaderPositioningConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -430,13 +493,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-market-leader-positioning-convergence"
               >
-                Market leader {view.era25MarketLeaderPositioningConvergence.progressLabel}
+                Market leader {strip.era25MarketLeaderPositioningConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25SustainedOperationalExcellenceConvergence ? (
+            {strip.era25SustainedOperationalExcellenceConvergence ? (
               <Badge
                 variant={
-                  view.era25SustainedOperationalExcellenceConvergence
+                  strip.era25SustainedOperationalExcellenceConvergence
                     .sustainedOperationalExcellenceConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -444,26 +507,26 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-sustained-operational-excellence-convergence"
               >
-                Sustained ops {view.era25SustainedOperationalExcellenceConvergence.progressLabel}
+                Sustained ops {strip.era25SustainedOperationalExcellenceConvergence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PureOperationalModeTerminus ? (
+            {strip.era25PureOperationalModeTerminus ? (
               <Badge
                 variant={
-                  view.era25PureOperationalModeTerminus.pureOperationalModeTerminusConvergenceIntegrityFailed
+                  strip.era25PureOperationalModeTerminus.pureOperationalModeTerminusConvergenceIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-pure-operational-mode-terminus"
               >
-                Pure ops {view.era25PureOperationalModeTerminus.progressLabel}
+                Pure ops {strip.era25PureOperationalModeTerminus.progressLabel}
               </Badge>
             ) : null}
-            {view.era25CommercialPilotConvergenceTrainClosure ? (
+            {strip.era25CommercialPilotConvergenceTrainClosure ? (
               <Badge
                 variant={
-                  view.era25CommercialPilotConvergenceTrainClosure
+                  strip.era25CommercialPilotConvergenceTrainClosure
                     .era25CommercialPilotConvergenceTrainClosureIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -471,13 +534,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-commercial-pilot-convergence-train-closure"
               >
-                Train closure {view.era25CommercialPilotConvergenceTrainClosure.progressLabel}
+                Train closure {strip.era25CommercialPilotConvergenceTrainClosure.progressLabel}
               </Badge>
             ) : null}
-            {view.era25SustainedProductEvolutionReentrant ? (
+            {strip.era25SustainedProductEvolutionReentrant ? (
               <Badge
                 variant={
-                  view.era25SustainedProductEvolutionReentrant
+                  strip.era25SustainedProductEvolutionReentrant
                     .sustainedProductEvolutionReentrantIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -485,39 +548,39 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-sustained-product-evolution-re-entrant"
               >
-                Re-entrant {view.era25SustainedProductEvolutionReentrant.progressLabel}
+                Re-entrant {strip.era25SustainedProductEvolutionReentrant.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PostReentrantCharterLock ? (
+            {strip.era25PostReentrantCharterLock ? (
               <Badge
                 variant={
-                  view.era25PostReentrantCharterLock.era25PostReentrantCharterLockIntegrityFailed
+                  strip.era25PostReentrantCharterLock.era25PostReentrantCharterLockIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-post-re-entrant-charter-lock"
               >
-                Charter lock {view.era25PostReentrantCharterLock.progressLabel}
+                Charter lock {strip.era25PostReentrantCharterLock.progressLabel}
               </Badge>
             ) : null}
-            {view.era25SteadyStateOperatorLoopLock ? (
+            {strip.era25SteadyStateOperatorLoopLock ? (
               <Badge
                 variant={
-                  view.era25SteadyStateOperatorLoopLock.era25SteadyStateOperatorLoopLockIntegrityFailed
+                  strip.era25SteadyStateOperatorLoopLock.era25SteadyStateOperatorLoopLockIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-steady-state-operator-loop-lock"
               >
-                Steady-state {view.era25SteadyStateOperatorLoopLock.progressLabel}
+                Steady-state {strip.era25SteadyStateOperatorLoopLock.progressLabel}
               </Badge>
             ) : null}
-            {view.era25CommercialPilotConvergenceTrainCapstone ? (
+            {strip.era25CommercialPilotConvergenceTrainCapstone ? (
               <Badge
                 variant={
-                  view.era25CommercialPilotConvergenceTrainCapstone
+                  strip.era25CommercialPilotConvergenceTrainCapstone
                     .era25CommercialPilotConvergenceTrainCapstoneIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -525,13 +588,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-commercial-pilot-convergence-train-capstone"
               >
-                Capstone {view.era25CommercialPilotConvergenceTrainCapstone.progressLabel}
+                Capstone {strip.era25CommercialPilotConvergenceTrainCapstone.progressLabel}
               </Badge>
             ) : null}
-            {view.era25ConvergenceGovernanceTerminusFreeze ? (
+            {strip.era25ConvergenceGovernanceTerminusFreeze ? (
               <Badge
                 variant={
-                  view.era25ConvergenceGovernanceTerminusFreeze
+                  strip.era25ConvergenceGovernanceTerminusFreeze
                     .era25ConvergenceGovernanceTerminusFreezeIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -539,13 +602,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-convergence-governance-terminus-freeze"
               >
-                Terminus {view.era25ConvergenceGovernanceTerminusFreeze.progressLabel}
+                Terminus {strip.era25ConvergenceGovernanceTerminusFreeze.progressLabel}
               </Badge>
             ) : null}
-            {view.era25BandAMarketProofExecutionSolePath ? (
+            {strip.era25BandAMarketProofExecutionSolePath ? (
               <Badge
                 variant={
-                  view.era25BandAMarketProofExecutionSolePath
+                  strip.era25BandAMarketProofExecutionSolePath
                     .era25BandAMarketProofExecutionSolePathIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -553,13 +616,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-band-a-market-proof-execution-sole-path"
               >
-                Band A {view.era25BandAMarketProofExecutionSolePath.progressLabel}
+                Band A {strip.era25BandAMarketProofExecutionSolePath.progressLabel}
               </Badge>
             ) : null}
-            {view.era25P0MarketProofHonestClosureCapstone ? (
+            {strip.era25P0MarketProofHonestClosureCapstone ? (
               <Badge
                 variant={
-                  view.era25P0MarketProofHonestClosureCapstone
+                  strip.era25P0MarketProofHonestClosureCapstone
                     .era25P0MarketProofHonestClosureCapstoneIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -567,13 +630,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-p0-market-proof-honest-closure-capstone"
               >
-                P0 closure {view.era25P0MarketProofHonestClosureCapstone.progressLabel}
+                P0 closure {strip.era25P0MarketProofHonestClosureCapstone.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PostMarketProofSteadyOperationalWitness ? (
+            {strip.era25PostMarketProofSteadyOperationalWitness ? (
               <Badge
                 variant={
-                  view.era25PostMarketProofSteadyOperationalWitness
+                  strip.era25PostMarketProofSteadyOperationalWitness
                     .era25PostMarketProofSteadyOperationalWitnessIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -581,26 +644,26 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-post-market-proof-steady-operational-witness"
               >
-                Steady witness {view.era25PostMarketProofSteadyOperationalWitness.progressLabel}
+                Steady witness {strip.era25PostMarketProofSteadyOperationalWitness.progressLabel}
               </Badge>
             ) : null}
-            {view.era25GovernanceTrainTerminalSeal ? (
+            {strip.era25GovernanceTrainTerminalSeal ? (
               <Badge
                 variant={
-                  view.era25GovernanceTrainTerminalSeal.era25GovernanceTrainTerminalSealIntegrityFailed
+                  strip.era25GovernanceTrainTerminalSeal.era25GovernanceTrainTerminalSealIntegrityFailed
                     ? "destructive"
                     : "outline"
                 }
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-governance-train-terminal-seal"
               >
-                Train seal {view.era25GovernanceTrainTerminalSeal.progressLabel}
+                Train seal {strip.era25GovernanceTrainTerminalSeal.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PostTerminalSealCommercialOpsPermanence ? (
+            {strip.era25PostTerminalSealCommercialOpsPermanence ? (
               <Badge
                 variant={
-                  view.era25PostTerminalSealCommercialOpsPermanence
+                  strip.era25PostTerminalSealCommercialOpsPermanence
                     .era25PostTerminalSealCommercialOpsPermanenceIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -608,13 +671,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-post-terminal-seal-commercial-ops-permanence"
               >
-                Ops permanence {view.era25PostTerminalSealCommercialOpsPermanence.progressLabel}
+                Ops permanence {strip.era25PostTerminalSealCommercialOpsPermanence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25BandAGovernanceChainCapstoneWitness ? (
+            {strip.era25BandAGovernanceChainCapstoneWitness ? (
               <Badge
                 variant={
-                  view.era25BandAGovernanceChainCapstoneWitness
+                  strip.era25BandAGovernanceChainCapstoneWitness
                     .era25BandAGovernanceChainCapstoneWitnessIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -622,13 +685,13 @@ export function LaunchWizardTodayStrip(props: {
                 className="rounded-full text-[10px] font-normal"
                 data-testid="launch-wizard-today-strip-era25-band-a-governance-chain-capstone-witness"
               >
-                Band A capstone {view.era25BandAGovernanceChainCapstoneWitness.progressLabel}
+                Band A capstone {strip.era25BandAGovernanceChainCapstoneWitness.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PostBandAGovernanceSteadyProductModeWitness ? (
+            {strip.era25PostBandAGovernanceSteadyProductModeWitness ? (
               <Badge
                 variant={
-                  view.era25PostBandAGovernanceSteadyProductModeWitness
+                  strip.era25PostBandAGovernanceSteadyProductModeWitness
                     .era25PostBandAGovernanceSteadyProductModeWitnessIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -637,13 +700,13 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-post-band-a-governance-steady-product-mode-witness"
               >
                 Steady product mode{" "}
-                {view.era25PostBandAGovernanceSteadyProductModeWitness.progressLabel}
+                {strip.era25PostBandAGovernanceSteadyProductModeWitness.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PostSteadyProductModeCommercialOpsRhythmPermanence ? (
+            {strip.era25PostSteadyProductModeCommercialOpsRhythmPermanence ? (
               <Badge
                 variant={
-                  view.era25PostSteadyProductModeCommercialOpsRhythmPermanence
+                  strip.era25PostSteadyProductModeCommercialOpsRhythmPermanence
                     .era25PostSteadyProductModeCommercialOpsRhythmPermanenceIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -652,13 +715,13 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-post-steady-product-mode-commercial-ops-rhythm-permanence"
               >
                 Ops rhythm permanence{" "}
-                {view.era25PostSteadyProductModeCommercialOpsRhythmPermanence.progressLabel}
+                {strip.era25PostSteadyProductModeCommercialOpsRhythmPermanence.progressLabel}
               </Badge>
             ) : null}
-            {view.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness ? (
+            {strip.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness ? (
               <Badge
                 variant={
-                  view.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness
+                  strip.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness
                     .era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitnessIntegrityFailed
                     ? "destructive"
                     : "outline"
@@ -667,19 +730,19 @@ export function LaunchWizardTodayStrip(props: {
                 data-testid="launch-wizard-today-strip-era25-post-rhythm-permanence-band-a-governance-terminal-closure-witness"
               >
                 Band A terminal closure{" "}
-                {view.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness.progressLabel}
+                {strip.era25PostRhythmPermanenceBandAGovernanceTerminalClosureWitness.progressLabel}
               </Badge>
             ) : null}
           </div>
           <div className="space-y-1.5">
-            <Progress value={view.progressPercent} className="h-1.5 max-w-md" />
-            <p className="text-sm font-medium text-foreground">{view.headline}</p>
-            <p className="text-sm text-muted-foreground">{view.subline}</p>
+            <Progress value={strip.progressPercent} className="h-1.5 max-w-md" />
+            <p className="text-sm font-medium text-foreground">{strip.headline}</p>
+            <p className="text-sm text-muted-foreground">{strip.subline}</p>
           </div>
         </div>
         <Button asChild size="sm" className="shrink-0 rounded-full">
-          <Link href={view.href} data-testid="launch-wizard-today-strip-cta">
-            {view.ctaLabel}
+          <Link href={strip.href} data-testid="launch-wizard-today-strip-cta">
+            {strip.ctaLabel}
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
           </Link>
         </Button>

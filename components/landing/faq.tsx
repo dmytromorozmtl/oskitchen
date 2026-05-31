@@ -16,7 +16,7 @@ export function FAQ() {
         <SectionHeader
           tag="FAQ"
           title="Answers before you commit to a pilot"
-          description="Straight talk on POS scope, hardware, trials, and integrations — so you can evaluate KitchenOS with realistic expectations."
+          description="Straight talk on POS scope, hardware, trials, and integrations — so you can evaluate OS Kitchen with realistic expectations."
         />
 
         <Accordion type="single" collapsible className="w-full">

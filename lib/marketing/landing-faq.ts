@@ -1,11 +1,11 @@
 export const LANDING_FAQS = [
   {
-    q: 'Is KitchenOS a replacement for Toast or Square?',
-    a: 'KitchenOS is built for operators who want POS and kitchen operations in one web-based system — especially when you do not want proprietary hardware. Many teams still pair KitchenOS with existing tools for specific payment or marketplace needs; we are honest about what is live in your workspace.',
+    q: 'Is OS Kitchen a replacement for Toast or Square?',
+    a: 'OS Kitchen is built for operators who want POS and kitchen operations in one web-based system — especially when you do not want proprietary hardware. Many teams still pair OS Kitchen with existing tools for specific payment or marketplace needs; we are honest about what is live in your workspace.',
   },
   {
     q: 'Do I need to buy tablets or terminals from you?',
-    a: 'No. KitchenOS runs in the browser on devices you already own — iPads, Android tablets, phones, or desktops. There is no mandatory terminal lease.',
+    a: 'No. OS Kitchen runs in the browser on devices you already own — iPads, Android tablets, phones, or desktops. There is no mandatory terminal lease.',
   },
   {
     q: 'What is included in the free trial?',
@@ -16,7 +16,7 @@ export const LANDING_FAQS = [
     a: 'Yes. Generate QR codes per table so guests browse your menu and submit orders that flow to the same kitchen display as staff-entered tickets.',
   },
   {
-    q: 'Does KitchenOS work for meal prep and catering?',
+    q: 'Does OS Kitchen work for meal prep and catering?',
     a: 'Yes. Preorder cutoffs, prepared dates, production board, and packing flows are designed for weekly menus and high-volume prep — not only dine-in service.',
   },
   {

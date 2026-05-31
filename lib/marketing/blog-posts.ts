@@ -28,7 +28,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   },
   {
     slug: 'restaurant-pos-comparison-2026',
-    title: 'Restaurant POS Comparison 2026: Toast vs Square vs KitchenOS',
+    title: 'Restaurant POS Comparison 2026: Toast vs Square vs OS Kitchen',
     description:
       'Honest comparison of restaurant POS systems: features, pricing, hardware, and which platform fits your restaurant type.',
     date: '2026-05-19',

@@ -73,13 +73,13 @@ export function DemoVideoDialog({ onOpen, triggerClassName }: Props) {
       </DialogTrigger>
       <DialogContent className="max-w-4xl gap-0 overflow-hidden p-0">
         <DialogHeader className="sr-only">
-          <DialogTitle>KitchenOS product tour</DialogTitle>
-          <DialogDescription>Video overview of POS and kitchen operations in KitchenOS.</DialogDescription>
+          <DialogTitle>OS Kitchen product tour</DialogTitle>
+          <DialogDescription>Video overview of POS and kitchen operations in OS Kitchen.</DialogDescription>
         </DialogHeader>
         <div className="aspect-video w-full bg-black">
           <iframe
             src={embed}
-            title="KitchenOS product tour"
+            title="OS Kitchen product tour"
             className="h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

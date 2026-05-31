@@ -31,7 +31,7 @@ export function DomainVerificationCard({
     <Card className="border-border/80 shadow-sm">
       <CardHeader>
         <CardTitle>Verification</CardTitle>
-        <CardDescription>DNS checks run from the KitchenOS server. TLS certificate issuance is not probed here.</CardDescription>
+        <CardDescription>DNS checks run from the OS Kitchen server. TLS certificate issuance is not probed here.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 text-sm">
         <p>

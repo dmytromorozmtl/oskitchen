@@ -357,7 +357,7 @@ export function PartnerOperationsCenter({
               <h3 className="text-base font-semibold">No partner organizations yet</h3>
               <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
                 Partner organizations allow agencies, consultants, and implementation teams to manage multiple
-                KitchenOS client workspaces securely.
+                OS Kitchen client workspaces securely.
               </p>
               {canProvision ? (
                 <Button type="button" className="mt-4" onClick={() => setCreateOpen(true)}>

@@ -20,7 +20,7 @@ export function SuggestionForm() {
       <CardHeader>
         <CardTitle>Add unmatched product</CardTitle>
         <CardDescription>
-          KitchenOS will suggest a match by SKU, normalized title, alias, or fuzzy similarity. Low-confidence
+          OS Kitchen will suggest a match by SKU, normalized title, alias, or fuzzy similarity. Low-confidence
           matches stay in review until you approve them.
         </CardDescription>
       </CardHeader>

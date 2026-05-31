@@ -26,7 +26,7 @@ export function ResourcesNavDropdown({ className }: { className?: string }) {
         <ChevronDown className="h-3.5 w-3.5 opacity-60" aria-hidden />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-52">
-        <DropdownMenuLabel className="text-xs text-muted-foreground">Evaluate KitchenOS</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs text-muted-foreground">Evaluate OS Kitchen</DropdownMenuLabel>
         {SITE_RESOURCES_NAV.map((item) => (
           <DropdownMenuItem key={item.href} asChild>
             <Link href={item.href}>{item.label}</Link>

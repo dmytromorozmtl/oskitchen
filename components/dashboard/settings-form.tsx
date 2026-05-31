@@ -125,7 +125,7 @@ export function SettingsForm({ initial }: { initial: SettingsDTO }) {
               id="businessName"
               name="businessName"
               defaultValue={initial.businessName ?? ""}
-              placeholder="KitchenOS Catering"
+              placeholder="OS Kitchen Catering"
             />
           </div>
           <div className="space-y-2 md:col-span-2">

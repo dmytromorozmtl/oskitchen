@@ -107,7 +107,7 @@ export function MealPrepGuideContent() {
         list. Spreadsheets break between 80–120 orders/week when channels multiply.
       </p>
       <p>
-        <Link href="/pricing">KitchenOS</Link> connects storefront preorders, production board, and
+        <Link href="/pricing">OS Kitchen</Link> connects storefront preorders, production board, and
         packing from $29/mo with a 14-day trial.{' '}
         <Link href="/demo">Try the interactive demo</Link> with a sample weekly menu before you import
         recipes.

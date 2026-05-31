@@ -7,7 +7,7 @@ import { SALES_DECK_SLIDES, type SalesDeckSlide } from "@/lib/marketing/sales-de
 function SlideBody({ slide }: { slide: SalesDeckSlide }) {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col justify-center px-8 py-10 md:px-14">
-      <p className="text-xs font-semibold uppercase tracking-widest text-primary">KitchenOS</p>
+      <p className="text-xs font-semibold uppercase tracking-widest text-primary">OS Kitchen</p>
       <h2 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">{slide.title}</h2>
       {slide.subtitle ? (
         <p className="mt-4 max-w-3xl text-lg text-muted-foreground">{slide.subtitle}</p>

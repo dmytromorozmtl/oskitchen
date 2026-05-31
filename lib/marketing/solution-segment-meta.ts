@@ -19,7 +19,7 @@ export const SOLUTION_SEGMENT_META: Record<RichSolutionSlug, SolutionSegmentMeta
     featuresTag: 'Built for meal prep',
     featuresTitle: 'Stop reconciling orders in spreadsheets',
     featuresDescription:
-      'KitchenOS connects your menu, preorders, production, and packing — so Sunday prep reflects what customers actually bought.',
+      'OS Kitchen connects your menu, preorders, production, and packing — so Sunday prep reflects what customers actually bought.',
     comparisonTag: 'Meal prep comparison',
     faqTag: 'Meal prep FAQ',
     faqTitle: 'Questions from meal prep operators',
@@ -63,7 +63,7 @@ export const SOLUTION_SEGMENT_META: Record<RichSolutionSlug, SolutionSegmentMeta
     faqTag: 'Restaurant FAQ',
     faqTitle: 'Common questions from restaurant operators',
     faqDescription:
-      'Straight answers on hardware, table service, trials, and how KitchenOS fits alongside tools you may already use.',
+      'Straight answers on hardware, table service, trials, and how OS Kitchen fits alongside tools you may already use.',
   },
   bars: {
     emoji: '🍸',

@@ -48,7 +48,7 @@ export function SolutionComparisonTable({ comparison, comparisonTag, disclaimer 
             <thead>
               <tr className="border-b border-border bg-muted/40 text-left">
                 <th className="px-5 py-4 font-semibold text-foreground">Capability</th>
-                <th className="px-5 py-4 font-semibold text-primary">KitchenOS</th>
+                <th className="px-5 py-4 font-semibold text-primary">OS Kitchen</th>
                 <th className="px-5 py-4 font-medium text-muted-foreground">
                   {comparison.competitorALabel}
                 </th>

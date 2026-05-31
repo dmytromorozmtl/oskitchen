@@ -3,12 +3,12 @@ export const PRICING_FAQ_ITEMS: Array<{ question: string; answer: string }> = [
   {
     question: 'Do you replace Shopify?',
     answer:
-      'No — KitchenOS operationalizes the kitchen after orders exist. Many teams keep Shopify or WooCommerce for marketing and sync kitchen workflows.',
+      'No — OS Kitchen operationalizes the kitchen after orders exist. Many teams keep Shopify or WooCommerce for marketing and sync kitchen workflows.',
   },
   {
-    question: 'Is KitchenOS a Toast replacement?',
+    question: 'Is OS Kitchen a Toast replacement?',
     answer:
-      'Not a blanket replacement claim. KitchenOS is strongest when you need web POS, kitchen display, and production in one workspace — especially without a terminal lease.',
+      'Not a blanket replacement claim. OS Kitchen is strongest when you need web POS, kitchen display, and production in one workspace — especially without a terminal lease.',
   },
   {
     question: 'Are Uber Eats or DoorDash live by default?',

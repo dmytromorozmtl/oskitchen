@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/select';
 import { trackGtagEvent } from '@/lib/analytics/gtag-events';
 import {
-  KITCHENOS_PLAN_OPTIONS,
+  OS_KITCHEN_PLAN_OPTIONS,
   TCO_HORIZON_YEARS,
-  TCO_KITCHENOS_DEFAULTS,
+  TCO_OS_KITCHEN_DEFAULTS,
   TCO_TRADITIONAL_DEFAULTS,
 } from '@/lib/marketing/tco-defaults';
 
@@ -37,11 +37,11 @@ export function TcoCalculator() {
   const [install, setInstall] = React.useState<number>(TCO_TRADITIONAL_DEFAULTS.installAndTraining);
   const [annualSupport, setAnnualSupport] = React.useState<number>(TCO_TRADITIONAL_DEFAULTS.annualSupport);
 
-  const [planKey, setPlanKey] = React.useState(TCO_KITCHENOS_DEFAULTS.planKey);
-  const [tabletUpfront, setTabletUpfront] = React.useState<number>(TCO_KITCHENOS_DEFAULTS.tabletUpfrontEach);
-  const [tabletCount, setTabletCount] = React.useState<number>(TCO_KITCHENOS_DEFAULTS.tabletCount);
+  const [planKey, setPlanKey] = React.useState(TCO_OS_KITCHEN_DEFAULTS.planKey);
+  const [tabletUpfront, setTabletUpfront] = React.useState<number>(TCO_OS_KITCHEN_DEFAULTS.tabletUpfrontEach);
+  const [tabletCount, setTabletCount] = React.useState<number>(TCO_OS_KITCHEN_DEFAULTS.tabletCount);
 
-  const plan = KITCHENOS_PLAN_OPTIONS.find((p) => p.key === planKey) ?? KITCHENOS_PLAN_OPTIONS[1]!;
+  const plan = OS_KITCHEN_PLAN_OPTIONS.find((p) => p.key === planKey) ?? OS_KITCHEN_PLAN_OPTIONS[1]!;
 
   const months = TCO_HORIZON_YEARS * 12;
 
@@ -106,7 +106,7 @@ export function TcoCalculator() {
         </div>
 
         <div className="rounded-2xl border border-primary/25 bg-primary/5 p-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">KitchenOS (cloud)</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-primary">OS Kitchen (cloud)</h3>
           <div className="mt-4 grid gap-4">
             <div className="space-y-2">
               <Label className="text-sm">Plan</Label>
@@ -121,7 +121,7 @@ export function TcoCalculator() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {KITCHENOS_PLAN_OPTIONS.map((p) => (
+                  {OS_KITCHEN_PLAN_OPTIONS.map((p) => (
                     <SelectItem key={p.key} value={p.key}>
                       {p.label} — ${p.monthly}/mo
                     </SelectItem>
@@ -154,7 +154,7 @@ export function TcoCalculator() {
         <p className="mt-1 text-3xl font-bold tracking-tight">
           {delta >= 0 ? formatUsd(delta) : formatUsd(Math.abs(delta))}{' '}
           <span className="text-base font-normal text-muted-foreground">
-            {delta >= 0 ? 'lower with KitchenOS (modeled)' : 'higher with KitchenOS (modeled)'}
+            {delta >= 0 ? 'lower with OS Kitchen (modeled)' : 'higher with OS Kitchen (modeled)'}
           </span>
         </p>
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">

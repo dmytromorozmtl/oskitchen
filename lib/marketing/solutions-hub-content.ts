@@ -69,12 +69,12 @@ export const SOLUTIONS_HUB_PRIMARY: SolutionsHubCard[] = [
 ];
 
 export const SOLUTIONS_HUB_COPY = {
-  metaTitle: 'Solutions — POS & Kitchen Operations by Business Type | KitchenOS',
+  metaTitle: 'Solutions — POS & Kitchen Operations by Business Type | OS Kitchen',
   metaDescription:
     'Restaurant POS, meal prep software, catering management, bakery orders, bars, cafés, and ghost kitchens — one platform. Compare solutions and start a 14-day trial.',
   headline: 'Solutions built for how you actually run food service',
   subheadline:
-    'Whether you serve at the table, ship weekly meal boxes, or run five virtual brands — KitchenOS connects orders, kitchen, and fulfillment without hardware lock-in.',
+    'Whether you serve at the table, ship weekly meal boxes, or run five virtual brands — OS Kitchen connects orders, kitchen, and fulfillment without hardware lock-in.',
   primaryCta: { label: 'Start free trial', href: '/signup' },
   secondaryCta: { label: 'Compare pricing', href: '/pricing' },
 } as const;

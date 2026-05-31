@@ -26,7 +26,7 @@ export function TrialBanner(props: {
     if (onBilling) {
       return (
         <div className="border-b border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          Your workspace trial has ended. Subscribe to restore full access to KitchenOS.
+          Your workspace trial has ended. Subscribe to restore full access to OS Kitchen.
         </div>
       );
     }

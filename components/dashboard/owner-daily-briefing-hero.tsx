@@ -35,6 +35,11 @@ import type { OwnerDailyBriefingRiskRadarSlice } from "@/lib/briefing/owner-dail
 import type { OwnerDailyBriefingRiskSignal } from "@/lib/briefing/owner-daily-briefing-risk-radar-era19";
 import { AlertTriangle, Cable, CheckCircle2, ClipboardCheck, Radar, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  filterCustomerFacingLinks,
+  pickCustomerFacingNextAction,
+  showInternalOpsDashboardUi,
+} from "@/lib/ui/customer-facing-dashboard";
 
 function nextActionCardClass(tone: OwnerDailyBriefingNextAction["tone"]): string {
   if (tone === "success") {
@@ -77,9 +82,10 @@ function availabilityLabel(availability: OwnerDailyBriefingTile["availability"])
 
 export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayload }) {
   const { briefing } = props;
+  const internalOps = showInternalOpsDashboardUi();
   const {
-    nextAction,
-    topActions,
+    nextAction: rawNextAction,
+    topActions: rawTopActions,
     heroTiles,
     summary,
     rolePackLabel,
@@ -90,6 +96,14 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
     operationalEmptyState,
     pureOperationalModeEra25Active,
   } = briefing;
+  const topActions = internalOps ? rawTopActions : filterCustomerFacingLinks(rawTopActions);
+  const nextAction = internalOps
+    ? rawNextAction
+    : pickCustomerFacingNextAction(rawNextAction, topActions);
+  const displayRolePackLabel = internalOps ? rolePackLabel : "Today overview";
+  const displayRolePackHeadline = internalOps
+    ? rolePackHeadline
+    : "Orders, kitchen, and setup — what needs attention right now.";
   const suppressEra21GatePanels = shouldSuppressEra21CommercialPilotGatePanels({
     pureOperationalModeEra25Active,
   });
@@ -102,18 +116,22 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
             <div>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <LayoutDashboard className="h-5 w-5 text-muted-foreground" aria-hidden />
-                {rolePackLabel}
+                {displayRolePackLabel}
               </CardTitle>
-              <CardDescription className="mt-1">{rolePackHeadline}</CardDescription>
+              <CardDescription className="mt-1">{displayRolePackHeadline}</CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary" className="rounded-full capitalize" data-testid="briefing-role-pack">
-                {briefing.rolePack}
-              </Badge>
-              <Badge variant="outline" className="rounded-full tabular-nums">
-                Readiness {summary.readinessOverall}%
-              </Badge>
-              {p0ProofBlockedLabel ? (
+              {internalOps ? (
+                <Badge variant="secondary" className="rounded-full capitalize" data-testid="briefing-role-pack">
+                  {briefing.rolePack}
+                </Badge>
+              ) : null}
+              {internalOps ? (
+                <Badge variant="outline" className="rounded-full tabular-nums">
+                  Readiness {summary.readinessOverall}%
+                </Badge>
+              ) : null}
+              {internalOps && p0ProofBlockedLabel ? (
                 <Badge
                   variant="secondary"
                   className="rounded-full text-[10px] text-amber-900 dark:text-amber-100"
@@ -155,13 +173,15 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         </CardContent>
       </Card>
 
-      {commercialInflection ? <CommercialInflectionTodayStrip slice={commercialInflection} /> : null}
+      {internalOps && commercialInflection ? (
+        <CommercialInflectionTodayStrip slice={commercialInflection} />
+      ) : null}
 
-      {p0OpsVault ? (
+      {internalOps && p0OpsVault ? (
         <P0OpsVaultPhasesPanel slice={p0OpsVault} variant="compact" title="Ops vault blocked" />
       ) : null}
 
-      {briefing.tier2GoldenPath ? (
+      {internalOps && briefing.tier2GoldenPath ? (
         <Tier2GoldenPathPhasesPanel
           slice={briefing.tier2GoldenPath}
           variant="compact"
@@ -169,7 +189,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {!suppressEra21GatePanels && briefing.commercialGoClosure ? (
+      {internalOps && !suppressEra21GatePanels && briefing.commercialGoClosure ? (
         <CommercialGoClosurePhasesPanel
           slice={briefing.commercialGoClosure}
           variant="compact"
@@ -177,7 +197,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {!suppressEra21GatePanels && briefing.pilotWeek1 ? (
+      {internalOps && !suppressEra21GatePanels && briefing.pilotWeek1 ? (
         <PilotWeek1PhasesPanel
           slice={briefing.pilotWeek1}
           variant="compact"
@@ -185,7 +205,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.month2MarketReadiness ? (
+      {internalOps && briefing.month2MarketReadiness ? (
         <Month2MarketReadinessPhasesPanel
           slice={briefing.month2MarketReadiness}
           variant="compact"
@@ -193,7 +213,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {!suppressEra21GatePanels && briefing.scaleReadiness ? (
+      {internalOps && !suppressEra21GatePanels && briefing.scaleReadiness ? (
         <ScaleReadinessPhasesPanel
           slice={briefing.scaleReadiness}
           variant="compact"
@@ -201,7 +221,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {!suppressEra21GatePanels && briefing.seriesAPartnerExpansion ? (
+      {internalOps && !suppressEra21GatePanels && briefing.seriesAPartnerExpansion ? (
         <SeriesAPartnerExpansionPhasesPanel
           slice={briefing.seriesAPartnerExpansion}
           variant="compact"
@@ -209,7 +229,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {!suppressEra21GatePanels && briefing.marketLeaderPositioning ? (
+      {internalOps && !suppressEra21GatePanels && briefing.marketLeaderPositioning ? (
         <MarketLeaderPositioningPhasesPanel
           slice={briefing.marketLeaderPositioning}
           variant="compact"
@@ -217,7 +237,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {!suppressEra21GatePanels && briefing.sustainedOperationalExcellence ? (
+      {internalOps && !suppressEra21GatePanels && briefing.sustainedOperationalExcellence ? (
         <SustainedOperationalExcellencePhasesPanel
           slice={briefing.sustainedOperationalExcellence}
           variant="compact"
@@ -225,11 +245,11 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.pureOperationalModeTerminus ? (
+      {internalOps && briefing.pureOperationalModeTerminus ? (
         <PureOperationalModeTerminusEra25Strip slice={briefing.pureOperationalModeTerminus} />
       ) : null}
 
-      {briefing.continuousImprovementLoop ? (
+      {internalOps && briefing.continuousImprovementLoop ? (
         <ContinuousImprovementLoopPanel
           slice={briefing.continuousImprovementLoop}
           variant="compact"
@@ -237,7 +257,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.sustainedProductEvolution ? (
+      {internalOps && briefing.sustainedProductEvolution ? (
         <SustainedProductEvolutionPanel
           slice={briefing.sustainedProductEvolution}
           variant="compact"
@@ -245,7 +265,7 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
         />
       ) : null}
 
-      {briefing.maintenanceMode ? (
+      {internalOps && briefing.maintenanceMode ? (
         <MaintenanceModePanel slice={briefing.maintenanceMode} variant="compact" title="Maintenance mode" />
       ) : null}
 
@@ -398,6 +418,8 @@ function BriefingTileCard(props: { tile: OwnerDailyBriefingTile; rolePack: Brief
 
 function RiskRadarLane(props: { slice: OwnerDailyBriefingRiskRadarSlice }) {
   const { slice } = props;
+  const internalOps = showInternalOpsDashboardUi();
+  const signals = internalOps ? slice.signals : filterCustomerFacingLinks(slice.signals);
   const tone = slice.allClear
     ? "border-emerald-200/80 bg-emerald-50/20 dark:border-emerald-900/40 dark:bg-emerald-950/15"
     : slice.criticalCount > 0
@@ -438,13 +460,14 @@ function RiskRadarLane(props: { slice: OwnerDailyBriefingRiskRadarSlice }) {
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
-        {slice.signals.length === 0 ? (
+        {signals.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            No active risk signals for your role — commercial proof, integrations, and pipeline
-            look clear from available data.
+            No active issues need attention right now.
           </p>
         ) : (
-          slice.signals.map((signal) => <RiskSignalRow key={signal.id} signal={signal} />)
+          signals.map((signal) => (
+            <RiskSignalRow key={signal.id} signal={signal} internalOps={internalOps} />
+          ))
         )}
       </CardContent>
     </Card>
@@ -462,8 +485,8 @@ function riskSeverityBadgeClass(severity: OwnerDailyBriefingRiskSignal["severity
   }
 }
 
-function RiskSignalRow(props: { signal: OwnerDailyBriefingRiskSignal }) {
-  const { signal } = props;
+function RiskSignalRow(props: { signal: OwnerDailyBriefingRiskSignal; internalOps?: boolean }) {
+  const { signal, internalOps = showInternalOpsDashboardUi() } = props;
 
   return (
     <Link
@@ -485,10 +508,10 @@ function RiskSignalRow(props: { signal: OwnerDailyBriefingRiskSignal }) {
         </div>
         <p className="font-medium">{signal.title}</p>
         <p className="text-xs text-muted-foreground">{signal.detail}</p>
-        {signal.honestNote ? (
+        {internalOps && signal.honestNote ? (
           <p className="text-[11px] text-muted-foreground/90">{signal.honestNote}</p>
         ) : null}
-        {signal.smokeScript ? (
+        {internalOps && signal.smokeScript ? (
           <p className="font-mono text-[11px] text-muted-foreground">{signal.smokeScript}</p>
         ) : null}
       </div>
@@ -586,6 +609,10 @@ function CalendarStat(props: {
 
 function PilotReadinessLane(props: { slice: OwnerDailyBriefingPilotReadinessSlice }) {
   const { slice } = props;
+  const internalOps = showInternalOpsDashboardUi();
+  const attentionItems = internalOps
+    ? slice.attentionItems
+    : filterCustomerFacingLinks(slice.attentionItems);
   const tone = slice.allClear
     ? "border-emerald-200/80 bg-emerald-50/30 dark:border-emerald-900/40 dark:bg-emerald-950/15"
     : slice.hasUrgent
@@ -599,9 +626,13 @@ function PilotReadinessLane(props: { slice: OwnerDailyBriefingPilotReadinessSlic
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <ClipboardCheck className="h-4 w-4 text-muted-foreground" aria-hidden />
-              Pilot readiness
+              {internalOps ? "Pilot readiness" : "Setup checklist"}
             </CardTitle>
-            <CardDescription>{slice.headline}</CardDescription>
+            <CardDescription>
+              {internalOps
+                ? slice.headline
+                : "Finish channel, delivery, and storefront setup before you go live."}
+            </CardDescription>
           </div>
           <Button asChild size="sm" variant="outline" className="rounded-full">
             <Link href={slice.hubHref}>Open hub</Link>
@@ -632,7 +663,7 @@ function PilotReadinessLane(props: { slice: OwnerDailyBriefingPilotReadinessSlic
             tone={slice.hasUrgent ? "attention" : slice.allClear ? "success" : "neutral"}
           />
         </div>
-        {(slice.commercialDecisionLabel || slice.p0ProofStatusLabel) && (
+        {(internalOps && (slice.commercialDecisionLabel || slice.p0ProofStatusLabel)) && (
           <div className="flex flex-wrap gap-2">
             {slice.commercialDecisionLabel ? (
               <Badge variant="destructive" className="rounded-full">
@@ -646,9 +677,9 @@ function PilotReadinessLane(props: { slice: OwnerDailyBriefingPilotReadinessSlic
             ) : null}
           </div>
         )}
-        {slice.attentionItems.length > 0 ? (
+        {attentionItems.length > 0 ? (
           <div className="space-y-2">
-            {slice.attentionItems.map((item) => (
+            {attentionItems.map((item) => (
               <Link
                 key={item.id}
                 href={item.href}

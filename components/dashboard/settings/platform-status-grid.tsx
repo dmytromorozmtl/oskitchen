@@ -34,7 +34,7 @@ export function PlatformStatusGrid({ items }: { items: PlatformStatusItem[] }) {
       <CardHeader>
         <CardTitle className="text-base">Platform status</CardTitle>
         <CardDescription>
-          Live readiness signals for the integrations that keep KitchenOS running.
+          Live readiness signals for the integrations that keep OS Kitchen running.
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -32,7 +32,7 @@ export function MealPrepOrderQueueContent() {
         <li>Source channel (storefront, POS, catering) for troubleshooting</li>
       </ol>
       <p>
-        KitchenOS ties{' '}
+        OS Kitchen ties{' '}
         <Link href="/solutions/meal-prep">meal prep workflows</Link> to production batches when recipes
         exist — so the queue is not a passive list; it drives what gets cooked on which day.
       </p>
@@ -78,7 +78,7 @@ export function MealPrepOrderQueueContent() {
       </p>
 
       <p>
-        <Link href="/signup">Start a KitchenOS trial</Link>, use the{' '}
+        <Link href="/signup">Start a OS Kitchen trial</Link>, use the{' '}
         <Link href="/roi-calculator">ROI calculator</Link> to estimate labor savings, or read{' '}
         <Link href="/blog/how-to-start-meal-prep-business">how to start a meal prep business</Link> for the
         full stack.

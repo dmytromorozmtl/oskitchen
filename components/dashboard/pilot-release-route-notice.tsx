@@ -22,7 +22,7 @@ export function PilotReleaseRouteNotice({
     >
       <p className="font-medium">This feature is not available on your current plan.</p>
       <p className="mt-1 text-muted-foreground">
-        Paid pilot operators use a reduced surface area. Contact your KitchenOS representative to
+        Paid pilot operators use a reduced surface area. Contact your OS Kitchen representative to
         enable this module, or return to{" "}
         <Link href="/dashboard/today" className="underline underline-offset-2">
           Today

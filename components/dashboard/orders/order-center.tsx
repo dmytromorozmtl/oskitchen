@@ -768,7 +768,7 @@ function PaymentStatusStep(props: {
       <CardHeader>
         <CardTitle className="text-base">Payment &amp; status</CardTitle>
         <CardDescription>
-          KitchenOS never fakes payments. Pick a mode that matches reality.
+          OS Kitchen never fakes payments. Pick a mode that matches reality.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

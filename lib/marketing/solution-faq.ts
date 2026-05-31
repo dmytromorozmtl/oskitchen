@@ -2,7 +2,7 @@
 export const SOLUTION_CHANNEL_FAQ: Array<[string, string]> = [
   [
     "Can I keep my existing Uber Eats integration?",
-    "You can plan your Uber Eats orders alongside other channels in KitchenOS. Live order ingestion requires partner credentials and is on our roadmap. We'll help you set it up when available.",
+    "You can plan your Uber Eats orders alongside other channels in OS Kitchen. Live order ingestion requires partner credentials and is on our roadmap. We'll help you set it up when available.",
   ],
   [
     "Can I connect my Shopify store?",

@@ -62,7 +62,7 @@ export function NpsSurveyPrompt({ workspaceCreatedAt }: NpsSurveyPromptProps) {
     <Dialog open={open} onOpenChange={(v) => !v && dismiss()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>How likely are you to recommend KitchenOS?</DialogTitle>
+          <DialogTitle>How likely are you to recommend OS Kitchen?</DialogTitle>
           <DialogDescription>
             Your feedback shapes the roadmap — especially during the pilot program.
           </DialogDescription>

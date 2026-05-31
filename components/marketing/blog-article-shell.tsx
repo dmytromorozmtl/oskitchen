@@ -74,7 +74,7 @@ export function BlogArticleShell({
           </section>
         ) : null}
         <div className="mt-16 rounded-2xl border bg-primary/5 p-8 text-center">
-          <h2 className="text-xl font-bold">Run your kitchen on KitchenOS</h2>
+          <h2 className="text-xl font-bold">Run your kitchen on OS Kitchen</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             14-day free trial · POS, production, packing, and storefront in one workspace.
           </p>

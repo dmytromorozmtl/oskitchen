@@ -128,7 +128,7 @@ export const LANDING_HOW_IT_WORKS = {
   tag: 'How it works',
   title: 'From first order to fulfilled — in four steps',
   description:
-    'KitchenOS connects the full service loop. Integrations and payment depth follow your credentials — never implied as universally live.',
+    'OS Kitchen connects the full service loop. Integrations and payment depth follow your credentials — never implied as universally live.',
   steps: [
     {
       step: '01',

@@ -9,15 +9,15 @@ export type CapabilityRow = {
 };
 
 export const CAPABILITY_SHEET_COPY = {
-  metaTitle: 'KitchenOS Capabilities — What We Ship Today',
+  metaTitle: 'OS Kitchen Capabilities — What We Ship Today',
   metaDescription:
-    'Honest capability matrix for KitchenOS: live pilot features, beta disclosures, and out-of-scope items. For sales and technical evaluation.',
+    'Honest capability matrix for OS Kitchen: live pilot features, beta disclosures, and out-of-scope items. For sales and technical evaluation.',
   eyebrow: 'Capability sheet',
-  headline: 'What KitchenOS ships today — and what we do not claim',
+  headline: 'What OS Kitchen ships today — and what we do not claim',
   subheadline:
     'Use this page in procurement and pilot conversations. Status labels match engineering sign-off; marketing and sales copy must not exceed this matrix.',
   disclaimer:
-    'KitchenOS is in paid pilot for meal prep, preorder, and daily-service operators. General availability gates apply before self-serve enterprise SLAs.',
+    'OS Kitchen is in paid pilot for meal prep, preorder, and daily-service operators. General availability gates apply before self-serve enterprise SLAs.',
   updated: 'May 2026',
 } as const;
 

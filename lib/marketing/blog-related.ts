@@ -44,7 +44,7 @@ export const SOLUTION_GUIDE_LINKS: Partial<
     },
     {
       href: "/compare/deliverect",
-      title: "KitchenOS vs Deliverect",
+      title: "OS Kitchen vs Deliverect",
       description: "Operations OS vs aggregator middleware — honest comparison.",
     },
   ],
@@ -52,7 +52,7 @@ export const SOLUTION_GUIDE_LINKS: Partial<
     {
       href: "/blog/restaurant-pos-comparison-2026",
       title: "Restaurant POS comparison 2026",
-      description: "Toast vs Square vs KitchenOS for full-service and fast-casual.",
+      description: "Toast vs Square vs OS Kitchen for full-service and fast-casual.",
     },
     {
       href: "/blog/how-to-choose-restaurant-pos-2026",

@@ -1,17 +1,17 @@
 "use client";
 
-import { getActionError } from "@/lib/action-result";
-
 import * as React from "react";
 import { toast } from "sonner";
-import Link from "next/link";
 
 import { resetDemoWorkspace } from "@/actions/demo";
+import { getActionError } from "@/lib/action-result";
+import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 import { Button } from "@/components/ui/button";
 
 export function DemoBanner({ userId }: { userId: string }) {
   const [dismissed, setDismissed] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
+  const internalOps = showInternalOpsDashboardUi();
 
   React.useEffect(() => {
     try {
@@ -33,7 +33,7 @@ export function DemoBanner({ userId }: { userId: string }) {
   async function reset() {
     if (
       !confirm(
-        "Remove all demo menus, orders, and simulated channels from this workspace?",
+        "Remove sample menus, orders, and channels from this workspace?",
       )
     ) {
       return;
@@ -43,7 +43,7 @@ export function DemoBanner({ userId }: { userId: string }) {
       const r = await resetDemoWorkspace();
       if (r && "error" in r && r.error) toast.error(getActionError(r) ?? "Something went wrong");
       else {
-        toast.success("Demo data cleared");
+        toast.success("Sample data cleared");
         window.location.href = "/dashboard";
       }
     } finally {
@@ -51,7 +51,7 @@ export function DemoBanner({ userId }: { userId: string }) {
     }
   }
 
-  if (dismissed) return null;
+  if (dismissed || !internalOps) return null;
 
   return (
     <div
@@ -59,16 +59,12 @@ export function DemoBanner({ userId }: { userId: string }) {
       className="mb-4 flex flex-col gap-3 rounded-2xl border border-amber-500/50 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:border-amber-400/40 dark:bg-amber-500/15 dark:text-amber-50 sm:flex-row sm:items-center sm:justify-between"
     >
       <div>
-        <p className="font-semibold">Demo workspace</p>
+        <p className="font-semibold">Sample workspace</p>
         <p className="mt-1 text-xs opacity-90">
-          Sample menus, orders, and sales channels are simulated — no live API keys required.
-          User id <span className="font-mono">{userId.slice(0, 8)}…</span>
+          Menus, orders, and channels use sample data for onboarding.
         </p>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button asChild size="sm" variant="secondary" className="rounded-full">
-          <Link href="/demo">Demo hub</Link>
-        </Button>
         <Button
           size="sm"
           variant="outline"
@@ -76,7 +72,7 @@ export function DemoBanner({ userId }: { userId: string }) {
           disabled={busy}
           onClick={() => void reset()}
         >
-          {busy ? "Clearing…" : "Reset demo"}
+          {busy ? "Clearing…" : "Clear sample data"}
         </Button>
         <Button size="sm" variant="ghost" className="rounded-full" onClick={dismiss}>
           Dismiss

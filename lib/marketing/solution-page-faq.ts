@@ -4,7 +4,7 @@ export type FaqItem = { question: string; answer: string };
 
 const MEAL_PREP_FAQ: FaqItem[] = [
   {
-    question: 'Can KitchenOS replace my meal prep spreadsheets?',
+    question: 'Can OS Kitchen replace my meal prep spreadsheets?',
     answer:
       'Yes — for the operational loop. Weekly menus, preorder cutoffs, production quantities, and packing flow from confirmed orders instead of manual tab reconciliation.',
   },
@@ -32,7 +32,7 @@ const MEAL_PREP_FAQ: FaqItem[] = [
 
 const CATERING_FAQ: FaqItem[] = [
   {
-    question: 'Is KitchenOS built for corporate catering?',
+    question: 'Is OS Kitchen built for corporate catering?',
     answer:
       'Yes. Event-style orders, production planning, packing by drop, and optional routes are designed for B2B catering — not only retail counter service.',
   },
@@ -49,7 +49,7 @@ const CATERING_FAQ: FaqItem[] = [
   {
     question: 'Does it replace my quoting CRM?',
     answer:
-      'KitchenOS focuses on operations after a quote is won — production, packing, and dispatch. Sales quoting may still live in your CRM until deeper integrations ship.',
+      'OS Kitchen focuses on operations after a quote is won — production, packing, and dispatch. Sales quoting may still live in your CRM until deeper integrations ship.',
   },
   {
     question: 'Is there a free trial?',
@@ -72,7 +72,7 @@ const BAKERY_FAQ: FaqItem[] = [
   {
     question: 'Do I need a separate bakery POS terminal?',
     answer:
-      'No. KitchenOS runs in the browser on hardware you already own. Stripe Terminal native drivers are not integrated today.',
+      'No. OS Kitchen runs in the browser on hardware you already own. Stripe Terminal native drivers are not integrated today.',
   },
   {
     question: 'Can I print labels for wholesale crates?',
@@ -88,9 +88,9 @@ const BAKERY_FAQ: FaqItem[] = [
 
 const RESTAURANT_FAQ: FaqItem[] = [
   {
-    question: 'Do I need to buy proprietary terminals from KitchenOS?',
+    question: 'Do I need to buy proprietary terminals from OS Kitchen?',
     answer:
-      'No. KitchenOS runs in the browser on iPads, Android tablets, phones, or desktops you already own. There is no mandatory hardware lease or terminal bundle.',
+      'No. OS Kitchen runs in the browser on iPads, Android tablets, phones, or desktops you already own. There is no mandatory hardware lease or terminal bundle.',
   },
   {
     question: 'Can guests order from their table without an app?',
@@ -103,9 +103,9 @@ const RESTAURANT_FAQ: FaqItem[] = [
       'Use a visual floor plan with statuses (Available, Occupied, Reserved, Dirty) and assign open orders to tables so servers and expo share one source of truth.',
   },
   {
-    question: 'How does KitchenOS compare to Toast or Square?',
+    question: 'How does OS Kitchen compare to Toast or Square?',
     answer:
-      'KitchenOS combines POS, kitchen display, table management, QR ordering, and production tools in one web platform — without requiring proprietary hardware. Many teams still use other tools for specific payment or marketplace needs; we are clear about what is live in your workspace.',
+      'OS Kitchen combines POS, kitchen display, table management, QR ordering, and production tools in one web platform — without requiring proprietary hardware. Many teams still use other tools for specific payment or marketplace needs; we are clear about what is live in your workspace.',
   },
   {
     question: 'What is included in the 14-day trial?',
@@ -121,7 +121,7 @@ const BAR_FAQ: FaqItem[] = [
       'Yes. Open tabs by table or customer name, add items with quick-order drink buttons, and close with tip when the party leaves.',
   },
   {
-    question: 'Does KitchenOS support split checks?',
+    question: 'Does OS Kitchen support split checks?',
     answer:
       'Split tracking exists in the data model today. Full split-bill UI is rolling out — contact us if you need early access for high-volume bars.',
   },
@@ -133,7 +133,7 @@ const BAR_FAQ: FaqItem[] = [
   {
     question: 'What hardware do I need behind the bar?',
     answer:
-      'Any tablet or phone with a modern browser. No proprietary payment terminal purchase is required to evaluate KitchenOS.',
+      'Any tablet or phone with a modern browser. No proprietary payment terminal purchase is required to evaluate OS Kitchen.',
   },
   {
     question: 'Is there a free trial for bars?',
@@ -149,7 +149,7 @@ const CAFE_FAQ: FaqItem[] = [
       'Yes. Enable storefront checkout with pickup windows and capacity limits when you configure Stripe — orders land in the same queue as counter POS.',
   },
   {
-    question: 'Is KitchenOS only for coffee shops?',
+    question: 'Is OS Kitchen only for coffee shops?',
     answer:
       'It is built for high-repeat counter service — coffee, bakery, and light food — with quick-order buttons and optional kitchen routing for warmed items.',
   },
@@ -172,7 +172,7 @@ const CAFE_FAQ: FaqItem[] = [
 
 const FAST_CASUAL_FAQ: FaqItem[] = [
   {
-    question: 'Is KitchenOS built for lunch rush volume?',
+    question: 'Is OS Kitchen built for lunch rush volume?',
     answer:
       'Yes. Daily Service Mode, color-coded KDS, and quick-order buttons are designed for same-day throughput — not only weekly preorder workflows.',
   },
@@ -212,7 +212,7 @@ const GHOST_FAQ: FaqItem[] = [
   {
     question: 'Are Uber Eats and DoorDash live for every account?',
     answer:
-      'No. Marketplace adapters require partner access and verified credentials. KitchenOS shows sync health honestly — we do not display fake “live” badges.',
+      'No. Marketplace adapters require partner access and verified credentials. OS Kitchen shows sync health honestly — we do not display fake “live” badges.',
   },
   {
     question: 'Can WooCommerce or Shopify orders import automatically?',

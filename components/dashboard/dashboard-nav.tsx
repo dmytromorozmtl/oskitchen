@@ -22,6 +22,7 @@ import {
   moduleReadinessBadgeLabel,
 } from "@/lib/product/module-readiness";
 import { navMaturityBadgeForHref } from "@/lib/navigation/nav-maturity-governance";
+import { showNavStatusBadges } from "@/lib/ui/customer-facing-dashboard";
 
 import {
   MAX_NAV_PINS as MAX_PINS,
@@ -119,10 +120,12 @@ function NavGroup({
             const active = linkActive(pathname, link.href);
             const pinned = pins.has(link.href);
             const readiness = getModuleReadinessForPath(link.href);
-            const readinessLabel = readiness
-              ? moduleReadinessBadgeLabel(readiness.status)
+            const readinessLabel = showNavStatusBadges()
+              ? readiness
+                ? moduleReadinessBadgeLabel(readiness.status)
+                : null
               : null;
-            const maturityLabel = navMaturityBadgeForHref(link.href);
+            const maturityLabel = showNavStatusBadges() ? navMaturityBadgeForHref(link.href) : null;
             const badgeLabel = readinessLabel ?? maturityLabel;
             return (
               <div key={link.href} className="group relative flex items-stretch">

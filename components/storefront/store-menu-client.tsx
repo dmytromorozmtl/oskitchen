@@ -110,7 +110,7 @@ export function StoreMenuClient({
                     >
                       {p.title}
                     </Link>
-                    <p className="text-xs font-medium text-[var(--store-accent,#286ab8)]">
+                    <p className="text-xs font-medium text-[var(--store-accent,#FF5F1F)]">
                       Prepared {format(prepared, "EEE MMM d")}
                     </p>
                     {p.soldOut ? (

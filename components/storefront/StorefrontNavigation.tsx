@@ -102,7 +102,7 @@ export function StorefrontNavigation({
             ) : (
               <div
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow-sm"
-                style={{ background: `linear-gradient(135deg, ${accentColor}, #1e4f8c)` }}
+                style={{ background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }}
               >
                 {publicName.slice(0, 1).toUpperCase()}
               </div>

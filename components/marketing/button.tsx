@@ -26,7 +26,7 @@ export function MarketingButton({
     'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200';
   const variants = {
     primary:
-      'bg-primary text-primary-foreground hover:bg-primary-700 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30',
+      'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25',
     secondary: 'border border-border bg-background text-foreground hover:bg-muted',
     ghost: 'text-foreground hover:bg-muted',
   };

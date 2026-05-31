@@ -46,9 +46,9 @@ const OPERATING_MODEL_COPY: { id: OperatingModelId; title: string; description: 
   { id: "WEEKLY_PREORDERS", title: "Weekly preorders", description: "Publish a cycle, cutoff, then produce in batch." },
   { id: "CATERING_QUOTES_EVENTS", title: "Catering quotes & events", description: "Quotes, deposits, and event execution." },
   { id: "BAKERY_CUSTOM_PREORDERS", title: "Bakery preorders", description: "Batch days, labels, and pickup slots." },
-  { id: "STOREFRONT", title: "Native KitchenOS storefront", description: "Public web ordering — connect later in Storefront." },
+  { id: "STOREFRONT", title: "Native OS Kitchen storefront", description: "Public web ordering — connect later in Storefront." },
   { id: "SHOPIFY_WOO_MARKETPLACE", title: "Shopify / WooCommerce / marketplaces", description: "Sync channels — credentials after setup." },
-  { id: "MANUAL_ONLY", title: "Manual internal orders only", description: "Start in KitchenOS; wire channels when ready." },
+  { id: "MANUAL_ONLY", title: "Manual internal orders only", description: "Start in OS Kitchen; wire channels when ready." },
 ];
 
 type Defaults = {
@@ -183,7 +183,7 @@ export function OnboardingWizard({
     <div className="mx-auto flex max-w-2xl flex-col gap-6 pb-20 pt-2">
       <div className="text-center sm:text-left">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Guided setup</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">KitchenOS setup</h1>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight">OS Kitchen setup</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           We’ll configure your workspace based on how you operate — about 2–5 minutes. Everything saves automatically
           and can be changed later in Settings.
@@ -243,7 +243,7 @@ export function OnboardingWizard({
       {currentStepId === "welcome" ? (
         <Card className="border-border/80 shadow-sm">
           <CardHeader>
-            <CardTitle>Welcome to KitchenOS</CardTitle>
+            <CardTitle>Welcome to OS Kitchen</CardTitle>
             <CardDescription>
               Let’s configure your workspace based on how your food business operates. You can skip anytime — nothing
               here is permanent.
@@ -741,7 +741,7 @@ export function OnboardingWizard({
                 <div className="flex items-center gap-2">
                   <input id="ch_storefront" name="ch_storefront" type="checkbox" className="h-4 w-4" />
                   <Label htmlFor="ch_storefront" className="font-normal">
-                    Native KitchenOS storefront
+                    Native OS Kitchen storefront
                   </Label>
                 </div>
                 <div className="flex items-center gap-2">

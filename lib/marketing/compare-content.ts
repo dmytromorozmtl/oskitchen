@@ -48,11 +48,11 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'restaurant-pos',
     path: '/compare/restaurant-pos',
-    metaTitle: 'Restaurant POS Comparison 2026 — Toast vs Square vs KitchenOS',
+    metaTitle: 'Restaurant POS Comparison 2026 — Toast vs Square vs OS Kitchen',
     metaDescription:
       'Compare restaurant POS systems: hardware, kitchen display, tables, and total cost. Honest feature matrix for US and Canadian operators.',
     eyebrow: 'Restaurant POS comparison',
-    headline: 'Toast vs Square vs KitchenOS — what actually matters in 2026',
+    headline: 'Toast vs Square vs OS Kitchen — what actually matters in 2026',
     subheadline:
       'Payments are table stakes. The decision is whether your floor, kitchen, and production run on one ticket stream — or three apps that drift apart on a Friday night.',
     methodology:
@@ -75,7 +75,7 @@ export const COMPARE_PAGES: ComparePageContent[] = [
       ],
     },
     disclaimer:
-      'Toast® and Square® are trademarks of their respective owners. KitchenOS is not affiliated with or endorsed by them. Matrix is directional for sales conversations — not a warranty of third-party features.',
+      'Toast® and Square® are trademarks of their respective owners. OS Kitchen is not affiliated with or endorsed by them. Matrix is directional for sales conversations — not a warranty of third-party features.',
     whenToChoose: [
       {
         title: 'Choose Toast when',
@@ -86,22 +86,22 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         body: 'You run a simple counter-first operation, want familiar out-of-the-box hardware, and kitchen complexity is low.',
       },
       {
-        title: 'Choose KitchenOS when',
+        title: 'Choose OS Kitchen when',
         body: 'You need web POS + KDS + production on devices you own, run meal prep or ghost brands, or want to avoid a multi-year terminal lease.',
       },
     ],
     faqs: [
       {
-        q: 'Can KitchenOS replace Toast on day one?',
+        q: 'Can OS Kitchen replace Toast on day one?',
         a: 'Many pilots start with kitchen + preorder while evaluating full floor POS. Migration depends on your payments setup and training bandwidth — we scope that in onboarding.',
       },
       {
         q: 'Do you support offline POS?',
-        a: 'No. KitchenOS is built for connected operations. If offline is mandatory, Toast or Square may be a better fit today.',
+        a: 'No. OS Kitchen is built for connected operations. If offline is mandatory, Toast or Square may be a better fit today.',
       },
       {
         q: 'How should we compare total cost?',
-        a: 'Model five-year TCO: software, terminals, swaps, chargebacks, and add-ons. KitchenOS shifts spend from hardware lease to software subscription on existing tablets.',
+        a: 'Model five-year TCO: software, terminals, swaps, chargebacks, and add-ons. OS Kitchen shifts spend from hardware lease to software subscription on existing tablets.',
       },
     ],
     blogSlug: 'restaurant-pos-comparison-2026',
@@ -110,11 +110,11 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'meal-prep-software',
     path: '/compare/meal-prep-software',
-    metaTitle: 'Meal Prep Software Comparison — KitchenOS vs Spreadsheet Workflow',
+    metaTitle: 'Meal Prep Software Comparison — OS Kitchen vs Spreadsheet Workflow',
     metaDescription:
       'Compare meal prep software for weekly menus, production, and packing vs spreadsheets and generic storefront tools.',
     eyebrow: 'Meal prep software comparison',
-    headline: 'Spreadsheets vs storefront-only tools vs KitchenOS',
+    headline: 'Spreadsheets vs storefront-only tools vs OS Kitchen',
     subheadline:
       'Weekly meal prep breaks when preorders, production quantities, and packing labels live in different places. Here is how operators typically stack options before a pilot.',
     methodology:
@@ -136,7 +136,7 @@ export const COMPARE_PAGES: ComparePageContent[] = [
       ],
     },
     disclaimer:
-      '“Storefront-only tool” describes category behavior, not a single vendor. KitchenOS includes native storefront when Stripe is configured — see capability sign-off for beta labels.',
+      '“Storefront-only tool” describes category behavior, not a single vendor. OS Kitchen includes native storefront when Stripe is configured — see capability sign-off for beta labels.',
     whenToChoose: [
       {
         title: 'Stay on spreadsheets when',
@@ -147,14 +147,14 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         body: 'You only need cart/checkout and will run kitchen ops elsewhere — accept manual production rebuilds each week.',
       },
       {
-        title: 'Choose KitchenOS when',
+        title: 'Choose OS Kitchen when',
         body: 'Preorder volume justifies one flow from menu → production → packing, with optional counter POS in the same workspace.',
       },
     ],
     faqs: [
       {
         q: 'We already use Shopify for orders — do we replace it?',
-        a: 'Many pilots use KitchenOS as the kitchen system of record while keeping Shopify for marketing. WooCommerce/Shopify import is beta — disclose timelines in sales.',
+        a: 'Many pilots use OS Kitchen as the kitchen system of record while keeping Shopify for marketing. WooCommerce/Shopify import is beta — disclose timelines in sales.',
       },
       {
         q: 'Is production planning included?',
@@ -171,18 +171,18 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'toast',
     path: '/compare/toast',
-    metaTitle: 'KitchenOS vs Toast — Restaurant POS Comparison 2026',
+    metaTitle: 'OS Kitchen vs Toast — Restaurant POS Comparison 2026',
     metaDescription:
-      'Compare KitchenOS and Toast POS: hardware lock-in, kitchen display, table management, and total cost for US restaurants.',
-    eyebrow: 'KitchenOS vs Toast',
-    headline: 'Toast vs KitchenOS — when hardware POS is not the whole story',
+      'Compare OS Kitchen and Toast POS: hardware lock-in, kitchen display, table management, and total cost for US restaurants.',
+    eyebrow: 'OS Kitchen vs Toast',
+    headline: 'Toast vs OS Kitchen — when hardware POS is not the whole story',
     subheadline:
-      'Toast wins on certified hardware and field support. KitchenOS wins when you need owned commerce, production truth, and multi-channel ops without device lock-in.',
+      'Toast wins on certified hardware and field support. OS Kitchen wins when you need owned commerce, production truth, and multi-channel ops without device lock-in.',
     methodology:
-      'Feature matrix based on public positioning and KitchenOS capability matrix. Verify Toast pricing and hardware bundles before purchase.',
+      'Feature matrix based on public positioning and OS Kitchen capability matrix. Verify Toast pricing and hardware bundles before purchase.',
     comparisonTag: 'Feature matrix',
     comparison: {
-      title: 'Toast vs KitchenOS',
+      title: 'Toast vs OS Kitchen',
       competitorALabel: 'Toast',
       competitorBLabel: 'Add-on stack',
       rows: [
@@ -194,31 +194,31 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Multi-brand / ghost kitchen', kitchenos: '✅ Command center', competitorA: 'Limited', competitorB: '❌' },
       ],
     },
-    disclaimer: 'Toast is a strong fit for full-service restaurants that want bundled hardware and payments. KitchenOS fits hybrid operators who prioritize flexible commerce + kitchen execution.',
+    disclaimer: 'Toast is a strong fit for full-service restaurants that want bundled hardware and payments. OS Kitchen fits hybrid operators who prioritize flexible commerce + kitchen execution.',
     whenToChoose: [
       { title: 'Choose Toast when', body: 'You need certified hardware, local field support, and a payments-first rollout with minimal engineering.' },
-      { title: 'Choose KitchenOS when', body: 'You run meal prep, ghost kitchen, or hybrid models and need production + storefront + POS on one tenant graph.' },
+      { title: 'Choose OS Kitchen when', body: 'You run meal prep, ghost kitchen, or hybrid models and need production + storefront + POS on one tenant graph.' },
     ],
     faqs: [
-      { q: 'Can KitchenOS replace Toast terminals?', a: 'KitchenOS uses Stripe Connect — you bring compatible devices or counter checkout. No proprietary terminal lock-in.' },
-      { q: 'Does KitchenOS support tips?', a: 'POS supports tip lines on checkout; structured tipping flows are on the roadmap.' },
+      { q: 'Can OS Kitchen replace Toast terminals?', a: 'OS Kitchen uses Stripe Connect — you bring compatible devices or counter checkout. No proprietary terminal lock-in.' },
+      { q: 'Does OS Kitchen support tips?', a: 'POS supports tip lines on checkout; structured tipping flows are on the roadmap.' },
     ],
     primaryCta: { label: 'Compare in a demo', href: '/book-demo?utm_source=compare&utm_medium=organic&utm_campaign=toast' },
   },
   {
     slug: 'square',
     path: '/compare/square',
-    metaTitle: 'KitchenOS vs Square for Restaurants — 2026 Comparison',
+    metaTitle: 'OS Kitchen vs Square for Restaurants — 2026 Comparison',
     metaDescription:
-      'Square vs KitchenOS for restaurants and cafés: POS, online ordering, kitchen ops, and when to pick an operations OS over payments-first SMB software.',
-    eyebrow: 'KitchenOS vs Square',
-    headline: 'Square vs KitchenOS — payments ubiquity vs kitchen execution',
+      'Square vs OS Kitchen for restaurants and cafés: POS, online ordering, kitchen ops, and when to pick an operations OS over payments-first SMB software.',
+    eyebrow: 'OS Kitchen vs Square',
+    headline: 'Square vs OS Kitchen — payments ubiquity vs kitchen execution',
     subheadline:
-      'Square optimizes for fast SMB signup and Cash App ecosystem effects. KitchenOS optimizes for food-specific fulfillment after the sale.',
+      'Square optimizes for fast SMB signup and Cash App ecosystem effects. OS Kitchen optimizes for food-specific fulfillment after the sale.',
     methodology: 'Directional comparison from public vendor positioning. Confirm Square plan limits and app marketplace fees.',
     comparisonTag: 'Feature matrix',
     comparison: {
-      title: 'Square vs KitchenOS',
+      title: 'Square vs OS Kitchen',
       competitorALabel: 'Square',
       competitorBLabel: 'Spreadsheet ops',
       rows: [
@@ -229,30 +229,30 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Inventory costing', kitchenos: '✅ AVT + theft', competitorA: 'Basic', competitorB: '❌' },
       ],
     },
-    disclaimer: 'Square remains excellent for single-location cafés that primarily need payments. KitchenOS targets operators with recurring production load.',
+    disclaimer: 'Square remains excellent for single-location cafés that primarily need payments. OS Kitchen targets operators with recurring production load.',
     whenToChoose: [
       { title: 'Choose Square when', body: 'You need the simplest counter POS and will add apps as you grow.' },
-      { title: 'Choose KitchenOS when', body: 'Orders drive production, packing, or delivery — you need one system of record.' },
+      { title: 'Choose OS Kitchen when', body: 'Orders drive production, packing, or delivery — you need one system of record.' },
     ],
     faqs: [
-      { q: 'Does KitchenOS integrate with Square?', a: 'Channel integrations are roadmap; today use native POS or Woo/Shopify storefront paths.' },
+      { q: 'Does OS Kitchen integrate with Square?', a: 'Channel integrations are roadmap; today use native POS or Woo/Shopify storefront paths.' },
     ],
     primaryCta: { label: 'Start free trial', href: '/signup?utm_source=compare&utm_medium=organic&utm_campaign=square' },
   },
   {
     slug: 'marketman',
     path: '/compare/marketman',
-    metaTitle: 'KitchenOS vs MarketMan — Inventory & Costing Comparison',
+    metaTitle: 'OS Kitchen vs MarketMan — Inventory & Costing Comparison',
     metaDescription:
-      'MarketMan vs KitchenOS for restaurant inventory, invoice OCR, and actual-vs-theoretical costing tied to live orders.',
-    eyebrow: 'KitchenOS vs MarketMan',
-    headline: 'MarketMan vs KitchenOS — back-office depth vs operational moment',
+      'MarketMan vs OS Kitchen for restaurant inventory, invoice OCR, and actual-vs-theoretical costing tied to live orders.',
+    eyebrow: 'OS Kitchen vs MarketMan',
+    headline: 'MarketMan vs OS Kitchen — back-office depth vs operational moment',
     subheadline:
-      'MarketMan leads on invoice OCR and vendor item masters. KitchenOS ties shortage signals to real orders on the production line.',
+      'MarketMan leads on invoice OCR and vendor item masters. OS Kitchen ties shortage signals to real orders on the production line.',
     methodology: 'Compares inventory/costing modules honestly; verify MarketMan OCR tiers separately.',
     comparisonTag: 'Feature matrix',
     comparison: {
-      title: 'MarketMan vs KitchenOS',
+      title: 'MarketMan vs OS Kitchen',
       competitorALabel: 'MarketMan',
       competitorBLabel: 'POS-only',
       rows: [
@@ -263,10 +263,10 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Supplier charts', kitchenos: '✅ Purchasing module', competitorA: '✅ Strong', competitorB: '❌' },
       ],
     },
-    disclaimer: 'MarketMan is stronger as a dedicated inventory back-office. KitchenOS is stronger when inventory must reflect today\'s ticket volume.',
+    disclaimer: 'MarketMan is stronger as a dedicated inventory back-office. OS Kitchen is stronger when inventory must reflect today\'s ticket volume.',
     whenToChoose: [
       { title: 'Choose MarketMan when', body: 'Accounting-grade inventory and invoice scanning are your primary pain.' },
-      { title: 'Choose KitchenOS when', body: 'You need costing plus POS, production, and storefront in one workspace.' },
+      { title: 'Choose OS Kitchen when', body: 'You need costing plus POS, production, and storefront in one workspace.' },
     ],
     faqs: [
       { q: 'Can I use both?', a: 'Many operators use inventory specialists alongside an ops OS — evaluate integration maturity before committing.' },
@@ -276,17 +276,17 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'deliverect',
     path: '/compare/deliverect',
-    metaTitle: 'KitchenOS vs Deliverect — Aggregator Middleware Comparison 2026',
+    metaTitle: 'OS Kitchen vs Deliverect — Aggregator Middleware Comparison 2026',
     metaDescription:
-      'Compare Deliverect aggregator middleware with KitchenOS all-in-one ops: POS, KDS, production, storefront, and channel honesty for ghost kitchens.',
-    eyebrow: 'KitchenOS vs Deliverect',
-    headline: 'Deliverect routes orders — KitchenOS runs the kitchen',
+      'Compare Deliverect aggregator middleware with OS Kitchen all-in-one ops: POS, KDS, production, storefront, and channel honesty for ghost kitchens.',
+    eyebrow: 'OS Kitchen vs Deliverect',
+    headline: 'Deliverect routes orders — OS Kitchen runs the kitchen',
     subheadline:
-      'Deliverect excels at pushing menus to Uber Eats and DoorDash. KitchenOS is the operations OS underneath: production, packing, POS, and owned storefront when you need more than middleware.',
+      'Deliverect excels at pushing menus to Uber Eats and DoorDash. OS Kitchen is the operations OS underneath: production, packing, POS, and owned storefront when you need more than middleware.',
     methodology: 'Category comparison — verify Deliverect plan and connector list before purchase.',
     comparisonTag: 'Ops depth vs middleware',
     comparison: {
-      title: 'Deliverect vs KitchenOS',
+      title: 'Deliverect vs OS Kitchen',
       competitorALabel: 'Deliverect',
       competitorBLabel: 'POS + spreadsheets',
       rows: [
@@ -297,30 +297,30 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Meal prep / batch logic', kitchenos: '✅ Cutoffs + yields', competitorA: '❌', competitorB: '❌' },
       ],
     },
-    disclaimer: 'Many operators use Deliverect (or similar) **with** an ops platform. KitchenOS can consolidate ops; native aggregator sync is roadmap — disclose in sales.',
+    disclaimer: 'Many operators use Deliverect (or similar) **with** an ops platform. OS Kitchen can consolidate ops; native aggregator sync is roadmap — disclose in sales.',
     whenToChoose: [
       { title: 'Choose Deliverect when', body: 'You only need aggregator menu injection and already have a mature POS + kitchen stack.' },
-      { title: 'Choose KitchenOS when', body: 'You need one tenant graph for POS, KDS, production, packing, and preorder — especially meal prep and ghost kitchen.' },
+      { title: 'Choose OS Kitchen when', body: 'You need one tenant graph for POS, KDS, production, packing, and preorder — especially meal prep and ghost kitchen.' },
     ],
     faqs: [
-      { q: 'Will KitchenOS replace Deliverect?', a: 'Not today for deep aggregator sync. Evaluate KitchenOS as your kitchen OS; add middleware if channel volume requires it.' },
+      { q: 'Will OS Kitchen replace Deliverect?', a: 'Not today for deep aggregator sync. Evaluate OS Kitchen as your kitchen OS; add middleware if channel volume requires it.' },
     ],
     primaryCta: { label: 'Book ghost kitchen demo', href: '/solutions/ghost-kitchens?utm_source=compare&utm_medium=organic&utm_campaign=deliverect' },
   },
   {
     slug: 'restaurant365',
     path: '/compare/restaurant365',
-    metaTitle: 'KitchenOS vs Restaurant365 — Restaurant Operations Comparison',
+    metaTitle: 'OS Kitchen vs Restaurant365 — Restaurant Operations Comparison',
     metaDescription:
-      'Restaurant365 vs KitchenOS: accounting-heavy enterprise stack vs web-first POS, kitchen, and production for growing operators.',
-    eyebrow: 'KitchenOS vs Restaurant365',
-    headline: 'Restaurant365 for finance — KitchenOS for the line',
+      'Restaurant365 vs OS Kitchen: accounting-heavy enterprise stack vs web-first POS, kitchen, and production for growing operators.',
+    eyebrow: 'OS Kitchen vs Restaurant365',
+    headline: 'Restaurant365 for finance — OS Kitchen for the line',
     subheadline:
-      'R365 wins enterprise accounting and workforce at scale. KitchenOS wins when you need fast rollout of POS, KDS, and production without a six-figure implementation.',
+      'R365 wins enterprise accounting and workforce at scale. OS Kitchen wins when you need fast rollout of POS, KDS, and production without a six-figure implementation.',
     methodology: 'Directional comparison — confirm R365 modules and services bundle with vendor.',
     comparisonTag: 'Enterprise accounting vs ops OS',
     comparison: {
-      title: 'Restaurant365 vs KitchenOS',
+      title: 'Restaurant365 vs OS Kitchen',
       competitorALabel: 'Restaurant365',
       competitorBLabel: 'QuickBooks + POS',
       rows: [
@@ -331,28 +331,28 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Starting price', kitchenos: '✅ From $29/mo', competitorA: '⚠️ $300+/mo typical', competitorB: 'Varies' },
       ],
     },
-    disclaimer: 'R365 is a strong fit for multi-unit groups with dedicated accounting teams. KitchenOS fits 1–3 location operators optimizing kitchen execution first.',
+    disclaimer: 'R365 is a strong fit for multi-unit groups with dedicated accounting teams. OS Kitchen fits 1–3 location operators optimizing kitchen execution first.',
     whenToChoose: [
       { title: 'Choose R365 when', body: 'You need deep GL, enterprise AP, and SOC2 vendor maturity at 20+ locations.' },
-      { title: 'Choose KitchenOS when', body: 'You need unified kitchen ops and commerce now, with honest upgrade path as you scale.' },
+      { title: 'Choose OS Kitchen when', body: 'You need unified kitchen ops and commerce now, with honest upgrade path as you scale.' },
     ],
-    faqs: [{ q: 'SOC2?', a: 'KitchenOS SOC2 Type I targeted Q4 — see trust page. R365 carries enterprise compliance today.' }],
+    faqs: [{ q: 'SOC2?', a: 'OS Kitchen SOC2 Type I targeted Q4 — see trust page. R365 carries enterprise compliance today.' }],
     primaryCta: { label: 'See pricing', href: '/pricing?utm_source=compare&utm_medium=organic&utm_campaign=r365' },
   },
   {
     slug: 'touchbistro',
     path: '/compare/touchbistro',
-    metaTitle: 'KitchenOS vs TouchBistro — iPad POS Comparison 2026',
+    metaTitle: 'OS Kitchen vs TouchBistro — iPad POS Comparison 2026',
     metaDescription:
-      'TouchBistro vs KitchenOS for restaurants and cafés: iPad POS vs web-first ops with production board and meal prep workflows.',
-    eyebrow: 'KitchenOS vs TouchBistro',
-    headline: 'TouchBistro for the floor — KitchenOS for floor + line',
+      'TouchBistro vs OS Kitchen for restaurants and cafés: iPad POS vs web-first ops with production board and meal prep workflows.',
+    eyebrow: 'OS Kitchen vs TouchBistro',
+    headline: 'TouchBistro for the floor — OS Kitchen for floor + line',
     subheadline:
-      'TouchBistro is a familiar iPad POS for dining rooms. KitchenOS adds production truth, packing, meal prep cutoffs, and multi-brand when the kitchen is the bottleneck.',
+      'TouchBistro is a familiar iPad POS for dining rooms. OS Kitchen adds production truth, packing, meal prep cutoffs, and multi-brand when the kitchen is the bottleneck.',
     methodology: 'Feature matrix from public positioning — verify TouchBistro plan limits.',
     comparisonTag: 'POS vs ops platform',
     comparison: {
-      title: 'TouchBistro vs KitchenOS',
+      title: 'TouchBistro vs OS Kitchen',
       competitorALabel: 'TouchBistro',
       competitorBLabel: 'Floor-only stack',
       rows: [
@@ -363,10 +363,10 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Hardware', kitchenos: '✅ BYOD', competitorA: '⚠️ iPad-focused', competitorB: 'Varies' },
       ],
     },
-    disclaimer: 'TouchBistro remains a solid dining-room POS. KitchenOS is the better fit when production, packing, or ghost kitchen complexity dominates.',
+    disclaimer: 'TouchBistro remains a solid dining-room POS. OS Kitchen is the better fit when production, packing, or ghost kitchen complexity dominates.',
     whenToChoose: [
       { title: 'Choose TouchBistro when', body: 'You need a proven iPad floor POS and kitchen complexity is low.' },
-      { title: 'Choose KitchenOS when', body: 'Preorder volume, production boards, or multi-brand routing drive your week.' },
+      { title: 'Choose OS Kitchen when', body: 'Preorder volume, production boards, or multi-brand routing drive your week.' },
     ],
     faqs: [],
     primaryCta: { label: 'Start free trial', href: '/signup?utm_source=compare&utm_medium=organic&utm_campaign=touchbistro' },
@@ -374,17 +374,17 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'olo',
     path: '/compare/olo',
-    metaTitle: 'KitchenOS vs Olo — Digital Ordering Comparison',
+    metaTitle: 'OS Kitchen vs Olo — Digital Ordering Comparison',
     metaDescription:
-      'Olo vs KitchenOS: enterprise digital ordering rails vs operator-owned storefront, POS, and kitchen execution for regional brands.',
-    eyebrow: 'KitchenOS vs Olo',
-    headline: 'Olo powers enterprise ordering — KitchenOS powers your kitchen',
+      'Olo vs OS Kitchen: enterprise digital ordering rails vs operator-owned storefront, POS, and kitchen execution for regional brands.',
+    eyebrow: 'OS Kitchen vs Olo',
+    headline: 'Olo powers enterprise ordering — OS Kitchen powers your kitchen',
     subheadline:
-      'Olo serves large chains with ordering rails and marketplace partnerships. KitchenOS serves independent and regional operators who need owned commerce plus kitchen ops in one workspace.',
+      'Olo serves large chains with ordering rails and marketplace partnerships. OS Kitchen serves independent and regional operators who need owned commerce plus kitchen ops in one workspace.',
     methodology: 'Category comparison — Olo typically requires enterprise sales cycle.',
     comparisonTag: 'Enterprise rails vs SMB ops',
     comparison: {
-      title: 'Olo vs KitchenOS',
+      title: 'Olo vs OS Kitchen',
       competitorALabel: 'Olo',
       competitorBLabel: 'Custom dev',
       rows: [
@@ -395,10 +395,10 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Meal prep / commissary', kitchenos: '✅', competitorA: 'Limited', competitorB: 'Custom' },
       ],
     },
-    disclaimer: 'Olo is not a direct substitute for 1–3 location operators evaluating KitchenOS. Compare only if you are weighing enterprise ordering against an ops-first stack.',
+    disclaimer: 'Olo is not a direct substitute for 1–3 location operators evaluating OS Kitchen. Compare only if you are weighing enterprise ordering against an ops-first stack.',
     whenToChoose: [
       { title: 'Choose Olo when', body: 'You are a national brand needing standardized ordering rails and franchise governance.' },
-      { title: 'Choose KitchenOS when', body: 'You are an independent or regional operator optimizing kitchen execution and owned preorder.' },
+      { title: 'Choose OS Kitchen when', body: 'You are an independent or regional operator optimizing kitchen execution and owned preorder.' },
     ],
     faqs: [],
     primaryCta: { label: 'Compare capabilities', href: '/capabilities?utm_source=compare&utm_medium=organic&utm_campaign=olo' },
@@ -406,17 +406,17 @@ export const COMPARE_PAGES: ComparePageContent[] = [
   {
     slug: 'kitchenos-vs-lightspeed',
     path: '/compare/kitchenos-vs-lightspeed',
-    metaTitle: 'KitchenOS vs Lightspeed — Restaurant POS Comparison 2026',
+    metaTitle: 'OS Kitchen vs Lightspeed — Restaurant POS Comparison 2026',
     metaDescription:
-      'Lightspeed vs KitchenOS: dining-room POS vs full kitchen ops — production boards, meal prep, storefront, and multi-brand ghost kitchens.',
-    eyebrow: 'KitchenOS vs Lightspeed',
-    headline: 'Lightspeed for the floor — KitchenOS for the whole kitchen',
+      'Lightspeed vs OS Kitchen: dining-room POS vs full kitchen ops — production boards, meal prep, storefront, and multi-brand ghost kitchens.',
+    eyebrow: 'OS Kitchen vs Lightspeed',
+    headline: 'Lightspeed for the floor — OS Kitchen for the whole kitchen',
     subheadline:
-      'Lightspeed excels at hospitality POS and payments. KitchenOS unifies POS, KDS, production, storefront, and delivery channels for operators who live in the back of house.',
+      'Lightspeed excels at hospitality POS and payments. OS Kitchen unifies POS, KDS, production, storefront, and delivery channels for operators who live in the back of house.',
     methodology: 'Feature matrix from public docs; verify pricing with vendors.',
     comparisonTag: 'Hospitality POS vs ops platform',
     comparison: {
-      title: 'Lightspeed vs KitchenOS',
+      title: 'Lightspeed vs OS Kitchen',
       competitorALabel: 'Lightspeed',
       competitorBLabel: 'POS-only stack',
       rows: [
@@ -427,32 +427,32 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Recipe costing depth', kitchenos: '✅ Costing module', competitorA: 'Basic', competitorB: 'Manual' },
       ],
     },
-    disclaimer: 'Lightspeed is a strong choice for traditional dining rooms. KitchenOS fits when production complexity and owned preorder drive margin.',
+    disclaimer: 'Lightspeed is a strong choice for traditional dining rooms. OS Kitchen fits when production complexity and owned preorder drive margin.',
     whenToChoose: [
       { title: 'Choose Lightspeed when', body: 'Front-of-house speed and payments are the primary bottleneck.' },
-      { title: 'Choose KitchenOS when', body: 'Weekly menus, commissary production, or multi-channel fulfillment dominate your week.' },
+      { title: 'Choose OS Kitchen when', body: 'Weekly menus, commissary production, or multi-channel fulfillment dominate your week.' },
     ],
     faqs: [
-      { q: 'Can KitchenOS replace Lightspeed POS?', a: 'For many meal prep and ghost kitchen operators, yes. Full-service dining rooms may keep a floor POS and use KitchenOS for production and digital channels.' },
-      { q: 'Does KitchenOS support hardware?', a: 'Yes — BYOD tablets and printers; no proprietary terminal lock-in.' },
-      { q: 'How does pricing compare?', a: 'KitchenOS Starter from $29/mo with trial; compare total cost including add-ons you need on either stack.' },
+      { q: 'Can OS Kitchen replace Lightspeed POS?', a: 'For many meal prep and ghost kitchen operators, yes. Full-service dining rooms may keep a floor POS and use OS Kitchen for production and digital channels.' },
+      { q: 'Does OS Kitchen support hardware?', a: 'Yes — BYOD tablets and printers; no proprietary terminal lock-in.' },
+      { q: 'How does pricing compare?', a: 'OS Kitchen Starter from $29/mo with trial; compare total cost including add-ons you need on either stack.' },
     ],
     primaryCta: { label: 'Start free trial', href: '/signup?utm_source=compare&utm_medium=organic&utm_campaign=lightspeed' },
   },
   {
     slug: 'kitchenos-vs-7shifts',
     path: '/compare/kitchenos-vs-7shifts',
-    metaTitle: 'KitchenOS vs 7shifts — Workforce + Kitchen Ops',
+    metaTitle: 'OS Kitchen vs 7shifts — Workforce + Kitchen Ops',
     metaDescription:
-      '7shifts vs KitchenOS: scheduling and labor vs unified kitchen operations, POS, and production for food operators.',
-    eyebrow: 'KitchenOS vs 7shifts',
-    headline: '7shifts schedules your team — KitchenOS runs the kitchen',
+      '7shifts vs OS Kitchen: scheduling and labor vs unified kitchen operations, POS, and production for food operators.',
+    eyebrow: 'OS Kitchen vs 7shifts',
+    headline: '7shifts schedules your team — OS Kitchen runs the kitchen',
     subheadline:
-      '7shifts is built for shift scheduling and labor compliance. KitchenOS includes staff tools plus orders, KDS, production, and storefront in one workspace.',
+      '7shifts is built for shift scheduling and labor compliance. OS Kitchen includes staff tools plus orders, KDS, production, and storefront in one workspace.',
     methodology: 'Workforce vs full ops comparison; not a substitute for legal labor advice.',
     comparisonTag: 'Workforce vs kitchen OS',
     comparison: {
-      title: '7shifts vs KitchenOS',
+      title: '7shifts vs OS Kitchen',
       competitorALabel: '7shifts',
       competitorBLabel: 'Scheduling + spreadsheets',
       rows: [
@@ -463,32 +463,32 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Storefront / preorders', kitchenos: '✅', competitorA: '❌', competitorB: '❌' },
       ],
     },
-    disclaimer: 'Many operators use 7shifts alongside KitchenOS for deep scheduling while running kitchen execution in KitchenOS.',
+    disclaimer: 'Many operators use 7shifts alongside OS Kitchen for deep scheduling while running kitchen execution in OS Kitchen.',
     whenToChoose: [
       { title: 'Choose 7shifts when', body: 'Scheduling, availability, and labor law templates are your only gap.' },
-      { title: 'Choose KitchenOS when', body: 'You need scheduling plus kitchen throughput, menus, and channel orders in one system.' },
+      { title: 'Choose OS Kitchen when', body: 'You need scheduling plus kitchen throughput, menus, and channel orders in one system.' },
     ],
     faqs: [
-      { q: 'Does KitchenOS replace 7shifts?', a: 'For smaller teams, KitchenOS staff tools may be enough. Larger teams often keep 7shifts for scheduling depth.' },
-      { q: 'Is there an integration?', a: 'Export labor actuals from KitchenOS reports; direct 7shifts sync is on the roadmap for enterprise pilots.' },
-      { q: 'Who is the ideal KitchenOS user?', a: 'Meal prep, ghost kitchen, and production-heavy restaurants with 5–50 staff.' },
+      { q: 'Does OS Kitchen replace 7shifts?', a: 'For smaller teams, OS Kitchen staff tools may be enough. Larger teams often keep 7shifts for scheduling depth.' },
+      { q: 'Is there an integration?', a: 'Export labor actuals from OS Kitchen reports; direct 7shifts sync is on the roadmap for enterprise pilots.' },
+      { q: 'Who is the ideal OS Kitchen user?', a: 'Meal prep, ghost kitchen, and production-heavy restaurants with 5–50 staff.' },
     ],
     primaryCta: { label: 'Start free trial', href: '/signup?utm_source=compare&utm_medium=organic&utm_campaign=7shifts' },
   },
   {
     slug: 'kitchenos-vs-meez',
     path: '/compare/kitchenos-vs-meez',
-    metaTitle: 'KitchenOS vs meez — Recipe Costing & Kitchen Ops',
+    metaTitle: 'OS Kitchen vs meez — Recipe Costing & Kitchen Ops',
     metaDescription:
-      'meez vs KitchenOS: recipe development and costing vs end-to-end kitchen operations, POS, and fulfillment.',
-    eyebrow: 'KitchenOS vs meez',
-    headline: 'meez nails recipes — KitchenOS runs the business',
+      'meez vs OS Kitchen: recipe development and costing vs end-to-end kitchen operations, POS, and fulfillment.',
+    eyebrow: 'OS Kitchen vs meez',
+    headline: 'meez nails recipes — OS Kitchen runs the business',
     subheadline:
-      'meez helps chefs standardize recipes and food cost. KitchenOS connects costing to live menus, production batches, orders, and margin reports.',
+      'meez helps chefs standardize recipes and food cost. OS Kitchen connects costing to live menus, production batches, orders, and margin reports.',
     methodology: 'Recipe tooling vs ops platform; verify meez plan features before purchase.',
     comparisonTag: 'Recipe intelligence vs ops',
     comparison: {
-      title: 'meez vs KitchenOS',
+      title: 'meez vs OS Kitchen',
       competitorALabel: 'meez',
       competitorBLabel: 'Spreadsheets',
       rows: [
@@ -499,15 +499,15 @@ export const COMPARE_PAGES: ComparePageContent[] = [
         { feature: 'Storefront preorders', kitchenos: '✅', competitorA: '❌', competitorB: '❌' },
       ],
     },
-    disclaimer: 'meez remains excellent for culinary R&D teams. KitchenOS is the better fit when recipes must drive daily production and sales.',
+    disclaimer: 'meez remains excellent for culinary R&D teams. OS Kitchen is the better fit when recipes must drive daily production and sales.',
     whenToChoose: [
       { title: 'Choose meez when', body: 'Your priority is recipe development, training, and theoretical food cost without daily ops.' },
-      { title: 'Choose KitchenOS when', body: 'Recipe cost must flow into weekly menus, packing, and P&L in real time.' },
+      { title: 'Choose OS Kitchen when', body: 'Recipe cost must flow into weekly menus, packing, and P&L in real time.' },
     ],
     faqs: [
-      { q: 'Can I import recipes from meez?', a: 'Use CSV import in KitchenOS costing; dedicated meez connector is planned for pilots.' },
-      { q: 'Does KitchenOS do yield scaling?', a: 'Yes — production batches scale from recipe yields and par levels.' },
-      { q: 'Which has better OCR for invoices?', a: 'KitchenOS includes invoice OCR with human review under 85% confidence.' },
+      { q: 'Can I import recipes from meez?', a: 'Use CSV import in OS Kitchen costing; dedicated meez connector is planned for pilots.' },
+      { q: 'Does OS Kitchen do yield scaling?', a: 'Yes — production batches scale from recipe yields and par levels.' },
+      { q: 'Which has better OCR for invoices?', a: 'OS Kitchen includes invoice OCR with human review under 85% confidence.' },
     ],
     primaryCta: { label: 'Start free trial', href: '/signup?utm_source=compare&utm_medium=organic&utm_campaign=meez' },
   },
@@ -520,7 +520,7 @@ export function comparePageBySlug(slug: string): ComparePageContent | undefined 
 }
 
 export const COMPARE_HUB_COPY = {
-  metaTitle: 'Compare KitchenOS — Restaurant POS & Meal Prep Software',
+  metaTitle: 'Compare OS Kitchen — Restaurant POS & Meal Prep Software',
   metaDescription:
     'Honest comparisons for restaurant POS and meal prep software. Feature matrices, TCO guidance, and when to choose each approach.',
   headline: 'Compare before you commit to a multi-year stack',

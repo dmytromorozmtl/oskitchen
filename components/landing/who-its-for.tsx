@@ -19,7 +19,7 @@ export function WhoItsFor() {
         <SectionHeader
           tag="Who it's for"
           title="One platform, every service model"
-          description="Whether you run a dining room, a bar, a weekly meal prep menu, or five virtual brands — KitchenOS adapts to how you serve."
+          description="Whether you run a dining room, a bar, a weekly meal prep menu, or five virtual brands — OS Kitchen adapts to how you serve."
           centered
           className="mx-auto"
         />

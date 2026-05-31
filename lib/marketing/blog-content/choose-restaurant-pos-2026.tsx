@@ -6,7 +6,7 @@ export function ChooseRestaurantPos2026Content() {
       <p>
         Choosing restaurant POS software in 2026 is less about counting features on a demo slide and more
         about whether your floor, kitchen, and back office share one ticket stream. This guide helps
-        operators compare Toast, Square, legacy terminals, and operations-first platforms like KitchenOS.
+        operators compare Toast, Square, legacy terminals, and operations-first platforms like OS Kitchen.
       </p>
       <h2>1. Start with service model, not vendor logos</h2>
       <p>
@@ -32,7 +32,7 @@ export function ChooseRestaurantPos2026Content() {
         </Link>{' '}
         and{' '}
         <Link href="/compare/toast" className="text-primary underline">
-          KitchenOS vs Toast
+          OS Kitchen vs Toast
         </Link>{' '}
         pages for feature matrices.
       </p>

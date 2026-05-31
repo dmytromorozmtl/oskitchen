@@ -56,7 +56,7 @@ export function SupportWidget() {
               <Bug className="h-5 w-5 shrink-0 text-primary" />
               <div>
                 <p className="text-sm font-medium">Report a Bug</p>
-                <p className="text-xs text-muted-foreground">Help us improve KitchenOS</p>
+                <p className="text-xs text-muted-foreground">Help us improve OS Kitchen</p>
               </div>
             </Link>
             <Link

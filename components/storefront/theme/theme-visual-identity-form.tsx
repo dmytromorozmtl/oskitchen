@@ -56,7 +56,7 @@ export function ThemeVisualIdentityForm({
           <Input
             id="brandColor"
             name="brandColor"
-            defaultValue={settings.brandColor ?? "#286ab8"}
+            defaultValue={settings.brandColor ?? "#FF5F1F"}
             className="rounded-xl font-mono text-sm"
           />
         </div>

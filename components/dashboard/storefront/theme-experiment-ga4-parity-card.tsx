@@ -54,7 +54,7 @@ export function ThemeExperimentGa4ParityCard({
           <p className="font-mono text-[11px] text-muted-foreground">
             GA4 checkout events — published {score.ga4.publishedCheckoutEvents} (
             {score.ga4.publishedCheckoutRatePercent}%) · draft {score.ga4.draftCheckoutEvents} (
-            {score.ga4.draftCheckoutRatePercent}%) · lift {score.ga4LiftPp ?? "—"} pp vs KitchenOS{" "}
+            {score.ga4.draftCheckoutRatePercent}%) · lift {score.ga4LiftPp ?? "—"} pp vs OS Kitchen{" "}
             {score.firstPartyLiftPp} pp
           </p>
         ) : null}

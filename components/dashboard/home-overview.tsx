@@ -205,7 +205,7 @@ function DashboardDatabaseUnavailable() {
           </CardTitle>
           <CardDescription className="space-y-2 text-base text-muted-foreground">
             <p>
-              KitchenOS could not open a connection to Postgres (Supabase pooler). This is usually a
+              OS Kitchen could not open a connection to Postgres (Supabase pooler). This is usually a
               network issue, a paused Supabase project, or a misconfigured{" "}
               <code className="rounded bg-muted px-1 py-0.5 text-sm">DATABASE_URL</code>.
             </p>

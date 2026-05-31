@@ -11,6 +11,7 @@ import {
   getModuleReadinessForPath,
   moduleReadinessBadgeLabel,
 } from "@/lib/product/module-readiness";
+import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -84,7 +85,7 @@ export function ModuleRouteGate({
     );
   }
 
-  if (readiness && readinessLabel) {
+  if (readiness && readinessLabel && showInternalOpsDashboardUi()) {
     return (
       <div className="space-y-4">
         <Card className="border-amber-500/40 bg-amber-500/10 shadow-sm">

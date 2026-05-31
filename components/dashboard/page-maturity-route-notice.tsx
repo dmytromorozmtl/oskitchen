@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { PilotBetaSurfaceBanner } from "@/components/dashboard/pilot-beta-surface-banner";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getPageMaturityHonesty } from "@/lib/navigation/page-maturity-honesty";
+import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 
 /**
  * In-page honesty for preview/placeholder dashboard routes (Era 4 Cycle 12).
@@ -12,6 +13,7 @@ import { getPageMaturityHonesty } from "@/lib/navigation/page-maturity-honesty";
  */
 export function PageMaturityRouteNotice() {
   const pathname = usePathname() ?? "";
+  if (!showInternalOpsDashboardUi()) return null;
   const honesty = getPageMaturityHonesty(pathname);
   if (!honesty) return null;
 

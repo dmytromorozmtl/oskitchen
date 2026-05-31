@@ -17,7 +17,7 @@ export function WorkbenchSafetyCallout({ blockedOrderLines, openConflictMappings
       <div className="rounded-lg border border-border/70 bg-muted/25 px-4 py-3 text-sm text-muted-foreground">
         <p>
           <span className="font-medium text-foreground">Human gate:</span> suggestions are deterministic scores, not
-          proof of the right prep item. Approve only after you have checked the KitchenOS target — especially for
+          proof of the right prep item. Approve only after you have checked the OS Kitchen target — especially for
           allergens, price tiers, and modifiers.
         </p>
         <p className="mt-2">

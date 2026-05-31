@@ -11,7 +11,7 @@ export type SalesDeckSlide = {
 export const SALES_DECK_SLIDES: SalesDeckSlide[] = [
   {
     id: "title",
-    title: "KitchenOS",
+    title: "OS Kitchen",
     subtitle:
       "Kitchen Operations Platform for Meal Prep, Ghost Kitchens & Preorder Businesses — one system for the floor, the line, and production on devices you already own.",
   },
@@ -127,7 +127,7 @@ export const SALES_DECK_SLIDES: SalesDeckSlide[] = [
     id: "compare",
     title: "Why not Toast / Square?",
     table: {
-      headers: ["KitchenOS", "Legacy POS"],
+      headers: ["OS Kitchen", "Legacy POS"],
       rows: [
         ["$0 hardware upfront", "Terminal lease $50–100/mo"],
         ["Built for production kitchens", "Built for payment capture"],

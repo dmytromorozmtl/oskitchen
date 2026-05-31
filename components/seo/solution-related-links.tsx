@@ -19,7 +19,7 @@ export function SolutionRelatedLinks({ currentSlug }: { currentSlug: SolutionPag
     <section className="mt-16 border-t pt-8">
       <h2 className="text-xl font-semibold tracking-tight">Explore more solutions</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        KitchenOS adapts to weekly meal prep, catering drops, and bakery preorders from one workspace.
+        OS Kitchen adapts to weekly meal prep, catering drops, and bakery preorders from one workspace.
       </p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         {others.map((link) => (

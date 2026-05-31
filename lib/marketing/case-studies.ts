@@ -34,7 +34,7 @@ const RAW_CASE_STUDIES = [
     operatorType: "Meal prep",
     location: "US Midwest",
     summary:
-      "Production planning lived in spreadsheets; packing errors spiked every Sunday cutoff. KitchenOS weekly menus, batches, and KDS packing brought Sundays back under control.",
+      "Production planning lived in spreadsheets; packing errors spiked every Sunday cutoff. OS Kitchen weekly menus, batches, and KDS packing brought Sundays back under control.",
     monogram: "MP",
     readTime: "5 min read",
     heroMetric: "3×",
@@ -42,9 +42,9 @@ const RAW_CASE_STUDIES = [
     challenge:
       "Production planning lived in spreadsheets; packing errors spiked every Sunday cutoff.",
     approach:
-      "KitchenOS weekly menus, production batches, and KDS packing queue with barcode verification.",
+      "OS Kitchen weekly menus, production batches, and KDS packing queue with barcode verification.",
     solution:
-      "KitchenOS weekly menus, production batches, and KDS packing queue with barcode verification.",
+      "OS Kitchen weekly menus, production batches, and KDS packing queue with barcode verification.",
     results: [
       { label: "Hours saved / week", value: "12+ (target)" },
       { label: "Packing errors", value: "-40% (target)" },

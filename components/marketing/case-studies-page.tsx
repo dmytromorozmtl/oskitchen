@@ -25,7 +25,7 @@ export function CaseStudiesPage() {
         <section className="py-12 sm:py-16">
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Customer stories</p>
           <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
-            How operators run calmer kitchens on KitchenOS
+            How operators run calmer kitchens on OS Kitchen
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             Real-world patterns from pilot cohorts — what changed in their weekly rhythm, not vanity metrics.

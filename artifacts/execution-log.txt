@@ -1151,3 +1151,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: rebrand batch 2; human vault gate
+
+---
+Cycle: 94
+Timestamp: 2026-05-31T12:00:00.000Z
+Priority: P2
+Action: refactor: marketing and dashboard chrome for OS Kitchen rebrand — batch 2 (93 files: components/, lib/marketing/, lib/ui/, resolve-public-env; step 26 skipped — audit cycle 93)
+Files changed: 94 (+ execution-log)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: rebrand batch 3 (~152 app pages); human vault gate; ~871 uncommitted remain

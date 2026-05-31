@@ -95,7 +95,7 @@ export function CompareLanding({ content }: Props) {
         <section className="mb-16 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 to-transparent px-6 py-10 text-center sm:px-10">
           <h2 className="text-2xl font-bold tracking-tight">Validate fit in 14 days</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-            Run your next service week on KitchenOS. No credit card for trial · Cancel anytime · Capability sheet
+            Run your next service week on OS Kitchen. No credit card for trial · Cancel anytime · Capability sheet
             available on request.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">

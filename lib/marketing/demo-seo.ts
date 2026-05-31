@@ -22,7 +22,7 @@ export function demoVerticalMetadata(slug: DemoVerticalSlug): Metadata {
   const label = SLUG_LABELS[slug];
 
   return marketingPageMetadata({
-    title: `${label} Demo Workspace — KitchenOS`,
+    title: `${label} Demo Workspace — OS Kitchen`,
     description: `${preset.tagline} Load simulated menus, orders, and channels — no live marketplace claims.`,
     path: `/demo/${slug}`,
     keywords: [`${label.toLowerCase()} kitchen software demo`, 'restaurant POS trial data'],

@@ -16,7 +16,7 @@ export function LocalSeoSchema() {
         name: `${APP_NAME} Service Areas`,
         url: `${SITE}/service-areas`,
         description:
-          'KitchenOS cloud POS, kitchen display, and production software for restaurants, meal prep, catering, and ghost kitchens in the United States and Canada.',
+          'OS Kitchen cloud POS, kitchen display, and production software for restaurants, meal prep, catering, and ghost kitchens in the United States and Canada.',
         inLanguage: 'en-US',
         isPartOf: {
           '@type': 'WebSite',

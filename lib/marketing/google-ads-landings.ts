@@ -72,7 +72,7 @@ export const GOOGLE_ADS_LANDINGS: AdsLandingConfig[] = [
     secondaryCta: { label: 'See product tour', href: demoHref('restaurant-pos') },
     conversionLabel: 'LP_RESTAURANT_SIGNUP',
     utmCampaign: 'restaurant-pos',
-    metaTitle: 'Restaurant POS + KDS — 14-Day Trial | KitchenOS',
+    metaTitle: 'Restaurant POS + KDS — 14-Day Trial | OS Kitchen',
     metaDescription:
       'Web-based restaurant POS with kitchen display, tables, and QR ordering. No hardware bundle. Start your 14-day trial.',
   },
@@ -97,7 +97,7 @@ export const GOOGLE_ADS_LANDINGS: AdsLandingConfig[] = [
     secondaryCta: { label: 'Meal prep solution', href: '/solutions/meal-prep?utm_source=google&utm_medium=cpc&utm_campaign=meal-prep' },
     conversionLabel: 'LP_MEALPREP_SIGNUP',
     utmCampaign: 'meal-prep',
-    metaTitle: 'Meal Prep Software — Production from Preorders | KitchenOS',
+    metaTitle: 'Meal Prep Software — Production from Preorders | OS Kitchen',
     metaDescription:
       'Meal prep software for weekly menus, production, and packing. 14-day free trial. No terminal lease.',
   },
@@ -122,7 +122,7 @@ export const GOOGLE_ADS_LANDINGS: AdsLandingConfig[] = [
     secondaryCta: { label: 'Catering solution', href: '/solutions/catering?utm_source=google&utm_medium=cpc&utm_campaign=catering' },
     conversionLabel: 'LP_CATERING_SIGNUP',
     utmCampaign: 'catering',
-    metaTitle: 'Catering Software — Quotes to Production | KitchenOS',
+    metaTitle: 'Catering Software — Quotes to Production | OS Kitchen',
     metaDescription:
       'Catering software for events, production, and deposits. 14-day trial for North American operators.',
   },
@@ -147,7 +147,7 @@ export const GOOGLE_ADS_LANDINGS: AdsLandingConfig[] = [
     secondaryCta: { label: 'Ghost kitchen solution', href: '/solutions/ghost-kitchens?utm_source=google&utm_medium=cpc&utm_campaign=ghost-kitchen' },
     conversionLabel: 'LP_GHOST_SIGNUP',
     utmCampaign: 'ghost-kitchen',
-    metaTitle: 'Ghost Kitchen Software — Multi-Brand Ops | KitchenOS',
+    metaTitle: 'Ghost Kitchen Software — Multi-Brand Ops | OS Kitchen',
     metaDescription:
       'Ghost kitchen software for multi-brand menus, KDS, and production. Cloud delivery in US & Canada.',
   },

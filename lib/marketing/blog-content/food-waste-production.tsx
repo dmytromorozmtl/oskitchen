@@ -46,7 +46,7 @@ export function FoodWasteProductionContent() {
       <p>
         Spreadsheets work until channels split — storefront, POS, catering quotes, marketplace imports.
         A single production board fed by all channels prevents duplicate prep lists.{' '}
-        <Link href="/solutions/meal-prep">KitchenOS production workflows</Link> tie orders to batch prep
+        <Link href="/solutions/meal-prep">OS Kitchen production workflows</Link> tie orders to batch prep
         when recipes exist in your workspace.
       </p>
 
@@ -73,7 +73,7 @@ export function FoodWasteProductionContent() {
       </p>
 
       <p>
-        <Link href="/signup">Start a KitchenOS trial</Link> or read{' '}
+        <Link href="/signup">Start a OS Kitchen trial</Link> or read{' '}
         <Link href="/blog/how-to-start-meal-prep-business">how to start a meal prep business</Link> for
         the full operational stack.
       </p>

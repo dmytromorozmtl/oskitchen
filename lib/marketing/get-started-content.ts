@@ -12,7 +12,7 @@ export type GetStartedPath = {
 };
 
 export const GET_STARTED_COPY = {
-  metaTitle: 'Get Started with KitchenOS — Choose Your Path',
+  metaTitle: 'Get Started with OS Kitchen — Choose Your Path',
   metaDescription:
     'Start a 14-day trial, book a walkthrough, or explore solutions by business type. Restaurant POS and kitchen operations for US & Canada.',
   eyebrow: 'Get started',

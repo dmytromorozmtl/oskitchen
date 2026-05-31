@@ -147,7 +147,7 @@ export function IntegrationHealthReadonly({ data, canReplay = false }: Props) {
         <CardHeader>
           <CardTitle className="text-lg text-white">Infrastructure & payments (host)</CardTitle>
           <CardDescription className="text-zinc-400">
-            Environment posture for the KitchenOS deployment — not tenant secrets.
+            Environment posture for the OS Kitchen deployment — not tenant secrets.
           </CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">

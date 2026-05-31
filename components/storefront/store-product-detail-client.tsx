@@ -129,7 +129,7 @@ export function StoreProductDetailClient({
       </div>
       <div className="space-y-4">
         <h1 className="text-3xl font-semibold tracking-tight">{product.title}</h1>
-        <p className="text-sm font-medium text-[var(--store-accent,#286ab8)]">
+        <p className="text-sm font-medium text-[var(--store-accent,#FF5F1F)]">
           Prepared {format(prepared, "EEEE, MMM d")}
         </p>
         <p className="text-2xl font-semibold tabular-nums">{formatCurrency(unitPrice, currency)}</p>

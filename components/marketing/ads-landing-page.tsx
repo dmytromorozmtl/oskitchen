@@ -40,7 +40,7 @@ export function AdsLandingPage({ config }: Props) {
       <header className="border-b border-border/60 bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="font-semibold tracking-tight">
-            KitchenOS
+            OS Kitchen
           </Link>
           <MarketingButton href={config.primaryCta.href} size="sm" onClick={handlePrimaryClick}>
             {config.primaryCta.label}
@@ -114,7 +114,7 @@ export function AdsLandingPage({ config }: Props) {
       </main>
 
       <footer className="hidden border-t border-border/60 py-8 text-center text-xs text-muted-foreground md:block">
-        © {new Date().getFullYear()} KitchenOS ·{' '}
+        © {new Date().getFullYear()} OS Kitchen ·{' '}
         <Link href="/pricing" className="underline hover:text-foreground">
           Pricing
         </Link>{' '}

@@ -83,7 +83,7 @@ export const RICH_SOLUTION_LANDING: Record<RichSolutionSlug, RichSolutionLanding
       },
     ],
     comparison: {
-      title: 'How KitchenOS compares for meal prep',
+      title: 'How OS Kitchen compares for meal prep',
       competitorALabel: 'Spreadsheets',
       competitorBLabel: 'Generic POS',
       rows: [
@@ -205,7 +205,7 @@ export const RICH_SOLUTION_LANDING: Record<RichSolutionSlug, RichSolutionLanding
     },
     ctaTitle: 'Bake and fulfill from one operations hub',
     ctaSubtitle:
-      'Try KitchenOS free for 14 days. Start with preorders or counter — add production depth as your recipes are configured.',
+      'Try OS Kitchen free for 14 days. Start with preorders or counter — add production depth as your recipes are configured.',
   },
   restaurants: {
     badge: 'For full-service restaurants',
@@ -245,7 +245,7 @@ export const RICH_SOLUTION_LANDING: Record<RichSolutionSlug, RichSolutionLanding
       },
     ],
     comparison: {
-      title: 'How KitchenOS compares',
+      title: 'How OS Kitchen compares',
       competitorALabel: 'Toast',
       competitorBLabel: 'Square',
       rows: [
@@ -344,7 +344,7 @@ export const RICH_SOLUTION_LANDING: Record<RichSolutionSlug, RichSolutionLanding
       },
     ],
     comparison: {
-      title: 'How KitchenOS compares for cafés',
+      title: 'How OS Kitchen compares for cafés',
       competitorALabel: 'Square',
       competitorBLabel: 'Toast',
       rows: [
@@ -357,7 +357,7 @@ export const RICH_SOLUTION_LANDING: Record<RichSolutionSlug, RichSolutionLanding
       ],
     },
     ctaTitle: 'Modernize your café operations',
-    ctaSubtitle: 'Try KitchenOS free for 14 days. Works on devices you already own.',
+    ctaSubtitle: 'Try OS Kitchen free for 14 days. Works on devices you already own.',
   },
   'fast-casual': {
     badge: 'For fast-casual & QSR',
