@@ -134,7 +134,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     category: "ECOMMERCE",
     statusType: "NEEDS_CREDENTIALS",
     supportedBusinessModes: allModes(),
-    capabilities: ["orders", "products", "webhooks", "customer_sync", "status_sync", "inventory_sync"],
+    capabilities: ["orders", "products", "webhooks", "customer_sync", "status_sync", "inventory_sync", "markets_sync"],
     setupType: "WEBHOOK_PLUS_API",
     requiresCredentials: true,
     requiresOAuth: false,

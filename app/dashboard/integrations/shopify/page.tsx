@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DisconnectIntegrationButton } from "@/components/dashboard/disconnect-integration-button";
 import { IntegrationClientForm } from "@/components/dashboard/integration-client-form";
 import { IntegrationToolRow } from "@/components/dashboard/integration-tool-row";
+import { ShopifyMarketsPanel } from "@/components/dashboard/integrations/shopify-markets-panel";
 import { saveShopifySettings } from "@/actions/integrations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { isEncryptionConfigured } from "@/lib/crypto";
+import { canManageIntegrations } from "@/lib/integrations/integrations-page-access";
+import { parseShopifyMarketsSyncSettings } from "@/lib/integrations/shopify-markets-settings";
+import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { SITE_URL } from "@/lib/constants";
 import { ChannelPilotSetupWizard } from "@/components/integrations/channel-pilot-setup-wizard";
 import { IntegrationCertificationPanel } from "@/components/dashboard/integration-certification-panel";
@@ -28,6 +32,8 @@ import { IntegrationProvider, UserRole } from "@prisma/client";
 
 export default async function ShopifyIntegrationPage() {
   const { sessionUser, userId } = await requireTenantActor();
+  const permissionActor = await requireWorkspacePermissionActor();
+  const canManageChannel = canManageIntegrations(permissionActor.granted);
   const [conn, profile] = await Promise.all([
     prisma.integrationConnection.findFirst({
       where: await integrationConnectionByProviderWhereForOwner(
@@ -42,6 +48,7 @@ export default async function ShopifyIntegrationPage() {
   ]);
 
   const settings = (conn?.settingsJson ?? {}) as { apiVersion?: string };
+  const marketsSync = parseShopifyMarketsSyncSettings(conn?.settingsJson);
   const hasToken = Boolean(conn?.accessTokenEncrypted);
   const certification = parseCertificationRecord(conn?.settingsJson);
   const isOwner = profile?.role === UserRole.OWNER;
@@ -164,6 +171,13 @@ export default async function ShopifyIntegrationPage() {
         isOwner={isOwner}
       />
 
+      <ShopifyMarketsPanel
+        connectionId={conn?.id ?? null}
+        hasCredentials={hasToken && Boolean(conn?.shopDomain)}
+        syncSettings={marketsSync}
+        canManage={canManageChannel}
+      />
+
       <Card id="channel-pilot-webhooks" className="scroll-mt-24">
         <CardHeader>
           <CardTitle className="text-base">Webhook endpoints</CardTitle>
@@ -195,9 +209,13 @@ export default async function ShopifyIntegrationPage() {
             batch per sync job, duplicate webhook id protection.
           </p>
           <p>
+            <span className="font-medium text-foreground">Phase 1 Markets:</span> read-only Shopify
+            Markets discovery + manual mapping to OS Kitchen markets — no price list import yet.
+          </p>
+          <p>
             <span className="font-medium text-foreground">Not yet:</span> automatic internal Order
-            creation for every Shopify row, inventory reservations, and marketplace-specific
-            adjustments.
+            creation for every Shopify row, inventory reservations, market-specific price import, and
+            marketplace-specific adjustments.
           </p>
           <p>
             <span className="font-medium text-foreground">Setup checklist:</span> custom app scopes

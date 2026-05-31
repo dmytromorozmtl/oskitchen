@@ -1,13 +1,17 @@
 import Link from "next/link";
 
 import { seedDefaultMarketFormAction } from "@/actions/storefront-markets";
+import { ShopifyMarketsMappingSummary } from "@/components/dashboard/storefront/shopify-markets-mapping-summary";
 import { StorefrontMarketsEditor } from "@/components/dashboard/storefront/storefront-markets-editor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { parseShopifyMarketsSyncSettings } from "@/lib/integrations/shopify-markets-settings";
+import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { requireStorefrontAdminPageAccess } from "@/lib/storefront/storefront-admin-page-access";
 import { parseStorefrontMarketsFromSettingsCenter } from "@/lib/storefront/markets";
 import { menuListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
+import { IntegrationProvider } from "@prisma/client";
 
 export default async function StorefrontMarketsPage() {
   const pageAccess = await requireStorefrontAdminPageAccess("storefront.markets");
@@ -15,7 +19,7 @@ export default async function StorefrontMarketsPage() {
 
   const ownerUserId = pageAccess.userId;
   const plannerMenuWhere = await menuListWhereForOwnerAnd(ownerUserId, { catalogOnly: false });
-  const [sf, kitchen, menus] = await Promise.all([
+  const [sf, kitchen, menus, shopifyConn] = await Promise.all([
     prisma.storefrontSettings.findUnique({
       where: { id: pageAccess.access.storefront.id },
       select: {
@@ -36,9 +40,22 @@ export default async function StorefrontMarketsPage() {
       select: { id: true, title: true },
       orderBy: { title: "asc" },
     }),
+    prisma.integrationConnection.findFirst({
+      where: await integrationConnectionByProviderWhereForOwner(
+        ownerUserId,
+        IntegrationProvider.SHOPIFY,
+      ),
+      select: { id: true, settingsJson: true, accessTokenEncrypted: true },
+    }),
   ]);
 
   const markets = parseStorefrontMarketsFromSettingsCenter(kitchen?.settingsCenterJson);
+  const shopifySync = parseShopifyMarketsSyncSettings(shopifyConn?.settingsJson);
+  const shopifyMarkets = shopifySync.discoveredMarkets.map((m) => ({
+    id: m.id,
+    name: m.name,
+    currencyCode: m.currencyCode,
+  }));
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -59,6 +76,13 @@ export default async function StorefrontMarketsPage() {
         <p className="text-muted-foreground">Publish storefront overview first.</p>
       ) : (
         <>
+          <ShopifyMarketsMappingSummary
+            osMarkets={markets}
+            shopifyMarkets={shopifySync.discoveredMarkets}
+            syncSettings={shopifyConn ? shopifySync : null}
+            shopifyConnected={Boolean(shopifyConn?.accessTokenEncrypted)}
+          />
+
           <Card className="border-border/80 shadow-sm">
             <CardHeader>
               <CardTitle>Routing</CardTitle>
@@ -97,6 +121,7 @@ export default async function StorefrontMarketsPage() {
                 currency={sf.currency}
                 menus={menus}
                 initialMarkets={markets}
+                shopifyMarkets={shopifyMarkets}
               />
             </CardContent>
           </Card>

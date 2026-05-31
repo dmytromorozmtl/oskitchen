@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { StorefrontMarket } from "@/lib/storefront/markets";
 
 type MenuOption = { id: string; title: string };
+type ShopifyMarketOption = { id: string; name: string; currencyCode: string | null };
 
 function emptyMarket(storeSlug: string, currency: string): StorefrontMarket {
   return {
@@ -26,11 +27,13 @@ export function StorefrontMarketsEditor({
   currency,
   menus,
   initialMarkets,
+  shopifyMarkets = [],
 }: {
   storeSlug: string;
   currency: string;
   menus: MenuOption[];
   initialMarkets: StorefrontMarket[];
+  shopifyMarkets?: ShopifyMarketOption[];
 }) {
   const [markets, setMarkets] = useState<StorefrontMarket[]>(
     initialMarkets.length > 0 ? initialMarkets : [emptyMarket(storeSlug, currency)],
@@ -143,6 +146,50 @@ export function StorefrontMarketsEditor({
                     onChange={(e) => updateAt(idx, { storeSlug: e.target.value || undefined })}
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label>Region (ISO, optional)</Label>
+                  <Input
+                    value={m.region ?? ""}
+                    placeholder="US"
+                    onChange={(e) => updateAt(idx, { region: e.target.value || undefined })}
+                    className="font-mono text-xs uppercase"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Currency (optional)</Label>
+                  <Input
+                    value={m.currency ?? ""}
+                    placeholder={currency}
+                    onChange={(e) => updateAt(idx, { currency: e.target.value || undefined })}
+                    className="font-mono text-xs uppercase"
+                  />
+                </div>
+                {shopifyMarkets.length > 0 ? (
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label>Linked Shopify market (optional)</Label>
+                    <select
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      value={m.shopifyMarketId ?? ""}
+                      onChange={(e) =>
+                        updateAt(idx, {
+                          shopifyMarketId: e.target.value || undefined,
+                          syncMode: e.target.value ? m.syncMode ?? "none" : "none",
+                        })
+                      }
+                    >
+                      <option value="">Not linked — native OS Kitchen market only</option>
+                      {shopifyMarkets.map((shopifyMarket) => (
+                        <option key={shopifyMarket.id} value={shopifyMarket.id}>
+                          {shopifyMarket.name}
+                          {shopifyMarket.currencyCode ? ` (${shopifyMarket.currencyCode})` : ""}
+                        </option>
+                      ))}
+                    </select>
+                    {m.shopifyMarketId ? (
+                      <p className="font-mono text-[10px] text-muted-foreground">{m.shopifyMarketId}</p>
+                    ) : null}
+                  </div>
+                ) : null}
                 <div className="space-y-2 sm:col-span-2">
                   <Label>Banner text</Label>
                   <Input

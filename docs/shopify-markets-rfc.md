@@ -1,6 +1,6 @@
 # Shopify Markets RFC — Multi-Region Commerce Integration
 
-**Status:** Draft for engineering review — **not implemented**  
+**Status:** Phase 1 shipped (read-only discovery + manual mapping BETA) — price import Phase 2 **not implemented**  
 **Audience:** Integrations, Storefront, Product, Commercial  
 **Tracker:** `shopify-markets-rfc` (competitor parity cycle 16)  
 **Related:** [`roadmap/STOREFRONT_SHOPIFY_PARITY.md`](./roadmap/STOREFRONT_SHOPIFY_PARITY.md) · [`storefront-audit-21may.md`](./storefront-audit-21may.md) · [`services/integrations/shopify.ts`](../services/integrations/shopify.ts) · [`lib/storefront/markets.ts`](../lib/storefront/markets.ts)
@@ -259,3 +259,4 @@ Required Shopify scopes (verify at implementation):
 | Date | Decision |
 |------|----------|
 | 2026-05-31 | RFC accepted as Phase 0; implementation deferred; recommend Option B for first engineering slice |
+| 2026-05-31 | **Phase 1 shipped:** `shopify-markets-service`, discovery cache on connection, mapping UI on storefront markets + Shopify integration card |

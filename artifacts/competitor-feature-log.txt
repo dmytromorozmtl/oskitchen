@@ -301,3 +301,15 @@ Result: PASS
 Summary: PartnerOAuthAppRegistry + review pipeline, platform queue at /platform/partner-apps, partner registration at /developers/apps/register, embedded admin host with HMAC embed tokens, verify API, merged OAuth catalog
 Tests: tests/unit/partner-app-review-service.test.ts, tests/unit/partner-oauth-service.test.ts
 Next: shopify-markets-phase1 OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing
+
+---
+Post-parity cycle: 5
+Timestamp: 2026-05-31T09:00:00.000Z
+Feature: shopify-markets-phase1
+Source: docs/shopify-markets-rfc.md Option B
+Priority: POST-PARITY
+Files: 18
+Result: PASS
+Summary: Read-only Shopify Markets GraphQL discovery, connection settings cache, manual OS Kitchen market mapping (shopifyMarketId), dashboard panels on /dashboard/integrations/shopify and /dashboard/storefront/markets
+Tests: tests/unit/shopify-markets-service.test.ts
+Next: shopify-markets-phase2-price-import OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing

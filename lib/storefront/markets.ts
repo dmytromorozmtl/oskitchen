@@ -21,6 +21,14 @@ export const storefrontMarketSchema = z.object({
   productIds: z.array(z.string().uuid()).max(500).optional(),
   /** Optional banner shown when this market is active */
   bannerText: z.string().max(400).optional(),
+  /** Linked Shopify Market gid — Phase 1 manual mapping only */
+  shopifyMarketId: z.string().max(128).optional(),
+  /** Optional Shopify catalog gid for Phase 2 price import */
+  shopifyCatalogId: z.string().max(128).optional(),
+  /** Optional Shopify price list gid for Phase 2 */
+  shopifyPriceListId: z.string().max(128).optional(),
+  /** How Shopify data flows for this market once Phase 2+ ships */
+  syncMode: z.enum(["none", "import", "bidirectional"]).optional().default("none"),
 });
 
 export type StorefrontMarket = z.infer<typeof storefrontMarketSchema>;
