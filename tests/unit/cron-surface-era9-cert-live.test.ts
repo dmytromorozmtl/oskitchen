@@ -52,7 +52,7 @@ describe("cron surface era9 CI certification (live repo)", () => {
     }
   });
 
-  it("recertifies 16 production crons and zero experimental App Router routes", () => {
+  it("recertifies 18 production crons and zero experimental App Router routes", () => {
     const report = validateCronRouteInventory();
     expect(report.ok).toBe(true);
     expect(report.productionOnDisk).toBe(CRON_SURFACE_ERA9_ACTIVE_ROUTE_COUNT);
@@ -83,7 +83,7 @@ describe("cron surface era9 CI certification (live repo)", () => {
       "utf8",
     ).toLowerCase();
     expect(pilot).toContain(CRON_SURFACE_ERA9_POLICY_ID);
-    expect(pilot).toContain("16 production");
+    expect(pilot).toContain("18 production");
     const index = readFileSync(join(ROOT, "docs/canonical-doc-index.md"), "utf8");
     expect(index).toContain(CRON_SURFACE_ERA9_POLICY_ID);
   });

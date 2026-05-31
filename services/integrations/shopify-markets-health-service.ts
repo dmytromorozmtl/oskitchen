@@ -251,7 +251,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
                       ? `${sync.b2bPaymentCollectionStats.overdueOpen} overdue B2B invoice(s) open`
                       : sync?.b2bArAgingStats?.bucket61Plus
                         ? `${sync.b2bArAgingStats.bucket61Plus} B2B invoice(s) 61+ days past due`
-                        : sync?.b2bPaymentCollectionStats?.markedPaid
+                        : sync?.b2bDunningStats?.skippedEmailOff
+                          ? `B2B dunning skipped — email not configured (${sync.b2bDunningStats.skippedEmailOff} run(s))`
+                          : sync?.b2bDunningStats?.autoRemindersSent
+                            ? `${sync.b2bDunningStats.autoRemindersSent} auto B2B reminder(s) sent · ${sync.b2bDunningStats.digestsSent} digest(s)`
+                            : sync?.b2bPaymentCollectionStats?.markedPaid
                         ? `${sync.b2bPaymentCollectionStats.markedPaid} B2B invoice(s) marked paid`
                         : sync?.b2bCateringRollupStats?.quotesCreated
                   ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
@@ -341,6 +345,19 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   if ((sync?.b2bArAgingStats?.bucket61Plus ?? 0) > 0) {
     recommendations.push(
       `${sync.b2bArAgingStats?.bucket61Plus} B2B invoice(s) are 61+ days past due — escalate collections immediately.`,
+    );
+  }
+  if ((sync?.b2bDunningStats?.skippedEmailOff ?? 0) > 0) {
+    recommendations.push(
+      "Configure Resend (RESEND_API_KEY) so B2B operator digests and auto-reminders can send.",
+    );
+  }
+  if (
+    !sync?.b2bAutoDunningEnabled &&
+    (sync?.b2bPaymentCollectionStats?.overdueOpen ?? 0) > 0
+  ) {
+    recommendations.push(
+      "Enable B2B auto-dunning on Integrations → Shopify to send day-35/day-65 overdue reminders automatically.",
     );
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {

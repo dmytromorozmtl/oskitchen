@@ -74,6 +74,10 @@
     {
       "path": "/api/cron/incident-remediation-reminders",
       "schedule": "17 * * * *"
+    },
+    {
+      "path": "/api/cron/shopify-b2b-dunning",
+      "schedule": "0 9 * * *"
     }
   ]
 }

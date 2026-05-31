@@ -29,7 +29,7 @@ import { parseCertificationRecord } from "@/lib/integrations/channel-certificati
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
-import { IntegrationProvider, UserRole } from "@prisma/client";
+import { buildB2bOperatorDigestPreviewForConnection } from "@/services/integrations/shopify-b2b-dunning-service";
 
 export default async function ShopifyIntegrationPage() {
   const { sessionUser, userId } = await requireTenantActor();
@@ -51,6 +51,13 @@ export default async function ShopifyIntegrationPage() {
   const settings = (conn?.settingsJson ?? {}) as { apiVersion?: string };
   const marketsSync = parseShopifyMarketsSyncSettings(conn?.settingsJson);
   const hasToken = Boolean(conn?.accessTokenEncrypted);
+  const b2bDunningDigestPreview =
+    conn?.id && hasToken
+      ? await buildB2bOperatorDigestPreviewForConnection({
+          userId,
+          connectionId: conn.id,
+        })
+      : null;
   const certification = parseCertificationRecord(conn?.settingsJson);
   const isOwner = profile?.role === UserRole.OWNER;
 
@@ -177,6 +184,7 @@ export default async function ShopifyIntegrationPage() {
         hasCredentials={hasToken && Boolean(conn?.shopDomain)}
         syncSettings={marketsSync}
         canManage={canManageChannel}
+        b2bDunningDigestPreview={b2bDunningDigestPreview}
       />
 
       <ShopifyMarketsWebhookRegistryPanel

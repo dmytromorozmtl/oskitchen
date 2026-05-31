@@ -354,6 +354,20 @@ export type ShopifyMarketsSyncSettings = {
     remindersSent: number;
     remindersSkipped: number;
   } | null;
+  b2bAutoDunningEnabled: boolean;
+  b2bOperatorDigestEnabled: boolean;
+  b2bDunningCadenceDays: number[] | null;
+  lastB2bDunningRunAt: string | null;
+  lastB2bOperatorDigestAt: string | null;
+  b2bDunningStats: {
+    runs: number;
+    digestsSent: number;
+    autoRemindersSent: number;
+    skippedEmailOff: number;
+    skippedDisabled: number;
+    skippedRecentDigest: number;
+    skippedNoOpenInvoices: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -601,6 +615,31 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
 
   const b2bArReminderEnabled = raw.b2bArReminderEnabled !== false;
 
+  const dunningStatsRaw = raw.b2bDunningStats;
+  const b2bDunningStats =
+    dunningStatsRaw && typeof dunningStatsRaw === "object"
+      ? {
+          runs: Number((dunningStatsRaw as Record<string, unknown>).runs) || 0,
+          digestsSent: Number((dunningStatsRaw as Record<string, unknown>).digestsSent) || 0,
+          autoRemindersSent:
+            Number((dunningStatsRaw as Record<string, unknown>).autoRemindersSent) || 0,
+          skippedEmailOff: Number((dunningStatsRaw as Record<string, unknown>).skippedEmailOff) || 0,
+          skippedDisabled: Number((dunningStatsRaw as Record<string, unknown>).skippedDisabled) || 0,
+          skippedRecentDigest:
+            Number((dunningStatsRaw as Record<string, unknown>).skippedRecentDigest) || 0,
+          skippedNoOpenInvoices:
+            Number((dunningStatsRaw as Record<string, unknown>).skippedNoOpenInvoices) || 0,
+        }
+      : null;
+
+  const cadenceRaw = raw.b2bDunningCadenceDays;
+  const b2bDunningCadenceDays = Array.isArray(cadenceRaw)
+    ? cadenceRaw.map((d) => Number(d)).filter((d) => Number.isFinite(d) && d > 0)
+    : null;
+
+  const b2bAutoDunningEnabled = raw.b2bAutoDunningEnabled === true;
+  const b2bOperatorDigestEnabled = raw.b2bOperatorDigestEnabled !== false;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -747,6 +786,14 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bArReminderAt:
       typeof raw.lastB2bArReminderAt === "string" ? raw.lastB2bArReminderAt : null,
     b2bArAgingStats,
+    b2bAutoDunningEnabled,
+    b2bOperatorDigestEnabled,
+    b2bDunningCadenceDays: b2bDunningCadenceDays?.length ? b2bDunningCadenceDays : null,
+    lastB2bDunningRunAt:
+      typeof raw.lastB2bDunningRunAt === "string" ? raw.lastB2bDunningRunAt : null,
+    lastB2bOperatorDigestAt:
+      typeof raw.lastB2bOperatorDigestAt === "string" ? raw.lastB2bOperatorDigestAt : null,
+    b2bDunningStats,
   };
 }
 

@@ -570,21 +570,42 @@ Required Shopify scopes (verify at implementation):
 | UI | Order Hub AR aging strip + customer profile overdue summary + send reminder button |
 | Health | B2B domain critical when `bucket61Plus > 0`; stats refresh on full reconcile |
 
-**Conscious limits:** No automated dunning schedule (Phase 20); no buyer self-serve pay link.
+**Conscious limits:** No automated dunning schedule (see Phase 20); no buyer self-serve pay link (Phase 21).
 
 ---
 
-## Phase 20 — B2B automated dunning & operator digest (planned)
+## Phase 20 — B2B automated dunning & operator digest (shipped)
 
-**Goal:** Scheduled collections workflow — weekly operator AR digest and optional auto-reminder cadence for 31+ day buckets.
+**Goal:** Scheduled collections workflow — weekly operator AR digest and optional auto-reminder cadence at day 35 / day 65 for overdue B2B invoices.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_DUNNING=1` (default on in non-production) |
+| Cron | `shopify-b2b-dunning` daily 09:00 UTC — digest on 7-day cadence + auto-reminders |
+| Service | `shopify-b2b-dunning-service.ts` — cadence rules, digest builder, cron sweep |
+| Email | `b2b-ar-operator-digest.ts` + reuses overdue reminder template for auto tier |
+| Audit | `BillingEvent` `B2B_AR_OPERATOR_DIGEST_SENT`, `B2B_INVOICE_AUTO_DUNNING_SENT` |
+| Settings | `b2bAutoDunningEnabled`, `b2bOperatorDigestEnabled`, `b2bDunningCadenceDays`, `b2bDunningStats`, `lastB2bDunningRunAt`, `lastB2bOperatorDigestAt` |
+| UI | Markets panel dunning card — digest preview, run now, send digest now |
+| Health | Recommends Resend when `skippedEmailOff > 0`; nudges auto-dunning when overdue open |
+| Actions | `previewB2bDunningDigestAction`, `runB2bDunningNowAction` |
+
+**Conscious limits:** No legal collections escalation; no buyer portal payment link (Phase 21).
+
+---
+
+## Phase 21 — B2B buyer self-serve pay link (planned)
+
+**Goal:** Hosted payment page for open B2B invoices — buyer pays without operator intervention; KitchenOS records payment locally (no Shopify write-back in v1).
 
 | Component | Plan |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_DUNNING=1` |
-| Cron | Weekly digest to kitchen owner + optional day-35/day-65 auto-reminders |
-| Service | `shopify-b2b-dunning-service.ts` — cadence rules, digest builder |
-| Settings | `b2bDunningCadenceDays`, `b2bDunningStats`, `lastB2bDunningRunAt` |
-| UI | Markets panel cadence toggles + digest preview |
-| Health | Attention when auto-reminders skipped (email off) |
+| Feature flag | `SHOPIFY_MARKETS_B2B_PAY_PORTAL=1` |
+| Route | `/pay/b2b/[token]` — signed token from `invoiceDraft.payToken` |
+| Service | `shopify-b2b-invoice-pay-portal-service.ts` — token mint, Stripe Checkout or manual ACH instructions |
+| Order | `paymentStatus: PAID`, reuse `markB2bInvoiceDraftPaid` path |
+| Email | Reminder + digest templates link to pay portal when token present |
+| UI | Order detail “Copy pay link”; customer portal optional |
+| Health | Attention when overdue invoices lack pay tokens |
 
-**Conscious limits:** No legal collections escalation; no buyer portal payment link (Phase 21).
+**Conscious limits:** No Shopify payment write-back; no multi-invoice consolidated checkout in v1.

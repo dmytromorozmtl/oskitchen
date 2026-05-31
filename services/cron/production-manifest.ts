@@ -23,6 +23,8 @@ export const ALLOWED_PRODUCTION_CRON_SLUGS = [
   "doordash-sync",
   "kds-overdue-alerts",
   "incident-remediation-reminders",
+  "shopify-b2b-dunning",
+  "outbound-webhook-deliveries",
 ] as const;
 
 export type ProductionCronSlug = (typeof ALLOWED_PRODUCTION_CRON_SLUGS)[number];
@@ -61,6 +63,8 @@ export const PRODUCTION_CRON_SCHEDULES: Record<ProductionCronSlug, string> = {
   "doordash-sync": "*/5 * * * *",
   "kds-overdue-alerts": "*/10 * * * *",
   "incident-remediation-reminders": "17 * * * *",
+  "shopify-b2b-dunning": "0 9 * * *",
+  "outbound-webhook-deliveries": "*/5 * * * *",
 };
 
 export type ProductionCronEntry = { path: string; schedule: string };

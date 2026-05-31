@@ -41,6 +41,8 @@ import {
   SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES,
   type ShopifyMarketsSyncSettings,
 } from "@/lib/integrations/shopify-markets-settings";
+import type { B2bOperatorDigestPreview } from "@/lib/integrations/shopify-b2b-dunning-metadata";
+import { ShopifyMarketsB2bDunningCard } from "@/components/dashboard/integrations/shopify-markets-b2b-dunning-card";
 import type { ShopifyMarketRow } from "@/services/integrations/shopify-markets-service";
 
 type ShopifyMarketsPanelProps = {
@@ -48,6 +50,7 @@ type ShopifyMarketsPanelProps = {
   hasCredentials: boolean;
   syncSettings: ShopifyMarketsSyncSettings;
   canManage: boolean;
+  b2bDunningDigestPreview?: B2bOperatorDigestPreview | null;
 };
 
 function MarketRow({ market }: { market: ShopifyMarketRow }) {
@@ -77,6 +80,7 @@ export function ShopifyMarketsPanel({
   hasCredentials,
   syncSettings,
   canManage,
+  b2bDunningDigestPreview = null,
 }: ShopifyMarketsPanelProps) {
   const [discoverPending, startDiscover] = useTransition();
   const [importPending, startImport] = useTransition();
@@ -1062,6 +1066,26 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bDunningStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B dunning: {syncSettings.b2bDunningStats.digestsSent} digest(s) ·{" "}
+              {syncSettings.b2bDunningStats.autoRemindersSent} auto reminder(s)
+              {!syncSettings.b2bAutoDunningEnabled ? " · auto off" : ""}
+              {syncSettings.lastB2bDunningRunAt ? (
+                <>
+                  {" "}
+                  · last run{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bDunningRunAt), { addSuffix: true })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
+          <ShopifyMarketsB2bDunningCard
+            connectionId={connectionId}
+            syncSettings={syncSettings}
+            digestPreview={b2bDunningDigestPreview}
+            canManage={canManage}
+          />
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

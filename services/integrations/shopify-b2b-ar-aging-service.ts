@@ -176,7 +176,8 @@ export async function sendB2bInvoiceOverdueReminderForOrder(input: {
   userId: string;
   workspaceId: string | null;
   orderId: string;
-  performedById: string;
+  performedById?: string | null;
+  source?: "manual" | "auto_dunning";
 }): Promise<B2bReminderResult> {
   if (!isShopifyMarketsB2bArAgingEnabled()) {
     return { ok: false, reason: "ar_aging_disabled", skipped: true };
@@ -326,12 +327,13 @@ export async function sendB2bInvoiceOverdueReminderForOrder(input: {
         eventType: CustomerTimelineEventType.CONTACTED,
         sourceType: "order",
         sourceId: order.id,
-        summary: `B2B invoice reminder sent — ${draft.invoiceNumber}`,
+        summary: `B2B invoice reminder sent — ${draft.invoiceNumber}${input.source === "auto_dunning" ? " (auto)" : ""}`,
         metadataJson: {
           invoiceId: draft.invoiceId,
           invoiceNumber: draft.invoiceNumber,
           daysPastDue: agingRow.daysPastDue,
           openAmountCents: agingRow.openAmountCents,
+          source: input.source ?? "manual",
         } as Prisma.InputJsonValue,
       },
     });
@@ -340,9 +342,12 @@ export async function sendB2bInvoiceOverdueReminderForOrder(input: {
   await recordBillingEvent({
     userId: input.userId,
     workspaceId: input.workspaceId,
-    eventType: "B2B_INVOICE_REMINDER_SENT",
+    eventType:
+      input.source === "auto_dunning"
+        ? "B2B_INVOICE_AUTO_DUNNING_SENT"
+        : "B2B_INVOICE_REMINDER_SENT",
     source: "internal",
-    performedById: input.performedById,
+    performedById: input.performedById ?? undefined,
     summary: `B2B invoice reminder ${draft.invoiceNumber} (${agingRow.daysPastDue}d past due)`,
     metadata: {
       orderId: order.id,
@@ -351,6 +356,7 @@ export async function sendB2bInvoiceOverdueReminderForOrder(input: {
       daysPastDue: agingRow.daysPastDue,
       bucket: agingRow.bucket,
       connectionId,
+      source: input.source ?? "manual",
     },
   }).catch(() => undefined);
 

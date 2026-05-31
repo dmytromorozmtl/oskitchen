@@ -68,7 +68,7 @@ Cron surface honesty smoke
   }
 
   console.log(
-    "\n[smoke:cron-surface] PASSED — 16 production crons only; no experimental App Router surface claim.\n",
+    "\n[smoke:cron-surface] PASSED — 18 production crons only; no experimental App Router surface claim.\n",
   );
 }
 

@@ -11,6 +11,7 @@ import {
 } from "@/lib/email/templates";
 import { storefrontTeamInviteTemplate } from "@/lib/email/templates/storefront-team-invite";
 import { b2bInvoiceOverdueReminderTemplate } from "@/lib/email/templates/b2b-invoice-overdue-reminder";
+import { b2bArOperatorDigestTemplate } from "@/lib/email/templates/b2b-ar-operator-digest";
 import { logger } from "@/lib/logger";
 
 const from =
@@ -233,6 +234,47 @@ export async function sendB2bInvoiceOverdueReminder(params: {
     from,
     to: params.to,
     subject: `Invoice reminder — ${params.invoiceNumber}`,
+    html,
+  });
+  return { sent: true as const };
+}
+
+export async function sendB2bArOperatorDigest(params: {
+  to: string;
+  businessName?: string | null;
+  openTotal: number;
+  openAmountCents: number;
+  overdueTotal: number;
+  bucket0_30: number;
+  bucket31_60: number;
+  bucket61Plus: number;
+  topOverdue: Array<{
+    invoiceNumber: string;
+    companyName: string | null;
+    daysPastDue: number;
+    openAmountCents: number;
+  }>;
+  orderHubUrl: string;
+}) {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
+  const html = b2bArOperatorDigestTemplate({
+    businessName: params.businessName,
+    openTotal: params.openTotal,
+    openAmountCents: params.openAmountCents,
+    overdueTotal: params.overdueTotal,
+    bucket0_30: params.bucket0_30,
+    bucket31_60: params.bucket31_60,
+    bucket61Plus: params.bucket61Plus,
+    topOverdue: params.topOverdue,
+    orderHubUrl: params.orderHubUrl,
+  });
+
+  await resend.emails.send({
+    from,
+    to: params.to,
+    subject: `B2B receivables digest — ${params.openTotal} open invoice(s)`,
     html,
   });
   return { sent: true as const };
