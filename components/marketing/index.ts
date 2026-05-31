@@ -10,3 +10,8 @@ export {
   NO_LOCK_IN_BADGE_LABEL,
   NO_LOCK_IN_HERO_SUBHEADING,
 } from './no-lock-in-badge';
+export {
+  FastPayoutsBadge,
+  FAST_PAYOUTS_BADGE_LABEL,
+  FAST_PAYOUTS_BADGE_DETAIL,
+} from './fast-payouts-badge';

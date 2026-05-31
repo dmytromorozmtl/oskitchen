@@ -1,7 +1,7 @@
 {
   "no-hardware-lock-in": "done",
   "transparent-pricing": "todo",
-  "fast-payouts": "todo",
+  "fast-payouts": "done",
   "cross-channel-inventory-prod": "todo",
   "offline-first-pos-prod": "todo",
   "multi-location-reporting-prod": "todo",
