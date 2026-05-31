@@ -15,7 +15,7 @@ export type PageMaturityHonesty = {
 
 const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
   "/dashboard/pos/tabs":
-    "Bar and table tabs are a preview workflow. Do not sell full tab-service parity until certified in the feature maturity matrix.",
+    "Bar and table tabs support bill splitting (equal, percentage, seat, item) with per-guest totals. Full multi-payment close per share is not certified yet.",
   "/dashboard/pos/handheld":
     "Handheld ordering BETA — mobile waiter UI with offline cash queue and installable PWA. Tab fire requires connectivity; not certified native handheld hardware.",
   "/dashboard/tables":

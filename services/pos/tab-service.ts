@@ -36,6 +36,7 @@ export async function getOpenTabs(userId: string) {
       quantity: item.quantity,
       unitPrice: Number(item.unitPrice),
       totalPrice: Number(item.totalPrice),
+      participantId: item.paidById,
     })),
   }));
 }

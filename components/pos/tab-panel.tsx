@@ -7,6 +7,7 @@ import { Beer, Coffee, Pizza, Plus, Utensils, Wine } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { addItemToTabAction, closeTabAction, createTabAction } from '@/actions/pos/tabs';
+import { BillSplitPanel } from '@/components/pos/bill-split-panel';
 import { useSyncedServerState } from '@/hooks/use-synced-server-state';
 import { posTouchButtonClass, posTouchCompactClass } from '@/lib/pos/touch-targets';
 
@@ -24,6 +25,7 @@ export interface TabRow {
     quantity: number;
     unitPrice: number;
     totalPrice: number;
+    participantId?: string | null;
   }[];
   tableId?: string | null;
 }
@@ -275,11 +277,45 @@ export function TabPanel({ tabs: initialTabs }: { tabs: TabRow[] }) {
                 <div>
                   <span className="font-medium">{item.productName}</span>
                   <span className="text-sm text-muted-foreground ml-2">x{item.quantity}</span>
+                  {item.participantId ? (
+                    <span className="ml-2 text-xs text-muted-foreground">· {item.participantId}</span>
+                  ) : null}
                 </div>
                 <span className="font-mono">${item.totalPrice.toFixed(2)}</span>
               </div>
             ))}
           </div>
+
+          <BillSplitPanel
+            tabId={currentTab.id}
+            tabName={currentTab.name}
+            tipTotal={liveTip}
+            items={currentTab.items.map((item) => ({
+              id: item.id,
+              label: item.productName,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              totalPrice: item.totalPrice,
+              participantId: item.participantId ?? null,
+            }))}
+            onItemsChange={(nextItems) =>
+              setTabs((prev) =>
+                prev.map((tab) =>
+                  tab.id === currentTab.id
+                    ? {
+                        ...tab,
+                        items: tab.items.map((item) => {
+                          const updated = nextItems.find((row) => row.id === item.id);
+                          return updated
+                            ? { ...item, participantId: updated.participantId ?? null }
+                            : item;
+                        }),
+                      }
+                    : tab,
+                ),
+              )
+            }
+          />
         </div>
       )}
     </div>
