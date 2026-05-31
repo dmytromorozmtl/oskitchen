@@ -72,6 +72,18 @@ export function IntegrationToolRow({
       >
         {busy === "sync-o" ? "Syncing…" : "Sync orders"}
       </Button>
+      {provider === "shopify" ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="rounded-full"
+          disabled={!connectionId || busy !== null}
+          onClick={() => void post(`${base}/import-market-prices`, "import-prices")}
+        >
+          {busy === "import-prices" ? "Importing…" : "Import market prices"}
+        </Button>
+      ) : null}
     </div>
   );
 }

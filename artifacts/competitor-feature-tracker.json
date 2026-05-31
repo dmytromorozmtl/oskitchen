@@ -44,6 +44,8 @@
   "app-marketplace-phase4ShippedAt": "2026-05-31T08:00:00.000Z",
   "shopify-markets-phase1": "done",
   "shopify-markets-phase1ShippedAt": "2026-05-31T09:00:00.000Z",
-  "postParityPhase": "shopify-markets-phase1",
-  "nextRecommendedStep": "shopify-markets-phase2-price-import OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing"
+  "shopify-markets-phase2": "done",
+  "shopify-markets-phase2ShippedAt": "2026-05-31T10:00:00.000Z",
+  "postParityPhase": "shopify-markets-phase2",
+  "nextRecommendedStep": "shopify-markets-phase3-webhooks OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing"
 }

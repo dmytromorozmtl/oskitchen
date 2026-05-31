@@ -22,14 +22,17 @@ export function ShopifyMarketsMappingSummary({
   shopifyConnected,
 }: ShopifyMarketsMappingSummaryProps) {
   const linked = osMarkets.filter((m) => m.shopifyMarketId).length;
+  const importMode = osMarkets.filter((m) => m.syncMode === "import").length;
+  const priceRows = syncSettings ? Object.values(syncSettings.marketPriceImports ?? {}) : [];
+  const mappedPrices = priceRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
 
   return (
     <Card className="border-border/80 bg-muted/10">
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 1 — manual link between OS Kitchen markets and Shopify Markets. Read-only discovery;
-          no automatic price or catalog sync.
+          Phase 2 — link OS Kitchen markets to Shopify, set syncMode import, and apply Shopify price list
+          overrides on mapped products at checkout/menu display.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -48,7 +51,21 @@ export function ShopifyMarketsMappingSummary({
               <Badge variant="secondary">
                 {linked}/{osMarkets.length} OS market(s) linked
               </Badge>
+              {importMode > 0 ? (
+                <Badge variant="secondary">{importMode} import-mode</Badge>
+              ) : null}
+              {mappedPrices > 0 ? (
+                <Badge variant="outline">{mappedPrices} Shopify price override(s)</Badge>
+              ) : null}
             </div>
+            {syncSettings?.lastPriceImportAt ? (
+              <p className="text-xs text-muted-foreground">
+                Last price import: {new Date(syncSettings.lastPriceImportAt).toLocaleString()}
+              </p>
+            ) : null}
+            {syncSettings?.priceImportError ? (
+              <p className="text-xs text-amber-700 dark:text-amber-200">{syncSettings.priceImportError}</p>
+            ) : null}
             {syncSettings?.lastDiscoveryAt ? (
               <p className="text-xs text-muted-foreground">
                 Last Shopify discovery: {new Date(syncSettings.lastDiscoveryAt).toLocaleString()}

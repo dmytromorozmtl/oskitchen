@@ -5,12 +5,16 @@ import { z } from "zod";
 import { requireConnectionOwner } from "@/lib/integrations/api-helpers";
 import { getShopifyCredentials } from "@/lib/integrations/decrypt-connection";
 import { upsertExternalProductRecord } from "@/lib/integrations/persist-external-product";
+import { allStorefrontCatalogTags } from "@/lib/storefront/cache-tags";
+import { loadMarketsForStorefrontOwner } from "@/lib/storefront/market-resolve";
 import { prisma } from "@/lib/prisma";
 import { IntegrationProvider, IntegrationStatus } from "@prisma/client";
 import {
   fetchProductsGraphQL,
   normalizeShopifyProduct,
 } from "@/services/integrations/shopify";
+import { importShopifyMarketPricesForConnection } from "@/services/integrations/shopify-market-prices-service";
+import { revalidateTag } from "next/cache";
 
 const bodySchema = z.object({
   connectionId: z.string().uuid(),
@@ -68,7 +72,38 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json({ ok: true, imported });
+    let marketPricesImported = 0;
+    let marketsImported = 0;
+    const priceImport = await importShopifyMarketPricesForConnection({
+      userId: owned.conn.userId,
+      connection: owned.conn,
+      creds,
+    });
+    if (priceImport.ok) {
+      marketPricesImported = priceImport.totalProductPrices;
+      marketsImported = priceImport.marketsImported;
+      const sf = await prisma.storefrontSettings.findFirst({
+        where: { userId: owned.conn.userId, enabled: true },
+        select: { storeSlug: true },
+      });
+      if (sf?.storeSlug) {
+        const markets = await loadMarketsForStorefrontOwner(owned.conn.userId);
+        for (const tag of allStorefrontCatalogTags(
+          sf.storeSlug,
+          markets.map((m) => m.id),
+        )) {
+          revalidateTag(tag);
+        }
+      }
+    }
+
+    return NextResponse.json({
+      ok: true,
+      imported,
+      marketPricesImported,
+      marketsImported,
+      priceImportSkipped: !priceImport.ok ? priceImport.error : null,
+    });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     await prisma.integrationConnection.update({

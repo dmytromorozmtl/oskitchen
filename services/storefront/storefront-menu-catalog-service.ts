@@ -15,6 +15,8 @@ export async function buildStorefrontMenuCatalog(input: {
   /** When set, only include these product IDs (market routing). */
   marketProductIds?: string[] | null;
   marketId?: string | null;
+  /** Shopify market price overrides — keyed by internal product id. */
+  productPriceOverrides?: Map<string, number> | Record<string, number>;
 }): Promise<StorefrontMenuCatalog | null> {
   const menu = await prisma.menu.findFirst({
     where: { id: input.menuId },
@@ -44,11 +46,23 @@ export async function buildStorefrontMenuCatalog(input: {
     where: { storefrontId: input.storefrontId, productId: { in: productIds }, active: true },
   });
   const variantPriceMap = new Map(
-    variantRows.map((v) => [v.id, resolveVariantUnitPrice(Number(menu.products.find((p) => p.id === v.productId)?.price ?? 0), v)]),
+    variantRows.map((v) => {
+      const base = Number(menu.products.find((prod) => prod.id === v.productId)?.price ?? 0);
+      const productBase = overrideLookup.has(v.productId)
+        ? overrideLookup.get(v.productId)!
+        : base;
+      return [v.id, resolveVariantUnitPrice(productBase, v)];
+    }),
   );
 
+  const overrideLookup =
+    input.productPriceOverrides instanceof Map
+      ? input.productPriceOverrides
+      : new Map(Object.entries(input.productPriceOverrides ?? {}));
+
   const products: StorefrontCatalogProduct[] = activeProducts.map((p) => {
-    const price = Number(p.price);
+    const basePrice = Number(p.price);
+    const price = overrideLookup.has(p.id) ? overrideLookup.get(p.id)! : basePrice;
     const maxSf = p.maxStorefrontQuantity ?? null;
     const avail = availability.get(p.id);
     const soldOut = avail?.soldOut === true;

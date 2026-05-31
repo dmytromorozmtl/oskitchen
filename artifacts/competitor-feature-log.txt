@@ -313,3 +313,15 @@ Result: PASS
 Summary: Read-only Shopify Markets GraphQL discovery, connection settings cache, manual OS Kitchen market mapping (shopifyMarketId), dashboard panels on /dashboard/integrations/shopify and /dashboard/storefront/markets
 Tests: tests/unit/shopify-markets-service.test.ts
 Next: shopify-markets-phase2-price-import OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing
+
+---
+Post-parity cycle: 6
+Timestamp: 2026-05-31T10:00:00.000Z
+Feature: shopify-markets-phase2-price-import
+Source: docs/shopify-markets-rfc.md Option C (import slice)
+Priority: POST-PARITY
+Files: 16
+Result: PASS
+Summary: Shopify market price list import via Admin GraphQL, cached on connection, storefront catalog overrides when syncMode=import and external products mapped; hooks product sync + import API
+Tests: tests/unit/shopify-market-prices-service.test.ts
+Next: shopify-markets-phase3-webhooks OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing

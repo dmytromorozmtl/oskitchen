@@ -1,0 +1,41 @@
+{
+  "data": {
+    "market": {
+      "id": "gid://shopify/Market/8947691234568",
+      "name": "Canada",
+      "priceList": {
+        "id": "gid://shopify/PriceList/987654",
+        "prices": {
+          "nodes": [
+            {
+              "price": {
+                "amount": "14.99",
+                "currencyCode": "CAD"
+              },
+              "variant": {
+                "id": "gid://shopify/ProductVariant/4455667788",
+                "sku": "MEAL-CA-1",
+                "product": {
+                  "id": "gid://shopify/Product/1122334455"
+                }
+              }
+            },
+            {
+              "price": {
+                "amount": "12.50",
+                "currencyCode": "CAD"
+              },
+              "variant": {
+                "id": "gid://shopify/ProductVariant/4455667799",
+                "sku": "MEAL-CA-2",
+                "product": {
+                  "id": "gid://shopify/Product/1122334466"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

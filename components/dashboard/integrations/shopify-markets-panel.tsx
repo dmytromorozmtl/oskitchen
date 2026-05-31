@@ -3,9 +3,9 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { Globe2, Loader2, RefreshCw } from "lucide-react";
+import { DollarSign, Globe2, Loader2, RefreshCw } from "lucide-react";
 
-import { discoverShopifyMarketsAction } from "@/actions/shopify-markets";
+import { discoverShopifyMarketsAction, importShopifyMarketPricesAction } from "@/actions/shopify-markets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,7 +47,15 @@ export function ShopifyMarketsPanel({
   syncSettings,
   canManage,
 }: ShopifyMarketsPanelProps) {
-  const [pending, startTransition] = useTransition();
+  const [discoverPending, startDiscover] = useTransition();
+  const [importPending, startImport] = useTransition();
+  const pending = discoverPending || importPending;
+
+  const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
+  const totalMappedPrices = importedMarkets.reduce(
+    (sum, row) => sum + row.mappedProductCount,
+    0,
+  );
 
   return (
     <Card id="shopify-markets-discovery" className="scroll-mt-24 border-border/80">
@@ -56,23 +64,21 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 1 BETA
+              Shopify Markets — Phase 2 BETA
             </CardTitle>
             <CardDescription>
-              Read-only discovery from Shopify Admin GraphQL. Link discovered markets to OS Kitchen
-              storefront markets — no price or catalog import yet.
+              Discover Shopify markets, link them on Storefront → Markets, set syncMode to import, then
+              pull market-specific prices for mapped external products.
             </CardDescription>
           </div>
-          <Badge variant="outline">markets_sync preview</Badge>
+          <Badge variant="outline">markets_sync BETA</Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-xs text-muted-foreground">
-          Custom app scope: <code className="rounded bg-muted px-1">read_markets</code>. Map links on{" "}
-          <Link href="/dashboard/storefront/markets" className="underline">
-            Storefront → Markets
-          </Link>
-          .
+          Scopes: <code className="rounded bg-muted px-1">read_markets</code>,{" "}
+          <code className="rounded bg-muted px-1">read_products</code>. Shopify wins on price when{" "}
+          <code className="rounded bg-muted px-1">syncMode=import</code> — menu composition stays OS Kitchen.
         </p>
 
         {!connectionId || !hasCredentials ? (
@@ -102,24 +108,59 @@ export function ShopifyMarketsPanel({
         ) : null}
 
         {canManage && connectionId ? (
-          <Button
-            type="button"
-            size="sm"
-            className="rounded-full"
-            disabled={pending || !hasCredentials}
-            onClick={() =>
-              startTransition(async () => {
-                await discoverShopifyMarketsAction(connectionId);
-              })
-            }
-          >
-            {pending ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
-            <span className="ml-2">Discover Shopify markets</span>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              size="sm"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startDiscover(async () => {
+                  await discoverShopifyMarketsAction(connectionId);
+                })
+              }
+            >
+              {discoverPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              <span className="ml-2">Discover markets</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startImport(async () => {
+                  await importShopifyMarketPricesAction(connectionId);
+                })
+              }
+            >
+              {importPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <DollarSign className="h-4 w-4" />
+              )}
+              <span className="ml-2">Import market prices</span>
+            </Button>
+          </div>
+        ) : null}
+
+        {syncSettings.lastPriceImportAt ? (
+          <p className="text-xs text-muted-foreground">
+            Last price import{" "}
+            {formatDistanceToNow(new Date(syncSettings.lastPriceImportAt), { addSuffix: true })}
+            {totalMappedPrices > 0 ? ` · ${totalMappedPrices} mapped product price(s)` : ""}
+          </p>
+        ) : null}
+
+        {syncSettings.priceImportError ? (
+          <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-sm text-muted-foreground">
+            Partial import notes: {syncSettings.priceImportError}
+          </p>
         ) : null}
 
         {syncSettings.discoveredMarkets.length > 0 ? (
@@ -134,9 +175,25 @@ export function ShopifyMarketsPanel({
           </p>
         )}
 
+        {importedMarkets.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs">
+            <p className="font-medium text-foreground">Cached price imports</p>
+            {importedMarkets.map((row) => (
+              <div key={row.osMarketId} className="flex flex-wrap justify-between gap-2 text-muted-foreground">
+                <span>
+                  OS market <span className="font-mono">{row.osMarketId}</span>
+                </span>
+                <span>
+                  {row.mappedProductCount}/{row.variantCount} mapped · {row.currencyCode ?? "—"}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
         <p className="text-xs text-muted-foreground">
-          Phase 2 will import market-specific prices on product sync. Tax, duties, and hostname routing
-          remain manual — we never silently overwrite OS Kitchen tax settings.
+          Product sync also attempts price import for import-mode markets. Map external products before
+          importing. Tax/duty settings are never overwritten.
         </p>
       </CardContent>
     </Card>

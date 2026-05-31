@@ -186,7 +186,27 @@ export function StorefrontMarketsEditor({
                       ))}
                     </select>
                     {m.shopifyMarketId ? (
-                      <p className="font-mono text-[10px] text-muted-foreground">{m.shopifyMarketId}</p>
+                      <>
+                        <p className="font-mono text-[10px] text-muted-foreground">{m.shopifyMarketId}</p>
+                        <div className="space-y-2">
+                          <Label>Price sync mode</Label>
+                          <select
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                            value={m.syncMode ?? "none"}
+                            onChange={(e) =>
+                              updateAt(idx, {
+                                syncMode: e.target.value as StorefrontMarket["syncMode"],
+                              })
+                            }
+                          >
+                            <option value="none">None — native OS Kitchen prices</option>
+                            <option value="import">Import — Shopify price list wins on mapped products</option>
+                            <option value="bidirectional" disabled>
+                              Bidirectional (Phase 4+ — not available)
+                            </option>
+                          </select>
+                        </div>
+                      </>
                     ) : null}
                   </div>
                 ) : null}

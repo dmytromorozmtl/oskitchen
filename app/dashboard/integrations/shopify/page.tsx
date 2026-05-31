@@ -209,8 +209,8 @@ export default async function ShopifyIntegrationPage() {
             batch per sync job, duplicate webhook id protection.
           </p>
           <p>
-            <span className="font-medium text-foreground">Phase 1 Markets:</span> read-only Shopify
-            Markets discovery + manual mapping to OS Kitchen markets — no price list import yet.
+            <span className="font-medium text-foreground">Phase 2 Markets:</span> price list import for
+            markets with syncMode=import — applies to mapped external products on public storefront.
           </p>
           <p>
             <span className="font-medium text-foreground">Not yet:</span> automatic internal Order

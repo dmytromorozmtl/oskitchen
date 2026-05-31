@@ -8,7 +8,7 @@ import {
   marketCatalogCacheKey,
   resolveActiveMarket,
 } from "@/lib/storefront/market-resolve";
-import type { StorefrontMarket } from "@/lib/storefront/markets";
+import { loadShopifyMarketPriceOverridesForMarket } from "@/lib/storefront/shopify-market-price-overrides";
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
 import { prisma } from "@/lib/prisma";
 import { buildStorefrontMenuCatalog } from "@/services/storefront/storefront-menu-catalog-service";
@@ -30,6 +30,7 @@ async function buildCatalogForStore(input: {
   currency: string;
   marketId: string;
   productIds: string[] | null;
+  productPriceOverrides?: Map<string, number>;
 }): Promise<StorefrontMenuCatalog | null> {
   const menu = await prisma.menu.findFirst({
     where: { id: input.menuId },
@@ -44,6 +45,7 @@ async function buildCatalogForStore(input: {
     currency: input.currency,
     marketId: input.marketId,
     marketProductIds: input.productIds,
+    productPriceOverrides: input.productPriceOverrides,
   });
 }
 
@@ -69,18 +71,27 @@ export async function loadStorefrontMenuCatalogForPage(
   const menuId = activeMenuId ?? sf.activeMenuId;
   if (!menuId) return null;
 
+  const { overrides: productPriceOverrides, importRow } =
+    await loadShopifyMarketPriceOverridesForMarket({
+      ownerUserId: sf.userId,
+      market,
+    });
+
   const cacheKey = marketCatalogCacheKey(market.id, menuId);
+  const priceVersionSuffix =
+    importRow?.importedAt != null ? `:shopify-${importRow.importedAt}` : ":native";
   const getCached = unstable_cache(
     async () =>
       buildCatalogForStore({
         storefrontId: sf.id,
         storeSlug: sf.storeSlug,
         menuId,
-        currency: sf.currency,
+        currency: importRow?.currencyCode ?? market.currency ?? sf.currency,
         marketId: market.id,
         productIds,
+        productPriceOverrides,
       }),
-    ["sf-menu-catalog", storeSlug, cacheKey, menuId],
+    ["sf-menu-catalog", storeSlug, cacheKey, menuId, priceVersionSuffix],
     {
       tags: [storefrontCatalogTag(storeSlug, market.id)],
       revalidate: 60,
@@ -94,7 +105,7 @@ export async function loadStorefrontMenuCatalogForPage(
 
   return {
     catalog,
-    currency: market.currency ?? sf.currency,
+    currency: importRow?.currencyCode ?? market.currency ?? sf.currency,
     marketId: market.id,
     marketName: market.name,
     marketBanner: market.bannerText ?? null,

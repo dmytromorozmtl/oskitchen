@@ -1,14 +1,28 @@
 import type { ShopifyMarketRow } from "@/services/integrations/shopify-markets-service";
 
+export type ShopifyMarketPriceImportRow = {
+  osMarketId: string;
+  shopifyMarketId: string;
+  shopifyPriceListId: string | null;
+  currencyCode: string | null;
+  importedAt: string;
+  variantCount: number;
+  mappedProductCount: number;
+  productPrices: Record<string, string>;
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
   discoveredMarkets: ShopifyMarketRow[];
   discoveryError: string | null;
   requiredScopesNote: string | null;
+  lastPriceImportAt: string | null;
+  priceImportError: string | null;
+  marketPriceImports: Record<string, ShopifyMarketPriceImportRow>;
 };
 
-export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets"] as const;
+export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
 
 export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyMarketsSyncSettings {
   const root =
@@ -26,6 +40,11 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       )
     : [];
 
+  const marketPriceImports =
+    raw.marketPriceImports && typeof raw.marketPriceImports === "object"
+      ? (raw.marketPriceImports as Record<string, ShopifyMarketPriceImportRow>)
+      : {};
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -34,6 +53,9 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     discoveryError: typeof raw.discoveryError === "string" ? raw.discoveryError : null,
     requiredScopesNote:
       typeof raw.requiredScopesNote === "string" ? raw.requiredScopesNote : null,
+    lastPriceImportAt: typeof raw.lastPriceImportAt === "string" ? raw.lastPriceImportAt : null,
+    priceImportError: typeof raw.priceImportError === "string" ? raw.priceImportError : null,
+    marketPriceImports,
   };
 }
 
