@@ -29,6 +29,8 @@ export const storefrontMarketSchema = z.object({
   shopifyPriceListId: z.string().max(128).optional(),
   /** How Shopify data flows for this market once Phase 2+ ships */
   syncMode: z.enum(["none", "import", "push", "bidirectional"]).optional().default("none"),
+  /** Bidirectional conflict resolution — who wins when Shopify and KitchenOS prices diverge */
+  priceAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
 });
 
 export type StorefrontMarket = z.infer<typeof storefrontMarketSchema>;

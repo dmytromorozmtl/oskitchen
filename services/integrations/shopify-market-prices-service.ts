@@ -209,7 +209,7 @@ export function listImportableStorefrontMarkets(settingsCenterJson: unknown): St
   return parseStorefrontMarketsFromSettingsCenter(settingsCenterJson).filter(
     (market) =>
       market.enabled !== false &&
-      market.syncMode === "import" &&
+      (market.syncMode === "import" || market.syncMode === "bidirectional") &&
       Boolean(market.shopifyMarketId?.trim()),
   );
 }

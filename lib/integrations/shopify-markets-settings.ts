@@ -23,6 +23,19 @@ export type ShopifyMarketPriceExportRow = {
   priceHash: string;
 };
 
+export type ShopifyMarketPriceConflictRow = {
+  conflictKey: string;
+  osMarketId: string;
+  shopifyMarketId: string;
+  productId: string;
+  externalVariantId: string;
+  shopifyAmount: string;
+  kitchenosAmount: string;
+  detectedAt: string;
+  status: "open" | "resolved_shopify" | "resolved_kitchenos" | "ignored";
+  priceAuthority: "shopify" | "kitchenos" | "manual";
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
@@ -42,6 +55,10 @@ export type ShopifyMarketsSyncSettings = {
   lastPricePushSkippedReason: string | null;
   lastPricePushOrigin: string | null;
   marketPriceExports: Record<string, ShopifyMarketPriceExportRow>;
+  lastBidirectionalReconcileAt: string | null;
+  lastBidirectionalReconcileError: string | null;
+  lastBidirectionalReconcileResult: string | null;
+  marketPriceConflicts: Record<string, ShopifyMarketPriceConflictRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -77,6 +94,11 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? (raw.marketPriceExports as Record<string, ShopifyMarketPriceExportRow>)
       : {};
 
+  const marketPriceConflicts =
+    raw.marketPriceConflicts && typeof raw.marketPriceConflicts === "object"
+      ? (raw.marketPriceConflicts as Record<string, ShopifyMarketPriceConflictRow>)
+      : {};
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -108,6 +130,13 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       typeof raw.lastPricePushSkippedReason === "string" ? raw.lastPricePushSkippedReason : null,
     lastPricePushOrigin: typeof raw.lastPricePushOrigin === "string" ? raw.lastPricePushOrigin : null,
     marketPriceExports,
+    lastBidirectionalReconcileAt:
+      typeof raw.lastBidirectionalReconcileAt === "string" ? raw.lastBidirectionalReconcileAt : null,
+    lastBidirectionalReconcileError:
+      typeof raw.lastBidirectionalReconcileError === "string" ? raw.lastBidirectionalReconcileError : null,
+    lastBidirectionalReconcileResult:
+      typeof raw.lastBidirectionalReconcileResult === "string" ? raw.lastBidirectionalReconcileResult : null,
+    marketPriceConflicts,
   };
 }
 

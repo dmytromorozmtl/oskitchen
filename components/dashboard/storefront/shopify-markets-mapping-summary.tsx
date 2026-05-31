@@ -24,6 +24,10 @@ export function ShopifyMarketsMappingSummary({
   const linked = osMarkets.filter((m) => m.shopifyMarketId).length;
   const importMode = osMarkets.filter((m) => m.syncMode === "import").length;
   const pushMode = osMarkets.filter((m) => m.syncMode === "push").length;
+  const bidirectionalMode = osMarkets.filter((m) => m.syncMode === "bidirectional").length;
+  const openConflicts = syncSettings
+    ? Object.values(syncSettings.marketPriceConflicts ?? {}).filter((row) => row.status === "open").length
+    : 0;
   const priceRows = syncSettings ? Object.values(syncSettings.marketPriceImports ?? {}) : [];
   const exportRows = syncSettings ? Object.values(syncSettings.marketPriceExports ?? {}) : [];
   const mappedPrices = priceRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
@@ -34,8 +38,8 @@ export function ShopifyMarketsMappingSummary({
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 4 — link OS Kitchen markets to Shopify, set syncMode import or push, and sync mapped
-          product prices via Shopify price lists.
+          Phase 5 — link OS Kitchen markets to Shopify, set syncMode import, push, or bidirectional, and
+          reconcile mapped product prices via Shopify price lists.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -59,6 +63,12 @@ export function ShopifyMarketsMappingSummary({
               ) : null}
               {pushMode > 0 ? (
                 <Badge variant="secondary">{pushMode} push-mode</Badge>
+              ) : null}
+              {bidirectionalMode > 0 ? (
+                <Badge variant="secondary">{bidirectionalMode} bidirectional</Badge>
+              ) : null}
+              {openConflicts > 0 ? (
+                <Badge variant="destructive">{openConflicts} open conflict(s)</Badge>
               ) : null}
               {mappedPrices > 0 ? (
                 <Badge variant="outline">{mappedPrices} Shopify price override(s)</Badge>

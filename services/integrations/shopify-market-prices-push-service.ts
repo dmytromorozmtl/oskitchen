@@ -64,10 +64,22 @@ function adminEndpoint(shopDomain: string, apiVersion: string): string {
 }
 
 export function listPushableStorefrontMarkets(settingsCenterJson: unknown): StorefrontMarket[] {
+  return parseStorefrontMarketsFromSettingsCenter(settingsCenterJson).filter((market) => {
+    if (market.enabled === false || !market.shopifyMarketId?.trim()) return false;
+    if (market.syncMode === "push") return true;
+    if (market.syncMode === "bidirectional") {
+      const authority = market.priceAuthority ?? "kitchenos";
+      return authority === "kitchenos";
+    }
+    return false;
+  });
+}
+
+export function listBidirectionalStorefrontMarkets(settingsCenterJson: unknown): StorefrontMarket[] {
   return parseStorefrontMarketsFromSettingsCenter(settingsCenterJson).filter(
     (market) =>
       market.enabled !== false &&
-      market.syncMode === "push" &&
+      market.syncMode === "bidirectional" &&
       Boolean(market.shopifyMarketId?.trim()),
   );
 }

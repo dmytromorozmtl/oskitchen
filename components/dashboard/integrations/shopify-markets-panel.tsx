@@ -2,12 +2,14 @@
 
 import { useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, DollarSign, Globe2, Loader2, RefreshCw } from "lucide-react";
+import { ArrowUpRight, DollarSign, Globe2, Loader2, RefreshCw, Scale } from "lucide-react";
 
 import {
   discoverShopifyMarketsAction,
   importShopifyMarketPricesAction,
   pushShopifyMarketPricesAction,
+  reconcileBidirectionalShopifyMarketsAction,
+  resolveShopifyMarketPriceConflictAction,
 } from "@/actions/shopify-markets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,10 +58,15 @@ export function ShopifyMarketsPanel({
   const [discoverPending, startDiscover] = useTransition();
   const [importPending, startImport] = useTransition();
   const [pushPending, startPush] = useTransition();
-  const pending = discoverPending || importPending || pushPending;
+  const [reconcilePending, startReconcile] = useTransition();
+  const [resolvePending, startResolve] = useTransition();
+  const pending = discoverPending || importPending || pushPending || reconcilePending || resolvePending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
   const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
+  const openConflicts = Object.values(syncSettings.marketPriceConflicts ?? {}).filter(
+    (row) => row.status === "open",
+  );
   const totalMappedPrices = importedMarkets.reduce(
     (sum, row) => sum + row.mappedProductCount,
     0,
@@ -76,12 +83,12 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 4 BETA
+              Shopify Markets — Phase 5 BETA
             </CardTitle>
             <CardDescription>
-              Discover Shopify markets, link them on Storefront → Markets, then import or push prices for
-              mapped external products. Webhooks keep import-mode markets fresh; push-mode sends KitchenOS
-              prices to Shopify price lists.
+              Discover Shopify markets, link them on Storefront → Markets, then import, push, or run
+              bidirectional reconcile for mapped external products. Webhooks keep import/bidirectional markets
+              fresh; push-mode sends KitchenOS prices to Shopify price lists.
             </CardDescription>
           </div>
           <Badge variant="outline">markets_sync BETA</Badge>
@@ -92,8 +99,8 @@ export function ShopifyMarketsPanel({
           Scopes: <code className="rounded bg-muted px-1">read_markets</code>,{" "}
           <code className="rounded bg-muted px-1">read_products</code>
           {", "}
-          <code className="rounded bg-muted px-1">write_products</code> (push). Import = Shopify wins;
-          push = KitchenOS wins on mapped variants.
+          <code className="rounded bg-muted px-1">write_products</code> (push/bidirectional). Import =
+          Shopify wins; push = KitchenOS wins; bidirectional = reconcile with priceAuthority per market.
         </p>
 
         {!connectionId || !hasCredentials ? (
@@ -180,6 +187,100 @@ export function ShopifyMarketsPanel({
               )}
               <span className="ml-2">Push market prices</span>
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startReconcile(async () => {
+                  await reconcileBidirectionalShopifyMarketsAction(connectionId);
+                })
+              }
+            >
+              {reconcilePending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Scale className="h-4 w-4" />
+              )}
+              <span className="ml-2">Reconcile bidirectional</span>
+            </Button>
+          </div>
+        ) : null}
+
+        {syncSettings.lastBidirectionalReconcileAt ? (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              Last bidirectional reconcile{" "}
+              {formatDistanceToNow(new Date(syncSettings.lastBidirectionalReconcileAt), {
+                addSuffix: true,
+              })}
+              {syncSettings.lastBidirectionalReconcileResult ? (
+                <> · {syncSettings.lastBidirectionalReconcileResult}</>
+              ) : null}
+            </p>
+            {syncSettings.lastBidirectionalReconcileError ? (
+              <p className="mt-1 text-destructive">{syncSettings.lastBidirectionalReconcileError}</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {openConflicts.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+            <p className="font-medium text-foreground">Open price conflicts ({openConflicts.length})</p>
+            {openConflicts.map((conflict) => (
+              <div
+                key={conflict.conflictKey}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-muted-foreground"
+              >
+                <span>
+                  Market <span className="font-mono">{conflict.osMarketId}</span> · product{" "}
+                  <span className="font-mono">{conflict.productId.slice(0, 8)}…</span> · Shopify{" "}
+                  {conflict.shopifyAmount} vs KitchenOS {conflict.kitchenosAmount}
+                </span>
+                {canManage ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={resolvePending}
+                      onClick={() =>
+                        startResolve(async () => {
+                          await resolveShopifyMarketPriceConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "shopify",
+                          });
+                        })
+                      }
+                    >
+                      Use Shopify
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={resolvePending}
+                      onClick={() =>
+                        startResolve(async () => {
+                          await resolveShopifyMarketPriceConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "kitchenos",
+                          });
+                        })
+                      }
+                    >
+                      Use KitchenOS
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            ))}
           </div>
         ) : null}
 
@@ -326,8 +427,9 @@ export function ShopifyMarketsPanel({
         ) : null}
 
         <p className="text-xs text-muted-foreground">
-          Product sync imports for import-mode markets; product price saves auto-push for push-mode markets
-          (30s debounce). Map external products first. Tax/duty settings are never overwritten.
+          Product sync imports for import/bidirectional markets; product price saves auto-reconcile
+          bidirectional or push (30s debounce). Map external products first. Tax/duty settings are never
+          overwritten.
         </p>
       </CardContent>
     </Card>

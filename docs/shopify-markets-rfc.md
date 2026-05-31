@@ -1,6 +1,6 @@
 # Shopify Markets RFC — Multi-Region Commerce Integration
 
-**Status:** Phase 1–4 shipped (discovery + mapping + import + webhooks + push BETA) — bidirectional optional  
+**Status:** Phase 1–5 shipped (discovery + mapping + import + webhooks + push + bidirectional BETA)  
 **Audience:** Integrations, Storefront, Product, Commercial  
 **Tracker:** `shopify-markets-rfc` (competitor parity cycle 16)  
 **Related:** [`roadmap/STOREFRONT_SHOPIFY_PARITY.md`](./roadmap/STOREFRONT_SHOPIFY_PARITY.md) · [`storefront-audit-21may.md`](./storefront-audit-21may.md) · [`services/integrations/shopify.ts`](../services/integrations/shopify.ts) · [`lib/storefront/markets.ts`](../lib/storefront/markets.ts)
@@ -164,8 +164,29 @@ Push OS Kitchen market price/menu changes to Shopify price lists and publication
 | **2** | Import price lists on product sync | Mapped variants show market price on storefront |
 | **3** | Webhooks for market/price changes | <15 min staleness SLA (best effort) |
 | **4** | Optional push (KitchenOS → Shopify) | Feature flag; explicit merchant opt-in |
+| **5** | Bidirectional reconcile (pilot BETA) | `syncMode=bidirectional`, conflict queue, `priceAuthority` per market |
 
----
+### Phase 5 — Bidirectional reconcile (shipped BETA)
+
+Pilot slice of Option D — **price-only**, not full catalog publication bi-sync.
+
+| Field | Values | Behavior |
+|-------|--------|----------|
+| `syncMode` | `bidirectional` | Enables reconcile engine on webhooks + product price updates |
+| `priceAuthority` | `shopify` \| `kitchenos` \| `manual` | Auto-resolve conflicts: accept import, push to Shopify, or queue for operator |
+
+**Flow:**
+
+1. Webhook or product-update trigger runs `reconcileBidirectionalShopifyMarketsForConnection`.
+2. Import Shopify price list (skip unchanged hash — same as Phase 3).
+3. Compare imported amounts vs KitchenOS product prices per mapped variant.
+4. Auto-resolve per `priceAuthority`; `manual` conflicts persist in `settingsJson.marketsSync.marketPriceConflicts`.
+5. Operator resolves via Shopify integration panel: **Use Shopify** or **Use KitchenOS**.
+
+**Services:** `shopify-markets-bidirectional-service.ts` · **UI:** `shopify-markets-panel.tsx`, `storefront-markets-editor.tsx`
+
+**Conscious limits:** No tax/duty sync, no catalog publication push, no subscription-box market rules. Revisit catalog publication in `shopify-markets-catalog-publication` slice.
+
 
 ## Proposed data model (Phase 1+)
 
@@ -263,3 +284,4 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 2 shipped:** `shopify-market-prices-service`, price list import, storefront catalog overrides for syncMode=import |
 | 2026-05-31 | **Phase 3 shipped:** webhook-driven price re-import (`products/update`, `markets/*`), 60s debounce, SHA price-hash skip, catalog cache revalidation |
 | 2026-05-31 | **Phase 4 shipped:** KitchenOS → Shopify price list push (`syncMode=push`), manual + product-update trigger, 30s debounce, write_products scope |
+| 2026-05-31 | **Phase 5 (bidirectional) shipped:** `syncMode=bidirectional` with `priceAuthority`, conflict queue, reconcile engine, webhook + product-update auto-reconcile |

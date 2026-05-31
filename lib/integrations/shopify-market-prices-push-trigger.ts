@@ -4,9 +4,11 @@ import { getShopifyCredentials } from "@/lib/integrations/decrypt-connection";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import {
+  listBidirectionalStorefrontMarkets,
   listPushableStorefrontMarkets,
   pushShopifyMarketPricesForConnection,
 } from "@/services/integrations/shopify-market-prices-push-service";
+import { reconcileBidirectionalShopifyMarketsForConnection } from "@/services/integrations/shopify-markets-bidirectional-service";
 
 /**
  * Best-effort push after KitchenOS product price changes.
@@ -25,7 +27,10 @@ export async function triggerShopifyMarketPricePushAfterProductUpdate(input: {
       where: { userId: input.userId },
       select: { settingsCenterJson: true },
     });
-    if (listPushableStorefrontMarkets(kitchen?.settingsCenterJson).length === 0) return;
+    const hasPush = listPushableStorefrontMarkets(kitchen?.settingsCenterJson).length > 0;
+    const hasBidirectional =
+      listBidirectionalStorefrontMarkets(kitchen?.settingsCenterJson).length > 0;
+    if (!hasPush && !hasBidirectional) return;
 
     const conn = await prisma.integrationConnection.findFirst({
       where: await integrationConnectionByProviderWhereForOwner(
@@ -46,6 +51,17 @@ export async function triggerShopifyMarketPricePushAfterProductUpdate(input: {
 
     const creds = getShopifyCredentials(conn);
     if (!creds) return;
+
+    if (hasBidirectional) {
+      await reconcileBidirectionalShopifyMarketsForConnection({
+        userId: input.userId,
+        connection: conn,
+        creds,
+        origin: "product_update",
+        skipUnchanged: true,
+      });
+      return;
+    }
 
     await pushShopifyMarketPricesForConnection({
       userId: input.userId,

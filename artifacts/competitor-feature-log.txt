@@ -409,3 +409,15 @@ Result: PASS
 Summary: PartnerBillingAccount + meter events + statements, install/revoke billing hooks on OAuth flow, platform partner billing dashboard, config rate cards, statement finalize/paid workflow with audit logs
 Tests: tests/unit/partner-billing-config.test.ts
 Next: shopify-markets-bidirectional OR restaurant-capital-phase5-live-lenders OR app-marketplace-phase6-stripe-connect
+
+---
+Post-parity cycle: 14
+Timestamp: 2026-05-31T18:00:00.000Z
+Feature: shopify-markets-bidirectional
+Source: docs/shopify-markets-rfc.md Option D (pilot slice)
+Priority: POST-PARITY
+Files: 14
+Result: PASS
+Summary: syncMode=bidirectional with priceAuthority, conflict detection queue, reconcile engine wired to webhooks and product updates, storefront markets editor enabled, dashboard conflict resolution UI
+Tests: tests/unit/shopify-markets-bidirectional-service.test.ts
+Next: restaurant-capital-phase5-live-lenders OR app-marketplace-phase6-stripe-connect OR shopify-markets-catalog-publication

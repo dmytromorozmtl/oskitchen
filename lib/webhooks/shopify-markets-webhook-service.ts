@@ -12,6 +12,10 @@ import {
   revalidateStorefrontCatalogForOwner,
 } from "@/lib/storefront/revalidate-shopify-market-catalog";
 import {
+  hasBidirectionalShopifyMarkets,
+  reconcileBidirectionalShopifyMarketsForConnection,
+} from "@/services/integrations/shopify-markets-bidirectional-service";
+import {
   importShopifyMarketPricesForConnection,
   listImportableStorefrontMarkets,
 } from "@/services/integrations/shopify-market-prices-service";
@@ -54,7 +58,8 @@ export async function handleShopifyMarketsWebhookEvent(input: {
     select: { settingsCenterJson: true },
   });
   const importable = listImportableStorefrontMarkets(kitchen?.settingsCenterJson);
-  if (importable.length === 0) {
+  const bidirectional = hasBidirectionalShopifyMarkets(kitchen?.settingsCenterJson);
+  if (importable.length === 0 && !bidirectional) {
     return { status: "no_import_markets" };
   }
 
@@ -108,6 +113,62 @@ export async function handleShopifyMarketsWebhookEvent(input: {
   });
   if (!refreshedConn) {
     return { status: "failed", error: "Connection not found after refresh." };
+  }
+
+  if (bidirectional) {
+    const reconcileResult = await reconcileBidirectionalShopifyMarketsForConnection({
+      userId: input.userId,
+      connection: refreshedConn,
+      creds,
+      origin: "webhook",
+      skipUnchanged: true,
+    });
+
+    if (!reconcileResult.ok) {
+      await prisma.integrationConnection.update({
+        where: { id: input.connection.id },
+        data: {
+          settingsJson: toInputJsonValue(
+            mergeShopifyMarketsSyncSettings(refreshedConn.settingsJson, {
+              lastWebhookPriceImportAt: now,
+              lastBidirectionalReconcileError: reconcileResult.error,
+            }),
+          ),
+        },
+      });
+      return { status: "failed", error: reconcileResult.error };
+    }
+
+    await prisma.integrationConnection.update({
+      where: { id: input.connection.id },
+      data: {
+        settingsJson: toInputJsonValue(
+          mergeShopifyMarketsSyncSettings(refreshedConn.settingsJson, {
+            lastWebhookPriceImportAt: now,
+            lastWebhookPriceImportTopic: input.topic,
+            lastBidirectionalReconcileAt: now,
+            lastBidirectionalReconcileError: null,
+            lastBidirectionalReconcileResult: reconcileResult.conflictsOpen
+              ? `open_conflicts=${reconcileResult.conflictsOpen}`
+              : "synced",
+          }),
+        ),
+      },
+    });
+
+    if (reconcileResult.importedMarkets === 0 && reconcileResult.pushedProducts === 0) {
+      return {
+        status: "unchanged",
+        marketsUnchanged: reconcileResult.marketsReconciled,
+      };
+    }
+
+    return {
+      status: "imported",
+      marketsImported: reconcileResult.importedMarkets,
+      marketsUnchanged: 0,
+      totalProductPrices: reconcileResult.conflictsDetected,
+    };
   }
 
   const importResult = await importShopifyMarketPricesForConnection({
