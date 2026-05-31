@@ -489,6 +489,24 @@
   }
 }
 
+@keyframes kds-ticket-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
 /* Kitchen screen mode */
 .kitchen-screen {
   font-size: 1.125rem;

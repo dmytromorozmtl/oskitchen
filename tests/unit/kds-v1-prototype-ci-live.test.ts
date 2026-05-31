@@ -60,7 +60,7 @@ describe("KDS v1 prototype CI certification (live repo)", () => {
     const page = readFileSync(KITCHEN_PAGE, "utf8");
     expect(page).toContain("isKdsV1CertifiedRolloutEnabled");
     expect(page).toContain("ENABLE_KDS_V1_CERTIFIED");
-    expect(page).toContain("KdsDailyService");
+    expect(page).toContain("KdsKitchenDailyClient");
     expect(page).toContain("kitchen.bump");
     expect(page).toContain("kitchen.recall");
   });

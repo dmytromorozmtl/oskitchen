@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 
+import { KdsKitchenDailyClient } from "@/app/dashboard/kitchen/kds-kitchen-daily-client";
 import { KbHelpButton } from "@/components/dashboard/kb-help-button";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PosAccessCard } from "@/components/dashboard/pos-access-card";
 import { KitchenScreenClient } from "@/components/dashboard/kitchen-screen-client";
-import { KdsDailyService } from "@/components/kitchen/kds-daily-service";
 import { isKdsV1CertifiedRolloutEnabled } from "@/lib/kitchen/kds-v1-gate";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
@@ -58,7 +58,7 @@ export default async function KitchenScreenPage({
         <div className="mb-2 flex justify-end">
           <KbHelpButton articleSlug="kds" title="KDS Basics" description="Kitchen display setup and bump workflow." />
         </div>
-        <KdsDailyService
+        <KdsKitchenDailyClient
           initialOrders={orders}
           userId={dataUserId}
           canBump={hasPermission(actor.granted, "kitchen.bump")}

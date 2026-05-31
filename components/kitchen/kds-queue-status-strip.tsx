@@ -1,21 +1,27 @@
 "use client";
 
+import { KdsRealtimeStatusBadge } from "@/components/kitchen/kds-realtime-status-badge";
 import { cn } from "@/lib/utils";
 import {
   formatKdsElapsedClock,
   type KdsQueueSummary,
 } from "@/lib/kitchen/kds-queue-clarity-era18";
+import type { KdsRealtimeTransport } from "@/services/kds-websocket";
 
 type KdsQueueStatusStripProps = {
   summary: KdsQueueSummary;
   realtimeConnected: boolean;
   connectionLabel: string;
+  transport?: KdsRealtimeTransport;
+  reconnectAttempt?: number;
 };
 
 export function KdsQueueStatusStrip({
   summary,
   realtimeConnected,
   connectionLabel,
+  transport = "polling",
+  reconnectAttempt = 0,
 }: KdsQueueStatusStripProps) {
   return (
     <div
@@ -25,6 +31,12 @@ export function KdsQueueStatusStrip({
       aria-live="polite"
     >
       <div className="flex flex-wrap items-center gap-2 text-sm">
+        <KdsRealtimeStatusBadge
+          isLive={realtimeConnected}
+          transport={transport}
+          reconnectAttempt={reconnectAttempt}
+          size="sm"
+        />
         <StatPill label="Active" value={summary.total} tone="neutral" />
         <StatPill label="Prep" value={summary.preparing} tone="prep" />
         <StatPill label="Ready" value={summary.ready} tone="ready" />

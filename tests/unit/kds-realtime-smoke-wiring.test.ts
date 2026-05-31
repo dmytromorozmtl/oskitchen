@@ -16,7 +16,7 @@ describe("kds realtime smoke wiring", () => {
     const source = readFileSync(join(ROOT, KDS_REALTIME_COMPONENT), "utf8");
     expect(source).toContain("useKdsRealtime");
     expect(source).toContain("use-kds-realtime");
-    expect(source).toContain("connectionLabel");
+    expect(source).toContain("KDS_NEW_TICKET_ANIMATION_CLASS");
   });
 
   it("matches documented poll intervals in status copy", () => {

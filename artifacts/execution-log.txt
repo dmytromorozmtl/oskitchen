@@ -1473,3 +1473,9 @@ Action: feat: KDS WebSocket via Supabase Realtime (Critical Features Cycle 4)
 Files: hooks/use-kds-realtime.ts, services/kds-websocket.ts (auto-reconnect + polling fallback), components/kitchen/kds-daily-service.tsx, tests/unit/use-kds-realtime.test.ts, tests/unit/kds-websocket.test.ts, tests/unit/kds-realtime-smoke-wiring.test.ts
 Tracker: websocket-kds-infra=done (4/13)
 Next: Cycle 5 KDS real-time UI (live indicator, animations, sound, LIVE/POLLING badge)
+---
+Cycle: 20260531-163200
+Action: feat: KDS real-time UI (Critical Features Cycle 5)
+Files: app/dashboard/kitchen/kds-kitchen-daily-client.tsx, kds-kitchen-realtime-bar.tsx, components/kitchen/kds-realtime-status-badge.tsx, lib/kitchen/kds-realtime-ui.ts, lib/kitchen/kds-realtime-sounds.ts, kds-queue-status-strip.tsx, kds-daily-service.tsx, app/globals.css (ticket enter animation)
+Tracker: websocket-kds-ui=done (5/13)
+Next: Cycle 6 KDS SLO proof + sales one-pager

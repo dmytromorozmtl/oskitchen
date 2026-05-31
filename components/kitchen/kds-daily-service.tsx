@@ -35,71 +35,50 @@ import {
   summarizeKdsQueue,
 } from "@/lib/kitchen/kds-queue-clarity-era18";
 import { useKdsRealtime } from "@/hooks/use-kds-realtime";
+import { KDS_NEW_TICKET_ANIMATION_CLASS } from "@/lib/kitchen/kds-realtime-ui";
+import {
+  playKdsNewOrderChime,
+  playKdsOverdueAlert,
+} from "@/lib/kitchen/kds-realtime-sounds";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
+import type { KdsRealtimeTransport } from "@/services/kds-websocket";
 import { cn } from "@/lib/utils";
 
-function playNewOrderChime() {
-  try {
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = 880;
-    gain.gain.value = 0.08;
-    osc.start();
-    osc.stop(ctx.currentTime + 0.15);
-    void ctx.close();
-  } catch {
-    /* ignore — autoplay may be blocked */
-  }
-}
-
-function playOverdueAlert() {
-  try {
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = 440;
-    gain.gain.value = 0.12;
-    osc.start();
-    osc.stop(ctx.currentTime + 0.35);
-    setTimeout(() => {
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.frequency.value = 330;
-      gain2.gain.value = 0.12;
-      osc2.start();
-      osc2.stop(ctx.currentTime + 0.35);
-      void ctx.close();
-    }, 400);
-  } catch {
-    /* ignore */
-  }
-}
+export type KdsDailyServiceRealtimeProps = {
+  isLive: boolean;
+  transport: KdsRealtimeTransport;
+  connectionLabel: string;
+  reconnectAttempt: number;
+};
 
 export function KdsDailyService({
   initialOrders,
   userId,
   canBump = true,
   canRecall = false,
+  soundEnabled: soundEnabledProp,
+  refreshSignal = 0,
+  realtime: realtimeProp,
+  hideSoundToggle = false,
 }: {
   initialOrders: KdsDailyOrder[];
   userId: string;
   canBump?: boolean;
   canRecall?: boolean;
+  soundEnabled?: boolean;
+  refreshSignal?: number;
+  realtime?: KdsDailyServiceRealtimeProps;
+  hideSoundToggle?: boolean;
 }) {
   const [orders, setOrders] = useState(initialOrders);
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [internalSoundEnabled, setInternalSoundEnabled] = useState(true);
+  const soundEnabled = soundEnabledProp ?? internalSoundEnabled;
   const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [, startBump] = useTransition();
   const [, startRefresh] = useTransition();
   const overdueAlertedRef = useRef<Set<string>>(new Set());
+  const [recentArrivals, setRecentArrivals] = useState<Set<string>>(() => new Set());
 
   const queueSummary = useMemo(() => summarizeKdsQueue(orders), [orders]);
   const { preparing, ready } = useMemo(() => partitionKdsQueueByPriority(orders), [orders]);
@@ -125,16 +104,45 @@ export function KdsDailyService({
       const res = await fetchDailyKdsOrdersAction();
       if (!res.ok) return;
       setOrders((prev) => {
-        if (soundEnabled && res.orders.length > prev.length) playNewOrderChime();
+        const prevIds = new Set(prev.map((o) => o.id));
+        const arrivals = res.orders.filter((o) => !prevIds.has(o.id)).map((o) => o.id);
+        if (arrivals.length > 0) {
+          setRecentArrivals((current) => {
+            const next = new Set(current);
+            for (const id of arrivals) next.add(id);
+            return next;
+          });
+          window.setTimeout(() => {
+            setRecentArrivals((current) => {
+              const next = new Set(current);
+              for (const id of arrivals) next.delete(id);
+              return next;
+            });
+          }, 700);
+        }
+        if (soundEnabled && res.orders.length > prev.length) playKdsNewOrderChime();
         return res.orders;
       });
     });
   }, [soundEnabled]);
 
-  const { isLive: realtimeConnected, connectionLabel } = useKdsRealtime({
+  const internalRealtime = useKdsRealtime({
     userId,
     onRefresh: refresh,
+    enabled: !realtimeProp,
   });
+
+  const realtime: KdsDailyServiceRealtimeProps = realtimeProp ?? {
+    isLive: internalRealtime.isLive,
+    transport: internalRealtime.transport,
+    connectionLabel: internalRealtime.connectionLabel,
+    reconnectAttempt: internalRealtime.reconnectAttempt,
+  };
+
+  useEffect(() => {
+    if (refreshSignal === 0) return;
+    refresh();
+  }, [refresh, refreshSignal]);
 
   useEffect(() => {
     const tick = setInterval(() => {
@@ -146,7 +154,7 @@ export function KdsDailyService({
         if (soundEnabled) {
           for (const order of next) {
             if (isKdsTicketOverdue(order.elapsedSeconds) && !overdueAlertedRef.current.has(order.id)) {
-              playOverdueAlert();
+              playKdsOverdueAlert();
               overdueAlertedRef.current.add(order.id);
             }
           }
@@ -200,7 +208,7 @@ export function KdsDailyService({
         </div>
         <button
           type="button"
-          onClick={() => setSoundEnabled((value) => !value)}
+          onClick={() => setInternalSoundEnabled((value) => !value)}
           aria-pressed={soundEnabled}
           aria-label={soundEnabled ? "Disable kitchen sound alerts" : "Enable kitchen sound alerts"}
           className={cn(
@@ -208,6 +216,7 @@ export function KdsDailyService({
             soundEnabled
               ? "border-emerald-300 bg-emerald-100 text-emerald-700"
               : "bg-muted text-muted-foreground",
+            hideSoundToggle && "hidden",
           )}
         >
           {soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"}
@@ -216,8 +225,10 @@ export function KdsDailyService({
 
       <KdsQueueStatusStrip
         summary={queueSummary}
-        realtimeConnected={realtimeConnected}
-        connectionLabel={connectionLabel}
+        realtimeConnected={realtime.isLive}
+        connectionLabel={realtime.connectionLabel}
+        transport={realtime.transport}
+        reconnectAttempt={realtime.reconnectAttempt}
       />
 
       {actionError ? (
@@ -270,6 +281,7 @@ export function KdsDailyService({
                 <KdsTicketCard
                   key={order.id}
                   order={order}
+                  isNew={recentArrivals.has(order.id)}
                   canBump={canBump}
                   canRecall={false}
                   pending={pendingOrderId !== null}
@@ -287,6 +299,7 @@ export function KdsDailyService({
                 <KdsTicketCard
                   key={order.id}
                   order={order}
+                  isNew={recentArrivals.has(order.id)}
                   canBump={false}
                   canRecall={canRecall}
                   pending={pendingOrderId !== null}
@@ -329,6 +342,7 @@ function KdsTicketSection({
 
 function KdsTicketCard({
   order,
+  isNew = false,
   canBump,
   canRecall,
   pending,
@@ -337,6 +351,7 @@ function KdsTicketCard({
   onRecall,
 }: {
   order: KdsDailyOrder;
+  isNew?: boolean;
   canBump: boolean;
   canRecall: boolean;
   pending: boolean;
@@ -359,6 +374,7 @@ function KdsTicketCard({
       className={cn(
         "rounded-xl border-l-4 bg-card p-4 shadow-sm transition-all",
         kdsTicketAgeClassName(order.elapsedSeconds),
+        isNew && KDS_NEW_TICKET_ANIMATION_CLASS,
         allergenConflict && "ring-2 ring-violet-600 dark:ring-violet-400",
         overdue && "animate-pulse ring-2 ring-rose-500 motion-reduce:animate-none",
       )}

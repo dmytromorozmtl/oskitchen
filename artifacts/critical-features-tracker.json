@@ -3,7 +3,7 @@
   "hardware-terminal-ui": "done",
   "hardware-terminal-e2e": "done",
   "websocket-kds-infra": "done",
-  "websocket-kds-ui": "todo",
+  "websocket-kds-ui": "done",
   "websocket-kds-slo": "todo",
   "cross-channel-inventory-engine": "todo",
   "cross-channel-inventory-ui": "todo",
