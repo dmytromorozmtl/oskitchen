@@ -15,6 +15,8 @@ export type B2bInvoiceDraftLink = {
   paidAt?: string | null;
   paymentReference?: string | null;
   markedPaidById?: string | null;
+  lastReminderAt?: string | null;
+  reminderCount?: number;
   paymentTermsLabel: string | null;
   poNumber: string | null;
   companyName: string | null;

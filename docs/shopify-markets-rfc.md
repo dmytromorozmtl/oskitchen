@@ -554,17 +554,37 @@ Required Shopify scopes (verify at implementation):
 
 ---
 
-## Phase 19 — B2B AR aging & overdue reminders (planned)
+## Phase 19 — B2B AR aging & overdue reminders (shipped)
 
 **Goal:** Proactive collections — surface aging buckets for open B2B receivables and send operator-triggered reminder emails before escalation.
 
-| Component | Plan |
+| Component | Path |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_AR_AGING=1` |
-| Service | `shopify-b2b-ar-aging-service.ts` — bucket orders 0–30 / 31–60 / 61+ days past due |
-| Email | Reuse kitchen email transport — template with invoice #, PO, company, amount due |
-| UI | Order Hub “AR aging” strip + company customer profile overdue summary |
-| Health | Critical when 61+ bucket non-zero |
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_AGING=1` (default on in non-production) |
+| Service | `shopify-b2b-ar-aging-service.ts` — snapshot, refresh stats, send reminder |
+| Buckets | `current`, `0–30`, `31–60`, `61+` days past due |
+| Email | `b2b-invoice-overdue-reminder.ts` via Resend |
+| Order metadata | `invoiceDraft.lastReminderAt`, `.reminderCount` |
+| Audit | `BillingEvent` `B2B_INVOICE_REMINDER_SENT`, CRM `CONTACTED` timeline |
 | Settings | `b2bArReminderEnabled`, `b2bArAgingStats`, `lastB2bArReminderAt` |
+| UI | Order Hub AR aging strip + customer profile overdue summary + send reminder button |
+| Health | B2B domain critical when `bucket61Plus > 0`; stats refresh on full reconcile |
 
 **Conscious limits:** No automated dunning schedule (Phase 20); no buyer self-serve pay link.
+
+---
+
+## Phase 20 — B2B automated dunning & operator digest (planned)
+
+**Goal:** Scheduled collections workflow — weekly operator AR digest and optional auto-reminder cadence for 31+ day buckets.
+
+| Component | Plan |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_DUNNING=1` |
+| Cron | Weekly digest to kitchen owner + optional day-35/day-65 auto-reminders |
+| Service | `shopify-b2b-dunning-service.ts` — cadence rules, digest builder |
+| Settings | `b2bDunningCadenceDays`, `b2bDunningStats`, `lastB2bDunningRunAt` |
+| UI | Markets panel cadence toggles + digest preview |
+| Health | Attention when auto-reminders skipped (email off) |
+
+**Conscious limits:** No legal collections escalation; no buyer portal payment link (Phase 21).

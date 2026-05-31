@@ -10,6 +10,7 @@ import {
   preorderReminderTemplate,
 } from "@/lib/email/templates";
 import { storefrontTeamInviteTemplate } from "@/lib/email/templates/storefront-team-invite";
+import { b2bInvoiceOverdueReminderTemplate } from "@/lib/email/templates/b2b-invoice-overdue-reminder";
 import { logger } from "@/lib/logger";
 
 const from =
@@ -196,6 +197,42 @@ export async function sendStorefrontTeamInviteEmail(params: {
     subject: params.isReminder
       ? `Reminder: storefront team invitation on ${APP_NAME}`
       : `You're invited to manage a storefront on ${APP_NAME}`,
+    html,
+  });
+  return { sent: true as const };
+}
+
+export async function sendB2bInvoiceOverdueReminder(params: {
+  to: string;
+  customerName: string;
+  invoiceNumber: string;
+  amountDue: string;
+  dueDate: string;
+  daysPastDue: number;
+  poNumber?: string | null;
+  companyName?: string | null;
+  paymentTermsLabel?: string | null;
+  businessName?: string | null;
+}) {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
+  const html = b2bInvoiceOverdueReminderTemplate({
+    businessName: params.businessName,
+    customerName: params.customerName,
+    invoiceNumber: params.invoiceNumber,
+    amountDue: params.amountDue,
+    dueDate: params.dueDate,
+    daysPastDue: params.daysPastDue,
+    poNumber: params.poNumber,
+    companyName: params.companyName,
+    paymentTermsLabel: params.paymentTermsLabel,
+  });
+
+  await resend.emails.send({
+    from,
+    to: params.to,
+    subject: `Invoice reminder — ${params.invoiceNumber}`,
     html,
   });
   return { sent: true as const };

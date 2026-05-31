@@ -1044,6 +1044,24 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bArAgingStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B AR aging: {syncSettings.b2bArAgingStats.lastSnapshotOpen} open · 0–30d{" "}
+              {syncSettings.b2bArAgingStats.bucket0_30} · 31–60d {syncSettings.b2bArAgingStats.bucket31_60} · 61+d{" "}
+              {syncSettings.b2bArAgingStats.bucket61Plus}
+              {!syncSettings.b2bArReminderEnabled ? " · reminders off" : ""}
+              {syncSettings.b2bArAgingStats.remindersSent > 0 ? (
+                <> · {syncSettings.b2bArAgingStats.remindersSent} reminder(s) sent</>
+              ) : null}
+              {syncSettings.lastB2bArReminderAt ? (
+                <>
+                  {" "}
+                  · last reminder{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bArReminderAt), { addSuffix: true })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

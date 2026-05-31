@@ -23,6 +23,8 @@ import { readKitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitc
 import { OrderB2bCommercialTermsBadges } from "@/components/orders/order-b2b-commercial-terms";
 import { OrderB2bInvoiceDraftBadges } from "@/components/orders/order-b2b-invoice-draft-banner";
 import { OrderB2bInvoiceMarkPaidButton } from "@/components/orders/order-b2b-invoice-mark-paid-button";
+import { OrderB2bInvoiceSendReminderButton } from "@/components/orders/order-b2b-invoice-send-reminder-button";
+import { isShopifyMarketsB2bArAgingEnabled } from "@/lib/commercial/shopify-market-b2b-ar-aging";
 import { formatCustomerPrimaryLabel } from "@/lib/customers/customer-display";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import {
@@ -32,6 +34,7 @@ import {
 import { IntegrationProvider } from "@prisma/client";
 import { OrderHubExportButton } from "@/components/dashboard/order-hub-export-button";
 import { OrderHubFulfillmentFlowProofPanel } from "@/components/dashboard/order-hub/order-hub-fulfillment-flow-proof-panel";
+import { OrderHubB2bArAgingStrip } from "@/components/dashboard/order-hub/order-hub-b2b-ar-aging-strip";
 import { OrderHubCommercialOpsStrip } from "@/components/dashboard/order-hub/order-hub-commercial-ops-strip";
 import { OrderHubAttentionStrip } from "@/components/dashboard/order-hub-attention-strip";
 import {
@@ -45,6 +48,7 @@ import {
   resolveExternalOrderHubRowNextAction,
   resolveInternalOrderHubRowNextAction,
 } from "@/lib/order-hub/order-hub-stuck-state-era18";
+import { buildB2bArAgingSnapshotForOwner } from "@/services/integrations/shopify-b2b-ar-aging-service";
 import { loadOrderHubExactTabCounts } from "@/services/order-hub/order-hub-exact-counts-service";
 import { loadOrderHubPageData } from "@/services/order-hub/order-hub-service";
 import {
@@ -108,6 +112,16 @@ export default async function OrderHubPage({
   const tabCounts = computeOrderHubTabCounts({ internalOrders, externalOrders, mappingBlockedCount });
 
   const hubEmpty = internalOrders.length === 0 && externalOrders.length === 0;
+
+  const b2bArAgingSnapshot = isShopifyMarketsB2bArAgingEnabled()
+    ? await buildB2bArAgingSnapshotForOwner({ userId: dataUserId })
+    : null;
+  const b2bOrdersById = new Map(
+    internalOrders.map((o) => [
+      o.id,
+      { sourceMetadataJson: o.sourceMetadataJson, paymentStatus: o.paymentStatus },
+    ]),
+  );
 
   return (
     <div className="space-y-6">
@@ -209,6 +223,8 @@ export default async function OrderHubPage({
       {commercialOpsStrip ? <OrderHubCommercialOpsStrip slice={commercialOpsStrip} /> : null}
 
       <OrderHubAttentionStrip mappingBlockedCount={mappingBlockedCount} exactTabCounts={exactTabCounts} />
+
+      <OrderHubB2bArAgingStrip snapshot={b2bArAgingSnapshot} ordersById={b2bOrdersById} />
 
       {hubEmpty ? (
         <EmptyState
@@ -357,6 +373,12 @@ export default async function OrderHubPage({
                       <TableCell className="text-right font-medium">{String(o.total)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex flex-wrap items-center justify-end gap-1">
+                          <OrderB2bInvoiceSendReminderButton
+                            orderId={o.id}
+                            sourceMetadataJson={o.sourceMetadataJson}
+                            paymentStatus={o.paymentStatus}
+                            compact
+                          />
                           <OrderB2bInvoiceMarkPaidButton
                             orderId={o.id}
                             sourceMetadataJson={o.sourceMetadataJson}

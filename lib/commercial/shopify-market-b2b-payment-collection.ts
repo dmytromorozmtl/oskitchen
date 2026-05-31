@@ -1,5 +1,5 @@
 export const SHOPIFY_MARKET_B2B_PAYMENT_COLLECTION_HONESTY =
-  "Operators mark B2B net-terms invoice drafts paid in Order Hub after collecting payment outside Shopify — no Stripe charge or Shopify write-back.";
+  "Operators mark B2B net-terms invoice drafts paid in Order Hub after collecting payment outside Shopify — AR aging and manual reminders are Phase 19.";
 
 export const DEFAULT_B2B_INVOICE_OVERDUE_GRACE_DAYS = 0;
 

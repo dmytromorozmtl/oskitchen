@@ -8,6 +8,7 @@ import {
 } from "@/lib/integrations/shopify-b2b-invoice-draft-metadata";
 import { formatCurrency } from "@/lib/utils";
 import { OrderB2bInvoiceMarkPaidButton } from "@/components/orders/order-b2b-invoice-mark-paid-button";
+import { OrderB2bInvoiceSendReminderButton } from "@/components/orders/order-b2b-invoice-send-reminder-button";
 import { Badge } from "@/components/ui/badge";
 
 export function OrderB2bInvoiceDraftBanner({
@@ -112,6 +113,17 @@ export function OrderB2bInvoiceDraftBanner({
           {!paid ? (
             <p className="text-xs text-muted-foreground">
               Collect payment outside Shopify, then mark paid here to close the receivable on this order.
+              {draft.lastReminderAt ? (
+                <>
+                  {" "}
+                  Last reminder sent{" "}
+                  {new Date(draft.lastReminderAt).toLocaleDateString(undefined, {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                  {(draft.reminderCount ?? 0) > 0 ? ` (${draft.reminderCount} total)` : ""}.
+                </>
+              ) : null}
             </p>
           ) : draft.paymentReference ? (
             <p className="text-xs text-muted-foreground">
@@ -120,6 +132,11 @@ export function OrderB2bInvoiceDraftBanner({
           ) : null}
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <OrderB2bInvoiceSendReminderButton
+            orderId={orderId}
+            sourceMetadataJson={sourceMetadataJson}
+            paymentStatus={paymentStatus ?? null}
+          />
           <OrderB2bInvoiceMarkPaidButton
             orderId={orderId}
             sourceMetadataJson={sourceMetadataJson}

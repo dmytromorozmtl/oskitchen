@@ -49,6 +49,7 @@ import { countOpenShopifyB2bLocationConflicts } from "@/services/integrations/sh
 import { countWebhookRegistryDrift } from "@/services/integrations/shopify-markets-webhook-registry-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 import { refreshB2bPaymentCollectionOverdueStats } from "@/services/integrations/shopify-b2b-invoice-payment-service";
+import { refreshB2bArAgingStatsForConnection } from "@/services/integrations/shopify-b2b-ar-aging-service";
 
 function countSyncModes(markets: StorefrontMarket[]) {
   return {
@@ -229,7 +230,7 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       key: "b2b",
       label: "B2B companies",
       level: domainLevel(
-        openB2bConflicts,
+        openB2bConflicts + (sync?.b2bArAgingStats?.bucket61Plus ?? 0),
         Boolean(sync?.b2bImportError || sync?.lastB2bReconcileError),
         Boolean(sync?.b2bUnavailableReason),
       ),
@@ -248,7 +249,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
                     ? `${sync.b2bInvoiceStats.draftsCreated} B2B invoice draft(s) · ${sync.b2bInvoiceStats.skippedMissingPo} skipped (missing PO)`
                     : sync?.b2bPaymentCollectionStats?.overdueOpen
                       ? `${sync.b2bPaymentCollectionStats.overdueOpen} overdue B2B invoice(s) open`
-                      : sync?.b2bPaymentCollectionStats?.markedPaid
+                      : sync?.b2bArAgingStats?.bucket61Plus
+                        ? `${sync.b2bArAgingStats.bucket61Plus} B2B invoice(s) 61+ days past due`
+                        : sync?.b2bPaymentCollectionStats?.markedPaid
                         ? `${sync.b2bPaymentCollectionStats.markedPaid} B2B invoice(s) marked paid`
                         : sync?.b2bCateringRollupStats?.quotesCreated
                   ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
@@ -333,6 +336,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   if ((sync?.b2bPaymentCollectionStats?.overdueOpen ?? 0) > 0) {
     recommendations.push(
       `${sync?.b2bPaymentCollectionStats?.overdueOpen} B2B invoice(s) are past due — follow up with company buyers in Order Hub.`,
+    );
+  }
+  if ((sync?.b2bArAgingStats?.bucket61Plus ?? 0) > 0) {
+    recommendations.push(
+      `${sync.b2bArAgingStats?.bucket61Plus} B2B invoice(s) are 61+ days past due — escalate collections immediately.`,
     );
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {
@@ -560,6 +568,11 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
     (await prisma.integrationConnection.findUnique({ where: { id: conn.id } })) ?? conn;
 
   await refreshB2bPaymentCollectionOverdueStats({
+    userId: input.userId,
+    connectionId: conn.id,
+  }).catch(() => undefined);
+
+  await refreshB2bArAgingStatsForConnection({
     userId: input.userId,
     connectionId: conn.id,
   }).catch(() => undefined);

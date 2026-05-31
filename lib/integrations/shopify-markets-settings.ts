@@ -344,6 +344,16 @@ export type ShopifyMarketsSyncSettings = {
     skippedNoDraft: number;
     overdueOpen: number;
   } | null;
+  b2bArReminderEnabled: boolean;
+  lastB2bArReminderAt: string | null;
+  b2bArAgingStats: {
+    lastSnapshotOpen: number;
+    bucket0_30: number;
+    bucket31_60: number;
+    bucket61Plus: number;
+    remindersSent: number;
+    remindersSkipped: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -576,6 +586,21 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
   const b2bInvoiceOverdueGraceDays =
     typeof overdueGraceRaw === "number" && overdueGraceRaw >= 0 ? overdueGraceRaw : null;
 
+  const arAgingStatsRaw = raw.b2bArAgingStats;
+  const b2bArAgingStats =
+    arAgingStatsRaw && typeof arAgingStatsRaw === "object"
+      ? {
+          lastSnapshotOpen: Number((arAgingStatsRaw as Record<string, unknown>).lastSnapshotOpen) || 0,
+          bucket0_30: Number((arAgingStatsRaw as Record<string, unknown>).bucket0_30) || 0,
+          bucket31_60: Number((arAgingStatsRaw as Record<string, unknown>).bucket31_60) || 0,
+          bucket61Plus: Number((arAgingStatsRaw as Record<string, unknown>).bucket61Plus) || 0,
+          remindersSent: Number((arAgingStatsRaw as Record<string, unknown>).remindersSent) || 0,
+          remindersSkipped: Number((arAgingStatsRaw as Record<string, unknown>).remindersSkipped) || 0,
+        }
+      : null;
+
+  const b2bArReminderEnabled = raw.b2bArReminderEnabled !== false;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -718,6 +743,10 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bPaymentCollectedAt:
       typeof raw.lastB2bPaymentCollectedAt === "string" ? raw.lastB2bPaymentCollectedAt : null,
     b2bPaymentCollectionStats,
+    b2bArReminderEnabled,
+    lastB2bArReminderAt:
+      typeof raw.lastB2bArReminderAt === "string" ? raw.lastB2bArReminderAt : null,
+    b2bArAgingStats,
   };
 }
 

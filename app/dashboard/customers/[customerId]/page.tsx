@@ -9,7 +9,9 @@ import {
   updateCustomerDietaryFormAction,
   updateCustomerProfileFormAction,
 } from "@/actions/customers";
+import { CustomerB2bArOverdueSummary } from "@/components/customers/customer-b2b-ar-overdue-summary";
 import { Badge } from "@/components/ui/badge";
+import { isShopifyMarketsB2bArAgingEnabled } from "@/lib/commercial/shopify-market-b2b-ar-aging";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -40,6 +42,7 @@ import {
   getCustomerForUser,
   listOrdersForCustomer,
 } from "@/services/crm/customer-service";
+import { listB2bArAgingRowsForCustomer } from "@/services/integrations/shopify-b2b-ar-aging-service";
 import {
   CustomerConsentType,
   CustomerFollowUpType,
@@ -80,6 +83,11 @@ export default async function CustomerDetailPage({
   const favorites = parseFavoriteItems(customer.favoriteItemsJson);
   const tags = parseTags(customer.tagsJson);
 
+  const b2bArRows =
+    isShopifyMarketsB2bArAgingEnabled() && customer.type === "OFFICE_CLIENT"
+      ? await listB2bArAgingRowsForCustomer({ userId, customerEmail: customer.email })
+      : [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -103,6 +111,8 @@ export default async function CustomerDetailPage({
           ) : null}
         </div>
       </div>
+
+      <CustomerB2bArOverdueSummary rows={b2bArRows} customerType={customer.type} />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi label="Orders" value={customer.totalOrders} />
