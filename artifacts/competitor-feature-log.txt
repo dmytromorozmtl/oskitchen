@@ -99,3 +99,13 @@ Priority: P1
 Files: 7
 Result: IMPLEMENTED
 Next: tip-pooling (P1)
+
+---
+Cycle: 12
+Timestamp: 2026-05-31T02:07:00.000Z
+Feature: tip-pooling
+Competitor: Toast/Square tip pooling
+Priority: P1
+Files: 8
+Result: IMPLEMENTED
+Next: labor-cost-realtime (P1)
