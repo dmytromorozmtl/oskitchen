@@ -37,6 +37,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { APP_NAME } from "@/lib/constants";
 import type { Locale, MessageKey } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
@@ -130,14 +131,11 @@ export function DashboardShell({
   ];
 
   return (
-    <div className="flex min-h-screen bg-muted/30">
-      <aside className="relative hidden w-64 shrink-0 border-r border-border/70 bg-background/90 backdrop-blur lg:flex lg:flex-col">
+    <div className="flex min-h-screen bg-white">
+      <aside className="relative hidden w-64 shrink-0 border-r border-border/70 bg-white lg:flex lg:flex-col">
         <div className="flex h-16 items-center gap-2 border-b border-border/70 px-6">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#286ab8] to-[#1e4f8c] text-xs font-bold text-white shadow-sm">
-            K
-          </span>
+          <OSKitchenLogo href="/dashboard" size="sm" />
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold leading-none">{APP_NAME}</p>
             <p className="truncate text-xs text-muted-foreground">{brand}</p>
           </div>
         </div>
@@ -165,7 +163,7 @@ export function DashboardShell({
       </aside>
 
       <div className="flex min-h-screen flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-background/85 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-white px-4">
           <div className="flex min-w-0 items-center gap-2">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
@@ -175,7 +173,9 @@ export function DashboardShell({
               </SheetTrigger>
               <SheetContent side="left" className="flex w-[280px] flex-col gap-0 p-0">
                 <SheetHeader className="shrink-0 border-b border-border/70 px-6 py-4 text-left">
-                  <SheetTitle>{APP_NAME}</SheetTitle>
+                  <SheetTitle className="font-display">
+                    <OSKitchenLogo href={null} size="sm" />
+                  </SheetTitle>
                   <p className="text-xs text-muted-foreground">{brand}</p>
                 </SheetHeader>
                 <div className="flex-1 overflow-y-auto py-4">
@@ -271,14 +271,14 @@ export function DashboardShell({
                   <>
                     <DropdownMenuItem asChild>
                       <a
-                        href={`mailto:${supportEmail}?subject=${encodeURIComponent("KitchenOS feedback")}`}
+                        href={`mailto:${supportEmail}?subject=${encodeURIComponent("OS Kitchen feedback")}`}
                       >
                         Send feedback
                       </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <a
-                        href={`mailto:${supportEmail}?subject=${encodeURIComponent("KitchenOS bug report")}`}
+                        href={`mailto:${supportEmail}?subject=${encodeURIComponent("OS Kitchen bug report")}`}
                       >
                         Report a bug
                       </a>

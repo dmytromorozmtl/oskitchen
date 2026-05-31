@@ -1,19 +1,15 @@
 import Link from "next/link";
 
+import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { APP_NAME } from "@/lib/constants";
 import { BRAND_POSITIONING } from "@/lib/marketing/brand-copy";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/70 bg-muted/20 px-4 py-14 sm:px-6">
+    <footer className="dark-section border-t border-[var(--dark-border)] px-4 py-14 sm:px-6">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:justify-between">
         <div>
-          <div className="flex items-center gap-2 font-semibold">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-600 to-primary-800 text-xs font-bold text-white shadow-sm">
-              K
-            </span>
-            {APP_NAME}
-          </div>
+          <OSKitchenLogo href="/" variant="light" />
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             {BRAND_POSITIONING.footerBlurb}
           </p>

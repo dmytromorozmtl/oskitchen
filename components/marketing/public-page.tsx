@@ -155,7 +155,7 @@ export function IntegrationMarketingPage({ page }: { page: IntegrationPageData }
           {
             title: "Operational value",
             description:
-              "KitchenOS centralizes production, packing, labels, health checks, and fulfillment visibility after orders arrive.",
+              "OS Kitchen centralizes production, packing, labels, health checks, and fulfillment visibility after orders arrive.",
           },
           { title: "Limitations", description: page.limitations },
           {
@@ -168,8 +168,8 @@ export function IntegrationMarketingPage({ page }: { page: IntegrationPageData }
       <Faq
         items={[
           [
-            "Does KitchenOS replace my sales channel?",
-            "No. KitchenOS centralizes kitchen operations after orders arrive.",
+            "Does OS Kitchen replace my sales channel?",
+            "No. OS Kitchen centralizes kitchen operations after orders arrive.",
           ],
           [
             "Can I try this in demo mode?",

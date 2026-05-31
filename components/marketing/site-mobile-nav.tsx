@@ -12,8 +12,10 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { APP_NAME } from '@/lib/constants';
+import { OSKitchenLogo } from '@/components/ui/os-kitchen-logo';
 import {
+  SITE_AUTH_DASHBOARD,
+  SITE_AUTH_QUICK_LINKS,
   SITE_HEADER_CTAS,
   SITE_MOBILE_QUICK_LINKS,
   SITE_PRODUCT_NAV,
@@ -49,7 +51,7 @@ function MobileNavLink({
   );
 }
 
-export function SiteMobileNav() {
+export function SiteMobileNav({ isAuthenticated = false }: { isAuthenticated?: boolean }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -67,24 +69,41 @@ export function SiteMobileNav() {
         className="flex w-[min(100vw-1.5rem,22rem)] flex-col gap-0 p-0 sm:max-w-sm"
       >
         <SheetHeader className="space-y-1 border-b border-border/60 px-5 py-4 text-left">
-          <SheetTitle className="text-base font-semibold tracking-tight">{APP_NAME}</SheetTitle>
-          <p className="text-xs text-muted-foreground">POS &amp; kitchen operations</p>
+          <SheetTitle className="text-left">
+            <OSKitchenLogo href={null} size="sm" />
+          </SheetTitle>
+          <p className="text-xs text-muted-foreground">The restaurant operating system</p>
         </SheetHeader>
 
         <nav className="flex flex-1 flex-col overflow-y-auto px-4 py-4" aria-label="Mobile">
-          <div className="grid grid-cols-2 gap-2">
-            {SITE_MOBILE_QUICK_LINKS.map((item) => (
-              <SheetClose key={item.href} asChild>
-                <Link
-                  href={item.href}
-                  className="rounded-xl border border-border/80 bg-muted/40 px-3 py-3 transition-colors hover:border-primary/30 hover:bg-muted"
-                >
-                  <span className="block text-sm font-semibold">{item.label}</span>
-                  <span className="mt-0.5 block text-xs text-muted-foreground">{item.hint}</span>
-                </Link>
-              </SheetClose>
-            ))}
-          </div>
+          {isAuthenticated ? (
+            <div className="grid grid-cols-2 gap-2">
+              {[...SITE_AUTH_QUICK_LINKS, SITE_AUTH_DASHBOARD].map((item) => (
+                <SheetClose key={item.href} asChild>
+                  <Link
+                    href={item.href}
+                    className="rounded-xl border border-border/80 bg-muted/40 px-3 py-3 transition-colors hover:border-primary/30 hover:bg-muted"
+                  >
+                    <span className="block text-sm font-semibold">{item.label}</span>
+                  </Link>
+                </SheetClose>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              {SITE_MOBILE_QUICK_LINKS.map((item) => (
+                <SheetClose key={item.href} asChild>
+                  <Link
+                    href={item.href}
+                    className="rounded-xl border border-border/80 bg-muted/40 px-3 py-3 transition-colors hover:border-primary/30 hover:bg-muted"
+                  >
+                    <span className="block text-sm font-semibold">{item.label}</span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">{item.hint}</span>
+                  </Link>
+                </SheetClose>
+              ))}
+            </div>
+          )}
 
           <Accordion
             type="single"
@@ -160,16 +179,26 @@ export function SiteMobileNav() {
         </nav>
 
         <div className="space-y-2 border-t border-border/60 bg-muted/20 px-5 py-4">
-          <SheetClose asChild>
-            <Button variant="outline" className="w-full rounded-full" asChild>
-              <Link href={SITE_HEADER_CTAS.signIn.href}>{SITE_HEADER_CTAS.signIn.label}</Link>
-            </Button>
-          </SheetClose>
-          <SheetClose asChild>
-            <Button variant="premium" className="w-full rounded-full shadow-sm" asChild>
-              <Link href={SITE_HEADER_CTAS.trial.href}>{SITE_HEADER_CTAS.trial.label}</Link>
-            </Button>
-          </SheetClose>
+          {isAuthenticated ? (
+            <SheetClose asChild>
+              <Button className="w-full rounded-full" asChild>
+                <Link href={SITE_AUTH_DASHBOARD.href}>{SITE_AUTH_DASHBOARD.label}</Link>
+              </Button>
+            </SheetClose>
+          ) : (
+            <>
+              <SheetClose asChild>
+                <Button variant="outline" className="w-full rounded-full" asChild>
+                  <Link href={SITE_HEADER_CTAS.signIn.href}>{SITE_HEADER_CTAS.signIn.label}</Link>
+                </Button>
+              </SheetClose>
+              <SheetClose asChild>
+                <Button variant="premium" className="w-full rounded-full shadow-sm" asChild>
+                  <Link href={SITE_HEADER_CTAS.trial.href}>{SITE_HEADER_CTAS.trial.label}</Link>
+                </Button>
+              </SheetClose>
+            </>
+          )}
         </div>
       </SheetContent>
     </Sheet>

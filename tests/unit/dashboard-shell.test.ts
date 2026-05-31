@@ -142,7 +142,7 @@ function renderShell(
       {
         userEmail: "owner@example.com",
         workspaceUserId: "owner-1",
-        businessName: "KitchenOS Demo",
+        businessName: "OS Kitchen Demo",
         businessType: "MEAL_PREP",
         isOwner: true,
         userRole: "OWNER",
@@ -167,8 +167,8 @@ describe("dashboard shell", () => {
     expect(markup).toContain("/dashboard/developer/api-keys");
     expect(markup).toContain("/dashboard/billing");
     expect(markup).toContain("/dashboard/staff");
-    expect(markup).toContain("mailto:support@example.com?subject=KitchenOS%20feedback");
-    expect(markup).toContain("mailto:support@example.com?subject=KitchenOS%20bug%20report");
+    expect(markup).toContain("mailto:support@example.com?subject=OS%20Kitchen%20feedback");
+    expect(markup).toContain("mailto:support@example.com?subject=OS%20Kitchen%20bug%20report");
     expect(markup).toContain("aria-label=\"Open account menu\"");
   });
 
