@@ -70,6 +70,7 @@ if (dashboardE2EEnabled) {
         "**/kds-staging.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/stripe-terminal-payment.spec.ts",
+        "**/cross-channel-inventory.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
         "**/webhook-replay-authed.spec.ts",

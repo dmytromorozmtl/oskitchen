@@ -7,7 +7,7 @@
   "websocket-kds-slo": "done",
   "cross-channel-inventory-engine": "done",
   "cross-channel-inventory-ui": "done",
-  "cross-channel-inventory-e2e": "todo",
+  "cross-channel-inventory-e2e": "done",
   "integration-health-scoring": "todo",
   "integration-health-recovery": "todo",
   "rbac-mutation-expansion": "todo",
