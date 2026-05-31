@@ -132,7 +132,7 @@ npm test -- tests/unit/integration-health-scoring-engine.test.ts
 4. Simulate webhook failures → verify alert codes  
 5. 7-day burn-in: workspace score ≥ 80 with zero critical alerts  
 
-**Next cycle:** Recovery playbooks (`recovery-playbook-service.ts`) auto-link to alert codes.
+**Next cycle:** Recovery playbooks (`recovery-playbook-service.ts`) link alert codes to auto + manual steps with success tracking.
 
 ---
 

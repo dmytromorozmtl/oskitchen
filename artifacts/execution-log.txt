@@ -1509,3 +1509,9 @@ Action: feat: integration health scoring + sales deck (Critical Features Cycle 1
 Files: services/integration-health/health-scoring-engine.ts, lib/integration-health/health-scoring-policy.ts, docs/integration-health-sales-deck.md, tests/unit/integration-health-scoring-engine.test.ts, tests/unit/integration-health-scoring-wiring.test.ts
 Tracker: integration-health-scoring=done (10/13)
 Next: Cycle 11 integration recovery playbooks
+---
+Cycle: 20260531-165100
+Action: feat: integration recovery playbooks (Critical Features Cycle 11)
+Files: services/integration-health/recovery-playbook-service.ts, lib/integration-health/recovery-playbook-policy.ts, tests/unit/integration-health-recovery-playbook.test.ts, tests/unit/integration-health-recovery-wiring.test.ts
+Tracker: integration-health-recovery=done (11/13) — Integration health feature COMPLETE
+Next: Cycle 12 mutation registry 100+ entries + dashboard

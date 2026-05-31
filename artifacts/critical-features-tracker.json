@@ -9,7 +9,7 @@
   "cross-channel-inventory-ui": "done",
   "cross-channel-inventory-e2e": "done",
   "integration-health-scoring": "done",
-  "integration-health-recovery": "todo",
+  "integration-health-recovery": "done",
   "rbac-mutation-expansion": "todo",
   "shopify-b2b-ar-dashboard": "todo"
 }
