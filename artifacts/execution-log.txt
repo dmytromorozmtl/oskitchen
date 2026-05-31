@@ -1384,3 +1384,11 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: human vault 11/11 → P0 staging proof → SSO IdP live smoke; ready:false score 85 until vault + P0 proof
+---
+Cycle: 20260531-141639
+Action: fix: resolve build errors — next/headers and fs client bundle leaks (BUILD FIX item 1 CLOSED)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Build: PASS (exit 0)
+Tests: pending (item 2 next)
