@@ -34,11 +34,26 @@ import {
   reconcileShopifyMarketTaxGuardForConnection,
   resolveShopifyMarketTaxConflict,
 } from "@/services/integrations/shopify-markets-tax-guard-bidirectional-service";
+import {
+  applySuggestedShopifyMarketHostname,
+  reconcileShopifyMarketHostnameGuardForConnection,
+  resolveShopifyMarketHostnameConflict,
+} from "@/services/integrations/shopify-markets-hostname-guard-bidirectional-service";
+import { importShopifyMarketHostnameForConnection } from "@/services/integrations/shopify-market-hostname-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
   connectionId: z.string().uuid(),
 });
+
+async function resolvePrimaryStoreSlugForOwner(userId: string): Promise<string | null> {
+  const sf = await prisma.storefrontSettings.findFirst({
+    where: { userId, enabled: true },
+    orderBy: { updatedAt: "desc" },
+    select: { storeSlug: true },
+  });
+  return sf?.storeSlug?.trim() || null;
+}
 
 export async function discoverShopifyMarketsAction(connectionId: string) {
   const access = await requireIntegrationsActor({ operation: "shopify.markets.discover" });
@@ -488,5 +503,148 @@ export async function resolveShopifyMarketTaxConflictAction(input: {
 
   revalidatePath("/dashboard/integrations/shopify");
   revalidatePath("/dashboard/storefront/markets");
+  return { ok: true as const };
+}
+
+export async function importShopifyMarketHostnameAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.import_hostname" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const primaryStoreSlug = await resolvePrimaryStoreSlugForOwner(access.actor.userId);
+  if (!primaryStoreSlug) {
+    return { ok: false as const, error: "Publish storefront overview with a slug first." };
+  }
+
+  const result = await importShopifyMarketHostnameForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    primaryStoreSlug,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return {
+    ok: true as const,
+    marketsImported: result.marketsImported,
+    marketsUnchanged: result.marketsUnchanged,
+  };
+}
+
+export async function reconcileShopifyMarketHostnameGuardAction(connectionId: string) {
+  const access = await requireIntegrationsActor({
+    operation: "shopify.markets.reconcile_hostname_guard",
+  });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const primaryStoreSlug = await resolvePrimaryStoreSlugForOwner(access.actor.userId);
+  if (!primaryStoreSlug) {
+    return { ok: false as const, error: "Publish storefront overview with a slug first." };
+  }
+
+  const result = await reconcileShopifyMarketHostnameGuardForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    primaryStoreSlug,
+    origin: "manual",
+    skipUnchanged: false,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return { ok: true as const, ...result };
+}
+
+export async function resolveShopifyMarketHostnameConflictAction(input: {
+  connectionId: string;
+  conflictKey: string;
+  resolution: "shopify" | "kitchenos" | "ignore";
+}) {
+  const access = await requireIntegrationsActor({
+    operation: "shopify.markets.resolve_hostname_conflict",
+  });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId: input.connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, input.connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const primaryStoreSlug = await resolvePrimaryStoreSlugForOwner(access.actor.userId);
+  if (!primaryStoreSlug) {
+    return { ok: false as const, error: "Publish storefront overview with a slug first." };
+  }
+
+  const result = await resolveShopifyMarketHostnameConflict({
+    userId: access.actor.userId,
+    connection: conn,
+    primaryStoreSlug,
+    conflictKey: input.conflictKey,
+    resolution: input.resolution,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  return { ok: true as const, applied: result.applied };
+}
+
+export async function applySuggestedShopifyMarketHostnameAction(input: {
+  connectionId: string;
+  osMarketId: string;
+}) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.apply_hostname" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId: input.connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, input.connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const primaryStoreSlug = await resolvePrimaryStoreSlugForOwner(access.actor.userId);
+  if (!primaryStoreSlug) {
+    return { ok: false as const, error: "Publish storefront overview with a slug first." };
+  }
+
+  const result = await applySuggestedShopifyMarketHostname({
+    userId: access.actor.userId,
+    connection: conn,
+    osMarketId: input.osMarketId,
+    primaryStoreSlug,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  revalidatePath("/dashboard/storefront/domains");
   return { ok: true as const };
 }

@@ -303,6 +303,7 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 5 (bidirectional) shipped:** `syncMode=bidirectional` with `priceAuthority`, conflict queue, reconcile engine, webhook + product-update auto-reconcile |
 | 2026-05-31 | **Phase 6 (catalog publication) shipped:** catalog import/push, `catalogAuthority`, publication conflicts, storefront overlay |
 | 2026-05-31 | **Phase 7 (tax/duty guard) shipped:** read-only Shopify tax hint import, `taxAuthority`, conflict queue (`RATE_MISMATCH`, `JURISDICTION_MISSING`, `DUTY_UNCONFIGURED`, `MODE_MISMATCH`), checkout honesty — KitchenOS tax engine always wins |
+| 2026-05-31 | **Phase 8 (market hostname) shipped:** Shopify handle → suggested subdomain/slug, `hostnameAuthority`, conflict queue, manual Apply + reconcile auto-apply when shopify wins |
 
 ---
 
@@ -321,3 +322,22 @@ Required Shopify scopes (verify at implementation):
 **Conflict types:** `RATE_MISMATCH`, `JURISDICTION_MISSING`, `DUTY_UNCONFIGURED`, `MODE_MISMATCH`
 
 **Conscious limits:** No automatic tax settings overwrite; no Shopify Tax API write; duties are informational only.
+
+---
+
+## Phase 8 — Market hostname auto-routing (shipped)
+
+**Goal:** Surface Shopify market handle → suggested vanity subdomain/slug for multi-market routing without automatic DNS changes.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_HOSTNAME_GUARD=1` (default on in non-production) |
+| Import service | `shopify-market-hostname-service.ts` — uses discovery cache `handle` |
+| Reconcile / conflicts | `shopify-markets-hostname-guard-bidirectional-service.ts` |
+| Storefront overlay | `shopify-market-hostname-overrides.ts` — `hostnameSource`, `suggestedHostSubdomain` on `ResolvedMarketContext` |
+| Routing integration | Existing `market-host-resolve.ts` + middleware `resolve-host` API |
+| UI | Shopify panel (import/reconcile/apply) + Storefront → Markets `hostnameAuthority` |
+
+**Conflict types:** `HANDLE_MISMATCH`, `SUBDOMAIN_TAKEN`, `SLUG_COLLISION`
+
+**Conscious limits:** DNS never auto-provisioned; apply writes `hostSubdomain`/`storeSlug` in settings center only when user clicks Apply or `hostnameAuthority=shopify` reconcile wins.

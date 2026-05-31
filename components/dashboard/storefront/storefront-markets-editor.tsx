@@ -268,6 +268,32 @@ export function StorefrontMarketsEditor({
                             </p>
                           </div>
                         ) : null}
+                        {(m.syncMode === "import" || m.syncMode === "bidirectional") ? (
+                          <div className="space-y-2">
+                            <Label>Hostname authority on conflict</Label>
+                            <select
+                              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              value={m.hostnameAuthority ?? "kitchenos"}
+                              onChange={(e) =>
+                                updateAt(idx, {
+                                  hostnameAuthority: e.target.value as StorefrontMarket["hostnameAuthority"],
+                                })
+                              }
+                            >
+                              <option value="kitchenos">
+                                KitchenOS wins — keep current subdomain/slug
+                              </option>
+                              <option value="shopify">
+                                Shopify wins — apply suggested subdomain on reconcile
+                              </option>
+                              <option value="manual">Manual — queue hostname conflicts for review</option>
+                            </select>
+                            <p className="text-[11px] text-muted-foreground">
+                              Pair with <span className="font-mono">NEXT_PUBLIC_STOREFRONT_ROOT_DOMAIN</span>{" "}
+                              and Domains — DNS is never changed automatically.
+                            </p>
+                          </div>
+                        ) : null}
                       </>
                     ) : null}
                   </div>

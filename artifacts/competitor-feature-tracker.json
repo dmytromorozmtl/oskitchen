@@ -62,6 +62,8 @@
   "shopify-markets-catalogPublicationShippedAt": "2026-05-31T21:00:00.000Z",
   "shopify-markets-tax-duty-guard": "done",
   "shopify-markets-taxDutyGuardShippedAt": "2026-05-31T23:30:00.000Z",
+  "shopify-markets-phase8-market-hostname": "done",
+  "shopify-markets-phase8MarketHostnameShippedAt": "2026-06-01T00:00:00.000Z",
   "restaurant-capital-resources-hub": "done",
   "restaurant-capital-resources-hubShippedAt": "2026-05-31T13:00:00.000Z",
   "restaurant-capital-phase2-attestation": "done",
@@ -74,6 +76,6 @@
   "restaurant-capital-phase5LiveLendersShippedAt": "2026-05-31T19:00:00.000Z",
   "restaurant-capital-phase6-lender-oauth": "done",
   "restaurant-capital-phase6LenderOauthShippedAt": "2026-05-31T22:00:00.000Z",
-  "postParityPhase": "shopify-markets-tax-duty-guard",
-  "nextRecommendedStep": "shopify-markets-phase8-market-hostname OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
+  "postParityPhase": "shopify-markets-phase8-market-hostname",
+  "nextRecommendedStep": "shopify-markets-phase9-webhook-registry OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
 }

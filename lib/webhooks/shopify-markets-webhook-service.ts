@@ -24,6 +24,10 @@ import {
   reconcileShopifyMarketTaxGuardForConnection,
 } from "@/services/integrations/shopify-markets-tax-guard-bidirectional-service";
 import {
+  hasHostnameGuardShopifyMarkets,
+  reconcileShopifyMarketHostnameGuardForConnection,
+} from "@/services/integrations/shopify-markets-hostname-guard-bidirectional-service";
+import {
   importShopifyMarketCatalogForConnection,
   listCatalogImportableStorefrontMarkets,
 } from "@/services/integrations/shopify-market-catalog-service";
@@ -56,6 +60,27 @@ export function isShopifyMarketsPriceWebhookTopic(topic: string): boolean {
   return MARKETS_WEBHOOK_TOPICS.has(topic);
 }
 
+async function maybeReconcileHostnameGuard(input: {
+  userId: string;
+  connection: IntegrationConnection;
+  settingsCenterJson: unknown;
+}): Promise<void> {
+  if (!hasHostnameGuardShopifyMarkets(input.settingsCenterJson)) return;
+  const sf = await prisma.storefrontSettings.findFirst({
+    where: { userId: input.userId, enabled: true },
+    orderBy: { updatedAt: "desc" },
+    select: { storeSlug: true },
+  });
+  if (!sf?.storeSlug?.trim()) return;
+  await reconcileShopifyMarketHostnameGuardForConnection({
+    userId: input.userId,
+    connection: input.connection,
+    primaryStoreSlug: sf.storeSlug.trim(),
+    origin: "webhook",
+    skipUnchanged: true,
+  });
+}
+
 export async function handleShopifyMarketsWebhookEvent(input: {
   userId: string;
   connection: IntegrationConnection;
@@ -74,7 +99,15 @@ export async function handleShopifyMarketsWebhookEvent(input: {
   const bidirectional = hasBidirectionalShopifyMarkets(kitchen?.settingsCenterJson);
   const catalogSync = hasCatalogSyncShopifyMarkets(kitchen?.settingsCenterJson);
   const taxGuard = hasTaxGuardShopifyMarkets(kitchen?.settingsCenterJson);
-  if (importable.length === 0 && !bidirectional && catalogImportable.length === 0 && !catalogSync && !taxGuard) {
+  const hostnameGuard = hasHostnameGuardShopifyMarkets(kitchen?.settingsCenterJson);
+  if (
+    importable.length === 0 &&
+    !bidirectional &&
+    catalogImportable.length === 0 &&
+    !catalogSync &&
+    !taxGuard &&
+    !hostnameGuard
+  ) {
     return { status: "no_import_markets" };
   }
 
@@ -190,6 +223,11 @@ export async function handleShopifyMarketsWebhookEvent(input: {
           skipUnchanged: true,
         });
       }
+      await maybeReconcileHostnameGuard({
+        userId: input.userId,
+        connection: refreshedConn,
+        settingsCenterJson: kitchen?.settingsCenterJson,
+      });
       return {
         status: "unchanged",
         marketsUnchanged: reconcileResult.marketsReconciled,
@@ -215,6 +253,11 @@ export async function handleShopifyMarketsWebhookEvent(input: {
         skipUnchanged: true,
       });
     }
+    await maybeReconcileHostnameGuard({
+      userId: input.userId,
+      connection: refreshedConn,
+      settingsCenterJson: kitchen?.settingsCenterJson,
+    });
 
     return {
       status: "imported",
@@ -284,6 +327,11 @@ export async function handleShopifyMarketsWebhookEvent(input: {
       skipUnchanged: true,
     });
   }
+  await maybeReconcileHostnameGuard({
+    userId: input.userId,
+    connection: refreshedConn,
+    settingsCenterJson: kitchen?.settingsCenterJson,
+  });
 
   if (importResult.marketsImported === 0 && importResult.marketsUnchanged > 0) {
     return {

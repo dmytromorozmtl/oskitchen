@@ -37,6 +37,8 @@ export const storefrontMarketSchema = z.object({
   taxAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
   /** Duty hint conflict resolution — reference-only; never auto-applies duty rules */
   dutyAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
+  /** Hostname/subdomain conflict resolution — apply Shopify hints only when shopify or manual apply */
+  hostnameAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
 });
 
 export type StorefrontMarket = z.infer<typeof storefrontMarketSchema>;

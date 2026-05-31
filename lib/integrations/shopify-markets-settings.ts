@@ -103,6 +103,33 @@ export type ShopifyMarketTaxConflictRow = {
   taxAuthority: "shopify" | "kitchenos" | "manual";
 };
 
+export type ShopifyMarketHostnameImportRow = {
+  osMarketId: string;
+  shopifyMarketId: string;
+  shopifyHandle: string | null;
+  importedAt: string;
+  suggestedHostSubdomain: string;
+  suggestedStoreSlug: string;
+  hostnameHash: string;
+};
+
+export type ShopifyMarketHostnameConflictType =
+  | "SLUG_COLLISION"
+  | "SUBDOMAIN_TAKEN"
+  | "HANDLE_MISMATCH";
+
+export type ShopifyMarketHostnameConflictRow = {
+  conflictKey: string;
+  osMarketId: string;
+  shopifyMarketId: string;
+  conflictType: ShopifyMarketHostnameConflictType;
+  shopifySummary: string;
+  kitchenosSummary: string;
+  detectedAt: string;
+  status: "open" | "resolved_shopify" | "resolved_kitchenos" | "ignored";
+  hostnameAuthority: "shopify" | "kitchenos" | "manual";
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
@@ -145,6 +172,13 @@ export type ShopifyMarketsSyncSettings = {
   lastTaxReconcileError: string | null;
   lastTaxReconcileResult: string | null;
   marketTaxConflicts: Record<string, ShopifyMarketTaxConflictRow>;
+  lastHostnameImportAt: string | null;
+  hostnameImportError: string | null;
+  marketHostnameImports: Record<string, ShopifyMarketHostnameImportRow>;
+  lastHostnameReconcileAt: string | null;
+  lastHostnameReconcileError: string | null;
+  lastHostnameReconcileResult: string | null;
+  marketHostnameConflicts: Record<string, ShopifyMarketHostnameConflictRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -217,6 +251,16 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? (raw.marketTaxConflicts as Record<string, ShopifyMarketTaxConflictRow>)
       : {};
 
+  const marketHostnameImports =
+    raw.marketHostnameImports && typeof raw.marketHostnameImports === "object"
+      ? (raw.marketHostnameImports as Record<string, ShopifyMarketHostnameImportRow>)
+      : {};
+
+  const marketHostnameConflicts =
+    raw.marketHostnameConflicts && typeof raw.marketHostnameConflicts === "object"
+      ? (raw.marketHostnameConflicts as Record<string, ShopifyMarketHostnameConflictRow>)
+      : {};
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -280,6 +324,17 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastTaxReconcileResult:
       typeof raw.lastTaxReconcileResult === "string" ? raw.lastTaxReconcileResult : null,
     marketTaxConflicts,
+    lastHostnameImportAt:
+      typeof raw.lastHostnameImportAt === "string" ? raw.lastHostnameImportAt : null,
+    hostnameImportError: typeof raw.hostnameImportError === "string" ? raw.hostnameImportError : null,
+    marketHostnameImports,
+    lastHostnameReconcileAt:
+      typeof raw.lastHostnameReconcileAt === "string" ? raw.lastHostnameReconcileAt : null,
+    lastHostnameReconcileError:
+      typeof raw.lastHostnameReconcileError === "string" ? raw.lastHostnameReconcileError : null,
+    lastHostnameReconcileResult:
+      typeof raw.lastHostnameReconcileResult === "string" ? raw.lastHostnameReconcileResult : null,
+    marketHostnameConflicts,
   };
 }
 

@@ -2,25 +2,30 @@
 
 import { useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, BookOpen, DollarSign, Globe2, Loader2, Receipt, RefreshCw, Scale } from "lucide-react";
+import { ArrowUpRight, BookOpen, DollarSign, Globe2, Link2, Loader2, Receipt, RefreshCw, Scale } from "lucide-react";
 
 import {
+  applySuggestedShopifyMarketHostnameAction,
   discoverShopifyMarketsAction,
   importShopifyMarketCatalogAction,
+  importShopifyMarketHostnameAction,
   importShopifyMarketPricesAction,
   importShopifyMarketTaxAction,
   pushShopifyMarketCatalogAction,
   pushShopifyMarketPricesAction,
   reconcileBidirectionalShopifyMarketCatalogAction,
   reconcileBidirectionalShopifyMarketsAction,
+  reconcileShopifyMarketHostnameGuardAction,
   reconcileShopifyMarketTaxGuardAction,
   resolveShopifyMarketCatalogConflictAction,
+  resolveShopifyMarketHostnameConflictAction,
   resolveShopifyMarketPriceConflictAction,
   resolveShopifyMarketTaxConflictAction,
 } from "@/actions/shopify-markets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SHOPIFY_MARKET_HOSTNAME_GUARD_HONESTY } from "@/lib/commercial/shopify-market-hostname-guard";
 import { SHOPIFY_MARKET_TAX_GUARD_HONESTY } from "@/lib/commercial/shopify-market-tax-guard";
 import {
   SHOPIFY_MARKETS_CATALOG_PUSH_REQUIRED_SCOPES,
@@ -76,6 +81,10 @@ export function ShopifyMarketsPanel({
   const [taxImportPending, startTaxImport] = useTransition();
   const [taxReconcilePending, startTaxReconcile] = useTransition();
   const [taxResolvePending, startTaxResolve] = useTransition();
+  const [hostnameImportPending, startHostnameImport] = useTransition();
+  const [hostnameReconcilePending, startHostnameReconcile] = useTransition();
+  const [hostnameResolvePending, startHostnameResolve] = useTransition();
+  const [hostnameApplyPending, startHostnameApply] = useTransition();
   const pending =
     discoverPending ||
     importPending ||
@@ -88,7 +97,11 @@ export function ShopifyMarketsPanel({
     catalogResolvePending ||
     taxImportPending ||
     taxReconcilePending ||
-    taxResolvePending;
+    taxResolvePending ||
+    hostnameImportPending ||
+    hostnameReconcilePending ||
+    hostnameResolvePending ||
+    hostnameApplyPending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
   const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
@@ -102,6 +115,10 @@ export function ShopifyMarketsPanel({
   );
   const importedTaxMarkets = Object.values(syncSettings.marketTaxImports ?? {});
   const openTaxConflicts = Object.values(syncSettings.marketTaxConflicts ?? {}).filter(
+    (row) => row.status === "open",
+  );
+  const importedHostnameMarkets = Object.values(syncSettings.marketHostnameImports ?? {});
+  const openHostnameConflicts = Object.values(syncSettings.marketHostnameConflicts ?? {}).filter(
     (row) => row.status === "open",
   );
   const totalMappedPrices = importedMarkets.reduce(
@@ -120,12 +137,12 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 7 BETA
+              Shopify Markets — Phase 8 BETA
             </CardTitle>
             <CardDescription>
-              Discover Shopify markets, link them on Storefront → Markets, then sync prices, catalog
-              publications, and tax/duty hints for mapped products. Bidirectional markets reconcile with
-              priceAuthority, catalogAuthority, and taxAuthority per market.
+              Discover Shopify markets, link them on Storefront → Markets, then sync prices, catalog,
+              tax/duty hints, and hostname routing for mapped products. Bidirectional markets reconcile
+              with priceAuthority, catalogAuthority, taxAuthority, and hostnameAuthority per market.
             </CardDescription>
           </div>
           <Badge variant="outline">markets_sync BETA</Badge>
@@ -339,7 +356,169 @@ export function ShopifyMarketsPanel({
               )}
               <span className="ml-2">Reconcile tax guard</span>
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startHostnameImport(async () => {
+                  await importShopifyMarketHostnameAction(connectionId);
+                })
+              }
+            >
+              {hostnameImportPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Link2 className="h-4 w-4" />
+              )}
+              <span className="ml-2">Import hostname hints</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startHostnameReconcile(async () => {
+                  await reconcileShopifyMarketHostnameGuardAction(connectionId);
+                })
+              }
+            >
+              {hostnameReconcilePending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Globe2 className="h-4 w-4" />
+              )}
+              <span className="ml-2">Reconcile hostname guard</span>
+            </Button>
           </div>
+        ) : null}
+
+        <p className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+          {SHOPIFY_MARKET_HOSTNAME_GUARD_HONESTY}
+        </p>
+
+        {syncSettings.lastHostnameReconcileAt ? (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              Last hostname guard reconcile{" "}
+              {formatDistanceToNow(new Date(syncSettings.lastHostnameReconcileAt), { addSuffix: true })}
+              {syncSettings.lastHostnameReconcileResult ? (
+                <> · {syncSettings.lastHostnameReconcileResult}</>
+              ) : null}
+            </p>
+            {syncSettings.lastHostnameReconcileError ? (
+              <p className="mt-1 text-destructive">{syncSettings.lastHostnameReconcileError}</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {openHostnameConflicts.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+            <p className="font-medium text-foreground">
+              Open hostname conflicts ({openHostnameConflicts.length})
+            </p>
+            {openHostnameConflicts.map((conflict) => (
+              <div
+                key={conflict.conflictKey}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-muted-foreground"
+              >
+                <span>
+                  Market <span className="font-mono">{conflict.osMarketId}</span> ·{" "}
+                  <span className="font-mono">{conflict.conflictType}</span> · Shopify{" "}
+                  {conflict.shopifySummary} vs KitchenOS {conflict.kitchenosSummary}
+                </span>
+                {canManage ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={hostnameResolvePending}
+                      onClick={() =>
+                        startHostnameResolve(async () => {
+                          await resolveShopifyMarketHostnameConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "shopify",
+                          });
+                        })
+                      }
+                    >
+                      Apply Shopify
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={hostnameResolvePending}
+                      onClick={() =>
+                        startHostnameResolve(async () => {
+                          await resolveShopifyMarketHostnameConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "kitchenos",
+                          });
+                        })
+                      }
+                    >
+                      Keep KitchenOS
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {importedHostnameMarkets.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs text-muted-foreground">
+            <p className="font-medium text-foreground">Cached hostname hints</p>
+            {importedHostnameMarkets.map((row) => (
+              <div
+                key={row.osMarketId}
+                className="flex flex-wrap items-center justify-between gap-2"
+              >
+                <span>
+                  {row.osMarketId}:{" "}
+                  <span className="font-mono">{row.suggestedHostSubdomain}</span>
+                  {row.shopifyHandle ? ` (handle ${row.shopifyHandle})` : ""}
+                </span>
+                {canManage && connectionId ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full"
+                    disabled={hostnameApplyPending}
+                    onClick={() =>
+                      startHostnameApply(async () => {
+                        await applySuggestedShopifyMarketHostnameAction({
+                          connectionId,
+                          osMarketId: row.osMarketId,
+                        });
+                      })
+                    }
+                  >
+                    Apply subdomain
+                  </Button>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {syncSettings.lastHostnameImportAt ? (
+          <p className="text-xs text-muted-foreground">
+            Last hostname import{" "}
+            {formatDistanceToNow(new Date(syncSettings.lastHostnameImportAt), { addSuffix: true })}
+            {syncSettings.hostnameImportError ? ` · notes: ${syncSettings.hostnameImportError}` : ""}
+          </p>
         ) : null}
 
         <p className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">

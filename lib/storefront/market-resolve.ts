@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { STOREFRONT_MARKET_COOKIE, storefrontCatalogTag } from "@/lib/storefront/cache-tags";
 import { loadShopifyMarketCatalogOverlayForMarket } from "@/lib/storefront/shopify-market-catalog-overrides";
 import { loadShopifyMarketTaxOverlayForMarket } from "@/lib/storefront/shopify-market-tax-overrides";
+import { loadShopifyMarketHostnameOverlayForMarket } from "@/lib/storefront/shopify-market-hostname-overrides";
 import {
   defaultPilotMarket,
   parseStorefrontMarketsFromSettingsCenter,
@@ -18,6 +19,9 @@ export type ResolvedMarketContext = {
   effectiveStoreSlug: string;
   /** Checkout tax source — always kitchenos; shopify_reference when import hints exist */
   taxSource: "kitchenos" | "shopify_reference";
+  /** Hostname routing hint source — shopify_reference when cached import exists */
+  hostnameSource: "kitchenos" | "shopify_reference";
+  suggestedHostSubdomain: string | null;
 };
 
 export async function loadMarketsForStorefrontOwner(userId: string): Promise<StorefrontMarket[]> {
@@ -60,6 +64,13 @@ export async function resolveActiveMarket(input: {
     market,
   });
 
+  const hostnameOverlay = await loadShopifyMarketHostnameOverlayForMarket({
+    ownerUserId: input.storefrontUserId,
+    market,
+    primaryStoreSlug: input.storeSlug,
+    rootDomain: process.env.NEXT_PUBLIC_STOREFRONT_ROOT_DOMAIN ?? null,
+  });
+
   const productIds =
     catalogOverlay.productIds ??
     (market.productIds && market.productIds.length > 0 ? market.productIds : null);
@@ -75,6 +86,8 @@ export async function resolveActiveMarket(input: {
     activeMenuId,
     effectiveStoreSlug,
     taxSource: taxOverlay.source,
+    hostnameSource: hostnameOverlay.source,
+    suggestedHostSubdomain: hostnameOverlay.importRow?.suggestedHostSubdomain ?? null,
   };
 }
 
