@@ -58,6 +58,12 @@ export function offlineSyncStatusLabel(input: {
   return "Online — offline queue ready";
 }
 
+export function formatOfflineSyncSuccessMessage(syncedCount: number): string {
+  if (syncedCount <= 0) return "No offline orders to sync.";
+  const noun = syncedCount === 1 ? "order" : "orders";
+  return `${syncedCount} ${noun} synced when back online`;
+}
+
 export function offlinePaymentReference(offlineSaleId: string): string {
   return `offline:${offlineSaleId}`;
 }

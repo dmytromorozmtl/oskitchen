@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_POS_SETTINGS, mergePosSettings } from "@/lib/pos/pos-settings";
 import {
   classifyOfflineCheckoutError,
+  formatOfflineSyncSuccessMessage,
   offlinePaymentReference,
   offlineSyncStatusLabel,
   resolveOfflineSyncConflict,
@@ -78,5 +79,9 @@ describe("offline sync labels", () => {
 
   it("builds stable offline payment references", () => {
     expect(offlinePaymentReference("abc-123")).toBe("offline:abc-123");
+  });
+
+  it("formats synced counter for reconnect banner", () => {
+    expect(formatOfflineSyncSuccessMessage(47)).toBe("47 orders synced when back online");
   });
 });

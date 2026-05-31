@@ -33,6 +33,7 @@ import {
 } from "@/hooks/use-offline-sync-status";
 import {
   classifyOfflineCheckoutError,
+  formatOfflineSyncSuccessMessage,
   resolveOfflineSyncConflict,
 } from "@/lib/pos/offline-sync";
 import { OfflineSyncStatusBar } from "@/components/dashboard/offline-sync-status-bar";
@@ -293,7 +294,7 @@ export function PosTerminalClient(props: {
     broadcastOfflineSyncState(conflicts > 0 ? "conflict" : "idle");
 
     if (synced > 0 && conflicts === 0) {
-      showCheckoutStatus(`Synced ${synced} offline sale(s).`, "success");
+      showCheckoutStatus(formatOfflineSyncSuccessMessage(synced), "success");
     } else if (conflicts > 0) {
       showCheckoutStatus(
         `${conflicts} offline sale(s) need review — server data wins or inventory blocked sync.`,
