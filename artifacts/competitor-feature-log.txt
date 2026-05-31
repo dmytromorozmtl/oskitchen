@@ -149,3 +149,13 @@ Priority: P2
 Files: 1
 Result: IMPLEMENTED
 Next: woocommerce-subscriptions-rfc (P2)
+
+---
+Cycle: 17
+Timestamp: 2026-05-31T02:22:00.000Z
+Feature: woocommerce-subscriptions-rfc
+Competitor: WooCommerce Subscriptions
+Priority: P2
+Files: 1
+Result: IMPLEMENTED
+Next: reservations-system (P1)
