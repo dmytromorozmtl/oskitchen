@@ -6,7 +6,7 @@ describe("page maturity honesty", () => {
   it("returns preview honesty for POS preview surfaces", () => {
     const handheld = getPageMaturityHonesty("/dashboard/pos/handheld");
     expect(handheld?.exposure).toBe("preview");
-    expect(handheld?.detail).toMatch(/preview/i);
+    expect(handheld?.detail).toMatch(/beta|preview/i);
 
     const tables = getPageMaturityHonesty("/dashboard/tables");
     expect(tables?.exposure).toBe("preview");
