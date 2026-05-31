@@ -72,6 +72,9 @@ export default async function LocationsPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button asChild variant="secondary">
+            <Link href="/dashboard/locations/dashboard">Multi-location dashboard</Link>
+          </Button>
           <Button asChild>
             <Link href="/dashboard/locations/new">New location</Link>
           </Button>

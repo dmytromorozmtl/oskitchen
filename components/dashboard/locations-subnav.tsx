@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/locations", label: "Overview", match: "exact" },
+  { href: "/dashboard/locations/dashboard", label: "Dashboard" },
   { href: "/dashboard/locations/active", label: "Active" },
   { href: "/dashboard/locations/setup", label: "Setup" },
   { href: "/dashboard/locations/assignment", label: "Assignment" },
