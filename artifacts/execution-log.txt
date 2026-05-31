@@ -1479,3 +1479,9 @@ Action: feat: KDS real-time UI (Critical Features Cycle 5)
 Files: app/dashboard/kitchen/kds-kitchen-daily-client.tsx, kds-kitchen-realtime-bar.tsx, components/kitchen/kds-realtime-status-badge.tsx, lib/kitchen/kds-realtime-ui.ts, lib/kitchen/kds-realtime-sounds.ts, kds-queue-status-strip.tsx, kds-daily-service.tsx, app/globals.css (ticket enter animation)
 Tracker: websocket-kds-ui=done (5/13)
 Next: Cycle 6 KDS SLO proof + sales one-pager
+---
+Cycle: 20260531-163800
+Action: docs: KDS SLO proof + sales one-pager (Critical Features Cycle 6)
+Files: docs/kds-slo-proof-plan.md, docs/kds-sales-one-pager.md, lib/kitchen/kds-slo-proof-policy.ts, tests/unit/kds-slo-proof-plan-wiring.test.ts
+Tracker: websocket-kds-slo=done (6/13) — KDS WebSocket feature COMPLETE
+Next: Cycle 7 cross-channel inventory sync engine
