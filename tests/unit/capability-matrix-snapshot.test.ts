@@ -12,10 +12,10 @@ describe("buildCapabilityRows", () => {
     expect(sms?.status).toBe("NOT_AVAILABLE");
   });
 
-  it("marks POS offline as NOT_AVAILABLE", () => {
+  it("marks POS offline as BETA", () => {
     const rows = buildCapabilityRows(minimalEnv);
     const pos = rows.find((r) => r.id === "pos_offline");
-    expect(pos?.status).toBe("NOT_AVAILABLE");
+    expect(pos?.status).toBe("BETA");
   });
 
   it("marks Stripe async billing webhooks as DESIGN_READY", () => {
