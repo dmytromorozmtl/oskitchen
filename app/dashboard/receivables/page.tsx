@@ -1,6 +1,9 @@
 import Link from "next/link";
 
 import { B2bReceivablesDashboard } from "@/components/dashboard/receivables/b2b-receivables-dashboard";
+import { B2bCollectorTaskQueue } from "@/components/dashboard/receivables/b2b-collector-task-queue";
+import { isShopifyMarketsB2bCollectorQueueEnabled } from "@/lib/commercial/shopify-market-b2b-collector-queue";
+import { IntegrationProvider } from "@prisma/client";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -77,14 +80,22 @@ export default async function ReceivablesPage({
   }
 
   const orderIds = snapshot.rows.map((row) => row.orderId);
-  const orders = orderIds.length
-    ? await prisma.order.findMany({
-        where: {
-          AND: [await orderListWhereForOwner(actor.dataUserId), { id: { in: orderIds } }],
-        },
-        select: { id: true, sourceMetadataJson: true, paymentStatus: true },
-      })
-    : [];
+  const [orders, shopifyConn] = await Promise.all([
+    orderIds.length
+      ? prisma.order.findMany({
+          where: {
+            AND: [await orderListWhereForOwner(actor.dataUserId), { id: { in: orderIds } }],
+          },
+          select: { id: true, sourceMetadataJson: true, paymentStatus: true },
+        })
+      : Promise.resolve([]),
+    isShopifyMarketsB2bCollectorQueueEnabled()
+      ? prisma.integrationConnection.findFirst({
+          where: { userId: actor.dataUserId, provider: IntegrationProvider.SHOPIFY },
+          select: { id: true },
+        })
+      : Promise.resolve(null),
+  ]);
   const ordersById = new Map(
     orders.map((order) => [
       order.id,
@@ -119,11 +130,19 @@ export default async function ReceivablesPage({
           </CardContent>
         </Card>
       ) : (
-        <B2bReceivablesDashboard
-          snapshot={snapshot}
-          ordersById={ordersById}
-          activeBucket={activeBucket}
-        />
+        <>
+          <B2bReceivablesDashboard
+            snapshot={snapshot}
+            ordersById={ordersById}
+            activeBucket={activeBucket}
+          />
+          {snapshot.collectorQueue && isShopifyMarketsB2bCollectorQueueEnabled() ? (
+            <B2bCollectorTaskQueue
+              queue={snapshot.collectorQueue}
+              connectionId={shopifyConn?.id ?? null}
+            />
+          ) : null}
+        </>
       )}
     </div>
   );

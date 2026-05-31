@@ -12,6 +12,7 @@ import {
 import { storefrontTeamInviteTemplate } from "@/lib/email/templates/storefront-team-invite";
 import { b2bInvoiceOverdueReminderTemplate } from "@/lib/email/templates/b2b-invoice-overdue-reminder";
 import { b2bArOperatorDigestTemplate } from "@/lib/email/templates/b2b-ar-operator-digest";
+import { b2bArCollectorDigestTemplate } from "@/lib/email/templates/b2b-ar-collector-digest";
 import { logger } from "@/lib/logger";
 
 const from =
@@ -277,6 +278,43 @@ export async function sendB2bArOperatorDigest(params: {
     from,
     to: params.to,
     subject: `B2B receivables digest — ${params.openTotal} open invoice(s)`,
+    html,
+  });
+  return { sent: true as const };
+}
+
+export async function sendB2bArCollectorDigest(params: {
+  to: string;
+  businessName?: string | null;
+  openCount: number;
+  slaBreachedCount: number;
+  tasksByAssignee: Array<{
+    assignee: string;
+    tasks: Array<{
+      companyName: string;
+      maxDaysPastDue: number;
+      openAmountCents: number;
+      slaBreached: boolean;
+      priority: string;
+    }>;
+  }>;
+  receivablesUrl: string;
+}) {
+  const resend = getResend();
+  if (!resend) return { skipped: true as const };
+
+  const html = b2bArCollectorDigestTemplate({
+    businessName: params.businessName,
+    openCount: params.openCount,
+    slaBreachedCount: params.slaBreachedCount,
+    tasksByAssignee: params.tasksByAssignee,
+    receivablesUrl: params.receivablesUrl,
+  });
+
+  await resend.emails.send({
+    from,
+    to: params.to,
+    subject: `B2B collector tasks — ${params.openCount} open${params.slaBreachedCount > 0 ? `, ${params.slaBreachedCount} SLA breach(es)` : ""}`,
     html,
   });
   return { sent: true as const };

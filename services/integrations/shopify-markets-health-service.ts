@@ -357,6 +357,19 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       `${sync?.b2bFinancialMirrorStats?.lastDriftCount} B2B invoice(s) have KitchenOS vs Shopify payment drift — review Receivables dashboard and mark paid or follow up in Shopify.`,
     );
   }
+  const collectorSlaBreached = (sync?.b2bArCollectorTasks ?? []).filter(
+    (task) => task.slaBreached && (task.status === "open" || task.status === "snoozed"),
+  ).length;
+  if (collectorSlaBreached > 0) {
+    recommendations.push(
+      `${collectorSlaBreached} B2B collector task(s) breached SLA — assign follow-up on Receivables dashboard.`,
+    );
+  }
+  if ((sync?.b2bCollectorQueueStats?.skippedEmailOff ?? 0) > 0) {
+    recommendations.push(
+      "Configure Resend so daily B2B collector task digests can send to your operator inbox.",
+    );
+  }
   if ((sync?.b2bArHealthScore ?? 100) < 45) {
     recommendations.push(
       `B2B AR health score is ${sync?.b2bArHealthScore}/100 — review Receivables dashboard and escalate critical invoices.`,

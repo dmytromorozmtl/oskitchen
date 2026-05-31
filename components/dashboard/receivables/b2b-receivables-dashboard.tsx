@@ -128,6 +128,11 @@ export function B2bReceivablesDashboard({
             >
               {snapshot.healthLevel}
             </Badge>
+            {snapshot.slaBreachedCount > 0 ? (
+              <p className="mt-2 text-[10px] text-destructive">
+                {snapshot.slaBreachedCount} SLA breach
+              </p>
+            ) : null}
             {snapshot.paymentStatusDriftCount > 0 ? (
               <p className="mt-2 text-[10px] text-amber-700 dark:text-amber-400">
                 {snapshot.paymentStatusDriftCount} Shopify drift

@@ -67,6 +67,28 @@ describe("shopify-b2b-ar-dashboard-metadata", () => {
     expect(snapshot.healthScore).toBeGreaterThanOrEqual(0);
     expect(snapshot.shopifyMirrorCount).toBe(1);
     expect(snapshot.paymentStatusDriftCount).toBe(0);
+    expect(snapshot.slaBreachedCount).toBe(0);
+    expect(snapshot.collectorQueue).toBeNull();
+  });
+
+  it("marks health critical when SLA breached tasks exist", () => {
+    const aging = buildB2bArAgingSnapshot([row]);
+    const snapshot = buildB2bArDashboardSnapshot({
+      aging,
+      rows: [row],
+      collectorsByCompanyId: {},
+      collectorQueue: {
+        computedAt: new Date().toISOString(),
+        tasks: [],
+        openCount: 1,
+        snoozedCount: 0,
+        doneCount: 0,
+        slaBreachedCount: 2,
+        escalatedCount: 2,
+      },
+    });
+    expect(snapshot.healthLevel).toBe("critical");
+    expect(snapshot.slaBreachedCount).toBe(2);
   });
 
   it("downgrades health level when payment drift exists", () => {
@@ -83,6 +105,7 @@ describe("shopify-b2b-ar-dashboard-metadata", () => {
       aging,
       rows: [driftRow],
       collectorsByCompanyId: {},
+      collectorQueue: null,
     });
     expect(snapshot.paymentStatusDriftCount).toBe(1);
     expect(snapshot.healthLevel).toBe("attention");

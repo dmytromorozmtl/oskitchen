@@ -399,6 +399,22 @@ export type ShopifyMarketsSyncSettings = {
     refreshErrors: number;
     lastDriftCount: number;
   } | null;
+  b2bArCollectorTasks: import("@/lib/integrations/shopify-b2b-collector-queue-metadata").B2bArCollectorTask[] | null;
+  b2bArCollectorSlaDaysByCompanyId: Record<string, number> | null;
+  b2bArCollectorDefaultSlaDays: number | null;
+  b2bCollectorDigestEnabled: boolean;
+  lastB2bCollectorQueueSyncAt: string | null;
+  lastB2bCollectorDigestAt: string | null;
+  b2bCollectorQueueStats: {
+    syncRuns: number;
+    tasksCreated: number;
+    tasksCompleted: number;
+    tasksSnoozed: number;
+    digestsSent: number;
+    skippedEmailOff: number;
+    skippedRecentDigest: number;
+    skippedNoTasks: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -731,6 +747,46 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         }
       : null;
 
+  const collectorTasksRaw = raw.b2bArCollectorTasks;
+  const b2bArCollectorTasks = Array.isArray(collectorTasksRaw)
+    ? (collectorTasksRaw as import("@/lib/integrations/shopify-b2b-collector-queue-metadata").B2bArCollectorTask[])
+    : null;
+
+  const collectorSlaRaw = raw.b2bArCollectorSlaDaysByCompanyId;
+  const b2bArCollectorSlaDaysByCompanyId =
+    collectorSlaRaw && typeof collectorSlaRaw === "object" && !Array.isArray(collectorSlaRaw)
+      ? Object.fromEntries(
+          Object.entries(collectorSlaRaw as Record<string, unknown>)
+            .filter(([, v]) => typeof v === "number" && Number.isFinite(v) && v > 0)
+            .map(([k, v]) => [k, Number(v)]),
+        )
+      : null;
+
+  const b2bArCollectorDefaultSlaDays =
+    typeof raw.b2bArCollectorDefaultSlaDays === "number" &&
+    Number.isFinite(raw.b2bArCollectorDefaultSlaDays) &&
+    raw.b2bArCollectorDefaultSlaDays > 0
+      ? raw.b2bArCollectorDefaultSlaDays
+      : null;
+
+  const b2bCollectorDigestEnabled = raw.b2bCollectorDigestEnabled !== false;
+
+  const collectorStatsRaw = raw.b2bCollectorQueueStats;
+  const b2bCollectorQueueStats =
+    collectorStatsRaw && typeof collectorStatsRaw === "object"
+      ? {
+          syncRuns: Number((collectorStatsRaw as Record<string, unknown>).syncRuns) || 0,
+          tasksCreated: Number((collectorStatsRaw as Record<string, unknown>).tasksCreated) || 0,
+          tasksCompleted: Number((collectorStatsRaw as Record<string, unknown>).tasksCompleted) || 0,
+          tasksSnoozed: Number((collectorStatsRaw as Record<string, unknown>).tasksSnoozed) || 0,
+          digestsSent: Number((collectorStatsRaw as Record<string, unknown>).digestsSent) || 0,
+          skippedEmailOff: Number((collectorStatsRaw as Record<string, unknown>).skippedEmailOff) || 0,
+          skippedRecentDigest:
+            Number((collectorStatsRaw as Record<string, unknown>).skippedRecentDigest) || 0,
+          skippedNoTasks: Number((collectorStatsRaw as Record<string, unknown>).skippedNoTasks) || 0,
+        }
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -907,6 +963,15 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         ? raw.lastB2bFinancialMirrorRefreshResult
         : null,
     b2bFinancialMirrorStats,
+    b2bArCollectorTasks,
+    b2bArCollectorSlaDaysByCompanyId,
+    b2bArCollectorDefaultSlaDays,
+    b2bCollectorDigestEnabled,
+    lastB2bCollectorQueueSyncAt:
+      typeof raw.lastB2bCollectorQueueSyncAt === "string" ? raw.lastB2bCollectorQueueSyncAt : null,
+    lastB2bCollectorDigestAt:
+      typeof raw.lastB2bCollectorDigestAt === "string" ? raw.lastB2bCollectorDigestAt : null,
+    b2bCollectorQueueStats,
   };
 }
 

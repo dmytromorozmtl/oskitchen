@@ -43,6 +43,7 @@ import {
 } from "@/lib/integrations/shopify-markets-settings";
 import type { B2bOperatorDigestPreview } from "@/lib/integrations/shopify-b2b-dunning-metadata";
 import { ShopifyMarketsB2bDunningCard } from "@/components/dashboard/integrations/shopify-markets-b2b-dunning-card";
+import { ShopifyMarketsB2bCollectorQueueCard } from "@/components/dashboard/integrations/shopify-markets-b2b-collector-queue-card";
 import type { ShopifyMarketRow } from "@/services/integrations/shopify-markets-service";
 
 type ShopifyMarketsPanelProps = {
@@ -51,6 +52,14 @@ type ShopifyMarketsPanelProps = {
   syncSettings: ShopifyMarketsSyncSettings;
   canManage: boolean;
   b2bDunningDigestPreview?: B2bOperatorDigestPreview | null;
+  b2bCollectorDigestPreview?: {
+    openCount: number;
+    slaBreachedCount: number;
+    tasksByAssignee: Array<{
+      assignee: string;
+      tasks: Array<{ companyName: string; maxDaysPastDue: number; openAmountCents: number }>;
+    }>;
+  } | null;
 };
 
 function MarketRow({ market }: { market: ShopifyMarketRow }) {
@@ -81,6 +90,7 @@ export function ShopifyMarketsPanel({
   syncSettings,
   canManage,
   b2bDunningDigestPreview = null,
+  b2bCollectorDigestPreview = null,
 }: ShopifyMarketsPanelProps) {
   const [discoverPending, startDiscover] = useTransition();
   const [importPending, startImport] = useTransition();
@@ -1120,6 +1130,12 @@ export function ShopifyMarketsPanel({
             connectionId={connectionId}
             syncSettings={syncSettings}
             digestPreview={b2bDunningDigestPreview}
+            canManage={canManage}
+          />
+          <ShopifyMarketsB2bCollectorQueueCard
+            connectionId={connectionId}
+            syncSettings={syncSettings}
+            digestPreview={b2bCollectorDigestPreview}
             canManage={canManage}
           />
         </div>

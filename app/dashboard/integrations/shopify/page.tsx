@@ -30,6 +30,7 @@ import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { buildB2bOperatorDigestPreviewForConnection } from "@/services/integrations/shopify-b2b-dunning-service";
+import { buildB2bCollectorDigestPreviewForConnection } from "@/services/integrations/shopify-b2b-collector-queue-service";
 
 export default async function ShopifyIntegrationPage() {
   const { sessionUser, userId } = await requireTenantActor();
@@ -54,6 +55,13 @@ export default async function ShopifyIntegrationPage() {
   const b2bDunningDigestPreview =
     conn?.id && hasToken
       ? await buildB2bOperatorDigestPreviewForConnection({
+          userId,
+          connectionId: conn.id,
+        })
+      : null;
+  const b2bCollectorDigestPreview =
+    conn?.id && hasToken
+      ? await buildB2bCollectorDigestPreviewForConnection({
           userId,
           connectionId: conn.id,
         })
@@ -185,6 +193,7 @@ export default async function ShopifyIntegrationPage() {
         syncSettings={marketsSync}
         canManage={canManageChannel}
         b2bDunningDigestPreview={b2bDunningDigestPreview}
+        b2bCollectorDigestPreview={b2bCollectorDigestPreview}
       />
 
       <ShopifyMarketsWebhookRegistryPanel

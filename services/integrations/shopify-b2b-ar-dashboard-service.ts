@@ -11,6 +11,7 @@ import {
   buildB2bArAgingSnapshot,
 } from "@/lib/integrations/shopify-b2b-ar-aging-metadata";
 import {
+  buildB2bArCompanyRollups,
   buildB2bArDashboardSnapshot,
   incrementB2bArDashboardStats,
   type B2bArDashboardRow,
@@ -32,6 +33,8 @@ import { decryptOrderPiiFields } from "@/lib/orders/order-pii";
 import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import { sendB2bInvoiceOverdueReminderForOrder } from "@/services/integrations/shopify-b2b-ar-aging-service";
 import { ensureB2bInvoicePayPortalLink } from "@/services/integrations/shopify-b2b-invoice-pay-portal-service";
+import { isShopifyMarketsB2bCollectorQueueEnabled } from "@/lib/commercial/shopify-market-b2b-collector-queue";
+import { syncB2bCollectorQueueForConnection } from "@/services/integrations/shopify-b2b-collector-queue-service";
 
 export type B2bArDashboardBulkResult = {
   processed: number;
@@ -212,10 +215,23 @@ export async function buildB2bArDashboardSnapshotForOwner(input: {
   }
 
   const aging = buildB2bArAgingSnapshot(dashboardRows);
+
+  let collectorQueue = null;
+  if (isShopifyMarketsB2bCollectorQueueEnabled() && ctx.connectionId) {
+    const companies = buildB2bArCompanyRollups(dashboardRows, ctx.collectorsByCompanyId);
+    collectorQueue = await syncB2bCollectorQueueForConnection({
+      connectionId: ctx.connectionId,
+      companies,
+      rows: dashboardRows,
+      collectorsByCompanyId: ctx.collectorsByCompanyId,
+    });
+  }
+
   const snapshot = buildB2bArDashboardSnapshot({
     aging,
     rows: dashboardRows,
     collectorsByCompanyId: ctx.collectorsByCompanyId,
+    collectorQueue,
   });
 
   await persistHealthScore(ctx.connectionId, snapshot.healthScore);

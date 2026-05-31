@@ -24,6 +24,7 @@ export const ALLOWED_PRODUCTION_CRON_SLUGS = [
   "kds-overdue-alerts",
   "incident-remediation-reminders",
   "shopify-b2b-dunning",
+  "shopify-b2b-collector-digest",
   "outbound-webhook-deliveries",
 ] as const;
 
@@ -64,6 +65,7 @@ export const PRODUCTION_CRON_SCHEDULES: Record<ProductionCronSlug, string> = {
   "kds-overdue-alerts": "*/10 * * * *",
   "incident-remediation-reminders": "17 * * * *",
   "shopify-b2b-dunning": "0 9 * * *",
+  "shopify-b2b-collector-digest": "0 10 * * *",
   "outbound-webhook-deliveries": "*/5 * * * *",
 };
 

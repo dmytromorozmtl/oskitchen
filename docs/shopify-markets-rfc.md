@@ -658,17 +658,37 @@ Required Shopify scopes (verify at implementation):
 
 ---
 
-## Phase 24 — B2B AR collector task queue & SLA reminders (planned)
+## Phase 24 — B2B AR collector task queue & SLA reminders (shipped)
 
-**Goal:** Turn receivables dashboard company rollups into assignable collector tasks with due-date SLAs — separate from legal dunning and pay portal.
+**Goal:** Turn receivables company rollups into assignable collector tasks with SLA due dates — separate from legal dunning and pay portal.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_COLLECTOR_QUEUE=1` (default on in non-production) |
+| Metadata | `shopify-b2b-collector-queue-metadata.ts` — task sync, SLA breach, priority |
+| Service | `shopify-b2b-collector-queue-service.ts` — sync, status updates, daily digest |
+| UI | `/dashboard/receivables#b2b-collector-task-queue` — snooze / complete / reopen |
+| Settings card | `shopify-markets-b2b-collector-queue-card.tsx` on Integrations → Shopify |
+| Cron | `/api/cron/shopify-b2b-collector-digest` daily 10:00 UTC |
+| Settings | `b2bArCollectorTasks`, `b2bArCollectorSlaDaysByCompanyId`, `b2bArCollectorDefaultSlaDays`, `b2bCollectorQueueStats` |
+| Health | Critical when `slaBreachedCount > 0`; recommendations for SLA breach + email off |
+| Digest | Daily operator email grouped by assignee label (distinct from weekly AR digest) |
+
+**Conscious limits:** No credit bureau or legal collections workflow; assignee is a label not an auth user.
+
+---
+
+## Phase 25 — B2B multi-invoice consolidated pay link (planned)
+
+**Goal:** Allow buyers to pay multiple open B2B invoices in one Stripe Checkout session from receivables dashboard selections.
 
 | Component | Plan |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_AR_COLLECTOR_QUEUE=1` |
-| Tasks | Per-company open-invoice tasks with assignee, due date, status (open / snoozed / done) |
-| SLA | Auto-escalate when max past due exceeds company threshold; link from receivables row actions |
-| Digest | Optional daily collector email (distinct from operator AR digest) |
-| Health | Critical when SLA-breached tasks > 0 |
-| Settings | `b2bArCollectorTasks`, `b2bArCollectorSlaDaysByCompanyId` |
+| Feature flag | `SHOPIFY_MARKETS_B2B_CONSOLIDATED_PAY=1` |
+| Token | HMAC-signed multi-order pay token (max 10 invoices, 90-day TTL) |
+| Route | `/pay/b2b/batch/[token]` — line items per invoice draft |
+| Webhook | Stripe `purpose=b2b_invoice_batch` → mark each draft paid atomically |
+| UI | Receivables bulk action “Mint consolidated pay link” |
+| Health | Attention when consolidated checkout started but not completed > 48h |
 
-**Conscious limits:** No credit bureau or legal collections workflow; tasks are operator reminders only.
+**Conscious limits:** Same Stripe Connect account as single pay portal; no partial batch settlement in v1.
