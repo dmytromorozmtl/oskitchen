@@ -13,7 +13,7 @@ import {
   revokePartnerAppInstallation,
   validatePartnerOAuthAuthorizeParams,
 } from "@/services/platform/partner-oauth-service";
-import { listPartnerOAuthAppDefinitions } from "@/lib/oauth/partner-oauth-app-catalog";
+import { listMergedPartnerOAuthAppDefinitions } from "@/services/platform/partner-oauth-app-registry-service";
 
 const consentSchema = z.object({
   client_id: z.string().min(1),
@@ -28,7 +28,7 @@ export async function loadPartnerOAuthHubDataAction() {
 
   const [installations, apps] = await Promise.all([
     listPartnerAppInstallationsForOwner(access.actor.userId),
-    Promise.resolve(listPartnerOAuthAppDefinitions()),
+    listMergedPartnerOAuthAppDefinitions(),
   ]);
 
   return { ok: true as const, installations, apps };
@@ -41,7 +41,7 @@ export async function approvePartnerOAuthConsentAction(raw: z.infer<typeof conse
   const input = consentSchema.safeParse(raw);
   if (!input.success) return { ok: false as const, error: "Invalid consent request." };
 
-  const validated = validatePartnerOAuthAuthorizeParams({
+  const validated = await validatePartnerOAuthAuthorizeParams({
     clientId: input.data.client_id,
     redirectUri: input.data.redirect_uri,
     responseType: "code",

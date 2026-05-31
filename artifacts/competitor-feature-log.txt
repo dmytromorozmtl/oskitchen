@@ -289,3 +289,15 @@ Result: PASS
 Summary: OAuth authorization_code flow with sandbox apps, consent UI, token endpoint (koa_ tokens), installation revoke, public API scope mapping; wired into extensions catalog
 Tests: tests/unit/partner-oauth-service.test.ts
 Next: app-marketplace-phase4-embed-review OR shopify-markets-phase1 OR restaurant-capital-resources-hub
+
+---
+Post-parity cycle: 4
+Timestamp: 2026-05-31T08:00:00.000Z
+Feature: app-marketplace-phase4-embed-review
+Source: docs/app-marketplace-rfc.md Option D lite
+Priority: POST-PARITY
+Files: 38
+Result: PASS
+Summary: PartnerOAuthAppRegistry + review pipeline, platform queue at /platform/partner-apps, partner registration at /developers/apps/register, embedded admin host with HMAC embed tokens, verify API, merged OAuth catalog
+Tests: tests/unit/partner-app-review-service.test.ts, tests/unit/partner-oauth-service.test.ts
+Next: shopify-markets-phase1 OR restaurant-capital-resources-hub OR app-marketplace-phase5-partner-billing

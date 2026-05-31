@@ -13,7 +13,14 @@ import {
   type IntegrationRegistryEntry,
 } from "@/lib/integrations/integration-registry";
 import { integrationConnectionListWhereForOwner, resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
-import { listPartnerOAuthAppDefinitions } from "@/lib/oauth/partner-oauth-app-catalog";
+import {
+  listPartnerOAuthAppDefinitions,
+  type PartnerOAuthAppDefinition,
+} from "@/lib/oauth/partner-oauth-app-catalog";
+import {
+  isPartnerOAuthAppInstallable,
+  listMergedPartnerOAuthAppDefinitions,
+} from "@/services/platform/partner-oauth-app-registry-service";
 import { prisma } from "@/lib/prisma";
 
 export type ExtensionKind = "first_party" | "partner" | "oauth_app" | "roadmap";
@@ -42,6 +49,7 @@ export type ExtensionCatalogItem = {
   status: ExtensionStatus;
   description: string;
   setupRoute: string | null;
+  embedRoute: string | null;
   externalUrl: string | null;
   tags: string[];
   connectionState: ExtensionConnectionState;
@@ -139,6 +147,7 @@ function firstPartyFromRegistry(
     status: entry.status,
     description: `${entry.name} integration — ${entry.status} first-party connector with setup in dashboard.`,
     setupRoute: entry.setupRoute,
+    embedRoute: null,
     externalUrl: null,
     tags: ["first-party", entry.status.toLowerCase()],
     connectionState: connectionStateFromStatus(provider, connections),
@@ -165,6 +174,7 @@ function firstPartyFromChannelExtra(
       status: "BETA",
       description: extra.description,
       setupRoute: "/dashboard/integrations/inventory-sync",
+      embedRoute: null,
       externalUrl: null,
       tags: extra.tags,
       connectionState:
@@ -184,6 +194,7 @@ function firstPartyFromChannelExtra(
     status: channel?.statusType === "LIVE" ? "LIVE" : channel?.isPlaceholder ? "PLACEHOLDER" : "BETA",
     description: extra.description,
     setupRoute: channel?.setupRoute ?? null,
+    embedRoute: null,
     externalUrl: null,
     tags: extra.tags,
     connectionState: connectionStateFromStatus(provider ?? undefined, connections),
@@ -217,6 +228,7 @@ function buildPartnerCatalog(): ExtensionCatalogItem[] {
     status: app.status,
     description: app.description,
     setupRoute: app.setupRoute,
+    embedRoute: null,
     externalUrl: app.externalUrl,
     tags: app.tags,
     connectionState: "not_applicable" as const,
@@ -226,22 +238,29 @@ function buildPartnerCatalog(): ExtensionCatalogItem[] {
 }
 
 function buildOAuthAppCatalog(
+  apps: PartnerOAuthAppDefinition[],
   activeInstallations: Set<string>,
 ): ExtensionCatalogItem[] {
-  return listPartnerOAuthAppDefinitions().map((app) => ({
-    id: app.clientId,
-    name: app.name,
-    publisher: app.publisher,
-    category: "developer" as ExtensionCategory,
-    kind: "oauth_app" as const,
-    status: app.status === "PUBLISHED" ? "LIVE" : "BETA",
-    description: app.description,
-    setupRoute: "/dashboard/integrations/oauth-apps",
-    externalUrl: null,
-    tags: [...app.allowedScopes, "oauth"],
-    connectionState: activeInstallations.has(app.clientId) ? "connected" : "not_connected",
-    honestyNote: app.honestyNote,
-  }));
+  return apps
+    .filter((app) => isPartnerOAuthAppInstallable(app.status))
+    .map((app) => ({
+      id: app.clientId,
+      name: app.name,
+      publisher: app.publisher,
+      category: "developer" as ExtensionCategory,
+      kind: "oauth_app" as const,
+      status: app.status === "PUBLISHED" ? "LIVE" : "BETA",
+      description: app.description,
+      setupRoute: "/dashboard/integrations/oauth-apps",
+      embedRoute:
+        app.embedUrl && activeInstallations.has(app.clientId)
+          ? `/dashboard/integrations/oauth-apps/${encodeURIComponent(app.clientId)}/embed`
+          : null,
+      externalUrl: null,
+      tags: [...app.allowedScopes, "oauth"],
+      connectionState: activeInstallations.has(app.clientId) ? "connected" : "not_connected",
+      honestyNote: app.honestyNote,
+    }));
 }
 
 function buildRoadmapCatalog(): ExtensionCatalogItem[] {
@@ -254,6 +273,7 @@ function buildRoadmapCatalog(): ExtensionCatalogItem[] {
     status: "ROADMAP" as const,
     description: item.description,
     setupRoute: item.setupRoute,
+    embedRoute: null,
     externalUrl: item.externalUrl,
     tags: item.tags,
     connectionState: "not_applicable" as const,
@@ -264,11 +284,12 @@ function buildRoadmapCatalog(): ExtensionCatalogItem[] {
 export function mergeExtensionsCatalog(
   connections: Array<{ provider: IntegrationProvider; status: IntegrationStatus }>,
   activeOAuthInstallations: Set<string> = new Set(),
+  oauthApps: PartnerOAuthAppDefinition[] = listPartnerOAuthAppDefinitions(),
 ): ExtensionCatalogItem[] {
   return [
     ...buildFirstPartyCatalog(connections),
     ...buildPartnerCatalog(),
-    ...buildOAuthAppCatalog(activeOAuthInstallations),
+    ...buildOAuthAppCatalog(oauthApps, activeOAuthInstallations),
     ...buildRoadmapCatalog(),
   ].sort((a, b) => {
     const kindOrder: Record<ExtensionKind, number> = {
@@ -298,7 +319,7 @@ export async function getExtensionsCatalogForOwner(
   userId: string,
 ): Promise<{ items: ExtensionCatalogItem[]; summary: ExtensionsCatalogSummary }> {
   const scope = await resolveOwnerScopedWhere(userId);
-  const [connections, oauthInstallations] = await Promise.all([
+  const [connections, oauthInstallations, oauthApps] = await Promise.all([
     prisma.integrationConnection.findMany({
       where: scope as Prisma.IntegrationConnectionWhereInput,
       select: { provider: true, status: true },
@@ -307,9 +328,10 @@ export async function getExtensionsCatalogForOwner(
       where: { AND: [scope, { status: "ACTIVE" }] } as Prisma.PartnerAppInstallationWhereInput,
       select: { clientId: true },
     }),
+    listMergedPartnerOAuthAppDefinitions(),
   ]);
   const activeOAuth = new Set(oauthInstallations.map((row) => row.clientId));
-  const items = mergeExtensionsCatalog(connections, activeOAuth);
+  const items = mergeExtensionsCatalog(connections, activeOAuth, oauthApps);
   return { items, summary: summarizeExtensionsCatalog(items) };
 }
 

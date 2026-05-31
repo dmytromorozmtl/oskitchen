@@ -70,6 +70,7 @@ export const PLATFORM_NAV_GROUPS: PlatformNavGroup[] = [
     label: "Platform",
     items: [
       { href: "/platform/integrations", label: "Integrations", permission: "platform:integrations:read" },
+      { href: "/platform/partner-apps", label: "Partner apps", permission: "platform:integrations:read" },
       { href: "/platform/webhooks", label: "Webhooks", permission: "platform:integrations:read" },
       { href: "/platform/automations", label: "Automations", permission: "platform:automations:read" },
       { href: "/platform/notifications", label: "Notifications", permission: "platform:automations:read" },

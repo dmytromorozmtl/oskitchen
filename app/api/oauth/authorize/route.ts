@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     state: url.searchParams.get("state"),
   };
 
-  const validated = validatePartnerOAuthAuthorizeParams(params);
+  const validated = await validatePartnerOAuthAuthorizeParams(params);
   if (!validated.ok) {
     return NextResponse.json({ error: validated.error }, { status: 400 });
   }

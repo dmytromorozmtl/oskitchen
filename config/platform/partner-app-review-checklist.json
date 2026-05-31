@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-31",
+  "items": [
+    {
+      "id": "security_scopes",
+      "label": "Scopes exclude payment/card data and match declared manifest",
+      "required": true
+    },
+    {
+      "id": "redirect_uris_https",
+      "label": "Production redirect URIs use HTTPS (localhost http allowed for sandbox)",
+      "required": true
+    },
+    {
+      "id": "embed_csp",
+      "label": "Embedded admin URL declares explicit frame-ancestors / embed origins",
+      "required": false
+    },
+    {
+      "id": "webhook_docs",
+      "label": "Outbound webhook event handling documented for partner receivers",
+      "required": false
+    },
+    {
+      "id": "support_contact",
+      "label": "Partner support contact and escalation path on file",
+      "required": true
+    },
+    {
+      "id": "pilot_workspace_test",
+      "label": "Sandbox install verified in pilot workspace with test traffic",
+      "required": true
+    }
+  ]
+}

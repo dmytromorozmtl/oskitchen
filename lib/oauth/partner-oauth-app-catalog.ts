@@ -8,7 +8,12 @@ import {
 
 export const PARTNER_OAUTH_APPS_CONFIG_PATH = "config/platform/partner-oauth-apps.json" as const;
 
-export type PartnerOAuthAppStatus = "SANDBOX" | "REVIEW" | "PUBLISHED" | "SUSPENDED";
+export type PartnerOAuthAppStatus =
+  | "DRAFT"
+  | "IN_REVIEW"
+  | "SANDBOX"
+  | "PUBLISHED"
+  | "SUSPENDED";
 
 export type PartnerOAuthAppDefinition = {
   clientId: string;
@@ -18,6 +23,8 @@ export type PartnerOAuthAppDefinition = {
   description: string;
   redirectUris: string[];
   allowedScopes: PartnerOAuthScope[];
+  embedUrl?: string;
+  embedOrigins?: string[];
   honestyNote?: string;
 };
 

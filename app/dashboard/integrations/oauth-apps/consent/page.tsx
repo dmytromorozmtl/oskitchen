@@ -3,7 +3,12 @@ import { redirect } from "next/navigation";
 import { PartnerOAuthConsentPanel } from "@/components/dashboard/oauth/partner-oauth-consent-panel";
 import { requireIntegrationsReadPage } from "@/lib/integrations/integrations-page-access";
 import { intersectPartnerOAuthScopes, parsePartnerOAuthScopeList } from "@/lib/developer/partner-oauth-scopes";
-import { getPartnerOAuthAppByClientId, isRedirectUriAllowed } from "@/lib/oauth/partner-oauth-app-catalog";
+import {
+  getMergedPartnerOAuthAppByClientId,
+  isPartnerOAuthAppInstallable,
+  listMergedPartnerOAuthAppDefinitions,
+} from "@/services/platform/partner-oauth-app-registry-service";
+import { isRedirectUriAllowed } from "@/lib/oauth/partner-oauth-app-catalog";
 
 type ConsentPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -19,8 +24,8 @@ export default async function PartnerOAuthConsentPage({ searchParams }: ConsentP
   const scopeRaw = String(params.scope ?? "");
   const state = params.state ? String(params.state) : undefined;
 
-  const app = getPartnerOAuthAppByClientId(clientId);
-  if (!app || !isRedirectUriAllowed(app, redirectUri)) {
+  const app = await getMergedPartnerOAuthAppByClientId(clientId);
+  if (!app || !isPartnerOAuthAppInstallable(app.status) || !isRedirectUriAllowed(app, redirectUri)) {
     redirect("/dashboard/integrations/oauth-apps");
   }
 

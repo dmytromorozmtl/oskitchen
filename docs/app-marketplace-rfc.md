@@ -1,6 +1,6 @@
 # App Marketplace RFC — Third-Party Extension Platform
 
-**Status:** Phase 1–3 shipped (directory · outbound webhooks · OAuth sandbox BETA) — full marketplace **not implemented**  
+**Status:** Phase 1–4 shipped (directory · outbound webhooks · OAuth sandbox · review + embed BETA) — full marketplace **not implemented**  
 **Audience:** Platform, Integrations, Security, Product, Commercial, Partnerships  
 **Tracker:** `app-marketplace-rfc` (competitor parity cycle 21)  
 **Related:** [`lib/integrations/integration-registry.ts`](../lib/integrations/integration-registry.ts) · [`lib/channels/channel-registry.ts`](../lib/channels/channel-registry.ts) · [`app/developers/page.tsx`](../app/developers/page.tsx) · [`docs/scim-provisioning-rfc.md`](./scim-provisioning-rfc.md) · [`docs/INTEGRATION_MATURITY_MATRIX.md`](./INTEGRATION_MATURITY_MATRIX.md)
@@ -310,3 +310,4 @@ Developer docs surface:
 | 2026-05-31 | **Phase 1 shipped:** `config/commercial/partner-apps.json`, `services/platform/extensions-catalog-service.ts`, `/dashboard/integrations/extensions` |
 | 2026-05-31 | **Phase 2 shipped:** outbound webhook subscriptions + delivery worker + `/dashboard/integrations/outbound-webhooks` |
 | 2026-05-31 | **Phase 3 shipped:** OAuth sandbox apps + consent + token endpoint + `koa_` API tokens |
+| 2026-05-31 | **Phase 4 shipped:** `PartnerOAuthAppRegistry` review pipeline, `/platform/partner-apps`, `/developers/apps/register`, embedded admin host + `POST /api/embed/partner-app/verify` |

@@ -1,4 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    partnerOAuthAppRegistry: {
+      findUnique: vi.fn().mockResolvedValue(null),
+      findMany: vi.fn().mockResolvedValue([]),
+    },
+  },
+}));
 
 import {
   intersectPartnerOAuthScopes,
@@ -47,10 +56,10 @@ describe("partner-oauth scopes", () => {
 });
 
 describe("partner-oauth authorize params", () => {
-  it("accepts valid authorization request", () => {
+  it("accepts valid authorization request", async () => {
     const app = getPartnerOAuthAppByClientId("sandbox-opsbridge-connector");
     expect(app).not.toBeNull();
-    const result = validatePartnerOAuthAuthorizeParams({
+    const result = await validatePartnerOAuthAuthorizeParams({
       clientId: app!.clientId,
       redirectUri: app!.redirectUris[0]!,
       responseType: "code",
@@ -63,8 +72,8 @@ describe("partner-oauth authorize params", () => {
     }
   });
 
-  it("rejects unknown client", () => {
-    const result = validatePartnerOAuthAuthorizeParams({
+  it("rejects unknown client", async () => {
+    const result = await validatePartnerOAuthAuthorizeParams({
       clientId: "unknown-app",
       redirectUri: "http://localhost:3000/api/oauth/callback/sandbox",
       responseType: "code",

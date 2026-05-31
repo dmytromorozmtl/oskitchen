@@ -12,10 +12,11 @@ import {
   validatePartnerOAuthScopes,
 } from "@/lib/developer/partner-oauth-scopes";
 import {
-  getPartnerOAuthAppByClientId,
-  isRedirectUriAllowed,
-  resolvePartnerOAuthClientSecret,
-} from "@/lib/oauth/partner-oauth-app-catalog";
+  getMergedPartnerOAuthAppByClientId,
+  isPartnerOAuthAppInstallable,
+} from "@/services/platform/partner-oauth-app-registry-service";
+import { isRedirectUriAllowed, resolvePartnerOAuthClientSecret } from "@/lib/oauth/partner-oauth-app-catalog";
+import type { PartnerOAuthAppDefinition } from "@/lib/oauth/partner-oauth-app-catalog";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
 
@@ -40,6 +41,7 @@ export type PartnerAppInstallationView = {
   tokenPrefix: string;
   installedAt: Date;
   lastUsedAt: Date | null;
+  embedUrl: string | null;
 };
 
 function hashOAuthCode(raw: string): string {
@@ -54,16 +56,18 @@ function generateAccessToken(): string {
   return `${PARTNER_OAUTH_TOKEN_PREFIX}${randomBytes(32).toString("hex")}`;
 }
 
-export function validatePartnerOAuthAuthorizeParams(
+export function validatePartnerOAuthAuthorizeParamsWithApp(
   params: PartnerOAuthAuthorizeParams,
-): { ok: true; app: NonNullable<ReturnType<typeof getPartnerOAuthAppByClientId>>; scopes: PartnerOAuthScope[] } | { ok: false; error: string } {
+  app: PartnerOAuthAppDefinition,
+): { ok: true; app: PartnerOAuthAppDefinition; scopes: PartnerOAuthScope[] } | { ok: false; error: string } {
   if (params.responseType !== "code") {
     return { ok: false, error: "Unsupported response_type — only `code` is supported." };
   }
 
-  const app = getPartnerOAuthAppByClientId(params.clientId.trim());
-  if (!app) return { ok: false, error: "Unknown client_id." };
   if (app.status === "SUSPENDED") return { ok: false, error: "This app is suspended." };
+  if (!isPartnerOAuthAppInstallable(app.status)) {
+    return { ok: false, error: "This app is not published for installation yet." };
+  }
 
   if (!isRedirectUriAllowed(app, params.redirectUri)) {
     return { ok: false, error: "redirect_uri is not registered for this app." };
@@ -79,6 +83,16 @@ export function validatePartnerOAuthAuthorizeParams(
   }
 
   return { ok: true, app, scopes };
+}
+
+export async function validatePartnerOAuthAuthorizeParams(
+  params: PartnerOAuthAuthorizeParams,
+): Promise<
+  { ok: true; app: PartnerOAuthAppDefinition; scopes: PartnerOAuthScope[] } | { ok: false; error: string }
+> {
+  const app = await getMergedPartnerOAuthAppByClientId(params.clientId.trim());
+  if (!app) return { ok: false, error: "Unknown client_id." };
+  return validatePartnerOAuthAuthorizeParamsWithApp(params, app);
 }
 
 export async function createPartnerOAuthAuthorizationCode(input: {
@@ -134,8 +148,11 @@ export async function exchangePartnerOAuthAuthorizationCode(input: {
     }
   | { ok: false; error: string }
 > {
-  const app = getPartnerOAuthAppByClientId(input.clientId.trim());
+  const app = await getMergedPartnerOAuthAppByClientId(input.clientId.trim());
   if (!app) return { ok: false, error: "invalid_client" };
+  if (!isPartnerOAuthAppInstallable(app.status)) {
+    return { ok: false, error: "invalid_client" };
+  }
 
   const expectedSecret = resolvePartnerOAuthClientSecret(app.clientId);
   if (!expectedSecret || input.clientSecret !== expectedSecret) {
@@ -250,20 +267,23 @@ export async function listPartnerAppInstallationsForOwner(
     orderBy: { installedAt: "desc" },
   });
 
-  return rows.map((row) => {
-    const app = getPartnerOAuthAppByClientId(row.clientId);
-    return {
-      id: row.id,
-      clientId: row.clientId,
-      appName: app?.name ?? row.clientId,
-      publisher: app?.publisher ?? "Unknown publisher",
-      scopesGranted: row.scopesGranted as PartnerOAuthScope[],
-      status: row.status,
-      tokenPrefix: row.tokenPrefix,
-      installedAt: row.installedAt,
-      lastUsedAt: row.lastUsedAt,
-    };
-  });
+  return Promise.all(
+    rows.map(async (row) => {
+      const app = await getMergedPartnerOAuthAppByClientId(row.clientId);
+      return {
+        id: row.id,
+        clientId: row.clientId,
+        appName: app?.name ?? row.clientId,
+        publisher: app?.publisher ?? "Unknown publisher",
+        scopesGranted: row.scopesGranted as PartnerOAuthScope[],
+        status: row.status,
+        tokenPrefix: row.tokenPrefix,
+        installedAt: row.installedAt,
+        lastUsedAt: row.lastUsedAt,
+        embedUrl: app?.embedUrl ?? null,
+      };
+    }),
+  );
 }
 
 export async function revokePartnerAppInstallation(input: {

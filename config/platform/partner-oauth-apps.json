@@ -13,6 +13,8 @@
         "https://hooks.example.com/oauth/kitchenos/callback"
       ],
       "allowedScopes": ["read:orders", "manage:webhooks"],
+      "embedUrl": "/developers/embed-demo",
+      "embedOrigins": ["http://localhost:3000", "https://kitchenos.com"],
       "honestyNote": "Sandbox — not a production app store listing. Requires integrations.manage to install."
     },
     {

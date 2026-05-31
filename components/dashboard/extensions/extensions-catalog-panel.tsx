@@ -153,6 +153,11 @@ function ExtensionCard({ item, canManage }: { item: ExtensionCatalogItem; canMan
               <Link href={item.externalUrl}>Partner program</Link>
             </Button>
           ) : null}
+          {item.embedRoute ? (
+            <Button asChild size="sm" variant="secondary" className="rounded-full">
+              <Link href={item.embedRoute}>Embedded admin</Link>
+            </Button>
+          ) : null}
           {item.setupRoute && item.externalUrl && item.kind === "partner" ? (
             <Button asChild size="sm" variant="ghost" className="rounded-full">
               <Link href={item.externalUrl}>Apply via partners</Link>

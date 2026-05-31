@@ -49,9 +49,9 @@ export default async function IntegrationsExtensionsPage() {
       </div>
 
       <PilotBetaSurfaceBanner
-        title="Partner directory — Phase 1"
+        title="Partner directory — Phase 1–4"
         status="BETA"
-        description="Certified integrations are SI-led. OAuth app install, outbound webhooks, and embedded admin surfaces remain on the developer roadmap — we do not claim a Toast/Square-style marketplace until those phases ship."
+        description="Certified SI partners, OAuth sandbox apps, outbound webhooks, and embedded admin for reviewed apps. Not a self-serve Toast/Square marketplace — partner submissions require platform review."
       />
 
       {!access.canManage ? (

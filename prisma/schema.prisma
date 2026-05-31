@@ -282,6 +282,14 @@ enum PartnerAppInstallationStatus {
   REVOKED
 }
 
+enum PartnerOAuthAppRegistryStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  SANDBOX
+  SUSPENDED
+}
+
 enum ErrorRecoverySource {
   WEBHOOK_JOB
 }
@@ -2035,6 +2043,7 @@ model UserProfile {
   partnerAppInstallations      PartnerAppInstallation[]
   partnerAppsInstalled         PartnerAppInstallation[] @relation("PartnerAppInstalledBy")
   oauthAuthorizationCodes      OAuthAuthorizationCode[]
+  partnerOAuthAppsReviewed     PartnerOAuthAppRegistry[] @relation("PartnerOAuthAppReviewedBy")
   errorRecoveryItems     ErrorRecoveryItem[]
   acknowledgedCronHeartbeats CronExecutionHeartbeat[] @relation("CronExecutionHeartbeatAcknowledger")
   cronExecutionEventsActed CronExecutionEvent[] @relation("CronExecutionEventActor")
@@ -3573,6 +3582,33 @@ model OAuthAuthorizationCode {
   @@index([clientId, expiresAt])
   @@index([userId])
   @@map("oauth_authorization_codes")
+}
+
+model PartnerOAuthAppRegistry {
+  id                String                      @id @default(uuid()) @db.Uuid
+  clientId          String                      @unique @map("client_id") @db.VarChar(128)
+  name              String                      @db.VarChar(255)
+  publisher         String                      @db.VarChar(255)
+  description       String                      @db.Text
+  status            PartnerOAuthAppRegistryStatus @default(DRAFT)
+  redirectUris      String[]                    @map("redirect_uris")
+  allowedScopes     String[]                    @map("allowed_scopes")
+  embedUrl          String?                     @map("embed_url") @db.Text
+  embedOrigins      String[]                    @map("embed_origins")
+  honestyNote       String?                     @map("honesty_note") @db.Text
+  reviewNotes       String?                     @map("review_notes") @db.Text
+  checklistJson     Json?                       @map("checklist_json")
+  submittedAt       DateTime?                   @map("submitted_at")
+  reviewedAt        DateTime?                   @map("reviewed_at")
+  reviewedByUserId  String?                     @map("reviewed_by_user_id") @db.Uuid
+  contactEmail      String?                     @map("contact_email") @db.VarChar(255)
+  createdAt         DateTime                    @default(now()) @map("created_at")
+  updatedAt         DateTime                    @updatedAt @map("updated_at")
+
+  reviewedBy UserProfile? @relation("PartnerOAuthAppReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([status, submittedAt])
+  @@map("partner_oauth_app_registry")
 }
 
 model CronExecutionHeartbeat {

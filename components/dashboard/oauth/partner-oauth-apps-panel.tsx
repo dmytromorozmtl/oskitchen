@@ -14,6 +14,7 @@ import {
   buildPartnerOAuthAuthorizeUrl,
   type PartnerOAuthAppDefinition,
 } from "@/lib/oauth/partner-oauth-app-catalog";
+import { isPartnerOAuthAppInstallable } from "@/services/platform/partner-oauth-app-registry-service";
 import type { PartnerAppInstallationView } from "@/services/platform/partner-oauth-service";
 
 type PartnerOAuthAppsPanelProps = {
@@ -41,12 +42,12 @@ export function PartnerOAuthAppsPanel({
         <CardHeader>
           <CardTitle className="text-base">Sandbox apps</CardTitle>
           <CardDescription>
-            Curated OAuth apps for pilot partners — install via authorization code flow. Production app
-            review pipeline is Phase 4.
+            Installable OAuth apps — sandbox and platform-reviewed partners. Submit new apps via the
+            developer registration form; platform staff approve before listing.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 md:grid-cols-2">
-          {apps.map((app) => {
+          {apps.filter((app) => isPartnerOAuthAppInstallable(app.status)).map((app) => {
             const installed = installedClientIds.has(app.clientId);
             const redirectUri = app.redirectUris[0] ?? "";
             const installHref = buildPartnerOAuthAuthorizeUrl({
@@ -73,12 +74,21 @@ export function PartnerOAuthAppsPanel({
                   ))}
                 </div>
                 {canManage ? (
-                  <Button asChild size="sm" className="mt-3 rounded-full" disabled={!redirectUri}>
-                    <Link href={installHref}>
-                      {installed ? "Re-authorize" : "Install"}
-                      <ExternalLink className="ml-1 h-3 w-3" />
-                    </Link>
-                  </Button>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button asChild size="sm" className="rounded-full" disabled={!redirectUri}>
+                      <Link href={installHref}>
+                        {installed ? "Re-authorize" : "Install"}
+                        <ExternalLink className="ml-1 h-3 w-3" />
+                      </Link>
+                    </Button>
+                    {installed && app.embedUrl ? (
+                      <Button asChild size="sm" variant="outline" className="rounded-full">
+                        <Link href={`/dashboard/integrations/oauth-apps/${encodeURIComponent(app.clientId)}/embed`}>
+                          Open embedded admin
+                        </Link>
+                      </Button>
+                    ) : null}
+                  </div>
                 ) : null}
               </div>
             );
@@ -126,7 +136,17 @@ export function PartnerOAuthAppsPanel({
                     </p>
                   </div>
                   {canManage && row.status === "ACTIVE" ? (
-                    <Button
+                    <div className="flex flex-col gap-2">
+                      {row.embedUrl ? (
+                        <Button asChild size="sm" variant="outline" className="rounded-full">
+                          <Link
+                            href={`/dashboard/integrations/oauth-apps/${encodeURIComponent(row.clientId)}/embed`}
+                          >
+                            Embedded admin
+                          </Link>
+                        </Button>
+                      ) : null}
+                      <Button
                       type="button"
                       size="sm"
                       variant="ghost"
@@ -143,6 +163,7 @@ export function PartnerOAuthAppsPanel({
                         <Trash2 className="h-4 w-4" />
                       )}
                     </Button>
+                    </div>
                   ) : null}
                 </div>
               </div>
