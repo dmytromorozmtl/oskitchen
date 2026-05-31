@@ -10,6 +10,7 @@ const LINKS: { href: string; label: string; match?: "exact" | "prefix" }[] = [
   { href: "/dashboard/analytics/revenue", label: "Revenue" },
   { href: "/dashboard/analytics/orders", label: "Orders" },
   { href: "/dashboard/analytics/channels", label: "Channels" },
+  { href: "/dashboard/analytics/delivery-channels", label: "Delivery Channels" },
   { href: "/dashboard/analytics/customers", label: "Customers" },
   { href: "/dashboard/analytics/production", label: "Production" },
   { href: "/dashboard/analytics/delivery", label: "Packing & Delivery" },

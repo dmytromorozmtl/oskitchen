@@ -10,7 +10,9 @@ export type AnalyticsChannel =
   | "MANUAL"
   | "WOOCOMMERCE"
   | "SHOPIFY"
+  | "DOORDASH"
   | "UBER_EATS"
+  | "GRUBHUB"
   | "UBER_DIRECT"
   | "OTHER";
 
@@ -19,7 +21,9 @@ export const ANALYTICS_CHANNEL_VALUES: AnalyticsChannel[] = [
   "MANUAL",
   "WOOCOMMERCE",
   "SHOPIFY",
+  "DOORDASH",
   "UBER_EATS",
+  "GRUBHUB",
   "UBER_DIRECT",
   "OTHER",
 ];
@@ -29,7 +33,9 @@ export const ANALYTICS_CHANNEL_LABEL: Record<AnalyticsChannel, string> = {
   MANUAL: "Manual / Phone",
   WOOCOMMERCE: "WooCommerce",
   SHOPIFY: "Shopify",
+  DOORDASH: "DoorDash",
   UBER_EATS: "Uber Eats",
+  GRUBHUB: "Grubhub",
   UBER_DIRECT: "Uber Direct",
   OTHER: "Other",
 };
@@ -40,8 +46,12 @@ export function channelFromProvider(provider: IntegrationProvider | null | undef
       return "WOOCOMMERCE";
     case "SHOPIFY":
       return "SHOPIFY";
+    case "DOORDASH":
+      return "DOORDASH";
     case "UBER_EATS":
       return "UBER_EATS";
+    case "GRUBHUB":
+      return "GRUBHUB";
     case "UBER_DIRECT":
       return "UBER_DIRECT";
     case "MANUAL":
