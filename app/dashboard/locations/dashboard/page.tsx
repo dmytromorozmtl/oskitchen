@@ -2,11 +2,12 @@ import Link from "next/link";
 
 import { AnalyticsBars, AnalyticsDailyArea } from "@/components/dashboard/analytics-bars";
 import { AnalyticsFilterBar } from "@/components/dashboard/analytics-filter-bar";
+import { MultiLocationComparisonTable } from "@/components/dashboard/multi-location-comparison-table";
+import { MultiLocationCustomDateForm } from "@/components/dashboard/multi-location-custom-date-form";
+import { MultiLocationPdfExportButton } from "@/components/dashboard/multi-location-pdf-export-button";
 import { PlanGate } from "@/components/plans/plan-gate";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LOCATION_STATUS_BADGE, LOCATION_STATUS_LABEL, LOCATION_TYPE_LABEL } from "@/lib/locations/location-types";
 import { parseAnalyticsFilters } from "@/lib/analytics/filters";
 import { loadFilterableBrandsAndLocations } from "@/lib/analytics/server-helpers";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -33,12 +34,16 @@ export default async function MultiLocationDashboardPage({
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Multi-location dashboard</h1>
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Aggregate revenue, order volume, routes, and tasks across every location in one command center.
+              Compare revenue, orders, labor, and food cost across every location — custom date ranges,
+              PDF export, and weekly email digest included.
             </p>
           </div>
-          <Button asChild variant="outline" size="sm" className="rounded-full">
-            <Link href="/dashboard/locations/reports">Detailed reports</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <MultiLocationPdfExportButton snapshot={snapshot} />
+            <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href="/dashboard/locations/reports">Detailed reports</Link>
+            </Button>
+          </div>
         </div>
 
         <AnalyticsFilterBar
@@ -47,6 +52,8 @@ export default async function MultiLocationDashboardPage({
           brands={brands}
           locations={locations}
         />
+
+        <MultiLocationCustomDateForm filters={filters} basePath="/dashboard/locations/dashboard" />
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Kpi label="Active locations" value={snapshot.activeLocations} hint={`${snapshot.totalLocations} total`} />
@@ -104,63 +111,13 @@ export default async function MultiLocationDashboardPage({
 
         <Card className="border-border/80 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-base">Cross-location comparison</CardTitle>
-            <CardDescription>Orders, revenue, fulfillment mix, routes, and tasks.</CardDescription>
+            <CardTitle className="text-base">Location vs location comparison</CardTitle>
+            <CardDescription>
+              Orders, revenue, labor %, food cost % — highlighted vs network average.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="overflow-x-auto">
-            <table className="w-full min-w-[880px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-border/60 text-xs text-muted-foreground">
-                  <th className="py-2 pr-3 font-medium">Location</th>
-                  <th className="py-2 pr-3 font-medium">Status</th>
-                  <th className="py-2 pr-3 font-medium">Orders</th>
-                  <th className="py-2 pr-3 font-medium">Revenue</th>
-                  <th className="py-2 pr-3 font-medium">AOV</th>
-                  <th className="py-2 pr-3 font-medium">Pickup / Delivery</th>
-                  <th className="py-2 pr-3 font-medium">Routes</th>
-                  <th className="py-2 font-medium">Tasks</th>
-                </tr>
-              </thead>
-              <tbody>
-                {snapshot.locations.map((row) => (
-                  <tr key={row.locationId} className="border-b border-border/40">
-                    <td className="py-2 pr-3">
-                      <Link href={`/dashboard/locations/${row.locationId}/reports`} className="font-medium hover:underline">
-                        {row.locationName}
-                      </Link>
-                      <p className="text-xs text-muted-foreground">{LOCATION_TYPE_LABEL[row.type]}</p>
-                    </td>
-                    <td className="py-2 pr-3">
-                      <Badge variant={LOCATION_STATUS_BADGE[row.status]} className="rounded-full text-[10px]">
-                        {LOCATION_STATUS_LABEL[row.status]}
-                      </Badge>
-                    </td>
-                    <td className="py-2 pr-3 tabular-nums">{row.orders}</td>
-                    <td className="py-2 pr-3 tabular-nums">{formatCurrency(row.revenue)}</td>
-                    <td className="py-2 pr-3 tabular-nums">
-                      {row.avgOrderValue == null ? "—" : formatCurrency(row.avgOrderValue)}
-                    </td>
-                    <td className="py-2 pr-3 tabular-nums">
-                      {row.pickupOrders} / {row.deliveryOrders}
-                    </td>
-                    <td className="py-2 pr-3 tabular-nums">{row.routes}</td>
-                    <td className="py-2 tabular-nums">{row.tasks}</td>
-                  </tr>
-                ))}
-                {(snapshot.unassignedOrders > 0 || snapshot.unassignedRevenue > 0) && (
-                  <tr className="bg-muted/30">
-                    <td className="py-2 pr-3 italic text-muted-foreground">Unassigned</td>
-                    <td className="py-2 pr-3">—</td>
-                    <td className="py-2 pr-3 tabular-nums">{snapshot.unassignedOrders}</td>
-                    <td className="py-2 pr-3 tabular-nums">{formatCurrency(snapshot.unassignedRevenue)}</td>
-                    <td className="py-2 pr-3">—</td>
-                    <td className="py-2 pr-3">—</td>
-                    <td className="py-2 pr-3 tabular-nums">{snapshot.locations.length ? "—" : 0}</td>
-                    <td className="py-2">—</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <CardContent>
+            <MultiLocationComparisonTable snapshot={snapshot} />
           </CardContent>
         </Card>
       </div>
