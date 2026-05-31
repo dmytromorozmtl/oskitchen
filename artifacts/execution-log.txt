@@ -1392,3 +1392,7 @@ P0: SKIPPED
 GO: NO-GO
 Build: PASS (exit 0)
 Tests: pending (item 2 next)
+---
+Cycle: 20260531-142649
+Action: fix: nav-maturity-governance-ci-live.test.ts — delivery integrations preview not placeholder
+Tests: nav-maturity-governance-ci-live.test.ts PASS (6/6)
