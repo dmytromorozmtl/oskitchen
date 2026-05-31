@@ -1,6 +1,6 @@
 {
   "hardware-terminal-sdk": "done",
-  "hardware-terminal-ui": "todo",
+  "hardware-terminal-ui": "done",
   "hardware-terminal-e2e": "todo",
   "websocket-kds-infra": "todo",
   "websocket-kds-ui": "todo",

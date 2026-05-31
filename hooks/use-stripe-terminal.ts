@@ -17,6 +17,8 @@ import {
 } from "@/lib/payments/stripe-terminal-client";
 
 export type UseStripeTerminalOptions = {
+  /** When false, Terminal.js is not initialized (lazy until card mode). */
+  enabled?: boolean;
   autoConnect?: boolean;
   maxReconnectAttempts?: number;
   onUnexpectedDisconnect?: () => void;
@@ -42,7 +44,12 @@ export type UseStripeTerminalResult = {
 };
 
 export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseStripeTerminalResult {
-  const { autoConnect = true, maxReconnectAttempts = 3, onUnexpectedDisconnect } = options;
+  const {
+    enabled = true,
+    autoConnect = true,
+    maxReconnectAttempts = 3,
+    onUnexpectedDisconnect,
+  } = options;
 
   const [terminal, setTerminal] = useState<Terminal | null>(null);
   const [reader, setReader] = useState<Reader | null>(null);
@@ -244,6 +251,16 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
   );
 
   useEffect(() => {
+    if (!enabled) {
+      clearReconnectTimer();
+      readerRef.current = null;
+      setReader(null);
+      setTerminal(null);
+      terminalRef.current = null;
+      setStatus("disconnected");
+      return;
+    }
+
     let cancelled = false;
     const shouldAutoConnect = autoConnect;
 
@@ -277,9 +294,7 @@ export function useStripeTerminal(options: UseStripeTerminalOptions = {}): UseSt
       clearReconnectTimer();
       void terminalRef.current?.disconnectReader();
     };
-    // Mount-only bootstrap — reconnect handlers use refs.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [autoConnect, clearReconnectTimer, enabled, initialize]);
 
   return {
     terminal,

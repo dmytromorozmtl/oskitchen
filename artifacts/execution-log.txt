@@ -1455,3 +1455,9 @@ Action: feat: Stripe Terminal SDK integration — reader connection + payment pr
 Files: lib/payments/stripe-terminal-client.ts, hooks/use-stripe-terminal.ts, components/pos/pos-payment-methods.tsx, tests/unit/stripe-terminal-client.test.ts, artifacts/critical-features-tracker.json
 Tracker: hardware-terminal-sdk=done
 Next: Cycle 2 POS terminal UI (stripe-terminal-reader component)
+---
+Cycle: 20260531-161100
+Action: feat: POS terminal Stripe reader UI — connect, pay, receipt (Critical Features Cycle 2)
+Files: components/pos/stripe-terminal-reader.tsx, components/dashboard/pos-terminal-client.tsx, hooks/use-stripe-terminal.ts (enabled lazy init)
+Tracker: hardware-terminal-ui=done (2/13)
+Next: Cycle 3 Stripe Terminal E2E + sales one-pager

@@ -13,7 +13,11 @@ import {
   type PosCheckoutStatusKind,
   toPosCheckoutStatus,
 } from "@/lib/pos/pos-checkout-status";
-import { TapToPayButton } from "@/components/pos/pos-payment-methods";
+import {
+  StripeTerminalProvider,
+  StripeTerminalReaderPanel,
+  StripeTerminalCheckout,
+} from "@/components/pos/stripe-terminal-reader";
 import { posQuickCreateKitchenCustomerAction, posSearchKitchenCustomersAction } from "@/actions/pos-terminal-customers";
 import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
 import {
@@ -616,7 +620,11 @@ export function PosTerminalClient(props: {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [filtered]);
 
+  const stripeTerminalActive =
+    paymentMode === "CARD_TERMINAL_PLACEHOLDER" || pendingTerminal != null;
+
   return (
+    <StripeTerminalProvider active={stripeTerminalActive}>
     <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
       <div className="flex flex-1 flex-col gap-3">
         <OfflineSyncStatusBar className="w-full" showWhenIdle={offlineQueueEnabled} />
@@ -1054,6 +1062,9 @@ export function PosTerminalClient(props: {
                 ))}
               </SelectContent>
             </Select>
+            {paymentMode === "CARD_TERMINAL_PLACEHOLDER" ? (
+              <StripeTerminalReaderPanel compact className="mt-2" />
+            ) : null}
             {!canApplyPosDiscount ? (
               <p className="text-xs text-muted-foreground">
                 Discounts and comps require manager approval (`pos.discount.apply`).
@@ -1306,7 +1317,7 @@ export function PosTerminalClient(props: {
           ) : null}
 
           {pendingTerminal ? (
-            <TapToPayButton
+            <StripeTerminalCheckout
               amount={pendingTerminal.amount}
               orderId={pendingTerminal.orderId}
               onSuccess={() => {
@@ -1352,5 +1363,6 @@ export function PosTerminalClient(props: {
         </CardContent>
       </Card>
     </div>
+    </StripeTerminalProvider>
   );
 }
