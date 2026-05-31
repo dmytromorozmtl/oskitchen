@@ -75,13 +75,13 @@
       "featured": false
     },
     {
-      "slug": "os-kitchen-attestation-waitlist",
-      "name": "OS Kitchen — Verified revenue export (waitlist)",
+      "slug": "os-kitchen-revenue-export",
+      "name": "OS Kitchen — Signed revenue export",
       "category": "platform",
-      "description": "Join the waitlist for signed KitchenOS revenue summaries you can share with lenders. Phase 2 beta — not a lending product.",
-      "href": "/contact-sales?topic=capital-attestation",
+      "description": "Generate a signed JSON summary of trailing gross order revenue from your KitchenOS workspace (Phase 2 beta).",
+      "href": "/dashboard/analytics/capital#revenue-attestation",
       "regions": ["US", "CA", "UK", "EU"],
-      "disclosure": "Internal waitlist — KitchenOS does not guarantee lender acceptance.",
+      "disclosure": "Operational revenue summary — not a lending product or credit decision.",
       "referralFee": false,
       "featured": true,
       "internal": true

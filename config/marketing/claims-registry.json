@@ -24,6 +24,14 @@
     "status": "verified"
   },
   {
+    "claim": "OS Kitchen provides signed revenue export JSON for lender conversations — not a credit decision.",
+    "page": "/dashboard/analytics/capital",
+    "evidenceType": "product-page",
+    "evidenceSource": "services/commercial/revenue-attestation-service.ts + docs/commercial/capital-partner-disclosures.md",
+    "dateVerified": "2026-05-31",
+    "status": "verified"
+  },
+  {
     "claim": "OS Kitchen provides third-party restaurant financing resources — not loans or credit decisions.",
     "page": "/resources/restaurant-financing",
     "evidenceType": "product-page",

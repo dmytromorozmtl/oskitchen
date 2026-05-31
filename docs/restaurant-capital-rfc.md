@@ -1,6 +1,6 @@
 # Restaurant Capital RFC — Merchant Financing & Revenue-Based Lending
 
-**Status:** Phase 1 shipped (resource hub + disclosures BETA) — Phase 2 attestation not implemented  
+**Status:** Phase 1–2 shipped (resource hub + signed revenue export BETA) — Phase 3 lender offers not implemented  
 **Audience:** Product, Commercial, Finance, Legal, Security, Partnerships  
 **Tracker:** `restaurant-capital-rfc` (competitor parity cycle 22)  
 **Related:** [`app-marketplace-rfc.md`](./app-marketplace-rfc.md) · [`services/analytics/advanced-reporting-service.ts`](../services/analytics/advanced-reporting-service.ts) · [`lib/analytics/revenue-metrics.ts`](../lib/analytics/revenue-metrics.ts) · [`services/billing/subscription-service.ts`](../services/billing/subscription-service.ts) · [`docs/KITCHENOS_FINAL_PRODUCT_AND_COMPETITOR_ANALYSIS.md`](./KITCHENOS_FINAL_PRODUCT_AND_COMPETITOR_ANALYSIS.md)
@@ -173,8 +173,8 @@ KitchenOS originates or funds advances directly.
 | Phase | Scope | Exit criteria | Sales honesty |
 |-------|--------|---------------|---------------|
 | **0 (this RFC)** | Document gap + options | RFC merged; tracker done | “No capital product” |
-| **1** | Resource hub + legal disclosures | Page live; claims registry updated | “Financing resources — third-party” |
-| **2** | Revenue attestation export | Merchant downloads signed summary | “Verified revenue export beta” |
+| **1 (shipped)** | Resource hub + legal disclosures | Page live; claims registry updated | “Financing resources — third-party” |
+| **2 (shipped)** | Revenue attestation export | Merchant downloads signed summary | “Verified revenue export beta” |
 | **3** | One lender partner embedded offers | Consent + offer display in dashboard | “Financing offers via [Partner]” |
 | **4** | Multi-lender marketplace (optional) | Compare offers — rare in restaurant POS | “Capital marketplace pilot” |
 
@@ -318,3 +318,4 @@ Engage counsel **before Phase 3**. Phase 1–2 are lower risk but still need rev
 |------|----------|
 | 2026-05-31 | RFC accepted as Phase 0; no lending origination; recommend Option A → B for first commercial slices |
 | 2026-05-31 | **Phase 1 shipped:** `/dashboard/analytics/capital`, `/resources/restaurant-financing`, partner config, audit-logged outbound links, revenue context panel |
+| 2026-05-31 | **Phase 2 shipped:** `RevenueAttestation` model, HMAC-signed JSON export, verify API, 30-day expiry, audit log on generate |

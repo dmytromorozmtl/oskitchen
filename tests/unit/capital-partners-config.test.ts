@@ -27,8 +27,8 @@ describe("capital-partners config", () => {
     expect(resolveCapitalPartnerOutboundHref("sba-funding-programs")).toContain(
       "/api/capital/partner-outbound?slug=sba-funding-programs",
     );
-    expect(resolveCapitalPartnerOutboundHref("os-kitchen-attestation-waitlist")).toBe(
-      "/contact-sales?topic=capital-attestation",
+    expect(resolveCapitalPartnerOutboundHref("os-kitchen-revenue-export")).toBe(
+      "/dashboard/analytics/capital#revenue-attestation",
     );
   });
 });

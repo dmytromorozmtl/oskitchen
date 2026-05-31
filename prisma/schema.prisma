@@ -2221,6 +2221,7 @@ model UserProfile {
   supportSavedViews         SupportSavedView[] @relation("SupportSavedViewOwner")
   auditLogs                 AuditLog[]
   auditExportsRequested     AuditExport[]         @relation("AuditExportRequester")
+  revenueAttestationsCreated RevenueAttestation[] @relation("RevenueAttestationCreator")
   advisoryBoardApplications AdvisoryBoardApplication[]
   automationRules         AutomationRule[]
   platformUserRoles       PlatformUserRole[]
@@ -10163,6 +10164,7 @@ model Workspace {
   auditLogs AuditLog[]
   auditRetentionPolicy AuditRetentionPolicy?
   auditExports         AuditExport[]
+  revenueAttestations  RevenueAttestation[]
   featureOverrides WorkspaceFeatureOverride[]
   storefronts StorefrontSettings[]
   teamInvites StorefrontTeamInvite[]
@@ -10592,6 +10594,26 @@ model AuditExport {
 
   @@index([workspaceId, createdAt])
   @@map("audit_exports")
+}
+
+model RevenueAttestation {
+  id          String   @id @default(uuid()) @db.Uuid
+  workspaceId String   @map("workspace_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  periodStart DateTime @map("period_start") @db.Date
+  periodEnd   DateTime @map("period_end") @db.Date
+  payloadJson Json     @map("payload_json")
+  signature   String   @db.VarChar(128)
+  expiresAt   DateTime @map("expires_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy UserProfile @relation("RevenueAttestationCreator", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+  @@index([userId, createdAt])
+  @@index([expiresAt])
+  @@map("revenue_attestations")
 }
 
 model AuditLog {

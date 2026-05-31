@@ -67,8 +67,8 @@ export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): st
       errors.push(`Duplicate partner slug: ${partner.slug}`);
     }
     slugs.add(partner.slug);
-    if (!partner.internal && !partner.href.startsWith("https://")) {
-      errors.push(`${partner.slug}: external partners must use https href`);
+    if (!partner.internal && !partner.href.startsWith("https://") && !partner.href.startsWith("/")) {
+      errors.push(`${partner.slug}: external partners must use https href or internal path`);
     }
   }
   return errors;

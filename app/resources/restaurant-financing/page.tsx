@@ -94,7 +94,11 @@ export default function RestaurantFinancingResourcesPage() {
           <h2 className="text-xl font-semibold">Already on OS Kitchen?</h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Signed-in owners see a revenue context panel tied to Analytics — still not a lender-certified
-            attestation. Verified export is on the Phase 2 roadmap.
+            attestation. Phase 2 signed JSON export is available at{" "}
+            <Link href="/dashboard/analytics/capital#revenue-attestation" className="underline">
+              Financing resources → Revenue export
+            </Link>
+            .
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Button asChild className="rounded-full">

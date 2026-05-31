@@ -71,5 +71,5 @@ When merchants ask about financing:
 | Phase | Deliverable | Legal review |
 |-------|-------------|--------------|
 | 1 (shipped) | Resource hub + disclosures | Required — lightweight |
-| 2 | Signed revenue attestation export | Required — medium |
+| 2 (shipped) | Signed revenue attestation export | Required — medium |
 | 3 | Embedded lender offers | Required — full program |
