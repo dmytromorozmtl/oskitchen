@@ -2,10 +2,10 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const requireIntegrationsManagePage = vi.hoisted(() => vi.fn());
+const requireIntegrationsReadPage = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/integrations/integrations-page-access", () => ({
-  requireIntegrationsManagePage,
+  requireIntegrationsReadPage,
 }));
 
 import IntegrationsLayout from "@/app/dashboard/integrations/layout";
@@ -15,13 +15,13 @@ describe("integrations layout RBAC", () => {
     vi.clearAllMocks();
   });
 
-  it("blocks legacy integration setup pages without integrations.manage", async () => {
-    requireIntegrationsManagePage.mockResolvedValue({
+  it("blocks legacy integration setup pages without integrations.read", async () => {
+    requireIntegrationsReadPage.mockResolvedValue({
       ok: false,
       deny: createElement(
         "div",
         { "data-testid": "integrations-deny" },
-        "You do not have permission to connect or manage sales channel integrations",
+        "You do not have permission to view sales channel integrations",
       ),
     });
 
@@ -35,10 +35,11 @@ describe("integrations layout RBAC", () => {
     expect(markup).not.toContain("WooCommerce setup");
   });
 
-  it("renders legacy integration children when access is granted", async () => {
-    requireIntegrationsManagePage.mockResolvedValue({
+  it("renders legacy integration children when read access is granted", async () => {
+    requireIntegrationsReadPage.mockResolvedValue({
       ok: true,
       actor: { granted: [] },
+      canManage: false,
     });
 
     const markup = renderToStaticMarkup(
