@@ -5,6 +5,17 @@ function gidTail(gid: string): string {
   return parts[parts.length - 1] ?? gid;
 }
 
+function attachCommercialFields(node: Record<string, unknown>): Record<string, unknown> {
+  const next = { ...node };
+  if (node.poNumber != null && !node.po_number) {
+    next.po_number = String(node.poNumber);
+  }
+  if (node.paymentTerms && typeof node.paymentTerms === "object" && !node.payment_terms) {
+    next.payment_terms = node.paymentTerms;
+  }
+  return next;
+}
+
 /**
  * GraphQL Admin orders expose B2B context on `purchasingEntity`, not REST `company`.
  * Normalize into REST-shaped `company` block so existing B2B routing can reuse it.
@@ -13,18 +24,18 @@ export function attachShopifyGraphqlPurchasingEntityToRawOrder(
   node: Record<string, unknown>,
 ): Record<string, unknown> {
   if (node.company && typeof node.company === "object") {
-    return node;
+    return attachCommercialFields(node);
   }
 
   const purchasingEntity = node.purchasingEntity;
   if (!purchasingEntity || typeof purchasingEntity !== "object") {
-    return node;
+    return attachCommercialFields(node);
   }
 
   const pe = purchasingEntity as Record<string, unknown>;
   const typename = pe.__typename != null ? String(pe.__typename) : "";
   if (typename !== "PurchasingCompany") {
-    return node;
+    return attachCommercialFields(node);
   }
 
   const company =
@@ -37,13 +48,13 @@ export function attachShopifyGraphqlPurchasingEntityToRawOrder(
       : null;
 
   if (!company?.id && !location?.id) {
-    return node;
+    return attachCommercialFields(node);
   }
 
   const companyGid = company?.id != null ? String(company.id) : null;
   const locationGid = location?.id != null ? String(location.id) : null;
 
-  return {
+  return attachCommercialFields({
     ...node,
     company: {
       id: companyGid ? gidTail(companyGid) : undefined,
@@ -57,5 +68,10 @@ export function attachShopifyGraphqlPurchasingEntityToRawOrder(
           : null,
       },
     },
-  };
+  });
+}
+
+/** Full GraphQL → REST B2B shape for routing + net terms enrichment. */
+export function normalizeShopifyGraphqlB2bOrderShape(node: Record<string, unknown>): Record<string, unknown> {
+  return attachCommercialFields(attachShopifyGraphqlPurchasingEntityToRawOrder(node));
 }

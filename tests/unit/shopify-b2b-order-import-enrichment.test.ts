@@ -110,4 +110,34 @@ describe("shopify-b2b-order-import-enrichment", () => {
     expect(partial.total).toBe(2);
     expect(partial.partial).toBe(1);
   });
+
+  it("includes net terms and PO on enrichment badge", () => {
+    const enrichment = buildShopifyB2bOrderImportEnrichment({
+      order: {
+        company: { id: 1, location_id: 9 },
+        po_number: "PO-100",
+        payment_terms: { payment_terms_name: "Net 30", due_in_days: 30 },
+      },
+      marketsSync,
+    });
+    expect(enrichment?.poNumber).toBe("PO-100");
+    expect(enrichment?.paymentTerms?.label).toBe("Net 30");
+    expect(enrichment?.orderNotesBadge).toContain("PO#PO-100");
+    expect(enrichment?.orderNotesBadge).toContain("Net 30");
+  });
+
+  it("flags missing PO when required by workspace policy", () => {
+    const enrichment = buildShopifyB2bOrderImportEnrichment({
+      order: { company: { id: 1, location_id: 9 } },
+      marketsSync: { ...marketsSync, b2bRequirePurchaseOrder: true } as ShopifyMarketsSyncSettings,
+    });
+    expect(enrichment?.missingPo).toBe(true);
+    expect(enrichment?.missingPieces).toContain("po_number");
+    expect(
+      adjustValidationForB2bEnrichment({
+        base: ChannelRecordValidationStatus.VALID,
+        enrichment: enrichment!,
+      }),
+    ).toBe(ChannelRecordValidationStatus.WARNING);
+  });
 });

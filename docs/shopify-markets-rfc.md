@@ -491,3 +491,23 @@ Required Shopify scopes (verify at implementation):
 | Health | Recommends reviewing auto-generated rollup drafts |
 
 **Conscious limits:** No auto-send proposal to client; no net terms / PO numbers (Phase 16).
+
+---
+
+## Phase 16 — B2B net terms & PO numbers (shipped)
+
+**Goal:** Capture Shopify B2B payment terms and purchase order numbers through staging into kitchen orders and catering rollups.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_NET_TERMS=1` (default on in non-production) |
+| Extractors | `shopify-b2b-net-terms-extract.ts` — REST `payment_terms` / `po_number`, GraphQL `paymentTerms` / `poNumber` |
+| GraphQL shape | `normalizeShopifyGraphqlB2bOrderShape` — commercial fields on sync orders |
+| Enrichment | `ShopifyB2bOrderImportEnrichment.poNumber`, `.paymentTerms`, `.missingPo` |
+| Validation | WARNING when `b2bRequirePurchaseOrder` and PO missing |
+| Kitchen Order | `sourceMetadataJson.b2b.paymentTerms`, `.poNumber` via Phase 14 promote |
+| Catering rollup | `clientNotes` mirrors Payment + PO on weekly draft quotes |
+| Settings | `b2bRequirePurchaseOrder`, `b2bNetTermsStats`, `lastB2bNetTermsEnrichmentAt` |
+| UI | Order hub + order detail badges (`Net 30`, `PO#…`) |
+
+**Conscious limits:** No outbound PO write to Shopify; no automatic invoice generation (Phase 17).

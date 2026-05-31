@@ -27,6 +27,7 @@ import {
   incrementB2bOrderEnrichmentStats,
   type ShopifyB2bOrderImportEnrichment,
 } from "@/services/integrations/shopify-b2b-order-import-enrichment-service";
+import { incrementB2bNetTermsStats } from "@/lib/integrations/shopify-b2b-net-terms-extract";
 import { enrichShopifyOrderWithB2bRouting } from "@/lib/integrations/shopify-b2b-order-routing";
 
 import { syncJobBatchDedupeKey, webhookEventBatchDedupeKey } from "./idempotency";
@@ -149,7 +150,7 @@ async function ensureB2bRoutingConflict(input: {
   recordId: string;
   enrichment: ShopifyB2bOrderImportEnrichment;
 }) {
-  if (input.enrichment.status === "complete" && !input.enrichment.routingStale) {
+  if (input.enrichment.status === "complete" && !input.enrichment.routingStale && !input.enrichment.missingPo) {
     await prisma.channelConflict.updateMany({
       where: {
         recordId: input.recordId,
@@ -178,7 +179,7 @@ async function ensureB2bRoutingConflict(input: {
         title: b2bEnrichmentConflictTitle(input.enrichment),
         description: b2bEnrichmentConflictDescription(input.enrichment),
         severity:
-          input.enrichment.status === "unresolved"
+          input.enrichment.missingPo || input.enrichment.status === "unresolved"
             ? ChannelConflictSeverity.WARNING
             : ChannelConflictSeverity.INFO,
         suggestedAction:
@@ -195,7 +196,7 @@ async function ensureB2bRoutingConflict(input: {
       recordId: input.recordId,
       conflictType: "b2b_routing_unresolved",
       severity:
-        input.enrichment.status === "unresolved"
+        input.enrichment.missingPo || input.enrichment.status === "unresolved"
           ? ChannelConflictSeverity.WARNING
           : ChannelConflictSeverity.INFO,
       title: b2bEnrichmentConflictTitle(input.enrichment),
@@ -234,6 +235,11 @@ async function maybeApplyShopifyB2bStagingEnrichment(input: {
   if (enrichment && input.trackStats !== false && !prior) {
     const sync = parseShopifyMarketsSyncSettings(conn.settingsJson);
     const nextStats = incrementB2bOrderEnrichmentStats(sync.b2bOrderEnrichmentStats, enrichment.status);
+    const netTermsStats = incrementB2bNetTermsStats(sync.b2bNetTermsStats, {
+      withNetTerms: enrichment.paymentTerms ? 1 : 0,
+      withPoNumber: enrichment.poNumber ? 1 : 0,
+      missingPoWhenRequired: enrichment.missingPo ? 1 : 0,
+    });
     await prisma.integrationConnection.update({
       where: { id: input.connectionId },
       data: {
@@ -241,6 +247,8 @@ async function maybeApplyShopifyB2bStagingEnrichment(input: {
           mergeShopifyMarketsSyncSettings(conn.settingsJson, {
             lastB2bOrderEnrichmentAt: enrichment.enrichedAt,
             b2bOrderEnrichmentStats: nextStats,
+            lastB2bNetTermsEnrichmentAt: enrichment.enrichedAt,
+            b2bNetTermsStats: netTermsStats,
           }),
         ),
       },

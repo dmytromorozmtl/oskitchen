@@ -2,6 +2,12 @@ import {
   type B2bOrderEnrichmentStatus,
   isShopifyMarketsB2bOrderImportEnabled,
 } from "@/lib/commercial/shopify-market-b2b-order-import";
+import type { B2bPaymentTermsSnapshot } from "@/lib/integrations/shopify-b2b-net-terms-extract";
+import {
+  buildB2bCommercialBadgeSuffix,
+  extractB2bPaymentTermsFromShopifyOrder,
+  extractB2bPoNumberFromShopifyOrder,
+} from "@/lib/integrations/shopify-b2b-net-terms-extract";
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
 import type { ShopifyMarketsSyncSettings } from "@/lib/integrations/shopify-markets-settings";
 import {
@@ -19,6 +25,9 @@ export type ShopifyB2bOrderImportEnrichment = ShopifyB2bOrderRoutingHints & {
   companyAccountLabel: string | null;
   routingStale: boolean;
   missingPieces: string[];
+  poNumber: string | null;
+  paymentTerms: B2bPaymentTermsSnapshot | null;
+  missingPo: boolean;
   enrichedAt: string;
 };
 
@@ -85,6 +94,11 @@ export function buildShopifyB2bOrderImportEnrichment(input: {
   if (!hints.companyAccountId) missingPieces.push("company_account");
   if (!hints.osMarketId) missingPieces.push("os_market");
 
+  const poNumber = extractB2bPoNumberFromShopifyOrder(input.order);
+  const paymentTerms = extractB2bPaymentTermsFromShopifyOrder(input.order);
+  const missingPo = Boolean(input.marketsSync.b2bRequirePurchaseOrder && !poNumber);
+  if (missingPo) missingPieces.push("po_number");
+
   let status: B2bOrderEnrichmentStatus;
   if (hints.companyAccountId && hints.osMarketId) {
     status = "complete";
@@ -99,6 +113,9 @@ export function buildShopifyB2bOrderImportEnrichment(input: {
   if (locationName) badgeParts.push(locationName);
   if (hints.osMarketId) badgeParts.push(`→ ${hints.osMarketId}`);
   if (status !== "complete") badgeParts.push(`(${status})`);
+  badgeParts.push(
+    ...buildB2bCommercialBadgeSuffix({ paymentTerms, poNumber, missingPo }),
+  );
 
   const routingStale = computeRoutingStale({
     hints,
@@ -116,6 +133,9 @@ export function buildShopifyB2bOrderImportEnrichment(input: {
     companyAccountLabel,
     routingStale,
     missingPieces,
+    poNumber,
+    paymentTerms,
+    missingPo,
     enrichedAt: now,
     resolvedAt: now,
   };
@@ -125,7 +145,14 @@ export function adjustValidationForB2bEnrichment(input: {
   base: ChannelRecordValidationStatus;
   enrichment: ShopifyB2bOrderImportEnrichment | null;
 }): ChannelRecordValidationStatus {
-  if (!input.enrichment || input.enrichment.status === "complete") {
+  if (!input.enrichment) {
+    return input.base;
+  }
+  if (
+    input.enrichment.status === "complete" &&
+    !input.enrichment.missingPo &&
+    !input.enrichment.routingStale
+  ) {
     return input.base;
   }
   if (input.base === ChannelRecordValidationStatus.ERROR) {
@@ -134,7 +161,8 @@ export function adjustValidationForB2bEnrichment(input: {
   if (
     input.enrichment.status === "partial" ||
     input.enrichment.status === "unresolved" ||
-    input.enrichment.routingStale
+    input.enrichment.routingStale ||
+    input.enrichment.missingPo
   ) {
     return ChannelRecordValidationStatus.WARNING;
   }
@@ -155,6 +183,9 @@ export function buildB2bStagingSuggestedFixJson(
       routingStale: enrichment.routingStale,
       missingPieces: enrichment.missingPieces,
       routingSummary: enrichment.routingSummary,
+      poNumber: enrichment.poNumber,
+      paymentTerms: enrichment.paymentTerms,
+      missingPo: enrichment.missingPo,
     },
   };
 }
@@ -167,6 +198,9 @@ export function buildB2bStagingConflictJson(
       status: enrichment.status,
       missingPieces: enrichment.missingPieces,
       routingStale: enrichment.routingStale,
+      missingPo: enrichment.missingPo,
+      poNumber: enrichment.poNumber,
+      paymentTermsLabel: enrichment.paymentTerms?.label ?? null,
     },
   };
 }
@@ -238,6 +272,7 @@ export function incrementB2bOrderEnrichmentStats(
 }
 
 export function b2bEnrichmentConflictTitle(enrichment: ShopifyB2bOrderImportEnrichment): string {
+  if (enrichment.missingPo) return "B2B order missing required PO number";
   if (enrichment.routingStale) return "B2B routing stale — re-link locations";
   if (enrichment.status === "unresolved") return "B2B order routing unresolved";
   if (enrichment.status === "partial") return "B2B order routing partial";
@@ -253,6 +288,15 @@ export function b2bEnrichmentConflictDescription(
   }
   if (enrichment.routingStale) {
     parts.push("Location links changed since this order was first enriched.");
+  }
+  if (enrichment.missingPo) {
+    parts.push("Purchase order number required by workspace B2B policy.");
+  }
+  if (enrichment.paymentTerms?.label) {
+    parts.push(`Payment terms: ${enrichment.paymentTerms.label}`);
+  }
+  if (enrichment.poNumber) {
+    parts.push(`PO#${enrichment.poNumber}`);
   }
   return parts.join(" · ");
 }

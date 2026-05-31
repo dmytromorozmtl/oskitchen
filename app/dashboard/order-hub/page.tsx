@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { readKitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
+import { OrderB2bCommercialTermsBadges } from "@/components/orders/order-b2b-commercial-terms";
 import { formatCustomerPrimaryLabel } from "@/lib/customers/customer-display";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import {
@@ -275,6 +276,7 @@ export default async function OrderHubPage({
                               {b2b.orderNotesBadge}
                             </Badge>
                           ) : null}
+                          <OrderB2bCommercialTermsBadges sourceMetadataJson={o.sourceMetadataJson} />
                           {o.isChannelTestOrder ? (
                             <Badge variant="outline" className="rounded-full text-[10px] uppercase">
                               Test

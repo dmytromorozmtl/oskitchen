@@ -241,7 +241,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
               ? `${sync.b2bOrderEnrichmentStats.unresolved} unresolved B2B order(s) in staging`
               : sync?.b2bKitchenOrderStats?.missingCompanyLink
                 ? `${sync.b2bKitchenOrderStats.missingCompanyLink} promoted B2B kitchen order(s) without company link`
-                : sync?.b2bCateringRollupStats?.quotesCreated
+                : sync?.b2bNetTermsStats?.missingPoWhenRequired
+                  ? `${sync.b2bNetTermsStats.missingPoWhenRequired} B2B order(s) missing required PO`
+                  : sync?.b2bCateringRollupStats?.quotesCreated
                   ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
                   : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
                 ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
@@ -306,6 +308,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   if ((sync?.b2bKitchenOrderStats?.missingCompanyLink ?? 0) > 0) {
     recommendations.push(
       "Link promoted B2B kitchen orders to company accounts in Customers → Companies.",
+    );
+  }
+  if ((sync?.b2bNetTermsStats?.missingPoWhenRequired ?? 0) > 0) {
+    recommendations.push(
+      "B2B orders are missing required PO numbers — verify Shopify order payloads or relax PO policy.",
     );
   }
   if ((sync?.b2bCateringRollupStats?.quotesCreated ?? 0) > 0) {

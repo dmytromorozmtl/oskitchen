@@ -998,6 +998,16 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bNetTermsStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B net terms: {syncSettings.b2bNetTermsStats.withNetTerms} with terms ·{" "}
+              {syncSettings.b2bNetTermsStats.withPoNumber} with PO
+              {syncSettings.b2bRequirePurchaseOrder ? " · PO required" : ""}
+              {syncSettings.b2bNetTermsStats.missingPoWhenRequired > 0 ? (
+                <> · {syncSettings.b2bNetTermsStats.missingPoWhenRequired} missing PO</>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

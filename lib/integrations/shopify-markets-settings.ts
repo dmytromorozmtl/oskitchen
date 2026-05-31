@@ -318,6 +318,13 @@ export type ShopifyMarketsSyncSettings = {
     skippedIncomplete: number;
     skippedAlreadyLinked: number;
   } | null;
+  b2bRequirePurchaseOrder: boolean;
+  lastB2bNetTermsEnrichmentAt: string | null;
+  b2bNetTermsStats: {
+    withNetTerms: number;
+    withPoNumber: number;
+    missingPoWhenRequired: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -500,6 +507,19 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? b2bCateringRollupMinTotalRaw
       : null;
 
+  const netTermsStatsRaw = raw.b2bNetTermsStats;
+  const b2bNetTermsStats =
+    netTermsStatsRaw && typeof netTermsStatsRaw === "object"
+      ? {
+          withNetTerms: Number((netTermsStatsRaw as Record<string, unknown>).withNetTerms) || 0,
+          withPoNumber: Number((netTermsStatsRaw as Record<string, unknown>).withPoNumber) || 0,
+          missingPoWhenRequired:
+            Number((netTermsStatsRaw as Record<string, unknown>).missingPoWhenRequired) || 0,
+        }
+      : null;
+
+  const b2bRequirePurchaseOrder = raw.b2bRequirePurchaseOrder === true;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -630,6 +650,10 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bCateringRollupAt:
       typeof raw.lastB2bCateringRollupAt === "string" ? raw.lastB2bCateringRollupAt : null,
     b2bCateringRollupStats,
+    b2bRequirePurchaseOrder,
+    lastB2bNetTermsEnrichmentAt:
+      typeof raw.lastB2bNetTermsEnrichmentAt === "string" ? raw.lastB2bNetTermsEnrichmentAt : null,
+    b2bNetTermsStats,
   };
 }
 

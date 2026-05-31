@@ -24,7 +24,7 @@ import {
 } from "@/lib/integrations/shopify-markets-settings";
 import { prisma } from "@/lib/prisma";
 import { cateringQuoteListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
-import { addQuoteLine, createQuote } from "@/services/catering/quote-service";
+import { formatB2bCommercialNotes } from "@/lib/integrations/shopify-b2b-net-terms-extract";
 
 export type B2bCateringRollupResult =
   | { ok: true; linked: B2bCateringQuoteRollupLink }
@@ -173,6 +173,11 @@ export async function maybeRollupB2bOrderToCateringQuote(input: {
     select: { id: true, quoteNumber: true, internalNotes: true },
   });
 
+  const commercialNote = formatB2bCommercialNotes({
+    paymentTerms: input.b2b.paymentTerms,
+    poNumber: input.b2b.poNumber,
+  });
+
   let action: B2bCateringQuoteRollupLink["action"] = "appended";
   if (!quote) {
     action = "created";
@@ -190,6 +195,7 @@ export async function maybeRollupB2bOrderToCateringQuote(input: {
       eventDate: input.fulfillmentDate ?? null,
       deliveryRequired: false,
       internalNotes: `${marker}\nSource orders: ${input.orderId}`,
+      clientNotes: commercialNote,
       notes: `Auto-generated from Shopify B2B channel import (${fulfillmentWeekKey}). Review before sending to client.`,
       performedBy: "shopify-b2b-rollup",
     });
@@ -204,7 +210,10 @@ export async function maybeRollupB2bOrderToCateringQuote(input: {
       .join("\n");
     await prisma.cateringQuote.update({
       where: { id: quote.id },
-      data: { internalNotes: notes },
+      data: {
+        internalNotes: notes,
+        ...(commercialNote ? { clientNotes: commercialNote } : {}),
+      },
     });
   }
 

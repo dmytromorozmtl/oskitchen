@@ -5,6 +5,7 @@ import { isShopifyMarketsKitchenOrderB2bEnabled } from "@/lib/commercial/shopify
 import type { ShopifyB2bOrderImportEnrichment } from "@/services/integrations/shopify-b2b-order-import-enrichment-service";
 
 import type { B2bCateringQuoteRollupLink } from "@/lib/integrations/shopify-b2b-catering-rollup-metadata";
+import type { B2bPaymentTermsSnapshot } from "@/lib/integrations/shopify-b2b-net-terms-extract";
 
 export type KitchenOrderB2bMetadata = {
   status: B2bOrderEnrichmentStatus;
@@ -19,6 +20,9 @@ export type KitchenOrderB2bMetadata = {
   enrichedAt: string;
   promotedAt: string;
   missingCompanyLink: boolean;
+  poNumber: string | null;
+  paymentTerms: B2bPaymentTermsSnapshot | null;
+  missingPo: boolean;
   cateringQuoteRollup?: B2bCateringQuoteRollupLink;
 };
 
@@ -48,6 +52,9 @@ export function buildKitchenOrderB2bMetadata(
     enrichedAt: enrichment.enrichedAt,
     promotedAt,
     missingCompanyLink: !enrichment.companyAccountId,
+    poNumber: enrichment.poNumber,
+    paymentTerms: enrichment.paymentTerms,
+    missingPo: enrichment.missingPo,
   };
 }
 
@@ -80,6 +87,8 @@ export function buildKitchenOrderB2bChannelTrace(input: {
     companyAccountId: input.enrichment.companyAccountId,
     b2bStatus: input.enrichment.status,
     b2bBadge: input.enrichment.orderNotesBadge,
+    poNumber: input.enrichment.poNumber,
+    paymentTermsLabel: input.enrichment.paymentTerms?.label ?? null,
   };
 }
 

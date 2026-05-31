@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { IntegrationProvider, NormalizedOrderStatus } from "@prisma/client";
 
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
-import { attachShopifyGraphqlPurchasingEntityToRawOrder } from "@/lib/integrations/shopify-graphql-b2b-order-shape";
+import { normalizeShopifyGraphqlB2bOrderShape } from "@/lib/integrations/shopify-graphql-b2b-order-shape";
 
 export type ShopifyCredentials = {
   shopDomain: string;
@@ -75,6 +75,12 @@ export async function fetchOrdersGraphQL(creds: ShopifyCredentials, first = 25) 
                   originalUnitPriceSet { shopMoney { amount } }
                 }
               }
+            }
+            poNumber
+            paymentTerms {
+              paymentTermsName
+              paymentTermsType
+              dueInDays
             }
             shippingAddress { address1 city province zip country phone }
             purchasingEntity {
@@ -266,7 +272,7 @@ export function normalizeShopifyRestOrder(order: Record<string, unknown>): Norma
 }
 
 export function normalizeShopifyOrder(node: Record<string, unknown>): NormalizedKitchenOrder {
-  const rawNode = attachShopifyGraphqlPurchasingEntityToRawOrder(node);
+  const rawNode = normalizeShopifyGraphqlB2bOrderShape(node);
   const lineEdges =
     (rawNode.lineItems as { edges?: { node: Record<string, unknown> }[] })?.edges ?? [];
   const ship = rawNode.shippingAddress as Record<string, unknown> | null | undefined;
