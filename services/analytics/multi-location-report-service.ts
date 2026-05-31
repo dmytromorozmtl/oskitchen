@@ -7,33 +7,7 @@ import {
   type MultiLocationAnalyticsSnapshot,
 } from "@/services/analytics/multi-location-analytics";
 
-export function buildMultiLocationPdfRows(snapshot: MultiLocationAnalyticsSnapshot): {
-  title: string;
-  head: string[];
-  body: (string | number)[][];
-} {
-  return {
-    title: `Multi-location report · ${snapshot.rangeLabel}`,
-    head: [
-      "Location",
-      "Orders",
-      "Revenue",
-      "Labor %",
-      "Food cost %",
-      "vs avg revenue",
-      "vs avg labor",
-    ],
-    body: snapshot.locations.map((row) => [
-      row.locationName,
-      row.orders,
-      row.revenue,
-      row.laborPct ?? "—",
-      row.foodCostPct ?? "—",
-      row.vsAvgRevenue ?? "—",
-      row.vsAvgLaborPct ?? "—",
-    ]),
-  };
-}
+export { buildMultiLocationPdfRows } from "@/lib/analytics/multi-location-pdf-rows";
 
 export function formatMultiLocationWeeklyReportEmail(params: {
   snapshot: MultiLocationAnalyticsSnapshot;
@@ -69,7 +43,7 @@ export async function sendMultiLocationWeeklyReportEmail(
 ): Promise<{ sent: boolean; skipped: boolean; reason?: string; snapshot?: MultiLocationAnalyticsSnapshot }> {
   if (!isEmailConfigured()) return { sent: false, skipped: true, reason: "email_not_configured" };
 
-  const owner = await prisma.user.findUnique({
+  const owner = await prisma.userProfile.findUnique({
     where: { id: userId },
     select: { email: true },
   });
@@ -106,6 +80,7 @@ export async function runMultiLocationWeeklyReportBatch(): Promise<{
   const locationCounts = await prisma.location.groupBy({
     by: ["userId"],
     _count: { _all: true },
+    orderBy: { userId: "asc" },
     take: 500,
   });
   const multiLocationOwners = locationCounts.filter((row) => row._count._all >= 2);

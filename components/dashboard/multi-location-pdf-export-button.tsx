@@ -3,7 +3,7 @@
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { buildMultiLocationPdfRows } from "@/services/analytics/multi-location-report-service";
+import { buildMultiLocationPdfRows } from "@/lib/analytics/multi-location-pdf-rows";
 import type { MultiLocationAnalyticsSnapshot } from "@/services/analytics/multi-location-analytics";
 
 type Props = {
