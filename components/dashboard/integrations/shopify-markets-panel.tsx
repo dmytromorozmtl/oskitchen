@@ -945,6 +945,24 @@ export function ShopifyMarketsPanel({
               </div>
             ) : null}
           </div>
+
+          {syncSettings.b2bOrderEnrichmentStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B order enrichments: {syncSettings.b2bOrderEnrichmentStats.total} total ·{" "}
+              {syncSettings.b2bOrderEnrichmentStats.complete} complete ·{" "}
+              {syncSettings.b2bOrderEnrichmentStats.partial} partial ·{" "}
+              {syncSettings.b2bOrderEnrichmentStats.unresolved} unresolved
+              {syncSettings.lastB2bOrderEnrichmentAt ? (
+                <>
+                  {" "}
+                  · last{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bOrderEnrichmentAt), {
+                    addSuffix: true,
+                  })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

@@ -16,7 +16,6 @@ import { touchShopifyMarketsWebhookDelivery } from "@/services/integrations/shop
 import {
   normalizeShopifyRestOrder,
 } from "@/services/integrations/shopify";
-import { enrichShopifyOrderWithB2bRouting } from "@/lib/integrations/shopify-b2b-order-routing";
 
 /**
  * Shopify webhook business logic after persistence + HMAC verification.
@@ -70,11 +69,7 @@ export async function executeShopifyWebhookBusinessLogic(params: {
 
   if (params.topic === "orders/create" || params.topic === "orders/updated") {
     const order = params.payload as Record<string, unknown>;
-    let normalized = normalizeShopifyRestOrder(order);
-    normalized = enrichShopifyOrderWithB2bRouting({
-      normalized,
-      connectionSettingsJson: conn.settingsJson,
-    });
+    const normalized = normalizeShopifyRestOrder(order);
     await persistNormalizedExternalOrder({
       userId: params.userId,
       connectionId: conn.id,

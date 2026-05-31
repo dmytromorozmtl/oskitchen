@@ -166,6 +166,7 @@ describe("shopify-b2b-order-routing", () => {
     });
 
     const raw = enriched.raw as Record<string, unknown>;
+    expect(raw._kitchenosB2bEnrichment).toBeTruthy();
     expect(raw._kitchenosB2bRouting).toBeTruthy();
   });
 });

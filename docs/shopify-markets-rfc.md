@@ -308,6 +308,7 @@ Required Shopify scopes (verify at implementation):
 | 2026-06-01 | **Phase 10 (health dashboard) shipped:** weighted health score, domain status cards, full reconcile orchestration on Storefront → Markets |
 | 2026-06-01 | **Phase 11 (B2B company guard) shipped:** Shopify companies import, KitchenOS CompanyAccount linking, conflict guard, health domain |
 | 2026-06-01 | **Phase 12 (B2B location routing) shipped:** location→market mapping, order `_kitchenosB2bRouting` hints, full reconcile step |
+| 2026-06-01 | **Phase 13 (B2B order import enrichment) shipped:** staging badges, validation downgrade, channel conflicts, enrichment stats |
 
 ---
 
@@ -427,4 +428,25 @@ Required Shopify scopes (verify at implementation):
 
 **Market suggestion:** ship-to `country` → OS market `region` or linked Shopify market `regionCodes`
 
-**Conscious limits:** No outbound location writes to Shopify; net terms / PO numbers deferred to Phase 13.
+**Conscious limits:** No outbound location writes to Shopify; net terms / PO numbers deferred to Phase 14.
+
+---
+
+## Phase 13 — B2B order import enrichment (shipped)
+
+**Goal:** Apply `_kitchenosB2bEnrichment` to Shopify B2B webhook orders in channel staging with validation, conflicts, and operator-visible badges.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_ORDER_IMPORT=1` (default on in non-production) |
+| Enrichment builder | `shopify-b2b-order-import-enrichment-service.ts` |
+| Staging hook | `import-staging.ts` — `suggestedFixJson`, `conflictJson`, `b2b_routing_unresolved` conflicts |
+| Stats | `b2bOrderEnrichmentStats` + `lastB2bOrderEnrichmentAt` on `marketsSync` |
+| UI | B2B routing column on Sales channels → Import batch |
+| Health | B2B domain shows unresolved staging count |
+
+**Enrichment statuses:** `complete`, `partial`, `unresolved`
+
+**Validation:** partial/unresolved/stale → `WARNING` (still approvable when otherwise VALID)
+
+**Conscious limits:** Kitchen `Order` rows not auto-created; GraphQL sync orders lack REST `company` block until Phase 14.

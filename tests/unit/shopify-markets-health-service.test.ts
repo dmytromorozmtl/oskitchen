@@ -113,6 +113,8 @@ const healthySync: ShopifyMarketsSyncSettings = {
   lastB2bLocationReconcileResult: null,
   b2bLocationConflicts: {},
   b2bLocationLinks: {},
+  lastB2bOrderEnrichmentAt: null,
+  b2bOrderEnrichmentStats: null,
 };
 
 describe("shopify-markets-health-dashboard", () => {

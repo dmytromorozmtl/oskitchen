@@ -7,6 +7,11 @@ import {
   parseShopifyMarketsSyncSettings,
   type ShopifyMarketsSyncSettings,
 } from "@/lib/integrations/shopify-markets-settings";
+import {
+  applyB2bEnrichmentToNormalizedOrder,
+  buildShopifyB2bOrderImportEnrichment,
+  type ShopifyB2bOrderImportEnrichment,
+} from "@/services/integrations/shopify-b2b-order-import-enrichment-service";
 
 export type ShopifyB2bOrderRoutingHints = {
   shopifyCompanyId: string | null;
@@ -90,14 +95,22 @@ export function enrichShopifyOrderWithB2bRouting(input: {
       : null;
   if (!order) return input.normalized;
 
-  const hints = resolveB2bRoutingForShopifyRestOrder({ order, marketsSync });
-  if (!hints) return input.normalized;
+  const prior =
+    order._kitchenosB2bEnrichment && typeof order._kitchenosB2bEnrichment === "object"
+      ? (order._kitchenosB2bEnrichment as ShopifyB2bOrderImportEnrichment)
+      : null;
 
-  return {
-    ...input.normalized,
-    raw: {
-      ...order,
-      _kitchenosB2bRouting: hints,
-    },
-  };
+  const enrichment = buildShopifyB2bOrderImportEnrichment({
+    order,
+    marketsSync,
+    priorEnrichment: prior,
+  });
+  if (!enrichment) return input.normalized;
+
+  return applyB2bEnrichmentToNormalizedOrder({
+    normalized: input.normalized,
+    enrichment,
+  });
 }
+
+export type { ShopifyB2bOrderImportEnrichment };

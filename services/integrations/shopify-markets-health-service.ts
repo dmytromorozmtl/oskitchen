@@ -237,11 +237,13 @@ export function buildShopifyMarketsHealthSnapshot(input: {
           ? sync.b2bUnavailableReason
           : openB2bConflicts + openB2bLocationConflicts > 0
             ? `${openB2bConflicts} company + ${openB2bLocationConflicts} location conflict(s)`
-            : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
-              ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
-              : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
-                ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} company · ${Object.keys(sync?.b2bLocationImports ?? {}).length} location hint(s)`
-                : "No B2B guard activity",
+            : sync?.b2bOrderEnrichmentStats?.unresolved
+              ? `${sync.b2bOrderEnrichmentStats.unresolved} unresolved B2B order(s) in staging`
+              : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
+                ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
+                : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
+                  ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} company · ${Object.keys(sync?.b2bLocationImports ?? {}).length} location hint(s)`
+                  : "No B2B guard activity",
       lastActivityAt:
         sync?.lastB2bLocationReconcileAt ?? sync?.lastB2bReconcileAt ?? sync?.lastB2bImportAt ?? null,
       openIssues: openB2bConflicts + openB2bLocationConflicts,
@@ -293,6 +295,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
     recommendations.push(
       "Link Shopify B2B companies and locations to KitchenOS accounts and markets on Integrations → Shopify.",
     );
+  }
+  if ((sync?.b2bOrderEnrichmentStats?.unresolved ?? 0) > 0) {
+    recommendations.push("Review unresolved B2B orders in Sales channels → Staging.");
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {
     recommendations.push("Run full reconcile weekly to keep import-mode markets fresh.");

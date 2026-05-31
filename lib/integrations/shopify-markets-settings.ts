@@ -293,6 +293,13 @@ export type ShopifyMarketsSyncSettings = {
   lastB2bLocationReconcileResult: string | null;
   b2bLocationConflicts: Record<string, ShopifyB2bLocationConflictRow>;
   b2bLocationLinks: Record<string, ShopifyB2bLocationLinkRow>;
+  lastB2bOrderEnrichmentAt: string | null;
+  b2bOrderEnrichmentStats: {
+    complete: number;
+    partial: number;
+    unresolved: number;
+    total: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -429,6 +436,17 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? b2bLocationAuthorityRaw
       : b2bAuthority;
 
+  const statsRaw = raw.b2bOrderEnrichmentStats;
+  const b2bOrderEnrichmentStats =
+    statsRaw && typeof statsRaw === "object"
+      ? {
+          complete: Number((statsRaw as Record<string, unknown>).complete) || 0,
+          partial: Number((statsRaw as Record<string, unknown>).partial) || 0,
+          unresolved: Number((statsRaw as Record<string, unknown>).unresolved) || 0,
+          total: Number((statsRaw as Record<string, unknown>).total) || 0,
+        }
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -547,6 +565,9 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       typeof raw.lastB2bLocationReconcileResult === "string" ? raw.lastB2bLocationReconcileResult : null,
     b2bLocationConflicts,
     b2bLocationLinks,
+    lastB2bOrderEnrichmentAt:
+      typeof raw.lastB2bOrderEnrichmentAt === "string" ? raw.lastB2bOrderEnrichmentAt : null,
+    b2bOrderEnrichmentStats,
   };
 }
 

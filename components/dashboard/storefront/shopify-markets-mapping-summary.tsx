@@ -52,8 +52,8 @@ export function ShopifyMarketsMappingSummary({
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 12 — B2B location routing maps company ship-to countries to OS Kitchen markets. Link
-          markets on Storefront → Markets; manage company accounts under Customers → Companies.
+          Phase 13 — B2B orders get company, location, and market routing badges in Sales channels staging.
+          Link markets here; review enriched orders under Sales channels → Staging.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">

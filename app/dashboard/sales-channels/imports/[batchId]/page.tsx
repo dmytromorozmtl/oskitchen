@@ -88,15 +88,34 @@ export default async function ChannelImportBatchPage({
         <TableHeader>
           <TableRow>
             <TableHead>External id</TableHead>
+            <TableHead>B2B routing</TableHead>
             <TableHead>Validation</TableHead>
             <TableHead>Imported</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {batch.records.map((r) => (
+          {batch.records.map((r) => {
+            const b2bFix =
+              r.suggestedFixJson &&
+              typeof r.suggestedFixJson === "object" &&
+              "b2bEnrichment" in (r.suggestedFixJson as Record<string, unknown>)
+                ? ((r.suggestedFixJson as Record<string, unknown>).b2bEnrichment as {
+                    orderNotesBadge?: string;
+                    status?: string;
+                  })
+                : null;
+
+            return (
             <TableRow key={r.id}>
               <TableCell className="font-mono text-xs">{r.externalId}</TableCell>
+              <TableCell className="text-xs text-muted-foreground">
+                {b2bFix?.orderNotesBadge ? (
+                  <span title={b2bFix.status}>{b2bFix.orderNotesBadge}</span>
+                ) : (
+                  "—"
+                )}
+              </TableCell>
               <TableCell>{r.validationStatus}</TableCell>
               <TableCell className="text-xs text-muted-foreground">
                 {r.importedAt ? r.importedEntityId ?? "yes" : "—"}
@@ -109,7 +128,8 @@ export default async function ChannelImportBatchPage({
                 />
               </TableCell>
             </TableRow>
-          ))}
+            );
+          })}
         </TableBody>
       </Table>
 
