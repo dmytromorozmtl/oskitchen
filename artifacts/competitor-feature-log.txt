@@ -457,3 +457,10 @@ Result: PASS
 Summary: Catalog import/push via market publications, catalogAuthority bidirectional conflicts, storefront productIds overlay, webhook catalog sync, dashboard UI
 Tests: tests/unit/shopify-market-catalog-service.test.ts
 Next: restaurant-capital-phase6-lender-oauth OR app-marketplace-phase7-revenue-share-meters OR shopify-markets-tax-duty-guard
+
+---
+Cycle 18 | restaurant-capital-phase6-lender-oauth | 2026-05-31T22:00:00.000Z
+Result: PASS
+Summary: Capital lender OAuth scopes, CapitalLenderOAuthGrant model, bearer attestation/referral pull APIs, token exchange grant linking, merchant OAuth consent + revoke UI
+Tests: tests/unit/capital-lender-oauth.test.ts
+Next: app-marketplace-phase7-revenue-share-meters OR shopify-markets-tax-duty-guard OR restaurant-capital-phase7-lender-refresh-tokens

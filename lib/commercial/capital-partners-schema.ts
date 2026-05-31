@@ -35,4 +35,8 @@ export const capitalPartnerSchema = z.object({
   contactEmail: z.string().email().max(255).optional(),
   /** Optional CIDR allowlist for partner pull API — empty means no IP restriction. */
   pullIpAllowlist: z.array(z.string().max(64)).optional(),
+  /** OAuth pull enabled — lender uses KitchenOS partner OAuth instead of share-token HMAC. */
+  oauthEnabled: z.boolean().optional().default(false),
+  /** Partner OAuth client_id registered in config/platform/partner-oauth-apps.json. */
+  oauthClientId: z.string().max(128).optional(),
 });

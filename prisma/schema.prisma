@@ -3578,6 +3578,7 @@ model PartnerAppInstallation {
   userProfile   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspace     Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
   installedBy   UserProfile @relation("PartnerAppInstalledBy", fields: [installedByUserId], references: [id], onDelete: Cascade)
+  capitalLenderOAuthGrants CapitalLenderOAuthGrant[]
 
   @@unique([workspaceId, clientId])
   @@index([userId])
@@ -10260,6 +10261,7 @@ model Workspace {
   auditExports         AuditExport[]
   revenueAttestations  RevenueAttestation[]
   capitalPartnerReferrals CapitalPartnerReferral[]
+  capitalLenderOAuthGrants CapitalLenderOAuthGrant[]
   featureOverrides WorkspaceFeatureOverride[]
   storefronts StorefrontSettings[]
   teamInvites StorefrontTeamInvite[]
@@ -10749,6 +10751,7 @@ model CapitalPartnerReferral {
   shareLinks    CapitalAttestationShare[]
   partnerOffers CapitalPartnerOffer[]
   selectedOffer CapitalPartnerOffer?      @relation("SelectedCapitalOffer", fields: [selectedOfferId], references: [id], onDelete: SetNull)
+  oauthGrant    CapitalLenderOAuthGrant?
 
   @@index([workspaceId, createdAt])
   @@index([workspaceId, partnerSlug, status])
@@ -10877,6 +10880,29 @@ model CapitalLenderWebhookDelivery {
   @@unique([partnerSlug, idempotencyKey])
   @@index([referralId, createdAt])
   @@map("capital_lender_webhook_deliveries")
+}
+
+model CapitalLenderOAuthGrant {
+  id             String    @id @default(uuid()) @db.Uuid
+  referralId     String    @unique @map("referral_id") @db.Uuid
+  installationId String    @map("installation_id") @db.Uuid
+  partnerSlug    String    @map("partner_slug") @db.VarChar(80)
+  workspaceId    String    @map("workspace_id") @db.Uuid
+  scopesGranted  String[]  @map("scopes_granted")
+  revokedAt      DateTime? @map("revoked_at")
+  lastAccessAt   DateTime? @map("last_access_at")
+  accessCount    Int       @default(0) @map("access_count")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  referral     CapitalPartnerReferral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  installation PartnerAppInstallation @relation(fields: [installationId], references: [id], onDelete: Cascade)
+  workspace    Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([installationId])
+  @@index([partnerSlug, workspaceId])
+  @@index([workspaceId, createdAt])
+  @@map("capital_lender_oauth_grants")
 }
 
 model AuditLog {

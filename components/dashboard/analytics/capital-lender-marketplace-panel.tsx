@@ -15,6 +15,7 @@ import {
 
 import {
   consentCapitalLenderOfferAction,
+  revokeCapitalLenderOAuthGrantAction,
   selectCapitalReferralOfferAction,
 } from "@/actions/capital-lender-offers";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +26,7 @@ import {
   CAPITAL_LENDER_CONSENT_COPY,
   CAPITAL_LENDER_OFFER_DISCLAIMER,
 } from "@/lib/commercial/capital-lender-offers";
+import { CAPITAL_LENDER_OAUTH_CONSENT_NOTE } from "@/lib/commercial/capital-lender-oauth";
 import type { CapitalPartner, CapitalRegion } from "@/lib/commercial/capital-partners";
 import type {
   CapitalMarketplaceReferralRow,
@@ -103,6 +105,7 @@ function LenderOfferCard({
 }) {
   const router = useRouter();
   const [consent, setConsent] = useState(false);
+  const [useOAuth, setUseOAuth] = useState(Boolean(partner.oauthEnabled));
   const [attestationId, setAttestationId] = useState(
     recentAttestations.find((row) => !row.expired)?.id ?? "",
   );
@@ -123,6 +126,9 @@ function LenderOfferCard({
           <div className="flex flex-wrap gap-2">
             {lifecycleBadge(partner.offerLifecycleStatus)}
             {referralFeeBadge(partner)}
+            {partner.oauthEnabled ? (
+              <Badge variant="secondary">OAuth pull</Badge>
+            ) : null}
             <Badge variant="outline">{partner.regions.join(", ")}</Badge>
           </div>
         </div>
@@ -150,8 +156,21 @@ function LenderOfferCard({
           <div className="space-y-3 rounded-lg border border-border/70 bg-muted/10 p-3 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-medium">Active referral</span>
-              <Badge variant="outline">{statusLabel(existingReferral.status)}</Badge>
+              <div className="flex flex-wrap gap-2">
+                {existingReferral.oauthConnected ? (
+                  <Badge variant="default">OAuth connected</Badge>
+                ) : existingReferral.oauthRevokedAt ? (
+                  <Badge variant="outline">OAuth revoked</Badge>
+                ) : null}
+                <Badge variant="outline">{statusLabel(existingReferral.status)}</Badge>
+              </div>
             </div>
+            {existingReferral.oauthConnected && existingReferral.oauthLastAccessAt ? (
+              <p className="text-xs text-muted-foreground">
+                Last OAuth attestation pull:{" "}
+                {new Date(existingReferral.oauthLastAccessAt).toLocaleString()}
+              </p>
+            ) : null}
 
             {existingReferral.partnerOffers.length > 0 ? (
               <div className="space-y-2">
@@ -215,6 +234,30 @@ function LenderOfferCard({
                 </a>
               </Button>
             ) : null}
+            {existingReferral.oauthConnected ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                className="rounded-full text-destructive"
+                disabled={pending}
+                onClick={() =>
+                  startTransition(async () => {
+                    setError(null);
+                    const formData = new FormData();
+                    formData.set("referralId", existingReferral.referralId);
+                    const result = await revokeCapitalLenderOAuthGrantAction(formData);
+                    if ("error" in result && result.error) {
+                      setError(result.error);
+                      return;
+                    }
+                    router.refresh();
+                  })
+                }
+              >
+                Revoke OAuth access
+              </Button>
+            ) : null}
           </div>
         ) : !hasOrderData ? (
           <p className="rounded-lg border border-dashed border-border/80 px-3 py-2 text-sm text-muted-foreground">
@@ -253,6 +296,19 @@ function LenderOfferCard({
               />
               <span>{CAPITAL_LENDER_CONSENT_COPY}</span>
             </label>
+            {partner.oauthEnabled ? (
+              <>
+                <label className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={useOAuth}
+                    onChange={(e) => setUseOAuth(e.target.checked)}
+                  />
+                  <span>{CAPITAL_LENDER_OAUTH_CONSENT_NOTE}</span>
+                </label>
+              </>
+            ) : null}
             <Button
               type="button"
               size="sm"
@@ -265,9 +321,16 @@ function LenderOfferCard({
                   formData.set("partnerSlug", partner.slug);
                   formData.set("attestationId", attestationId);
                   formData.set("consentAccepted", "true");
+                  if (useOAuth && partner.oauthEnabled) {
+                    formData.set("useOAuth", "true");
+                  }
                   const result = await consentCapitalLenderOfferAction(formData);
                   if ("error" in result && result.error) {
                     setError(result.error);
+                    return;
+                  }
+                  if ("oauthAuthorizeUrl" in result && result.oauthAuthorizeUrl) {
+                    window.location.href = result.oauthAuthorizeUrl;
                     return;
                   }
                   if ("offerDeepLink" in result && result.offerDeepLink) {
@@ -278,7 +341,13 @@ function LenderOfferCard({
               }
             >
               <ExternalLink className="h-4 w-4" />
-              <span className="ml-2">{pending ? "Preparing…" : "Continue to partner"}</span>
+              <span className="ml-2">
+                {pending
+                  ? "Preparing…"
+                  : useOAuth && partner.oauthEnabled
+                    ? "Authorize OAuth & continue"
+                    : "Continue to partner"}
+              </span>
             </Button>
           </div>
         )}

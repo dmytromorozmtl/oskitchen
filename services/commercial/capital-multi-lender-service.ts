@@ -31,6 +31,9 @@ export type CapitalMarketplaceReferralRow = CapitalLenderOfferRow & {
   partnerOffers: CapitalPartnerOfferSnapshot[];
   selectedOfferId: string | null;
   timeline: Array<{ step: string; at: string | null }>;
+  oauthConnected: boolean;
+  oauthRevokedAt: string | null;
+  oauthLastAccessAt: string | null;
 };
 
 export type CapitalMarketplaceSnapshot = {
@@ -126,6 +129,7 @@ export async function listCapitalMarketplaceReferralsForOwner(
       shareLinks: { orderBy: { createdAt: "desc" }, take: 1 },
       partnerOffers: { orderBy: { createdAt: "asc" } },
       selectedOffer: true,
+      oauthGrant: true,
     },
   });
 
@@ -158,6 +162,9 @@ export async function listCapitalMarketplaceReferralsForOwner(
         isSelected: row.selectedOfferId === offer.id,
       })),
       timeline: buildReferralTimeline(row),
+      oauthConnected: Boolean(row.oauthGrant && !row.oauthGrant.revokedAt),
+      oauthRevokedAt: row.oauthGrant?.revokedAt?.toISOString() ?? null,
+      oauthLastAccessAt: row.oauthGrant?.lastAccessAt?.toISOString() ?? null,
     };
   });
 }

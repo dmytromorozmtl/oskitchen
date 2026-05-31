@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { exchangePartnerOAuthAuthorizationCode } from "@/services/platform/partner-oauth-service";
+import { finalizeCapitalLenderOAuthGrantAfterTokenExchange } from "@/services/commercial/capital-lender-oauth-service";
+import { parsePartnerOAuthScopeList } from "@/lib/developer/partner-oauth-scopes";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +52,14 @@ export async function POST(request: Request) {
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
+
+  await finalizeCapitalLenderOAuthGrantAfterTokenExchange({
+    clientId: body.client_id,
+    installationId: result.installationId,
+    workspaceId: result.workspaceId,
+    scopes: parsePartnerOAuthScopeList(result.scope),
+    oauthState: result.oauthState,
+  });
 
   return NextResponse.json({
     access_token: result.accessToken,

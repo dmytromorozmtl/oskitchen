@@ -209,6 +209,11 @@ export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): st
         errors.push(`${partner.slug}: referralFee live lenders require referralFeeBps`);
       }
     }
+    if (partner.oauthEnabled) {
+      if (!partner.oauthClientId?.trim()) {
+        errors.push(`${partner.slug}: oauthEnabled requires oauthClientId`);
+      }
+    }
     for (const region of partner.regions) {
       if (!CAPITAL_REGIONS.includes(region as CapitalRegion)) {
         errors.push(`${partner.slug}: unsupported region code ${region}`);

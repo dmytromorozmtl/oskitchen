@@ -10,6 +10,8 @@ export const PARTNER_OAUTH_SCOPES = [
   "read:products",
   "read:inventory",
   "manage:webhooks",
+  "read:capital_attestation",
+  "read:capital_referrals",
 ] as const;
 
 export type PartnerOAuthScope = (typeof PARTNER_OAUTH_SCOPES)[number];
@@ -27,7 +29,29 @@ export const PARTNER_OAUTH_SCOPE_LABEL: Record<PartnerOAuthScope, string> = {
   "read:products": "Read catalog and menu items",
   "read:inventory": "Read inventory levels and sync metadata",
   "manage:webhooks": "Manage outbound webhook subscriptions",
+  "read:capital_attestation": "Read signed revenue export for a financing referral",
+  "read:capital_referrals": "Read financing referral status and metadata",
 };
+
+export const CAPITAL_OAUTH_SCOPES = [
+  "read:capital_attestation",
+  "read:capital_referrals",
+] as const satisfies readonly PartnerOAuthScope[];
+
+export type CapitalOAuthScope = (typeof CAPITAL_OAUTH_SCOPES)[number];
+
+const CAPITAL_OAUTH_SCOPE_SET = new Set<string>(CAPITAL_OAUTH_SCOPES);
+
+export function isCapitalOAuthScope(value: string): value is CapitalOAuthScope {
+  return CAPITAL_OAUTH_SCOPE_SET.has(value);
+}
+
+export function partnerOAuthInstallationHasCapitalScope(
+  grantedOAuthScopes: readonly PartnerOAuthScope[],
+  required: CapitalOAuthScope,
+): boolean {
+  return grantedOAuthScopes.includes(required);
+}
 
 const OAUTH_SCOPE_SET = new Set<string>(PARTNER_OAUTH_SCOPES);
 
@@ -69,6 +93,8 @@ const OAUTH_TO_DEVELOPER: Record<PartnerOAuthScope, readonly DeveloperApiScope[]
   "read:products": ["products:read", "menus:read"],
   "read:inventory": ["products:read", "integrations:read"],
   "manage:webhooks": ["integrations:read"],
+  "read:capital_attestation": [],
+  "read:capital_referrals": [],
 };
 
 export function partnerOAuthScopesToDeveloperScopes(

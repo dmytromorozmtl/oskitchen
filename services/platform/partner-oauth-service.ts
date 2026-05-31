@@ -149,6 +149,8 @@ export async function exchangePartnerOAuthAuthorizationCode(input: {
       tokenType: "Bearer";
       scope: string;
       installationId: string;
+      workspaceId: string | null;
+      oauthState: string | null;
     }
   | { ok: false; error: string }
 > {
@@ -275,6 +277,8 @@ export async function exchangePartnerOAuthAuthorizationCode(input: {
     tokenType: "Bearer",
     scope: scopes.join(" "),
     installationId: installation.row.id,
+    workspaceId: codeRow.workspaceId,
+    oauthState: codeRow.state,
   };
 }
 

@@ -47,6 +47,42 @@ Optional IP allowlist: configure `pullIpAllowlist` on partner entry in `capital-
 
 ---
 
+## Partner OAuth pull API (Phase 6)
+
+Alternative to share-token HMAC when partner has `oauthEnabled: true`.
+
+### Authorization flow
+
+1. Merchant consents on `/dashboard/analytics/capital#lender-offers` with OAuth checkbox.
+2. KitchenOS creates referral and redirects merchant to `/api/oauth/authorize` (`state=capital:{referralId}`).
+3. Merchant approves scopes on KitchenOS consent screen.
+4. Partner exchanges `code` at `POST /api/oauth/token` → receives `koa_*` bearer token.
+5. Token exchange creates `CapitalLenderOAuthGrant` linking referral to installation.
+
+### Attestation pull
+
+```
+GET /api/capital/lender/oauth/referrals/{referralId}/attestation?partnerSlug={slug}
+Authorization: Bearer koa_...
+```
+
+**Response 200:** same attestation envelope as share-token pull, plus `"authMethod": "oauth"`.
+
+### Referral metadata pull
+
+```
+GET /api/capital/lender/oauth/referrals/{referralId}?partnerSlug={slug}
+Authorization: Bearer koa_...
+```
+
+Requires `read:capital_referrals` scope.
+
+**Feature flag:** `CAPITAL_LENDER_OAUTH=1` in production.
+
+OAuth client registry: `config/platform/partner-oauth-apps.json` — map via `oauthClientId` on partner entry.
+
+---
+
 ## Partner webhook API
 
 ```

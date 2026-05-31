@@ -1,6 +1,6 @@
 # Restaurant Capital RFC — Merchant Financing & Revenue-Based Lending
 
-**Status:** Phase 1–2 shipped (resource hub + signed revenue export BETA) — Phase 3 lender offers not implemented  
+**Status:** Phase 1–6 shipped (resource hub → lender OAuth BETA)  
 **Audience:** Product, Commercial, Finance, Legal, Security, Partnerships  
 **Tracker:** `restaurant-capital-rfc` (competitor parity cycle 22)  
 **Related:** [`app-marketplace-rfc.md`](./app-marketplace-rfc.md) · [`services/analytics/advanced-reporting-service.ts`](../services/analytics/advanced-reporting-service.ts) · [`lib/analytics/revenue-metrics.ts`](../lib/analytics/revenue-metrics.ts) · [`services/billing/subscription-service.ts`](../services/billing/subscription-service.ts) · [`docs/KITCHENOS_FINAL_PRODUCT_AND_COMPETITOR_ANALYSIS.md`](./KITCHENOS_FINAL_PRODUCT_AND_COMPETITOR_ANALYSIS.md)
@@ -175,8 +175,26 @@ KitchenOS originates or funds advances directly.
 | **0 (this RFC)** | Document gap + options | RFC merged; tracker done | “No capital product” |
 | **1 (shipped)** | Resource hub + legal disclosures | Page live; claims registry updated | “Financing resources — third-party” |
 | **2 (shipped)** | Revenue attestation export | Merchant downloads signed summary | “Verified revenue export beta” |
-| **3** | One lender partner embedded offers | Consent + offer display in dashboard | “Financing offers via [Partner]” |
-| **4** | Multi-lender marketplace (optional) | Compare offers — rare in restaurant POS | “Capital marketplace pilot” |
+| **3 (shipped)** | One lender partner embedded offers | Consent + offer display in dashboard | “Financing offers via [Partner]” |
+| **4 (shipped)** | Multi-lender marketplace | Compare offers — rare in restaurant POS | “Capital marketplace pilot” |
+| **5 (shipped)** | Live lenders + referral billing | FlexCap live, webhook idempotency, platform billing | “Live partner — sandbox hidden in prod” |
+| **6 (shipped)** | Lender OAuth pull | Partner OAuth scopes, bearer attestation API, grant revoke | “OAuth attestation pull beta” |
+
+### Phase 6 — Lender OAuth (shipped BETA)
+
+Replaces ephemeral share-token HMAC with scoped **Partner OAuth** bearer tokens for lender attestation pull.
+
+| Component | Path |
+|-----------|------|
+| Scopes | `read:capital_attestation`, `read:capital_referrals` |
+| OAuth apps | `config/platform/partner-oauth-apps.json` (`capital-flexcap-rbf-us`) |
+| Grant model | `CapitalLenderOAuthGrant` links referral ↔ installation |
+| Pull API | `GET /api/capital/lender/oauth/referrals/{referralId}/attestation` |
+| Token hook | `/api/oauth/token` → `finalizeCapitalLenderOAuthGrantAfterTokenExchange` |
+
+**Feature flag:** `CAPITAL_LENDER_OAUTH=1` (enabled in non-production by default).
+
+**Conscious limits:** No refresh tokens; no outbound OAuth to lender APIs; share-token HMAC path remains for backward compatibility.
 
 ---
 
@@ -321,3 +339,5 @@ Engage counsel **before Phase 3**. Phase 1–2 are lower risk but still need rev
 | 2026-05-31 | **Phase 2 shipped:** `RevenueAttestation` model, HMAC-signed JSON export, verify API, 30-day expiry, audit log on generate |
 | 2026-05-31 | **Phase 3 shipped:** `CapitalPartnerReferral` + `CapitalAttestationShare`, consent modal, partner apply deep links, lender pull API (`GET /api/capital/lender-share/[token]`), status webhook (`POST /api/webhooks/capital-lender/[partnerSlug]`), pilot sandbox partner in config |
 | 2026-05-31 | **Phase 4 shipped:** `CapitalPartnerOffer` snapshots, multi-lender marketplace UI with region filter, referral inbox timeline, webhook v2 `offers[]`, offer selection audit, CA + UK pilot partners |
+| 2026-05-31 | **Phase 5 shipped:** live FlexCap partner, referral billing meters, webhook idempotency, platform capital partners admin |
+| 2026-05-31 | **Phase 6 shipped:** lender OAuth scopes, `CapitalLenderOAuthGrant`, bearer attestation pull API, merchant OAuth consent + revoke |

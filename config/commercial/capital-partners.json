@@ -108,7 +108,9 @@
       "partnerAgreementEffectiveDate": "2026-05-31",
       "stateDisclosureUrl": "https://www.flexcap.example/legal/lending-disclosures",
       "contactEmail": "partnerships@flexcap.example",
-      "sortOrder": 5
+      "sortOrder": 5,
+      "oauthEnabled": true,
+      "oauthClientId": "capital-flexcap-rbf-us"
     },
     {
       "slug": "pilot-rbf-partner",
@@ -127,7 +129,9 @@
       "offerAmountLabel": "Illustrative offers from $5k–$250k based on trailing KitchenOS revenue",
       "webhookSecretEnvKey": "CAPITAL_LENDER_PILOT_WEBHOOK_SECRET",
       "offerLifecycleStatus": "sandbox",
-      "sortOrder": 10
+      "sortOrder": 10,
+      "oauthEnabled": true,
+      "oauthClientId": "capital-pilot-rbf-partner"
     },
     {
       "slug": "pilot-equipment-lender-ca",
