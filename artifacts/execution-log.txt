@@ -1263,3 +1263,16 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: fix remaining ~16 vitest failures (dashboard-userid, POS RBAC pages, cron-auth, marketing-claims CI); human vault 11/11 for score 100
+
+---
+Cycle: 104
+Timestamp: 2026-05-31T20:33:30.000Z
+Priority: P1 (post-tree test fix)
+Action: no tree step matched — agent exhausted; fixed marketing-claims-governance-ci-live by qualifying Uber Eats/DoorDash copy in components/marketing/home-landing.tsx
+Files changed: 1 (components/marketing/home-landing.tsx)
+Commit: fix: qualify Uber Eats and DoorDash claims on home landing
+Tests fixed: marketing-claims-governance-ci-live (6/6 pass); vitest failures ~15 remaining
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: dashboard-userid-cleanup (5 failures) or POS RBAC page tests; human vault 11/11 for score 100
