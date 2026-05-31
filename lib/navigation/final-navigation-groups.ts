@@ -112,6 +112,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/integrations/grubhub", labelKey: "nav.grubhub", icon: Truck },
       { href: "/dashboard/orders/hub", labelKey: "nav.ordersHub", icon: LayoutGrid },
       { href: "/dashboard/order-hub", labelKey: "nav.orderHub", icon: LayoutGrid },
+      { href: "/dashboard/receivables", labelKey: "nav.receivables", icon: Wallet },
       { href: "/dashboard/product-mapping", labelKey: "nav.productMapping", icon: MenuSquare },
     ],
   },

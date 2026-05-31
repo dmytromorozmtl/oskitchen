@@ -55,10 +55,13 @@ export function OrderHubB2bArAgingStrip({
             </Badge>
           ) : null}
         </CardTitle>
-        <CardDescription className="max-w-3xl">
-          Open Shopify B2B net-terms invoices bucketed by days past due. Send manual reminders or mark
-          paid when payment is collected.
-        </CardDescription>
+          <CardDescription className="max-w-3xl">
+            Open Shopify B2B net-terms invoices bucketed by days past due. Send manual reminders or mark
+            paid when payment is collected.{" "}
+            <Link href="/dashboard/receivables" className="font-medium text-primary hover:underline">
+              Open receivables dashboard →
+            </Link>
+          </CardDescription>
         <div className="flex flex-wrap gap-2 pt-1">
           <Badge variant="outline" className="rounded-full text-[10px] tabular-nums">
             Open {snapshot.openTotal} · {formatCurrency(snapshot.openAmountCents / 100)}

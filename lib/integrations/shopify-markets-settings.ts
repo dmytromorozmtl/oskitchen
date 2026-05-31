@@ -378,6 +378,18 @@ export type ShopifyMarketsSyncSettings = {
     skippedNoStripe: number;
     skippedAlreadyPaid: number;
   } | null;
+  b2bArDashboardEnabled: boolean;
+  lastB2bArDashboardViewAt: string | null;
+  lastB2bArDashboardExportAt: string | null;
+  b2bArHealthScore: number | null;
+  b2bArCollectorsByCompanyId: Record<string, string> | null;
+  b2bArDashboardStats: {
+    views: number;
+    bulkRemindersSent: number;
+    bulkPayLinksMinted: number;
+    csvExports: number;
+    collectorsAssigned: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -668,6 +680,35 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         }
       : null;
 
+  const b2bArDashboardEnabled = raw.b2bArDashboardEnabled !== false;
+  const b2bArHealthScore =
+    typeof raw.b2bArHealthScore === "number" && Number.isFinite(raw.b2bArHealthScore)
+      ? raw.b2bArHealthScore
+      : null;
+  const collectorsRaw = raw.b2bArCollectorsByCompanyId;
+  const b2bArCollectorsByCompanyId =
+    collectorsRaw && typeof collectorsRaw === "object" && !Array.isArray(collectorsRaw)
+      ? Object.fromEntries(
+          Object.entries(collectorsRaw as Record<string, unknown>)
+            .filter(([, v]) => typeof v === "string" && v.trim())
+            .map(([k, v]) => [k, String(v).trim()]),
+        )
+      : null;
+  const dashboardStatsRaw = raw.b2bArDashboardStats;
+  const b2bArDashboardStats =
+    dashboardStatsRaw && typeof dashboardStatsRaw === "object"
+      ? {
+          views: Number((dashboardStatsRaw as Record<string, unknown>).views) || 0,
+          bulkRemindersSent:
+            Number((dashboardStatsRaw as Record<string, unknown>).bulkRemindersSent) || 0,
+          bulkPayLinksMinted:
+            Number((dashboardStatsRaw as Record<string, unknown>).bulkPayLinksMinted) || 0,
+          csvExports: Number((dashboardStatsRaw as Record<string, unknown>).csvExports) || 0,
+          collectorsAssigned:
+            Number((dashboardStatsRaw as Record<string, unknown>).collectorsAssigned) || 0,
+        }
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -827,6 +868,14 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bPayPortalCheckoutAt:
       typeof raw.lastB2bPayPortalCheckoutAt === "string" ? raw.lastB2bPayPortalCheckoutAt : null,
     b2bPayPortalStats,
+    b2bArDashboardEnabled,
+    lastB2bArDashboardViewAt:
+      typeof raw.lastB2bArDashboardViewAt === "string" ? raw.lastB2bArDashboardViewAt : null,
+    lastB2bArDashboardExportAt:
+      typeof raw.lastB2bArDashboardExportAt === "string" ? raw.lastB2bArDashboardExportAt : null,
+    b2bArHealthScore,
+    b2bArCollectorsByCompanyId,
+    b2bArDashboardStats,
   };
 }
 

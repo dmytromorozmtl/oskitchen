@@ -617,17 +617,37 @@ Required Shopify scopes (verify at implementation):
 
 ---
 
-## Phase 22 — B2B consolidated AR dashboard & Shopify sync (planned)
+## Phase 22 — B2B consolidated AR dashboard (shipped)
 
 **Goal:** Operator-facing receivables command center across all B2B channels with optional Shopify payment status mirror.
 
-| Component | Plan |
+| Component | Path |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_AR_DASHBOARD=1` |
-| Route | `/dashboard/receivables` — cross-order aging, pay portal activity, collection tasks |
-| Service | `shopify-b2b-ar-dashboard-service.ts` — unified snapshot, export CSV |
-| Shopify sync | Read-only mirror of Shopify B2B order payment status where API allows |
-| UI | Aging heatmap, bulk send pay links, assign collector |
-| Health | Single B2B AR score in markets health rollup |
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_DASHBOARD=1` (default on in non-production) |
+| Route | `/dashboard/receivables` — aging heatmap, company rollups, invoice table |
+| Service | `shopify-b2b-ar-dashboard-service.ts` — snapshot, bulk actions, collector assign |
+| Metadata | `shopify-b2b-ar-dashboard-metadata.ts` — health score, CSV export, company rollups |
+| Export | `GET /api/dashboard/receivables/export` |
+| Settings | `b2bArDashboardEnabled`, `b2bArHealthScore`, `b2bArCollectorsByCompanyId`, `b2bArDashboardStats` |
+| Bulk | Send reminders + mint pay links (max 25) |
+| Shopify mirror | Read-only `shopifyFinancialStatus` from order metadata when captured |
+| Health | Single B2B AR health score in markets health rollup |
+| Nav | Inventory & finance → B2B receivables |
 
 **Conscious limits:** No legal collections workflow; no credit bureau integration.
+
+---
+
+## Phase 23 — B2B Shopify payment status capture at import (planned)
+
+**Goal:** Enrich channel promote with Shopify `displayFinancialStatus` so receivables dashboard mirror is complete without live API polling.
+
+| Component | Plan |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_SHOPIFY_FINANCIAL_MIRROR=1` |
+| Import | Persist `shopifyFinancialStatus` on `sourceMetadataJson` during B2B promote |
+| Reconcile | Optional refresh for open invoices via Admin API (read-only) |
+| Dashboard | Highlight KitchenOS vs Shopify payment drift |
+| Health | Attention when drift count > 0 |
+
+**Conscious limits:** No Shopify payment write-back; refresh capped at 50 orders per reconcile.

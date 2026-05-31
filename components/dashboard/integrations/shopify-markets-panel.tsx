@@ -1096,6 +1096,20 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bArHealthScore != null || syncSettings.b2bArDashboardStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B AR dashboard:{" "}
+              {syncSettings.b2bArHealthScore != null ? `${syncSettings.b2bArHealthScore}/100 health` : "—"}
+              {syncSettings.b2bArDashboardStats
+                ? ` · ${syncSettings.b2bArDashboardStats.views} view(s) · ${syncSettings.b2bArDashboardStats.csvExports} export(s)`
+                : ""}
+              {!syncSettings.b2bArDashboardEnabled ? " · dashboard off" : ""}
+              {" · "}
+              <Link href="/dashboard/receivables" className="text-primary hover:underline">
+                Open receivables
+              </Link>
+            </p>
+          ) : null}
           <ShopifyMarketsB2bDunningCard
             connectionId={connectionId}
             syncSettings={syncSettings}

@@ -1,5 +1,5 @@
 export const SHOPIFY_MARKET_B2B_AR_AGING_HONESTY =
-  "Open Shopify B2B receivables are bucketed by days past due in Order Hub — operators send manual reminder emails; automated cadence reminders and weekly digests are optional (Integrations → Shopify dunning card).";
+  "Open Shopify B2B receivables are bucketed by days past due — use Receivables dashboard for consolidated AR command center, or Order Hub for inline actions.";
 
 export function isShopifyMarketsB2bArAgingEnabled(): boolean {
   if (process.env.SHOPIFY_MARKETS_B2B_AR_AGING === "1") return true;

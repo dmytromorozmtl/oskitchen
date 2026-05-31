@@ -50,6 +50,8 @@ import { countWebhookRegistryDrift } from "@/services/integrations/shopify-marke
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 import { refreshB2bPaymentCollectionOverdueStats } from "@/services/integrations/shopify-b2b-invoice-payment-service";
 import { refreshB2bArAgingStatsForConnection } from "@/services/integrations/shopify-b2b-ar-aging-service";
+import { buildB2bArDashboardSnapshotForOwner } from "@/services/integrations/shopify-b2b-ar-dashboard-service";
+import { resolveB2bArHealthLevel } from "@/lib/integrations/shopify-b2b-ar-dashboard-metadata";
 
 function countSyncModes(markets: StorefrontMarket[]) {
   return {
@@ -230,14 +232,19 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       key: "b2b",
       label: "B2B companies",
       level: domainLevel(
-        openB2bConflicts + (sync?.b2bArAgingStats?.bucket61Plus ?? 0),
+        openB2bConflicts +
+          (sync?.b2bArHealthScore != null && sync.b2bArHealthScore < 45
+            ? 2
+            : sync?.b2bArAgingStats?.bucket61Plus ?? 0),
         Boolean(sync?.b2bImportError || sync?.lastB2bReconcileError),
         Boolean(sync?.b2bUnavailableReason),
       ),
       summary:
         sync?.b2bUnavailableReason
           ? sync.b2bUnavailableReason
-          : openB2bConflicts + openB2bLocationConflicts > 0
+          : sync?.b2bArHealthScore != null
+            ? `B2B AR health ${sync.b2bArHealthScore}/100 (${resolveB2bArHealthLevel(sync.b2bArHealthScore)}) · ${sync.b2bArAgingStats?.lastSnapshotOpen ?? 0} open`
+            : openB2bConflicts + openB2bLocationConflicts > 0
             ? `${openB2bConflicts} company + ${openB2bLocationConflicts} location conflict(s)`
             : sync?.b2bOrderEnrichmentStats?.unresolved
               ? `${sync.b2bOrderEnrichmentStats.unresolved} unresolved B2B order(s) in staging`
@@ -269,7 +276,7 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       lastActivityAt:
         sync?.lastB2bLocationReconcileAt ?? sync?.lastB2bReconcileAt ?? sync?.lastB2bImportAt ?? null,
       openIssues: openB2bConflicts + openB2bLocationConflicts,
-      linkHref: "/dashboard/integrations/shopify#shopify-markets-b2b-guard",
+      linkHref: "/dashboard/receivables",
     },
   ];
 
@@ -342,6 +349,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   if ((sync?.b2bPaymentCollectionStats?.overdueOpen ?? 0) > 0) {
     recommendations.push(
       `${sync?.b2bPaymentCollectionStats?.overdueOpen} B2B invoice(s) are past due — follow up with company buyers in Order Hub.`,
+    );
+  }
+  if ((sync?.b2bArHealthScore ?? 100) < 45) {
+    recommendations.push(
+      `B2B AR health score is ${sync?.b2bArHealthScore}/100 — review Receivables dashboard and escalate critical invoices.`,
     );
   }
   if ((sync?.b2bArAgingStats?.bucket61Plus ?? 0) > 0) {
@@ -604,6 +616,11 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
   await refreshB2bArAgingStatsForConnection({
     userId: input.userId,
     connectionId: conn.id,
+  }).catch(() => undefined);
+
+  await buildB2bArDashboardSnapshotForOwner({
+    userId: input.userId,
+    recordView: false,
   }).catch(() => undefined);
 
   const resultSummary = steps.join("; ");
