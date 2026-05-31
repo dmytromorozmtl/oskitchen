@@ -101,7 +101,47 @@
       "offerApplyUrlTemplate": "https://partners.example.com/kitchenos/apply?referralId={{referralId}}&shareToken={{shareToken}}",
       "offerDisclosure": "By continuing you leave OS Kitchen and apply directly with the lender. OS Kitchen does not guarantee approval, rates, or funding timelines.",
       "offerAmountLabel": "Illustrative offers from $5k–$250k based on trailing KitchenOS revenue",
-      "webhookSecretEnvKey": "CAPITAL_LENDER_PILOT_WEBHOOK_SECRET"
+      "webhookSecretEnvKey": "CAPITAL_LENDER_PILOT_WEBHOOK_SECRET",
+      "offerLifecycleStatus": "sandbox",
+      "sortOrder": 10
+    },
+    {
+      "slug": "pilot-equipment-lender-ca",
+      "name": "Pilot — Equipment financing (Canada sandbox)",
+      "category": "lender",
+      "description": "Sandbox equipment financing partner for Canadian restaurant operators. Compare terms alongside working-capital options.",
+      "href": "https://partners.example.com/kitchenos-ca",
+      "regions": ["CA"],
+      "disclosure": "Sandbox pilot partner for Canada — not a live funding guarantee.",
+      "referralFee": false,
+      "featured": false,
+      "offersEnabled": true,
+      "offerProgramName": "KitchenOS equipment financing pilot (CA)",
+      "offerApplyUrlTemplate": "https://partners.example.com/kitchenos-ca/apply?referralId={{referralId}}&shareToken={{shareToken}}",
+      "offerDisclosure": "Equipment loans are collateralized by assets. OS Kitchen does not guarantee approval or rates.",
+      "offerAmountLabel": "Illustrative equipment offers from $10k–$500k CAD",
+      "webhookSecretEnvKey": "CAPITAL_LENDER_CA_WEBHOOK_SECRET",
+      "offerLifecycleStatus": "sandbox",
+      "sortOrder": 20
+    },
+    {
+      "slug": "pilot-working-capital-uk",
+      "name": "Pilot — Working capital (UK sandbox)",
+      "category": "lender",
+      "description": "UK hospitality working-capital sandbox with multi-offer webhook support for comparison in your referral inbox.",
+      "href": "https://partners.example.com/kitchenos-uk",
+      "regions": ["UK"],
+      "disclosure": "UK sandbox partner — verify FCA authorisation and terms with the lender directly.",
+      "referralFee": true,
+      "featured": false,
+      "offersEnabled": true,
+      "offerProgramName": "KitchenOS working capital pilot (UK)",
+      "offerApplyUrlTemplate": "https://partners.example.com/kitchenos-uk/apply?referralId={{referralId}}&shareToken={{shareToken}}",
+      "offerDisclosure": "KitchenOS may receive referral compensation. Terms set solely by the lender.",
+      "offerAmountLabel": "Illustrative offers from £5k–£150k based on trailing revenue",
+      "webhookSecretEnvKey": "CAPITAL_LENDER_UK_WEBHOOK_SECRET",
+      "offerLifecycleStatus": "live",
+      "sortOrder": 30
     }
   ],
   "educationTopics": [

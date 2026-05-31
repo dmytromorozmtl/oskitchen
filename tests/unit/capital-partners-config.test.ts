@@ -36,11 +36,13 @@ describe("capital-partners config", () => {
   it("registers lender offer partners with required disclosure fields", () => {
     resetCapitalPartnersConfigCache();
     const offers = listLenderOfferPartners();
-    expect(offers.length).toBeGreaterThan(0);
+    expect(offers.length).toBeGreaterThan(1);
     for (const partner of offers) {
       expect(partner.offerApplyUrlTemplate?.length).toBeGreaterThan(0);
       expect(partner.offerDisclosure?.length).toBeGreaterThan(0);
+      expect(partner.offerLifecycleStatus).toBeDefined();
     }
     expect(getCapitalPartnerBySlug("pilot-rbf-partner")?.offersEnabled).toBe(true);
+    expect(getCapitalPartnerBySlug("pilot-equipment-lender-ca")?.regions).toContain("CA");
   });
 });

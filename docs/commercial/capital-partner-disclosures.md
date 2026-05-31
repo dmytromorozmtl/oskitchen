@@ -55,6 +55,43 @@ Env: `CAPITAL_LENDER_WEBHOOK_SECRET` or per-partner `webhookSecretEnvKey` in `ca
 
 Audit actions: `capital.lender_consent_granted`, `capital.lender_webhook_status`.
 
+## Phase 4 — Multi-lender marketplace (shipped)
+
+Merchants on `/dashboard/analytics/capital#lender-offers` can:
+
+1. Filter embedded lender partners by region (US / CA / UK / EU) — auto-detected from `kitchen_settings.country`.
+2. Compare partners in a summary table before consenting.
+3. Receive multiple offer snapshots per referral via webhook `offers[]` payload (v2).
+4. Select a specific offer in the referral inbox (`capital.lender_offer_selected` audit).
+
+Partner webhook v2 example:
+
+```json
+{
+  "referralId": "uuid",
+  "status": "OFFER_VIEWED",
+  "offers": [
+    {
+      "partnerOfferId": "offer-001",
+      "title": "12-month working capital",
+      "amountMin": 25000,
+      "amountMax": 75000,
+      "currency": "USD",
+      "termLabel": "12 months",
+      "rateLabel": "Illustrative factor rate",
+      "deepLink": "https://partner.example/apply/offer-001"
+    }
+  ]
+}
+```
+
+APIs:
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /api/capital/marketplace?region=` | Marketplace snapshot for dashboard |
+| `GET /api/capital/lender-referrals` | Referral inbox with offer snapshots |
+
 ## Partner onboarding checklist (future)
 
 - [ ] Signed partner agreement reviewed by counsel
@@ -93,4 +130,5 @@ When merchants ask about financing:
 | 1 (shipped) | Resource hub + disclosures | Required — lightweight |
 | 2 (shipped) | Signed revenue attestation export | Required — medium |
 | 3 (shipped) | Embedded lender offers + partner pull API | Required — full program |
-| 4 | Multi-lender marketplace | Required — full program |
+| 4 (shipped) | Multi-lender marketplace, region filter, offer comparison inbox | Required — full program |
+| 5 | Partner billing / live lender onboarding | Required — full program |

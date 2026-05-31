@@ -10644,14 +10644,18 @@ model CapitalPartnerReferral {
   offerDeepLink       String?                      @map("offer_deep_link") @db.Text
   status              CapitalPartnerReferralStatus @default(CONSENTED)
   statusUpdatedAt     DateTime                     @default(now()) @map("status_updated_at")
+  comparedAt          DateTime?                    @map("compared_at")
+  selectedOfferId     String?                      @map("selected_offer_id") @db.Uuid
   metadataJson        Json?                        @map("metadata_json")
   createdAt           DateTime                     @default(now()) @map("created_at")
   updatedAt           DateTime                     @updatedAt @map("updated_at")
 
-  workspace   Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  createdBy   UserProfile        @relation("CapitalPartnerReferralCreator", fields: [userId], references: [id], onDelete: Cascade)
-  attestation RevenueAttestation? @relation(fields: [attestationId], references: [id], onDelete: SetNull)
-  shareLinks  CapitalAttestationShare[]
+  workspace     Workspace                 @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy     UserProfile               @relation("CapitalPartnerReferralCreator", fields: [userId], references: [id], onDelete: Cascade)
+  attestation   RevenueAttestation?       @relation(fields: [attestationId], references: [id], onDelete: SetNull)
+  shareLinks    CapitalAttestationShare[]
+  partnerOffers CapitalPartnerOffer[]
+  selectedOffer CapitalPartnerOffer?      @relation("SelectedCapitalOffer", fields: [selectedOfferId], references: [id], onDelete: SetNull)
 
   @@index([workspaceId, createdAt])
   @@index([workspaceId, partnerSlug, status])
@@ -10676,6 +10680,31 @@ model CapitalAttestationShare {
   @@index([attestationId])
   @@index([expiresAt])
   @@map("capital_attestation_shares")
+}
+
+model CapitalPartnerOffer {
+  id             String    @id @default(uuid()) @db.Uuid
+  referralId     String    @map("referral_id") @db.Uuid
+  partnerOfferId String    @map("partner_offer_id") @db.VarChar(128)
+  title          String    @db.VarChar(255)
+  summary        String?   @db.VarChar(500)
+  amountMin      Decimal?  @map("amount_min") @db.Decimal(14, 2)
+  amountMax      Decimal?  @map("amount_max") @db.Decimal(14, 2)
+  currency       String    @default("USD") @db.VarChar(8)
+  termLabel      String?   @map("term_label") @db.VarChar(120)
+  rateLabel      String?   @map("rate_label") @db.VarChar(120)
+  deepLink       String?   @map("deep_link") @db.Text
+  expiresAt      DateTime? @map("expires_at")
+  metadataJson   Json?     @map("metadata_json")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  referral            CapitalPartnerReferral   @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  selectedByReferrals CapitalPartnerReferral[] @relation("SelectedCapitalOffer")
+
+  @@unique([referralId, partnerOfferId])
+  @@index([referralId, expiresAt])
+  @@map("capital_partner_offers")
 }
 
 model AuditLog {

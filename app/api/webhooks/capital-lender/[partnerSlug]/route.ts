@@ -8,8 +8,25 @@ import {
   verifyCapitalLenderWebhookSignature,
 } from "@/lib/commercial/capital-lender-offers";
 import { applyCapitalLenderWebhookUpdate } from "@/services/commercial/capital-lender-offers-service";
+import {
+  type CapitalWebhookOfferInput,
+  upsertCapitalPartnerOffersFromWebhook,
+} from "@/services/commercial/capital-multi-lender-service";
 
 type RouteContext = { params: Promise<{ partnerSlug: string }> };
+
+const webhookOfferSchema = z.object({
+  partnerOfferId: z.string().min(1).max(128),
+  title: z.string().min(1).max(255),
+  summary: z.string().max(500).optional().nullable(),
+  amountMin: z.coerce.number().nonnegative().optional().nullable(),
+  amountMax: z.coerce.number().nonnegative().optional().nullable(),
+  currency: z.string().max(8).optional().nullable(),
+  termLabel: z.string().max(120).optional().nullable(),
+  rateLabel: z.string().max(120).optional().nullable(),
+  deepLink: z.string().max(2000).optional().nullable(),
+  expiresAt: z.string().datetime().optional().nullable(),
+});
 
 const webhookBodySchema = z.object({
   referralId: z.string().uuid(),
@@ -18,6 +35,7 @@ const webhookBodySchema = z.object({
   offerTitle: z.string().max(255).optional().nullable(),
   offerSummary: z.string().max(500).optional().nullable(),
   offerDeepLink: z.string().max(2000).optional().nullable(),
+  offers: z.array(webhookOfferSchema).max(12).optional(),
 });
 
 export async function POST(request: Request, context: RouteContext) {
@@ -72,5 +90,13 @@ export async function POST(request: Request, context: RouteContext) {
     return NextResponse.json({ error: result.error }, { status: 404 });
   }
 
-  return NextResponse.json({ ok: true });
+  if (parsed.data.offers?.length) {
+    await upsertCapitalPartnerOffersFromWebhook({
+      partnerSlug: slug,
+      referralId: parsed.data.referralId,
+      offers: parsed.data.offers as CapitalWebhookOfferInput[],
+    });
+  }
+
+  return NextResponse.json({ ok: true, offersUpserted: parsed.data.offers?.length ?? 0 });
 }

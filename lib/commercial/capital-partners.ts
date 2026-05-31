@@ -2,24 +2,18 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { z } from "zod";
 
-const capitalPartnerSchema = z.object({
-  slug: z.string().min(1).max(80),
-  name: z.string().min(1).max(200),
-  category: z.enum(["government", "education", "lender", "platform"]),
-  description: z.string().min(1).max(800),
-  href: z.string().min(1).max(500),
-  regions: z.array(z.string().min(2).max(8)).min(1),
-  disclosure: z.string().min(1).max(400),
-  referralFee: z.boolean(),
-  featured: z.boolean().optional().default(false),
-  internal: z.boolean().optional().default(false),
-  offersEnabled: z.boolean().optional().default(false),
-  offerProgramName: z.string().max(200).optional(),
-  offerApplyUrlTemplate: z.string().max(500).optional(),
-  offerDisclosure: z.string().max(800).optional(),
-  offerAmountLabel: z.string().max(200).optional(),
-  webhookSecretEnvKey: z.string().max(80).optional(),
-});
+import {
+  capitalPartnerSchema,
+  CAPITAL_REGIONS,
+  type CapitalOfferLifecycleStatus,
+  type CapitalRegion,
+} from "@/lib/commercial/capital-partners-schema";
+
+export {
+  CAPITAL_REGIONS,
+  type CapitalOfferLifecycleStatus,
+  type CapitalRegion,
+} from "@/lib/commercial/capital-partners-schema";
 
 const capitalPartnersConfigSchema = z.object({
   version: z.number().int().positive(),
@@ -65,8 +59,82 @@ export function listFeaturedCapitalPartners(): CapitalPartner[] {
   return loadCapitalPartnersConfig().partners.filter((partner) => partner.featured);
 }
 
-export function listLenderOfferPartners(): CapitalPartner[] {
-  return loadCapitalPartnersConfig().partners.filter((partner) => partner.offersEnabled === true);
+function sortLenderPartners(partners: CapitalPartner[]): CapitalPartner[] {
+  return [...partners].sort((a, b) => {
+    const orderDiff = (a.sortOrder ?? 100) - (b.sortOrder ?? 100);
+    if (orderDiff !== 0) return orderDiff;
+    return a.name.localeCompare(b.name);
+  });
+}
+
+export function listLenderOfferPartners(input?: {
+  region?: CapitalRegion | null;
+  includePaused?: boolean;
+}): CapitalPartner[] {
+  const region = input?.region ?? null;
+  const includePaused = input?.includePaused ?? false;
+
+  const partners = loadCapitalPartnersConfig().partners.filter((partner) => {
+    if (!partner.offersEnabled) return false;
+    if (!includePaused && partner.offerLifecycleStatus === "paused") return false;
+    if (region && !partner.regions.includes(region)) return false;
+    return true;
+  });
+
+  return sortLenderPartners(partners);
+}
+
+export function mapCountryToCapitalRegion(country: string | null | undefined): CapitalRegion {
+  const normalized = country?.trim().toLowerCase() ?? "";
+  if (!normalized) return "US";
+
+  if (
+    normalized === "us" ||
+    normalized === "usa" ||
+    normalized === "united states" ||
+    normalized.includes("united states")
+  ) {
+    return "US";
+  }
+  if (normalized === "ca" || normalized === "canada" || normalized.includes("canada")) {
+    return "CA";
+  }
+  if (
+    normalized === "uk" ||
+    normalized === "gb" ||
+    normalized === "united kingdom" ||
+    normalized.includes("united kingdom")
+  ) {
+    return "UK";
+  }
+
+  const euCountries = new Set([
+    "at",
+    "austria",
+    "be",
+    "belgium",
+    "de",
+    "germany",
+    "fr",
+    "france",
+    "es",
+    "spain",
+    "it",
+    "italy",
+    "nl",
+    "netherlands",
+    "ie",
+    "ireland",
+    "pt",
+    "portugal",
+    "pl",
+    "poland",
+    "eu",
+    "europe",
+  ]);
+  if (euCountries.has(normalized)) return "EU";
+
+  return "US";
 }
 
 export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): string[] {
@@ -85,6 +153,11 @@ export function validateCapitalPartnersConfig(config: CapitalPartnersConfig): st
     }
     if (partner.offersEnabled && !partner.offerDisclosure?.trim()) {
       errors.push(`${partner.slug}: offersEnabled requires offerDisclosure`);
+    }
+    for (const region of partner.regions) {
+      if (!CAPITAL_REGIONS.includes(region as CapitalRegion)) {
+        errors.push(`${partner.slug}: unsupported region code ${region}`);
+      }
     }
   }
   return errors;
