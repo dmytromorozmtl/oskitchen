@@ -2,8 +2,9 @@ import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
 /**
- * Create a Stripe Terminal connection token.
- * Used by the frontend to connect to a physical card reader.
+ * Stripe Terminal — server-side payment intents and capture recording.
+ * Reader WebSocket connection lives in the browser via `@stripe/terminal-js`
+ * (`hooks/use-stripe-terminal.ts`, `lib/payments/stripe-terminal-client.ts`).
  */
 export async function createTerminalConnectionToken(): Promise<string> {
   const stripe = getStripe();

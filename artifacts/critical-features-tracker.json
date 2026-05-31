@@ -1,0 +1,15 @@
+{
+  "hardware-terminal-sdk": "done",
+  "hardware-terminal-ui": "todo",
+  "hardware-terminal-e2e": "todo",
+  "websocket-kds-infra": "todo",
+  "websocket-kds-ui": "todo",
+  "websocket-kds-slo": "todo",
+  "cross-channel-inventory-engine": "todo",
+  "cross-channel-inventory-ui": "todo",
+  "cross-channel-inventory-e2e": "todo",
+  "integration-health-scoring": "todo",
+  "integration-health-recovery": "todo",
+  "rbac-mutation-expansion": "todo",
+  "shopify-b2b-ar-dashboard": "todo"
+}

@@ -1449,3 +1449,9 @@ Non-vault: Build ✅ Tests ✅ Vault doc ✅ KDS plan ✅ Tracker reconciliation
 Blocked on vault: P0 proof, live smoke, SSO IdP, GO decision
 Vault: 0/11
 Next: VP Ops vault → Item 5 P0 orchestrator
+---
+Cycle: 20260531-160600
+Action: feat: Stripe Terminal SDK integration — reader connection + payment processing (Critical Features Cycle 1)
+Files: lib/payments/stripe-terminal-client.ts, hooks/use-stripe-terminal.ts, components/pos/pos-payment-methods.tsx, tests/unit/stripe-terminal-client.test.ts, artifacts/critical-features-tracker.json
+Tracker: hardware-terminal-sdk=done
+Next: Cycle 2 POS terminal UI (stripe-terminal-reader component)
