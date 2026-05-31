@@ -28,18 +28,23 @@ export function ShopifyMarketsMappingSummary({
   const openConflicts = syncSettings
     ? Object.values(syncSettings.marketPriceConflicts ?? {}).filter((row) => row.status === "open").length
     : 0;
+  const openCatalogConflicts = syncSettings
+    ? Object.values(syncSettings.marketCatalogConflicts ?? {}).filter((row) => row.status === "open").length
+    : 0;
   const priceRows = syncSettings ? Object.values(syncSettings.marketPriceImports ?? {}) : [];
   const exportRows = syncSettings ? Object.values(syncSettings.marketPriceExports ?? {}) : [];
+  const catalogRows = syncSettings ? Object.values(syncSettings.marketCatalogImports ?? {}) : [];
   const mappedPrices = priceRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
   const pushedVariants = exportRows.reduce((sum, row) => sum + row.pushedVariantCount, 0);
+  const mappedCatalogProducts = catalogRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
 
   return (
     <Card className="border-border/80 bg-muted/10">
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 5 — link OS Kitchen markets to Shopify, set syncMode import, push, or bidirectional, and
-          reconcile mapped product prices via Shopify price lists.
+          Phase 6 — link OS Kitchen markets to Shopify, sync prices and catalog publications, reconcile
+          conflicts with priceAuthority and catalogAuthority.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -68,10 +73,16 @@ export function ShopifyMarketsMappingSummary({
                 <Badge variant="secondary">{bidirectionalMode} bidirectional</Badge>
               ) : null}
               {openConflicts > 0 ? (
-                <Badge variant="destructive">{openConflicts} open conflict(s)</Badge>
+                <Badge variant="destructive">{openConflicts} price conflict(s)</Badge>
+              ) : null}
+              {openCatalogConflicts > 0 ? (
+                <Badge variant="destructive">{openCatalogConflicts} catalog conflict(s)</Badge>
               ) : null}
               {mappedPrices > 0 ? (
                 <Badge variant="outline">{mappedPrices} Shopify price override(s)</Badge>
+              ) : null}
+              {mappedCatalogProducts > 0 ? (
+                <Badge variant="outline">{mappedCatalogProducts} catalog product(s)</Badge>
               ) : null}
               {pushedVariants > 0 ? (
                 <Badge variant="outline">{pushedVariants} variant(s) pushed</Badge>

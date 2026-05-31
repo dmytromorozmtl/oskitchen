@@ -445,3 +445,15 @@ Result: PASS
 Summary: Stripe Connect Express onboarding for publishers, transfer payouts on finalized statements, account.updated webhook sync, platform UI with Connect status and Send payout, dry-run mode
 Tests: tests/unit/partner-stripe-connect.test.ts
 Next: shopify-markets-catalog-publication OR restaurant-capital-phase6-lender-oauth OR app-marketplace-phase7-revenue-share-meters
+
+---
+Post-parity cycle: 17
+Timestamp: 2026-05-31T21:00:00.000Z
+Feature: shopify-markets-catalog-publication
+Source: docs/shopify-markets-rfc.md Phase 6 catalog slice
+Priority: POST-PARITY
+Files: 20
+Result: PASS
+Summary: Catalog import/push via market publications, catalogAuthority bidirectional conflicts, storefront productIds overlay, webhook catalog sync, dashboard UI
+Tests: tests/unit/shopify-market-catalog-service.test.ts
+Next: restaurant-capital-phase6-lender-oauth OR app-marketplace-phase7-revenue-share-meters OR shopify-markets-tax-duty-guard

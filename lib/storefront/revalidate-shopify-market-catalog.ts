@@ -31,6 +31,11 @@ export function computeShopifyMarketPriceHash(productPrices: Record<string, stri
   return createHash("sha256").update(canonical).digest("hex").slice(0, 16);
 }
 
+export function computeShopifyMarketCatalogHash(productIds: string[]): string {
+  const canonical = [...productIds].sort().join("|");
+  return createHash("sha256").update(canonical).digest("hex").slice(0, 16);
+}
+
 export const SHOPIFY_MARKETS_WEBHOOK_DEBOUNCE_MS = 60_000;
 
 export function isShopifyMarketsWebhookDebounced(

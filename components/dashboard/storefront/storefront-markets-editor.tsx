@@ -203,11 +203,12 @@ export function StorefrontMarketsEditor({
                             <option value="import">Import — Shopify price list wins on mapped products</option>
                             <option value="push">Push — KitchenOS prices update Shopify price list</option>
                             <option value="bidirectional">
-                              Bidirectional — import + push with conflict resolution (Phase 5 BETA)
+                              Bidirectional — price + catalog reconcile with conflict resolution
                             </option>
                           </select>
                         </div>
                         {m.syncMode === "bidirectional" ? (
+                          <>
                           <div className="space-y-2">
                             <Label>Price authority on conflict</Label>
                             <select
@@ -224,6 +225,23 @@ export function StorefrontMarketsEditor({
                               <option value="manual">Manual — queue conflicts for review</option>
                             </select>
                           </div>
+                          <div className="space-y-2">
+                            <Label>Catalog authority on conflict</Label>
+                            <select
+                              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              value={m.catalogAuthority ?? "kitchenos"}
+                              onChange={(e) =>
+                                updateAt(idx, {
+                                  catalogAuthority: e.target.value as StorefrontMarket["catalogAuthority"],
+                                })
+                              }
+                            >
+                              <option value="kitchenos">KitchenOS wins — push menu/productIds to Shopify</option>
+                              <option value="shopify">Shopify wins — import publication into productIds</option>
+                              <option value="manual">Manual — queue catalog conflicts for review</option>
+                            </select>
+                          </div>
+                          </>
                         ) : null}
                       </>
                     ) : null}

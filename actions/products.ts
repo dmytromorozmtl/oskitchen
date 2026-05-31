@@ -2,6 +2,7 @@
 
 
 import { triggerShopifyMarketPricePushAfterProductUpdate } from "@/lib/integrations/shopify-market-prices-push-trigger";
+import { triggerShopifyMarketCatalogPushAfterProductUpdate } from "@/lib/integrations/shopify-market-catalog-push-trigger";
 import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -216,6 +217,13 @@ export async function updateProduct(productId: string, formData: FormData) {
       productId,
       previousPrice: existing.price.toFixed(2),
       newPrice: d.price.toFixed(2),
+    });
+
+    void triggerShopifyMarketCatalogPushAfterProductUpdate({
+      userId,
+      productId,
+      previousActive: existing.active,
+      newActive: d.active,
     });
 
     await revalidateProductPaths(userId);

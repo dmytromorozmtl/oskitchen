@@ -36,6 +36,41 @@ export type ShopifyMarketPriceConflictRow = {
   priceAuthority: "shopify" | "kitchenos" | "manual";
 };
 
+export type ShopifyMarketCatalogImportRow = {
+  osMarketId: string;
+  shopifyMarketId: string;
+  shopifyCatalogId: string | null;
+  shopifyPublicationId: string | null;
+  importedAt: string;
+  externalProductCount: number;
+  mappedProductCount: number;
+  productIds: string[];
+  catalogHash: string;
+};
+
+export type ShopifyMarketCatalogExportRow = {
+  osMarketId: string;
+  shopifyMarketId: string;
+  shopifyPublicationId: string | null;
+  pushedAt: string;
+  publishedCount: number;
+  unpublishedCount: number;
+  catalogHash: string;
+};
+
+export type ShopifyMarketCatalogConflictRow = {
+  conflictKey: string;
+  osMarketId: string;
+  shopifyMarketId: string;
+  productId: string;
+  externalProductId: string;
+  shopifyPublished: boolean;
+  kitchenosPublished: boolean;
+  detectedAt: string;
+  status: "open" | "resolved_shopify" | "resolved_kitchenos" | "ignored";
+  catalogAuthority: "shopify" | "kitchenos" | "manual";
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
@@ -59,6 +94,18 @@ export type ShopifyMarketsSyncSettings = {
   lastBidirectionalReconcileError: string | null;
   lastBidirectionalReconcileResult: string | null;
   marketPriceConflicts: Record<string, ShopifyMarketPriceConflictRow>;
+  lastCatalogImportAt: string | null;
+  catalogImportError: string | null;
+  marketCatalogImports: Record<string, ShopifyMarketCatalogImportRow>;
+  lastCatalogPushAt: string | null;
+  lastCatalogPushError: string | null;
+  lastCatalogPushTriggeredAt: string | null;
+  lastCatalogPushSkippedReason: string | null;
+  marketCatalogExports: Record<string, ShopifyMarketCatalogExportRow>;
+  lastCatalogReconcileAt: string | null;
+  lastCatalogReconcileError: string | null;
+  lastCatalogReconcileResult: string | null;
+  marketCatalogConflicts: Record<string, ShopifyMarketCatalogConflictRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -66,6 +113,13 @@ export const SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES = [
   "read_markets",
   "read_products",
   "write_products",
+] as const;
+
+export const SHOPIFY_MARKETS_CATALOG_PUSH_REQUIRED_SCOPES = [
+  "read_markets",
+  "read_products",
+  "write_products",
+  "write_publications",
 ] as const;
 
 export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyMarketsSyncSettings {
@@ -97,6 +151,21 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
   const marketPriceConflicts =
     raw.marketPriceConflicts && typeof raw.marketPriceConflicts === "object"
       ? (raw.marketPriceConflicts as Record<string, ShopifyMarketPriceConflictRow>)
+      : {};
+
+  const marketCatalogImports =
+    raw.marketCatalogImports && typeof raw.marketCatalogImports === "object"
+      ? (raw.marketCatalogImports as Record<string, ShopifyMarketCatalogImportRow>)
+      : {};
+
+  const marketCatalogExports =
+    raw.marketCatalogExports && typeof raw.marketCatalogExports === "object"
+      ? (raw.marketCatalogExports as Record<string, ShopifyMarketCatalogExportRow>)
+      : {};
+
+  const marketCatalogConflicts =
+    raw.marketCatalogConflicts && typeof raw.marketCatalogConflicts === "object"
+      ? (raw.marketCatalogConflicts as Record<string, ShopifyMarketCatalogConflictRow>)
       : {};
 
   return {
@@ -137,6 +206,23 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastBidirectionalReconcileResult:
       typeof raw.lastBidirectionalReconcileResult === "string" ? raw.lastBidirectionalReconcileResult : null,
     marketPriceConflicts,
+    lastCatalogImportAt: typeof raw.lastCatalogImportAt === "string" ? raw.lastCatalogImportAt : null,
+    catalogImportError: typeof raw.catalogImportError === "string" ? raw.catalogImportError : null,
+    marketCatalogImports,
+    lastCatalogPushAt: typeof raw.lastCatalogPushAt === "string" ? raw.lastCatalogPushAt : null,
+    lastCatalogPushError: typeof raw.lastCatalogPushError === "string" ? raw.lastCatalogPushError : null,
+    lastCatalogPushTriggeredAt:
+      typeof raw.lastCatalogPushTriggeredAt === "string" ? raw.lastCatalogPushTriggeredAt : null,
+    lastCatalogPushSkippedReason:
+      typeof raw.lastCatalogPushSkippedReason === "string" ? raw.lastCatalogPushSkippedReason : null,
+    marketCatalogExports,
+    lastCatalogReconcileAt:
+      typeof raw.lastCatalogReconcileAt === "string" ? raw.lastCatalogReconcileAt : null,
+    lastCatalogReconcileError:
+      typeof raw.lastCatalogReconcileError === "string" ? raw.lastCatalogReconcileError : null,
+    lastCatalogReconcileResult:
+      typeof raw.lastCatalogReconcileResult === "string" ? raw.lastCatalogReconcileResult : null,
+    marketCatalogConflicts,
   };
 }
 

@@ -1,6 +1,6 @@
 # Shopify Markets RFC — Multi-Region Commerce Integration
 
-**Status:** Phase 1–5 shipped (discovery + mapping + import + webhooks + push + bidirectional BETA)  
+**Status:** Phase 1–6 shipped (discovery + mapping + import + webhooks + push + bidirectional + catalog publication BETA)  
 **Audience:** Integrations, Storefront, Product, Commercial  
 **Tracker:** `shopify-markets-rfc` (competitor parity cycle 16)  
 **Related:** [`roadmap/STOREFRONT_SHOPIFY_PARITY.md`](./roadmap/STOREFRONT_SHOPIFY_PARITY.md) · [`storefront-audit-21may.md`](./storefront-audit-21may.md) · [`services/integrations/shopify.ts`](../services/integrations/shopify.ts) · [`lib/storefront/markets.ts`](../lib/storefront/markets.ts)
@@ -165,6 +165,7 @@ Push OS Kitchen market price/menu changes to Shopify price lists and publication
 | **3** | Webhooks for market/price changes | <15 min staleness SLA (best effort) |
 | **4** | Optional push (KitchenOS → Shopify) | Feature flag; explicit merchant opt-in |
 | **5** | Bidirectional reconcile (pilot BETA) | `syncMode=bidirectional`, conflict queue, `priceAuthority` per market |
+| **6** | Catalog publication sync | Import/push publications, `catalogAuthority`, storefront `productIds` overlay |
 
 ### Phase 5 — Bidirectional reconcile (shipped BETA)
 
@@ -185,8 +186,23 @@ Pilot slice of Option D — **price-only**, not full catalog publication bi-sync
 
 **Services:** `shopify-markets-bidirectional-service.ts` · **UI:** `shopify-markets-panel.tsx`, `storefront-markets-editor.tsx`
 
-**Conscious limits:** No tax/duty sync, no catalog publication push, no subscription-box market rules. Revisit catalog publication in `shopify-markets-catalog-publication` slice.
+**Conscious limits (Phase 5):** Price-only bidirectional; catalog handled in Phase 6.
 
+### Phase 6 — Catalog publication (shipped BETA)
+
+Extends market sync to **menu composition** via Shopify catalog publications.
+
+| Field | Purpose |
+|-------|---------|
+| `catalogAuthority` | Bidirectional conflict resolution for published product sets |
+| `marketCatalogImports` | Cached Shopify publication product IDs per OS market |
+| `marketCatalogConflicts` | Per-product publish/unpublish mismatches |
+
+**RFC rule:** KitchenOS wins on `productIds` when set; empty `productIds` fills from Shopify import.
+
+**Services:** `shopify-market-catalog-service.ts`, `shopify-market-catalog-push-service.ts`, `shopify-markets-catalog-bidirectional-service.ts`
+
+**Conscious limits:** No tax/duty sync, publication scopes only (not full Catalog CRUD).
 
 ## Proposed data model (Phase 1+)
 
@@ -285,3 +301,4 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 3 shipped:** webhook-driven price re-import (`products/update`, `markets/*`), 60s debounce, SHA price-hash skip, catalog cache revalidation |
 | 2026-05-31 | **Phase 4 shipped:** KitchenOS → Shopify price list push (`syncMode=push`), manual + product-update trigger, 30s debounce, write_products scope |
 | 2026-05-31 | **Phase 5 (bidirectional) shipped:** `syncMode=bidirectional` with `priceAuthority`, conflict queue, reconcile engine, webhook + product-update auto-reconcile |
+| 2026-05-31 | **Phase 6 (catalog publication) shipped:** catalog import/push, `catalogAuthority`, publication conflicts, storefront overlay |

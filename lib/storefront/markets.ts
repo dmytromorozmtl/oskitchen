@@ -31,6 +31,8 @@ export const storefrontMarketSchema = z.object({
   syncMode: z.enum(["none", "import", "push", "bidirectional"]).optional().default("none"),
   /** Bidirectional conflict resolution — who wins when Shopify and KitchenOS prices diverge */
   priceAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
+  /** Bidirectional catalog conflict resolution — who wins when publication sets diverge */
+  catalogAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
 });
 
 export type StorefrontMarket = z.infer<typeof storefrontMarketSchema>;

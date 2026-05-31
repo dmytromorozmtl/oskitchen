@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
 import { STOREFRONT_MARKET_COOKIE, storefrontCatalogTag } from "@/lib/storefront/cache-tags";
+import { loadShopifyMarketCatalogOverlayForMarket } from "@/lib/storefront/shopify-market-catalog-overrides";
 import {
   defaultPilotMarket,
   parseStorefrontMarketsFromSettingsCenter,
@@ -46,8 +47,14 @@ export async function resolveActiveMarket(input: {
     markets.find((m) => m.enabled !== false) ??
     defaultPilotMarket(input.storeSlug, input.currency);
 
+  const catalogOverlay = await loadShopifyMarketCatalogOverlayForMarket({
+    ownerUserId: input.storefrontUserId,
+    market,
+  });
+
   const productIds =
-    market.productIds && market.productIds.length > 0 ? market.productIds : null;
+    catalogOverlay.productIds ??
+    (market.productIds && market.productIds.length > 0 ? market.productIds : null);
 
   const activeMenuId = market.activeMenuId?.trim() || input.defaultActiveMenuId;
 

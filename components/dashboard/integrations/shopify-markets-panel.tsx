@@ -2,19 +2,24 @@
 
 import { useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, DollarSign, Globe2, Loader2, RefreshCw, Scale } from "lucide-react";
+import { ArrowUpRight, BookOpen, DollarSign, Globe2, Loader2, RefreshCw, Scale } from "lucide-react";
 
 import {
   discoverShopifyMarketsAction,
+  importShopifyMarketCatalogAction,
   importShopifyMarketPricesAction,
+  pushShopifyMarketCatalogAction,
   pushShopifyMarketPricesAction,
+  reconcileBidirectionalShopifyMarketCatalogAction,
   reconcileBidirectionalShopifyMarketsAction,
+  resolveShopifyMarketCatalogConflictAction,
   resolveShopifyMarketPriceConflictAction,
 } from "@/actions/shopify-markets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  SHOPIFY_MARKETS_CATALOG_PUSH_REQUIRED_SCOPES,
   SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES,
   type ShopifyMarketsSyncSettings,
 } from "@/lib/integrations/shopify-markets-settings";
@@ -60,11 +65,29 @@ export function ShopifyMarketsPanel({
   const [pushPending, startPush] = useTransition();
   const [reconcilePending, startReconcile] = useTransition();
   const [resolvePending, startResolve] = useTransition();
-  const pending = discoverPending || importPending || pushPending || reconcilePending || resolvePending;
+  const [catalogImportPending, startCatalogImport] = useTransition();
+  const [catalogPushPending, startCatalogPush] = useTransition();
+  const [catalogReconcilePending, startCatalogReconcile] = useTransition();
+  const [catalogResolvePending, startCatalogResolve] = useTransition();
+  const pending =
+    discoverPending ||
+    importPending ||
+    pushPending ||
+    reconcilePending ||
+    resolvePending ||
+    catalogImportPending ||
+    catalogPushPending ||
+    catalogReconcilePending ||
+    catalogResolvePending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
   const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
+  const importedCatalogMarkets = Object.values(syncSettings.marketCatalogImports ?? {});
+  const exportedCatalogMarkets = Object.values(syncSettings.marketCatalogExports ?? {});
   const openConflicts = Object.values(syncSettings.marketPriceConflicts ?? {}).filter(
+    (row) => row.status === "open",
+  );
+  const openCatalogConflicts = Object.values(syncSettings.marketCatalogConflicts ?? {}).filter(
     (row) => row.status === "open",
   );
   const totalMappedPrices = importedMarkets.reduce(
@@ -83,12 +106,12 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 5 BETA
+              Shopify Markets — Phase 6 BETA
             </CardTitle>
             <CardDescription>
-              Discover Shopify markets, link them on Storefront → Markets, then import, push, or run
-              bidirectional reconcile for mapped external products. Webhooks keep import/bidirectional markets
-              fresh; push-mode sends KitchenOS prices to Shopify price lists.
+              Discover Shopify markets, link them on Storefront → Markets, then sync prices and catalog
+              publications for mapped products. Bidirectional markets reconcile with priceAuthority and
+              catalogAuthority per market.
             </CardDescription>
           </div>
           <Badge variant="outline">markets_sync BETA</Badge>
@@ -99,8 +122,9 @@ export function ShopifyMarketsPanel({
           Scopes: <code className="rounded bg-muted px-1">read_markets</code>,{" "}
           <code className="rounded bg-muted px-1">read_products</code>
           {", "}
-          <code className="rounded bg-muted px-1">write_products</code> (push/bidirectional). Import =
-          Shopify wins; push = KitchenOS wins; bidirectional = reconcile with priceAuthority per market.
+          <code className="rounded bg-muted px-1">write_products</code> (push/bidirectional),{" "}
+          <code className="rounded bg-muted px-1">write_publications</code> (catalog push). KitchenOS wins
+          on menu composition when productIds is set; empty productIds fills from Shopify import.
         </p>
 
         {!connectionId || !hasCredentials ? (
@@ -204,8 +228,167 @@ export function ShopifyMarketsPanel({
               ) : (
                 <Scale className="h-4 w-4" />
               )}
-              <span className="ml-2">Reconcile bidirectional</span>
+              <span className="ml-2">Reconcile prices</span>
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startCatalogImport(async () => {
+                  await importShopifyMarketCatalogAction(connectionId);
+                })
+              }
+            >
+              {catalogImportPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <BookOpen className="h-4 w-4" />
+              )}
+              <span className="ml-2">Import catalog</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startCatalogPush(async () => {
+                  await pushShopifyMarketCatalogAction(connectionId);
+                })
+              }
+            >
+              {catalogPushPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ArrowUpRight className="h-4 w-4" />
+              )}
+              <span className="ml-2">Push catalog</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startCatalogReconcile(async () => {
+                  await reconcileBidirectionalShopifyMarketCatalogAction(connectionId);
+                })
+              }
+            >
+              {catalogReconcilePending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Scale className="h-4 w-4" />
+              )}
+              <span className="ml-2">Reconcile catalog</span>
+            </Button>
+          </div>
+        ) : null}
+
+        {syncSettings.lastCatalogReconcileAt ? (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              Last catalog reconcile{" "}
+              {formatDistanceToNow(new Date(syncSettings.lastCatalogReconcileAt), { addSuffix: true })}
+              {syncSettings.lastCatalogReconcileResult ? (
+                <> · {syncSettings.lastCatalogReconcileResult}</>
+              ) : null}
+            </p>
+            {syncSettings.lastCatalogReconcileError ? (
+              <p className="mt-1 text-destructive">{syncSettings.lastCatalogReconcileError}</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {openCatalogConflicts.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+            <p className="font-medium text-foreground">
+              Open catalog conflicts ({openCatalogConflicts.length})
+            </p>
+            {openCatalogConflicts.map((conflict) => (
+              <div
+                key={conflict.conflictKey}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-muted-foreground"
+              >
+                <span>
+                  Market <span className="font-mono">{conflict.osMarketId}</span> · product{" "}
+                  <span className="font-mono">{conflict.productId.slice(0, 8)}…</span> · Shopify{" "}
+                  {conflict.shopifyPublished ? "published" : "unpublished"} vs KitchenOS{" "}
+                  {conflict.kitchenosPublished ? "published" : "unpublished"}
+                </span>
+                {canManage ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={catalogResolvePending}
+                      onClick={() =>
+                        startCatalogResolve(async () => {
+                          await resolveShopifyMarketCatalogConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "shopify",
+                          });
+                        })
+                      }
+                    >
+                      Use Shopify
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={catalogResolvePending}
+                      onClick={() =>
+                        startCatalogResolve(async () => {
+                          await resolveShopifyMarketCatalogConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "kitchenos",
+                          });
+                        })
+                      }
+                    >
+                      Use KitchenOS
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {importedCatalogMarkets.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs text-muted-foreground">
+            <p className="font-medium text-foreground">Cached catalog imports</p>
+            {importedCatalogMarkets.map((row) => (
+              <p key={row.osMarketId}>
+                {row.osMarketId}: {row.mappedProductCount} mapped / {row.externalProductCount} Shopify
+                products
+              </p>
+            ))}
+          </div>
+        ) : null}
+
+        {exportedCatalogMarkets.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs text-muted-foreground">
+            <p className="font-medium text-foreground">Cached catalog exports (push)</p>
+            {exportedCatalogMarkets.map((row) => (
+              <p key={row.osMarketId}>
+                {row.osMarketId}: +{row.publishedCount} / -{row.unpublishedCount} publications
+              </p>
+            ))}
+            <p className="text-[11px]">
+              Requires {SHOPIFY_MARKETS_CATALOG_PUSH_REQUIRED_SCOPES.join(", ")} scopes.
+            </p>
           </div>
         ) : null}
 

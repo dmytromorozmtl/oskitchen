@@ -23,6 +23,12 @@ import {
   reconcileBidirectionalShopifyMarketsForConnection,
   resolveShopifyMarketPriceConflict,
 } from "@/services/integrations/shopify-markets-bidirectional-service";
+import {
+  reconcileBidirectionalShopifyMarketCatalogForConnection,
+  resolveShopifyMarketCatalogConflict,
+} from "@/services/integrations/shopify-markets-catalog-bidirectional-service";
+import { importShopifyMarketCatalogForConnection } from "@/services/integrations/shopify-market-catalog-service";
+import { pushShopifyMarketCatalogForConnection } from "@/services/integrations/shopify-market-catalog-push-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
@@ -218,6 +224,157 @@ export async function resolveShopifyMarketPriceConflictAction(input: {
   }
 
   const result = await resolveShopifyMarketPriceConflict({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    conflictKey: input.conflictKey,
+    resolution: input.resolution,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  return { ok: true as const };
+}
+
+export async function importShopifyMarketCatalogAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.import_catalog" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before import." };
+  }
+
+  const result = await importShopifyMarketCatalogForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  await revalidateStorefrontCatalogForOwner(access.actor.userId);
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return {
+    ok: true as const,
+    marketsImported: result.marketsImported,
+    totalProducts: result.totalProducts,
+  };
+}
+
+export async function pushShopifyMarketCatalogAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.push_catalog" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before push." };
+  }
+
+  const result = await pushShopifyMarketCatalogForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    respectDebounce: false,
+  });
+
+  if (!result.ok) {
+    return {
+      ok: false as const,
+      error: result.error,
+      skippedReason: result.skippedReason,
+    };
+  }
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return {
+    ok: true as const,
+    marketsPushed: result.marketsPushed,
+    publishedCount: result.publishedCount,
+    unpublishedCount: result.unpublishedCount,
+    skippedReason: result.skippedReason,
+  };
+}
+
+export async function reconcileBidirectionalShopifyMarketCatalogAction(connectionId: string) {
+  const access = await requireIntegrationsActor({
+    operation: "shopify.markets.reconcile_catalog_bidirectional",
+  });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before reconcile." };
+  }
+
+  const result = await reconcileBidirectionalShopifyMarketCatalogForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    origin: "manual",
+    skipUnchanged: false,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return { ok: true as const, ...result };
+}
+
+export async function resolveShopifyMarketCatalogConflictAction(input: {
+  connectionId: string;
+  conflictKey: string;
+  resolution: "shopify" | "kitchenos" | "ignore";
+}) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.resolve_catalog_conflict" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId: input.connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, input.connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials." };
+  }
+
+  const result = await resolveShopifyMarketCatalogConflict({
     userId: access.actor.userId,
     connection: conn,
     creds,

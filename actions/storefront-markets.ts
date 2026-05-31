@@ -5,7 +5,7 @@ import { fail, ok } from "@/lib/action-result";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
+import { triggerShopifyMarketCatalogPushAfterMarketsUpdate } from "@/lib/integrations/shopify-market-catalog-push-trigger";
 import { requireAdminStorefrontRow } from "@/lib/storefront/require-admin-storefront";
 import { defaultPilotMarket, storefrontMarketSchema } from "@/lib/storefront/markets";
 import { revalidateStorefrontDashboardAndPublic } from "@/lib/storefront/revalidate-storefront-dashboard";
@@ -69,6 +69,7 @@ export async function updateStorefrontMarketsAction(formData: FormData) {
       ownerUserId: user.id,
     });
     revalidatePath("/dashboard/storefront/markets");
+    void triggerShopifyMarketCatalogPushAfterMarketsUpdate({ userId: sf.userId });
     return { ok: true as const };
   } catch (e) {
     return { error: safeError(e) };
