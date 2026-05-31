@@ -1,6 +1,6 @@
 # Shopify Markets RFC — Multi-Region Commerce Integration
 
-**Status:** Phase 1–2 shipped (discovery + manual mapping + price list import BETA) — webhooks Phase 3 **not implemented**  
+**Status:** Phase 1–3 shipped (discovery + mapping + price import + webhook re-sync BETA) — Phase 4 push optional  
 **Audience:** Integrations, Storefront, Product, Commercial  
 **Tracker:** `shopify-markets-rfc` (competitor parity cycle 16)  
 **Related:** [`roadmap/STOREFRONT_SHOPIFY_PARITY.md`](./roadmap/STOREFRONT_SHOPIFY_PARITY.md) · [`storefront-audit-21may.md`](./storefront-audit-21may.md) · [`services/integrations/shopify.ts`](../services/integrations/shopify.ts) · [`lib/storefront/markets.ts`](../lib/storefront/markets.ts)
