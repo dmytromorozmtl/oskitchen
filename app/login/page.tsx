@@ -5,8 +5,8 @@ import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 import { SsoLoginEntry } from "@/components/auth/sso-login-entry";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { getSessionUser } from "@/lib/auth";
-import { APP_NAME } from "@/lib/constants";
 import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
 
 export const metadata = {
@@ -20,18 +20,13 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-muted/30">
+    <div className="relative min-h-screen bg-white">
       <div className="absolute right-6 top-6">
         <ThemeToggle />
       </div>
       <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-16">
         <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2 font-semibold">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#286ab8] to-[#1e4f8c] text-xs font-bold text-white">
-              K
-            </span>
-            {APP_NAME}
-          </Link>
+          <OSKitchenLogo href="/" size="lg" className="inline-flex" />
           <h1 className="mt-6 text-2xl font-semibold tracking-tight">
             Welcome back
           </h1>
@@ -49,7 +44,7 @@ export default async function LoginPage() {
             </div>
           </Suspense>
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            New to KitchenOS?{" "}
+            New to OS Kitchen?{" "}
             <Link href="/signup" className="text-primary hover:underline">
               Start free trial
             </Link>

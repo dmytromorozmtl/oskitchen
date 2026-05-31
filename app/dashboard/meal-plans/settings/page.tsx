@@ -33,7 +33,7 @@ export default async function MealPlanSettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Order generation rules</CardTitle>
-          <CardDescription>How KitchenOS turns meal plan cycles into orders.</CardDescription>
+          <CardDescription>How OS Kitchen turns meal plan cycles into orders.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
           <p>
@@ -41,7 +41,7 @@ export default async function MealPlanSettingsPage() {
             missing selections before a draft order is created.
           </p>
           <p>
-            Draft orders are always created with status <strong>PENDING</strong>. KitchenOS never auto-confirms
+            Draft orders are always created with status <strong>PENDING</strong>. OS Kitchen never auto-confirms
             or auto-charges a subscriber.
           </p>
           <p>

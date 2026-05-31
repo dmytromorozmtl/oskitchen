@@ -17,7 +17,7 @@ export default async function PosHardwareSettingsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">POS hardware</h1>
         <p className="text-sm text-muted-foreground">
-          KitchenOS stays browser-first. Native drivers (Epson/Star, Stripe Terminal, cash-drawer kick) are explicitly
+          OS Kitchen stays browser-first. Native drivers (Epson/Star, Stripe Terminal, cash-drawer kick) are explicitly
           marked until shipped.
         </p>
       </div>

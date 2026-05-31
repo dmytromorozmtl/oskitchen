@@ -12,15 +12,14 @@ export default function NotFound() {
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">404</p>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">Page not found</h1>
         <p className="mt-3 text-muted-foreground">
-          The page you are looking for does not exist or has been moved. Try the demo or return
-          home.
+          The page you are looking for does not exist or has been moved.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild className="rounded-full">
             <Link href="/">Go home</Link>
           </Button>
           <Button asChild variant="outline" className="rounded-full">
-            <Link href="/demo">Try demo</Link>
+            <Link href="/dashboard/today">Open dashboard</Link>
           </Button>
         </div>
       </main>

@@ -36,7 +36,7 @@ export default function DataRightsPage() {
       </p>
       <h2>California residents (CCPA / CPRA)</h2>
       <p>
-        California consumers may have rights to know, delete, correct, and opt out of certain data uses. KitchenOS does
+        California consumers may have rights to know, delete, correct, and opt out of certain data uses. OS Kitchen does
         not sell personal information for monetary consideration. To submit a privacy request or opt out of analytics
         cookies on marketing pages, use the cookie banner or contact{" "}
         <a href="mailto:support@os-kitchen.com">support@os-kitchen.com</a> with subject line{" "}
@@ -49,7 +49,7 @@ export default function DataRightsPage() {
       </p>
       <h2>DPA</h2>
       <p>
-        A Data Processing Addendum is provided separately through your legal/commercial process — KitchenOS does not
+        A Data Processing Addendum is provided separately through your legal/commercial process — OS Kitchen does not
         auto-generate binding legal instruments from this template page.
       </p>
       <p>

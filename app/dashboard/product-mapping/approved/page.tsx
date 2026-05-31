@@ -18,7 +18,7 @@ export default async function ApprovedMappingsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Approved mappings</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          External products with an approved KitchenOS target. Editing an approved mapping is a destructive
+          External products with an approved OS Kitchen target. Editing an approved mapping is a destructive
           operation — use Suggestions or Conflicts when in doubt.
         </p>
       </div>
@@ -34,7 +34,7 @@ export default async function ApprovedMappingsPage() {
                   <th className="px-3 py-2 font-medium">External title</th>
                   <th className="px-3 py-2 font-medium">Provider</th>
                   <th className="px-3 py-2 font-medium">SKU</th>
-                  <th className="px-3 py-2 font-medium">KitchenOS item</th>
+                  <th className="px-3 py-2 font-medium">OS Kitchen item</th>
                   <th className="px-3 py-2 font-medium">Approved by</th>
                   <th className="px-3 py-2 font-medium">Approved</th>
                   <th className="px-3 py-2 font-medium">Status</th>

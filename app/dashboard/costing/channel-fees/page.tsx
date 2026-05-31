@@ -21,7 +21,7 @@ export default async function CostingChannelFeesPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Channel fees</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-            Configure your own fee stacks (Uber Eats, DoorDash, Shopify, storefront, catering, etc.). KitchenOS never
+            Configure your own fee stacks (Uber Eats, DoorDash, Shopify, storefront, catering, etc.). OS Kitchen never
             impersonates partner pricing — estimates use only what you enter.
           </p>
         </div>

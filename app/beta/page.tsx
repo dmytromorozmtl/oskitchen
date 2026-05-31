@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { APP_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Early access · KitchenOS beta",
+  title: "Early access · OS Kitchen beta",
   description: `Apply for early access to ${APP_NAME} — kitchen operations for meal prep, catering, and ghost kitchens.`,
 };
 
@@ -50,7 +50,7 @@ export default async function BetaPage({
               The operating system for high-trust food operations
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-pretty text-lg text-muted-foreground">
-              KitchenOS unifies preorders, channel imports, production, packing, and routes — built for teams
+              OS Kitchen unifies preorders, channel imports, production, packing, and routes — built for teams
               where mistakes are expensive and every service window counts.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
@@ -106,7 +106,7 @@ export default async function BetaPage({
                 },
                 {
                   title: "Security-first applicant data",
-                  body: "Submissions stay in your KitchenOS database, gated to founder and GTM roles — never exposed to tenant staff.",
+                  body: "Submissions stay in your OS Kitchen database, gated to founder and GTM roles — never exposed to tenant staff.",
                 },
                 {
                   title: "Premium onboarding path",
@@ -145,7 +145,7 @@ export default async function BetaPage({
               <div>
                 <p className="font-medium text-foreground">Is my data sold?</p>
                 <p className="mt-1">
-                  No. Application data is used only to evaluate beta fit and contact you about KitchenOS.
+                  No. Application data is used only to evaluate beta fit and contact you about OS Kitchen.
                 </p>
               </div>
               <div>

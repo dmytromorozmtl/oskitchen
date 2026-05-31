@@ -14,7 +14,7 @@ export default async function ImportCenterErrorsPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Error reports</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
           Validation errors are listed in row order, newest jobs first. Download per-job error
-          CSVs from the job page to fix data outside KitchenOS.
+          CSVs from the job page to fix data outside OS Kitchen.
         </p>
       </div>
 

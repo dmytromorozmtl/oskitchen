@@ -36,7 +36,7 @@ export default async function PlatformDashboardPage() {
       <div>
         <h1 className="text-2xl font-semibold text-white">Command center</h1>
         <p className="mt-1 max-w-3xl text-sm text-zinc-400">
-          Cross-tenant snapshot for KitchenOS operators. Revenue and churn rollups wire to Stripe and
+          Cross-tenant snapshot for OS Kitchen operators. Revenue and churn rollups wire to Stripe and
           warehouse exports when available — never guess paid state.
         </p>
       </div>

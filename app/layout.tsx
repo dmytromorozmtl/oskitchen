@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans, Syne } from "next/font/google";
 
 import { SkipToContent } from "@/components/a11y/skip-to-content";
 import { CookieConsentBanner } from "@/components/analytics/cookie-consent";
@@ -21,9 +21,17 @@ import { googleSiteVerificationMetadata } from "@/lib/marketing/google-site-veri
 import "./globals.css";
 import "../sentry.client.config";
 
-const inter = Inter({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["600", "700", "800"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
   display: "swap",
 });
 
@@ -31,11 +39,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   ...googleSiteVerificationMetadata(),
   title: {
-    default: `${APP_NAME} — Restaurant POS & Kitchen Operations Platform`,
+    default: `${APP_NAME} — Your Restaurant. One Screen.`,
     template: `%s · ${APP_NAME}`,
   },
   description:
-    "All-in-one POS, kitchen display, table management, and online ordering for restaurants, bars, cafés, and meal prep kitchens. 14-day free trial. No hardware required.",
+    "OS Kitchen replaces the chaos of tablets, printers, and spreadsheets with a single operating system. No extra hardware. 14-day free trial.",
   keywords: [
     "restaurant POS software",
     "kitchen display system",
@@ -48,16 +56,16 @@ export const metadata: Metadata = {
     type: "website",
     siteName: APP_NAME,
     locale: "en_US",
-    title: `${APP_NAME} — Restaurant POS & Kitchen Operations Platform`,
+    title: `${APP_NAME} — Your Restaurant. One Screen.`,
     description:
-      "All-in-one POS, kitchen display, table management, and online ordering. 14-day free trial.",
+      "One screen for orders, kitchen, delivery, and staff. Launch in 15 minutes. 14-day free trial.",
     url: SITE_URL,
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${APP_NAME} — Operating System for Food Businesses`,
+        alt: `${APP_NAME} — The restaurant operating system`,
       },
     ],
   },
@@ -65,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${APP_NAME} — Restaurant POS & Kitchen Operations Platform`,
     description:
-      "POS, kitchen display, table management, and online ordering for modern food businesses.",
+      "One screen for orders, kitchen, delivery, and staff. Launch in 15 minutes.",
     images: ["/opengraph-image"],
   },
   icons: {
@@ -76,10 +84,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
-  ],
+  themeColor: "#FFFFFF",
 };
 
 export default function RootLayout({
@@ -89,7 +94,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} min-h-screen font-sans`}>
+      <body className={`${dmSans.variable} ${syne.variable} min-h-screen font-sans`}>
         <SkipToContent />
         <OrganizationSchema />
         <SoftwareApplicationSchema />

@@ -9,9 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "KitchenOS Partners — Integration & Agency Program",
+  title: "OS Kitchen Partners — Integration & Agency Program",
   description:
-    "Partner with KitchenOS. Integration partners, agency referrals, and technology alliances for food business software.",
+    "Partner with OS Kitchen. Integration partners, agency referrals, and technology alliances for food business software.",
   path: "/partners",
 });
 
@@ -21,7 +21,7 @@ export default function PartnersPage() {
       <Hero
         eyebrow="Partner program"
         title="Help food businesses launch better operations."
-        description="Agencies, consultants, and technology partners who implement KitchenOS for meal prep, catering, and bakery operators."
+        description="Agencies, consultants, and technology partners who implement OS Kitchen for meal prep, catering, and bakery operators."
         cta="Apply to partner"
         ctaHref="#apply"
         secondary="Book demo"
@@ -53,7 +53,7 @@ export default function PartnersPage() {
               <Input name="companyName" placeholder="Company name" required />
               <Input name="contactName" placeholder="Your name" required />
               <Input name="email" type="email" placeholder="Email" required />
-              <Textarea name="message" placeholder="How you plan to work with KitchenOS" rows={4} />
+              <Textarea name="message" placeholder="How you plan to work with OS Kitchen" rows={4} />
               <Button type="submit">Submit</Button>
             </form>
           </CardContent>

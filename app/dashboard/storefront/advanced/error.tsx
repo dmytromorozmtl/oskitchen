@@ -26,7 +26,7 @@ export default function StorefrontAdvancedError({
       </h1>
       <p className="text-sm text-muted-foreground">
         {isDb
-          ? "KitchenOS could not reach Supabase (transaction pooler :6543). This is usually temporary or a local env issue."
+          ? "OS Kitchen could not reach Supabase (transaction pooler :6543). This is usually temporary or a local env issue."
           : error.message}
       </p>
       {isDb ? (

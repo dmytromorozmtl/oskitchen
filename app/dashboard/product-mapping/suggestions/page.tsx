@@ -70,7 +70,7 @@ export default async function SuggestionsPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Suggestions</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
           Suggestions produced by the matching engine. Review the candidate, then approve, reject, or pick a
-          different KitchenOS item.
+          different OS Kitchen item.
         </p>
       </div>
 
@@ -81,7 +81,7 @@ export default async function SuggestionsPage() {
           <CardHeader>
             <CardTitle className="text-base">No suggestions yet</CardTitle>
             <CardDescription>
-              Suggestions appear when external products can be compared to your KitchenOS menu items by SKU,
+              Suggestions appear when external products can be compared to your OS Kitchen menu items by SKU,
               title, aliases, or category.
             </CardDescription>
           </CardHeader>

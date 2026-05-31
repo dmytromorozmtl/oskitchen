@@ -31,7 +31,7 @@ export default async function StorefrontDomainsPage() {
         <h1 className="text-3xl font-semibold tracking-tight">Domains</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
           DNS is not automatic: add hostnames in your hosting provider and matching records at your DNS registrar. This tab
-          shows what KitchenOS has saved for your workspace.
+          shows what OS Kitchen has saved for your workspace.
         </p>
       </div>
 

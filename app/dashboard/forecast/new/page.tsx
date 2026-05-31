@@ -54,7 +54,7 @@ export default async function NewForecastPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Run a new forecast</h1>
         <p className="text-muted-foreground">
-          Pick the forecast type, date range, and the sources to blend. KitchenOS will produce a
+          Pick the forecast type, date range, and the sources to blend. OS Kitchen will produce a
           deterministic estimate — never an ML/AI prediction.
         </p>
       </div>

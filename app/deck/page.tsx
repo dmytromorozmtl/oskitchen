@@ -5,7 +5,7 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = {
   ...marketingPageMetadata({
-    title: "KitchenOS Sales Deck",
+    title: "OS Kitchen Sales Deck",
     description: "Print-ready sales deck for demos, pilots, and investor intros.",
     path: "/deck",
     noIndex: true,

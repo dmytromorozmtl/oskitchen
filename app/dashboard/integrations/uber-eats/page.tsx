@@ -63,7 +63,7 @@ export default async function UberEatsIntegrationPage() {
           <CardTitle className="text-base">Partner access</CardTitle>
           <CardDescription className="text-amber-950 dark:text-amber-50">
             Request Uber Eats developer / integration access for your brand. Until then,
-            KitchenOS stores configuration only and shows graceful placeholders in sync and
+            OS Kitchen stores configuration only and shows graceful placeholders in sync and
             test actions.
           </CardDescription>
         </CardHeader>

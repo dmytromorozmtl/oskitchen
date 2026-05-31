@@ -32,7 +32,7 @@ export default async function NotificationSettingsPage() {
         </p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">Notifications</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Control how KitchenOS contacts you. Configure email, push, and SMS for your account.
+          Control how OS Kitchen contacts you. Configure email, push, and SMS for your account.
         </p>
       </div>
 

@@ -22,7 +22,7 @@ export default async function CustomerDedupePage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Customer dedupe</h1>
         <p className="mt-2 max-w-3xl text-muted-foreground">
-          Possible duplicates by email, phone, normalized name, or external customer id. KitchenOS never
+          Possible duplicates by email, phone, normalized name, or external customer id. OS Kitchen never
           auto-merges — review each group and confirm a winning record.
         </p>
       </div>

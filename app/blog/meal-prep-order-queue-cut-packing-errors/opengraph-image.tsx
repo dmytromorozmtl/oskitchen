@@ -5,7 +5,7 @@ export const contentType = 'image/png';
 
 export default function OgImage() {
   return createOgImageResponse({
-    eyebrow: 'KitchenOS Blog · Meal Prep',
+    eyebrow: 'OS Kitchen Blog · Meal Prep',
     title: 'One Order Queue for Weekly Meal Prep',
     subtitle: 'Cut packing errors and missed cutoffs without spreadsheet chaos.',
   });

@@ -14,7 +14,7 @@ export default async function ForecastingPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Forecasting</h1>
         <p className="text-muted-foreground">
           Forecasts are <span className="font-medium">estimates</span> based on a trailing
-          moving average of the last 90 days of revenue. KitchenOS never invents numbers — when
+          moving average of the last 90 days of revenue. OS Kitchen never invents numbers — when
           history is insufficient we say so explicitly.
         </p>
       </div>
@@ -24,7 +24,7 @@ export default async function ForecastingPage() {
           <CardHeader>
             <CardTitle className="text-base">Forecasting needs more history</CardTitle>
             <CardDescription>
-              KitchenOS begins forecasting once enough operational history exists (≥ 7 days of orders).
+              OS Kitchen begins forecasting once enough operational history exists (≥ 7 days of orders).
             </CardDescription>
           </CardHeader>
         </Card>

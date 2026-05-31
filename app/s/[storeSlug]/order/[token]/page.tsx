@@ -177,7 +177,7 @@ export default async function StorefrontOrderPage({
           ) : null}
           {row.internalOrder?.publicLookupToken ? (
             <p className="pt-2 text-xs text-muted-foreground">
-              KitchenOS guest lookup:{" "}
+              OS Kitchen guest lookup:{" "}
               <Link
                 className="text-primary underline-offset-4 hover:underline"
                 href={`/order/${row.internalOrder.publicLookupToken}`}

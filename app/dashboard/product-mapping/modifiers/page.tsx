@@ -21,7 +21,7 @@ export default async function ModifierMappingPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Modifiers &amp; options</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
           Map external modifiers (Shopify options, Woo attributes, Uber Eats modifiers, CSV options) to canonical
-          KitchenOS modifier keys for production and packaging.
+          OS Kitchen modifier keys for production and packaging.
         </p>
       </div>
 
@@ -44,7 +44,7 @@ export default async function ModifierMappingPage() {
                   <p className="font-medium">{m.externalTitle}</p>
                   <p className="text-xs text-muted-foreground">
                     {PRODUCT_MAPPING_PROVIDER_LABEL[m.providerKey ?? "CUSTOM"]} · ext {m.externalProductId} ·
-                    {" "}KitchenOS: {m.internalProduct?.title ?? "—"}
+                    {" "}OS Kitchen: {m.internalProduct?.title ?? "—"}
                   </p>
                 </div>
                 <p className="text-xs text-muted-foreground">

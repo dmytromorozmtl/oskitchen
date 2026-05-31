@@ -12,7 +12,7 @@ export default async function DriverEntryPage() {
   return (
     <div className="flex min-h-screen flex-col gap-4 bg-slate-950 p-6 text-white">
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500">KitchenOS</p>
+        <p className="text-xs uppercase tracking-wide text-slate-500">OS Kitchen</p>
         <h1 className="mt-1 text-3xl font-semibold">Driver mode</h1>
         <p className="mt-2 max-w-lg text-sm text-slate-400">
           Mobile-first entry to routes and stops. Financial admin and full CRM remain on the desktop dashboard by

@@ -21,14 +21,14 @@ export default function PosTerminalProductPage() {
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Product</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">POS Terminal</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          KitchenOS is not trying to replace every legacy restaurant POS overnight. The POS Terminal is built for food
+          OS Kitchen is not trying to replace every legacy restaurant POS overnight. The POS Terminal is built for food
           operators who need counter sales, cafés, bakeries, meal prep pickup desks, catering handoffs, and ghost-kitchen
           counters tied directly into the same orders, production, packing, inventory signals, CRM, and analytics as
           online channels.
         </p>
         <ul className="mt-8 list-disc space-y-2 pl-5 text-muted-foreground">
           <li>Touch-first cashier layout with barcode-friendly search.</li>
-          <li>Creates real KitchenOS orders with POS sourcing — visible in Order Hub and downstream workflows.</li>
+          <li>Creates real OS Kitchen orders with POS sourcing — visible in Order Hub and downstream workflows.</li>
           <li>Honest payment posture: cash, external terminal, pay later, and placeholders — no fake card capture.</li>
           <li>Registers, optional shift-based cash reconciliation, receipts, and audit events.</li>
         </ul>

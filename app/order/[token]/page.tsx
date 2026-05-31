@@ -30,7 +30,7 @@ export default async function PublicOrderPage({
     <div className="min-h-screen bg-muted/40 px-4 py-16">
       <div className="mx-auto flex max-w-3xl flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <div className="flex-1 space-y-4">
-          <Badge variant="secondary">KitchenOS guest lookup</Badge>
+          <Badge variant="secondary">OS Kitchen guest lookup</Badge>
           <h1 className="text-3xl font-semibold tracking-tight">
             Hi {order.customerName},
           </h1>
@@ -89,7 +89,7 @@ export default async function PublicOrderPage({
         <div className="mx-auto flex flex-col items-center gap-3 md:mx-0">
           <OrderQr url={url} />
           <p className="max-w-[220px] text-center text-xs text-muted-foreground">
-            Scan for instant lookup — powered by KitchenOS secure tokens.
+            Scan for instant lookup — powered by OS Kitchen secure tokens.
           </p>
         </div>
       </div>

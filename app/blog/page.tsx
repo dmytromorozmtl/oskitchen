@@ -7,7 +7,7 @@ import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
 import { BLOG_POSTS } from '@/lib/marketing/blog-posts';
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'Blog — Restaurant & Kitchen Operations Guides | KitchenOS',
+  title: 'Blog — Restaurant & Kitchen Operations Guides | OS Kitchen',
   description:
     'Guides on restaurant POS, kitchen management, meal prep business, and food cost optimization.',
   path: '/blog',
@@ -19,7 +19,7 @@ export default function BlogIndexPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-        <h1 className="text-4xl font-bold tracking-tight">KitchenOS Blog</h1>
+        <h1 className="text-4xl font-bold tracking-tight">OS Kitchen Blog</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Guides on restaurant POS, kitchen management, and food business operations.
         </p>

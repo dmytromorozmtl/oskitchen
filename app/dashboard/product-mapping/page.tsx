@@ -67,7 +67,7 @@ export default async function ProductMappingPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Product Mapping Workbench</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Map external catalog items, SKUs, variants, and modifiers to KitchenOS menu items so imports,
+            Map external catalog items, SKUs, variants, and modifiers to OS Kitchen menu items so imports,
             production, costing, and reports stay accurate.
           </p>
         </div>
@@ -92,7 +92,7 @@ export default async function ProductMappingPage() {
           <CardTitle className="text-lg">Most recent mappings to review</CardTitle>
           <CardDescription>
             Showing the latest suggested / unmapped / conflicting rows. Approve a row only after you have
-            verified the KitchenOS target.
+            verified the OS Kitchen target.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -100,7 +100,7 @@ export default async function ProductMappingPage() {
             <div className="rounded-lg border border-dashed bg-muted/30 p-6 text-sm text-muted-foreground">
               <p className="font-medium text-foreground">No product mappings yet</p>
               <p className="mt-1">
-                Import external products from sales channels or CSVs, then map them to KitchenOS menu items.
+                Import external products from sales channels or CSVs, then map them to OS Kitchen menu items.
               </p>
               <div className="mt-3 flex gap-2">
                 <Button asChild size="sm">

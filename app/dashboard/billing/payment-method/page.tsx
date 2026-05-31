@@ -39,7 +39,7 @@ export default async function PaymentMethodPage() {
         <CardContent className="space-y-3">
           <PortalButton disabled={!portalEnabled} />
           <ul className="list-inside list-disc text-xs text-muted-foreground">
-            <li>KitchenOS never displays card numbers.</li>
+            <li>OS Kitchen never displays card numbers.</li>
             <li>All card edits happen on Stripe-hosted pages.</li>
             <li>Refunds and disputes are handled in the Stripe Dashboard.</li>
           </ul>

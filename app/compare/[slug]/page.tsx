@@ -16,14 +16,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const content = comparePageBySlug(slug);
-  if (!content) return { title: 'Compare | KitchenOS' };
+  if (!content) return { title: 'Compare | OS Kitchen' };
 
   return marketingPageMetadata({
     title: content.metaTitle,
     description: content.metaDescription,
     path: content.path,
     keywords: [
-      content.slug === 'restaurant-pos' ? 'Toast vs Square vs KitchenOS' : 'meal prep software comparison',
+      content.slug === 'restaurant-pos' ? 'Toast vs Square vs OS Kitchen' : 'meal prep software comparison',
     ],
   });
 }

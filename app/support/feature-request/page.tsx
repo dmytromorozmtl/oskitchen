@@ -8,7 +8,7 @@ export const metadata = { title: "Feature request" };
 
 export default function FeatureRequestPage() {
   return (
-    <FormShell title="Feature request" description="Tell us what workflow would make KitchenOS more useful. Requests are reviewed, not guaranteed.">
+    <FormShell title="Feature request" description="Tell us what workflow would make OS Kitchen more useful. Requests are reviewed, not guaranteed.">
       <form action={submitSupportTicketFormAction} className="grid gap-4">
         <Input name="email" type="email" placeholder="Email" required />
         <Input name="subject" placeholder="Feature request title" required />

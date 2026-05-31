@@ -33,7 +33,7 @@ export default async function DriversPage() {
       <Card className="border-border/80 shadow-sm">
         <CardHeader>
           <CardTitle className="text-lg">Add driver</CardTitle>
-          <CardDescription>Driver profiles are local KitchenOS records — no third-party identity required.</CardDescription>
+          <CardDescription>Driver profiles are local OS Kitchen records — no third-party identity required.</CardDescription>
         </CardHeader>
         <CardContent>
           <form action={createDriverFormAction} className="grid gap-4 sm:grid-cols-2">

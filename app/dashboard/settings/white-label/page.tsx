@@ -15,7 +15,7 @@ export default async function WhiteLabelSettingsPage() {
             ["Custom logo", "Configured in branding settings today."],
             ["Brand color", "Available for storefront and email theme placeholders."],
             ["Custom domain", "Placeholder only; DNS automation is not implemented."],
-            ["Hide KitchenOS branding", "Enterprise placeholder, already gated."],
+            ["Hide OS Kitchen branding", "Enterprise placeholder, already gated."],
             ["White-label storefront", "Use brand-specific storefront readiness and custom domain plan."],
             ["White-label quote/order tracking", "Roadmap item; do not promise custom domains yet."],
           ].map(([title, desc]) => (

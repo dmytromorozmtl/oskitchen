@@ -11,7 +11,7 @@ import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
 import { resourcePages } from '@/lib/public-copy';
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'KitchenOS Resources — Guides, Comparisons & Operator Stories',
+  title: 'OS Kitchen Resources — Guides, Comparisons & Operator Stories',
   description:
     'Guides for meal prep, catering, and restaurant operations — plus POS comparisons, customer playbooks, and capability documentation.',
   path: '/resources',
@@ -25,7 +25,7 @@ const RESOURCE_HUB_LINKS = [
   },
   {
     title: 'Compare POS & kitchen software',
-    description: 'Toast vs Square vs KitchenOS and meal prep comparisons.',
+    description: 'Toast vs Square vs OS Kitchen and meal prep comparisons.',
     href: '/compare',
   },
   {

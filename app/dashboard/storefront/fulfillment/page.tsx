@@ -116,7 +116,7 @@ export default async function StorefrontFulfillmentPage() {
               <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="deliveryRadiusKm">Delivery radius (km, optional)</Label>
                 <p className="text-xs text-muted-foreground">
-                  Radius is stored for reference only — KitchenOS does not geocode guest addresses yet, so radius is not
+                  Radius is stored for reference only — OS Kitchen does not geocode guest addresses yet, so radius is not
                   enforced server-side. Use delivery zones with postal codes or regions for automated checks.
                 </p>
                 <Input

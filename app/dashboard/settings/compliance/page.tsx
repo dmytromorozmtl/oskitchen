@@ -31,7 +31,7 @@ export default async function ComplianceSettingsPage() {
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
           For GDPR / PIPEDA requests today: open the relevant customer in CRM and use the data
-          export / delete actions; KitchenOS records the action in the audit log.
+          export / delete actions; OS Kitchen records the action in the audit log.
         </CardContent>
       </Card>
     </div>

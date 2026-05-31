@@ -1,6 +1,6 @@
 import { createOgImageResponse } from '@/lib/seo/og-image-generator';
 
-export const alt = 'KitchenOS Solutions';
+export const alt = 'OS Kitchen Solutions';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

@@ -31,13 +31,13 @@ export default async function UberDirectPlaceholderPage() {
     <div className="space-y-8">
       <PlaceholderBanner
         feature="Uber Direct dispatch"
-        detail="KitchenOS records placeholder dispatch events for workflow rehearsal. Live Uber Direct courier APIs are not production-ready — see Integration Health and capability matrix."
+        detail="OS Kitchen records placeholder dispatch events for workflow rehearsal. Live Uber Direct courier APIs are not production-ready — see Integration Health and capability matrix."
       />
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Uber Direct dispatch (placeholder)</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            KitchenOS does not call Uber APIs from this screen. Quote and dispatch buttons record placeholder events for the
+            OS Kitchen does not call Uber APIs from this screen. Quote and dispatch buttons record placeholder events for the
             audit trail so you can rehearse the workflow before real partner credentials are wired.
           </p>
         </div>

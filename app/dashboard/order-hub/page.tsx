@@ -112,7 +112,7 @@ export default async function OrderHubPage({
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Order hub</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Incoming orders from KitchenOS and your sales channels in one operational view. Tabs triage the internal
+            Incoming orders from OS Kitchen and your sales channels in one operational view. Tabs triage the internal
             pipeline; channel rows follow sync health. <span className="font-medium text-foreground">Workspace totals</span>{" "}
             count your full database; the <span className="font-medium text-foreground">snapshot</span> row matches the
             same 150-row preview used in the tables below.
@@ -122,7 +122,7 @@ export default async function OrderHubPage({
           <OrderHubExportButton />
           <OrderHubExportButton storefrontOnly />
           <Button asChild variant="outline" size="sm" className="rounded-full">
-            <Link href="/dashboard/orders">KitchenOS orders</Link>
+            <Link href="/dashboard/orders">OS Kitchen orders</Link>
           </Button>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default async function OrderHubPage({
             <Link
               key={`db-${row.id}`}
               href={`/dashboard/order-hub?tab=${row.id}`}
-              title={`KitchenOS rows: ${row.internal} · Channel rows: ${row.external}${
+              title={`OS Kitchen rows: ${row.internal} · Channel rows: ${row.external}${
                 row.internalCapped ? " — internal missing-* counts may be a lower bound (scan cap)." : ""
               }`}
               className={cn(
@@ -165,7 +165,7 @@ export default async function OrderHubPage({
         </div>
         <p className="mt-2 text-[11px] text-muted-foreground">
           <span className="font-medium text-foreground">*</span> Internal &quot;missing customer / fulfillment&quot;
-          tabs scan up to the most recent non-terminal KitchenOS orders (bounded scan); if you are at the cap, treat
+          tabs scan up to the most recent non-terminal OS Kitchen orders (bounded scan); if you are at the cap, treat
           the number as a minimum until the backlog is cleared.
         </p>
 
@@ -178,7 +178,7 @@ export default async function OrderHubPage({
                 <Link
                   key={row.id}
                   href={`/dashboard/order-hub?tab=${row.id}`}
-                  title={`KitchenOS rows: ${row.internal} · Channel rows: ${row.external}`}
+                  title={`OS Kitchen rows: ${row.internal} · Channel rows: ${row.external}`}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-2.5 py-1 font-medium text-foreground transition-colors hover:bg-muted/50",
                     tab === row.id && "border-primary/40 ring-1 ring-primary/20",
@@ -190,7 +190,7 @@ export default async function OrderHubPage({
               ))}
             </div>
             <p className="mt-2 text-[11px] text-muted-foreground">
-              Snapshot is capped at the latest 150 KitchenOS rows and 150 channel rows per load. For the full
+              Snapshot is capped at the latest 150 OS Kitchen rows and 150 channel rows per load. For the full
               sortable list, open{" "}
               <Link href="/dashboard/orders" className="font-medium text-primary underline-offset-2 hover:underline">
                 Orders
@@ -224,8 +224,8 @@ export default async function OrderHubPage({
         <>
           <Card className="border-border/80 bg-card/90 shadow-sm">
             <CardHeader>
-              <CardTitle>KitchenOS orders · {ORDER_HUB_TABS.find((x) => x.id === tab)?.label ?? "All"}</CardTitle>
-              <CardDescription>Captured inside KitchenOS — deep links open the full order detail.</CardDescription>
+              <CardTitle>OS Kitchen orders · {ORDER_HUB_TABS.find((x) => x.id === tab)?.label ?? "All"}</CardTitle>
+              <CardDescription>Captured inside OS Kitchen — deep links open the full order detail.</CardDescription>
             </CardHeader>
             <CardContent className="overflow-x-auto">
               <Table>
@@ -310,7 +310,7 @@ export default async function OrderHubPage({
                       <TableCell className="text-xs text-muted-foreground">
                         {o.creationSource === "POS" || o.orderType === "POS_SALE"
                           ? "POS"
-                          : (o.channelTraceJson as { source?: string } | null)?.source ?? "KitchenOS"}
+                          : (o.channelTraceJson as { source?: string } | null)?.source ?? "OS Kitchen"}
                       </TableCell>
                       <TableCell className="text-xs">
                         {o.channelImportBatch ? (
@@ -372,7 +372,7 @@ export default async function OrderHubPage({
                 <CardTitle>Incoming channel orders</CardTitle>
                 <CardDescription>
                   Pulled from connected sales channels via sync or webhooks. Resolve failures, map SKUs, then convert
-                  into KitchenOS orders when ready.
+                  into OS Kitchen orders when ready.
                 </CardDescription>
               </CardHeader>
               <CardContent className="overflow-x-auto">

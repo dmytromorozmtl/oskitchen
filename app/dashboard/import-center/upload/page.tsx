@@ -50,7 +50,7 @@ export default async function ImportCenterUploadPage({
         <CardHeader>
           <CardTitle className="text-base">Tips</CardTitle>
           <CardDescription>
-            Use templates so column headers match KitchenOS field names automatically.
+            Use templates so column headers match OS Kitchen field names automatically.
           </CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">

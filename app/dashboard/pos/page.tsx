@@ -30,7 +30,7 @@ export default async function PosOverviewPage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">POS Terminal</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Front-of-house sales that create real KitchenOS orders with <code className="text-xs">creationSource = POS</code>,
+          Front-of-house sales that create real OS Kitchen orders with <code className="text-xs">creationSource = POS</code>,
           production routing, inventory impact events, and audit trails.
         </p>
       </div>

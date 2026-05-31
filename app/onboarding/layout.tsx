@@ -21,7 +21,7 @@ export default async function OnboardingLayout({
     <div className="min-h-screen bg-gradient-to-b from-muted/50 via-background to-background">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border/70 bg-background/90 px-4 py-4 backdrop-blur sm:px-8">
         <Link href="/" className="text-sm font-semibold tracking-tight">
-          KitchenOS
+          OS Kitchen
         </Link>
         <span className="hidden text-xs text-muted-foreground sm:inline">
           Guided setup · saves automatically each step

@@ -129,7 +129,7 @@ export default async function SettingsControlCenterPage() {
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Settings</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">Control Center</h1>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
-          The operational brain of KitchenOS. Configure workspace identity, operations, fulfillment, customers,
+          The operational brain of OS Kitchen. Configure workspace identity, operations, fulfillment, customers,
           storefront, notifications, billing, security, and the rest of your platform — all from one place.
         </p>
       </div>

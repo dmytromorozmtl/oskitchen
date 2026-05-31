@@ -37,7 +37,7 @@ export default async function StorefrontPreviewPage() {
         <h1 className="text-3xl font-semibold tracking-tight">Preview</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
           While signed in you can always open your draft storefront. For embedded preview without relying on the admin
-          session, KitchenOS can mint a short-lived signed cookie (same origin) so the iframe can load unpublished
+          session, OS Kitchen can mint a short-lived signed cookie (same origin) so the iframe can load unpublished
           stores safely.
         </p>
       </div>

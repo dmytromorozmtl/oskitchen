@@ -15,7 +15,7 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 import { listMarketingCapabilities } from "@/lib/marketing/marketing-capabilities";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "Integrations & Sales Channels — KitchenOS",
+  title: "Integrations & Sales Channels — OS Kitchen",
   description: `Connect WooCommerce, Shopify, manual orders, and storefront preorders to ${APP_NAME} production — with honest Live, Beta, partner-required, and roadmap statuses.`,
   path: "/integrations",
   keywords: [

@@ -11,6 +11,7 @@ import { StorefrontLocaleSwitcher } from "@/components/storefront/locale-switche
 import { StorefrontNavigation } from "@/components/storefront/StorefrontNavigation";
 import { enabledLocaleCodes, resolveStorefrontLocaleFromRequest } from "@/lib/storefront/resolve-locale";
 import { getSessionUser } from "@/lib/auth";
+import { BRAND_ACCENT, BRAND_ACCENT_DARK } from "@/lib/constants";
 import { readStorefrontPreviewCookie } from "@/lib/storefront/preview-cookie-server";
 import { verifyStorefrontPreviewToken } from "@/lib/storefront/preview-token";
 import { parseAnalyticsConsentMode, parseFirstPartyAnalyticsMode } from "@/lib/storefront/consent";
@@ -169,7 +170,7 @@ export default async function StorefrontLayout({
       ? mergePublishedThemeTokensIntoSettings(sf)
       : mergeDraftThemeTokensIntoSettings(sf);
 
-  const accent = tokenSf.brandColor?.trim() || "#286ab8";
+  const accent = tokenSf.brandColor?.trim() || BRAND_ACCENT;
   const secondary = tokenSf.secondaryColor?.trim();
 
   const fpMode = parseFirstPartyAnalyticsMode(sf.firstPartyAnalyticsMode);

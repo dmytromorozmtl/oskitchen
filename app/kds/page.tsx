@@ -12,7 +12,7 @@ export default async function KdsEntryPage() {
   return (
     <div className="flex min-h-screen flex-col gap-4 bg-zinc-950 p-6 text-white">
       <div>
-        <p className="text-xs uppercase tracking-wide text-zinc-500">KitchenOS</p>
+        <p className="text-xs uppercase tracking-wide text-zinc-500">OS Kitchen</p>
         <h1 className="mt-1 text-3xl font-semibold">Kitchen display mode</h1>
         <p className="mt-2 max-w-lg text-sm text-zinc-400">
           Large-touch entry point. Station filters and live updates stay on the kitchen screen; this page avoids

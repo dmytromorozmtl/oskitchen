@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug, metro } = await params;
   const geo = adsGeoOverride(slug, metro);
   const config = geo ? resolveAdsLanding(slug, geo) : undefined;
-  if (!config) return { title: 'KitchenOS' };
+  if (!config) return { title: 'OS Kitchen' };
 
   return marketingPageMetadata({
     title: config.metaTitle,

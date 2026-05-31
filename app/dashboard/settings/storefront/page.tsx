@@ -42,7 +42,7 @@ export default async function StorefrontSettingsPage() {
         checks={[
           { label: "Theme selected", ok: Boolean(ks?.storefrontThemeKey), hint: "Pick a theme to publish customer-facing storefronts." },
           { label: "Custom domain mapped", ok: domainCount > 0, hint: "Map at least one custom domain for a branded experience." },
-          { label: "Hide KitchenOS branding", ok: Boolean(ks?.hideKitchenOsBranding), hint: "Enterprise plans only." },
+          { label: "Hide OS Kitchen branding", ok: Boolean(ks?.hideKitchenOsBranding), hint: "Enterprise plans only." },
         ]}
         secondaryActions={[
           { label: "Domains", href: "/dashboard/settings/domains" },

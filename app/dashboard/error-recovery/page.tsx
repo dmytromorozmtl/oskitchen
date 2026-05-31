@@ -97,7 +97,7 @@ export default async function ErrorRecoveryPage() {
       title: "Failed channel orders",
       count: failedExternalOrders,
       href: "/dashboard/order-hub",
-      detail: "Rows that never became KitchenOS orders.",
+      detail: "Rows that never became OS Kitchen orders.",
     },
     {
       id: "import-jobs",

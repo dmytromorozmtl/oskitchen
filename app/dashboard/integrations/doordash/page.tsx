@@ -18,7 +18,7 @@ export default async function DoorDashIntegrationPage() {
     <div className="mx-auto max-w-4xl space-y-6">
       <PlaceholderBanner
         feature="DoorDash integration"
-        detail="KitchenOS keeps DoorDash in placeholder mode. Credentials can be prepared, but live Drive quotes, deliveries, menu sync, and order import are not production-ready."
+        detail="OS Kitchen keeps DoorDash in placeholder mode. Credentials can be prepared, but live Drive quotes, deliveries, menu sync, and order import are not production-ready."
       />
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -54,7 +54,7 @@ export default async function DoorDashIntegrationPage() {
           <CardTitle className="text-base">What is intentionally disabled</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>KitchenOS does not expose live quote or delivery buttons here while the provider remains placeholder-only.</p>
+          <p>OS Kitchen does not expose live quote or delivery buttons here while the provider remains placeholder-only.</p>
           <p>It also does not create new local delivery rows just to simulate success.</p>
           <p>When live partner support ships, this page will switch from preparation guidance to real provider-backed actions.</p>
         </CardContent>

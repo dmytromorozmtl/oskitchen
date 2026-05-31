@@ -6,16 +6,16 @@ import { Suspense } from 'react';
 import { SignupForm } from '@/components/auth/signup-form';
 import { ConversionTrustBadges } from '@/components/marketing/conversion-trust-badges';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { OSKitchenLogo } from '@/components/ui/os-kitchen-logo';
 import { getSessionUser } from '@/lib/auth';
-import { APP_NAME } from '@/lib/constants';
 import { SIGNUP_MARKETING } from '@/lib/marketing/signup-marketing-content';
 import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
 import { resolvePostAuthPathForSessionUser } from '@/lib/navigation/resolve-operator-post-auth-path';
 
 export const metadata = marketingPageMetadata({
-  title: 'Start Free Trial — KitchenOS',
+  title: 'Start Free Trial — OS Kitchen',
   description:
-    'Create your KitchenOS workspace. 14-day trial, no credit card. POS and kitchen operations for restaurants, meal prep, and catering.',
+    'Create your OS Kitchen workspace. 14-day trial, no credit card. One screen for orders, kitchen, and delivery.',
   path: '/signup',
   noIndex: true,
 });
@@ -31,18 +31,13 @@ export default async function SignupPage() {
   const copy = SIGNUP_MARKETING;
 
   return (
-    <div className="relative min-h-screen bg-muted/30">
+    <div className="relative min-h-screen bg-white">
       <div className="absolute right-6 top-6">
         <ThemeToggle />
       </div>
       <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-16">
         <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2 font-semibold">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 text-xs font-bold text-white">
-              K
-            </span>
-            {APP_NAME}
-          </Link>
+          <OSKitchenLogo href="/" size="lg" className="inline-flex" />
           <h1 className="mt-6 text-2xl font-bold tracking-tight">{copy.title}</h1>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{copy.subtitle}</p>
           <div className="mt-5">

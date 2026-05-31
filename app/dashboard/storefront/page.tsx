@@ -48,7 +48,7 @@ export default async function StorefrontAdminPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Public storefront</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Publish a branded preorder link powered by KitchenOS — no WooCommerce or Shopify
+            Publish a branded preorder link powered by OS Kitchen — no WooCommerce or Shopify
             required.
           </p>
         </div>
@@ -316,7 +316,7 @@ export default async function StorefrontAdminPage() {
                   defaultValue={settings?.primaryDomainMode ?? "PATH"}
                   className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
                 >
-                  <option value="PATH">KitchenOS path (/s/slug)</option>
+                  <option value="PATH">OS Kitchen path (/s/slug)</option>
                   <option value="SUBDOMAIN">Subdomain</option>
                   <option value="CUSTOM_DOMAIN">Custom domain</option>
                 </select>

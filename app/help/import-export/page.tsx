@@ -7,7 +7,7 @@ export default function HelpImportExportPage() {
         Importing & exporting orders
       </h1>
       <p>
-        KitchenOS ingests orders from connected channels or manual entry. For spreadsheet backups,
+        OS Kitchen ingests orders from connected channels or manual entry. For spreadsheet backups,
         Owners use{" "}
         <Link href="/dashboard/import-export" className="text-primary underline">
           Import / export

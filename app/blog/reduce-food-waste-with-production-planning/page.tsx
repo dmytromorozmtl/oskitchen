@@ -9,7 +9,7 @@ const SLUG = 'reduce-food-waste-with-production-planning';
 const meta = blogPostBySlug(SLUG)!;
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'How to Reduce Food Waste with Production Planning | KitchenOS',
+  title: 'How to Reduce Food Waste with Production Planning | OS Kitchen',
   description: meta.description,
   path: `/blog/${SLUG}`,
   keywords: ['reduce food waste restaurant', 'production planning kitchen', 'kitchen waste software'],

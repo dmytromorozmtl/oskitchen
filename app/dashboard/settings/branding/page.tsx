@@ -55,7 +55,7 @@ export default async function BrandingSettingsPage() {
                 <Input
                   id="brandColorHex"
                   name="brandColorHex"
-                  placeholder="#286ab8"
+                  placeholder="#FF5F1F"
                   defaultValue={ks?.brandColorHex ?? ""}
                 />
               </div>
@@ -94,7 +94,7 @@ export default async function BrandingSettingsPage() {
                   disabled={!allowHide}
                 />
                 <Label htmlFor="hideKitchenOsBranding" className="font-normal">
-                  Hide KitchenOS branding (Enterprise only)
+                  Hide OS Kitchen branding (Enterprise only)
                 </Label>
               </div>
               <Button type="submit" className="rounded-full">

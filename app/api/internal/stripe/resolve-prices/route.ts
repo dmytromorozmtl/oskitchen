@@ -4,7 +4,7 @@ import { requireSuperAdminActor } from "@/lib/auth/is-superadmin";
 import { resolvePlanPriceIdAsync } from "@/lib/billing/stripe-price-resolver";
 
 /**
- * Superadmin-only: resolve live `price_…` ids from KitchenOS Stripe products.
+ * Superadmin-only: resolve live `price_…` ids from OS Kitchen Stripe products.
  * Use output to set NEXT_PUBLIC_STRIPE_*_PRICE_ID in Vercel, then redeploy.
  */
 export async function GET() {

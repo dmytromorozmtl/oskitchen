@@ -9,7 +9,7 @@ const SLUG = 'restaurant-pos-comparison-2026';
 const meta = blogPostBySlug(SLUG)!;
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'Restaurant POS Comparison 2026: Toast vs Square vs KitchenOS',
+  title: 'Restaurant POS Comparison 2026: Toast vs Square vs OS Kitchen',
   description: meta.description,
   path: `/blog/${SLUG}`,
   keywords: ['restaurant POS comparison', 'Toast vs Square', 'best restaurant POS 2026'],

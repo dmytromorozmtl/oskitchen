@@ -36,7 +36,7 @@ export default async function CustomerDeduplicationPage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Customer deduplication</h1>
         <p className="mt-2 text-muted-foreground">
-          Review duplicate candidates by email, phone, or similar name. KitchenOS never auto-merges records.
+          Review duplicate candidates by email, phone, or similar name. OS Kitchen never auto-merges records.
         </p>
       </div>
 

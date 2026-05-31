@@ -68,7 +68,7 @@ export default async function StaffPage() {
             <CardHeader>
               <CardTitle className="text-lg">No teammates yet</CardTitle>
               <CardDescription>
-                Add teammates so KitchenOS can assign tasks, training, production roles, packing work,
+                Add teammates so OS Kitchen can assign tasks, training, production roles, packing work,
                 and delivery routes.
               </CardDescription>
             </CardHeader>

@@ -18,7 +18,7 @@ export default async function LaborReportsHubPage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Labor & shifts</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          KitchenOS keeps an MVP layer (staff roster, tasks, POS shifts). Full payroll and compliance scheduling are
+          OS Kitchen keeps an MVP layer (staff roster, tasks, POS shifts). Full payroll and compliance scheduling are
           roadmap or partner integrations — see <span className="font-medium text-foreground">docs/LABOR_STRATEGY_DECISION.md</span>.
         </p>
       </div>

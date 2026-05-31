@@ -16,10 +16,10 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const study = caseStudyById(id);
-  if (!study) return { title: 'Customer story | KitchenOS' };
+  if (!study) return { title: 'Customer story | OS Kitchen' };
 
   return marketingPageMetadata({
-    title: `${study.title} | KitchenOS Customer Story`,
+    title: `${study.title} | OS Kitchen Customer Story`,
     description: study.summary,
     path: `/customers/${id}`,
   });

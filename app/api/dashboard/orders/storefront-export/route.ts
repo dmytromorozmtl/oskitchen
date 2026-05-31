@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 
 const MAX_ROWS = 5_000;
 
-/** Export KitchenOS orders with storefront commerce columns (market, tax). */
+/** Export OS Kitchen orders with storefront commerce columns (market, tax). */
 export async function GET(request: Request) {
   const { dataUserId } = await requireTenantActor();
   const orderScope = await orderListWhereForOwner(dataUserId);

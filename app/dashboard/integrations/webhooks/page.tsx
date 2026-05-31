@@ -55,7 +55,7 @@ export default async function WebhookEventsPage() {
         <EmptyState
           icon={Webhook}
           title="No webhook events yet"
-          description="Once WooCommerce or Shopify points at your KitchenOS URLs, signed payloads appear here with verification status — perfect for proving integrations on sales calls."
+          description="Once WooCommerce or Shopify points at your OS Kitchen URLs, signed payloads appear here with verification status — perfect for proving integrations on sales calls."
           primaryLabel="Sales channels"
           primaryHref="/dashboard/sales-channels"
           secondaryLabel="Open channel setup"

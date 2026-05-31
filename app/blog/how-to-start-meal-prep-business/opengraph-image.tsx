@@ -7,7 +7,7 @@ export const contentType = 'image/png';
 export default function OgImage() {
   const post = blogPostBySlug('how-to-start-meal-prep-business')!;
   return createOgImageResponse({
-    eyebrow: 'KitchenOS Blog',
+    eyebrow: 'OS Kitchen Blog',
     title: 'Start a Meal Prep Business in 2026',
     subtitle: post.description.slice(0, 100),
   });

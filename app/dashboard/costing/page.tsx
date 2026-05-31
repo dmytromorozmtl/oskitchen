@@ -77,7 +77,7 @@ export default async function CostingPage() {
           <CardHeader className="pb-2">
             <CardTitle className="text-base">Safety & scope</CardTitle>
             <CardDescription>
-              KitchenOS does not provide tax, legal, or accounting advice. Channel fee estimates use only the rates you
+              OS Kitchen does not provide tax, legal, or accounting advice. Channel fee estimates use only the rates you
               configure — we do not ship third-party fee tables.
             </CardDescription>
           </CardHeader>

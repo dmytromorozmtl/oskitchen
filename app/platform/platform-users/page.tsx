@@ -7,7 +7,7 @@ export default async function Page() {
   return (
     <PlatformInternalStub
       title="Platform users"
-      description="KitchenOS staff with PlatformUserRole rows — keep separate from workspace roles."
+      description="OS Kitchen staff with PlatformUserRole rows — keep separate from workspace roles."
     />
   );
 }

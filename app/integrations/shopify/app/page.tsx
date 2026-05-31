@@ -16,12 +16,12 @@ export default function ShopifyAppMarketingPage() {
       <SiteHeader />
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-16 text-sm leading-relaxed text-muted-foreground sm:px-6">
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-          Shopify custom app (KitchenOS)
+          Shopify custom app (OS Kitchen)
         </h1>
         <p>
-          KitchenOS uses a <strong className="text-foreground">custom app</strong> pattern today:
+          OS Kitchen uses a <strong className="text-foreground">custom app</strong> pattern today:
           merchants paste an Admin API access token and webhook signing secret into their encrypted
-          KitchenOS workspace — OAuth-based installs are the natural upgrade path before{" "}
+          OS Kitchen workspace — OAuth-based installs are the natural upgrade path before{" "}
           <strong className="text-foreground">Shopify App Store</strong> submission.
         </p>
         <section className="space-y-2">
@@ -35,7 +35,7 @@ export default function ShopifyAppMarketingPage() {
           </ul>
         </section>
         <p className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-amber-950 dark:text-amber-50">
-          KitchenOS does <strong>not</strong> claim Shopify App Store approval until an audit passes
+          OS Kitchen does <strong>not</strong> claim Shopify App Store approval until an audit passes
           — treat this page as engineering preparation only.
         </p>
         <div className="flex flex-wrap gap-3">

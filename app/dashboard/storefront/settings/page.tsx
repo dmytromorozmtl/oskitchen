@@ -171,7 +171,7 @@ export default async function StorefrontSettingsPage() {
                       type="password"
                       autoComplete="off"
                       defaultValue={pagePublishWebhookSecret ?? ""}
-                      placeholder="Optional — X-KitchenOS-Signature"
+                      placeholder="Optional — X-OS Kitchen-Signature"
                       className="rounded-xl font-mono text-sm"
                     />
                   </div>

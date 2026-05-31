@@ -71,7 +71,7 @@ export async function generateMetadata({
 
   return marketingPageMetadata({
     title: headline,
-    description: `${headline} — Centralize orders, production, and packing with KitchenOS.`,
+    description: `${headline} — Centralize orders, production, and packing with OS Kitchen.`,
     path,
   });
 }
@@ -117,7 +117,7 @@ export default async function SolutionPage({
       <main className="mx-auto max-w-4xl space-y-10 px-4 py-16 sm:px-6">
         <Breadcrumbs items={breadcrumbItems} />
         <Badge variant="secondary" className="rounded-full">
-          KitchenOS for {preset.businessName.replace(/^Demo · /, "")}
+          OS Kitchen for {preset.businessName.replace(/^Demo · /, "")}
         </Badge>
         <div className="space-y-4">
           <h1 className="text-balance text-4xl font-semibold tracking-tight">
@@ -163,7 +163,7 @@ export default async function SolutionPage({
         </div>
 
         <div className="rounded-2xl border bg-muted/30 p-5">
-          <h2 className="font-semibold">KitchenOS workflow</h2>
+          <h2 className="font-semibold">OS Kitchen workflow</h2>
           <p className="mt-2 text-sm text-muted-foreground">{solutionPages[slug].workflow}</p>
         </div>
 

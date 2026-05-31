@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "Book a KitchenOS Demo — Walkthrough for Your Kitchen",
+  title: "Book a OS Kitchen Demo — Walkthrough for Your Kitchen",
   description:
     "Schedule a founder-led walkthrough for meal prep, restaurants, catering, or ghost kitchens. We map your channels honestly — no fake integrations or automated spam.",
   path: "/book-demo",
@@ -29,7 +29,7 @@ export default function BookDemoPage() {
             Founder-led onboarding
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Book a KitchenOS demo
+            Book a OS Kitchen demo
           </h1>
           <p className="text-muted-foreground">
             Tell us about your kitchen model and channels. We reply with next steps — no automated

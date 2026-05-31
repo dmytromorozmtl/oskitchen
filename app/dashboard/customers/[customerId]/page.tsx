@@ -398,7 +398,7 @@ export default async function CustomerDetailPage({
         <CardHeader>
           <CardTitle className="text-base">Marketing consent</CardTitle>
           <CardDescription>
-            KitchenOS records consent but never sends marketing automatically — only export consented lists into
+            OS Kitchen records consent but never sends marketing automatically — only export consented lists into
             a real integration.
           </CardDescription>
         </CardHeader>

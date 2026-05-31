@@ -8,7 +8,7 @@ import { describeQueuePosture } from "@/services/queue/queue-service";
 
 export const metadata = {
   title: "Service status",
-  description: "High-level KitchenOS component status for operators (not a formal SLA-backed status page).",
+  description: "High-level OS Kitchen component status for operators (not a formal SLA-backed status page).",
 };
 
 const COMPONENTS = [

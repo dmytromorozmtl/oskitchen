@@ -8,7 +8,7 @@ export default function HelpPackingPage() {
       </p>
       <ul className="list-disc space-y-2 pl-5">
         <li>Delivery routes group by pickup date — ensure addresses live on the order notes.</li>
-        <li>Allergen text on labels must be verified by your team — KitchenOS stores operational hints only.</li>
+        <li>Allergen text on labels must be verified by your team — OS Kitchen stores operational hints only.</li>
       </ul>
     </article>
   );

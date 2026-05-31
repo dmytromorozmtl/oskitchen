@@ -193,7 +193,7 @@ export default async function GoLivePage({
           <CardHeader>
             <CardTitle className="text-lg">No launch project yet</CardTitle>
             <CardDescription>
-              Create a structured implementation and launch workflow to safely bring your KitchenOS operation
+              Create a structured implementation and launch workflow to safely bring your OS Kitchen operation
               online. We&rsquo;ll seed a stage-aware checklist, default rollback plans, and a readiness snapshot
               from your current workspace data.
             </CardDescription>

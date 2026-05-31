@@ -9,7 +9,7 @@ export default function HelpUberEatsPage() {
         not promise customers live ingestion until keys validate in staging.
       </p>
       <p>
-        KitchenOS ships adapter scaffolding plus simulated demo rows for UX rehearsal only.
+        OS Kitchen ships adapter scaffolding plus simulated demo rows for UX rehearsal only.
         Label pilots honestly and keep demo data marked synthetic.
       </p>
     </article>

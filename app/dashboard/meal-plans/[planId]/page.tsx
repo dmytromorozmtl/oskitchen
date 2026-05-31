@@ -143,7 +143,7 @@ export default async function MealPlanDetailPage({
         <CardHeader>
           <CardTitle className="text-base">Plan details</CardTitle>
           <CardDescription>
-            Generation mode controls how cycles turn into orders. KitchenOS never auto-confirms.
+            Generation mode controls how cycles turn into orders. OS Kitchen never auto-confirms.
           </CardDescription>
         </CardHeader>
         <CardContent>

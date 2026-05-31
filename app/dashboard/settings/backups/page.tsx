@@ -29,7 +29,7 @@ export default async function BackupsSettingsPage() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
           <p>
-            KitchenOS does not yet manage automated database snapshots from inside the app. The
+            OS Kitchen does not yet manage automated database snapshots from inside the app. The
             preferences above are honored by import + export flows in the Import Center, and by the
             CSV/JSON exports available in the Data Exports card on the Workspace page.
           </p>

@@ -26,7 +26,7 @@ export default async function StorefrontAboutPage({
           <p className="whitespace-pre-wrap text-muted-foreground">{sf.description}</p>
         ) : (
           <p className="text-muted-foreground">
-            This kitchen uses KitchenOS to power weekly preorders. Story content can be added from
+            This kitchen uses OS Kitchen to power weekly preorders. Story content can be added from
             the storefront Pages tab in your admin.
           </p>
         )}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { BRAND_ACCENT } from "@/lib/constants";
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
 
 export async function GET(
@@ -16,12 +17,12 @@ export async function GET(
   const manifest = {
     name,
     short_name: name.slice(0, 12),
-    description: `Order from ${name} — powered by KitchenOS`,
+    description: `Order from ${name} — powered by OS Kitchen`,
     start_url: `/s/${storeSlug}`,
     scope: `/s/${storeSlug}`,
     display: "standalone",
     background_color: "#FFFFFF",
-    theme_color: sf.brandColor ?? "#2563FF",
+    theme_color: sf.brandColor ?? BRAND_ACCENT,
     icons: [
       {
         src: sf.logoUrl?.trim() || "/favicon.svg",

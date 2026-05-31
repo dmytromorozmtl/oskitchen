@@ -15,10 +15,10 @@ export default function ImplementationServicePage() {
     <main className="mx-auto max-w-6xl space-y-12 px-6 py-16">
       <section className="max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">White-glove onboarding</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">Launch KitchenOS without migration chaos.</h1>
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight">Launch OS Kitchen without migration chaos.</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           We help food businesses migrate spreadsheets, WooCommerce/Shopify exports, menus, products, customers,
-          and first production workflows into KitchenOS safely.
+          and first production workflows into OS Kitchen safely.
         </p>
         <div className="mt-6 flex gap-3">
           <Button asChild size="lg">

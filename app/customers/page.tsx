@@ -4,7 +4,7 @@ import { CaseStudiesPage } from '@/components/marketing/case-studies-page';
 import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'Customer Stories — How Operators Use KitchenOS',
+  title: 'Customer Stories — How Operators Use OS Kitchen',
   description:
     'Operator playbooks from meal prep, restaurant, and ghost kitchen pilots. Honest outcomes and workflows — start your 14-day trial.',
   path: '/customers',

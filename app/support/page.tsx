@@ -4,9 +4,9 @@ import { FeatureGrid, Hero, PublicShell } from "@/components/marketing/public-pa
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "KitchenOS Support — Help Center & Resources",
+  title: "OS Kitchen Support — Help Center & Resources",
   description:
-    "Get help with KitchenOS setup, integrations, billing, and launch. Browse guides or contact our support team.",
+    "Get help with OS Kitchen setup, integrations, billing, and launch. Browse guides or contact our support team.",
   path: "/support",
 });
 
@@ -15,7 +15,7 @@ export default function SupportPage() {
     <PublicShell>
       <Hero
         eyebrow="Support"
-        title="Get help with KitchenOS setup, integrations, billing, and launch."
+        title="Get help with OS Kitchen setup, integrations, billing, and launch."
         description="Browse guides, contact support, or request features. We do not promise live marketplace integrations without your credentials and approvals."
         cta="Contact support"
         ctaHref="/support/contact"

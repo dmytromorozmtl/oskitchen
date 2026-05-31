@@ -77,7 +77,7 @@ export default async function ForecastOverviewPage() {
           <EmptyState
             icon={Sparkles}
             title="Forecast needs operational data"
-            description="Create orders, menus, meal plans, catering events, or manual plans so KitchenOS can estimate upcoming demand."
+            description="Create orders, menus, meal plans, catering events, or manual plans so OS Kitchen can estimate upcoming demand."
             primaryLabel="Run manual forecast"
             primaryHref="/dashboard/forecast/new"
             secondaryLabel="Create menu"

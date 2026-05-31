@@ -131,7 +131,7 @@ export default async function SalesChannelsWebhookCenterPage() {
             <EmptyState
               icon={Webhook}
               title="No webhook events yet"
-              description="Point WooCommerce or Shopify at your KitchenOS webhook URLs. Verification status appears here — Stripe billing webhooks use a separate pipeline."
+              description="Point WooCommerce or Shopify at your OS Kitchen webhook URLs. Verification status appears here — Stripe billing webhooks use a separate pipeline."
               primaryLabel="Channel operations center"
               primaryHref="/dashboard/sales-channels"
               secondaryLabel="WooCommerce setup"

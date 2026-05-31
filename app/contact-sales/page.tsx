@@ -6,9 +6,9 @@ import { PublicShell } from '@/components/marketing/public-page';
 import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'Contact KitchenOS Sales — Enterprise & Multi-Location',
+  title: 'Contact OS Kitchen Sales — Enterprise & Multi-Location',
   description:
-    'Contact KitchenOS sales for multi-location rollouts, catering deposits, and pilot onboarding. US & Canada. Response within one business day.',
+    'Contact OS Kitchen sales for multi-location rollouts, catering deposits, and pilot onboarding. US & Canada. Response within one business day.',
   path: '/contact-sales',
   keywords: ['kitchen software enterprise', 'restaurant POS sales', 'meal prep software quote'],
 });

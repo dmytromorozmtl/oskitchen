@@ -15,6 +15,7 @@ import {
   shouldShowPilotIntegrationHealthStrip,
 } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import { resolveOperatorHomePersona } from "@/lib/navigation/operator-home-era18";
+import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { canUseFullSupportInbox } from "@/lib/support/support-permissions";
@@ -125,7 +126,7 @@ export default async function TodayOperationsPage({
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
-        {breakthroughEra25 && !ownerBriefing?.pureOperationalModeEra25Active ? (
+        {breakthroughEra25 && showInternalOpsDashboardUi() && !ownerBriefing?.pureOperationalModeEra25Active ? (
           <OwnerDailyBriefingBreakthroughEra25Panel slice={breakthroughEra25} />
         ) : null}
         {launchWizardModel ? (

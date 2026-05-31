@@ -10,7 +10,7 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 import { PRODUCT_MARKETING_SLUGS, productMarketingPages } from "@/lib/product-marketing";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "KitchenOS Product — POS, Production, Packing & Integrations",
+  title: "OS Kitchen Product — POS, Production, Packing & Integrations",
   description: `${APP_NAME} is the operating system for modern food operations — POS, orders, production, packing, delivery, customers, and integrations in one workspace.`,
   path: "/product",
   keywords: [

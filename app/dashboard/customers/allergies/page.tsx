@@ -25,7 +25,7 @@ export default async function CustomerAllergiesPage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Allergy &amp; dietary register</h1>
         <p className="mt-2 max-w-3xl text-muted-foreground">
-          Customers with recorded allergies or dietary preferences. KitchenOS surfaces this information to
+          Customers with recorded allergies or dietary preferences. OS Kitchen surfaces this information to
           kitchen / packing where operationally needed — final responsibility rests with the operator.
         </p>
       </div>

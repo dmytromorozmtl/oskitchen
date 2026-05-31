@@ -21,7 +21,7 @@ export default async function StorefrontFaqPage({
     },
     {
       q: "When is the menu updated?",
-      a: "Menus rotate on the schedule your kitchen sets in KitchenOS. If you do not see new items yet, check back closer to the prep week.",
+      a: "Menus rotate on the schedule your kitchen sets in OS Kitchen. If you do not see new items yet, check back closer to the prep week.",
     },
     {
       q: "Do I pay online here?",

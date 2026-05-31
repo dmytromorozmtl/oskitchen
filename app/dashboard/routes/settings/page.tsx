@@ -18,7 +18,7 @@ export default async function RoutesSettingsPage() {
       <Card className="border-border/80 shadow-sm">
         <CardHeader>
           <CardTitle className="text-lg">Integrations</CardTitle>
-          <CardDescription>External services KitchenOS can use for maps and dispatch.</CardDescription>
+          <CardDescription>External services OS Kitchen can use for maps and dispatch.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <p>

@@ -50,7 +50,7 @@ export default async function RoutePlannerPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Route planner</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
           Build a route from open delivery orders by pickup date, or create a manual route shell and add stops later. Manual
-          stop order — KitchenOS does not call optimization APIs.
+          stop order — OS Kitchen does not call optimization APIs.
         </p>
       </div>
 

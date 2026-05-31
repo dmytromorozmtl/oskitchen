@@ -148,7 +148,7 @@ export default async function SalesChannelsOverviewPage() {
         <CardHeader className="pb-2">
           <CardTitle className="text-sm">Orders & revenue today by source</CardTitle>
           <CardDescription>
-            Revenue sums KitchenOS Order.total for orders created today; slices are mutually
+            Revenue sums OS Kitchen Order.total for orders created today; slices are mutually
             exclusive heuristics (manual = no storefront link and no known import provider).
           </CardDescription>
         </CardHeader>
@@ -181,7 +181,7 @@ export default async function SalesChannelsOverviewPage() {
             <CardDescription>Prioritized for {kitchen?.businessType ?? "your"} mode.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p>1. Enable KitchenOS storefront or confirm manual order flow.</p>
+            <p>1. Enable OS Kitchen storefront or confirm manual order flow.</p>
             <p>2. Connect WooCommerce / Shopify with encrypted credentials + webhooks.</p>
             <p>3. Map unmatched catalog SKUs before high-volume sync.</p>
             <p>4. Review webhook log after first live events.</p>

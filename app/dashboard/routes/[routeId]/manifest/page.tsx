@@ -88,7 +88,7 @@ export default async function RouteManifestPage({ params }: { params: Promise<{ 
         </ol>
 
         <footer className="mt-6 border-t border-border/60 pt-3 text-xs text-muted-foreground">
-          KitchenOS · Manual stop order. Optimized routing is a future placeholder.
+          OS Kitchen · Manual stop order. Optimized routing is a future placeholder.
         </footer>
       </section>
     </div>

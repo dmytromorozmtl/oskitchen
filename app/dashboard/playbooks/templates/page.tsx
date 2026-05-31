@@ -23,7 +23,7 @@ export default async function TemplatesPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">System Templates</h1>
         <p className="text-muted-foreground">
-          Built-in playbooks shipped with KitchenOS. Run as-is or copy into a custom playbook.
+          Built-in playbooks shipped with OS Kitchen. Run as-is or copy into a custom playbook.
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-2">

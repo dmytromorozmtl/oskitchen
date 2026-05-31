@@ -35,7 +35,7 @@ export default async function PublicChangelogPage() {
       <main className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
         <h1 className="text-3xl font-semibold tracking-tight">Changelog</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Published release notes from the KitchenOS team. Draft entries are managed under
+          Published release notes from the OS Kitchen team. Draft entries are managed under
           Developer → Releases (owner only).
         </p>
         <ul className="mt-10 space-y-8">
@@ -61,7 +61,7 @@ export default async function PublicChangelogPage() {
         ) : notes.length === 0 ? (
           <div className="mt-10 space-y-6 rounded-2xl border border-border/80 bg-muted/20 p-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">KitchenOS Commercial MVP Foundation</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">OS Kitchen Commercial MVP Foundation</p>
               <h2 className="mt-2 text-xl font-semibold tracking-tight">First public changelog entry</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 Published notes will appear here as releases ship. The items below summarize the current foundation — not

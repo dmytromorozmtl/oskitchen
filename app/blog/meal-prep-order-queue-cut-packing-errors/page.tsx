@@ -9,7 +9,7 @@ const SLUG = 'meal-prep-order-queue-cut-packing-errors';
 const meta = blogPostBySlug(SLUG)!;
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'Cut Meal Prep Packing Errors with One Order Queue | KitchenOS',
+  title: 'Cut Meal Prep Packing Errors with One Order Queue | OS Kitchen',
   description: meta.description,
   path: `/blog/${SLUG}`,
   keywords: [

@@ -269,7 +269,7 @@ export default async function BrandsPage({
                 <div className="grid gap-4 md:grid-cols-3">
                   <Input name="name" placeholder="Brand name" required />
                   <Input name="slug" placeholder="brand-slug" required />
-                  <Input name="brandColor" placeholder="#286ab8" />
+                  <Input name="brandColor" placeholder="#FF5F1F" />
                 </div>
                 <Textarea name="description" placeholder="Positioning, guest promise, internal notes" />
                 <Button type="submit" className="w-fit rounded-full">

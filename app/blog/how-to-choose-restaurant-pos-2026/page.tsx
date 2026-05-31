@@ -9,7 +9,7 @@ const SLUG = 'how-to-choose-restaurant-pos-2026';
 const meta = blogPostBySlug(SLUG)!;
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: `${meta.title} | KitchenOS`,
+  title: `${meta.title} | OS Kitchen`,
   description: meta.description,
   path: `/blog/${SLUG}`,
   keywords: ['restaurant POS guide', 'choose POS software', 'restaurant technology 2026'],

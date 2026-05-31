@@ -18,7 +18,7 @@ export default async function GrubhubIntegrationPage() {
     <div className="mx-auto max-w-4xl space-y-6">
       <PlaceholderBanner
         feature="Grubhub integration"
-        detail="KitchenOS keeps Grubhub in placeholder mode. Credentials can be prepared, but live sync and order ingestion are not production-ready."
+        detail="OS Kitchen keeps Grubhub in placeholder mode. Credentials can be prepared, but live sync and order ingestion are not production-ready."
       />
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -53,7 +53,7 @@ export default async function GrubhubIntegrationPage() {
           <CardTitle className="text-base">What is intentionally disabled</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>KitchenOS does not create new local Grubhub delivery rows just to simulate a live integration.</p>
+          <p>OS Kitchen does not create new local Grubhub delivery rows just to simulate a live integration.</p>
           <p>This page is preparation-only until the provider implementation is actually shipped and verified.</p>
         </CardContent>
       </Card>

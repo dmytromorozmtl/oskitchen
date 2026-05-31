@@ -16,7 +16,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const resolved = resolveAdsLanding(slug);
-  if (!resolved) return { title: 'KitchenOS' };
+  if (!resolved) return { title: 'OS Kitchen' };
 
   return marketingPageMetadata({
     title: resolved.metaTitle,

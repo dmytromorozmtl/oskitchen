@@ -79,7 +79,7 @@ export default async function CopilotTodayPage({
           <h1 className="text-3xl font-semibold tracking-tight">AI Operations Copilot</h1>
           <p className="max-w-3xl text-sm text-muted-foreground">
             Safe operational insights, summaries, recommendations, and draft actions grounded in your
-            KitchenOS data.
+            OS Kitchen data.
           </p>
           <AiStatusBadges
             hasApiKey={settings.hasApiKey}

@@ -5,7 +5,7 @@ export default function HelpProductsSkusPage() {
         Fixing unmatched products
       </h1>
       <p>
-        When WooCommerce or Shopify sends SKUs your weekly menu does not recognize, KitchenOS keeps
+        When WooCommerce or Shopify sends SKUs your weekly menu does not recognize, OS Kitchen keeps
         the external row linked but may skip automatic production mapping until you align titles or
         external product IDs.
       </p>

@@ -9,7 +9,7 @@ const SLUG = 'ghost-kitchen-setup-complete-guide';
 const meta = blogPostBySlug(SLUG)!;
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: `${meta.title} | KitchenOS`,
+  title: `${meta.title} | OS Kitchen`,
   description: meta.description,
   path: `/blog/${SLUG}`,
   keywords: ['ghost kitchen setup', 'virtual brand kitchen', 'delivery kitchen software'],

@@ -5,7 +5,7 @@ export const contentType = 'image/png';
 
 export default function OgImage() {
   return createOgImageResponse({
-    eyebrow: 'KitchenOS Blog',
+    eyebrow: 'OS Kitchen Blog',
     title: 'Reduce Food Waste with Production Planning',
     subtitle: 'Cut kitchen waste 4–10% of food cost with a weekly planning loop.',
   });

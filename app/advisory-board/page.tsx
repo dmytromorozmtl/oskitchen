@@ -8,7 +8,7 @@ export const metadata = { title: "Customer Advisory Board" };
 
 export default function AdvisoryBoardPage() {
   return (
-    <FormShell title="Customer Advisory Board" description="Apply to join a small operator group shaping KitchenOS. This is a feedback program, not a paid customer claim.">
+    <FormShell title="Customer Advisory Board" description="Apply to join a small operator group shaping OS Kitchen. This is a feedback program, not a paid customer claim.">
       <form action={submitAdvisoryBoardApplicationFormAction} className="grid gap-4">
         <input name="company_hp" className="hidden" tabIndex={-1} />
         <Input name="fullName" placeholder="Full name" required />

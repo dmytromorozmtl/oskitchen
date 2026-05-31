@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { BRAND_ACCENT, BRAND_ACCENT_DARK, BRAND_INK } from "@/lib/constants";
+
 export default function GlobalError({
   error,
   reset,
@@ -15,17 +17,36 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+      <body
+        className="min-h-screen antialiased"
+        style={{
+          background: "#FFFFFF",
+          color: BRAND_INK,
+          fontFamily: "var(--font-body, 'DM Sans', system-ui, sans-serif)",
+        }}
+      >
         <main className="mx-auto flex max-w-lg flex-col items-center justify-center px-4 py-24 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-[#286ab8]">500</p>
+          <p
+            className="text-sm font-semibold uppercase tracking-wide"
+            style={{ color: BRAND_ACCENT }}
+          >
+            500
+          </p>
           <h1 className="mt-4 text-3xl font-semibold tracking-tight">Something went wrong</h1>
-          <p className="mt-3 text-slate-600">
+          <p className="mt-3" style={{ color: "#3A3B40" }}>
             An unexpected error occurred. Our team has been notified. Please try again.
           </p>
           <button
             type="button"
             onClick={() => reset()}
-            className="mt-8 rounded-full bg-[#286ab8] px-6 py-2.5 text-sm font-medium text-white hover:bg-[#1e4f8c]"
+            className="mt-8 rounded-full px-6 py-2.5 text-sm font-medium text-white"
+            style={{ background: BRAND_ACCENT }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = BRAND_ACCENT_DARK;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = BRAND_ACCENT;
+            }}
           >
             Try again
           </button>
@@ -34,7 +55,8 @@ export default function GlobalError({
             onClick={() => {
               window.location.href = "/";
             }}
-            className="mt-4 text-sm text-[#286ab8] underline-offset-4 hover:underline"
+            className="mt-4 text-sm underline-offset-4 hover:underline"
+            style={{ color: BRAND_ACCENT }}
           >
             Return home
           </button>

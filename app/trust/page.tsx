@@ -7,7 +7,7 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 export const metadata: Metadata = marketingPageMetadata({
   title: "Trust center",
   description:
-    "KitchenOS security posture, data handling, infrastructure, and compliance roadmap.",
+    "OS Kitchen security posture, data handling, infrastructure, and compliance roadmap.",
   path: "/trust",
 });
 
@@ -17,7 +17,7 @@ export default function TrustPage() {
       <Hero
         eyebrow="Trust center"
         title="Designed with security-conscious practices for food operations data."
-        description="KitchenOS centralizes orders, menus, customers, production, packing, and integrations with role-based access, audit logs, and credential redaction. This page summarizes current safeguards using enterprise-ready control language — not formal certification claims."
+        description="OS Kitchen centralizes orders, menus, customers, production, packing, and integrations with role-based access, audit logs, and credential redaction. This page summarizes current safeguards using enterprise-ready control language — not formal certification claims."
         cta="Contact security"
         ctaHref="/support/contact"
         secondary="Read legal templates"
@@ -48,7 +48,7 @@ export default function TrustPage() {
           {
             title: "Payment security",
             description:
-              "Stripe handles payment processing. KitchenOS stores subscription identifiers, not raw card data.",
+              "Stripe handles payment processing. OS Kitchen stores subscription identifiers, not raw card data.",
           },
           {
             title: "Integrations security",
@@ -88,7 +88,7 @@ export default function TrustPage() {
         ]}
       />
       <Disclaimer>
-        KitchenOS does not currently claim SOC 2, HIPAA, PCI compliance, GDPR compliance, or food
+        OS Kitchen does not currently claim SOC 2, HIPAA, PCI compliance, GDPR compliance, or food
         labeling compliance. Full enterprise SSO/SCIM is roadmap unless explicitly enabled for your
         tenant in writing. Formal compliance certifications are future roadmap items.
       </Disclaimer>

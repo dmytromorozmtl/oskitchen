@@ -12,7 +12,7 @@ export default async function CopilotInsightsPage() {
       <header>
         <h1 className="text-2xl font-semibold">Open insights</h1>
         <p className="text-sm text-muted-foreground">
-          Deterministic operational signals from your KitchenOS workspace. Resolve once handled.
+          Deterministic operational signals from your OS Kitchen workspace. Resolve once handled.
         </p>
       </header>
       {insights.length === 0 ? (

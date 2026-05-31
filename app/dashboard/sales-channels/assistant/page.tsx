@@ -16,7 +16,7 @@ export default async function ChannelAssistantPage() {
         </p>
       </div>
       <ol className="list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
-        <li>Turn on KitchenOS storefront or manual orders first — always-on baselines.</li>
+        <li>Turn on OS Kitchen storefront or manual orders first — always-on baselines.</li>
         <li>Add WooCommerce or Shopify only when encryption (<span className="font-mono">ENCRYPTION_KEY</span>) is configured.</li>
         <li>Run a sandbox order, confirm webhook + staging batch, then approve in import staging.</li>
         <li>Map SKUs before enabling any auto-production handoff toggles.</li>

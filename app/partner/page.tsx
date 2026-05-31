@@ -10,7 +10,7 @@ export default function PartnerPortalPage() {
     <PublicShell>
       <Hero
         eyebrow="Partner portal"
-        title="Manage client implementations with KitchenOS."
+        title="Manage client implementations with OS Kitchen."
         description="Foundation for agencies and consultants: client readiness, implementation stage, blockers, and commission placeholders. Payout automation is not implemented."
         cta="View clients"
         ctaHref="/partner/clients"

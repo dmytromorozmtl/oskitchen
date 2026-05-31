@@ -101,7 +101,7 @@ export default async function ConflictsPage() {
 
       <Card id="duplicate-internal">
         <CardHeader>
-          <CardTitle className="text-base">Duplicate KitchenOS target</CardTitle>
+          <CardTitle className="text-base">Duplicate OS Kitchen target</CardTitle>
           <CardDescription>
             Multiple external products are pointing at the same internal item — usually the desired behaviour
             for marketplaces, but worth confirming.
@@ -109,7 +109,7 @@ export default async function ConflictsPage() {
         </CardHeader>
         <CardContent>
           {derived.duplicateInternalTargets.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No duplicate KitchenOS targets.</p>
+            <p className="text-sm text-muted-foreground">No duplicate OS Kitchen targets.</p>
           ) : (
             <ul className="space-y-2 text-sm">
               {derived.duplicateInternalTargets.map((group) => (

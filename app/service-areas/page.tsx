@@ -84,8 +84,8 @@ export default function ServiceAreasPage() {
         <section className="border-t border-border/60 py-16 sm:py-20">
           <SectionHeader
             tag="Metro markets"
-            title="Where operators run KitchenOS"
-            description="Teams in major metros use KitchenOS for dine-in, meal prep, catering, and virtual brands. Software is delivered in the cloud — there are no regional hardware depots or on-site installs."
+            title="Where operators run OS Kitchen"
+            description="Teams in major metros use OS Kitchen for dine-in, meal prep, catering, and virtual brands. Software is delivered in the cloud — there are no regional hardware depots or on-site installs."
           />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {TOP_METRO_MARKETS.map((metro) => (

@@ -46,7 +46,7 @@ export default async function AliasesPage() {
                 <tr className="border-b bg-muted/40 text-muted-foreground">
                   <th className="px-3 py-2 font-medium">External title</th>
                   <th className="px-3 py-2 font-medium">Provider</th>
-                  <th className="px-3 py-2 font-medium">KitchenOS item</th>
+                  <th className="px-3 py-2 font-medium">OS Kitchen item</th>
                   <th className="px-3 py-2 font-medium">Created</th>
                 </tr>
               </thead>

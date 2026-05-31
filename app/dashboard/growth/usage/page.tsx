@@ -51,7 +51,7 @@ export default async function GrowthUsagePage() {
             <CardTitle>No product telemetry yet</CardTitle>
             <CardDescription>
               Workspace activity, feature adoption, onboarding milestones, and retention events will populate once users
-              begin interacting with KitchenOS.
+              begin interacting with OS Kitchen.
             </CardDescription>
           </CardHeader>
         </Card>

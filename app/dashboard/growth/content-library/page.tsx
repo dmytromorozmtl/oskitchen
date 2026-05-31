@@ -23,7 +23,7 @@ export default function GrowthContentLibraryPage() {
             <h3 className="font-medium text-foreground">Cold opener — meal prep</h3>
             <p className="mt-2 leading-relaxed">
               Most weekly meal prep teams lose hours reconciling Shopify or Woo orders against a
-              printed prep sheet. KitchenOS gives you one queue with cutoff-aware menus — worth a
+              printed prep sheet. OS Kitchen gives you one queue with cutoff-aware menus — worth a
               15-minute walkthrough?
             </p>
           </section>

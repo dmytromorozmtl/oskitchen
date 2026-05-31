@@ -2,7 +2,7 @@ import { PublicShell } from "@/components/marketing/public-page";
 import { RoiCalculator } from "@/components/marketing/roi-calculator";
 
 export const metadata = {
-  title: "KitchenOS ROI calculator",
+  title: "OS Kitchen ROI calculator",
   description: "Estimate hours saved, cost savings, and plan fit for food operations.",
 };
 

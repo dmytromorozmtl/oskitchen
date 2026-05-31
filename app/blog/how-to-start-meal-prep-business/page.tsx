@@ -9,7 +9,7 @@ const SLUG = 'how-to-start-meal-prep-business';
 const meta = blogPostBySlug(SLUG)!;
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: 'How to Start a Meal Prep Business in 2026 — Complete Guide | KitchenOS',
+  title: 'How to Start a Meal Prep Business in 2026 — Complete Guide | OS Kitchen',
   description: meta.description,
   path: `/blog/${SLUG}`,
   keywords: ['start meal prep business', 'meal prep business plan', 'meal prep software'],

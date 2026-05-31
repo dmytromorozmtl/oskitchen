@@ -23,9 +23,9 @@ import {
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "KitchenOS Demo — Interactive Workspace",
+  title: "OS Kitchen Demo — Interactive Workspace",
   description:
-    "Explore KitchenOS with a realistic workspace. Pre-populated demo scenarios for meal prep, catering, and bakeries.",
+    "Explore OS Kitchen with a realistic workspace. Pre-populated demo scenarios for meal prep, catering, and bakeries.",
   path: "/demo",
   keywords: ["kitchen software demo", "meal prep software demo", "food ops platform demo"],
 });
@@ -52,10 +52,10 @@ export default async function DemoHubPage({
             </Badge>
           </div>
           <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            Explore KitchenOS with a realistic workspace
+            Explore OS Kitchen with a realistic workspace
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            KitchenOS is the operating system for modern food operations — explore a realistic
+            OS Kitchen is the operating system for modern food operations — explore a realistic
             workspace with simulated data. Pick a vertical to tailor labels and menu language.
             Import replaces demo-eligible rows only inside{" "}
             <span className="font-medium text-foreground">your signed-in workspace</span> and turns

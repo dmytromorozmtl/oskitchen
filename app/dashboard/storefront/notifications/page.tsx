@@ -12,7 +12,7 @@ export default async function StorefrontNotificationsAdminPage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Notifications</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Storefront order emails use the same Resend pipeline as the rest of KitchenOS. Configure provider keys and
+          Storefront order emails use the same Resend pipeline as the rest of OS Kitchen. Configure provider keys and
           templates in workspace settings — nothing here is required for checkout to succeed.
         </p>
       </div>

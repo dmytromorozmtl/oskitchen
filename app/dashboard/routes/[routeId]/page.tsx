@@ -86,7 +86,7 @@ export default async function RouteDetailPage({ params }: { params: Promise<{ ro
           <CardHeader>
             <CardTitle className="text-lg">Stops</CardTitle>
             <CardDescription>
-              Manual stop order — KitchenOS does not call optimization APIs. Use the arrow buttons to reorder.
+              Manual stop order — OS Kitchen does not call optimization APIs. Use the arrow buttons to reorder.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">

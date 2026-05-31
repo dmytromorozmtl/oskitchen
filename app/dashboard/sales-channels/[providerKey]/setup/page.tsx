@@ -53,7 +53,7 @@ export default async function ChannelSetupPage({
         <CardHeader>
           <CardTitle className="text-base">Honest status</CardTitle>
           <CardDescription>
-            KitchenOS does not ship a live certified connector for this provider yet. This page
+            OS Kitchen does not ship a live certified connector for this provider yet. This page
             documents requirements and captures intent — no credentials are validated here.
           </CardDescription>
         </CardHeader>

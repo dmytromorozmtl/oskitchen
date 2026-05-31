@@ -62,7 +62,7 @@ export default async function UnmappedQueuePage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Unmapped queue</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          External products waiting for a KitchenOS target. Pick a candidate, approve, or reject — never bulk-approve
+          External products waiting for a OS Kitchen target. Pick a candidate, approve, or reject — never bulk-approve
           unless the confidence is HIGH or above.
         </p>
       </div>

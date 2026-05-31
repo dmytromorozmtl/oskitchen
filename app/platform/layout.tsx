@@ -24,7 +24,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
       <PlatformSearchShortcut />
       <header className="fixed top-0 z-50 flex h-14 w-full items-center gap-3 border-b border-zinc-800 bg-zinc-950/90 px-4 backdrop-blur">
         <Link href="/platform/dashboard" className="text-sm font-semibold tracking-tight text-white">
-          KitchenOS <span className="text-zinc-500">Platform</span>
+          OS Kitchen <span className="text-zinc-500">Platform</span>
         </Link>
         <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-xs text-amber-200">Internal</span>
         <span className="rounded-full bg-zinc-800 px-2 py-0.5 font-mono text-[10px] uppercase text-zinc-400">

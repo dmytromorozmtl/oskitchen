@@ -37,7 +37,7 @@ export default async function ChannelConflictsPage() {
         <h2 className="text-lg font-semibold">Conflict resolution</h2>
         <p className="text-sm text-muted-foreground">
           Operator-first queue for duplicates, mapping gaps, and risky payloads. Resolving here does
-          not mutate partner systems — it updates KitchenOS staging metadata only.
+          not mutate partner systems — it updates OS Kitchen staging metadata only.
         </p>
       </div>
       <Button asChild variant="outline" size="sm" className="rounded-full">

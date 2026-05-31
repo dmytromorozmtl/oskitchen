@@ -17,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const study = caseStudyBySlug(slug);
-  if (!study) return { title: "Case studies | KitchenOS" };
+  if (!study) return { title: "Case studies | OS Kitchen" };
   return marketingPageMetadata({
     title: study.title,
     description: study.challenge,
@@ -78,7 +78,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </div>
         <p className="mt-8 text-sm">
           <Link href="/compare" className="underline underline-offset-4">
-            Compare KitchenOS
+            Compare OS Kitchen
           </Link>
         </p>
       </main>

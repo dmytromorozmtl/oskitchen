@@ -17,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { city } = await params;
   const content = geoCityBySlug(city);
-  if (!content) return { title: "Locations | KitchenOS" };
+  if (!content) return { title: "Locations | OS Kitchen" };
   return marketingPageMetadata({
     title: content.headline,
     description: content.subheadline,
@@ -50,7 +50,7 @@ export default async function GeoCityPage({ params }: PageProps) {
         </div>
         <p className="mt-12 text-sm text-muted-foreground">
           <Link href="/compare" className="underline underline-offset-4">
-            Compare KitchenOS to other stacks
+            Compare OS Kitchen to other stacks
           </Link>
         </p>
       </main>

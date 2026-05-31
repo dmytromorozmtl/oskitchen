@@ -53,7 +53,7 @@ export default async function NewMealPlanPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">New meal plan</h1>
           <p className="mt-2 max-w-3xl text-muted-foreground">
-            Set up a recurring meal customer in one form. KitchenOS materialises the first cycle for you —
+            Set up a recurring meal customer in one form. OS Kitchen materialises the first cycle for you —
             you can edit selections and generate the draft order from the plan detail page.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default async function NewMealPlanPage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Customer</CardTitle>
-          <CardDescription>Email is required — KitchenOS upserts the customer in the CRM.</CardDescription>
+          <CardDescription>Email is required — OS Kitchen upserts the customer in the CRM.</CardDescription>
         </CardHeader>
         <CardContent>
           <form action={createMealPlanFormAction} className="grid gap-4 md:grid-cols-2">
@@ -198,7 +198,7 @@ export default async function NewMealPlanPage() {
             <div className="space-y-2 md:col-span-2 border-t border-border/60 pt-4">
               <h3 className="text-sm font-semibold">Billing &amp; generation</h3>
               <p className="text-xs text-muted-foreground">
-                KitchenOS does not auto-charge customers and does not auto-confirm orders.
+                OS Kitchen does not auto-charge customers and does not auto-confirm orders.
               </p>
             </div>
             <div className="space-y-2">
