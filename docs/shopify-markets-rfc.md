@@ -450,3 +450,24 @@ Required Shopify scopes (verify at implementation):
 **Validation:** partial/unresolved/stale → `WARNING` (still approvable when otherwise VALID)
 
 **Conscious limits:** Kitchen `Order` rows not auto-created; GraphQL sync orders lack REST `company` block until Phase 14.
+
+---
+
+## Phase 14 — Kitchen Order B2B metadata (shipped)
+
+**Goal:** When channel staging records are approved, promote into kitchen `Order` rows with B2B company, market, and routing context.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_KITCHEN_ORDER_B2B=1` (default on in non-production) |
+| Promote service | `channel-import-promote-service.ts` — approve → `persistResolvedOrder` |
+| Metadata builders | `shopify-b2b-kitchen-order-metadata.ts` — `sourceMetadataJson.b2b`, `channelTraceJson` |
+| GraphQL shape | `shopify-graphql-b2b-order-shape.ts` — `purchasingEntity` → REST `company` block |
+| Approve hook | `channel-command-center.ts` — VALID + WARNING approvable |
+| Customer link | `KitchenCustomer.companyAccountId` + `OFFICE_CLIENT` type when linked |
+| Health | `b2bKitchenOrderStats.missingCompanyLink` on markets health dashboard |
+| UI | B2B badge on Order hub internal rows; kitchen-order stats on Integrations → Shopify |
+
+**Metadata fields:** `companyAccountId`, `osMarketId`, `shopifyCompanyId`, `shopifyLocationId`, `orderNotesBadge`, `status`
+
+**Conscious limits:** No auto catering quote rollup (Phase 15); no net terms / PO numbers (Phase 16).

@@ -378,15 +378,34 @@ export async function stageSyncJobOrders(input: {
     update: { updatedAt: new Date() },
   });
 
-  const rows: Prisma.ChannelImportRecordCreateManyInput[] = input.entries.map((e) => ({
-    batchId: batch.id,
-    provider: input.provider,
-    externalId: e.normalized.externalOrderId,
-    recordType: ChannelImportRecordType.ORDER,
-    rawPayloadJson: e.raw as Prisma.InputJsonValue,
-    normalizedJson: e.normalized as unknown as Prisma.InputJsonValue,
-    validationStatus: validationForOrder(e.normalized),
-  }));
+  const rows: Prisma.ChannelImportRecordCreateManyInput[] = [];
+  for (const e of input.entries) {
+    const normalized = await maybeApplyShopifyB2bStagingEnrichment({
+      provider: input.provider,
+      connectionId: input.connectionId,
+      normalized: e.normalized,
+      rawPayload: e.raw,
+    });
+    const enrichment = extractB2bEnrichmentFromNormalized(normalized);
+    const baseValidation = validationForOrder(normalized);
+    const validation = adjustValidationForB2bEnrichment({ base: baseValidation, enrichment });
+
+    rows.push({
+      batchId: batch.id,
+      provider: input.provider,
+      externalId: normalized.externalOrderId,
+      recordType: ChannelImportRecordType.ORDER,
+      rawPayloadJson: e.raw as Prisma.InputJsonValue,
+      normalizedJson: normalized as unknown as Prisma.InputJsonValue,
+      validationStatus: validation,
+      suggestedFixJson: enrichment
+        ? (buildB2bStagingSuggestedFixJson(enrichment) as Prisma.InputJsonValue)
+        : undefined,
+      conflictJson: enrichment
+        ? (buildB2bStagingConflictJson(enrichment) as Prisma.InputJsonValue)
+        : undefined,
+    });
+  }
 
   await prisma.channelImportRecord.createMany({
     data: rows,
@@ -394,27 +413,48 @@ export async function stageSyncJobOrders(input: {
   });
 
   const createdRecords = await prisma.channelImportRecord.findMany({
-    where: { batchId: batch.id, validationStatus: ChannelRecordValidationStatus.NEEDS_MAPPING },
+    where: { batchId: batch.id },
   });
   for (const r of createdRecords) {
-    await ensureMappingConflict({
-      userId: input.userId,
-      batchId: batch.id,
-      recordId: r.id,
-    });
+    if (r.validationStatus === ChannelRecordValidationStatus.NEEDS_MAPPING) {
+      await ensureMappingConflict({
+        userId: input.userId,
+        batchId: batch.id,
+        recordId: r.id,
+      });
+    }
+    const normalized = r.normalizedJson as unknown as NormalizedKitchenOrder;
+    const enrichment = extractB2bEnrichmentFromNormalized(normalized);
+    if (enrichment) {
+      await ensureB2bRoutingConflict({
+        userId: input.userId,
+        batchId: batch.id,
+        recordId: r.id,
+        enrichment,
+      });
+    }
   }
 
   await recalculateImportBatchStats(batch.id);
 
   for (const e of input.entries) {
+    const normalized = await maybeApplyShopifyB2bStagingEnrichment({
+      provider: input.provider,
+      connectionId: input.connectionId,
+      normalized: e.normalized,
+      rawPayload: e.raw,
+    });
     await prisma.externalOrder.updateMany({
       where: {
         userId: input.userId,
         connectionId: input.connectionId,
         provider: input.provider,
-        externalOrderId: e.normalized.externalOrderId,
+        externalOrderId: normalized.externalOrderId,
       },
-      data: { channelImportBatchId: batch.id },
+      data: {
+        channelImportBatchId: batch.id,
+        rawPayloadJson: normalized.raw as Prisma.InputJsonValue,
+      },
     });
   }
 }

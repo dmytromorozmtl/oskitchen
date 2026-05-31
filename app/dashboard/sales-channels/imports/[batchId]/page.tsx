@@ -21,6 +21,7 @@ import { prisma } from "@/lib/prisma";
 import { ImportBatchToolbar } from "@/components/sales-channels/import-batch-toolbar";
 import { ImportRollbackButton } from "@/components/sales-channels/import-rollback-button";
 import { StagingRecordActions } from "@/components/sales-channels/staging-record-actions";
+import { isChannelImportRecordApprovable } from "@/services/channels/channel-import-promote-service";
 
 export default async function ChannelImportBatchPage({
   params,
@@ -46,7 +47,7 @@ export default async function ChannelImportBatchPage({
   if (!batch) notFound();
 
   const validIds = batch.records
-    .filter((r) => r.validationStatus === "VALID" && !r.importedAt)
+    .filter((r) => isChannelImportRecordApprovable(r.validationStatus) && !r.importedAt)
     .map((r) => r.id);
 
   const permissionCtx = {
@@ -123,7 +124,11 @@ export default async function ChannelImportBatchPage({
               <TableCell className="text-right">
                 <StagingRecordActions
                   recordId={r.id}
-                  canApprove={canApprove && r.validationStatus === "VALID" && !r.importedAt}
+                  canApprove={
+                    canApprove &&
+                    isChannelImportRecordApprovable(r.validationStatus) &&
+                    !r.importedAt
+                  }
                   canRetry={canApprove}
                 />
               </TableCell>

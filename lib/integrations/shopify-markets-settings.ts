@@ -300,6 +300,14 @@ export type ShopifyMarketsSyncSettings = {
     unresolved: number;
     total: number;
   } | null;
+  lastB2bKitchenOrderPromoteAt: string | null;
+  b2bKitchenOrderStats: {
+    promoted: number;
+    complete: number;
+    partial: number;
+    unresolved: number;
+    missingCompanyLink: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -447,6 +455,19 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         }
       : null;
 
+  const kitchenStatsRaw = raw.b2bKitchenOrderStats;
+  const b2bKitchenOrderStats =
+    kitchenStatsRaw && typeof kitchenStatsRaw === "object"
+      ? {
+          promoted: Number((kitchenStatsRaw as Record<string, unknown>).promoted) || 0,
+          complete: Number((kitchenStatsRaw as Record<string, unknown>).complete) || 0,
+          partial: Number((kitchenStatsRaw as Record<string, unknown>).partial) || 0,
+          unresolved: Number((kitchenStatsRaw as Record<string, unknown>).unresolved) || 0,
+          missingCompanyLink:
+            Number((kitchenStatsRaw as Record<string, unknown>).missingCompanyLink) || 0,
+        }
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -568,6 +589,11 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bOrderEnrichmentAt:
       typeof raw.lastB2bOrderEnrichmentAt === "string" ? raw.lastB2bOrderEnrichmentAt : null,
     b2bOrderEnrichmentStats,
+    lastB2bKitchenOrderPromoteAt:
+      typeof raw.lastB2bKitchenOrderPromoteAt === "string"
+        ? raw.lastB2bKitchenOrderPromoteAt
+        : null,
+    b2bKitchenOrderStats,
   };
 }
 

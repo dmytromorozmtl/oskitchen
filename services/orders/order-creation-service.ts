@@ -88,6 +88,8 @@ export type PersistResolvedOrderInput = {
   channelProvider?: string | null;
   externalOrderId?: string | null;
   sourceMetadataJson?: Prisma.InputJsonValue;
+  channelTraceJson?: Prisma.InputJsonValue;
+  channelImportBatchId?: string | null;
   lines: ResolvedLine[];
 };
 
@@ -279,6 +281,8 @@ export async function persistResolvedOrder(
       channelProvider: input.channelProvider ?? undefined,
       externalOrderIdExt: input.externalOrderId ?? undefined,
       sourceMetadataJson: input.sourceMetadataJson,
+      channelTraceJson: input.channelTraceJson,
+      channelImportBatchId: input.channelImportBatchId ?? undefined,
       publicLookupToken: generatePublicLookupToken(),
       orderItems: {
         create: input.lines.map((l) => ({

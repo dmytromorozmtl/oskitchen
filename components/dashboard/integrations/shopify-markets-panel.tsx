@@ -963,6 +963,22 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bKitchenOrderStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B kitchen orders: {syncSettings.b2bKitchenOrderStats.promoted} promoted ·{" "}
+              {syncSettings.b2bKitchenOrderStats.complete} complete ·{" "}
+              {syncSettings.b2bKitchenOrderStats.missingCompanyLink} missing company link
+              {syncSettings.lastB2bKitchenOrderPromoteAt ? (
+                <>
+                  {" "}
+                  · last promote{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bKitchenOrderPromoteAt), {
+                    addSuffix: true,
+                  })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

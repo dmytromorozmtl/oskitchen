@@ -3,6 +3,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { IntegrationProvider, NormalizedOrderStatus } from "@prisma/client";
 
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
+import { attachShopifyGraphqlPurchasingEntityToRawOrder } from "@/lib/integrations/shopify-graphql-b2b-order-shape";
 
 export type ShopifyCredentials = {
   shopDomain: string;
@@ -76,6 +77,13 @@ export async function fetchOrdersGraphQL(creds: ShopifyCredentials, first = 25) 
               }
             }
             shippingAddress { address1 city province zip country phone }
+            purchasingEntity {
+              __typename
+              ... on PurchasingCompany {
+                company { id name }
+                location { id name }
+              }
+            }
           }
         }
       }
@@ -258,27 +266,28 @@ export function normalizeShopifyRestOrder(order: Record<string, unknown>): Norma
 }
 
 export function normalizeShopifyOrder(node: Record<string, unknown>): NormalizedKitchenOrder {
+  const rawNode = attachShopifyGraphqlPurchasingEntityToRawOrder(node);
   const lineEdges =
-    (node.lineItems as { edges?: { node: Record<string, unknown> }[] })?.edges ?? [];
-  const ship = node.shippingAddress as Record<string, unknown> | null | undefined;
+    (rawNode.lineItems as { edges?: { node: Record<string, unknown> }[] })?.edges ?? [];
+  const ship = rawNode.shippingAddress as Record<string, unknown> | null | undefined;
   const hasShip = ship && Object.keys(ship).some((k) => ship[k]);
 
-  const total = node.totalPriceSet as
+  const total = rawNode.totalPriceSet as
     | { shopMoney?: { amount?: string; currencyCode?: string } }
     | undefined;
 
   return {
     provider: IntegrationProvider.SHOPIFY,
-    externalOrderId: gidTail(String(node.id)),
-    externalOrderNumber: node.name != null ? String(node.name) : null,
+    externalOrderId: gidTail(String(rawNode.id)),
+    externalOrderNumber: rawNode.name != null ? String(rawNode.name) : null,
     sourceStatus:
-      node.displayFulfillmentStatus != null ? String(node.displayFulfillmentStatus) : null,
+      rawNode.displayFulfillmentStatus != null ? String(rawNode.displayFulfillmentStatus) : null,
     normalizedStatus: mapShopifyFulfillment(
-      node.displayFulfillmentStatus != null ? String(node.displayFulfillmentStatus) : undefined,
+      rawNode.displayFulfillmentStatus != null ? String(rawNode.displayFulfillmentStatus) : undefined,
     ),
     customer: {
       name: null,
-      email: node.email != null ? String(node.email) : null,
+      email: rawNode.email != null ? String(rawNode.email) : null,
       phone: ship?.phone != null ? String(ship.phone) : null,
     },
     lineItems: lineEdges.map((e) => {
@@ -306,7 +315,7 @@ export function normalizeShopifyOrder(node: Record<string, unknown>): Normalized
       total: total?.shopMoney?.amount != null ? Number(total.shopMoney.amount) : null,
       currency: total?.shopMoney?.currencyCode ?? null,
     },
-    raw: node,
+    raw: rawNode,
   };
 }
 

@@ -41,6 +41,10 @@ import { requireChannelActor } from "@/lib/channels/require-channel-actor";
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
 import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
+import {
+  isChannelImportRecordApprovable,
+  promoteChannelImportRecordToKitchenOrder,
+} from "@/services/channels/channel-import-promote-service";
 
 export async function approveChannelImportRecords(input: { recordIds: string[] }) {
   try {
@@ -57,8 +61,14 @@ export async function approveChannelImportRecords(input: { recordIds: string[] }
         include: { batch: true },
       });
       if (!record) continue;
-      if (record.validationStatus !== ChannelRecordValidationStatus.VALID) continue;
+      if (!isChannelImportRecordApprovable(record.validationStatus)) continue;
       if (record.importedAt) continue;
+
+      const promote = await promoteChannelImportRecordToKitchenOrder({
+        userId,
+        recordId: record.id,
+      });
+      if (!promote.ok) continue;
 
       const ext = await prisma.externalOrder.findFirst({
         where: {

@@ -26,8 +26,9 @@ export type ChannelGoldenPathStage = (typeof CHANNEL_GOLDEN_PATH_STAGES)[number]
 
 /** Honest product/CI claims — do not overstate integration maturity. */
 export const CHANNEL_GOLDEN_PATH_HONEST_SCOPE = {
-  /** Channel approve links externalOrder; kitchen Order spine is separate (e.g. DoorDash import). */
+  /** Channel approve promotes staging → kitchen Order with optional B2B metadata (Phase 14). */
   kitchenOrderAutoCreateFromWebhook: false,
+  kitchenOrderPromoteOnChannelApprove: true,
   externalOrderAndStagingCertified: true,
   orderHubListsExternalOrders: true,
   liveStoreApiOptional: true,

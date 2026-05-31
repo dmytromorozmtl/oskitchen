@@ -239,7 +239,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
             ? `${openB2bConflicts} company + ${openB2bLocationConflicts} location conflict(s)`
             : sync?.b2bOrderEnrichmentStats?.unresolved
               ? `${sync.b2bOrderEnrichmentStats.unresolved} unresolved B2B order(s) in staging`
-              : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
+              : sync?.b2bKitchenOrderStats?.missingCompanyLink
+                ? `${sync.b2bKitchenOrderStats.missingCompanyLink} promoted B2B kitchen order(s) without company link`
+                : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
                 ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
                 : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
                   ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} company · ${Object.keys(sync?.b2bLocationImports ?? {}).length} location hint(s)`
@@ -298,6 +300,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   }
   if ((sync?.b2bOrderEnrichmentStats?.unresolved ?? 0) > 0) {
     recommendations.push("Review unresolved B2B orders in Sales channels → Staging.");
+  }
+  if ((sync?.b2bKitchenOrderStats?.missingCompanyLink ?? 0) > 0) {
+    recommendations.push(
+      "Link promoted B2B kitchen orders to company accounts in Customers → Companies.",
+    );
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {
     recommendations.push("Run full reconcile weekly to keep import-mode markets fresh.");

@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { readKitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
 import { formatCustomerPrimaryLabel } from "@/lib/customers/customer-display";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import {
@@ -251,6 +251,7 @@ export default async function OrderHubPage({
                       paymentPending:
                         sf?.paymentMode === "ONLINE_PAYMENT" && sf.paymentStatus === "PENDING",
                     });
+                    const b2b = readKitchenOrderB2bMetadata(o.sourceMetadataJson);
                     return (
                     <TableRow key={o.id} data-order-id={o.id}>
                       <TableCell>
@@ -266,6 +267,14 @@ export default async function OrderHubPage({
                           <Badge variant="secondary" className="rounded-full">
                             {o.status}
                           </Badge>
+                          {b2b ? (
+                            <Badge
+                              className="rounded-full bg-indigo-500/15 text-[10px] text-indigo-900 dark:text-indigo-100"
+                              title={b2b.routingSummary}
+                            >
+                              {b2b.orderNotesBadge}
+                            </Badge>
+                          ) : null}
                           {o.isChannelTestOrder ? (
                             <Badge variant="outline" className="rounded-full text-[10px] uppercase">
                               Test
