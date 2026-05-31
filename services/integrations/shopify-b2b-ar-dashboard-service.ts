@@ -17,6 +17,10 @@ import {
   type B2bArDashboardSnapshot,
   type B2bArDashboardStats,
 } from "@/lib/integrations/shopify-b2b-ar-dashboard-metadata";
+import {
+  isB2bShopifyPaymentDrift,
+  readShopifyFinancialStatus,
+} from "@/lib/integrations/shopify-b2b-financial-mirror-metadata";
 import { readB2bInvoiceDraftLink } from "@/lib/integrations/shopify-b2b-invoice-draft-metadata";
 import { readKitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
 import {
@@ -35,19 +39,6 @@ export type B2bArDashboardBulkResult = {
   skipped: number;
   errors: string[];
 };
-
-function readShopifyFinancialStatus(sourceMetadataJson: unknown): string | null {
-  if (!sourceMetadataJson || typeof sourceMetadataJson !== "object") return null;
-  const root = sourceMetadataJson as Record<string, unknown>;
-  const direct = root.shopifyFinancialStatus;
-  if (typeof direct === "string" && direct.trim()) return direct.trim();
-  const b2b = root.b2b;
-  if (b2b && typeof b2b === "object") {
-    const nested = (b2b as Record<string, unknown>).shopifyFinancialStatus;
-    if (typeof nested === "string" && nested.trim()) return nested.trim();
-  }
-  return null;
-}
 
 function readExternalOrderNumber(sourceMetadataJson: unknown): string | null {
   if (!sourceMetadataJson || typeof sourceMetadataJson !== "object") return null;
@@ -136,6 +127,7 @@ function enrichDashboardRow(input: {
     companyAccountId && input.collectorsByCompanyId[companyAccountId]
       ? input.collectorsByCompanyId[companyAccountId]
       : null;
+  const shopifyFinancialStatus = readShopifyFinancialStatus(input.order.sourceMetadataJson);
 
   return {
     ...input.row,
@@ -143,7 +135,11 @@ function enrichDashboardRow(input: {
     osMarketId: b2b?.osMarketId ?? null,
     externalOrderNumber: readExternalOrderNumber(input.order.sourceMetadataJson),
     kitchenPaymentStatus: input.order.paymentStatus,
-    shopifyFinancialStatus: readShopifyFinancialStatus(input.order.sourceMetadataJson),
+    shopifyFinancialStatus,
+    paymentStatusDrift: isB2bShopifyPaymentDrift(
+      input.order.paymentStatus,
+      shopifyFinancialStatus,
+    ),
     payPortalIssued: Boolean(draft?.payPortalIssuedAt),
     payPortalCheckoutStarted: Boolean(draft?.payPortalCheckoutStartedAt),
     collectionPriority:

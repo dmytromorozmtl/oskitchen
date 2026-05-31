@@ -638,16 +638,37 @@ Required Shopify scopes (verify at implementation):
 
 ---
 
-## Phase 23 — B2B Shopify payment status capture at import (planned)
+## Phase 23 — B2B Shopify payment status capture at import (shipped)
 
-**Goal:** Enrich channel promote with Shopify `displayFinancialStatus` so receivables dashboard mirror is complete without live API polling.
+**Goal:** Enrich channel promote with Shopify `displayFinancialStatus` so receivables dashboard mirror is complete without live API polling on every page view.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_SHOPIFY_FINANCIAL_MIRROR=1` (default on in non-production) |
+| Import | Persist `shopifyFinancialStatus` on `sourceMetadataJson` + `b2b` during B2B channel promote |
+| Metadata | `shopify-b2b-financial-mirror-metadata.ts` — extract, patch, drift comparator |
+| Reconcile | `shopify-b2b-financial-mirror-service.ts` — read-only Admin API refresh (max 50 open invoices) |
+| Full reconcile | Step `b2b-financial-mirror` after AR aging refresh on Storefront → Markets |
+| Dashboard | `/dashboard/receivables` — drift badge, mirror coverage, health attention when drift > 0 |
+| Settings | `b2bFinancialMirrorStats`, `lastB2bFinancialMirrorRefreshAt`, `lastB2bFinancialMirrorRefreshResult` |
+| Health | Markets health recommends review when `lastDriftCount > 0` |
+| CSV | `payment_status_drift` column on receivables export |
+
+**Conscious limits:** No Shopify payment write-back; refresh capped at 50 orders per reconcile.
+
+---
+
+## Phase 24 — B2B AR collector task queue & SLA reminders (planned)
+
+**Goal:** Turn receivables dashboard company rollups into assignable collector tasks with due-date SLAs — separate from legal dunning and pay portal.
 
 | Component | Plan |
 |-----------|------|
-| Feature flag | `SHOPIFY_MARKETS_B2B_SHOPIFY_FINANCIAL_MIRROR=1` |
-| Import | Persist `shopifyFinancialStatus` on `sourceMetadataJson` during B2B promote |
-| Reconcile | Optional refresh for open invoices via Admin API (read-only) |
-| Dashboard | Highlight KitchenOS vs Shopify payment drift |
-| Health | Attention when drift count > 0 |
+| Feature flag | `SHOPIFY_MARKETS_B2B_AR_COLLECTOR_QUEUE=1` |
+| Tasks | Per-company open-invoice tasks with assignee, due date, status (open / snoozed / done) |
+| SLA | Auto-escalate when max past due exceeds company threshold; link from receivables row actions |
+| Digest | Optional daily collector email (distinct from operator AR digest) |
+| Health | Critical when SLA-breached tasks > 0 |
+| Settings | `b2bArCollectorTasks`, `b2bArCollectorSlaDaysByCompanyId` |
 
-**Conscious limits:** No Shopify payment write-back; refresh capped at 50 orders per reconcile.
+**Conscious limits:** No credit bureau or legal collections workflow; tasks are operator reminders only.

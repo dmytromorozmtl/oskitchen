@@ -390,6 +390,15 @@ export type ShopifyMarketsSyncSettings = {
     csvExports: number;
     collectorsAssigned: number;
   } | null;
+  lastB2bFinancialMirrorRefreshAt: string | null;
+  lastB2bFinancialMirrorRefreshResult: string | null;
+  b2bFinancialMirrorStats: {
+    capturedAtPromote: number;
+    refreshed: number;
+    refreshSkipped: number;
+    refreshErrors: number;
+    lastDriftCount: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -709,6 +718,19 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         }
       : null;
 
+  const mirrorStatsRaw = raw.b2bFinancialMirrorStats;
+  const b2bFinancialMirrorStats =
+    mirrorStatsRaw && typeof mirrorStatsRaw === "object"
+      ? {
+          capturedAtPromote:
+            Number((mirrorStatsRaw as Record<string, unknown>).capturedAtPromote) || 0,
+          refreshed: Number((mirrorStatsRaw as Record<string, unknown>).refreshed) || 0,
+          refreshSkipped: Number((mirrorStatsRaw as Record<string, unknown>).refreshSkipped) || 0,
+          refreshErrors: Number((mirrorStatsRaw as Record<string, unknown>).refreshErrors) || 0,
+          lastDriftCount: Number((mirrorStatsRaw as Record<string, unknown>).lastDriftCount) || 0,
+        }
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -876,6 +898,15 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     b2bArHealthScore,
     b2bArCollectorsByCompanyId,
     b2bArDashboardStats,
+    lastB2bFinancialMirrorRefreshAt:
+      typeof raw.lastB2bFinancialMirrorRefreshAt === "string"
+        ? raw.lastB2bFinancialMirrorRefreshAt
+        : null,
+    lastB2bFinancialMirrorRefreshResult:
+      typeof raw.lastB2bFinancialMirrorRefreshResult === "string"
+        ? raw.lastB2bFinancialMirrorRefreshResult
+        : null,
+    b2bFinancialMirrorStats,
   };
 }
 

@@ -120,6 +120,58 @@ export async function fetchOrdersGraphQL(creds: ShopifyCredentials, first = 25) 
   return json.data?.orders?.edges?.map((e) => e.node) ?? [];
 }
 
+/** Read-only batch fetch of Shopify displayFinancialStatus for reconcile mirror refresh. */
+export async function fetchShopifyOrderFinancialStatuses(
+  creds: ShopifyCredentials,
+  orderGids: string[],
+): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  if (orderGids.length === 0) return result;
+
+  const version = creds.apiVersion ?? "2025-01";
+  const query = `
+    query OrderFinancialStatuses($ids: [ID!]!) {
+      nodes(ids: $ids) {
+        ... on Order {
+          id
+          displayFinancialStatus
+        }
+      }
+    }
+  `;
+
+  const res = await fetch(adminEndpoint(creds.shopDomain, version), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": creds.adminAccessToken,
+    },
+    body: JSON.stringify({ query, variables: { ids: orderGids } }),
+    cache: "no-store",
+  });
+
+  const json = (await res.json()) as {
+    data?: { nodes?: Array<Record<string, unknown> | null> };
+    errors?: { message: string }[];
+  };
+  if (!res.ok || json.errors?.length) {
+    throw new Error(json.errors?.map((e) => e.message).join("; ") ?? `HTTP ${res.status}`);
+  }
+
+  for (const node of json.data?.nodes ?? []) {
+    if (!node || typeof node !== "object") continue;
+    const id = node.id != null ? String(node.id) : "";
+    const status = node.displayFinancialStatus;
+    if (!id || typeof status !== "string" || !status.trim()) continue;
+    const normalized = status.trim().toUpperCase();
+    result.set(id, normalized);
+    const tail = id.split("/").pop();
+    if (tail) result.set(tail, normalized);
+  }
+
+  return result;
+}
+
 export async function fetchProductsGraphQL(creds: ShopifyCredentials, first = 25) {
   const version = creds.apiVersion ?? "2025-01";
   const query = `

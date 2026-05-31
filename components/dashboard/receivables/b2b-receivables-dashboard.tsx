@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SHOPIFY_MARKET_B2B_AR_DASHBOARD_HONESTY } from "@/lib/commercial/shopify-market-b2b-ar-dashboard";
+import { SHOPIFY_MARKET_B2B_FINANCIAL_MIRROR_HONESTY } from "@/lib/commercial/shopify-market-b2b-financial-mirror";
 import type { B2bArAgingBucket } from "@/lib/integrations/shopify-b2b-ar-aging-metadata";
 import type { B2bArDashboardSnapshot } from "@/lib/integrations/shopify-b2b-ar-dashboard-metadata";
 import { formatCurrency } from "@/lib/utils";
@@ -96,7 +97,9 @@ export function B2bReceivablesDashboard({
       <Card className="border-border/80 bg-card/90 shadow-sm">
         <CardHeader>
           <CardTitle>B2B receivables command center</CardTitle>
-          <CardDescription className="max-w-3xl">{SHOPIFY_MARKET_B2B_AR_DASHBOARD_HONESTY}</CardDescription>
+          <CardDescription className="max-w-3xl">
+            {SHOPIFY_MARKET_B2B_AR_DASHBOARD_HONESTY} {SHOPIFY_MARKET_B2B_FINANCIAL_MIRROR_HONESTY}
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {(["current", "days_0_30", "days_31_60", "days_61_plus"] as const).map((bucket) => (
@@ -125,6 +128,14 @@ export function B2bReceivablesDashboard({
             >
               {snapshot.healthLevel}
             </Badge>
+            {snapshot.paymentStatusDriftCount > 0 ? (
+              <p className="mt-2 text-[10px] text-amber-700 dark:text-amber-400">
+                {snapshot.paymentStatusDriftCount} Shopify drift
+              </p>
+            ) : null}
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              {snapshot.shopifyMirrorCount}/{snapshot.openTotal} mirrored
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -254,7 +265,14 @@ export function B2bReceivablesDashboard({
                       </Badge>
                     </TableCell>
                     <TableCell className="text-xs">{row.kitchenPaymentStatus ?? "—"}</TableCell>
-                    <TableCell className="text-xs">{row.shopifyFinancialStatus ?? "—"}</TableCell>
+                    <TableCell className="text-xs">
+                      <span>{row.shopifyFinancialStatus ?? "—"}</span>
+                      {row.paymentStatusDrift ? (
+                        <Badge variant="destructive" className="ml-1 rounded-full text-[9px]">
+                          drift
+                        </Badge>
+                      ) : null}
+                    </TableCell>
                     <TableCell className="text-right text-xs tabular-nums">
                       {formatCurrency(row.openAmountCents / 100)}
                     </TableCell>

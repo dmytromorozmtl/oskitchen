@@ -8,6 +8,7 @@ export type B2bArDashboardRow = B2bArAgingRow & {
   externalOrderNumber: string | null;
   kitchenPaymentStatus: string | null;
   shopifyFinancialStatus: string | null;
+  paymentStatusDrift: boolean;
   payPortalIssued: boolean;
   payPortalCheckoutStarted: boolean;
   collectionPriority: B2bArCollectionPriority;
@@ -38,6 +39,7 @@ export type B2bArDashboardSnapshot = B2bArAgingSnapshot & {
   healthLevel: "healthy" | "attention" | "critical";
   missingPayPortalCount: number;
   shopifyMirrorCount: number;
+  paymentStatusDriftCount: number;
 };
 
 export type B2bArDashboardStats = {
@@ -55,18 +57,26 @@ export function resolveCollectionPriority(row: Pick<B2bArAgingRow, "bucket" | "d
   return "low";
 }
 
-export function computeB2bArHealthScore(snapshot: Pick<B2bArAgingSnapshot, "openTotal" | "overdueTotal" | "buckets">): number {
-  if (snapshot.openTotal === 0) return 100;
+export function computeB2bArHealthScore(
+  snapshot: Pick<B2bArAgingSnapshot, "openTotal" | "overdueTotal" | "buckets">,
+  paymentStatusDriftCount = 0,
+): number {
+  if (snapshot.openTotal === 0) return paymentStatusDriftCount > 0 ? 95 : 100;
   const overdueRatio = snapshot.overdueTotal / snapshot.openTotal;
   const criticalRatio = snapshot.buckets.days_61_plus / snapshot.openTotal;
   let score = 100;
   score -= Math.round(overdueRatio * 35);
   score -= Math.round(criticalRatio * 45);
   score -= snapshot.buckets.days_31_60 * 2;
+  score -= paymentStatusDriftCount * 4;
   return Math.max(0, Math.min(100, score));
 }
 
-export function resolveB2bArHealthLevel(score: number): "healthy" | "attention" | "critical" {
+export function resolveB2bArHealthLevel(
+  score: number,
+  paymentStatusDriftCount = 0,
+): "healthy" | "attention" | "critical" {
+  if (paymentStatusDriftCount > 0 && score >= 75) return "attention";
   if (score >= 75) return "healthy";
   if (score >= 45) return "attention";
   return "critical";
@@ -116,8 +126,9 @@ export function buildB2bArDashboardSnapshot(input: {
   collectorsByCompanyId: Record<string, string>;
 }): B2bArDashboardSnapshot {
   const companies = buildB2bArCompanyRollups(input.rows, input.collectorsByCompanyId);
-  const healthScore = computeB2bArHealthScore(input.aging);
-  const healthLevel = resolveB2bArHealthLevel(healthScore);
+  const paymentStatusDriftCount = input.rows.filter((row) => row.paymentStatusDrift).length;
+  const healthScore = computeB2bArHealthScore(input.aging, paymentStatusDriftCount);
+  const healthLevel = resolveB2bArHealthLevel(healthScore, paymentStatusDriftCount);
   const missingPayPortalCount = input.rows.filter(
     (row) => row.bucket !== "current" && !row.payPortalIssued,
   ).length;
@@ -131,6 +142,7 @@ export function buildB2bArDashboardSnapshot(input: {
     healthLevel,
     missingPayPortalCount,
     shopifyMirrorCount,
+    paymentStatusDriftCount,
   };
 }
 
@@ -170,6 +182,7 @@ export function b2bArDashboardRowsToCsv(rows: B2bArDashboardRow[]): string {
     "bucket",
     "kitchen_payment_status",
     "shopify_financial_status",
+    "payment_status_drift",
     "pay_portal_issued",
     "reminder_count",
     "assigned_collector",
@@ -187,6 +200,7 @@ export function b2bArDashboardRowsToCsv(rows: B2bArDashboardRow[]): string {
       csvEscape(row.bucket),
       csvEscape(row.kitchenPaymentStatus ?? ""),
       csvEscape(row.shopifyFinancialStatus ?? ""),
+      row.paymentStatusDrift ? "yes" : "no",
       row.payPortalIssued ? "yes" : "no",
       String(row.reminderCount),
       csvEscape(row.assignedCollector ?? ""),

@@ -34,6 +34,7 @@ const row = {
   externalOrderNumber: "#1042",
   kitchenPaymentStatus: "UNPAID",
   shopifyFinancialStatus: "PENDING",
+  paymentStatusDrift: false,
   payPortalIssued: true,
   payPortalCheckoutStarted: false,
   collectionPriority: "high" as const,
@@ -65,6 +66,26 @@ describe("shopify-b2b-ar-dashboard-metadata", () => {
     expect(snapshot.companies).toHaveLength(1);
     expect(snapshot.healthScore).toBeGreaterThanOrEqual(0);
     expect(snapshot.shopifyMirrorCount).toBe(1);
+    expect(snapshot.paymentStatusDriftCount).toBe(0);
+  });
+
+  it("downgrades health level when payment drift exists", () => {
+    const driftRow = {
+      ...row,
+      bucket: "current" as const,
+      daysPastDue: 0,
+      paymentStatusDrift: true,
+      kitchenPaymentStatus: "UNPAID",
+      shopifyFinancialStatus: "PAID",
+    };
+    const aging = buildB2bArAgingSnapshot([driftRow]);
+    const snapshot = buildB2bArDashboardSnapshot({
+      aging,
+      rows: [driftRow],
+      collectorsByCompanyId: {},
+    });
+    expect(snapshot.paymentStatusDriftCount).toBe(1);
+    expect(snapshot.healthLevel).toBe("attention");
   });
 
   it("exports csv rows", () => {

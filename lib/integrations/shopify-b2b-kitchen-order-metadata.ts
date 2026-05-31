@@ -24,6 +24,8 @@ export type KitchenOrderB2bMetadata = {
   poNumber: string | null;
   paymentTerms: B2bPaymentTermsSnapshot | null;
   missingPo: boolean;
+  shopifyFinancialStatus?: string | null;
+  shopifyFinancialStatusCapturedAt?: string | null;
   cateringQuoteRollup?: B2bCateringQuoteRollupLink;
   invoiceDraft?: B2bInvoiceDraftLink;
 };
@@ -65,13 +67,32 @@ export function buildKitchenOrderB2bSourceMetadata(input: {
   enrichment: KitchenOrderB2bMetadata;
   externalOrderId: string;
   externalOrderNumber?: string | null;
+  shopifyFinancialStatus?: string | null;
+  shopifyFinancialStatusCapturedAt?: string | null;
 }): Record<string, unknown> {
+  const capturedAt = input.shopifyFinancialStatusCapturedAt ?? new Date().toISOString();
+  const enrichment: KitchenOrderB2bMetadata = {
+    ...input.enrichment,
+    ...(input.shopifyFinancialStatus
+      ? {
+          shopifyFinancialStatus: input.shopifyFinancialStatus,
+          shopifyFinancialStatusCapturedAt: capturedAt,
+        }
+      : {}),
+  };
+
   return {
     provider: String(input.provider).toLowerCase(),
     channelImport: true,
     externalOrderId: input.externalOrderId,
     externalOrderNumber: input.externalOrderNumber ?? null,
-    b2b: input.enrichment,
+    ...(input.shopifyFinancialStatus
+      ? {
+          shopifyFinancialStatus: input.shopifyFinancialStatus,
+          shopifyFinancialStatusCapturedAt: capturedAt,
+        }
+      : {}),
+    b2b: enrichment,
   };
 }
 

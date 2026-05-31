@@ -7,6 +7,8 @@ import {
 } from "@prisma/client";
 
 import type { NormalizedKitchenOrder } from "@/lib/order-normalization";
+import { isShopifyMarketsB2bFinancialMirrorEnabled } from "@/lib/commercial/shopify-market-b2b-financial-mirror";
+import { extractShopifyFinancialStatusFromNormalized } from "@/lib/integrations/shopify-b2b-financial-mirror-metadata";
 import { normalizeProviderKey } from "@/lib/product-mapping/provider-types";
 import {
   buildChannelImportChannelTrace,
@@ -32,7 +34,22 @@ import {
   applyB2bNetTermsPaymentMode,
   maybeGenerateB2bInvoiceDraft,
 } from "@/services/integrations/shopify-b2b-invoice-generation-service";
+import { recordB2bFinancialMirrorCapturedAtPromote } from "@/services/integrations/shopify-b2b-financial-mirror-service";
 import type { KitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
+
+function resolveB2bFinancialMirrorCapture(
+  provider: IntegrationProvider,
+  normalized: NormalizedKitchenOrder,
+): { shopifyFinancialStatus: string; shopifyFinancialStatusCapturedAt: string } | null {
+  if (provider !== IntegrationProvider.SHOPIFY) return null;
+  if (!isShopifyMarketsB2bFinancialMirrorEnabled()) return null;
+  const status = extractShopifyFinancialStatusFromNormalized(normalized);
+  if (!status) return null;
+  return {
+    shopifyFinancialStatus: status,
+    shopifyFinancialStatusCapturedAt: new Date().toISOString(),
+  };
+}
 
 const APPROVABLE_STATUSES: ChannelRecordValidationStatus[] = [
   ChannelRecordValidationStatus.VALID,
@@ -269,6 +286,9 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
   const enrichment = extractB2bEnrichmentFromNormalized(normalized);
   const b2bEnabled = shouldApplyKitchenOrderB2bMetadata(enrichment);
   const b2bMetadata = b2bEnabled ? buildKitchenOrderB2bMetadata(enrichment) : null;
+  const b2bFinancialMirrorCapture = b2bMetadata
+    ? resolveB2bFinancialMirrorCapture(record.provider, normalized)
+    : null;
 
   const workspaceId =
     ext.workspaceId ?? record.batch.workspaceId ?? (await resolveOwnerWorkspaceId(input.userId));
@@ -280,6 +300,7 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
           enrichment: b2bMetadata,
           externalOrderId: normalized.externalOrderId,
           externalOrderNumber: normalized.externalOrderNumber,
+          ...b2bFinancialMirrorCapture,
         })
       : buildChannelImportSourceMetadata({
           provider: record.provider,
@@ -335,6 +356,9 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
         connectionId: record.batch.connectionId,
         metadata: b2bMetadata,
       });
+      if (b2bFinancialMirrorCapture) {
+        await recordB2bFinancialMirrorCapturedAtPromote(record.batch.connectionId);
+      }
     }
 
     await tryB2bCateringRollup({
@@ -427,6 +451,9 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
       connectionId: record.batch.connectionId,
       metadata: b2bMetadata,
     });
+    if (b2bFinancialMirrorCapture) {
+      await recordB2bFinancialMirrorCapturedAtPromote(record.batch.connectionId);
+    }
   }
 
   await tryB2bCateringRollup({

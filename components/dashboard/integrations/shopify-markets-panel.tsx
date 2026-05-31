@@ -1100,6 +1100,12 @@ export function ShopifyMarketsPanel({
             <p className="text-xs text-muted-foreground">
               B2B AR dashboard:{" "}
               {syncSettings.b2bArHealthScore != null ? `${syncSettings.b2bArHealthScore}/100 health` : "—"}
+              {syncSettings.b2bFinancialMirrorStats?.lastDriftCount ? (
+                <> · {syncSettings.b2bFinancialMirrorStats.lastDriftCount} Shopify drift</>
+              ) : null}
+              {syncSettings.b2bFinancialMirrorStats?.capturedAtPromote ? (
+                <> · {syncSettings.b2bFinancialMirrorStats.capturedAtPromote} mirror capture(s)</>
+              ) : null}
               {syncSettings.b2bArDashboardStats
                 ? ` · ${syncSettings.b2bArDashboardStats.views} view(s) · ${syncSettings.b2bArDashboardStats.csvExports} export(s)`
                 : ""}

@@ -50,6 +50,7 @@ import { countWebhookRegistryDrift } from "@/services/integrations/shopify-marke
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 import { refreshB2bPaymentCollectionOverdueStats } from "@/services/integrations/shopify-b2b-invoice-payment-service";
 import { refreshB2bArAgingStatsForConnection } from "@/services/integrations/shopify-b2b-ar-aging-service";
+import { refreshB2bShopifyFinancialMirrorForConnection } from "@/services/integrations/shopify-b2b-financial-mirror-service";
 import { buildB2bArDashboardSnapshotForOwner } from "@/services/integrations/shopify-b2b-ar-dashboard-service";
 import { resolveB2bArHealthLevel } from "@/lib/integrations/shopify-b2b-ar-dashboard-metadata";
 
@@ -351,6 +352,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
       `${sync?.b2bPaymentCollectionStats?.overdueOpen} B2B invoice(s) are past due — follow up with company buyers in Order Hub.`,
     );
   }
+  if ((sync?.b2bFinancialMirrorStats?.lastDriftCount ?? 0) > 0) {
+    recommendations.push(
+      `${sync?.b2bFinancialMirrorStats?.lastDriftCount} B2B invoice(s) have KitchenOS vs Shopify payment drift — review Receivables dashboard and mark paid or follow up in Shopify.`,
+    );
+  }
   if ((sync?.b2bArHealthScore ?? 100) < 45) {
     recommendations.push(
       `B2B AR health score is ${sync?.b2bArHealthScore}/100 — review Receivables dashboard and escalate critical invoices.`,
@@ -617,6 +623,20 @@ export async function runFullShopifyMarketsReconcileForConnection(input: {
     userId: input.userId,
     connectionId: conn.id,
   }).catch(() => undefined);
+
+  const mirrorRefresh = await refreshB2bShopifyFinancialMirrorForConnection({
+    userId: input.userId,
+    connectionId: conn.id,
+    creds: input.creds,
+    origin: "full_reconcile",
+  }).catch(() => ({ ok: false as const, error: "mirror_refresh_failed" }));
+  steps.push(
+    mirrorRefresh.ok
+      ? `b2b-financial-mirror: refreshed=${mirrorRefresh.refreshed} drift=${mirrorRefresh.driftCount}${mirrorRefresh.capped ? " capped" : ""}`
+      : mirrorRefresh.unavailable
+        ? "b2b-financial-mirror: unavailable"
+        : `b2b-financial-mirror: skipped/failed (${mirrorRefresh.error})`,
+  );
 
   await buildB2bArDashboardSnapshotForOwner({
     userId: input.userId,
