@@ -53,6 +53,7 @@ const checkoutSchema = z.object({
   taxAmount: z.number().optional(),
   loyaltyPointsRedeem: z.number().int().nonnegative().optional(),
   giftCardCode: z.string().max(32).optional(),
+  offlineSaleId: z.string().uuid().optional(),
   lines: z
     .array(
       z.object({
@@ -129,6 +130,7 @@ export async function posCheckoutAction(raw: z.infer<typeof checkoutSchema>) {
       notes: input.notes,
       loyaltyPointsRedeem: input.loyaltyPointsRedeem,
       giftCardCode: input.giftCardCode,
+      offlineSaleId: input.offlineSaleId,
     });
     if (!res.ok) return res;
     revalidatePath("/dashboard/orders");

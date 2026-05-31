@@ -2,18 +2,22 @@
 
 ## Implemented
 
-- `PosTerminalClient` shows online/offline indicator (browser `online` / `offline` events).
-- `posPaymentAllowedWhileOffline` blocks **placeholder** card flows (`STRIPE_PLACEHOLDER`, `CARD_TERMINAL_PLACEHOLDER`) while offline so OS Kitchen never records a false paid card state.
-- `POS_OFFLINE_LIMITATIONS` copy documents that checkout still requires a successful server round-trip.
+- **Offline queue enabled by default** via `mergePosSettings()` (`lib/pos/pos-settings.ts`). Workspaces inherit `offlineQueueEnabled: true` unless explicitly disabled in `KitchenSettings.posSettingsJson`.
+- `PosTerminalClient` queues **cash** and other offline-safe payment modes in IndexedDB when the browser reports offline.
+- **Sync on reconnect** replays queued sales through `posCheckoutAction` → `checkoutPosSale` with idempotent `offlineSaleId`.
+- **Conflict resolution** classifies sync failures (inventory, duplicate, shift closed, plan blocked) and either removes duplicate replays or marks rows as `conflict` for manual review (`manual_review` default; `server_wins` optional).
+- **Indicators**: global `OfflineIndicator` (layout) and POS `OfflineSyncStatusBar` show connectivity, queued count, and conflict count.
+- `posPaymentAllowedWhileOffline` blocks placeholder card flows while offline.
+
+## Operator guidance
+
+1. Keep **cash** or **mark-paid-after-external-terminal** modes when connectivity is flaky.
+2. If sync reports conflicts, open **POS Terminal** and review queued rows — inventory or catalog changes may have blocked replay.
+3. Disable offline queue only when you require live server confirmation for every sale (`offlineQueueEnabled: false` in `posSettingsJson`).
 
 ## Not implemented
 
-- Local queue of carts that sync later with idempotent checkout IDs.
-- Conflict resolution when two devices sell the last unit offline.
+- Certified hardware offline / EMV store-and-forward.
+- Multi-device inventory locking while fully offline.
 
-## Guidance for operators
-
-1. Keep selling **cash** or **mark-paid-after-external-terminal** modes when connectivity is flaky but present.
-2. If fully offline, **pause checkout** — draft carts in browser memory only; refreshing the page may lose them until persistence ships.
-
-See also `docs/POS_TERMINAL_UI.md` and in-app hardware page for cashier messaging.
+See also `e2e/pos-offline-queue.spec.ts` and `lib/pos/offline-pos-queue.ts`.

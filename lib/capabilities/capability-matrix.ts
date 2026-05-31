@@ -130,9 +130,9 @@ export function buildCapabilityRows(env: ServerEnv): CapabilityRow[] {
     {
       id: "pos_offline",
       label: "POS offline mode",
-      status: "NOT_AVAILABLE",
-      works: "—",
-      gaps: "No offline checkout queue — POS requires connectivity for sale finalization.",
+      status: "BETA",
+      works: "Cash / mark-paid sales queue in IndexedDB by default and sync with idempotent replay when online.",
+      gaps: "Card capture and certified hardware offline are not shipped; inventory conflicts may require manual review.",
     },
     {
       id: "native_storefront",

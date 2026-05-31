@@ -25,6 +25,7 @@ import {
   computePosCheckoutDiscountTotal,
   validateExplicitPosDiscountAmount,
 } from "@/lib/pos/pos-discount-guard";
+import { offlinePaymentReference } from "@/lib/pos/offline-sync";
 
 export type PosCheckoutLine = {
   productId?: string;
@@ -51,6 +52,7 @@ export type PosCheckoutInput = {
   compRequiresManager?: boolean;
   loyaltyPointsRedeem?: number;
   giftCardCode?: string;
+  offlineSaleId?: string;
 };
 
 export type PosCheckoutResult =
@@ -102,6 +104,24 @@ export async function checkoutPosSale(
   if (!register) return { ok: false, error: "Register not found." };
   const workspaceId =
     register.workspaceId ?? (await ensureOwnerWorkspaceId(userId));
+
+  if (input.offlineSaleId) {
+    const existing = await prisma.pOSTransaction.findFirst({
+      where: {
+        userId,
+        externalPaymentReference: offlinePaymentReference(input.offlineSaleId),
+      },
+      select: { id: true, orderId: true, receiptNumber: true },
+    });
+    if (existing) {
+      return {
+        ok: true,
+        orderId: existing.orderId,
+        transactionId: existing.id,
+        receiptNumber: existing.receiptNumber,
+      };
+    }
+  }
 
   if (input.shiftId) {
     const shift = await prisma.pOSShift.findFirst({
@@ -250,6 +270,9 @@ export async function checkoutPosSale(
           total,
           receiptNumber: rcpt,
           status: "COMPLETED",
+          externalPaymentReference: input.offlineSaleId
+            ? offlinePaymentReference(input.offlineSaleId)
+            : null,
         },
       });
 

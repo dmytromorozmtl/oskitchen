@@ -19,10 +19,19 @@ import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
 import {
   enqueueOfflinePosCheckout,
   listOfflinePosCheckouts,
-  offlinePosQueueSize,
   registerOfflinePosBackgroundSync,
   removeOfflinePosCheckout,
+  updateOfflinePosCheckout,
 } from "@/lib/pos/offline-pos-queue";
+import type { PosConflictResolutionStrategy } from "@/lib/pos/pos-settings";
+import {
+  broadcastOfflineSyncState,
+} from "@/hooks/use-offline-sync-status";
+import {
+  classifyOfflineCheckoutError,
+  resolveOfflineSyncConflict,
+} from "@/lib/pos/offline-sync";
+import { OfflineSyncStatusBar } from "@/components/dashboard/offline-sync-status-bar";
 import type { PaymentModeKey } from "@/lib/orders/order-payment";
 import { PAYMENT_MODE_LABEL } from "@/lib/orders/order-payment";
 import { posPaymentAllowedWhileOffline } from "@/services/pos/pos-payment-service";
@@ -119,11 +128,15 @@ export function PosTerminalClient(props: {
   canApplyPosDiscount?: boolean;
   /** Rush-hour layout from ?speed=1 — denser grid and checkout-first panels. */
   initialSpeedMode?: boolean;
+  offlineQueueEnabled?: boolean;
+  conflictResolution?: PosConflictResolutionStrategy;
 }) {
   const recentCustomers = props.recentCustomers ?? [];
   const customerAttachEnabled = props.customerAttachEnabled ?? true;
   const canApplyPosDiscount = props.canApplyPosDiscount ?? false;
   const speedMode = props.initialSpeedMode ?? false;
+  const offlineQueueEnabled = props.offlineQueueEnabled ?? true;
+  const conflictResolution = props.conflictResolution ?? "manual_review";
   const showSecondaryPanels = shouldShowPosTerminalSecondaryPanels(speedMode);
   const categories = useMemo(
     () => buildPosProductCategories(props.products),
@@ -167,6 +180,7 @@ export function PosTerminalClient(props: {
   const [loyaltyBalance, setLoyaltyBalance] = useState<number | null>(null);
   const [giftCardBalance, setGiftCardBalance] = useState<number | null>(null);
   const [queuedSales, setQueuedSales] = useState(0);
+  const [conflictSales, setConflictSales] = useState(0);
   const [discountMode, setDiscountMode] = useState<PosTerminalDiscountMode>("none");
   const [fixedDiscountInput, setFixedDiscountInput] = useState("");
   const [percentDiscountInput, setPercentDiscountInput] = useState("");
@@ -215,28 +229,78 @@ export function PosTerminalClient(props: {
     };
   }
 
+  async function refreshOfflineCounts() {
+    const rows = await listOfflinePosCheckouts();
+    setQueuedSales(rows.length);
+    setConflictSales(rows.filter((row) => row.syncStatus === "conflict").length);
+  }
+
   async function flushOfflineQueue() {
+    if (!offlineQueueEnabled) return;
     const queued = await listOfflinePosCheckouts();
-    if (!queued.length) {
-      setQueuedSales(0);
+    const pending = queued.filter((entry) => entry.syncStatus !== "conflict");
+    if (!pending.length) {
+      await refreshOfflineCounts();
       return;
     }
-    for (const entry of queued) {
-      const res = await posCheckoutAction(entry.payload as Parameters<typeof posCheckoutAction>[0]);
+
+    broadcastOfflineSyncState("syncing");
+    let synced = 0;
+    let conflicts = 0;
+
+    for (const entry of pending) {
+      await updateOfflinePosCheckout(entry.id, { syncStatus: "syncing", syncError: undefined });
+      const payload = {
+        ...(entry.payload as Parameters<typeof posCheckoutAction>[0]),
+        offlineSaleId: entry.id,
+      };
+      const res = await posCheckoutAction(payload);
       if (res.ok) {
         await removeOfflinePosCheckout(entry.id);
+        synced += 1;
+        continue;
       }
+
+      const reason = classifyOfflineCheckoutError(res.error);
+      const resolution = resolveOfflineSyncConflict({
+        strategy: conflictResolution,
+        conflict: {
+          offlineSaleId: entry.id,
+          reason,
+          message: res.error,
+        },
+      });
+
+      if (resolution === "remove") {
+        await removeOfflinePosCheckout(entry.id);
+        synced += 1;
+        continue;
+      }
+
+      conflicts += 1;
+      await updateOfflinePosCheckout(entry.id, {
+        syncStatus: "conflict",
+        syncError: res.error,
+        conflictReason: reason,
+      });
     }
-    const remaining = await offlinePosQueueSize();
-    setQueuedSales(remaining);
-    if (remaining === 0 && queued.length) {
-      showCheckoutStatus(`Synced ${queued.length} offline sale(s).`, "success");
+
+    await refreshOfflineCounts();
+    broadcastOfflineSyncState(conflicts > 0 ? "conflict" : "idle");
+
+    if (synced > 0 && conflicts === 0) {
+      showCheckoutStatus(`Synced ${synced} offline sale(s).`, "success");
+    } else if (conflicts > 0) {
+      showCheckoutStatus(
+        `${conflicts} offline sale(s) need review — server data wins or inventory blocked sync.`,
+        "error",
+      );
     }
   }
 
   useEffect(() => {
     registerOfflinePosBackgroundSync();
-    void offlinePosQueueSize().then(setQueuedSales);
+    void refreshOfflineCounts();
     const on = () => {
       setOnline(true);
       void flushOfflineQueue();
@@ -253,7 +317,7 @@ export function PosTerminalClient(props: {
       window.removeEventListener("online", on);
       window.removeEventListener("offline", off);
     };
-  }, []);
+  }, [offlineQueueEnabled, conflictResolution]);
 
   useEffect(() => {
     const q = customerQuery.trim();
@@ -476,15 +540,19 @@ export function PosTerminalClient(props: {
       showCheckoutStatus("Enter a valid discount amount before completing the sale.", "error");
       return;
     }
-    if (!online && posPaymentAllowedWhileOffline(paymentMode)) {
+    if (!online && offlineQueueEnabled && posPaymentAllowedWhileOffline(paymentMode)) {
       startTransition(async () => {
         await enqueueOfflinePosCheckout(buildCheckoutPayload());
-        const size = await offlinePosQueueSize();
-        setQueuedSales(size);
+        await refreshOfflineCounts();
         setCart([]);
         resetDiscountState();
         showCheckoutStatus("Offline — sale queued. Will sync when back online.", "info");
+        broadcastOfflineSyncState("idle");
       });
+      return;
+    }
+    if (!online && !offlineQueueEnabled) {
+      showCheckoutStatus("Offline queue is disabled — reconnect before completing sales.", "error");
       return;
     }
     if (!online && !posPaymentAllowedWhileOffline(paymentMode)) {
@@ -551,6 +619,7 @@ export function PosTerminalClient(props: {
   return (
     <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
       <div className="flex flex-1 flex-col gap-3">
+        <OfflineSyncStatusBar className="w-full" showWhenIdle={offlineQueueEnabled} />
         <div
           className="flex flex-wrap items-center gap-3 rounded-2xl border border-border/70 bg-muted/20 p-3"
           role="status"
@@ -563,8 +632,16 @@ export function PosTerminalClient(props: {
               <WifiOff className="h-4 w-4 text-amber-600" aria-hidden />
             )}
             <span className="text-muted-foreground">{online ? "Online" : "Offline / degraded"}</span>
+            {offlineQueueEnabled ? (
+              <span className="text-xs font-medium text-emerald-700">Offline queue on</span>
+            ) : (
+              <span className="text-xs font-medium text-muted-foreground">Offline queue off</span>
+            )}
             {queuedSales > 0 ? (
               <span className="text-xs font-medium text-amber-700">{queuedSales} queued sale(s)</span>
+            ) : null}
+            {conflictSales > 0 ? (
+              <span className="text-xs font-medium text-rose-700">{conflictSales} conflict(s)</span>
             ) : null}
           </div>
           {!online ? (

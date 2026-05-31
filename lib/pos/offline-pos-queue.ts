@@ -7,10 +7,15 @@ const DB_NAME = "kitchenos-offline-pos";
 const STORE = "checkout_queue";
 const DB_VERSION = 1;
 
+export type OfflinePosSyncStatus = "queued" | "syncing" | "conflict" | "failed";
+
 export type OfflinePosCheckoutPayload = {
   id: string;
   createdAt: string;
   payload: Record<string, unknown>;
+  syncStatus?: OfflinePosSyncStatus;
+  syncError?: string;
+  conflictReason?: string;
 };
 
 function openDb(): Promise<IDBDatabase> {
@@ -32,7 +37,8 @@ export async function enqueueOfflinePosCheckout(payload: Record<string, unknown>
   const entry: OfflinePosCheckoutPayload = {
     id,
     createdAt: new Date().toISOString(),
-    payload,
+    payload: { ...payload, offlineSaleId: id },
+    syncStatus: "queued",
   };
   const db = await openDb();
   await new Promise<void>((resolve, reject) => {
@@ -71,6 +77,35 @@ export async function removeOfflinePosCheckout(id: string): Promise<void> {
 export async function offlinePosQueueSize(): Promise<number> {
   const rows = await listOfflinePosCheckouts();
   return rows.length;
+}
+
+export async function countOfflinePosConflicts(): Promise<number> {
+  const rows = await listOfflinePosCheckouts();
+  return rows.filter((row) => row.syncStatus === "conflict").length;
+}
+
+export async function updateOfflinePosCheckout(
+  id: string,
+  patch: Partial<Pick<OfflinePosCheckoutPayload, "syncStatus" | "syncError" | "conflictReason">>,
+): Promise<void> {
+  const db = await openDb();
+  const existing = await new Promise<OfflinePosCheckoutPayload | undefined>((resolve, reject) => {
+    const tx = db.transaction(STORE, "readonly");
+    const req = tx.objectStore(STORE).get(id);
+    req.onsuccess = () => resolve(req.result as OfflinePosCheckoutPayload | undefined);
+    req.onerror = () => reject(req.error);
+  });
+  if (!existing) {
+    db.close();
+    return;
+  }
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE, "readwrite");
+    tx.objectStore(STORE).put({ ...existing, ...patch });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+  db.close();
 }
 
 export function registerOfflinePosBackgroundSync(): void {

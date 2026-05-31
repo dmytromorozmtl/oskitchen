@@ -43,9 +43,18 @@ export default async function PosWorkspaceSettingsPage() {
       </Card>
       <Card className="border-border/80 shadow-sm">
         <CardHeader>
-          <CardTitle>Offline limitations</CardTitle>
+          <CardTitle>Offline queue</CardTitle>
+          <CardDescription>
+            Enabled by default for every workspace. Cash and mark-paid modes queue locally in IndexedDB
+            and replay through the canonical POS checkout path when connectivity returns.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
+          <p>
+            Status: <strong className="text-foreground">On by default</strong> — conflict resolution uses
+            manual review unless you set <code className="text-xs">conflictResolution: server_wins</code>{" "}
+            in <code className="text-xs">posSettingsJson</code>.
+          </p>
           {POS_OFFLINE_LIMITATIONS.map((line) => (
             <p key={line}>{line}</p>
           ))}

@@ -11,6 +11,7 @@ import { canUseFeature } from "@/lib/plans/feature-registry";
 import { listCustomersForUser } from "@/services/crm/customer-service";
 import { isDailyServiceMode } from "@/lib/operating-modes/resolver";
 import { getTenantOperatingMode } from "@/lib/operating-modes/tenant-mode";
+import { mergePosSettings } from "@/lib/pos/pos-settings";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { loadPosTerminalBootstrap } from "@/services/pos/pos-session-service";
 import { resolveOperatorHomePersona } from "@/lib/navigation/operator-home-era18";
@@ -50,8 +51,9 @@ export default async function PosTerminalPage({
   const [boot, operatingMode, kitchen] = await Promise.all([
     loadPosTerminalBootstrap(userId),
     getTenantOperatingMode(userId),
-    findOwnerKitchenSettings(userId, { businessType: true }),
+    findOwnerKitchenSettings(userId, { businessType: true, posSettingsJson: true }),
   ]);
+  const posSettings = mergePosSettings(kitchen?.posSettingsJson);
   const quickOrderEnabled = isDailyServiceMode(operatingMode);
 
   const products = boot.products.map((p) => ({
@@ -139,6 +141,8 @@ export default async function PosTerminalPage({
         businessType={kitchen?.businessType ?? "RESTAURANT"}
         canApplyPosDiscount={hasPermission(actor.granted, "pos.discount.apply")}
         initialSpeedMode={speedMode}
+        offlineQueueEnabled={posSettings.offlineQueueEnabled}
+        conflictResolution={posSettings.conflictResolution}
       />
     </div>
   );
