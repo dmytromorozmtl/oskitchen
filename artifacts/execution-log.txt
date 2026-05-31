@@ -1521,3 +1521,9 @@ Action: feat: mutation registry 100+ entries + dashboard + enterprise sales (Cri
 Files: lib/permissions/action-mutation-registry.ts, lib/permissions/domain-mutation-registry.ts, app/dashboard/platform/mutation-registry/page.tsx, services/platform/mutation-registry-dashboard-service.ts, docs/mutation-registry-enterprise-sales.md
 Tracker: rbac-mutation-expansion=done (12/13)
 Next: Cycle 13 Shopify B2B AR dashboard + wholesale sales deck
+---
+Cycle: 20260531-165600
+Action: feat: Shopify B2B AR dashboard + wholesale sales deck (Critical Features Cycle 13)
+Files: lib/integrations/shopify-b2b-credit-limit-metadata.ts, components/dashboard/receivables/b2b-ar-credit-auto-panels.tsx, docs/shopify-b2b-ar-sales-deck.md, services/integrations/shopify-b2b-ar-dashboard-service.ts
+Tracker: shopify-b2b-ar-dashboard=done (13/13) — ALL CRITICAL FEATURES COMPLETE
+Next: Cycle 14 final tracker closure commit

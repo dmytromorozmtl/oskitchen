@@ -1,5 +1,9 @@
 import type { B2bArAgingBucket, B2bArAgingRow, B2bArAgingSnapshot } from "@/lib/integrations/shopify-b2b-ar-aging-metadata";
 import type { B2bArCollectorQueueSnapshot } from "@/lib/integrations/shopify-b2b-collector-queue-metadata";
+import type {
+  B2bArAutoReminderSummary,
+  B2bArCreditLimitRow,
+} from "@/lib/integrations/shopify-b2b-credit-limit-metadata";
 
 export type B2bArCollectionPriority = "critical" | "high" | "medium" | "low";
 
@@ -43,6 +47,8 @@ export type B2bArDashboardSnapshot = Omit<B2bArAgingSnapshot, "rows"> & {
   paymentStatusDriftCount: number;
   collectorQueue: B2bArCollectorQueueSnapshot | null;
   slaBreachedCount: number;
+  creditLimits: B2bArCreditLimitRow[];
+  autoReminderSummary: B2bArAutoReminderSummary;
 };
 
 export type B2bArDashboardStats = {
@@ -135,6 +141,8 @@ export function buildB2bArDashboardSnapshot(input: {
   rows: B2bArDashboardRow[];
   collectorsByCompanyId: Record<string, string>;
   collectorQueue?: B2bArCollectorQueueSnapshot | null;
+  creditLimits?: B2bArCreditLimitRow[];
+  autoReminderSummary: B2bArAutoReminderSummary;
 }): B2bArDashboardSnapshot {
   const companies = buildB2bArCompanyRollups(input.rows, input.collectorsByCompanyId);
   const paymentStatusDriftCount = input.rows.filter((row) => row.paymentStatusDrift).length;
@@ -157,6 +165,8 @@ export function buildB2bArDashboardSnapshot(input: {
     paymentStatusDriftCount,
     collectorQueue: input.collectorQueue ?? null,
     slaBreachedCount,
+    creditLimits: input.creditLimits ?? [],
+    autoReminderSummary: input.autoReminderSummary,
   };
 }
 

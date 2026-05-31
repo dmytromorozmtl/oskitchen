@@ -383,6 +383,10 @@ export type ShopifyMarketsSyncSettings = {
   lastB2bArDashboardExportAt: string | null;
   b2bArHealthScore: number | null;
   b2bArCollectorsByCompanyId: Record<string, string> | null;
+  b2bCreditLimitsByCompanyId: Record<
+    string,
+    { limitCents: number; notes?: string; updatedAt?: string }
+  > | null;
   b2bArDashboardStats: {
     views: number;
     bulkRemindersSent: number;
@@ -735,6 +739,32 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
             .map(([k, v]) => [k, String(v).trim()]),
         )
       : null;
+  const creditLimitsRaw = raw.b2bCreditLimitsByCompanyId;
+  const b2bCreditLimitsByCompanyId =
+    creditLimitsRaw && typeof creditLimitsRaw === "object" && !Array.isArray(creditLimitsRaw)
+      ? Object.fromEntries(
+          Object.entries(creditLimitsRaw as Record<string, unknown>)
+            .map(([k, v]) => {
+              if (!v || typeof v !== "object") return null;
+              const row = v as Record<string, unknown>;
+              const limitCents = Number(row.limitCents);
+              if (!Number.isFinite(limitCents) || limitCents <= 0) return null;
+              return [
+                k,
+                {
+                  limitCents: Math.round(limitCents),
+                  ...(typeof row.notes === "string" && row.notes.trim()
+                    ? { notes: row.notes.trim() }
+                    : {}),
+                  ...(typeof row.updatedAt === "string" ? { updatedAt: row.updatedAt } : {}),
+                },
+              ] as const;
+            })
+            .filter((entry): entry is readonly [string, { limitCents: number; notes?: string; updatedAt?: string }] =>
+              entry != null,
+            ),
+        )
+      : null;
   const dashboardStatsRaw = raw.b2bArDashboardStats;
   const b2bArDashboardStats =
     dashboardStatsRaw && typeof dashboardStatsRaw === "object"
@@ -1007,6 +1037,7 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       typeof raw.lastB2bArDashboardExportAt === "string" ? raw.lastB2bArDashboardExportAt : null,
     b2bArHealthScore,
     b2bArCollectorsByCompanyId,
+    b2bCreditLimitsByCompanyId,
     b2bArDashboardStats,
     lastB2bFinancialMirrorRefreshAt:
       typeof raw.lastB2bFinancialMirrorRefreshAt === "string"

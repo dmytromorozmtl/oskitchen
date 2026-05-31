@@ -11,6 +11,10 @@ import {
   buildB2bArAgingSnapshot,
 } from "@/lib/integrations/shopify-b2b-ar-aging-metadata";
 import {
+  buildB2bArAutoReminderSummary,
+  buildB2bArCreditLimitRows,
+} from "@/lib/integrations/shopify-b2b-credit-limit-metadata";
+import {
   buildB2bArCompanyRollups,
   buildB2bArDashboardSnapshot,
   incrementB2bArDashboardStats,
@@ -59,7 +63,17 @@ async function loadShopifyConnectionContext(userId: string) {
       connectionId: null as string | null,
       graceDays: 0,
       collectorsByCompanyId: {} as Record<string, string>,
+      creditLimitsByCompanyId: {} as Record<string, { limitCents: number }>,
       dashboardEnabled: true,
+      autoReminderInput: {
+        reminderEnabled: true,
+        autoDunningEnabled: false,
+        operatorDigestEnabled: false,
+        cadenceDays: null,
+        lastRunAt: null,
+        lastReminderAt: null,
+        dunningStats: null,
+      },
     };
   }
   const sync = parseShopifyMarketsSyncSettings(conn.settingsJson);
@@ -67,7 +81,17 @@ async function loadShopifyConnectionContext(userId: string) {
     connectionId: conn.id,
     graceDays: resolveB2bInvoiceOverdueGraceDays(sync.b2bInvoiceOverdueGraceDays),
     collectorsByCompanyId: sync.b2bArCollectorsByCompanyId ?? {},
+    creditLimitsByCompanyId: sync.b2bCreditLimitsByCompanyId ?? {},
     dashboardEnabled: resolveB2bArDashboardEnabled(sync.b2bArDashboardEnabled),
+    autoReminderInput: {
+      reminderEnabled: sync.b2bArReminderEnabled,
+      autoDunningEnabled: sync.b2bAutoDunningEnabled,
+      operatorDigestEnabled: sync.b2bOperatorDigestEnabled,
+      cadenceDays: sync.b2bDunningCadenceDays,
+      lastRunAt: sync.lastB2bDunningRunAt,
+      lastReminderAt: sync.lastB2bArReminderAt,
+      dunningStats: sync.b2bDunningStats,
+    },
   };
 }
 
@@ -217,8 +241,8 @@ export async function buildB2bArDashboardSnapshotForOwner(input: {
   const aging = buildB2bArAgingSnapshot(dashboardRows);
 
   let collectorQueue = null;
+  const companies = buildB2bArCompanyRollups(dashboardRows, ctx.collectorsByCompanyId);
   if (isShopifyMarketsB2bCollectorQueueEnabled() && ctx.connectionId) {
-    const companies = buildB2bArCompanyRollups(dashboardRows, ctx.collectorsByCompanyId);
     collectorQueue = await syncB2bCollectorQueueForConnection({
       connectionId: ctx.connectionId,
       companies,
@@ -227,11 +251,16 @@ export async function buildB2bArDashboardSnapshotForOwner(input: {
     });
   }
 
+  const creditLimits = buildB2bArCreditLimitRows(companies, ctx.creditLimitsByCompanyId);
+  const autoReminderSummary = buildB2bArAutoReminderSummary(ctx.autoReminderInput);
+
   const snapshot = buildB2bArDashboardSnapshot({
     aging,
     rows: dashboardRows,
     collectorsByCompanyId: ctx.collectorsByCompanyId,
     collectorQueue,
+    creditLimits,
+    autoReminderSummary,
   });
 
   await persistHealthScore(ctx.connectionId, snapshot.healthScore);
@@ -366,6 +395,43 @@ export async function assignB2bArCollectorForCompany(input: {
   await recordDashboardStats({
     connectionId: conn.id,
     patch: { collectorsAssigned: 1 },
+  });
+
+  return { ok: true };
+}
+
+export async function setB2bArCreditLimitForCompany(input: {
+  userId: string;
+  companyAccountId: string;
+  limitDollars: number | null;
+  notes?: string;
+}): Promise<{ ok: true } | { ok: false; reason: string }> {
+  const conn = await prisma.integrationConnection.findFirst({
+    where: { userId: input.userId, provider: IntegrationProvider.SHOPIFY },
+    select: { id: true, settingsJson: true },
+  });
+  if (!conn) return { ok: false, reason: "no_shopify_connection" };
+
+  const sync = parseShopifyMarketsSyncSettings(conn.settingsJson);
+  const nextLimits = { ...(sync.b2bCreditLimitsByCompanyId ?? {}) };
+
+  if (input.limitDollars == null || input.limitDollars <= 0) {
+    delete nextLimits[input.companyAccountId];
+  } else {
+    nextLimits[input.companyAccountId] = {
+      limitCents: Math.round(input.limitDollars * 100),
+      ...(input.notes?.trim() ? { notes: input.notes.trim() } : {}),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  await prisma.integrationConnection.update({
+    where: { id: conn.id },
+    data: {
+      settingsJson: mergeShopifyMarketsSyncSettings(conn.settingsJson, {
+        b2bCreditLimitsByCompanyId: nextLimits,
+      }) as Prisma.InputJsonValue,
+    },
   });
 
   return { ok: true };

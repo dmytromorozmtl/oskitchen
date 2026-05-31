@@ -8,6 +8,7 @@ import {
   assignB2bArCollectorForCompany,
   bulkMintB2bArPayLinks,
   bulkSendB2bArReminders,
+  setB2bArCreditLimitForCompany,
   type B2bArDashboardBulkResult,
 } from "@/services/integrations/shopify-b2b-ar-dashboard-service";
 
@@ -74,5 +75,27 @@ export async function assignB2bArCollectorAction(
     return ok({ assigned: true });
   } catch {
     return fail("Unable to assign collector.");
+  }
+}
+
+export async function setB2bArCreditLimitAction(
+  companyAccountId: string,
+  limitDollars: number | null,
+): Promise<ActionResult<{ saved: boolean }>> {
+  try {
+    const access = await requireMutationPermission("orders.manage");
+    if (!access.ok) return fail(access.error);
+
+    const result = await setB2bArCreditLimitForCompany({
+      userId: access.actor.userId,
+      companyAccountId,
+      limitDollars,
+    });
+    if (!result.ok) return fail("Unable to save credit limit.");
+
+    revalidatePath("/dashboard/receivables");
+    return ok({ saved: true });
+  } catch {
+    return fail("Unable to save credit limit.");
   }
 }

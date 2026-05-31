@@ -14,6 +14,18 @@ import {
   resolveB2bArDashboardEnabled,
 } from "@/lib/commercial/shopify-market-b2b-ar-dashboard";
 
+import { buildB2bArAutoReminderSummary } from "@/lib/integrations/shopify-b2b-credit-limit-metadata";
+
+const defaultAutoReminderSummary = buildB2bArAutoReminderSummary({
+  reminderEnabled: true,
+  autoDunningEnabled: true,
+  operatorDigestEnabled: true,
+  cadenceDays: [7, 14],
+  lastRunAt: null,
+  lastReminderAt: null,
+  dunningStats: { autoRemindersSent: 3, digestsSent: 1 },
+});
+
 const row = {
   orderId: "order-1",
   invoiceNumber: "B2B-20260601-A1B2C3D4",
@@ -62,6 +74,7 @@ describe("shopify-b2b-ar-dashboard-metadata", () => {
       aging,
       rows: [row],
       collectorsByCompanyId: { "company-1": "Alex" },
+      autoReminderSummary: defaultAutoReminderSummary,
     });
     expect(snapshot.companies).toHaveLength(1);
     expect(snapshot.healthScore).toBeGreaterThanOrEqual(0);
@@ -86,6 +99,7 @@ describe("shopify-b2b-ar-dashboard-metadata", () => {
         slaBreachedCount: 2,
         escalatedCount: 2,
       },
+      autoReminderSummary: defaultAutoReminderSummary,
     });
     expect(snapshot.healthLevel).toBe("critical");
     expect(snapshot.slaBreachedCount).toBe(2);
@@ -106,6 +120,7 @@ describe("shopify-b2b-ar-dashboard-metadata", () => {
       rows: [driftRow],
       collectorsByCompanyId: {},
       collectorQueue: null,
+      autoReminderSummary: defaultAutoReminderSummary,
     });
     expect(snapshot.paymentStatusDriftCount).toBe(1);
     expect(snapshot.healthLevel).toBe("attention");

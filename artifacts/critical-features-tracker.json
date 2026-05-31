@@ -11,5 +11,5 @@
   "integration-health-scoring": "done",
   "integration-health-recovery": "done",
   "rbac-mutation-expansion": "done",
-  "shopify-b2b-ar-dashboard": "todo"
+  "shopify-b2b-ar-dashboard": "done"
 }

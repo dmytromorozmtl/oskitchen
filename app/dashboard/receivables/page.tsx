@@ -1,6 +1,10 @@
 import Link from "next/link";
 
 import { B2bReceivablesDashboard } from "@/components/dashboard/receivables/b2b-receivables-dashboard";
+import {
+  B2bArAutoRemindersPanel,
+  B2bArCreditLimitsPanel,
+} from "@/components/dashboard/receivables/b2b-ar-credit-auto-panels";
 import { B2bCollectorTaskQueue } from "@/components/dashboard/receivables/b2b-collector-task-queue";
 import { isShopifyMarketsB2bCollectorQueueEnabled } from "@/lib/commercial/shopify-market-b2b-collector-queue";
 import { IntegrationProvider } from "@prisma/client";
@@ -136,6 +140,8 @@ export default async function ReceivablesPage({
             ordersById={ordersById}
             activeBucket={activeBucket}
           />
+          <B2bArAutoRemindersPanel summary={snapshot.autoReminderSummary} />
+          <B2bArCreditLimitsPanel rows={snapshot.creditLimits} />
           {snapshot.collectorQueue && isShopifyMarketsB2bCollectorQueueEnabled() ? (
             <B2bCollectorTaskQueue
               queue={snapshot.collectorQueue}
