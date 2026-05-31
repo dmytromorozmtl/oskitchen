@@ -8,7 +8,7 @@ const META: Record<OnboardingStepId, Omit<OnboardingFlowStep, "id">> = {
   },
   business_profile: {
     label: "Business profile",
-    description: "Legal / customer-facing basics and how you identify in KitchenOS.",
+    description: "Legal / customer-facing basics and how you identify in OS Kitchen.",
   },
   operating_model: {
     label: "Operating model",
@@ -47,7 +47,7 @@ const META: Record<OnboardingStepId, Omit<OnboardingFlowStep, "id">> = {
   },
   finish: {
     label: "Finish",
-    description: "Summary and your best next screen inside KitchenOS.",
+    description: "Summary and your best next screen inside OS Kitchen.",
   },
 };
 

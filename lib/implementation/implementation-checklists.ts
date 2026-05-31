@@ -146,7 +146,7 @@ export const CHECKLIST_TEMPLATES: ChecklistTemplateSeed[] = [
     label: "Restaurant",
     businessTypes: ["RESTAURANT"],
     items: withShared([
-      { title: "Configure menu items", description: "Build the restaurant menu in KitchenOS.", phaseKey: "OPERATIONS_SETUP", priority: "HIGH", moduleKey: "menus", actionRoute: "/dashboard/menus", requiredForGoLive: true },
+      { title: "Configure menu items", description: "Build the restaurant menu in OS Kitchen.", phaseKey: "OPERATIONS_SETUP", priority: "HIGH", moduleKey: "menus", actionRoute: "/dashboard/menus", requiredForGoLive: true },
       { title: "Set up orders", description: "Configure ordering channels and order types.", phaseKey: "OPERATIONS_SETUP", priority: "HIGH", moduleKey: "orders", actionRoute: "/dashboard/orders", requiredForGoLive: true },
       { title: "Set up production", description: "Confirm production board defaults.", phaseKey: "OPERATIONS_SETUP", priority: "MEDIUM", moduleKey: "production", actionRoute: "/dashboard/production" },
       { title: "Set up staff", description: "Invite staff and assign roles.", phaseKey: "OPERATIONS_SETUP", priority: "MEDIUM", moduleKey: "training", actionRoute: "/dashboard/staff", requiredForGoLive: true },
@@ -169,7 +169,7 @@ export const CHECKLIST_TEMPLATES: ChecklistTemplateSeed[] = [
     label: "Bar",
     businessTypes: ["BAR"],
     items: withShared([
-      { title: "Configure drinks menu", description: "Build the drinks menu in KitchenOS.", phaseKey: "OPERATIONS_SETUP", priority: "HIGH", moduleKey: "menus", actionRoute: "/dashboard/menus", requiredForGoLive: true },
+      { title: "Configure drinks menu", description: "Build the drinks menu in OS Kitchen.", phaseKey: "OPERATIONS_SETUP", priority: "HIGH", moduleKey: "menus", actionRoute: "/dashboard/menus", requiredForGoLive: true },
       { title: "Event workflow", description: "Configure private event / catering workflow.", phaseKey: "OPERATIONS_SETUP", priority: "MEDIUM", moduleKey: "catering", actionRoute: "/dashboard/catering" },
       { title: "Staff tasks", description: "Set up recurring bar staff tasks.", phaseKey: "OPERATIONS_SETUP", priority: "LOW", moduleKey: "training" },
     ]),

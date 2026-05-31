@@ -133,13 +133,13 @@ export function buildOpenApiDocument(): Record<string, unknown> {
 
   const tags = [...new Set(routes.map((r) => r.tag))].sort().map((name) => ({
     name,
-    description: `KitchenOS ${name} API routes`,
+    description: `OS Kitchen ${name} API routes`,
   }));
 
   return {
     openapi: "3.0.3",
     info: {
-      title: "KitchenOS API",
+      title: "OS Kitchen API",
       version: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "1.0.0",
       description:
         "Auto-generated route manifest for partner integrations. Public API v1 routes (`/api/public/v1/*`) require `Authorization: Bearer kos_...` with Enterprise entitlement. Method list is indicative for non-v1 routes — inspect each handler for supported verbs.",

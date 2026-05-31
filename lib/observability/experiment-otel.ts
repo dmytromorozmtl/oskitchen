@@ -63,7 +63,7 @@ export type ExperimentOtelSpanInput = {
 };
 
 /**
- * Emit native OTLP span linked to KitchenOS trace headers (middleware → rsc → checkout).
+ * Emit native OTLP span linked to OS Kitchen trace headers (middleware → rsc → checkout).
  */
 export function recordExperimentOtelSpan(input: ExperimentOtelSpanInput): void {
   if (!isOtelExportEnabled() || !tracerInitialized) return;

@@ -37,7 +37,7 @@ export function evaluatePciCardholderBoundaries(): PciBoundaryCheck[] {
   return [
     {
       id: "PCI-1",
-      description: "Card data not stored on KitchenOS servers",
+      description: "Card data not stored on OS Kitchen servers",
       passed: true,
       detail: "Checkout delegates to Stripe Elements / hosted fields.",
     },

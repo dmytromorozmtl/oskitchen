@@ -261,7 +261,7 @@ export const IMPLEMENTATION_INTEGRATIONS: Array<{
   { key: "woocommerce", label: "WooCommerce", provider: "WOOCOMMERCE", setupRoute: "/dashboard/integrations" },
   { key: "uber_eats", label: "Uber Eats", setupRoute: "/dashboard/integrations", placeholder: true },
   { key: "uber_direct", label: "Uber Direct", setupRoute: "/dashboard/integrations", placeholder: true },
-  { key: "storefront_native", label: "KitchenOS Storefront", setupRoute: "/dashboard/storefront" },
+  { key: "storefront_native", label: "OS Kitchen Storefront", setupRoute: "/dashboard/storefront" },
   { key: "webhooks", label: "Webhooks", setupRoute: "/dashboard/integrations" },
   {
     key: "email",

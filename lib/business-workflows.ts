@@ -55,7 +55,7 @@ export const WORKFLOW_TEMPLATE_OPTIONS: readonly WorkflowTemplateOption[] = [
   {
     id: "manual-orders-only",
     title: "Manual orders first",
-    description: "Capture orders in KitchenOS — connect channels and menus when you are ready.",
+    description: "Capture orders in OS Kitchen — connect channels and menus when you are ready.",
     businessType: "OTHER",
   },
 ];

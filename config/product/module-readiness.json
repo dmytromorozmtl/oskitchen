@@ -36,7 +36,7 @@
       "label": "Production planning",
       "status": "GA",
       "defaultEnabledFor": ["MEAL_PREP", "CATERING", "GHOST_KITCHEN", "COMMISSARY", "BAKERY"],
-      "notes": "Core KitchenOS strength."
+      "notes": "Core OS Kitchen strength."
     },
     {
       "id": "packing",

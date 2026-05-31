@@ -67,7 +67,7 @@ export function describeIntegrationConnectionHealth(input: {
       truthLabel: "PLACEHOLDER",
       capabilityStatus,
       headline: "Placeholder / roadmap",
-      detail: cap?.gaps ?? "Not production-certified in KitchenOS.",
+      detail: cap?.gaps ?? "Not production-certified in OS Kitchen.",
       showGreenOk: false,
     };
   }

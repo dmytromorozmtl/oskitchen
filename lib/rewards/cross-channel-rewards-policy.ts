@@ -1,7 +1,7 @@
 /**
  * Cross-channel loyalty / gift card honesty policy — Evolution Era 4 Cycle 9.
  *
- * KitchenOS maintains separate kitchen-ledger (POS / order spine) and
+ * OS Kitchen maintains separate kitchen-ledger (POS / order spine) and
  * storefront-ledger rewards systems. Do not claim unified cross-channel balances.
  */
 

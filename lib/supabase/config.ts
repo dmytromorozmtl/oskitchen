@@ -2,9 +2,10 @@
  * Detect whether Supabase Auth env is set to real values (not template placeholders).
  * Used by middleware to avoid crashing when `.env.local` is incomplete during local setup.
  */
+import { resolveSupabasePublicEnv } from "@/lib/supabase/resolve-public-env";
+
 export function isSupabaseConfigured(): boolean {
-  const url = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim();
-  const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "").trim();
+  const { url, anonKey: key } = resolveSupabasePublicEnv();
   if (!url || !key) return false;
 
   const u = url.toLowerCase();

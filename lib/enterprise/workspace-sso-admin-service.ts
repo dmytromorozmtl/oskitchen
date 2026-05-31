@@ -3,6 +3,7 @@
  * Pilot-gated; requires ssoOidc entitlement before activation.
  */
 
+import { Prisma } from "@prisma/client";
 import type { SsoIdpVendor, WorkspaceSsoSettings } from "@prisma/client";
 
 import { recordAuditLog } from "@/lib/audit-log";
@@ -60,10 +61,22 @@ export async function getWorkspaceSsoAdminView(input: {
   workspaceId: string;
   ownerUserId: string;
 }): Promise<WorkspaceSsoAdminView> {
-  const [row, entitlements] = await Promise.all([
-    prisma.workspaceSsoSettings.findUnique({ where: { workspaceId: input.workspaceId } }),
-    entitlementSnapshot(input.ownerUserId),
-  ]);
+  let row: WorkspaceSsoSettings | null = null;
+  try {
+    row = await prisma.workspaceSsoSettings.findUnique({
+      where: { workspaceId: input.workspaceId },
+    });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2021"
+    ) {
+      row = null;
+    } else {
+      throw error;
+    }
+  }
+  const entitlements = await entitlementSnapshot(input.ownerUserId);
   const settings = row ? toSnapshot(row) : null;
   const runtimeGate = evaluateWorkspaceSsoRuntimeGate(settings);
   return {

@@ -1,6 +1,6 @@
 [
   {
-    "claim": "KitchenOS unifies storefront, POS, production, packing, and routes in one platform.",
+    "claim": "OS Kitchen unifies storefront, POS, production, packing, and routes in one platform.",
     "page": "/",
     "evidenceType": "codebase-surface-audit",
     "evidenceSource": "docs/kitchenos-p0-p3-readiness-audit.md",
@@ -16,7 +16,7 @@
     "status": "verified"
   },
   {
-    "claim": "Interactive KitchenOS demo is available without API keys.",
+    "claim": "Interactive OS Kitchen demo is available without API keys.",
     "page": "/demo",
     "evidenceType": "product-page",
     "evidenceSource": "app/demo/page.tsx",
@@ -24,7 +24,7 @@
     "status": "verified"
   },
   {
-    "claim": "KitchenOS reduces food cost by a measurable percentage.",
+    "claim": "OS Kitchen reduces food cost by a measurable percentage.",
     "page": "/pricing",
     "evidenceType": "illustrative-roi",
     "evidenceSource": "internal estimate only — not a verified customer case study; do not use as direct sales proof",
@@ -32,7 +32,7 @@
     "status": "illustrative"
   },
   {
-    "claim": "KitchenOS saves operators hours every week.",
+    "claim": "OS Kitchen saves operators hours every week.",
     "page": "/solutions",
     "evidenceType": "internal-estimate",
     "evidenceSource": "illustrative ROI calculator assumptions",

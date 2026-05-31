@@ -38,7 +38,7 @@ export const ENTERPRISE_SSO_IDP_LOGIN_PROOF_ERA17_REQUIRED_AUDIT_ACTION =
 
 export const ENTERPRISE_SSO_IDP_LOGIN_PROOF_ERA17_CYCLE2_RUNBOOK_STEPS = [
   "Set all SSO_STAGING_* prerequisite env vars (see enterprise-sso-idp-staging-smoke-plan.md).",
-  "Configure Okta or Entra test tenant + Supabase SAML + KitchenOS PILOT_ACTIVE workspace.",
+  "Configure Okta or Entra test tenant + Supabase SAML + OS Kitchen PILOT_ACTIVE workspace.",
   "Operator completes /login → Sign in with SSO → IdP auth → dashboard on staging.",
   "Save screenshot to ops vault; set SSO_STAGING_LOGIN_SCREENSHOT_PATH to local file path.",
   "Export audit row with sso.login_success; set SSO_STAGING_AUDIT_EVENT_REF.",

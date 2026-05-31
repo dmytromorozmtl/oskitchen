@@ -1,11 +1,11 @@
 {
-  "name": "KitchenOS — Restaurant POS & Kitchen Operations",
-  "short_name": "KitchenOS",
-  "description": "All-in-one POS, kitchen display, table management, and production board",
+  "name": "OS Kitchen — Your Restaurant. One Screen.",
+  "short_name": "OS Kitchen",
+  "description": "One screen for orders, kitchen, delivery, and staff. No extra hardware.",
   "start_url": "/dashboard/today",
   "display": "standalone",
   "background_color": "#FFFFFF",
-  "theme_color": "#2563FF",
+  "theme_color": "#FF5F1F",
   "icons": [
     {
       "src": "/favicon.svg",

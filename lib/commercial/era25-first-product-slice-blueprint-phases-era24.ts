@@ -48,7 +48,7 @@ export const ERA25_FIRST_PRODUCT_SLICE_STAGING_CHECKLIST_DOC =
 export const ERA25_FIRST_PRODUCT_SLICE_PRODUCT_DOC =
   "docs/next-era25-owner-daily-briefing-breakthrough-product-slice-2026-05-28.md" as const;
 
-/** Links blueprint to existing KitchenOS surfaces (era19 briefing, Today, integration health). */
+/** Links blueprint to existing OS Kitchen surfaces (era19 briefing, Today, integration health). */
 export const ERA25_FIRST_PRODUCT_SLICE_EXISTING_SURFACES: readonly {
   id: string;
   label: string;

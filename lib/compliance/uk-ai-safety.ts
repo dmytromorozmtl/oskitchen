@@ -52,7 +52,7 @@ export function isUkAiSafetyEnabled(): boolean {
 export function buildDefaultFrontierDisclosure(): UkFrontierDisclosure {
   return {
     at: new Date().toISOString(),
-    modelFamily: process.env.UK_AI_SAFETY_MODEL_FAMILY ?? "KitchenOS-Experiment-Scientist",
+    modelFamily: process.env.UK_AI_SAFETY_MODEL_FAMILY ?? "OS Kitchen-Experiment-Scientist",
     capabilityTier: "standard",
     trainingCutoff: process.env.UK_AI_SAFETY_TRAINING_CUTOFF ?? "2025-12",
     alignmentReview: true,

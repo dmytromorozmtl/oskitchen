@@ -94,7 +94,7 @@ export async function createDeliveryRouteFromOrdersAction(formData: FormData) {
           customerPhone: o.customerPhone ?? null,
           addressJson: {
             placeholder: true,
-            hint: "Paste full address into KitchenOS orders or driver notes.",
+            hint: "Paste full address into OS Kitchen orders or driver notes.",
             notes: o.notes ?? "",
           },
           status: "PENDING",

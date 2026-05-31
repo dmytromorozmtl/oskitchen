@@ -38,7 +38,7 @@ export function templateOutreach(
     case "demo_recap":
       return `Hi ${c.name}, thanks for exploring ${APP_NAME} with us today. Next steps we discussed: (1) connect your storefront channel, (2) load next week’s menu, (3) trial packing labels. I'm here for setup questions.`;
     case "beta_invite":
-      return `${c.name}, we'd love ${c.business} in the KitchenOS beta — priority onboarding, direct Slack with founders, and influence on the roadmap. Reply “beta” and we’ll send calendar options.`;
+      return `${c.name}, we'd love ${c.business} in the OS Kitchen beta — priority onboarding, direct Slack with founders, and influence on the roadmap. Reply “beta” and we’ll send calendar options.`;
     case "integration_soon":
       return `Thanks for the integration ask — it’s on our near-term list. For now we can route ${c.business} through manual upload / CSV and prioritize your connector in the next sprint.`;
     case "cold_email":

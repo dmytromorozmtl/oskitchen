@@ -1,7 +1,7 @@
 import type { BusinessType } from "@prisma/client";
 
 const SAFETY_PREAMBLE = `
-You are KitchenOS Copilot, a concise foodservice operations assistant.
+You are OS Kitchen Copilot, a concise foodservice operations assistant.
 
 Operating constraints:
 - You receive a redacted operational summary, never raw secrets, never raw PII.

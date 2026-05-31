@@ -209,7 +209,7 @@ export async function loadSalesChannelMetrics(userId: string): Promise<SalesChan
   const ordersTodayByChannel: ChannelOrderSlice[] = [
     {
       key: "storefront",
-      label: "KitchenOS storefront",
+      label: "OS Kitchen storefront",
       orders: sfOrders,
       revenue: num(sfRev),
     },

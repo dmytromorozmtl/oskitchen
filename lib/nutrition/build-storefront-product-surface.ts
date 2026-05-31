@@ -120,7 +120,7 @@ export function buildStorefrontProductSurface(input: {
 
   const labelDisclaimer =
     hiddenPieces.length > 0
-      ? "Some label details are hidden until your team verifies them in KitchenOS or enables public display for unverified data in storefront settings."
+      ? "Some label details are hidden until your team verifies them in OS Kitchen or enables public display for unverified data in storefront settings."
       : null;
 
   return { allergens, ingredients, nutrition, labelDisclaimer };

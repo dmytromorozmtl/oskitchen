@@ -22,7 +22,7 @@ export async function notifyEdgeSyncDlq(input: {
   const url = parsed.url;
 
   const body = {
-    text: `KitchenOS Edge sync DLQ: ${input.storeSlug} job ${input.jobId} failed after ${input.attemptCount} attempts (v${input.expectedVersion}). ${input.lastError ?? ""}`,
+    text: `OS Kitchen Edge sync DLQ: ${input.storeSlug} job ${input.jobId} failed after ${input.attemptCount} attempts (v${input.expectedVersion}). ${input.lastError ?? ""}`,
     jobId: input.jobId,
     storeSlug: input.storeSlug,
     storefrontId: input.storefrontId,

@@ -18,7 +18,7 @@ export async function notifyGrowthInbound(subject: string, textBody: string) {
   try {
     await sendRawEmail({
       to: FOUNDER_TO.trim(),
-      subject: `[KitchenOS] ${subject}`,
+      subject: `[OS Kitchen] ${subject}`,
       text: textBody.slice(0, 12000),
     });
     return { ok: true as const };

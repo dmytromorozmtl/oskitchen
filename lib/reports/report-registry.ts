@@ -1,7 +1,7 @@
 import type { ReportDefinition, ReportKey } from "@/lib/reports/report-types";
 
 /**
- * Single source of truth for what reports KitchenOS exposes.
+ * Single source of truth for what reports OS Kitchen exposes.
  *
  * Every UI surface (library cards, generator page, CSV export endpoint,
  * permission gating) reads from this registry. To add a report:

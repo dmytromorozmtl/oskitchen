@@ -32,7 +32,7 @@ export const productMarketingPages: Record<
     title: `Order hub — ${APP_NAME}`,
     headline: "One queue for POS, storefront, imports, and shaped channel payloads",
     description:
-      "Normalize intake, exceptions, and lifecycle states before production sees the ticket. Marketplace depth depends on your credentials and provider maturity — KitchenOS does not claim live Toast/DoorDash without your connection.",
+      "Normalize intake, exceptions, and lifecycle states before production sees the ticket. Marketplace depth depends on your credentials and provider maturity — OS Kitchen does not claim live Toast/DoorDash without your connection.",
     connectedModules: ["Production", "Packing", "Routes", "CRM", "Integration health"],
     exampleWorkflow: "Order arrives → triage mapping gaps → schedule fulfillment → hand to kitchen.",
     integrationNote: "WooCommerce/Shopify are setup-ready with credentials; delivery marketplaces are partner-gated or roadmap per channel.",
@@ -46,7 +46,7 @@ export const productMarketingPages: Record<
       "Batch-friendly work items, kitchen views, and honest status when recipes or demand data are incomplete.",
     connectedModules: ["Order hub", "Menu & recipes", "Packing", "Labor"],
     exampleWorkflow: "Released order → kitchen work items → completion signals packing.",
-    integrationNote: "Deep equipment or IoT integrations are not claimed; production runs on KitchenOS tasks and your configured menus.",
+    integrationNote: "Deep equipment or IoT integrations are not claimed; production runs on OS Kitchen tasks and your configured menus.",
     ctaHref: "/signup",
     ctaLabel: "Start trial",
   },

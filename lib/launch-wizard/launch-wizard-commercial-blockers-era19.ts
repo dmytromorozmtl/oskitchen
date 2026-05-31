@@ -122,7 +122,7 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
     const p0 = input.commercialOps?.p0Staging.summary;
     const opsVault = buildP0OpsVaultUiSlice(
       p0,
-      input.commercialOps?.vaultReadiness.report ?? null,
+      input.commercialOps?.vaultReadiness?.report ?? null,
     );
     const nextPhase = opsVault?.nextPhase ?? null;
     const phaseDetail = nextPhase

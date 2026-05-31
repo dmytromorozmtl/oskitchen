@@ -21,7 +21,7 @@ export const CHANNEL_ERRORS: Record<string, ChannelErrorDefinition> = {
     severity: "error",
     userMessage: "The webhook signature did not match your saved secret.",
     developerMessage: "HMAC or WooCommerce signature verification failed.",
-    suggestedAction: "Confirm the webhook secret in the partner admin matches KitchenOS.",
+    suggestedAction: "Confirm the webhook secret in the partner admin matches OS Kitchen.",
   },
   CHANNEL_DUPLICATE_EVENT: {
     code: "CHANNEL_DUPLICATE_EVENT",
@@ -54,7 +54,7 @@ export const CHANNEL_ERRORS: Record<string, ChannelErrorDefinition> = {
   CHANNEL_STATUS_UNKNOWN: {
     code: "CHANNEL_STATUS_UNKNOWN",
     severity: "warning",
-    userMessage: "The partner order status is not mapped to a KitchenOS status yet.",
+    userMessage: "The partner order status is not mapped to a OS Kitchen status yet.",
     developerMessage: "No mapping for source status string.",
     suggestedAction: "Assign a normalized status manually or extend the mapping table.",
   },

@@ -36,7 +36,7 @@ describe("marketing claims governance policy", () => {
 
   it("fails on forbidden matrix-conflict phrases", () => {
     const violations = findForbiddenPhraseViolations(
-      "KitchenOS offers enterprise SSO included in every plan.",
+      "OS Kitchen offers enterprise SSO included in every plan.",
     );
     expect(violations.length).toBeGreaterThan(0);
     expect(exitCodeForMarketingClaimViolations(violations, false)).toBe(1);

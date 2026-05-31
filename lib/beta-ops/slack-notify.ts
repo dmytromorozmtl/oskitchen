@@ -22,7 +22,7 @@ export function formatDailyOpsSlackMessage(report: {
   kitchens: Array<{ email: string; alerts: string[]; metrics: { ordersLast7d: number } }>;
 }): string {
   const lines = [
-    `*KitchenOS Beta Daily Ops — ${report.day}*`,
+    `*OS Kitchen Beta Daily Ops — ${report.day}*`,
     `Live: ${report.summary.live} · Unhealthy: ${report.summary.unhealthy}`,
     "",
   ];

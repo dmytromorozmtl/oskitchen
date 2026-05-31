@@ -51,7 +51,7 @@ import { safeError } from "@/lib/security";
 const DEFAULT_TASKS: Array<{ title: string; category: ImplementationTaskCategory; description: string }> = [
   { title: "Complete discovery call", category: "DISCOVERY", description: "Capture business model, current tools, volumes, and go-live window." },
   { title: "Validate CSV imports", category: "DATA", description: "Load product/customer/order samples and resolve row errors before production import." },
-  { title: "Resolve product mappings", category: "MENU", description: "Confirm sales channel SKUs against KitchenOS menu items." },
+  { title: "Resolve product mappings", category: "MENU", description: "Confirm sales channel SKUs against OS Kitchen menu items." },
   { title: "Connect sales channels", category: "INTEGRATIONS", description: "Connect WooCommerce/Shopify credentials or document manual export cadence." },
   { title: "Verify production workflow", category: "PRODUCTION", description: "Run a sample production day and confirm quantities." },
   { title: "Test packing labels", category: "PACKING", description: "Print labels and confirm scanner/packing flow with staff." },

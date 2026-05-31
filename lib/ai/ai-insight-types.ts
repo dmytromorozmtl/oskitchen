@@ -6,6 +6,6 @@ export type OperationalInsight = {
   title: string;
   summary: string;
   actionRoute?: string;
-  /** KitchenOS policy: autonomous writes always false here. */
+  /** OS Kitchen policy: autonomous writes always false here. */
   requiresApproval: true;
 };

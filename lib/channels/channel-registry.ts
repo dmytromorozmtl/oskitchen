@@ -34,10 +34,10 @@ function allModes(): readonly BusinessType[] {
 export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
   {
     providerKey: "kitchenos-storefront",
-    label: "KitchenOS storefront",
+    label: "OS Kitchen storefront",
     shortDescription: "Native public storefront and checkout on your domain.",
     longDescription:
-      "Orders created here are first-class KitchenOS orders with fulfillment, production, and packing hooks. No third-party API credentials required.",
+      "Orders created here are first-class OS Kitchen orders with fulfillment, production, and packing hooks. No third-party API credentials required.",
     category: "STOREFRONT",
     statusType: "LIVE",
     supportedBusinessModes: allModes(),
@@ -66,7 +66,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
   {
     providerKey: "manual-orders",
     label: "Manual orders",
-    shortDescription: "Phone, counter, and internal orders created in KitchenOS.",
+    shortDescription: "Phone, counter, and internal orders created in OS Kitchen.",
     longDescription:
       "Always available. Use for walk-ins, phone orders, and adjustments. Sends to Order hub like any other order source.",
     category: "MANUAL_INTAKE",
@@ -166,7 +166,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     label: "Uber Eats Marketplace",
     shortDescription: "Marketplace orders — partner credentials and approval required.",
     longDescription:
-      "KitchenOS does not claim Uber official partnership. Adapter endpoints exist for verified tenants; live ingestion requires Uber-issued credentials and contract.",
+      "OS Kitchen does not claim Uber official partnership. Adapter endpoints exist for verified tenants; live ingestion requires Uber-issued credentials and contract.",
     category: "DELIVERY_MARKETPLACE",
     statusType: "PARTNER_ACCESS_REQUIRED",
     supportedBusinessModes: ["GHOST_KITCHEN", "CLOUD_KITCHEN", "RESTAURANT", "MULTI_BRAND", "OTHER"],
@@ -290,7 +290,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     label: "Square",
     shortDescription: "POS + catalog — OAuth and partner scopes required.",
     longDescription:
-      "Placeholder roadmap channel. Square is a trademark of Block, Inc. KitchenOS does not imply certification.",
+      "Placeholder roadmap channel. Square is a trademark of Block, Inc. OS Kitchen does not imply certification.",
     category: "POS",
     statusType: "COMING_SOON",
     supportedBusinessModes: ["RESTAURANT", "CAFE", "BAR", "BAKERY", "OTHER"],
@@ -321,7 +321,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     label: "Toast",
     shortDescription: "Restaurant POS — partner / API access required.",
     longDescription:
-      "Placeholder. Toast integration requires Toast-approved API access; KitchenOS does not claim Toast partnership.",
+      "Placeholder. Toast integration requires Toast-approved API access; OS Kitchen does not claim Toast partnership.",
     category: "POS",
     statusType: "COMING_SOON",
     supportedBusinessModes: ["RESTAURANT", "BAR", "GHOST_KITCHEN"],
@@ -503,7 +503,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
   {
     providerKey: "catering-inquiries",
     label: "Catering inquiries",
-    shortDescription: "Quotes and events pipeline inside KitchenOS.",
+    shortDescription: "Quotes and events pipeline inside OS Kitchen.",
     longDescription:
       "Uses Catering quotes + CRM. Not a third-party feed — native workflow for B2B catering sales.",
     category: "CATERING_EVENTS",

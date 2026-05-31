@@ -249,7 +249,7 @@ export const ROLE_PROGRAM_TEMPLATES: Record<TrainingRoleType, ProgramSeed> = {
     isOnboardingPath: true,
     modules: [
       { title: "Welcome", moduleType: "ONBOARDING", lessons: [
-        { title: "Welcome to KitchenOS", lessonType: "TEXT", content: "Workspace overview and where to find help." },
+        { title: "Welcome to OS Kitchen", lessonType: "TEXT", content: "Workspace overview and where to find help." },
       ]},
     ],
   },

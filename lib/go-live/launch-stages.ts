@@ -34,7 +34,7 @@ export const STAGE_LABEL: Record<GoLiveLaunchStage, string> = {
 
 export const STAGE_DESCRIPTION: Record<GoLiveLaunchStage, string> = {
   DISCOVERY: "Confirm business profile, owners, and success criteria.",
-  DATA_MIGRATION: "Move historical data into KitchenOS via the Import Center.",
+  DATA_MIGRATION: "Move historical data into OS Kitchen via the Import Center.",
   CATALOG_SETUP: "Menus, products, modifiers, pricing, and tax codes.",
   CHANNEL_INTEGRATIONS: "Connect WooCommerce, Shopify, Uber, and other channels.",
   PRODUCTION_VALIDATION: "Verify production sheet, kitchen flow, and prep batches.",

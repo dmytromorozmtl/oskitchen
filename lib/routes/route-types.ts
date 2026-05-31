@@ -78,7 +78,7 @@ export function routeTerminologyForMode(business: BusinessType | null | undefine
       return {
         title: "Event / private booking deliveries",
         subtitle:
-          "Loadout-only routes for private events and bookings. Alcohol delivery rules vary by jurisdiction — KitchenOS does not handle compliance.",
+          "Loadout-only routes for private events and bookings. Alcohol delivery rules vary by jurisdiction — OS Kitchen does not handle compliance.",
         defaultMode: "EVENT_DELIVERY",
       };
     case "GHOST_KITCHEN":

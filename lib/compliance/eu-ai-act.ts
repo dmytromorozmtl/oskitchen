@@ -37,7 +37,7 @@ export function isEuAiActPackEnabled(): boolean {
 export function buildDefaultAssignmentModelCard(): EuAiModelCard {
   return {
     at: new Date().toISOString(),
-    systemName: "KitchenOS Theme Experiment Assigner",
+    systemName: "OS Kitchen Theme Experiment Assigner",
     purpose: "Deterministic visitor-to-arm assignment for storefront A/B theme tests",
     assignmentMethod: "SHA-256 bucket + optional LinUCB/WASM/quantum-safe hybrid",
     personalData: false,

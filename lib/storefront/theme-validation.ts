@@ -58,7 +58,7 @@ export function validateStorefrontThemeInputs(input: {
     const r = isSafeHttpsUrl(val ?? "");
     if (!r.ok && (val ?? "").trim()) errors.push(`${label}: ${r.reason}`);
   }
-  if (input.brandColor && !isValidHexColor(input.brandColor)) warnings.push("Accent color should be a hex value like #286ab8.");
+  if (input.brandColor && !isValidHexColor(input.brandColor)) warnings.push("Accent color should be a hex value like #FF5F1F.");
   if (input.textColor && !isValidHexColor(input.textColor)) warnings.push("Text color should be a valid hex value.");
   const ratio =
     input.brandColor && input.textColor ? contrastRatio(input.brandColor, input.textColor) : null;

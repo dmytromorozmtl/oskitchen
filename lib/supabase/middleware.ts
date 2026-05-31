@@ -8,6 +8,7 @@ type CookieToSet = {
 };
 
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { resolveSupabasePublicEnv } from "@/lib/supabase/resolve-public-env";
 
 export async function updateSession(request: NextRequest) {
   if (!isSupabaseConfigured()) {
@@ -27,9 +28,10 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  const { url, anonKey } = resolveSupabasePublicEnv();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {

@@ -23,7 +23,7 @@ export function buildGa4ParityChecklist(input: {
 }): Ga4ParityChecklist {
   const ga4Steps = input.ga4MeasurementId
     ? [
-        `Export KitchenOS CSV for ${input.days}d (Advanced → Download CSV).`,
+        `Export OS Kitchen CSV for ${input.days}d (Advanced → Download CSV).`,
         `GA4 Explore → same ${input.days}d date range → breakdown by experimentArm.`,
         `Compare draft vs published checkout→submit rate (first-party) with GA4 purchase/checkout events per arm.`,
         `Lift should align within ~2–3 pp if traffic and tagging are healthy (allow 24–48h CD lag).`,
@@ -64,7 +64,7 @@ export function bigQueryExperimentParityQueryTemplate(input: {
   datasetId: string;
   days: number;
 }): string {
-  return `-- KitchenOS GA4 parity (experimentArm custom dimension)
+  return `-- OS Kitchen GA4 parity (experimentArm custom dimension)
 -- Replace table suffix with your GA4 export date shard pattern.
 SELECT
   (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'experimentArm') AS experiment_arm,

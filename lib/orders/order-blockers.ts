@@ -26,7 +26,7 @@ export const ORDER_BLOCKER_META: Record<
   },
   UNMAPPED_PRODUCTS: {
     label: "Channel items need mapping",
-    explanation: "One or more imported lines are not linked to your KitchenOS menu catalog.",
+    explanation: "One or more imported lines are not linked to your OS Kitchen menu catalog.",
     severity: S.HIGH,
     defaultFixHref: "/dashboard/product-mapping/unmapped",
     recommendedAction: "Resolve mappings in Product mapping, then reprocess the import batch if needed.",

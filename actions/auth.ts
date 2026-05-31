@@ -141,7 +141,7 @@ export async function signUpAction(formData: FormData) {
         redirectTo: safeInternalNextPath(redirect, "/login"), });
     }
 
-    return ok({ message: "Welcome to KitchenOS! Let's set up your workspace.",
+    return ok({ message: "Welcome to OS Kitchen! Let's set up your workspace.",
       redirectTo: safeInternalNextPath(redirect, "/onboarding"), });
   } catch (err) {
     console.error("signUpAction error:", err);

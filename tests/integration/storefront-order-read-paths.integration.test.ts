@@ -176,7 +176,7 @@ async function createPaidCheckoutFixture(tag: string): Promise<Fixture> {
     data: {
       userId: owner.ownerId,
       workspaceId: owner.workspaceId,
-      businessName: "KitchenOS Test Kitchen",
+      businessName: "OS Kitchen Test Kitchen",
       notifyOrderConfirmation: true,
       notifyPreorderReminder: false,
       notifyPickupReminder: false,

@@ -1,6 +1,6 @@
 # Contributing
 
-KitchenOS is a private product codebase. This guide supports the solo founder and future hires.
+OS Kitchen is a private product codebase. This guide supports the solo founder and future hires.
 
 ## Local setup
 

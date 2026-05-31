@@ -483,7 +483,7 @@ function manualChannelRow(userId: string, label: string) {
     name: label,
     provider: IntegrationProvider.MANUAL,
     active: true,
-    color: "#286ab8",
+    color: "#FF5F1F",
   };
 }
 
@@ -505,7 +505,7 @@ export async function onboardingSaveStep5Channels(formData: FormData) {
     };
 
     if (intents.includes("storefront")) {
-      pushManual("Native KitchenOS storefront (configure next)", "#0ea5e9");
+      pushManual("Native OS Kitchen storefront (configure next)", "#0ea5e9");
     }
     if (intents.includes("woocommerce")) {
       rows.push({

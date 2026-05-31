@@ -60,7 +60,7 @@ export function buildLaunchWizardCommercialInflectionSlice(
 export function buildLaunchWizardCommercialInflectionSliceFromCommercialOps(
   commercialOps: CommercialPilotOpsStatusModel | null,
 ): LaunchWizardCommercialInflectionSlice | null {
-  const vaultReport = commercialOps?.vaultReadiness.report ?? null;
+  const vaultReport = commercialOps?.vaultReadiness?.report ?? null;
   const p0Staging = commercialOps?.p0Staging.summary ?? null;
   const summary = evaluateCommercialInflectionReadiness(process.env, process.cwd(), {
     p0Staging,

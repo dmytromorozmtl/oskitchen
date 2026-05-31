@@ -123,7 +123,7 @@ export function packingEmptyStateForBusiness(bt: BusinessType | null | undefined
       return {
         title: "No event loadout yet",
         description:
-          "Private event items, bar prep, and supplies can be grouped into event loadout lists. Alcohol service must comply with local law — KitchenOS does not provide legal advice.",
+          "Private event items, bar prep, and supplies can be grouped into event loadout lists. Alcohol service must comply with local law — OS Kitchen does not provide legal advice.",
         primaryLabel: "Create event loadout",
         primaryHref: "#generate-queue",
         secondaryLabel: "Kitchen production",

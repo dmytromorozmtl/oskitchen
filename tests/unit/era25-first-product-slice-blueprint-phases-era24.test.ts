@@ -27,7 +27,7 @@ describe("era25-first-product-slice-blueprint-phases-era24", () => {
     expect(ERA25_FIRST_PRODUCT_SLICE_BACKLOG_ID).toBe("KOS-E25-001-ODB-BREAKTHROUGH");
   });
 
-  it("links existing KitchenOS surfaces", () => {
+  it("links existing OS Kitchen surfaces", () => {
     expect(ERA25_FIRST_PRODUCT_SLICE_EXISTING_SURFACES.length).toBeGreaterThanOrEqual(3);
     expect(
       ERA25_FIRST_PRODUCT_SLICE_EXISTING_SURFACES.some((surface) =>

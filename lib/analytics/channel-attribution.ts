@@ -25,7 +25,7 @@ export const ANALYTICS_CHANNEL_VALUES: AnalyticsChannel[] = [
 ];
 
 export const ANALYTICS_CHANNEL_LABEL: Record<AnalyticsChannel, string> = {
-  STOREFRONT: "KitchenOS Storefront",
+  STOREFRONT: "OS Kitchen Storefront",
   MANUAL: "Manual / Phone",
   WOOCOMMERCE: "WooCommerce",
   SHOPIFY: "Shopify",

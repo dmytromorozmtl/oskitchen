@@ -36,7 +36,7 @@ export function renderP0StagingProofExecutionHtml(summary: P0StagingProofExecuti
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KitchenOS P0 Staging Proof Execution</title>
+  <title>OS Kitchen P0 Staging Proof Execution</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
     .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }

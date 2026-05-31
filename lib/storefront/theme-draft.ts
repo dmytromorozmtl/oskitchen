@@ -1,3 +1,4 @@
+import { BRAND_ACCENT, BRAND_ACCENT_DARK } from "@/lib/constants";
 import { asJsonRecord } from "@/lib/prisma/json";
 
 export type ThemeCustomizerState = {
@@ -25,9 +26,9 @@ export type ThemeDraftPayload = {
 };
 
 const DEFAULT_CUSTOMIZER: ThemeCustomizerState = {
-  accentColor: "#2563FF",
-  secondaryColor: "#1E40AF",
-  fontFamily: "Inter",
+  accentColor: BRAND_ACCENT,
+  secondaryColor: BRAND_ACCENT_DARK,
+  fontFamily: "DM Sans",
   borderRadius: "12px",
   buttonStyle: "rounded-full",
   heroLayout: "centered",

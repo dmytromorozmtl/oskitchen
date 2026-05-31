@@ -133,7 +133,7 @@ export function resolveExternalOrderHubRowNextAction(
 ): OrderHubRowNextAction | null {
   if (o.importedOrderId) {
     return {
-      label: "Open KitchenOS order",
+      label: "Open OS Kitchen order",
       href: orderTab(o.importedOrderId, "overview"),
       tone: "normal",
     };
@@ -179,7 +179,7 @@ export function resolveExternalOrderHubRowNextAction(
 
   if (o.syncStatus === "SYNCED") {
     return {
-      label: "Finish KitchenOS import",
+      label: "Finish OS Kitchen import",
       href: o.channelImportBatch
         ? importBatchHref(o.channelImportBatch.id)
         : externalStagingHref("READY_TO_IMPORT"),

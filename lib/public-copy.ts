@@ -3,7 +3,7 @@ export const integrationPages = {
     title: "WooCommerce food order operations",
     status: "BETA — test shop certification required",
     description:
-      "Connect WooCommerce order and product data to KitchenOS production, packing, and fulfillment workflows. Available as BETA: signed webhooks, REST sync, and tenant-isolated ingest — not marketed as marketplace-certified until your test shop passes the in-app certification checklist.",
+      "Connect WooCommerce order and product data to OS Kitchen production, packing, and fulfillment workflows. Available as BETA: signed webhooks, REST sync, and tenant-isolated ingest — not marketed as marketplace-certified until your test shop passes the in-app certification checklist.",
     for: "Meal prep, bakeries, and catering teams already selling through WooCommerce.",
     credentials: "WooCommerce REST API keys, webhook signing secret, and HTTPS store URL.",
     limitations:
@@ -32,8 +32,8 @@ export const integrationPages = {
     title: "Uber Direct delivery dispatch",
     status: "Roadmap / setup foundation",
     description:
-      "KitchenOS includes routing placeholders and documentation for a future Uber Direct handoff — not live courier dispatch out of the box.",
-    for: "Teams evaluating how KitchenOS could sit beside a future Uber Direct contract.",
+      "OS Kitchen includes routing placeholders and documentation for a future Uber Direct handoff — not live courier dispatch out of the box.",
+    for: "Teams evaluating how OS Kitchen could sit beside a future Uber Direct contract.",
     credentials: "Uber Direct developer credentials when you have an approved Uber program.",
     limitations:
       "Live dispatch, pricing, and SLA depend on Uber Direct onboarding and geography. Do not market as production-ready delivery until Uber confirms your integration.",
@@ -51,7 +51,7 @@ export const integrationPages = {
     status: "Live ready",
     description: "Publish preorder menus with pickup/delivery rules and order confirmation flow.",
     for: "Weekly preorder businesses that want a lightweight ordering surface.",
-    credentials: "KitchenOS account and configured menu/storefront settings.",
+    credentials: "OS Kitchen account and configured menu/storefront settings.",
     limitations: "Advanced payment capture depends on Stripe setup and local business requirements.",
   },
 } as const;
@@ -88,7 +88,7 @@ export const solutionPages = {
     workflow: "Connect channels -> normalize orders -> map products -> produce by station -> verify packing.",
     modules: ["Sales channels", "Product mapping", "Order hub", "Production", "Packing", "Integration health"],
     limitations: [
-      "Uber Eats and similar channels remain partner-gated; KitchenOS surfaces architecture and readiness, not fake live menus.",
+      "Uber Eats and similar channels remain partner-gated; OS Kitchen surfaces architecture and readiness, not fake live menus.",
     ],
   },
   bakeries: {
@@ -121,7 +121,7 @@ export const solutionPages = {
     workflow: "Normalize channels -> assign production lanes -> verify packing -> dispatch.",
     modules: ["Sales channels", "Order hub", "Production", "Packing", "Routes"],
     limitations: [
-      "KitchenOS does not replace Toast or other legacy POS suites; it coordinates operational truth once orders exist.",
+      "OS Kitchen does not replace Toast or other legacy POS suites; it coordinates operational truth once orders exist.",
     ],
   },
   "corporate-lunch": {

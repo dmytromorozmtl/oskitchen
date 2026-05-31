@@ -1,3 +1,4 @@
+import { BRAND_ACCENT, BRAND_ACCENT_DARK } from "@/lib/constants";
 import type { ThemeCustomizerState } from "@/lib/storefront/theme-draft";
 
 export type StorefrontThemePresetId = "minimal" | "bold" | "elegant" | "dark" | "rustic";
@@ -16,11 +17,11 @@ export const THEME_PRESETS: Record<StorefrontThemePresetId, StorefrontThemePrese
     id: "minimal",
     name: "Minimal",
     description: "Clean, modern, lots of white space",
-    swatch: "linear-gradient(135deg, #2563FF 0%, #E0E7FF 100%)",
+    swatch: "linear-gradient(135deg, #FF5F1F 0%, #FFE8D9 100%)",
     theme: {
-      accentColor: "#2563FF",
-      secondaryColor: "#1E40AF",
-      fontFamily: "Inter",
+      accentColor: BRAND_ACCENT,
+      secondaryColor: BRAND_ACCENT_DARK,
+      fontFamily: "DM Sans",
       borderRadius: "12px",
       buttonStyle: "rounded-full",
       heroLayout: "centered",

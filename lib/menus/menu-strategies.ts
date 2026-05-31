@@ -165,7 +165,7 @@ const DEFS: Record<MenuStrategy, MenuStrategyDefinition> = {
     secondaryCta: "Browse templates",
     defaultSections: ["Cocktails", "Wine", "Beer"],
     warnings: [
-      "Alcohol service and delivery are jurisdiction-specific — configure fulfillment honestly; KitchenOS does not provide legal compliance.",
+      "Alcohol service and delivery are jurisdiction-specific — configure fulfillment honestly; OS Kitchen does not provide legal compliance.",
     ],
   },
   BAKERY_PREORDER: {

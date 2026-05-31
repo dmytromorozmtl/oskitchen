@@ -1,4 +1,4 @@
-/* KitchenOS production service worker — critical ops shell + offline POS sync */
+/* OS Kitchen production service worker — critical ops shell + offline POS sync */
 const CACHE_VERSION = "kitchenos-v2";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
@@ -117,7 +117,7 @@ async function networkFirst(request) {
 }
 
 self.addEventListener("push", (event) => {
-  let data = { title: "KitchenOS", body: "New update", url: "/dashboard/today", tag: "kitchenos" };
+  let data = { title: "OS Kitchen", body: "New update", url: "/dashboard/today", tag: "kitchenos" };
   try {
     data = { ...data, ...JSON.parse(event.data?.text() ?? "{}") };
   } catch {

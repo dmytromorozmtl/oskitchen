@@ -49,7 +49,7 @@ export function resolveSsoCallbackLoginErrorRecovery(input: {
       return {
         title: "Workspace access denied",
         detail:
-          "Your KitchenOS account isn't linked to this pilot workspace. Ask an admin to invite you as staff, then retry SSO.",
+          "Your OS Kitchen account isn't linked to this pilot workspace. Ask an admin to invite you as staff, then retry SSO.",
         href: retryHref,
         ctaLabel: retryLabel,
         tone: "urgent",

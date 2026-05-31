@@ -30,7 +30,7 @@ export function experimentApproveConfirmHtml(input: {
   <style>
     body { font-family: system-ui, sans-serif; max-width: 32rem; margin: 4rem auto; padding: 0 1rem; color: #0f172a; }
     p { color: #475569; line-height: 1.5; }
-    button { margin-top: 1rem; padding: 0.625rem 1.25rem; background: #286ab8; color: #fff; border: 0; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
+    button { margin-top: 1rem; padding: 0.625rem 1.25rem; background: #FF5F1F; color: #fff; border: 0; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>

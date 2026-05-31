@@ -63,7 +63,7 @@ export function renderVaultReadinessHtml(report: VaultReadinessReport): string {
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KitchenOS Vault Readiness Report</title>
+  <title>OS Kitchen Vault Readiness Report</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
     h1, h2 { margin-bottom: 0.5rem; }
@@ -81,7 +81,7 @@ export function renderVaultReadinessHtml(report: VaultReadinessReport): string {
   </style>
 </head>
 <body>
-  <h1>KitchenOS — Ops Vault Readiness</h1>
+  <h1>OS Kitchen — Ops Vault Readiness</h1>
   <p class="meta">Generated ${escapeHtml(report.generatedAt)} · Policy ${escapeHtml(report.policyId)}</p>
 
   <div class="banner ${report.vaultReady ? "banner-ready" : "banner-blocked"}">

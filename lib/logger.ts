@@ -15,15 +15,15 @@ export function redactForLog(input: unknown): unknown {
 
 export const logger = {
   debug: (...args: unknown[]) => {
-    if (isDev) console.debug("[KitchenOS]", ...args.map(redactForLog));
+    if (isDev) console.debug("[OS Kitchen]", ...args.map(redactForLog));
   },
   info: (...args: unknown[]) => {
-    if (isDev) console.info("[KitchenOS]", ...args.map(redactForLog));
+    if (isDev) console.info("[OS Kitchen]", ...args.map(redactForLog));
   },
   warn: (...args: unknown[]) => {
-    console.warn("[KitchenOS]", ...args.map(redactForLog));
+    console.warn("[OS Kitchen]", ...args.map(redactForLog));
   },
   error: (...args: unknown[]) => {
-    console.error("[KitchenOS]", ...args.map(redactForLog));
+    console.error("[OS Kitchen]", ...args.map(redactForLog));
   },
 };

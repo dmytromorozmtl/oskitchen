@@ -8,7 +8,7 @@ export type ChannelFeeRuleLike = {
 
 /**
  * Operational estimate of marketplace / platform take — user-configured only.
- * KitchenOS does not ship partner-specific fee tables.
+ * OS Kitchen does not ship partner-specific fee tables.
  */
 export function estimatePlatformFee(salePrice: number, rule: ChannelFeeRuleLike | null): number {
   if (!rule || salePrice <= 0) return 0;

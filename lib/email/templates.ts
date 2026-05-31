@@ -19,7 +19,7 @@ export function emailShell(params: {
         <td align="center">
           <table width="560" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;border:1px solid #e2e8f0;overflow:hidden;">
             <tr>
-              <td style="padding:28px 28px 8px 28px;font-size:20px;font-weight:600;color:#286ab8;">
+              <td style="padding:28px 28px 8px 28px;font-size:20px;font-weight:600;color:#FF5F1F;">
                 ${APP_NAME}
               </td>
             </tr>
@@ -87,7 +87,7 @@ export function orderConfirmationTemplate(params: {
     </table>
     ${
       params.lookupUrl
-        ? `<p style="margin-top:20px;"><a href="${escapeHtml(params.lookupUrl)}" style="color:#286ab8;font-weight:600;">Track your order</a></p>`
+        ? `<p style="margin-top:20px;"><a href="${escapeHtml(params.lookupUrl)}" style="color:#FF5F1F;font-weight:600;">Track your order</a></p>`
         : ""
     }
     <p style="color:#94a3b8;font-size:12px;margin-top:24px;">Order ID: ${escapeHtml(params.orderId)}</p>
@@ -105,7 +105,7 @@ export function preorderReminderTemplate(params: {
   const body = `
     <p>Hi ${escapeHtml(params.customerName)},</p>
     <p>Preorder for <strong>${escapeHtml(brand)}</strong> closes soon: <strong>${escapeHtml(params.deadline)}</strong>.</p>
-    <p><a href="${escapeHtml(params.ctaUrl)}" style="color:#286ab8;font-weight:600;">View menus</a></p>
+    <p><a href="${escapeHtml(params.ctaUrl)}" style="color:#FF5F1F;font-weight:600;">View menus</a></p>
   `;
   return emailShell({ title: "Preorder reminder", bodyHtml: body });
 }

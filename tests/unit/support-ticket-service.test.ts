@@ -47,7 +47,7 @@ describe("support ticket service", () => {
     const result = await createSupportTicket({
       userId: null,
       email: "platform-ops@system.kitchenos.local",
-      requesterName: "KitchenOS Cron Guard",
+      requesterName: "OS Kitchen Cron Guard",
       subject: "Critical cron auto-escalated: Webhook job drain",
       message: "Critical cron incident.",
       category: "PRODUCTION",

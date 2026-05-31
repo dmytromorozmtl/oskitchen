@@ -8,5 +8,5 @@ export const INTEGRITY_RULE_DESCRIPTIONS: Record<IntegrityIssueKind, string> = {
   ORDER_NO_ITEMS: "Orders should include at least one priced line before fulfillment.",
   DELIVERY_NO_ADDRESS: "Delivery commitments require structured address JSON on the order.",
   ORDER_LINE_NO_PRICE: "Order economics and margin reporting need unit + line totals.",
-  UNMAPPED_EXTERNAL_PRODUCT: "Channel catalog rows must map to a KitchenOS menu item.",
+  UNMAPPED_EXTERNAL_PRODUCT: "Channel catalog rows must map to a OS Kitchen menu item.",
 };

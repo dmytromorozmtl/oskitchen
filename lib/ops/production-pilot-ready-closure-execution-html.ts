@@ -47,7 +47,7 @@ export function renderProductionPilotReadyClosureExecutionHtml(
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KitchenOS Production Pilot Ready Closure</title>
+  <title>OS Kitchen Production Pilot Ready Closure</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
     .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }

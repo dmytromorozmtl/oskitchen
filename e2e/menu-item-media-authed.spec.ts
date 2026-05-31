@@ -36,7 +36,7 @@ test.describe("Menu item media (authed)", () => {
       const editBtn = page.getByRole("button", { name: /^edit$/i }).first();
       test.skip((await editBtn.count()) === 0, "No products to edit");
       await editBtn.click();
-      const testUrl = "https://placehold.co/400x300/png?text=KitchenOS-E2E";
+      const testUrl = "https://placehold.co/400x300/png?text=OS Kitchen-E2E";
       await page.getByLabel(/storefront image/i).fill(testUrl);
       await page.getByRole("button", { name: /save changes/i }).click();
       await expect(page.getByText(/item updated|added/i)).toBeVisible({ timeout: 20_000 });

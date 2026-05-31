@@ -115,10 +115,10 @@ export function infrastructureMaturityRows(env: ServerEnv): InfrastructureIntegr
 
   const posRow: InfrastructureIntegrationRow = {
     id: "kitchenos-pos",
-    label: "KitchenOS POS",
+    label: "OS Kitchen POS",
     maturity: "LIVE",
     authState: "Workspace-native (no third-party POS OAuth)",
-    worksSummary: "Registers, shifts, terminal, transactions, and receipts inside KitchenOS.",
+    worksSummary: "Registers, shifts, terminal, transactions, and receipts inside OS Kitchen.",
     gapsSummary:
       "Requires network connectivity — offline checkout queue is not implemented. Does not replace Toast/Square hardware ecosystems — see roadmap row for external POS.",
     webhookSupport: "N/A (first-party)",
@@ -146,7 +146,7 @@ export function infrastructureMaturityRows(env: ServerEnv): InfrastructureIntegr
     label: "External POS (Toast / Square / Clover / Lightspeed)",
     maturity: "ROADMAP",
     authState: "Not shipped as native connectors in this repo snapshot",
-    worksSummary: "KitchenOS ingests commerce via storefront, manual orders, and supported e-commerce channels.",
+    worksSummary: "OS Kitchen ingests commerce via storefront, manual orders, and supported e-commerce channels.",
     gapsSummary:
       "Deep two-way sync with legacy POS is a partner-heavy roadmap item — do not sell as available without an explicit integration contract.",
     webhookSupport: "Varies by vendor when built",

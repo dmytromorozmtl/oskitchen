@@ -1,6 +1,6 @@
 import type { ProductMappingProvider } from "@prisma/client";
 
-/** Canonical KitchenOS modifier keys used by storefront / production. */
+/** Canonical OS Kitchen modifier keys used by storefront / production. */
 export const CANONICAL_MODIFIER_KEYS = [
   "size",
   "protein",

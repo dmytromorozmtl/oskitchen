@@ -22,7 +22,7 @@ export type SystemTemplate = {
 
 const V = {
   customer_name: { key: "customer_name", label: "Customer name", example: "Alex", required: true },
-  business_name: { key: "business_name", label: "Business name", example: "KitchenOS", required: false },
+  business_name: { key: "business_name", label: "Business name", example: "OS Kitchen", required: false },
   order_number: { key: "order_number", label: "Order number", example: "ORD-12345", required: true },
   pickup_date: { key: "pickup_date", label: "Pickup date", example: "Sat, May 17", required: false },
   pickup_window: { key: "pickup_window", label: "Pickup window", example: "10–12am", required: false },

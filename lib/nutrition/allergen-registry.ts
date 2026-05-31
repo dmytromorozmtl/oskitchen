@@ -1,6 +1,6 @@
 /**
  * Canonical allergen keys for structured profiles (UI + JSON storage).
- * KitchenOS does not map these to any jurisdiction — operators must confirm legal declarations locally.
+ * OS Kitchen does not map these to any jurisdiction — operators must confirm legal declarations locally.
  */
 export const STANDARD_ALLERGEN_KEYS = [
   "milk",

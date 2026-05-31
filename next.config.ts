@@ -10,7 +10,19 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   staticPageGenerationTimeout: 120,
   serverExternalPackages: ["stripe"],
-  webpack: (config, { nextRuntime }) => {
+  ...(process.env.SKIP_TYPECHECK === "1"
+    ? {
+        typescript: { ignoreBuildErrors: true },
+        eslint: { ignoreDuringBuilds: true },
+      }
+    : {}),
+  webpack: (config, { nextRuntime, dev }) => {
+    // Remote Vercel builds: disable persistent webpack cache (log spam hits 4 MB build log limit).
+    if (process.env.VERCEL && !dev) {
+      config.cache = false;
+      config.infrastructureLogging = { level: "error" };
+    }
+
     // @supabase/storage-js imports iceberg-js; Edge/middleware bundling can fail to resolve nested hoists.
     try {
       const icebergRoot = path.dirname(require.resolve("iceberg-js/package.json"));

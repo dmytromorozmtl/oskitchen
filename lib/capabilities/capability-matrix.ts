@@ -87,8 +87,8 @@ export function buildCapabilityRows(env: ServerEnv): CapabilityRow[] {
       id: "stripe_terminal",
       label: "Stripe Terminal (hardware)",
       status: "ROADMAP",
-      works: "KitchenOS POS uses first-party flows — not Stripe Terminal SDK.",
-      gaps: "No Stripe reader certification in-repo; external terminal mode refers to KitchenOS counter UX only.",
+      works: "OS Kitchen POS uses first-party flows — not Stripe Terminal SDK.",
+      gaps: "No Stripe reader certification in-repo; external terminal mode refers to OS Kitchen counter UX only.",
     },
     {
       id: "stripe_async_billing",
@@ -125,7 +125,7 @@ export function buildCapabilityRows(env: ServerEnv): CapabilityRow[] {
       label: "OpenAI",
       status: openAiStatus(env),
       works: "Optional model-backed assist when key present; deterministic fallbacks otherwise.",
-      gaps: "Enterprise DPA / data processing terms are separate from KitchenOS software readiness.",
+      gaps: "Enterprise DPA / data processing terms are separate from OS Kitchen software readiness.",
     },
     {
       id: "pos_offline",
@@ -190,7 +190,7 @@ export function buildCapabilityRows(env: ServerEnv): CapabilityRow[] {
       label: "SOC 2 certification",
       status: "ROADMAP",
       works: "Operational and security foundations documented.",
-      gaps: "No formal SOC2 attestation is claimed by KitchenOS in product copy.",
+      gaps: "No formal SOC2 attestation is claimed by OS Kitchen in product copy.",
     },
     {
       id: "dpa_data_rights",

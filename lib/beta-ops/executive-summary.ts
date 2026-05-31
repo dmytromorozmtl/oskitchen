@@ -34,7 +34,7 @@ export function renderExecutiveSummary(state: ProgramState): string {
   const next = resolveNextAction(state);
   const readiness = computeProgramReadiness(state);
   const lines: string[] = [
-    "# KitchenOS Beta Program — Executive Summary",
+    "# OS Kitchen Beta Program — Executive Summary",
     "",
     `Updated: ${state.updatedAt}`,
     `**Program readiness: ${readiness.score}/100**`,

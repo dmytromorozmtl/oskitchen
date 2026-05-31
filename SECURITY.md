@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-KitchenOS is under active development. Security fixes land on the default production branch as soon as practical.
+OS Kitchen is under active development. Security fixes land on the default production branch as soon as practical.
 
 ## Reporting a vulnerability
 

@@ -103,7 +103,7 @@ export function computeGa4ParityScore(input: {
     firstPartyLiftPp,
     ga4LiftPp,
     headline: drift
-      ? `Parity drift ${parityScorePp} pp (KitchenOS ${firstPartyLiftPp} pp vs GA4 ${ga4LiftPp} pp)`
+      ? `Parity drift ${parityScorePp} pp (OS Kitchen ${firstPartyLiftPp} pp vs GA4 ${ga4LiftPp} pp)`
       : `Parity OK — Δ${parityScorePp} pp vs GA4`,
     detail: drift
       ? "Investigate tagging lag, consent mode, or bot traffic before Apply winner."

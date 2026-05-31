@@ -48,7 +48,7 @@ export function integrationLaunchLabel(args: {
     return {
       label: "partner_access_required",
       description:
-        "Partner approval may exist, but this provider is not yet certified for live traffic in KitchenOS.",
+        "Partner approval may exist, but this provider is not yet certified for live traffic in OS Kitchen.",
     };
   }
 

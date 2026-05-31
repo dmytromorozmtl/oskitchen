@@ -8,7 +8,7 @@ export type OgImageOptions = {
   subtitle?: string;
 };
 
-/** Branded 1200×630 Open Graph image (KitchenOS palette). */
+/** Branded 1200×630 Open Graph image (OS Kitchen palette). */
 export function createOgImageResponse({ eyebrow, title, subtitle }: OgImageOptions) {
   return new ImageResponse(
     (
@@ -35,7 +35,7 @@ export function createOgImageResponse({ eyebrow, title, subtitle }: OgImageOptio
               color: '#93c5fd',
             }}
           >
-            {eyebrow ?? 'KitchenOS'}
+            {eyebrow ?? 'OS Kitchen'}
           </div>
           <div
             style={{

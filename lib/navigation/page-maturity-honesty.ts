@@ -91,7 +91,7 @@ export function getPageMaturityHonesty(pathname: string): PageMaturityHonesty | 
 
   const detail =
     PAGE_MATURITY_DETAIL_BY_PREFIX[rule.prefix] ??
-    `${rule.matrixRef} is ${rule.exposure} in KitchenOS — see docs/feature-maturity-matrix.md before customer commitments.`;
+    `${rule.matrixRef} is ${rule.exposure} in OS Kitchen — see docs/feature-maturity-matrix.md before customer commitments.`;
 
   return {
     exposure: rule.exposure,

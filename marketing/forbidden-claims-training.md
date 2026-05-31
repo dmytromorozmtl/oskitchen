@@ -9,7 +9,7 @@
 
 ## Why this matters
 
-KitchenOS has deep product surface area. It is easy to over-promise features that are **preview**, **SKIPPED**, or **awaiting pilot proof**. Forbidden-claims training protects buyers, legal, and engineering from demos that outrun evidence.
+OS Kitchen has deep product surface area. It is easy to over-promise features that are **preview**, **SKIPPED**, or **awaiting pilot proof**. Forbidden-claims training protects buyers, legal, and engineering from demos that outrun evidence.
 
 **Rule:** PASS > SKIPPED — never describe a SKIPPED smoke or missing vault secret as production-ready.
 

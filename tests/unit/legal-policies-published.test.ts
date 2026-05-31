@@ -53,7 +53,7 @@ describe("legalPolicyPageMetadata", () => {
   it("sets noindex when draft", async () => {
     delete process.env[key];
     const { legalPolicyPageMetadata } = await import("@/lib/legal/legal-policies-published");
-    const m = legalPolicyPageMetadata({ slug: "privacy", appName: "KitchenOS" });
+    const m = legalPolicyPageMetadata({ slug: "privacy", appName: "OS Kitchen" });
     expect(m.robots).toEqual({ index: false, follow: false });
     expect(String(m.title)).toMatch(/draft/i);
   });
@@ -62,7 +62,7 @@ describe("legalPolicyPageMetadata", () => {
     process.env[key] = "true";
     vi.resetModules();
     const { legalPolicyPageMetadata } = await import("@/lib/legal/legal-policies-published");
-    const m = legalPolicyPageMetadata({ slug: "terms", appName: "KitchenOS" });
+    const m = legalPolicyPageMetadata({ slug: "terms", appName: "OS Kitchen" });
     expect(m.robots).toEqual({ index: true, follow: true });
     expect(String(m.title)).not.toMatch(/\(draft\)/i);
   });

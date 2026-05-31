@@ -51,7 +51,7 @@ export type DesignTokens = {
 
 export const DEFAULT_DESIGN_TOKENS: DesignTokens = {
   colors: {
-    primary: "#286ab8",
+    primary: "#FF5F1F",
     secondary: "#64748b",
     accent: "#0ea5e9",
     background: "#f8fafc",
@@ -62,7 +62,7 @@ export const DEFAULT_DESIGN_TOKENS: DesignTokens = {
     success: "#16a34a",
     warning: "#ca8a04",
     error: "#dc2626",
-    buttonBg: "#286ab8",
+    buttonBg: "#FF5F1F",
     buttonText: "#ffffff",
   },
   typography: {

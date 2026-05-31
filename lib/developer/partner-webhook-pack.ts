@@ -48,14 +48,14 @@ export type PartnerWebhookConfidenceSummary = {
 export const PARTNER_WEBHOOK_CHECKLIST: readonly PartnerWebhookChecklistItem[] = [
   {
     id: "partner-inbound-url",
-    task: "Register KitchenOS inbound webhook URL at Stripe / Woo / Shopify",
+    task: "Register OS Kitchen inbound webhook URL at Stripe / Woo / Shopify",
     verifyHow:
       "Stripe → /api/webhooks/stripe; Woo → /api/webhooks/woocommerce?cid=<connection-uuid>; Shopify → /api/webhooks/shopify/orders",
     integrationBlocker: true,
   },
   {
     id: "partner-signature-secret",
-    task: "Align signature secrets between provider and KitchenOS integration settings",
+    task: "Align signature secrets between provider and OS Kitchen integration settings",
     verifyHow:
       "Stripe signing secret; Woo webhook secret; Shopify app shared secret — invalid HMAC returns 401/400 fail-closed",
     integrationBlocker: true,

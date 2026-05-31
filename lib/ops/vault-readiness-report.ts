@@ -87,7 +87,7 @@ const SECRET_OWNERS: Record<string, string> = {
 function secretDescription(key: string): string {
   switch (key) {
     case "E2E_STAGING_BASE_URL":
-      return "Staging KitchenOS base URL for SSO and E2E workflows";
+      return "Staging OS Kitchen base URL for SSO and E2E workflows";
     case "E2E_LOGIN_EMAIL":
       return "Dashboard login email for staging Playwright workflows";
     case "E2E_LOGIN_PASSWORD":

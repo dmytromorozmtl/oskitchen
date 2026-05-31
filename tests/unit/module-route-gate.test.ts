@@ -44,6 +44,17 @@ function renderGate(input?: {
 }
 
 describe("module route gate", () => {
+  it("hides pilot and beta banners in customer-facing mode", () => {
+    delete process.env.NEXT_PUBLIC_INTERNAL_OPS_UI;
+    const copilot = renderGate({ pathname: "/dashboard/copilot" });
+    expect(copilot).not.toContain("currently pilot");
+    expect(copilot).toContain("Visible child content");
+
+    const pos = renderGate({ pathname: "/dashboard/pos" });
+    expect(pos).not.toContain("currently beta");
+    expect(pos).toContain("Visible child content");
+  });
+
   it("shows a recovery card when the current route is blocked by module settings", () => {
     const markup = renderGate({
       pathname: "/dashboard/copilot",
@@ -67,6 +78,7 @@ describe("module route gate", () => {
   });
 
   it("renders pilot messaging when a pilot route is reachable", () => {
+    process.env.NEXT_PUBLIC_INTERNAL_OPS_UI = "1";
     const markup = renderGate({
       pathname: "/dashboard/copilot",
     });
@@ -77,6 +89,7 @@ describe("module route gate", () => {
   });
 
   it("renders beta messaging for beta routes without blocking the page", () => {
+    process.env.NEXT_PUBLIC_INTERNAL_OPS_UI = "1";
     const markup = renderGate({
       pathname: "/dashboard/pos",
     });

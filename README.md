@@ -1,6 +1,6 @@
-# KitchenOS
+# OS Kitchen
 
-KitchenOS is a production-grade micro-SaaS for meal prep operators, caterers, ghost kitchens, and preorder-first restaurants. It unifies weekly menus, preorder deadlines, kitchen production, packing exports, customer notifications, pickup and delivery workflows, and Stripe billing inside a fast Next.js 15 experience.
+OS Kitchen is a production-grade micro-SaaS for meal prep operators, caterers, ghost kitchens, and preorder-first restaurants. It unifies weekly menus, preorder deadlines, kitchen production, packing exports, customer notifications, pickup and delivery workflows, and Stripe billing inside a fast Next.js 15 experience.
 
 ## Stack
 
@@ -66,7 +66,7 @@ Fill **`.env.local`** (copy from **`.env.example`** if needed). A starter **`.en
 5. Paste the Postgres connection strings into `DATABASE_URL` / `DIRECT_URL`.
 6. (Recommended for MVP speed) Disable **Confirm email** under Authentication → Providers → Email while iterating locally.
 
-KitchenOS mirrors each authenticated user into the `users` table via `ensureAppUser`, keeping Supabase Auth as the source of truth for IDs.
+OS Kitchen mirrors each authenticated user into the `users` table via `ensureAppUser`, keeping Supabase Auth as the source of truth for IDs.
 
 ## Stripe setup
 
@@ -152,7 +152,7 @@ When **`WEBHOOK_ASYNC_QUEUE=true`**, WooCommerce webhooks enqueue **`webhook_pro
 
 ### Supabase RLS
 
-KitchenOS uses Prisma server-side against Postgres; RLS is optional. See **`supabase/rls.sql`** for recommended policies if you query tables from the Supabase JS client.
+OS Kitchen uses Prisma server-side against Postgres; RLS is optional. See **`supabase/rls.sql`** for recommended policies if you query tables from the Supabase JS client.
 
 ### Supabase Storage (optional image uploads)
 
@@ -214,7 +214,7 @@ types/          # Shared TypeScript contracts
 
 ## Support & roadmap
 
-KitchenOS is intentionally modular—swap branding tokens in `app/globals.css`, extend email templates in `lib/email.ts`, or wire additional fulfillment providers beside Stripe + Resend without touching core domain logic.
+OS Kitchen is intentionally modular—swap branding tokens in `app/globals.css`, extend email templates in `lib/email.ts`, or wire additional fulfillment providers beside Stripe + Resend without touching core domain logic.
 
 For implementation questions, extend `README.md` with your company-specific runbooks (SLAs, training PDFs, escalations).
 

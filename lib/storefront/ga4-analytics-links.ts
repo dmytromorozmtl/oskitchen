@@ -28,7 +28,7 @@ export function ga4ExperimentArmDimensionSteps(measurementId: string | null): st
   const id = measurementId ?? "G-XXXXXXXX";
   return [
     `GA4 Admin → Data display → Custom definitions → Create custom dimension.`,
-    `Dimension name: experimentArm · Scope: Event · Event parameter: experimentArm (matches KitchenOS beacon).`,
+    `Dimension name: experimentArm · Scope: Event · Event parameter: experimentArm (matches OS Kitchen beacon).`,
     `Measurement ID on this storefront: ${id}. Allow 24–48h for reporting after publish.`,
     `In Explore, add experimentArm as a breakdown and filter the same date range as your CSV export.`,
   ];

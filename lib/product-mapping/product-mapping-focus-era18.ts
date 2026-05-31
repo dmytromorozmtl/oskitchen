@@ -129,7 +129,7 @@ export function pickProductMappingAttentionItems(
     items.push({
       id: "unmapped-catalog",
       title: `${snapshot.unmapped} unmapped external product${snapshot.unmapped === 1 ? "" : "s"}`,
-      detail: "No KitchenOS menu target — pick candidates from the unmapped queue.",
+      detail: "No OS Kitchen menu target — pick candidates from the unmapped queue.",
       href: PRODUCT_MAPPING_UNMAPPED_ROUTE,
       priority: 3,
       tone: "urgent",
@@ -205,7 +205,7 @@ export function pickProductMappingConflictsAttentionItems(
     items.push({
       id: "explicit-conflicts",
       title: `${snapshot.explicitConflictCount} explicit mapping conflict${snapshot.explicitConflictCount === 1 ? "" : "s"}`,
-      detail: "Rows flagged CONFLICT — pick a single KitchenOS target or reject duplicates.",
+      detail: "Rows flagged CONFLICT — pick a single OS Kitchen target or reject duplicates.",
       href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${PRODUCT_MAPPING_EXPLICIT_CONFLICTS_ANCHOR}`,
       priority: 2,
       tone: "urgent",
@@ -226,7 +226,7 @@ export function pickProductMappingConflictsAttentionItems(
   if (snapshot.duplicateInternalGroupCount > 0) {
     items.push({
       id: "duplicate-internal",
-      title: `${snapshot.duplicateInternalGroupCount} duplicate KitchenOS target group${snapshot.duplicateInternalGroupCount === 1 ? "" : "s"}`,
+      title: `${snapshot.duplicateInternalGroupCount} duplicate OS Kitchen target group${snapshot.duplicateInternalGroupCount === 1 ? "" : "s"}`,
       detail: "Multiple externals share one menu item — confirm this is intentional for your channels.",
       href: `${PRODUCT_MAPPING_CONFLICTS_ROUTE}${PRODUCT_MAPPING_DUPLICATE_INTERNAL_ANCHOR}`,
       priority: 4,

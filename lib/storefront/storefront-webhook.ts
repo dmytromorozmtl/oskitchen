@@ -16,7 +16,7 @@ export type StorefrontWebhookPayload = {
   publishedAt: string;
 };
 
-/** HMAC-SHA256 over `{timestamp}.{body}` — used in X-KitchenOS-Signature. */
+/** HMAC-SHA256 over `{timestamp}.{body}` — used in X-OS Kitchen-Signature. */
 export function signStorefrontWebhookPayload(secret: string, body: string, timestamp: string): string {
   return createHmac("sha256", secret).update(`${timestamp}.${body}`).digest("hex");
 }
@@ -78,14 +78,14 @@ export async function dispatchStorefrontPagePublishedWebhook(input: {
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    "X-KitchenOS-Event": payload.event,
-    "X-KitchenOS-Delivery-Id": deliveryId,
-    "X-KitchenOS-Timestamp": timestamp,
+    "X-OS Kitchen-Event": payload.event,
+    "X-OS Kitchen-Delivery-Id": deliveryId,
+    "X-OS Kitchen-Timestamp": timestamp,
   };
 
   const secret = decryptStorefrontWebhookSecret(input.webhookSecret)?.trim();
   if (secret) {
-    headers["X-KitchenOS-Signature"] = `sha256=${signStorefrontWebhookPayload(secret, body, timestamp)}`;
+    headers["X-OS Kitchen-Signature"] = `sha256=${signStorefrontWebhookPayload(secret, body, timestamp)}`;
   }
 
   const ok = await postWithRetries({ url, body, headers });

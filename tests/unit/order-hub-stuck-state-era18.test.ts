@@ -171,7 +171,7 @@ describe("order hub stuck state era18", () => {
     );
   });
 
-  it("routes imported channel rows to the KitchenOS order", () => {
+  it("routes imported channel rows to the OS Kitchen order", () => {
     const o = baseExternal({
       importedOrderId: "00000000-0000-0000-0000-000000000099",
       syncStatus: "SYNCED",

@@ -69,7 +69,7 @@ async function auditSsoCallbackEvent(input: {
 }
 
 /**
- * Validates pilot SSO callback context and links IdP subject to the KitchenOS user.
+ * Validates pilot SSO callback context and links IdP subject to the OS Kitchen user.
  * Call only after Supabase `exchangeCodeForSession` succeeds.
  */
 export async function completeWorkspaceSsoCallback(

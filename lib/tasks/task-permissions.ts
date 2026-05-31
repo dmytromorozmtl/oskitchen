@@ -1,5 +1,5 @@
 /**
- * KitchenOS does not yet expose a granular Workspace RBAC; for now permissions
+ * OS Kitchen does not yet expose a granular Workspace RBAC; for now permissions
  * are derived from "is the current user the workspace owner?" + persisted
  * SUPER_ADMIN platformBypass. This file is the single place that gating logic
  * should live so we can graduate to WorkspaceMember.role without rewriting the UI.

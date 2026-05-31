@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes for KitchenOS pilot hardening are documented here.
+All notable changes for OS Kitchen pilot hardening are documented here.
 
 ## [Pilot-19May-Deploy] — 2026-05-19 (Session 16)
 

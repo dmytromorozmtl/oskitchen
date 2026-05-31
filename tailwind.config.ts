@@ -18,16 +18,16 @@ const config: Config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          50: "#EFF6FF",
-          100: "#DBEAFE",
-          200: "#BFDBFE",
-          300: "#93C5FD",
-          400: "#60A5FA",
-          500: "#3B82F6",
-          600: "#2563FF",
-          700: "#1D4ED8",
-          800: "#1E40AF",
-          900: "#1E3A8A",
+          50: "#FFF4ED",
+          100: "#FFE8D9",
+          200: "#FFD0B3",
+          300: "#FFB88C",
+          400: "#FF8F4D",
+          500: "#FF5F1F",
+          600: "#E54F15",
+          700: "#CC4512",
+          800: "#A8380E",
+          900: "#852C0B",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -54,7 +54,7 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
         brand: {
-          DEFAULT: "#2563FF",
+          DEFAULT: "#FF5F1F",
           foreground: "#ffffff",
         },
       },
@@ -74,7 +74,8 @@ const config: Config = {
           "0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-body)", "var(--font-body-fallback)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-display-fallback)", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

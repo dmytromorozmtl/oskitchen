@@ -157,7 +157,7 @@ export function pickErrorRecoveryAttentionItems(
     items.push({
       id: "failed-channel-orders",
       title: `${snapshot.failedExternalOrders} failed channel order${snapshot.failedExternalOrders === 1 ? "" : "s"}`,
-      detail: "Rows that never became KitchenOS orders — recover from order hub.",
+      detail: "Rows that never became OS Kitchen orders — recover from order hub.",
       href: "/dashboard/order-hub?tab=failed",
       priority: 5,
       tone: "urgent",

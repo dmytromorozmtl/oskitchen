@@ -13,7 +13,7 @@ import { storefrontTeamInviteTemplate } from "@/lib/email/templates/storefront-t
 import { logger } from "@/lib/logger";
 
 const from =
-  process.env.RESEND_FROM_EMAIL ?? "KitchenOS <onboarding@resend.dev>";
+  process.env.RESEND_FROM_EMAIL ?? "OS Kitchen <onboarding@resend.dev>";
 
 export function isEmailConfigured() {
   return isResendConfigured();

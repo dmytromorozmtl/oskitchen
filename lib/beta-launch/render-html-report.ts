@@ -36,7 +36,7 @@ export function renderLaunchReportHtml(report: LaunchReport): string {
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KitchenOS Beta Launch Report</title>
+  <title>OS Kitchen Beta Launch Report</title>
   <style>
     body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #111; }
     h1 { font-size: 1.5rem; }
@@ -52,7 +52,7 @@ export function renderLaunchReportHtml(report: LaunchReport): string {
   </style>
 </head>
 <body>
-  <h1>KitchenOS Beta Launch Report</h1>
+  <h1>OS Kitchen Beta Launch Report</h1>
   <p class="meta">Generated ${esc(report.generatedAt)} · env ${esc(report.environment)}</p>
   <p class="meta">pass=${report.summary.pass} fail=${report.summary.fail} manual=${report.summary.manual} skip=${report.summary.skip}</p>
   <div class="banner ${ready ? "ok" : "fail"}">${ready ? "Ready for closed beta (automated gates)" : "Not ready — fix FAIL gates"}</div>

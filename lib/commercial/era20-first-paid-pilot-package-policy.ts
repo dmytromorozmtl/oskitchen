@@ -50,7 +50,7 @@ export const ERA20_FIRST_PAID_PILOT_PACKAGE_REQUIRED_SECTIONS = [
   "Onboarding checklist (Launch Wizard — primary path)",
   "Launch checklist",
   "Training checklist",
-  "Support checklist (KitchenOS)",
+  "Support checklist (OS Kitchen)",
   "Success metrics (90-day pilot)",
   "Pricing hypothesis (not in-product billing SKU yet)",
   "LOI / contract language",

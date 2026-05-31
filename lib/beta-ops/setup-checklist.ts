@@ -93,7 +93,7 @@ export function renderSetupChecklist(state: ProgramState | null): string {
   const phases = buildSetupPhases(state);
   const readiness = computeProgramReadiness(state);
   const lines = [
-    "# KitchenOS Beta — Setup Checklist",
+    "# OS Kitchen Beta — Setup Checklist",
     "",
     `Readiness: **${readiness.score}/100** (launch ${readiness.launchScore}, env ${readiness.envScore}, program ${readiness.programScore})`,
     "",

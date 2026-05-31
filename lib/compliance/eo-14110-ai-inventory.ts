@@ -41,7 +41,7 @@ export function buildDefaultModelInventory(): Eo14110ModelInventoryEntry[] {
     {
       at: new Date().toISOString(),
       modelId: "kos-theme-assigner-v1",
-      provider: "KitchenOS",
+      provider: "OS Kitchen",
       useCase: "Deterministic theme experiment assignment",
       dualUseScreened: true,
       nationalSecuritySensitive: false,
@@ -49,7 +49,7 @@ export function buildDefaultModelInventory(): Eo14110ModelInventoryEntry[] {
     {
       at: new Date().toISOString(),
       modelId: process.env.EO_14110_SCIENTIST_MODEL_ID ?? "kos-autonomous-scientist",
-      provider: process.env.EO_14110_SCIENTIST_PROVIDER ?? "KitchenOS",
+      provider: process.env.EO_14110_SCIENTIST_PROVIDER ?? "OS Kitchen",
       useCase: "Experiment hypothesis proposals and guardrailed conclude",
       dualUseScreened: true,
       nationalSecuritySensitive: false,

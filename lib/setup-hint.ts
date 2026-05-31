@@ -32,7 +32,7 @@ export function buildWorkspaceSetupHint(settings: KitchenSettings | null): Setup
       ok: Boolean(settings.businessType),
       label: "Choose business mode",
       href: "/dashboard/settings/workspace",
-      why: "Unlocks the right modules and language across KitchenOS.",
+      why: "Unlocks the right modules and language across OS Kitchen.",
       minutes: 2,
     },
     {
