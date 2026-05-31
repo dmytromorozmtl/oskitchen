@@ -243,7 +243,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
                 ? `${sync.b2bKitchenOrderStats.missingCompanyLink} promoted B2B kitchen order(s) without company link`
                 : sync?.b2bNetTermsStats?.missingPoWhenRequired
                   ? `${sync.b2bNetTermsStats.missingPoWhenRequired} B2B order(s) missing required PO`
-                  : sync?.b2bCateringRollupStats?.quotesCreated
+                  : sync?.b2bInvoiceStats?.draftsCreated
+                    ? `${sync.b2bInvoiceStats.draftsCreated} B2B invoice draft(s) · ${sync.b2bInvoiceStats.skippedMissingPo} skipped (missing PO)`
+                    : sync?.b2bCateringRollupStats?.quotesCreated
                   ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
                   : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
                 ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
@@ -317,6 +319,11 @@ export function buildShopifyMarketsHealthSnapshot(input: {
   }
   if ((sync?.b2bCateringRollupStats?.quotesCreated ?? 0) > 0) {
     recommendations.push("Review auto-generated B2B catering rollup drafts before sending proposals.");
+  }
+  if ((sync?.b2bInvoiceStats?.draftsCreated ?? 0) > 0) {
+    recommendations.push(
+      "Review B2B net-terms invoice drafts in Order Hub — send to clients and mark paid when collected (Phase 18).",
+    );
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {
     recommendations.push("Run full reconcile weekly to keep import-mode markets fresh.");

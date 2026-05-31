@@ -1008,6 +1008,24 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bInvoiceStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B invoice drafts: {syncSettings.b2bInvoiceStats.draftsCreated} created
+              {!syncSettings.b2bAutoGenerateInvoice ? " · auto-generate off" : ""}
+              {syncSettings.b2bInvoiceStats.skippedMissingPo > 0 ? (
+                <> · {syncSettings.b2bInvoiceStats.skippedMissingPo} skipped (missing PO)</>
+              ) : null}
+              {syncSettings.lastB2bInvoiceGeneratedAt ? (
+                <>
+                  {" "}
+                  · last{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bInvoiceGeneratedAt), {
+                    addSuffix: true,
+                  })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

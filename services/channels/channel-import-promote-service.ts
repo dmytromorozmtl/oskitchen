@@ -28,6 +28,10 @@ import { upsertCustomerByEmail } from "@/services/crm/customer-service";
 import { runMatch } from "@/services/product-mapping/matching-service";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { maybeRollupB2bOrderToCateringQuote } from "@/services/integrations/shopify-b2b-catering-quote-rollup-service";
+import {
+  applyB2bNetTermsPaymentMode,
+  maybeGenerateB2bInvoiceDraft,
+} from "@/services/integrations/shopify-b2b-invoice-generation-service";
 import type { KitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
 
 const APPROVABLE_STATUSES: ChannelRecordValidationStatus[] = [
@@ -199,6 +203,33 @@ async function tryB2bCateringRollup(input: {
   }).catch(() => undefined);
 }
 
+async function tryB2bInvoiceGeneration(input: {
+  userId: string;
+  workspaceId: string | null;
+  orderId: string;
+  provider: IntegrationProvider;
+  connectionId: string | null;
+  orderTotal: number;
+  b2bMetadata: KitchenOrderB2bMetadata | null;
+  sourceMetadataJson: Prisma.InputJsonValue;
+}) {
+  if (!input.b2bMetadata) return;
+  await applyB2bNetTermsPaymentMode({
+    orderId: input.orderId,
+    b2b: input.b2bMetadata,
+  }).catch(() => undefined);
+  await maybeGenerateB2bInvoiceDraft({
+    userId: input.userId,
+    workspaceId: input.workspaceId,
+    orderId: input.orderId,
+    provider: input.provider,
+    connectionId: input.connectionId,
+    orderTotal: input.orderTotal,
+    b2b: input.b2bMetadata,
+    sourceMetadataJson: input.sourceMetadataJson,
+  }).catch(() => undefined);
+}
+
 export async function promoteChannelImportRecordToKitchenOrder(input: {
   userId: string;
   recordId: string;
@@ -318,6 +349,17 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
       customerId,
     });
 
+    await tryB2bInvoiceGeneration({
+      userId: input.userId,
+      workspaceId,
+      orderId: ext.importedOrderId,
+      provider: record.provider,
+      connectionId: record.batch.connectionId,
+      orderTotal: normalized.totals.total ?? 0,
+      b2bMetadata,
+      sourceMetadataJson,
+    });
+
     return {
       ok: true,
       orderId: ext.importedOrderId,
@@ -354,7 +396,7 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
       orderType: "SALES_CHANNEL_ORDER",
       creationSource: "CHANNEL_IMPORT",
       statusKey: "CONFIRMED",
-      paymentMode: "PAY_LATER",
+      paymentMode: b2bMetadata?.paymentTerms ? "MANUAL_INVOICE" : "PAY_LATER",
       customerId: customerId ?? undefined,
       customerName: normalized.customer.name ?? b2bMetadata?.companyName ?? "Channel guest",
       customerEmail: email,
@@ -397,6 +439,17 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
     sourceMetadataJson,
     normalized,
     customerId,
+  });
+
+  await tryB2bInvoiceGeneration({
+    userId: input.userId,
+    workspaceId,
+    orderId: order.orderId,
+    provider: record.provider,
+    connectionId: record.batch.connectionId,
+    orderTotal: total,
+    b2bMetadata,
+    sourceMetadataJson,
   });
 
   return {

@@ -325,6 +325,16 @@ export type ShopifyMarketsSyncSettings = {
     withPoNumber: number;
     missingPoWhenRequired: number;
   } | null;
+  b2bAutoGenerateInvoice: boolean;
+  lastB2bInvoiceGeneratedAt: string | null;
+  b2bInvoiceStats: {
+    draftsCreated: number;
+    skippedNoTerms: number;
+    skippedIncomplete: number;
+    skippedAlreadyLinked: number;
+    skippedMissingPo: number;
+    skippedDisabled: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -520,6 +530,23 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
 
   const b2bRequirePurchaseOrder = raw.b2bRequirePurchaseOrder === true;
 
+  const invoiceStatsRaw = raw.b2bInvoiceStats;
+  const b2bInvoiceStats =
+    invoiceStatsRaw && typeof invoiceStatsRaw === "object"
+      ? {
+          draftsCreated: Number((invoiceStatsRaw as Record<string, unknown>).draftsCreated) || 0,
+          skippedNoTerms: Number((invoiceStatsRaw as Record<string, unknown>).skippedNoTerms) || 0,
+          skippedIncomplete:
+            Number((invoiceStatsRaw as Record<string, unknown>).skippedIncomplete) || 0,
+          skippedAlreadyLinked:
+            Number((invoiceStatsRaw as Record<string, unknown>).skippedAlreadyLinked) || 0,
+          skippedMissingPo: Number((invoiceStatsRaw as Record<string, unknown>).skippedMissingPo) || 0,
+          skippedDisabled: Number((invoiceStatsRaw as Record<string, unknown>).skippedDisabled) || 0,
+        }
+      : null;
+
+  const b2bAutoGenerateInvoice = raw.b2bAutoGenerateInvoice !== false;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -654,6 +681,10 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastB2bNetTermsEnrichmentAt:
       typeof raw.lastB2bNetTermsEnrichmentAt === "string" ? raw.lastB2bNetTermsEnrichmentAt : null,
     b2bNetTermsStats,
+    b2bAutoGenerateInvoice,
+    lastB2bInvoiceGeneratedAt:
+      typeof raw.lastB2bInvoiceGeneratedAt === "string" ? raw.lastB2bInvoiceGeneratedAt : null,
+    b2bInvoiceStats,
   };
 }
 

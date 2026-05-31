@@ -511,3 +511,41 @@ Required Shopify scopes (verify at implementation):
 | UI | Order hub + order detail badges (`Net 30`, `PO#…`) |
 
 **Conscious limits:** No outbound PO write to Shopify; no automatic invoice generation (Phase 17).
+
+---
+
+## Phase 17 — B2B invoice draft generation (shipped)
+
+**Goal:** After promote, complete Shopify B2B kitchen orders with net terms receive a DRAFT receivable invoice linked on the order — payment mode switches to `MANUAL_INVOICE` / `UNPAID`.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_INVOICE=1` (default on in non-production) |
+| Trigger | Post-promote when `b2b.status=complete`, `paymentTerms` present, `b2bAutoGenerateInvoice` |
+| Service | `shopify-b2b-invoice-generation-service.ts` — `maybeGenerateB2bInvoiceDraft` |
+| Order metadata | `sourceMetadataJson.b2b.invoiceDraft`: `{ invoiceId, invoiceNumber, status, dueAt, amountCents }` |
+| Payment mode | `MANUAL_INVOICE` + `UNPAID` when net terms on promote |
+| Audit | `BillingEvent` type `B2B_INVOICE_DRAFT_CREATED` |
+| Settings | `b2bAutoGenerateInvoice`, `b2bInvoiceStats`, `lastB2bInvoiceGeneratedAt` |
+| UI | Order detail + Order Hub badges/banner |
+| Health | Recommends reviewing invoice drafts before client send |
+
+**Conscious limits:** No Shopify outbound invoice write; no in-app payment collection or mark-paid workflow (Phase 18).
+
+---
+
+## Phase 18 — B2B payment collection (planned)
+
+**Goal:** Close the AR loop — operators mark B2B net-terms invoices paid from Order Hub, sync `paymentStatus`, and optionally emit customer timeline events.
+
+| Component | Plan |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_PAYMENT_COLLECTION=1` |
+| Trigger | Manual action on orders with `b2b.invoiceDraft` and `paymentStatus=UNPAID` |
+| Service | `shopify-b2b-invoice-payment-service.ts` — mark paid, patch `invoiceDraft.status`, timeline |
+| Order | `paymentStatus: PAID`, `b2b.invoiceDraft.paidAt`, optional partial payments |
+| UI | Order detail “Mark invoice paid” + Order Hub bulk action |
+| Health | Overdue net-terms drafts past `dueAt` without payment |
+| Settings | `b2bInvoiceOverdueDays`, `b2bPaymentCollectionStats` |
+
+**Conscious limits:** No Stripe Connect charge for B2B buyer; no Shopify payment write-back.

@@ -5,6 +5,7 @@ import { isShopifyMarketsKitchenOrderB2bEnabled } from "@/lib/commercial/shopify
 import type { ShopifyB2bOrderImportEnrichment } from "@/services/integrations/shopify-b2b-order-import-enrichment-service";
 
 import type { B2bCateringQuoteRollupLink } from "@/lib/integrations/shopify-b2b-catering-rollup-metadata";
+import type { B2bInvoiceDraftLink } from "@/lib/integrations/shopify-b2b-invoice-draft-metadata";
 import type { B2bPaymentTermsSnapshot } from "@/lib/integrations/shopify-b2b-net-terms-extract";
 
 export type KitchenOrderB2bMetadata = {
@@ -24,6 +25,7 @@ export type KitchenOrderB2bMetadata = {
   paymentTerms: B2bPaymentTermsSnapshot | null;
   missingPo: boolean;
   cateringQuoteRollup?: B2bCateringQuoteRollupLink;
+  invoiceDraft?: B2bInvoiceDraftLink;
 };
 
 export type B2bKitchenOrderStats = {
