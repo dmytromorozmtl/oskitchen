@@ -12,6 +12,7 @@ import { stageWebhookOrderIngest } from "@/lib/channels/import-staging";
 import {
   handleShopifyMarketsWebhookEvent,
 } from "@/lib/webhooks/shopify-markets-webhook-service";
+import { touchShopifyMarketsWebhookDelivery } from "@/services/integrations/shopify-markets-webhook-registry-service";
 import {
   normalizeShopifyRestOrder,
 } from "@/services/integrations/shopify";
@@ -53,6 +54,10 @@ export async function executeShopifyWebhookBusinessLogic(params: {
     await handleShopifyMarketsWebhookEvent({
       userId: params.userId,
       connection: conn,
+      topic: params.topic,
+    });
+    await touchShopifyMarketsWebhookDelivery({
+      connectionId: conn.id,
       topic: params.topic,
     });
     await prisma.integrationConnection.update({
@@ -136,6 +141,10 @@ export async function executeShopifyWebhookBusinessLogic(params: {
     await handleShopifyMarketsWebhookEvent({
       userId: params.userId,
       connection: conn,
+      topic: params.topic,
+    });
+    await touchShopifyMarketsWebhookDelivery({
+      connectionId: conn.id,
       topic: params.topic,
     });
     await prisma.integrationConnection.update({

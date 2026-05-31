@@ -40,6 +40,10 @@ import {
   resolveShopifyMarketHostnameConflict,
 } from "@/services/integrations/shopify-markets-hostname-guard-bidirectional-service";
 import { importShopifyMarketHostnameForConnection } from "@/services/integrations/shopify-market-hostname-service";
+import {
+  registerMissingShopifyMarketsWebhooks,
+  syncShopifyMarketsWebhookRegistryForConnection,
+} from "@/services/integrations/shopify-markets-webhook-registry-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
@@ -97,6 +101,14 @@ export async function discoverShopifyMarketsAction(connectionId: string) {
 
   if (!discovery.ok) {
     return { ok: false as const, error: discovery.error };
+  }
+
+  const refreshedConn = await prisma.integrationConnection.findUnique({ where: { id: conn.id } });
+  if (refreshedConn && creds) {
+    await syncShopifyMarketsWebhookRegistryForConnection({
+      connection: refreshedConn,
+      creds,
+    });
   }
 
   return {
@@ -647,4 +659,57 @@ export async function applySuggestedShopifyMarketHostnameAction(input: {
   revalidatePath("/dashboard/storefront/markets");
   revalidatePath("/dashboard/storefront/domains");
   return { ok: true as const };
+}
+
+export async function syncShopifyMarketsWebhookRegistryAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.sync_webhook_registry" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before sync." };
+  }
+
+  const result = await syncShopifyMarketsWebhookRegistryForConnection({ connection: conn, creds });
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  return { ok: true as const, driftOpen: result.driftOpen };
+}
+
+export async function registerShopifyMarketsWebhooksAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.register_webhooks" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before register." };
+  }
+
+  const result = await registerMissingShopifyMarketsWebhooks({ connection: conn, creds });
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  return {
+    ok: true as const,
+    registered: result.registered,
+    skipped: result.skipped,
+    errors: result.errors,
+  };
 }

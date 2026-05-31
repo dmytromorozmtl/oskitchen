@@ -130,6 +130,21 @@ export type ShopifyMarketHostnameConflictRow = {
   hostnameAuthority: "shopify" | "kitchenos" | "manual";
 };
 
+export type ShopifyMarketsWebhookRegistryRow = {
+  topic: string;
+  graphqlTopic: string;
+  routeSegment: string;
+  label: string;
+  expectedCallbackUrl: string;
+  shopifySubscriptionId: string | null;
+  actualCallbackUrl: string | null;
+  registeredAt: string | null;
+  lastSyncedAt: string;
+  lastDeliveryAt: string | null;
+  failureCount: number;
+  driftStatus: "ok" | "missing" | "wrong_url" | "stale" | "never_delivered";
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
@@ -179,6 +194,12 @@ export type ShopifyMarketsSyncSettings = {
   lastHostnameReconcileError: string | null;
   lastHostnameReconcileResult: string | null;
   marketHostnameConflicts: Record<string, ShopifyMarketHostnameConflictRow>;
+  lastWebhookRegistrySyncAt: string | null;
+  webhookRegistrySyncError: string | null;
+  lastWebhookRegistryRegisterAt: string | null;
+  lastWebhookRegistryRegisterError: string | null;
+  lastWebhookRegistryDriftCount: number | null;
+  marketWebhookRegistry: Record<string, ShopifyMarketsWebhookRegistryRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -193,6 +214,11 @@ export const SHOPIFY_MARKETS_CATALOG_PUSH_REQUIRED_SCOPES = [
   "read_products",
   "write_products",
   "write_publications",
+] as const;
+
+export const SHOPIFY_MARKETS_WEBHOOK_REGISTRY_REQUIRED_SCOPES = [
+  "read_webhooks",
+  "write_webhooks",
 ] as const;
 
 export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyMarketsSyncSettings {
@@ -259,6 +285,11 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
   const marketHostnameConflicts =
     raw.marketHostnameConflicts && typeof raw.marketHostnameConflicts === "object"
       ? (raw.marketHostnameConflicts as Record<string, ShopifyMarketHostnameConflictRow>)
+      : {};
+
+  const marketWebhookRegistry =
+    raw.marketWebhookRegistry && typeof raw.marketWebhookRegistry === "object"
+      ? (raw.marketWebhookRegistry as Record<string, ShopifyMarketsWebhookRegistryRow>)
       : {};
 
   return {
@@ -335,6 +366,17 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastHostnameReconcileResult:
       typeof raw.lastHostnameReconcileResult === "string" ? raw.lastHostnameReconcileResult : null,
     marketHostnameConflicts,
+    lastWebhookRegistrySyncAt:
+      typeof raw.lastWebhookRegistrySyncAt === "string" ? raw.lastWebhookRegistrySyncAt : null,
+    webhookRegistrySyncError:
+      typeof raw.webhookRegistrySyncError === "string" ? raw.webhookRegistrySyncError : null,
+    lastWebhookRegistryRegisterAt:
+      typeof raw.lastWebhookRegistryRegisterAt === "string" ? raw.lastWebhookRegistryRegisterAt : null,
+    lastWebhookRegistryRegisterError:
+      typeof raw.lastWebhookRegistryRegisterError === "string" ? raw.lastWebhookRegistryRegisterError : null,
+    lastWebhookRegistryDriftCount:
+      typeof raw.lastWebhookRegistryDriftCount === "number" ? raw.lastWebhookRegistryDriftCount : null,
+    marketWebhookRegistry,
   };
 }
 

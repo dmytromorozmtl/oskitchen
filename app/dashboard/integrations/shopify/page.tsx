@@ -4,6 +4,7 @@ import { DisconnectIntegrationButton } from "@/components/dashboard/disconnect-i
 import { IntegrationClientForm } from "@/components/dashboard/integration-client-form";
 import { IntegrationToolRow } from "@/components/dashboard/integration-tool-row";
 import { ShopifyMarketsPanel } from "@/components/dashboard/integrations/shopify-markets-panel";
+import { ShopifyMarketsWebhookRegistryPanel } from "@/components/dashboard/integrations/shopify-markets-webhook-registry-panel";
 import { saveShopifySettings } from "@/actions/integrations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -172,6 +173,13 @@ export default async function ShopifyIntegrationPage() {
       />
 
       <ShopifyMarketsPanel
+        connectionId={conn?.id ?? null}
+        hasCredentials={hasToken && Boolean(conn?.shopDomain)}
+        syncSettings={marketsSync}
+        canManage={canManageChannel}
+      />
+
+      <ShopifyMarketsWebhookRegistryPanel
         connectionId={conn?.id ?? null}
         hasCredentials={hasToken && Boolean(conn?.shopDomain)}
         syncSettings={marketsSync}

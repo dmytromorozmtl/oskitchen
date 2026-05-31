@@ -319,13 +319,27 @@ export function verifyShopifyHmac(rawBody: string, hmacHeader: string, secret: s
 }
 
 export async function registerWebhookPlaceholder(
-  _creds: ShopifyCredentials,
-  _topic: string,
-  _address: string,
+  creds: ShopifyCredentials,
+  topic: string,
+  address: string,
 ) {
+  const { registerMissingShopifyMarketsWebhooks } = await import(
+    "@/services/integrations/shopify-markets-webhook-registry-service"
+  );
+  const { findMarketsWebhookTopicDef } = await import(
+    "@/lib/commercial/shopify-markets-webhook-registry"
+  );
+  if (!findMarketsWebhookTopicDef(topic)) {
+    return {
+      ok: false as const,
+      message:
+        "Programmatic webhook registration is available for Markets sync topics via Integrations → Shopify → Webhook registry.",
+    };
+  }
+  void creds;
+  void address;
   return {
     ok: false as const,
-    message:
-      "Programmatic webhook registration requires the Admin API webhookSubscriptionCreate mutation with appropriate scopes. Configure webhooks in Shopify admin for now.",
+    message: "Use Integrations → Shopify → Register missing webhooks for Markets sync topics.",
   };
 }

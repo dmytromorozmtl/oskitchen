@@ -1,0 +1,24 @@
+{
+  "data": {
+    "webhookSubscriptions": {
+      "nodes": [
+        {
+          "id": "gid://shopify/WebhookSubscription/1111111111",
+          "topic": "MARKETS_CREATE",
+          "endpoint": {
+            "__typename": "WebhookHttpEndpoint",
+            "callbackUrl": "https://app.kitchenos.test/api/webhooks/shopify/markets-create"
+          }
+        },
+        {
+          "id": "gid://shopify/WebhookSubscription/2222222222",
+          "topic": "PRODUCTS_UPDATE",
+          "endpoint": {
+            "__typename": "WebhookHttpEndpoint",
+            "callbackUrl": "https://wrong.example.com/api/webhooks/shopify/products-update"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -304,6 +304,7 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 6 (catalog publication) shipped:** catalog import/push, `catalogAuthority`, publication conflicts, storefront overlay |
 | 2026-05-31 | **Phase 7 (tax/duty guard) shipped:** read-only Shopify tax hint import, `taxAuthority`, conflict queue (`RATE_MISMATCH`, `JURISDICTION_MISSING`, `DUTY_UNCONFIGURED`, `MODE_MISMATCH`), checkout honesty — KitchenOS tax engine always wins |
 | 2026-05-31 | **Phase 8 (market hostname) shipped:** Shopify handle → suggested subdomain/slug, `hostnameAuthority`, conflict queue, manual Apply + reconcile auto-apply when shopify wins |
+| 2026-06-01 | **Phase 9 (webhook registry) shipped:** Admin subscription sync, drift detection, register missing, delivery health from webhook event log |
 
 ---
 
@@ -341,3 +342,24 @@ Required Shopify scopes (verify at implementation):
 **Conflict types:** `HANDLE_MISMATCH`, `SUBDOMAIN_TAKEN`, `SLUG_COLLISION`
 
 **Conscious limits:** DNS never auto-provisioned; apply writes `hostSubdomain`/`storeSlug` in settings center only when user clicks Apply or `hostnameAuthority=shopify` reconcile wins.
+
+---
+
+## Phase 9 — Webhook registry & health (shipped)
+
+**Goal:** Observe and provision Shopify Admin webhook subscriptions for Markets sync topics with drift detection.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_WEBHOOK_REGISTRY=1` (default on in non-production) |
+| Registry service | `shopify-markets-webhook-registry-service.ts` — list/create via GraphQL |
+| Settings cache | `marketWebhookRegistry` on connection `marketsSync` |
+| Delivery health | `webhookEvent` log + `touchShopifyMarketsWebhookDelivery` on process |
+| UI | `shopify-markets-webhook-registry-panel.tsx` on Shopify integration page |
+| Auto-sync | Runs after market discovery |
+
+**Topics:** `markets/create`, `markets/update`, `markets/delete`, `products/update`
+
+**Drift statuses:** `missing`, `wrong_url`, `stale` (>24h), `never_delivered`
+
+**Scopes:** `read_webhooks`, `write_webhooks` for programmatic registration.
