@@ -979,6 +979,25 @@ export function ShopifyMarketsPanel({
               ) : null}
             </p>
           ) : null}
+          {syncSettings.b2bCateringRollupStats ? (
+            <p className="text-xs text-muted-foreground">
+              B2B catering rollups: {syncSettings.b2bCateringRollupStats.quotesCreated} draft quote(s)
+              · {syncSettings.b2bCateringRollupStats.ordersAppended} order(s) appended ·{" "}
+              {syncSettings.b2bCateringRollupStats.linesRolled} line(s)
+              {syncSettings.b2bCateringRollupMinTotal ? (
+                <> · min total {syncSettings.b2bCateringRollupMinTotal}</>
+              ) : null}
+              {syncSettings.lastB2bCateringRollupAt ? (
+                <>
+                  {" "}
+                  · last{" "}
+                  {formatDistanceToNow(new Date(syncSettings.lastB2bCateringRollupAt), {
+                    addSuffix: true,
+                  })}
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         {syncSettings.lastCatalogReconcileAt ? (

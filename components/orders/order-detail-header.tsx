@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { OrderB2bCateringQuoteBanner } from "@/components/orders/order-b2b-catering-quote-banner";
 import { OrderCustomerSummary } from "@/components/orders/order-customer-summary";
 import { OrderOperationalStateBadge } from "@/components/orders/order-operational-state-badge";
 import { OrderStatusSummary } from "@/components/orders/order-status-summary";
@@ -40,6 +41,7 @@ export function OrderDetailHeader({
 
   return (
     <div className="space-y-4">
+      <OrderB2bCateringQuoteBanner sourceMetadataJson={order.sourceMetadataJson} />
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
       <div className="min-w-0 flex-1 space-y-3">
         <div>

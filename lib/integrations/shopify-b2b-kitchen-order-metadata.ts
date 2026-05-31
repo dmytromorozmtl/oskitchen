@@ -4,6 +4,8 @@ import type { B2bOrderEnrichmentStatus } from "@/lib/commercial/shopify-market-b
 import { isShopifyMarketsKitchenOrderB2bEnabled } from "@/lib/commercial/shopify-market-kitchen-order-b2b";
 import type { ShopifyB2bOrderImportEnrichment } from "@/services/integrations/shopify-b2b-order-import-enrichment-service";
 
+import type { B2bCateringQuoteRollupLink } from "@/lib/integrations/shopify-b2b-catering-rollup-metadata";
+
 export type KitchenOrderB2bMetadata = {
   status: B2bOrderEnrichmentStatus;
   companyAccountId: string | null;
@@ -17,6 +19,7 @@ export type KitchenOrderB2bMetadata = {
   enrichedAt: string;
   promotedAt: string;
   missingCompanyLink: boolean;
+  cateringQuoteRollup?: B2bCateringQuoteRollupLink;
 };
 
 export type B2bKitchenOrderStats = {

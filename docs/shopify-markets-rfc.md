@@ -471,3 +471,23 @@ Required Shopify scopes (verify at implementation):
 **Metadata fields:** `companyAccountId`, `osMarketId`, `shopifyCompanyId`, `shopifyLocationId`, `orderNotesBadge`, `status`
 
 **Conscious limits:** No auto catering quote rollup (Phase 15); no net terms / PO numbers (Phase 16).
+
+---
+
+## Phase 15 — B2B catering quote rollup (shipped)
+
+**Goal:** Complete B2B kitchen orders above threshold append into a weekly DRAFT `CateringQuote` per company account.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_B2B_CATERING_ROLLUP=1` (default on in non-production) |
+| Rollup service | `shopify-b2b-catering-quote-rollup-service.ts` — post-promote hook |
+| Metadata | `shopify-b2b-catering-rollup-metadata.ts` — week key, quote marker, order link |
+| Trigger | After Phase 14 promote when `b2b.status=complete`, total ≥ `b2bCateringRollupMinTotal` (default 300) |
+| Quote aggregation | Same company + ISO week → append lines; else create DRAFT `OFFICE_EVENT` quote |
+| Order link | `sourceMetadataJson.b2b.cateringQuoteRollup` |
+| Settings | `b2bCateringRollupStats`, `b2bCateringRollupMinTotal`, `lastB2bCateringRollupAt` |
+| UI | Order detail banner → `/dashboard/catering-quotes/[id]` |
+| Health | Recommends reviewing auto-generated rollup drafts |
+
+**Conscious limits:** No auto-send proposal to client; no net terms / PO numbers (Phase 16).

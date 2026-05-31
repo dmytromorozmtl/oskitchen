@@ -308,6 +308,16 @@ export type ShopifyMarketsSyncSettings = {
     unresolved: number;
     missingCompanyLink: number;
   } | null;
+  b2bCateringRollupMinTotal: number | null;
+  lastB2bCateringRollupAt: string | null;
+  b2bCateringRollupStats: {
+    quotesCreated: number;
+    ordersAppended: number;
+    linesRolled: number;
+    skippedBelowThreshold: number;
+    skippedIncomplete: number;
+    skippedAlreadyLinked: number;
+  } | null;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -468,6 +478,28 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         }
       : null;
 
+  const rollupStatsRaw = raw.b2bCateringRollupStats;
+  const b2bCateringRollupStats =
+    rollupStatsRaw && typeof rollupStatsRaw === "object"
+      ? {
+          quotesCreated: Number((rollupStatsRaw as Record<string, unknown>).quotesCreated) || 0,
+          ordersAppended: Number((rollupStatsRaw as Record<string, unknown>).ordersAppended) || 0,
+          linesRolled: Number((rollupStatsRaw as Record<string, unknown>).linesRolled) || 0,
+          skippedBelowThreshold:
+            Number((rollupStatsRaw as Record<string, unknown>).skippedBelowThreshold) || 0,
+          skippedIncomplete:
+            Number((rollupStatsRaw as Record<string, unknown>).skippedIncomplete) || 0,
+          skippedAlreadyLinked:
+            Number((rollupStatsRaw as Record<string, unknown>).skippedAlreadyLinked) || 0,
+        }
+      : null;
+
+  const b2bCateringRollupMinTotalRaw = raw.b2bCateringRollupMinTotal;
+  const b2bCateringRollupMinTotal =
+    typeof b2bCateringRollupMinTotalRaw === "number" && b2bCateringRollupMinTotalRaw > 0
+      ? b2bCateringRollupMinTotalRaw
+      : null;
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -594,6 +626,10 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
         ? raw.lastB2bKitchenOrderPromoteAt
         : null,
     b2bKitchenOrderStats,
+    b2bCateringRollupMinTotal,
+    lastB2bCateringRollupAt:
+      typeof raw.lastB2bCateringRollupAt === "string" ? raw.lastB2bCateringRollupAt : null,
+    b2bCateringRollupStats,
   };
 }
 

@@ -27,6 +27,8 @@ import { persistResolvedOrder } from "@/services/orders/order-creation-service";
 import { upsertCustomerByEmail } from "@/services/crm/customer-service";
 import { runMatch } from "@/services/product-mapping/matching-service";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
+import { maybeRollupB2bOrderToCateringQuote } from "@/services/integrations/shopify-b2b-catering-quote-rollup-service";
+import type { KitchenOrderB2bMetadata } from "@/lib/integrations/shopify-b2b-kitchen-order-metadata";
 
 const APPROVABLE_STATUSES: ChannelRecordValidationStatus[] = [
   ChannelRecordValidationStatus.VALID,
@@ -167,6 +169,36 @@ function fallbackCustomerEmail(provider: IntegrationProvider, externalOrderId: s
   return `${String(provider).toLowerCase()}+${externalOrderId}@channel-import.local`;
 }
 
+async function tryB2bCateringRollup(input: {
+  userId: string;
+  orderId: string;
+  provider: IntegrationProvider;
+  connectionId: string | null;
+  orderTotal: number;
+  b2bMetadata: KitchenOrderB2bMetadata | null;
+  sourceMetadataJson: Prisma.InputJsonValue;
+  normalized: NormalizedKitchenOrder;
+  customerId: string | null;
+}) {
+  if (!input.b2bMetadata) return;
+  await maybeRollupB2bOrderToCateringQuote({
+    userId: input.userId,
+    orderId: input.orderId,
+    provider: input.provider,
+    connectionId: input.connectionId,
+    orderTotal: input.orderTotal,
+    b2b: input.b2bMetadata,
+    sourceMetadataJson: input.sourceMetadataJson,
+    customerName: input.normalized.customer.name ?? input.b2bMetadata.companyName ?? "B2B guest",
+    customerEmail:
+      input.normalized.customer.email?.trim() ||
+      fallbackCustomerEmail(input.provider, input.normalized.externalOrderId),
+    customerPhone: input.normalized.customer.phone ?? null,
+    customerId: input.customerId,
+    fulfillmentDate: input.normalized.fulfillment.deliveryTime ?? input.normalized.fulfillment.pickupTime,
+  }).catch(() => undefined);
+}
+
 export async function promoteChannelImportRecordToKitchenOrder(input: {
   userId: string;
   recordId: string;
@@ -274,6 +306,18 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
       });
     }
 
+    await tryB2bCateringRollup({
+      userId: input.userId,
+      orderId: ext.importedOrderId,
+      provider: record.provider,
+      connectionId: record.batch.connectionId,
+      orderTotal: normalized.totals.total ?? 0,
+      b2bMetadata,
+      sourceMetadataJson,
+      normalized,
+      customerId,
+    });
+
     return {
       ok: true,
       orderId: ext.importedOrderId,
@@ -342,6 +386,18 @@ export async function promoteChannelImportRecordToKitchenOrder(input: {
       metadata: b2bMetadata,
     });
   }
+
+  await tryB2bCateringRollup({
+    userId: input.userId,
+    orderId: order.orderId,
+    provider: record.provider,
+    connectionId: record.batch.connectionId,
+    orderTotal: total,
+    b2bMetadata,
+    sourceMetadataJson,
+    normalized,
+    customerId,
+  });
 
   return {
     ok: true,

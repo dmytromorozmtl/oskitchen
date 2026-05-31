@@ -241,7 +241,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
               ? `${sync.b2bOrderEnrichmentStats.unresolved} unresolved B2B order(s) in staging`
               : sync?.b2bKitchenOrderStats?.missingCompanyLink
                 ? `${sync.b2bKitchenOrderStats.missingCompanyLink} promoted B2B kitchen order(s) without company link`
-                : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
+                : sync?.b2bCateringRollupStats?.quotesCreated
+                  ? `${sync.b2bCateringRollupStats.quotesCreated} B2B catering rollup quote(s) · ${sync.b2bCateringRollupStats.ordersAppended} order(s) appended`
+                  : sync?.lastB2bReconcileAt || sync?.lastB2bLocationReconcileAt
                 ? `Last reconcile ${sync.lastB2bReconcileResult ?? sync.lastB2bLocationReconcileResult ?? "ok"}`
                 : Object.keys(sync?.b2bCompanyImports ?? {}).length > 0
                   ? `${Object.keys(sync?.b2bCompanyImports ?? {}).length} company · ${Object.keys(sync?.b2bLocationImports ?? {}).length} location hint(s)`
@@ -305,6 +307,9 @@ export function buildShopifyMarketsHealthSnapshot(input: {
     recommendations.push(
       "Link promoted B2B kitchen orders to company accounts in Customers → Companies.",
     );
+  }
+  if ((sync?.b2bCateringRollupStats?.quotesCreated ?? 0) > 0) {
+    recommendations.push("Review auto-generated B2B catering rollup drafts before sending proposals.");
   }
   if (recommendations.length === 0 && linkedMarkets > 0) {
     recommendations.push("Run full reconcile weekly to keep import-mode markets fresh.");
