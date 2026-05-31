@@ -199,3 +199,13 @@ Priority: P2
 Files: 1
 Result: IMPLEMENTED
 Next: restaurant-capital-rfc (P2)
+
+---
+Cycle: 22
+Timestamp: 2026-05-31T03:30:00.000Z
+Feature: restaurant-capital-rfc
+Competitor: Toast Capital / Square Capital
+Priority: P2
+Files: 1
+Result: IMPLEMENTED
+Next: competitor feature parity complete (cycle 23)
