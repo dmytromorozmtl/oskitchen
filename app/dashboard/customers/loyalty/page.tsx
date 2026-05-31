@@ -1,8 +1,11 @@
 import { LoyaltyRulesForm } from "@/components/customers/loyalty-rules-form";
 import { LoyaltyTransactionHistory } from "@/components/customers/loyalty-transaction-history";
+import { RestaurantLoyaltyConfigForm } from "@/components/customers/restaurant-loyalty-config-form";
 import { PolicyLockedHonestyBanner } from "@/components/dashboard/policy-locked-honesty-banner";
 import { requireLoyaltyPageAccess } from "@/lib/crm/rewards-page-access";
+import { restaurantLoyaltyFromSettingsCenter } from "@/lib/loyalty/restaurant-loyalty-settings";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { prisma } from "@/lib/prisma";
 import {
   getLoyaltyTransactions,
   getOrCreateLoyaltyProgram,
@@ -16,11 +19,17 @@ export default async function CustomerLoyaltyPage() {
   if (!access.ok) return access.deny;
 
   const { userId } = await getTenantActor();
-  const [program, accounts, transactions] = await Promise.all([
+  const [program, accounts, transactions, kitchen] = await Promise.all([
     getOrCreateLoyaltyProgram(userId),
     listLoyaltyAccounts(userId),
     getLoyaltyTransactions(userId, 50),
+    prisma.kitchenSettings.findUnique({
+      where: { userId },
+      select: { settingsCenterJson: true },
+    }),
   ]);
+
+  const restaurantConfig = restaurantLoyaltyFromSettingsCenter(kitchen?.settingsCenterJson);
 
   const txRows = transactions.map((tx) => ({
     id: tx.id,
@@ -41,20 +50,23 @@ export default async function CustomerLoyaltyPage() {
       <div>
         <h1 className="text-2xl font-semibold">Loyalty program</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Configure kitchen-ledger loyalty for POS checkout. Storefront uses a separate ledger — not
-          interchangeable with POS codes until unified rewards ship in a future era.
+          Kitchen-ledger loyalty for POS — per-item bonuses, visit rewards, and tier multipliers.
+          Storefront uses a separate ledger until unified rewards ship.
         </p>
       </div>
 
       {access.canManage ? (
-        <LoyaltyRulesForm
-          program={{
-            pointsPerDollar: Number(program.pointsPerDollar),
-            redeemPointsThreshold: program.redeemPointsThreshold,
-            redeemValueCents: program.redeemValueCents,
-            active: program.active,
-          }}
-        />
+        <>
+          <LoyaltyRulesForm
+            program={{
+              pointsPerDollar: Number(program.pointsPerDollar),
+              redeemPointsThreshold: program.redeemPointsThreshold,
+              redeemValueCents: program.redeemValueCents,
+              active: program.active,
+            }}
+          />
+          <RestaurantLoyaltyConfigForm config={restaurantConfig} />
+        </>
       ) : (
         <p className="text-sm text-muted-foreground">
           You can view loyalty activity but do not have permission to change program rules.

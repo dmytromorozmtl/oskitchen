@@ -1,6 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { orderContributesToRevenue } from "@/lib/analytics/revenue-metrics";
+import { restaurantLoyaltyFromSettingsCenter } from "@/lib/loyalty/restaurant-loyalty-settings";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { loyaltyAccountListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import {
+  buildRestaurantLoyaltyEarnBreakdown,
+  formatEarnNotes,
+  type OrderLineForLoyalty,
+} from "@/services/loyalty/restaurant-loyalty-service";
 
 export async function getOrCreateLoyaltyProgram(userId: string) {
   const workspaceId = await resolveOwnerWorkspaceId(userId);
@@ -114,18 +121,40 @@ export async function earnLoyaltyPointsForOrder(
   customerId: string,
   orderId: string,
   orderTotal: number,
+  opts?: { lines?: OrderLineForLoyalty[] },
 ) {
   const program = await getOrCreateLoyaltyProgram(userId);
   if (!program.active) return { earned: 0 };
 
-  const points = Math.floor(orderTotal * Number(program.pointsPerDollar));
-  if (points <= 0) return { earned: 0 };
+  const kitchen = await prisma.kitchenSettings.findUnique({
+    where: { userId },
+    select: { settingsCenterJson: true },
+  });
+  const restaurantConfig = restaurantLoyaltyFromSettingsCenter(kitchen?.settingsCenterJson);
 
   const account = await getOrCreateLoyaltyAccount(userId, customerId);
+  const lifetimeBefore = await sumLifetimeEarnedPoints(account.id);
+  const visitCount = await countCustomerVisits(userId, customerId);
+
+  const breakdown = buildRestaurantLoyaltyEarnBreakdown({
+    orderTotal,
+    pointsPerDollar: Number(program.pointsPerDollar),
+    lines: opts?.lines ?? [],
+    config: restaurantConfig,
+    lifetimePointsBefore: lifetimeBefore,
+    visitCount,
+  });
+
+  const points = breakdown.totalPoints;
+  if (points <= 0) return { earned: 0, breakdown };
+
   await prisma.$transaction([
     prisma.loyaltyAccount.update({
       where: { id: account.id },
-      data: { pointsBalance: { increment: points } },
+      data: {
+        pointsBalance: { increment: points },
+        tier: breakdown.tierName,
+      },
     }),
     prisma.loyaltyTransaction.create({
       data: {
@@ -133,12 +162,29 @@ export async function earnLoyaltyPointsForOrder(
         type: "EARN",
         points,
         orderId,
-        notes: `Earned from order $${orderTotal.toFixed(2)}`,
+        notes: formatEarnNotes(breakdown, orderTotal),
       },
     }),
   ]);
 
-  return { earned: points };
+  return { earned: points, breakdown };
+}
+
+async function sumLifetimeEarnedPoints(accountId: string): Promise<number> {
+  const agg = await prisma.loyaltyTransaction.aggregate({
+    where: { accountId, type: "EARN", points: { gt: 0 } },
+    _sum: { points: true },
+  });
+  return agg._sum.points ?? 0;
+}
+
+async function countCustomerVisits(userId: string, customerId: string): Promise<number> {
+  const orders = await prisma.order.findMany({
+    where: { userId, customerId },
+    select: { status: true },
+    take: 500,
+  });
+  return orders.filter((order) => orderContributesToRevenue(order.status)).length;
 }
 
 export async function listLoyaltyAccounts(userId: string) {

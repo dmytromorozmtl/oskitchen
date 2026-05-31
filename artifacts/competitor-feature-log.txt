@@ -179,3 +179,13 @@ Priority: P1
 Files: 11
 Result: IMPLEMENTED
 Next: restaurant-loyalty (P1)
+
+---
+Cycle: 20
+Timestamp: 2026-05-31T03:00:00.000Z
+Feature: restaurant-loyalty
+Competitor: Toast/Square loyalty + visit rewards
+Priority: P1
+Files: 9
+Result: IMPLEMENTED
+Next: app-marketplace-rfc (P2)

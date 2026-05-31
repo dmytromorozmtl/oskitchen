@@ -378,11 +378,23 @@ export async function checkoutPosSale(
     await syncPosOrderToCrm(userId, order.id);
 
     if (order.customerId) {
+      const lines = await prisma.orderItem.findMany({
+        where: { orderId: order.id },
+        select: { title: true, productId: true, quantity: true, lineTotal: true },
+      });
       await earnLoyaltyPointsForOrder(
         userId,
         order.customerId,
         order.id,
         Number(order.total),
+        {
+          lines: lines.map((line) => ({
+            title: line.title,
+            productId: line.productId,
+            quantity: line.quantity,
+            lineTotal: Number(line.lineTotal ?? 0),
+          })),
+        },
       ).catch(() => null);
     }
 
