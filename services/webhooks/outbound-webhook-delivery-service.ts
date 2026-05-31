@@ -15,6 +15,8 @@ import {
   buildOutboundWebhookRequestHeaders,
   truncateResponseSnippet,
 } from "@/lib/webhooks/outbound-webhook-signing";
+import { triggerPartnerWebhookDeliveryBillingMeter } from "@/lib/platform/partner-billing-meter-hooks";
+import { resolveOutboundWebhookPartnerAttribution } from "@/lib/platform/outbound-webhook-partner-attribution";
 import type { OutboundWebhookEnvelope } from "@/services/webhooks/outbound-webhook-payload-builders";
 import { serializeOutboundWebhookEnvelope } from "@/services/webhooks/outbound-webhook-payload-builders";
 import { webhookRetryDelayMs } from "@/services/webhooks/webhook-retry-service";
@@ -262,6 +264,22 @@ export async function attemptOutboundWebhookDelivery(
           },
         }),
       ]);
+
+      const attribution = await resolveOutboundWebhookPartnerAttribution({
+        workspaceId: delivery.workspaceId,
+        partnerClientId: delivery.subscription.partnerClientId,
+        partnerInstallationId: delivery.subscription.partnerInstallationId,
+      });
+      if (attribution) {
+        void triggerPartnerWebhookDeliveryBillingMeter({
+          clientId: attribution.clientId,
+          installationId: attribution.installationId,
+          workspaceId: delivery.workspaceId,
+          deliveryId: delivery.id,
+          eventType: delivery.eventType,
+        });
+      }
+
       return { ok: true };
     }
 

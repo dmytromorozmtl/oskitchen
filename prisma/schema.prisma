@@ -3520,6 +3520,8 @@ model OutboundWebhookSubscription {
   lastSuccessAt   DateTime? @map("last_success_at")
   lastFailureAt   DateTime? @map("last_failure_at")
   consecutiveFailures Int  @default(0) @map("consecutive_failures")
+  partnerClientId     String? @map("partner_client_id") @db.VarChar(128)
+  partnerInstallationId String? @map("partner_installation_id") @db.Uuid
 
   userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)

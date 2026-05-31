@@ -315,6 +315,7 @@ Developer docs surface:
 | 2026-05-31 | **Phase 4 shipped:** `PartnerOAuthAppRegistry` review pipeline, `/platform/partner-apps`, `/developers/apps/register`, embedded admin host + `POST /api/embed/partner-app/verify` |
 | 2026-05-31 | **Phase 5 shipped:** `PartnerBillingAccount` + meter events + statements, install/revoke hooks, `/platform/partner-billing`, config rates in `config/platform/partner-billing.json` |
 | 2026-05-31 | **Phase 6 shipped:** Stripe Connect Express publisher onboarding, transfer payouts on finalized statements, `account.updated` sync, `MARKETPLACE_PARTNER_STRIPE_CONNECT=1` feature flag |
+| 2026-05-31 | **Phase 7 shipped:** `API_REQUEST` + `WEBHOOK_DELIVERY` revenue share meters, `revenueShareBps` applied at statement accrual, partner attribution on outbound webhooks |
 
 ### Phase 6 — Stripe Connect payouts (shipped)
 
@@ -327,3 +328,16 @@ Developer docs surface:
 | Webhook | `account.updated` refreshes `PartnerBillingAccount` connect fields |
 | Platform UI | Connect status column, **Connect Stripe** + **Send Stripe payout** actions |
 | Prisma | `stripeConnectAccountId`, `stripeTransferId`, `payoutStatus` on billing models |
+
+### Phase 7 — Revenue share meters (shipped)
+
+| Meter | Hook | Unit rate config |
+|-------|------|------------------|
+| `API_REQUEST` | `lib/api-public/guard.ts` after partner OAuth success | `defaultApiRequestFeeCentsPerCall` |
+| `WEBHOOK_DELIVERY` | `outbound-webhook-delivery-service.ts` on HTTP 2xx | `defaultWebhookDeliveryFeeCentsPerDelivery` |
+
+**Accrual:** gross meter revenue × `revenueShareBps` → publisher statement payout (Stripe transfer amount).
+
+**Attribution:** outbound subscriptions auto-link single webhook-capable partner install per workspace; explicit `partnerClientId` on subscription when ambiguous.
+
+---

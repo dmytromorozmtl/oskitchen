@@ -205,7 +205,14 @@ export function PartnerBillingPanel({
                     {statement.publisherName} · {statement.periodMonth}
                   </p>
                   <p className="text-sm text-zinc-400">
-                    {formatMoney(statement.totalAccruedCents, statement.currency)}
+                    Publisher share {formatMoney(statement.totalAccruedCents, statement.currency)}
+                    {statement.totalGrossCents > statement.totalAccruedCents ? (
+                      <span className="text-zinc-500">
+                        {" "}
+                        (gross {formatMoney(statement.totalGrossCents, statement.currency)} @{" "}
+                        {(statement.revenueShareBps / 100).toFixed(2)}%)
+                      </span>
+                    ) : null}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -222,7 +229,9 @@ export function PartnerBillingPanel({
               <ul className="mt-3 space-y-1 text-xs text-zinc-400">
                 {statement.lineItems.map((item) => (
                   <li key={`${statement.id}-${item.kind}`}>
-                    {item.label}: {item.quantity} × {formatMoney(item.amountCents, statement.currency)}
+                    {item.label}: {item.quantity} · gross{" "}
+                    {formatMoney(item.grossCents ?? item.amountCents, statement.currency)} → share{" "}
+                    {formatMoney(item.amountCents, statement.currency)}
                   </li>
                 ))}
               </ul>

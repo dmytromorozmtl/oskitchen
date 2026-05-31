@@ -10,11 +10,13 @@ import { findPublicApiV1Resource } from "@/lib/api-public/public-api-v1-registry
 import { apiKeyHasScope } from "@/lib/api-public/public-api-scopes";
 import type { DeveloperApiScope } from "@/lib/developer/api-scopes";
 import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
+import { isPartnerOAuthCredential } from "@/lib/oauth/partner-oauth-auth";
+import { triggerPartnerApiRequestBillingMeter } from "@/lib/platform/partner-billing-meter-hooks";
 import { enforceRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
 import type { RateLimitPolicyKey } from "@/lib/rate-limit/rate-limit-policies";
 
 export type PublicApiGuardResult =
-  | { userId: string }
+  | { userId: string; credential?: Awaited<ReturnType<typeof resolveEnterpriseApiCredential>> }
   | { response: NextResponse };
 
 export async function guardPublicApi(
@@ -66,7 +68,14 @@ export async function guardPublicApi(
     };
   }
 
-  return { userId };
+  if (isPartnerOAuthCredential(credential)) {
+    void triggerPartnerApiRequestBillingMeter({
+      credential,
+      routeKey: rateLimitKey,
+    });
+  }
+
+  return { userId, credential };
 }
 
 export async function guardPublicApiV1Resource(

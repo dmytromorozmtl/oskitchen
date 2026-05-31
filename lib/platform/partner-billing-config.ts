@@ -7,6 +7,8 @@ const partnerBillingAppSchema = z.object({
   publisherKey: z.string().min(1).max(120),
   revenueShareBps: z.number().int().min(0).max(10_000).optional(),
   monthlyPlatformFeeCentsPerInstall: z.number().int().min(0).max(1_000_000).optional(),
+  apiRequestFeeCentsPerCall: z.number().int().min(0).max(1_000_000).optional(),
+  webhookDeliveryFeeCentsPerDelivery: z.number().int().min(0).max(1_000_000).optional(),
 });
 
 const partnerBillingConfigSchema = z.object({
@@ -15,6 +17,8 @@ const partnerBillingConfigSchema = z.object({
   defaultCurrency: z.string().min(3).max(8),
   defaultRevenueShareBps: z.number().int().min(0).max(10_000),
   defaultMonthlyPlatformFeeCentsPerInstall: z.number().int().min(0).max(1_000_000),
+  defaultApiRequestFeeCentsPerCall: z.number().int().min(0).max(1_000_000),
+  defaultWebhookDeliveryFeeCentsPerDelivery: z.number().int().min(0).max(1_000_000),
   installActivationFeeCents: z.number().int().min(0).max(1_000_000),
   disclosure: z.string().min(1).max(800),
   apps: z.array(partnerBillingAppSchema),
@@ -58,6 +62,8 @@ export function resolvePartnerBillingRates(input: {
   publisherKey: string;
   revenueShareBps: number;
   monthlyPlatformFeeCentsPerInstall: number;
+  apiRequestFeeCentsPerCall: number;
+  webhookDeliveryFeeCentsPerDelivery: number;
   currency: string;
 } {
   const config = loadPartnerBillingConfig();
@@ -69,6 +75,11 @@ export function resolvePartnerBillingRates(input: {
     monthlyPlatformFeeCentsPerInstall:
       appOverride?.monthlyPlatformFeeCentsPerInstall ??
       config.defaultMonthlyPlatformFeeCentsPerInstall,
+    apiRequestFeeCentsPerCall:
+      appOverride?.apiRequestFeeCentsPerCall ?? config.defaultApiRequestFeeCentsPerCall,
+    webhookDeliveryFeeCentsPerDelivery:
+      appOverride?.webhookDeliveryFeeCentsPerDelivery ??
+      config.defaultWebhookDeliveryFeeCentsPerDelivery,
     currency: config.defaultCurrency,
   };
 }

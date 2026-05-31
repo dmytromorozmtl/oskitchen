@@ -14,6 +14,10 @@ import {
   resolvePartnerBillingRates,
 } from "@/lib/platform/partner-billing-config";
 import {
+  computePartnerPublisherShareCents,
+  partnerBillingMeterKindLabel,
+} from "@/lib/platform/partner-billing-meter-math";
+import {
   isMarketplacePartnerStripeConnectEnabled,
   partnerConnectStatusLabel,
   resolvePartnerConnectStatus,
@@ -45,11 +49,14 @@ export type PartnerBillingStatementView = {
   periodMonth: string;
   status: PartnerBillingStatementStatus;
   totalAccruedCents: number;
+  totalGrossCents: number;
+  revenueShareBps: number;
   currency: string;
   lineItems: Array<{
     label: string;
     kind: PartnerBillingMeterKind;
     quantity: number;
+    grossCents: number;
     amountCents: number;
   }>;
   finalizedAt: string | null;
@@ -258,6 +265,101 @@ export async function syncActiveInstallBillingMeters(periodMonth = currentBillin
   return { scanned: activeInstalls.length, recorded };
 }
 
+function sumPublisherShareForEvents(
+  events: Array<{ unitAmountCents: number; quantity: number }>,
+  revenueShareBps: number,
+): { grossCents: number; publisherShareCents: number } {
+  const grossCents = events.reduce((sum, row) => sum + row.unitAmountCents * row.quantity, 0);
+  return {
+    grossCents,
+    publisherShareCents: computePartnerPublisherShareCents({
+      grossCents,
+      revenueShareBps,
+    }),
+  };
+}
+
+export async function recordPartnerApiRequestBillingMeter(input: {
+  clientId: string;
+  installationId: string;
+  workspaceId?: string | null;
+  routeKey: string;
+  nowMs?: number;
+}): Promise<void> {
+  const app = await getMergedPartnerOAuthAppByClientId(input.clientId);
+  if (!app) return;
+
+  let workspaceId = input.workspaceId ?? null;
+  if (!workspaceId) {
+    const install = await prisma.partnerAppInstallation.findUnique({
+      where: { id: input.installationId },
+      select: { workspaceId: true },
+    });
+    workspaceId = install?.workspaceId ?? null;
+  }
+
+  const rates = resolvePartnerBillingRates({
+    clientId: input.clientId,
+    publisher: app.publisher,
+  });
+  if (rates.apiRequestFeeCentsPerCall <= 0) return;
+
+  const periodMonth = currentBillingPeriodMonth();
+  const minuteBucket = Math.floor((input.nowMs ?? Date.now()) / 60_000);
+  const routeKey = input.routeKey.replace(/[^a-zA-Z0-9:_-]/g, "_").slice(0, 64);
+
+  await recordPartnerBillingMeterEvent({
+    publisherKey: rates.publisherKey,
+    publisherName: app.publisher,
+    clientId: input.clientId,
+    workspaceId: input.workspaceId,
+    installationId: input.installationId,
+    kind: PartnerBillingMeterKind.API_REQUEST,
+    quantity: 1,
+    unitAmountCents: rates.apiRequestFeeCentsPerCall,
+    currency: rates.currency,
+    periodMonth,
+    idempotencyKey: `API_REQUEST:${input.installationId}:${periodMonth}:${minuteBucket}:${routeKey}`,
+    revenueShareBps: rates.revenueShareBps,
+    metadata: { appName: app.name, routeKey: input.routeKey },
+  });
+}
+
+export async function recordPartnerWebhookDeliveryBillingMeter(input: {
+  clientId: string;
+  installationId: string;
+  workspaceId: string | null;
+  deliveryId: string;
+  eventType: string;
+}): Promise<void> {
+  const app = await getMergedPartnerOAuthAppByClientId(input.clientId);
+  if (!app) return;
+
+  const rates = resolvePartnerBillingRates({
+    clientId: input.clientId,
+    publisher: app.publisher,
+  });
+  if (rates.webhookDeliveryFeeCentsPerDelivery <= 0) return;
+
+  const periodMonth = currentBillingPeriodMonth();
+
+  await recordPartnerBillingMeterEvent({
+    publisherKey: rates.publisherKey,
+    publisherName: app.publisher,
+    clientId: input.clientId,
+    workspaceId: input.workspaceId,
+    installationId: input.installationId,
+    kind: PartnerBillingMeterKind.WEBHOOK_DELIVERY,
+    quantity: 1,
+    unitAmountCents: rates.webhookDeliveryFeeCentsPerDelivery,
+    currency: rates.currency,
+    periodMonth,
+    idempotencyKey: `WEBHOOK_DELIVERY:${input.deliveryId}`,
+    revenueShareBps: rates.revenueShareBps,
+    metadata: { appName: app.name, eventType: input.eventType },
+  });
+}
+
 export async function loadPartnerBillingOverview(): Promise<{
   disclosure: string;
   periodMonth: string;
@@ -309,9 +411,11 @@ export async function loadPartnerBillingOverview(): Promise<{
       where: { publisherKey, periodMonth },
       select: { unitAmountCents: true, quantity: true },
     });
-    const currentPeriodAccruedCents = eventRows.reduce(
-      (sum, row) => sum + row.unitAmountCents * row.quantity,
-      0,
+    const revenueShareBps =
+      account?.revenueShareBps ?? configApp?.revenueShareBps ?? config.defaultRevenueShareBps;
+    const { publisherShareCents: currentPeriodAccruedCents } = sumPublisherShareForEvents(
+      eventRows,
+      revenueShareBps,
     );
 
     totalAccrued += currentPeriodAccruedCents;
@@ -325,7 +429,7 @@ export async function loadPartnerBillingOverview(): Promise<{
       activeInstallations,
       currentPeriodAccruedCents,
       currency: account?.currency ?? config.defaultCurrency,
-      revenueShareBps: account?.revenueShareBps ?? configApp?.revenueShareBps ?? config.defaultRevenueShareBps,
+      revenueShareBps,
       monthlyPlatformFeeCentsPerInstall:
         account?.monthlyPlatformFeeCentsPerInstall ??
         configApp?.monthlyPlatformFeeCentsPerInstall ??
@@ -380,21 +484,26 @@ export async function generatePartnerBillingStatement(input: {
     orderBy: { recordedAt: "asc" },
   });
 
-  const byKind = new Map<PartnerBillingMeterKind, { quantity: number; amountCents: number }>();
+  const byKind = new Map<PartnerBillingMeterKind, { quantity: number; grossCents: number }>();
   for (const event of events) {
-    const current = byKind.get(event.kind) ?? { quantity: 0, amountCents: 0 };
+    const current = byKind.get(event.kind) ?? { quantity: 0, grossCents: 0 };
     current.quantity += event.quantity;
-    current.amountCents += event.unitAmountCents * event.quantity;
+    current.grossCents += event.unitAmountCents * event.quantity;
     byKind.set(event.kind, current);
   }
 
   const lineItems = [...byKind.entries()].map(([kind, totals]) => ({
-    label: kind.replaceAll("_", " ").toLowerCase(),
+    label: partnerBillingMeterKindLabel(kind),
     kind,
     quantity: totals.quantity,
-    amountCents: totals.amountCents,
+    grossCents: totals.grossCents,
+    amountCents: computePartnerPublisherShareCents({
+      grossCents: totals.grossCents,
+      revenueShareBps: account.revenueShareBps,
+    }),
   }));
 
+  const totalGrossCents = lineItems.reduce((sum, item) => sum + item.grossCents, 0);
   const totalAccruedCents = lineItems.reduce((sum, item) => sum + item.amountCents, 0);
 
   const statement = await prisma.partnerBillingStatement.upsert({
@@ -468,9 +577,12 @@ function mapStatementView(
     stripeConnectAccountId: string | null;
     stripeConnectPayoutsEnabled: boolean;
     stripeConnectDetailsSubmitted: boolean;
+    revenueShareBps?: number;
   } | null,
 ): PartnerBillingStatementView {
   const lineItems = (row.lineItemsJson as PartnerBillingStatementView["lineItems"]) ?? [];
+  const totalGrossCents = lineItems.reduce((sum, item) => sum + (item.grossCents ?? 0), 0);
+  const revenueShareBps = account?.revenueShareBps ?? 0;
   const connectReady =
     account &&
     resolvePartnerConnectStatus({
@@ -495,6 +607,8 @@ function mapStatementView(
     periodMonth: row.periodMonth,
     status: row.status,
     totalAccruedCents: row.totalAccruedCents,
+    totalGrossCents,
+    revenueShareBps,
     currency: row.currency,
     lineItems,
     finalizedAt: row.finalizedAt?.toISOString() ?? null,

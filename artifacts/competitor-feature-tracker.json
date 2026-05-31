@@ -46,6 +46,8 @@
   "app-marketplace-phase5PartnerBillingShippedAt": "2026-05-31T17:00:00.000Z",
   "app-marketplace-phase6-stripe-connect": "done",
   "app-marketplace-phase6StripeConnectShippedAt": "2026-05-31T20:00:00.000Z",
+  "app-marketplace-phase7-revenue-share-meters": "done",
+  "app-marketplace-phase7RevenueShareMetersShippedAt": "2026-05-31T23:00:00.000Z",
   "shopify-markets-phase1": "done",
   "shopify-markets-phase1ShippedAt": "2026-05-31T09:00:00.000Z",
   "shopify-markets-phase2": "done",
@@ -70,6 +72,6 @@
   "restaurant-capital-phase5LiveLendersShippedAt": "2026-05-31T19:00:00.000Z",
   "restaurant-capital-phase6-lender-oauth": "done",
   "restaurant-capital-phase6LenderOauthShippedAt": "2026-05-31T22:00:00.000Z",
-  "postParityPhase": "restaurant-capital-phase6-lender-oauth",
-  "nextRecommendedStep": "app-marketplace-phase7-revenue-share-meters OR shopify-markets-tax-duty-guard OR restaurant-capital-phase7-lender-refresh-tokens"
+  "postParityPhase": "app-marketplace-phase7-revenue-share-meters",
+  "nextRecommendedStep": "shopify-markets-tax-duty-guard OR restaurant-capital-phase7-lender-refresh-tokens OR app-marketplace-phase8-partner-analytics"
 }

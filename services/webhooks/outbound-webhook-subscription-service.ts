@@ -2,7 +2,9 @@ import { randomBytes } from "crypto";
 
 import type { Prisma } from "@prisma/client";
 
-import { recordAuditLog } from "@/lib/audit-log";
+import {
+  resolveSingleWebhookCapablePartnerInstallForWorkspace,
+} from "@/lib/platform/outbound-webhook-partner-attribution";
 import { encryptSecret, isEncryptionConfigured } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
@@ -18,6 +20,8 @@ export type OutboundWebhookSubscriptionView = {
   events: string[];
   active: boolean;
   description: string | null;
+  partnerClientId: string | null;
+  partnerInstallationId: string | null;
   createdAt: Date;
   updatedAt: Date;
   lastDeliveryAt: Date | null;
@@ -69,6 +73,8 @@ export async function listOutboundWebhookSubscriptionsForOwner(
     lastFailureAt: row.lastFailureAt,
     consecutiveFailures: row.consecutiveFailures,
     secretPreview: secretPreviewFromEncrypted(row.secretEncrypted),
+    partnerClientId: row.partnerClientId,
+    partnerInstallationId: row.partnerInstallationId,
   }));
 }
 
@@ -103,6 +109,9 @@ export async function createOutboundWebhookSubscription(input: {
   }
 
   const secret = randomBytes(32).toString("hex");
+  const partnerAttribution = await resolveSingleWebhookCapablePartnerInstallForWorkspace(
+    input.workspaceId,
+  );
   const row = await prisma.outboundWebhookSubscription.create({
     data: {
       userId: input.ownerUserId,
@@ -113,6 +122,8 @@ export async function createOutboundWebhookSubscription(input: {
       secretEncrypted: encryptSecret(secret),
       description: input.description?.trim() || null,
       active: true,
+      partnerClientId: partnerAttribution?.clientId ?? null,
+      partnerInstallationId: partnerAttribution?.installationId ?? null,
     },
   });
 
@@ -142,6 +153,8 @@ export async function createOutboundWebhookSubscription(input: {
       lastFailureAt: row.lastFailureAt,
       consecutiveFailures: row.consecutiveFailures,
       secretPreview: secretPreviewFromEncrypted(row.secretEncrypted),
+      partnerClientId: row.partnerClientId,
+      partnerInstallationId: row.partnerInstallationId,
     },
   };
 }
