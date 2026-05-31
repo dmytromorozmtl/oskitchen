@@ -1118,3 +1118,14 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: human vault gate; remaining failures (dashboard-shell/os-kitchen-logo, cert-live docs, order-pii rebrand); rebrand batch 1
+
+---
+Cycle: 91
+Timestamp: 2026-05-31T10:30:00.000Z
+Priority: P2
+Action: chore: uncommitted audit — refreshed artifacts/uncommitted-audit.md (975 files, base b258aa59; −3 after cycles 89–90; vitest ~30 failed)
+Files changed: 2 (artifacts/uncommitted-audit.md, artifacts/execution-log.txt)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: rebrand batch 1 (os-kitchen-logo React fix); human vault gate
