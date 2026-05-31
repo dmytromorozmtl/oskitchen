@@ -26,10 +26,10 @@ export function buildCommercialPilotOpsInflectionSlice(
   model: CommercialPilotOpsStatusModel,
 ): CommercialPilotOpsInflectionSlice {
   const p0 = model.p0Staging.summary;
-  const vaultReport = model.vaultReadiness.report;
+  const vaultReport = model.vaultReadiness?.report ?? null;
   const summary = evaluateCommercialInflectionReadiness(process.env, process.cwd(), {
     p0Staging: p0,
-    tier2Staging: model.tier2Staging.summary,
+    tier2Staging: model.tier2Staging?.summary ?? null,
     goNoGo: model.goNoGo.summary,
     vaultReport,
   });

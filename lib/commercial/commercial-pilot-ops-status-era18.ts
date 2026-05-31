@@ -215,7 +215,7 @@ export function pickCommercialPilotOpsAttentionItems(
       tone: "urgent",
     });
   } else if (p0 && p0.p0ProofStatus !== "proof_passed") {
-    const opsVault = buildP0OpsVaultUiSlice(p0, model.vaultReadiness.report);
+    const opsVault = buildP0OpsVaultUiSlice(p0, model.vaultReadiness?.report ?? null);
     const nextPhase = opsVault?.nextPhase ?? null;
     items.push({
       id: "p0-staging-blocked",
@@ -233,7 +233,7 @@ export function pickCommercialPilotOpsAttentionItems(
     });
   }
 
-  const tier2 = model.tier2Staging.summary;
+  const tier2 = model.tier2Staging?.summary;
   if (tier2 && tier2.tier2ProofStatus !== "proof_passed") {
     const p0Passed = p0?.p0ProofStatus === "proof_passed";
     items.push({
