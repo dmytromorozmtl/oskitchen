@@ -65,7 +65,7 @@ export function resolveLaunchWizardTier2ProofBlocked(
 ): boolean {
   const p0 = commercialOps?.p0Staging.summary;
   if (p0?.p0ProofStatus !== "proof_passed") return false;
-  const tier2 = commercialOps?.tier2Staging.summary;
+  const tier2 = commercialOps?.tier2Staging?.summary;
   if (!tier2) return true;
   return tier2.tier2ProofStatus !== "proof_passed";
 }
@@ -138,13 +138,14 @@ export function buildLaunchWizardCommercialBlockersSlice(input: {
       detail: phaseDetail,
       tone: "urgent",
       href:
-        opsVault?.platformOpsHref ??
-        `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
+        nextPhase && opsVault?.platformOpsHref
+          ? opsVault.platformOpsHref
+          : `/dashboard/integration-health${INTEGRATION_HEALTH_RECOVERY_ANCHOR}`,
     });
   }
 
   if (resolveLaunchWizardTier2ProofBlocked(input.commercialOps)) {
-    const tier2 = input.commercialOps?.tier2Staging.summary;
+    const tier2 = input.commercialOps?.tier2Staging?.summary;
     const goldenPath = buildTier2GoldenPathUiSlice({
       p0ProofStatus: "proof_passed",
       tier2Summary: tier2 ?? null,
