@@ -1276,3 +1276,15 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: dashboard-userid-cleanup (5 failures) or POS RBAC page tests; human vault 11/11 for score 100
+
+---
+Cycle: 105
+Timestamp: 2026-05-31T20:36:30.000Z
+Priority: P1 (post-tree test fix)
+Action: no tree step matched — agent exhausted; fixed dashboard-userid-cleanup (12/12 pass): removed dataUserId from sales-channels health/available pages; updated test expectations for era19/20 loadWorkspacePermissionPageActor, loadCopilotPageActor, requireReportsPageAccess
+Files changed: 3 (sales-channels health/available pages, dashboard-userid-cleanup.test.ts)
+Commit: fix: dashboard userId cleanup tests and sales-channels scope
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: POS RBAC page tests, cron-auth, era68 cert-live (~10 failures); human vault 11/11 for score 100
