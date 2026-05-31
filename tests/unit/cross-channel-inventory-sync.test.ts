@@ -6,13 +6,17 @@ import {
 } from "@/lib/inventory/cross-channel-inventory-settings";
 import {
   applyCrossChannelConflictPlan,
+  buildCrossChannelDailyReconciliationReport,
+  buildCrossChannelHealthDashboard,
   buildCrossChannelLevels,
   buildCrossChannelSyncSnapshot,
   computeAvailableQuantity,
   createCrossChannelReservation,
   detectCrossChannelConflicts,
   detectCrossChannelLowStockAlerts,
+  detectNewCrossChannelConflicts,
   extractDoorDashChannelQuantity,
+  formatCrossChannelDailyReconciliationEmail,
   planCrossChannelRealtimeSync,
   releaseCrossChannelReservation,
   resolveCrossChannelConflict,
@@ -191,5 +195,83 @@ describe("cross-channel inventory sync engine", () => {
     });
     const next = releaseCrossChannelReservation(reservations, reservation.id);
     expect(next).toHaveLength(0);
+  });
+
+  it("builds per-channel health dashboard with last synced timestamps", () => {
+    const levels = buildCrossChannelLevels({
+      masterByProduct,
+      externalRows,
+      reservations: [],
+      lowStockThresholdDefault: 5,
+    });
+    const snapshot = buildCrossChannelSyncSnapshot({ levels, reservations: [] });
+    const dashboard = buildCrossChannelHealthDashboard({
+      snapshot,
+      connections: [
+        {
+          id: "c-woo",
+          provider: "WOOCOMMERCE",
+          name: "Main Woo",
+          settings: {
+            enabled: true,
+            conflictResolution: "manual_review",
+            autoPushOnChange: true,
+            lowStockThreshold: 5,
+            lastSyncedAtIso: "2026-05-31T10:00:00.000Z",
+            notifyOnConflict: true,
+            dailyReconciliationEmail: true,
+          },
+        },
+      ],
+      now: new Date("2026-05-31T12:00:00.000Z"),
+    });
+    expect(dashboard.channels.some((c) => c.provider === "POS")).toBe(true);
+    const woo = dashboard.channels.find((c) => c.provider === "WOOCOMMERCE");
+    expect(woo?.lastSyncedAtIso).toBe("2026-05-31T10:00:00.000Z");
+    expect(woo?.status).toBe("conflict");
+    expect(dashboard.overallStatus).toBe("conflict");
+  });
+
+  it("detects new conflicts for email notification", () => {
+    const levels = buildCrossChannelLevels({
+      masterByProduct,
+      externalRows,
+      reservations: [],
+      lowStockThresholdDefault: 5,
+    });
+    const conflicts = detectCrossChannelConflicts(levels);
+    const fresh = detectNewCrossChannelConflicts([], conflicts);
+    expect(fresh.length).toBe(conflicts.length);
+    const none = detectNewCrossChannelConflicts(
+      conflicts.map((c) => c.id),
+      conflicts,
+    );
+    expect(none).toHaveLength(0);
+  });
+
+  it("formats daily reconciliation report", () => {
+    const levels = buildCrossChannelLevels({
+      masterByProduct,
+      externalRows,
+      reservations: [],
+      lowStockThresholdDefault: 5,
+    });
+    const snapshot = buildCrossChannelSyncSnapshot({ levels, reservations: [] });
+    const dashboard = buildCrossChannelHealthDashboard({
+      snapshot,
+      connections: [],
+      now: new Date("2026-05-31T12:00:00.000Z"),
+    });
+    const report = buildCrossChannelDailyReconciliationReport({
+      snapshot,
+      channelHealth: dashboard.channels,
+    });
+    expect(report.summary.conflictCount).toBeGreaterThan(0);
+    const email = formatCrossChannelDailyReconciliationEmail({
+      report,
+      dashboardUrl: "https://example.com/dashboard/inventory/cross-channel",
+    });
+    expect(email.subject).toContain("Daily inventory reconciliation");
+    expect(email.text).toContain("Channel health");
   });
 });

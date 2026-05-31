@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import type { CrossChannelInventorySettings, CrossChannelInventoryProvider } from "@/lib/inventory/cross-channel-inventory-settings";
 import type {
   CrossChannelConflict,
+  CrossChannelHealthStatus,
   CrossChannelLevel,
   CrossChannelLowStockAlert,
   CrossChannelSyncSnapshot,
@@ -55,6 +56,38 @@ function syncStatusForLevel(level: CrossChannelLevel): "synced" | "conflict" | "
   return allMatch ? "synced" : "conflict";
 }
 
+function healthBadgeVariant(
+  status: CrossChannelHealthStatus,
+): "default" | "secondary" | "destructive" | "outline" {
+  if (status === "healthy") return "default";
+  if (status === "conflict") return "destructive";
+  if (status === "degraded") return "secondary";
+  return "outline";
+}
+
+function healthStatusLabel(status: CrossChannelHealthStatus): string {
+  if (status === "healthy") return "Healthy";
+  if (status === "conflict") return "Conflict";
+  if (status === "degraded") return "Stale";
+  if (status === "offline") return "Offline";
+  return "Disabled";
+}
+
+function HealthStatusBadge({
+  status,
+  label,
+}: {
+  status: CrossChannelHealthStatus;
+  label?: string;
+}) {
+  return (
+    <Badge variant={healthBadgeVariant(status)}>
+      {label ? `${label}: ` : ""}
+      {healthStatusLabel(status)}
+    </Badge>
+  );
+}
+
 export function CrossChannelInventoryPanel({ snapshot, connections, canManage }: Props) {
   const [activeChannel, setActiveChannel] = useState<"ALL" | CrossChannelInventoryProvider>("ALL");
 
@@ -79,6 +112,55 @@ export function CrossChannelInventoryPanel({ snapshot, connections, canManage }:
         <SummaryCard label="Low stock" value={snapshot.lowStockAlerts.length} tone="warn" />
         <SummaryCard label="Reservations" value={snapshot.reservations.length} />
       </div>
+
+      {snapshot.channelHealth && snapshot.channelHealth.length > 0 ? (
+        <Card data-testid="cross-channel-health-dashboard">
+          <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
+            <CardTitle className="text-base">Channel sync health</CardTitle>
+            {snapshot.overallHealth ? (
+              <HealthStatusBadge status={snapshot.overallHealth} label="Overall" />
+            ) : null}
+          </CardHeader>
+          <CardContent className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="text-left text-xs uppercase text-muted-foreground">
+                <tr>
+                  <th className="pb-2 pr-3">Channel</th>
+                  <th className="pb-2 pr-3">Status</th>
+                  <th className="pb-2 pr-3">Last synced</th>
+                  <th className="pb-2 pr-3">Mapped SKUs</th>
+                  <th className="pb-2 pr-3">In sync</th>
+                  <th className="pb-2">Conflicts</th>
+                </tr>
+              </thead>
+              <tbody>
+                {snapshot.channelHealth.map((channel) => (
+                  <tr
+                    key={channel.connectionId}
+                    className="border-t"
+                    data-testid={`cross-channel-health-${channel.provider}`}
+                  >
+                    <td className="py-2 pr-3 font-medium">
+                      {channel.connectionName ?? channel.provider}
+                    </td>
+                    <td className="py-2 pr-3">
+                      <HealthStatusBadge status={channel.status} />
+                    </td>
+                    <td className="py-2 pr-3 text-muted-foreground">
+                      {channel.lastSyncedAtIso
+                        ? new Date(channel.lastSyncedAtIso).toLocaleString()
+                        : "Never"}
+                    </td>
+                    <td className="py-2 pr-3 tabular-nums">{channel.mappedProductCount}</td>
+                    <td className="py-2 pr-3 tabular-nums">{channel.inSyncCount}</td>
+                    <td className="py-2 tabular-nums">{channel.conflictCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <div className="flex flex-wrap gap-2">
         {CHANNEL_TABS.map((tab) => (

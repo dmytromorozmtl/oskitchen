@@ -10,14 +10,18 @@
 
 import type { IntegrationProvider, Prisma } from "@prisma/client";
 
+import type { CrossChannelInventoryProvider,
+  StoredCrossChannelReservation,
+  CrossChannelInventorySettings,
+} from "@/lib/inventory/cross-channel-inventory-settings";
 import {
   crossChannelSettingsFromConnection,
   mergeCrossChannelIntoConnectionSettings,
   storedReservationsFromConnection,
-  type CrossChannelInventoryProvider,
-  type StoredCrossChannelReservation,
 } from "@/lib/inventory/cross-channel-inventory-settings";
 import type { InventoryConflictResolution } from "@/lib/integrations/inventory-sync-settings";
+import { isEmailConfigured, sendRawEmail } from "@/lib/email";
+import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
 import { externalProductListWhereForOwner } from "@/lib/scope/workspace-channel-scope";
 import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
@@ -73,6 +77,45 @@ export type CrossChannelLowStockAlert = {
   channels: CrossChannelInventoryProvider[];
 };
 
+export type CrossChannelHealthStatus =
+  | "healthy"
+  | "degraded"
+  | "conflict"
+  | "offline"
+  | "disabled";
+
+export type CrossChannelChannelHealth = {
+  provider: CrossChannelInventoryProvider;
+  connectionId: string;
+  connectionName: string | null;
+  status: CrossChannelHealthStatus;
+  lastSyncedAtIso: string | null;
+  mappedProductCount: number;
+  conflictCount: number;
+  inSyncCount: number;
+};
+
+export type CrossChannelHealthDashboard = {
+  generatedAtIso: string;
+  overallStatus: CrossChannelHealthStatus;
+  channels: CrossChannelChannelHealth[];
+};
+
+export type CrossChannelDailyReconciliationReport = {
+  reportDateIso: string;
+  summary: {
+    totalProducts: number;
+    inSyncCount: number;
+    conflictCount: number;
+    lowStockCount: number;
+    reservationCount: number;
+  };
+  conflicts: CrossChannelConflict[];
+  lowStockAlerts: CrossChannelLowStockAlert[];
+  channelHealth: CrossChannelChannelHealth[];
+  notes: string[];
+};
+
 export type CrossChannelSyncSnapshot = {
   pulledAtIso: string;
   levels: CrossChannelLevel[];
@@ -81,6 +124,8 @@ export type CrossChannelSyncSnapshot = {
   reservations: StoredCrossChannelReservation[];
   inSyncCount: number;
   notes: string[];
+  channelHealth?: CrossChannelChannelHealth[];
+  overallHealth?: CrossChannelHealthStatus;
 };
 
 export type CrossChannelRealtimeSyncPlan = {
@@ -307,6 +352,218 @@ export function buildCrossChannelSyncSnapshot(params: {
   };
 }
 
+const DEFAULT_STALE_SYNC_HOURS = 24;
+
+export function computeCrossChannelHealthStatus(params: {
+  enabled: boolean;
+  mappedProductCount: number;
+  conflictCount: number;
+  lastSyncedAtIso: string | null;
+  staleAfterHours?: number;
+  now?: Date;
+}): CrossChannelHealthStatus {
+  if (!params.enabled) return "disabled";
+  if (params.mappedProductCount === 0) return "offline";
+  if (params.conflictCount > 0) return "conflict";
+  if (!params.lastSyncedAtIso) return "degraded";
+
+  const staleMs = (params.staleAfterHours ?? DEFAULT_STALE_SYNC_HOURS) * 60 * 60 * 1000;
+  const syncedAt = new Date(params.lastSyncedAtIso).getTime();
+  const nowMs = (params.now ?? new Date()).getTime();
+  if (Number.isNaN(syncedAt) || nowMs - syncedAt > staleMs) return "degraded";
+  return "healthy";
+}
+
+export function computeOverallCrossChannelHealth(
+  channels: CrossChannelChannelHealth[],
+): CrossChannelHealthStatus {
+  if (channels.length === 0) return "offline";
+  const priority: CrossChannelHealthStatus[] = [
+    "conflict",
+    "offline",
+    "degraded",
+    "disabled",
+    "healthy",
+  ];
+  for (const status of priority) {
+    if (channels.some((c) => c.status === status)) return status;
+  }
+  return "healthy";
+}
+
+export function buildCrossChannelHealthDashboard(params: {
+  snapshot: CrossChannelSyncSnapshot;
+  connections: Array<{
+    id: string;
+    provider: string;
+    name: string | null;
+    settings: CrossChannelInventorySettings;
+  }>;
+  now?: Date;
+}): CrossChannelHealthDashboard {
+  const now = params.now ?? new Date();
+  const posProductCount = params.snapshot.levels.length;
+  const posConflicts = 0;
+  const posInSync = params.snapshot.inSyncCount;
+
+  const externalChannels: CrossChannelChannelHealth[] = params.connections.map((conn) => {
+    const provider = EXTERNAL_PROVIDER_MAP[conn.provider] ?? "SHOPIFY";
+    const mappedProductCount = params.snapshot.levels.filter((level) =>
+      level.channels.some((c) => c.connectionId === conn.id),
+    ).length;
+    const conflictCount = params.snapshot.conflicts.filter(
+      (c) => c.channel.connectionId === conn.id,
+    ).length;
+    const inSyncCount = params.snapshot.levels.filter((level) => {
+      const channel = level.channels.find((c) => c.connectionId === conn.id);
+      return channel != null && channel.quantity === level.masterQuantity;
+    }).length;
+
+    return {
+      provider,
+      connectionId: conn.id,
+      connectionName: conn.name,
+      status: computeCrossChannelHealthStatus({
+        enabled: conn.settings.enabled,
+        mappedProductCount,
+        conflictCount,
+        lastSyncedAtIso: conn.settings.lastSyncedAtIso ?? null,
+        now,
+      }),
+      lastSyncedAtIso: conn.settings.lastSyncedAtIso ?? null,
+      mappedProductCount,
+      conflictCount,
+      inSyncCount,
+    };
+  });
+
+  const channels: CrossChannelChannelHealth[] = [
+    {
+      provider: "POS",
+      connectionId: POS_CONNECTION_ID,
+      connectionName: "Kitchen spine (POS)",
+      status: posProductCount > 0 ? "healthy" : "offline",
+      lastSyncedAtIso: params.snapshot.pulledAtIso,
+      mappedProductCount: posProductCount,
+      conflictCount: posConflicts,
+      inSyncCount: posInSync,
+    },
+    ...externalChannels,
+  ];
+
+  return {
+    generatedAtIso: now.toISOString(),
+    overallStatus: computeOverallCrossChannelHealth(channels),
+    channels,
+  };
+}
+
+export function enrichCrossChannelSnapshotWithHealth(
+  snapshot: CrossChannelSyncSnapshot,
+  dashboard: CrossChannelHealthDashboard,
+): CrossChannelSyncSnapshot {
+  return {
+    ...snapshot,
+    channelHealth: dashboard.channels,
+    overallHealth: dashboard.overallStatus,
+  };
+}
+
+export function detectNewCrossChannelConflicts(
+  previousIds: readonly string[],
+  conflicts: readonly CrossChannelConflict[],
+): CrossChannelConflict[] {
+  const prev = new Set(previousIds);
+  return conflicts.filter((c) => !prev.has(c.id));
+}
+
+export function buildCrossChannelDailyReconciliationReport(params: {
+  snapshot: CrossChannelSyncSnapshot;
+  channelHealth: CrossChannelChannelHealth[];
+  now?: Date;
+}): CrossChannelDailyReconciliationReport {
+  const now = params.now ?? new Date();
+  return {
+    reportDateIso: now.toISOString(),
+    summary: {
+      totalProducts: params.snapshot.levels.length,
+      inSyncCount: params.snapshot.inSyncCount,
+      conflictCount: params.snapshot.conflicts.length,
+      lowStockCount: params.snapshot.lowStockAlerts.length,
+      reservationCount: params.snapshot.reservations.length,
+    },
+    conflicts: params.snapshot.conflicts,
+    lowStockAlerts: params.snapshot.lowStockAlerts,
+    channelHealth: params.channelHealth,
+    notes: [
+      ...params.snapshot.notes,
+      "Daily reconciliation compares POS master spine to connected sales channels.",
+      "DoorDash inventory compare is BETA — push requires partner-approved menu APIs.",
+    ],
+  };
+}
+
+export function formatCrossChannelConflictNotification(params: {
+  conflicts: CrossChannelConflict[];
+  dashboardUrl: string;
+}): { subject: string; text: string } {
+  const lines = params.conflicts.map(
+    (c) =>
+      `- ${c.productTitle} (${c.channel.provider}): master ${c.masterQuantity}, channel ${c.channel.quantity}, delta ${c.delta}`,
+  );
+  return {
+    subject: `[OS Kitchen] ${params.conflicts.length} inventory conflict(s) detected`,
+    text: [
+      "Cross-channel inventory drift detected between your Kitchen spine and a sales channel.",
+      "",
+      ...lines,
+      "",
+      `Review and resolve: ${params.dashboardUrl}`,
+      "",
+      "SMS alerts are not available — email only.",
+    ].join("\n"),
+  };
+}
+
+export function formatCrossChannelDailyReconciliationEmail(params: {
+  report: CrossChannelDailyReconciliationReport;
+  dashboardUrl: string;
+}): { subject: string; text: string } {
+  const { summary, channelHealth } = params.report;
+  const channelLines = channelHealth.map(
+    (c) =>
+      `- ${c.provider}${c.connectionName ? ` (${c.connectionName})` : ""}: ${c.status}, last sync ${c.lastSyncedAtIso ? new Date(c.lastSyncedAtIso).toLocaleString() : "never"}, ${c.conflictCount} conflict(s)`,
+  );
+  return {
+    subject: `[OS Kitchen] Daily inventory reconciliation — ${summary.conflictCount} conflict(s), ${summary.lowStockCount} low-stock`,
+    text: [
+      "Daily cross-channel inventory reconciliation",
+      `Report date: ${new Date(params.report.reportDateIso).toLocaleString()}`,
+      "",
+      `Products tracked: ${summary.totalProducts}`,
+      `In sync: ${summary.inSyncCount}`,
+      `Conflicts: ${summary.conflictCount}`,
+      `Low stock alerts: ${summary.lowStockCount}`,
+      `Active reservations: ${summary.reservationCount}`,
+      "",
+      "Channel health:",
+      ...channelLines,
+      "",
+      `Open dashboard: ${params.dashboardUrl}`,
+    ].join("\n"),
+  };
+}
+
+export function resolveCrossChannelConflictNotificationRecipient(params: {
+  ownerEmail: string | null | undefined;
+  settings: CrossChannelInventorySettings;
+}): string | null {
+  const override = params.settings.notificationEmail?.trim();
+  if (override) return override;
+  const owner = params.ownerEmail?.trim();
+  return owner || null;
+}
+
 export function resolveCrossChannelConflict(
   conflict: CrossChannelConflict,
   strategy: InventoryConflictResolution,
@@ -517,26 +774,68 @@ async function persistReservations(userId: string, reservations: StoredCrossChan
   }
 }
 
-export async function loadCrossChannelInventorySnapshot(
-  userId: string,
-): Promise<CrossChannelSyncSnapshot> {
-  const [productWhere, connectionWhere, masterByProduct, reservations] = await Promise.all([
-    externalProductListWhereForOwner(userId),
-    integrationConnectionListWhereForOwner(userId),
-    kitchenProductsForOwner(userId),
-    loadAllReservations(userId),
-  ]);
-
-  const settingsRow = await prisma.integrationConnection.findFirst({
+async function loadCrossChannelConnections(userId: string) {
+  const connectionWhere = await integrationConnectionListWhereForOwner(userId);
+  return prisma.integrationConnection.findMany({
     where: {
       AND: [
         connectionWhere,
         { provider: { in: ["SHOPIFY", "WOOCOMMERCE", "DOORDASH"] as IntegrationProvider[] } },
       ],
     },
-    select: { settingsJson: true },
-    orderBy: { updatedAt: "desc" },
+    select: { id: true, provider: true, name: true, settingsJson: true },
+    orderBy: { name: "asc" },
   });
+}
+
+async function persistConnectionCrossChannelSettings(
+  connectionId: string,
+  settings: CrossChannelInventorySettings,
+  settingsJson: unknown,
+) {
+  await prisma.integrationConnection.update({
+    where: { id: connectionId },
+    data: {
+      settingsJson: mergeCrossChannelIntoConnectionSettings(
+        settingsJson,
+        settings,
+      ) as Prisma.InputJsonValue,
+    },
+  });
+}
+
+export async function recordCrossChannelConnectionSync(
+  userId: string,
+  connectionId: string,
+  syncedAt: Date = new Date(),
+): Promise<void> {
+  const connectionWhere = await integrationConnectionListWhereForOwner(userId);
+  const conn = await prisma.integrationConnection.findFirst({
+    where: { AND: [connectionWhere, { id: connectionId }] },
+    select: { id: true, settingsJson: true },
+  });
+  if (!conn) return;
+  const settings = crossChannelSettingsFromConnection(conn.settingsJson);
+  await persistConnectionCrossChannelSettings(
+    conn.id,
+    { ...settings, lastSyncedAtIso: syncedAt.toISOString() },
+    conn.settingsJson,
+  );
+}
+
+async function loadCrossChannelSnapshotWithHealth(
+  userId: string,
+): Promise<CrossChannelSyncSnapshot> {
+  const [productWhere, connectionWhere, masterByProduct, reservations, connections] =
+    await Promise.all([
+      externalProductListWhereForOwner(userId),
+      integrationConnectionListWhereForOwner(userId),
+      kitchenProductsForOwner(userId),
+      loadAllReservations(userId),
+      loadCrossChannelConnections(userId),
+    ]);
+
+  const settingsRow = connections[0];
   const settings = crossChannelSettingsFromConnection(settingsRow?.settingsJson);
 
   const externalProducts = await prisma.externalProduct.findMany({
@@ -564,17 +863,8 @@ export async function loadCrossChannelInventorySnapshot(
     take: 500,
   });
 
-  const enabledConnections = await prisma.integrationConnection.findMany({
-    where: {
-      AND: [
-        connectionWhere,
-        { provider: { in: ["SHOPIFY", "WOOCOMMERCE", "DOORDASH"] as IntegrationProvider[] } },
-      ],
-    },
-    select: { id: true, settingsJson: true },
-  });
   const enabledIds = new Set(
-    enabledConnections
+    connections
       .filter((c) => crossChannelSettingsFromConnection(c.settingsJson).enabled)
       .map((c) => c.id),
   );
@@ -600,12 +890,174 @@ export async function loadCrossChannelInventorySnapshot(
     lowStockThresholdDefault: settings.lowStockThreshold,
   });
 
-  return buildCrossChannelSyncSnapshot({ levels, reservations });
+  const snapshot = buildCrossChannelSyncSnapshot({ levels, reservations });
+  const dashboard = buildCrossChannelHealthDashboard({
+    snapshot,
+    connections: connections.map((c) => ({
+      id: c.id,
+      provider: c.provider,
+      name: c.name,
+      settings: crossChannelSettingsFromConnection(c.settingsJson),
+    })),
+  });
+  return enrichCrossChannelSnapshotWithHealth(snapshot, dashboard);
+}
+
+export async function loadCrossChannelInventorySnapshot(
+  userId: string,
+): Promise<CrossChannelSyncSnapshot> {
+  return loadCrossChannelSnapshotWithHealth(userId);
+}
+
+export async function notifyCrossChannelInventoryConflicts(
+  userId: string,
+  snapshot: CrossChannelSyncSnapshot,
+): Promise<{ sent: boolean; skipped: boolean; reason?: string }> {
+  const connections = await loadCrossChannelConnections(userId);
+  const owner = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true },
+  });
+
+  const notifyEnabled = connections.some(
+    (c) => crossChannelSettingsFromConnection(c.settingsJson).notifyOnConflict !== false,
+  );
+  if (!notifyEnabled) return { sent: false, skipped: true, reason: "notifications_disabled" };
+  if (!isEmailConfigured()) return { sent: false, skipped: true, reason: "email_not_configured" };
+
+  const previousIds = connections.flatMap(
+    (c) => crossChannelSettingsFromConnection(c.settingsJson).lastNotifiedConflictIds ?? [],
+  );
+  const newConflicts = detectNewCrossChannelConflicts(previousIds, snapshot.conflicts);
+  if (newConflicts.length === 0) {
+    return { sent: false, skipped: true, reason: "no_new_conflicts" };
+  }
+
+  const settings = crossChannelSettingsFromConnection(connections[0]?.settingsJson);
+  const recipient = resolveCrossChannelConflictNotificationRecipient({
+    ownerEmail: owner?.email,
+    settings,
+  });
+  if (!recipient) return { sent: false, skipped: true, reason: "no_recipient" };
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.oskitchen.com";
+  const { subject, text } = formatCrossChannelConflictNotification({
+    conflicts: newConflicts,
+    dashboardUrl: `${siteUrl}/dashboard/inventory/cross-channel`,
+  });
+
+  try {
+    await sendRawEmail({ to: recipient, subject, text });
+  } catch (e) {
+    logger.warn("cross_channel_conflict_notify_failed", e);
+    return { sent: false, skipped: true, reason: "send_failed" };
+  }
+
+  const mergedIds = [...new Set([...previousIds, ...newConflicts.map((c) => c.id)])].slice(-200);
+  for (const conn of connections) {
+    const connSettings = crossChannelSettingsFromConnection(conn.settingsJson);
+    if (connSettings.notifyOnConflict === false) continue;
+    await persistConnectionCrossChannelSettings(
+      conn.id,
+      { ...connSettings, lastNotifiedConflictIds: mergedIds },
+      conn.settingsJson,
+    );
+  }
+
+  return { sent: true, skipped: false };
+}
+
+export async function sendCrossChannelDailyReconciliationEmail(
+  userId: string,
+): Promise<{
+  sent: boolean;
+  skipped: boolean;
+  reason?: string;
+  report?: CrossChannelDailyReconciliationReport;
+}> {
+  const connections = await loadCrossChannelConnections(userId);
+  const digestEnabled = connections.some(
+    (c) => crossChannelSettingsFromConnection(c.settingsJson).dailyReconciliationEmail !== false,
+  );
+  if (!digestEnabled) return { sent: false, skipped: true, reason: "digest_disabled" };
+  if (connections.length === 0) return { sent: false, skipped: true, reason: "no_connections" };
+  if (!isEmailConfigured()) return { sent: false, skipped: true, reason: "email_not_configured" };
+
+  const owner = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true },
+  });
+  const settings = crossChannelSettingsFromConnection(connections[0]?.settingsJson);
+  const recipient = resolveCrossChannelConflictNotificationRecipient({
+    ownerEmail: owner?.email,
+    settings,
+  });
+  if (!recipient) return { sent: false, skipped: true, reason: "no_recipient" };
+
+  const snapshot = await loadCrossChannelInventorySnapshot(userId);
+  const report = buildCrossChannelDailyReconciliationReport({
+    snapshot,
+    channelHealth: snapshot.channelHealth ?? [],
+  });
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.oskitchen.com";
+  const { subject, text } = formatCrossChannelDailyReconciliationEmail({
+    report,
+    dashboardUrl: `${siteUrl}/dashboard/inventory/cross-channel`,
+  });
+
+  try {
+    await sendRawEmail({ to: recipient, subject, text });
+  } catch (e) {
+    logger.warn("cross_channel_daily_reconciliation_failed", e);
+    return { sent: false, skipped: true, reason: "send_failed", report };
+  }
+
+  return { sent: true, skipped: false, report };
+}
+
+export async function runCrossChannelDailyReconciliationBatch(): Promise<{
+  processed: number;
+  sent: number;
+  skipped: number;
+}> {
+  const connections = await prisma.integrationConnection.findMany({
+    where: {
+      provider: { in: ["SHOPIFY", "WOOCOMMERCE", "DOORDASH"] },
+    },
+    select: { userId: true, settingsJson: true },
+    distinct: ["userId"],
+    take: 200,
+  });
+
+  let sent = 0;
+  let skipped = 0;
+  for (const row of connections) {
+    const settings = crossChannelSettingsFromConnection(row.settingsJson);
+    if (settings.dailyReconciliationEmail === false) {
+      skipped += 1;
+      continue;
+    }
+    const result = await sendCrossChannelDailyReconciliationEmail(row.userId);
+    if (result.sent) sent += 1;
+    else skipped += 1;
+  }
+
+  return { processed: connections.length, sent, skipped };
 }
 
 export async function runCrossChannelInventorySyncPull(userId: string) {
   await runInventorySyncPull(userId);
-  return loadCrossChannelInventorySnapshot(userId);
+  const connections = await loadCrossChannelConnections(userId);
+  const syncedAt = new Date();
+  await Promise.all(
+    connections
+      .filter((c) => crossChannelSettingsFromConnection(c.settingsJson).enabled)
+      .map((c) => recordCrossChannelConnectionSync(userId, c.id, syncedAt)),
+  );
+  const snapshot = await loadCrossChannelInventorySnapshot(userId);
+  await notifyCrossChannelInventoryConflicts(userId, snapshot);
+  return snapshot;
 }
 
 export async function runCrossChannelInventorySyncPush(
@@ -615,7 +1067,9 @@ export async function runCrossChannelInventorySyncPush(
   conflictId?: string,
 ) {
   const result = await runInventorySyncPush(userId, connectionId, strategy, conflictId);
+  await recordCrossChannelConnectionSync(userId, connectionId);
   const snapshot = await loadCrossChannelInventorySnapshot(userId);
+  await notifyCrossChannelInventoryConflicts(userId, snapshot);
   return { ...result, snapshot };
 }
 

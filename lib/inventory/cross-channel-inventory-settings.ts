@@ -18,6 +18,16 @@ export type CrossChannelInventorySettings = {
   conflictResolution: InventoryConflictResolution;
   autoPushOnChange: boolean;
   lowStockThreshold: number;
+  /** ISO timestamp of last successful pull/push for this connection. */
+  lastSyncedAtIso?: string | null;
+  /** Email operator when new inventory conflicts appear. */
+  notifyOnConflict?: boolean;
+  /** Include this workspace in daily reconciliation digest. */
+  dailyReconciliationEmail?: boolean;
+  /** Override recipient; defaults to workspace owner email. */
+  notificationEmail?: string | null;
+  /** Conflict ids already emailed — prevents duplicate alerts. */
+  lastNotifiedConflictIds?: string[];
 };
 
 export const DEFAULT_CROSS_CHANNEL_INVENTORY_SETTINGS: CrossChannelInventorySettings = {
@@ -25,6 +35,11 @@ export const DEFAULT_CROSS_CHANNEL_INVENTORY_SETTINGS: CrossChannelInventorySett
   conflictResolution: "manual_review",
   autoPushOnChange: true,
   lowStockThreshold: 5,
+  lastSyncedAtIso: null,
+  notifyOnConflict: true,
+  dailyReconciliationEmail: true,
+  notificationEmail: null,
+  lastNotifiedConflictIds: [],
 };
 
 export type StoredCrossChannelReservation = {
@@ -45,6 +60,7 @@ export function parseCrossChannelInventorySettings(raw: unknown): CrossChannelIn
     resolution === "kitchen_wins" || resolution === "channel_wins"
       ? resolution
       : "manual_review";
+  const lastNotified = o.lastNotifiedConflictIds;
   return {
     enabled: typeof o.enabled === "boolean" ? o.enabled : DEFAULT_CROSS_CHANNEL_INVENTORY_SETTINGS.enabled,
     conflictResolution,
@@ -56,6 +72,21 @@ export function parseCrossChannelInventorySettings(raw: unknown): CrossChannelIn
       typeof o.lowStockThreshold === "number" && o.lowStockThreshold >= 0
         ? o.lowStockThreshold
         : DEFAULT_CROSS_CHANNEL_INVENTORY_SETTINGS.lowStockThreshold,
+    lastSyncedAtIso:
+      typeof o.lastSyncedAtIso === "string" ? o.lastSyncedAtIso : null,
+    notifyOnConflict:
+      typeof o.notifyOnConflict === "boolean"
+        ? o.notifyOnConflict
+        : DEFAULT_CROSS_CHANNEL_INVENTORY_SETTINGS.notifyOnConflict,
+    dailyReconciliationEmail:
+      typeof o.dailyReconciliationEmail === "boolean"
+        ? o.dailyReconciliationEmail
+        : DEFAULT_CROSS_CHANNEL_INVENTORY_SETTINGS.dailyReconciliationEmail,
+    notificationEmail:
+      typeof o.notificationEmail === "string" ? o.notificationEmail : null,
+    lastNotifiedConflictIds: Array.isArray(lastNotified)
+      ? lastNotified.filter((id): id is string => typeof id === "string")
+      : [],
   };
 }
 
