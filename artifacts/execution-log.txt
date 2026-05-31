@@ -1485,3 +1485,9 @@ Action: docs: KDS SLO proof + sales one-pager (Critical Features Cycle 6)
 Files: docs/kds-slo-proof-plan.md, docs/kds-sales-one-pager.md, lib/kitchen/kds-slo-proof-policy.ts, tests/unit/kds-slo-proof-plan-wiring.test.ts
 Tracker: websocket-kds-slo=done (6/13) — KDS WebSocket feature COMPLETE
 Next: Cycle 7 cross-channel inventory sync engine
+---
+Cycle: 20260531-164200
+Action: feat: cross-channel inventory sync engine (Critical Features Cycle 7)
+Files: services/inventory/cross-channel-inventory-sync.ts, lib/inventory/cross-channel-inventory-settings.ts, tests/unit/cross-channel-inventory-sync.test.ts, tests/unit/cross-channel-inventory-sync-wiring.test.ts
+Tracker: cross-channel-inventory-engine=done (7/13)
+Next: Cycle 8 cross-channel inventory UI
