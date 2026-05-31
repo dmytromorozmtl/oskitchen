@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { StaffForm } from "@/components/dashboard/staff/staff-form";
 import { StaffKpiGrid } from "@/components/dashboard/staff/kpi-grid";
+import { TeamCommunicationWidget } from "@/components/dashboard/staff/team-communication-widget";
 import { StaffStatusBadge } from "@/components/dashboard/staff/badges";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,12 +15,13 @@ import {
   createStaffMemberFormAction,
 } from "@/actions/staff-member";
 import { listStaff, listRoles, staffKpis } from "@/services/staff/staff-service";
+import { loadTeamCommunicationFeed } from "@/services/team/team-communication-load";
 
 export default async function StaffPage() {
   const { userId, workspaceId, canManage, actor } = await getStaffPageAccess();
   const isSuper = actor.platformBypass;
 
-  const [staff, kpis, roles, brands, locations] = await Promise.all([
+  const [staff, kpis, roles, brands, locations, teamFeed] = await Promise.all([
     listStaff(userId),
     staffKpis(userId),
     listRoles(userId),
@@ -37,6 +39,7 @@ export default async function StaffPage() {
       orderBy: { name: "asc" },
       take: 50,
     }).catch(() => []),
+    loadTeamCommunicationFeed(userId, { limit: 10 }),
   ]);
 
   return (
@@ -62,6 +65,8 @@ export default async function StaffPage() {
         </div>
 
         <StaffKpiGrid tiles={kpis} />
+
+        <TeamCommunicationWidget feed={teamFeed} />
 
         {staff.length === 0 ? (
           <Card className="border-dashed">

@@ -15,6 +15,7 @@ const LINKS = [
   { href: "/dashboard/staff/ai-scheduling", label: "AI scheduling" },
   { href: "/dashboard/staff/tip-pooling", label: "Tip pooling" },
   { href: "/dashboard/staff/labor-realtime", label: "Labor tracker" },
+  { href: "/dashboard/staff/team", label: "Team comms" },
   { href: "/dashboard/staff/certifications", label: "Certifications" },
   { href: "/dashboard/staff/drivers", label: "Drivers" },
   { href: "/dashboard/staff/reports", label: "Reports" },
