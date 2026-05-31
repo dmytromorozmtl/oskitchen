@@ -71,6 +71,38 @@ export type ShopifyMarketCatalogConflictRow = {
   catalogAuthority: "shopify" | "kitchenos" | "manual";
 };
 
+export type ShopifyMarketTaxImportRow = {
+  osMarketId: string;
+  shopifyMarketId: string;
+  importedAt: string;
+  regionCodes: string[];
+  currencyCode: string | null;
+  taxIncludedInPrices: boolean | null;
+  inferredMode: "single" | "us_sales" | "ca_sales" | "eu_vat";
+  taxComponents: Array<{ id: string; label: string; ratePercent: number }>;
+  totalRatePercent: number;
+  dutiesEnabled: boolean | null;
+  taxHash: string;
+};
+
+export type ShopifyMarketTaxConflictType =
+  | "RATE_MISMATCH"
+  | "JURISDICTION_MISSING"
+  | "DUTY_UNCONFIGURED"
+  | "MODE_MISMATCH";
+
+export type ShopifyMarketTaxConflictRow = {
+  conflictKey: string;
+  osMarketId: string;
+  shopifyMarketId: string;
+  conflictType: ShopifyMarketTaxConflictType;
+  shopifySummary: string;
+  kitchenosSummary: string;
+  detectedAt: string;
+  status: "open" | "resolved_shopify" | "resolved_kitchenos" | "ignored";
+  taxAuthority: "shopify" | "kitchenos" | "manual";
+};
+
 export type ShopifyMarketsSyncSettings = {
   lastDiscoveryAt: string | null;
   primaryShopifyMarketId: string | null;
@@ -106,6 +138,13 @@ export type ShopifyMarketsSyncSettings = {
   lastCatalogReconcileError: string | null;
   lastCatalogReconcileResult: string | null;
   marketCatalogConflicts: Record<string, ShopifyMarketCatalogConflictRow>;
+  lastTaxImportAt: string | null;
+  taxImportError: string | null;
+  marketTaxImports: Record<string, ShopifyMarketTaxImportRow>;
+  lastTaxReconcileAt: string | null;
+  lastTaxReconcileError: string | null;
+  lastTaxReconcileResult: string | null;
+  marketTaxConflicts: Record<string, ShopifyMarketTaxConflictRow>;
 };
 
 export const SHOPIFY_MARKETS_REQUIRED_SCOPES = ["read_markets", "read_products"] as const;
@@ -168,6 +207,16 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
       ? (raw.marketCatalogConflicts as Record<string, ShopifyMarketCatalogConflictRow>)
       : {};
 
+  const marketTaxImports =
+    raw.marketTaxImports && typeof raw.marketTaxImports === "object"
+      ? (raw.marketTaxImports as Record<string, ShopifyMarketTaxImportRow>)
+      : {};
+
+  const marketTaxConflicts =
+    raw.marketTaxConflicts && typeof raw.marketTaxConflicts === "object"
+      ? (raw.marketTaxConflicts as Record<string, ShopifyMarketTaxConflictRow>)
+      : {};
+
   return {
     lastDiscoveryAt: typeof raw.lastDiscoveryAt === "string" ? raw.lastDiscoveryAt : null,
     primaryShopifyMarketId:
@@ -223,6 +272,14 @@ export function parseShopifyMarketsSyncSettings(settingsJson: unknown): ShopifyM
     lastCatalogReconcileResult:
       typeof raw.lastCatalogReconcileResult === "string" ? raw.lastCatalogReconcileResult : null,
     marketCatalogConflicts,
+    lastTaxImportAt: typeof raw.lastTaxImportAt === "string" ? raw.lastTaxImportAt : null,
+    taxImportError: typeof raw.taxImportError === "string" ? raw.taxImportError : null,
+    marketTaxImports,
+    lastTaxReconcileAt: typeof raw.lastTaxReconcileAt === "string" ? raw.lastTaxReconcileAt : null,
+    lastTaxReconcileError: typeof raw.lastTaxReconcileError === "string" ? raw.lastTaxReconcileError : null,
+    lastTaxReconcileResult:
+      typeof raw.lastTaxReconcileResult === "string" ? raw.lastTaxReconcileResult : null,
+    marketTaxConflicts,
   };
 }
 

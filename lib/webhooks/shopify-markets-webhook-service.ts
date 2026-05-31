@@ -20,6 +20,10 @@ import {
   reconcileBidirectionalShopifyMarketCatalogForConnection,
 } from "@/services/integrations/shopify-markets-catalog-bidirectional-service";
 import {
+  hasTaxGuardShopifyMarkets,
+  reconcileShopifyMarketTaxGuardForConnection,
+} from "@/services/integrations/shopify-markets-tax-guard-bidirectional-service";
+import {
   importShopifyMarketCatalogForConnection,
   listCatalogImportableStorefrontMarkets,
 } from "@/services/integrations/shopify-market-catalog-service";
@@ -69,7 +73,8 @@ export async function handleShopifyMarketsWebhookEvent(input: {
   const catalogImportable = listCatalogImportableStorefrontMarkets(kitchen?.settingsCenterJson);
   const bidirectional = hasBidirectionalShopifyMarkets(kitchen?.settingsCenterJson);
   const catalogSync = hasCatalogSyncShopifyMarkets(kitchen?.settingsCenterJson);
-  if (importable.length === 0 && !bidirectional && catalogImportable.length === 0 && !catalogSync) {
+  const taxGuard = hasTaxGuardShopifyMarkets(kitchen?.settingsCenterJson);
+  if (importable.length === 0 && !bidirectional && catalogImportable.length === 0 && !catalogSync && !taxGuard) {
     return { status: "no_import_markets" };
   }
 
@@ -176,6 +181,15 @@ export async function handleShopifyMarketsWebhookEvent(input: {
           skipUnchanged: true,
         });
       }
+      if (taxGuard) {
+        await reconcileShopifyMarketTaxGuardForConnection({
+          userId: input.userId,
+          connection: refreshedConn,
+          creds,
+          origin: "webhook",
+          skipUnchanged: true,
+        });
+      }
       return {
         status: "unchanged",
         marketsUnchanged: reconcileResult.marketsReconciled,
@@ -184,6 +198,16 @@ export async function handleShopifyMarketsWebhookEvent(input: {
 
     if (catalogSync) {
       await reconcileBidirectionalShopifyMarketCatalogForConnection({
+        userId: input.userId,
+        connection: refreshedConn,
+        creds,
+        origin: "webhook",
+        skipUnchanged: true,
+      });
+    }
+
+    if (taxGuard) {
+      await reconcileShopifyMarketTaxGuardForConnection({
         userId: input.userId,
         connection: refreshedConn,
         creds,
@@ -247,6 +271,16 @@ export async function handleShopifyMarketsWebhookEvent(input: {
       userId: input.userId,
       connection: refreshedConn,
       creds,
+      skipUnchanged: true,
+    });
+  }
+
+  if (taxGuard) {
+    await reconcileShopifyMarketTaxGuardForConnection({
+      userId: input.userId,
+      connection: refreshedConn,
+      creds,
+      origin: "webhook",
       skipUnchanged: true,
     });
   }

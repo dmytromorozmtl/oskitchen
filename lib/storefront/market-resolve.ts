@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { STOREFRONT_MARKET_COOKIE, storefrontCatalogTag } from "@/lib/storefront/cache-tags";
 import { loadShopifyMarketCatalogOverlayForMarket } from "@/lib/storefront/shopify-market-catalog-overrides";
+import { loadShopifyMarketTaxOverlayForMarket } from "@/lib/storefront/shopify-market-tax-overrides";
 import {
   defaultPilotMarket,
   parseStorefrontMarketsFromSettingsCenter,
@@ -15,6 +16,8 @@ export type ResolvedMarketContext = {
   productIds: string[] | null;
   activeMenuId: string | null;
   effectiveStoreSlug: string;
+  /** Checkout tax source — always kitchenos; shopify_reference when import hints exist */
+  taxSource: "kitchenos" | "shopify_reference";
 };
 
 export async function loadMarketsForStorefrontOwner(userId: string): Promise<StorefrontMarket[]> {
@@ -52,6 +55,11 @@ export async function resolveActiveMarket(input: {
     market,
   });
 
+  const taxOverlay = await loadShopifyMarketTaxOverlayForMarket({
+    ownerUserId: input.storefrontUserId,
+    market,
+  });
+
   const productIds =
     catalogOverlay.productIds ??
     (market.productIds && market.productIds.length > 0 ? market.productIds : null);
@@ -66,6 +74,7 @@ export async function resolveActiveMarket(input: {
     productIds,
     activeMenuId,
     effectiveStoreSlug,
+    taxSource: taxOverlay.source,
   };
 }
 

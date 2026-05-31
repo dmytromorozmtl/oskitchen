@@ -2,22 +2,26 @@
 
 import { useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, BookOpen, DollarSign, Globe2, Loader2, RefreshCw, Scale } from "lucide-react";
+import { ArrowUpRight, BookOpen, DollarSign, Globe2, Loader2, Receipt, RefreshCw, Scale } from "lucide-react";
 
 import {
   discoverShopifyMarketsAction,
   importShopifyMarketCatalogAction,
   importShopifyMarketPricesAction,
+  importShopifyMarketTaxAction,
   pushShopifyMarketCatalogAction,
   pushShopifyMarketPricesAction,
   reconcileBidirectionalShopifyMarketCatalogAction,
   reconcileBidirectionalShopifyMarketsAction,
+  reconcileShopifyMarketTaxGuardAction,
   resolveShopifyMarketCatalogConflictAction,
   resolveShopifyMarketPriceConflictAction,
+  resolveShopifyMarketTaxConflictAction,
 } from "@/actions/shopify-markets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SHOPIFY_MARKET_TAX_GUARD_HONESTY } from "@/lib/commercial/shopify-market-tax-guard";
 import {
   SHOPIFY_MARKETS_CATALOG_PUSH_REQUIRED_SCOPES,
   SHOPIFY_MARKETS_PUSH_REQUIRED_SCOPES,
@@ -69,6 +73,9 @@ export function ShopifyMarketsPanel({
   const [catalogPushPending, startCatalogPush] = useTransition();
   const [catalogReconcilePending, startCatalogReconcile] = useTransition();
   const [catalogResolvePending, startCatalogResolve] = useTransition();
+  const [taxImportPending, startTaxImport] = useTransition();
+  const [taxReconcilePending, startTaxReconcile] = useTransition();
+  const [taxResolvePending, startTaxResolve] = useTransition();
   const pending =
     discoverPending ||
     importPending ||
@@ -78,7 +85,10 @@ export function ShopifyMarketsPanel({
     catalogImportPending ||
     catalogPushPending ||
     catalogReconcilePending ||
-    catalogResolvePending;
+    catalogResolvePending ||
+    taxImportPending ||
+    taxReconcilePending ||
+    taxResolvePending;
 
   const importedMarkets = Object.values(syncSettings.marketPriceImports ?? {});
   const exportedMarkets = Object.values(syncSettings.marketPriceExports ?? {});
@@ -88,6 +98,10 @@ export function ShopifyMarketsPanel({
     (row) => row.status === "open",
   );
   const openCatalogConflicts = Object.values(syncSettings.marketCatalogConflicts ?? {}).filter(
+    (row) => row.status === "open",
+  );
+  const importedTaxMarkets = Object.values(syncSettings.marketTaxImports ?? {});
+  const openTaxConflicts = Object.values(syncSettings.marketTaxConflicts ?? {}).filter(
     (row) => row.status === "open",
   );
   const totalMappedPrices = importedMarkets.reduce(
@@ -106,12 +120,12 @@ export function ShopifyMarketsPanel({
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               <Globe2 className="h-4 w-4" />
-              Shopify Markets — Phase 6 BETA
+              Shopify Markets — Phase 7 BETA
             </CardTitle>
             <CardDescription>
-              Discover Shopify markets, link them on Storefront → Markets, then sync prices and catalog
-              publications for mapped products. Bidirectional markets reconcile with priceAuthority and
-              catalogAuthority per market.
+              Discover Shopify markets, link them on Storefront → Markets, then sync prices, catalog
+              publications, and tax/duty hints for mapped products. Bidirectional markets reconcile with
+              priceAuthority, catalogAuthority, and taxAuthority per market.
             </CardDescription>
           </div>
           <Badge variant="outline">markets_sync BETA</Badge>
@@ -287,7 +301,145 @@ export function ShopifyMarketsPanel({
               )}
               <span className="ml-2">Reconcile catalog</span>
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startTaxImport(async () => {
+                  await importShopifyMarketTaxAction(connectionId);
+                })
+              }
+            >
+              {taxImportPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Receipt className="h-4 w-4" />
+              )}
+              <span className="ml-2">Import tax hints</span>
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={pending || !hasCredentials}
+              onClick={() =>
+                startTaxReconcile(async () => {
+                  await reconcileShopifyMarketTaxGuardAction(connectionId);
+                })
+              }
+            >
+              {taxReconcilePending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Scale className="h-4 w-4" />
+              )}
+              <span className="ml-2">Reconcile tax guard</span>
+            </Button>
           </div>
+        ) : null}
+
+        <p className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+          {SHOPIFY_MARKET_TAX_GUARD_HONESTY}
+        </p>
+
+        {syncSettings.lastTaxReconcileAt ? (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+            <p>
+              Last tax guard reconcile{" "}
+              {formatDistanceToNow(new Date(syncSettings.lastTaxReconcileAt), { addSuffix: true })}
+              {syncSettings.lastTaxReconcileResult ? (
+                <> · {syncSettings.lastTaxReconcileResult}</>
+              ) : null}
+            </p>
+            {syncSettings.lastTaxReconcileError ? (
+              <p className="mt-1 text-destructive">{syncSettings.lastTaxReconcileError}</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {openTaxConflicts.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+            <p className="font-medium text-foreground">
+              Open tax/duty conflicts ({openTaxConflicts.length})
+            </p>
+            {openTaxConflicts.map((conflict) => (
+              <div
+                key={conflict.conflictKey}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 px-3 py-2 text-muted-foreground"
+              >
+                <span>
+                  Market <span className="font-mono">{conflict.osMarketId}</span> ·{" "}
+                  <span className="font-mono">{conflict.conflictType}</span> · Shopify{" "}
+                  {conflict.shopifySummary} vs KitchenOS {conflict.kitchenosSummary}
+                </span>
+                {canManage ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={taxResolvePending}
+                      onClick={() =>
+                        startTaxResolve(async () => {
+                          await resolveShopifyMarketTaxConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "shopify",
+                          });
+                        })
+                      }
+                    >
+                      Ack Shopify hint
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={taxResolvePending}
+                      onClick={() =>
+                        startTaxResolve(async () => {
+                          await resolveShopifyMarketTaxConflictAction({
+                            connectionId: connectionId!,
+                            conflictKey: conflict.conflictKey,
+                            resolution: "kitchenos",
+                          });
+                        })
+                      }
+                    >
+                      Keep KitchenOS
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {importedTaxMarkets.length > 0 ? (
+          <div className="space-y-2 rounded-lg border border-border/70 p-3 text-xs text-muted-foreground">
+            <p className="font-medium text-foreground">Cached tax hint imports (reference only)</p>
+            {importedTaxMarkets.map((row) => (
+              <p key={row.osMarketId}>
+                {row.osMarketId}: {row.inferredMode} · {row.regionCodes.join(", ") || "—"} ·{" "}
+                {row.totalRatePercent.toFixed(2)}% · hash{" "}
+                <span className="font-mono">{row.taxHash.slice(0, 8)}</span>
+              </p>
+            ))}
+          </div>
+        ) : null}
+
+        {syncSettings.lastTaxImportAt ? (
+          <p className="text-xs text-muted-foreground">
+            Last tax import{" "}
+            {formatDistanceToNow(new Date(syncSettings.lastTaxImportAt), { addSuffix: true })}
+            {syncSettings.taxImportError ? ` · notes: ${syncSettings.taxImportError}` : ""}
+          </p>
         ) : null}
 
         {syncSettings.lastCatalogReconcileAt ? (

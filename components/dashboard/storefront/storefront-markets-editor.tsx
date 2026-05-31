@@ -243,6 +243,31 @@ export function StorefrontMarketsEditor({
                           </div>
                           </>
                         ) : null}
+                        {(m.syncMode === "import" || m.syncMode === "bidirectional") ? (
+                          <div className="space-y-2">
+                            <Label>Tax authority on conflict (reference only)</Label>
+                            <select
+                              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              value={m.taxAuthority ?? "kitchenos"}
+                              onChange={(e) =>
+                                updateAt(idx, {
+                                  taxAuthority: e.target.value as StorefrontMarket["taxAuthority"],
+                                })
+                              }
+                            >
+                              <option value="kitchenos">
+                                KitchenOS wins — checkout uses your tax settings
+                              </option>
+                              <option value="shopify">
+                                Ack Shopify hint — review and update tax settings manually if needed
+                              </option>
+                              <option value="manual">Manual — queue tax conflicts for review</option>
+                            </select>
+                            <p className="text-[11px] text-muted-foreground">
+                              Shopify tax import never overwrites checkout tax — it surfaces mismatches only.
+                            </p>
+                          </div>
+                        ) : null}
                       </>
                     ) : null}
                   </div>

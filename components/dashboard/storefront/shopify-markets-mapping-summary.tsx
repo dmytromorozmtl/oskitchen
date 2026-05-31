@@ -31,9 +31,13 @@ export function ShopifyMarketsMappingSummary({
   const openCatalogConflicts = syncSettings
     ? Object.values(syncSettings.marketCatalogConflicts ?? {}).filter((row) => row.status === "open").length
     : 0;
+  const openTaxConflicts = syncSettings
+    ? Object.values(syncSettings.marketTaxConflicts ?? {}).filter((row) => row.status === "open").length
+    : 0;
   const priceRows = syncSettings ? Object.values(syncSettings.marketPriceImports ?? {}) : [];
   const exportRows = syncSettings ? Object.values(syncSettings.marketPriceExports ?? {}) : [];
   const catalogRows = syncSettings ? Object.values(syncSettings.marketCatalogImports ?? {}) : [];
+  const taxRows = syncSettings ? Object.values(syncSettings.marketTaxImports ?? {}) : [];
   const mappedPrices = priceRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
   const pushedVariants = exportRows.reduce((sum, row) => sum + row.pushedVariantCount, 0);
   const mappedCatalogProducts = catalogRows.reduce((sum, row) => sum + row.mappedProductCount, 0);
@@ -43,8 +47,8 @@ export function ShopifyMarketsMappingSummary({
       <CardHeader>
         <CardTitle className="text-base">Shopify Markets mapping</CardTitle>
         <CardDescription>
-          Phase 6 — link OS Kitchen markets to Shopify, sync prices and catalog publications, reconcile
-          conflicts with priceAuthority and catalogAuthority.
+          Phase 7 — link OS Kitchen markets to Shopify, sync prices, catalog publications, and tax/duty
+          hints; reconcile conflicts with priceAuthority, catalogAuthority, and taxAuthority.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 text-sm">
@@ -78,11 +82,17 @@ export function ShopifyMarketsMappingSummary({
               {openCatalogConflicts > 0 ? (
                 <Badge variant="destructive">{openCatalogConflicts} catalog conflict(s)</Badge>
               ) : null}
+              {openTaxConflicts > 0 ? (
+                <Badge variant="destructive">{openTaxConflicts} tax conflict(s)</Badge>
+              ) : null}
               {mappedPrices > 0 ? (
                 <Badge variant="outline">{mappedPrices} Shopify price override(s)</Badge>
               ) : null}
               {mappedCatalogProducts > 0 ? (
                 <Badge variant="outline">{mappedCatalogProducts} catalog product(s)</Badge>
+              ) : null}
+              {taxRows.length > 0 ? (
+                <Badge variant="outline">{taxRows.length} tax hint(s) cached</Badge>
               ) : null}
               {pushedVariants > 0 ? (
                 <Badge variant="outline">{pushedVariants} variant(s) pushed</Badge>

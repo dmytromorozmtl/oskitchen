@@ -33,6 +33,10 @@ export const storefrontMarketSchema = z.object({
   priceAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
   /** Bidirectional catalog conflict resolution — who wins when publication sets diverge */
   catalogAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
+  /** Tax hint conflict resolution — reference-only; checkout always uses KitchenOS tax settings */
+  taxAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
+  /** Duty hint conflict resolution — reference-only; never auto-applies duty rules */
+  dutyAuthority: z.enum(["shopify", "kitchenos", "manual"]).optional().default("kitchenos"),
 });
 
 export type StorefrontMarket = z.infer<typeof storefrontMarketSchema>;

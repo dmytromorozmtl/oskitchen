@@ -302,3 +302,22 @@ Required Shopify scopes (verify at implementation):
 | 2026-05-31 | **Phase 4 shipped:** KitchenOS → Shopify price list push (`syncMode=push`), manual + product-update trigger, 30s debounce, write_products scope |
 | 2026-05-31 | **Phase 5 (bidirectional) shipped:** `syncMode=bidirectional` with `priceAuthority`, conflict queue, reconcile engine, webhook + product-update auto-reconcile |
 | 2026-05-31 | **Phase 6 (catalog publication) shipped:** catalog import/push, `catalogAuthority`, publication conflicts, storefront overlay |
+| 2026-05-31 | **Phase 7 (tax/duty guard) shipped:** read-only Shopify tax hint import, `taxAuthority`, conflict queue (`RATE_MISMATCH`, `JURISDICTION_MISSING`, `DUTY_UNCONFIGURED`, `MODE_MISMATCH`), checkout honesty — KitchenOS tax engine always wins |
+
+---
+
+## Phase 7 — Tax/duty guard (shipped)
+
+**Goal:** Surface Shopify Markets tax/duty hints without silently overwriting KitchenOS `storefront.tax`.
+
+| Component | Path |
+|-----------|------|
+| Feature flag | `SHOPIFY_MARKETS_TAX_GUARD=1` (default on in non-production) |
+| Import service | `shopify-market-tax-service.ts` |
+| Reconcile / conflicts | `shopify-markets-tax-guard-bidirectional-service.ts` |
+| Storefront overlay | `shopify-market-tax-overrides.ts` — reference only; `taxSource` on `ResolvedMarketContext` |
+| UI | Shopify integration panel + Storefront → Markets `taxAuthority` |
+
+**Conflict types:** `RATE_MISMATCH`, `JURISDICTION_MISSING`, `DUTY_UNCONFIGURED`, `MODE_MISMATCH`
+
+**Conscious limits:** No automatic tax settings overwrite; no Shopify Tax API write; duties are informational only.

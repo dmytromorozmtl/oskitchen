@@ -29,6 +29,11 @@ import {
 } from "@/services/integrations/shopify-markets-catalog-bidirectional-service";
 import { importShopifyMarketCatalogForConnection } from "@/services/integrations/shopify-market-catalog-service";
 import { pushShopifyMarketCatalogForConnection } from "@/services/integrations/shopify-market-catalog-push-service";
+import { importShopifyMarketTaxForConnection } from "@/services/integrations/shopify-market-tax-service";
+import {
+  reconcileShopifyMarketTaxGuardForConnection,
+  resolveShopifyMarketTaxConflict,
+} from "@/services/integrations/shopify-markets-tax-guard-bidirectional-service";
 import { revalidateStorefrontCatalogForOwner } from "@/lib/storefront/revalidate-shopify-market-catalog";
 
 const discoverSchema = z.object({
@@ -378,6 +383,103 @@ export async function resolveShopifyMarketCatalogConflictAction(input: {
     userId: access.actor.userId,
     connection: conn,
     creds,
+    conflictKey: input.conflictKey,
+    resolution: input.resolution,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+  return { ok: true as const };
+}
+
+export async function importShopifyMarketTaxAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.import_tax" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before import." };
+  }
+
+  const result = await importShopifyMarketTaxForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return {
+    ok: true as const,
+    marketsImported: result.marketsImported,
+    marketsUnchanged: result.marketsUnchanged,
+  };
+}
+
+export async function reconcileShopifyMarketTaxGuardAction(connectionId: string) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.reconcile_tax_guard" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const creds = getShopifyCredentials(conn);
+  if (!creds) {
+    return { ok: false as const, error: "Complete Shopify Admin API credentials before reconcile." };
+  }
+
+  const result = await reconcileShopifyMarketTaxGuardForConnection({
+    userId: access.actor.userId,
+    connection: conn,
+    creds,
+    origin: "manual",
+    skipUnchanged: false,
+  });
+
+  if (!result.ok) return { ok: false as const, error: result.error };
+
+  revalidatePath("/dashboard/integrations/shopify");
+  revalidatePath("/dashboard/storefront/markets");
+
+  return { ok: true as const, ...result };
+}
+
+export async function resolveShopifyMarketTaxConflictAction(input: {
+  connectionId: string;
+  conflictKey: string;
+  resolution: "shopify" | "kitchenos" | "ignore";
+}) {
+  const access = await requireIntegrationsActor({ operation: "shopify.markets.resolve_tax_conflict" });
+  if (!access.ok) return { ok: false as const, error: access.error };
+
+  const parsed = discoverSchema.safeParse({ connectionId: input.connectionId });
+  if (!parsed.success) return { ok: false as const, error: "Invalid connection." };
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByIdWhereForOwner(access.actor.userId, input.connectionId),
+  });
+  if (!conn) return { ok: false as const, error: "Shopify connection not found." };
+
+  const result = await resolveShopifyMarketTaxConflict({
+    connection: conn,
     conflictKey: input.conflictKey,
     resolution: input.resolution,
   });
