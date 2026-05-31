@@ -1250,3 +1250,16 @@ TS errors: 0
 Vault: false (0/11)
 P0: awaiting_ops_credentials
 Next: human vault 11/11; optional post-tree fix for 22 cert-live/RBAC test failures
+
+---
+Cycle: 103
+Timestamp: 2026-05-31T20:27:30.000Z
+Priority: P1 (post-tree test fix)
+Action: no tree step matched — agent exhausted; fixed 6 cert-live failures by adding Era 10–17 production calendar + POS shift spotcheck policy IDs to docs/feature-maturity-matrix.md
+Files changed: 1 (docs/feature-maturity-matrix.md)
+Commit: fix: cert-live doc markers for production calendar policies
+Tests fixed: production-calendar-operator-depth-era13/15, production-calendar-operator-drill-era17, production-calendar-cross-week-ui, production-calendar-status-workflow-ui, pos-receipt-shift-spotcheck-era17 (6/6 pass)
+TS errors: 0
+Vault: false (0/11)
+P0: awaiting_ops_credentials
+Next: fix remaining ~16 vitest failures (dashboard-userid, POS RBAC pages, cron-auth, marketing-claims CI); human vault 11/11 for score 100
