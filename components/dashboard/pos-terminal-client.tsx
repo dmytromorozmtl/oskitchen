@@ -645,8 +645,15 @@ export function PosTerminalClient(props: {
             ) : null}
           </div>
           {!online ? (
-            <span className="text-xs text-muted-foreground">{POS_OFFLINE_LIMITATIONS[0]}</span>
-          ) : null}
+            <span className="text-xs text-muted-foreground">
+              Offline mode works for cash and saved payments. Card requires connection.{" "}
+              {POS_OFFLINE_LIMITATIONS[0]}
+            </span>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              Offline mode works for cash and saved payments. Card requires connection.
+            </span>
+          )}
         </div>
         {props.quickOrderEnabled ? (
           <QuickOrderButtons

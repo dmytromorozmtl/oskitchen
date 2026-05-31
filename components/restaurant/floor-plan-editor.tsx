@@ -200,6 +200,12 @@ export function FloorPlanEditor({ tables: initialTables }: { tables: TableData[]
 
   return (
     <div className="space-y-6">
+      <p
+        className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100"
+        role="status"
+      >
+        Floor view updates on refresh. Real-time coming soon.
+      </p>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Floor plan editor</h1>

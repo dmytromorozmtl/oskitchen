@@ -104,3 +104,34 @@ export function formatWaitlistReadySms(params: {
 }): string {
   return `${params.storeName}: Your table is ready! Please check in with the host within ${params.graceMinutes} minutes.`;
 }
+
+export function formatReservationConfirmationSms(params: {
+  storeName: string;
+  reservationDate: string;
+  partySize: number;
+  confirmationCode?: string | null;
+}): string {
+  const code = params.confirmationCode ? ` Ref: ${params.confirmationCode}.` : "";
+  return `${params.storeName}: Reservation confirmed for ${params.partySize} on ${params.reservationDate}.${code}`;
+}
+
+export async function sendReservationConfirmationSms(params: {
+  storeName: string;
+  customerPhone: string;
+  reservationDate: string;
+  partySize: number;
+  confirmationCode?: string | null;
+}): Promise<
+  import("@/services/notifications/sms-service").SmsSendResult
+> {
+  const { sendSmsNotification } = await import("@/services/notifications/sms-service");
+  return sendSmsNotification({
+    to: params.customerPhone,
+    body: formatReservationConfirmationSms({
+      storeName: params.storeName,
+      reservationDate: params.reservationDate,
+      partySize: params.partySize,
+      confirmationCode: params.confirmationCode,
+    }),
+  });
+}

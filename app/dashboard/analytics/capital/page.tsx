@@ -28,6 +28,12 @@ export default async function AnalyticsCapitalResourcesPage({
           Third-party financing resources, signed revenue exports, multi-lender marketplace, and your
           KitchenOS revenue context — not loan approvals from OS Kitchen.
         </p>
+        <p
+          className="mt-3 rounded-lg border border-border/70 bg-muted/30 px-3 py-2 text-sm text-muted-foreground"
+          role="status"
+        >
+          Capital referrals via partner lenders. KitchenOS does not originate loans.
+        </p>
       </div>
       <CapitalRevenueAttestationPanel
         recentAttestations={data.recentAttestations}

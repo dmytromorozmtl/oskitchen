@@ -4,6 +4,7 @@ import {
   buildWaitlistQueueSummary,
   DEFAULT_WAITLIST_CONFIG,
   estimateWaitMinutesForPosition,
+  formatReservationConfirmationSms,
   formatWaitlistJoinedSms,
   formatWaitlistReadySms,
   parseWaitlistConfig,
@@ -49,5 +50,13 @@ describe("waitlist service", () => {
   it("formats SMS copy", () => {
     expect(formatWaitlistJoinedSms({ storeName: "Demo", position: 2, estimatedMinutes: 18 })).toContain("#2");
     expect(formatWaitlistReadySms({ storeName: "Demo", graceMinutes: 10 })).toContain("ready");
+    expect(
+      formatReservationConfirmationSms({
+        storeName: "Demo",
+        reservationDate: "Jun 15, 7:00 PM",
+        partySize: 4,
+        confirmationCode: "ABC123",
+      }),
+    ).toContain("confirmed");
   });
 });

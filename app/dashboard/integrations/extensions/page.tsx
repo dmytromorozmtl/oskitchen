@@ -54,6 +54,13 @@ export default async function IntegrationsExtensionsPage() {
         description="Certified SI partners, OAuth sandbox apps, outbound webhooks, and embedded admin for reviewed apps. Not a self-serve Toast/Square marketplace — partner submissions require platform review."
       />
 
+      <p
+        className="rounded-lg border border-border/70 bg-muted/30 px-3 py-2 text-sm text-muted-foreground"
+        role="status"
+      >
+        Extensions catalog — self-serve app store coming Q1 2027.
+      </p>
+
       {!access.canManage ? (
         <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100">
           Read-only access — browse the catalog and partner options; connecting integrations requires
