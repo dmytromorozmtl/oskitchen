@@ -1,16 +1,23 @@
 import {
   PartnerAppInstallationStatus,
   PartnerBillingMeterKind,
+  PartnerBillingPayoutStatus,
   PartnerBillingStatementStatus,
   Prisma,
 } from "@prisma/client";
 
 import { recordAuditLog } from "@/lib/audit-log";
+import { getStripeClient, safeStripeError } from "@/lib/billing/stripe-client";
 import {
   currentBillingPeriodMonth,
   loadPartnerBillingConfig,
   resolvePartnerBillingRates,
 } from "@/lib/platform/partner-billing-config";
+import {
+  isMarketplacePartnerStripeConnectEnabled,
+  partnerConnectStatusLabel,
+  resolvePartnerConnectStatus,
+} from "@/lib/platform/partner-stripe-connect";
 import { prisma } from "@/lib/prisma";
 import { toInputJsonValue } from "@/lib/prisma/json";
 import { getMergedPartnerOAuthAppByClientId } from "@/services/platform/partner-oauth-app-registry-service";
@@ -25,6 +32,10 @@ export type PartnerBillingOverviewRow = {
   currency: string;
   revenueShareBps: number;
   monthlyPlatformFeeCentsPerInstall: number;
+  stripeConnectAccountId: string | null;
+  stripeConnectPayoutsEnabled: boolean;
+  connectStatus: string;
+  connectReady: boolean;
 };
 
 export type PartnerBillingStatementView = {
@@ -43,6 +54,11 @@ export type PartnerBillingStatementView = {
   }>;
   finalizedAt: string | null;
   paidAt: string | null;
+  stripeTransferId: string | null;
+  payoutStatus: PartnerBillingPayoutStatus;
+  payoutError: string | null;
+  payoutInitiatedAt: string | null;
+  canExecuteStripePayout: boolean;
 };
 
 async function ensurePartnerBillingAccount(input: {
@@ -314,6 +330,21 @@ export async function loadPartnerBillingOverview(): Promise<{
         account?.monthlyPlatformFeeCentsPerInstall ??
         configApp?.monthlyPlatformFeeCentsPerInstall ??
         config.defaultMonthlyPlatformFeeCentsPerInstall,
+      stripeConnectAccountId: account?.stripeConnectAccountId ?? null,
+      stripeConnectPayoutsEnabled: account?.stripeConnectPayoutsEnabled ?? false,
+      connectStatus: partnerConnectStatusLabel(
+        resolvePartnerConnectStatus({
+          stripeConnectAccountId: account?.stripeConnectAccountId ?? null,
+          stripeConnectPayoutsEnabled: account?.stripeConnectPayoutsEnabled ?? false,
+          stripeConnectDetailsSubmitted: account?.stripeConnectDetailsSubmitted ?? false,
+        }),
+      ),
+      connectReady:
+        resolvePartnerConnectStatus({
+          stripeConnectAccountId: account?.stripeConnectAccountId ?? null,
+          stripeConnectPayoutsEnabled: account?.stripeConnectPayoutsEnabled ?? false,
+          stripeConnectDetailsSubmitted: account?.stripeConnectDetailsSubmitted ?? false,
+        }) === "ready",
     });
   }
 
@@ -403,7 +434,7 @@ export async function generatePartnerBillingStatement(input: {
     },
   });
 
-  return mapStatementView(statement, account.publisherName);
+  return mapStatementView(statement, account.publisherName, account);
 }
 
 export async function listPartnerBillingStatements(limit = 24): Promise<PartnerBillingStatementView[]> {
@@ -413,7 +444,7 @@ export async function listPartnerBillingStatements(limit = 24): Promise<PartnerB
     include: { account: true },
   });
 
-  return statements.map((row) => mapStatementView(row, row.account.publisherName));
+  return statements.map((row) => mapStatementView(row, row.account.publisherName, row.account));
 }
 
 function mapStatementView(
@@ -427,10 +458,36 @@ function mapStatementView(
     lineItemsJson: unknown;
     finalizedAt: Date | null;
     paidAt: Date | null;
+    stripeTransferId: string | null;
+    payoutStatus: PartnerBillingPayoutStatus;
+    payoutError: string | null;
+    payoutInitiatedAt: Date | null;
   },
   publisherName: string,
+  account?: {
+    stripeConnectAccountId: string | null;
+    stripeConnectPayoutsEnabled: boolean;
+    stripeConnectDetailsSubmitted: boolean;
+  } | null,
 ): PartnerBillingStatementView {
   const lineItems = (row.lineItemsJson as PartnerBillingStatementView["lineItems"]) ?? [];
+  const connectReady =
+    account &&
+    resolvePartnerConnectStatus({
+      stripeConnectAccountId: account.stripeConnectAccountId,
+      stripeConnectPayoutsEnabled: account.stripeConnectPayoutsEnabled,
+      stripeConnectDetailsSubmitted: account.stripeConnectDetailsSubmitted,
+    }) === "ready";
+
+  const canExecuteStripePayout = Boolean(
+    isMarketplacePartnerStripeConnectEnabled() &&
+      connectReady &&
+      row.status === PartnerBillingStatementStatus.FINALIZED &&
+      row.totalAccruedCents > 0 &&
+      row.payoutStatus !== PartnerBillingPayoutStatus.PENDING &&
+      row.payoutStatus !== PartnerBillingPayoutStatus.COMPLETED,
+  );
+
   return {
     id: row.id,
     publisherKey: row.publisherKey,
@@ -442,6 +499,11 @@ function mapStatementView(
     lineItems,
     finalizedAt: row.finalizedAt?.toISOString() ?? null,
     paidAt: row.paidAt?.toISOString() ?? null,
+    stripeTransferId: row.stripeTransferId,
+    payoutStatus: row.payoutStatus,
+    payoutError: row.payoutError,
+    payoutInitiatedAt: row.payoutInitiatedAt?.toISOString() ?? null,
+    canExecuteStripePayout,
   };
 }
 
@@ -474,4 +536,115 @@ export async function markPartnerBillingStatementPaid(input: {
   });
 
   return { ok: true };
+}
+
+export async function executePartnerStatementStripePayout(input: {
+  statementId: string;
+  actorUserId: string;
+}): Promise<
+  | { ok: true; transferId: string; dryRun: boolean }
+  | { ok: false; error: string }
+> {
+  if (!isMarketplacePartnerStripeConnectEnabled()) {
+    return { ok: false, error: "Partner Stripe Connect payouts are not enabled." };
+  }
+
+  const statement = await prisma.partnerBillingStatement.findUnique({
+    where: { id: input.statementId },
+    include: { account: true },
+  });
+  if (!statement) return { ok: false, error: "Statement not found." };
+  if (statement.status !== PartnerBillingStatementStatus.FINALIZED) {
+    return { ok: false, error: "Only finalized statements can be paid out." };
+  }
+  if (statement.payoutStatus === PartnerBillingPayoutStatus.PENDING) {
+    return { ok: false, error: "Payout is already in progress." };
+  }
+  if (statement.payoutStatus === PartnerBillingPayoutStatus.COMPLETED) {
+    return { ok: false, error: "Stripe payout already completed for this statement." };
+  }
+  if (statement.totalAccruedCents <= 0) {
+    return { ok: false, error: "Statement total must be greater than zero." };
+  }
+
+  const account = statement.account;
+  if (!account.stripeConnectAccountId?.trim()) {
+    return { ok: false, error: "Publisher has not completed Stripe Connect onboarding." };
+  }
+  if (!account.stripeConnectPayoutsEnabled) {
+    return { ok: false, error: "Publisher Stripe account is not payout-ready yet." };
+  }
+
+  const dryRun = process.env.PARTNER_STRIPE_PAYOUT_DRY_RUN === "1";
+  const stripe = getStripeClient();
+
+  await prisma.partnerBillingStatement.update({
+    where: { id: statement.id },
+    data: {
+      payoutStatus: PartnerBillingPayoutStatus.PENDING,
+      payoutInitiatedAt: new Date(),
+      payoutError: null,
+    },
+  });
+
+  try {
+    let transferId: string;
+
+    if (dryRun || !stripe) {
+      transferId = `dryrun_tr_${statement.id.replace(/-/g, "").slice(0, 24)}`;
+    } else {
+      const transfer = await stripe.transfers.create(
+        {
+          amount: statement.totalAccruedCents,
+          currency: statement.currency.toLowerCase(),
+          destination: account.stripeConnectAccountId,
+          description: `KitchenOS partner billing ${statement.periodMonth}`,
+          metadata: {
+            kitchenosPublisherKey: statement.publisherKey,
+            kitchenosStatementId: statement.id,
+            kitchenosPeriodMonth: statement.periodMonth,
+          },
+        },
+        { idempotencyKey: `partner-payout:${statement.id}` },
+      );
+      transferId = transfer.id;
+    }
+
+    await prisma.partnerBillingStatement.update({
+      where: { id: statement.id },
+      data: {
+        status: PartnerBillingStatementStatus.PAID,
+        paidAt: new Date(),
+        stripeTransferId: transferId,
+        payoutStatus: PartnerBillingPayoutStatus.COMPLETED,
+        payoutError: null,
+      },
+    });
+
+    await recordAuditLog({
+      userId: input.actorUserId,
+      action: "partner.billing_statement_stripe_payout",
+      entityType: "PartnerBillingStatement",
+      entityId: statement.id,
+      metadata: {
+        publisherKey: statement.publisherKey,
+        periodMonth: statement.periodMonth,
+        transferId,
+        amountCents: statement.totalAccruedCents,
+        dryRun,
+      },
+    });
+
+    return { ok: true, transferId, dryRun };
+  } catch (e) {
+    const message = safeStripeError(e);
+    await prisma.partnerBillingStatement.update({
+      where: { id: statement.id },
+      data: {
+        payoutStatus: PartnerBillingPayoutStatus.FAILED,
+        payoutError: message,
+      },
+    });
+    return { ok: false, error: message };
+  }
 }

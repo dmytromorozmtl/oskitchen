@@ -433,3 +433,15 @@ Result: PASS
 Summary: Live lender partner flexcap-rbf-us, production sandbox gating, referral fee billing on FUNDED webhooks, webhook idempotency, platform onboarding dashboard, partner integration guide
 Tests: tests/unit/capital-partner-billing.test.ts
 Next: app-marketplace-phase6-stripe-connect OR shopify-markets-catalog-publication OR restaurant-capital-phase6-lender-oauth
+
+---
+Post-parity cycle: 16
+Timestamp: 2026-05-31T20:00:00.000Z
+Feature: app-marketplace-phase6-stripe-connect
+Source: docs/app-marketplace-rfc.md Phase 6
+Priority: POST-PARITY
+Files: 18
+Result: PASS
+Summary: Stripe Connect Express onboarding for publishers, transfer payouts on finalized statements, account.updated webhook sync, platform UI with Connect status and Send payout, dry-run mode
+Tests: tests/unit/partner-stripe-connect.test.ts
+Next: shopify-markets-catalog-publication OR restaurant-capital-phase6-lender-oauth OR app-marketplace-phase7-revenue-share-meters

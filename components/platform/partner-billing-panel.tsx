@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { DollarSign, Loader2, RefreshCw } from "lucide-react";
+import { CreditCard, DollarSign, ExternalLink, Loader2, RefreshCw } from "lucide-react";
 
 import {
+  executePartnerStatementStripePayoutAction,
   generatePartnerBillingStatementAction,
   markPartnerBillingStatementPaidAction,
   syncPartnerBillingMetersAction,
 } from "@/actions/partner-billing";
+import { startPartnerStripeConnectAction } from "@/actions/partner-stripe-connect";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type {
@@ -22,6 +24,7 @@ type PartnerBillingPanelProps = {
   totals: { activeInstallations: number; accruedCents: number; currency: string };
   statements: PartnerBillingStatementView[];
   canWrite: boolean;
+  connectEnabled: boolean;
 };
 
 function formatMoney(cents: number, currency: string) {
@@ -39,6 +42,7 @@ export function PartnerBillingPanel({
   totals,
   statements,
   canWrite,
+  connectEnabled,
 }: PartnerBillingPanelProps) {
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
@@ -92,13 +96,14 @@ export function PartnerBillingPanel({
       {message ? <p className="text-sm text-zinc-300">{message}</p> : null}
 
       <section className="overflow-x-auto rounded-lg border border-zinc-800">
-        <table className="w-full min-w-[720px] text-sm">
+        <table className="w-full min-w-[860px] text-sm">
           <thead className="bg-zinc-900/80 text-left text-xs uppercase tracking-wide text-zinc-500">
             <tr>
               <th className="px-3 py-2">Publisher</th>
               <th className="px-3 py-2">Active installs</th>
               <th className="px-3 py-2">Platform fee / install</th>
               <th className="px-3 py-2">Rev share</th>
+              <th className="px-3 py-2">Stripe Connect</th>
               <th className="px-3 py-2">Accrued ({periodMonth})</th>
               {canWrite ? <th className="px-3 py-2">Actions</th> : null}
             </tr>
@@ -106,7 +111,7 @@ export function PartnerBillingPanel({
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={canWrite ? 6 : 5} className="px-3 py-6 text-center text-zinc-500">
+                <td colSpan={canWrite ? 7 : 6} className="px-3 py-6 text-center text-zinc-500">
                   No partner billing accounts yet — meters accrue when OAuth apps install.
                 </td>
               </tr>
@@ -122,6 +127,39 @@ export function PartnerBillingPanel({
                     {formatMoney(row.monthlyPlatformFeeCentsPerInstall, row.currency)}/mo
                   </td>
                   <td className="px-3 py-3 text-zinc-300">{(row.revenueShareBps / 100).toFixed(2)}%</td>
+                  <td className="px-3 py-3">
+                    <Badge
+                      variant={row.connectReady ? "default" : "outline"}
+                      className={row.connectReady ? "bg-emerald-600/90" : "border-zinc-700 text-zinc-300"}
+                    >
+                      {row.connectStatus}
+                    </Badge>
+                    {connectEnabled && canWrite && !row.connectReady ? (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        className="mt-1 h-7 px-2 text-xs text-amber-200"
+                        disabled={pending}
+                        onClick={() =>
+                          startTransition(async () => {
+                            setMessage(null);
+                            const result = await startPartnerStripeConnectAction({
+                              publisherKey: row.publisherKey,
+                            });
+                            if ("error" in result && result.error) {
+                              setMessage(result.error);
+                              return;
+                            }
+                            window.location.href = result.url;
+                          })
+                        }
+                      >
+                        <CreditCard className="mr-1 h-3 w-3" />
+                        Connect Stripe
+                      </Button>
+                    ) : null}
+                  </td>
                   <td className="px-3 py-3 font-medium text-white">
                     {formatMoney(row.currentPeriodAccruedCents, row.currency)}
                   </td>
@@ -170,9 +208,16 @@ export function PartnerBillingPanel({
                     {formatMoney(statement.totalAccruedCents, statement.currency)}
                   </p>
                 </div>
-                <Badge variant="outline" className="border-zinc-700 text-zinc-300">
-                  {statement.status}
-                </Badge>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="border-zinc-700 text-zinc-300">
+                    {statement.status}
+                  </Badge>
+                  {statement.payoutStatus !== "NONE" ? (
+                    <Badge variant="outline" className="border-zinc-700 text-zinc-300">
+                      Payout: {statement.payoutStatus}
+                    </Badge>
+                  ) : null}
+                </div>
               </div>
               <ul className="mt-3 space-y-1 text-xs text-zinc-400">
                 {statement.lineItems.map((item) => (
@@ -181,7 +226,41 @@ export function PartnerBillingPanel({
                   </li>
                 ))}
               </ul>
-              {canWrite && statement.status === "FINALIZED" ? (
+              {statement.stripeTransferId ? (
+                <p className="mt-2 font-mono text-xs text-zinc-500">
+                  Transfer: {statement.stripeTransferId}
+                </p>
+              ) : null}
+              {statement.payoutError ? (
+                <p className="mt-2 text-xs text-red-300">{statement.payoutError}</p>
+              ) : null}
+              {canWrite && statement.canExecuteStripePayout ? (
+                <form
+                  className="mt-3"
+                  action={async (formData) => {
+                    formData.set("statementId", statement.id);
+                    const result = await executePartnerStatementStripePayoutAction(formData);
+                    if ("error" in result && result.error) {
+                      setMessage(result.error);
+                    } else if ("transferId" in result) {
+                      setMessage(
+                        result.dryRun
+                          ? `Dry-run payout recorded (${result.transferId}).`
+                          : `Stripe transfer sent (${result.transferId}).`,
+                      );
+                    }
+                  }}
+                >
+                  <Button type="submit" size="sm" className="rounded-full">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span className="ml-1">Send Stripe payout</span>
+                  </Button>
+                </form>
+              ) : null}
+              {canWrite &&
+              statement.status === "FINALIZED" &&
+              !connectEnabled &&
+              statement.payoutStatus === "NONE" ? (
                 <form
                   className="mt-3"
                   action={async (formData) => {
@@ -189,8 +268,8 @@ export function PartnerBillingPanel({
                     await markPartnerBillingStatementPaidAction(formData);
                   }}
                 >
-                  <Button type="submit" size="sm" className="rounded-full">
-                    Mark paid
+                  <Button type="submit" size="sm" variant="outline" className="rounded-full border-zinc-700">
+                    Mark paid (manual)
                   </Button>
                 </form>
               ) : null}

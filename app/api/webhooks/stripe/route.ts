@@ -133,6 +133,11 @@ export async function POST(request: Request) {
             "@/services/storefront/storefront-stripe-connect-service"
           );
           await refreshStorefrontConnectAccountFromStripe(account.id);
+
+          const { refreshPartnerConnectAccountFromStripe } = await import(
+            "@/services/platform/partner-stripe-connect-service"
+          );
+          await refreshPartnerConnectAccountFromStripe(account.id);
         }
         break;
       }

@@ -177,6 +177,7 @@ App Bridge–style iframe embeds in dashboard, partner billing, app review pipel
 | **3** | OAuth app registration + install flow | Sandbox app installs in test workspace | “Developer platform beta” |
 | **4** | Review pipeline + optional embed host | 1–2 lighthouse partner apps live | “App marketplace pilot” |
 | **5 (shipped)** | Partner billing meters + publisher statements | Platform accrues install fees; statements finalize/paid workflow | “Partner billing beta” |
+| **6 (shipped)** | Stripe Connect Express payouts to publishers | Onboard publishers, transfer on finalized statements | “Publisher payouts via Stripe Connect (pilot)” |
 
 ---
 
@@ -313,3 +314,16 @@ Developer docs surface:
 | 2026-05-31 | **Phase 3 shipped:** OAuth sandbox apps + consent + token endpoint + `koa_` API tokens |
 | 2026-05-31 | **Phase 4 shipped:** `PartnerOAuthAppRegistry` review pipeline, `/platform/partner-apps`, `/developers/apps/register`, embedded admin host + `POST /api/embed/partner-app/verify` |
 | 2026-05-31 | **Phase 5 shipped:** `PartnerBillingAccount` + meter events + statements, install/revoke hooks, `/platform/partner-billing`, config rates in `config/platform/partner-billing.json` |
+| 2026-05-31 | **Phase 6 shipped:** Stripe Connect Express publisher onboarding, transfer payouts on finalized statements, `account.updated` sync, `MARKETPLACE_PARTNER_STRIPE_CONNECT=1` feature flag |
+
+### Phase 6 — Stripe Connect payouts (shipped)
+
+| Component | Path / detail |
+|-----------|---------------|
+| Feature flag | `MARKETPLACE_PARTNER_STRIPE_CONNECT=1` + `STRIPE_CONNECT_CLIENT_ID` |
+| Connect onboarding | `services/platform/partner-stripe-connect-service.ts` — Express account + Account Link |
+| Payout execution | `executePartnerStatementStripePayout` — `stripe.transfers.create` with idempotency |
+| Dry run | `PARTNER_STRIPE_PAYOUT_DRY_RUN=1` for staging without live transfers |
+| Webhook | `account.updated` refreshes `PartnerBillingAccount` connect fields |
+| Platform UI | Connect status column, **Connect Stripe** + **Send Stripe payout** actions |
+| Prisma | `stripeConnectAccountId`, `stripeTransferId`, `payoutStatus` on billing models |

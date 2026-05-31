@@ -305,6 +305,13 @@ enum PartnerBillingStatementStatus {
   VOID
 }
 
+enum PartnerBillingPayoutStatus {
+  NONE
+  PENDING
+  COMPLETED
+  FAILED
+}
+
 enum ErrorRecoverySource {
   WEBHOOK_JOB
 }
@@ -3637,6 +3644,10 @@ model PartnerBillingAccount {
   monthlyPlatformFeeCentsPerInstall Int     @default(500) @map("monthly_platform_fee_cents_per_install")
   currency                         String   @default("USD") @db.VarChar(8)
   status                           String   @default("active") @db.VarChar(32)
+  stripeConnectAccountId           String?  @map("stripe_connect_account_id") @db.VarChar(64)
+  stripeConnectPayoutsEnabled      Boolean  @default(false) @map("stripe_connect_payouts_enabled")
+  stripeConnectDetailsSubmitted    Boolean  @default(false) @map("stripe_connect_details_submitted")
+  stripeConnectOnboardedAt         DateTime? @map("stripe_connect_onboarded_at")
   metadataJson                     Json?    @map("metadata_json")
   createdAt                        DateTime @default(now()) @map("created_at")
   updatedAt                        DateTime @updatedAt @map("updated_at")
@@ -3681,6 +3692,10 @@ model PartnerBillingStatement {
   lineItemsJson     Json                          @map("line_items_json")
   finalizedAt       DateTime?                     @map("finalized_at")
   paidAt            DateTime?                     @map("paid_at")
+  stripeTransferId  String?                       @map("stripe_transfer_id") @db.VarChar(64)
+  payoutStatus      PartnerBillingPayoutStatus      @default(NONE) @map("payout_status")
+  payoutError       String?                       @map("payout_error") @db.Text
+  payoutInitiatedAt DateTime?                     @map("payout_initiated_at")
   createdAt         DateTime                      @default(now()) @map("created_at")
   updatedAt         DateTime                      @updatedAt @map("updated_at")
 

@@ -5,7 +5,7 @@
   "defaultRevenueShareBps": 1500,
   "defaultMonthlyPlatformFeeCentsPerInstall": 500,
   "installActivationFeeCents": 0,
-  "disclosure": "Partner billing is accrual-only in Phase 5 BETA — statements are operational summaries, not tax documents or Stripe invoices.",
+  "disclosure": "Partner billing supports Stripe Connect Express payouts when MARKETPLACE_PARTNER_STRIPE_CONNECT=1. Finalize statements, onboard publishers via Connect, then send transfers from platform balance. Dry-run with PARTNER_STRIPE_PAYOUT_DRY_RUN=1.",
   "apps": [
     {
       "clientId": "sandbox-opsbridge-connector",
