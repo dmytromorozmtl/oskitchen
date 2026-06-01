@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   PERMISSION_DENIED_UX_ERA17_CANONICAL_DOC_PATHS,
   PERMISSION_DENIED_UX_ERA17_CANONICAL_MARKERS,
+  PERMISSION_DENIED_UX_ERA17_CARD_MODULE,
   PERMISSION_DENIED_UX_ERA17_CI_SCRIPTS,
   PERMISSION_DENIED_UX_ERA17_COPY_MODULE,
   PERMISSION_DENIED_UX_ERA17_ORCHESTRATOR_SCRIPT,
@@ -47,9 +48,10 @@ describe("permission denied ux era17 CI certification (live repo)", () => {
   it("wires standardized copy and card test id", () => {
     expect(existsSync(join(ROOT, PERMISSION_DENIED_UX_ERA17_COPY_MODULE))).toBe(true);
     expect(existsSync(join(ROOT, PERMISSION_DENIED_UX_ERA17_SHELL_MODULE))).toBe(true);
-    const card = readFileSync(join(ROOT, "components/dashboard/pos-access-card.tsx"), "utf8");
+    expect(existsSync(join(ROOT, PERMISSION_DENIED_UX_ERA17_CARD_MODULE))).toBe(true);
+    const card = readFileSync(join(ROOT, PERMISSION_DENIED_UX_ERA17_CARD_MODULE), "utf8");
     expect(card).toContain("PERMISSION_DENIED_UX_ERA17_TEST_ID");
-    expect(card).toContain("data-testid={PERMISSION_DENIED_UX_ERA17_TEST_ID}");
+    expect(card).toContain("data-testid={testId}");
   });
 
   it("uses PermissionDeniedSurfaceCard or resolvePermissionDeniedSurface on wired pages", () => {

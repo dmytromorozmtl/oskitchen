@@ -1646,3 +1646,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 14/30
 Created: docs/stripe-terminal-hardware-test-plan.md
+---
+Cycle: 13 (20260601-101816)
+Action: 18 — Unified permission-denied card component
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 15/30
+Created: components/ui/permission-denied-card.tsx (PermissionDeniedCard + PermissionDeniedSurfaceCard)

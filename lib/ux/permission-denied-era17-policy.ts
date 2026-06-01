@@ -22,7 +22,7 @@ export const PERMISSION_DENIED_UX_ERA17_COPY_MODULE =
   "lib/ux/permission-denied-copy.ts" as const;
 
 export const PERMISSION_DENIED_UX_ERA17_CARD_MODULE =
-  "components/dashboard/pos-access-card.tsx" as const;
+  "components/ui/permission-denied-card.tsx" as const;
 
 export const PERMISSION_DENIED_UX_ERA17_SHELL_MODULE =
   "components/dashboard/permission-denied-shell.tsx" as const;
