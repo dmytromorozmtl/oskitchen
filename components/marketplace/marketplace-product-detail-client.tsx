@@ -40,6 +40,8 @@ import {
   readMarketplaceWishlistSlugs,
   writeMarketplaceWishlistSlugs,
 } from "@/lib/marketplace/wishlist";
+
+export function MarketplaceProductDetailClient({
   product,
   canAddToCart,
   initialQuantity,
