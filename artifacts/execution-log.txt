@@ -1671,3 +1671,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 17/30
 Created: docs/report-catalog-perf-plan.md
+---
+Cycle: 16 (20260601-102127)
+Action: 21 — Floor plan WebSocket RFC (Supabase Realtime parity with KDS)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 18/30
+Created: docs/floor-plan-websocket-rfc.md
