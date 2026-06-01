@@ -1679,3 +1679,12 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 18/30
 Created: docs/floor-plan-websocket-rfc.md
+---
+Cycle: 17 (20260601-102205)
+Action: 22 — WooCommerce Subscriptions go/no-go decision
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 19/30
+Created: docs/woocommerce-subscriptions-decision.md
+Verdict: NO-GO Phase 2+ through pilot; GO maintain Phase 1 read-only PLACEHOLDER
