@@ -2014,3 +2014,10 @@ Files: app/vendor/(cabinet)/analytics/page.tsx, services/marketplace/vendor-anal
 Marketplace progress: 17/33 (phase-3-cycle-16-vendor-analytics done)
 Next: Cycle 17 — app/vendor/settings/page.tsx vendor settings
 ---
+Cycle: marketplace-17
+Timestamp: 2026-06-02T06:00:00.000Z
+Action: feat: vendor settings — profile logo/banner/description/zones, team invites Admin/Manager/Finance/Support, notifications, API keys & webhooks, subscription FREE/GROWTH/ENTERPRISE, compliance documents
+Files: app/vendor/(cabinet)/settings/page.tsx, services/marketplace/vendor-settings-service.ts, actions/vendor/settings.ts, components/marketplace/vendor-settings-client.tsx, lib/marketplace/vendor-settings-types.ts
+Marketplace progress: 18/33 (phase-3-cycle-17-vendor-settings done, phase-3-vendor-cabinet complete)
+Next: Cycle 18 — components/marketplace/vendor-chat.tsx marketplace messaging
+---

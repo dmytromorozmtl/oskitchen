@@ -17,7 +17,8 @@
   "phase-3-cycle-14-vendor-orders": "done",
   "phase-3-cycle-15-vendor-finance": "done",
   "phase-3-cycle-16-vendor-analytics": "done",
-  "phase-3-vendor-cabinet": "in_progress",
+  "phase-3-cycle-17-vendor-settings": "done",
+  "phase-3-vendor-cabinet": "done",
   "phase-4-payments-admin": "todo",
   "phase-5-integrations": "todo",
   "phase-6-advanced-features": "todo"
