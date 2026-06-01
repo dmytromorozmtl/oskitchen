@@ -66,6 +66,27 @@ This step **cannot be completed by engineering alone**. VP Ops must:
 
 Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs done; credentials pending human).
 
+## 30-action executor status (2026-06-01, cycle 26)
+
+| Bucket | Done | Blocked on vault |
+|--------|------|------------------|
+| P0 docs (1–4) | ✅ | — |
+| P0 proof (5–7) | — | `ops:run-p0-staging-proof`, SSO smoke, live Woo/Shopify |
+| P1 (8–19) | ✅ 12/12 | — |
+| P2 (20–27) | ✅ 8/8 | — |
+| P3 (28–30) | ✅ 3/3 | — |
+| **Agent total** | **27/30** | **3/30** need `presentCount: 11` |
+
+After vault PASS, run in order (tracker actions 5→7):
+
+```bash
+npm run ops:run-p0-staging-proof-execution -- --execute --write   # action 5
+npm run smoke:enterprise-sso-idp-staging -- --execute            # action 6
+npm run smoke:woo-live && npm run smoke:shopify-live             # action 7
+```
+
+**Do not** set `artifacts/final-execution-report.json` → `ready: true` until actions 5–7 PASS — see [`investor-narrative-hold.md`](./investor-narrative-hold.md).
+
 ## Deadline
 
 **Today.** Every day without vault = one day delayed to first revenue.
