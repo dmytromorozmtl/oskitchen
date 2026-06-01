@@ -2077,3 +2077,10 @@ Files: services/marketplace/capital-integration-service.ts, lib/marketplace/capi
 Marketplace progress: 28/33 (phase-5-cycle-25-capital-integration done)
 Next: Cycle 26 — services/marketplace/briefing-integration-service.ts briefing-marketplace integration
 ---
+Cycle: marketplace-26
+Timestamp: 2026-06-02T15:00:00.000Z
+Action: feat: briefing-marketplace integration — PO approval queue alerts (batch when N≥3), delivery arriving within 2 days, budget 85%+ warning/critical exceeded, price drop vs last paid unit price (≥5%); ranked actions mergeable into owner daily briefing
+Files: services/marketplace/briefing-integration-service.ts, lib/marketplace/briefing-integration-types.ts, tests/unit/marketplace-briefing-integration.test.ts
+Marketplace progress: 29/33 (phase-5-cycle-26-briefing-integration done)
+Next: Cycle 27 — services/marketplace/billing-integration-service.ts billing-marketplace integration
+---
