@@ -119,6 +119,8 @@ if [[ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" || -z "${NEXT_PUBLIC_SUPABASE_ANON_KEY:
   # shellcheck source=/dev/null
   source .env.local
 fi
+# Env pulls must not shrink the heap budget for local next build (OOM at ~4GB otherwise).
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=16384}"
 export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://os-kitchen.com}"
 export NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV:-production}"
 export NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-sb_publishable_dD4M3pNzWjB-8Ae4-ZIKKw_U8MXvFm4}"
@@ -172,7 +174,7 @@ if [[ "$REUSE_PREDEPLOY_BUILD" -eq 1 ]]; then
 else
   node ./node_modules/prisma/build/index.js generate
   node scripts/ensure-prisma-client-default.cjs
-  node ./node_modules/next/dist/bin/next build
+  NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=16384}" node ./node_modules/next/dist/bin/next build
   node scripts/predeploy-build-state.mjs write deploy-prebuilt-prod
 fi
 
