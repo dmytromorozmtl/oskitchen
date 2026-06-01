@@ -1739,3 +1739,13 @@ Created: app/landing/ghost-kitchen/page.tsx, meal-prep, weekly-preorder
 Shared: lib/marketing/icp-landing-content.ts, components/marketing/icp-landing-page.tsx
 UTM: utm_source=landing&utm_medium=icp&utm_campaign=icp_*
 ---
+---
+Cycle: 23 (20260601-103152)
+Action: 28 — npm script trim RFC (baseline 1,064 scripts)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 25/30
+Created: docs/npm-script-trim-rfc.md
+Baseline: 427 test:ci, 272 ops, 332 era25-related; target <650 then <350
+---
