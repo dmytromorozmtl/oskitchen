@@ -1621,3 +1621,12 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 11/30
 Files: e2e/helpers/cross-tenant-staging-ready.ts, e2e/cross-tenant-isolation-staging.spec.ts, tests/unit/cross-tenant-staging-ready.test.ts
+---
+Cycle: 10 (20260601-101606)
+Action: 15 — Webhook signature staging matrix (static 52/52 + vault-gated negative probes)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 12/30
+Created: scripts/audit-webhook-signatures-staging.sh, artifacts/webhook-signature-staging-audit.json
+Staging: SKIPPED (missing E2E_STAGING_BASE_URL)

@@ -1,0 +1,11 @@
+{
+  "version": "webhook-signature-staging-audit-v1",
+  "generatedAt": "2026-06-01T14:15:57Z",
+  "staticAudit": "PASSED",
+  "matrixCert": "PASSED",
+  "stagingOverall": "SKIPPED",
+  "stagingSkipReason": "Missing E2E_STAGING_BASE_URL (vault 0/11)",
+  "stagingBaseUrl": null,
+  "honestyNote": "Negative probes only \u2014 valid HMAC/OAuth replay drills require channel credentials.",
+  "probes": []
+}
