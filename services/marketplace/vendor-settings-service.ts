@@ -255,26 +255,10 @@ export async function requestVendorPlanUpgrade(
   vendorId: string,
   planTier: VendorPlanTier,
 ): Promise<{ ok: true; planTier: VendorPlanTier } | { ok: false; error: string }> {
-  const vendor = await prisma.vendor.findUnique({
-    where: { id: vendorId },
-    select: { planTier: true },
-  });
-  if (!vendor) return { ok: false, error: "Vendor not found." };
-
-  const order: VendorPlanTier[] = ["FREE", "GROWTH", "ENTERPRISE"];
-  if (order.indexOf(planTier) <= order.indexOf(vendor.planTier)) {
-    return { ok: false, error: "Select a higher plan tier to upgrade." };
-  }
-
-  await prisma.vendor.update({
-    where: { id: vendorId },
-    data: {
-      planTier,
-      commissionRate: planTier === "ENTERPRISE" ? 2 : planTier === "GROWTH" ? 3.5 : 5,
-    },
-  });
-
-  return { ok: true, planTier };
+  const { upgradePlan } = await import("@/services/marketplace/billing-integration-service");
+  const result = await upgradePlan(vendorId, planTier);
+  if (!result.ok) return result;
+  return { ok: true, planTier: result.planTier };
 }
 
 export function validateVendorApiKey(documents: unknown, apiKey: string): boolean {

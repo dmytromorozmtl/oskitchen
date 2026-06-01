@@ -2084,3 +2084,10 @@ Files: services/marketplace/briefing-integration-service.ts, lib/marketplace/bri
 Marketplace progress: 29/33 (phase-5-cycle-26-briefing-integration done)
 Next: Cycle 27 — services/marketplace/billing-integration-service.ts billing-marketplace integration
 ---
+Cycle: marketplace-27
+Timestamp: 2026-06-02T16:00:00.000Z
+Action: feat: billing-marketplace integration — createVendorSubscription (Stripe customer + plan persisted in vendor documents), generateVendorInvoice (SaaS fee + commission lines), chargeVendorSubscription (Stripe invoice or manual fallback), upgradePlan with prorated charge; vendor plan upgrade wired through billing service
+Files: services/marketplace/billing-integration-service.ts, lib/marketplace/billing-integration-types.ts, services/marketplace/vendor-settings-service.ts, tests/unit/marketplace-billing-integration.test.ts
+Marketplace progress: 30/33 (phase-5-cycle-27-billing-integration done)
+Next: Cycle 28 — services/marketplace/analytics-integration-service.ts analytics-marketplace integration
+---
