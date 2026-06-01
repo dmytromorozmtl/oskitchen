@@ -1759,3 +1759,14 @@ Actions: 26/30
 Created: docs/investor-narrative-hold.md
 Verdict: HOLD until vault + GO + pilot-metrics-baseline PASS
 ---
+---
+Cycle: 25 (20260601-103314)
+Action: 30 — Native mobile deferral RFC (PWA GO, iOS/Android DEFER)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 27/30
+Created: docs/native-mobile-defer-rfc.md
+Verdict: Web-first PWA through pilot; no App Store claim
+Note: P0 actions 5-7 remain todo (vault blocked); FINAL step 31 next cycle
+---
