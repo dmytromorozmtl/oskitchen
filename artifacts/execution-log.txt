@@ -2049,3 +2049,10 @@ Files: app/platform/marketplace/products/page.tsx, services/marketplace/platform
 Marketplace progress: 23/33 (phase-4-cycle-21-admin-product-moderation done)
 Next: Cycle 22 — app/platform/marketplace/disputes/page.tsx admin dispute resolution
 ---
+Cycle: marketplace-22
+Timestamp: 2026-06-02T11:00:00.000Z
+Action: feat: admin dispute resolution — filter by status/reason/date, expandable detail with order/line items/messages/photos, admin decisions refund/pay vendor/split, resolution history JSON, escalate to admin review, auto-flag vendors after repeated losses
+Files: app/platform/marketplace/disputes/page.tsx, services/marketplace/platform-dispute-resolution-service.ts, lib/platform/marketplace-dispute-admin-filters.ts, lib/marketplace/dispute-types.ts, actions/platform/marketplace-disputes.ts, components/platform/marketplace-disputes-admin-client.tsx, tests/unit/marketplace-platform-disputes.test.ts
+Marketplace progress: 24/33 (phase-4-cycle-22-admin-dispute-resolution done)
+Next: Cycle 23 — app/platform/marketplace/analytics/page.tsx admin marketplace analytics
+---

@@ -23,6 +23,7 @@
   "phase-4-cycle-19-stripe-connect": "done",
   "phase-4-cycle-20-admin-vendor-moderation": "done",
   "phase-4-cycle-21-admin-product-moderation": "done",
+  "phase-4-cycle-22-admin-dispute-resolution": "done",
   "phase-4-payments-admin": "in_progress",
   "phase-5-integrations": "todo",
   "phase-6-advanced-features": "todo"
