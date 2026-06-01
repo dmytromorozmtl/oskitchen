@@ -22,8 +22,8 @@ node_modules/
 .next-broken*
 .vercel/output-broken*/
 
-# Ops-only (keep ensure-* shims used by install; prebuilt skips remote build)
-scripts/ops/
+# Ops-only scripts not imported by the app (ensure-* shims stay in package.json postinstall)
+# NOTE: scripts/ops/* is imported by platform UI — do not ignore.
 
 # Reduce upload size for CLI deploys (build runs locally)
 *.test.ts
