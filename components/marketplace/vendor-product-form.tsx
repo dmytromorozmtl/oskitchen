@@ -28,7 +28,7 @@ import type {
   VendorProductVariantInput,
   VendorVolumePriceInput,
 } from "@/services/marketplace/vendor-products-service";
-import type { MarketplaceProductStatus } from "@prisma/client";
+import type { MarketplaceCurrency, MarketplaceProductStatus } from "@prisma/client";
 
 type CategoryOption = { id: string; name: string; slug: string };
 
@@ -49,7 +49,7 @@ export function VendorProductForm({
   );
   const [media, setMedia] = useState<VendorProductMediaItem[]>(product?.media ?? [{ url: "", alt: "" }]);
   const [categoryId, setCategoryId] = useState(product?.categoryId ?? categories[0]?.id ?? "");
-  const [currency, setCurrency] = useState(product?.currency ?? "USD");
+  const [currency, setCurrency] = useState<MarketplaceCurrency>(product?.currency ?? "USD");
   const [priceUnit, setPriceUnit] = useState(product?.priceUnit ?? "PER_UNIT");
   const [weightUnit, setWeightUnit] = useState(product?.weightUnit ?? "");
   const [storageRequirement, setStorageRequirement] = useState(product?.storageRequirement ?? "");
@@ -156,7 +156,10 @@ export function VendorProductForm({
         <Field label="Base price" name="basePrice" type="number" step="0.01" defaultValue={product?.basePrice ?? 0} required />
         <div>
           <Label htmlFor="currency">Currency</Label>
-          <Select value={currency} onValueChange={setCurrency}>
+          <Select
+            value={currency}
+            onValueChange={(value) => setCurrency(value as MarketplaceCurrency)}
+          >
             <SelectTrigger id="currency"><SelectValue /></SelectTrigger>
             <SelectContent>
               {["USD", "EUR", "GBP", "CAD"].map((currency) => (
@@ -167,7 +170,10 @@ export function VendorProductForm({
         </div>
         <div>
           <Label htmlFor="priceUnit">Price unit</Label>
-          <Select value={priceUnit} onValueChange={setPriceUnit}>
+          <Select
+            value={priceUnit}
+            onValueChange={(value) => setPriceUnit(value as typeof priceUnit)}
+          >
             <SelectTrigger id="priceUnit"><SelectValue /></SelectTrigger>
             <SelectContent>
               {["PER_UNIT", "PER_CASE", "PER_KG", "PER_LITRE", "PER_PALLET"].map((unit) => (
