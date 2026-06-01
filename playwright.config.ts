@@ -69,6 +69,7 @@ if (dashboardE2EEnabled) {
         "**/kds-realtime-staging.spec.ts",
         "**/kds-staging.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
+        "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",
         "**/cross-channel-inventory.spec.ts",
         "**/remediation-delivery-idor.spec.ts",

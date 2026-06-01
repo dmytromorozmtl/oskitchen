@@ -12,7 +12,7 @@
   "11-cross-channel-staging": "done",
   "12-health-deck": "done",
   "13-shopify-outbound": "done",
-  "14-cross-tenant-e2e": "todo",
+  "14-cross-tenant-e2e": "done",
   "15-webhook-matrix": "todo",
   "16-pilot-template": "todo",
   "17-terminal-hardware": "todo",

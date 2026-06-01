@@ -1613,3 +1613,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 10/30
 Created: docs/shopify-bundle-outbound-sequence.md
+---
+Cycle: 9 (20260601-100758)
+Action: 14 — Cross-tenant E2E staging-ready skip (vault-gated HTTP proofs)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 11/30
+Files: e2e/helpers/cross-tenant-staging-ready.ts, e2e/cross-tenant-isolation-staging.spec.ts, tests/unit/cross-tenant-staging-ready.test.ts

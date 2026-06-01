@@ -2,19 +2,78 @@ import { randomUUID } from "node:crypto";
 
 import { expect, test } from "@playwright/test";
 
+import { prisma } from "@/lib/prisma";
 import { WorkspaceAccessDeniedError } from "@/lib/scope/assert-user-workspace-access";
 import { scopedIdWhere } from "@/lib/scope/tenant-scope";
 import { assertOwnedByUser } from "@/lib/scope/user-owned-guards";
+import { loadOrderDetailPageData } from "@/services/orders/order-detail-service";
+
+import { skipCrossTenantStagingIfNotReady } from "./helpers/cross-tenant-staging-ready";
 
 /**
- * Cross-tenant isolation — staging mock path (no DATABASE_URL / vault required).
+ * Cross-tenant isolation — mock contract (always runs) + staging HTTP (vault gated).
  *
- * Complements `e2e/cross-tenant-isolation.spec.ts` (DB + authed HTTP when env present).
- * Uses scope guards directly and Playwright route mocks for HTTP contract proof.
+ * Mock path: no DATABASE_URL / vault required.
+ * Staging path: skips until E2E_STAGING_BASE_URL, DATABASE_URL, E2E_LOGIN_* present.
  *
  * @see docs/pen-test-plan.md PT-01, PT-07
  * @see tests/unit/cross-tenant-denial.test.ts
+ * @see e2e/cross-tenant-isolation.spec.ts
  */
+
+type TenantFixture = {
+  ownerId: string;
+  workspaceId: string;
+  orderId: string;
+  cleanup: () => Promise<void>;
+};
+
+async function seedTenantOrder(label: string): Promise<TenantFixture> {
+  const suffix = `${label}-${randomUUID().slice(0, 8)}`;
+  const owner = await prisma.userProfile.create({
+    data: {
+      id: randomUUID(),
+      email: `cross-tenant-staging-${suffix}@e2e.test`,
+      fullName: `Cross Tenant Staging ${label}`,
+      role: "OWNER",
+    },
+  });
+  const workspace = await prisma.workspace.create({
+    data: { name: `Cross-tenant staging WS ${suffix}`, ownerUserId: owner.id },
+  });
+  const order = await prisma.order.create({
+    data: {
+      userId: owner.id,
+      workspaceId: workspace.id,
+      customerName: "Staging Isolated Customer",
+      customerEmail: `staging-isolated-${suffix}@e2e.test`,
+      total: 19.99,
+      status: "PENDING",
+      fulfillmentType: "PICKUP",
+    },
+  });
+
+  return {
+    ownerId: owner.id,
+    workspaceId: workspace.id,
+    orderId: order.id,
+    cleanup: async () => {
+      await prisma.order.delete({ where: { id: order.id } }).catch(() => undefined);
+      await prisma.workspace.delete({ where: { id: workspace.id } }).catch(() => undefined);
+      await prisma.userProfile.delete({ where: { id: owner.id } }).catch(() => undefined);
+    },
+  };
+}
+
+async function resolveAuthedUserId(): Promise<string | null> {
+  const email = process.env.E2E_LOGIN_EMAIL?.trim().toLowerCase();
+  if (!email) return null;
+  const profile = await prisma.userProfile.findFirst({
+    where: { email },
+    select: { id: true },
+  });
+  return profile?.id ?? null;
+}
 
 const TENANT_A = {
   userId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -124,5 +183,53 @@ test.describe("impersonation audit (mock contract)", () => {
     expect(auditPayload.metadata.sessionId).toBe(sessionId);
     expect(auditPayload.targetWorkspaceId).toBe(TENANT_B.workspaceId);
     expect(auditPayload.entityId).not.toBe(adminUserId);
+  });
+});
+
+test.describe("cross-tenant isolation (staging — vault gated)", () => {
+  test.beforeEach(({ }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== "chromium-authed",
+      "Staging cross-tenant HTTP tests run in chromium-authed project only",
+    );
+    skipCrossTenantStagingIfNotReady();
+  });
+
+  test("signed-in tenant A gets 404 for tenant B order detail on staging", async ({ page }) => {
+    const authedUserId = await resolveAuthedUserId();
+    test.skip(!authedUserId, "E2E_LOGIN_EMAIL user not found in staging database");
+
+    const tenantB = await seedTenantOrder("http-staging-b");
+
+    try {
+      const leaked = await loadOrderDetailPageData(authedUserId, tenantB.orderId);
+      expect(leaked).toBeNull();
+
+      await page.goto(`/dashboard/orders/${tenantB.orderId}`);
+      await expect(page.getByRole("heading", { name: /^Page not found$/i })).toBeVisible({
+        timeout: 60_000,
+      });
+      await expect(page.locator("body")).not.toContainText("Staging Isolated Customer");
+    } finally {
+      await tenantB.cleanup();
+    }
+  });
+
+  test("public API key tenant does not list foreign order id on staging", async ({ request }) => {
+    const apiKey = process.env.E2E_PUBLIC_API_KEY?.trim();
+    const foreignOrderId = process.env.E2E_CROSS_TENANT_ORDER_ID?.trim();
+    test.skip(
+      !apiKey || !foreignOrderId,
+      "Set E2E_PUBLIC_API_KEY and E2E_CROSS_TENANT_ORDER_ID for public API staging proof",
+    );
+
+    const res = await request.get("/api/public/v1/orders", {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    expect(res.status()).toBe(200);
+
+    const body = (await res.json()) as { data?: Array<{ id: string }> };
+    const ids = (body.data ?? []).map((row) => row.id);
+    expect(ids).not.toContain(foreignOrderId);
   });
 });
