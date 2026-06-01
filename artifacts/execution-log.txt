@@ -1780,3 +1780,12 @@ Actions: 27/30
 Updated: docs/vault-one-pager.md (30-action status + P0 5-7 runbook)
 Blocked: FINAL #31 until actions 5-7 PASS
 ---
+---
+Cycle: 27 (20260601-103549)
+Action: 2 — Remove duplicate files (resurfaced copies)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 27/30
+Deleted: public/favicon 2.svg, public/manifest 2.webmanifest, vercel 2.json, vercel 3.json
+---
