@@ -7,6 +7,3 @@ export {
 
 /** @deprecated Prefer PermissionDeniedCard from `@/components/ui/permission-denied-card`. */
 export { PermissionDeniedCard as PosAccessCard } from "@/components/ui/permission-denied-card";
-
-/** @deprecated Import from `@/components/ui/permission-denied-card`. */
-export { PermissionDeniedCard } from "@/components/ui/permission-denied-card";

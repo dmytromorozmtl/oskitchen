@@ -95,6 +95,7 @@ describe("nav maturity governance", () => {
         gtmSurfaceAccess: false,
       }),
     ).toBe(false);
+  });
 
   it("shows go-live when navScopeAll is enabled", () => {
     const filtered = filterNavGroupsByMaturityGovernance(FINAL_NAVIGATION_GROUPS, {

@@ -14,6 +14,6 @@ describe("permission-denied-card ui module", () => {
     const source = readFileSync(path, "utf8");
     expect(source).toContain("export function PermissionDeniedCard");
     expect(source).toContain("export function PermissionDeniedSurfaceCard");
-    expect(source).toContain("permission-denied-card");
+    expect(source).toContain("PERMISSION_DENIED_UX_ERA17_TEST_ID");
   });
 });

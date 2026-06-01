@@ -17,10 +17,11 @@ describe("enterprise SSO IdP staging smoke era17 policy", () => {
     expect(ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_SSO_DELIVERY_STATUS).toBe("pilot_foundation");
   });
 
-  it("supports Okta and Entra ID only", () => {
+  it("supports Okta, Entra ID, and Auth0", () => {
     expect(ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_SUPPORTED_IDP_VENDORS).toEqual([
       "OKTA",
       "ENTRA_ID",
+      "AUTH0",
     ]);
   });
 });

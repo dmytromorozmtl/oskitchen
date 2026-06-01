@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { MarketingButton } from '@/components/marketing/button';
 import { MarketingCard } from '@/components/marketing/card';
 import { SiteFooter } from '@/components/marketing/site-footer';
-import { SiteHeader } from '@/components/marketing/site-header';
+import { SiteHeaderClient } from '@/components/marketing/site-header-client';
 import { SolutionComparisonTable } from '@/components/marketing/solution-comparison-table';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
 import { SolutionSegmentIcon } from '@/components/marketing/solution-segment-icon';
@@ -45,7 +45,7 @@ export function IcpLandingPage({ slug }: Props) {
     <div className="min-h-screen bg-background">
       <BreadcrumbSchema items={breadcrumbSchemaItems} />
       <FAQSchema questions={config.faq} />
-      <SiteHeader />
+      <SiteHeaderClient isAuthenticated={false} />
       <main className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="pt-6">
           <Breadcrumbs items={breadcrumbItems} />
