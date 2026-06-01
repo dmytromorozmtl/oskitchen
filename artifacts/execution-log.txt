@@ -1937,3 +1937,10 @@ Files: app/dashboard/marketplace/catalog/page.tsx, services/marketplace/marketpl
 Marketplace progress: 6/33 (phase-2-cycle-5-catalog done)
 Next: Cycle 6 — app/dashboard/marketplace/products/[slug]/page.tsx product detail
 ---
+Cycle: marketplace-6
+Timestamp: 2026-06-01T19:00:00.000Z
+Action: feat: marketplace product detail — gallery zoom, vendor badge, tier pricing, variants, MOQ qty, stock/delivery, wishlist, specs, reviews, similar/co-purchase, contact vendor
+Files: app/dashboard/marketplace/products/[slug]/page.tsx, services/marketplace/marketplace-product-detail-service.ts, actions/marketplace/product-detail.ts, components/marketplace/marketplace-product-*.tsx
+Marketplace progress: 7/33 (phase-2-cycle-6-product-detail done)
+Next: Cycle 7 — services/marketplace/cart-service.ts cart & checkout
+---
