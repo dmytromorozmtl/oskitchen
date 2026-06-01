@@ -1708,3 +1708,13 @@ Actions: 21/30
 Created: docs/case-study-template.md
 Note: Canonical template; supersedes legacy docs/templates/CASE_STUDY_TEMPLATE.md for new drafts
 ---
+---
+Cycle: 20 (20260601-102917)
+Action: 25 — Pen test vendor selection (Cobalt / Bishop Fox / Cure53)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 22/30
+Created: docs/pen-test-vendor-selection.md
+Primary: Cobalt Q3 2026 post-vault; not scheduled yet
+---
