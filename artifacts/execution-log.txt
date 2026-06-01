@@ -2063,3 +2063,10 @@ Files: app/platform/marketplace/analytics/page.tsx, services/marketplace/platfor
 Marketplace progress: 25/33 (phase-4-cycle-23-admin-marketplace-analytics done, phase-4-payments-admin complete)
 Next: Cycle 24 — services/marketplace/inventory-integration-service.ts inventory-marketplace integration
 ---
+Cycle: marketplace-24
+Timestamp: 2026-06-02T13:00:00.000Z
+Action: feat: inventory-marketplace integration — onOrderReceived creates InventoryTransaction PURCHASE audit + stock increment, linkProductToInventorySKU in product attributes, lowStockAlert suggestMarketplaceForLowStock, autoUpdateStock on vendor SKU; wired into receiveMarketplaceOrder
+Files: services/marketplace/inventory-integration-service.ts, lib/marketplace/inventory-link-types.ts, services/marketplace/marketplace-orders-service.ts, tests/unit/marketplace-inventory-integration.test.ts
+Marketplace progress: 27/33 (phase-5-cycle-24-inventory-integration done)
+Next: Cycle 25 — services/marketplace/capital-integration-service.ts Capital-marketplace integration
+---

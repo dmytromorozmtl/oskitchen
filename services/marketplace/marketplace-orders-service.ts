@@ -3,7 +3,9 @@ import { endOfDay, startOfDay } from "date-fns";
 
 import { buildMarketplaceOrderTimeline } from "@/lib/marketplace/order-status";
 import type { MarketplaceOrdersFilters } from "@/lib/marketplace/orders-filters";
+import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
+import { onOrderReceived } from "@/services/marketplace/inventory-integration-service";
 
 export type MarketplaceOrderListItem = {
   id: string;
@@ -310,6 +312,17 @@ export async function receiveMarketplaceOrder(input: {
     where: { id: order.id },
     select: { status: true },
   });
+
+  if (refreshed && ["COMPLETED", "DELIVERED"].includes(refreshed.status)) {
+    try {
+      await onOrderReceived({
+        workspaceId: input.workspaceId,
+        orderId: order.id,
+      });
+    } catch (error) {
+      logger.error("[marketplace] inventory onOrderReceived failed", error);
+    }
+  }
 
   return { ok: true, status: refreshed!.status };
 }
