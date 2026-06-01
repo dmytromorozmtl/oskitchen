@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import { addDays } from "date-fns";
+import type { Prisma } from "@prisma/client";
 
 import {
   marketplaceCapitalFromSettingsCenter,
@@ -53,8 +54,8 @@ async function savePaymentSchedule(userId: string, schedule: MarketplacePaymentS
   });
   await prisma.kitchenSettings.upsert({
     where: { userId },
-    create: { userId, settingsCenterJson: next },
-    update: { settingsCenterJson: next },
+    create: { userId, settingsCenterJson: next as Prisma.InputJsonValue },
+    update: { settingsCenterJson: next as Prisma.InputJsonValue },
   });
 }
 
