@@ -455,7 +455,7 @@ export async function onboardingSkipWeeklyMenu() {
   try {
     const manage = await requireOnboardingManageAccess("onboarding.skip_weekly_menu");
     if (!manage.ok) return { error: manage.error };
-    const { sessionUser: user } = manage;
+    const { sessionUser: user, dataUserId } = manage;
     await markStepSkipped(dataUserId, "weekly_menu");
     await afterSkipSuccess(user.id, dataUserId, "weekly_menu");
     revalidatePath("/onboarding");
