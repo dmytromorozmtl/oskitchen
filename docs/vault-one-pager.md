@@ -48,7 +48,8 @@ npm run smoke:pilot-gono-go  # → GO decision
 | LIVE integrations | **0** | `lib/integrations/integration-registry.ts` |
 | Paid pilots | **0** | — |
 | Git remote configured | **No** | `git remote -v` empty — see [`git-remote-setup.md`](./git-remote-setup.md) |
-| Duplicate asset cleanup | **Done (cycle 27)** | Removed `favicon 2`, `manifest 2`, `vercel 2/3` |
+| Duplicate asset cleanup | **Done (cycle 2, session 29)** | Removed cron `* 2` dirs, playwright-report copies, `.vercel/project 2.json` |
+| Auth0 enterprise SSO | **Done** | Commit `2647e1f1` — SAML IdP via Supabase; see [`auth0-supabase-saml-setup.md`](./auth0-supabase-saml-setup.md) |
 
 ## Human gate (VP Operations)
 
@@ -68,7 +69,7 @@ This step **cannot be completed by engineering alone**. VP Ops must:
 
 Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs done; credentials pending human).
 
-## 30-action executor status (2026-06-01, cycle 28)
+## 30-action executor status (2026-06-01, cyclic session — cycle 1/30)
 
 | Bucket | Done | Blocked on vault |
 |--------|------|------------------|
@@ -78,6 +79,8 @@ Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs d
 | P2 (20–27) | ✅ 8/8 | — |
 | P3 (28–30) | ✅ 3/3 | — |
 | **Agent total** | **27/30** | **3/30** need `presentCount: 11` |
+
+**Pre-flight (cycle 1 diagnostic):** TS 0 errors, build green, tests green, vault **0/11**, git remote unset, Auth0 SAML landed (`2647e1f1`), repo **815** commits local-only.
 
 After vault PASS, run in order (tracker actions 5→7):
 
