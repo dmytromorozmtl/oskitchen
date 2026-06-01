@@ -1728,3 +1728,14 @@ Actions: 23/30
 Created: docs/demo-crm-integration-plan.md
 Gap: DemoRequest/BetaLead silos; HubSpot no sync-back; Phase 1 unify native capture
 ---
+---
+Cycle: 22 (20260601-103114)
+Action: 27 — 3 ICP landing pages (ghost-kitchen, meal-prep, weekly-preorder)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 24/30
+Created: app/landing/ghost-kitchen/page.tsx, meal-prep, weekly-preorder
+Shared: lib/marketing/icp-landing-content.ts, components/marketing/icp-landing-page.tsx
+UTM: utm_source=landing&utm_medium=icp&utm_campaign=icp_*
+---
