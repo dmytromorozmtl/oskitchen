@@ -1944,3 +1944,10 @@ Files: app/dashboard/marketplace/products/[slug]/page.tsx, services/marketplace/
 Marketplace progress: 7/33 (phase-2-cycle-6-product-detail done)
 Next: Cycle 7 — services/marketplace/cart-service.ts cart & checkout
 ---
+Cycle: marketplace-7
+Timestamp: 2026-06-01T20:00:00.000Z
+Action: feat: marketplace cart & checkout — cart CRUD/saved templates, validate/split/create orders, Stripe card intent, approval threshold, confirmation email/in-app
+Files: services/marketplace/cart-service.ts, services/marketplace/checkout-service.ts, actions/marketplace/cart.ts, actions/marketplace/checkout.ts, app/dashboard/marketplace/checkout/page.tsx
+Marketplace progress: 8/33 (phase-2-cycle-7-cart-checkout done)
+Next: Cycle 8 — app/dashboard/marketplace/orders/page.tsx orders & recurring
+---

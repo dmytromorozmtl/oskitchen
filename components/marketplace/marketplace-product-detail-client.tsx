@@ -7,8 +7,8 @@ import { toast } from "sonner";
 
 import {
   addMarketplaceProductToCartAction,
-  sendMarketplaceVendorMessageAction,
-} from "@/actions/marketplace/product-detail";
+} from "@/actions/marketplace/cart";
+import { sendMarketplaceVendorMessageAction } from "@/actions/marketplace/product-detail";
 import { MarketplaceProductGallery } from "@/components/marketplace/marketplace-product-gallery";
 import { MarketplaceProductReviewsSection } from "@/components/marketplace/marketplace-product-reviews-section";
 import {

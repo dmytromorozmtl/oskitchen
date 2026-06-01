@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 export const MARKETPLACE_SUBNAV_LINKS = [
   { href: "/dashboard/marketplace", label: "Discover", exact: true },
   { href: "/dashboard/marketplace/catalog", label: "Catalog" },
+  { href: "/dashboard/marketplace/checkout", label: "Cart" },
   { href: "/dashboard/marketplace/vendors", label: "My Vendors" },
   { href: "/dashboard/marketplace/orders", label: "Orders" },
   { href: "/dashboard/marketplace/orders?tab=po", label: "PO" },
