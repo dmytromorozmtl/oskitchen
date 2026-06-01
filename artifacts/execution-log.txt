@@ -1923,3 +1923,10 @@ Files: lib/permissions/permissions.ts, tests/unit/marketplace-permissions.test.t
 Marketplace progress: 3/33 (phase-1-cycle-3-rbac done)
 Next: Cycle 4 — app/dashboard/marketplace/page.tsx marketplace dashboard
 ---
+Cycle: marketplace-4
+Timestamp: 2026-06-01T17:00:00.000Z
+Action: feat: marketplace dashboard — spend summary, search, sub-nav, hero, order again, recommendations, featured vendors, pending actions
+Files: app/dashboard/marketplace/page.tsx, app/dashboard/marketplace/layout.tsx, components/marketplace/*, components/dashboard/marketplace-subnav.tsx, services/marketplace/marketplace-dashboard-service.ts, lib/marketplace/marketplace-page-access.tsx
+Marketplace progress: 4/33 (phase-2-cycle-4-dashboard done)
+Next: Cycle 5 — app/dashboard/marketplace/catalog/page.tsx product catalog
+---
