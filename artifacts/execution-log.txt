@@ -1663,3 +1663,11 @@ GO: NO-GO
 Actions: 16/30
 Created: docs/unified-onboarding-ia.md
 P1 complete: 8-19/12 actions done
+---
+Cycle: 15 (20260601-102028)
+Action: 20 — Report catalog perf plan (p95<2s wired reports)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 17/30
+Created: docs/report-catalog-perf-plan.md
