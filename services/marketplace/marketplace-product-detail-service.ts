@@ -1,10 +1,13 @@
 import { addDays, format } from "date-fns";
 
 import { prisma } from "@/lib/prisma";
+import { resolveUnitPrice } from "@/lib/marketplace/pricing-utils";
 import {
   loadFrequentlyBoughtTogether,
   loadSimilarProducts,
 } from "@/services/marketplace/recommendations-service";
+
+export { resolveUnitPrice };
 
 export type MarketplaceProductMediaItem = {
   url: string;
@@ -239,17 +242,4 @@ export async function loadMarketplaceProductDetail(
       createdAt: review.createdAt.toISOString(),
     })),
   };
-}
-
-export function resolveUnitPrice(
-  product: Pick<MarketplaceProductDetail, "basePrice" | "volumePricing">,
-  quantity: number,
-  variantPrice: number | null,
-): number {
-  if (variantPrice != null) return variantPrice;
-  let price = product.basePrice;
-  for (const tier of product.volumePricing) {
-    if (quantity >= tier.minQuantity) price = tier.price;
-  }
-  return price;
 }

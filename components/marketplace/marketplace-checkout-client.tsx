@@ -19,7 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { MarketplaceCartView } from "@/services/marketplace/cart-service";
-import { splitByVendor } from "@/services/marketplace/checkout-service";
+import { splitByVendor } from "@/lib/marketplace/checkout-utils";
 import { formatCurrency } from "@/lib/utils";
 
 export function MarketplaceCheckoutClient({

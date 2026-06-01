@@ -32,8 +32,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   type MarketplaceProductDetail,
-  resolveUnitPrice,
 } from "@/services/marketplace/marketplace-product-detail-service";
+import { resolveUnitPrice } from "@/lib/marketplace/pricing-utils";
 import { formatCurrency } from "@/lib/utils";
 
 import {

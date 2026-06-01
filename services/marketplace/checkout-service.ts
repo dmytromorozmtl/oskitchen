@@ -11,18 +11,18 @@ import {
   getCart,
   type MarketplaceCartItem,
 } from "@/services/marketplace/cart-service";
+import {
+  splitByVendor,
+  type VendorCartGroup,
+} from "@/lib/marketplace/checkout-utils";
+
+export type { VendorCartGroup };
+export { splitByVendor };
 
 export type CartValidationIssue = {
   productId: string;
   sku: string;
   message: string;
-};
-
-export type VendorCartGroup = {
-  vendorId: string;
-  vendorName: string;
-  items: MarketplaceCartItem[];
-  subtotal: number;
 };
 
 export type MarketplaceCheckoutInput = {
@@ -46,25 +46,6 @@ export type MarketplaceCheckoutResult = {
 };
 
 const DEFAULT_APPROVAL_LIMIT_USD = 2500;
-
-export function splitByVendor(items: readonly MarketplaceCartItem[]): VendorCartGroup[] {
-  const groups = new Map<string, VendorCartGroup>();
-  for (const item of items) {
-    const existing = groups.get(item.vendorId);
-    if (existing) {
-      existing.items.push(item);
-      existing.subtotal += item.unitPrice * item.quantity;
-      continue;
-    }
-    groups.set(item.vendorId, {
-      vendorId: item.vendorId,
-      vendorName: item.vendorName,
-      items: [item],
-      subtotal: item.unitPrice * item.quantity,
-    });
-  }
-  return [...groups.values()];
-}
 
 export function approvalCheck(
   totalAmount: number,
