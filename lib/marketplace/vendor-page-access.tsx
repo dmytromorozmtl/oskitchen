@@ -13,6 +13,7 @@ export type VendorCabinetAccess = {
   canAccess: boolean;
   canManageProducts: boolean;
   canManageOrders: boolean;
+  canRequestPayouts: boolean;
 };
 
 export async function resolveVendorCabinetAccess(): Promise<
@@ -86,6 +87,9 @@ export async function resolveVendorCabinetAccess(): Promise<
     canManageOrders:
       hasPermission(actor.granted, "vendor:orders:confirm") ||
       hasPermission(actor.granted, "vendor:orders:ship") ||
+      (actor.workspaceRole === "OWNER" && hasPermission(actor.granted, "marketplace:read")),
+    canRequestPayouts:
+      hasPermission(actor.granted, "vendor:payouts:request") ||
       (actor.workspaceRole === "OWNER" && hasPermission(actor.granted, "marketplace:read")),
   };
 }

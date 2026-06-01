@@ -2000,3 +2000,10 @@ Files: app/vendor/(cabinet)/orders/page.tsx, app/vendor/(cabinet)/orders/[id]/pa
 Marketplace progress: 15/33 (phase-3-cycle-14-vendor-orders done)
 Next: Cycle 15 — app/vendor/finance/page.tsx vendor financials
 ---
+Cycle: marketplace-15
+Timestamp: 2026-06-02T04:00:00.000Z
+Action: feat: vendor financials — available/pending/paid balances, revenue & commission chart, filterable transactions, request payout, payout history, 1099-K tax summary
+Files: app/vendor/(cabinet)/finance/page.tsx, services/marketplace/vendor-finance-service.ts, actions/vendor/finance.ts, components/marketplace/vendor-finance-client.tsx, app/api/vendor/finance/tax-1099/route.ts, lib/marketplace/vendor-finance-filters.ts
+Marketplace progress: 16/33 (phase-3-cycle-15-vendor-finance done)
+Next: Cycle 16 — app/vendor/analytics/page.tsx vendor analytics
+---
