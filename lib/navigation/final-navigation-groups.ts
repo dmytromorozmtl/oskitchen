@@ -152,6 +152,8 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/inventory/waste", labelKey: "nav.inventoryWaste", icon: Package },
       { href: "/dashboard/inventory/counts", labelKey: "nav.inventoryCounts", icon: Package },
       { href: "/dashboard/purchasing", labelKey: "nav.purchasing", icon: ShoppingBag },
+      { href: "/dashboard/marketplace", labelKey: "nav.marketplace", icon: Store },
+      { href: "/vendor/register", labelKey: "nav.vendorRegister", icon: Truck, ownerOnly: true },
       { href: "/dashboard/purchasing/bulk-pricing", labelKey: "nav.bulkPricing", icon: Coins },
       { href: "/dashboard/purchasing/direct-ordering", labelKey: "nav.directOrdering", icon: Truck },
       { href: "/dashboard/accounting/invoices", labelKey: "nav.apInvoices", icon: FileSpreadsheet },

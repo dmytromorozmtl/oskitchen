@@ -202,6 +202,16 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
     matrixRef: "Growth campaigns",
   },
   {
+    prefix: "/dashboard/marketplace",
+    exposure: "default",
+    matrixRef: "B2B HoReCa marketplace",
+  },
+  {
+    prefix: "/vendor/register",
+    exposure: "default",
+    matrixRef: "Marketplace vendor registration",
+  },
+  {
     prefix: "/dashboard/executive",
     exposure: "hidden_default",
     matrixRef: "Executive / franchise roadmap",
