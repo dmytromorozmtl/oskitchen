@@ -30,8 +30,8 @@
   "29-investor-hold": "done",
   "30-native-defer": "done",
   "_meta": {
-    "1-vault-secrets-note": "docs updated cycle 28; credentials still 0/11; git remote unset",
-    "2-delete-duplicates-note": "re-cleaned cycle 27: favicon 2, manifest 2, vercel 2/3",
+    "1-vault-secrets-note": "docs updated session cycle 1; credentials still 0/11; Auth0 SAML 2647e1f1",
+    "2-delete-duplicates-note": "session-2 cycle 30: removed 25 cron/playwright/test-results/.vercel duplicates",
     "10-kds-slo-note": "docs/kds-slo-proof-plan.md pre-existed with p50/p95/p99 targets"
   }
 }

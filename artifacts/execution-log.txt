@@ -1798,3 +1798,81 @@ GO: NO-GO
 Actions: 27/30
 Updated: docs/vault-one-pager.md (git remote gate + cycle 27 dup cleanup note)
 ---
+---
+Cycle: 29 / session-1 (20260601-executor-restart)
+Action: 1 — Vault 0/11 refresh vault-one-pager (Auth0 2647e1f1, 815 commits)
+Vault: 0/11
+P0: SKIPPED (5-7)
+GO: NO-GO
+Actions: 27/30
+---
+---
+Cycle: 30 / session-2
+Action: 2 — Remove duplicate files (25 paths: cron * 2, playwright-report, test-results, .vercel)
+Vault: 0/11
+P0: SKIPPED (5-7)
+GO: NO-GO
+Actions: 27/30
+---
+---
+Cycle: 31 / session-3
+Action: 3 — git remote empty → refresh docs/git-remote-setup.md (815 commits)
+Vault: 0/11
+P0: SKIPPED (5-7)
+GO: NO-GO
+Actions: 27/30
+---
+---
+Cycle: 32 / session-4
+Action: 4 — refresh docs/vercel-env-vars-production.md (Auth0 SAML section)
+Vault: 0/11
+P0: SKIPPED (5-7)
+GO: NO-GO
+Actions: 27/30
+---
+---
+Cycle: 33 / session-5
+Action: 5 — P0 orchestrator BLOCKED (vault 0/11, need 11/11)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 27/30
+Verdict: awaiting npm run ops:run-p0-staging-proof-execution after vaultReady
+---
+---
+Cycle: 34 / session-6
+Action: 6 — SSO IdP smoke BLOCKED (vault 0/11)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 27/30
+Verdict: awaiting SSO_STAGING_* + vault; Auth0 vendor ready in code
+---
+---
+Cycle: 35 / session-7
+Action: 7 — Live Woo/Shopify smoke BLOCKED (vault 0/11)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 27/30
+Verdict: awaiting CHANNEL_SMOKE_OWNER_EMAIL + vault
+---
+---
+Cycle: 36-57 / session-8-29
+Action: P1-P3 re-evaluated — all deliverables present; no new agent steps
+Vault: 0/11
+P0: SKIPPED (5-7)
+GO: NO-GO
+Actions: 27/30
+Note: preview hidden, tracker reconciled, 12 P1 + 8 P2 + 3 P3 docs/components exist
+---
+---
+Cycle: 58 / session-30
+Action: FINAL #31 — honest final-execution-report refresh (score:90, ready:false)
+Vault: 0/11
+P0: SKIPPED (5-7)
+GO: NO-GO
+Actions: 27/30
+Verdict: NOT ready:true — actions 5-7 remain todo until vault 11/11
+Updated: artifacts/final-execution-report.json v4.2
+---
