@@ -2056,3 +2056,10 @@ Files: app/platform/marketplace/disputes/page.tsx, services/marketplace/platform
 Marketplace progress: 24/33 (phase-4-cycle-22-admin-dispute-resolution done)
 Next: Cycle 23 — app/platform/marketplace/analytics/page.tsx admin marketplace analytics
 ---
+Cycle: marketplace-23
+Timestamp: 2026-06-02T12:00:00.000Z
+Action: feat: admin marketplace analytics — GMV 12mo trend, revenue by category/vendor tier, vendor active/new/churned, buyer active/new/repeat, commission revenue, featured placeholder, CSV export
+Files: app/platform/marketplace/analytics/page.tsx, services/marketplace/platform-marketplace-analytics-service.ts, components/platform/marketplace-analytics-admin-client.tsx, app/api/platform/marketplace/analytics/export/route.ts, tests/unit/marketplace-platform-analytics.test.ts
+Marketplace progress: 25/33 (phase-4-cycle-23-admin-marketplace-analytics done, phase-4-payments-admin complete)
+Next: Cycle 24 — services/marketplace/inventory-integration-service.ts inventory-marketplace integration
+---
