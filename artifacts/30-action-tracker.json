@@ -7,7 +7,7 @@
   "6-sso-smoke": "todo",
   "7-live-smoke": "todo",
   "8-hide-preview-nav": "done",
-  "9-reconcile-tracker": "todo",
+  "9-reconcile-tracker": "done",
   "10-kds-slo": "todo",
   "11-cross-channel-staging": "todo",
   "12-health-deck": "todo",
@@ -30,6 +30,6 @@
   "29-investor-hold": "todo",
   "30-native-defer": "todo",
   "_meta": {
-    "1-vault-secrets-note": "docs updated 2026-06-01; human gate — credentials still 0/11"
+    "1-vault-secrets-note": "docs updated 2026-06-01; human gate \u2014 credentials still 0/11"
   }
 }
