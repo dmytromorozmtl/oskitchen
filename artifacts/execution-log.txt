@@ -1993,3 +1993,10 @@ Files: app/vendor/(cabinet)/products/page.tsx, app/vendor/(cabinet)/products/new
 Marketplace progress: 14/33 (phase-3-cycle-13-vendor-products done)
 Next: Cycle 14 — app/vendor/orders/page.tsx vendor order management
 ---
+Cycle: marketplace-14
+Timestamp: 2026-06-02T03:00:00.000Z
+Action: feat: vendor order management — table filters/status badges/bulk confirm, order detail confirm/processing/ship/partial shipment, buyer chat, packing slip PDF
+Files: app/vendor/(cabinet)/orders/page.tsx, app/vendor/(cabinet)/orders/[id]/page.tsx, services/marketplace/vendor-orders-service.ts, actions/vendor/orders.ts, components/marketplace/vendor-orders-list-client.tsx, components/marketplace/vendor-order-detail-client.tsx, app/api/vendor/orders/[id]/packing-slip/route.ts, lib/marketplace/vendor-orders-filters.ts
+Marketplace progress: 15/33 (phase-3-cycle-14-vendor-orders done)
+Next: Cycle 15 — app/vendor/finance/page.tsx vendor financials
+---

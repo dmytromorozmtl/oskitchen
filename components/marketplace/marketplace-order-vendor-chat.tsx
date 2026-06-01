@@ -17,10 +17,16 @@ type ChatMessage = {
 export function MarketplaceOrderVendorChat({
   orderId,
   vendorName,
+  counterpartyName,
+  perspective = "buyer",
 }: {
   orderId: string;
-  vendorName: string;
+  vendorName?: string;
+  counterpartyName?: string;
+  perspective?: "buyer" | "vendor";
 }) {
+  const otherParty = counterpartyName ?? vendorName ?? "counterparty";
+  const self: ChatMessage["from"] = perspective === "vendor" ? "vendor" : "buyer";
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -36,10 +42,10 @@ export function MarketplaceOrderVendorChat({
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <MessageSquare className="h-4 w-4" />
-          Vendor chat
+          {perspective === "vendor" ? "Buyer chat" : "Vendor chat"}
         </CardTitle>
         <CardDescription>
-          Message {vendorName} about this order. Real-time delivery arrives in the messaging module.
+          Message {otherParty} about this order. Real-time delivery arrives in the messaging module.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -85,7 +91,7 @@ export function MarketplaceOrderVendorChat({
                 {
                   id: crypto.randomUUID(),
                   body: draft.trim(),
-                  from: "buyer",
+                  from: self,
                   at: new Date().toISOString(),
                 },
               ]);

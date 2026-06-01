@@ -12,6 +12,7 @@ export type VendorCabinetAccess = {
   vendorName: string;
   canAccess: boolean;
   canManageProducts: boolean;
+  canManageOrders: boolean;
 };
 
 export async function resolveVendorCabinetAccess(): Promise<
@@ -81,6 +82,10 @@ export async function resolveVendorCabinetAccess(): Promise<
     canAccess: true,
     canManageProducts:
       hasPermission(actor.granted, "vendor:products:manage") ||
+      (actor.workspaceRole === "OWNER" && hasPermission(actor.granted, "marketplace:read")),
+    canManageOrders:
+      hasPermission(actor.granted, "vendor:orders:confirm") ||
+      hasPermission(actor.granted, "vendor:orders:ship") ||
       (actor.workspaceRole === "OWNER" && hasPermission(actor.granted, "marketplace:read")),
   };
 }
