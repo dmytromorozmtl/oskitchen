@@ -13,7 +13,8 @@ export default async function MarketplaceLayout({ children }: { children: React.
     return <div className="space-y-8">{access.deny}</div>;
   }
 
-  const cart = await getCart(access.actor.workspaceId);
+  const workspaceId = access.actor.workspaceId;
+  const cart = workspaceId ? await getCart(workspaceId) : null;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-20 lg:pb-8">
