@@ -54,6 +54,22 @@ const PAGE_MATURITY_DETAIL_BY_PREFIX: Record<string, string> = {
     "Holiday packages are preview-scoped seasonal bundles — not certified full catering or ecommerce parity.",
   "/dashboard/integrations/7shifts":
     "7shifts schedule sync is preview-scoped — not certified labor suite or payroll parity.",
+  "/dashboard/integrations/extensions":
+    "Extensions catalog BETA — partner directory and OAuth sandbox; not a self-serve app store yet.",
+  "/dashboard/integrations/outbound-webhooks":
+    "Outbound webhooks BETA — partner integrations; not certified marketplace delivery parity.",
+  "/dashboard/integrations/oauth-apps":
+    "OAuth sandbox apps BETA — developer preview; not certified public app marketplace.",
+  "/dashboard/gift-cards":
+    "Gift cards BETA — dual locked; cross-channel redemption not certified for pilot commitments.",
+  "/dashboard/customers/loyalty":
+    "Loyalty BETA — dual locked; cross-channel rewards deferred until pilot scope expands.",
+  "/dashboard/storefront/gift-cards":
+    "Storefront gift cards BETA — not certified network-wide gift card parity.",
+  "/dashboard/storefront/loyalty":
+    "Storefront loyalty BETA — not certified unified rewards across channels.",
+  "/dashboard/meal-plans":
+    "Meal subscriptions BETA — native meal plans only; WooCommerce Subscriptions bridge not implemented.",
 };
 
 function normalizeHref(href: string): string {

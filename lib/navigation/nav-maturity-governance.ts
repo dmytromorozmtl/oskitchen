@@ -62,6 +62,46 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
     matrixRef: "Uber Eats marketplace BETA",
   },
   {
+    prefix: "/dashboard/integrations/extensions",
+    exposure: "preview",
+    matrixRef: "App marketplace extensions catalog",
+  },
+  {
+    prefix: "/dashboard/integrations/outbound-webhooks",
+    exposure: "preview",
+    matrixRef: "Partner outbound webhooks",
+  },
+  {
+    prefix: "/dashboard/integrations/oauth-apps",
+    exposure: "preview",
+    matrixRef: "OAuth sandbox apps",
+  },
+  {
+    prefix: "/dashboard/gift-cards",
+    exposure: "preview",
+    matrixRef: "Gift cards",
+  },
+  {
+    prefix: "/dashboard/customers/loyalty",
+    exposure: "preview",
+    matrixRef: "Loyalty programs",
+  },
+  {
+    prefix: "/dashboard/storefront/gift-cards",
+    exposure: "preview",
+    matrixRef: "Storefront gift cards",
+  },
+  {
+    prefix: "/dashboard/storefront/loyalty",
+    exposure: "preview",
+    matrixRef: "Storefront loyalty",
+  },
+  {
+    prefix: "/dashboard/meal-plans",
+    exposure: "preview",
+    matrixRef: "Meal subscriptions",
+  },
+  {
     prefix: "/dashboard/integrations/uber-direct",
     exposure: "placeholder",
     matrixRef: "Uber / DoorDash provider surfaces",
