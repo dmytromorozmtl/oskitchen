@@ -1749,3 +1749,13 @@ Actions: 25/30
 Created: docs/npm-script-trim-rfc.md
 Baseline: 427 test:ci, 272 ops, 332 era25-related; target <650 then <350
 ---
+---
+Cycle: 24 (20260601-103233)
+Action: 29 — Investor narrative HOLD (no KPI fundraising until pilot proof)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 26/30
+Created: docs/investor-narrative-hold.md
+Verdict: HOLD until vault + GO + pilot-metrics-baseline PASS
+---
