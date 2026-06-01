@@ -15,6 +15,7 @@ export type VendorWebhookConfig = {
   url: string;
   events: string[];
   secretPreview: string;
+  secretHash?: string | null;
   createdAt: string;
   active: boolean;
 };
@@ -167,6 +168,7 @@ export function parseVendorCabinetSettings(raw: unknown): VendorCabinetSettingsD
               ? hook.events.filter((event): event is string => typeof event === "string")
               : [],
             secretPreview: typeof hook.secretPreview === "string" ? hook.secretPreview : "****",
+            secretHash: typeof hook.secretHash === "string" ? hook.secretHash : null,
             createdAt: typeof hook.createdAt === "string" ? hook.createdAt : new Date().toISOString(),
             active: hook.active !== false,
           }))

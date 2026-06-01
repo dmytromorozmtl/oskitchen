@@ -2119,3 +2119,10 @@ Files: services/marketplace/featured-service.ts, lib/marketplace/featured-placem
 Marketplace progress: 31/33 modules (phase-6-cycle-31-featured-placements done)
 Next: Cycle 32 — app/api/vendor/webhooks/route.ts vendor API & webhooks
 ---
+Cycle: marketplace-32
+Timestamp: 2026-06-02T21:00:00.000Z
+Action: feat: vendor API & webhooks — /api/vendor/webhooks GET OpenAPI + POST actions (register_webhook, generate_api_key, list_webhooks, test_webhook); Bearer vk_ auth; outbound dispatch with X-KitchenOS-Signature; new_order wired on checkout; webhook secretHash persisted
+Files: app/api/vendor/webhooks/route.ts, services/marketplace/vendor-api-service.ts, lib/marketplace/vendor-api-types.ts, services/marketplace/vendor-settings-service.ts, lib/marketplace/vendor-settings-types.ts, services/marketplace/checkout-service.ts, tests/unit/marketplace-vendor-api.test.ts
+Marketplace progress: 32/33 modules (phase-6-cycle-32-vendor-api-webhooks done)
+Next: Cycle 33 — marketplace mobile responsive adaptation
+---

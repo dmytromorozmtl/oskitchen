@@ -16,6 +16,7 @@ import {
   type VendorWebhookConfig,
 } from "@/lib/marketplace/vendor-settings-types";
 import { prisma } from "@/lib/prisma";
+import { toInputJsonValue } from "@/lib/prisma/json";
 
 export type VendorSettingsModel = {
   vendorId: string;
@@ -67,7 +68,10 @@ export async function loadVendorSettings(vendorId: string): Promise<VendorSettin
     contactEmail: meta.contactEmail,
     contactPhone: meta.contactPhone,
     website: meta.website,
-    settings: publicSettings,
+    settings: {
+      ...publicSettings,
+      webhooks: publicSettings.webhooks.map(({ secretHash: _secretHash, ...hook }) => hook),
+    },
   };
 }
 
@@ -97,7 +101,7 @@ async function persistVendorSettings(
 
   await prisma.vendor.update({
     where: { id: vendorId },
-    data: { documents },
+    data: { documents: toInputJsonValue(documents) },
   });
 
   return { ok: true as const };
@@ -212,6 +216,7 @@ export async function addVendorWebhook(input: {
     url,
     events: input.events.filter(Boolean),
     secretPreview: `…${secret.slice(-6)}`,
+    secretHash: hashApiKey(secret),
     createdAt: new Date().toISOString(),
     active: true,
   };

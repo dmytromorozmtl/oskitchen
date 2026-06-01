@@ -255,6 +255,22 @@ export async function createOrders(input: MarketplaceCheckoutInput): Promise<{
     },
   });
 
+  const { dispatchVendorWebhookEvent } = await import("@/services/marketplace/vendor-api-service");
+  await Promise.all(
+    orders.map((order) =>
+      dispatchVendorWebhookEvent({
+        vendorId: order.vendorId,
+        event: "new_order",
+        data: {
+          orderId: order.id,
+          total: order.total,
+          currency: order.currency,
+          status,
+        },
+      }).catch(() => undefined),
+    ),
+  );
+
   return { orders, requiresApproval };
 }
 
