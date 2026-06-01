@@ -30,8 +30,8 @@
   "29-investor-hold": "done",
   "30-native-defer": "done",
   "_meta": {
-    "1-vault-secrets-note": "cycle 59 P0#1 refresh; credentials still 0/11; missingKeys all 11",
-    "2-delete-duplicates-note": "session-2 cycle 30: removed 25 cron/playwright/test-results/.vercel duplicates",
+    "1-vault-secrets-note": "cycle 60 session refresh; vault 0/11; 820 commits",
+    "2-delete-duplicates-note": "cycle 61: 0 duplicate paths (clean scan)",
     "10-kds-slo-note": "docs/kds-slo-proof-plan.md pre-existed with p50/p95/p99 targets"
   }
 }
