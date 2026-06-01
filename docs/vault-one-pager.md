@@ -47,6 +47,8 @@ npm run smoke:pilot-gono-go  # → GO decision
 | Pilot executable score | **26/100** | `docs/fullreport1june.md` §1 |
 | LIVE integrations | **0** | `lib/integrations/integration-registry.ts` |
 | Paid pilots | **0** | — |
+| Git remote configured | **No** | `git remote -v` empty — see [`git-remote-setup.md`](./git-remote-setup.md) |
+| Duplicate asset cleanup | **Done (cycle 27)** | Removed `favicon 2`, `manifest 2`, `vercel 2/3` |
 
 ## Human gate (VP Operations)
 
@@ -66,7 +68,7 @@ This step **cannot be completed by engineering alone**. VP Ops must:
 
 Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs done; credentials pending human).
 
-## 30-action executor status (2026-06-01, cycle 26)
+## 30-action executor status (2026-06-01, cycle 28)
 
 | Bucket | Done | Blocked on vault |
 |--------|------|------------------|

@@ -1789,3 +1789,12 @@ GO: NO-GO
 Actions: 27/30
 Deleted: public/favicon 2.svg, public/manifest 2.webmanifest, vercel 2.json, vercel 3.json
 ---
+---
+Cycle: 28 (20260601-103615)
+Action: 1 — Vault 0/11 one-pager refresh (cycle 28)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 27/30
+Updated: docs/vault-one-pager.md (git remote gate + cycle 27 dup cleanup note)
+---
