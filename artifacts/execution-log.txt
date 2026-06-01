@@ -1566,3 +1566,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 2/30
 Removed: lib/scope/workspace-resource-scope 2.ts, public/favicon 3.svg, public/favicon 4.svg, public/manifest 3.webmanifest, public/manifest 4.webmanifest, public/sw 2.js
+---
+Cycle: 20260601-095859
+Action: 3 — Git remote backup setup (docs; human gate for push)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 3/30
+Created: docs/git-remote-setup.md

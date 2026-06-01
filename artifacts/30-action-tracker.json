@@ -1,7 +1,7 @@
 {
   "1-vault-secrets": "done",
   "2-delete-duplicates": "done",
-  "3-git-remote": "todo",
+  "3-git-remote": "done",
   "4-staging-deploy": "todo",
   "5-p0-orchestrator": "todo",
   "6-sso-smoke": "todo",
