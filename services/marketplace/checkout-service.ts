@@ -1,4 +1,4 @@
-import type { MarketplaceCurrency, MarketplacePaymentMethod } from "@prisma/client";
+import type { MarketplaceCurrency, MarketplacePaymentMethod, Prisma } from "@prisma/client";
 
 import { sendRawEmail } from "@/lib/email";
 import { getStripe } from "@/lib/stripe";
@@ -175,7 +175,7 @@ export async function createOrders(input: MarketplaceCheckoutInput): Promise<{
           total,
           currency,
           paymentMethod: input.paymentMethod,
-          deliveryAddress: input.deliveryAddress,
+          deliveryAddress: input.deliveryAddress as Prisma.InputJsonValue,
           requestedDeliveryDate: input.requestedDeliveryDate ?? null,
           notes: input.notes ?? null,
           poNumber: `MPO-${Date.now().toString(36).toUpperCase()}`,
