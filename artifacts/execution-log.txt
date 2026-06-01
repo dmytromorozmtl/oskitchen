@@ -1951,3 +1951,10 @@ Files: services/marketplace/cart-service.ts, services/marketplace/checkout-servi
 Marketplace progress: 8/33 (phase-2-cycle-7-cart-checkout done)
 Next: Cycle 8 — app/dashboard/marketplace/orders/page.tsx orders & recurring
 ---
+Cycle: marketplace-8
+Timestamp: 2026-06-01T21:00:00.000Z
+Action: feat: marketplace orders & recurring — list filters, status badges, detail timeline, receiving, invoice HTML, vendor chat shell, recurring CRUD/pause/resume, cron route
+Files: app/dashboard/marketplace/orders/page.tsx, app/dashboard/marketplace/orders/[id]/page.tsx, services/marketplace/marketplace-orders-service.ts, services/marketplace/recurring-orders-service.ts, actions/marketplace/orders.ts, app/api/cron/marketplace-recurring-orders/route.ts
+Marketplace progress: 9/33 (phase-2-cycle-8-orders-recurring done)
+Next: Cycle 9 — app/dashboard/marketplace/vendors/page.tsx vendor management
+---
