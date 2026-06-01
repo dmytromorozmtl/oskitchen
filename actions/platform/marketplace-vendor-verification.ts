@@ -26,6 +26,7 @@ export async function reviewMarketplaceVendorRegistrationAction(input: {
 
   if (result.ok) {
     revalidatePath("/platform/marketplace/vendor-verification");
+    revalidatePath("/platform/marketplace/vendors");
     revalidatePath("/vendor/register/status");
   }
 

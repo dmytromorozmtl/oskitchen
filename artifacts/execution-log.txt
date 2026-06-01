@@ -2035,3 +2035,10 @@ Files: services/marketplace/stripe-connect-service.ts, lib/marketplace/stripe-co
 Marketplace progress: 21/33 (phase-4-cycle-19-stripe-connect done)
 Next: Cycle 20 — app/platform/marketplace/vendors/page.tsx admin vendor moderation
 ---
+Cycle: marketplace-20
+Timestamp: 2026-06-02T09:00:00.000Z
+Action: feat: admin vendor moderation — all vendors list with status/type/plan filters, verification queue tab, bulk approve/suspend, vendor detail with documents/performance/orders/disputes, approve/reject/suspend/reactivate
+Files: app/platform/marketplace/vendors/page.tsx, app/platform/marketplace/vendors/[id]/page.tsx, services/marketplace/platform-vendor-moderation-service.ts, lib/platform/marketplace-vendor-admin-filters.ts, actions/platform/marketplace-vendors.ts, components/platform/marketplace-vendors-admin-client.tsx, components/platform/marketplace-vendor-detail-admin-client.tsx, tests/unit/marketplace-platform-vendors.test.ts
+Marketplace progress: 22/33 (phase-4-cycle-20-admin-vendor-moderation done)
+Next: Cycle 21 — app/platform/marketplace/products/page.tsx admin product moderation
+---
