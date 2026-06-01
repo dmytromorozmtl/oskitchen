@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import { PilotRouteError } from "@/components/dashboard/pilot-route-states";
 
-export default function Error({
+export default function PosTerminalError({
   error,
   reset,
 }: {
