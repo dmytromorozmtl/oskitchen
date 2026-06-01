@@ -12,7 +12,7 @@ import {
 import { MarketplaceOrderReceivingForm } from "@/components/marketplace/marketplace-order-receiving-form";
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
 import { MarketplaceOrderTimeline } from "@/components/marketplace/marketplace-order-timeline";
-import { MarketplaceOrderVendorChat } from "@/components/marketplace/marketplace-order-vendor-chat";
+import { VendorChat } from "@/components/marketplace/vendor-chat";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -25,17 +25,20 @@ import {
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import type { MarketplaceOrderDetail } from "@/services/marketplace/marketplace-orders-service";
+import type { VendorChatMessage } from "@/services/marketplace/vendor-messaging-service";
 
 export function MarketplaceOrderDetailClient({
   order,
   canApprove,
   canCancel,
   canReceive,
+  chatMessages = [],
 }: {
   order: MarketplaceOrderDetail;
   canApprove: boolean;
   canCancel: boolean;
   canReceive: boolean;
+  chatMessages?: VendorChatMessage[];
 }) {
   const [pending, startTransition] = useTransition();
 
@@ -150,7 +153,13 @@ export function MarketplaceOrderDetailClient({
         </Card>
 
         <MarketplaceOrderReceivingForm order={order} canReceive={canReceive} />
-        <MarketplaceOrderVendorChat orderId={order.id} vendorName={order.vendor.companyName} />
+        <VendorChat
+          orderId={order.id}
+          counterpartyName={order.vendor.companyName}
+          perspective="buyer"
+          poNumber={order.poNumber}
+          initialMessages={chatMessages}
+        />
       </div>
 
       <Card className="h-fit border-border/80 shadow-sm">

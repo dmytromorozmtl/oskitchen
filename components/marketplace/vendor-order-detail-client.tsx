@@ -11,7 +11,7 @@ import {
 } from "@/actions/vendor/orders";
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
 import { MarketplaceOrderTimeline } from "@/components/marketplace/marketplace-order-timeline";
-import { MarketplaceOrderVendorChat } from "@/components/marketplace/marketplace-order-vendor-chat";
+import { VendorChat } from "@/components/marketplace/vendor-chat";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,13 +26,16 @@ import {
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import type { VendorOrderDetail } from "@/services/marketplace/vendor-orders-service";
+import type { VendorChatMessage } from "@/services/marketplace/vendor-messaging-service";
 
 export function VendorOrderDetailClient({
   order,
   canManage,
+  chatMessages = [],
 }: {
   order: VendorOrderDetail;
   canManage: boolean;
+  chatMessages?: VendorChatMessage[];
 }) {
   const [pending, startTransition] = useTransition();
   const [trackingNumber, setTrackingNumber] = useState(order.trackingNumber ?? "");
@@ -223,10 +226,12 @@ export function VendorOrderDetailClient({
           </CardContent>
         </Card>
 
-        <MarketplaceOrderVendorChat
+        <VendorChat
           orderId={order.id}
           counterpartyName={order.buyer.name}
           perspective="vendor"
+          poNumber={order.poNumber}
+          initialMessages={chatMessages}
         />
       </div>
 

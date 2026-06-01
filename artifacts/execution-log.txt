@@ -2021,3 +2021,10 @@ Files: app/vendor/(cabinet)/settings/page.tsx, services/marketplace/vendor-setti
 Marketplace progress: 18/33 (phase-3-cycle-17-vendor-settings done, phase-3-vendor-cabinet complete)
 Next: Cycle 18 — components/marketplace/vendor-chat.tsx marketplace messaging
 ---
+Cycle: marketplace-18
+Timestamp: 2026-06-02T07:00:00.000Z
+Action: feat: marketplace messaging — VendorChat with order context, DB-backed messages, 5s polling, file attachments, read receipts, email notifications; integrated into buyer/vendor order detail
+Files: components/marketplace/vendor-chat.tsx, services/marketplace/vendor-messaging-service.ts, actions/marketplace/messaging.ts, app/api/marketplace/orders/[id]/messages/route.ts
+Marketplace progress: 20/33 (phase-4-cycle-18-vendor-messaging done)
+Next: Cycle 19 — services/marketplace/stripe-connect-service.ts Stripe Connect
+---

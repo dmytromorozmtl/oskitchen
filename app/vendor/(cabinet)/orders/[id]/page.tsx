@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { requireVendorCabinetPage } from "@/lib/marketplace/vendor-page-access";
 import { loadVendorOrderDetail } from "@/services/marketplace/vendor-orders-service";
+import { loadOrderChatMessages } from "@/services/marketplace/vendor-messaging-service";
 
 export const metadata = { title: "Vendor order detail" };
 
@@ -26,6 +27,12 @@ export default async function VendorOrderDetailPage({
   const order = await loadVendorOrderDetail(access.vendorId, id);
   if (!order) notFound();
 
+  const chatMessages = await loadOrderChatMessages({
+    orderId: id,
+    perspective: "vendor",
+    readerId: access.actor.sessionUserId,
+  });
+
   return (
     <div className="space-y-6 pb-8">
       <PageHeader
@@ -41,7 +48,7 @@ export default async function VendorOrderDetailPage({
         }
       />
 
-      <VendorOrderDetailClient order={order} canManage={access.canManageOrders} />
+      <VendorOrderDetailClient order={order} canManage={access.canManageOrders} chatMessages={chatMessages} />
     </div>
   );
 }

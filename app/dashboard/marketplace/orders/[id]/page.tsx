@@ -9,6 +9,7 @@ import { hasPermission } from "@/lib/permissions/guards";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadMarketplaceOrderDetail } from "@/services/marketplace/marketplace-orders-service";
+import { loadOrderChatMessages } from "@/services/marketplace/vendor-messaging-service";
 
 export default async function MarketplaceOrderDetailPage({
   params,
@@ -25,6 +26,14 @@ export default async function MarketplaceOrderDetailPage({
   ]);
 
   if (!order) notFound();
+
+  const chatMessages = access.actor.sessionUserId
+    ? await loadOrderChatMessages({
+        orderId: id,
+        perspective: "buyer",
+        readerId: access.actor.sessionUserId,
+      })
+    : [];
 
   const canCancel = hasPermission(access.actor.granted, "marketplace:orders:cancel");
   const canApprove = access.canCreateOrders;
@@ -50,6 +59,7 @@ export default async function MarketplaceOrderDetailPage({
         canApprove={canApprove}
         canCancel={canCancel}
         canReceive={canReceive}
+        chatMessages={chatMessages}
       />
     </div>
   );
