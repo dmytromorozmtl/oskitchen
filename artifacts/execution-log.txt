@@ -1605,3 +1605,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 9/30
 Created: docs/integration-health-sales-deck-v2.md
+---
+Cycle: 8 (20260601-100648)
+Action: 13 — Shopify bundle outbound sequence (7-touch / 14-day SDR playbook)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 10/30
+Created: docs/shopify-bundle-outbound-sequence.md
