@@ -2098,3 +2098,10 @@ Files: services/marketplace/analytics-integration-service.ts, lib/marketplace/an
 Marketplace progress: 31/33 (phase-5-cycle-28-analytics-integration done, phase-5-integrations complete)
 Next: Cycle 29 — app/dashboard/marketplace/compare/page.tsx marketplace price comparison
 ---
+Cycle: marketplace-29
+Timestamp: 2026-06-02T18:00:00.000Z
+Action: feat: marketplace price comparison — search by product name/GTIN, vendor/price/delivery/rating/MOQ table with sort, best-price badge, add-to-cart from compare row; catalog compare slugs via ?products=
+Files: app/dashboard/marketplace/compare/page.tsx, components/marketplace/marketplace-compare-client.tsx, services/marketplace/marketplace-compare-service.ts, lib/marketplace/compare-filters.ts, tests/unit/marketplace-compare.test.ts, actions/marketplace/cart.ts
+Marketplace progress: 32/33 (phase-6-cycle-29-compare-page done)
+Next: Cycle 30 — services/marketplace/recommendations-service.ts marketplace recommendations
+---

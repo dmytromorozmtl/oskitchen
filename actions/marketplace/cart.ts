@@ -50,6 +50,7 @@ export async function addMarketplaceProductToCartAction(input: {
   await addToCart(access.actor.workspaceId!, input, cartActor(access.actor));
   revalidatePath("/dashboard/marketplace");
   revalidatePath("/dashboard/marketplace/catalog");
+  revalidatePath("/dashboard/marketplace/compare");
   revalidatePath("/dashboard/marketplace/checkout");
   revalidatePath(`/dashboard/marketplace/products/${input.slug}`);
   return { ok: true };
