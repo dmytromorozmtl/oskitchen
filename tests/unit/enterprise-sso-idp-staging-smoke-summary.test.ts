@@ -69,6 +69,7 @@ describe("enterprise SSO IdP staging smoke summary", () => {
     expect(normalizeSsoIdpVendor("entra")).toBe("ENTRA_ID");
     expect(normalizeSsoIdpVendor("azure")).toBe("ENTRA_ID");
     expect(normalizeSsoIdpVendor("OKTA")).toBe("OKTA");
+    expect(normalizeSsoIdpVendor("auth0")).toBe("AUTH0");
     expect(normalizeSsoIdpVendor("google")).toBeNull();
   });
 

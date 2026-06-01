@@ -115,6 +115,7 @@ export function inferSsoIdpVendorFromUser(user: SupabaseSsoUserShape): SsoIdpVen
 
   const joined = hints.join(" ");
   if (joined.includes("okta")) return "OKTA";
+  if (joined.includes("auth0") || joined.includes("auth_0")) return "AUTH0";
   if (
     joined.includes("azure") ||
     joined.includes("entra") ||

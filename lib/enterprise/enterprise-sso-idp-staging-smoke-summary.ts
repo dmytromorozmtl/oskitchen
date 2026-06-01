@@ -32,7 +32,7 @@ export type EnterpriseSsoIdpOperatorProofTemplate = {
   breakGlassDrillNote: string | null;
   stagingBaseUrl: string | null;
   workspaceId: string | null;
-  idpVendor: "OKTA" | "ENTRA_ID" | null;
+  idpVendor: "OKTA" | "ENTRA_ID" | "AUTH0" | null;
 };
 
 export type EnterpriseSsoIdpStagingSmokeSummary = {
@@ -82,7 +82,7 @@ const PREREQUISITE_ENV_CHECKS: readonly {
   },
   {
     key: "SSO_STAGING_IDP_VENDOR",
-    label: "IdP vendor (OKTA or ENTRA_ID)",
+    label: "IdP vendor (OKTA, ENTRA_ID, or AUTH0)",
     present: (input) => normalizeSsoIdpVendor(input.idpVendor) !== null,
   },
   {
@@ -121,18 +121,19 @@ export function formatMissingEnterpriseSsoIdpStagingEnvVarsReason(
 
 export function normalizeSsoIdpVendor(
   raw: string | null | undefined,
-): "OKTA" | "ENTRA_ID" | null {
+): "OKTA" | "ENTRA_ID" | "AUTH0" | null {
   const value = raw?.trim().toUpperCase();
   if (value === "OKTA") return "OKTA";
   if (value === "ENTRA_ID" || value === "ENTRA" || value === "AZURE" || value === "MICROSOFT") {
     return "ENTRA_ID";
   }
+  if (value === "AUTH0" || value === "AUTH_0") return "AUTH0";
   return null;
 }
 
 export function evaluateEnterpriseSsoIdpStagingSmokePrerequisites(
   input: EnterpriseSsoIdpStagingSmokePrerequisiteInput,
-): { ok: true; idpVendor: "OKTA" | "ENTRA_ID" } | { ok: false; reason: string } {
+): { ok: true; idpVendor: "OKTA" | "ENTRA_ID" | "AUTH0" } | { ok: false; reason: string } {
   if (!input.stagingBaseUrl?.trim()) {
     return {
       ok: false,
@@ -226,7 +227,7 @@ export function evaluateEnterpriseSsoIdpLoginProofEvidence(
 export function buildEnterpriseSsoIdpOperatorProofTemplate(input: {
   stagingBaseUrl?: string | null;
   workspaceId?: string | null;
-  idpVendor?: "OKTA" | "ENTRA_ID" | null;
+  idpVendor?: "OKTA" | "ENTRA_ID" | "AUTH0" | null;
   operatorEmail?: string | null;
   screenshotPath?: string | null;
   auditEventRef?: string | null;

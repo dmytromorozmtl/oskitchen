@@ -64,6 +64,7 @@ export const ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_ENV_VARS = [
 export const ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_SUPPORTED_IDP_VENDORS = [
   "OKTA",
   "ENTRA_ID",
+  "AUTH0",
 ] as const;
 
 export const ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_AUDIT_EVENTS = [
@@ -74,7 +75,7 @@ export const ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_AUDIT_EVENTS = [
 
 export const ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_PILOT_RUNBOOK_STEPS = [
   "Confirm workspace has ssoOidc entitlement and pilot workspace UUID documented in ops vault.",
-  "Provision Okta dev org OR Microsoft Entra ID test tenant — one IdP per pilot workspace only.",
+  "Provision Okta dev org, Microsoft Entra ID test tenant, or Auth0 SAML app — one IdP per pilot workspace only.",
   "Configure Supabase Auth SAML provider (Dashboard → Authentication → SSO) with IdP metadata.",
   "OS Kitchen Settings → Security → SSO pilot: IdP vendor, allowed domains, Supabase provider ref.",
   "Activate SSO pilot (PILOT_ACTIVE) for staging workspace only — not global launch.",

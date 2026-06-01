@@ -95,7 +95,7 @@ function secretDescription(key: string): string {
     case "SSO_STAGING_WORKSPACE_ID":
       return "Pilot workspace UUID for tenant-bound SSO smoke";
     case "SSO_STAGING_IDP_VENDOR":
-      return "IdP vendor label (OKTA or ENTRA_ID)";
+      return "IdP vendor label (OKTA, ENTRA_ID, or AUTH0)";
     case "SSO_STAGING_ALLOWED_DOMAIN":
       return "Allowed email domain for SSO test user";
     case "SSO_STAGING_TEST_EMAIL":

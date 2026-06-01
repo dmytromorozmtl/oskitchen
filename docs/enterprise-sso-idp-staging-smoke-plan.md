@@ -16,7 +16,7 @@
 1. **Cycle 1 delivers the plan and orchestrator** — it does **not** move SSO to `pilot_ready` or claim production SSO.
 2. **Cycle 2 requires operator proof** — one successful IdP login → dashboard on staging with audit event `sso.login_success`.
 3. **Cycle 3 gates `pilot_ready`** — only after Cycle 2 artifact exists (`era17-enterprise-sso-pilot-ready-v1`).
-4. **One IdP per pilot workspace** — Okta **or** Microsoft Entra ID, not both simultaneously.
+4. **One IdP per pilot workspace** — Okta, Microsoft Entra ID, or Auth0, not multiple simultaneously.
 
 **Unsafe headline:** “Enterprise SSO included,” “SAML live today,” or “pilot_ready without staging artifact.”
 
@@ -28,8 +28,9 @@
 |--------|--------------------------|-------|
 | Okta | `OKTA` | Okta Developer Edition org recommended for staging |
 | Microsoft Entra ID | `ENTRA_ID` | Azure AD / Entra test tenant; aliases `ENTRA`, `AZURE`, `MICROSOFT` accepted in smoke script |
+| Auth0 | `AUTH0` | SAML addon on Auth0 app → Supabase SP; see `docs/auth0-supabase-saml-setup.md` |
 
-OS Kitchen stores vendor as `SsoIdpVendor` enum (`OKTA` | `ENTRA_ID`) in `WorkspaceSsoSettings`.
+OS Kitchen stores vendor as `SsoIdpVendor` enum (`OKTA` | `ENTRA_ID` | `AUTH0`) in `WorkspaceSsoSettings`.
 
 ---
 
@@ -41,7 +42,7 @@ Set in local ops shell or GitHub Actions **secrets** (never commit values):
 |----------|----------|---------|
 | `E2E_STAGING_BASE_URL` | Yes | Staging OS Kitchen URL (e.g. `https://staging.kitchenos.app`) |
 | `SSO_STAGING_WORKSPACE_ID` | Yes | Pilot workspace UUID — tenant-bound SSO |
-| `SSO_STAGING_IDP_VENDOR` | Yes | `OKTA` or `ENTRA_ID` |
+| `SSO_STAGING_IDP_VENDOR` | Yes | `OKTA`, `ENTRA_ID`, or `AUTH0` |
 | `SSO_STAGING_ALLOWED_DOMAIN` | Yes | Allowed email domain (e.g. `pilot.example.com`) |
 | `SSO_STAGING_TEST_EMAIL` | Yes | Staff test user email in allowed domain |
 | `SSO_STAGING_SUPABASE_PROVIDER_REF` | Yes | Supabase Auth SAML provider reference / UUID |
@@ -93,10 +94,23 @@ After manual IdP login on staging, set these to record proof (never commit value
 
 ---
 
+## Auth0 SAML IdP setup
+
+Full walkthrough: **`docs/auth0-supabase-saml-setup.md`**.
+
+1. Auth0 Dashboard → **Applications** → create **Regular Web Application**.
+2. **Addons → SAML2 WEB APP** — set Supabase **Entity ID** (audience) and **ACS URL** (recipient).
+3. Map email claim; use **emailAddress** name identifier format.
+4. Download IdP metadata → upload to Supabase SAML provider.
+5. Create test user with email `@SSO_STAGING_ALLOWED_DOMAIN`.
+6. Set `SSO_STAGING_IDP_VENDOR=AUTH0` and workspace SSO pilot **IdP vendor → Auth0**.
+
+---
+
 ## Supabase SAML configuration
 
 1. Supabase project (staging) → **Authentication → SSO / SAML**.
-2. **Add provider** — upload IdP metadata from Okta or Entra.
+2. **Add provider** — upload IdP metadata from Okta, Entra, or Auth0.
 3. Note the **provider reference** → set `SSO_STAGING_SUPABASE_PROVIDER_REF`.
 4. Confirm redirect URLs include staging OS Kitchen `/auth/callback`.
 5. **Do not** enable SSO globally for all Supabase users — workspace gate remains in OS Kitchen (`PILOT_ACTIVE` + `ssoOidc` entitlement).
@@ -107,7 +121,7 @@ After manual IdP login on staging, set these to record proof (never commit value
 
 1. Confirm workspace owner has **`ssoOidc`** entitlement (Enterprise plan or billing override).
 2. **Settings → Security → SSO pilot:**
-   - IdP vendor: Okta or Entra ID
+   - IdP vendor: Okta, Entra ID, or Auth0
    - Allowed email domains: match `SSO_STAGING_ALLOWED_DOMAIN`
    - Supabase provider ref: `SSO_STAGING_SUPABASE_PROVIDER_REF`
    - Break-glass owner enabled: **true** for pilot

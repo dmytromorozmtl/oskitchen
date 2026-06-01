@@ -137,11 +137,12 @@ export function SsoPilotAdminForm({ initial }: SsoPilotAdminFormProps) {
                   id="idpVendor"
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   value={idpVendor}
-                  onChange={(e) => setIdpVendor(e.target.value as "OKTA" | "ENTRA_ID")}
+                  onChange={(e) => setIdpVendor(e.target.value as "OKTA" | "ENTRA_ID" | "AUTH0")}
                   disabled={pending}
                 >
                   <option value="OKTA">Okta</option>
                   <option value="ENTRA_ID">Microsoft Entra ID</option>
+                  <option value="AUTH0">Auth0</option>
                 </select>
               </div>
               <div className="space-y-2">

@@ -22,8 +22,8 @@ export function validateEnterpriseSsoIdpStagingSmokePack(): { ok: boolean; error
   if (ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_ENV_VARS.length < 6) {
     errors.push("Expected at least six documented env vars");
   }
-  if (ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_SUPPORTED_IDP_VENDORS.length !== 2) {
-    errors.push("Expected exactly two supported IdP vendors (OKTA, ENTRA_ID)");
+  if (ENTERPRISE_SSO_IDP_STAGING_SMOKE_ERA17_SUPPORTED_IDP_VENDORS.length !== 3) {
+    errors.push("Expected exactly three supported IdP vendors (OKTA, ENTRA_ID, AUTH0)");
   }
   return { ok: errors.length === 0, errors };
 }
