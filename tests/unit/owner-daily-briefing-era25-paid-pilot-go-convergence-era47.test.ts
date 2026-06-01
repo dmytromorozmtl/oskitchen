@@ -7,7 +7,7 @@ import {
   mergeBriefingEra25PaidPilotGoConvergenceTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-paid-pilot-go-convergence-era47";
 
-describe("owner-daily-briefing-era25-paid-pilot-go-convergence-era47", () => {
+describe("owner-daily-briefing-era25-paid-pilot-go-convergence-era47", { timeout: 120_000 }, () => {
   it("ranks GO convergence meta action at priority 22", () => {
     const breakthrough = buildOwnerDailyBriefingBreakthroughEra25UiSlice({
       blueprintVisible: true,

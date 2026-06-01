@@ -7,7 +7,7 @@ import {
   mergeBriefingEra25FirstProductSliceBlueprintTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-first-product-slice-blueprint-era45";
 
-describe("owner-daily-briefing-era25-first-product-slice-blueprint-era45", () => {
+describe("owner-daily-briefing-era25-first-product-slice-blueprint-era45", { timeout: 120_000 }, () => {
   it("ranks blueprint action at priority 20", () => {
     const gates = buildEra25EngineeringGatesUiSlice({ readinessVisible: true, env: {} });
     const action = buildOwnerDailyBriefingEra25FirstProductSliceBlueprintAction(

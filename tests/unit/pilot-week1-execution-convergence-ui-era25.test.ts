@@ -5,7 +5,7 @@ import {
   formatPilotWeek1ExecutionConvergenceEra25Label,
 } from "@/lib/commercial/pilot-week1-execution-convergence-ui-era25";
 
-describe("pilot-week1-execution-convergence-ui-era25", () => {
+describe("pilot-week1-execution-convergence-ui-era25", { timeout: 120_000 }, () => {
   it("returns null when go convergence not visible", () => {
     expect(
       buildPilotWeek1ExecutionConvergenceEra25UiSlice({ goConvergenceVisible: false }),

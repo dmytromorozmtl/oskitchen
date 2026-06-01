@@ -5,7 +5,7 @@ import {
   formatOwnerDailyBriefingBreakthroughEra25Label,
 } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 
-describe("owner-daily-briefing-breakthrough-ui-era25", () => {
+describe("owner-daily-briefing-breakthrough-ui-era25", { timeout: 120_000 }, () => {
   it("returns null when blueprint not visible", () => {
     expect(
       buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: false }),

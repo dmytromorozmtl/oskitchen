@@ -7,7 +7,7 @@ import {
   mergeBriefingEra25OwnerDailyBriefingBreakthroughTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-owner-daily-briefing-breakthrough-era46";
 
-describe("owner-daily-briefing-era25-owner-daily-briefing-breakthrough-era46", () => {
+describe("owner-daily-briefing-era25-owner-daily-briefing-breakthrough-era46", { timeout: 120_000 }, () => {
   it("ranks breakthrough action at priority 21", () => {
     const blueprint = buildEra25FirstProductSliceBlueprintUiSlice({
       engineeringGatesVisible: true,

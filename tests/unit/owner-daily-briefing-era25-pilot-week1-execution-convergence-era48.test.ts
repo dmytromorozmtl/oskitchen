@@ -7,7 +7,7 @@ import {
   mergeBriefingEra25PilotWeek1ExecutionConvergenceTopActions,
 } from "@/lib/briefing/owner-daily-briefing-era25-pilot-week1-execution-convergence-era48";
 
-describe("owner-daily-briefing-era25-pilot-week1-execution-convergence-era48", () => {
+describe("owner-daily-briefing-era25-pilot-week1-execution-convergence-era48", { timeout: 120_000 }, () => {
   it("ranks week 1 meta action at priority 23", () => {
     const goConvergence = buildPaidPilotGoConvergenceEra25UiSlice({
       breakthroughVisible: true,

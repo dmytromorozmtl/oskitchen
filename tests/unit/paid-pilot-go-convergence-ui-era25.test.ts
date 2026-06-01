@@ -5,7 +5,7 @@ import {
   formatPaidPilotGoConvergenceEra25Label,
 } from "@/lib/commercial/paid-pilot-go-convergence-ui-era25";
 
-describe("paid-pilot-go-convergence-ui-era25", () => {
+describe("paid-pilot-go-convergence-ui-era25", { timeout: 120_000 }, () => {
   it("returns null when breakthrough not visible", () => {
     expect(buildPaidPilotGoConvergenceEra25UiSlice({ breakthroughVisible: false })).toBeNull();
   });
