@@ -60,9 +60,64 @@ export const PERMISSIONS = {
   "templates.participate": "Preview workspace templates and view application history",
   "growth.view": "View growth / beta surfaces",
   "growth.manage": "Manage growth CRM, outreach, and founder operations",
+  "marketplace:read": "View marketplace catalog, products, and vendors",
+  "marketplace:cart:write": "Add to cart and checkout marketplace orders",
+  "marketplace:orders:read": "View marketplace purchase orders",
+  "marketplace:orders:create": "Create marketplace purchase orders",
+  "marketplace:orders:cancel": "Cancel marketplace purchase orders",
+  "marketplace:recurring:manage": "Create and edit recurring marketplace orders",
+  "marketplace:reviews:write": "Write vendor reviews after completed orders",
+  "marketplace:disputes:open": "Open marketplace order disputes",
+  "vendor:cabinet:access": "Access vendor cabinet",
+  "vendor:products:manage": "Create and manage vendor product catalog",
+  "vendor:orders:read": "View incoming vendor orders",
+  "vendor:orders:confirm": "Confirm or reject vendor orders",
+  "vendor:orders:ship": "Mark vendor orders as shipped",
+  "vendor:analytics:read": "View vendor analytics",
+  "vendor:payouts:request": "Request vendor payouts",
+  "vendor:messages:send": "Send messages to marketplace buyers",
+  "marketplace:admin:moderate": "Approve or reject marketplace vendors and products",
+  "marketplace:admin:disputes": "Resolve marketplace disputes",
+  "marketplace:admin:featured": "Manage marketplace featured placements",
+  "marketplace:admin:analytics": "View marketplace-wide analytics",
 } as const;
 
 export type PermissionKey = keyof typeof PERMISSIONS;
+
+export const MARKETPLACE_BUYER_PERMISSIONS = [
+  "marketplace:read",
+  "marketplace:cart:write",
+  "marketplace:orders:read",
+  "marketplace:orders:create",
+  "marketplace:orders:cancel",
+  "marketplace:recurring:manage",
+  "marketplace:reviews:write",
+  "marketplace:disputes:open",
+] as const satisfies readonly PermissionKey[];
+
+export const MARKETPLACE_VENDOR_PERMISSIONS = [
+  "vendor:cabinet:access",
+  "vendor:products:manage",
+  "vendor:orders:read",
+  "vendor:orders:confirm",
+  "vendor:orders:ship",
+  "vendor:analytics:read",
+  "vendor:payouts:request",
+  "vendor:messages:send",
+] as const satisfies readonly PermissionKey[];
+
+export const MARKETPLACE_ADMIN_PERMISSIONS = [
+  "marketplace:admin:moderate",
+  "marketplace:admin:disputes",
+  "marketplace:admin:featured",
+  "marketplace:admin:analytics",
+] as const satisfies readonly PermissionKey[];
+
+export const MARKETPLACE_PERMISSIONS = [
+  ...MARKETPLACE_BUYER_PERMISSIONS,
+  ...MARKETPLACE_VENDOR_PERMISSIONS,
+  ...MARKETPLACE_ADMIN_PERMISSIONS,
+] as const satisfies readonly PermissionKey[];
 
 const OWNER_LIKE: readonly PermissionKey[] = [
   "workspace.view",
@@ -124,6 +179,7 @@ const OWNER_LIKE: readonly PermissionKey[] = [
   "templates.participate",
   "growth.view",
   "growth.manage",
+  ...MARKETPLACE_BUYER_PERMISSIONS,
 ];
 
 const STAFF_OPS: readonly PermissionKey[] = [
@@ -138,6 +194,8 @@ const STAFF_OPS: readonly PermissionKey[] = [
   "routes.manage",
   "training.participate",
   "playbooks.participate",
+  "marketplace:read",
+  "marketplace:orders:read",
 ];
 
 export function defaultPermissionsForWorkspaceRole(role: UserRole): Set<PermissionKey> {

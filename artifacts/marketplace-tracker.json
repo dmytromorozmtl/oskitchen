@@ -2,7 +2,7 @@
   "phase-1-database": "in_progress",
   "phase-1-cycle-1-prisma-schema": "done",
   "phase-1-cycle-2-category-seed": "done",
-  "phase-1-cycle-3-rbac": "todo",
+  "phase-1-cycle-3-rbac": "done",
   "phase-2-buyer-experience": "todo",
   "phase-3-vendor-cabinet": "todo",
   "phase-4-payments-admin": "todo",

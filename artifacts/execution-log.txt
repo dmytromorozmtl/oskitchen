@@ -1916,3 +1916,10 @@ Script: npm run db:seed:marketplace-categories
 Marketplace progress: 2/33 (phase-1-cycle-2-category-seed done)
 Next: Cycle 3 — marketplace RBAC permissions in lib/permissions/permissions.ts
 ---
+Cycle: marketplace-3
+Timestamp: 2026-06-01T16:00:00.000Z
+Action: feat: marketplace RBAC permissions — 20 keys (buyer 8, vendor 8, admin 4) with owner/staff defaults
+Files: lib/permissions/permissions.ts, tests/unit/marketplace-permissions.test.ts, artifacts/marketplace-tracker.json
+Marketplace progress: 3/33 (phase-1-cycle-3-rbac done)
+Next: Cycle 4 — app/dashboard/marketplace/page.tsx marketplace dashboard
+---
