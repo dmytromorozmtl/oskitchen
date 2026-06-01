@@ -1597,3 +1597,11 @@ Vault: 0/11
 P0: SKIPPED
 GO: NO-GO
 Actions: 8/30
+---
+Cycle: 7 (20260601-100620)
+Action: 12 — Integration Health sales deck v2 (June delta: scoring engine + recovery playbooks)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 9/30
+Created: docs/integration-health-sales-deck-v2.md

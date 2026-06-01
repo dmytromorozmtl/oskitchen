@@ -10,7 +10,7 @@
   "9-reconcile-tracker": "done",
   "10-kds-slo": "done",
   "11-cross-channel-staging": "done",
-  "12-health-deck": "todo",
+  "12-health-deck": "done",
   "13-shopify-outbound": "todo",
   "14-cross-tenant-e2e": "todo",
   "15-webhook-matrix": "todo",
