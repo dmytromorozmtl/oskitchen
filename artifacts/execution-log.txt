@@ -2028,3 +2028,10 @@ Files: components/marketplace/vendor-chat.tsx, services/marketplace/vendor-messa
 Marketplace progress: 20/33 (phase-4-cycle-18-vendor-messaging done)
 Next: Cycle 19 — services/marketplace/stripe-connect-service.ts Stripe Connect
 ---
+Cycle: marketplace-19
+Timestamp: 2026-06-02T08:00:00.000Z
+Action: feat: Stripe Connect integration — createVendorAccount, getAccountLink, handleAccountUpdate, createPaymentIntent with destination charges, capturePayment, releaseFunds, processPayout; marketplace webhook route + main Stripe webhook hooks
+Files: services/marketplace/stripe-connect-service.ts, lib/marketplace/stripe-connect-config.ts, app/api/marketplace/stripe-connect/webhook/route.ts, actions/vendor/stripe-connect.ts
+Marketplace progress: 21/33 (phase-4-cycle-19-stripe-connect done)
+Next: Cycle 20 — app/platform/marketplace/vendors/page.tsx admin vendor moderation
+---

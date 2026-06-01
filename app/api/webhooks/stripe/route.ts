@@ -152,6 +152,21 @@ export async function POST(request: Request) {
             "@/services/platform/partner-stripe-connect-service"
           );
           await refreshPartnerConnectAccountFromStripe(account.id);
+
+          const { handleAccountUpdate } = await import(
+            "@/services/marketplace/stripe-connect-service"
+          );
+          await handleAccountUpdate(account.id);
+        }
+        break;
+      }
+      case "payment_intent.succeeded": {
+        const intent = event.data.object as Stripe.PaymentIntent;
+        if (intent.metadata?.marketplaceOrderId) {
+          const { handleMarketplaceStripeWebhookEvent } = await import(
+            "@/services/marketplace/stripe-connect-service"
+          );
+          await handleMarketplaceStripeWebhookEvent(event);
         }
         break;
       }
