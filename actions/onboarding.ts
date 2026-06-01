@@ -123,18 +123,26 @@ async function loadFlowContext(userId: string) {
   return { flow, adaptive, businessType: settings?.businessType ?? null };
 }
 
-async function afterSaveSuccess(userId: string, stepId: OnboardingStepId | null) {
+async function afterSaveSuccess(
+  sessionUserId: string,
+  dataUserId: string,
+  stepId: OnboardingStepId | null,
+) {
   if (!stepId) return;
-  const { flow } = await loadFlowContext(userId);
-  await advanceOnboardingStepIndex(userId, flow.stepIds, stepId);
-  await markStepCompleted(userId, stepId);
+  const { flow } = await loadFlowContext(dataUserId);
+  await advanceOnboardingStepIndex(sessionUserId, flow.stepIds, stepId);
+  await markStepCompleted(dataUserId, stepId);
 }
 
-async function afterSkipSuccess(userId: string, stepId: OnboardingStepId | null) {
+async function afterSkipSuccess(
+  sessionUserId: string,
+  dataUserId: string,
+  stepId: OnboardingStepId | null,
+) {
   if (!stepId) return;
-  await markStepSkipped(userId, stepId);
-  const { flow } = await loadFlowContext(userId);
-  await advanceOnboardingStepIndex(userId, flow.stepIds, stepId);
+  await markStepSkipped(dataUserId, stepId);
+  const { flow } = await loadFlowContext(dataUserId);
+  await advanceOnboardingStepIndex(sessionUserId, flow.stepIds, stepId);
 }
 
 async function getAdaptive(userId: string): Promise<OnboardingAdaptiveState | null> {
@@ -173,14 +181,14 @@ export async function onboardingSaveWelcome(formData: FormData) {
     const { sessionUser: user, dataUserId } = manage;
     const skip = String(formData.get("skipSetup") ?? "") === "1";
     if (skip) {
-      await patchAdaptive(user.id, {
+      await patchAdaptive(dataUserId, {
         welcomeSeenAt: new Date().toISOString(),
         skippedFromWelcome: true,
       });
       return onboardingSkipToDashboard();
     }
-    await patchAdaptive(user.id, { welcomeSeenAt: new Date().toISOString() });
-    await afterSaveSuccess(user.id, "welcome");
+    await patchAdaptive(dataUserId, { welcomeSeenAt: new Date().toISOString() });
+    await afterSaveSuccess(user.id, dataUserId, "welcome");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -204,8 +212,8 @@ export async function onboardingSaveOperatingModel(formData: FormData) {
         operatingMode: toPrismaOperatingMode(operatingModeFromOperatingModelId(op)),
       },
     });
-    await patchAdaptive(user.id, { operatingModel: op });
-    await afterSaveSuccess(user.id, "operating_model");
+    await patchAdaptive(dataUserId, { operatingModel: op });
+    await afterSaveSuccess(user.id, dataUserId, "operating_model");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -220,11 +228,11 @@ export async function onboardingSaveBrandsLocations(formData: FormData) {
     const { sessionUser: user, dataUserId } = manage;
     const locations = z.coerce.number().int().min(1).max(9999).safeParse(formData.get("locationsCount"));
     const brands = z.coerce.number().int().min(0).max(9999).safeParse(formData.get("brandsCount"));
-    await patchAdaptive(user.id, {
+    await patchAdaptive(dataUserId, {
       locationsCount: locations.success ? locations.data : undefined,
       brandsCount: brands.success ? brands.data : undefined,
     });
-    await afterSaveSuccess(user.id, "brands_locations");
+    await afterSaveSuccess(user.id, dataUserId, "brands_locations");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -271,12 +279,12 @@ export async function onboardingSaveStep1(formData: FormData) {
         kitchenWorkflowDefault: d.kitchenWorkflowDefault?.trim() || null,
       },
     });
-    await patchAdaptive(user.id, {
+    await patchAdaptive(dataUserId, {
       locationsCount: d.locationsCount,
       brandsCount: d.brandsCount,
     });
     void recordLifecycleEventSafe(user.id, "onboarding_started");
-    await afterSaveSuccess(user.id, "business_profile");
+    await afterSaveSuccess(user.id, dataUserId, "business_profile");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -318,7 +326,7 @@ export async function onboardingSaveStep2(formData: FormData) {
         pickupWindows: d.pickupWindows?.trim() || null,
       },
     });
-    await afterSaveSuccess(user.id, "fulfillment");
+    await afterSaveSuccess(user.id, dataUserId, "fulfillment");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -359,7 +367,7 @@ export async function onboardingSaveStep3Menu(formData: FormData) {
         sortOrder: 0,
       },
     });
-    await afterSaveSuccess(user.id, "weekly_menu");
+    await afterSaveSuccess(user.id, dataUserId, "weekly_menu");
     revalidatePath("/onboarding");
     return { ok: true as const, menuId: menu.id };
   } catch (e) {
@@ -376,14 +384,14 @@ export async function onboardingSaveStep4Products(formData: FormData) {
     const mode = String(formData.get("mode") ?? "skip");
 
     if (mode === "skip") {
-      await afterSaveSuccess(user.id, "menu_items");
+      await afterSaveSuccess(user.id, dataUserId, "menu_items");
       revalidatePath("/onboarding");
       return { ok: true as const };
     }
 
     let resolvedMenuId = menuId;
     if (!resolvedMenuId) {
-      resolvedMenuId = await ensureServiceMenu(user.id);
+      resolvedMenuId = await ensureServiceMenu(dataUserId);
     }
 
     const menu = await prisma.menu.findFirst({
@@ -435,7 +443,7 @@ export async function onboardingSaveStep4Products(formData: FormData) {
       }
     }
 
-    await afterSaveSuccess(user.id, "menu_items");
+    await afterSaveSuccess(user.id, dataUserId, "menu_items");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -448,8 +456,8 @@ export async function onboardingSkipWeeklyMenu() {
     const manage = await requireOnboardingManageAccess("onboarding.skip_weekly_menu");
     if (!manage.ok) return { error: manage.error };
     const { sessionUser: user } = manage;
-    await markStepSkipped(user.id, "weekly_menu");
-    await afterSkipSuccess(user.id, "weekly_menu");
+    await markStepSkipped(dataUserId, "weekly_menu");
+    await afterSkipSuccess(user.id, dataUserId, "weekly_menu");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -491,17 +499,17 @@ export async function onboardingSaveStep5Channels(formData: FormData) {
   try {
     const manage = await requireOnboardingManageAccess("onboarding.save_step5_channels");
     if (!manage.ok) return { error: manage.error };
-    const { sessionUser: user, dataUserId } = manage;
+    const { sessionUser: user, dataUserId, workspaceId } = manage;
     const intents = intentFromForm(formData);
-    await patchAdaptive(user.id, { selectedChannelIntents: intents });
+    await patchAdaptive(dataUserId, { selectedChannelIntents: intents });
 
     await prisma.orderChannel.deleteMany({ where: { userId: dataUserId } });
 
     const rows: { userId: string; name: string; provider: IntegrationProvider; active: boolean; color?: string }[] =
-      [manualChannelRow(user.id, "Manual orders")];
+      [manualChannelRow(dataUserId, "Manual orders")];
 
     const pushManual = (name: string, color: string) => {
-      rows.push({ ...manualChannelRow(user.id, name), color });
+      rows.push({ ...manualChannelRow(dataUserId, name), color });
     };
 
     if (intents.includes("storefront")) {
@@ -561,7 +569,8 @@ export async function onboardingSaveStep5Channels(formData: FormData) {
 
     await prisma.orderChannel.createMany({
       data: rows.map((c) => ({
-        userId: c.userId,
+        userId: dataUserId,
+        workspaceId: workspaceId ?? undefined,
         name: c.name,
         provider: c.provider,
         active: c.active,
@@ -569,7 +578,7 @@ export async function onboardingSaveStep5Channels(formData: FormData) {
       })),
     });
 
-    await afterSaveSuccess(user.id, "sales_channels");
+    await afterSaveSuccess(user.id, dataUserId, "sales_channels");
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {
@@ -590,8 +599,8 @@ export async function onboardingSaveRecommendedModules(formData: FormData) {
       modules.push({ key: raw as ModuleKey, enabled: v === "on" });
     }
     const keys = entries.filter(([, v]) => v === "on").map(([k]) => k.replace(/^module_/, ""));
-    await patchAdaptive(user.id, { selectedModuleKeys: keys });
-    await afterSaveSuccess(user.id, "recommended_modules");
+    await patchAdaptive(dataUserId, { selectedModuleKeys: keys });
+    await afterSaveSuccess(user.id, dataUserId, "recommended_modules");
     revalidatePath("/onboarding");
     if (modules.length > 0) {
       void saveKitchenModulePreferences({ modules }).catch(() => undefined);
@@ -620,8 +629,8 @@ export async function onboardingComplete() {
       channels,
       skippedStepIds: skipped,
     });
-    await patchAdaptive(user.id, { setupTasks: tasks });
-    await markStepCompleted(user.id, "finish");
+    await patchAdaptive(dataUserId, { setupTasks: tasks });
+    await markStepCompleted(dataUserId, "finish");
     await prisma.userProfile.update({
       where: { id: user.id },
       data: {
@@ -706,10 +715,10 @@ export async function onboardingSkipStepGeneric(formData: FormData) {
   try {
     const manage = await requireOnboardingManageAccess("onboarding.skip_step");
     if (!manage.ok) return { error: manage.error };
-    const { sessionUser: user } = manage;
+    const { sessionUser: user, dataUserId } = manage;
     const sid = stepIdFromForm(formData);
     if (!sid) return { error: "Missing step" };
-    await afterSkipSuccess(user.id, sid);
+    await afterSkipSuccess(user.id, dataUserId, sid);
     revalidatePath("/onboarding");
     return { ok: true as const };
   } catch (e) {

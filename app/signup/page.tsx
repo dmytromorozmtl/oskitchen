@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 
 import { SignupForm } from '@/components/auth/signup-form';
 import { ConversionTrustBadges } from '@/components/marketing/conversion-trust-badges';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { OSKitchenLogo } from '@/components/ui/os-kitchen-logo';
 import { getSessionUser } from '@/lib/auth';
 import { SIGNUP_MARKETING } from '@/lib/marketing/signup-marketing-content';
@@ -32,9 +31,6 @@ export default async function SignupPage() {
 
   return (
     <div className="relative min-h-screen bg-white">
-      <div className="absolute right-6 top-6">
-        <ThemeToggle />
-      </div>
       <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-16">
         <div className="mb-8 text-center">
           <OSKitchenLogo href="/" size="lg" className="inline-flex" />

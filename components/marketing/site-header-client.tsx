@@ -7,7 +7,6 @@ import { ProductNavDropdown } from '@/components/marketing/product-nav-dropdown'
 import { ResourcesNavDropdown } from '@/components/marketing/resources-nav-dropdown';
 import { SiteMobileNav } from '@/components/marketing/site-mobile-nav';
 import { SolutionsNavDropdown } from '@/components/marketing/solutions-nav-dropdown';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { OSKitchenLogo } from '@/components/ui/os-kitchen-logo';
 import { Button } from '@/components/ui/button';
 import {
@@ -51,7 +50,6 @@ export function SiteHeaderClient({ isAuthenticated = false }: SiteHeaderClientPr
         </nav>
 
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-          <ThemeToggle />
           {isAuthenticated ? (
             <>
               {SITE_AUTH_QUICK_LINKS.map((item) => (

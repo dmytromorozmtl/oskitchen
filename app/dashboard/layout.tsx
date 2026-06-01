@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { OfflineIndicator } from "@/components/pwa/offline-indicator";
 import { DemoBanner } from "@/components/demo/demo-banner";
 import { NpsSurveyPrompt } from "@/components/dashboard/nps-survey-prompt";
 import { SupportWidget } from "@/components/dashboard/support-widget";
@@ -158,6 +159,7 @@ export default async function DashboardLayout({
         </ModuleRouteGate>
       </PageShell>
       <SupportWidget />
+      <OfflineIndicator />
       <NpsSurveyPrompt workspaceCreatedAt={workspaceForNps?.createdAt?.toISOString() ?? null} />
     </DashboardShell>
     </WorkspacePermissionsProvider>

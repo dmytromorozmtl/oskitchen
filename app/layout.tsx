@@ -7,7 +7,6 @@ import { GoogleAdsTracking } from "@/components/analytics/google-ads";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { LinkedInInsightTag } from "@/components/analytics/linkedin-insight";
 import { MetaPixel } from "@/components/analytics/meta-pixel";
-import { OfflineIndicator } from "@/components/pwa/offline-indicator";
 import { RegisterServiceWorker } from "@/components/pwa/register-service-worker";
 import { Providers } from "@/components/providers/providers";
 import {
@@ -110,7 +109,6 @@ export default function RootLayout({
         <LinkedInInsightTag />
         <CookieConsentBanner />
         <RegisterServiceWorker />
-        <OfflineIndicator />
       </body>
     </html>
   );

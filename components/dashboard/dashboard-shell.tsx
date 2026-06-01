@@ -8,7 +8,6 @@ import { MenuSquare, Shield, User, Bell, KeyRound, Users, Sparkles } from "lucid
 
 import { BillingAccessGuard } from "@/components/billing/billing-access-guard";
 import { TrialBanner } from "@/components/billing/trial-banner";
-import { FeedbackLauncher } from "@/components/feedback/feedback-launcher";
 
 import { CommandPalette } from "@/components/dashboard/command-palette";
 import {
@@ -348,7 +347,6 @@ export function DashboardShell({
             <main className="flex-1 px-4 py-8 pb-24 sm:px-8 lg:pb-8">{children}</main>
           </BrandContextProvider>
         </BillingAccessGuard>
-        <FeedbackLauncher />
       </div>
     </div>
   );

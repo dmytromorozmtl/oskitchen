@@ -4,7 +4,6 @@ import { Suspense } from "react";
 
 import { LoginForm } from "@/components/auth/login-form";
 import { SsoLoginEntry } from "@/components/auth/sso-login-entry";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { getSessionUser } from "@/lib/auth";
 import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
@@ -21,9 +20,6 @@ export default async function LoginPage() {
 
   return (
     <div className="relative min-h-screen bg-white">
-      <div className="absolute right-6 top-6">
-        <ThemeToggle />
-      </div>
       <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-16">
         <div className="mb-8 text-center">
           <OSKitchenLogo href="/" size="lg" className="inline-flex" />
