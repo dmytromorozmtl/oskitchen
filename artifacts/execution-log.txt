@@ -1698,3 +1698,13 @@ Actions: 20/30
 Created: docs/console-log-sweep-plan.md
 Baseline: 3181 total; ~6 in production runtime (lib/integrations)
 ---
+---
+Cycle: 19 (20260601-102830)
+Action: 24 — Case study template (publish gates + long/short forms)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 21/30
+Created: docs/case-study-template.md
+Note: Canonical template; supersedes legacy docs/templates/CASE_STUDY_TEMPLATE.md for new drafts
+---
