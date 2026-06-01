@@ -1965,3 +1965,10 @@ Files: app/dashboard/marketplace/vendors/page.tsx, app/dashboard/marketplace/ven
 Marketplace progress: 10/33 (phase-2-cycle-9-vendor-management done)
 Next: Cycle 10 — app/dashboard/marketplace/analytics/page.tsx buyer analytics
 ---
+Cycle: marketplace-10
+Timestamp: 2026-06-01T23:00:00.000Z
+Action: feat: marketplace buyer analytics — spend donut/bar/line charts, cost per unit table, monthly budget alerts at 85%, inventory reorder integration, CSV/PDF export
+Files: app/dashboard/marketplace/analytics/page.tsx, services/marketplace/marketplace-analytics-service.ts, components/marketplace/marketplace-analytics-*.tsx, app/api/marketplace/analytics/export/route.ts
+Marketplace progress: 11/33 (phase-2-cycle-10-buyer-analytics done)
+Next: Cycle 11 — app/vendor/register/page.tsx vendor registration & verification
+---

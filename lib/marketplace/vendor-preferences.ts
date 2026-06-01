@@ -10,6 +10,7 @@ export type MarketplaceVendorContract = {
 export type MarketplaceVendorPreferences = {
   favoriteVendorIds: string[];
   vendorContracts: Record<string, MarketplaceVendorContract>;
+  monthlyBudgetUsd?: number | null;
 };
 
 export const DEFAULT_MARKETPLACE_VENDOR_PREFERENCES: MarketplaceVendorPreferences = {
@@ -44,7 +45,16 @@ export function parseMarketplaceVendorPreferences(raw: unknown): MarketplaceVend
     }
   }
 
-  return { favoriteVendorIds, vendorContracts };
+  return { favoriteVendorIds, vendorContracts, monthlyBudgetUsd: parseBudget(raw.monthlyBudgetUsd) };
+}
+
+function parseBudget(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) return value;
+  if (typeof value === "string" && value.trim()) {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return null;
 }
 
 export function marketplacePrefsFromSettingsCenter(settingsCenterJson: unknown): MarketplaceVendorPreferences {
