@@ -47,6 +47,23 @@ export function vendorProductStatusLabel(status: MarketplaceProductStatus): stri
     .join(" ");
 }
 
+export function vendorProductStatusBadgeVariant(
+  status: MarketplaceProductStatus,
+): "default" | "secondary" | "destructive" | "outline" {
+  switch (status) {
+    case "ACTIVE":
+      return "default";
+    case "ARCHIVED":
+      return "destructive";
+    case "PENDING_REVIEW":
+      return "secondary";
+    case "OUT_OF_STOCK":
+      return "outline";
+    default:
+      return "outline";
+  }
+}
+
 export function slugifyVendorProduct(name: string, sku: string): string {
   const base = name
     .toLowerCase()
