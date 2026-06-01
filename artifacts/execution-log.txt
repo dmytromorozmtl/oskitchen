@@ -2007,3 +2007,10 @@ Files: app/vendor/(cabinet)/finance/page.tsx, services/marketplace/vendor-financ
 Marketplace progress: 16/33 (phase-3-cycle-15-vendor-finance done)
 Next: Cycle 16 — app/vendor/analytics/page.tsx vendor analytics
 ---
+Cycle: marketplace-16
+Timestamp: 2026-06-02T05:00:00.000Z
+Action: feat: vendor analytics — sales revenue chart, conversion funnel, product performance table, customer segments, marketplace insights, inventory forecasting, CSV export
+Files: app/vendor/(cabinet)/analytics/page.tsx, services/marketplace/vendor-analytics-service.ts, components/marketplace/vendor-analytics-client.tsx, app/api/vendor/analytics/export/route.ts
+Marketplace progress: 17/33 (phase-3-cycle-16-vendor-analytics done)
+Next: Cycle 17 — app/vendor/settings/page.tsx vendor settings
+---
