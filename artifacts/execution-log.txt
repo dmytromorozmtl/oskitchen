@@ -1930,3 +1930,10 @@ Files: app/dashboard/marketplace/page.tsx, app/dashboard/marketplace/layout.tsx,
 Marketplace progress: 4/33 (phase-2-cycle-4-dashboard done)
 Next: Cycle 5 — app/dashboard/marketplace/catalog/page.tsx product catalog
 ---
+Cycle: marketplace-5
+Timestamp: 2026-06-01T18:00:00.000Z
+Action: feat: marketplace catalog — category sidebar, filters, sort, pagination, compare checkbox, quick add
+Files: app/dashboard/marketplace/catalog/page.tsx, services/marketplace/marketplace-catalog-service.ts, lib/marketplace/catalog-filters.ts, components/marketplace/marketplace-*-catalog*.tsx
+Marketplace progress: 6/33 (phase-2-cycle-5-catalog done)
+Next: Cycle 6 — app/dashboard/marketplace/products/[slug]/page.tsx product detail
+---
