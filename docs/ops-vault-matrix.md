@@ -12,9 +12,12 @@
 | Field | Value |
 |-------|-------|
 | Required secrets | **11** |
-| Current readiness | Run `npm run check-vault-readiness -- --write` → `artifacts/vault-readiness-report.json` |
+| Last audit | **2026-06-01** — `docs/fullreport1june.md` |
+| Current `presentCount` | **0/11** (`artifacts/vault-readiness-report.json`) |
+| Current readiness | Run `npm run check-vault-readiness -- --write` → refreshes artifact |
 | Blocking status | `awaiting_ops_credentials` until **11/11 present** and child smokes **PASS** |
 | Honesty rule | Missing secrets → **SKIPPED WITH REASON**, never fake PASS |
+| Execution tracker | `artifacts/30-action-tracker.json` → action `1-vault-secrets` |
 
 **VP Ops gate:** Sign [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md), assign owners below, then track each row to `present: true`.
 

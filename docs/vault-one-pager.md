@@ -37,11 +37,35 @@ npm run smoke:pilot-gono-go  # → GO decision
 ```
 
 ## Current Blockers Without Vault
-- Pilot executable score: 85/100 (stuck since May 28)
-- 0/11 secrets configured
-- 0 LIVE integrations
-- 0 staging proofs
-- 0 paid pilots
+
+| Metric | Value | Evidence |
+|--------|-------|----------|
+| Secrets configured | **0/11** | `artifacts/vault-readiness-report.json` |
+| `vaultReady` | **false** | same |
+| `p0ProofStatus` | `awaiting_ops_credentials` | same |
+| Pilot GO/NO-GO | **NO-GO** | `artifacts/pilot-gono-go-summary.json` |
+| Pilot executable score | **26/100** | `docs/fullreport1june.md` §1 |
+| LIVE integrations | **0** | `lib/integrations/integration-registry.ts` |
+| Paid pilots | **0** | — |
+
+## Human gate (VP Operations)
+
+This step **cannot be completed by engineering alone**. VP Ops must:
+
+1. Assign owners in [`ops-vault-matrix.md`](./ops-vault-matrix.md) (DevOps ×6, Security ×5, Integration ×1).
+2. Store all 11 values in company secrets manager (1Password / Vault) — **never commit to git**.
+3. Mirror to GitHub Actions secrets + Vercel staging env (see matrix per-variable).
+4. Run verification:
+   ```bash
+   npm run ops:validate-p0-vault-env
+   npm run check-vault-readiness -- --write
+   ```
+5. Sign [`era18-p0-staging-proof-ops-checklist.md`](./era18-p0-staging-proof-ops-checklist.md).
+
+**Pass criteria:** `presentCount: 11`, `vaultReady: true` in `artifacts/vault-readiness-report.json`.
+
+Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs done; credentials pending human).
 
 ## Deadline
+
 **Today.** Every day without vault = one day delayed to first revenue.
