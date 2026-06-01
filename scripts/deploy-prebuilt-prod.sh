@@ -66,9 +66,14 @@ if [[ "$REUSE_PREDEPLOY_BUILD" -eq 0 ]] && [[ -d .next ]]; then
   mv .next ".next.trash.${STAMP}" 2>/dev/null || true
 fi
 if [[ -d .vercel/output ]]; then
-  chmod -R u+w .vercel/output 2>/dev/null || true
-  find .vercel/output -maxdepth 3 -type d \( -name 'static *' -o -name 'server *' \) -exec rm -rf {} + 2>/dev/null || true
-  mv .vercel/output ".vercel/output.bak.${STAMP}" 2>/dev/null || true
+  if [[ "$REUSE_PREDEPLOY_BUILD" -eq 1 ]]; then
+    # Avoid chmod -R on iCloud (can hang 20+ min on partial output trees).
+    mv .vercel/output ".vercel/output.bak.${STAMP}" 2>/dev/null || true
+  else
+    chmod -R u+w .vercel/output 2>/dev/null || true
+    find .vercel/output -maxdepth 3 -type d \( -name 'static *' -o -name 'server *' \) -exec rm -rf {} + 2>/dev/null || true
+    mv .vercel/output ".vercel/output.bak.${STAMP}" 2>/dev/null || true
+  fi
 fi
 rm -rf .vercel/output-stale-* 2>/dev/null || true
 rm -rf node_modules/.cache 2>/dev/null || true
