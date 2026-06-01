@@ -1558,3 +1558,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 1/30
 Note: Updated vault-one-pager.md + ops-vault-matrix.md with June 1 audit metrics and human gate checklist.
+---
+Cycle: 20260601-095836
+Action: 2 — Delete duplicate untracked files
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 2/30
+Removed: lib/scope/workspace-resource-scope 2.ts, public/favicon 3.svg, public/favicon 4.svg, public/manifest 3.webmanifest, public/manifest 4.webmanifest, public/sw 2.js
