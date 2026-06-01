@@ -1895,3 +1895,16 @@ Cycle: 67-88 / session-8-29 — P1-P3 re-evaluated; all deliverables present
 Cycle: 89 / session-30 — FINAL #31 honest refresh (ready:false, score:90)
 Vault: 0/11 | P0: SKIPPED (5-7) | GO: NO-GO | Actions: 27/30
 ---
+---
+Cycle: vault-seed (20260601)
+Action: Vault seed + Auth0 SAML path (NOT Auth0 SDK)
+Vault: 11/11 (local .env.staging.local)
+P0: staging health attempted — blocked on tsx PATH in npm scripts
+GO: NO-GO
+Actions: 27/30 (5-7 still todo until P0 proof PASS)
+Notes:
+  - DATABASE_URL password rotated; workspace UUID 5e831e17-a30f-45df-b655-5bd8f46979ff
+  - SSO_STAGING_SUPABASE_PROVIDER_REF still placeholder — configure Supabase SAML
+  - Auth0 via docs/auth0-supabase-saml-setup.md; login/signup unchanged
+  - check-vault-readiness now loads .env.staging.local
+---

@@ -66,7 +66,7 @@
     "smoke:channel-github-workflow-first-green": "tsx scripts/smoke-channel-github-workflow-first-green-era17.ts",
     "smoke:pilot-tier-preflight": "tsx scripts/smoke-pilot-tier-preflight-era17.ts",
     "smoke:p0-staging-proof-unblock": "tsx scripts/smoke-p0-staging-proof-unblock-era17.ts",
-    "check-vault-readiness": "tsx scripts/check-vault-readiness.ts",
+    "check-vault-readiness": "node ./node_modules/tsx/dist/cli.mjs scripts/check-vault-readiness.ts",
     "icp-qualification-check": "tsx scripts/icp-qualification-check.ts",
     "run:production-pilot-ready": "tsx scripts/run-production-pilot-ready-orchestrator.ts",
     "ops:run-p0-staging-proof-execution": "tsx scripts/ops/run-p0-staging-proof-execution.ts",

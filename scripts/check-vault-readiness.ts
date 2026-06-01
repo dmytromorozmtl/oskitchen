@@ -13,6 +13,7 @@ import {
   formatVaultReadinessReportLines,
   VAULT_READINESS_REPORT_ARTIFACT,
 } from "@/lib/ops/vault-readiness-report";
+import { loadStagingPilotEnv } from "./lib/load-dotenv-file";
 
 function writeArtifacts(report: ReturnType<typeof resolveVaultReadinessReport>, writeHtml: boolean): void {
   const jsonPath = join(process.cwd(), VAULT_READINESS_REPORT_ARTIFACT);
@@ -29,12 +30,14 @@ export function runVaultReadinessCheck(options?: {
   env?: NodeJS.ProcessEnv;
   writeHtml?: boolean;
 }): ReturnType<typeof resolveVaultReadinessReport> {
+  loadStagingPilotEnv();
   const report = resolveVaultReadinessReport(process.cwd(), { env: options?.env });
   writeArtifacts(report, options?.writeHtml ?? false);
   return report;
 }
 
 function main() {
+  loadStagingPilotEnv();
   const jsonOnly = process.argv.includes("--json");
   const writeHtml = process.argv.includes("--write-html") || process.argv.includes("--write");
   const report = runVaultReadinessCheck({ writeHtml });

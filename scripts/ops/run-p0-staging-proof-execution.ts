@@ -23,6 +23,7 @@ import {
   P0_STAGING_PROOF_EXECUTION_SUMMARY_ARTIFACT,
 } from "@/lib/ops/p0-staging-proof-execution-orchestrator";
 import { runVaultReadinessCheck } from "@/scripts/check-vault-readiness";
+import { loadStagingPilotEnv } from "@/scripts/lib/load-dotenv-file";
 
 type LooseArtifact = Record<string, unknown>;
 
@@ -103,6 +104,7 @@ export async function runP0StagingProofExecution(options?: {
   execute?: boolean;
   writeArtifacts?: boolean;
 }): Promise<ReturnType<typeof buildP0StagingProofExecutionSummary>> {
+  loadStagingPilotEnv();
   let summary = await collectExecutionContext();
 
   if (options?.execute) {
@@ -119,6 +121,7 @@ export async function runP0StagingProofExecution(options?: {
 }
 
 async function main() {
+  loadStagingPilotEnv();
   const jsonOnly = process.argv.includes("--json");
   const execute = process.argv.includes("--execute");
 

@@ -40,8 +40,8 @@ npm run smoke:pilot-gono-go  # → GO decision
 
 | Metric | Value | Evidence |
 |--------|-------|----------|
-| Secrets configured | **0/11** | `artifacts/vault-readiness-report.json` |
-| `vaultReady` | **false** | same |
+| Secrets configured | **11/11 (local)** | `.env.staging.local` + `artifacts/vault-readiness-report.json` |
+| `vaultReady` | **true (local shell)** | Run `npm run check-vault-readiness -- --write` after sourcing staging env |
 | `p0ProofStatus` | `awaiting_ops_credentials` | same |
 | Pilot GO/NO-GO | **NO-GO** | `artifacts/pilot-gono-go-summary.json` |
 | Pilot executable score | **26/100** | `docs/fullreport1june.md` §1 |

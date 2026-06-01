@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KitchenOS Vault Readiness Report</title>
+  <title>OS Kitchen Vault Readiness Report</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
     h1, h2 { margin-bottom: 0.5rem; }
@@ -20,13 +20,13 @@
   </style>
 </head>
 <body>
-  <h1>KitchenOS — Ops Vault Readiness</h1>
-  <p class="meta">Generated 2026-05-29T17:29:09.648Z · Policy era17-p0-staging-proof-unblock-v1</p>
+  <h1>OS Kitchen — Ops Vault Readiness</h1>
+  <p class="meta">Generated 2026-06-01T15:02:48.677Z · Policy era17-p0-staging-proof-unblock-v1</p>
 
-  <div class="banner banner-blocked">
-    <strong>Vault ready:</strong> NO
-    (0/11 secrets present)<br />
-    <strong>Day 0 milestone:</strong> blocked<br />
+  <div class="banner banner-ready">
+    <strong>Vault ready:</strong> YES
+    (11/11 secrets present)<br />
+    <strong>Day 0 milestone:</strong> env_complete<br />
     <strong>P0 proof:</strong> awaiting_ops_credentials
     (aggregate SKIPPED)
   </div>
@@ -38,15 +38,15 @@
     <thead><tr><th></th><th>Variable</th><th>Owner</th><th>Purpose</th><th>Child smokes</th><th>Doc</th></tr></thead>
     <tbody>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>E2E_STAGING_BASE_URL</code></td>
         <td>DevOps</td>
-        <td>Staging KitchenOS base URL for SSO and E2E workflows</td>
+        <td>Staging OS Kitchen base URL for SSO and E2E workflows</td>
         <td>smoke:enterprise-sso-idp-staging, smoke:staging-workflows-first-green</td>
         <td><a href="docs/GITHUB_E2E_STAGING_SECRETS.md">docs/GITHUB_E2E_STAGING_SECRETS.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>E2E_LOGIN_EMAIL</code></td>
         <td>DevOps</td>
         <td>Dashboard login email for staging Playwright workflows</td>
@@ -54,7 +54,7 @@
         <td><a href="docs/GITHUB_E2E_STAGING_SECRETS.md">docs/GITHUB_E2E_STAGING_SECRETS.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>E2E_LOGIN_PASSWORD</code></td>
         <td>DevOps</td>
         <td>Dashboard login password for staging Playwright workflows</td>
@@ -62,7 +62,7 @@
         <td><a href="docs/GITHUB_E2E_STAGING_SECRETS.md">docs/GITHUB_E2E_STAGING_SECRETS.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>SSO_STAGING_WORKSPACE_ID</code></td>
         <td>Security / CTO</td>
         <td>Pilot workspace UUID for tenant-bound SSO smoke</td>
@@ -70,15 +70,15 @@
         <td><a href="docs/enterprise-sso-idp-staging-smoke-plan.md">docs/enterprise-sso-idp-staging-smoke-plan.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>SSO_STAGING_IDP_VENDOR</code></td>
         <td>Security / CTO</td>
-        <td>IdP vendor label (OKTA or ENTRA_ID)</td>
+        <td>IdP vendor label (OKTA, ENTRA_ID, or AUTH0)</td>
         <td>smoke:enterprise-sso-idp-staging</td>
         <td><a href="docs/enterprise-sso-idp-staging-smoke-plan.md">docs/enterprise-sso-idp-staging-smoke-plan.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>SSO_STAGING_ALLOWED_DOMAIN</code></td>
         <td>Security / CTO</td>
         <td>Allowed email domain for SSO test user</td>
@@ -86,7 +86,7 @@
         <td><a href="docs/enterprise-sso-idp-staging-smoke-plan.md">docs/enterprise-sso-idp-staging-smoke-plan.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>SSO_STAGING_TEST_EMAIL</code></td>
         <td>Security / CTO</td>
         <td>Staff test user in allowed SSO domain</td>
@@ -94,7 +94,7 @@
         <td><a href="docs/enterprise-sso-idp-staging-smoke-plan.md">docs/enterprise-sso-idp-staging-smoke-plan.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>SSO_STAGING_SUPABASE_PROVIDER_REF</code></td>
         <td>Security / CTO</td>
         <td>Supabase Auth SAML provider reference</td>
@@ -102,7 +102,7 @@
         <td><a href="docs/enterprise-sso-idp-staging-smoke-plan.md">docs/enterprise-sso-idp-staging-smoke-plan.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>DATABASE_URL</code></td>
         <td>DevOps</td>
         <td>Staging Postgres connection for channel live smoke</td>
@@ -110,7 +110,7 @@
         <td><a href="docs/commercial-pilot-runbook.md">docs/commercial-pilot-runbook.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>ENCRYPTION_KEY</code></td>
         <td>DevOps</td>
         <td>App encryption key for integration credential rows</td>
@@ -118,7 +118,7 @@
         <td><a href="docs/commercial-pilot-runbook.md">docs/commercial-pilot-runbook.md</a></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td><code>CHANNEL_SMOKE_OWNER_EMAIL</code></td>
         <td>Integration engineer</td>
         <td>Workspace owner email for Woo/Shopify tenant selector</td>
@@ -132,27 +132,27 @@
     <thead><tr><th></th><th>Phase</th><th>Missing</th><th>Smoke scripts</th></tr></thead>
     <tbody>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Phase 1 — Staging login</td>
-        <td>E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD</td>
+        <td>—</td>
         <td>smoke:staging-workflows-first-green</td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Phase 2 — Database + encryption</td>
-        <td>DATABASE_URL, ENCRYPTION_KEY</td>
+        <td>—</td>
         <td>smoke:woo-shopify-live</td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Phase 3 — Channel tenant</td>
-        <td>CHANNEL_SMOKE_OWNER_EMAIL</td>
+        <td>—</td>
         <td>smoke:woo-shopify-live</td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Phase 4 — SSO IdP</td>
-        <td>SSO_STAGING_WORKSPACE_ID, SSO_STAGING_IDP_VENDOR, SSO_STAGING_ALLOWED_DOMAIN, SSO_STAGING_TEST_EMAIL, SSO_STAGING_SUPABASE_PROVIDER_REF</td>
+        <td>—</td>
         <td>smoke:enterprise-sso-idp-staging</td>
       </tr></tbody>
   </table>
@@ -185,7 +185,7 @@
   </table>
 
   <h2>Recommended next steps</h2>
-  <ol><li><code>Complete Phase 1 — Staging login: missing E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD</code></li><li><code>Read docs/GITHUB_E2E_STAGING_SECRETS.md</code></li><li><code>Configure missing secrets (11/11): E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD, SSO_STAGING_WORKSPACE_ID, SSO_STAGING_IDP_VENDOR, SSO_STAGING_ALLOWED_DOMAIN, SSO_STAGING_TEST_EMAIL, SSO_STAGING_SUPABASE_PROVIDER_REF, DATABASE_URL, ENCRYPTION_KEY, CHANNEL_SMOKE_OWNER_EMAIL</code></li><li><code>Read docs/era18-p0-staging-proof-ops-checklist.md</code></li><li><code>npm run ops:validate-p0-vault-env</code></li><li><code>npm run ops:run-p0-vault-day0-orchestrator -- --write</code></li><li><code>npm run smoke:pilot-gono-go</code></li></ol>
+  <ol><li><code>npm run smoke:enterprise-sso-idp-staging</code></li><li><code>npm run smoke:staging-workflows-first-green</code></li><li><code>npm run smoke:woo-shopify-live</code></li><li><code>npm run ops:run-p0-staging-proof-execution -- --write</code></li><li><code>npm run smoke:p0-staging-proof-unblock</code></li><li><code>npm run ops:validate-p0-staging-proof-integrity</code></li><li><code>npm run smoke:pilot-gono-go</code></li></ol>
 
   <p class="honesty">Canonical matrix: docs/ops-vault-matrix.md · Checklist: docs/era18-p0-staging-proof-ops-checklist.md</p>
 </body>
