@@ -1037,6 +1037,7 @@
     "db:repair-storefront": "node ./node_modules/prisma/build/index.js db execute --schema prisma/schema.prisma --file prisma/sql/ensure-storefront-followup-columns.sql",
     "db:apply-storefront-phase2": "bash scripts/apply-storefront-phase2-sql.sh",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:marketplace-categories": "tsx prisma/seed-marketplace-categories.ts",
     "db:seed-demo": "tsx prisma/seed-demo.ts",
     "db:seed:e2e-pos": "tsx scripts/seed-e2e-pos-fixture.ts",
     "db:prune:e2e-pos-orders": "tsx scripts/prune-e2e-pos-orders.ts",

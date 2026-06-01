@@ -1908,3 +1908,11 @@ Notes:
   - Auth0 via docs/auth0-supabase-saml-setup.md; login/signup unchanged
   - check-vault-readiness now loads .env.staging.local
 ---
+Cycle: marketplace-2
+Timestamp: 2026-06-01T15:00:00.000Z
+Action: feat: marketplace categories seed — 8 HoReCa parent categories with child subcategories (idempotent upsert by slug)
+Files: prisma/seed-marketplace-categories.ts, tests/unit/marketplace-category-seed.test.ts, package.json, artifacts/marketplace-tracker.json
+Script: npm run db:seed:marketplace-categories
+Marketplace progress: 2/33 (phase-1-cycle-2-category-seed done)
+Next: Cycle 3 — marketplace RBAC permissions in lib/permissions/permissions.ts
+---
