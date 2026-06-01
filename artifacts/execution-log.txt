@@ -1718,3 +1718,13 @@ Actions: 22/30
 Created: docs/pen-test-vendor-selection.md
 Primary: Cobalt Q3 2026 post-vault; not scheduled yet
 ---
+---
+Cycle: 21 (20260601-103005)
+Action: 26 — Demo→CRM integration plan (Workflow 1 PARTIAL)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 23/30
+Created: docs/demo-crm-integration-plan.md
+Gap: DemoRequest/BetaLead silos; HubSpot no sync-back; Phase 1 unify native capture
+---
