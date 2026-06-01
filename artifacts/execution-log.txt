@@ -1638,3 +1638,11 @@ P0: SKIPPED
 GO: NO-GO
 Actions: 13/30
 Created: docs/pilot-week1-checklist.md
+---
+Cycle: 12 (20260601-101723)
+Action: 17 — Stripe Terminal hardware test plan (simulated → M2 staging → pilot live)
+Vault: 0/11
+P0: SKIPPED
+GO: NO-GO
+Actions: 14/30
+Created: docs/stripe-terminal-hardware-test-plan.md

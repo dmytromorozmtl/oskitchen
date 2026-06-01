@@ -15,7 +15,7 @@
   "14-cross-tenant-e2e": "done",
   "15-webhook-matrix": "done",
   "16-pilot-template": "done",
-  "17-terminal-hardware": "todo",
+  "17-terminal-hardware": "done",
   "18-permission-denied-card": "todo",
   "19-unified-onboarding": "todo",
   "20-report-perf": "todo",
