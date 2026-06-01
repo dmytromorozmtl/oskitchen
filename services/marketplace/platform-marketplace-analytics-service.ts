@@ -232,6 +232,9 @@ export async function loadPlatformMarketplaceAnalytics(): Promise<PlatformMarket
     repeat: buyerOrderGroups.filter((row) => row._count._all >= 2).length,
   };
 
+  const { loadFeaturedPlacementRevenue30d } = await import("@/services/marketplace/featured-service");
+  const featuredPlacementRevenue30d = await loadFeaturedPlacementRevenue30d();
+
   return {
     currency: "USD",
     gmv30d,
@@ -239,7 +242,7 @@ export async function loadPlatformMarketplaceAnalytics(): Promise<PlatformMarket
     orders30d,
     commissionRevenue30d,
     commissionRevenueAllTime,
-    featuredPlacementRevenue30d: 0,
+    featuredPlacementRevenue30d,
     gmvTrend,
     revenueByCategory,
     revenueByVendorTier,
