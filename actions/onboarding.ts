@@ -590,8 +590,7 @@ export async function onboardingSaveRecommendedModules(formData: FormData) {
   try {
     const manage = await requireOnboardingManageAccess("onboarding.save_recommended_modules");
     if (!manage.ok) return { error: manage.error };
-    const { sessionUser: user } = manage;
-    const modules: { key: ModuleKey; enabled: boolean }[] = [];
+    const { sessionUser: user, dataUserId } = manage;
     const entries = [...formData.entries()].filter(([k]) => k.startsWith("module_"));
     for (const [k, v] of entries) {
       const raw = k.replace(/^module_/, "");
