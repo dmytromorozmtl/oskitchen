@@ -6,6 +6,13 @@
   "regions": [
     "iad1"
   ],
+  "redirects": [
+    {
+      "source": "/kitchenos",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/webhook-jobs",
