@@ -57,7 +57,7 @@ Deploy domain: **https://os-kitchen.com**
 | `SHOPIFY_API_SECRET` | Shopify webhook signing |
 | `SHOPIFY_STORE_DOMAIN` | Shopify Admin API |
 | `SSO_STAGING_WORKSPACE_ID` | Enterprise SSO (staging proof) |
-| `SSO_STAGING_IDP_VENDOR` | Enterprise SSO |
+| `SSO_STAGING_IDP_VENDOR` | `OKTA`, `ENTRA_ID`, or **`AUTH0`** (SAML via Supabase) |
 | `SSO_STAGING_ALLOWED_DOMAIN` | Enterprise SSO |
 | `SSO_STAGING_TEST_EMAIL` | Enterprise SSO |
 | `SSO_STAGING_SUPABASE_PROVIDER_REF` | Enterprise SSO |
@@ -68,6 +68,21 @@ Deploy domain: **https://os-kitchen.com**
 | `CHANNEL_SMOKE_OWNER_EMAIL` | Live channel smoke tests |
 | `SENTRY_DSN` | Server error reporting |
 | `NEXT_PUBLIC_SENTRY_DSN` | Browser error reporting |
+
+---
+
+## Auth0 enterprise SSO (SAML IdP — staging / pilot)
+
+KitchenOS sessions stay on **Supabase Auth**. Auth0 connects as a **SAML IdP** in Supabase Dashboard — see [`auth0-supabase-saml-setup.md`](./auth0-supabase-saml-setup.md).
+
+| Variable | Where | Notes |
+|----------|-------|-------|
+| `AUTH0_DOMAIN` | Ops vault only | e.g. `dev-xxxxx.us.auth0.com` — for IdP app config, not Next.js SDK |
+| `AUTH0_CLIENT_ID` | Ops vault only | Auth0 SAML application |
+| `AUTH0_CLIENT_SECRET` | Ops vault only | Never commit |
+| `SSO_STAGING_*` | Staging env | Required for action 6 smoke (`SSO_STAGING_IDP_VENDOR=AUTH0`) |
+
+Do **not** set `AUTH0_SECRET` / `APP_BASE_URL` for `@auth0/nextjs-auth0` — that SDK path conflicts with `/auth/callback`.
 
 ---
 
