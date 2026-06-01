@@ -17,7 +17,7 @@ Every P0 smoke, every live integration test, every staging proof is **blocked** 
 | 5 | E2E_LOGIN_EMAIL | Test user email on staging | QA |
 | 6 | E2E_LOGIN_PASSWORD | Test user password on staging | QA |
 | 7 | SSO_STAGING_WORKSPACE_ID | Okta/Auth0 dev tenant | Security |
-| 8 | SSO_STAGING_IDP_VENDOR | "okta" or "auth0" | Security |
+| 8 | SSO_STAGING_IDP_VENDOR | `OKTA`, `ENTRA_ID`, or `AUTH0` | Security |
 | 9 | SSO_STAGING_ALLOWED_DOMAIN | Test email domain | Security |
 | 10 | SSO_STAGING_TEST_EMAIL | Test SSO user email | Security |
 | 11 | SSO_STAGING_SUPABASE_PROVIDER_REF | Supabase Auth → SSO settings | Security |
@@ -69,7 +69,7 @@ This step **cannot be completed by engineering alone**. VP Ops must:
 
 Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs done; credentials pending human).
 
-## 30-action executor status (2026-06-01, cyclic session — cycle 1/30)
+## 30-action executor status (2026-06-01, cycle 59 — P0 #1 re-entry)
 
 | Bucket | Done | Blocked on vault |
 |--------|------|------------------|
@@ -80,7 +80,7 @@ Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs d
 | P3 (28–30) | ✅ 3/3 | — |
 | **Agent total** | **27/30** | **3/30** need `presentCount: 11` |
 
-**Pre-flight (cycle 1 diagnostic):** TS 0 errors, build green, tests green, vault **0/11**, git remote unset, Auth0 SAML landed (`2647e1f1`), repo **815** commits local-only.
+**Latest diagnostic:** vault **0/11**, `missingKeys: 11`, git remote unset, **819** local commits (`f93e9d50`), final report **ready:false** score **90**.
 
 After vault PASS, run in order (tracker actions 5→7):
 
