@@ -11,6 +11,11 @@ export const MARKETPLACE_CATALOG_SORT_OPTIONS = [
 export type MarketplaceCatalogSort =
   (typeof MARKETPLACE_CATALOG_SORT_OPTIONS)[number]["value"];
 
+export type MarketplaceCatalogVendorOption = {
+  id: string;
+  companyName: string;
+};
+
 export type MarketplaceCatalogFilters = {
   q: string;
   category: string;

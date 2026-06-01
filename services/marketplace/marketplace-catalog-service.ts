@@ -4,6 +4,7 @@ import {
   MARKETPLACE_CATALOG_PAGE_SIZE,
   type MarketplaceCatalogCategoryNode,
   type MarketplaceCatalogFilters,
+  type MarketplaceCatalogVendorOption,
   buildMarketplaceCategoryTree,
 } from "@/lib/marketplace/catalog-filters";
 import { prisma } from "@/lib/prisma";
@@ -16,10 +17,7 @@ export type MarketplaceCatalogProduct = MarketplaceProductCard & {
   reviewCount: number;
 };
 
-export type MarketplaceCatalogVendorOption = {
-  id: string;
-  companyName: string;
-};
+export type { MarketplaceCatalogVendorOption };
 
 export type MarketplaceCatalogResult = {
   items: MarketplaceCatalogProduct[];
