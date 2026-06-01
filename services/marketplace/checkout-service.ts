@@ -360,6 +360,21 @@ export async function sendConfirmation(input: {
 export async function checkoutMarketplaceCart(
   input: MarketplaceCheckoutInput,
 ): Promise<MarketplaceCheckoutResult> {
+  if (input.paymentMethod === "NET_TERMS") {
+    const capital = await import("@/services/marketplace/capital-integration-service");
+    const cartModule = await import("@/services/marketplace/cart-service");
+    const cart = await cartModule.getCart(input.workspaceId);
+    const total = cartModule.cartSubtotal(cart?.items ?? []);
+    const creditCheck = await capital.assertNetTermsCheckoutAllowed({
+      workspaceId: input.workspaceId,
+      userId: input.userId,
+      additionalAmountUsd: total,
+    });
+    if (!creditCheck.ok) {
+      throw new Error(creditCheck.error);
+    }
+  }
+
   const { orders, requiresApproval } = await createOrders(input);
 
   let paymentIntentClientSecret: string | null = null;
@@ -387,6 +402,15 @@ export async function checkoutMarketplaceCart(
     email: input.actorEmail,
     role: input.actorRole,
   });
+
+  if (input.paymentMethod === "NET_TERMS" && orders.length > 0) {
+    const capital = await import("@/services/marketplace/capital-integration-service");
+    await capital.paymentSchedule({
+      workspaceId: input.workspaceId,
+      userId: input.userId,
+      orderIds: orders.map((order) => order.id),
+    });
+  }
 
   return {
     orderIds: orders.map((order) => order.id),

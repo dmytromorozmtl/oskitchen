@@ -2070,3 +2070,10 @@ Files: services/marketplace/inventory-integration-service.ts, lib/marketplace/in
 Marketplace progress: 27/33 (phase-5-cycle-24-inventory-integration done)
 Next: Cycle 25 — services/marketplace/capital-integration-service.ts Capital-marketplace integration
 ---
+Cycle: marketplace-25
+Timestamp: 2026-06-02T14:00:00.000Z
+Action: feat: Capital-marketplace integration — getCreditLine (GMV-derived/settings/funded boost), checkoutWithNetTerms with credit validation, equipmentFinancing partner options, paymentSchedule persisted in settings center; NET_TERMS checkout wired in checkout-service
+Files: services/marketplace/capital-integration-service.ts, lib/marketplace/capital-integration-types.ts, services/marketplace/checkout-service.ts, tests/unit/marketplace-capital-integration.test.ts
+Marketplace progress: 28/33 (phase-5-cycle-25-capital-integration done)
+Next: Cycle 26 — services/marketplace/briefing-integration-service.ts briefing-marketplace integration
+---
