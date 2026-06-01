@@ -1,6 +1,10 @@
 import { addDays, format } from "date-fns";
 
 import { prisma } from "@/lib/prisma";
+import {
+  loadFrequentlyBoughtTogether,
+  loadSimilarProducts,
+} from "@/services/marketplace/recommendations-service";
 
 export type MarketplaceProductMediaItem = {
   url: string;
@@ -109,24 +113,6 @@ function parseAttributes(raw: unknown): Record<string, unknown> {
   return raw as Record<string, unknown>;
 }
 
-function mapCard(product: {
-  id: string;
-  slug: string;
-  name: string;
-  basePrice: { toString(): string };
-  currency: string;
-  vendor: { companyName: string };
-}) {
-  return {
-    id: product.id,
-    slug: product.slug,
-    name: product.name,
-    basePrice: decimalToNumber(product.basePrice),
-    currency: product.currency,
-    vendorName: product.vendor.companyName,
-  };
-}
-
 export async function loadMarketplaceProductDetail(
   slug: string,
 ): Promise<MarketplaceProductDetail | null> {
@@ -137,7 +123,7 @@ export async function loadMarketplaceProductDetail(
       vendor: { status: "APPROVED" },
     },
     include: {
-      category: { select: { name: true } },
+      category: { select: { id: true, name: true } },
       vendor: {
         select: {
           id: true,
@@ -167,44 +153,14 @@ export async function loadMarketplaceProductDetail(
 
   if (!product) return null;
 
-  const [similarProducts, coPurchaseRows] = await Promise.all([
-    prisma.vendorProduct.findMany({
-      where: {
-        id: { not: product.id },
-        status: "ACTIVE",
-        OR: [{ vendorId: product.vendorId }, { categoryId: product.categoryId }],
-      },
-      orderBy: { updatedAt: "desc" },
-      take: 6,
-      include: { vendor: { select: { companyName: true } } },
+  const [similarProducts, boughtTogether] = await Promise.all([
+    loadSimilarProducts({
+      productId: product.id,
+      categoryId: product.category.id,
+      vendorId: product.vendor.id,
     }),
-    prisma.marketplacePOLineItem.findMany({
-      where: {
-        productId: product.id,
-        purchaseOrder: { status: { notIn: ["DRAFT", "CANCELLED"] } },
-      },
-      select: { purchaseOrderId: true },
-      take: 50,
-    }),
+    loadFrequentlyBoughtTogether({ productId: product.id }),
   ]);
-
-  const orderIds = [...new Set(coPurchaseRows.map((row) => row.purchaseOrderId))];
-  const boughtTogether =
-    orderIds.length === 0
-      ? []
-      : await prisma.vendorProduct.findMany({
-          where: {
-            id: { not: product.id },
-            status: "ACTIVE",
-            orderItems: {
-              some: {
-                purchaseOrderId: { in: orderIds },
-              },
-            },
-          },
-          take: 6,
-          include: { vendor: { select: { companyName: true } } },
-        });
 
   const ratings = product.vendor.reviews.map((review) => review.overall);
   const avgRating =
@@ -256,8 +212,22 @@ export async function loadMarketplaceProductDetail(
       reviewCount: product.vendor.reviews.length,
     },
     expectedDeliveryLabel: format(deliveryDate, "EEE, MMM d, yyyy"),
-    similarProducts: similarProducts.map(mapCard),
-    boughtTogether: boughtTogether.map(mapCard),
+    similarProducts: similarProducts.map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      name: item.name,
+      basePrice: item.basePrice,
+      currency: item.currency,
+      vendorName: item.vendorName,
+    })),
+    boughtTogether: boughtTogether.map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      name: item.name,
+      basePrice: item.basePrice,
+      currency: item.currency,
+      vendorName: item.vendorName,
+    })),
     reviews: product.vendor.reviews.map((review) => ({
       id: review.id,
       overall: review.overall,

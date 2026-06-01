@@ -2,6 +2,9 @@ import type { BusinessType, MarketplacePOStatus } from "@prisma/client";
 import { startOfMonth } from "date-fns";
 
 import { prisma } from "@/lib/prisma";
+import { loadMarketplaceRecommendationsBundle } from "@/services/marketplace/recommendations-service";
+
+export { recommendationCategorySlugsForBusinessType } from "@/lib/marketplace/recommendations-types";
 
 const ACTIVE_ORDER_STATUSES: MarketplacePOStatus[] = [
   "PENDING_APPROVAL",
@@ -83,28 +86,6 @@ export type MarketplaceDashboardModel = {
   categoryCount: number;
 };
 
-const BUSINESS_TYPE_CATEGORY_SLUGS: Partial<Record<BusinessType, readonly string[]>> = {
-  RESTAURANT: ["kitchenware-tools", "dry-goods", "packaging-disposables", "cleaning-sanitation"],
-  CAFE: ["packaging-disposables", "dry-goods", "equipment", "kitchenware-tools"],
-  BAKERY: ["dry-goods", "packaging-disposables", "kitchenware-tools", "equipment"],
-  CATERING: ["packaging-disposables", "kitchenware-tools", "equipment", "uniforms"],
-  MEAL_PREP: ["packaging-disposables", "dry-goods", "cleaning-sanitation", "kitchenware-tools"],
-  BAR: ["dry-goods", "packaging-disposables", "equipment", "cleaning-sanitation"],
-  GHOST_KITCHEN: ["packaging-disposables", "equipment", "cleaning-sanitation", "services"],
-  CLOUD_KITCHEN: ["packaging-disposables", "equipment", "cleaning-sanitation", "services"],
-  MULTI_BRAND: ["packaging-disposables", "equipment", "dry-goods", "services"],
-  OTHER: ["packaging-disposables", "cleaning-sanitation", "dry-goods", "kitchenware-tools"],
-};
-
-export function recommendationCategorySlugsForBusinessType(
-  businessType: BusinessType | null | undefined,
-): readonly string[] {
-  if (!businessType) {
-    return BUSINESS_TYPE_CATEGORY_SLUGS.OTHER ?? ["packaging-disposables", "dry-goods"];
-  }
-  return BUSINESS_TYPE_CATEGORY_SLUGS[businessType] ?? BUSINESS_TYPE_CATEGORY_SLUGS.OTHER ?? [];
-}
-
 function decimalToNumber(value: { toString(): string } | number | null | undefined): number {
   if (value == null) return 0;
   return typeof value === "number" ? value : Number(value.toString());
@@ -150,7 +131,7 @@ export async function loadMarketplaceDashboard(
     categoryCount,
     recentOrders,
     featuredVendorsRaw,
-    popularProducts,
+    recommendationBundle,
     newProducts,
     pendingApprovalOrders,
     upcomingDeliveries,
@@ -205,12 +186,7 @@ export async function loadMarketplaceDashboard(
         reviews: { select: { overall: true }, take: 20 },
       },
     }),
-    prisma.vendorProduct.findMany({
-      where: { status: "ACTIVE" },
-      orderBy: { updatedAt: "desc" },
-      take: 8,
-      include: { vendor: { select: { companyName: true } } },
-    }),
+    loadMarketplaceRecommendationsBundle({ workspaceId, businessType }),
     prisma.vendorProduct.findMany({
       where: { status: "ACTIVE" },
       orderBy: { createdAt: "desc" },
@@ -254,20 +230,6 @@ export async function loadMarketplaceDashboard(
       include: { vendor: { select: { companyName: true } } },
     }),
   ]);
-
-  const recommendationSlugs = recommendationCategorySlugsForBusinessType(businessType);
-  const recommendationProducts =
-    recommendationSlugs.length > 0
-      ? await prisma.vendorProduct.findMany({
-          where: {
-            status: "ACTIVE",
-            category: { slug: { in: [...recommendationSlugs] } },
-          },
-          orderBy: { updatedAt: "desc" },
-          take: 6,
-          include: { vendor: { select: { companyName: true } } },
-        })
-      : popularProducts.slice(0, 6);
 
   const orderAgain: MarketplaceOrderAgainItem[] = recentOrders.flatMap((order) => {
     const line = order.items[0];
@@ -371,9 +333,9 @@ export async function loadMarketplaceDashboard(
     currency: "USD",
     promotions,
     orderAgain,
-    recommendations: recommendationProducts.map(mapProductCard),
+    recommendations: recommendationBundle.personalized,
     featuredVendors,
-    popularInRegion: popularProducts.slice(0, 6).map(mapProductCard),
+    popularInRegion: recommendationBundle.popularInRegion,
     newArrivals: newProducts.map(mapProductCard),
     pendingActions,
     categoryCount,

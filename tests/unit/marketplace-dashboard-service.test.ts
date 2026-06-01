@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { recommendationCategorySlugsForBusinessType } from "@/services/marketplace/marketplace-dashboard-service";
+import { recommendationCategorySlugsForBusinessType } from "@/lib/marketplace/recommendations-types";
 
 describe("marketplace dashboard service helpers", () => {
   it("maps restaurant business type to HoReCa category slugs", () => {

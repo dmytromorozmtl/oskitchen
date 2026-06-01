@@ -2105,3 +2105,10 @@ Files: app/dashboard/marketplace/compare/page.tsx, components/marketplace/market
 Marketplace progress: 32/33 (phase-6-cycle-29-compare-page done)
 Next: Cycle 30 — services/marketplace/recommendations-service.ts marketplace recommendations
 ---
+Cycle: marketplace-30
+Timestamp: 2026-06-02T19:00:00.000Z
+Action: feat: marketplace recommendations — personalized by business type + order history + low-stock inventory links, frequently bought together, similar products (category/vendor), popular in region (org/workspace order volume); wired into dashboard and product detail
+Files: services/marketplace/recommendations-service.ts, lib/marketplace/recommendations-types.ts, services/marketplace/marketplace-dashboard-service.ts, services/marketplace/marketplace-product-detail-service.ts, tests/unit/marketplace-recommendations.test.ts, tests/unit/marketplace-dashboard-service.test.ts
+Marketplace progress: 30/33 modules (phase-6-cycle-30-recommendations done)
+Next: Cycle 31 — services/marketplace/featured-service.ts marketplace featured placements
+---
