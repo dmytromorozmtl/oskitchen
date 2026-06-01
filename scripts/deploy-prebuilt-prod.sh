@@ -129,6 +129,8 @@ export NEXT_TELEMETRY_DISABLED=1
 export NEXT_WEBPACK_CACHE="${NEXT_WEBPACK_CACHE:-0}"
 if [[ -x "./node_modules/.bin/vercel" ]]; then
   VERCEL_BIN="./node_modules/.bin/vercel"
+elif [[ -x "/tmp/vercel-cli-kos/node_modules/.bin/vercel" ]]; then
+  VERCEL_BIN="/tmp/vercel-cli-kos/node_modules/.bin/vercel"
 else
   VERCEL_BIN="npx"
   VERCEL_ARGS=(--yes vercel@latest)
@@ -192,11 +194,37 @@ fi
 
 echo ""
 echo "[5/6] Vercel prebuilt package + deploy..."
+# Local prebuilt: skip `npm ci` (already have node_modules + .next). Remote npm ci on iCloud
+# Desktop can hang for 60+ min on duplicate `node_modules/@pkg 2` folders.
+VERCEL_JSON_BACKUP=""
+if [[ -f vercel.json ]]; then
+  VERCEL_JSON_BACKUP="$(mktemp "${TMPDIR:-/tmp}/vercel-json-backup.XXXXXX")"
+  cp vercel.json "$VERCEL_JSON_BACKUP"
+  node <<'NODE'
+const fs = require("fs");
+const path = "vercel.json";
+const config = JSON.parse(fs.readFileSync(path, "utf8"));
+config.installCommand =
+  process.env.PREBUILT_LOCAL_INSTALL_CMD ??
+  "node ./node_modules/prisma/build/index.js generate";
+fs.writeFileSync(path, JSON.stringify(config, null, 2) + "\n");
+console.log("✅ vercel.json installCommand → prebuilt-local (no npm ci)");
+NODE
+fi
+restore_vercel_json() {
+  if [[ -n "$VERCEL_JSON_BACKUP" && -f "$VERCEL_JSON_BACKUP" ]]; then
+    mv "$VERCEL_JSON_BACKUP" vercel.json
+  fi
+}
+trap restore_vercel_json EXIT
+
 if [[ -n "${VERCEL_BIN:-}" && "${VERCEL_BIN}" != "npx" ]]; then
   "${VERCEL_BIN}" build --prod --yes
 else
   npx "${VERCEL_ARGS[@]}" build --prod --yes
 fi
+restore_vercel_json
+trap - EXIT
 
 if [[ ! -e .vercel/output/functions/_middleware.func ]]; then
   echo "❌ Prebuilt output missing _middleware.func — aborting deploy (incomplete vercel build)"
