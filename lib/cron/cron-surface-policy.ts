@@ -1,7 +1,7 @@
 /**
  * Cron route surface policy — Evolution Era 4 Cycle 4.
  *
- * Production schedules and runtime gates use only ALLOWED_PRODUCTION_CRON_SLUGS (19).
+ * Production schedules and runtime gates use only ALLOWED_PRODUCTION_CRON_SLUGS (21).
  * Experimental handlers live under archive/cron-routes/ and are not App Router routes.
  */
 

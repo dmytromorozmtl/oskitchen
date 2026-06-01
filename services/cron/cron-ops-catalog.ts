@@ -193,6 +193,24 @@ export const PRODUCTION_CRON_OPS_CATALOG: Record<ProductionCronSlug, ProductionC
     ownerTeam: "channels",
     ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
   },
+  "cross-channel-inventory-reconciliation": {
+    label: "Cross-channel inventory reconciliation",
+    summary: "Reconciles inventory counts across POS, storefront, and marketplace channels.",
+    ownerHref: "/dashboard/inventory/cross-channel",
+    ownerLabel: "Open inventory",
+    responseHint: "Review channel sync lag, stock discrepancies, and reconciliation job errors.",
+    ownerTeam: "channels",
+    ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
+  },
+  "multi-location-weekly-report": {
+    label: "Multi-location weekly report",
+    summary: "Generates and emails consolidated weekly performance reports across locations.",
+    ownerHref: "/dashboard/reports",
+    ownerLabel: "Open reports",
+    responseHint: "Inspect report generation inputs, email delivery, and location data completeness.",
+    ownerTeam: "system_health",
+    ownerRolePriority: ["PLATFORM_ADMIN", "SUPER_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN"],
+  },
 };
 
 export function getProductionCronOpsMetadata(slug: ProductionCronSlug): ProductionCronOpsMetadata {

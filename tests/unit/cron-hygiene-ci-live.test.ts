@@ -81,7 +81,7 @@ describe("cron hygiene CI certification (live repo)", () => {
   });
 
   it("keeps production allowlist count honest and documented", () => {
-    expect(ALLOWED_PRODUCTION_CRON_SLUGS.length).toBe(19);
+    expect(ALLOWED_PRODUCTION_CRON_SLUGS.length).toBe(21);
     expect(existsSync(TIER_MATRIX)).toBe(true);
     const matrix = readFileSync(TIER_MATRIX, "utf8");
     expect(matrix).toContain("Tier 1b — Cron hygiene");
