@@ -36,24 +36,10 @@ import {
 } from "@/services/marketplace/marketplace-product-detail-service";
 import { formatCurrency } from "@/lib/utils";
 
-const WISHLIST_KEY = "marketplace-wishlist-slugs";
-
-function readWishlist(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(WISHLIST_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.filter((value) => typeof value === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeWishlist(slugs: string[]) {
-  window.localStorage.setItem(WISHLIST_KEY, JSON.stringify(slugs));
-}
-
-export function MarketplaceProductDetailClient({
+import {
+  readMarketplaceWishlistSlugs,
+  writeMarketplaceWishlistSlugs,
+} from "@/lib/marketplace/wishlist";
   product,
   canAddToCart,
   initialQuantity,
@@ -119,7 +105,7 @@ export function MarketplaceProductDetailClient({
   }
 
   useEffect(() => {
-    setWishlisted(readWishlist().includes(product.slug));
+    setWishlisted(readMarketplaceWishlistSlugs().includes(product.slug));
   }, [product.slug]);
 
   useEffect(() => {
@@ -147,11 +133,11 @@ export function MarketplaceProductDetailClient({
   }, [autoAdd, canAddToCart, initialQuantity, product, selectedVariant]);
 
   function toggleWishlist() {
-    const current = readWishlist();
+    const current = readMarketplaceWishlistSlugs();
     const next = current.includes(product.slug)
       ? current.filter((slug) => slug !== product.slug)
       : [...current, product.slug];
-    writeWishlist(next);
+    writeMarketplaceWishlistSlugs(next);
     setWishlisted(next.includes(product.slug));
     toast.success(next.includes(product.slug) ? "Saved to wish list" : "Removed from wish list");
   }

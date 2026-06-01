@@ -12,17 +12,10 @@ import {
 import { MarketplaceOrderReceivingForm } from "@/components/marketplace/marketplace-order-receiving-form";
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
 import { MarketplaceOrderTimeline } from "@/components/marketplace/marketplace-order-timeline";
+import { MarketplaceResponsiveDataList } from "@/components/marketplace/marketplace-responsive-data-list";
 import { VendorChat } from "@/components/marketplace/vendor-chat";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import type { MarketplaceOrderDetail } from "@/services/marketplace/marketplace-orders-service";
 import type { VendorChatMessage } from "@/services/marketplace/vendor-messaging-service";
@@ -105,36 +98,50 @@ export function MarketplaceOrderDetailClient({
               </Button>
             </div>
 
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>SKU</TableHead>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Unit</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead>Received</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {order.items.map((line) => (
-                  <TableRow key={line.id}>
-                    <TableCell>{line.sku}</TableCell>
-                    <TableCell>{line.productName}</TableCell>
-                    <TableCell>{line.quantity}</TableCell>
-                    <TableCell>
-                      {formatCurrency(line.unitPrice, order.currency as "USD")}
-                    </TableCell>
-                    <TableCell>
+            <MarketplaceResponsiveDataList
+              rows={order.items}
+              emptyMessage="No line items on this order."
+              columns={[
+                { key: "sku", header: "SKU", cell: (line) => line.sku },
+                { key: "product", header: "Product", cell: (line) => line.productName },
+                { key: "qty", header: "Qty", cell: (line) => line.quantity },
+                {
+                  key: "unit",
+                  header: "Unit",
+                  cell: (line) => formatCurrency(line.unitPrice, order.currency as "USD"),
+                },
+                {
+                  key: "total",
+                  header: "Total",
+                  cell: (line) => formatCurrency(line.total, order.currency as "USD"),
+                },
+                {
+                  key: "received",
+                  header: "Received",
+                  cell: (line) => `${line.receivedQuantity}/${line.quantity}`,
+                },
+              ]}
+              renderMobileCard={(line) => (
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-medium">{line.productName}</p>
+                      <p className="text-xs text-muted-foreground">SKU {line.sku}</p>
+                    </div>
+                    <span className="font-semibold">
                       {formatCurrency(line.total, order.currency as "USD")}
-                    </TableCell>
-                    <TableCell>
-                      {line.receivedQuantity}/{line.quantity}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap justify-between gap-2 text-muted-foreground">
+                    <span>Qty {line.quantity}</span>
+                    <span>Unit {formatCurrency(line.unitPrice, order.currency as "USD")}</span>
+                    <span>
+                      Received {line.receivedQuantity}/{line.quantity}
+                    </span>
+                  </div>
+                </div>
+              )}
+            />
 
             <div className="flex flex-col gap-1 text-sm">
               <p>

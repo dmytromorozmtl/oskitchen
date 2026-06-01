@@ -2140,3 +2140,9 @@ Files: artifacts/marketplace-tracker.json
 Marketplace progress: 33/33 COMPLETE — all phases done
 Next: none — marketplace build cycle finished
 ---
+Cycle: marketplace-deploy-gaps
+Timestamp: 2026-06-02T23:30:00.000Z
+Action: feat: marketplace Wish List, mobile tables, Briefing UI integration — wishlist page with localStorage sync; vendor products/dashboard + order detail line items mobile cards; marketplace briefing wired into Owner Daily Briefing top actions and alerts
+Files: app/dashboard/marketplace/wishlist/page.tsx, components/marketplace/marketplace-wishlist-client.tsx, lib/marketplace/wishlist.ts, services/briefing/owner-daily-briefing-service.ts, app/dashboard/today/page.tsx, components/marketplace/vendor-products-list-client.tsx, components/marketplace/vendor-dashboard-client.tsx, components/marketplace/marketplace-order-detail-client.tsx
+Next: deploy to os-kitchen.com + P0 staging proof
+---

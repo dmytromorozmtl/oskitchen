@@ -9,6 +9,7 @@ import {
   bulkVendorProductStatusAction,
   submitVendorProductsForReviewAction,
 } from "@/actions/vendor/products";
+import { MarketplaceResponsiveDataList } from "@/components/marketplace/marketplace-responsive-data-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,18 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   MARKETPLACE_PRODUCT_STATUSES,
   type VendorProductFilters,
   vendorProductStatusLabel,
 } from "@/lib/marketplace/vendor-product-filters";
+import { MARKETPLACE_TOUCH_INPUT_CLASS } from "@/lib/marketplace/mobile-ui";
 import { formatCurrency } from "@/lib/utils";
 import type { VendorProductListItem } from "@/services/marketplace/vendor-products-service";
 
@@ -73,7 +67,7 @@ export function VendorProductsListClient({
         <Input
           placeholder="Search name, SKU, GTIN…"
           defaultValue={filters.q ?? ""}
-          className="max-w-md rounded-full"
+          className={`max-w-md rounded-full ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               const params = new URLSearchParams();
@@ -92,7 +86,7 @@ export function VendorProductsListClient({
             router.push(`/vendor/products${params.toString() ? `?${params}` : ""}`);
           }}
         >
-          <SelectTrigger className="w-full rounded-full lg:w-[180px]">
+          <SelectTrigger className={`w-full rounded-full lg:w-[180px] ${MARKETPLACE_TOUCH_INPUT_CLASS}`}>
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -142,64 +136,111 @@ export function VendorProductsListClient({
         </div>
       ) : null}
 
-      <div className="overflow-hidden rounded-2xl border border-border/80 bg-card/80 shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {canManage ? <TableHead className="w-10" /> : null}
-              <TableHead>Product</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Stock</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow
-                key={product.id}
-                className={highlightId === product.id ? "bg-amber-500/10" : undefined}
-              >
-                {canManage ? (
-                  <TableCell>
+      <MarketplaceResponsiveDataList
+        rows={products}
+        emptyMessage="No products match your filters."
+        columns={[
+          ...(canManage
+            ? [
+                {
+                  key: "select",
+                  header: "",
+                  className: "w-10",
+                  cell: (product: VendorProductListItem) => (
                     <Checkbox
                       checked={!!selected[product.id]}
                       onCheckedChange={(checked) =>
                         setSelected((prev) => ({ ...prev, [product.id]: checked === true }))
                       }
                     />
-                  </TableCell>
-                ) : null}
-                <TableCell>
+                  ),
+                },
+              ]
+            : []),
+          {
+            key: "product",
+            header: "Product",
+            cell: (product) => (
+              <div>
+                <p className="font-medium">{product.name}</p>
+                <p className="text-xs text-muted-foreground">{product.sku}</p>
+              </div>
+            ),
+          },
+          {
+            key: "status",
+            header: "Status",
+            cell: (product) => (
+              <Badge variant="outline" className="rounded-full">
+                {vendorProductStatusLabel(product.status)}
+              </Badge>
+            ),
+          },
+          {
+            key: "price",
+            header: "Price",
+            cell: (product) => formatCurrency(product.basePrice, product.currency as "USD"),
+          },
+          { key: "stock", header: "Stock", cell: (product) => product.stockQty },
+          { key: "category", header: "Category", cell: (product) => product.categoryName },
+          {
+            key: "actions",
+            header: "Actions",
+            className: "text-right",
+            cell: (product) => (
+              <div className="flex justify-end gap-2">
+                <Button asChild variant="outline" size="sm" className="rounded-full">
+                  <Link href={`/vendor/products/${product.id}/edit`}>Edit</Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm" className="rounded-full">
+                  <Link href={`/dashboard/marketplace/products/${product.slug}`} target="_blank">
+                    Preview
+                  </Link>
+                </Button>
+              </div>
+            ),
+          },
+        ]}
+        renderMobileCard={(product) => (
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              {canManage ? (
+                <Checkbox
+                  checked={!!selected[product.id]}
+                  onCheckedChange={(checked) =>
+                    setSelected((prev) => ({ ...prev, [product.id]: checked === true }))
+                  }
+                  className="mt-1"
+                />
+              ) : null}
+              <div className="flex flex-1 items-start justify-between gap-2">
+                <div>
                   <p className="font-medium">{product.name}</p>
                   <p className="text-xs text-muted-foreground">{product.sku}</p>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline" className="rounded-full">
-                    {vendorProductStatusLabel(product.status)}
-                  </Badge>
-                </TableCell>
-                <TableCell>{formatCurrency(product.basePrice, product.currency as "USD")}</TableCell>
-                <TableCell>{product.stockQty}</TableCell>
-                <TableCell className="text-sm">{product.categoryName}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href={`/vendor/products/${product.id}/edit`}>Edit</Link>
-                    </Button>
-                    <Button asChild variant="ghost" size="sm" className="rounded-full">
-                      <Link href={`/dashboard/marketplace/products/${product.slug}`} target="_blank">
-                        Preview
-                      </Link>
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+                </div>
+                <Badge variant="outline" className="rounded-full">
+                  {vendorProductStatusLabel(product.status)}
+                </Badge>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-between gap-2 text-sm">
+              <span>{formatCurrency(product.basePrice, product.currency as "USD")}</span>
+              <span>Stock {product.stockQty}</span>
+              <span className="text-muted-foreground">{product.categoryName}</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline" size="sm" className="rounded-full min-h-11 flex-1">
+                <Link href={`/vendor/products/${product.id}/edit`}>Edit</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm" className="rounded-full min-h-11 flex-1">
+                <Link href={`/dashboard/marketplace/products/${product.slug}`} target="_blank">
+                  Preview
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      />
     </div>
   );
 }

@@ -30,6 +30,22 @@ export type MarketplaceCatalogResult = {
   vendors: MarketplaceCatalogVendorOption[];
 };
 
+export type MarketplaceWishlistProduct = MarketplaceCatalogProduct & {
+  vendorId: string;
+  sku: string;
+  imageUrl: string | null;
+};
+
+function parseFirstMediaUrl(raw: unknown): string | null {
+  if (!Array.isArray(raw)) return null;
+  for (const item of raw) {
+    if (!item || typeof item !== "object") continue;
+    const url = (item as Record<string, unknown>).url;
+    if (typeof url === "string" && url.length > 0) return url;
+  }
+  return null;
+}
+
 function decimalToNumber(value: { toString(): string } | number): number {
   return typeof value === "number" ? value : Number(value.toString());
 }
@@ -288,4 +304,36 @@ export async function loadMarketplaceCatalog(
     categories: buildMarketplaceCategoryTree(categoryRows),
     vendors: vendorOptions,
   };
+}
+
+export async function loadMarketplaceProductsBySlugs(
+  slugs: readonly string[],
+): Promise<MarketplaceWishlistProduct[]> {
+  const uniqueSlugs = [...new Set(slugs.filter(Boolean))].slice(0, 50);
+  if (uniqueSlugs.length === 0) return [];
+
+  const [ratings, products] = await Promise.all([
+    loadVendorRatingMap(),
+    prisma.vendorProduct.findMany({
+      where: {
+        slug: { in: uniqueSlugs },
+        status: "ACTIVE",
+        vendor: { status: "APPROVED" },
+      },
+      include: {
+        vendor: { select: { id: true, companyName: true } },
+      },
+    }),
+  ]);
+
+  const order = new Map(uniqueSlugs.map((slug, index) => [slug, index]));
+
+  return products
+    .map((product) => ({
+      ...mapProduct(product, ratings),
+      vendorId: product.vendor.id,
+      sku: product.sku,
+      imageUrl: parseFirstMediaUrl(product.media),
+    }))
+    .sort((a, b) => (order.get(a.slug) ?? 999) - (order.get(b.slug) ?? 999));
 }

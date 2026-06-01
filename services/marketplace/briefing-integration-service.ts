@@ -281,4 +281,13 @@ export async function buildMarketplaceBriefingRankedActions(input: {
   return snapshot.alerts.map(marketplaceBriefingAlertToRankedAction);
 }
 
+/** Procurement alerts for Owner Daily Briefing (PO approval, delivery, budget, price drops). */
+export async function getProcurementBriefingItems(input: {
+  workspaceId: string;
+  userId: string;
+}): Promise<MarketplaceBriefingAlert[]> {
+  const snapshot = await loadMarketplaceBriefingSnapshot(input);
+  return snapshot.alerts;
+}
+
 export { mergeMarketplaceBriefingIntoTopActions } from "@/lib/marketplace/briefing-integration-types";

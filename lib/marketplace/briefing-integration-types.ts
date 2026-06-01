@@ -1,4 +1,7 @@
-import type { OwnerDailyBriefingRankedAction } from "@/lib/briefing/owner-daily-briefing-era19";
+import type {
+  OwnerDailyBriefingAlert,
+  OwnerDailyBriefingRankedAction,
+} from "@/lib/briefing/owner-daily-briefing-era19";
 
 export type MarketplaceBriefingAlertKind =
   | "po_approval"
@@ -67,4 +70,23 @@ export function mergeMarketplaceBriefingIntoTopActions(
 ): OwnerDailyBriefingRankedAction[] {
   const marketplaceActions = marketplaceAlerts.map(marketplaceBriefingAlertToRankedAction);
   return [...marketplaceActions, ...existing].sort((a, b) => a.priority - b.priority);
+}
+
+export function marketplaceBriefingAlertToOwnerAlert(
+  alert: MarketplaceBriefingAlert,
+): OwnerDailyBriefingAlert {
+  return {
+    id: `marketplace-${alert.id}`,
+    title: alert.title,
+    detail: alert.detail,
+    href: alert.href,
+    priority: alert.priority,
+    tone: alert.severity === "critical" || alert.severity === "high" ? "urgent" : "normal",
+  };
+}
+
+export function marketplaceBriefingAlertsToOwnerAlerts(
+  alerts: readonly MarketplaceBriefingAlert[],
+): OwnerDailyBriefingAlert[] {
+  return alerts.map(marketplaceBriefingAlertToOwnerAlert);
 }

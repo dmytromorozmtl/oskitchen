@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
+import { MARKETPLACE_MOBILE_CARD_CLASS } from "@/lib/marketplace/mobile-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -117,7 +118,27 @@ export function VendorDashboardClient({ model }: { model: VendorDashboardModel }
             {model.topProducts.length === 0 ? (
               <p className="text-sm text-muted-foreground">No sales yet.</p>
             ) : (
-              <Table>
+              <>
+                <div className="space-y-3 lg:hidden">
+                  {model.topProducts.map((product) => (
+                    <div key={product.id} className={MARKETPLACE_MOBILE_CARD_CLASS}>
+                      <Link
+                        href={`/vendor/products?highlight=${product.id}`}
+                        className="font-medium hover:underline"
+                      >
+                        {product.name}
+                      </Link>
+                      <p className="text-xs text-muted-foreground">{product.sku}</p>
+                      <div className="mt-2 flex flex-wrap justify-between gap-2 text-sm">
+                        <span>{product.unitsSold} units</span>
+                        <span>{formatCurrency(product.revenue, "USD")}</span>
+                        <span>Stock {product.stockQty}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="hidden lg:block">
+                  <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Product</TableHead>
@@ -142,6 +163,8 @@ export function VendorDashboardClient({ model }: { model: VendorDashboardModel }
                   ))}
                 </TableBody>
               </Table>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -157,32 +180,59 @@ export function VendorDashboardClient({ model }: { model: VendorDashboardModel }
             {model.recentOrders.length === 0 ? (
               <p className="text-sm text-muted-foreground">No orders yet.</p>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>PO</TableHead>
-                    <TableHead>Buyer</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Total</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <>
+                <div className="space-y-3 lg:hidden">
                   {model.recentOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell>
-                        <Link href={`/vendor/orders/${order.id}`} className="font-medium hover:underline">
-                          {order.poNumber ?? order.id.slice(0, 8)}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-xs">{order.buyerWorkspaceName ?? "—"}</TableCell>
-                      <TableCell>
+                    <div key={order.id} className={MARKETPLACE_MOBILE_CARD_CLASS}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <Link
+                            href={`/vendor/orders/${order.id}`}
+                            className="font-medium hover:underline"
+                          >
+                            {order.poNumber ?? order.id.slice(0, 8)}
+                          </Link>
+                          <p className="text-xs text-muted-foreground">
+                            {order.buyerWorkspaceName ?? "—"}
+                          </p>
+                        </div>
                         <MarketplaceOrderStatusBadge status={order.status} />
-                      </TableCell>
-                      <TableCell>{formatCurrency(order.total, order.currency as "USD")}</TableCell>
-                    </TableRow>
+                      </div>
+                      <p className="mt-2 text-sm font-semibold">
+                        {formatCurrency(order.total, order.currency as "USD")}
+                      </p>
+                    </div>
                   ))}
-                </TableBody>
-              </Table>
+                </div>
+                <div className="hidden lg:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>PO</TableHead>
+                        <TableHead>Buyer</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Total</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {model.recentOrders.map((order) => (
+                        <TableRow key={order.id}>
+                          <TableCell>
+                            <Link href={`/vendor/orders/${order.id}`} className="font-medium hover:underline">
+                              {order.poNumber ?? order.id.slice(0, 8)}
+                            </Link>
+                          </TableCell>
+                          <TableCell className="text-xs">{order.buyerWorkspaceName ?? "—"}</TableCell>
+                          <TableCell>
+                            <MarketplaceOrderStatusBadge status={order.status} />
+                          </TableCell>
+                          <TableCell>{formatCurrency(order.total, order.currency as "USD")}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>

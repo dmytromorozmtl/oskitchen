@@ -563,6 +563,7 @@ export async function loadOwnerDailyBriefing(
       progress: LaunchWizardProgress;
     };
     granted?: ReadonlySet<PermissionKey>;
+    workspaceId?: string | null;
   },
 ): Promise<OwnerDailyBriefingPayload> {
   const showIntegrationHealth = options?.showIntegrationHealth ?? true;
@@ -2161,8 +2162,32 @@ export async function loadOwnerDailyBriefing(
     );
   }
 
+  let mergedAlerts = allAlerts;
+  if (
+    (rolePack === "owner" || rolePack === "manager") &&
+    options?.workspaceId &&
+    options?.granted &&
+    hasPermission(options.granted, "marketplace:read")
+  ) {
+    const { loadMarketplaceBriefingSnapshot } = await import(
+      "@/services/marketplace/briefing-integration-service"
+    );
+    const {
+      mergeMarketplaceBriefingIntoTopActions,
+      marketplaceBriefingAlertsToOwnerAlerts,
+    } = await import("@/lib/marketplace/briefing-integration-types");
+    const snapshot = await loadMarketplaceBriefingSnapshot({
+      workspaceId: options.workspaceId,
+      userId,
+    });
+    allTopActions = mergeMarketplaceBriefingIntoTopActions(allTopActions, snapshot.alerts);
+    mergedAlerts = [...marketplaceBriefingAlertsToOwnerAlerts(snapshot.alerts), ...allAlerts].sort(
+      (a, b) => a.priority - b.priority,
+    );
+  }
+
   const tiles = filterBriefingTilesForRolePack(allTiles, rolePack);
-  const alerts = filterBriefingAlertsForRolePack(allAlerts, rolePack);
+  const alerts = filterBriefingAlertsForRolePack(mergedAlerts, rolePack);
   const topActions = finalizeOwnerDailyBriefingTopActions(
     filterBriefingActionsForRolePack(allTopActions, rolePack),
   );

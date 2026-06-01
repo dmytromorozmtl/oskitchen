@@ -36,7 +36,7 @@ export default async function TodayOperationsPage({
 }: {
   searchParams?: Promise<{ metrics?: string; checklist?: string }>;
 }) {
-  const [{ sessionUser, dataUserId }, actor] = await Promise.all([
+  const [{ sessionUser, dataUserId, workspaceId }, actor] = await Promise.all([
     getTenantActor(),
     requireWorkspacePermissionActor(),
   ]);
@@ -85,6 +85,7 @@ export default async function TodayOperationsPage({
         workspaceRole: actor.workspaceRole,
         supportAdmin,
         granted: actor.granted,
+        workspaceId,
         launchWizard: launchWizardModel
           ? {
               commercialBlockers: launchWizardModel.commercialBlockers,
