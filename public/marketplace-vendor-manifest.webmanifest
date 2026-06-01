@@ -1,0 +1,24 @@
+{
+  "name": "KitchenOS Vendor Cabinet",
+  "short_name": "Vendor",
+  "description": "Manage marketplace orders, products, and payouts on mobile.",
+  "start_url": "/vendor/dashboard",
+  "scope": "/vendor/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 import { MarketplaceSubnav } from "@/components/dashboard/marketplace-subnav";
+import { MarketplaceMobileShell } from "@/components/marketplace/marketplace-mobile-shell";
 import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-access";
+import { getCart } from "@/services/marketplace/cart-service";
 
 export default async function MarketplaceLayout({ children }: { children: React.ReactNode }) {
   const access = await requireMarketplaceReadPage({
@@ -11,10 +13,14 @@ export default async function MarketplaceLayout({ children }: { children: React.
     return <div className="space-y-8">{access.deny}</div>;
   }
 
+  const cart = await getCart(access.actor.workspaceId);
+
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6 pb-20 lg:pb-8">
       <MarketplaceSubnav />
-      {children}
+      <MarketplaceMobileShell cart={cart} canCartWrite={access.canCartWrite}>
+        {children}
+      </MarketplaceMobileShell>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import {
   type MarketplaceCatalogFilters,
   type MarketplaceCatalogVendorOption,
 } from "@/lib/marketplace/catalog-filters";
+import { MARKETPLACE_TOUCH_BUTTON_CLASS, MARKETPLACE_TOUCH_INPUT_CLASS } from "@/lib/marketplace/mobile-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,7 +29,7 @@ export function MarketplaceCatalogFilterBar({
           name="q"
           defaultValue={filters.q}
           placeholder="Product name, SKU, GTIN, vendor"
-          className="rounded-xl"
+          className={`rounded-xl ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         />
       </div>
 
@@ -38,7 +39,7 @@ export function MarketplaceCatalogFilterBar({
           id="catalog-vendor"
           name="vendor"
           defaultValue={filters.vendorId}
-          className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+          className={`flex w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         >
           <option value="">All vendors</option>
           {vendors.map((vendor) => (
@@ -55,7 +56,7 @@ export function MarketplaceCatalogFilterBar({
           id="catalog-sort"
           name="sort"
           defaultValue={filters.sort}
-          className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+          className={`flex w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         >
           {MARKETPLACE_CATALOG_SORT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -74,7 +75,7 @@ export function MarketplaceCatalogFilterBar({
           min="0"
           step="0.01"
           defaultValue={filters.minPrice ?? ""}
-          className="rounded-xl"
+          className={`rounded-xl ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         />
       </div>
 
@@ -87,7 +88,7 @@ export function MarketplaceCatalogFilterBar({
           min="0"
           step="0.01"
           defaultValue={filters.maxPrice ?? ""}
-          className="rounded-xl"
+          className={`rounded-xl ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         />
       </div>
 
@@ -101,7 +102,7 @@ export function MarketplaceCatalogFilterBar({
           max="5"
           step="0.5"
           defaultValue={filters.minRating ?? ""}
-          className="rounded-xl"
+          className={`rounded-xl ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         />
       </div>
 
@@ -114,7 +115,7 @@ export function MarketplaceCatalogFilterBar({
           min="1"
           step="1"
           defaultValue={filters.maxLeadDays ?? ""}
-          className="rounded-xl"
+          className={`rounded-xl ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         />
       </div>
 
@@ -127,7 +128,7 @@ export function MarketplaceCatalogFilterBar({
           min="1"
           step="1"
           defaultValue={filters.maxMoq ?? ""}
-          className="rounded-xl"
+          className={`rounded-xl ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
         />
       </div>
 
@@ -145,10 +146,10 @@ export function MarketplaceCatalogFilterBar({
       </div>
 
       <div className="flex flex-wrap items-end gap-2 lg:col-span-2">
-        <Button type="submit" className="rounded-full">
+        <Button type="submit" className={`rounded-full ${MARKETPLACE_TOUCH_BUTTON_CLASS}`}>
           Apply filters
         </Button>
-        <Button type="reset" variant="outline" className="rounded-full" asChild>
+        <Button type="reset" variant="outline" className={`rounded-full ${MARKETPLACE_TOUCH_BUTTON_CLASS}`} asChild>
           <a href="/dashboard/marketplace/catalog">Reset</a>
         </Button>
       </div>

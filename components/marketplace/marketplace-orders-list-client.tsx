@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
+import { MarketplaceResponsiveDataList } from "@/components/marketplace/marketplace-responsive-data-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,19 +17,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   MARKETPLACE_PO_STATUSES,
   marketplaceOrderStatusLabel,
 } from "@/lib/marketplace/order-status";
 import type { MarketplaceOrdersFilters } from "@/lib/marketplace/orders-filters";
 import { marketplaceOrdersFiltersToQuery } from "@/lib/marketplace/orders-filters";
+import { MARKETPLACE_TOUCH_INPUT_CLASS } from "@/lib/marketplace/mobile-ui";
 import { formatCurrency } from "@/lib/utils";
 import type { MarketplaceOrderListItem } from "@/services/marketplace/marketplace-orders-service";
 
@@ -61,7 +55,7 @@ export function MarketplaceOrdersListClient({
         <Input
           placeholder="Search PO, vendor, product…"
           defaultValue={filters.q ?? ""}
-          className="max-w-md rounded-full"
+          className={`max-w-md rounded-full ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               pushFilters({ q: event.currentTarget.value || undefined });
@@ -74,7 +68,7 @@ export function MarketplaceOrdersListClient({
             pushFilters({ status: value === "all" ? undefined : (value as typeof filters.status) })
           }
         >
-          <SelectTrigger className="w-full rounded-full lg:w-[180px]">
+          <SelectTrigger className={`w-full rounded-full lg:w-[180px] ${MARKETPLACE_TOUCH_INPUT_CLASS}`}>
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -92,7 +86,7 @@ export function MarketplaceOrdersListClient({
             pushFilters({ vendorId: value === "all" ? undefined : value })
           }
         >
-          <SelectTrigger className="w-full rounded-full lg:w-[200px]">
+          <SelectTrigger className={`w-full rounded-full lg:w-[200px] ${MARKETPLACE_TOUCH_INPUT_CLASS}`}>
             <SelectValue placeholder="Vendor" />
           </SelectTrigger>
           <SelectContent>
@@ -107,13 +101,13 @@ export function MarketplaceOrdersListClient({
         <Input
           type="date"
           defaultValue={filters.dateFrom ?? ""}
-          className="w-full rounded-full lg:w-[160px]"
+          className={`w-full rounded-full lg:w-[160px] ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
           onChange={(event) => pushFilters({ dateFrom: event.target.value || undefined })}
         />
         <Input
           type="date"
           defaultValue={filters.dateTo ?? ""}
-          className="w-full rounded-full lg:w-[160px]"
+          className={`w-full rounded-full lg:w-[160px] ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
           onChange={(event) => pushFilters({ dateTo: event.target.value || undefined })}
         />
         <Badge variant="outline" className="rounded-full">
@@ -121,42 +115,77 @@ export function MarketplaceOrdersListClient({
         </Badge>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-border/80 bg-card/80 shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>PO</TableHead>
-              <TableHead>Vendor</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Items</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Placed</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-medium">{order.poNumber ?? order.id.slice(0, 8)}</TableCell>
-                <TableCell>{order.vendorName}</TableCell>
-                <TableCell>
-                  <MarketplaceOrderStatusBadge status={order.status} />
-                </TableCell>
-                <TableCell>{order.itemCount}</TableCell>
-                <TableCell>
-                  {formatCurrency(order.total, order.currency as "USD")}
-                </TableCell>
-                <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <Button asChild variant="outline" size="sm" className="rounded-full">
-                    <Link href={`/dashboard/marketplace/orders/${order.id}`}>View</Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <MarketplaceResponsiveDataList
+        rows={orders}
+        emptyMessage="No orders match your filters."
+        columns={[
+          {
+            key: "po",
+            header: "PO",
+            cell: (order) => order.poNumber ?? order.id.slice(0, 8),
+          },
+          {
+            key: "vendor",
+            header: "Vendor",
+            cell: (order) => order.vendorName,
+          },
+          {
+            key: "status",
+            header: "Status",
+            cell: (order) => <MarketplaceOrderStatusBadge status={order.status} />,
+          },
+          {
+            key: "items",
+            header: "Items",
+            cell: (order) => order.itemCount,
+          },
+          {
+            key: "total",
+            header: "Total",
+            cell: (order) => formatCurrency(order.total, order.currency as "USD"),
+          },
+          {
+            key: "placed",
+            header: "Placed",
+            cell: (order) => new Date(order.createdAt).toLocaleDateString(),
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            className: "text-right",
+            cell: (order) => (
+              <Button asChild variant="outline" size="sm" className="rounded-full">
+                <Link href={`/dashboard/marketplace/orders/${order.id}`}>View</Link>
+              </Button>
+            ),
+          },
+        ]}
+        renderMobileCard={(order) => (
+          <div className="space-y-3">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-medium">{order.poNumber ?? order.id.slice(0, 8)}</p>
+                <p className="text-sm text-muted-foreground">{order.vendorName}</p>
+              </div>
+              <MarketplaceOrderStatusBadge status={order.status} />
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+              <span>{order.itemCount} items</span>
+              <span className="font-semibold">
+                {formatCurrency(order.total, order.currency as "USD")}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs text-muted-foreground">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </span>
+              <Button asChild variant="outline" size="sm" className="rounded-full min-h-11">
+                <Link href={`/dashboard/marketplace/orders/${order.id}`}>View</Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      />
 
       {filters.page > 1 ? (
         <div className="flex justify-center">

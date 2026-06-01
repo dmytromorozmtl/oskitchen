@@ -2126,3 +2126,10 @@ Files: app/api/vendor/webhooks/route.ts, services/marketplace/vendor-api-service
 Marketplace progress: 32/33 modules (phase-6-cycle-32-vendor-api-webhooks done)
 Next: Cycle 33 — marketplace mobile responsive adaptation
 ---
+Cycle: marketplace-33
+Timestamp: 2026-06-02T22:00:00.000Z
+Action: feat: marketplace mobile responsive — MarketplaceMobileShell with offline catalog banner + floating cart drawer; MarketplaceResponsiveDataList (tables→cards on mobile) for buyer/vendor orders and compare; touch-friendly filter inputs; catalog offline localStorage sync; vendor cabinet PWA manifest + service worker
+Files: lib/marketplace/mobile-ui.ts, components/marketplace/marketplace-mobile-shell.tsx, components/marketplace/marketplace-mobile-cart-drawer.tsx, components/marketplace/marketplace-responsive-data-list.tsx, components/marketplace/marketplace-catalog-offline-sync.tsx, components/marketplace/vendor-cabinet-pwa-register.tsx, public/marketplace-vendor-manifest.webmanifest, public/sw-marketplace-vendor.js, app/dashboard/marketplace/layout.tsx, app/vendor/(cabinet)/layout.tsx, components/marketplace/marketplace-orders-list-client.tsx, components/marketplace/vendor-orders-list-client.tsx, components/marketplace/marketplace-compare-client.tsx, components/marketplace/marketplace-catalog-filter-bar.tsx, app/dashboard/marketplace/catalog/page.tsx, tests/unit/marketplace-mobile-ui.test.ts
+Marketplace progress: 33/33 modules (phase-6-cycle-33-mobile-responsive done)
+Next: Cycle 34 — mark all tracker keys done; feat: B2B HoReCa marketplace complete — 33/33
+---

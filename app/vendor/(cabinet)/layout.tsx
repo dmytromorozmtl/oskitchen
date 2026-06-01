@@ -1,10 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { VendorCabinetSubnav } from "@/components/marketplace/vendor-cabinet-subnav";
+import { VendorCabinetPwaRegister } from "@/components/marketplace/vendor-cabinet-pwa-register";
+
+export const metadata: Metadata = {
+  manifest: "/marketplace-vendor-manifest.webmanifest",
+  themeColor: "#0f172a",
+  appleWebApp: {
+    capable: true,
+    title: "KitchenOS Vendor",
+  },
+};
 
 export default function VendorCabinetLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background">
+      <VendorCabinetPwaRegister />
       <header className="border-b border-border/80 bg-card/80">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">

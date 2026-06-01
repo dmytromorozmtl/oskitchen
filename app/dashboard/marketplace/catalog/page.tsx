@@ -2,6 +2,7 @@ import { PackageSearch } from "lucide-react";
 
 import { PaginationBar } from "@/components/dashboard/pagination-bar";
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MarketplaceCatalogOfflineSync } from "@/components/marketplace/marketplace-catalog-offline-sync";
 import { MarketplaceCatalogFilterBar } from "@/components/marketplace/marketplace-catalog-filter-bar";
 import { MarketplaceCatalogProductCard } from "@/components/marketplace/marketplace-catalog-product-card";
 import { MarketplaceCategorySidebar } from "@/components/marketplace/marketplace-category-sidebar";
@@ -26,8 +27,19 @@ export default async function MarketplaceCatalogPage({
     loadMarketplaceCatalog(filters),
   ]);
 
+  const offlineProducts = catalog.items.map((product) => ({
+    id: product.id,
+    slug: product.slug,
+    name: product.name,
+    vendorName: product.vendorName,
+    basePrice: product.basePrice,
+    currency: product.currency,
+    cachedAt: new Date().toISOString(),
+  }));
+
   return (
     <div className="space-y-6 pb-8">
+      <MarketplaceCatalogOfflineSync products={offlineProducts} />
       <PageHeader
         title="Catalog"
         description="Browse verified HoReCa products with filters for price, vendor rating, delivery time, MOQ, and stock."

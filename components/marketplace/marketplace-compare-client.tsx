@@ -7,6 +7,7 @@ import { Plus, Scale, Search, Star } from "lucide-react";
 import { toast } from "sonner";
 
 import { addMarketplaceProductToCartAction } from "@/actions/marketplace/cart";
+import { MarketplaceResponsiveDataList } from "@/components/marketplace/marketplace-responsive-data-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,18 +21,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   MARKETPLACE_COMPARE_SORT_OPTIONS,
   marketplaceCompareFiltersToQuery,
   type MarketplaceCompareFilters,
 } from "@/lib/marketplace/compare-filters";
+import { MARKETPLACE_TOUCH_BUTTON_CLASS, MARKETPLACE_TOUCH_INPUT_CLASS } from "@/lib/marketplace/mobile-ui";
 import { formatCurrency } from "@/lib/utils";
 import type { MarketplaceCompareResult } from "@/services/marketplace/marketplace-compare-service";
 
@@ -110,11 +104,11 @@ export function MarketplaceCompareClient({
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="e.g. olive oil or 00812345678905"
-                  className="pl-9"
+                  className={`pl-9 ${MARKETPLACE_TOUCH_INPUT_CLASS}`}
                 />
               </div>
             </div>
-            <Button type="submit" className="rounded-full">
+            <Button type="submit" className={`rounded-full ${MARKETPLACE_TOUCH_BUTTON_CLASS}`}>
               Search
             </Button>
           </form>
@@ -135,7 +129,7 @@ export function MarketplaceCompareClient({
                   navigate({ sort: value as MarketplaceCompareFilters["sort"] })
                 }
               >
-                <SelectTrigger id="compare-sort" className="w-[180px]">
+                <SelectTrigger id="compare-sort" className={`w-[180px] ${MARKETPLACE_TOUCH_INPUT_CLASS}`}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -165,85 +159,167 @@ export function MarketplaceCompareClient({
         </Card>
       ) : (
         <Card className="border-border/80 shadow-sm">
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Product</TableHead>
-                    <TableHead>Vendor</TableHead>
-                    <TableHead className="text-right">Price</TableHead>
-                    <TableHead className="text-right">Delivery</TableHead>
-                    <TableHead className="text-right">Rating</TableHead>
-                    <TableHead className="text-right">MOQ</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {result.rows.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <Link
-                            href={`/dashboard/marketplace/products/${row.slug}`}
-                            className="font-medium hover:underline"
-                          >
-                            {row.name}
-                          </Link>
-                          <p className="text-xs text-muted-foreground">
-                            SKU {row.sku}
-                            {row.gtin ? ` · GTIN ${row.gtin}` : ""}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell>{row.vendorName}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex flex-col items-end gap-1">
-                          <span className="font-semibold tabular-nums">
-                            {formatCurrency(row.basePrice, row.currency)}
-                          </span>
-                          {row.isBestPrice ? (
-                            <Badge variant="secondary" className="rounded-full text-[10px]">
-                              Best price
-                            </Badge>
-                          ) : null}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">{row.leadTimeDays}d</TableCell>
-                      <TableCell className="text-right">
+          <CardContent className="p-4 lg:p-0">
+            <MarketplaceResponsiveDataList
+              rows={result.rows}
+              emptyMessage="No comparable products found."
+              columns={[
+                {
+                  key: "product",
+                  header: "Product",
+                  cell: (row) => (
+                    <div className="space-y-1">
+                      <Link
+                        href={`/dashboard/marketplace/products/${row.slug}`}
+                        className="font-medium hover:underline"
+                      >
+                        {row.name}
+                      </Link>
+                      <p className="text-xs text-muted-foreground">
+                        SKU {row.sku}
+                        {row.gtin ? ` · GTIN ${row.gtin}` : ""}
+                      </p>
+                    </div>
+                  ),
+                },
+                {
+                  key: "vendor",
+                  header: "Vendor",
+                  cell: (row) => row.vendorName,
+                },
+                {
+                  key: "price",
+                  header: "Price",
+                  className: "text-right",
+                  cell: (row) => (
+                    <div className="flex flex-col items-end gap-1">
+                      <span className="font-semibold tabular-nums">
+                        {formatCurrency(row.basePrice, row.currency)}
+                      </span>
+                      {row.isBestPrice ? (
+                        <Badge variant="secondary" className="rounded-full text-[10px]">
+                          Best price
+                        </Badge>
+                      ) : null}
+                    </div>
+                  ),
+                },
+                {
+                  key: "delivery",
+                  header: "Delivery",
+                  className: "text-right",
+                  cell: (row) => `${row.leadTimeDays}d`,
+                },
+                {
+                  key: "rating",
+                  header: "Rating",
+                  className: "text-right",
+                  cell: (row) =>
+                    row.avgVendorRating != null ? (
+                      <span className="inline-flex items-center justify-end gap-1 text-sm">
+                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                        {row.avgVendorRating}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    ),
+                },
+                {
+                  key: "moq",
+                  header: "MOQ",
+                  className: "text-right",
+                  cell: (row) => row.moq,
+                },
+                {
+                  key: "actions",
+                  header: "Actions",
+                  className: "text-right",
+                  cell: (row) => (
+                    <div className="flex flex-wrap justify-end gap-2">
+                      <Button asChild variant="outline" size="sm" className="rounded-full">
+                        <Link href={`/dashboard/marketplace/products/${row.slug}`}>View</Link>
+                      </Button>
+                      {canAddToCart ? (
+                        <Button
+                          size="sm"
+                          className="rounded-full gap-1"
+                          disabled={isPending && pendingProductId === row.id}
+                          onClick={() => handleAddToCart(row)}
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                          Add
+                        </Button>
+                      ) : null}
+                    </div>
+                  ),
+                },
+              ]}
+              renderMobileCard={(row) => (
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <Link
+                        href={`/dashboard/marketplace/products/${row.slug}`}
+                        className="font-medium hover:underline"
+                      >
+                        {row.name}
+                      </Link>
+                      <p className="text-xs text-muted-foreground">{row.vendorName}</p>
+                    </div>
+                    {row.isBestPrice ? (
+                      <Badge variant="secondary" className="rounded-full text-[10px]">
+                        Best price
+                      </Badge>
+                    ) : null}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Price</p>
+                      <p className="font-semibold tabular-nums">
+                        {formatCurrency(row.basePrice, row.currency)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Delivery</p>
+                      <p>{row.leadTimeDays} days</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Rating</p>
+                      <p>
                         {row.avgVendorRating != null ? (
-                          <span className="inline-flex items-center justify-end gap-1 text-sm">
+                          <span className="inline-flex items-center gap-1">
                             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                             {row.avgVendorRating}
                           </span>
                         ) : (
-                          <span className="text-muted-foreground">—</span>
+                          "—"
                         )}
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">{row.moq}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex flex-wrap justify-end gap-2">
-                          <Button asChild variant="outline" size="sm" className="rounded-full">
-                            <Link href={`/dashboard/marketplace/products/${row.slug}`}>View</Link>
-                          </Button>
-                          {canAddToCart ? (
-                            <Button
-                              size="sm"
-                              className="rounded-full gap-1"
-                              disabled={isPending && pendingProductId === row.id}
-                              onClick={() => handleAddToCart(row)}
-                            >
-                              <Plus className="h-3.5 w-3.5" />
-                              Add
-                            </Button>
-                          ) : null}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">MOQ</p>
+                      <p>{row.moq}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button asChild variant="outline" size="sm" className="rounded-full min-h-11 flex-1">
+                      <Link href={`/dashboard/marketplace/products/${row.slug}`}>View</Link>
+                    </Button>
+                    {canAddToCart ? (
+                      <Button
+                        size="sm"
+                        className="rounded-full min-h-11 flex-1 gap-1"
+                        disabled={isPending && pendingProductId === row.id}
+                        onClick={() => handleAddToCart(row)}
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                        Add
+                      </Button>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+            />
           </CardContent>
         </Card>
       )}
