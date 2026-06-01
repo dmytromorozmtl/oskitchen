@@ -8,8 +8,8 @@
   "7-live-smoke": "todo",
   "8-hide-preview-nav": "done",
   "9-reconcile-tracker": "done",
-  "10-kds-slo": "todo",
-  "11-cross-channel-staging": "todo",
+  "10-kds-slo": "done",
+  "11-cross-channel-staging": "done",
   "12-health-deck": "todo",
   "13-shopify-outbound": "todo",
   "14-cross-tenant-e2e": "todo",
@@ -30,6 +30,7 @@
   "29-investor-hold": "todo",
   "30-native-defer": "todo",
   "_meta": {
-    "1-vault-secrets-note": "docs updated 2026-06-01; human gate \u2014 credentials still 0/11"
+    "1-vault-secrets-note": "docs updated 2026-06-01; human gate — credentials still 0/11",
+    "10-kds-slo-note": "docs/kds-slo-proof-plan.md pre-existed with p50/p95/p99 targets"
   }
 }
