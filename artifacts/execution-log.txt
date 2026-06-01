@@ -2091,3 +2091,10 @@ Files: services/marketplace/billing-integration-service.ts, lib/marketplace/bill
 Marketplace progress: 30/33 (phase-5-cycle-27-billing-integration done)
 Next: Cycle 28 — services/marketplace/analytics-integration-service.ts analytics-marketplace integration
 ---
+Cycle: marketplace-28
+Timestamp: 2026-06-02T17:00:00.000Z
+Action: feat: analytics-marketplace integration — getProcurementPnL (category spend lines, budget variance, % of revenue), getFoodCostWithMarketplace (internal costSnapshot + marketplace dry-goods COGS), getSavingsReport (price drops, spend delta, budget headroom); integration snapshot loader
+Files: services/marketplace/analytics-integration-service.ts, lib/marketplace/analytics-integration-types.ts, tests/unit/marketplace-analytics-integration.test.ts
+Marketplace progress: 31/33 (phase-5-cycle-28-analytics-integration done, phase-5-integrations complete)
+Next: Cycle 29 — app/dashboard/marketplace/compare/page.tsx marketplace price comparison
+---
