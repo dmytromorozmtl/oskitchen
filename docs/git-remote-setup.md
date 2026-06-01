@@ -1,7 +1,7 @@
 # Git Remote Backup Setup
 
 **Audience:** Founder, VP Engineering, DevOps  
-**Status:** **Human gate** — this clone has **no `git remote` configured** (786 commits, single-machine risk)  
+**Status:** **Human gate** — this clone has **no `git remote` configured** (815 commits, single-machine risk)  
 **Related:** [`GITHUB_SETUP.md`](./GITHUB_SETUP.md), [`SECRET_ROTATION_PLAN.md`](./SECRET_ROTATION_PLAN.md)
 
 ---
@@ -13,7 +13,7 @@
 | Single-machine repo | Total loss if laptop fails |
 | No CI/CD integration | GitHub Actions + Vercel previews blocked |
 | No collaborator backup | Bus factor = 1 |
-| No off-site history | 786 commits unprotected |
+| No off-site history | 815 commits unprotected |
 
 **Execution tracker:** `artifacts/30-action-tracker.json` → `3-git-remote` (docs done; remote pending human)
 
