@@ -1979,3 +1979,10 @@ Files: app/vendor/register/page.tsx, app/vendor/register/status/page.tsx, app/pl
 Marketplace progress: 12/33 (phase-3-cycle-11-vendor-registration done)
 Next: Cycle 12 — app/vendor/dashboard/page.tsx vendor dashboard
 ---
+Cycle: marketplace-12
+Timestamp: 2026-06-02T01:00:00.000Z
+Action: feat: vendor dashboard — metrics orders/revenue/avg/pending/stock/messages/rating, pending actions, 30d revenue chart, top 5 products, recent 10 orders, vendor cabinet layout/subnav
+Files: app/vendor/(cabinet)/dashboard/page.tsx, services/marketplace/vendor-dashboard-service.ts, lib/marketplace/vendor-page-access.tsx, components/marketplace/vendor-dashboard-client.tsx
+Marketplace progress: 13/33 (phase-3-cycle-12-vendor-dashboard done)
+Next: Cycle 13 — app/vendor/products/page.tsx vendor product management
+---
