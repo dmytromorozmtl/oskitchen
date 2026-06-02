@@ -2679,3 +2679,11 @@ Commit: feat: marketplace catalog filters
 Changes: components/marketplace/catalog-filter-bar.tsx — mobile search + Sheet drawer, desktop grid; tests/unit/catalog-filter-bar.test.ts
 Total done: 47/122
 
+---
+Cycle: 20260602-172500
+Task: 48 — Product comparison table (side-by-side, max 4)
+Role: Design | Priority: P1
+Commit: feat: product comparison table
+Changes: components/marketplace/product-comparison-table.tsx, wired into marketplace-compare-client.tsx, tests/unit/product-comparison-table.test.ts
+Total done: 48/122
+

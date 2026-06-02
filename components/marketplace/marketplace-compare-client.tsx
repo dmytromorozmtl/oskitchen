@@ -7,6 +7,7 @@ import { Plus, Scale, Search, Star } from "lucide-react";
 import { toast } from "sonner";
 
 import { addMarketplaceProductToCartAction } from "@/actions/marketplace/cart";
+import { ProductComparisonTable, MARKETPLACE_PRODUCT_COMPARISON_MAX, sliceProductsForComparison } from "@/components/marketplace/product-comparison-table";
 import { MarketplaceResponsiveDataList } from "@/components/marketplace/marketplace-responsive-data-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -158,6 +159,23 @@ export function MarketplaceCompareClient({
           </CardContent>
         </Card>
       ) : (
+        <div className="space-y-4">
+          {result.rows.length >= 2 ? (
+            <ProductComparisonTable
+              products={result.rows}
+              truncatedFrom={
+                result.rows.length > MARKETPLACE_PRODUCT_COMPARISON_MAX
+                  ? result.rows.length
+                  : undefined
+              }
+              canAddToCart={canAddToCart}
+              onAddToCart={handleAddToCart}
+              pendingProductId={pendingProductId}
+              isPending={isPending}
+            />
+          ) : null}
+
+          {result.rows.length === 1 || result.rows.length > MARKETPLACE_PRODUCT_COMPARISON_MAX ? (
         <Card className="border-border/80 shadow-sm">
           <CardContent className="p-4 lg:p-0">
             <MarketplaceResponsiveDataList
@@ -322,6 +340,8 @@ export function MarketplaceCompareClient({
             />
           </CardContent>
         </Card>
+          ) : null}
+        </div>
       )}
     </div>
   );
