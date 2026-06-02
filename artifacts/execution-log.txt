@@ -2607,3 +2607,11 @@ Commit: test: marketplace migration regression
 Changes: tests/unit/marketplace-migration-regression.test.ts — migration/schema parity, tenant indexes, hub graceful degradation
 Total done: 38/122
 
+---
+Cycle: 20260602-158000
+Task: 39 — Accessibility audit (axe-core results)
+Role: QA | Priority: P1
+Commit: docs: accessibility audit
+Changes: docs/accessibility-audit.md — 12-route axe-core sweep, violation matrix, remediation backlog
+Total done: 39/122
+
