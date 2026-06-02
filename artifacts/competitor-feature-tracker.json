@@ -5,19 +5,28 @@
   "auditReconciliation": {
     "report": "artifacts/competitor-audit-report.md",
     "salesSafeYes": 1,
-    "salesSafePartial": 22,
-    "salesSafePlaceholder": 2,
+    "salesSafePartial": 20,
+    "salesSafePlaceholder": 4,
     "salesSafeMissing": 0,
     "salesSafeTotal": 25,
     "engineeringShippedKeys": 57,
     "priorInflatedClaim": "25/25 done (v12 gap closure — engineering only)",
     "honestyRule": "PASS > SKIPPED — live_proven requires smoke artifact PASS, not wiring-only",
-    "note": "Reconciled 2026-06-01 per forensic audit; 2026-06-02 Toast/Square/Lightspeed head-to-head added (task 52). Use salesSafeFeatures for GTM; engineeringDelivery for eng ledger only."
+    "note": "Reconciled 2026-06-01 per forensic audit; 2026-06-02 Toast/Square/Lightspeed head-to-head added (task 52); 2026-06-02 all 7 competitor head-to-head profiles filled (task 101). Use salesSafeFeatures for GTM; engineeringDelivery for eng ledger only."
   },
   "competitorComparison": {
-    "reconciledAt": "2026-06-02T18:00:00.000Z",
+    "reconciledAt": "2026-06-02T20:00:00.000Z",
     "source": "docs/competitor-comparison-honest.md",
-    "competitors": ["toast", "square", "lightspeed"],
+    "competitors": [
+      "toast",
+      "square",
+      "lightspeed",
+      "clover",
+      "touchbistro",
+      "spoton",
+      "oracle_simphony"
+    ],
+    "headToHeadFilled": 7,
     "honestyRule": "Engineering scaffold ≠ market proof — 0 LIVE integrations, 0 signed LOI (June 2026)",
     "executiveDimensions": [
       {
@@ -117,6 +126,78 @@
           "Multi-location schema and dashboard (partial sales-safe)"
         ],
         "safeTalkTrack": "Lightspeed has proven multi-site deployments. We match on schema ambition but not on LIVE integrations or customer proof yet."
+      },
+      "clover": {
+        "category": "smb_pos_payments",
+        "competitorWins": [
+          "Fiserv-backed payments and SMB brand",
+          "Flexible Clover hardware (Station, Mini, Flex)",
+          "Simple in-venue POS for cafés and QSR",
+          "App marketplace for add-ons",
+          "Established merchant install base"
+        ],
+        "osKitchenWinsQualified": [
+          "Production kitchen → packing → routes depth",
+          "Commissary / meal-prep / ghost kitchen ICP",
+          "7 AI modules + Today Command Center (engineering)",
+          "B2B HoReCa marketplace buyer scaffold",
+          "Software-first — no terminal lock-in"
+        ],
+        "safeTalkTrack": "Clover wins simple counter POS and payments bundles. We target operators who run production kitchens and multi-channel fulfillment — pre-customer with honest BETA labels."
+      },
+      "touchbistro": {
+        "category": "full_service_restaurant",
+        "competitorWins": [
+          "Full-service restaurant focus (table service)",
+          "Reservations and floor-plan narrative",
+          "Established SMB restaurant customer base",
+          "In-venue POS + payments maturity",
+          "Local reseller/partner channels"
+        ],
+        "osKitchenWinsQualified": [
+          "Multi-channel order hub (storefront + delivery BETA)",
+          "Production board and packing workflows",
+          "AI Restaurant Brain briefing on Today",
+          "B2B supply marketplace angle",
+          "Integration honesty UI for pre-LIVE posture"
+        ],
+        "safeTalkTrack": "TouchBistro fits dine-in table service. OS Kitchen fits hybrid operators who need kitchen production truth and B2B supply — not table-management parity claims."
+      },
+      "spoton": {
+        "category": "mid_market_restaurant",
+        "competitorWins": [
+          "Mid-market restaurant POS + payments bundle",
+          "Growing US install base and field sales",
+          "Marketing and loyalty add-ons",
+          "Hardware + software package deals",
+          "Payment processing integration"
+        ],
+        "osKitchenWinsQualified": [
+          "Unified order-to-fulfillment software depth",
+          "566-route ops surface (engineering — not all GTM)",
+          "7 proprietary AI modules in one codebase",
+          "Marketplace buyer catalog → PO path (BETA)",
+          "Deterministic briefing vs generic dashboards"
+        ],
+        "safeTalkTrack": "SpotOn competes on bundled payments and mid-market restaurant POS. We sell a kitchen operating system with AI modules — still proving pilot KPIs and LIVE integrations."
+      },
+      "oracle_simphony": {
+        "category": "enterprise_franchise",
+        "competitorWins": [
+          "Global enterprise franchise deployments",
+          "Certified enterprise stack and SI partner network",
+          "Multi-brand / multi-country at scale (proven)",
+          "Deep enterprise integrations and SLAs",
+          "SOC2 / compliance narrative for RFPs"
+        ],
+        "osKitchenWinsQualified": [
+          "Faster iteration cloud-native UX (small operator)",
+          "AI module breadth in one repo (pilot unproven)",
+          "B2B marketplace vision for independent operators",
+          "Software-only deployment — no Oracle SI timeline",
+          "Honest BETA posture vs overpromising enterprise parity"
+        ],
+        "safeTalkTrack": "Oracle Simphony wins global franchise RFPs. OS Kitchen is not enterprise-ready day one — target commissaries and ≤5-location operators until SSO/SOC2 and LIVE proof land."
       }
     },
     "featureParitySelected": [
@@ -187,7 +268,16 @@
       "Proven uptime SLAs",
       "Brand and distribution",
       "Native mobile POS apps"
-    ]
+    ],
+    "competitorProfileIndex": {
+      "toast": { "tier": "incumbent_leader", "primaryBattlefield": "hardware_payments_scale" },
+      "square": { "tier": "incumbent_leader", "primaryBattlefield": "smb_payments_brand" },
+      "lightspeed": { "tier": "incumbent", "primaryBattlefield": "multi_site_retail_restaurant" },
+      "clover": { "tier": "incumbent", "primaryBattlefield": "smb_counter_pos" },
+      "touchbistro": { "tier": "incumbent", "primaryBattlefield": "full_service_dine_in" },
+      "spoton": { "tier": "challenger", "primaryBattlefield": "mid_market_bundle" },
+      "oracle_simphony": { "tier": "enterprise", "primaryBattlefield": "franchise_rfp" }
+    }
   },
   "salesSafeFeatures": {
     "doordash-ingest": {
