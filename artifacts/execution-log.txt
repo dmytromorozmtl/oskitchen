@@ -2312,3 +2312,53 @@ Cycle: ultimate-verification
 Timestamp: 2026-06-03T04:35:00.000Z
 Action: Ultimate verification & final polish — all 20 critical files ✅, 10/10 integrations ✅, 5571 tests pass, build green after fixes (Prisma JSON casts, camera dashboard types, benchmark metrics, menu CSV types). Production health ok. Committed b562e43b, pushed main.
 
+---
+Cycle: 20260602-095024
+Task: 1 — Commit marketplace UI WIP files
+Commit: 55752b45 chore: commit marketplace UI WIP files
+Files: 16 marketplace pages/components + prisma-migration-missing helper
+Total done: 1/122
+
+---
+Cycle: 20260602-095047
+Task: 2 — Sentry setup guide + instrumentation docs
+Commit: 99245036 docs: Sentry setup guide
+Total done: 2/122
+
+---
+Cycle: 20260602-095148
+Task: 3 — Fix 3 failing tests (Shopify drift at sync time)
+Commit: e3339f68 fix: resolve 3 failing tests
+Total done: 3/122
+
+---
+Cycle: 20260602-095243
+Task: 4 — Kitchen camera synthetic honesty banner
+Role: Developer | Priority: P0
+Commit: 03e82c87 feat: kitchen camera synthetic mode honesty banner
+Total done: 4/122
+
+---
+Cycle: 20260602-095318
+Task: 5 — Marketplace core migration committed
+Role: Developer | Priority: P0
+Commit: 6979efe6 feat: marketplace core migration
+Deploy: npm run prisma:migrate:deploy (staging first, then production)
+Total done: 5/122
+
+---
+Cycle: 20260602-095424
+Task: 6 — Marketplace checkout E2E
+Role: QA | Priority: P0
+Commit: ffbe7520 test: marketplace checkout E2E
+Total done: 6/122
+
+---
+Cycle: 20260602-095958
+Task: 7 — P0 staging smokes in CI pipeline
+Role: QA | Priority: P0
+Commit: ci: P0 staging smokes in pipeline
+Changes: p0-staging-smokes job in ci.yml; policy module + ci-artifacts/p0-staging-smokes-summary.json; Tier 2c in docs/ci-e2e-tier-matrix.md
+Note: Live smokes SKIPPED until all 11 vault secrets configured (honest PASS > SKIPPED)
+Total done: 7/122
+

@@ -100,6 +100,20 @@ npm run test:ci:pos-money-path:e2e
 
 **Inventory depletion channel policy (Era 4 Cycle 1 + Era 5 Cycle 3 + Era 17 Cycles 29–30):** **POS-only** (`lib/inventory/inventory-depletion-policy.ts`, `era4-pos-only-v1`); permanent GTM lock `era5-pos-only-gtm-lock-v1` (`deferred_locked` storefront hook); **Era 17 recert** `era17-pos-only-inventory-lock-v1`; **Era 17 sales training** `era17-pilot-inventory-messaging-v1` — `npm run smoke:pilot-inventory-messaging`. Storefront, public API, manual, and integration entrypoints must not call POS inventory impact recording. Live gate: `npm run test:ci:inventory-depletion:cert`.
 
+## Tier 2c — P0 staging smokes (`p0-staging-smokes` job)
+
+| Suite | Command | Secrets | Notes |
+|-------|---------|---------|-------|
+| P0 staging proof policy unit gate | `npm run test:ci:p0-staging-proof-unblock-era17` | None | **Always-on** — policy + summary unit tests |
+| P0 staging proof unblock smokes | `npm run smoke:p0-staging-proof-unblock` | All **11** P0 vault vars | **Optional tier** — runs only when `ops:validate-p0-vault-env` passes in CI |
+| P0 staging smokes policy summary | `npm run test:ci:p0-staging-smokes:policy` | None | **Always runs** at end of `p0-staging-smokes` job; writes `ci-artifacts/p0-staging-smokes-summary.json` with `PASSED` / `SKIPPED` / `FAILED` |
+
+**CI workflow:** `.github/workflows/ci.yml` → job `p0-staging-smokes`.
+
+**P0 staging smokes policy (Era 17 P0 ops):** `era17-p0-staging-smokes-optional-v1` + `era17-p0-staging-smokes-secrets-accept-v1` in `lib/ci/p0-staging-smokes-ci-policy.ts`. Policy unit gate is **always-on**. Live staging smokes do **not** run without all 11 repository secrets (`E2E_STAGING_BASE_URL`, `E2E_LOGIN_*`, `SSO_STAGING_*`, `DATABASE_URL`, `ENCRYPTION_KEY`, `CHANNEL_SMOKE_OWNER_EMAIL`); forks without secrets stay green when the always-on gate passes and the policy artifact reports **`SKIPPED`**. Ops checklist: `docs/era18-p0-staging-proof-ops-checklist.md`. Artifact: `p0-staging-smokes-summary` (GitHub Actions).
+
+**Wiring certification:** `npm run test:ci:p0-staging-smokes:cert` → `tests/unit/p0-staging-smokes-ci-live.test.ts`.
+
 ## Tier 3 — Staging / preview (manual or scheduled)
 
 | Suite | Workflow | Secrets |
