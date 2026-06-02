@@ -1,29 +1,14 @@
-import { prisma } from "@/lib/prisma";
+import { processReferralConversion } from "@/services/referral/referral-service";
 
-/** Record signup attribution when `referralCode` matches an active code. */
+/** Record signup attribution and grant free months when code is valid. */
 export async function attachReferralToSignup(params: {
   email: string;
   userId: string;
   referralCode?: string | null;
 }) {
-  const code = params.referralCode?.trim();
-  if (!code || code.length > 64) return;
-
-  const normalized = code.toUpperCase();
-  const ref = await prisma.referralCode.findFirst({
-    where: {
-      active: true,
-      OR: [{ code: normalized }, { code: code }],
-    },
-  });
-  if (!ref || ref.userId === params.userId) return;
-
-  await prisma.referralEvent.create({
-    data: {
-      referralCodeId: ref.id,
-      email: params.email.toLowerCase().slice(0, 320),
-      source: "signup",
-      convertedUserId: params.userId,
-    },
+  await processReferralConversion({
+    email: params.email,
+    userId: params.userId,
+    referralCode: params.referralCode,
   });
 }

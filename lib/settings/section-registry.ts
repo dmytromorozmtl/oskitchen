@@ -271,6 +271,17 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     keywords: ["plan", "stripe", "invoice", "usage"],
   },
   {
+    key: "referrals",
+    label: "Referrals",
+    description: "Refer a restaurant — both get a free month on your plan.",
+    href: "/dashboard/settings/referrals",
+    group: "platform",
+    icon: "Gift",
+    capability: "view_settings",
+    bridge: true,
+    keywords: ["referral", "invite", "free month", "partner"],
+  },
+  {
     key: "staff",
     label: "Staff & permissions",
     description: "RBAC roles, invitations, per-location access.",

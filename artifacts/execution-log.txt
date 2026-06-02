@@ -3316,3 +3316,14 @@ Cycle: high-impact-complete
 Feature: all-five
 Result: mass sales ready — Quick Start, Demo, Menu Templates, QR Ordering, Real-time Profit
 
+---
+Cycle: high-impact-final-polish
+Feature: all-five
+Result: done — 5/5 modules + integrations verified; fixed menu-template-selector JSX, QR statusKey IN_PRODUCTION, qr_codes permission surface; test fixes for QR route + era25 timeout; TS 0 errors; deploy COMPLETE https://os-kitchen.com
+Tracker: 5/5
+
+---
+Cycle: 20260602-192022
+Feature: 6 — Referral Program
+Total done: 6/40
+
