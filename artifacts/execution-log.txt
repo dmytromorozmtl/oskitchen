@@ -3159,3 +3159,11 @@ Commit: docs: LinkedIn content plan
 Changes: docs/linkedin-content-plan.md (pillars, cadence, UTM, templates, 4-week calendar); tests/unit/linkedin-content-plan.test.ts
 Total done: 107/122
 
+---
+Cycle: 20260602-350300
+Task: 108 — Restaurant industry partnerships
+Role: Marketing | Priority: P2
+Commit: docs: restaurant industry partnerships
+Changes: docs/restaurant-partnerships-strategy.md (taxonomy, phases, outreach, association MOU, vendor track); tests/unit/restaurant-partnerships-strategy.test.ts
+Total done: 108/122
+
