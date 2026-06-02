@@ -1,4 +1,4 @@
-import type { MarketplaceTransactionStatus } from "@prisma/client";
+import type { MarketplaceTransactionStatus, Prisma } from "@prisma/client";
 import { endOfDay, format, startOfDay, subDays } from "date-fns";
 
 import type { VendorFinanceFilters } from "@/lib/marketplace/vendor-finance-filters";

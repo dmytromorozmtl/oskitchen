@@ -1,4 +1,4 @@
-import type { MarketplacePOStatus } from "@prisma/client";
+import type { MarketplacePOStatus, Prisma } from "@prisma/client";
 import { endOfDay, startOfDay } from "date-fns";
 
 import { buildMarketplaceOrderTimeline } from "@/lib/marketplace/order-status";
@@ -60,7 +60,7 @@ function decimalToNumber(value: { toString(): string } | number | null | undefin
 }
 
 function buildOrderWhere(workspaceId: string, filters: MarketplaceOrdersFilters) {
-  const where: Parameters<typeof prisma.marketplacePurchaseOrder.findMany>[0]["where"] = {
+  const where: Prisma.MarketplacePurchaseOrderWhereInput = {
     workspaceId,
   };
 

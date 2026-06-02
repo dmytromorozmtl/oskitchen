@@ -61,7 +61,7 @@ function decimalToNumber(value: { toString(): string } | number | null | undefin
 }
 
 function buildVendorWhere(filters: PlatformVendorAdminFilters) {
-  const where: Parameters<typeof prisma.vendor.findMany>[0]["where"] = {};
+  const where: Prisma.VendorWhereInput = {};
 
   if (filters.tab === "queue") {
     where.status = filters.status
