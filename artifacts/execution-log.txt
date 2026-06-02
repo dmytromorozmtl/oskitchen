@@ -3023,3 +3023,11 @@ Commit: docs: marketing page audit
 Changes: docs/marketing-page-audit.md (52-route inventory, claims/design/metadata findings, P0–P2 backlog); tests/unit/marketing-page-audit.test.ts
 Total done: 90/122
 
+---
+Cycle: 20260602-272800
+Task: 91 — Dark mode audit
+Role: Design | Priority: P2
+Commit: docs: dark mode audit
+Changes: docs/dark-mode-audit.md (theme architecture, surface inventory, token dual-stack, P0–P2 backlog); tests/unit/dark-mode-audit.test.ts
+Total done: 91/122
+
