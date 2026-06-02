@@ -2399,3 +2399,11 @@ Commit: docs: design partner LOI template
 Changes: docs/loi-design-partner-template.md — LOI body, exhibits, ICP alignment, post-signature checklist
 Total done: 12/122
 
+---
+Cycle: 20260602-103000
+Task: 13 — Pilot execution checklist (16 steps)
+Role: PM | Priority: P0
+Commit: docs: pilot execution checklist
+Changes: docs/pilot-execution-checklist.md — 16 steps with owners, due dates, blockers, sign-off
+Total done: 13/122
+
