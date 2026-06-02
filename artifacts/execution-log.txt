@@ -2511,3 +2511,11 @@ Commit: docs: Prisma schema optimization
 Changes: docs/prisma-optimization-audit.md — 399 models census, 43 zero-ref models, duplication clusters, index/N+1 backlog, priority queue
 Total done: 26/122
 
+---
+Cycle: 20260602-140000
+Task: 27 — DoorDash LIVE integration plan
+Role: Developer | Priority: P1
+Commit: docs: DoorDash LIVE integration plan
+Changes: docs/doordash-live-integration-plan.md — BETA inventory, G1–G4 mapping, 4-phase rollout, promotion/rollback, sales-safe language
+Total done: 27/122
+
