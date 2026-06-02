@@ -219,6 +219,7 @@ export function buildWebhookRegistryRows(input: {
       actualCallbackUrl: subscription?.callbackUrl ?? null,
       lastDeliveryAt: delivery?.lastDeliveryAt ?? previous?.lastDeliveryAt ?? null,
       registeredAt,
+      now: Date.parse(input.syncedAt),
     });
 
     registry[def.topic] = {
