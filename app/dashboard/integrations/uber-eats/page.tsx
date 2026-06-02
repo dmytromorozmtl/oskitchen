@@ -6,7 +6,7 @@ import { saveUberEatsSettings } from "@/actions/integrations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import {
   Card,
@@ -57,7 +57,7 @@ export default async function UberEatsIntegrationPage() {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight">Uber Eats</h1>
-            <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>BETA</Badge>
+            <BetaBadge />
           </div>
           <p className="text-sm text-muted-foreground">
             Marketplace BETA — OAuth order ingest, menu sync, signed webhooks.

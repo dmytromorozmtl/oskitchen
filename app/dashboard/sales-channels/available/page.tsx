@@ -1,12 +1,14 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { Button } from "@/components/ui/button";
 import { canManageIntegrations } from "@/lib/integrations/integrations-page-access";
 import {
   isMarketplacePlaceholderProvider,
   marketplacePlaceholderHonestyLabel,
 } from "@/lib/integrations/integration-honesty";
+import { isBetaIntegrationProvider } from "@/lib/integrations/integration-registry";
 import { requireSalesChannelsManagePage } from "@/lib/channels/sales-channels-page-access";
 import { integrationConnectionListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { resolveAllChannels } from "@/lib/channels/channel-runtime";
@@ -53,6 +55,8 @@ export default async function SalesChannelsAvailablePage() {
                 <Badge variant="outline" className="rounded-full text-[10px] uppercase tracking-wide">
                   {marketplacePlaceholderHonestyLabel()}
                 </Badge>
+              ) : isBetaIntegrationProvider(c.providerKey) ? (
+                <BetaBadge />
               ) : null}
             </span>
             {canManage ? (

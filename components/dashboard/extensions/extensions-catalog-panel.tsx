@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { ExternalLink, Puzzle, Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -92,9 +93,13 @@ function ExtensionCard({ item, canManage }: { item: ExtensionCatalogItem; canMan
             <CardDescription className="text-xs">{item.publisher}</CardDescription>
           </div>
           <div className="flex flex-wrap gap-1">
-            <Badge variant={statusBadgeVariant(item.status)} className="rounded-full text-[10px] uppercase">
-              {item.status}
-            </Badge>
+            {item.status === "BETA" ? (
+              <BetaBadge />
+            ) : (
+              <Badge variant={statusBadgeVariant(item.status)} className="rounded-full text-[10px] uppercase">
+                {item.status}
+              </Badge>
+            )}
             {item.certificationLabel ? (
               <Badge variant="outline" className="rounded-full text-[10px]">
                 {item.certificationLabel}

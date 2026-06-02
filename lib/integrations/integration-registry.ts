@@ -78,3 +78,23 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {
   return INTEGRATION_REGISTRY.find((e) => e.id === id);
 }
+
+export const BETA_INTEGRATION_IDS = INTEGRATION_REGISTRY.filter(
+  (entry) => entry.status === "BETA",
+).map((entry) => entry.id);
+
+export function isBetaIntegration(id: string): boolean {
+  return getIntegrationById(id)?.status === "BETA";
+}
+
+/** Maps sales-channel provider keys to integration registry ids when they share BETA status. */
+const PROVIDER_KEY_TO_INTEGRATION_ID: Partial<Record<string, string>> = {
+  doordash: "doordash",
+  grubhub: "grubhub",
+  "uber-eats": "uber-eats",
+};
+
+export function isBetaIntegrationProvider(providerKey: string): boolean {
+  const integrationId = PROVIDER_KEY_TO_INTEGRATION_ID[providerKey] ?? providerKey;
+  return isBetaIntegration(integrationId);
+}

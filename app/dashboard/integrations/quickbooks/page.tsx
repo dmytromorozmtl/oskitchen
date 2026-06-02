@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { AccountingExportPanel } from "@/components/integrations/accounting-export-panel";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { isQuickBooksConfigured } from "@/services/integrations/quickbooks-service";
 
@@ -11,7 +12,10 @@ export default function QuickBooksIntegrationPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <h1 className="text-2xl font-semibold">QuickBooks</h1>
+      <div className="flex flex-wrap items-center gap-2">
+        <h1 className="text-2xl font-semibold">QuickBooks</h1>
+        <BetaBadge />
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Connection</CardTitle>

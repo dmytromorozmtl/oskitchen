@@ -2370,3 +2370,16 @@ Commit: test: kitchen camera synthetic banner presence
 Changes: tests/unit/kitchen-camera-synthetic-banner-presence.test.ts (wiring, SSR markup, static import graph, optional .next chunk check)
 Total done: 8/122
 
+---
+Cycle: 20260602-100530
+Task: 9 — Kitchen camera preview banner (pre-satisfied by Task 4)
+Role: Design | Priority: P0
+Note: components/kitchen/kitchen-camera-preview-banner.tsx already exists — tracker marked done, no duplicate commit
+---
+Cycle: 20260602-100530
+Task: 10 — BETA badges on all integration cards
+Role: Design | Priority: P0
+Commit: feat: BETA badges on all integration cards
+Changes: BetaBadge component; applied to 7 BETA integration pages, channel cards, extensions catalog, sales channels list
+Total done: 10/122
+

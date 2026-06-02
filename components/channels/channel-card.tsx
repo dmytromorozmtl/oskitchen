@@ -18,6 +18,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 
 import { IntegrationActionButton } from "@/components/integrations/integration-action-button";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { SensitiveErrorPreview } from "@/components/integrations/sensitive-error-preview";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ import {
   isMarketplacePlaceholderProvider,
   marketplacePlaceholderHonestyLabel,
 } from "@/lib/integrations/integration-honesty";
+import { isBetaIntegrationProvider } from "@/lib/integrations/integration-registry";
 import { SITE_URL } from "@/lib/constants";
 import { toSafeErrorPreview } from "@/lib/security/sensitive-redaction";
 
@@ -137,6 +139,8 @@ export function ChannelCard({ row, mode = "default" }: { row: ResolvedChannel; m
             <Badge variant="outline" className="rounded-full border-amber-500/50 text-[10px] font-semibold uppercase tracking-wide text-amber-800 dark:text-amber-200">
               {marketplacePlaceholderHonestyLabel()}
             </Badge>
+          ) : isBetaIntegrationProvider(row.providerKey) ? (
+            <BetaBadge />
           ) : null}
           <Badge variant="outline" className="rounded-full text-[10px] font-normal">
             {supportLevelBadgeLabel(row.supportLevel)}

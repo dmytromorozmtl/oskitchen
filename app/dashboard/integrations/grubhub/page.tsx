@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -41,7 +42,10 @@ export default async function GrubhubIntegrationPage() {
       ) : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Grubhub integration</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-2xl font-semibold">Grubhub integration</h1>
+            <BetaBadge />
+          </div>
           <p className="text-sm text-muted-foreground">
             {integration?.name} · {integration?.status} · marketplace ingest + menu sync
           </p>
