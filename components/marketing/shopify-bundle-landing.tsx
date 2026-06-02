@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { SolutionComparisonTable } from "@/components/marketing/solution-comparison-table";
 import { SolutionFinalCta } from "@/components/marketing/solution-final-cta";
+import { PlatformDifferentiatorSection } from "@/components/marketing/platform-differentiator-section";
 import { SectionHeader } from "@/components/marketing/section-header";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { BreadcrumbSchema, FAQSchema } from "@/components/seo/schema-org";
@@ -16,6 +17,8 @@ import {
   SHOPIFY_BUNDLE_CTA,
   SHOPIFY_BUNDLE_FAQ,
   SHOPIFY_BUNDLE_FEATURES,
+  SHOPIFY_AI_MOATS_BLOCK,
+  SHOPIFY_MARKETPLACE_BLOCK,
   SHOPIFY_BUNDLE_HEADLINE,
   SHOPIFY_BUNDLE_SUBHEADLINE,
   SHOPIFY_BUNDLE_TESTIMONIAL,
@@ -119,7 +122,7 @@ export function ShopifyBundleLanding() {
           <SectionHeader
             tag="Features"
             title="What the Shopify bundle includes"
-            description="Production-ready integrations today — with honest beta labels where scope is still expanding."
+            description="Qualified integrations today — honest BETA labels where scope is still expanding."
             centered
             className="mx-auto"
           />
@@ -132,6 +135,9 @@ export function ShopifyBundleLanding() {
             ))}
           </div>
         </section>
+
+        <PlatformDifferentiatorSection block={SHOPIFY_AI_MOATS_BLOCK} />
+        <PlatformDifferentiatorSection block={SHOPIFY_MARKETPLACE_BLOCK} />
 
         <SolutionComparisonTable
           comparison={SHOPIFY_BUNDLE_COMPARISON}

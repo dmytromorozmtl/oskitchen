@@ -2807,3 +2807,11 @@ Commit: docs: Today Command Center demo script
 Changes: docs/demo-video-script-today.md — 90s timed script, VO block, on-screen map, honesty rules, variants
 Total done: 63/122
 
+---
+Cycle: 20260602-210000
+Task: 64 — ICP landing pages updated (marketplace + AI moats)
+Role: Marketing | Priority: P1
+Commit: docs: ICP landing pages updated
+Changes: lib/marketing/platform-differentiators-content.ts, shopify-bundle-content.ts, icp-landing-content.ts, platform-differentiator-section.tsx, shopify-bundle-landing.tsx, icp-landing-page.tsx, docs/icp-landing-pages-updated.md — honest inventory fixes + AI moats + B2B marketplace sections on /shopify and 3 ICP landings
+Total done: 64/122
+

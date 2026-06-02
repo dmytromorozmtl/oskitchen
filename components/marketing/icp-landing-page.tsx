@@ -19,6 +19,11 @@ import {
   icpLandingCtaHref,
   type IcpLandingSlug,
 } from '@/lib/marketing/icp-landing-content';
+import { PlatformDifferentiatorSection } from '@/components/marketing/platform-differentiator-section';
+import {
+  MARKETING_AI_MOATS_BLOCK,
+  MARKETING_B2B_MARKETPLACE_BLOCK,
+} from '@/lib/marketing/platform-differentiators-content';
 import type { RichSolutionSlug } from '@/lib/marketing/solution-landing-content';
 
 type Props = {
@@ -117,6 +122,9 @@ export function IcpLandingPage({ slug }: Props) {
             disclaimer="Comparison is directional for evaluation — confirm pricing, hardware bundles, and feature tiers with each vendor before purchase."
           />
         ) : null}
+
+        <PlatformDifferentiatorSection block={MARKETING_AI_MOATS_BLOCK} />
+        <PlatformDifferentiatorSection block={MARKETING_B2B_MARKETPLACE_BLOCK} />
 
         <section className="border-t border-border/60 py-16 sm:py-20">
           <div className="mx-auto max-w-3xl rounded-2xl border border-amber-500/25 bg-amber-500/5 p-6 sm:p-8">

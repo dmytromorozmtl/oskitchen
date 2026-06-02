@@ -97,6 +97,8 @@ const WEEKLY_PREORDER_LIMITATIONS = [
   'Cross-channel inventory depletion is POS-scoped today — not full unified stock across Woo/Shopify unless configured and proven.',
   'Native meal-plan subscriptions are BETA — WooCommerce Subscriptions bridge is read-only placeholder.',
   'Enterprise SSO and SCIM are not production-certified — pilot scope only.',
+  'AI Restaurant Brain briefing on Today is deterministic — not LLM magic or guaranteed revenue lift.',
+  'HoReCa B2B marketplace is BETA scaffold — 0 signed marketplace customers at pre-scale.',
 ];
 
 const GHOST_KITCHEN_LIMITATIONS = [
@@ -104,6 +106,8 @@ const GHOST_KITCHEN_LIMITATIONS = [
   'Marketplace aggregator live ops are not certified — partner-required for Uber Eats and similar.',
   'Unified inventory depletion across all channels is not a production sales claim today.',
   'Multi-brand P&L is dashboard snapshot — not audited financial reporting.',
+  '7 AI modules ship at qualified maturity — Today briefing is pilot-ready; others are BETA until your workspace proves them.',
+  'B2B HoReCa buyer marketplace is a BETA scaffold — vendor seeding required; not a live national vendor network.',
 ];
 
 const MEAL_PREP_LIMITATIONS = [
@@ -111,6 +115,8 @@ const MEAL_PREP_LIMITATIONS = [
   'Ingredient demand rollups need recipes configured — not a full ERP or purchasing automation suite.',
   'Delivery route optimization is partial — third-party courier dispatch is on the roadmap.',
   'Cross-channel loyalty earn/redeem is not live across all channels.',
+  'AI Purchasing suggestions are BETA — buyer approves POs; not autopilot procurement.',
+  'B2B marketplace catalog/checkout is BETA — useful for commissary buyers when vendors are onboarded in pilot.',
 ];
 
 export const ICP_LANDING_CONFIG: Record<IcpLandingSlug, IcpLandingConfig> = {

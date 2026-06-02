@@ -1,4 +1,10 @@
 import type { RichSolutionLanding } from "@/lib/marketing/solution-landing-content";
+import {
+  MARKETING_AI_MOATS_BLOCK,
+  MARKETING_B2B_MARKETPLACE_BLOCK,
+} from "@/lib/marketing/platform-differentiators-content";
+
+export { MARKETING_AI_MOATS_BLOCK as SHOPIFY_AI_MOATS_BLOCK, MARKETING_B2B_MARKETPLACE_BLOCK as SHOPIFY_MARKETPLACE_BLOCK };
 
 /** Hero badge for Shopify bundle landing — exported for tests. */
 export const SHOPIFY_BUNDLE_BADGE = "Shopify + Kitchen OS" as const;
@@ -8,7 +14,7 @@ export const SHOPIFY_BUNDLE_HEADLINE =
   "Your Shopify store. Your kitchen. One operating system." as const;
 
 export const SHOPIFY_BUNDLE_SUBHEADLINE =
-  "Connect Shopify orders to production, packing, POS, and cross-channel inventory — without replacing your storefront." as const;
+  "Connect Shopify orders to production, packing, POS, and POS-scoped inventory hooks — without replacing your storefront." as const;
 
 export const SHOPIFY_BUNDLE_TRUST_LINE =
   "Custom app integration (beta) — not listed on Shopify App Store yet. Honest scope on every claim." as const;
@@ -38,9 +44,9 @@ export const SHOPIFY_SOLUTION_POINTS = [
       "Shopify webhooks promote orders into the same spine as POS, catering, and storefront — visible in Order Hub, KDS, and packing.",
   },
   {
-    title: "Cross-channel inventory sync",
+    title: "POS-scoped inventory hooks",
     description:
-      "Kitchen master spine with Shopify pull/push, conflict queue, health dashboard, and daily reconciliation email.",
+      "Kitchen master spine with Shopify pull/compare paths, conflict queue, and health dashboard — BETA maturity; not unified depletion across all channels.",
   },
   {
     title: "Optional B2B AR command center",
@@ -61,9 +67,9 @@ export const SHOPIFY_BUNDLE_FEATURES = [
       "Map Shopify SKUs to kitchen products and modifiers — resolve conflicts before they hit production.",
   },
   {
-    title: "Cross-channel inventory",
+    title: "Inventory compare & sync (BETA)",
     description:
-      "Bidirectional sync with health dashboard, last-synced timestamps, and email alerts on drift.",
+      "Shopify pull/push with health dashboard and reconciliation email when configured — POS-scoped depletion certified; cross-channel unification not a sales claim.",
   },
   {
     title: "POS + pickup desk",
@@ -102,7 +108,7 @@ export const SHOPIFY_BUNDLE_COMPARISON: NonNullable<RichSolutionLanding["compari
     },
     {
       feature: "Cross-channel inventory",
-      kitchenos: "✅ POS + Shopify sync",
+      kitchenos: "BETA — POS + Shopify compare",
       competitorA: "Shopify-only",
       competitorB: "Spreadsheet",
     },
@@ -138,7 +144,7 @@ export const SHOPIFY_BUNDLE_FAQ = [
   },
   {
     q: "What about inventory sync?",
-    a: "Cross-channel inventory sync is production-ready with conflict resolution, health dashboard, and daily reconciliation email. Enable auto-push per channel in dashboard settings.",
+    a: "Inventory compare and selective sync paths are BETA — enable per channel in dashboard after integration health review. POS-scoped depletion is the certified claim today; we do not sell unified cross-channel stock without pilot proof.",
   },
   {
     q: "Is B2B wholesale included?",
