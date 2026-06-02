@@ -2407,3 +2407,11 @@ Commit: docs: pilot execution checklist
 Changes: docs/pilot-execution-checklist.md — 16 steps with owners, due dates, blockers, sign-off
 Total done: 13/122
 
+---
+Cycle: 20260602-104000
+Task: 14 — LIVE integration definition of done
+Role: PM | Priority: P0
+Commit: docs: LIVE integration DoD
+Changes: docs/live-integration-definition-of-done.md — smoke pass, real credentials, 24h uptime, error rate < 1%
+Total done: 14/122
+
