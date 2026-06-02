@@ -2415,3 +2415,11 @@ Commit: docs: LIVE integration DoD
 Changes: docs/live-integration-definition-of-done.md — smoke pass, real credentials, 24h uptime, error rate < 1%
 Total done: 14/122
 
+---
+Cycle: 20260602-105000
+Task: 15 — Staging environment checklist
+Role: PM | Priority: P0
+Commit: docs: staging environment checklist
+Changes: docs/staging-environment-checklist.md — domain, SSL, vault, database, cron, webhooks
+Total done: 15/122
+
