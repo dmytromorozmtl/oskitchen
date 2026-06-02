@@ -2495,3 +2495,11 @@ Commit: chore: console.log audit
 Changes: scripts/audit-console-log.sh (--write, --strict); docs/console-log-audit.md; npm run audit:console-log; observability-setup.md link
 Total done: 24/122
 
+---
+Cycle: 20260602-133000
+Task: 25 — Bundle size analysis guide
+Role: Developer | Priority: P1
+Commit: docs: bundle size analysis
+Changes: docs/bundle-analysis.md — @next/bundle-analyzer install, next.config wiring, run/interpret, budgets, OS Kitchen heavy deps
+Total done: 25/122
+
