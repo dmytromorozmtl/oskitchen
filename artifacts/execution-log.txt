@@ -2583,3 +2583,11 @@ Commit: test: SSO IdP smoke
 Changes: e2e/sso-idp-smoke.spec.ts, e2e/helpers/sso-idp-staging-ready.ts — contract, denial paths, vault-gated staging reachability
 Total done: 35/122
 
+---
+Cycle: 20260602-155000
+Task: 36 — Non-Stripe webhook signature tests
+Role: QA | Priority: P1
+Commit: test: webhook signatures non-Stripe
+Changes: tests/unit/webhook-signatures.test.ts — DoorDash, Grubhub, Uber Eats, Shopify HMAC + route wiring
+Total done: 36/122
+
