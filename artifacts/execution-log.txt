@@ -3151,3 +3151,11 @@ Commit: docs: marketing analytics setup
 Changes: docs/marketing-analytics-setup.md (GA4, PostHog, pixels, consent, events, dashboards); tests/unit/marketing-analytics-setup.test.ts
 Total done: 106/122
 
+---
+Cycle: 20260602-345100
+Task: 107 — LinkedIn content plan
+Role: Marketing | Priority: P2
+Commit: docs: LinkedIn content plan
+Changes: docs/linkedin-content-plan.md (pillars, cadence, UTM, templates, 4-week calendar); tests/unit/linkedin-content-plan.test.ts
+Total done: 107/122
+
