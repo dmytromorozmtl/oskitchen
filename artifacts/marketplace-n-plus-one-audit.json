@@ -1,0 +1,98 @@
+{
+  "version": "marketplace-n-plus-one-audit-v1",
+  "generatedAt": "2026-06-02T16:09:34.814Z",
+  "scannedRoot": "services/marketplace",
+  "scannedFiles": 32,
+  "findings": [
+    {
+      "file": "services/marketplace/inventory-integration-service.ts",
+      "line": 222,
+      "pattern": "for_await_prisma",
+      "severity": "high",
+      "snippet": "for (const line of order.items) {",
+      "recommendation": "Batch with findMany + Map, or use Prisma include/select in one query."
+    },
+    {
+      "file": "services/marketplace/platform-product-moderation-service.ts",
+      "line": 387,
+      "pattern": "for_await_marketplace_db",
+      "severity": "medium",
+      "snippet": "for (const productId of input.productIds) {",
+      "recommendation": "Collapse marketplace service calls in loops — batch cart/checkout/moderation writes."
+    },
+    {
+      "file": "services/marketplace/platform-vendor-moderation-service.ts",
+      "line": 323,
+      "pattern": "for_await_marketplace_db",
+      "severity": "medium",
+      "snippet": "for (const vendorId of input.vendorIds) {",
+      "recommendation": "Collapse marketplace service calls in loops — batch cart/checkout/moderation writes."
+    },
+    {
+      "file": "services/marketplace/recurring-orders-service.ts",
+      "line": 212,
+      "pattern": "for_await_marketplace_db",
+      "severity": "medium",
+      "snippet": "for (const item of items) {",
+      "recommendation": "Collapse marketplace service calls in loops — batch cart/checkout/moderation writes."
+    },
+    {
+      "file": "services/marketplace/recurring-orders-service.ts",
+      "line": 268,
+      "pattern": "for_await_prisma",
+      "severity": "high",
+      "snippet": "for (const row of due) {",
+      "recommendation": "Batch with findMany + Map, or use Prisma include/select in one query."
+    },
+    {
+      "file": "services/marketplace/recurring-orders-service.ts",
+      "line": 287,
+      "pattern": "for_await_marketplace_db",
+      "severity": "medium",
+      "snippet": "for (const item of items) {",
+      "recommendation": "Collapse marketplace service calls in loops — batch cart/checkout/moderation writes."
+    }
+  ],
+  "summary": {
+    "high": 2,
+    "medium": 4,
+    "byPattern": {
+      "for_await_prisma": 2,
+      "map_async_prisma": 0,
+      "for_await_marketplace_db": 4
+    }
+  },
+  "hotPaths": [
+    {
+      "file": "services/marketplace/marketplace-catalog-service.ts",
+      "highSeverityFindings": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "services/marketplace/cart-service.ts",
+      "highSeverityFindings": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "services/marketplace/checkout-service.ts",
+      "highSeverityFindings": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "services/marketplace/marketplace-orders-service.ts",
+      "highSeverityFindings": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "services/marketplace/marketplace-product-detail-service.ts",
+      "highSeverityFindings": 0,
+      "status": "PASS"
+    }
+  ],
+  "overall": "NEEDS_ATTENTION",
+  "recommendations": [
+    "Fix high-severity prisma-in-loop findings before marketplace pilot scale.",
+    "Batch bulk moderation and recurring-order cart writes (see recurring-orders + platform moderation services).",
+    "inventory-integration-service: prefetch ingredients with findMany({ id: { in } }) on PO receive."
+  ]
+}

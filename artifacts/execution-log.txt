@@ -2951,3 +2951,11 @@ Commit: test: AI Briefing delivery integration
 Changes: tests/integration/briefing-delivery.integration.test.ts — SMS critical path, email log-only + Resend success, schedule skip, deliverDailyBriefingIfScheduled/ForUser, notificationLog wiring; npm run test:ci:briefing-delivery-integration
 Total done: 81/122
 
+---
+Cycle: 20260602-254500
+Task: 82 — N+1 query detection for marketplace
+Role: QA | Priority: P2
+Commit: chore: N+1 query detection for marketplace
+Changes: scripts/lib/marketplace-n-plus-one-audit.ts + scripts/audit-marketplace-n-plus-one.ts; artifacts/marketplace-n-plus-one-audit.json (6 findings, hot paths PASS); npm run audit:marketplace-n-plus-one; tests/unit/marketplace-n-plus-one-audit.test.ts
+Total done: 82/122
+
