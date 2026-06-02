@@ -51,6 +51,7 @@
     "test:e2e": "playwright test",
     "test:e2e:public-smoke": "playwright test tests/e2e/public-health.spec.ts tests/e2e/platform-access-denial.spec.ts --project=ci-critical-paths",
     "test:e2e:a11y": "playwright test tests/e2e/a11y-marketing.spec.ts --project=ci-critical-paths",
+    "test:e2e:accessibility": "playwright test e2e/accessibility.spec.ts --project=chromium",
     "test:e2e:pilot": "node scripts/check-e2e-pilot-env.mjs && node scripts/run-e2e-pilot.mjs",
     "test:e2e:pilot:http": "node scripts/check-e2e-pilot-http-env.mjs && playwright test tests/e2e/pilot-golden-path-http.spec.ts --project=ci-critical-paths",
     "test:e2e:dashboard": "playwright test e2e/auth.setup.ts e2e/dashboard-auth.spec.ts e2e/pos-checkout-flow.spec.ts",

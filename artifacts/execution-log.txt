@@ -2911,3 +2911,11 @@ Commit: chore: Prisma unused model audit
 Changes: scripts/audit-prisma-model-usage.ts + lib/prisma-model-usage-audit.ts; artifacts/prisma-unused-models.json (43 Tier A orphans, 42 phase-1 review); npm run audit:prisma-models
 Total done: 76/122
 
+---
+Cycle: 20260602-241500
+Task: 77 — Accessibility auto-test (axe-core)
+Role: QA | Priority: P2
+Commit: test: accessibility auto-test
+Changes: e2e/accessibility.spec.ts — unified WCAG 2.1 AA gate for marketing + auth paths (/shopify, /vendor); npm run test:e2e:accessibility
+Total done: 77/122
+

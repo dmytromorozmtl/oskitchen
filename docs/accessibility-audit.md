@@ -13,7 +13,7 @@
 |-------|--------|----------------|
 | Marketing | `/`, `/pricing`, `/roi-calculator`, `/book-demo`, `/compare/toast`, `/compare/deliverect`, `/solutions/meal-prep`, `/blog/meal-prep-order-queue-cut-packing-errors`, `/deck` | Yes — `tests/e2e/a11y-marketing.spec.ts` |
 | Auth shell | `/login`, `/signup`, `/forgot-password` | Yes — `tests/e2e/a11y-auth-shell.spec.ts` |
-| Dashboard / POS / KDS | Not scanned in this pass | Manual + future Task 77 (`e2e/accessibility.spec.ts`) |
+| Dashboard / POS / KDS | Not scanned in this pass | `e2e/accessibility.spec.ts` (Task 77) + manual |
 
 **WCAG tags scanned:** `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`
 
@@ -32,6 +32,7 @@ CI=1 CRON_SECRET=ci-test-secret \
   npm run start -- -p 3000 &
 # wait for http://127.0.0.1:3000/login
 npm run test:e2e:a11y
+npm run test:e2e:accessibility
 ./node_modules/.bin/playwright test tests/e2e/a11y-auth-shell.spec.ts --project=chromium
 ```
 
