@@ -2439,3 +2439,11 @@ Commit: docs: remove untouchable claim
 Changes: docs/reportjune2.md (4 replacements); marketing/forbidden-claims-training.md (safe alternative row)
 Total done: 17/122
 
+---
+Cycle: 20260602-113000
+Task: 18 — Kitchen camera honest positioning
+Role: Marketing | Priority: P0
+Commit: docs: kitchen camera honest positioning
+Changes: docs/kitchen-camera-honest-positioning.md — camera-ready platform, synthetic vs live, safe/forbidden claims
+Total done: 18/122
+
