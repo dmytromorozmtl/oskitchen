@@ -44,6 +44,8 @@ yarn-error.log*
 .env.local
 .env*.local
 .env.*
+.env.sentry-build-plugin
+.sentryclirc
 !.env.example
 !.env*.example
 !.env*.template

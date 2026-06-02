@@ -14,9 +14,9 @@ Free-tier monitoring for errors, performance, bundle size, and production availa
 
 - **Dashboard:** [sentry.io — os-kitchen](https://sentry.io/organizations/os-kitchen/)
 - **Server DSN:** `SENTRY_DSN` (Vercel Production)
-- **Browser DSN:** `NEXT_PUBLIC_SENTRY_DSN` (optional; public DSN only)
-- **Wiring:** `instrumentation.ts`, `sentry.*.config.ts`, `withSentryConfig` in `next.config.ts`
-- **Setup guide:** [sentry-setup.md](./sentry-setup.md)
+- **Browser DSN:** `NEXT_PUBLIC_SENTRY_DSN` (Replay + Feedback)
+- **Wiring:** `instrumentation.ts`, `instrumentation-client.ts`, `sentry.{server,edge}.config.ts`, `withSentryConfig`, tunnel `/monitoring`
+- **Setup guide:** [sentry-setup.md](./sentry-setup.md) (official Next.js SDK skill)
 - **Activate on Vercel:** `npm run sentry:production:activate`
 
 Verify production:

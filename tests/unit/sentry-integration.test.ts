@@ -34,6 +34,9 @@ describe("Sentry integration wiring", () => {
     const nextConfig = read("next.config.ts");
     expect(nextConfig).toContain("withSentryConfig");
     expect(nextConfig).toContain("os-kitchen");
+    expect(nextConfig).toContain('tunnelRoute: "/monitoring"');
+    expect(nextConfig).toContain("automaticVercelMonitors");
+    expect(nextConfig).toContain("SENTRY_AUTH_TOKEN");
   });
 
   it("loads server and edge SDKs from instrumentation register()", () => {
@@ -42,19 +45,34 @@ describe("Sentry integration wiring", () => {
     expect(instrumentation).toContain('await import("./sentry.edge.config")');
     expect(instrumentation).toContain('process.env.NEXT_RUNTIME === "nodejs"');
     expect(instrumentation).toContain('process.env.NEXT_RUNTIME === "edge"');
+    expect(instrumentation).toContain("onRequestError");
+    expect(instrumentation).toContain("captureRequestError");
   });
 
   it("guards Sentry.init on DSN env vars in runtime configs", () => {
     for (const rel of ["sentry.server.config.ts", "sentry.edge.config.ts"]) {
       const src = read(rel);
-      expect(src).toContain("process.env.SENTRY_DSN?.trim()");
+      expect(src).toContain("resolveSentryServerDsn");
       expect(src).toContain("Sentry.init");
       expect(src).toContain("resolveTracesSampleRate");
     }
 
-    const client = read("sentry.client.config.ts");
+    const client = read("instrumentation-client.ts");
     expect(client).toContain("process.env.NEXT_PUBLIC_SENTRY_DSN?.trim()");
     expect(client).toContain("Sentry.init");
+    expect(client).toContain("replayIntegration");
+    expect(client).toContain("feedbackIntegration");
+    expect(client).toContain("onRouterTransitionStart");
+  });
+
+  it("does not double-init client SDK from root layout", () => {
+    const layout = read("app/layout.tsx");
+    expect(layout).not.toContain("sentry.client.config");
+  });
+
+  it("captures root layout errors in global-error boundary", () => {
+    const globalError = read("app/global-error.tsx");
+    expect(globalError).toContain("Sentry.captureException");
   });
 
   it("routes server errors through captureErrorSafe helper", () => {

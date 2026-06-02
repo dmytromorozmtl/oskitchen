@@ -18,7 +18,6 @@ import { APP_NAME, SITE_URL } from "@/lib/constants";
 import { googleSiteVerificationMetadata } from "@/lib/marketing/google-site-verification";
 
 import "./globals.css";
-import "../sentry.client.config";
 
 const syne = Syne({
   subsets: ["latin"],

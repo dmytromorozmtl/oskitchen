@@ -73,7 +73,7 @@ Client Components **must not** import `getServerEnv()` or read secret keys.
 | `SENTRY_DSN` | SECRET | Optional | Initializes `@sentry/nextjs` on the server (`instrumentation.ts`) and enables `captureErrorSafe` when the SDK client is live. |
 | `SENTRY_TRACES_SAMPLE_RATE` | SECRET | Optional | Server trace sampling `0`–`1` (default `0.05` in `sentry.server.config.ts`). |
 | `NEXT_PUBLIC_SENTRY_DSN` | PUBLIC | Optional | Browser Sentry DSN only — never put secret keys in `NEXT_PUBLIC_*`. |
-| `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` | PUBLIC | Optional | Client trace sampling (default `0` in `sentry.client.config.ts`). |
+| `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` | PUBLIC | Optional | Client trace sampling (default `0.1` prod in `instrumentation-client.ts` via `resolveClientTracesSampleRate`). |
 | `RATE_LIMIT_ADAPTER` | SECRET | Optional | `memory` (default) \| `upstash` \| `redis`. Use distributed adapters in preview/production multi-instance hosts. |
 | `UPSTASH_REDIS_REST_URL` | SECRET | With Upstash | REST API URL from Upstash console. |
 | `UPSTASH_REDIS_REST_TOKEN` | SECRET | With Upstash | REST token — pair with URL. |

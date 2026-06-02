@@ -3,9 +3,9 @@
 ## Dependency
 
 - `@sentry/nextjs` is installed.
-- Config files: `sentry.client.config.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`.
+- Config files: `instrumentation-client.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`, `instrumentation.ts` (`onRequestError`).
 - `instrumentation.ts` loads server + edge configs.
-- Root `app/layout.tsx` imports `../sentry.client.config` so browser SDK initializes when `NEXT_PUBLIC_SENTRY_DSN` is set.
+- Browser SDK loads via `instrumentation-client.ts` when `NEXT_PUBLIC_SENTRY_DSN` is set (Next.js client instrumentation hook).
 
 ## Server capture API
 

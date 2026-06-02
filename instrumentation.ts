@@ -1,4 +1,6 @@
-/** Server boot: production readiness, Sentry (`sentry.server.config` when `SENTRY_DSN` set), OTEL. See `docs/sentry-setup.md`. */
+import * as Sentry from "@sentry/nextjs";
+
+/** Server boot: Sentry, production readiness, OTEL. See `docs/sentry-setup.md`. */
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const { assertNodeStartupReadiness } = await import(
@@ -13,3 +15,5 @@ export async function register() {
     await import("./sentry.edge.config");
   }
 }
+
+export const onRequestError = Sentry.captureRequestError;

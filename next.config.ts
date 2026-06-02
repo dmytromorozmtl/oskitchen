@@ -88,7 +88,7 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://*.supabase.co https://*.vercel.app",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://www.google-analytics.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://www.google-analytics.com https://*.ingest.sentry.io https://*.sentry.io",
       "frame-src https://js.stripe.com",
       "object-src 'none'",
       "base-uri 'self'",
@@ -119,9 +119,13 @@ const configWithAnalyzer = withBundleAnalyzer(nextConfig);
 export default withSentryConfig(configWithAnalyzer, {
   org: process.env.SENTRY_ORG ?? "os-kitchen",
   project: process.env.SENTRY_PROJECT ?? "os-kitchen",
-  silent: true,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
   widenClientFileUpload: true,
+  reactComponentAnnotation: { enabled: true },
+  tunnelRoute: "/monitoring",
   disableLogger: true,
+  automaticVercelMonitors: true,
   sourcemaps: {
     disable: !process.env.SENTRY_AUTH_TOKEN,
   },

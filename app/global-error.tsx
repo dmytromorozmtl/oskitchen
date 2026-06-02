@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
 import { BRAND_ACCENT, BRAND_ACCENT_DARK, BRAND_INK } from "@/lib/constants";
@@ -12,6 +13,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
+    Sentry.captureException(error);
     console.error("Global error boundary:", error);
   }, [error]);
 

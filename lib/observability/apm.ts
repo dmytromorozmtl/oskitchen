@@ -12,12 +12,28 @@ export function resolveTracesSampleRate(): number {
   return process.env.NODE_ENV === "production" ? 0.1 : 1;
 }
 
+/** Browser trace sampling — override via NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE. */
+export function resolveClientTracesSampleRate(): number {
+  const raw = process.env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE?.trim();
+  if (raw) {
+    const n = Number(raw);
+    if (Number.isFinite(n) && n >= 0 && n <= 1) return n;
+  }
+  return process.env.NODE_ENV === "production" ? 0.1 : 1;
+}
+
+/** Server/edge DSN — prefers secret server var, falls back to public DSN when misconfigured. */
+export function resolveSentryServerDsn(): string | undefined {
+  const dsn = process.env.SENTRY_DSN?.trim() || process.env.NEXT_PUBLIC_SENTRY_DSN?.trim();
+  return dsn || undefined;
+}
+
 /**
  * Idempotent APM init — complements sentry.*.config.ts when imported from hot paths.
  * Safe to call multiple times; Sentry ignores duplicate init.
  */
 export function initAPM(): void {
-  const dsn = process.env.SENTRY_DSN?.trim();
+  const dsn = resolveSentryServerDsn();
   if (!dsn || resolveObservabilityBackend() !== "SENTRY") return;
 
   Sentry.init({

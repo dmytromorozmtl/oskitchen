@@ -313,6 +313,6 @@ export const config = {
   // Theme experiment middleware reads many compliance snapshots that use node:crypto.
   runtime: "nodejs",
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|manifest\\.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!monitoring|_next/static|_next/image|favicon.ico|manifest\\.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
