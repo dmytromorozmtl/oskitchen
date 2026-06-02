@@ -2871,3 +2871,11 @@ Commit: docs: navigation sprawl audit
 Changes: docs/nav-sprawl-audit.md — sprawl metrics (566 routes / 126 sidebar), orphan buckets, pilot profile, duplicate paths, consolidation waves
 Total done: 71/122
 
+---
+Cycle: 20260602-231000
+Task: 72 — Uber Direct implementation plan
+Role: Developer | Priority: P2
+Commit: docs: Uber Direct plan
+Changes: docs/uber-direct-implementation-plan.md — PLACEHOLDER inventory, UI keep decision, BETA/LIVE gates, phased execution, sales-safe language
+Total done: 72/122
+
