@@ -2647,3 +2647,11 @@ Commit: feat: consistent empty states
 Changes: components/ui/empty-state.tsx (card + inline variants), dashboard re-export, marketplace pages + list clients
 Total done: 43/122
 
+---
+Cycle: 20260602-163000
+Task: 44 — Today Command Center mobile audit
+Role: Design | Priority: P1
+Commit: docs: Today Command Center mobile audit
+Changes: docs/today-command-center-mobile-audit.md — viewport matrix, section findings, P1/P2 backlog, test gap
+Total done: 44/122
+
