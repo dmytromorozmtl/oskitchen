@@ -3143,3 +3143,11 @@ Commit: docs: vendor seeding execution plan
 Changes: docs/vendor-seeding-execution.md (E0–E3 runbook, per-vendor sprint, sign-offs, smoke matrix); tests/unit/vendor-seeding-execution.test.ts
 Total done: 105/122
 
+---
+Cycle: 20260602-343400
+Task: 106 — Marketing analytics setup
+Role: Marketing | Priority: P2
+Commit: docs: marketing analytics setup
+Changes: docs/marketing-analytics-setup.md (GA4, PostHog, pixels, consent, events, dashboards); tests/unit/marketing-analytics-setup.test.ts
+Total done: 106/122
+
