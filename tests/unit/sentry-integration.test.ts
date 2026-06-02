@@ -23,10 +23,17 @@ vi.mock("@sentry/nextjs", () => ({
 describe("Sentry integration wiring", () => {
   it("documents setup and references instrumentation hook", () => {
     expect(existsSync(join(ROOT, "docs/sentry-setup.md"))).toBe(true);
+    expect(existsSync(join(ROOT, "docs/monitoring.md"))).toBe(true);
     const doc = read("docs/sentry-setup.md");
     expect(doc).toContain("instrumentation.ts");
     expect(doc).toContain("SENTRY_DSN");
     expect(doc).toContain("captureErrorSafe");
+  });
+
+  it("wraps Next config with withSentryConfig for build-time SDK integration", () => {
+    const nextConfig = read("next.config.ts");
+    expect(nextConfig).toContain("withSentryConfig");
+    expect(nextConfig).toContain("os-kitchen");
   });
 
   it("loads server and edge SDKs from instrumentation register()", () => {

@@ -2,6 +2,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import type { NextConfig } from "next";
 import bundleAnalyzer from "@next/bundle-analyzer";
+import { withSentryConfig } from "@sentry/nextjs";
 
 import { storefrontImageRemotePatterns } from "@/lib/storefront/image-cdn-config";
 
@@ -113,4 +114,15 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+const configWithAnalyzer = withBundleAnalyzer(nextConfig);
+
+export default withSentryConfig(configWithAnalyzer, {
+  org: process.env.SENTRY_ORG ?? "os-kitchen",
+  project: process.env.SENTRY_PROJECT ?? "os-kitchen",
+  silent: true,
+  widenClientFileUpload: true,
+  disableLogger: true,
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+});
