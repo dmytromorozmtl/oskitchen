@@ -2423,3 +2423,11 @@ Commit: docs: staging environment checklist
 Changes: docs/staging-environment-checklist.md — domain, SSL, vault, database, cron, webhooks
 Total done: 15/122
 
+---
+Cycle: 20260602-110000
+Task: 16 — Migration deployment process
+Role: PM | Priority: P0
+Commit: docs: migration deployment process
+Changes: docs/migration-deployment-process.md — create → verify → staging → prod
+Total done: 16/122
+
