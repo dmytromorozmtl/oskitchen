@@ -2687,3 +2687,11 @@ Commit: feat: product comparison table
 Changes: components/marketplace/product-comparison-table.tsx, wired into marketplace-compare-client.tsx, tests/unit/product-comparison-table.test.ts
 Total done: 48/122
 
+---
+Cycle: 20260602-173500
+Task: 49 — Component library (20 key components)
+Role: Design | Priority: P1
+Commit: docs: component library
+Changes: docs/component-library.md — 20 components across UI, layout, dashboard, marketplace, onboarding, integrations
+Total done: 49/122
+
