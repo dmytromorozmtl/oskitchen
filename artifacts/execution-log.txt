@@ -3255,3 +3255,11 @@ Commit: docs: QR code ordering plan
 Changes: docs/qr-code-ordering-plan.md (Phase 1–6, table metadata Phase 2, kiosk Q4 2026); tests/unit/qr-code-ordering-plan.test.ts
 Total done: 119/122
 
+---
+Cycle: 20260602-448400
+Task: 120 — Multi-location reporting plan
+Role: P2 Additional | Priority: P2
+Commit: docs: multi-location consolidated reporting plan
+Changes: docs/multi-location-reporting-plan.md (Layers 1–4, Phase 2 cert, executive partial); tests/unit/multi-location-reporting-plan.test.ts
+Total done: 120/122
+
