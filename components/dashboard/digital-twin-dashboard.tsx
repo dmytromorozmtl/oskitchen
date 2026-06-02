@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { RangeInput } from "@/components/ui/range-input";
 import { cn } from "@/lib/utils";
 
 const TIME_WINDOWS = [
@@ -162,18 +163,20 @@ export function DigitalTwinDashboard({ config, defaultMenuMix, initialResult }: 
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="order-count">Expected orders</Label>
+                <Label id="order-count-label" htmlFor="order-count">
+                  Expected orders
+                </Label>
                 <span className="text-sm font-medium tabular-nums">{orderCount}</span>
               </div>
-              <input
+              <RangeInput
                 id="order-count"
-                type="range"
                 min={50}
                 max={500}
                 step={10}
                 value={orderCount}
+                valueText={`${orderCount} orders`}
+                aria-labelledby="order-count-label"
                 onChange={(e) => setOrderCount(Number(e.target.value))}
-                className="w-full accent-primary"
               />
               <p className="text-xs text-muted-foreground">50 – 500 orders in window</p>
             </div>
