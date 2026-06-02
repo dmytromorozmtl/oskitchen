@@ -10,6 +10,7 @@ import {
   resolveQuickStartModuleKeys,
 } from "@/lib/onboarding/quick-start-channels";
 import type {
+  OnboardingMenuTemplateId,
   QuickStartApplyResult,
   QuickStartConfig,
   QuickStartMenuItemInput,
@@ -62,7 +63,17 @@ export async function createMenuFromTemplate(
   ownerUserId: string,
   config: Pick<QuickStartConfig, "restaurantType" | "skipTemplateItems">,
 ): Promise<{ menuId: string; itemsCreated: number }> {
-  const template = getMenuTemplate(config.restaurantType);
+  return createMenuFromOnboardingTemplate(ownerUserId, config.restaurantType, {
+    skipTemplateItems: config.skipTemplateItems,
+  });
+}
+
+export async function createMenuFromOnboardingTemplate(
+  ownerUserId: string,
+  templateId: OnboardingMenuTemplateId,
+  options?: { skipTemplateItems?: boolean },
+): Promise<{ menuId: string; itemsCreated: number }> {
+  const template = getMenuTemplate(templateId);
   const base = await menuCreateBaseForOwner(ownerUserId);
   const today = startOfDay(new Date());
   const end = addYears(today, 1);
@@ -85,7 +96,7 @@ export async function createMenuFromTemplate(
   });
 
   let itemsCreated = 0;
-  if (!config.skipTemplateItems) {
+  if (!options?.skipTemplateItems) {
     const operatingMode = getOperatingModeForBusinessType(template.businessType);
     const isDaily = operatingMode === "DAILY_SERVICE";
     for (let i = 0; i < template.items.length; i++) {
@@ -115,6 +126,14 @@ export async function createMenuFromTemplate(
   }
 
   return { menuId: menu.id, itemsCreated };
+}
+
+export async function applyOnboardingMenuTemplate(
+  ownerUserId: string,
+  templateId: OnboardingMenuTemplateId,
+): Promise<{ menuId: string; productCount: number }> {
+  const { menuId, itemsCreated } = await createMenuFromOnboardingTemplate(ownerUserId, templateId);
+  return { menuId, productCount: itemsCreated };
 }
 
 export async function createQuickStartMenuItems(

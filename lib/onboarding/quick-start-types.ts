@@ -13,6 +13,26 @@ export type QuickStartRestaurantType =
   | "catering"
   | "food_truck";
 
+/** Pre-built cuisine menu templates (10) — includes quick-start types + pizza, sushi, coffee. */
+export type OnboardingMenuTemplateId =
+  | QuickStartRestaurantType
+  | "pizza"
+  | "sushi"
+  | "coffee_shop";
+
+export const ONBOARDING_MENU_TEMPLATE_IDS = [
+  "full_service",
+  "qsr",
+  "bakery",
+  "bar",
+  "ghost_kitchen",
+  "catering",
+  "food_truck",
+  "pizza",
+  "sushi",
+  "coffee_shop",
+] as const satisfies readonly OnboardingMenuTemplateId[];
+
 /** Quick Start step 2 — order intake channels. */
 export type QuickStartChannel = "pos" | "qr" | "website" | "delivery_apps" | "all";
 
@@ -38,7 +58,7 @@ export type MenuTemplateItem = {
 };
 
 export type MenuTemplate = {
-  id: QuickStartRestaurantType;
+  id: OnboardingMenuTemplateId;
   title: string;
   description: string;
   businessType: BusinessType;
@@ -47,6 +67,24 @@ export type MenuTemplate = {
   categories: readonly string[];
   items: readonly MenuTemplateItem[];
 };
+
+export const ONBOARDING_MENU_TEMPLATE_OPTIONS: {
+  id: OnboardingMenuTemplateId;
+  label: string;
+  description: string;
+  icon: string;
+}[] = [
+  { id: "full_service", label: "Full service", description: "15-item dine-in menu", icon: "🍽️" },
+  { id: "qsr", label: "Quick service", description: "10-item counter menu", icon: "🍔" },
+  { id: "bakery", label: "Bakery", description: "10 pastries & coffee", icon: "🥐" },
+  { id: "bar", label: "Bar & lounge", description: "12 drinks & bar bites", icon: "🍸" },
+  { id: "ghost_kitchen", label: "Ghost kitchen", description: "8 delivery bowls", icon: "👻" },
+  { id: "catering", label: "Catering", description: "6 packages & trays", icon: "🎉" },
+  { id: "food_truck", label: "Food truck", description: "8 handheld favorites", icon: "🚚" },
+  { id: "pizza", label: "Pizza", description: "8 pies & sides", icon: "🍕" },
+  { id: "sushi", label: "Sushi", description: "12 rolls & nigiri", icon: "🍣" },
+  { id: "coffee_shop", label: "Coffee shop", description: "10 drinks & bites", icon: "☕" },
+];
 
 export type QuickStartApplyResult = {
   success: true;
