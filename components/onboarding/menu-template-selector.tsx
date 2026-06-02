@@ -130,7 +130,7 @@ export function MenuTemplateSelector({ className }: { className?: string }) {
                     <span>
                       <span className="font-medium">{item.name}</span>
                       <span className="ml-2 text-xs text-muted-foreground">{item.category}</span>
-                    </li>
+                    </span>
                     <span className="tabular-nums">${item.price.toFixed(2)}</span>
                   </li>
                 ))}

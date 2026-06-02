@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export default async function QrCodesPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "products.edit")) {
-    return <PermissionDeniedSurfaceCard surfaceId="qr-codes" />;
+    return <PermissionDeniedSurfaceCard surfaceId="qr_codes" />;
   }
 
   const { dataUserId } = actor;

@@ -26,7 +26,8 @@ export type PermissionDeniedSurfaceId =
   | "packing_command"
   | "packing_verify"
   | "production_calendar"
-  | "production_board";
+  | "production_board"
+  | "qr_codes";
 
 export type PermissionDeniedSurfaceDef = {
   id: PermissionDeniedSurfaceId;
@@ -229,6 +230,15 @@ export const PERMISSION_DENIED_SURFACES: Record<
     primaryLabel: "Back to Today",
     secondaryHref: "/dashboard/production/calendar",
     secondaryLabel: "Open calendar",
+  },
+  qr_codes: {
+    id: "qr_codes",
+    title: "QR table ordering",
+    permissionKey: "products.edit",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/products",
+    secondaryLabel: "Open products",
   },
 };
 

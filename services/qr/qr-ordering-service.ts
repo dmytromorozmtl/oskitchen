@@ -177,7 +177,7 @@ export async function processQROrder(input: ProcessQROrderInput): Promise<Proces
     { userId: ctx.ownerUserId },
     {
       orderType: "RESTAURANT_ORDER",
-      statusKey: "PREPARING",
+      statusKey: "IN_PRODUCTION",
       fulfillmentDetail: "DINE_IN",
       paymentMode: "PAY_LATER",
       customerName: input.customerName?.trim() || `Table ${tableLabel.replace(/^Table\s*/i, "")}`,
