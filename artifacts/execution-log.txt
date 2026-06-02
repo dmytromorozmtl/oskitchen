@@ -2455,3 +2455,11 @@ Commit: docs: AI moats honest positioning
 Changes: docs/ai-moats-honest-positioning.md — 7 modules, capabilities, limits, safe/forbidden claims
 Total done: 19/122
 
+---
+Cycle: 20260602-120000
+Task: 20 — Honest competitor comparison
+Role: Marketing | Priority: P0
+Commit: docs: honest competitor comparison
+Changes: docs/competitor-comparison-honest.md — vs Toast/Square/Lightspeed, ahead/behind tables
+Total done: 20/122
+
