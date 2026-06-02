@@ -3135,3 +3135,11 @@ Commit: docs: bug triage process
 Changes: docs/bug-triage-process.md (intake, P0–P4 priorities, workflow, escalation, support templates); tests/unit/bug-triage-process.test.ts
 Total done: 104/122
 
+---
+Cycle: 20260602-341800
+Task: 105 — Vendor seeding execution plan
+Role: PM | Priority: P2
+Commit: docs: vendor seeding execution plan
+Changes: docs/vendor-seeding-execution.md (E0–E3 runbook, per-vendor sprint, sign-offs, smoke matrix); tests/unit/vendor-seeding-execution.test.ts
+Total done: 105/122
+
