@@ -3207,3 +3207,11 @@ Commit: docs: hardware partner program
 Changes: docs/hardware-partner-program.md (L0–L2 tiers, categories, L1 validation, partner process); tests/unit/hardware-partner-program.test.ts
 Total done: 113/122
 
+---
+Cycle: 20260602-381200
+Task: 114 — 24/7 support tier plan
+Role: P2 Additional | Priority: P2
+Commit: docs: 24/7 support tier plan
+Changes: docs/support-tier-plan.md (T0–T4 tiers, severity SLAs, 24/7 roadmap prerequisites); tests/unit/support-tier-plan.test.ts
+Total done: 114/122
+
