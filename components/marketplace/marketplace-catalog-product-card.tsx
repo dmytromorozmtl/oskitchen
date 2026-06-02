@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Plus, Scale, Star } from "lucide-react";
 
+import { WishlistButton } from "@/components/marketplace/wishlist-button";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,9 +63,12 @@ export function MarketplaceCatalogProductCard({
       <CardHeader className="space-y-2 pb-3">
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="line-clamp-2 text-base">{product.name}</CardTitle>
-          <Badge variant={product.inStock ? "secondary" : "outline"} className="shrink-0 rounded-full text-[10px]">
-            {product.inStock ? "In stock" : "Backorder"}
-          </Badge>
+          <div className="flex shrink-0 items-center gap-1">
+            <WishlistButton slug={product.slug} productName={product.name} variant="icon" size="icon" />
+            <Badge variant={product.inStock ? "secondary" : "outline"} className="rounded-full text-[10px]">
+              {product.inStock ? "In stock" : "Backorder"}
+            </Badge>
+          </div>
         </div>
         <CardDescription>{product.vendorName}</CardDescription>
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

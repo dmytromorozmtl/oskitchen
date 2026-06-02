@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { Heart, MessageCircle, Minus, Plus, ShoppingCart, Star } from "lucide-react";
+import { MessageCircle, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -11,6 +11,7 @@ import {
 import { sendMarketplaceVendorMessageAction } from "@/actions/marketplace/product-detail";
 import { MarketplaceProductGallery } from "@/components/marketplace/marketplace-product-gallery";
 import { MarketplaceProductReviewsSection } from "@/components/marketplace/marketplace-product-reviews-section";
+import { WishlistButton } from "@/components/marketplace/wishlist-button";
 import {
   Accordion,
   AccordionContent,
@@ -36,11 +37,6 @@ import {
 import { resolveUnitPrice } from "@/lib/marketplace/pricing-utils";
 import { formatCurrency } from "@/lib/utils";
 
-import {
-  readMarketplaceWishlistSlugs,
-  writeMarketplaceWishlistSlugs,
-} from "@/lib/marketplace/wishlist";
-
 export function MarketplaceProductDetailClient({
   product,
   canAddToCart,
@@ -56,7 +52,6 @@ export function MarketplaceProductDetailClient({
   const [quantity, setQuantity] = useState(
     Math.max(product.moq, initialQuantity ?? product.moq),
   );
-  const [wishlisted, setWishlisted] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
   const [contactOpen, setContactOpen] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -107,10 +102,6 @@ export function MarketplaceProductDetailClient({
   }
 
   useEffect(() => {
-    setWishlisted(readMarketplaceWishlistSlugs().includes(product.slug));
-  }, [product.slug]);
-
-  useEffect(() => {
     if (autoAddedRef.current || !autoAdd || !canAddToCart) return;
     autoAddedRef.current = true;
     startTransition(async () => {
@@ -133,16 +124,6 @@ export function MarketplaceProductDetailClient({
       if (result.ok) toast.success("Added to marketplace cart");
     });
   }, [autoAdd, canAddToCart, initialQuantity, product, selectedVariant]);
-
-  function toggleWishlist() {
-    const current = readMarketplaceWishlistSlugs();
-    const next = current.includes(product.slug)
-      ? current.filter((slug) => slug !== product.slug)
-      : [...current, product.slug];
-    writeMarketplaceWishlistSlugs(next);
-    setWishlisted(next.includes(product.slug));
-    toast.success(next.includes(product.slug) ? "Saved to wish list" : "Removed from wish list");
-  }
 
   function sendContactMessage() {
     startTransition(async () => {
@@ -306,15 +287,7 @@ export function MarketplaceProductDetailClient({
               <ShoppingCart className="h-4 w-4" />
               Add to cart
             </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="rounded-full gap-2"
-              onClick={toggleWishlist}
-            >
-              <Heart className={`h-4 w-4 ${wishlisted ? "fill-rose-500 text-rose-500" : ""}`} />
-              Wish list
-            </Button>
+            <WishlistButton slug={product.slug} productName={product.name} />
             <Dialog open={contactOpen} onOpenChange={setContactOpen}>
               <DialogTrigger asChild>
                 <Button type="button" variant="outline" className="rounded-full gap-2">

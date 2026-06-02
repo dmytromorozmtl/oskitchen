@@ -2991,3 +2991,11 @@ Commit: feat: marketplace category icons
 Changes: lib/marketplace/category-icons.ts; components/marketplace/marketplace-category-icon.tsx + marketplace-category-browse-grid.tsx; wired into category sidebar and marketplace hub; tests/unit/marketplace-category-icons.test.ts
 Total done: 86/122
 
+---
+Cycle: 20260602-264500
+Task: 87 — Marketplace wishlist UX
+Role: Design | Priority: P2
+Commit: feat: wishlist UX
+Changes: components/marketplace/wishlist-button.tsx + wishlist-page.tsx; lib/marketplace/wishlist toggle helpers; wired into product detail, catalog cards, and wishlist route; tests/unit/marketplace-wishlist-ux.test.ts
+Total done: 87/122
+
