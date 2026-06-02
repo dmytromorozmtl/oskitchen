@@ -2567,3 +2567,11 @@ Commit: test: cross-tenant marketplace isolation
 Changes: e2e/cross-tenant-isolation.spec.ts — scopedIdWhere, loadMarketplaceOrderDetail, loadVendorOrderDetail, HTTP 404 for foreign marketplace PO
 Total done: 33/122
 
+---
+Cycle: 20260602-153000
+Task: 34 — Sentry integration unit tests
+Role: QA | Priority: P1
+Commit: test: Sentry integration
+Changes: tests/unit/sentry-integration.test.ts — wiring contract, backend resolution, capture pipeline redaction, health snapshot states
+Total done: 34/122
+
