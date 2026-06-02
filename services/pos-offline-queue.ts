@@ -51,6 +51,10 @@ export type OfflinePosPreAuthorization = {
   deviceId: string | null;
   amountCents: number;
   currency: string;
+  cardBrand?: string;
+  last4?: string;
+  paymentIntentId?: string | null;
+  orderId?: string | null;
   createdAt: string;
   status: "pending" | "captured" | "failed" | "expired";
   lastError?: string;
@@ -195,6 +199,10 @@ export async function storeOfflinePreAuthorization(input: {
   currency?: string;
   tableId?: string | null;
   deviceId?: string | null;
+  cardBrand?: string;
+  last4?: string;
+  paymentIntentId?: string | null;
+  orderId?: string | null;
 }): Promise<{ id: string }> {
   const id = randomUUID();
   const entry: OfflinePosPreAuthorization = {
@@ -207,6 +215,10 @@ export async function storeOfflinePreAuthorization(input: {
     deviceId: input.deviceId ?? null,
     amountCents: Math.max(0, Math.round(input.amountCents)),
     currency: input.currency ?? "usd",
+    cardBrand: input.cardBrand,
+    last4: input.last4,
+    paymentIntentId: input.paymentIntentId ?? null,
+    orderId: input.orderId ?? null,
     createdAt: new Date().toISOString(),
     status: "pending",
   };
@@ -287,6 +299,9 @@ async function capturePendingPreAuthorizations(input: {
   workspaceId?: string | null;
   online: boolean;
 }): Promise<{ captured: number; failed: number }> {
+  const { enqueueOfflineCardCapture, linkOfflineCardCaptureToOrder, syncOfflineCardCaptures } =
+    await import("@/services/pos/offline-card-service");
+
   const key = queueKey(input.userId, input.workspaceId ?? null);
   const list = preAuthQueues.get(key) ?? [];
   let captured = 0;
@@ -295,10 +310,54 @@ async function capturePendingPreAuthorizations(input: {
   for (const preAuth of list) {
     if (preAuth.status !== "pending") continue;
     if (!input.online) continue;
-    preAuth.status = "failed";
-    preAuth.lastError =
-      "Card capture requires online Stripe Terminal — pre-auth stored for manual retry when connected.";
-    failed += 1;
+
+    if (!preAuth.last4 || !preAuth.cardBrand) {
+      preAuth.status = "failed";
+      preAuth.lastError =
+        "Card capture requires PCI-safe last4/brand metadata — reconnect and sync offline card queue.";
+      failed += 1;
+      continue;
+    }
+
+    await enqueueOfflineCardCapture({
+      userId: preAuth.userId,
+      workspaceId: preAuth.workspaceId,
+      capture: {
+        offlineSaleId: preAuth.offlineSaleId,
+        registerId: preAuth.registerId,
+        amountCents: preAuth.amountCents,
+        currency: preAuth.currency,
+        cardBrand: preAuth.cardBrand,
+        last4: preAuth.last4,
+        paymentIntentId: preAuth.paymentIntentId ?? undefined,
+        tableId: preAuth.tableId,
+        deviceId: preAuth.deviceId,
+      },
+    });
+    if (preAuth.orderId) {
+      await linkOfflineCardCaptureToOrder({
+        userId: preAuth.userId,
+        workspaceId: preAuth.workspaceId,
+        offlineSaleId: preAuth.offlineSaleId,
+        orderId: preAuth.orderId,
+      });
+    }
+  }
+
+  const cardSync = await syncOfflineCardCaptures({
+    userId: input.userId,
+    workspaceId: input.workspaceId ?? null,
+    online: input.online,
+  });
+  captured += cardSync.captured;
+  failed += cardSync.failed;
+
+  for (const preAuth of list) {
+    if (preAuth.status !== "pending") continue;
+    preAuth.status = cardSync.captured > 0 ? "captured" : "failed";
+    if (preAuth.status === "failed" && !preAuth.lastError) {
+      preAuth.lastError = "Stripe Terminal capture did not complete — retry when online.";
+    }
   }
 
   return { captured, failed };

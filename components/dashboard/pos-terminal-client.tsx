@@ -5,6 +5,16 @@ import Link from "next/link";
 import { CreditCard, Minus, Percent, Plus, ShoppingCart, Tag, UserRound, Wifi, WifiOff } from "lucide-react";
 
 import { posCheckoutAction } from "@/actions/pos";
+import {
+  enqueueOfflineCardCaptureAction,
+  linkOfflineCardCaptureAction,
+  syncOfflineCardCapturesAction,
+} from "@/actions/pos-offline-card";
+import {
+  enqueueOfflineCardClientCapture,
+  listOfflineCardClientCaptures,
+  removeOfflineCardClientCapture,
+} from "@/lib/pos/offline-card-client-queue";
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
 import { posTouchCompactClass, posTouchTileClass } from "@/lib/pos/touch-targets";
 import {
@@ -158,6 +168,8 @@ export function PosTerminalClient(props: {
   const [staffId, setStaffId] = useState(props.staff[0]?.id ?? "");
   const [query, setQuery] = useState("");
   const [paymentMode, setPaymentMode] = useState<PaymentModeKey>("CASH");
+  const [offlineCardLast4, setOfflineCardLast4] = useState("");
+  const [offlineCardBrand, setOfflineCardBrand] = useState("visa");
   const [fulfillment, setFulfillment] = useState<"PICKUP" | "DINE_IN" | "DELIVERY">("PICKUP");
   const [cart, setCart] = useState<CartLine[]>([]);
   const [checkoutStatus, setCheckoutStatus] = useState<PosCheckoutStatus | null>(null);
@@ -261,6 +273,23 @@ export function PosTerminalClient(props: {
       };
       const res = await posCheckoutAction(payload);
       if (res.ok) {
+        const cardCaptures = await listOfflineCardClientCaptures();
+        const cardRow = cardCaptures.find((c) => c.offlineSaleId === entry.id);
+        if (cardRow) {
+          const fd = new FormData();
+          fd.set("offlineSaleId", entry.id);
+          fd.set("registerId", String(payload.registerId));
+          fd.set("amountCents", String(cardRow.amountCents));
+          fd.set("cardBrand", cardRow.cardBrand);
+          fd.set("last4", cardRow.last4);
+          if (cardRow.paymentIntentId) fd.set("paymentIntentId", cardRow.paymentIntentId);
+          await enqueueOfflineCardCaptureAction(fd);
+          const linkFd = new FormData();
+          linkFd.set("offlineSaleId", entry.id);
+          linkFd.set("orderId", res.orderId);
+          await linkOfflineCardCaptureAction(linkFd);
+          await removeOfflineCardClientCapture(cardRow.id);
+        }
         await removeOfflinePosCheckout(entry.id);
         synced += 1;
         continue;
@@ -293,8 +322,16 @@ export function PosTerminalClient(props: {
     await refreshOfflineCounts();
     broadcastOfflineSyncState(conflicts > 0 ? "conflict" : "idle");
 
-    if (synced > 0 && conflicts === 0) {
-      showCheckoutStatus(formatOfflineSyncSuccessMessage(synced), "success");
+    if (synced > 0) {
+      const cardSync = await syncOfflineCardCapturesAction();
+      if (cardSync.ok && cardSync.data.captured > 0) {
+        showCheckoutStatus(
+          `${formatOfflineSyncSuccessMessage(synced)} · ${cardSync.data.captured} card capture(s) synced.`,
+          "success",
+        );
+      } else if (conflicts === 0) {
+        showCheckoutStatus(formatOfflineSyncSuccessMessage(synced), "success");
+      }
     } else if (conflicts > 0) {
       showCheckoutStatus(
         `${conflicts} offline sale(s) need review — server data wins or inventory blocked sync.`,
@@ -546,12 +583,35 @@ export function PosTerminalClient(props: {
       return;
     }
     if (!online && offlineQueueEnabled && posPaymentAllowedWhileOffline(paymentMode)) {
+      if (paymentMode === "OFFLINE_CARD_QUEUED") {
+        const last4 = offlineCardLast4.replace(/\D/g, "").slice(-4);
+        if (last4.length !== 4) {
+          showCheckoutStatus("Enter the last 4 digits shown on the guest card (never the full number).", "error");
+          return;
+        }
+      }
       startTransition(async () => {
-        await enqueueOfflinePosCheckout(buildCheckoutPayload());
+        const offlineSaleId = await enqueueOfflinePosCheckout(buildCheckoutPayload());
+        if (paymentMode === "OFFLINE_CARD_QUEUED" && registerId) {
+          const last4 = offlineCardLast4.replace(/\D/g, "").slice(-4);
+          await enqueueOfflineCardClientCapture({
+            offlineSaleId,
+            registerId,
+            amountCents: Math.round(amountDue * 100),
+            cardBrand: offlineCardBrand,
+            last4,
+          });
+        }
         await refreshOfflineCounts();
         setCart([]);
         resetDiscountState();
-        showCheckoutStatus("Offline — sale queued. Will sync when back online.", "info");
+        setOfflineCardLast4("");
+        showCheckoutStatus(
+          paymentMode === "OFFLINE_CARD_QUEUED"
+            ? "Offline — card sale queued (last4 only). Capture syncs when online."
+            : "Offline — sale queued. Will sync when back online.",
+          "info",
+        );
         broadcastOfflineSyncState("idle");
       });
       return;
@@ -1065,6 +1125,40 @@ export function PosTerminalClient(props: {
             </Select>
             {paymentMode === "CARD_TERMINAL_PLACEHOLDER" ? (
               <StripeTerminalReaderPanel compact className="mt-2" />
+            ) : null}
+            {paymentMode === "OFFLINE_CARD_QUEUED" ? (
+              <div className="mt-2 space-y-2 rounded-lg border border-dashed p-3" data-testid="offline-card-fields">
+                <p className="text-xs text-muted-foreground">
+                  PCI-safe offline card — last4 and brand only. Full capture when Stripe Terminal is online.
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label className="text-xs">Last 4 digits</Label>
+                    <Input
+                      inputMode="numeric"
+                      maxLength={4}
+                      value={offlineCardLast4}
+                      onChange={(e) => setOfflineCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                      placeholder="4242"
+                      data-testid="offline-card-last4"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Brand</Label>
+                    <Select value={offlineCardBrand} onValueChange={setOfflineCardBrand}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="visa">Visa</SelectItem>
+                        <SelectItem value="mastercard">Mastercard</SelectItem>
+                        <SelectItem value="amex">Amex</SelectItem>
+                        <SelectItem value="discover">Discover</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
             ) : null}
             {!canApplyPosDiscount ? (
               <p className="text-xs text-muted-foreground">

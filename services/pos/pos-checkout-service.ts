@@ -26,6 +26,7 @@ import {
   validateExplicitPosDiscountAmount,
 } from "@/lib/pos/pos-discount-guard";
 import { offlinePaymentReference } from "@/lib/pos/offline-sync";
+import { linkOfflineCardCaptureToOrder } from "@/services/pos/offline-card-service";
 
 export type PosCheckoutLine = {
   productId?: string;
@@ -376,6 +377,15 @@ export async function checkoutPosSale(
     await enqueueKitchenRoutingForPosOrder(userId, order.id);
     await recordPendingInventoryImpactsForPosOrder(userId, workspaceId, order.id);
     await syncPosOrderToCrm(userId, order.id);
+
+    if (input.paymentMode === "OFFLINE_CARD_QUEUED" && input.offlineSaleId) {
+      await linkOfflineCardCaptureToOrder({
+        userId,
+        workspaceId,
+        offlineSaleId: input.offlineSaleId,
+        orderId: order.id,
+      }).catch(() => null);
+    }
 
     if (order.customerId) {
       const lines = await prisma.orderItem.findMany({

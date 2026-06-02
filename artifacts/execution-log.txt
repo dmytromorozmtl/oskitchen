@@ -3353,3 +3353,8 @@ Cycle: 20260602-194330
 Feature: 12 — Voice Ordering
 Result: PASSED — Alexa/Google webhooks, voice-ordering-service, settings/voice, KDS purple badge, unit tests (4), e2e smoke
 Tracker: features 7-8 marked done (pre-existing QR + profit); 12/40 complete
+---
+Cycle: 20260602-194612
+Feature: 13 — Offline POS Card Payments
+Result: PASSED — offline-card-service (PCI last4/brand only), OFFLINE_CARD_QUEUED mode, terminal UI + sync panel, unit tests (4), e2e smoke
+Total done: 13/40

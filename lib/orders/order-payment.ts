@@ -6,6 +6,7 @@ export const PAYMENT_MODE_KEYS = [
   "STRIPE_PLACEHOLDER",
   "CASH",
   "CARD_TERMINAL_PLACEHOLDER",
+  "OFFLINE_CARD_QUEUED",
   "COMPED",
 ] as const;
 export type PaymentModeKey = (typeof PAYMENT_MODE_KEYS)[number];
@@ -18,6 +19,8 @@ export const PAYMENT_MODE_LABEL: Record<PaymentModeKey, string> = {
   STRIPE_PLACEHOLDER: "Stripe checkout (when configured)",
   CASH: "Cash",
   CARD_TERMINAL_PLACEHOLDER: "Card terminal (mark paid after external approval)",
+  OFFLINE_CARD_QUEUED:
+    "Offline card (queued — Stripe Terminal capture when online, PCI-safe metadata only)",
   COMPED: "Comped (manager approval required in POS)",
 };
 
@@ -52,12 +55,17 @@ export function modeIsPlaceholder(m: PaymentModeKey): boolean {
   return m === "STRIPE_PLACEHOLDER" || m === "CARD_TERMINAL_PLACEHOLDER";
 }
 
+export function modeIsOfflineCardQueued(m: PaymentModeKey): boolean {
+  return m === "OFFLINE_CARD_QUEUED";
+}
+
 /**
  * Initial `Order.paymentStatus` when an order is first persisted.
  * Never `PAID` for Stripe/terminal placeholder modes until a real capture integration exists.
  */
 export function initialOrderPaymentStatusFromMode(mode: PaymentModeKey): PaymentStatusKey {
   if (mode === "CASH" || mode === "PAID_EXTERNALLY" || mode === "COMPED") return "PAID";
+  if (modeIsOfflineCardQueued(mode)) return "PENDING";
   if (modeIsPlaceholder(mode)) return "PENDING";
   if (mode === "REQUEST_ONLY") return "NOT_REQUIRED";
   return "UNPAID";

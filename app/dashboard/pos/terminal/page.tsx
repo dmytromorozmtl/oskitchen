@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PosTerminalManagerAuditFlowProofPanel } from "@/components/dashboard/pos/pos-terminal-manager-audit-flow-proof-panel";
+import { OfflineCardSyncPanel } from "@/components/pos/offline-card-sync-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PosTerminalClient } from "@/components/dashboard/pos-terminal-client";
 import { PosWelcomeBanner } from "@/components/dashboard/pos-welcome-banner";
@@ -133,6 +134,8 @@ export default async function PosTerminalPage({
       {showWelcome ? <PosWelcomeBanner /> : null}
 
       <PosTerminalManagerAuditFlowProofPanel slice={managerAuditFlowProof} />
+
+      <OfflineCardSyncPanel />
 
       <PosTerminalClient
         registers={registers}

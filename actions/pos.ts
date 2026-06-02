@@ -46,6 +46,7 @@ const checkoutSchema = z.object({
     "STRIPE_PLACEHOLDER",
     "CASH",
     "CARD_TERMINAL_PLACEHOLDER",
+    "OFFLINE_CARD_QUEUED",
     "COMPED",
   ]),
   notes: z.string().max(2000).optional(),
