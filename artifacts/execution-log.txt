@@ -2855,3 +2855,11 @@ Commit: docs: case study template
 Changes: docs/case-study-template.md — reconciled June 2026 gates (Gate C, founding customer stages), web publish path via case-studies.ts, claims cross-refs
 Total done: 69/122
 
+---
+Cycle: 20260602-223000
+Task: 70 — AI briefing email public sample
+Role: Marketing | Priority: P1
+Commit: docs: AI briefing email sample
+Changes: docs/ai-briefing-email-sample.md — subject, plain-text, HTML sample aligned to formatBriefingEmail, SMS excerpt, public usage + forbidden claims
+Total done: 70/122
+
