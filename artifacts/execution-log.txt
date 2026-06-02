@@ -2391,3 +2391,11 @@ Commit: feat: MarketplaceDataUnavailable empty state
 Changes: SVG illustration, "Marketplace is being set up" copy, Contact support CTA; unit test
 Total done: 11/122
 
+---
+Cycle: 20260602-102000
+Task: 12 — Design partner LOI template
+Role: PM | Priority: P0
+Commit: docs: design partner LOI template
+Changes: docs/loi-design-partner-template.md — LOI body, exhibits, ICP alignment, post-signature checklist
+Total done: 12/122
+
