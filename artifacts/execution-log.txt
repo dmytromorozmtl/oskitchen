@@ -3071,3 +3071,11 @@ Commit: docs: marketplace pricing strategy
 Changes: docs/marketplace-pricing-strategy.md (vendor tiers, GMV commission, featured slots, pilot policy, sales claims); tests/unit/marketplace-pricing-strategy.test.ts
 Total done: 96/122
 
+---
+Cycle: 20260602-301200
+Task: 97 — Sales demo environment setup
+Role: PM | Priority: P2
+Commit: docs: sales demo environment setup
+Changes: docs/sales-demo-environment.md (staging tiers, env vars, golden scenarios, demo flow, checklists); tests/unit/sales-demo-environment.test.ts
+Total done: 97/122
+
