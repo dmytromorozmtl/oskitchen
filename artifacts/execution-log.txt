@@ -2935,3 +2935,11 @@ Commit: ci: performance regression check
 Changes: scripts/check-bundle-size-regression.ts; npm run check:bundle-size-regression + test:ci:bundle-size-regression; CI Build tees build-route-sizes.log + Performance regression step; bundle-size-regression.test.ts CI wiring assertion
 Total done: 79/122
 
+---
+Cycle: 20260602-251500
+Task: 80 — MarketplaceDataUnavailable component test
+Role: QA | Priority: P2
+Commit: test: MarketplaceDataUnavailable component
+Changes: tests/unit/marketplace-data-unavailable.test.ts — setup messaging, illustration a11y, 6 hub page wiring, static import graph, custom props API, production chunk check; npm run test:ci:marketplace-data-unavailable
+Total done: 80/122
+
