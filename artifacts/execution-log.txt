@@ -2967,3 +2967,11 @@ Commit: feat: API error states
 Changes: components/ui/api-error-state.tsx — card/inline variants, retry + support CTAs, HTTP status/requestId meta, formatApiErrorMessage helper; tests/unit/api-error-state.test.ts
 Total done: 83/122
 
+---
+Cycle: 20260602-262100
+Task: 84 — AI Briefing email HTML template
+Role: Design | Priority: P2
+Commit: feat: AI briefing email template
+Changes: templates/emails/ai-briefing-email.html — static design reference aligned to formatBriefingEmail(); tests/unit/ai-briefing-email-template.test.ts
+Total done: 84/122
+
