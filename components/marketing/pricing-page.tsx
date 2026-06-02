@@ -19,6 +19,12 @@ import { APP_NAME } from "@/lib/constants";
 import { A11Y_FOCUS_RING, A11Y_INLINE_LINK, A11Y_SEGMENT_BUTTON } from "@/lib/a11y/ui-classes";
 import { cn } from "@/lib/utils";
 import { PLAN_REGISTRY } from "@/lib/billing/plan-registry";
+import {
+  VENDOR_PLAN_MONTHLY_FEE_USD,
+  VENDOR_PLAN_ORDER,
+  commissionRateForPlan,
+} from "@/lib/marketplace/billing-integration-types";
+import type { VendorPlanTier } from "@prisma/client";
 
 const ANNUAL_DISCOUNT_PCT = 17;
 
@@ -103,7 +109,20 @@ const FEATURE_ROWS: { label: string; s: boolean; p: boolean; t: boolean; e: bool
   { label: "Analytics & CRM rollup", s: false, p: true, t: true, e: true },
   { label: "Forecasting & webhook ingestion log", s: false, p: false, t: true, e: true },
   { label: "Enterprise API keys", s: false, p: false, t: false, e: true },
+  { label: "HoReCa B2B marketplace catalog & PO (BETA)", s: true, p: true, t: true, e: true },
 ];
+
+const VENDOR_PLAN_LABELS: Record<VendorPlanTier, string> = {
+  FREE: "Free",
+  GROWTH: "Growth",
+  ENTERPRISE: "Enterprise",
+};
+
+const VENDOR_PLAN_DESCRIPTIONS: Record<VendorPlanTier, string> = {
+  FREE: "Pilot suppliers and long-tail catalogs",
+  GROWTH: "Active regional distributors",
+  ENTERPRISE: "Multi-category and national suppliers",
+};
 
 export function PricingPage() {
   const [annual, setAnnual] = React.useState(false);
@@ -200,10 +219,94 @@ export function PricingPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100">
-          Marketplace adapters (Uber Eats, DoorDash, Grubhub) require partner approval and your
+          Delivery marketplace adapters (Uber Eats, DoorDash, Grubhub) require partner approval and your
           credentials — we never imply official endorsement until your integration is verified live.
           Uber Direct courier dispatch is on the roadmap and is not included in any plan today.
         </div>
+
+        <section className="mt-20" aria-labelledby="marketplace-pricing-heading">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              HoReCa B2B marketplace
+            </p>
+            <h2 id="marketplace-pricing-heading" className="mt-3 text-2xl font-semibold tracking-tight">
+              Supply ordering for restaurants — vendor-side fees only
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
+              Browse approved vendor catalogs, build carts, and create purchase orders inside your OS Kitchen
+              workspace. Restaurant plans above include marketplace access —{" "}
+              <strong className="font-medium text-foreground">no separate buyer marketplace fee</strong>. You pay
+              vendor list price plus Stripe processing at checkout.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <Card className="border-border/80">
+              <CardHeader>
+                <CardTitle className="text-lg">For restaurant buyers</CardTitle>
+                <CardDescription>Included with Starter, Pro, Team, and Enterprise</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm text-muted-foreground">
+                <p>• Catalog browse, filters, and PO workflow in your workspace</p>
+                <p>• No OS Kitchen commission added to your invoice — vendors pay platform fees</p>
+                <p>• Approval gates and cross-vendor carts as features roll out (BETA)</p>
+                <p className="pt-2 text-xs text-amber-950 dark:text-amber-100">
+                  Marketplace is <strong className="font-medium">BETA</strong> — design-partner vendors onboarding on
+                  staging; not a live national supplier network yet.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-border/80">
+              <CardHeader>
+                <CardTitle className="text-lg">For suppliers & distributors</CardTitle>
+                <CardDescription>Separate vendor plans — Stripe Connect payouts when enabled</CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Monthly SaaS tier + commission on completed marketplace orders</li>
+                  <li>• Optional featured placement slots (Growth+)</li>
+                  <li>• Express onboarding at /vendor/register after platform approval</li>
+                </ul>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link href="/vendor">Become a marketplace vendor</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-10 overflow-x-auto rounded-2xl border border-border/80">
+            <table className="w-full min-w-[520px] text-sm" aria-label="Marketplace vendor plan pricing">
+              <thead className="bg-muted/40">
+                <tr>
+                  <th className="px-4 py-3 text-left font-medium">Vendor tier</th>
+                  <th className="px-4 py-3 text-left font-medium">Monthly fee</th>
+                  <th className="px-4 py-3 text-left font-medium">Commission on GMV</th>
+                  <th className="px-4 py-3 text-left font-medium">Best for</th>
+                </tr>
+              </thead>
+              <tbody>
+                {VENDOR_PLAN_ORDER.map((tier) => (
+                  <tr key={tier} className="border-t border-border/60">
+                    <td className="px-4 py-3 font-medium">{VENDOR_PLAN_LABELS[tier]}</td>
+                    <td className="px-4 py-3">
+                      {VENDOR_PLAN_MONTHLY_FEE_USD[tier] === 0
+                        ? "$0"
+                        : `$${VENDOR_PLAN_MONTHLY_FEE_USD[tier]}`}
+                      /mo
+                    </td>
+                    <td className="px-4 py-3">{commissionRateForPlan(tier)}%</td>
+                    <td className="px-4 py-3 text-muted-foreground">{VENDOR_PLAN_DESCRIPTIONS[tier]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            Featured placement slots (homepage hero, catalog top, category spotlight) available to Growth+ vendors
+            — see vendor cabinet after approval. Illustrative economics only; no live GMV on record as of June 2026.
+          </p>
+        </section>
 
         <section className="mt-20">
           <h2 className="text-center text-2xl font-semibold">Feature comparison</h2>

@@ -43,4 +43,19 @@ export const PRICING_FAQ_ITEMS: Array<{ question: string; answer: string }> = [
     answer:
       'Annual toggle shows an approximate ~17% effective discount on published monthly list prices. Confirm final numbers with sales before enterprise contracts.',
   },
+  {
+    question: 'Does the HoReCa marketplace cost restaurants extra?',
+    answer:
+      'No separate marketplace subscription for buyers — catalog browse and PO workflow are included in Starter, Pro, Team, and Enterprise. You pay vendor list price plus Stripe processing at checkout. OS Kitchen commission is charged to suppliers, not as an extra line on your invoice.',
+  },
+  {
+    question: 'How do marketplace vendor fees work?',
+    answer:
+      'Suppliers choose a vendor tier: Free ($0/mo, 5% commission), Growth ($99/mo, 3.5%), or Enterprise ($299/mo, 2%). Featured placement slots are optional add-ons for Growth+. Payouts require Stripe Connect onboarding after platform approval. Marketplace checkout is BETA until design-partner vendors are live.',
+  },
+  {
+    question: 'Is the B2B marketplace live?',
+    answer:
+      'Marketplace is BETA — catalog and checkout are in design-partner onboarding on staging. We do not claim a live national supplier network until seeded vendors and buyer POs are verified. See /vendor for supplier recruitment.',
+  },
 ];

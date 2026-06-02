@@ -3167,3 +3167,11 @@ Commit: docs: restaurant industry partnerships
 Changes: docs/restaurant-partnerships-strategy.md (taxonomy, phases, outreach, association MOU, vendor track); tests/unit/restaurant-partnerships-strategy.test.ts
 Total done: 108/122
 
+---
+Cycle: 20260602-352000
+Task: 109 — Marketplace pricing page copy
+Role: Marketing | Priority: P2
+Commit: docs: marketplace pricing page copy
+Changes: components/marketing/pricing-page.tsx (HoReCa marketplace section, vendor tier table from billing registry); lib/marketing/pricing-faq.ts; tests/unit/pricing-page-marketplace-copy.test.ts
+Total done: 109/122
+
