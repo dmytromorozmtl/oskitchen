@@ -31,13 +31,13 @@ import { Label } from "@/components/ui/label";
 import { COMMERCIAL_LAUNCH_STEPS, commercialLaunchProgress } from "@/lib/onboarding/commercial-launch-steps";
 import { ALL_BUSINESS_TYPES_ORDERED, BUSINESS_TYPE_LABELS } from "@/lib/business-modes";
 import { OnboardingLocaleFields } from "@/components/onboarding/onboarding-locale-fields";
+import { OnboardingStepper } from "@/components/onboarding/onboarding-stepper";
 import { defaultOperatingModelForBusinessType } from "@/lib/onboarding/onboarding-business-modes";
 import { buildOnboardingFlow } from "@/lib/onboarding/onboarding-flow-builder";
 import type { BuiltOnboardingFlow } from "@/lib/onboarding/onboarding-flow-builder";
 import type { OnboardingStepId, OperatingModelId } from "@/lib/onboarding/onboarding-types";
 import { WORKFLOW_TEMPLATE_OPTIONS, defaultWorkflowForBusinessType } from "@/lib/business-workflows";
 import { candidateModuleKeysForBusinessType } from "@/lib/onboarding/onboarding-modules";
-import { cn } from "@/lib/utils";
 
 const OPERATING_MODEL_COPY: { id: OperatingModelId; title: string; description: string }[] = [
   { id: "WALK_IN_DAILY", title: "Walk-in / daily service", description: "Day-of tickets, line service, and prep lists." },
@@ -125,7 +125,6 @@ export function OnboardingWizard({
   }, [flowStepKey, liveFlow.stepIds]);
 
   const currentStepId = liveFlow.stepIds[stepIndex] ?? "welcome";
-  const progress = ((stepIndex + 1) / liveFlow.stepIds.length) * 100;
   const launchProgress = commercialLaunchProgress(Math.min(stepIndex + 1, COMMERCIAL_LAUNCH_STEPS.length));
   const workflowDefault =
     defaults.kitchenWorkflowDefault?.trim() ||
@@ -190,41 +189,12 @@ export function OnboardingWizard({
         </p>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>
-            Step {stepIndex + 1} of {liveFlow.stepIds.length}
-          </span>
-          <span>
-            {Math.round(progress)}% · Launch checklist {launchProgress}%
-          </span>
-        </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-          <div className="h-full bg-primary transition-all" style={{ width: `${progress}%` }} />
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {liveFlow.steps.map((s, i) => (
-            <button
-              key={s.id}
-              type="button"
-              disabled={i > stepIndex}
-              onClick={() => i <= stepIndex && setStepIndex(i)}
-              className={cn(
-                "rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors",
-                i === stepIndex
-                  ? "bg-primary text-primary-foreground"
-                  : i < stepIndex
-                    ? "bg-primary/15 text-primary"
-                    : "bg-muted text-muted-foreground",
-              )}
-            >
-              {s.optional ? "○ " : ""}
-              {s.label}
-              {s.recommended ? " ★" : ""}
-            </button>
-          ))}
-        </div>
-      </div>
+      <OnboardingStepper
+        steps={liveFlow.steps}
+        currentStepIndex={stepIndex}
+        launchProgressPercent={launchProgress}
+        onStepClick={(index) => setStepIndex(index)}
+      />
 
       <div className="flex items-center justify-between gap-2">
         <Button

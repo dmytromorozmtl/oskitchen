@@ -2655,3 +2655,11 @@ Commit: docs: Today Command Center mobile audit
 Changes: docs/today-command-center-mobile-audit.md — viewport matrix, section findings, P1/P2 backlog, test gap
 Total done: 44/122
 
+---
+Cycle: 20260602-164500
+Task: 45 — Onboarding progress stepper component
+Role: Design | Priority: P1
+Commit: feat: onboarding progress stepper
+Changes: components/onboarding/onboarding-stepper.tsx, wired into onboarding-wizard.tsx
+Total done: 45/122
+
