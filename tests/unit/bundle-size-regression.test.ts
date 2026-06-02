@@ -108,4 +108,19 @@ describe("bundle size regression", () => {
     const measured = parseFirstLoadJsFromBuildLog(readFileSync(logPath, "utf8"));
     assertNoBundleSizeViolations(measured, baseline);
   });
+
+  it("wires bundle size regression gate in CI and package.json", () => {
+    const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
+      scripts?: Record<string, string>;
+    };
+    const scripts = pkg.scripts ?? {};
+    expect(scripts["check:bundle-size-regression"]).toContain("check-bundle-size-regression.ts");
+    expect(scripts["test:ci:bundle-size-regression"]).toContain("bundle-size-regression.test.ts");
+    expect(scripts["test:ci:bundle-size-regression"]).toContain("check:bundle-size-regression");
+
+    const ci = readFileSync(join(ROOT, ".github/workflows/ci.yml"), "utf8");
+    expect(ci).toContain("Performance regression (bundle size)");
+    expect(ci).toContain("test:ci:bundle-size-regression");
+    expect(ci).toContain("build-route-sizes.log");
+  });
 });

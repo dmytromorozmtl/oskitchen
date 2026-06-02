@@ -110,12 +110,17 @@ jobs:
           MARKETING_CLAIMS_STRICT: "1"
 
       - name: Build
-        run: npm run build
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee artifacts/build-route-sizes.log
         env:
           NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
           NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
           DIRECT_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
+
+      - name: Performance regression (bundle size)
+        run: npm run test:ci:bundle-size-regression
 
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps

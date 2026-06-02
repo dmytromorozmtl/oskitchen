@@ -2927,3 +2927,11 @@ Commit: ci: forbidden claims auto-test
 Changes: .github/workflows/ci.yml — Forbidden claims enforcement auto-test step (MARKETING_CLAIMS_STRICT=1); npm run test:ci:forbidden-claims-enforcement; forbidden-claims-enforcement.test.ts CI wiring assertion
 Total done: 78/122
 
+---
+Cycle: 20260602-250000
+Task: 79 — Performance regression CI (bundle size)
+Role: QA | Priority: P2
+Commit: ci: performance regression check
+Changes: scripts/check-bundle-size-regression.ts; npm run check:bundle-size-regression + test:ci:bundle-size-regression; CI Build tees build-route-sizes.log + Performance regression step; bundle-size-regression.test.ts CI wiring assertion
+Total done: 79/122
+
