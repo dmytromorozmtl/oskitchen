@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import { prisma } from "@/lib/prisma";
 
 /** Owner-configurable AI briefing delivery channels (stored in settingsCenterJson.aiBriefingDelivery). */
@@ -110,8 +112,8 @@ export async function saveBriefingDeliverySettings(
 
   await prisma.kitchenSettings.upsert({
     where: { userId },
-    create: { userId, settingsCenterJson: center },
-    update: { settingsCenterJson: center },
+    create: { userId, settingsCenterJson: center as Prisma.InputJsonValue },
+    update: { settingsCenterJson: center as Prisma.InputJsonValue },
   });
 
   return next;

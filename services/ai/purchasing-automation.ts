@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import {
   filterAutoPurchaseCandidates,
   parsePurchasingAutomationSettings,
@@ -63,8 +65,8 @@ async function saveAutomationSettings(
 
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing },
-    update: { settingsCenterJson: existing },
+    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
   });
 }
 

@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { subHours } from "date-fns";
 
 import {
@@ -120,8 +121,8 @@ export async function persistKDSPredictions(ownerUserId: string, predictions: Kd
 
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing },
-    update: { settingsCenterJson: existing },
+    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
   });
 }
 

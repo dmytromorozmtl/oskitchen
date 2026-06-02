@@ -46,7 +46,7 @@ export type KitchenCameraHistoryStorage = {
   timeline: CameraTimelinePoint[];
 };
 
-export type KitchenCameraDashboardPayload = CameraAnalysis & {
+export type KitchenCameraDashboardPayload = Omit<CameraAnalysis, "cameras"> & {
   cameras: CameraDashboardFrame[];
   alerts: CameraAlert[];
   timeline30m: CameraTimelinePoint[];

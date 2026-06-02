@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import { defaultFilters } from "@/lib/analytics/filters";
 import { selectCohortForBusinessType, listBenchmarkCohorts } from "@/lib/ai/benchmark-cohort-seeds";
 import { assembleBenchmarkNetworkResult } from "@/lib/ai/benchmark-network-builders";
@@ -129,7 +131,7 @@ async function persistWorkspaceContribution(
             ...contribution,
           },
         },
-      },
+      } as Prisma.InputJsonValue,
     },
   });
 }

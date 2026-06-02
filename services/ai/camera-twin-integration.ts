@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import {
   applyCameraLoadsToTwinConfig,
   buildKdsStateWithCameraLoads,
@@ -49,8 +51,8 @@ async function persistCameraTwinSnapshot(
 
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing },
-    update: { settingsCenterJson: existing },
+    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
   });
 }
 

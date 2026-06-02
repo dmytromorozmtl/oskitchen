@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import { prisma } from "@/lib/prisma";
 import { parseAiPurchasingUiState } from "@/lib/ai/ai-purchasing-dashboard-builders";
 import type { AiPurchasingUiState } from "@/lib/ai/ai-purchasing-dashboard-types";
@@ -37,7 +39,7 @@ export async function saveAiPurchasingUiState(
 
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing },
-    update: { settingsCenterJson: existing },
+    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
   });
 }

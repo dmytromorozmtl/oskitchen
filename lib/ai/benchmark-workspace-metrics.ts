@@ -64,7 +64,7 @@ export function buildWorkspaceMetricSnapshot(input: {
     kdsWaitMinutes: input.kdsWaitMinutes,
     channelCount: ex?.channelMix.length ?? null,
     menuVelocity: ex?.topProducts[0] ? ex.topProducts[0].quantity / days : null,
-    costVarianceAlerts: ex?.costingVarianceAlerts.length ?? null,
+    costVarianceAlerts: ex?.costingVarianceAlerts.count ?? null,
     demandShortageLines:
       ex != null ? ex.inventoryShortages + ex.imminentShortages + ex.purchasingNeeds : null,
   };

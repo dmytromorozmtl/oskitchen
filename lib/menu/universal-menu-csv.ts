@@ -1,4 +1,4 @@
-import type { UniversalMenuItem } from "@/lib/menu/universal-menu-types";
+import type { UniversalMenuItem, UniversalMenuItemUpdate } from "@/lib/menu/universal-menu-types";
 import { MENU_CHANNELS } from "@/lib/menu/universal-menu-types";
 
 const CSV_HEADERS = [
@@ -165,7 +165,7 @@ export function parseUniversalMenuCsv(text: string): { rows: UniversalMenuCsvRow
   return { rows, errors };
 }
 
-export function csvRowToItemUpdate(row: UniversalMenuCsvRow) {
+export function csvRowToItemUpdate(row: UniversalMenuCsvRow): UniversalMenuItemUpdate {
   const channelOverrides: Partial<
     Record<(typeof MENU_CHANNELS)[number], import("@/lib/menu/universal-menu-types").ChannelItemOverride>
   > = {};
@@ -189,6 +189,6 @@ export function csvRowToItemUpdate(row: UniversalMenuCsvRow) {
       ...(row.active != null ? { active: row.active } : {}),
     },
     channelOverrides,
-    pushToChannels: false as const,
+    pushToChannels: false,
   };
 }

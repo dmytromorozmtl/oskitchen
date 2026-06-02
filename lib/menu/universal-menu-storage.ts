@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import {
   parseUniversalMenuStorage,
 } from "@/lib/menu/universal-menu-builders";
@@ -43,8 +45,8 @@ export async function saveUniversalMenuItemStorage(
 
   await prisma.kitchenSettings.upsert({
     where: { userId },
-    create: { userId, settingsCenterJson: center },
-    update: { settingsCenterJson: center },
+    create: { userId, settingsCenterJson: center as Prisma.InputJsonValue },
+    update: { settingsCenterJson: center as Prisma.InputJsonValue },
   });
 }
 

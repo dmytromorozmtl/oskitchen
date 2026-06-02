@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import { listBenchmarkCohorts } from "@/lib/ai/benchmark-cohort-seeds";
 import {
   buildContributionInfo,
@@ -59,7 +61,7 @@ export async function loadBenchmarkDashboard(
       settingsCenterJson: {
         ...center,
         benchmarkNetwork: mergedSettings,
-      },
+      } as Prisma.InputJsonValue,
     },
   });
 

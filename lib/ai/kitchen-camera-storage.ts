@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import type { KitchenCameraConfig, KitchenCameraStorage } from "@/lib/ai/kitchen-camera-types";
 import type { KitchenCameraHistoryStorage as DashboardHistory } from "@/lib/ai/kitchen-camera-dashboard-types";
 import { parseCameraHistory } from "@/lib/ai/kitchen-camera-dashboard-builders";
@@ -87,8 +89,8 @@ export async function saveKitchenCameraStorage(
 
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing },
-    update: { settingsCenterJson: existing },
+    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
   });
 }
 
@@ -124,7 +126,7 @@ export async function saveKitchenCameraHistory(
 
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing },
-    update: { settingsCenterJson: existing },
+    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
   });
 }
