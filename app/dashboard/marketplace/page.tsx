@@ -95,11 +95,16 @@ export default async function MarketplaceDashboardPage() {
         title="Marketplace"
         description="Procure supplies, equipment, and services from verified HoReCa vendors — integrated with your workspace orders and inventory."
         actions={
-          access.canCartWrite ? (
-            <Button asChild className="rounded-full">
-              <Link href="/dashboard/marketplace/catalog">Browse catalog</Link>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href="/dashboard/marketplace/auto-vendor">Auto vendor savings</Link>
             </Button>
-          ) : null
+            {access.canCartWrite ? (
+              <Button asChild className="rounded-full">
+                <Link href="/dashboard/marketplace/catalog">Browse catalog</Link>
+              </Button>
+            ) : null}
+          </div>
         }
       />
 
