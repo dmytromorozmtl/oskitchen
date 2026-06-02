@@ -3127,3 +3127,11 @@ Commit: docs: Enterprise MVP spec
 Changes: docs/enterprise-mvp-spec.md (ICP, pillars, in/out scope, waves, DoD, sales-safe claims); tests/unit/enterprise-mvp-spec.test.ts
 Total done: 103/122
 
+---
+Cycle: 20260602-340200
+Task: 104 — Bug triage process
+Role: PM | Priority: P2
+Commit: docs: bug triage process
+Changes: docs/bug-triage-process.md (intake, P0–P4 priorities, workflow, escalation, support templates); tests/unit/bug-triage-process.test.ts
+Total done: 104/122
+
