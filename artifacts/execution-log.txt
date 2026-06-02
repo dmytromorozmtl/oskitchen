@@ -3175,3 +3175,11 @@ Commit: docs: marketplace pricing page copy
 Changes: components/marketing/pricing-page.tsx (HoReCa marketplace section, vendor tier table from billing registry); lib/marketing/pricing-faq.ts; tests/unit/pricing-page-marketplace-copy.test.ts
 Total done: 109/122
 
+---
+Cycle: 20260602-354500
+Task: 110 — Webinar strategy
+Role: Marketing | Priority: P2
+Commit: docs: webinar strategy
+Changes: docs/webinar-strategy.md (types, W1 run-of-show, promotion, follow-up, Q3 calendar); tests/unit/webinar-strategy.test.ts
+Total done: 110/122
+
