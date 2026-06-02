@@ -3215,3 +3215,11 @@ Commit: docs: 24/7 support tier plan
 Changes: docs/support-tier-plan.md (T0–T4 tiers, severity SLAs, 24/7 roadmap prerequisites); tests/unit/support-tier-plan.test.ts
 Total done: 114/122
 
+---
+Cycle: 20260602-392400
+Task: 115 — Offline POS mode plan
+Role: P2 Additional | Priority: P2
+Commit: docs: offline POS mode plan
+Changes: docs/offline-pos-plan.md (Phase 1–5 maturity, staging proof gate, sales guardrails); tests/unit/offline-pos-plan.test.ts
+Total done: 115/122
+
