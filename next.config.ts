@@ -1,8 +1,15 @@
 import { createRequire } from "node:module";
 import path from "node:path";
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
 import { storefrontImageRemotePatterns } from "@/lib/storefront/image-cdn-config";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+  openAnalyzer: false,
+  analyzerMode: "json",
+});
 
 const require = createRequire(import.meta.url);
 
@@ -98,4 +105,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

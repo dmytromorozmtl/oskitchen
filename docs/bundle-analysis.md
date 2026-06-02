@@ -25,7 +25,7 @@ Production builds already print per-route **First Load JS** in the `next build` 
 - Clean working tree recommended (`git status` clean before comparing baselines)
 - **Local RAM:** full production build peaks high (~8 GB+ on this repo due to 655+ static paths). Close other apps; Vercel builders use `cpus: 1` and reduced SSG concurrency (`next.config.ts`).
 
-Install analyzer (dev dependency — not yet wired in repo as of Task 25):
+Install analyzer (dev dependency — wired in repo as of Task 75):
 
 ```bash
 npm install --save-dev @next/bundle-analyzer
@@ -151,7 +151,43 @@ These are **internal targets**, not CI gates yet (Task 41 / Task 79 add regressi
 | POS / KDS interactive | < 450 kB | Accept higher if offline-tolerant UX requires it |
 | Analytics with charts | < 500 kB | Chart library dominates — document exception |
 
-Record baseline in Task 75 commit: `artifacts/bundle-analysis-report.json` (planned).
+Record baseline in Task 75 commit: `artifacts/bundle-analysis-report.json`.
+
+---
+
+## Sweep execution (Task 75 — 2026-06-02)
+
+**Wired:** `@next/bundle-analyzer` in `next.config.ts` · `npm run analyze` · `npm run report:bundle`
+
+| Step | Result |
+|------|--------|
+| `npm run analyze` (12 GB heap) | **OOM** during webpack compile — see `artifacts/bundle-analyzer-attempt.json` |
+| `npm run build` | **PASS** — route sizes in `artifacts/build-route-sizes.log` |
+| `npm run report:bundle` | **PASS** — `artifacts/bundle-analysis-report.json` |
+
+**June 2026 First Load JS (representative routes):**
+
+| Route | Baseline | Measured | Δ |
+|-------|--------:|---------:|--:|
+| Shared | 102 kB | 102 kB | 0 |
+| `/` | 194 kB | 194 kB | 0 |
+| `/pricing` | 211 kB | 211 kB | 0 |
+| `/login` | 129 kB | 129 kB | 0 |
+| `/dashboard/today` | 139 kB | 139 kB | 0 |
+| `/dashboard/pos/terminal` | 165 kB | 165 kB | 0 |
+| `/dashboard/analytics/benchmarks` | 238 kB | 238 kB | 0 |
+| `/dashboard/marketplace/catalog` | 118 kB | 133 kB | +15 kB (within 15% tolerance) |
+
+**Overall:** PASS — no surface budget or baseline regression violations. Full treemap deferred to CI/16 GB+ machine.
+
+Regenerate:
+
+```bash
+npm run build 2>&1 | tee artifacts/build-route-sizes.log
+npm run report:bundle
+# Optional treemap (requires ≥16 GB RAM):
+NODE_OPTIONS=--max-old-space-size=16384 npm run analyze
+```
 
 ---
 
