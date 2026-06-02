@@ -2703,3 +2703,11 @@ Commit: docs: typography audit
 Changes: docs/typography-audit.md — font stack, type scale, usage scan, drift matrix, recommendations
 Total done: 50/122
 
+---
+Cycle: 20260602-175500
+Task: 51 — Status color tokens (LIVE/BETA/PLACEHOLDER/SKIPPED/PASS/NO-GO)
+Role: Design | Priority: P1
+Commit: docs: status color tokens
+Changes: docs/status-color-tokens.md — six primary tokens, Tailwind classes, component map, usage rules
+Total done: 51/122
+
