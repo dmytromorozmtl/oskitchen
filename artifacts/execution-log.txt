@@ -2975,3 +2975,11 @@ Commit: feat: AI briefing email template
 Changes: templates/emails/ai-briefing-email.html — static design reference aligned to formatBriefingEmail(); tests/unit/ai-briefing-email-template.test.ts
 Total done: 84/122
 
+---
+Cycle: 20260602-262800
+Task: 85 — Executive Dashboard demo page
+Role: Design | Priority: P2
+Commit: feat: executive dashboard demo
+Changes: app/dashboard/analytics/executive-demo/page.tsx — synthetic KPIs, health score, charts, insights with honesty banner; lib/demo/executive-dashboard-demo-data.ts; tests/unit/executive-dashboard-demo.test.ts
+Total done: 85/122
+
