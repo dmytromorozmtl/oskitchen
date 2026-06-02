@@ -3223,3 +3223,11 @@ Commit: docs: offline POS mode plan
 Changes: docs/offline-pos-plan.md (Phase 1–5 maturity, staging proof gate, sales guardrails); tests/unit/offline-pos-plan.test.ts
 Total done: 115/122
 
+---
+Cycle: 20260602-403600
+Task: 116 — Instant payouts plan
+Role: P2 Additional | Priority: P2
+Commit: docs: instant payouts for vendors
+Changes: docs/instant-payouts-plan.md (Models A–D, Phase 1–4, instant fee proposal, fraud controls); tests/unit/instant-payouts-plan.test.ts
+Total done: 116/122
+
