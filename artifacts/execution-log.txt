@@ -3247,3 +3247,11 @@ Commit: docs: gift cards and loyalty plan
 Changes: docs/gift-cards-loyalty-plan.md (dual ledger, Phase 1–5, parity cert gate); tests/unit/gift-cards-loyalty-plan.test.ts
 Total done: 118/122
 
+---
+Cycle: 20260602-437200
+Task: 119 — QR code ordering plan
+Role: P2 Additional | Priority: P2
+Commit: docs: QR code ordering plan
+Changes: docs/qr-code-ordering-plan.md (Phase 1–6, table metadata Phase 2, kiosk Q4 2026); tests/unit/qr-code-ordering-plan.test.ts
+Total done: 119/122
+
