@@ -3358,3 +3358,8 @@ Cycle: 20260602-194612
 Feature: 13 — Offline POS Card Payments
 Result: PASSED — offline-card-service (PCI last4/brand only), OFFLINE_CARD_QUEUED mode, terminal UI + sync panel, unit tests (4), e2e smoke
 Total done: 13/40
+---
+Cycle: 20260602-194806
+Feature: 14 — Stripe Terminal Hardware
+Result: PASSED — M2/WisePOS E/P400 catalog, pairing service, settings/hardware page, reader badges, unit+e2e
+Total done: 14/40

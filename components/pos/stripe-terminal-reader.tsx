@@ -18,6 +18,11 @@ import {
   type UseStripeTerminalResult,
 } from "@/hooks/use-stripe-terminal";
 import type { StripeTerminalReaderStatus } from "@/lib/payments/stripe-terminal-client";
+import {
+  catalogEntryForDeviceType,
+  formatStripeTerminalDeviceLabel,
+} from "@/lib/payments/stripe-terminal-hardware-types";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const StripeTerminalContext = createContext<UseStripeTerminalResult | null>(null);
@@ -114,11 +119,18 @@ export function StripeTerminalReaderPanel({
 
   const readerOptions = useMemo(() => {
     const list = discoveredReaders.length > 0 ? discoveredReaders : reader ? [reader] : [];
-    return list.map((r) => ({
-      id: r.id,
-      label: r.label || r.serial_number || r.device_type || r.id,
-    }));
+    return list.map((r) => {
+      const model = formatStripeTerminalDeviceLabel(r.device_type ?? null);
+      const base = r.label || r.serial_number || r.id;
+      return {
+        id: r.id,
+        label: `${base} · ${model}`,
+        deviceType: r.device_type ?? null,
+      };
+    });
   }, [discoveredReaders, reader]);
+
+  const connectedDevice = catalogEntryForDeviceType(reader?.device_type ?? null);
 
   if (!terminal) {
     return (
@@ -135,9 +147,17 @@ export function StripeTerminalReaderPanel({
     <Card className={cn("border-border/80 shadow-sm", className)} data-testid="stripe-terminal-reader">
       <CardHeader className={cn("flex flex-row items-start justify-between gap-3 space-y-0", compact && "p-4 pb-2")}>
         <div>
-          <CardTitle className="text-base">Stripe card reader</CardTitle>
+          <div className="flex flex-wrap items-center gap-2">
+            <CardTitle className="text-base">Stripe card reader</CardTitle>
+            {connectedDevice ? (
+              <Badge variant="outline" data-testid="stripe-terminal-device-badge">
+                {connectedDevice.shortLabel}
+              </Badge>
+            ) : null}
+          </div>
           <CardDescription>
             {reader?.label ?? reader?.device_type ?? "Discover and connect a reader before card payment."}
+            {connectedDevice ? ` · ${connectedDevice.connectivity}` : ""}
           </CardDescription>
         </div>
         <div className="flex items-center gap-2 text-xs font-medium" aria-live="polite">

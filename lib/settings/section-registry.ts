@@ -293,6 +293,17 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     keywords: ["alexa", "google home", "voice", "assistant"],
   },
   {
+    key: "hardware",
+    label: "Payment hardware",
+    description: "Stripe Terminal — Reader M2, WisePOS E, P400 pairing.",
+    href: "/dashboard/settings/hardware",
+    group: "platform",
+    icon: "CreditCard",
+    capability: "view_settings",
+    bridge: true,
+    keywords: ["stripe terminal", "card reader", "m2", "wisepos", "p400"],
+  },
+  {
     key: "staff",
     label: "Staff & permissions",
     description: "RBAC roles, invitations, per-location access.",
