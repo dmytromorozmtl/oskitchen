@@ -2783,3 +2783,11 @@ Commit: docs: pilot acceptance criteria
 Changes: docs/pilot-acceptance-criteria.md — Gates A/B/C kickoff/mid/close, mandatory criteria, KPI thresholds, sign-off forms
 Total done: 60/122
 
+---
+Cycle: 20260602-201500
+Task: 61 — Incident response process
+Role: PM | Priority: P1
+Commit: docs: incident response process
+Changes: docs/incident-response-process.md — severity, RACI, 7-phase lifecycle, escalation, playbook map, SLAs, post-incident template
+Total done: 61/122
+
