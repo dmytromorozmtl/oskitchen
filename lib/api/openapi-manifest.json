@@ -1,6 +1,7 @@
 {
   "routes": [
     "/api/accounting/ocr",
+    "/api/analytics/real-time-profit",
     "/api/billing-portal",
     "/api/billing/checkout",
     "/api/billing/portal",
@@ -115,6 +116,7 @@
     "/api/pos/shifts/export",
     "/api/pos/terminal",
     "/api/printing/label",
+    "/api/public/qr-order",
     "/api/public/v1/customers",
     "/api/public/v1/inventory",
     "/api/public/v1/locations",
@@ -224,6 +226,6 @@
     "/api/webhooks/woocommerce",
     "/api/webhooks/wto-upu-cross-border-ai-trade-registry"
   ],
-  "generatedAt": "2026-06-02T12:43:12.781Z",
-  "count": 223
+  "generatedAt": "2026-06-02T21:37:18.073Z",
+  "count": 225
 }

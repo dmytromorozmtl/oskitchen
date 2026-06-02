@@ -32,6 +32,6 @@ describe("qr code ordering plan doc", () => {
     expect(doc).toContain("sales-safe-claims-registry.md");
     expect(doc).toContain("Toast QR parity");
     expect(limitation).toContain("floor-plan realtime occupancy");
-    expect(qrRoute).toContain("daily-menu");
+    expect(qrRoute).toContain("absoluteQrOrderUrl");
   });
 });
