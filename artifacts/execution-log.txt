@@ -2823,3 +2823,11 @@ Commit: feat: vendor recruitment landing page
 Changes: app/vendor/page.tsx, vendor-recruitment-landing.tsx, vendor-recruitment-content.ts, tests/unit/vendor-recruitment-landing.test.ts — /vendor become-a-vendor landing with honest BETA marketplace + onboarding flow
 Total done: 65/122
 
+---
+Cycle: 20260602-213000
+Task: 66 — Design partner email sequence
+Role: Marketing | Priority: P1
+Commit: docs: design partner email sequence
+Changes: docs/design-partner-email-sequence.md — 3-email outbound sequence (Day 0/4/10), tokens, forbidden copy, CRM fields, LOI attachment on email 2
+Total done: 66/122
+
