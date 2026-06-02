@@ -11,6 +11,7 @@ import { KdsBumpNextStrip } from "@/components/kitchen/kds-bump-next-strip";
 import { KdsPriorityLaneStrip } from "@/components/kitchen/kds-priority-lane-strip";
 import { KdsQueueStatusStrip } from "@/components/kitchen/kds-queue-status-strip";
 import { KdsRecallNextStrip } from "@/components/kitchen/kds-recall-next-strip";
+import { QrOrderTicketBadge } from "@/components/kitchen/qr-order-ticket";
 import { KdsTicketAttentionStrip } from "@/components/kitchen/kds-ticket-attention-strip";
 import { KdsTicketRowNextAction } from "@/components/kitchen/kds-ticket-row-next-action";
 import {
@@ -385,11 +386,10 @@ function KdsTicketCard({
             <span className="font-mono text-xs font-bold uppercase tracking-wide text-muted-foreground">
               {ticketNumber}
             </span>
-            {order.tableName ? (
-              <span className="rounded-md bg-background px-2 py-0.5 text-xs font-semibold shadow-sm border">
-                {order.tableName}
-              </span>
-            ) : null}
+            <QrOrderTicketBadge
+              tableName={order.tableName}
+              sourceMetadataJson={order.sourceMetadataJson}
+            />
           </div>
           <span className="mt-1 block truncate text-lg font-bold">{order.customerName}</span>
         </div>

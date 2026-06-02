@@ -3299,3 +3299,9 @@ Feature: menu-templates
 Result: done — 10 cuisine templates (5–15 items), MenuTemplateSelector with preview/select, /dashboard/menus/templates, applyOnboardingMenuTemplate action, e2e/menu-templates.spec.ts
 Tracker: 3/5
 
+---
+Cycle: high-impact-4
+Feature: qr-code-ordering
+Result: done — /q/[slug]/[tableId] dark ordering UI, processQROrder → KDS blue table badge, /dashboard/qr-codes grid + PNG/print, e2e/qr-ordering.spec.ts @375px
+Tracker: 4/5
+

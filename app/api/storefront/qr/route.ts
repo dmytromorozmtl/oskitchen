@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import QRCode from "qrcode";
 import { z } from "zod";
 
+import { absoluteQrOrderUrl } from "@/lib/qr/qr-order-meta";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { captureErrorSafe } from "@/services/observability/error-reporting-service";
@@ -25,11 +26,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Storefront not found" }, { status: 404 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://os-kitchen.com";
     const { storeSlug, tableId } = parsed.data;
     const url = tableId
-      ? `${baseUrl}/s/${storeSlug}/daily-menu?table=${encodeURIComponent(tableId)}`
-      : `${baseUrl}/s/${storeSlug}/daily-menu`;
+      ? absoluteQrOrderUrl(storeSlug, tableId)
+      : absoluteQrOrderUrl(storeSlug, "bar");
 
     const qrDataUrl = await QRCode.toDataURL(url, {
       width: 300,

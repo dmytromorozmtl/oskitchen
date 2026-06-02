@@ -1,5 +1,6 @@
 import { endOfDay, startOfDay } from "date-fns";
 
+import { readQrTableLabel } from "@/lib/qr/qr-order-meta";
 import { prisma } from "@/lib/prisma";
 import { orderListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
 
@@ -10,6 +11,7 @@ export type TodayOrderItem = {
   status: string;
   createdAt: string;
   tableName?: string;
+  sourceMetadataJson?: unknown;
   priority: "high" | "normal" | "low";
   hasAllergenConflict?: boolean;
 };
@@ -60,8 +62,7 @@ export async function getTodayQueue(userId: string): Promise<TodayOrderItem[]> {
   });
 
   return orders.map((order) => {
-    const meta = order.sourceMetadataJson as { table?: string; tableId?: string } | null;
-    const tableName = meta?.table ?? meta?.tableId ?? undefined;
+    const tableName = readQrTableLabel(order.sourceMetadataJson) ?? undefined;
     const items = order.orderItems.map(
       (i) => i.title?.trim() || i.product?.title?.trim() || "Item",
     );
@@ -93,6 +94,7 @@ export async function getTodayQueue(userId: string): Promise<TodayOrderItem[]> {
       status: order.status,
       createdAt: order.createdAt.toISOString(),
       tableName,
+      sourceMetadataJson: order.sourceMetadataJson,
       priority: priorityFromAge(order.createdAt),
       hasAllergenConflict,
     };
