@@ -3368,3 +3368,8 @@ Cycle: 20260602-195018
 Feature: 15 — Uber Eats LIVE
 Result: PASSED — uber-eats-live-service (OAuth, webhook, menu sync, order mapping), /integrations/uber-eats/live, unit+e2e
 Total done: 15/40
+---
+Cycle: 20260602-195200
+Feature: 16 — DoorDash LIVE
+Result: PASSED — doordash-live-service (OAuth, webhook, menu sync, order mapping), per-user credentials, /integrations/doordash/live, unit+e2e
+Total done: 16/40

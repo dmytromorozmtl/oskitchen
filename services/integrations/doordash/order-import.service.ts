@@ -7,22 +7,15 @@ import {
   fetchDoorDashMarketplaceOrders,
   normalizeDoorDashOrder,
 } from "@/services/integrations/doordash/doordash-marketplace";
-import type { DoorDashCredentials } from "@/services/integrations/doordash/doordash-service";
+import { getDoorDashCredentialsForUser } from "@/services/integrations/doordash/doordash-credentials";
 import { persistResolvedOrder } from "@/services/orders/order-creation-service";
-
-function credsFromEnv(): DoorDashCredentials {
-  return {
-    apiKey: process.env.DOORDASH_API_KEY ?? null,
-    merchantId: process.env.DOORDASH_MERCHANT_ID ?? null,
-  };
-}
 
 export async function importDoorDashOrdersForUser(userId: string): Promise<{
   imported: number;
   total: number;
 }> {
-  const creds = credsFromEnv();
-  if (!creds.apiKey?.trim() || !creds.merchantId?.trim()) {
+  const creds = await getDoorDashCredentialsForUser(userId);
+  if (!creds?.apiKey?.trim() || !creds.merchantId?.trim()) {
     throw new Error("DoorDash credentials are not configured.");
   }
 

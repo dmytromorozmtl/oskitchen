@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { BetaBadge } from "@/components/integrations/beta-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
@@ -50,9 +51,14 @@ export default async function DoorDashIntegrationPage() {
             {integration?.name} · {integration?.status} · marketplace ingest + Drive delivery
           </p>
         </div>
-        <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>
-          {capability.hasCredentials ? "BETA credentials configured" : "Credentials missing"}
-        </Badge>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild size="sm" className="rounded-full">
+            <Link href="/dashboard/integrations/doordash/live">Open LIVE dashboard</Link>
+          </Button>
+          <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>
+            {capability.hasCredentials ? "BETA credentials configured" : "Credentials missing"}
+          </Badge>
+        </div>
       </div>
 
       <Card>

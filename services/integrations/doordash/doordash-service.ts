@@ -1,6 +1,7 @@
 import { resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
+import { getDoorDashCredentialsForUser } from "@/services/integrations/doordash/doordash-credentials";
 import { DoorDashMenuSyncService } from "@/services/integrations/doordash/menu-sync.service";
 import { importDoorDashOrdersForUser } from "@/services/integrations/doordash/order-import.service";
 import { DoorDashSyncService } from "@/services/integrations/doordash/order-sync.service";
@@ -160,7 +161,7 @@ export async function listDoorDashDeliveries(userId: string, take = 25) {
 
 /** Push active menus to DoorDash Marketplace (BETA). */
 export async function syncMenuToDoorDash(userId: string, menuId?: string) {
-  const creds = credsFromEnv();
+  const creds = (await getDoorDashCredentialsForUser(userId)) ?? credsFromEnv();
   if (!isDoorDashConfigured(creds)) {
     throw new Error(getDoorDashPlaceholderMessage(false));
   }
@@ -175,8 +176,9 @@ export async function syncMenuToDoorDash(userId: string, menuId?: string) {
 
 /** Poll DoorDash Marketplace and import orders into kitchen + external_orders. */
 export async function fetchDoorDashOrders(userId: string) {
+  const creds = await getDoorDashCredentialsForUser(userId);
   const capability = getDoorDashCapabilitySnapshot();
-  if (capability.placeholderMode) {
+  if (capability.placeholderMode && !creds) {
     throw new Error(`DoorDash order import disabled for ${userId}: ${getDoorDashPlaceholderMessage(false)}`);
   }
   return importDoorDashOrdersForUser(userId);
