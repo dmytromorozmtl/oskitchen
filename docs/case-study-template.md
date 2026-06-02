@@ -1,27 +1,41 @@
-# Case Study Template — OS Kitchen
+# Case study template — OS Kitchen
 
+**Policy:** `case-study-template-v1`  
 **Status:** Canonical template — **internal use until publish gates pass**  
-**Updated:** 2026-06-01  
+**Updated:** 2026-06-02  
+**Owner:** Marketing + CS + Legal  
 **Audience:** GTM, Sales, CS, Founder  
+**Related:** [`founding-customer-story.md`](./founding-customer-story.md) · [`pilot-acceptance-criteria.md`](./pilot-acceptance-criteria.md) · [`feature-announcement-template.md`](./feature-announcement-template.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md)  
 **Proof wiring:** [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md) · [`pilot-week1-checklist.md`](./pilot-week1-checklist.md)  
+**Code surface:** `lib/marketing/case-studies.ts` → `/case-studies/[slug]`  
 **Legacy (non-canonical):** [`templates/CASE_STUDY_TEMPLATE.md`](./templates/CASE_STUDY_TEMPLATE.md)
 
 ---
 
 ## Before you write
 
-OS Kitchen has **no published customer case study** as of June 2026. This template is the **fill-in scaffold** for the first signed pilot — not marketing copy you can ship today.
+OS Kitchen has **no published customer case study** as of June 2026 (`loiSignedDate: null` in [`artifacts/pilot-gono-go-summary.json`](../artifacts/pilot-gono-go-summary.json)). This template is the **fill-in scaffold** for the first signed pilot — not marketing copy you can ship today.
+
+| Customer stage | Case study usage | See |
+|----------------|------------------|-----|
+| Design partner (LOI) | Internal draft only — no public name | [`founding-customer-story.md`](./founding-customer-story.md) |
+| Paid pilot | Anonymized draft OK with “pilot” badge | Gate A–B in [`pilot-acceptance-criteria.md`](./pilot-acceptance-criteria.md) |
+| Convert (Gate C) | Named or anonymized **candidate** | Gate C — convert does **not** auto-unlock publish |
+| Reference customer (≥90d paid + approval) | Website, ads, investor deck | Separate marketing sign-off below |
 
 | Gate | Requirement | Artifact / command |
 |------|-------------|-------------------|
 | Pilot live | GO or CONDITIONAL in GO evaluator | `artifacts/pilot-gono-go-summary.json` |
-| Agreement | Signed pilot SOW / LOI | [`outreach/pilot-agreement-template.md`](./outreach/pilot-agreement-template.md) |
+| Agreement | Signed pilot SOW / LOI | [`loi-design-partner-template.md`](./loi-design-partner-template.md) |
+| Close | Gate C convert (optional for anonymized pilot story) | [`pilot-acceptance-criteria.md`](./pilot-acceptance-criteria.md) § Gate C |
 | Metrics | Verified dashboard exports only | `npm run smoke:pilot-metrics-baseline` → `overall: PASSED` |
 | Permission | Written case study release | `PILOT_CASE_STUDY_CUSTOMER_APPROVAL=signed` or `anonymized_signed` |
 | Claims | No forbidden outcomes | `npm run smoke:pilot-forbidden-claims-enforcement` |
 | Publish | Internal draft smoke PASS | `npm run smoke:pilot-case-study-draft` |
 
-**Until all gates pass:** keep `[TBD]` placeholders; do not name customers on `/customers`, deck, or blog.
+**Until all gates pass:** keep `[TBD]` placeholders; label targets as `(target)`; do not name customers on `/customers`, deck, or blog.
+
+**Mid-pilot never unlocks:** Case studies, investor KPI slides, or LIVE integration claims — even if Gate B is ACCEPT.
 
 ---
 
@@ -37,6 +51,26 @@ artifacts/case-study-<slug>-summary.json   # metrics + approval audit trail
 ```
 
 **Slug examples:** `meal-prep-denver-anon`, `ghost-kitchen-toronto-named`
+
+---
+
+## Publish to web (`lib/marketing/case-studies.ts`)
+
+After internal draft + legal approval, add an entry to `RAW_CASE_STUDIES` in [`lib/marketing/case-studies.ts`](../lib/marketing/case-studies.ts):
+
+| Field | Pilot (pre-permission) | Published (post-approval) |
+|-------|------------------------|---------------------------|
+| `status` | `"pilot"` | `"published"` |
+| `heroMetric` / outcomes | Must include `(target)` suffix | Verified numbers only |
+| `attribution` | `"Pilot operator (permission pending)"` | Signed name + title |
+| `quote` | Placeholder or composite — label clearly | Exact signed wording |
+| Page badge | Amber “Coming Q3 — metrics are targets” | Remove badge |
+
+**Disclaimer:** `CASE_STUDIES_DISCLAIMER` renders on list pages — keep aligned with honest scope.
+
+**SEO:** Add slug to `lib/marketing/sitemap-urls.ts` when `status: "published"`.
+
+**Launch comms:** Use [`feature-announcement-template.md`](./feature-announcement-template.md) Type B (pilot milestone) — not Type D LIVE.
 
 ---
 
@@ -210,7 +244,7 @@ Reference: [`pilot-week1-checklist.md`](./pilot-week1-checklist.md)
 
 ## Forbidden in published case studies
 
-Enforced via `npm run smoke:pilot-forbidden-claims-enforcement` and `MARKETING_CLAIMS_STRICT=1 npm run verify-claims`:
+Enforced via `npm run smoke:pilot-forbidden-claims-enforcement` and `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` — see [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md):
 
 | Do not claim | Why |
 |--------------|-----|
@@ -221,6 +255,7 @@ Enforced via `npm run smoke:pilot-forbidden-claims-enforcement` and `MARKETING_C
 | Woo/Shopify "fully synced" without live smoke PASS | Vault / channel proof |
 | Marketplace or hardware parity with Toast/Square | Competitor matrix |
 | "100+ reports at enterprise scale" without perf proof | Report catalog plan |
+| untouchable / guaranteed ROI / magic AGI | Forbidden claims CI |
 
 ---
 
@@ -276,3 +311,5 @@ MARKETING_CLAIMS_STRICT=1 npm run verify-claims
 | [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) | Pilot lifecycle |
 | [`sales-deck.md`](./sales-deck.md) | Slide 12 case study slot (post-permission) |
 | [`integration-health-sales-deck-v2.md`](./integration-health-sales-deck-v2.md) | Health score narrative (BETA caveat) |
+| [`founding-customer-story.md`](./founding-customer-story.md) | Pre-customer narrative guardrails |
+| [`seo-audit.md`](./seo-audit.md) | Sitemap when publishing `/case-studies/*` |

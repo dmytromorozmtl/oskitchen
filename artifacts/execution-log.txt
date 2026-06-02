@@ -2847,3 +2847,11 @@ Commit: docs: SEO audit
 Changes: docs/seo-audit.md — technical SEO inventory, sitemap gaps (/shopify, /vendor, 2 blogs, /changelog), metadata/structured-data review, P0–P2 backlog
 Total done: 68/122
 
+---
+Cycle: 20260602-221500
+Task: 69 — Case study template
+Role: Marketing | Priority: P1
+Commit: docs: case study template
+Changes: docs/case-study-template.md — reconciled June 2026 gates (Gate C, founding customer stages), web publish path via case-studies.ts, claims cross-refs
+Total done: 69/122
+
