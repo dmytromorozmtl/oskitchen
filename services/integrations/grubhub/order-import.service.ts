@@ -7,22 +7,15 @@ import {
   fetchGrubhubMarketplaceOrders,
   normalizeGrubhubOrder,
 } from "@/services/integrations/grubhub/grubhub-marketplace";
-import type { GrubhubCredentials } from "@/services/integrations/grubhub/grubhub-service";
+import { getGrubhubCredentialsForUser } from "@/services/integrations/grubhub/grubhub-credentials";
 import { persistResolvedOrder } from "@/services/orders/order-creation-service";
-
-function credsFromEnv(): GrubhubCredentials {
-  return {
-    apiKey: process.env.GRUBHUB_API_KEY ?? null,
-    merchantId: process.env.GRUBHUB_MERCHANT_ID ?? null,
-  };
-}
 
 export async function importGrubhubOrdersForUser(userId: string): Promise<{
   imported: number;
   total: number;
 }> {
-  const creds = credsFromEnv();
-  if (!creds.apiKey?.trim() || !creds.merchantId?.trim()) {
+  const creds = await getGrubhubCredentialsForUser(userId);
+  if (!creds?.apiKey?.trim() || !creds.merchantId?.trim()) {
     throw new Error("Grubhub credentials are not configured.");
   }
 

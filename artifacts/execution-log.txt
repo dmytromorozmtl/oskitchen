@@ -3373,3 +3373,8 @@ Cycle: 20260602-195200
 Feature: 16 — DoorDash LIVE
 Result: PASSED — doordash-live-service (OAuth, webhook, menu sync, order mapping), per-user credentials, /integrations/doordash/live, unit+e2e
 Total done: 16/40
+---
+Cycle: 20260602-200100
+Feature: 17 — Grubhub LIVE
+Result: PASSED — grubhub-live-service (OAuth, webhook, menu sync, order mapping), per-user credentials, /integrations/grubhub/live, unit+e2e
+Total done: 17/40

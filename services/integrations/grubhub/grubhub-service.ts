@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { grubhubDeliveryListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 
+import { getGrubhubCredentialsForUser } from "@/services/integrations/grubhub/grubhub-credentials";
 import { GrubhubMenuSyncService } from "@/services/integrations/grubhub/menu-sync.service";
 import { importGrubhubOrdersForUser } from "@/services/integrations/grubhub/order-import.service";
 
@@ -104,7 +105,7 @@ export async function getGrubhubMenu(userId: string) {
 }
 
 export async function syncMenuToGrubhub(userId: string, menuId?: string) {
-  const creds = credsFromEnv();
+  const creds = (await getGrubhubCredentialsForUser(userId)) ?? credsFromEnv();
   if (!isGrubhubConfigured(creds)) {
     throw new Error(getGrubhubBetaMessage(false));
   }
@@ -117,8 +118,9 @@ export async function syncMenuToGrubhub(userId: string, menuId?: string) {
 }
 
 export async function fetchGrubhubOrders(userId: string) {
+  const creds = await getGrubhubCredentialsForUser(userId);
   const capability = getGrubhubCapabilitySnapshot();
-  if (capability.placeholderMode) {
+  if (capability.placeholderMode && !creds) {
     throw new Error(`Grubhub order import disabled for ${userId}: ${getGrubhubBetaMessage(false)}`);
   }
   return importGrubhubOrdersForUser(userId);
