@@ -120,7 +120,7 @@ export async function generateDailyBriefing(workspaceId: string): Promise<DailyB
   });
 
   return {
-    timestamp: new Date(),
+    timestamp: new Date().toISOString(),
     workspaceId,
     aiAssisted: true,
     overallConfidence,

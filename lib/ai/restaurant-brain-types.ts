@@ -62,7 +62,7 @@ export type WeeklyBriefingForecast = {
 };
 
 export type DailyBriefing = {
-  timestamp: Date;
+  timestamp: string;
   workspaceId: string;
   /** Always true — insights are AI-assisted suggestions from operational data. */
   aiAssisted: true;

@@ -38,7 +38,14 @@ export type TodayBlocker = {
 };
 
 export type TodayCommandCenterPayload = {
-  settings: Awaited<ReturnType<typeof prisma.kitchenSettings.findUnique>>;
+  settings: {
+    businessType: NonNullable<
+      Awaited<ReturnType<typeof prisma.kitchenSettings.findUnique>>
+    >["businessType"];
+    businessName: string | null;
+    locale: string;
+    demoMode: boolean;
+  } | null;
   kpis: {
     ordersDueToday: number;
     ordersToday: number;
@@ -64,8 +71,8 @@ export type TodayCommandCenterPayload = {
     productionWorkOpen: number;
     confirmedOrders: number;
   };
-  ordersDueToday: { id: string; customerName: string; status: string; pickupDate: Date | null }[];
-  openTasks: { id: string; title: string; dueAt: Date | null; priority: string; status: string }[];
+  ordersDueToday: { id: string; customerName: string; status: string; pickupDate: string | null }[];
+  openTasks: { id: string; title: string; dueAt: string | null; priority: string; status: string }[];
   routesToday: { id: string; status: string; totalStops: number }[];
   blockers: TodayBlocker[];
   readiness: ReturnType<typeof computeWorkspaceReadiness>;
@@ -337,7 +344,14 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
   const shortageReadiness = await evaluateInventoryShortageReadiness(userId);
 
   return {
-    settings,
+    settings: settings
+      ? {
+          businessType: settings.businessType,
+          businessName: settings.businessName,
+          locale: settings.locale,
+          demoMode: settings.demoMode,
+        }
+      : null,
     kpis: {
       ordersDueToday: ordersDueToday.length,
       ordersToday,
@@ -362,8 +376,14 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
       productionWorkOpen: todayOps.productionWorkOpen,
       confirmedOrders: todayOps.confirmedOrdersToday,
     },
-    ordersDueToday,
-    openTasks,
+    ordersDueToday: ordersDueToday.map((order) => ({
+      ...order,
+      pickupDate: order.pickupDate?.toISOString() ?? null,
+    })),
+    openTasks: openTasks.map((task) => ({
+      ...task,
+      dueAt: task.dueAt?.toISOString() ?? null,
+    })),
     routesToday,
     blockers,
     readiness,

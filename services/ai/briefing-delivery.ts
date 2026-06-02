@@ -116,7 +116,7 @@ export async function deliverDailyBriefing(
       data: {
         userId: config.ownerUserId,
         type: "CRON_REMINDER",
-        dedupeKey: `ai-briefing-sms:${workspaceId}:${briefing.timestamp.toISOString().slice(0, 10)}`,
+        dedupeKey: `ai-briefing-sms:${workspaceId}:${briefing.timestamp.slice(0, 10)}`,
         recipient: config.sms.number,
         status: smsOutcome.ok ? "SENT" : smsOutcome.skipped ? "SKIPPED" : "FAILED",
         category: "INTERNAL_ALERT",

@@ -28,7 +28,7 @@ import {
   deliveryRouteListWhereForOwner,
   executiveInsightListWhereForOwner,
   executiveSnapshotListWhereForOwner,
-  ingredientDemandLineListWhereForOwner,
+  ingredientDemandRunLineListWhereForOwner,
   integrationConnectionListWhereForOwner,
   kitchenTaskListWhereForOwner,
   locationListWhereForOwner,
@@ -192,7 +192,7 @@ export async function loadExecutiveOverview(
     packingBatchListWhereForOwner(uid),
     deliveryRouteListWhereForOwner(uid),
     costingRunListWhereForOwner(uid),
-    ingredientDemandLineListWhereForOwner(uid),
+    ingredientDemandRunLineListWhereForOwner(uid),
     purchaseOrderListWhereForOwner(uid),
     kitchenTaskListWhereForOwner(uid),
     cateringQuoteListWhereForOwner(uid),
@@ -299,10 +299,7 @@ export async function loadExecutiveOverview(
     }),
     prisma.ingredientDemandRunLine.findMany({
       where: {
-        AND: [
-          demandLineScope as unknown as Prisma.IngredientDemandRunLineWhereInput,
-          { status: "OPEN", shortageQuantity: { gt: 0 } },
-        ],
+        AND: [demandLineScope, { status: "OPEN", shortageQuantity: { gt: 0 } }],
       },
       select: {
         demandDate: true,

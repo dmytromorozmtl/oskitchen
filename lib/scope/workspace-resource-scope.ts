@@ -412,6 +412,14 @@ export async function ingredientDemandLineListWhereForOwner(
   return resolveOwnerScopedWhere(ownerUserId) as Prisma.IngredientDemandLineWhereInput;
 }
 
+/** Run lines inherit tenant scope via parent IngredientDemandRun (no workspaceId on the line row). */
+export async function ingredientDemandRunLineListWhereForOwner(
+  ownerUserId: string,
+): Promise<Prisma.IngredientDemandRunLineWhereInput> {
+  const runScope = await ingredientDemandRunListWhereForOwner(ownerUserId);
+  return { demandRun: runScope };
+}
+
 export async function ingredientSubstitutionListWhereForOwner(
   ownerUserId: string,
 ): Promise<Prisma.IngredientSubstitutionWhereInput> {

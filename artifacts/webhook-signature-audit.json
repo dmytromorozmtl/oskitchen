@@ -1,9 +1,9 @@
 {
   "version": "webhook-signature-static-audit-v1",
-  "generatedAt": "2026-05-30T22:44:45.916Z",
-  "expectedRouteCount": 46,
-  "totalRoutes": 46,
-  "verifiedCount": 46,
+  "generatedAt": "2026-06-01T14:15:57.248Z",
+  "expectedRouteCount": 52,
+  "totalRoutes": 52,
+  "verifiedCount": 52,
   "missingVerificationCount": 0,
   "matrixMismatchCount": 0,
   "overall": "PASSED",
@@ -194,6 +194,20 @@
       "notes": null
     },
     {
+      "apiPath": "/api/webhooks/capital-lender/[partnerSlug]",
+      "routeFile": "app/api/webhooks/capital-lender/[partnerSlug]/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "verify_capital_lender_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P2",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
       "apiPath": "/api/webhooks/cen-cenelec-digital-product-governance-registry",
       "routeFile": "app/api/webhooks/cen-cenelec-digital-product-governance-registry/route.ts",
       "handlerFiles": [],
@@ -204,6 +218,22 @@
       "matrixSignatureKind": "bearer_secret",
       "matrixSignatureValidated": true,
       "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/doordash/orders",
+      "routeFile": "app/api/webhooks/doordash/orders/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/webhook-event-store.ts"
+      ],
+      "detectedSignals": [
+        "verify_doordash_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
       "codeMatchesMatrix": true,
       "notes": null
     },
@@ -348,6 +378,22 @@
       "notes": null
     },
     {
+      "apiPath": "/api/webhooks/grubhub/orders",
+      "routeFile": "app/api/webhooks/grubhub/orders/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/webhook-event-store.ts"
+      ],
+      "detectedSignals": [
+        "verify_grubhub_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
       "apiPath": "/api/webhooks/icao-imo-ai-aviation-registry",
       "routeFile": "app/api/webhooks/icao-imo-ai-aviation-registry/route.ts",
       "handlerFiles": [],
@@ -463,6 +509,57 @@
     {
       "apiPath": "/api/webhooks/shopify/app-uninstalled",
       "routeFile": "app/api/webhooks/shopify/app-uninstalled/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/markets-create",
+      "routeFile": "app/api/webhooks/shopify/markets-create/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/markets-delete",
+      "routeFile": "app/api/webhooks/shopify/markets-delete/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/shopify-handler.ts"
+      ],
+      "detectedSignals": [
+        "verify_shopify_hmac",
+        "shopify_handler"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/shopify/markets-update",
+      "routeFile": "app/api/webhooks/shopify/markets-update/route.ts",
       "handlerFiles": [
         "lib/webhooks/shopify-handler.ts"
       ],

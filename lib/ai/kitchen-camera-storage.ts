@@ -4,6 +4,7 @@ import type { KitchenCameraConfig, KitchenCameraStorage } from "@/lib/ai/kitchen
 import type { KitchenCameraHistoryStorage as DashboardHistory } from "@/lib/ai/kitchen-camera-dashboard-types";
 import { parseCameraHistory } from "@/lib/ai/kitchen-camera-dashboard-builders";
 import { prisma } from "@/lib/prisma";
+import { ensureOwnerWorkspaceId } from "@/lib/scope/ensure-owner-workspace";
 
 export const EMPTY_KITCHEN_CAMERA_STORAGE: KitchenCameraStorage = {
   cameras: [],
@@ -87,10 +88,16 @@ export async function saveKitchenCameraStorage(
 
   existing[STORAGE_KEY] = storage;
 
+  const workspaceId = await ensureOwnerWorkspaceId(ownerUserId);
+
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
-    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
+    create: {
+      userId: ownerUserId,
+      workspaceId,
+      settingsCenterJson: existing as Prisma.InputJsonValue,
+    },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue, workspaceId },
   });
 }
 
@@ -124,9 +131,15 @@ export async function saveKitchenCameraHistory(
 
   existing[HISTORY_KEY] = history;
 
+  const workspaceId = await ensureOwnerWorkspaceId(ownerUserId);
+
   await prisma.kitchenSettings.upsert({
     where: { userId: ownerUserId },
-    create: { userId: ownerUserId, settingsCenterJson: existing as Prisma.InputJsonValue },
-    update: { settingsCenterJson: existing as Prisma.InputJsonValue },
+    create: {
+      userId: ownerUserId,
+      workspaceId,
+      settingsCenterJson: existing as Prisma.InputJsonValue,
+    },
+    update: { settingsCenterJson: existing as Prisma.InputJsonValue, workspaceId },
   });
 }

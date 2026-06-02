@@ -7,7 +7,7 @@ import {
 } from "@/lib/ai/restaurant-brain-ui-summary";
 
 const baseBriefing: DailyBriefing = {
-  timestamp: new Date(),
+  timestamp: new Date().toISOString(),
   workspaceId: "ws-1",
   aiAssisted: true,
   overallConfidence: 0.87,

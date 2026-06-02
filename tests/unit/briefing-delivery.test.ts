@@ -14,7 +14,7 @@ import type { DailyBriefing } from "@/lib/ai/restaurant-brain-types";
 import type { PredictiveAlert } from "@/lib/ai/predictive-alerts-types";
 
 const briefing: DailyBriefing = {
-  timestamp: new Date("2026-06-05T12:00:00.000Z"),
+  timestamp: "2026-06-05T12:00:00.000Z",
   workspaceId: "ws-1",
   aiAssisted: true,
   overallConfidence: 0.87,

@@ -399,7 +399,7 @@ export function TodayCommandCenterView({
                   <span className="font-medium leading-snug">{t.title}</span>
                   <span className="text-xs text-muted-foreground">
                     {t.priority} · {t.status}
-                    {t.dueAt ? ` · due ${t.dueAt.toISOString().slice(0, 10)}` : ""}
+                    {t.dueAt ? ` · due ${String(t.dueAt).slice(0, 10)}` : ""}
                   </span>
                 </Link>
               ))

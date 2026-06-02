@@ -26,8 +26,12 @@ function sectionBlock(title: string, lines: string[]): string {
   return `<h3 style="margin:16px 0 8px;font-size:15px;">${escapeHtml(title)}</h3><ul style="margin:0;padding-left:20px;">${items}</ul>`;
 }
 
+function briefingDateLabel(timestamp: string, options?: Intl.DateTimeFormatOptions): string {
+  return new Date(timestamp).toLocaleDateString(undefined, options);
+}
+
 export function formatBriefingEmail(briefing: DailyBriefing, alerts: PredictiveAlert[]): string {
-  const dateLabel = briefing.timestamp.toLocaleDateString(undefined, {
+  const dateLabel = briefingDateLabel(briefing.timestamp, {
     weekday: "long",
     month: "short",
     day: "numeric",
@@ -80,7 +84,7 @@ export function formatBriefingEmail(briefing: DailyBriefing, alerts: PredictiveA
 }
 
 export function formatBriefingEmailSubject(briefing: DailyBriefing): string {
-  return `OS Kitchen Daily Briefing — ${briefing.timestamp.toLocaleDateString()}`;
+  return `OS Kitchen Daily Briefing — ${briefingDateLabel(briefing.timestamp)}`;
 }
 
 export function formatBriefingEmailText(briefing: DailyBriefing, alerts: PredictiveAlert[]): string {
