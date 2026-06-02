@@ -2623,3 +2623,11 @@ Commit: test: forbidden claims enforcement
 Changes: tests/unit/forbidden-claims-enforcement.test.ts — marketing scan, hype terms, pilot affirmative claims, CI wiring
 Total done: 40/122
 
+---
+Cycle: 20260602-160000
+Task: 41 — Bundle size regression unit tests
+Role: QA | Priority: P1
+Commit: test: bundle size regression
+Changes: lib/performance/bundle-size-budget-policy.ts, artifacts/bundle-size-baseline.json, tests/unit/bundle-size-regression.test.ts
+Total done: 41/122
+
