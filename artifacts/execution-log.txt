@@ -2383,3 +2383,11 @@ Commit: feat: BETA badges on all integration cards
 Changes: BetaBadge component; applied to 7 BETA integration pages, channel cards, extensions catalog, sales channels list
 Total done: 10/122
 
+---
+Cycle: 20260602-101200
+Task: 11 — MarketplaceDataUnavailable empty state
+Role: Design | Priority: P0
+Commit: feat: MarketplaceDataUnavailable empty state
+Changes: SVG illustration, "Marketplace is being set up" copy, Contact support CTA; unit test
+Total done: 11/122
+
