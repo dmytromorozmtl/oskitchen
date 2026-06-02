@@ -2631,3 +2631,11 @@ Commit: test: bundle size regression
 Changes: lib/performance/bundle-size-budget-policy.ts, artifacts/bundle-size-baseline.json, tests/unit/bundle-size-regression.test.ts
 Total done: 41/122
 
+---
+Cycle: 20260602-161000
+Task: 42 — Navigation audit (566 dashboard routes categorized)
+Role: Design | Priority: P1
+Commit: docs: navigation audit
+Changes: docs/navigation-audit.md, scripts/generate-navigation-audit.mjs — 770 routes in 26 categories, full appendix
+Total done: 42/122
+
