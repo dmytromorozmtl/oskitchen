@@ -3231,3 +3231,11 @@ Commit: docs: instant payouts for vendors
 Changes: docs/instant-payouts-plan.md (Models A–D, Phase 1–4, instant fee proposal, fraud controls); tests/unit/instant-payouts-plan.test.ts
 Total done: 116/122
 
+---
+Cycle: 20260602-414800
+Task: 117 — Freemium tier plan
+Role: P2 Additional | Priority: P2
+Commit: docs: freemium entry point plan
+Changes: docs/freemium-tier-plan.md (options A–D, FREE caps proposal, Phase 1–4 rollout); tests/unit/freemium-tier-plan.test.ts
+Total done: 117/122
+
