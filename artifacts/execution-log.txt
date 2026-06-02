@@ -2767,3 +2767,11 @@ Commit: docs: sales limitation sheet
 Changes: docs/sales-limitation-sheet.md — prospect one-pager: integrations, POS, AI, marketplace, enterprise, support, ROI limits + scripts
 Total done: 58/122
 
+---
+Cycle: 20260602-194500
+Task: 59 — Bus factor mitigation plan
+Role: PM | Priority: P1
+Commit: docs: bus factor mitigation plan
+Changes: docs/bus-factor-mitigation.md — SPOF map, access continuity, knowledge map, hire plan, 30/60/90 actions, quarterly scorecard
+Total done: 59/122
+
