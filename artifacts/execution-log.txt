@@ -3199,3 +3199,11 @@ Commit: docs: AI crisis communication template
 Changes: docs/ai-crisis-communication-template.md (scenarios C1–C7, SLA, templates A–E, post-mortem); tests/unit/ai-crisis-communication-template.test.ts; docs/ai-honesty-policy.md link update
 Total done: 112/122
 
+---
+Cycle: 20260602-370500
+Task: 113 — Hardware partner program
+Role: P2 Additional | Priority: P2
+Commit: docs: hardware partner program
+Changes: docs/hardware-partner-program.md (L0–L2 tiers, categories, L1 validation, partner process); tests/unit/hardware-partner-program.test.ts
+Total done: 113/122
+
