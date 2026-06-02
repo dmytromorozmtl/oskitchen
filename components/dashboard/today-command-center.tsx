@@ -105,6 +105,9 @@ export function TodayCommandCenterView({
           <Button asChild variant="outline" className="rounded-full">
             <Link href="/dashboard/system-health">System health</Link>
           </Button>
+          <Button asChild variant="premium" className="rounded-full shadow-sm">
+            <Link href="/dashboard/today/profit">Real-time profit</Link>
+          </Button>
         </div>
       </div>
 

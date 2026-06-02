@@ -3305,3 +3305,9 @@ Feature: qr-code-ordering
 Result: done — /q/[slug]/[tableId] dark ordering UI, processQROrder → KDS blue table badge, /dashboard/qr-codes grid + PNG/print, e2e/qr-ordering.spec.ts @375px
 Tracker: 4/5
 
+---
+Cycle: high-impact-5
+Feature: real-time-profit
+Result: done — /dashboard/today/profit mobile-first dashboard, getRealTimeProfit() + profit-alerts, profit-gauge, 60s refresh API, e2e/real-time-profit.spec.ts @375px
+Tracker: 5/5 — all high-impact features complete
+
