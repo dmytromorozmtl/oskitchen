@@ -2863,3 +2863,11 @@ Commit: docs: AI briefing email sample
 Changes: docs/ai-briefing-email-sample.md — subject, plain-text, HTML sample aligned to formatBriefingEmail, SMS excerpt, public usage + forbidden claims
 Total done: 70/122
 
+---
+Cycle: 20260602-224500
+Task: 71 — Navigation sprawl audit
+Role: Developer | Priority: P2
+Commit: docs: navigation sprawl audit
+Changes: docs/nav-sprawl-audit.md — sprawl metrics (566 routes / 126 sidebar), orphan buckets, pilot profile, duplicate paths, consolidation waves
+Total done: 71/122
+
