@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ClipboardList } from "lucide-react";
 
 import { PaginationBar } from "@/components/dashboard/pagination-bar";
-import { EmptyState } from "@/components/dashboard/empty-state";
+import { EmptyState } from "@/components/ui/empty-state";
 import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceOrdersListClient } from "@/components/marketplace/marketplace-orders-list-client";
 import { MarketplaceRecurringOrdersSection } from "@/components/marketplace/marketplace-recurring-orders-section";
@@ -46,6 +46,7 @@ export default async function MarketplaceOrdersPage({
         description="Open a workspace to view marketplace purchase orders."
         primaryLabel="Marketplace"
         primaryHref="/dashboard/marketplace"
+        showDemoLink={false}
       />
     );
   }
@@ -106,12 +107,13 @@ export default async function MarketplaceOrdersPage({
       {model.items.length === 0 ? (
         <EmptyState
           icon={ClipboardList}
-          title="No marketplace orders yet"
+          title="No orders yet"
           description="Checkout from the catalog to create purchase orders split by vendor."
           primaryLabel="Browse catalog"
           primaryHref="/dashboard/marketplace/catalog"
           secondaryLabel="Cart"
           secondaryHref="/dashboard/marketplace/checkout"
+          showDemoLink={false}
         />
       ) : (
         <>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { ClipboardList } from "lucide-react";
 
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
 import { MarketplaceResponsiveDataList } from "@/components/marketplace/marketplace-responsive-data-list";
@@ -117,7 +118,15 @@ export function MarketplaceOrdersListClient({
 
       <MarketplaceResponsiveDataList
         rows={orders}
-        emptyMessage="No orders match your filters."
+        emptyState={{
+          icon: ClipboardList,
+          title: "No orders match your filters",
+          description: "Try clearing status, vendor, or date filters to see more purchase orders.",
+          primaryLabel: "Clear filters",
+          primaryHref: "/dashboard/marketplace/orders",
+          secondaryLabel: "Browse catalog",
+          secondaryHref: "/dashboard/marketplace/catalog",
+        }}
         columns={[
           {
             key: "po",

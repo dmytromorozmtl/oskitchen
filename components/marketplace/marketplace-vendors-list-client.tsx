@@ -1,10 +1,12 @@
 "use client";
 
 import { useTransition } from "react";
+import { Store } from "lucide-react";
 import { toast } from "sonner";
 
 import { toggleMarketplaceVendorFavoriteAction } from "@/actions/marketplace/vendors";
 import { MarketplaceVendorCardView } from "@/components/marketplace/marketplace-vendor-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import type { MarketplaceVendorCard } from "@/services/marketplace/marketplace-vendors-service";
 
@@ -70,9 +72,15 @@ export function MarketplaceVendorsListClient({
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">My vendors</h2>
         {vendors.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Place marketplace orders or favorite approved vendors to see them here.
-          </p>
+          <EmptyState
+            icon={Store}
+            title="No vendors in this list yet"
+            description="Place marketplace orders or favorite approved vendors to see them here."
+            primaryLabel="Browse catalog"
+            primaryHref="/dashboard/marketplace/catalog"
+            variant="inline"
+            showDemoLink={false}
+          />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             {vendors.map((vendor) => (

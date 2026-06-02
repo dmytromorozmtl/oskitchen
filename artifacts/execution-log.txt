@@ -2639,3 +2639,11 @@ Commit: docs: navigation audit
 Changes: docs/navigation-audit.md, scripts/generate-navigation-audit.mjs — 770 routes in 26 categories, full appendix
 Total done: 42/122
 
+---
+Cycle: 20260602-162500
+Task: 43 — Consistent empty states (UI component + marketplace vendors/orders/products)
+Role: Design | Priority: P1
+Commit: feat: consistent empty states
+Changes: components/ui/empty-state.tsx (card + inline variants), dashboard re-export, marketplace pages + list clients
+Total done: 43/122
+

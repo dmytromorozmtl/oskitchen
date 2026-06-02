@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Store } from "lucide-react";
 
-import { EmptyState } from "@/components/dashboard/empty-state";
+import { EmptyState } from "@/components/ui/empty-state";
 import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceVendorsListClient } from "@/components/marketplace/marketplace-vendors-list-client";
 import { PageHeader } from "@/components/layout/page-header";
@@ -27,6 +27,7 @@ export default async function MarketplaceVendorsPage({
         description="Open a workspace to manage marketplace vendors."
         primaryLabel="Marketplace"
         primaryHref="/dashboard/marketplace"
+        showDemoLink={false}
       />
     );
   }
@@ -61,12 +62,13 @@ export default async function MarketplaceVendorsPage({
       {model.vendors.length === 0 && model.favorites.length === 0 ? (
         <EmptyState
           icon={Store}
-          title="No vendor relationships yet"
+          title="No vendors yet"
           description="Place marketplace orders or browse the catalog to build your supplier list."
           primaryLabel="Browse catalog"
           primaryHref="/dashboard/marketplace/catalog"
           secondaryLabel="View orders"
           secondaryHref="/dashboard/marketplace/orders"
+          showDemoLink={false}
         />
       ) : (
         <MarketplaceVendorsListClient

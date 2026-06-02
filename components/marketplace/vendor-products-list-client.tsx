@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { PackageSearch } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -138,7 +139,15 @@ export function VendorProductsListClient({
 
       <MarketplaceResponsiveDataList
         rows={products}
-        emptyMessage="No products match your filters."
+        emptyState={{
+          icon: PackageSearch,
+          title: "No products match your filters",
+          description: "Try a different search term or status filter, or create a new product.",
+          primaryLabel: "Clear filters",
+          primaryHref: "/vendor/products",
+          secondaryLabel: canManage ? "New product" : undefined,
+          secondaryHref: canManage ? "/vendor/products/new" : undefined,
+        }}
         columns={[
           ...(canManage
             ? [

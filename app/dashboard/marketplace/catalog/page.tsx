@@ -1,7 +1,7 @@
 import { PackageSearch } from "lucide-react";
 
 import { PaginationBar } from "@/components/dashboard/pagination-bar";
-import { EmptyState } from "@/components/dashboard/empty-state";
+import { EmptyState } from "@/components/ui/empty-state";
 import { MarketplaceCatalogOfflineSync } from "@/components/marketplace/marketplace-catalog-offline-sync";
 import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceCatalogFilterBar } from "@/components/marketplace/marketplace-catalog-filter-bar";
@@ -47,6 +47,18 @@ export default async function MarketplaceCatalogPage({
     cachedAt: new Date().toISOString(),
   }));
 
+  const hasActiveFilters =
+    Boolean(filters.q) ||
+    Boolean(filters.category) ||
+    Boolean(filters.vendorId) ||
+    filters.minPrice != null ||
+    filters.maxPrice != null ||
+    filters.minRating != null ||
+    filters.maxLeadDays != null ||
+    filters.maxMoq != null ||
+    filters.inStockOnly ||
+    filters.page > 1;
+
   return (
     <div className="space-y-6 pb-8">
       <MarketplaceCatalogOfflineSync products={offlineProducts} />
@@ -69,12 +81,23 @@ export default async function MarketplaceCatalogPage({
           {catalog.items.length === 0 ? (
             <EmptyState
               icon={PackageSearch}
-              title="No products match your filters"
-              description="Try clearing category or price filters, or seed marketplace categories and vendor catalogs."
-              primaryLabel="Reset filters"
-              primaryHref="/dashboard/marketplace/catalog"
-              secondaryLabel="Marketplace home"
-              secondaryHref="/dashboard/marketplace"
+              title={hasActiveFilters ? "No products match your filters" : "No products yet"}
+              description={
+                hasActiveFilters
+                  ? "Try clearing category, vendor, or price filters to see more catalog items."
+                  : "Approved vendor catalogs will appear here once marketplace categories and products are seeded."
+              }
+              primaryLabel={hasActiveFilters ? "Reset filters" : "Marketplace home"}
+              primaryHref={
+                hasActiveFilters ? "/dashboard/marketplace/catalog" : "/dashboard/marketplace"
+              }
+              secondaryLabel={hasActiveFilters ? "Marketplace home" : "Browse vendors"}
+              secondaryHref={
+                hasActiveFilters
+                  ? "/dashboard/marketplace"
+                  : "/dashboard/marketplace/vendors"
+              }
+              showDemoLink={false}
             />
           ) : (
             <>

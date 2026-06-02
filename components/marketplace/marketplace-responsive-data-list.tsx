@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { EmptyState, type EmptyStateProps } from "@/components/ui/empty-state";
 import { MARKETPLACE_MOBILE_CARD_CLASS } from "@/lib/marketplace/mobile-ui";
 import { cn } from "@/lib/utils";
 import {
@@ -24,13 +25,35 @@ export function MarketplaceResponsiveDataList<T extends { id: string }>({
   columns,
   renderMobileCard,
   emptyMessage = "No rows to display.",
+  emptyState,
 }: {
   rows: T[];
   columns: MarketplaceResponsiveColumn<T>[];
   renderMobileCard: (row: T) => ReactNode;
   emptyMessage?: string;
+  emptyState?: Pick<
+    EmptyStateProps,
+    | "icon"
+    | "title"
+    | "description"
+    | "primaryLabel"
+    | "primaryHref"
+    | "secondaryLabel"
+    | "secondaryHref"
+  >;
 }) {
   if (rows.length === 0) {
+    if (emptyState) {
+      return (
+        <EmptyState
+          {...emptyState}
+          variant="inline"
+          showDemoLink={false}
+          className={MARKETPLACE_MOBILE_CARD_CLASS}
+        />
+      );
+    }
+
     return (
       <div className={cn(MARKETPLACE_MOBILE_CARD_CLASS, "py-10 text-center text-sm text-muted-foreground")}>
         {emptyMessage}
