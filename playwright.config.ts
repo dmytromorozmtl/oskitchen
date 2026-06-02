@@ -72,6 +72,7 @@ if (dashboardE2EEnabled) {
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",
         "**/cross-channel-inventory.spec.ts",
+        "**/marketplace-checkout.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
         "**/webhook-replay-authed.spec.ts",
