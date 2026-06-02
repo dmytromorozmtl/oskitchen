@@ -2479,3 +2479,11 @@ Commit: ci: P0 staging smokes workflow
 Changes: .github/workflows/p0-staging-smokes.yml (workflow_dispatch, daily schedule, policy-path triggers); lib/ci/p0-staging-smokes-ci-policy.ts (DEDICATED_WORKFLOW_PATH); docs/ci-e2e-tier-matrix.md; p0-staging-smokes-ci-live.test.ts
 Total done: 22/122
 
+---
+Cycle: 20260602-124500
+Task: 23 — Observability setup guide
+Role: Developer | Priority: P1
+Commit: docs: observability setup
+Changes: docs/observability-setup.md — Sentry + OpenTelemetry setup, env vars, verification, health signals, logging policy
+Total done: 23/122
+
