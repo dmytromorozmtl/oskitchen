@@ -3039,3 +3039,11 @@ Commit: feat: AI features error states
 Changes: components/dashboard/ai-feature-api-error.tsx; lib/ai/load-ai-feature-page.ts + ai-feature-pages.ts; wired into 7 AI modules, copilot suite, today briefing, scheduling, forecast; tests/unit/ai-feature-api-error.test.ts
 Total done: 92/122
 
+---
+Cycle: 20260602-281200
+Task: 93 — Toast gap analysis
+Role: PM | Priority: P2
+Commit: docs: Toast gap analysis
+Changes: docs/toast-gap-analysis.md (Toast-specific gap matrix, wedges, mitigation roadmap, sales talk tracks); tests/unit/toast-gap-analysis.test.ts
+Total done: 93/122
+
