@@ -6,6 +6,7 @@ import { LoginForm } from "@/components/auth/login-form";
 import { SsoLoginEntry } from "@/components/auth/sso-login-entry";
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { getSessionUser } from "@/lib/auth";
+import { A11Y_INLINE_LINK } from "@/lib/a11y/ui-classes";
 import { resolvePostAuthPathForSessionUser } from "@/lib/navigation/resolve-operator-post-auth-path";
 
 export const metadata = {
@@ -41,7 +42,7 @@ export default async function LoginPage() {
           </Suspense>
           <p className="mt-6 text-center text-xs text-muted-foreground">
             New to OS Kitchen?{" "}
-            <Link href="/signup" className="text-primary hover:underline">
+            <Link href="/signup" className={A11Y_INLINE_LINK}>
               Start free trial
             </Link>
           </p>

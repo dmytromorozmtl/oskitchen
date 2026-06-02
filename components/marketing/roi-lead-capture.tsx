@@ -74,20 +74,22 @@ export function RoiLeadCapture({ estimatedSavingsMonthly, weeklyOrders, recommen
           </DialogDescription>
         </DialogHeader>
         <form className="grid gap-3" onSubmit={submit}>
-          <label className="text-sm font-medium">
-            Work email
+          <div className="space-y-2">
+            <Label htmlFor="roi-lead-email">Work email</Label>
             <Input
+              id="roi-lead-email"
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
             />
-          </label>
-          <label className="text-sm font-medium">
-            Business type
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="roi-lead-business-type">Business type</Label>
             <select
-              className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+              id="roi-lead-business-type"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               value={businessType}
               onChange={(e) => setBusinessType(e.target.value)}
             >
@@ -96,7 +98,7 @@ export function RoiLeadCapture({ estimatedSavingsMonthly, weeklyOrders, recommen
               <option value="RESTAURANT">Restaurant / café</option>
               <option value="CATERING">Catering</option>
             </select>
-          </label>
+          </div>
           <Button type="submit" disabled={status === "loading" || (siteKey != null && !captchaToken)} className="rounded-full">
             {status === "loading" ? "Sending…" : "Send my analysis"}
           </Button>

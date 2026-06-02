@@ -104,9 +104,9 @@ export function DemoRequestForm() {
         </div>
       </div>
       <div className="space-y-2">
-        <Label>Business type</Label>
+        <Label htmlFor="businessType">Business type</Label>
         <Select value={businessType} onValueChange={setBusinessType}>
-          <SelectTrigger className="rounded-xl">
+          <SelectTrigger id="businessType" className="rounded-xl">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

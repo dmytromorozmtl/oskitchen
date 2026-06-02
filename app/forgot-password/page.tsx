@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ForgotForm } from "@/components/auth/forgot-form";
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
+import { A11Y_INLINE_LINK } from "@/lib/a11y/ui-classes";
 
 export const metadata = {
   title: "Reset password",
@@ -22,7 +23,7 @@ export default function ForgotPasswordPage() {
           <ForgotForm />
           <p className="mt-6 text-center text-xs text-muted-foreground">
             Remembered it?{" "}
-            <Link href="/login" className="text-primary hover:underline">
+            <Link href="/login" className={A11Y_INLINE_LINK}>
               Sign in
             </Link>
           </p>

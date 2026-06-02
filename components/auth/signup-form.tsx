@@ -12,6 +12,7 @@ import { trackSignupConversion } from "@/lib/analytics/gtag-events";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { A11Y_INLINE_LINK } from "@/lib/a11y/ui-classes";
 
 export function SignupForm({
   initialReferralCode = "",
@@ -92,7 +93,7 @@ export function SignupForm({
       </Button>
       <p className="text-center text-xs text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="text-primary hover:underline">
+        <Link href="/login" className={A11Y_INLINE_LINK}>
           Sign in
         </Link>
       </p>

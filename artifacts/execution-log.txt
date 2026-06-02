@@ -3007,3 +3007,11 @@ Commit: feat: checkout approval gate UI
 Changes: components/marketplace/checkout-approval-gate.tsx; shared approval threshold in lib/marketplace/checkout-utils.ts; wired into marketplace checkout; tests/unit/checkout-approval-gate.test.ts
 Total done: 88/122
 
+---
+Cycle: 20260602-270100
+Task: 89 — Accessibility improvements (focus, contrast, keyboard)
+Role: Design | Priority: P2
+Commit: fix: accessibility improvements
+Changes: lib/a11y/ui-classes.ts; globals.css muted-foreground + focus-visible; pricing billing toggle aria-pressed; ROI/book-demo form labels; auth inline links underlined; tests/unit/accessibility-improvements.test.ts
+Total done: 89/122
+

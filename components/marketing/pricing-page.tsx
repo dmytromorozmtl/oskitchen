@@ -16,6 +16,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { APP_NAME } from "@/lib/constants";
+import { A11Y_FOCUS_RING, A11Y_INLINE_LINK, A11Y_SEGMENT_BUTTON } from "@/lib/a11y/ui-classes";
+import { cn } from "@/lib/utils";
 import { PLAN_REGISTRY } from "@/lib/billing/plan-registry";
 
 const ANNUAL_DISCOUNT_PCT = 17;
@@ -126,17 +128,29 @@ export function PricingPage() {
             customers, and integrations in one workspace. It does not replace Shopify, WooCommerce, or marketplaces;
             it coordinates the kitchen after orders are captured.
           </p>
-          <div className="mt-8 inline-flex rounded-full border border-border bg-muted/30 p-1 text-sm">
+          <div
+            role="group"
+            aria-label="Billing period"
+            className="mt-8 inline-flex rounded-full border border-border bg-muted/30 p-1 text-sm"
+          >
             <button
               type="button"
-              className={`rounded-full px-4 py-2 transition-colors ${!annual ? "bg-background shadow-sm" : ""}`}
+              aria-pressed={!annual}
+              className={cn(
+                A11Y_SEGMENT_BUTTON,
+                !annual ? "bg-background shadow-sm" : "text-muted-foreground",
+              )}
               onClick={() => setAnnual(false)}
             >
               Monthly
             </button>
             <button
               type="button"
-              className={`rounded-full px-4 py-2 transition-colors ${annual ? "bg-background shadow-sm" : ""}`}
+              aria-pressed={annual}
+              className={cn(
+                A11Y_SEGMENT_BUTTON,
+                annual ? "bg-background shadow-sm" : "text-muted-foreground",
+              )}
               onClick={() => setAnnual(true)}
             >
               Annual (save ~{ANNUAL_DISCOUNT_PCT}%)
@@ -194,7 +208,7 @@ export function PricingPage() {
         <section className="mt-20">
           <h2 className="text-center text-2xl font-semibold">Feature comparison</h2>
           <div className="mt-8 overflow-x-auto rounded-2xl border border-border/80">
-            <table className="w-full min-w-[640px] text-sm">
+            <table className="w-full min-w-[640px] text-sm" aria-label="Plan feature comparison">
               <thead className="bg-muted/40">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">Capability</th>
@@ -247,11 +261,11 @@ export function PricingPage() {
         />
         <p className="mt-8 text-center text-sm text-muted-foreground">
           Integration details:{' '}
-          <Link href="/integrations" className="font-medium text-primary hover:underline">
+          <Link href="/integrations" className={A11Y_INLINE_LINK}>
             capability matrix
           </Link>
           {' · '}
-          <Link href="/get-started" className="font-medium text-primary hover:underline">
+          <Link href="/get-started" className={A11Y_INLINE_LINK}>
             choose your path
           </Link>
         </p>

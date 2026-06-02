@@ -7,6 +7,7 @@ import Link from "next/link";
 import { RoiLeadCapture } from "@/components/marketing/roi-lead-capture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function RoiCalculator() {
   const [weeklyOrders, setWeeklyOrders] = React.useState(250);
@@ -26,12 +27,12 @@ export function RoiCalculator() {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <div className="grid gap-3">
-        <label className="text-sm font-medium">Weekly orders<Input type="number" value={weeklyOrders} onChange={(e) => setWeeklyOrders(Number(e.target.value))} /></label>
-        <label className="text-sm font-medium">Average order value<Input type="number" value={aov} onChange={(e) => setAov(Number(e.target.value))} /></label>
-        <label className="text-sm font-medium">Manual coordination hours/week<Input type="number" value={hours} onChange={(e) => setHours(Number(e.target.value))} /></label>
-        <label className="text-sm font-medium">Hourly admin/kitchen cost<Input type="number" value={cost} onChange={(e) => setCost(Number(e.target.value))} /></label>
-        <label className="text-sm font-medium">Monthly mistakes/refunds<Input type="number" value={mistakes} onChange={(e) => setMistakes(Number(e.target.value))} /></label>
-        <label className="text-sm font-medium">Expected growth %<Input type="number" value={growth} onChange={(e) => setGrowth(Number(e.target.value))} /></label>
+        <RoiField id="roi-weekly-orders" label="Weekly orders" value={weeklyOrders} onChange={setWeeklyOrders} />
+        <RoiField id="roi-aov" label="Average order value" value={aov} onChange={setAov} />
+        <RoiField id="roi-hours" label="Manual coordination hours/week" value={hours} onChange={setHours} />
+        <RoiField id="roi-cost" label="Hourly admin/kitchen cost" value={cost} onChange={setCost} />
+        <RoiField id="roi-mistakes" label="Monthly mistakes/refunds" value={mistakes} onChange={setMistakes} />
+        <RoiField id="roi-growth" label="Expected growth %" value={growth} onChange={setGrowth} />
       </div>
       <div className="rounded-2xl border bg-muted/30 p-6">
         <p className="text-sm text-muted-foreground">Conservative estimate, not a guarantee.</p>
@@ -53,6 +54,30 @@ export function RoiCalculator() {
           </Button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function RoiField({
+  id,
+  label,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <Input
+        id={id}
+        type="number"
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
+      />
     </div>
   );
 }

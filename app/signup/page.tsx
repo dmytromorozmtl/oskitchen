@@ -9,6 +9,7 @@ import { OSKitchenLogo } from '@/components/ui/os-kitchen-logo';
 import { getSessionUser } from '@/lib/auth';
 import { SIGNUP_MARKETING } from '@/lib/marketing/signup-marketing-content';
 import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
+import { A11Y_INLINE_LINK } from '@/lib/a11y/ui-classes';
 import { resolvePostAuthPathForSessionUser } from '@/lib/navigation/resolve-operator-post-auth-path';
 
 export const metadata = marketingPageMetadata({
@@ -47,7 +48,7 @@ export default async function SignupPage() {
         </div>
         <nav className="mt-8 flex flex-wrap justify-center gap-x-4 gap-y-2 text-center text-sm text-muted-foreground">
           {copy.footerLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="font-medium text-primary hover:underline">
+            <Link key={link.href} href={link.href} className={A11Y_INLINE_LINK}>
               {link.label}
             </Link>
           ))}

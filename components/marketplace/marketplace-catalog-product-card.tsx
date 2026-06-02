@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Plus, Scale, Star } from "lucide-react";
 
 import { WishlistButton } from "@/components/marketplace/wishlist-button";
+import { A11Y_FOCUS_RING } from "@/lib/a11y/ui-classes";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -95,12 +96,12 @@ export function MarketplaceCatalogProductCard({
           </p>
         </div>
 
-        <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-sm">
           <input
             type="checkbox"
             checked={isCompared}
             onChange={toggleCompare}
-            className="h-4 w-4 rounded border-input"
+            className={`h-4 w-4 rounded border-input ${A11Y_FOCUS_RING}`}
           />
           Compare
         </label>

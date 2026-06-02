@@ -11,6 +11,8 @@ import { signInAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { A11Y_INLINE_LINK } from "@/lib/a11y/ui-classes";
+import { cn } from "@/lib/utils";
 
 export function LoginForm() {
   const router = useRouter();
@@ -63,10 +65,7 @@ export function LoginForm() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="password">Password</Label>
-          <Link
-            href="/forgot-password"
-            className="text-xs text-muted-foreground hover:text-primary"
-          >
+          <Link href="/forgot-password" className={cn("text-xs", A11Y_INLINE_LINK)}>
             Forgot password?
           </Link>
         </div>
