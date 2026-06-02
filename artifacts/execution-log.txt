@@ -2551,3 +2551,11 @@ Commit: chore: gitignore tools and deploy state
 Changes: .gitignore — added .tools/ and .deploy-state/
 Total done: 31/122
 
+---
+Cycle: 20260602-151500
+Task: 32 — Vendor registration E2E
+Role: QA | Priority: P1
+Commit: test: vendor registration E2E
+Changes: e2e/vendor-registration.spec.ts, e2e/helpers/marketplace-vendor-mock.ts; playwright chromium-authed testMatch
+Total done: 32/122
+

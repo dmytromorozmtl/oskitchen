@@ -73,6 +73,7 @@ if (dashboardE2EEnabled) {
         "**/stripe-terminal-payment.spec.ts",
         "**/cross-channel-inventory.spec.ts",
         "**/marketplace-checkout.spec.ts",
+        "**/vendor-registration.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
         "**/webhook-replay-authed.spec.ts",
