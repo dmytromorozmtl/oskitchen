@@ -253,7 +253,7 @@ async function autoFlagVendorForDisputes(input: {
   if (recentLossCount >= 2) {
     await moderatePlatformVendor({
       vendorId: input.vendorId,
-      action: "flag",
+      action: "review",
       reviewerUserId: input.reviewerUserId,
       reviewerEmail: input.reviewerEmail,
       notes: `Auto-flagged after ${recentLossCount} resolved disputes in 90 days.`,
