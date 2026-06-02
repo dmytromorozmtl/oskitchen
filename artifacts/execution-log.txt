@@ -3063,3 +3063,11 @@ Commit: docs: SOC2 readiness
 Changes: docs/soc2-readiness-assessment.md (TSC control mapping, ~35% readiness, P0–P2 backlog, questionnaire templates); tests/unit/soc2-readiness-assessment.test.ts
 Total done: 95/122
 
+---
+Cycle: 20260602-292400
+Task: 96 — Marketplace pricing strategy
+Role: PM | Priority: P2
+Commit: docs: marketplace pricing strategy
+Changes: docs/marketplace-pricing-strategy.md (vendor tiers, GMV commission, featured slots, pilot policy, sales claims); tests/unit/marketplace-pricing-strategy.test.ts
+Total done: 96/122
+
