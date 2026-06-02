@@ -2903,3 +2903,11 @@ Commit: chore: bundle optimization report
 Changes: @next/bundle-analyzer wired in next.config.ts; npm run analyze/report:bundle; artifacts/bundle-analysis-report.json + build-route-sizes.log; analyze OOM documented in bundle-analyzer-attempt.json
 Total done: 75/122
 
+---
+Cycle: 20260602-240100
+Task: 76 — Prisma unused model audit
+Role: Developer | Priority: P2
+Commit: chore: Prisma unused model audit
+Changes: scripts/audit-prisma-model-usage.ts + lib/prisma-model-usage-audit.ts; artifacts/prisma-unused-models.json (43 Tier A orphans, 42 phase-1 review); npm run audit:prisma-models
+Total done: 76/122
+

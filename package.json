@@ -409,6 +409,7 @@
     "verify:install-chain": "node --experimental-transform-types scripts/verify-clean-install-chain.ts",
     "audit:marketing-claims": "tsx scripts/audit-marketing-claims.ts",
     "audit:console-log": "bash scripts/audit-console-log.sh",
+    "audit:prisma-models": "tsx scripts/audit-prisma-model-usage.ts --write",
     "backfill:workspace-id": "tsx scripts/backfill-workspace-id.ts",
     "backfill:workspace-phase2": "tsx scripts/backfill-workspace-phase2.ts",
     "beta:program": "tsx scripts/beta-program.ts",

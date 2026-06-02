@@ -35,8 +35,10 @@ tsx scripts/audit-prisma-performance.ts --write
 # Workspace tenant field posture
 tsx scripts/audit-workspace-id-migration.ts   # if present in package scripts
 
-# Manual model usage census (same method as this doc)
-python3 scripts/audit-prisma-model-usage.py   # see § Methodology — inline below
+# Manual model usage census (Task 76 artifact)
+tsx scripts/audit-prisma-model-usage.ts --write
+# or
+npm run audit:prisma-models
 ```
 
 Regenerate this doc's **zero-reference** table after major feature merges.
@@ -198,7 +200,7 @@ Do **not** bulk-merge enums without Postgres migration + backfill plan.
 | P1 | Floor plan models — wire to `/dashboard/tables` or hide nav | Product | M |
 | P2 | Automation child tables — merge into JSON on `AutomationRule` or implement CRUD | Eng | L |
 | P2 | Enum consolidation RFC | Architecture | L |
-| P2 | Task 76 — formal unused-model drop list + migration | Eng | L |
+| P2 | Task 76 — formal unused-model drop list (`artifacts/prisma-unused-models.json`) | Eng | **Done** |
 
 ---
 
@@ -210,7 +212,7 @@ Do **not** bulk-merge enums without Postgres migration + backfill plan.
 | [`PERFORMANCE_QUERY_OPTIMIZATION_AUDIT.md`](./PERFORMANCE_QUERY_OPTIMIZATION_AUDIT.md) | EXPLAIN ANALYZE, staging DB tracing |
 | [`migration-deployment-process.md`](./migration-deployment-process.md) | Safe migration rollout |
 | [`bundle-analysis.md`](./bundle-analysis.md) | Client bundle (separate from DB) |
-| Task 76 | `chore: Prisma unused model audit` — executable drop list |
+| Task 76 | `artifacts/prisma-unused-models.json` — executable unused model list |
 | Task 82 | N+1 detection script for marketplace |
 | Task 38 | Marketplace migration regression test |
 
@@ -220,3 +222,21 @@ Do **not** bulk-merge enums without Postgres migration + backfill plan.
 
 - **OK:** "Broad schema supports multi-vertical roadmap; production paths use a focused subset."
 - **NOT OK:** "Every Prisma model is fully productized" — 43 models have no runtime accessor today.
+
+---
+
+## Task 76 execution (2026-06-02)
+
+**Command:** `npm run audit:prisma-models`  
+**Artifact:** `artifacts/prisma-unused-models.json`
+
+| Metric | Count |
+|--------|------:|
+| Total models | 399 |
+| Tier A — zero runtime refs | 43 |
+| Tier C — ≤2 runtime refs | 89 |
+| Active (>2 runtime refs) | 267 |
+| Phase-1 drop review (no script/test refs) | 42 |
+| Storefront orphans (phase-2 sign-off) | 5 |
+
+**Overall:** ATTENTION — schema breadth exceeds wired runtime surface; use artifact `recommendedAction` per model before any DROP migration.
