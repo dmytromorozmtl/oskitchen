@@ -2919,3 +2919,11 @@ Commit: test: accessibility auto-test
 Changes: e2e/accessibility.spec.ts — unified WCAG 2.1 AA gate for marketing + auth paths (/shopify, /vendor); npm run test:e2e:accessibility
 Total done: 77/122
 
+---
+Cycle: 20260602-243000
+Task: 78 — Forbidden claims auto-test in CI
+Role: QA | Priority: P2
+Commit: ci: forbidden claims auto-test
+Changes: .github/workflows/ci.yml — Forbidden claims enforcement auto-test step (MARKETING_CLAIMS_STRICT=1); npm run test:ci:forbidden-claims-enforcement; forbidden-claims-enforcement.test.ts CI wiring assertion
+Total done: 78/122
+

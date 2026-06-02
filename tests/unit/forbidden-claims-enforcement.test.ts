@@ -177,4 +177,17 @@ describe("forbidden claims enforcement", () => {
     expect(ci).toContain("verify-claims");
     expect(ci).toContain("Marketing vs capability matrix");
   });
+
+  it("wires forbidden claims enforcement auto-test in CI and package.json", () => {
+    const scripts = readPackageScripts();
+    expect(scripts["test:ci:forbidden-claims-enforcement"]).toContain(
+      "forbidden-claims-enforcement.test.ts",
+    );
+    expect(scripts["test:ci:forbidden-claims-enforcement"]).toContain("verify-claims");
+
+    const ci = readFileSync(join(ROOT, ".github/workflows/ci.yml"), "utf8");
+    expect(ci).toContain("Forbidden claims enforcement auto-test");
+    expect(ci).toContain("test:ci:forbidden-claims-enforcement");
+    expect(ci).toContain("MARKETING_CLAIMS_STRICT");
+  });
 });

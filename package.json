@@ -947,6 +947,7 @@
     "test:ci:repo-hygiene:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/repo-hygiene-ci-live.test.ts",
     "test:ci:marketing-claims-governance": "node ./node_modules/vitest/vitest.mjs run tests/unit/marketing-claims-governance-policy.test.ts",
     "test:ci:marketing-claims-governance:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/marketing-claims-governance-ci-live.test.ts",
+    "test:ci:forbidden-claims-enforcement": "npm run verify-claims && node ./node_modules/vitest/vitest.mjs run tests/unit/forbidden-claims-enforcement.test.ts",
     "test:ci:claims-registry": "node ./node_modules/vitest/vitest.mjs run tests/unit/claims-registry-policy.test.ts",
     "test:ci:claims-registry:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/claims-registry-ci-live.test.ts",
     "test:ci:pilot-preflight-claims": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-preflight-claims-policy.test.ts",
