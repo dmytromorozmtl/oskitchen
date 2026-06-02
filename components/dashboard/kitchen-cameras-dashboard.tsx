@@ -26,9 +26,12 @@ import type {
   CameraDashboardFrame,
   KitchenCameraDashboardPayload,
 } from "@/lib/ai/kitchen-camera-dashboard-types";
+import { KitchenCameraPreviewBanner } from "@/components/kitchen/kitchen-camera-preview-banner";
 import { cn } from "@/lib/utils";
 
-type Props = KitchenCameraDashboardPayload;
+type Props = KitchenCameraDashboardPayload & {
+  showPreviewBanner?: boolean;
+};
 
 const SEVERITY_VARIANT: Record<CameraAlert["severity"], "destructive" | "default" | "secondary"> = {
   critical: "destructive",
@@ -163,6 +166,8 @@ export function KitchenCamerasDashboard(props: Props) {
 
   return (
     <div className="space-y-6" data-testid="kitchen-cameras-dashboard" id="kitchen-camera-report">
+      {props.showPreviewBanner ? <KitchenCameraPreviewBanner /> : null}
+
       <div className="flex flex-wrap items-start justify-between gap-3 print:hidden">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Kitchen Cameras</h1>

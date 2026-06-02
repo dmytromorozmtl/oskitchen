@@ -1,6 +1,7 @@
 import { KitchenCamerasDashboard } from "@/components/dashboard/kitchen-cameras-dashboard";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { resolveKitchenCameraSyntheticMode } from "@/lib/ai/kitchen-camera-synthetic-mode";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -28,10 +29,14 @@ export default async function KitchenCamerasPage() {
   }
 
   const payload = await loadKitchenCameraDashboard(workspaceId);
+  const { showPreviewBanner } = resolveKitchenCameraSyntheticMode({
+    dataSource: payload.dataSource,
+    hasLiveStream: payload.cameras.some((camera) => Boolean(camera.config.streamUrl?.trim())),
+  });
 
   return (
     <div className="p-4 md:p-6">
-      <KitchenCamerasDashboard {...payload} />
+      <KitchenCamerasDashboard {...payload} showPreviewBanner={showPreviewBanner} />
     </div>
   );
 }
