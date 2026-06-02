@@ -2535,3 +2535,11 @@ Commit: docs: Stripe Connect vendor test plan
 Changes: docs/stripe-connect-vendor-test-plan.md — L0–L4 tiers, env vars, onboarding/payment/payout matrix, webhook tests, Task 32 E2E outline
 Total done: 29/122
 
+---
+Cycle: 20260602-144500
+Task: 30 — Webhook signature matrix
+Role: Developer | Priority: P1
+Commit: security: webhook signature matrix
+Changes: artifacts/webhook-signature-matrix.md — 52 /api/webhooks routes, all VERIFIED, category breakdown, production partner priority, adjacent routes
+Total done: 30/122
+
