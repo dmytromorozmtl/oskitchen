@@ -3343,3 +3343,8 @@ Cycle: 20260602-193904
 Feature: 10 — Loyalty 2.0
 Result: program builder, loyalty-2.0-service, unit+e2e tests green
 Total done: 8/40
+---
+Cycle: 20260602-194055
+Feature: 11 — Automated Onboarding
+Result: 5-question AI agent, plan review, apply via quick-start
+Total done: 9/40
