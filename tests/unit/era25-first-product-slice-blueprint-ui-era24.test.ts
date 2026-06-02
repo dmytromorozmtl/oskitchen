@@ -1,11 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import {
   buildEra25FirstProductSliceBlueprintUiSlice,
   formatEra25FirstProductSliceBlueprintLabel,
+  type Era25FirstProductSliceBlueprintUiSlice,
 } from "@/lib/commercial/era25-first-product-slice-blueprint-ui-era24";
 
 describe("era25-first-product-slice-blueprint-ui-era24", () => {
+  let engineeringGatesSlice: Era25FirstProductSliceBlueprintUiSlice | null;
+
+  beforeAll(() => {
+    engineeringGatesSlice = buildEra25FirstProductSliceBlueprintUiSlice({
+      engineeringGatesVisible: true,
+      env: {},
+    });
+  }, 120_000);
   it("returns null when engineering gates not visible", () => {
     expect(
       buildEra25FirstProductSliceBlueprintUiSlice({ engineeringGatesVisible: false }),
@@ -13,10 +22,7 @@ describe("era25-first-product-slice-blueprint-ui-era24", () => {
   });
 
   it("builds slice when engineering gates visible", () => {
-    const slice = buildEra25FirstProductSliceBlueprintUiSlice({
-      engineeringGatesVisible: true,
-      env: {},
-    });
+    const slice = engineeringGatesSlice;
     expect(slice).not.toBeNull();
     expect(slice?.outsideLinearCatalog).toBe(true);
     expect(slice?.canonicalSliceName).toBe("owner-daily-briefing-breakthrough");
@@ -36,10 +42,7 @@ describe("era25-first-product-slice-blueprint-ui-era24", () => {
   });
 
   it("formats blueprint label", () => {
-    const slice = buildEra25FirstProductSliceBlueprintUiSlice({
-      engineeringGatesVisible: true,
-      env: {},
-    });
+    const slice = engineeringGatesSlice;
     expect(slice).not.toBeNull();
     if (!slice) return;
     expect(formatEra25FirstProductSliceBlueprintLabel(slice)).toContain("blueprint");

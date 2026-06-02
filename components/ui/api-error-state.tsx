@@ -61,6 +61,7 @@ function ApiErrorActions({
   supportLabel = "Contact support",
   homeHref = "/dashboard/today",
   homeLabel = "Go to Today",
+  centered = false,
 }: Pick<
   ApiErrorStateProps,
   "onRetry" | "retryLabel" | "supportHref" | "supportLabel" | "homeHref" | "homeLabel"
