@@ -3119,3 +3119,11 @@ Commit: docs: integration escalation matrix
 Changes: docs/integration-escalation-matrix.md (L0–L3 levels, per-integration matrix, partner/CS templates); tests/unit/integration-escalation-matrix.test.ts
 Total done: 102/122
 
+---
+Cycle: 20260602-335500
+Task: 103 — Enterprise MVP spec
+Role: PM | Priority: P2
+Commit: docs: Enterprise MVP spec
+Changes: docs/enterprise-mvp-spec.md (ICP, pillars, in/out scope, waves, DoD, sales-safe claims); tests/unit/enterprise-mvp-spec.test.ts
+Total done: 103/122
+
