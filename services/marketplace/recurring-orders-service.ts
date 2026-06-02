@@ -1,4 +1,4 @@
-import type { MarketplaceRecurringFrequency } from "@prisma/client";
+import type { MarketplaceRecurringFrequency, Prisma } from "@prisma/client";
 import { addDays, addMonths, addWeeks } from "date-fns";
 
 import { prisma } from "@/lib/prisma";
@@ -110,7 +110,7 @@ export async function createMarketplaceRecurringOrder(input: {
       workspaceId: input.workspaceId,
       vendorId: input.vendorId,
       name: input.name.trim(),
-      items: input.items,
+      items: input.items as Prisma.InputJsonValue,
       frequency: input.frequency,
       nextRunAt: startAt,
       isActive: true,
