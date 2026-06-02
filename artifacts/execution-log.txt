@@ -3055,3 +3055,11 @@ Commit: docs: Series A narrative prep
 Changes: docs/series-a-narrative.md (thesis, honest traction, milestones M0–M6, deck outline, fundraise sequencing); tests/unit/series-a-narrative.test.ts
 Total done: 94/122
 
+---
+Cycle: 20260602-285600
+Task: 95 — SOC 2 readiness assessment
+Role: PM | Priority: P2
+Commit: docs: SOC2 readiness
+Changes: docs/soc2-readiness-assessment.md (TSC control mapping, ~35% readiness, P0–P2 backlog, questionnaire templates); tests/unit/soc2-readiness-assessment.test.ts
+Total done: 95/122
+
