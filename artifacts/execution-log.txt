@@ -2575,3 +2575,11 @@ Commit: test: Sentry integration
 Changes: tests/unit/sentry-integration.test.ts — wiring contract, backend resolution, capture pipeline redaction, health snapshot states
 Total done: 34/122
 
+---
+Cycle: 20260602-154000
+Task: 35 — SSO IdP smoke E2E
+Role: QA | Priority: P1
+Commit: test: SSO IdP smoke
+Changes: e2e/sso-idp-smoke.spec.ts, e2e/helpers/sso-idp-staging-ready.ts — contract, denial paths, vault-gated staging reachability
+Total done: 35/122
+
