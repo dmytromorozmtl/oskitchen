@@ -36,6 +36,8 @@ yarn-error.log*
 .vscode/
 .turbo/
 .cursor/cache/
+.tools/
+.deploy-state/
 
 # local env files
 .env

@@ -2543,3 +2543,11 @@ Commit: security: webhook signature matrix
 Changes: artifacts/webhook-signature-matrix.md — 52 /api/webhooks routes, all VERIFIED, category breakdown, production partner priority, adjacent routes
 Total done: 30/122
 
+---
+Cycle: 20260602-150000
+Task: 31 — Gitignore tools and deploy state
+Role: Developer | Priority: P1
+Commit: chore: gitignore tools and deploy state
+Changes: .gitignore — added .tools/ and .deploy-state/
+Total done: 31/122
+
