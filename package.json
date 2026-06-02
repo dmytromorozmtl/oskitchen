@@ -951,6 +951,7 @@
     "test:ci:forbidden-claims-enforcement": "npm run verify-claims && node ./node_modules/vitest/vitest.mjs run tests/unit/forbidden-claims-enforcement.test.ts",
     "test:ci:bundle-size-regression": "npm run check:bundle-size-regression && node ./node_modules/vitest/vitest.mjs run tests/unit/bundle-size-regression.test.ts",
     "test:ci:marketplace-data-unavailable": "node ./node_modules/vitest/vitest.mjs run tests/unit/marketplace-data-unavailable.test.ts",
+    "test:ci:briefing-delivery-integration": "node ./node_modules/vitest/vitest.mjs run tests/integration/briefing-delivery.integration.test.ts",
     "test:ci:claims-registry": "node ./node_modules/vitest/vitest.mjs run tests/unit/claims-registry-policy.test.ts",
     "test:ci:claims-registry:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/claims-registry-ci-live.test.ts",
     "test:ci:pilot-preflight-claims": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-preflight-claims-policy.test.ts",

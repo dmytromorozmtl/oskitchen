@@ -2943,3 +2943,11 @@ Commit: test: MarketplaceDataUnavailable component
 Changes: tests/unit/marketplace-data-unavailable.test.ts — setup messaging, illustration a11y, 6 hub page wiring, static import graph, custom props API, production chunk check; npm run test:ci:marketplace-data-unavailable
 Total done: 80/122
 
+---
+Cycle: 20260602-253000
+Task: 81 — AI Briefing delivery integration test
+Role: QA | Priority: P2
+Commit: test: AI Briefing delivery integration
+Changes: tests/integration/briefing-delivery.integration.test.ts — SMS critical path, email log-only + Resend success, schedule skip, deliverDailyBriefingIfScheduled/ForUser, notificationLog wiring; npm run test:ci:briefing-delivery-integration
+Total done: 81/122
+
