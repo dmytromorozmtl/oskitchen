@@ -1,3 +1,4 @@
+import { AiBriefingPanel } from "@/components/dashboard/ai-briefing-panel";
 import { GettingStartedChecklist } from "@/components/dashboard/getting-started-checklist";
 import { GettingStartedAttentionStrip } from "@/components/dashboard/getting-started-attention-strip";
 import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-briefing-hero";
@@ -28,6 +29,7 @@ import {
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 import { loadLaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
+import { generateDailyBriefing } from "@/services/ai/ai-restaurant-brain";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +98,10 @@ export default async function TodayOperationsPage({
           : undefined,
       })
     : null;
+  const aiBriefing =
+    showOwnerBriefing && workspaceId
+      ? await generateDailyBriefing(workspaceId).catch(() => null)
+      : null;
   const gettingStarted = await loadGettingStartedStatus(
     dataUserId,
     profile?.createdAt ?? new Date(),
@@ -126,6 +132,7 @@ export default async function TodayOperationsPage({
         !ownerBriefing ? (
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
+        {aiBriefing ? <AiBriefingPanel briefing={aiBriefing} /> : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
         {breakthroughEra25 && showInternalOpsDashboardUi() && !ownerBriefing?.pureOperationalModeEra25Active ? (
           <OwnerDailyBriefingBreakthroughEra25Panel slice={breakthroughEra25} />

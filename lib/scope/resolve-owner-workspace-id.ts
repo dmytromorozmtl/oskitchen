@@ -9,3 +9,12 @@ export async function resolveOwnerWorkspaceId(ownerUserId: string): Promise<stri
   });
   return ws?.id ?? null;
 }
+
+/** Owner user id for a workspace — inverse of {@link resolveOwnerWorkspaceId}. */
+export async function resolveWorkspaceOwnerUserId(workspaceId: string): Promise<string | null> {
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { ownerUserId: true },
+  });
+  return ws?.ownerUserId ?? null;
+}

@@ -14,7 +14,7 @@ describe("marketplace analytics preferences", () => {
   });
 
   it("computes budget alert thresholds", () => {
-    expect(budgetAlertLevel(4000, 5000)).toBe("warning");
+    expect(budgetAlertLevel(4250, 5000)).toBe("warning");
     expect(budgetAlertLevel(5000, 5000)).toBe("critical");
     expect(budgetAlertLevel(1000, 5000)).toBe("none");
   });

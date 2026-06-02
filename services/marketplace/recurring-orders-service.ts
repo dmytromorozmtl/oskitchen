@@ -138,7 +138,7 @@ export async function updateMarketplaceRecurringOrder(input: {
     where: { id: existing.id },
     data: {
       name: input.name?.trim() ?? existing.name,
-      items: input.items ?? existing.items,
+      items: (input.items ?? existing.items) as Prisma.InputJsonValue,
       frequency: input.frequency ?? existing.frequency,
       approvalRequired: input.approvalRequired ?? existing.approvalRequired,
     },

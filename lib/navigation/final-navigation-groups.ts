@@ -30,6 +30,7 @@ import {
   ScanBarcode,
   ScanLine,
   LayoutList,
+  Layers,
   Link2,
   Mail,
   MapPin,
@@ -79,6 +80,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/tables", labelKey: "nav.tables", icon: LayoutGrid },
       { href: "/dashboard/production", labelKey: "nav.production", icon: ChefHat },
       { href: "/dashboard/kitchen", labelKey: "nav.kitchen", icon: MonitorDot },
+      { href: "/dashboard/kitchen/cameras", labelKey: "nav.kitchenCameras", icon: MonitorDot },
       { href: "/dashboard/packing", labelKey: "nav.packing", icon: Truck },
       { href: "/dashboard/packing/verify", labelKey: "nav.packingVerify", icon: ScanLine },
       { href: "/dashboard/routes", labelKey: "nav.routes", icon: Route },
@@ -121,6 +123,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     title: "Menus",
     links: [
       { href: "/dashboard/menus", labelKey: "nav.menus", icon: MenuSquare },
+      { href: "/dashboard/menu/universal", labelKey: "nav.universalMenu", icon: Layers },
       { href: "/dashboard/products", labelKey: "nav.products", icon: ShoppingBag },
       { href: "/dashboard/menu-planner", labelKey: "nav.menuPlanner", icon: CalendarRange },
       { href: "/dashboard/brands", labelKey: "nav.brands", icon: Store },
@@ -147,6 +150,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     title: "Inventory & finance",
     links: [
       { href: "/dashboard/inventory/demand", labelKey: "nav.inventoryDemand", icon: Package },
+      { href: "/dashboard/inventory/purchasing-ai", labelKey: "nav.aiPurchasing", icon: ShoppingBag },
       { href: "/dashboard/inventory/cross-channel", labelKey: "nav.inventoryCrossChannel", icon: Package },
       { href: "/dashboard/inventory/pos-impacts", labelKey: "nav.inventoryPosImpacts", icon: Package },
       { href: "/dashboard/inventory/waste", labelKey: "nav.inventoryWaste", icon: Package },
