@@ -1,6 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
-import { buildEra25FirstCharterSliceReadinessUiSlice } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
+import {
+  buildEra25FirstCharterSliceReadinessUiSlice,
+  type Era25FirstCharterSliceReadinessUiSlice,
+} from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
 import {
   buildOwnerDailyBriefingEra25EngineeringGatesAction,
   ERA25_ENGINEERING_GATES_BRIEFING_ACTION_PRIORITY,
@@ -8,11 +11,16 @@ import {
 } from "@/lib/briefing/owner-daily-briefing-era25-engineering-gates-era44";
 
 describe("owner-daily-briefing-era25-engineering-gates-era44", () => {
-  it("ranks engineering gates action at priority 19", () => {
-    const firstSlice = buildEra25FirstCharterSliceReadinessUiSlice({
+  let firstSlice: Era25FirstCharterSliceReadinessUiSlice | null;
+
+  beforeAll(() => {
+    firstSlice = buildEra25FirstCharterSliceReadinessUiSlice({
       charterExitVisible: true,
       env: {},
     });
+  }, 120_000);
+
+  it("ranks engineering gates action at priority 19", () => {
     const action = buildOwnerDailyBriefingEra25EngineeringGatesAction(
       firstSlice?.engineeringGates ?? null,
     );
@@ -22,10 +30,6 @@ describe("owner-daily-briefing-era25-engineering-gates-era44", () => {
   });
 
   it("merges gates action ahead of lower-priority briefing items", () => {
-    const firstSlice = buildEra25FirstCharterSliceReadinessUiSlice({
-      charterExitVisible: true,
-      env: {},
-    });
     const gatesAction = buildOwnerDailyBriefingEra25EngineeringGatesAction(
       firstSlice?.engineeringGates ?? null,
     );

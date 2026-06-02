@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PosTerminalManagerAuditFlowProofPanel } from "@/components/dashboard/pos/pos-terminal-manager-audit-flow-proof-panel";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { PosTerminalClient } from "@/components/dashboard/pos-terminal-client";
+import { PosWelcomeBanner } from "@/components/dashboard/pos-welcome-banner";
 import { buildManagerDiscountAuditFlowProofSlice } from "@/lib/commercial/era20-manager-discount-audit-flow-proof-era20";
 import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -24,7 +25,7 @@ import {
 export default async function PosTerminalPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ speed?: string }>;
+  searchParams?: Promise<{ speed?: string; welcome?: string }>;
 }) {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
@@ -42,6 +43,7 @@ export default async function PosTerminalPage({
     speedParam: resolvedSearchParams.speed,
     persona,
   });
+  const showWelcome = resolvedSearchParams.welcome === "true";
   const { userId } = actor;
 
   const managerAuditFlowProof = buildManagerDiscountAuditFlowProofSlice({
@@ -127,6 +129,8 @@ export default async function PosTerminalPage({
           <Link href="/dashboard/pos">Exit to POS hub</Link>
         </Button>
       </div>
+
+      {showWelcome ? <PosWelcomeBanner /> : null}
 
       <PosTerminalManagerAuditFlowProofPanel slice={managerAuditFlowProof} />
 

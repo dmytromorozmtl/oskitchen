@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 type SettingsDTO = {
   businessType: BusinessType | null;
@@ -48,15 +49,18 @@ export function SettingsForm({ initial }: { initial: SettingsDTO }) {
     initial.notifyDeliveryReminder,
   );
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const res = await invokeServerAction(() =>
+      updateKitchenSettings(new FormData(event.currentTarget)),
+    );
+    const _err = getActionError(res);
+    if (_err) toast.error(_err);
+    else toast.success("Settings saved");
+  }
+
   return (
-    <form
-      className="space-y-6"
-      action={async (formData) => {
-        const res = await updateKitchenSettings(formData);
-        const _err = getActionError(res); if (_err) toast.error(_err);
-        else toast.success("Settings saved");
-      }}
-    >
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <input
         type="hidden"
         name="deliveryEnabled"

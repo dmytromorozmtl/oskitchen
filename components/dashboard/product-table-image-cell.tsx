@@ -8,6 +8,7 @@ import { ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { updateProductImageFormAction } from "@/actions/products";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 import { MediaPickerDialog } from "@/components/storefront/media/media-picker-dialog";
 import type { ProductMediaAsset } from "@/lib/menus/product-image-fields";
 
@@ -33,7 +34,7 @@ export function ProductTableImageCell({
       const fd = new FormData();
       fd.set("productId", productId);
       fd.set("image", next);
-      const res = await updateProductImageFormAction(fd);
+      const res = await invokeServerAction(() => updateProductImageFormAction(fd));
       const _err = getActionError(res); if (_err) { toast.error(_err);
         setUrl(image ?? "");
         return;

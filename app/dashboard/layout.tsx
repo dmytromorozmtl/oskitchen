@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { OfflineIndicator } from "@/components/pwa/offline-indicator";
@@ -61,7 +62,9 @@ export default async function DashboardLayout({
   const billingAccess = await getBillingAccess(sessionUser.id, { workspaceId });
   const isPlatformSuper = billingAccess.platformBypass === true;
 
-  if (profile && !profile.onboardingCompleted && !isPlatformSuper) {
+  const pathname = (await headers()).get("x-kos-pathname") ?? "";
+  const onQuickStart = pathname === "/dashboard/quick-start";
+  if (profile && !profile.onboardingCompleted && !isPlatformSuper && !onQuickStart) {
     redirect("/onboarding");
   }
 

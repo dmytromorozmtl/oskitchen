@@ -16,6 +16,7 @@ import type {
   PartnerBillingOverviewRow,
   PartnerBillingStatementView,
 } from "@/services/platform/partner-billing-service";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 type PartnerBillingPanelProps = {
   disclosure: string;
@@ -166,11 +167,15 @@ export function PartnerBillingPanel({
                   {canWrite ? (
                     <td className="px-3 py-3">
                       <form
-                        action={async (formData) => {
+                        onSubmit={async (event) => {
+                          event.preventDefault();
+                          const formData = new FormData(event.currentTarget);
                           formData.set("publisherKey", row.publisherKey);
                           formData.set("periodMonth", periodMonth);
                           formData.set("finalize", "true");
-                          await generatePartnerBillingStatementAction(formData);
+                          await invokeServerAction(() =>
+                            generatePartnerBillingStatementAction(formData),
+                          );
                         }}
                       >
                         <Button
@@ -246,9 +251,13 @@ export function PartnerBillingPanel({
               {canWrite && statement.canExecuteStripePayout ? (
                 <form
                   className="mt-3"
-                  action={async (formData) => {
+                  onSubmit={async (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.currentTarget);
                     formData.set("statementId", statement.id);
-                    const result = await executePartnerStatementStripePayoutAction(formData);
+                    const result = await invokeServerAction(() =>
+                      executePartnerStatementStripePayoutAction(formData),
+                    );
                     if ("error" in result && result.error) {
                       setMessage(result.error);
                     } else if ("transferId" in result) {
@@ -272,9 +281,13 @@ export function PartnerBillingPanel({
               statement.payoutStatus === "NONE" ? (
                 <form
                   className="mt-3"
-                  action={async (formData) => {
+                  onSubmit={async (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.currentTarget);
                     formData.set("statementId", statement.id);
-                    await markPartnerBillingStatementPaidAction(formData);
+                    await invokeServerAction(() =>
+                      markPartnerBillingStatementPaidAction(formData),
+                    );
                   }}
                 >
                   <Button type="submit" size="sm" variant="outline" className="rounded-full border-zinc-700">

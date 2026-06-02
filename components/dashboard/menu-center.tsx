@@ -35,6 +35,8 @@ import {
 import type { BusinessType, MenuStrategy } from "@prisma/client";
 import { toast } from "sonner";
 
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
+
 import {
   createMenu,
   deleteMenu,
@@ -212,10 +214,13 @@ function SortableMenuCard({
             </DialogHeader>
             <form
               className="space-y-4"
-              action={async (fd) => {
+              onSubmit={async (event) => {
+                event.preventDefault();
+                const fd = new FormData(event.currentTarget);
                 fd.set("strategy", menu.strategy);
-                const res = await updateMenu(menu.id, fd);
-                const _err = getActionError(res); if (_err) toast.error(_err);
+                const res = await invokeServerAction(() => updateMenu(menu.id, fd));
+                const _err = getActionError(res);
+                if (_err) toast.error(_err);
                 else {
                   toast.success("Menu updated");
                   setEditOpen(false);
@@ -555,10 +560,13 @@ export function MenuCenter({
             </DialogHeader>
             <form
               className="space-y-4"
-              action={async (fd) => {
+              onSubmit={async (event) => {
+                event.preventDefault();
+                const fd = new FormData(event.currentTarget);
                 fd.set("strategy", defaultMenuStrategyForBusinessType(businessType));
-                const res = await createMenu(fd);
-                const _err = getActionError(res); if (_err) toast.error(_err);
+                const res = await invokeServerAction(() => createMenu(fd));
+                const _err = getActionError(res);
+                if (_err) toast.error(_err);
                 else {
                   toast.success("Menu created");
                   setCreateOpen(false);

@@ -64,6 +64,14 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "4mb",
+      // Custom domain + Vercel previews: Origin/Host must match or actions abort (CSRF guard).
+      allowedOrigins: [
+        "localhost:3000",
+        "127.0.0.1:3000",
+        "os-kitchen.com",
+        "www.os-kitchen.com",
+        "*.vercel.app",
+      ],
     },
     // Reduce parallel SSG — lowers peak RAM on Vercel (655+ static paths).
     staticGenerationMaxConcurrency: process.env.VERCEL

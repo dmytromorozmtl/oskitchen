@@ -1,9 +1,15 @@
 "use client";
 
+import * as React from "react";
 import { AlertTriangle, Loader2 } from "lucide-react";
 
 import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
+import {
+  isStaleServerActionError,
+  reloadForStaleServerAction,
+  STALE_SERVER_ACTION_USER_MESSAGE,
+} from "@/lib/server-actions/stale-server-action";
 
 export function RouteLoading({ message = "Loading..." }: { message?: string }) {
   return (
@@ -21,16 +27,24 @@ export function RouteError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const stale = isStaleServerActionError(error);
+
+  React.useEffect(() => {
+    if (stale) reloadForStaleServerAction();
+  }, [stale]);
+
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 px-4">
       <AlertTriangle className="h-10 w-10 shrink-0 text-amber-500" aria-hidden />
       <ErrorState
-        title="Something went wrong"
+        title={stale ? "App updated" : "Something went wrong"}
         description={
-          error.message || "An unexpected error occurred while loading this page."
+          stale
+            ? STALE_SERVER_ACTION_USER_MESSAGE
+            : error.message || "An unexpected error occurred while loading this page."
         }
-        retryLabel="Try again"
-        onRetry={reset}
+        retryLabel={stale ? "Reload now" : "Try again"}
+        onRetry={stale ? reloadForStaleServerAction : reset}
       />
     </div>
   );

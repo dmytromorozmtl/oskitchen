@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/utils";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 export type OrderProductOption = {
   id: string;
@@ -46,25 +47,27 @@ export function OrderCreateForm({ products }: { products: OrderProductOption[] }
     return sum;
   }, [lines, products]);
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const fd = new FormData(event.currentTarget);
+    fd.set("fulfillmentType", fulfillment);
+    lines.forEach((line) => {
+      if (line.productId) {
+        fd.append("productId", line.productId);
+        fd.append("qty", String(line.qty));
+      }
+    });
+    const res = await invokeServerAction(() => createOrder(fd));
+    const _err = getActionError(res);
+    if (_err) toast.error(_err);
+    else {
+      toast.success("Order created");
+      window.location.href = "/dashboard/orders";
+    }
+  }
+
   return (
-    <form
-      className="space-y-6"
-      action={async (fd) => {
-        fd.set("fulfillmentType", fulfillment);
-        lines.forEach((line) => {
-          if (line.productId) {
-            fd.append("productId", line.productId);
-            fd.append("qty", String(line.qty));
-          }
-        });
-        const res = await createOrder(fd);
-        const _err = getActionError(res); if (_err) toast.error(_err);
-        else {
-          toast.success("Order created");
-          window.location.href = "/dashboard/orders";
-        }
-      }}
-    >
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <Card className="space-y-4 border-border/80 bg-card/90 p-6 shadow-sm">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">

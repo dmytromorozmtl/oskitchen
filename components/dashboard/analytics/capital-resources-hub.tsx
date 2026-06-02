@@ -22,6 +22,7 @@ import type { CapitalPartner, CapitalPartnersConfig } from "@/lib/commercial/cap
 import { resolveCapitalPartnerOutboundHref } from "@/lib/commercial/capital-partner-outbound";
 import type { CapitalRevenueContext } from "@/services/commercial/restaurant-capital-resources-service";
 import { formatCurrency } from "@/lib/utils";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 type CapitalResourcesHubProps = {
   config: CapitalPartnersConfig;
@@ -209,8 +210,11 @@ export function CapitalResourcesHub({
         <CardContent>
           <form
             className="grid gap-4"
-            action={async (formData) => {
-              await submitCapitalInterestAction(formData);
+            onSubmit={async (event) => {
+              event.preventDefault();
+              await invokeServerAction(() =>
+                submitCapitalInterestAction(new FormData(event.currentTarget)),
+              );
             }}
           >
             <div className="space-y-2">

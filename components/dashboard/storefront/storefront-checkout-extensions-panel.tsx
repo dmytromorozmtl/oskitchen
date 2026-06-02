@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { CheckoutExtensions } from "@/lib/storefront/checkout-extensions";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 type Props = {
   extensions: CheckoutExtensions;
@@ -31,9 +32,12 @@ export function StorefrontCheckoutExtensionsPanel({ extensions, stripeApplicatio
       <CardContent>
         <form
           className="space-y-4"
-          action={async (fd) => {
+          onSubmit={async (event) => {
+            event.preventDefault();
             setMessage(null);
-            const r = await updateCheckoutExtensionsAction(fd);
+            const r = await invokeServerAction(() =>
+              updateCheckoutExtensionsAction(new FormData(event.currentTarget)),
+            );
             if (r.error) setMessage(r.error);
             else {
               setMessage("Saved.");

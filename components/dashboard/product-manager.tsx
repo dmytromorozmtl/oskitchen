@@ -64,6 +64,7 @@ import {
 import type { OperatingMode } from "@/lib/operating-modes/types";
 import type { ProductCategoryOption } from "@/services/products/category-service";
 import { formatCurrency } from "@/lib/utils";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 function formatMenuDate(iso: string | null | undefined, dateFmt = "MMM d") {
   if (!iso) return "—";
@@ -146,34 +147,35 @@ export function ProductForm({
     ? getEditItemSubmitLabel()
     : getCreateProductSubmitLabel(operatingMode);
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const fd = new FormData(event.currentTarget);
+    fd.set("menuId", menuId);
+    fd.set("operatingMode", operatingMode);
+    fd.set("category", category);
+    fd.set("deliveryAvailable", delivery ? "on" : "off");
+    fd.set("active", active ? "on" : "off");
+    if (!isWeeklyPreorder) {
+      fd.set("preparedDate", today);
+      fd.set("pickupDate", "");
+      fd.set("portionSize", "");
+      fd.set("reheatingInstructions", "");
+    }
+    const res = await invokeServerAction(() =>
+      initial ? updateProduct(initial.id, fd) : createProduct(fd),
+    );
+    const _err = getActionError(res);
+    if (_err) toast.error(_err);
+    else {
+      toast.success(initial ? "Item updated" : getProductCreatedToast(operatingMode));
+      onDone();
+      router.refresh();
+    }
+  }
+
   return (
-    <form
-      className="space-y-4"
-      action={async (fd) => {
-        fd.set("menuId", menuId);
-        fd.set("operatingMode", operatingMode);
-        fd.set("category", category);
-        fd.set("deliveryAvailable", delivery ? "on" : "off");
-        fd.set("active", active ? "on" : "off");
-        if (!isWeeklyPreorder) {
-          fd.set("preparedDate", today);
-          fd.set("pickupDate", "");
-          fd.set("portionSize", "");
-          fd.set("reheatingInstructions", "");
-        }
-        const res = initial
-          ? await updateProduct(initial.id, fd)
-          : await createProduct(fd);
-        const _err = getActionError(res); if (_err) toast.error(_err);
-        else {
-          toast.success(
-            initial ? "Item updated" : getProductCreatedToast(operatingMode),
-          );
-          onDone();
-          router.refresh();
-        }
-      }}
-    >
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <input type="hidden" name="menuId" value={menuId} />
       <input type="hidden" name="operatingMode" value={operatingMode} />
       <input type="hidden" name="category" value={category} />
       <input type="hidden" name="deliveryAvailable" value={delivery ? "on" : "off"} />
@@ -649,8 +651,11 @@ export function ProductManager({
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={async () => {
-                                    const res = await deleteProduct(p.id);
-                                    const _err = getActionError(res); if (_err) toast.error(_err);
+                                    const res = await invokeServerAction(() =>
+                                      deleteProduct(p.id),
+                                    );
+                                    const _err = getActionError(res);
+                                    if (_err) toast.error(_err);
                                     else {
                                       toast.success("Deleted");
                                       router.refresh();

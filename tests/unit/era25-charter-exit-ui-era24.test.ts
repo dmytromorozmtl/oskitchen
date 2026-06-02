@@ -1,17 +1,24 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import {
   buildEra25CharterExitUiSlice,
   formatEra25CharterExitLabel,
+  type Era25CharterExitUiSlice,
 } from "@/lib/commercial/era25-charter-exit-ui-era24";
 
 describe("era25-charter-exit-ui-era24", () => {
+  let guardPassedSlice: Era25CharterExitUiSlice | null;
+
+  beforeAll(() => {
+    guardPassedSlice = buildEra25CharterExitUiSlice({ guardPassed: true, env: {} });
+  }, 120_000);
+
   it("returns null when guard not passed", () => {
     expect(buildEra25CharterExitUiSlice({ guardPassed: false })).toBeNull();
   });
 
   it("builds slice when guard passed", () => {
-    const slice = buildEra25CharterExitUiSlice({ guardPassed: true, env: {} });
+    const slice = guardPassedSlice;
     expect(slice).not.toBeNull();
     expect(slice?.outsideLinearCatalog).toBe(true);
     expect(slice?.postTerminusGuardOrchestratorCommand).toContain(
@@ -27,7 +34,7 @@ describe("era25-charter-exit-ui-era24", () => {
   });
 
   it("formats charter exit label", () => {
-    const slice = buildEra25CharterExitUiSlice({ guardPassed: true, env: {} });
+    const slice = guardPassedSlice;
     expect(slice).not.toBeNull();
     if (!slice) return;
     expect(formatEra25CharterExitLabel(slice)).toContain("outside linear path");

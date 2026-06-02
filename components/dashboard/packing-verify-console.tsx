@@ -44,6 +44,7 @@ import {
   shouldShowPackingVerifyAttentionStrip,
 } from "@/lib/packing-verification/packing-verify-focus-era18";
 import type { VerificationSessionDetail } from "@/services/packing-verification/verification-service";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 
 type CustomerOrderHit = {
   id: string;
@@ -74,7 +75,7 @@ export type VerifyOpenSessionRow = {
 };
 
 async function flushAction(fn: (fd: FormData) => Promise<unknown>, fd: FormData, router: ReturnType<typeof useRouter>) {
-  await fn(fd);
+  await invokeServerAction(() => fn(fd));
   router.refresh();
 }
 
@@ -680,7 +681,9 @@ export function PackingVerifyConsole({
                             className="min-h-[72px] rounded-xl"
                           />
                           <form
-                            action={async (fd) => {
+                            onSubmit={async (event) => {
+                              event.preventDefault();
+                              const fd = new FormData(event.currentTarget);
                               fd.set("reason", overrideReason);
                               await flushAction(supervisorOverrideVerificationAction, fd, router);
                               setOverrideReason("");

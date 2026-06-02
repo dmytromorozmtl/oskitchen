@@ -7,6 +7,7 @@ import { Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { uploadProductImageAction } from "@/actions/upload";
+import { invokeServerAction } from "@/lib/server-actions/invoke-server-action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -49,7 +50,7 @@ export function ImageUploadField({
             startTransition(async () => {
               const fd = new FormData();
               fd.set("file", file);
-              const res = await uploadProductImageAction(fd);
+              const res = await invokeServerAction(() => uploadProductImageAction(fd));
               if ("error" in res && res.error) toast.error(getActionError(res) ?? "Something went wrong");
               else if ("publicUrl" in res && res.publicUrl) {
                 onChange(res.publicUrl);
