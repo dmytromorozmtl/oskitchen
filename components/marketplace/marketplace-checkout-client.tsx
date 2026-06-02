@@ -13,6 +13,7 @@ import {
   saveMarketplaceCartTemplateAction,
   updateMarketplaceCartQuantityAction,
 } from "@/actions/marketplace/cart";
+import { CheckoutApprovalGate } from "@/components/marketplace/checkout-approval-gate";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -174,6 +175,10 @@ export function MarketplaceCheckoutClient({
 
             {canCheckout ? (
               <>
+                <CheckoutApprovalGate
+                  subtotal={cart.subtotal}
+                  currency={cart.items[0]?.currency ?? "USD"}
+                />
                 <Button
                   type="button"
                   className="w-full rounded-full"

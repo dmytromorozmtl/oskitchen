@@ -14,6 +14,8 @@ import {
 import {
   splitByVendor,
   type VendorCartGroup,
+  MARKETPLACE_CHECKOUT_APPROVAL_LIMIT_USD,
+  marketplaceCheckoutRequiresApproval,
 } from "@/lib/marketplace/checkout-utils";
 
 export type { VendorCartGroup };
@@ -45,13 +47,13 @@ export type MarketplaceCheckoutResult = {
   paymentIntentId?: string | null;
 };
 
-const DEFAULT_APPROVAL_LIMIT_USD = 2500;
+const DEFAULT_APPROVAL_LIMIT_USD = MARKETPLACE_CHECKOUT_APPROVAL_LIMIT_USD;
 
 export function approvalCheck(
   totalAmount: number,
   limitUsd: number = DEFAULT_APPROVAL_LIMIT_USD,
 ): boolean {
-  return totalAmount > limitUsd;
+  return marketplaceCheckoutRequiresApproval(totalAmount, limitUsd);
 }
 
 export async function validateCart(

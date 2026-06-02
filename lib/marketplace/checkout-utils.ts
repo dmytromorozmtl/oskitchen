@@ -25,3 +25,13 @@ export function splitByVendor(items: readonly MarketplaceCartItem[]): VendorCart
   }
   return [...groups.values()];
 }
+
+/** Manager approval gate for marketplace checkout — keep aligned with checkout-service. */
+export const MARKETPLACE_CHECKOUT_APPROVAL_LIMIT_USD = 2500;
+
+export function marketplaceCheckoutRequiresApproval(
+  totalAmount: number,
+  limitUsd: number = MARKETPLACE_CHECKOUT_APPROVAL_LIMIT_USD,
+): boolean {
+  return totalAmount > limitUsd;
+}

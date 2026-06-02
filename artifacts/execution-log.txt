@@ -2999,3 +2999,11 @@ Commit: feat: wishlist UX
 Changes: components/marketplace/wishlist-button.tsx + wishlist-page.tsx; lib/marketplace/wishlist toggle helpers; wired into product detail, catalog cards, and wishlist route; tests/unit/marketplace-wishlist-ux.test.ts
 Total done: 87/122
 
+---
+Cycle: 20260602-265200
+Task: 88 — Checkout approval gate UI
+Role: Design | Priority: P2
+Commit: feat: checkout approval gate UI
+Changes: components/marketplace/checkout-approval-gate.tsx; shared approval threshold in lib/marketplace/checkout-utils.ts; wired into marketplace checkout; tests/unit/checkout-approval-gate.test.ts
+Total done: 88/122
+
