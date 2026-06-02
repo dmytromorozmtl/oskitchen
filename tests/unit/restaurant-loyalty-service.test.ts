@@ -14,6 +14,8 @@ import {
 describe("restaurant loyalty service", () => {
   const config = {
     ...DEFAULT_RESTAURANT_LOYALTY_CONFIG,
+    visitRewardEvery: 5,
+    visitRewardPoints: 50,
     itemBonuses: [{ titleContains: "salmon", bonusPoints: 12 }],
   };
 
@@ -31,7 +33,7 @@ describe("restaurant loyalty service", () => {
       pointsPerDollar: 1,
       lines: [{ title: "Salmon plate", productId: null, quantity: 1, lineTotal: 30 }],
       config,
-      lifetimePointsBefore: 480,
+      lifetimePointsBefore: 200,
       visitCount: 5,
     });
     expect(breakdown.itemBonusPoints).toBe(12);

@@ -18,6 +18,7 @@ export type RestaurantLoyaltyEarnBreakdown = {
   tierName: string;
   tierAdjustedPoints: number;
   visitBonusPoints: number;
+  freeItemReward: string | null;
   totalPoints: number;
   visitCount: number;
   lifetimePointsAfter: number;
@@ -100,6 +101,8 @@ export function buildRestaurantLoyaltyEarnBreakdown(params: {
       ? params.config.visitRewardPoints
       : 0;
 
+  const freeItemReward = resolveVisitFreeItemReward(params.visitCount, params.lines, params.config);
+
   const totalPoints = tierAdjustedPoints + visitBonusPoints;
 
   return {
@@ -109,15 +112,31 @@ export function buildRestaurantLoyaltyEarnBreakdown(params: {
     tierName: tier.name,
     tierAdjustedPoints,
     visitBonusPoints,
+    freeItemReward,
     totalPoints,
     visitCount: params.visitCount,
     lifetimePointsAfter: params.lifetimePointsBefore + totalPoints,
   };
 }
 
+export function resolveVisitFreeItemReward(
+  visitCount: number,
+  lines: OrderLineForLoyalty[],
+  config: RestaurantLoyaltyConfig,
+): string | null {
+  if (!config.enabled || config.visitFreeItemEvery <= 0) return null;
+  if (visitCount <= 0 || visitCount % config.visitFreeItemEvery !== 0) return null;
+  const needle = config.visitFreeItemTitleContains.trim().toLowerCase();
+  if (!needle) return `Free item on visit #${visitCount}`;
+  const matched = lines.some((l) => (l.title ?? "").toLowerCase().includes(needle));
+  if (!matched && lines.length > 0) return null;
+  return `Free ${config.visitFreeItemTitleContains} (visit #${visitCount})`;
+}
+
 export function formatEarnNotes(breakdown: RestaurantLoyaltyEarnBreakdown, orderTotal: number): string {
   const parts = [`Order $${orderTotal.toFixed(2)}`];
   if (breakdown.itemBonusPoints > 0) parts.push(`+${breakdown.itemBonusPoints} item bonus`);
+  if (breakdown.freeItemReward) parts.push(breakdown.freeItemReward);
   if (breakdown.tierMultiplier > 1) parts.push(`${breakdown.tierName} ${breakdown.tierMultiplier}x`);
   if (breakdown.visitBonusPoints > 0) {
     parts.push(`+${breakdown.visitBonusPoints} visit #${breakdown.visitCount} reward`);

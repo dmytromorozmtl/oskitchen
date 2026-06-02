@@ -47,12 +47,20 @@ export default async function CustomerLoyaltyPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8">
       <PolicyLockedHonestyBanner variant="rewards_dual_ledger" />
-      <div>
-        <h1 className="text-2xl font-semibold">Loyalty program</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Kitchen-ledger loyalty for POS — per-item bonuses, visit rewards, and tier multipliers.
-          Storefront uses a separate ledger until unified rewards ship.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">Loyalty program</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Kitchen-ledger loyalty for POS — per-item bonuses, visit rewards, and tier multipliers.
+            Storefront uses a separate ledger until unified rewards ship.
+          </p>
+        </div>
+        <a
+          href="/dashboard/loyalty/program-builder"
+          className="text-sm font-medium text-primary underline underline-offset-4"
+        >
+          Open Loyalty 2.0 builder →
+        </a>
       </div>
 
       {access.canManage ? (

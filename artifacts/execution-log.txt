@@ -3338,3 +3338,8 @@ Cycle: 20260602-193711
 Feature: 9 — White-label PWA
 Result: manifest + scoped SW + branding studio + install page
 Total done: 7/40 (features 7-8 pre-existing in codebase)
+---
+Cycle: 20260602-193904
+Feature: 10 — Loyalty 2.0
+Result: program builder, loyalty-2.0-service, unit+e2e tests green
+Total done: 8/40

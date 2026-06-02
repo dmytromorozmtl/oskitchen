@@ -16,21 +16,41 @@ export type RestaurantLoyaltyConfig = {
   visitRewardPoints: number;
   itemBonuses: ItemBonusRule[];
   tiers: LoyaltyTierRule[];
+  /** Loyalty 2.0 — birthday reward (MM-DD match in customer tagsJson.birthday). */
+  birthdayRewardEnabled: boolean;
+  birthdayRewardPoints: number;
+  /** Both referrer and friend earn bonus when friend completes first order. */
+  referralBonusEnabled: boolean;
+  referralBonusPoints: number;
+  /** e.g. every 10th visit with matching item → free item reward note. */
+  visitFreeItemEvery: number;
+  visitFreeItemTitleContains: string;
 };
 
-export const DEFAULT_RESTAURANT_LOYALTY_TIERS: LoyaltyTierRule[] = [
-  { name: "BRONZE", minLifetimePoints: 0, multiplier: 1 },
-  { name: "SILVER", minLifetimePoints: 500, multiplier: 1.1 },
-  { name: "GOLD", minLifetimePoints: 1500, multiplier: 1.25 },
-  { name: "PLATINUM", minLifetimePoints: 4000, multiplier: 1.5 },
+/** Loyalty 2.0 tier ladder — Silver / Gold / Platinum lifetime points. */
+export const LOYALTY_2_TIER_LADDER: LoyaltyTierRule[] = [
+  { name: "SILVER", minLifetimePoints: 0, multiplier: 1 },
+  { name: "GOLD", minLifetimePoints: 501, multiplier: 1.15 },
+  { name: "PLATINUM", minLifetimePoints: 2001, multiplier: 1.3 },
 ];
+
+export const DEFAULT_RESTAURANT_LOYALTY_TIERS: LoyaltyTierRule[] = LOYALTY_2_TIER_LADDER;
 
 export const DEFAULT_RESTAURANT_LOYALTY_CONFIG: RestaurantLoyaltyConfig = {
   enabled: true,
-  visitRewardEvery: 5,
-  visitRewardPoints: 50,
-  itemBonuses: [],
-  tiers: DEFAULT_RESTAURANT_LOYALTY_TIERS,
+  visitRewardEvery: 10,
+  visitRewardPoints: 0,
+  itemBonuses: [
+    { titleContains: "espresso", bonusPoints: 5 },
+    { titleContains: "latte", bonusPoints: 10 },
+  ],
+  tiers: LOYALTY_2_TIER_LADDER,
+  birthdayRewardEnabled: true,
+  birthdayRewardPoints: 100,
+  referralBonusEnabled: true,
+  referralBonusPoints: 50,
+  visitFreeItemEvery: 10,
+  visitFreeItemTitleContains: "coffee",
 };
 
 function num(v: unknown, fallback: number): number {
@@ -86,6 +106,30 @@ export function parseRestaurantLoyaltyConfig(raw: unknown): RestaurantLoyaltyCon
     ),
     itemBonuses,
     tiers: sortedTiers,
+    birthdayRewardEnabled:
+      typeof o.birthdayRewardEnabled === "boolean"
+        ? o.birthdayRewardEnabled
+        : DEFAULT_RESTAURANT_LOYALTY_CONFIG.birthdayRewardEnabled,
+    birthdayRewardPoints: Math.max(
+      0,
+      Math.round(num(o.birthdayRewardPoints, DEFAULT_RESTAURANT_LOYALTY_CONFIG.birthdayRewardPoints)),
+    ),
+    referralBonusEnabled:
+      typeof o.referralBonusEnabled === "boolean"
+        ? o.referralBonusEnabled
+        : DEFAULT_RESTAURANT_LOYALTY_CONFIG.referralBonusEnabled,
+    referralBonusPoints: Math.max(
+      0,
+      Math.round(num(o.referralBonusPoints, DEFAULT_RESTAURANT_LOYALTY_CONFIG.referralBonusPoints)),
+    ),
+    visitFreeItemEvery: Math.max(
+      0,
+      Math.round(num(o.visitFreeItemEvery, DEFAULT_RESTAURANT_LOYALTY_CONFIG.visitFreeItemEvery)),
+    ),
+    visitFreeItemTitleContains:
+      typeof o.visitFreeItemTitleContains === "string"
+        ? o.visitFreeItemTitleContains.trim()
+        : DEFAULT_RESTAURANT_LOYALTY_CONFIG.visitFreeItemTitleContains,
   };
 }
 
