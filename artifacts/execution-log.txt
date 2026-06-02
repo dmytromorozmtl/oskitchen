@@ -2487,3 +2487,11 @@ Commit: docs: observability setup
 Changes: docs/observability-setup.md — Sentry + OpenTelemetry setup, env vars, verification, health signals, logging policy
 Total done: 23/122
 
+---
+Cycle: 20260602-131600
+Task: 24 — Console.log audit script
+Role: Developer | Priority: P1
+Commit: chore: console.log audit
+Changes: scripts/audit-console-log.sh (--write, --strict); docs/console-log-audit.md; npm run audit:console-log; observability-setup.md link
+Total done: 24/122
+

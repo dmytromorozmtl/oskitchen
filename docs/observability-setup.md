@@ -194,7 +194,7 @@ Use **`lib/logger.ts`** — never `console.log` for production diagnostics witho
 | Use `redactForLog()` for payloads | Log full customer PII in production |
 | Classify integration errors (`auth`, `rate_limit`, …) | Attach raw Stripe/WooCommerce bodies to Sentry |
 
-Console.log audit (planned): Task 24 — `scripts/audit-console-log.sh`
+Console.log audit: [`docs/console-log-audit.md`](./console-log-audit.md) — `npm run audit:console-log`
 
 ---
 
