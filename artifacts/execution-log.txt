@@ -2799,3 +2799,11 @@ Commit: docs: founding customer story
 Changes: docs/founding-customer-story.md — pre-customer origin narrative, founding-customer definitions, fill-in template, audience copy, forbidden language
 Total done: 62/122
 
+---
+Cycle: 20260602-204500
+Task: 63 — Today Command Center demo video script
+Role: Marketing | Priority: P1
+Commit: docs: Today Command Center demo script
+Changes: docs/demo-video-script-today.md — 90s timed script, VO block, on-screen map, honesty rules, variants
+Total done: 63/122
+
