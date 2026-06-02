@@ -2815,3 +2815,11 @@ Commit: docs: ICP landing pages updated
 Changes: lib/marketing/platform-differentiators-content.ts, shopify-bundle-content.ts, icp-landing-content.ts, platform-differentiator-section.tsx, shopify-bundle-landing.tsx, icp-landing-page.tsx, docs/icp-landing-pages-updated.md — honest inventory fixes + AI moats + B2B marketplace sections on /shopify and 3 ICP landings
 Total done: 64/122
 
+---
+Cycle: 20260602-211500
+Task: 65 — Vendor recruitment landing page
+Role: Marketing | Priority: P1
+Commit: feat: vendor recruitment landing page
+Changes: app/vendor/page.tsx, vendor-recruitment-landing.tsx, vendor-recruitment-content.ts, tests/unit/vendor-recruitment-landing.test.ts — /vendor become-a-vendor landing with honest BETA marketplace + onboarding flow
+Total done: 65/122
+
