@@ -2959,3 +2959,11 @@ Commit: chore: N+1 query detection for marketplace
 Changes: scripts/lib/marketplace-n-plus-one-audit.ts + scripts/audit-marketplace-n-plus-one.ts; artifacts/marketplace-n-plus-one-audit.json (6 findings, hot paths PASS); npm run audit:marketplace-n-plus-one; tests/unit/marketplace-n-plus-one-audit.test.ts
 Total done: 82/122
 
+---
+Cycle: 20260602-261500
+Task: 83 — API error states component
+Role: Design | Priority: P2
+Commit: feat: API error states
+Changes: components/ui/api-error-state.tsx — card/inline variants, retry + support CTAs, HTTP status/requestId meta, formatApiErrorMessage helper; tests/unit/api-error-state.test.ts
+Total done: 83/122
+
