@@ -2431,3 +2431,11 @@ Commit: docs: migration deployment process
 Changes: docs/migration-deployment-process.md — create → verify → staging → prod
 Total done: 16/122
 
+---
+Cycle: 20260602-111500
+Task: 17 — Remove untouchable claim from docs/marketing
+Role: Marketing | Priority: P0
+Commit: docs: remove untouchable claim
+Changes: docs/reportjune2.md (4 replacements); marketing/forbidden-claims-training.md (safe alternative row)
+Total done: 17/122
+

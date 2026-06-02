@@ -38,6 +38,7 @@ OS Kitchen has deep product surface area. It is easy to over-promise features th
 | Offline POS production-ready | Degraded mode only; no card offline | "Offline queue is engineering preview — not rush-hour certified" |
 | Rush-hour KDS SLO / realtime certified | Polling fallback honest in UI | "KDS refreshes on interval; realtime not production SLO" |
 | Public API SLA | No SLA until proof artifact | "Partner API preview — scope per contract" |
+| Hype moat / "untouchable" language | Overclaim — not evidence-backed | **7 proprietary AI modules in production** (qualified; see AI moats tracker) |
 | "Production-ready platform" (blanket) | Requires matrix + pilot scope | "Pilot-ready modules per capability matrix and signed scope" |
 | Paid customer references / case studies | Zero paid pilots at handoff | "Design partner conversations in progress" |
 | Woo/Shopify live without smoke PASS | Needs vault + live smoke | "Engineering certification path — show SKIPPED reason if unset" |
