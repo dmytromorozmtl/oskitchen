@@ -3015,3 +3015,11 @@ Commit: fix: accessibility improvements
 Changes: lib/a11y/ui-classes.ts; globals.css muted-foreground + focus-visible; pricing billing toggle aria-pressed; ROI/book-demo form labels; auth inline links underlined; tests/unit/accessibility-improvements.test.ts
 Total done: 89/122
 
+---
+Cycle: 20260602-271500
+Task: 90 — Public marketing page audit
+Role: Design | Priority: P2
+Commit: docs: marketing page audit
+Changes: docs/marketing-page-audit.md (52-route inventory, claims/design/metadata findings, P0–P2 backlog); tests/unit/marketing-page-audit.test.ts
+Total done: 90/122
+
