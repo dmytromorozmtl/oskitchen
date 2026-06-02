@@ -195,7 +195,7 @@ If OS Kitchen publishes an incorrect AI claim:
 3. **Log** root cause in release notes or internal post-mortem.  
 4. **Add** CI phrase block if repeatable.
 
-Crisis template (Task 112): [`ai-crisis-communication-template.md`](./ai-crisis-communication-template.md) when created.
+Crisis template: [`ai-crisis-communication-template.md`](./ai-crisis-communication-template.md).
 
 ---
 

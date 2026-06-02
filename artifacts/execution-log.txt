@@ -3191,3 +3191,11 @@ Commit: docs: MVP marketing dashboard
 Changes: docs/mvp-marketing-dashboard.md (weekly scorecard A–E, monthly rollup, review cadence, spreadsheet tabs); tests/unit/mvp-marketing-dashboard.test.ts
 Total done: 111/122
 
+---
+Cycle: 20260602-363800
+Task: 112 — AI crisis communication template
+Role: Marketing | Priority: P2
+Commit: docs: AI crisis communication template
+Changes: docs/ai-crisis-communication-template.md (scenarios C1–C7, SLA, templates A–E, post-mortem); tests/unit/ai-crisis-communication-template.test.ts; docs/ai-honesty-policy.md link update
+Total done: 112/122
+
