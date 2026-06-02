@@ -2719,3 +2719,11 @@ Commit: docs: competitor tracker reconciled
 Changes: artifacts/competitor-feature-tracker.json — competitorComparison section with executive dimensions, head-to-head, feature parity
 Total done: 52/122
 
+---
+Cycle: 20260602-181500
+Task: 53 — Sales-safe claims registry
+Role: PM | Priority: P1
+Commit: docs: sales-safe claims registry
+Changes: docs/sales-safe-claims-registry.md — verdict vocabulary, YES/CAVAT/NO/ILLUSTRATIVE tables, forbidden phrases, CI gates
+Total done: 53/122
+
