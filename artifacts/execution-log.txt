@@ -2663,3 +2663,11 @@ Commit: feat: onboarding progress stepper
 Changes: components/onboarding/onboarding-stepper.tsx, wired into onboarding-wizard.tsx
 Total done: 45/122
 
+---
+Cycle: 20260602-170000
+Task: 46 — Vendor registration flow design (mockups)
+Role: Design | Priority: P1
+Commit: docs: vendor registration flow design
+Changes: docs/vendor-registration-flow-design.md — flow diagram, 9 screen wireframes, component map, backlog
+Total done: 46/122
+
