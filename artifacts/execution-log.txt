@@ -2751,3 +2751,11 @@ Commit: docs: release notes process
 Changes: docs/release-notes-process.md — artifact map, cadence, RACI, draft→claims→publish workflow, template, checklists
 Total done: 56/122
 
+---
+Cycle: 20260602-191500
+Task: 57 — BETA to LIVE integration roadmap
+Role: PM | Priority: P1
+Commit: docs: BETA to LIVE integration roadmap
+Changes: docs/beta-to-live-roadmap.md — WooCommerce → DoorDash → QuickBooks priority, G1–G4 workstreams, quarterly timeline, RACI
+Total done: 57/122
+
