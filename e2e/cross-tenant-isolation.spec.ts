@@ -5,7 +5,10 @@ import { expect, test } from "@playwright/test";
 import { recordPlatformAudit } from "@/lib/platform-audit";
 import { prisma } from "@/lib/prisma";
 import { scopedIdWhere } from "@/lib/scope/tenant-scope";
+import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { loadOrderDetailPageData } from "@/services/orders/order-detail-service";
+import { loadMarketplaceOrderDetail } from "@/services/marketplace/marketplace-orders-service";
+import { loadVendorOrderDetail } from "@/services/marketplace/vendor-orders-service";
 import { assertWorkspaceWebhookReplayAllowed } from "@/lib/webhooks/webhook-replay-permissions";
 
 /**
@@ -60,6 +63,132 @@ async function seedTenantOrder(label: string): Promise<TenantFixture> {
     orderId: order.id,
     cleanup: async () => {
       await prisma.order.delete({ where: { id: order.id } }).catch(() => undefined);
+      await prisma.workspace.delete({ where: { id: workspace.id } }).catch(() => undefined);
+      await prisma.userProfile.delete({ where: { id: owner.id } }).catch(() => undefined);
+    },
+  };
+}
+
+type MarketplaceTenantFixture = {
+  buyerOwnerId: string;
+  buyerWorkspaceId: string;
+  vendorId: string;
+  purchaseOrderId: string;
+  poNumber: string;
+  vendorCompanyName: string;
+  cleanup: () => Promise<void>;
+};
+
+async function seedMarketplacePurchaseOrder(label: string): Promise<MarketplaceTenantFixture> {
+  const suffix = `${label}-${randomUUID().slice(0, 8)}`;
+  const buyerOwner = await prisma.userProfile.create({
+    data: {
+      id: randomUUID(),
+      email: `cross-tenant-mp-buyer-${suffix}@e2e.test`,
+      fullName: `Marketplace Buyer ${label}`,
+      role: "OWNER",
+    },
+  });
+  const buyerWorkspace = await prisma.workspace.create({
+    data: { name: `Marketplace Buyer WS ${suffix}`, ownerUserId: buyerOwner.id },
+  });
+  const vendorOwner = await prisma.userProfile.create({
+    data: {
+      id: randomUUID(),
+      email: `cross-tenant-mp-vendor-${suffix}@e2e.test`,
+      fullName: `Marketplace Vendor ${label}`,
+      role: "OWNER",
+    },
+  });
+  const vendorWorkspace = await prisma.workspace.create({
+    data: { name: `Marketplace Vendor WS ${suffix}`, ownerUserId: vendorOwner.id },
+  });
+  const vendorCompanyName = `Isolated MPO Vendor ${suffix}`;
+  const vendor = await prisma.vendor.create({
+    data: {
+      workspaceId: vendorWorkspace.id,
+      companyName: vendorCompanyName,
+      legalName: `${vendorCompanyName} LLC`,
+      type: "DISTRIBUTOR",
+      status: "APPROVED",
+    },
+  });
+  const poNumber = `PO-ISOLATED-${suffix}`;
+  const purchaseOrder = await prisma.marketplacePurchaseOrder.create({
+    data: {
+      workspaceId: buyerWorkspace.id,
+      vendorId: vendor.id,
+      status: "SUBMITTED",
+      subtotal: 49.99,
+      deliveryFee: 0,
+      total: 49.99,
+      currency: "USD",
+      paymentMethod: "NET_TERMS",
+      poNumber,
+      deliveryAddress: {
+        line1: "456 Supply Lane",
+        city: "Austin",
+        region: "TX",
+        postalCode: "78702",
+        country: "US",
+      },
+    },
+  });
+
+  return {
+    buyerOwnerId: buyerOwner.id,
+    buyerWorkspaceId: buyerWorkspace.id,
+    vendorId: vendor.id,
+    purchaseOrderId: purchaseOrder.id,
+    poNumber,
+    vendorCompanyName,
+    cleanup: async () => {
+      await prisma.marketplacePurchaseOrder
+        .delete({ where: { id: purchaseOrder.id } })
+        .catch(() => undefined);
+      await prisma.vendor.delete({ where: { id: vendor.id } }).catch(() => undefined);
+      await prisma.workspace
+        .deleteMany({ where: { id: { in: [buyerWorkspace.id, vendorWorkspace.id] } } })
+        .catch(() => undefined);
+      await prisma.userProfile
+        .deleteMany({ where: { id: { in: [buyerOwner.id, vendorOwner.id] } } })
+        .catch(() => undefined);
+    },
+  };
+}
+
+async function seedMarketplaceVendor(label: string): Promise<{
+  vendorId: string;
+  vendorWorkspaceId: string;
+  cleanup: () => Promise<void>;
+}> {
+  const suffix = `${label}-${randomUUID().slice(0, 8)}`;
+  const owner = await prisma.userProfile.create({
+    data: {
+      id: randomUUID(),
+      email: `cross-tenant-mp-vonly-${suffix}@e2e.test`,
+      fullName: `Marketplace Vendor Only ${label}`,
+      role: "OWNER",
+    },
+  });
+  const workspace = await prisma.workspace.create({
+    data: { name: `Marketplace Vendor Only WS ${suffix}`, ownerUserId: owner.id },
+  });
+  const vendor = await prisma.vendor.create({
+    data: {
+      workspaceId: workspace.id,
+      companyName: `Vendor Only ${suffix}`,
+      legalName: `Vendor Only ${suffix} LLC`,
+      type: "DISTRIBUTOR",
+      status: "APPROVED",
+    },
+  });
+
+  return {
+    vendorId: vendor.id,
+    vendorWorkspaceId: workspace.id,
+    cleanup: async () => {
+      await prisma.vendor.delete({ where: { id: vendor.id } }).catch(() => undefined);
       await prisma.workspace.delete({ where: { id: workspace.id } }).catch(() => undefined);
       await prisma.userProfile.delete({ where: { id: owner.id } }).catch(() => undefined);
     },
@@ -143,6 +272,88 @@ test.describe("cross-tenant data isolation", () => {
         timeout: 60_000,
       });
       await expect(page.locator("body")).not.toContainText("Isolated Customer");
+    } finally {
+      await tenantB.cleanup();
+    }
+  });
+
+  test("scopedIdWhere prevents tenant A from querying tenant B marketplace PO", async () => {
+    test.skip(!hasDb, "DATABASE_URL required for cross-tenant E2E");
+
+    const tenantA = await seedMarketplacePurchaseOrder("mp-a");
+    const tenantB = await seedMarketplacePurchaseOrder("mp-b");
+
+    try {
+      const whereForA = scopedIdWhere(
+        { userId: tenantA.buyerOwnerId, workspaceId: tenantA.buyerWorkspaceId },
+        tenantB.purchaseOrderId,
+      );
+      const leaked = await prisma.marketplacePurchaseOrder.findFirst({ where: whereForA });
+      expect(leaked).toBeNull();
+    } finally {
+      await tenantA.cleanup();
+      await tenantB.cleanup();
+    }
+  });
+
+  test("loadMarketplaceOrderDetail returns null for foreign workspace purchase order", async () => {
+    test.skip(!hasDb, "DATABASE_URL required for cross-tenant E2E");
+
+    const tenantA = await seedMarketplacePurchaseOrder("mp-detail-a");
+    const tenantB = await seedMarketplacePurchaseOrder("mp-detail-b");
+
+    try {
+      const data = await loadMarketplaceOrderDetail(
+        tenantA.buyerWorkspaceId,
+        tenantB.purchaseOrderId,
+      );
+      expect(data).toBeNull();
+    } finally {
+      await tenantA.cleanup();
+      await tenantB.cleanup();
+    }
+  });
+
+  test("loadVendorOrderDetail returns null when vendor queries foreign purchase order", async () => {
+    test.skip(!hasDb, "DATABASE_URL required for cross-tenant E2E");
+
+    const tenantB = await seedMarketplacePurchaseOrder("mp-vendor-b");
+    const tenantA = await seedMarketplaceVendor("mp-vendor-a");
+
+    try {
+      const data = await loadVendorOrderDetail(tenantA.vendorId, tenantB.purchaseOrderId);
+      expect(data).toBeNull();
+    } finally {
+      await tenantA.cleanup();
+      await tenantB.cleanup();
+    }
+  });
+
+  test("signed-in tenant A gets 404 for tenant B marketplace order detail", async ({ page }) => {
+    test.skip(!hasDb, "DATABASE_URL required for cross-tenant E2E");
+    test.skip(
+      !process.env.E2E_LOGIN_EMAIL?.trim() || !process.env.E2E_LOGIN_PASSWORD?.trim(),
+      "Set E2E_LOGIN_EMAIL and E2E_LOGIN_PASSWORD (chromium-authed project)",
+    );
+
+    const authedUserId = await resolveAuthedUserId();
+    test.skip(!authedUserId, "E2E_LOGIN_EMAIL user not found in database");
+
+    const tenantB = await seedMarketplacePurchaseOrder("mp-http-b");
+
+    try {
+      const authedWorkspaceId = await resolveOwnerWorkspaceId(authedUserId);
+      test.skip(!authedWorkspaceId, "E2E login user has no active workspace");
+
+      const leaked = await loadMarketplaceOrderDetail(authedWorkspaceId, tenantB.purchaseOrderId);
+      expect(leaked).toBeNull();
+
+      await page.goto(`/dashboard/marketplace/orders/${tenantB.purchaseOrderId}`);
+      await expect(page.getByRole("heading", { name: /^Page not found$/i })).toBeVisible({
+        timeout: 60_000,
+      });
+      await expect(page.locator("body")).not.toContainText(tenantB.poNumber);
+      await expect(page.locator("body")).not.toContainText(tenantB.vendorCompanyName);
     } finally {
       await tenantB.cleanup();
     }
