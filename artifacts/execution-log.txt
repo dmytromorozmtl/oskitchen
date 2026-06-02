@@ -2362,3 +2362,11 @@ Changes: p0-staging-smokes job in ci.yml; policy module + ci-artifacts/p0-stagin
 Note: Live smokes SKIPPED until all 11 vault secrets configured (honest PASS > SKIPPED)
 Total done: 7/122
 
+---
+Cycle: 20260602-100130
+Task: 8 — Kitchen camera synthetic banner presence test
+Role: QA | Priority: P0
+Commit: test: kitchen camera synthetic banner presence
+Changes: tests/unit/kitchen-camera-synthetic-banner-presence.test.ts (wiring, SSR markup, static import graph, optional .next chunk check)
+Total done: 8/122
+

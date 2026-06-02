@@ -1,3 +1,4 @@
+import React from "react";
 import { CameraOff } from "lucide-react";
 
 /** Shown when feeds use KDS inference / demo data — not live computer vision. */
