@@ -3239,3 +3239,11 @@ Commit: docs: freemium entry point plan
 Changes: docs/freemium-tier-plan.md (options A–D, FREE caps proposal, Phase 1–4 rollout); tests/unit/freemium-tier-plan.test.ts
 Total done: 117/122
 
+---
+Cycle: 20260602-426000
+Task: 118 — Gift cards and loyalty plan
+Role: P2 Additional | Priority: P2
+Commit: docs: gift cards and loyalty plan
+Changes: docs/gift-cards-loyalty-plan.md (dual ledger, Phase 1–5, parity cert gate); tests/unit/gift-cards-loyalty-plan.test.ts
+Total done: 118/122
+
