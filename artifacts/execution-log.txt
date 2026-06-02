@@ -3047,3 +3047,11 @@ Commit: docs: Toast gap analysis
 Changes: docs/toast-gap-analysis.md (Toast-specific gap matrix, wedges, mitigation roadmap, sales talk tracks); tests/unit/toast-gap-analysis.test.ts
 Total done: 93/122
 
+---
+Cycle: 20260602-283400
+Task: 94 — Series A narrative prep
+Role: PM | Priority: P2
+Commit: docs: Series A narrative prep
+Changes: docs/series-a-narrative.md (thesis, honest traction, milestones M0–M6, deck outline, fundraise sequencing); tests/unit/series-a-narrative.test.ts
+Total done: 94/122
+
