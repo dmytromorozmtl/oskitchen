@@ -2471,3 +2471,11 @@ Commit: docs: remove placeholder features from public pages
 Changes: pricing-page.tsx (removed Uber Direct from plan bullets & comparison); product-marketing.ts routes copy; integration-seo.ts (exclude uber-direct from hub grid); help/integrations; icp-landing-content; pricing-faq.ts
 Total done: 21/122
 
+---
+Cycle: 20260602-123000
+Task: 22 — P0 staging smokes workflow
+Role: Developer | Priority: P1
+Commit: ci: P0 staging smokes workflow
+Changes: .github/workflows/p0-staging-smokes.yml (workflow_dispatch, daily schedule, policy-path triggers); lib/ci/p0-staging-smokes-ci-policy.ts (DEDICATED_WORKFLOW_PATH); docs/ci-e2e-tier-matrix.md; p0-staging-smokes-ci-live.test.ts
+Total done: 22/122
+

@@ -14,6 +14,9 @@ import {
 import { P0_OPS_VAULT_ENV_KEYS } from "@/lib/commercial/p0-ops-vault-phases-era21";
 import { evaluateP0VaultEnv } from "@/scripts/ops/validate-p0-vault-env";
 
+export const P0_STAGING_SMOKES_DEDICATED_WORKFLOW_PATH =
+  ".github/workflows/p0-staging-smokes.yml" as const;
+
 export const P0_STAGING_SMOKES_CI_POLICY_ID = "era17-p0-staging-smokes-optional-v1" as const;
 
 export const P0_STAGING_SMOKES_SECRETS_POLICY_ID =

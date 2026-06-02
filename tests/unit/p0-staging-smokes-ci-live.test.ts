@@ -7,12 +7,14 @@ import {
   P0_STAGING_SMOKES_ALWAYS_ON_SCRIPTS,
   P0_STAGING_SMOKES_CANONICAL_DOC_PATHS,
   P0_STAGING_SMOKES_CI_POLICY_ID,
+  P0_STAGING_SMOKES_DEDICATED_WORKFLOW_PATH,
   P0_STAGING_SMOKES_ORCHESTRATOR_SCRIPT,
   P0_STAGING_SMOKES_REQUIRED_SECRETS,
 } from "@/lib/ci/p0-staging-smokes-ci-policy";
 
 const ROOT = process.cwd();
 const CI_WORKFLOW = join(ROOT, ".github/workflows/ci.yml");
+const DEDICATED_WORKFLOW = join(ROOT, P0_STAGING_SMOKES_DEDICATED_WORKFLOW_PATH);
 
 const REQUIRED_SCRIPTS = [
   "test:ci:p0-staging-proof-unblock-era17",
@@ -58,6 +60,17 @@ describe("P0 staging smokes CI certification (live repo)", () => {
 
   it("requires all 11 P0 vault secrets for optional staging smokes tier", () => {
     expect(P0_STAGING_SMOKES_REQUIRED_SECRETS).toHaveLength(11);
+  });
+
+  it("wires dedicated p0-staging-smokes workflow with policy gate and optional smokes", () => {
+    expect(existsSync(DEDICATED_WORKFLOW)).toBe(true);
+    const workflow = readFileSync(DEDICATED_WORKFLOW, "utf8");
+    expect(workflow).toContain("test:ci:p0-staging-proof-unblock-era17");
+    expect(workflow).toContain("smoke:p0-staging-proof-unblock");
+    expect(workflow).toContain("test:ci:p0-staging-smokes:policy");
+    expect(workflow).toContain("id: p0_staging_smokes");
+    expect(workflow).toContain("ops:validate-p0-vault-env");
+    expect(workflow).toContain("workflow_dispatch");
   });
 
   it("wires p0-staging-smokes job with always-on policy gate and explicit smoke policy", () => {
