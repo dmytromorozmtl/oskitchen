@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { BRAND_ACCENT } from "@/lib/constants";
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
+import { prisma } from "@/lib/prisma";
+import { buildBrandedManifest } from "@/services/branding/white-label-service";
 
 export async function GET(
   _req: Request,
@@ -13,25 +14,19 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  const kitchen = await prisma.kitchenSettings.findUnique({
+    where: { userId: sf.userId },
+    select: { hideKitchenOsBranding: true },
+  });
+
   const name = sf.publicName?.trim() || storeSlug;
-  const manifest = {
-    name,
-    short_name: name.slice(0, 12),
-    description: `Order from ${name} — powered by OS Kitchen`,
-    start_url: `/s/${storeSlug}`,
-    scope: `/s/${storeSlug}`,
-    display: "standalone",
-    background_color: "#FFFFFF",
-    theme_color: sf.brandColor ?? BRAND_ACCENT,
-    icons: [
-      {
-        src: sf.logoUrl?.trim() || "/favicon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-        purpose: "any",
-      },
-    ],
-  };
+  const manifest = buildBrandedManifest({
+    storeSlug,
+    restaurantName: name,
+    logoUrl: sf.logoUrl,
+    themeColor: sf.brandColor,
+    hideKitchenOsBranding: kitchen?.hideKitchenOsBranding ?? false,
+  });
 
   return NextResponse.json(manifest, {
     headers: {
