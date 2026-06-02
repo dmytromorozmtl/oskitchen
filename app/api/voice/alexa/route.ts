@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { processKitchenVoiceQuery } from "@/services/voice/kitchen-voice-service";
 import {
   processVoiceOrder,
   verifyVoiceWebhookSecret,
@@ -13,6 +14,7 @@ const bodySchema = z.object({
     .object({
       table: z.string().max(40).optional(),
       item: z.string().max(200).optional(),
+      ingredient: z.string().max(200).optional(),
       quantity: z.union([z.number(), z.string()]).optional(),
       modifiers: z.string().max(200).optional(),
     })
@@ -40,6 +42,17 @@ export async function POST(request: Request) {
   const verified = await verifyVoiceWebhookSecret(parsed.data.ownerUserId, secret);
   if (!verified) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const kitchen = await processKitchenVoiceQuery({
+    ownerUserId: parsed.data.ownerUserId,
+    utterance: parsed.data.utterance,
+    slots: parsed.data.slots?.ingredient
+      ? { ingredient: parsed.data.slots.ingredient }
+      : undefined,
+  });
+  if (kitchen) {
+    return alexaResponse(kitchen.speech, true);
   }
 
   const result = await processVoiceOrder({

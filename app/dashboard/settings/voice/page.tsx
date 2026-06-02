@@ -46,8 +46,11 @@ export default async function SettingsVoicePage() {
         <h1 className="text-2xl font-semibold tracking-tight">Voice ordering</h1>
         <p className="text-sm text-muted-foreground">
           Guests say &ldquo;{settings.wakePhrase}, add two lattes to table five&rdquo; — orders
-          land on KDS with a purple <strong>Voice</strong> badge. Parsing is{" "}
-          <Badge variant="secondary">AI-assisted</Badge> (deterministic menu match).
+          land on KDS with a purple <strong>Voice</strong> badge. Staff can also ask inventory:{" "}
+          <a className="text-primary underline" href="/dashboard/kitchen/voice">
+            Voice-Activated Kitchen
+          </a>
+          . Parsing is <Badge variant="secondary">AI-assisted</Badge> (deterministic menu match).
         </p>
       </div>
 
