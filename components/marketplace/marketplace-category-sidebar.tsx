@@ -1,10 +1,12 @@
 import Link from "next/link";
 
+import { MarketplaceCategoryIcon } from "@/components/marketplace/marketplace-category-icon";
 import {
   marketplaceCatalogFiltersToQuery,
   type MarketplaceCatalogCategoryNode,
   type MarketplaceCatalogFilters,
 } from "@/lib/marketplace/catalog-filters";
+import { isHoReCaTopLevelCategorySlug } from "@/lib/marketplace/category-icons";
 import { cn } from "@/lib/utils";
 
 function categoryHref(filters: MarketplaceCatalogFilters, slug: string | null): string {
@@ -41,13 +43,16 @@ function CategoryLinks({
             <Link
               href={categoryHref(filters, node.slug)}
               className={cn(
-                "block rounded-lg px-2 py-1.5 text-sm transition-colors",
+                "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors",
                 active
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
             >
-              {node.name}
+              {depth === 0 && isHoReCaTopLevelCategorySlug(node.slug) ? (
+                <MarketplaceCategoryIcon slug={node.slug} size="sm" className="opacity-90" />
+              ) : null}
+              <span>{node.name}</span>
             </Link>
             {node.children.length > 0 ? (
               <CategoryLinks

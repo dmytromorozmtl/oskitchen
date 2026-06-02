@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AlertCircle, Package, ShoppingBag, Store, Truck } from "lucide-react";
 
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MarketplaceCategoryBrowseGrid } from "@/components/marketplace/marketplace-category-browse-grid";
 import { MarketplaceHeroBanner } from "@/components/marketplace/marketplace-hero-banner";
 import {
   MarketplaceFeaturedVendorCard,
@@ -133,6 +134,16 @@ export default async function MarketplaceDashboardPage() {
       </div>
 
       <MarketplaceHeroBanner promotions={model.promotions} />
+
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight">Browse by category</h2>
+          <p className="text-sm text-muted-foreground">
+            Eight HoReCa procurement categories — packaging, equipment, dry goods, and more
+          </p>
+        </div>
+        <MarketplaceCategoryBrowseGrid />
+      </section>
 
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="border-border/80 shadow-sm lg:col-span-2">

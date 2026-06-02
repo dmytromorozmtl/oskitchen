@@ -2983,3 +2983,11 @@ Commit: feat: executive dashboard demo
 Changes: app/dashboard/analytics/executive-demo/page.tsx — synthetic KPIs, health score, charts, insights with honesty banner; lib/demo/executive-dashboard-demo-data.ts; tests/unit/executive-dashboard-demo.test.ts
 Total done: 85/122
 
+---
+Cycle: 20260602-263500
+Task: 86 — Marketplace category icons (8 HoReCa categories)
+Role: Design | Priority: P2
+Commit: feat: marketplace category icons
+Changes: lib/marketplace/category-icons.ts; components/marketplace/marketplace-category-icon.tsx + marketplace-category-browse-grid.tsx; wired into category sidebar and marketplace hub; tests/unit/marketplace-category-icons.test.ts
+Total done: 86/122
+
