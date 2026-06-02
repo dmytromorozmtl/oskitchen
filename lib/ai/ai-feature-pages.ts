@@ -51,6 +51,11 @@ export const AI_FEATURE_PAGES = [
     pageFile: "app/dashboard/copilot/page.tsx",
   },
   {
+    route: "/dashboard/ai/co-pilot",
+    featureName: "AI Restaurant Co-Pilot",
+    pageFile: "app/dashboard/ai/co-pilot/page.tsx",
+  },
+  {
     route: "/dashboard/copilot/insights",
     featureName: "Copilot Insights",
     pageFile: "app/dashboard/copilot/insights/page.tsx",

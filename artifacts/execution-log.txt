@@ -3378,3 +3378,8 @@ Cycle: 20260602-200100
 Feature: 17 — Grubhub LIVE
 Result: PASSED — grubhub-live-service (OAuth, webhook, menu sync, order mapping), per-user credentials, /integrations/grubhub/live, unit+e2e
 Total done: 17/40
+---
+Cycle: 20260602-200400
+Feature: 18 — AI Restaurant Co-Pilot
+Result: PASSED — co-pilot-service (procurement/scheduling/pricing scan), owner approval drafts, /dashboard/ai/co-pilot, unit+e2e
+Total done: 18/40
