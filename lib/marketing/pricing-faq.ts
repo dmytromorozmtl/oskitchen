@@ -13,7 +13,12 @@ export const PRICING_FAQ_ITEMS: Array<{ question: string; answer: string }> = [
   {
     question: 'Are Uber Eats or DoorDash live by default?',
     answer:
-      'No. Marketplace adapters are partner-gated or setup-ready until your credentials are verified. See Integration health after connecting.',
+      'No. Marketplace adapters are partner-gated or BETA until your credentials are verified. See Integration health after connecting.',
+  },
+  {
+    question: 'Is Uber Direct included?',
+    answer:
+      'No. Uber Direct courier dispatch is on the roadmap and is not sold as a live feature on any plan. Use delivery routes for manual driver manifests today.',
   },
   {
     question: 'Do I need Stripe?',

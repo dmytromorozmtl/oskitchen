@@ -2463,3 +2463,11 @@ Commit: docs: honest competitor comparison
 Changes: docs/competitor-comparison-honest.md — vs Toast/Square/Lightspeed, ahead/behind tables
 Total done: 20/122
 
+---
+Cycle: 20260602-121500
+Task: 21 — Remove placeholder features from public pages
+Role: Marketing | Priority: P0
+Commit: docs: remove placeholder features from public pages
+Changes: pricing-page.tsx (removed Uber Direct from plan bullets & comparison); product-marketing.ts routes copy; integration-seo.ts (exclude uber-direct from hub grid); help/integrations; icp-landing-content; pricing-faq.ts
+Total done: 21/122
+

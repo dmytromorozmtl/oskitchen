@@ -3,8 +3,9 @@ export default function HelpIntegrationsPage() {
     <article className="space-y-6 text-sm leading-relaxed text-muted-foreground">
       <h1 className="text-2xl font-semibold tracking-tight text-foreground">Integrations</h1>
       <p>
-        WooCommerce, Shopify, Uber Eats, and Uber Direct each use encrypted credentials on the
-        server. Use <strong>Test connection</strong> actions before relying on automation.
+        WooCommerce, Shopify, and Uber Eats use encrypted credentials on the server. Uber Direct
+        courier dispatch is on the roadmap — not a live integration. Use{" "}
+        <strong>Test connection</strong> actions before relying on automation.
       </p>
       <ul className="list-disc space-y-2 pl-5">
         <li>

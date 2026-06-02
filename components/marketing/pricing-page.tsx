@@ -67,7 +67,7 @@ const PLANS = [
     bullets: [
       "Everything in Pro",
       "Uber Eats architecture (partner credentials required)",
-      "Uber Direct delivery module (credentials + geography)",
+      "DoorDash & Grubhub adapters (BETA — credentials required)",
       "Staff roles",
       "Delivery routes",
       "Advanced production",
@@ -97,7 +97,7 @@ const PLANS = [
 const FEATURE_ROWS: { label: string; s: boolean; p: boolean; t: boolean; e: boolean }[] = [
   { label: "Manual orders & storefront", s: true, p: true, t: true, e: true },
   { label: "WooCommerce / Shopify", s: false, p: true, t: true, e: true },
-  { label: "Uber Eats / Uber Direct adapters", s: false, p: false, t: true, e: true },
+  { label: "DoorDash / Grubhub / Uber Eats adapters (BETA)", s: false, p: false, t: true, e: true },
   { label: "Analytics & CRM rollup", s: false, p: true, t: true, e: true },
   { label: "Forecasting & webhook ingestion log", s: false, p: false, t: true, e: true },
   { label: "Enterprise API keys", s: false, p: false, t: false, e: true },
@@ -186,8 +186,9 @@ export function PricingPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-950 dark:text-amber-100">
-          Uber Eats production traffic requires marketplace partner approval and credentials — we
-          never imply official endorsement until your integration is verified live.
+          Marketplace adapters (Uber Eats, DoorDash, Grubhub) require partner approval and your
+          credentials — we never imply official endorsement until your integration is verified live.
+          Uber Direct courier dispatch is on the roadmap and is not included in any plan today.
         </div>
 
         <section className="mt-20">

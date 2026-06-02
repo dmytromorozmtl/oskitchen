@@ -109,7 +109,7 @@ const GHOST_KITCHEN_LIMITATIONS = [
 const MEAL_PREP_LIMITATIONS = [
   'Stripe storefront checkout requires Stripe Connect configuration in your workspace.',
   'Ingredient demand rollups need recipes configured — not a full ERP or purchasing automation suite.',
-  'Delivery route optimization is partial — Uber Direct remains placeholder for many workspaces.',
+  'Delivery route optimization is partial — third-party courier dispatch is on the roadmap.',
   'Cross-channel loyalty earn/redeem is not live across all channels.',
 ];
 

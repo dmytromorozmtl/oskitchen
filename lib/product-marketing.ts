@@ -65,10 +65,10 @@ export const productMarketingPages: Record<
     title: `Routes & dispatch — ${APP_NAME}`,
     headline: "Plan manifests and driver handoff when delivery is in scope",
     description:
-      "Pickup-first businesses can leave routing minimal; delivery needs addresses and honest geographies for Uber Direct or manual dispatch.",
+      "Pickup-first businesses can leave routing minimal; delivery needs addresses and manual dispatch manifests when you run your own drivers.",
     connectedModules: ["Order hub", "Packing", "CRM"],
     exampleWorkflow: "Packed orders → route plan → driver pickup → completion analytics.",
-    integrationNote: "Uber Direct requires your credentials and supported geography; no silent live dispatch is claimed without configuration.",
+    integrationNote: "Third-party courier dispatch (e.g. Uber Direct) is on the roadmap — today supports internal route planning and manual handoff only.",
     ctaHref: "/signup",
     ctaLabel: "Start trial",
   },
