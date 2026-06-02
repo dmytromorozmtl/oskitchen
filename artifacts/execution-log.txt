@@ -2775,3 +2775,11 @@ Commit: docs: bus factor mitigation plan
 Changes: docs/bus-factor-mitigation.md — SPOF map, access continuity, knowledge map, hire plan, 30/60/90 actions, quarterly scorecard
 Total done: 59/122
 
+---
+Cycle: 20260602-200000
+Task: 60 — Pilot acceptance criteria
+Role: PM | Priority: P1
+Commit: docs: pilot acceptance criteria
+Changes: docs/pilot-acceptance-criteria.md — Gates A/B/C kickoff/mid/close, mandatory criteria, KPI thresholds, sign-off forms
+Total done: 60/122
+
