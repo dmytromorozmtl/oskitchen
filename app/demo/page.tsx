@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Clock, Package, Sparkles, Users } from "lucide-react";
 
 import { DemoImportForm } from "@/components/demo/demo-import-form";
+import { DemoLaunchButton } from "@/components/demo/demo-launch-button";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { getSessionUser } from "@/lib/auth";
 import { GOLDEN_DEMO_SCENARIOS } from "@/lib/demo/golden-demo-scenarios";
+import { demoSessionHoursLabel } from "@/services/demo/demo-environment-service";
 import {
   DEMO_VERTICAL_SLUGS,
   getDemoWorkspacePreset,
@@ -23,11 +25,11 @@ import {
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "OS Kitchen Demo — Interactive Workspace",
+  title: "OS Kitchen Demo — See it in action",
   description:
-    "Explore OS Kitchen with a realistic workspace. Pre-populated demo scenarios for meal prep, catering, and bakeries.",
+    "Launch a free demo workspace with realistic orders, vendors, and analytics. No signup — explore OS Kitchen for two hours.",
   path: "/demo",
-  keywords: ["kitchen software demo", "meal prep software demo", "food ops platform demo"],
+  keywords: ["kitchen software demo", "restaurant POS demo", "food ops platform demo"],
 });
 
 export default async function DemoHubPage({
@@ -42,40 +44,66 @@ export default async function DemoHubPage({
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-6xl space-y-12 px-4 py-16 sm:px-6">
-        <div className="space-y-4 text-center">
-          <div className="flex flex-wrap items-center justify-center gap-2">
+        <section className="relative overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-br from-primary/10 via-background to-background px-6 py-14 text-center shadow-sm sm:px-10">
+          <div className="relative z-10 mx-auto max-w-3xl space-y-6">
             <Badge variant="secondary" className="rounded-full">
-              Investor / sales demo mode
+              demo.os-kitchen.com · No signup
             </Badge>
-            <Badge variant="secondary" className="rounded-full">
-              Simulated data · No API keys required
-            </Badge>
-          </div>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            Explore OS Kitchen with a realistic workspace
-          </h1>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            OS Kitchen is the operating system for modern food operations — explore a realistic
-            workspace with simulated data. Pick a vertical to tailor labels and menu language.
-            Import replaces demo-eligible rows only inside{" "}
-            <span className="font-medium text-foreground">your signed-in workspace</span> and turns
-            on demo mode until you reset from the banner.
-          </p>
-          {error ? (
-            <div className="mx-auto flex max-w-xl items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-left text-sm text-destructive">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>{decodeURIComponent(error)}</span>
+            <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+              See OS Kitchen in action. No signup. {demoSessionHoursLabel()} free.
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Launch a temp workspace with 50 orders, vendors, inventory, staff, and 30 days of
+              analytics — then land on your dashboard ready to explore.
+            </p>
+            {error ? (
+              <div className="mx-auto flex max-w-xl items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-left text-sm text-destructive">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>{decodeURIComponent(error)}</span>
+              </div>
+            ) : null}
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <DemoLaunchButton />
+              {user ? (
+                <Link
+                  href="/dashboard/today"
+                  className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-card px-6 text-sm font-medium shadow-sm transition hover:bg-muted"
+                >
+                  Back to my dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/signup"
+                  className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-card px-6 text-sm font-medium shadow-sm transition hover:bg-muted"
+                >
+                  Start free trial
+                </Link>
+              )}
             </div>
-          ) : null}
+          </div>
+        </section>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { icon: Package, label: "50 sample orders" },
+            { icon: Users, label: "5 staff · 3 vendors" },
+            { icon: Sparkles, label: "20 inventory SKUs" },
+            { icon: Clock, label: "30-day analytics" },
+          ].map(({ icon: Icon, label }) => (
+            <Card key={label} className="border-border/80 bg-card/90">
+              <CardContent className="flex items-center gap-3 p-4 text-sm font-medium">
+                <Icon className="h-5 w-5 text-primary" aria-hidden />
+                {label}
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         <section className="space-y-6">
           <div className="space-y-2 text-center">
             <h2 className="text-2xl font-semibold tracking-tight">Six golden demo scenarios</h2>
             <p className="mx-auto max-w-3xl text-sm text-muted-foreground">
-              Seeded demo data is simulated inside your workspace — not live marketplace or payment
-              traffic. Each card lists what the checklist covers; run seed/reset from the dashboard
-              when signed in.
+              Signed-in operators can also seed scenario checklists inside an existing workspace.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -99,9 +127,6 @@ export default async function DemoHubPage({
                       </li>
                     ))}
                   </ul>
-                  <p className="text-xs text-amber-900/90 dark:text-amber-100/90">
-                    {scenario.safetyNotes[scenario.safetyNotes.length - 1]}
-                  </p>
                   <div className="flex flex-wrap gap-2">
                     {user ? (
                       <Link
@@ -111,22 +136,10 @@ export default async function DemoHubPage({
                         View checklist & seed
                       </Link>
                     ) : (
-                      <Link
-                        href={`/login?redirect=${encodeURIComponent("/dashboard/demo/scenarios")}`}
-                        className="text-xs font-medium text-primary hover:underline"
-                      >
-                        Sign in for checklist & seed
-                      </Link>
+                      <span className="text-xs text-muted-foreground">
+                        Launch demo above for instant access
+                      </span>
                     )}
-                    <Link
-                      href="/book-demo"
-                      className="text-xs font-medium text-primary hover:underline"
-                    >
-                      Book guided demo
-                    </Link>
-                    <Link href="/beta" className="text-xs font-medium text-primary hover:underline">
-                      Join beta
-                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -137,41 +150,17 @@ export default async function DemoHubPage({
         {user ? (
           <Card className="border-border/80 bg-card/90 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg">Quick launch</CardTitle>
+              <CardTitle className="text-lg">Load demo into your account</CardTitle>
               <CardDescription>
-                Loads FitFresh-style meal prep data — swap vertical on each card below for
-                industry-specific wording.
+                Already signed in? Import sample data into your workspace (separate from guest
+                launch).
               </CardDescription>
             </CardHeader>
             <CardContent>
               <DemoImportForm vertical="meal-prep" />
             </CardContent>
           </Card>
-        ) : (
-          <Card className="border-primary/30 bg-primary/5">
-            <CardHeader>
-              <CardTitle className="text-lg">Sign in to launch a dashboard</CardTitle>
-              <CardDescription>
-                Demo import attaches to your account so reviewers see production, packing, and Order
-                hub with realistic rows — never mixed into someone else&apos;s data.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-3">
-              <Link
-                href="/login?redirect=/demo"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition hover:opacity-95"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/signup?redirect=/demo"
-                className="inline-flex h-10 items-center justify-center rounded-full border border-border bg-card px-5 text-sm font-medium shadow-sm transition hover:bg-muted"
-              >
-                Start free trial
-              </Link>
-            </CardContent>
-          </Card>
-        )}
+        ) : null}
 
         <div className="grid gap-4 md:grid-cols-2">
           {DEMO_VERTICAL_SLUGS.map((slug) => (
@@ -205,12 +194,10 @@ function VerticalDemoCard({
         {signedIn ? (
           <DemoImportForm vertical={slug} label="Load this demo" />
         ) : (
-          <Link
-            href={`/login?redirect=${encodeURIComponent(`/demo/${slug}`)}`}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-border px-4 text-sm font-medium hover:bg-muted"
-          >
-            Sign in to load
-          </Link>
+          <DemoLaunchButton
+            vertical={slug}
+            className="h-10 rounded-full px-4 text-sm font-medium"
+          />
         )}
       </CardContent>
     </Card>

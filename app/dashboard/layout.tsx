@@ -14,6 +14,7 @@ import { ModuleRouteGate } from "@/components/dashboard/module-route-gate";
 import { PageShell } from "@/components/layout/page-shell";
 import { WorkspacePermissionsProvider } from "@/components/permissions/workspace-permissions-provider";
 import { ensureAppUser } from "@/lib/auth";
+import { isDemoSessionExpired, isGuestDemoEmail } from "@/lib/demo/demo-session";
 import { resolveUiWorkspacePermissions } from "@/lib/permissions/resolve-ui-permissions";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getBillingAccess } from "@/lib/billing/access";
@@ -66,6 +67,15 @@ export default async function DashboardLayout({
   const onQuickStart = pathname === "/dashboard/quick-start";
   if (profile && !profile.onboardingCompleted && !isPlatformSuper && !onQuickStart) {
     redirect("/onboarding");
+  }
+
+  if (
+    kitchenSettings?.demoMode &&
+    kitchenSettings.demoExpiresAt &&
+    isDemoSessionExpired(kitchenSettings.demoExpiresAt) &&
+    isGuestDemoEmail(profile?.email ?? sessionUser.email)
+  ) {
+    redirect("/demo/expired");
   }
 
   const businessName =
@@ -145,7 +155,10 @@ export default async function DashboardLayout({
       }}
     >
       {kitchenSettings?.demoMode ? (
-        <DemoBanner userId={userId} />
+        <DemoBanner
+          expiresAtIso={kitchenSettings.demoExpiresAt?.toISOString() ?? null}
+          isGuestDemo={isGuestDemoEmail(profile?.email ?? sessionUser.email)}
+        />
       ) : null}
       <PlatformImpersonationNotice />
       <SupportSessionCustomerNotice userId={sessionUser.id} />

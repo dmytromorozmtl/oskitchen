@@ -2383,6 +2383,7 @@ model KitchenSettings {
   notifyDeliveryReminder  Boolean       @default(true) @map("notify_delivery_reminder")
   locale                  String        @default("en")
   demoMode                Boolean       @default(false) @map("demo_mode")
+  demoExpiresAt           DateTime?     @map("demo_expires_at")
   brandColorHex           String?       @map("brand_color_hex") @db.VarChar(16)
   storefrontThemeKey      String?       @map("storefront_theme_key") @db.VarChar(64)
   customDomainHint        String?       @map("custom_domain_hint") @db.VarChar(255)
