@@ -3271,3 +3271,11 @@ Commit: docs: purchase order automation plan
 Changes: docs/purchase-order-automation-plan.md (Track A/B automation, approval gates, Phase 2 cert); tests/unit/purchase-order-automation-plan.test.ts
 Total done: 121/122
 
+---
+Cycle: 20260602-470800
+Task: 122 — Franchise management plan
+Role: P2 Additional | Priority: P2
+Commit: docs: franchise management tools plan
+Changes: docs/franchise-management-plan.md (Phases 1–6, royalties MVP, vs multi-location); tests/unit/franchise-management-plan.test.ts
+Total done: 122/122
+
