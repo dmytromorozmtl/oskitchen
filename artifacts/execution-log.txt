@@ -2759,3 +2759,11 @@ Commit: docs: BETA to LIVE integration roadmap
 Changes: docs/beta-to-live-roadmap.md — WooCommerce → DoorDash → QuickBooks priority, G1–G4 workstreams, quarterly timeline, RACI
 Total done: 57/122
 
+---
+Cycle: 20260602-193000
+Task: 58 — Sales limitation sheet
+Role: PM | Priority: P1
+Commit: docs: sales limitation sheet
+Changes: docs/sales-limitation-sheet.md — prospect one-pager: integrations, POS, AI, marketplace, enterprise, support, ROI limits + scripts
+Total done: 58/122
+
