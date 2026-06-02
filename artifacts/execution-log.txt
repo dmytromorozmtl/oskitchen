@@ -2711,3 +2711,11 @@ Commit: docs: status color tokens
 Changes: docs/status-color-tokens.md — six primary tokens, Tailwind classes, component map, usage rules
 Total done: 51/122
 
+---
+Cycle: 20260602-180000
+Task: 52 — Competitor tracker reconciled (Toast/Square/Lightspeed)
+Role: PM | Priority: P1
+Commit: docs: competitor tracker reconciled
+Changes: artifacts/competitor-feature-tracker.json — competitorComparison section with executive dimensions, head-to-head, feature parity
+Total done: 52/122
+

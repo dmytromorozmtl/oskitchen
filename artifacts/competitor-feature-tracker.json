@@ -1,7 +1,7 @@
 {
   "schemaVersion": "sales-safe-v1",
-  "reconciledAt": "2026-06-01T14:00:00.000Z",
-  "reconciledFrom": "artifacts/competitor-audit-report.md",
+  "reconciledAt": "2026-06-02T18:00:00.000Z",
+  "reconciledFrom": "artifacts/competitor-audit-report.md + docs/competitor-comparison-honest.md",
   "auditReconciliation": {
     "report": "artifacts/competitor-audit-report.md",
     "salesSafeYes": 1,
@@ -12,7 +12,182 @@
     "engineeringShippedKeys": 57,
     "priorInflatedClaim": "25/25 done (v12 gap closure — engineering only)",
     "honestyRule": "PASS > SKIPPED — live_proven requires smoke artifact PASS, not wiring-only",
-    "note": "Reconciled 2026-06-01 per forensic audit. Use salesSafeFeatures for GTM; engineeringDelivery for eng ledger only."
+    "note": "Reconciled 2026-06-01 per forensic audit; 2026-06-02 Toast/Square/Lightspeed head-to-head added (task 52). Use salesSafeFeatures for GTM; engineeringDelivery for eng ledger only."
+  },
+  "competitorComparison": {
+    "reconciledAt": "2026-06-02T18:00:00.000Z",
+    "source": "docs/competitor-comparison-honest.md",
+    "competitors": ["toast", "square", "lightspeed"],
+    "honestyRule": "Engineering scaffold ≠ market proof — 0 LIVE integrations, 0 signed LOI (June 2026)",
+    "executiveDimensions": [
+      {
+        "dimension": "reference_customers",
+        "osKitchen": "0 signed LOI",
+        "toast": "Thousands",
+        "square": "Millions of sellers",
+        "lightspeed": "Established install base"
+      },
+      {
+        "dimension": "live_integrations",
+        "osKitchen": "0 LIVE (7 BETA + 1 PLACEHOLDER)",
+        "toast": "Mature marketplace",
+        "square": "Mature app ecosystem",
+        "lightspeed": "Strong partner network"
+      },
+      {
+        "dimension": "in_person_payments_hardware",
+        "osKitchen": "Software POS — browser/tablet",
+        "toast": "Leader — terminals + ecosystem",
+        "square": "Leader — Reader ecosystem",
+        "lightspeed": "Strong hardware partners"
+      },
+      {
+        "dimension": "unified_ops_breadth",
+        "osKitchen": "Broad — order hub, KDS, production, packing, marketplace scaffold",
+        "toast": "Strong ops stack",
+        "square": "POS-first; less kitchen depth",
+        "lightspeed": "Restaurant + retail variants"
+      },
+      {
+        "dimension": "ai_modules",
+        "osKitchen": "7 proprietary modules shipped — unproven in market",
+        "toast": "Toast IQ / xtraCHEF (mature narrative)",
+        "square": "Square AI features (payments-led)",
+        "lightspeed": "Analytics + integrations"
+      },
+      {
+        "dimension": "b2b_horeca_marketplace",
+        "osKitchen": "Shipped buyer scaffold — migration/pilot dependent",
+        "toast": "Third-party apps",
+        "square": "Less central",
+        "lightspeed": "Vendor integrations"
+      },
+      {
+        "dimension": "enterprise_sso_soc2",
+        "osKitchen": "Roadmap / pilot wiring",
+        "toast": "Mature",
+        "square": "Mature",
+        "lightspeed": "Mature"
+      }
+    ],
+    "headToHead": {
+      "toast": {
+        "competitorWins": [
+          "Hardware (Toast Go, KDS devices)",
+          "Payment processing at scale",
+          "Reference customers and Toast Capital",
+          "xtraCHEF / Toast IQ brand",
+          "Live delivery and partner marketplace maturity"
+        ],
+        "osKitchenWinsQualified": [
+          "Software-only POS — lower hardware capex",
+          "B2B marketplace buyer scaffold",
+          "7 AI modules in one OS (engineering — pilot unproven)",
+          "Deterministic Today briefing + integration honesty UI",
+          "Unified order hub → production → packing depth"
+        ],
+        "safeTalkTrack": "Toast owns in-restaurant hardware and scale. We target operators who want a unified cloud OS with AI modules and B2B supply marketplace — pre-customer and honest about BETA integrations."
+      },
+      "square": {
+        "competitorWins": [
+          "In-person payments and Reader ecosystem",
+          "Brand recognition for SMB",
+          "App marketplace maturity",
+          "Offline card where offered"
+        ],
+        "osKitchenWinsQualified": [
+          "Kitchen/production/packing workflow depth",
+          "Commissary / ghost kitchen / meal-prep ICP focus",
+          "AI Restaurant Brain on Today Command Center",
+          "Multi-module AI moats (code complete)"
+        ],
+        "safeTalkTrack": "Square is the default for simple retail POS. We build for operators who run production kitchens and multi-channel fulfillment — still early on proof."
+      },
+      "lightspeed": {
+        "competitorWins": [
+          "Established restaurant and retail install base",
+          "Partner and hardware channels",
+          "LIVE integrations catalog",
+          "Multi-location at scale (proven)"
+        ],
+        "osKitchenWinsQualified": [
+          "AI module breadth (7 modules)",
+          "B2B HoReCa marketplace (buyer side)",
+          "Today hub and digital twin simulation (BETA)",
+          "Multi-location schema and dashboard (partial sales-safe)"
+        ],
+        "safeTalkTrack": "Lightspeed has proven multi-site deployments. We match on schema ambition but not on LIVE integrations or customer proof yet."
+      }
+    },
+    "featureParitySelected": [
+      {
+        "area": "kds_bump_recall",
+        "osKitchen": "Shipped — not rush-hour certified",
+        "incumbentsTypical": "Mature",
+        "salesSafeVerdict": "partial"
+      },
+      {
+        "area": "delivery_ingest_dd_uber_grubhub",
+        "osKitchen": "BETA wiring",
+        "incumbentsTypical": "LIVE for customers",
+        "salesSafeVerdict": "partial"
+      },
+      {
+        "area": "offline_mode",
+        "osKitchen": "Cash queue only",
+        "incumbentsTypical": "Varies — often stronger",
+        "salesSafeVerdict": "partial"
+      },
+      {
+        "area": "multi_location_dashboard",
+        "osKitchen": "PlanGate",
+        "incumbentsTypical": "Mature",
+        "salesSafeVerdict": "partial"
+      },
+      {
+        "area": "bill_splitting",
+        "osKitchen": "YES — only sales-safe yes in audit",
+        "incumbentsTypical": "Mature",
+        "salesSafeVerdict": "yes"
+      },
+      {
+        "area": "ai_scheduling",
+        "osKitchen": "Partial / rules",
+        "incumbentsTypical": "Varies",
+        "salesSafeVerdict": "partial"
+      },
+      {
+        "area": "marketplace_vendor_buying",
+        "osKitchen": "BETA scaffold",
+        "incumbentsTypical": "Toast xtraCHEF / third-party",
+        "salesSafeVerdict": "partial"
+      },
+      {
+        "area": "enterprise_sso",
+        "osKitchen": "Pilot foundation",
+        "incumbentsTypical": "Production",
+        "salesSafeVerdict": "no"
+      }
+    ],
+    "osKitchenAheadEngineeringOnly": [
+      "Today Command Center + deterministic AI briefing",
+      "7 proprietary AI modules in one codebase",
+      "B2B marketplace buyer UX (catalog → PO)",
+      "Integration honesty UX (BETA badges, SKIPPED banners)",
+      "Breadth of ops surface (566 dashboard routes)",
+      "Bill splitting (sales-safe YES)"
+    ],
+    "osKitchenBehindMarketProof": [
+      "0 customers and case studies",
+      "Payment processing scale vs processor-of-record",
+      "Hardware ecosystem",
+      "LIVE delivery marketplaces",
+      "Offline / rush-hour certified",
+      "Enterprise compliance (SOC2/SCIM)",
+      "Proven uptime SLAs",
+      "Brand and distribution",
+      "Native mobile POS apps"
+    ]
   },
   "salesSafeFeatures": {
     "doordash-ingest": {
