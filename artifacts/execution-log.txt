@@ -2591,3 +2591,11 @@ Commit: test: webhook signatures non-Stripe
 Changes: tests/unit/webhook-signatures.test.ts — DoorDash, Grubhub, Uber Eats, Shopify HMAC + route wiring
 Total done: 36/122
 
+---
+Cycle: 20260602-156000
+Task: 37 — KDS Realtime load (50 bump events)
+Role: QA | Priority: P1
+Commit: test: KDS Realtime load
+Changes: tests/unit/kds-realtime-load.test.ts — 50 sequential/concurrent bumps, refresh burst, poll fallback load
+Total done: 37/122
+
