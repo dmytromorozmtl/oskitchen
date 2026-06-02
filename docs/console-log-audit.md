@@ -71,7 +71,7 @@ First audit after introducing the script:
 | Runtime (`app`, `components`, `actions`, `services`) | **0** | PASS |
 | Library (`lib/`, excl. allowlist) | **0** | PASS |
 | Scripts | 3,181 | Informational — ops/CLI scripts |
-| Tests | 1 | Informational |
+| Tests | 1 | Informational — `tests/e2e/a11y-marketing.spec.ts` debug dump |
 
 **Overall: PASS** — runtime paths are clean. High script count is expected (orchestrators, smokes, beta tooling).
 
@@ -81,6 +81,25 @@ Regenerate baseline:
 ./scripts/audit-console-log.sh --write
 cat artifacts/console-log-audit.json | python3 -m json.tool | head -20
 ```
+
+---
+
+## Sweep execution (Task 74 — 2026-06-02)
+
+**Command:** `npm run audit:console-log -- --write`  
+**Artifact:** `artifacts/console-log-audit.json` (`generatedAt: 2026-06-02T15:17:30Z`)  
+**Strict gate:** `./scripts/audit-console-log.sh --strict` → exit **0**
+
+| Bucket | Count | vs baseline |
+|--------|------:|-------------|
+| Runtime | 0 | unchanged |
+| Library | 0 | unchanged |
+| Scripts | 3,181 | unchanged |
+| Tests | 1 | unchanged |
+
+**Result:** **PASS** — no remediation required in Tier A/B. Ops script volume (3,181) remains deferred to [`console-log-sweep-plan.md`](./console-log-sweep-plan.md) Phase 2.
+
+**Next:** wire `--strict` into CI (see CI integration below).
 
 ---
 
@@ -111,7 +130,7 @@ Uncaught errors and production incidents → `captureErrorSafe()` (`services/obs
 
 ## CI integration (future)
 
-Task 74 (`chore: console.log sweep execution`) will wire `--strict` into CI after any backlog cleanup. Suggested check:
+Task 74 sweep **executed** — artifact committed. Suggested CI check:
 
 ```yaml
 - name: Console.log audit (runtime)
