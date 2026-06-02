@@ -3,6 +3,7 @@ import { PackageSearch } from "lucide-react";
 import { PaginationBar } from "@/components/dashboard/pagination-bar";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { MarketplaceCatalogOfflineSync } from "@/components/marketplace/marketplace-catalog-offline-sync";
+import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceCatalogFilterBar } from "@/components/marketplace/marketplace-catalog-filter-bar";
 import { MarketplaceCatalogProductCard } from "@/components/marketplace/marketplace-catalog-product-card";
 import { MarketplaceCategorySidebar } from "@/components/marketplace/marketplace-category-sidebar";
@@ -13,6 +14,7 @@ import {
   parseMarketplaceCatalogFilters,
 } from "@/lib/marketplace/catalog-filters";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
+import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMarketplaceCatalog } from "@/services/marketplace/marketplace-catalog-service";
 
 export default async function MarketplaceCatalogPage({
@@ -22,10 +24,18 @@ export default async function MarketplaceCatalogPage({
 }) {
   const sp = await searchParams;
   const filters = parseMarketplaceCatalogFilters(sp);
-  const [access, catalog] = await Promise.all([
-    resolveMarketplaceHubAccess(),
-    loadMarketplaceCatalog(filters),
-  ]);
+  const access = await resolveMarketplaceHubAccess();
+
+  let catalog;
+  try {
+    catalog = await loadMarketplaceCatalog(filters);
+  } catch (error) {
+    console.error("[marketplace-catalog] load failed", error);
+    if (isPrismaMigrationMissingError(error)) {
+      return <MarketplaceDataUnavailable />;
+    }
+    throw error;
+  }
 
   const offlineProducts = catalog.items.map((product) => ({
     id: product.id,

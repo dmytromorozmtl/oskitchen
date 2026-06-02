@@ -2,10 +2,12 @@ import Link from "next/link";
 import { Store } from "lucide-react";
 
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceVendorsListClient } from "@/components/marketplace/marketplace-vendors-list-client";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMyMarketplaceVendors } from "@/services/marketplace/marketplace-vendors-service";
 
 export default async function MarketplaceVendorsPage({
@@ -29,11 +31,20 @@ export default async function MarketplaceVendorsPage({
     );
   }
 
-  const model = await loadMyMarketplaceVendors({
-    workspaceId,
-    dataUserId,
-    query,
-  });
+  let model;
+  try {
+    model = await loadMyMarketplaceVendors({
+      workspaceId,
+      dataUserId,
+      query,
+    });
+  } catch (error) {
+    console.error("[marketplace-vendors] load failed", error);
+    if (isPrismaMigrationMissingError(error)) {
+      return <MarketplaceDataUnavailable />;
+    }
+    throw error;
+  }
 
   return (
     <div className="space-y-6 pb-8">

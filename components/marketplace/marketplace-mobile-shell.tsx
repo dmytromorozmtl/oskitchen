@@ -10,14 +10,14 @@ import {
   isMarketplaceOfflineMode,
   loadOfflineCatalogProducts,
 } from "@/lib/marketplace/mobile-ui";
-import type { MarketplaceCartView } from "@/services/marketplace/cart-service";
+import type { MarketplaceCartClientView } from "@/services/marketplace/cart-service";
 
 export function MarketplaceMobileShell({
   cart,
   canCartWrite,
   children,
 }: {
-  cart: MarketplaceCartView | null;
+  cart: MarketplaceCartClientView | null;
   canCartWrite: boolean;
   children: React.ReactNode;
 }) {

@@ -1,7 +1,7 @@
 import { MarketplaceSubnav } from "@/components/dashboard/marketplace-subnav";
 import { MarketplaceMobileShell } from "@/components/marketplace/marketplace-mobile-shell";
 import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-access";
-import { getCart } from "@/services/marketplace/cart-service";
+import { getCart, toMarketplaceCartClientView } from "@/services/marketplace/cart-service";
 
 export default async function MarketplaceLayout({ children }: { children: React.ReactNode }) {
   const access = await requireMarketplaceReadPage({
@@ -14,7 +14,15 @@ export default async function MarketplaceLayout({ children }: { children: React.
   }
 
   const workspaceId = access.actor.workspaceId;
-  const cart = workspaceId ? await getCart(workspaceId) : null;
+  let cart = null;
+  if (workspaceId) {
+    try {
+      const cartRaw = await getCart(workspaceId);
+      cart = cartRaw ? toMarketplaceCartClientView(cartRaw) : null;
+    } catch {
+      cart = null;
+    }
+  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-20 lg:pb-8">

@@ -7,7 +7,9 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { getCart } from "@/services/marketplace/cart-service";
+import { getCart, toMarketplaceCartClientView } from "@/services/marketplace/cart-service";
+import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
+import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 
 export default async function MarketplaceCheckoutPage() {
   const { workspaceId } = await getTenantActor();
@@ -23,10 +25,19 @@ export default async function MarketplaceCheckoutPage() {
     );
   }
 
-  const [access, cart] = await Promise.all([
-    resolveMarketplaceHubAccess(),
-    getCart(workspaceId),
-  ]);
+  const access = await resolveMarketplaceHubAccess();
+
+  let cart = null;
+  try {
+    const cartRaw = await getCart(workspaceId);
+    cart = cartRaw ? toMarketplaceCartClientView(cartRaw) : null;
+  } catch (error) {
+    console.error("[marketplace-checkout] load failed", error);
+    if (isPrismaMigrationMissingError(error)) {
+      return <MarketplaceDataUnavailable />;
+    }
+    throw error;
+  }
 
   return (
     <div className="space-y-6 pb-8">

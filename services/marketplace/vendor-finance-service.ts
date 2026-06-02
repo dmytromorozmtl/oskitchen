@@ -71,7 +71,7 @@ async function syncAvailableVendorTransactions(vendorId: string) {
 }
 
 function buildTransactionWhere(vendorId: string, filters: VendorFinanceFilters) {
-  const where: Parameters<typeof prisma.vendorTransaction.findMany>[0]["where"] = { vendorId };
+  const where: Prisma.VendorTransactionWhereInput = { vendorId };
 
   if (filters.status) where.status = filters.status;
 

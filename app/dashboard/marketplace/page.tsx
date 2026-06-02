@@ -69,10 +69,24 @@ export default async function MarketplaceDashboardPage() {
     }),
   ]);
 
-  const model = await loadMarketplaceDashboard(
-    workspaceId,
-    profile?.kitchenSettings?.businessType ?? null,
-  );
+  let model;
+  try {
+    model = await loadMarketplaceDashboard(
+      workspaceId,
+      profile?.kitchenSettings?.businessType ?? null,
+    );
+  } catch (error) {
+    console.error("[marketplace-dashboard] load failed", error);
+    return (
+      <EmptyState
+        icon={Store}
+        title="Marketplace temporarily unavailable"
+        description="We could not load marketplace data for this workspace. Try again in a moment or browse the catalog when it is back."
+        primaryLabel="Browse catalog"
+        primaryHref="/dashboard/marketplace/catalog"
+      />
+    );
+  }
 
   return (
     <div className="space-y-8 pb-8">

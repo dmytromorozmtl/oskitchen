@@ -21,13 +21,13 @@ import {
 } from "@/components/ui/sheet";
 import { MARKETPLACE_TOUCH_BUTTON_CLASS, MARKETPLACE_TOUCH_INPUT_CLASS } from "@/lib/marketplace/mobile-ui";
 import { formatCurrency } from "@/lib/utils";
-import type { MarketplaceCartView } from "@/services/marketplace/cart-service";
+import type { MarketplaceCartClientView } from "@/services/marketplace/cart-service";
 
 export function MarketplaceMobileCartDrawer({
   initialCart,
   canEdit,
 }: {
-  initialCart: MarketplaceCartView | null;
+  initialCart: MarketplaceCartClientView | null;
   canEdit: boolean;
 }) {
   const [cart, setCart] = useState(initialCart);

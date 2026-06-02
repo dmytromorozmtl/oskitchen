@@ -42,6 +42,23 @@ export type MarketplaceCartView = {
   subtotal: number;
 };
 
+/** Serializable cart for client components (RSC cannot pass Date instances). */
+export type MarketplaceCartClientView = Omit<
+  MarketplaceCartView,
+  "savedAt" | "expiresAt"
+> & {
+  savedAt: string;
+  expiresAt: string | null;
+};
+
+export function toMarketplaceCartClientView(cart: MarketplaceCartView): MarketplaceCartClientView {
+  return {
+    ...cart,
+    savedAt: cart.savedAt.toISOString(),
+    expiresAt: cart.expiresAt?.toISOString() ?? null,
+  };
+}
+
 type CartAuditActor = {
   userId: string;
   email: string | null;

@@ -3,6 +3,7 @@ import { ClipboardList } from "lucide-react";
 
 import { PaginationBar } from "@/components/dashboard/pagination-bar";
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceOrdersListClient } from "@/components/marketplace/marketplace-orders-list-client";
 import { MarketplaceRecurringOrdersSection } from "@/components/marketplace/marketplace-recurring-orders-section";
 import { PageHeader } from "@/components/layout/page-header";
@@ -13,6 +14,7 @@ import {
   parseMarketplaceOrdersFilters,
 } from "@/lib/marketplace/orders-filters";
 import { resolveMarketplaceHubAccess } from "@/lib/marketplace/marketplace-page-access";
+import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadMarketplaceOrders } from "@/services/marketplace/marketplace-orders-service";
 import { loadMarketplaceRecurringOrders } from "@/services/marketplace/recurring-orders-service";
@@ -51,7 +53,16 @@ export default async function MarketplaceOrdersPage({
   const access = await resolveMarketplaceHubAccess();
 
   if (filters.tab === "recurring") {
-    const recurring = await loadMarketplaceRecurringOrders(workspaceId);
+    let recurring;
+    try {
+      recurring = await loadMarketplaceRecurringOrders(workspaceId);
+    } catch (error) {
+      console.error("[marketplace-orders-recurring] load failed", error);
+      if (isPrismaMigrationMissingError(error)) {
+        return <MarketplaceDataUnavailable />;
+      }
+      throw error;
+    }
     return (
       <div className="space-y-6 pb-8">
         <PageHeader
@@ -67,7 +78,16 @@ export default async function MarketplaceOrdersPage({
     );
   }
 
-  const model = await loadMarketplaceOrders(workspaceId, filters);
+  let model;
+  try {
+    model = await loadMarketplaceOrders(workspaceId, filters);
+  } catch (error) {
+    console.error("[marketplace-orders] load failed", error);
+    if (isPrismaMigrationMissingError(error)) {
+      return <MarketplaceDataUnavailable />;
+    }
+    throw error;
+  }
 
   return (
     <div className="space-y-6 pb-8">

@@ -1,10 +1,12 @@
 import { Scale } from "lucide-react";
 
 import { MarketplaceCompareClient } from "@/components/marketplace/marketplace-compare-client";
+import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { parseMarketplaceCompareFilters } from "@/lib/marketplace/compare-filters";
 import { requireMarketplaceReadPage } from "@/lib/marketplace/marketplace-page-access";
+import { isPrismaMigrationMissingError } from "@/lib/prisma-migration-missing";
 import { loadMarketplaceCompare } from "@/services/marketplace/marketplace-compare-service";
 
 export default async function MarketplaceComparePage({
@@ -20,7 +22,17 @@ export default async function MarketplaceComparePage({
 
   const sp = await searchParams;
   const filters = parseMarketplaceCompareFilters(sp);
-  const result = await loadMarketplaceCompare(filters);
+
+  let result;
+  try {
+    result = await loadMarketplaceCompare(filters);
+  } catch (error) {
+    console.error("[marketplace-compare] load failed", error);
+    if (isPrismaMigrationMissingError(error)) {
+      return <MarketplaceDataUnavailable />;
+    }
+    throw error;
+  }
 
   return (
     <div className="space-y-6 pb-8">
