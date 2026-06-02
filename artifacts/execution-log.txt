@@ -3183,3 +3183,11 @@ Commit: docs: webinar strategy
 Changes: docs/webinar-strategy.md (types, W1 run-of-show, promotion, follow-up, Q3 calendar); tests/unit/webinar-strategy.test.ts
 Total done: 110/122
 
+---
+Cycle: 20260602-361200
+Task: 111 — MVP marketing dashboard
+Role: Marketing | Priority: P2
+Commit: docs: MVP marketing dashboard
+Changes: docs/mvp-marketing-dashboard.md (weekly scorecard A–E, monthly rollup, review cadence, spreadsheet tabs); tests/unit/mvp-marketing-dashboard.test.ts
+Total done: 111/122
+
