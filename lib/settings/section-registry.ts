@@ -282,6 +282,17 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     keywords: ["referral", "invite", "free month", "partner"],
   },
   {
+    key: "voice",
+    label: "Voice ordering",
+    description: "Alexa and Google Home — spoken orders to KDS.",
+    href: "/dashboard/settings/voice",
+    group: "platform",
+    icon: "Mic",
+    capability: "view_settings",
+    bridge: true,
+    keywords: ["alexa", "google home", "voice", "assistant"],
+  },
+  {
     key: "staff",
     label: "Staff & permissions",
     description: "RBAC roles, invitations, per-location access.",

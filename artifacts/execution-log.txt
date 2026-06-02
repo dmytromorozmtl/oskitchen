@@ -3348,3 +3348,8 @@ Cycle: 20260602-194055
 Feature: 11 — Automated Onboarding
 Result: 5-question AI agent, plan review, apply via quick-start
 Total done: 9/40
+---
+Cycle: 20260602-194330
+Feature: 12 — Voice Ordering
+Result: PASSED — Alexa/Google webhooks, voice-ordering-service, settings/voice, KDS purple badge, unit tests (4), e2e smoke
+Tracker: features 7-8 marked done (pre-existing QR + profit); 12/40 complete
