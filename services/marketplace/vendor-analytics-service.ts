@@ -220,24 +220,25 @@ export async function loadVendorAnalytics(vendorId: string): Promise<VendorAnaly
   const productPerformance: VendorProductPerformanceRow[] = [...lineItemsAgg]
     .sort((a, b) => decimalToNumber(b._sum.total) - decimalToNumber(a._sum.total))
     .slice(0, 15)
-    .map((row) => {
+    .flatMap((row) => {
       const product = productById.get(row.productId);
-      if (!product) return null;
+      if (!product) return [];
       const orderCount = row._count._all;
-      return {
-        id: product.id,
-        name: product.name,
-        sku: product.sku,
-        slug: product.slug,
-        revenue: decimalToNumber(row._sum.total),
-        unitsSold: row._sum.quantity ?? 0,
-        orderCount,
-        conversionRate: allOrdersCount > 0 ? round2((orderCount / allOrdersCount) * 100) : 0,
-        stockQty: product.stockQty,
-        status: product.status,
-      };
-    })
-    .filter((row): row is VendorProductPerformanceRow => row != null);
+      return [
+        {
+          id: product.id,
+          name: product.name,
+          sku: product.sku,
+          slug: product.slug,
+          revenue: decimalToNumber(row._sum.total),
+          unitsSold: row._sum.quantity ?? 0,
+          orderCount,
+          conversionRate: allOrdersCount > 0 ? round2((orderCount / allOrdersCount) * 100) : 0,
+          stockQty: product.stockQty,
+          status: product.status,
+        },
+      ];
+    });
 
   const workspaceIds = ordersByWorkspace.map((row) => row.workspaceId);
   const workspaces = workspaceIds.length

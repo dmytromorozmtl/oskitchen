@@ -227,11 +227,11 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
     orders: bucket.orders,
   }));
 
-  const topProducts: VendorTopProduct[] = lineItemsAgg
-    .map((row) => {
-      const product = productById.get(row.productId);
-      if (!product) return null;
-      return {
+  const topProducts: VendorTopProduct[] = lineItemsAgg.flatMap((row) => {
+    const product = productById.get(row.productId);
+    if (!product) return [];
+    return [
+      {
         id: product.id,
         name: product.name,
         sku: product.sku,
@@ -239,9 +239,9 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
         revenue: decimalToNumber(row._sum.total),
         unitsSold: row._sum.quantity ?? 0,
         stockQty: product.stockQty,
-      };
-    })
-    .filter((row): row is VendorTopProduct => row != null);
+      },
+    ];
+  });
 
   const pendingActions: VendorDashboardPendingAction[] = [
     ...pendingConfirmOrders.map((order) => ({
