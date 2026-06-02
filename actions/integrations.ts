@@ -330,6 +330,7 @@ export async function saveUberEatsSettings(formData: FormData) {
     revalidatePath("/dashboard/sales-channels");
     revalidatePath("/dashboard/integrations");
     revalidatePath("/dashboard/integrations/uber-eats");
+    revalidatePath("/dashboard/integrations/uber-eats/live");
     await logChannelCredentialAudit({
       connectionId: row.id,
       userId,

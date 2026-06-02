@@ -63,9 +63,14 @@ export default async function UberEatsIntegrationPage() {
             Marketplace BETA — OAuth order ingest, menu sync, signed webhooks.
           </p>
         </div>
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/dashboard/sales-channels">← Back</Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild size="sm" className="rounded-full">
+            <Link href="/dashboard/integrations/uber-eats/live">Open LIVE dashboard</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/dashboard/sales-channels">← Back</Link>
+          </Button>
+        </div>
       </div>
 
       <Card>
