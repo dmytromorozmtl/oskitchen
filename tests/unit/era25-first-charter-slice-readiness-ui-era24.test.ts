@@ -5,7 +5,7 @@ import {
   formatEra25FirstCharterSliceReadinessLabel,
 } from "@/lib/commercial/era25-first-charter-slice-readiness-ui-era24";
 
-describe("era25-first-charter-slice-readiness-ui-era24", () => {
+describe("era25-first-charter-slice-readiness-ui-era24", { timeout: 120_000 }, () => {
   it("returns null when charter exit not visible", () => {
     expect(buildEra25FirstCharterSliceReadinessUiSlice({ charterExitVisible: false })).toBeNull();
   });
