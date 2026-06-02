@@ -2527,3 +2527,11 @@ Commit: docs: SSO IdP smoke test plan
 Changes: docs/sso-idp-smoke-test-plan.md — L0–L4 test tiers, commands, env vars, manual matrix, artifact pass criteria, CI map
 Total done: 28/122
 
+---
+Cycle: 20260602-143000
+Task: 29 — Stripe Connect vendor test plan
+Role: Developer | Priority: P1
+Commit: docs: Stripe Connect vendor test plan
+Changes: docs/stripe-connect-vendor-test-plan.md — L0–L4 tiers, env vars, onboarding/payment/payout matrix, webhook tests, Task 32 E2E outline
+Total done: 29/122
+
