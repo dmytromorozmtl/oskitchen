@@ -1,4 +1,6 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { requireForecastAiPageAccess } from "@/lib/forecast/require-forecast-ai-page-access";
 import { getAIOrderForecast } from "@/services/ai/kitchen-ai-service";
 
@@ -8,16 +10,22 @@ export default async function AiForecastPage() {
     return (
       <div className="mx-auto max-w-4xl space-y-6">
         <h1 className="text-2xl font-semibold">AI demand forecast</h1>
-        <Card className="border-border/80 shadow-sm">
-          <CardContent className="py-8 text-center text-sm text-muted-foreground">
-            {access.error}
-          </CardContent>
-        </Card>
+        <AiFeatureApiError featureName="AI Demand Forecast" error={access.error} />
       </div>
     );
   }
 
-  const forecast = await getAIOrderForecast(access.dataUserId, 7);
+  const forecastLoad = await loadAiFeaturePage(() => getAIOrderForecast(access.dataUserId, 7));
+  if (!forecastLoad.ok) {
+    return (
+      <div className="mx-auto max-w-4xl space-y-6">
+        <h1 className="text-2xl font-semibold">AI demand forecast</h1>
+        <AiFeatureApiError featureName="AI Demand Forecast" error={forecastLoad.error} />
+      </div>
+    );
+  }
+
+  const forecast = forecastLoad.data;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">

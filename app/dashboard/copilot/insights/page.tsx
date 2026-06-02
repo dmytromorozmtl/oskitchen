@@ -1,12 +1,22 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { CopilotInsightCard } from "@/components/dashboard/copilot/insight-card";
 import { Card, CardContent } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { listOpenInsights, persistDeterministicInsights } from "@/services/ai/copilot-service";
 
 export default async function CopilotInsightsPage() {
   const { scope } = await loadCopilotPageActor();
-  await persistDeterministicInsights(scope);
-  const insights = await listOpenInsights(scope, 100);
+  const insightsLoad = await loadAiFeaturePage(async () => {
+    await persistDeterministicInsights(scope);
+    return listOpenInsights(scope, 100);
+  });
+
+  if (!insightsLoad.ok) {
+    return <AiFeatureApiError featureName="Copilot Insights" error={insightsLoad.error} />;
+  }
+
+  const insights = insightsLoad.data;
   return (
     <div className="space-y-4">
       <header>

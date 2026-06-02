@@ -4,9 +4,11 @@ import {
   executeActionDraftFormAction,
   rejectActionDraftFormAction,
 } from "@/actions/copilot";
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { COPILOT_TOOLS, COPILOT_TOOL_KEYS } from "@/lib/ai/copilot-tools";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
 import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
@@ -30,7 +32,11 @@ export default async function CopilotDraftsPage({
   const { scope } = await loadCopilotPageActor();
   const canDraft = canUseCopilot(scope, "copilot.actions.draft");
   const canApprove = canUseCopilot(scope, "copilot.actions.approve");
-  const drafts = await listActionDrafts(scope);
+  const draftsLoad = await loadAiFeaturePage(() => listActionDrafts(scope));
+  if (!draftsLoad.ok) {
+    return <AiFeatureApiError featureName="Copilot Action Drafts" error={draftsLoad.error} />;
+  }
+  const drafts = draftsLoad.data;
 
   return (
     <div className="space-y-6">

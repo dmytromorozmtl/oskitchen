@@ -1,7 +1,9 @@
 import { updateCopilotSettingsFormAction } from "@/actions/copilot";
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import {
   hasCopilotSettingsPageAccess,
@@ -19,7 +21,11 @@ export default async function CopilotSettingsPage({
   if (!hasCopilotSettingsPageAccess(scope)) {
     return <PermissionDeniedSurfaceCard surfaceId="copilot_settings" />;
   }
-  const s = await getCopilotSettings(scope);
+  const settingsLoad = await loadAiFeaturePage(() => getCopilotSettings(scope));
+  if (!settingsLoad.ok) {
+    return <AiFeatureApiError featureName="Copilot Settings" error={settingsLoad.error} />;
+  }
+  const s = settingsLoad.data;
 
   return (
     <div className="space-y-4">

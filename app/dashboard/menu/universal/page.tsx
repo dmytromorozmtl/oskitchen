@@ -1,5 +1,7 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { UniversalMenuDashboard } from "@/components/dashboard/universal-menu-dashboard";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadUniversalMenuDashboard } from "@/services/menu/universal-menu-engine";
 
@@ -19,7 +21,10 @@ export default async function UniversalMenuPage() {
     );
   }
 
-  const payload = await loadUniversalMenuDashboard(workspaceId);
+  const payload = await loadAiFeaturePage(() => loadUniversalMenuDashboard(workspaceId));
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="Universal Menu Engine" error={payload.error} />;
+  }
 
-  return <UniversalMenuDashboard {...payload} />;
+  return <UniversalMenuDashboard {...payload.data} />;
 }

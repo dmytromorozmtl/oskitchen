@@ -1,5 +1,7 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { FoodCostDashboard } from "@/components/dashboard/food-cost-dashboard";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadFoodCostDashboard } from "@/services/ai/food-cost-dashboard";
 
@@ -19,7 +21,10 @@ export default async function FoodCostAnalyticsPage() {
     );
   }
 
-  const payload = await loadFoodCostDashboard(workspaceId);
+  const payload = await loadAiFeaturePage(() => loadFoodCostDashboard(workspaceId));
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="Food Cost AI" error={payload.error} />;
+  }
 
-  return <FoodCostDashboard {...payload} />;
+  return <FoodCostDashboard {...payload.data} />;
 }

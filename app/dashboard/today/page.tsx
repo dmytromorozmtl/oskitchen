@@ -1,4 +1,5 @@
 import { AiBriefingPanel } from "@/components/dashboard/ai-briefing-panel";
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { GettingStartedChecklist } from "@/components/dashboard/getting-started-checklist";
 import { GettingStartedAttentionStrip } from "@/components/dashboard/getting-started-attention-strip";
 import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-briefing-hero";
@@ -29,6 +30,7 @@ import {
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
 import { loadLaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { generateDailyBriefing } from "@/services/ai/ai-restaurant-brain";
 
 export const dynamic = "force-dynamic";
@@ -74,10 +76,10 @@ export default async function TodayOperationsPage({
       select: { createdAt: true },
     }),
     showIntegrationHealth
-      ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)
+      ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId).catch(() => null)
       : Promise.resolve(null),
-    showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId) : Promise.resolve(null),
-    needsCommercialInflection ? loadCommercialPilotOpsStatusModel() : Promise.resolve(null),
+    showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId).catch(() => null) : Promise.resolve(null),
+    needsCommercialInflection ? loadCommercialPilotOpsStatusModel().catch(() => null) : Promise.resolve(null),
   ]);
   const ownerBriefing = showOwnerBriefing
     ? await loadOwnerDailyBriefing(dataUserId, {
@@ -96,12 +98,21 @@ export default async function TodayOperationsPage({
               progress: launchWizardModel.progress,
             }
           : undefined,
+      }).catch((error) => {
+        console.error("[today] owner briefing load failed", error);
+        return null;
       })
     : null;
-  const aiBriefing =
-    showOwnerBriefing && workspaceId
-      ? await generateDailyBriefing(workspaceId).catch(() => null)
-      : null;
+  let aiBriefing = null;
+  let aiBriefingError: unknown = null;
+  if (showOwnerBriefing && workspaceId) {
+    const briefingLoad = await loadAiFeaturePage(() => generateDailyBriefing(workspaceId));
+    if (briefingLoad.ok) {
+      aiBriefing = briefingLoad.data;
+    } else {
+      aiBriefingError = briefingLoad.error;
+    }
+  }
   const gettingStarted = await loadGettingStartedStatus(
     dataUserId,
     profile?.createdAt ?? new Date(),
@@ -131,6 +142,13 @@ export default async function TodayOperationsPage({
         !gettingStarted.allDone &&
         !ownerBriefing ? (
           <GettingStartedAttentionStrip data={gettingStarted} />
+        ) : null}
+        {aiBriefingError ? (
+          <AiFeatureApiError
+            featureName="Today's AI Briefing"
+            error={aiBriefingError}
+            variant="inline"
+          />
         ) : null}
         {aiBriefing ? <AiBriefingPanel briefing={aiBriefing} /> : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}

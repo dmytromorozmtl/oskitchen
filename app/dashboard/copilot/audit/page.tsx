@@ -1,9 +1,11 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   hasCopilotAuditPageAccess,
   loadCopilotPageActor,
 } from "@/lib/ux/copilot-page-access-era20";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { listAuditEvents } from "@/services/ai/copilot-service";
 
 export default async function CopilotAuditPage() {
@@ -11,7 +13,11 @@ export default async function CopilotAuditPage() {
   if (!hasCopilotAuditPageAccess(scope)) {
     return <PermissionDeniedSurfaceCard surfaceId="copilot_audit" />;
   }
-  const events = await listAuditEvents(scope, 200);
+  const eventsLoad = await loadAiFeaturePage(() => listAuditEvents(scope, 200));
+  if (!eventsLoad.ok) {
+    return <AiFeatureApiError featureName="Copilot Audit Log" error={eventsLoad.error} />;
+  }
+  const events = eventsLoad.data;
   return (
     <div className="space-y-4">
       <header>

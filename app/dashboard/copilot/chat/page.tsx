@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { ChatThread } from "@/components/dashboard/copilot/chat-thread";
 import { AiStatusBadges } from "@/components/dashboard/copilot/ai-status-badges";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
@@ -8,6 +9,7 @@ import {
   hasCopilotChatPageAccess,
   loadCopilotPageActor,
 } from "@/lib/ux/copilot-page-access-era20";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import {
   getCopilotSettings,
   listConversations,
@@ -25,11 +27,20 @@ export default async function CopilotChatPage({
     return <PermissionDeniedSurfaceCard surfaceId="copilot_chat" />;
   }
   const conversationId = typeof sp.c === "string" ? sp.c : null;
-  const [settings, conversations, messages] = await Promise.all([
-    getCopilotSettings(scope),
-    listConversations(scope),
-    conversationId ? listMessages(scope, conversationId) : Promise.resolve([]),
-  ]);
+  const pageData = await loadAiFeaturePage(async () => {
+    const [settings, conversations, messages] = await Promise.all([
+      getCopilotSettings(scope),
+      listConversations(scope),
+      conversationId ? listMessages(scope, conversationId) : Promise.resolve([]),
+    ]);
+    return { settings, conversations, messages };
+  });
+
+  if (!pageData.ok) {
+    return <AiFeatureApiError featureName="Copilot Chat" error={pageData.error} />;
+  }
+
+  const { settings, conversations, messages } = pageData.data;
 
   return (
     <div className="space-y-4">

@@ -1,6 +1,8 @@
 import Link from "next/link";
 
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { canExportReports } from "@/lib/reports/report-export-access";
 import { buildDeterministicSnapshot } from "@/services/ai/deterministic-insights-service";
@@ -72,21 +74,31 @@ export default async function CopilotSummariesPage() {
 
   const canExport = canExportReports(actor);
 
-  const [settings, profile, snapshot] = await Promise.all([
-    getCopilotSettings(scope),
-    prisma.userProfile.findUnique({
-      where: { id: userId },
-      select: { kitchenSettings: { select: { businessType: true } } },
-    }),
-    buildDeterministicSnapshot(userId),
-  ]);
+  const pageData = await loadAiFeaturePage(async () => {
+    const [settings, profile, snapshot] = await Promise.all([
+      getCopilotSettings(scope),
+      prisma.userProfile.findUnique({
+        where: { id: userId },
+        select: { kitchenSettings: { select: { businessType: true } } },
+      }),
+      buildDeterministicSnapshot(userId),
+    ]);
 
-  const narrative = await generateNarrative(scope, {
-    rangeLabel: snapshot.rangeLabel,
-    bulletSummary: snapshot.bulletSummary,
-    mode: profile?.kitchenSettings?.businessType ?? null,
-    role: null,
+    const narrative = await generateNarrative(scope, {
+      rangeLabel: snapshot.rangeLabel,
+      bulletSummary: snapshot.bulletSummary,
+      mode: profile?.kitchenSettings?.businessType ?? null,
+      role: null,
+    });
+
+    return { settings, snapshot, narrative };
   });
+
+  if (!pageData.ok) {
+    return <AiFeatureApiError featureName="Copilot Summaries" error={pageData.error} />;
+  }
+
+  const { settings, snapshot, narrative } = pageData.data;
 
   return (
     <div className="space-y-6">

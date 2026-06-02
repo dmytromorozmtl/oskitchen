@@ -1,8 +1,10 @@
 import Link from "next/link";
 
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { AiSchedulePanel } from "@/components/dashboard/staff/ai-schedule-panel";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { loadAiSchedulePlan } from "@/services/labor/ai-scheduling-service";
 import { weekStartMonday } from "@/services/labor/schedule-service";
 
@@ -24,7 +26,13 @@ export default async function AiSchedulingPage({
   const nextWeek = new Date(weekStart);
   nextWeek.setDate(nextWeek.getDate() + 7);
 
-  const initialPlan = await loadAiSchedulePlan(actor.userId, weekStart, targetLaborPct);
+  const initialPlan = await loadAiFeaturePage(() =>
+    loadAiSchedulePlan(actor.userId, weekStart, targetLaborPct),
+  );
+
+  if (!initialPlan.ok) {
+    return <AiFeatureApiError featureName="AI Scheduling" error={initialPlan.error} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -51,7 +59,7 @@ export default async function AiSchedulingPage({
       <AiSchedulePanel
         weekStartIso={weekStart.toISOString().slice(0, 10)}
         canManage={canManageSchedule}
-        initialPlan={initialPlan}
+        initialPlan={initialPlan.data}
       />
     </div>
   );

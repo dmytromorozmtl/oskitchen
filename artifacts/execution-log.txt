@@ -3031,3 +3031,11 @@ Commit: docs: dark mode audit
 Changes: docs/dark-mode-audit.md (theme architecture, surface inventory, token dual-stack, P0–P2 backlog); tests/unit/dark-mode-audit.test.ts
 Total done: 91/122
 
+---
+Cycle: 20260602-274500
+Task: 92 — Consistent ApiErrorState on all AI feature pages
+Role: Design | Priority: P2
+Commit: feat: AI features error states
+Changes: components/dashboard/ai-feature-api-error.tsx; lib/ai/load-ai-feature-page.ts + ai-feature-pages.ts; wired into 7 AI modules, copilot suite, today briefing, scheduling, forecast; tests/unit/ai-feature-api-error.test.ts
+Total done: 92/122
+

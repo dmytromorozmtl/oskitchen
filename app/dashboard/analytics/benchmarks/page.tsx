@@ -1,5 +1,7 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { BenchmarkDashboard } from "@/components/dashboard/benchmark-dashboard";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadBenchmarkDashboard } from "@/services/ai/benchmark-dashboard";
 
@@ -24,7 +26,10 @@ export default async function BenchmarkAnalyticsPage({ searchParams }: Props) {
     );
   }
 
-  const payload = await loadBenchmarkDashboard(workspaceId, cohort);
+  const payload = await loadAiFeaturePage(() => loadBenchmarkDashboard(workspaceId, cohort));
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="Benchmark Network" error={payload.error} />;
+  }
 
-  return <BenchmarkDashboard {...payload} />;
+  return <BenchmarkDashboard {...payload.data} />;
 }

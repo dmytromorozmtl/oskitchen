@@ -1,5 +1,7 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { DigitalTwinDashboard } from "@/components/dashboard/digital-twin-dashboard";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadDigitalTwinDashboard } from "@/services/ai/digital-twin";
 
@@ -19,7 +21,10 @@ export default async function DigitalTwinAnalyticsPage() {
     );
   }
 
-  const payload = await loadDigitalTwinDashboard(workspaceId);
+  const payload = await loadAiFeaturePage(() => loadDigitalTwinDashboard(workspaceId));
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="Digital Twin" error={payload.error} />;
+  }
 
-  return <DigitalTwinDashboard {...payload} />;
+  return <DigitalTwinDashboard {...payload.data} />;
 }

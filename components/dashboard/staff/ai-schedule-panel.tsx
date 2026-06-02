@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { applyAiScheduleAction, generateAiScheduleAction } from "@/actions/labor/ai-scheduling";
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import type { AiSchedulePlan } from "@/services/labor/ai-scheduling-service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -15,12 +16,14 @@ type Props = {
 export function AiSchedulePanel({ weekStartIso, canManage, initialPlan = null }: Props) {
   const [plan, setPlan] = useState<AiSchedulePlan | null>(initialPlan);
   const [targetLaborPct, setTargetLaborPct] = useState(initialPlan?.targetLaborPct ?? 28);
-  const [message, setMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<unknown>(null);
   const [isPending, startTransition] = useTransition();
 
   function handleGenerate() {
     startTransition(async () => {
-      setMessage(null);
+      setSuccessMessage(null);
+      setApiError(null);
       const fd = new FormData();
       fd.set("weekStart", weekStartIso);
       fd.set("targetLaborPct", String(targetLaborPct));
@@ -28,7 +31,7 @@ export function AiSchedulePanel({ weekStartIso, canManage, initialPlan = null }:
         const next = await generateAiScheduleAction(fd);
         setPlan(next);
       } catch (err) {
-        setMessage(err instanceof Error ? err.message : "Could not generate schedule");
+        setApiError(err);
       }
     });
   }
@@ -37,14 +40,17 @@ export function AiSchedulePanel({ weekStartIso, canManage, initialPlan = null }:
     if (!plan) return;
     const shifts = plan.days.flatMap((day) => day.shifts);
     startTransition(async () => {
-      setMessage(null);
+      setSuccessMessage(null);
+      setApiError(null);
       const fd = new FormData();
       fd.set("shiftsJson", JSON.stringify(shifts));
       try {
         const result = await applyAiScheduleAction(fd);
-        setMessage(`Created ${result.created} shift${result.created === 1 ? "" : "s"}${result.skipped ? ` (${result.skipped} skipped)` : ""}.`);
+        setSuccessMessage(
+          `Created ${result.created} shift${result.created === 1 ? "" : "s"}${result.skipped ? ` (${result.skipped} skipped)` : ""}.`,
+        );
       } catch (err) {
-        setMessage(err instanceof Error ? err.message : "Could not apply schedule");
+        setApiError(err);
       }
     });
   }
@@ -100,7 +106,16 @@ export function AiSchedulePanel({ weekStartIso, canManage, initialPlan = null }:
               View-only — <span className="font-medium text-foreground">schedule.manage</span> required to generate or apply.
             </p>
           )}
-          {message && <p className="text-sm text-muted-foreground">{message}</p>}
+          {successMessage ? <p className="text-sm text-muted-foreground">{successMessage}</p> : null}
+          {apiError ? (
+            <AiFeatureApiError
+              featureName="AI Scheduling"
+              error={apiError}
+              variant="inline"
+              onRetry={handleGenerate}
+              retryLabel="Try again"
+            />
+          ) : null}
         </CardContent>
       </Card>
 

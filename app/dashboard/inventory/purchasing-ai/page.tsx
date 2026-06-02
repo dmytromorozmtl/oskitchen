@@ -1,5 +1,7 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { PurchasingAiDashboard } from "@/components/dashboard/purchasing-ai-dashboard";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadPurchasingAiDashboard } from "@/services/ai/ai-purchasing-dashboard";
 
@@ -19,11 +21,14 @@ export default async function PurchasingAiPage() {
     );
   }
 
-  const payload = await loadPurchasingAiDashboard(workspaceId);
+  const payload = await loadAiFeaturePage(() => loadPurchasingAiDashboard(workspaceId));
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="AI Purchasing" error={payload.error} />;
+  }
 
   return (
     <div className="mx-auto max-w-6xl">
-      <PurchasingAiDashboard {...payload} />
+      <PurchasingAiDashboard {...payload.data} />
     </div>
   );
 }

@@ -1,9 +1,11 @@
 import Link from "next/link";
 
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { AiStatusBadges } from "@/components/dashboard/copilot/ai-status-badges";
 import { CopilotFormErrorBanner } from "@/components/dashboard/copilot/form-error-banner";
 import { CopilotInsightCard } from "@/components/dashboard/copilot/insight-card";
 import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { KitchenAiTools } from "@/components/dashboard/copilot/kitchen-ai-tools";
 import { RefreshDeterministicButton } from "@/components/dashboard/copilot/refresh-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,23 +39,33 @@ export default async function CopilotTodayPage({
   const { actor, scope } = await loadCopilotPageActor();
   const { userId } = actor;
 
-  const [settings, snapshot, profile, openInsights, drafts] = await Promise.all([
-    getCopilotSettings(scope),
-    buildDeterministicSnapshot(userId),
-    prisma.userProfile.findUnique({
-      where: { id: userId },
-      select: { kitchenSettings: { select: { businessType: true } } },
-    }),
-    listOpenInsights(scope),
-    listActionDrafts(scope, ["NEEDS_APPROVAL", "APPROVED"]),
-  ]);
+  const pageData = await loadAiFeaturePage(async () => {
+    const [settings, snapshot, profile, openInsights, drafts] = await Promise.all([
+      getCopilotSettings(scope),
+      buildDeterministicSnapshot(userId),
+      prisma.userProfile.findUnique({
+        where: { id: userId },
+        select: { kitchenSettings: { select: { businessType: true } } },
+      }),
+      listOpenInsights(scope),
+      listActionDrafts(scope, ["NEEDS_APPROVAL", "APPROVED"]),
+    ]);
 
-  const narrative = await generateNarrative(scope, {
-    rangeLabel: snapshot.rangeLabel,
-    bulletSummary: snapshot.bulletSummary,
-    mode: profile?.kitchenSettings?.businessType ?? null,
-    role: null,
+    const narrative = await generateNarrative(scope, {
+      rangeLabel: snapshot.rangeLabel,
+      bulletSummary: snapshot.bulletSummary,
+      mode: profile?.kitchenSettings?.businessType ?? null,
+      role: null,
+    });
+
+    return { settings, snapshot, openInsights, drafts, narrative };
   });
+
+  if (!pageData.ok) {
+    return <AiFeatureApiError featureName="AI Operations Copilot" error={pageData.error} />;
+  }
+
+  const { settings, snapshot, openInsights, drafts, narrative } = pageData.data;
 
   const insightCards = openInsights.length > 0
     ? openInsights

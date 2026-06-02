@@ -1,3 +1,4 @@
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { KitchenCamerasDashboard } from "@/components/dashboard/kitchen-cameras-dashboard";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { resolveKitchenCameraSyntheticMode } from "@/lib/ai/kitchen-camera-synth
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { loadKitchenCameraDashboard } from "@/services/ai/kitchen-camera-dashboard";
 
 export const dynamic = "force-dynamic";
@@ -28,15 +30,19 @@ export default async function KitchenCamerasPage() {
     );
   }
 
-  const payload = await loadKitchenCameraDashboard(workspaceId);
+  const payload = await loadAiFeaturePage(() => loadKitchenCameraDashboard(workspaceId));
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="Kitchen Camera AI" error={payload.error} />;
+  }
+
   const { showPreviewBanner } = resolveKitchenCameraSyntheticMode({
-    dataSource: payload.dataSource,
-    hasLiveStream: payload.cameras.some((camera) => Boolean(camera.config.streamUrl?.trim())),
+    dataSource: payload.data.dataSource,
+    hasLiveStream: payload.data.cameras.some((camera) => Boolean(camera.config.streamUrl?.trim())),
   });
 
   return (
     <div className="p-4 md:p-6">
-      <KitchenCamerasDashboard {...payload} showPreviewBanner={showPreviewBanner} />
+      <KitchenCamerasDashboard {...payload.data} showPreviewBanner={showPreviewBanner} />
     </div>
   );
 }
