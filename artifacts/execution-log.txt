@@ -2839,3 +2839,11 @@ Commit: docs: feature announcement template
 Changes: docs/feature-announcement-template.md — master template, short-form (LinkedIn/email/Slack/X), 4 announcement types, claims checklist, safe examples
 Total done: 67/122
 
+---
+Cycle: 20260602-220000
+Task: 68 — SEO audit
+Role: Marketing | Priority: P1
+Commit: docs: SEO audit
+Changes: docs/seo-audit.md — technical SEO inventory, sitemap gaps (/shopify, /vendor, 2 blogs, /changelog), metadata/structured-data review, P0–P2 backlog
+Total done: 68/122
+
