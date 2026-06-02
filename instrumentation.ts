@@ -1,3 +1,4 @@
+/** Server boot: production readiness, Sentry (`sentry.server.config` when `SENTRY_DSN` set), OTEL. See `docs/sentry-setup.md`. */
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const { assertNodeStartupReadiness } = await import(
