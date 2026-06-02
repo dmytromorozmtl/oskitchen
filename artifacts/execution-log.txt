@@ -2599,3 +2599,11 @@ Commit: test: KDS Realtime load
 Changes: tests/unit/kds-realtime-load.test.ts — 50 sequential/concurrent bumps, refresh burst, poll fallback load
 Total done: 37/122
 
+---
+Cycle: 20260602-157000
+Task: 38 — Marketplace migration regression tests
+Role: QA | Priority: P1
+Commit: test: marketplace migration regression
+Changes: tests/unit/marketplace-migration-regression.test.ts — migration/schema parity, tenant indexes, hub graceful degradation
+Total done: 38/122
+
