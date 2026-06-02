@@ -2831,3 +2831,11 @@ Commit: docs: design partner email sequence
 Changes: docs/design-partner-email-sequence.md — 3-email outbound sequence (Day 0/4/10), tokens, forbidden copy, CRM fields, LOI attachment on email 2
 Total done: 66/122
 
+---
+Cycle: 20260602-214500
+Task: 67 — Feature announcement template
+Role: Marketing | Priority: P1
+Commit: docs: feature announcement template
+Changes: docs/feature-announcement-template.md — master template, short-form (LinkedIn/email/Slack/X), 4 announcement types, claims checklist, safe examples
+Total done: 67/122
+
