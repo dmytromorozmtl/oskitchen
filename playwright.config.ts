@@ -62,6 +62,7 @@ if (dashboardE2EEnabled) {
       dependencies: ["setup"],
       testMatch: [
         "**/dashboard-auth.spec.ts",
+        "**/dashboard-rsc-regression.spec.ts",
         "**/workspace-post-not-null-smoke.spec.ts",
         "**/pos-checkout-flow.spec.ts",
         "**/pos-checkout-staging.spec.ts",
@@ -168,6 +169,7 @@ projects.push({
     "**/pilot-auth.setup.ts",
     "**/pilot-staff-auth.setup.ts",
     "**/dashboard-auth.spec.ts",
+    "**/dashboard-rsc-regression.spec.ts",
     "**/pos-checkout-flow.spec.ts",
     "**/pos-checkout-staging.spec.ts",
     "**/pos-offline-queue.spec.ts",

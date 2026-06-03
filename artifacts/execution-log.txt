@@ -3656,3 +3656,12 @@ Artifact: tests/unit/webhook-signature-matrix.test.ts
 Result: PASS — 52/52 routes verified in static audit; 57 vitest assertions green
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 15
+Task: QA-07 — dashboard RSC regression suite
+Role: QA
+Priority: P0
+Artifact: e2e/dashboard-rsc-regression.spec.ts
+Result: CREATED — today/marketplace/pos no-500 + RSC crash guards; wired to chromium-authed project
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
