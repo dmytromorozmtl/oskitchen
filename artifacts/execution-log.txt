@@ -3443,3 +3443,13 @@ Cycle: 20260602-204800
 Feature: 30–32 — Support tier + SOC2 (pre-existing docs, tracker sync) + SSO + SCIM LIVE plan
 Result: PASSED — support-tier-plan.md + soc2-readiness-assessment.md verified; sso-scim-live-plan.md + unit test
 Total done: 32/40
+---
+Cycle: 20260602-205200
+Feature: 33 — International Expansion (docs)
+Result: PASSED — international-expansion-plan.md (UK first, multi-currency, multi-language, GDPR), unit test
+Total done: 33/40
+---
+Cycle: 20260602-205200
+Feature: 33 — International Expansion (docs)
+Result: PASSED — international-expansion-plan.md (UK first, multi-currency, multi-language, GDPR), unit test
+Total done: 33/40
