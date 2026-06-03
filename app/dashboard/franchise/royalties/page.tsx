@@ -20,7 +20,14 @@ export default async function FranchiseRoyaltiesPage({
     <div className="mx-auto max-w-5xl space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold">Franchise royalties</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/dashboard/enterprise/franchise"
+            className="rounded-full border px-3 py-1 text-sm"
+            data-testid="franchise-enterprise-link"
+          >
+            Franchise suite
+          </Link>
           <Link
             href="?period=month"
             className={`rounded-full border px-3 py-1 text-sm ${period === "month" ? "bg-primary text-primary-foreground" : ""}`}

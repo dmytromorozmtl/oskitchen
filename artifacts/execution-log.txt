@@ -3418,3 +3418,8 @@ Cycle: 20260602-202800
 Feature: 25 — Advanced Inventory Auto-Ordering
 Result: PASSED — auto-ordering-service (weather/holiday/trend signals, batch POs), /inventory/auto-ordering, unit+e2e
 Total done: 25/40
+---
+Cycle: 20260602-203000
+Feature: 26 — Franchise Management Suite
+Result: PASSED — franchise-service (brand control, royalties, menu enforcement), /enterprise/franchise, unit+e2e
+Total done: 26/40

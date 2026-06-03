@@ -58,6 +58,9 @@ export function MultiLocationEnterprisePanel({ dashboard }: Props) {
         <div className="flex flex-wrap gap-2">
           <MultiLocationPdfExportButton snapshot={snapshot} />
           <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/enterprise/franchise">Franchise suite</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/locations/dashboard">Operations view</Link>
           </Button>
         </div>
