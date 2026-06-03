@@ -3674,3 +3674,12 @@ Artifact: tests/performance/today-page-load.test.ts
 Result: CREATED — p95 SLO 2000ms on loadTodayPageCriticalPath; live benchmark gated by RUN_PERF_TESTS=1
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 17
+Task: QA-09 — profit margin accuracy COGS validation
+Role: QA
+Priority: P0
+Artifact: tests/unit/profit-margin-accuracy.test.ts
+Result: PASS — seeded COGS fixtures assert food cost + gross margin within ±1%
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
