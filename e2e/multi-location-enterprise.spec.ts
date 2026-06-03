@@ -1,15 +1,24 @@
-import { expect, test } from "@playwright/test";
+import { test } from "@playwright/test";
 
-import { skipIfLoginRedirect } from "./helpers/dashboard-smoke";
+import { runMultiLocationRollupExportPanelFlow } from "./helpers/multi-location-rollup-export-flow";
+import { skipMultiLocationRollupExportIfNotAuthed } from "./helpers/multi-location-rollup-export-ready";
+
+/**
+ * Enterprise multi-location smoke (chromium-authed).
+ *
+ * @see e2e/multi-location-rollup-export-e2e.spec.ts — QA-33 export contract
+ */
 
 test.describe("enterprise multi-location", () => {
-  test("enterprise page shows panel and comparison", async ({ page }) => {
-    await page.goto("/dashboard/enterprise/multi-location");
-    await skipIfLoginRedirect(page);
-    await expect(page.getByRole("heading", { name: /Multi-location enterprise/i })).toBeVisible({
-      timeout: 15_000,
-    });
-    await expect(page.getByTestId("enterprise-multi-location-panel")).toBeVisible();
-    await expect(page.getByTestId("multi-location-comparison-table")).toBeVisible();
+  test.beforeEach(({ }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== "chromium-authed",
+      "Enterprise multi-location smoke runs in chromium-authed project only",
+    );
+    skipMultiLocationRollupExportIfNotAuthed();
+  });
+
+  test("enterprise page shows panel and rollup export controls", async ({ page }) => {
+    await runMultiLocationRollupExportPanelFlow(page);
   });
 });

@@ -4260,3 +4260,12 @@ Artifact: lib/pos/bill-splitting-e2e-policy.ts, lib/pos/bill-splitting-metrics.t
 Result: IMPLEMENTED — four-mode split contract (equal/percentage/seat/item); ±1% grand total accuracy SLI; computeBillSplit reconciliation for all modes; chromium-authed tabs panel smoke
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 82
+Task: QA-33 — multi-location rollup export E2E
+Role: QA
+Priority: P1
+Artifact: lib/enterprise/multi-location-rollup-export-e2e-policy.ts, lib/enterprise/multi-location-rollup-export-metrics.ts, e2e/multi-location-rollup-export-e2e.spec.ts, e2e/helpers/multi-location-rollup-export-*.ts, tests/unit/multi-location-rollup-export-e2e.test.ts, e2e/multi-location-enterprise.spec.ts, playwright.config.ts
+Result: IMPLEMENTED — CSV header/network+location row contract; builder summarize within export SLI; authed GET rollup-export CSV attachment + X-Row-Count; enterprise panel export link smoke
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
