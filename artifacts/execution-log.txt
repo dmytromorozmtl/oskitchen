@@ -4233,3 +4233,12 @@ Artifact: lib/upload-policy/file-upload-validation-e2e-policy.ts, e2e/file-uploa
 Result: IMPLEMENTED — 9-channel denial matrix (MIME/size/PDF/SVG); EICAR malware block; storefront form HTTP 400 on video/mp4 before storage
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 79
+Task: QA-30 — KDS bump latency p50/p95/p99 E2E
+Role: QA
+Priority: P1
+Artifact: lib/kitchen/kds-bump-latency-e2e-policy.ts, lib/kitchen/kds-bump-latency-metrics.ts, e2e/kds-bump-latency.spec.ts, e2e/helpers/kds-bump-latency-*.ts, tests/unit/kds-bump-latency-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — SLI-2 targets (400/1500/4000ms); rolling p50/p95/p99 summarize; 20-sample bump action batch within SLO; UI kitchen probe in chromium-authed
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
