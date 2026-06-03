@@ -1,5 +1,7 @@
+import type { Prisma } from "@prisma/client";
 import { IntegrationProvider } from "@prisma/client";
 
+import { runChannelMenuSyncJob } from "@/lib/menu/channel-sync-helpers";
 import { menuListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import type { UberEatsCredentials } from "@/services/integrations/uber-eats";
@@ -11,6 +13,11 @@ export type UberEatsMenuSyncResult = {
   message?: string;
   categoriesCount?: number;
   itemsCount?: number;
+};
+
+export type UberEatsMenuSyncOptions = {
+  menuId?: string | null;
+  locationId?: string | null;
 };
 
 type UberMenuCategory = {
@@ -25,17 +32,18 @@ const UBER_MENU_API =
 /** Build Uber Eats Menu API v2 payload from OS Kitchen menus/products. */
 export async function buildUberEatsMenuPayload(
   ownerUserId: string,
-  locationId?: string | null,
+  options?: UberEatsMenuSyncOptions,
 ): Promise<{ categories: UberMenuCategory[] }> {
   const menuWhere = await menuListWhereForOwner(ownerUserId);
+  const filters: Prisma.MenuWhereInput[] = [menuWhere, { active: true }];
+  if (options?.menuId) {
+    filters.push({ id: options.menuId });
+  } else if (options?.locationId) {
+    filters.push({ locationId: options.locationId });
+  }
+
   const menus = await prisma.menu.findMany({
-    where: {
-      AND: [
-        menuWhere,
-        { active: true },
-        ...(locationId ? [{ locationId }] : []),
-      ],
-    },
+    where: { AND: filters },
     include: {
       products: {
         where: { active: true },
@@ -43,7 +51,7 @@ export async function buildUberEatsMenuPayload(
         take: 500,
       },
     },
-    take: 20,
+    take: options?.menuId ? 1 : 20,
   });
 
   const categories: UberMenuCategory[] = menus.map((menu) => ({
@@ -60,7 +68,7 @@ export async function buildUberEatsMenuPayload(
   return { categories };
 }
 
-async function getUberAccessToken(creds: UberEatsCredentials): Promise<string | null> {
+export async function getUberEatsAccessToken(creds: UberEatsCredentials): Promise<string | null> {
   if (!creds.clientId?.trim() || !creds.clientSecret?.trim()) return null;
   const tokenUrl = process.env.UBER_EATS_TOKEN_URL ?? "https://login.uber.com/oauth/v2/token";
   try {
@@ -86,49 +94,87 @@ async function getUberAccessToken(creds: UberEatsCredentials): Promise<string | 
 export class UberEatsMenuSyncService {
   constructor(private readonly creds: UberEatsCredentials) {}
 
-  async pushMenu(ownerUserId: string, storeId: string, locationId?: string | null): Promise<UberEatsMenuSyncResult> {
+  async pushMenu(
+    ownerUserId: string,
+    storeId: string,
+    options?: UberEatsMenuSyncOptions,
+    connectionId?: string | null,
+  ): Promise<UberEatsMenuSyncResult> {
     const syncedAt = new Date();
-    const menu = await buildUberEatsMenuPayload(ownerUserId, locationId);
-    const token = await getUberAccessToken(this.creds);
-    const sid = storeId || this.creds.storeId?.trim();
+    const menu = await buildUberEatsMenuPayload(ownerUserId, options);
+    const itemsCount = menu.categories.reduce((n, c) => n + c.entities.length, 0);
+    const sid = storeId.trim() || this.creds.storeId?.trim();
 
+    if (menu.categories.length === 0) {
+      return {
+        ok: false,
+        syncedAt,
+        message: options?.menuId
+          ? "Menu not found or has no active products."
+          : "No active menus with products to sync.",
+        categoriesCount: 0,
+        itemsCount: 0,
+      };
+    }
+
+    const token = await getUberEatsAccessToken(this.creds);
     if (!token || !sid) {
       return {
         ok: false,
         syncedAt,
         message: "Uber Eats credentials or store ID missing — menu payload built locally only.",
         categoriesCount: menu.categories.length,
-        itemsCount: menu.categories.reduce((n, c) => n + c.entities.length, 0),
+        itemsCount,
       };
     }
 
-    const res = await fetch(`${UBER_MENU_API}/${encodeURIComponent(sid)}/menus`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+    const outcome = await runChannelMenuSyncJob({
+      userId: ownerUserId,
+      connectionId: connectionId ?? null,
+      provider: IntegrationProvider.UBER_EATS,
+      records: { processed: itemsCount, updated: itemsCount },
+      run: async () => {
+        const res = await fetch(`${UBER_MENU_API}/${encodeURIComponent(sid)}/menus`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            menus: [
+              { service_availability: [], category_ids: menu.categories.map((c) => c.id) },
+            ],
+            categories: menu.categories,
+          }),
+          cache: "no-store",
+        });
+
+        if (res.ok) {
+          return {
+            ok: true,
+            message: `Menu synced (${menu.categories.length} categories, ${itemsCount} items)`,
+          };
+        }
+
+        let detail = "";
+        try {
+          detail = await res.text();
+        } catch {
+          detail = "";
+        }
+        return {
+          ok: false,
+          message: `Uber Eats menu sync failed (${res.status})${detail ? `: ${detail.slice(0, 200)}` : ""}`,
+        };
       },
-      body: JSON.stringify({ menus: [{ service_availability: [], category_ids: menu.categories.map((c) => c.id) }], categories: menu.categories }),
     });
 
-    await prisma.channelSyncJob.create({
-      data: {
-        userId: ownerUserId,
-        provider: IntegrationProvider.UBER_EATS,
-        type: "MENUS",
-        status: res.ok ? "SUCCESS" : "FAILED",
-        completedAt: new Date(),
-        resultJson: { statusCode: res.status, storeId: sid },
-      },
-    }).catch(() => undefined);
-
     return {
-      ok: res.ok,
+      ok: outcome.ok,
       syncedAt,
-      statusCode: res.status,
-      message: res.ok ? "Menu pushed to Uber Eats" : `Uber API returned ${res.status}`,
       categoriesCount: menu.categories.length,
-      itemsCount: menu.categories.reduce((n, c) => n + c.entities.length, 0),
+      itemsCount,
+      message: outcome.message,
     };
   }
 }

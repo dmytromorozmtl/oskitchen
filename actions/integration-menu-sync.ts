@@ -1,17 +1,13 @@
 "use server";
 
-import { IntegrationProvider } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { requireIntegrationsActor } from "@/lib/integrations/require-integrations-actor";
-import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
-import { prisma } from "@/lib/prisma";
 import { safeError } from "@/lib/security";
 import { DoorDashSyncService } from "@/services/integrations/doordash/order-sync.service";
 import { syncMenuToDoorDash } from "@/services/integrations/doordash/doordash-service";
-import { UberEatsMenuSyncService } from "@/services/integrations/uber-eats/menu-sync.service";
-import type { UberEatsCredentials } from "@/services/integrations/uber-eats";
+import { syncMenuToUberEats } from "@/services/integrations/uber-eats/uber-eats-service";
 
 export async function forceUberEatsMenuSyncAction(): Promise<
   ActionResult<{ categoriesCount?: number; itemsCount?: number; message?: string }>
@@ -20,20 +16,7 @@ export async function forceUberEatsMenuSyncAction(): Promise<
     const gate = await requireIntegrationsActor({ operation: "integrations.force_uber_eats_menu_sync" });
     if (!gate.ok) return fail(gate.error);
     const { userId: dataUserId } = gate.actor;
-    const where = await integrationConnectionByProviderWhereForOwner(
-      dataUserId,
-      IntegrationProvider.UBER_EATS,
-    );
-    const conn = await prisma.integrationConnection.findFirst({ where });
-    if (!conn) return fail("Connect Uber Eats first.");
-
-    const creds: UberEatsCredentials = {
-      clientId: process.env.UBER_EATS_CLIENT_ID,
-      clientSecret: process.env.UBER_EATS_CLIENT_SECRET,
-      storeId: conn.externalStoreId,
-    };
-    const svc = new UberEatsMenuSyncService(creds);
-    const result = await svc.pushMenu(dataUserId, conn.externalStoreId ?? "");
+    const result = await syncMenuToUberEats(dataUserId);
     revalidatePath("/dashboard/integrations/health");
     revalidatePath("/dashboard/integrations/uber-eats");
     return ok({

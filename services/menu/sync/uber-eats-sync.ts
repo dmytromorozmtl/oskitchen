@@ -12,32 +12,11 @@ import {
   type ChannelMenuSyncInput,
   type ChannelMenuSyncResult,
 } from "@/lib/menu/channel-sync-types";
+import { getUberEatsAccessToken } from "@/services/integrations/uber-eats/menu-sync.service";
 import { getUberEatsCredentialsForUser } from "@/services/integrations/uber-eats/uber-eats-service";
 
 const UBER_MENU_API =
   process.env.UBER_EATS_MENU_API_BASE ?? "https://api.uber.com/v2/eats/stores";
-
-async function getUberAccessToken(clientId: string, clientSecret: string): Promise<string | null> {
-  const tokenUrl = process.env.UBER_EATS_TOKEN_URL ?? "https://login.uber.com/oauth/v2/token";
-  try {
-    const body = new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      grant_type: "client_credentials",
-      scope: "eats.store",
-    });
-    const res = await fetch(tokenUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-    });
-    if (!res.ok) return null;
-    const json = (await res.json()) as { access_token?: string };
-    return json.access_token ?? null;
-  } catch {
-    return null;
-  }
-}
 
 /** Push a single menu item to Uber Eats marketplace menu API. */
 export async function syncMenuItemToUberEats(
@@ -66,7 +45,7 @@ export async function syncMenuItemToUberEats(
     connectionId: conn.id,
     provider: IntegrationProvider.UBER_EATS,
     run: async () => {
-      const token = await getUberAccessToken(creds.clientId!.trim(), creds.clientSecret!.trim());
+      const token = await getUberEatsAccessToken(creds);
       if (!token) {
         return { ok: false, message: "Uber OAuth token unavailable — item payload staged locally." };
       }

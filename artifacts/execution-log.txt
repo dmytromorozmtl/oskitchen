@@ -3936,3 +3936,12 @@ Artifact: services/integrations/doordash/menu-sync.service.ts, services/integrat
 Result: HARDENED — per-user credentials on item sync; menuId filter fix; channelSyncJob logging on bulk push; cron menu sync (DOORDASH_MENU_SYNC_ON_CRON); unit tests for payload builder
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 46
+Task: DEV-21 — Uber Eats hardening
+Role: DEVELOPER
+Priority: P1
+Artifact: services/integrations/uber-eats/menu-sync.service.ts, services/integrations/uber-eats/uber-eats-service.ts, services/menu/sync/uber-eats-sync.ts, app/api/integrations/uber-eats/menu/route.ts, actions/integration-menu-sync.ts, tests/unit/uber-eats-menu-sync.test.ts
+Result: HARDENED — menuId filter; runChannelMenuSyncJob with item counts; per-user creds + storeId fallback; shared OAuth token helper; forceUberEatsMenuSyncAction uses syncMenuToUberEats
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

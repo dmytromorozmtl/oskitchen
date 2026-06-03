@@ -62,14 +62,16 @@ export async function getUberEatsCredentialsForUser(
   );
   const conn = await prisma.integrationConnection.findFirst({ where });
   if (conn) {
-    const clientId = decryptOptional(conn.consumerKeyEncrypted);
-    const clientSecret = decryptOptional(conn.consumerSecretEncrypted);
-    if (clientId && clientSecret) {
-      return {
-        clientId,
-        clientSecret,
-        storeId: conn.externalStoreId,
-      };
+    const clientId =
+      decryptOptional(conn.consumerKeyEncrypted) ?? process.env.UBER_EATS_CLIENT_ID?.trim() ?? null;
+    const clientSecret =
+      decryptOptional(conn.consumerSecretEncrypted) ??
+      process.env.UBER_EATS_CLIENT_SECRET?.trim() ??
+      null;
+    const storeId =
+      conn.externalStoreId?.trim() ?? process.env.UBER_EATS_STORE_ID?.trim() ?? null;
+    if (clientId && clientSecret && storeId) {
+      return { clientId, clientSecret, storeId };
     }
   }
   const env = credsFromEnv();
@@ -86,13 +88,26 @@ export async function fetchUberEatsOrders(userId: string) {
   return importUberEatsOrdersForUser(userId);
 }
 
-export async function syncMenuToUberEats(userId: string, locationId?: string | null) {
+export async function syncMenuToUberEats(
+  userId: string,
+  options?: { menuId?: string | null; locationId?: string | null },
+) {
   const creds = await getUberEatsCredentialsForUser(userId);
-  if (!creds || !isUberEatsConfigured(creds)) {
+  if (!creds || !creds.clientId?.trim() || !creds.clientSecret?.trim() || !creds.storeId?.trim()) {
     throw new Error(getUberEatsBetaMessage(false));
   }
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByProviderWhereForOwner(
+      userId,
+      IntegrationProvider.UBER_EATS,
+    ),
+    select: { id: true, externalStoreId: true },
+  });
+  const storeId = conn?.externalStoreId?.trim() || creds.storeId.trim();
+
   const svc = new UberEatsMenuSyncService(creds);
-  const result = await svc.pushMenu(userId, creds.storeId!.trim(), locationId ?? null);
+  const result = await svc.pushMenu(userId, storeId, options, conn?.id ?? null);
   if (!result.ok) {
     throw new Error(result.message ?? "Uber Eats menu sync failed");
   }

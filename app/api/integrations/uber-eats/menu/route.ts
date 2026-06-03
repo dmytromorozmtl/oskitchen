@@ -9,16 +9,22 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: gate.error }, { status: 403 });
   }
 
+  let menuId: string | undefined;
   let locationId: string | undefined;
   try {
-    const body = (await request.json()) as { locationId?: string };
+    const body = (await request.json()) as { menuId?: string; locationId?: string };
+    menuId = body.menuId;
     locationId = body.locationId;
   } catch {
+    menuId = undefined;
     locationId = undefined;
   }
 
   try {
-    const result = await syncMenuToUberEats(gate.actor.userId, locationId ?? null);
+    const result = await syncMenuToUberEats(gate.actor.userId, {
+      menuId: menuId ?? null,
+      locationId: locationId ?? null,
+    });
     return NextResponse.json({
       ok: true,
       categoriesCount: result.categoriesCount,
