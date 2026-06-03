@@ -40,6 +40,9 @@ export default async function MultiLocationDashboardPage({
           </div>
           <div className="flex flex-wrap gap-2">
             <MultiLocationPdfExportButton snapshot={snapshot} />
+            <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="enterprise-multi-location-link">
+              <Link href="/dashboard/enterprise/multi-location">Enterprise view</Link>
+            </Button>
             <Button asChild variant="outline" size="sm" className="rounded-full">
               <Link href="/dashboard/locations/reports">Detailed reports</Link>
             </Button>

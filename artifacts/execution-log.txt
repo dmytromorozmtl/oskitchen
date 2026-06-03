@@ -3408,3 +3408,8 @@ Cycle: 20260602-202000
 Feature: 23 — Restaurant Network Effects
 Result: PASSED — network-effects-service (intelligence index, milestones, cohort mesh), /analytics/network, unit+e2e
 Total done: 23/40
+---
+Cycle: 20260602-202400
+Feature: 24 — Multi-location Enterprise Dashboard
+Result: PASSED — multi-location-service (ranks, alerts, drill-down), /enterprise/multi-location, unit+e2e
+Total done: 24/40
