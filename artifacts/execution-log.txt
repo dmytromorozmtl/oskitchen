@@ -3810,3 +3810,12 @@ Result: CREATED — Integration Health section after hero; PASS/SKIPPED/FAILED m
 Note: MKT-05 skipped (docs/competitor-comparison-honest.md already present — marked done in tracker)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 32
+Task: MKT-07 — software-first POS positioning
+Role: MARKETING
+Priority: P0
+Artifact: docs/software-first-pos-positioning.md
+Result: CREATED — BYOD browser POS; no hardware lock-in; vs Toast/Square/Lightspeed; TCO framing; ICP fit; objection handling; honest offline/EMV caveats
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
