@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type ExportType = "pnl" | "invoices";
+type ExportType = "pnl" | "pnl-csv" | "invoices" | "sales";
 
 export function AccountingExportPanel({
   provider,
@@ -15,7 +15,12 @@ export function AccountingExportPanel({
   const [type, setType] = useState<ExportType>("pnl");
 
   const base = provider === "quickbooks" ? "/api/export/quickbooks" : "/api/export/xero";
-  const href = `${base}?type=${type}&period=${period}`;
+  const pnlType = pnlFormat === "csv" ? "pnl-csv" : "pnl";
+  const resolvedType = type === "pnl" ? pnlType : type;
+  const href =
+    type === "sales" && provider === "quickbooks"
+      ? `${base}?type=sales&period=${period}&format=iif`
+      : `${base}?type=${resolvedType}&period=${period}`;
 
   return (
     <div className="space-y-3 text-sm">
@@ -40,11 +45,15 @@ export function AccountingExportPanel({
           >
             <option value="pnl">P&L ({pnlFormat.toUpperCase()})</option>
             <option value="invoices">Invoices (CSV)</option>
+            {provider === "quickbooks" ? (
+              <option value="sales">Sales journal (IIF)</option>
+            ) : null}
           </select>
         </label>
       </div>
       <a href={href} className="inline-flex rounded-xl border px-3 py-1.5 text-sm hover:bg-muted">
-        Download {type === "pnl" ? "P&L" : "invoices"} — {period}
+        Download{" "}
+        {type === "pnl" ? "P&L" : type === "sales" ? "sales journal" : "invoices"} — {period}
       </a>
     </div>
   );

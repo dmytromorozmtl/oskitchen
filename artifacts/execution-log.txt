@@ -3945,3 +3945,12 @@ Artifact: services/integrations/uber-eats/menu-sync.service.ts, services/integra
 Result: HARDENED — menuId filter; runChannelMenuSyncJob with item counts; per-user creds + storeId fallback; shared OAuth token helper; forceUberEatsMenuSyncAction uses syncMenuToUberEats
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 47
+Task: DEV-22 — QuickBooks export
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/accounting/quickbooks-export-format.ts, services/integrations/quickbooks-service.ts, app/api/export/quickbooks/route.ts, components/integrations/accounting-export-panel.tsx, tests/unit/quickbooks-export-format.test.ts
+Result: HARDENED — balanced IIF TRNS/SPL/ENDTRNS; period-scoped invoices + sales journal; P&L CSV + sales IIF/CSV routes; supplier column in invoice export
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
