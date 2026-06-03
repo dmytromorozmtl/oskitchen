@@ -91,6 +91,7 @@ const serverEnvSchema = clientEnvSchema.extend({
   DEMO_SEED_SECRET: z.string().optional(),
   VERCEL_ENV: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().optional(),
   GOOGLE_MAPS_API_KEY: z.string().optional(),
   /** Development only — skips subscription / trial enforcement when true. */
   DEV_BYPASS_BILLING: z.string().optional(),

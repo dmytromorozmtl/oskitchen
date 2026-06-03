@@ -44,13 +44,24 @@ export default async function CopilotSettingsPage({
         </CardHeader>
         <CardContent className="space-y-1 text-sm">
           <p>
-            <span className="font-medium">OPENAI_API_KEY configured:</span>{" "}
+            <span className="font-medium">LLM provider configured:</span>{" "}
             <span className={s.hasApiKey ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}>
               {s.hasApiKey ? "yes" : "no"}
             </span>
           </p>
+          {s.narrativeRouteLabel ? (
+            <p>
+              <span className="font-medium">Narrative route:</span> {s.narrativeRouteLabel}
+            </p>
+          ) : null}
+          {s.chatRouteLabel ? (
+            <p>
+              <span className="font-medium">Chat route:</span> {s.chatRouteLabel}
+            </p>
+          ) : null}
           <p className="text-xs text-muted-foreground">
-            We never display the key value. Configure it server-side as an environment variable.
+            Configure OPENAI_API_KEY and/or ANTHROPIC_API_KEY server-side. Override models with
+            OPENAI_COPILOT_NARRATIVE_MODEL, OPENAI_COPILOT_CHAT_MODEL, or ANTHROPIC_COPILOT_MODEL.
           </p>
         </CardContent>
       </Card>

@@ -6,6 +6,7 @@ type Props = {
   deterministicOnly: boolean;
   redactionLevel: CopilotRedactionLevel;
   requireApprovalAll: boolean;
+  chatRouteLabel?: string | null;
 };
 
 function pill(label: string, tone: "ok" | "warn" | "muted" = "muted") {
@@ -28,6 +29,7 @@ export function AiStatusBadges({
   deterministicOnly,
   redactionLevel,
   requireApprovalAll,
+  chatRouteLabel,
 }: Props) {
   const aiState = deterministicOnly
     ? pill("Deterministic mode", "muted")
@@ -43,6 +45,7 @@ export function AiStatusBadges({
       {requireApprovalAll
         ? pill("Human approval required", "ok")
         : pill("Human approval optional", "warn")}
+      {chatRouteLabel ? pill(`Route: ${chatRouteLabel}`, "ok") : null}
     </div>
   );
 }

@@ -101,6 +101,7 @@ export default async function CopilotTodayPage({
             deterministicOnly={settings.deterministicOnly}
             redactionLevel={settings.redactionLevel}
             requireApprovalAll={settings.requireApprovalAll}
+            chatRouteLabel={settings.chatRouteLabel}
           />
         </div>
         <div className="flex flex-wrap gap-2 print:hidden">

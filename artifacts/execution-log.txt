@@ -3990,3 +3990,12 @@ Artifact: lib/briefing/briefing-telemetry-policy.ts, lib/briefing/briefing-telem
 Result: IMPLEMENTED — server persistence for briefing_click + briefing_view; hero page-view on mount; TTV summary service (views/clicks/top hrefs); AI briefing section click tracking
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 52
+Task: DEV-27 — copilot LLM routing
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/ai/copilot-llm-routing.ts, services/ai/copilot-service.ts, app/dashboard/copilot/settings/page.tsx, components/dashboard/copilot/ai-status-badges.tsx, tests/unit/copilot-llm-routing.test.ts
+Result: IMPLEMENTED — task-aware routing (narrative vs chat); OpenAI + Anthropic providers; env model overrides; unified invokeCopilotLlm; route labels in settings + status badges
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

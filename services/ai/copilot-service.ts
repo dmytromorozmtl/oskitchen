@@ -2,13 +2,18 @@ import { Prisma } from "@prisma/client";
 import type { CopilotRedactionLevel } from "@prisma/client";
 
 import { buildChatMessages, buildNarrativePrompt, buildSystemPrompt } from "@/lib/ai/copilot-prompts";
-import { runOutboundGuardrail, COPILOT_MAX_OUTPUT_TOKENS } from "@/lib/ai/copilot-guardrails";
+import { runOutboundGuardrail } from "@/lib/ai/copilot-guardrails";
+import {
+  describeCopilotLlmRoute,
+  invokeCopilotLlm,
+  isCopilotLlmConfigured,
+  resolveCopilotLlmRoute,
+} from "@/lib/ai/copilot-llm-routing";
 import type {
   CopilotActionDraftSeed,
   CopilotActionType,
   CopilotNarrativeResult,
 } from "@/lib/ai/copilot-types";
-import { getServerEnv } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import { assertAiAllowed } from "@/lib/ai/assert-ai-allowed";
 import { estimateTokens, recordAIUsage } from "@/lib/ai/budget-guard";
@@ -16,8 +21,6 @@ import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id"
 import { buildDeterministicSnapshot } from "@/services/ai/deterministic-insights-service";
 
 type Scope = { userId: string; email: string | null; workspaceId?: string | null };
-
-const DEFAULT_MODEL = "gpt-4o-mini";
 
 export type CopilotSettingsView = {
   aiNarrativeEnabled: boolean;
@@ -28,11 +31,15 @@ export type CopilotSettingsView = {
   summaryRetentionDays: number;
   privacyDisclaimer: string | null;
   hasApiKey: boolean;
+  narrativeRouteLabel: string | null;
+  chatRouteLabel: string | null;
 };
 
 export async function getCopilotSettings(scope: Scope): Promise<CopilotSettingsView> {
   const row = await prisma.copilotSettings.findUnique({ where: { userId: scope.userId } });
-  const { OPENAI_API_KEY } = getServerEnv();
+  const hasApiKey = isCopilotLlmConfigured();
+  const narrativeRouteLabel = describeCopilotLlmRoute("narrative");
+  const chatRouteLabel = describeCopilotLlmRoute("chat");
   if (!row) {
     return {
       aiNarrativeEnabled: true,
@@ -42,7 +49,9 @@ export async function getCopilotSettings(scope: Scope): Promise<CopilotSettingsV
       maxContextRows: 50,
       summaryRetentionDays: 30,
       privacyDisclaimer: null,
-      hasApiKey: !!OPENAI_API_KEY?.trim(),
+      hasApiKey,
+      narrativeRouteLabel,
+      chatRouteLabel,
     };
   }
   return {
@@ -53,7 +62,9 @@ export async function getCopilotSettings(scope: Scope): Promise<CopilotSettingsV
     maxContextRows: row.maxContextRows,
     summaryRetentionDays: row.summaryRetentionDays,
     privacyDisclaimer: row.privacyDisclaimer,
-    hasApiKey: !!OPENAI_API_KEY?.trim(),
+    hasApiKey,
+    narrativeRouteLabel,
+    chatRouteLabel,
   };
 }
 
@@ -176,7 +187,10 @@ export async function generateNarrative(
   if (!settings.hasApiKey) {
     return { status: "MISSING_API_KEY", text: null };
   }
-  const { OPENAI_API_KEY } = getServerEnv();
+  const route = resolveCopilotLlmRoute("narrative");
+  if (!route) {
+    return { status: "MISSING_API_KEY", text: null };
+  }
   const prompt = buildNarrativePrompt({
     operatorRole: context.role,
     mode: context.mode,
@@ -189,37 +203,31 @@ export async function generateNarrative(
     return { status: "REDACTION_BLOCKED", text: null };
   }
   const system = buildSystemPrompt(context.mode, context.role);
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: DEFAULT_MODEL,
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: guardrail.sanitised },
-        ],
-        temperature: 0.2,
-        max_tokens: COPILOT_MAX_OUTPUT_TOKENS,
-      }),
-    });
-    if (!res.ok) {
-      await recordCopilotAudit(scope, "narrative_provider_error", { status: res.status });
-      return { status: "PROVIDER_ERROR", text: null, modelUsed: DEFAULT_MODEL };
-    }
-    const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-    const text = data.choices?.[0]?.message?.content?.trim() ?? null;
-    await recordCopilotAudit(scope, "narrative_generated", { model: DEFAULT_MODEL });
-    return { status: "OK", text, modelUsed: DEFAULT_MODEL };
-  } catch (e) {
+  const llmResult = await invokeCopilotLlm(route, [
+    { role: "system", content: system },
+    { role: "user", content: guardrail.sanitised },
+  ]);
+  if (!llmResult.ok) {
     await recordCopilotAudit(scope, "narrative_provider_error", {
-      error: e instanceof Error ? e.message : "unknown",
+      status: llmResult.statusCode,
+      provider: llmResult.provider,
+      error: llmResult.error,
     });
-    return { status: "PROVIDER_ERROR", text: null, modelUsed: DEFAULT_MODEL };
+    return {
+      status: "PROVIDER_ERROR",
+      text: null,
+      modelUsed: `${llmResult.provider}:${llmResult.model}`,
+    };
   }
+  await recordCopilotAudit(scope, "narrative_generated", {
+    provider: llmResult.provider,
+    model: llmResult.model,
+  });
+  return {
+    status: "OK",
+    text: llmResult.text,
+    modelUsed: `${llmResult.provider}:${llmResult.model}`,
+  };
 }
 
 export type ChatTurnInput = {
@@ -291,7 +299,7 @@ export async function runChatTurn(scope: Scope, input: ChatTurnInput): Promise<C
     narrativeStatus = "MISSING_API_KEY";
     reply = buildDeterministicChatReply(input.message, snapshot.bulletSummary);
   } else {
-    const { OPENAI_API_KEY } = getServerEnv();
+    const route = resolveCopilotLlmRoute("chat");
     const history = await prisma.copilotMessage.findMany({
       where: { conversationId, role: { in: ["USER", "ASSISTANT"] } },
       orderBy: { createdAt: "asc" },
@@ -314,41 +322,31 @@ export async function runChatTurn(scope: Scope, input: ChatTurnInput): Promise<C
       await recordCopilotAudit(scope, "chat_blocked", { reason: guardrail.reason });
       narrativeStatus = "REDACTION_BLOCKED";
       reply = `I held that request locally — the redaction guard tripped on "${guardrail.reason}". Here is the deterministic answer instead:\n\n${snapshot.bulletSummary}`;
+    } else if (!route) {
+      narrativeStatus = "MISSING_API_KEY";
+      reply = buildDeterministicChatReply(input.message, snapshot.bulletSummary);
     } else {
-      try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: DEFAULT_MODEL,
-            messages,
-            temperature: 0.2,
-            max_tokens: COPILOT_MAX_OUTPUT_TOKENS,
-          }),
-        });
-        if (!res.ok) {
-          narrativeStatus = "PROVIDER_ERROR";
-          reply = `AI provider returned ${res.status}. Deterministic summary:\n\n${snapshot.bulletSummary}`;
-          await recordCopilotAudit(scope, "chat_provider_error", { status: res.status });
-        } else {
-          const data = (await res.json()) as {
-            choices?: { message?: { content?: string } }[];
-          };
-          reply = data.choices?.[0]?.message?.content?.trim() ?? snapshot.bulletSummary;
-          narrativeStatus = "OK";
-          await recordCopilotAudit(scope, "chat_message_generated", { model: DEFAULT_MODEL });
-          const wsId =
-            scope.workspaceId?.trim() || (await resolveOwnerWorkspaceId(scope.userId).catch(() => null));
-          if (wsId) {
-            void recordAIUsage(wsId, estimateTokens(input.message + reply), "ai_copilot");
-          }
-        }
-      } catch (e) {
+      const llmResult = await invokeCopilotLlm(route, messages);
+      if (!llmResult.ok) {
         narrativeStatus = "PROVIDER_ERROR";
-        reply = `AI provider error: ${e instanceof Error ? e.message : "unknown"}. Deterministic summary:\n\n${snapshot.bulletSummary}`;
+        reply = `AI provider returned ${llmResult.statusCode ?? llmResult.error ?? "error"}. Deterministic summary:\n\n${snapshot.bulletSummary}`;
+        await recordCopilotAudit(scope, "chat_provider_error", {
+          status: llmResult.statusCode,
+          provider: llmResult.provider,
+          error: llmResult.error,
+        });
+      } else {
+        reply = llmResult.text?.trim() || snapshot.bulletSummary;
+        narrativeStatus = "OK";
+        await recordCopilotAudit(scope, "chat_message_generated", {
+          provider: llmResult.provider,
+          model: llmResult.model,
+        });
+        const wsId =
+          scope.workspaceId?.trim() || (await resolveOwnerWorkspaceId(scope.userId).catch(() => null));
+        if (wsId) {
+          void recordAIUsage(wsId, estimateTokens(input.message + reply), "ai_copilot");
+        }
       }
     }
   }
