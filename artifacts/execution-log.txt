@@ -4125,3 +4125,12 @@ Artifact: lib/marketplace/marketplace-catalog-checkout-vendor-order-e2e-policy.t
 Result: IMPLEMENTED — catalog quick-add → net-terms checkout → buyer PO list → vendor incoming order detail; vendor fanout unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 67
+Task: QA-18 — QR scan guest order kitchen E2E
+Role: QA
+Priority: P1
+Artifact: lib/qr/qr-scan-guest-kitchen-e2e-policy.ts, e2e/qr-scan-guest-kitchen.spec.ts, e2e/helpers/qr-scan-guest-kitchen-*.ts, tests/unit/qr-scan-guest-kitchen.test.ts, playwright.config.ts
+Result: IMPLEMENTED — scanned `/q/demo-store/12` deep link → dark menu → place order → KDS ticket + table badge; scan vs self-service URL unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
