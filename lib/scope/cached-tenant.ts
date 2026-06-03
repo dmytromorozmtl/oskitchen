@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { requireSessionUser } from "@/lib/auth";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
-import { resolveTenantDataUserId } from "@/lib/scope/resolve-tenant-data-user-id";
+import { resolveTenantDataUserIdSafe } from "@/lib/scope/resolve-tenant-data-user-id-safe";
 import type { TenantActor } from "@/lib/scope/require-tenant-actor";
 
 /**
@@ -11,8 +11,13 @@ import type { TenantActor } from "@/lib/scope/require-tenant-actor";
  */
 export const getTenantActor = cache(async (): Promise<TenantActor> => {
   const sessionUser = await requireSessionUser();
-  const userId = await resolveTenantDataUserId(sessionUser.id);
-  const workspaceId = await resolveOwnerWorkspaceId(userId);
+  const userId = await resolveTenantDataUserIdSafe(sessionUser.id);
+  let workspaceId: string | null = null;
+  try {
+    workspaceId = await resolveOwnerWorkspaceId(userId);
+  } catch (error) {
+    console.error("[tenant] resolveOwnerWorkspaceId failed", error);
+  }
   return {
     sessionUser,
     sessionUserId: sessionUser.id,

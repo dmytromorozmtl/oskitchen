@@ -16,7 +16,12 @@ export default async function DashboardLayout({
     return await DashboardLayoutContent({ children });
   } catch (error) {
     if (isNextNavigationError(error)) throw error;
-    console.error("[dashboard-layout] fatal", error);
-    return <DashboardLayoutFallback detail={dashboardLayoutErrorDetail(error)} />;
+    const detail = dashboardLayoutErrorDetail(error);
+    console.error("[dashboard-layout] fatal", {
+      detail,
+      name: error instanceof Error ? error.name : undefined,
+      message: error instanceof Error ? error.message : String(error),
+    });
+    return <DashboardLayoutFallback detail={detail} />;
   }
 }
