@@ -23,7 +23,8 @@ import { updateSession } from "@/lib/supabase/middleware";
 /** Drop malformed impersonation cookies (invalid UUID crashes Prisma in dashboard layout). */
 function clearInvalidImpersonationCookie(request: NextRequest, response: NextResponse): NextResponse {
   const raw = request.cookies.get(PLATFORM_IMPERSONATION_COOKIE)?.value?.trim();
-  if (raw && !isUuid(raw)) {
+  if (!raw) return response;
+  if (!isUuid(raw)) {
     response.cookies.set(PLATFORM_IMPERSONATION_COOKIE, "", { path: "/", maxAge: 0 });
   }
   return response;

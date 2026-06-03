@@ -48,12 +48,20 @@ export async function signInAction(formData: FormData) {
     if (error) return fail(error.message);
 
     if (data.user) {
-      await ensureAppUser(data.user.id, data.user.email ?? email);
+      try {
+        await ensureAppUser(data.user.id, data.user.email ?? email);
+      } catch (bootstrapError) {
+        console.error("[signInAction] ensureAppUser failed", bootstrapError);
+      }
     }
 
     let defaultPath = "/dashboard/today";
     if (data.user) {
-      defaultPath = await resolvePostAuthPathForSessionUser(data.user.id);
+      try {
+        defaultPath = await resolvePostAuthPathForSessionUser(data.user.id);
+      } catch (pathError) {
+        console.error("[signInAction] resolvePostAuthPath failed", pathError);
+      }
     }
 
     const redirectTo = safeInternalNextPath(rawRedirect, defaultPath);

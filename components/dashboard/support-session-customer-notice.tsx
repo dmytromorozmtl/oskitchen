@@ -3,7 +3,13 @@ import { formatDistanceToNow } from "date-fns";
 import { getActiveSupportSessionsVisibleToUser } from "@/services/platform/platform-support-session-service";
 
 export async function SupportSessionCustomerNotice({ userId }: { userId: string }) {
-  const rows = await getActiveSupportSessionsVisibleToUser(userId);
+  let rows: Awaited<ReturnType<typeof getActiveSupportSessionsVisibleToUser>> = [];
+  try {
+    rows = await getActiveSupportSessionsVisibleToUser(userId);
+  } catch (error) {
+    console.error("[support-session] customer notice failed", error);
+    return null;
+  }
   if (!rows.length) return null;
   const first = rows[0];
   return (

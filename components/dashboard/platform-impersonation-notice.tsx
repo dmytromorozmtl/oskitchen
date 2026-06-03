@@ -7,7 +7,13 @@ import {
 
 /** Shown on tenant dashboard when a platform admin has an active impersonation cookie. */
 export async function PlatformImpersonationNotice() {
-  const session = await getActiveImpersonationSession();
+  let session = null;
+  try {
+    session = await getActiveImpersonationSession();
+  } catch (error) {
+    console.error("[impersonation] notice render failed", error);
+    return null;
+  }
   if (!session) return null;
 
   return (
