@@ -4206,3 +4206,12 @@ Artifact: lib/api-public/public-api-key-scope-e2e-policy.ts, e2e/public-api-key-
 Result: IMPLEMENTED — scope denial matrix (orders:read≠write, products≠orders, integrations≠webhooks); DB credential resolve; guard/HTTP 403 with requiredScope; honest skip when billing gate blocks
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 76
+Task: QA-27 — rate limit public routes E2E
+Role: QA
+Priority: P1
+Artifact: lib/api-public/public-api-rate-limit-e2e-policy.ts, e2e/public-api-rate-limit.spec.ts, e2e/helpers/public-api-rate-limit-*.ts, tests/unit/public-api-rate-limit-e2e.test.ts
+Result: IMPLEMENTED — dual-bucket route matrix (600/min burst + per-route); guard/HTTP X-RateLimit-* headers; unit 429 + Retry-After on burst/route exhaustion
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
