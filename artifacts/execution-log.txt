@@ -4242,3 +4242,12 @@ Artifact: lib/kitchen/kds-bump-latency-e2e-policy.ts, lib/kitchen/kds-bump-laten
 Result: IMPLEMENTED — SLI-2 targets (400/1500/4000ms); rolling p50/p95/p99 summarize; 20-sample bump action batch within SLO; UI kitchen probe in chromium-authed
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 80
+Task: QA-31 — offline mode queue+sync E2E
+Role: QA
+Priority: P1
+Artifact: lib/pos/offline-mode-queue-sync-e2e-policy.ts, lib/pos/offline-mode-queue-sync-metrics.ts, e2e/offline-mode-queue-sync.spec.ts, e2e/helpers/offline-mode-queue-sync-*.ts, tests/unit/offline-mode-queue-sync-e2e.test.ts, e2e/pos-offline-queue.spec.ts (helpers refactor), playwright.config.ts
+Result: IMPLEMENTED — IndexedDB kitchenos-offline-pos drain contract; server queueOrder→syncQueue lifecycle; same-table multi-device conflict stats; chromium-authed offline cash sale → online sync → queue 0
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
