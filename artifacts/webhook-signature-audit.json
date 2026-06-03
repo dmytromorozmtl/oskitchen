@@ -1,9 +1,11 @@
 {
   "version": "webhook-signature-static-audit-v1",
-  "generatedAt": "2026-06-01T14:15:57.248Z",
-  "expectedRouteCount": 52,
-  "totalRoutes": 52,
-  "verifiedCount": 52,
+  "generatedAt": "2026-06-03T22:36:21.934Z",
+  "expectedRouteCount": 56,
+  "coreRouteCount": 52,
+  "extendedRouteCount": 4,
+  "totalRoutes": 56,
+  "verifiedCount": 56,
   "missingVerificationCount": 0,
   "matrixMismatchCount": 0,
   "overall": "PASSED",
@@ -773,6 +775,62 @@
       "matrixSignatureKind": "bearer_secret",
       "matrixSignatureValidated": true,
       "matrixRiskTier": "P3",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/marketplace/stripe-connect/webhook",
+      "routeFile": "app/api/marketplace/stripe-connect/webhook/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "stripe_construct_event"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "stripe_construct_event",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/voice/google",
+      "routeFile": "app/api/voice/google/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "verify_voice_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P2",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/voice/alexa",
+      "routeFile": "app/api/voice/alexa/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "verify_voice_webhook_secret"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P2",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/capital/lender-share/[token]",
+      "routeFile": "app/api/capital/lender-share/[token]/route.ts",
+      "handlerFiles": [],
+      "detectedSignals": [
+        "verify_capital_lender_partner_pull"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P2",
       "codeMatchesMatrix": true,
       "notes": null
     }

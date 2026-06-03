@@ -9,10 +9,14 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 
 import {
+  WEBHOOK_ALL_INGRESS_ROUTE_COUNT,
+  WEBHOOK_EXTENDED_INGRESS_ROUTE_COUNT,
+  buildExtendedWebhookIngressMatrix,
+} from "../lib/security/webhook-ingress-extended";
+import {
   WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT,
   buildWebhookSecurityMatrix,
   listWebhookRouteFiles,
-  routeFileToApiPath,
   type WebhookSecurityMatrixEntry,
 } from "../lib/security/webhook-security-matrix";
 
@@ -39,6 +43,11 @@ export const WEBHOOK_SIGNATURE_DETECTORS = [
   { id: "uber_direct_handler", pattern: /\bhandleUberDirectWebhook\s*\(/ },
   { id: "slack_handler", pattern: /\bhandleSlackExperimentInteractiveWebhook\s*\(/ },
   { id: "scim_bearer_provision", pattern: /\bprovisionExperimentAuditorFromScim\s*\(/ },
+  { id: "verify_voice_webhook_secret", pattern: /\bverifyVoiceWebhookSecret\s*\(/ },
+  {
+    id: "verify_capital_lender_partner_pull",
+    pattern: /\bverifyCapitalLenderPartnerPull\s*\(/,
+  },
 ] as const;
 
 const HANDLER_IMPORT_RE =
@@ -61,6 +70,8 @@ export type WebhookSignatureAuditReport = {
   version: typeof WEBHOOK_SIGNATURE_AUDIT_POLICY_ID;
   generatedAt: string;
   expectedRouteCount: number;
+  coreRouteCount: number;
+  extendedRouteCount: number;
   totalRoutes: number;
   verifiedCount: number;
   missingVerificationCount: number;
@@ -131,7 +142,7 @@ function auditRoute(
   }
 
   return {
-    apiPath: routeFileToApiPath(routeFile),
+    apiPath: matrixEntry.apiPath,
     routeFile,
     handlerFiles,
     detectedSignals,
@@ -145,8 +156,13 @@ function auditRoute(
 }
 
 export function buildWebhookSignatureAuditReport(root = process.cwd()): WebhookSignatureAuditReport {
-  const matrixEntries = buildWebhookSecurityMatrix(root);
-  const routeFiles = listWebhookRouteFiles(root);
+  const coreMatrixEntries = buildWebhookSecurityMatrix(root);
+  const extendedMatrixEntries = buildExtendedWebhookIngressMatrix(root);
+  const matrixEntries = [...coreMatrixEntries, ...extendedMatrixEntries];
+  const routeFiles = [
+    ...listWebhookRouteFiles(root),
+    ...extendedMatrixEntries.map((entry) => entry.routePath),
+  ];
 
   const matrixByPath = new Map(matrixEntries.map((e) => [e.routePath, e]));
 
@@ -163,7 +179,7 @@ export function buildWebhookSignatureAuditReport(root = process.cwd()): WebhookS
   const verifiedCount = routes.filter((r) => r.signatureVerifiedInCode).length;
 
   const overall =
-    routes.length === WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT &&
+    routes.length === WEBHOOK_ALL_INGRESS_ROUTE_COUNT &&
     missingVerification.length === 0 &&
     matrixMismatches.length === 0
       ? "PASSED"
@@ -172,7 +188,9 @@ export function buildWebhookSignatureAuditReport(root = process.cwd()): WebhookS
   return {
     version: WEBHOOK_SIGNATURE_AUDIT_POLICY_ID,
     generatedAt: new Date().toISOString(),
-    expectedRouteCount: WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT,
+    expectedRouteCount: WEBHOOK_ALL_INGRESS_ROUTE_COUNT,
+    coreRouteCount: WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT,
+    extendedRouteCount: WEBHOOK_EXTENDED_INGRESS_ROUTE_COUNT,
     totalRoutes: routes.length,
     verifiedCount,
     missingVerificationCount: missingVerification.length,
@@ -193,7 +211,7 @@ function main() {
 
   console.log(`\nWebhook signature audit (${report.version})\n`);
   console.log(
-    `Routes: ${report.totalRoutes}/${report.expectedRouteCount} | verified in code: ${report.verifiedCount} | overall: ${report.overall}`,
+    `Routes: ${report.totalRoutes}/${report.expectedRouteCount} (core ${report.coreRouteCount} + extended ${report.extendedRouteCount}) | verified in code: ${report.verifiedCount} | overall: ${report.overall}`,
   );
 
   if (report.missingVerification.length > 0) {

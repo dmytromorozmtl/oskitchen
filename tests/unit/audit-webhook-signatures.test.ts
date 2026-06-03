@@ -6,13 +6,15 @@ import {
 } from "../../scripts/audit-webhook-signatures";
 
 describe("audit-webhook-signatures", () => {
-  it("reports PASSED for all 52 webhook routes with code-level verification", () => {
+  it("reports PASSED for all 56 webhook ingress routes with code-level verification", () => {
     const report = buildWebhookSignatureAuditReport(process.cwd());
 
     expect(report.version).toBe(WEBHOOK_SIGNATURE_AUDIT_POLICY_ID);
-    expect(report.totalRoutes).toBe(52);
-    expect(report.expectedRouteCount).toBe(52);
-    expect(report.verifiedCount).toBe(52);
+    expect(report.coreRouteCount).toBe(52);
+    expect(report.extendedRouteCount).toBe(4);
+    expect(report.totalRoutes).toBe(56);
+    expect(report.expectedRouteCount).toBe(56);
+    expect(report.verifiedCount).toBe(56);
     expect(report.missingVerificationCount).toBe(0);
     expect(report.matrixMismatchCount).toBe(0);
     expect(report.overall).toBe("PASSED");

@@ -6,6 +6,7 @@ import {
   validateWebhookSecurityMatrix,
   type WebhookSignatureKind,
 } from "@/lib/security/webhook-security-matrix";
+import { buildExtendedWebhookIngressMatrix } from "@/lib/security/webhook-ingress-extended";
 import {
   buildWebhookSignatureAuditReport,
   WEBHOOK_SIGNATURE_AUDIT_POLICY_ID,
@@ -31,6 +32,7 @@ const EXPECTED_SIGNAL_BY_KIND: Record<WebhookSignatureKind, readonly string[]> =
 };
 
 const PRODUCTION_PARTNER_PATHS = [
+  "/api/marketplace/stripe-connect/webhook",
   "/api/webhooks/stripe",
   "/api/webhooks/woocommerce",
   "/api/webhooks/doordash/orders",
@@ -52,17 +54,25 @@ describe("webhook signature matrix — 52 routes", () => {
   const root = process.cwd();
   const report = buildWebhookSignatureAuditReport(root);
   const matrix = buildWebhookSecurityMatrix(root);
-  const matrixByPath = new Map(matrix.map((e) => [e.apiPath, e]));
+  const extendedMatrix = buildExtendedWebhookIngressMatrix(root);
+  const allMatrix = [...matrix, ...extendedMatrix];
+  const matrixByPath = new Map(allMatrix.map((e) => [e.apiPath, e]));
   const auditByPath = new Map(report.routes.map((r) => [r.apiPath, r]));
 
-  it("discovers exactly 52 webhook route files", () => {
+  it("discovers exactly 52 core webhook route files", () => {
     expect(matrix).toHaveLength(WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT);
-    expect(report.totalRoutes).toBe(WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT);
+  });
+
+  it("full ingress audit includes core + extended routes (56 total)", () => {
+    expect(report.coreRouteCount).toBe(52);
+    expect(report.extendedRouteCount).toBe(4);
+    expect(report.totalRoutes).toBe(56);
+    expect(report.expectedRouteCount).toBe(56);
   });
 
   it("static audit reports PASSED with zero unverified routes", () => {
     expect(report.version).toBe(WEBHOOK_SIGNATURE_AUDIT_POLICY_ID);
-    expect(report.verifiedCount).toBe(52);
+    expect(report.verifiedCount).toBe(56);
     expect(report.missingVerificationCount).toBe(0);
     expect(report.matrixMismatchCount).toBe(0);
     expect(report.overall).toBe("PASSED");
@@ -104,7 +114,7 @@ describe("webhook signature matrix — 52 routes", () => {
     },
   );
 
-  it("covers all 14 production-partner ingress routes", () => {
+  it("covers all 16 production-partner ingress routes", () => {
     for (const apiPath of PRODUCTION_PARTNER_PATHS) {
       expect(matrixByPath.has(apiPath), `missing matrix entry ${apiPath}`).toBe(true);
       expect(auditByPath.get(apiPath)?.signatureVerifiedInCode).toBe(true);
@@ -115,6 +125,10 @@ describe("webhook signature matrix — 52 routes", () => {
     const paths = report.routes.map((r) => r.apiPath).sort();
     expect(paths).toMatchInlineSnapshot(`
       [
+        "/api/capital/lender-share/[token]",
+        "/api/marketplace/stripe-connect/webhook",
+        "/api/voice/alexa",
+        "/api/voice/google",
         "/api/webhooks/bigquery-bayesian-prior",
         "/api/webhooks/bigquery-causal-discovery-outcomes",
         "/api/webhooks/bigquery-causal-lift",

@@ -4053,3 +4053,12 @@ Artifact: lib/api-public/public-api-rate-limit.ts, lib/api-public/guard.ts, lib/
 Result: IMPLEMENTED — per-API-key burst (600/min) + per-route user+IP limits; X-RateLimit headers on success; publicApiJson helper; production-critical policy
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 59
+Task: DEV-34 — webhook signature matrix all routes
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/security/webhook-ingress-extended.ts, scripts/audit-webhook-signatures.ts, tests/unit/webhook-ingress-extended.test.ts, artifacts/webhook-signature-audit.json
+Result: IMPLEMENTED — extended ingress registry (4 routes outside /api/webhooks); full audit 56/56 PASSED; marketplace Stripe Connect, voice, capital lender pull covered
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
