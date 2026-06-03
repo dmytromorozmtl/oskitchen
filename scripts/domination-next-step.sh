@@ -33,8 +33,22 @@ done_count() {
 if [[ ! -f app/dashboard/quick-start/page.tsx ]]; then echo "STEP=1 Quick Start Wizard"; exit 0; fi
 if [[ ! -f app/demo/page.tsx ]]; then echo "STEP=2 Demo Environment"; exit 0; fi
 if [[ ! -f components/onboarding/menu-template-selector.tsx ]]; then echo "STEP=3 Pre-built Menu Templates"; exit 0; fi
-if ! woo_passed; then echo "STEP=4 WooCommerce live smoke (overall != PASSED)"; exit 0; fi
-if ! shopify_passed; then echo "STEP=5 Shopify live smoke (overall != PASSED)"; exit 0; fi
+if [[ ! -f docs/woocommerce-credentials-guide.md ]] || [[ ! -f scripts/smoke-woocommerce-live.ts ]]; then
+  echo "STEP=4 WooCommerce live smoke — create guide + script"
+  exit 0
+fi
+if ! woo_passed; then
+  echo "STEP=4 WooCommerce live smoke — ops proof pending (npm run smoke:woo-live, see docs/domination-live-smoke-ops.md)"
+  exit 0
+fi
+if [[ ! -f docs/shopify-credentials-guide.md ]] || [[ ! -f scripts/smoke-shopify-live.ts ]]; then
+  echo "STEP=5 Shopify live smoke — create guide + script"
+  exit 0
+fi
+if ! shopify_passed; then
+  echo "STEP=5 Shopify live smoke — ops proof pending (npm run smoke:shopify-live, see docs/domination-live-smoke-ops.md)"
+  exit 0
+fi
 if [[ ! -f services/referral/referral-service.ts ]]; then echo "STEP=6 Referral Program"; exit 0; fi
 if [[ ! -f app/q/\[slug\]/\[tableId\]/page.tsx ]]; then echo "STEP=7 QR Code Ordering"; exit 0; fi
 if [[ ! -f app/dashboard/today/profit/page.tsx ]]; then echo "STEP=8 Real-time Profit Dashboard"; exit 0; fi

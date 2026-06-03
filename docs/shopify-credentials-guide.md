@@ -5,9 +5,13 @@ Use this guide to move `artifacts/shopify-live-smoke-summary.json` from **SKIPPE
 ## Quick check
 
 ```bash
-npm run smoke:shopify-live
+cp .env.smoke.example .env.smoke.local   # fill staging + Shopify vars (gitignored)
+npm run smoke:shopify-live               # auto-loads .env.smoke.local, writes artifact
 # Review artifacts/shopify-live-smoke-summary.json
 # overall: PASSED | SKIPPED | FAILED
+
+# Or run both channel smokes:
+npm run smoke:channels-live
 ```
 
 Missing env vars are listed in `missingEnvVars[]` on the artifact.

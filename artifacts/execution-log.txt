@@ -3500,3 +3500,9 @@ Feature: 4 — WooCommerce live smoke (tree step)
 Result: PARTIAL — smoke scripts auto-load .env.smoke.local; artifact still SKIPPED until ops fills credentials; unit tests green
 Next: cp .env.smoke.example .env.smoke.local → npm run smoke:woo-live → overall PASSED
 Total done: 40/40 (code) — ops smoke 4–5 pending
+---
+Cycle: 20260603-channel-smokes-runner
+Feature: 4 — WooCommerce live smoke (ops proof pending)
+Result: PARTIAL — docs/domination-live-smoke-ops.md, npm run smoke:channels-live, domination-next-step clarifies create vs proof
+Next: .env.smoke.local → PASSED on woo then shopify artifacts
+Total done: 40/40 (code) — ops smoke 4–5 pending
