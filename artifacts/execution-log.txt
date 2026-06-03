@@ -3428,3 +3428,8 @@ Cycle: 20260602-203400
 Feature: 27 — AI Co-Pilot 2.0
 Result: PASSED — co-pilot-autonomous-service (daily digest, exception log, safe auto-run), /ai/co-pilot/autonomous, unit+e2e
 Total done: 27/40
+---
+Cycle: 20260602-203800
+Feature: 28 — API Marketplace
+Result: PASSED — app-marketplace-service (submit/review/publish, 70/30 rev share), /dashboard/developers, unit+e2e
+Total done: 28/40

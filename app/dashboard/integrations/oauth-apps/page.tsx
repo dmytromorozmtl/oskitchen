@@ -44,6 +44,9 @@ export default async function PartnerOAuthAppsPage() {
           <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/integrations/outbound-webhooks">Outbound webhooks</Link>
           </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="api-marketplace-link">
+            <Link href="/dashboard/developers">API Marketplace</Link>
+          </Button>
           <Button asChild variant="ghost" size="sm" className="rounded-full">
             <Link href="/developers/apps/register">Submit partner app</Link>
           </Button>
