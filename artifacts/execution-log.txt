@@ -3882,3 +3882,12 @@ Artifact: services/pos-offline-queue.ts, tests/unit/pos-offline-queue.test.ts
 Result: UPDATED — queueOfflineCardCapture, syncOfflineCardQueue, card stats in getOfflineQueueStats; auto-stage card metadata on queueOrder; link on sync
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 40
+Task: DEV-15 — marketplace checkout vendor notification
+Role: DEVELOPER
+Priority: P1
+Artifact: services/marketplace/checkout-service.ts, services/marketplace/vendor-order-notification-service.ts, tests/unit/marketplace-vendor-order-notification.test.ts
+Result: WIRED — notifyVendorsOfNewMarketplaceOrders after buyer confirmation; email to contact + admin/manager team; in-app notificationLog for vendor workspace owner
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

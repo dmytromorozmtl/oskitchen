@@ -396,6 +396,14 @@ export async function checkoutMarketplaceCart(
     orderIds: orders.map((order) => order.id),
   });
 
+  const { notifyVendorsOfNewMarketplaceOrders } =
+    await import("@/services/marketplace/vendor-order-notification-service");
+  await notifyVendorsOfNewMarketplaceOrders({
+    orderIds: orders.map((order) => order.id),
+    buyerWorkspaceId: input.workspaceId,
+    requiresApproval,
+  }).catch(() => undefined);
+
   await clearCart(input.workspaceId, {
     userId: input.actorUserId,
     email: input.actorEmail,
