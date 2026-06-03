@@ -4269,3 +4269,12 @@ Artifact: lib/enterprise/multi-location-rollup-export-e2e-policy.ts, lib/enterpr
 Result: IMPLEMENTED — CSV header/network+location row contract; builder summarize within export SLI; authed GET rollup-export CSV attachment + X-Row-Count; enterprise panel export link smoke
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 83
+Task: QA-34 — delivery order ingest latency E2E
+Role: QA
+Priority: P1
+Artifact: lib/integrations/delivery-order-ingest-latency-e2e-policy.ts, lib/integrations/delivery-order-ingest-latency-metrics.ts, e2e/delivery-order-ingest-latency.spec.ts, e2e/helpers/delivery-order-ingest-latency-*.ts, tests/unit/delivery-order-ingest-latency-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — webhook ingest ACK SLO (500/2000/5000ms); DoorDash/Grubhub/Uber Eats normalize + inbound processor latency batches; order hub UI probe in chromium-authed
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
