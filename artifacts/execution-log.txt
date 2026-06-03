@@ -4287,3 +4287,12 @@ Artifact: lib/pos/refund-flow-e2e-policy.ts, lib/pos/refund-flow-metrics.ts, e2e
 Result: IMPLEMENTED — full/partial refund contract + Stripe idempotency keys; cash refund service + RBAC denial; chromium-authed cash sale → refundPosTransaction → REFUNDED order status
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 85
+Task: QA-36 — shift report accuracy E2E
+Role: QA
+Priority: P1
+Artifact: lib/pos/shift-report-accuracy-e2e-policy.ts, lib/pos/shift-report-accuracy-metrics.ts, e2e/shift-report-accuracy-e2e.spec.ts, e2e/helpers/shift-report-accuracy-*.ts, tests/unit/shift-report-accuracy-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — expected=opening+cash sales; variance=counted−expected ±$0.01; computeShiftCloseout + closedShiftSummary reconciliation; receiptTotalsConsistent; chromium-authed balanced close history row
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
