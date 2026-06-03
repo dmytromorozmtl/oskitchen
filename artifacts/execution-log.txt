@@ -3873,3 +3873,12 @@ Artifact: e2e/stripe-terminal-staging.spec.ts, e2e/helpers/stripe-terminal-stagi
 Result: CREATED — engine reconnect/amount tests; authed simulated reader sale + hardware panel; vault-gated live connection token probe
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 39
+Task: DEV-14 — offline POS card queue
+Role: DEVELOPER
+Priority: P1
+Artifact: services/pos-offline-queue.ts, tests/unit/pos-offline-queue.test.ts
+Result: UPDATED — queueOfflineCardCapture, syncOfflineCardQueue, card stats in getOfflineQueueStats; auto-stage card metadata on queueOrder; link on sync
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

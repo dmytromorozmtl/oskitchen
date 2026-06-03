@@ -8,6 +8,8 @@ import { randomUUID } from "crypto";
 import type { PosCheckoutInput } from "@/services/pos/pos-checkout-service";
 import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
 import { formatOfflineSyncSuccessMessage } from "@/lib/pos/offline-sync";
+import type { OfflineCardCaptureInput } from "@/lib/pos/offline-card-pci";
+import { resetOfflineCardCapturesForTests } from "@/services/pos/offline-card-service";
 
 export { formatOfflineSyncSuccessMessage };
 
@@ -16,7 +18,15 @@ export type OfflinePosQueueEntryStatus = "pending" | "synced" | "failed" | "conf
 export type OfflinePosQueueMetadata = {
   tableId?: string | null;
   deviceId?: string | null;
+  /** PCI-safe card metadata staged with the offline order (last4 + brand only). */
+  offlineCard?: {
+    last4: string;
+    cardBrand: string;
+    paymentIntentId?: string | null;
+  };
 };
+
+export type { OfflineCardCaptureRecord as OfflineCardQueueEntry } from "@/services/pos/offline-card-service";
 
 export type OfflinePosQueuedOrder = {
   id: string;
@@ -103,25 +113,33 @@ export function detectOfflineTableConflicts(
   return conflicts;
 }
 
-export function getOfflineQueueStats(input: {
+export async function getOfflineQueueStats(input: {
   userId: string;
   workspaceId?: string | null;
-}): {
+}): Promise<{
   pendingOrders: number;
   syncedOrders: number;
   failedOrders: number;
   conflictOrders: number;
   pendingReceipts: number;
   pendingPreAuths: number;
+  pendingCardCaptures: number;
+  failedCardCaptures: number;
+  capturedCardCaptures: number;
   lastSyncedAtIso: string | null;
   syncedTotal: number;
   tableConflicts: OfflinePosTableConflict[];
-} {
+}> {
   const key = queueKey(input.userId, input.workspaceId ?? null);
   const orders = queues.get(key) ?? [];
   const receipts = receiptQueues.get(key) ?? [];
   const preAuths = preAuthQueues.get(key) ?? [];
   const stats = syncStats.get(key) ?? { syncedTotal: 0, lastSyncedAtIso: null };
+  const { getOfflineCardDashboard } = await import("@/services/pos/offline-card-service");
+  const cardStats = await getOfflineCardDashboard({
+    userId: input.userId,
+    workspaceId: input.workspaceId ?? null,
+  });
 
   return {
     pendingOrders: orders.filter((o) => o.status === "pending").length,
@@ -130,6 +148,9 @@ export function getOfflineQueueStats(input: {
     conflictOrders: orders.filter((o) => o.status === "conflict").length,
     pendingReceipts: receipts.filter((r) => r.status === "pending").length,
     pendingPreAuths: preAuths.filter((p) => p.status === "pending").length,
+    pendingCardCaptures: cardStats.queued,
+    failedCardCaptures: cardStats.failed,
+    capturedCardCaptures: cardStats.captured,
     lastSyncedAtIso: stats.lastSyncedAtIso,
     syncedTotal: stats.syncedTotal,
     tableConflicts: detectOfflineTableConflicts(orders),
@@ -157,6 +178,35 @@ export async function queueOrder(input: {
   const list = queues.get(key) ?? [];
   list.push(entry);
   queues.set(key, list);
+
+  const offlineSaleId = input.payload.offlineSaleId?.trim();
+  const cardMeta = input.metadata?.offlineCard;
+  if (
+    offlineSaleId &&
+    cardMeta &&
+    input.payload.paymentMode === "OFFLINE_CARD_QUEUED"
+  ) {
+    await queueOfflineCardCapture({
+      userId: input.userId,
+      workspaceId: input.workspaceId ?? null,
+      capture: {
+        offlineSaleId,
+        registerId: input.payload.registerId,
+        amountCents: Math.round(
+          input.payload.lines.reduce(
+            (sum, line) => sum + line.quantity * line.unitPrice,
+            0,
+          ) * 100,
+        ),
+        cardBrand: cardMeta.cardBrand,
+        last4: cardMeta.last4,
+        paymentIntentId: cardMeta.paymentIntentId ?? undefined,
+        tableId: input.metadata?.tableId ?? null,
+        deviceId: input.metadata?.deviceId ?? null,
+      },
+    });
+  }
+
   return { id };
 }
 
@@ -229,6 +279,69 @@ export async function storeOfflinePreAuthorization(input: {
   return { id };
 }
 
+/** Stage PCI-safe offline card capture metadata for sync when Stripe Terminal is online. */
+export async function queueOfflineCardCapture(input: {
+  userId: string;
+  workspaceId?: string | null;
+  capture: OfflineCardCaptureInput;
+  orderId?: string | null;
+}): Promise<{ id: string }> {
+  const { enqueueOfflineCardCapture, linkOfflineCardCaptureToOrder } =
+    await import("@/services/pos/offline-card-service");
+
+  const result = await enqueueOfflineCardCapture({
+    userId: input.userId,
+    workspaceId: input.workspaceId ?? null,
+    capture: input.capture,
+  });
+
+  if (input.orderId) {
+    await linkOfflineCardCaptureToOrder({
+      userId: input.userId,
+      workspaceId: input.workspaceId ?? null,
+      offlineSaleId: input.capture.offlineSaleId,
+      orderId: input.orderId,
+    });
+  }
+
+  return { id: result.id };
+}
+
+export async function getPendingOfflineCardCaptures(input: {
+  userId: string;
+  workspaceId?: string | null;
+}) {
+  const { listOfflineCardCaptures } = await import("@/services/pos/offline-card-service");
+  return listOfflineCardCaptures({
+    userId: input.userId,
+    workspaceId: input.workspaceId ?? null,
+    status: "queued",
+  });
+}
+
+export async function linkOfflineCardQueueToOrder(input: {
+  userId: string;
+  workspaceId?: string | null;
+  offlineSaleId: string;
+  orderId: string;
+}): Promise<boolean> {
+  const { linkOfflineCardCaptureToOrder } = await import("@/services/pos/offline-card-service");
+  return linkOfflineCardCaptureToOrder(input);
+}
+
+export async function syncOfflineCardQueue(input: {
+  userId: string;
+  workspaceId?: string | null;
+  online?: boolean;
+}) {
+  const { syncOfflineCardCaptures } = await import("@/services/pos/offline-card-service");
+  return syncOfflineCardCaptures({
+    userId: input.userId,
+    workspaceId: input.workspaceId ?? null,
+    online: input.online ?? true,
+  });
+}
+
 /** List queued orders for an owner workspace (pending by default). */
 export async function getQueue(input: {
   userId: string;
@@ -268,6 +381,8 @@ export type SyncQueueResult = {
   conflicts: number;
   receiptsPrinted: number;
   preAuthsCaptured: number;
+  cardsCaptured: number;
+  cardsFailed: number;
   tableConflicts: OfflinePosTableConflict[];
   syncedMessage: string;
   errors: Array<{ id: string; error: string }>;
@@ -298,13 +413,10 @@ async function capturePendingPreAuthorizations(input: {
   userId: string;
   workspaceId?: string | null;
   online: boolean;
-}): Promise<{ captured: number; failed: number }> {
-  const { enqueueOfflineCardCapture, linkOfflineCardCaptureToOrder, syncOfflineCardCaptures } =
-    await import("@/services/pos/offline-card-service");
-
+}): Promise<{ staged: number; failed: number }> {
   const key = queueKey(input.userId, input.workspaceId ?? null);
   const list = preAuthQueues.get(key) ?? [];
-  let captured = 0;
+  let staged = 0;
   let failed = 0;
 
   for (const preAuth of list) {
@@ -319,7 +431,7 @@ async function capturePendingPreAuthorizations(input: {
       continue;
     }
 
-    await enqueueOfflineCardCapture({
+    await queueOfflineCardCapture({
       userId: preAuth.userId,
       workspaceId: preAuth.workspaceId,
       capture: {
@@ -333,34 +445,13 @@ async function capturePendingPreAuthorizations(input: {
         tableId: preAuth.tableId,
         deviceId: preAuth.deviceId,
       },
+      orderId: preAuth.orderId,
     });
-    if (preAuth.orderId) {
-      await linkOfflineCardCaptureToOrder({
-        userId: preAuth.userId,
-        workspaceId: preAuth.workspaceId,
-        offlineSaleId: preAuth.offlineSaleId,
-        orderId: preAuth.orderId,
-      });
-    }
+    preAuth.status = "captured";
+    staged += 1;
   }
 
-  const cardSync = await syncOfflineCardCaptures({
-    userId: input.userId,
-    workspaceId: input.workspaceId ?? null,
-    online: input.online,
-  });
-  captured += cardSync.captured;
-  failed += cardSync.failed;
-
-  for (const preAuth of list) {
-    if (preAuth.status !== "pending") continue;
-    preAuth.status = cardSync.captured > 0 ? "captured" : "failed";
-    if (preAuth.status === "failed" && !preAuth.lastError) {
-      preAuth.lastError = "Stripe Terminal capture did not complete — retry when online.";
-    }
-  }
-
-  return { captured, failed };
+  return { staged, failed };
 }
 
 function markTableConflicts(orders: OfflinePosQueuedOrder[]): number {
@@ -398,6 +489,8 @@ export async function syncQueue(input: {
     conflicts: tableConflictCount,
     receiptsPrinted: 0,
     preAuthsCaptured: 0,
+    cardsCaptured: 0,
+    cardsFailed: 0,
     tableConflicts: detectOfflineTableConflicts(list),
     syncedMessage: "No offline orders to sync.",
     errors: [],
@@ -411,6 +504,16 @@ export async function syncQueue(input: {
       entry.status = "synced";
       entry.lastError = undefined;
       result.synced += 1;
+
+      const offlineSaleId = entry.payload.offlineSaleId?.trim();
+      if (offlineSaleId && entry.payload.paymentMode === "OFFLINE_CARD_QUEUED") {
+        await linkOfflineCardQueueToOrder({
+          userId: input.userId,
+          workspaceId: input.workspaceId ?? null,
+          offlineSaleId,
+          orderId: checkoutResult.orderId,
+        }).catch(() => false);
+      }
       continue;
     }
 
@@ -426,9 +529,23 @@ export async function syncQueue(input: {
     workspaceId: input.workspaceId ?? null,
     online: input.online ?? true,
   });
-  result.preAuthsCaptured = preAuthResult.captured;
   if (preAuthResult.failed > 0) {
     result.failed += preAuthResult.failed;
+  }
+
+  const cardSync = await syncOfflineCardQueue({
+    userId: input.userId,
+    workspaceId: input.workspaceId ?? null,
+    online: input.online ?? true,
+  });
+  result.cardsCaptured = cardSync.captured;
+  result.cardsFailed = cardSync.failed;
+  result.preAuthsCaptured = preAuthResult.staged + cardSync.captured;
+  if (cardSync.failed > 0) {
+    result.failed += cardSync.failed;
+    for (const err of cardSync.errors) {
+      result.errors.push(err);
+    }
   }
 
   result.syncedMessage = formatOfflineSyncSuccessMessage(result.synced);
@@ -499,4 +616,5 @@ export function resetOfflinePosQueuesForTests(): void {
   receiptQueues.clear();
   preAuthQueues.clear();
   syncStats.clear();
+  resetOfflineCardCapturesForTests();
 }
