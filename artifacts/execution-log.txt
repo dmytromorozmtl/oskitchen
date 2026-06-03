@@ -4197,3 +4197,12 @@ Artifact: lib/platform/platform-impersonation-e2e-policy.ts, e2e/platform-impers
 Result: IMPLEMENTED — MFA/audit policy contract; DB session end scoped to owning admin; PLATFORM audit row; authed target sees support banner with active cookie
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 75
+Task: QA-26 — public API key scope E2E
+Role: QA
+Priority: P1
+Artifact: lib/api-public/public-api-key-scope-e2e-policy.ts, e2e/public-api-key-scope.spec.ts, e2e/helpers/public-api-key-scope-*.ts, tests/unit/public-api-key-scope-e2e.test.ts
+Result: IMPLEMENTED — scope denial matrix (orders:read≠write, products≠orders, integrations≠webhooks); DB credential resolve; guard/HTTP 403 with requiredScope; honest skip when billing gate blocks
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
