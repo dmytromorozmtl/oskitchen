@@ -3611,3 +3611,12 @@ Artifacts: scripts/run-p0-orchestrator-staging.sh, artifacts/p0-orchestrator-sta
 Result: overall FAIL (vault 11/11; channel live proof_failed; SSO/workflows SKIPPED)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 10
+Task: QA-02 — cross-tenant isolation E2E staging
+Role: QA
+Priority: P0
+Artifacts: e2e/cross-tenant-isolation-staging.spec.ts (403 mock + marketplace staging 404)
+Note: mock contract always runs; live staging gated on E2E_STAGING_* vault
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

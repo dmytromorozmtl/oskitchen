@@ -4,8 +4,10 @@ import { expect, test } from "@playwright/test";
 
 import { prisma } from "@/lib/prisma";
 import { WorkspaceAccessDeniedError } from "@/lib/scope/assert-user-workspace-access";
+import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
 import { scopedIdWhere } from "@/lib/scope/tenant-scope";
 import { assertOwnedByUser } from "@/lib/scope/user-owned-guards";
+import { loadMarketplaceOrderDetail } from "@/services/marketplace/marketplace-orders-service";
 import { loadOrderDetailPageData } from "@/services/orders/order-detail-service";
 
 import { skipCrossTenantStagingIfNotReady } from "./helpers/cross-tenant-staging-ready";
@@ -61,6 +63,92 @@ async function seedTenantOrder(label: string): Promise<TenantFixture> {
       await prisma.order.delete({ where: { id: order.id } }).catch(() => undefined);
       await prisma.workspace.delete({ where: { id: workspace.id } }).catch(() => undefined);
       await prisma.userProfile.delete({ where: { id: owner.id } }).catch(() => undefined);
+    },
+  };
+}
+
+type MarketplaceTenantFixture = {
+  buyerOwnerId: string;
+  buyerWorkspaceId: string;
+  purchaseOrderId: string;
+  poNumber: string;
+  vendorCompanyName: string;
+  cleanup: () => Promise<void>;
+};
+
+async function seedMarketplacePurchaseOrder(label: string): Promise<MarketplaceTenantFixture> {
+  const suffix = `${label}-${randomUUID().slice(0, 8)}`;
+  const buyerOwner = await prisma.userProfile.create({
+    data: {
+      id: randomUUID(),
+      email: `cross-tenant-staging-mp-${suffix}@e2e.test`,
+      fullName: `Staging Marketplace Buyer ${label}`,
+      role: "OWNER",
+    },
+  });
+  const buyerWorkspace = await prisma.workspace.create({
+    data: { name: `Staging MP Buyer WS ${suffix}`, ownerUserId: buyerOwner.id },
+  });
+  const vendorOwner = await prisma.userProfile.create({
+    data: {
+      id: randomUUID(),
+      email: `cross-tenant-staging-mp-v-${suffix}@e2e.test`,
+      fullName: `Staging Marketplace Vendor ${label}`,
+      role: "OWNER",
+    },
+  });
+  const vendorWorkspace = await prisma.workspace.create({
+    data: { name: `Staging MP Vendor WS ${suffix}`, ownerUserId: vendorOwner.id },
+  });
+  const vendorCompanyName = `Staging Isolated Vendor ${suffix}`;
+  const vendor = await prisma.vendor.create({
+    data: {
+      workspaceId: vendorWorkspace.id,
+      companyName: vendorCompanyName,
+      legalName: `${vendorCompanyName} LLC`,
+      type: "DISTRIBUTOR",
+      status: "APPROVED",
+    },
+  });
+  const poNumber = `PO-STAGING-${suffix}`;
+  const purchaseOrder = await prisma.marketplacePurchaseOrder.create({
+    data: {
+      workspaceId: buyerWorkspace.id,
+      vendorId: vendor.id,
+      status: "SUBMITTED",
+      subtotal: 49.99,
+      deliveryFee: 0,
+      total: 49.99,
+      currency: "USD",
+      paymentMethod: "NET_TERMS",
+      poNumber,
+      deliveryAddress: {
+        line1: "789 Supply Row",
+        city: "Austin",
+        region: "TX",
+        postalCode: "78703",
+        country: "US",
+      },
+    },
+  });
+
+  return {
+    buyerOwnerId: buyerOwner.id,
+    buyerWorkspaceId: buyerWorkspace.id,
+    purchaseOrderId: purchaseOrder.id,
+    poNumber,
+    vendorCompanyName,
+    cleanup: async () => {
+      await prisma.marketplacePurchaseOrder
+        .delete({ where: { id: purchaseOrder.id } })
+        .catch(() => undefined);
+      await prisma.vendor.delete({ where: { id: vendor.id } }).catch(() => undefined);
+      await prisma.workspace
+        .deleteMany({ where: { id: { in: [buyerWorkspace.id, vendorWorkspace.id] } } })
+        .catch(() => undefined);
+      await prisma.userProfile
+        .deleteMany({ where: { id: { in: [buyerOwner.id, vendorOwner.id] } } })
+        .catch(() => undefined);
     },
   };
 }
@@ -133,7 +221,7 @@ function mockPublicOrdersPost(body: {
 }
 
 test.describe("cross-tenant HTTP (mock contract — no staging server required)", () => {
-  test("GET /api/public/v1/orders with foreign workspaceId query returns 403", async () => {
+  test("tenant A → tenant B: GET public orders with foreign workspaceId returns 403", async () => {
     const foreign = mockPublicOrdersGet(TENANT_B.workspaceId);
     expect(foreign.status).toBe(403);
     expect(foreign.body.reason).toBe("cross_tenant_workspace_forbidden");
@@ -142,7 +230,7 @@ test.describe("cross-tenant HTTP (mock contract — no staging server required)"
     expect(own.status).toBe(200);
   });
 
-  test("POST /api/public/v1/orders with tenant B locationId in body returns 403", async () => {
+  test("tenant A → tenant B: POST public orders with foreign locationId returns 403", async () => {
     const rejected = mockPublicOrdersPost({
       locationId: "ffffffff-ffff-4fff-8fff-ffffffffffff",
     });
@@ -210,6 +298,30 @@ test.describe("cross-tenant isolation (staging — vault gated)", () => {
         timeout: 60_000,
       });
       await expect(page.locator("body")).not.toContainText("Staging Isolated Customer");
+    } finally {
+      await tenantB.cleanup();
+    }
+  });
+
+  test("tenant A gets 404 for tenant B marketplace order on staging", async ({ page }) => {
+    const authedUserId = await resolveAuthedUserId();
+    test.skip(!authedUserId, "E2E_LOGIN_EMAIL user not found in staging database");
+
+    const tenantB = await seedMarketplacePurchaseOrder("http-staging-mp-b");
+
+    try {
+      const authedWorkspaceId = await resolveOwnerWorkspaceId(authedUserId);
+      test.skip(!authedWorkspaceId, "E2E login user has no active workspace");
+
+      const leaked = await loadMarketplaceOrderDetail(authedWorkspaceId, tenantB.purchaseOrderId);
+      expect(leaked).toBeNull();
+
+      await page.goto(`/dashboard/marketplace/orders/${tenantB.purchaseOrderId}`);
+      await expect(page.getByRole("heading", { name: /^Page not found$/i })).toBeVisible({
+        timeout: 60_000,
+      });
+      await expect(page.locator("body")).not.toContainText(tenantB.poNumber);
+      await expect(page.locator("body")).not.toContainText(tenantB.vendorCompanyName);
     } finally {
       await tenantB.cleanup();
     }
