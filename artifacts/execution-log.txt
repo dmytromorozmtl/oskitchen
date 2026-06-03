@@ -3746,3 +3746,12 @@ Artifact: components/ui/permission-denied-card.tsx
 Result: ENHANCED — illustration + CTAs; marketplace_hub surface; marketplace + reports wired
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 25
+Task: DES-07 — Quick Start single entry IA
+Role: DESIGN
+Priority: P0
+Artifact: docs/quick-start-single-entry-ia.md
+Result: CREATED — merge quick-start + launch-wizard; 4 paths → 1 hub; Wave 1–4 plan
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
