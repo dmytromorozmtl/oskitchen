@@ -16,6 +16,7 @@ import {
   removeOfflineCardClientCapture,
 } from "@/lib/pos/offline-card-client-queue";
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
+import { EmptyState } from "@/components/ui/empty-state";
 import { posTouchCompactClass, posTouchTileClass } from "@/lib/pos/touch-targets";
 import {
   posCheckoutStatusClassName,
@@ -800,7 +801,23 @@ export function PosTerminalClient(props: {
           )}
           data-testid={speedMode ? "pos-speed-product-grid" : "pos-product-grid"}
         >
-          {filtered.map((p) => (
+          {filtered.length === 0 ? (
+            <EmptyState
+              icon={Tag}
+              variant="inline"
+              title={props.products.length === 0 ? "No menu items for POS" : "No matching items"}
+              description={
+                props.products.length === 0
+                  ? "Add products to your active menu before ringing sales on this register."
+                  : "Try another search term or category filter."
+              }
+              primaryLabel={props.products.length === 0 ? "Manage products" : undefined}
+              primaryHref={props.products.length === 0 ? "/dashboard/products" : undefined}
+              showDemoLink={false}
+              className="col-span-full"
+            />
+          ) : (
+          filtered.map((p) => (
             <button
               type="button"
               key={p.id}
@@ -831,7 +848,8 @@ export function PosTerminalClient(props: {
                 ${p.price.toFixed(2)}
               </span>
             </button>
-          ))}
+          ))
+          )}
         </div>
       </div>
 
@@ -1350,7 +1368,15 @@ export function PosTerminalClient(props: {
                 </div>
               </div>
             ))}
-            {!cart.length ? <p className="text-sm text-muted-foreground">No items yet.</p> : null}
+            {!cart.length ? (
+              <EmptyState
+                icon={ShoppingCart}
+                variant="inline"
+                title="Cart is empty"
+                description="Tap a product tile to start a sale."
+                showDemoLink={false}
+              />
+            ) : null}
           </div>
 
           <div className="rounded-xl border border-border/80 bg-muted/20 px-3 py-3 text-sm">

@@ -23,6 +23,7 @@ import { SyncIndicator } from "@/components/realtime/sync-indicator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Progress } from "@/components/ui/progress";
 import { BUSINESS_TYPE_LABELS, dashboardModeSummaryLines } from "@/lib/business-modes";
 import {
@@ -204,37 +205,37 @@ export function TodayCommandCenterView({
       </Card>
 
       {quiet ? (
-        <Card className="border-dashed border-border/80 bg-muted/10 shadow-none">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Everything is calm today</CardTitle>
-            <CardDescription>
-              Orders, production work, packing, routes, support issues, and integration alerts will appear here when
-              they need attention.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Button asChild size="sm" variant="secondary" className="rounded-full">
-              <Link href="/dashboard/orders/new" data-tour="today-orders">
-                Create order
-              </Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <Link href="/dashboard/products">Add menu item</Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <Link href="/dashboard/order-hub">Open Order Hub</Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <Link href="/demo">View demo workspace</Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <Link href="/dashboard/sales-channels/available">Connect sales channel</Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <Link href="/dashboard/product-mapping">Product mapping</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={ChefHat}
+          title="Everything is calm today"
+          description="Orders, production work, packing, routes, support issues, and integration alerts will appear here when they need attention."
+          variant="card"
+          showDemoLink={false}
+          primarySlot={
+            <div className="flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="secondary" className="rounded-full">
+                <Link href="/dashboard/orders/new" data-tour="today-orders">
+                  Create order
+                </Link>
+              </Button>
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link href="/dashboard/products">Add menu item</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link href="/dashboard/order-hub">Open Order Hub</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link href="/demo">View demo workspace</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link href="/dashboard/sales-channels/available">Connect sales channel</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link href="/dashboard/product-mapping">Product mapping</Link>
+              </Button>
+            </div>
+          }
+        />
       ) : null}
 
       {collapseKpiWall ? (
@@ -316,7 +317,13 @@ export function TodayCommandCenterView({
           </CardHeader>
           <CardContent className="space-y-2">
             {blockers.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No surfaced blockers.</p>
+              <EmptyState
+                icon={Shield}
+                variant="inline"
+                title="No surfaced blockers"
+                description="Integration and order issues will appear here when they need attention."
+                showDemoLink={false}
+              />
             ) : (
               blockers.map((b) => (
                 <Link

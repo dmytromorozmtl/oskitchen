@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
+import { ChefHat } from "lucide-react";
 
 import {
   bumpDailyKdsOrderAction,
@@ -15,6 +16,7 @@ import { QrOrderTicketBadge } from "@/components/kitchen/qr-order-ticket";
 import { VoiceOrderTicketBadge } from "@/components/kitchen/voice-order-ticket";
 import { KdsTicketAttentionStrip } from "@/components/kitchen/kds-ticket-attention-strip";
 import { KdsTicketRowNextAction } from "@/components/kitchen/kds-ticket-row-next-action";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   pickKdsBumpNextTicket,
   shouldShowKdsBumpNextHero,
@@ -270,11 +272,17 @@ export function KdsDailyService({
       ) : null}
 
       {orders.length === 0 ? (
-        <div className="py-16 text-center text-muted-foreground">
-          <p className="mb-4 text-4xl">🍽️</p>
-          <p className="text-lg font-medium">No active orders</p>
-          <p className="mt-1 text-sm">Waiting for new orders…</p>
-        </div>
+        <EmptyState
+          icon={ChefHat}
+          variant="inline"
+          title="No active tickets"
+          description="Kitchen display tickets appear here when POS, storefront, or channel orders enter production."
+          primaryLabel="Open production board"
+          primaryHref="/dashboard/production"
+          secondaryLabel="Order Hub"
+          secondaryHref="/dashboard/order-hub"
+          showDemoLink={false}
+        />
       ) : (
         <div className="space-y-6">
           {preparing.length > 0 ? (

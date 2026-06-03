@@ -3719,3 +3719,12 @@ Artifact: components/ui/feature-preview-overlay.tsx
 Result: CREATED — blurred preview gate, lock icon, Launching soon CTA
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 22
+Task: DES-04 — empty-state design system
+Role: DESIGN
+Priority: P0
+Artifact: components/ui/empty-state.tsx + Today/marketplace/KDS/POS wiring
+Result: APPLIED — EmptyState on calm Today, blockers, marketplace sections, KDS queue, POS cart/products
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

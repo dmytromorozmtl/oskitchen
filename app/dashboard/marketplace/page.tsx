@@ -165,9 +165,15 @@ export default async function MarketplaceDashboardPage() {
           </CardHeader>
           <CardContent>
             {model.orderAgain.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Place your first marketplace order to see quick reorder shortcuts here.
-              </p>
+              <EmptyState
+                icon={ShoppingBag}
+                variant="inline"
+                title="No reorder shortcuts yet"
+                description="Place your first marketplace order to see quick reorder shortcuts here."
+                primaryLabel="Browse catalog"
+                primaryHref="/dashboard/marketplace/catalog"
+                showDemoLink={false}
+              />
             ) : (
               <div className="grid gap-3 md:grid-cols-2">
                 {model.orderAgain.map((item) => (
@@ -206,12 +212,15 @@ export default async function MarketplaceDashboardPage() {
           </Button>
         </div>
         {model.recommendations.length === 0 ? (
-          <Card className="border-dashed border-border/80 shadow-none">
-            <CardContent className="flex items-center gap-3 py-8 text-sm text-muted-foreground">
-              <Package className="h-5 w-5 shrink-0" />
-              Seed marketplace categories and vendor products to populate recommendations.
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={Package}
+            variant="inline"
+            title="Recommendations populate after catalog seed"
+            description="Seed marketplace categories and vendor products to populate recommendations for your profile."
+            primaryLabel="Browse catalog"
+            primaryHref="/dashboard/marketplace/catalog"
+            showDemoLink={false}
+          />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {model.recommendations.map((product) => (
@@ -231,7 +240,15 @@ export default async function MarketplaceDashboardPage() {
           <p className="text-sm text-muted-foreground">Verified suppliers with active catalogs</p>
         </div>
         {model.featuredVendors.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Featured vendors appear once suppliers are approved.</p>
+          <EmptyState
+            icon={Store}
+            variant="inline"
+            title="No featured vendors yet"
+            description="Featured vendors appear once suppliers are approved and publish active catalogs."
+            primaryLabel="Browse vendors"
+            primaryHref="/dashboard/marketplace/vendors"
+            showDemoLink={false}
+          />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {model.featuredVendors.map((vendor) => (
