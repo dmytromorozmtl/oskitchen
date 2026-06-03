@@ -4080,3 +4080,12 @@ Artifact: lib/qr/qr-guest-kitchen-e2e-policy.ts, tests/unit/qr-guest-order-kitch
 Result: IMPLEMENTED — E2E policy module (15s ticket SLA, testids); processQROrder → IN_PRODUCTION unit test; Playwright spec wired to shared policy
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 62
+Task: QA-13 — signup quick start today E2E
+Role: QA
+Priority: P1
+Artifact: lib/onboarding/signup-quick-start-today-e2e-policy.ts, e2e/signup-quick-start-today.spec.ts, e2e/helpers/signup-quick-start-ready.ts, tests/unit/signup-quick-start-today.test.ts, playwright.config.ts
+Result: IMPLEMENTED — signup shell smoke; authed quick-start skip/redirect → Today; staging full signup gated on E2E_SIGNUP_AUTO_CONFIRM; route policy unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
