@@ -3575,3 +3575,12 @@ Artifacts: middleware.ts (matcher /vendor/:path*), lib/supabase/middleware.ts (s
 Note: unauthenticated /vendor/* → /login?redirect=…; impersonation cookie cleared on vendor routes
 Vault: 11/11 | P0: SKIPPED | GO: NO-GO
 
+---
+Cycle: 6
+Task: DEV-08 — WooCommerce live smoke setup guide
+Role: Developer
+Priority: P0
+Artifact: docs/woocommerce-live-smoke-setup.md
+Note: sandbox + GHA secrets + pass criteria; artifact still FAILED until real Woo URL replaces smoke-test placeholder
+Vault: 11/11 | P0: SKIPPED | GO: NO-GO
+
