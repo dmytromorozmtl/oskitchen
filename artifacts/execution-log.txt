@@ -4098,3 +4098,12 @@ Artifact: lib/storefront/storefront-checkout-kds-e2e-policy.ts, e2e/storefront-c
 Result: IMPLEMENTED — guest pay-later checkout → internal order id on confirmation → KDS ticket within 15s; menu smoke + eligibility unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 64
+Task: QA-15 — POS checkout shift close report E2E
+Role: QA
+Priority: P1
+Artifact: lib/pos/pos-checkout-shift-report-e2e-policy.ts, e2e/pos-checkout-shift-close-report.spec.ts, e2e/helpers/pos-checkout-shift-*.ts, tests/unit/pos-checkout-shift-close-report.test.ts, playwright.config.ts
+Result: IMPLEMENTED — open shift → cash sale → close with expected cash → closed shift history row; policy contract + closeout preview unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
