@@ -3837,3 +3837,12 @@ Artifact: .github/workflows/verify-claims.yml
 Result: CREATED — PR/push gate; MARKETING_CLAIMS_STRICT=1; forbidden-claims-enforcement test; PASS/FAIL artifact upload
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 35
+Task: MKT-10 — Series A narrative hold notice
+Role: MARKETING
+Priority: P0
+Artifact: docs/series-a-hold-notice.md
+Result: CREATED — internal hold until first pilot; unlock gates G1–G6; frozen activities; approved messaging; comms routing
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
