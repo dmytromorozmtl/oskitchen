@@ -4071,3 +4071,12 @@ Artifact: e2e/marketplace-checkout-fulfill-payout.spec.ts, tests/unit/marketplac
 Result: IMPLEMENTED — buyer net-terms checkout → vendor confirm/process/ship → finance payout request; service lifecycle unit test; honest skips for migration/RBAC
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 61
+Task: QA-12 — QR guest kitchen ticket E2E
+Role: QA
+Priority: P1
+Artifact: lib/qr/qr-guest-kitchen-e2e-policy.ts, tests/unit/qr-guest-order-kitchen.test.ts, e2e/qr-guest-order-kitchen.spec.ts
+Result: IMPLEMENTED — E2E policy module (15s ticket SLA, testids); processQROrder → IN_PRODUCTION unit test; Playwright spec wired to shared policy
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

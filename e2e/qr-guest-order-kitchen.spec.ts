@@ -8,6 +8,11 @@ import {
 
 import { qrGuestTableUrl, skipQrGuestKitchenIfNotReady } from "./helpers/qr-guest-order-ready";
 import { skipIfLoginRedirect } from "./helpers/dashboard-smoke";
+import {
+  QR_GUEST_KITCHEN_TICKET_VISIBLE_MS,
+  QR_GUEST_KDS_TABLE_BADGE_TEST_ID,
+  qrGuestKdsTicketTestId,
+} from "@/lib/qr/qr-guest-kitchen-e2e-policy";
 
 /**
  * QR guest order → kitchen ticket E2E — table self-service → KDS within 15s.
@@ -153,9 +158,9 @@ test.describe("qr guest order kitchen ticket (chromium-authed)", () => {
       await page.goto("/dashboard/kitchen");
       await assertKdsKitchenReady(page);
 
-      const ticket = page.getByTestId(`kds-ticket-${orderId}`);
-      await expect(ticket).toBeVisible({ timeout: 15_000 });
-      await expect(ticket.getByTestId("kds-qr-table-badge")).toBeVisible();
+      const ticket = page.getByTestId(qrGuestKdsTicketTestId(orderId));
+      await expect(ticket).toBeVisible({ timeout: QR_GUEST_KITCHEN_TICKET_VISIBLE_MS });
+      await expect(ticket.getByTestId(QR_GUEST_KDS_TABLE_BADGE_TEST_ID)).toBeVisible();
     } finally {
       await guestContext.close();
     }
