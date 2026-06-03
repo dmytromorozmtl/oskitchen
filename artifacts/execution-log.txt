@@ -4188,3 +4188,12 @@ Artifact: lib/marketplace/vendor-cabinet-cross-tenant-e2e-policy.ts, e2e/vendor-
 Result: IMPLEMENTED — vendor A cannot read vendor B PO via loadVendorOrderDetail, bulk confirm, /vendor/orders/[id] 404, packing-slip 403/404
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 74
+Task: QA-25 — platform impersonation E2E
+Role: QA
+Priority: P1
+Artifact: lib/platform/platform-impersonation-e2e-policy.ts, e2e/platform-impersonation.spec.ts, e2e/helpers/platform-impersonation-*.ts, tests/unit/platform-impersonation-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — MFA/audit policy contract; DB session end scoped to owning admin; PLATFORM audit row; authed target sees support banner with active cookie
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

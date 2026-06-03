@@ -77,6 +77,7 @@ if (dashboardE2EEnabled) {
         "**/profit-dashboard-margin-alert.spec.ts",
         "**/rbac-matrix.spec.ts",
         "**/vendor-cabinet-cross-tenant.spec.ts",
+        "**/platform-impersonation.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",
