@@ -20,8 +20,8 @@ const credentialsSchema = z.object({
   merchantId: z.string().min(1).max(120),
   apiKey: z.string().max(500).optional(),
   webhookSecret: z.string().max(500).optional(),
-  menuSyncEnabled: z.union([z.boolean(), z.literal("on")]).optional(),
-  orderIngestionEnabled: z.union([z.boolean(), z.literal("on")]).optional(),
+  menuSyncEnabled: z.union([z.boolean(), z.literal("on"), z.literal("off")]).optional(),
+  orderIngestionEnabled: z.union([z.boolean(), z.literal("on"), z.literal("off")]).optional(),
 });
 
 export async function saveDoorDashLiveCredentialsAction(formData: FormData) {

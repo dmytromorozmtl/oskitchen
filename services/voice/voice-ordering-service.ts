@@ -380,12 +380,7 @@ export async function processVoiceOrder(
   if (table?.id) {
     await prisma.order.update({
       where: { id: created.orderId },
-      data: { tableId: table.id, tableName: tableLabel },
-    });
-  } else {
-    await prisma.order.update({
-      where: { id: created.orderId },
-      data: { tableName: tableLabel },
+      data: { tableId: table.id },
     });
   }
 
@@ -410,7 +405,7 @@ export async function listRecentVoiceOrders(ownerUserId: string, limit = 20) {
     select: {
       id: true,
       customerName: true,
-      tableName: true,
+      tableId: true,
       status: true,
       createdAt: true,
       sourceMetadataJson: true,

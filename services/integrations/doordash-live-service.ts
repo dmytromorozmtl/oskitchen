@@ -297,9 +297,9 @@ export async function getDoorDashLiveDashboard(userId: string): Promise<DoorDash
       const normalized = normalizeDoorDashOrder(raw);
       return {
         externalOrderId: row.externalOrderId,
-        displayId: normalized.externalOrderNumber,
+        displayId: normalized.externalOrderNumber ?? null,
         status: row.sourceStatus ?? normalized.normalizedStatus,
-        total: normalized.totals.total,
+        total: normalized.totals.total ?? null,
         imported: Boolean(row.importedOrderId),
         createdAt: row.createdAt.toISOString(),
       };
@@ -418,9 +418,9 @@ export function mapDoorDashLiveOrderPreview(raw: Record<string, unknown>): DoorD
   const normalized = normalizeDoorDashOrder(raw);
   return {
     externalOrderId: normalized.externalOrderId,
-    displayId: normalized.externalOrderNumber,
+    displayId: normalized.externalOrderNumber ?? null,
     status: normalized.normalizedStatus,
-    total: normalized.totals.total,
+    total: normalized.totals.total ?? null,
     imported: false,
     createdAt: new Date().toISOString(),
   };

@@ -176,10 +176,11 @@ export async function syncMenuToDoorDash(userId: string, menuId?: string) {
 
 /** Poll DoorDash Marketplace and import orders into kitchen + external_orders. */
 export async function fetchDoorDashOrders(userId: string) {
-  const creds = await getDoorDashCredentialsForUser(userId);
   const capability = getDoorDashCapabilitySnapshot();
-  if (capability.placeholderMode && !creds) {
-    throw new Error(`DoorDash order import disabled for ${userId}: ${getDoorDashPlaceholderMessage(false)}`);
+  if (capability.placeholderMode) {
+    throw new Error(
+      `DoorDash order import disabled for ${userId}: ${getDoorDashPlaceholderMessage(false)}`,
+    );
   }
   return importDoorDashOrdersForUser(userId);
 }

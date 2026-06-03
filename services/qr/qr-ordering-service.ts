@@ -306,7 +306,7 @@ export async function payQrTableSplitShare(input: {
   const order = await prisma.order.findFirst({
     where: {
       id: input.orderId,
-      lookupToken: input.lookupToken,
+      publicLookupToken: input.lookupToken,
     },
     select: {
       id: true,

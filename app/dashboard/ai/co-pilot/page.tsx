@@ -1,8 +1,10 @@
 import Link from "next/link";
 
+import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { CoPilotPanel } from "@/components/dashboard/ai/co-pilot-panel";
 import { Button } from "@/components/ui/button";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
+import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { getRestaurantCoPilotDashboard } from "@/services/ai/co-pilot-service";
@@ -12,11 +14,18 @@ export const metadata = {
   description: "Procurement, scheduling, and pricing suggestions — owner approves every action.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function RestaurantCoPilotPage() {
   const { userId } = await getTenantActor();
   const { scope } = await loadCopilotPageActor();
-  const dashboard = await getRestaurantCoPilotDashboard(userId);
+  const payload = await loadAiFeaturePage(() => getRestaurantCoPilotDashboard(userId));
 
+  if (!payload.ok) {
+    return <AiFeatureApiError featureName="AI Restaurant Co-Pilot" error={payload.error} />;
+  }
+
+  const dashboard = payload.data;
   const canDraft = canUseCopilot(scope, "copilot.actions.draft");
   const canApprove = canUseCopilot(scope, "copilot.actions.approve");
 

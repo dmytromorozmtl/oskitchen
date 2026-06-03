@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: result.error }, { status: 400 });
     }
 
-    return NextResponse.json({ ok: true, ...result });
+    return NextResponse.json(result);
   } catch (err) {
     captureErrorSafe(err, { module: "qr-table", action: "pay_share" });
     return NextResponse.json({ ok: false, error: "Could not record payment." }, { status: 500 });

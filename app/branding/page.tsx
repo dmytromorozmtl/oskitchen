@@ -11,7 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
-import { buildBrandedManifest } from "@/services/branding/white-label-service";
+import {
+  buildBrandedManifest,
+  normalizeThemeColor,
+} from "@/services/branding/white-label-service";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +53,7 @@ export default async function BrandingInstallPage({
     storeSlug,
     restaurantName: sf.publicName,
     logoUrl: sf.logoUrl,
-    themeColor: sf.brandColor,
+    themeColor: normalizeThemeColor(sf.brandColor ?? ""),
   });
 
   return (

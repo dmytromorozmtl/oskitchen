@@ -195,7 +195,7 @@ async function applyExtendedMenuTemplate(
   ownerUserId: string,
   plan: AutoOnboardingPlan,
 ): Promise<{ menuId: string; productCount: number }> {
-  const { menuId, productCount } = await createMenuFromOnboardingTemplate(
+  const { menuId, itemsCreated } = await createMenuFromOnboardingTemplate(
     ownerUserId,
     plan.menuTemplateId,
   );
@@ -206,7 +206,7 @@ async function applyExtendedMenuTemplate(
     config.firstItems,
     config.restaurantType,
   );
-  return { menuId, productCount: productCount + custom };
+  return { menuId, productCount: itemsCreated + custom };
 }
 
 export async function applyAutoOnboardingPlan(input: {

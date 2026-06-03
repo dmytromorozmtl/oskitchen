@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
 import { prisma } from "@/lib/prisma";
-import { buildBrandedManifest } from "@/services/branding/white-label-service";
+import {
+  buildBrandedManifest,
+  normalizeThemeColor,
+} from "@/services/branding/white-label-service";
 
 export async function GET(
   _req: Request,
@@ -24,7 +27,7 @@ export async function GET(
     storeSlug,
     restaurantName: name,
     logoUrl: sf.logoUrl,
-    themeColor: sf.brandColor,
+    themeColor: normalizeThemeColor(sf.brandColor ?? ""),
     hideKitchenOsBranding: kitchen?.hideKitchenOsBranding ?? false,
   });
 

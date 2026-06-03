@@ -128,7 +128,7 @@ export async function refreshAppMarketplaceDashboardAction() {
     const user = await requireSessionUser();
     const canReview = await isPlatformAdmin(user.id, user.email);
     const dashboard = await loadAppMarketplaceDashboard({
-      userEmail: user.email,
+      userEmail: user.email ?? null,
       canReview,
     });
     revalidateMarketplace();

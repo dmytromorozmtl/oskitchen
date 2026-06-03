@@ -9,7 +9,12 @@ describe("settings navigation helpers", () => {
   it("returns only viewable sections for staff-level settings access", () => {
     const sections = filterVisibleSettingsSections(["view_settings"], "");
 
-    expect(sections.map((section) => section.key)).toEqual(["overview"]);
+    expect(sections.map((section) => section.key)).toEqual([
+      "overview",
+      "referrals",
+      "voice",
+      "hardware",
+    ]);
   });
 
   it("filters query results within the capability-allowed section set", () => {

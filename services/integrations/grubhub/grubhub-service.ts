@@ -118,9 +118,8 @@ export async function syncMenuToGrubhub(userId: string, menuId?: string) {
 }
 
 export async function fetchGrubhubOrders(userId: string) {
-  const creds = await getGrubhubCredentialsForUser(userId);
   const capability = getGrubhubCapabilitySnapshot();
-  if (capability.placeholderMode && !creds) {
+  if (capability.placeholderMode) {
     throw new Error(`Grubhub order import disabled for ${userId}: ${getGrubhubBetaMessage(false)}`);
   }
   return importGrubhubOrdersForUser(userId);

@@ -94,7 +94,7 @@ export default async function SettingsVoicePage() {
                         {o.createdAt.toLocaleString()}
                       </TableCell>
                       <TableCell>
-                        {o.tableName ?? readVoiceTableLabel(meta) ?? "—"}
+                        {readVoiceTableLabel(meta) ?? o.tableId ?? "—"}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">{o.status}</Badge>

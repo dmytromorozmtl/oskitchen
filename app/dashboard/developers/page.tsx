@@ -15,7 +15,7 @@ export default async function DashboardDevelopersPage() {
   const canReview = await isPlatformAdmin(sessionUser.id, sessionUser.email);
 
   const dashboard = await loadAppMarketplaceDashboard({
-    userEmail: sessionUser.email,
+    userEmail: sessionUser.email ?? null,
     canReview,
   });
 
