@@ -3566,3 +3566,12 @@ Artifacts: scripts/sweep-console-log.sh, lib/logger.ts (logger.cli), lib/integra
 Note: production paths 0 console.log (lib/logger.ts sink excluded); 3239 in scripts/ CLI (intentional)
 Vault: 11/11 | P0: SKIPPED | GO: NO-GO
 
+---
+Cycle: 5
+Task: DEV-07 — gate vendor routes at edge middleware
+Role: Developer
+Priority: P0
+Artifacts: middleware.ts (matcher /vendor/:path*), lib/supabase/middleware.ts (session redirect)
+Note: unauthenticated /vendor/* → /login?redirect=…; impersonation cookie cleared on vendor routes
+Vault: 11/11 | P0: SKIPPED | GO: NO-GO
+

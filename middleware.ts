@@ -149,7 +149,7 @@ export async function middleware(request: NextRequest) {
   }
 
   let sessionResponse = await updateSession(request);
-  if (pathname.startsWith("/dashboard") || pathname.startsWith("/platform")) {
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/platform") || pathname.startsWith("/vendor")) {
     sessionResponse = clearInvalidImpersonationCookie(request, sessionResponse);
   }
 
@@ -328,6 +328,7 @@ export const config = {
   // Theme experiment middleware reads many compliance snapshots that use node:crypto.
   runtime: "nodejs",
   matcher: [
+    "/vendor/:path*",
     "/((?!monitoring|_next/static|_next/image|favicon.ico|manifest\\.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

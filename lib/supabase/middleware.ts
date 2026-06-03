@@ -14,7 +14,7 @@ export async function updateSession(request: NextRequest) {
   if (!isSupabaseConfigured()) {
     if (process.env.NODE_ENV === "production") {
       const path = request.nextUrl.pathname;
-      if (path.startsWith("/dashboard")) {
+      if (path.startsWith("/dashboard") || path.startsWith("/vendor")) {
         return new NextResponse(
           "Application misconfigured: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
           { status: 503 },
@@ -60,6 +60,7 @@ export async function updateSession(request: NextRequest) {
   const isDashboard = path.startsWith("/dashboard");
   const isPlatform = path.startsWith("/platform");
   const isOnboarding = path.startsWith("/onboarding");
+  const isVendor = path.startsWith("/vendor");
 
   if (isOnboarding && !user) {
     const url = request.nextUrl.clone();
@@ -76,6 +77,13 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isPlatform && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(url);
+  }
+
+  if (isVendor && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirect", request.nextUrl.pathname);
