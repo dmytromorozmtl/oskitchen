@@ -78,6 +78,14 @@ export default async function StorefrontOrderPage({
   return (
     <div className="mx-auto max-w-lg space-y-8">
       <OrderTrackingAnalyticsBeacon storeSlug={storeSlug} orderToken={token} />
+      {row.internalOrder?.id ? (
+        <span
+          data-testid="storefront-internal-order-id"
+          data-order-id={row.internalOrder.id}
+          className="sr-only"
+          aria-hidden="true"
+        />
+      ) : null}
       {duplicateNotice ? (
         <p
           className={

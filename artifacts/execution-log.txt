@@ -4089,3 +4089,12 @@ Artifact: lib/onboarding/signup-quick-start-today-e2e-policy.ts, e2e/signup-quic
 Result: IMPLEMENTED — signup shell smoke; authed quick-start skip/redirect → Today; staging full signup gated on E2E_SIGNUP_AUTO_CONFIRM; route policy unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 63
+Task: QA-14 — storefront checkout KDS E2E
+Role: QA
+Priority: P1
+Artifact: lib/storefront/storefront-checkout-kds-e2e-policy.ts, e2e/storefront-checkout-kds.spec.ts, e2e/helpers/storefront-checkout-kds-*.ts, tests/unit/storefront-checkout-kds.test.ts, app/s/[storeSlug]/order/[token]/page.tsx
+Result: IMPLEMENTED — guest pay-later checkout → internal order id on confirmation → KDS ticket within 15s; menu smoke + eligibility unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
