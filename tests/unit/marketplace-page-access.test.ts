@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const requireWorkspacePermissionActor = vi.hoisted(() => vi.fn());
 const logMarketplacePermissionDenied = vi.hoisted(() => vi.fn());
 
-vi.mock("@/components/dashboard/pos-access-card", () => ({
-  PosAccessCard: () => null,
+vi.mock("@/components/ui/permission-denied-card", () => ({
+  PermissionDeniedSurfaceCard: () => null,
 }));
 
 vi.mock("@/lib/permissions/require-workspace-permission", () => ({

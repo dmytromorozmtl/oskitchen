@@ -1,13 +1,13 @@
 import { createElement, type ReactNode } from "react";
 
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedCard } from "@/components/ui/permission-denied-card";
 import { createReportActorScope } from "@/lib/reports/report-actor-scope";
 import { canDoReports } from "@/lib/reports/report-permissions";
 import type { ReportPermission } from "@/lib/reports/report-types";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
 function deniedCard(title: string, description: string): ReactNode {
-  return createElement(PosAccessCard, {
+  return createElement(PermissionDeniedCard, {
     title,
     description,
     primaryHref: "/dashboard/today",

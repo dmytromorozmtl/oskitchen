@@ -61,4 +61,10 @@ describe("permission denied copy", () => {
     expect(surface.permissionKey).toBe("production.manage");
     expect(surface.secondaryHref).toBe("/dashboard/production");
   });
+
+  it("resolves marketplace hub surface", () => {
+    const surface = resolvePermissionDeniedSurface("marketplace_hub");
+    expect(surface.permissionKey).toBe("marketplace:read");
+    expect(surface.primaryHref).toBe("/dashboard/today");
+  });
 });

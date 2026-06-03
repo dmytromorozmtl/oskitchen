@@ -15,5 +15,7 @@ describe("permission-denied-card ui module", () => {
     expect(source).toContain("export function PermissionDeniedCard");
     expect(source).toContain("export function PermissionDeniedSurfaceCard");
     expect(source).toContain("PERMISSION_DENIED_UX_ERA17_TEST_ID");
+    expect(source).toContain("rounded-2xl bg-destructive/10");
+    expect(source).toContain("helpHref");
   });
 });

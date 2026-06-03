@@ -27,7 +27,8 @@ export type PermissionDeniedSurfaceId =
   | "packing_verify"
   | "production_calendar"
   | "production_board"
-  | "qr_codes";
+  | "qr_codes"
+  | "marketplace_hub";
 
 export type PermissionDeniedSurfaceDef = {
   id: PermissionDeniedSurfaceId;
@@ -239,6 +240,15 @@ export const PERMISSION_DENIED_SURFACES: Record<
     primaryLabel: "Back to Today",
     secondaryHref: "/dashboard/products",
     secondaryLabel: "Open products",
+  },
+  marketplace_hub: {
+    id: "marketplace_hub",
+    title: "Marketplace",
+    permissionKey: "marketplace:read",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/order-hub",
+    secondaryLabel: "Order hub",
   },
 };
 

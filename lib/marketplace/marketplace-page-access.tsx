@@ -1,6 +1,6 @@
 import { createElement, type ReactNode } from "react";
 
-import { PosAccessCard } from "@/components/dashboard/pos-access-card";
+import { PermissionDeniedSurfaceCard } from "@/components/ui/permission-denied-card";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 import { logMarketplacePermissionDenied } from "@/services/marketplace/marketplace-permission-audit";
@@ -23,12 +23,7 @@ export async function resolveMarketplaceHubAccess(): Promise<MarketplaceHubAcces
 }
 
 export function marketplaceReadDeniedCard(): ReactNode {
-  return createElement(PosAccessCard, {
-    title: "Marketplace",
-    description: "You do not have permission to view the B2B marketplace in this workspace.",
-    primaryHref: "/dashboard/today",
-    primaryLabel: "Back to Today",
-  });
+  return createElement(PermissionDeniedSurfaceCard, { surfaceId: "marketplace_hub" });
 }
 
 export async function requireMarketplaceReadPage(input?: {

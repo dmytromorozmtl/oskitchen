@@ -1,9 +1,14 @@
-import React from "react";
 import Link from "next/link";
-import { ShieldOff } from "lucide-react";
+import { ShieldOff, type LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { PERMISSION_DENIED_UX_ERA17_TEST_ID } from "@/lib/ux/permission-denied-era17-policy";
 import {
   resolvePermissionDeniedSurface,
@@ -18,13 +23,61 @@ export type PermissionDeniedCardProps = {
   primaryLabel?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  helpLabel?: string;
+  helpHref?: string;
+  icon?: LucideIcon;
   /** Surfaces required permission in data attribute for UX audits. */
   permissionKey?: string;
   testId?: string;
   className?: string;
 };
 
-/** Unified RBAC denial card for dashboard and workspace surfaces. */
+function PermissionDeniedActions({
+  primaryHref,
+  primaryLabel,
+  secondaryHref,
+  secondaryLabel,
+  helpHref,
+  helpLabel,
+}: Pick<
+  PermissionDeniedCardProps,
+  | "primaryHref"
+  | "primaryLabel"
+  | "secondaryHref"
+  | "secondaryLabel"
+  | "helpHref"
+  | "helpLabel"
+>) {
+  const hasPrimary = primaryHref && primaryLabel;
+  const hasSecondary = secondaryHref && secondaryLabel;
+  const hasHelp = helpHref && helpLabel;
+
+  if (!hasPrimary && !hasSecondary && !hasHelp) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap">
+      {hasPrimary ? (
+        <Button asChild className="rounded-full">
+          <Link href={primaryHref!}>{primaryLabel}</Link>
+        </Button>
+      ) : null}
+      {hasSecondary ? (
+        <Button asChild variant="outline" className="rounded-full">
+          <Link href={secondaryHref!}>{secondaryLabel}</Link>
+        </Button>
+      ) : null}
+      {hasHelp ? (
+        <Button asChild variant="link" className="rounded-full text-xs text-muted-foreground">
+          <Link href={helpHref!}>{helpLabel}</Link>
+        </Button>
+      ) : null}
+    </div>
+  );
+}
+
+/** Unified RBAC denial card — illustration, message, and recovery CTAs. */
 export function PermissionDeniedCard({
   title,
   description,
@@ -32,43 +85,43 @@ export function PermissionDeniedCard({
   primaryLabel,
   secondaryHref,
   secondaryLabel,
+  helpHref = "/dashboard/settings",
+  helpLabel = "Workspace roles & permissions",
+  icon: Icon = ShieldOff,
   permissionKey,
   testId = PERMISSION_DENIED_UX_ERA17_TEST_ID,
   className,
 }: PermissionDeniedCardProps) {
   return (
     <Card
-      className={cn("max-w-lg border-border/80 shadow-sm", className)}
+      className={cn(
+        "max-w-lg border-dashed border-border/80 bg-muted/10 shadow-none",
+        className,
+      )}
       data-testid={testId}
       data-permission-key={permissionKey ?? undefined}
       role="status"
     >
-      <CardHeader>
-        <div className="flex items-start gap-3">
-          <ShieldOff
-            className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
-            aria-hidden
-          />
-          <div className="space-y-1.5">
-            <CardTitle>{title}</CardTitle>
-            <CardDescription>{description}</CardDescription>
-          </div>
+      <CardHeader className="text-center sm:text-left">
+        <div
+          className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-destructive/10 text-destructive sm:mx-0"
+          aria-hidden
+        >
+          <Icon className="h-6 w-6" />
         </div>
+        <CardTitle className="text-xl">{title}</CardTitle>
+        <CardDescription className="text-base leading-relaxed">{description}</CardDescription>
       </CardHeader>
-      {primaryHref || secondaryHref ? (
-        <CardContent className="flex flex-wrap gap-2">
-          {primaryHref && primaryLabel ? (
-            <Button asChild className="rounded-full">
-              <Link href={primaryHref}>{primaryLabel}</Link>
-            </Button>
-          ) : null}
-          {secondaryHref && secondaryLabel ? (
-            <Button asChild variant="outline" className="rounded-full">
-              <Link href={secondaryHref}>{secondaryLabel}</Link>
-            </Button>
-          ) : null}
-        </CardContent>
-      ) : null}
+      <CardContent>
+        <PermissionDeniedActions
+          primaryHref={primaryHref}
+          primaryLabel={primaryLabel}
+          secondaryHref={secondaryHref}
+          secondaryLabel={secondaryLabel}
+          helpHref={helpHref}
+          helpLabel={helpLabel}
+        />
+      </CardContent>
     </Card>
   );
 }
