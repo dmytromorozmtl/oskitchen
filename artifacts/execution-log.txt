@@ -3846,3 +3846,12 @@ Artifact: docs/series-a-hold-notice.md
 Result: CREATED — internal hold until first pilot; unlock gates G1–G6; frozen activities; approved messaging; comms routing
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 36
+Task: DEV-11 — KDS Realtime SLO instrumentation
+Role: DEVELOPER
+Priority: P1
+Artifact: hooks/use-kds-realtime.ts, lib/kitchen/kds-realtime-slo-metrics.ts, tests/unit/kds-realtime-slo-metrics.test.ts
+Result: UPDATED — rolling p50/p95/p99 refresh latency on hook; targets from kds-slo-proof-policy; withinSlo snapshot
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
