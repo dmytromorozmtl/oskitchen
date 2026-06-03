@@ -3800,3 +3800,13 @@ Artifact: app/pricing/page.tsx, lib/marketing/pilot-pricing-skus.ts, components/
 Result: UPDATED — transparent SKU table (LOI-DP-001, PILOT-*-50, PILOT-PLAT-90, PILOT-IMPL-001); 50% pilot discount cards; honest invoice/LOI disclaimer
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 31
+Task: MKT-06 — Integration Health headline moat on landing page
+Role: MARKETING
+Priority: P0
+Artifact: app/page.tsx, components/marketing/landing-integration-health-moat.tsx, components/marketing/home-landing.tsx
+Result: CREATED — Integration Health section after hero; PASS/SKIPPED/FAILED moat copy; metadata + SiteFooter; links to /integrations and /trust
+Note: MKT-05 skipped (docs/competitor-comparison-honest.md already present — marked done in tracker)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

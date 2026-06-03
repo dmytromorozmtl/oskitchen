@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const FEATURES = [
   {
@@ -99,7 +99,7 @@ const TESTIMONIALS = [
 
 const BRANDS = ["Urban Eats", "PrepLab", "Northside", "GhostLine", "Table & Co", "FreshRoute", "Metro Bowl", "Shift Kitchen"];
 
-export function HomeLanding() {
+export function HomeLanding({ afterHero }: { afterHero?: ReactNode }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
@@ -212,6 +212,8 @@ export function HomeLanding() {
             </div>
           </div>
         </section>
+
+        {afterHero}
 
         {/* SOCIAL PROOF */}
         <section className="section" style={{ paddingTop: "var(--space-12)", paddingBottom: "var(--space-12)" }}>
