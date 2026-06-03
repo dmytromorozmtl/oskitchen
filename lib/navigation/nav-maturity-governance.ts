@@ -1,4 +1,8 @@
 import type { NavGroupDef } from "@/lib/navigation/nav-types";
+import {
+  getNavMaturityHideExposure,
+  getNavMaturityHideRule,
+} from "@/lib/navigation/nav-maturity-hide-registry";
 
 /**
  * Nav exposure aligned with `docs/feature-maturity-matrix.md`.
@@ -243,11 +247,16 @@ export function getNavMaturityRule(href: string): NavMaturityRule | null {
       match = rule;
     }
   }
-  return match;
+  if (match) return match;
+  return getNavMaturityHideRule(href);
 }
 
 export function getNavMaturityExposure(href: string): NavMaturityExposure {
-  return getNavMaturityRule(href)?.exposure ?? "default";
+  const rule = getNavMaturityRule(href);
+  if (rule) return rule.exposure;
+  const hideExposure = getNavMaturityHideExposure(href);
+  if (hideExposure) return hideExposure;
+  return "default";
 }
 
 export function navMaturityBadgeLabel(exposure: NavMaturityExposure): string | null {

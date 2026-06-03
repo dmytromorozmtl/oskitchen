@@ -4296,3 +4296,12 @@ Artifact: lib/pos/shift-report-accuracy-e2e-policy.ts, lib/pos/shift-report-accu
 Result: IMPLEMENTED — expected=opening+cash sales; variance=counted−expected ±$0.01; computeShiftCloseout + closedShiftSummary reconciliation; receiptTotalsConsistent; chromium-authed balanced close history row
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 86
+Task: DES-09 — nav maturity hide 280 routes
+Role: DESIGN
+Priority: P1
+Artifact: lib/navigation/nav-maturity-hide-registry.ts, lib/navigation/nav-maturity-hide-metrics.ts, lib/navigation/nav-maturity-governance.ts, tests/unit/nav-maturity-hide-registry.test.ts
+Result: IMPLEMENTED — 131 hide prefix rules + dynamic [id] detail routes; 322/591 dashboard routes hidden from focused nav (target ≥280); getNavMaturityExposure fallback wired
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
