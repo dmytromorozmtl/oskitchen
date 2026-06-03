@@ -97,6 +97,16 @@ export function DynamicPricingPanel({ initial }: { initial: DynamicPricingDashbo
           </div>
         </CardHeader>
         <CardContent className="space-y-4 text-sm">
+          {!data.readiness.qualified ? (
+            <p
+              className="rounded-lg border border-amber-300/70 bg-amber-50 px-3 py-2 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-50"
+              role="status"
+              data-testid="dynamic-pricing-readiness"
+            >
+              <span className="font-medium">{data.readiness.headline}</span>
+              <span className="mt-1 block text-xs opacity-90">{data.readiness.detail}</span>
+            </p>
+          ) : null}
           <div className="flex flex-wrap gap-2">
             {data.activeSignals.map((s) => (
               <Badge key={`${s.kind}-${s.label}`} variant="secondary">

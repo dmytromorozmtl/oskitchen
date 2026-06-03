@@ -17,6 +17,13 @@ import type {
   DynamicPricingWeather,
 } from "@/lib/ai/dynamic-pricing-types";
 import {
+  assessDynamicPricingReadiness,
+  assertDynamicPricingValidation,
+  validateDynamicPricingAbLift,
+  validateDynamicPricingPrice,
+  validateDynamicPricingSuggestionIntegrity,
+} from "@/lib/ai/dynamic-pricing-validation";
+import {
   loadDynamicPricingStorage,
   saveDynamicPricingStorage,
 } from "@/lib/ai/dynamic-pricing-storage";
@@ -48,7 +55,9 @@ function localHourInTimezone(date: Date, timezone: string): number {
   }
 }
 
-async function loadProductDemand(userId: string): Promise<Map<string, number>> {
+async function loadProductDemand(
+  userId: string,
+): Promise<{ byProduct: Map<string, number>; lineCount: number }> {
   const since = subDays(new Date(), LOOKBACK_DAYS);
   const lines = await prisma.orderItem.findMany({
     where: {
@@ -63,12 +72,53 @@ async function loadProductDemand(userId: string): Promise<Map<string, number>> {
     take: 2000,
   });
 
-  const map = new Map<string, number>();
+  const byProduct = new Map<string, number>();
   for (const line of lines) {
     if (!line.productId) continue;
-    map.set(line.productId, (map.get(line.productId) ?? 0) + line.quantity);
+    byProduct.set(line.productId, (byProduct.get(line.productId) ?? 0) + line.quantity);
   }
-  return map;
+  return { byProduct, lineCount: lines.length };
+}
+
+function buildProductSuggestion(input: {
+  product: { id: string; title: string; category: string; price: { toString(): string } | number };
+  productOrderCount: number;
+  avgOrdersPerProduct: number;
+  localHour: number;
+  weather: DynamicPricingWeather;
+  date: Date;
+}): DynamicPricingSuggestion | null {
+  const currentPrice = decimalToNumber(input.product.price);
+  if (currentPrice <= 0) return null;
+
+  const signals = buildSignals({
+    localHour: input.localHour,
+    weather: input.weather,
+    date: input.date,
+    productOrderCount: input.productOrderCount,
+    avgOrdersPerProduct: input.avgOrdersPerProduct,
+  });
+
+  const combined = combineMultipliers(signals.map((s) => s.multiplier));
+  const suggestedPrice = computeSuggestedPrice(currentPrice, combined);
+  const pct = changePercent(currentPrice, suggestedPrice);
+
+  if (Math.abs(pct) < 1) return null;
+
+  return {
+    productId: input.product.id,
+    title: input.product.title,
+    category: input.product.category,
+    currentPrice,
+    suggestedPrice,
+    changePercent: pct,
+    confidence: suggestionConfidence(pct, signals.length),
+    signals,
+    rationale:
+      pct > 0
+        ? `Raise price +${pct}% while demand signals are favorable.`
+        : `Trim price ${pct}% to lift slow-period conversion.`,
+  };
 }
 
 function buildActiveSignals(input: {
@@ -87,7 +137,7 @@ function buildActiveSignals(input: {
 
 export async function loadDynamicPricingDashboard(userId: string): Promise<DynamicPricingDashboard> {
   const now = new Date();
-  const [storage, kitchen, productWhere, demand] = await Promise.all([
+  const [storage, kitchen, productWhere, demandSnapshot] = await Promise.all([
     loadDynamicPricingStorage(userId),
     prisma.kitchenSettings.findUnique({
       where: { userId },
@@ -96,6 +146,9 @@ export async function loadDynamicPricingDashboard(userId: string): Promise<Dynam
     productListWhereForOwner(userId),
     loadProductDemand(userId),
   ]);
+
+  const demand = demandSnapshot.byProduct;
+  const readiness = assessDynamicPricingReadiness(demandSnapshot.lineCount);
 
   const timezone = kitchen?.timezone ?? "UTC";
   const currency = kitchen?.currency ?? "USD";
@@ -119,38 +172,15 @@ export async function loadDynamicPricingDashboard(userId: string): Promise<Dynam
   const suggestions: DynamicPricingSuggestion[] = [];
 
   for (const product of products) {
-    const currentPrice = decimalToNumber(product.price);
-    if (currentPrice <= 0) continue;
-
-    const productOrderCount = demand.get(product.id) ?? 0;
-    const signals = buildSignals({
+    const suggestion = buildProductSuggestion({
+      product,
+      productOrderCount: demand.get(product.id) ?? 0,
+      avgOrdersPerProduct: avgOrders,
       localHour,
       weather,
       date: now,
-      productOrderCount,
-      avgOrdersPerProduct: avgOrders,
     });
-
-    const combined = combineMultipliers(signals.map((s) => s.multiplier));
-    const suggestedPrice = computeSuggestedPrice(currentPrice, combined);
-    const pct = changePercent(currentPrice, suggestedPrice);
-
-    if (Math.abs(pct) < 1) continue;
-
-    suggestions.push({
-      productId: product.id,
-      title: product.title,
-      category: product.category,
-      currentPrice,
-      suggestedPrice,
-      changePercent: pct,
-      confidence: suggestionConfidence(pct, signals.length),
-      signals,
-      rationale:
-        pct > 0
-          ? `Raise price ${pct > 0 ? "+" : ""}${pct}% while demand signals are favorable.`
-          : `Trim price ${pct}% to lift slow-period conversion.`,
-    });
+    if (suggestion) suggestions.push(suggestion);
   }
 
   suggestions.sort((a, b) => Math.abs(b.changePercent) - Math.abs(a.changePercent));
@@ -173,7 +203,9 @@ export async function loadDynamicPricingDashboard(userId: string): Promise<Dynam
       suggestionsCount: top.length,
       avgLiftPercent: avgLift,
       runningExperiments: storage.abTests.filter((t) => t.status === "running").length,
+      orderLinesInLookback: demandSnapshot.lineCount,
     },
+    readiness,
     scannedAt: now.toISOString(),
     honestyNote: HONESTY_NOTE,
   };
@@ -208,15 +240,29 @@ export async function applyDynamicPricingSuggestion(
   const where = await productListWhereForOwner(userId);
   const product = await prisma.product.findFirst({
     where: { ...where, id: productId },
-    select: { id: true },
+    select: { id: true, title: true, category: true, price: true },
   });
   if (!product) {
     throw new Error("Menu item not found.");
   }
 
+  const currentPrice = decimalToNumber(product.price);
+  const dashboard = await loadDynamicPricingDashboard(userId);
+  const liveSuggestion = dashboard.suggestions.find((s) => s.productId === productId);
+
+  const validation = liveSuggestion
+    ? validateDynamicPricingSuggestionIntegrity({
+        currentPrice,
+        clientSuggestedPrice: suggestedPrice,
+        serverSuggestedPrice: liveSuggestion.suggestedPrice,
+      })
+    : validateDynamicPricingPrice({ currentPrice, proposedPrice: suggestedPrice });
+
+  assertDynamicPricingValidation(validation);
+
   await prisma.product.update({
     where: { id: productId },
-    data: { price: suggestedPrice },
+    data: { price: validation.normalizedPrice },
   });
 
   return loadDynamicPricingDashboard(userId);
@@ -227,6 +273,8 @@ export async function startDynamicPricingAbTest(
   productId: string,
   liftPercent = 5,
 ): Promise<DynamicPricingDashboard> {
+  assertDynamicPricingValidation(validateDynamicPricingAbLift(liftPercent));
+
   const where = await productListWhereForOwner(userId);
   const product = await prisma.product.findFirst({
     where: { ...where, id: productId },

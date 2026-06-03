@@ -4008,3 +4008,12 @@ Artifact: lib/ai/digital-twin-data-gate.ts, services/ai/digital-twin-data-gate-s
 Result: IMPLEMENTED — 4-signal gate (stations, menu mix, staff, orders); live_ready/partial/demo_defaults tiers; confidence cap; remediation links in UI banner
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 54
+Task: DEV-29 — dynamic pricing validation
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/ai/dynamic-pricing-validation.ts, services/ai/dynamic-pricing-service.ts, components/ai/dynamic-pricing-panel.tsx, tests/unit/dynamic-pricing-validation.test.ts
+Result: IMPLEMENTED — ±12%/-8% bounds on apply; stale-suggestion integrity check; A/B lift cap; order-line readiness gate in UI
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

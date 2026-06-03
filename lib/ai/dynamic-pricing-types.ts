@@ -49,6 +49,13 @@ export type DynamicPricingDashboard = {
     suggestionsCount: number;
     avgLiftPercent: number;
     runningExperiments: number;
+    orderLinesInLookback: number;
+  };
+  readiness: {
+    orderLinesInLookback: number;
+    qualified: boolean;
+    headline: string;
+    detail: string;
   };
   scannedAt: string;
   honestyNote: string;
