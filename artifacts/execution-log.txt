@@ -4224,3 +4224,12 @@ Artifact: lib/security/csrf-server-actions-e2e-policy.ts, e2e/csrf-server-action
 Result: IMPLEMENTED — Next.js allowedOrigins contract; mutation origin guard blocks foreign POST; DSR export HTTP 403 before auth; trusted origin passes CSRF gate
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 78
+Task: QA-29 — file upload validation E2E
+Role: QA
+Priority: P1
+Artifact: lib/upload-policy/file-upload-validation-e2e-policy.ts, e2e/file-upload-validation.spec.ts, e2e/helpers/file-upload-validation-*.ts, tests/unit/file-upload-validation-e2e.test.ts
+Result: IMPLEMENTED — 9-channel denial matrix (MIME/size/PDF/SVG); EICAR malware block; storefront form HTTP 400 on video/mp4 before storage
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
