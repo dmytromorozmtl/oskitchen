@@ -71,6 +71,12 @@ export function VendorFinanceClient({
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" className="rounded-full" asChild>
+          <Link href="/vendor/finance/instant-payouts">Instant payouts (beta)</Link>
+        </Button>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-3">
         <BalanceCard
           label="Available balance"

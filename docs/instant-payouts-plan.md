@@ -114,8 +114,8 @@ Platform retains instant fee as **marketplace services revenue** — separate fr
 
 | # | Task | Owner |
 |---|------|-------|
-| 3.1 | `GET /vendor/finance` — show instant eligibility + fee quote | Product |
-| 3.2 | `requestInstantPayoutAction` — validate eligibility server-side | Eng |
+| 3.1 | `/vendor/finance/instant-payouts` — instant eligibility + fee quote | Product — **MVP UI shipped** |
+| 3.2 | `requestInstantPayoutAction` — validate eligibility server-side | Eng — `services/marketplace/instant-payouts-service.ts` |
 | 3.3 | Call Stripe instant payout on connected account (or platform-initiated pattern per Stripe docs) | Eng |
 | 3.4 | Ledger: `VendorTransaction` sub-row or `payoutMethod: instant` + fee column | Eng |
 | 3.5 | Webhook handler upgrade — `payout.paid` / `payout.failed` → update UI + CS alert | Eng |

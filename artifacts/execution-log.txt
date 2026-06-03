@@ -3453,3 +3453,8 @@ Cycle: 20260602-205600
 Feature: 34 — Gift Cards System
 Result: PASSED — gift-cards-service.ts (digital + physical), loyalty/gift-cards page, actions, e2e, unit tests
 Total done: 34/40
+---
+Cycle: 20260602-210000
+Feature: 35–36 — Freemium plan (pre-existing, tracker sync) + Instant Payouts for Vendors
+Result: PASSED — instant-payouts-service.ts, /vendor/finance/instant-payouts, Stripe instant path, unit + e2e
+Total done: 36/40
