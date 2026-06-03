@@ -4017,3 +4017,12 @@ Artifact: lib/ai/dynamic-pricing-validation.ts, services/ai/dynamic-pricing-serv
 Result: IMPLEMENTED — ±12%/-8% bounds on apply; stale-suggestion integrity check; A/B lift cap; order-line readiness gate in UI
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 55
+Task: DEV-30 — SCIM provisioning
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/scim/*, services/scim/scim-provisioning-service.ts, app/api/scim/v2/**, prisma/migrations/20260603180000_scim_provisioning_schema, tests/unit/scim-provisioning.test.ts
+Result: IMPLEMENTED — RFC 7644 /api/scim/v2 Users/Groups discovery; workspace bearer auth; create/patch/deprovision + WorkspaceMember sync; audit events; pilot env token fallback
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

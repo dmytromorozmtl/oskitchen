@@ -2353,7 +2353,9 @@ model UserProfile {
   posTabs                 PosTab[]
   pickupWindows           PickupWindow[]
   ssoIdentities           SsoIdentity[]
+  scimProvisionedUsers    ScimProvisionedUser[]
   workspaceSsoSettingsConfigured WorkspaceSsoSettings[] @relation("WorkspaceSsoSettingsConfiguredBy")
+  workspaceScimSettingsConfigured WorkspaceScimSettings[] @relation("WorkspaceScimSettingsConfiguredBy")
 
   @@map("users")
 }
@@ -10483,7 +10485,9 @@ model Workspace {
   packingVerificationSessionsByWorkspace PackingVerificationSession[] @relation("PackingVerificationSessionWorkspace")
   templateApplicationEventsByWorkspace TemplateApplicationEvent[] @relation("TemplateApplicationEventWorkspace")
   ssoSettings              WorkspaceSsoSettings?
+  scimSettings             WorkspaceScimSettings?
   ssoIdentities            SsoIdentity[]
+  scimProvisionedUsers     ScimProvisionedUser[]
 
   @@index([ownerUserId])
   @@index([organizationId])
@@ -10550,6 +10554,54 @@ model SsoIdentity {
   @@unique([workspaceId, userId, idpVendor])
   @@index([userId])
   @@map("sso_identities")
+}
+
+/// Workspace SCIM 2.0 provisioning settings (pilot foundation — disabled by default).
+enum ScimPilotPhase {
+  DISABLED
+  PILOT_CONFIGURED
+  PILOT_ACTIVE
+}
+
+model WorkspaceScimSettings {
+  id                 String         @id @default(uuid()) @db.Uuid
+  workspaceId        String         @unique @map("workspace_id") @db.Uuid
+  enabled            Boolean        @default(false)
+  tokenHash          String         @map("token_hash") @db.VarChar(128)
+  pilotPhase         ScimPilotPhase @default(DISABLED) @map("pilot_phase")
+  lastRotatedAt      DateTime?      @map("last_rotated_at")
+  configuredByUserId String?        @map("configured_by_user_id") @db.Uuid
+  configuredAt       DateTime?      @map("configured_at")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+
+  workspace    Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  configuredBy UserProfile? @relation("WorkspaceScimSettingsConfiguredBy", fields: [configuredByUserId], references: [id], onDelete: SetNull)
+
+  @@map("workspace_scim_settings")
+}
+
+/// SCIM-provisioned user linkage within a workspace (RFC 7644 User resource id).
+model ScimProvisionedUser {
+  id          String              @id @default(uuid()) @db.Uuid
+  workspaceId String              @map("workspace_id") @db.Uuid
+  userId      String              @map("user_id") @db.Uuid
+  externalId  String?             @map("external_id") @db.VarChar(512)
+  idpSubject  String?             @map("idp_subject") @db.VarChar(512)
+  userName    String              @map("user_name") @db.VarChar(255)
+  active      Boolean             @default(true)
+  role        WorkspaceMemberRole @default(STAFF)
+  lastSyncAt  DateTime            @default(now()) @map("last_sync_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userName])
+  @@unique([workspaceId, externalId])
+  @@index([userId])
+  @@map("scim_provisioned_users")
 }
 
 model Brand {
