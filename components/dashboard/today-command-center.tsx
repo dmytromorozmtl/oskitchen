@@ -36,6 +36,7 @@ import {
   shouldHideTodayAttentionStripForBriefing,
   todayMetricsExpandLabel,
 } from "@/lib/briefing/owner-daily-briefing-today-focus-era19";
+import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 import { formatCurrency } from "@/lib/utils";
 import type { TodayCommandCenterPayload } from "@/services/today/today-command-center-service";
 
@@ -96,15 +97,16 @@ export function TodayCommandCenterView({
               </Link>
             </Button>
           ) : null}
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/dashboard">Classic dashboard</Link>
-          </Button>
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/dashboard/error-recovery">Error recovery</Link>
-          </Button>
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/dashboard/system-health">System health</Link>
-          </Button>
+          {showInternalOpsDashboardUi() ? (
+            <>
+              <Button asChild variant="outline" className="rounded-full">
+                <Link href="/dashboard/error-recovery">Error recovery</Link>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full">
+                <Link href="/dashboard/system-health">System health</Link>
+              </Button>
+            </>
+          ) : null}
           <Button asChild variant="premium" className="rounded-full shadow-sm">
             <Link href="/dashboard/today/profit">Real-time profit</Link>
           </Button>

@@ -62,14 +62,17 @@ export default async function TodayOperationsPage({
   const supportAdmin =
     actor.platformBypass ||
     (await canUseFullSupportInbox(actor.sessionUserId, actor.email, actor.workspaceRole));
-  const showOwnerBriefing = resolveOwnerDailyBriefingVisibility({
+  const internalOpsUi = showInternalOpsDashboardUi({ platformBypass: actor.platformBypass });
+  const wantsOwnerBriefing = resolveOwnerDailyBriefingVisibility({
     workspaceRole: actor.workspaceRole,
     persona,
     granted: actor.granted,
     supportAdmin,
   });
+  /** Pilot/engineering briefing (SSO smoke, P0 artifacts) — internal ops only. */
+  const showPilotOwnerBriefing = wantsOwnerBriefing && internalOpsUi;
   const showLaunchWizardStrip = actor.workspaceRole === "OWNER";
-  const needsCommercialInflection = showOwnerBriefing && showIntegrationHealth;
+  const needsCommercialInflection = showPilotOwnerBriefing && showIntegrationHealth;
   let todayLoadFailed = false;
   let data = emptyTodayCommandCenterPayload();
   try {
@@ -89,7 +92,7 @@ export default async function TodayOperationsPage({
     showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId).catch(() => null) : Promise.resolve(null),
     needsCommercialInflection ? loadCommercialPilotOpsStatusModel().catch(() => null) : Promise.resolve(null),
   ]);
-  const ownerBriefing = showOwnerBriefing
+  const ownerBriefing = showPilotOwnerBriefing
     ? await loadOwnerDailyBriefing(dataUserId, {
         showIntegrationHealth,
         today: data,
@@ -113,7 +116,7 @@ export default async function TodayOperationsPage({
     : null;
   let aiBriefing = null;
   let aiBriefingError: unknown = null;
-  if (showOwnerBriefing && workspaceId) {
+  if (showPilotOwnerBriefing && workspaceId) {
     const briefingLoad = await loadAiFeaturePage(() => generateDailyBriefing(workspaceId));
     if (briefingLoad.ok) {
       aiBriefing = briefingLoad.data;
@@ -126,7 +129,7 @@ export default async function TodayOperationsPage({
     profile?.createdAt ?? new Date(),
   );
   let breakthroughEra25 = null;
-  if (showOwnerBriefing) {
+  if (showPilotOwnerBriefing) {
     try {
       breakthroughEra25 = buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true });
     } catch (error) {
@@ -143,7 +146,7 @@ export default async function TodayOperationsPage({
     console.error("[today] commercial inflection slice failed", error);
   }
   const integrationHealthStripModel =
-    integrationHealthModel && showOwnerBriefing
+    integrationHealthModel && showPilotOwnerBriefing
       ? augmentPilotIntegrationHealthStripWithCommercialInflection(
           integrationHealthModel,
           commercialInflectionUiSlice,

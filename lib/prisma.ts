@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
+import { kitchenSettingsDemoExpiresColumnCompatExtension } from "@/lib/prisma-kitchen-settings-demo-column-compat";
 import { storefrontFirstPartyColumnCompatExtension } from "@/lib/prisma-storefront-first-party-column-compat";
 
 const globalForPrisma = globalThis as unknown as {
@@ -13,9 +14,9 @@ function createPrismaClient(): PrismaClient {
         ? ["error", "warn"]
         : ["error"],
   });
-  return base.$extends(
-    storefrontFirstPartyColumnCompatExtension(base)
-  ) as unknown as PrismaClient;
+  return base
+    .$extends(storefrontFirstPartyColumnCompatExtension(base))
+    .$extends(kitchenSettingsDemoExpiresColumnCompatExtension(base)) as unknown as PrismaClient;
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();

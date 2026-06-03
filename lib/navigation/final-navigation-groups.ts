@@ -15,7 +15,6 @@ import {
   Coins,
   CreditCard,
   FileSpreadsheet,
-  LayoutDashboard,
   LayoutGrid,
   LayoutTemplate,
   ListTodo,
@@ -66,7 +65,6 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     title: "Core",
     links: [
       { href: "/dashboard/today", labelKey: "nav.today", icon: Sun },
-      { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
       { href: "/dashboard/orders", labelKey: "nav.orders", icon: Package },
       { href: "/dashboard/pos", labelKey: "nav.posTerminal", icon: ScanBarcode },
       { href: "/dashboard/pos/tabs", labelKey: "nav.posTabs", icon: LayoutList },

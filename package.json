@@ -1053,6 +1053,7 @@
     "db:deploy": "node ./node_modules/prisma/build/index.js migrate deploy",
     "db:repair-onboarding": "node ./node_modules/prisma/build/index.js db execute --schema prisma/schema.prisma --file prisma/sql/ensure-onboarding-demo-columns.sql",
     "db:repair-storefront": "node ./node_modules/prisma/build/index.js db execute --schema prisma/schema.prisma --file prisma/sql/ensure-storefront-followup-columns.sql",
+    "db:repair-kitchen-demo": "node ./node_modules/prisma/build/index.js db execute --schema prisma/schema.prisma --file prisma/sql/ensure-kitchen-demo-expires-column.sql",
     "db:apply-storefront-phase2": "bash scripts/apply-storefront-phase2-sql.sh",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:marketplace-categories": "tsx prisma/seed-marketplace-categories.ts",
