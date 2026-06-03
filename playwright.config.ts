@@ -77,6 +77,7 @@ if (dashboardE2EEnabled) {
         "**/cross-channel-inventory.spec.ts",
         "**/cross-channel-inventory-live-sync.spec.ts",
         "**/marketplace-checkout.spec.ts",
+        "**/marketplace-checkout-fulfill-payout.spec.ts",
         "**/vendor-registration.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",

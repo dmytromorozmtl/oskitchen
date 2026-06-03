@@ -4062,3 +4062,12 @@ Artifact: lib/security/webhook-ingress-extended.ts, scripts/audit-webhook-signat
 Result: IMPLEMENTED — extended ingress registry (4 routes outside /api/webhooks); full audit 56/56 PASSED; marketplace Stripe Connect, voice, capital lender pull covered
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 60
+Task: QA-11 — marketplace checkout fulfill payout E2E
+Role: QA
+Priority: P1
+Artifact: e2e/marketplace-checkout-fulfill-payout.spec.ts, tests/unit/marketplace-checkout-fulfill-payout.test.ts, playwright.config.ts
+Result: IMPLEMENTED — buyer net-terms checkout → vendor confirm/process/ship → finance payout request; service lifecycle unit test; honest skips for migration/RBAC
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
