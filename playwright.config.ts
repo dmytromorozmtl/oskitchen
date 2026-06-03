@@ -71,6 +71,7 @@ if (dashboardE2EEnabled) {
         "**/kds-staging.spec.ts",
         "**/qr-guest-order-kitchen.spec.ts",
         "**/qr-scan-guest-kitchen.spec.ts",
+        "**/woocommerce-webhook-order-hub.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",

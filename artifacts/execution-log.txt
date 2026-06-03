@@ -4134,3 +4134,12 @@ Artifact: lib/qr/qr-scan-guest-kitchen-e2e-policy.ts, e2e/qr-scan-guest-kitchen.
 Result: IMPLEMENTED — scanned `/q/demo-store/12` deep link → dark menu → place order → KDS ticket + table badge; scan vs self-service URL unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 68
+Task: QA-19 — WooCommerce webhook order hub E2E
+Role: QA
+Priority: P1
+Artifact: lib/integrations/woocommerce-webhook-order-hub-e2e-policy.ts, e2e/woocommerce-webhook-order-hub.spec.ts, e2e/helpers/woocommerce-webhook-order-hub-*.ts, tests/unit/woocommerce-webhook-order-hub.test.ts, playwright.config.ts
+Result: IMPLEMENTED — signed order.updated webhook → WooCommerce row on Order hub All tab; golden-path normalize + HMAC unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
