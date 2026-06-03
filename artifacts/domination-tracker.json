@@ -1,4 +1,7 @@
 {
+  "programStatus": "code-complete",
+  "liveSmokeWooCommerce": "pending_ops",
+  "liveSmokeShopify": "pending_ops",
   "feature-1": "done",
   "feature-2": "done",
   "feature-3": "done",

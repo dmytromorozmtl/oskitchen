@@ -253,6 +253,21 @@ npx tsx scripts/smoke-shopify-live.ts
 
 ---
 
+## Ops gate: live channel smokes (steps 4–5)
+
+Code for WooCommerce and Shopify is shipped (`feature-4` / `feature-5` = `done` in the tracker). The **decision tree** still surfaces step **4** or **5** until artifacts report `overall: PASSED` (requires staging credentials).
+
+| Check | Command |
+|-------|---------|
+| Next tree step | `./scripts/domination-next-step.sh` |
+| Env template | Copy `.env.smoke.example` → `.env.smoke.local` |
+| Woo smoke | `npm run smoke:woo-live` → `artifacts/woocommerce-live-smoke-summary.json` |
+| Shopify smoke | `npm run smoke:shopify-live` → `artifacts/shopify-live-smoke-summary.json` |
+
+Guides: [`woocommerce-credentials-guide.md`](./woocommerce-credentials-guide.md), [`shopify-credentials-guide.md`](./shopify-credentials-guide.md).
+
+---
+
 ## Honesty & compliance
 
 Several features use **deterministic or proxy signals** (weather proxy, benchmark aggregates, dynamic pricing caps) rather than live third-party AI or payment networks until credentials are configured. UI surfaces include honesty notes where pricing, benchmarks, or CV affect customer-facing behavior. Review `docs/PRICE_SUGGESTIONS.md` and integration guides before go-live claims.

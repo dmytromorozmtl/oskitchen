@@ -3483,3 +3483,14 @@ Cycle: 20260602-212000
 Feature: FINAL — Market Domination complete (41)
 Result: PASSED — all 40 features done in domination-tracker.json; docs/market-domination.md canonical index + verification checklist
 Total done: 40/40 — OS Kitchen dominates
+---
+Cycle: 20260603-domination-idle
+Feature: (none) — tree exhausted
+Result: SKIP — 40/40 done, docs/market-domination.md present; no decision-tree step matched
+Total done: 40/40 — OS Kitchen dominates
+---
+Cycle: 20260603-woo-smoke-ops
+Feature: 4 — WooCommerce live smoke (tree step; artifact not PASSED)
+Result: BLOCKED — overall SKIPPED (missing staging env); added .env.smoke.example, scripts/domination-next-step.sh, tracker liveSmoke* flags, market-domination ops gate section
+Next: source .env.smoke.local + npm run smoke:woo-live until overall PASSED
+Total done: 40/40 (code) — ops smoke 4–5 pending
