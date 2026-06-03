@@ -72,6 +72,7 @@ if (dashboardE2EEnabled) {
         "**/qr-guest-order-kitchen.spec.ts",
         "**/qr-scan-guest-kitchen.spec.ts",
         "**/woocommerce-webhook-order-hub.spec.ts",
+        "**/owner-briefing-blocker-resolve.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",

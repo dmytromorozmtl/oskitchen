@@ -4143,3 +4143,12 @@ Artifact: lib/integrations/woocommerce-webhook-order-hub-e2e-policy.ts, e2e/wooc
 Result: IMPLEMENTED — signed order.updated webhook → WooCommerce row on Order hub All tab; golden-path normalize + HMAC unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 69
+Task: QA-20 — owner briefing blocker resolve E2E
+Role: QA
+Priority: P1
+Artifact: lib/briefing/owner-briefing-blocker-resolve-e2e-policy.ts, e2e/owner-briefing-blocker-resolve.spec.ts, e2e/helpers/owner-briefing-blocker-*.ts, tests/unit/owner-briefing-blocker-resolve.test.ts, playwright.config.ts
+Result: IMPLEMENTED — Today ranked blocker / next action → destination workflow → resolve CTA; briefing blocker mapping + go-live next-action unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
