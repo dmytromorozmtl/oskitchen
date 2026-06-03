@@ -3539,3 +3539,12 @@ P0: SKIPPED (awaiting GHA secrets for live PASS)
 GO: NO-GO
 Tests: page-maturity-sweep 6/6 pass
 
+---
+Cycle: 2
+Task: DEV-03 — Sentry production setup guide
+Role: Developer
+Priority: P0
+Artifact: docs/sentry-production-setup.md
+Note: sentryServer.ok still false until Vercel DSN + redeploy (human gate)
+Vault: 11/11 | P0: SKIPPED | GO: NO-GO
+
