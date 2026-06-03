@@ -3647,3 +3647,12 @@ Artifact: artifacts/enterprise-sso-idp-staging-smoke-summary.json
 Result: overall SKIPPED — wiring+health PASS; idp_browser_login awaits manual Auth0 SAML operator proof
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 14
+Task: QA-06 — webhook signature matrix 52 routes
+Role: QA
+Priority: P0
+Artifact: tests/unit/webhook-signature-matrix.test.ts
+Result: PASS — 52/52 routes verified in static audit; 57 vitest assertions green
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
