@@ -8,6 +8,7 @@ import { readCopilotFormError } from "@/lib/ai/copilot-form-mutation";
 import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { KitchenAiTools } from "@/components/dashboard/copilot/kitchen-ai-tools";
 import { RefreshDeterministicButton } from "@/components/dashboard/copilot/refresh-button";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadCopilotPageActor } from "@/lib/ux/copilot-page-access-era20";
 import { prisma } from "@/lib/prisma";
@@ -86,6 +87,7 @@ export default async function CopilotTodayPage({
 
   return (
     <div className="space-y-6">
+      <AiHonestyBanner moduleId="operations-copilot" />
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">AI Operations Copilot</h1>

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { CoPilotPanel } from "@/components/dashboard/ai/co-pilot-panel";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Button } from "@/components/ui/button";
 import { canUseCopilot } from "@/lib/ai/copilot-permissions";
 import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
@@ -31,6 +32,7 @@ export default async function RestaurantCoPilotPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 pb-10">
+      <AiHonestyBanner moduleId="restaurant-co-pilot" />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">AI Restaurant Co-Pilot</h1>

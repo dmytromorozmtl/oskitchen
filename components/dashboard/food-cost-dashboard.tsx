@@ -22,6 +22,7 @@ import {
 import { toast } from "sonner";
 
 import { foodCostWhatIfAction } from "@/actions/food-cost-analytics";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -202,6 +203,7 @@ export function FoodCostDashboard({ analysis, alerts, trend30d, ingredientPriceS
 
   return (
     <div className="space-y-6 print:space-y-4" data-testid="food-cost-dashboard" id="food-cost-report">
+      <AiHonestyBanner moduleId="food-cost-ai" />
       <div className="flex flex-wrap items-start justify-between gap-3 print:hidden">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Food Cost AI</h1>

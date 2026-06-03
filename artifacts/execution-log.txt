@@ -3972,3 +3972,12 @@ Artifact: lib/restaurant/floor-plan-realtime-policy.ts, services/floor-plan-real
 Result: IMPLEMENTED — Supabase Realtime on restaurant_tables (workspace_id filter) + 15s/60s polling fallback; connection badge in floor plan editor; mirrors KDS transport pattern
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 50
+Task: DEV-25 — AI honesty labels
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/ai/ai-honesty-labels.ts, components/ui/ai-honesty-label.tsx, wired into 7 AI module dashboards + copilot pages, tests/unit/ai-honesty-labels.test.ts
+Result: IMPLEMENTED — maturity (pilot_ready/BETA/Preview) + method badges (deterministic/heuristic/simulation/LLM/synthetic) on all AI surfaces; links to /trust policy
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

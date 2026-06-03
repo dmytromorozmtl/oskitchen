@@ -19,6 +19,7 @@ import {
   syncUniversalMenuItemAction,
   updateUniversalMenuItemAction,
 } from "@/actions/universal-menu";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -409,6 +410,7 @@ export function UniversalMenuDashboard({ items: initialItems, menus, syncHistory
 
   return (
     <div className="space-y-6" data-testid="universal-menu-dashboard">
+      <AiHonestyBanner moduleId="universal-menu" />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Universal Menu</h1>

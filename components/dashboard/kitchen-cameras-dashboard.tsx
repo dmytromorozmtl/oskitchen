@@ -28,6 +28,7 @@ import type {
   KitchenCameraDashboardPayload,
 } from "@/lib/ai/kitchen-camera-dashboard-types";
 import { KitchenCameraPreviewBanner } from "@/components/kitchen/kitchen-camera-preview-banner";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { cn } from "@/lib/utils";
 
 type Props = KitchenCameraDashboardPayload & {
@@ -167,6 +168,7 @@ export function KitchenCamerasDashboard(props: Props) {
 
   return (
     <div className="space-y-6" data-testid="kitchen-cameras-dashboard" id="kitchen-camera-report">
+      <AiHonestyBanner moduleId="kitchen-camera" />
       {props.showPreviewBanner ? <KitchenCameraPreviewBanner /> : null}
 
       <div className="flex flex-wrap items-start justify-between gap-3 print:hidden">

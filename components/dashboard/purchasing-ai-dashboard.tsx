@@ -20,6 +20,7 @@ import {
   skipAiPurchaseItemAction,
   unskipAiPurchaseItemAction,
 } from "@/actions/ai-purchasing";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -250,6 +251,7 @@ export function PurchasingAiDashboard(props: Props) {
 
   return (
     <div className="space-y-6" data-testid="purchasing-ai-dashboard">
+      <AiHonestyBanner moduleId="ai-purchasing" />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">AI Purchasing</h1>

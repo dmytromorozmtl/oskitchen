@@ -30,6 +30,7 @@ import {
 } from "recharts";
 
 import { contributeBenchmarkDataAction } from "@/actions/benchmark-analytics";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -152,6 +153,7 @@ export function BenchmarkDashboard({
 
   return (
     <div className="space-y-6" data-testid="benchmark-dashboard">
+      <AiHonestyBanner moduleId="benchmark-network" />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Benchmark Network</h1>

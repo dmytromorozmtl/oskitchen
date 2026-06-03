@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DailyBriefing } from "@/lib/ai/restaurant-brain-types";
@@ -67,6 +68,7 @@ export function AiBriefingPanel({ briefing }: { briefing: DailyBriefing }) {
 
   return (
     <section className="space-y-4" data-testid="ai-briefing-panel">
+      <AiHonestyBanner moduleId="restaurant-brain" compact />
       <Card className="border-primary/20 bg-primary/[0.03] shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
