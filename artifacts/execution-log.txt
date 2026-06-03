@@ -4251,3 +4251,12 @@ Artifact: lib/pos/offline-mode-queue-sync-e2e-policy.ts, lib/pos/offline-mode-qu
 Result: IMPLEMENTED — IndexedDB kitchenos-offline-pos drain contract; server queueOrder→syncQueue lifecycle; same-table multi-device conflict stats; chromium-authed offline cash sale → online sync → queue 0
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 81
+Task: QA-32 — bill splitting E2E
+Role: QA
+Priority: P1
+Artifact: lib/pos/bill-splitting-e2e-policy.ts, lib/pos/bill-splitting-metrics.ts, e2e/bill-splitting-e2e.spec.ts, e2e/helpers/bill-splitting-*.ts, tests/unit/bill-splitting-e2e.test.ts, e2e/bill-splitting.spec.ts, playwright.config.ts
+Result: IMPLEMENTED — four-mode split contract (equal/percentage/seat/item); ±1% grand total accuracy SLI; computeBillSplit reconciliation for all modes; chromium-authed tabs panel smoke
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
