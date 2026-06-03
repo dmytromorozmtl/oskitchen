@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useTransition } from "react";
 import {
@@ -160,8 +161,11 @@ export function BenchmarkDashboard({
             Confidence {Math.round(data.confidence * 100)}%.
           </p>
         </div>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="benchmark-cohort" className="text-xs font-medium text-muted-foreground">
+        <div className="flex flex-col items-end gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="benchmark-premium-link">
+            <Link href="/dashboard/analytics/benchmarks/premium">Benchmark Premium →</Link>
+          </Button>
+          <label htmlFor="benchmark-cohort" className="text-xs font-medium text-muted-foreground self-stretch">
             Peer group
           </label>
           <select
