@@ -6,7 +6,21 @@ import { prisma } from "@/lib/prisma";
 import { auditLog } from "@/services/audit/audit-service";
 import { buildAuditWhere, type AuditWorkspaceScope } from "@/services/audit/audit-query-service";
 
-const EXPORT_CAP = 5000;
+export const EXPORT_CAP = 5000;
+
+export type AuditExportRow = {
+  id: string;
+  createdAt: Date;
+  action: string;
+  category: string | null;
+  severity: string | null;
+  source: string | null;
+  entityType: string;
+  entityId: string | null;
+  actorEmail: string | null;
+  userId: string | null;
+  route: string | null;
+};
 
 export type ExportAuditParams = {
   scope: AuditWorkspaceScope;
@@ -17,8 +31,20 @@ export type ExportAuditParams = {
   requestedById: string;
 };
 
-function buildCsv(rows: { id: string; createdAt: Date; action: string; category: string | null; severity: string | null; source: string | null; entityType: string; entityId: string | null; actorEmail: string | null; userId: string | null; route: string | null }[]): string {
-  const headers = ["id", "createdAt", "severity", "action", "category", "source", "entityType", "entityId", "actorEmail", "userId", "route"];
+export function buildAuditExportCsv(rows: AuditExportRow[]): string {
+  const headers = [
+    "id",
+    "createdAt",
+    "severity",
+    "action",
+    "category",
+    "source",
+    "entityType",
+    "entityId",
+    "actorEmail",
+    "userId",
+    "route",
+  ];
   const lines = [headers.join(",")];
   for (const r of rows) {
     lines.push(
@@ -38,6 +64,10 @@ function buildCsv(rows: { id: string; createdAt: Date; action: string; category:
     );
   }
   return lines.join("\n");
+}
+
+export function buildAuditExportJson(rows: AuditExportRow[]): string {
+  return JSON.stringify(rows, null, 2);
 }
 
 export async function exportAuditLogsSync(
@@ -66,7 +96,8 @@ export async function exportAuditLogsSync(
     },
   });
 
-  const body = params.format === "CSV" ? buildCsv(rows) : JSON.stringify(rows, null, 2);
+  const body =
+    params.format === "CSV" ? buildAuditExportCsv(rows) : buildAuditExportJson(rows);
   const ext = params.format === "CSV" ? "csv" : "json";
   const filename = `audit-export-${new Date().toISOString().slice(0, 10)}.${ext}`;
 

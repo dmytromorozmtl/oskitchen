@@ -12,6 +12,7 @@ import {
   runAuditExportAction,
   type AuditCenterFlags,
 } from "@/actions/audit-center";
+import { buildAuditExportDownloadHref } from "@/lib/audit/audit-export-filters";
 import type { AuditListFilters } from "@/lib/audit/audit-types";
 import type { AuditKpis } from "@/services/audit/audit-query-service";
 import { Badge } from "@/components/ui/badge";
@@ -186,6 +187,14 @@ export function AuditLogsView(props: {
               </Button>
               <Button variant="outline" disabled={exporting} onClick={() => void onExport("JSON")}>
                 Export JSON
+              </Button>
+              <Button variant="secondary" asChild>
+                <a
+                  href={buildAuditExportDownloadHref({ filters, format: "csv", signed: true })}
+                  download
+                >
+                  Signed CSV
+                </a>
               </Button>
             </>
           ) : null}

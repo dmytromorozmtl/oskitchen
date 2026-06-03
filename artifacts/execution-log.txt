@@ -4026,3 +4026,12 @@ Artifact: lib/scim/*, services/scim/scim-provisioning-service.ts, app/api/scim/v
 Result: IMPLEMENTED — RFC 7644 /api/scim/v2 Users/Groups discovery; workspace bearer auth; create/patch/deprovision + WorkspaceMember sync; audit events; pilot env token fallback
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 56
+Task: DEV-31 — audit log export
+Role: DEVELOPER
+Priority: P1
+Artifact: app/api/dashboard/audit-logs/export/route.ts, lib/audit/audit-export-filters.ts, lib/audit/audit-center-scope.ts, services/audit/audit-export-service.ts, tests/unit/audit-export-service.test.ts
+Result: IMPLEMENTED — GET export API with filter passthrough; HMAC signed CSV; AuditExport job row + AUDIT_EXPORT_GENERATED; Signed CSV button in Audit Center
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

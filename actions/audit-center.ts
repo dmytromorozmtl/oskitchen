@@ -9,14 +9,13 @@ import type { AuditExportFormat } from "@prisma/client";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { canViewSensitiveAuditDetailFromGrants } from "@/lib/audit/audit-permissions";
 import {
-  requireAuditCenterViewAccess,
   requireAuditExportAccess,
   requireAuditRetentionMutationAccess,
 } from "@/lib/audit/require-audit-center-mutation-access";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { hasSuperAdminRoleRow } from "@/lib/platform-super-bypass";
 import { clampRetentionDays } from "@/lib/audit/audit-retention";
+import { resolveAuditWorkspaceScope } from "@/lib/audit/audit-center-scope";
 import { AUDIT_ACTIONS } from "@/lib/audit/audit-actions";
 import type { AuditListFilters } from "@/lib/audit/audit-types";
 import { prisma } from "@/lib/prisma";
@@ -32,28 +31,7 @@ import {
 } from "@/services/audit/audit-query-service";
 
 async function resolveScope(): Promise<AuditWorkspaceScope | null> {
-  const viewAccess = await requireAuditCenterViewAccess();
-  if (!viewAccess.ok) return null;
-
-  const { sessionUser: user, dataUserId } = await requireTenantActor();
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: user.id },
-    select: { email: true, role: true },
-  });
-  const email = profile?.email ?? user.email ?? null;
-  const role = profile?.role ?? null;
-  const platformBypass = await hasSuperAdminRoleRow(user.id);
-  const workspaces = await prisma.workspace.findMany({
-    where: { ownerUserId: dataUserId },
-    select: { id: true },
-  });
-  return {
-    userId: dataUserId,
-    email,
-    role,
-    ownedWorkspaceIds: workspaces.map((w) => w.id),
-    platformBypass,
-  };
+  return resolveAuditWorkspaceScope();
 }
 
 export type AuditCenterFlags = {
