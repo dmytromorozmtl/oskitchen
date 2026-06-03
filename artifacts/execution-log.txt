@@ -4161,3 +4161,12 @@ Artifact: lib/integration-health/integration-health-recovery-playbook-e2e-policy
 Result: IMPLEMENTED — /dashboard/integration-health recovery panel → step or quick link → operator workflow; playbook alert mapping + recovery model unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 71
+Task: QA-22 — profit dashboard margin alert accuracy E2E
+Role: QA
+Priority: P1
+Artifact: lib/analytics/profit-dashboard-margin-alert-e2e-policy.ts, e2e/profit-dashboard-margin-alert.spec.ts, e2e/helpers/profit-dashboard-margin-alert-*.ts, tests/unit/profit-dashboard-margin-alert-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — /dashboard/today/profit gauge + alerts match API margin within ±1%; margin drop/healthy alert message accuracy unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

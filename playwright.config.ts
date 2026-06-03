@@ -74,6 +74,7 @@ if (dashboardE2EEnabled) {
         "**/woocommerce-webhook-order-hub.spec.ts",
         "**/owner-briefing-blocker-resolve.spec.ts",
         "**/integration-health-recovery-playbook.spec.ts",
+        "**/profit-dashboard-margin-alert.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",
