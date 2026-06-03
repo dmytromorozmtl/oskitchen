@@ -1,7 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import {
+  get7shiftsConfigError,
+  importScheduleFrom7shifts as import7shifts,
+  is7shiftsImportConfigured,
+} from "@/services/integrations/seven-shifts-import-service";
 
 export function is7shiftsConfigured(): boolean {
-  return Boolean(process.env.SEVENSHIFTS_API_KEY?.trim());
+  return is7shiftsImportConfigured();
 }
 
 export function isHomebaseConfigured(): boolean {
@@ -14,16 +19,17 @@ export async function exportScheduleTo7shifts(userId: string) {
       userId,
       shiftDate: { gte: new Date() },
     },
-      include: { staffMember: { select: { name: true } } },
+    include: { staffMember: { select: { name: true } } },
     take: 100,
   });
 
-  if (!is7shiftsConfigured()) {
-    return { ok: false as const, message: "Set SEVENSHIFTS_API_KEY", shifts };
+  const configError = get7shiftsConfigError();
+  if (configError) {
+    return { ok: false as const, message: configError, shifts };
   }
   return {
     ok: false as const,
-    message: "7shifts API wiring pending — schedule export ready",
+    message: "7shifts schedule export pending — import is available now",
     exported: shifts.length,
   };
 }
@@ -48,12 +54,7 @@ export async function exportScheduleToHomebase(userId: string) {
   };
 }
 
-export async function importScheduleFrom7shifts(_userId: string) {
-  if (!is7shiftsConfigured()) {
-    return { ok: false as const, message: "Set SEVENSHIFTS_API_KEY", imported: 0 };
-  }
-  return { ok: false as const, message: "7shifts import scaffold", imported: 0 };
-}
+export { importScheduleFrom7shifts } from "@/services/integrations/seven-shifts-import-service";
 
 export async function importScheduleFromHomebase(_userId: string) {
   if (!isHomebaseConfigured()) {
