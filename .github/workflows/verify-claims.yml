@@ -1,0 +1,111 @@
+# MKT-09: Marketing claims CI gate — blocks PRs with forbidden or unqualified roadmap copy.
+# Policy: era7-marketing-claims-governance-v1 · npm run verify-claims
+# Strict: MARKETING_CLAIMS_STRICT=1 (roadmap warnings fail the run)
+
+name: Verify Claims
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - "app/**/page.tsx"
+      - "app/**/layout.tsx"
+      - "components/marketing/**"
+      - "components/landing/**"
+      - "lib/public-copy.ts"
+      - "lib/marketing/**"
+      - "config/marketing/**"
+      - "docs/**"
+      - "scripts/verify-marketing-claims.ts"
+      - "lib/governance/marketing-claims-governance-policy.ts"
+      - "tests/unit/forbidden-claims-enforcement.test.ts"
+      - ".github/workflows/verify-claims.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: verify-claims-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify-claims:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify marketing claims (strict)
+        id: claims
+        run: |
+          set -o pipefail
+          mkdir -p artifacts
+          if MARKETING_CLAIMS_STRICT=1 npm run verify-claims 2>&1 | tee artifacts/verify-claims.log; then
+            echo "result=PASS" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=FAIL" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+        env:
+          MARKETING_CLAIMS_STRICT: "1"
+
+      - name: Forbidden claims enforcement unit test
+        run: npm run test:ci:forbidden-claims-enforcement
+        env:
+          MARKETING_CLAIMS_STRICT: "1"
+
+      - name: Write verify-claims artifact
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const result = process.env.CLAIMS_RESULT || 'UNKNOWN';
+          fs.writeFileSync('artifacts/verify-claims-gate.json', JSON.stringify({
+            policyId: 'era7-marketing-claims-governance-v1',
+            workflow: 'verify-claims.yml',
+            result,
+            strict: true,
+            sha: process.env.GITHUB_SHA,
+            ref: process.env.GITHUB_REF,
+            runId: process.env.GITHUB_RUN_ID,
+            scannedRoots: [
+              'components/marketing',
+              'components/landing',
+              'app/integrations',
+              'lib/public-copy.ts',
+            ],
+            matrixDoc: 'docs/feature-maturity-matrix.md',
+            registry: 'config/marketing/claims-registry.json',
+            generatedAt: new Date().toISOString(),
+          }, null, 2));
+          "
+        env:
+          CLAIMS_RESULT: ${{ steps.claims.outputs.result }}
+
+      - name: Upload verify-claims artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-claims-gate-${{ github.run_id }}
+          path: |
+            artifacts/verify-claims-gate.json
+            artifacts/verify-claims.log
+          if-no-files-found: warn
+
+      - name: Fail PR on claims violation
+        if: steps.claims.outputs.result != 'PASS'
+        run: |
+          echo "::error::Marketing claims gate FAILED — forbidden phrases or unqualified roadmap terms."
+          echo "Fix copy or add honest qualifiers. See docs/forbidden-claims-training.md"
+          exit 1

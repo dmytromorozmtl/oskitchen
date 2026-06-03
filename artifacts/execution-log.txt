@@ -3828,3 +3828,12 @@ Artifact: app/trust/page.tsx, components/marketing/trust-maturity-labels-section
 Result: UPDATED — trust page now explains Pilot ready, BETA, Preview, SKIPPED, Placeholder, Internal, LIVE; Integration Health rule + FAQ; security grid retained below
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 34
+Task: MKT-09 — verify-claims CI gate
+Role: MARKETING
+Priority: P0
+Artifact: .github/workflows/verify-claims.yml
+Result: CREATED — PR/push gate; MARKETING_CLAIMS_STRICT=1; forbidden-claims-enforcement test; PASS/FAIL artifact upload
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
