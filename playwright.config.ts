@@ -69,6 +69,7 @@ if (dashboardE2EEnabled) {
         "**/pos-offline-queue.spec.ts",
         "**/kds-realtime-staging.spec.ts",
         "**/kds-staging.spec.ts",
+        "**/qr-guest-order-kitchen.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",

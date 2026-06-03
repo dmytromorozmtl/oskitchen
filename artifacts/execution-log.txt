@@ -3900,3 +3900,12 @@ Artifact: app/api/marketplace/stripe-connect/webhook/route.ts, services/marketpl
 Result: HARDENED — idempotency via billingEvent; event allowlist; transfer.created/reversed reconciliation; payout.paid → vendor payout_processed webhook; payout.failed logging
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 42
+Task: DEV-17 — QR guest order kitchen ticket E2E
+Role: DEVELOPER
+Priority: P1
+Artifact: e2e/qr-guest-order-kitchen.spec.ts, e2e/helpers/qr-guest-order-ready.ts, playwright.config.ts
+Result: CREATED — engine QR metadata tests; public table shell; authed guest→KDS ticket + qr-table badge within 15s
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
