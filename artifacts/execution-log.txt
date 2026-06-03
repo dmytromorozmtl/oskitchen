@@ -4152,3 +4152,12 @@ Artifact: lib/briefing/owner-briefing-blocker-resolve-e2e-policy.ts, e2e/owner-b
 Result: IMPLEMENTED — Today ranked blocker / next action → destination workflow → resolve CTA; briefing blocker mapping + go-live next-action unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 70
+Task: QA-21 — integration health recovery playbook E2E
+Role: QA
+Priority: P1
+Artifact: lib/integration-health/integration-health-recovery-playbook-e2e-policy.ts, e2e/integration-health-recovery-playbook.spec.ts, e2e/helpers/integration-health-recovery-*.ts, tests/unit/integration-health-recovery-playbook-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — /dashboard/integration-health recovery panel → step or quick link → operator workflow; playbook alert mapping + recovery model unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
