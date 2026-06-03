@@ -3782,3 +3782,12 @@ Artifact: docs/icp-definition-final.md
 Result: CREATED — ghost kitchen, commissary, meal prep segments; Era 17 qualification gates; scoring rubric; GTM asset map
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 29
+Task: MKT-03 — LOI outreach email template
+Role: MARKETING
+Priority: P0
+Artifact: docs/loi-outreach-email.md
+Result: CREATED — 4 email variants (cold, follow-up, post-discovery, decline); 10 target criteria; CRM fields; honest beta framing
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
