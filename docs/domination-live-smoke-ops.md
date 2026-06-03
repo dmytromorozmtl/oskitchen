@@ -5,13 +5,17 @@ Features **4** (WooCommerce) and **5** (Shopify) are **code-complete** in `artif
 ## One-command check (local)
 
 ```bash
-cp .env.smoke.example .env.smoke.local
-# Edit .env.smoke.local — see guides below
-
+# Preferred: vault already in .env.staging.local (auto-loaded by smoke scripts)
 npm run smoke:live-checklist    # which env vars are still missing?
+
+# Optional overrides (gitignored):
+cp .env.smoke.example .env.smoke.local
+
 npm run smoke:channels-live
 ./scripts/domination-next-step.sh
 ```
+
+Live smoke scripts load **`.env` → `.env.local` → `.env.staging.local`**, then fill gaps from **`.env.smoke.local`**.
 
 ## GitHub Actions (staging secrets)
 

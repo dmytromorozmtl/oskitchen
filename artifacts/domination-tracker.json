@@ -1,6 +1,6 @@
 {
   "programStatus": "code-complete",
-  "liveSmokeWooCommerce": "pending_ops",
+  "liveSmokeWooCommerce": "failed_rest_fetch",
   "liveSmokeShopify": "pending_ops",
   "feature-1": "done",
   "feature-2": "done",
