@@ -67,6 +67,7 @@
     "smoke:woo-live": "tsx scripts/smoke-woocommerce-live.ts --write",
     "smoke:shopify-live": "tsx scripts/smoke-shopify-live.ts --write",
     "smoke:channels-live": "bash scripts/run-channel-live-smokes.sh",
+    "smoke:live-checklist": "tsx scripts/print-live-smoke-checklist.ts",
     "smoke:woo-shopify-live": "tsx scripts/smoke-woo-shopify-live-era17.ts",
     "smoke:channel-github-workflow-first-green": "tsx scripts/smoke-channel-github-workflow-first-green-era17.ts",
     "smoke:pilot-tier-preflight": "tsx scripts/smoke-pilot-tier-preflight-era17.ts",

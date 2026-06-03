@@ -8,6 +8,7 @@ Features **4** (WooCommerce) and **5** (Shopify) are **code-complete** in `artif
 cp .env.smoke.example .env.smoke.local
 # Edit .env.smoke.local — see guides below
 
+npm run smoke:live-checklist    # which env vars are still missing?
 npm run smoke:channels-live
 ./scripts/domination-next-step.sh
 ```
