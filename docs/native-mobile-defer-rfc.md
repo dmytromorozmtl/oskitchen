@@ -3,7 +3,7 @@
 **Status:** **DEFERRED** — no native iOS/Android app through pilot  
 **Decision date:** 2026-06-01  
 **Audience:** Product, Engineering, Sales, Founder  
-**Related:** [`MOBILE_OPS_EXPERIENCE.md`](./MOBILE_OPS_EXPERIENCE.md) · [`investor-narrative-hold.md`](./investor-narrative-hold.md) · [`pen-test-plan.md`](./pen-test-plan.md)
+**Related:** [`native-mobile-app-plan.md`](./native-mobile-app-plan.md) (RN + white-label + push roadmap) · [`MOBILE_OPS_EXPERIENCE.md`](./MOBILE_OPS_EXPERIENCE.md) · [`investor-narrative-hold.md`](./investor-narrative-hold.md) · [`pen-test-plan.md`](./pen-test-plan.md)
 
 ---
 
