@@ -4305,3 +4305,12 @@ Artifact: lib/navigation/nav-maturity-hide-registry.ts, lib/navigation/nav-matur
 Result: IMPLEMENTED — 131 hide prefix rules + dynamic [id] detail routes; 322/591 dashboard routes hidden from focused nav (target ≥280); getNavMaturityExposure fallback wired
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 87
+Task: DES-10 — role-based nav personas
+Role: DESIGN
+Priority: P1
+Artifact: lib/navigation/nav-personas.ts, lib/business-modes.ts, components/dashboard/dashboard-nav.tsx, services/navigation/navigation-preference-service.ts, tests/unit/nav-personas.test.ts
+Result: IMPLEMENTED — manager/kitchen/cashier/packer/support_admin allowlists; auto-resolve from StaffRoleType; sidebar persona select for STAFF; getFilteredNavGroups persona filter when focused
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

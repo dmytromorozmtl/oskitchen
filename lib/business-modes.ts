@@ -1,4 +1,4 @@
-import type { BusinessType, UserRole } from "@prisma/client";
+import type { BusinessType, StaffRoleType, UserRole } from "@prisma/client";
 
 import type { NavGroupDef } from "@/lib/nav-config";
 import { NAV_GROUPS } from "@/lib/nav-config";
@@ -6,10 +6,17 @@ import { getBusinessModeExperience, recommendedHrefsForBusinessType } from "@/li
 import { MODULE_REGISTRY_ENTRIES } from "@/lib/modules/module-registry";
 import type { ModuleKey } from "@/lib/module-visibility";
 import { navigationHrefDisabled } from "@/lib/module-visibility";
-import { filterNavGroupsForUserRole } from "@/lib/nav-role-filter";
 import {
   filterNavGroupsByMaturityGovernance,
 } from "@/lib/navigation/nav-maturity-governance";
+import { filterNavGroupsForUserRole } from "@/lib/nav-role-filter";
+import {
+  filterNavGroupsForNavPersona,
+  resolveEffectiveNavPersona,
+  shouldApplyNavPersonaFilter,
+  type NavPersona,
+  type NavPersonaSelection,
+} from "@/lib/navigation/nav-personas";
 
 /** Stable ordering for selects (onboarding, settings, growth forms). */
 export const ALL_BUSINESS_TYPES_ORDERED = [
@@ -79,6 +86,10 @@ export type NavFilterContext = NavRoleContext & {
    * Focused mode hides {@link getBusinessModeExperience} `hiddenByDefaultModuleKeys` routes until “Show all modules”.
    */
   navScopeAll: boolean;
+  /** Sidebar persona selection — `auto` resolves from staff role when available. */
+  navPersona?: NavPersonaSelection;
+  /** Staff role type for persona auto-resolution (optional server hint). */
+  staffRoleType?: StaffRoleType | null;
 };
 
 export function getFilteredNavGroups(
@@ -120,6 +131,29 @@ export function getFilteredNavGroups(
     navScopeAll: ctx.navScopeAll,
     gtmSurfaceAccess: Boolean(ctx.gtmSurfaceAccess),
   });
+
+  const workspaceRole = ctx.userRole ?? "OWNER";
+  const effectivePersona = resolveEffectiveNavPersona({
+    selection: ctx.navPersona ?? "auto",
+    workspaceRole,
+    staffRoleType: ctx.staffRoleType ?? null,
+    platformBypass: Boolean(ctx.isPlatformSuper ?? ctx.fullNavAccess),
+  });
+
+  if (
+    shouldApplyNavPersonaFilter({
+      persona: effectivePersona,
+      fullNavAccess: ctx.fullNavAccess,
+      navScopeAll: ctx.navScopeAll,
+      workspaceRole,
+    })
+  ) {
+    return filterNavGroupsForNavPersona(
+      afterMaturity,
+      effectivePersona as Exclude<NavPersona, "owner">,
+      { gtmSurfaceAccess: Boolean(ctx.gtmSurfaceAccess) },
+    );
+  }
 
   return filterNavGroupsForUserRole(
     afterMaturity,

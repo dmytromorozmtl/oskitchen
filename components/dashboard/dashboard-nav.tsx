@@ -28,10 +28,19 @@ import { showNavStatusBadges } from "@/lib/ui/customer-facing-dashboard";
 import {
   MAX_NAV_PINS as MAX_PINS,
   MAX_NAV_RECENT as MAX_RECENT,
+  NAV_PERSONA_STORAGE_KEY as LS_NAV_PERSONA,
   NAV_PINS_STORAGE_KEY as LS_NAV_PINS,
   NAV_RECENT_STORAGE_KEY as LS_NAV_RECENT,
   NAV_SCOPE_STORAGE_KEY as LS_NAV_SCOPE,
+  parseNavPersona,
+  type NavPersonaPersistence,
 } from "@/services/navigation/navigation-preference-service";
+import {
+  NAV_PERSONA_HEADLINE,
+  NAV_PERSONA_LABEL,
+  NAV_PERSONA_OPTIONS,
+  type NavPersonaSelection,
+} from "@/lib/navigation/nav-personas";
 
 export type { NavLinkItem } from "@/lib/nav-config";
 export { NAV_GROUPS, flattenNavLinks } from "@/lib/nav-config";
@@ -210,6 +219,7 @@ export function DashboardSidebarNav({
 }) {
   const [navQuery, setNavQuery] = React.useState("");
   const [navScopeAll, setNavScopeAll] = React.useState(false);
+  const [navPersona, setNavPersona] = React.useState<NavPersonaSelection>("auto");
   const [pinHrefs, setPinHrefs] = React.useState<string[]>([]);
   const [recentHrefs, setRecentHrefs] = React.useState<string[]>([]);
 
@@ -237,6 +247,7 @@ export function DashboardSidebarNav({
     try {
       const raw = localStorage.getItem(LS_NAV_SCOPE);
       setNavScopeAll(raw === "all");
+      setNavPersona(parseNavPersona(localStorage.getItem(LS_NAV_PERSONA)));
       const p = localStorage.getItem(LS_NAV_PINS);
       if (p) {
         const arr = JSON.parse(p) as string[];
@@ -248,6 +259,15 @@ export function DashboardSidebarNav({
       /* ignore */
     }
   }, []);
+
+  const persistPersona = (persona: NavPersonaPersistence) => {
+    setNavPersona(persona);
+    try {
+      localStorage.setItem(LS_NAV_PERSONA, persona);
+    } catch {
+      /* ignore */
+    }
+  };
 
   const persistScope = (all: boolean) => {
     setNavScopeAll(all);
@@ -296,12 +316,12 @@ export function DashboardSidebarNav({
 
   const groups = React.useMemo(() => {
     const base = getFilteredNavGroups(
-      { ...navContext, businessType, navScopeAll },
+      { ...navContext, businessType, navScopeAll, navPersona },
       navContext.fullNavAccess ? undefined : { disabledModuleKeys: disabledSet },
     );
     const effectiveRelease = navContext.fullNavAccess ? "full" : navReleaseProfile;
     return applyNavReleaseProfile(base, effectiveRelease);
-  }, [navContext, businessType, navScopeAll, disabledSet, navReleaseProfile]);
+  }, [navContext, businessType, navScopeAll, navPersona, disabledSet, navReleaseProfile]);
 
   const linkIndex = React.useMemo(() => {
     const m = new Map<string, NavLinkItem>();
@@ -355,6 +375,32 @@ export function DashboardSidebarNav({
             aria-label="Filter navigation"
           />
         </div>
+        {!navContext.fullNavAccess && !navContext.isOwner ? (
+          <label className="block space-y-1">
+            <span className="px-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              Nav persona
+            </span>
+            <select
+              value={navPersona}
+              onChange={(e) => persistPersona(e.target.value as NavPersonaPersistence)}
+              className="h-9 w-full rounded-lg border border-border/80 bg-muted/40 px-2 text-xs outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Navigation persona"
+              data-testid="nav-persona-select"
+            >
+              <option value="auto">Auto (from role)</option>
+              {NAV_PERSONA_OPTIONS.map((persona) => (
+                <option key={persona} value={persona}>
+                  {NAV_PERSONA_LABEL[persona]}
+                </option>
+              ))}
+            </select>
+            {navPersona !== "auto" ? (
+              <p className="px-0.5 text-[10px] leading-snug text-muted-foreground">
+                {NAV_PERSONA_HEADLINE[navPersona]}
+              </p>
+            ) : null}
+          </label>
+        ) : null}
         {!navContext.fullNavAccess ? (
           <button
             type="button"
