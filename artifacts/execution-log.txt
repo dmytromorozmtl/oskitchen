@@ -4107,3 +4107,12 @@ Artifact: lib/pos/pos-checkout-shift-report-e2e-policy.ts, e2e/pos-checkout-shif
 Result: IMPLEMENTED — open shift → cash sale → close with expected cash → closed shift history row; policy contract + closeout preview unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 65
+Task: QA-16 — KDS bump packing verify route E2E
+Role: QA
+Priority: P1
+Artifact: lib/kitchen/kds-bump-packing-route-e2e-policy.ts, e2e/kds-bump-packing-route.spec.ts, e2e/helpers/kds-bump-packing-route-*.ts, tests/unit/kds-bump-packing-route.test.ts, playwright.config.ts
+Result: IMPLEMENTED — delivery storefront checkout → KDS bump to ready → packing QC pass → route stop with customer; route eligibility unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
