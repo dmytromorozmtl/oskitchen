@@ -3548,3 +3548,12 @@ Artifact: docs/sentry-production-setup.md
 Note: sentryServer.ok still false until Vercel DSN + redeploy (human gate)
 Vault: 11/11 | P0: SKIPPED | GO: NO-GO
 
+---
+Cycle: 3
+Task: DEV-04 — production schema drift prevention runbook
+Role: Developer
+Priority: P0
+Artifact: docs/prod-schema-drift-fix.md
+Note: demo_expires_at incident documented; migrate deploy + CI drift check
+Vault: 11/11 | P0: SKIPPED | GO: NO-GO
+
