@@ -41,8 +41,12 @@ describe("page maturity sweep CI certification (live repo)", () => {
   });
 
   it("wires PageMaturityRouteNotice into dashboard layout", () => {
-    const layout = readFileSync(join(ROOT, "app/dashboard/layout.tsx"), "utf8");
-    expect(layout).toContain("PageMaturityRouteNotice");
+    const layoutShell = readFileSync(join(ROOT, "app/dashboard/layout.tsx"), "utf8");
+    const layoutContent = readFileSync(
+      join(ROOT, "app/dashboard/dashboard-layout-content.tsx"),
+      "utf8",
+    );
+    expect(layoutShell + layoutContent).toContain("PageMaturityRouteNotice");
   });
 
   it("has policy, honesty module, and unit tests on disk", () => {
