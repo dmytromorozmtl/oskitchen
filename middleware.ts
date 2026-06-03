@@ -16,7 +16,18 @@ import { stripLocalePrefixFromInternalPath } from "@/lib/storefront/locale-path"
 import { parseStorefrontInternalPath } from "@/lib/storefront/storefront-redirects";
 import { mapVanityPathToInternal } from "@/lib/storefront/middleware-paths";
 import { enforceApiSessionMiddleware } from "@/lib/api/middleware-api-auth";
+import { isUuid } from "@/lib/platform/is-uuid";
+import { PLATFORM_IMPERSONATION_COOKIE } from "@/lib/platform/platform-impersonation";
 import { updateSession } from "@/lib/supabase/middleware";
+
+/** Drop malformed impersonation cookies (invalid UUID crashes Prisma in dashboard layout). */
+function clearInvalidImpersonationCookie(request: NextRequest, response: NextResponse): NextResponse {
+  const raw = request.cookies.get(PLATFORM_IMPERSONATION_COOKIE)?.value?.trim();
+  if (raw && !isUuid(raw)) {
+    response.cookies.set(PLATFORM_IMPERSONATION_COOKIE, "", { path: "/", maxAge: 0 });
+  }
+  return response;
+}
 
 async function fetchHostResolution(
   request: NextRequest,
@@ -136,7 +147,10 @@ export async function middleware(request: NextRequest) {
     /* ignore */
   }
 
-  const sessionResponse = await updateSession(request);
+  let sessionResponse = await updateSession(request);
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/platform")) {
+    sessionResponse = clearInvalidImpersonationCookie(request, sessionResponse);
+  }
 
   if (pathname.startsWith("/s/")) {
     const { rewritten, locale } = stripLocalePrefixFromInternalPath(pathname);

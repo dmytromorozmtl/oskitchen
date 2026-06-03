@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
+import { isUuid } from "@/lib/platform/is-uuid";
 import {
   PLATFORM_IMPERSONATION_COOKIE,
   PLATFORM_IMPERSONATION_MAX_SECONDS,
@@ -21,40 +22,46 @@ function expiresAt(startedAt: Date): Date {
   return new Date(startedAt.getTime() + PLATFORM_IMPERSONATION_MAX_SECONDS * 1000);
 }
 
-/** Load active impersonation session; auto-end when TTL exceeded. */
+/** Load active impersonation session; auto-end when TTL exceeded. Never throws (safe for dashboard layout RSC). */
 export async function getActiveImpersonationSession(): Promise<ActiveImpersonation | null> {
-  const jar = await cookies();
-  const id = jar.get(PLATFORM_IMPERSONATION_COOKIE)?.value;
-  if (!id) return null;
+  try {
+    const jar = await cookies();
+    const id = jar.get(PLATFORM_IMPERSONATION_COOKIE)?.value?.trim();
+    if (!id || !isUuid(id)) return null;
 
-  const session = await prisma.impersonationSession.findFirst({
-    where: { id, endedAt: null },
-    include: { target: { select: { email: true } } },
-  });
-  if (!session) return null;
-
-  const exp = expiresAt(session.startedAt);
-  const now = Date.now();
-  if (now > exp.getTime()) {
-    await prisma.impersonationSession.update({
-      where: { id: session.id },
-      data: { endedAt: new Date() },
+    const session = await prisma.impersonationSession.findFirst({
+      where: { id, endedAt: null },
+      include: { target: { select: { email: true } } },
     });
-    // Do not mutate cookies here — dashboard layout renders this during RSC and Next.js
-    // only allows cookie writes in Server Actions / Route Handlers (would 500 every tab).
+    if (!session) return null;
+
+    const exp = expiresAt(session.startedAt);
+    const now = Date.now();
+    if (now > exp.getTime()) {
+      // End in DB only — never touch cookies here (RSC layout cannot mutate cookies).
+      await prisma.impersonationSession
+        .update({
+          where: { id: session.id },
+          data: { endedAt: new Date() },
+        })
+        .catch(() => undefined);
+      return null;
+    }
+
+    return {
+      sessionId: session.id,
+      adminUserId: session.adminUserId,
+      targetUserId: session.targetUserId,
+      targetEmail: session.target.email,
+      reason: session.reason,
+      startedAt: session.startedAt,
+      expiresAt: exp,
+      secondsRemaining: Math.max(0, Math.floor((exp.getTime() - now) / 1000)),
+    };
+  } catch (error) {
+    console.error("[impersonation] getActiveImpersonationSession failed", error);
     return null;
   }
-
-  return {
-    sessionId: session.id,
-    adminUserId: session.adminUserId,
-    targetUserId: session.targetUserId,
-    targetEmail: session.target.email,
-    reason: session.reason,
-    startedAt: session.startedAt,
-    expiresAt: exp,
-    secondsRemaining: Math.max(0, Math.floor((exp.getTime() - now) / 1000)),
-  };
 }
 
 export function formatImpersonationTtl(seconds: number): string {

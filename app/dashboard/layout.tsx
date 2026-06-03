@@ -16,6 +16,7 @@ import { WorkspacePermissionsProvider } from "@/components/permissions/workspace
 import { ensureAppUser } from "@/lib/auth";
 import { isDemoSessionExpired, isGuestDemoEmail } from "@/lib/demo/demo-session";
 import { resolveUiWorkspacePermissions } from "@/lib/permissions/resolve-ui-permissions";
+import type { PermissionKey } from "@/lib/permissions/permissions";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { getBillingAccess } from "@/lib/billing/access";
 import { BUSINESS_TYPE_LABELS, resolveBusinessType } from "@/lib/business-modes";
@@ -38,7 +39,11 @@ export default async function DashboardLayout({
 }) {
   const { sessionUser, userId, workspaceId } = await getTenantActor();
   if (sessionUser.email) {
-    await ensureAppUser(sessionUser.id, sessionUser.email);
+    try {
+      await ensureAppUser(sessionUser.id, sessionUser.email);
+    } catch (error) {
+      console.error("[dashboard-layout] ensureAppUser failed", error);
+    }
   }
 
   const [profile, kitchenSettings, workspaceForNps] = await Promise.all([
@@ -128,7 +133,12 @@ export default async function DashboardLayout({
   });
 
   const navReleaseProfile = navReleaseProfileFromEnv();
-  const workspaceGrantedKeys = await resolveUiWorkspacePermissions();
+  let workspaceGrantedKeys: PermissionKey[] = [];
+  try {
+    workspaceGrantedKeys = await resolveUiWorkspacePermissions();
+  } catch (error) {
+    console.error("[dashboard-layout] resolveUiWorkspacePermissions failed", error);
+  }
 
   return (
     <WorkspacePermissionsProvider grantedKeys={workspaceGrantedKeys}>

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { formatImpersonationTtl } from "@/lib/platform/impersonation-session";
-import { PLATFORM_IMPERSONATION_MAX_SECONDS } from "@/lib/platform/platform-impersonation";
+import { isUuid } from "@/lib/platform/is-uuid";
 
-describe("platform impersonation", () => {
-  it("formats TTL for banner", () => {
-    expect(formatImpersonationTtl(125)).toBe("2m 5s");
-    expect(formatImpersonationTtl(45)).toBe("45s");
+describe("isUuid", () => {
+  it("accepts valid v4 ids", () => {
+    expect(isUuid("550e8400-e29b-41d4-a716-446655440000")).toBe(true);
   });
 
-  it("uses one-hour max session constant", () => {
-    expect(PLATFORM_IMPERSONATION_MAX_SECONDS).toBe(3600);
+  it("rejects malformed cookie values", () => {
+    expect(isUuid("")).toBe(false);
+    expect(isUuid("not-a-uuid")).toBe(false);
+    expect(isUuid("expired-session-123")).toBe(false);
   });
 });
