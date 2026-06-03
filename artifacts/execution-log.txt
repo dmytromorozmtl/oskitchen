@@ -3683,3 +3683,12 @@ Artifact: tests/unit/profit-margin-accuracy.test.ts
 Result: PASS — seeded COGS fixtures assert food cost + gross margin within ±1%
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 18
+Task: QA-10 — pilot GO/NO-GO builder integration
+Role: QA
+Priority: P0
+Artifact: tests/integration/pilot-gono-go-builder.integration.test.ts
+Result: PASS — all P0 smokes pass → GO; channel/SSO P0 fail → NO-GO
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
