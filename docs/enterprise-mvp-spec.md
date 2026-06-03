@@ -68,7 +68,7 @@ Features that may appear in an Enterprise MVP SOW **only** with the honesty labe
 | Feature | Why excluded | Pointer |
 |---------|--------------|---------|
 | SOC 2 Type II attestation | Not certified — ~35% readiness | [`soc2-readiness-assessment.md`](./soc2-readiness-assessment.md) |
-| SCIM provisioning | Depends on SSO R2 pilot | [`ENTERPRISE_SECURITY_ROADMAP.md`](./ENTERPRISE_SECURITY_ROADMAP.md) |
+| SCIM provisioning | Depends on SSO R2 pilot | [`sso-scim-live-plan.md`](./sso-scim-live-plan.md) · [`scim-provisioning-rfc.md`](./scim-provisioning-rfc.md) |
 | Uber Direct dispatch | **PLACEHOLDER** | [`uber-direct-implementation-plan.md`](./uber-direct-implementation-plan.md) |
 | 24/7 phone support / P1 SLA | Bus factor 1 | [`support-tier-plan.md`](./support-tier-plan.md) |
 | Org-level invoicing (non-Stripe) | Billing still user-centric | [`SCALE_READINESS_AUDIT.md`](./SCALE_READINESS_AUDIT.md) |

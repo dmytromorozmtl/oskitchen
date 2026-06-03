@@ -3,7 +3,7 @@
 **Status:** Draft for engineering review — **not implemented**  
 **Audience:** Enterprise engineering, Security, Procurement, DevOps  
 **Policy:** `era16-enterprise-sso-r2-pilot-v1` (`ENTERPRISE_SSO_R2_SCIM_DELIVERY_STATUS = "not_implemented"`)  
-**Related:** [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md) · [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md) · [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md)
+**Related:** [`sso-scim-live-plan.md`](./sso-scim-live-plan.md) · [`enterprise-sso-r2-pilot-design.md`](./enterprise-sso-r2-pilot-design.md) · [`enterprise-sso-idp-staging-smoke-plan.md`](./enterprise-sso-idp-staging-smoke-plan.md) · [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md)
 
 ---
 

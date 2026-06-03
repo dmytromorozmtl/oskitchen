@@ -3438,3 +3438,8 @@ Cycle: 20260602-204200
 Feature: 29 — Hardware Partnership Program (docs)
 Result: PASSED — hardware-partnership-program.md (certified devices, partner pricing), unit test, cross-links
 Total done: 29/40
+---
+Cycle: 20260602-204800
+Feature: 30–32 — Support tier + SOC2 (pre-existing docs, tracker sync) + SSO + SCIM LIVE plan
+Result: PASSED — support-tier-plan.md + soc2-readiness-assessment.md verified; sso-scim-live-plan.md + unit test
+Total done: 32/40
