@@ -3791,3 +3791,12 @@ Artifact: docs/loi-outreach-email.md
 Result: CREATED — 4 email variants (cold, follow-up, post-discovery, decline); 10 target criteria; CRM fields; honest beta framing
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 30
+Task: MKT-04 — pilot pricing page
+Role: MARKETING
+Priority: P0
+Artifact: app/pricing/page.tsx, lib/marketing/pilot-pricing-skus.ts, components/marketing/pilot-pricing-section.tsx
+Result: UPDATED — transparent SKU table (LOI-DP-001, PILOT-*-50, PILOT-PLAT-90, PILOT-IMPL-001); 50% pilot discount cards; honest invoice/LOI disclaimer
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

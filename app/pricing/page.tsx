@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { PilotPricingSection } from "@/components/marketing/pilot-pricing-section";
 import { PricingPage } from "@/components/marketing/pricing-page";
 import { PricingViewTracker } from "@/components/marketing/pricing-view-tracker";
 import { SiteFooter } from "@/components/marketing/site-footer";
@@ -9,11 +10,16 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "OS Kitchen Pricing — Restaurant POS & Kitchen Operations Plans",
+  title: "OS Kitchen Pricing — Plans & Transparent Pilot SKUs",
   description:
-    "Restaurant POS & kitchen software pricing. Starter $29, Pro $79, Team $199/mo. 14-day free trial. No hardware required.",
+    "Published plans: Starter $29, Pro $79, Team $199/mo. Pilot SKUs LOI-DP-001 (design partner $0), PILOT-*-50 at 50% off, PILOT-PLAT-90 SOW. 14-day trial. No hardware required.",
   path: "/pricing",
-  keywords: ["meal prep software pricing", "catering software cost", "kitchen software plans"],
+  keywords: [
+    "meal prep software pricing",
+    "ghost kitchen pilot pricing",
+    "kitchen software plans",
+    "restaurant pilot SKU",
+  ],
 });
 
 export default function Page() {
@@ -22,6 +28,7 @@ export default function Page() {
       <FAQSchema questions={PRICING_FAQ_ITEMS} />
       <PricingViewTracker />
       <SiteHeader />
+      <PilotPricingSection />
       <PricingPage />
       <SiteFooter />
     </div>
