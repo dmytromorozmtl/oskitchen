@@ -1,0 +1,60 @@
+{
+  "version": "era17-enterprise-sso-idp-staging-smoke-v1",
+  "runAt": "2026-06-03T19:08:07.022Z",
+  "overall": "SKIPPED",
+  "wiringCertPassed": true,
+  "idpStagingPrerequisitesMet": true,
+  "loginProofStatus": "proof_skipped_missing_operator_evidence",
+  "missingEnvVars": [],
+  "operatorProof": {
+    "operatorEmail": null,
+    "screenshotPath": null,
+    "auditEventRef": null,
+    "negativeTestNote": null,
+    "breakGlassDrillNote": null,
+    "stagingBaseUrl": "https://os-kitchen.com",
+    "workspaceId": "5e831e17-a30f-45df-b655-5bd8f46979ff",
+    "idpVendor": "AUTH0"
+  },
+  "steps": [
+    {
+      "id": "wiring_cert",
+      "label": "SSO R2 pilot wiring cert (smoke:enterprise-sso-r2-pilot)",
+      "status": "PASSED"
+    },
+    {
+      "id": "idp_staging_prerequisites",
+      "label": "IdP staging prerequisites configured",
+      "status": "PASSED",
+      "reason": "IdP vendor AUTH0; workspace 5e831e17-a30f-45df-b655-5bd8f46979ff"
+    },
+    {
+      "id": "staging_health",
+      "label": "Staging /api/health reachable",
+      "status": "PASSED"
+    },
+    {
+      "id": "staging_login_page",
+      "label": "Staging /login reachable",
+      "status": "PASSED"
+    },
+    {
+      "id": "idp_browser_login",
+      "label": "Operator IdP login → dashboard on staging",
+      "status": "SKIPPED",
+      "reason": "Missing operator proof env vars: SSO_STAGING_OPERATOR_EMAIL, SSO_STAGING_LOGIN_SCREENSHOT_PATH, SSO_STAGING_AUDIT_EVENT_REF, SSO_STAGING_NEGATIVE_TEST_NOTE — complete manual IdP login on staging first."
+    },
+    {
+      "id": "negative_tenant_mapping",
+      "label": "Negative tests (wrong domain / workspace / disabled SSO)",
+      "status": "SKIPPED",
+      "reason": "Set SSO_STAGING_NEGATIVE_TEST_NOTE after manual denial tests."
+    },
+    {
+      "id": "break_glass_drill",
+      "label": "Break-glass owner login drill",
+      "status": "SKIPPED",
+      "reason": "Set SSO_STAGING_BREAK_GLASS_DRILL_NOTE after owner break-glass drill."
+    }
+  ]
+}

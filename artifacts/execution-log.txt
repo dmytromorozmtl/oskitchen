@@ -3638,3 +3638,12 @@ Artifact: artifacts/shopify-live-smoke-summary.json
 Result: overall FAILED — shopify_api_connection json.errors?.map is not a function (invalid API response or creds)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 13
+Task: QA-05 — SSO SAML login smoke run
+Role: QA
+Priority: P0
+Artifact: artifacts/enterprise-sso-idp-staging-smoke-summary.json
+Result: overall SKIPPED — wiring+health PASS; idp_browser_login awaits manual Auth0 SAML operator proof
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
