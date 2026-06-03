@@ -3764,3 +3764,12 @@ Artifact: components/dashboard/integration-health-strip.tsx
 Result: CREATED — health score bar, status badge, mobile metric scroll, empty CTA
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 27
+Task: MKT-01 — forbidden claims training
+Role: MARKETING
+Priority: P0
+Artifact: docs/forbidden-claims-training.md
+Result: CREATED — 5 modules, 10-question quiz, certification record
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
