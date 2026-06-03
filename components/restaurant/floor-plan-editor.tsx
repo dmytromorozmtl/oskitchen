@@ -14,6 +14,7 @@ import {
 } from "@/actions/restaurant/tables";
 import type { TableData } from "@/components/restaurant/floor-plan";
 import { getActionError, isActionSuccess } from "@/lib/action-result";
+import { useFloorPlanRealtime } from "@/hooks/use-floor-plan-realtime";
 import { useSyncedServerState } from "@/hooks/use-synced-server-state";
 import { cn } from "@/lib/utils";
 
@@ -54,7 +55,15 @@ function displayPosition(table: TableData, index: number): { x: number; y: numbe
   return { x: table.positionX, y: table.positionY };
 }
 
-export function FloorPlanEditor({ tables: initialTables }: { tables: TableData[] }) {
+export function FloorPlanEditor({
+  tables: initialTables,
+  userId,
+  workspaceId,
+}: {
+  tables: TableData[];
+  userId: string;
+  workspaceId: string | null;
+}) {
   const [tables, setTables] = useSyncedServerState(initialTables);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -63,6 +72,16 @@ export function FloorPlanEditor({ tables: initialTables }: { tables: TableData[]
   const canvasRef = useRef<HTMLDivElement>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+
+  const refreshFromServer = useCallback(() => {
+    router.refresh();
+  }, [router]);
+
+  const { connectionLabel, isLive, reconnectAttempt } = useFloorPlanRealtime({
+    userId,
+    workspaceId,
+    onRefresh: refreshFromServer,
+  });
 
   const persistPosition = useCallback(
     (tableId: string, positionX: number, positionY: number) => {
@@ -201,10 +220,17 @@ export function FloorPlanEditor({ tables: initialTables }: { tables: TableData[]
   return (
     <div className="space-y-6">
       <p
-        className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100"
+        className={cn(
+          "rounded-lg border px-3 py-2 text-sm",
+          isLive
+            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-950 dark:text-emerald-100"
+            : "border-amber-500/30 bg-amber-500/10 text-amber-950 dark:text-amber-100",
+        )}
         role="status"
+        data-testid="floor-plan-connection-status"
       >
-        Floor view updates on refresh. Real-time coming soon.
+        {connectionLabel}
+        {reconnectAttempt > 0 ? ` · reconnect ${reconnectAttempt}/5` : null}
       </p>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>

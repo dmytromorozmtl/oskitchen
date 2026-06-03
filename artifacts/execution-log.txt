@@ -3963,3 +3963,12 @@ Artifact: services/integrations/seven-shifts-import-service.ts, lib/integrations
 Result: IMPLEMENTED — fetch 14-day shifts from 7shifts API v2; staff mapping → StaffShift upsert; SEVENSHIFTS_COMPANY_ID required; idempotent via 7shifts:shift tag
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 49
+Task: DEV-24 — floor plan WebSocket realtime
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/restaurant/floor-plan-realtime-policy.ts, services/floor-plan-realtime.ts, hooks/use-floor-plan-realtime.ts, components/restaurant/floor-plan-editor.tsx, app/dashboard/floor-plans/page.tsx, tests/unit/floor-plan-realtime.test.ts
+Result: IMPLEMENTED — Supabase Realtime on restaurant_tables (workspace_id filter) + 15s/60s polling fallback; connection badge in floor plan editor; mirrors KDS transport pattern
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
