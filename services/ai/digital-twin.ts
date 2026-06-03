@@ -12,9 +12,11 @@ import type {
   TwinStation,
 } from "@/lib/ai/digital-twin-types";
 import { simulateKitchen } from "@/lib/ai/digital-twin-simulation";
+import { applyDigitalTwinConfidenceCap } from "@/lib/ai/digital-twin-data-gate";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId, resolveWorkspaceOwnerUserId } from "@/lib/scope/resolve-owner-workspace-id";
 import { resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
+import { loadDigitalTwinDataGate } from "@/services/ai/digital-twin-data-gate-service";
 import { loadExecutiveOverview } from "@/services/executive/executive-dashboard-service";
 
 export type { KitchenSimulation, SimulationParams, SimulationResult, KitchenTwinConfig, DigitalTwinDashboardPayload } from "@/lib/ai/digital-twin-types";
@@ -180,8 +182,17 @@ export async function runKitchenSimulation(
   workspaceId: string,
   params: SimulationParams,
 ): Promise<SimulationResult> {
-  const twin = await createDigitalTwin(workspaceId);
-  return twin.simulate(params);
+  const ownerUserId = await resolveWorkspaceOwnerUserId(workspaceId);
+  if (!ownerUserId) {
+    throw new Error(`Workspace not found: ${workspaceId}`);
+  }
+
+  const [twin, dataGate] = await Promise.all([
+    createDigitalTwin(workspaceId),
+    loadDigitalTwinDataGate(ownerUserId),
+  ]);
+  const raw = twin.simulate(params);
+  return applyDigitalTwinConfidenceCap(raw, dataGate);
 }
 
 /** Menu mix from recent order volume — for what-if scenario defaults. */
@@ -210,20 +221,25 @@ export async function loadDigitalTwinDashboard(workspaceId: string): Promise<Dig
     throw new Error(`Workspace not found: ${workspaceId}`);
   }
 
-  const [twin, defaultMenuMix] = await Promise.all([
+  const [twin, defaultMenuMix, dataGate] = await Promise.all([
     createDigitalTwin(workspaceId),
     loadHistoricalMenuMix(ownerUserId),
+    loadDigitalTwinDataGate(ownerUserId),
   ]);
 
-  const initialResult = twin.simulate({
-    orderCount: 60,
-    timeWindow: 60,
-    menuMix: defaultMenuMix,
-  });
+  const initialResult = applyDigitalTwinConfidenceCap(
+    twin.simulate({
+      orderCount: 60,
+      timeWindow: 60,
+      menuMix: defaultMenuMix,
+    }),
+    dataGate,
+  );
 
   return {
     config: twin.config,
     defaultMenuMix,
     initialResult,
+    dataGate,
   };
 }

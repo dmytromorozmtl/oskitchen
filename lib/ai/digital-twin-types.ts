@@ -1,4 +1,4 @@
-/** Restaurant Digital Twin — kitchen simulation types (deterministic, AI-assisted). */
+import type { DigitalTwinDataGateResult } from "@/lib/ai/digital-twin-data-gate";
 
 export type TwinStation = {
   name: string;
@@ -57,4 +57,5 @@ export type DigitalTwinDashboardPayload = {
   config: KitchenTwinConfig;
   defaultMenuMix: SimulationMenuMixItem[];
   initialResult: SimulationResult;
+  dataGate: DigitalTwinDataGateResult;
 };

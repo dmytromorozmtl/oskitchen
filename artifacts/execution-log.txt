@@ -3999,3 +3999,12 @@ Artifact: lib/ai/copilot-llm-routing.ts, services/ai/copilot-service.ts, app/das
 Result: IMPLEMENTED — task-aware routing (narrative vs chat); OpenAI + Anthropic providers; env model overrides; unified invokeCopilotLlm; route labels in settings + status badges
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 53
+Task: DEV-28 — digital twin data gate
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/ai/digital-twin-data-gate.ts, services/ai/digital-twin-data-gate-service.ts, components/dashboard/digital-twin-data-gate-banner.tsx, services/ai/digital-twin.ts, tests/unit/digital-twin-data-gate.test.ts
+Result: IMPLEMENTED — 4-signal gate (stations, menu mix, staff, orders); live_ready/partial/demo_defaults tiers; confidence cap; remediation links in UI banner
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

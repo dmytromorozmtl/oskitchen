@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { runDigitalTwinScenarioAction } from "@/actions/digital-twin";
 import type { DigitalTwinDashboardPayload } from "@/lib/ai/digital-twin-types";
 import type { SimulationResult } from "@/lib/ai/digital-twin-types";
+import { DigitalTwinDataGateBanner } from "@/components/dashboard/digital-twin-data-gate-banner";
 import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,7 @@ const TIME_WINDOWS = [
 
 type Props = DigitalTwinDashboardPayload;
 
-export function DigitalTwinDashboard({ config, defaultMenuMix, initialResult }: Props) {
+export function DigitalTwinDashboard({ config, defaultMenuMix, initialResult, dataGate }: Props) {
   const [orderCount, setOrderCount] = useState(60);
   const [timeWindow, setTimeWindow] = useState(60);
   const [menuMixMode, setMenuMixMode] = useState<"auto" | "custom">("auto");
@@ -82,6 +83,7 @@ export function DigitalTwinDashboard({ config, defaultMenuMix, initialResult }: 
   return (
     <div className="space-y-6" data-testid="digital-twin-dashboard">
       <AiHonestyBanner moduleId="digital-twin" />
+      <DigitalTwinDataGateBanner gate={dataGate} />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Digital Twin</h1>
