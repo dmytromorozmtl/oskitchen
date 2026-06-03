@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import type { SetupHintPayload } from "@/lib/setup-hint";
 import { SetupProgressNavWidget } from "@/components/dashboard/setup-progress-widget";
 import { Badge } from "@/components/ui/badge";
+import { NavMaturityBadge } from "@/components/ui/beta-badge";
 import {
   getModuleReadinessForPath,
   moduleReadinessBadgeLabel,
@@ -126,7 +127,6 @@ function NavGroup({
                 : null
               : null;
             const maturityLabel = showNavStatusBadges() ? navMaturityBadgeForHref(link.href) : null;
-            const badgeLabel = readinessLabel ?? maturityLabel;
             return (
               <div key={link.href} className="group relative flex items-stretch">
                 <Link
@@ -148,13 +148,15 @@ function NavGroup({
                     <span className="truncate">
                       {navLabelForBusinessType(locale, businessType, link.labelKey)}
                     </span>
-                    {badgeLabel ? (
+                    {readinessLabel ? (
                       <Badge
                         variant="secondary"
                         className="rounded-full px-1.5 py-0 text-[10px] uppercase tracking-wide"
                       >
-                        {badgeLabel}
+                        {readinessLabel}
                       </Badge>
+                    ) : maturityLabel ? (
+                      <NavMaturityBadge label={maturityLabel} />
                     ) : null}
                   </span>
                 </Link>

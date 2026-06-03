@@ -3728,3 +3728,12 @@ Artifact: components/ui/empty-state.tsx + Today/marketplace/KDS/POS wiring
 Result: APPLIED — EmptyState on calm Today, blockers, marketplace sections, KDS queue, POS cart/products
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 23
+Task: DES-05 — BETA/Preview badge system
+Role: DESIGN
+Priority: P0
+Artifact: components/ui/beta-badge.tsx
+Result: CREATED — BetaBadge, PreviewBadge, NavMaturityBadge; dashboard nav wired; integrations shim
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
