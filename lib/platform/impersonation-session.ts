@@ -40,7 +40,8 @@ export async function getActiveImpersonationSession(): Promise<ActiveImpersonati
       where: { id: session.id },
       data: { endedAt: new Date() },
     });
-    jar.delete(PLATFORM_IMPERSONATION_COOKIE);
+    // Do not mutate cookies here — dashboard layout renders this during RSC and Next.js
+    // only allows cookie writes in Server Actions / Route Handlers (would 500 every tab).
     return null;
   }
 
