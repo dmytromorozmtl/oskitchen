@@ -1,0 +1,25 @@
+{
+  "version": "woocommerce-live-smoke-v1",
+  "runAt": "2026-06-03T19:06:36.079Z",
+  "overall": "FAILED",
+  "proofStatus": "proof_failed",
+  "missingEnvVars": [],
+  "steps": [
+    {
+      "id": "env_validation",
+      "label": "Prerequisite env vars",
+      "status": "PASSED",
+      "detail": "Direct Woo or DB tenant path satisfied"
+    },
+    {
+      "id": "woo_api_connection",
+      "label": "WooCommerce REST connection",
+      "status": "FAILED",
+      "detail": "Store smoke-test.os-kitchen.com: fetch failed (getaddrinfo ENOTFOUND smoke-test.os-kitchen.com). Update the store URL in Dashboard → Integrations → WooCommerce (saved host is a placeholder)."
+    }
+  ],
+  "externalOrderId": null,
+  "connectionId": "7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3",
+  "stagingWebhookUrl": "https://os-kitchen.com/api/webhooks/woocommerce?cid=7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3",
+  "honestyNote": "PASS requires live Woo REST + staging webhook ingest + ExternalOrder row — not wiring cert alone."
+}

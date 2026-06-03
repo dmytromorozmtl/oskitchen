@@ -3620,3 +3620,12 @@ Artifacts: e2e/cross-tenant-isolation-staging.spec.ts (403 mock + marketplace st
 Note: mock contract always runs; live staging gated on E2E_STAGING_* vault
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 11
+Task: QA-03 — WooCommerce live smoke E2E run
+Role: QA
+Priority: P0
+Artifact: artifacts/woocommerce-live-smoke-summary.json
+Result: overall FAILED — woo_api_connection ENOTFOUND smoke-test.os-kitchen.com (placeholder URL in dashboard)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
