@@ -3463,3 +3463,8 @@ Cycle: 20260602-210400
 Feature: 37 — Native Mobile App (docs)
 Result: PASSED — native-mobile-app-plan.md (React Native, white-label, push), unit test, defer RFC cross-link
 Total done: 37/40
+---
+Cycle: 20260602-210800
+Feature: 38 — QR Code Ordering for Tables
+Result: PASSED — /q/table full self-service (order, pay now, split bill, KDS), extended qr-ordering-service, e2e
+Total done: 38/40

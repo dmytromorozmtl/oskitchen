@@ -5,6 +5,12 @@ import { OrderStatus } from "@prisma/client";
 
 import { absoluteQrOrderUrl } from "@/lib/qr/qr-order-meta";
 import { buildQrOrderSourceMetadata } from "@/lib/qr/qr-order-meta";
+import {
+  calculateSplitBillShare,
+  type QrTableCheckoutStyle,
+  type QrTableSelfServiceMetadata,
+} from "@/lib/qr/table-self-service";
+import { parseQrTableSelfServiceMetadata } from "@/lib/qr/table-self-service";
 import { loadStorefrontMenuCatalogForPage } from "@/lib/storefront/menu-page-data";
 import { getStorefrontForPublicFromRequest } from "@/lib/storefront/public-access";
 import { prisma } from "@/lib/prisma";
@@ -34,6 +40,16 @@ export type ProcessQROrderInput = {
   tableRouteId: string;
   lines: { productId: string; quantity: number }[];
   customerName?: string;
+  checkoutStyle?: QrTableCheckoutStyle;
+  splitGuests?: number;
+};
+
+export type ProcessQROrderResultExtended = ProcessQROrderResult & {
+  paymentStatus?: string;
+  checkoutStyle?: QrTableCheckoutStyle;
+  orderTotal?: number;
+  splitShareAmount?: number;
+  splitGuests?: number;
 };
 
 export type ProcessQROrderResult =
@@ -147,15 +163,70 @@ function estimateWaitMinutes(activeKitchenCount: number): number {
   return base + extra;
 }
 
-export async function processQROrder(input: ProcessQROrderInput): Promise<ProcessQROrderResult> {
+function buildTableSelfServiceMetadata(input: {
+  storeSlug: string;
+  tableRouteId: string;
+  tableLabel: string;
+  restaurantTableId?: string | null;
+  checkoutStyle: QrTableCheckoutStyle;
+  orderTotal: number;
+  currency: string;
+  splitGuests?: number;
+}): QrTableSelfServiceMetadata {
+  const base = buildQrOrderSourceMetadata({
+    storeSlug: input.storeSlug,
+    tableRouteId: input.tableRouteId,
+    tableLabel: input.tableLabel,
+    restaurantTableId: input.restaurantTableId,
+  }) as QrTableSelfServiceMetadata;
+
+  base.qr = {
+    ...base.qr,
+    channel: "table_qr",
+    selfService: true,
+    checkoutStyle: input.checkoutStyle,
+  };
+
+  if (input.checkoutStyle === "split" && input.splitGuests) {
+    base.split = {
+      guests: input.splitGuests,
+      shareAmount: calculateSplitBillShare(input.orderTotal, input.splitGuests),
+      paidShares: 0,
+      currency: input.currency,
+    };
+  }
+
+  return base;
+}
+
+function paymentModeForCheckout(style: QrTableCheckoutStyle): "PAY_LATER" | "CASH" {
+  return style === "pay_now" ? "CASH" : "PAY_LATER";
+}
+
+export async function processQROrder(
+  input: ProcessQROrderInput,
+): Promise<ProcessQROrderResultExtended> {
   const ctx = await resolveQROrderingContext(input.storeSlug, input.tableRouteId);
   if (!ctx) return { ok: false, error: "Menu not available." };
 
   const lines = input.lines.filter((l) => l.quantity > 0);
   if (!lines.length) return { ok: false, error: "Cart is empty." };
 
+  const checkoutStyle: QrTableCheckoutStyle = input.checkoutStyle ?? "pay_later";
+  const splitGuests =
+    checkoutStyle === "split"
+      ? Math.max(2, Math.min(20, Math.round(input.splitGuests ?? 2)))
+      : undefined;
+
   const table = await resolveRestaurantTable(ctx.ownerUserId, input.tableRouteId);
   const tableLabel = formatTableLabel(input.tableRouteId, table?.name);
+
+  let orderTotal = 0;
+  for (const line of lines) {
+    const product = ctx.products.find((p) => p.id === line.productId);
+    if (product) orderTotal += Number(product.price) * line.quantity;
+  }
+  orderTotal = Math.round(orderTotal * 100) / 100;
 
   const activeCount = await prisma.order.count({
     where: {
@@ -166,11 +237,15 @@ export async function processQROrder(input: ProcessQROrderInput): Promise<Proces
   });
 
   const guestToken = randomUUID().slice(0, 8);
-  const metadata = buildQrOrderSourceMetadata({
+  const metadata = buildTableSelfServiceMetadata({
     storeSlug: ctx.storeSlug,
     tableRouteId: ctx.tableRouteId,
     tableLabel,
     restaurantTableId: table?.id ?? null,
+    checkoutStyle,
+    orderTotal,
+    currency: ctx.currency,
+    splitGuests,
   });
 
   const created = await createOrderViaCenter(
@@ -179,7 +254,7 @@ export async function processQROrder(input: ProcessQROrderInput): Promise<Proces
       orderType: "RESTAURANT_ORDER",
       statusKey: "IN_PRODUCTION",
       fulfillmentDetail: "DINE_IN",
-      paymentMode: "PAY_LATER",
+      paymentMode: paymentModeForCheckout(checkoutStyle),
       customerName: input.customerName?.trim() || `Table ${tableLabel.replace(/^Table\s*/i, "")}`,
       customerEmail: `qr-guest-${guestToken}@table.local`,
       channelProvider: "qr",
@@ -201,11 +276,78 @@ export async function processQROrder(input: ProcessQROrderInput): Promise<Proces
     });
   }
 
+  const order = await prisma.order.findUnique({
+    where: { id: created.orderId },
+    select: { paymentStatus: true },
+  });
+
   return {
     ok: true,
     orderId: created.orderId,
     lookupToken: created.lookupToken,
     estimatedWaitMinutes: estimateWaitMinutes(activeCount),
     tableLabel,
+    paymentStatus: order?.paymentStatus ?? (checkoutStyle === "pay_now" ? "PAID" : "UNPAID"),
+    checkoutStyle,
+    orderTotal,
+    splitShareAmount: metadata.split?.shareAmount,
+    splitGuests: metadata.split?.guests,
+  };
+}
+
+export async function payQrTableSplitShare(input: {
+  orderId: string;
+  lookupToken: string;
+  storeSlug: string;
+}): Promise<
+  | { ok: true; paidShares: number; guests: number; fullyPaid: boolean; paymentStatus: string }
+  | { ok: false; error: string }
+> {
+  const order = await prisma.order.findFirst({
+    where: {
+      id: input.orderId,
+      lookupToken: input.lookupToken,
+    },
+    select: {
+      id: true,
+      userId: true,
+      sourceMetadataJson: true,
+      paymentStatus: true,
+    },
+  });
+
+  if (!order) return { ok: false, error: "Order not found." };
+
+  const meta = parseQrTableSelfServiceMetadata(order.sourceMetadataJson);
+  if (meta?.qr?.storeSlug && meta.qr.storeSlug !== input.storeSlug) {
+    return { ok: false, error: "Order not found." };
+  }
+  if (!meta?.split) return { ok: false, error: "This order is not a split-bill check." };
+  if (meta.split.paidShares >= meta.split.guests) {
+    return { ok: false, error: "This check is already fully paid." };
+  }
+
+  const nextPaid = meta.split.paidShares + 1;
+  const fullyPaid = nextPaid >= meta.split.guests;
+  const updatedMeta: QrTableSelfServiceMetadata = {
+    ...meta,
+    split: { ...meta.split, paidShares: nextPaid },
+  };
+
+  await prisma.order.update({
+    where: { id: order.id },
+    data: {
+      sourceMetadataJson: JSON.stringify(updatedMeta),
+      paymentStatus: fullyPaid ? "PAID" : "PARTIAL",
+      paymentMode: fullyPaid ? "CASH" : "PAY_LATER",
+    },
+  });
+
+  return {
+    ok: true,
+    paidShares: nextPaid,
+    guests: meta.split.guests,
+    fullyPaid,
+    paymentStatus: fullyPaid ? "PAID" : "PARTIAL",
   };
 }

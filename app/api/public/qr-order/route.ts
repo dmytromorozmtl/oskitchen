@@ -17,6 +17,8 @@ const bodySchema = z.object({
     .min(1)
     .max(50),
   customerName: z.string().trim().max(120).optional(),
+  checkoutStyle: z.enum(["pay_later", "pay_now", "split"]).optional(),
+  splitGuests: z.coerce.number().int().min(2).max(20).optional(),
 });
 
 export async function POST(request: Request) {
@@ -32,6 +34,8 @@ export async function POST(request: Request) {
       tableRouteId: parsed.data.tableRouteId,
       lines: parsed.data.lines,
       customerName: parsed.data.customerName,
+      checkoutStyle: parsed.data.checkoutStyle,
+      splitGuests: parsed.data.splitGuests,
     });
 
     if (!result.ok) {
@@ -44,6 +48,11 @@ export async function POST(request: Request) {
       lookupToken: result.lookupToken,
       estimatedWaitMinutes: result.estimatedWaitMinutes,
       tableLabel: result.tableLabel,
+      paymentStatus: result.paymentStatus,
+      checkoutStyle: result.checkoutStyle,
+      orderTotal: result.orderTotal,
+      splitShareAmount: result.splitShareAmount,
+      splitGuests: result.splitGuests,
     });
   } catch (err) {
     captureErrorSafe(err, { module: "qr-ordering", action: "public_place_order" });
