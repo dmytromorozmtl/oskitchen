@@ -3773,3 +3773,12 @@ Artifact: docs/forbidden-claims-training.md
 Result: CREATED — 5 modules, 10-question quiz, certification record
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 28
+Task: MKT-02 — ICP definition final
+Role: MARKETING
+Priority: P0
+Artifact: docs/icp-definition-final.md
+Result: CREATED — ghost kitchen, commissary, meal prep segments; Era 17 qualification gates; scoring rubric; GTM asset map
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
