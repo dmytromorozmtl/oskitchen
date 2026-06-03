@@ -38,6 +38,7 @@ export async function runChannelMenuSyncJob(input: {
   userId: string;
   connectionId: string | null;
   provider: IntegrationProvider;
+  records?: { processed?: number; updated?: number; failed?: number };
   run: () => Promise<{ ok: boolean; message?: string }>;
 }): Promise<{ ok: boolean; message?: string }> {
   const job = await beginChannelSyncJob({
@@ -47,14 +48,17 @@ export async function runChannelMenuSyncJob(input: {
     type: "MENUS",
   });
 
+  const processed = input.records?.processed ?? 1;
+  const updated = input.records?.updated ?? (processed > 0 ? 1 : 0);
+
   try {
     const result = await input.run();
     await finishChannelSyncJob(job.id, {
       status: result.ok ? "SUCCESS" : "FAILED",
-      recordsProcessed: 1,
+      recordsProcessed: processed,
       recordsCreated: 0,
-      recordsUpdated: result.ok ? 1 : 0,
-      recordsFailed: result.ok ? 0 : 1,
+      recordsUpdated: result.ok ? updated : 0,
+      recordsFailed: result.ok ? (input.records?.failed ?? 0) : (input.records?.failed ?? processed),
       errorMessage: result.ok ? null : result.message ?? "Sync failed",
     });
     return result;

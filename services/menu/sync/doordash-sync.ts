@@ -12,17 +12,10 @@ import {
   type ChannelMenuSyncInput,
   type ChannelMenuSyncResult,
 } from "@/lib/menu/channel-sync-types";
-import type { DoorDashCredentials } from "@/services/integrations/doordash/doordash-service";
+import { getDoorDashCredentialsForUser } from "@/services/integrations/doordash/doordash-credentials";
 
 const MENU_API_BASE =
   process.env.DOORDASH_MENU_API_BASE ?? "https://openapi.doordash.com/marketplace/v2";
-
-function credsFromEnv(): DoorDashCredentials {
-  return {
-    apiKey: process.env.DOORDASH_API_KEY ?? null,
-    merchantId: process.env.DOORDASH_MERCHANT_ID ?? null,
-  };
-}
 
 /** Push a single menu item to DoorDash marketplace menu API. */
 export async function syncMenuItemToDoorDash(
@@ -37,9 +30,9 @@ export async function syncMenuItemToDoorDash(
     );
   }
 
-  const env = credsFromEnv();
-  const merchantId = conn.externalStoreId?.trim() || env.merchantId?.trim();
-  const apiKey = env.apiKey?.trim();
+  const creds = await getDoorDashCredentialsForUser(input.userId);
+  const merchantId = conn.externalStoreId?.trim() || creds?.merchantId?.trim();
+  const apiKey = creds?.apiKey?.trim();
 
   if (!apiKey || !merchantId) {
     return toSyncResult(false, "pending", "DoorDash API key and merchant ID required.");

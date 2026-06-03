@@ -1,3 +1,7 @@
+import type { Prisma } from "@prisma/client";
+import { IntegrationProvider } from "@prisma/client";
+
+import { runChannelMenuSyncJob } from "@/lib/menu/channel-sync-helpers";
 import { menuListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import type { DoorDashCredentials } from "@/services/integrations/doordash/doordash-service";
@@ -9,6 +13,11 @@ export type DoorDashMenuSyncResult = {
   message?: string;
   categoriesCount?: number;
   itemsCount?: number;
+};
+
+export type DoorDashMenuSyncOptions = {
+  menuId?: string | null;
+  locationId?: string | null;
 };
 
 type DoorDashMenuCategory = {
@@ -27,13 +36,18 @@ const MENU_API_BASE =
 
 export async function buildDoorDashMenuPayload(
   ownerUserId: string,
-  locationId?: string | null,
+  options?: DoorDashMenuSyncOptions,
 ): Promise<{ categories: DoorDashMenuCategory[] }> {
   const menuWhere = await menuListWhereForOwner(ownerUserId);
+  const filters: Prisma.MenuWhereInput[] = [menuWhere, { active: true }];
+  if (options?.menuId) {
+    filters.push({ id: options.menuId });
+  } else if (options?.locationId) {
+    filters.push({ locationId: options.locationId });
+  }
+
   const menus = await prisma.menu.findMany({
-    where: {
-      AND: [menuWhere, { active: true }, ...(locationId ? [{ locationId }] : [])],
-    },
+    where: { AND: filters },
     include: {
       products: {
         where: { active: true },
@@ -41,7 +55,7 @@ export async function buildDoorDashMenuPayload(
         take: 500,
       },
     },
-    take: 20,
+    take: options?.menuId ? 1 : 20,
   });
 
   const categories: DoorDashMenuCategory[] = menus.map((menu) => ({
@@ -64,7 +78,8 @@ export class DoorDashMenuSyncService {
   async pushMenu(
     ownerUserId: string,
     merchantId: string,
-    locationId?: string | null,
+    options?: DoorDashMenuSyncOptions,
+    connectionId?: string | null,
   ): Promise<DoorDashMenuSyncResult> {
     const apiKey = this.creds.apiKey?.trim();
     if (!apiKey || !merchantId.trim()) {
@@ -75,32 +90,67 @@ export class DoorDashMenuSyncService {
       };
     }
 
-    const payload = await buildDoorDashMenuPayload(ownerUserId, locationId);
+    const payload = await buildDoorDashMenuPayload(ownerUserId, options);
     const itemsCount = payload.categories.reduce((sum, c) => sum + c.items.length, 0);
 
-    const res = await fetch(
-      `${MENU_API_BASE}/stores/${encodeURIComponent(merchantId)}/menu`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ categories: payload.categories }),
-        cache: "no-store",
+    if (payload.categories.length === 0) {
+      return {
+        ok: false,
+        syncedAt: new Date(),
+        message: options?.menuId
+          ? "Menu not found or has no active products."
+          : "No active menus with products to sync.",
+        categoriesCount: 0,
+        itemsCount: 0,
+      };
+    }
+
+    const outcome = await runChannelMenuSyncJob({
+      userId: ownerUserId,
+      connectionId: connectionId ?? null,
+      provider: IntegrationProvider.DOORDASH,
+      records: { processed: itemsCount, updated: itemsCount },
+      run: async () => {
+        const res = await fetch(
+          `${MENU_API_BASE}/stores/${encodeURIComponent(merchantId)}/menu`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ categories: payload.categories }),
+            cache: "no-store",
+          },
+        );
+
+        if (res.ok) {
+          return {
+            ok: true,
+            message: `Menu synced (${payload.categories.length} categories, ${itemsCount} items)`,
+          };
+        }
+
+        let detail = "";
+        try {
+          detail = await res.text();
+        } catch {
+          detail = "";
+        }
+        return {
+          ok: false,
+          message: `DoorDash menu sync failed (${res.status})${detail ? `: ${detail.slice(0, 200)}` : ""}`,
+        };
       },
-    );
+    });
 
     return {
-      ok: res.ok,
+      ok: outcome.ok,
       syncedAt: new Date(),
-      statusCode: res.status,
       categoriesCount: payload.categories.length,
       itemsCount,
-      message: res.ok
-        ? `Menu synced (${payload.categories.length} categories, ${itemsCount} items)`
-        : `DoorDash menu sync failed (${res.status})`,
+      message: outcome.message,
     };
   }
 }

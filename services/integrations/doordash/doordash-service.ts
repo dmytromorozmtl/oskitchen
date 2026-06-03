@@ -1,4 +1,6 @@
-import { resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
+import { IntegrationProvider } from "@prisma/client";
+
+import { integrationConnectionByProviderWhereForOwner, resolveOwnerScopedWhere } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
 import { getDoorDashCredentialsForUser } from "@/services/integrations/doordash/doordash-credentials";
@@ -159,15 +161,26 @@ export async function listDoorDashDeliveries(userId: string, take = 25) {
   });
 }
 
-/** Push active menus to DoorDash Marketplace (BETA). */
+/** Push active menus (or one menu by id) to DoorDash Marketplace (BETA). */
 export async function syncMenuToDoorDash(userId: string, menuId?: string) {
   const creds = (await getDoorDashCredentialsForUser(userId)) ?? credsFromEnv();
   if (!isDoorDashConfigured(creds)) {
     throw new Error(getDoorDashPlaceholderMessage(false));
   }
 
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByProviderWhereForOwner(userId, IntegrationProvider.DOORDASH),
+    select: { id: true, externalStoreId: true },
+  });
+  const merchantId = conn?.externalStoreId?.trim() || creds.merchantId!.trim();
+
   const svc = new DoorDashMenuSyncService(creds);
-  const result = await svc.pushMenu(userId, creds.merchantId!.trim(), menuId ?? null);
+  const result = await svc.pushMenu(
+    userId,
+    merchantId,
+    menuId ? { menuId } : undefined,
+    conn?.id ?? null,
+  );
   if (!result.ok) {
     throw new Error(result.message ?? "DoorDash menu sync failed");
   }

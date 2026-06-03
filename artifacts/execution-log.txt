@@ -3927,3 +3927,12 @@ Artifact: services/today/today-workspace-scopes.ts, services/today/today-command
 Result: BATCHED — resolveTodayWorkspaceScopes (1 workspace lookup vs 11); readiness + shortage counts in main Promise.all; operational signals accept pre-resolved scopes
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 45
+Task: DEV-20 — DoorDash menu sync
+Role: DEVELOPER
+Priority: P1
+Artifact: services/integrations/doordash/menu-sync.service.ts, services/integrations/doordash/doordash-service.ts, services/menu/sync/doordash-sync.ts, app/api/cron/doordash-sync/route.ts, lib/menu/channel-sync-helpers.ts, tests/unit/doordash-menu-sync.test.ts
+Result: HARDENED — per-user credentials on item sync; menuId filter fix; channelSyncJob logging on bulk push; cron menu sync (DOORDASH_MENU_SYNC_ON_CRON); unit tests for payload builder
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
