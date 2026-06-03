@@ -26,4 +26,8 @@ export const logger = {
   error: (...args: unknown[]) => {
     console.error("[OS Kitchen]", ...args.map(redactForLog));
   },
+  /** CLI / smoke report output — always prints (use instead of console.log in lib/). */
+  cli: (...args: unknown[]) => {
+    console.log("[OS Kitchen]", ...args.map(redactForLog));
+  },
 };

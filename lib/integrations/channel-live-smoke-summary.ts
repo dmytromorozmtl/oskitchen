@@ -4,6 +4,8 @@
  * Pure helpers for PASS / FAILED / SKIPPED WITH REASON orchestration.
  */
 
+import { logger } from "@/lib/logger";
+
 export const CHANNEL_LIVE_SMOKE_SUMMARY_VERSION = "era17-channel-live-smoke-v1" as const;
 
 export type ChannelLiveSmokeStepStatus = "PASSED" | "FAILED" | "SKIPPED";
@@ -194,12 +196,12 @@ export function formatChannelLiveSmokeReportLines(summary: ChannelLiveSmokeSumma
 }
 
 export function printChannelLiveSmokeSummary(summary: ChannelLiveSmokeSummary): void {
-  console.log(`\nChannel live smoke summary (${summary.version})`);
-  console.log(`Overall: ${summary.overall}`);
-  console.log(`Woo live proof: ${summary.wooLiveProofStatus}`);
-  console.log(`Shopify live proof: ${summary.shopifyLiveProofStatus}`);
+  logger.cli(`\nChannel live smoke summary (${summary.version})`);
+  logger.cli(`Overall: ${summary.overall}`);
+  logger.cli(`Woo live proof: ${summary.wooLiveProofStatus}`);
+  logger.cli(`Shopify live proof: ${summary.shopifyLiveProofStatus}`);
   for (const step of summary.steps) {
-    console.log(`  ${formatChannelLiveSmokeStepLine(step)}`);
+    logger.cli(`  ${formatChannelLiveSmokeStepLine(step)}`);
   }
-  console.log("");
+  logger.cli("");
 }

@@ -3557,3 +3557,12 @@ Artifact: docs/prod-schema-drift-fix.md
 Note: demo_expires_at incident documented; migrate deploy + CI drift check
 Vault: 11/11 | P0: SKIPPED | GO: NO-GO
 
+---
+Cycle: 4
+Task: DEV-06 — console.log sweep + structured logger
+Role: Developer
+Priority: P0
+Artifacts: scripts/sweep-console-log.sh, lib/logger.ts (logger.cli), lib/integrations/channel-live-smoke-summary.ts
+Note: production paths 0 console.log (lib/logger.ts sink excluded); 3239 in scripts/ CLI (intentional)
+Vault: 11/11 | P0: SKIPPED | GO: NO-GO
+
