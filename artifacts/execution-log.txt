@@ -3494,3 +3494,9 @@ Feature: 4 — WooCommerce live smoke (tree step; artifact not PASSED)
 Result: BLOCKED — overall SKIPPED (missing staging env); added .env.smoke.example, scripts/domination-next-step.sh, tracker liveSmoke* flags, market-domination ops gate section
 Next: source .env.smoke.local + npm run smoke:woo-live until overall PASSED
 Total done: 40/40 (code) — ops smoke 4–5 pending
+---
+Cycle: 20260603-woo-smoke-autoload
+Feature: 4 — WooCommerce live smoke (tree step)
+Result: PARTIAL — smoke scripts auto-load .env.smoke.local; artifact still SKIPPED until ops fills credentials; unit tests green
+Next: cp .env.smoke.example .env.smoke.local → npm run smoke:woo-live → overall PASSED
+Total done: 40/40 (code) — ops smoke 4–5 pending

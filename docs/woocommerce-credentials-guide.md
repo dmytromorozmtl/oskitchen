@@ -5,7 +5,8 @@ Use this guide to move `artifacts/woocommerce-live-smoke-summary.json` from **SK
 ## Quick check
 
 ```bash
-npm run smoke:woo-live -- --write
+cp .env.smoke.example .env.smoke.local   # fill staging + Woo vars (gitignored)
+npm run smoke:woo-live                   # auto-loads .env.smoke.local, writes artifact
 # Review artifacts/woocommerce-live-smoke-summary.json
 # overall: PASSED | SKIPPED | FAILED
 ```

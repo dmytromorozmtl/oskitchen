@@ -15,12 +15,18 @@
  *   E2E_STAGING_BASE_URL
  *
  * Missing credentials → SKIPPED WITH REASON (exit 0). Real failure → FAILED (exit 1).
+ *
+ * Auto-loads `.env.smoke.local` when present (see .env.smoke.example).
  */
 import { createHmac } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
+import { loadSmokeEnv } from "./lib/load-smoke-env";
+
 import { PrismaClient, IntegrationProvider } from "@prisma/client";
+
+loadSmokeEnv();
 
 import {
   getWebhookSecret,
@@ -486,7 +492,23 @@ export async function runWooCommerceLiveSmoke(
 }
 
 async function main() {
-  const summary = await runWooCommerceLiveSmoke();
+  let summary: WooCommerceLiveSmokeSummary;
+  try {
+    summary = await runWooCommerceLiveSmoke();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    summary = buildWooCommerceLiveSmokeSummary({
+      steps: [
+        {
+          id: "runtime_error",
+          label: "Smoke execution",
+          status: "FAILED",
+          detail: message.slice(0, 500),
+        },
+      ],
+      missingEnvVars: [],
+    });
+  }
   const shouldWrite = process.argv.includes("--write") || process.argv.includes("-w");
 
   console.log(`\nWooCommerce live smoke (${summary.version})\n`);
