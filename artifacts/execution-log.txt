@@ -4179,3 +4179,12 @@ Artifact: lib/security/rbac-matrix-e2e-policy.ts, e2e/rbac-matrix.spec.ts, e2e/h
 Result: IMPLEMENTED — 15 staff templates × 30 capabilities (450 cells); owner smoke on 10 capability-gated routes without permission-denied cards
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 73
+Task: QA-24 — vendor cabinet cross-tenant E2E
+Role: QA
+Priority: P1
+Artifact: lib/marketplace/vendor-cabinet-cross-tenant-e2e-policy.ts, e2e/vendor-cabinet-cross-tenant.spec.ts, e2e/helpers/vendor-cabinet-cross-tenant-*.ts, tests/unit/vendor-cabinet-cross-tenant.test.ts, playwright.config.ts
+Result: IMPLEMENTED — vendor A cannot read vendor B PO via loadVendorOrderDetail, bulk confirm, /vendor/orders/[id] 404, packing-slip 403/404
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
