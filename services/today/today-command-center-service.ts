@@ -1,22 +1,6 @@
 import { addDays, startOfDay, startOfWeek } from "date-fns";
 
 import { prisma } from "@/lib/prisma";
-import {
-  externalOrderListWhereForOwner,
-  externalProductListWhereForOwner,
-} from "@/lib/scope/workspace-channel-scope";
-import { orderListWhereForOwner } from "@/lib/scope/workspace-order-scope";
-import {
-  deliveryRouteListWhereForOwner,
-  integrationConnectionListWhereForOwner,
-  kitchenTaskListWhereForOwner,
-  menuListWhereForOwner,
-  orderChannelListWhereForOwner,
-  posTransactionListWhereForOwner,
-  productListWhereForOwner,
-  staffMemberListWhereForOwner,
-  supportTicketListWhereForOwner,
-} from "@/lib/scope/workspace-resource-scope";
 import { countIntegrityIssues } from "@/services/integrity/integrity-service";
 import { evaluateInventoryShortageReadiness } from "@/services/inventory/inventory-shortage-readiness-service";
 import { loadTodayOperationalCounts } from "@/services/today/today-query-service";
@@ -27,6 +11,7 @@ import {
   countWebhookQueueSignals,
   loadOrdersDueTodayList,
 } from "@/services/today/today-operational-signals";
+import { resolveTodayWorkspaceScopes } from "@/services/today/today-workspace-scopes";
 import { IntegrationStatus } from "@prisma/client";
 
 export type TodayBlocker = {
@@ -84,7 +69,8 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
   const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
   const tomorrow = addDays(todayStart, 1);
 
-  const [
+  const scopes = await resolveTodayWorkspaceScopes(userId);
+  const {
     externalOrderWhere,
     externalProductWhere,
     orderWhere,
@@ -96,19 +82,9 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
     supportTicketWhere,
     posTransactionWhere,
     staffMemberWhere,
-  ] = await Promise.all([
-    externalOrderListWhereForOwner(userId),
-    externalProductListWhereForOwner(userId),
-    orderListWhereForOwner(userId),
-    productListWhereForOwner(userId),
-    menuListWhereForOwner(userId),
-    integrationConnectionListWhereForOwner(userId),
-    kitchenTaskListWhereForOwner(userId),
-    deliveryRouteListWhereForOwner(userId),
-    supportTicketListWhereForOwner(userId),
-    posTransactionListWhereForOwner(userId),
-    staffMemberListWhereForOwner(userId),
-  ]);
+    orderChannelWhere,
+    webhookEventWhere,
+  } = scopes;
 
   const [
     settings,
@@ -132,6 +108,12 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
     posKitchenQueueToday,
     revenueTodayAgg,
     todayOps,
+    menuCount,
+    productCount,
+    channelCount,
+    integrationConnectedCount,
+    staffCount,
+    shortageReadiness,
   ] = await Promise.all([
     prisma.kitchenSettings.findUnique({ where: { userId } }),
     prisma.order.count({ where: { AND: [orderWhere, { createdAt: { gte: todayStart } }] } }),
@@ -142,7 +124,7 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
       where: { product: productWhere },
       select: { cooked: true, packed: true, labeled: true },
     }),
-    countWebhookQueueSignals(userId),
+    countWebhookQueueSignals(userId, webhookEventWhere),
     prisma.integrationConnection.count({
       where: { AND: [integrationWhere, { status: IntegrationStatus.ERROR }] },
     }),
@@ -158,7 +140,7 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
       },
       _sum: { total: true },
     }),
-    loadOrdersDueTodayList(userId, todayStart, tomorrow),
+    loadOrdersDueTodayList(userId, todayStart, tomorrow, orderWhere),
     prisma.kitchenTask.findMany({
       where: {
         AND: [
@@ -202,8 +184,8 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
       },
     }),
     countIntegrityIssues(userId),
-    countOrdersMissingRequiredServiceDate(userId),
-    countDeliveryOrdersWithoutRouteStops(userId),
+    countOrdersMissingRequiredServiceDate(userId, orderWhere),
+    countDeliveryOrdersWithoutRouteStops(userId, orderWhere),
     prisma.pOSTransaction.count({
       where: { AND: [posTransactionWhere, { createdAt: { gte: todayStart, lt: tomorrow } }] },
     }),
@@ -233,6 +215,18 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
       _sum: { total: true },
     }),
     loadTodayOperationalCounts(userId),
+    prisma.menu.count({ where: menuWhere }),
+    prisma.product.count({ where: productWhere }),
+    prisma.orderChannel.count({
+      where: { AND: [orderChannelWhere, { active: true }] },
+    }),
+    prisma.integrationConnection.count({
+      where: { AND: [integrationWhere, { status: IntegrationStatus.CONNECTED }] },
+    }),
+    prisma.staffMember.count({
+      where: { AND: [staffMemberWhere, { active: true }] },
+    }),
+    evaluateInventoryShortageReadiness(userId),
   ]);
 
   const failedWebhooks = webhookSignals.unprocessedTotal;
@@ -327,21 +321,13 @@ export async function loadTodayCommandCenter(userId: string): Promise<TodayComma
 
   const readiness = computeWorkspaceReadiness({
     settings,
-    menuCount: await prisma.menu.count({ where: menuWhere }),
-    productCount: await prisma.product.count({ where: productWhere }),
-    channelCount: await prisma.orderChannel.count({
-      where: { AND: [await orderChannelListWhereForOwner(userId), { active: true }] },
-    }),
-    integrationConnectedCount: await prisma.integrationConnection.count({
-      where: { AND: [integrationWhere, { status: IntegrationStatus.CONNECTED }] },
-    }),
-    staffCount: await prisma.staffMember.count({
-      where: { AND: [staffMemberWhere, { active: true }] },
-    }),
+    menuCount,
+    productCount,
+    channelCount,
+    integrationConnectedCount,
+    staffCount,
     activeOrders,
   });
-
-  const shortageReadiness = await evaluateInventoryShortageReadiness(userId);
 
   return {
     settings: settings

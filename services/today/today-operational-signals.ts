@@ -1,9 +1,16 @@
-import type { FulfillmentType, OrderStatus } from "@prisma/client";
+import type { FulfillmentType, OrderStatus, Prisma } from "@prisma/client";
 
 import { orderMissingRequiredServiceDate } from "@/lib/fulfillment/fulfillment-requirements";
+import { rewriteOrderEmailFilters } from "@/lib/orders/order-pii";
 import { prisma } from "@/lib/prisma";
-import { whereOrdersForOwnerAnd } from "@/lib/analytics/revenue-metrics";
-import { webhookEventListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { orderListWhereForOwner, webhookEventListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+
+function orderWhereAnd(
+  base: Prisma.OrderWhereInput,
+  extra: Prisma.OrderWhereInput,
+): Prisma.OrderWhereInput {
+  return { AND: [base, rewriteOrderEmailFilters(extra)] };
+}
 
 const ACTIVE_STATUSES: OrderStatus[] = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
@@ -45,13 +52,17 @@ export function orderQualifiesForDueTodayList(
  * Counts active orders that still need a service/prep date per fulfillment rules
  * (excludes POS counter / ready-now where scheduling is not required).
  */
-export async function countOrdersMissingRequiredServiceDate(userId: string): Promise<number> {
+export async function countOrdersMissingRequiredServiceDate(
+  userId: string,
+  orderScope?: Prisma.OrderWhereInput,
+): Promise<number> {
+  const base = orderScope ?? (await orderListWhereForOwner(userId));
   let total = 0;
   let cursor: string | undefined;
   const take = 500;
   for (;;) {
     const batch = await prisma.order.findMany({
-      where: await whereOrdersForOwnerAnd(userId, {
+      where: orderWhereAnd(base, {
         pickupDate: null,
         status: { in: ACTIVE_STATUSES },
       }),
@@ -94,9 +105,13 @@ export async function countOrdersMissingRequiredServiceDate(userId: string): Pro
 }
 
 /** Delivery orders in-flight that have no route stops yet (dispatch gap). */
-export async function countDeliveryOrdersWithoutRouteStops(userId: string): Promise<number> {
+export async function countDeliveryOrdersWithoutRouteStops(
+  userId: string,
+  orderScope?: Prisma.OrderWhereInput,
+): Promise<number> {
+  const base = orderScope ?? (await orderListWhereForOwner(userId));
   return prisma.order.count({
-    where: await whereOrdersForOwnerAnd(userId, {
+    where: orderWhereAnd(base, {
       fulfillmentType: "DELIVERY",
       status: { in: ["CONFIRMED", "PREPARING", "READY"] },
       deliveryStops: { none: {} },
@@ -104,11 +119,14 @@ export async function countDeliveryOrdersWithoutRouteStops(userId: string): Prom
   });
 }
 
-export async function countWebhookQueueSignals(userId: string): Promise<{
+export async function countWebhookQueueSignals(
+  userId: string,
+  webhookScope?: Prisma.WebhookEventWhereInput,
+): Promise<{
   unprocessedTotal: number;
   needingAttention: number;
 }> {
-  const webhookWhere = await webhookEventListWhereForOwner(userId);
+  const webhookWhere = webhookScope ?? (await webhookEventListWhereForOwner(userId));
   const [unprocessedTotal, needingAttention] = await Promise.all([
     prisma.webhookEvent.count({ where: { AND: [webhookWhere, { processed: false }] } }),
     prisma.webhookEvent.count({
@@ -141,9 +159,11 @@ export async function loadOrdersDueTodayList(
   userId: string,
   todayStart: Date,
   tomorrow: Date,
+  orderScope?: Prisma.OrderWhereInput,
 ): Promise<OrdersDueTodayRow[]> {
+  const base = orderScope ?? (await orderListWhereForOwner(userId));
   const raw = await prisma.order.findMany({
-    where: await whereOrdersForOwnerAnd(userId, {
+    where: orderWhereAnd(base, {
       status: { notIn: ["COMPLETED", "CANCELLED"] },
       OR: [
         { pickupDate: { gte: todayStart, lt: tomorrow } },

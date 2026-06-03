@@ -3918,3 +3918,12 @@ Artifact: lib/costing/order-cogs.ts, services/analytics/profit-engine-service.ts
 Result: LINKED — loadProductCogsMap from profitability lines / cost snapshots; resolveLineCogs + resolveOrderLinesCogs; profit engine + real-time profit use recipe prime cost with 32% fallback
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 44
+Task: DEV-19 — Today page query optimization
+Role: DEVELOPER
+Priority: P1
+Artifact: services/today/today-workspace-scopes.ts, services/today/today-command-center-service.ts, services/today/today-operational-signals.ts, tests/unit/today-workspace-scopes.test.ts
+Result: BATCHED — resolveTodayWorkspaceScopes (1 workspace lookup vs 11); readiness + shortage counts in main Promise.all; operational signals accept pre-resolved scopes
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
