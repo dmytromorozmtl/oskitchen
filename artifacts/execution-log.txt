@@ -4035,3 +4035,12 @@ Artifact: app/api/dashboard/audit-logs/export/route.ts, lib/audit/audit-export-f
 Result: IMPLEMENTED — GET export API with filter passthrough; HMAC signed CSV; AuditExport job row + AUDIT_EXPORT_GENERATED; Signed CSV button in Audit Center
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 57
+Task: DEV-32 — multi-location rollup
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/enterprise/multi-location-rollup-*.ts, services/enterprise/multi-location-rollup-service.ts, app/api/dashboard/multi-location/rollup-export/route.ts, components/enterprise/multi-location-enterprise-panel.tsx, tests/unit/multi-location-rollup.test.ts
+Result: IMPLEMENTED — consolidated network+location+unassigned rollup; CSV export API; rollup summary card + export button on enterprise panel
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

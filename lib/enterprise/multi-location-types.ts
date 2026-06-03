@@ -1,4 +1,5 @@
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
+import type { MultiLocationRollup } from "@/lib/enterprise/multi-location-rollup-types";
 import type {
   ComparisonVsAverage,
   LocationAnalyticsRow,
@@ -31,6 +32,7 @@ export type EnterpriseLocationRank = {
 
 export type EnterpriseMultiLocationDashboard = {
   snapshot: MultiLocationAnalyticsSnapshot;
+  rollup: MultiLocationRollup;
   filters: AnalyticsFilters;
   ranks: EnterpriseLocationRank[];
   selectedLocation: LocationAnalyticsRow | null;

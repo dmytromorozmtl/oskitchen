@@ -5,6 +5,7 @@ import {
   buildEnterpriseLocationRanks,
   buildEnterpriseMultiLocationDashboard,
 } from "@/lib/enterprise/multi-location-builders";
+import { buildMultiLocationRollup } from "@/lib/enterprise/multi-location-rollup-builders";
 import type { LocationAnalyticsRow } from "@/services/analytics/multi-location-analytics";
 
 function row(partial: Partial<LocationAnalyticsRow> & Pick<LocationAnalyticsRow, "locationId" | "locationName">): LocationAnalyticsRow {
@@ -64,8 +65,7 @@ describe("multi-location enterprise builders", () => {
       row({ locationId: "x", locationName: "X" }),
       row({ locationId: "y", locationName: "Y" }),
     ];
-    const dashboard = buildEnterpriseMultiLocationDashboard({
-      snapshot: {
+    const snapshot = {
         rangeLabel: "test",
         totalLocations: 2,
         activeLocations: 2,
@@ -77,7 +77,10 @@ describe("multi-location enterprise builders", () => {
         topLocation: locations[1] ?? null,
         dailyTrend: [],
         networkAverages: { revenue: 1000, orders: 10, laborPct: 25, foodCostPct: 30 },
-      },
+      };
+    const dashboard = buildEnterpriseMultiLocationDashboard({
+      snapshot,
+      rollup: buildMultiLocationRollup({ snapshot }),
       filters: {
         from: new Date(),
         to: new Date(),

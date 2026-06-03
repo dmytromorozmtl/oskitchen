@@ -3,6 +3,7 @@ import type {
   EnterpriseLocationRank,
   EnterpriseMultiLocationDashboard,
 } from "@/lib/enterprise/multi-location-types";
+import type { MultiLocationRollup } from "@/lib/enterprise/multi-location-rollup-types";
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
 import type {
   LocationAnalyticsRow,
@@ -75,6 +76,7 @@ export function buildEnterpriseLocationAlerts(locations: LocationAnalyticsRow[])
 
 export function buildEnterpriseMultiLocationDashboard(input: {
   snapshot: MultiLocationAnalyticsSnapshot;
+  rollup: MultiLocationRollup;
   filters: AnalyticsFilters;
   selectedLocationId?: string | null;
   basePath?: string;
@@ -87,6 +89,7 @@ export function buildEnterpriseMultiLocationDashboard(input: {
 
   return {
     snapshot: input.snapshot,
+    rollup: input.rollup,
     filters: input.filters,
     ranks,
     selectedLocation,

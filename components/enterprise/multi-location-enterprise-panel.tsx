@@ -10,6 +10,7 @@ import { MultiLocationPdfExportButton } from "@/components/dashboard/multi-locat
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { buildMultiLocationRollupExportHref } from "@/lib/enterprise/multi-location-rollup-builders";
 import type { EnterpriseMultiLocationDashboard } from "@/lib/enterprise/multi-location-types";
 import { LOCATION_STATUS_BADGE, LOCATION_STATUS_LABEL } from "@/lib/locations/location-types";
 import { cn, formatCurrency } from "@/lib/utils";
@@ -29,7 +30,8 @@ function ComparisonHint({ value }: { value: "above" | "below" | "at" | null }) {
 
 export function MultiLocationEnterprisePanel({ dashboard }: Props) {
   const router = useRouter();
-  const { snapshot, ranks, selectedLocation, alerts, basePath } = dashboard;
+  const { snapshot, rollup, ranks, selectedLocation, alerts, basePath, filters } = dashboard;
+  const rollupExportHref = buildMultiLocationRollupExportHref(filters);
 
   function selectLocation(locationId: string | null) {
     const params = new URLSearchParams(window.location.search);
@@ -57,6 +59,11 @@ export function MultiLocationEnterprisePanel({ dashboard }: Props) {
         </div>
         <div className="flex flex-wrap gap-2">
           <MultiLocationPdfExportButton snapshot={snapshot} />
+          <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="multi-location-rollup-csv-export">
+            <a href={rollupExportHref} download>
+              Export rollup CSV
+            </a>
+          </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/enterprise/franchise">Franchise suite</Link>
           </Button>
@@ -76,6 +83,28 @@ export function MultiLocationEnterprisePanel({ dashboard }: Props) {
           hint={`${formatCurrency(snapshot.unassignedRevenue)} revenue`}
         />
       </div>
+
+      <Card data-testid="multi-location-rollup-summary">
+        <CardHeader>
+          <CardTitle className="text-base">Consolidated rollup</CardTitle>
+          <CardDescription>
+            Network totals with per-location revenue share — unassigned orders shown separately when present.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <RollupStat label="Network labor" value={rollup.networkLaborPct != null ? `${rollup.networkLaborPct}%` : "—"} />
+          <RollupStat label="Network food cost" value={rollup.networkFoodCostPct != null ? `${rollup.networkFoodCostPct}%` : "—"} />
+          <RollupStat label="Location rows" value={rollup.rows.filter((r) => r.kind === "location").length} />
+          <RollupStat
+            label="Unassigned share"
+            value={
+              rollup.unassignedOrders > 0
+                ? `${rollup.unassignedOrders} orders · ${formatCurrency(rollup.unassignedRevenue)}`
+                : "None"
+            }
+          />
+        </CardContent>
+      </Card>
 
       {alerts.length > 0 ? (
         <Card className="border-amber-200/60 bg-amber-50/30 dark:bg-amber-950/20">
@@ -256,6 +285,15 @@ function Kpi({ label, value, hint }: { label: string; value: string | number; hi
         {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
       </CardHeader>
     </Card>
+  );
+}
+
+function RollupStat({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-lg border border-border/80 bg-muted/20 px-4 py-3">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="mt-1 text-lg font-semibold tabular-nums">{value}</p>
+    </div>
   );
 }
 
