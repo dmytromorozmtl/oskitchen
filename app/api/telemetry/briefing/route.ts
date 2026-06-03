@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import {
+  BRIEFING_TELEMETRY_EVENT_NAMES,
+  BRIEFING_TELEMETRY_SURFACES,
+} from "@/lib/briefing/briefing-telemetry-policy";
 import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { prisma } from "@/lib/prisma";
@@ -8,20 +12,9 @@ import { consumeRateLimitToken } from "@/services/security/rate-limit-service";
 
 export const runtime = "nodejs";
 
-const briefingSurfaceSchema = z.enum([
-  "next_action",
-  "ranked_action",
-  "hero_tile",
-  "risk_signal",
-  "production_lane",
-  "pilot_lane",
-  "integration_lane",
-  "operational_empty",
-]);
-
 const bodySchema = z.object({
-  eventName: z.literal("briefing_click").default("briefing_click"),
-  surface: briefingSurfaceSchema,
+  eventName: z.enum(BRIEFING_TELEMETRY_EVENT_NAMES).default("briefing_click"),
+  surface: z.enum(BRIEFING_TELEMETRY_SURFACES),
   entityId: z.string().min(1).max(255),
   hrefPath: z.string().max(512).optional(),
   rolePack: z.string().max(64).optional(),
@@ -31,7 +24,7 @@ const bodySchema = z.object({
   rank: z.number().int().min(0).max(100).optional(),
 });
 
-/** Persist Owner Daily Briefing click telemetry (server-side complement to PostHog). */
+/** Persist Owner Daily Briefing telemetry (server-side complement to PostHog). */
 export async function POST(req: Request) {
   let actor;
   try {

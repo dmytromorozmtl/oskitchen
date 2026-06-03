@@ -3,10 +3,12 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
 
-import { captureProductEvent } from "@/lib/analytics/product-events";
+import { trackBriefingClick } from "@/lib/briefing/briefing-telemetry-client";
+import type { BriefingTelemetrySurface } from "@/lib/briefing/briefing-telemetry-policy";
 import { normalizeBriefingActionPath } from "@/lib/briefing/owner-daily-briefing-production-grade-era20";
 
-export type BriefingClickSurface =
+export type BriefingClickSurface = Extract<
+  BriefingTelemetrySurface,
   | "next_action"
   | "ranked_action"
   | "hero_tile"
@@ -14,7 +16,9 @@ export type BriefingClickSurface =
   | "production_lane"
   | "pilot_lane"
   | "integration_lane"
-  | "operational_empty";
+  | "operational_empty"
+  | "ai_briefing_section"
+>;
 
 type Props = ComponentProps<typeof Link> & {
   surface: BriefingClickSurface;
@@ -44,12 +48,13 @@ export function BriefingTelemetryLink({
     <Link
       href={href}
       onClick={(event) => {
-        captureProductEvent("briefing_click", {
+        trackBriefingClick({
+          eventName: "briefing_click",
           surface,
-          entity_id: entityId,
-          role_pack: rolePack,
-          href_path: normalizeBriefingActionPath(hrefString),
-          link_state: linkState,
+          entityId,
+          rolePack,
+          hrefPath: normalizeBriefingActionPath(hrefString),
+          linkState,
           category,
           severity,
           rank,

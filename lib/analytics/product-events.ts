@@ -11,7 +11,8 @@ export type ProductEventName =
   | "web_vitals"
   | "roi_lead_submitted"
   | "nps_submitted"
-  | "briefing_click";
+  | "briefing_click"
+  | "briefing_view";
 
 export function captureProductEvent(
   name: ProductEventName,

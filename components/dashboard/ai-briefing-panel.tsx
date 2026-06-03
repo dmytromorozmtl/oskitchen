@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   AlertTriangle,
   Brain,
@@ -17,6 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
+import { BriefingTelemetryLink } from "@/components/dashboard/briefing-telemetry-link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DailyBriefing } from "@/lib/ai/restaurant-brain-types";
@@ -96,9 +96,12 @@ export function AiBriefingPanel({ briefing }: { briefing: DailyBriefing }) {
           {sections.map((section) => {
             const Icon = SECTION_ICONS[section.id as keyof typeof SECTION_ICONS] ?? TrendingUp;
             return (
-              <Link
+              <BriefingTelemetryLink
                 key={section.id}
                 href={section.href}
+                surface="ai_briefing_section"
+                entityId={section.id}
+                category={section.tone}
                 className={cn(
                   "rounded-lg border p-3 transition-colors hover:bg-muted/40",
                   toneClass(section.tone),
@@ -110,7 +113,7 @@ export function AiBriefingPanel({ briefing }: { briefing: DailyBriefing }) {
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{section.headline}</p>
                 <p className="mt-2 text-xs text-muted-foreground">{confidenceLabel(section.confidence)}</p>
-              </Link>
+              </BriefingTelemetryLink>
             );
           })}
         </CardContent>

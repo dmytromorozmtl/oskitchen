@@ -1,4 +1,5 @@
 import { BriefingTelemetryLink } from "@/components/dashboard/briefing-telemetry-link";
+import { BriefingTelemetryPageView } from "@/components/dashboard/briefing-telemetry-page-view";
 import { CommercialInflectionTodayStrip } from "@/components/dashboard/commercial-inflection-today-strip";
 import { P0OpsVaultPhasesPanel } from "@/components/dashboard/p0-ops-vault-phases-panel";
 import { Tier2GoldenPathPhasesPanel } from "@/components/dashboard/tier2-golden-path-phases-panel";
@@ -113,6 +114,11 @@ export function OwnerDailyBriefingHero(props: { briefing: OwnerDailyBriefingPayl
 
   return (
     <section className="space-y-4" data-testid="owner-daily-briefing-hero">
+      <BriefingTelemetryPageView
+        rolePack={briefing.rolePack}
+        attentionTileCount={summary.attentionTileCount}
+        alertCount={summary.alertCount}
+      />
       <Card className={nextActionCardClass(nextAction.tone)}>
         <CardHeader className="pb-3">
           <div className="flex flex-wrap items-start justify-between gap-3">

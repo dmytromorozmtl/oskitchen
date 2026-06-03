@@ -3981,3 +3981,12 @@ Artifact: lib/ai/ai-honesty-labels.ts, components/ui/ai-honesty-label.tsx, wired
 Result: IMPLEMENTED — maturity (pilot_ready/BETA/Preview) + method badges (deterministic/heuristic/simulation/LLM/synthetic) on all AI surfaces; links to /trust policy
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 51
+Task: DEV-26 — briefing telemetry
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/briefing/briefing-telemetry-policy.ts, lib/briefing/briefing-telemetry-client.ts, services/briefing/briefing-telemetry-service.ts, components/dashboard/briefing-telemetry-page-view.tsx, wired BriefingTelemetryLink → POST /api/telemetry/briefing, tests/unit/briefing-telemetry.test.ts
+Result: IMPLEMENTED — server persistence for briefing_click + briefing_view; hero page-view on mount; TTV summary service (views/clicks/top hrefs); AI briefing section click tracking
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
