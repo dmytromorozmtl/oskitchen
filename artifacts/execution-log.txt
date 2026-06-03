@@ -4116,3 +4116,12 @@ Artifact: lib/kitchen/kds-bump-packing-route-e2e-policy.ts, e2e/kds-bump-packing
 Result: IMPLEMENTED — delivery storefront checkout → KDS bump to ready → packing QC pass → route stop with customer; route eligibility unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 66
+Task: QA-17 — marketplace catalog checkout vendor order E2E
+Role: QA
+Priority: P1
+Artifact: lib/marketplace/marketplace-catalog-checkout-vendor-order-e2e-policy.ts, e2e/marketplace-catalog-checkout-vendor-order.spec.ts, e2e/helpers/marketplace-catalog-checkout-vendor-order-*.ts, tests/unit/marketplace-catalog-checkout-vendor-order.test.ts, playwright.config.ts
+Result: IMPLEMENTED — catalog quick-add → net-terms checkout → buyer PO list → vendor incoming order detail; vendor fanout unit tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

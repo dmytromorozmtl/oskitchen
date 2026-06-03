@@ -78,6 +78,7 @@ if (dashboardE2EEnabled) {
         "**/cross-channel-inventory-live-sync.spec.ts",
         "**/marketplace-checkout.spec.ts",
         "**/marketplace-checkout-fulfill-payout.spec.ts",
+        "**/marketplace-catalog-checkout-vendor-order.spec.ts",
         "**/signup-quick-start-today.spec.ts",
         "**/storefront-checkout-kds.spec.ts",
         "**/pos-checkout-shift-close-report.spec.ts",
