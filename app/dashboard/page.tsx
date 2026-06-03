@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { HomeOverview } from "@/components/dashboard/home-overview";
 import { OperatorHomePanel } from "@/components/dashboard/operator-home-panel";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
@@ -9,13 +11,13 @@ import {
   loadPilotIntegrationHealthStripModelForWorkspace,
   shouldShowPilotIntegrationHealthStrip,
 } from "@/lib/integrations/pilot-integration-health-strip-era18";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { safeRequireWorkspacePermissionActor } from "@/lib/permissions/safe-workspace-permission-actor";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 
 export default async function DashboardHomePage() {
   const [{ dataUserId }, actor] = await Promise.all([
     getTenantActor(),
-    requireWorkspacePermissionActor(),
+    safeRequireWorkspacePermissionActor(),
   ]);
 
   const persona = resolveOperatorHomePersona({
@@ -39,11 +41,15 @@ export default async function DashboardHomePage() {
       granted: actor.granted,
     })
   ) {
-    integrationHealthStrip = (
-      <PilotIntegrationHealthStrip
-        model={await loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)}
-      />
-    );
+    try {
+      integrationHealthStrip = (
+        <PilotIntegrationHealthStrip
+          model={await loadPilotIntegrationHealthStripModelForWorkspace(dataUserId)}
+        />
+      );
+    } catch (error) {
+      console.error("[dashboard-home] integration health strip failed", error);
+    }
   }
 
   return (

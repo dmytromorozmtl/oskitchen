@@ -6,7 +6,6 @@ import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-brief
 import { OwnerDailyBriefingBreakthroughEra25Panel } from "@/components/dashboard/owner-daily-briefing-breakthrough-era25-panel";
 import { buildOwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
-import { buildCommercialInflectionReadinessUiSlice } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
 import { resolveTodayCommercialInflectionUiSlice } from "@/lib/commercial/commercial-pilot-ops-inflection-era28";
 import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
@@ -18,8 +17,10 @@ import {
 } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import { resolveOperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
-import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
+import { emptyTodayCommandCenterPayload } from "@/lib/dashboard/empty-today-command-center";
+import { safeRequireWorkspacePermissionActor } from "@/lib/permissions/safe-workspace-permission-actor";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { TodayPageLoadError } from "@/components/dashboard/today-page-load-error";
 import { canUseFullSupportInbox } from "@/lib/support/support-permissions";
 import { prisma } from "@/lib/prisma";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
@@ -42,7 +43,7 @@ export default async function TodayOperationsPage({
 }) {
   const [{ sessionUser, dataUserId, workspaceId }, actor] = await Promise.all([
     getTenantActor(),
-    requireWorkspacePermissionActor(),
+    safeRequireWorkspacePermissionActor(),
   ]);
   const resolvedSearchParams = (await searchParams) ?? {};
   const showFullMetrics = resolvedSearchParams.metrics === "all";
@@ -69,7 +70,14 @@ export default async function TodayOperationsPage({
   });
   const showLaunchWizardStrip = actor.workspaceRole === "OWNER";
   const needsCommercialInflection = showOwnerBriefing && showIntegrationHealth;
-  const data = await loadTodayCommandCenter(dataUserId);
+  let todayLoadFailed = false;
+  let data = emptyTodayCommandCenterPayload();
+  try {
+    data = await loadTodayCommandCenter(dataUserId);
+  } catch (error) {
+    todayLoadFailed = true;
+    console.error("[today] loadTodayCommandCenter failed", error);
+  }
   const [profile, integrationHealthModel, launchWizardModel, commercialOps] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: dataUserId },
@@ -117,12 +125,23 @@ export default async function TodayOperationsPage({
     dataUserId,
     profile?.createdAt ?? new Date(),
   );
-  const breakthroughEra25 = showOwnerBriefing
-    ? buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true })
-    : null;
-  const commercialInflectionUiSlice = commercialOps
-    ? resolveTodayCommercialInflectionUiSlice(commercialOps)
-    : buildCommercialInflectionReadinessUiSlice();
+  let breakthroughEra25 = null;
+  if (showOwnerBriefing) {
+    try {
+      breakthroughEra25 = buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true });
+    } catch (error) {
+      console.error("[today] breakthrough era25 slice failed", error);
+    }
+  }
+
+  let commercialInflectionUiSlice = null;
+  try {
+    commercialInflectionUiSlice = commercialOps
+      ? resolveTodayCommercialInflectionUiSlice(commercialOps)
+      : null;
+  } catch (error) {
+    console.error("[today] commercial inflection slice failed", error);
+  }
   const integrationHealthStripModel =
     integrationHealthModel && showOwnerBriefing
       ? augmentPilotIntegrationHealthStripWithCommercialInflection(
@@ -135,6 +154,7 @@ export default async function TodayOperationsPage({
     <>
       <OperatorTourLauncher />
       <div className="space-y-6">
+        {todayLoadFailed ? <TodayPageLoadError /> : null}
         {integrationHealthStripModel && !ownerBriefing?.showIntegrationHealthLane ? (
           <PilotIntegrationHealthStrip model={integrationHealthStripModel} />
         ) : null}
