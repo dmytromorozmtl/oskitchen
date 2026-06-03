@@ -3,10 +3,16 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 
 import { getStripeClient } from "@/lib/billing/stripe-client";
-import { marketplaceStripeWebhookSecret } from "@/lib/marketplace/stripe-connect-config";
+import {
+  isAllowedMarketplaceConnectWebhookEvent,
+  marketplaceStripeWebhookSecret,
+} from "@/lib/marketplace/stripe-connect-config";
 import { enforceWebhookIpRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
-import { handleMarketplaceStripeWebhookEvent } from "@/services/marketplace/stripe-connect-service";
+import {
+  handleMarketplaceStripeWebhookEvent,
+  isDuplicateMarketplaceConnectWebhook,
+} from "@/services/marketplace/stripe-connect-service";
 
 export async function POST(request: Request) {
   const stripe = getStripeClient();
@@ -36,6 +42,18 @@ export async function POST(request: Request) {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Invalid signature";
     return NextResponse.json({ error: message }, { status: 400 });
+  }
+
+  if (await isDuplicateMarketplaceConnectWebhook(event.id)) {
+    return NextResponse.json({ received: true, duplicate: true });
+  }
+
+  if (!isAllowedMarketplaceConnectWebhookEvent(event.type)) {
+    logger.info("[marketplace-connect] unhandled verified event", {
+      type: event.type,
+      id: event.id,
+    });
+    return NextResponse.json({ received: true, ignored: true });
   }
 
   try {

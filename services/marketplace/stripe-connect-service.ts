@@ -3,12 +3,14 @@ import type Stripe from "stripe";
 import { getStripeClient, safeStripeError } from "@/lib/billing/stripe-client";
 import { SITE_URL } from "@/lib/constants";
 import {
+  isAllowedMarketplaceConnectWebhookEvent,
   isMarketplaceVendorStripeConnectEnabled,
   marketplaceVendorStripeConnectClientId,
   resolveVendorConnectStatus,
 } from "@/lib/marketplace/stripe-connect-config";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
+import { recordBillingEvent } from "@/services/billing/billing-service";
 
 function decimalToNumber(value: { toString(): string } | number | null | undefined): number {
   if (value == null) return 0;
@@ -257,7 +259,174 @@ export async function processPayout(vendorId: string): Promise<
   return { ok: true, payoutId, amount, transferId };
 }
 
+export async function isDuplicateMarketplaceConnectWebhook(stripeEventId: string): Promise<boolean> {
+  const existing = await prisma.billingEvent.findUnique({
+    where: { stripeEventId },
+    select: { id: true },
+  });
+  return Boolean(existing);
+}
+
+async function resolveVendorByStripeAccountId(accountId: string | null | undefined) {
+  if (!accountId?.trim()) return null;
+  return prisma.vendor.findFirst({
+    where: { stripeAccountId: accountId },
+    select: {
+      id: true,
+      workspaceId: true,
+      stripeAccountId: true,
+      workspace: { select: { ownerUserId: true } },
+    },
+  });
+}
+
+async function resolveVendorIdFromConnectEvent(event: Stripe.Event): Promise<string | null> {
+  const object = event.data.object as {
+    metadata?: { vendorId?: string; marketplaceOrderId?: string };
+    destination?: string | { id?: string } | null;
+  };
+
+  if (object.metadata?.vendorId?.trim()) {
+    return object.metadata.vendorId.trim();
+  }
+
+  if (object.metadata?.marketplaceOrderId?.trim()) {
+    const order = await prisma.marketplacePurchaseOrder.findUnique({
+      where: { id: object.metadata.marketplaceOrderId.trim() },
+      select: { vendorId: true },
+    });
+    return order?.vendorId ?? null;
+  }
+
+  const destination =
+    typeof object.destination === "string"
+      ? object.destination
+      : object.destination?.id ?? null;
+  if (destination) {
+    const vendor = await resolveVendorByStripeAccountId(destination);
+    return vendor?.id ?? null;
+  }
+
+  if (event.account) {
+    const vendor = await resolveVendorByStripeAccountId(event.account);
+    return vendor?.id ?? null;
+  }
+
+  return null;
+}
+
+export async function recordMarketplaceConnectWebhookDelivery(input: {
+  event: Stripe.Event;
+  vendorId?: string | null;
+}): Promise<void> {
+  const vendorId =
+    input.vendorId ?? (await resolveVendorIdFromConnectEvent(input.event));
+  if (!vendorId) return;
+
+  const vendor = await prisma.vendor.findUnique({
+    where: { id: vendorId },
+    select: { workspaceId: true, workspace: { select: { ownerUserId: true } } },
+  });
+  const userId = vendor?.workspace?.ownerUserId;
+  if (!userId) return;
+
+  await recordBillingEvent({
+    userId,
+    workspaceId: vendor.workspaceId,
+    eventType: `MARKETPLACE_CONNECT_${input.event.type.toUpperCase().replaceAll(".", "_")}`,
+    source: "stripe",
+    stripeEventId: input.event.id,
+    summary: input.event.type,
+    metadata: { vendorId, eventType: input.event.type },
+  });
+}
+
+async function handleTransferCreated(transfer: Stripe.Transfer): Promise<void> {
+  const vendorId = transfer.metadata?.vendorId?.trim();
+  const payoutId = transfer.metadata?.payoutId?.trim();
+  if (!vendorId || !payoutId) {
+    logger.info("[marketplace-connect] transfer.created without payout metadata", {
+      transferId: transfer.id,
+    });
+    return;
+  }
+
+  const vendor = await prisma.vendor.findUnique({
+    where: { id: vendorId },
+    select: { stripeAccountId: true },
+  });
+  const destination =
+    typeof transfer.destination === "string" ? transfer.destination : transfer.destination?.id;
+  if (!vendor?.stripeAccountId || vendor.stripeAccountId !== destination) {
+    logger.warn("[marketplace-connect] transfer destination mismatch", {
+      vendorId,
+      transferId: transfer.id,
+      destination,
+    });
+    return;
+  }
+
+  await prisma.vendorTransaction.updateMany({
+    where: {
+      vendorId,
+      payoutId,
+      status: { in: ["AVAILABLE", "PAID_OUT"] },
+    },
+    data: { status: "PAID_OUT", payoutId },
+  });
+}
+
+async function handleTransferReversed(transfer: Stripe.Transfer): Promise<void> {
+  const vendorId = transfer.metadata?.vendorId?.trim();
+  const payoutId = transfer.metadata?.payoutId?.trim();
+  if (!vendorId || !payoutId) return;
+
+  await prisma.vendorTransaction.updateMany({
+    where: { vendorId, payoutId, status: "PAID_OUT" },
+    data: { status: "AVAILABLE", payoutId: null },
+  });
+}
+
+async function handlePayoutPaid(payout: Stripe.Payout, connectedAccountId: string): Promise<void> {
+  const vendor = await resolveVendorByStripeAccountId(connectedAccountId);
+  if (!vendor) return;
+
+  const { dispatchVendorWebhookEvent } = await import("@/services/marketplace/vendor-api-service");
+  const amount = payout.amount / 100;
+
+  await dispatchVendorWebhookEvent({
+    vendorId: vendor.id,
+    event: "payout_processed",
+    data: {
+      payoutId: payout.id,
+      amount,
+      currency: payout.currency.toUpperCase(),
+      status: payout.status,
+      arrivalDate: payout.arrival_date
+        ? new Date(payout.arrival_date * 1000).toISOString()
+        : null,
+    },
+  });
+}
+
+async function handlePayoutFailed(payout: Stripe.Payout, connectedAccountId: string): Promise<void> {
+  const vendor = await resolveVendorByStripeAccountId(connectedAccountId);
+  if (!vendor) return;
+
+  logger.error("[marketplace-connect] connected account payout failed", {
+    vendorId: vendor.id,
+    payoutId: payout.id,
+    failureCode: payout.failure_code ?? null,
+    failureMessage: payout.failure_message ?? null,
+  });
+}
+
 export async function handleMarketplaceStripeWebhookEvent(event: Stripe.Event): Promise<void> {
+  if (!isAllowedMarketplaceConnectWebhookEvent(event.type)) {
+    logger.info("[marketplace-connect] ignored webhook event", { type: event.type, id: event.id });
+    return;
+  }
+
   switch (event.type) {
     case "account.updated": {
       const account = event.data.object as Stripe.Account;
@@ -277,13 +446,33 @@ export async function handleMarketplaceStripeWebhookEvent(event: Stripe.Event): 
       break;
     }
     case "transfer.created":
+    case "transfer.updated": {
+      await handleTransferCreated(event.data.object as Stripe.Transfer);
+      break;
+    }
+    case "transfer.reversed": {
+      await handleTransferReversed(event.data.object as Stripe.Transfer);
+      break;
+    }
     case "payout.paid": {
-      logger.info("[marketplace-connect] payout event", { type: event.type, id: event.id });
+      if (!event.account) break;
+      await handlePayoutPaid(event.data.object as Stripe.Payout, event.account);
+      break;
+    }
+    case "payout.failed":
+    case "payout.canceled": {
+      if (!event.account) break;
+      await handlePayoutFailed(event.data.object as Stripe.Payout, event.account);
       break;
     }
     default:
       break;
   }
+
+  await recordMarketplaceConnectWebhookDelivery({
+    event,
+    vendorId: await resolveVendorIdFromConnectEvent(event),
+  });
 }
 
 export function vendorConnectReadiness(vendor: { stripeAccountId: string | null }) {

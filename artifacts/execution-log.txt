@@ -3891,3 +3891,12 @@ Artifact: services/marketplace/checkout-service.ts, services/marketplace/vendor-
 Result: WIRED — notifyVendorsOfNewMarketplaceOrders after buyer confirmation; email to contact + admin/manager team; in-app notificationLog for vendor workspace owner
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 41
+Task: DEV-16 — Stripe Connect payout webhook hardening
+Role: DEVELOPER
+Priority: P1
+Artifact: app/api/marketplace/stripe-connect/webhook/route.ts, services/marketplace/stripe-connect-service.ts, lib/marketplace/stripe-connect-config.ts, tests/unit/marketplace-stripe-connect-webhook.test.ts
+Result: HARDENED — idempotency via billingEvent; event allowlist; transfer.created/reversed reconciliation; payout.paid → vendor payout_processed webhook; payout.failed logging
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
