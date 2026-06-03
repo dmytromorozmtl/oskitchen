@@ -3819,3 +3819,12 @@ Artifact: docs/software-first-pos-positioning.md
 Result: CREATED — BYOD browser POS; no hardware lock-in; vs Toast/Square/Lightspeed; TCO framing; ICP fit; objection handling; honest offline/EMV caveats
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 33
+Task: MKT-08 — BETA badge explanation page
+Role: MARKETING
+Priority: P0
+Artifact: app/trust/page.tsx, components/marketing/trust-maturity-labels-section.tsx
+Result: UPDATED — trust page now explains Pilot ready, BETA, Preview, SKIPPED, Placeholder, Internal, LIVE; Integration Health rule + FAQ; security grid retained below
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

@@ -2,27 +2,42 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { Disclaimer, FeatureGrid, Hero, PublicShell } from "@/components/marketing/public-page";
+import { TrustMaturityLabelsSection } from "@/components/marketing/trust-maturity-labels-section";
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "Trust center",
+  title: "Trust center — BETA, Preview & SKIPPED labels explained",
   description:
-    "OS Kitchen security posture, data handling, infrastructure, and compliance roadmap.",
+    "What OS Kitchen maturity badges mean: pilot ready, BETA, Preview, SKIPPED, and LIVE. Honest integration status — not fake green tiles.",
   path: "/trust",
+  keywords: [
+    "OS Kitchen BETA badge",
+    "integration health SKIPPED",
+    "restaurant software trust",
+    "feature maturity labels",
+  ],
 });
 
 export default function TrustPage() {
   return (
     <PublicShell>
       <Hero
-        eyebrow="Trust center"
-        title="Designed with security-conscious practices for food operations data."
-        description="OS Kitchen centralizes orders, menus, customers, production, packing, and integrations with role-based access, audit logs, and credential redaction. This page summarizes current safeguards using enterprise-ready control language — not formal certification claims."
-        cta="Contact security"
-        ctaHref="/support/contact"
-        secondary="Read legal templates"
-        secondaryHref="/legal/security"
+        eyebrow="Trust & feature honesty"
+        title="We label what is live, beta, or skipped — so rush hour never surprises you."
+        description="OS Kitchen uses BETA, Preview, Pilot ready, and SKIPPED badges across dashboard nav and Integration Health. This page explains each label for operators, sales, and security reviewers. Security practices are summarized below."
+        cta="Integration matrix"
+        ctaHref="/integrations"
+        secondary="Pilot pricing & SKUs"
+        secondaryHref="/pricing"
       />
+      <TrustMaturityLabelsSection />
+      <section className="mx-auto max-w-6xl px-4 pb-4 sm:px-6">
+        <h2 className="text-2xl font-semibold tracking-tight">Security & data handling</h2>
+        <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+          Enterprise-ready control language below — not formal SOC 2, HIPAA, or PCI attestation
+          claims.
+        </p>
+      </section>
       <FeatureGrid
         items={[
           {
@@ -90,15 +105,19 @@ export default function TrustPage() {
       <Disclaimer>
         OS Kitchen does not currently claim SOC 2, HIPAA, PCI compliance, GDPR compliance, or food
         labeling compliance. Full enterprise SSO/SCIM is roadmap unless explicitly enabled for your
-        tenant in writing. Formal compliance certifications are future roadmap items.
+        tenant in writing. SKIPPED integration states are honest — not production LIVE claims.
       </Disclaimer>
       <p className="mx-auto max-w-3xl px-4 pb-8 text-center text-sm text-muted-foreground">
         <Link href="/trust/status" className="underline">
           Service snapshot (engineering)
-        </Link>{" "}
-        ·{" "}
+        </Link>
+        {" · "}
         <Link href="/legal/data-rights" className="underline">
           Data rights template
+        </Link>
+        {" · "}
+        <Link href="/pricing" className="underline">
+          Pilot pricing SKUs
         </Link>
       </p>
     </PublicShell>
