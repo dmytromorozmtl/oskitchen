@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KitchenOS P0 Staging Proof Execution</title>
+  <title>OS Kitchen P0 Staging Proof Execution</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; color: #111; line-height: 1.5; }
     .banner { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
@@ -19,14 +19,14 @@
 </head>
 <body>
   <h1>P0 Staging Proof — Step 2 Execution</h1>
-  <p class="honesty">Policy era30-p0-staging-proof-execution-v1 · Generated 2026-05-29T13:35:02.043Z</p>
+  <p class="honesty">Policy era30-p0-staging-proof-execution-v1 · Generated 2026-06-03T19:03:36.231Z</p>
 
   <div class="banner banner-blocked">
-    <strong>Milestone:</strong> vault_blocked<br />
-    <strong>Vault ready:</strong> NO<br />
-    <strong>P0 proof:</strong> awaiting_ops_credentials (SKIPPED)<br />
-    <strong>Integrity:</strong> PASS<br />
-    <strong>Staging health:</strong> SKIPPED
+    <strong>Milestone:</strong> awaiting_staging_workflows<br />
+    <strong>Vault ready:</strong> YES<br />
+    <strong>P0 proof:</strong> proof_failed (FAILED)<br />
+    <strong>Integrity:</strong> FAIL<br />
+    <strong>Staging health:</strong> PASS https://os-kitchen.com/api/health
   </div>
 
   <p class="honesty">PASS &gt; SKIPPED — Step 2 never fabricates proof_passed. Use --execute only when vault is ready.</p>
@@ -36,26 +36,26 @@
     <thead><tr><th></th><th>Phase</th><th>Owner</th><th>Proof</th><th>Detail</th><th>Smoke</th></tr></thead>
     <tbody>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.0 — Vault gate (11 secrets)</td>
         <td>VP Operations</td>
-        <td>awaiting_ops_credentials</td>
-        <td>Configure 11 secrets — see docs/ops-vault-matrix.md</td>
+        <td>proof_passed</td>
+        <td>All 11 ops vault secrets present in shell.</td>
         <td>—</td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.1a — Staging /api/health</td>
         <td>DevOps</td>
-        <td>proof_skipped_missing_prerequisites</td>
-        <td>Set E2E_STAGING_BASE_URL and run ops:check-p0-staging-health</td>
+        <td>proof_passed</td>
+        <td>Health PASS — https://os-kitchen.com/api/health</td>
         <td>—</td>
       </tr>
       <tr>
         <td class="status-blocked">✗</td>
         <td>Step 2.1b — GitHub staging workflows first green</td>
         <td>DevOps</td>
-        <td>proof_skipped_missing_prerequisites</td>
+        <td>proof_skipped_missing_github_run</td>
         <td>Run smoke:staging-workflows-first-green after staging health PASS.</td>
         <td><code>npm run smoke:staging-workflows-first-green</code></td>
       </tr>
@@ -63,7 +63,7 @@
         <td class="status-blocked">✗</td>
         <td>Step 2.2 — Woo/Shopify live channel smoke</td>
         <td>Integration engineer</td>
-        <td>proof_skipped_missing_prerequisites/proof_skipped_missing_prerequisites</td>
+        <td>proof_failed/proof_failed</td>
         <td>Run smoke:woo-shopify-live with DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL.</td>
         <td><code>npm run smoke:woo-shopify-live</code></td>
       </tr>
@@ -71,7 +71,7 @@
         <td class="status-blocked">✗</td>
         <td>Step 2.3 — SSO IdP staging login</td>
         <td>Security / CTO</td>
-        <td>proof_skipped_missing_prerequisites</td>
+        <td>proof_skipped_missing_operator_evidence</td>
         <td>Run smoke:enterprise-sso-idp-staging with SSO_STAGING_* vars.</td>
         <td><code>npm run smoke:enterprise-sso-idp-staging</code></td>
       </tr>
@@ -79,7 +79,7 @@
         <td class="status-blocked">✗</td>
         <td>Step 2.4 — P0 orchestrator aggregation</td>
         <td>DevOps</td>
-        <td>awaiting_ops_credentials</td>
+        <td>proof_failed</td>
         <td>Run smoke:p0-staging-proof-unblock after child smokes PASS.</td>
         <td><code>npm run smoke:p0-staging-proof-unblock</code></td>
       </tr>
@@ -87,13 +87,13 @@
         <td class="status-blocked">✗</td>
         <td>Step 2.5 — P0 integrity validation</td>
         <td>Engineering</td>
-        <td>integrity_passed</td>
+        <td>integrity_failed</td>
         <td>Run ops:validate-p0-staging-proof-integrity after P0 PASS.</td>
         <td>—</td>
       </tr></tbody>
   </table>
 
   <h2>Recommended commands</h2>
-  <ol><li><code>npm run check-vault-readiness -- --write</code></li><li><code>npm run ops:run-p0-vault-day0-orchestrator -- --write</code></li></ol>
+  <ol><li><code>npm run smoke:staging-workflows-first-green</code></li><li><code>npm run ops:run-p0-staging-proof-execution -- --execute</code></li></ol>
 </body>
 </html>

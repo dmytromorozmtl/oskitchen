@@ -1,6 +1,6 @@
 {
   "version": "vault-readiness-v2",
-  "generatedAt": "2026-06-01T21:56:45.369Z",
+  "generatedAt": "2026-06-03T19:03:35.337Z",
   "policyId": "era17-p0-staging-proof-unblock-v1",
   "opsChecklistDoc": "docs/era18-p0-staging-proof-ops-checklist.md",
   "vaultMatrixDoc": "docs/ops-vault-matrix.md",
@@ -10,8 +10,8 @@
   "missingKeys": [],
   "day0Milestone": "env_complete",
   "day0PartialComplete": true,
-  "p0ProofStatus": "awaiting_ops_credentials",
-  "p0ArtifactOverall": "SKIPPED",
+  "p0ProofStatus": "proof_failed",
+  "p0ArtifactOverall": "FAILED",
   "nextPhase": null,
   "phases": [
     {
@@ -80,39 +80,24 @@
       "smokeScript": "smoke:enterprise-sso-idp-staging",
       "artifactPath": "artifacts/enterprise-sso-idp-staging-smoke-summary.json",
       "overall": "SKIPPED",
-      "proofStatus": "proof_skipped_missing_prerequisites",
-      "missingEnvVars": [
-        "E2E_STAGING_BASE_URL",
-        "SSO_STAGING_WORKSPACE_ID",
-        "SSO_STAGING_IDP_VENDOR",
-        "SSO_STAGING_ALLOWED_DOMAIN",
-        "SSO_STAGING_TEST_EMAIL",
-        "SSO_STAGING_SUPABASE_PROVIDER_REF"
-      ]
+      "proofStatus": "proof_skipped_missing_operator_evidence",
+      "missingEnvVars": []
     },
     {
       "id": "stagingWorkflowsFirstGreen",
       "smokeScript": "smoke:staging-workflows-first-green",
       "artifactPath": "artifacts/staging-workflows-first-green-summary.json",
       "overall": "SKIPPED",
-      "proofStatus": "proof_skipped_missing_prerequisites",
-      "missingEnvVars": [
-        "E2E_STAGING_BASE_URL",
-        "E2E_LOGIN_EMAIL",
-        "E2E_LOGIN_PASSWORD"
-      ]
+      "proofStatus": "proof_skipped_missing_github_run",
+      "missingEnvVars": []
     },
     {
       "id": "channelLive",
       "smokeScript": "smoke:woo-shopify-live",
       "artifactPath": "artifacts/channel-live-smoke-summary.json",
-      "overall": "SKIPPED",
-      "proofStatus": "proof_skipped_missing_prerequisites/proof_skipped_missing_prerequisites",
-      "missingEnvVars": [
-        "DATABASE_URL",
-        "ENCRYPTION_KEY",
-        "CHANNEL_SMOKE_OWNER_EMAIL"
-      ]
+      "overall": "FAILED",
+      "proofStatus": "proof_failed/proof_failed",
+      "missingEnvVars": []
     }
   ],
   "recommendedNextSteps": [

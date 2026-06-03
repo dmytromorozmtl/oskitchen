@@ -1,0 +1,36 @@
+{
+  "version": "p0-orchestrator-staging-run-v1",
+  "task": "QA-01",
+  "runAt": "2026-06-03T19:03:35.337Z",
+  "overall": "FAIL",
+  "vaultReady": true,
+  "policyOnly": false,
+  "failedStepCount": 2,
+  "p0ArtifactOverall": "FAILED",
+  "steps": [
+    { "id": "tier0_policy", "status": "PASS" },
+    { "id": "vault_gate", "status": "PASS" },
+    { "id": "smoke_workflows", "status": "PASS" },
+    { "id": "smoke_channel", "status": "FAIL" },
+    { "id": "smoke_sso", "status": "PASS" },
+    { "id": "smoke_p0", "status": "FAIL" },
+    { "id": "smoke_integrity", "status": "PASS" }
+  ],
+  "childSummary": {
+    "stagingWorkflowsFirstGreen": "SKIPPED / proof_skipped_missing_github_run",
+    "channelLive": "FAILED / proof_failed",
+    "ssoIdpStaging": "SKIPPED / proof_skipped_missing_operator_evidence",
+    "p0ProofStatus": "proof_failed"
+  },
+  "artifacts": [
+    "artifacts/vault-readiness-report.json",
+    "artifacts/p0-staging-proof-execution-summary.json",
+    "artifacts/p0-staging-proof-unblock-summary.json",
+    "artifacts/staging-workflows-first-green-summary.json",
+    "artifacts/channel-live-smoke-summary.json",
+    "artifacts/enterprise-sso-idp-staging-smoke-summary.json"
+  ],
+  "workflow": ".github/workflows/p0-orchestrator.yml",
+  "runner": "scripts/run-p0-orchestrator-staging.sh",
+  "honestyNote": "FAIL is honest — channel live smoke proof_failed (Woo placeholder URL). PASS requires all tier-2 child smokes proof_passed in GHA with live credentials."
+}

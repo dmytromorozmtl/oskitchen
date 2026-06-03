@@ -3602,3 +3602,12 @@ Artifact: scripts/smoke-sso-idp-staging.sh
 Note: wraps smoke:enterprise-sso-idp-staging; env load, Auth0 runbook, operator proof hints
 Vault: 11/11 | P0: SKIPPED | GO: NO-GO
 
+---
+Cycle: 9
+Task: QA-01 — P0 orchestrator staging run
+Role: QA
+Priority: P0
+Artifacts: scripts/run-p0-orchestrator-staging.sh, artifacts/p0-orchestrator-staging-run-summary.json
+Result: overall FAIL (vault 11/11; channel live proof_failed; SSO/workflows SKIPPED)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
