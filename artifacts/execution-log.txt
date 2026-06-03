@@ -3710,3 +3710,12 @@ Artifact: docs/mobile-375px-audit.md
 Result: CREATED — 30 critical pages, 22 pass / 7 partial / 1 fail (POS terminal)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 21
+Task: DES-03 — FeaturePreviewOverlay component
+Role: DESIGN
+Priority: P0
+Artifact: components/ui/feature-preview-overlay.tsx
+Result: CREATED — blurred preview gate, lock icon, Launching soon CTA
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
