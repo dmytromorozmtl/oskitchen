@@ -3468,3 +3468,8 @@ Cycle: 20260602-210800
 Feature: 38 — QR Code Ordering for Tables
 Result: PASSED — /q/table full self-service (order, pay now, split bill, KDS), extended qr-ordering-service, e2e
 Total done: 38/40
+---
+Cycle: 20260602-211200
+Feature: 39 — Real-time Profit Engine
+Result: PASSED — profit-engine-service.ts (order/table/server/channel, 30s refresh), API + ProfitEngineBreakdown on profit page, unit + e2e
+Total done: 39/40
