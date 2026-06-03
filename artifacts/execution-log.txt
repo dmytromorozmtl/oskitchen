@@ -3593,3 +3593,12 @@ Artifact: docs/shopify-live-smoke-setup.md
 Note: dev store + custom app + GHA secrets; artifact SKIPPED until vault vars filled locally/GHA
 Vault: 11/11 | P0: SKIPPED | GO: NO-GO
 
+---
+Cycle: 8
+Task: DEV-10 — SSO IdP smoke script (Auth0 SAML → Supabase session)
+Role: Developer
+Priority: P0
+Artifact: scripts/smoke-sso-idp-staging.sh
+Note: wraps smoke:enterprise-sso-idp-staging; env load, Auth0 runbook, operator proof hints
+Vault: 11/11 | P0: SKIPPED | GO: NO-GO
+
