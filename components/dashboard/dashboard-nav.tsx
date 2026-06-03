@@ -16,6 +16,8 @@ import { navLabelForBusinessType } from "@/lib/terminology";
 import { cn } from "@/lib/utils";
 import type { SetupHintPayload } from "@/lib/setup-hint";
 import { SetupProgressNavWidget } from "@/components/dashboard/setup-progress-widget";
+import { PreviewModulesVisibleBanner } from "@/components/dashboard/preview-modules-visible-banner";
+import { PreviewRouteHidingConfirmationDialog } from "@/components/dashboard/preview-route-hiding-confirmation-dialog";
 import { Badge } from "@/components/ui/badge";
 import { NavMaturityBadge } from "@/components/ui/beta-badge";
 import {
@@ -41,6 +43,7 @@ import {
   NAV_PERSONA_OPTIONS,
   type NavPersonaSelection,
 } from "@/lib/navigation/nav-personas";
+import { listPreviewSidebarLinks } from "@/lib/navigation/preview-route-hiding-confirmation-policy";
 
 export type { NavLinkItem } from "@/lib/nav-config";
 export { NAV_GROUPS, flattenNavLinks } from "@/lib/nav-config";
@@ -220,6 +223,7 @@ export function DashboardSidebarNav({
   const [navQuery, setNavQuery] = React.useState("");
   const [navScopeAll, setNavScopeAll] = React.useState(false);
   const [navPersona, setNavPersona] = React.useState<NavPersonaSelection>("auto");
+  const [previewRevealOpen, setPreviewRevealOpen] = React.useState(false);
   const [pinHrefs, setPinHrefs] = React.useState<string[]>([]);
   const [recentHrefs, setRecentHrefs] = React.useState<string[]>([]);
 
@@ -267,6 +271,21 @@ export function DashboardSidebarNav({
     } catch {
       /* ignore */
     }
+  };
+
+  const previewSidebarLinkCount = React.useMemo(() => listPreviewSidebarLinks().length, []);
+
+  const requestNavScopeChange = (all: boolean) => {
+    if (all && !navScopeAll) {
+      setPreviewRevealOpen(true);
+      return;
+    }
+    persistScope(all);
+  };
+
+  const confirmPreviewReveal = () => {
+    setPreviewRevealOpen(false);
+    persistScope(true);
   };
 
   const persistScope = (all: boolean) => {
@@ -404,13 +423,22 @@ export function DashboardSidebarNav({
         {!navContext.fullNavAccess ? (
           <button
             type="button"
-            onClick={() => persistScope(!navScopeAll)}
+            onClick={() => requestNavScopeChange(!navScopeAll)}
             className="w-full rounded-lg border border-dashed border-border/80 px-2 py-1.5 text-left text-[11px] font-medium text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+            data-testid="nav-scope-toggle"
           >
             {navScopeAll ? "Focus recommended modules" : "Show all modules (advanced)"}
           </button>
         ) : null}
+        {navScopeAll && !navContext.fullNavAccess ? <PreviewModulesVisibleBanner /> : null}
       </div>
+
+      <PreviewRouteHidingConfirmationDialog
+        open={previewRevealOpen}
+        onOpenChange={setPreviewRevealOpen}
+        onConfirm={confirmPreviewReveal}
+        previewLinkCount={previewSidebarLinkCount}
+      />
 
       {setupHint ? (
         <SetupProgressNavWidget

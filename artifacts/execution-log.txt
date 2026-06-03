@@ -4314,3 +4314,12 @@ Artifact: lib/navigation/nav-personas.ts, lib/business-modes.ts, components/dash
 Result: IMPLEMENTED — manager/kitchen/cashier/packer/support_admin allowlists; auto-resolve from StaffRoleType; sidebar persona select for STAFF; getFilteredNavGroups persona filter when focused
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 88
+Task: DES-11 — preview route hiding confirmation
+Role: DESIGN
+Priority: P1
+Artifact: lib/navigation/preview-route-hiding-confirmation-policy.ts, components/dashboard/preview-route-hiding-confirmation-dialog.tsx, components/dashboard/preview-modules-visible-banner.tsx, components/dashboard/dashboard-nav.tsx, tests/unit/preview-route-hiding-confirmation.test.ts
+Result: IMPLEMENTED — confirm dialog before Show all modules; preview-modules-visible banner when expanded; audit certifies preview sidebar links hidden in focused nav
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
