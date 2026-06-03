@@ -3393,3 +3393,8 @@ Cycle: 20260602-201000
 Feature: 20 — Voice-Activated Kitchen
 Result: PASSED — kitchen-voice-service (inventory Q&A, bowl yield), Alexa/Google branch, /dashboard/kitchen/voice, unit+e2e
 Total done: 20/40
+---
+Cycle: 20260602-201300
+Feature: 21 — AI Camera LIVE
+Result: PASSED — camera-live-service (queues, PPE, idle downtime), /kitchen/cameras/live, frame ingest API, unit+e2e
+Total done: 21/40

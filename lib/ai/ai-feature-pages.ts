@@ -31,6 +31,11 @@ export const AI_FEATURE_PAGES = [
     pageFile: "app/dashboard/kitchen/cameras/page.tsx",
   },
   {
+    route: "/dashboard/kitchen/cameras/live",
+    featureName: "AI Camera LIVE",
+    pageFile: "app/dashboard/kitchen/cameras/live/page.tsx",
+  },
+  {
     route: "/dashboard/analytics/benchmarks",
     featureName: "Benchmark Network",
     pageFile: "app/dashboard/analytics/benchmarks/page.tsx",
