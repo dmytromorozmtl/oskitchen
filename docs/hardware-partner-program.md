@@ -5,7 +5,7 @@
 **Owner:** Founder + Product + Partnerships  
 **Scope:** OEM / reseller / integrator relationships for **compatible devices** — not a proprietary terminal ecosystem  
 **Status:** **Program design only** — **0 signed hardware partners · 0 certified device SKUs · pilot NO-GO**  
-**Related:** [`kitchen-camera-honest-positioning.md`](./kitchen-camera-honest-positioning.md) · [`POS_ARCHITECTURE.md`](./POS_ARCHITECTURE.md) · [`restaurant-partnerships-strategy.md`](./restaurant-partnerships-strategy.md) · [`toast-gap-analysis.md`](./toast-gap-analysis.md) · [`offline-pos-plan.md`](./offline-pos-plan.md) (Task 115)
+**Related:** [`hardware-partnership-program.md`](./hardware-partnership-program.md) (certified catalog + partner pricing) · [`kitchen-camera-honest-positioning.md`](./kitchen-camera-honest-positioning.md) · [`POS_ARCHITECTURE.md`](./POS_ARCHITECTURE.md) · [`restaurant-partnerships-strategy.md`](./restaurant-partnerships-strategy.md) · [`toast-gap-analysis.md`](./toast-gap-analysis.md) · [`offline-pos-plan.md`](./offline-pos-plan.md) (Task 115)
 
 OS Kitchen is **software-first**: operators bring tablets, browsers, optional Stripe Terminal readers, label printers, and camera streams. This program defines how **third-party hardware vendors** can list compatibility — without implying Toast/Square-level bundled hardware today.
 

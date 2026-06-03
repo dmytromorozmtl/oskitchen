@@ -3433,3 +3433,8 @@ Cycle: 20260602-203800
 Feature: 28 — API Marketplace
 Result: PASSED — app-marketplace-service (submit/review/publish, 70/30 rev share), /dashboard/developers, unit+e2e
 Total done: 28/40
+---
+Cycle: 20260602-204200
+Feature: 29 — Hardware Partnership Program (docs)
+Result: PASSED — hardware-partnership-program.md (certified devices, partner pricing), unit test, cross-links
+Total done: 29/40
