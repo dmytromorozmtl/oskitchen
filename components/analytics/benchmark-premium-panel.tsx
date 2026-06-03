@@ -97,12 +97,17 @@ export function BenchmarkPremiumPanel({ dashboard }: Props) {
             cohort ({dashboard.benchmark.data.cohort.label}).
           </p>
         </div>
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/dashboard/analytics/benchmarks">
-            <BarChart3 className="mr-1.5 h-4 w-4" aria-hidden />
-            Free benchmarks
-          </Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/dashboard/analytics/network">Network effects</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/dashboard/analytics/benchmarks">
+              <BarChart3 className="mr-1.5 h-4 w-4" aria-hidden />
+              Free benchmarks
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <Card className="border-amber-200/60 bg-gradient-to-br from-amber-50/80 to-background dark:from-amber-950/30">

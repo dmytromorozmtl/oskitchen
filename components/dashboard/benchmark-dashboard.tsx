@@ -162,9 +162,14 @@ export function BenchmarkDashboard({
           </p>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="benchmark-premium-link">
-            <Link href="/dashboard/analytics/benchmarks/premium">Benchmark Premium →</Link>
-          </Button>
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="network-effects-link">
+              <Link href="/dashboard/analytics/network">Network effects →</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="benchmark-premium-link">
+              <Link href="/dashboard/analytics/benchmarks/premium">Benchmark Premium →</Link>
+            </Button>
+          </div>
           <label htmlFor="benchmark-cohort" className="text-xs font-medium text-muted-foreground self-stretch">
             Peer group
           </label>
