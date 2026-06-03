@@ -3665,3 +3665,12 @@ Artifact: e2e/dashboard-rsc-regression.spec.ts
 Result: CREATED — today/marketplace/pos no-500 + RSC crash guards; wired to chromium-authed project
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 16
+Task: QA-08 — Today page performance p95
+Role: QA
+Priority: P0
+Artifact: tests/performance/today-page-load.test.ts
+Result: CREATED — p95 SLO 2000ms on loadTodayPageCriticalPath; live benchmark gated by RUN_PERF_TESTS=1
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

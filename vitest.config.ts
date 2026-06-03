@@ -21,6 +21,7 @@ export default defineConfig({
     include: [
       "unit/**/*.test.ts",
       "integration/**/*.integration.test.ts",
+      "performance/**/*.test.ts",
       "contracts/**/*.test.ts",
     ],
     exclude: [
