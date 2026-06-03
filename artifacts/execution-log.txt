@@ -4170,3 +4170,12 @@ Artifact: lib/analytics/profit-dashboard-margin-alert-e2e-policy.ts, e2e/profit-
 Result: IMPLEMENTED — /dashboard/today/profit gauge + alerts match API margin within ±1%; margin drop/healthy alert message accuracy unit tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 72
+Task: QA-23 — RBAC matrix 15×30 E2E
+Role: QA
+Priority: P1
+Artifact: lib/security/rbac-matrix-e2e-policy.ts, e2e/rbac-matrix.spec.ts, e2e/helpers/rbac-matrix-*.ts, tests/unit/rbac-matrix-15x30.test.ts, playwright.config.ts
+Result: IMPLEMENTED — 15 staff templates × 30 capabilities (450 cells); owner smoke on 10 capability-gated routes without permission-denied cards
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

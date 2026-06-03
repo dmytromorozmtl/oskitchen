@@ -75,6 +75,7 @@ if (dashboardE2EEnabled) {
         "**/owner-briefing-blocker-resolve.spec.ts",
         "**/integration-health-recovery-playbook.spec.ts",
         "**/profit-dashboard-margin-alert.spec.ts",
+        "**/rbac-matrix.spec.ts",
         "**/cross-tenant-isolation.spec.ts",
         "**/cross-tenant-isolation-staging.spec.ts",
         "**/stripe-terminal-payment.spec.ts",
