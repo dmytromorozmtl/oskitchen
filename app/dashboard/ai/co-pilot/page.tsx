@@ -30,9 +30,14 @@ export default async function RestaurantCoPilotPage() {
             approval draft — nothing runs until you approve and execute.
           </p>
         </div>
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/dashboard/copilot">← Operations Copilot</Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-full" data-testid="co-pilot-autonomous-link">
+            <Link href="/dashboard/ai/co-pilot/autonomous">Co-Pilot 2.0</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/dashboard/copilot">← Operations Copilot</Link>
+          </Button>
+        </div>
       </div>
 
       <CoPilotPanel dashboard={dashboard} canDraft={canDraft} canApprove={canApprove} />
