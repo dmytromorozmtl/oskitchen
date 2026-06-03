@@ -40,7 +40,9 @@ export async function testConnection(creds: WooCredentials): Promise<{ ok: boole
     return { ok: true, message: "Connected to WooCommerce REST API." };
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Network error";
-    return { ok: false, message: msg };
+    const cause =
+      e instanceof Error && e.cause instanceof Error ? ` (${e.cause.message})` : "";
+    return { ok: false, message: `${msg}${cause}` };
   }
 }
 

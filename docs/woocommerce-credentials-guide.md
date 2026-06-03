@@ -113,6 +113,7 @@ Optional workflow: **Woo Shopify Staging Smoke** (`workflow_dispatch`).
 
 | Symptom | Fix |
 |---------|-----|
+| `fetch failed` / host `smoke-test.*` | Saved store URL is a placeholder — set a **real** HTTPS WooCommerce site in Integrations, then `npm run smoke:woo-diagnose` |
 | `Missing: DATABASE_URL` | Point at staging Postgres, not local dev |
 | `Connection missing decrypted Woo credentials` | `ENCRYPTION_KEY` must match staging app |
 | `No WooCommerce connection` | Save Woo in staging dashboard or set `WOOCOMMERCE_*` |

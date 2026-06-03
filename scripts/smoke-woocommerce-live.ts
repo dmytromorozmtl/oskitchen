@@ -114,6 +114,26 @@ export function readWooCommerceLiveSmokeEnv(
   };
 }
 
+export function wooStoreHostLabel(baseUrl: string): string {
+  try {
+    return new URL(baseUrl.startsWith("http") ? baseUrl : `https://${baseUrl}`).host;
+  } catch {
+    return baseUrl.slice(0, 80);
+  }
+}
+
+export function formatWooPingFailureDetail(baseUrl: string, message: string): string {
+  const host = wooStoreHostLabel(baseUrl);
+  const placeholder =
+    host.includes("smoke-test") ||
+    host.includes("example.com") ||
+    host.endsWith(".local");
+  const hint = placeholder
+    ? " Update the store URL in Dashboard → Integrations → WooCommerce (saved host is a placeholder)."
+    : "";
+  return `Store ${host}: ${message}.${hint}`;
+}
+
 export function listMissingWooCommerceLiveSmokeEnvVars(
   input: WooCommerceLiveSmokeEnvInput,
 ): string[] {
@@ -419,7 +439,9 @@ export async function runWooCommerceLiveSmoke(
       id: "woo_api_connection",
       label: "WooCommerce REST connection",
       status: ping.ok ? "PASSED" : "FAILED",
-      detail: ping.message,
+      detail: ping.ok
+        ? ping.message
+        : formatWooPingFailureDetail(creds.baseUrl, ping.message),
     });
     if (!ping.ok) {
       return buildWooCommerceLiveSmokeSummary({
