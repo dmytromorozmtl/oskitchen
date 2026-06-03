@@ -1,5 +1,11 @@
 import { FulfillmentType } from "@prisma/client";
 
+import {
+  DEFAULT_FOOD_COST_RATIO,
+  loadProductCogsMap,
+  orderTotalCost,
+  resolveOrderLinesCogs,
+} from "@/lib/costing/order-cogs";
 import { prisma } from "@/lib/prisma";
 import { readQrTableLabel } from "@/lib/qr/qr-order-meta";
 import { orderListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
@@ -7,7 +13,6 @@ import { getRealTimeProfit } from "@/services/analytics/real-time-profit-service
 
 export const PROFIT_ENGINE_REFRESH_SECONDS = 30;
 
-const FOOD_COST_RATIO = 0.32;
 const DELIVERY_COST_PER_ORDER = 4.5;
 
 export type ProfitEngineRow = {
@@ -46,8 +51,12 @@ function startOfDay(d = new Date()): Date {
   return x;
 }
 
-function orderCost(revenue: number, isDelivery: boolean): number {
-  return round2(revenue * FOOD_COST_RATIO + (isDelivery ? DELIVERY_COST_PER_ORDER : 0));
+function estimatedOrderCost(revenue: number, isDelivery: boolean): number {
+  return orderTotalCost(
+    round2(revenue * DEFAULT_FOOD_COST_RATIO),
+    isDelivery,
+    DELIVERY_COST_PER_ORDER,
+  );
 }
 
 function toRow(id: string, label: string, revenue: number, cost: number, orderCount: number): ProfitEngineRow {
@@ -123,8 +132,22 @@ export async function getProfitEngineSnapshot(userId: string): Promise<ProfitEng
         },
         take: 1,
       },
+      orderItems: {
+        select: {
+          quantity: true,
+          unitPrice: true,
+          lineTotal: true,
+          productId: true,
+          title: true,
+        },
+      },
     },
   });
+
+  const productIds = orders.flatMap((o) =>
+    o.orderItems.map((li) => li.productId).filter(Boolean) as string[],
+  );
+  const cogsMap = await loadProductCogsMap(userId, productIds);
 
   const tableMap = new Map<string, { label: string; revenue: number; cost: number; count: number }>();
   const serverMap = new Map<string, { label: string; revenue: number; cost: number; count: number }>();
@@ -137,7 +160,11 @@ export async function getProfitEngineSnapshot(userId: string): Promise<ProfitEng
   for (const order of orders) {
     const orderRevenue = Number(order.total ?? 0);
     const isDelivery = order.fulfillmentType === FulfillmentType.DELIVERY;
-    const cost = orderCost(orderRevenue, isDelivery);
+    const lineCogs = resolveOrderLinesCogs(order.orderItems, orderRevenue, cogsMap);
+    const cost =
+      order.orderItems.length > 0
+        ? orderTotalCost(lineCogs.primeCost, isDelivery, DELIVERY_COST_PER_ORDER)
+        : estimatedOrderCost(orderRevenue, isDelivery);
     revenue += orderRevenue;
     totalCost += cost;
 

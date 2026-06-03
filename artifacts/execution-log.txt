@@ -3909,3 +3909,12 @@ Artifact: e2e/qr-guest-order-kitchen.spec.ts, e2e/helpers/qr-guest-order-ready.t
 Result: CREATED — engine QR metadata tests; public table shell; authed guest→KDS ticket + qr-table badge within 15s
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 43
+Task: DEV-18 — profit engine COGS accuracy
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/costing/order-cogs.ts, services/analytics/profit-engine-service.ts, services/analytics/real-time-profit-service.ts, tests/unit/order-cogs.test.ts
+Result: LINKED — loadProductCogsMap from profitability lines / cost snapshots; resolveLineCogs + resolveOrderLinesCogs; profit engine + real-time profit use recipe prime cost with 32% fallback
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

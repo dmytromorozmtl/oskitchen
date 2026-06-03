@@ -1,5 +1,11 @@
 import { FulfillmentType } from "@prisma/client";
 
+import {
+  DEFAULT_FOOD_COST_RATIO,
+  loadProductCogsMap,
+  resolveLineCogs,
+  resolveOrderLinesCogs,
+} from "@/lib/costing/order-cogs";
 import { prisma } from "@/lib/prisma";
 import { orderListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
 import { getLaborRealtimeData } from "@/services/labor/labor-realtime-load";
@@ -9,7 +15,6 @@ import {
   type ProfitAlert,
 } from "@/services/analytics/profit-alerts";
 
-const DEFAULT_FOOD_COST_RATIO = 0.32;
 const TARGET_FOOD_COST_PERCENT = 32;
 const DELIVERY_COST_PER_ORDER = 4.5;
 const REFRESH_SECONDS = 60;
@@ -58,11 +63,6 @@ function startOfDay(d = new Date()): Date {
   return x;
 }
 
-function lineRevenue(qty: number, unitPrice: unknown, lineTotal: unknown): number {
-  if (lineTotal != null) return Number(lineTotal);
-  return qty * Number(unitPrice ?? 0);
-}
-
 export async function getRealTimeProfit(userId: string): Promise<RealTimeProfitSnapshot> {
   const now = new Date();
   const today = startOfDay(now);
@@ -97,10 +97,19 @@ export async function getRealTimeProfit(userId: string): Promise<RealTimeProfitS
     getLaborRealtimeData(userId),
   ]);
 
+  const productIds = orders.flatMap((o) =>
+    o.orderItems.map((li) => li.productId).filter(Boolean) as string[],
+  );
+  const cogsMap = await loadProductCogsMap(userId, productIds);
+
   let revenue = 0;
+  let foodCost = 0;
   let deliveryCost = 0;
   let deliveryOrders = 0;
-  const itemMap = new Map<string, { title: string; revenue: number; units: number }>();
+  const itemMap = new Map<
+    string,
+    { title: string; revenue: number; units: number; foodCost: number; primeCost: number }
+  >();
   const hourMap = new Map<number, { revenue: number; cost: number }>();
 
   for (let h = 0; h < 6; h++) {
@@ -120,27 +129,31 @@ export async function getRealTimeProfit(userId: string): Promise<RealTimeProfitS
       deliveryCost += DELIVERY_COST_PER_ORDER;
     }
 
+    const orderCogs = resolveOrderLinesCogs(order.orderItems, orderTotal, cogsMap);
+    foodCost += orderCogs.foodCost;
+
     const orderHour = new Date(order.createdAt).getHours();
     const bucket = hourMap.get(orderHour);
-    const orderFoodEst = orderTotal * DEFAULT_FOOD_COST_RATIO;
 
     if (bucket) {
       bucket.revenue = round2(bucket.revenue + orderTotal);
-      bucket.cost = round2(bucket.cost + orderFoodEst + orderTotal * 0.05);
+      bucket.cost = round2(bucket.cost + orderCogs.foodCost + orderTotal * 0.05);
     }
 
     for (const line of order.orderItems) {
-      const rev = lineRevenue(line.quantity, line.unitPrice, line.lineTotal);
+      const lineCogs = resolveLineCogs(line, cogsMap);
       const pid = line.productId ?? `custom-${line.title ?? "item"}`;
       const title = line.product?.title ?? line.title ?? "Item";
-      const cur = itemMap.get(pid) ?? { title, revenue: 0, units: 0 };
-      cur.revenue += rev;
+      const cur = itemMap.get(pid) ?? { title, revenue: 0, units: 0, foodCost: 0, primeCost: 0 };
+      cur.revenue += lineCogs.revenue;
+      cur.foodCost += lineCogs.foodCost;
+      cur.primeCost += lineCogs.primeCost;
       cur.units += line.quantity;
       itemMap.set(pid, cur);
     }
   }
 
-  const foodCost = round2(revenue * DEFAULT_FOOD_COST_RATIO);
+  foodCost = round2(foodCost);
   const laborCost = labor.laborCost;
   const totalCost = round2(foodCost + laborCost + deliveryCost);
   const profit = round2(revenue - totalCost);
@@ -149,8 +162,7 @@ export async function getRealTimeProfit(userId: string): Promise<RealTimeProfitS
   const laborPercent = labor.laborPercent;
 
   const itemRows: ProfitItemRow[] = [...itemMap.entries()].map(([productId, row]) => {
-    const itemFood = row.revenue * DEFAULT_FOOD_COST_RATIO;
-    const itemProfit = row.revenue - itemFood;
+    const itemProfit = row.revenue - row.primeCost;
     const margin = row.revenue > 0 ? round2((itemProfit / row.revenue) * 100) : 0;
     return {
       productId,
