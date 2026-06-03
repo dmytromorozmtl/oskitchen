@@ -3506,3 +3506,9 @@ Feature: 4 — WooCommerce live smoke (ops proof pending)
 Result: PARTIAL — docs/domination-live-smoke-ops.md, npm run smoke:channels-live, domination-next-step clarifies create vs proof
 Next: .env.smoke.local → PASSED on woo then shopify artifacts
 Total done: 40/40 (code) — ops smoke 4–5 pending
+---
+Cycle: 20260603-domination-gha-smokes
+Feature: 4 — WooCommerce live smoke (CI path to PASSED)
+Result: PARTIAL — .github/workflows/domination-live-smokes.yml (workflow_dispatch + secrets); local artifact still SKIPPED
+Next: Run GHA workflow with vault secrets or fill .env.smoke.local locally
+Total done: 40/40 (code) — ops smoke 4–5 pending

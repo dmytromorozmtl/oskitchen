@@ -1,0 +1,94 @@
+# Market Domination steps 4–5: Woo + Shopify live smokes → artifacts with overall PASSED.
+# Run manually after configuring repository secrets (see docs/domination-live-smoke-ops.md).
+
+name: Domination Live Channel Smokes
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner_email:
+        description: "Workspace owner email (CHANNEL_SMOKE_OWNER_EMAIL override)"
+        type: string
+        required: false
+
+jobs:
+  woo-shopify-live:
+    if: >-
+      ${{ secrets.DATABASE_URL != '' && secrets.ENCRYPTION_KEY != '' &&
+          secrets.E2E_STAGING_BASE_URL != '' &&
+          (secrets.CHANNEL_SMOKE_OWNER_EMAIL != '' || inputs.owner_email != '' ||
+           secrets.CHANNEL_SMOKE_CONNECTION_ID != '') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+      E2E_STAGING_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL }}
+      CHANNEL_SMOKE_CONNECTION_ID: ${{ secrets.CHANNEL_SMOKE_CONNECTION_ID }}
+      CHANNEL_SMOKE_OWNER_EMAIL: ${{ inputs.owner_email || secrets.CHANNEL_SMOKE_OWNER_EMAIL }}
+      WOOCOMMERCE_BASE_URL: ${{ secrets.WOOCOMMERCE_BASE_URL }}
+      WOOCOMMERCE_CONSUMER_KEY: ${{ secrets.WOOCOMMERCE_CONSUMER_KEY }}
+      WOOCOMMERCE_CONSUMER_SECRET: ${{ secrets.WOOCOMMERCE_CONSUMER_SECRET }}
+      WOOCOMMERCE_WEBHOOK_SECRET: ${{ secrets.WOOCOMMERCE_WEBHOOK_SECRET }}
+      SHOPIFY_SHOP_DOMAIN: ${{ secrets.SHOPIFY_SHOP_DOMAIN }}
+      SHOPIFY_ADMIN_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ADMIN_ACCESS_TOKEN }}
+      SHOPIFY_APP_SECRET: ${{ secrets.SHOPIFY_APP_SECRET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+      - run: npx prisma generate
+
+      - name: Run Woo + Shopify live smokes
+        run: npm run smoke:channels-live
+
+      - name: Assert WooCommerce PASSED
+        run: |
+          python3 -c "
+          import json, sys
+          d = json.load(open('artifacts/woocommerce-live-smoke-summary.json'))
+          print('Woo overall:', d.get('overall'))
+          sys.exit(0 if d.get('overall') == 'PASSED' else 1)
+          "
+
+      - name: Assert Shopify PASSED
+        run: |
+          python3 -c "
+          import json, sys
+          d = json.load(open('artifacts/shopify-live-smoke-summary.json'))
+          print('Shopify overall:', d.get('overall'))
+          sys.exit(0 if d.get('overall') == 'PASSED' else 1)
+          "
+
+      - name: Upload smoke summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: domination-live-smoke-summaries
+          path: |
+            artifacts/woocommerce-live-smoke-summary.json
+            artifacts/shopify-live-smoke-summary.json
+          if-no-files-found: warn
+
+  skipped:
+    if: >-
+      ${{ secrets.DATABASE_URL == '' || secrets.ENCRYPTION_KEY == '' ||
+          secrets.E2E_STAGING_BASE_URL == '' ||
+          (secrets.CHANNEL_SMOKE_OWNER_EMAIL == '' && inputs.owner_email == '' &&
+           secrets.CHANNEL_SMOKE_CONNECTION_ID == '') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: SKIPPED — configure secrets
+        run: |
+          echo "[SKIPPED] Domination live smokes need at minimum:"
+          echo "  DATABASE_URL, ENCRYPTION_KEY, E2E_STAGING_BASE_URL"
+          echo "  CHANNEL_SMOKE_OWNER_EMAIL or CHANNEL_SMOKE_CONNECTION_ID"
+          echo "  Plus Woo and/or Shopify credentials (see docs/domination-live-smoke-ops.md)"
+          exit 0
