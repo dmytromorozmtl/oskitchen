@@ -3413,3 +3413,8 @@ Cycle: 20260602-202400
 Feature: 24 — Multi-location Enterprise Dashboard
 Result: PASSED — multi-location-service (ranks, alerts, drill-down), /enterprise/multi-location, unit+e2e
 Total done: 24/40
+---
+Cycle: 20260602-202800
+Feature: 25 — Advanced Inventory Auto-Ordering
+Result: PASSED — auto-ordering-service (weather/holiday/trend signals, batch POs), /inventory/auto-ordering, unit+e2e
+Total done: 25/40

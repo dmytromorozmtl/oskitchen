@@ -260,6 +260,9 @@ export function PurchasingAiDashboard(props: Props) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm" data-testid="auto-ordering-link">
+            <Link href="/dashboard/inventory/auto-ordering">Auto-ordering</Link>
+          </Button>
           <Button type="button" variant="outline" size="sm" onClick={refresh}>
             <RefreshCw className="mr-2 h-4 w-4" aria-hidden />
             Refresh
