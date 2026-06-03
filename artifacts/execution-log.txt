@@ -3755,3 +3755,12 @@ Artifact: docs/quick-start-single-entry-ia.md
 Result: CREATED — merge quick-start + launch-wizard; 4 paths → 1 hub; Wave 1–4 plan
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 26
+Task: DES-08 — Integration Health strip visual polish
+Role: DESIGN
+Priority: P0
+Artifact: components/dashboard/integration-health-strip.tsx
+Result: CREATED — health score bar, status badge, mobile metric scroll, empty CTA
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
