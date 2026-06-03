@@ -20,7 +20,7 @@ Authentication: `Authorization: Bearer kos_live_<secret>` (prefix shown in dashb
 
 ## Errors
 
-401 invalid key · 403 plan lacks `api_access` · 429 TODO edge rate limit.
+401 invalid key · 403 plan lacks `api_access` or missing scope · 429 rate limit (per-API-key burst 600/min + per-route limits; `Retry-After` + `X-RateLimit-*` headers).
 
 ## Security notes
 

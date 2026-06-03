@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError, publicApiJson } from "@/lib/api-public/guard";
 import { publicApiWebhookCreateSchema } from "@/lib/api-public/schemas";
 import { prisma } from "@/lib/prisma";
 
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     },
   });
 
-  return NextResponse.json({ data: events });
+  return publicApiJson(guard, { data: events });
 }
 
 export async function POST(request: Request) {
@@ -54,5 +54,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json({ data: { id: event.id } }, { status: 201 });
+  return publicApiJson(guard, { data: { id: event.id } }, { status: 201 });
 }

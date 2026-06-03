@@ -7,16 +7,22 @@ import type {
   PublicApiV1ResourceId,
 } from "@/lib/api-public/public-api-v1-registry";
 import { findPublicApiV1Resource } from "@/lib/api-public/public-api-v1-registry";
+import { enforcePublicApiRateLimits } from "@/lib/api-public/public-api-rate-limit";
 import { apiKeyHasScope } from "@/lib/api-public/public-api-scopes";
 import type { DeveloperApiScope } from "@/lib/developer/api-scopes";
-import { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
 import { isPartnerOAuthCredential } from "@/lib/oauth/partner-oauth-auth";
 import { triggerPartnerApiRequestBillingMeter } from "@/lib/platform/partner-billing-meter-hooks";
-import { enforceRateLimit, rateLimitedJsonResponse } from "@/lib/rate-limit";
+import { rateLimitedJsonResponse } from "@/lib/rate-limit";
 import type { RateLimitPolicyKey } from "@/lib/rate-limit/rate-limit-policies";
 
+export type PublicApiGuardSuccess = {
+  userId: string;
+  credential?: Awaited<ReturnType<typeof resolveEnterpriseApiCredential>>;
+  rateLimitHeaders: Record<string, string>;
+};
+
 export type PublicApiGuardResult =
-  | { userId: string; credential?: Awaited<ReturnType<typeof resolveEnterpriseApiCredential>> }
+  | PublicApiGuardSuccess
   | { response: NextResponse };
 
 export async function guardPublicApi(
@@ -47,8 +53,12 @@ export async function guardPublicApi(
 
   const userId = credential.userId;
 
-  const ip = getClientIpFromRequest(request);
-  const rl = await enforceRateLimit(`${rateLimitKey}:${userId}:${ip}`, policyKey);
+  const rl = await enforcePublicApiRateLimits({
+    request,
+    routeKey: rateLimitKey,
+    userId,
+    policyKey,
+  });
   if (!rl.ok) {
     if (rl.reason === "misconfigured") {
       return {
@@ -75,7 +85,7 @@ export async function guardPublicApi(
     });
   }
 
-  return { userId, credential };
+  return { userId, credential, rateLimitHeaders: rl.headers };
 }
 
 export async function guardPublicApiV1Resource(
@@ -97,4 +107,17 @@ export function isGuardError(
   result: PublicApiGuardResult,
 ): result is { response: NextResponse } {
   return "response" in result;
+}
+
+/** JSON response with X-RateLimit-* headers from a successful guard. */
+export function publicApiJson(
+  guard: PublicApiGuardSuccess,
+  body: unknown,
+  init?: ResponseInit,
+): NextResponse {
+  const headers = new Headers(init?.headers);
+  for (const [key, value] of Object.entries(guard.rateLimitHeaders)) {
+    headers.set(key, value);
+  }
+  return NextResponse.json(body, { ...init, headers });
 }

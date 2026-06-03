@@ -16,6 +16,8 @@ export const RATE_LIMIT_POLICIES = {
   public_api_customers_get: { windowMs: 60_000, max: 60 },
   public_api_v1_get: { windowMs: 60_000, max: 120 },
   public_api_v1_post: { windowMs: 60_000, max: 120 },
+  /** Global per-API-key burst across all public v1 routes (Bearer fingerprint). */
+  public_api_key_burst: { windowMs: 60_000, max: 600 },
   /** SaaS billing Stripe checkout session — per authenticated user + IP. */
   billing_checkout: { windowMs: 60_000, max: 15 },
   /** Stripe billing portal session — per authenticated user + IP. */
@@ -75,6 +77,7 @@ export const PRODUCTION_CRITICAL_RATE_LIMIT_POLICIES: RateLimitPolicyKey[] = [
   "public_api_customers_get",
   "public_api_v1_get",
   "public_api_v1_post",
+  "public_api_key_burst",
   "webhook_ingest",
   "storefront_checkout_submit",
   "storefront_checkout_retry",

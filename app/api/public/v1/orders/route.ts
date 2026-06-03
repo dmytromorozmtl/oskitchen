@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { decryptOrderPiiFields } from "@/lib/orders/order-pii";
-import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError, publicApiJson } from "@/lib/api-public/guard";
 import { publicApiOrderCreateSchema } from "@/lib/orders/public-api-order-create";
 import { prisma } from "@/lib/prisma";
 import { createOrderViaCenter } from "@/services/orders/order-creation-service";
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     },
   });
 
-  return NextResponse.json({
+  return publicApiJson(guard, {
     data: orders.map((o) => {
       const pii = decryptOrderPiiFields({
         customerName: o.customerName,
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({
+  return publicApiJson(guard, {
     data: {
       ...order,
       customerName: created.customerName,

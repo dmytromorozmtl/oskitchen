@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError, publicApiJson } from "@/lib/api-public/guard";
 import { productListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     },
   });
 
-  return NextResponse.json({
+  return publicApiJson(guard, {
     data: products.map((p) => ({
       ...p,
       price: p.price.toString(),

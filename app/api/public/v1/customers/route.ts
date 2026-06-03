@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError, publicApiJson } from "@/lib/api-public/guard";
 import { prisma } from "@/lib/prisma";
 
 const querySchema = z.object({
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     prisma.kitchenCustomer.count({ where: { userId } }),
   ]);
 
-  return NextResponse.json({
+  return publicApiJson(guard, {
     data: customers.map((c) => ({
       id: c.id,
       email: c.email,

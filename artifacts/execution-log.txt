@@ -4044,3 +4044,12 @@ Artifact: lib/enterprise/multi-location-rollup-*.ts, services/enterprise/multi-l
 Result: IMPLEMENTED — consolidated network+location+unassigned rollup; CSV export API; rollup summary card + export button on enterprise panel
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 58
+Task: DEV-33 — public API rate limit
+Role: DEVELOPER
+Priority: P1
+Artifact: lib/api-public/public-api-rate-limit.ts, lib/api-public/guard.ts, lib/rate-limit/rate-limit-policies.ts, app/api/public/v1/**, tests/unit/public-api-rate-limit.test.ts, docs/API_REFERENCE.md
+Result: IMPLEMENTED — per-API-key burst (600/min) + per-route user+IP limits; X-RateLimit headers on success; publicApiJson helper; production-critical policy
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

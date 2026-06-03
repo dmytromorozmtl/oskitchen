@@ -62,11 +62,14 @@ describe("public API scope guard", () => {
       "orders:write",
     );
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       userId: "owner-1",
       credential: { userId: "owner-1", scopes: ["orders:write"] },
     });
-    expect(consumeRateLimitToken).toHaveBeenCalled();
+    if ("rateLimitHeaders" in result) {
+      expect(result.rateLimitHeaders["X-RateLimit-Limit"]).toBeDefined();
+    }
+    expect(consumeRateLimitToken).toHaveBeenCalledTimes(2);
   });
 
   it("guardPublicApiV1Resource enforces orders write on POST orders", async () => {

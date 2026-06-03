@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { guardPublicApiV1Resource, isGuardError } from "@/lib/api-public/guard";
+import { guardPublicApiV1Resource, isGuardError, publicApiJson } from "@/lib/api-public/guard";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
@@ -18,5 +18,5 @@ export async function GET(request: Request) {
     orderBy: { name: "asc" },
   });
 
-  return NextResponse.json({ data: locations });
+  return publicApiJson(guard, { data: locations });
 }
