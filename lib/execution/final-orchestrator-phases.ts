@@ -29,7 +29,7 @@ export const FINAL_ORCHESTRATOR_PHASES: readonly FinalOrchestratorPhaseEntry[] =
     id: "FINAL-02",
     taskSlot: 196,
     policyId: "final-02-p0-orchestrator-artifact-v1",
-    surface: "artifacts/p0-orchestrator-staging-summary.json",
+    surface: "artifacts/p0-orchestrator-staging-run-summary.json",
     summary: "P0 orchestrator staging artifact honesty",
   },
   {
