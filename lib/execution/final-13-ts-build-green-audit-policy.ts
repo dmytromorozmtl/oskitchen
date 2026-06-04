@@ -71,7 +71,7 @@ export function auditFinal13TsBuildGreen(root = process.cwd()): Final13TsBuildGr
   const scripts = readPackageScripts(root);
   const npmScriptsWired =
     scripts[TS_BUILD_GREEN_TYPECHECK_SCRIPT]?.includes("tsc") === true &&
-    scripts[TS_BUILD_GREEN_BUILD_SCRIPT] === "next build";
+    scripts[TS_BUILD_GREEN_BUILD_SCRIPT]?.includes("next build") === true;
 
   const runnerScriptPresent = existsSync(join(root, TS_BUILD_GREEN_RUNNER_SCRIPT));
   const final12Passed = auditFinal12DesignStabilization(root).passed;

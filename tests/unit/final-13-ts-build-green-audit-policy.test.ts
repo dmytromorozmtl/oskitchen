@@ -1,4 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/execution/final-12-design-stabilization-audit-policy", () => ({
+  auditFinal12DesignStabilization: () => ({ passed: true }),
+}));
 
 import {
   auditFinal13TsBuildGreen,
