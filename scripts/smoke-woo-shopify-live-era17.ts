@@ -146,6 +146,29 @@ Era 17 Woo/Shopify live channel smoke
   );
 
   const steps: ChannelLiveSmokeStep[] = [];
+
+  console.log("\n→ npx prisma generate (channel live smokes require @prisma/client)\n");
+  const prismaCode = spawnSync("npx", ["prisma", "generate"], {
+    stdio: "inherit",
+    env: process.env,
+  }).status ?? 1;
+  steps.push({
+    id: "prisma_client_generate",
+    label: "Prisma client generate",
+    status: prismaCode === 0 ? "PASSED" : "FAILED",
+    reason: prismaCode === 0 ? undefined : `exit ${prismaCode}`,
+  });
+  if (prismaCode !== 0) {
+    const summary = buildChannelLiveSmokeSummary(steps, {
+      missingEnvVars: listMissingChannelLiveSmokeEnvVars(readPrerequisiteInput()),
+      prerequisitesMet: false,
+    });
+    writeSummaryArtifact(summary);
+    for (const line of formatChannelLiveSmokeReportLines(summary)) {
+      console.log(line);
+    }
+    process.exit(1);
+  }
   const prereqInput = readPrerequisiteInput();
   const missingEnvVars = listMissingChannelLiveSmokeEnvVars(prereqInput);
   const prereq = evaluateChannelLiveSmokePrerequisites(prereqInput);

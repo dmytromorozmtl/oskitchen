@@ -86,6 +86,15 @@ load_env_file ".env.smoke.local"
 
 export CI="${CI:-1}"
 
+# Channel live smokes import @prisma/client — generate before tier-2.
+echo ""
+echo "=== Prisma client generate ==="
+if npx prisma generate; then
+  echo "✓ prisma generate PASS"
+else
+  echo "⚠ prisma generate FAIL — smoke_channel may fail with MODULE_NOT_FOUND (run: npm ci && npx prisma generate)"
+fi
+
 # Tier 0 — always on
 run_step "tier0_policy" "Tier 0 — P0 policy unit gate" \
   npm run test:ci:p0-staging-proof-unblock-era17

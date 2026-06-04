@@ -54,6 +54,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Prisma client
+        run: npx prisma generate
+
       - name: P0 policy unit gate (tier-0 — always-on)
         run: npm run test:ci:p0-staging-proof-unblock-era17
 

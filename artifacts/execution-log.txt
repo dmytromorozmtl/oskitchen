@@ -5485,3 +5485,12 @@ Artifact: lib/execution/audit-post-220-verification.ts, scripts/ops/run-post-220
 Result: VERIFIED — 220/220 + program-closure PASS; ready:false; GO:NO-GO; next ops QA-01 P0 channel live smokes (proof_passed_post_220_verification)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 218
+Task: QA-01 — P0 orchestrator staging re-run (prisma generate preflight)
+Role: QA
+Priority: P0
+Artifact: scripts/run-p0-orchestrator-staging.sh, .github/workflows/p0-orchestrator.yml, scripts/smoke-woo-shopify-live-era17.ts, artifacts/p0-orchestrator-staging-run-summary.json
+Result: RE-RUN — overall FAIL (smoke_channel+smoke_p0); root cause MODULE_NOT_FOUND .prisma/client; added prisma generate to orchestrator + channel smoke; honest FAIL until generate succeeds in CI
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
