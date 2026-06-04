@@ -86,6 +86,19 @@ const config: Config = {
         /** Shift close history table horizontal scroll floor — 640px. */
         "pos-table-min": "40rem",
       },
+      zIndex: {
+        /** DES-23 — canonical layering scale (see lib/design/z-index-scale.ts). */
+        sticky: "10",
+        "sticky-header": "20",
+        chrome: "30",
+        drawer: "40",
+        overlay: "50",
+        floating: "60",
+        tour: "70",
+        "tour-highlight": "71",
+        "tour-card": "72",
+        "kitchen-fullscreen": "90",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

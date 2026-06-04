@@ -125,7 +125,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
 
   return (
     <div className={cn(qrGuestShellClass, "pb-28")} data-testid="qr-ordering-page">
-      <header className="sticky top-0 z-20 border-b border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur">
+      <header className="sticky top-0 z-sticky-header border-b border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur">
         <p className="text-xs font-medium uppercase tracking-widest text-sky-400">
           {context.tableLabel}
         </p>
@@ -133,7 +133,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
         <p className="text-sm text-zinc-400">Scan · order · no app required</p>
       </header>
 
-      <div className="sticky top-[88px] z-10 border-b border-zinc-800 bg-zinc-950 px-2 py-2">
+      <div className="sticky top-[88px] z-sticky border-b border-zinc-800 bg-zinc-950 px-2 py-2">
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
           {context.categories.map((cat) => (
             <button
@@ -222,7 +222,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
       ) : null}
 
       {drawerOpen ? (
-        <div className="fixed inset-0 z-40 flex flex-col justify-end bg-black/60">
+        <div className="fixed inset-0 z-drawer flex flex-col justify-end bg-black/60">
           <div className={qrGuestDrawerSheetClass} data-testid="qr-cart-drawer">
             <div
               className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-zinc-600"

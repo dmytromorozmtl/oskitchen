@@ -362,7 +362,7 @@ export function KitchenScreenClient({
 
   if (fullscreen) {
     return (
-      <div className="fixed inset-0 z-[200] flex flex-col overflow-auto bg-zinc-950 p-3 sm:p-5">
+      <div className="fixed inset-0 z-kitchen-fullscreen flex flex-col overflow-auto bg-zinc-950 p-3 sm:p-5">
         {inner}
         <p className="mt-4 text-center text-[11px] text-zinc-500">
           Allergen and nutrition data must be verified by your business. OS Kitchen does not replace label compliance.

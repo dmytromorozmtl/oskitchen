@@ -33,7 +33,7 @@ export function OfflineIndicator() {
   return (
     <div
       role="status"
-      className="fixed bottom-4 left-4 z-50 flex max-w-sm flex-col gap-2 rounded-2xl bg-amber-100 px-4 py-3 text-sm font-medium text-amber-950 shadow-lg dark:bg-amber-950 dark:text-amber-100"
+      className="fixed bottom-4 left-4 z-floating flex max-w-sm flex-col gap-2 rounded-2xl bg-amber-100 px-4 py-3 text-sm font-medium text-amber-950 shadow-lg dark:bg-amber-950 dark:text-amber-100"
       data-testid="global-offline-indicator"
     >
       <div className="flex items-start gap-2">

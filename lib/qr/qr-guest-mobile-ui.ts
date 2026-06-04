@@ -26,7 +26,7 @@ export const qrGuestShellClass = cn(
 
 /** Bottom sticky bar — home-indicator safe area. */
 export const qrGuestStickyFooterClass = cn(
-  "fixed bottom-0 left-0 right-0 z-30 border-t border-zinc-800 bg-zinc-950/95 p-4 backdrop-blur",
+  "fixed bottom-0 left-0 right-0 z-chrome border-t border-zinc-800 bg-zinc-950/95 p-4 backdrop-blur",
   "pb-[max(1rem,env(safe-area-inset-bottom))]",
 );
 

@@ -271,7 +271,7 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
 
   return (
     <div className="space-y-4 pb-28" data-testid="handheld-ordering-root">
-      <div className="sticky top-0 z-20 space-y-3 rounded-2xl border border-border/70 bg-background/95 p-3 backdrop-blur">
+      <div className="sticky top-0 z-sticky-header space-y-3 rounded-2xl border border-border/70 bg-background/95 p-3 backdrop-blur">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Handheld waiter</p>
@@ -364,7 +364,7 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border/80 bg-background/95 p-4 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 z-chrome border-t border-border/80 bg-background/95 p-4 backdrop-blur">
         <div className="mx-auto flex max-w-md flex-col gap-3">
           {status ? (
             <p className="text-sm text-muted-foreground" data-testid="handheld-status">

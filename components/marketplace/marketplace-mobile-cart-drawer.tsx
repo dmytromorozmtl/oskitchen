@@ -45,7 +45,7 @@ export function MarketplaceMobileCartDrawer({
   if (!cart || itemCount === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 lg:hidden">
+    <div className="fixed bottom-4 right-4 z-drawer lg:hidden">
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button size="lg" className="h-14 rounded-full px-5 shadow-lg gap-2">

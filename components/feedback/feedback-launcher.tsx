@@ -41,7 +41,7 @@ export function FeedbackLauncher() {
           type="button"
           size="sm"
           variant="secondary"
-          className="fixed bottom-6 right-4 z-40 gap-2 rounded-full shadow-lg lg:bottom-8 lg:right-8"
+          className="fixed bottom-6 right-4 z-drawer gap-2 rounded-full shadow-lg lg:bottom-8 lg:right-8"
         >
           <MessageSquarePlus className="h-4 w-4" />
           Feedback

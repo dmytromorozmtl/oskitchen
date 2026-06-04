@@ -32,7 +32,7 @@ export function PlatformChrome({ navGroups }: PlatformChromeProps) {
   const activeHref = hrefs.find((h) => navMatch(currentPath, h));
   const isActive = (href: string) => activeHref === href;
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 overflow-y-auto border-r border-zinc-800 bg-zinc-950/95 pt-14 lg:block">
+    <aside className="fixed inset-y-0 left-0 z-drawer hidden w-60 overflow-y-auto border-r border-zinc-800 bg-zinc-950/95 pt-14 lg:block">
       <div className="px-4 py-3">
         <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">OS Kitchen</p>
         <p className="text-sm font-medium text-zinc-200">Platform operations</p>

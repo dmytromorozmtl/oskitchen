@@ -119,10 +119,10 @@ export function OperatorTourLauncher() {
 
   return (
     <>
-      <div className="fixed inset-0 z-[90] bg-black/50" aria-hidden onClick={skipTour} />
+      <div className="fixed inset-0 z-tour bg-black/50" aria-hidden onClick={skipTour} />
       {rect ? (
         <div
-          className="pointer-events-none fixed z-[91] rounded-lg ring-4 ring-primary ring-offset-2 ring-offset-background transition-all"
+          className="pointer-events-none fixed z-tour-highlight rounded-lg ring-4 ring-primary ring-offset-2 ring-offset-background transition-all"
           style={{
             top: rect.top - 8,
             left: rect.left - 8,
@@ -135,7 +135,7 @@ export function OperatorTourLauncher() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="operator-tour-title"
-        className="fixed bottom-6 left-1/2 z-[92] w-[min(420px,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border bg-card p-5 shadow-xl"
+        className="fixed bottom-6 left-1/2 z-tour-card w-[min(420px,calc(100vw-2rem))] -translate-x-1/2 rounded-2xl border bg-card p-5 shadow-xl"
       >
         <p className="text-xs font-medium text-muted-foreground">
           Step {stepIndex + 1} of {STEPS.length}

@@ -27,7 +27,7 @@ export function OperationalSignalBar({
   const top = sorted.slice(0, 3);
 
   return (
-    <div className="sticky top-0 z-30 -mx-4 mb-2 border-b border-border/60 bg-background/90 px-4 py-2.5 backdrop-blur-md supports-[backdrop-filter]:bg-background/75 md:static md:mx-0 md:mb-0 md:rounded-xl md:border md:py-3">
+    <div className="sticky top-0 z-chrome -mx-4 mb-2 border-b border-border/60 bg-background/90 px-4 py-2.5 backdrop-blur-md supports-[backdrop-filter]:bg-background/75 md:static md:mx-0 md:mb-0 md:rounded-xl md:border md:py-3">
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground md:text-sm">
           {sorted.length === 0 ? (

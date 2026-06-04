@@ -313,7 +313,7 @@ export function QrTableSelfServiceClient({ context }: { context: QrOrderingConte
 
   return (
     <div className={cn(qrGuestShellClass, "pb-28")} data-testid="qr-table-self-service-page">
-      <header className="sticky top-0 z-20 border-b border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur">
+      <header className="sticky top-0 z-sticky-header border-b border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur">
         <p className="text-xs font-medium uppercase tracking-widest text-violet-400">Table service</p>
         <h1 className="text-xl font-semibold">{context.restaurantName}</h1>
         <p className="text-sm text-zinc-400">
@@ -386,7 +386,7 @@ export function QrTableSelfServiceClient({ context }: { context: QrOrderingConte
       ) : null}
 
       {drawerOpen ? (
-        <div className="fixed inset-0 z-40 flex flex-col justify-end bg-black/60">
+        <div className="fixed inset-0 z-drawer flex flex-col justify-end bg-black/60">
           <div className="rounded-t-3xl border border-zinc-800 bg-zinc-900 p-4">
             <Button type="button" size="icon" variant="ghost" onClick={() => setDrawerOpen(false)}>
               <X className="h-5 w-5" />

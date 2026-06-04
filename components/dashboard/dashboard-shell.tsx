@@ -162,7 +162,7 @@ export function DashboardShell({
       </aside>
 
       <div className="flex min-h-screen flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-white px-4">
+        <header className="sticky top-0 z-chrome flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-white px-4">
           <div className="flex min-w-0 items-center gap-2">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>

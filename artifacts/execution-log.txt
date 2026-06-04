@@ -4422,3 +4422,12 @@ Artifact: lib/pos/pos-spacing-tokens.ts, lib/pos/pos-raw-px-audit-policy.ts, tai
 Result: IMPLEMENTED — Tailwind spacing tokens for 96/120px tiles and 640px tables; text-xs badge/meta classes; zero raw [Npx] in audited POS modules
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 100
+Task: DES-23 — z-index scale
+Role: DESIGN
+Priority: P1
+Artifact: lib/design/z-index-scale.ts, lib/design/z-index-audit-policy.ts, tailwind.config.ts (zIndex scale), 16 module migrations, tests/unit/z-index-audit-policy.test.ts
+Result: IMPLEMENTED — 10-layer z-index scale (sticky→kitchen-fullscreen); replaced z-[200]/z-[90–92] and ad-hoc z-10–50 in dashboard/QR/KDS/platform surfaces; audit gate zero arbitrary z-[N]
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

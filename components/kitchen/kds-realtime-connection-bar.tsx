@@ -62,7 +62,7 @@ export function KdsRealtimeConnectionBar({
         "rounded-xl border px-3 py-2 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80",
         kdsConnectionBarSurfaceClass(isLive),
         variant === "sticky" &&
-          "sticky top-0 z-20 -mx-4 mb-4 border-b border-border/80 bg-background/95 md:-mx-6 md:px-6",
+          "sticky top-0 z-sticky-header -mx-4 mb-4 border-b border-border/80 bg-background/95 md:-mx-6 md:px-6",
         variant === "inline" && "mb-0",
         className,
       )}

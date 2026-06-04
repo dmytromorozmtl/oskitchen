@@ -31,7 +31,7 @@ export function StickySaveBar({ dirty, saving, onSave, onDiscard, message, disab
   return (
     <div
       className={cn(
-        "pointer-events-none fixed inset-x-0 bottom-3 z-30 flex justify-center px-3 transition-all sm:bottom-6",
+        "pointer-events-none fixed inset-x-0 bottom-3 z-chrome flex justify-center px-3 transition-all sm:bottom-6",
         dirty ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-10 opacity-0",
       )}
       aria-hidden={!dirty}

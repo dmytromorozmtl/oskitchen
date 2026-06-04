@@ -22,7 +22,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50">
       <PlatformSearchShortcut />
-      <header className="fixed top-0 z-50 flex h-14 w-full items-center gap-3 border-b border-zinc-800 bg-zinc-950/90 px-4 backdrop-blur">
+      <header className="fixed top-0 z-overlay flex h-14 w-full items-center gap-3 border-b border-zinc-800 bg-zinc-950/90 px-4 backdrop-blur">
         <Link href="/platform/dashboard" className="text-sm font-semibold tracking-tight text-white">
           OS Kitchen <span className="text-zinc-500">Platform</span>
         </Link>
