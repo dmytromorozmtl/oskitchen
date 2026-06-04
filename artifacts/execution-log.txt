@@ -4467,3 +4467,12 @@ Artifact: lib/marketing/case-study-template-policy.ts, docs/case-studies/_TEMPLA
 Result: IMPLEMENTED — MKT-11 policy with 8-section long-form ladder, fill-in scaffold, doc audit gate, draft forbidden-claims lint; canonical template already existed — wired to code + tests
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 105
+Task: MKT-12 — demo video 5min script
+Role: MARKETING
+Priority: P1
+Artifact: docs/demo-video-script-5min.md, lib/marketing/demo-video-script-5min-policy.ts, tests/unit/demo-video-script-5min-policy.test.ts
+Result: IMPLEMENTED — 7-act 300s platform tour (Today→Orders→KDS→POS→channels→profit); honest BETA/SKIPPED talk track; VO lint + doc audit; linked from 90s Today script + sales-demo-environment
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

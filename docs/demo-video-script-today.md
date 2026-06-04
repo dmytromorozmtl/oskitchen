@@ -6,7 +6,7 @@
 **Route:** `/dashboard/today`  
 **UI:** `app/dashboard/today/page.tsx` · `components/dashboard/today-command-center.tsx` · `OwnerDailyBriefingHero`  
 **Audience:** Prospects, investors, design-partner outreach  
-**Honesty:** [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) · [`ai-moats-honest-positioning.md`](./ai-moats-honest-positioning.md)
+**Companion:** [`demo-video-script-5min.md`](./demo-video-script-5min.md) (5-min full platform tour · MKT-12)
 
 Record in **owner workspace** with sample orders/tasks for visual density, or use `/demo` workspace. Do not imply customer proof or LIVE integrations.
 

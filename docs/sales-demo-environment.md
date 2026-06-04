@@ -10,7 +10,7 @@ This document defines **how to configure, seed, and run** OS Kitchen sales demos
 
 **Hard rule:** Demos use **simulated or seeded data** — never imply signed customers, LIVE integrations, or production marketplace GMV.
 
-**Related:** [`demo-video-script-today.md`](./demo-video-script-today.md) · [`sales-limitation-sheet.md`](./sales-limitation-sheet.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) · [`staging-environment-checklist.md`](./staging-environment-checklist.md) · [`nav-sprawl-audit.md`](./nav-sprawl-audit.md)
+**Related:** [`demo-video-script-today.md`](./demo-video-script-today.md) (90s Today cut-down) · [`demo-video-script-5min.md`](./demo-video-script-5min.md) (MKT-12 full tour) · [`sales-limitation-sheet.md`](./sales-limitation-sheet.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) · [`staging-environment-checklist.md`](./staging-environment-checklist.md) · [`nav-sprawl-audit.md`](./nav-sprawl-audit.md)
 
 ---
 
