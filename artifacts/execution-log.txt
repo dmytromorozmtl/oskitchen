@@ -4944,3 +4944,12 @@ Artifact: lib/design/form-feedback-patterns.ts, lib/design/form-feedback-audit-p
 Result: IMPLEMENTED — notifyActionResult toast helper + FormActionInlineFeedback; PO approval, staff archive, webhook replay, integration disconnect migrated; replaces window.alert; 6 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 158
+Task: DES-33 — error state patterns audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/error-state-patterns.ts, lib/design/error-state-audit-policy.ts, components/feedback/error-state.tsx, components/ui/api-error-state.tsx, app/dashboard/integrations/email-orders/error.tsx, app/dashboard/integrations/google-forms/error.tsx, tests/unit/error-state-audit-policy.test.ts
+Result: IMPLEMENTED — ERROR_STATE_CARD_CLASS + data-testid tokens; ErrorState/ApiErrorState aligned; email-orders + google-forms error.tsx migrated to RouteError; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

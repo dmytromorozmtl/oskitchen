@@ -4,6 +4,10 @@ import { AlertTriangle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ERROR_STATE_CARD_CLASS,
+  ERROR_STATE_TEST_ID,
+} from "@/lib/design/error-state-patterns";
 import { cn } from "@/lib/utils";
 
 export function ErrorState({
@@ -24,7 +28,10 @@ export function ErrorState({
   icon?: LucideIcon;
 }) {
   return (
-    <Card className={cn("border-destructive/30 bg-destructive/5", className)}>
+    <Card
+      className={cn(ERROR_STATE_CARD_CLASS, className)}
+      data-testid={ERROR_STATE_TEST_ID}
+    >
       <CardHeader>
         <div className="flex items-start gap-3">
           <Icon className="mt-0.5 h-5 w-5 text-destructive" aria-hidden />

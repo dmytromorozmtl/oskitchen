@@ -11,6 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import {
+  API_ERROR_STATE_TEST_ID,
+  ERROR_STATE_CARD_CLASS,
+} from "@/lib/design/error-state-patterns";
 
 export type ApiErrorStateProps = {
   title?: string;
@@ -102,7 +106,7 @@ export function ApiErrorState({
   icon: Icon = AlertCircle,
   className,
   variant = "card",
-  "data-testid": testId = "api-error-state",
+  "data-testid": testId = API_ERROR_STATE_TEST_ID,
 }: ApiErrorStateProps) {
   if (variant === "inline") {
     return (
@@ -110,7 +114,8 @@ export function ApiErrorState({
         role="alert"
         data-testid={testId}
         className={cn(
-          "rounded-2xl border border-destructive/30 bg-destructive/5 px-6 py-8 text-center",
+          "rounded-2xl border px-6 py-8 text-center",
+          ERROR_STATE_CARD_CLASS,
           className,
         )}
       >
@@ -141,7 +146,7 @@ export function ApiErrorState({
     <Card
       role="alert"
       data-testid={testId}
-      className={cn("border-destructive/30 bg-destructive/5 shadow-none", className)}
+      className={cn(ERROR_STATE_CARD_CLASS, "shadow-none", className)}
     >
       <CardHeader>
         <div className="flex items-start gap-3">
