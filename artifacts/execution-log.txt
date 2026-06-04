@@ -4611,3 +4611,12 @@ Artifact: docs/integration-honesty-screen-share-guide.md, lib/marketing/integrat
 Result: IMPLEMENTED — seven segments S1–S7 (~390s); PASS/BETA/SKIPPED/PLACEHOLDER/FAILED vocabulary; pre/post-share checklists; forbidden hide-skipped lint; linked from demo-script-15min, competitive-battle-cards, objection-handling O5
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 121
+Task: MKT-28 — LOI template walkthrough
+Role: MARKETING
+Priority: P1
+Artifact: docs/loi-template-walkthrough.md, lib/marketing/loi-template-walkthrough-policy.ts, tests/unit/loi-template-walkthrough-policy.test.ts
+Result: IMPLEMENTED — eight walkthrough steps W1–W8 (~21 min); LOI-DP-001 SKU; Exhibit A/B/C scripts; post-signature GO/NO-GO checklist; forbidden-claims lint; linked from loi-design-partner-template, loi-outreach-email, pilot-proposal-template, discovery-call-script
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

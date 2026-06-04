@@ -231,6 +231,7 @@ Run `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before send. Lint helper: 
 | Doc | Use |
 |-----|-----|
 | [`loi-outreach-email.md`](./loi-outreach-email.md) | Outbound before proposal |
+| [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) | Post-proposal LOI review (MKT-28) |
 | [`objection-handling.md`](./objection-handling.md) | O4 no customers · O5 SKIPPED integrations |
 | [`case-study-template.md`](./case-study-template.md) | Post-pilot narrative |
 | [`outreach/pilot-agreement-template.md`](./outreach/pilot-agreement-template.md) | Short-form agreement (legacy) |

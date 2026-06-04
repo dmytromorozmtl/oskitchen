@@ -215,4 +215,5 @@ Runbooks: [`PILOT_ONBOARDING_RUNBOOK.md`](./PILOT_ONBOARDING_RUNBOOK.md) · [`co
 | [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) | Paid pilot SOW after LOI |
 | [`pilot-program.md`](./pilot-program.md) | Program overview |
 | [`PAID_PILOT_GO_NO_GO_CHECKLIST.md`](./PAID_PILOT_GO_NO_GO_CHECKLIST.md) | GO/NO-GO criteria |
+| [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) | Live-call LOI review guide (MKT-28) |
 | [`feature-maturity-matrix.md`](./feature-maturity-matrix.md) | Maturity source of truth |

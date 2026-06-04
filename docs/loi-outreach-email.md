@@ -242,6 +242,7 @@ Track internally; do not publish until approved case study exists.
 |-----|-----|
 | [`icp-definition-final.md`](./icp-definition-final.md) | Segment definitions + scoring |
 | [`loi-design-partner-template.md`](./loi-design-partner-template.md) | Countersigned LOI body |
+| [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) | Live LOI review call (MKT-28) |
 | [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) | Post-LOI paid pilot SOW |
 | [`forbidden-claims-training.md`](./forbidden-claims-training.md) | Sales certification |
 | [`era20-first-paid-pilot-package-2026-05-28.md`](./era20-first-paid-pilot-package-2026-05-28.md) | Scope + exclusions |
