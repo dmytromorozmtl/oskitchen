@@ -8,21 +8,43 @@ import { RoiLeadCapture } from "@/components/marketing/roi-lead-capture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  computeConservativeRoiMonthly,
+  ROI_CALCULATOR_DEFAULT_INPUTS,
+  ROI_CALCULATOR_DISCLAIMER,
+} from "@/lib/marketing/roi-calculator-conservative-policy";
 
 export function RoiCalculator() {
-  const [weeklyOrders, setWeeklyOrders] = React.useState(250);
-  const [aov, setAov] = React.useState(18);
-  const [hours, setHours] = React.useState(12);
-  const [cost, setCost] = React.useState(25);
-  const [mistakes, setMistakes] = React.useState(8);
-  const [growth, setGrowth] = React.useState(10);
+  const [weeklyOrders, setWeeklyOrders] = React.useState(
+    ROI_CALCULATOR_DEFAULT_INPUTS.weeklyOrders,
+  );
+  const [aov, setAov] = React.useState(ROI_CALCULATOR_DEFAULT_INPUTS.averageOrderValue);
+  const [hours, setHours] = React.useState(
+    ROI_CALCULATOR_DEFAULT_INPUTS.manualCoordinationHoursPerWeek,
+  );
+  const [cost, setCost] = React.useState(ROI_CALCULATOR_DEFAULT_INPUTS.hourlyAdminCost);
+  const [mistakes, setMistakes] = React.useState(
+    ROI_CALCULATOR_DEFAULT_INPUTS.monthlyMistakesOrRefunds,
+  );
+  const [growth, setGrowth] = React.useState(
+    ROI_CALCULATOR_DEFAULT_INPUTS.expectedGrowthPct,
+  );
 
-  const hoursSaved = Math.round(hours * 0.35);
-  const laborSaved = hoursSaved * cost * 4.33;
-  const mistakeSavings = mistakes * aov * 0.4;
-  const growthRevenue = weeklyOrders * (growth / 100) * aov * 4.33 * 0.08;
-  const total = laborSaved + mistakeSavings + growthRevenue;
-  const plan = weeklyOrders > 1000 ? "Team" : weeklyOrders > 100 ? "Pro" : "Starter";
+  const {
+    hoursSavedPerWeek: hoursSaved,
+    laborValueMonthly: laborSaved,
+    mistakeReductionMonthly: mistakeSavings,
+    growthContributionMonthly: growthRevenue,
+    totalMonthly: total,
+    recommendedPlan: plan,
+  } = computeConservativeRoiMonthly({
+    weeklyOrders,
+    averageOrderValue: aov,
+    manualCoordinationHoursPerWeek: hours,
+    hourlyAdminCost: cost,
+    monthlyMistakesOrRefunds: mistakes,
+    expectedGrowthPct: growth,
+  });
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -35,7 +57,7 @@ export function RoiCalculator() {
         <RoiField id="roi-growth" label="Expected growth %" value={growth} onChange={setGrowth} />
       </div>
       <div className="rounded-2xl border bg-muted/30 p-6">
-        <p className="text-sm text-muted-foreground">Conservative estimate, not a guarantee.</p>
+        <p className="text-sm text-muted-foreground">{ROI_CALCULATOR_DISCLAIMER}</p>
         <h2 className="mt-2 text-3xl font-semibold">${Math.round(total).toLocaleString()}/mo</h2>
         <div className="mt-4 space-y-2 text-sm">
           <p>Estimated hours saved: {hoursSaved}/week</p>

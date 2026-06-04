@@ -4584,3 +4584,12 @@ Artifact: docs/pilot-proposal-template.md, lib/marketing/pilot-proposal-template
 Result: IMPLEMENTED — 10-section proposal template P1–P10; six pilot SKUs; 90-day timeline; forbidden-claims lint; linked from discovery-call-script and objection-handling
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 118
+Task: MKT-25 — ROI calculator conservative
+Role: MARKETING
+Priority: P1
+Artifact: docs/roi-calculator-conservative.md, lib/marketing/roi-calculator-conservative-policy.ts, tests/unit/roi-calculator-conservative-policy.test.ts, components/marketing/roi-calculator.tsx
+Result: IMPLEMENTED — 35%/40%/8% conservative multipliers in shared policy; computeConservativeRoiMonthly; sales guide with segment examples; component refactored to policy; linked from discovery-call-script and objection-handling
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

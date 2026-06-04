@@ -212,6 +212,7 @@ Run: `lintDiscoveryCallScriptCopy()` before updating slides or call notes.
 | [`loi-outreach-email.md`](./loi-outreach-email.md) | Pre-call outbound |
 | [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) | Post-discovery outbound |
 | [`pilot-proposal-template.md`](./pilot-proposal-template.md) | Post-demo proposal email/PDF (MKT-24) |
+| [`roi-calculator-conservative.md`](./roi-calculator-conservative.md) | Illustrative ROI on calls (MKT-25) |
 | [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) | Post-LOI |
 
 **Book demo CTA:** [`/book-demo?utm_source=discovery&utm_medium=call&utm_campaign=discovery-script-mkt21`](/book-demo?utm_source=discovery&utm_medium=call&utm_campaign=discovery-script-mkt21)

@@ -227,5 +227,6 @@ Log in growth CRM (`objections` field on onboarding calls) within 24h of call.
 | [`sales-limitation-sheet.md`](./sales-limitation-sheet.md) | Post-call attachment |
 | [`forbidden-claims-training.md`](./forbidden-claims-training.md) | Certification before calls |
 | [`pilot-proposal-template.md`](./pilot-proposal-template.md) | Post-objection proposal path (MKT-24) |
+| [`roi-calculator-conservative.md`](./roi-calculator-conservative.md) | Illustrative ROI — O3 admin-hours compare (MKT-25) |
 
 **Primary CTA after resolved objection:** [`/book-demo?utm_source=objection&utm_medium=sales&utm_campaign=objection-handling-mkt23`](/book-demo?utm_source=objection&utm_medium=sales&utm_campaign=objection-handling-mkt23)
