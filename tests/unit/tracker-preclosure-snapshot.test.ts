@@ -16,13 +16,18 @@ import {
 const ROOT = process.cwd();
 
 describe("tracker pre-closure snapshot — FINAL-25", () => {
-  it("builds honest snapshot with 218+ canonical slots done pre-closure", () => {
+  it("builds honest snapshot (pre- or post-closure)", () => {
     const snapshot = buildTrackerPreclosureSnapshot(ROOT);
     expect(snapshot.version).toBe(TRACKER_PRECLOSURE_POLICY_ID);
     expect(snapshot.canonicalSlotsTotal).toBe(CANONICAL_TASK_SLOT_COUNT);
     expect(snapshot.canonicalSlotsDone).toBeGreaterThanOrEqual(218);
-    expect(snapshot.remainingCanonicalSlots).toEqual(expect.arrayContaining([219, 220]));
-    expect(snapshot.preClosureReady).toBe(false);
+    if (snapshot.remainingCanonicalSlots.length === 0) {
+      expect(snapshot.canonicalSlotsDone).toBe(CANONICAL_TASK_SLOT_COUNT);
+      expect(snapshot.preClosureReady).toBe(true);
+    } else {
+      expect(snapshot.remainingCanonicalSlots).toEqual(expect.arrayContaining([219, 220]));
+      expect(snapshot.preClosureReady).toBe(false);
+    }
     expect(auditTrackerPreclosureSnapshot(snapshot)).toBe(true);
   });
 

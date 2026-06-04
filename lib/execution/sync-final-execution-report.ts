@@ -104,6 +104,11 @@ export function buildFinalExecutionReport(root = process.cwd()): FinalExecutionR
 
   const ready = finalPhasesDone && vaultReady && goDecision === "GO" && doneCount === totalCount;
 
+  const canonicalDone = finalOrchestratorGates.every((g) => g.trackerStatus === "done");
+  const honestyNote = canonicalDone && doneCount === totalCount
+    ? "220/220 execution tracker complete — program slots done; ready:true still requires vault 11/11, P0 PASS, and pilot GO; otherwise honest false."
+    : "Synced snapshot — ready:true only when all tracker slots done, vault 11/11, and pilot GO/NO-GO decision GO; otherwise honest false.";
+
   return {
     version: FINAL_EXECUTION_JSON_POLICY_ID,
     generatedAt,
@@ -125,8 +130,7 @@ export function buildFinalExecutionReport(root = process.cwd()): FinalExecutionR
     p0ProofStatus,
     ready,
     allPhasesPassed: finalPhasesDone && gateArtifacts.every((g) => g.present),
-    honestyNote:
-      "Synced snapshot — ready:true only when all tracker slots done, vault 11/11, and pilot GO/NO-GO decision GO; otherwise honest false.",
+    honestyNote,
   };
 }
 

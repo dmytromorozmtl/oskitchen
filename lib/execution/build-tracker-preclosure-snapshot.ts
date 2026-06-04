@@ -80,11 +80,22 @@ export function buildTrackerPreclosureSnapshot(root = process.cwd()): TrackerPre
 export function auditTrackerPreclosureSnapshot(
   snapshot: TrackerPreclosureSnapshot,
 ): boolean {
-  return (
-    snapshot.version === TRACKER_PRECLOSURE_POLICY_ID &&
-    snapshot.canonicalSlotsTotal === CANONICAL_TASK_SLOT_COUNT &&
+  if (
+    snapshot.version !== TRACKER_PRECLOSURE_POLICY_ID ||
+    snapshot.canonicalSlotsTotal !== CANONICAL_TASK_SLOT_COUNT
+  ) {
+    return false;
+  }
+
+  const postClosure =
+    snapshot.remainingCanonicalSlots.length === 0 &&
+    snapshot.canonicalSlotsDone === CANONICAL_TASK_SLOT_COUNT &&
+    snapshot.preClosureReady;
+
+  const preClosure =
     snapshot.canonicalSlotsDone >= 218 &&
     snapshot.remainingCanonicalSlots.every((s) => s === 219 || s === 220) &&
-    snapshot.preClosureReady === (snapshot.remainingCanonicalSlots.length === 0)
-  );
+    !snapshot.preClosureReady;
+
+  return postClosure || preClosure;
 }

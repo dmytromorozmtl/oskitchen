@@ -39,9 +39,12 @@ export function renderFinalExecutionMarkdown(report: FinalExecutionReport): stri
     .map((g) => `| ${g.phaseId} | ${g.taskSlot} | ${g.trackerStatus} |`)
     .join("\n");
 
+  const programComplete = pendingGates.length === 0 && report.trackerSync.percentDone === 100;
+
   return `# Final execution report — OS Kitchen
 
 **Final execution report (FINAL-23)** — markdown synced from \`${FINAL_EXECUTION_REPORT_ARTIFACT}\`.
+${programComplete ? "\n**220-task program tracker: COMPLETE** (FINAL-26 / task-220).\n" : ""}
 
 | Field | Value |
 |-------|-------|
@@ -61,7 +64,11 @@ export function renderFinalExecutionMarkdown(report: FinalExecutionReport): stri
 
 ## Executive summary
 
-Engineering gates through **FINAL-21** are largely **done** in the tracker; **commercial pilot GO** remains **NO-GO** until P0 staging proofs pass and customer/LOI gates clear. Do **not** set \`ready: true\` in JSON or claim production-ready for sales until \`goDecision === "GO"\`.
+${
+  programComplete
+    ? "All **220** canonical task slots and **FINAL-01..FINAL-26** orchestrator gates are **done** in the execution tracker. **Commercial pilot GO** remains **NO-GO** until P0 staging proofs pass and customer/LOI gates clear."
+    : "Engineering gates through **FINAL-21** are largely **done** in the tracker; **commercial pilot GO** remains **NO-GO** until P0 staging proofs pass and customer/LOI gates clear."
+} Do **not** set \`ready: true\` in JSON or claim production-ready for sales until \`goDecision === "GO"\`.
 
 ---
 
@@ -87,7 +94,11 @@ ${gateRows}
 
 1. Configure ops vault secrets and re-run \`npm run smoke:p0-staging-proof-unblock\` until P0 artifact is honest **PASS**.
 2. Re-run \`npm run smoke:pilot-gono-go\` after Tier 0/1 + forbidden-claims enforcement — expect **NO-GO** until evidence gates pass.
-3. Complete **FINAL-23..FINAL-26** tracker slots, then re-sync JSON (\`run-final-execution-json-sync.ts\`) and this doc (\`run-final-execution-doc-sync.ts\`).
+${
+  programComplete
+    ? "3. Re-run P0 staging + pilot GO/NO-GO after vault secrets — tracker closure does not imply pilot GO."
+    : "3. Complete **FINAL-23..FINAL-26** tracker slots, then re-sync JSON (`run-final-execution-json-sync.ts`) and this doc (`run-final-execution-doc-sync.ts`)."
+}
 
 ---
 
