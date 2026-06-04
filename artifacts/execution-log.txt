@@ -4656,3 +4656,12 @@ Artifact: lib/integrations/klaviyo-types.ts, services/integrations/klaviyo-sync-
 Result: IMPLEMENTED — consent-aware EMAIL_MARKETING gate; profile upsert with order stats; 90-day sync window; Klaviyo integration page + BETA registry entry; unit tests for consent + profile builder
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 126
+Task: DEV-39 — Mailchimp customer sync hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/mailchimp-types.ts, lib/marketing/marketing-email-consent.ts, services/integrations/mailchimp-sync-service.ts, app/api/integrations/mailchimp/sync/route.ts, components/integrations/mailchimp-sync-panel.tsx, app/dashboard/integrations/mailchimp/page.tsx, lib/integrations/integration-registry.ts, tests/unit/mailchimp-sync.test.ts
+Result: IMPLEMENTED — shared consent gate; Mailchimp member PUT upsert with FNAME/LNAME/PHONE merge fields; datacenter parsing from API key; 90-day sync window; BETA registry entry; unit tests for hash + datacenter + member builder
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

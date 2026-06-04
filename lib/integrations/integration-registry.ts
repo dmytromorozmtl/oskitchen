@@ -74,6 +74,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/klaviyo",
   },
   {
+    id: "mailchimp",
+    name: "Mailchimp",
+    status: "BETA",
+    requiredEnv: ["MAILCHIMP_API_KEY", "MAILCHIMP_LIST_ID"],
+    setupRoute: "/dashboard/integrations/mailchimp",
+  },
+  {
     id: "uber-direct",
     name: "Uber Direct",
     status: "PLACEHOLDER",

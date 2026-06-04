@@ -2,6 +2,7 @@ import { subDays } from "date-fns";
 
 import type { KlaviyoCustomerInput, KlaviyoProfileRow, KlaviyoSyncResult } from "@/lib/integrations/klaviyo-types";
 import { REVENUE_STATUSES } from "@/lib/analytics/revenue-metrics";
+import { hasMarketingEmailConsent } from "@/lib/marketing/marketing-email-consent";
 import { prisma } from "@/lib/prisma";
 import { customerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
 import { orderListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
@@ -16,16 +17,6 @@ export function isKlaviyoSyncConfigured(): boolean {
 export function getKlaviyoConfigError(): string | null {
   if (!process.env.KLAVIYO_API_KEY?.trim()) return "Set KLAVIYO_API_KEY";
   return null;
-}
-
-/** Latest EMAIL_MARKETING consent must be true — consent-aware sync gate. */
-export function hasMarketingEmailConsent(
-  events: KlaviyoCustomerInput["consentEvents"],
-): boolean {
-  const latest = events
-    .filter((e) => e.consentType === "EMAIL_MARKETING")
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
-  return latest?.value === true;
 }
 
 export function buildKlaviyoProfileRow(
@@ -49,6 +40,8 @@ export function buildKlaviyoProfileRow(
     },
   };
 }
+
+export { hasMarketingEmailConsent };
 
 async function upsertKlaviyoProfile(row: KlaviyoProfileRow): Promise<{ ok: true } | { ok: false; error: string }> {
   const key = process.env.KLAVIYO_API_KEY?.trim();
