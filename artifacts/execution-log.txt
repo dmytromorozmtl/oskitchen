@@ -4368,3 +4368,12 @@ Artifact: lib/marketplace/marketplace-catalog-ux-policy.ts, lib/marketplace/mark
 Result: IMPLEMENTED — filter chips with remove links; compare tray (session, max 4); wishlist tray (localStorage); unified toolbar on catalog; product card uses shared compare storage
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 94
+Task: DES-17 — marketplace checkout trust signals
+Role: DESIGN
+Priority: P1
+Artifact: lib/marketplace/marketplace-checkout-trust-policy.ts, components/marketplace/marketplace-checkout-trust-strip.tsx, components/marketplace/marketplace-checkout-client.tsx, tests/unit/marketplace-checkout-trust-policy.test.ts
+Result: IMPLEMENTED — trust strip with approved vendors, PO split, approval gate, Stripe card honesty, orders tracking, dispute path; wired above checkout grid
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

@@ -14,6 +14,7 @@ import {
   updateMarketplaceCartQuantityAction,
 } from "@/actions/marketplace/cart";
 import { CheckoutApprovalGate } from "@/components/marketplace/checkout-approval-gate";
+import { MarketplaceCheckoutTrustStrip } from "@/components/marketplace/marketplace-checkout-trust-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,6 +61,14 @@ export function MarketplaceCheckoutClient({
   }
 
   return (
+    <div className="space-y-6">
+      <MarketplaceCheckoutTrustStrip
+        vendorGroups={vendorGroups}
+        itemCount={cart.itemCount}
+        subtotal={cart.subtotal}
+        currency={cart.items[0]?.currency ?? "USD"}
+      />
+
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
       <div className="space-y-4">
         {cart.items.map((item, index) => (
@@ -205,6 +214,7 @@ export function MarketplaceCheckoutClient({
           </CardContent>
         </Card>
       </div>
+    </div>
     </div>
   );
 }
