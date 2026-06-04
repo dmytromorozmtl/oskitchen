@@ -4521,3 +4521,12 @@ Artifact: app/ai/page.tsx, components/marketing/ai-moats-honest-positioning-cont
 Result: IMPLEMENTED — public /ai page with 7 core moats + copilot note; cross-cutting rules; safe/forbidden claims; linked from trust, footer, ai-honesty-policy
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 111
+Task: MKT-18 — webinar ghost kitchens
+Role: MARKETING
+Priority: P1
+Artifact: docs/webinar-ghost-kitchens.md, lib/marketing/webinar-ghost-kitchens-policy.ts, tests/unit/webinar-ghost-kitchens-policy.test.ts
+Result: IMPLEMENTED — 45-min ghost kitchen run-of-show; registration copy; 8-slide skeleton; promotion + follow-up; forbidden-claims lint; W6 added to webinar-strategy
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

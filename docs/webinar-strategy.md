@@ -36,6 +36,7 @@ This document defines **when, why, and how** OS Kitchen runs webinars — format
 | **W3** | **HoReCa marketplace BETA** | Buyers + suppliers split session | `/pricing` · `/vendor` | After vendor seed E1 |
 | **W4** | **Association co-host** | Member newsletter list | Design partner LOI | After MOU signed |
 | **W5** | **Shopify / Woo operator path** | E-com F&B | `/shopify` | ICP campaign tie-in |
+| **W6** | **Ghost kitchen command center** | Multi-brand operators | `/solutions/ghost-kitchens` · LOI | Q3 — see [`webinar-ghost-kitchens.md`](./webinar-ghost-kitchens.md) |
 
 **Avoid until pilot GO:** “Enterprise SSO deep dive,” “LIVE integration masterclass,” competitor teardown webinars.
 
@@ -193,6 +194,7 @@ Export summary to [`mvp-marketing-dashboard.md`](./mvp-marketing-dashboard.md) (
 | Doc | Use |
 |-----|-----|
 | [`demo-video-script-today.md`](./demo-video-script-today.md) | Core demo narrative |
+| [`webinar-ghost-kitchens.md`](./webinar-ghost-kitchens.md) | W6 ghost kitchen run-of-show (MKT-18) |
 | [`sales-demo-environment.md`](./sales-demo-environment.md) | Staging workspace setup |
 | [`feature-announcement-template.md`](./feature-announcement-template.md) | Post-webinar product email |
 | [`case-study-template.md`](./case-study-template.md) | After first permissioned pilot |
