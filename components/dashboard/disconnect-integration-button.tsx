@@ -1,12 +1,10 @@
 "use client";
 
-import { getActionError } from "@/lib/action-result";
-
 import * as React from "react";
-import { toast } from "sonner";
 
 import { disconnectIntegration } from "@/actions/integrations";
 import { Button } from "@/components/ui/button";
+import { notifyActionResult } from "@/lib/feedback/notify-action-result";
 
 export function DisconnectIntegrationButton({
   connectionId,
@@ -28,9 +26,7 @@ export function DisconnectIntegrationButton({
       const fd = new FormData();
       fd.set("connectionId", connectionId);
       const result = await disconnectIntegration(fd);
-      if (!result.ok) toast.error(getActionError(result) ?? "Something went wrong");
-      else {
-        toast.success("Disconnected");
+      if (notifyActionResult(result, { successMessage: "Disconnected" })) {
         window.location.href = "/dashboard/sales-channels";
       }
     } finally {

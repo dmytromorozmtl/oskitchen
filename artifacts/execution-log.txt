@@ -4935,3 +4935,12 @@ Artifact: lib/design/table-card-patterns.ts, lib/design/table-card-audit-policy.
 Result: IMPLEMENTED — ResponsiveDataList (table lg+ / cards mobile); DataTableShell tokens + data-testid; orders table + webhook log migrated; marketplace list delegates to shared primitive; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 157
+Task: DES-32 — form mutation feedback patterns audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/form-feedback-patterns.ts, lib/design/form-feedback-audit-policy.ts, lib/feedback/notify-action-result.ts, components/feedback/form-action-inline-feedback.tsx, components/purchasing/po-approval-buttons.tsx, components/dashboard/staff/archive-button.tsx, components/integrations/webhook-replay-row.tsx, components/dashboard/disconnect-integration-button.tsx, tests/unit/form-feedback-audit-policy.test.ts
+Result: IMPLEMENTED — notifyActionResult toast helper + FormActionInlineFeedback; PO approval, staff archive, webhook replay, integration disconnect migrated; replaces window.alert; 6 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
