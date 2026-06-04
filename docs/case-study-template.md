@@ -1,6 +1,6 @@
 # Case study template — OS Kitchen
 
-**Policy:** `case-study-template-v1`  
+**Policy:** `case-study-template-v1` · **MKT-11 code:** `case-study-template-mkt11-v1` ([`lib/marketing/case-study-template-policy.ts`](../lib/marketing/case-study-template-policy.ts))  
 **Status:** Canonical template — **internal use until publish gates pass**  
 **Updated:** 2026-06-02  
 **Owner:** Marketing + CS + Legal  
@@ -44,7 +44,8 @@ OS Kitchen has **no published customer case study** as of June 2026 (`loiSignedD
 When a pilot is ready for internal draft:
 
 ```
-docs/case-studies/<slug>-draft.md          # internal review
+docs/case-studies/<slug>-draft.md          # internal review — copy from _TEMPLATE.md
+docs/case-studies/_TEMPLATE.md             # MKT-11 fill-in scaffold
 docs/case-studies/<slug>-published.md      # after legal + customer sign-off
 public/customers/<slug>/page.tsx           # optional — action 27+ GTM
 artifacts/case-study-<slug>-summary.json   # metrics + approval audit trail

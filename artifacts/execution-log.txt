@@ -4458,3 +4458,12 @@ Artifact: lib/design/form-patterns-wizard-steps.ts, lib/design/form-patterns-wiz
 Result: IMPLEMENTED — canonical wizard form layout tokens (field/section/actions/checklist); WizardStepForm primitives; audit gate on Quick Start, channel pilot, vendor onboarding wizards
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 104
+Task: MKT-11 — case study template
+Role: MARKETING
+Priority: P1
+Artifact: lib/marketing/case-study-template-policy.ts, docs/case-studies/_TEMPLATE.md, docs/case-study-template.md (MKT-11 wiring), tests/unit/case-study-template-policy.test.ts
+Result: IMPLEMENTED — MKT-11 policy with 8-section long-form ladder, fill-in scaffold, doc audit gate, draft forbidden-claims lint; canonical template already existed — wired to code + tests
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
