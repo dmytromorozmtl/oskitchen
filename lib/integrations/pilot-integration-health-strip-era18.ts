@@ -1,6 +1,7 @@
 import type { UserRole } from "@prisma/client";
 
 import { augmentPilotIntegrationHealthStripWithLiveProof } from "@/lib/integrations/pilot-integration-health-live-proof-era18";
+import { augmentPilotIntegrationHealthStripWithBetaEnv } from "@/lib/integrations/pilot-integration-health-beta-env-era18";
 import type { OperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import { getServerEnv } from "@/lib/env";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -115,12 +116,14 @@ export async function loadPilotIntegrationHealthStripModelForWorkspace(
     stripe: stripeConfigured,
     email: emailConfigured,
   });
-  return augmentPilotIntegrationHealthStripWithLiveProof(
-    buildPilotIntegrationHealthStripModel({
-      summary,
-      cards: healthCards,
-      failedWebhookCount,
-    }),
-    liveProofSlices,
+  return augmentPilotIntegrationHealthStripWithBetaEnv(
+    augmentPilotIntegrationHealthStripWithLiveProof(
+      buildPilotIntegrationHealthStripModel({
+        summary,
+        cards: healthCards,
+        failedWebhookCount,
+      }),
+      liveProofSlices,
+    ),
   );
 }

@@ -4782,3 +4782,12 @@ Artifact: lib/integrations/beta-integrations-integrity-smoke-era17-policy.ts, li
 Result: IMPLEMENTED — unified registry + env cert chain; npm run smoke:beta-integrations-integrity → overall PASSED (scaffold_complete + env_audit_complete); cert chain 16 tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 140
+Task: DEV-53 — BETA env readiness Today Integration Health strip footnote
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/pilot-integration-health-beta-env-era18.ts, lib/integrations/pilot-integration-health-strip-era18.ts, components/dashboard/integration-health-strip.tsx, tests/unit/pilot-integration-health-beta-env-era18.test.ts, tests/unit/integration-health-strip-ui.test.ts
+Result: IMPLEMENTED — Today strip shows 18 BETA env ready/optional/missing counts with link to Integration Health panel; loadPilotIntegrationHealthStripModelForWorkspace augmented; 9 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

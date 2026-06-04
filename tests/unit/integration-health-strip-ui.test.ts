@@ -14,6 +14,7 @@ describe("integration-health-strip ui", () => {
     expect(source).toContain("export function IntegrationHealthStrip");
     expect(source).toContain("Channel health score");
     expect(source).toContain("data-testid=\"pilot-integration-health-strip\"");
+    expect(source).toContain("data-testid=\"pilot-integration-beta-env-footnote\"");
   });
 
   it("pilot shim re-exports IntegrationHealthStrip", () => {

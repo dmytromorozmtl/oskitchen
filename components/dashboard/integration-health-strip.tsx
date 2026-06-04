@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PilotIntegrationHealthStripModel } from "@/lib/integrations/pilot-integration-health-strip-era18";
+import type { PilotIntegrationHealthBetaEnvFootnote } from "@/lib/integrations/pilot-integration-health-beta-env-era18";
 import type { PilotIntegrationHealthCommercialInflectionFootnote } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import {
   appIconHeroClass,
@@ -23,6 +24,7 @@ import { cn } from "@/lib/utils";
 
 export type IntegrationHealthStripModel = PilotIntegrationHealthStripModel & {
   commercialInflection?: PilotIntegrationHealthCommercialInflectionFootnote | null;
+  betaEnvFootnote?: PilotIntegrationHealthBetaEnvFootnote;
 };
 
 const OVERALL_META = {
@@ -240,6 +242,32 @@ export function IntegrationHealthStrip({ model }: { model: IntegrationHealthStri
                   ? "Open P0 staging proof ops"
                   : "Commercial inflection matrix"}
               </Link>
+            </Button>
+          </div>
+        ) : null}
+
+        {model.betaEnvFootnote ? (
+          <div
+            className="rounded-xl border border-sky-200/70 bg-sky-50/40 px-3 py-3 text-xs dark:border-sky-900/40 dark:bg-sky-950/20"
+            data-testid="pilot-integration-beta-env-footnote"
+          >
+            <p className="font-medium text-sky-950 dark:text-sky-100">
+              {model.betaEnvFootnote.headline}
+            </p>
+            <p className="mt-1 text-muted-foreground">{model.betaEnvFootnote.detail}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Badge variant="outline" className="rounded-full bg-background/60 text-[10px]">
+                {model.betaEnvFootnote.readyCount} env ready
+              </Badge>
+              <Badge variant="outline" className="rounded-full bg-background/60 text-[10px]">
+                {model.betaEnvFootnote.optionalCount} no server env
+              </Badge>
+              <Badge variant="outline" className="rounded-full bg-background/60 text-[10px]">
+                {model.betaEnvFootnote.missingCount} missing
+              </Badge>
+            </div>
+            <Button asChild variant="link" size="sm" className="mt-1 h-auto p-0 text-xs">
+              <Link href={model.betaEnvFootnote.href}>BETA env readiness panel</Link>
             </Button>
           </div>
         ) : null}
