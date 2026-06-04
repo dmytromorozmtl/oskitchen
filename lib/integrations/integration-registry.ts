@@ -67,6 +67,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/homebase",
   },
   {
+    id: "klaviyo",
+    name: "Klaviyo",
+    status: "BETA",
+    requiredEnv: ["KLAVIYO_API_KEY"],
+    setupRoute: "/dashboard/integrations/klaviyo",
+  },
+  {
     id: "uber-direct",
     name: "Uber Direct",
     status: "PLACEHOLDER",

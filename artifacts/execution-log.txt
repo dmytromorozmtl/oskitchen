@@ -4647,3 +4647,12 @@ Artifact: lib/accounting/xero-export-format.ts, services/integrations/xero-servi
 Result: HARDENED — balanced manual journal CSV (debit/credit pairs); ACCPAY bills import for supplier invoices; P&L report CSV + sales journal/CSV routes; period-scoped filenames; Xero panel sales journal option
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 125
+Task: DEV-38 — Klaviyo customer sync hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/klaviyo-types.ts, services/integrations/klaviyo-sync-service.ts, app/api/integrations/klaviyo/sync/route.ts, components/integrations/klaviyo-sync-panel.tsx, app/dashboard/integrations/klaviyo/page.tsx, lib/integrations/integration-registry.ts, tests/unit/klaviyo-sync.test.ts
+Result: IMPLEMENTED — consent-aware EMAIL_MARKETING gate; profile upsert with order stats; 90-day sync window; Klaviyo integration page + BETA registry entry; unit tests for consent + profile builder
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
