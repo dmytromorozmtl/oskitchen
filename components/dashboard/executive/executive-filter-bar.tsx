@@ -1,8 +1,10 @@
-import Link from "next/link";
-
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
 import { serialiseFilters } from "@/lib/analytics/filters";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  FilterChipLink,
+  FilterChipRow,
+  FilterSearchShell,
+} from "@/components/dashboard/filter-search-shell";
 
 const QUICK_RANGES: { days: number; label: string }[] = [
   { days: 7, label: "Last 7d" },
@@ -40,21 +42,16 @@ export function ExecutiveFilterBar({
   }
 
   return (
-    <Card className="border-border/80 shadow-sm print:hidden">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm">Filters</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-wrap items-center gap-2 text-sm">
+    <FilterSearchShell printHidden>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-muted-foreground">Range:</span>
-        {QUICK_RANGES.map((r) => (
-          <Link
-            key={r.days}
-            href={rangeLink(r.days)}
-            className="rounded-full bg-muted px-3 py-1 text-xs hover:bg-muted/80"
-          >
-            {r.label}
-          </Link>
-        ))}
+        <FilterChipRow className="inline-flex">
+          {QUICK_RANGES.map((r) => (
+            <FilterChipLink key={r.days} href={rangeLink(r.days)} active={false}>
+              {r.label}
+            </FilterChipLink>
+          ))}
+        </FilterChipRow>
         <span className="ml-2 text-muted-foreground">
           {filters.from.toISOString().slice(0, 10)} → {filters.to.toISOString().slice(0, 10)}
         </span>
@@ -62,19 +59,17 @@ export function ExecutiveFilterBar({
         {brands.length > 0 && (
           <div className="flex flex-wrap items-center gap-1 border-l pl-2">
             <span className="text-muted-foreground">Brand:</span>
-            <Link href={link({ brandId: null })} className="rounded-full bg-muted px-2 py-0.5 text-xs">
+            <FilterChipLink href={link({ brandId: null })} active={filters.brandId == null}>
               All
-            </Link>
+            </FilterChipLink>
             {brands.map((b) => (
-              <Link
+              <FilterChipLink
                 key={b.id}
                 href={link({ brandId: b.id })}
-                className={`rounded-full px-2 py-0.5 text-xs ${
-                  filters.brandId === b.id ? "bg-primary text-primary-foreground" : "bg-muted"
-                }`}
+                active={filters.brandId === b.id}
               >
                 {b.name}
-              </Link>
+              </FilterChipLink>
             ))}
           </div>
         )}
@@ -82,23 +77,21 @@ export function ExecutiveFilterBar({
         {locations.length > 0 && (
           <div className="flex flex-wrap items-center gap-1 border-l pl-2">
             <span className="text-muted-foreground">Location:</span>
-            <Link href={link({ locationId: null })} className="rounded-full bg-muted px-2 py-0.5 text-xs">
+            <FilterChipLink href={link({ locationId: null })} active={filters.locationId == null}>
               All
-            </Link>
+            </FilterChipLink>
             {locations.map((l) => (
-              <Link
+              <FilterChipLink
                 key={l.id}
                 href={link({ locationId: l.id })}
-                className={`rounded-full px-2 py-0.5 text-xs ${
-                  filters.locationId === l.id ? "bg-primary text-primary-foreground" : "bg-muted"
-                }`}
+                active={filters.locationId === l.id}
               >
                 {l.name}
-              </Link>
+              </FilterChipLink>
             ))}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </FilterSearchShell>
   );
 }

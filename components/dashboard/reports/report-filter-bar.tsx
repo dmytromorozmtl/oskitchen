@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import {
   ANALYTICS_CHANNEL_LABEL,
   ANALYTICS_CHANNEL_VALUES,
@@ -9,7 +7,11 @@ import type {
   ReportDefinition,
   ReportFilters,
 } from "@/lib/reports/report-types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  FilterChipLink,
+  FilterChipRow,
+  FilterSearchShell,
+} from "@/components/dashboard/filter-search-shell";
 
 const QUICK_RANGES: { preset: string; label: string }[] = [
   { preset: "7d", label: "Last 7d" },
@@ -55,21 +57,16 @@ export function ReportFilterBar({
   const supports = (k: string) => definition.supportedFilters.includes(k as never);
 
   return (
-    <Card className="border-border/80 shadow-sm print:hidden">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm">Filters</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-wrap items-center gap-2 text-sm">
+    <FilterSearchShell printHidden>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-muted-foreground">Range:</span>
-        {QUICK_RANGES.map((r) => (
-          <Link
-            key={r.preset}
-            href={presetLink(r.preset)}
-            className="rounded-full bg-muted px-3 py-1 text-xs hover:bg-muted/80"
-          >
-            {r.label}
-          </Link>
-        ))}
+        <FilterChipRow className="inline-flex">
+          {QUICK_RANGES.map((r) => (
+            <FilterChipLink key={r.preset} href={presetLink(r.preset)} active={false}>
+              {r.label}
+            </FilterChipLink>
+          ))}
+        </FilterChipRow>
         <span className="ml-2 text-muted-foreground">
           {filters.from.toISOString().slice(0, 10)} → {filters.to.toISOString().slice(0, 10)}
         </span>
@@ -77,19 +74,17 @@ export function ReportFilterBar({
         {supports("brandId") && brands.length > 0 && (
           <div className="flex flex-wrap items-center gap-1 border-l pl-2">
             <span className="text-muted-foreground">Brand:</span>
-            <Link href={link({ brandId: null })} className="rounded-full bg-muted px-2 py-0.5 text-xs">
+            <FilterChipLink href={link({ brandId: null })} active={filters.brandId == null}>
               All
-            </Link>
+            </FilterChipLink>
             {brands.map((b) => (
-              <Link
+              <FilterChipLink
                 key={b.id}
                 href={link({ brandId: b.id })}
-                className={`rounded-full px-2 py-0.5 text-xs ${
-                  filters.brandId === b.id ? "bg-primary text-primary-foreground" : "bg-muted"
-                }`}
+                active={filters.brandId === b.id}
               >
                 {b.name}
-              </Link>
+              </FilterChipLink>
             ))}
           </div>
         )}
@@ -97,19 +92,17 @@ export function ReportFilterBar({
         {supports("locationId") && locations.length > 0 && (
           <div className="flex flex-wrap items-center gap-1 border-l pl-2">
             <span className="text-muted-foreground">Location:</span>
-            <Link href={link({ locationId: null })} className="rounded-full bg-muted px-2 py-0.5 text-xs">
+            <FilterChipLink href={link({ locationId: null })} active={filters.locationId == null}>
               All
-            </Link>
+            </FilterChipLink>
             {locations.map((l) => (
-              <Link
+              <FilterChipLink
                 key={l.id}
                 href={link({ locationId: l.id })}
-                className={`rounded-full px-2 py-0.5 text-xs ${
-                  filters.locationId === l.id ? "bg-primary text-primary-foreground" : "bg-muted"
-                }`}
+                active={filters.locationId === l.id}
               >
                 {l.name}
-              </Link>
+              </FilterChipLink>
             ))}
           </div>
         )}
@@ -117,19 +110,17 @@ export function ReportFilterBar({
         {supports("channel") && (
           <div className="flex flex-wrap items-center gap-1 border-l pl-2">
             <span className="text-muted-foreground">Channel:</span>
-            <Link href={link({ channel: null })} className="rounded-full bg-muted px-2 py-0.5 text-xs">
+            <FilterChipLink href={link({ channel: null })} active={filters.channel == null}>
               All
-            </Link>
+            </FilterChipLink>
             {ANALYTICS_CHANNEL_VALUES.map((c) => (
-              <Link
+              <FilterChipLink
                 key={c}
                 href={link({ channel: c })}
-                className={`rounded-full px-2 py-0.5 text-xs ${
-                  filters.channel === c ? "bg-primary text-primary-foreground" : "bg-muted"
-                }`}
+                active={filters.channel === c}
               >
                 {ANALYTICS_CHANNEL_LABEL[c]}
-              </Link>
+              </FilterChipLink>
             ))}
           </div>
         )}
@@ -137,28 +128,24 @@ export function ReportFilterBar({
         {supports("fulfillmentType") && (
           <div className="flex flex-wrap items-center gap-1 border-l pl-2">
             <span className="text-muted-foreground">Fulfillment:</span>
-            <Link href={link({ fulfillment: null })} className="rounded-full bg-muted px-2 py-0.5 text-xs">
+            <FilterChipLink href={link({ fulfillment: null })} active={filters.fulfillmentType == null}>
               All
-            </Link>
-            <Link
+            </FilterChipLink>
+            <FilterChipLink
               href={link({ fulfillment: "PICKUP" })}
-              className={`rounded-full px-2 py-0.5 text-xs ${
-                filters.fulfillmentType === "PICKUP" ? "bg-primary text-primary-foreground" : "bg-muted"
-              }`}
+              active={filters.fulfillmentType === "PICKUP"}
             >
               Pickup
-            </Link>
-            <Link
+            </FilterChipLink>
+            <FilterChipLink
               href={link({ fulfillment: "DELIVERY" })}
-              className={`rounded-full px-2 py-0.5 text-xs ${
-                filters.fulfillmentType === "DELIVERY" ? "bg-primary text-primary-foreground" : "bg-muted"
-              }`}
+              active={filters.fulfillmentType === "DELIVERY"}
             >
               Delivery
-            </Link>
+            </FilterChipLink>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </FilterSearchShell>
   );
 }

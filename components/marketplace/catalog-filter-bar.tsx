@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 
+import { FilterSearchShell } from "@/components/dashboard/filter-search-shell";
 import {
   MARKETPLACE_CATALOG_SORT_OPTIONS,
   type MarketplaceCatalogFilters,
   type MarketplaceCatalogVendorOption,
 } from "@/lib/marketplace/catalog-filters";
+import { FILTER_SEARCH_BAR_TEST_ID } from "@/lib/design/filter-search-patterns";
 import {
   MARKETPLACE_TOUCH_BUTTON_CLASS,
   MARKETPLACE_TOUCH_INPUT_CLASS,
@@ -240,7 +242,7 @@ export function CatalogFilterBar({ filters, vendors }: CatalogFilterBarProps) {
   const activeCount = useMemo(() => countActiveCatalogFilters(filters), [filters]);
 
   return (
-    <div data-testid="marketplace-catalog-filter-bar">
+    <div data-testid={FILTER_SEARCH_BAR_TEST_ID}>
       <div className="space-y-3 lg:hidden">
         <form method="get" className="flex gap-2">
           <CatalogFilterHiddenFields filters={filters} omit="q" />
@@ -288,12 +290,11 @@ export function CatalogFilterBar({ filters, vendors }: CatalogFilterBarProps) {
         </Sheet>
       </div>
 
-      <form
-        method="get"
-        className="hidden gap-4 rounded-2xl border border-border/80 bg-card p-4 shadow-sm lg:grid lg:grid-cols-4"
-      >
-        <CatalogFilterFields filters={filters} vendors={vendors} />
-      </form>
+      <FilterSearchShell title="Catalog filters" className="hidden lg:block">
+        <form method="get" className="grid gap-4 lg:grid-cols-4">
+          <CatalogFilterFields filters={filters} vendors={vendors} />
+        </form>
+      </FilterSearchShell>
     </div>
   );
 }

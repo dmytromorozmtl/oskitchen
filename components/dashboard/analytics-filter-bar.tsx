@@ -6,7 +6,11 @@ import {
 } from "@/lib/analytics/channel-attribution";
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
 import { serialiseFilters } from "@/lib/analytics/filters";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  FilterChipLink,
+  FilterChipRow,
+  FilterSearchShell,
+} from "@/components/dashboard/filter-search-shell";
 
 const QUICK_RANGES: { days: number; label: string }[] = [
   { days: 7, label: "Last 7d" },
@@ -70,113 +74,93 @@ export function AnalyticsFilterBar({
   }
 
   return (
-    <Card className="border-border/80 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm">Filters</CardTitle>
-        <CardDescription className="text-xs">
-          {filters.from.toISOString().slice(0, 10)} → {filters.to.toISOString().slice(0, 10)}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="flex flex-wrap gap-1.5">
+    <FilterSearchShell
+      description={`${filters.from.toISOString().slice(0, 10)} → ${filters.to.toISOString().slice(0, 10)}`}
+    >
+      <div className="space-y-2">
+        <FilterChipRow>
           {QUICK_RANGES.map((r) => (
-            <Link
-              key={r.days}
-              href={link({ days: r.days })}
-              className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/70"
-            >
+            <FilterChipLink key={r.days} href={link({ days: r.days })} active={false}>
               {r.label}
-            </Link>
+            </FilterChipLink>
           ))}
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          <Link
-            href={link({ channel: null })}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${filters.channel == null ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
-          >
+        </FilterChipRow>
+        <FilterChipRow>
+          <FilterChipLink href={link({ channel: null })} active={filters.channel == null}>
             All channels
-          </Link>
+          </FilterChipLink>
           {ANALYTICS_CHANNEL_VALUES.map((channel) => (
-            <Link
+            <FilterChipLink
               key={channel}
               href={link({ channel })}
-              className={`rounded-full px-3 py-1 text-xs font-medium ${filters.channel === channel ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+              active={filters.channel === channel}
             >
               {ANALYTICS_CHANNEL_LABEL[channel]}
-            </Link>
+            </FilterChipLink>
           ))}
-        </div>
+        </FilterChipRow>
         {brands.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5">
-            <Link
-              href={link({ brandId: null })}
-              className={`rounded-full px-3 py-1 text-xs font-medium ${filters.brandId == null ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
-            >
+          <FilterChipRow>
+            <FilterChipLink href={link({ brandId: null })} active={filters.brandId == null}>
               All brands
-            </Link>
+            </FilterChipLink>
             {brands.slice(0, 6).map((b) => (
-              <Link
+              <FilterChipLink
                 key={b.id}
                 href={link({ brandId: b.id })}
-                className={`rounded-full px-3 py-1 text-xs font-medium ${filters.brandId === b.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+                active={filters.brandId === b.id}
               >
                 {b.name}
-              </Link>
+              </FilterChipLink>
             ))}
-          </div>
+          </FilterChipRow>
         ) : null}
         {locations.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5">
-            <Link
-              href={link({ locationId: null })}
-              className={`rounded-full px-3 py-1 text-xs font-medium ${filters.locationId == null ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
-            >
+          <FilterChipRow>
+            <FilterChipLink href={link({ locationId: null })} active={filters.locationId == null}>
               All locations
-            </Link>
+            </FilterChipLink>
             {locations.slice(0, 6).map((l) => (
-              <Link
+              <FilterChipLink
                 key={l.id}
                 href={link({ locationId: l.id })}
-                className={`rounded-full px-3 py-1 text-xs font-medium ${filters.locationId === l.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+                active={filters.locationId === l.id}
               >
                 {l.name}
-              </Link>
+              </FilterChipLink>
             ))}
-          </div>
+          </FilterChipRow>
         ) : null}
-        <div className="flex flex-wrap gap-1.5">
-          <Link
-            href={link({ fulfillment: null })}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${filters.fulfillmentType == null ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
-          >
+        <FilterChipRow>
+          <FilterChipLink href={link({ fulfillment: null })} active={filters.fulfillmentType == null}>
             All fulfillment
-          </Link>
-          <Link
+          </FilterChipLink>
+          <FilterChipLink
             href={link({ fulfillment: "PICKUP" })}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${filters.fulfillmentType === "PICKUP" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+            active={filters.fulfillmentType === "PICKUP"}
           >
             Pickup
-          </Link>
-          <Link
+          </FilterChipLink>
+          <FilterChipLink
             href={link({ fulfillment: "DELIVERY" })}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${filters.fulfillmentType === "DELIVERY" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+            active={filters.fulfillmentType === "DELIVERY"}
           >
             Delivery
-          </Link>
-          <Link
+          </FilterChipLink>
+          <FilterChipLink
             href={link({ mealPlanOnly: filters.mealPlanOnly ? null : "1" })}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${filters.mealPlanOnly ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+            active={Boolean(filters.mealPlanOnly)}
           >
             Meal plans only
-          </Link>
-          <Link
+          </FilterChipLink>
+          <FilterChipLink
             href={link({ cateringOnly: filters.cateringOnly ? null : "1" })}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${filters.cateringOnly ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+            active={Boolean(filters.cateringOnly)}
           >
             Catering only
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+          </FilterChipLink>
+        </FilterChipRow>
+      </div>
+    </FilterSearchShell>
   );
 }
