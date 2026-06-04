@@ -8,10 +8,13 @@ import {
 
 export async function POST(request: Request) {
   const { dataUserId } = await requireTenantActor();
-  const body = (await request.json().catch(() => ({}))) as { direction?: string };
+  const body = (await request.json().catch(() => ({}))) as {
+    direction?: string;
+    staffMappings?: Record<string, string>;
+  };
   const result =
     body.direction === "import"
-      ? await importScheduleFromHomebase(dataUserId)
+      ? await importScheduleFromHomebase(dataUserId, body.staffMappings)
       : await exportScheduleToHomebase(dataUserId);
   return NextResponse.json(result);
 }
