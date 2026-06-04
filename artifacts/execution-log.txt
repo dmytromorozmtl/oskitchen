@@ -4854,3 +4854,12 @@ Artifact: lib/integrations/beta-env-readiness-rows-e2e-policy.ts, lib/integratio
 Result: IMPLEMENTED — Integration Health env readiness panel: 18 rows × status badge + setup link; summary counts sum to 18; tenant credential honesty disclaimer; chromium-authed flow; 3 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 148
+Task: QA-42 — BETA integrations integrity smoke builder integration
+Role: QA
+Priority: P2
+Artifact: lib/integrations/beta-integrations-integrity-smoke-integration-policy.ts, tests/integration/beta-integrations-integrity-smoke.integration.test.ts, tests/unit/beta-integrations-integrity-smoke-integration.test.ts
+Result: IMPLEMENTED — registry + env cert chain → honest PASSED/FAILED; cert_failed/env_failed paths; zero scaffold failures; 5 integration + 2 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
