@@ -1,5 +1,5 @@
-import { RouteLoadingSimple } from "@/components/dashboard/route-states";
+import { DashboardPageSkeleton } from "@/components/feedback/loading-skeleton";
 
 export default function Loading() {
-  return <RouteLoadingSimple />;
+  return <DashboardPageSkeleton />;
 }

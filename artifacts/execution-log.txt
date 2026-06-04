@@ -4899,3 +4899,12 @@ Artifact: lib/design/page-layout-patterns.ts, lib/design/page-layout-audit-polic
 Result: IMPLEMENTED — PageHeader audit on 4 critical routes; Integration Health + Today profit migrated to PageHeader/PageShell; Today/POS documented PAGE_LAYOUT_EXCEPTION; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 153
+Task: DES-28 — loading skeleton patterns audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/loading-skeleton-patterns.ts, lib/design/loading-skeleton-audit-policy.ts, components/feedback/loading-skeleton.tsx, app/dashboard/today/loading.tsx, app/dashboard/today/profit/loading.tsx, app/dashboard/integrations/health/loading.tsx, app/dashboard/orders/loading.tsx, app/dashboard/pos/terminal/loading.tsx, tests/unit/loading-skeleton-audit-policy.test.ts
+Result: IMPLEMENTED — DashboardPageSkeleton (PageShell + PageSkeleton); 4 critical routes migrated; POS terminal spinner exception; data-testid page-skeleton; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
