@@ -80,6 +80,7 @@ function PercentileGauge({ rank }: { rank: number }) {
   );
 }
 
+/** METRIC_CARD_EXCEPTION — percentile gauge benchmark cards, not label/value KPI strips. */
 function MetricCard({ metric }: { metric: BenchmarkMetric }) {
   const tone = gaugeToneForPercentile(metric.percentileRank);
 

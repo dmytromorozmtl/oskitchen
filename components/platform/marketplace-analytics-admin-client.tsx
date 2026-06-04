@@ -30,6 +30,7 @@ function formatMoney(amount: number, currency = "USD"): string {
   }).format(amount);
 }
 
+/** METRIC_CARD_EXCEPTION — platform admin dark zinc chrome, not dashboard MetricCard tokens. */
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-4">

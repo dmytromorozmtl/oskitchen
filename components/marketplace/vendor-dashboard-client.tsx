@@ -13,6 +13,7 @@ import {
 
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
 import { VendorDashboardOnboardingWizard } from "@/components/marketplace/vendor-dashboard-onboarding-wizard";
+import { MetricCard } from "@/components/data-display/metric-card";
 import { colorVar } from "@/lib/design/color-tokens";
 import { MARKETPLACE_MOBILE_CARD_CLASS } from "@/lib/marketplace/mobile-ui";
 import { Badge } from "@/components/ui/badge";
@@ -242,19 +243,5 @@ export function VendorDashboardClient({ model }: { model: VendorDashboardModel }
         </Card>
       </div>
     </div>
-  );
-}
-
-function MetricCard({ label, value, hint }: { label: string; value: string; hint: string }) {
-  return (
-    <Card className="border-border/80 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardDescription>{label}</CardDescription>
-        <CardTitle className="text-2xl tabular-nums">{value}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-xs text-muted-foreground">{hint}</p>
-      </CardContent>
-    </Card>
   );
 }

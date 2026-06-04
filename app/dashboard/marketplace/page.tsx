@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AlertCircle, Package, ShoppingBag, Store, Truck } from "lucide-react";
 
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MetricCard } from "@/components/data-display/metric-card";
 import { MarketplaceCategoryBrowseGrid } from "@/components/marketplace/marketplace-category-browse-grid";
 import { MarketplaceHeroBanner } from "@/components/marketplace/marketplace-hero-banner";
 import {
@@ -21,33 +22,6 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { formatCurrency } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import { loadMarketplaceDashboard } from "@/services/marketplace/marketplace-dashboard-service";
-
-function SummaryCard({
-  label,
-  value,
-  hint,
-  icon: Icon,
-  accent,
-}: {
-  label: string;
-  value: string;
-  hint: string;
-  icon: typeof ShoppingBag;
-  accent?: boolean;
-}) {
-  return (
-    <Card className={`border-border/80 shadow-sm ${accent ? "border-amber-500/30 bg-amber-500/5" : ""}`}>
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <CardDescription>{label}</CardDescription>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <p className="text-2xl font-semibold tabular-nums">{value}</p>
-        <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default async function MarketplaceDashboardPage() {
   const { workspaceId, dataUserId } = await getTenantActor();
@@ -112,25 +86,25 @@ export default async function MarketplaceDashboardPage() {
       <MarketplaceSearchBar />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard
+        <MetricCard
           label="Spend this month"
           value={formatCurrency(model.spendThisMonth, model.currency)}
           hint="Marketplace purchase orders"
           icon={ShoppingBag}
         />
-        <SummaryCard
+        <MetricCard
           label="Active orders"
           value={String(model.activeOrderCount)}
           hint="Submitted through delivery"
           icon={Truck}
         />
-        <SummaryCard
+        <MetricCard
           label="Vendors ordered"
           value={String(model.vendorCount)}
           hint="Unique suppliers on file"
           icon={Store}
         />
-        <SummaryCard
+        <MetricCard
           label="Needs attention"
           value={String(model.attentionCount)}
           hint="Approval, disputes, or follow-up"

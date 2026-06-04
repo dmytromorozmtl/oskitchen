@@ -46,6 +46,7 @@ import {
   updateMenu,
 } from "@/actions/menus";
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { MetricCard } from "@/components/data-display/metric-card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -377,15 +378,6 @@ function SortableMenuCard({
   );
 }
 
-function SummaryCard({ label, value }: { label: string; value: number }) {
-  return (
-    <Card className="border-border/80 bg-muted/20 p-4 shadow-none">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className="mt-1 text-2xl font-semibold tabular-nums">{value}</p>
-    </Card>
-  );
-}
-
 export function MenuCenter({
   businessType,
   initialMenus,
@@ -471,12 +463,12 @@ export function MenuCenter({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <SummaryCard label="Live checkout menus" value={counts.active} />
-        <SummaryCard label="Drafts" value={counts.draft} />
-        <SummaryCard label="Scheduled" value={counts.scheduled} />
-        <SummaryCard label="Archived" value={counts.archived} />
-        <SummaryCard label="Published flag" value={counts.published} />
-        <SummaryCard label={copy.itemsWord} value={counts.items} />
+        <MetricCard label="Live checkout menus" value={counts.active} className="bg-muted/20 shadow-none" />
+        <MetricCard label="Drafts" value={counts.draft} className="bg-muted/20 shadow-none" />
+        <MetricCard label="Scheduled" value={counts.scheduled} className="bg-muted/20 shadow-none" />
+        <MetricCard label="Archived" value={counts.archived} className="bg-muted/20 shadow-none" />
+        <MetricCard label="Published flag" value={counts.published} className="bg-muted/20 shadow-none" />
+        <MetricCard label={copy.itemsWord} value={counts.items} className="bg-muted/20 shadow-none" />
       </div>
 
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

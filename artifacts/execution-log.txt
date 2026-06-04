@@ -4962,3 +4962,12 @@ Artifact: lib/design/empty-state-patterns.ts, lib/design/empty-state-audit-polic
 Result: IMPLEMENTED — EMPTY_STATE tokens + data-testid; RouteEmpty delegates to EmptyState; voice orders + integration health zero-data migrated to inline EmptyState; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 160
+Task: DES-35 — MetricCard KPI strip consistency audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/metric-card-patterns.ts, lib/design/metric-card-audit-policy.ts, components/data-display/metric-card.tsx, app/dashboard/marketplace/page.tsx, components/marketplace/vendor-dashboard-client.tsx, components/dashboard/menu-center.tsx, tests/unit/metric-card-audit-policy.test.ts
+Result: IMPLEMENTED — MetricCard icon/accent tokens + data-testid; marketplace hub, vendor dashboard, menu center migrated; benchmark/platform admin documented METRIC_CARD_EXCEPTION; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
