@@ -8,6 +8,8 @@
 
 Three-email outbound sequence for **qualified ICP operators** (commissary, ghost kitchen, meal-prep, small multi-unit ≤5 locations). Use after a warm intro, event lead, or inbound `/book-demo` no-show — not cold spam at scale.
 
+**Inbound nurture (5 emails):** [`email-nurture-5-sequence.md`](./email-nurture-5-sequence.md) — trial signup, demo no-show, webinar registrant. Hand off to this outbound sequence after email 5 if ICP ≥75 and no booking.
+
 **Honesty rule:** No customer logos, KPIs, or “thousands of operators” claims. Say **design partner program open**, **0 signed founding customers**, **BETA** on integrations and marketplace.
 
 ---

@@ -138,7 +138,7 @@ Track registrations in GA4 / PostHog when keys live ([`marketing-analytics-setup
 | **Registered, no-show** | Recording + reschedule offer | +48h |
 | **All** | Add to CRM with `source=webinar_{id}` | +24h |
 
-Use [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) Email 1 for hot leads.
+Use [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) Email 1 for hot leads. Inbound registrants enter [`email-nurture-5-sequence.md`](./email-nurture-5-sequence.md) first.
 
 **Discovery call booking:** Cal.com or `/book-demo` — founder calendar only until hire #2.
 
