@@ -26,6 +26,13 @@ import {
   stepsForProvider,
   type ChannelPilotProvider,
 } from "@/lib/integrations/channel-pilot-setup-wizard-steps";
+import { appIconMdClass } from "@/lib/design/icon-system";
+import {
+  wizardStepChecklistItemClass,
+  wizardStepChecklistItemCurrentClass,
+  wizardStepStackClass,
+} from "@/lib/design/form-patterns-wizard-steps";
+import { cn } from "@/lib/utils";
 
 type ChannelPilotSetupWizardProps = {
   provider: ChannelPilotProvider;
@@ -92,7 +99,7 @@ export function ChannelPilotSetupWizard({
           Not full marketplace live ops.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className={wizardStepStackClass}>
         {showSetupAttentionStrip ? (
           <ChannelPilotSetupAttentionStrip
             focus={setupFocus}
@@ -109,16 +116,17 @@ export function ChannelPilotSetupWizard({
               <li
                 key={def.id}
                 id={`channel-pilot-step-${def.id}`}
-                className={`scroll-mt-24 flex gap-3 rounded-lg border px-3 py-2 text-sm ${
-                  isCurrent ? "border-primary/40 bg-background" : "border-border/60"
-                }`}
+                className={cn(
+                  wizardStepChecklistItemClass,
+                  isCurrent && wizardStepChecklistItemCurrentClass,
+                )}
                 data-step-id={def.id}
                 data-step-complete={complete ? "true" : "false"}
               >
                 {complete ? (
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
+                  <CheckCircle2 className={cn("mt-0.5 shrink-0 text-green-600", appIconMdClass)} />
                 ) : (
-                  <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  <Circle className={cn("mt-0.5 shrink-0 text-muted-foreground", appIconMdClass)} />
                 )}
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{def.title}</p>

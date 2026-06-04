@@ -4449,3 +4449,12 @@ Artifact: lib/design/icon-system.ts, lib/design/icon-system-audit-policy.ts, com
 Result: IMPLEMENTED — 5-tier Lucide size ladder (xs→xl); semantic appIconNav/Badge/Header/Hero classes; audit gate zero raw h-N w-N on operator surfaces; marketplace category icons aligned
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 103
+Task: DES-26 — form patterns wizard steps
+Role: DESIGN
+Priority: P1
+Artifact: lib/design/form-patterns-wizard-steps.ts, lib/design/form-patterns-wizard-steps-audit-policy.ts, components/ui/wizard-step-form.tsx, quick-start/channel-pilot/vendor wizard migrations, tests/unit/form-patterns-wizard-steps-audit-policy.test.ts
+Result: IMPLEMENTED — canonical wizard form layout tokens (field/section/actions/checklist); WizardStepForm primitives; audit gate on Quick Start, channel pilot, vendor onboarding wizards
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

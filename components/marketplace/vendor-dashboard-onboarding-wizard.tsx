@@ -14,16 +14,22 @@ import {
   type VendorOnboardingSnapshot,
   type VendorOnboardingStep,
 } from "@/lib/marketplace/vendor-dashboard-onboarding-wizard-policy";
+import { appIconMdClass } from "@/lib/design/icon-system";
+import {
+  wizardStepChoiceGridClass,
+  wizardStepProgressBlockClass,
+  wizardStepSectionClass,
+} from "@/lib/design/form-patterns-wizard-steps";
 import { cn } from "@/lib/utils";
 
 function StepIcon({ step }: { step: VendorOnboardingStep }) {
   if (step.status === "complete") {
-    return <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden />;
+    return <CheckCircle2 className={cn("shrink-0 text-emerald-600", appIconMdClass)} aria-hidden />;
   }
   if (step.status === "current") {
-    return <CircleDot className="h-4 w-4 shrink-0 text-primary" aria-hidden />;
+    return <CircleDot className={cn("shrink-0 text-primary", appIconMdClass)} aria-hidden />;
   }
-  return <Circle className="h-4 w-4 shrink-0 text-muted-foreground/60" aria-hidden />;
+  return <Circle className={cn("shrink-0 text-muted-foreground/60", appIconMdClass)} aria-hidden />;
 }
 
 export function VendorDashboardOnboardingWizard({
@@ -85,7 +91,7 @@ export function VendorDashboardOnboardingWizard({
             <X className="h-4 w-4" />
           </Button>
         </div>
-        <div className="space-y-1 pt-2">
+        <div className={cn(wizardStepProgressBlockClass, "pt-2")}>
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>Setup progress</span>
             <span>{summary.progressPercent}%</span>
@@ -93,8 +99,8 @@ export function VendorDashboardOnboardingWizard({
           <Progress value={summary.progressPercent} aria-label="Vendor onboarding progress" />
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <ol className="grid gap-2 sm:grid-cols-2" aria-label="Vendor onboarding steps">
+      <CardContent className={wizardStepSectionClass}>
+        <ol className={wizardStepChoiceGridClass} aria-label="Vendor onboarding steps">
           {summary.steps.map((step) => (
             <li
               key={step.id}

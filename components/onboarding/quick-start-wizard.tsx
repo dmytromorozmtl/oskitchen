@@ -29,6 +29,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  WizardStepActions,
+  WizardStepChoiceGrid,
+  WizardStepChoiceList,
+  WizardStepField,
+  WizardStepFieldGrid,
+  WizardStepHeading,
+  WizardStepIntro,
+  WizardStepProgressHeader,
+  WizardStepRoot,
+  WizardStepSection,
+} from "@/components/ui/wizard-step-form";
+import { appIconMdClass, appIconXsClass } from "@/lib/design/icon-system";
+import {
+  wizardStepChoiceCardClass,
+  wizardStepChoiceCardSelectedClass,
+  wizardStepChoiceRowSelectedClass,
+  wizardStepDescriptionClass,
+} from "@/lib/design/form-patterns-wizard-steps";
 import { cn } from "@/lib/utils";
 
 const STEPS = ["type", "channels", "menu"] as const;
@@ -136,8 +155,8 @@ export function QuickStartWizard() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 pb-16">
-      <div className="space-y-3">
+    <WizardStepRoot>
+      <WizardStepIntro>
         <p className="text-sm font-medium text-primary">Quick Start</p>
         <h1 className="text-3xl font-semibold tracking-tight">
           First order in about 15 minutes
@@ -146,7 +165,7 @@ export function QuickStartWizard() {
           Three steps — we pre-load your menu, turn on the right modules, and open the POS when
           you are ready.
         </p>
-        <div className="space-y-2">
+        <WizardStepProgressHeader>
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>
               Step {stepIndex + 1} of {STEPS.length}
@@ -154,23 +173,21 @@ export function QuickStartWizard() {
             <span>{Math.round(progress)}%</span>
           </div>
           <Progress value={progress} className="h-2" />
-        </div>
-      </div>
+        </WizardStepProgressHeader>
+      </WizardStepIntro>
 
       {step === "type" ? (
-        <section className="space-y-4">
-          <h2 className="text-lg font-medium">What type of restaurant?</h2>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <WizardStepSection>
+          <WizardStepHeading>What type of restaurant?</WizardStepHeading>
+          <WizardStepChoiceGrid>
             {QUICK_START_RESTAURANT_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => setRestaurantType(opt.id)}
                 className={cn(
-                  "rounded-xl border p-4 text-left transition-colors",
-                  restaurantType === opt.id
-                    ? "border-primary bg-primary/5 ring-2 ring-primary/30"
-                    : "border-border hover:border-primary/40",
+                  wizardStepChoiceCardClass,
+                  restaurantType === opt.id && wizardStepChoiceCardSelectedClass,
                 )}
               >
                 <span className="text-2xl" aria-hidden>
@@ -180,8 +197,8 @@ export function QuickStartWizard() {
                 <p className="mt-1 text-xs text-muted-foreground">{opt.description}</p>
               </button>
             ))}
-          </div>
-          <div className="space-y-2">
+          </WizardStepChoiceGrid>
+          <WizardStepField>
             <Label htmlFor="businessName">Business name (optional)</Label>
             <Input
               id="businessName"
@@ -190,14 +207,14 @@ export function QuickStartWizard() {
               placeholder={template.title}
               className="rounded-full"
             />
-          </div>
-        </section>
+          </WizardStepField>
+        </WizardStepSection>
       ) : null}
 
       {step === "channels" ? (
-        <section className="space-y-4">
-          <h2 className="text-lg font-medium">How do you take orders?</h2>
-          <div className="grid gap-3">
+        <WizardStepSection>
+          <WizardStepHeading>How do you take orders?</WizardStepHeading>
+          <WizardStepChoiceList>
             {QUICK_START_CHANNEL_OPTIONS.map((opt) => {
               const selected = channels.includes(opt.id);
               return (
@@ -206,10 +223,8 @@ export function QuickStartWizard() {
                   type="button"
                   onClick={() => toggleChannel(opt.id)}
                   className={cn(
-                    "flex items-start gap-3 rounded-xl border p-4 text-left transition-colors",
-                    selected
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/40",
+                    "flex items-start gap-3 rounded-xl border p-4 text-left transition-colors border-border hover:border-primary/40",
+                    selected && wizardStepChoiceRowSelectedClass,
                   )}
                 >
                   <span
@@ -218,7 +233,7 @@ export function QuickStartWizard() {
                       selected ? "border-primary bg-primary text-primary-foreground" : "",
                     )}
                   >
-                    {selected ? <Check className="h-3 w-3" /> : null}
+                    {selected ? <Check className={appIconXsClass} /> : null}
                   </span>
                   <span>
                     <span className="font-medium">{opt.label}</span>
@@ -229,14 +244,14 @@ export function QuickStartWizard() {
                 </button>
               );
             })}
-          </div>
-        </section>
+          </WizardStepChoiceList>
+        </WizardStepSection>
       ) : null}
 
       {step === "menu" ? (
-        <section className="space-y-4">
-          <h2 className="text-lg font-medium">What&apos;s your first menu item?</h2>
-          <p className="text-sm text-muted-foreground">
+        <WizardStepSection>
+          <WizardStepHeading>What&apos;s your first menu item?</WizardStepHeading>
+          <p className={wizardStepDescriptionClass}>
             We also add {template.items.length} starter items from the {template.title} template.
             Edit or remove them later in Menu items.
           </p>
@@ -254,20 +269,20 @@ export function QuickStartWizard() {
                       onClick={() => removeItem(index)}
                       aria-label="Remove item"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className={appIconMdClass} />
                     </Button>
                   ) : null}
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="space-y-2 sm:col-span-2">
+                <WizardStepFieldGrid>
+                  <WizardStepField className="sm:col-span-2">
                     <Label>Name</Label>
                     <Input
                       value={item.name}
                       onChange={(e) => updateItem(index, { name: e.target.value })}
                       placeholder="Chicken Bowl"
                     />
-                  </div>
-                  <div className="space-y-2">
+                  </WizardStepField>
+                  <WizardStepField>
                     <Label>Price</Label>
                     <Input
                       type="number"
@@ -278,8 +293,8 @@ export function QuickStartWizard() {
                         updateItem(index, { price: Number(e.target.value) || 0 })
                       }
                     />
-                  </div>
-                  <div className="space-y-2">
+                  </WizardStepField>
+                  <WizardStepField>
                     <Label>Category</Label>
                     <Select
                       value={item.category}
@@ -297,23 +312,23 @@ export function QuickStartWizard() {
                         <SelectItem value="OTHER">Other</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
-                </div>
+                  </WizardStepField>
+                </WizardStepFieldGrid>
               </Card>
             ))}
           </div>
           <Button type="button" variant="outline" className="rounded-full" onClick={addItem}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className={cn("mr-2", appIconMdClass)} />
             Add another
           </Button>
-        </section>
+        </WizardStepSection>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-6">
+      <WizardStepActions>
         <div className="flex gap-2">
           {stepIndex > 0 ? (
             <Button type="button" variant="outline" className="rounded-full" onClick={goBack}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className={cn("mr-2", appIconMdClass)} />
               Back
             </Button>
           ) : (
@@ -338,13 +353,13 @@ export function QuickStartWizard() {
           onClick={goNext}
         >
           {pending ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className={cn("mr-2 animate-spin", appIconMdClass)} />
           ) : step === "menu" ? null : (
-            <ArrowRight className="mr-2 h-4 w-4" />
+            <ArrowRight className={cn("mr-2", appIconMdClass)} />
           )}
           {step === "menu" ? (pending ? "Setting up…" : "Finish setup") : "Continue"}
         </Button>
-      </div>
-    </div>
+      </WizardStepActions>
+    </WizardStepRoot>
   );
 }
