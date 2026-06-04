@@ -19,6 +19,8 @@ Independent food operators ($250k–$5M revenue) running **multi-channel** order
 - Packing error stories?
 - Timeline to pilot?
 
+**Discovery call script:** [`discovery-call-script.md`](./discovery-call-script.md) — 30-min qualification (MKT-21) before product demo.
+
 ## Demo path
 
 Follow **`docs/DEMO_SCRIPT.md`**.

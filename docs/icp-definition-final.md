@@ -284,6 +284,7 @@ Do **not** spend LOI cycles on:
 |-------|------|-----|
 | This ICP definition | `docs/icp-definition-final.md` | Sales onboarding, LOI prep |
 | Forbidden claims training | `docs/forbidden-claims-training.md` | Certification before customer calls |
+| Discovery call script | `docs/discovery-call-script.md` | 30-min qualification (MKT-21) |
 | Pilot ICP contract template | `docs/pilot-icp-contract-template-era17.md` | Legal/SOW |
 | ICP qualification JSON | `PILOT_GONOGO_ICP_INPUT_JSON` | GO/NO-GO gate |
 | Ghost kitchen landing | `/landing/ghost-kitchen` | Outbound + ads |

@@ -4548,3 +4548,12 @@ Artifact: docs/seo-10-icp-keywords.md, lib/marketing/seo-10-icp-keywords-policy.
 Result: IMPLEMENTED — 10 canonical keywords for ghost kitchen/commissary/meal prep + cross-ICP; keyword matrix; on-page checklist; forbidden SEO lint; linked from seo-audit and icp-definition-final
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 114
+Task: MKT-21 — discovery call script
+Role: MARKETING
+Priority: P1
+Artifact: docs/discovery-call-script.md, lib/marketing/discovery-call-script-policy.ts, tests/unit/discovery-call-script-policy.test.ts
+Result: IMPLEMENTED — 30-min 5-block qualification script; 7 ICP questions; score thresholds 8/12; forbidden-claims lint; linked from SALES_PLAYBOOK and icp-definition-final
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
