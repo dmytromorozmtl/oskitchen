@@ -28,7 +28,8 @@ export type PermissionDeniedSurfaceId =
   | "production_calendar"
   | "production_board"
   | "qr_codes"
-  | "marketplace_hub";
+  | "marketplace_hub"
+  | "settings_workspace";
 
 export type PermissionDeniedSurfaceDef = {
   id: PermissionDeniedSurfaceId;
@@ -249,6 +250,15 @@ export const PERMISSION_DENIED_SURFACES: Record<
     primaryLabel: "Back to Today",
     secondaryHref: "/dashboard/order-hub",
     secondaryLabel: "Order hub",
+  },
+  settings_workspace: {
+    id: "settings_workspace",
+    title: "Workspace settings",
+    permissionKey: "workspace.settings",
+    primaryHref: "/dashboard/today",
+    primaryLabel: "Back to Today",
+    secondaryHref: "/dashboard/settings",
+    secondaryLabel: "Open settings",
   },
 };
 

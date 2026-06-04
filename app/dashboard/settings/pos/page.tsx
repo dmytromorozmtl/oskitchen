@@ -1,5 +1,4 @@
-import { notFound } from "next/navigation";
-
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
 import { POS_HARDWARE_CATEGORIES } from "@/lib/pos/pos-hardware";
 import { SectionHeader } from "@/components/dashboard/settings/section-header";
@@ -20,7 +19,9 @@ export default async function PosWorkspaceSettingsPage() {
     email: profile?.email ?? session.email ?? null,
     role: (profile?.role ?? null) as string | null,
   };
-  if (!canUseSettings(actor, "manage_orders")) notFound();
+  if (!canUseSettings(actor, "manage_orders")) {
+    return <PermissionDeniedSurfaceCard surfaceId="settings_workspace" />;
+  }
 
   const prefs = await prisma.kitchenModulePreference.findMany({
     where: { userId, moduleKey: "pos_terminal" },

@@ -1,5 +1,4 @@
-import { notFound } from "next/navigation";
-
+import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { BackupsForm } from "@/components/dashboard/settings/forms/backups-form";
 import { SectionHeader } from "@/components/dashboard/settings/section-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +14,9 @@ export default async function BackupsSettingsPage() {
     select: { role: true, email: true },
   });
   const actor = { userId, email: profile?.email ?? session.email ?? null, role: (profile?.role ?? null) as string | null };
-  if (!canUseSettings(actor, "manage_imports")) notFound();
+  if (!canUseSettings(actor, "manage_imports")) {
+    return <PermissionDeniedSurfaceCard surfaceId="settings_workspace" />;
+  }
   const { payload } = await loadSettingsCenter(userId);
 
   return (

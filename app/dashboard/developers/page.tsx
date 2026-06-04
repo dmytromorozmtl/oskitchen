@@ -10,6 +10,8 @@ export const metadata = {
 
 export const dynamic = "force-dynamic";
 
+/** PERMISSION_DENIED_EXCEPTION — platform OAuth marketplace; workspace RBAC not surface-gated (DES-37). */
+
 export default async function DashboardDevelopersPage() {
   const { sessionUser } = await getTenantActor();
   const canReview = await isPlatformAdmin(sessionUser.id, sessionUser.email);

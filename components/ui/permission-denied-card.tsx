@@ -11,6 +11,10 @@ import {
 } from "@/components/ui/card";
 import { PERMISSION_DENIED_UX_ERA17_TEST_ID } from "@/lib/ux/permission-denied-era17-policy";
 import {
+  PERMISSION_DENIED_CARD_CLASS,
+  PERMISSION_DENIED_CARD_TEST_ID,
+} from "@/lib/design/permission-denied-patterns";
+import {
   resolvePermissionDeniedSurface,
   type PermissionDeniedSurfaceId,
 } from "@/lib/ux/permission-denied-copy";
@@ -94,10 +98,7 @@ export function PermissionDeniedCard({
 }: PermissionDeniedCardProps) {
   return (
     <Card
-      className={cn(
-        "max-w-lg border-dashed border-border/80 bg-muted/10 shadow-none",
-        className,
-      )}
+      className={cn(PERMISSION_DENIED_CARD_CLASS, className)}
       data-testid={testId}
       data-permission-key={permissionKey ?? undefined}
       role="status"

@@ -4980,3 +4980,12 @@ Artifact: lib/design/route-loading-patterns.ts, lib/design/route-loading-audit-p
 Result: IMPLEMENTED — LoadingState data-testid route-loading; RouteLoading delegates to LoadingState (removes duplicate Loader2); complements DES-28 skeletons; POS terminal ROUTE_LOADING_EXCEPTION; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 162
+Task: DES-37 — permission-denied surface consistency audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/permission-denied-patterns.ts, lib/design/permission-denied-audit-policy.ts, lib/ux/permission-denied-copy.ts, components/ui/permission-denied-card.tsx, app/dashboard/settings/pos/page.tsx, app/dashboard/settings/backups/page.tsx, app/dashboard/developers/page.tsx, tests/unit/permission-denied-audit-policy.test.ts
+Result: IMPLEMENTED — settings_workspace surface; PERMISSION_DENIED_CARD_CLASS tokens; settings POS/backups migrated from notFound() to PermissionDeniedSurfaceCard; developers page documented exception; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
