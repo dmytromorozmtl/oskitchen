@@ -25,7 +25,11 @@ describe("dark mode audit doc", () => {
     const lock = readFileSync(LOCK_PATH, "utf8");
     expect(globals).toContain(".dark {");
     expect(globals).toContain(".dark-section");
+    expect(globals).toContain("--color-bg: var(--dark-bg)");
     expect(shell).toContain("ThemeToggle");
+    expect(shell).toContain("dashboardShellRootClass");
+    expect(shell).toContain("dashboardShellHeaderClass");
+    expect(shell).not.toContain("bg-white");
     expect(lock).toContain('setTheme("light")');
   });
 });

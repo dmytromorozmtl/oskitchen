@@ -4431,3 +4431,12 @@ Artifact: lib/design/z-index-scale.ts, lib/design/z-index-audit-policy.ts, tailw
 Result: IMPLEMENTED — 10-layer z-index scale (sticky→kitchen-fullscreen); replaced z-[200]/z-[90–92] and ad-hoc z-10–50 in dashboard/QR/KDS/platform surfaces; audit gate zero arbitrary z-[N]
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 101
+Task: DES-24 — dark mode consistency
+Role: DESIGN
+Priority: P1
+Artifact: lib/design/dark-mode-consistency-policy.ts, app/globals.css (.dark legacy bridge), components/dashboard/dashboard-shell.tsx, tests/unit/dark-mode-consistency-policy.test.ts
+Result: IMPLEMENTED — dashboard shell chrome uses bg-background; .dark maps legacy --color-* tokens; audit gate zero bg-white on operator surfaces
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

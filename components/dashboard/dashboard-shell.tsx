@@ -37,6 +37,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
+import {
+  dashboardShellHeaderClass,
+  dashboardShellRootClass,
+  dashboardShellSidebarClass,
+} from "@/lib/design/dark-mode-consistency-policy";
 import { APP_NAME } from "@/lib/constants";
 import type { Locale, MessageKey } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
@@ -130,8 +135,8 @@ export function DashboardShell({
   ];
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <aside className="relative hidden w-64 shrink-0 border-r border-border/70 bg-white lg:flex lg:flex-col">
+    <div className={dashboardShellRootClass}>
+      <aside className={dashboardShellSidebarClass}>
         <div className="flex h-16 items-center gap-2 border-b border-border/70 px-6">
           <OSKitchenLogo href="/dashboard" size="sm" />
           <div className="min-w-0">
@@ -162,7 +167,7 @@ export function DashboardShell({
       </aside>
 
       <div className="flex min-h-screen flex-1 flex-col">
-        <header className="sticky top-0 z-chrome flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-white px-4">
+        <header className={dashboardShellHeaderClass}>
           <div className="flex min-w-0 items-center gap-2">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>

@@ -150,6 +150,19 @@
   --border: 240 4% 16%;
   --input: 240 4% 16%;
   --ring: 21 100% 56%;
+
+  /* DES-24 — legacy marketing tokens follow shadcn dark (body + inline styles). */
+  --color-bg: var(--dark-bg);
+  --color-bg-secondary: var(--dark-surface);
+  --color-bg-tertiary: #1e2028;
+  --color-surface: var(--dark-surface);
+  --color-surface-hover: #1e2028;
+  --color-surface-elevated: #1a1c22;
+  --color-text: var(--dark-text);
+  --color-text-secondary: #c4c4be;
+  --color-text-muted: var(--dark-text-muted);
+  --color-border: var(--dark-border);
+  --color-border-hover: rgba(255, 255, 255, 0.16);
 }
 
 .dark-section {
