@@ -5,7 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 
 import { ProfitGauge } from "@/components/analytics/profit-gauge";
-import { Badge } from "@/components/ui/badge";
+import { ProfitItemMarginBars } from "@/components/analytics/profit-item-margin-bars";
+import { ProfitMarginBreakdownBar } from "@/components/analytics/profit-margin-breakdown-bar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
@@ -91,6 +92,7 @@ export function RealTimeProfitDashboard({
       <Card className="border-border/80">
         <CardContent className="pt-6">
           <ProfitGauge marginPercent={data.marginPercent} zone={data.marginZone} />
+          <ProfitMarginBreakdownBar snapshot={data} currency={currency} className="mt-6" />
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
             <div>
               <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" /> 55%+
@@ -177,41 +179,21 @@ export function RealTimeProfitDashboard({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Top items</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            {data.topItems.length === 0 ? (
-              <p className="text-muted-foreground">No item sales yet today.</p>
-            ) : (
-              data.topItems.map((item) => (
-                <div key={item.productId} className="flex justify-between gap-2">
-                  <span className="truncate">{item.title}</span>
-                  <Badge variant="secondary" className="shrink-0 tabular-nums">
-                    {item.marginPercent}%
-                  </Badge>
-                </div>
-              ))
-            )}
+          <CardContent className="pt-6">
+            <ProfitItemMarginBars
+              items={data.topItems}
+              title="Top margin items"
+              emptyLabel="No item sales yet today."
+            />
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Needs attention</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            {data.bottomItems.length === 0 ? (
-              <p className="text-muted-foreground">—</p>
-            ) : (
-              data.bottomItems.map((item) => (
-                <div key={item.productId} className="flex justify-between gap-2">
-                  <span className="truncate">{item.title}</span>
-                  <Badge variant="outline" className="shrink-0 tabular-nums">
-                    {item.marginPercent}%
-                  </Badge>
-                </div>
-              ))
-            )}
+          <CardContent className="pt-6">
+            <ProfitItemMarginBars
+              items={data.bottomItems}
+              title="Needs attention"
+              emptyLabel="No low-margin items flagged."
+            />
           </CardContent>
         </Card>
       </div>
