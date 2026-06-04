@@ -5016,3 +5016,12 @@ Artifact: docs/product-hunt-launch-defer.md, lib/marketing/product-hunt-launch-d
 Result: IMPLEMENTED — explicit DEFER decision; 8 launch gates LG1–LG8; isProductHuntLaunchAllowed(3); PH listing draft template; forbidden-claims lint; linked from MKT-29 press release; 5 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 166
+Task: MKT-31 — Shopify agency partner program (Woo+Shopify LIVE gate)
+Role: MARKETING
+Priority: P2
+Artifact: docs/partner-program-shopify-agencies.md, lib/marketing/partner-program-shopify-agencies-policy.ts, tests/unit/partner-program-shopify-agencies-policy.test.ts
+Result: IMPLEMENTED — PRE-LAUNCH until PG1+PG2 PASS; 10 agency criteria A1–A10; Registered/Certified/Premier tiers; isPartnerProgramShopifyAgenciesEnabled(); referral email template; 6 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
