@@ -4539,3 +4539,12 @@ Artifact: docs/email-nurture-5-sequence.md, lib/marketing/email-nurture-5-sequen
 Result: IMPLEMENTED — inbound 5-email nurture (Day 0/2/5/9/14); welcome→Today→Integration Health→AI→design partner; CRM fields; forbidden-claims lint; linked from design-partner-email-sequence
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 113
+Task: MKT-20 — SEO 10 ICP keywords
+Role: MARKETING
+Priority: P1
+Artifact: docs/seo-10-icp-keywords.md, lib/marketing/seo-10-icp-keywords-policy.ts, tests/unit/seo-10-icp-keywords-policy.test.ts
+Result: IMPLEMENTED — 10 canonical keywords for ghost kitchen/commissary/meal prep + cross-ICP; keyword matrix; on-page checklist; forbidden SEO lint; linked from seo-audit and icp-definition-final
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

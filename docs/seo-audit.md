@@ -4,7 +4,7 @@
 **Date:** 2026-06-02  
 **Owner:** Marketing + Engineering  
 **Scope:** Organic discoverability for public marketing, ICP, integrations, blog, and geo pages  
-**Related:** [`SEO_CONTENT_PLAN.md`](./SEO_CONTENT_PLAN.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) · [`navigation-audit.md`](./navigation-audit.md) · [`accessibility-audit.md`](./accessibility-audit.md)
+**Related:** [`SEO_CONTENT_PLAN.md`](./SEO_CONTENT_PLAN.md) · [`seo-10-icp-keywords.md`](./seo-10-icp-keywords.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) · [`navigation-audit.md`](./navigation-audit.md) · [`accessibility-audit.md`](./accessibility-audit.md)
 
 This audit inventories **technical SEO**, **on-page metadata**, **sitemap coverage**, and **content/claims alignment** — not paid search or Search Console history (no GSC export on file as of June 2026).
 

@@ -55,6 +55,8 @@ Every prospect must pass **Era 17 ICP gates** before LOI or paid pilot. Export r
 
 **Qualification tooling:** `lib/commercial/pilot-icp-contract-era17.ts`, `npm run smoke:pilot-gono-go`
 
+**SEO keywords:** [`seo-10-icp-keywords.md`](./seo-10-icp-keywords.md) — ten canonical organic targets (MKT-20)
+
 ---
 
 ## Segment 1 — Ghost kitchen
