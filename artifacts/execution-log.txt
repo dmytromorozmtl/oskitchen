@@ -4719,3 +4719,12 @@ Artifact: lib/integrations/clover-types.ts, services/integrations/clover-sync-se
 Result: IMPLEMENTED — Clover REST API v3 order import (14-day window); idempotent clover:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 15th BETA integration; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 133
+Task: DEV-46 — Lightspeed POS order import hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/lightspeed-types.ts, services/integrations/lightspeed-sync-service.ts, app/api/integrations/lightspeed/sync/route.ts, components/integrations/lightspeed-sync-panel.tsx, app/dashboard/integrations/lightspeed/page.tsx, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/navigation/nav-maturity-hide-registry.ts, tests/unit/lightspeed-sync.test.ts
+Result: IMPLEMENTED — Lightspeed Restaurant API sales import (14-day window); idempotent lightspeed:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 16th BETA integration; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

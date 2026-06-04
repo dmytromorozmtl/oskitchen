@@ -122,6 +122,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     requiredEnv: ["CLOVER_ACCESS_TOKEN", "CLOVER_MERCHANT_ID"],
     setupRoute: "/dashboard/integrations/clover",
   },
+  {
+    id: "lightspeed",
+    name: "Lightspeed",
+    status: "BETA",
+    requiredEnv: ["LIGHTSPEED_ACCESS_TOKEN", "LIGHTSPEED_BUSINESS_LOCATION_ID"],
+    setupRoute: "/dashboard/integrations/lightspeed",
+  },
 ];
 
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {
