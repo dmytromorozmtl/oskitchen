@@ -5070,3 +5070,12 @@ Artifact: lib/marketing/marketing-p2-stabilization-patterns.ts, lib/marketing/ma
 Result: IMPLEMENTED — auditMarketingP2Stabilization() composes 7 sub-audits (press release, Product Hunt defer, Shopify partners, referral, ghost kitchen report, Toast summary, analyst deck); registry + capstone report; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 172
+Task: MKT-37 — marketing P1 stabilization capstone audit (MKT-11 through MKT-28)
+Role: MARKETING
+Priority: P2
+Artifact: lib/marketing/marketing-p1-stabilization-patterns.ts, lib/marketing/marketing-p1-stabilization-audit-policy.ts, tests/unit/marketing-p1-stabilization-audit-policy.test.ts
+Result: IMPLEMENTED — auditMarketingP1Stabilization() composes 18 sub-audits (case study through LOI walkthrough); registry + capstone report; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
