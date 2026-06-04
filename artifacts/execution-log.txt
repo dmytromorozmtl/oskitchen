@@ -4827,3 +4827,12 @@ Artifact: lib/integrations/today-beta-env-footnote-e2e-policy.ts, lib/integratio
 Result: IMPLEMENTED — Today `/dashboard/today` health strip + BETA env footnote (18 badge sum); chromium-authed flow; no RSC failure contract; 3 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 145
+Task: QA-39 — LIVE integration DoD G1–G4 gate contract E2E
+Role: QA
+Priority: P2
+Artifact: lib/integrations/live-integration-dod-gates-e2e-policy.ts, lib/integrations/live-integration-dod-gates-e2e-metrics.ts, e2e/live-integration-dod-gates.spec.ts, e2e/helpers/live-integration-dod-gates-*.ts, tests/unit/live-integration-dod-gates-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — Integration Health LIVE DoD panel: 18 rows × G1 scaffold passed + G3/G4 not_measured + 0 LIVE summary; chromium-authed flow; no RSC failure; 2 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
