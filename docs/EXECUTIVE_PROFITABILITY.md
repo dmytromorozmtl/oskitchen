@@ -21,6 +21,8 @@ These are explicitly labelled as **operational estimates, not
 accounting statements**. The Costing module remains the authoritative
 source for accounting figures.
 
+**Sales narrative:** [`profit-engine-owner-margin-story.md`](./profit-engine-owner-margin-story.md) (MKT-15).
+
 ## Channel fee impact / cost increases
 
 These deeper breakdowns live in the existing Costing and Reports

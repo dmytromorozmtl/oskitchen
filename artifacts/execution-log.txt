@@ -4494,3 +4494,12 @@ Artifact: docs/qr-ordering-pilot-story.md, lib/marketing/qr-ordering-pilot-story
 Result: IMPLEMENTED — 5-beat 2-min pilot narrative; approved 30s demo script; week-1 checklist; outbound snippets; forbidden-claims lint; linked from qr-code-ordering-plan
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 108
+Task: MKT-15 — profit engine owner margin story
+Role: MARKETING
+Priority: P1
+Artifact: docs/profit-engine-owner-margin-story.md, lib/marketing/profit-engine-owner-margin-story-policy.ts, tests/unit/profit-engine-owner-margin-story-policy.test.ts
+Result: IMPLEMENTED — owner 2-min margin narrative; Today profit / food cost / executive routes; ±1% COGS honesty; 8-min demo flow; forbidden-claims lint; linked from EXECUTIVE_PROFITABILITY
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
