@@ -5106,3 +5106,12 @@ Artifact: lib/marketing/marketing-claims-governance-capstone-patterns.ts, lib/ma
 Result: IMPLEMENTED — auditMarketingClaimsGovernanceCapstone() composes 6 sub-audits (sales-safe claims registry doc, claims-registry.json, era7 governance policy, verify-claims CI, forbidden-claims training linkage, MKT-39 full marketing stabilization); registry + capstone report; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 176
+Task: MKT-41 — marketing sales playbook capstone audit
+Role: MARKETING
+Priority: P2
+Artifact: lib/marketing/marketing-sales-playbook-capstone-patterns.ts, lib/marketing/marketing-sales-playbook-capstone-audit-policy.ts, tests/unit/marketing-sales-playbook-capstone-audit-policy.test.ts
+Result: IMPLEMENTED — auditMarketingSalesPlaybookCapstone() composes 6 sub-audits (SALES_PLAYBOOK hub, GTM_SALES_PLAYBOOK, MKT-21 discovery, MKT-22 demo, MKT-23 objection handling, MKT-40 claims governance); registry + capstone report; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
