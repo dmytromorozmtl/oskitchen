@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
+import { ROUTE_LOADING_MIN_HEIGHT_CLASS } from "@/lib/design/route-loading-patterns";
 import {
   isStaleServerActionError,
   reloadForStaleServerAction,
@@ -13,12 +14,7 @@ import {
 } from "@/lib/server-actions/stale-server-action";
 
 export function RouteLoading({ message = "Loading..." }: { message?: string }) {
-  return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden />
-      <p className="text-sm text-muted-foreground">{message}</p>
-    </div>
-  );
+  return <LoadingState title={message} className={ROUTE_LOADING_MIN_HEIGHT_CLASS} />;
 }
 
 export function RouteError({

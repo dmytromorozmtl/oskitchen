@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 
+import { ROUTE_LOADING_TEST_ID } from "@/lib/design/route-loading-patterns";
 import { cn } from "@/lib/utils";
 
 export function LoadingState({
@@ -18,6 +19,7 @@ export function LoadingState({
       role="status"
       aria-live="polite"
       aria-busy="true"
+      data-testid={ROUTE_LOADING_TEST_ID}
     >
       <Loader2 className="h-8 w-8 animate-spin" aria-hidden />
       <p className="text-sm font-medium">{title}</p>

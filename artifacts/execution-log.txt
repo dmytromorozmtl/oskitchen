@@ -4971,3 +4971,12 @@ Artifact: lib/design/metric-card-patterns.ts, lib/design/metric-card-audit-polic
 Result: IMPLEMENTED — MetricCard icon/accent tokens + data-testid; marketplace hub, vendor dashboard, menu center migrated; benchmark/platform admin documented METRIC_CARD_EXCEPTION; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 161
+Task: DES-36 — route loading spinner pattern audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/route-loading-patterns.ts, lib/design/route-loading-audit-policy.ts, components/feedback/loading-state.tsx, components/dashboard/route-states.tsx, app/dashboard/pos/terminal/loading.tsx, tests/unit/route-loading-audit-policy.test.ts
+Result: IMPLEMENTED — LoadingState data-testid route-loading; RouteLoading delegates to LoadingState (removes duplicate Loader2); complements DES-28 skeletons; POS terminal ROUTE_LOADING_EXCEPTION; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
