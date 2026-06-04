@@ -61,6 +61,10 @@ jobs:
         id: smoke_beta_dod
         run: npm run smoke:live-integration-dod
 
+      - name: Tier 1 — BETA governance smoke chain (always-on)
+        id: smoke_beta_governance_chain
+        run: npm run smoke:beta-governance-chain
+
       - name: Assess P0 vault (11 secrets)
         id: vault
         run: |

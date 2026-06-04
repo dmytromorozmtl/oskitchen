@@ -1,0 +1,82 @@
+/**
+ * Era 17 BETA governance smoke chain — registry → integrity → LIVE DoD (FINAL-05).
+ */
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { spawnSync } from "node:child_process";
+
+import {
+  BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_CERT_NPM_SCRIPT,
+  BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_CYCLE_RUNBOOK_STEPS,
+  BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_NPM_SCRIPT,
+  BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_POLICY_ID,
+  BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_SUMMARY_ARTIFACT,
+} from "../lib/integrations/beta-governance-smoke-chain-era17-policy";
+import {
+  buildBetaGovernanceSmokeChainSummary,
+  formatBetaGovernanceSmokeChainReportLines,
+} from "../lib/integrations/beta-governance-smoke-chain-summary";
+
+function runNpmScript(script: string): number {
+  const result = spawnSync("npm", ["run", script], {
+    stdio: "inherit",
+    env: process.env,
+  });
+  return result.status ?? 1;
+}
+
+function writeSummary(summary: ReturnType<typeof buildBetaGovernanceSmokeChainSummary>): void {
+  const path = join(process.cwd(), BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_SUMMARY_ARTIFACT);
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+}
+
+function printRunbook(): void {
+  console.log(`\nBETA governance smoke chain (${BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_POLICY_ID})\n`);
+  for (const [index, step] of BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_CYCLE_RUNBOOK_STEPS.entries()) {
+    console.log(`${index + 1}. ${step}`);
+  }
+  console.log("\nSee docs/beta-governance-smoke-chain.md\n");
+}
+
+function main() {
+  if (process.argv.includes("--help") || process.argv.includes("-h")) {
+    console.log(`
+Era 17 BETA governance smoke chain
+
+  (default)         Cert chain + full-chain artifact
+  --checklist-only  Print runbook steps
+`);
+    process.exit(0);
+  }
+
+  if (process.argv.includes("--checklist-only")) {
+    printRunbook();
+    process.exit(0);
+  }
+
+  console.log(
+    `\n[${BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_NPM_SCRIPT}] ${BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_POLICY_ID}\n`,
+  );
+  console.log(`\n→ npm run ${BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_CERT_NPM_SCRIPT}\n`);
+  const certCode = runNpmScript(BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_CERT_NPM_SCRIPT);
+
+  const summary = buildBetaGovernanceSmokeChainSummary({
+    certPassed: certCode === 0,
+    strictEnvMode: process.env.BETA_ENV_STRICT === "1",
+    commitSha: process.env.GITHUB_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+  });
+  writeSummary(summary);
+
+  for (const line of formatBetaGovernanceSmokeChainReportLines(summary)) {
+    console.log(line);
+  }
+  console.log(`\nSummary artifact: ${BETA_GOVERNANCE_SMOKE_CHAIN_ERA17_SUMMARY_ARTIFACT}\n`);
+  printRunbook();
+
+  if (summary.overall === "FAILED") {
+    process.exit(1);
+  }
+}
+
+main();
