@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
+import { VendorDashboardOnboardingWizard } from "@/components/marketplace/vendor-dashboard-onboarding-wizard";
 import { MARKETPLACE_MOBILE_CARD_CLASS } from "@/lib/marketplace/mobile-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,6 +30,8 @@ import type { VendorDashboardModel } from "@/services/marketplace/vendor-dashboa
 export function VendorDashboardClient({ model }: { model: VendorDashboardModel }) {
   return (
     <div className="space-y-6">
+      <VendorDashboardOnboardingWizard snapshot={model.onboarding} />
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard label="Orders (30d)" value={String(model.ordersTotal)} hint={`${model.ordersActive} active`} />
         <MetricCard

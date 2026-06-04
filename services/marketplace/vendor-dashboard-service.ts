@@ -1,6 +1,9 @@
 import type { MarketplacePOStatus } from "@prisma/client";
 import { format, startOfDay, subDays } from "date-fns";
 
+import { vendorConnectReadiness } from "@/services/marketplace/stripe-connect-service";
+import { extractRegistrationMeta, parseVendorDocuments } from "@/lib/marketplace/vendor-registration-types";
+import type { VendorOnboardingSnapshot } from "@/lib/marketplace/vendor-dashboard-onboarding-wizard-policy";
 import { prisma } from "@/lib/prisma";
 
 export type VendorDashboardPendingAction = {
@@ -55,6 +58,7 @@ export type VendorDashboardModel = {
   topProducts: VendorTopProduct[];
   recentOrders: VendorRecentOrder[];
   pendingActions: VendorDashboardPendingAction[];
+  onboarding: VendorOnboardingSnapshot;
 };
 
 const ACTIVE_STATUSES: MarketplacePOStatus[] = [
@@ -79,7 +83,7 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
 
   const vendor = await prisma.vendor.findUnique({
     where: { id: vendorId },
-    select: { companyName: true },
+    select: { companyName: true, status: true, stripeAccountId: true, documents: true },
   });
 
   const [
@@ -98,6 +102,8 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
     pendingReviewProducts,
     lowStockProducts,
     vendorOrderIds,
+    activeProductCount,
+    pendingReviewProductCount,
   ] = await Promise.all([
     prisma.marketplacePurchaseOrder.count({
       where: { vendorId, status: { notIn: ["DRAFT", "CANCELLED"] } },
@@ -181,6 +187,8 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
       where: { vendorId },
       select: { id: true },
     }),
+    prisma.vendorProduct.count({ where: { vendorId, status: "ACTIVE" } }),
+    prisma.vendorProduct.count({ where: { vendorId, status: "PENDING_REVIEW" } }),
   ]);
 
   const orderIds = vendorOrderIds.map((order) => order.id);
@@ -277,6 +285,19 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
     });
   }
 
+  const registrationMeta = extractRegistrationMeta(parseVendorDocuments(vendor?.documents ?? []));
+  const connect = vendorConnectReadiness({ stripeAccountId: vendor?.stripeAccountId ?? null });
+  const onboarding: VendorOnboardingSnapshot = {
+    vendorStatus: vendor?.status ?? "PENDING",
+    stripeAccountId: vendor?.stripeAccountId ?? null,
+    connectStatus: connect.status,
+    connectReady: connect.ready,
+    activeProductCount,
+    pendingReviewProductCount,
+    hasContactProfile: Boolean(registrationMeta.contactEmail?.trim() && registrationMeta.contactPhone?.trim()),
+    ordersTotal,
+  };
+
   return {
     vendorName: vendor?.companyName ?? "Vendor",
     currency: "USD",
@@ -306,5 +327,6 @@ export async function loadVendorDashboard(vendorId: string): Promise<VendorDashb
       itemCount: order._count.items,
     })),
     pendingActions,
+    onboarding,
   };
 }

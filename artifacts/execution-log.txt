@@ -4395,3 +4395,12 @@ Artifact: lib/analytics/profit-dashboard-margin-visualization-policy.ts, compone
 Result: IMPLEMENTED — revenue composition stack (food/labor/delivery/profit); item-level margin bars with green/yellow/red zones; wired into real-time profit dashboard
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 97
+Task: DES-20 — vendor dashboard onboarding wizard
+Role: DESIGN
+Priority: P1
+Artifact: lib/marketplace/vendor-dashboard-onboarding-wizard-policy.ts, components/marketplace/vendor-dashboard-onboarding-wizard.tsx, services/marketplace/vendor-dashboard-service.ts, components/marketplace/vendor-dashboard-client.tsx, tests/unit/vendor-dashboard-onboarding-wizard-policy.test.ts
+Result: IMPLEMENTED — 4-step setup wizard (profile → Connect payouts → catalog → first order); progress bar; dismissible checklist on vendor dashboard; onboarding snapshot from dashboard service
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
