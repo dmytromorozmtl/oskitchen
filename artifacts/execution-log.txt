@@ -4836,3 +4836,12 @@ Artifact: lib/integrations/live-integration-dod-gates-e2e-policy.ts, lib/integra
 Result: IMPLEMENTED — Integration Health LIVE DoD panel: 18 rows × G1 scaffold passed + G3/G4 not_measured + 0 LIVE summary; chromium-authed flow; no RSC failure; 2 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 146
+Task: QA-40 — LIVE integration DoD smoke builder integration
+Role: QA
+Priority: P2
+Artifact: lib/integrations/live-integration-dod-smoke-integration-policy.ts, tests/integration/live-integration-dod-smoke.integration.test.ts, tests/unit/live-integration-dod-smoke-integration.test.ts
+Result: IMPLEMENTED — cert + integrity + gate tracker → honest PASSED/FAILED; proof_failed_cert/scaffold paths; zero LIVE claim; 5 integration + 2 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
