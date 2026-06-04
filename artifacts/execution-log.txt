@@ -5052,3 +5052,12 @@ Artifact: docs/toast-gap-analysis.md (public summary TW1–TW3, OK1–OK3), lib/
 Result: IMPLEMENTED — sales-safe public summary + TG1–TG4 gates; lintToastGapPublicSummaryCopy(); BC1 + /compare/toast CTA; extends PM Task 93 matrix; 5 unit tests PASS (+ 2 existing toast-gap tests)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 170
+Task: MKT-35 — analyst briefing deck (enterprise interest gate)
+Role: MARKETING
+Priority: P2
+Artifact: docs/analyst-briefing-deck.md, lib/marketing/analyst-briefing-deck-policy.ts, tests/unit/analyst-briefing-deck-policy.test.ts
+Result: IMPLEMENTED — 12-slide AB1–AB12 outline; EG1–EG6 enterprise interest gates; isAnalystBriefingDeckDistributable(); qualifiesEnterpriseInterest(); Series A hold separation; forbidden-claims lint; 6 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
