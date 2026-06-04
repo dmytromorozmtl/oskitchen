@@ -4503,3 +4503,12 @@ Artifact: docs/profit-engine-owner-margin-story.md, lib/marketing/profit-engine-
 Result: IMPLEMENTED — owner 2-min margin narrative; Today profit / food cost / executive routes; ±1% COGS honesty; 8-min demo flow; forbidden-claims lint; linked from EXECUTIVE_PROFITABILITY
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 109
+Task: MKT-16 — marketplace B2B supply angle
+Role: MARKETING
+Priority: P1
+Artifact: docs/marketplace-b2b-supply-angle.md, lib/marketing/marketplace-b2b-supply-angle-policy.ts, tests/unit/marketplace-b2b-supply-angle-policy.test.ts
+Result: IMPLEMENTED — buyer+vendor 2-min B2B supply narrative; marketplace hub/catalog/vendors routes; 8-min demo flow; forbidden-claims lint; linked from marketplace-pricing-strategy and vendor-seeding-strategy
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

@@ -3,7 +3,7 @@
 **Version:** 1.0 · **June 2026**  
 **Scope:** First **3–5 approved vendors** to make the HoReCa B2B marketplace demo- and pilot-ready  
 **Status:** Marketplace scaffold **BETA** — catalog empty until categories + vendors are seeded  
-**Related:** [`vendor-registration-flow-design.md`](./vendor-registration-flow-design.md) · [`stripe-connect-vendor-test-plan.md`](./stripe-connect-vendor-test-plan.md) · Task 105 `vendor-seeding-execution.md`
+**Related:** [`vendor-registration-flow-design.md`](./vendor-registration-flow-design.md) · [`marketplace-b2b-supply-angle.md`](./marketplace-b2b-supply-angle.md) · [`stripe-connect-vendor-test-plan.md`](./stripe-connect-vendor-test-plan.md) · Task 105 `vendor-seeding-execution.md`
 
 ---
 

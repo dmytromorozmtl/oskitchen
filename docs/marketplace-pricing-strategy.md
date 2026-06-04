@@ -10,7 +10,7 @@ This document defines how OS Kitchen **monetizes the HoReCa B2B marketplace** 鈥
 
 **Hard rule:** Do **not** claim a live marketplace network, guaranteed take rate, or published vendor pricing on `/pricing` until Task 109 ships public copy and pilot vendors are onboarded.
 
-**Related:** [`vendor-seeding-strategy.md`](./vendor-seeding-strategy.md) 路 [`stripe-connect-vendor-test-plan.md`](./stripe-connect-vendor-test-plan.md) 路 [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) 路 [`transparent-pricing-sales-guide.md`](./transparent-pricing-sales-guide.md) 路 Task 109 `/pricing` marketplace copy
+**Related:** [`vendor-seeding-strategy.md`](./vendor-seeding-strategy.md) 路 [`marketplace-b2b-supply-angle.md`](./marketplace-b2b-supply-angle.md) 路 [`stripe-connect-vendor-test-plan.md`](./stripe-connect-vendor-test-plan.md) 路 [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) 路 [`transparent-pricing-sales-guide.md`](./transparent-pricing-sales-guide.md) 路 Task 109 `/pricing` marketplace copy
 
 ---
 
