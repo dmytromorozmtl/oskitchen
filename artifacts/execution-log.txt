@@ -4665,3 +4665,12 @@ Artifact: lib/integrations/mailchimp-types.ts, lib/marketing/marketing-email-con
 Result: IMPLEMENTED — shared consent gate; Mailchimp member PUT upsert with FNAME/LNAME/PHONE merge fields; datacenter parsing from API key; 90-day sync window; BETA registry entry; unit tests for hash + datacenter + member builder
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 127
+Task: DEV-40 — Resy reservations sync hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/resy-types.ts, services/integrations/resy-sync-service.ts, app/api/integrations/resy/sync/route.ts, components/integrations/resy-sync-panel.tsx, app/dashboard/integrations/resy/page.tsx, lib/integrations/integration-registry.ts, tests/unit/resy-sync.test.ts
+Result: IMPLEMENTED — 14-day import from Resy venue API; export local PENDING/CONFIRMED bookings; idempotent resy:res tags; status mapping; storefront ownership guard; BETA registry entry; unit tests for parser + status map
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

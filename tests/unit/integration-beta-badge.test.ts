@@ -21,11 +21,12 @@ const BETA_INTEGRATION_PAGES: Record<string, string> = {
   homebase: "app/dashboard/integrations/homebase/page.tsx",
   klaviyo: "app/dashboard/integrations/klaviyo/page.tsx",
   mailchimp: "app/dashboard/integrations/mailchimp/page.tsx",
+  resy: "app/dashboard/integrations/resy/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks nine BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(9);
+  it("tracks ten BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(10);
     expect(BETA_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "doordash",
@@ -34,6 +35,7 @@ describe("integration beta badge", () => {
       "klaviyo",
       "mailchimp",
       "quickbooks",
+      "resy",
       "uber-eats",
       "xero",
     ]);
@@ -50,7 +52,7 @@ describe("integration beta badge", () => {
     expect(isBetaIntegrationProvider("uber-direct")).toBe(false);
   });
 
-  it("renders BetaBadge on all nine BETA integration pages", () => {
+  it("renders BetaBadge on all ten BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const path = join(ROOT, rel);
       expect(existsSync(path), id).toBe(true);

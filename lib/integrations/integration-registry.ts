@@ -81,6 +81,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/mailchimp",
   },
   {
+    id: "resy",
+    name: "Resy",
+    status: "BETA",
+    requiredEnv: ["RESY_API_KEY", "RESY_VENUE_ID"],
+    setupRoute: "/dashboard/integrations/resy",
+  },
+  {
     id: "uber-direct",
     name: "Uber Direct",
     status: "PLACEHOLDER",
