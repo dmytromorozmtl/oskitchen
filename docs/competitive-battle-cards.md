@@ -199,5 +199,6 @@ Run `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before competitive decks.
 | [`software-first-pos-positioning.md`](./software-first-pos-positioning.md) | Hardware lock-in narrative |
 | [`transparent-pricing-sales-guide.md`](./transparent-pricing-sales-guide.md) | TCO vs Square/Toast |
 | [`pilot-proposal-template.md`](./pilot-proposal-template.md) | Post-competitive proposal |
+| [`integration-honesty-screen-share-guide.md`](./integration-honesty-screen-share-guide.md) | BC4/BC5 screen-share walkthrough (MKT-27) |
 
 **Primary CTA:** [`/book-demo?utm_source=battle-card&utm_medium=sales&utm_campaign=competitive-battle-cards-mkt26`](/book-demo?utm_source=battle-card&utm_medium=sales&utm_campaign=competitive-battle-cards-mkt26)

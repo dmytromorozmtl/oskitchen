@@ -4602,3 +4602,12 @@ Artifact: docs/competitive-battle-cards.md, lib/marketing/competitive-battle-car
 Result: IMPLEMENTED — seven battle cards BC1–BC7 (Toast, Square, Lightspeed, Deliverect, Shopify/Woo, TouchBistro, status quo); WIN-TRAP-REDIRECT framework; quick reference matrix; forbidden-claims lint; linked from competitor-comparison-honest, objection-handling, discovery-call-script
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 120
+Task: MKT-27 — integration honesty screen-share guide
+Role: MARKETING
+Priority: P1
+Artifact: docs/integration-honesty-screen-share-guide.md, lib/marketing/integration-honesty-screen-share-policy.ts, tests/unit/integration-honesty-screen-share-policy.test.ts
+Result: IMPLEMENTED — seven segments S1–S7 (~390s); PASS/BETA/SKIPPED/PLACEHOLDER/FAILED vocabulary; pre/post-share checklists; forbidden hide-skipped lint; linked from demo-script-15min, competitive-battle-cards, objection-handling O5
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

@@ -249,6 +249,7 @@ Run: `lintDemoScript15MinCopy()` before updating talk tracks.
 | [`discovery-call-script.md`](./discovery-call-script.md) | Pre-demo qualification (MKT-21) |
 | [`demo-video-script-5min.md`](./demo-video-script-5min.md) | Recorded marketing cut |
 | [`sales-demo-environment.md`](./sales-demo-environment.md) | Staging setup |
+| [`integration-honesty-screen-share-guide.md`](./integration-honesty-screen-share-guide.md) | Segment 4 deep dive (MKT-27) |
 | [`loi-design-partner-template.md`](./loi-design-partner-template.md) | Post-demo LOI |
 
 **Primary CTA:** [`/book-demo?utm_source=demo&utm_medium=live&utm_campaign=demo-15min-mkt22`](/book-demo?utm_source=demo&utm_medium=live&utm_campaign=demo-15min-mkt22)
