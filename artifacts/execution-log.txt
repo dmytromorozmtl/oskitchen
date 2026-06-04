@@ -4413,3 +4413,12 @@ Artifact: lib/design/color-tokens.ts, lib/design/color-token-audit-policy.ts, do
 Result: IMPLEMENTED — canonical CSS-var color tokens; chart/status/gauge palettes; 9 modules migrated off raw hex; audit gate ≥95% coverage
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 99
+Task: DES-22 — POS raw px cleanup
+Role: DESIGN
+Priority: P1
+Artifact: lib/pos/pos-spacing-tokens.ts, lib/pos/pos-raw-px-audit-policy.ts, tailwind.config.ts (pos-tile/pos-table-min), 10 POS module migrations, tests/unit/pos-raw-px-audit-policy.test.ts
+Result: IMPLEMENTED — Tailwind spacing tokens for 96/120px tiles and 640px tables; text-xs badge/meta classes; zero raw [Npx] in audited POS modules
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

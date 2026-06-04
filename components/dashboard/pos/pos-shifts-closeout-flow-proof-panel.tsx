@@ -8,6 +8,7 @@ import type {
   ShiftCloseoutFlowHopProofState,
   ShiftCloseoutFlowProofSlice,
 } from "@/lib/commercial/era20-shift-closeout-flow-proof-era20";
+import { posBadgeTextClass } from "@/lib/pos/pos-spacing-tokens";
 import { cn } from "@/lib/utils";
 
 function hopBadgeVariant(
@@ -80,7 +81,7 @@ export function PosShiftsCloseoutFlowProofPanel(props: {
                 </div>
                 <Badge
                   variant={hopBadgeVariant(hop.proofState)}
-                  className="shrink-0 rounded-full text-[10px]"
+                  className={cn("shrink-0 rounded-full", posBadgeTextClass)}
                 >
                   {hopBadgeLabel(hop.proofState)}
                 </Badge>

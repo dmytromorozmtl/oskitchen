@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { POS_PRODUCT_TILE_MIN_CLASS } from "@/lib/pos/pos-spacing-tokens";
 
 /** WCAG 2.5.5 — minimum 44×44 CSS px; kitchen handheld primary target 48px (12 in Tailwind). */
 export const POS_WCAG_FLOOR_PX = 44;
@@ -9,7 +10,8 @@ export const posTouchButtonClass = cn(
 );
 
 export const posTouchTileClass = cn(
-  "min-h-[120px] touch-manipulation",
+  POS_PRODUCT_TILE_MIN_CLASS,
+  "touch-manipulation",
 );
 
 /** Secondary POS taps — 44px floor (Tailwind min-h-11 / min-w-11). */

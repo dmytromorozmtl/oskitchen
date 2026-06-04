@@ -20,7 +20,7 @@ export function PosManagerOverrideHero(props: PosManagerOverrideChecklistInput) 
         <div className="min-w-0 space-y-1">
           <p className="text-sm font-semibold text-foreground">{summary.headline}</p>
           <p className="text-xs text-muted-foreground">{summary.detail}</p>
-          <p className="text-[11px] text-muted-foreground/90">
+          <p className="text-xs text-muted-foreground/90">
             Manager override is audit-logged — no PIN flow or Toast hardware parity claim.
           </p>
         </div>

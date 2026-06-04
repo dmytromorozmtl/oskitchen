@@ -8,6 +8,7 @@ import type {
   PosMoneyPathFlowHopProofState,
   PosMoneyPathFlowProofSlice,
 } from "@/lib/commercial/era20-pos-money-path-flow-proof-era20";
+import { posBadgeTextClass } from "@/lib/pos/pos-spacing-tokens";
 import { cn } from "@/lib/utils";
 
 function hopBadgeVariant(
@@ -82,7 +83,7 @@ export function PosHubMoneyPathFlowProofPanel(props: {
                 </div>
                 <Badge
                   variant={hopBadgeVariant(hop.proofState)}
-                  className="shrink-0 rounded-full text-[10px]"
+                  className={cn("shrink-0 rounded-full", posBadgeTextClass)}
                 >
                   {hopBadgeLabel(hop.proofState)}
                 </Badge>

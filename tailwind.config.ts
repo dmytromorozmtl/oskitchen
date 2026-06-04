@@ -78,6 +78,14 @@ const config: Config = {
         sans: ["var(--font-body)", "var(--font-body-fallback)", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "var(--font-display-fallback)", "system-ui", "sans-serif"],
       },
+      spacing: {
+        /** POS product tile — 120px kitchen-friendly height (DES-22). */
+        "pos-tile": "7.5rem",
+        /** Speed-mode dense tile — 96px. */
+        "pos-tile-speed": "6rem",
+        /** Shift close history table horizontal scroll floor — 640px. */
+        "pos-table-min": "40rem",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

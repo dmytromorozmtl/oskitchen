@@ -3,6 +3,7 @@ import {
   POS_CASHIER_SPEED_MODE_ROUTE,
   POS_CASHIER_SPEED_MODE_ERA19_POLICY_ID,
 } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
+import { posProductTileLayoutClass } from "@/lib/pos/pos-spacing-tokens";
 
 export const POS_CASHIER_SPEED_MODE_AGGREGATOR_ERA19_POLICY_ID =
   "era19-pos-cashier-speed-mode-aggregator-v1" as const;
@@ -91,7 +92,7 @@ export function posCashierSpeedProductGridClass(speedMode: boolean): string {
 }
 
 export function posCashierSpeedProductTileClass(speedMode: boolean): string {
-  return speedMode ? "min-h-[96px] p-3" : "min-h-[120px] p-4";
+  return posProductTileLayoutClass(speedMode);
 }
 
 export function shouldShowPosTerminalSecondaryPanels(speedMode: boolean): boolean {

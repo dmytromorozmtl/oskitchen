@@ -8,6 +8,7 @@ import type {
   ManagerDiscountAuditFlowHopProofState,
   ManagerDiscountAuditFlowProofSlice,
 } from "@/lib/commercial/era20-manager-discount-audit-flow-proof-era20";
+import { posBadgeTextClass } from "@/lib/pos/pos-spacing-tokens";
 import { cn } from "@/lib/utils";
 
 function hopBadgeVariant(
@@ -56,7 +57,7 @@ export function PosTerminalManagerAuditFlowProofPanel(props: {
               <CardDescription className="mt-1 max-w-2xl">{slice.headline}</CardDescription>
             ) : null}
           </div>
-          <Badge variant="outline" className="rounded-full text-[10px]">
+          <Badge variant="outline" className={cn("rounded-full", posBadgeTextClass)}>
             Tier 2 · {slice.tier2PhaseId}
           </Badge>
         </div>
@@ -76,7 +77,7 @@ export function PosTerminalManagerAuditFlowProofPanel(props: {
                 {hop.order}. {hop.label}
               </span>
               <div className="flex items-center gap-2">
-                <Badge variant={hopBadgeVariant(hop.proofState)} className="rounded-full text-[10px]">
+                <Badge variant={hopBadgeVariant(hop.proofState)} className={cn("rounded-full", posBadgeTextClass)}>
                   {hopBadgeLabel(hop.proofState)}
                 </Badge>
                 <Button asChild variant="ghost" size="sm" className="h-7 rounded-full px-2">

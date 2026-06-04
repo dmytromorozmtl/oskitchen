@@ -32,6 +32,7 @@ import {
   type HandheldTable,
 } from "@/lib/pos/handheld-ordering";
 import { posTouchButtonClass, posTouchTileClass } from "@/lib/pos/touch-targets";
+import { posBadgeTextClass } from "@/lib/pos/pos-spacing-tokens";
 import { posPaymentAllowedWhileOffline } from "@/services/pos/pos-payment-service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -315,7 +316,7 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{table.name}</span>
-                  <Badge variant={tableStatusTone(table.status)} className="text-[10px]">
+                  <Badge variant={tableStatusTone(table.status)} className={posBadgeTextClass}>
                     {table.status.toLowerCase()}
                   </Badge>
                 </div>

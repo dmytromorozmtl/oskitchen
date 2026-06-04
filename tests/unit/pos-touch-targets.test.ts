@@ -25,7 +25,7 @@ describe("POS touch targets (WCAG 2.5.5)", () => {
   });
 
   it("product tiles use large kitchen-friendly height", () => {
-    expect(posTouchTileClass).toContain("min-h-[120px]");
+    expect(posTouchTileClass).toContain("min-h-pos-tile");
   });
 
   it("compact targets meet 44px floor for secondary actions", () => {

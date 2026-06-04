@@ -12,6 +12,7 @@ import {
   SHIFT_CLOSE_HISTORY_RANGE_LABEL,
   type ShiftCloseHistoryRangePreset,
 } from "@/lib/pos/pos-shift-close-history-range-era18";
+import { POS_TABLE_MIN_WIDTH_CLASS } from "@/lib/pos/pos-spacing-tokens";
 import {
   formatShiftClosedAt,
   shiftVarianceBadgeClassName,
@@ -70,7 +71,7 @@ export function PosShiftCloseHistoryPanel({
         ) : null}
       </div>
       <div className="overflow-x-auto rounded-xl border border-border/80">
-        <table className="w-full min-w-[640px] text-sm">
+        <table className={cn("w-full text-sm", POS_TABLE_MIN_WIDTH_CLASS)}>
           <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-3 py-2 font-medium">Closed</th>

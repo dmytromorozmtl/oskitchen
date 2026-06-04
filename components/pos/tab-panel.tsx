@@ -10,6 +10,8 @@ import { addItemToTabAction, closeTabAction, createTabAction } from '@/actions/p
 import { BillSplitPanel } from '@/components/pos/bill-split-panel';
 import { useSyncedServerState } from '@/hooks/use-synced-server-state';
 import { posTouchButtonClass, posTouchCompactClass } from '@/lib/pos/touch-targets';
+import { posBadgeTextClass, posMetaTextClass } from '@/lib/pos/pos-spacing-tokens';
+import { cn } from '@/lib/utils';
 
 export interface TabRow {
   id: string;
@@ -264,8 +266,8 @@ export function TabPanel({ tabs: initialTabs }: { tabs: TabRow[] }) {
                   className={`flex ${posTouchButtonClass} flex-col items-center justify-center rounded-xl border p-2 text-center hover:bg-muted active:scale-95 transition-all disabled:opacity-60`}
                 >
                   <item.icon className="h-5 w-5 mb-1" />
-                  <span className="text-[11px] font-medium">{item.name}</span>
-                  <span className="text-[10px] text-muted-foreground">${item.price}</span>
+                  <span className={cn(posMetaTextClass, "font-medium")}>{item.name}</span>
+                  <span className={cn(posBadgeTextClass, "text-muted-foreground")}>${item.price}</span>
                 </button>
               ))}
             </div>

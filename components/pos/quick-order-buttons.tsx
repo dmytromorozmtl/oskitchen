@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import { posTouchButtonClass } from "@/lib/pos/touch-targets";
+import { posBadgeTextClass, posMetaTextClass } from "@/lib/pos/pos-spacing-tokens";
+import { cn } from "@/lib/utils";
 
 export type QuickOrderItem = {
   id: string;
@@ -75,12 +77,12 @@ export function QuickOrderButtons({
             }`}
           >
             <span className="text-2xl mb-1">{item.icon}</span>
-            <span className="text-[11px] font-medium leading-tight">{item.name}</span>
-            <span className="text-[11px] text-muted-foreground">
+            <span className={cn(posMetaTextClass, "font-medium")}>{item.name}</span>
+            <span className={cn(posMetaTextClass, "text-muted-foreground")}>
               {item.price === 0 ? "Free" : `$${item.price.toFixed(2)}`}
             </span>
             {addedId === item.id ? (
-              <span className="text-[10px] text-emerald-600 font-medium mt-0.5">Added ✓</span>
+              <span className={cn(posBadgeTextClass, "text-emerald-600 font-medium mt-0.5")}>Added ✓</span>
             ) : null}
           </button>
         ))}
