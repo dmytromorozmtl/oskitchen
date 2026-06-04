@@ -1,5 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+vi.mock("@/lib/prisma", () => ({
+  prisma: {},
+}));
+
+vi.mock("@/lib/support/support-permissions", () => ({
+  userWorkspaceIds: vi.fn().mockResolvedValue([]),
+  canUseFullSupportInbox: vi.fn().mockResolvedValue(false),
+}));
+
+vi.mock("@/lib/auth", () => ({
+  requireSessionUser: vi.fn(),
+}));
+
 import { WorkspaceAccessDeniedError } from "@/lib/scope/assert-user-workspace-access";
 import { whereOwnedOrderForOwner } from "@/lib/scope/owned-order-guard";
 import {

@@ -5367,3 +5367,21 @@ Artifact: lib/execution/final-14-vitest-health-audit-policy.ts, scripts/ops/run-
 Result: IMPLEMENTED — final-orchestrator bundle 13 files / 51 tests PASS; artifact overall PASS; npm test wired via vitest.mjs; FINAL-13 prerequisite artifact PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 205
+Task: FINAL-15 / task-209 — dashboard RSC golden path E2E
+Role: EXECUTION
+Priority: P2
+Artifact: e2e/dashboard-rsc-regression.spec.ts, final-15-e2e-golden-path-audit-policy.ts, artifacts/dashboard-rsc-golden-path-summary.json
+Result: IMPLEMENTED — E2E spec covers today/marketplace/POS; runner + audit gate; artifact SKIPPED (playwright bootstrap broken locally — proof_skipped_playwright_bootstrap); re-run after npm ci + playwright install on staging
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
+---
+Cycle: 206
+Task: FINAL-16 / task-210 — cross-tenant isolation staging gate
+Role: EXECUTION
+Priority: P2
+Artifact: lib/execution/cross-tenant-isolation-policy.ts, scripts/ops/run-cross-tenant-isolation-audit.ts, artifacts/cross-tenant-isolation-staging-summary.json
+Result: IMPLEMENTED — mock contract 6/6 PASS (vitest prisma mocks); E2E contract markers in staging spec; artifact SKIPPED (playwright bootstrap); proof_passed_mock_contract_staging_skipped
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

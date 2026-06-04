@@ -14,6 +14,7 @@ import { skipCrossTenantStagingIfNotReady } from "./helpers/cross-tenant-staging
 
 /**
  * Cross-tenant isolation — mock contract (always runs) + staging HTTP (vault gated).
+ * Tenant A → tenant B: foreign workspace/order access must return status: 403 or 404.
  *
  * Mock path: no DATABASE_URL / vault required.
  * Staging path: skips until E2E_STAGING_BASE_URL, DATABASE_URL, E2E_LOGIN_* present.
