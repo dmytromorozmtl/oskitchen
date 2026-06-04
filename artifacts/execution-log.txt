@@ -5097,3 +5097,12 @@ Artifact: lib/marketing/marketing-full-stabilization-patterns.ts, lib/marketing/
 Result: IMPLEMENTED — auditMarketingFullStabilization() composes 3 tier capstones (P0: 10, P1: 18, P2: 7 nested sub-audits); registry + capstone report; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 175
+Task: MKT-40 — marketing claims governance capstone audit
+Role: MARKETING
+Priority: P2
+Artifact: lib/marketing/marketing-claims-governance-capstone-patterns.ts, lib/marketing/marketing-claims-governance-capstone-audit-policy.ts, tests/unit/marketing-claims-governance-capstone-audit-policy.test.ts
+Result: IMPLEMENTED — auditMarketingClaimsGovernanceCapstone() composes 6 sub-audits (sales-safe claims registry doc, claims-registry.json, era7 governance policy, verify-claims CI, forbidden-claims training linkage, MKT-39 full marketing stabilization); registry + capstone report; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
