@@ -4863,3 +4863,12 @@ Artifact: lib/integrations/beta-integrations-integrity-smoke-integration-policy.
 Result: IMPLEMENTED — registry + env cert chain → honest PASSED/FAILED; cert_failed/env_failed paths; zero scaffold failures; 5 integration + 2 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 149
+Task: QA-43 — BETA integrations governance capstone E2E
+Role: QA
+Priority: P2
+Artifact: lib/integrations/beta-integrations-governance-capstone-e2e-policy.ts, lib/integrations/beta-integrations-governance-capstone-e2e-metrics.ts, e2e/beta-integrations-governance-capstone.spec.ts, e2e/helpers/beta-integrations-governance-capstone-*.ts, tests/unit/beta-integrations-governance-capstone-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — Today footnote → Integration Health env readiness + LIVE DoD panels (18 rows each, 0 LIVE); chromium-authed golden path; no RSC failure; 2 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
