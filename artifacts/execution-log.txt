@@ -5385,3 +5385,12 @@ Artifact: lib/execution/cross-tenant-isolation-policy.ts, scripts/ops/run-cross-
 Result: IMPLEMENTED — mock contract 6/6 PASS (vitest prisma mocks); E2E contract markers in staging spec; artifact SKIPPED (playwright bootstrap); proof_passed_mock_contract_staging_skipped
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 207
+Task: FINAL-17 / task-211 — webhook signature matrix gate
+Role: EXECUTION
+Priority: P2
+Artifact: lib/execution/webhook-signature-matrix-policy.ts, scripts/ops/run-webhook-signature-matrix-audit.ts, artifacts/webhook-signature-matrix-summary.json
+Result: IMPLEMENTED — 58 matrix vitest PASS; static audit 52 core + 56 ingress PASSED; artifact overall PASS (proof_passed_matrix_and_static_audit)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
