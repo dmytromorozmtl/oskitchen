@@ -4512,3 +4512,12 @@ Artifact: docs/marketplace-b2b-supply-angle.md, lib/marketing/marketplace-b2b-su
 Result: IMPLEMENTED — buyer+vendor 2-min B2B supply narrative; marketplace hub/catalog/vendors routes; 8-min demo flow; forbidden-claims lint; linked from marketplace-pricing-strategy and vendor-seeding-strategy
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 110
+Task: MKT-17 — AI moats honest positioning page
+Role: MARKETING
+Priority: P1
+Artifact: app/ai/page.tsx, components/marketing/ai-moats-honest-positioning-content.tsx, lib/marketing/ai-moats-honest-positioning-policy.ts, tests/unit/ai-moats-honest-positioning-policy.test.ts
+Result: IMPLEMENTED — public /ai page with 7 core moats + copilot note; cross-cutting rules; safe/forbidden claims; linked from trust, footer, ai-honesty-policy
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

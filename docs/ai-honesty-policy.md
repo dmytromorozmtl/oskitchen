@@ -228,7 +228,7 @@ Pilot gates: [`pilot-acceptance-criteria.md`](./pilot-acceptance-criteria.md) ·
 
 Material changes require Founder sign-off and `verify-claims` PASS on affected pages.
 
-**Suggested public URL:** `/legal/ai-honesty` (page to be wired in marketing backlog)
+**Suggested public URL:** [`/ai`](/ai) — honest positioning page (MKT-17)
 
 ---
 

@@ -112,6 +112,10 @@ export default function TrustPage() {
           Service snapshot (engineering)
         </Link>
         {" · "}
+        <Link href="/ai" className="underline">
+          AI modules (honest positioning)
+        </Link>
+        {" · "}
         <Link href="/legal/data-rights" className="underline">
           Data rights template
         </Link>

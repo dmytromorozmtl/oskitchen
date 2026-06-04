@@ -156,6 +156,8 @@ Full positioning: [`kitchen-camera-honest-positioning.md`](./kitchen-camera-hone
 
 Run: `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before decks and landing updates.
 
+**Public page:** [`/ai`](/ai) — MKT-17 honest positioning surface for sales and security reviewers.
+
 ---
 
 ## Module → service map (engineering)

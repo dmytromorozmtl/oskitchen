@@ -39,6 +39,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/ai" className="hover:text-foreground">
+                  AI modules
+                </Link>
+              </li>
+              <li>
                 <Link href="/capabilities" className="hover:text-foreground">
                   Capabilities
                 </Link>
