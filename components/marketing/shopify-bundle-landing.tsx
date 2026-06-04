@@ -4,6 +4,7 @@ import { MarketingButton } from "@/components/marketing/button";
 import { MarketingCard } from "@/components/marketing/card";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { ShopifyBundleGtmStrip } from "@/components/marketing/shopify-bundle-gtm-strip";
 import { SolutionComparisonTable } from "@/components/marketing/solution-comparison-table";
 import { SolutionFinalCta } from "@/components/marketing/solution-final-cta";
 import { PlatformDifferentiatorSection } from "@/components/marketing/platform-differentiator-section";
@@ -26,6 +27,11 @@ import {
   SHOPIFY_PAIN_POINTS,
   SHOPIFY_SOLUTION_POINTS,
 } from "@/lib/marketing/shopify-bundle-content";
+import {
+  SHOPIFY_BUNDLE_CONNECT_CTA,
+  SHOPIFY_BUNDLE_PRIMARY_CTA,
+  SHOPIFY_BUNDLE_SECONDARY_CTA,
+} from "@/lib/marketing/shopify-bundle-gtm-policy";
 
 const breadcrumbItems = [
   { name: "Home", href: "/" },
@@ -67,15 +73,15 @@ export function ShopifyBundleLanding() {
               {SHOPIFY_BUNDLE_SUBHEADLINE}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <MarketingButton href="/signup" size="lg">
-                Start free trial
+              <MarketingButton href={SHOPIFY_BUNDLE_PRIMARY_CTA.href} size="lg">
+                {SHOPIFY_BUNDLE_PRIMARY_CTA.label}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </MarketingButton>
-              <MarketingButton href="/dashboard/integrations/shopify" variant="secondary" size="lg">
-                Connect Shopify
+              <MarketingButton href={SHOPIFY_BUNDLE_SECONDARY_CTA.href} variant="secondary" size="lg">
+                {SHOPIFY_BUNDLE_SECONDARY_CTA.label}
               </MarketingButton>
-              <MarketingButton href="/book-demo" variant="ghost" size="lg">
-                Book a demo
+              <MarketingButton href={SHOPIFY_BUNDLE_CONNECT_CTA.href} variant="ghost" size="lg">
+                {SHOPIFY_BUNDLE_CONNECT_CTA.label}
               </MarketingButton>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">{SHOPIFY_BUNDLE_TRUST_LINE}</p>
@@ -117,6 +123,8 @@ export function ShopifyBundleLanding() {
             ))}
           </div>
         </section>
+
+        <ShopifyBundleGtmStrip />
 
         <section className="border-t border-border/60 py-16 sm:py-20">
           <SectionHeader
@@ -170,7 +178,15 @@ export function ShopifyBundleLanding() {
           </dl>
         </section>
 
-        <SolutionFinalCta title={SHOPIFY_BUNDLE_CTA.title} subtitle={SHOPIFY_BUNDLE_CTA.subtitle} />
+        <SolutionFinalCta
+          title={SHOPIFY_BUNDLE_CTA.title}
+          subtitle={SHOPIFY_BUNDLE_CTA.subtitle}
+          bookDemoPrimary
+          bookDemoHref={SHOPIFY_BUNDLE_PRIMARY_CTA.href}
+          bookDemoLabel={SHOPIFY_BUNDLE_PRIMARY_CTA.label}
+          signupHref={SHOPIFY_BUNDLE_SECONDARY_CTA.href}
+          signupLabel={SHOPIFY_BUNDLE_SECONDARY_CTA.label}
+        />
       </main>
       <SiteFooter />
     </div>

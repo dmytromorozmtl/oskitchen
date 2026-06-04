@@ -99,6 +99,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/shopify" className="hover:text-foreground">
+                  Shopify bundle
+                </Link>
+              </li>
+              <li>
                 <Link href="/solutions/ghost-kitchens" className="hover:text-foreground">
                   Ghost kitchens
                 </Link>

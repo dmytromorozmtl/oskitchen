@@ -7,6 +7,10 @@ type Props = {
   subtitle: string;
   signupHref?: string;
   bookDemoHref?: string;
+  /** When true, book-demo is the primary (filled) CTA — used on `/shopify` GTM landing. */
+  bookDemoPrimary?: boolean;
+  bookDemoLabel?: string;
+  signupLabel?: string;
 };
 
 export function SolutionFinalCta({
@@ -14,7 +18,17 @@ export function SolutionFinalCta({
   subtitle,
   signupHref = '/signup',
   bookDemoHref = '/book-demo',
+  bookDemoPrimary = false,
+  bookDemoLabel = 'Book a demo',
+  signupLabel = 'Start free trial',
 }: Props) {
+  const primary = bookDemoPrimary
+    ? { href: bookDemoHref, label: bookDemoLabel }
+    : { href: signupHref, label: signupLabel };
+  const secondary = bookDemoPrimary
+    ? { href: signupHref, label: signupLabel }
+    : { href: bookDemoHref, label: bookDemoLabel };
+
   return (
     <section className="pb-20 pt-4 sm:pb-28">
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 px-6 py-14 text-center shadow-elevated sm:px-12 sm:py-16">
@@ -27,20 +41,20 @@ export function SolutionFinalCta({
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-primary-100">{subtitle}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <MarketingButton
-              href={signupHref}
+              href={primary.href}
               size="lg"
               className="bg-white text-primary-700 shadow-lg hover:bg-white/95 hover:text-primary-800"
             >
-              Start free trial
+              {primary.label}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </MarketingButton>
             <MarketingButton
-              href={bookDemoHref}
+              href={secondary.href}
               variant="secondary"
               size="lg"
               className="border-white/30 bg-white/10 text-white hover:bg-white/20"
             >
-              Book a demo
+              {secondary.label}
             </MarketingButton>
           </div>
         </div>

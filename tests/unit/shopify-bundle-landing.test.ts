@@ -37,6 +37,8 @@ describe("shopify bundle landing marketing copy", () => {
       SHOPIFY_BUNDLE_HEADLINE,
       SHOPIFY_BUNDLE_SUBHEADLINE,
       SHOPIFY_BUNDLE_TRUST_LINE,
+      SHOPIFY_BUNDLE_CTA.title,
+      SHOPIFY_BUNDLE_CTA.subtitle,
       SHOPIFY_BUNDLE_TESTIMONIAL.quote,
       SHOPIFY_BUNDLE_TESTIMONIAL.context,
       ...SHOPIFY_BUNDLE_FEATURES.map((f) => `${f.title} ${f.description}`),

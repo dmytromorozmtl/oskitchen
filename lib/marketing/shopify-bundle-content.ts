@@ -155,5 +155,5 @@ export const SHOPIFY_BUNDLE_FAQ = [
 export const SHOPIFY_BUNDLE_CTA = {
   title: "Connect Shopify to your kitchen",
   subtitle:
-    "Start a trial, connect your store in minutes, and see Shopify orders beside counter sales in Order Hub.",
+    "Book a 15-minute fit call for Shopify meal prep and catering brands — or start a trial and run the 5-step pilot wizard with Integration Health visible from day one.",
 } as const;

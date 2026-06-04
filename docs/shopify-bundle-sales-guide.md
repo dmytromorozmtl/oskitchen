@@ -38,7 +38,7 @@ Subheading: **Your Shopify store. Your kitchen. One operating system.**
 |------------|-------------------|----------------------|------------------------|
 | Kitchen display / production | ❌ | ❌ | **✅ KDS + production queues** |
 | Order Hub (all channels) | Shopify-only | Partial | **✅ Shopify + POS + catering** |
-| Cross-channel inventory | Shopify catalog only | Add-on cost | **✅ Included with health dashboard** |
+| Cross-channel inventory | Shopify catalog only | Add-on cost | **BETA — POS + Shopify compare** |
 | B2B AR / collections | Shopify Plus | Separate finance tool | **✅ Optional AR dashboard (flagged)** |
 | Catering / meal prep workflows | Limited | Custom | **✅ Native order spine** |
 | Setup | Native | Integration project | **Custom app (beta) — ~30 min** |
