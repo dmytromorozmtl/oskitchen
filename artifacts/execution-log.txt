@@ -5286,3 +5286,12 @@ Artifact: lib/execution/final-07-tracker-reconciliation-audit-policy.ts, tests/u
 Result: IMPLEMENTED — auditFinal07TrackerReconciliation() re-certifies execution-tracker-reconciliation-exec02-v1 (0 unreconciled slots through task-193 + overlays), 220-slot registry + EXEC-02 task-182/194 done, FINAL-06 prerequisite; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 196
+Task: FINAL-08 — marketing claims CI gate re-cert (task-202)
+Role: EXECUTION
+Priority: P2
+Artifact: lib/execution/final-08-forbidden-claims-audit-policy.ts, tests/unit/final-08-forbidden-claims-audit-policy.test.ts
+Result: IMPLEMENTED — auditFinal08ForbiddenClaims() re-certifies verify-claims.yml (strict MARKETING_CLAIMS_STRICT, PR gate, forbidden-claims test, gate artifact), era7 governance policy + training doc, MKT-09 done, FINAL-07 prerequisite; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
