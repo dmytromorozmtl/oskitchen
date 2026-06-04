@@ -4818,3 +4818,12 @@ Artifact: lib/integrations/beta-integrations-governance-e2e-policy.ts, lib/integ
 Result: IMPLEMENTED — Integration Health env readiness + LIVE DoD panels (18 rows each); chromium-authed flow; no RSC failure contract; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 144
+Task: QA-38 — Today Integration Health BETA env footnote E2E
+Role: QA
+Priority: P2
+Artifact: lib/integrations/today-beta-env-footnote-e2e-policy.ts, lib/integrations/today-beta-env-footnote-e2e-metrics.ts, e2e/today-beta-env-footnote.spec.ts, e2e/helpers/today-beta-env-footnote-*.ts, tests/unit/today-beta-env-footnote-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — Today `/dashboard/today` health strip + BETA env footnote (18 badge sum); chromium-authed flow; no RSC failure contract; 3 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
