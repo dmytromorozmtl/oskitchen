@@ -6,31 +6,18 @@ import { Plus, Scale, Star } from "lucide-react";
 
 import { WishlistButton } from "@/components/marketplace/wishlist-button";
 import { A11Y_FOCUS_RING } from "@/lib/a11y/ui-classes";
+import { buildMarketplaceCompareHref } from "@/lib/marketplace/marketplace-catalog-ux-policy";
+import {
+  isMarketplaceCompareSlug,
+  readMarketplaceCompareSlugs,
+  toggleMarketplaceCompareSlug,
+} from "@/lib/marketplace/marketplace-compare-storage";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { MarketplaceCatalogProduct } from "@/services/marketplace/marketplace-catalog-service";
 import { formatCurrency } from "@/lib/utils";
-
-const COMPARE_STORAGE_KEY = "marketplace-compare-slugs";
-const COMPARE_LIMIT = 4;
-
-function readCompareSlugs(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.sessionStorage.getItem(COMPARE_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((value) => typeof value === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeCompareSlugs(slugs: string[]) {
-  window.sessionStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(slugs.slice(0, COMPARE_LIMIT)));
-}
 
 export function MarketplaceCatalogProductCard({
   product,
@@ -42,21 +29,14 @@ export function MarketplaceCatalogProductCard({
   const [compareSlugs, setCompareSlugs] = useState<string[]>([]);
 
   useEffect(() => {
-    setCompareSlugs(readCompareSlugs());
+    setCompareSlugs(readMarketplaceCompareSlugs());
   }, []);
 
-  const isCompared = compareSlugs.includes(product.slug);
+  const isCompared = isMarketplaceCompareSlug(product.slug);
 
   function toggleCompare() {
-    setCompareSlugs((current) => {
-      const next = current.includes(product.slug)
-        ? current.filter((slug) => slug !== product.slug)
-        : current.length >= COMPARE_LIMIT
-          ? current
-          : [...current, product.slug];
-      writeCompareSlugs(next);
-      return next;
-    });
+    const result = toggleMarketplaceCompareSlug(product.slug);
+    setCompareSlugs(result.slugs);
   }
 
   return (
@@ -120,7 +100,7 @@ export function MarketplaceCatalogProductCard({
           ) : null}
           {compareSlugs.length > 0 ? (
             <Button asChild variant="secondary" size="sm" className="rounded-full gap-1">
-              <Link href={`/dashboard/marketplace/compare?products=${compareSlugs.join(",")}`}>
+              <Link href={buildMarketplaceCompareHref(compareSlugs)}>
                 <Scale className="h-3.5 w-3.5" />
                 Compare ({compareSlugs.length})
               </Link>

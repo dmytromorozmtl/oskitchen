@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { MarketplaceCatalogOfflineSync } from "@/components/marketplace/marketplace-catalog-offline-sync";
 import { MarketplaceDataUnavailable } from "@/components/marketplace/marketplace-data-unavailable";
 import { MarketplaceCatalogFilterBar } from "@/components/marketplace/marketplace-catalog-filter-bar";
+import { MarketplaceCatalogToolbar } from "@/components/marketplace/marketplace-catalog-toolbar";
 import { MarketplaceCatalogProductCard } from "@/components/marketplace/marketplace-catalog-product-card";
 import { MarketplaceCategorySidebar } from "@/components/marketplace/marketplace-category-sidebar";
 import { PageHeader } from "@/components/layout/page-header";
@@ -73,6 +74,12 @@ export default async function MarketplaceCatalogPage({
       />
 
       <MarketplaceCatalogFilterBar filters={filters} vendors={catalog.vendors} />
+
+      <MarketplaceCatalogToolbar
+        filters={filters}
+        vendors={catalog.vendors}
+        categories={catalog.categories}
+      />
 
       <div className="grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
         <MarketplaceCategorySidebar categories={catalog.categories} filters={filters} />

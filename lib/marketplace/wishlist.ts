@@ -1,4 +1,10 @@
-export const MARKETPLACE_WISHLIST_KEY = "marketplace-wishlist-slugs";
+import {
+  dispatchMarketplaceCatalogTrayChange,
+  MARKETPLACE_WISHLIST_CHANGE_EVENT,
+  MARKETPLACE_WISHLIST_KEY,
+} from "@/lib/marketplace/marketplace-catalog-ux-policy";
+
+export { MARKETPLACE_WISHLIST_KEY } from "@/lib/marketplace/marketplace-catalog-ux-policy";
 
 export function readMarketplaceWishlistSlugs(): string[] {
   if (typeof window === "undefined") return [];
@@ -14,6 +20,7 @@ export function readMarketplaceWishlistSlugs(): string[] {
 export function writeMarketplaceWishlistSlugs(slugs: string[]): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(MARKETPLACE_WISHLIST_KEY, JSON.stringify(slugs));
+  dispatchMarketplaceCatalogTrayChange(MARKETPLACE_WISHLIST_CHANGE_EVENT);
 }
 
 export function removeMarketplaceWishlistSlug(slug: string): string[] {

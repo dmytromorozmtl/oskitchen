@@ -4359,3 +4359,12 @@ Artifact: lib/kitchen/kds-realtime-connection-bar-policy.ts, components/kitchen/
 Result: IMPLEMENTED — sticky LIVE/POLLING bar with poll interval, reconnect detail, rolling p50/p95/p99 SLO; 44px sound toggle; deduped queue strip when shell bar present
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 93
+Task: DES-16 — marketplace catalog filter/compare/wishlist
+Role: DESIGN
+Priority: P1
+Artifact: lib/marketplace/marketplace-catalog-ux-policy.ts, lib/marketplace/marketplace-compare-storage.ts, components/marketplace/marketplace-catalog-toolbar.tsx, hooks/use-marketplace-catalog-tray.ts, app/dashboard/marketplace/catalog/page.tsx, tests/unit/marketplace-catalog-ux-policy.test.ts
+Result: IMPLEMENTED — filter chips with remove links; compare tray (session, max 4); wishlist tray (localStorage); unified toolbar on catalog; product card uses shared compare storage
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
