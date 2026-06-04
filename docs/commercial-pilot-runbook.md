@@ -7,6 +7,8 @@
 
 Use this runbook for **paid pilot GO/NO-GO** and operator onboarding. It aligns sales promises with certified CI and honest matrix maturity — not with dated `docs/PILOT_*` audit files.
 
+**Commercial pilot runbook gate (FINAL-21)** — era7 policy + `test:ci:commercial-pilot-runbook:cert` + `npm run smoke:pilot-gono-go` honest NO-GO until P0 proofs PASS.
+
 ---
 
 ## Purpose and honesty rules

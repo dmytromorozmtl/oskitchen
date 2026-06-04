@@ -5421,3 +5421,12 @@ Artifact: docs/SALES_PLAYBOOK.md, lib/execution/sales-playbook-policy.ts, script
 Result: IMPLEMENTED — sales-safe governance section; MKT-41 capstone PASS; 2 vitest PASS; artifact overall PASS (proof_passed_sales_playbook_hub)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 211
+Task: FINAL-21 / task-215 — commercial pilot runbook
+Role: EXECUTION
+Priority: P2
+Artifact: docs/commercial-pilot-runbook.md, lib/execution/commercial-pilot-runbook-final-policy.ts, scripts/ops/run-commercial-pilot-runbook-audit.ts, artifacts/commercial-pilot-runbook-summary.json
+Result: IMPLEMENTED — era7 sections + FINAL-21 markers; 6 runbook vitest PASS; CI cert scripts wired; artifact overall PASS (proof_passed_commercial_pilot_runbook)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
