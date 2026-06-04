@@ -5025,3 +5025,12 @@ Artifact: docs/partner-program-shopify-agencies.md, lib/marketing/partner-progra
 Result: IMPLEMENTED — PRE-LAUNCH until PG1+PG2 PASS; 10 agency criteria A1–A10; Registered/Certified/Premier tiers; isPartnerProgramShopifyAgenciesEnabled(); referral email template; 6 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 167
+Task: MKT-32 — referral program (NPS ≥40 GTM gate)
+Role: MARKETING
+Priority: P2
+Artifact: docs/referral-program.md, lib/marketing/referral-program-policy.ts, tests/unit/referral-program-policy.test.ts
+Result: IMPLEMENTED — product BETA in-app / GTM PRE-LAUNCH; RG1–RG5 gates; isReferralProgramGtmEnabled(40, 3); calculatePortfolioNps(); Starter/Advocate/Champion tiers; forbidden-claims lint; 7 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
