@@ -4566,3 +4566,12 @@ Artifact: docs/demo-script-15min.md, lib/marketing/demo-script-15min-policy.ts, 
 Result: IMPLEMENTED — 15-min 9-segment live demo; Integration Health moat segment; timing map 900s; forbidden-claims lint; linked from discovery-call-script and SALES_PLAYBOOK
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 116
+Task: MKT-23 — objection handling
+Role: MARKETING
+Priority: P1
+Artifact: docs/objection-handling.md, lib/marketing/objection-handling-policy.ts, tests/unit/objection-handling-policy.test.ts
+Result: IMPLEMENTED — twelve core objections O1–O12 with LAER framework; quick reference matrix; forbidden override responses lint; CRM fields; linked from SALES_PLAYBOOK and OBJECTION_HANDLING_ADVANCED
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

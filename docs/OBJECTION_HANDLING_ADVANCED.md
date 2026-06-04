@@ -1,5 +1,9 @@
 # Advanced objection handling
 
+**Canonical playbook:** [`objection-handling.md`](./objection-handling.md) — twelve core objections with LAER framework (MKT-23).
+
+Legacy quick notes below — prefer the canonical doc for discovery, demo, and follow-up calls.
+
 **We already use Shopify.** OS Kitchen does not replace Shopify. It coordinates production and fulfillment after Shopify checkout.
 
 **We use spreadsheets.** Keep your current process while importing CSVs, then move to production/packing workflows once validated.

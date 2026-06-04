@@ -208,6 +208,7 @@ Run: `lintDiscoveryCallScriptCopy()` before updating slides or call notes.
 |-----|-----|
 | [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) | 10-min product demo shorthand |
 | [`demo-script-15min.md`](./demo-script-15min.md) | 15-min live demo after discovery (MKT-22) |
+| [`objection-handling.md`](./objection-handling.md) | Twelve core objections LAER (MKT-23) |
 | [`loi-outreach-email.md`](./loi-outreach-email.md) | Pre-call outbound |
 | [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) | Post-discovery outbound |
 | [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) | Post-LOI |

@@ -21,6 +21,8 @@ Independent food operators ($250k–$5M revenue) running **multi-channel** order
 
 **Discovery call script:** [`discovery-call-script.md`](./discovery-call-script.md) — 30-min qualification (MKT-21) before product demo.
 
+**Objection handling:** [`objection-handling.md`](./objection-handling.md) — twelve core objections LAER framework (MKT-23).
+
 ## Demo path
 
 Follow **`docs/DEMO_SCRIPT.md`** (10-min) or **`docs/demo-script-15min.md`** (15-min live · MKT-22) after discovery qualification.
