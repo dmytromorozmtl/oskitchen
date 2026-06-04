@@ -4764,3 +4764,12 @@ Artifact: lib/integrations/beta-integration-env-readiness.ts, components/integra
 Result: IMPLEMENTED — platform G2 helper lists 18 BETA integrations with requiredEnv status (ready/optional/missing); Integration Health page panel; 5 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 138
+Task: DEV-51 — BETA integration env readiness smoke
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/beta-integration-env-readiness-smoke-era17-policy.ts, lib/integrations/beta-integration-env-readiness-smoke-summary.ts, scripts/smoke-beta-integration-env-readiness-era17.ts, docs/beta-integration-env-readiness-smoke.md, tests/unit/beta-integration-env-readiness-smoke.test.ts, tests/unit/beta-integration-env-readiness-smoke-era17-cert-live.test.ts
+Result: IMPLEMENTED — env audit smoke for 18 BETA integrations; BETA_ENV_STRICT=1 optional gate; npm run smoke:beta-integration-env-readiness → overall PASSED; cert chain 13 tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
