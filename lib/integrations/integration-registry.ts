@@ -129,6 +129,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     requiredEnv: ["LIGHTSPEED_ACCESS_TOKEN", "LIGHTSPEED_BUSINESS_LOCATION_ID"],
     setupRoute: "/dashboard/integrations/lightspeed",
   },
+  {
+    id: "google-forms",
+    name: "Google Forms",
+    status: "BETA",
+    requiredEnv: ["GOOGLE_FORMS_SHEET_ACCESS_TOKEN", "GOOGLE_FORMS_SHEET_ID"],
+    setupRoute: "/dashboard/integrations/google-forms",
+  },
 ];
 
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {

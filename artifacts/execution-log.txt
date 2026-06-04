@@ -4728,3 +4728,12 @@ Artifact: lib/integrations/lightspeed-types.ts, services/integrations/lightspeed
 Result: IMPLEMENTED — Lightspeed Restaurant API sales import (14-day window); idempotent lightspeed:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 16th BETA integration; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 134
+Task: DEV-47 — Google Forms sheet-linked intake hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/google-forms-types.ts, services/integrations/google-forms-sync-service.ts, app/api/integrations/google-forms/sync/route.ts, components/integrations/google-forms-sync-panel.tsx, app/dashboard/integrations/google-forms/page.tsx, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/navigation/nav-maturity-hide-registry.ts, tests/unit/google-forms-sync.test.ts
+Result: IMPLEMENTED — Google Sheets API import for linked Form Responses tab; flexible header mapping; idempotent google-forms:row tags; PLACEHOLDER→BETA; 17th BETA integration; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
