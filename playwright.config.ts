@@ -103,6 +103,7 @@ if (dashboardE2EEnabled) {
         "**/beta-integrations-governance.spec.ts",
         "**/today-beta-env-footnote.spec.ts",
         "**/live-integration-dod-gates.spec.ts",
+        "**/beta-env-readiness-rows.spec.ts",
         "**/vendor-registration.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",

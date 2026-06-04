@@ -4845,3 +4845,12 @@ Artifact: lib/integrations/live-integration-dod-smoke-integration-policy.ts, tes
 Result: IMPLEMENTED — cert + integrity + gate tracker → honest PASSED/FAILED; proof_failed_cert/scaffold paths; zero LIVE claim; 5 integration + 2 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 147
+Task: QA-41 — BETA env readiness panel row contract E2E
+Role: QA
+Priority: P2
+Artifact: lib/integrations/beta-env-readiness-rows-e2e-policy.ts, lib/integrations/beta-env-readiness-rows-e2e-metrics.ts, e2e/beta-env-readiness-rows.spec.ts, e2e/helpers/beta-env-readiness-rows-*.ts, tests/unit/beta-env-readiness-rows-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — Integration Health env readiness panel: 18 rows × status badge + setup link; summary counts sum to 18; tenant credential honesty disclaimer; chromium-authed flow; 3 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
