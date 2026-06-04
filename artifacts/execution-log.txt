@@ -4755,3 +4755,12 @@ Artifact: lib/integrations/beta-integrations-registry-smoke-era17-policy.ts, lib
 Result: IMPLEMENTED — eighteen BETA scaffold audit (pages, services, API routes, BetaBadge); zero PLACEHOLDER; npm run smoke:beta-integrations-registry → overall PASSED; cert chain 13 tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 137
+Task: DEV-50 — BETA integration env readiness panel
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/beta-integration-env-readiness.ts, components/integrations/beta-integration-env-readiness-panel.tsx, app/dashboard/integrations/health/page.tsx, tests/unit/beta-integration-env-readiness.test.ts
+Result: IMPLEMENTED — platform G2 helper lists 18 BETA integrations with requiredEnv status (ready/optional/missing); Integration Health page panel; 5 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CapabilityBadge } from "@/components/capabilities/capability-badge";
+import { BetaIntegrationEnvReadinessPanel } from "@/components/integrations/beta-integration-env-readiness-panel";
 import { IntegrationForceSyncPanel } from "@/components/integrations/integration-force-sync-panel";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import {
@@ -68,6 +69,8 @@ export default async function IntegrationHealthPage() {
       ) : null}
 
       <IntegrationForceSyncPanel />
+
+      <BetaIntegrationEnvReadinessPanel />
 
       <div className="grid gap-4">
         {connections.map((c) => {
