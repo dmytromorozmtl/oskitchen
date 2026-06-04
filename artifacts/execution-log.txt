@@ -4557,3 +4557,12 @@ Artifact: docs/discovery-call-script.md, lib/marketing/discovery-call-script-pol
 Result: IMPLEMENTED — 30-min 5-block qualification script; 7 ICP questions; score thresholds 8/12; forbidden-claims lint; linked from SALES_PLAYBOOK and icp-definition-final
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 115
+Task: MKT-22 — demo script 15min
+Role: MARKETING
+Priority: P1
+Artifact: docs/demo-script-15min.md, lib/marketing/demo-script-15min-policy.ts, tests/unit/demo-script-15min-policy.test.ts
+Result: IMPLEMENTED — 15-min 9-segment live demo; Integration Health moat segment; timing map 900s; forbidden-claims lint; linked from discovery-call-script and SALES_PLAYBOOK
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

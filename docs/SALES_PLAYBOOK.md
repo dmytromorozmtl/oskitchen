@@ -23,7 +23,7 @@ Independent food operators ($250k–$5M revenue) running **multi-channel** order
 
 ## Demo path
 
-Follow **`docs/DEMO_SCRIPT.md`**.
+Follow **`docs/DEMO_SCRIPT.md`** (10-min) or **`docs/demo-script-15min.md`** (15-min live · MKT-22) after discovery qualification.
 
 ## Pricing talk track
 

@@ -27,7 +27,7 @@ No signed founding customers as of June 2026. This script recruits **design part
 | **4 — Honest scope check** | 23:00–27:00 | BETA labels, integration maturity, pilot offer |
 | **5 — Next step** | 27:00–30:00 | Demo book, LOI path, nurture, or polite pass |
 
-**Do not demo** until block 3 scores ≥8/10 unless prospect demands — offer product demo as separate session ([`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) or upcoming 15-min script MKT-22).
+**Do not demo** until block 3 scores ≥8/10 unless prospect demands — offer product demo as separate session ([`demo-script-15min.md`](./demo-script-15min.md) · MKT-22).
 
 ---
 
@@ -206,7 +206,8 @@ Run: `lintDiscoveryCallScriptCopy()` before updating slides or call notes.
 
 | Doc | Use |
 |-----|-----|
-| [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) | 10-min product demo (separate call) |
+| [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) | 10-min product demo shorthand |
+| [`demo-script-15min.md`](./demo-script-15min.md) | 15-min live demo after discovery (MKT-22) |
 | [`loi-outreach-email.md`](./loi-outreach-email.md) | Pre-call outbound |
 | [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) | Post-discovery outbound |
 | [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) | Post-LOI |
