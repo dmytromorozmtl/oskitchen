@@ -25,11 +25,12 @@ const BETA_INTEGRATION_PAGES: Record<string, string> = {
   opentable: "app/dashboard/integrations/opentable/page.tsx",
   "uber-direct": "app/dashboard/integrations/uber-direct/page.tsx",
   square: "app/dashboard/integrations/square/page.tsx",
+  toast: "app/dashboard/integrations/toast/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks thirteen BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(13);
+  it("tracks fourteen BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(14);
     expect(BETA_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "doordash",
@@ -41,6 +42,7 @@ describe("integration beta badge", () => {
       "quickbooks",
       "resy",
       "square",
+      "toast",
       "uber-direct",
       "uber-eats",
       "xero",
@@ -58,7 +60,7 @@ describe("integration beta badge", () => {
     expect(isBetaIntegrationProvider("uber-direct")).toBe(true);
   });
 
-  it("renders BetaBadge on all thirteen BETA integration pages", () => {
+  it("renders BetaBadge on all fourteen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const path = join(ROOT, rel);
       expect(existsSync(path), id).toBe(true);

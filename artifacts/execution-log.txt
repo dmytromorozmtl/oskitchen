@@ -4701,3 +4701,12 @@ Artifact: lib/integrations/square-types.ts, services/integrations/square-sync-se
 Result: IMPLEMENTED — Square Orders API search import (14-day window); idempotent square:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 13th BETA integration; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 131
+Task: DEV-44 — Toast POS order import hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/toast-types.ts, services/integrations/toast-sync-service.ts, app/api/integrations/toast/sync/route.ts, components/integrations/toast-sync-panel.tsx, app/dashboard/integrations/toast/page.tsx, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/navigation/nav-maturity-hide-registry.ts, tests/unit/toast-sync.test.ts
+Result: IMPLEMENTED — Toast Orders API v2 import (14-day window); idempotent toast:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 14th BETA integration; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

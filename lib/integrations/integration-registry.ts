@@ -108,6 +108,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     requiredEnv: ["SQUARE_ACCESS_TOKEN", "SQUARE_LOCATION_ID"],
     setupRoute: "/dashboard/integrations/square",
   },
+  {
+    id: "toast",
+    name: "Toast",
+    status: "BETA",
+    requiredEnv: ["TOAST_ACCESS_TOKEN", "TOAST_RESTAURANT_GUID"],
+    setupRoute: "/dashboard/integrations/toast",
+  },
 ];
 
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {
