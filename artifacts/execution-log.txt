@@ -5007,3 +5007,12 @@ Artifact: docs/press-release-first-design-partner.md, lib/marketing/press-releas
 Result: IMPLEMENTED — wire template H1–H3; publish gates (LOI signed + partner approval + verify-claims); forbidden-claims lint; post-publish checklist; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 165
+Task: MKT-30 — Product Hunt launch defer (≥3 pilots gate)
+Role: MARKETING
+Priority: P2
+Artifact: docs/product-hunt-launch-defer.md, lib/marketing/product-hunt-launch-defer-policy.ts, tests/unit/product-hunt-launch-defer-policy.test.ts
+Result: IMPLEMENTED — explicit DEFER decision; 8 launch gates LG1–LG8; isProductHuntLaunchAllowed(3); PH listing draft template; forbidden-claims lint; linked from MKT-29 press release; 5 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

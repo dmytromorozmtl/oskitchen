@@ -128,7 +128,7 @@ Use this doc when OS Kitchen signs its **first design-partner LOI** and the part
 | Company blog `/blog` | Embargo +0 | Link `/trust` |
 | LinkedIn (founder + company) | Embargo +0 | No paid boost until Week 2 |
 | Local trade press | Embargo +1 | Commissary / ghost-kitchen vertical |
-| Product Hunt | **Defer** — see MKT-30 | Requires 3 pilots |
+| Product Hunt | **Defer** — see [`product-hunt-launch-defer.md`](./product-hunt-launch-defer.md) (MKT-30) | Requires 3 pilots |
 
 ---
 
