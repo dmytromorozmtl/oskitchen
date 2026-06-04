@@ -8,6 +8,12 @@ import { toast } from "sonner";
 import type { QrOrderingContext } from "@/services/qr/qr-ordering-service";
 import type { QrTableCheckoutStyle } from "@/lib/qr/table-self-service";
 import { calculateSplitBillShare } from "@/lib/qr/table-self-service";
+import {
+  qrGuestPrimaryCtaClass,
+  qrGuestShellClass,
+  qrGuestStickyFooterClass,
+  qrGuestTouchCompactClass,
+} from "@/lib/qr/qr-guest-mobile-ui";
 import { formatCurrency } from "@/lib/utils";
 import { storefrontMenuImageUrl } from "@/lib/storefront/product-image-url";
 import { Button } from "@/components/ui/button";
@@ -306,7 +312,7 @@ export function QrTableSelfServiceClient({ context }: { context: QrOrderingConte
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-lg pb-28" data-testid="qr-table-self-service-page">
+    <div className={cn(qrGuestShellClass, "pb-28")} data-testid="qr-table-self-service-page">
       <header className="sticky top-0 z-20 border-b border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur">
         <p className="text-xs font-medium uppercase tracking-widest text-violet-400">Table service</p>
         <h1 className="text-xl font-semibold">{context.restaurantName}</h1>
@@ -341,7 +347,7 @@ export function QrTableSelfServiceClient({ context }: { context: QrOrderingConte
                     type="button"
                     size="icon"
                     variant="outline"
-                    className="h-9 w-9 rounded-full border-zinc-700 bg-zinc-800"
+                    className={cn("rounded-full border-zinc-700 bg-zinc-800", qrGuestTouchCompactClass)}
                     onClick={() => bump(p.id, -1)}
                     disabled={qty === 0}
                   >
@@ -353,7 +359,7 @@ export function QrTableSelfServiceClient({ context }: { context: QrOrderingConte
                   <Button
                     type="button"
                     size="icon"
-                    className="h-9 w-9 rounded-full bg-violet-600 hover:bg-violet-500"
+                    className={cn("rounded-full bg-violet-600 hover:bg-violet-500", qrGuestTouchCompactClass)}
                     onClick={() => bump(p.id, 1)}
                   >
                     <Plus className="h-4 w-4" />
@@ -366,10 +372,10 @@ export function QrTableSelfServiceClient({ context }: { context: QrOrderingConte
       </ul>
 
       {cartCount > 0 ? (
-        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-zinc-800 bg-zinc-950/95 p-4 backdrop-blur">
+        <div className={qrGuestStickyFooterClass}>
           <Button
             type="button"
-            className="h-12 w-full rounded-full bg-violet-600 text-base font-semibold hover:bg-violet-500"
+            className={cn("rounded-full bg-violet-600 hover:bg-violet-500", qrGuestPrimaryCtaClass)}
             onClick={() => setStep("checkout")}
             data-testid="qr-table-open-checkout"
           >

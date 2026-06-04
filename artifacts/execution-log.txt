@@ -4377,3 +4377,12 @@ Artifact: lib/marketplace/marketplace-checkout-trust-policy.ts, components/marke
 Result: IMPLEMENTED — trust strip with approved vendors, PO split, approval gate, Stripe card honesty, orders tracking, dispute path; wired above checkout grid
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 95
+Task: DES-18 — QR guest flow mobile-first
+Role: DESIGN
+Priority: P1
+Artifact: lib/qr/qr-guest-mobile-ui.ts, lib/qr/qr-guest-mobile-ui-policy.ts, components/qr/qr-ordering-client.tsx, components/qr/qr-table-self-service-client.tsx, tests/unit/qr-guest-mobile-ui-policy.test.ts
+Result: IMPLEMENTED — 375px/44px touch policy; 100dvh shell; safe-area sticky footer; drawer handle; qty/category/CTA touch targets on both QR guest clients
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

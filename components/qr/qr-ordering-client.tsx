@@ -6,6 +6,14 @@ import { Minus, Plus, ShoppingBag, X } from "lucide-react";
 import { toast } from "sonner";
 
 import type { QrOrderingContext } from "@/services/qr/qr-ordering-service";
+import {
+  qrGuestCategoryPillClass,
+  qrGuestDrawerSheetClass,
+  qrGuestPrimaryCtaClass,
+  qrGuestShellClass,
+  qrGuestStickyFooterClass,
+  qrGuestTouchCompactClass,
+} from "@/lib/qr/qr-guest-mobile-ui";
 import { formatCurrency } from "@/lib/utils";
 import { storefrontMenuImageUrl } from "@/lib/storefront/product-image-url";
 import { Button } from "@/components/ui/button";
@@ -93,7 +101,10 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
   if (confirmation) {
     return (
       <div
-        className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center px-4 py-16 text-center"
+        className={cn(
+          qrGuestShellClass,
+          "flex flex-col items-center justify-center px-4 py-16 text-center",
+        )}
         data-testid="qr-order-confirmation"
       >
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/20 text-3xl">
@@ -113,7 +124,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-lg pb-28" data-testid="qr-ordering-page">
+    <div className={cn(qrGuestShellClass, "pb-28")} data-testid="qr-ordering-page">
       <header className="sticky top-0 z-20 border-b border-zinc-800 bg-zinc-950/95 px-4 py-4 backdrop-blur">
         <p className="text-xs font-medium uppercase tracking-widest text-sky-400">
           {context.tableLabel}
@@ -130,7 +141,8 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
               type="button"
               onClick={() => setActiveCategory(cat)}
               className={cn(
-                "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                qrGuestCategoryPillClass,
+                "transition-colors",
                 activeCategory === cat
                   ? "bg-sky-600 text-white"
                   : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700",
@@ -169,7 +181,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
                     type="button"
                     size="icon"
                     variant="outline"
-                    className="h-9 w-9 rounded-full border-zinc-700 bg-zinc-800"
+                    className={cn("rounded-full border-zinc-700 bg-zinc-800", qrGuestTouchCompactClass)}
                     onClick={() => bump(p.id, -1)}
                     disabled={qty === 0}
                     aria-label="Decrease quantity"
@@ -182,7 +194,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
                   <Button
                     type="button"
                     size="icon"
-                    className="h-9 w-9 rounded-full bg-sky-600 hover:bg-sky-500"
+                    className={cn("rounded-full bg-sky-600 hover:bg-sky-500", qrGuestTouchCompactClass)}
                     onClick={() => bump(p.id, 1)}
                     aria-label="Add item"
                   >
@@ -196,10 +208,10 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
       </ul>
 
       {cartCount > 0 ? (
-        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-zinc-800 bg-zinc-950/95 p-4 backdrop-blur">
+        <div className={qrGuestStickyFooterClass}>
           <Button
             type="button"
-            className="h-12 w-full rounded-full bg-sky-600 text-base font-semibold hover:bg-sky-500"
+            className={cn("rounded-full bg-sky-600 hover:bg-sky-500", qrGuestPrimaryCtaClass)}
             onClick={() => setDrawerOpen(true)}
             data-testid="qr-open-cart"
           >
@@ -211,18 +223,21 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
 
       {drawerOpen ? (
         <div className="fixed inset-0 z-40 flex flex-col justify-end bg-black/60">
-          <div
-            className="max-h-[85vh] rounded-t-3xl border border-zinc-800 bg-zinc-900 p-4"
-            data-testid="qr-cart-drawer"
-          >
+          <div className={qrGuestDrawerSheetClass} data-testid="qr-cart-drawer">
+            <div
+              className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-zinc-600"
+              aria-hidden
+              data-testid="qr-cart-drawer-handle"
+            />
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Your order</h2>
               <Button
                 type="button"
                 size="icon"
                 variant="ghost"
-                className="rounded-full"
+                className={cn("rounded-full", qrGuestTouchCompactClass)}
                 onClick={() => setDrawerOpen(false)}
+                aria-label="Close cart"
               >
                 <X className="h-5 w-5" />
               </Button>
@@ -249,7 +264,7 @@ export function QrOrderingClient({ context }: { context: QrOrderingContext }) {
             </div>
             <Button
               type="button"
-              className="mt-4 h-12 w-full rounded-full bg-sky-600 text-base font-semibold"
+              className={cn("mt-4 rounded-full bg-sky-600", qrGuestPrimaryCtaClass)}
               disabled={pending}
               onClick={() => void placeOrder()}
               data-testid="qr-place-order"
