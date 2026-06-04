@@ -34,6 +34,8 @@ import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commerc
 import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { generateDailyBriefing } from "@/services/ai/ai-restaurant-brain";
 
+/** PAGE_LAYOUT_EXCEPTION — Today command-center composite layout (DES-27). */
+
 export const dynamic = "force-dynamic";
 
 export default async function TodayOperationsPage({

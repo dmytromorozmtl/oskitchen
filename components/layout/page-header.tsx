@@ -14,7 +14,10 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-col gap-3 md:flex-row md:items-start md:justify-between", className)}>
+    <div
+      className={cn("flex flex-col gap-3 md:flex-row md:items-start md:justify-between", className)}
+      data-testid="page-header"
+    >
       <div className="min-w-0">
         <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
         {description ? (

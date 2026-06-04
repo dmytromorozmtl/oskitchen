@@ -4890,3 +4890,12 @@ Artifact: lib/integrations/beta-governance-smoke-chain-integration-policy.ts, te
 Result: IMPLEMENTED — registry → integrity → LIVE DoD full smoke chain; honest PASSED/FAILED; zero LIVE + zero placeholders; QA 35–45 arc complete; 5 integration + 2 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 152
+Task: DES-27 — PageHeader/PageShell layout consistency audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/page-layout-patterns.ts, lib/design/page-layout-audit-policy.ts, components/layout/page-header.tsx, app/dashboard/integrations/health/page.tsx, app/dashboard/today/profit/page.tsx, app/dashboard/today/page.tsx, app/dashboard/pos/terminal/page.tsx, tests/unit/page-layout-audit-policy.test.ts
+Result: IMPLEMENTED — PageHeader audit on 4 critical routes; Integration Health + Today profit migrated to PageHeader/PageShell; Today/POS documented PAGE_LAYOUT_EXCEPTION; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

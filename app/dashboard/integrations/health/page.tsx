@@ -2,6 +2,8 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
 import { runIntegrationHealthCheckFormAction } from "@/actions/integration-health";
+import { PageHeader } from "@/components/layout/page-header";
+import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,19 +45,16 @@ export default async function IntegrationHealthPage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Integration health</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Status reflects real capability maturity (BETA / roadmap) — not a fake green indicator.
-            Run a manual check after credentials are saved.
-          </p>
-        </div>
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/dashboard/sales-channels">← Channel operations center</Link>
-        </Button>
-      </div>
+    <PageShell narrow className="space-y-8">
+      <PageHeader
+        title="Integration health"
+        description="Status reflects real capability maturity (BETA / roadmap) — not a fake green indicator. Run a manual check after credentials are saved."
+        actions={
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/dashboard/sales-channels">← Channel operations center</Link>
+          </Button>
+        }
+      />
 
       {webhookFailCount > 0 ? (
         <Card className="border-amber-500/40 bg-amber-500/5">
@@ -133,6 +132,6 @@ export default async function IntegrationHealthPage() {
           <p className="text-sm text-muted-foreground">No connections yet.</p>
         ) : null}
       </div>
-    </div>
+    </PageShell>
   );
 }

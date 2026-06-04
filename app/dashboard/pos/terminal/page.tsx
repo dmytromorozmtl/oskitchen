@@ -23,6 +23,8 @@ import {
   resolvePosCashierSpeedMode,
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 
+/** PAGE_LAYOUT_EXCEPTION — full-screen POS terminal chrome (DES-27). */
+
 export default async function PosTerminalPage({
   searchParams,
 }: {
