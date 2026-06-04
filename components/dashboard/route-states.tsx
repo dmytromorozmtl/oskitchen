@@ -3,6 +3,7 @@
 import * as React from "react";
 import { AlertTriangle, Loader2 } from "lucide-react";
 
+import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
 import {
@@ -60,22 +61,15 @@ export function RouteEmpty({
   action?: { label: string; href: string };
 }) {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-3 px-4 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-        <span className="text-2xl text-muted-foreground" aria-hidden>
-          ∅
-        </span>
-      </div>
-      <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="max-w-sm text-sm text-muted-foreground">{description}</p>
-      {action ? (
-        <a
-          href={action.href}
-          className="mt-2 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        >
-          {action.label}
-        </a>
-      ) : null}
+    <div className="flex min-h-[400px] items-center justify-center px-4">
+      <EmptyState
+        title={title}
+        description={description}
+        primaryLabel={action?.label}
+        primaryHref={action?.href}
+        showDemoLink={false}
+        className="max-w-md"
+      />
     </div>
   );
 }

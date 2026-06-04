@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
+import { Plug } from "lucide-react";
 
 import { runIntegrationHealthCheckFormAction } from "@/actions/integration-health";
+import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/layout/page-header";
 import { PageSection } from "@/components/layout/page-section";
 import { PageShell } from "@/components/layout/page-shell";
@@ -134,7 +136,15 @@ export default async function IntegrationHealthPage() {
           );
         })}
           {!connections.length ? (
-            <p className="text-sm text-muted-foreground">No connections yet.</p>
+            <EmptyState
+              icon={Plug}
+              variant="inline"
+              title="No connections yet"
+              description="Save credentials on Sales channels, then run a manual health check here."
+              primaryLabel="Sales channels"
+              primaryHref="/dashboard/sales-channels"
+              showDemoLink={false}
+            />
           ) : null}
         </div>
       </PageSection>

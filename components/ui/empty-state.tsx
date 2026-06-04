@@ -12,6 +12,11 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { appIconHeaderClass, appIconHeroClass } from "@/lib/design/icon-system";
+import {
+  EMPTY_STATE_CARD_CLASS,
+  EMPTY_STATE_INLINE_CLASS,
+  EMPTY_STATE_TEST_ID,
+} from "@/lib/design/empty-state-patterns";
 
 export type EmptyStateProps = {
   icon?: LucideIcon;
@@ -122,9 +127,11 @@ export function EmptyState({
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-muted/20 px-6 py-10 text-center",
+          "flex flex-col items-center justify-center",
+          EMPTY_STATE_INLINE_CLASS,
           className,
         )}
+        data-testid={EMPTY_STATE_TEST_ID}
       >
         {Icon ? (
           <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -156,10 +163,8 @@ export function EmptyState({
 
   return (
     <Card
-      className={cn(
-        "border-dashed border-border/80 bg-muted/10 shadow-none",
-        className,
-      )}
+      className={cn(EMPTY_STATE_CARD_CLASS, className)}
+      data-testid={EMPTY_STATE_TEST_ID}
     >
       <CardHeader className="text-center sm:text-left">
         {Icon ? (

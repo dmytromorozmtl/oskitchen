@@ -4953,3 +4953,12 @@ Artifact: lib/design/error-state-patterns.ts, lib/design/error-state-audit-polic
 Result: IMPLEMENTED — ERROR_STATE_CARD_CLASS + data-testid tokens; ErrorState/ApiErrorState aligned; email-orders + google-forms error.tsx migrated to RouteError; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 159
+Task: DES-34 — EmptyState consistency audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/empty-state-patterns.ts, lib/design/empty-state-audit-policy.ts, components/ui/empty-state.tsx, components/dashboard/route-states.tsx, app/dashboard/settings/voice/page.tsx, app/dashboard/integrations/health/page.tsx, tests/unit/empty-state-audit-policy.test.ts
+Result: IMPLEMENTED — EMPTY_STATE tokens + data-testid; RouteEmpty delegates to EmptyState; voice orders + integration health zero-data migrated to inline EmptyState; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

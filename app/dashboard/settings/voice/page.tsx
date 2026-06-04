@@ -1,4 +1,5 @@
 import { VoiceSettingsPanel } from "@/components/voice/voice-settings-panel";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -67,7 +68,14 @@ export default async function SettingsVoicePage() {
         </CardHeader>
         <CardContent className="overflow-x-auto">
           {recent.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No voice orders yet.</p>
+            <EmptyState
+              variant="inline"
+              title="No voice orders yet"
+              description="Connect Alexa or Google Home, or run a dashboard test order to see voice tickets here."
+              primaryLabel="Voice kitchen"
+              primaryHref="/dashboard/kitchen/voice"
+              showDemoLink={false}
+            />
           ) : (
             <Table>
               <TableHeader>
