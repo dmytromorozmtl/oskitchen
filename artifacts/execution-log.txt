@@ -5061,3 +5061,12 @@ Artifact: docs/analyst-briefing-deck.md, lib/marketing/analyst-briefing-deck-pol
 Result: IMPLEMENTED — 12-slide AB1–AB12 outline; EG1–EG6 enterprise interest gates; isAnalystBriefingDeckDistributable(); qualifiesEnterpriseInterest(); Series A hold separation; forbidden-claims lint; 6 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 171
+Task: MKT-36 — marketing P2 stabilization capstone audit (MKT-29 through MKT-35)
+Role: MARKETING
+Priority: P2
+Artifact: lib/marketing/marketing-p2-stabilization-patterns.ts, lib/marketing/marketing-p2-stabilization-audit-policy.ts, tests/unit/marketing-p2-stabilization-audit-policy.test.ts
+Result: IMPLEMENTED — auditMarketingP2Stabilization() composes 7 sub-audits (press release, Product Hunt defer, Shopify partners, referral, ghost kitchen report, Toast summary, analyst deck); registry + capstone report; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
