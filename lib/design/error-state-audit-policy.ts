@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import {
@@ -35,7 +35,16 @@ export function auditErrorStateModule(
   modulePath: string,
   root = process.cwd(),
 ): ErrorStateModuleAudit {
-  const source = readFileSync(join(root, modulePath), "utf8");
+  const absolutePath = join(root, modulePath);
+  if (!existsSync(absolutePath)) {
+    return {
+      module: modulePath,
+      usesErrorStatePrimitive: false,
+      isException: false,
+      passed: false,
+    };
+  }
+  const source = readFileSync(absolutePath, "utf8");
   const isException =
     (ERROR_STATE_EXCEPTION_MODULES as readonly string[]).includes(modulePath) ||
     source.includes(ERROR_STATE_EXCEPTION_MARKER);
