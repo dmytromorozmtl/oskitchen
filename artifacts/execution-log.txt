@@ -4575,3 +4575,12 @@ Artifact: docs/objection-handling.md, lib/marketing/objection-handling-policy.ts
 Result: IMPLEMENTED — twelve core objections O1–O12 with LAER framework; quick reference matrix; forbidden override responses lint; CRM fields; linked from SALES_PLAYBOOK and OBJECTION_HANDLING_ADVANCED
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 117
+Task: MKT-24 — pilot proposal template
+Role: MARKETING
+Priority: P1
+Artifact: docs/pilot-proposal-template.md, lib/marketing/pilot-proposal-template-policy.ts, tests/unit/pilot-proposal-template-policy.test.ts
+Result: IMPLEMENTED — 10-section proposal template P1–P10; six pilot SKUs; 90-day timeline; forbidden-claims lint; linked from discovery-call-script and objection-handling
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
