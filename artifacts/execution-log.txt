@@ -4638,3 +4638,12 @@ Artifact: services/integrations/homebase-import-service.ts, lib/integrations/hom
 Result: IMPLEMENTED — 14-day shift import with staff mapping; idempotent homebase:shift tags; HOMEBASE_LOCATION_ID config; sync route staffMappings; unit tests for datetime + user map
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 124
+Task: DEV-37 — Xero export hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/accounting/xero-export-format.ts, services/integrations/xero-service.ts, app/api/export/xero/route.ts, components/integrations/accounting-export-panel.tsx, app/dashboard/integrations/xero/page.tsx, tests/unit/xero-export-format.test.ts
+Result: HARDENED — balanced manual journal CSV (debit/credit pairs); ACCPAY bills import for supplier invoices; P&L report CSV + sales journal/CSV routes; period-scoped filenames; Xero panel sales journal option
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

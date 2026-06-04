@@ -9,18 +9,21 @@ export function AccountingExportPanel({
   pnlFormat,
 }: {
   provider: "quickbooks" | "xero";
-  pnlFormat: "iif" | "csv";
+  pnlFormat: "iif" | "csv" | "journal";
 }) {
   const [period, setPeriod] = useState<"month" | "quarter">("month");
   const [type, setType] = useState<ExportType>("pnl");
 
   const base = provider === "quickbooks" ? "/api/export/quickbooks" : "/api/export/xero";
-  const pnlType = pnlFormat === "csv" ? "pnl-csv" : "pnl";
+  const pnlType =
+    pnlFormat === "csv" ? "pnl-csv" : pnlFormat === "journal" ? "pnl" : "pnl";
   const resolvedType = type === "pnl" ? pnlType : type;
   const href =
     type === "sales" && provider === "quickbooks"
       ? `${base}?type=sales&period=${period}&format=iif`
-      : `${base}?type=${resolvedType}&period=${period}`;
+      : type === "sales" && provider === "xero"
+        ? `${base}?type=sales&period=${period}&format=journal`
+        : `${base}?type=${resolvedType}&period=${period}`;
 
   return (
     <div className="space-y-3 text-sm">
@@ -43,11 +46,19 @@ export function AccountingExportPanel({
             onChange={(e) => setType(e.target.value as ExportType)}
             className="h-9 rounded-lg border px-2"
           >
-            <option value="pnl">P&L ({pnlFormat.toUpperCase()})</option>
+            <option value="pnl">
+              P&L (
+              {pnlFormat === "journal"
+                ? "Journal CSV"
+                : pnlFormat === "csv"
+                  ? "Report CSV"
+                  : "IIF"}
+              )
+            </option>
             <option value="invoices">Invoices (CSV)</option>
-            {provider === "quickbooks" ? (
-              <option value="sales">Sales journal (IIF)</option>
-            ) : null}
+            <option value="sales">
+              Sales journal ({provider === "quickbooks" ? "IIF" : "CSV"})
+            </option>
           </select>
         </label>
       </div>

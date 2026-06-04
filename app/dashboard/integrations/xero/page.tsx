@@ -26,7 +26,7 @@ export default function XeroIntegrationPage() {
           ) : (
             <p className="text-muted-foreground">Set XERO_CLIENT_ID for OAuth (CSV export works without)</p>
           )}
-          <AccountingExportPanel provider="xero" pnlFormat="csv" />
+          <AccountingExportPanel provider="xero" pnlFormat="journal" />
           <Link href="/dashboard/reports/financial/pnl" className="text-xs text-primary underline">
             Restaurant P&L →
           </Link>

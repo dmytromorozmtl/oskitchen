@@ -18,9 +18,18 @@ vi.mock("@/services/accounting/restaurant-pnl-service", () => ({
 }));
 
 vi.mock("@/services/integrations/xero-service", () => ({
-  exportXeroData: vi.fn().mockResolvedValue({ invoices: [], lines: [] }),
+  exportXeroData: vi.fn().mockResolvedValue({
+    invoices: [],
+    lines: [],
+    sales: { orderCount: 0, grossSales: 0, periodStart: "2026-06-01", periodEnd: "2026-06-15" },
+    periodEnd: new Date("2026-06-15"),
+    period: "month",
+  }),
   xeroInvoicesToCsv: vi.fn().mockReturnValue("csv"),
   xeroPnlToCsv: vi.fn().mockReturnValue("csv"),
+  xeroPnlToJournalCsv: vi.fn().mockReturnValue("csv"),
+  salesSummaryToXeroCsv: vi.fn().mockReturnValue("csv"),
+  salesSummaryToXeroJournalCsv: vi.fn().mockReturnValue("csv"),
 }));
 
 vi.mock("@/services/integrations/quickbooks-service", () => ({
