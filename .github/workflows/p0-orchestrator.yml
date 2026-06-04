@@ -57,6 +57,10 @@ jobs:
       - name: P0 policy unit gate (tier-0 — always-on)
         run: npm run test:ci:p0-staging-proof-unblock-era17
 
+      - name: Tier 1 — BETA integrations LIVE DoD smoke (always-on)
+        id: smoke_beta_dod
+        run: npm run smoke:live-integration-dod
+
       - name: Assess P0 vault (11 secrets)
         id: vault
         run: |
@@ -118,7 +122,12 @@ jobs:
             artifacts/staging-workflows-first-green-summary.json
             artifacts/channel-live-smoke-summary.json
             artifacts/enterprise-sso-idp-staging-smoke-summary.json
+            artifacts/smoke-live-integration-dod-summary.json
           if-no-files-found: warn
+
+      - name: Fail when BETA DoD smoke failed
+        if: steps.smoke_beta_dod.outcome == 'failure'
+        run: exit 1
 
       - name: Fail when vault ready and any live smoke failed
         if: steps.vault.outputs.ready == 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.policy_only != true)

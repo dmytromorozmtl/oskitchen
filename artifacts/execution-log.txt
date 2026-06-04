@@ -4800,3 +4800,12 @@ Artifact: lib/integrations/live-integration-dod-tracker.ts, components/integrati
 Result: IMPLEMENTED — G1–G4 gate tracker for 18 BETA integrations on Integration Health page; G3/G4 not_measured (honest); 5 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 142
+Task: DEV-55 — LIVE integration DoD smoke + P0 orchestrator wiring
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/live-integration-dod-smoke-era17-policy.ts, lib/integrations/live-integration-dod-smoke-summary.ts, scripts/smoke-live-integration-dod-era17.ts, docs/live-integration-dod-smoke.md, .github/workflows/p0-orchestrator.yml, tests/unit/live-integration-dod-smoke.test.ts, tests/unit/live-integration-dod-smoke-era17-cert-live.test.ts
+Result: IMPLEMENTED — capstone DoD smoke (integrity + gate tracker artifact); Tier 1 always-on in P0 orchestrator; npm run smoke:live-integration-dod → overall PASSED; 21 cert tests PASS; DEV 26–55 arc complete
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
