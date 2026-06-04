@@ -104,6 +104,13 @@ else
   cat /tmp/p0-vault.json 2>/dev/null || true
 fi
 
+record_smoke_skip() {
+  local id="$1"
+  local reason="$2"
+  STEP_OUTCOMES+=("$id:SKIP")
+  echo "⚠ $id SKIP — $reason"
+}
+
 if [[ "$VAULT_READY" == "true" && "$POLICY_ONLY" == "false" ]]; then
   run_step_optional "smoke_workflows" "Tier 2.1b — staging workflows first green" \
     npm run smoke:staging-workflows-first-green
@@ -116,13 +123,21 @@ if [[ "$VAULT_READY" == "true" && "$POLICY_ONLY" == "false" ]]; then
   run_step_optional "smoke_integrity" "Tier 2.5 — P0 integrity validation" \
     npm run ops:validate-p0-staging-proof-integrity
 elif [[ "$POLICY_ONLY" == "true" ]]; then
-  STEP_OUTCOMES+=("live_smokes:SKIP")
   echo ""
-  echo "⚠ Live smokes SKIPPED (--policy-only)"
+  echo "⚠ Live smokes SKIPPED (--policy-only) — recording honest SKIP per step"
+  record_smoke_skip "smoke_workflows" "--policy-only"
+  record_smoke_skip "smoke_channel" "--policy-only"
+  record_smoke_skip "smoke_sso" "--policy-only"
+  record_smoke_skip "smoke_p0" "--policy-only"
+  record_smoke_skip "smoke_integrity" "--policy-only"
 else
-  STEP_OUTCOMES+=("live_smokes:SKIP")
   echo ""
-  echo "⚠ Live smokes SKIPPED (vault incomplete)"
+  echo "⚠ Live smokes SKIPPED (vault incomplete) — recording honest SKIP per step"
+  record_smoke_skip "smoke_workflows" "vault incomplete"
+  record_smoke_skip "smoke_channel" "vault incomplete"
+  record_smoke_skip "smoke_sso" "vault incomplete"
+  record_smoke_skip "smoke_p0" "vault incomplete"
+  record_smoke_skip "smoke_integrity" "vault incomplete"
 fi
 
 # Always refresh downstream artifacts
@@ -138,7 +153,7 @@ fi
 
 if [[ "$VAULT_READY" != "true" ]]; then
   OVERALL="SKIPPED"
-elif [[ "$FAILED_STEPS" -gt 0 || "$P0_ARTIFACT_OVERALL" == "FAIL" ]]; then
+elif [[ "$FAILED_STEPS" -gt 0 || "$P0_ARTIFACT_OVERALL" == "FAIL" || "$P0_ARTIFACT_OVERALL" == "FAILED" ]]; then
   OVERALL="FAIL"
 elif [[ "$P0_ARTIFACT_OVERALL" == "PASS" ]]; then
   OVERALL="PASS"
@@ -168,6 +183,7 @@ summary = {
     "policyOnly": "$POLICY_ONLY_JSON" == "true",
     "failedStepCount": $FAILED_STEPS,
     "p0ArtifactOverall": "$P0_ARTIFACT_OVERALL",
+    "runner": "scripts/run-p0-orchestrator-staging.sh",
     "steps": steps,
     "artifacts": [
         "artifacts/vault-readiness-report.json",
