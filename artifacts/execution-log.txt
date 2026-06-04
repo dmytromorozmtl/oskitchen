@@ -4593,3 +4593,12 @@ Artifact: docs/roi-calculator-conservative.md, lib/marketing/roi-calculator-cons
 Result: IMPLEMENTED — 35%/40%/8% conservative multipliers in shared policy; computeConservativeRoiMonthly; sales guide with segment examples; component refactored to policy; linked from discovery-call-script and objection-handling
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 119
+Task: MKT-26 — competitive battle cards ×7
+Role: MARKETING
+Priority: P1
+Artifact: docs/competitive-battle-cards.md, lib/marketing/competitive-battle-cards-policy.ts, tests/unit/competitive-battle-cards-policy.test.ts
+Result: IMPLEMENTED — seven battle cards BC1–BC7 (Toast, Square, Lightspeed, Deliverect, Shopify/Woo, TouchBistro, status quo); WIN-TRAP-REDIRECT framework; quick reference matrix; forbidden-claims lint; linked from competitor-comparison-honest, objection-handling, discovery-call-script
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
