@@ -4773,3 +4773,12 @@ Artifact: lib/integrations/beta-integration-env-readiness-smoke-era17-policy.ts,
 Result: IMPLEMENTED — env audit smoke for 18 BETA integrations; BETA_ENV_STRICT=1 optional gate; npm run smoke:beta-integration-env-readiness → overall PASSED; cert chain 13 tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 139
+Task: DEV-52 — BETA integrations integrity smoke bundle
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/beta-integrations-integrity-smoke-era17-policy.ts, lib/integrations/beta-integrations-integrity-smoke-summary.ts, scripts/smoke-beta-integrations-integrity-era17.ts, docs/beta-integrations-integrity-smoke.md, tests/unit/beta-integrations-integrity-smoke.test.ts, tests/unit/beta-integrations-integrity-smoke-era17-cert-live.test.ts
+Result: IMPLEMENTED — unified registry + env cert chain; npm run smoke:beta-integrations-integrity → overall PASSED (scaffold_complete + env_audit_complete); cert chain 16 tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
