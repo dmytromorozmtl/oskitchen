@@ -19,9 +19,8 @@ import { Download } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { chartAxisChrome, chartSeriesColor, colorVar } from "@/lib/design/color-tokens";
 import type { PlatformMarketplaceAnalyticsModel } from "@/services/marketplace/platform-marketplace-analytics-service";
-
-const COLORS = ["#f59e0b", "#6366f1", "#10b981", "#ef4444", "#8b5cf6", "#0891b2", "#64748b", "#ec4899"];
 
 function formatMoney(amount: number, currency = "USD"): string {
   return new Intl.NumberFormat("en-US", {
@@ -94,13 +93,30 @@ export function MarketplaceAnalyticsAdminClient({ model }: { model: PlatformMark
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={model.gmvTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
-                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#a1a1aa" }} />
-                  <YAxis tick={{ fontSize: 11, fill: "#a1a1aa" }} />
-                  <Tooltip contentStyle={{ background: "#18181b", border: "1px solid #3f3f46" }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartAxisChrome.gridStroke} />
+                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: chartAxisChrome.tickFill }} />
+                  <YAxis tick={{ fontSize: 11, fill: chartAxisChrome.tickFill }} />
+                  <Tooltip
+                    contentStyle={{
+                      background: chartAxisChrome.tooltipBackground,
+                      border: `1px solid ${chartAxisChrome.tooltipBorder}`,
+                    }}
+                  />
                   <Legend />
-                  <Area type="monotone" dataKey="gmv" name="GMV" stroke="#f59e0b" fill="#f59e0b33" />
-                  <Area type="monotone" dataKey="orders" name="Orders" stroke="#6366f1" fill="#6366f133" />
+                  <Area
+                    type="monotone"
+                    dataKey="gmv"
+                    name="GMV"
+                    stroke={colorVar.warning}
+                    fill={`color-mix(in srgb, ${colorVar.warning} 20%, transparent)`}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="orders"
+                    name="Orders"
+                    stroke={colorVar.info}
+                    fill={`color-mix(in srgb, ${colorVar.info} 20%, transparent)`}
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             )}
@@ -125,7 +141,7 @@ export function MarketplaceAnalyticsAdminClient({ model }: { model: PlatformMark
                     paddingAngle={2}
                   >
                     {model.revenueByCategory.map((_, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={index} fill={chartSeriesColor(index)} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value: number) => formatMoney(value, model.currency)} />
@@ -147,11 +163,11 @@ export function MarketplaceAnalyticsAdminClient({ model }: { model: PlatformMark
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={model.revenueByVendorTier}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
-                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#a1a1aa" }} />
-                  <YAxis tick={{ fontSize: 11, fill: "#a1a1aa" }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartAxisChrome.gridStroke} />
+                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: chartAxisChrome.tickFill }} />
+                  <YAxis tick={{ fontSize: 11, fill: chartAxisChrome.tickFill }} />
                   <Tooltip formatter={(value: number) => formatMoney(value, model.currency)} />
-                  <Bar dataKey="value" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="value" fill={colorVar.warning} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}

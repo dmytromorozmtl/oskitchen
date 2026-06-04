@@ -4404,3 +4404,12 @@ Artifact: lib/marketplace/vendor-dashboard-onboarding-wizard-policy.ts, componen
 Result: IMPLEMENTED — 4-step setup wizard (profile → Connect payouts → catalog → first order); progress bar; dismissible checklist on vendor dashboard; onboarding snapshot from dashboard service
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 98
+Task: DES-21 — color token audit 85→95%
+Role: DESIGN
+Priority: P1
+Artifact: lib/design/color-tokens.ts, lib/design/color-token-audit-policy.ts, docs/color-token-audit.md, 9 chart/dashboard module migrations, tests/unit/color-token-audit-policy.test.ts
+Result: IMPLEMENTED — canonical CSS-var color tokens; chart/status/gauge palettes; 9 modules migrated off raw hex; audit gate ≥95% coverage
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

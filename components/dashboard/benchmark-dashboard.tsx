@@ -43,6 +43,7 @@ import {
 import type { BenchmarkDashboardPayload } from "@/lib/ai/benchmark-dashboard-types";
 import type { BenchmarkMetric } from "@/lib/ai/benchmark-network-types";
 import { gaugeToneForPercentile } from "@/lib/ai/benchmark-network-builders";
+import { benchmarkRadarColors } from "@/lib/design/color-tokens";
 import { cn } from "@/lib/utils";
 
 type Props = BenchmarkDashboardPayload;
@@ -240,9 +241,9 @@ export function BenchmarkDashboard({
                   <PolarGrid />
                   <PolarAngleAxis dataKey="metric" tick={{ fontSize: 10 }} />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9 }} />
-                  <Radar name="You" dataKey="you" stroke="#059669" fill="#059669" fillOpacity={0.35} />
-                  <Radar name="Industry avg" dataKey="industry" stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.15} />
-                  <Radar name="Top quartile" dataKey="topQuartile" stroke="#2563eb" fill="#2563eb" fillOpacity={0.1} />
+                  <Radar name="You" dataKey="you" stroke={benchmarkRadarColors.you} fill={benchmarkRadarColors.you} fillOpacity={0.35} />
+                  <Radar name="Industry avg" dataKey="industry" stroke={benchmarkRadarColors.industry} fill={benchmarkRadarColors.industry} fillOpacity={0.15} />
+                  <Radar name="Top quartile" dataKey="topQuartile" stroke={benchmarkRadarColors.topQuartile} fill={benchmarkRadarColors.topQuartile} fillOpacity={0.1} />
                   <Legend />
                   <Tooltip formatter={(v: number) => `${v.toFixed(0)}th percentile`} />
                 </RadarChart>
@@ -272,7 +273,7 @@ export function BenchmarkDashboard({
                     formatter={(v: number) => [`${v.toFixed(1)}th`, "Avg percentile"]}
                     labelFormatter={(l) => `Date: ${l}`}
                   />
-                  <Line type="monotone" dataKey="averagePercentile" stroke="#2563eb" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line type="monotone" dataKey="averagePercentile" stroke={benchmarkRadarColors.trendLine} strokeWidth={2} dot={{ r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             ) : (

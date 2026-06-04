@@ -13,6 +13,7 @@ import {
 
 import { MarketplaceOrderStatusBadge } from "@/components/marketplace/marketplace-order-status-badge";
 import { VendorDashboardOnboardingWizard } from "@/components/marketplace/vendor-dashboard-onboarding-wizard";
+import { colorVar } from "@/lib/design/color-tokens";
 import { MARKETPLACE_MOBILE_CARD_CLASS } from "@/lib/marketplace/mobile-ui";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -92,8 +93,8 @@ export function VendorDashboardClient({ model }: { model: VendorDashboardModel }
             <AreaChart data={model.revenueTrend}>
               <defs>
                 <linearGradient id="vendorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#FF5F1F" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#FF5F1F" stopOpacity={0} />
+                  <stop offset="5%" stopColor={colorVar.accent} stopOpacity={0.35} />
+                  <stop offset="95%" stopColor={colorVar.accent} stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -103,7 +104,7 @@ export function VendorDashboardClient({ model }: { model: VendorDashboardModel }
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="#FF5F1F"
+                stroke={colorVar.accent}
                 fill="url(#vendorRevenue)"
                 strokeWidth={2}
               />

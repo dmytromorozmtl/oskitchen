@@ -12,8 +12,7 @@ import {
 } from "recharts";
 
 import type { SupplierPriceChartPoint } from "@/services/purchasing/supplier-price-history-service";
-
-const COLORS = ["#4f46e5", "#059669", "#d97706", "#dc2626", "#7c3aed", "#0891b2"];
+import { chartSeriesColor } from "@/lib/design/color-tokens";
 
 type Props = { data: SupplierPriceChartPoint[] };
 
@@ -49,7 +48,7 @@ export function SupplierPriceChart({ data }: Props) {
               type="monotone"
               dataKey={supplier}
               name={supplier}
-              stroke={COLORS[i % COLORS.length]}
+              stroke={chartSeriesColor(i)}
               strokeWidth={2}
               dot={false}
               connectNulls

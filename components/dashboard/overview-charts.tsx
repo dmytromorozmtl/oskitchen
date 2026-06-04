@@ -10,6 +10,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { chartAxisChrome, colorVar } from "@/lib/design/color-tokens";
+
 type Point = { label: string; value: number };
 
 export function OverviewCharts({
@@ -31,13 +33,13 @@ export function OverviewCharts({
         <AreaChart data={fulfillmentTrend}>
           <defs>
             <linearGradient id="fillKitchen" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="var(--color-accent, #FF5F1F)" stopOpacity={0.35} />
-              <stop offset="95%" stopColor="var(--color-accent, #FF5F1F)" stopOpacity={0} />
+              <stop offset="5%" stopColor={colorVar.accent} stopOpacity={0.35} />
+              <stop offset="95%" stopColor={colorVar.accent} stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-          <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="#94a3b8" />
-          <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
+          <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke={chartAxisChrome.tickFill} />
+          <YAxis tick={{ fontSize: 11 }} stroke={chartAxisChrome.tickFill} />
           <Tooltip
             contentStyle={{
               borderRadius: 12,
@@ -48,7 +50,7 @@ export function OverviewCharts({
           <Area
             type="monotone"
             dataKey="value"
-            stroke="var(--color-accent, #FF5F1F)"
+            stroke={colorVar.accent}
             strokeWidth={2}
             fillOpacity={1}
             fill="url(#fillKitchen)"

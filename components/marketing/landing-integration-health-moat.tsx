@@ -1,30 +1,26 @@
 import Link from "next/link";
 import { AlertTriangle, Cable, CheckCircle2, XCircle } from "lucide-react";
 
+import { integrationHealthStatusColors } from "@/lib/design/color-tokens";
+
 const STATUS_ROWS = [
   {
     label: "Healthy",
     detail: "Webhook verified · credentials configured · last sync within SLA window",
     Icon: CheckCircle2,
-    color: "rgba(34, 197, 94, 0.15)",
-    border: "rgba(34, 197, 94, 0.35)",
-    iconColor: "#16a34a",
+    colors: integrationHealthStatusColors.healthy,
   },
   {
     label: "Degraded",
     detail: "Partial sync · retry queue · operator action recommended",
     Icon: AlertTriangle,
-    color: "rgba(245, 158, 11, 0.12)",
-    border: "rgba(245, 158, 11, 0.35)",
-    iconColor: "#d97706",
+    colors: integrationHealthStatusColors.degraded,
   },
   {
     label: "Skipped / Action required",
     detail: "Partner credentials missing · smoke not run · we say SKIPPED — not fake green",
     Icon: XCircle,
-    color: "rgba(239, 68, 68, 0.1)",
-    border: "rgba(239, 68, 68, 0.3)",
-    iconColor: "#dc2626",
+    colors: integrationHealthStatusColors.actionRequired,
   },
 ] as const;
 
@@ -45,7 +41,7 @@ export function LandingIntegrationHealthMoat() {
         paddingTop: "var(--space-16)",
         paddingBottom: "var(--space-16)",
         background:
-          "linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, var(--color-bg) 100%)",
+          "linear-gradient(180deg, color-mix(in srgb, var(--color-info) 6%, transparent) 0%, var(--color-bg) 100%)",
       }}
     >
       <div className="container">
@@ -69,7 +65,7 @@ export function LandingIntegrationHealthMoat() {
             className="card"
             style={{
               padding: "var(--space-8)",
-              borderColor: "rgba(99, 102, 241, 0.25)",
+              borderColor: "color-mix(in srgb, var(--color-info) 25%, transparent)",
               background: "var(--color-bg)",
             }}
           >
@@ -79,7 +75,7 @@ export function LandingIntegrationHealthMoat() {
                   width: "48px",
                   height: "48px",
                   borderRadius: "var(--radius-lg)",
-                  background: "rgba(99, 102, 241, 0.12)",
+                  background: "color-mix(in srgb, var(--color-info) 12%, transparent)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -105,11 +101,14 @@ export function LandingIntegrationHealthMoat() {
                     gap: "0.75rem",
                     padding: "0.875rem 1rem",
                     borderRadius: "var(--radius-md)",
-                    background: row.color,
-                    border: `1px solid ${row.border}`,
+                    background: row.colors.background,
+                    border: `1px solid ${row.colors.border}`,
                   }}
                 >
-                  <row.Icon style={{ width: "20px", height: "20px", flexShrink: 0, color: row.iconColor }} aria-hidden />
+                  <row.Icon
+                    style={{ width: "20px", height: "20px", flexShrink: 0, color: row.colors.icon }}
+                    aria-hidden
+                  />
                   <div>
                     <p style={{ fontWeight: 600, fontSize: "var(--text-sm)" }}>{row.label}</p>
                     <p style={{ fontSize: "var(--text-xs)", color: "var(--color-text-secondary)", marginTop: "0.25rem" }}>

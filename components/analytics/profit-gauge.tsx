@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { marginGaugeGradientStops } from "@/lib/design/color-tokens";
 import { cn } from "@/lib/utils";
 
 export function ProfitGauge({
@@ -37,16 +38,16 @@ export function ProfitGauge({
       <svg viewBox="0 0 200 110" className="h-full w-full overflow-visible">
         <defs>
           <linearGradient id="gauge-green" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#10b981" />
-            <stop offset="100%" stopColor="#34d399" />
+            <stop offset="0%" stopColor={marginGaugeGradientStops.green.start} />
+            <stop offset="100%" stopColor={marginGaugeGradientStops.green.end} />
           </linearGradient>
           <linearGradient id="gauge-yellow" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#f59e0b" />
-            <stop offset="100%" stopColor="#fbbf24" />
+            <stop offset="0%" stopColor={marginGaugeGradientStops.yellow.start} />
+            <stop offset="100%" stopColor={marginGaugeGradientStops.yellow.end} />
           </linearGradient>
           <linearGradient id="gauge-red" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#f43f5e" />
-            <stop offset="100%" stopColor="#fb7185" />
+            <stop offset="0%" stopColor={marginGaugeGradientStops.red.start} />
+            <stop offset="100%" stopColor={marginGaugeGradientStops.red.end} />
           </linearGradient>
         </defs>
         <path

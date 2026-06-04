@@ -21,8 +21,7 @@ import type {
   MarketplaceSpendSlice,
   MarketplaceSpendTrendPoint,
 } from "@/services/marketplace/marketplace-analytics-service";
-
-const COLORS = ["#FF5F1F", "#4f46e5", "#059669", "#d97706", "#dc2626", "#7c3aed", "#0891b2", "#64748b"];
+import { chartSeriesColor, colorVar } from "@/lib/design/color-tokens";
 
 export function MarketplaceSpendDonutChart({ data }: { data: MarketplaceSpendSlice[] }) {
   if (data.length === 0) {
@@ -34,7 +33,7 @@ export function MarketplaceSpendDonutChart({ data }: { data: MarketplaceSpendSli
       <PieChart>
         <Pie data={data} dataKey="value" nameKey="label" innerRadius={55} outerRadius={90} paddingAngle={2}>
           {data.map((_, index) => (
-            <Cell key={index} fill={COLORS[index % COLORS.length]} />
+            <Cell key={index} fill={chartSeriesColor(index)} />
           ))}
         </Pie>
         <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
@@ -76,8 +75,8 @@ export function MarketplaceSpendLineChart({ data }: { data: MarketplaceSpendTren
         <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
         <Tooltip />
         <Legend />
-        <Line yAxisId="left" type="monotone" dataKey="spend" name="Spend" stroke="#FF5F1F" strokeWidth={2} dot />
-        <Line yAxisId="right" type="monotone" dataKey="orders" name="Orders" stroke="#4f46e5" strokeWidth={2} dot />
+        <Line yAxisId="left" type="monotone" dataKey="spend" name="Spend" stroke={colorVar.accent} strokeWidth={2} dot />
+        <Line yAxisId="right" type="monotone" dataKey="orders" name="Orders" stroke={colorVar.info} strokeWidth={2} dot />
       </LineChart>
     </ResponsiveContainer>
   );
