@@ -1,0 +1,16 @@
+{
+  "version": "era17-channel-live-smoke-v1",
+  "runAt": "2026-06-04T14:14:48.419Z",
+  "overall": "FAILED",
+  "wooLiveProofStatus": "proof_skipped_missing_prerequisites",
+  "shopifyLiveProofStatus": "proof_skipped_missing_prerequisites",
+  "missingEnvVars": [],
+  "steps": [
+    {
+      "id": "prisma_client_generate",
+      "label": "Prisma client generate",
+      "status": "FAILED",
+      "reason": "exit 1"
+    }
+  ]
+}

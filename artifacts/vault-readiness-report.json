@@ -1,6 +1,6 @@
 {
   "version": "vault-readiness-v2",
-  "generatedAt": "2026-06-03T19:03:35.337Z",
+  "generatedAt": "2026-06-04T14:14:50.558Z",
   "policyId": "era17-p0-staging-proof-unblock-v1",
   "opsChecklistDoc": "docs/era18-p0-staging-proof-ops-checklist.md",
   "vaultMatrixDoc": "docs/ops-vault-matrix.md",
@@ -96,7 +96,7 @@
       "smokeScript": "smoke:woo-shopify-live",
       "artifactPath": "artifacts/channel-live-smoke-summary.json",
       "overall": "FAILED",
-      "proofStatus": "proof_failed/proof_failed",
+      "proofStatus": "proof_skipped_missing_prerequisites/proof_skipped_missing_prerequisites",
       "missingEnvVars": []
     }
   ],

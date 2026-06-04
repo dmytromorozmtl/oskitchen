@@ -5503,3 +5503,12 @@ Artifact: artifacts/pilot-gono-go-summary.json
 Result: REGENERATED — npm run smoke:pilot-gono-go; decision NO-GO (honest); tier0+forbidden-claims+rollback PASS; tier1/tier2/P0/ICP/customer FAIL as expected
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 220
+Task: QA-01 — P0 orchestrator staging re-run (post-220 next ops)
+Role: QA
+Priority: P0
+Artifact: artifacts/p0-orchestrator-staging-run-summary.json, artifacts/channel-live-smoke-summary.json, artifacts/vault-readiness-report.json
+Result: RE-RUN — overall FAIL (smoke_channel+smoke_p0); root cause prisma generate exit 1 (fast-check MODULE_NOT_FOUND ./commands/ScheduledCommand); tier0/vault/workflows/sso/integrity PASS; honest FAIL until npm ci restores node_modules
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
