@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import { runIntegrationHealthCheckFormAction } from "@/actions/integration-health";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSection } from "@/components/layout/page-section";
 import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import {
@@ -74,8 +75,12 @@ export default async function IntegrationHealthPage() {
 
       <LiveIntegrationDodPanel />
 
-      <div className="grid gap-4">
-        {connections.map((c) => {
+      <PageSection
+        title="Connections"
+        description="Per-provider health checks reflect real credential and sync state."
+      >
+        <div className="grid gap-4">
+          {connections.map((c) => {
           const last = c.healthChecks[0];
           const hasCredentials = Boolean(
             c.accessTokenEncrypted || c.consumerKeyEncrypted || c.consumerSecretEncrypted,
@@ -128,10 +133,11 @@ export default async function IntegrationHealthPage() {
             </Card>
           );
         })}
-        {!connections.length ? (
-          <p className="text-sm text-muted-foreground">No connections yet.</p>
-        ) : null}
-      </div>
+          {!connections.length ? (
+            <p className="text-sm text-muted-foreground">No connections yet.</p>
+          ) : null}
+        </div>
+      </PageSection>
     </PageShell>
   );
 }

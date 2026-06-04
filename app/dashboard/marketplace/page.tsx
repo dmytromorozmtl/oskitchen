@@ -12,6 +12,7 @@ import {
 } from "@/components/marketplace/marketplace-dashboard-sections";
 import { MarketplaceSearchBar } from "@/components/marketplace/marketplace-search-bar";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageSection } from "@/components/layout/page-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -140,15 +141,12 @@ export default async function MarketplaceDashboardPage() {
 
       <MarketplaceHeroBanner promotions={model.promotions} />
 
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight">Browse by category</h2>
-          <p className="text-sm text-muted-foreground">
-            Eight HoReCa procurement categories — packaging, equipment, dry goods, and more
-          </p>
-        </div>
+      <PageSection
+        title="Browse by category"
+        description="Eight HoReCa procurement categories — packaging, equipment, dry goods, and more"
+      >
         <MarketplaceCategoryBrowseGrid />
-      </section>
+      </PageSection>
 
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="border-border/80 shadow-sm lg:col-span-2">
@@ -199,18 +197,15 @@ export default async function MarketplaceDashboardPage() {
         </Card>
       </section>
 
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">Recommended for you</h2>
-            <p className="text-sm text-muted-foreground">
-              Based on your restaurant profile and procurement patterns
-            </p>
-          </div>
+      <PageSection
+        title="Recommended for you"
+        description="Based on your restaurant profile and procurement patterns"
+        actions={
           <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/marketplace/catalog">View all</Link>
           </Button>
-        </div>
+        }
+      >
         {model.recommendations.length === 0 ? (
           <EmptyState
             icon={Package}
@@ -232,13 +227,12 @@ export default async function MarketplaceDashboardPage() {
             ))}
           </div>
         )}
-      </section>
+      </PageSection>
 
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight">Featured vendors of the week</h2>
-          <p className="text-sm text-muted-foreground">Verified suppliers with active catalogs</p>
-        </div>
+      <PageSection
+        title="Featured vendors of the week"
+        description="Verified suppliers with active catalogs"
+      >
         {model.featuredVendors.length === 0 ? (
           <EmptyState
             icon={Store}
@@ -256,14 +250,13 @@ export default async function MarketplaceDashboardPage() {
             ))}
           </div>
         )}
-      </section>
+      </PageSection>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">Popular in your region</h2>
-            <p className="text-sm text-muted-foreground">Trending SKUs across nearby restaurants</p>
-          </div>
+        <PageSection
+          title="Popular in your region"
+          description="Trending SKUs across nearby restaurants"
+        >
           <div className="grid gap-4 sm:grid-cols-2">
             {model.popularInRegion.map((product) => (
               <MarketplaceProductGridCard
@@ -273,13 +266,12 @@ export default async function MarketplaceDashboardPage() {
               />
             ))}
           </div>
-        </div>
+        </PageSection>
 
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">New vendors & products</h2>
-            <p className="text-sm text-muted-foreground">Recently listed marketplace SKUs</p>
-          </div>
+        <PageSection
+          title="New vendors & products"
+          description="Recently listed marketplace SKUs"
+        >
           <div className="grid gap-4 sm:grid-cols-2">
             {model.newArrivals.map((product) => (
               <MarketplaceProductGridCard
@@ -289,7 +281,7 @@ export default async function MarketplaceDashboardPage() {
               />
             ))}
           </div>
-        </div>
+        </PageSection>
       </section>
     </div>
   );
