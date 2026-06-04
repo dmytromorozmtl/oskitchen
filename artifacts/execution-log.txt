@@ -4881,3 +4881,12 @@ Artifact: lib/integrations/beta-integrations-registry-smoke-integration-policy.t
 Result: IMPLEMENTED — scaffold audit → honest PASSED/FAILED; scaffold_incomplete on cert/scaffold fail; zero placeholders; 5 integration + 2 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 151
+Task: QA-45 — BETA governance smoke chain capstone integration
+Role: QA
+Priority: P2
+Artifact: lib/integrations/beta-governance-smoke-chain-integration-policy.ts, tests/integration/beta-governance-smoke-chain.integration.test.ts, tests/unit/beta-governance-smoke-chain-integration.test.ts
+Result: IMPLEMENTED — registry → integrity → LIVE DoD full smoke chain; honest PASSED/FAILED; zero LIVE + zero placeholders; QA 35–45 arc complete; 5 integration + 2 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
