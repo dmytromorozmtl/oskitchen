@@ -4350,3 +4350,12 @@ Artifact: lib/pos/touch-targets.ts, lib/pos/pos-terminal-touch-targets-policy.ts
 Result: IMPLEMENTED — WCAG 44px floor tokens (input/select/checkout); audit policy; fixed 7 sub-44px violations in terminal client; unit cert PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 92
+Task: DES-15 — KDS realtime connection bar
+Role: DESIGN
+Priority: P1
+Artifact: lib/kitchen/kds-realtime-connection-bar-policy.ts, components/kitchen/kds-realtime-connection-bar.tsx, app/dashboard/kitchen/kds-kitchen-realtime-bar.tsx, kds-kitchen-daily-client.tsx, kds-queue-status-strip.tsx, tests/unit/kds-realtime-connection-bar-policy.test.ts
+Result: IMPLEMENTED — sticky LIVE/POLLING bar with poll interval, reconnect detail, rolling p50/p95/p99 SLO; 44px sound toggle; deduped queue strip when shell bar present
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

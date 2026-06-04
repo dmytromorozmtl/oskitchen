@@ -1,11 +1,13 @@
 "use client";
 
+import { KdsRealtimeConnectionBar } from "@/components/kitchen/kds-realtime-connection-bar";
 import { KdsRealtimeStatusBadge } from "@/components/kitchen/kds-realtime-status-badge";
 import { cn } from "@/lib/utils";
 import {
   formatKdsElapsedClock,
   type KdsQueueSummary,
 } from "@/lib/kitchen/kds-queue-clarity-era18";
+import type { KdsRealtimeSloSnapshot } from "@/lib/kitchen/kds-realtime-slo-metrics";
 import type { KdsRealtimeTransport } from "@/services/kds-websocket";
 
 type KdsQueueStatusStripProps = {
@@ -14,6 +16,9 @@ type KdsQueueStatusStripProps = {
   connectionLabel: string;
   transport?: KdsRealtimeTransport;
   reconnectAttempt?: number;
+  slo?: KdsRealtimeSloSnapshot;
+  /** When false, parent renders sticky connection bar (kitchen daily shell). */
+  showConnectionBar?: boolean;
 };
 
 export function KdsQueueStatusStrip({
@@ -22,21 +27,36 @@ export function KdsQueueStatusStrip({
   connectionLabel,
   transport = "polling",
   reconnectAttempt = 0,
+  slo,
+  showConnectionBar = true,
 }: KdsQueueStatusStripProps) {
   return (
-    <div
-      className="rounded-xl border border-border/80 bg-card/80 p-3 shadow-sm"
-      data-testid="kds-queue-status-strip"
-      role="status"
-      aria-live="polite"
-    >
-      <div className="flex flex-wrap items-center gap-2 text-sm">
-        <KdsRealtimeStatusBadge
+    <div className="space-y-2" data-testid="kds-queue-status-strip">
+      {showConnectionBar ? (
+        <KdsRealtimeConnectionBar
+          variant="inline"
           isLive={realtimeConnected}
           transport={transport}
+          connectionLabel={connectionLabel}
           reconnectAttempt={reconnectAttempt}
-          size="sm"
+          slo={slo}
+          className="shadow-none"
         />
+      ) : null}
+      <div
+        className="rounded-xl border border-border/80 bg-card/80 p-3 shadow-sm"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          {!showConnectionBar ? (
+            <KdsRealtimeStatusBadge
+              isLive={realtimeConnected}
+              transport={transport}
+              reconnectAttempt={reconnectAttempt}
+              size="sm"
+            />
+          ) : null}
         <StatPill label="Active" value={summary.total} tone="neutral" />
         <StatPill label="Prep" value={summary.preparing} tone="prep" />
         <StatPill label="Ready" value={summary.ready} tone="ready" />
@@ -48,14 +68,17 @@ export function KdsQueueStatusStrip({
             Oldest prep {formatKdsElapsedClock(summary.oldestPrepSeconds)}
           </span>
         ) : null}
-        <span
-          className={cn(
-            "ml-auto text-xs",
-            realtimeConnected ? "text-emerald-600 dark:text-emerald-500" : "text-muted-foreground",
-          )}
-        >
-          {connectionLabel}
-        </span>
+        {!showConnectionBar ? (
+          <span
+            className={cn(
+              "ml-auto text-xs",
+              realtimeConnected ? "text-emerald-600 dark:text-emerald-500" : "text-muted-foreground",
+            )}
+          >
+            {connectionLabel}
+          </span>
+        ) : null}
+      </div>
       </div>
     </div>
   );

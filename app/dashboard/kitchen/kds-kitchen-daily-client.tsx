@@ -34,7 +34,7 @@ export function KdsKitchenDailyClient({
     setRefreshSignal((n) => n + 1);
   }, []);
 
-  const { isLive, transport, connectionLabel, reconnectAttempt } = useKdsRealtime({
+  const { isLive, transport, connectionLabel, reconnectAttempt, slo } = useKdsRealtime({
     userId,
     onRefresh,
   });
@@ -53,6 +53,7 @@ export function KdsKitchenDailyClient({
         transport={transport}
         connectionLabel={connectionLabel}
         reconnectAttempt={reconnectAttempt}
+        slo={slo}
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled((v) => !v)}
       />
@@ -69,6 +70,7 @@ export function KdsKitchenDailyClient({
           transport,
           connectionLabel,
           reconnectAttempt,
+          slo,
         }}
       />
     </>

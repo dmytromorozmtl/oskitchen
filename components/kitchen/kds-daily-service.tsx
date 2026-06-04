@@ -44,6 +44,7 @@ import {
   playKdsNewOrderChime,
   playKdsOverdueAlert,
 } from "@/lib/kitchen/kds-realtime-sounds";
+import type { KdsRealtimeSloSnapshot } from "@/lib/kitchen/kds-realtime-slo-metrics";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
 import type { KdsRealtimeTransport } from "@/services/kds-websocket";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,7 @@ export type KdsDailyServiceRealtimeProps = {
   transport: KdsRealtimeTransport;
   connectionLabel: string;
   reconnectAttempt: number;
+  slo?: KdsRealtimeSloSnapshot;
 };
 
 export function KdsDailyService({
@@ -141,6 +143,7 @@ export function KdsDailyService({
     transport: internalRealtime.transport,
     connectionLabel: internalRealtime.connectionLabel,
     reconnectAttempt: internalRealtime.reconnectAttempt,
+    slo: internalRealtime.slo,
   };
 
   useEffect(() => {
@@ -233,6 +236,8 @@ export function KdsDailyService({
         connectionLabel={realtime.connectionLabel}
         transport={realtime.transport}
         reconnectAttempt={realtime.reconnectAttempt}
+        slo={realtime.slo}
+        showConnectionBar={!hideSoundToggle}
       />
 
       {actionError ? (

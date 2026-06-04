@@ -19,9 +19,17 @@ describe("kds kitchen dashboard realtime ui wiring", () => {
       join(ROOT, "app/dashboard/kitchen/kds-kitchen-realtime-bar.tsx"),
       "utf8",
     );
-    expect(bar).toContain("KdsRealtimeStatusBadge");
+    expect(bar).toContain("KdsRealtimeConnectionBar");
     expect(bar).toContain("kds-kitchen-realtime-bar");
+  });
+
+  it("ships canonical connection bar component", () => {
+    const bar = readFileSync(
+      join(ROOT, "components/kitchen/kds-realtime-connection-bar.tsx"),
+      "utf8",
+    );
     expect(bar).toContain("kds-realtime-status-badge");
+    expect(bar).toContain("kds-realtime-connection-bar");
   });
 
   it("uses single Realtime subscription in kitchen daily client shell", () => {
@@ -31,6 +39,7 @@ describe("kds kitchen dashboard realtime ui wiring", () => {
     );
     expect(client).toContain("useKdsRealtime");
     expect(client).toContain("KdsKitchenRealtimeBar");
+    expect(client).toContain("slo");
     expect(client).toContain("playKdsLiveConnectChime");
   });
 
