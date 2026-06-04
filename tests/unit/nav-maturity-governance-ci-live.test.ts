@@ -22,10 +22,7 @@ const REQUIRED_FILES = [
   "lib/business-modes.ts",
 ] as const;
 
-const PLACEHOLDER_PREFIXES = [
-  "/dashboard/integrations/uber-direct",
-  "/dashboard/routes/uber-direct",
-] as const;
+const PLACEHOLDER_PREFIXES = [] as const;
 
 const PREVIEW_PREFIXES = [
   "/dashboard/pos/tabs",
@@ -33,6 +30,8 @@ const PREVIEW_PREFIXES = [
   "/dashboard/integrations/doordash",
   "/dashboard/integrations/grubhub",
   "/dashboard/integrations/uber-eats",
+  "/dashboard/integrations/uber-direct",
+  "/dashboard/routes/uber-direct",
 ] as const;
 
 function readPackageScripts(): Record<string, string> {

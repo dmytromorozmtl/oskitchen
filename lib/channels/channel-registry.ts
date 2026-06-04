@@ -203,9 +203,9 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
   {
     providerKey: "uber-direct",
     label: "Uber Direct",
-    shortDescription: "Delivery dispatch quotes — separate from marketplace menus.",
+    shortDescription: "Delivery dispatch quotes and status sync (BETA).",
     longDescription:
-      "Dispatch API is gated behind Uber Direct customer provisioning. Quote routes exist as stubs until credentials are live.",
+      "Uber Direct BETA ships OAuth-backed quote/create/cancel routes and webhook status updates. Partner-approved customer ID and API hosts are still required for production traffic.",
     category: "DELIVERY_DISPATCH",
     statusType: "PARTNER_ACCESS_REQUIRED",
     supportedBusinessModes: allModes(),
@@ -222,7 +222,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     supportsDeliveryDispatch: true,
     supportsPayments: false,
     supportsLiveMode: false,
-    isPlaceholder: true,
+    isPlaceholder: false,
     docsUrl: "/integrations/uber-direct",
     setupRoute: "/dashboard/integrations/uber-direct",
     webhookPathHints: ["/api/webhooks/uber-direct"],

@@ -22,7 +22,7 @@ describe("partner integration placeholder truth", () => {
     expect(getIntegrationById("doordash")?.status).toBe("BETA");
     expect(getIntegrationById("uber-eats")?.status).toBe("BETA");
     expect(getIntegrationById("grubhub")?.status).toBe("BETA");
-    expect(getIntegrationById("uber-direct")?.status).toBe("PLACEHOLDER");
+    expect(getIntegrationById("uber-direct")?.status).toBe("BETA");
   });
 
   it("enables DoorDash BETA flows when credentials exist", async () => {

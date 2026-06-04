@@ -60,7 +60,7 @@ describe("integration honesty CI certification (live repo)", () => {
       expect(navRule, `missing nav rule for ${id}`).toBeDefined();
       expect(navRule?.exposure).toBe("placeholder");
     }
-    expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual(["uber-direct"]);
+    expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual([]);
   });
 
   it("labels marketplace placeholders in channel UI without fake health scores", () => {

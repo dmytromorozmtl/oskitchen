@@ -7,9 +7,7 @@
 export const PAGE_MATURITY_SWEEP_POLICY_ID = "era4-page-maturity-sweep-v1" as const;
 
 /** Routes that render their own PlaceholderBanner — skip layout duplicate. */
-export const PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES = [
-  "/dashboard/routes/uber-direct",
-] as const;
+export const PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES = [] as const;
 
 /** Routes with certified in-page pilot/preview copy — skip layout duplicate (Era 17). */
 export const PAGE_MATURITY_INLINE_HONESTY_ROUTES = [
@@ -18,6 +16,8 @@ export const PAGE_MATURITY_INLINE_HONESTY_ROUTES = [
   "/dashboard/integrations/doordash",
   "/dashboard/integrations/uber-eats",
   "/dashboard/integrations/grubhub",
+  "/dashboard/integrations/uber-direct",
+  "/dashboard/routes/uber-direct",
 ] as const;
 
 export const PAGE_MATURITY_SWEEP_CI_SCRIPTS = [

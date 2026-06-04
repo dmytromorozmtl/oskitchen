@@ -97,8 +97,8 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "uber-direct",
     name: "Uber Direct",
-    status: "PLACEHOLDER",
-    requiredEnv: ["UBER_DIRECT_CUSTOMER_ID"],
+    status: "BETA",
+    requiredEnv: ["UBER_DIRECT_CUSTOMER_ID", "UBER_DIRECT_CLIENT_ID", "UBER_DIRECT_CLIENT_SECRET"],
     setupRoute: "/dashboard/integrations/uber-direct",
   },
 ];

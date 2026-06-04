@@ -11,20 +11,19 @@ import {
   isMarketplacePlaceholderProvider,
   MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS,
   MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS,
-  marketplacePlaceholderIntegrationPage,
 } from "@/lib/integrations/integration-honesty";
 
 describe("integration honesty alignment", () => {
-  it("lists only uber-direct as marketplace placeholder", () => {
-    expect(MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS).toEqual(["uber-direct"]);
-    expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual(["uber-direct"]);
+  it("has no marketplace placeholder integrations after Uber Direct BETA promotion", () => {
+    expect(MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS).toEqual([]);
+    expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual([]);
   });
 
-  it("marks delivery marketplaces as BETA except uber-direct placeholder", () => {
+  it("marks delivery dispatch and marketplaces as BETA in registry", () => {
     expect(getIntegrationById("doordash")?.status).toBe("BETA");
     expect(getIntegrationById("uber-eats")?.status).toBe("BETA");
     expect(getIntegrationById("grubhub")?.status).toBe("BETA");
-    expect(getIntegrationById("uber-direct")?.status).toBe("PLACEHOLDER");
+    expect(getIntegrationById("uber-direct")?.status).toBe("BETA");
   });
 
   it("includes Grubhub in channel catalog as BETA (not placeholder)", () => {
@@ -35,16 +34,12 @@ describe("integration honesty alignment", () => {
     expect(grubhub?.setupRoute).toBe("/dashboard/integrations/grubhub");
   });
 
-  it("resolves marketplace placeholders without live connector status", () => {
+  it("resolves uber-direct as BETA channel without placeholder flag", () => {
     const resolved = resolveAllChannels([], false);
-    for (const key of MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS) {
-      const row = resolved.find((c) => c.providerKey === key);
-      expect(row, key).toBeDefined();
-      expect(row?.isPlaceholder).toBe(true);
-      expect(["COMING_SOON", "PARTNER_ACCESS_REQUIRED"]).toContain(row?.effectiveStatus);
-      expect(row?.effectiveStatus).not.toBe("LIVE");
-      expect(row?.effectiveStatus).not.toBe("CONNECTED");
-    }
+    const uberDirect = resolved.find((c) => c.providerKey === "uber-direct");
+    expect(uberDirect).toBeDefined();
+    expect(uberDirect?.isPlaceholder).toBe(false);
+    expect(uberDirect?.effectiveStatus).not.toBe("LIVE");
 
     for (const key of ["doordash", "uber-eats", "grubhub"] as const) {
       const row = resolved.find((c) => c.providerKey === key);
@@ -52,19 +47,19 @@ describe("integration honesty alignment", () => {
     }
   });
 
-  it("maps integration ids to honest preparation pages", () => {
-    expect(marketplacePlaceholderIntegrationPage("uber-direct")).toBe(
-      "/dashboard/integrations/uber-direct",
-    );
+  it("does not treat promoted integrations as marketplace placeholders", () => {
+    expect(isMarketplacePlaceholderIntegration("uber-direct")).toBe(false);
+    expect(isMarketplacePlaceholderProvider("uber-direct")).toBe(false);
     expect(isMarketplacePlaceholderIntegration("grubhub")).toBe(false);
     expect(isMarketplacePlaceholderProvider("grubhub")).toBe(false);
-    expect(isMarketplacePlaceholderIntegration("shopify")).toBe(false);
   });
 
-  it("keeps integration registry setup routes on placeholder pages", () => {
-    for (const id of MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS) {
-      const entry = INTEGRATION_REGISTRY.find((row) => row.id === id);
-      expect(entry?.setupRoute).toBe(marketplacePlaceholderIntegrationPage(id));
+  it("keeps integration registry setup routes stable", () => {
+    expect(getIntegrationById("uber-direct")?.setupRoute).toBe(
+      "/dashboard/integrations/uber-direct",
+    );
+    for (const row of INTEGRATION_REGISTRY) {
+      expect(row.setupRoute).toMatch(/^\/dashboard\/integrations\//);
     }
   });
 });

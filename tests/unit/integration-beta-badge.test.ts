@@ -23,11 +23,12 @@ const BETA_INTEGRATION_PAGES: Record<string, string> = {
   mailchimp: "app/dashboard/integrations/mailchimp/page.tsx",
   resy: "app/dashboard/integrations/resy/page.tsx",
   opentable: "app/dashboard/integrations/opentable/page.tsx",
+  "uber-direct": "app/dashboard/integrations/uber-direct/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks eleven BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(11);
+  it("tracks twelve BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(12);
     expect(BETA_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "doordash",
@@ -38,23 +39,24 @@ describe("integration beta badge", () => {
       "opentable",
       "quickbooks",
       "resy",
+      "uber-direct",
       "uber-eats",
       "xero",
     ]);
     for (const id of BETA_INTEGRATION_IDS) {
       expect(isBetaIntegration(id)).toBe(true);
     }
-    expect(isBetaIntegration("uber-direct")).toBe(false);
+    expect(isBetaIntegration("uber-direct")).toBe(true);
   });
 
   it("maps delivery provider keys to BETA integrations", () => {
     expect(isBetaIntegrationProvider("doordash")).toBe(true);
     expect(isBetaIntegrationProvider("grubhub")).toBe(true);
     expect(isBetaIntegrationProvider("uber-eats")).toBe(true);
-    expect(isBetaIntegrationProvider("uber-direct")).toBe(false);
+    expect(isBetaIntegrationProvider("uber-direct")).toBe(true);
   });
 
-  it("renders BetaBadge on all eleven BETA integration pages", () => {
+  it("renders BetaBadge on all twelve BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const path = join(ROOT, rel);
       expect(existsSync(path), id).toBe(true);

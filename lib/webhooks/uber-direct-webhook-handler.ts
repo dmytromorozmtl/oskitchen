@@ -7,10 +7,13 @@ import {
   recordWebhookIngressOrDuplicate,
   WEBHOOK_INGRESS_ROUTE_KEYS,
 } from "@/lib/webhooks/webhook-ingress-replay-guard";
-import { getUberDirectWebhookPlaceholderMessage } from "@/services/delivery/uber-direct";
+import {
+  applyUberDirectWebhookStatus,
+  getUberDirectCapabilitySnapshot,
+} from "@/services/delivery/uber-direct";
 
 /**
- * Uber Direct status callbacks — placeholder with bearer auth + ingress dedupe.
+ * Uber Direct status callbacks — bearer auth + ingress dedupe + dispatch status update.
  */
 export async function handleUberDirectWebhook(request: Request): Promise<NextResponse> {
   const authError = requireBearerWebhookSecret(request, {
@@ -38,16 +41,33 @@ export async function handleUberDirectWebhook(request: Request): Promise<NextRes
     return NextResponse.json({ ok: true, duplicate: true });
   }
 
-  logger.warn("uber_direct_webhook_placeholder", {
-    payloadType: payload && typeof payload === "object" ? "object" : typeof payload,
+  const snapshot = getUberDirectCapabilitySnapshot();
+  if (!snapshot.liveWebhookReady) {
+    logger.warn("uber_direct_webhook_not_configured", { eventId: externalEventId });
+    return NextResponse.json(
+      {
+        error: "Uber Direct webhook handler requires BETA credentials",
+        code: "uber_direct_not_configured",
+      },
+      { status: 503 },
+    );
+  }
+
+  const result = await applyUberDirectWebhookStatus(payload);
+  logger.info("uber_direct_webhook_processed", {
     eventId: externalEventId,
+    updated: result.updated,
+    dispatchId: result.dispatchId,
   });
 
-  return NextResponse.json(
-    {
-      error: getUberDirectWebhookPlaceholderMessage(),
-      code: "uber_direct_placeholder",
-    },
-    { status: 503 },
-  );
+  if (!result.ok) {
+    return NextResponse.json({ error: result.message }, { status: 400 });
+  }
+
+  return NextResponse.json({
+    ok: true,
+    updated: result.updated,
+    dispatchId: result.dispatchId,
+    message: result.message,
+  });
 }

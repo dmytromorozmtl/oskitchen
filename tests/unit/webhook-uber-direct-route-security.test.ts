@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 describe("Uber Direct webhook route security", () => {
-  it("uses bearer guard, ingress dedupe, and remains placeholder", () => {
+  it("uses bearer guard, ingress dedupe, and processes dispatch status updates", () => {
     const handler = readFileSync(
       join(process.cwd(), "lib/webhooks/uber-direct-webhook-handler.ts"),
       "utf8",
@@ -13,7 +13,7 @@ describe("Uber Direct webhook route security", () => {
     expect(handler).toContain("UBER_DIRECT_WEBHOOK_SECRET");
     expect(handler).toContain("recordWebhookIngressOrDuplicate");
     expect(handler).toContain("duplicate: true");
-    expect(handler).toContain("uber_direct_placeholder");
+    expect(handler).toContain("applyUberDirectWebhookStatus");
   });
 
   it("keeps slack handler on signature verification and ingress dedupe", () => {

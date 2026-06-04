@@ -3,24 +3,18 @@
  * `lib/integrations/integration-registry.ts`, `lib/channels/channel-registry.ts`,
  * and `docs/feature-maturity-matrix.md`.
  */
-export const MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS = [
-  "uber-direct",
-] as const;
+export const MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS = [] as const;
 
 export type MarketplacePlaceholderIntegrationId =
   (typeof MARKETPLACE_PLACEHOLDER_INTEGRATION_IDS)[number];
 
 /** Channel catalog provider keys that must never appear as live connectors. */
-export const MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS = [
-  "uber-direct",
-] as const;
+export const MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS = [] as const;
 
 export type MarketplacePlaceholderProviderKey =
   (typeof MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS)[number];
 
-const INTEGRATION_PAGE_BY_ID: Partial<Record<MarketplacePlaceholderIntegrationId, string>> = {
-  "uber-direct": "/dashboard/integrations/uber-direct",
-};
+const INTEGRATION_PAGE_BY_ID: Partial<Record<MarketplacePlaceholderIntegrationId, string>> = {};
 
 export function isMarketplacePlaceholderIntegration(
   id: string,

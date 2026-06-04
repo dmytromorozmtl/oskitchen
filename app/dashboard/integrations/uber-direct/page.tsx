@@ -14,12 +14,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { isEncryptionConfigured } from "@/lib/crypto";
-import { CapabilityBadge } from "@/components/capabilities/capability-badge";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { integrationConnectionByProviderWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { IntegrationProvider } from "@prisma/client";
+import { getUberDirectCapabilitySnapshot } from "@/services/delivery/uber-direct";
 
 export default async function UberDirectIntegrationPage() {
   const { userId } = await getTenantActor();
@@ -37,6 +38,7 @@ export default async function UberDirectIntegrationPage() {
     deliveryRadiusKm?: number | null;
     defaultPickupInstructions?: string;
   };
+  const capability = getUberDirectCapabilitySnapshot();
 
   return (
     <PlanGate userId={userId} feature="uber_direct" title="Uber Direct">
@@ -45,10 +47,11 @@ export default async function UberDirectIntegrationPage() {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight">Uber Direct</h1>
-            <CapabilityBadge status="ROADMAP" />
+            <BetaBadge />
           </div>
           <p className="text-sm text-muted-foreground">
-            Delivery dispatch (separate from Uber Eats marketplace orders). Not live — roadmap only.
+            Delivery dispatch (separate from Uber Eats marketplace orders). BETA — sandbox/pilot only
+            until Uber Direct partner approval.
           </p>
         </div>
         <Button asChild variant="ghost" size="sm" className="rounded-full">
@@ -62,10 +65,18 @@ export default async function UberDirectIntegrationPage() {
           <CardDescription>
             API routes <code className="text-xs">/api/delivery/quote</code>,{" "}
             <code className="text-xs">/api/delivery/create</code>, and{" "}
-            <code className="text-xs">/api/delivery/cancel</code> return structured
-            placeholders until Uber Direct credentials and hosts are configured.
+            <code className="text-xs">/api/delivery/cancel</code> call Uber Direct when credentials
+            are configured. Webhook updates dispatch rows at{" "}
+            <code className="text-xs">/api/webhooks/uber-direct</code>.
           </CardDescription>
         </CardHeader>
+        <CardContent className="text-sm">
+          {capability.placeholderMode ? (
+            <p className="text-muted-foreground">Set Uber Direct env vars to enable BETA API calls.</p>
+          ) : (
+            <p className="text-emerald-600">Uber Direct BETA credentials detected.</p>
+          )}
+        </CardContent>
       </Card>
 
       {!isEncryptionConfigured() ? (

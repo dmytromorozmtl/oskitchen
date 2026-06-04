@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { NAV_MATURITY_RULES } from "@/lib/navigation/nav-maturity-governance";
 import {
   PAGE_MATURITY_SWEEP_POLICY_ID,
-  PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES,
+  PAGE_MATURITY_INLINE_HONESTY_ROUTES,
 } from "@/lib/navigation/page-maturity-sweep-policy";
 
 describe("page maturity sweep policy", () => {
@@ -11,10 +11,11 @@ describe("page maturity sweep policy", () => {
     expect(PAGE_MATURITY_SWEEP_POLICY_ID).toBe("era4-page-maturity-sweep-v1");
   });
 
-  it("aligns inline placeholder exceptions with uber-direct nav rules", () => {
-    for (const route of PAGE_MATURITY_INLINE_PLACEHOLDER_ROUTES) {
+  it("aligns inline honesty exceptions with uber-direct nav rules", () => {
+    for (const route of PAGE_MATURITY_INLINE_HONESTY_ROUTES) {
+      if (!route.includes("uber-direct")) continue;
       const rule = NAV_MATURITY_RULES.find((r) => r.prefix === route);
-      expect(rule?.exposure, route).toBe("placeholder");
+      expect(rule?.exposure, route).toBe("preview");
     }
   });
 

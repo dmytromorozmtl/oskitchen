@@ -1,4 +1,4 @@
-import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
+import { BetaBadge } from "@/components/integrations/beta-badge";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -29,16 +29,22 @@ export default async function UberDirectPlaceholderPage() {
 
   return (
     <div className="space-y-8">
-      <PlaceholderBanner
-        feature="Uber Direct dispatch"
-        detail="OS Kitchen records placeholder dispatch events for workflow rehearsal. Live Uber Direct courier APIs are not production-ready — see Integration Health and capability matrix."
-      />
+      <div className="rounded-xl border bg-muted/30 p-4 text-sm">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <span className="font-medium">Uber Direct dispatch</span>
+          <BetaBadge />
+        </div>
+        <p className="text-muted-foreground">
+          BETA — quote/create/cancel routes call Uber Direct when credentials are configured. Partner approval
+          required for production dispatch volume.
+        </p>
+      </div>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Uber Direct dispatch (placeholder)</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Uber Direct dispatch</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            OS Kitchen does not call Uber APIs from this screen. Quote and dispatch buttons record placeholder events for the
-            audit trail so you can rehearse the workflow before real partner credentials are wired.
+            Dispatch rehearsal and recent DeliveryDispatch audit trail. Live courier APIs require Uber Direct
+            customer provisioning.
           </p>
         </div>
         <Badge variant={hasCredentials ? "secondary" : "outline"}>

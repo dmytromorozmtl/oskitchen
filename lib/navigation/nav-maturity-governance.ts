@@ -107,13 +107,13 @@ export const NAV_MATURITY_RULES: readonly NavMaturityRule[] = [
   },
   {
     prefix: "/dashboard/integrations/uber-direct",
-    exposure: "placeholder",
-    matrixRef: "Uber / DoorDash provider surfaces",
+    exposure: "preview",
+    matrixRef: "Uber Direct dispatch BETA",
   },
   {
     prefix: "/dashboard/routes/uber-direct",
-    exposure: "placeholder",
-    matrixRef: "Uber / DoorDash provider surfaces",
+    exposure: "preview",
+    matrixRef: "Uber Direct dispatch BETA",
   },
   {
     prefix: "/dashboard/demo/scenarios",

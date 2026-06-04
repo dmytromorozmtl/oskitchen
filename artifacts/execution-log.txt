@@ -4683,3 +4683,12 @@ Artifact: lib/integrations/opentable-types.ts, services/integrations/opentable-s
 Result: IMPLEMENTED — 14-day import from OpenTable Partner API v2; export local bookings; idempotent opentable:res tags; confirmation_number parsing; storefront-scoped sync; BETA registry entry; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 129
+Task: DEV-42 — Uber Direct dispatch hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/delivery/uber-direct-types.ts, services/delivery/uber-direct.ts, lib/webhooks/uber-direct-webhook-handler.ts, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/navigation/page-maturity-sweep-policy.ts, app/dashboard/integrations/uber-direct/page.tsx, app/dashboard/routes/uber-direct/page.tsx, tests/unit/uber-direct-api.test.ts, tests/unit/uber-direct-capability.test.ts, tests/unit/webhook-uber-direct-route-security.test.ts, tests/unit/integration-honesty-alignment.test.ts, tests/unit/nav-maturity-governance-ci-live.test.ts
+Result: IMPLEMENTED — PLACEHOLDER→BETA; OAuth token fetch; quote/create/cancel/status API calls; webhook status apply; nav maturity preview; inline honesty routes; 35 related unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
