@@ -54,6 +54,7 @@ export type SettingsSection = {
   /** Stable key — used by health scoring, search, deeplinks. */
   key:
     | "overview"
+    | "profile"
     | "workspace"
     | "modules"
     | "operations"
@@ -62,10 +63,12 @@ export type SettingsSection = {
     | "production"
     | "packing"
     | "delivery"
+    | "delivery_zones"
     | "routes"
     | "crm"
     | "storefront"
     | "branding"
+    | "white_label"
     | "domains"
     | "notifications"
     | "integrations"
@@ -108,6 +111,16 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     icon: "LayoutDashboard",
     capability: "view_settings",
     keywords: ["overview", "health", "status"],
+  },
+  {
+    key: "profile",
+    label: "Profile",
+    description: "Your name, email, password, and avatar.",
+    href: "/dashboard/settings/profile",
+    group: "workspace",
+    icon: "UserCircle",
+    capability: "view_settings",
+    keywords: ["account", "avatar", "password", "email", "name"],
   },
   {
     key: "workspace",
@@ -187,7 +200,17 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     group: "operations",
     icon: "Truck",
     capability: "manage_delivery",
-    keywords: ["delivery", "zones", "courier", "uber"],
+    keywords: ["delivery", "zones", "courier", "uber", "fees"],
+  },
+  {
+    key: "delivery_zones",
+    label: "Delivery zones & slots",
+    description: "Geo-zone capacity limits and checkout slot windows.",
+    href: "/dashboard/settings/delivery-zones",
+    group: "operations",
+    icon: "MapPin",
+    capability: "manage_delivery",
+    keywords: ["zones", "slots", "capacity", "geo", "checkout"],
   },
   {
     key: "routes",
@@ -229,6 +252,18 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     icon: "Palette",
     capability: "manage_branding",
     keywords: ["logo", "color", "theme", "favicon"],
+  },
+  {
+    key: "white_label",
+    label: "White-label",
+    description: "Enterprise storefront branding and OS Kitchen badge removal.",
+    href: "/dashboard/settings/white-label",
+    group: "customers",
+    icon: "Sparkles",
+    capability: "manage_branding",
+    badge: "Enterprise",
+    bridge: true,
+    keywords: ["white label", "enterprise", "custom domain", "hide branding"],
   },
   {
     key: "domains",
@@ -293,6 +328,7 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
     icon: "Mic",
     capability: "view_settings",
     bridge: true,
+    badge: "Preview",
     keywords: ["alexa", "google home", "voice", "assistant"],
   },
   {
@@ -408,6 +444,26 @@ export function getSettingsSection(key: SettingsSection["key"]): SettingsSection
   const found = SETTINGS_SECTIONS.find((s) => s.key === key);
   if (!found) throw new Error(`Unknown settings section: ${key}`);
   return found;
+}
+
+export function getSettingsSectionByHref(href: string): SettingsSection | undefined {
+  return SETTINGS_SECTIONS.find((section) => section.href === href);
+}
+
+export function resolveSettingsSectionForPathname(pathname: string): SettingsSection | null {
+  const path = pathname.endsWith("/") && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+  const exact = getSettingsSectionByHref(path);
+  if (exact) return exact;
+
+  let best: SettingsSection | null = null;
+  for (const section of SETTINGS_SECTIONS) {
+    if (path === section.href || path.startsWith(`${section.href}/`)) {
+      if (!best || section.href.length > best.href.length) {
+        best = section;
+      }
+    }
+  }
+  return best;
 }
 
 export function sectionsByGroup(): Record<SettingsSectionGroupKey, SettingsSection[]> {

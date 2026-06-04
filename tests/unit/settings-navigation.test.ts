@@ -11,6 +11,7 @@ describe("settings navigation helpers", () => {
 
     expect(sections.map((section) => section.key)).toEqual([
       "overview",
+      "profile",
       "referrals",
       "voice",
       "hardware",
