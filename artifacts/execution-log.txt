@@ -4998,3 +4998,12 @@ Artifact: lib/design/stabilization-design-patterns.ts, lib/design/stabilization-
 Result: IMPLEMENTED — auditStabilizationDesign() composes 11 sub-audits (page layout, skeleton, section, filter, table, form feedback, error, empty, metric, route loading, permission denied); registry + capstone report; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 164
+Task: MKT-29 — press release first design partner (LOI-gated)
+Role: MARKETING
+Priority: P2
+Artifact: docs/press-release-first-design-partner.md, lib/marketing/press-release-first-design-partner-policy.ts, tests/unit/press-release-first-design-partner-policy.test.ts
+Result: IMPLEMENTED — wire template H1–H3; publish gates (LOI signed + partner approval + verify-claims); forbidden-claims lint; post-publish checklist; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
