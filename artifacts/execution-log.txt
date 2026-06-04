@@ -4485,3 +4485,12 @@ Artifact: lib/marketing/shopify-bundle-gtm-policy.ts, components/marketing/shopi
 Result: IMPLEMENTED — ICP-first CTAs (Book Shopify fit call); 3-step setup + Integration Health GTM strip; UTM-tagged links; honest inventory row in sales guide; footer /shopify link
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 107
+Task: MKT-14 — QR ordering pilot story
+Role: MARKETING
+Priority: P1
+Artifact: docs/qr-ordering-pilot-story.md, lib/marketing/qr-ordering-pilot-story-policy.ts, tests/unit/qr-ordering-pilot-story-policy.test.ts
+Result: IMPLEMENTED — 5-beat 2-min pilot narrative; approved 30s demo script; week-1 checklist; outbound snippets; forbidden-claims lint; linked from qr-code-ordering-plan
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

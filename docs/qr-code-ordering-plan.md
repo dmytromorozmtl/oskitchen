@@ -10,7 +10,7 @@ This document defines the **QR ordering strategy**: what guests can do today, wh
 
 **Honesty rule:** QR **generation and daily-menu ordering** exist, but **full table-service integration** (floor plan, pay-at-table, certified rush-hour path) does **not**. [`sales-limitation-sheet.md`](./sales-limitation-sheet.md): floor plan / realtime table state is **BETA — not live occupancy**.
 
-**Related:** [`feature-maturity-matrix.md`](./feature-maturity-matrix.md) · [`POS_ARCHITECTURE.md`](./POS_ARCHITECTURE.md) · [`gift-cards-loyalty-plan.md`](./gift-cards-loyalty-plan.md) · [`toast-gap-analysis.md`](./toast-gap-analysis.md) · [`offline-pos-plan.md`](./offline-pos-plan.md)
+**Related:** [`qr-ordering-pilot-story.md`](./qr-ordering-pilot-story.md) · [`feature-maturity-matrix.md`](./feature-maturity-matrix.md) · [`POS_ARCHITECTURE.md`](./POS_ARCHITECTURE.md) · [`gift-cards-loyalty-plan.md`](./gift-cards-loyalty-plan.md) · [`toast-gap-analysis.md`](./toast-gap-analysis.md) · [`offline-pos-plan.md`](./offline-pos-plan.md)
 
 ---
 
