@@ -5439,3 +5439,12 @@ Artifact: lib/execution/sync-final-execution-report.ts, scripts/ops/run-final-ex
 Result: IMPLEMENTED — synced 428/433 tracker + FINAL-13..21 gate snapshots; ready:false honest; GO:NO-GO; vitest PASS (proof_synced_final_execution_json)
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 213
+Task: FINAL-23 / task-217 — final execution markdown report sync
+Role: EXECUTION
+Priority: P2
+Artifact: lib/execution/sync-final-execution-doc.ts, scripts/ops/run-final-execution-doc-sync.ts, docs/final-execution-report.md, artifacts/final-execution-doc-sync-summary.json
+Result: IMPLEMENTED — markdown mirrors JSON snapshot (trackerSync, gates, gate artifacts); 3 vitest PASS; artifact overall PASS (proof_synced_final_execution_doc)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

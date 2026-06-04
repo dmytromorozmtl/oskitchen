@@ -1,177 +1,94 @@
-# Final execution report — Production Pilot Ready
+# Final execution report — OS Kitchen
 
-**Generated:** 2026-05-29  
-**Orchestrator:** `npm run run:production-pilot-ready`  
-**Master policy:** PASS > SKIPPED · no forbidden claims · GO via `smoke:pilot-gono-go` only
+**Final execution report (FINAL-23)** — markdown synced from `artifacts/final-execution-report.json`.
+
+| Field | Value |
+|-------|-------|
+| JSON version | `final-22-final-execution-json-v1` |
+| Generated (JSON) | 2026-06-04T13:10:19.131Z |
+| trackerSync | **430/434** (99%) |
+| Execution log cycles | 561 |
+| Vault | 11/11 present |
+| P0 artifact overall | FAILED |
+| GO/NO-GO | **NO-GO** |
+| **ready** | **false** |
+| allPhasesPassed | false |
+
+> Synced snapshot — ready:true only when all tracker slots done, vault 11/11, and pilot GO/NO-GO decision GO; otherwise honest false.
 
 ---
 
 ## Executive summary
 
-OS Kitchen **engineering infrastructure for pilot readiness is mature** (53 smoke scripts, GO/NO-GO evaluator, commercial inflection orchestrator, vault validators). **Commercial proof is not complete** — P0 staging remains `awaiting_ops_credentials` with all 11 ops vault secrets missing in CI/local default env.
-
-| Phase | Engineering status | Execution status |
-|-------|-------------------|------------------|
-| **0** Ops vault + P0 PASS | Tooling ✅ | **BLOCKED** — secrets not configured |
-| **1** Staging proof band | Scripts ✅ | **BLOCKED** — depends on Phase 0 |
-| **2** ICP + LOI + GO | Evaluator ✅ | **BLOCKED** — no customer/LOI |
-| **3** Measurement + hardening | Partial ✅ | Deferred until pilot kickoff |
-| **4** GTM proof | Templates ✅ | Deferred until pilot metrics |
-
-**Overall pilot executable readiness:** ~66/100 (per audit) — unchanged until real P0 PASS.
+Engineering gates through **FINAL-21** are largely **done** in the tracker; **commercial pilot GO** remains **NO-GO** until P0 staging proofs pass and customer/LOI gates clear. Do **not** set `ready: true` in JSON or claim production-ready for sales until `goDecision === "GO"`.
 
 ---
 
-## Phase 0 — Ops vault
+## FINAL orchestrator gates
 
-### Delivered in this execution
+| Phase | Task slot | Tracker |
+|-------|-----------|---------|
+| FINAL-01 | 195 | done |
+| FINAL-02 | 196 | done |
+| FINAL-03 | 197 | done |
+| FINAL-04 | 198 | done |
+| FINAL-05 | 199 | done |
+| FINAL-06 | 200 | done |
+| FINAL-07 | 201 | done |
+| FINAL-08 | 202 | done |
+| FINAL-09 | 203 | done |
+| FINAL-10 | 204 | done |
+| FINAL-11 | 205 | done |
+| FINAL-12 | 206 | done |
+| FINAL-13 | 207 | done |
+| FINAL-14 | 208 | done |
+| FINAL-15 | 209 | done |
+| FINAL-16 | 210 | done |
+| FINAL-17 | 211 | done |
+| FINAL-18 | 212 | done |
+| FINAL-19 | 213 | done |
+| FINAL-20 | 214 | done |
+| FINAL-21 | 215 | done |
+| FINAL-22 | 216 | done |
+| FINAL-23 | 217 | todo |
+| FINAL-24 | 218 | todo |
+| FINAL-25 | 219 | todo |
+| FINAL-26 | 220 | todo |
 
-| Item | Path |
-|------|------|
-| Vault matrix doc | `docs/ops-vault-matrix.md` |
-| VP Ops email template | `docs/ops-email-template.md` |
-| Vault readiness report builder | `lib/ops/vault-readiness-report.ts` |
-| Check script | `npm run check-vault-readiness` |
-| CI workflow | `.github/workflows/vault-readiness-check.yml` |
-| Unit tests | `tests/unit/vault-readiness-report.test.ts` |
 
-### Pre-existing (not duplicated)
+**Pending phases:** FINAL-23, FINAL-24, FINAL-25, FINAL-26
 
-| Item | Command |
-|------|---------|
-| P0 env validator | `npm run ops:validate-p0-vault-env` |
-| P0 orchestrator | `npm run smoke:p0-staging-proof-unblock` |
-| P0 integrity validator | `npm run ops:validate-p0-staging-proof-integrity` |
-| Day 0 orchestrator | `npm run ops:run-p0-vault-day0-orchestrator` |
-
-### Current artifact truth
-
-```json
-"p0ProofStatus": "awaiting_ops_credentials",
-"overall": "SKIPPED"
-```
-
-**Next human action:** Configure 11 secrets per `docs/ops-vault-matrix.md`, then re-run P0 orchestrator.
-
----
-
-## Phase 1 — Staging proof band
-
-### Pre-existing tooling
-
-- `npm run smoke:tier2-staging-golden-path`
-- `npm run smoke:kds-staging-playwright`
-- `e2e/kds-realtime-staging.spec.ts`
-- `.github/workflows/playwright-kds-staging.yml`
-
-### Status
-
-Blocked until P0 PASS. See [`phase1-completion-report.md`](./phase1-completion-report.md).
 
 ---
 
-## Phase 2 — Commercial gate
+## Gate artifacts (FINAL-13..FINAL-21)
 
-### Delivered
-
-| Item | Path |
-|------|------|
-| ICP check script | `npm run icp-qualification-check` |
-| ICP template segments (all F&B) | `config/commercial/pilot-icp-prospect-draft.template.json` |
-| ICP UI copy fix | `implementation-pilot-icp-qualification-panel.tsx` |
-
-### Pre-existing
-
-- `npm run smoke:pilot-gono-go` → `artifacts/pilot-gono-go-summary.json`
-- `PILOT_GONOGO_*` env contract in `scripts/smoke-pilot-gono-go-era17.ts`
-
-### Current GO/NO-GO
-
-- **Decision:** NO-GO  
-- **Blockers:** P0, Tier 1/2, ICP, LOI, customer, role checklists
+| Artifact | Present | Overall | proofStatus |
+|----------|---------|---------|-------------|
+| `artifacts/ts-build-green-summary.json` | yes | PASS | — |
+| `artifacts/vitest-health-summary.json` | yes | PASS | — |
+| `artifacts/dashboard-rsc-golden-path-summary.json` | yes | SKIPPED | proof_skipped_playwright_bootstrap |
+| `artifacts/cross-tenant-isolation-staging-summary.json` | yes | SKIPPED | proof_passed_mock_contract_staging_skipped |
+| `artifacts/webhook-signature-matrix-summary.json` | yes | PASS | proof_passed_matrix_and_static_audit |
+| `artifacts/integration-health-moat-summary.json` | yes | PASS | proof_passed_moat_surfaces |
+| `artifacts/trust-page-summary.json` | yes | PASS | proof_passed_trust_maturity_labels |
+| `artifacts/sales-playbook-summary.json` | yes | PASS | proof_passed_sales_playbook_hub |
+| `artifacts/commercial-pilot-runbook-summary.json` | yes | PASS | proof_passed_commercial_pilot_runbook |
 
 ---
 
-## Phase 3 — Measurement & hardening
+## Operator next actions
 
-### Already implemented (no new work required)
-
-| Item | Evidence |
-|------|----------|
-| KDS 15s poll honesty banner | `components/kitchen/kds-refresh-honesty-banner.tsx` |
-| Cashier speed mode default | `resolvePosCashierSpeedMode` → `persona === "cashier"` |
-| Nav preview hidden from focused IA | `lib/navigation/nav-maturity-governance.ts` |
-| Inventory/Loyalty locked policy | `policy-locked-honesty-banner.tsx`, pos-only lock |
-| Webhook replay P1 expansion smoke | `smoke:webhook-replay-p1-expansion` |
-
-### Deferred (post-kickoff / separate cycles)
-
-- Briefing telemetry Prisma table + dashboard  
-- Mutation registry expansion to >50% (145 action modules)  
-- Universal webhook replay UI for all 46 routes  
-- Pen test vendor engagement  
+1. Configure ops vault secrets and re-run `npm run smoke:p0-staging-proof-unblock` until P0 artifact is honest **PASS**.
+2. Re-run `npm run smoke:pilot-gono-go` after Tier 0/1 + forbidden-claims enforcement — expect **NO-GO** until evidence gates pass.
+3. Complete **FINAL-23..FINAL-26** tracker slots, then re-sync JSON (`run-final-execution-json-sync.ts`) and this doc (`run-final-execution-doc-sync.ts`).
 
 ---
 
-## Phase 4 — GTM proof
+## References
 
-### Pre-existing
+- Canonical JSON: `artifacts/final-execution-report.json`
+- Commercial runbook: `docs/commercial-pilot-runbook.md`
+- Sales hub: `docs/SALES_PLAYBOOK.md`
+- Trust labels: `/trust`
 
-- `smoke:pilot-case-study-draft`
-- `smoke:investor-narrative-onepager`
-- `docs/era19-cycle-completion-scorecard-2026-05-28.md`
-- `docs/era20-cycle-completion-scorecard-2026-05-28.md`
-
-### Deferred until pilot metrics
-
-- Customer case study PDF  
-- Sales deck with real KPIs  
-- Forbidden claims sales training certification  
-
----
-
-## Master orchestrator
-
-```bash
-npm run run:production-pilot-ready
-# Optional: skip child smokes when vault empty
-npm run run:production-pilot-ready -- --skip-smokes
-```
-
-Writes: `artifacts/production-pilot-ready-execution-summary.json`
-
----
-
-## Critical path (unchanged)
-
-```
-11 ops vault secrets
-  → smoke:p0-staging-proof-unblock (proof_passed)
-    → tier2 + kds staging PASS
-      → ICP qualified + LOI + customer
-        → smoke:pilot-gono-go (GO)
-          → pilot kickoff Week 1
-```
-
----
-
-## What was intentionally NOT built
-
-1. **Mock child smokes** that write `proof_passed` without real staging — violates mission rules  
-2. **Duplicate** `smoke-sso-idp-staging.ts` / `smoke-channel-live.ts` — Era 17 scripts are canonical  
-3. **`evaluateCommercialPilotGoNoGo.ts`** — logic lives in `lib/commercial/pilot-gono-go-summary.ts` + `smoke:pilot-gono-go`  
-4. **Fake GO certificate** without signed LOI  
-5. **New UX convergence cycles** in Phases 0–1  
-
----
-
-## Recommended immediate actions
-
-| Priority | Action | Owner |
-|----------|--------|-------|
-| P0 | Configure 11 vault secrets | VP Ops + DevOps |
-| P0 | `npm run smoke:p0-staging-proof-unblock` | DevOps |
-| P0 | Qualify real ICP prospect (any F&B format) | Sales |
-| P0 | Sign LOI | Founder + Legal |
-| P1 | Execute Tier 2 golden path on staging | QA + Integration |
-| P1 | `npm run run:production-pilot-ready` weekly | Engineering |
