@@ -4341,3 +4341,12 @@ Artifact: lib/settings/section-registry.ts, lib/settings/section-registry-audit.
 Result: IMPLEMENTED — profile/delivery_zones/white_label sections; pathname resolver; disk route audit (36/36 covered); ranked settings search; command palette export helper
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 91
+Task: DES-14 — POS terminal 44px touch targets
+Role: DESIGN
+Priority: P1
+Artifact: lib/pos/touch-targets.ts, lib/pos/pos-terminal-touch-targets-policy.ts, components/dashboard/pos-terminal-client.tsx, tests/unit/pos-terminal-touch-targets-policy.test.ts, tests/unit/pos-touch-targets.test.ts
+Result: IMPLEMENTED — WCAG 44px floor tokens (input/select/checkout); audit policy; fixed 7 sub-44px violations in terminal client; unit cert PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
