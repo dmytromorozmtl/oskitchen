@@ -17,6 +17,7 @@ describe("instant payouts plan doc", () => {
     expect(doc).toContain("MARKETPLACE_VENDOR_STRIPE_CONNECT");
     expect(doc).toContain("## Maturity phases");
     expect(doc).toContain("Phase 3 — Instant payout MVP");
+    expect(doc).toContain("instant-payouts-service.ts");
     expect(doc).toContain("application_fee");
     expect(doc).toContain("stripe-connect-vendor-test-plan.md");
   });

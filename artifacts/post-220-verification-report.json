@@ -1,0 +1,44 @@
+{
+  "version": "post-220-verification-report-v1",
+  "generatedAt": "2026-06-04T17:45:00.000Z",
+  "overall": "PASS_WITH_OPS_GATES",
+  "trackers": {
+    "execution-tracker-final": "440/440",
+    "domination-tracker": "40/43",
+    "122-task-tracker": "122/122",
+    "marketplace-tracker": "40/40",
+    "ai-moats-tracker": "22/22",
+    "competitor-feature-tracker": "0/8"
+  },
+  "criticalFilesMissing": 0,
+  "codeQuality": {
+    "typescriptErrors": 0,
+    "consoleLogProdPaths": 0,
+    "forbiddenClaims": 0,
+    "keyUnitTests": "20/20 PASS"
+  },
+  "production": {
+    "healthStatus": "ok",
+    "sentryServerOk": false,
+    "publicPages200": 7,
+    "vendorPages200": 8,
+    "dashboardPages307Auth": 15
+  },
+  "fixesApplied": [
+    "Restored app/vendor/(cabinet)/dashboard/page.tsx",
+    "Restored app/vendor/(cabinet)/finance/page.tsx",
+    "Restored app/api/cron/outbound-webhook-deliveries/route.ts",
+    "Restored app/api/pos/shifts/export/route.ts",
+    "Repaired node_modules via npm install (Node 22.22.3)",
+    "Removed duplicate page 2.tsx artifact"
+  ],
+  "remainingOpsGates": [
+    "SENTRY_DSN on Vercel production (sentryServer.ok: false)",
+    "P0 channel live smokes (Woo/Shopify sandbox URLs)",
+    "SSO IdP operator evidence",
+    "Pilot GO/NO-GO decision: NO-GO until customer LOI + tier proofs"
+  ],
+  "ready": false,
+  "goDecision": "NO-GO",
+  "p0ArtifactOverall": "FAILED"
+}
