@@ -115,6 +115,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     requiredEnv: ["TOAST_ACCESS_TOKEN", "TOAST_RESTAURANT_GUID"],
     setupRoute: "/dashboard/integrations/toast",
   },
+  {
+    id: "clover",
+    name: "Clover",
+    status: "BETA",
+    requiredEnv: ["CLOVER_ACCESS_TOKEN", "CLOVER_MERCHANT_ID"],
+    setupRoute: "/dashboard/integrations/clover",
+  },
 ];
 
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {

@@ -4710,3 +4710,12 @@ Artifact: lib/integrations/toast-types.ts, services/integrations/toast-sync-serv
 Result: IMPLEMENTED — Toast Orders API v2 import (14-day window); idempotent toast:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 14th BETA integration; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 132
+Task: DEV-45 — Clover POS order import hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/clover-types.ts, services/integrations/clover-sync-service.ts, app/api/integrations/clover/sync/route.ts, components/integrations/clover-sync-panel.tsx, app/dashboard/integrations/clover/page.tsx, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/navigation/nav-maturity-hide-registry.ts, tests/unit/clover-sync.test.ts
+Result: IMPLEMENTED — Clover REST API v3 order import (14-day window); idempotent clover:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 15th BETA integration; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
