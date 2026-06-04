@@ -4674,3 +4674,12 @@ Artifact: lib/integrations/resy-types.ts, services/integrations/resy-sync-servic
 Result: IMPLEMENTED — 14-day import from Resy venue API; export local PENDING/CONFIRMED bookings; idempotent resy:res tags; status mapping; storefront ownership guard; BETA registry entry; unit tests for parser + status map
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 128
+Task: DEV-41 — OpenTable reservations sync hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/opentable-types.ts, services/integrations/opentable-sync-service.ts, app/api/integrations/opentable/sync/route.ts, components/integrations/opentable-sync-panel.tsx, app/dashboard/integrations/opentable/page.tsx, lib/integrations/integration-registry.ts, tests/unit/opentable-sync.test.ts
+Result: IMPLEMENTED — 14-day import from OpenTable Partner API v2; export local bookings; idempotent opentable:res tags; confirmation_number parsing; storefront-scoped sync; BETA registry entry; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

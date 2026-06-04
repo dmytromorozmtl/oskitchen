@@ -88,6 +88,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/resy",
   },
   {
+    id: "opentable",
+    name: "OpenTable",
+    status: "BETA",
+    requiredEnv: ["OPENTABLE_API_KEY", "OPENTABLE_RID"],
+    setupRoute: "/dashboard/integrations/opentable",
+  },
+  {
     id: "uber-direct",
     name: "Uber Direct",
     status: "PLACEHOLDER",
