@@ -4809,3 +4809,12 @@ Artifact: lib/integrations/live-integration-dod-smoke-era17-policy.ts, lib/integ
 Result: IMPLEMENTED — capstone DoD smoke (integrity + gate tracker artifact); Tier 1 always-on in P0 orchestrator; npm run smoke:live-integration-dod → overall PASSED; 21 cert tests PASS; DEV 26–55 arc complete
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 143
+Task: QA-37 — BETA integrations governance E2E
+Role: QA
+Priority: P2
+Artifact: lib/integrations/beta-integrations-governance-e2e-policy.ts, lib/integrations/beta-integrations-governance-e2e-metrics.ts, e2e/beta-integrations-governance.spec.ts, e2e/helpers/beta-integrations-governance-*.ts, tests/unit/beta-integrations-governance-e2e.test.ts, playwright.config.ts
+Result: IMPLEMENTED — Integration Health env readiness + LIVE DoD panels (18 rows each); chromium-authed flow; no RSC failure contract; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

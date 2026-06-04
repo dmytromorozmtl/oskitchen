@@ -100,6 +100,7 @@ if (dashboardE2EEnabled) {
         "**/delivery-order-ingest-latency.spec.ts",
         "**/refund-flow-e2e.spec.ts",
         "**/shift-report-accuracy-e2e.spec.ts",
+        "**/beta-integrations-governance.spec.ts",
         "**/vendor-registration.spec.ts",
         "**/remediation-delivery-idor.spec.ts",
         "**/beta-export-streaming.spec.ts",
