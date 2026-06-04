@@ -5,6 +5,7 @@ import { Disclaimer, FeatureGrid, Hero, PublicShell } from "@/components/marketi
 import { TrustMaturityLabelsSection } from "@/components/marketing/trust-maturity-labels-section";
 import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 
+/** Trust page — BETA / PREVIEW / SKIPPED maturity labels (MKT-08, FINAL-19). */
 export const metadata: Metadata = marketingPageMetadata({
   title: "Trust center — BETA, Preview & SKIPPED labels explained",
   description:
