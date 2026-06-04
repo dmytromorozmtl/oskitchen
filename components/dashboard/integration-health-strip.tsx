@@ -60,7 +60,7 @@ function healthScorePercent(model: IntegrationHealthStripModel): number {
   return Math.round((model.healthyCount / total) * 100);
 }
 
-/** Today / briefing Integration Health moat strip — honest pilot channel status. */
+/** Integration Health moat — Today / briefing strip — honest pilot channel status (DES-08, FINAL-18). */
 export function IntegrationHealthStrip({ model }: { model: IntegrationHealthStripModel }) {
   const meta = OVERALL_META[model.overall];
   const StatusIcon = meta.Icon;
