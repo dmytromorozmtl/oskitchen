@@ -148,7 +148,7 @@
   "task-147": "done",
   "task-148": "done",
   "task-149": "done",
-  "task-150": "todo",
+  "task-150": "done",
   "task-151": "todo",
   "task-152": "todo",
   "task-153": "todo",
@@ -374,5 +374,6 @@
   "DES-26": "done",
   "DES-27": "done",
   "DES-28": "done",
-  "DES-29": "done"
+  "DES-29": "done",
+  "DES-30": "done"
 }

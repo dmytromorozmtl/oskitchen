@@ -4926,3 +4926,12 @@ Artifact: lib/design/filter-search-patterns.ts, lib/design/filter-search-audit-p
 Result: IMPLEMENTED — FilterSearchShell + FilterChipLink/FilterChipRow tokens; 4 critical filter bars migrated; shared data-testid filter-search-bar; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 156
+Task: DES-31 — table/card list pattern consistency audit
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/table-card-patterns.ts, lib/design/table-card-audit-policy.ts, components/tables/responsive-data-list.tsx, components/tables/data-table-shell.tsx, components/marketplace/marketplace-responsive-data-list.tsx, components/dashboard/orders-table.tsx, app/dashboard/integrations/webhooks/page.tsx, tests/unit/table-card-audit-policy.test.ts
+Result: IMPLEMENTED — ResponsiveDataList (table lg+ / cards mobile); DataTableShell tokens + data-testid; orders table + webhook log migrated; marketplace list delegates to shared primitive; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

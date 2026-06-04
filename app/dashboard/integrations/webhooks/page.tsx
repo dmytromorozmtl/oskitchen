@@ -2,15 +2,9 @@ import Link from "next/link";
 import { Webhook } from "lucide-react";
 
 import { EmptyState } from "@/components/dashboard/empty-state";
+import { DataTableShell } from "@/components/tables/data-table-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -65,16 +59,18 @@ export default async function WebhookEventsPage() {
       ) : null}
 
       {events.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent events</CardTitle>
-            <CardDescription>
-              Duplicate external IDs short-circuit processing and still return HTTP 200 to
-              partners.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="overflow-x-auto">
-            <Table>
+        <DataTableShell
+          toolbar={
+            <div>
+              <p className="text-sm font-medium">Recent events</p>
+              <p className="text-xs text-muted-foreground">
+                Duplicate external IDs short-circuit processing and still return HTTP 200 to
+                partners.
+              </p>
+            </div>
+          }
+        >
+          <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Received</TableHead>
@@ -141,8 +137,7 @@ export default async function WebhookEventsPage() {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+        </DataTableShell>
       ) : null}
     </div>
     </PlanGate>

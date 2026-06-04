@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { updateOrderStatus } from "@/actions/orders";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { BulkActionsBar } from "@/components/tables/bulk-actions";
+import { DataTableShell } from "@/components/tables/data-table-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -30,7 +31,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TableSkeletonRows } from "@/components/tables/table-skeleton";
 import { SITE_URL } from "@/lib/constants";
 import { orderStatusLabel, t } from "@/lib/i18n";
 import { formatCurrency } from "@/lib/utils";
@@ -163,56 +163,61 @@ export function OrdersTable({
         />
       ) : (
         <>
-          <div className="flex flex-col gap-3 rounded-2xl border border-border/80 bg-card/80 p-4 shadow-sm lg:flex-row lg:flex-wrap lg:items-center">
-            <Input
-              placeholder="Search name, email, phone..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="max-w-md rounded-full"
+          <DataTableShell
+            loading={loading}
+            skeletonColumns={7}
+            skeletonRows={10}
+            toolbar={
+              <>
+                <Input
+                  placeholder="Search name, email, phone..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="max-w-md rounded-full"
+                />
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-full rounded-full lg:w-[180px]">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All statuses</SelectItem>
+                    {statuses.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        {orderStatusLabel(locale, s)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={fulfillmentFilter} onValueChange={setFulfillmentFilter}>
+                  <SelectTrigger className="w-full rounded-full lg:w-[180px]">
+                    <SelectValue placeholder="Fulfillment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All fulfillment</SelectItem>
+                    <SelectItem value="PICKUP">{t(locale as never, "fulfillment.pickup")}</SelectItem>
+                    <SelectItem value="DELIVERY">
+                      {t(locale as never, "fulfillment.delivery")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="date"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                  className="w-full rounded-full lg:w-[200px]"
+                />
+              </>
+            }
+          >
+            <BulkActionsBar
+              selectedCount={selectedIds.length}
+              totalCount={filtered.length}
+              onToggleAll={toggleAll}
+              onBulkStatus={bulkMarkConfirmed}
+              onBulkExport={bulkExportCsv}
+              statusLabel="Mark confirmed"
             />
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full rounded-full lg:w-[180px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                {statuses.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {orderStatusLabel(locale, s)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={fulfillmentFilter} onValueChange={setFulfillmentFilter}>
-              <SelectTrigger className="w-full rounded-full lg:w-[180px]">
-                <SelectValue placeholder="Fulfillment" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All fulfillment</SelectItem>
-                <SelectItem value="PICKUP">{t(locale as never, "fulfillment.pickup")}</SelectItem>
-                <SelectItem value="DELIVERY">
-                  {t(locale as never, "fulfillment.delivery")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              type="date"
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="w-full rounded-full lg:w-[200px]"
-            />
-          </div>
 
-          <BulkActionsBar
-            selectedCount={selectedIds.length}
-            totalCount={filtered.length}
-            onToggleAll={toggleAll}
-            onBulkStatus={bulkMarkConfirmed}
-            onBulkExport={bulkExportCsv}
-            statusLabel="Mark confirmed"
-          />
-
-          <div className="rounded-2xl border border-border/80 bg-card/90 shadow-sm">
             <Table>
           <TableHeader>
             <TableRow>
@@ -232,9 +237,6 @@ export function OrdersTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
-              <TableSkeletonRows columns={7} rows={10} />
-            ) : null}
             {!loading &&
             filtered.map((o) => (
               <TableRow key={o.id}>
@@ -324,7 +326,7 @@ export function OrdersTable({
               )}
             </TableBody>
           </Table>
-        </div>
+          </DataTableShell>
         </>
       )}
     </div>
