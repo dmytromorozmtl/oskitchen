@@ -4323,3 +4323,12 @@ Artifact: lib/navigation/preview-route-hiding-confirmation-policy.ts, components
 Result: IMPLEMENTED — confirm dialog before Show all modules; preview-modules-visible banner when expanded; audit certifies preview sidebar links hidden in focused nav
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 89
+Task: DES-12 — command palette UX
+Role: DESIGN
+Priority: P1
+Artifact: lib/navigation/command-palette-ux-policy.ts, components/dashboard/command-palette.tsx, tests/unit/command-palette-ux.test.ts
+Result: IMPLEMENTED — ↑↓/↵ keyboard nav; Preview maturity badges; recent routes; ranked search; mobile trigger; empty hints + footer shortcuts
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

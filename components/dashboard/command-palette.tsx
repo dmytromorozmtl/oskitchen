@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { NavMaturityBadge } from "@/components/ui/beta-badge";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import { flattenNavLinks, NAV_GROUPS } from "@/lib/nav-config";
@@ -24,6 +25,18 @@ import type { ModuleKey } from "@/lib/module-visibility";
 import { navigationHrefDisabled } from "@/lib/module-visibility";
 import { getCommandPaletteRoutesFromRegistry } from "@/lib/modules/command-palette-routes";
 import { isDashboardPathAllowedForRole } from "@/lib/nav-role-filter";
+import {
+  buildCommandPaletteItems,
+  COMMAND_PALETTE_EMPTY_HINTS,
+  COMMAND_PALETTE_FOOTER_HINTS,
+  COMMAND_PALETTE_RECENT_STORAGE_KEY,
+  commandPaletteItemId,
+  moveCommandPaletteActiveIndex,
+  parseCommandPaletteRecent,
+  pushCommandPaletteRecent,
+  rankCommandPaletteRoutes,
+  type CommandPaletteItem,
+} from "@/lib/navigation/command-palette-ux-policy";
 import type { GlobalSearchHit } from "@/lib/search/search-types";
 
 const hrefToLabelKey = new Map(flattenNavLinks(NAV_GROUPS, []).map((l) => [l.href, l.labelKey]));
@@ -94,9 +107,20 @@ export function CommandPalette({
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [q, setQ] = React.useState("");
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [recentHrefs, setRecentHrefs] = React.useState<string[]>([]);
   const [remoteHits, setRemoteHits] = React.useState<GlobalSearchHit[]>([]);
   const [searchPending, startSearchTransition] = React.useTransition();
   const disabled = React.useMemo(() => new Set<ModuleKey>(disabledModuleKeys), [disabledModuleKeys]);
+  const listRef = React.useRef<HTMLUListElement>(null);
+
+  React.useEffect(() => {
+    try {
+      setRecentHrefs(parseCommandPaletteRecent(localStorage.getItem(COMMAND_PALETTE_RECENT_STORAGE_KEY)));
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   React.useEffect(() => {
     if (!open || !searchWorkspaceUserId) {
@@ -163,6 +187,17 @@ export function CommandPalette({
     return out;
   }, [locale, businessType, disabled, extraRoutes, fullNavAccess, gtmSurfaceAccess, isPlatformSuper, userRole]);
 
+  const routeByHref = React.useMemo(() => new Map(ROUTES.map((r) => [r.href, r])), [ROUTES]);
+
+  const recentRoutes = React.useMemo(() => {
+    const out: { href: string; label: string; k?: string }[] = [];
+    for (const href of recentHrefs) {
+      const route = routeByHref.get(href);
+      if (route) out.push(route);
+    }
+    return out;
+  }, [recentHrefs, routeByHref]);
+
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -174,16 +209,24 @@ export function CommandPalette({
     return () => window.removeEventListener("keydown", down);
   }, []);
 
+  React.useEffect(() => {
+    setActiveIndex(0);
+  }, [q, open]);
+
   const filteredRoutes = React.useMemo(() => {
-    const s = q.trim().toLowerCase();
-    if (!s) return ROUTES;
-    return ROUTES.filter(
-      (r) =>
-        r.label.toLowerCase().includes(s) ||
-        r.href.toLowerCase().includes(s) ||
-        r.k?.includes(s),
-    );
-  }, [q, ROUTES]);
+    const s = q.trim();
+    if (!s) {
+      if (recentRoutes.length > 0) {
+        const recentSet = new Set(recentRoutes.map((r) => r.href));
+        return [
+          ...recentRoutes,
+          ...ROUTES.filter((r) => !recentSet.has(r.href)),
+        ];
+      }
+      return ROUTES;
+    }
+    return rankCommandPaletteRoutes(s, ROUTES);
+  }, [q, ROUTES, recentRoutes]);
 
   const filteredHits = React.useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -197,22 +240,146 @@ export function CommandPalette({
     );
   }, [q, remoteHits]);
 
+  const selectableItems = React.useMemo(
+    () =>
+      buildCommandPaletteItems({
+        hits: filteredHits,
+        routes: filteredRoutes,
+      }),
+    [filteredHits, filteredRoutes],
+  );
+
+  const recordRecent = React.useCallback((href: string) => {
+    setRecentHrefs((prev) => {
+      const next = pushCommandPaletteRecent(prev, href);
+      try {
+        localStorage.setItem(COMMAND_PALETTE_RECENT_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
+
+  const navigateTo = React.useCallback(
+    (href: string) => {
+      recordRecent(href);
+      setOpen(false);
+      setQ("");
+      router.push(href);
+    },
+    [recordRecent, router],
+  );
+
+  const openItem = React.useCallback(
+    (item: CommandPaletteItem) => {
+      navigateTo(item.href);
+    },
+    [navigateTo],
+  );
+
+  React.useEffect(() => {
+    const el = listRef.current?.querySelector<HTMLElement>(`[data-cmd-index="${activeIndex}"]`);
+    el?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => moveCommandPaletteActiveIndex(i, "down", selectableItems.length));
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => moveCommandPaletteActiveIndex(i, "up", selectableItems.length));
+      return;
+    }
+    if (e.key === "Enter" && selectableItems.length > 0) {
+      e.preventDefault();
+      const item = selectableItems[activeIndex];
+      if (item) openItem(item);
+    }
+  };
+
+  const showRecentHeader = !q.trim() && recentRoutes.length > 0;
+  const hitItems = selectableItems.filter((i) => i.kind === "hit");
+  const routeItems = selectableItems.filter((i) => i.kind === "route");
+
+  const renderItemButton = (item: CommandPaletteItem, index: number) => {
+    if (item.kind === "hit") {
+      return (
+        <li key={commandPaletteItemId(item)} role="option" aria-selected={index === activeIndex}>
+          <button
+            type="button"
+            data-cmd-index={index}
+            className={cn(
+              "flex w-full px-4 py-2 text-left text-sm outline-none",
+              index === activeIndex ? "bg-muted" : "hover:bg-muted",
+            )}
+            onMouseEnter={() => setActiveIndex(index)}
+            onClick={() => openItem(item)}
+          >
+            <span className="min-w-0 flex-1">
+              <span className="block font-medium">{item.title}</span>
+              {item.subtitle ? (
+                <span className="block text-xs text-muted-foreground">{item.subtitle}</span>
+              ) : null}
+            </span>
+            <span className="ml-2 shrink-0 text-[10px] uppercase text-muted-foreground">
+              {item.hitKind}
+            </span>
+          </button>
+        </li>
+      );
+    }
+
+    return (
+      <li key={commandPaletteItemId(item)} role="option" aria-selected={index === activeIndex}>
+        <button
+          type="button"
+          data-cmd-index={index}
+          className={cn(
+            "flex w-full items-center gap-2 px-4 py-2 text-left text-sm outline-none",
+            index === activeIndex ? "bg-muted" : "hover:bg-muted",
+          )}
+          onMouseEnter={() => setActiveIndex(index)}
+          onClick={() => openItem(item)}
+        >
+          <span className="min-w-0 flex-1 truncate">{item.label}</span>
+          {item.maturityBadge ? <NavMaturityBadge label={item.maturityBadge} /> : null}
+          <span className="ml-auto hidden shrink-0 font-mono text-[10px] text-muted-foreground sm:inline">
+            {item.href}
+          </span>
+        </button>
+      </li>
+    );
+  };
+
+  let itemIndex = 0;
+
   return (
     <>
       <Button
         type="button"
         variant="outline"
         size="sm"
-        className="hidden rounded-full text-xs text-muted-foreground lg:inline-flex"
+        className="rounded-full text-xs text-muted-foreground"
         onClick={() => setOpen(true)}
+        data-testid="command-palette-trigger"
+        aria-label="Open command palette"
       >
-        <Search className="mr-2 h-3.5 w-3.5" />
-        Search
-        <kbd className="ml-2 rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
+        <Search className="h-3.5 w-3.5 sm:mr-2" />
+        <span className="hidden sm:inline">Search</span>
+        <kbd className="ml-0 hidden rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] sm:ml-2 sm:inline">
+          ⌘K
+        </kbd>
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-lg">
+        <DialogContent
+          className="gap-0 overflow-hidden p-0 sm:max-w-lg"
+          data-testid="command-palette-dialog"
+        >
           <DialogHeader className="sr-only">
             <DialogTitle>Command palette</DialogTitle>
             <DialogDescription>Jump to a module or run a quick action.</DialogDescription>
@@ -222,74 +389,53 @@ export function CommandPalette({
             <Input
               value={q}
               onChange={(e) => setQ(e.target.value)}
+              onKeyDown={handleInputKeyDown}
               placeholder="Search modules, actions, orders, customers…"
               className="border-0 shadow-none focus-visible:ring-0"
               autoFocus
+              data-testid="command-palette-input"
             />
           </div>
-          <ul className="max-h-72 overflow-y-auto py-2" aria-label="Command results">
-            {filteredHits.length > 0 ? (
+          <ul
+            ref={listRef}
+            className="max-h-72 overflow-y-auto py-2"
+            aria-label="Command results"
+            role="listbox"
+          >
+            {hitItems.length > 0 ? (
               <li className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                 Workspace matches
               </li>
             ) : null}
-            {filteredHits.map((h) => (
-              <li key={`${h.kind}-${h.id}`}>
-                <button
-                  type="button"
-                  className={cn(
-                    "flex w-full px-4 py-2 text-left text-sm hover:bg-muted",
-                    "focus:bg-muted outline-none",
-                  )}
-                  onClick={() => {
-                    setOpen(false);
-                    setQ("");
-                    router.push(h.href);
-                  }}
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-medium">{h.title}</span>
-                    {h.subtitle ? (
-                      <span className="block text-xs text-muted-foreground">{h.subtitle}</span>
-                    ) : null}
-                  </span>
-                  <span className="ml-2 shrink-0 text-[10px] uppercase text-muted-foreground">
-                    {h.kind}
-                  </span>
-                </button>
-              </li>
-            ))}
-            {filteredRoutes.length > 0 ? (
-              <li className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                Navigation
+            {hitItems.map((item) => renderItemButton(item, itemIndex++))}
+            {routeItems.length > 0 ? (
+              <li
+                className={cn(
+                  "px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground",
+                  hitItems.length > 0 ? "pt-2" : "",
+                )}
+              >
+                {showRecentHeader ? "Recent & navigation" : "Navigation"}
               </li>
             ) : null}
-            {filteredRoutes.map((r) => (
-              <li key={r.href}>
-                <button
-                  type="button"
-                  className={cn(
-                    "flex w-full px-4 py-2 text-left text-sm hover:bg-muted",
-                    "focus:bg-muted outline-none",
-                  )}
-                  onClick={() => {
-                    setOpen(false);
-                    setQ("");
-                    router.push(r.href);
-                  }}
-                >
-                  {r.label}
-                  <span className="ml-auto font-mono text-[10px] text-muted-foreground">{r.href}</span>
-                </button>
-              </li>
-            ))}
+            {routeItems.map((item) => renderItemButton(item, itemIndex++))}
             {searchPending ? (
               <li className="px-4 py-2 text-xs text-muted-foreground">Searching workspace…</li>
             ) : null}
-            {filteredRoutes.length === 0 && filteredHits.length === 0 ? (
-              <li className="px-4 py-6 text-center text-sm text-muted-foreground">No matches</li>
+            {selectableItems.length === 0 && !searchPending ? (
+              <li className="space-y-2 px-4 py-6 text-center text-sm text-muted-foreground">
+                <p>No matches</p>
+                <p className="text-xs">
+                  Try: {COMMAND_PALETTE_EMPTY_HINTS.map((hint) => `"${hint}"`).join(", ")}
+                </p>
+              </li>
             ) : null}
           </ul>
+          <div className="flex flex-wrap gap-x-3 gap-y-1 border-t px-3 py-2 text-[10px] text-muted-foreground">
+            <span>{COMMAND_PALETTE_FOOTER_HINTS.navigate}</span>
+            <span>{COMMAND_PALETTE_FOOTER_HINTS.select}</span>
+            <span>{COMMAND_PALETTE_FOOTER_HINTS.close}</span>
+          </div>
         </DialogContent>
       </Dialog>
     </>
