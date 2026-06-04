@@ -4620,3 +4620,12 @@ Artifact: docs/loi-template-walkthrough.md, lib/marketing/loi-template-walkthrou
 Result: IMPLEMENTED — eight walkthrough steps W1–W8 (~21 min); LOI-DP-001 SKU; Exhibit A/B/C scripts; post-signature GO/NO-GO checklist; forbidden-claims lint; linked from loi-design-partner-template, loi-outreach-email, pilot-proposal-template, discovery-call-script
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 122
+Task: DEV-35 — Grubhub menu sync hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: services/integrations/grubhub/menu-sync.service.ts, services/integrations/grubhub/grubhub-service.ts, app/api/cron/grubhub-sync/route.ts, tests/unit/grubhub-menu-sync.test.ts
+Result: IMPLEMENTED — menuId filter fix; runChannelMenuSyncJob logging; empty-menu guard; per-user connectionId; cron menu sync (GRUBHUB_MENU_SYNC_ON_CRON); unit tests for payload builder
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

@@ -1,5 +1,10 @@
+import { IntegrationProvider } from "@prisma/client";
+
+import {
+  grubhubDeliveryListWhereForOwner,
+  integrationConnectionByProviderWhereForOwner,
+} from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
-import { grubhubDeliveryListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 
 import { getGrubhubCredentialsForUser } from "@/services/integrations/grubhub/grubhub-credentials";
 import { GrubhubMenuSyncService } from "@/services/integrations/grubhub/menu-sync.service";
@@ -109,8 +114,20 @@ export async function syncMenuToGrubhub(userId: string, menuId?: string) {
   if (!isGrubhubConfigured(creds)) {
     throw new Error(getGrubhubBetaMessage(false));
   }
+
+  const conn = await prisma.integrationConnection.findFirst({
+    where: await integrationConnectionByProviderWhereForOwner(userId, IntegrationProvider.GRUBHUB),
+    select: { id: true, externalStoreId: true },
+  });
+  const merchantId = conn?.externalStoreId?.trim() || creds.merchantId!.trim();
+
   const svc = new GrubhubMenuSyncService(creds);
-  const result = await svc.pushMenu(userId, creds.merchantId!.trim(), menuId ?? null);
+  const result = await svc.pushMenu(
+    userId,
+    merchantId,
+    menuId ? { menuId } : undefined,
+    conn?.id ?? null,
+  );
   if (!result.ok) {
     throw new Error(result.message ?? "Grubhub menu sync failed");
   }
