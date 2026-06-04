@@ -4746,3 +4746,12 @@ Artifact: lib/integrations/email-orders-types.ts, services/integrations/email-or
 Result: IMPLEMENTED — heuristic email parser (From/Subject/items/total); content-hash dedupe; order hub persist; PLACEHOLDER→BETA; 18th BETA integration; zero channel placeholders remain; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 136
+Task: DEV-49 — BETA integrations registry integrity smoke
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/beta-integrations-registry-smoke-era17-policy.ts, lib/integrations/beta-integrations-registry-smoke-summary.ts, scripts/smoke-beta-integrations-registry-era17.ts, docs/beta-integrations-registry-smoke.md, tests/unit/beta-integrations-registry-smoke.test.ts, tests/unit/beta-integrations-registry-smoke-era17-cert-live.test.ts, artifacts/smoke-beta-integrations-registry-summary.json
+Result: IMPLEMENTED — eighteen BETA scaffold audit (pages, services, API routes, BetaBadge); zero PLACEHOLDER; npm run smoke:beta-integrations-registry → overall PASSED; cert chain 13 tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
