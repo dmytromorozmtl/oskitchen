@@ -5043,3 +5043,12 @@ Artifact: docs/state-of-ghost-kitchen-ops-report.md, lib/marketing/state-of-ghos
 Result: IMPLEMENTED — DRAFT OUTLINE; 11 sections S1–S11; data collection contract; isStateOfGhostKitchenOpsReportPublishable(5); cohortMedian(); artifact schema; forbidden-claims lint; 6 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 169
+Task: MKT-34 — Toast gap analysis public summary
+Role: MARKETING
+Priority: P2
+Artifact: docs/toast-gap-analysis.md (public summary TW1–TW3, OK1–OK3), lib/marketing/toast-gap-analysis-public-summary-policy.ts, tests/unit/toast-gap-analysis-public-summary-policy.test.ts
+Result: IMPLEMENTED — sales-safe public summary + TG1–TG4 gates; lintToastGapPublicSummaryCopy(); BC1 + /compare/toast CTA; extends PM Task 93 matrix; 5 unit tests PASS (+ 2 existing toast-gap tests)
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

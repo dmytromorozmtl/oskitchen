@@ -1,8 +1,9 @@
 # Toast gap analysis — OS Kitchen
 
-**Policy:** `toast-gap-analysis-v1`  
-**Date:** 2026-06-02  
-**Owner:** PM + Sales + Engineering  
+**Task:** MKT-34 (public summary) · PM Task 93 (full matrix)  
+**Policy:** `toast-gap-analysis-v1` · `toast-gap-analysis-public-summary-mkt34-v1`  
+**Date:** 2026-06-03  
+**Owner:** PM + Sales + Engineering + Marketing  
 **Scope:** Structured gap inventory vs **Toast POS** — not Square/Lightspeed (see [`competitor-comparison-honest.md`](./competitor-comparison-honest.md))  
 **Sources:** [`artifacts/competitor-feature-tracker.json`](../artifacts/competitor-feature-tracker.json) · [`compare/toast`](../lib/marketing/compare-content.ts) · [`beta-to-live-roadmap.md`](./beta-to-live-roadmap.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md)
 
@@ -27,6 +28,54 @@ This doc is the **Toast-specific** diligence artifact for sales, product, and Se
 | Enterprise SSO / SOC2 | Mature | Roadmap / pilot wiring | **Critical** (enterprise deals) |
 
 **Safe one-liner:** Toast wins **in-restaurant hardware, payments scale, and install base**. OS Kitchen competes on **unified order-to-fulfillment software**, **B2B buyer marketplace vision**, and **seven AI modules in one codebase** — all **pre-customer** until pilot proof lands.
+
+---
+
+## Public summary (sales & marketing)
+
+**Status:** Approved for **internal sales** and `/compare/toast` — not for paid ads until `verify-claims` CI green on edited copy.
+
+### Publish gates (public-facing copy)
+
+| # | Gate | Required |
+|---|------|----------|
+| **TG1** | Disclaimer on `/compare/toast` visible | Hardware + reference-customer caveat |
+| **TG2** | `lintToastGapPublicSummaryCopy()` PASS | No forbidden superlatives |
+| **TG3** | Battle card BC1 linked | [`competitive-battle-cards.md`](./competitive-battle-cards.md) |
+| **TG4** | No customer logos | Until case study approved |
+
+### Toast wins (say aloud — 3 bullets)
+
+| ID | Public bullet |
+|----|---------------|
+| **TW1** | Toast wins on **certified payment hardware** and field install — we do not compete on proprietary terminals. |
+| **TW2** | Toast has **thousands of reference customers** — we have **0 signed LOI**; design-partner path only. |
+| **TW3** | Toast wins **rush-hour KDS ops proof** — our KDS is shipped but **not rush-hour certified**. |
+
+### OS Kitchen wedges (qualified — 3 bullets)
+
+| ID | Public bullet |
+|----|---------------|
+| **OK1** | **Production / commissary / ghost kitchen** depth — order hub → production → packing → routes. |
+| **OK2** | **Software-first** — Stripe Connect on tablets you own; no Toast Go lock-in. |
+| **OK3** | **Integration Health** — honest PASS / BETA / SKIPPED per connector ([`/trust`](/trust)). |
+
+### Public CTA
+
+> Book a competitive walkthrough: `/book-demo?utm_source=compare&utm_medium=toast-gap&utm_campaign=toast-gap-mkt34`  
+> Deep matrix: this doc (internal) · Live compare: `/compare/toast` · Battle card: **BC1**
+
+### Forbidden public summary claims
+
+Do not use on landing pages, ads, or social:
+
+- "We beat Toast on everything" / "Toast killer"
+- "Toast-class rush hour" / "production-certified DoorDash"
+- "Thousands of OS Kitchen customers"
+- "Enterprise-ready day one" / SOC2 certified
+- Implying LIVE WooCommerce/Shopify while smokes SKIPPED
+
+Run `lintToastGapPublicSummaryCopy(draft)` before publishing any derivative of this section.
 
 ---
 
@@ -236,4 +285,4 @@ Before using this doc in investor or enterprise materials:
 
 ---
 
-*Generated as Task 93 — P2 PM. Next: [`series-a-narrative.md`](./series-a-narrative.md) (Task 94).*
+*PM matrix: Task 93. Public summary: MKT-34. Next: [`series-a-narrative.md`](./series-a-narrative.md) (Task 94).*
