@@ -5187,3 +5187,12 @@ Artifact: lib/competitor/competitor-p0-intelligence-patterns.ts, lib/competitor/
 Result: IMPLEMENTED — auditCompetitorP0Intelligence() composes 5 sub-audits (honest comparison doc, 7-competitor sales-safe tracker, battle cards BC1–BC7, Era 17 gap matrix + summary artifact, Toast public summary wedges); registry + capstone report; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 185
+Task: COMP-02 — competitor leapfrog gap-closure capstone audit
+Role: COMPETITOR
+Priority: P1
+Artifact: lib/competitor/competitor-leapfrog-gap-closure-patterns.ts, lib/competitor/competitor-leapfrog-gap-closure-audit-policy.ts, tests/unit/competitor-leapfrog-gap-closure-audit-policy.test.ts
+Result: IMPLEMENTED — auditCompetitorLeapfrogGapClosure() composes 6 sub-audits (COMP-01 P0 intelligence, Era 17 leapfrog roadmap, v12 gap-closure program, forensic sales-safe audit 1/25 done, Era 19 readiness 59/100 scorecard, product gap roadmap); registry + capstone report; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
