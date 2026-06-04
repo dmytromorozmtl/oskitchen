@@ -4989,3 +4989,12 @@ Artifact: lib/design/permission-denied-patterns.ts, lib/design/permission-denied
 Result: IMPLEMENTED — settings_workspace surface; PERMISSION_DENIED_CARD_CLASS tokens; settings POS/backups migrated from notFound() to PermissionDeniedSurfaceCard; developers page documented exception; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 163
+Task: DES-38 — stabilization design capstone audit (DES-27 through DES-37)
+Role: DESIGN
+Priority: P2
+Artifact: lib/design/stabilization-design-patterns.ts, lib/design/stabilization-design-audit-policy.ts, tests/unit/stabilization-design-audit-policy.test.ts
+Result: IMPLEMENTED — auditStabilizationDesign() composes 11 sub-audits (page layout, skeleton, section, filter, table, form feedback, error, empty, metric, route loading, permission denied); registry + capstone report; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
