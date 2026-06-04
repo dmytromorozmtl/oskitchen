@@ -5295,3 +5295,12 @@ Artifact: lib/execution/final-08-forbidden-claims-audit-policy.ts, tests/unit/fi
 Result: IMPLEMENTED — auditFinal08ForbiddenClaims() re-certifies verify-claims.yml (strict MARKETING_CLAIMS_STRICT, PR gate, forbidden-claims test, gate artifact), era7 governance policy + training doc, MKT-09 done, FINAL-07 prerequisite; 4 unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 197
+Task: FINAL-09 — competitor intelligence capstone re-cert (task-203)
+Role: EXECUTION
+Priority: P2
+Artifact: lib/execution/final-09-competitor-intelligence-audit-policy.ts, tests/unit/final-09-competitor-intelligence-audit-policy.test.ts
+Result: IMPLEMENTED — auditFinal09CompetitorIntelligence() re-certifies competitor-completion-capstone-comp03-v1 (COMP-01 P0 intelligence + COMP-02 leapfrog gap-closure), patterns + unit tests, COMP-03 done, FINAL-08 prerequisite; 4 unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
