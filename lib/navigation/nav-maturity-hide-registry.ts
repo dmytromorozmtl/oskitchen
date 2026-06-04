@@ -158,7 +158,7 @@ export const NAV_MATURITY_HIDE_RULES: readonly NavMaturityHideRule[] = [
   { prefix: "/dashboard/integrations/shopify", exposure: "hidden_default", matrixRef: "Shopify integration hub" },
   { prefix: "/dashboard/integrations/stripe", exposure: "hidden_default", matrixRef: "Stripe integration hub" },
   { prefix: "/dashboard/integrations/woocommerce", exposure: "hidden_default", matrixRef: "WooCommerce integration hub" },
-  { prefix: "/dashboard/integrations/square", exposure: "hidden_default", matrixRef: "Square integration hub" },
+  { prefix: "/dashboard/integrations/square", exposure: "preview", matrixRef: "Square POS order import BETA" },
   { prefix: "/dashboard/integrations/toast", exposure: "hidden_default", matrixRef: "Toast integration hub" },
   { prefix: "/dashboard/integrations/webhooks", exposure: "hidden_default", matrixRef: "Webhooks hub" },
   { prefix: "/dashboard/integrations/import", exposure: "hidden_default", matrixRef: "Integration import" },

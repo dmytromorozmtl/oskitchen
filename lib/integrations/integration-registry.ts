@@ -101,6 +101,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     requiredEnv: ["UBER_DIRECT_CUSTOMER_ID", "UBER_DIRECT_CLIENT_ID", "UBER_DIRECT_CLIENT_SECRET"],
     setupRoute: "/dashboard/integrations/uber-direct",
   },
+  {
+    id: "square",
+    name: "Square",
+    status: "BETA",
+    requiredEnv: ["SQUARE_ACCESS_TOKEN", "SQUARE_LOCATION_ID"],
+    setupRoute: "/dashboard/integrations/square",
+  },
 ];
 
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {

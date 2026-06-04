@@ -4692,3 +4692,12 @@ Artifact: lib/delivery/uber-direct-types.ts, services/delivery/uber-direct.ts, l
 Result: IMPLEMENTED — PLACEHOLDER→BETA; OAuth token fetch; quote/create/cancel/status API calls; webhook status apply; nav maturity preview; inline honesty routes; 35 related unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 130
+Task: DEV-43 — Square POS order import hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/square-types.ts, services/integrations/square-sync-service.ts, app/api/integrations/square/sync/route.ts, components/integrations/square-sync-panel.tsx, app/dashboard/integrations/square/page.tsx, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/navigation/nav-maturity-hide-registry.ts, tests/unit/square-sync.test.ts
+Result: IMPLEMENTED — Square Orders API search import (14-day window); idempotent square:order tags; order hub persist; PLACEHOLDER→BETA channel registry; 13th BETA integration; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+
