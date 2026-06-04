@@ -4440,3 +4440,12 @@ Artifact: lib/design/dark-mode-consistency-policy.ts, app/globals.css (.dark leg
 Result: IMPLEMENTED — dashboard shell chrome uses bg-background; .dark maps legacy --color-* tokens; audit gate zero bg-white on operator surfaces
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 102
+Task: DES-25 — icon system audit
+Role: DESIGN
+Priority: P1
+Artifact: lib/design/icon-system.ts, lib/design/icon-system-audit-policy.ts, components/ui/app-icon.tsx, 8 module migrations, tests/unit/icon-system-audit-policy.test.ts
+Result: IMPLEMENTED — 5-tier Lucide size ladder (xs→xl); semantic appIconNav/Badge/Header/Hero classes; audit gate zero raw h-N w-N on operator surfaces; marketplace category icons aligned
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

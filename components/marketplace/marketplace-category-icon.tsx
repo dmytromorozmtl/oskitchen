@@ -11,6 +11,10 @@ import {
 } from "lucide-react";
 
 import {
+  APP_ICON_SIZES,
+  appIconTileContainerClass,
+} from "@/lib/design/icon-system";
+import {
   getMarketplaceCategoryIconMeta,
   resolveMarketplaceCategoryIconMeta,
   type MarketplaceCategoryIconName,
@@ -29,10 +33,10 @@ const ICON_COMPONENTS: Record<MarketplaceCategoryIconName, LucideIcon> = {
 };
 
 const SIZE_CLASS = {
-  sm: "h-3.5 w-3.5",
-  md: "h-4 w-4",
-  lg: "h-5 w-5",
-  tile: "h-6 w-6",
+  sm: APP_ICON_SIZES.sm.className,
+  md: APP_ICON_SIZES.md.className,
+  lg: APP_ICON_SIZES.lg.className,
+  tile: APP_ICON_SIZES.xl.className,
 } as const;
 
 function iconForSlug(slug: string): LucideIcon {
@@ -81,7 +85,7 @@ export function MarketplaceCategoryIconTile({
     <span
       data-testid={`marketplace-category-icon-${slug}`}
       className={cn(
-        "inline-flex h-10 w-10 items-center justify-center rounded-xl",
+        appIconTileContainerClass,
         meta.tileClassName,
         className,
       )}

@@ -38,7 +38,8 @@ import {
   todayMetricsExpandLabel,
 } from "@/lib/briefing/owner-daily-briefing-today-focus-era19";
 import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
-import { formatCurrency } from "@/lib/utils";
+import { appIconHeaderClass, appIconMdClass } from "@/lib/design/icon-system";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { TodayCommandCenterPayload } from "@/services/today/today-command-center-service";
 
 export function TodayCommandCenterView({
@@ -310,7 +311,7 @@ export function TodayCommandCenterView({
         <Card className="border-border/80 bg-card/90 shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <AlertTriangle className="h-5 w-5 text-amber-600" />
+              <AlertTriangle className={cn(appIconHeaderClass, "text-amber-600")} />
               Blockers & integration risk
             </CardTitle>
             <CardDescription>Prioritized issues with deep links — empty means clear for now.</CardDescription>
@@ -335,7 +336,7 @@ export function TodayCommandCenterView({
                     <p className="font-medium">{b.title}</p>
                     <p className="text-xs text-muted-foreground">{b.detail}</p>
                   </div>
-                  <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  <ArrowRight className={cn("mt-0.5 shrink-0 text-muted-foreground", appIconMdClass)} />
                 </Link>
               ))
             )}
@@ -345,7 +346,7 @@ export function TodayCommandCenterView({
         <Card className="border-border/80 bg-card/90 shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Shield className="h-5 w-5 text-primary" />
+              <Shield className={cn(appIconHeaderClass, "text-primary")} />
               Go-live & quality
             </CardTitle>
             <CardDescription>Cross-check data and recovery workflows.</CardDescription>
@@ -529,7 +530,7 @@ function Quick({
   return (
     <Button asChild variant="secondary" className="h-auto justify-start gap-3 rounded-2xl py-4">
       <Link href={href}>
-        <Icon className="h-5 w-5" />
+        <Icon className={appIconHeaderClass} />
         <span className="text-left text-sm font-semibold">{label}</span>
       </Link>
     </Button>

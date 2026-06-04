@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { appIconMdClass, appIconSmClass, appIconXsClass } from "@/lib/design/icon-system";
 
 export type BridgeStatusTone = "ok" | "warn" | "down" | "neutral";
 
@@ -64,7 +65,7 @@ export function BridgeCard({
           </div>
           {status && StatusIcon && (
             <Badge variant="outline" className={cn("flex items-center gap-1 rounded-full ring-2", toneBadgeClasses(status.tone))}>
-              <StatusIcon className="h-3 w-3" aria-hidden />
+              <StatusIcon className={appIconXsClass} aria-hidden />
               {status.label}
             </Badge>
           )}
@@ -87,7 +88,7 @@ export function BridgeCard({
               const Icon = c.ok ? CheckCircle2 : AlertTriangle;
               return (
                 <li key={c.label} className="flex items-start gap-2">
-                  <Icon className={cn("mt-0.5 h-4 w-4", c.ok ? "text-emerald-600" : "text-amber-600")} aria-hidden />
+                  <Icon className={cn("mt-0.5", appIconMdClass, c.ok ? "text-emerald-600" : "text-amber-600")} aria-hidden />
                   <div>
                     <p className="font-medium">{c.label}</p>
                     {c.hint && <p className="text-xs text-muted-foreground">{c.hint}</p>}
@@ -100,7 +101,7 @@ export function BridgeCard({
         <div className="flex flex-wrap items-center gap-2 pt-1">
           <Button asChild size="sm">
             <Link href={href}>
-              {ctaLabel ?? "Open"} <ArrowRight className="ml-1 h-3.5 w-3.5" aria-hidden />
+              {ctaLabel ?? "Open"} <ArrowRight className={cn("ml-1", appIconSmClass)} aria-hidden />
             </Link>
           </Button>
           {secondaryActions?.map((a) => (

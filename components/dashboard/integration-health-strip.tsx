@@ -13,6 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PilotIntegrationHealthStripModel } from "@/lib/integrations/pilot-integration-health-strip-era18";
 import type { PilotIntegrationHealthCommercialInflectionFootnote } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
+import {
+  appIconHeroClass,
+  appIconMdClass,
+  appIconSmClass,
+  appIconXsClass,
+} from "@/lib/design/icon-system";
 import { cn } from "@/lib/utils";
 
 export type IntegrationHealthStripModel = PilotIntegrationHealthStripModel & {
@@ -73,7 +79,7 @@ export function IntegrationHealthStrip({ model }: { model: IntegrationHealthStri
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-background/80 shadow-sm ring-1 ring-border/60"
               aria-hidden
             >
-              <Cable className="h-6 w-6 text-muted-foreground" />
+              <Cable className={cn(appIconHeroClass, "text-muted-foreground")} />
             </div>
             <div className="min-w-0 space-y-1">
               <div className="flex flex-wrap items-center gap-2">
@@ -82,7 +88,7 @@ export function IntegrationHealthStrip({ model }: { model: IntegrationHealthStri
                   variant="outline"
                   className={cn("rounded-full border-current/30 bg-background/60", meta.iconClass)}
                 >
-                  <StatusIcon className="mr-1 h-3 w-3" aria-hidden />
+                  <StatusIcon className={cn("mr-1", appIconXsClass)} aria-hidden />
                   {meta.label}
                 </Badge>
               </div>
@@ -92,7 +98,7 @@ export function IntegrationHealthStrip({ model }: { model: IntegrationHealthStri
           <Button asChild variant="outline" size="sm" className="shrink-0 rounded-full">
             <Link href="/dashboard/integration-health">
               Full dashboard
-              <ExternalLink className="ml-1.5 h-3.5 w-3.5" aria-hidden />
+              <ExternalLink className={cn("ml-1.5", appIconSmClass)} aria-hidden />
             </Link>
           </Button>
         </div>
@@ -169,7 +175,7 @@ export function IntegrationHealthStrip({ model }: { model: IntegrationHealthStri
                   </div>
                   <p className="mt-0.5 text-xs text-muted-foreground">{row.detail}</p>
                 </div>
-                <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                <ArrowRight className={cn("mt-0.5 shrink-0 text-muted-foreground", appIconMdClass)} aria-hidden />
               </Link>
             ))}
           </div>

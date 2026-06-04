@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { appIconHeaderClass, appIconHeroClass } from "@/lib/design/icon-system";
 
 export type EmptyStateProps = {
   icon?: LucideIcon;
@@ -127,7 +128,7 @@ export function EmptyState({
       >
         {Icon ? (
           <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Icon className="h-5 w-5" aria-hidden />
+            <Icon className={appIconHeaderClass} aria-hidden />
           </div>
         ) : null}
         <p className="text-base font-medium">{title}</p>
@@ -163,7 +164,7 @@ export function EmptyState({
       <CardHeader className="text-center sm:text-left">
         {Icon ? (
           <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary sm:mx-0">
-            <Icon className="h-6 w-6" aria-hidden />
+            <Icon className={appIconHeroClass} aria-hidden />
           </div>
         ) : null}
         <CardTitle className="text-xl">{title}</CardTitle>

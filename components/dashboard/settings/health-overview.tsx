@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { appIconMdClass, appIconSmClass, appIconXsClass } from "@/lib/design/icon-system";
 import type { SectionHealth } from "@/lib/settings/health-score";
 import { overallReadiness, readinessTone } from "@/lib/settings/health-score";
 
@@ -55,7 +56,7 @@ export function HealthOverview({ sections }: HealthOverviewProps) {
             variant="outline"
             className={cn("flex items-center gap-1 rounded-full border-transparent ring-2", tone.ring)}
           >
-            <ToneIcon className="h-3 w-3" aria-hidden />
+            <ToneIcon className={appIconXsClass} aria-hidden />
             {overall}% · {tone.label}
           </Badge>
         </div>
@@ -81,7 +82,7 @@ function SectionHealthTile({ section }: { section: SectionHealth }) {
     >
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold text-muted-foreground">{section.label}</span>
-        <ArrowUpRight className="h-3 w-3 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden />
+        <ArrowUpRight className={cn("text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary", appIconXsClass)} aria-hidden />
       </div>
       <div className="flex items-baseline gap-2">
         <span className="text-xl font-semibold tabular-nums">{section.score}%</span>

@@ -37,6 +37,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
+import { appIconNavClass } from "@/lib/design/icon-system";
 import {
   dashboardShellHeaderClass,
   dashboardShellRootClass,
@@ -172,7 +173,7 @@ export function DashboardShell({
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className="rounded-full lg:hidden">
-                  <MenuSquare className="h-4 w-4" />
+                  <MenuSquare className={appIconNavClass} />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="flex w-[280px] flex-col gap-0 p-0">
@@ -234,7 +235,7 @@ export function DashboardShell({
                   className="rounded-full"
                   aria-label="Open account menu"
                 >
-                  <User className="h-4 w-4" />
+                  <User className={appIconNavClass} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -249,13 +250,13 @@ export function DashboardShell({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/settings/profile" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
+                    <User className={appIconNavClass} />
                     Profile
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/settings/notifications" className="flex items-center gap-2">
-                    <Bell className="h-4 w-4" />
+                    <Bell className={appIconNavClass} />
                     Notifications
                   </Link>
                 </DropdownMenuItem>
@@ -267,7 +268,7 @@ export function DashboardShell({
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/changelog" className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4" />
+                    <Sparkles className={appIconNavClass} />
                     What&apos;s new
                   </Link>
                 </DropdownMenuItem>
@@ -300,7 +301,7 @@ export function DashboardShell({
                 {isOwner ? (
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/developer/api-keys" className="flex items-center gap-2">
-                      <KeyRound className="h-4 w-4" />
+                      <KeyRound className={appIconNavClass} />
                       API Keys
                     </Link>
                   </DropdownMenuItem>
@@ -313,7 +314,7 @@ export function DashboardShell({
                 {isOwner ? (
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/staff" className="flex items-center gap-2">
-                      <Users className="h-4 w-4" />
+                      <Users className={appIconNavClass} />
                       Team
                     </Link>
                   </DropdownMenuItem>
