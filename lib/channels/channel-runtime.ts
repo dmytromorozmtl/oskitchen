@@ -27,8 +27,9 @@ function statusFromIntegration(
   }
 
   if (!def.mapsToIntegrationProvider) {
-    if (def.providerKey === "email-orders") return "NEEDS_SETUP";
+    if (def.providerKey === "email-orders" && def.isPlaceholder) return "NEEDS_SETUP";
     if (def.providerKey === "kitchenos-storefront" || def.providerKey === "manual-orders") return "LIVE";
+    if (def.providerKey === "email-orders") return "LIVE";
     if (def.isPlaceholder) return def.statusType;
     return "LIVE";
   }

@@ -136,6 +136,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     requiredEnv: ["GOOGLE_FORMS_SHEET_ACCESS_TOKEN", "GOOGLE_FORMS_SHEET_ID"],
     setupRoute: "/dashboard/integrations/google-forms",
   },
+  {
+    id: "email-orders",
+    name: "Email orders",
+    status: "BETA",
+    requiredEnv: [],
+    setupRoute: "/dashboard/integrations/email-orders",
+  },
 ];
 
 export function getIntegrationById(id: string): IntegrationRegistryEntry | undefined {

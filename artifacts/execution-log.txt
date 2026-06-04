@@ -4737,3 +4737,12 @@ Artifact: lib/integrations/google-forms-types.ts, services/integrations/google-f
 Result: IMPLEMENTED — Google Sheets API import for linked Form Responses tab; flexible header mapping; idempotent google-forms:row tags; PLACEHOLDER→BETA; 17th BETA integration; unit tests PASS
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+Cycle: 135
+Task: DEV-48 — Email orders pasted intake hardening
+Role: DEVELOPER
+Priority: P2
+Artifact: lib/integrations/email-orders-types.ts, services/integrations/email-orders-intake-service.ts, app/api/integrations/email-orders/intake/route.ts, components/integrations/email-orders-intake-panel.tsx, app/dashboard/integrations/email-orders/page.tsx, lib/integrations/integration-registry.ts, lib/channels/channel-registry.ts, lib/channels/channel-runtime.ts, tests/unit/email-orders-intake.test.ts
+Result: IMPLEMENTED — heuristic email parser (From/Subject/items/total); content-hash dedupe; order hub persist; PLACEHOLDER→BETA; 18th BETA integration; zero channel placeholders remain; unit tests PASS
+Vault: 11/11 | P0: FAILED | GO: NO-GO
+

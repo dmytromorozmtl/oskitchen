@@ -29,15 +29,17 @@ const BETA_INTEGRATION_PAGES: Record<string, string> = {
   clover: "app/dashboard/integrations/clover/page.tsx",
   lightspeed: "app/dashboard/integrations/lightspeed/page.tsx",
   "google-forms": "app/dashboard/integrations/google-forms/page.tsx",
+  "email-orders": "app/dashboard/integrations/email-orders/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks seventeen BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(17);
+  it("tracks eighteen BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(18);
     expect(BETA_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "clover",
       "doordash",
+      "email-orders",
       "google-forms",
       "grubhub",
       "homebase",
@@ -66,7 +68,7 @@ describe("integration beta badge", () => {
     expect(isBetaIntegrationProvider("uber-direct")).toBe(true);
   });
 
-  it("renders BetaBadge on all seventeen BETA integration pages", () => {
+  it("renders BetaBadge on all eighteen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const path = join(ROOT, rel);
       expect(existsSync(path), id).toBe(true);

@@ -162,6 +162,7 @@ export const NAV_MATURITY_HIDE_RULES: readonly NavMaturityHideRule[] = [
   { prefix: "/dashboard/integrations/clover", exposure: "preview", matrixRef: "Clover POS order import BETA" },
   { prefix: "/dashboard/integrations/lightspeed", exposure: "preview", matrixRef: "Lightspeed POS order import BETA" },
   { prefix: "/dashboard/integrations/google-forms", exposure: "preview", matrixRef: "Google Forms sheet intake BETA" },
+  { prefix: "/dashboard/integrations/email-orders", exposure: "preview", matrixRef: "Email orders pasted intake BETA" },
   { prefix: "/dashboard/integrations/toast", exposure: "preview", matrixRef: "Toast POS order import BETA" },
   { prefix: "/dashboard/integrations/webhooks", exposure: "hidden_default", matrixRef: "Webhooks hub" },
   { prefix: "/dashboard/integrations/import", exposure: "hidden_default", matrixRef: "Integration import" },

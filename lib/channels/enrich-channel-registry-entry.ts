@@ -67,7 +67,7 @@ function hubCategory(def: ChannelDefinition): HubChannelCategory {
 
 function supportLevel(def: ChannelDefinition): SupportLevel {
   if (def.providerKey === "manual-orders") return "MANUAL_ONLY";
-  if (def.providerKey === "email-orders") return "DEMO_ONLY";
+  if (def.providerKey === "email-orders" && def.isPlaceholder) return "DEMO_ONLY";
   if (def.isPlaceholder && def.statusType === "COMING_SOON") return "COMING_SOON";
   if (def.requiresPartnerApproval) return "PARTNER_REQUIRED";
   if (def.requiresCredentials && def.supportsLiveMode && !def.isPlaceholder) {
