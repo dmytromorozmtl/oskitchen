@@ -17,7 +17,14 @@ import {
 } from "@/lib/pos/offline-card-client-queue";
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
 import { EmptyState } from "@/components/ui/empty-state";
-import { posTouchCompactClass, posTouchTileClass } from "@/lib/pos/touch-targets";
+import {
+  posCheckoutButtonClass,
+  posTouchCompactClass,
+  posTouchInputClass,
+  posTouchSelectClass,
+  posTouchSelectLargeClass,
+  posTouchTileClass,
+} from "@/lib/pos/touch-targets";
 import {
   posCheckoutStatusClassName,
   type PosCheckoutStatus,
@@ -869,7 +876,7 @@ export function PosTerminalClient(props: {
           <div className="space-y-2">
             <Label>Register</Label>
             <Select value={registerId} onValueChange={setRegisterId}>
-              <SelectTrigger className="h-12 rounded-xl text-base">
+              <SelectTrigger className={posTouchSelectLargeClass}>
                 <SelectValue placeholder="Choose register" />
               </SelectTrigger>
               <SelectContent>
@@ -885,7 +892,7 @@ export function PosTerminalClient(props: {
           <div className="space-y-2">
             <Label>Staff member</Label>
             <Select value={staffId} onValueChange={setStaffId}>
-              <SelectTrigger className="h-12 rounded-xl text-base">
+              <SelectTrigger className={posTouchSelectLargeClass}>
                 <SelectValue placeholder="Staff on sale" />
               </SelectTrigger>
               <SelectContent>
@@ -905,7 +912,11 @@ export function PosTerminalClient(props: {
                 <UserRound className="h-4 w-4 text-muted-foreground" aria-hidden />
                 Customer
               </Label>
-              <Button variant="link" className="h-auto p-0 text-xs" asChild>
+              <Button
+                variant="link"
+                className={cn("text-xs", posTouchCompactClass)}
+                asChild
+              >
                 <Link href="/dashboard/customers">CRM</Link>
               </Button>
             </div>
@@ -995,7 +1006,7 @@ export function PosTerminalClient(props: {
                           variant="secondary"
                           size="sm"
                           className={cn(
-                            "h-auto max-w-[11rem] truncate rounded-full px-3 py-2 text-xs font-normal",
+                            "max-w-[11rem] truncate rounded-full px-3 text-xs font-normal",
                             posTouchCompactClass,
                           )}
                           title={c.email}
@@ -1022,7 +1033,7 @@ export function PosTerminalClient(props: {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="h-9 w-full rounded-lg text-xs"
+                    className={cn("w-full rounded-lg text-xs", posTouchCompactClass)}
                     onClick={() => {
                       setShowQuickCustomer((v) => !v);
                       setQuickCustomerError(null);
@@ -1117,7 +1128,7 @@ export function PosTerminalClient(props: {
           <div className="space-y-2">
             <Label>Fulfillment</Label>
             <Select value={fulfillment} onValueChange={(v) => setFulfillment(v as typeof fulfillment)}>
-              <SelectTrigger className="h-12 rounded-xl text-base">
+              <SelectTrigger className={posTouchSelectLargeClass}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -1130,7 +1141,7 @@ export function PosTerminalClient(props: {
           <div className="space-y-2">
             <Label>Payment</Label>
             <Select value={paymentMode} onValueChange={(v) => setPaymentMode(v as PaymentModeKey)}>
-              <SelectTrigger className="h-12 rounded-xl text-base">
+              <SelectTrigger className={posTouchSelectLargeClass}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -1164,7 +1175,7 @@ export function PosTerminalClient(props: {
                   <div>
                     <Label className="text-xs">Brand</Label>
                     <Select value={offlineCardBrand} onValueChange={setOfflineCardBrand}>
-                      <SelectTrigger className="h-10">
+                      <SelectTrigger className={posTouchSelectClass}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -1202,7 +1213,7 @@ export function PosTerminalClient(props: {
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-auto px-2 py-1 text-xs"
+                  className={cn("text-xs", posTouchCompactClass)}
                   onClick={() => {
                     resetDiscountState();
                     if (paymentMode === "COMPED") setPaymentMode("CASH");
@@ -1404,7 +1415,7 @@ export function PosTerminalClient(props: {
                 value={loyaltyPointsRedeem}
                 onChange={(e) => setLoyaltyPointsRedeem(e.target.value)}
                 placeholder="e.g. 100"
-                className="h-10 rounded-xl"
+                className={cn("rounded-xl", posTouchInputClass)}
                 disabled={!selectedCustomer}
               />
               {selectedCustomer && loyaltyBalance != null ? (
@@ -1417,7 +1428,7 @@ export function PosTerminalClient(props: {
                 value={giftCardCode}
                 onChange={(e) => setGiftCardCode(e.target.value.toUpperCase())}
                 placeholder="GC-XXXX"
-                className="h-10 rounded-xl font-mono uppercase"
+                className={cn("rounded-xl font-mono uppercase", posTouchInputClass)}
               />
               {giftCardBalance != null ? (
                 <p className="mt-1 text-xs text-muted-foreground">${giftCardBalance.toFixed(2)} balance</p>
@@ -1460,8 +1471,8 @@ export function PosTerminalClient(props: {
             type="button"
             data-testid="pos-complete-sale"
             className={cn(
-              "h-14 w-full rounded-2xl text-lg font-semibold touch-manipulation",
-              speedMode && "h-16 text-xl",
+              posCheckoutButtonClass,
+              speedMode && "min-h-16 h-16 text-xl",
             )}
             disabled={pending}
             onClick={() => checkout()}

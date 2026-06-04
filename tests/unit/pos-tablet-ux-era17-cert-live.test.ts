@@ -43,6 +43,7 @@ describe("POS tablet UX era17 CI certification (live repo)", () => {
     const terminal = readFileSync(join(ROOT, POS_TABLET_UX_ERA17_TERMINAL_MODULE), "utf8");
     expect(terminal).toContain("posCheckoutStatusClassName");
     expect(terminal).toContain("posTouchCompactClass");
+    expect(terminal).toContain("posCheckoutButtonClass");
     expect(terminal).toContain('data-testid="pos-checkout-status"');
     expect(terminal).toContain("onError");
 
