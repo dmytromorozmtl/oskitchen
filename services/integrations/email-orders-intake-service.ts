@@ -161,6 +161,7 @@ export async function importEmailOrderFromText(
         return {
           productId: null,
           title: li.title,
+          sku: undefined,
           quantity: li.quantity,
           unitPrice,
           lineTotal: unitPrice * li.quantity,

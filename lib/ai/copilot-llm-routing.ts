@@ -48,7 +48,19 @@ type CopilotLlmEnv = {
 const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
 const DEFAULT_ANTHROPIC_MODEL = "claude-3-5-haiku-latest";
 
-export function isCopilotLlmConfigured(env: CopilotLlmEnv = process.env): boolean {
+function readCopilotLlmEnv(env: NodeJS.ProcessEnv = process.env): CopilotLlmEnv {
+  return {
+    COPILOT_LLM_PROVIDER: env.COPILOT_LLM_PROVIDER,
+    OPENAI_API_KEY: env.OPENAI_API_KEY,
+    ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY,
+    OPENAI_COPILOT_MODEL: env.OPENAI_COPILOT_MODEL,
+    OPENAI_COPILOT_NARRATIVE_MODEL: env.OPENAI_COPILOT_NARRATIVE_MODEL,
+    OPENAI_COPILOT_CHAT_MODEL: env.OPENAI_COPILOT_CHAT_MODEL,
+    ANTHROPIC_COPILOT_MODEL: env.ANTHROPIC_COPILOT_MODEL,
+  };
+}
+
+export function isCopilotLlmConfigured(env: CopilotLlmEnv = readCopilotLlmEnv()): boolean {
   return Boolean(env.OPENAI_API_KEY?.trim() || env.ANTHROPIC_API_KEY?.trim());
 }
 
@@ -75,7 +87,7 @@ function resolveOpenAiModel(task: CopilotLlmTask, env: CopilotLlmEnv): string {
 /** Resolve provider + model for a copilot task. Returns null when no credentials are configured. */
 export function resolveCopilotLlmRoute(
   task: CopilotLlmTask,
-  env: CopilotLlmEnv = process.env,
+  env: CopilotLlmEnv = readCopilotLlmEnv(),
 ): CopilotLlmRoute | null {
   const provider = resolveProviderPreference(env);
   if (!provider) return null;
@@ -88,7 +100,10 @@ export function resolveCopilotLlmRoute(
   return { provider, model, task };
 }
 
-export function describeCopilotLlmRoute(task: CopilotLlmTask, env: CopilotLlmEnv = process.env): string | null {
+export function describeCopilotLlmRoute(
+  task: CopilotLlmTask,
+  env: CopilotLlmEnv = readCopilotLlmEnv(),
+): string | null {
   const route = resolveCopilotLlmRoute(task, env);
   if (!route) return null;
   return `${route.provider} · ${route.model}`;
@@ -211,7 +226,7 @@ export async function invokeCopilotLlm(
   route: CopilotLlmRoute,
   messages: CopilotLlmMessage[],
   options: { temperature?: number; maxTokens?: number } = {},
-  env: CopilotLlmEnv = process.env,
+  env: CopilotLlmEnv = readCopilotLlmEnv(),
 ): Promise<CopilotLlmInvokeResult> {
   const temperature = options.temperature ?? 0.2;
   const maxTokens = options.maxTokens ?? COPILOT_MAX_OUTPUT_TOKENS;

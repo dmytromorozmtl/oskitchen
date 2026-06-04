@@ -31,7 +31,12 @@ function ComparisonHint({ value }: { value: "above" | "below" | "at" | null }) {
 export function MultiLocationEnterprisePanel({ dashboard }: Props) {
   const router = useRouter();
   const { snapshot, rollup, ranks, selectedLocation, alerts, basePath, filters } = dashboard;
-  const rollupExportHref = buildMultiLocationRollupExportHref(filters);
+  const rollupExportHref = buildMultiLocationRollupExportHref({
+    from: filters.from,
+    to: filters.to,
+    locationId: filters.locationId ?? undefined,
+    brandId: filters.brandId ?? undefined,
+  });
 
   function selectLocation(locationId: string | null) {
     const params = new URLSearchParams(window.location.search);

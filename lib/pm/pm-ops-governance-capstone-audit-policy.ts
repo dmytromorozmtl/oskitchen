@@ -65,7 +65,7 @@ function auditEraFreezeGovernance(root: string): boolean {
     "docs/next-step-era25-convergence-governance-terminus-freeze-phase-aj-product-2026-05-28.md",
   );
   const integrity = evaluateEra25ConvergenceGovernanceTerminusFreezeIntegrity(root, {
-    env: {},
+    env: { NODE_ENV: process.env.NODE_ENV ?? "development" },
   });
   return (
     source.includes("era60-era25-convergence-governance-terminus-freeze-integrity-v1") &&

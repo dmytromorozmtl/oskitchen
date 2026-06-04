@@ -25,14 +25,13 @@ export const POS_CHECKOUT_STATUS_TESTID = "pos-checkout-status" as const;
 export const OFFLINE_CONNECTIVITY_LABEL = "Offline / degraded" as const;
 export const ONLINE_CONNECTIVITY_LABEL = "Online" as const;
 
-export const OFFLINE_QUEUED_STATUS_PATTERN =
-  /offline.*queued|queued.*sync/i as const;
+export const OFFLINE_QUEUED_STATUS_PATTERN = /offline.*queued|queued.*sync/i;
 
 export const OFFLINE_SYNC_SUCCESS_PATTERN =
-  /Synced \d+ offline sale\(s\)|sale complete|not available on your current plan/i as const;
+  /Synced \d+ offline sale\(s\)|sale complete|not available on your current plan/i;
 
 export const OFFLINE_PLAN_BLOCKED_PATTERN =
-  /not available on your current plan|POS is not available/i as const;
+  /not available on your current plan|POS is not available/i;
 
 export type OfflineQueueSyncPhase =
   | "idle"

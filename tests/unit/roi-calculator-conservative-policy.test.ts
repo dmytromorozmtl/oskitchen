@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   auditRoiCalculatorConservativeDoc,
-  computeConservativeRoiMonthly,
   lintRoiCalculatorCopy,
+} from "@/lib/marketing/roi-calculator-conservative-doc-audit";
+import {
+  computeConservativeRoiMonthly,
   ROI_CALCULATOR_CONSERVATIVE_POLICY_ID,
   ROI_CALCULATOR_DEFAULT_INPUTS,
   ROI_GROWTH_CONTRIBUTION_PCT,

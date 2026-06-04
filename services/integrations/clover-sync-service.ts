@@ -203,7 +203,7 @@ export async function importOrdersFromClover(userId: string): Promise<CloverImpo
         orderType: "SALES_CHANNEL_ORDER",
         creationSource: "CHANNEL_IMPORT",
         statusKey,
-        paymentMode: "PAID",
+        paymentMode: "PAID_EXTERNALLY",
         customerName: row.customerName ?? "Clover guest",
         customerEmail: row.customerEmail ?? `clover-import@${userId.slice(0, 8)}.local`,
         customerPhone: row.customerPhone,

@@ -73,7 +73,7 @@ export function buildLiveIntegrationDodSmokeSummary(input: {
   const integrity = buildBetaIntegrationsIntegritySmokeSummary({
     registryCertPassed: input.integrityCertPassed,
     envCertPassed: input.envCertPassed,
-    strictMode: input.strictEnvMode ?? false,
+    strictEnvMode: input.strictEnvMode ?? false,
     commitSha: input.commitSha,
     runAt,
     env,

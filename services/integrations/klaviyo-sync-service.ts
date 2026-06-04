@@ -4,7 +4,7 @@ import type { KlaviyoCustomerInput, KlaviyoProfileRow, KlaviyoSyncResult } from 
 import { REVENUE_STATUSES } from "@/lib/analytics/revenue-metrics";
 import { hasMarketingEmailConsent } from "@/lib/marketing/marketing-email-consent";
 import { prisma } from "@/lib/prisma";
-import { customerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
+import { kitchenCustomerListWhereForOwner } from "@/lib/scope/workspace-customer-scope";
 import { orderListWhereForOwnerAnd } from "@/lib/scope/workspace-resource-scope";
 
 const KLAVIYO_BASE = "https://a.klaviyo.com/api";
@@ -89,7 +89,7 @@ export async function syncCustomersToKlaviyo(
   const days = opts?.days ?? 90;
   const limit = opts?.limit ?? 500;
   const since = subDays(new Date(), days);
-  const customerScope = await customerListWhereForOwner(userId);
+  const customerScope = await kitchenCustomerListWhereForOwner(userId);
 
   const customers = await prisma.kitchenCustomer.findMany({
     where: {

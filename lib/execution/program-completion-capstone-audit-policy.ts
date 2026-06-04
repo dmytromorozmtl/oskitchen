@@ -58,7 +58,7 @@ const SUB_AUDIT_RUNNERS: Record<
     passed: auditQaBetaGovernanceChain(root),
   }),
   "DES-38": (root) => {
-    const report = auditStabilizationDesign(root);
+    const report = auditStabilizationDesign();
     return {
       policyId: report.policyId,
       nestedSubAuditCount: report.subAudits.length,

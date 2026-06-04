@@ -2,11 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   auditDarkModeConsistency,
+  findDarkModeLightOnlyViolations,
+  hasLegacyDarkColorBridge,
+} from "@/lib/design/dark-mode-consistency-audit-policy";
+import {
   DARK_MODE_CONSISTENCY_POLICY_ID,
   dashboardShellHeaderClass,
   dashboardShellRootClass,
-  findDarkModeLightOnlyViolations,
-  hasLegacyDarkColorBridge,
 } from "@/lib/design/dark-mode-consistency-policy";
 
 describe("dark mode consistency policy (DES-24)", () => {

@@ -188,6 +188,7 @@ export async function importSubmissionsFromGoogleForms(
           {
             productId: null,
             title: row.itemSummary,
+            sku: undefined,
             quantity: 1,
             unitPrice: total,
             lineTotal: total,

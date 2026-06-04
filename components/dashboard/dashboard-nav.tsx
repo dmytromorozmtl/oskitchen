@@ -413,7 +413,7 @@ export function DashboardSidebarNav({
                 </option>
               ))}
             </select>
-            {navPersona !== "auto" ? (
+            {navPersona !== "auto" && navPersona !== "owner" ? (
               <p className="px-0.5 text-[10px] leading-snug text-muted-foreground">
                 {NAV_PERSONA_HEADLINE[navPersona]}
               </p>

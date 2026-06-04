@@ -7,7 +7,7 @@
  */
 
 /** Matches QA-09 COGS margin accuracy tolerance (±1%). */
-export const MARGIN_ALERT_ACCURACY_TOLERANCE_PERCENT = 1.0 as const;
+export const MARGIN_ALERT_ACCURACY_TOLERANCE_PERCENT = 1.0;
 
 export const PROFIT_DASHBOARD_MARGIN_ALERT_E2E_POLICY_ID =
   "profit-dashboard-margin-alert-e2e-v1" as const;

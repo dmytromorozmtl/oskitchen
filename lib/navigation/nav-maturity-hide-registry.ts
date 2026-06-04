@@ -16,6 +16,12 @@ export type NavMaturityHideExposure =
   | "hidden_default"
   | "internal";
 
+export type NavMaturityHideRule = {
+  prefix: string;
+  exposure: NavMaturityHideExposure;
+  matrixRef: string;
+};
+
 /** Minimum hidden route count for pilot-focused IA (35% of ~800 dashboard pages). */
 export const NAV_MATURITY_HIDE_TARGET = 280 as const;
 

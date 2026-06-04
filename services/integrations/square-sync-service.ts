@@ -221,7 +221,7 @@ export async function importOrdersFromSquare(userId: string): Promise<SquareImpo
         orderType: "SALES_CHANNEL_ORDER",
         creationSource: "CHANNEL_IMPORT",
         statusKey,
-        paymentMode: "PAID",
+        paymentMode: "PAID_EXTERNALLY",
         customerName: row.customerName ?? "Square guest",
         customerEmail: row.customerEmail ?? `square-import@${userId.slice(0, 8)}.local`,
         customerPhone: row.customerPhone,

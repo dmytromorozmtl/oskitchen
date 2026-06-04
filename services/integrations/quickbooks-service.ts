@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import { prisma } from "@/lib/prisma";
 import {
   quickBooksInvoicesToCsv,
@@ -22,7 +24,9 @@ export type QuickBooksExportPayload = {
   periodStart: Date;
   periodEnd: Date;
   lines: Awaited<ReturnType<typeof getRestaurantPnLStatement>>["lines"];
-  invoices: Awaited<ReturnType<typeof prisma.supplierInvoice.findMany>>;
+  invoices: Prisma.SupplierInvoiceGetPayload<{
+    include: { supplier: { select: { name: true } } };
+  }>[];
   sales: QuickBooksSalesSummary;
 };
 

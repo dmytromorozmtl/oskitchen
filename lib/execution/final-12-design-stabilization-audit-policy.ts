@@ -61,7 +61,7 @@ export function auditFinal12DesignStabilization(
   const elevenSubPolicyRegistryHonest = des38PolicyPresent && auditElevenSubPolicyRegistry(root);
   const unitTestsPresent = existsSync(join(root, STABILIZATION_DESIGN_UNIT_TEST_PATH));
 
-  const capstone = auditStabilizationDesign(root);
+  const capstone = auditStabilizationDesign();
   const stabilizationDesignPassed = capstone.passed;
   const allSubAuditsPassed =
     capstone.subAudits.length === STABILIZATION_DESIGN_SUB_POLICIES.length &&

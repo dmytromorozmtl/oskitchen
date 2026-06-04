@@ -107,7 +107,7 @@ export function buildProfitMarginStackSegments(
           ? marginStackBarClassForSegment("profit")
           : "bg-rose-600/90",
     },
-  ].filter((segment) => segment.percent !== 0 || segment.id === "profit");
+  ].filter((segment) => segment.percent !== 0 || segment.id === "profit") as MarginStackSegment[];
 }
 
 export function buildItemMarginBarRows(

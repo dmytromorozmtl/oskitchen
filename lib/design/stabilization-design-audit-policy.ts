@@ -47,10 +47,10 @@ const SUB_AUDIT_RUNNERS: Record<string, () => { policyId: string; passed: boolea
   "DES-37": auditPermissionDenied,
 };
 
-export function auditStabilizationDesign(root?: string): StabilizationDesignAuditReport {
+export function auditStabilizationDesign(): StabilizationDesignAuditReport {
   const subAudits = STABILIZATION_DESIGN_SUB_POLICIES.map((entry) => {
     const run = SUB_AUDIT_RUNNERS[entry.id];
-    const report = run!(root);
+    const report = run!();
     return {
       taskId: entry.id,
       policyId: report.policyId,

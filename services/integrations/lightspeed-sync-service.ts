@@ -227,7 +227,7 @@ export async function importOrdersFromLightspeed(userId: string): Promise<Lights
         orderType: "SALES_CHANNEL_ORDER",
         creationSource: "CHANNEL_IMPORT",
         statusKey,
-        paymentMode: "PAID",
+        paymentMode: "PAID_EXTERNALLY",
         customerName: row.customerName ?? "Lightspeed guest",
         customerEmail: row.customerEmail ?? `lightspeed-import@${userId.slice(0, 8)}.local`,
         customerPhone: row.customerPhone,
