@@ -81,6 +81,9 @@ export default async function MarketplaceDashboardPage() {
               <Link href="/dashboard/marketplace/price-intelligence">Price intelligence</Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href="/dashboard/marketplace/quality">Quality scoring</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="rounded-full">
               <Link href="/dashboard/marketplace/auto-vendor">Auto vendor savings</Link>
             </Button>
             {access.canCartWrite ? (
