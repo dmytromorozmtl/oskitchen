@@ -51,5 +51,7 @@ describe("integration live readiness guards", () => {
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("DOORDASH");
     expect(providerCountsTowardLiveReadiness("SKIP")).toBe(true);
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("SKIP");
+    expect(providerCountsTowardLiveReadiness("GRUBHUB")).toBe(true);
+    expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("GRUBHUB");
   });
 });

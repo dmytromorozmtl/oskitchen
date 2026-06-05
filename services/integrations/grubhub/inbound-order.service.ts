@@ -3,11 +3,13 @@ import { IntegrationProvider } from "@prisma/client";
 import { persistNormalizedExternalOrder } from "@/lib/integrations/persist-external-order";
 import { createWebhookEvent, markWebhookProcessed } from "@/lib/webhooks/webhook-event-store";
 import { normalizeGrubhubOrder } from "@/services/integrations/grubhub/grubhub-marketplace";
+import { importGrubhubOrderToKitchen } from "@/services/integrations/grubhub/kitchen-import.service";
 
 export type GrubhubInboundResult = {
   ok: boolean;
   duplicate?: boolean;
   externalOrderId?: string;
+  importedOrderId?: string;
   message?: string;
 };
 
@@ -41,16 +43,30 @@ export async function processGrubhubInboundOrder(input: {
 
   try {
     const normalized = normalizeGrubhubOrder(input.payload);
-    await persistNormalizedExternalOrder({
+    const external = await persistNormalizedExternalOrder({
       userId: input.userId,
       connectionId: input.connectionId,
       normalized,
     });
+
+    const kitchen = await importGrubhubOrderToKitchen({
+      userId: input.userId,
+      workspaceId: input.workspaceId,
+      connectionId: input.connectionId,
+      normalized,
+      externalOrderRecordId: external.id,
+    });
+
     await markWebhookProcessed(eventId, true);
     return {
       ok: true,
       externalOrderId: normalized.externalOrderId,
-      message: "External order persisted",
+      importedOrderId: kitchen.orderId,
+      message: kitchen.imported
+        ? "External order persisted and imported to kitchen"
+        : kitchen.duplicate
+          ? "External order persisted (kitchen import already done)"
+          : "External order persisted",
     };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

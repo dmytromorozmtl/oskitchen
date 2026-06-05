@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { GrubhubLivePanel } from "@/components/integrations/grubhub-live-panel";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
 import { Button } from "@/components/ui/button";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -34,14 +34,14 @@ export default async function GrubhubLivePage() {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight">Grubhub LIVE</h1>
-            <BetaBadge />
+            <LiveBadge />
           </div>
           <p className="text-sm text-muted-foreground">
             OAuth, signed webhooks, menu push, and canonical order mapping into OS Kitchen.
           </p>
         </div>
         <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/dashboard/integrations/grubhub">← BETA settings</Link>
+          <Link href="/dashboard/integrations/grubhub">← Integration settings</Link>
         </Button>
       </div>
 

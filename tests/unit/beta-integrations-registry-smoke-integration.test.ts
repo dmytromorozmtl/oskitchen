@@ -19,7 +19,7 @@ describe("beta integrations registry smoke integration policy (QA-44)", () => {
     expect(BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_SUMMARY_ARTIFACT).toBe(
       "artifacts/smoke-beta-integrations-registry-summary.json",
     );
-    expect(BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT).toBe(16);
+    expect(BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT).toBe(15);
   });
 
   it("evaluates pass contract for scaffold_complete with zero placeholders", () => {

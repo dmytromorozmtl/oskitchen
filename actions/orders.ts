@@ -295,6 +295,16 @@ export async function updateOrderStatus(
       status: nextStatus,
     }).catch(() => undefined);
 
+    const { syncGrubhubStatusFromKitchenOrder } = await import(
+      "@/services/integrations/grubhub/status-sync.service"
+    );
+    await syncGrubhubStatusFromKitchenOrder({
+      userId,
+      channelProvider: prev.channelProvider,
+      externalOrderId: prev.externalOrderIdExt,
+      status: nextStatus,
+    }).catch(() => undefined);
+
     if (nextStatus === "COMPLETED") {
       await recomputeMetricsForOrderEmail(userId, prevPii.customerEmail);
     }

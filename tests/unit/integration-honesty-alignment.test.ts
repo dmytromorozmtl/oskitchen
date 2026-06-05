@@ -22,15 +22,16 @@ describe("integration honesty alignment", () => {
   it("marks delivery marketplaces honestly in registry", () => {
     expect(getIntegrationById("doordash")?.status).toBe("LIVE");
     expect(getIntegrationById("uber-eats")?.status).toBe("LIVE");
-    expect(getIntegrationById("grubhub")?.status).toBe("BETA");
+    expect(getIntegrationById("grubhub")?.status).toBe("LIVE");
     expect(getIntegrationById("uber-direct")?.status).toBe("BETA");
   });
 
-  it("includes Grubhub in channel catalog as BETA (not placeholder)", () => {
+  it("includes Grubhub in channel catalog as LIVE (not placeholder)", () => {
     const grubhub = channelByKey("grubhub");
     expect(grubhub).toBeDefined();
     expect(grubhub?.isPlaceholder).toBe(false);
-    expect(grubhub?.statusType).toBe("PARTNER_ACCESS_REQUIRED");
+    expect(grubhub?.supportsLiveMode).toBe(true);
+    expect(grubhub?.requiresOAuth).toBe(true);
     expect(grubhub?.setupRoute).toBe("/dashboard/integrations/grubhub");
   });
 

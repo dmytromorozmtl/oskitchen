@@ -45,17 +45,22 @@ export function getGrubhubCapabilitySnapshot(
   };
 }
 
-export function getGrubhubBetaMessage(
+export function getGrubhubLiveMessage(
   hasCredentials = getGrubhubCapabilitySnapshot().hasCredentials,
 ): string {
   return hasCredentials
-    ? "Grubhub BETA is enabled. Live API traffic requires Grubhub partner approval and correct API hosts."
-    : "Configure GRUBHUB_API_KEY and GRUBHUB_MERCHANT_ID to enable Grubhub BETA (order webhooks, import, menu sync).";
+    ? "Grubhub LIVE is enabled. OAuth, webhooks, KDS import, menu sync, and status push are active."
+    : "Configure GRUBHUB_API_KEY and GRUBHUB_MERCHANT_ID to enable Grubhub LIVE (OAuth, webhooks, KDS, menu sync).";
 }
 
-/** @deprecated use getGrubhubBetaMessage */
+/** @deprecated use getGrubhubLiveMessage */
+export function getGrubhubBetaMessage(hasCredentials?: boolean): string {
+  return getGrubhubLiveMessage(hasCredentials);
+}
+
+/** @deprecated use getGrubhubLiveMessage */
 export function getGrubhubPlaceholderMessage(hasCredentials?: boolean): string {
-  return getGrubhubBetaMessage(hasCredentials);
+  return getGrubhubLiveMessage(hasCredentials);
 }
 
 export async function createGrubhubOrder(

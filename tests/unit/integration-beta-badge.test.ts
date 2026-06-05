@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -13,7 +13,6 @@ import {
 const ROOT = process.cwd();
 
 const BETA_INTEGRATION_PAGES: Record<string, string> = {
-  grubhub: "app/dashboard/integrations/grubhub/page.tsx",
   quickbooks: "app/dashboard/integrations/quickbooks/page.tsx",
   xero: "app/dashboard/integrations/xero/page.tsx",
   "7shifts": "app/dashboard/integrations/7shifts/page.tsx",
@@ -35,28 +34,30 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   "uber-eats": "app/dashboard/integrations/uber-eats/page.tsx",
   doordash: "app/dashboard/integrations/doordash/page.tsx",
   skip: "app/dashboard/integrations/skip/page.tsx",
+  grubhub: "app/dashboard/integrations/grubhub/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks sixteen BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(16);
+  it("tracks fifteen BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(15);
     expect(isBetaIntegration("uber-eats")).toBe(false);
     expect(isBetaIntegration("doordash")).toBe(false);
     expect(isBetaIntegration("skip")).toBe(false);
+    expect(isBetaIntegration("grubhub")).toBe(false);
   });
 
-  it("tracks three LIVE registry integrations", () => {
-    expect(LIVE_INTEGRATION_IDS.sort()).toEqual(["doordash", "skip", "uber-eats"]);
+  it("tracks four LIVE registry integrations", () => {
+    expect(LIVE_INTEGRATION_IDS.sort()).toEqual(["doordash", "grubhub", "skip", "uber-eats"]);
   });
 
   it("maps delivery provider keys to registry status", () => {
     expect(isBetaIntegrationProvider("doordash")).toBe(false);
     expect(isBetaIntegrationProvider("skip")).toBe(false);
     expect(isBetaIntegrationProvider("uber-eats")).toBe(false);
-    expect(isBetaIntegrationProvider("grubhub")).toBe(true);
+    expect(isBetaIntegrationProvider("grubhub")).toBe(false);
   });
 
-  it("renders BetaBadge on all sixteen BETA integration pages", () => {
+  it("renders BetaBadge on all fifteen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const source = readFileSync(join(ROOT, rel), "utf8");
       expect(source, id).toContain("BetaBadge");

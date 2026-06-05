@@ -34,7 +34,7 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "grubhub",
     name: "Grubhub",
-    status: "BETA",
+    status: "LIVE",
     requiredEnv: ["GRUBHUB_API_KEY", "GRUBHUB_MERCHANT_ID", "GRUBHUB_WEBHOOK_SECRET"],
     setupRoute: "/dashboard/integrations/grubhub",
   },

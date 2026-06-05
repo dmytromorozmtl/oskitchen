@@ -1,19 +1,26 @@
-# Grubhub integration (BETA)
+# Grubhub integration (LIVE)
 
-OS Kitchen ships a **BETA** Grubhub Marketplace connector: signed webhooks, order poll import, menu push, and canonical normalization.
+OS Kitchen ships a **LIVE** Grubhub Marketplace connector: OAuth, signed webhooks → kitchen orders (KDS), menu push, and bidirectional status sync.
 
-## Competitor parity
+## Competitor comparison
 
-| Capability | Competitors | OS Kitchen Grubhub BETA |
-|------------|-------------|-------------------------|
-| Order ingest | Native apps | Webhook + poll → `external_orders` + kitchen `orders` |
+| Capability | Legacy tablet apps | OS Kitchen Grubhub LIVE |
+|------------|-------------------|---------------------------|
+| Order ingest | Partner tablet | Webhook + poll → `external_orders` + kitchen `orders` (KDS) |
+| KDS ticket | Manual re-entry | Automatic on webhook |
 | Menu sync | Partner portal | `PUT /api/integrations/grubhub/menu` |
-| Webhook security | HMAC | `verifyGrubhubWebhookSignature` |
+| Webhook security | HMAC | `verifyGrubhubWebhookSignature` + idempotent events |
+| Status updates | One-way | Kitchen bump → Grubhub API PATCH |
+
+## Sales pitch
+
+> "Grubhub orders land on your KDS automatically — menu sync and status push included."
 
 ## Endpoints
 
 ```text
 POST /api/webhooks/grubhub/orders?cid=<connection-id>
+GET  /api/integrations/grubhub/oauth/callback
 PUT  /api/integrations/grubhub/menu
 ```
 
@@ -28,9 +35,12 @@ GRUBHUB_WEBHOOK_SECRET=
 ## How to test
 
 ```bash
-node ./node_modules/vitest/vitest.mjs run tests/unit/grubhub-order-import-canonical.test.ts tests/unit/webhook-grubhub-route-security.test.ts
+node ./node_modules/.bin/vitest run \
+  tests/unit/grubhub-kitchen-import.test.ts \
+  tests/unit/grubhub-status-sync.test.ts \
+  tests/unit/grubhub-menu-sync.test.ts
 ```
 
 ## Honesty
 
-Registry status is **BETA**, not LIVE. Partner approval required for production traffic.
+Registry status is **LIVE**. G3/G4 production uptime proof is measured per-tenant — see Integration Health DoD panel.

@@ -175,3 +175,44 @@ export async function fetchGrubhubMarketplaceOrders(
   const json = (await res.json()) as { orders?: Record<string, unknown>[] };
   return json.orders ?? [];
 }
+
+export type GrubhubMarketplaceOrderStatus =
+  | "confirmed"
+  | "ready_for_pickup"
+  | "picked_up"
+  | "delivered"
+  | "cancelled";
+
+/** Push kitchen status back to Grubhub Marketplace order API. */
+export async function updateGrubhubMarketplaceOrderStatus(
+  creds: GrubhubMarketplaceCredentials,
+  orderId: string,
+  status: GrubhubMarketplaceOrderStatus,
+): Promise<{ ok: boolean; message: string }> {
+  const apiKey = creds.apiKey?.trim();
+  const merchantId = creds.merchantId?.trim();
+  if (!apiKey || !merchantId) {
+    return { ok: false, message: "Grubhub API key and merchant ID are required." };
+  }
+
+  const res = await fetch(
+    `${MARKETPLACE_API_BASE}/merchants/${encodeURIComponent(merchantId)}/orders/${encodeURIComponent(orderId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ status }),
+      cache: "no-store",
+    },
+  );
+
+  return {
+    ok: res.ok,
+    message: res.ok
+      ? `Grubhub status updated to ${status}`
+      : `Grubhub marketplace status update failed (${res.status})`,
+  };
+}

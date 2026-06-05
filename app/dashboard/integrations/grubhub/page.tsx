@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -38,14 +38,14 @@ export default async function GrubhubIntegrationPage() {
       {capability.placeholderMode ? (
         <PlaceholderBanner
           feature="Grubhub integration"
-          detail="Configure GRUBHUB_API_KEY, GRUBHUB_MERCHANT_ID, and GRUBHUB_WEBHOOK_SECRET to enable Grubhub BETA."
+          detail="Configure GRUBHUB_API_KEY, GRUBHUB_MERCHANT_ID, and GRUBHUB_WEBHOOK_SECRET to enable Grubhub LIVE."
         />
       ) : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold">Grubhub integration</h1>
-            <BetaBadge />
+            <LiveBadge title="LIVE — Grubhub marketplace ingest, menu sync, KDS" />
           </div>
           <p className="text-sm text-muted-foreground">
             {integration?.name} · {integration?.status} · marketplace ingest + menu sync
@@ -56,7 +56,7 @@ export default async function GrubhubIntegrationPage() {
             <Link href="/dashboard/integrations/grubhub/live">Open LIVE dashboard</Link>
           </Button>
           <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>
-            {capability.hasCredentials ? "BETA credentials configured" : "Credentials missing"}
+            {capability.hasCredentials ? "LIVE credentials configured" : "Credentials missing"}
           </Badge>
         </div>
       </div>
