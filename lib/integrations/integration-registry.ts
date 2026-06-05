@@ -90,8 +90,12 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "7shifts",
     name: "7shifts",
-    status: "BETA",
-    requiredEnv: ["SEVENSHIFTS_API_KEY", "SEVENSHIFTS_COMPANY_ID"],
+    status: "LIVE",
+    requiredEnv: [
+      "SEVENSHIFTS_CLIENT_ID",
+      "SEVENSHIFTS_CLIENT_SECRET",
+      "SEVENSHIFTS_COMPANY_ID",
+    ],
     setupRoute: "/dashboard/integrations/7shifts",
   },
   {

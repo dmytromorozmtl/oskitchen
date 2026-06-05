@@ -75,7 +75,7 @@ export async function runLiveIntegrationDodGatesFlow(
     }
   }
 
-  expect(allG1ScaffoldPassed, "all eleven BETA rows must show G1 scaffold passed").toBe(true);
+  expect(allG1ScaffoldPassed, "all ten BETA rows must show G1 scaffold passed").toBe(true);
   expect(allG3NotMeasured, "G3 must remain not_measured on every row").toBe(true);
   expect(allG4NotMeasured, "G4 must remain not_measured on every row").toBe(true);
 

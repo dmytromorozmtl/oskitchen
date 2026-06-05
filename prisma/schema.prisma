@@ -226,6 +226,7 @@ enum IntegrationProvider {
   XERO
   OPENTABLE
   RESY
+  SEVEN_SHIFTS
   MANUAL
 }
 

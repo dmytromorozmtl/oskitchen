@@ -5,6 +5,8 @@ export type SevenShiftsShiftRow = {
   start: string;
   end: string;
   notes: string | null;
+  hourlyWage?: number;
+  laborCost?: number;
 };
 
 export type SevenShiftsImportStats = {

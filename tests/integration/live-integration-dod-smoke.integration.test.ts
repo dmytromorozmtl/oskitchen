@@ -91,7 +91,7 @@ describe("live integration dod smoke builder integration (QA-40)", () => {
       integrityCertPassed: true,
       envCertPassed: true,
     });
-    expect(summary.dod.scaffoldReadyCount).toBe(11);
+    expect(summary.dod.scaffoldReadyCount).toBe(10);
     expect(liveIntegrationDodSmokeHonestNoLiveClaim(summary)).toBe(true);
     expect(LIVE_INTEGRATION_DOD_SMOKE_INTEGRATION_POLICY_ID).toBe(
       "live-integration-dod-smoke-integration-v1",
