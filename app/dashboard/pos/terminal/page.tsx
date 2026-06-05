@@ -22,6 +22,12 @@ import {
   posCashierSpeedModeHeadline,
   resolvePosCashierSpeedMode,
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
+import { POS_DESKTOP_TERMINAL_ROUTE } from "@/lib/pos/pos-desktop-shortcuts-policy";
+
+export const metadata = {
+  title: "POS Terminal — Desktop",
+  description: "Professional desktop POS with keyboard shortcuts and multi-monitor customer display.",
+};
 
 /** PAGE_LAYOUT_EXCEPTION — full-screen POS terminal chrome (DES-27). */
 
@@ -118,19 +124,28 @@ export default async function PosTerminalPage({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 xl:-mx-4 xl:max-w-none">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">POS Terminal</h1>
           <p className="text-sm text-muted-foreground">
             {speedMode
               ? posCashierSpeedModeHeadline(true)
-              : "Touch-first layout · catalog respects POS visibility on each menu item."}
+              : "Desktop POS · F1–F9 shortcuts · F8 customer display on second monitor · catalog respects POS visibility."}
           </p>
         </div>
-        <Button asChild variant="outline" className="rounded-full" size="sm">
-          <Link href="/dashboard/pos">Exit to POS hub</Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          {!speedMode ? (
+            <Button asChild variant="outline" className="rounded-full" size="sm">
+              <Link href={`${POS_DESKTOP_TERMINAL_ROUTE}/customer-display`} target="_blank" rel="noopener">
+                Open customer display
+              </Link>
+            </Button>
+          ) : null}
+          <Button asChild variant="outline" className="rounded-full" size="sm">
+            <Link href="/dashboard/pos">Exit to POS hub</Link>
+          </Button>
+        </div>
       </div>
 
       {showWelcome ? <PosWelcomeBanner /> : null}
@@ -153,6 +168,7 @@ export default async function PosTerminalPage({
         showWelcome={showWelcome}
         offlineQueueEnabled={posSettings.offlineQueueEnabled}
         conflictResolution={posSettings.conflictResolution}
+        desktopMode={!speedMode}
       />
     </div>
   );

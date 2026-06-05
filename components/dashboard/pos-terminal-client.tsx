@@ -77,7 +77,16 @@ import {
   shouldShowPosTerminalSecondaryPanels,
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 import { POS_CASHIER_SPEED_MODE_ALL_CATEGORY } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
-import { matchPosShortcut } from "@/lib/keyboard/shortcuts";
+import {
+  matchPosShortcut,
+  quickAddIndexFromAction,
+} from "@/lib/keyboard/shortcuts";
+import {
+  openPosCustomerDisplayWindow,
+  publishPosCustomerDisplayState,
+} from "@/lib/pos/pos-multi-monitor";
+import { PosDesktopShortcutsOverlay } from "@/components/pos/pos-desktop-shortcuts-overlay";
+import { PosDesktopToolbar } from "@/components/pos/pos-desktop-toolbar";
 import { PosManagerOverrideChecklist } from "@/components/dashboard/pos-manager-override-checklist";
 import { PosManagerOverrideHero } from "@/components/dashboard/pos-manager-override-hero";
 import {
@@ -156,6 +165,8 @@ export function PosTerminalClient(props: {
   showWelcome?: boolean;
   offlineQueueEnabled?: boolean;
   conflictResolution?: PosConflictResolutionStrategy;
+  /** Desktop counter layout — keyboard shortcuts and multi-monitor customer display. */
+  desktopMode?: boolean;
 }) {
   const recentCustomers = props.recentCustomers ?? [];
   const customerAttachEnabled = props.customerAttachEnabled ?? true;
@@ -165,6 +176,7 @@ export function PosTerminalClient(props: {
   const welcomeConfettiFired = useRef(false);
   const offlineQueueEnabled = props.offlineQueueEnabled ?? true;
   const conflictResolution = props.conflictResolution ?? "manual_review";
+  const desktopMode = props.desktopMode ?? true;
   const showSecondaryPanels = shouldShowPosTerminalSecondaryPanels(speedMode);
   const categories = useMemo(
     () => buildPosProductCategories(props.products),
@@ -204,6 +216,10 @@ export function PosTerminalClient(props: {
   const [quickPhone, setQuickPhone] = useState("");
   const searchSeq = useRef(0);
   const productSearchRef = useRef<HTMLInputElement>(null);
+  const customerSearchRef = useRef<HTMLInputElement>(null);
+  const customerDisplayWindowRef = useRef<Window | null>(null);
+  const [showShortcutsOverlay, setShowShortcutsOverlay] = useState(false);
+  const [customerDisplayActive, setCustomerDisplayActive] = useState(false);
   const [customerProfileNotice, setCustomerProfileNotice] = useState<string | null>(null);
   const [loyaltyPointsRedeem, setLoyaltyPointsRedeem] = useState("");
   const [giftCardCode, setGiftCardCode] = useState("");
@@ -581,6 +597,29 @@ export function PosTerminalClient(props: {
     setCart((prev) => prev.filter((l) => l.key !== key));
   }
 
+  function scrollToDiscountPanel() {
+    if (!canApplyPosDiscount) return;
+    document.getElementById(POS_MANAGER_OVERRIDE_ANCHOR)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setDiscountMode((mode) => (mode === "none" ? "fixed" : mode));
+  }
+
+  function toggleCustomerDisplayWindow() {
+    const win = openPosCustomerDisplayWindow();
+    if (win) {
+      customerDisplayWindowRef.current = win;
+      setCustomerDisplayActive(true);
+      return;
+    }
+    if (customerDisplayWindowRef.current && !customerDisplayWindowRef.current.closed) {
+      customerDisplayWindowRef.current.close();
+    }
+    customerDisplayWindowRef.current = null;
+    setCustomerDisplayActive(false);
+  }
+
+  const activeRegisterName =
+    props.registers.find((register) => register.id === registerId)?.name ?? "Register";
+
   function checkout() {
     setCheckoutStatus(null);
     if (!registerId) {
@@ -667,6 +706,7 @@ export function PosTerminalClient(props: {
   }
 
   useEffect(() => {
+    if (!desktopMode) return;
     function onKeyDown(e: KeyboardEvent) {
       const action = matchPosShortcut(e);
       if (!action) return;
@@ -675,13 +715,49 @@ export function PosTerminalClient(props: {
         productSearchRef.current?.focus();
         return;
       }
+      if (action === "focus_customer_search") {
+        customerSearchRef.current?.focus();
+        return;
+      }
       if (action === "add_first_product") {
         const first = filtered[0];
         if (first) addProduct(first);
         return;
       }
+      const quickIndex = quickAddIndexFromAction(action);
+      if (quickIndex != null) {
+        const product = filtered[quickIndex - 1];
+        if (product) addProduct(product);
+        return;
+      }
       if (action === "payment_cash") {
         setPaymentMode("CASH");
+        return;
+      }
+      if (action === "payment_card") {
+        if (availablePaymentModes.includes("CARD_TERMINAL_PLACEHOLDER")) {
+          setPaymentMode("CARD_TERMINAL_PLACEHOLDER");
+        }
+        return;
+      }
+      if (action === "toggle_discount_panel") {
+        scrollToDiscountPanel();
+        return;
+      }
+      if (action === "toggle_customer_display") {
+        toggleCustomerDisplayWindow();
+        return;
+      }
+      if (action === "show_shortcuts_help") {
+        setShowShortcutsOverlay(true);
+        return;
+      }
+      if (action === "increment_last_line" && cart.length > 0) {
+        bump(cart[cart.length - 1]!.key, 1);
+        return;
+      }
+      if (action === "decrement_last_line" && cart.length > 0) {
+        bump(cart[cart.length - 1]!.key, -1);
         return;
       }
       if (action === "complete_sale") {
@@ -696,13 +772,65 @@ export function PosTerminalClient(props: {
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [filtered]);
+  }, [filtered, desktopMode, cart, availablePaymentModes, canApplyPosDiscount]);
+
+  useEffect(() => {
+    if (!desktopMode || !customerDisplayActive) return;
+    publishPosCustomerDisplayState({
+      registerName: activeRegisterName,
+      lines: cart.map((line) => ({
+        title: line.title,
+        quantity: line.quantity,
+        lineTotal: line.quantity * line.unitPrice,
+      })),
+      subtotal: cartTotal,
+      discount: appliedDiscountAmount,
+      total: amountDue,
+      paymentLabel: PAYMENT_MODE_LABEL[paymentMode] ?? paymentMode,
+      updatedAtIso: new Date().toISOString(),
+    });
+  }, [
+    desktopMode,
+    customerDisplayActive,
+    activeRegisterName,
+    cart,
+    cartTotal,
+    appliedDiscountAmount,
+    amountDue,
+    paymentMode,
+  ]);
+
+  useEffect(() => {
+    if (!desktopMode) return;
+    const timer = window.setInterval(() => {
+      const win = customerDisplayWindowRef.current;
+      if (win && win.closed) {
+        customerDisplayWindowRef.current = null;
+        setCustomerDisplayActive(false);
+      }
+    }, 1500);
+    return () => window.clearInterval(timer);
+  }, [desktopMode]);
 
   const stripeTerminalActive =
     paymentMode === "CARD_TERMINAL_PLACEHOLDER" || pendingTerminal != null;
 
   return (
     <StripeTerminalProvider active={stripeTerminalActive}>
+    <div className="space-y-4">
+      {desktopMode ? (
+        <PosDesktopToolbar
+          customerDisplayActive={customerDisplayActive}
+          onToggleCustomerDisplay={toggleCustomerDisplayWindow}
+          onShowShortcuts={() => setShowShortcutsOverlay(true)}
+        />
+      ) : null}
+      {desktopMode ? (
+        <PosDesktopShortcutsOverlay
+          open={showShortcutsOverlay}
+          onClose={() => setShowShortcutsOverlay(false)}
+        />
+      ) : null}
     <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
       <div className="flex flex-1 flex-col gap-3">
         <OfflineSyncStatusBar className="w-full" showWhenIdle={offlineQueueEnabled} />
@@ -966,6 +1094,7 @@ export function PosTerminalClient(props: {
                   Optional — attach this sale to a CRM profile for history and receipts.
                 </p>
                 <Input
+                  ref={customerSearchRef}
                   data-testid="pos-customer-query"
                   value={customerQuery}
                   onChange={(e) => setCustomerQuery(e.target.value)}
@@ -1503,6 +1632,7 @@ export function PosTerminalClient(props: {
           )}
         </CardContent>
       </Card>
+    </div>
     </div>
     </StripeTerminalProvider>
   );
