@@ -323,14 +323,7 @@ Use positive amounts. Include every visible transaction row.`;
     });
 
     const content = response.choices[0]?.message?.content ?? "{}";
-    void recordAIUsage({
-      userId,
-      workspaceId: workspaceId ?? null,
-      kind: "ai_ocr",
-      model: "gpt-4o-mini",
-      inputTokens: estimateTokens(prompt),
-      outputTokens: estimateTokens(content),
-    });
+    void recordAIUsage(workspaceId ?? userId, estimateTokens(content), "ai_ocr");
 
     const parsed = parseOcrJson(content);
     const rows = (parsed.transactions as Array<Record<string, unknown>>) ?? [];
