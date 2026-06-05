@@ -146,6 +146,17 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/square-payments",
   },
   {
+    id: "moneris",
+    name: "Moneris",
+    status: "LIVE",
+    requiredEnv: [
+      "MONERIS_CLIENT_ID",
+      "MONERIS_CLIENT_SECRET",
+      "MONERIS_STORE_ID",
+    ],
+    setupRoute: "/dashboard/integrations/moneris",
+  },
+  {
     id: "resy",
     name: "Resy",
     status: "LIVE",

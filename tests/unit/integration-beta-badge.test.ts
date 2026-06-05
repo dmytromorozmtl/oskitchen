@@ -38,6 +38,7 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   mailchimp: "app/dashboard/integrations/mailchimp/page.tsx",
   stripe: "app/dashboard/integrations/stripe/page.tsx",
   "square-payments": "app/dashboard/integrations/square-payments/page.tsx",
+  moneris: "app/dashboard/integrations/moneris/page.tsx",
 };
 
 describe("integration beta badge", () => {
@@ -46,7 +47,7 @@ describe("integration beta badge", () => {
     expect(isBetaIntegration("mailchimp")).toBe(false);
   });
 
-  it("tracks sixteen LIVE registry integrations", () => {
+  it("tracks seventeen LIVE registry integrations", () => {
     expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "doordash",
@@ -54,6 +55,7 @@ describe("integration beta badge", () => {
       "homebase",
       "klaviyo",
       "mailchimp",
+      "moneris",
       "opentable",
       "quickbooks",
       "resy",

@@ -232,6 +232,7 @@ enum IntegrationProvider {
   MAILCHIMP
   STRIPE
   SQUARE_PAYMENTS
+  MONERIS
   MANUAL
 }
 
