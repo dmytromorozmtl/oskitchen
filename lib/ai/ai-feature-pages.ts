@@ -46,6 +46,11 @@ export const AI_FEATURE_PAGES = [
     pageFile: "app/dashboard/staff/ai-scheduling/page.tsx",
   },
   {
+    route: "/dashboard/staff/labor-manager",
+    featureName: "AI Labor Manager",
+    pageFile: "app/dashboard/staff/labor-manager/page.tsx",
+  },
+  {
     route: "/dashboard/forecast/ai",
     featureName: "AI Demand Forecast",
     pageFile: "app/dashboard/forecast/ai/page.tsx",

@@ -238,6 +238,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/staff", labelKey: "nav.staff", icon: UserCircle },
       { href: "/dashboard/staff/time-clock", labelKey: "nav.timeClock", icon: Clock },
       { href: "/dashboard/staff/schedule", labelKey: "nav.laborSchedule", icon: CalendarRange },
+      { href: "/dashboard/staff/labor-manager", labelKey: "nav.aiLaborManager", icon: Users },
       { href: "/dashboard/staff/payroll", labelKey: "nav.payrollExport", icon: FileSpreadsheet },
       { href: "/dashboard/notifications", labelKey: "nav.notifications", icon: Bell },
       { href: "/dashboard/notifications/rules", labelKey: "nav.notificationRules", icon: Settings2 },
