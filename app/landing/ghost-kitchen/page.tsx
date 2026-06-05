@@ -1,18 +1,19 @@
 import type { Metadata } from 'next';
 
-import { IcpLandingPage } from '@/components/marketing/icp-landing-page';
-import { getIcpLandingConfig } from '@/lib/marketing/icp-landing-content';
+import { GhostKitchenLanding } from '@/components/marketing/ghost-kitchen-landing';
+import {
+  GHOST_KITCHEN_LANDING_META,
+  GHOST_KITCHEN_LANDING_PATH,
+} from '@/lib/marketing/ghost-kitchen-landing-content';
 import { marketingPageMetadata } from '@/lib/marketing/page-metadata';
 
-const config = getIcpLandingConfig('ghost-kitchen');
-
 export const metadata: Metadata = marketingPageMetadata({
-  title: config.metaTitle,
-  description: config.metaDescription,
-  path: config.path,
-  keywords: config.keywords,
+  title: GHOST_KITCHEN_LANDING_META.title,
+  description: GHOST_KITCHEN_LANDING_META.description,
+  path: GHOST_KITCHEN_LANDING_PATH,
+  keywords: [...GHOST_KITCHEN_LANDING_META.keywords],
 });
 
-export default function GhostKitchenIcpLandingPage() {
-  return <IcpLandingPage slug="ghost-kitchen" />;
+export default function GhostKitchenLandingPage() {
+  return <GhostKitchenLanding />;
 }
