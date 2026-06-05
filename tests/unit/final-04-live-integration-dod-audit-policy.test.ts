@@ -12,7 +12,7 @@ describe("final orchestrator FINAL-04 LIVE integration DoD audit", () => {
     expect(FINAL_04_LIVE_INTEGRATION_DOD_POLICY_ID).toBe("final-04-live-integration-dod-v1");
     expect(FINAL_ORCHESTRATOR_PHASES[3]?.id).toBe("FINAL-04");
     expect(FINAL_ORCHESTRATOR_PHASES[3]?.taskSlot).toBe(198);
-    expect(LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT).toBe(15);
+    expect(LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT).toBe(14);
   });
 
   it("passes LIVE DoD smoke audit against repo", () => {

@@ -10,7 +10,7 @@ import { betaIntegrationsGovernanceSucceeded } from "@/lib/integrations/beta-int
 describe("beta integrations governance E2E policy (QA-37)", () => {
   it("locks governance e2e policy id and expected BETA count", () => {
     expect(BETA_INTEGRATIONS_GOVERNANCE_E2E_POLICY_ID).toBe("beta-integrations-governance-e2e-v1");
-    expect(BETA_INTEGRATIONS_GOVERNANCE_EXPECTED_COUNT).toBe(15);
+    expect(BETA_INTEGRATIONS_GOVERNANCE_EXPECTED_COUNT).toBe(14);
   });
 
   it("requires eighteen rows in both governance panels", () => {

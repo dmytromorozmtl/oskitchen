@@ -35,7 +35,7 @@ test.describe("beta integrations governance capstone policy", () => {
     );
     expect(TODAY_PATH).toBe("/dashboard/today");
     expect(INTEGRATIONS_HEALTH_PATH).toBe("/dashboard/integrations/health");
-    expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT).toBe(15);
+    expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT).toBe(14);
   });
 
   test("evaluates governance capstone contract", () => {

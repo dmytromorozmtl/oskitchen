@@ -31,7 +31,7 @@ test.describe("beta integrations governance policy", () => {
     expect(BETA_INTEGRATIONS_GOVERNANCE_E2E_POLICY_ID).toBe("beta-integrations-governance-e2e-v1");
     expect(BETA_INTEGRATIONS_GOVERNANCE_SLI_ID).toBe("integrations.beta_governance_panels");
     expect(INTEGRATIONS_HEALTH_PATH).toBe("/dashboard/integrations/health");
-    expect(BETA_INTEGRATIONS_GOVERNANCE_EXPECTED_COUNT).toBe(15);
+    expect(BETA_INTEGRATIONS_GOVERNANCE_EXPECTED_COUNT).toBe(14);
     expect(betaEnvReadinessRowTestId("square")).toBe("beta-env-readiness-square");
     expect(liveDodRowTestId("email-orders")).toBe("live-integration-dod-email-orders");
   });

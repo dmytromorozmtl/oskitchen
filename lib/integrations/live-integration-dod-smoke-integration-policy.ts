@@ -56,7 +56,7 @@ export function liveIntegrationDodSmokeWithinPassContract(
     contract.proofStatus === "dod_audit_complete" &&
     contract.scaffoldReadyCount === contract.expectedTotal &&
     contract.expectedTotal === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
-    contract.livePromotionCount === 6 &&
+    contract.livePromotionCount === 7 &&
     contract.integrityOverall === "PASSED"
   );
 }
@@ -64,5 +64,5 @@ export function liveIntegrationDodSmokeWithinPassContract(
 export function liveIntegrationDodSmokeHonestNoLiveClaim(
   summary: LiveIntegrationDodSmokeSummary,
 ): boolean {
-  return summary.livePromotionCount === 6 && summary.dod.liveCount === 6;
+  return summary.livePromotionCount === 7 && summary.dod.liveCount === 7;
 }

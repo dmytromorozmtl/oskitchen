@@ -12,7 +12,7 @@ describe("beta integrations governance capstone E2E policy (QA-43)", () => {
     expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_E2E_POLICY_ID).toBe(
       "beta-integrations-governance-capstone-e2e-v1",
     );
-    expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT).toBe(15);
+    expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT).toBe(14);
   });
 
   it("requires Today footnote → Health panels golden path contract", () => {

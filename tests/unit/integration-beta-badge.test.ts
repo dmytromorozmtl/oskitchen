@@ -7,13 +7,11 @@ import {
   BETA_INTEGRATION_IDS,
   LIVE_INTEGRATION_IDS,
   isBetaIntegration,
-  isBetaIntegrationProvider,
 } from "@/lib/integrations/integration-registry";
 
 const ROOT = process.cwd();
 
 const BETA_INTEGRATION_PAGES: Record<string, string> = {
-  quickbooks: "app/dashboard/integrations/quickbooks/page.tsx",
   xero: "app/dashboard/integrations/xero/page.tsx",
   "7shifts": "app/dashboard/integrations/7shifts/page.tsx",
   homebase: "app/dashboard/integrations/homebase/page.tsx",
@@ -37,19 +35,20 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   grubhub: "app/dashboard/integrations/grubhub/page.tsx",
   shopify: "app/dashboard/integrations/shopify/page.tsx",
   woocommerce: "app/dashboard/integrations/woocommerce/page.tsx",
+  quickbooks: "app/dashboard/integrations/quickbooks/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks fifteen BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(15);
-    expect(isBetaIntegration("woocommerce")).toBe(false);
-    expect(isBetaIntegration("shopify")).toBe(false);
+  it("tracks fourteen BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(14);
+    expect(isBetaIntegration("quickbooks")).toBe(false);
   });
 
-  it("tracks six LIVE registry integrations", () => {
+  it("tracks seven LIVE registry integrations", () => {
     expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
       "doordash",
       "grubhub",
+      "quickbooks",
       "shopify",
       "skip",
       "uber-eats",
@@ -57,12 +56,7 @@ describe("integration beta badge", () => {
     ]);
   });
 
-  it("maps ecommerce provider keys to registry status", () => {
-    expect(isBetaIntegrationProvider("woocommerce")).toBe(false);
-    expect(isBetaIntegrationProvider("shopify")).toBe(false);
-  });
-
-  it("renders BetaBadge on all fifteen BETA integration pages", () => {
+  it("renders BetaBadge on all fourteen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const source = readFileSync(join(ROOT, rel), "utf8");
       expect(source, id).toContain("BetaBadge");

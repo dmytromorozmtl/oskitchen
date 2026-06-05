@@ -76,8 +76,8 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "quickbooks",
     name: "QuickBooks",
-    status: "BETA",
-    requiredEnv: ["QUICKBOOKS_CLIENT_ID"],
+    status: "LIVE",
+    requiredEnv: ["QUICKBOOKS_CLIENT_ID", "QUICKBOOKS_CLIENT_SECRET"],
     setupRoute: "/dashboard/integrations/quickbooks",
   },
   {
@@ -200,6 +200,7 @@ export function isBetaIntegration(id: string): boolean {
 const PROVIDER_KEY_TO_INTEGRATION_ID: Partial<Record<string, string>> = {
   doordash: "doordash",
   grubhub: "grubhub",
+  quickbooks: "quickbooks",
   shopify: "shopify",
   woocommerce: "woocommerce",
   skip: "skip",

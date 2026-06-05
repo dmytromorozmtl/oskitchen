@@ -60,8 +60,8 @@ function auditLiveDodSmokeArtifact(root: string): boolean {
     summary.integrityProofStatus === "integrity_complete" &&
     summary.dod?.total === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
     summary.dod?.scaffoldReadyCount === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
-    summary.dod?.liveCount === 6 &&
-    summary.livePromotionCount === 6
+    summary.dod?.liveCount === 7 &&
+    summary.livePromotionCount === 7
   );
 }
 

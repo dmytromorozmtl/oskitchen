@@ -222,6 +222,7 @@ enum IntegrationProvider {
   DOORDASH
   GRUBHUB
   SKIP
+  QUICKBOOKS
   MANUAL
 }
 

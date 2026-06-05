@@ -15,8 +15,8 @@ describe("live integration dod smoke summary", () => {
     });
     expect(summary.overall).toBe("PASSED");
     expect(summary.proofStatus).toBe("dod_audit_complete");
-    expect(summary.dod.scaffoldReadyCount).toBe(15);
-    expect(summary.dod.total).toBe(15);
+    expect(summary.dod.scaffoldReadyCount).toBe(14);
+    expect(summary.dod.total).toBe(14);
   });
 
   it("fails when scaffold incomplete", () => {

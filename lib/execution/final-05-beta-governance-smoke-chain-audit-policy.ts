@@ -65,10 +65,10 @@ function auditChainSmokeArtifact(root: string): boolean {
     summary.certPassed === true &&
     summary.integrationPolicyId === BETA_GOVERNANCE_SMOKE_CHAIN_INTEGRATION_POLICY_ID &&
     summary.chain?.chainPassed === true &&
-    summary.chain?.livePromotionCount === 6 &&
+    summary.chain?.livePromotionCount === 7 &&
     summary.chain?.placeholderCount === 0 &&
     summary.chain?.expectedBetaCount === BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT &&
-    summary.livePromotionCount === 6 &&
+    summary.livePromotionCount === 7 &&
     summary.placeholderCount === 0 &&
     summary.expectedBetaCount === BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT
   );
