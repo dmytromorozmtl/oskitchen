@@ -31,6 +31,16 @@ Permissions: `production.manage` (same as other inventory operations).
 | AP | Creates `SupplierInvoice` with scanned image URL |
 | Audit | `inventory.invoice_scan_supply_created` event |
 
+## Mobile UX
+
+- **Take Photo** — half-screen thumb-friendly button opens live camera viewfinder with invoice alignment frame.
+- **Gallery** — pick existing photos from camera roll.
+- **Processing** — spinner with “AI is reading your invoice…” while vision runs.
+- **Review** — scrollable editable line items with confidence badges.
+- **Confirm All** — sticky bottom bar (safe-area aware) on mobile.
+- **Offline queue** — photos and pending confirmations stored in IndexedDB; auto-sync on reconnect. Banner shows queue count with manual “Sync now”.
+- **PWA** — “Scan Invoice” home-screen shortcut in `manifest.webmanifest` with camera icon.
+
 ## vs Poster POS
 
 Poster offers invoice photo capture for supply receipts. OS Kitchen matches that workflow with explicit confidence scores, ingredient matching, editable review step, and full PO/AP/inventory integration — not a standalone OCR widget.
@@ -43,5 +53,5 @@ Poster offers invoice photo capture for supply receipts. OS Kitchen matches that
 
 ## Tests
 
-- Unit: `tests/unit/invoice-scanner-service.test.ts`
+- Unit: `tests/unit/invoice-scanner-service.test.ts`, `tests/unit/invoice-scanner-offline-queue.test.ts`
 - E2E: `e2e/invoice-scanner.spec.ts`

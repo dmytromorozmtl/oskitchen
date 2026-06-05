@@ -6,6 +6,13 @@
   "display": "standalone",
   "shortcuts": [
     {
+      "name": "Scan Invoice",
+      "short_name": "Scan",
+      "description": "Photograph supplier invoices to update inventory stock",
+      "url": "/dashboard/inventory/invoice-scanner",
+      "icons": [{ "src": "/icons/invoice-scanner.svg", "sizes": "any" }]
+    },
+    {
       "name": "Handheld Waiter",
       "short_name": "Waiter",
       "description": "Tableside ordering with offline cash checkout",
