@@ -78,6 +78,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/tables", labelKey: "nav.tables", icon: LayoutGrid },
       { href: "/dashboard/production", labelKey: "nav.production", icon: ChefHat },
       { href: "/dashboard/kitchen", labelKey: "nav.kitchen", icon: MonitorDot },
+      { href: "/dashboard/kitchen/production", labelKey: "nav.kitchenProduction", icon: ChefHat },
       { href: "/dashboard/kitchen/cameras", labelKey: "nav.kitchenCameras", icon: MonitorDot },
       { href: "/dashboard/packing", labelKey: "nav.packing", icon: Truck },
       { href: "/dashboard/packing/verify", labelKey: "nav.packingVerify", icon: ScanLine },

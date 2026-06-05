@@ -5672,3 +5672,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T02:30:00Z | Cycle 24 | Phase 2 | Feature 24: POS Hardware Compatibility | PASS — docs/hardware-compatibility.md, Epson/PAX/Star/barcode certified catalog
 2026-06-06T02:45:00Z | Cycle 25 | Phase 2 | Feature 25: POS Cash Management | PASS — /dashboard/pos/cash open, count, close, report
 2026-06-06T03:00:00Z | Cycle 26 | Phase 2 | Feature 26: POS Customer Display | PASS — components/pos/customer-display.tsx, second-screen BroadcastChannel
+2026-06-06T03:15:00Z | Cycle 27 | Phase 3 | Feature 27: KDS Production View | PASS — /dashboard/kitchen/production station load, bottlenecks, ETA
