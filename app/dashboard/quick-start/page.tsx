@@ -4,16 +4,22 @@ import { QuickStartWizard } from "@/components/onboarding/quick-start-wizard";
 import { requireSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export default async function QuickStartPage() {
+export default async function QuickStartPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ phase?: string }>;
+}) {
   const sessionUser = await requireSessionUser();
+  const params = (await searchParams) ?? {};
   const profile = await prisma.userProfile.findUnique({
     where: { id: sessionUser.id },
     select: { onboardingCompleted: true },
   });
 
-  if (profile?.onboardingCompleted) {
+  const showOrderPhase = params.phase === "order";
+  if (profile?.onboardingCompleted && !showOrderPhase) {
     redirect("/dashboard/today");
   }
 
-  return <QuickStartWizard />;
+  return <QuickStartWizard initialStep={showOrderPhase ? "order" : undefined} />;
 }

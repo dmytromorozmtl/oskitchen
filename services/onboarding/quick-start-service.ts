@@ -30,6 +30,9 @@ import { mergePosSettings } from "@/lib/pos/pos-settings";
 import { MODULE_KEYS } from "@/lib/module-visibility";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId } from "@/lib/scope/resolve-owner-workspace-id";
+import { supplierListWhereForOwner, staffMemberListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { ensurePosTerminalReady } from "@/services/pos/pos-session-service";
+import { createStaffMember } from "@/services/staff/staff-service";
 
 function defaultBusinessName(templateTitle: string): string {
   return `My ${templateTitle.split(" ")[0] ?? "Kitchen"}`;
@@ -205,6 +208,61 @@ export async function configureKDSLayout(
   });
 }
 
+export async function seedQuickStartDemoData(
+  ownerUserId: string,
+  businessName: string,
+): Promise<{ supplierId: string | null; staffSeeded: boolean; registerReady: boolean }> {
+  const workspaceId = await resolveOwnerWorkspaceId(ownerUserId);
+  const supplierWhere = await supplierListWhereForOwner(ownerUserId);
+
+  let supplierId: string | null = null;
+  const existingSupplier = await prisma.supplier.findFirst({
+    where: { AND: [supplierWhere, { name: "Local Produce Co." }] },
+    select: { id: true },
+  });
+  if (existingSupplier) {
+    supplierId = existingSupplier.id;
+  } else {
+    const created = await prisma.supplier.create({
+      data: {
+        userId: ownerUserId,
+        workspaceId,
+        name: "Local Produce Co.",
+        email: "orders@localproduce.example",
+        active: true,
+        notes: "Quick Start demo supplier — replace with your real vendors anytime.",
+      },
+    });
+    supplierId = created.id;
+  }
+
+  const staffWhere = await staffMemberListWhereForOwner(ownerUserId);
+  let staffSeeded = false;
+  const activeStaff = await prisma.staffMember.count({
+    where: { AND: [staffWhere, { status: "ACTIVE", archivedAt: null }] },
+  });
+  if (activeStaff === 0) {
+    await createStaffMember({
+      userId: ownerUserId,
+      name: `${businessName.trim()} Team`,
+      roleType: "OWNER",
+      status: "ACTIVE",
+    });
+    staffSeeded = true;
+  }
+
+  await ensurePosTerminalReady(ownerUserId);
+  const registerCount = await prisma.posRegister.count({
+    where: { userId: ownerUserId },
+  });
+
+  return {
+    supplierId,
+    staffSeeded,
+    registerReady: registerCount > 0,
+  };
+}
+
 export async function configurePOSDefaults(ownerUserId: string): Promise<void> {
   const settings = await prisma.kitchenSettings.findUnique({
     where: { userId: ownerUserId },
@@ -267,6 +325,7 @@ export async function applyQuickStartTemplate(
   ownerUserId: string,
   sessionUserId: string,
   config: QuickStartConfig,
+  options?: { deferCompletion?: boolean },
 ): Promise<QuickStartApplyResult> {
   const template = getMenuTemplate(config.restaurantType);
   const operatingMode = operatingModeFromOperatingModelId(template.operatingModel);
@@ -306,7 +365,11 @@ export async function applyQuickStartTemplate(
   }
   await configureKDSLayout(ownerUserId, config.restaurantType);
   const { enabledModuleKeys } = await enableModulesForQuickStart(ownerUserId, config);
-  await completeQuickStartOnboarding(ownerUserId, sessionUserId, config);
+  await seedQuickStartDemoData(ownerUserId, businessName);
+
+  if (!options?.deferCompletion) {
+    await completeQuickStartOnboarding(ownerUserId, sessionUserId, config);
+  }
 
   const channelIntents = quickStartChannelsToIntents(config.channels);
   const nextUrl = quickStartFinishUrl(config.channels, template.operatingModel);

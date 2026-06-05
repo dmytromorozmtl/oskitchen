@@ -97,6 +97,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { fireCelebrationConfetti } from "@/components/ui/celebration-confetti";
 
 export type PosTerminalProduct = {
   id: string;
@@ -151,6 +152,8 @@ export function PosTerminalClient(props: {
   canApplyPosDiscount?: boolean;
   /** Rush-hour layout from ?speed=1 — denser grid and checkout-first panels. */
   initialSpeedMode?: boolean;
+  /** Quick Start — confetti on first successful checkout. */
+  showWelcome?: boolean;
   offlineQueueEnabled?: boolean;
   conflictResolution?: PosConflictResolutionStrategy;
 }) {
@@ -158,6 +161,8 @@ export function PosTerminalClient(props: {
   const customerAttachEnabled = props.customerAttachEnabled ?? true;
   const canApplyPosDiscount = props.canApplyPosDiscount ?? false;
   const speedMode = props.initialSpeedMode ?? false;
+  const showWelcome = props.showWelcome ?? false;
+  const welcomeConfettiFired = useRef(false);
   const offlineQueueEnabled = props.offlineQueueEnabled ?? true;
   const conflictResolution = props.conflictResolution ?? "manual_review";
   const showSecondaryPanels = shouldShowPosTerminalSecondaryPanels(speedMode);
@@ -654,6 +659,10 @@ export function PosTerminalClient(props: {
         `Sale complete — order ${res.orderId.slice(0, 8)}… receipt ${res.receiptNumber}`,
         "success",
       );
+      if (showWelcome && !welcomeConfettiFired.current) {
+        welcomeConfettiFired.current = true;
+        fireCelebrationConfetti();
+      }
     });
   }
 

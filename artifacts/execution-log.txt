@@ -5519,3 +5519,27 @@ Priority: P0-FINAL
 Result: VERIFIED — 440/440 tracker, 220/220 canonical, 26/26 critical files present, 0 TS errors, 0 forbidden claims, 0 console.log prod paths; vendor 8/8 public 200; marketplace/AI auth-gated 307; health ok (sentryServer.ok false human gate); restored deleted vendor dashboard+finance pages; npm install repaired node_modules (Node 22); post-220 proof_passed; ready:false GO:NO-GO P0:FAILED
 Vault: 11/11 | P0: FAILED | GO: NO-GO
 
+---
+POSTER GAP Cycle: 1
+Timestamp: 2026-06-05T07:38:00.000Z
+Feature: invoice-scanner-ai
+Action: feat: AI Invoice Scanner — photo to supply receipt via Claude Vision
+Result: DONE — Poster Gaps 1/10
+
+---
+POSTER GAP Cycle: 2
+Timestamp: 2026-06-05T07:42:00.000Z
+Feature: invoice-scanner-mobile-ux
+Action: feat: Invoice Scanner mobile UX — camera, gallery, offline queue
+Result: DONE — Poster Gaps 2/10
+Tests: unit 5/5 pass
+
+---
+POSTER GAP Cycle: 3
+Timestamp: 2026-06-05T07:45:00.000Z
+Feature: quick-start-15min
+Action: feat: Quick Start Wizard — 15-minute self-serve onboarding, no vault blockers
+Result: DONE — Poster Gaps 3/10
+Files: quick-start-wizard.tsx, quick-start-service.ts, quick-start/page.tsx, e2e/quick-start-15min.spec.ts
+Tests: unit 7/7 pass (quick-start service + menu templates)
+

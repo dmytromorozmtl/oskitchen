@@ -150,6 +150,7 @@ export default async function PosTerminalPage({
         businessType={kitchen?.businessType ?? "RESTAURANT"}
         canApplyPosDiscount={hasPermission(actor.granted, "pos.discount.apply")}
         initialSpeedMode={speedMode}
+        showWelcome={showWelcome}
         offlineQueueEnabled={posSettings.offlineQueueEnabled}
         conflictResolution={posSettings.conflictResolution}
       />
