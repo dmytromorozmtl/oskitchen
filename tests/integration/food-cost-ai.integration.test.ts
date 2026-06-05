@@ -10,6 +10,7 @@ vi.mock("@/lib/scope/resolve-owner-workspace-id", () => ({
 vi.mock("@/lib/scope/workspace-resource-scope", () => ({
   ingredientListWhereForOwner: vi.fn().mockResolvedValue({ userId: "user-1" }),
   recipeListWhereForOwner: vi.fn().mockResolvedValue({ userId: "user-1" }),
+  orderListWhereForOwnerAnd: vi.fn().mockResolvedValue({ userId: "user-1" }),
 }));
 
 vi.mock("@/services/costing/costing-service", () => ({
@@ -70,6 +71,11 @@ vi.mock("@/lib/prisma", () => ({
         { id: "i1", name: "Beef", unit: "lb", costPerUnit: 4.5 },
       ]),
     },
+    orderItem: {
+      groupBy: vi.fn().mockResolvedValue([
+        { productId: "p1", _sum: { quantity: 42 } },
+      ]),
+    },
   },
 }));
 
@@ -84,5 +90,9 @@ describe("food cost ai service (integration)", () => {
     expect(analysis.itemAnalyses[0]!.itemTitle).toBe("Burger");
     expect(analysis.confidence).toBeGreaterThan(0.5);
     expect(analysis.topIngredientMovers.length).toBeGreaterThan(0);
+    expect(analysis.dailyBrief.headline.length).toBeGreaterThan(0);
+    expect(analysis.itemAnalyses[0]!.profitPerItem).toBeGreaterThan(0);
+    expect(analysis.itemAnalyses[0]!.priceRecommendation).toBeDefined();
+    expect(analysis.summary.avgProfitPerItem).toBeGreaterThan(0);
   });
 });

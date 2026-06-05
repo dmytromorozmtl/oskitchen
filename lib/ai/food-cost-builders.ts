@@ -2,12 +2,20 @@ import {
   foodCostPercent,
   grossMarginPercent,
 } from "@/lib/costing/costing-calculations";
+import {
+  AI_FOOD_COST_MANAGER_POLICY_ID,
+  AI_FOOD_COST_PRICE_BUMP_MARGIN_GAP,
+  AI_FOOD_COST_TOP_RECOMMENDATIONS,
+} from "@/lib/ai/food-cost-manager-policy";
 import type {
   CostingLineInput,
   FoodCostAnalysis,
   FoodCostItemAnalysis,
+  FoodCostManagerDailyBrief,
+  FoodCostPriceRecommendationRow,
   IngredientCostBreakdown,
   IngredientPricePoint,
+  PriceRecommendation,
   PriceTrend,
   RecipeIngredientInput,
 } from "@/lib/ai/food-cost-types";
@@ -104,6 +112,127 @@ export function buildTopIngredientMovers(
     .slice(0, limit);
 }
 
+export function computeProfitPerItem(salePrice: number, totalCost: number): number {
+  return round2(salePrice - totalCost);
+}
+
+export function computeRealTimeMarginPercent(salePrice: number, totalCost: number): number {
+  if (salePrice <= 0) return 0;
+  return round1(grossMarginPercent(salePrice - totalCost, salePrice));
+}
+
+export function suggestPriceForTargetMargin(totalCost: number, targetMarginPercent: number): number {
+  const margin = targetMarginPercent / 100;
+  if (margin >= 0.99) return round2(totalCost * 2);
+  return round2(totalCost / (1 - margin));
+}
+
+export function buildPriceRecommendation(input: {
+  itemTitle: string;
+  salePrice: number;
+  totalCost: number;
+  grossMarginPercent: number;
+  targetMarginPercent: number;
+  suggestedPrice: number | null;
+  topRisingIngredient?: string | null;
+}): PriceRecommendation {
+  const profitPerItem = computeProfitPerItem(input.salePrice, input.totalCost);
+  const marginGap = input.targetMarginPercent - input.grossMarginPercent;
+  const recommendedPrice =
+    input.suggestedPrice ?? suggestPriceForTargetMargin(input.totalCost, input.targetMarginPercent);
+  const expectedProfitPerItem = computeProfitPerItem(recommendedPrice, input.totalCost);
+  const expectedMarginPercent = computeRealTimeMarginPercent(recommendedPrice, input.totalCost);
+
+  let action: PriceRecommendation["action"] = "hold";
+  if (marginGap >= AI_FOOD_COST_PRICE_BUMP_MARGIN_GAP && recommendedPrice > input.salePrice + 0.01) {
+    action = "raise_price";
+  } else if (marginGap >= 5 && input.topRisingIngredient) {
+    action = "lower_portion";
+  } else if (marginGap > 3) {
+    action = "review";
+  }
+
+  let rationale = `"${input.itemTitle}" margin is on target at $${profitPerItem.toFixed(2)} profit per item.`;
+  if (action === "raise_price") {
+    rationale = `Raise "${input.itemTitle}" to $${recommendedPrice.toFixed(2)} — restores ${round1(input.targetMarginPercent)}% margin ($${expectedProfitPerItem.toFixed(2)} profit).`;
+  } else if (action === "lower_portion") {
+    rationale = `Trim "${input.itemTitle}" portions or raise price — ${input.topRisingIngredient} costs are rising.`;
+  } else if (action === "review") {
+    rationale = `Review "${input.itemTitle}" pricing — ${round1(marginGap)} pts below ${round1(input.targetMarginPercent)}% margin target.`;
+  }
+
+  return {
+    action,
+    recommendedPrice: action === "hold" ? null : recommendedPrice,
+    currentPrice: round2(input.salePrice),
+    expectedMarginPercent,
+    expectedProfitPerItem: expectedProfitPerItem,
+    rationale,
+  };
+}
+
+export function buildFoodCostManagerDailyBrief(
+  itemAnalyses: FoodCostItemAnalysis[],
+  analyzedAt: Date,
+): FoodCostManagerDailyBrief {
+  const itemsNeedingPriceBump = itemAnalyses.filter(
+    (item) => item.priceRecommendation.action === "raise_price",
+  ).length;
+  const profitable = itemAnalyses.filter((item) => item.profitPerItem > 0);
+  const avgProfitPerItem =
+    profitable.length > 0
+      ? round2(profitable.reduce((sum, item) => sum + item.profitPerItem, 0) / profitable.length)
+      : 0;
+
+  const headline =
+    itemsNeedingPriceBump > 0
+      ? `${itemsNeedingPriceBump} item${itemsNeedingPriceBump === 1 ? "" : "s"} need price bumps — avg profit $${avgProfitPerItem.toFixed(2)}/item`
+      : itemAnalyses.length > 0
+        ? `Food cost on target — $${avgProfitPerItem.toFixed(2)} avg profit per item across ${itemAnalyses.length} SKUs`
+        : "Add recipes and menu prices to unlock per-item profit analysis";
+
+  const executiveSummary =
+    itemsNeedingPriceBump > 0
+      ? `Real-time margin scan found ${itemsNeedingPriceBump} menu item${itemsNeedingPriceBump === 1 ? "" : "s"} below margin target with recommended price adjustments.`
+      : `Per-item profit analysis covers ${itemAnalyses.length} menu items using latest ingredient costs.`;
+
+  const topBump = itemAnalyses.find((item) => item.priceRecommendation.action === "raise_price");
+  const bullets = [
+    itemsNeedingPriceBump > 0
+      ? `${itemsNeedingPriceBump} price increase${itemsNeedingPriceBump === 1 ? "" : "s"} recommended`
+      : null,
+    topBump
+      ? `Top action: ${topBump.itemTitle} → $${topBump.priceRecommendation.recommendedPrice?.toFixed(2) ?? topBump.salePrice.toFixed(2)}`
+      : null,
+    profitable.length > 0 ? `Average profit $${avgProfitPerItem.toFixed(2)} per item (7d volume weighted)` : null,
+  ].filter((line): line is string => line != null);
+
+  return {
+    generatedAtIso: analyzedAt.toISOString(),
+    headline,
+    executiveSummary,
+    bullets,
+    itemsNeedingPriceBump,
+    avgProfitPerItem,
+  };
+}
+
+export function buildTopPriceRecommendations(
+  itemAnalyses: FoodCostItemAnalysis[],
+  limit = AI_FOOD_COST_TOP_RECOMMENDATIONS,
+): FoodCostPriceRecommendationRow[] {
+  return [...itemAnalyses]
+    .filter((item) => item.priceRecommendation.action !== "hold")
+    .sort((left, right) => right.marginGapPercent - left.marginGapPercent)
+    .slice(0, limit)
+    .map((item) => ({
+      productId: item.productId,
+      itemTitle: item.itemTitle,
+      profitPerItem: item.profitPerItem,
+      priceRecommendation: item.priceRecommendation,
+    }));
+}
+
 export function recommendForItem(input: {
   itemTitle: string;
   grossMarginPercent: number;
@@ -143,9 +272,22 @@ export function buildFoodCostItemAnalysis(input: {
   targetMarginPercent: number;
   targetFoodCostPercent: number;
   ingredientBreakdown: IngredientCostBreakdown[];
+  unitsSold7d?: number;
 }): FoodCostItemAnalysis {
   const rising = input.ingredientBreakdown.find((i) => i.priceTrend === "up");
   const marginGap = input.targetMarginPercent - input.line.grossMarginPercent;
+  const profitPerItem = computeProfitPerItem(input.line.salePrice, input.line.totalCost);
+  const realTimeMarginPercent = computeRealTimeMarginPercent(input.line.salePrice, input.line.totalCost);
+  const unitsSold7d = input.unitsSold7d ?? 0;
+  const priceRecommendation = buildPriceRecommendation({
+    itemTitle: input.line.itemTitle,
+    salePrice: input.line.salePrice,
+    totalCost: input.line.totalCost,
+    grossMarginPercent: input.line.grossMarginPercent,
+    targetMarginPercent: input.targetMarginPercent,
+    suggestedPrice: input.line.suggestedPrice,
+    topRisingIngredient: rising?.name ?? null,
+  });
 
   return {
     productId: input.line.productId,
@@ -153,14 +295,19 @@ export function buildFoodCostItemAnalysis(input: {
     salePrice: round2(input.line.salePrice),
     foodCostPercent: round1(input.line.foodCostPercent),
     grossMarginPercent: round1(input.line.grossMarginPercent),
+    realTimeMarginPercent,
     ingredientCost: round2(input.line.ingredientCost),
     laborCost: round2(input.line.laborCost),
     totalCost: round2(input.line.totalCost),
+    profitPerItem,
+    unitsSold7d,
+    weeklyProfitEstimate: round2(profitPerItem * unitsSold7d),
     targetFoodCostPercent: input.targetFoodCostPercent,
     targetMarginPercent: input.targetMarginPercent,
     marginGapPercent: round1(marginGap),
     warningLevel: input.line.warningLevel,
     suggestedPrice: input.line.suggestedPrice != null ? round2(input.line.suggestedPrice) : null,
+    priceRecommendation,
     recommendation: recommendForItem({
       itemTitle: input.line.itemTitle,
       grossMarginPercent: input.line.grossMarginPercent,
@@ -244,8 +391,10 @@ export function assembleFoodCostAnalysis(input: {
   pricePoints: IngredientPricePoint[];
   missingRecipes: number;
   recipeCount: number;
+  unitsSold7dByProduct?: Record<string, number>;
 }): FoodCostAnalysis {
   const priceByIngredient = new Map(input.pricePoints.map((p) => [p.ingredientId, p]));
+  const volumeByProduct = input.unitsSold7dByProduct ?? {};
 
   const itemAnalyses = input.costingLines.map((line) =>
     buildFoodCostItemAnalysis({
@@ -253,6 +402,7 @@ export function assembleFoodCostAnalysis(input: {
       targetMarginPercent: input.targetMarginPercent,
       targetFoodCostPercent: input.targetFoodCostPercent,
       ingredientBreakdown: buildIngredientBreakdownForProduct(line.productId, input.recipeLines, priceByIngredient),
+      unitsSold7d: volumeByProduct[line.productId] ?? 0,
     }),
   );
 
@@ -275,16 +425,35 @@ export function assembleFoodCostAnalysis(input: {
     (p) => p.previousCostPerUnit != null,
   ).length;
 
+  const analyzedAt = new Date();
+  const sortedItems = itemAnalyses.sort((a, b) => a.grossMarginPercent - b.grossMarginPercent);
+  const topPriceRecommendations = buildTopPriceRecommendations(sortedItems);
+  const priceBumpCount = sortedItems.filter(
+    (item) => item.priceRecommendation.action === "raise_price",
+  ).length;
+  const profitableItems = sortedItems.filter((item) => item.profitPerItem > 0);
+  const avgProfitPerItem =
+    profitableItems.length > 0
+      ? round2(
+          profitableItems.reduce((sum, item) => sum + item.profitPerItem, 0) / profitableItems.length,
+        )
+      : 0;
+  const weeklyProfitEstimate = round2(
+    sortedItems.reduce((sum, item) => sum + item.weeklyProfitEstimate, 0),
+  );
+
   return {
     workspaceId: input.workspaceId,
-    analyzedAt: new Date().toISOString(),
+    analyzedAt: analyzedAt.toISOString(),
     overallFoodCostPercent: round1(avgFoodCost),
     overallGrossMarginPercent: round1(avgMargin),
     targetFoodCostPercent: input.targetFoodCostPercent,
     targetMarginPercent: input.targetMarginPercent,
     itemsAnalyzed: itemAnalyses.length,
     itemsBelowTargetMargin,
-    itemAnalyses: itemAnalyses.sort((a, b) => a.grossMarginPercent - b.grossMarginPercent),
+    itemAnalyses: sortedItems,
+    dailyBrief: buildFoodCostManagerDailyBrief(sortedItems, analyzedAt),
+    topPriceRecommendations,
     topIngredientMovers,
     recommendations: buildWorkspaceRecommendations({
       overallFoodCostPercent: avgFoodCost,
@@ -295,6 +464,11 @@ export function assembleFoodCostAnalysis(input: {
       topIngredientMovers,
       missingRecipes: input.missingRecipes,
     }),
+    summary: {
+      avgProfitPerItem,
+      weeklyProfitEstimate,
+      priceBumpCount,
+    },
     aiAssisted: true,
     confidence: computeOverallConfidence({
       itemsAnalyzed: itemAnalyses.length,
@@ -303,6 +477,12 @@ export function assembleFoodCostAnalysis(input: {
       totalIngredients: input.pricePoints.length,
     }),
   };
+}
+
+export function foodCostManagerPolicySnapshot(): {
+  policyId: typeof AI_FOOD_COST_MANAGER_POLICY_ID;
+} {
+  return { policyId: AI_FOOD_COST_MANAGER_POLICY_ID };
 }
 
 /** Quick margin recompute when sale price or ingredient cost changes (what-if). */

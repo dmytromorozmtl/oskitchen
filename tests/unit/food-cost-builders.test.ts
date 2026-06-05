@@ -3,8 +3,11 @@ import { describe, expect, it } from "vitest";
 import {
   assembleFoodCostAnalysis,
   buildIngredientBreakdownForProduct,
+  buildPriceRecommendation,
   buildTopIngredientMovers,
   computePriceTrend,
+  computeProfitPerItem,
+  computeRealTimeMarginPercent,
   recommendForItem,
   recomputeMargin,
 } from "@/lib/ai/food-cost-builders";
@@ -110,6 +113,29 @@ describe("food cost builders", () => {
     expect(analysis.recommendations.length).toBeGreaterThan(1);
     expect(analysis.aiAssisted).toBe(true);
     expect(analysis.topIngredientMovers[0]?.name).toBe("Beef");
+    expect(analysis.dailyBrief.headline.length).toBeGreaterThan(0);
+    expect(analysis.itemAnalyses[0]!.profitPerItem).toBe(7);
+    expect(analysis.itemAnalyses[0]!.priceRecommendation.action).toBe("raise_price");
+    expect(analysis.summary.priceBumpCount).toBeGreaterThanOrEqual(1);
+  });
+
+  it("computes per-item profit and real-time margin", () => {
+    expect(computeProfitPerItem(14, 7)).toBe(7);
+    expect(computeRealTimeMarginPercent(14, 7)).toBe(50);
+  });
+
+  it("builds raise_price recommendation when margin gap is large", () => {
+    const rec = buildPriceRecommendation({
+      itemTitle: "Burger",
+      salePrice: 12,
+      totalCost: 7,
+      grossMarginPercent: 42,
+      targetMarginPercent: 60,
+      suggestedPrice: 16,
+    });
+    expect(rec.action).toBe("raise_price");
+    expect(rec.recommendedPrice).toBe(16);
+    expect(rec.expectedProfitPerItem).toBe(9);
   });
 
   it("recommends price action when margin gap is large", () => {

@@ -96,6 +96,14 @@ function ItemDrillDown({ item }: { item: FoodCostItemAnalysis }) {
   return (
     <div className="rounded-lg border bg-muted/30 p-3 text-xs space-y-2">
       <p className="font-medium">{item.recommendation}</p>
+      <p className="text-muted-foreground">{item.priceRecommendation.rationale}</p>
+      {item.priceRecommendation.recommendedPrice != null ? (
+        <p>
+          Recommended price: <span className="font-semibold">${item.priceRecommendation.recommendedPrice.toFixed(2)}</span>
+          {" · "}
+          est. margin {item.priceRecommendation.expectedMarginPercent}%
+        </p>
+      ) : null}
       {item.ingredientBreakdown.length > 0 ? (
         <table className="w-full">
           <thead>
@@ -219,6 +227,28 @@ export function FoodCostDashboard({ analysis, alerts, trend30d, ingredientPriceS
         </Button>
       </div>
 
+      <Card data-testid="food-cost-manager-daily-brief">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Food cost manager brief</CardTitle>
+          <CardDescription>{analysis.dailyBrief.executiveSummary}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-lg font-medium">{analysis.dailyBrief.headline}</p>
+          {analysis.dailyBrief.bullets.length > 0 ? (
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              {analysis.dailyBrief.bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <Badge variant="outline">Avg profit ${analysis.summary.avgProfitPerItem.toFixed(2)}/item</Badge>
+            <Badge variant="outline">{analysis.dailyBrief.itemsNeedingPriceBump} price bumps</Badge>
+            <Badge variant="outline">${analysis.summary.weeklyProfitEstimate.toFixed(0)} est. 7d profit</Badge>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
@@ -329,6 +359,7 @@ export function FoodCostDashboard({ analysis, alerts, trend30d, ingredientPriceS
                 <th className="p-3 font-medium">Price</th>
                 <th className="p-3 font-medium">Food cost</th>
                 <th className="p-3 font-medium">Margin</th>
+                <th className="p-3 font-medium">Profit/item</th>
                 <th className="p-3 font-medium">Gap</th>
               </tr>
             </thead>
@@ -348,7 +379,8 @@ export function FoodCostDashboard({ analysis, alerts, trend30d, ingredientPriceS
                       <td className="p-3 font-medium">{item.itemTitle}</td>
                       <td className="p-3">${item.salePrice.toFixed(2)}</td>
                       <td className={cn("p-3", GAUGE_TONE_CLASS[fcTone])}>{item.foodCostPercent}%</td>
-                      <td className="p-3">{item.grossMarginPercent}%</td>
+                      <td className="p-3">{item.realTimeMarginPercent}%</td>
+                      <td className="p-3 tabular-nums">${item.profitPerItem.toFixed(2)}</td>
                       <td className="p-3">
                         {item.marginGapPercent > 0 ? (
                           <span className="inline-flex items-center gap-1 text-red-600">
@@ -365,7 +397,7 @@ export function FoodCostDashboard({ analysis, alerts, trend30d, ingredientPriceS
                     </tr>
                     {open ? (
                       <tr>
-                        <td colSpan={6} className="p-3 pt-0">
+                        <td colSpan={7} className="p-3 pt-0">
                           <ItemDrillDown item={item} />
                         </td>
                       </tr>
@@ -375,7 +407,7 @@ export function FoodCostDashboard({ analysis, alerts, trend30d, ingredientPriceS
               })}
               {analysis.itemAnalyses.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                  <td colSpan={7} className="p-8 text-center text-muted-foreground">
                     No costing data — add recipes and run costing first.
                   </td>
                 </tr>

@@ -1,17 +1,27 @@
 import { subDays } from "date-fns";
 
 import { assembleFoodCostAnalysis } from "@/lib/ai/food-cost-builders";
-import type { FoodCostAnalysis, FoodCostItemAnalysis } from "@/lib/ai/food-cost-types";
+import type {
+  FoodCostAnalysis,
+  FoodCostItemAnalysis,
+  FoodCostManagerDailyBrief,
+} from "@/lib/ai/food-cost-types";
 import { mergeCostingSettings } from "@/lib/costing/costing-settings";
 import { prisma } from "@/lib/prisma";
 import { resolveOwnerWorkspaceId, resolveWorkspaceOwnerUserId } from "@/lib/scope/resolve-owner-workspace-id";
 import {
   ingredientListWhereForOwner,
+  orderListWhereForOwnerAnd,
   recipeListWhereForOwner,
 } from "@/lib/scope/workspace-resource-scope";
 import { loadCostingOverviewData } from "@/services/costing/costing-service";
 
-export type { FoodCostAnalysis, FoodCostItemAnalysis } from "@/lib/ai/food-cost-types";
+export type {
+  FoodCostAnalysis,
+  FoodCostItemAnalysis,
+  FoodCostManagerDailyBrief,
+  PriceRecommendation,
+} from "@/lib/ai/food-cost-types";
 
 /**
  * Food Cost AI — recipe-level ingredient breakdown, price trends, margin analysis, and recommendations.
@@ -51,6 +61,24 @@ export async function analyzeFoodCost(workspaceId: string): Promise<FoodCostAnal
   }
 
   const since = subDays(new Date(), 90);
+  const since7d = subDays(new Date(), 7);
+  const orderWhere = await orderListWhereForOwnerAnd(ownerUserId, {
+    createdAt: { gte: since7d },
+    status: { notIn: ["CANCELLED"] },
+  });
+  const volumeRows = await prisma.orderItem.groupBy({
+    by: ["productId"],
+    where: {
+      productId: { not: null },
+      order: orderWhere,
+    },
+    _sum: { quantity: true },
+  });
+  const unitsSold7dByProduct = Object.fromEntries(
+    volumeRows
+      .filter((row) => row.productId)
+      .map((row) => [row.productId!, Number(row._sum.quantity ?? 0)]),
+  );
   const historyRows =
     ingredientIds.length === 0
       ? []
@@ -154,7 +182,16 @@ export async function analyzeFoodCost(workspaceId: string): Promise<FoodCostAnal
     pricePoints,
     missingRecipes: costing.kpis.missingRecipes,
     recipeCount: costing.recipeCount,
+    unitsSold7dByProduct,
   });
+}
+
+/** Daily food cost brief — per-item profit and price recommendations. */
+export async function generateFoodCostManagerDailyBrief(
+  workspaceId: string,
+): Promise<FoodCostManagerDailyBrief> {
+  const analysis = await analyzeFoodCost(workspaceId);
+  return analysis.dailyBrief;
 }
 
 export async function analyzeFoodCostForProduct(
