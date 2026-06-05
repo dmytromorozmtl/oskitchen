@@ -5561,3 +5561,12 @@ Result: DONE — Poster Gaps 5/10
 Files: bank-statement-import-service.ts, bank-import/page.tsx, bank-import-client.tsx, actions/finance/bank-statement-import.ts
 Tests: unit 3/3 pass (bank-statement-import-service)
 
+---
+POSTER GAP Cycle: 6
+Timestamp: 2026-06-05T07:52:00.000Z
+Feature: public-knowledge-base
+Action: feat: Public Knowledge Base
+Result: DONE — Poster Gaps 6/10
+Files: knowledge-base-service.ts, knowledge-base-content.ts, app/kb/[[...slug]]/page.tsx, kb-shell.tsx, kb-pages.tsx, e2e/knowledge-base.spec.ts
+Tests: unit 4/4 pass (knowledge-base-service)
+
