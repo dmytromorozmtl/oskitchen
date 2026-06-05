@@ -208,6 +208,7 @@ export async function posOpenShiftAction(formData: FormData) {
       },
     });
     revalidatePath("/dashboard/pos/shifts");
+    revalidatePath("/dashboard/pos/cash");
     revalidatePath("/dashboard/pos/terminal");
     return { ok: true as const };
   } catch (e) {
@@ -268,6 +269,7 @@ export async function posCloseShiftAction(formData: FormData) {
       },
     });
     revalidatePath("/dashboard/pos/shifts");
+    revalidatePath("/dashboard/pos/cash");
     revalidatePath("/dashboard/pos/terminal");
     return { ok: true as const };
   } catch (e) {

@@ -26,7 +26,10 @@ export function buildPosSubnavLinks(granted: ReadonlySet<PermissionKey>): PosNav
   }
 
   if (hasPermission(granted, "pos.shift.open") || hasPermission(granted, "pos.shift.close")) {
-    links.push({ href: "/dashboard/pos/shifts", label: "Shifts" });
+    links.push(
+      { href: "/dashboard/pos/cash", label: "Cash" },
+      { href: "/dashboard/pos/shifts", label: "Shifts" },
+    );
   }
 
   links.push(

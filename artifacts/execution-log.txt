@@ -5670,3 +5670,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T02:00:00Z | Cycle 22 | Phase 2 | Feature 22: Offline POS | PASS — IndexedDB v2, PCI local AES-GCM sealing, auto-sync + retry
 2026-06-06T02:15:00Z | Cycle 23 | Phase 2 | Feature 23: Handheld POS | PASS — waiter → order → KDS fire, tab sync, kitchen display link
 2026-06-06T02:30:00Z | Cycle 24 | Phase 2 | Feature 24: POS Hardware Compatibility | PASS — docs/hardware-compatibility.md, Epson/PAX/Star/barcode certified catalog
+2026-06-06T02:45:00Z | Cycle 25 | Phase 2 | Feature 25: POS Cash Management | PASS — /dashboard/pos/cash open, count, close, report
