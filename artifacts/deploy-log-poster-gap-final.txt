@@ -1,0 +1,2207 @@
+
+> os-kitchen@0.1.0 deploy:prod
+> bash scripts/deploy-prebuilt-prod.sh
+
+=========================================
+ KITCHENOS — PREBUILT PRODUCTION DEPLOY
+ Fri Jun  5 09:39:42 EDT 2026
+=========================================
+
+[1/6] Node version...
+v22.22.3
+
+[2/6] Cleaning build artifacts...
+✅ Moved 1 stale build trash dir(s) to /Users/dmytro/Desktop/2026/KitchenOS/../.kitchenos-deploy-trash.1780666782
+✅ Cleaned
+
+[3/6] OpenAPI manifest + tests...
+✅ OpenAPI manifest: 255 routes → lib/api/openapi-manifest.json
+  → skipping vitest (DEPLOY_SKIP_VITEST=1)
+  (TypeScript is checked during next build — standalone tsc is too slow on Desktop/iCloud.)
+
+[4/6] Local production build...
+  → startup readiness preflight...
+OS Kitchen startup readiness
+
+NODE_ENV=production
+fatal_on_boot=yes
+
+✓ No production startup readiness blockers detected
+  → production cron reconciliation...
+✓ production cron reconciliation OK (21 allowlisted, 1 experimental active)
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 106.32s
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+[@sentry/nextjs] DEPRECATION WARNING: disableLogger is deprecated and will be removed in a future version. Use webpack.treeshake.removeDebugLogging instead.
+[@sentry/nextjs] DEPRECATION WARNING: automaticVercelMonitors is deprecated and will be removed in a future version. Use webpack.automaticVercelMonitors instead.
+[@sentry/nextjs] DEPRECATION WARNING: reactComponentAnnotation is deprecated and will be removed in a future version. Use webpack.reactComponentAnnotation instead.
+   ▲ Next.js 15.5.16
+   - Environments: .env.production.local, .env.local, .env
+   - Experiments (use with caution):
+     · cpus: 1
+     · serverActions
+     · clientTraceMetadata
+     · staticGenerationMaxConcurrency: 1
+
+   Creating an optimized production build ...
+[@sentry/nextjs] DEPRECATION WARNING: It is recommended renaming your `sentry.client.config.ts` file, or moving its content to `instrumentation-client.ts`. When using Turbopack `sentry.client.config.ts` will no longer work. Read more about the `instrumentation-client.ts` file: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
+[BABEL] Note: The code generator has deoptimised the styling of /Users/dmytro/Desktop/2026/KitchenOS/components/dashboard/maintenance-mode-panel.tsx as it exceeds the max of 500KB.
+ ⚠ Compiled with warnings in 12.0min
+
+./node_modules/@protobufjs/inquire/index.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@protobufjs/inquire/index.js
+./node_modules/protobufjs/src/util/minimal.js
+./node_modules/protobufjs/src/index-minimal.js
+./node_modules/protobufjs/minimal.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/generated/root.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/logs/protobuf/logs.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/logs/protobuf/index.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/index.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/platform/node/OTLPTraceExporter.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/platform/index.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/index.js
+./lib/observability/experiment-otel.ts
+./lib/storefront/experiment-trace.ts
+./lib/storefront/theme-experiment-middleware.ts
+
+./node_modules/@protobufjs/inquire/index.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@protobufjs/inquire/index.js
+./node_modules/protobufjs/src/util/minimal.js
+./node_modules/protobufjs/src/index-minimal.js
+./node_modules/protobufjs/minimal.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/generated/root.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/metrics/protobuf/metrics.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/metrics/protobuf/index.js
+./node_modules/@opentelemetry/otlp-transformer/build/esm/index.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/platform/node/OTLPTraceExporter.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/platform/index.js
+./node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/index.js
+./lib/observability/experiment-otel.ts
+./lib/storefront/experiment-trace.ts
+./services/storefront/theme-experiment-edge-sync.ts
+./services/storefront/storefront-edge-sync-job-service.ts
+./actions/storefront-theme-experiment.ts
+
+   Linting and checking validity of types ...
+   
+Your tsconfig.json extends another configuration, which means we cannot add the Next.js TypeScript plugin automatically. To improve your development experience, we recommend adding the Next.js plugin (`"plugins": [{ "name": "next" }]`) manually to your TypeScript configuration. Learn more: https://nextjs.org/docs/app/api-reference/config/typescript#the-typescript-plugin
+
+
+./app/api/cron/reminders/route.ts
+12:10  Warning: 'logger' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/cron/storefront-cart-recovery/route.ts
+5:10  Warning: 'logger' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/cron/storefront-team-invite-reminders/route.ts
+5:10  Warning: 'logger' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/public/v1/inventory/route.ts
+1:10  Warning: 'NextResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/public/v1/locations/route.ts
+1:10  Warning: 'NextResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/public/v1/products/route.ts
+1:10  Warning: 'NextResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/public/v1/staff/route.ts
+1:10  Warning: 'NextResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/scim/v2/Groups/route.ts
+5:3  Warning: 'buildScimGroupResource' is defined but never used.  @typescript-eslint/no-unused-vars
+8:10  Warning: 'scimErrorResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/webhooks/experiment-scientist-proposal/route.ts
+13:10  Warning: 'createHash' is defined but never used.  @typescript-eslint/no-unused-vars
+56:9  Warning: 'prev' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/blog/restaurant-pos-comparison-2026/opengraph-image.tsx
+8:9  Warning: 'post' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/catering/page.tsx
+16:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/channels/page.tsx
+17:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/customers/page.tsx
+17:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/delivery/page.tsx
+15:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/forecasting/page.tsx
+8:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/inventory/page.tsx
+8:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/meal-plans/page.tsx
+14:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/orders/page.tsx
+17:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/page.tsx
+50:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/production/page.tsx
+16:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/reports/page.tsx
+26:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/revenue/page.tsx
+16:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/analytics/saved-views/page.tsx
+24:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/billing/history/page.tsx
+6:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/billing/invoices/page.tsx
+13:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/billing/page.tsx
+33:9  Warning: 'profile' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/billing/usage/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/brands/[brandId]/page.tsx
+46:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/brands/[brandId]/reports/page.tsx
+13:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/brands/assignment/page.tsx
+16:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/brands/page.tsx
+63:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/calendar/page.tsx
+20:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering/page.tsx
+20:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/[quoteId]/page.tsx
+51:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/accepted/page.tsx
+17:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/follow-ups/page.tsx
+14:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/new/page.tsx
+19:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/page.tsx
+32:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/pipeline/page.tsx
+12:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/public-proposals/page.tsx
+11:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/quotes/page.tsx
+15:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/reports/page.tsx
+11:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/catering-quotes/templates/page.tsx
+13:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/alerts/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/channel-fees/page.tsx
+11:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/components/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/items/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/menus/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/page.tsx
+44:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/recipes-missing/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/reports/page.tsx
+8:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/scenarios/page.tsx
+11:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/costing/settings/page.tsx
+13:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/dashboard-layout-content.tsx
+4:10  Warning: 'dashboardLayoutErrorDetail' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/demo/scenarios/page.tsx
+18:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/executive/risks/page.tsx
+2:10  Warning: 'Card' is defined but never used.  @typescript-eslint/no-unused-vars
+2:16  Warning: 'CardContent' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/forecast/[runId]/page.tsx
+45:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/forecast/history/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/forecast/new/page.tsx
+31:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/forecast/page.tsx
+29:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/forecast/settings/page.tsx
+16:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/go-live/test-run/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/growth/referrals/page.tsx
+23:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-center/errors/page.tsx
+8:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-center/jobs/[jobId]/page.tsx
+68:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-export/export/page.tsx
+5:10  Warning: 'ALL_EXPORT_TYPES' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-export/exports/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-export/imports/[jobId]/page.tsx
+15:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-export/imports/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-export/page.tsx
+24:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/import-export/validation-errors/page.tsx
+14:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/integrations/oauth-apps/consent/page.tsx
+9:3  Warning: 'listMergedPartnerOAuthAppDefinitions' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/inventory/demand/page.tsx
+7:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/inventory/demand/settings/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/kitchen/page.tsx
+21:10  Warning: 'getTenantActor' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/meal-subscriptions/page.tsx
+18:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/menu-planner/page.tsx
+19:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/menus/[menuId]/reports/page.tsx
+11:11  Warning: 'sessionUser' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/nutrition-labels/print-queue/page.tsx
+12:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/order-hub/page.tsx
+87:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/orders/quick/page.tsx
+10:11  Warning: 'sessionUser' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/packing/reports/page.tsx
+22:24  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/packing/verify/page.tsx
+26:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/pos/reports/page.tsx
+4:29  Warning: 'CardDescription' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/production/page.tsx
+39:11  Warning: 'sessionUser' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/production/reports/page.tsx
+22:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/production/templates/page.tsx
+34:30  Warning: 'dataUserId' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/purchasing/page.tsx
+23:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/purchasing/purchase-orders/[poId]/page.tsx
+14:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/purchasing/purchase-orders/page.tsx
+12:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/purchasing/receiving/page.tsx
+9:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/purchasing/reorder-queue/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/purchasing/suppliers/page.tsx
+11:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/staff/schedule/page.tsx
+8:10  Warning: 'getTenantActor' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/advanced/page.tsx
+167:9  Warning: 'stored' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/domains/page.tsx
+14:10  Warning: 'prisma' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/forms/new/page.tsx
+11:10  Warning: 'prisma' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/launch/page.tsx
+37:11  Warning: 'dataUserId' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/marketing/page.tsx
+1:8  Warning: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+3:10  Warning: 'Button' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/pages/[pageId]/page.tsx
+9:3  Warning: 'updateStorefrontPageDetailsFormAction' is defined but never used.  @typescript-eslint/no-unused-vars
+18:10  Warning: 'Input' is defined but never used.  @typescript-eslint/no-unused-vars
+47:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/storefront/theme/page.tsx
+59:9  Warning: 'pages' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/training/analytics/page.tsx
+21:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/training/assignments/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/training/practice/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/dashboard/workspace/experiments/page.tsx
+10:24  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/platform/webhooks/page.tsx
+13:10  Warning: 'toSafeErrorPreview' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/s/[storeSlug]/layout.tsx
+14:24  Warning: 'BRAND_ACCENT_DARK' is defined but never used.  @typescript-eslint/no-unused-vars
+32:10  Warning: 'getStorefrontForPublicFromRequest' is defined but never used.  @typescript-eslint/no-unused-vars
+82:30  Warning: 'brandOverlay' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+173:9  Warning: 'accent' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+174:9  Warning: 'secondary' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./app/s/[storeSlug]/p/[pageSlug]/page.tsx
+5:10  Warning: 'getStorefrontForPublicFromRequest' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/analytics/google-analytics.tsx
+14:7  Warning: `next/script`'s `beforeInteractive` strategy should not be used outside of `pages/_document.js`. See: https://nextjs.org/docs/messages/no-before-interactive-script-outside-document  @next/next/no-before-interactive-script-outside-document
+
+./components/analytics/linkedin-insight.tsx
+39:9  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/analytics/meta-pixel.tsx
+39:9  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/dashboard/analytics-filter-bar.tsx
+1:8  Warning: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/dashboard/changelog-banner.tsx
+19:6  Warning: React Hook useEffect has a missing dependency: 'latest'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/dashboard/compliance/uk-dsit-algorithmic-transparency-card.tsx
+13:9  Warning: 'snap' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/dashboard/ingredient-demand-command-center.tsx
+29:10  Warning: 'TableSkeletonRows' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/dashboard/marketing/holiday-package-form.tsx
+5:10  Warning: 'useState' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/dashboard/pos-access-card.tsx
+1:8  Warning: 'React' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/dashboard/pos-terminal-client.tsx
+375:6  Warning: React Hook useEffect has a missing dependency: 'flushOfflineQueue'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+699:6  Warning: React Hook useEffect has a missing dependency: 'checkout'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/dashboard/settings/health-overview.tsx
+8:10  Warning: 'appIconMdClass' is defined but never used.  @typescript-eslint/no-unused-vars
+8:26  Warning: 'appIconSmClass' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/dashboard/storefront/delivery-zones-editor.tsx
+41:34  Warning: '_' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/delivery/fleet-map.tsx
+24:9  Warning: 'ref' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/marketing/roi-calculator.tsx
+37:32  Warning: 'growthRevenue' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/marketplace/marketplace-compare-client.tsx
+10:70  Warning: 'sliceProductsForComparison' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/marketplace/marketplace-vendor-card.tsx
+13:3  Warning: 'canReorder' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/marketplace/vendor-products-list-client.tsx
+39:3  Warning: 'highlightId' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/onboarding/onboarding-wizard.tsx
+72:9  Warning: '_flow' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/pos/handheld-ordering-client.tsx
+92:6  Warning: React Hook useEffect has a missing dependency: 'flushOfflineQueue'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/pos/tab-panel.tsx
+44:10  Warning: 'actionErrorMessage' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/production/today-queue.tsx
+37:5  Warning: Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps').
+
+./components/qr/qr-ordering-client.tsx
+38:6  Warning: React Hook React.useMemo has a missing dependency: 'context'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/restaurant/floor-plan.tsx
+49:10  Warning: 'actionErrorMessage' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/storefront/meal-builder.tsx
+39:6  Warning: React Hook React.useEffect has a missing dependency: 'requiredIds'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+39:7  Warning: React Hook React.useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.  react-hooks/exhaustive-deps
+
+./components/storefront/media/media-upload-dropzone.tsx
+10:10  Warning: 'Input' is defined but never used.  @typescript-eslint/no-unused-vars
+11:10  Warning: 'Label' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/storefront/pickup-windows-panel.tsx
+4:10  Warning: 'useState' is defined but never used.  @typescript-eslint/no-unused-vars
+23:10  Warning: 'actionErrorMessage' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/storefront/theme-customizer.tsx
+7:10  Warning: 'Button' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/ui/permission-denied-card.tsx
+15:3  Warning: 'PERMISSION_DENIED_CARD_TEST_ID' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/ai/budget-guard.ts
+103:3  Warning: '_feature' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/ai/camera-live-types.ts
+2:3  Warning: 'ActivityLevel' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/ai/camera-twin-types.ts
+1:31  Warning: 'CameraFrameAnalysis' is defined but never used.  @typescript-eslint/no-unused-vars
+2:15  Warning: 'KitchenTwinConfig' is defined but never used.  @typescript-eslint/no-unused-vars
+3:15  Warning: 'KdsLiveState' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/ai/purchasing-automation-types.ts
+1:15  Warning: 'PurchaseRecommendation' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/analytics/hero-ab-client.ts
+12:7  Warning: 'VALID' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/api/run-cron.ts
+35:64  Warning: 'slug' is defined but never used.  @typescript-eslint/no-unused-vars
+59:3  Warning: '_options' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/auth/is-superadmin.ts
+3:10  Warning: 'isSuperAdminEmail' is defined but never used.  @typescript-eslint/no-unused-vars
+4:10  Warning: 'hasSuperAdminRoleRow' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/beta-launch/build-report.ts
+1:65  Warning: 'LaunchStepId' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/billing/billing-permissions.ts
+64:37  Warning: '_scope' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/briefing/month2-market-readiness-convergence-briefing-era25.ts
+8:3  Warning: 'MONTH2_MEAL_PREP_LANDING_ROUTE' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/briefing/owner-daily-briefing-tile-links-era19.ts
+1:10  Warning: 'BRIEFING_CASHIER_POS_SPEED_TERMINAL_HREF' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/commercial-inflection-readiness-post-linear-closure-orchestrator-era28.ts
+11:3  Warning: 'evaluateCommercialInflectionReadiness' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/commercial-pilot-ops-status-era18.ts
+163:9  Warning: 'blockers' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/engineering-path-terminus-ui-era24.ts
+12:3  Warning: 'ENGINEERING_PATH_TERMINUS_ERA24_POLICY_ID' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/era20-manager-discount-audit-flow-proof-era20-policy.ts
+5:10  Warning: 'ERA20_OPERATOR_GOLDEN_PATH_PROOF_POLICY_ID' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/era25-first-charter-slice-readiness-post-charter-exit-orchestrator-era24.ts
+12:3  Warning: 'ERA25_CHARTER_REQUIRED_SECTIONS' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/market-leader-positioning-ui-era21.ts
+150:9  Warning: 'seriesAHonest' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/pilot-gono-go-era17-policy.ts
+10:3  Warning: 'PILOT_FORBIDDEN_CLAIMS_ENFORCEMENT_ERA17_SUMMARY_ARTIFACT' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/commercial/tier2-golden-path-post-p0-orchestrator-era21.ts
+10:3  Warning: 'buildTier2GoldenPathPhaseStatuses' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/eo-14110-ai-inventory.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/eu-ai-act.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/eu-ai-office-notified-body.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/experiment-bq-private-link.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/five-eyes-cloud-compact.ts
+95:50  Warning: '_raw' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/hipaa-baa.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/homomorphic-dna-federation.ts
+10:3  Warning: 'ckksEncodeInteger' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/hypergraph-evolution-snapshot.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/hypergraph-zk-dna-rollup.ts
+7:3  Warning: 'isRecursiveZkDnaRollupEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/hypergraph-zk-dna-snapshot.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/ismap-nzism-crosswalk.ts
+109:47  Warning: '_raw' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/iso-42001-ai-ms.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/iso-42001-cert-body.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/iso-42001-stage2.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/nist-ai-rmf.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/pqc-dna-archival.ts
+5:10  Warning: 'createHash' is defined but never used.  @typescript-eslint/no-unused-vars
+87:9  Warning: 'prev' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/pspf-nz-dta-crosswalk.ts
+110:46  Warning: '_raw' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/soci-nz-gcdo-crosswalk.ts
+107:47  Warning: '_raw' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/compliance/uk-ai-safety.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/costing/costing-pilot-spotcheck-summary.ts
+11:3  Warning: 'COSTING_PILOT_SPOTCHECK_ERA17_PROOF_STATUS' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/crm/crm-page-access.tsx
+5:10  Warning: 'buildCustomersSubnavLinks' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/design/page-layout-audit-policy.ts
+33:10  Warning: 'sourceUsesLayoutPrimitive' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/execution/final-07-tracker-reconciliation-audit-policy.ts
+9:3  Warning: 'EXECUTION_TRACKER_RECONCILIATION_POLICY_ID' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/execution/final-23-final-execution-doc-audit-policy.ts
+11:3  Warning: 'FINAL_EXECUTION_DOC_VITEST_SPEC' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/execution/final-25-tracker-preclosure-audit-policy.ts
+20:3  Warning: 'TRACKER_PRECLOSURE_VITEST_SPEC' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/execution/program-completion-capstone-audit-policy.ts
+60:14  Warning: 'root' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/execution/sync-final-execution-report.ts
+8:3  Warning: 'FINAL_EXECUTION_REPORT_ARTIFACT' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/go-live/go-live-project-next-step-focus-era18.ts
+140:19  Warning: '_rank' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/import-center/import-center-page-access.tsx
+6:8  Warning: 'ImportCenterSubnavLink' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/import-center/import-permissions.ts
+5:10  Warning: 'hasPermission' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/integrations/beta-integrations-governance-capstone-e2e-policy.ts
+18:10  Warning: 'LIVE_DOD_G3_G4_HONESTY_PATTERN' is defined but never used.  @typescript-eslint/no-unused-vars
+18:42  Warning: 'LIVE_DOD_ZERO_LIVE_SUMMARY_PATTERN' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/integrations/channel-github-workflow-first-green-summary.ts
+9:10  Warning: 'normalizeGitHubRunOutcome' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/integrations/shopify-b2b-credit-limit-metadata.ts
+38:13  Warning: 'limitKey' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/launch-wizard/launch-wizard-commercial-go-closure-era28.ts
+5:10  Warning: 'LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/launch-wizard/launch-wizard-commercial-inflection-era28.ts
+12:10  Warning: 'LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/launch-wizard/launch-wizard-month2-era29.ts
+5:10  Warning: 'LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/launch-wizard/launch-wizard-pilot-week1-era28.ts
+5:10  Warning: 'LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/launch-wizard/launch-wizard-scale-era30.ts
+5:10  Warning: 'LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/launch-wizard/launch-wizard-series-a-era31.ts
+5:10  Warning: 'LAUNCH_WIZARD_COMMERCIAL_BLOCKERS_ANCHOR' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/marketing/google-ads-landings.ts
+33:7  Warning: 'TRIAL_UTM' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/marketplace/vendor-page-access.tsx
+101:48  Warning: 'input' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/menu/channel-sync-types.ts
+1:15  Warning: 'IntegrationProvider' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/navigation/nav-maturity-hide-metrics.ts
+6:3  Warning: 'NAV_MATURITY_HIDE_TARGET' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/navigation/nav-maturity-sweep-era17-summary.ts
+9:3  Warning: 'NAV_MATURITY_SWEEP_ERA17_PROOF_STATUS' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/navigation/preview-route-hiding-confirmation-policy.ts
+92:9  Warning: 'focusedHrefs' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/ops/p0-staging-proof-execution-orchestrator.ts
+5:10  Warning: 'evaluateP0StagingProofIntegrity' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'checkP0StagingHealth' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/permissions/mutation-access-era14-policy.ts
+108:10  Warning: 'isRegistryCanonicalBacking' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/platform-super-bypass.ts
+9:3  Warning: '_email' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/playbooks/playbook-permissions.ts
+2:15  Warning: 'PermissionKey' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/pos/offline-card-pci.ts
+60:20  Warning: 'value' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/production/production-board-focus-era18.ts
+57:3  Warning: 'now' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/security/webhook-security-matrix.ts
+107:29  Warning: 'slug' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/cart-snapshot.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/fulfillment-rules.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/ga4-parity-json.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/localized-page-meta.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/market-host-resolve.ts
+2:10  Warning: 'compositeMarketHostLabel' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/resolve-locale.ts
+26:36  Warning: 'primary' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/sections.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/storefront-first-party-ingest.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/storefront-page-access.tsx
+8:8  Warning: 'StorefrontPermission' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/tax-provider.ts
+44:53  Warning: 'input' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-auto-conclude.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-autonomous-scientist.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-basal-ganglia-action-selection-publish.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+17:3  Warning: 'isPrefrontalEthicsBoardEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-bayesian-hierarchical.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-bayesian-prior.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-brainstem-autonomic-guard.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-causal-dag.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-causal-discovery-agent.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'readSpilloverDaily' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-causal-forest.ts
+7:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-causal-posteriors.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-cerebellar-motor-organoid.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-cerebellum-motor-refinement-publish.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+17:3  Warning: 'isPrefrontalEthicsBoardEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-compositional-ui.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-cortical-organoid-mesh.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-cosmic-web-federation.ts
+10:8  Warning: 'IntergalacticFederationOutcome' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-crdt-gossip.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-crdt.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-ebpf-telemetry.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-edge-config.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-edge-db-fallback.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-edge-planet.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-feature-stream-bus.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-federated-learning.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-galactic-mesh.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-hippocampal-organoid-mesh.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-holdout-ws.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-homomorphic-metrics.ts
+130:11  Warning: 'pubRate' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-intergalactic-mesh-federation.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-linucb.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-lunar-farside-dtn-mesh.ts
+11:10  Warning: 'isHeliopauseDtnEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-medulla-oblongata-emergency-halt.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-midbrain-arousal-publish-pacing.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+16:3  Warning: 'isPrefrontalEthicsBoardEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-ml-model.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-motor-cortex-execution-publish.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+17:3  Warning: 'isPrefrontalEthicsBoardEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-multiverse-counterfactual-crdt.ts
+11:3  Warning: 'isMultiverseOutcomeCrdtEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-multiverse-reconciliation-crdt.ts
+97:69  Warning: 'i' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-pipeline.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-pons-autonomic-bridge-failover.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+15:3  Warning: 'isPrefrontalEthicsBoardEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-post-publish-guard.ts
+1:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-prefrontal-ethics-board.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-prefrontal-organoid-mesh.ts
+6:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-premotor-sma-planning-publish.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-publish-preflight.ts
+17:10  Warning: 'evaluateSpinalCordPublishThrottleGate' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-quantum-safe-edge.ts
+11:59  Warning: '_mode' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-quantum-safe.ts
+80:30  Warning: 'kemDerivedBucket' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-sequential.ts
+22:43  Warning: 'alpha' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-spinal-cord-publish-throttle.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-thalamus-sensory-gating-publish.ts
+5:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+16:3  Warning: 'isPrefrontalEthicsBoardEnabled' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./lib/storefront/theme-experiment-version.ts
+2:10  Warning: 'toJsonValue' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/449) ...
+   Generating static pages (112/449) 
+   Generating static pages (224/449) 
+   Generating static pages (336/449) 
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/analytics. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/products/new. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/finance. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/settings. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/orders. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/dashboard. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/products. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata themeColor is configured in metadata export in /vendor/finance/instant-payouts. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ✓ Generating static pages (449/449)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                              Size  First Load JS
+┌ ƒ /                                                                 4.28 kB         351 kB
+├ ƒ /_not-found                                                       1.22 kB         262 kB
+├ ƒ /advisory-board                                                     369 B         347 kB
+├ ƒ /ai                                                                 369 B         347 kB
+├ ƒ /api/accounting/ocr                                               1.22 kB         262 kB
+├ ƒ /api/ai/dynamic-pricing                                           1.22 kB         262 kB
+├ ƒ /api/analytics/profit-engine                                      1.22 kB         262 kB
+├ ƒ /api/analytics/real-time-profit                                   1.22 kB         262 kB
+├ ƒ /api/billing-portal                                               1.22 kB         262 kB
+├ ƒ /api/billing/checkout                                             1.22 kB         262 kB
+├ ƒ /api/billing/portal                                               1.22 kB         262 kB
+├ ƒ /api/capital/lender-offers/consent                                1.22 kB         262 kB
+├ ƒ /api/capital/lender-referrals                                     1.22 kB         262 kB
+├ ƒ /api/capital/lender-share/[token]                                 1.22 kB         262 kB
+├ ƒ /api/capital/lender/oauth/referrals/[referralId]                  1.22 kB         262 kB
+├ ƒ /api/capital/lender/oauth/referrals/[referralId]/attestation      1.22 kB         262 kB
+├ ƒ /api/capital/marketplace                                          1.22 kB         262 kB
+├ ƒ /api/capital/partner-outbound                                     1.22 kB         262 kB
+├ ƒ /api/capital/revenue-attestation/[id]/download                    1.22 kB         262 kB
+├ ƒ /api/capital/revenue-attestation/generate                         1.22 kB         262 kB
+├ ƒ /api/capital/revenue-attestation/verify                           1.22 kB         262 kB
+├ ƒ /api/checkout                                                     1.22 kB         262 kB
+├ ƒ /api/compliance/auditor/experiment-controls                       1.22 kB         262 kB
+├ ƒ /api/costing/variance-stream                                      1.22 kB         262 kB
+├ ƒ /api/cron/cross-channel-inventory-reconciliation                  1.22 kB         262 kB
+├ ƒ /api/cron/doordash-sync                                           1.22 kB         262 kB
+├ ƒ /api/cron/grubhub-sync                                            1.22 kB         262 kB
+├ ƒ /api/cron/incident-remediation-reminders                          1.22 kB         262 kB
+├ ƒ /api/cron/kds-overdue-alerts                                      1.22 kB         262 kB
+├ ƒ /api/cron/meal-plan-auto-renew                                    1.22 kB         262 kB
+├ ƒ /api/cron/menu-rotation                                           1.22 kB         262 kB
+├ ƒ /api/cron/multi-location-weekly-report                            1.22 kB         262 kB
+├ ƒ /api/cron/outbound-webhook-deliveries                             1.22 kB         262 kB
+├ ƒ /api/cron/pilot-daily-health                                      1.22 kB         262 kB
+├ ƒ /api/cron/reminders                                               1.22 kB         262 kB
+├ ƒ /api/cron/shopify-b2b-collector-digest                            1.22 kB         262 kB
+├ ƒ /api/cron/shopify-b2b-dunning                                     1.22 kB         262 kB
+├ ƒ /api/cron/storefront-cart-recovery                                1.22 kB         262 kB
+├ ƒ /api/cron/storefront-domain-recheck                               1.22 kB         262 kB
+├ ƒ /api/cron/storefront-edge-sync                                    1.22 kB         262 kB
+├ ƒ /api/cron/storefront-ga4-parity                                   1.22 kB         262 kB
+├ ƒ /api/cron/storefront-invite-audit-retention                       1.22 kB         262 kB
+├ ƒ /api/cron/storefront-team-invite-reminders                        1.22 kB         262 kB
+├ ƒ /api/cron/storefront-theme-publish                                1.22 kB         262 kB
+├ ƒ /api/cron/storefront-webhook-retention                            1.22 kB         262 kB
+├ ƒ /api/cron/webhook-jobs                                            1.22 kB         262 kB
+├ ƒ /api/dashboard/audit-logs/export                                  1.22 kB         262 kB
+├ ƒ /api/dashboard/compliance/experiment-audit-download               1.22 kB         262 kB
+├ ƒ /api/dashboard/experiment-publish-preflight                       1.22 kB         262 kB
+├ ƒ /api/dashboard/multi-location/rollup-export                       1.22 kB         262 kB
+├ ƒ /api/dashboard/orders/storefront-export                           1.22 kB         262 kB
+├ ƒ /api/dashboard/receivables/export                                 1.22 kB         262 kB
+├ ƒ /api/dashboard/storefront/experiment-audit-export                 1.22 kB         262 kB
+├ ƒ /api/dashboard/storefront/experiment-legal-hold                   1.22 kB         262 kB
+├ ƒ /api/dashboard/storefront/experiment-series                       1.22 kB         262 kB
+├ ƒ /api/dashboard/storefront/team-invite-audit-export                1.22 kB         262 kB
+├ ƒ /api/delivery/cancel                                              1.22 kB         262 kB
+├ ƒ /api/delivery/create                                              1.22 kB         262 kB
+├ ƒ /api/delivery/quote                                               1.22 kB         262 kB
+├ ƒ /api/delivery/track/[orderId]                                     1.22 kB         262 kB
+├ ƒ /api/docs                                                           683 B         261 kB
+├ ƒ /api/embed/partner-app/verify                                     1.22 kB         262 kB
+├ ƒ /api/export                                                       1.22 kB         262 kB
+├ ƒ /api/export/allergen-sheet                                        1.22 kB         262 kB
+├ ƒ /api/export/franchise-royalties                                   1.22 kB         262 kB
+├ ƒ /api/export/nutrition-label                                       1.22 kB         262 kB
+├ ƒ /api/export/payroll                                               1.22 kB         262 kB
+├ ƒ /api/export/quickbooks                                            1.22 kB         262 kB
+├ ƒ /api/export/report                                                1.22 kB         262 kB
+├ ƒ /api/export/restaurant-pnl                                        1.22 kB         262 kB
+├ ƒ /api/export/xero                                                  1.22 kB         262 kB
+├ ƒ /api/gift-cards/balance                                           1.22 kB         262 kB
+├ ƒ /api/growth/customer-success/export                               1.22 kB         262 kB
+├ ƒ /api/growth/leads/export                                          1.22 kB         262 kB
+├ ƒ /api/health                                                       1.22 kB         262 kB
+├ ƒ /api/import-center/[jobId]/errors.csv                             1.22 kB         262 kB
+├ ƒ /api/import-center/templates/[type]                               1.22 kB         262 kB
+├ ƒ /api/import-export/template                                       1.22 kB         262 kB
+├ ƒ /api/import-templates/[type]                                      1.22 kB         262 kB
+├ ƒ /api/inngest                                                      1.22 kB         262 kB
+├ ƒ /api/integrations/7shifts/sync                                    1.22 kB         262 kB
+├ ƒ /api/integrations/clover/sync                                     1.22 kB         262 kB
+├ ƒ /api/integrations/doordash/menu                                   1.22 kB         262 kB
+├ ƒ /api/integrations/doordash/oauth/callback                         1.22 kB         262 kB
+├ ƒ /api/integrations/email-orders/intake                             1.22 kB         262 kB
+├ ƒ /api/integrations/google-forms/sync                               1.22 kB         262 kB
+├ ƒ /api/integrations/grubhub/menu                                    1.22 kB         262 kB
+├ ƒ /api/integrations/grubhub/oauth/callback                          1.22 kB         262 kB
+├ ƒ /api/integrations/homebase/sync                                   1.22 kB         262 kB
+├ ƒ /api/integrations/klaviyo/sync                                    1.22 kB         262 kB
+├ ƒ /api/integrations/lightspeed/sync                                 1.22 kB         262 kB
+├ ƒ /api/integrations/mailchimp/sync                                  1.22 kB         262 kB
+├ ƒ /api/integrations/opentable/sync                                  1.22 kB         262 kB
+├ ƒ /api/integrations/resy/sync                                       1.22 kB         262 kB
+├ ƒ /api/integrations/shopify/import-market-prices                    1.22 kB         262 kB
+├ ƒ /api/integrations/shopify/push-market-prices                      1.22 kB         262 kB
+├ ƒ /api/integrations/shopify/sync-orders                             1.22 kB         262 kB
+├ ƒ /api/integrations/shopify/sync-products                           1.22 kB         262 kB
+├ ƒ /api/integrations/shopify/test                                    1.22 kB         262 kB
+├ ƒ /api/integrations/square/sync                                     1.22 kB         262 kB
+├ ƒ /api/integrations/toast/sync                                      1.22 kB         262 kB
+├ ƒ /api/integrations/uber-eats/menu                                  1.22 kB         262 kB
+├ ƒ /api/integrations/uber-eats/oauth/callback                        1.22 kB         262 kB
+├ ƒ /api/integrations/uber-eats/test                                  1.22 kB         262 kB
+├ ƒ /api/integrations/woocommerce/sync-orders                         1.22 kB         262 kB
+├ ƒ /api/integrations/woocommerce/sync-products                       1.22 kB         262 kB
+├ ƒ /api/integrations/woocommerce/test                                1.22 kB         262 kB
+├ ƒ /api/internal/dsr/export                                          1.22 kB         262 kB
+├ ƒ /api/internal/experiment-dna-audit-block                          1.22 kB         262 kB
+├ ƒ /api/internal/experiment-ebpf-sample                              1.22 kB         262 kB
+├ ƒ /api/internal/experiment-ethics-review                            1.22 kB         262 kB
+├ ƒ /api/internal/experiment-quantum-seal                             1.22 kB         262 kB
+├ ƒ /api/internal/experiment-tee-attest                               1.22 kB         262 kB
+├ ƒ /api/internal/experiment-wetware-calibrate                        1.22 kB         262 kB
+├ ƒ /api/internal/experiment-zk-proof                                 1.22 kB         262 kB
+├ ƒ /api/internal/stripe/resolve-prices                               1.22 kB         262 kB
+├ ƒ /api/invite/magic-link                                            1.22 kB         262 kB
+├ ƒ /api/iot/temperature                                              1.22 kB         262 kB
+├ ƒ /api/kitchen/cameras/live/frame                                   1.22 kB         262 kB
+├ ƒ /api/labor/realtime                                               1.22 kB         262 kB
+├ ƒ /api/leads/roi                                                    1.22 kB         262 kB
+├ ƒ /api/loyalty/balance                                              1.22 kB         262 kB
+├ ƒ /api/marketplace/analytics/export                                 1.22 kB         262 kB
+├ ƒ /api/marketplace/orders/[id]/invoice                              1.22 kB         262 kB
+├ ƒ /api/marketplace/orders/[id]/messages                               708 B         263 kB
+├ ƒ /api/marketplace/stripe-connect/webhook                           1.22 kB         262 kB
+├ ƒ /api/notifications/push/subscribe                                 1.22 kB         262 kB
+├ ƒ /api/notifications/push/vapid-public-key                          1.22 kB         262 kB
+├ ƒ /api/nps                                                          1.22 kB         262 kB
+├ ƒ /api/oauth/authorize                                              1.22 kB         262 kB
+├ ƒ /api/oauth/callback/sandbox                                       1.22 kB         262 kB
+├ ƒ /api/oauth/token                                                  1.22 kB         262 kB
+├ ƒ /api/openapi.json                                                 1.22 kB         262 kB
+├ ƒ /api/pay/b2b/[token]/checkout                                     1.22 kB         262 kB
+├ ƒ /api/pay/b2b/batch/[token]/checkout                               1.22 kB         262 kB
+├ ƒ /api/platform/marketplace/analytics/export                        1.22 kB         262 kB
+├ ƒ /api/platform/partner-billing/overview                            1.22 kB         262 kB
+├ ƒ /api/pos/offline-card/sync                                        1.22 kB         262 kB
+├ ƒ /api/pos/shifts/export                                            1.22 kB         262 kB
+├ ƒ /api/pos/terminal                                                 1.22 kB         262 kB
+├ ƒ /api/printing/label                                               1.22 kB         262 kB
+├ ƒ /api/public/qr-order                                              1.22 kB         262 kB
+├ ƒ /api/public/qr-table/pay-share                                    1.22 kB         262 kB
+├ ƒ /api/public/v1/customers                                          1.22 kB         262 kB
+├ ƒ /api/public/v1/inventory                                          1.22 kB         262 kB
+├ ƒ /api/public/v1/locations                                          1.22 kB         262 kB
+├ ƒ /api/public/v1/orders                                             1.22 kB         262 kB
+├ ƒ /api/public/v1/products                                           1.22 kB         262 kB
+├ ƒ /api/public/v1/recipes                                            1.22 kB         262 kB
+├ ƒ /api/public/v1/staff                                              1.22 kB         262 kB
+├ ƒ /api/public/v1/webhooks                                           1.22 kB         262 kB
+├ ƒ /api/purchasing/edi/submit                                        1.22 kB         262 kB
+├ ƒ /api/scim/v2/Groups                                               1.22 kB         262 kB
+├ ƒ /api/scim/v2/Groups/[id]                                          1.22 kB         262 kB
+├ ƒ /api/scim/v2/ResourceTypes                                        1.22 kB         262 kB
+├ ƒ /api/scim/v2/Schemas                                              1.22 kB         262 kB
+├ ƒ /api/scim/v2/ServiceProviderConfig                                1.22 kB         262 kB
+├ ƒ /api/scim/v2/Users                                                1.22 kB         262 kB
+├ ƒ /api/scim/v2/Users/[id]                                           1.22 kB         262 kB
+├ ƒ /api/storefront/account/orders                                    1.22 kB         262 kB
+├ ƒ /api/storefront/account/reorder                                   1.22 kB         262 kB
+├ ƒ /api/storefront/account/reorder/preview                           1.22 kB         262 kB
+├ ƒ /api/storefront/account/session                                   1.22 kB         262 kB
+├ ƒ /api/storefront/account/subscription                              1.22 kB         262 kB
+├ ƒ /api/storefront/analytics                                         1.22 kB         262 kB
+├ ƒ /api/storefront/builder/add                                       1.22 kB         262 kB
+├ ƒ /api/storefront/builder/publish                                   1.22 kB         262 kB
+├ ƒ /api/storefront/builder/remove                                    1.22 kB         262 kB
+├ ƒ /api/storefront/builder/reorder                                   1.22 kB         262 kB
+├ ƒ /api/storefront/cart                                              1.22 kB         262 kB
+├ ƒ /api/storefront/cart-recovery                                     1.22 kB         262 kB
+├ ƒ /api/storefront/cart-recovery/unsubscribe                         1.22 kB         262 kB
+├ ƒ /api/storefront/catalog                                           1.22 kB         262 kB
+├ ƒ /api/storefront/experiment/auto-conclude/approve                  1.22 kB         262 kB
+├ ƒ /api/storefront/experiment/auto-conclude/bulk-approve             1.22 kB         262 kB
+├ ƒ /api/storefront/experiment/auto-conclude/reject                   1.22 kB         262 kB
+├ ƒ /api/storefront/experiment/causal-discovery/approve               1.22 kB         262 kB
+├ ƒ /api/storefront/experiment/orchestrator/approve                   1.22 kB         262 kB
+├ ƒ /api/storefront/form-submissions-export/[formId]                  1.22 kB         262 kB
+├ ƒ /api/storefront/forms/upload                                      1.22 kB         262 kB
+├ ƒ /api/storefront/guest-account                                     1.22 kB         262 kB
+├ ƒ /api/storefront/loyalty/balance                                   1.22 kB         262 kB
+├ ƒ /api/storefront/loyalty/redeem                                    1.22 kB         262 kB
+├ ƒ /api/storefront/preview-token                                     1.22 kB         262 kB
+├ ƒ /api/storefront/qr                                                1.22 kB         262 kB
+├ ƒ /api/storefront/reservations                                      1.22 kB         262 kB
+├ ƒ /api/storefront/resolve-host                                      1.22 kB         262 kB
+├ ƒ /api/storefront/resolve-redirect                                  1.22 kB         262 kB
+├ ƒ /api/storefront/shipping/quote                                    1.22 kB         262 kB
+├ ƒ /api/storefront/theme-experiment                                  1.22 kB         262 kB
+├ ƒ /api/storefront/theme/custom-css                                  1.22 kB         262 kB
+├ ƒ /api/storefront/theme/preview-cookie                              1.22 kB         262 kB
+├ ƒ /api/storefront/theme/publish                                     1.22 kB         262 kB
+├ ƒ /api/storefront/theme/restore                                     1.22 kB         262 kB
+├ ƒ /api/storefront/theme/save                                        1.22 kB         262 kB
+├ ƒ /api/storefront/theme/save-draft                                  1.22 kB         262 kB
+├ ƒ /api/storefront/theme/seo-social                                  1.22 kB         262 kB
+├ ƒ /api/storefront/theme/versions                                    1.22 kB         262 kB
+├ ƒ /api/storefront/upsell                                            1.22 kB         262 kB
+├ ƒ /api/storefront/waitlist                                          1.22 kB         262 kB
+├ ƒ /api/telemetry/ai-briefing-feedback                               1.22 kB         262 kB
+├ ƒ /api/telemetry/briefing                                           1.22 kB         262 kB
+├ ƒ /api/vendor/analytics/export                                        708 B         263 kB
+├ ƒ /api/vendor/finance/tax-1099                                        708 B         263 kB
+├ ƒ /api/vendor/orders/[id]/packing-slip                                708 B         263 kB
+├ ƒ /api/vendor/webhooks                                              1.22 kB         262 kB
+├ ƒ /api/voice/alexa                                                  1.22 kB         262 kB
+├ ƒ /api/voice/google                                                 1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-bayesian-prior                             1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-causal-discovery-outcomes                  1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-causal-lift                                1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-causal-posteriors                          1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-federated-gradients                        1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-ga4-parity                                 1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-global-mesh-outcomes                       1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-homomorphic-metrics                        1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-interference-matrix                        1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-linucb-weights                             1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-off-policy                                 1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-spillover-daily                            1.22 kB         262 kB
+├ ƒ /api/webhooks/bigquery-workspace-acl                              1.22 kB         262 kB
+├ ƒ /api/webhooks/capital-lender/[partnerSlug]                        1.22 kB         262 kB
+├ ƒ /api/webhooks/cen-cenelec-digital-product-governance-registry     1.22 kB         262 kB
+├ ƒ /api/webhooks/doordash/orders                                     1.22 kB         262 kB
+├ ƒ /api/webhooks/eu-ai-act-art71-pmm-live                            1.22 kB         262 kB
+├ ƒ /api/webhooks/eu-ai-act-live-registry                             1.22 kB         262 kB
+├ ƒ /api/webhooks/eu-ai-office-conformity-sync                        1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-cislunar-dtn-bundle                      1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-dtn-bundle                               1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-feature-stream                           1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-feature-stream-flink                     1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-heliopause-dtn-bundle                    1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-holdout-ws-push                          1.22 kB         262 kB
+├ ƒ /api/webhooks/experiment-scientist-proposal                       1.22 kB         262 kB
+├ ƒ /api/webhooks/grubhub/orders                                      1.22 kB         262 kB
+├ ƒ /api/webhooks/icao-imo-ai-aviation-registry                       1.22 kB         262 kB
+├ ƒ /api/webhooks/iso-42001-cert-body-attest                          1.22 kB         262 kB
+├ ƒ /api/webhooks/iso-iec-ai-standards-harmonization-registry         1.22 kB         262 kB
+├ ƒ /api/webhooks/itu-uncitral-digital-commerce-ai-registry           1.22 kB         262 kB
+├ ƒ /api/webhooks/nist-ai-rmf-live-control-feed                       1.22 kB         262 kB
+├ ƒ /api/webhooks/oecd-state-ag-ai-transparency-mesh                  1.22 kB         262 kB
+├ ƒ /api/webhooks/resend                                              1.22 kB         262 kB
+├ ƒ /api/webhooks/scim/experiment-auditor                             1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/app-uninstalled                             1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/markets-create                              1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/markets-delete                              1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/markets-update                              1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/orders-create                               1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/orders-updated                              1.22 kB         262 kB
+├ ƒ /api/webhooks/shopify/products-update                             1.22 kB         262 kB
+├ ƒ /api/webhooks/slack/experiment-interactive                        1.22 kB         262 kB
+├ ƒ /api/webhooks/stripe                                              1.22 kB         262 kB
+├ ƒ /api/webhooks/uber-direct                                         1.22 kB         262 kB
+├ ƒ /api/webhooks/uber-eats/orders                                    1.22 kB         262 kB
+├ ƒ /api/webhooks/uk-dsit-algorithmic-transparency                    1.22 kB         262 kB
+├ ƒ /api/webhooks/un-ai-office-global-registry-mesh                   1.22 kB         262 kB
+├ ƒ /api/webhooks/us-ftc-ai-transparency-live                         1.22 kB         262 kB
+├ ƒ /api/webhooks/vertex-ml-model                                     1.22 kB         262 kB
+├ ƒ /api/webhooks/woocommerce                                         1.22 kB         262 kB
+├ ƒ /api/webhooks/wto-upu-cross-border-ai-trade-registry              1.22 kB         262 kB
+├ ƒ /auth/callback                                                    1.22 kB         262 kB
+├ ƒ /b/[brandSlug]                                                    1.22 kB         262 kB
+├ ƒ /beta                                                             7.75 kB         389 kB
+├ ƒ /blog                                                               369 B         347 kB
+├ ƒ /blog/ghost-kitchen-setup-complete-guide                            266 B         347 kB
+├ ƒ /blog/how-to-choose-restaurant-pos-2026                             266 B         347 kB
+├ ƒ /blog/how-to-start-meal-prep-business                               266 B         347 kB
+├ ○ /blog/how-to-start-meal-prep-business/opengraph-image             1.22 kB         262 kB
+├ ƒ /blog/meal-prep-order-queue-cut-packing-errors                      266 B         347 kB
+├ ○ /blog/meal-prep-order-queue-cut-packing-errors/opengraph-image    1.22 kB         262 kB
+├ ƒ /blog/reduce-food-waste-with-production-planning                    266 B         347 kB
+├ ○ /blog/reduce-food-waste-with-production-planning/opengraph-image  1.22 kB         262 kB
+├ ƒ /blog/restaurant-pos-comparison-2026                                266 B         347 kB
+├ ○ /blog/restaurant-pos-comparison-2026/opengraph-image              1.22 kB         262 kB
+├ ƒ /book-demo                                                        4.19 kB         385 kB
+├ ƒ /branding                                                         3.42 kB         273 kB
+├ ƒ /capabilities                                                       266 B         347 kB
+├ ● /case-studies/[slug]                                                369 B         347 kB
+├   └ /case-studies/pilot-meal-prep-q3
+├ ƒ /changelog                                                          369 B         347 kB
+├ ƒ /compare                                                            266 B         347 kB
+├ ● /compare/[slug]                                                   1.34 kB         348 kB
+├   ├ /compare/restaurant-pos
+├   ├ /compare/meal-prep-software
+├   ├ /compare/toast
+├   └ [+9 more paths]
+├ ƒ /compare/[slug]/opengraph-image                                   1.22 kB         262 kB
+├ ○ /compare/opengraph-image                                          1.22 kB         262 kB
+├ ƒ /contact-sales                                                    2.51 kB         350 kB
+├ ƒ /customers                                                          369 B         347 kB
+├ ● /customers/[id]                                                     679 B         348 kB
+├   └ /customers/pilot-meal-prep-q3
+├ ƒ /dashboard                                                        1.22 kB         262 kB
+├ ƒ /dashboard/accounting/bank-reconciliation                         1.22 kB         262 kB
+├ ƒ /dashboard/accounting/cash-counts                                 1.22 kB         262 kB
+├ ƒ /dashboard/accounting/invoices                                    2.65 kB         273 kB
+├ ƒ /dashboard/accounting/vendor-payments                               708 B         263 kB
+├ ƒ /dashboard/ai/co-pilot                                            4.32 kB         274 kB
+├ ƒ /dashboard/ai/co-pilot/autonomous                                 8.47 kB         287 kB
+├ ƒ /dashboard/analytics                                                410 B         263 kB
+├ ƒ /dashboard/analytics/advanced                                       410 B         263 kB
+├ ƒ /dashboard/analytics/benchmarks                                   9.49 kB         404 kB
+├ ƒ /dashboard/analytics/benchmarks/premium                           5.83 kB         284 kB
+├ ƒ /dashboard/analytics/capital                                      11.2 kB         426 kB
+├ ƒ /dashboard/analytics/catering                                       708 B         263 kB
+├ ƒ /dashboard/analytics/channels                                       708 B         263 kB
+├ ƒ /dashboard/analytics/customers                                      708 B         263 kB
+├ ƒ /dashboard/analytics/delivery                                       708 B         263 kB
+├ ƒ /dashboard/analytics/delivery-channels                              410 B         263 kB
+├ ƒ /dashboard/analytics/digital-twin                                 6.71 kB         289 kB
+├ ƒ /dashboard/analytics/executive-demo                                 410 B         263 kB
+├ ƒ /dashboard/analytics/food-cost                                    7.65 kB         397 kB
+├ ƒ /dashboard/analytics/forecasting                                  1.22 kB         262 kB
+├ ƒ /dashboard/analytics/inventory                                      708 B         263 kB
+├ ƒ /dashboard/analytics/meal-plans                                     708 B         263 kB
+├ ƒ /dashboard/analytics/network                                      6.15 kB         285 kB
+├ ƒ /dashboard/analytics/orders                                         708 B         263 kB
+├ ƒ /dashboard/analytics/production                                     708 B         263 kB
+├ ƒ /dashboard/analytics/reports                                        708 B         263 kB
+├ ƒ /dashboard/analytics/revenue                                        708 B         263 kB
+├ ƒ /dashboard/analytics/saved-views                                  2.18 kB         271 kB
+├ ƒ /dashboard/audit-logs                                             10.2 kB         297 kB
+├ ƒ /dashboard/audit-logs/retention                                   2.18 kB         271 kB
+├ ƒ /dashboard/beta-applications                                        15 kB         459 kB
+├ ƒ /dashboard/billing                                                2.72 kB         281 kB
+├ ƒ /dashboard/billing/cancel                                         3.04 kB         282 kB
+├ ƒ /dashboard/billing/cancelled                                        708 B         263 kB
+├ ƒ /dashboard/billing/entitlements                                    4.6 kB         272 kB
+├ ƒ /dashboard/billing/history                                        1.22 kB         262 kB
+├ ƒ /dashboard/billing/invoices                                       1.22 kB         262 kB
+├ ƒ /dashboard/billing/payment-method                                 2.72 kB         281 kB
+├ ƒ /dashboard/billing/plans                                          2.73 kB         281 kB
+├ ƒ /dashboard/billing/settings                                       3.04 kB         272 kB
+├ ƒ /dashboard/billing/success                                          708 B         263 kB
+├ ƒ /dashboard/billing/usage                                          1.22 kB         262 kB
+├ ƒ /dashboard/brands                                                   849 B         278 kB
+├ ƒ /dashboard/brands/[brandId]                                         708 B         263 kB
+├ ƒ /dashboard/brands/[brandId]/reports                                 708 B         263 kB
+├ ƒ /dashboard/brands/assignment                                        708 B         263 kB
+├ ƒ /dashboard/brands/command-center                                    708 B         263 kB
+├ ƒ /dashboard/brands/multi-brand-setup                                 708 B         263 kB
+├ ƒ /dashboard/brands/new                                             8.07 kB         381 kB
+├ ƒ /dashboard/brands/templates                                         708 B         263 kB
+├ ƒ /dashboard/calendar                                                 708 B         263 kB
+├ ƒ /dashboard/catering                                               2.18 kB         271 kB
+├ ƒ /dashboard/catering-quotes                                          410 B         263 kB
+├ ƒ /dashboard/catering-quotes/[quoteId]                              2.18 kB         271 kB
+├ ƒ /dashboard/catering-quotes/accepted                                 410 B         263 kB
+├ ƒ /dashboard/catering-quotes/follow-ups                               410 B         263 kB
+├ ƒ /dashboard/catering-quotes/new                                    2.12 kB         270 kB
+├ ƒ /dashboard/catering-quotes/pipeline                                 708 B         263 kB
+├ ƒ /dashboard/catering-quotes/public-proposals                         708 B         263 kB
+├ ƒ /dashboard/catering-quotes/quotes                                   708 B         263 kB
+├ ƒ /dashboard/catering-quotes/reports                                1.22 kB         262 kB
+├ ƒ /dashboard/catering-quotes/settings                                 708 B         263 kB
+├ ƒ /dashboard/catering-quotes/templates                              2.12 kB         270 kB
+├ ƒ /dashboard/commissary/transfers                                   1.22 kB         262 kB
+├ ƒ /dashboard/compliance/experiment-audit                              708 B         263 kB
+├ ƒ /dashboard/copilot                                                1.49 kB         273 kB
+├ ƒ /dashboard/copilot/audit                                            410 B         263 kB
+├ ƒ /dashboard/copilot/chat                                           1.71 kB         264 kB
+├ ƒ /dashboard/copilot/drafts                                           708 B         263 kB
+├ ƒ /dashboard/copilot/insights                                         410 B         263 kB
+├ ƒ /dashboard/copilot/settings                                         410 B         263 kB
+├ ƒ /dashboard/copilot/sources                                        1.22 kB         262 kB
+├ ƒ /dashboard/copilot/summaries                                        410 B         263 kB
+├ ƒ /dashboard/costing                                                2.69 kB         272 kB
+├ ƒ /dashboard/costing/alerts                                           410 B         263 kB
+├ ƒ /dashboard/costing/avt                                              410 B         263 kB
+├ ƒ /dashboard/costing/channel-fees                                   2.18 kB         271 kB
+├ ƒ /dashboard/costing/components                                       410 B         263 kB
+├ ƒ /dashboard/costing/items                                            410 B         263 kB
+├ ƒ /dashboard/costing/menus                                            410 B         263 kB
+├ ƒ /dashboard/costing/recipes-missing                                  410 B         263 kB
+├ ƒ /dashboard/costing/reports                                          410 B         263 kB
+├ ƒ /dashboard/costing/scenarios                                      2.18 kB         271 kB
+├ ƒ /dashboard/costing/settings                                       2.18 kB         271 kB
+├ ƒ /dashboard/costing/theft                                            708 B         263 kB
+├ ƒ /dashboard/crm/customers/[customerId]                             1.22 kB         262 kB
+├ ƒ /dashboard/customers                                                410 B         263 kB
+├ ƒ /dashboard/customers/[customerId]                                 2.14 kB         271 kB
+├ ƒ /dashboard/customers/allergies                                      708 B         263 kB
+├ ƒ /dashboard/customers/at-risk                                        708 B         263 kB
+├ ƒ /dashboard/customers/churn-risk                                     708 B         263 kB
+├ ƒ /dashboard/customers/companies                                    2.12 kB         270 kB
+├ ƒ /dashboard/customers/dedupe                                       1.22 kB         262 kB
+├ ƒ /dashboard/customers/deduplication                                1.22 kB         262 kB
+├ ƒ /dashboard/customers/feedback                                       708 B         263 kB
+├ ƒ /dashboard/customers/follow-ups                                     708 B         263 kB
+├ ƒ /dashboard/customers/list                                           708 B         263 kB
+├ ƒ /dashboard/customers/loyalty                                      4.63 kB         281 kB
+├ ƒ /dashboard/customers/new                                          2.18 kB         271 kB
+├ ƒ /dashboard/customers/reports                                      1.22 kB         262 kB
+├ ƒ /dashboard/customers/segments                                     2.18 kB         271 kB
+├ ƒ /dashboard/customers/vip                                            708 B         263 kB
+├ ƒ /dashboard/demo/scenarios                                         3.18 kB         272 kB
+├ ƒ /dashboard/developer                                                708 B         263 kB
+├ ƒ /dashboard/developer/api-keys                                     9.13 kB         286 kB
+├ ƒ /dashboard/developer/docs                                         1.22 kB         262 kB
+├ ƒ /dashboard/developer/email-preview                                3.08 kB         276 kB
+├ ƒ /dashboard/developer/flags                                        1.22 kB         262 kB
+├ ƒ /dashboard/developer/health                                       1.22 kB         262 kB
+├ ƒ /dashboard/developer/incidents                                    2.12 kB         270 kB
+├ ƒ /dashboard/developer/integrations                                 1.22 kB         262 kB
+├ ƒ /dashboard/developer/jobs                                         1.22 kB         262 kB
+├ ƒ /dashboard/developer/logs                                         1.22 kB         262 kB
+├ ƒ /dashboard/developer/performance                                  1.22 kB         262 kB
+├ ƒ /dashboard/developer/releases                                     2.18 kB         271 kB
+├ ƒ /dashboard/developer/tools                                        1.22 kB         262 kB
+├ ƒ /dashboard/developer/webhooks                                     1.22 kB         262 kB
+├ ƒ /dashboard/developers                                             7.06 kB         286 kB
+├ ƒ /dashboard/enterprise/franchise                                   6.92 kB         285 kB
+├ ƒ /dashboard/enterprise/multi-location                              4.06 kB         279 kB
+├ ƒ /dashboard/error-recovery                                           221 B         291 kB
+├ ƒ /dashboard/executive                                                739 B         263 kB
+├ ƒ /dashboard/executive/brands-locations                               708 B         263 kB
+├ ƒ /dashboard/executive/customers                                      410 B         263 kB
+├ ƒ /dashboard/executive/operations                                     410 B         263 kB
+├ ƒ /dashboard/executive/profitability                                  410 B         263 kB
+├ ƒ /dashboard/executive/report                                         390 B         263 kB
+├ ƒ /dashboard/executive/revenue                                        410 B         263 kB
+├ ƒ /dashboard/executive/risks                                          708 B         263 kB
+├ ƒ /dashboard/finance/bank-import                                     4.9 kB         283 kB
+├ ƒ /dashboard/floor-plans                                            5.36 kB         348 kB
+├ ƒ /dashboard/food-safety                                              708 B         263 kB
+├ ƒ /dashboard/food-safety/allergens                                    708 B         263 kB
+├ ƒ /dashboard/food-safety/audits                                       708 B         263 kB
+├ ƒ /dashboard/food-safety/audits/[auditId]                           1.22 kB         262 kB
+├ ƒ /dashboard/food-safety/checklists                                   708 B         263 kB
+├ ƒ /dashboard/food-safety/iot-devices                                  708 B         263 kB
+├ ƒ /dashboard/food-safety/temperature                                  708 B         263 kB
+├ ƒ /dashboard/forecast                                                 410 B         263 kB
+├ ƒ /dashboard/forecast/[runId]                                       2.18 kB         271 kB
+├ ƒ /dashboard/forecast/ai                                              708 B         263 kB
+├ ƒ /dashboard/forecast/history                                         708 B         263 kB
+├ ƒ /dashboard/forecast/new                                           2.12 kB         270 kB
+├ ƒ /dashboard/forecast/settings                                        708 B         263 kB
+├ ƒ /dashboard/founder                                                1.22 kB         262 kB
+├ ƒ /dashboard/franchise/royalties                                      708 B         263 kB
+├ ƒ /dashboard/gift-cards                                             1.19 kB         271 kB
+├ ƒ /dashboard/go-live                                                1.61 kB         274 kB
+├ ƒ /dashboard/go-live/projects/[projectId]                           5.48 kB         275 kB
+├ ƒ /dashboard/go-live/test-run                                       1.22 kB         262 kB
+├ ƒ /dashboard/growth                                                 5.67 kB         381 kB
+├ ƒ /dashboard/growth/accounts                                          708 B         263 kB
+├ ƒ /dashboard/growth/advisory-board                                  1.22 kB         262 kB
+├ ƒ /dashboard/growth/content-library                                 1.22 kB         262 kB
+├ ƒ /dashboard/growth/customer-success                                2.18 kB         271 kB
+├ ƒ /dashboard/growth/demo-requests                                   1.22 kB         262 kB
+├ ƒ /dashboard/growth/feedback                                        1.22 kB         262 kB
+├ ƒ /dashboard/growth/launch-analytics                                  974 B         363 kB
+├ ƒ /dashboard/growth/leads                                            3.6 kB         273 kB
+├ ƒ /dashboard/growth/leads/[id]                                      2.18 kB         271 kB
+├ ƒ /dashboard/growth/onboarding-calls                                2.12 kB         270 kB
+├ ƒ /dashboard/growth/outreach                                         3.7 kB         281 kB
+├ ƒ /dashboard/growth/partner-leads                                   1.22 kB         262 kB
+├ ƒ /dashboard/growth/referrals                                       2.42 kB         279 kB
+├ ƒ /dashboard/growth/roadmap                                         1.22 kB         262 kB
+├ ƒ /dashboard/growth/sales-inquiries                                 1.22 kB         262 kB
+├ ƒ /dashboard/growth/usage                                           1.22 kB         262 kB
+├ ƒ /dashboard/implementation                                           410 B         263 kB
+├ ƒ /dashboard/implementation/[projectId]                               200 B         273 kB
+├ ƒ /dashboard/implementation/[projectId]/activity                    1.03 kB         270 kB
+├ ƒ /dashboard/implementation/[projectId]/checklist                   1.56 kB         275 kB
+├ ƒ /dashboard/implementation/[projectId]/go-live                       188 B         273 kB
+├ ƒ /dashboard/implementation/[projectId]/integrations                1.03 kB         270 kB
+├ ƒ /dashboard/implementation/[projectId]/migration                   1.03 kB         270 kB
+├ ƒ /dashboard/implementation/[projectId]/risks                       3.76 kB         273 kB
+├ ƒ /dashboard/implementation/[projectId]/timeline                    1.03 kB         270 kB
+├ ƒ /dashboard/implementation/[projectId]/training                    1.03 kB         270 kB
+├ ƒ /dashboard/implementation/[projectId]/uat                         1.03 kB         270 kB
+├ ƒ /dashboard/implementation/activity                                1.22 kB         262 kB
+├ ƒ /dashboard/implementation/checklist                                 708 B         263 kB
+├ ƒ /dashboard/implementation/enterprise                              1.22 kB         262 kB
+├ ƒ /dashboard/implementation/go-live                                 1.22 kB         262 kB
+├ ƒ /dashboard/implementation/handoff                                   708 B         263 kB
+├ ƒ /dashboard/implementation/integrations                              708 B         263 kB
+├ ƒ /dashboard/implementation/migration                                 708 B         263 kB
+├ ƒ /dashboard/implementation/new                                     3.77 kB         275 kB
+├ ƒ /dashboard/implementation/projects                                  708 B         263 kB
+├ ƒ /dashboard/implementation/reports                                   708 B         263 kB
+├ ƒ /dashboard/implementation/risks                                   1.22 kB         262 kB
+├ ƒ /dashboard/implementation/training                                  708 B         263 kB
+├ ƒ /dashboard/implementation/uat                                     1.22 kB         262 kB
+├ ƒ /dashboard/import-center                                            190 B         273 kB
+├ ƒ /dashboard/import-center/errors                                     708 B         263 kB
+├ ƒ /dashboard/import-center/history                                    410 B         263 kB
+├ ƒ /dashboard/import-center/jobs/[jobId]                              3.3 kB         273 kB
+├ ƒ /dashboard/import-center/migrate                                  2.31 kB         281 kB
+├ ƒ /dashboard/import-center/settings                                 1.22 kB         262 kB
+├ ƒ /dashboard/import-center/templates                                1.22 kB         262 kB
+├ ƒ /dashboard/import-center/upload                                     194 B         273 kB
+├ ƒ /dashboard/import-export                                            708 B         263 kB
+├ ƒ /dashboard/import-export/export                                     708 B         263 kB
+├ ƒ /dashboard/import-export/exports                                    708 B         263 kB
+├ ƒ /dashboard/import-export/import                                    3.6 kB         273 kB
+├ ƒ /dashboard/import-export/imports                                    708 B         263 kB
+├ ƒ /dashboard/import-export/imports/[jobId]                            708 B         263 kB
+├ ƒ /dashboard/import-export/settings                                 1.22 kB         262 kB
+├ ƒ /dashboard/import-export/templates                                  708 B         263 kB
+├ ƒ /dashboard/import-export/validation-errors                          708 B         263 kB
+├ ƒ /dashboard/integration-health                                       205 B         291 kB
+├ ƒ /dashboard/integrations                                           1.22 kB         262 kB
+├ ƒ /dashboard/integrations/7shifts                                   1.34 kB         271 kB
+├ ƒ /dashboard/integrations/clover                                      988 B         273 kB
+├ ƒ /dashboard/integrations/doordash                                    708 B         263 kB
+├ ƒ /dashboard/integrations/doordash/live                             5.67 kB         275 kB
+├ ƒ /dashboard/integrations/email-orders                              1.17 kB         273 kB
+├ ƒ /dashboard/integrations/extensions                                5.95 kB         275 kB
+├ ƒ /dashboard/integrations/google-forms                              1.02 kB         273 kB
+├ ƒ /dashboard/integrations/grubhub                                     708 B         263 kB
+├ ƒ /dashboard/integrations/grubhub/live                              5.67 kB         275 kB
+├ ƒ /dashboard/integrations/health                                    3.35 kB         273 kB
+├ ƒ /dashboard/integrations/homebase                                  1.34 kB         271 kB
+├ ƒ /dashboard/integrations/inventory-sync                            2.41 kB         272 kB
+├ ƒ /dashboard/integrations/klaviyo                                   1.05 kB         273 kB
+├ ƒ /dashboard/integrations/lightspeed                                1.01 kB         273 kB
+├ ƒ /dashboard/integrations/mailchimp                                 1.04 kB         273 kB
+├ ƒ /dashboard/integrations/oauth-apps                                 3.5 kB         335 kB
+├ ƒ /dashboard/integrations/oauth-apps/[clientId]/embed               1.86 kB         264 kB
+├ ƒ /dashboard/integrations/oauth-apps/consent                        4.72 kB         274 kB
+├ ƒ /dashboard/integrations/opentable                                 1.12 kB         273 kB
+├ ƒ /dashboard/integrations/outbound-webhooks                         7.45 kB         281 kB
+├ ƒ /dashboard/integrations/quickbooks                                  882 B         263 kB
+├ ƒ /dashboard/integrations/resy                                      1.11 kB         273 kB
+├ ƒ /dashboard/integrations/shopify                                   14.6 kB         305 kB
+├ ƒ /dashboard/integrations/square                                    1.01 kB         273 kB
+├ ƒ /dashboard/integrations/toast                                       991 B         273 kB
+├ ƒ /dashboard/integrations/uber-direct                               3.56 kB         282 kB
+├ ƒ /dashboard/integrations/uber-eats                                 3.56 kB         282 kB
+├ ƒ /dashboard/integrations/uber-eats/live                            4.76 kB         274 kB
+├ ƒ /dashboard/integrations/webhooks                                  2.46 kB         302 kB
+├ ƒ /dashboard/integrations/woocommerce                                2.7 kB         293 kB
+├ ƒ /dashboard/integrations/woocommerce-subscriptions                   708 B         263 kB
+├ ƒ /dashboard/integrations/xero                                        882 B         263 kB
+├ ƒ /dashboard/inventory/auto-ordering                                9.04 kB         288 kB
+├ ƒ /dashboard/inventory/counts                                         708 B         263 kB
+├ ƒ /dashboard/inventory/counts/[countId]                               708 B         263 kB
+├ ƒ /dashboard/inventory/cross-channel                                4.52 kB         274 kB
+├ ƒ /dashboard/inventory/demand                                         12 kB         319 kB
+├ ƒ /dashboard/inventory/demand/settings                              5.02 kB         274 kB
+├ ƒ /dashboard/inventory/invoice-scanner                              10.1 kB         289 kB
+├ ƒ /dashboard/inventory/pos-impacts                                    708 B         263 kB
+├ ƒ /dashboard/inventory/purchasing-ai                                6.39 kB         304 kB
+├ ƒ /dashboard/inventory/receiving                                    1.22 kB         262 kB
+├ ƒ /dashboard/inventory/waste                                          708 B         263 kB
+├ ƒ /dashboard/kitchen                                                17.4 kB         396 kB
+├ ƒ /dashboard/kitchen/cameras                                        4.43 kB         289 kB
+├ ƒ /dashboard/kitchen/cameras/live                                   3.27 kB         275 kB
+├ ƒ /dashboard/kitchen/fullscreen                                     1.22 kB         262 kB
+├ ƒ /dashboard/kitchen/tablet                                         1.22 kB         262 kB
+├ ƒ /dashboard/kitchen/voice                                          4.31 kB         274 kB
+├ ƒ /dashboard/launch-wizard                                          4.46 kB         274 kB
+├ ƒ /dashboard/locations                                              2.14 kB         271 kB
+├ ƒ /dashboard/locations/[locationId]                                   708 B         263 kB
+├ ƒ /dashboard/locations/[locationId]/brands                            708 B         263 kB
+├ ƒ /dashboard/locations/[locationId]/fulfillment                     2.12 kB         270 kB
+├ ƒ /dashboard/locations/[locationId]/hours                           2.12 kB         270 kB
+├ ƒ /dashboard/locations/[locationId]/inventory                       1.22 kB         262 kB
+├ ƒ /dashboard/locations/[locationId]/menus                             708 B         263 kB
+├ ƒ /dashboard/locations/[locationId]/orders                            708 B         263 kB
+├ ƒ /dashboard/locations/[locationId]/production                      1.22 kB         262 kB
+├ ƒ /dashboard/locations/[locationId]/profile                         2.12 kB         270 kB
+├ ƒ /dashboard/locations/[locationId]/reports                         1.22 kB         262 kB
+├ ƒ /dashboard/locations/[locationId]/routes                            708 B         263 kB
+├ ƒ /dashboard/locations/[locationId]/settings                          708 B         263 kB
+├ ƒ /dashboard/locations/active                                         708 B         263 kB
+├ ƒ /dashboard/locations/assignment                                   1.56 kB         262 kB
+├ ƒ /dashboard/locations/dashboard                                      205 B         275 kB
+├ ƒ /dashboard/locations/new                                          2.18 kB         271 kB
+├ ƒ /dashboard/locations/reports                                        708 B         263 kB
+├ ƒ /dashboard/locations/settings                                       708 B         263 kB
+├ ƒ /dashboard/locations/setup                                          708 B         263 kB
+├ ƒ /dashboard/locations/templates                                      708 B         263 kB
+├ ƒ /dashboard/loyalty/gift-cards                                     5.47 kB         275 kB
+├ ƒ /dashboard/loyalty/program-builder                                5.63 kB         275 kB
+├ ƒ /dashboard/marketing/email-campaigns                                708 B         263 kB
+├ ƒ /dashboard/marketing/holiday-packages                             3.87 kB         282 kB
+├ ƒ /dashboard/marketplace                                            4.58 kB         274 kB
+├ ƒ /dashboard/marketplace/analytics                                  6.09 kB         401 kB
+├ ƒ /dashboard/marketplace/auto-vendor                                3.71 kB         273 kB
+├ ƒ /dashboard/marketplace/catalog                                    6.32 kB         303 kB
+├ ƒ /dashboard/marketplace/checkout                                   8.11 kB         287 kB
+├ ƒ /dashboard/marketplace/compare                                    6.39 kB         319 kB
+├ ƒ /dashboard/marketplace/orders                                     5.15 kB         318 kB
+├ ƒ /dashboard/marketplace/orders/[id]                                3.31 kB         290 kB
+├ ƒ /dashboard/marketplace/products/[slug]                            9.08 kB         308 kB
+├ ƒ /dashboard/marketplace/vendors                                    6.57 kB         285 kB
+├ ƒ /dashboard/marketplace/vendors/[id]                               6.28 kB         317 kB
+├ ƒ /dashboard/marketplace/wishlist                                   6.21 kB         290 kB
+├ ƒ /dashboard/meal-plans                                               410 B         263 kB
+├ ƒ /dashboard/meal-plans/[planId]                                    2.18 kB         271 kB
+├ ƒ /dashboard/meal-plans/active                                        708 B         263 kB
+├ ƒ /dashboard/meal-plans/customers                                     708 B         263 kB
+├ ƒ /dashboard/meal-plans/cycles                                        708 B         263 kB
+├ ƒ /dashboard/meal-plans/generated                                     708 B         263 kB
+├ ƒ /dashboard/meal-plans/needs-review                                  708 B         263 kB
+├ ƒ /dashboard/meal-plans/new                                         2.18 kB         271 kB
+├ ƒ /dashboard/meal-plans/paused                                        708 B         263 kB
+├ ƒ /dashboard/meal-plans/reports                                     1.22 kB         262 kB
+├ ƒ /dashboard/meal-plans/settings                                    1.22 kB         262 kB
+├ ƒ /dashboard/meal-plans/templates                                   2.12 kB         270 kB
+├ ƒ /dashboard/meal-subscriptions                                     2.18 kB         271 kB
+├ ƒ /dashboard/menu-planner                                             849 B         278 kB
+├ ƒ /dashboard/menu/dynamic-pricing                                   8.44 kB         287 kB
+├ ƒ /dashboard/menu/universal                                         14.7 kB         300 kB
+├ ƒ /dashboard/menus                                                  14.3 kB         358 kB
+├ ƒ /dashboard/menus/[menuId]                                           708 B         263 kB
+├ ƒ /dashboard/menus/[menuId]/reports                                   708 B         263 kB
+├ ƒ /dashboard/menus/new                                              4.29 kB         285 kB
+├ ƒ /dashboard/menus/templates                                        2.52 kB         300 kB
+├ ƒ /dashboard/notifications                                          3.43 kB         282 kB
+├ ƒ /dashboard/notifications/alerts                                   1.22 kB         262 kB
+├ ƒ /dashboard/notifications/log                                      1.22 kB         262 kB
+├ ƒ /dashboard/notifications/preferences                                708 B         263 kB
+├ ƒ /dashboard/notifications/provider                                 1.22 kB         262 kB
+├ ƒ /dashboard/notifications/retry                                    2.74 kB         280 kB
+├ ƒ /dashboard/notifications/rules                                    3.68 kB         282 kB
+├ ƒ /dashboard/notifications/settings                                   708 B         263 kB
+├ ƒ /dashboard/notifications/templates                                3.42 kB         280 kB
+├ ƒ /dashboard/nutrition-labels                                       6.85 kB         276 kB
+├ ƒ /dashboard/nutrition-labels/import                                  708 B         263 kB
+├ ƒ /dashboard/nutrition-labels/items/[productId]                     2.18 kB         271 kB
+├ ƒ /dashboard/nutrition-labels/print-queue                             708 B         263 kB
+├ ƒ /dashboard/nutrition-labels/reports                                 708 B         263 kB
+├ ƒ /dashboard/onboarding/auto                                        6.26 kB         274 kB
+├ ƒ /dashboard/operations/audits                                        708 B         263 kB
+├ ƒ /dashboard/operations/audits/[auditId]                            1.22 kB         262 kB
+├ ƒ /dashboard/operations/checklists                                    708 B         263 kB
+├ ƒ /dashboard/operations/compliance                                    708 B         263 kB
+├ ƒ /dashboard/order-hub                                              4.88 kB         274 kB
+├ ƒ /dashboard/orders                                                 4.36 kB         332 kB
+├ ƒ /dashboard/orders/[orderId]                                       7.33 kB         291 kB
+├ ƒ /dashboard/orders/hub                                               708 B         263 kB
+├ ƒ /dashboard/orders/new                                             10.2 kB         289 kB
+├ ƒ /dashboard/orders/quick                                           4.69 kB         315 kB
+├ ƒ /dashboard/packing                                                21.3 kB         299 kB
+├ ƒ /dashboard/packing/reports                                          410 B         263 kB
+├ ƒ /dashboard/packing/scanner                                          410 B         263 kB
+├ ƒ /dashboard/packing/verify                                         17.4 kB         295 kB
+├ ƒ /dashboard/partner                                                12.9 kB         438 kB
+├ ƒ /dashboard/platform/mutation-registry                             2.51 kB         272 kB
+├ ƒ /dashboard/playbooks                                              2.87 kB         272 kB
+├ ƒ /dashboard/playbooks/[playbookId]                                 2.87 kB         272 kB
+├ ƒ /dashboard/playbooks/active                                         708 B         263 kB
+├ ƒ /dashboard/playbooks/all                                          2.87 kB         272 kB
+├ ƒ /dashboard/playbooks/custom                                       2.87 kB         272 kB
+├ ƒ /dashboard/playbooks/new                                          4.57 kB         272 kB
+├ ƒ /dashboard/playbooks/reports                                      1.22 kB         262 kB
+├ ƒ /dashboard/playbooks/runs/[runId]                                 4.38 kB         274 kB
+├ ƒ /dashboard/playbooks/schedule                                     1.22 kB         262 kB
+├ ƒ /dashboard/playbooks/settings                                     1.22 kB         262 kB
+├ ƒ /dashboard/playbooks/templates                                    2.87 kB         272 kB
+├ ƒ /dashboard/pos                                                      410 B         263 kB
+├ ƒ /dashboard/pos/handheld                                           9.58 kB         279 kB
+├ ƒ /dashboard/pos/handheld/manifest.webmanifest                      1.22 kB         262 kB
+├ ƒ /dashboard/pos/receipts                                             708 B         263 kB
+├ ƒ /dashboard/pos/registers                                          2.18 kB         271 kB
+├ ƒ /dashboard/pos/reports                                              708 B         263 kB
+├ ƒ /dashboard/pos/settings                                             410 B         263 kB
+├ ƒ /dashboard/pos/settings/hardware                                    410 B         263 kB
+├ ƒ /dashboard/pos/shifts                                               11 kB         280 kB
+├ ƒ /dashboard/pos/tabs                                               9.02 kB         288 kB
+├ ƒ /dashboard/pos/terminal                                           20.1 kB         328 kB
+├ ƒ /dashboard/pos/transactions                                         410 B         263 kB
+├ ƒ /dashboard/product-mapping                                        1.78 kB         274 kB
+├ ƒ /dashboard/product-mapping/activity                               1.22 kB         262 kB
+├ ƒ /dashboard/product-mapping/aliases                                3.58 kB         271 kB
+├ ƒ /dashboard/product-mapping/approved                               1.22 kB         262 kB
+├ ƒ /dashboard/product-mapping/batches                                  708 B         263 kB
+├ ƒ /dashboard/product-mapping/bulk                                   3.57 kB         271 kB
+├ ƒ /dashboard/product-mapping/conflicts                                410 B         263 kB
+├ ƒ /dashboard/product-mapping/health                                   708 B         263 kB
+├ ƒ /dashboard/product-mapping/modifiers                              3.35 kB         271 kB
+├ ƒ /dashboard/product-mapping/settings                                 708 B         263 kB
+├ ƒ /dashboard/product-mapping/suggestions                              191 B         273 kB
+├ ƒ /dashboard/product-mapping/unmapped                               1.78 kB         274 kB
+├ ƒ /dashboard/production                                             13.3 kB         337 kB
+├ ƒ /dashboard/production/batches/[batchId]                             410 B         263 kB
+├ ƒ /dashboard/production/calendar                                      410 B         263 kB
+├ ƒ /dashboard/production/reports                                       410 B         263 kB
+├ ƒ /dashboard/production/templates                                     410 B         263 kB
+├ ƒ /dashboard/products                                                 20 kB         345 kB
+├ ƒ /dashboard/products/[productId]                                     410 B         263 kB
+├ ƒ /dashboard/products/import                                          194 B         273 kB
+├ ƒ /dashboard/products/new                                             708 B         263 kB
+├ ƒ /dashboard/purchasing                                               410 B         263 kB
+├ ƒ /dashboard/purchasing/bulk-pricing                                 1.6 kB         273 kB
+├ ƒ /dashboard/purchasing/direct-ordering                               956 B         271 kB
+├ ƒ /dashboard/purchasing/exports                                       708 B         263 kB
+├ ƒ /dashboard/purchasing/price-history                               1.55 kB         369 kB
+├ ƒ /dashboard/purchasing/purchase-orders                               708 B         263 kB
+├ ƒ /dashboard/purchasing/purchase-orders/[poId]                      3.39 kB         282 kB
+├ ƒ /dashboard/purchasing/receiving                                   1.22 kB         262 kB
+├ ƒ /dashboard/purchasing/reorder-queue                               1.22 kB         262 kB
+├ ƒ /dashboard/purchasing/suppliers                                   2.12 kB         270 kB
+├ ƒ /dashboard/qr-codes                                                6.4 kB         285 kB
+├ ƒ /dashboard/quick-start                                            6.86 kB         321 kB
+├ ƒ /dashboard/receivables                                            11.6 kB         285 kB
+├ ƒ /dashboard/recipes/yield                                            708 B         263 kB
+├ ƒ /dashboard/referrals                                                708 B         263 kB
+├ ƒ /dashboard/reports                                                  410 B         263 kB
+├ ƒ /dashboard/reports/[reportKey]                                    1.91 kB         271 kB
+├ ƒ /dashboard/reports/catalog                                        1.53 kB         274 kB
+├ ƒ /dashboard/reports/catalog/builder                                3.76 kB         276 kB
+├ ƒ /dashboard/reports/enterprise                                       410 B         263 kB
+├ ƒ /dashboard/reports/executive                                        410 B         263 kB
+├ ƒ /dashboard/reports/financial                                        410 B         263 kB
+├ ƒ /dashboard/reports/financial/pnl                                  6.08 kB         385 kB
+├ ƒ /dashboard/reports/history                                          708 B         263 kB
+├ ƒ /dashboard/reports/labor                                            708 B         263 kB
+├ ƒ /dashboard/reports/library                                          708 B         263 kB
+├ ƒ /dashboard/reports/menu-engineering                                 708 B         263 kB
+├ ƒ /dashboard/reports/operations                                       410 B         263 kB
+├ ƒ /dashboard/reports/saved                                            410 B         263 kB
+├ ƒ /dashboard/reports/settings                                       1.22 kB         262 kB
+├ ƒ /dashboard/reports/tax                                              708 B         263 kB
+├ ƒ /dashboard/reservations                                           5.62 kB         275 kB
+├ ƒ /dashboard/routes                                                 2.14 kB         271 kB
+├ ƒ /dashboard/routes/[routeId]                                         782 B         273 kB
+├ ƒ /dashboard/routes/[routeId]/driver                                  189 B         273 kB
+├ ƒ /dashboard/routes/[routeId]/manifest                              2.55 kB         272 kB
+├ ƒ /dashboard/routes/driver                                            708 B         263 kB
+├ ƒ /dashboard/routes/drivers                                         2.12 kB         270 kB
+├ ƒ /dashboard/routes/fleet                                           1.66 kB         264 kB
+├ ƒ /dashboard/routes/optimize                                          708 B         263 kB
+├ ƒ /dashboard/routes/planner                                         2.18 kB         271 kB
+├ ƒ /dashboard/routes/reports                                         1.22 kB         262 kB
+├ ƒ /dashboard/routes/settings                                        1.22 kB         262 kB
+├ ƒ /dashboard/routes/uber-direct                                     1.22 kB         262 kB
+├ ƒ /dashboard/routes/zones                                           2.12 kB         270 kB
+├ ƒ /dashboard/sales-channels                                           221 B         291 kB
+├ ƒ /dashboard/sales-channels/[providerKey]/setup                       708 B         263 kB
+├ ƒ /dashboard/sales-channels/analytics                                 708 B         263 kB
+├ ƒ /dashboard/sales-channels/assistant                                 708 B         263 kB
+├ ƒ /dashboard/sales-channels/attention                                 708 B         263 kB
+├ ƒ /dashboard/sales-channels/available                                 410 B         263 kB
+├ ƒ /dashboard/sales-channels/conflicts                               2.71 kB         272 kB
+├ ƒ /dashboard/sales-channels/connected                                 221 B         291 kB
+├ ƒ /dashboard/sales-channels/connections/[connectionId]                410 B         263 kB
+├ ƒ /dashboard/sales-channels/handoff                                 3.85 kB         273 kB
+├ ƒ /dashboard/sales-channels/health                                    410 B         263 kB
+├ ƒ /dashboard/sales-channels/imports/[batchId]                       3.37 kB         273 kB
+├ ƒ /dashboard/sales-channels/mapping                                   410 B         263 kB
+├ ƒ /dashboard/sales-channels/reliability                             1.22 kB         262 kB
+├ ƒ /dashboard/sales-channels/rules                                   3.76 kB         273 kB
+├ ƒ /dashboard/sales-channels/settings                                  410 B         263 kB
+├ ƒ /dashboard/sales-channels/simulator                               2.73 kB         272 kB
+├ ƒ /dashboard/sales-channels/staging                                   410 B         263 kB
+├ ƒ /dashboard/sales-channels/sync-jobs                                 708 B         263 kB
+├ ƒ /dashboard/sales-channels/webhook-lab                             3.74 kB         273 kB
+├ ƒ /dashboard/sales-channels/webhooks                                2.65 kB         302 kB
+├ ƒ /dashboard/scan                                                   1.22 kB         262 kB
+├ ƒ /dashboard/security/audit-logs                                    1.22 kB         262 kB
+├ ƒ /dashboard/settings                                               3.89 kB         273 kB
+├ ƒ /dashboard/settings/advanced                                      7.57 kB         286 kB
+├ ƒ /dashboard/settings/ai                                             8.5 kB         287 kB
+├ ƒ /dashboard/settings/automation                                    7.98 kB         286 kB
+├ ƒ /dashboard/settings/backups                                       7.61 kB         286 kB
+├ ƒ /dashboard/settings/billing                                         410 B         263 kB
+├ ƒ /dashboard/settings/branding                                      3.47 kB         461 kB
+├ ƒ /dashboard/settings/compliance                                    5.94 kB         316 kB
+├ ƒ /dashboard/settings/crm                                           5.95 kB         316 kB
+├ ƒ /dashboard/settings/delivery                                      5.94 kB         316 kB
+├ ƒ /dashboard/settings/delivery-zones                                  708 B         263 kB
+├ ƒ /dashboard/settings/developer                                      7.4 kB         286 kB
+├ ƒ /dashboard/settings/domains                                         410 B         263 kB
+├ ƒ /dashboard/settings/hardware                                      3.87 kB         312 kB
+├ ƒ /dashboard/settings/imports                                         410 B         263 kB
+├ ƒ /dashboard/settings/integrations                                    410 B         263 kB
+├ ƒ /dashboard/settings/modules                                       9.31 kB         294 kB
+├ ƒ /dashboard/settings/notifications                                 3.58 kB         282 kB
+├ ƒ /dashboard/settings/notifications/push                            2.91 kB         272 kB
+├ ƒ /dashboard/settings/notifications/sms                               708 B         263 kB
+├ ƒ /dashboard/settings/notifications/whatsapp                          708 B         263 kB
+├ ƒ /dashboard/settings/operations                                    6.11 kB         316 kB
+├ ƒ /dashboard/settings/orders                                        8.52 kB         287 kB
+├ ƒ /dashboard/settings/packing                                       5.87 kB         316 kB
+├ ƒ /dashboard/settings/pos                                             410 B         263 kB
+├ ƒ /dashboard/settings/production                                    6.14 kB         316 kB
+├ ƒ /dashboard/settings/profile                                       5.82 kB         288 kB
+├ ƒ /dashboard/settings/referrals                                     2.42 kB         279 kB
+├ ƒ /dashboard/settings/routes                                         4.6 kB         315 kB
+├ ƒ /dashboard/settings/security                                        410 B         263 kB
+├ ƒ /dashboard/settings/security/sso                                  5.75 kB         288 kB
+├ ƒ /dashboard/settings/staff                                           410 B         263 kB
+├ ƒ /dashboard/settings/storefront                                      410 B         263 kB
+├ ƒ /dashboard/settings/voice                                         6.47 kB         276 kB
+├ ƒ /dashboard/settings/white-label                                     410 B         263 kB
+├ ƒ /dashboard/settings/workspace                                       11 kB         339 kB
+├ ƒ /dashboard/staff                                                    189 B         273 kB
+├ ƒ /dashboard/staff/[staffId]                                        3.32 kB         286 kB
+├ ƒ /dashboard/staff/ai-scheduling                                     5.8 kB         275 kB
+├ ƒ /dashboard/staff/availability                                       708 B         263 kB
+├ ƒ /dashboard/staff/certifications                                   3.33 kB         273 kB
+├ ƒ /dashboard/staff/drivers                                            708 B         263 kB
+├ ƒ /dashboard/staff/labor-realtime                                   2.48 kB         272 kB
+├ ƒ /dashboard/staff/payroll                                            763 B         262 kB
+├ ƒ /dashboard/staff/reports                                            708 B         263 kB
+├ ƒ /dashboard/staff/roles                                            3.15 kB         271 kB
+├ ƒ /dashboard/staff/roster                                              2 kB         284 kB
+├ ƒ /dashboard/staff/schedule                                         1.77 kB         277 kB
+├ ƒ /dashboard/staff/shifts                                            3.6 kB         273 kB
+├ ƒ /dashboard/staff/team                                              3.4 kB         273 kB
+├ ƒ /dashboard/staff/time-clock                                       1.22 kB         262 kB
+├ ƒ /dashboard/staff/tip-pooling                                      1.65 kB         271 kB
+├ ƒ /dashboard/storefront                                             3.98 kB         273 kB
+├ ƒ /dashboard/storefront/advanced                                    8.82 kB         402 kB
+├ ƒ /dashboard/storefront/analytics                                   1.14 kB         370 kB
+├ ƒ /dashboard/storefront/builder                                     9.98 kB         304 kB
+├ ƒ /dashboard/storefront/cart-recovery                               1.25 kB         378 kB
+├ ƒ /dashboard/storefront/catalog                                     5.51 kB         275 kB
+├ ƒ /dashboard/storefront/discounts                                   2.14 kB         271 kB
+├ ƒ /dashboard/storefront/domains                                     2.14 kB         271 kB
+├ ƒ /dashboard/storefront/forms                                       2.14 kB         271 kB
+├ ƒ /dashboard/storefront/forms/[formId]                              2.46 kB         272 kB
+├ ƒ /dashboard/storefront/forms/[formId]/submissions                    410 B         263 kB
+├ ƒ /dashboard/storefront/forms/new                                   2.14 kB         271 kB
+├ ƒ /dashboard/storefront/fulfillment                                 3.88 kB         273 kB
+├ ƒ /dashboard/storefront/gift-cards                                  2.14 kB         271 kB
+├ ƒ /dashboard/storefront/inventory                                     708 B         263 kB
+├ ƒ /dashboard/storefront/launch                                        410 B         263 kB
+├ ƒ /dashboard/storefront/loyalty                                       410 B         263 kB
+├ ƒ /dashboard/storefront/marketing                                     708 B         263 kB
+├ ƒ /dashboard/storefront/markets                                     8.62 kB         282 kB
+├ ƒ /dashboard/storefront/media                                        4.5 kB         279 kB
+├ ƒ /dashboard/storefront/menu                                        2.14 kB         271 kB
+├ ƒ /dashboard/storefront/notifications                                 410 B         263 kB
+├ ƒ /dashboard/storefront/ordering                                     4.5 kB         298 kB
+├ ƒ /dashboard/storefront/pages                                       3.59 kB         273 kB
+├ ƒ /dashboard/storefront/pages/[pageId]                              7.61 kB         370 kB
+├ ƒ /dashboard/storefront/pickup-windows                              1.72 kB         273 kB
+├ ƒ /dashboard/storefront/preview                                      3.3 kB         273 kB
+├ ƒ /dashboard/storefront/products                                    2.14 kB         271 kB
+├ ƒ /dashboard/storefront/redirects                                   2.14 kB         271 kB
+├ ƒ /dashboard/storefront/referrals                                     708 B         263 kB
+├ ƒ /dashboard/storefront/reservations                                1.22 kB         262 kB
+├ ƒ /dashboard/storefront/reviews                                       708 B         263 kB
+├ ƒ /dashboard/storefront/schedule                                      708 B         263 kB
+├ ƒ /dashboard/storefront/seo                                         4.25 kB         283 kB
+├ ƒ /dashboard/storefront/settings                                    5.14 kB         393 kB
+├ ƒ /dashboard/storefront/settings/experiments                        2.14 kB         271 kB
+├ ƒ /dashboard/storefront/team                                        4.57 kB         274 kB
+├ ƒ /dashboard/storefront/team/audit                                    410 B         263 kB
+├ ƒ /dashboard/storefront/theme                                       9.95 kB         297 kB
+├ ƒ /dashboard/storefront/website                                       410 B         263 kB
+├ ƒ /dashboard/storefront/workspace                                   2.14 kB         271 kB
+├ ƒ /dashboard/support                                                13.9 kB         385 kB
+├ ƒ /dashboard/support/[ticketId]                                     6.39 kB         377 kB
+├ ƒ /dashboard/support/inbox                                          1.22 kB         262 kB
+├ ƒ /dashboard/support/kb                                               708 B         263 kB
+├ ƒ /dashboard/support/kb/[slug]                                        708 B         263 kB
+├ ƒ /dashboard/support/reports                                          708 B         263 kB
+├ ƒ /dashboard/system-health                                            410 B         263 kB
+├ ƒ /dashboard/system-health/cron-execution                             708 B         263 kB
+├ ƒ /dashboard/system-health/cron-execution/[slug]                      410 B         263 kB
+├ ƒ /dashboard/system-health/data-integrity                             708 B         263 kB
+├ ƒ /dashboard/system-health/incidents                                  410 B         263 kB
+├ ƒ /dashboard/tables                                                 3.45 kB         274 kB
+├ ƒ /dashboard/tasks                                                  3.01 kB         272 kB
+├ ƒ /dashboard/tasks/[taskId]                                         3.27 kB         273 kB
+├ ƒ /dashboard/tasks/calendar                                           708 B         263 kB
+├ ƒ /dashboard/tasks/kanban                                            2.6 kB         272 kB
+├ ƒ /dashboard/tasks/list                                             2.18 kB         271 kB
+├ ƒ /dashboard/tasks/my                                                2.6 kB         272 kB
+├ ƒ /dashboard/tasks/new                                              2.18 kB         271 kB
+├ ƒ /dashboard/tasks/recurring                                          708 B         263 kB
+├ ƒ /dashboard/tasks/reports                                          1.22 kB         262 kB
+├ ƒ /dashboard/tasks/settings                                         1.22 kB         262 kB
+├ ƒ /dashboard/tasks/templates                                        2.12 kB         270 kB
+├ ƒ /dashboard/templates                                                410 B         263 kB
+├ ƒ /dashboard/templates/[templateKey]                                  708 B         263 kB
+├ ƒ /dashboard/templates/[templateKey]/apply                          4.65 kB         274 kB
+├ ƒ /dashboard/templates/all                                            708 B         263 kB
+├ ƒ /dashboard/templates/history                                      2.82 kB         272 kB
+├ ƒ /dashboard/templates/imports                                        708 B         263 kB
+├ ƒ /dashboard/templates/module-packs                                   708 B         263 kB
+├ ƒ /dashboard/templates/playbooks                                      708 B         263 kB
+├ ƒ /dashboard/templates/starters                                       708 B         263 kB
+├ ƒ /dashboard/templates/storefront                                     708 B         263 kB
+├ ƒ /dashboard/today                                                    16 kB         297 kB
+├ ƒ /dashboard/today/profit                                           7.67 kB         277 kB
+├ ƒ /dashboard/training                                                 140 B         273 kB
+├ ƒ /dashboard/training/analytics                                     1.22 kB         262 kB
+├ ƒ /dashboard/training/assignments                                   2.79 kB         270 kB
+├ ƒ /dashboard/training/certifications                                 3.5 kB         271 kB
+├ ƒ /dashboard/training/kitchen                                         708 B         263 kB
+├ ƒ /dashboard/training/manager                                         708 B         263 kB
+├ ƒ /dashboard/training/packing                                         708 B         263 kB
+├ ƒ /dashboard/training/practice                                        708 B         263 kB
+├ ƒ /dashboard/training/programs                                        140 B         273 kB
+├ ƒ /dashboard/training/programs/[programId]                          3.18 kB         271 kB
+├ ƒ /dashboard/training/simulations                                   3.85 kB         271 kB
+├ ƒ /dashboard/training/sops                                          4.01 kB         272 kB
+├ ƒ /dashboard/training/tablet                                          708 B         263 kB
+├ ƒ /dashboard/workspace/experiments                                    708 B         263 kB
+├ ƒ /deck                                                             2.94 kB         265 kB
+├ ƒ /demo                                                             1.14 kB         348 kB
+├ ● /demo/[slug]                                                        369 B         347 kB
+├   ├ /demo/meal-prep
+├   ├ /demo/catering
+├   ├ /demo/ghost-kitchen
+├   └ [+4 more paths]
+├ ƒ /demo/expired                                                       369 B         347 kB
+├ ƒ /developers                                                         369 B         347 kB
+├ ƒ /developers/apps/register                                         3.31 kB         350 kB
+├ ƒ /developers/docs                                                    369 B         347 kB
+├ ƒ /developers/embed-demo                                            1.94 kB         351 kB
+├ ƒ /developers/webhooks                                                369 B         347 kB
+├ ƒ /driver                                                             708 B         263 kB
+├ ƒ /forgot-password                                                  3.32 kB         282 kB
+├ ƒ /get-started                                                        266 B         347 kB
+├ ○ /get-started/opengraph-image                                      1.22 kB         262 kB
+├ ƒ /help                                                             1.59 kB         264 kB
+├ ƒ /help/billing                                                     1.22 kB         262 kB
+├ ƒ /help/data-export                                                 1.22 kB         262 kB
+├ ƒ /help/faq                                                         1.22 kB         262 kB
+├ ƒ /help/getting-started                                             1.22 kB         262 kB
+├ ƒ /help/import-export                                                 708 B         263 kB
+├ ƒ /help/integrations                                                1.22 kB         262 kB
+├ ƒ /help/order-hub                                                   1.22 kB         262 kB
+├ ƒ /help/packing                                                     1.22 kB         262 kB
+├ ƒ /help/production                                                  1.22 kB         262 kB
+├ ƒ /help/products-skus                                               1.22 kB         262 kB
+├ ƒ /help/uber-eats                                                   1.22 kB         262 kB
+├ ƒ /implementation-service                                             708 B         263 kB
+├ ƒ /integrations                                                       708 B         263 kB
+├ ƒ /integrations/manual-orders                                         369 B         347 kB
+├ ƒ /integrations/public-storefront                                     369 B         347 kB
+├ ƒ /integrations/shopify                                               369 B         347 kB
+├ ƒ /integrations/shopify/app                                           369 B         347 kB
+├ ƒ /integrations/uber-direct                                           369 B         347 kB
+├ ƒ /integrations/uber-eats                                             369 B         347 kB
+├ ƒ /integrations/woocommerce                                           369 B         347 kB
+├ ƒ /integrations/woocommerce/extension                                 708 B         263 kB
+├ ƒ /invite/[token]                                                   3.64 kB         282 kB
+├ ● /kb/[[...slug]]                                                   2.69 kB         359 kB
+├   ├ /kb/getting-started/quick-start
+├   ├ /kb/getting-started/first-menu
+├   ├ /kb/getting-started/first-order
+├   └ [+12 more paths]
+├ ƒ /kds                                                                708 B         263 kB
+├ ƒ /landing/bar                                                      7.85 kB         366 kB
+├ ƒ /landing/coffee-shop                                              7.93 kB         366 kB
+├ ƒ /landing/full-service-restaurant                                  7.99 kB         366 kB
+├ ƒ /landing/ghost-kitchen                                            8.07 kB         366 kB
+├ ƒ /landing/meal-prep                                                  176 B         364 kB
+├ ƒ /landing/weekly-preorder                                            177 B         364 kB
+├ ƒ /legal/acceptable-use                                               369 B         347 kB
+├ ƒ /legal/cookie-policy                                                369 B         347 kB
+├ ƒ /legal/data-rights                                                  708 B         263 kB
+├ ƒ /legal/dpa                                                          708 B         263 kB
+├ ƒ /legal/privacy                                                      708 B         263 kB
+├ ƒ /legal/security                                                     708 B         263 kB
+├ ƒ /legal/terms                                                        708 B         263 kB
+├ ● /locations/[city]                                                   369 B         347 kB
+├   ├ /locations/los-angeles
+├   ├ /locations/new-york
+├   ├ /locations/chicago
+├   └ [+3 more paths]
+├ ƒ /login                                                            3.98 kB         286 kB
+├ ● /lp/[slug]                                                          140 B         272 kB
+├   ├ /lp/restaurant-pos
+├   ├ /lp/meal-prep-software
+├   ├ /lp/catering-software
+├   └ /lp/ghost-kitchen-software
+├ ● /lp/[slug]/[metro]                                                  140 B         272 kB
+├   ├ /lp/restaurant-pos/nyc
+├   ├ /lp/restaurant-pos/la
+├   ├ /lp/restaurant-pos/chicago
+├   └ [+9 more paths]
+├ ƒ /markets/canada                                                     369 B         347 kB
+├ ƒ /markets/europe                                                     369 B         347 kB
+├ ƒ /markets/united-kingdom                                             369 B         347 kB
+├ ƒ /markets/united-states                                              369 B         347 kB
+├ ƒ /onboarding                                                       13.8 kB         310 kB
+├ ○ /opengraph-image                                                  1.22 kB         262 kB
+├ ƒ /order/[token]                                                      824 B         268 kB
+├ ƒ /partner                                                            369 B         347 kB
+├ ƒ /partner/clients                                                    369 B         347 kB
+├ ƒ /partner/clients/[id]                                               369 B         347 kB
+├ ƒ /partner/implementation                                             369 B         347 kB
+├ ƒ /partner/revenue                                                    369 B         347 kB
+├ ƒ /partners                                                           369 B         347 kB
+├ ƒ /pay/b2b/[token]                                                  4.31 kB         272 kB
+├ ƒ /pay/b2b/batch/[token]                                            4.38 kB         272 kB
+├ ƒ /platform                                                         1.22 kB         262 kB
+├ ƒ /platform/accounts                                                1.22 kB         262 kB
+├ ƒ /platform/audit                                                   1.22 kB         262 kB
+├ ƒ /platform/automations                                             1.22 kB         262 kB
+├ ƒ /platform/beta-applications                                       1.22 kB         262 kB
+├ ƒ /platform/billing                                                 1.22 kB         262 kB
+├ ƒ /platform/capital-partners                                        5.23 kB         274 kB
+├ ƒ /platform/customer-success                                        1.22 kB         262 kB
+├ ƒ /platform/dashboard                                                 410 B         263 kB
+├ ƒ /platform/demo                                                      708 B         263 kB
+├ ƒ /platform/entitlements                                            1.22 kB         262 kB
+├ ƒ /platform/error-recovery                                            221 B         291 kB
+├ ƒ /platform/errors                                                    708 B         263 kB
+├ ƒ /platform/feature-flags                                           3.14 kB         271 kB
+├ ƒ /platform/go-live                                                 2.92 kB         272 kB
+├ ƒ /platform/growth-crm                                              1.22 kB         262 kB
+├ ƒ /platform/health                                                    410 B         263 kB
+├ ƒ /platform/implementations                                           410 B         263 kB
+├ ƒ /platform/incidents                                                 410 B         263 kB
+├ ƒ /platform/integrations                                              221 B         291 kB
+├ ƒ /platform/jobs                                                      708 B         263 kB
+├ ƒ /platform/marketplace/analytics                                   5.63 kB         388 kB
+├ ƒ /platform/marketplace/disputes                                    5.63 kB         316 kB
+├ ƒ /platform/marketplace/products                                     7.3 kB         318 kB
+├ ƒ /platform/marketplace/vendor-verification                         4.02 kB         283 kB
+├ ƒ /platform/marketplace/vendors                                     7.17 kB         317 kB
+├ ƒ /platform/marketplace/vendors/[id]                                5.11 kB         284 kB
+├ ƒ /platform/notifications                                           1.22 kB         262 kB
+├ ƒ /platform/organizations                                           1.22 kB         262 kB
+├ ƒ /platform/partner                                                 1.22 kB         262 kB
+├ ƒ /platform/partner-apps                                            5.07 kB         278 kB
+├ ƒ /platform/partner-billing                                         5.99 kB         275 kB
+├ ƒ /platform/plans                                                   1.22 kB         262 kB
+├ ƒ /platform/platform-users                                          1.22 kB         262 kB
+├ ƒ /platform/pos                                                     1.22 kB         262 kB
+├ ƒ /platform/preview/[userId]                                          708 B         263 kB
+├ ƒ /platform/revenue                                                 1.22 kB         262 kB
+├ ƒ /platform/roles                                                   1.22 kB         262 kB
+├ ƒ /platform/runbooks                                                  708 B         263 kB
+├ ƒ /platform/search                                                    708 B         263 kB
+├ ƒ /platform/settings                                                1.22 kB         262 kB
+├ ƒ /platform/support                                                   410 B         263 kB
+├ ƒ /platform/support/[ticketId]                                        708 B         263 kB
+├ ƒ /platform/support/escalations                                       410 B         263 kB
+├ ƒ /platform/support/knowledge-base                                  1.22 kB         262 kB
+├ ƒ /platform/support/queue                                             410 B         263 kB
+├ ƒ /platform/system-health                                             410 B         263 kB
+├ ƒ /platform/tasks/remediation/[taskId]                                708 B         263 kB
+├ ƒ /platform/tools                                                     708 B         263 kB
+├ ƒ /platform/tools/db-health                                           708 B         263 kB
+├ ƒ /platform/training                                                1.22 kB         262 kB
+├ ƒ /platform/trials                                                  1.22 kB         262 kB
+├ ƒ /platform/users                                                     708 B         263 kB
+├ ƒ /platform/webhooks                                                4.06 kB         283 kB
+├ ƒ /platform/workspaces                                                708 B         263 kB
+├ ƒ /platform/workspaces/[workspaceId]                                4.04 kB         273 kB
+├ ƒ /platform/workspaces/[workspaceId]/integration-health             2.46 kB         302 kB
+├ ƒ /pricing                                                          9.88 kB         368 kB
+├ ƒ /product                                                            369 B         347 kB
+├ ● /product/[slug]                                                     369 B         347 kB
+├   ├ /product/order-hub
+├   ├ /product/production
+├   ├ /product/packing
+├   └ [+3 more paths]
+├ ƒ /product/pos-terminal                                               369 B         347 kB
+├ ƒ /q/[slug]/[tableId]                                               2.85 kB         289 kB
+├ ƒ /q/table                                                          3.59 kB         291 kB
+├ ƒ /quote/[token]                                                    1.22 kB         262 kB
+├ ƒ /r/[code]                                                         1.22 kB         262 kB
+├ ƒ /resources                                                          369 B         347 kB
+├ ƒ /resources/catering-production-workflow                             369 B         347 kB
+├ ƒ /resources/kitchen-production-planning                              369 B         347 kB
+├ ƒ /resources/meal-prep-operations                                     369 B         347 kB
+├ ƒ /resources/packing-labels-for-meal-prep                             369 B         347 kB
+├ ƒ /resources/restaurant-financing                                     369 B         347 kB
+├ ƒ /resources/shopify-meal-prep-store                                  369 B         347 kB
+├ ƒ /resources/woocommerce-food-orders                                  369 B         347 kB
+├ ○ /robots.txt                                                       1.22 kB         262 kB
+├ ƒ /roi-calculator                                                     226 B         351 kB
+├ ƒ /s/[storeSlug]                                                      223 B         304 kB
+├ ƒ /s/[storeSlug]/about                                                708 B         263 kB
+├ ƒ /s/[storeSlug]/account                                            5.44 kB         368 kB
+├ ƒ /s/[storeSlug]/cart                                               5.06 kB         290 kB
+├ ƒ /s/[storeSlug]/catering                                             200 B         295 kB
+├ ƒ /s/[storeSlug]/checkout                                           15.1 kB         424 kB
+├ ƒ /s/[storeSlug]/collections/[collectionSlug]                         203 B         278 kB
+├ ƒ /s/[storeSlug]/contact                                              200 B         295 kB
+├ ƒ /s/[storeSlug]/custom.css                                         1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/daily-menu                                           207 B         296 kB
+├ ƒ /s/[storeSlug]/faq                                                4.42 kB         281 kB
+├ ƒ /s/[storeSlug]/gift-cards                                         3.86 kB         282 kB
+├ ƒ /s/[storeSlug]/manifest.webmanifest                               1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/menu                                               1.05 kB         297 kB
+├ ƒ /s/[storeSlug]/order-confirmation/[token]                         1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/order/[token]                                      4.91 kB         298 kB
+├ ƒ /s/[storeSlug]/orders/[orderId]/track                               708 B         263 kB
+├ ƒ /s/[storeSlug]/p/[pageSlug]                                         222 B         304 kB
+├ ƒ /s/[storeSlug]/policies/privacy                                     708 B         263 kB
+├ ƒ /s/[storeSlug]/policies/terms                                       708 B         263 kB
+├ ƒ /s/[storeSlug]/products/[productRef]                              6.45 kB         297 kB
+├ ƒ /s/[storeSlug]/reservations                                       4.11 kB         272 kB
+├ ƒ /s/[storeSlug]/robots.txt                                         1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/sitemap.xml                                        1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/sitemaps/[page]                                    1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/sw.js                                              1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/track/[orderId]                                    1.22 kB         262 kB
+├ ƒ /s/[storeSlug]/waitlist                                           4.04 kB         272 kB
+├ ƒ /service-areas                                                      266 B         347 kB
+├ ○ /service-areas/opengraph-image                                    1.22 kB         262 kB
+├ ƒ /shopify                                                            266 B         347 kB
+├ ƒ /signup                                                           5.54 kB         284 kB
+├ ○ /sitemap.xml                                                      1.22 kB         262 kB
+├ ƒ /solutions                                                          266 B         347 kB
+├ ● /solutions/[slug]                                                 3.16 kB         350 kB
+├   ├ /solutions/meal-prep
+├   ├ /solutions/catering
+├   ├ /solutions/restaurants
+├   └ [+9 more paths]
+├ ƒ /solutions/[slug]/opengraph-image                                 1.22 kB         262 kB
+├ ○ /solutions/opengraph-image                                        1.22 kB         262 kB
+├ ƒ /status                                                             369 B         347 kB
+├ ƒ /support                                                            369 B         347 kB
+├ ƒ /support/contact                                                    369 B         347 kB
+├ ƒ /support/feature-request                                            369 B         347 kB
+├ ƒ /support/status                                                     369 B         347 kB
+├ ƒ /trust                                                              369 B         347 kB
+├ ƒ /trust/status                                                       369 B         347 kB
+├ ƒ /vendor                                                             266 B         347 kB
+├ ƒ /vendor/analytics                                                 6.73 kB         391 kB
+├ ƒ /vendor/dashboard                                                 11.5 kB         386 kB
+├ ƒ /vendor/finance                                                   8.32 kB         419 kB
+├ ƒ /vendor/finance/instant-payouts                                   4.63 kB         283 kB
+├ ƒ /vendor/orders                                                    6.52 kB         320 kB
+├ ƒ /vendor/orders/[id]                                               3.84 kB         287 kB
+├ ƒ /vendor/products                                                  6.66 kB         320 kB
+├ ƒ /vendor/products/[id]/edit                                          163 B         317 kB
+├ ƒ /vendor/products/new                                                163 B         317 kB
+├ ƒ /vendor/register                                                  4.77 kB         315 kB
+├ ƒ /vendor/register/status                                             410 B         263 kB
+├ ƒ /vendor/settings                                                  9.17 kB         319 kB
+├ ƒ /visual-test/checkout-shell                                       6.14 kB         275 kB
+├ ƒ /visual-test/collection-preview                                     180 B         273 kB
+├ ƒ /visual-test/nav-tokens                                           2.71 kB         265 kB
+└ ƒ /visual-test/theme-presets                                          676 B         261 kB
++ First Load JS shared by all                                          261 kB
+  ├ chunks/4bd1b696-b4fe72abe69cbf61.js                               54.2 kB
+  ├ chunks/52774a7f-02ffebab050bbc0b.js                               37.7 kB
+  ├ chunks/78255-3bd45963aceb8468.js                                   154 kB
+  ├ chunks/main-app-334914e2f41f243d.js                               12.4 kB
+  └ other shared chunks (total)                                       2.05 kB
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+build_state=recorded path=.deploy-state/predeploy-ready.json buildId=IFduWHlTN3HMLDL-PUdMb source=deploy-prebuilt-prod
+✅ Build ID: IFduWHlTN3HMLDL-PUdMb
+
+[5/6] Vercel prebuilt package + deploy...
+✅ vercel.json installCommand → prebuilt-local (no npm ci)
+Vercel CLI 54.2.0
+Detected OpenTelemetry dependency: @opentelemetry/sdk-trace-node@1.30.1, which meets the minimum version requirement of 1.19.0
+Warning: Due to "engines": { "node": ">=22 <23" } in your `package.json` file, the Node.js Version defined in your Project Settings ("24.x") will not apply, Node.js Version "22.x" will be used instead. Learn More: https://vercel.link/node-version
+WARNING: You should not upload the `.next` directory.
+Running "install" command: `node ./node_modules/prisma/build/index.js generate`...
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 99.25s
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+Detected Next.js version: 15.5.16
+Running "bash scripts/vercel-build.sh"
+▶ Vercel remote build (--max-old-space-size=14336, SSG concurrency=1, webpack cache off)
+✓ Reusing existing Next.js build (.next/BUILD_ID=IFduWHlTN3HMLDL-PUdMb)
+[vc] PATH TO REGEXP PATH DIFF @ #712: {"path":"o:orgid.ingest.:region.sentry.io","currentRegExp":"/^o([^\\/#\\?]+?)\\.ingest(?:\\.([^\\/#\\?]+?))\\.sentry\\.io[\\/#\\?]?$/i","newRegExp":"/^o((?:(?!o)[^\\/#\\?])+?)\\.ingest(?:\\.((?:(?!\\.)[^\\/#\\?])+?))\\.sentry\\.io[\\/#\\?]?$/i"}
+[vc] PATH TO REGEXP PATH DIFF @ #712: {"path":"o:orgid.ingest.sentry.io","currentRegExp":"/^o([^\\/#\\?]+?)\\.ingest\\.sentry\\.io[\\/#\\?]?$/i","newRegExp":"/^o((?:(?!o)[^\\/#\\?])+?)\\.ingest\\.sentry\\.io[\\/#\\?]?$/i"}
+Traced Next.js server files in: 247.473ms
+Created all serverless functions in: 21.868s
+Collected static files (public/, static/, .next/static): 155.331ms
+{
+  "status": "ok",
+  "outputDir": "/Users/dmytro/Desktop/2026/KitchenOS/.vercel/output",
+  "outputDirRelative": ".vercel/output",
+  "target": "production",
+  "message": "Build completed successfully.",
+  "next": [
+    {
+      "command": "vercel deploy",
+      "when": "Deploy the build output"
+    }
+  ]
+}
+✅ Prebuilt includes _middleware
+✅ Prebuilt includes /dashboard/food-safety
+Vercel CLI 54.2.0
+Retrieving project…
+Deploying aervio/kitchen-os
+Uploading [--------------------] (0.0B/380.9MB)
+Uploading [=====---------------] (95.2MB/380.9MB)
+Uploading [==========----------] (190.5MB/380.9MB)
+Uploading [===============-----] (285.7MB/380.9MB)
+Uploading [====================] (380.9MB/380.9MB)
+  Inspect     https://vercel.com/aervio/kitchen-os/D7MN13rQ1pnjjEAqyMem5oitUwHn
+▲ Production  https://kitchen-q11np04sj-aervio.vercel.app
+Building…
+Building…
+Running build in Washington, D.C., USA (East) – iad1 (Turbo Build Machine)
+Build machine configuration: 30 cores, 60 GB
+Retrieving list of deployment files...
+Downloading 8697 deployment files...
+Using prebuilt build artifacts from .vercel/output
+Learn more: https://vercel.link/build-output-api
+Deploying outputs...
+Deployment completed
+[2K[1A[2K[G▲ Production  https://kitchen-q11np04sj-aervio.vercel.app
+Completing…
+▲ Aliased     https://os-kitchen.com
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_D7MN13rQ1pnjjEAqyMem5oitUwHn",
+    "url": "https://kitchen-q11np04sj-aervio.vercel.app",
+    "inspectorUrl": "https://vercel.com/aervio/kitchen-os/D7MN13rQ1pnjjEAqyMem5oitUwHn",
+    "readyState": "READY",
+    "target": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_D7MN13rQ1pnjjEAqyMem5oitUwHn"
+  },
+  "message": "Deployment kitchen-q11np04sj-aervio.vercel.app ready.",
+  "next": [
+    {
+      "command": "vercel inspect kitchen-q11np04sj-aervio.vercel.app",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod",
+      "when": "Promote to production"
+    }
+  ]
+}
+
+[6/6] Production health check...
+health.url=https://os-kitchen.com/api/health
+health.httpStatus=200
+health.status=ok
+health.database.ok=true
+health.database.latencyMs=921
+health.rateLimit.mode=upstash
+health.startupReadiness.ok=true
+✅ Production ready (attempt 1)
+
+=========================================
+ DEPLOY COMPLETE — https://os-kitchen.com
+=========================================
