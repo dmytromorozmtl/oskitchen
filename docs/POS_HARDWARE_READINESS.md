@@ -1,6 +1,7 @@
 # POS — Hardware Readiness
 
-Source of truth: `lib/pos/pos-hardware.ts` and `/dashboard/pos/settings/hardware`.
+Source of truth: `lib/pos/pos-hardware.ts` and `/dashboard/pos/settings/hardware`.  
+Certified device catalog: [`hardware-compatibility.md`](./hardware-compatibility.md) · `lib/pos/pos-hardware-certification.ts`.
 
 | Category | Status | Notes |
 | --- | --- | --- |
