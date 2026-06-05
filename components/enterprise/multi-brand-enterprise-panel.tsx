@@ -39,6 +39,9 @@ export function MultiBrandEnterprisePanel({ dashboard }: Props) {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/enterprise/virtual-brand">Virtual Brand Manager</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/brands/new">Add brand</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">

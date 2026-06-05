@@ -132,6 +132,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/menu-planner", labelKey: "nav.menuPlanner", icon: CalendarRange },
       { href: "/dashboard/brands", labelKey: "nav.brands", icon: Store },
       { href: "/dashboard/enterprise/multi-brand", labelKey: "nav.multiBrandCommandCenter", icon: BarChart3 },
+      { href: "/dashboard/enterprise/virtual-brand", labelKey: "nav.virtualBrandManager", icon: Sparkles },
       { href: "/dashboard/enterprise/commissary", labelKey: "nav.commissaryOs", icon: Warehouse },
       { href: "/dashboard/brands/command-center", labelKey: "nav.brandCommandCenter", icon: BarChart3 },
       { href: "/dashboard/nutrition-labels", labelKey: "nav.nutritionLabels", icon: Wheat },
