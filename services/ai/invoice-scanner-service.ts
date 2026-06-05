@@ -327,7 +327,7 @@ export async function createSupplyFromInvoice(
   void auditLog({
     action: "inventory.invoice_scan_supply_created",
     category: "INVENTORY",
-    source: "invoice_scanner",
+    source: "AI_COPILOT",
     actor: { userId: performedById },
     workspaceId,
     entity: {
