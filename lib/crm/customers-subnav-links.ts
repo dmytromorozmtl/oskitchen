@@ -8,6 +8,7 @@ export type CustomersSubnavLink = {
 export const CUSTOMERS_SUBNAV_LINKS: CustomersSubnavLink[] = [
   { href: "/dashboard/customers", label: "Overview", match: "exact" },
   { href: "/dashboard/customers/list", label: "Customers" },
+  { href: "/dashboard/customers/unified-profile", label: "Unified profiles" },
   { href: "/dashboard/customers/segments", label: "Segments" },
   { href: "/dashboard/customers/vip", label: "VIPs" },
   { href: "/dashboard/customers/at-risk", label: "At risk" },

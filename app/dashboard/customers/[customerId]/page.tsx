@@ -103,6 +103,9 @@ export default async function CustomerDetailPage({
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href={`/dashboard/customers/unified-profile/${customer.id}`}>Unified profile</Link>
+          </Button>
           <Badge variant={CUSTOMER_STATUS_BADGE[customer.status]} className="rounded-full">
             {CUSTOMER_STATUS_LABEL[customer.status]}
           </Badge>
