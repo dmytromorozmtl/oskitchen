@@ -192,6 +192,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     title: "Marketing",
     links: [
       { href: "/dashboard/marketing/email-campaigns", labelKey: "nav.emailCampaigns", icon: Mail },
+      { href: "/dashboard/marketing/manager", labelKey: "nav.aiMarketingManager", icon: Sparkles },
       { href: "/dashboard/marketing/holiday-packages", labelKey: "nav.holidayPackages", icon: Sparkles },
     ],
   },

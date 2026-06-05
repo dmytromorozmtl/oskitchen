@@ -5682,3 +5682,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T05:00:00Z | Cycle 34 | Phase 4 | Feature 34: AI Inventory Manager | PASS — waste, theft, shrinkage signals, daily brief
 2026-06-06T05:15:00Z | Cycle 35 | Phase 4 | Feature 35: AI Food Cost Manager | PASS — per-item profit, real-time margin, price recommendations
 2026-06-06T05:30:00Z | Cycle 36 | Phase 4 | Feature 36: AI Labor Manager | PASS — staffing optimization, overtime alerts, daily brief
+2026-06-06T05:45:00Z | Cycle 37 | Phase 4 | Feature 37: AI Marketing Manager | PASS — auto campaigns, weather promos, daily brief

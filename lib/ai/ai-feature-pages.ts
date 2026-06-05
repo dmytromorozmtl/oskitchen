@@ -26,6 +26,11 @@ export const AI_FEATURE_PAGES = [
     pageFile: "app/dashboard/inventory/purchasing-ai/page.tsx",
   },
   {
+    route: "/dashboard/marketing/manager",
+    featureName: "AI Marketing Manager",
+    pageFile: "app/dashboard/marketing/manager/page.tsx",
+  },
+  {
     route: "/dashboard/kitchen/cameras",
     featureName: "Kitchen Camera AI",
     pageFile: "app/dashboard/kitchen/cameras/page.tsx",
