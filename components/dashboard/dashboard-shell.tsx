@@ -38,6 +38,12 @@ import {
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { appIconNavClass } from "@/lib/design/icon-system";
 import { dashboardShellHeaderClass, dashboardShellRootClass } from "@/lib/design/dark-mode-consistency-policy";
+import {
+  createDashboardSwipeHandlers,
+  dashboardChromeButtonClass,
+  dashboardChromeNavTriggerClass,
+} from "@/lib/design/mobile-first-redesign-patterns";
+import { dashboardMainMobileClass } from "@/lib/design/mobile-first-redesign-policy";
 import { APP_NAME } from "@/lib/constants";
 import type { Locale, MessageKey } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
@@ -100,6 +106,14 @@ export function DashboardShell({
   const [navOpen, setNavOpen] = React.useState(false);
   const brand = businessName?.trim() || APP_NAME;
 
+  const navSwipeHandlers = React.useMemo(
+    () =>
+      createDashboardSwipeHandlers({
+        onSwipeLeft: () => setNavOpen(false),
+      }),
+    [],
+  );
+
   React.useEffect(() => {
     setNavOpen(false);
   }, [pathname]);
@@ -143,8 +157,7 @@ export function DashboardShell({
               <SheetTrigger asChild>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="rounded-full gap-2 px-3"
+                  className={dashboardChromeNavTriggerClass}
                   aria-label="Open navigation menu"
                   data-testid="dashboard-nav-trigger"
                 >
@@ -155,6 +168,7 @@ export function DashboardShell({
               <SheetContent
                 side="left"
                 className="flex w-[min(100vw-1rem,20rem)] flex-col gap-0 p-0 sm:max-w-none md:w-80"
+                {...navSwipeHandlers}
               >
                 <SheetHeader className="shrink-0 border-b border-border/70 px-6 py-4 text-left">
                   <SheetTitle className="font-display">
@@ -179,7 +193,7 @@ export function DashboardShell({
                 <div className="shrink-0 border-t border-border/70 p-4">
                   <p className="truncate text-xs text-muted-foreground">{userEmail}</p>
                   <form action={signOutAction} className="mt-3">
-                    <Button variant="outline" size="sm" className="w-full rounded-full">
+                    <Button variant="outline" className="min-h-11 w-full touch-manipulation rounded-full">
                       Log out
                     </Button>
                   </form>
@@ -219,7 +233,7 @@ export function DashboardShell({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full"
+                  className={dashboardChromeButtonClass}
                   aria-label="Open account menu"
                 >
                   <User className={appIconNavClass} />
@@ -337,7 +351,7 @@ export function DashboardShell({
             />
           ) : null}
           <BrandContextProvider>
-            <main className="flex-1 px-4 py-8 pb-24 sm:px-8 lg:pb-8">{children}</main>
+            <main className={dashboardMainMobileClass}>{children}</main>
           </BrandContextProvider>
         </BillingAccessGuard>
       </div>

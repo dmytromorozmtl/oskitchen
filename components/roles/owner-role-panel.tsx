@@ -6,6 +6,7 @@ import { ArrowRight, Crown, LayoutDashboard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { dashboardShortcutTileClass } from "@/lib/design/mobile-first-redesign-patterns";
 import type { OwnerRoleUiSnapshot } from "@/lib/roles/owner-ui-types";
 import { cn } from "@/lib/utils";
 
@@ -81,7 +82,7 @@ export function OwnerRolePanel({ snapshot }: Props) {
         </CardHeader>
         <CardContent className="flex flex-wrap items-center justify-between gap-3">
           <p className="font-medium">{snapshot.nextAction.title}</p>
-          <Button asChild size="sm" className="rounded-full">
+          <Button asChild className="min-h-11 touch-manipulation rounded-full">
             <Link href={snapshot.nextAction.href}>
               {snapshot.nextAction.ctaLabel}
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -129,7 +130,7 @@ export function OwnerRolePanel({ snapshot }: Props) {
                   <p className="font-medium">{action.title}</p>
                   <p className="text-xs text-muted-foreground">{action.reason}</p>
                 </div>
-                <Button asChild variant="outline" size="sm" className="shrink-0 rounded-full">
+                <Button asChild variant="outline" className="min-h-11 shrink-0 touch-manipulation rounded-full">
                   <Link href={action.href}>{action.ctaLabel}</Link>
                 </Button>
               </div>
@@ -151,7 +152,7 @@ export function OwnerRolePanel({ snapshot }: Props) {
             <Link
               key={shortcut.id}
               href={shortcut.href}
-              className="rounded-lg border border-border/80 bg-muted/20 p-3 transition-colors hover:bg-muted/40"
+              className={dashboardShortcutTileClass}
             >
               <p className="text-sm font-medium">{shortcut.label}</p>
               <p className="mt-1 text-xs text-muted-foreground">{shortcut.description}</p>

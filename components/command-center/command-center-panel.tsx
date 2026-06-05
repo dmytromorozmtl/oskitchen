@@ -10,6 +10,7 @@ import type {
   CommandCenterTicker,
   CommandCenterTickerTone,
 } from "@/lib/command-center/command-center-types";
+import { dashboardChromeButtonClass } from "@/lib/design/mobile-first-redesign-patterns";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -132,7 +133,14 @@ export function CommandCenterPanel({ snapshot }: Props) {
                   <p className="font-semibold text-slate-200">{alert.title}</p>
                   <p className="text-slate-500">{alert.detail}</p>
                 </div>
-                <Button asChild variant="outline" size="sm" className="h-7 rounded-full border-slate-700 bg-slate-900 text-[10px]">
+                <Button
+                  asChild
+                  variant="outline"
+                  className={cn(
+                    dashboardChromeButtonClass,
+                    "h-auto min-h-11 border-slate-700 bg-slate-900 px-3 text-[10px]",
+                  )}
+                >
                   <Link href={alert.href}>Open</Link>
                 </Button>
               </div>
