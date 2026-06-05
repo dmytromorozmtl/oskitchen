@@ -372,7 +372,13 @@ export function DashboardSidebarNav({
 
   const defaultOpenForGroup = (id: string) => {
     if (id === "internal" && !navContext.fullNavAccess) return false;
-    return id === "today" || id === "ordersSales" || id === "menus" || id === "kitchen";
+    return (
+      id === "core" ||
+      id === "operations" ||
+      id === "menus" ||
+      id === "commerce" ||
+      id === "customers"
+    );
   };
 
   return (

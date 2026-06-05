@@ -13,7 +13,7 @@ export const DARK_MODE_CONSISTENCY_POLICY_ID = "dark-mode-consistency-des24-v1" 
 export const dashboardShellRootClass = cn("flex min-h-screen bg-background text-foreground");
 
 export const dashboardShellSidebarClass = cn(
-  "relative hidden w-64 shrink-0 border-r border-border/70 bg-background lg:flex lg:flex-col",
+  "relative hidden w-64 shrink-0 border-r border-border/70 bg-background md:flex md:flex-col",
 );
 
 export const dashboardShellHeaderClass = cn(

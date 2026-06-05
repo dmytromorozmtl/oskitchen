@@ -172,7 +172,7 @@ export function DashboardShell({
           <div className="flex min-w-0 items-center gap-2">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="rounded-full lg:hidden">
+                <Button variant="outline" size="icon" className="rounded-full md:hidden">
                   <MenuSquare className={appIconNavClass} />
                 </Button>
               </SheetTrigger>
