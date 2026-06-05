@@ -16,6 +16,7 @@ export function buildPosSubnavLinks(granted: ReadonlySet<PermissionKey>): PosNav
     { href: "/dashboard/pos", label: "Overview", match: "exact" },
     { href: "/dashboard/pos/terminal", label: "Terminal" },
     { href: "/dashboard/pos/tablet", label: "Tablet" },
+    { href: "/dashboard/pos/mobile", label: "Mobile" },
     { href: "/dashboard/pos/tabs", label: "Tabs" },
     { href: "/dashboard/pos/handheld", label: "Handheld" },
   ];

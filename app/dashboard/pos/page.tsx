@@ -68,6 +68,9 @@ export default async function PosOverviewPage() {
               <Link href="/dashboard/pos/tablet">Tablet POS</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full">
+              <Link href="/dashboard/pos/mobile">Mobile POS</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full">
               <Link href="/dashboard/pos/handheld">Handheld POS</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full">

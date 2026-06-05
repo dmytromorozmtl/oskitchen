@@ -42,6 +42,7 @@ export const posCheckoutButtonClass = cn(
 export const POS_TOUCH_TARGET_CONSUMERS = [
   "components/dashboard/pos-terminal-client.tsx",
   "components/pos/pos-tablet-client.tsx",
+  "components/pos/pos-mobile-client.tsx",
   "components/pos/handheld-ordering-client.tsx",
   "components/pos/tab-panel.tsx",
   "components/pos/quick-order-buttons.tsx",
