@@ -128,6 +128,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/products", labelKey: "nav.products", icon: ShoppingBag },
       { href: "/dashboard/menu-planner", labelKey: "nav.menuPlanner", icon: CalendarRange },
       { href: "/dashboard/brands", labelKey: "nav.brands", icon: Store },
+      { href: "/dashboard/enterprise/multi-brand", labelKey: "nav.multiBrandCommandCenter", icon: BarChart3 },
       { href: "/dashboard/brands/command-center", labelKey: "nav.brandCommandCenter", icon: BarChart3 },
       { href: "/dashboard/nutrition-labels", labelKey: "nav.nutritionLabels", icon: Wheat },
     ],

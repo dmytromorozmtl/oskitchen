@@ -70,6 +70,9 @@ export function MultiLocationEnterprisePanel({ dashboard }: Props) {
             </a>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/enterprise/multi-brand">Multi-brand</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/enterprise/franchise">Franchise suite</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
