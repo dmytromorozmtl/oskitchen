@@ -5650,3 +5650,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-05T15:11:37Z | Cycle 2 | Phase 1 | Feature 2: DoorDash LIVE | PASS — OAuth, webhook→KDS, Drive API, menu sync, status push, registry LIVE
 2026-06-05T16:45:00Z | Cycle 3 | Phase 1 | Feature 3: Skip/Just Eat LIVE | PASS — OAuth, webhook→KDS, status sync, registry PLACEHOLDER→LIVE (16 BETA + 3 LIVE)
 2026-06-05T17:30:00Z | Cycle 4 | Phase 1 | Feature 4: Grubhub LIVE | PASS — OAuth, webhook→KDS, menu sync, status push, registry BETA→LIVE (15 BETA + 4 LIVE)
+2026-06-05T18:15:00Z | Cycle 5 | Phase 1 | Feature 5: Shopify LIVE | PASS — dev store, HMAC webhooks, KDS import, inventory sync, registry→LIVE (15 BETA + 5 LIVE)

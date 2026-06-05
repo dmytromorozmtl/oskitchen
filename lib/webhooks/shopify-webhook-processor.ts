@@ -13,9 +13,9 @@ import {
   handleShopifyMarketsWebhookEvent,
 } from "@/lib/webhooks/shopify-markets-webhook-service";
 import { touchShopifyMarketsWebhookDelivery } from "@/services/integrations/shopify-markets-webhook-registry-service";
-import {
-  normalizeShopifyRestOrder,
-} from "@/services/integrations/shopify";
+import { importShopifyOrderToKitchen } from "@/services/integrations/shopify/kitchen-import.service";
+import { syncShopifyInventoryFromOrder } from "@/services/integrations/shopify/inventory-sync.service";
+import { normalizeShopifyRestOrder } from "@/services/integrations/shopify";
 
 /**
  * Shopify webhook business logic after persistence + HMAC verification.
@@ -70,11 +70,33 @@ export async function executeShopifyWebhookBusinessLogic(params: {
   if (params.topic === "orders/create" || params.topic === "orders/updated") {
     const order = params.payload as Record<string, unknown>;
     const normalized = normalizeShopifyRestOrder(order);
-    await persistNormalizedExternalOrder({
+    const external = await persistNormalizedExternalOrder({
       userId: params.userId,
       connectionId: conn.id,
       normalized,
     });
+
+    await importShopifyOrderToKitchen({
+      userId: params.userId,
+      workspaceId: conn.workspaceId,
+      connectionId: conn.id,
+      normalized,
+      externalOrderRecordId: external.id,
+    }).catch((err) => {
+      console.error("shopify_kitchen_import_failed", err);
+    });
+
+    if (params.topic === "orders/create") {
+      await syncShopifyInventoryFromOrder({
+        userId: params.userId,
+        connectionId: conn.id,
+        normalized,
+        rawPayload: params.payload,
+      }).catch((err) => {
+        console.error("shopify_inventory_sync_failed", err);
+      });
+    }
+
     try {
       await stageWebhookOrderIngest({
         userId: params.userId,

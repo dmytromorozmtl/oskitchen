@@ -77,7 +77,7 @@ describe("beta governance smoke chain capstone integration (QA-45)", () => {
     expect(BETA_GOVERNANCE_SMOKE_CHAIN_INTEGRATION_POLICY_ID).toBe(
       "beta-governance-smoke-chain-integration-v1",
     );
-    expect(summaries.dod.livePromotionCount).toBe(4);
+    expect(summaries.dod.livePromotionCount).toBe(5);
     expect(summaries.registry.placeholderCount).toBe(0);
   });
 });

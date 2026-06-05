@@ -125,7 +125,7 @@ export function betaGovernanceSmokeChainWithinPassContract(
     contract.integrityPassed &&
     contract.dodPassed &&
     contract.expectedBetaCount === BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT &&
-    contract.livePromotionCount === 4 &&
+    contract.livePromotionCount === 5 &&
     contract.placeholderCount === 0
   );
 }

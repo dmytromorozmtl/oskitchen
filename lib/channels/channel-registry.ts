@@ -148,7 +148,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     supportsPayments: false,
     supportsLiveMode: true,
     isPlaceholder: false,
-    docsUrl: "/integrations/shopify",
+    docsUrl: "/docs/SHOPIFY_INTEGRATION.md",
     setupRoute: "/dashboard/integrations/shopify",
     webhookPathHints: [
       "/api/webhooks/shopify/orders-create",

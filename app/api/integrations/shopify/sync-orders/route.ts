@@ -11,6 +11,7 @@ import {
   fetchOrdersGraphQL,
   normalizeShopifyOrder,
 } from "@/services/integrations/shopify";
+import { importShopifyOrderToKitchen } from "@/services/integrations/shopify/kitchen-import.service";
 import { beginChannelSyncJob, finishChannelSyncJob } from "@/services/channels/sync-orchestrator";
 
 const bodySchema = z.object({
@@ -52,13 +53,20 @@ export async function POST(request: Request) {
     const nodes = await fetchOrdersGraphQL(creds, 50);
     for (const node of nodes) {
       const normalized = normalizeShopifyOrder(node as Record<string, unknown>);
-      await persistNormalizedExternalOrder({
+      const external = await persistNormalizedExternalOrder({
         userId: owned.conn.userId,
         connectionId: owned.conn.id,
         normalized,
       });
+      const kitchen = await importShopifyOrderToKitchen({
+        userId: owned.conn.userId,
+        workspaceId: owned.conn.workspaceId,
+        connectionId: owned.conn.id,
+        normalized,
+        externalOrderRecordId: external.id,
+      });
       entries.push({ raw: node, normalized });
-      imported++;
+      if (kitchen.imported) imported++;
     }
 
     await stageSyncJobOrders({

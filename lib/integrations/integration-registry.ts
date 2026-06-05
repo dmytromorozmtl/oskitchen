@@ -39,6 +39,17 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/grubhub",
   },
   {
+    id: "shopify",
+    name: "Shopify",
+    status: "LIVE",
+    requiredEnv: [
+      "SHOPIFY_SHOP_DOMAIN",
+      "SHOPIFY_ADMIN_ACCESS_TOKEN",
+      "SHOPIFY_APP_SECRET",
+    ],
+    setupRoute: "/dashboard/integrations/shopify",
+  },
+  {
     id: "uber-eats",
     name: "Uber Eats",
     status: "LIVE",
@@ -177,6 +188,7 @@ export function isBetaIntegration(id: string): boolean {
 const PROVIDER_KEY_TO_INTEGRATION_ID: Partial<Record<string, string>> = {
   doordash: "doordash",
   grubhub: "grubhub",
+  shopify: "shopify",
   skip: "skip",
   "uber-eats": "uber-eats",
 };

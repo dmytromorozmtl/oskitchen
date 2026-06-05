@@ -35,25 +35,28 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   doordash: "app/dashboard/integrations/doordash/page.tsx",
   skip: "app/dashboard/integrations/skip/page.tsx",
   grubhub: "app/dashboard/integrations/grubhub/page.tsx",
+  shopify: "app/dashboard/integrations/shopify/page.tsx",
 };
 
 describe("integration beta badge", () => {
   it("tracks fifteen BETA registry integrations", () => {
     expect(BETA_INTEGRATION_IDS).toHaveLength(15);
-    expect(isBetaIntegration("uber-eats")).toBe(false);
-    expect(isBetaIntegration("doordash")).toBe(false);
-    expect(isBetaIntegration("skip")).toBe(false);
+    expect(isBetaIntegration("shopify")).toBe(false);
     expect(isBetaIntegration("grubhub")).toBe(false);
   });
 
-  it("tracks four LIVE registry integrations", () => {
-    expect(LIVE_INTEGRATION_IDS.sort()).toEqual(["doordash", "grubhub", "skip", "uber-eats"]);
+  it("tracks five LIVE registry integrations", () => {
+    expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
+      "doordash",
+      "grubhub",
+      "shopify",
+      "skip",
+      "uber-eats",
+    ]);
   });
 
   it("maps delivery provider keys to registry status", () => {
-    expect(isBetaIntegrationProvider("doordash")).toBe(false);
-    expect(isBetaIntegrationProvider("skip")).toBe(false);
-    expect(isBetaIntegrationProvider("uber-eats")).toBe(false);
+    expect(isBetaIntegrationProvider("shopify")).toBe(false);
     expect(isBetaIntegrationProvider("grubhub")).toBe(false);
   });
 
