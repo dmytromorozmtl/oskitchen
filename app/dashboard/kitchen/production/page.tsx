@@ -28,8 +28,8 @@ export default async function KdsProductionViewPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Production view</h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Station load, bottleneck detection, and estimated clear times for active kitchen prep
-            tickets.
+            Multi-station routing across 12 kitchen lines — load, bottlenecks, and estimated clear
+            times for active prep tickets.
           </p>
         </div>
         <Button asChild variant="outline" size="sm" className="rounded-full">

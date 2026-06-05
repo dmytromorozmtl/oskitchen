@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { KDS_PRODUCTION_VIEW_ROUTE } from "@/lib/kitchen/kds-production-view";
 import type { ProductionViewSnapshot } from "@/lib/kitchen/kds-production-view";
+import { KDS_MULTI_STATION_MIN_STATIONS } from "@/lib/kitchen/kds-multi-station-policy";
 import { cn } from "@/lib/utils";
 
 type ProductionViewClientProps = {
@@ -25,6 +26,15 @@ function formatEta(minutes: number): string {
 export function ProductionViewClient({ snapshot }: ProductionViewClientProps) {
   return (
     <div className="space-y-6" data-testid="kds-production-view-root">
+      {snapshot.stations.length >= KDS_MULTI_STATION_MIN_STATIONS ? (
+        <p
+          className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
+          data-testid="kds-multi-station-count"
+        >
+          Multi-station routing · {snapshot.stations.length} stations
+        </p>
+      ) : null}
+
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="border-border/80 shadow-sm">
           <CardHeader className="pb-2">
@@ -68,15 +78,18 @@ export function ProductionViewClient({ snapshot }: ProductionViewClientProps) {
         </Card>
       </div>
 
-      {snapshot.stations.length === 0 ? (
+      {snapshot.totalActive === 0 ? (
         <Card className="border-dashed border-border/80 shadow-sm" data-testid="kds-production-view-empty">
           <CardContent className="py-10 text-center text-sm text-muted-foreground">
-            No active production tickets — new POS and channel orders will populate station load here.
+            No active production tickets — new POS and channel orders will route across{" "}
+            {snapshot.stations.length} kitchen stations here.
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-          {snapshot.stations.map((station) => (
+          {snapshot.stations
+            .filter((station) => station.activeItems > 0)
+            .map((station) => (
             <Card
               key={station.station}
               className={cn(

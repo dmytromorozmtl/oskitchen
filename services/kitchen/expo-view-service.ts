@@ -4,8 +4,10 @@ import {
   type ExpoViewSnapshot,
   type ExpoViewTicketInput,
 } from "@/lib/kitchen/kds-expo-view";
+import { routeKdsWorkItemToStation } from "@/lib/kitchen/kds-multi-station";
 import { productionWorkItemListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { getDailyKdsOrders } from "@/services/kitchen-screen/daily-kds-service";
+import { loadKdsStationRegistry } from "@/services/kitchen/multi-station-service";
 
 const EXPO_WORK_STATUSES = ["TO_PREP", "IN_PROGRESS", "READY", "HANDOFF", "PACK_HANDOFF", "HOLD"] as const;
 
@@ -17,9 +19,10 @@ function elapsedSecondsFrom(iso: string, nowMs: number): number {
 
 export async function loadKdsExpoView(userId: string): Promise<ExpoViewSnapshot> {
   const nowMs = Date.now();
-  const [orders, workWhere] = await Promise.all([
+  const [orders, workWhere, stationRegistry] = await Promise.all([
     getDailyKdsOrders(userId),
     productionWorkItemListWhereForOwner(userId),
+    loadKdsStationRegistry(userId),
   ]);
 
   const orderIds = new Set(orders.map((order) => order.id));
@@ -60,6 +63,21 @@ export async function loadKdsExpoView(userId: string): Promise<ExpoViewSnapshot>
   });
 
   for (const row of workRows) {
+    const routed = routeKdsWorkItemToStation(
+      {
+        id: row.id,
+        title: row.title,
+        station: row.station,
+        status: row.status,
+        priority: row.priority,
+        quantity: 1,
+        dueAtIso: row.dueAt ? row.dueAt.toISOString() : null,
+        createdAtIso: row.createdAt.toISOString(),
+        startedAtIso: null,
+        productCategory: null,
+      },
+      stationRegistry,
+    );
     const anchorIso = row.status === "READY" || row.status === "HANDOFF"
       ? row.updatedAt.toISOString()
       : row.createdAt.toISOString();
@@ -67,12 +85,12 @@ export async function loadKdsExpoView(userId: string): Promise<ExpoViewSnapshot>
       id: row.id,
       kind: "work_item",
       title: row.title,
-      subtitle: row.station?.trim() || row.order?.customerName?.trim() || null,
+      subtitle: routed.routedStation || row.order?.customerName?.trim() || null,
       status: row.status,
       elapsedSeconds: elapsedSecondsFrom(anchorIso, nowMs),
       dueAtIso: row.dueAt ? row.dueAt.toISOString() : null,
       tableName: null,
-      itemSummary: row.station?.trim() ?? null,
+      itemSummary: `${routed.routedStation} · ${routed.foodType}`,
       priority: row.priority.toLowerCase(),
     });
   }
