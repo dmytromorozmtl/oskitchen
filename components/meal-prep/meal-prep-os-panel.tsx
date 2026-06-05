@@ -1,27 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarDays, Package, Route, Users, UtensilsCrossed } from "lucide-react";
+import { CalendarClock, Clock, LineChart, Salad, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { CateringOsDashboard } from "@/lib/catering/catering-os-types";
+import type { MealPrepOsDashboard } from "@/lib/meal-prep/meal-prep-os-types";
 import { cn, formatCurrency } from "@/lib/utils";
 
 type Props = {
-  dashboard: CateringOsDashboard;
+  dashboard: MealPrepOsDashboard;
 };
 
-const MODULE_ICONS: Record<CateringOsDashboard["modules"][number]["module"], typeof CalendarDays> = {
-  events: CalendarDays,
-  clients: Users,
-  packing: Package,
-  routes: Route,
+const MODULE_ICONS: Record<MealPrepOsDashboard["modules"][number]["module"], typeof Salad> = {
+  weekly_menu: Salad,
+  cutoffs: Clock,
+  forecasting: LineChart,
+  subscriptions: Users,
 };
 
 const STATUS_VARIANT: Record<
-  CateringOsDashboard["modules"][number]["status"],
+  MealPrepOsDashboard["modules"][number]["status"],
   "default" | "secondary" | "destructive" | "outline"
 > = {
   healthy: "default",
@@ -30,34 +30,30 @@ const STATUS_VARIANT: Record<
   idle: "outline",
 };
 
-export function CateringOsPanel({ dashboard }: Props) {
-  const { modules, summary, alerts, upcomingEvents, topClients, basePath } = dashboard;
+export function MealPrepOsPanel({ dashboard }: Props) {
+  const { modules, summary, alerts, weeklyMenus, upcomingCycles, basePath } = dashboard;
 
   return (
-    <div className="space-y-6" data-testid="catering-os-panel">
+    <div className="space-y-6" data-testid="meal-prep-os-panel">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="flex items-center gap-2 text-3xl font-semibold tracking-tight">
-            <UtensilsCrossed className="h-8 w-8 text-primary" aria-hidden />
-            Catering OS
+            <CalendarClock className="h-8 w-8 text-primary" aria-hidden />
+            Meal Prep OS
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Events, clients, packing, and routes on one screen — from quote pipeline through production
-            handoff.
+            Weekly menus, preorder cutoffs, demand forecasting, and subscription cycles on one screen.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild className="rounded-full">
-            <Link href="/dashboard/catering-quotes/new">New quote</Link>
+            <Link href="/dashboard/meal-plans/new">New meal plan</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
-            <Link href="/dashboard/catering-quotes">Quote center</Link>
+            <Link href="/dashboard/menus">Weekly menus</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
-            <Link href="/dashboard/meal-prep">Meal Prep OS</Link>
-          </Button>
-          <Button asChild variant="outline" size="sm" className="rounded-full">
-            <Link href="/dashboard/enterprise/commissary">Commissary OS</Link>
+            <Link href="/dashboard/catering">Catering OS</Link>
           </Button>
         </div>
       </div>
@@ -65,38 +61,38 @@ export function CateringOsPanel({ dashboard }: Props) {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Pipeline</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Recurring MRR</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold tabular-nums">{formatCurrency(summary.pipelineValue)}</p>
-            <p className="text-xs text-muted-foreground">{summary.openQuotes} open quotes</p>
+            <p className="text-2xl font-bold tabular-nums">{formatCurrency(summary.recurringRevenue)}</p>
+            <p className="text-xs text-muted-foreground">{summary.activePlans} active plans</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Events</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">This week</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold tabular-nums">{summary.upcomingEvents}</p>
-            <p className="text-xs text-muted-foreground">{summary.deliveryEvents} delivery</p>
+            <p className="text-2xl font-bold tabular-nums">{summary.mealsDueThisWeek}</p>
+            <p className="text-xs text-muted-foreground">{summary.cyclesDueThisWeek} cycles</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Clients</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Weekly menus</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold tabular-nums">{summary.activeClients}</p>
-            <p className="text-xs text-muted-foreground">{summary.acceptedQuotes} accepted</p>
+            <p className="text-2xl font-bold tabular-nums">{summary.weeklyMenuCount}</p>
+            <p className="text-xs text-muted-foreground">{summary.cutoffMenusSoon} deadlines soon</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Ops today</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Forecast</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold tabular-nums">{summary.packingTasksToday}</p>
-            <p className="text-xs text-muted-foreground">{summary.routesPlannedToday} routes</p>
+            <p className="text-2xl font-bold tabular-nums">{summary.forecastCommittedMeals}</p>
+            <p className="text-xs text-muted-foreground">committed meals (14d)</p>
           </CardContent>
         </Card>
       </div>
@@ -138,7 +134,7 @@ export function CateringOsPanel({ dashboard }: Props) {
       {alerts.length > 0 ? (
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Catering alerts</CardTitle>
+            <CardTitle className="text-base">Meal prep alerts</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
@@ -161,29 +157,26 @@ export function CateringOsPanel({ dashboard }: Props) {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Upcoming events</CardTitle>
-            <CardDescription>Quotes with event dates in the next 30 days.</CardDescription>
+            <CardTitle className="text-base">Weekly menus</CardTitle>
+            <CardDescription>WEEKLY_PREORDER menus with preorder deadlines.</CardDescription>
           </CardHeader>
           <CardContent>
-            {upcomingEvents.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No events scheduled — add dates to open quotes.</p>
+            {weeklyMenus.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No weekly menus — create one under Menus.</p>
             ) : (
               <ul className="space-y-2">
-                {upcomingEvents.map((event) => (
-                  <li key={event.quoteId} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
-                    <div>
-                      <p className="font-medium">{event.eventName}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {event.eventDateIso} · {event.customerName}
-                        {event.guestCount != null ? ` · ${event.guestCount} guests` : ""}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="capitalize">
-                        {event.status.toLowerCase()}
+                {weeklyMenus.map((menu) => (
+                  <li key={menu.menuId} className="rounded-md border px-3 py-2 text-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-medium">{menu.title}</p>
+                      <Badge variant={menu.published ? "default" : "outline"}>
+                        {menu.published ? "Published" : "Draft"}
                       </Badge>
-                      <p className="mt-1 text-xs tabular-nums">{formatCurrency(event.total)}</p>
                     </div>
+                    <p className="text-xs text-muted-foreground">
+                      {menu.startDateIso} → {menu.endDateIso} · cutoff {menu.preorderDeadlineIso} ·{" "}
+                      {menu.productCount} items
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -193,21 +186,25 @@ export function CateringOsPanel({ dashboard }: Props) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Top clients</CardTitle>
-            <CardDescription>B2B accounts ranked by open pipeline value.</CardDescription>
+            <CardTitle className="text-base">Upcoming cycles</CardTitle>
+            <CardDescription>Subscription cycles in the next 14 days.</CardDescription>
           </CardHeader>
           <CardContent>
-            {topClients.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No clients yet — create catering quotes with company names.</p>
+            {upcomingCycles.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No upcoming cycles — add meal plans or wait for renewals.</p>
             ) : (
               <ul className="space-y-2">
-                {topClients.map((client) => (
-                  <li key={client.key} className="rounded-md border px-3 py-2 text-sm">
-                    <p className="font-medium">{client.displayName}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {client.quoteCount} quote{client.quoteCount === 1 ? "" : "s"} · {formatCurrency(client.pipelineValue)}
-                      {client.lastEventDateIso ? ` · next ${client.lastEventDateIso}` : ""}
-                    </p>
+                {upcomingCycles.map((cycle) => (
+                  <li key={cycle.cycleId} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
+                    <div>
+                      <p className="font-medium">{cycle.planName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {cycle.cycleStartIso} · {cycle.customerName} · {cycle.mealsPlanned} meals
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="capitalize">
+                      {cycle.status.toLowerCase().replace(/_/g, " ")}
+                    </Badge>
                   </li>
                 ))}
               </ul>
@@ -216,7 +213,9 @@ export function CateringOsPanel({ dashboard }: Props) {
         </Card>
       </div>
 
-      <p className="text-xs text-muted-foreground">{basePath}</p>
+      <p className="text-xs text-muted-foreground">
+        Cutoff {summary.storefrontCutoff ?? "not set"} · {summary.draftsNeeded} selections due · {basePath}
+      </p>
     </div>
   );
 }
