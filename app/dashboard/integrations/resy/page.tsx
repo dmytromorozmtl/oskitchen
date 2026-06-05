@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { ResySyncPanel } from "@/components/integrations/resy-sync-panel";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -16,9 +17,14 @@ export default async function ResyIntegrationPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <h1 className="text-2xl font-semibold">Resy</h1>
-        <BetaBadge />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl font-semibold">Resy</h1>
+          <LiveBadge title="LIVE — OAuth, reservation sync, waitlist" />
+        </div>
+        <Button asChild size="sm" className="rounded-full">
+          <Link href="/dashboard/integrations/resy/live">Open LIVE dashboard</Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -29,7 +35,7 @@ export default async function ResyIntegrationPage() {
             <p className="text-emerald-600">RESY_API_KEY and RESY_VENUE_ID detected</p>
           ) : (
             <p className="text-muted-foreground">
-              Set RESY_API_KEY and RESY_VENUE_ID for venue reservation sync
+              Set RESY_CLIENT_ID, RESY_CLIENT_SECRET, and RESY_VENUE_ID for LIVE OAuth
             </p>
           )}
           {!sf ? (

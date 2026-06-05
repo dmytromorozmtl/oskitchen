@@ -118,8 +118,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "resy",
     name: "Resy",
-    status: "BETA",
-    requiredEnv: ["RESY_API_KEY", "RESY_VENUE_ID"],
+    status: "LIVE",
+    requiredEnv: [
+      "RESY_CLIENT_ID",
+      "RESY_CLIENT_SECRET",
+      "RESY_VENUE_ID",
+      "RESY_WEBHOOK_SECRET",
+    ],
     setupRoute: "/dashboard/integrations/resy",
   },
   {

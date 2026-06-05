@@ -16,7 +16,7 @@ describe("beta integrations integrity smoke integration policy (QA-42)", () => {
     expect(BETA_INTEGRATIONS_INTEGRITY_SMOKE_ERA17_SUMMARY_ARTIFACT).toBe(
       "artifacts/smoke-beta-integrations-integrity-summary.json",
     );
-    expect(BETA_INTEGRATIONS_INTEGRITY_EXPECTED_BETA_COUNT).toBe(12);
+    expect(BETA_INTEGRATIONS_INTEGRITY_EXPECTED_BETA_COUNT).toBe(11);
   });
 
   it("evaluates pass contract for integrity_complete with eighteen BETA rows", () => {

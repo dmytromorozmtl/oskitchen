@@ -17,7 +17,7 @@ export const BETA_INTEGRATION_ENV_READINESS_SMOKE_ERA17_SUMMARY_ARTIFACT =
 export const BETA_INTEGRATION_ENV_READINESS_SMOKE_ERA17_NPM_SCRIPT =
   "smoke:beta-integration-env-readiness" as const;
 
-export const BETA_INTEGRATION_ENV_READINESS_SMOKE_ERA17_EXPECTED_COUNT = 12 as const;
+export const BETA_INTEGRATION_ENV_READINESS_SMOKE_ERA17_EXPECTED_COUNT = 11 as const;
 
 export const BETA_INTEGRATION_ENV_READINESS_SMOKE_ERA17_CYCLE_RUNBOOK_STEPS = [
   "Review Integration Health → BETA integration env readiness panel for missing platform vars.",

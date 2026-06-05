@@ -225,6 +225,7 @@ enum IntegrationProvider {
   QUICKBOOKS
   XERO
   OPENTABLE
+  RESY
   MANUAL
 }
 
