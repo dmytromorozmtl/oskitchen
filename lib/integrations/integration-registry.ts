@@ -83,8 +83,8 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "xero",
     name: "Xero",
-    status: "BETA",
-    requiredEnv: ["XERO_CLIENT_ID"],
+    status: "LIVE",
+    requiredEnv: ["XERO_CLIENT_ID", "XERO_CLIENT_SECRET"],
     setupRoute: "/dashboard/integrations/xero",
   },
   {

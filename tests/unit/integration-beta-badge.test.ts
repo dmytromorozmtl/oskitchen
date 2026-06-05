@@ -12,7 +12,6 @@ import {
 const ROOT = process.cwd();
 
 const BETA_INTEGRATION_PAGES: Record<string, string> = {
-  xero: "app/dashboard/integrations/xero/page.tsx",
   "7shifts": "app/dashboard/integrations/7shifts/page.tsx",
   homebase: "app/dashboard/integrations/homebase/page.tsx",
   klaviyo: "app/dashboard/integrations/klaviyo/page.tsx",
@@ -36,15 +35,16 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   shopify: "app/dashboard/integrations/shopify/page.tsx",
   woocommerce: "app/dashboard/integrations/woocommerce/page.tsx",
   quickbooks: "app/dashboard/integrations/quickbooks/page.tsx",
+  xero: "app/dashboard/integrations/xero/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks fourteen BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(14);
-    expect(isBetaIntegration("quickbooks")).toBe(false);
+  it("tracks thirteen BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(13);
+    expect(isBetaIntegration("xero")).toBe(false);
   });
 
-  it("tracks seven LIVE registry integrations", () => {
+  it("tracks eight LIVE registry integrations", () => {
     expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
       "doordash",
       "grubhub",
@@ -53,10 +53,11 @@ describe("integration beta badge", () => {
       "skip",
       "uber-eats",
       "woocommerce",
+      "xero",
     ]);
   });
 
-  it("renders BetaBadge on all fourteen BETA integration pages", () => {
+  it("renders BetaBadge on all thirteen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const source = readFileSync(join(ROOT, rel), "utf8");
       expect(source, id).toContain("BetaBadge");

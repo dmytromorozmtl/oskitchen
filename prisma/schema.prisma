@@ -223,6 +223,7 @@ enum IntegrationProvider {
   GRUBHUB
   SKIP
   QUICKBOOKS
+  XERO
   MANUAL
 }
 

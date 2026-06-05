@@ -14,7 +14,7 @@ describe("final orchestrator FINAL-05 BETA governance smoke chain audit", () => 
     );
     expect(FINAL_ORCHESTRATOR_PHASES[4]?.id).toBe("FINAL-05");
     expect(FINAL_ORCHESTRATOR_PHASES[4]?.taskSlot).toBe(199);
-    expect(BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT).toBe(14);
+    expect(BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT).toBe(13);
   });
 
   it("passes BETA governance smoke chain audit against repo", () => {
