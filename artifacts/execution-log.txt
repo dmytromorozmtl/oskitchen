@@ -5597,3 +5597,12 @@ Result: DONE — Poster Gaps 9/10
 Files: app/landing/ghost-kitchen/page.tsx (upgraded), ghost-kitchen-landing.tsx, ghost-kitchen-landing-content.ts
 Tests: unit 2/2 pass (ghost-kitchen-landing)
 
+---
+POSTER GAP Cycle: 10
+Timestamp: 2026-06-05T07:57:00.000Z
+Feature: landing-bar
+Action: feat: Bar / Nightclub landing page
+Result: DONE — Poster Gaps 10/10
+Files: app/landing/bar/page.tsx, bar-landing.tsx, bar-landing-content.ts
+Tests: unit 2/2 pass (bar-landing)
+
