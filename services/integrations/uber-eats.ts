@@ -38,7 +38,7 @@ export async function testConnection(creds: UberEatsCredentials): Promise<{
     if (res.ok) {
       return {
         ok: true,
-        message: "OAuth token exchange succeeded (BETA). Confirm store UUID and webhook signing in Uber developer portal.",
+        message: "OAuth token exchange succeeded (LIVE). Confirm store UUID and webhook signing in Uber developer portal.",
       };
     }
     return {

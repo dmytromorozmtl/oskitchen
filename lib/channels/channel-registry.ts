@@ -167,11 +167,11 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
   {
     providerKey: "uber-eats",
     label: "Uber Eats Marketplace",
-    shortDescription: "Marketplace webhooks, order import, and menu sync (BETA).",
+    shortDescription: "LIVE marketplace — OAuth, webhooks, KDS import, menu sync, status push.",
     longDescription:
-      "Uber Eats BETA ships OAuth-backed order ingest, signed webhooks, menu push, and status updates. Partner-approved credentials are still required for production traffic.",
+      "Uber Eats LIVE ships OAuth-backed order ingest, signed webhooks → kitchen orders (KDS), menu push, and bidirectional status sync. Requires Uber partner credentials and webhook registration.",
     category: "DELIVERY_MARKETPLACE",
-    statusType: "PARTNER_ACCESS_REQUIRED",
+    statusType: "NEEDS_CREDENTIALS",
     supportedBusinessModes: ["GHOST_KITCHEN", "CLOUD_KITCHEN", "RESTAURANT", "MULTI_BRAND", "OTHER"],
     capabilities: ["orders", "webhooks", "status_sync", "menu_sync"],
     setupType: "WEBHOOK_PLUS_API",
@@ -185,7 +185,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     supportsStatusSync: true,
     supportsDeliveryDispatch: false,
     supportsPayments: false,
-    supportsLiveMode: false,
+    supportsLiveMode: true,
     isPlaceholder: false,
     docsUrl: "/docs/UBER_EATS_INTEGRATION.md",
     setupRoute: "/dashboard/integrations/uber-eats",

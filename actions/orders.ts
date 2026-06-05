@@ -265,6 +265,16 @@ export async function updateOrderStatus(
       status: nextStatus,
     }).catch(() => undefined);
 
+    const { syncUberEatsStatusFromKitchenOrder } = await import(
+      "@/services/integrations/uber-eats/status-sync.service"
+    );
+    await syncUberEatsStatusFromKitchenOrder({
+      userId,
+      channelProvider: prev.channelProvider,
+      externalOrderId: prev.externalOrderIdExt,
+      status: nextStatus,
+    }).catch(() => undefined);
+
     if (nextStatus === "COMPLETED") {
       await recomputeMetricsForOrderEmail(userId, prevPii.customerEmail);
     }

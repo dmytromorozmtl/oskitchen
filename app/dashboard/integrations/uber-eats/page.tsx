@@ -6,7 +6,7 @@ import { saveUberEatsSettings } from "@/actions/integrations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import {
   Card,
@@ -50,17 +50,17 @@ export default async function UberEatsIntegrationPage() {
       {capability.placeholderMode ? (
         <PlaceholderBanner
           feature="Uber Eats integration"
-          detail="Configure UBER_EATS_CLIENT_ID, UBER_EATS_CLIENT_SECRET, and UBER_EATS_STORE_ID to enable BETA order ingest and menu sync."
+          detail="Configure UBER_EATS_CLIENT_ID, UBER_EATS_CLIENT_SECRET, and UBER_EATS_STORE_ID to enable LIVE order ingest and menu sync."
         />
       ) : null}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight">Uber Eats</h1>
-            <BetaBadge />
+            <LiveBadge />
           </div>
           <p className="text-sm text-muted-foreground">
-            Marketplace BETA — OAuth order ingest, menu sync, signed webhooks.
+            Marketplace LIVE — OAuth, signed webhooks → KDS, menu sync, status push.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -83,7 +83,7 @@ export default async function UberEatsIntegrationPage() {
           <ChecklistItem label="Webhook order ingest" done={capability.liveImportReady} />
           <ChecklistItem label="Menu sync API" done={capability.liveMenuReady} />
           <p className="pt-2 text-muted-foreground">
-            Uber partner approval is still required before claiming production LIVE marketplace traffic.
+            Uber partner credentials are required for production marketplace traffic.
           </p>
         </CardContent>
       </Card>

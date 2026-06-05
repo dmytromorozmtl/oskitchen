@@ -35,7 +35,7 @@ test.describe("beta integrations governance capstone policy", () => {
     );
     expect(TODAY_PATH).toBe("/dashboard/today");
     expect(INTEGRATIONS_HEALTH_PATH).toBe("/dashboard/integrations/health");
-    expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT).toBe(18);
+    expect(BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT).toBe(17);
   });
 
   test("evaluates governance capstone contract", () => {
@@ -47,7 +47,7 @@ test.describe("beta integrations governance capstone policy", () => {
       envReadinessRowCount: 18,
       liveDodRowCount: 18,
       expectedCount: 18,
-      zeroLiveInDodPanel: true,
+      honestLiveCountInDodPanel: true,
       g3G4HonestyInDodPanel: true,
     });
     expect(betaIntegrationsGovernanceCapstoneWithinContract(summary)).toBe(true);
@@ -80,7 +80,7 @@ test.describe("beta integrations governance capstone (chromium-authed)", () => {
       envReadinessRowCount: result!.envReadinessRowCount,
       liveDodRowCount: result!.liveDodRowCount,
       expectedCount: result!.expectedCount,
-      zeroLiveInDodPanel: result!.zeroLiveInDodPanel,
+      honestLiveCountInDodPanel: result!.honestLiveCountInDodPanel,
       g3G4HonestyInDodPanel: result!.g3G4HonestyInDodPanel,
     });
     expect(betaIntegrationsGovernanceCapstoneWithinContract(summary)).toBe(true);

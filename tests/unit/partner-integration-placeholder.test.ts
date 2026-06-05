@@ -20,7 +20,7 @@ afterEach(() => {
 describe("partner integration placeholder truth", () => {
   it("marks marketplace delivery integrations as BETA in registry", () => {
     expect(getIntegrationById("doordash")?.status).toBe("BETA");
-    expect(getIntegrationById("uber-eats")?.status).toBe("BETA");
+    expect(getIntegrationById("uber-eats")?.status).toBe("LIVE");
     expect(getIntegrationById("grubhub")?.status).toBe("BETA");
     expect(getIntegrationById("uber-direct")?.status).toBe("BETA");
   });

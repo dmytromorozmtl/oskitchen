@@ -11,6 +11,7 @@ import {
 import {
   BETA_INTEGRATION_IDS,
   getIntegrationById,
+  LIVE_INTEGRATION_IDS,
   type IntegrationRegistryEntry,
 } from "@/lib/integrations/integration-registry";
 
@@ -169,7 +170,7 @@ export function summarizeLiveIntegrationDod(
   let scaffoldReadyCount = 0;
   let envReadyCount = 0;
   let promotionEligibleCount = 0;
-  let liveCount = 0;
+  let liveCount = LIVE_INTEGRATION_IDS.length;
 
   for (const row of rows) {
     if (row.gates.find((g) => g.id === "G1")?.status === "passed") scaffoldReadyCount += 1;

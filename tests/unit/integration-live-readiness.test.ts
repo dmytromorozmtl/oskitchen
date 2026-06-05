@@ -43,10 +43,10 @@ describe("integration live readiness guards", () => {
   it("counts only real live-capable providers toward generic readiness", () => {
     expect(providerCountsTowardLiveReadiness("SHOPIFY")).toBe(true);
     expect(providerCountsTowardLiveReadiness("WOOCOMMERCE")).toBe(true);
-    expect(providerCountsTowardLiveReadiness("UBER_EATS")).toBe(false);
+    expect(providerCountsTowardLiveReadiness("UBER_EATS")).toBe(true);
     expect(providerCountsTowardLiveReadiness("UBER_DIRECT")).toBe(false);
     expect(providerCountsTowardLiveReadiness("DOORDASH")).toBe(false);
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).not.toContain("UBER_DIRECT");
-    expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).not.toContain("UBER_EATS");
+    expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("UBER_EATS");
   });
 });

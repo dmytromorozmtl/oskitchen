@@ -19,9 +19,9 @@ describe("integration honesty alignment", () => {
     expect(MARKETPLACE_PLACEHOLDER_PROVIDER_KEYS).toEqual([]);
   });
 
-  it("marks delivery dispatch and marketplaces as BETA in registry", () => {
+  it("marks delivery marketplaces honestly in registry", () => {
     expect(getIntegrationById("doordash")?.status).toBe("BETA");
-    expect(getIntegrationById("uber-eats")?.status).toBe("BETA");
+    expect(getIntegrationById("uber-eats")?.status).toBe("LIVE");
     expect(getIntegrationById("grubhub")?.status).toBe("BETA");
     expect(getIntegrationById("uber-direct")?.status).toBe("BETA");
   });

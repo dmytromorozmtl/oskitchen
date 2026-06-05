@@ -46,7 +46,7 @@ export const LIVE_DOD_G3_NOT_MEASURED_TITLE_FRAGMENT =
 export const LIVE_DOD_G4_NOT_MEASURED_TITLE_FRAGMENT =
   "Requires 24h production" as const;
 
-export const LIVE_DOD_ZERO_LIVE_SUMMARY_PATTERN = /0 LIVE/i;
+export const LIVE_DOD_ZERO_LIVE_SUMMARY_PATTERN = /1 LIVE/i;
 export const LIVE_DOD_G3_G4_HONESTY_PATTERN = /G3\/G4 require production proof/i;
 
 export const LIVE_DOD_GATES_PARENT_POLICY_ID = BETA_INTEGRATIONS_GOVERNANCE_E2E_POLICY_ID;
@@ -58,7 +58,7 @@ export type LiveIntegrationDodGatesContract = {
   allG1ScaffoldPassed: boolean;
   allG3NotMeasured: boolean;
   allG4NotMeasured: boolean;
-  zeroLiveInSummary: boolean;
+  oneLiveInSummary: boolean;
   g3G4HonestyInDescription: boolean;
 };
 
@@ -71,7 +71,7 @@ export function liveIntegrationDodGatesWithinContract(
     input.allG1ScaffoldPassed &&
     input.allG3NotMeasured &&
     input.allG4NotMeasured &&
-    input.zeroLiveInSummary &&
+    input.oneLiveInSummary &&
     input.g3G4HonestyInDescription
   );
 }

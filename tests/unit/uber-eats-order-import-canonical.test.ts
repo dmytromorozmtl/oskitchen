@@ -44,7 +44,7 @@ describe("Uber Eats order import capability", () => {
     await expect(fetchUberEatsOrders("owner-1")).rejects.toThrow("Uber Eats order import disabled");
   });
 
-  it("enables BETA import when credentials are configured", () => {
+  it("enables LIVE import when credentials are configured", () => {
     process.env.UBER_EATS_CLIENT_ID = "client-id";
     process.env.UBER_EATS_CLIENT_SECRET = "client-secret";
     process.env.UBER_EATS_STORE_ID = "store-1";

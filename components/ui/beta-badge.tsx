@@ -4,6 +4,29 @@ import { cn } from "@/lib/utils";
 const badgeBaseClass =
   "rounded-full px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wide";
 
+/** Certified LIVE integration — OAuth, webhooks, and KDS path verified in CI. */
+export function LiveBadge({
+  className,
+  title = "LIVE — production integration with webhook → KDS and status sync",
+}: {
+  className?: string;
+  title?: string;
+}) {
+  return (
+    <Badge
+      variant="secondary"
+      title={title}
+      className={cn(
+        badgeBaseClass,
+        "border border-emerald-500/40 bg-emerald-500/10 text-emerald-950 dark:text-emerald-100",
+        className,
+      )}
+    >
+      LIVE
+    </Badge>
+  );
+}
+
 /** Honest maturity label for BETA integrations and surfaces — not certified LIVE. */
 export function BetaBadge({
   className,

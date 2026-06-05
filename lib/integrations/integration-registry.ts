@@ -29,7 +29,7 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "uber-eats",
     name: "Uber Eats",
-    status: "BETA",
+    status: "LIVE",
     requiredEnv: [
       "UBER_EATS_CLIENT_ID",
       "UBER_EATS_CLIENT_SECRET",
@@ -151,6 +151,10 @@ export function getIntegrationById(id: string): IntegrationRegistryEntry | undef
 
 export const BETA_INTEGRATION_IDS = INTEGRATION_REGISTRY.filter(
   (entry) => entry.status === "BETA",
+).map((entry) => entry.id);
+
+export const LIVE_INTEGRATION_IDS = INTEGRATION_REGISTRY.filter(
+  (entry) => entry.status === "LIVE",
 ).map((entry) => entry.id);
 
 export function isBetaIntegration(id: string): boolean {

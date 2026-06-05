@@ -59,7 +59,7 @@ export type BetaIntegrationsGovernanceCapstoneContract = {
   envReadinessRowCount: number;
   liveDodRowCount: number;
   expectedCount: number;
-  zeroLiveInDodPanel: boolean;
+  honestLiveCountInDodPanel: boolean;
   g3G4HonestyInDodPanel: boolean;
 };
 
@@ -73,7 +73,7 @@ export function betaIntegrationsGovernanceCapstoneWithinContract(
     input.navigatedToHealth &&
     input.envReadinessRowCount === input.expectedCount &&
     input.liveDodRowCount === input.expectedCount &&
-    input.zeroLiveInDodPanel &&
+    input.honestLiveCountInDodPanel &&
     input.g3G4HonestyInDodPanel
   );
 }

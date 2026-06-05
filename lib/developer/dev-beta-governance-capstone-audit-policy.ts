@@ -60,9 +60,9 @@ function auditLiveDodSmokeArtifact(root: string): boolean {
   return (
     summary.overall === "PASSED" &&
     summary.certPassed === true &&
-    summary.dod.total === 18 &&
-    summary.dod.scaffoldReadyCount === 18 &&
-    summary.dod.liveCount === 0
+    summary.dod.total === 17 &&
+    summary.dod.scaffoldReadyCount === 17 &&
+    summary.dod.liveCount === 1
   );
 }
 

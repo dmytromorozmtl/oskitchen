@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   BETA_INTEGRATION_IDS,
+  LIVE_INTEGRATION_IDS,
   isBetaIntegration,
   isBetaIntegrationProvider,
 } from "@/lib/integrations/integration-registry";
@@ -14,7 +15,6 @@ const ROOT = process.cwd();
 const BETA_INTEGRATION_PAGES: Record<string, string> = {
   doordash: "app/dashboard/integrations/doordash/page.tsx",
   grubhub: "app/dashboard/integrations/grubhub/page.tsx",
-  "uber-eats": "app/dashboard/integrations/uber-eats/page.tsx",
   quickbooks: "app/dashboard/integrations/quickbooks/page.tsx",
   xero: "app/dashboard/integrations/xero/page.tsx",
   "7shifts": "app/dashboard/integrations/7shifts/page.tsx",
@@ -33,8 +33,8 @@ const BETA_INTEGRATION_PAGES: Record<string, string> = {
 };
 
 describe("integration beta badge", () => {
-  it("tracks eighteen BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(18);
+  it("tracks seventeen BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(17);
     expect(BETA_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "clover",
@@ -52,23 +52,27 @@ describe("integration beta badge", () => {
       "square",
       "toast",
       "uber-direct",
-      "uber-eats",
       "xero",
     ]);
     for (const id of BETA_INTEGRATION_IDS) {
       expect(isBetaIntegration(id)).toBe(true);
     }
     expect(isBetaIntegration("uber-direct")).toBe(true);
+    expect(isBetaIntegration("uber-eats")).toBe(false);
   });
 
-  it("maps delivery provider keys to BETA integrations", () => {
+  it("tracks one LIVE registry integration", () => {
+    expect(LIVE_INTEGRATION_IDS).toEqual(["uber-eats"]);
+  });
+
+  it("maps delivery provider keys to BETA integrations (except uber-eats LIVE)", () => {
     expect(isBetaIntegrationProvider("doordash")).toBe(true);
     expect(isBetaIntegrationProvider("grubhub")).toBe(true);
-    expect(isBetaIntegrationProvider("uber-eats")).toBe(true);
+    expect(isBetaIntegrationProvider("uber-eats")).toBe(false);
     expect(isBetaIntegrationProvider("uber-direct")).toBe(true);
   });
 
-  it("renders BetaBadge on all eighteen BETA integration pages", () => {
+  it("renders BetaBadge on all seventeen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const path = join(ROOT, rel);
       expect(existsSync(path), id).toBe(true);
@@ -76,6 +80,15 @@ describe("integration beta badge", () => {
       expect(source, id).toContain("BetaBadge");
       expect(source, id).toContain("@/components/integrations/beta-badge");
     }
+  });
+
+  it("renders LiveBadge on Uber Eats integration page", () => {
+    const source = readFileSync(
+      join(ROOT, "app/dashboard/integrations/uber-eats/page.tsx"),
+      "utf8",
+    );
+    expect(source).toContain("LiveBadge");
+    expect(source).not.toContain("BetaBadge");
   });
 
   it("uses BetaBadge in extensions catalog and channel cards", () => {

@@ -31,7 +31,7 @@ export type BetaIntegrationsGovernanceCapstoneFlowResult = {
   envReadinessRowCount: number;
   liveDodRowCount: number;
   expectedCount: number;
-  zeroLiveInDodPanel: boolean;
+  honestLiveCountInDodPanel: boolean;
   g3G4HonestyInDodPanel: boolean;
 };
 
@@ -95,7 +95,7 @@ export async function runBetaIntegrationsGovernanceCapstoneFlow(
     envReadinessRowCount,
     liveDodRowCount,
     expectedCount: BETA_INTEGRATIONS_GOVERNANCE_CAPSTONE_EXPECTED_COUNT,
-    zeroLiveInDodPanel: true,
+    honestLiveCountInDodPanel: true,
     g3G4HonestyInDodPanel: true,
   };
 }

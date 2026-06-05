@@ -49,8 +49,8 @@ export function getUberEatsBetaMessage(
   hasCredentials = getUberEatsCapabilitySnapshot().hasCredentials,
 ): string {
   return hasCredentials
-    ? "Uber Eats BETA is enabled. Live API traffic requires Uber partner approval and correct OAuth scopes."
-    : "Configure UBER_EATS_CLIENT_ID, UBER_EATS_CLIENT_SECRET, and UBER_EATS_STORE_ID for BETA order ingest and menu sync.";
+    ? "Uber Eats LIVE is enabled. Webhooks import to KDS and status updates push back to Uber."
+    : "Configure UBER_EATS_CLIENT_ID, UBER_EATS_CLIENT_SECRET, and UBER_EATS_STORE_ID for LIVE order ingest and menu sync.";
 }
 
 export async function getUberEatsCredentialsForUser(
