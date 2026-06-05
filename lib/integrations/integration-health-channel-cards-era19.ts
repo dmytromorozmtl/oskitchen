@@ -262,9 +262,9 @@ export function buildSsoChannelCard(input: {
     : null;
 
   let currentState: string;
-  if (input.sso.active) currentState = "SSO pilot active";
-  else if (input.sso.configured) currentState = "Configured — activation pending";
-  else currentState = "Pilot setup incomplete";
+  if (input.sso.active) currentState = "SSO LIVE — active";
+  else if (input.sso.configured) currentState = "SSO LIVE — activation pending";
+  else currentState = "SSO LIVE — setup incomplete";
 
   let stateTone: IntegrationHealthChannelCardStateTone = input.sso.active ? "healthy" : "degraded";
   if (smokeStatus === "FAILED") {
@@ -294,7 +294,7 @@ export function buildSsoChannelCard(input: {
       tone: input.sso.active ? "normal" : "urgent",
     },
     supportGuidance:
-      "Enterprise SSO is pilot wiring only — not production SSO for all tenants.",
+      "Enterprise SSO + SCIM LIVE for Okta, Entra ID, and Google Workspace — configure at /dashboard/enterprise/sso-scim.",
   };
 }
 

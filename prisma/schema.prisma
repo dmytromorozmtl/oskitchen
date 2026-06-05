@@ -1463,6 +1463,7 @@ enum SsoIdpVendor {
   OKTA
   ENTRA_ID
   AUTH0
+  GOOGLE_WORKSPACE
 }
 
 /// Workspace SSO rollout phase — default DISABLED; no production SSO until runtime cycles wire login.

@@ -17,7 +17,7 @@ import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { safeInternalNextPath } from "@/lib/auth/safe-redirect";
 
 const configureSchema = z.object({
-  idpVendor: z.enum(["OKTA", "ENTRA_ID", "AUTH0"]),
+  idpVendor: z.enum(["OKTA", "ENTRA_ID", "AUTH0", "GOOGLE_WORKSPACE"]),
   allowedEmailDomains: z.string().min(1, "At least one email domain is required"),
   supabaseSsoProviderRef: z.string().min(1, "Supabase SSO provider reference is required"),
   loginHintDomain: z.string().optional(),
