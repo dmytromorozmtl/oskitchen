@@ -24,7 +24,7 @@ function baseModel() {
 describe("pilot integration health beta env footnote", () => {
   it("builds footnote for eighteen BETA integrations", () => {
     const footnote = buildPilotIntegrationHealthBetaEnvFootnote({});
-    expect(footnote.total).toBe(9);
+    expect(footnote.total).toBe(8);
     expect(footnote.optionalCount).toBeGreaterThanOrEqual(1);
     expect(footnote.href).toBe("/dashboard/integrations/health");
     expect(footnote.headline).toContain("BETA");
@@ -69,13 +69,13 @@ describe("pilot integration health beta env footnote", () => {
       GOOGLE_FORMS_SHEET_ACCESS_TOKEN: "x",
       GOOGLE_FORMS_SHEET_ID: "x",
     });
-    expect(footnote.readyCount + footnote.optionalCount).toBe(9);
+    expect(footnote.readyCount + footnote.optionalCount).toBe(8);
     expect(footnote.headline).toContain("platform-ready");
   });
 
   it("augments strip model with beta env footnote", () => {
     const augmented = augmentPilotIntegrationHealthStripWithBetaEnv(baseModel(), {});
-    expect(augmented.betaEnvFootnote.total).toBe(9);
+    expect(augmented.betaEnvFootnote.total).toBe(8);
     expect(augmented.overall).toBe("healthy");
   });
 });

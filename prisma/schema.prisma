@@ -228,6 +228,7 @@ enum IntegrationProvider {
   RESY
   SEVEN_SHIFTS
   HOMEBASE
+  KLAVIYO
   MANUAL
 }
 

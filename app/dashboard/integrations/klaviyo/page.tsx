@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { KlaviyoSyncPanel } from "@/components/integrations/klaviyo-sync-panel";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { isKlaviyoSyncConfigured } from "@/services/integrations/klaviyo-sync-service";
 import { listEmailCampaignFlows } from "@/services/marketing/email-marketing-service";
@@ -14,9 +15,14 @@ export default async function KlaviyoIntegrationPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <h1 className="text-2xl font-semibold">Klaviyo</h1>
-        <BetaBadge />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl font-semibold">Klaviyo</h1>
+          <LiveBadge title="LIVE — API key, campaign triggers, segment export" />
+        </div>
+        <Button asChild size="sm" className="rounded-full">
+          <Link href="/dashboard/integrations/klaviyo/live">Open LIVE dashboard</Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>

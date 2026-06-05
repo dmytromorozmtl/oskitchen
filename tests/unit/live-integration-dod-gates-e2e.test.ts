@@ -10,7 +10,7 @@ import { liveIntegrationDodGatesSucceeded } from "@/lib/integrations/live-integr
 describe("live integration dod gates E2E policy (QA-39)", () => {
   it("locks LIVE DoD gates e2e policy id and expected row count", () => {
     expect(LIVE_INTEGRATION_DOD_GATES_E2E_POLICY_ID).toBe("live-integration-dod-gates-e2e-v1");
-    expect(LIVE_DOD_GATES_EXPECTED_ROW_COUNT).toBe(9);
+    expect(LIVE_DOD_GATES_EXPECTED_ROW_COUNT).toBe(8);
   });
 
   it("requires G1 passed and G3/G4 not_measured on all rows", () => {

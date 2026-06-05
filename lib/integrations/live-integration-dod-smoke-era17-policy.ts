@@ -17,9 +17,9 @@ export const LIVE_INTEGRATION_DOD_SMOKE_ERA17_SUMMARY_ARTIFACT =
 export const LIVE_INTEGRATION_DOD_SMOKE_ERA17_NPM_SCRIPT =
   "smoke:live-integration-dod" as const;
 
-export const LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT = 9 as const;
+export const LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT = 8 as const;
 
-export const LIVE_INTEGRATION_REGISTRY_LIVE_COUNT = 12 as const;
+export const LIVE_INTEGRATION_REGISTRY_LIVE_COUNT = 13 as const;
 
 export const LIVE_INTEGRATION_DOD_SMOKE_ERA17_CYCLE_RUNBOOK_STEPS = [
   "Run npm run smoke:live-integration-dod — review artifacts/smoke-live-integration-dod-summary.json.",

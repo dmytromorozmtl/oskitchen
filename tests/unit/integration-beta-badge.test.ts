@@ -12,7 +12,6 @@ import {
 const ROOT = process.cwd();
 
 const BETA_INTEGRATION_PAGES: Record<string, string> = {
-  klaviyo: "app/dashboard/integrations/klaviyo/page.tsx",
   mailchimp: "app/dashboard/integrations/mailchimp/page.tsx",
   "uber-direct": "app/dashboard/integrations/uber-direct/page.tsx",
   square: "app/dashboard/integrations/square/page.tsx",
@@ -36,20 +35,22 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   resy: "app/dashboard/integrations/resy/page.tsx",
   "7shifts": "app/dashboard/integrations/7shifts/page.tsx",
   homebase: "app/dashboard/integrations/homebase/page.tsx",
+  klaviyo: "app/dashboard/integrations/klaviyo/page.tsx",
 };
 
 describe("integration beta badge", () => {
-  it("tracks nine BETA registry integrations", () => {
-    expect(BETA_INTEGRATION_IDS).toHaveLength(9);
-    expect(isBetaIntegration("homebase")).toBe(false);
+  it("tracks eight BETA registry integrations", () => {
+    expect(BETA_INTEGRATION_IDS).toHaveLength(8);
+    expect(isBetaIntegration("klaviyo")).toBe(false);
   });
 
-  it("tracks twelve LIVE registry integrations", () => {
+  it("tracks thirteen LIVE registry integrations", () => {
     expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "doordash",
       "grubhub",
       "homebase",
+      "klaviyo",
       "opentable",
       "quickbooks",
       "resy",
@@ -61,7 +62,7 @@ describe("integration beta badge", () => {
     ]);
   });
 
-  it("renders BetaBadge on all nine BETA integration pages", () => {
+  it("renders BetaBadge on all eight BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
       const source = readFileSync(join(ROOT, rel), "utf8");
       expect(source, id).toContain("BetaBadge");

@@ -112,7 +112,7 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "klaviyo",
     name: "Klaviyo",
-    status: "BETA",
+    status: "LIVE",
     requiredEnv: ["KLAVIYO_API_KEY"],
     setupRoute: "/dashboard/integrations/klaviyo",
   },
