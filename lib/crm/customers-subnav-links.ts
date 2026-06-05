@@ -14,6 +14,7 @@ export const CUSTOMERS_SUBNAV_LINKS: CustomersSubnavLink[] = [
   { href: "/dashboard/customers/at-risk", label: "At risk" },
   { href: "/dashboard/customers/companies", label: "Companies" },
   { href: "/dashboard/customers/follow-ups", label: "Follow-ups" },
+  { href: "/dashboard/crm/automation", label: "Automation" },
   { href: "/dashboard/customers/allergies", label: "Allergies" },
   { href: "/dashboard/customers/dedupe", label: "Dedupe", requiresManage: true },
   { href: "/dashboard/customers/reports", label: "Reports" },
