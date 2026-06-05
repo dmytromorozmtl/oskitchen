@@ -252,7 +252,7 @@ export async function seedQuickStartDemoData(
   }
 
   await ensurePosTerminalReady(ownerUserId);
-  const registerCount = await prisma.posRegister.count({
+  const registerCount = await prisma.pOSRegister.count({
     where: { userId: ownerUserId },
   });
 
