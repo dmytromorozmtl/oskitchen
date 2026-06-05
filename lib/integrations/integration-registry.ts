@@ -15,7 +15,7 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "doordash",
     name: "DoorDash",
-    status: "BETA",
+    status: "LIVE",
     requiredEnv: ["DOORDASH_API_KEY", "DOORDASH_MERCHANT_ID", "DOORDASH_WEBHOOK_SECRET"],
     setupRoute: "/dashboard/integrations/doordash",
   },

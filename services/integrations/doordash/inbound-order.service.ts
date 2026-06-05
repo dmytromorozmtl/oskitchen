@@ -3,11 +3,13 @@ import { IntegrationProvider } from "@prisma/client";
 import { persistNormalizedExternalOrder } from "@/lib/integrations/persist-external-order";
 import { createWebhookEvent, markWebhookProcessed } from "@/lib/webhooks/webhook-event-store";
 import { normalizeDoorDashOrder } from "@/services/integrations/doordash/doordash-marketplace";
+import { importDoorDashOrderToKitchen } from "@/services/integrations/doordash/kitchen-import.service";
 
 export type DoorDashInboundResult = {
   ok: boolean;
   duplicate?: boolean;
   externalOrderId?: string;
+  importedOrderId?: string;
   message?: string;
 };
 
@@ -45,16 +47,30 @@ export async function processDoorDashInboundOrder(input: {
 
   try {
     const normalized = normalizeDoorDashOrder(input.payload);
-    await persistNormalizedExternalOrder({
+    const external = await persistNormalizedExternalOrder({
       userId: input.userId,
       connectionId: input.connectionId,
       normalized,
     });
+
+    const kitchen = await importDoorDashOrderToKitchen({
+      userId: input.userId,
+      workspaceId: input.workspaceId,
+      connectionId: input.connectionId,
+      normalized,
+      externalOrderRecordId: external.id,
+    });
+
     await markWebhookProcessed(eventId, true);
     return {
       ok: true,
       externalOrderId: normalized.externalOrderId,
-      message: "External order persisted",
+      importedOrderId: kitchen.orderId,
+      message: kitchen.imported
+        ? "External order persisted and imported to kitchen"
+        : kitchen.duplicate
+          ? "External order persisted (kitchen import already done)"
+          : "External order persisted",
     };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

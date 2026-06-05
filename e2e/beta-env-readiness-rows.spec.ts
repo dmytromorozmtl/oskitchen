@@ -32,7 +32,7 @@ test.describe("beta env readiness rows policy", () => {
   test("exports row contract for eighteen BETA integrations", () => {
     expect(BETA_ENV_READINESS_ROWS_E2E_POLICY_ID).toBe("beta-env-readiness-rows-e2e-v1");
     expect(BETA_ENV_READINESS_ROWS_SLI_ID).toBe("integrations.beta_env_readiness_rows");
-    expect(BETA_ENV_READINESS_ROWS_EXPECTED_COUNT).toBe(17);
+    expect(BETA_ENV_READINESS_ROWS_EXPECTED_COUNT).toBe(16);
     expect(betaEnvReadinessRowTestId("square")).toBe("beta-env-readiness-square");
     expect(BETA_ENV_STATUS_READY_LABEL).toBe("Env ready");
     expect(BETA_ENV_STATUS_OPTIONAL_LABEL).toBe("No server env");

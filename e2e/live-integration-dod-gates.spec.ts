@@ -31,7 +31,7 @@ test.describe("live integration dod gates policy", () => {
   test("exports gate contract for eighteen BETA integrations", () => {
     expect(LIVE_INTEGRATION_DOD_GATES_E2E_POLICY_ID).toBe("live-integration-dod-gates-e2e-v1");
     expect(LIVE_INTEGRATION_DOD_GATES_SLI_ID).toBe("integrations.live_dod_gate_contract");
-    expect(LIVE_DOD_GATES_EXPECTED_ROW_COUNT).toBe(17);
+    expect(LIVE_DOD_GATES_EXPECTED_ROW_COUNT).toBe(16);
     expect(liveDodRowTestId("square")).toBe("live-integration-dod-square");
     expect(LIVE_DOD_G1_PASSED_TITLE_FRAGMENT).toContain("Registry scaffold complete");
     expect(LIVE_DOD_G3_NOT_MEASURED_TITLE_FRAGMENT).toContain("production tenant");
@@ -41,8 +41,8 @@ test.describe("live integration dod gates policy", () => {
   test("evaluates LIVE DoD gate contract", () => {
     const summary = summarizeLiveIntegrationDodGatesResult({
       panelVisible: true,
-      rowCount: 17,
-      expectedCount: 17,
+      rowCount: 16,
+      expectedCount: 16,
       allG1ScaffoldPassed: true,
       allG3NotMeasured: true,
       allG4NotMeasured: true,

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlaceholderBanner } from "@/components/ui/placeholder-banner";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -38,17 +38,17 @@ export default async function DoorDashIntegrationPage() {
       {capability.placeholderMode ? (
         <PlaceholderBanner
           feature="DoorDash integration"
-          detail="Configure DOORDASH_API_KEY, DOORDASH_MERCHANT_ID, and DOORDASH_WEBHOOK_SECRET to enable DoorDash BETA."
+          detail="Configure DOORDASH_API_KEY, DOORDASH_MERCHANT_ID, and DOORDASH_WEBHOOK_SECRET to enable DoorDash LIVE."
         />
       ) : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold">DoorDash integration</h1>
-            <BetaBadge />
+            <LiveBadge />
           </div>
           <p className="text-sm text-muted-foreground">
-            {integration?.name} · {integration?.status} · marketplace ingest + Drive delivery
+            {integration?.name} · LIVE · webhook → KDS, menu sync, Drive delivery, status push
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -56,7 +56,7 @@ export default async function DoorDashIntegrationPage() {
             <Link href="/dashboard/integrations/doordash/live">Open LIVE dashboard</Link>
           </Button>
           <Badge variant={capability.hasCredentials ? "secondary" : "outline"}>
-            {capability.hasCredentials ? "BETA credentials configured" : "Credentials missing"}
+            {capability.hasCredentials ? "LIVE credentials configured" : "Credentials missing"}
           </Badge>
         </div>
       </div>

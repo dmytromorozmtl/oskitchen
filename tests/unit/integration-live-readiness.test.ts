@@ -45,8 +45,9 @@ describe("integration live readiness guards", () => {
     expect(providerCountsTowardLiveReadiness("WOOCOMMERCE")).toBe(true);
     expect(providerCountsTowardLiveReadiness("UBER_EATS")).toBe(true);
     expect(providerCountsTowardLiveReadiness("UBER_DIRECT")).toBe(false);
-    expect(providerCountsTowardLiveReadiness("DOORDASH")).toBe(false);
+    expect(providerCountsTowardLiveReadiness("DOORDASH")).toBe(true);
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).not.toContain("UBER_DIRECT");
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("UBER_EATS");
+    expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("DOORDASH");
   });
 });

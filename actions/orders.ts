@@ -275,6 +275,16 @@ export async function updateOrderStatus(
       status: nextStatus,
     }).catch(() => undefined);
 
+    const { syncDoorDashStatusFromKitchenOrder } = await import(
+      "@/services/integrations/doordash/status-sync.service"
+    );
+    await syncDoorDashStatusFromKitchenOrder({
+      userId,
+      channelProvider: prev.channelProvider,
+      externalOrderId: prev.externalOrderIdExt,
+      status: nextStatus,
+    }).catch(() => undefined);
+
     if (nextStatus === "COMPLETED") {
       await recomputeMetricsForOrderEmail(userId, prevPii.customerEmail);
     }

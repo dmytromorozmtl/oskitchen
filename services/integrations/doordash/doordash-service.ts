@@ -47,8 +47,8 @@ export function isDoorDashConfigured(creds: DoorDashCredentials = credsFromEnv()
 
 export function getDoorDashPlaceholderMessage(hasCredentials = getDoorDashCapabilitySnapshot().hasCredentials): string {
   return hasCredentials
-    ? "DoorDash BETA is enabled with credentials. Live API calls require DoorDash partner approval and correct API hosts for your merchant program."
-    : "Configure DOORDASH_API_KEY and DOORDASH_MERCHANT_ID to enable DoorDash BETA (order webhooks, import, menu sync, Drive delivery).";
+    ? "DoorDash LIVE is enabled. Webhooks import to KDS, menu sync, Drive delivery, and status updates push back to DoorDash."
+    : "Configure DOORDASH_API_KEY and DOORDASH_MERCHANT_ID to enable DoorDash LIVE (order webhooks, import, menu sync, Drive delivery).";
 }
 
 export async function getDoorDashQuote(

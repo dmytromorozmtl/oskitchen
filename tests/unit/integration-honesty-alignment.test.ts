@@ -20,7 +20,7 @@ describe("integration honesty alignment", () => {
   });
 
   it("marks delivery marketplaces honestly in registry", () => {
-    expect(getIntegrationById("doordash")?.status).toBe("BETA");
+    expect(getIntegrationById("doordash")?.status).toBe("LIVE");
     expect(getIntegrationById("uber-eats")?.status).toBe("LIVE");
     expect(getIntegrationById("grubhub")?.status).toBe("BETA");
     expect(getIntegrationById("uber-direct")?.status).toBe("BETA");

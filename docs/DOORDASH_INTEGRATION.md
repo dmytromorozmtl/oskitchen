@@ -1,55 +1,57 @@
-# DoorDash integration (BETA)
+# DoorDash integration (LIVE)
 
-OS Kitchen ships a **BETA** DoorDash connector for ghost kitchens and multi-channel operators. It covers marketplace order ingest (webhooks + poll import), menu push, and Drive delivery APIs. Production traffic still requires DoorDash partner-approved credentials and correct API hosts.
+OS Kitchen ships a **LIVE** DoorDash connector: OAuth, signed webhooks → kitchen orders (KDS), menu sync, Drive delivery, and bidirectional status sync.
 
-## Competitor parity
+## Competitor comparison
 
-| Capability | Square / Toast | OS Kitchen DoorDash BETA |
-|------------|----------------|---------------------------|
-| Marketplace order ingest | Partner apps | Webhook + poll import → `external_orders` + kitchen `orders` |
-| Menu sync | Via aggregator | `PUT /api/integrations/doordash/menu` |
+| Capability | Toast / legacy POS | OS Kitchen DoorDash LIVE |
+|------------|-------------------|--------------------------|
+| Marketplace ingest | Partner tablet apps | Webhook + poll → `external_orders` + kitchen `orders` (KDS) |
+| KDS ticket | Manual re-entry | Automatic on webhook |
+| Menu sync | Aggregator portal | `PUT /api/integrations/doordash/menu` |
 | Drive delivery | Third-party | `DoorDashSyncService` (Drive v2) |
-| Webhook security | HMAC | `verifyDoorDashWebhookSignature` + idempotent `WebhookEvent` store |
+| Status updates | One-way | Kitchen bump → Marketplace PATCH (`ready_for_pickup`, `delivered`) |
+| Webhook security | Vendor-managed | `verifyDoorDashWebhookSignature` + idempotent events |
 
-## What ships
+## Sales pitch
 
-- **Webhook ingress:** `POST /api/webhooks/doordash/orders?cid=<connection-id>`
-- **Order normalization:** `normalizeDoorDashOrder` → `NormalizedKitchenOrder`
-- **Poll import:** `fetchDoorDashOrders(userId)` for cron / manual sync
-- **Menu sync:** `DoorDashMenuSyncService.pushMenu` from active OS Kitchen menus
-- **Drive delivery:** quotes and delivery creation via Drive v2 client
-- **RBAC:** `integrations.manage` via `requireIntegrationsActor`
+> "DoorDash orders hit your KDS instantly. Bump ready in OS Kitchen — DoorDash gets the update. Menu sync and Drive delivery in one place."
+
+## Endpoints
+
+```text
+POST /api/webhooks/doordash/orders?cid=<connection-id>
+PUT  /api/integrations/doordash/menu
+GET  /api/integrations/doordash/oauth/callback
+```
 
 ## Required environment
 
 ```bash
-DOORDASH_API_KEY=           # Partner API key / JWT signing material
-DOORDASH_MERCHANT_ID=       # Store / merchant identifier
-DOORDASH_WEBHOOK_SECRET=    # Webhook HMAC secret (per connection or env fallback)
-DOORDASH_CRON_OWNER_USER_ID= # Optional: owner user id for scheduled poll import
+DOORDASH_API_KEY=
+DOORDASH_MERCHANT_ID=
+DOORDASH_WEBHOOK_SECRET=
+DOORDASH_OAUTH_CLIENT_ID=      # optional — OAuth flow
+DOORDASH_OAUTH_CLIENT_SECRET=
 ```
 
-## How to test locally
+## How it works
 
-1. Create an `IntegrationConnection` with `provider: DOORDASH` and encrypted webhook secret.
-2. Register webhook URL with DoorDash developer portal.
-3. Send a signed test payload:
+1. **OAuth** — Merchant connects via `/api/integrations/doordash/oauth/callback`.
+2. **Webhook** — DoorDash sends order events; signature verified per connection.
+3. **KDS import** — `processDoorDashInboundOrder` → `importDoorDashOrderToKitchen`.
+4. **Menu sync** — `DoorDashMenuSyncService.pushMenu` from active OS Kitchen menus.
+5. **Status push** — `syncDoorDashStatusFromKitchenOrder` on `updateOrderStatus`.
+
+## How to test
 
 ```bash
-BODY='{"event_id":"evt-1","order":{"id":"dd-test-1","customer":{"name":"Test Guest"},"items":[{"name":"Bowl","quantity":1,"price":1200}]}}'
-SIG=$(printf '%s' "$BODY" | openssl dgst -sha256 -hmac "$DOORDASH_WEBHOOK_SECRET" -hex | awk '{print $2}')
-curl -X POST "http://localhost:3000/api/webhooks/doordash/orders?cid=<connection-id>" \
-  -H "Content-Type: application/json" \
-  -H "x-doordash-signature: $SIG" \
-  -d "$BODY"
+node ./node_modules/vitest/vitest.mjs run \
+  tests/unit/doordash-kitchen-import.test.ts \
+  tests/unit/doordash-status-sync.test.ts \
+  tests/unit/doordash-order-import-canonical.test.ts
 ```
 
-4. Run unit tests:
+## Honesty
 
-```bash
-node ./node_modules/vitest/vitest.mjs run tests/unit/doordash-order-import-canonical.test.ts tests/unit/webhook-doordash-route-security.test.ts
-```
-
-## Honesty note
-
-Registry status is **BETA**, not **LIVE**. OS Kitchen does not claim DoorDash is production-certified until your merchant program validates API traffic. Missing credentials keep the integration in preparation mode.
+Registry status is **LIVE** for DoorDash. G3/G4 production uptime proof is measured per-tenant — see Integration Health DoD panel.

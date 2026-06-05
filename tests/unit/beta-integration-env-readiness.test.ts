@@ -51,7 +51,7 @@ describe("beta integration env readiness", () => {
       SQUARE_LOCATION_ID: "y",
     });
     const summary = summarizeBetaIntegrationEnvReadiness(cards);
-    expect(summary.total).toBe(17);
+    expect(summary.total).toBe(16);
     expect(summary.readyCount).toBeGreaterThanOrEqual(1);
     expect(summary.optionalCount).toBeGreaterThanOrEqual(1);
     expect(["ready", "degraded", "blocked"]).toContain(summary.overall);
