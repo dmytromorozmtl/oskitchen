@@ -5552,3 +5552,12 @@ Result: DONE — Poster Gaps 4/10
 Files: plan-registry.ts, public-pricing-content.ts, pricing-page.tsx, app/pricing/page.tsx, pricing-faq.ts, signup-form.tsx, e2e/pricing-self-serve.spec.ts
 Tests: unit 3/3 pass (public-pricing-content)
 
+---
+POSTER GAP Cycle: 5
+Timestamp: 2026-06-05T07:50:00.000Z
+Feature: bank-statement-import
+Action: feat: Bank Statement Import
+Result: DONE — Poster Gaps 5/10
+Files: bank-statement-import-service.ts, bank-import/page.tsx, bank-import-client.tsx, actions/finance/bank-statement-import.ts
+Tests: unit 3/3 pass (bank-statement-import-service)
+

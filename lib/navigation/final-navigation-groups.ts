@@ -160,6 +160,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/purchasing/direct-ordering", labelKey: "nav.directOrdering", icon: Truck },
       { href: "/dashboard/accounting/invoices", labelKey: "nav.apInvoices", icon: FileSpreadsheet },
       { href: "/dashboard/accounting/vendor-payments", labelKey: "nav.vendorPayments", icon: Wallet },
+      { href: "/dashboard/finance/bank-import", labelKey: "nav.bankStatementImport", icon: FileSpreadsheet },
       { href: "/dashboard/accounting/bank-reconciliation", labelKey: "nav.bankReconciliation", icon: FileSpreadsheet },
       { href: "/dashboard/accounting/cash-counts", labelKey: "nav.cashCounts", icon: Coins },
       { href: "/dashboard/inventory/invoice-scanner", labelKey: "nav.invoiceScanner", icon: Package },
