@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { OpenTableSyncPanel } from "@/components/integrations/opentable-sync-panel";
-import { BetaBadge } from "@/components/integrations/beta-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { findAdminStorefront } from "@/lib/storefront/load-admin-storefront";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
@@ -16,9 +17,14 @@ export default async function OpenTableIntegrationPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <h1 className="text-2xl font-semibold">OpenTable</h1>
-        <BetaBadge />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl font-semibold">OpenTable</h1>
+          <LiveBadge title="LIVE — OAuth, reservation webhooks, table availability" />
+        </div>
+        <Button asChild size="sm" className="rounded-full">
+          <Link href="/dashboard/integrations/opentable/live">Open LIVE dashboard</Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -29,7 +35,7 @@ export default async function OpenTableIntegrationPage() {
             <p className="text-emerald-600">OPENTABLE_API_KEY and OPENTABLE_RID detected</p>
           ) : (
             <p className="text-muted-foreground">
-              Set OPENTABLE_API_KEY and OPENTABLE_RID (restaurant ID) for reservation sync
+              Set OPENTABLE_CLIENT_ID, OPENTABLE_CLIENT_SECRET, and OPENTABLE_RID for LIVE OAuth
             </p>
           )}
           {!sf ? (

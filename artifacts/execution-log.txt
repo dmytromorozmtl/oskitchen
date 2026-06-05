@@ -5654,3 +5654,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-05T19:00:00Z | Cycle 6 | Phase 1 | Feature 6: WooCommerce LIVE | PASS — dev store, REST API, HMAC webhooks, canonical order, KDS import, inventory sync, registry→LIVE (15 BETA + 6 LIVE)
 2026-06-05T19:45:00Z | Cycle 7 | Phase 1 | Feature 7: QuickBooks LIVE | PASS — OAuth, chart of accounts, daily sales journal, registry BETA→LIVE (14 BETA + 7 LIVE)
 2026-06-05T20:30:00Z | Cycle 8 | Phase 1 | Feature 8: Xero LIVE | PASS — OAuth, supplier invoice sync, bank reconciliation, registry BETA→LIVE (13 BETA + 8 LIVE)
+2026-06-05T21:15:00Z | Cycle 9 | Phase 1 | Feature 9: OpenTable LIVE | PASS — OAuth, reservation webhook, table availability, registry BETA→LIVE (12 BETA + 9 LIVE)

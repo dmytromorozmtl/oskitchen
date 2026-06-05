@@ -224,6 +224,7 @@ enum IntegrationProvider {
   SKIP
   QUICKBOOKS
   XERO
+  OPENTABLE
   MANUAL
 }
 

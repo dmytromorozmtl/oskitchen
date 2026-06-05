@@ -13,7 +13,7 @@ describe("beta governance smoke chain integration policy (QA-45)", () => {
     expect(BETA_GOVERNANCE_SMOKE_CHAIN_INTEGRATION_POLICY_ID).toBe(
       "beta-governance-smoke-chain-integration-v1",
     );
-    expect(BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT).toBe(13);
+    expect(BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT).toBe(12);
   });
 
   it("evaluates full-chain pass contract for registry + integrity + dod", () => {

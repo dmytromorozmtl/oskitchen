@@ -18,7 +18,7 @@ export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_SUMMARY_ARTIFACT =
 export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_NPM_SCRIPT =
   "smoke:beta-integrations-registry" as const;
 
-export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT = 13 as const;
+export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT = 12 as const;
 
 /** Required repo paths per BETA integration id — honest scaffold, not live proof. */
 export const BETA_INTEGRATION_SCAFFOLD_PATHS: Readonly<
@@ -58,11 +58,6 @@ export const BETA_INTEGRATION_SCAFFOLD_PATHS: Readonly<
     "app/dashboard/integrations/resy/page.tsx",
     "services/integrations/resy-sync-service.ts",
     "app/api/integrations/resy/sync/route.ts",
-  ],
-  opentable: [
-    "app/dashboard/integrations/opentable/page.tsx",
-    "services/integrations/opentable-sync-service.ts",
-    "app/api/integrations/opentable/sync/route.ts",
   ],
   "uber-direct": [
     "app/dashboard/integrations/uber-direct/page.tsx",

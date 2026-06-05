@@ -125,8 +125,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "opentable",
     name: "OpenTable",
-    status: "BETA",
-    requiredEnv: ["OPENTABLE_API_KEY", "OPENTABLE_RID"],
+    status: "LIVE",
+    requiredEnv: [
+      "OPENTABLE_CLIENT_ID",
+      "OPENTABLE_CLIENT_SECRET",
+      "OPENTABLE_RID",
+      "OPENTABLE_WEBHOOK_SECRET",
+    ],
     setupRoute: "/dashboard/integrations/opentable",
   },
   {

@@ -37,7 +37,7 @@ test.describe("today beta env footnote policy", () => {
     expect(TODAY_PATH).toBe("/dashboard/today");
     expect(BETA_ENV_FOOTNOTE_TESTID).toBe("pilot-integration-beta-env-footnote");
     expect(INTEGRATION_HEALTH_STRIP_TESTID).toBe("pilot-integration-health-strip");
-    expect(TODAY_BETA_ENV_FOOTNOTE_EXPECTED_TOTAL).toBe(13);
+    expect(TODAY_BETA_ENV_FOOTNOTE_EXPECTED_TOTAL).toBe(12);
     expect(BETA_ENV_FOOTNOTE_HEALTH_HREF).toBe("/dashboard/integrations/health");
     expect(BETA_ENV_FOOTNOTE_LINK_LABEL).toBe("BETA env readiness panel");
   });
