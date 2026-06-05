@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 import { signUpAction } from "@/actions/auth";
 import { trackSignupConversion } from "@/lib/analytics/gtag-events";
+import { planDef, type PlanKey, PLAN_KEYS } from "@/lib/billing/plan-registry";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +26,11 @@ export function SignupForm({
 
   const redirectTo =
     searchParams.get("redirect") ?? searchParams.get("next") ?? "";
+
+  const planParam = searchParams.get("plan")?.toUpperCase() ?? "";
+  const selectedPlan = PLAN_KEYS.includes(planParam as PlanKey)
+    ? planDef(planParam as PlanKey)
+    : null;
 
   return (
     <form
@@ -47,6 +53,20 @@ export function SignupForm({
     >
       <input type="hidden" name="referralCode" value={initialReferralCode} />
       <input type="hidden" name="redirect" value={redirectTo} />
+      {selectedPlan?.checkoutable ? (
+        <p
+          data-testid="signup-selected-plan"
+          className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-muted-foreground"
+        >
+          Starting with <strong className="text-foreground">{selectedPlan.name}</strong>
+          {selectedPlan.priceMonthlyUsd != null ? (
+            <>
+              {" "}
+              — ${selectedPlan.priceMonthlyUsd}/mo after your 14-day trial
+            </>
+          ) : null}
+        </p>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="fullName">Full name</Label>

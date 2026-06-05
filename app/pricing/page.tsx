@@ -10,9 +10,9 @@ import { marketingPageMetadata } from "@/lib/marketing/page-metadata";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
 
 export const metadata: Metadata = marketingPageMetadata({
-  title: "OS Kitchen Pricing — Plans & Transparent Pilot SKUs",
+  title: "OS Kitchen Pricing — 4 Transparent Plans",
   description:
-    "Published plans: Starter $29, Pro $79, Team $199/mo. Pilot SKUs LOI-DP-001 (design partner $0), PILOT-*-50 at 50% off, PILOT-PLAT-90 SOW. 14-day trial. No hardware required.",
+    "Published plans: Starter $49, Pro $79, Team $199, Enterprise $499/mo. Self-serve signup with 14-day trial — no credit card required. Cancel anytime, no hardware lock-in.",
   path: "/pricing",
   keywords: [
     "meal prep software pricing",
@@ -28,8 +28,8 @@ export default function Page() {
       <FAQSchema questions={PRICING_FAQ_ITEMS} />
       <PricingViewTracker />
       <SiteHeader />
-      <PilotPricingSection />
       <PricingPage />
+      <PilotPricingSection />
       <SiteFooter />
     </div>
   );

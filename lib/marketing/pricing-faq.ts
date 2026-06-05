@@ -1,6 +1,11 @@
 /** Truth-safe FAQ for pricing page JSON-LD (must match on-page copy). */
 export const PRICING_FAQ_ITEMS: Array<{ question: string; answer: string }> = [
   {
+    question: "What's not included?",
+    answer:
+      'Card processing fees (Stripe), third-party marketplace commissions, SMS guest notifications, and formal SOC 2 attestation are not bundled in subscription list prices. You pay Stripe processing on card checkout when enabled; delivery marketplace fees are charged by Uber Eats, DoorDash, or Grubhub directly.',
+  },
+  {
     question: 'Do you replace Shopify?',
     answer:
       'No — OS Kitchen operationalizes the kitchen after orders exist. Many teams keep Shopify or WooCommerce for marketing and sync kitchen workflows.',

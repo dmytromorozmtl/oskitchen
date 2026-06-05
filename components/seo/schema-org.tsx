@@ -55,7 +55,7 @@ export function SoftwareApplicationSchema() {
           "@type": "Offer",
           price: String(STRIPE_PLANS.STARTER.priceMonthly),
           priceCurrency: "USD",
-          description: "Starter plan from $29/month with 14-day trial",
+          description: "Starter plan from $49/month with 14-day trial",
         },
       }}
     />

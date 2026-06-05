@@ -7,6 +7,12 @@ import { RoiCalculator } from "@/components/marketing/roi-calculator";
 import { CompareFaqSection } from "@/components/marketing/compare-faq-section";
 import { TcoCalculator } from "@/components/marketing/tco-calculator";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
+import {
+  PUBLIC_PRICING_COMPARE_ROWS,
+  PUBLIC_PRICING_PLANS,
+  PUBLIC_PRICING_UNIVERSAL_BENEFITS,
+  signupHrefForPlan,
+} from "@/lib/marketing/public-pricing-content";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,10 +21,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { APP_NAME } from "@/lib/constants";
-import { A11Y_FOCUS_RING, A11Y_INLINE_LINK, A11Y_SEGMENT_BUTTON } from "@/lib/a11y/ui-classes";
+import { A11Y_INLINE_LINK, A11Y_SEGMENT_BUTTON } from "@/lib/a11y/ui-classes";
 import { cn } from "@/lib/utils";
-import { PLAN_REGISTRY } from "@/lib/billing/plan-registry";
 import {
   VENDOR_PLAN_MONTHLY_FEE_USD,
   VENDOR_PLAN_ORDER,
@@ -27,90 +31,6 @@ import {
 import type { VendorPlanTier } from "@prisma/client";
 
 const ANNUAL_DISCOUNT_PCT = 17;
-
-// Marketing copy uses the single plan registry as the price source of truth,
-// keeping richer feature bullets here for storytelling. Prices must NOT be
-// duplicated below — read them from the registry.
-const PLANS = [
-  {
-    key: "STARTER" as const,
-    name: PLAN_REGISTRY.STARTER.name,
-    monthly: PLAN_REGISTRY.STARTER.priceMonthlyUsd ?? 0,
-    desc: "Small weekly food businesses starting operations.",
-    bullets: [
-      "Manual orders",
-      "Public preorder storefront (when enabled)",
-      "1 active menu",
-      "100 orders / month",
-      "Basic production board",
-      "Basic packing lists",
-      "Email support",
-    ],
-    cta: "trial" as const,
-  },
-  {
-    key: "PRO" as const,
-    name: PLAN_REGISTRY.PRO.name,
-    monthly: PLAN_REGISTRY.PRO.priceMonthlyUsd ?? 0,
-    desc: "Growing meal prep, catering, and kitchen teams.",
-    bullets: [
-      "Everything in Starter",
-      "WooCommerce & Shopify (setup-ready — requires your API credentials)",
-      "1,000 orders / month",
-      "Packing labels",
-      "Customer CRM",
-      "Analytics",
-      "Inventory lite",
-      "Recipe costing",
-      "Priority support",
-    ],
-    cta: "trial" as const,
-    featured: true,
-  },
-  {
-    key: "TEAM" as const,
-    name: PLAN_REGISTRY.TEAM.name,
-    monthly: PLAN_REGISTRY.TEAM.priceMonthlyUsd ?? 0,
-    desc: "Multi-channel food operations.",
-    bullets: [
-      "Everything in Pro",
-      "Uber Eats architecture (partner credentials required)",
-      "DoorDash & Grubhub adapters (BETA — credentials required)",
-      "Staff roles",
-      "Delivery routes",
-      "Advanced production",
-      "Forecasting",
-      "Webhook ingestion log (operator replay only where audited actions exist)",
-      "High-volume orders",
-    ],
-    cta: "trial" as const,
-  },
-  {
-    key: "ENTERPRISE" as const,
-    name: PLAN_REGISTRY.ENTERPRISE.name,
-    monthly: PLAN_REGISTRY.ENTERPRISE.priceMonthlyUsd,
-    desc: "Multi-location and custom operations.",
-    bullets: [
-      "Multi-location",
-      "Custom integrations (scoped statements of work)",
-      "API access where contracted",
-      "Onboarding support",
-      "SLA as agreed in contract",
-      "Dedicated support",
-    ],
-    cta: "contact" as const,
-  },
-];
-
-const FEATURE_ROWS: { label: string; s: boolean; p: boolean; t: boolean; e: boolean }[] = [
-  { label: "Manual orders & storefront", s: true, p: true, t: true, e: true },
-  { label: "WooCommerce / Shopify", s: false, p: true, t: true, e: true },
-  { label: "DoorDash / Grubhub / Uber Eats adapters (BETA)", s: false, p: false, t: true, e: true },
-  { label: "Analytics & CRM rollup", s: false, p: true, t: true, e: true },
-  { label: "Forecasting & webhook ingestion log", s: false, p: false, t: true, e: true },
-  { label: "Enterprise API keys", s: false, p: false, t: false, e: true },
-  { label: "HoReCa B2B marketplace catalog & PO (BETA)", s: true, p: true, t: true, e: true },
-];
 
 const VENDOR_PLAN_LABELS: Record<VendorPlanTier, string> = {
   FREE: "Free",
@@ -143,10 +63,22 @@ export function PricingPage() {
             Plans that match real kitchens
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            {APP_NAME} is the operating system for modern food operations — POS, orders, production, packing, delivery,
-            customers, and integrations in one workspace. It does not replace Shopify, WooCommerce, or marketplaces;
-            it coordinates the kitchen after orders are captured.
+            Four transparent plans — self-serve signup with a 14-day trial. POS, kitchen display, orders,
+            production, and integrations in one workspace. No proprietary hardware required.
           </p>
+          <ul
+            data-testid="pricing-universal-benefits"
+            className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+          >
+            {PUBLIC_PRICING_UNIVERSAL_BENEFITS.map((benefit) => (
+              <li key={benefit} className="flex items-center gap-1.5">
+                <span aria-hidden className="text-primary">
+                  ✓
+                </span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
           <div
             role="group"
             aria-label="Billing period"
@@ -178,13 +110,21 @@ export function PricingPage() {
         </div>
 
         <div className="mt-14 grid gap-6 lg:grid-cols-4">
-          {PLANS.map((plan) => (
+          {PUBLIC_PRICING_PLANS.map((plan) => (
             <Card
               key={plan.key}
+              data-testid={`pricing-plan-${plan.key.toLowerCase()}`}
               className={`flex flex-col border-border/80 ${plan.featured ? "border-primary/40 shadow-lg shadow-primary/10" : ""}`}
             >
               <CardHeader>
-                <CardTitle>{plan.name}</CardTitle>
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle>{plan.name}</CardTitle>
+                  {plan.badge ? (
+                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                      {plan.badge}
+                    </span>
+                  ) : null}
+                </div>
                 <CardDescription>{plan.desc}</CardDescription>
                 {plan.monthly != null ? (
                   <p className="pt-2 text-3xl font-semibold">
@@ -206,11 +146,15 @@ export function PricingPage() {
                 </ul>
                 {plan.cta === "trial" ? (
                   <Button asChild className="rounded-full" variant={plan.featured ? "default" : "outline"}>
-                    <Link href="/signup">Start free trial</Link>
+                    <Link href={signupHrefForPlan(plan.key)} data-testid={`pricing-cta-${plan.key.toLowerCase()}`}>
+                      Start free trial
+                    </Link>
                   </Button>
                 ) : (
                   <Button asChild variant="outline" className="rounded-full">
-                    <Link href="/book-demo">Talk to us</Link>
+                    <Link href="/book-demo" data-testid="pricing-cta-enterprise">
+                      Contact sales
+                    </Link>
                   </Button>
                 )}
               </CardContent>
@@ -322,7 +266,7 @@ export function PricingPage() {
                 </tr>
               </thead>
               <tbody>
-                {FEATURE_ROWS.map((row) => (
+                {PUBLIC_PRICING_COMPARE_ROWS.map((row) => (
                   <tr key={row.label} className="border-t border-border/60">
                     <td className="px-4 py-3">{row.label}</td>
                     <td className="px-4 py-3 text-center">{row.s ? "✓" : "—"}</td>

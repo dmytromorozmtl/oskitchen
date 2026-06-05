@@ -95,7 +95,7 @@ export const PLAN_REGISTRY: Record<PlanKey, PlanDefinition> = {
     tagline: "Manual operations + a single menu.",
     description:
       "Manual orders, one active menu, basic production board, basic reports. No external integrations.",
-    priceMonthlyUsd: 29,
+    priceMonthlyUsd: 49,
     stripePriceEnvKey: "NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID",
     checkoutable: true,
     rank: 1,
@@ -168,11 +168,11 @@ export const PLAN_REGISTRY: Record<PlanKey, PlanDefinition> = {
     rank: 3,
     limits: {
       maxMenus: null,
-      maxOrdersPerMonth: 10_000,
+      maxOrdersPerMonth: null,
       maxIntegrations: null,
       maxStaff: null,
       maxBrands: 5,
-      maxLocations: 5,
+      maxLocations: 3,
       maxStorefronts: 5,
     },
     features: {
@@ -210,7 +210,7 @@ export const PLAN_REGISTRY: Record<PlanKey, PlanDefinition> = {
     tagline: "Multi-location, custom integrations, SLA.",
     description:
       "Multi-location, custom integrations, dedicated SLA, API access, advanced permissions, custom limits.",
-    priceMonthlyUsd: null,
+    priceMonthlyUsd: 499,
     stripePriceEnvKey: "NEXT_PUBLIC_STRIPE_ENTERPRISE_PRICE_ID",
     checkoutable: false,
     rank: 4,

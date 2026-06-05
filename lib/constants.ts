@@ -15,7 +15,7 @@ export const SITE_URL = resolvePublicSiteUrl();
 export const STRIPE_PLANS = {
   STARTER: {
     name: "Starter",
-    priceMonthly: 79,
+    priceMonthly: 49,
     description: "Orders, kitchen display, and basic analytics for small venues.",
   },
   PRO: {

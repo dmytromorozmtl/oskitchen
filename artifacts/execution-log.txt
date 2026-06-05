@@ -5543,3 +5543,12 @@ Result: DONE — Poster Gaps 3/10
 Files: quick-start-wizard.tsx, quick-start-service.ts, quick-start/page.tsx, e2e/quick-start-15min.spec.ts
 Tests: unit 7/7 pass (quick-start service + menu templates)
 
+---
+POSTER GAP Cycle: 4
+Timestamp: 2026-06-05T07:48:00.000Z
+Feature: public-pricing-page
+Action: feat: Public Pricing Page — 4 transparent plans
+Result: DONE — Poster Gaps 4/10
+Files: plan-registry.ts, public-pricing-content.ts, pricing-page.tsx, app/pricing/page.tsx, pricing-faq.ts, signup-form.tsx, e2e/pricing-self-serve.spec.ts
+Tests: unit 3/3 pass (public-pricing-content)
+

@@ -9,7 +9,7 @@ export function relatedPagesForSolution(slug: SolutionPageSlug): RelatedPage[] {
     { title: 'Fast-casual', href: '/solutions/fast-casual', description: 'High-throughput POS & KDS' },
     { title: 'Ghost kitchens', href: '/solutions/ghost-kitchens', description: 'Multi-brand command center' },
     { title: 'Meal prep', href: '/solutions/meal-prep', description: 'Weekly menus & production' },
-    { title: 'Pricing', href: '/pricing', description: 'Plans from $29/mo · 14-day trial' },
+    { title: 'Pricing', href: '/pricing', description: 'Plans from $49/mo · 14-day trial' },
     { title: 'Interactive demo', href: '/demo', description: 'Try a live workspace' },
     { title: 'Blog', href: '/blog', description: 'Guides for operators' },
     {
