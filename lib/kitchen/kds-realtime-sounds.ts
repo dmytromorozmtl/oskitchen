@@ -26,6 +26,13 @@ export function playKdsLiveConnectChime() {
   setTimeout(() => playTone(880, 0.12, 0.06), 120);
 }
 
+/** Triple ascending alert when rush mode enters peak. */
+export function playKdsRushModeAlert() {
+  playTone(523, 0.12, 0.1);
+  setTimeout(() => playTone(659, 0.12, 0.1), 140);
+  setTimeout(() => playTone(784, 0.18, 0.12), 280);
+}
+
 /** Two-tone alert when a ticket crosses the overdue threshold. */
 export function playKdsOverdueAlert() {
   try {

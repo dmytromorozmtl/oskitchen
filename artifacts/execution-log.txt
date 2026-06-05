@@ -5675,3 +5675,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T03:15:00Z | Cycle 27 | Phase 3 | Feature 27: KDS Production View | PASS — /dashboard/kitchen/production station load, bottlenecks, ETA
 2026-06-06T03:30:00Z | Cycle 28 | Phase 3 | Feature 28: KDS Expo View | PASS — /dashboard/kitchen/expo ready, waiting, delayed lanes
 2026-06-06T03:45:00Z | Cycle 29 | Phase 3 | Feature 29: KDS Manager View | PASS — /dashboard/kitchen/manager performance, delays, efficiency
+2026-06-06T04:00:00Z | Cycle 30 | Phase 3 | Feature 30: KDS Rush Mode | PASS — auto peak detection, priority routing, sound alerts

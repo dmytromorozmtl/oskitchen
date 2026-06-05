@@ -9,7 +9,7 @@ import {
   recallDailyKdsOrderAction,
 } from "@/actions/kitchen-daily-kds";
 import { KdsBumpNextStrip } from "@/components/kitchen/kds-bump-next-strip";
-import { KdsPriorityLaneStrip } from "@/components/kitchen/kds-priority-lane-strip";
+import { RushMode } from "@/components/kitchen/rush-mode";
 import { KdsQueueStatusStrip } from "@/components/kitchen/kds-queue-status-strip";
 import { KdsRecallNextStrip } from "@/components/kitchen/kds-recall-next-strip";
 import { QrOrderTicketBadge } from "@/components/kitchen/qr-order-ticket";
@@ -26,11 +26,12 @@ import {
   buildKdsTicketFocusSnapshot,
   shouldShowKdsTicketAttentionStrip,
 } from "@/lib/kitchen/kds-ticket-focus-era18";
+import { partitionKdsQueueByPriority } from "@/lib/kitchen/kds-priority-lane-era19";
 import {
-  buildKdsPriorityLaneItems,
-  partitionKdsQueueByPriority,
-  shouldShowKdsPriorityLane,
-} from "@/lib/kitchen/kds-priority-lane-era19";
+  buildKdsRushModeSnapshot,
+  shouldShowKdsRushMode,
+  type KdsRushLevel,
+} from "@/lib/kitchen/kds-rush-mode";
 import {
   formatKdsElapsedClock,
   formatKdsTicketNumber,
@@ -43,6 +44,7 @@ import { KDS_NEW_TICKET_ANIMATION_CLASS } from "@/lib/kitchen/kds-realtime-ui";
 import {
   playKdsNewOrderChime,
   playKdsOverdueAlert,
+  playKdsRushModeAlert,
 } from "@/lib/kitchen/kds-realtime-sounds";
 import type { KdsRealtimeSloSnapshot } from "@/lib/kitchen/kds-realtime-slo-metrics";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
@@ -84,15 +86,13 @@ export function KdsDailyService({
   const [, startBump] = useTransition();
   const [, startRefresh] = useTransition();
   const overdueAlertedRef = useRef<Set<string>>(new Set());
+  const rushLevelRef = useRef<KdsRushLevel>("normal");
   const [recentArrivals, setRecentArrivals] = useState<Set<string>>(() => new Set());
 
   const queueSummary = useMemo(() => summarizeKdsQueue(orders), [orders]);
+  const rushSnapshot = useMemo(() => buildKdsRushModeSnapshot(orders), [orders]);
+  const showRushMode = shouldShowKdsRushMode(rushSnapshot);
   const { preparing, ready } = useMemo(() => partitionKdsQueueByPriority(orders), [orders]);
-  const priorityLaneItems = useMemo(
-    () => buildKdsPriorityLaneItems(preparing, ready),
-    [preparing, ready],
-  );
-  const showPriorityLane = shouldShowKdsPriorityLane(orders);
   const bumpNextTicket = useMemo(() => pickKdsBumpNextTicket(preparing), [preparing]);
   const showBumpNextHero = shouldShowKdsBumpNextHero({
     canBump,
@@ -150,6 +150,13 @@ export function KdsDailyService({
     if (refreshSignal === 0) return;
     refresh();
   }, [refresh, refreshSignal]);
+
+  useEffect(() => {
+    if (soundEnabled && rushSnapshot.level === "rush" && rushLevelRef.current !== "rush") {
+      playKdsRushModeAlert();
+    }
+    rushLevelRef.current = rushSnapshot.level;
+  }, [rushSnapshot.level, soundEnabled]);
 
   useEffect(() => {
     const tick = setInterval(() => {
@@ -250,7 +257,7 @@ export function KdsDailyService({
         </div>
       ) : null}
 
-      {showPriorityLane ? <KdsPriorityLaneStrip items={priorityLaneItems} /> : null}
+      {showRushMode ? <RushMode snapshot={rushSnapshot} /> : null}
 
       {showTicketAttentionStrip ? (
         <KdsTicketAttentionStrip
