@@ -68,6 +68,9 @@ export default async function ForecastOverviewPage() {
               <Link href="/dashboard/forecast/new">Run forecast</Link>
             </Button>
             <Button asChild size="sm" variant="outline" className="rounded-full">
+              <Link href="/dashboard/forecast/forecasting-2">Forecasting 2.0</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="rounded-full">
               <Link href="/dashboard/forecast/history">History</Link>
             </Button>
           </div>
