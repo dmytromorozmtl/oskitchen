@@ -5606,3 +5606,11 @@ Result: DONE — Poster Gaps 10/10
 Files: app/landing/bar/page.tsx, bar-landing.tsx, bar-landing-content.ts
 Tests: unit 2/2 pass (bar-landing)
 
+---
+POSTER GAP Cycle: 11
+Timestamp: 2026-06-05T08:00:00.000Z
+Feature: poster-gap-closure
+Action: feat: Poster gaps closed — 10/10 features complete
+Result: DONE — All SMB adoption gaps vs Poster closed
+Tracker: invoice-scanner-ai, invoice-scanner-mobile-ux, quick-start-15min, public-pricing-page, bank-statement-import, public-knowledge-base, landing-full-service, landing-coffee-shop, landing-ghost-kitchen, landing-bar
+
