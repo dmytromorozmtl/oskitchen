@@ -42,6 +42,9 @@ export function MultiBrandEnterprisePanel({ dashboard }: Props) {
             <Link href="/dashboard/brands/new">Add brand</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/enterprise/commissary">Commissary OS</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/enterprise/multi-location">Multi-location</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
