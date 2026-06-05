@@ -12,10 +12,6 @@ export const DARK_MODE_CONSISTENCY_POLICY_ID = "dark-mode-consistency-des24-v1" 
 /** Root / sidebar / header chrome — responds to `.dark` via shadcn tokens. */
 export const dashboardShellRootClass = cn("flex min-h-screen bg-background text-foreground");
 
-export const dashboardShellSidebarClass = cn(
-  "relative hidden w-64 shrink-0 border-r border-border/70 bg-background md:flex md:flex-col",
-);
-
 export const dashboardShellHeaderClass = cn(
   "sticky top-0 z-chrome flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80",
 );

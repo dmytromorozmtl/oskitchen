@@ -28,7 +28,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -38,11 +37,7 @@ import {
 } from "@/components/ui/sheet";
 import { OSKitchenLogo } from "@/components/ui/os-kitchen-logo";
 import { appIconNavClass } from "@/lib/design/icon-system";
-import {
-  dashboardShellHeaderClass,
-  dashboardShellRootClass,
-  dashboardShellSidebarClass,
-} from "@/lib/design/dark-mode-consistency-policy";
+import { dashboardShellHeaderClass, dashboardShellRootClass } from "@/lib/design/dark-mode-consistency-policy";
 import { APP_NAME } from "@/lib/constants";
 import type { Locale, MessageKey } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
@@ -102,8 +97,12 @@ export function DashboardShell({
   navReleaseProfile?: NavReleaseProfile;
 }) {
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [navOpen, setNavOpen] = React.useState(false);
   const brand = businessName?.trim() || APP_NAME;
+
+  React.useEffect(() => {
+    setNavOpen(false);
+  }, [pathname]);
 
   const ownerExtras = [
     ...(billingAccess?.platformBypass
@@ -137,46 +136,26 @@ export function DashboardShell({
 
   return (
     <div className={dashboardShellRootClass}>
-      <aside className={dashboardShellSidebarClass}>
-        <div className="flex h-16 items-center gap-2 border-b border-border/70 px-6">
-          <OSKitchenLogo href="/dashboard" size="sm" />
-          <div className="min-w-0">
-            <p className="truncate text-xs text-muted-foreground">{brand}</p>
-          </div>
-        </div>
-        <ScrollArea className="flex-1 py-4">
-          <DashboardSidebarNav
-            locale={locale}
-            pathname={pathname}
-            ownerExtras={ownerExtras}
-            businessType={businessType}
-            businessModeLabel={businessModeLabel}
-            navContext={navContextBase}
-            disabledModuleKeys={disabledModuleKeys}
-            setupHint={setupHint}
-            navReleaseProfile={navReleaseProfile}
-          />
-        </ScrollArea>
-        <div className="border-t border-border/70 p-4">
-          <p className="truncate text-xs text-muted-foreground">{userEmail}</p>
-          <form action={signOutAction} className="mt-3">
-            <Button variant="outline" size="sm" className="w-full rounded-full">
-              Log out
-            </Button>
-          </form>
-        </div>
-      </aside>
-
       <div className="flex min-h-screen flex-1 flex-col">
         <header className={dashboardShellHeaderClass}>
           <div className="flex min-w-0 items-center gap-2">
-            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <Sheet open={navOpen} onOpenChange={setNavOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="rounded-full md:hidden">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full gap-2 px-3"
+                  aria-label="Open navigation menu"
+                  data-testid="dashboard-nav-trigger"
+                >
                   <MenuSquare className={appIconNavClass} />
+                  <span className="hidden sm:inline">Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="flex w-[280px] flex-col gap-0 p-0">
+              <SheetContent
+                side="left"
+                className="flex w-[min(100vw-1rem,20rem)] flex-col gap-0 p-0 sm:max-w-none md:w-80"
+              >
                 <SheetHeader className="shrink-0 border-b border-border/70 px-6 py-4 text-left">
                   <SheetTitle className="font-display">
                     <OSKitchenLogo href={null} size="sm" />
@@ -194,8 +173,16 @@ export function DashboardShell({
                     disabledModuleKeys={disabledModuleKeys}
                     setupHint={setupHint}
                     navReleaseProfile={navReleaseProfile}
-                    onNavigate={() => setMobileOpen(false)}
+                    onNavigate={() => setNavOpen(false)}
                   />
+                </div>
+                <div className="shrink-0 border-t border-border/70 p-4">
+                  <p className="truncate text-xs text-muted-foreground">{userEmail}</p>
+                  <form action={signOutAction} className="mt-3">
+                    <Button variant="outline" size="sm" className="w-full rounded-full">
+                      Log out
+                    </Button>
+                  </form>
                 </div>
               </SheetContent>
             </Sheet>
