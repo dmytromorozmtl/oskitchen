@@ -152,6 +152,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
     links: [
       { href: "/dashboard/inventory/demand", labelKey: "nav.inventoryDemand", icon: Package },
       { href: "/dashboard/inventory/purchasing-ai", labelKey: "nav.aiPurchasing", icon: ShoppingBag },
+      { href: "/dashboard/inventory/manager", labelKey: "nav.aiInventoryManager", icon: AlertTriangle },
       { href: "/dashboard/inventory/cross-channel", labelKey: "nav.inventoryCrossChannel", icon: Package },
       { href: "/dashboard/inventory/pos-impacts", labelKey: "nav.inventoryPosImpacts", icon: Package },
       { href: "/dashboard/inventory/waste", labelKey: "nav.inventoryWaste", icon: Package },
