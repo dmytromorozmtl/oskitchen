@@ -1,3 +1,4 @@
+import { buildFranchiseSuiteDashboardV2 } from "@/lib/enterprise/franchise-suite-2-builders";
 import type {
   FranchiseBrandStatus,
   FranchiseMenuEnforcement,
@@ -103,5 +104,14 @@ export function buildFranchiseSuiteDashboard(input: {
       averageMenuCompliance,
       unitsNeedingReview: input.units.filter((u) => u.brandStatus !== "compliant").length,
     },
+    v2: buildFranchiseSuiteDashboardV2({
+      units: input.units,
+      totalRoyalties: input.royalties.totalRoyalties,
+      hasBrandKit: Boolean(
+        input.settings.brandControl.brandName ||
+          input.settings.brandControl.logoUrl ||
+          input.settings.brandControl.brandColor,
+      ),
+    }),
   };
 }

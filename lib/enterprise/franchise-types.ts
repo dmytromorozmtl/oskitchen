@@ -1,3 +1,4 @@
+import type { FranchiseSuiteDashboardV2 } from "@/lib/enterprise/franchise-suite-2-types";
 import type { calculateRoyalties } from "@/services/franchise/franchise-service";
 
 export type FranchiseRoyaltyPeriod = "month" | "quarter";
@@ -54,6 +55,7 @@ export type FranchiseSuiteDashboard = {
     averageMenuCompliance: number;
     unitsNeedingReview: number;
   };
+  v2: FranchiseSuiteDashboardV2;
 };
 
 export const DEFAULT_FRANCHISE_SUITE_SETTINGS: FranchiseSuiteSettings = {

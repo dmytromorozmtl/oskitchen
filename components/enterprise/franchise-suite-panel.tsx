@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Building, Palette, ShieldCheck, UtensilsCrossed } from "lucide-react";
+import { Building, Palette, Rocket, ShieldCheck, TrendingUp, UtensilsCrossed } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -28,7 +28,13 @@ const BRAND_STATUS_CLASS: Record<FranchiseUnitRow["brandStatus"], string> = {
   non_compliant: "bg-red-600 hover:bg-red-600",
 };
 
-function UnitRow({ unit }: { unit: FranchiseUnitRow }) {
+function UnitRow({
+  unit,
+  rollout,
+}: {
+  unit: FranchiseUnitRow;
+  rollout?: FranchiseSuiteDashboard["v2"]["unitRollouts"][number];
+}) {
   return (
     <tr className="border-b border-border/50" data-testid={`franchise-unit-${unit.franchiseId}`}>
       <td className="py-2 pr-3 font-medium">{unit.franchiseName}</td>
@@ -36,6 +42,17 @@ function UnitRow({ unit }: { unit: FranchiseUnitRow }) {
       <td className="py-2 pr-3 text-right tabular-nums">{unit.royaltyRate}%</td>
       <td className="py-2 pr-3 text-right tabular-nums font-medium">{formatCurrency(unit.royaltyAmount)}</td>
       <td className="py-2 pr-3 text-right tabular-nums">{unit.menuCompliancePercent}%</td>
+      <td className="py-2 pr-3">
+        <Badge variant="outline" className="rounded-full capitalize">
+          {rollout?.phaseLabel ?? "—"}
+        </Badge>
+        {rollout ? (
+          <p className="mt-1 max-w-[12rem] text-xs text-muted-foreground">{rollout.nextStep}</p>
+        ) : null}
+      </td>
+      <td className="py-2 pr-3 tabular-nums text-sm">
+        {rollout ? `${rollout.passedCheckCount}/${rollout.totalCheckCount}` : "—"}
+      </td>
       <td className="py-2">
         <Badge className={cn("capitalize", BRAND_STATUS_CLASS[unit.brandStatus])}>
           {unit.brandStatus.replace(/_/g, " ")}
@@ -51,7 +68,7 @@ export function FranchiseSuitePanel({ dashboard }: Props) {
   const [lockedItems, setLockedItems] = useState(
     dashboard.menuEnforcement.lockedMenuItems.join("\n"),
   );
-  const { brandControl, summary, period } = dashboard;
+  const { brandControl, summary, period, v2 } = dashboard;
 
   function run(action: () => Promise<{ ok: boolean; error?: string; data?: { message?: string } }>) {
     startTransition(async () => {
@@ -74,7 +91,8 @@ export function FranchiseSuitePanel({ dashboard }: Props) {
             Franchise management suite
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Brand control, royalty tracking, and menu enforcement across franchisee workspaces.
+            Brand control, royalty tracking, compliance checklist, and rollout phases across franchisee
+            workspaces.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -106,6 +124,42 @@ export function FranchiseSuitePanel({ dashboard }: Props) {
         <Kpi label="Avg menu compliance" value={`${summary.averageMenuCompliance}%`} />
         <Kpi label="Needs review" value={summary.unitsNeedingReview} />
       </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Kpi
+          label="Effective royalty rate"
+          value={
+            v2.royaltyInsights.effectiveRoyaltyRatePct != null
+              ? `${v2.royaltyInsights.effectiveRoyaltyRatePct}%`
+              : "—"
+          }
+          hint={`${v2.royaltyInsights.unitsWithRevenue} units reporting revenue`}
+        />
+        <Kpi
+          label="Avg royalty / unit"
+          value={formatCurrency(v2.royaltyInsights.averageRoyaltyPerUnit)}
+        />
+        <Kpi label="Compliance pass rate" value={`${v2.compliancePassRate}%`} />
+        <Kpi label="Certified units" value={v2.certifiedUnitCount} hint="Rollout phase complete" />
+      </div>
+
+      <Card data-testid="franchise-rollout-overview">
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Rocket className="h-4 w-4" aria-hidden />
+            Rollout pipeline
+          </CardTitle>
+          <CardDescription>Discovery → training → go-live → certified</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {(["discovery", "training", "go_live", "certified"] as const).map((phase) => (
+            <div key={phase} className="rounded-lg border border-border/80 bg-muted/20 px-3 py-2">
+              <p className="text-xs capitalize text-muted-foreground">{phase.replace(/_/g, " ")}</p>
+              <p className="mt-1 text-2xl font-semibold tabular-nums">{v2.rolloutByPhase[phase]}</p>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
@@ -227,11 +281,30 @@ export function FranchiseSuitePanel({ dashboard }: Props) {
         </Card>
       </div>
 
+      {v2.royaltyInsights.topRoyaltyUnitName ? (
+        <Card data-testid="franchise-royalty-insights">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" aria-hidden />
+              Royalty insights
+            </CardTitle>
+            <CardDescription>
+              Top unit: {v2.royaltyInsights.topRoyaltyUnitName} —{" "}
+              {formatCurrency(v2.royaltyInsights.topRoyaltyAmount)}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            Network revenue {formatCurrency(v2.royaltyInsights.totalRevenue)} · royalties{" "}
+            {formatCurrency(v2.royaltyInsights.totalRoyalties)}
+          </CardContent>
+        </Card>
+      ) : null}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <ShieldCheck className="h-4 w-4" aria-hidden />
-            Franchise units — royalties & compliance
+            Franchise units — royalties, compliance & rollout
           </CardTitle>
           <CardDescription>
             Royalties estimated from non-cancelled order totals · {period} view.
@@ -252,12 +325,18 @@ export function FranchiseSuitePanel({ dashboard }: Props) {
                     <th className="pb-2 text-right">Rate</th>
                     <th className="pb-2 text-right">Royalty</th>
                     <th className="pb-2 text-right">Menu</th>
+                    <th className="pb-2">Rollout</th>
+                    <th className="pb-2">Checks</th>
                     <th className="pb-2">Brand</th>
                   </tr>
                 </thead>
                 <tbody>
                   {dashboard.units.map((unit) => (
-                    <UnitRow key={unit.franchiseId} unit={unit} />
+                    <UnitRow
+                      key={unit.franchiseId}
+                      unit={unit}
+                      rollout={v2.unitRollouts.find((row) => row.franchiseId === unit.franchiseId)}
+                    />
                   ))}
                 </tbody>
               </table>
