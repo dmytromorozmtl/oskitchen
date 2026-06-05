@@ -15,8 +15,8 @@ describe("beta integrations integrity smoke summary", () => {
     });
     expect(summary.overall).toBe("PASSED");
     expect(summary.proofStatus).toBe("integrity_complete");
-    expect(summary.registry.registryBetaCount).toBe(10);
-    expect(summary.env.envSummary.total).toBe(10);
+    expect(summary.registry.registryBetaCount).toBe(9);
+    expect(summary.env.envSummary.total).toBe(9);
   });
 
   it("fails when registry cert fails", () => {

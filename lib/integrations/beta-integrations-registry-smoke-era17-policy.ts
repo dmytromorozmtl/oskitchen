@@ -18,7 +18,7 @@ export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_SUMMARY_ARTIFACT =
 export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_NPM_SCRIPT =
   "smoke:beta-integrations-registry" as const;
 
-export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT = 10 as const;
+export const BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT = 9 as const;
 
 /** Required repo paths per BETA integration id — honest scaffold, not live proof. */
 export const BETA_INTEGRATION_SCAFFOLD_PATHS: Readonly<
@@ -33,11 +33,6 @@ export const BETA_INTEGRATION_SCAFFOLD_PATHS: Readonly<
     "app/dashboard/integrations/uber-eats/page.tsx",
     "services/integrations/uber-eats.ts",
     "app/api/integrations/uber-eats/menu/route.ts",
-  ],
-  homebase: [
-    "app/dashboard/integrations/homebase/page.tsx",
-    "services/integrations/homebase-import-service.ts",
-    "app/api/integrations/homebase/sync/route.ts",
   ],
   klaviyo: [
     "app/dashboard/integrations/klaviyo/page.tsx",

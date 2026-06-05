@@ -101,8 +101,12 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "homebase",
     name: "Homebase",
-    status: "BETA",
-    requiredEnv: ["HOMEBASE_API_KEY", "HOMEBASE_LOCATION_ID"],
+    status: "LIVE",
+    requiredEnv: [
+      "HOMEBASE_CLIENT_ID",
+      "HOMEBASE_CLIENT_SECRET",
+      "HOMEBASE_LOCATION_ID",
+    ],
     setupRoute: "/dashboard/integrations/homebase",
   },
   {

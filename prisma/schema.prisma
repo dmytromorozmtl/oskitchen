@@ -227,6 +227,7 @@ enum IntegrationProvider {
   OPENTABLE
   RESY
   SEVEN_SHIFTS
+  HOMEBASE
   MANUAL
 }
 

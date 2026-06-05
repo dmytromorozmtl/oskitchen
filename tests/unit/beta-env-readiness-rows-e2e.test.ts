@@ -12,7 +12,7 @@ import { betaEnvReadinessRowsSucceeded } from "@/lib/integrations/beta-env-readi
 describe("beta env readiness rows E2E policy (QA-41)", () => {
   it("locks env readiness rows e2e policy id and expected count", () => {
     expect(BETA_ENV_READINESS_ROWS_E2E_POLICY_ID).toBe("beta-env-readiness-rows-e2e-v1");
-    expect(BETA_ENV_READINESS_ROWS_EXPECTED_COUNT).toBe(10);
+    expect(BETA_ENV_READINESS_ROWS_EXPECTED_COUNT).toBe(9);
   });
 
   it("parses header summary counts from panel text", () => {

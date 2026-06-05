@@ -13,9 +13,9 @@ describe("live integration dod tracker", () => {
     expect(LIVE_INTEGRATION_DOD_POLICY_ID).toBe("live-integration-dod-v1");
   });
 
-  it("lists ten BETA integration rows with G1–G4 gates", () => {
+  it("lists nine BETA integration rows with G1–G4 gates", () => {
     const rows = listLiveIntegrationDodRows({});
-    expect(rows).toHaveLength(10);
+    expect(rows).toHaveLength(9);
     for (const row of rows) {
       expect(row.gates).toHaveLength(4);
       expect(row.registryStatus).toBe("BETA");
@@ -49,8 +49,8 @@ describe("live integration dod tracker", () => {
   it("summarizes scaffold and env readiness counts", () => {
     const rows = listLiveIntegrationDodRows({});
     const summary = summarizeLiveIntegrationDod(rows);
-    expect(summary.total).toBe(10);
-    expect(summary.scaffoldReadyCount).toBe(10);
-    expect(summary.liveCount).toBe(11);
+    expect(summary.total).toBe(9);
+    expect(summary.scaffoldReadyCount).toBe(9);
+    expect(summary.liveCount).toBe(12);
   });
 });
