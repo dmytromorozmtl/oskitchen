@@ -39,8 +39,8 @@ import type {
   InvoiceScanHistoryEntry,
   ScannedInvoice,
   ScannedInvoiceLineItem,
-} from "@/services/ai/invoice-scanner-service";
-import { confidenceBadgeVariant } from "@/services/ai/invoice-scanner-service";
+} from "@/lib/inventory/invoice-scanner-types";
+import { confidenceBadgeVariant } from "@/lib/inventory/invoice-scanner-types";
 
 type Props = {
   history: InvoiceScanHistoryEntry[];

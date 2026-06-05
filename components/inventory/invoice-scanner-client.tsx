@@ -1,7 +1,7 @@
 "use client";
 
 import { InvoiceScannerMobile } from "@/components/inventory/invoice-scanner-mobile";
-import type { InvoiceScanHistoryEntry } from "@/services/ai/invoice-scanner-service";
+import type { InvoiceScanHistoryEntry } from "@/lib/inventory/invoice-scanner-types";
 
 type Props = {
   history: InvoiceScanHistoryEntry[];

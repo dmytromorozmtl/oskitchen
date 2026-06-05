@@ -3,7 +3,7 @@
  * Photos captured without connectivity are stored in IndexedDB and synced when online.
  */
 
-import type { ScannedInvoice } from "@/services/ai/invoice-scanner-service";
+import type { ScannedInvoice } from "@/lib/inventory/invoice-scanner-types";
 
 export const INVOICE_SCANNER_OFFLINE_DB = "kitchenos-invoice-scanner-offline";
 export const INVOICE_SCANNER_OFFLINE_STORE = "scan_queue";
