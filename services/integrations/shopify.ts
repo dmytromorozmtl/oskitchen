@@ -33,11 +33,13 @@ export async function testConnection(creds: ShopifyCredentials): Promise<{ ok: b
       data?: { shop?: { name?: string } };
       errors?: { message: string }[];
     };
-    if (!res.ok || json.errors?.length) {
-      return {
-        ok: false,
-        message: json.errors?.map((e) => e.message).join("; ") ?? `HTTP ${res.status}`,
-      };
+    if (!res.ok || json.errors) {
+      const message = Array.isArray(json.errors)
+        ? json.errors.map((e) => e.message).join("; ")
+        : typeof json.errors === "object"
+          ? JSON.stringify(json.errors).slice(0, 200)
+          : `HTTP ${res.status}`;
+      return { ok: false, message };
     }
     return {
       ok: true,

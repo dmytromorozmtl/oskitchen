@@ -33,14 +33,24 @@ import {
   getWebhookSecret,
 } from "@/lib/integrations/decrypt-connection";
 import {
+  SHOPIFY_LIVE_SMOKE_ERA72_POLICY_ID,
+  SHOPIFY_LIVE_SMOKE_ERA72_SUMMARY_ARTIFACT,
+} from "@/lib/integrations/shopify-live-smoke-era72-policy";
+import { isPlaceholderShopifyStoreHost } from "@/lib/integrations/shopify-live-smoke-summary";
+import {
+  inventorySyncTopicForSmoke,
+  waitForKdsTicket,
+  waitForKitchenImport,
+} from "@/services/integrations/shopify-live-smoke-service";
+import {
   testConnection,
   verifyShopifyHmac,
   type ShopifyCredentials,
 } from "@/services/integrations/shopify";
 
-export const SHOPIFY_LIVE_SMOKE_ARTIFACT = "artifacts/shopify-live-smoke-summary.json" as const;
+export const SHOPIFY_LIVE_SMOKE_ARTIFACT = SHOPIFY_LIVE_SMOKE_ERA72_SUMMARY_ARTIFACT;
 
-export const SHOPIFY_LIVE_SMOKE_VERSION = "shopify-live-smoke-v1" as const;
+export const SHOPIFY_LIVE_SMOKE_VERSION = SHOPIFY_LIVE_SMOKE_ERA72_POLICY_ID;
 
 export type ShopifyLiveSmokeStepStatus = "PASSED" | "FAILED" | "SKIPPED";
 
@@ -54,6 +64,7 @@ export type ShopifyLiveSmokeStep = {
 export type ShopifyLiveSmokeProofStatus =
   | "proof_passed"
   | "proof_skipped_missing_prerequisites"
+  | "proof_skipped_placeholder_store"
   | "proof_failed";
 
 export type ShopifyLiveSmokeSummary = {
@@ -278,9 +289,16 @@ export function buildShopifyLiveSmokeSummary(input: {
   let overall: ShopifyLiveSmokeSummary["overall"];
   let proofStatus: ShopifyLiveSmokeProofStatus;
 
+  const placeholderSkipped = input.steps.some(
+    (step) => step.id === "shopify_api_connection" && step.status === "SKIPPED",
+  );
+
   if (input.missingEnvVars.length > 0) {
     overall = "SKIPPED";
     proofStatus = "proof_skipped_missing_prerequisites";
+  } else if (placeholderSkipped) {
+    overall = "SKIPPED";
+    proofStatus = "proof_skipped_placeholder_store";
   } else if (failed) {
     overall = "FAILED";
     proofStatus = "proof_failed";
@@ -304,7 +322,7 @@ export function buildShopifyLiveSmokeSummary(input: {
     shopDomain: input.shopDomain ?? null,
     stagingWebhookUrl: input.stagingWebhookUrl ?? null,
     honestyNote:
-      "PASS requires live Shopify Admin API + staging webhook ingest + ExternalOrder row — not wiring cert alone.",
+      "PASS requires live Shopify Admin API + staging orders/create webhook + ExternalOrder + KDS kitchen import — inventory sync on orders/create.",
   };
 }
 
@@ -438,12 +456,17 @@ export async function runShopifyLiveSmoke(
     const { connectionId, creds, webhookSecret, shopDomain } = resolved;
     const stagingWebhookUrl = `${input.stagingBaseUrl!.replace(/\/+$/, "")}/api/webhooks/shopify/orders-create`;
 
+    const placeholderStore = isPlaceholderShopifyStoreHost(shopDomain);
     const ping = await testConnection(creds);
     steps.push({
       id: "shopify_api_connection",
       label: "Shopify Admin API connection",
-      status: ping.ok ? "PASSED" : "FAILED",
-      detail: ping.message,
+      status: ping.ok ? "PASSED" : placeholderStore ? "SKIPPED" : "FAILED",
+      detail: ping.ok
+        ? ping.message
+        : placeholderStore
+          ? `Store ${shopDomain}: ${ping.message}. Update Dashboard → Integrations → Shopify (saved host is a placeholder).`
+          : ping.message,
     });
     if (!ping.ok) {
       return buildShopifyLiveSmokeSummary({
@@ -504,6 +527,74 @@ export async function runShopifyLiveSmoke(
       detail: inDb
         ? `connectionId=${connectionId} externalOrderId=${created.orderId}`
         : "Order not found within 15s — check staging DB matches DATABASE_URL",
+    });
+    if (!inDb) {
+      return buildShopifyLiveSmokeSummary({
+        steps,
+        missingEnvVars: [],
+        externalOrderId: created.orderId,
+        connectionId,
+        shopDomain,
+        stagingWebhookUrl,
+      });
+    }
+
+    const kitchenImport = await waitForKitchenImport({
+      prisma,
+      connectionId,
+      externalOrderId: created.orderId,
+    });
+    steps.push({
+      id: "kds_kitchen_import",
+      label: "Kitchen import (KDS ticket source)",
+      status: kitchenImport.ok ? "PASSED" : "FAILED",
+      detail: kitchenImport.ok
+        ? `importedOrderId=${kitchenImport.orderId}`
+        : "importedOrderId not set within 20s — check staging webhook processor",
+    });
+    if (!kitchenImport.ok || !kitchenImport.orderId) {
+      return buildShopifyLiveSmokeSummary({
+        steps,
+        missingEnvVars: [],
+        externalOrderId: created.orderId,
+        connectionId,
+        shopDomain,
+        stagingWebhookUrl,
+      });
+    }
+
+    const kdsTicket = await waitForKdsTicket({
+      prisma,
+      orderId: kitchenImport.orderId,
+    });
+    steps.push({
+      id: "kds_ticket_visible",
+      label: "KDS ticket row in kitchen orders",
+      status: kdsTicket.ok ? "PASSED" : "FAILED",
+      detail: kdsTicket.ok
+        ? `orderId=${kitchenImport.orderId} status=${kdsTicket.status}`
+        : "Kitchen order not visible within 15s",
+    });
+    if (!kdsTicket.ok) {
+      return buildShopifyLiveSmokeSummary({
+        steps,
+        missingEnvVars: [],
+        externalOrderId: created.orderId,
+        connectionId,
+        shopDomain,
+        stagingWebhookUrl,
+      });
+    }
+
+    const webhookTopic = inventorySyncTopicForSmoke();
+    steps.push({
+      id: "inventory_sync_wiring",
+      label: "Inventory sync on orders/create",
+      status: webhookTopic === "orders/create" ? "PASSED" : "FAILED",
+      detail:
+        webhookTopic === "orders/create"
+          ? "orders/create topic triggers syncShopifyInventoryFromOrder"
+          : `unexpected topic ${webhookTopic}`,
     });
 
     return buildShopifyLiveSmokeSummary({

@@ -53,4 +53,26 @@ describe("smoke-shopify-live", () => {
     expect(summary.overall).toBe("SKIPPED");
     expect(summary.proofStatus).toBe("proof_skipped_missing_prerequisites");
   });
+
+  it("builds SKIPPED summary for placeholder store host", () => {
+    const summary = buildShopifyLiveSmokeSummary({
+      steps: [
+        {
+          id: "env_validation",
+          label: "Prerequisite env vars",
+          status: "PASSED",
+        },
+        {
+          id: "shopify_api_connection",
+          label: "Shopify Admin API connection",
+          status: "SKIPPED",
+          detail: "placeholder host",
+        },
+      ],
+      missingEnvVars: [],
+    });
+
+    expect(summary.overall).toBe("SKIPPED");
+    expect(summary.proofStatus).toBe("proof_skipped_placeholder_store");
+  });
 });

@@ -1,26 +1,29 @@
 {
-  "version": "shopify-live-smoke-v1",
-  "runAt": "2026-06-03T19:07:17.636Z",
-  "overall": "FAILED",
-  "proofStatus": "proof_failed",
+  "version": "era72-shopify-live-smoke-v1",
+  "runAt": "2026-06-05T23:50:10.093Z",
+  "commitSha": null,
+  "overall": "SKIPPED",
+  "proofStatus": "proof_skipped_placeholder_store",
+  "wiringCertPassed": true,
+  "liveSmokeOverall": "SKIPPED",
   "missingEnvVars": [],
   "steps": [
     {
-      "id": "env_validation",
-      "label": "Prerequisite env vars",
-      "status": "PASSED",
-      "detail": "Direct Shopify or DB tenant path satisfied"
+      "id": "wiring_audit",
+      "label": "Shopify → webhook → KDS → inventory wiring",
+      "status": "PASSED"
     },
     {
-      "id": "shopify_api_connection",
-      "label": "Shopify Admin API connection",
-      "status": "FAILED",
-      "detail": "json.errors?.map is not a function"
+      "id": "unit_cert",
+      "label": "Era 72 Shopify live smoke cert",
+      "status": "PASSED"
+    },
+    {
+      "id": "live_admin_webhook_kds_inventory",
+      "label": "Live dev store → webhook → KDS → inventory",
+      "status": "SKIPPED",
+      "reason": "Store smoke-test-os-kitchen.myshopify.com: HTTP 404. Update Dashboard → Integrations → Shopify (saved host is a placeholder)."
     }
   ],
-  "externalOrderId": null,
-  "connectionId": "e3a6b9a5-0558-4676-9f19-e08fbe039df8",
-  "shopDomain": "smoke-test-os-kitchen.myshopify.com",
-  "stagingWebhookUrl": "https://os-kitchen.com/api/webhooks/shopify/orders-create",
-  "honestyNote": "PASS requires live Shopify Admin API + staging webhook ingest + ExternalOrder row — not wiring cert alone."
+  "honestyNote": "PASS requires live Shopify Admin API + staging orders/create webhook + ExternalOrder + KDS kitchen import — inventory sync on orders/create."
 }

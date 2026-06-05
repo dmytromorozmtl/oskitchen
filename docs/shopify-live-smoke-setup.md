@@ -4,7 +4,7 @@
 **Status:** Human gate — requires Shopify development store + staging vault secrets  
 **Evidence:** `artifacts/shopify-live-smoke-summary.json` → `overall: SKIPPED`, `missingEnvVars: 7` (2026-06-03)
 
-This guide moves Shopify live proof from **SKIPPED** → **PASSED**. PASS requires live Shopify Admin API, a signed webhook delivered to staging, and a canonical `ExternalOrder` row — not wiring certification alone.
+This guide moves Shopify live proof from **SKIPPED/FAILED** → **PASSED**. PASS requires live Shopify Admin API, a signed `orders/create` webhook delivered to staging, a canonical `ExternalOrder` row, KDS kitchen import (`importedOrderId`), and inventory sync wiring — not credentials-only certification alone.
 
 ---
 
@@ -12,8 +12,10 @@ This guide moves Shopify live proof from **SKIPPED** → **PASSED**. PASS requir
 
 | Layer | Location | Behavior |
 |-------|----------|----------|
-| Live smoke script | `scripts/smoke-shopify-live.ts` | Admin API connect → test order → signed webhook → DB verify |
-| npm command | `npm run smoke:shopify-live` | Auto-loads `.env.smoke.local`, writes artifact |
+| Live smoke script | `scripts/smoke-shopify-live.ts` | Admin API connect → test order → signed `orders/create` webhook → ExternalOrder → KDS import |
+| Era 72 orchestrator | `scripts/smoke-shopify-live-era72.ts` | Wiring cert + live path; policy `era72-shopify-live-smoke-v1` |
+| npm command | `npm run smoke:shopify-live-era72` | Cert + live smoke; writes artifact |
+| Legacy npm | `npm run smoke:shopify-live` | Live path only (no cert chain) |
 | Combined channels | `npm run smoke:channels-live` | Runs Woo + Shopify live smokes sequentially |
 | Artifact | `artifacts/shopify-live-smoke-summary.json` | `overall: PASSED \| SKIPPED \| FAILED` |
 | P0 orchestrator | `.github/workflows/p0-orchestrator.yml` | Tier 2.2 runs `npm run smoke:woo-shopify-live` when vault 11/11 |
