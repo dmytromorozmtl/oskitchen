@@ -8,6 +8,7 @@ export default async function ImportExportLayout({ children }: { children: React
     { href: "/dashboard/import-export", label: "Overview", match: "exact" as const, visible: access.canViewHub },
     { href: "/dashboard/import-export/import", label: "Import data", visible: access.canImportIngredients },
     { href: "/dashboard/import-export/export", label: "Export data", visible: access.canViewHub },
+    { href: "/dashboard/data/export", label: "Data portability", visible: access.canViewHub },
     { href: "/dashboard/import-export/templates", label: "Templates", visible: access.canViewHub },
     { href: "/dashboard/import-export/imports", label: "Import history", visible: access.canImportIngredients },
     { href: "/dashboard/import-export/exports", label: "Export history", visible: access.canViewHub },
