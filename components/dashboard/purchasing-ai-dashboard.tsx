@@ -281,6 +281,28 @@ export function PurchasingAiDashboard(props: Props) {
         </div>
       </div>
 
+      <Card data-testid="ai-purchasing-daily-brief">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Daily purchasing brief</CardTitle>
+          <CardDescription>{props.dailyBrief.executiveSummary}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-lg font-medium">{props.dailyBrief.headline}</p>
+          {props.dailyBrief.bullets.length > 0 ? (
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              {props.dailyBrief.bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <Badge variant="outline">{props.dailyBrief.orderTodayCount} order today</Badge>
+            <Badge variant="outline">{props.summary.shortageCount} shortage signals</Badge>
+            <Badge variant="outline">{props.dailyBrief.priceSwitchCount} price switches</Badge>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">

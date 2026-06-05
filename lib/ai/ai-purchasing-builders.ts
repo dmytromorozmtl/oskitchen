@@ -1,12 +1,15 @@
 import { addDays } from "date-fns";
 
 import type {
+  AiPurchasingDailyBrief,
   AiPurchasingResult,
   IngredientPurchasingInput,
+  PriceOptimization,
   PurchaseAlternativeSupplier,
   PurchaseRecommendation,
   PurchaseSupplierChoice,
   PurchasingUrgency,
+  ShortagePrediction,
   SupplierOfferInput,
 } from "@/lib/ai/ai-purchasing-types";
 import { suggestReorderQuantity } from "@/lib/purchasing/reorder-rules";
@@ -140,6 +143,176 @@ function recommendationConfidence(input: {
   return round2(Math.min(0.95, score));
 }
 
+export function predictShortage(input: {
+  currentStock: number;
+  dailyUsage: number;
+  predictedDemand14d: number;
+  leadTimeDays: number;
+  analyzedAt?: Date;
+}): ShortagePrediction {
+  const daysUntilShortage = computeDaysRemaining(input.currentStock, input.dailyUsage);
+  const predictedShortageQty = round1(Math.max(0, input.predictedDemand14d - input.currentStock));
+  const shortageDateIso =
+    daysUntilShortage != null
+      ? addDays(input.analyzedAt ?? new Date(), Math.ceil(daysUntilShortage)).toISOString()
+      : null;
+  const coverageGapDays =
+    daysUntilShortage != null ? round1(Math.max(0, input.leadTimeDays - daysUntilShortage)) : 0;
+
+  return {
+    predictedShortageQty,
+    shortageDateIso,
+    daysUntilShortage,
+    coverageGapDays,
+  };
+}
+
+export function optimizePrice(input: {
+  best: PurchaseSupplierChoice;
+  alt: PurchaseAlternativeSupplier | null;
+  urgency: PurchasingUrgency;
+  defaultUnitCost: number;
+}): PriceOptimization {
+  const currentBestUnitCost = input.best.unitCost;
+  const defaultOrderTotal = round2(input.best.orderQuantity * input.defaultUnitCost);
+  const savingsVsDefault = round2(Math.max(0, defaultOrderTotal - input.best.orderTotal));
+
+  if (savingsVsDefault >= 1) {
+    return {
+      optimizedUnitCost: currentBestUnitCost,
+      currentBestUnitCost: input.defaultUnitCost,
+      savingsPerUnit: round2(Math.max(0, input.defaultUnitCost - currentBestUnitCost)),
+      savingsPerOrder: savingsVsDefault,
+      recommendation: "switch_supplier",
+      rationale: `Switch to ${input.best.supplierName} at $${currentBestUnitCost.toFixed(2)}/unit — saves $${savingsVsDefault.toFixed(2)} vs default supplier cost.`,
+    };
+  }
+
+  if (input.alt && input.alt.savingsPerOrder >= 1) {
+    const savingsPerUnit = round2(Math.max(0, currentBestUnitCost - input.alt.unitCost));
+    return {
+      optimizedUnitCost: input.alt.unitCost,
+      currentBestUnitCost,
+      savingsPerUnit,
+      savingsPerOrder: input.alt.savingsPerOrder,
+      recommendation: "switch_supplier",
+      rationale: `Switch to ${input.alt.supplierName} — saves $${input.alt.savingsPerOrder.toFixed(2)} on this order.`,
+    };
+  }
+
+  if (input.urgency === "critical" || input.urgency === "high") {
+    return {
+      optimizedUnitCost: currentBestUnitCost,
+      currentBestUnitCost,
+      savingsPerUnit: 0,
+      savingsPerOrder: 0,
+      recommendation: "order_now",
+      rationale: "Stock coverage is below lead time — prioritize replenishment over price shopping.",
+    };
+  }
+
+  if (input.best.eoq > input.best.orderQuantity * 1.15) {
+    return {
+      optimizedUnitCost: currentBestUnitCost,
+      currentBestUnitCost,
+      savingsPerUnit: 0,
+      savingsPerOrder: 0,
+      recommendation: "bulk_up",
+      rationale: `Consider bulk to EOQ ${input.best.eoq} to reduce reorder frequency.`,
+    };
+  }
+
+  return {
+    optimizedUnitCost: currentBestUnitCost,
+    currentBestUnitCost,
+    savingsPerUnit: 0,
+    savingsPerOrder: 0,
+    recommendation: "hold",
+    rationale: "Coverage is healthy — no immediate price or quantity change.",
+  };
+}
+
+export function buildAiPurchasingDailyBrief(
+  recommendations: PurchaseRecommendation[],
+  analyzedAt: Date,
+): AiPurchasingDailyBrief {
+  const urgent = recommendations.filter((row) => row.urgency === "critical" || row.urgency === "high");
+  const totalSpend = round2(recommendations.reduce((sum, row) => sum + row.bestSupplier.orderTotal, 0));
+  const totalSavings = round2(
+    recommendations.reduce((sum, row) => sum + (row.alternativeSupplier?.savingsPerOrder ?? 0), 0),
+  );
+  const priceSwitchCount = recommendations.filter(
+    (row) => row.priceOptimization.recommendation === "switch_supplier",
+  ).length;
+  const orderTodayCount = recommendations.filter(
+    (row) => row.priceOptimization.recommendation === "order_now",
+  ).length;
+
+  const topShortages = [...recommendations]
+    .filter((row) => row.shortagePrediction.predictedShortageQty > 0)
+    .sort(
+      (left, right) =>
+        (left.shortagePrediction.daysUntilShortage ?? 999) -
+        (right.shortagePrediction.daysUntilShortage ?? 999),
+    )
+    .slice(0, 5)
+    .map((row) => ({
+      ingredientName: row.ingredientName,
+      daysUntilShortage: row.shortagePrediction.daysUntilShortage,
+      predictedShortageQty: row.shortagePrediction.predictedShortageQty,
+    }));
+
+  const topSavings = [...recommendations]
+    .filter((row) => (row.alternativeSupplier?.savingsPerOrder ?? 0) > 0)
+    .sort(
+      (left, right) =>
+        (right.alternativeSupplier?.savingsPerOrder ?? 0) -
+        (left.alternativeSupplier?.savingsPerOrder ?? 0),
+    )
+    .slice(0, 5)
+    .map((row) => ({
+      ingredientName: row.ingredientName,
+      supplierName: row.alternativeSupplier!.supplierName,
+      savingsPerOrder: row.alternativeSupplier!.savingsPerOrder,
+    }));
+
+  const headline =
+    urgent.length > 0
+      ? `${urgent.length} items need orders today — $${totalSpend.toFixed(0)} estimated spend`
+      : recommendations.length > 0
+        ? `${recommendations.length} purchase opportunities — $${totalSavings.toFixed(0)} potential savings`
+        : "Purchasing clear — no shortage signals in the next 14 days";
+
+  const executiveSummary =
+    urgent.length > 0
+      ? `Shortage prediction flags ${urgent.length} urgent line${urgent.length === 1 ? "" : "s"}. ${priceSwitchCount} alternative supplier switch${priceSwitchCount === 1 ? "" : "es"} can reduce spend.`
+      : `14-day demand scan found ${recommendations.length} reorder candidate${recommendations.length === 1 ? "" : "s"} with $${totalSavings.toFixed(0)} optimizable via alternate suppliers.`;
+
+  const bullets = [
+    orderTodayCount > 0 ? `${orderTodayCount} item${orderTodayCount === 1 ? "" : "s"} below lead-time coverage` : null,
+    priceSwitchCount > 0
+      ? `${priceSwitchCount} supplier switch${priceSwitchCount === 1 ? "" : "es"} recommended for price optimization`
+      : null,
+    topShortages.length > 0
+      ? `Top shortage: ${topShortages[0]!.ingredientName}${topShortages[0]!.daysUntilShortage != null ? ` in ~${topShortages[0]!.daysUntilShortage}d` : ""}`
+      : null,
+    topSavings.length > 0
+      ? `Best savings: ${topSavings[0]!.ingredientName} via ${topSavings[0]!.supplierName} ($${topSavings[0]!.savingsPerOrder.toFixed(2)})`
+      : null,
+  ].filter((line): line is string => line != null);
+
+  return {
+    generatedAtIso: analyzedAt.toISOString(),
+    headline,
+    executiveSummary,
+    topShortages,
+    topSavings,
+    priceSwitchCount,
+    orderTodayCount,
+    bullets,
+  };
+}
+
 function suggestedActionFor(input: {
   unit: string;
   urgency: PurchasingUrgency;
@@ -189,6 +362,18 @@ export function buildPurchaseRecommendation(
     demandRequired: input.demandRequired,
     offerCount: offers.length,
   });
+  const shortagePrediction = predictShortage({
+    currentStock: input.currentStock,
+    dailyUsage,
+    predictedDemand14d,
+    leadTimeDays: best.leadTimeDays,
+  });
+  const priceOptimization = optimizePrice({
+    best,
+    alt,
+    urgency,
+    defaultUnitCost: input.defaultUnitCost,
+  });
 
   return {
     ingredientId: input.ingredientId,
@@ -203,6 +388,8 @@ export function buildPurchaseRecommendation(
     urgency,
     bestSupplier: best,
     alternativeSupplier: alt,
+    shortagePrediction,
+    priceOptimization,
     confidence,
     suggestedAction: suggestedActionFor({
       unit: input.unit,
@@ -234,12 +421,18 @@ export function assembleAiPurchasingResult(input: {
     recs.length > 0 ? round2(recs.reduce((s, r) => s + r.confidence, 0) / recs.length) : 0.5;
 
   const dataConfidence = recs.length > 0 ? Math.min(0.92, averageConfidence + 0.05) : 0.4;
+  const analyzedAt = input.analyzedAt ?? new Date();
+  const shortageCount = recs.filter((row) => row.shortagePrediction.predictedShortageQty > 0).length;
+  const priceSwitchCount = recs.filter(
+    (row) => row.priceOptimization.recommendation === "switch_supplier",
+  ).length;
 
   return {
     workspaceId: input.workspaceId,
-    analyzedAt: (input.analyzedAt ?? new Date()).toISOString(),
+    analyzedAt: analyzedAt.toISOString(),
     forecastHorizonDays: FORECAST_HORIZON_DAYS,
     recommendations: recs,
+    dailyBrief: buildAiPurchasingDailyBrief(recs, analyzedAt),
     summary: {
       itemCount: recs.length,
       criticalCount: recs.filter((r) => r.urgency === "critical").length,
@@ -247,6 +440,8 @@ export function assembleAiPurchasingResult(input: {
       totalEstimatedSpend,
       totalPotentialSavings,
       averageConfidence,
+      shortageCount,
+      priceSwitchCount,
     },
     aiAssisted: true,
     confidence: round2(dataConfidence),

@@ -2,11 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import {
   assembleAiPurchasingResult,
+  buildAiPurchasingDailyBrief,
   buildPurchaseRecommendation,
   computeDailyUsage,
   computeDaysRemaining,
   computeEoq,
   computePredictedDemand14d,
+  optimizePrice,
+  predictShortage,
   urgencyFromDaysRemaining,
 } from "@/lib/ai/ai-purchasing-builders";
 import type { IngredientPurchasingInput } from "@/lib/ai/ai-purchasing-types";
@@ -20,7 +23,7 @@ const baseInput: IngredientPurchasingInput = {
   reorderPoint: 15,
   parLevel: 30,
   defaultSupplierName: "Sysco",
-  defaultUnitCost: 3.5,
+  defaultUnitCost: 4,
   demandRequired: 42,
   forecast14d: null,
   supplierOffers: [
@@ -85,6 +88,35 @@ describe("urgencyFromDaysRemaining", () => {
   });
 });
 
+describe("predictShortage", () => {
+  it("predicts shortage quantity and coverage gap", () => {
+    const prediction = predictShortage({
+      currentStock: 10,
+      dailyUsage: 3,
+      predictedDemand14d: 42,
+      leadTimeDays: 2,
+      analyzedAt: new Date("2026-06-05T12:00:00.000Z"),
+    });
+    expect(prediction.predictedShortageQty).toBe(32);
+    expect(prediction.daysUntilShortage).toBeCloseTo(3.3, 1);
+    expect(prediction.shortageDateIso).not.toBeNull();
+  });
+});
+
+describe("optimizePrice", () => {
+  it("recommends supplier switch when alternative saves money", () => {
+    const rec = buildPurchaseRecommendation(baseInput, 14)!;
+    const optimization = optimizePrice({
+      best: rec.bestSupplier,
+      alt: rec.alternativeSupplier,
+      urgency: rec.urgency,
+      defaultUnitCost: 4,
+    });
+    expect(optimization.recommendation).toBe("switch_supplier");
+    expect(optimization.savingsPerOrder).toBeGreaterThan(0);
+  });
+});
+
 describe("buildPurchaseRecommendation", () => {
   it("builds recommendation with best and alternative supplier", () => {
     const rec = buildPurchaseRecommendation(baseInput, 14);
@@ -95,6 +127,8 @@ describe("buildPurchaseRecommendation", () => {
     expect(rec!.bestSupplier.eoq).toBeGreaterThan(0);
     expect(rec!.alternativeSupplier).not.toBeNull();
     expect(rec!.alternativeSupplier!.supplierName).toBe("US Foods");
+    expect(rec!.shortagePrediction.predictedShortageQty).toBeGreaterThan(0);
+    expect(rec!.priceOptimization.recommendation).toBe("switch_supplier");
   });
 
   it("returns null when stock is healthy and no usage", () => {
@@ -122,8 +156,20 @@ describe("assembleAiPurchasingResult", () => {
     });
     expect(result.summary.itemCount).toBe(1);
     expect(result.summary.totalEstimatedSpend).toBeGreaterThan(0);
+    expect(result.summary.shortageCount).toBe(1);
     expect(result.aiAssisted).toBe(true);
     expect(result.forecastHorizonDays).toBe(14);
+    expect(result.dailyBrief.headline.length).toBeGreaterThan(0);
+    expect(result.dailyBrief.bullets.length).toBeGreaterThan(0);
+  });
+});
+
+describe("buildAiPurchasingDailyBrief", () => {
+  it("builds executive summary with top shortages and savings", () => {
+    const rec = buildPurchaseRecommendation(baseInput, 14)!;
+    const brief = buildAiPurchasingDailyBrief([rec], new Date("2026-06-05T12:00:00.000Z"));
+    expect(brief.topShortages.length).toBeGreaterThan(0);
+    expect(brief.priceSwitchCount).toBeGreaterThanOrEqual(1);
   });
 });
 

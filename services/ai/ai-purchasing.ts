@@ -5,6 +5,7 @@ import {
   buildPurchaseRecommendation,
 } from "@/lib/ai/ai-purchasing-builders";
 import type {
+  AiPurchasingDailyBrief,
   AiPurchasingResult,
   IngredientPurchasingInput,
   PurchaseRecommendation,
@@ -19,10 +20,13 @@ import {
 import { loadDemandCommandCenterPayload } from "@/services/ingredient-demand/demand-service";
 
 export type {
+  AiPurchasingDailyBrief,
   AiPurchasingResult,
+  PriceOptimization,
   PurchaseRecommendation,
   PurchaseAlternativeSupplier,
   PurchaseSupplierChoice,
+  ShortagePrediction,
 } from "@/lib/ai/ai-purchasing-types";
 
 /**
@@ -179,4 +183,20 @@ export async function generateCriticalPurchaseRecommendations(
 ): Promise<PurchaseRecommendation[]> {
   const result = await generatePurchaseRecommendations(workspaceId);
   return result.recommendations.filter((r) => r.urgency === "critical" || r.urgency === "high");
+}
+
+/** Daily purchasing brief — shortage prediction, price optimization, supplier switches. */
+export async function generateAiPurchasingDailyBrief(
+  workspaceId: string,
+): Promise<AiPurchasingDailyBrief> {
+  const result = await generatePurchaseRecommendations(workspaceId);
+  return result.dailyBrief;
+}
+
+export async function generateAiPurchasingDailyBriefForUser(
+  userId: string,
+): Promise<AiPurchasingDailyBrief> {
+  const workspaceId = await resolveOwnerWorkspaceId(userId);
+  if (!workspaceId) throw new Error(`No workspace for user: ${userId}`);
+  return generateAiPurchasingDailyBrief(workspaceId);
 }

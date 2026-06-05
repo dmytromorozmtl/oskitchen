@@ -30,6 +30,24 @@ export type PurchaseAlternativeSupplier = PurchaseSupplierChoice & {
   savingsPercent: number;
 };
 
+export type ShortagePrediction = {
+  predictedShortageQty: number;
+  shortageDateIso: string | null;
+  daysUntilShortage: number | null;
+  coverageGapDays: number;
+};
+
+export type PriceOptimizationRecommendation = "switch_supplier" | "bulk_up" | "hold" | "order_now";
+
+export type PriceOptimization = {
+  optimizedUnitCost: number;
+  currentBestUnitCost: number;
+  savingsPerUnit: number;
+  savingsPerOrder: number;
+  recommendation: PriceOptimizationRecommendation;
+  rationale: string;
+};
+
 /** Per-ingredient purchase recommendation with supplier economics. */
 export type PurchaseRecommendation = {
   ingredientId: string;
@@ -44,8 +62,33 @@ export type PurchaseRecommendation = {
   urgency: PurchasingUrgency;
   bestSupplier: PurchaseSupplierChoice;
   alternativeSupplier: PurchaseAlternativeSupplier | null;
+  shortagePrediction: ShortagePrediction;
+  priceOptimization: PriceOptimization;
   confidence: number;
   suggestedAction: string;
+};
+
+export type AiPurchasingDailyBriefShortage = {
+  ingredientName: string;
+  daysUntilShortage: number | null;
+  predictedShortageQty: number;
+};
+
+export type AiPurchasingDailyBriefSaving = {
+  ingredientName: string;
+  supplierName: string;
+  savingsPerOrder: number;
+};
+
+export type AiPurchasingDailyBrief = {
+  generatedAtIso: string;
+  headline: string;
+  executiveSummary: string;
+  topShortages: AiPurchasingDailyBriefShortage[];
+  topSavings: AiPurchasingDailyBriefSaving[];
+  priceSwitchCount: number;
+  orderTodayCount: number;
+  bullets: string[];
 };
 
 export type IngredientPurchasingInput = {
@@ -68,6 +111,7 @@ export type AiPurchasingResult = {
   analyzedAt: string;
   forecastHorizonDays: 14;
   recommendations: PurchaseRecommendation[];
+  dailyBrief: AiPurchasingDailyBrief;
   summary: {
     itemCount: number;
     criticalCount: number;
@@ -75,6 +119,8 @@ export type AiPurchasingResult = {
     totalEstimatedSpend: number;
     totalPotentialSavings: number;
     averageConfidence: number;
+    shortageCount: number;
+    priceSwitchCount: number;
   };
   aiAssisted: true;
   confidence: number;
