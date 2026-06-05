@@ -75,6 +75,9 @@ export default async function MarketplaceDashboardPage() {
         actions={
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline" size="sm" className="rounded-full">
+              <Link href="/dashboard/marketplace/price-intelligence">Price intelligence</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="rounded-full">
               <Link href="/dashboard/marketplace/auto-vendor">Auto vendor savings</Link>
             </Button>
             {access.canCartWrite ? (
