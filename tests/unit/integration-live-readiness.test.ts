@@ -55,5 +55,7 @@ describe("integration live readiness guards", () => {
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("GRUBHUB");
     expect(providerCountsTowardLiveReadiness("SHOPIFY")).toBe(true);
     expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("SHOPIFY");
+    expect(providerCountsTowardLiveReadiness("WOOCOMMERCE")).toBe(true);
+    expect(LIVE_CAPABLE_INTEGRATION_PROVIDERS).toContain("WOOCOMMERCE");
   });
 });

@@ -18,7 +18,7 @@ import { isEncryptionConfigured } from "@/lib/crypto";
 import { SITE_URL } from "@/lib/constants";
 import { ChannelPilotSetupWizard } from "@/components/integrations/channel-pilot-setup-wizard";
 import { IntegrationCertificationPanel } from "@/components/dashboard/integration-certification-panel";
-import { CapabilityBadge } from "@/components/capabilities/capability-badge";
+import { LiveBadge } from "@/components/integrations/beta-badge";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { parseCertificationRecord } from "@/lib/integrations/channel-certification-types";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
@@ -60,7 +60,7 @@ export default async function WooCommerceIntegrationPage() {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight">WooCommerce</h1>
-            <CapabilityBadge status="BETA" />
+            <LiveBadge title="LIVE — dev store, REST API, HMAC webhooks, KDS import" />
           </div>
           <p className="text-sm text-muted-foreground">
             REST consumer keys and webhook signing secret (encrypted).

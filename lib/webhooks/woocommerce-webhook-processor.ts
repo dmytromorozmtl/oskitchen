@@ -2,6 +2,8 @@ import { persistNormalizedExternalOrder } from "@/lib/integrations/persist-exter
 import { upsertExternalProductRecord } from "@/lib/integrations/persist-external-product";
 import { stageWebhookOrderIngest } from "@/lib/channels/import-staging";
 import { prisma } from "@/lib/prisma";
+import { importWooCommerceOrderToKitchen } from "@/services/integrations/woocommerce/kitchen-import.service";
+import { syncWooCommerceInventoryFromOrder } from "@/services/integrations/woocommerce/inventory-sync.service";
 import {
   normalizeWooOrder,
   normalizeWooProduct,
@@ -20,14 +22,39 @@ export async function executeWooCommerceWebhookBusinessLogic(params: {
   payload: unknown;
 }): Promise<void> {
   const row = params.payload as Record<string, unknown>;
+  const conn = await prisma.integrationConnection.findFirst({
+    where: { id: params.connectionId },
+    select: { workspaceId: true },
+  });
 
   if (params.topic.startsWith("order.")) {
     const normalized = normalizeWooOrder(row);
-    await persistNormalizedExternalOrder({
+    const external = await persistNormalizedExternalOrder({
       userId: params.userId,
       connectionId: params.connectionId,
       normalized,
     });
+
+    await importWooCommerceOrderToKitchen({
+      userId: params.userId,
+      workspaceId: conn?.workspaceId,
+      connectionId: params.connectionId,
+      normalized,
+      externalOrderRecordId: external.id,
+    }).catch((err) => {
+      console.error("woocommerce_kitchen_import_failed", err);
+    });
+
+    if (params.topic === "order.created") {
+      await syncWooCommerceInventoryFromOrder({
+        userId: params.userId,
+        connectionId: params.connectionId,
+        normalized,
+      }).catch((err) => {
+        console.error("woocommerce_inventory_sync_failed", err);
+      });
+    }
+
     try {
       await stageWebhookOrderIngest({
         userId: params.userId,

@@ -39,6 +39,18 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/grubhub",
   },
   {
+    id: "woocommerce",
+    name: "WooCommerce",
+    status: "LIVE",
+    requiredEnv: [
+      "WOOCOMMERCE_BASE_URL",
+      "WOOCOMMERCE_CONSUMER_KEY",
+      "WOOCOMMERCE_CONSUMER_SECRET",
+      "WOOCOMMERCE_WEBHOOK_SECRET",
+    ],
+    setupRoute: "/dashboard/integrations/woocommerce",
+  },
+  {
     id: "shopify",
     name: "Shopify",
     status: "LIVE",
@@ -189,6 +201,7 @@ const PROVIDER_KEY_TO_INTEGRATION_ID: Partial<Record<string, string>> = {
   doordash: "doordash",
   grubhub: "grubhub",
   shopify: "shopify",
+  woocommerce: "woocommerce",
   skip: "skip",
   "uber-eats": "uber-eats",
 };

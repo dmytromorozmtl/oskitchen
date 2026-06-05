@@ -36,28 +36,30 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   skip: "app/dashboard/integrations/skip/page.tsx",
   grubhub: "app/dashboard/integrations/grubhub/page.tsx",
   shopify: "app/dashboard/integrations/shopify/page.tsx",
+  woocommerce: "app/dashboard/integrations/woocommerce/page.tsx",
 };
 
 describe("integration beta badge", () => {
   it("tracks fifteen BETA registry integrations", () => {
     expect(BETA_INTEGRATION_IDS).toHaveLength(15);
+    expect(isBetaIntegration("woocommerce")).toBe(false);
     expect(isBetaIntegration("shopify")).toBe(false);
-    expect(isBetaIntegration("grubhub")).toBe(false);
   });
 
-  it("tracks five LIVE registry integrations", () => {
+  it("tracks six LIVE registry integrations", () => {
     expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
       "doordash",
       "grubhub",
       "shopify",
       "skip",
       "uber-eats",
+      "woocommerce",
     ]);
   });
 
-  it("maps delivery provider keys to registry status", () => {
+  it("maps ecommerce provider keys to registry status", () => {
+    expect(isBetaIntegrationProvider("woocommerce")).toBe(false);
     expect(isBetaIntegrationProvider("shopify")).toBe(false);
-    expect(isBetaIntegrationProvider("grubhub")).toBe(false);
   });
 
   it("renders BetaBadge on all fifteen BETA integration pages", () => {

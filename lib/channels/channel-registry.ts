@@ -117,7 +117,7 @@ export const CHANNEL_DEFINITIONS: readonly ChannelDefinition[] = [
     supportsPayments: false,
     supportsLiveMode: true,
     isPlaceholder: false,
-    docsUrl: "/integrations/woocommerce",
+    docsUrl: "/docs/WOOCOMMERCE_INTEGRATION.md",
     setupRoute: "/dashboard/integrations/woocommerce",
     webhookPathHints: ["/api/webhooks/woocommerce"],
     envRequirements: ["APP_ENCRYPTION_KEY or equivalent for credential encryption"],

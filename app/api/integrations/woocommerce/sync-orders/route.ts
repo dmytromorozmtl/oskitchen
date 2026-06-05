@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { stageSyncJobOrders } from "@/lib/channels/import-staging";
 import { IntegrationProvider, IntegrationStatus } from "@prisma/client";
 import { fetchOrders, normalizeWooOrder } from "@/services/integrations/woocommerce";
+import { importWooCommerceOrderToKitchen } from "@/services/integrations/woocommerce/kitchen-import.service";
 import { beginChannelSyncJob, finishChannelSyncJob } from "@/services/channels/sync-orchestrator";
 
 const bodySchema = z.object({
@@ -46,13 +47,20 @@ export async function POST(request: Request) {
       if (!batch.length) break;
       for (const raw of batch) {
         const normalized = normalizeWooOrder(raw as Record<string, unknown>);
-        await persistNormalizedExternalOrder({
+        const external = await persistNormalizedExternalOrder({
           userId: owned.conn.userId,
           connectionId: owned.conn.id,
           normalized,
         });
+        const kitchen = await importWooCommerceOrderToKitchen({
+          userId: owned.conn.userId,
+          workspaceId: owned.conn.workspaceId,
+          connectionId: owned.conn.id,
+          normalized,
+          externalOrderRecordId: external.id,
+        });
         entries.push({ raw, normalized });
-        imported++;
+        if (kitchen.imported) imported++;
       }
       if (batch.length < 50) break;
     }
