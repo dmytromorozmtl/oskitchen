@@ -89,5 +89,7 @@ describe("multi-location enterprise builders", () => {
       selectedLocationId: "y",
     });
     expect(dashboard.selectedLocation?.locationName).toBe("Y");
+    expect(dashboard.v2.scaleTier).toBe("standard");
+    expect(dashboard.v2.paginatedRanks).toHaveLength(2);
   });
 });

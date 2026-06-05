@@ -1,3 +1,8 @@
+import {
+  buildEnterpriseMultiLocationDashboardV2,
+  capEnterpriseLocationAlerts,
+  type MultiLocationDashboard2ViewState,
+} from "@/lib/enterprise/multi-location-dashboard-2-builders";
 import type {
   EnterpriseLocationAlert,
   EnterpriseLocationRank,
@@ -71,7 +76,7 @@ export function buildEnterpriseLocationAlerts(locations: LocationAnalyticsRow[])
     }
   }
 
-  return alerts.slice(0, 8);
+  return capEnterpriseLocationAlerts(alerts);
 }
 
 export function buildEnterpriseMultiLocationDashboard(input: {
@@ -80,6 +85,7 @@ export function buildEnterpriseMultiLocationDashboard(input: {
   filters: AnalyticsFilters;
   selectedLocationId?: string | null;
   basePath?: string;
+  viewState?: MultiLocationDashboard2ViewState;
 }): EnterpriseMultiLocationDashboard {
   const ranks = buildEnterpriseLocationRanks(input.snapshot.locations);
   const selectedLocation =
@@ -95,5 +101,10 @@ export function buildEnterpriseMultiLocationDashboard(input: {
     selectedLocation,
     alerts: buildEnterpriseLocationAlerts(input.snapshot.locations),
     basePath: input.basePath ?? "/dashboard/enterprise/multi-location",
+    v2: buildEnterpriseMultiLocationDashboardV2({
+      ranks,
+      totalLocations: input.snapshot.totalLocations,
+      viewState: input.viewState,
+    }),
   };
 }

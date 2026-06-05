@@ -1,4 +1,5 @@
 import type { AnalyticsFilters } from "@/lib/analytics/filters";
+import type { EnterpriseMultiLocationDashboardV2 } from "@/lib/enterprise/multi-location-dashboard-2-types";
 import type { MultiLocationRollup } from "@/lib/enterprise/multi-location-rollup-types";
 import type {
   ComparisonVsAverage,
@@ -38,4 +39,5 @@ export type EnterpriseMultiLocationDashboard = {
   selectedLocation: LocationAnalyticsRow | null;
   alerts: EnterpriseLocationAlert[];
   basePath: string;
+  v2: EnterpriseMultiLocationDashboardV2;
 };

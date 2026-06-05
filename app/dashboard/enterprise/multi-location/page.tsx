@@ -6,7 +6,10 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { parseAnalyticsFilters } from "@/lib/analytics/filters";
 import { loadFilterableBrandsAndLocations } from "@/lib/analytics/server-helpers";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
-import { loadEnterpriseMultiLocationDashboard } from "@/services/enterprise/multi-location-service";
+import {
+  loadEnterpriseMultiLocationDashboard,
+  parseMultiLocationDashboard2ViewState,
+} from "@/services/enterprise/multi-location-service";
 
 export const metadata = {
   title: "Multi-location Enterprise — Dashboard",
@@ -26,6 +29,7 @@ export default async function EnterpriseMultiLocationPage({
   const sp = await searchParams;
   const filters = parseAnalyticsFilters(sp);
   const locationId = typeof sp.locationId === "string" ? sp.locationId : undefined;
+  const viewState = parseMultiLocationDashboard2ViewState(sp);
 
   if (!workspaceId) {
     return (
@@ -44,6 +48,7 @@ export default async function EnterpriseMultiLocationPage({
       workspaceId,
       filters,
       selectedLocationId: locationId,
+      viewState,
     }),
   ]);
 

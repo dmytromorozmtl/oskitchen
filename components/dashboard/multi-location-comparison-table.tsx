@@ -13,6 +13,8 @@ import type {
 
 type Props = {
   snapshot: MultiLocationAnalyticsSnapshot;
+  /** Paginated subset for 100+ location networks (Dashboard 2.0). */
+  rows?: LocationAnalyticsRow[];
 };
 
 function comparisonClass(
@@ -68,8 +70,9 @@ function LocationRow({ row }: { row: LocationAnalyticsRow }) {
   );
 }
 
-export function MultiLocationComparisonTable({ snapshot }: Props) {
+export function MultiLocationComparisonTable({ snapshot, rows }: Props) {
   const { networkAverages } = snapshot;
+  const displayRows = rows ?? snapshot.locations;
 
   return (
     <div className="overflow-x-auto" data-testid="multi-location-comparison-table">
@@ -95,7 +98,7 @@ export function MultiLocationComparisonTable({ snapshot }: Props) {
           </tr>
         </thead>
         <tbody>
-          {snapshot.locations.map((row) => (
+          {displayRows.map((row) => (
             <LocationRow key={row.locationId} row={row} />
           ))}
           {(snapshot.unassignedOrders > 0 || snapshot.unassignedRevenue > 0) && (
