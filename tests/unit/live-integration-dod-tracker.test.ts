@@ -51,6 +51,6 @@ describe("live integration dod tracker", () => {
     const summary = summarizeLiveIntegrationDod(rows);
     expect(summary.total).toBe(7);
     expect(summary.scaffoldReadyCount).toBe(7);
-    expect(summary.liveCount).toBe(15);
+    expect(summary.liveCount).toBe(16);
   });
 });

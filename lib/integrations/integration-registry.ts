@@ -135,6 +135,17 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/stripe",
   },
   {
+    id: "square-payments",
+    name: "Square Payments",
+    status: "LIVE",
+    requiredEnv: [
+      "SQUARE_PAYMENTS_CLIENT_ID",
+      "SQUARE_PAYMENTS_CLIENT_SECRET",
+      "SQUARE_PAYMENTS_LOCATION_ID",
+    ],
+    setupRoute: "/dashboard/integrations/square-payments",
+  },
+  {
     id: "resy",
     name: "Resy",
     status: "LIVE",

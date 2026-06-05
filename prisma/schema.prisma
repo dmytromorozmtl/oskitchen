@@ -231,6 +231,7 @@ enum IntegrationProvider {
   KLAVIYO
   MAILCHIMP
   STRIPE
+  SQUARE_PAYMENTS
   MANUAL
 }
 
