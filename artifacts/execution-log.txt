@@ -5702,3 +5702,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-05T15:23:00Z | Cycle 54 | Phase 8 | Feature 54: Role-Based UI — Owner | PASS — owner command center, KPIs, briefing tiles, 8 shortcuts, roles subnav
 2026-06-05T15:28:00Z | Cycle 55 | Phase 8 | Feature 55: Role-Based UI — Manager | PASS — shift KPIs, manager briefing pack, 8 floor shortcuts, RBAC gate
 2026-06-05T15:31:00Z | Cycle 56 | Phase 8 | Feature 56: Role-Based UI — Chef | PASS — kitchen pack KPIs, line tiles, 8 KDS shortcuts, chef RBAC gate
+2026-06-05T15:35:00Z | Cycle 57 | Phase 8 | Feature 57: Role-Based UI — Cashier | PASS — POS KPIs, cashier briefing pack, 8 register shortcuts, RBAC gate
