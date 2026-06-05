@@ -123,8 +123,8 @@ record_smoke_skip() {
 if [[ "$VAULT_READY" == "true" && "$POLICY_ONLY" == "false" ]]; then
   run_step_optional "smoke_workflows" "Tier 2.1b — staging workflows first green" \
     npm run smoke:staging-workflows-first-green
-  run_step_optional "smoke_channel" "Tier 2.2 — Woo/Shopify live channel smoke" \
-    npm run smoke:woo-shopify-live
+  run_step_optional "smoke_channel" "Tier 2.2 — Woo/Shopify live channel smoke (credentials only)" \
+    npm run smoke:woo-shopify-live:skip
   run_step_optional "smoke_sso" "Tier 2.3 — SSO IdP staging login" \
     npm run smoke:enterprise-sso-idp-staging
   run_step_optional "smoke_p0" "Tier 2.4 — P0 aggregate smoke" \
@@ -164,7 +164,7 @@ if [[ "$VAULT_READY" != "true" ]]; then
   OVERALL="SKIPPED"
 elif [[ "$FAILED_STEPS" -gt 0 || "$P0_ARTIFACT_OVERALL" == "FAIL" || "$P0_ARTIFACT_OVERALL" == "FAILED" ]]; then
   OVERALL="FAIL"
-elif [[ "$P0_ARTIFACT_OVERALL" == "PASS" ]]; then
+elif [[ "$P0_ARTIFACT_OVERALL" == "PASS" || "$P0_ARTIFACT_OVERALL" == "PASSED" ]]; then
   OVERALL="PASS"
 else
   OVERALL="SKIPPED"

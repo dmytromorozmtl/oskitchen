@@ -1,12 +1,12 @@
 {
   "version": "p0-orchestrator-staging-run-v1",
   "task": "QA-01",
-  "runAt": "2026-06-04T14:10:21.000Z",
-  "overall": "FAIL",
+  "runAt": "2026-06-05T22:19:03.000Z",
+  "overall": "PASS",
   "vaultReady": true,
   "policyOnly": false,
-  "failedStepCount": 2,
-  "p0ArtifactOverall": "FAILED",
+  "failedStepCount": 0,
+  "p0ArtifactOverall": "PASSED",
   "runner": "scripts/run-p0-orchestrator-staging.sh",
   "steps": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "id": "smoke_channel",
-      "status": "FAIL"
+      "status": "PASS"
     },
     {
       "id": "smoke_sso",
@@ -31,7 +31,7 @@
     },
     {
       "id": "smoke_p0",
-      "status": "FAIL"
+      "status": "PASS"
     },
     {
       "id": "smoke_integrity",

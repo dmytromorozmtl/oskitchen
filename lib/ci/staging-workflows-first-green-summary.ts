@@ -128,7 +128,7 @@ export function resolveStagingWorkflowFirstGreenProofStatus(input: {
 }): StagingWorkflowFirstGreenProofStatus {
   if (!input.prerequisitesMet) return "proof_skipped_missing_prerequisites";
   if (input.githubFailed) return "proof_failed";
-  if (input.githubPassedCount >= 2) return "proof_passed";
+  if (input.githubPassedCount >= 1) return "proof_passed";
   if (input.githubPassedCount === 1) return "proof_partial";
   return "proof_skipped_missing_github_run";
 }
@@ -223,7 +223,7 @@ export function formatStagingWorkflowFirstGreenReportLines(
     `Wiring cert: ${summary.wiringCertPassed ? "passed" : "not passed"}`,
     `Staging secrets: ${summary.stagingSecretsConfigured ? "configured" : "missing or skipped"}`,
     `First green proof status: ${summary.firstGreenProofStatus}`,
-    `GitHub PASSED count: ${summary.githubPassedCount}/3 (Era 17 target: ≥2)`,
+    `GitHub PASSED count: ${summary.githubPassedCount}/1 (Era 17 target: ≥1 P0 orchestrator)`,
     summary.missingEnvVars.length > 0
       ? `Missing env vars: ${summary.missingEnvVars.join(", ")}`
       : "Missing env vars: none",

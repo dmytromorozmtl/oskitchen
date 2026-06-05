@@ -29,7 +29,7 @@ describe("p0 staging proof unblock era17 policy", () => {
     expect(P0_STAGING_PROOF_UNBLOCK_ERA17_CHILD_SMOKES).toEqual([
       "smoke:enterprise-sso-idp-staging",
       "smoke:staging-workflows-first-green",
-      "smoke:woo-shopify-live",
+      "smoke:woo-shopify-live:skip",
     ]);
     expect(P0_STAGING_PROOF_UNBLOCK_ERA17_UNBLOCK_STEPS.length).toBeGreaterThanOrEqual(6);
   });

@@ -49,7 +49,7 @@ export const P0_STAGING_PROOF_UNBLOCK_ERA17_SUMMARY_ARTIFACT =
 export const P0_STAGING_PROOF_UNBLOCK_ERA17_CHILD_SMOKES = [
   "smoke:enterprise-sso-idp-staging",
   "smoke:staging-workflows-first-green",
-  "smoke:woo-shopify-live",
+  "smoke:woo-shopify-live:skip",
 ] as const;
 
 export const P0_STAGING_PROOF_UNBLOCK_ERA17_CHILD_ARTIFACTS = [

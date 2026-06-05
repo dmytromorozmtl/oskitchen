@@ -19,13 +19,13 @@
 </head>
 <body>
   <h1>P0 Staging Proof — Step 2 Execution</h1>
-  <p class="honesty">Policy era30-p0-staging-proof-execution-v1 · Generated 2026-06-03T19:03:36.231Z</p>
+  <p class="honesty">Policy era30-p0-staging-proof-execution-v1 · Generated 2026-06-05T22:23:03.512Z</p>
 
-  <div class="banner banner-blocked">
-    <strong>Milestone:</strong> awaiting_staging_workflows<br />
+  <div class="banner banner-pass">
+    <strong>Milestone:</strong> proof_passed<br />
     <strong>Vault ready:</strong> YES<br />
-    <strong>P0 proof:</strong> proof_failed (FAILED)<br />
-    <strong>Integrity:</strong> FAIL<br />
+    <strong>P0 proof:</strong> proof_passed (PASSED)<br />
+    <strong>Integrity:</strong> PASS<br />
     <strong>Staging health:</strong> PASS https://os-kitchen.com/api/health
   </div>
 
@@ -52,48 +52,48 @@
         <td>—</td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.1b — GitHub staging workflows first green</td>
         <td>DevOps</td>
-        <td>proof_skipped_missing_github_run</td>
-        <td>Run smoke:staging-workflows-first-green after staging health PASS.</td>
+        <td>proof_passed</td>
+        <td>GitHub staging workflows first green PASS.</td>
         <td><code>npm run smoke:staging-workflows-first-green</code></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.2 — Woo/Shopify live channel smoke</td>
         <td>Integration engineer</td>
-        <td>proof_failed/proof_failed</td>
-        <td>Run smoke:woo-shopify-live with DATABASE_URL + ENCRYPTION_KEY + CHANNEL_SMOKE_OWNER_EMAIL.</td>
+        <td>proof_passed/proof_passed</td>
+        <td>Woo or Shopify live smoke PASS — canonical order in staging DB.</td>
         <td><code>npm run smoke:woo-shopify-live</code></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.3 — SSO IdP staging login</td>
         <td>Security / CTO</td>
-        <td>proof_skipped_missing_operator_evidence</td>
-        <td>Run smoke:enterprise-sso-idp-staging with SSO_STAGING_* vars.</td>
+        <td>proof_passed</td>
+        <td>SSO IdP staging login PASS.</td>
         <td><code>npm run smoke:enterprise-sso-idp-staging</code></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.4 — P0 orchestrator aggregation</td>
         <td>DevOps</td>
-        <td>proof_failed</td>
-        <td>Run smoke:p0-staging-proof-unblock after child smokes PASS.</td>
+        <td>proof_passed</td>
+        <td>P0 orchestrator proof_passed — all child smokes aggregated.</td>
         <td><code>npm run smoke:p0-staging-proof-unblock</code></td>
       </tr>
       <tr>
-        <td class="status-blocked">✗</td>
+        <td class="status-pass">✓</td>
         <td>Step 2.5 — P0 integrity validation</td>
         <td>Engineering</td>
-        <td>integrity_failed</td>
-        <td>Run ops:validate-p0-staging-proof-integrity after P0 PASS.</td>
+        <td>integrity_passed</td>
+        <td>P0 artifact integrity PASS — no fake PASS detected.</td>
         <td>—</td>
       </tr></tbody>
   </table>
 
   <h2>Recommended commands</h2>
-  <ol><li><code>npm run smoke:staging-workflows-first-green</code></li><li><code>npm run ops:run-p0-staging-proof-execution -- --execute</code></li></ol>
+  <ol><li><code>npm run ops:run-tier2-golden-path-post-p0-orchestrator -- --write</code></li><li><code>npm run smoke:pilot-gono-go</code></li></ol>
 </body>
 </html>

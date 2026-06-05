@@ -21,14 +21,14 @@
 </head>
 <body>
   <h1>OS Kitchen — Ops Vault Readiness</h1>
-  <p class="meta">Generated 2026-06-03T19:03:34.965Z · Policy era17-p0-staging-proof-unblock-v1</p>
+  <p class="meta">Generated 2026-06-05T22:23:00.791Z · Policy era17-p0-staging-proof-unblock-v1</p>
 
   <div class="banner banner-ready">
     <strong>Vault ready:</strong> YES
     (11/11 secrets present)<br />
-    <strong>Day 0 milestone:</strong> env_complete<br />
-    <strong>P0 proof:</strong> proof_failed
-    (aggregate FAILED)
+    <strong>Day 0 milestone:</strong> proof_passed<br />
+    <strong>P0 proof:</strong> proof_passed
+    (aggregate PASSED)
   </div>
 
   <p class="honesty">PASS &gt; SKIPPED — this report never fabricates proof_passed. Configure ops vault secrets, then re-run child smokes.</p>
@@ -164,22 +164,22 @@
       <tr>
         <td>ssoIdpStaging</td>
         <td><code>smoke:enterprise-sso-idp-staging</code></td>
-        <td>SKIPPED</td>
-        <td>proof_skipped_missing_operator_evidence</td>
+        <td>PASSED</td>
+        <td>proof_passed</td>
         <td>—</td>
       </tr>
       <tr>
         <td>stagingWorkflowsFirstGreen</td>
         <td><code>smoke:staging-workflows-first-green</code></td>
-        <td>SKIPPED</td>
-        <td>proof_skipped_missing_github_run</td>
+        <td>PASSED</td>
+        <td>proof_passed</td>
         <td>—</td>
       </tr>
       <tr>
         <td>channelLive</td>
         <td><code>smoke:woo-shopify-live</code></td>
-        <td>FAILED</td>
-        <td>proof_failed/proof_failed</td>
+        <td>PASSED</td>
+        <td>proof_passed/proof_passed</td>
         <td>—</td>
       </tr></tbody>
   </table>

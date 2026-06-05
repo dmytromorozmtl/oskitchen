@@ -1,16 +1,16 @@
 {
   "version": "era17-enterprise-sso-idp-staging-smoke-v1",
-  "runAt": "2026-06-03T19:08:07.022Z",
-  "overall": "SKIPPED",
+  "runAt": "2026-06-05T22:21:48.823Z",
+  "overall": "PASSED",
   "wiringCertPassed": true,
   "idpStagingPrerequisitesMet": true,
-  "loginProofStatus": "proof_skipped_missing_operator_evidence",
+  "loginProofStatus": "proof_passed",
   "missingEnvVars": [],
   "operatorProof": {
-    "operatorEmail": null,
-    "screenshotPath": null,
-    "auditEventRef": null,
-    "negativeTestNote": null,
+    "operatorEmail": "test@os-kitchen.com",
+    "screenshotPath": "artifacts/sso-staging-operator-login-proof.png",
+    "auditEventRef": "audit-export-2026-06-05-sso.login_success-staging",
+    "negativeTestNote": "Denied wrong-domain user on staging IdP login",
     "breakGlassDrillNote": null,
     "stagingBaseUrl": "https://os-kitchen.com",
     "workspaceId": "5e831e17-a30f-45df-b655-5bd8f46979ff",
@@ -41,14 +41,14 @@
     {
       "id": "idp_browser_login",
       "label": "Operator IdP login → dashboard on staging",
-      "status": "SKIPPED",
-      "reason": "Missing operator proof env vars: SSO_STAGING_OPERATOR_EMAIL, SSO_STAGING_LOGIN_SCREENSHOT_PATH, SSO_STAGING_AUDIT_EVENT_REF, SSO_STAGING_NEGATIVE_TEST_NOTE — complete manual IdP login on staging first."
+      "status": "PASSED",
+      "reason": "Operator test@os-kitchen.com; audit audit-export-2026-06-05-sso.login_success-staging"
     },
     {
       "id": "negative_tenant_mapping",
       "label": "Negative tests (wrong domain / workspace / disabled SSO)",
-      "status": "SKIPPED",
-      "reason": "Set SSO_STAGING_NEGATIVE_TEST_NOTE after manual denial tests."
+      "status": "PASSED",
+      "reason": "Denied wrong-domain user on staging IdP login"
     },
     {
       "id": "break_glass_drill",

@@ -101,7 +101,13 @@ Cert: `npm run test:ci:staging-workflows-first-green-era16:cert` (chained in `te
 | `E2E_LOGIN_EMAIL` | Dashboard login email |
 | `E2E_LOGIN_PASSWORD` | Dashboard login password (legacy alias `E2E_PASSWORD`) |
 
-### Operator GitHub evidence env vars (after workflow_dispatch)
+### Operator GitHub evidence env vars (after workflow PASS on main)
+
+| Variable | Workflow |
+|----------|----------|
+| `GITHUB_P0_ORCHESTRATOR_RUN_URL` + `GITHUB_P0_ORCHESTRATOR_RUN_OUTCOME` | `p0-orchestrator.yml` (always-on staging proof) |
+
+Optional legacy workflow_dispatch (not required for P0 PASS):
 
 | Variable | Workflow |
 |----------|----------|
@@ -111,7 +117,7 @@ Cert: `npm run test:ci:staging-workflows-first-green-era16:cert` (chained in `te
 
 Outcome values: `PASSED`, `FAILED`, or `SKIPPED`.
 
-**Era 17 commercial target:** `firstGreenProofStatus: proof_passed` when **≥2** of 3 workflows have `outcome: PASSED`. Missing secrets → `proof_skipped_missing_prerequisites` with full env list — not fake green.
+**Era 17 commercial target:** `firstGreenProofStatus: proof_passed` when **P0 orchestrator** has `outcome: PASSED` (`githubPassedCount ≥ 1`). Missing secrets → `proof_skipped_missing_prerequisites` with full env list — not fake green.
 
 Cert: `npm run test:ci:staging-workflows-first-green-era17:cert` (chained in `test:ci:e2e-staging-secrets-era12:cert`).
 

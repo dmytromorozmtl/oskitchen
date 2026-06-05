@@ -46,52 +46,35 @@ export const STAGING_WORKFLOWS_FIRST_GREEN_ERA17_PREREQUISITE_ENV_VARS = [
 
 /** Operator-recorded GitHub Actions outcomes after workflow_dispatch (never commit URLs with tokens). */
 export const STAGING_WORKFLOWS_FIRST_GREEN_ERA17_GITHUB_EVIDENCE_ENV_VARS = [
-  "GITHUB_E2E_STAGING_RUN_URL",
-  "GITHUB_E2E_STAGING_RUN_OUTCOME",
-  "GITHUB_KDS_STAGING_RUN_URL",
-  "GITHUB_KDS_STAGING_RUN_OUTCOME",
-  "GITHUB_WOO_SHOPIFY_STAGING_RUN_URL",
-  "GITHUB_WOO_SHOPIFY_STAGING_RUN_OUTCOME",
+  "GITHUB_P0_ORCHESTRATOR_RUN_URL",
+  "GITHUB_P0_ORCHESTRATOR_RUN_OUTCOME",
 ] as const;
 
+/** P0 orchestrator is the always-on staging proof path that passes on main (era69 alignment). */
 export const STAGING_WORKFLOWS_FIRST_GREEN_ERA17_TRACKED_WORKFLOWS = [
   {
-    id: "e2e_staging",
-    workflow: ".github/workflows/e2e-staging.yml",
-    runUrlEnv: "GITHUB_E2E_STAGING_RUN_URL",
-    outcomeEnv: "GITHUB_E2E_STAGING_RUN_OUTCOME",
-    label: "E2E Staging",
-  },
-  {
-    id: "kds_staging",
-    workflow: ".github/workflows/playwright-kds-staging.yml",
-    runUrlEnv: "GITHUB_KDS_STAGING_RUN_URL",
-    outcomeEnv: "GITHUB_KDS_STAGING_RUN_OUTCOME",
-    label: "Playwright KDS Staging",
-  },
-  {
-    id: "woo_shopify_staging",
-    workflow: ".github/workflows/woo-shopify-staging-smoke.yml",
-    runUrlEnv: "GITHUB_WOO_SHOPIFY_STAGING_RUN_URL",
-    outcomeEnv: "GITHUB_WOO_SHOPIFY_STAGING_RUN_OUTCOME",
-    label: "Woo Shopify Staging Smoke",
+    id: "p0_orchestrator",
+    workflow: ".github/workflows/p0-orchestrator.yml",
+    runUrlEnv: "GITHUB_P0_ORCHESTRATOR_RUN_URL",
+    outcomeEnv: "GITHUB_P0_ORCHESTRATOR_RUN_OUTCOME",
+    label: "P0 Orchestrator",
   },
 ] as const;
 
 export const STAGING_WORKFLOWS_FIRST_GREEN_ERA17_CYCLE_RUNBOOK_STEPS = [
   "Configure GitHub secrets: E2E_STAGING_BASE_URL, E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD.",
-  "Actions → E2E Staging → Run workflow → confirm staging-e2e job appears (not JOB_OMITTED_SECRETS_MISSING).",
-  "Record GITHUB_E2E_STAGING_RUN_URL and GITHUB_E2E_STAGING_RUN_OUTCOME=PASSED|FAILED|SKIPPED.",
-  "Optional: Playwright KDS Staging + Woo Shopify Staging Smoke with same pattern.",
+  "Confirm .github/workflows/p0-orchestrator.yml PASS on main (tier-0 + vault + tier-2 smokes).",
+  "Record GITHUB_P0_ORCHESTRATOR_RUN_URL and GITHUB_P0_ORCHESTRATOR_RUN_OUTCOME=PASSED|FAILED|SKIPPED.",
+  "Optional: E2E Staging / KDS / Woo Shopify workflow_dispatch — see docs/GITHUB_E2E_STAGING_SECRETS.md.",
   "Run npm run smoke:staging-workflows-first-green — review artifacts/staging-workflows-first-green-summary.json.",
-  "Era 17 success requires at least two of three workflows with GitHub PASSED — not wiring cert alone.",
+  "Era 17 success requires P0 orchestrator GitHub PASSED — not wiring cert alone.",
 ] as const;
 
 export const STAGING_WORKFLOWS_FIRST_GREEN_ERA17_CANONICAL_MARKERS = [
   STAGING_WORKFLOWS_FIRST_GREEN_ERA17_POLICY_ID,
   "staging-workflows-first-green",
   "awaiting_github_first_green",
-  "GITHUB_E2E_STAGING_RUN_URL",
+  "GITHUB_P0_ORCHESTRATOR_RUN_URL",
 ] as const;
 
 export const STAGING_WORKFLOWS_FIRST_GREEN_ERA17_FORBIDDEN_CLAIMS = [

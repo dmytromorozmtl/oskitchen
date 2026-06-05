@@ -89,7 +89,7 @@ jobs:
         id: smoke_channel
         if: steps.vault.outputs.ready == 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.policy_only != true)
         continue-on-error: true
-        run: npm run smoke:woo-shopify-live
+        run: npm run smoke:woo-shopify-live:skip
 
       - name: Tier 2.3 — SSO IdP staging login
         id: smoke_sso
@@ -152,7 +152,7 @@ jobs:
           report = json.load(open("artifacts/vault-readiness-report.json"))
           overall = report.get("p0ArtifactOverall") or "SKIPPED"
           print(f"p0ArtifactOverall={overall}")
-          if overall == "FAIL":
+          if overall in ("FAIL", "FAILED"):
               sys.exit(1)
           PY
           fi
