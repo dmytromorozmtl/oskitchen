@@ -105,6 +105,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  posTabletCartPanelClass,
+  posTabletMainLayoutClass,
+  type TabletOrientation,
+} from "@/lib/pos/pos-tablet-layout";
 import { cn } from "@/lib/utils";
 import { fireCelebrationConfetti } from "@/components/ui/celebration-confetti";
 
@@ -167,6 +172,9 @@ export function PosTerminalClient(props: {
   conflictResolution?: PosConflictResolutionStrategy;
   /** Desktop counter layout — keyboard shortcuts and multi-monitor customer display. */
   desktopMode?: boolean;
+  /** iPad/Android tablet layout — orientation-aware catalog and cart. */
+  tabletMode?: boolean;
+  layoutOrientation?: TabletOrientation;
 }) {
   const recentCustomers = props.recentCustomers ?? [];
   const customerAttachEnabled = props.customerAttachEnabled ?? true;
@@ -177,6 +185,8 @@ export function PosTerminalClient(props: {
   const offlineQueueEnabled = props.offlineQueueEnabled ?? true;
   const conflictResolution = props.conflictResolution ?? "manual_review";
   const desktopMode = props.desktopMode ?? true;
+  const tabletMode = props.tabletMode ?? false;
+  const layoutOrientation = props.layoutOrientation ?? "landscape";
   const showSecondaryPanels = shouldShowPosTerminalSecondaryPanels(speedMode);
   const categories = useMemo(
     () => buildPosProductCategories(props.products),
@@ -831,7 +841,13 @@ export function PosTerminalClient(props: {
           onClose={() => setShowShortcutsOverlay(false)}
         />
       ) : null}
-    <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
+    <div
+      data-pos-layout
+      className={cn(
+        "flex min-h-[calc(100vh-8rem)]",
+        posTabletMainLayoutClass(layoutOrientation, tabletMode),
+      )}
+    >
       <div className="flex flex-1 flex-col gap-3">
         <OfflineSyncStatusBar className="w-full" showWhenIdle={offlineQueueEnabled} />
         <div
@@ -997,7 +1013,7 @@ export function PosTerminalClient(props: {
         </div>
       </div>
 
-      <Card className="w-full shrink-0 border-border/80 shadow-md lg:max-w-md">
+      <Card className={posTabletCartPanelClass(layoutOrientation, tabletMode)}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-xl">
             <ShoppingCart className="h-5 w-5" />
