@@ -20,6 +20,18 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/doordash",
   },
   {
+    id: "skip",
+    name: "Skip / Just Eat",
+    status: "LIVE",
+    requiredEnv: [
+      "SKIP_CLIENT_ID",
+      "SKIP_CLIENT_SECRET",
+      "SKIP_RESTAURANT_ID",
+      "SKIP_WEBHOOK_SECRET",
+    ],
+    setupRoute: "/dashboard/integrations/skip",
+  },
+  {
     id: "grubhub",
     name: "Grubhub",
     status: "BETA",
@@ -165,6 +177,7 @@ export function isBetaIntegration(id: string): boolean {
 const PROVIDER_KEY_TO_INTEGRATION_ID: Partial<Record<string, string>> = {
   doordash: "doordash",
   grubhub: "grubhub",
+  skip: "skip",
   "uber-eats": "uber-eats",
 };
 

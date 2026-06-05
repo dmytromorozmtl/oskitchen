@@ -5648,3 +5648,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 
 2026-06-05T15:08:07Z | Cycle 1 | Phase 1 | Feature 1: Uber Eats LIVE | PASS — webhook→KDS, status sync, registry LIVE
 2026-06-05T15:11:37Z | Cycle 2 | Phase 1 | Feature 2: DoorDash LIVE | PASS — OAuth, webhook→KDS, Drive API, menu sync, status push, registry LIVE
+2026-06-05T16:45:00Z | Cycle 3 | Phase 1 | Feature 3: Skip/Just Eat LIVE | PASS — OAuth, webhook→KDS, status sync, registry PLACEHOLDER→LIVE (16 BETA + 3 LIVE)

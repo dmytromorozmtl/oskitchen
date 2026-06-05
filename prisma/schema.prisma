@@ -221,6 +221,7 @@ enum IntegrationProvider {
   UBER_DIRECT
   DOORDASH
   GRUBHUB
+  SKIP
   MANUAL
 }
 

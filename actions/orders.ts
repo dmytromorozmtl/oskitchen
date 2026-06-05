@@ -285,6 +285,16 @@ export async function updateOrderStatus(
       status: nextStatus,
     }).catch(() => undefined);
 
+    const { syncSkipStatusFromKitchenOrder } = await import(
+      "@/services/integrations/skip/status-sync.service"
+    );
+    await syncSkipStatusFromKitchenOrder({
+      userId,
+      channelProvider: prev.channelProvider,
+      externalOrderId: prev.externalOrderIdExt,
+      status: nextStatus,
+    }).catch(() => undefined);
+
     if (nextStatus === "COMPLETED") {
       await recomputeMetricsForOrderEmail(userId, prevPii.customerEmail);
     }

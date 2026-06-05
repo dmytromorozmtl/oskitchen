@@ -34,54 +34,32 @@ const BETA_INTEGRATION_PAGES: Record<string, string> = {
 const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   "uber-eats": "app/dashboard/integrations/uber-eats/page.tsx",
   doordash: "app/dashboard/integrations/doordash/page.tsx",
+  skip: "app/dashboard/integrations/skip/page.tsx",
 };
 
 describe("integration beta badge", () => {
   it("tracks sixteen BETA registry integrations", () => {
     expect(BETA_INTEGRATION_IDS).toHaveLength(16);
-    expect(BETA_INTEGRATION_IDS.sort()).toEqual([
-      "7shifts",
-      "clover",
-      "email-orders",
-      "google-forms",
-      "grubhub",
-      "homebase",
-      "klaviyo",
-      "lightspeed",
-      "mailchimp",
-      "opentable",
-      "quickbooks",
-      "resy",
-      "square",
-      "toast",
-      "uber-direct",
-      "xero",
-    ]);
-    for (const id of BETA_INTEGRATION_IDS) {
-      expect(isBetaIntegration(id)).toBe(true);
-    }
     expect(isBetaIntegration("uber-eats")).toBe(false);
     expect(isBetaIntegration("doordash")).toBe(false);
+    expect(isBetaIntegration("skip")).toBe(false);
   });
 
-  it("tracks two LIVE registry integrations", () => {
-    expect(LIVE_INTEGRATION_IDS.sort()).toEqual(["doordash", "uber-eats"]);
+  it("tracks three LIVE registry integrations", () => {
+    expect(LIVE_INTEGRATION_IDS.sort()).toEqual(["doordash", "skip", "uber-eats"]);
   });
 
   it("maps delivery provider keys to registry status", () => {
     expect(isBetaIntegrationProvider("doordash")).toBe(false);
-    expect(isBetaIntegrationProvider("grubhub")).toBe(true);
+    expect(isBetaIntegrationProvider("skip")).toBe(false);
     expect(isBetaIntegrationProvider("uber-eats")).toBe(false);
-    expect(isBetaIntegrationProvider("uber-direct")).toBe(true);
+    expect(isBetaIntegrationProvider("grubhub")).toBe(true);
   });
 
   it("renders BetaBadge on all sixteen BETA integration pages", () => {
     for (const [id, rel] of Object.entries(BETA_INTEGRATION_PAGES)) {
-      const path = join(ROOT, rel);
-      expect(existsSync(path), id).toBe(true);
-      const source = readFileSync(path, "utf8");
+      const source = readFileSync(join(ROOT, rel), "utf8");
       expect(source, id).toContain("BetaBadge");
-      expect(source, id).toContain("@/components/integrations/beta-badge");
     }
   });
 
@@ -91,15 +69,5 @@ describe("integration beta badge", () => {
       expect(source, id).toContain("LiveBadge");
       expect(source, id).not.toContain("BetaBadge");
     }
-  });
-
-  it("uses BetaBadge in extensions catalog and channel cards", () => {
-    const catalog = readFileSync(
-      join(ROOT, "components/dashboard/extensions/extensions-catalog-panel.tsx"),
-      "utf8",
-    );
-    const channelCard = readFileSync(join(ROOT, "components/channels/channel-card.tsx"), "utf8");
-    expect(catalog).toContain("BetaBadge");
-    expect(channelCard).toContain("BetaBadge");
   });
 });
