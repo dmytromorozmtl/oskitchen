@@ -1,8 +1,10 @@
 # Sentry production setup — OS Kitchen
 
-**Task:** DEV-03  
-**Status:** Human gate — requires Vercel Production env vars  
-**Evidence:** `GET /api/health` → `checks.sentryServer.ok: false`, `configured: false` (2026-06-03)
+**Task:** DEV-03 / Era 70 (`era70-sentry-production-v1`)  
+**Status:** SDK wired — activate with `npm run sentry:production:activate`  
+**Smoke:** `npm run smoke:sentry-production` → `artifacts/sentry-production-smoke-summary.json`  
+**UI:** `/dashboard/developer/sentry`  
+**Evidence:** `GET /api/health` → `checks.sentryServer.ok` flips true after Vercel DSN + redeploy
 
 This guide activates Sentry on **production** (`os-kitchen.com`). SDK wiring is already in the repo; only DSN env vars are missing.
 

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 const LINKS: { href: string; label: string }[] = [
   { href: "/dashboard/developer", label: "Overview" },
   { href: "/dashboard/developer/health", label: "Platform health" },
+  { href: "/dashboard/developer/sentry", label: "Sentry" },
   { href: "/dashboard/developer/releases", label: "Releases" },
   { href: "/dashboard/developer/api-keys", label: "API keys" },
   { href: "/dashboard/developer/integrations", label: "Integrations" },

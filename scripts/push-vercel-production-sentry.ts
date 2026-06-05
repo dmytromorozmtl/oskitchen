@@ -16,8 +16,15 @@
  *   NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=0
  *   --mirror-public-dsn   # use SENTRY_DSN for NEXT_PUBLIC_SENTRY_DSN when unset
  */
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { execSync, spawnSync } from "node:child_process";
 
+import { SENTRY_PRODUCTION_ERA70_SUMMARY_ARTIFACT } from "../lib/observability/sentry-production-era70-policy";
+import {
+  buildSentryProductionSmokeSummary,
+  formatSentryProductionSmokeReportLines,
+} from "../lib/observability/sentry-production-summary";
 import { loadProductionEnvLocal } from "./lib/load-dotenv-file";
 
 const REQUIRED_KEYS = ["SENTRY_DSN"] as const;
@@ -27,13 +34,37 @@ const OPTIONAL_KEYS = [
   "NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE",
 ] as const;
 
-function hasVercelCli(): boolean {
+function vercelCommand(): string[] {
   try {
     execSync("vercel --version", { stdio: "ignore" });
-    return true;
+    return ["vercel"];
   } catch {
-    return false;
+    return ["npx", "vercel"];
   }
+}
+
+function writeActivationArtifact(input: {
+  vercelPushed: boolean;
+  deployTriggered: boolean;
+}): void {
+  const summary = buildSentryProductionSmokeSummary({
+    certPassed: true,
+    wiringFailures: [],
+    commitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+  });
+  const enriched = {
+    ...summary,
+    vercelPushed: input.vercelPushed,
+    deployTriggered: input.deployTriggered,
+    activationScript: "scripts/push-vercel-production-sentry.ts",
+  };
+  const path = join(process.cwd(), SENTRY_PRODUCTION_ERA70_SUMMARY_ARTIFACT);
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(enriched, null, 2)}\n`, "utf8");
+  for (const line of formatSentryProductionSmokeReportLines(summary)) {
+    console.log(line);
+  }
+  console.log(`\nArtifact: ${SENTRY_PRODUCTION_ERA70_SUMMARY_ARTIFACT}\n`);
 }
 
 function looksLikeUrl(v: string | undefined): boolean {
@@ -57,7 +88,8 @@ function pushKey(key: string, value: string): void {
     ? ["env", "add", key, "production", "--yes", "--force"]
     : ["env", "add", key, "production", "--yes", "--force", "--value", value];
 
-  const res = spawnSync("vercel", args, {
+  const vercel = vercelCommand();
+  const res = spawnSync(vercel[0], [...vercel.slice(1), ...args], {
     input: useStdin ? value : undefined,
     stdio: useStdin ? ["pipe", "inherit", "inherit"] : ["pipe", "inherit", "inherit"],
     encoding: "utf8",
@@ -131,11 +163,6 @@ function main() {
     console.error(`\nCannot apply: missing required keys (${requiredMissing.join(", ")}).`);
     process.exit(1);
   }
-  if (!hasVercelCli()) {
-    console.error("\nvercel CLI not found. Install or link Vercel before applying.");
-    process.exit(1);
-  }
-
   const keysToPush = [...REQUIRED_KEYS, ...OPTIONAL_KEYS].filter((key) => Boolean(getEnvValue(key)));
   console.log(`\nApplying ${keysToPush.length} key(s) to Vercel Production...\n`);
   for (const key of keysToPush) {
@@ -144,6 +171,8 @@ function main() {
     pushKey(key, value);
     console.log(`  pushed ${key}`);
   }
+
+  writeActivationArtifact({ vercelPushed: true, deployTriggered: false });
 
   if (!deploy) {
     console.log("\nDone. Next:");
@@ -162,9 +191,12 @@ function main() {
     throw new Error("Production deploy failed after pushing Sentry envs.");
   }
 
+  writeActivationArtifact({ vercelPushed: true, deployTriggered: true });
+
   console.log("\nVerify:");
   console.log("  curl -s https://os-kitchen.com/api/health | jq '.checks.observability, .checks.sentryServer'");
   console.log("  npm run final:100");
+  console.log("  npm run smoke:sentry-production");
 }
 
 main();

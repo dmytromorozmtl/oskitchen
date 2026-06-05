@@ -1,6 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
 
-import { resolveSentryServerDsn, resolveTracesSampleRate } from "@/lib/observability/apm";
+import {
+  resolveSentryRelease,
+  resolveSentryServerDsn,
+  resolveTracesSampleRate,
+} from "@/lib/observability/apm";
 
 const dsn = resolveSentryServerDsn();
 if (dsn) {
@@ -8,6 +12,7 @@ if (dsn) {
     dsn,
     tracesSampleRate: resolveTracesSampleRate(),
     environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "development",
+    release: resolveSentryRelease(),
     includeLocalVariables: true,
     enableLogs: true,
   });

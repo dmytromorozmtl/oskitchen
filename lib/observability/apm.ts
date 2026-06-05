@@ -28,6 +28,13 @@ export function resolveSentryServerDsn(): string | undefined {
   return dsn || undefined;
 }
 
+/** Release tag for Sentry events — Vercel commit SHA when deployed. */
+export function resolveSentryRelease(): string | undefined {
+  const sha = process.env.VERCEL_GIT_COMMIT_SHA?.trim();
+  if (sha) return `os-kitchen@${sha.slice(0, 12)}`;
+  return process.env.NODE_ENV === "production" ? "os-kitchen@local" : undefined;
+}
+
 /**
  * Idempotent APM init — complements sentry.*.config.ts when imported from hot paths.
  * Safe to call multiple times; Sentry ignores duplicate init.
@@ -40,6 +47,7 @@ export function initAPM(): void {
     dsn,
     tracesSampleRate: resolveTracesSampleRate(),
     environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "development",
+    release: resolveSentryRelease(),
   });
 }
 
