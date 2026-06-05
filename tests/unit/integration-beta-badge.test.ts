@@ -36,6 +36,7 @@ const LIVE_INTEGRATION_PAGES: Record<string, string> = {
   homebase: "app/dashboard/integrations/homebase/page.tsx",
   klaviyo: "app/dashboard/integrations/klaviyo/page.tsx",
   mailchimp: "app/dashboard/integrations/mailchimp/page.tsx",
+  stripe: "app/dashboard/integrations/stripe/page.tsx",
 };
 
 describe("integration beta badge", () => {
@@ -44,7 +45,7 @@ describe("integration beta badge", () => {
     expect(isBetaIntegration("mailchimp")).toBe(false);
   });
 
-  it("tracks fourteen LIVE registry integrations", () => {
+  it("tracks fifteen LIVE registry integrations", () => {
     expect(LIVE_INTEGRATION_IDS.sort()).toEqual([
       "7shifts",
       "doordash",
@@ -57,6 +58,7 @@ describe("integration beta badge", () => {
       "resy",
       "shopify",
       "skip",
+      "stripe",
       "uber-eats",
       "woocommerce",
       "xero",

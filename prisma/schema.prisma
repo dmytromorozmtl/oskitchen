@@ -230,6 +230,7 @@ enum IntegrationProvider {
   HOMEBASE
   KLAVIYO
   MAILCHIMP
+  STRIPE
   MANUAL
 }
 

@@ -128,6 +128,13 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
     setupRoute: "/dashboard/integrations/mailchimp",
   },
   {
+    id: "stripe",
+    name: "Stripe",
+    status: "LIVE",
+    requiredEnv: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
+    setupRoute: "/dashboard/integrations/stripe",
+  },
+  {
     id: "resy",
     name: "Resy",
     status: "LIVE",
