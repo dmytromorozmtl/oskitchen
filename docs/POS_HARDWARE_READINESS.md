@@ -9,7 +9,7 @@ Certified device catalog: [`hardware-compatibility.md`](./hardware-compatibility
 | Receipt printer (browser print) | supported | Use OS print dialog; no raw ESC/POS driver. |
 | Kitchen / chit printer | planned | Same browser print path until native adapter ships. |
 | Cash drawer kick | placeholder | Needs printer pulse integration. |
-| Customer display | placeholder | Secondary display not implemented. |
+| Customer display | supported | Second-monitor popup + BroadcastChannel live cart (`components/pos/customer-display.tsx`). |
 | Stripe Terminal | placeholder | No live SDK wiring; do not claim in-product copy. |
 | Epson / Star native | future | Adapter roadmap item. |
 

@@ -29,8 +29,9 @@ export const POS_HARDWARE_CATEGORIES = [
   {
     id: "customer_display",
     label: "Customer-facing display",
-    status: "placeholder" as const,
-    detail: "Secondary window / casting not implemented yet.",
+    status: "supported" as const,
+    detail:
+      "Second monitor popup at /dashboard/pos/terminal/customer-display — F8 or toolbar toggle; live cart via BroadcastChannel.",
   },
   {
     id: "stripe_terminal",
