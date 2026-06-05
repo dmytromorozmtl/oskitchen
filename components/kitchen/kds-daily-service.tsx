@@ -46,6 +46,7 @@ import {
   playKdsOverdueAlert,
   playKdsRushModeAlert,
 } from "@/lib/kitchen/kds-realtime-sounds";
+import { announceKdsVoiceAlert } from "@/services/kitchen/voice-alerts";
 import type { KdsRealtimeSloSnapshot } from "@/lib/kitchen/kds-realtime-slo-metrics";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
 import type { KdsRealtimeTransport } from "@/services/kds-websocket";
@@ -86,6 +87,7 @@ export function KdsDailyService({
   const [, startBump] = useTransition();
   const [, startRefresh] = useTransition();
   const overdueAlertedRef = useRef<Set<string>>(new Set());
+  const voiceAlertedRef = useRef<Set<string>>(new Set());
   const rushLevelRef = useRef<KdsRushLevel>("normal");
   const [recentArrivals, setRecentArrivals] = useState<Set<string>>(() => new Set());
 
@@ -126,7 +128,21 @@ export function KdsDailyService({
             });
           }, 700);
         }
-        if (soundEnabled && res.orders.length > prev.length) playKdsNewOrderChime();
+        if (soundEnabled && res.orders.length > prev.length) {
+          playKdsNewOrderChime();
+          for (const order of res.orders) {
+            if (!prevIds.has(order.id)) {
+              announceKdsVoiceAlert("new_order", {
+                orderId: order.id,
+                customerName: order.customerName,
+                tableName: order.tableName,
+              });
+              if (order.hasAllergenConflict) {
+                announceKdsVoiceAlert("allergen", { orderId: order.id });
+              }
+            }
+          }
+        }
         return res.orders;
       });
     });
@@ -152,11 +168,16 @@ export function KdsDailyService({
   }, [refresh, refreshSignal]);
 
   useEffect(() => {
-    if (soundEnabled && rushSnapshot.level === "rush" && rushLevelRef.current !== "rush") {
-      playKdsRushModeAlert();
+    if (soundEnabled && rushSnapshot.level !== rushLevelRef.current) {
+      if (rushSnapshot.level === "rush") {
+        playKdsRushModeAlert();
+        announceKdsVoiceAlert("rush_peak", { queueTotal: rushSnapshot.queue.total });
+      } else if (rushSnapshot.level === "building") {
+        announceKdsVoiceAlert("rush_building", { queueTotal: rushSnapshot.queue.total });
+      }
     }
     rushLevelRef.current = rushSnapshot.level;
-  }, [rushSnapshot.level, soundEnabled]);
+  }, [rushSnapshot.level, rushSnapshot.queue.total, soundEnabled]);
 
   useEffect(() => {
     const tick = setInterval(() => {
@@ -170,6 +191,13 @@ export function KdsDailyService({
             if (isKdsTicketOverdue(order.elapsedSeconds) && !overdueAlertedRef.current.has(order.id)) {
               playKdsOverdueAlert();
               overdueAlertedRef.current.add(order.id);
+              if (!voiceAlertedRef.current.has(order.id)) {
+                announceKdsVoiceAlert("overdue", {
+                  orderId: order.id,
+                  elapsedMinutes: Math.floor(order.elapsedSeconds / 60),
+                });
+                voiceAlertedRef.current.add(order.id);
+              }
             }
           }
         }
@@ -233,7 +261,7 @@ export function KdsDailyService({
             hideSoundToggle && "hidden",
           )}
         >
-          {soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"}
+          {soundEnabled ? "🔊 Alerts ON" : "🔇 Alerts OFF"}
         </button>
       </div>
 
