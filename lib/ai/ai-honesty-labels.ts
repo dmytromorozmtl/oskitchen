@@ -12,6 +12,7 @@ export type AiModuleId =
   | "food-cost-ai"
   | "ai-purchasing"
   | "kitchen-camera"
+  | "invoice-scanner"
   | "benchmark-network"
   | "operations-copilot"
   | "restaurant-co-pilot";
@@ -110,6 +111,16 @@ export const AI_HONESTY_LABELS: readonly AiHonestyLabelDefinition[] = [
     disclaimer:
       "Camera-ready platform with configurable detection modules — not food safety certification or live vision on all stations by default.",
     routes: ["/dashboard/kitchen/cameras", "/dashboard/kitchen/cameras/live"],
+  },
+  {
+    moduleId: "invoice-scanner",
+    moduleName: "AI Invoice Scanner",
+    maturity: "beta",
+    method: "llm_optional",
+    methodDescription: AI_METHOD_LABELS.llm_optional,
+    disclaimer:
+      "AI-assisted invoice scanning. Please verify all fields before confirming. Confidence scores are estimates, not guarantees.",
+    routes: ["/dashboard/inventory/invoice-scanner"],
   },
   {
     moduleId: "benchmark-network",
