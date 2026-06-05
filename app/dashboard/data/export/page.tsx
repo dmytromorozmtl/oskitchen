@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { DataExportPanel } from "@/components/data/data-export-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { requireImportExportPageAccess } from "@/lib/import-export/import-export-page-access";
@@ -27,7 +28,7 @@ export default async function DataExportPage() {
         title="Data Export & Portability"
         description="Export every workspace domain — operations, catalog, purchasing, integrations, and compliance — with a portable JSON manifest."
         actions={
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
             <Link href="/dashboard/import-export">Import / Export hub</Link>
           </Button>
         }

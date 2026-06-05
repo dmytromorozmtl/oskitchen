@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { AnalyticsSuitePanel } from "@/components/analytics/analytics-suite-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { PlanGate } from "@/components/plans/plan-gate";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ export default async function AnalyticsSuitePage() {
           title="Analytics Suite"
           description="Unified command view across revenue, orders, customers, operations, catering, meal plans, inventory, and 90-day forecast."
           actions={
-            <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
               <Link href="/dashboard/analytics">Executive overview</Link>
             </Button>
           }

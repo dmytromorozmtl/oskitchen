@@ -6,6 +6,11 @@ import { ArrowRight, Crown, LayoutDashboard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ROLE_HERO_CARD_CLASS,
+  roleNextActionCardClass,
+  roleTileToneClass,
+} from "@/lib/design/dark-mode-everywhere-patterns";
 import { dashboardShortcutTileClass } from "@/lib/design/mobile-first-redesign-patterns";
 import type { OwnerRoleUiSnapshot } from "@/lib/roles/owner-ui-types";
 import { cn } from "@/lib/utils";
@@ -14,20 +19,10 @@ type Props = {
   snapshot: OwnerRoleUiSnapshot;
 };
 
-function tileToneClass(tone: "neutral" | "attention" | "success"): string {
-  if (tone === "attention") {
-    return "border-amber-200/70 bg-amber-50/30 dark:border-amber-900/40 dark:bg-amber-950/15";
-  }
-  if (tone === "success") {
-    return "border-emerald-200/60 bg-emerald-50/20 dark:border-emerald-900/30 dark:bg-emerald-950/10";
-  }
-  return "border-border/70 bg-background/80";
-}
-
 export function OwnerRolePanel({ snapshot }: Props) {
   return (
     <div className="space-y-6" data-testid="owner-role-panel">
-      <Card className="border-primary/20 bg-primary/[0.03]">
+      <Card className={ROLE_HERO_CARD_CLASS.owner}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Crown className="h-5 w-5 text-primary" />
@@ -71,9 +66,10 @@ export function OwnerRolePanel({ snapshot }: Props) {
       <Card
         className={cn(
           "border shadow-sm",
-          snapshot.nextAction.tone === "urgent"
-            ? "border-amber-200/80 bg-amber-50/40 dark:border-amber-900/40 dark:bg-amber-950/20"
-            : "border-primary/25 bg-primary/[0.04]",
+          roleNextActionCardClass(
+            snapshot.nextAction.tone === "urgent" ? "urgent" : "default",
+            "owner",
+          ),
         )}
       >
         <CardHeader className="pb-2">
@@ -101,7 +97,7 @@ export function OwnerRolePanel({ snapshot }: Props) {
             {snapshot.heroTiles.map((tile) => (
               <div
                 key={tile.id}
-                className={cn("rounded-lg border p-3", tileToneClass(tile.tone))}
+                className={cn("rounded-lg border p-3", roleTileToneClass(tile.tone))}
               >
                 <p className="text-xs font-medium text-muted-foreground">{tile.label}</p>
                 <p className="mt-1 text-lg font-semibold tabular-nums">{tile.value}</p>

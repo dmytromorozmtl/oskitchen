@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { OwnerRolePanel } from "@/components/roles/owner-role-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,7 +50,7 @@ export default async function OwnerRolePage() {
         title="Owner"
         description="Role-based UI for restaurant owners — leadership KPIs, briefing priorities, and strategic shortcuts."
         actions={
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
             <Link href="/dashboard/today">Today overview</Link>
           </Button>
         }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { DriverRolePanel } from "@/components/roles/driver-role-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -44,7 +45,7 @@ export default async function DriverRolePage() {
         title="Driver"
         description="Role-based UI for delivery drivers — route KPIs, stop priorities, and dispatch shortcuts."
         actions={
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
             <Link href="/dashboard/routes/driver">Today&apos;s route</Link>
           </Button>
         }

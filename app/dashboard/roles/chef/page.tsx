@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ChefRolePanel } from "@/components/roles/chef-role-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,7 +50,7 @@ export default async function ChefRolePage() {
         title="Chef"
         description="Role-based UI for kitchen leads — line KPIs, KDS priorities, and production shortcuts."
         actions={
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
             <Link href="/dashboard/kitchen">Kitchen display</Link>
           </Button>
         }

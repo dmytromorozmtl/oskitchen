@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ManagerRolePanel } from "@/components/roles/manager-role-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,7 +50,7 @@ export default async function ManagerRolePage() {
         title="Manager"
         description="Role-based UI for shift managers — operational KPIs, briefing priorities, and floor shortcuts."
         actions={
-          <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
             <Link href="/dashboard/today">Today overview</Link>
           </Button>
         }

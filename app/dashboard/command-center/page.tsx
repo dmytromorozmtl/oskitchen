@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { CommandCenterPanel } from "@/components/command-center/command-center-panel";
+import { rolePageActionClass } from "@/lib/design/dark-mode-everywhere-patterns";
 import { Button } from "@/components/ui/button";
 import { canAccessOwnerOnlySurfaces } from "@/lib/platform-admin";
 import { safeRequireWorkspacePermissionActor } from "@/lib/permissions/safe-workspace-permission-actor";
@@ -51,7 +52,7 @@ export default async function CommandCenterPage() {
             surfaces — one screen for leadership.
           </p>
         </div>
-        <Button asChild variant="outline" size="sm" className="rounded-full">
+        <Button asChild variant="outline" size="sm" className={rolePageActionClass}>
           <Link href="/dashboard/executive">Executive dashboard</Link>
         </Button>
       </div>
