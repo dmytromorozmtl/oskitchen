@@ -3,9 +3,14 @@
  * Queued sales replay via `posCheckoutAction` when connectivity returns.
  */
 
-const DB_NAME = "kitchenos-offline-pos";
-const STORE = "checkout_queue";
-const DB_VERSION = 1;
+import { registerOfflinePosAutoSync } from "@/lib/pos/offline-pos-auto-sync";
+
+export const OFFLINE_POS_INDEXED_DB_NAME = "kitchenos-offline-pos" as const;
+export const OFFLINE_POS_INDEXED_DB_STORE = "checkout_queue" as const;
+
+const DB_NAME = OFFLINE_POS_INDEXED_DB_NAME;
+const STORE = OFFLINE_POS_INDEXED_DB_STORE;
+const DB_VERSION = 2;
 
 export type OfflinePosSyncStatus = "queued" | "syncing" | "conflict" | "failed";
 
@@ -108,9 +113,18 @@ export async function updateOfflinePosCheckout(
   db.close();
 }
 
-export function registerOfflinePosBackgroundSync(): void {
-  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
-  void navigator.serviceWorker.ready
-    .then((reg) => reg.active?.postMessage({ type: "REGISTER_OFFLINE_POS_SYNC" }))
-    .catch(() => undefined);
+export function registerOfflinePosBackgroundSync(
+  autoSyncHandlers?: Parameters<typeof registerOfflinePosAutoSync>[0],
+): () => void {
+  if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+    void navigator.serviceWorker.ready
+      .then((reg) => reg.active?.postMessage({ type: "REGISTER_OFFLINE_POS_SYNC" }))
+      .catch(() => undefined);
+  }
+
+  if (!autoSyncHandlers) {
+    return () => undefined;
+  }
+
+  return registerOfflinePosAutoSync(autoSyncHandlers);
 }

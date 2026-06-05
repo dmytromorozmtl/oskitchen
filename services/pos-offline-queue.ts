@@ -1,6 +1,8 @@
 /**
  * Server-side offline POS order queue — staging buffer for replay when connectivity returns.
  * Client IndexedDB queue remains canonical in-browser (`lib/pos/offline-pos-queue.ts`).
+ * Card metadata is sealed at rest in the browser via `lib/pos/offline-pci-local-encryption.ts`.
+ * Auto-sync replays pending rows when connectivity returns (`lib/pos/offline-pos-auto-sync.ts`).
  * Does not imply certified hardware offline or EMV store-and-forward while disconnected.
  */
 import { randomUUID } from "crypto";
@@ -9,9 +11,23 @@ import type { PosCheckoutInput } from "@/services/pos/pos-checkout-service";
 import { checkoutPosSale } from "@/services/pos/pos-checkout-service";
 import { formatOfflineSyncSuccessMessage } from "@/lib/pos/offline-sync";
 import type { OfflineCardCaptureInput } from "@/lib/pos/offline-card-pci";
+import { assertPciSafeOfflineCardCapture } from "@/lib/pos/offline-card-pci";
+import {
+  OFFLINE_POS_INDEXED_DB_NAME,
+  OFFLINE_POS_INDEXED_DB_STORE,
+} from "@/lib/pos/offline-pos-queue";
 import { resetOfflineCardCapturesForTests } from "@/services/pos/offline-card-service";
 
 export { formatOfflineSyncSuccessMessage };
+
+export const POS_OFFLINE_QUEUE_POLICY_ID = "pos-offline-queue-v2" as const;
+
+export { OFFLINE_POS_INDEXED_DB_NAME, OFFLINE_POS_INDEXED_DB_STORE };
+
+export const OFFLINE_CARD_INDEXED_DB_NAME = "kitchenos-offline-card" as const;
+export const OFFLINE_CARD_INDEXED_DB_STORE = "card_capture_queue" as const;
+
+export const OFFLINE_POS_AUTO_SYNC_RETRY_LIMIT = 3 as const;
 
 export type OfflinePosQueueEntryStatus = "pending" | "synced" | "failed" | "conflict";
 
@@ -155,6 +171,33 @@ export async function getOfflineQueueStats(input: {
     syncedTotal: stats.syncedTotal,
     tableConflicts: detectOfflineTableConflicts(orders),
   };
+}
+
+function checkoutAmountCents(payload: PosCheckoutInput): number {
+  return Math.round(
+    payload.lines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0) * 100,
+  );
+}
+
+/** Stage a POS checkout payload with PCI validation for offline card rows. */
+export async function queueOrderWithPciValidation(input: {
+  userId: string;
+  workspaceId?: string | null;
+  payload: PosCheckoutInput;
+  metadata?: OfflinePosQueueMetadata;
+}): Promise<{ id: string }> {
+  const cardMeta = input.metadata?.offlineCard;
+  if (cardMeta && input.payload.paymentMode === "OFFLINE_CARD_QUEUED") {
+    assertPciSafeOfflineCardCapture({
+      offlineSaleId: input.payload.offlineSaleId?.trim() || "pending-offline-sale",
+      registerId: input.payload.registerId,
+      amountCents: checkoutAmountCents(input.payload),
+      cardBrand: cardMeta.cardBrand,
+      last4: cardMeta.last4,
+      paymentIntentId: cardMeta.paymentIntentId ?? undefined,
+    });
+  }
+  return queueOrder(input);
 }
 
 /** Stage a POS checkout payload for later sync (e.g. device regained connectivity). */
@@ -555,6 +598,60 @@ export async function syncQueue(input: {
   syncStats.set(key, stats);
 
   return result;
+}
+
+function isTransientOfflineSyncError(message: string): boolean {
+  return /network|timeout|503|502|fetch failed|econnreset|temporarily unavailable/i.test(
+    message,
+  );
+}
+
+/** Replay pending rows with automatic retry for transient checkout failures. */
+export async function syncQueueWithAutoRetry(input: {
+  userId: string;
+  workspaceId?: string | null;
+  performedByUserId?: string;
+  online?: boolean;
+  checkoutHandler?: PosCheckoutHandler;
+}): Promise<SyncQueueResult & { retries: number }> {
+  let retries = 0;
+  let aggregate = await syncQueue(input);
+  const key = queueKey(input.userId, input.workspaceId ?? null);
+
+  while (retries < OFFLINE_POS_AUTO_SYNC_RETRY_LIMIT) {
+    const list = queues.get(key) ?? [];
+    const retryable = list.filter(
+      (entry) =>
+        entry.status === "failed" &&
+        entry.lastError &&
+        isTransientOfflineSyncError(entry.lastError),
+    );
+    if (retryable.length === 0) break;
+
+    for (const entry of retryable) {
+      entry.status = "pending";
+      entry.lastError = undefined;
+    }
+
+    retries += 1;
+    const retryResult = await syncQueue(input);
+    aggregate = {
+      ...aggregate,
+      attempted: aggregate.attempted + retryResult.attempted,
+      synced: aggregate.synced + retryResult.synced,
+      failed: retryResult.failed,
+      conflicts: Math.max(aggregate.conflicts, retryResult.conflicts),
+      receiptsPrinted: aggregate.receiptsPrinted + retryResult.receiptsPrinted,
+      preAuthsCaptured: aggregate.preAuthsCaptured + retryResult.preAuthsCaptured,
+      cardsCaptured: aggregate.cardsCaptured + retryResult.cardsCaptured,
+      cardsFailed: retryResult.cardsFailed,
+      tableConflicts: retryResult.tableConflicts,
+      syncedMessage: retryResult.syncedMessage,
+      errors: [...aggregate.errors, ...retryResult.errors],
+    };
+  }
+
+  return { ...aggregate, retries };
 }
 
 /** Stress test: queue N offline orders and replay through injectable checkout handler. */

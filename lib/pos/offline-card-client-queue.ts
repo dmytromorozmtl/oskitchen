@@ -1,10 +1,18 @@
 /**
  * Browser queue for PCI-safe offline card metadata (pairs with `lib/pos/offline-pos-queue.ts`).
+ * Card fields are sealed at rest with device-local AES-GCM when Web Crypto is available.
  */
+
+import {
+  sealOfflinePciField,
+  sealOfflinePciRecord,
+  unsealOfflinePciRecord,
+  type OfflinePciSealedBlob,
+} from "@/lib/pos/offline-pci-local-encryption";
 
 const DB_NAME = "kitchenos-offline-card";
 const STORE = "card_capture_queue";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export type OfflineCardClientEntry = {
   id: string;
@@ -17,6 +25,11 @@ export type OfflineCardClientEntry = {
   paymentIntentId?: string;
   syncStatus: "queued" | "synced" | "failed";
   syncError?: string;
+  pciSealed?: {
+    last4: OfflinePciSealedBlob;
+    cardBrand: OfflinePciSealedBlob;
+    paymentIntentId?: OfflinePciSealedBlob;
+  };
 };
 
 function openDb(): Promise<IDBDatabase> {
@@ -33,6 +46,17 @@ function openDb(): Promise<IDBDatabase> {
   });
 }
 
+async function hydrateCardEntry(entry: OfflineCardClientEntry): Promise<OfflineCardClientEntry> {
+  if (!entry.pciSealed) return entry;
+  const plain = await unsealOfflinePciRecord(entry.pciSealed);
+  return {
+    ...entry,
+    last4: plain.last4 || entry.last4,
+    cardBrand: plain.cardBrand || entry.cardBrand,
+    paymentIntentId: plain.paymentIntentId || entry.paymentIntentId,
+  };
+}
+
 export async function enqueueOfflineCardClientCapture(input: {
   offlineSaleId: string;
   registerId: string;
@@ -42,17 +66,27 @@ export async function enqueueOfflineCardClientCapture(input: {
   paymentIntentId?: string;
 }): Promise<string> {
   const id = crypto.randomUUID();
+  const last4 = input.last4.replace(/\D/g, "").slice(-4);
+  const cardBrand = input.cardBrand.trim().slice(0, 32);
+  const pciSealed = await sealOfflinePciRecord({
+    last4,
+    cardBrand,
+    paymentIntentId: input.paymentIntentId ?? "",
+  });
+
   const entry: OfflineCardClientEntry = {
     id,
     offlineSaleId: input.offlineSaleId,
     createdAt: new Date().toISOString(),
     registerId: input.registerId,
     amountCents: Math.round(input.amountCents),
-    cardBrand: input.cardBrand.trim().slice(0, 32),
-    last4: input.last4.replace(/\D/g, "").slice(-4),
-    paymentIntentId: input.paymentIntentId,
+    cardBrand: "[sealed]",
+    last4: "****",
+    paymentIntentId: input.paymentIntentId ? "[sealed]" : undefined,
     syncStatus: "queued",
+    pciSealed,
   };
+
   const db = await openDb();
   await new Promise<void>((resolve, reject) => {
     const tx = db.transaction(STORE, "readwrite");
@@ -73,7 +107,8 @@ export async function listOfflineCardClientCaptures(): Promise<OfflineCardClient
     req.onerror = () => reject(req.error);
   });
   db.close();
-  return rows.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  const hydrated = await Promise.all(rows.map((row) => hydrateCardEntry(row)));
+  return hydrated.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 }
 
 export async function removeOfflineCardClientCapture(id: string): Promise<void> {
@@ -85,4 +120,9 @@ export async function removeOfflineCardClientCapture(id: string): Promise<void> 
     tx.onerror = () => reject(tx.error);
   });
   db.close();
+}
+
+/** Test helper — seal without persisting. */
+export async function sealOfflineCardFieldForTests(value: string) {
+  return sealOfflinePciField(value);
 }
