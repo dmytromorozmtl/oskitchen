@@ -4,6 +4,13 @@ import { QuickStartWizard } from "@/components/onboarding/quick-start-wizard";
 import { requireSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+/** 15-minute self-serve Quick Start — profile → menu → first order with countdown timer and confetti. */
+
+export const metadata = {
+  title: "Quick Start — 15-minute setup",
+  description: "Self-serve onboarding wizard with countdown timer and confetti when you finish.",
+};
+
 export default async function QuickStartPage({
   searchParams,
 }: {

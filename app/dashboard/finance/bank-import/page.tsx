@@ -19,6 +19,10 @@ export default async function BankImportPage() {
         <p className="mt-1 text-sm text-muted-foreground">
           Upload CSV, PDF, or a photo of your bank statement. OS Kitchen categorizes each line and auto-matches deposits to orders and payments to supplier invoices.
         </p>
+        <p className="mt-2 text-xs text-muted-foreground" role="status">
+          AI-assisted categorization and matching — confidence scores are estimates, not guarantees.
+          Please verify each transaction before committing imports; parsed data may be incorrect.
+        </p>
       </div>
 
       <BankImportClient recentImports={recentImports} aiConfigured={aiConfigured} />

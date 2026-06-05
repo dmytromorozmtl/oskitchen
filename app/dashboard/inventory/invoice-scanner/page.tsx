@@ -1,4 +1,5 @@
 import { InvoiceScannerClient } from "@/components/inventory/invoice-scanner-client";
+import { AiHonestyBanner } from "@/components/ui/ai-honesty-label";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { isCopilotLlmConfigured } from "@/lib/ai/copilot-llm-routing";
 import {
@@ -22,6 +23,8 @@ export default async function InvoiceScannerPage() {
           Photograph a supplier invoice to create a supply receipt and update inventory stock.
         </p>
       </div>
+
+      <AiHonestyBanner moduleId="invoice-scanner" compact />
 
       <InvoiceScannerClient history={history} aiConfigured={aiConfigured} />
     </div>
