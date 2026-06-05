@@ -6,11 +6,12 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export const VENDOR_CABINET_LINKS = [
-  { href: "/vendor/dashboard", label: "Dashboard", exact: true },
-  { href: "/vendor/products", label: "Products" },
+  { href: "/vendor/dashboard", label: "Portal", exact: true },
   { href: "/vendor/orders", label: "Orders" },
-  { href: "/vendor/finance", label: "Finance" },
+  { href: "/vendor/invoices", label: "Invoices" },
   { href: "/vendor/analytics", label: "Analytics" },
+  { href: "/vendor/products", label: "Products" },
+  { href: "/vendor/finance", label: "Finance" },
   { href: "/vendor/settings", label: "Settings" },
 ] as const;
 

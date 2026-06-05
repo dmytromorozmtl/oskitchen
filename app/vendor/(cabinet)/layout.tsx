@@ -24,7 +24,7 @@ export default function VendorCabinetLayout({ children }: { children: React.Reac
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 OS Kitchen Marketplace
               </p>
-              <p className="text-sm font-semibold">Vendor cabinet</p>
+              <p className="text-sm font-semibold">Vendor Portal 2.0</p>
             </div>
             <nav className="flex flex-wrap gap-3 text-sm">
               <Link href="/dashboard/marketplace" className="text-muted-foreground hover:text-foreground">
