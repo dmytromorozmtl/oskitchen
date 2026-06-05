@@ -16,6 +16,7 @@ export function fireCelebrationConfetti(durationMs = 2400): void {
     canvas.remove();
     return;
   }
+  const draw = ctx;
 
   const colors = ["#FF5F1F", "#FFD166", "#06D6A0", "#118AB2", "#EF476F", "#8338EC"];
   const particles = Array.from({ length: 120 }, () => ({
@@ -33,18 +34,18 @@ export function fireCelebrationConfetti(durationMs = 2400): void {
 
   function frame(now: number) {
     const elapsed = now - started;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    draw.clearRect(0, 0, canvas.width, canvas.height);
     for (const p of particles) {
       p.x += p.vx;
       p.y += p.vy;
       p.vy += 0.08;
       p.angle += p.spin;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 0.6);
-      ctx.restore();
+      draw.save();
+      draw.translate(p.x, p.y);
+      draw.rotate(p.angle);
+      draw.fillStyle = p.color;
+      draw.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 0.6);
+      draw.restore();
     }
     if (elapsed < durationMs) {
       requestAnimationFrame(frame);
