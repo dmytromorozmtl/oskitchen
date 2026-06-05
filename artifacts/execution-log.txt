@@ -5570,3 +5570,12 @@ Result: DONE — Poster Gaps 6/10
 Files: knowledge-base-service.ts, knowledge-base-content.ts, app/kb/[[...slug]]/page.tsx, kb-shell.tsx, kb-pages.tsx, e2e/knowledge-base.spec.ts
 Tests: unit 4/4 pass (knowledge-base-service)
 
+---
+POSTER GAP Cycle: 7
+Timestamp: 2026-06-05T07:53:00.000Z
+Feature: landing-full-service
+Action: feat: Full-Service Restaurant landing page
+Result: DONE — Poster Gaps 7/10
+Files: app/landing/full-service-restaurant/page.tsx, full-service-restaurant-landing.tsx, full-service-restaurant-landing-content.ts
+Tests: unit 2/2 pass (full-service-restaurant-landing)
+
