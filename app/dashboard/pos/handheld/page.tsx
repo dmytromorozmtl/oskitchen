@@ -11,7 +11,7 @@ import { loadHandheldOrderingBootstrap } from "@/services/pos/handheld-ordering-
 
 export const metadata: Metadata = {
   title: "Handheld POS",
-  description: "Mobile-first tableside ordering with offline cash checkout.",
+  description: "Mobile-first tableside ordering — fire to KDS, tab sync, offline cash checkout.",
   manifest: "/dashboard/pos/handheld/manifest.webmanifest",
   appleWebApp: {
     capable: true,

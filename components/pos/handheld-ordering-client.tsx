@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { Minus, Plus, Send, ShoppingBag, Smartphone } from "lucide-react";
+import { ChefHat, Minus, Plus, Send, ShoppingBag, Smartphone } from "lucide-react";
 
 import { posCheckoutAction } from "@/actions/pos";
-import { addItemToTabAction, createTabAction } from "@/actions/pos/tabs";
+import { fireHandheldToKdsAction } from "@/actions/pos/handheld";
+import { createTabAction } from "@/actions/pos/tabs";
 import { OfflineSyncStatusBar } from "@/components/dashboard/offline-sync-status-bar";
 import { broadcastOfflineSyncState } from "@/hooks/use-offline-sync-status";
 import { getActionError, isActionSuccess } from "@/lib/action-result";
@@ -24,6 +25,7 @@ import type { PosConflictResolutionStrategy } from "@/lib/pos/pos-settings";
 import {
   findOpenTabForTable,
   groupHandheldProducts,
+  HANDHELD_KDS_ROUTE,
   handheldCartSubtotal,
   tableStatusTone,
   type HandheldCartLine,
@@ -63,6 +65,7 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
   const [cart, setCart] = useState<HandheldCartLine[]>([]);
   const [tabs, setTabs] = useState(props.tabs);
   const [status, setStatus] = useState<string | null>(null);
+  const [lastKdsOrderId, setLastKdsOrderId] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const grouped = useMemo(() => groupHandheldProducts(props.products), [props.products]);
@@ -184,36 +187,73 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
     return null;
   }
 
-  function fireToTab() {
+  function fireToKds() {
+    if (!registerId) {
+      setStatus("Create a register before firing to KDS.");
+      return;
+    }
     if (!cart.length) {
-      setStatus("Add items before firing to the kitchen.");
+      setStatus("Add items before firing to KDS.");
       return;
     }
     if (!online) {
-      setStatus("Tab fire requires connectivity — checkout cash offline instead.");
+      setStatus("KDS fire requires connectivity — checkout cash offline instead.");
       return;
     }
+
+    const lineCount = cart.length;
+    const tableName = selectedTable?.name ?? null;
 
     startTransition(async () => {
       const tabId = await ensureTabForTable();
       if (!tabId) return;
 
-      for (const line of cart) {
-        const formData = new FormData();
-        formData.set("tabId", tabId);
-        formData.set("productName", line.title);
-        formData.set("quantity", String(line.quantity));
-        formData.set("unitPrice", String(line.unitPrice));
-        const result = await addItemToTabAction(formData);
-        const error = getActionError(result);
-        if (error) {
-          setStatus(error);
-          return;
-        }
+      const res = await fireHandheldToKdsAction({
+        registerId,
+        shiftId: props.openShiftsByRegisterId[registerId]?.id ?? null,
+        staffMemberId: staffId || null,
+        locationId: props.registers.find((register) => register.id === registerId)?.locationId ?? null,
+        tableId: selectedTableId,
+        tableName,
+        tabId,
+        lines: cart.map((line) => ({
+          productId: line.productId,
+          title: line.title,
+          quantity: line.quantity,
+          unitPrice: line.unitPrice,
+        })),
+      });
+
+      if (!res.ok) {
+        setStatus(res.error);
+        return;
       }
 
+      setTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === tabId
+            ? {
+                ...tab,
+                items: [
+                  ...tab.items,
+                  ...cart.map((line, index) => ({
+                    id: `kds-${res.orderId}-${index}`,
+                    productName: line.title,
+                    quantity: line.quantity,
+                    unitPrice: line.unitPrice,
+                    totalPrice: line.quantity * line.unitPrice,
+                  })),
+                ],
+              }
+            : tab,
+        ),
+      );
       setCart([]);
-      setStatus(`Fired ${cart.length} item line(s) to ${selectedTable?.name ?? "table"}.`);
+      setLastKdsOrderId(res.orderId);
+      const tableLabel = tableName ? `Table ${tableName}` : "table";
+      setStatus(
+        `Fired ${lineCount} line(s) to KDS (${res.workItemsCreated} prep ticket(s)) — ${tableLabel} · order ${res.orderId.slice(0, 8)}…`,
+      );
     });
   }
 
@@ -283,9 +323,19 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
           <Badge variant={online ? "default" : "outline"}>{online ? "Online" : "Offline"}</Badge>
         </div>
         <OfflineSyncStatusBar className="w-full" showWhenIdle={offlineQueueEnabled} />
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Smartphone className="h-4 w-4" aria-hidden />
-          Install from browser menu for full-screen waiter mode.
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-2">
+            <Smartphone className="h-4 w-4" aria-hidden />
+            Install from browser menu for full-screen waiter mode.
+          </span>
+          <Link
+            href={HANDHELD_KDS_ROUTE}
+            className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline"
+            data-testid="handheld-kds-link"
+          >
+            <ChefHat className="h-4 w-4" aria-hidden />
+            Kitchen display
+          </Link>
         </div>
       </div>
 
@@ -369,6 +419,14 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
           {status ? (
             <p className="text-sm text-muted-foreground" data-testid="handheld-status">
               {status}
+              {lastKdsOrderId ? (
+                <>
+                  {" "}
+                  <Link href={HANDHELD_KDS_ROUTE} className="text-primary underline-offset-2 hover:underline">
+                    View KDS
+                  </Link>
+                </>
+              ) : null}
             </p>
           ) : null}
           <div className="flex items-center justify-between gap-3">
@@ -383,11 +441,11 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
                 variant="outline"
                 className={cn("rounded-full", posTouchButtonClass)}
                 disabled={pending || !cart.length}
-                onClick={fireToTab}
-                data-testid="handheld-fire-tab"
+                onClick={fireToKds}
+                data-testid="handheld-fire-kds"
               >
                 <Send className="mr-1 h-4 w-4" />
-                Fire
+                Fire KDS
               </Button>
               <Button
                 type="button"

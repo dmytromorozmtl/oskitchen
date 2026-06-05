@@ -17,6 +17,8 @@ test.describe("Handheld ordering", () => {
 
     await expect(page.getByTestId("handheld-ordering-root")).toBeVisible({ timeout: 15_000 });
     await expect(page.getByText("Tables")).toBeVisible();
+    await expect(page.getByTestId("handheld-fire-kds")).toBeVisible();
     await expect(page.getByTestId("handheld-checkout-cash")).toBeVisible();
+    await expect(page.getByTestId("handheld-kds-link")).toBeVisible();
   });
 });

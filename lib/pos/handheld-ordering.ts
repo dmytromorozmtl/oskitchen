@@ -87,3 +87,4 @@ export function tableStatusTone(status: string): "default" | "secondary" | "outl
 }
 
 export const HANDHELD_PWA_SCOPE = "/dashboard/pos/handheld";
+export const HANDHELD_KDS_ROUTE = "/dashboard/kitchen";
