@@ -51,6 +51,9 @@ export function CommissaryEnterprisePanel({ dashboard }: Props) {
             <Link href="/dashboard/commissary/transfers">Transfers</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/catering">Catering OS</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/enterprise/multi-brand">Multi-brand</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
