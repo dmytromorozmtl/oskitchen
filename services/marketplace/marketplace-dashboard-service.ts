@@ -34,10 +34,12 @@ export type MarketplaceOrderAgainItem = {
   orderId: string;
   productId: string;
   productName: string;
+  vendorId: string;
   vendorName: string;
   sku: string;
   quantity: number;
   unitPrice: number;
+  currency: string;
   slug: string;
   lastOrderedAt: string;
 };
@@ -174,7 +176,7 @@ export async function loadMarketplaceDashboard(
             product: { select: { slug: true } },
           },
         },
-        vendor: { select: { companyName: true } },
+        vendor: { select: { id: true, companyName: true } },
       },
     }),
     prisma.vendor.findMany({
@@ -239,10 +241,12 @@ export async function loadMarketplaceDashboard(
         orderId: order.id,
         productId: line.productId,
         productName: line.productName,
+        vendorId: order.vendor.id,
         vendorName: order.vendor.companyName,
         sku: line.sku,
         quantity: line.quantity,
         unitPrice: decimalToNumber(line.unitPrice),
+        currency: order.currency,
         slug: line.product.slug,
         lastOrderedAt: order.createdAt.toISOString(),
       },

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Plus, Star } from "lucide-react";
 
+import { SupplierOneClickReorderButton } from "@/components/marketplace/supplier-one-click-reorder-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,11 +79,22 @@ export function MarketplaceOrderAgainCard({
           <Link href={`/dashboard/marketplace/products/${item.slug}`}>View product</Link>
         </Button>
         {canAddToCart ? (
-          <Button asChild size="sm" className="rounded-full">
-            <Link href={`/dashboard/marketplace/products/${item.slug}?qty=${item.quantity}&add=1`}>
-              Order again
-            </Link>
-          </Button>
+          <SupplierOneClickReorderButton
+            item={{
+              id: `${item.orderId}-${item.productId}`,
+              lane: "food",
+              productId: item.productId,
+              productName: item.productName,
+              slug: item.slug,
+              sku: item.sku,
+              vendorId: item.vendorId,
+              vendorName: item.vendorName,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              currency: item.currency,
+              lastOrderedAtIso: item.lastOrderedAt,
+            }}
+          />
         ) : null}
       </CardContent>
     </Card>

@@ -12,6 +12,7 @@ import {
   MarketplaceProductGridCard,
 } from "@/components/marketplace/marketplace-dashboard-sections";
 import { MarketplaceSearchBar } from "@/components/marketplace/marketplace-search-bar";
+import { SupplierMarketplaceLanes } from "@/components/marketplace/supplier-marketplace-lanes";
 import { PageHeader } from "@/components/layout/page-header";
 import { PageSection } from "@/components/layout/page-section";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { formatCurrency } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import { loadMarketplaceDashboard } from "@/services/marketplace/marketplace-dashboard-service";
+import { loadSupplierMarketplaceDashboard } from "@/services/marketplace/supplier-marketplace-service";
 
 export default async function MarketplaceDashboardPage() {
   const { workspaceId, dataUserId } = await getTenantActor();
@@ -46,11 +48,12 @@ export default async function MarketplaceDashboardPage() {
   ]);
 
   let model;
+  let supplierMarketplace;
   try {
-    model = await loadMarketplaceDashboard(
-      workspaceId,
-      profile?.kitchenSettings?.businessType ?? null,
-    );
+    [model, supplierMarketplace] = await Promise.all([
+      loadMarketplaceDashboard(workspaceId, profile?.kitchenSettings?.businessType ?? null),
+      loadSupplierMarketplaceDashboard(workspaceId),
+    ]);
   } catch (error) {
     console.error("[marketplace-dashboard] load failed", error);
     return (
@@ -67,8 +70,8 @@ export default async function MarketplaceDashboardPage() {
   return (
     <div className="space-y-8 pb-8">
       <PageHeader
-        title="Marketplace"
-        description="Procure supplies, equipment, and services from verified HoReCa vendors — integrated with your workspace orders and inventory."
+        title="Supplier Marketplace"
+        description="Food, packaging, and equipment from verified HoReCa suppliers — one-click reorder, integrated with purchase orders and inventory."
         actions={
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline" size="sm" className="rounded-full">
@@ -112,6 +115,11 @@ export default async function MarketplaceDashboardPage() {
           accent={model.attentionCount > 0}
         />
       </div>
+
+      <SupplierMarketplaceLanes
+        dashboard={supplierMarketplace}
+        canReorder={access.canCartWrite}
+      />
 
       <MarketplaceHeroBanner promotions={model.promotions} />
 
