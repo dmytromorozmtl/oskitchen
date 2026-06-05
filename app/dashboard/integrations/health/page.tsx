@@ -77,6 +77,20 @@ export default async function IntegrationHealthPage() {
 
       <LiveIntegrationDodPanel />
 
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">LIVE fleet health</CardTitle>
+          <CardDescription>
+            Scores, 7-day trends, and predictive alerts for every LIVE integration.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/integration-health/live">Open LIVE health dashboard →</Link>
+          </Button>
+        </CardContent>
+      </Card>
+
       <PageSection
         title="Connections"
         description="Per-provider health checks reflect real credential and sync state."
