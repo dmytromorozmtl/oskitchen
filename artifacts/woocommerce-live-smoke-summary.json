@@ -1,25 +1,29 @@
 {
-  "version": "woocommerce-live-smoke-v1",
-  "runAt": "2026-06-03T19:06:36.079Z",
-  "overall": "FAILED",
-  "proofStatus": "proof_failed",
+  "version": "era71-woocommerce-live-smoke-v1",
+  "runAt": "2026-06-05T23:21:57.232Z",
+  "commitSha": null,
+  "overall": "SKIPPED",
+  "proofStatus": "proof_skipped_placeholder_store",
+  "wiringCertPassed": true,
+  "liveSmokeOverall": "SKIPPED",
   "missingEnvVars": [],
   "steps": [
     {
-      "id": "env_validation",
-      "label": "Prerequisite env vars",
-      "status": "PASSED",
-      "detail": "Direct Woo or DB tenant path satisfied"
+      "id": "wiring_audit",
+      "label": "Woo → webhook → KDS → inventory wiring",
+      "status": "PASSED"
     },
     {
-      "id": "woo_api_connection",
-      "label": "WooCommerce REST connection",
-      "status": "FAILED",
-      "detail": "Store smoke-test.os-kitchen.com: fetch failed (getaddrinfo ENOTFOUND smoke-test.os-kitchen.com). Update the store URL in Dashboard → Integrations → WooCommerce (saved host is a placeholder)."
+      "id": "unit_cert",
+      "label": "Era 71 Woo live smoke cert",
+      "status": "PASSED"
+    },
+    {
+      "id": "live_rest_webhook_kds_inventory",
+      "label": "Live dev store → webhook → KDS → inventory",
+      "status": "SKIPPED",
+      "reason": "Store smoke-test.os-kitchen.com: fetch failed (getaddrinfo ENOTFOUND smoke-test.os-kitchen.com). Update the store URL in Dashboard → Integrations → WooCommerce (saved host is a placeholder)."
     }
   ],
-  "externalOrderId": null,
-  "connectionId": "7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3",
-  "stagingWebhookUrl": "https://os-kitchen.com/api/webhooks/woocommerce?cid=7ff36f51-4c34-4ab7-b4ed-c6eb095bc4d3",
-  "honestyNote": "PASS requires live Woo REST + staging webhook ingest + ExternalOrder row — not wiring cert alone."
+  "honestyNote": "PASS requires live Woo REST + staging webhook + ExternalOrder + KDS kitchen import — inventory sync fires on order.created."
 }

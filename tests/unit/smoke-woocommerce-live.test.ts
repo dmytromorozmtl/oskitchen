@@ -58,6 +58,28 @@ describe("smoke-woocommerce-live", () => {
     expect(summary.proofStatus).toBe("proof_skipped_missing_prerequisites");
   });
 
+  it("builds SKIPPED summary for placeholder store host", () => {
+    const summary = buildWooCommerceLiveSmokeSummary({
+      steps: [
+        {
+          id: "env_validation",
+          label: "Prerequisite env vars",
+          status: "PASSED",
+        },
+        {
+          id: "woo_api_connection",
+          label: "WooCommerce REST connection",
+          status: "SKIPPED",
+          detail: "placeholder host",
+        },
+      ],
+      missingEnvVars: [],
+    });
+
+    expect(summary.overall).toBe("SKIPPED");
+    expect(summary.proofStatus).toBe("proof_skipped_placeholder_store");
+  });
+
   it("flags placeholder store hosts in ping failure detail", () => {
     expect(wooStoreHostLabel("https://smoke-test.os-kitchen.com")).toBe("smoke-test.os-kitchen.com");
     expect(formatWooPingFailureDetail("https://smoke-test.os-kitchen.com", "fetch failed")).toContain(

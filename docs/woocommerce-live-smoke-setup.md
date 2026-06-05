@@ -4,7 +4,7 @@
 **Status:** Human gate — requires real Woo sandbox + staging vault secrets  
 **Evidence:** `artifacts/woocommerce-live-smoke-summary.json` → `overall: FAILED` (placeholder store URL `smoke-test.os-kitchen.com`, 2026-06-03)
 
-This guide moves WooCommerce live proof from **SKIPPED/FAILED** → **PASSED**. PASS requires live Woo REST, a signed webhook delivered to staging, and a canonical `ExternalOrder` row — not wiring certification alone.
+This guide moves WooCommerce live proof from **SKIPPED/FAILED** → **PASSED**. PASS requires live Woo REST, a signed `order.created` webhook delivered to staging, a canonical `ExternalOrder` row, KDS kitchen import (`importedOrderId`), and inventory sync wiring — not credentials-only certification alone.
 
 ---
 
@@ -12,8 +12,10 @@ This guide moves WooCommerce live proof from **SKIPPED/FAILED** → **PASSED**. 
 
 | Layer | Location | Behavior |
 |-------|----------|----------|
-| Live smoke script | `scripts/smoke-woocommerce-live.ts` | REST connect → $1 COD test order → signed webhook → DB verify |
-| npm command | `npm run smoke:woo-live` | Auto-loads `.env.smoke.local`, writes artifact |
+| Live smoke script | `scripts/smoke-woocommerce-live.ts` | REST connect → $1 COD test order → signed `order.created` webhook → ExternalOrder → KDS import |
+| Era 71 orchestrator | `scripts/smoke-woocommerce-live-era71.ts` | Wiring cert + live path; policy `era71-woocommerce-live-smoke-v1` |
+| npm command | `npm run smoke:woocommerce-live-era71` | Cert + live smoke; writes artifact |
+| Legacy npm | `npm run smoke:woo-live` | Live path only (no cert chain) |
 | Diagnose helper | `npm run smoke:woo-diagnose` | Explains connection / URL / credential failures |
 | Artifact | `artifacts/woocommerce-live-smoke-summary.json` | `overall: PASSED \| SKIPPED \| FAILED` |
 | P0 orchestrator | `.github/workflows/p0-orchestrator.yml` | Tier 2.2 runs `npm run smoke:woo-shopify-live` when vault 11/11 |
