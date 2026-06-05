@@ -119,8 +119,12 @@ export const INTEGRATION_REGISTRY: IntegrationRegistryEntry[] = [
   {
     id: "mailchimp",
     name: "Mailchimp",
-    status: "BETA",
-    requiredEnv: ["MAILCHIMP_API_KEY", "MAILCHIMP_LIST_ID"],
+    status: "LIVE",
+    requiredEnv: [
+      "MAILCHIMP_CLIENT_ID",
+      "MAILCHIMP_CLIENT_SECRET",
+      "MAILCHIMP_LIST_ID",
+    ],
     setupRoute: "/dashboard/integrations/mailchimp",
   },
   {

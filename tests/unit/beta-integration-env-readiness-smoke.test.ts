@@ -38,7 +38,7 @@ describe("beta integration env readiness smoke summary", () => {
       strictMode: false,
     });
     expect(summary.overall).toBe("PASSED");
-    expect(summary.envSummary.total).toBe(8);
+    expect(summary.envSummary.total).toBe(7);
     expect(summary.missingIntegrations.length).toBeGreaterThan(0);
   });
 });

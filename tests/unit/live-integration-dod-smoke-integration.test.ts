@@ -16,7 +16,7 @@ describe("live integration dod smoke integration policy (QA-40)", () => {
     expect(LIVE_INTEGRATION_DOD_SMOKE_ERA17_SUMMARY_ARTIFACT).toBe(
       "artifacts/smoke-live-integration-dod-summary.json",
     );
-    expect(LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT).toBe(8);
+    expect(LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT).toBe(7);
   });
 
   it("evaluates pass contract for dod_audit_complete with zero LIVE", () => {

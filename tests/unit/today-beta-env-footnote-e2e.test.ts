@@ -12,7 +12,7 @@ import { todayBetaEnvFootnoteSucceeded } from "@/lib/integrations/today-beta-env
 describe("today beta env footnote E2E policy (QA-38)", () => {
   it("locks Today footnote e2e policy id and expected BETA count", () => {
     expect(TODAY_BETA_ENV_FOOTNOTE_E2E_POLICY_ID).toBe("today-beta-env-footnote-e2e-v1");
-    expect(TODAY_BETA_ENV_FOOTNOTE_EXPECTED_TOTAL).toBe(8);
+    expect(TODAY_BETA_ENV_FOOTNOTE_EXPECTED_TOTAL).toBe(7);
   });
 
   it("parses env readiness badge counts from footnote text", () => {

@@ -229,6 +229,7 @@ enum IntegrationProvider {
   SEVEN_SHIFTS
   HOMEBASE
   KLAVIYO
+  MAILCHIMP
   MANUAL
 }
 
