@@ -55,12 +55,20 @@ export default async function CustomerLoyaltyPage() {
             Storefront uses a separate ledger until unified rewards ship.
           </p>
         </div>
-        <a
-          href="/dashboard/loyalty/program-builder"
-          className="text-sm font-medium text-primary underline underline-offset-4"
-        >
-          Open Loyalty 2.0 builder →
-        </a>
+        <div className="flex flex-col gap-1 text-sm">
+          <a
+            href="/dashboard/loyalty/loyalty-3"
+            className="font-medium text-primary underline underline-offset-4"
+          >
+            Open Loyalty 3.0 →
+          </a>
+          <a
+            href="/dashboard/loyalty/program-builder"
+            className="text-muted-foreground underline underline-offset-4"
+          >
+            Loyalty 2.0 builder
+          </a>
+        </div>
       </div>
 
       {access.canManage ? (

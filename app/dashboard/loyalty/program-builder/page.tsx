@@ -41,6 +41,9 @@ export default async function LoyaltyProgramBuilderPage() {
       <PolicyLockedHonestyBanner variant="rewards_dual_ledger" />
       <div className="flex flex-wrap justify-end gap-2">
         <Button variant="outline" size="sm" className="rounded-full" asChild>
+          <Link href="/dashboard/loyalty/loyalty-3">Loyalty 3.0</Link>
+        </Button>
+        <Button variant="outline" size="sm" className="rounded-full" asChild>
           <Link href="/dashboard/loyalty/gift-cards">Gift cards</Link>
         </Button>
         <Button variant="outline" size="sm" className="rounded-full" asChild>
