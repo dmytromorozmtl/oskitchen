@@ -57,6 +57,7 @@ export function marketingSitemapPaths(): Array<{
     { path: '/landing/meal-prep', priority: 0.84, changeFrequency: 'monthly' },
     { path: '/landing/ghost-kitchen', priority: 0.84, changeFrequency: 'monthly' },
     { path: '/landing/full-service-restaurant', priority: 0.84, changeFrequency: 'monthly' },
+    { path: '/landing/coffee-shop', priority: 0.84, changeFrequency: 'monthly' },
     { path: '/landing/weekly-preorder', priority: 0.84, changeFrequency: 'monthly' },
     { path: '/solutions/catering', priority: 0.85, changeFrequency: 'monthly' },
     { path: '/solutions/bakeries', priority: 0.85, changeFrequency: 'monthly' },

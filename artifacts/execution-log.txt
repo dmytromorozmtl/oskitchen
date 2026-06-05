@@ -5579,3 +5579,12 @@ Result: DONE — Poster Gaps 7/10
 Files: app/landing/full-service-restaurant/page.tsx, full-service-restaurant-landing.tsx, full-service-restaurant-landing-content.ts
 Tests: unit 2/2 pass (full-service-restaurant-landing)
 
+---
+POSTER GAP Cycle: 8
+Timestamp: 2026-06-05T07:55:00.000Z
+Feature: landing-coffee-shop
+Action: feat: Coffee Shop / Bakery landing page
+Result: DONE — Poster Gaps 8/10
+Files: app/landing/coffee-shop/page.tsx, coffee-shop-landing.tsx, coffee-shop-landing-content.ts
+Tests: unit 2/2 pass (coffee-shop-landing)
+
