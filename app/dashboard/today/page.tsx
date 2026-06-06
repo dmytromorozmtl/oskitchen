@@ -9,6 +9,7 @@ import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integr
 import { resolveTodayCommercialInflectionUiSlice } from "@/lib/commercial/commercial-pilot-ops-inflection-era28";
 import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
+import { PlaybookTodayStrip } from "@/components/dashboard/playbooks/playbook-today-strip";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
 import { LaunchWizardTodayStrip } from "@/components/dashboard/launch-wizard/launch-wizard-today-strip";
 import {
@@ -177,7 +178,7 @@ export default async function TodayOperationsPage({
         ) : null}
         {aiBriefing ? <AiBriefingPanel briefing={aiBriefing} /> : null}
         {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
-        {breakthroughEra25 && showInternalOpsDashboardUi() && !ownerBriefing?.pureOperationalModeEra25Active ? (
+        {breakthroughEra25 && internalOpsUi && !ownerBriefing?.pureOperationalModeEra25Active ? (
           <OwnerDailyBriefingBreakthroughEra25Panel slice={breakthroughEra25} />
         ) : null}
         {launchWizardModel ? (
@@ -196,6 +197,11 @@ export default async function TodayOperationsPage({
           data={data}
           showFullMetrics={showFullMetrics}
           briefingActive={Boolean(ownerBriefing)}
+        />
+        <PlaybookTodayStrip
+          userId={dataUserId}
+          email={sessionUser.email ?? null}
+          businessMode={data.settings?.businessType ?? null}
         />
       </div>
     </>

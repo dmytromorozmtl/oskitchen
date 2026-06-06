@@ -451,6 +451,8 @@ export function MenuCenter({
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" className="rounded-full" asChild>
             <Link href="/dashboard/menus/templates">Menu templates</Link>
+          </Button>
+          <Button variant="outline" size="sm" className="rounded-full" asChild>
             <Link href="/dashboard/qr-codes">Table QR codes</Link>
           </Button>
           <Button variant="outline" size="sm" className="rounded-full" asChild>

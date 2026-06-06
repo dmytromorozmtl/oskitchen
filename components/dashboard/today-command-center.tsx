@@ -13,7 +13,6 @@ import {
   Truck,
 } from "lucide-react";
 
-import { PlaybookTodayStrip } from "@/components/dashboard/playbooks/playbook-today-strip";
 import { TodayAttentionStrip } from "@/components/dashboard/today-attention-strip";
 import { ChangelogBanner } from "@/components/dashboard/changelog-banner";
 import { LaborRealtimeWidget } from "@/components/labor/labor-realtime-widget";
@@ -445,8 +444,6 @@ export function TodayCommandCenterView({
           </CardContent>
         </Card>
       </div>
-
-      <PlaybookTodayStrip userId={userId} email={email} businessMode={mode ?? null} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="border-border/80 bg-card/90 shadow-sm">
