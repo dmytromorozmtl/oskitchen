@@ -52,3 +52,16 @@ export function getDoorDashApiCredentials(
   if (!apiKey || !merchantId) return null;
   return { apiKey, merchantId };
 }
+
+export function getGrubhubApiCredentials(
+  conn: IntegrationConnection,
+): { apiKey: string; merchantId: string } | null {
+  const settings = conn.settingsJson as { liveOAuth?: { accessTokenEnc?: string } } | null;
+  const oauthToken = settings?.liveOAuth?.accessTokenEnc
+    ? decryptOptional(settings.liveOAuth.accessTokenEnc)
+    : null;
+  const apiKey = oauthToken ?? decryptOptional(conn.consumerKeyEncrypted);
+  const merchantId = conn.externalStoreId?.trim() ?? null;
+  if (!apiKey || !merchantId) return null;
+  return { apiKey, merchantId };
+}
