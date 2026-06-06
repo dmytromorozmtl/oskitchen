@@ -1,17 +1,18 @@
+import { Suspense } from "react";
+
 import { AiBriefingPanel } from "@/components/dashboard/ai-briefing-panel";
 import { AiFeatureApiError } from "@/components/dashboard/ai-feature-api-error";
 import { GettingStartedChecklist } from "@/components/dashboard/getting-started-checklist";
 import { GettingStartedAttentionStrip } from "@/components/dashboard/getting-started-attention-strip";
-import { OwnerDailyBriefingHero } from "@/components/dashboard/owner-daily-briefing-hero";
-import { OwnerDailyBriefingBreakthroughEra25Panel } from "@/components/dashboard/owner-daily-briefing-breakthrough-era25-panel";
-import { buildOwnerDailyBriefingBreakthroughEra25UiSlice } from "@/lib/commercial/owner-daily-briefing-breakthrough-ui-era25";
 import { PilotIntegrationHealthStrip } from "@/components/dashboard/pilot-integration-health-strip";
 import { resolveTodayCommercialInflectionUiSlice } from "@/lib/commercial/commercial-pilot-ops-inflection-era28";
 import { augmentPilotIntegrationHealthStripWithCommercialInflection } from "@/lib/integrations/pilot-integration-health-commercial-inflection-era28";
 import { OperatorTourLauncher } from "@/components/onboarding/operator-tour";
 import { PlaybookTodayStrip } from "@/components/dashboard/playbooks/playbook-today-strip";
 import { TodayCommandCenterView } from "@/components/dashboard/today-command-center";
-import { LaunchWizardTodayStrip } from "@/components/dashboard/launch-wizard/launch-wizard-today-strip";
+import { LaunchWizardTodayStripSection } from "@/components/dashboard/today/launch-wizard-today-strip-section";
+import { OwnerDailyBriefingHeroSection } from "@/components/dashboard/today/owner-daily-briefing-hero-section";
+import { TodaySkeleton } from "@/components/dashboard/today-skeleton";
 import {
   loadPilotIntegrationHealthStripModelForWorkspace,
   shouldShowPilotIntegrationHealthStrip,
@@ -26,13 +27,9 @@ import { TodayPageLoadError } from "@/components/dashboard/today-page-load-error
 import { canUseFullSupportInbox } from "@/lib/support/support-permissions";
 import { prisma } from "@/lib/prisma";
 import { loadGettingStartedStatus } from "@/services/onboarding/getting-started-status";
-import {
-  loadOwnerDailyBriefing,
-  resolveOwnerDailyBriefingVisibility,
-} from "@/services/briefing/owner-daily-briefing-service";
 import { loadTodayCommandCenter } from "@/services/today/today-command-center-service";
-import { loadLaunchWizardModel } from "@/services/launch-wizard/launch-wizard-service";
 import { loadCommercialPilotOpsStatusModel } from "@/services/commercial/commercial-pilot-ops-status-service";
+import { resolveOwnerDailyBriefingVisibility } from "@/services/briefing/owner-daily-briefing-service";
 import { loadAiFeaturePage } from "@/lib/ai/load-ai-feature-page";
 import { generateDailyBriefing } from "@/services/ai/ai-restaurant-brain";
 
@@ -85,7 +82,7 @@ export default async function TodayOperationsPage({
     todayLoadFailed = true;
     console.error("[today] loadTodayCommandCenter failed", error);
   }
-  const [profile, integrationHealthModel, launchWizardModel, commercialOps] = await Promise.all([
+  const [profile, integrationHealthModel, commercialOps] = await Promise.all([
     prisma.userProfile.findUnique({
       where: { id: dataUserId },
       select: { createdAt: true },
@@ -93,31 +90,8 @@ export default async function TodayOperationsPage({
     showIntegrationHealth
       ? loadPilotIntegrationHealthStripModelForWorkspace(dataUserId).catch(() => null)
       : Promise.resolve(null),
-    showLaunchWizardStrip ? loadLaunchWizardModel(dataUserId).catch(() => null) : Promise.resolve(null),
     needsCommercialInflection ? loadCommercialPilotOpsStatusModel().catch(() => null) : Promise.resolve(null),
   ]);
-  const ownerBriefing = showPilotOwnerBriefing
-    ? await loadOwnerDailyBriefing(dataUserId, {
-        showIntegrationHealth,
-        today: data,
-        persona,
-        workspaceRole: actor.workspaceRole,
-        supportAdmin,
-        granted: actor.granted,
-        workspaceId,
-        launchWizard: launchWizardModel
-          ? {
-              commercialBlockers: launchWizardModel.commercialBlockers,
-              commercialSetup: launchWizardModel.commercialSetup,
-              nextStep: launchWizardModel.nextStep,
-              progress: launchWizardModel.progress,
-            }
-          : undefined,
-      }).catch((error) => {
-        console.error("[today] owner briefing load failed", error);
-        return null;
-      })
-    : null;
   let aiBriefing = null;
   let aiBriefingError: unknown = null;
   if (showPilotOwnerBriefing && workspaceId) {
@@ -135,15 +109,6 @@ export default async function TodayOperationsPage({
     console.error("[today] getting started load failed", error);
     return emptyGettingStartedPayload();
   });
-  let breakthroughEra25 = null;
-  if (showPilotOwnerBriefing) {
-    try {
-      breakthroughEra25 = buildOwnerDailyBriefingBreakthroughEra25UiSlice({ blueprintVisible: true });
-    } catch (error) {
-      console.error("[today] breakthrough era25 slice failed", error);
-    }
-  }
-
   let commercialInflectionUiSlice = null;
   try {
     commercialInflectionUiSlice = commercialOps
@@ -165,12 +130,12 @@ export default async function TodayOperationsPage({
       <OperatorTourLauncher />
       <div className="space-y-6">
         {todayLoadFailed ? <TodayPageLoadError /> : null}
-        {integrationHealthStripModel && !ownerBriefing?.showIntegrationHealthLane ? (
+        {integrationHealthStripModel && !showPilotOwnerBriefing ? (
           <PilotIntegrationHealthStrip model={integrationHealthStripModel} />
         ) : null}
         {gettingStarted.showChecklist &&
         !gettingStarted.allDone &&
-        !ownerBriefing ? (
+        !showPilotOwnerBriefing ? (
           <GettingStartedAttentionStrip data={gettingStarted} />
         ) : null}
         {aiBriefingError ? (
@@ -181,18 +146,34 @@ export default async function TodayOperationsPage({
           />
         ) : null}
         {aiBriefing ? <AiBriefingPanel briefing={aiBriefing} /> : null}
-        {ownerBriefing ? <OwnerDailyBriefingHero briefing={ownerBriefing} /> : null}
-        {breakthroughEra25 && internalOpsUi && !ownerBriefing?.pureOperationalModeEra25Active ? (
-          <OwnerDailyBriefingBreakthroughEra25Panel slice={breakthroughEra25} />
+        {showPilotOwnerBriefing ? (
+          <Suspense fallback={<TodaySkeleton section="hero" />}>
+            <OwnerDailyBriefingHeroSection
+              dataUserId={dataUserId}
+              showIntegrationHealth={showIntegrationHealth}
+              today={data}
+              persona={persona}
+              workspaceRole={actor.workspaceRole}
+              supportAdmin={supportAdmin}
+              granted={actor.granted}
+              workspaceId={workspaceId}
+              internalOpsUi={internalOpsUi}
+              integrationHealthStripModel={integrationHealthStripModel}
+            />
+          </Suspense>
         ) : null}
-        {launchWizardModel ? (
-          <LaunchWizardTodayStrip
-            model={launchWizardModel}
-            briefingActive={Boolean(ownerBriefing)}
-            rolePack={ownerBriefing?.rolePack ?? null}
-          />
+        {showLaunchWizardStrip ? (
+          <Suspense fallback={<TodaySkeleton section="wizard" />}>
+            <LaunchWizardTodayStripSection
+              dataUserId={dataUserId}
+              briefingActive={showPilotOwnerBriefing}
+              persona={persona}
+              workspaceRole={actor.workspaceRole}
+              supportAdmin={supportAdmin}
+            />
+          </Suspense>
         ) : null}
-        {gettingStarted.showChecklist && !gettingStarted.allDone && !ownerBriefing ? (
+        {gettingStarted.showChecklist && !gettingStarted.allDone && !showPilotOwnerBriefing ? (
           <GettingStartedChecklist data={gettingStarted} showAllSteps={showAllChecklistSteps} />
         ) : null}
         <TodayCommandCenterView
@@ -200,13 +181,15 @@ export default async function TodayOperationsPage({
           email={sessionUser.email ?? null}
           data={data}
           showFullMetrics={showFullMetrics}
-          briefingActive={Boolean(ownerBriefing)}
+          briefingActive={showPilotOwnerBriefing}
         />
-        <PlaybookTodayStrip
-          userId={dataUserId}
-          email={sessionUser.email ?? null}
-          businessMode={data.settings?.businessType ?? null}
-        />
+        <Suspense fallback={<TodaySkeleton section="playbook" />}>
+          <PlaybookTodayStrip
+            userId={dataUserId}
+            email={sessionUser.email ?? null}
+            businessMode={data.settings?.businessType ?? null}
+          />
+        </Suspense>
       </div>
     </>
   );

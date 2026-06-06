@@ -38,7 +38,12 @@ describe("pure-operational-mode-terminus-era25-steady-state-stack", () => {
     expect(platformOps).toContain("suppressEra21GatePanels");
 
     const today = readFileSync(join(ROOT, "app/dashboard/today/page.tsx"), "utf8");
-    expect(today).toContain("pureOperationalModeEra25Active");
+    expect(today).toContain("OwnerDailyBriefingHeroSection");
+    const briefingSection = readFileSync(
+      join(ROOT, "components/dashboard/today/owner-daily-briefing-hero-section.tsx"),
+      "utf8",
+    );
+    expect(briefingSection).toContain("pureOperationalModeEra25Active");
   });
 
   it("exposes terminus fields on owner daily briefing payload", () => {
