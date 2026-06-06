@@ -58,7 +58,16 @@ describe("pickPlatformGoLiveAttentionItems", () => {
   });
 
   it("surfaces blocked projects before normal queue review", () => {
-    const items = pickPlatformGoLiveAttentionItems([row({ status: "BLOCKED", readinessScore: 40 })]);
+    const items = pickPlatformGoLiveAttentionItems(
+      [
+        row({
+          status: "BLOCKED",
+          readinessScore: 40,
+          launchDate: new Date("2026-06-20T12:00:00Z"),
+        }),
+      ],
+      Date.parse("2026-06-01T12:00:00Z"),
+    );
 
     expect(items.some((item) => item.id === "blocked-proj-1")).toBe(true);
   });
