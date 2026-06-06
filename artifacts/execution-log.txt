@@ -5816,3 +5816,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T14:00:00Z | Cycle 168 | Phase 2 R2 | Feature 168: Tablet POS era168 wiring cert | PASS — era168 wiring cert 6/6, 44px touch targets + portrait/landscape + PWA standalone, smoke:pos-tablet-terminal-era168 PASSED
 2026-06-06T14:10:00Z | Cycle 169 | Phase 2 R2 | Feature 169: Mobile POS era169 wiring cert | PASS — era169 wiring cert 6/6, swipe gestures + one-hand checkout + PWA standalone, smoke:pos-mobile-terminal-era169 PASSED
 2026-06-06T14:20:00Z | Cycle 170 | Phase 2 R2 | Feature 170: Offline POS era170 wiring cert | PASS — era170 wiring cert 6/6, IndexedDB + PCI local encryption + card payments + auto-sync, smoke:pos-offline-queue-era170 PASSED
+2026-06-06T14:30:00Z | Cycle 171 | Phase 2 R2 | Feature 171: Handheld POS era171 wiring cert | PASS — era171 wiring cert 6/6, table select + waiter ordering + KDS fire + tab sync, smoke:pos-handheld-terminal-era171 PASSED
