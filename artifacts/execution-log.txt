@@ -5748,3 +5748,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T02:25:00Z | Cycle 100 | Phase 3 ext | Feature 100: KDS Production View era100 wiring cert | PASS — era100 wiring cert 11/11, station load + bottleneck + kitchen ETA, smoke:kds-production-view-era100 PASSED
 2026-06-06T02:40:00Z | Cycle 101 | Phase 3 ext | Feature 101: KDS Expo View era101 wiring cert | PASS — era101 wiring cert 11/11, ready/waiting/delayed lanes, smoke:kds-expo-view-era101 PASSED
 2026-06-06T02:55:00Z | Cycle 102 | Phase 3 ext | Feature 102: KDS Manager View era102 wiring cert | PASS — era102 wiring cert 10/10, performance/delays/efficiency pillars, smoke:kds-manager-view-era102 PASSED
+2026-06-06T03:10:00Z | Cycle 103 | Phase 3 ext | Feature 103: KDS Rush Mode era103 wiring cert | PASS — era103 wiring cert 12/12, peak detection + priority routing + sound alerts, smoke:kds-rush-mode-era103 PASSED
