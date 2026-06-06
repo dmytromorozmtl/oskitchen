@@ -65,3 +65,13 @@ export function getGrubhubApiCredentials(
   if (!apiKey || !merchantId) return null;
   return { apiKey, merchantId };
 }
+
+export function getSkipOAuthCredentials(
+  conn: IntegrationConnection,
+): { clientId: string; clientSecret: string; restaurantId: string } | null {
+  const clientId = decryptOptional(conn.consumerKeyEncrypted);
+  const clientSecret = decryptOptional(conn.consumerSecretEncrypted);
+  const restaurantId = conn.externalStoreId?.trim() ?? null;
+  if (!clientId || !clientSecret || !restaurantId) return null;
+  return { clientId, clientSecret, restaurantId };
+}
