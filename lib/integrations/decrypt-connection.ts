@@ -3,6 +3,7 @@ import type { IntegrationConnection } from "@prisma/client";
 import { decryptOptional } from "@/lib/crypto";
 
 import type { ShopifyCredentials } from "@/services/integrations/shopify";
+import type { UberEatsCredentials } from "@/services/integrations/uber-eats";
 import type { WooCredentials } from "@/services/integrations/woocommerce";
 
 export function getWooCommerceCredentials(conn: IntegrationConnection): WooCredentials | null {
@@ -25,6 +26,14 @@ export function getShopifyCredentials(
     adminAccessToken,
     apiVersion: apiVersion ?? (conn.settingsJson as { apiVersion?: string } | null)?.apiVersion,
   };
+}
+
+export function getUberEatsCredentials(conn: IntegrationConnection): UberEatsCredentials | null {
+  const clientId = decryptOptional(conn.consumerKeyEncrypted);
+  const clientSecret = decryptOptional(conn.consumerSecretEncrypted);
+  const storeId = conn.externalStoreId?.trim() ?? null;
+  if (!clientId || !clientSecret || !storeId) return null;
+  return { clientId, clientSecret, storeId };
 }
 
 export function getWebhookSecret(conn: IntegrationConnection): string | null {
