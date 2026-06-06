@@ -59,6 +59,7 @@ function PlaybookTodayStripContent({
   activeRuns: Awaited<ReturnType<typeof listRuns>>;
   kpis: Awaited<ReturnType<typeof getPlaybookKpis>>;
 }) {
+  return (
     <Card className="border-border/80 bg-card/90 shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 text-lg">
