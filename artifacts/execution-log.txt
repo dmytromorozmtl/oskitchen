@@ -5776,3 +5776,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T08:05:00Z | Cycle 128 | Phase 8 | Feature 128: Role-Based UI Manager era128 wiring cert | PASS — era128 wiring cert 10/10, operational KPIs + shift briefing + shortcuts, smoke:manager-role-ui-era128 PASSED
 2026-06-06T08:10:00Z | Cycle 129 | Phase 8 | Feature 129: Role-Based UI Chef era129 wiring cert | PASS — era129 wiring cert 10/10, line KPIs + kitchen briefing + shortcuts, smoke:chef-role-ui-era129 PASSED
 2026-06-06T08:15:00Z | Cycle 130 | Phase 8 | Feature 130: Role-Based UI Cashier era130 wiring cert | PASS — era130 wiring cert 10/10, register KPIs + cashier briefing + shortcuts, smoke:cashier-role-ui-era130 PASSED
+2026-06-06T08:20:00Z | Cycle 131 | Phase 8 | Feature 131: Role-Based UI Driver era131 wiring cert | PASS — era131 wiring cert 10/10, route KPIs + delivery signals + dispatch shortcuts, smoke:driver-role-ui-era131 PASSED
