@@ -3,7 +3,7 @@ import { join, relative } from "node:path";
 
 export const WEBHOOK_ROUTE_ROOT = "app/api/webhooks" as const;
 
-export const WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT = 52 as const;
+export const WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT = 55 as const;
 
 export type WebhookSecurityCategory =
   | "commerce_critical"
@@ -242,7 +242,7 @@ export function classifyWebhookRoute(routePath: string): WebhookSecurityClassifi
     };
   }
 
-  if (slug === "doordash/orders" || slug === "grubhub/orders") {
+  if (slug === "doordash/orders" || slug === "grubhub/orders" || slug === "skip/orders") {
     return {
       category: "commerce_critical",
       signatureKind: "bearer_secret",
@@ -254,6 +254,21 @@ export function classifyWebhookRoute(routePath: string): WebhookSecurityClassifi
       riskTier: "P0",
       testCoverage: "none",
       nextAction: "Marketplace BETA — continue live channel smoke when staging credentials exist.",
+    };
+  }
+
+  if (slug === "opentable/reservations" || slug === "resy/reservations") {
+    return {
+      category: "delivery_ops",
+      signatureKind: "bearer_secret",
+      signatureValidated: true,
+      replayProtection: "webhook_event_store",
+      tenantMapping: "connection_cid",
+      structuredLogging: true,
+      rateLimited: true,
+      riskTier: "P1",
+      testCoverage: "none",
+      nextAction: "Reservation BETA — continue live channel smoke when staging credentials exist.",
     };
   }
 

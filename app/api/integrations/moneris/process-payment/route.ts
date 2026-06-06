@@ -16,7 +16,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: "amount is required." }, { status: 400 });
   }
 
-  const result = await processMonerisPayment(dataUserId, body);
+  const result = await processMonerisPayment(dataUserId, {
+    amount: body.amount,
+    currency: body.currency,
+    orderId: body.orderId,
+  });
 
   if (result.ok && result.transactionId) {
     await updateMonerisLiveSettings(dataUserId, {

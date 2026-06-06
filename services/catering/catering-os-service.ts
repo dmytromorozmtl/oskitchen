@@ -1,4 +1,5 @@
 import { addDays, startOfDay } from "date-fns";
+import type { CateringQuoteStatus } from "@prisma/client";
 
 import { buildCateringOsDashboard } from "@/lib/catering/catering-os-builders";
 import type { CateringClientRow, CateringEventRow } from "@/lib/catering/catering-os-types";
@@ -69,7 +70,14 @@ export async function loadCateringOsDashboard(workspaceId: string) {
   const quoteScope = await cateringQuoteListWhereForOwner(ownerUserId);
 
   const inactiveStatuses = {
-    notIn: ["CONVERTED_TO_ORDER", "REJECTED", "DECLINED", "CANCELLED", "ARCHIVED", "EXPIRED"] as const,
+    notIn: [
+      "CONVERTED_TO_ORDER",
+      "REJECTED",
+      "DECLINED",
+      "CANCELLED",
+      "ARCHIVED",
+      "EXPIRED",
+    ] satisfies CateringQuoteStatus[],
   };
 
   const [kpis, routeKpis, packingTasks, packingWaves, eventQuotes, activeQuotes] = await Promise.all([

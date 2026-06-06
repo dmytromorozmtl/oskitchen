@@ -168,7 +168,7 @@ function buildDriverHeroTiles(routeKpis: RouteOverviewKpis): OwnerDailyBriefingT
       whyItMatters: "Dispatch escalation",
       href: "/dashboard/routes",
       availability: "available",
-      linkState: routeKpis.routesNeedingAttention > 0 ? "blocked" : "ready",
+      linkState: routeKpis.routesNeedingAttention > 0 ? "blocked" : "operational",
       tone: routeKpis.routesNeedingAttention > 0 ? "attention" : "success",
       priority: 4,
     },

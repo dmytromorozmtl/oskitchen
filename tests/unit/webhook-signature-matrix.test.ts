@@ -13,7 +13,7 @@ import {
 } from "../../scripts/audit-webhook-signatures";
 
 /**
- * CI gate — all 52 `/api/webhooks/*` routes must have signature verification in source.
+ * CI gate — all 55 `/api/webhooks/*` routes must have signature verification in source.
  *
  * @see artifacts/webhook-signature-matrix.md
  * @see tests/unit/webhook-signatures.test.ts (HMAC crypto unit tests)
@@ -50,7 +50,7 @@ const PRODUCTION_PARTNER_PATHS = [
   "/api/webhooks/shopify/products-update",
 ] as const;
 
-describe("webhook signature matrix — 52 routes", () => {
+describe("webhook signature matrix — 55 routes", () => {
   const root = process.cwd();
   const report = buildWebhookSignatureAuditReport(root);
   const matrix = buildWebhookSecurityMatrix(root);
@@ -59,20 +59,20 @@ describe("webhook signature matrix — 52 routes", () => {
   const matrixByPath = new Map(allMatrix.map((e) => [e.apiPath, e]));
   const auditByPath = new Map(report.routes.map((r) => [r.apiPath, r]));
 
-  it("discovers exactly 52 core webhook route files", () => {
+  it("discovers exactly 55 core webhook route files", () => {
     expect(matrix).toHaveLength(WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT);
   });
 
-  it("full ingress audit includes core + extended routes (56 total)", () => {
-    expect(report.coreRouteCount).toBe(52);
+  it("full ingress audit includes core + extended routes (59 total)", () => {
+    expect(report.coreRouteCount).toBe(55);
     expect(report.extendedRouteCount).toBe(4);
-    expect(report.totalRoutes).toBe(56);
-    expect(report.expectedRouteCount).toBe(56);
+    expect(report.totalRoutes).toBe(59);
+    expect(report.expectedRouteCount).toBe(59);
   });
 
   it("static audit reports PASSED with zero unverified routes", () => {
     expect(report.version).toBe(WEBHOOK_SIGNATURE_AUDIT_POLICY_ID);
-    expect(report.verifiedCount).toBe(56);
+    expect(report.verifiedCount).toBe(59);
     expect(report.missingVerificationCount).toBe(0);
     expect(report.matrixMismatchCount).toBe(0);
     expect(report.overall).toBe("PASSED");
@@ -105,6 +105,9 @@ describe("webhook signature matrix — 52 routes", () => {
         "verify_grubhub_hmac",
         "verify_uber_eats_hmac",
         "verify_capital_lender_hmac",
+        "verify_skip_hmac",
+        "verify_opentable_hmac",
+        "verify_resy_hmac",
       ];
       const hasPartnerHmac = auditRow!.detectedSignals.some((s) =>
         partnerHmacSignals.includes(s),
@@ -162,7 +165,9 @@ describe("webhook signature matrix — 52 routes", () => {
         "/api/webhooks/itu-uncitral-digital-commerce-ai-registry",
         "/api/webhooks/nist-ai-rmf-live-control-feed",
         "/api/webhooks/oecd-state-ag-ai-transparency-mesh",
+        "/api/webhooks/opentable/reservations",
         "/api/webhooks/resend",
+        "/api/webhooks/resy/reservations",
         "/api/webhooks/scim/experiment-auditor",
         "/api/webhooks/shopify/app-uninstalled",
         "/api/webhooks/shopify/markets-create",
@@ -171,6 +176,7 @@ describe("webhook signature matrix — 52 routes", () => {
         "/api/webhooks/shopify/orders-create",
         "/api/webhooks/shopify/orders-updated",
         "/api/webhooks/shopify/products-update",
+        "/api/webhooks/skip/orders",
         "/api/webhooks/slack/experiment-interactive",
         "/api/webhooks/stripe",
         "/api/webhooks/uber-direct",

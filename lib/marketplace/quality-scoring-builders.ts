@@ -53,7 +53,7 @@ export function buildQualityAlerts(suppliers: SupplierQualityScore[]): QualitySc
       vendorName: row.vendorName,
       overall: row.overall!,
       message: `${row.vendorName} scored ${row.overall}/5 — consider alternate suppliers before reordering.`,
-      severity: row.overall! < 3 ? "warning" : "info",
+      severity: row.overall! < 3 ? ("warning" as const) : ("info" as const),
       href: row.href,
     }))
     .slice(0, 6);

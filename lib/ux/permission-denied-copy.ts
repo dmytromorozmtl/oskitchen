@@ -6,6 +6,8 @@ import type { PermissionKey } from "@/lib/permissions/permissions";
 
 export type PermissionDeniedSurfaceId =
   | "pos_terminal"
+  | "pos_tablet"
+  | "pos_mobile"
   | "pos_hub"
   | "pos_layout"
   | "kds"
@@ -48,6 +50,20 @@ export const PERMISSION_DENIED_SURFACES: Record<
   pos_terminal: {
     id: "pos_terminal",
     title: "POS terminal",
+    permissionKey: "pos.access",
+    primaryHref: "/dashboard/pos",
+    primaryLabel: "Back to POS hub",
+  },
+  pos_tablet: {
+    id: "pos_tablet",
+    title: "POS tablet",
+    permissionKey: "pos.access",
+    primaryHref: "/dashboard/pos",
+    primaryLabel: "Back to POS hub",
+  },
+  pos_mobile: {
+    id: "pos_mobile",
+    title: "POS mobile",
     permissionKey: "pos.access",
     primaryHref: "/dashboard/pos",
     primaryLabel: "Back to POS hub",

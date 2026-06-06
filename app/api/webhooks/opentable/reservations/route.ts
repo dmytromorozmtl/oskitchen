@@ -83,9 +83,9 @@ export async function POST(request: Request) {
     emitWebhookSignatureInvalid({
       provider: "opentable",
       connectionId: conn.id,
-      webhookEventId: id,
+      topic: "reservations",
     });
-    await markWebhookProcessed(id, { error: "Invalid signature" });
+    await markWebhookProcessed(id, false, "Invalid webhook signature");
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
     payload,
   });
 
-  await markWebhookProcessed(id, { error: result.ok ? null : result.message });
+  await markWebhookProcessed(id, result.ok, result.ok ? null : result.message);
 
   return NextResponse.json(result, { status: result.ok ? 200 : 400 });
 }

@@ -55,7 +55,7 @@ export type IntegrationHealthLiveSmokeEra166Summary = {
   registryLiveCount: number;
   capabilities: readonly string[];
   steps: IntegrationHealthLiveSmokeEra166Step[];
-  providers: IntegrationHealthLiveSmokeEra166ProviderResult[];
+  providers: readonly IntegrationHealthLiveSmokeEra166ProviderResult[];
   honestyNote: string;
 };
 

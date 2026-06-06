@@ -47,7 +47,7 @@ export async function loadEnterpriseAuditComplianceDashboard(workspaceId: string
         where: { AND: [baseWhere, { redactionApplied: true }] },
       }),
       prisma.auditExport.count({
-        where: { workspaceId, status: "COMPLETED" },
+        where: { workspaceId, status: "COMPLETE" },
       }),
       prisma.auditLog.groupBy({
         by: ["category"],
@@ -88,7 +88,7 @@ export async function loadEnterpriseAuditComplianceDashboard(workspaceId: string
     id: row.id,
     createdAtIso: row.createdAt.toISOString(),
     action: row.action,
-    severity: row.severity,
+    severity: row.severity ?? "UNKNOWN",
     category: row.category,
     actorEmail: row.actorEmail,
   }));

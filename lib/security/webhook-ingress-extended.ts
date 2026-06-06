@@ -22,7 +22,7 @@ export const WEBHOOK_EXTENDED_INGRESS_ROUTE_COUNT =
 
 export const WEBHOOK_ALL_INGRESS_ROUTE_COUNT =
   (WEBHOOK_SECURITY_EXPECTED_ROUTE_COUNT +
-    WEBHOOK_EXTENDED_INGRESS_ROUTE_COUNT) as 56;
+    WEBHOOK_EXTENDED_INGRESS_ROUTE_COUNT) as 59;
 
 export function extendedRouteFileToApiPath(routePath: string): string {
   const slug = routePath.replace(/^app\/api\//, "").replace(/\/route\.ts$/, "");

@@ -20,7 +20,13 @@ export type {
   EnterpriseCommissaryDashboard,
 } from "@/lib/enterprise/commissary-types";
 
-const OPEN_PO_STATUSES: PurchaseOrderStatus[] = ["DRAFT", "AWAITING_APPROVAL", "SENT", "PARTIALLY_RECEIVED"];
+const OPEN_PO_STATUSES: PurchaseOrderStatus[] = [
+  "DRAFT",
+  "READY_FOR_REVIEW",
+  "APPROVED",
+  "SENT",
+  "PARTIALLY_RECEIVED",
+];
 
 export async function loadEnterpriseCommissaryDashboard(workspaceId: string) {
   const ownerUserId = await resolveWorkspaceOwnerUserId(workspaceId);

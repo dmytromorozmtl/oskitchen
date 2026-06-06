@@ -55,7 +55,7 @@ export type IntegrationHealthLiveSmokeEra91Summary = {
   fleetSize: number;
   registryLiveCount: number;
   steps: IntegrationHealthLiveSmokeEra91Step[];
-  providers: IntegrationHealthLiveSmokeEra91ProviderResult[];
+  providers: readonly IntegrationHealthLiveSmokeEra91ProviderResult[];
   honestyNote: string;
 };
 

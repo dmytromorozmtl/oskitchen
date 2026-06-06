@@ -1,6 +1,8 @@
 import type { MULTI_LOCATION_DASHBOARD_2_POLICY_ID } from "@/lib/enterprise/multi-location-dashboard-2-policy";
 import type { EnterpriseLocationRank } from "@/lib/enterprise/multi-location-types";
 
+export type { EnterpriseLocationRank };
+
 export type MultiLocationScaleTier = "standard" | "enterprise";
 
 export type LocationComparisonPair = {

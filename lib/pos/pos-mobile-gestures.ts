@@ -12,7 +12,7 @@ export type PosSwipePoint = {
 export function detectPosSwipe(
   start: PosSwipePoint,
   end: PosSwipePoint,
-  minDistance = POS_MOBILE_SWIPE_MIN_DISTANCE_PX,
+  minDistance: number = POS_MOBILE_SWIPE_MIN_DISTANCE_PX,
 ): PosSwipeDirection | null {
   const dx = end.x - start.x;
   const dy = end.y - start.y;

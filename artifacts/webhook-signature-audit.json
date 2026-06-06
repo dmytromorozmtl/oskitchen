@@ -1,11 +1,11 @@
 {
   "version": "webhook-signature-static-audit-v1",
-  "generatedAt": "2026-06-03T22:36:21.934Z",
-  "expectedRouteCount": 56,
-  "coreRouteCount": 52,
+  "generatedAt": "2026-06-06T04:30:53.768Z",
+  "expectedRouteCount": 59,
+  "coreRouteCount": 55,
   "extendedRouteCount": 4,
-  "totalRoutes": 56,
-  "verifiedCount": 56,
+  "totalRoutes": 59,
+  "verifiedCount": 59,
   "missingVerificationCount": 0,
   "matrixMismatchCount": 0,
   "overall": "PASSED",
@@ -480,6 +480,22 @@
       "notes": null
     },
     {
+      "apiPath": "/api/webhooks/opentable/reservations",
+      "routeFile": "app/api/webhooks/opentable/reservations/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/webhook-event-store.ts"
+      ],
+      "detectedSignals": [
+        "verify_opentable_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P1",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
       "apiPath": "/api/webhooks/resend",
       "routeFile": "app/api/webhooks/resend/route.ts",
       "handlerFiles": [],
@@ -489,6 +505,22 @@
       ],
       "signatureVerifiedInCode": true,
       "matrixSignatureKind": "resend_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P1",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/resy/reservations",
+      "routeFile": "app/api/webhooks/resy/reservations/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/webhook-event-store.ts"
+      ],
+      "detectedSignals": [
+        "verify_resy_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
       "matrixSignatureValidated": true,
       "matrixRiskTier": "P1",
       "codeMatchesMatrix": true,
@@ -622,6 +654,22 @@
       ],
       "signatureVerifiedInCode": true,
       "matrixSignatureKind": "shopify_hmac",
+      "matrixSignatureValidated": true,
+      "matrixRiskTier": "P0",
+      "codeMatchesMatrix": true,
+      "notes": null
+    },
+    {
+      "apiPath": "/api/webhooks/skip/orders",
+      "routeFile": "app/api/webhooks/skip/orders/route.ts",
+      "handlerFiles": [
+        "lib/webhooks/webhook-event-store.ts"
+      ],
+      "detectedSignals": [
+        "verify_skip_hmac"
+      ],
+      "signatureVerifiedInCode": true,
+      "matrixSignatureKind": "bearer_secret",
       "matrixSignatureValidated": true,
       "matrixRiskTier": "P0",
       "codeMatchesMatrix": true,

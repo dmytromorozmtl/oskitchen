@@ -40,13 +40,13 @@ describe("webhook ingress extended — all routes (DEV-34)", () => {
     expect(validation.errors).toEqual([]);
   });
 
-  it("full ingress audit covers 56 routes with PASSED overall", () => {
+  it("full ingress audit covers 59 routes with PASSED overall", () => {
     expect(report.version).toBe(WEBHOOK_SIGNATURE_AUDIT_POLICY_ID);
-    expect(report.coreRouteCount).toBe(52);
+    expect(report.coreRouteCount).toBe(55);
     expect(report.extendedRouteCount).toBe(4);
-    expect(report.totalRoutes).toBe(56);
-    expect(report.expectedRouteCount).toBe(56);
-    expect(report.verifiedCount).toBe(56);
+    expect(report.totalRoutes).toBe(59);
+    expect(report.expectedRouteCount).toBe(59);
+    expect(report.verifiedCount).toBe(59);
     expect(report.missingVerificationCount).toBe(0);
     expect(report.matrixMismatchCount).toBe(0);
     expect(report.overall).toBe("PASSED");

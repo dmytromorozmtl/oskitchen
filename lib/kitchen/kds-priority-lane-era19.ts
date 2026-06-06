@@ -96,7 +96,7 @@ export function shouldShowKdsPriorityLane(orders: readonly KdsPriorityTicket[]):
 export function buildKdsPriorityLaneItems(
   preparing: readonly KdsPriorityTicket[],
   ready: readonly KdsPriorityTicket[],
-  maxItems = KDS_PRIORITY_LANE_MAX_ITEMS,
+  maxItems: number = KDS_PRIORITY_LANE_MAX_ITEMS,
 ): KdsPriorityLaneItem[] {
   const candidates: KdsPriorityLaneItem[] = [];
 

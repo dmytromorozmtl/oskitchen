@@ -113,7 +113,7 @@ export function buildKdsRushPriorityRoutes(
   preparing: readonly KdsPriorityTicket[],
   ready: readonly KdsPriorityTicket[],
   level: KdsRushLevel,
-  maxRoutes = KDS_RUSH_MAX_PRIORITY_ROUTES,
+  maxRoutes: number = KDS_RUSH_MAX_PRIORITY_ROUTES,
 ): KdsPriorityLaneItem[] {
   const priorityLane = buildKdsPriorityLaneItems(preparing, ready, maxRoutes);
   if (priorityLane.length > 0 || level === "normal") {
