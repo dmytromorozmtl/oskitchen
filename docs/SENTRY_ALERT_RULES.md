@@ -40,3 +40,28 @@ curl -s -o /dev/null -w "%{http_code}\n" \
 ```
 
 Confirm the issue appears with `ops_signal:cron_failure` before enabling production pages.
+
+## 6. Error rate spike (P1 — production gate)
+
+Create after `SENTRY_DSN` is live on Vercel Production:
+
+- **When:** Error rate is above **1%** of sessions (or equivalent issue volume threshold)
+- **Dataset:** `production` only
+- **Filter:** `event.type:error` (or Issues alert with `is:unresolved`)
+- **Threshold:** > 1% error rate over 5 minutes **OR** > 50 events in 5 minutes (whichever fires first for low-traffic windows)
+- **Action:** Slack `#kitchenos-ops` + email on-call
+- **Frequency:** At most once every 15 minutes
+
+### Verify after deploy
+
+```bash
+npm run sentry:production:verify
+# expects checks.sentryServer.ok === true
+```
+
+If verify fails, run:
+
+```bash
+SENTRY_DSN=https://... npm run sentry:production:activate -- --apply --deploy --mirror-public-dsn
+npm run sentry:production:verify
+```

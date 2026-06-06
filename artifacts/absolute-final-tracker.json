@@ -1,6 +1,7 @@
 {
   "1-split-maintenance-mode-panel": "done",
-  "2-activate-sentry-dsn": "pending",
+  "2-activate-sentry-dsn": "blocked",
+  "2-activate-sentry-dsn-note": "SENTRY_DSN missing locally and on Vercel — run: SENTRY_DSN=https://... npm run sentry:production:activate -- --apply --deploy --mirror-public-dsn",
   "3-remove-deploy-skip-vitest": "pending",
   "4-add-error-tsx-top-20": "pending",
   "5-suspense-wrap-today": "pending",

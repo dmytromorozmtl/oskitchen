@@ -194,9 +194,20 @@ function main() {
   writeActivationArtifact({ vercelPushed: true, deployTriggered: true });
 
   console.log("\nVerify:");
+  console.log("  npm run sentry:production:verify");
   console.log("  curl -s https://os-kitchen.com/api/health | jq '.checks.observability, .checks.sentryServer'");
   console.log("  npm run final:100");
   console.log("  npm run smoke:sentry-production");
+  console.log("\nConfigure error-rate alert (>1%) — docs/SENTRY_ALERT_RULES.md §6");
+
+  const verify = spawnSync("npm", ["run", "sentry:production:verify"], {
+    stdio: "inherit",
+    encoding: "utf8",
+    shell: process.platform === "win32",
+  });
+  if (verify.status !== 0) {
+    throw new Error("Sentry production verify failed after deploy — check SENTRY_DSN on Vercel.");
+  }
 }
 
 main();

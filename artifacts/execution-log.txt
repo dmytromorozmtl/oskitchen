@@ -5880,3 +5880,12 @@ Category: perf
 Result: done — 5856-line monolith → thin shell (46 lines) + 5 core modules + 4 platform panels; linear-path panel (5263 lines) lazy-loaded via next/dynamic; tests 20/20 pass (maintenance + 3 execution certs)
 Files: components/dashboard/maintenance/**, components/dashboard/maintenance-mode-panel.tsx (shim), scripts/split-maintenance-mode-panel.py
 Follow-up: split maintenance-linear-path-panel.tsx into era25 sub-panels (<400 lines each)
+
+---
+Cycle: 20260606-195400
+Task: 2 — Activate Sentry DSN on Vercel production (P0)
+Category: fix
+Result: BLOCKED — SENTRY_DSN not in .env.production.local or Vercel Production; health checks.sentryServer.ok=false
+Delivered: npm run sentry:production:verify gate, post-deploy verify in push script, docs/SENTRY_ALERT_RULES.md §6 error-rate >1% alert
+Human gate: SENTRY_DSN=https://... npm run sentry:production:activate -- --apply --deploy --mirror-public-dsn && npm run sentry:production:verify
+Tests: tests/unit/sentry-production-verify.test.ts 3/3 pass
