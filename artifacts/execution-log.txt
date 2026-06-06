@@ -5912,4 +5912,4 @@ Task: 5 — Suspense-wrap Today page async components (P0)
 Category: fix
 Result: done — TodaySkeleton (hero/wizard/playbook sections); OwnerDailyBriefingHeroSection + LaunchWizardTodayStripSection async loaders; PlaybookTodayStrip/LaunchWizard/OwnerBriefing wrapped in Suspense on today page
 Tests: tests/unit/today-page-suspense.test.ts 2/2 pass; pure-operational stack test updated
-Commit: pending
+Commit: d15ebcff
