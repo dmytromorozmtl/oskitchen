@@ -1,0 +1,12 @@
+{
+  "1-split-maintenance-mode-panel": "done",
+  "2-activate-sentry-dsn": "pending",
+  "3-remove-deploy-skip-vitest": "pending",
+  "4-add-error-tsx-top-20": "pending",
+  "5-suspense-wrap-today": "pending",
+  "6-fix-n-plus-one-8": "pending",
+  "7-authed-rsc-smoke-ci": "pending",
+  "8-rate-limit-192-routes": "pending",
+  "9-eslint-aschild-guard": "pending",
+  "10-bundle-budget-ci-gate": "pending"
+}

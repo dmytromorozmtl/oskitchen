@@ -51,7 +51,7 @@ describe("maintenance mode execution cert (live repo)", () => {
     const ui = readFileSync(join(ROOT, "lib/commercial/maintenance-mode-ui-era24.ts"), "utf8");
     expect(ui).toContain("maintenanceModeExecutionCommand");
     const panel = readFileSync(
-      join(ROOT, "components/dashboard/maintenance-mode-panel.tsx"),
+      join(ROOT, "components/dashboard/maintenance/maintenance-guardrails-footer.tsx"),
       "utf8",
     );
     expect(panel).toContain("maintenanceModeExecutionCommand");

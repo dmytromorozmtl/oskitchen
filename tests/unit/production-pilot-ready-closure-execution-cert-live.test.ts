@@ -66,7 +66,7 @@ describe("production pilot ready closure execution cert (live repo)", () => {
     );
     expect(steadyStateUi).toContain("productionPilotReadyClosureExecutionCommand");
     const panel = readFileSync(
-      join(ROOT, "components/dashboard/maintenance-mode-panel.tsx"),
+      join(ROOT, "components/dashboard/maintenance/maintenance-guardrails-footer.tsx"),
       "utf8",
     );
     expect(panel).toContain("productionPilotReadyClosureExecutionCommand");

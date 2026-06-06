@@ -61,7 +61,7 @@ describe("commercial pilot path absolute end lock execution cert (live repo)", (
     );
     expect(steadyStateUi).toContain("commercialPilotPathAbsoluteEndLockExecutionCommand");
     const panel = readFileSync(
-      join(ROOT, "components/dashboard/maintenance-mode-panel.tsx"),
+      join(ROOT, "components/dashboard/maintenance/maintenance-guardrails-footer.tsx"),
       "utf8",
     );
     expect(panel).toContain("commercialPilotPathAbsoluteEndLockExecutionCommand");
