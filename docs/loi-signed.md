@@ -116,6 +116,7 @@ These are **collaboration targets** — not contractual SLAs or investor KPIs un
 2. Set `PILOT_GONOGO_CUSTOMER_NAME=Riverbend Commissary LLC` and `PILOT_GONOGO_LOI_SIGNED_DATE=2026-06-05` for `npm run smoke:pilot-gono-go`.
 3. Provision staging workspace **`riverbend-commissary`** and Week 0 kickoff calendar invite.
 4. Record CRM stage → **LOI signed**; schedule pilot Week 1 per [`pilot-execution-checklist.md`](./pilot-execution-checklist.md).
+5. Week 1 checkpoint report: [`pilot-week1-report.md`](./pilot-week1-report.md) (era74-pilot-week1-report-v1).
 5. Do **not** publish press release ([`press-release-first-design-partner.md`](./press-release-first-design-partner.md)) or case study without written partner approval.
 6. Re-run `npm run cert:commercial-pilot-evidence-era16` when staging vault is complete.
 

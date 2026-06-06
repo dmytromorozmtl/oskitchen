@@ -359,6 +359,8 @@
     "test:ci:shopify-live-smoke-era72:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/shopify-live-smoke-era72.test.ts",
     "test:ci:loi-signed-era73": "node ./node_modules/vitest/vitest.mjs run tests/unit/loi-signed-era73.test.ts tests/unit/press-release-first-design-partner-policy.test.ts tests/unit/loi-template-walkthrough-policy.test.ts",
     "test:ci:loi-signed-era73:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/loi-signed-era73.test.ts",
+    "test:ci:pilot-week1-report-era74": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-report-era74.test.ts tests/unit/pilot-week1-execution-orchestrator.test.ts",
+    "test:ci:pilot-week1-report-era74:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-report-era74.test.ts",
     "predeploy:verify": "bash scripts/predeploy-verify.sh",
     "test:e2e:workspace-smoke": "playwright test e2e/workspace-post-not-null-smoke.spec.ts e2e/smoke.spec.ts e2e/ci-smoke.spec.ts --project=setup --project=chromium-authed",
     "e2e:bootstrap": "tsx scripts/bootstrap-e2e-credentials.ts",
