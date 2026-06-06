@@ -14,6 +14,7 @@ import {
   BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT,
   BETA_GOVERNANCE_SMOKE_CHAIN_INTEGRATION_POLICY_ID,
 } from "@/lib/integrations/beta-governance-smoke-chain-integration-policy";
+import { LIVE_INTEGRATION_REGISTRY_LIVE_COUNT } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 
 /**
  * FINAL-05 — BETA governance smoke chain gate (registry → integrity → DoD).
@@ -65,10 +66,10 @@ function auditChainSmokeArtifact(root: string): boolean {
     summary.certPassed === true &&
     summary.integrationPolicyId === BETA_GOVERNANCE_SMOKE_CHAIN_INTEGRATION_POLICY_ID &&
     summary.chain?.chainPassed === true &&
-    summary.chain?.livePromotionCount === 8 &&
+    summary.chain?.livePromotionCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT &&
     summary.chain?.placeholderCount === 0 &&
     summary.chain?.expectedBetaCount === BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT &&
-    summary.livePromotionCount === 8 &&
+    summary.livePromotionCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT &&
     summary.placeholderCount === 0 &&
     summary.expectedBetaCount === BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT
   );

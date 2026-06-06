@@ -65,7 +65,7 @@ function auditCompetitorComparison(root: string): boolean {
     source.includes("competitor-comparison-honest-v1") &&
     source.includes("Toast") &&
     source.includes("Square") &&
-    source.includes("0 LIVE")
+    source.includes("17 LIVE")
   );
 }
 

@@ -7,6 +7,7 @@ import {
   liveIntegrationDodSmokePassContract,
   liveIntegrationDodSmokeWithinPassContract,
 } from "@/lib/integrations/live-integration-dod-smoke-integration-policy";
+import { LIVE_INTEGRATION_REGISTRY_LIVE_COUNT } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 import {
   buildLiveIntegrationDodSmokeSummary,
   formatLiveIntegrationDodSmokeReportLines,
@@ -24,7 +25,7 @@ import {
  */
 
 describe("live integration dod smoke builder integration (QA-40)", () => {
-  it("returns PASSED when cert chain and eighteen-row scaffold integrity succeed", () => {
+  it("returns PASSED when cert chain and seven-row scaffold integrity succeed", () => {
     const summary = buildLiveIntegrationDodSmokeSummary({
       certPassed: true,
       integrityCertPassed: true,
@@ -81,8 +82,8 @@ describe("live integration dod smoke builder integration (QA-40)", () => {
     });
     const lines = formatLiveIntegrationDodSmokeReportLines(summary);
     expect(lines.some((line) => line.startsWith("overall: PASSED"))).toBe(true);
-    expect(lines.some((line) => line.includes("g1ScaffoldReady: 18/18"))).toBe(true);
-    expect(lines.some((line) => line.startsWith("liveCount: 0"))).toBe(true);
+    expect(lines.some((line) => line.includes(`g1ScaffoldReady: ${LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT}/${LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT}`))).toBe(true);
+    expect(lines.some((line) => line.startsWith(`liveCount: ${LIVE_INTEGRATION_REGISTRY_LIVE_COUNT}`))).toBe(true);
   });
 
   it("builds honest summary against real repo scaffold state", () => {

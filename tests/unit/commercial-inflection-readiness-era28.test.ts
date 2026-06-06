@@ -13,11 +13,51 @@ describe("commercial-inflection-readiness-era28", () => {
     expect(COMMERCIAL_INFLECTION_READINESS_POLICY_ID).toBe("commercial-inflection-readiness-v1");
   });
 
-  it("reports honest p0_ops_vault_blocked locally", () => {
-    const result = evaluateCommercialInflectionReadiness({});
+  it("reports honest p0_ops_vault_blocked when vault report is blocked", () => {
+    const p0Staging = buildP0StagingProofUnblockSummary({
+      ssoArtifact: { overall: "SKIPPED", loginProofStatus: "proof_skipped" },
+      workflowsArtifact: { overall: "SKIPPED", firstGreenProofStatus: "proof_skipped" },
+      channelArtifact: {
+        overall: "SKIPPED",
+        wooLiveProofStatus: "proof_skipped",
+        shopifyLiveProofStatus: "proof_skipped",
+      },
+    });
+    const result = evaluateCommercialInflectionReadiness({}, process.cwd(), {
+      p0Staging,
+      vaultReport: {
+        version: "vault-readiness-v2",
+        generatedAt: "2026-05-28T00:00:00.000Z",
+        policyId: "era17-p0-staging-proof-unblock-v1",
+        opsChecklistDoc: "docs/era18-p0-staging-proof-ops-checklist.md",
+        vaultMatrixDoc: "docs/ops-vault-matrix.md",
+        vaultReady: false,
+        presentCount: 0,
+        totalCount: 11,
+        missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+        day0Milestone: "blocked",
+        day0PartialComplete: false,
+        p0ProofStatus: "awaiting_ops_credentials",
+        p0ArtifactOverall: "SKIPPED",
+        nextPhase: {
+          id: "staging_login",
+          label: "Phase 1 — Staging login",
+          complete: false,
+          presentKeys: [],
+          missingKeys: ["E2E_STAGING_BASE_URL", "E2E_LOGIN_EMAIL", "E2E_LOGIN_PASSWORD"],
+          docPath: "docs/GITHUB_E2E_STAGING_SECRETS.md",
+          smokeScripts: ["smoke:staging-workflows-first-green"],
+        },
+        phases: [],
+        childSmokes: [],
+        recommendedNextSteps: [],
+        secrets: [],
+        honestyNote: "test",
+      },
+    });
     expect(result.milestone).toBe("p0_ops_vault_blocked");
     expect(result.p0ProofStatus).toBe("awaiting_ops_credentials");
-    expect(result.p0VaultMissingCount).toBe(11);
+    expect(result.p0VaultMissingCount).toBe(3);
     expect(result.goDecision).not.toBe("GO");
     const vaultBlocker = result.blockers.find((row) => row.id === "p0_ops_vault_11_env");
     expect(vaultBlocker?.detail).toContain("Phase 1 — Staging login");

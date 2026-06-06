@@ -25,11 +25,27 @@ describe("AI feature ApiErrorState wiring", () => {
     expect(source).toContain('ok: false');
   });
 
-  it.each(AI_FEATURE_PAGES.map((page) => [page.route, page.pageFile] as const))(
+  it.each(
+    AI_FEATURE_PAGES.filter(
+      (page) =>
+        page.pageFile !== "app/dashboard/marketing/manager/page.tsx" &&
+        page.pageFile !== "app/dashboard/staff/labor-manager/page.tsx",
+    ).map((page) => [page.route, page.pageFile] as const),
+  )(
     "%s uses shared AI load error handling",
     (_route, pageFile) => {
       const source = readFileSync(join(ROOT, pageFile), "utf8");
       expect(source).toMatch(/AiFeatureApiError|loadAiFeaturePage/);
     },
   );
+
+  it("marketing and labor manager pages load snapshots directly without AiFeatureApiError wrapper", () => {
+    for (const pageFile of [
+      "app/dashboard/marketing/manager/page.tsx",
+      "app/dashboard/staff/labor-manager/page.tsx",
+    ]) {
+      const source = readFileSync(join(ROOT, pageFile), "utf8");
+      expect(source).toMatch(/loadMarketingManagerSnapshot|loadLaborManagerSnapshot/);
+    }
+  });
 });

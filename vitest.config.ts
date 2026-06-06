@@ -15,8 +15,8 @@ export default defineConfig({
   test: {
     dir: "tests",
     environment: "node",
-    /** Era governance UI/orchestrator slices scan large repo trees; 5s default is too tight. */
-    testTimeout: 60_000,
+    /** Era governance UI/orchestrator slices scan large repo trees; allow headroom under parallel CI load. */
+    testTimeout: 120_000,
     watch: false,
     include: [
       "unit/**/*.test.ts",

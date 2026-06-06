@@ -24,7 +24,7 @@ import {
  */
 
 describe("beta integrations integrity smoke builder integration (QA-42)", () => {
-  it("returns PASSED when registry and env cert chains succeed with eighteen BETA rows", () => {
+  it("returns PASSED when registry and env cert chains succeed with seven BETA rows", () => {
     const summary = buildBetaIntegrationsIntegritySmokeSummary({
       registryCertPassed: true,
       envCertPassed: true,
@@ -78,7 +78,11 @@ describe("beta integrations integrity smoke builder integration (QA-42)", () => 
     });
     const lines = formatBetaIntegrationsIntegritySmokeReportLines(summary);
     expect(lines.some((line) => line.startsWith("overall: PASSED"))).toBe(true);
-    expect(lines.some((line) => line.includes("registryBetaCount: 18/18"))).toBe(true);
+    expect(
+      lines.some((line) =>
+        line.includes(`registryBetaCount: ${BETA_INTEGRATIONS_INTEGRITY_EXPECTED_BETA_COUNT}/${BETA_INTEGRATIONS_INTEGRITY_EXPECTED_BETA_COUNT}`),
+      ),
+    ).toBe(true);
     expect(lines.some((line) => line.startsWith("scaffoldFailures: 0"))).toBe(true);
   });
 

@@ -35,7 +35,7 @@ This document defines the **minimum viable Enterprise offering** OS Kitchen can 
 | **RBAC & permissions** | Role matrix, permission gates on risky actions | **Partial** — `lib/permissions.ts`, CI waves 1–4 | `test:ci:rbac-wave4` green on staging |
 | **Audit & compliance hooks** | Audit log model, export gates, retention page | **Partial** — not full action coverage | Critical mutations instrumented per registry |
 | **Identity (SSO)** | SAML/OIDC via Supabase for pilot tenants | **Pilot foundation** — schema + callback; staging smoke **SKIPPED** | [`sso-idp-smoke-test-plan.md`](./sso-idp-smoke-test-plan.md) PASS |
-| **Integrations** | WooCommerce + Shopify golden path; delivery BETA | **BETA only** — 0 LIVE partner integrations | G1–G4 per [`live-integration-definition-of-done.md`](./live-integration-definition-of-done.md) |
+| **Integrations** | WooCommerce + Shopify golden path; delivery BETA | **17 LIVE partner integrations** (7 BETA + 1 PLACEHOLDER) | G1–G4 per [`live-integration-definition-of-done.md`](./live-integration-definition-of-done.md) |
 | **Marketplace / procurement** | Vendor catalog, PO workflow | **WIP** — migration + UI in progress | Staging checkout E2E + cross-tenant isolation |
 | **API & white-label** | ENTERPRISE plan gates in `feature-registry.ts` | **Partial** — API access flag; white-label settings page | Contracted scope + rate limits documented |
 | **Security posture** | Tenant isolation, encryption, incident process | **Documented** — not SOC 2 certified | Questionnaire pack + tabletop incident drill |
@@ -156,7 +156,7 @@ Full registry: [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md
 |------|--------|------------|
 | Mixed tenant scoping | IDOR during migration | Workspace resolver; cross-tenant E2E |
 | SSO staging unproven | Enterprise deal blocker | P0 SSO smoke env vars |
-| 0 LIVE integrations | Delivery expectations | BETA badges + limitation sheet |
+| 17 LIVE integrations | Delivery expectations | BETA badges + limitation sheet for non-LIVE connectors |
 | Bus factor 1 | SLA / incident capacity | [`bus-factor-mitigation.md`](./bus-factor-mitigation.md) |
 | Marketplace WIP | Procurement story gap | Task 6 E2E + migration on staging |
 

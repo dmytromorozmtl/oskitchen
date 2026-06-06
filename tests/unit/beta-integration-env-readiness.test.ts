@@ -11,10 +11,10 @@ import {
 } from "@/lib/integrations/integration-registry";
 
 describe("beta integration env readiness", () => {
-  it("lists eighteen BETA registry cards", () => {
+  it("lists seven BETA registry cards", () => {
     const cards = listBetaIntegrationEnvReadinessCards({});
     expect(cards).toHaveLength(BETA_INTEGRATION_IDS.length);
-    expect(cards).toHaveLength(18);
+    expect(cards).toHaveLength(7);
   });
 
   it("marks email-orders as optional when no env required", () => {

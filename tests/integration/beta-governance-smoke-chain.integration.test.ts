@@ -8,6 +8,7 @@ import {
   betaGovernanceSmokeChainWithinPassContract,
   buildBetaGovernanceSmokeChainSummaries,
 } from "@/lib/integrations/beta-governance-smoke-chain-integration-policy";
+import { LIVE_INTEGRATION_REGISTRY_LIVE_COUNT } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 
 /**
  * BETA governance smoke chain capstone integration (QA-45).
@@ -72,12 +73,12 @@ describe("beta governance smoke chain capstone integration (QA-45)", () => {
     expect(betaGovernanceSmokeChainPassContract(failing).chainPassed).toBe(false);
   });
 
-  it("locks capstone policy id and enforces zero LIVE across chain", () => {
+  it("locks capstone policy id and reports LIVE promotion count across chain", () => {
     const summaries = buildBetaGovernanceSmokeChainSummaries({ certPassed: true });
     expect(BETA_GOVERNANCE_SMOKE_CHAIN_INTEGRATION_POLICY_ID).toBe(
       "beta-governance-smoke-chain-integration-v1",
     );
-    expect(summaries.dod.livePromotionCount).toBe(7);
+    expect(summaries.dod.livePromotionCount).toBe(LIVE_INTEGRATION_REGISTRY_LIVE_COUNT);
     expect(summaries.registry.placeholderCount).toBe(0);
   });
 });

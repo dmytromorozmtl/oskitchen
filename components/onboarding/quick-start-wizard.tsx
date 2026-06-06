@@ -55,7 +55,9 @@ import { appIconMdClass } from "@/lib/design/icon-system";
 import {
   wizardStepChoiceCardClass,
   wizardStepChoiceCardSelectedClass,
+  wizardStepChoiceGridClass,
   wizardStepDescriptionClass,
+  wizardStepFormClass,
 } from "@/lib/design/form-patterns-wizard-steps";
 import { cn, formatCurrency } from "@/lib/utils";
 
@@ -261,7 +263,7 @@ export function QuickStartWizard({ initialStep }: Props) {
             />
           </WizardStepField>
           <p className={wizardStepDescriptionClass}>Pick a cuisine — we pre-load a starter menu.</p>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className={cn(wizardStepChoiceGridClass, "lg:grid-cols-3")}>
             {QUICK_START_RESTAURANT_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
@@ -396,7 +398,7 @@ export function QuickStartWizard({ initialStep }: Props) {
         <WizardStepSection data-testid="quick-start-order-step">
           <WizardStepHeading>Take your first order</WizardStepHeading>
           <Card className="border-primary/30 bg-primary/5">
-            <CardContent className="space-y-4 p-6">
+            <CardContent className={`${wizardStepFormClass} p-6`}>
               <div className="flex gap-3">
                 <ShoppingBag className="h-8 w-8 shrink-0 text-primary" aria-hidden />
                 <div className="space-y-2 text-sm">

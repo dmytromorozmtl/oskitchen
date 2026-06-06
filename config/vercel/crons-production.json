@@ -56,6 +56,10 @@
     "schedule": "*/5 * * * *"
   },
   {
+    "path": "/api/cron/grubhub-sync",
+    "schedule": "*/5 * * * *"
+  },
+  {
     "path": "/api/cron/kds-overdue-alerts",
     "schedule": "*/10 * * * *"
   },

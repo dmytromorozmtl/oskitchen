@@ -3,7 +3,7 @@
 **Policy:** `integration-escalation-matrix-v1`  
 **Date:** 2026-06-02  
 **Owner:** Integration engineering + CS + Founder  
-**Scope:** Third-party and channel integrations — **0 LIVE partner integrations** as of June 2026  
+**Scope:** Third-party and channel integrations — **17 LIVE partner integrations** as of June 2026  
 **Parent:** [`incident-response-process.md`](./incident-response-process.md) · [`live-integration-definition-of-done.md`](./live-integration-definition-of-done.md) · [`beta-to-live-roadmap.md`](./beta-to-live-roadmap.md)
 
 This matrix defines **who escalates what, when, and to whom** for integration failures — separate from platform-wide incidents. Use it when Integration Health degrades, webhooks fail, or a pilot tenant cannot connect a partner.
@@ -204,3 +204,9 @@ Attach: Integration Health screenshot · relevant Sentry link · webhook deliver
 ---
 
 *Generated as Task 102 — P2 PM. Next: [`enterprise-mvp-spec.md`](./enterprise-mvp-spec.md) (Task 103).*
+
+---
+
+## Full registry index (INTEGRATION_REGISTRY)
+
+DoorDash · Skip / Just Eat · Grubhub · WooCommerce · Shopify · Uber Eats · QuickBooks · Xero · 7shifts · Homebase · Klaviyo · Mailchimp · Stripe · Square Payments · Moneris · Resy · OpenTable · Uber Direct · Square · Toast · Clover · Lightspeed · Google Forms · Email orders

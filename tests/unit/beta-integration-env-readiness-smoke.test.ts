@@ -6,14 +6,15 @@ import {
   resolveBetaIntegrationEnvReadinessSmokeProofStatus,
 } from "@/lib/integrations/beta-integration-env-readiness-smoke-summary";
 import { listBetaIntegrationEnvReadinessCards } from "@/lib/integrations/beta-integration-env-readiness";
+import { BETA_INTEGRATION_IDS } from "@/lib/integrations/integration-registry";
 
 describe("beta integration env readiness smoke summary", () => {
-  it("passes audit when cert succeeds with eighteen cards", () => {
+  it("passes audit when cert succeeds with seven BETA cards", () => {
     const cards = listBetaIntegrationEnvReadinessCards({});
     const proofStatus = resolveBetaIntegrationEnvReadinessSmokeProofStatus({
       certPassed: true,
       strictMode: false,
-      envSummary: { total: 18, readyCount: 0, optionalCount: 1, missingCount: 17, overall: "degraded" },
+      envSummary: { total: 7, readyCount: 0, optionalCount: 1, missingCount: 6, overall: "degraded" },
       cardCount: cards.length,
     });
     expect(proofStatus).toBe("env_audit_complete");
@@ -24,8 +25,8 @@ describe("beta integration env readiness smoke summary", () => {
     const proofStatus = resolveBetaIntegrationEnvReadinessSmokeProofStatus({
       certPassed: true,
       strictMode: true,
-      envSummary: { total: 18, readyCount: 0, optionalCount: 0, missingCount: 18, overall: "blocked" },
-      cardCount: 18,
+      envSummary: { total: 7, readyCount: 0, optionalCount: 0, missingCount: 7, overall: "blocked" },
+      cardCount: 7,
     });
     expect(proofStatus).toBe("proof_failed_strict_env");
   });
@@ -44,9 +45,10 @@ describe("beta integration env readiness smoke summary", () => {
 });
 
 describe("beta integration env readiness smoke (live audit)", () => {
-  it("audits eighteen BETA integrations from live registry", () => {
+  it("audits seven BETA integrations from live registry", () => {
     const cards = listBetaIntegrationEnvReadinessCards(process.env);
-    expect(cards).toHaveLength(18);
+    expect(cards).toHaveLength(BETA_INTEGRATION_IDS.length);
+    expect(cards).toHaveLength(7);
     expect(cards.some((c) => c.status === "optional")).toBe(true);
   });
 });

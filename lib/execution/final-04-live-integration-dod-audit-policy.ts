@@ -10,6 +10,7 @@ import {
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_ORCHESTRATOR_SCRIPT,
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_POLICY_ID,
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_SUMMARY_ARTIFACT,
+  LIVE_INTEGRATION_REGISTRY_LIVE_COUNT,
 } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 
 /**
@@ -60,8 +61,8 @@ function auditLiveDodSmokeArtifact(root: string): boolean {
     summary.integrityProofStatus === "integrity_complete" &&
     summary.dod?.total === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
     summary.dod?.scaffoldReadyCount === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
-    summary.dod?.liveCount === 11 &&
-    summary.livePromotionCount === 11
+    summary.dod?.liveCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT &&
+    summary.livePromotionCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT
   );
 }
 
@@ -71,7 +72,7 @@ function auditLiveDodSmokeDoc(root: string): boolean {
     source.includes(LIVE_INTEGRATION_DOD_SMOKE_ERA17_POLICY_ID) &&
     source.includes("not LIVE claims") &&
     source.includes("LIVE integration proof") &&
-    source.includes("Eighteen BETA") &&
+    source.includes("Seven BETA") &&
     source.includes(LIVE_INTEGRATION_DOD_SMOKE_ERA17_NPM_SCRIPT) &&
     existsSync(join(root, LIVE_INTEGRATION_DOD_SMOKE_ERA17_ORCHESTRATOR_SCRIPT))
   );

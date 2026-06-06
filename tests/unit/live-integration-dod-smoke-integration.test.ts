@@ -19,7 +19,7 @@ describe("live integration dod smoke integration policy (QA-40)", () => {
     expect(LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT).toBe(7);
   });
 
-  it("evaluates pass contract for dod_audit_complete with zero LIVE", () => {
+  it("evaluates pass contract for dod_audit_complete with registry LIVE promotions", () => {
     const summary = buildLiveIntegrationDodSmokeSummary({
       certPassed: true,
       integrityCertPassed: true,

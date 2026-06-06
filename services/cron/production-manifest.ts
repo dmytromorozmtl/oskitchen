@@ -21,6 +21,7 @@ export const ALLOWED_PRODUCTION_CRON_SLUGS = [
   "meal-plan-auto-renew",
   "menu-rotation",
   "doordash-sync",
+  "grubhub-sync",
   "kds-overdue-alerts",
   "incident-remediation-reminders",
   "shopify-b2b-dunning",
@@ -42,6 +43,7 @@ export const CRITICAL_PRODUCTION_CRON_EVIDENCE_SLUGS = [
   "storefront-edge-sync",
   "storefront-cart-recovery",
   "doordash-sync",
+  "grubhub-sync",
   "kds-overdue-alerts",
 ] as const satisfies readonly ProductionCronSlug[];
 
@@ -64,6 +66,7 @@ export const PRODUCTION_CRON_SCHEDULES: Record<ProductionCronSlug, string> = {
   "meal-plan-auto-renew": "0 6 * * *",
   "menu-rotation": "0 7 * * *",
   "doordash-sync": "*/5 * * * *",
+  "grubhub-sync": "*/5 * * * *",
   "kds-overdue-alerts": "*/10 * * * *",
   "incident-remediation-reminders": "17 * * * *",
   "shopify-b2b-dunning": "0 9 * * *",

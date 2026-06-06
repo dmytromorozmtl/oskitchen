@@ -24,7 +24,7 @@ describe("integration escalation matrix doc", () => {
     for (const entry of INTEGRATION_REGISTRY) {
       expect(doc).toContain(entry.name);
     }
-    expect(doc).toContain("0 LIVE partner integrations");
+    expect(doc).toContain("17 LIVE partner integrations");
     expect(doc).toContain("Uber Direct");
     expect(doc).toContain("PLACEHOLDER");
     expect(doc).toContain("WooCommerce");

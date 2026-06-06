@@ -19,7 +19,7 @@ describe("beta integrations integrity smoke integration policy (QA-42)", () => {
     expect(BETA_INTEGRATIONS_INTEGRITY_EXPECTED_BETA_COUNT).toBe(7);
   });
 
-  it("evaluates pass contract for integrity_complete with eighteen BETA rows", () => {
+  it("evaluates pass contract for integrity_complete with seven BETA rows", () => {
     const summary = buildBetaIntegrationsIntegritySmokeSummary({
       registryCertPassed: true,
       envCertPassed: true,

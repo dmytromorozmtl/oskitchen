@@ -25,7 +25,7 @@ import {
  */
 
 describe("beta integrations registry smoke builder integration (QA-44)", () => {
-  it("returns PASSED when cert chain and eighteen BETA scaffolds succeed", () => {
+  it("returns PASSED when cert chain and seven BETA scaffolds succeed", () => {
     const audit = auditBetaIntegrationsRegistryScaffold(process.cwd());
     const summary = buildBetaIntegrationsRegistrySmokeSummary({
       certPassed: true,
@@ -45,7 +45,7 @@ describe("beta integrations registry smoke builder integration (QA-44)", () => {
     const summary = buildBetaIntegrationsRegistrySmokeSummary({
       certPassed: false,
       scaffoldFailures: [],
-      registryBetaCount: 18,
+      registryBetaCount: BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT,
       placeholderCount: 0,
     });
 
@@ -62,7 +62,7 @@ describe("beta integrations registry smoke builder integration (QA-44)", () => {
     const proofStatus = resolveBetaIntegrationsRegistryProofStatus({
       certPassed: true,
       scaffoldFailures: [{ integrationId: "square", missingPaths: ["app/page.tsx"] }],
-      registryBetaCount: 18,
+      registryBetaCount: BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT,
       placeholderCount: 0,
     });
     expect(proofStatus).toBe("scaffold_incomplete");
@@ -79,7 +79,13 @@ describe("beta integrations registry smoke builder integration (QA-44)", () => {
     });
     const lines = formatBetaIntegrationsRegistrySmokeReportLines(summary);
     expect(lines.some((line) => line.startsWith("overall: PASSED"))).toBe(true);
-    expect(lines.some((line) => line.includes("registryBetaCount: 18/18"))).toBe(true);
+    expect(
+      lines.some((line) =>
+        line.includes(
+          `registryBetaCount: ${BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT}/${BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT}`,
+        ),
+      ),
+    ).toBe(true);
     expect(lines.some((line) => line.startsWith("placeholderCount: 0"))).toBe(true);
   });
 

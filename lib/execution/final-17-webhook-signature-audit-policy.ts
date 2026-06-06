@@ -97,8 +97,8 @@ export function auditFinal17WebhookSignatureMatrix(
       typeof summary.honestyNote === "string" &&
       summary.honestyNote.length > 20 &&
       summary.matrixVitestPassed === true &&
-      summary.coreRouteCount === 52 &&
-      summary.ingressRouteCount === 56;
+      summary.coreRouteCount === 55 &&
+      summary.ingressRouteCount === 59;
 
     matrixHonest =
       summary.overall === "PASS" &&

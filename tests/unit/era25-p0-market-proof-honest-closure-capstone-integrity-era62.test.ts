@@ -91,6 +91,38 @@ describe("era25-p0-market-proof-honest-closure-capstone-integrity-era62", () => 
       },
       goNoGoOverride: honestGo,
       p0ProofStatusOverride: "awaiting_ops_credentials",
+      p0StagingOverride: {
+        version: "era17-p0-staging-proof-unblock-v1",
+        runAt: "2026-05-28T00:00:00.000Z",
+        commitSha: null,
+        overall: "SKIPPED",
+        p0ProofStatus: "awaiting_ops_credentials",
+        defaultProofStatus: "awaiting_ops_credentials",
+        allMissingEnvVars: ["VAULT_KEY"],
+        children: {
+          ssoIdpStaging: {
+            smokeScript: "smoke:enterprise-sso-idp-staging",
+            artifactPath: "artifacts/enterprise-sso-idp-staging-smoke-summary.json",
+            overall: null,
+            proofStatus: null,
+            missingEnvVars: [],
+          },
+          stagingWorkflowsFirstGreen: {
+            smokeScript: "smoke:staging-workflows-first-green",
+            artifactPath: "artifacts/staging-workflows-first-green-summary.json",
+            overall: null,
+            proofStatus: null,
+            missingEnvVars: [],
+          },
+          channelLive: {
+            smokeScript: "smoke:woo-shopify-live",
+            artifactPath: "artifacts/channel-live-smoke-summary.json",
+            overall: null,
+            proofStatus: null,
+            missingEnvVars: [],
+          },
+        },
+      },
     });
     expect(
       result.violations.some((row) => row.id === "closure_attested_before_proof_passed_artifact"),

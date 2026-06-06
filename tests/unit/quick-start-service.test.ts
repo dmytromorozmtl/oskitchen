@@ -1,10 +1,10 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
-const prismaMock = {
+const prismaMock = vi.hoisted(() => ({
   supplier: { findFirst: vi.fn(), create: vi.fn() },
   staffMember: { count: vi.fn() },
-  posRegister: { count: vi.fn() },
-};
+  pOSRegister: { count: vi.fn() },
+}));
 
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
 
@@ -31,7 +31,7 @@ describe("seedQuickStartDemoData", () => {
     prismaMock.supplier.findFirst.mockResolvedValue(null);
     prismaMock.supplier.create.mockResolvedValue({ id: "sup-1" });
     prismaMock.staffMember.count.mockResolvedValue(0);
-    prismaMock.posRegister.count.mockResolvedValue(1);
+    prismaMock.pOSRegister.count.mockResolvedValue(1);
   });
 
   it("creates demo supplier and staff when missing", async () => {

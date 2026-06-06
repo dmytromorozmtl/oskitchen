@@ -17,12 +17,14 @@ const prismaMock = vi.hoisted(() => ({
   webhookEvent: { findMany: vi.fn(), create: vi.fn() },
 }));
 
-vi.mock("@/lib/api-public/guard", () => ({
-  guardPublicApiV1Resource,
-  guardPublicApi,
-  isGuardError: (value: unknown) =>
-    Boolean(value && typeof value === "object" && "response" in value),
-}));
+vi.mock("@/lib/api-public/guard", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/api-public/guard")>();
+  return {
+    ...actual,
+    guardPublicApiV1Resource,
+    guardPublicApi,
+  };
+});
 
 vi.mock("@/lib/scope/workspace-resource-scope", () => ({
   productListWhereForOwner,
@@ -77,7 +79,10 @@ function unauthorizedGuard() {
 }
 
 function authorizedGuard(userId = "owner-1") {
-  guardPublicApiV1Resource.mockResolvedValue({ userId });
+  guardPublicApiV1Resource.mockResolvedValue({
+    userId,
+    rateLimitHeaders: {},
+  });
 }
 
 describe("public API v1 resource contracts", () => {

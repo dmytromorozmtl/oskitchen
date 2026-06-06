@@ -7,7 +7,7 @@ Capstone smoke for the BETA integration governance arc (DEV-49–DEV-55). Combin
 ## What it checks
 
 1. Cert chain (DoD tracker + integrity + env readiness tests).
-2. Eighteen BETA integrations with G1 scaffold complete.
+2. Seven BETA integrations with G1 scaffold complete; seventeen LIVE in registry.
 3. G2 env readiness counts recorded (missing vars expected in CI).
 4. G3/G4 remain `not_measured` — honest, not LIVE claims.
 

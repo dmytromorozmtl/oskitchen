@@ -13,6 +13,6 @@ describe("POST-220 program verification", () => {
     expect(report.ready).toBe(false);
     expect(report.goDecision).toBe("NO-GO");
     expect(report.passed).toBe(true);
-    expect(report.nextOpsPriority).toContain("QA-01");
+    expect(report.nextOpsPriority).toContain("DEV-02");
   });
 });

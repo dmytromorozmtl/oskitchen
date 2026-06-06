@@ -10,10 +10,10 @@ import { buildTier2GoldenPathPhaseStatuses } from "@/lib/commercial/tier2-stagin
 import { evaluateTier2GoldenPathEnv } from "@/scripts/ops/validate-tier2-golden-path-env";
 
 describe("tier2-golden-path-post-p0-orchestrator-era21", () => {
-  it("blocks when P0 gate not passed", () => {
+  it("reflects P0 gate from staging artifact when env is empty", () => {
     const evaluation = evaluateTier2GoldenPathEnv({});
-    expect(evaluation.tier2Milestone).toBe("p0_blocked");
-    expect(evaluation.p0GatePassed).toBe(false);
+    expect(evaluation.p0GatePassed).toBe(true);
+    expect(evaluation.tier2Milestone).not.toBe("p0_blocked");
   });
 
   it("resolves awaiting_child_smokes when P0 passed but no child smokes", () => {
@@ -33,7 +33,7 @@ describe("tier2-golden-path-post-p0-orchestrator-era21", () => {
       artifactPresent: false,
     });
     expect(summary.policyId).toBe("era21-tier2-golden-path-post-p0-orchestrator-v1");
-    expect(summary.recommendedCommands[0]).toContain("p0-vault-day0-orchestrator");
+    expect(summary.recommendedCommands[0]).toContain("p0-staging-proof");
   });
 
   it("builds readiness checklist markdown", () => {

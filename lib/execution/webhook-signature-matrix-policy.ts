@@ -18,13 +18,13 @@ export const WEBHOOK_SIGNATURE_STATIC_AUDIT_ARTIFACT =
 export const WEBHOOK_SIGNATURE_MATRIX_RUNNER_SCRIPT =
   "scripts/ops/run-webhook-signature-matrix-audit.ts" as const;
 
-export const WEBHOOK_SIGNATURE_MATRIX_EXPECTED_CORE_ROUTES = 52 as const;
+export const WEBHOOK_SIGNATURE_MATRIX_EXPECTED_CORE_ROUTES = 55 as const;
 
-export const WEBHOOK_SIGNATURE_MATRIX_EXPECTED_INGRESS_ROUTES = 56 as const;
+export const WEBHOOK_SIGNATURE_MATRIX_EXPECTED_INGRESS_ROUTES = 59 as const;
 
 /** Contract markers in the CI matrix test source. */
 export const WEBHOOK_SIGNATURE_MATRIX_CONTRACT_MARKERS = [
-  "webhook signature matrix — 52 routes",
+  "webhook signature matrix — 55 routes",
   "signature verification in source",
   "zero unverified routes",
   "production-partner ingress routes",

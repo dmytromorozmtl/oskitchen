@@ -17,7 +17,7 @@ import {
 import { auditBetaIntegrationsRegistryScaffold } from "@/lib/integrations/beta-integrations-registry-smoke-summary";
 import { buildBetaIntegrationsIntegritySmokeSummary } from "@/lib/integrations/beta-integrations-integrity-smoke-summary";
 import { buildBetaIntegrationsRegistrySmokeSummary } from "@/lib/integrations/beta-integrations-registry-smoke-summary";
-import { LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
+import { LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT, LIVE_INTEGRATION_REGISTRY_LIVE_COUNT } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 import {
   liveIntegrationDodSmokeHonestNoLiveClaim,
   liveIntegrationDodSmokePassContract,
@@ -125,7 +125,7 @@ export function betaGovernanceSmokeChainWithinPassContract(
     contract.integrityPassed &&
     contract.dodPassed &&
     contract.expectedBetaCount === BETA_GOVERNANCE_SMOKE_CHAIN_EXPECTED_BETA_COUNT &&
-    contract.livePromotionCount === 8 &&
+    contract.livePromotionCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT &&
     contract.placeholderCount === 0
   );
 }

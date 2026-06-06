@@ -148,6 +148,15 @@ export const PRODUCTION_CRON_OPS_CATALOG: Record<ProductionCronSlug, ProductionC
     ownerTeam: "channels",
     ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
   },
+  "grubhub-sync": {
+    label: "Grubhub sync",
+    summary: "Imports Grubhub orders and keeps channel state aligned.",
+    ownerHref: "/dashboard/sales-channels/health",
+    ownerLabel: "Open channel health",
+    responseHint: "Review Grubhub credentials, sync lag, and channel import errors.",
+    ownerTeam: "channels",
+    ownerRolePriority: ["PLATFORM_ADMIN", "SUPPORT_ADMIN", "IMPLEMENTATION_ADMIN", "SUPER_ADMIN"],
+  },
   "kds-overdue-alerts": {
     label: "KDS overdue alerts",
     summary: "Flags kitchen tickets and orders that are running overdue.",

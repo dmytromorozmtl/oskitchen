@@ -1,6 +1,7 @@
 {
   "version": "post-200-verification-report-v1",
-  "generatedAt": "2026-06-06T03:50:00.000Z",
+  "generatedAt": "2026-06-06T06:35:00.000Z",
+  "commitSha": "7c42a880",
   "overall": "PASS_WITH_OPS_GATES",
   "domination": {
     "tracker": "200/200",
@@ -27,8 +28,9 @@
   },
   "codeQuality": {
     "typescriptErrors": 0,
-    "buildStatus": "pending_rebuild",
-    "testsFailing": "pre_fix_baseline_108",
+    "buildStatus": "in_progress_node22",
+    "testsFailing": 108,
+    "testsPassing": 7728,
     "liveIntegrations": 18
   },
   "compliance": {

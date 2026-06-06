@@ -95,7 +95,7 @@ describe("tier2-staging-proof-execution-orchestrator", () => {
       },
       env: {},
     });
-    expect(summary.milestone).toBe("p0_blocked");
+    expect(summary.milestone).toBe("p0_execution_blocked");
     expect(summary.milestone).not.toBe("proof_passed");
     expect(summary.recommendedCommands.some((cmd) => cmd.includes("p0-staging-proof-execution"))).toBe(
       true,

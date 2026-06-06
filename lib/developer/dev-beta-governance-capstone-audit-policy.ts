@@ -11,6 +11,8 @@ import {
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_ORCHESTRATOR_SCRIPT,
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_POLICY_ID,
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_SUMMARY_ARTIFACT,
+  LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT,
+  LIVE_INTEGRATION_REGISTRY_LIVE_COUNT,
 } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 
 /**
@@ -60,9 +62,9 @@ function auditLiveDodSmokeArtifact(root: string): boolean {
   return (
     summary.overall === "PASSED" &&
     summary.certPassed === true &&
-    summary.dod.total === 16 &&
-    summary.dod.scaffoldReadyCount === 16 &&
-    summary.dod.liveCount === 11
+    summary.dod.total === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
+    summary.dod.scaffoldReadyCount === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
+    summary.dod.liveCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT
   );
 }
 

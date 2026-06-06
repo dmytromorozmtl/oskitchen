@@ -27,7 +27,7 @@ describe("enterprise MVP spec doc", () => {
     expect(pilot.decision).toBe("NO-GO");
     expect(doc).toContain("NO-GO");
     expect(doc).toContain("0 signed LOI");
-    expect(doc).toContain("0 LIVE partner integrations");
+    expect(doc).toContain("17 LIVE partner integrations");
     expect(doc).toContain("SOC 2 Type II attestation");
     expect(doc).toContain("Do **not** contract");
     expect(doc).toContain("sales-limitation-sheet.md");

@@ -7,6 +7,30 @@ vi.mock("@/lib/integrations/persist-external-order", () => ({
   persistNormalizedExternalOrder,
 }));
 
+vi.mock("@/services/integrations/doordash/kitchen-import.service", () => ({
+  importDoorDashOrderToKitchen: vi.fn().mockResolvedValue({
+    orderId: "order-1",
+    imported: true,
+    duplicate: false,
+  }),
+}));
+
+vi.mock("@/services/integrations/grubhub/kitchen-import.service", () => ({
+  importGrubhubOrderToKitchen: vi.fn().mockResolvedValue({
+    orderId: "order-gh-1",
+    imported: true,
+    duplicate: false,
+  }),
+}));
+
+vi.mock("@/services/integrations/uber-eats/kitchen-import.service", () => ({
+  importUberEatsOrderToKitchen: vi.fn().mockResolvedValue({
+    orderId: "order-ue-1",
+    imported: true,
+    duplicate: false,
+  }),
+}));
+
 vi.mock("@/lib/webhooks/webhook-event-store", () => ({
   createWebhookEvent: vi.fn(),
   markWebhookProcessed,
@@ -41,7 +65,7 @@ describe("delivery order ingest latency E2E policy (QA-34)", () => {
 describe("delivery inbound order ingest latency batch (QA-34)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    persistNormalizedExternalOrder.mockResolvedValue(undefined);
+    persistNormalizedExternalOrder.mockResolvedValue({ id: "ext-1" });
     markWebhookProcessed.mockResolvedValue(undefined);
   });
 

@@ -39,7 +39,7 @@ describe("beta integrations registry smoke summary", () => {
     const summary = buildBetaIntegrationsRegistrySmokeSummary({
       certPassed: false,
       scaffoldFailures: [{ integrationId: "square", missingPaths: ["missing.ts"] }],
-      registryBetaCount: 18,
+      registryBetaCount: BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT,
       placeholderCount: 0,
     });
     expect(summary.overall).toBe("FAILED");
@@ -48,14 +48,14 @@ describe("beta integrations registry smoke summary", () => {
 });
 
 describe("beta integrations registry smoke (live repo scaffold audit)", () => {
-  it("maps all eighteen BETA ids to scaffold paths", () => {
+  it("maps all seven BETA ids to scaffold paths", () => {
     expect(BETA_INTEGRATION_IDS).toHaveLength(BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT);
     for (const id of BETA_INTEGRATION_IDS) {
       expect(BETA_INTEGRATION_SCAFFOLD_PATHS[id]?.length, id).toBeGreaterThan(0);
     }
   });
 
-  it("passes live scaffold audit for all eighteen BETA integrations", () => {
+  it("passes live scaffold audit for all seven BETA integrations", () => {
     const audit = auditBetaIntegrationsRegistryScaffold(process.cwd());
     expect(audit.registryBetaCount).toBe(BETA_INTEGRATIONS_REGISTRY_SMOKE_ERA17_EXPECTED_COUNT);
     expect(audit.placeholderCount).toBe(0);

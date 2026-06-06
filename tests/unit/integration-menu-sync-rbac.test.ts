@@ -20,6 +20,10 @@ vi.mock("@/lib/prisma", () => ({
   },
 }));
 
+vi.mock("@/services/integrations/uber-eats/uber-eats-service", () => ({
+  syncMenuToUberEats: pushMenu,
+}));
+
 vi.mock("@/services/integrations/uber-eats/menu-sync.service", () => ({
   UberEatsMenuSyncService: class MockUberEatsMenuSyncService {
     pushMenu = pushMenu;

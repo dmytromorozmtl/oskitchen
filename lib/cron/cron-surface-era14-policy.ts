@@ -49,7 +49,7 @@ export const CRON_SURFACE_ERA14_SMOKE_SCRIPT = "scripts/smoke-cron-surface.ts" a
 export const CRON_SURFACE_ERA14_SMOKE_NPM_SCRIPT = "smoke:cron-surface" as const;
 
 export const CRON_SURFACE_ERA14_AUDIT_CHECKLIST = [
-  "Confirm only 21 production routes exist under app/api/cron/ (no new experimental folders).",
+  "Confirm only 22 production routes exist under app/api/cron/ (no new experimental folders).",
   "Do not set ENABLE_EXPERIMENTAL_CRONS=true in pilot or production.",
   "Run npm run validate:production-crons and validate:cron-inventory before cron-related releases.",
   "Experimental handlers stay in archive/cron-routes/ — do not restore to App Router without era sign-off.",
@@ -69,7 +69,7 @@ export const CRON_SURFACE_ERA14_CANONICAL_MARKERS = [
   CRON_SURFACE_ERA14_POLICY_ID,
   CRON_SURFACE_POLICY_ID,
   CRON_SURFACE_ERA9_POLICY_ID,
-  "21 production",
+  "22 production",
   "archive/cron-routes",
   "ENABLE_EXPERIMENTAL_CRONS",
 ] as const;

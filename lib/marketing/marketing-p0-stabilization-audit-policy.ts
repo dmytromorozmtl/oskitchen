@@ -53,8 +53,12 @@ function auditMkt03LoiOutreach(root: string): boolean {
 }
 
 function auditMkt04PilotPricing(root: string): boolean {
-  const source = readSurface(root, "app/pricing/page.tsx");
-  return source.includes("PilotPricingSection") && source.includes("Pilot SKUs");
+  const page = readSurface(root, "app/pricing/page.tsx");
+  const section = readSurface(root, "components/marketing/pilot-pricing-section.tsx");
+  return (
+    page.includes("PilotPricingSection") &&
+    (page.includes("Pilot SKUs") || section.includes("Pilot SKUs"))
+  );
 }
 
 function auditMkt05CompetitorComparison(root: string): boolean {

@@ -11,6 +11,7 @@ import {
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT,
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_POLICY_ID,
   LIVE_INTEGRATION_DOD_SMOKE_ERA17_SUMMARY_ARTIFACT,
+  LIVE_INTEGRATION_REGISTRY_LIVE_COUNT,
 } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 import type { LiveIntegrationDodSmokeSummary } from "@/lib/integrations/live-integration-dod-smoke-summary";
 
@@ -56,7 +57,7 @@ export function liveIntegrationDodSmokeWithinPassContract(
     contract.proofStatus === "dod_audit_complete" &&
     contract.scaffoldReadyCount === contract.expectedTotal &&
     contract.expectedTotal === LIVE_INTEGRATION_DOD_SMOKE_ERA17_EXPECTED_BETA_COUNT &&
-    contract.livePromotionCount === 11 &&
+    contract.livePromotionCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT &&
     contract.integrityOverall === "PASSED"
   );
 }
@@ -64,5 +65,8 @@ export function liveIntegrationDodSmokeWithinPassContract(
 export function liveIntegrationDodSmokeHonestNoLiveClaim(
   summary: LiveIntegrationDodSmokeSummary,
 ): boolean {
-  return summary.livePromotionCount === 11 && summary.dod.liveCount === 11;
+  return (
+    summary.livePromotionCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT &&
+    summary.dod.liveCount === LIVE_INTEGRATION_REGISTRY_LIVE_COUNT
+  );
 }

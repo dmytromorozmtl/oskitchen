@@ -14,7 +14,7 @@ Use this doc in decks, discovery calls, and diligence — **never** claim parity
 | Dimension | OS Kitchen (honest) | Toast | Square | Lightspeed |
 |-----------|---------------------|-------|--------|------------|
 | **Reference customers / LOI** | **0 signed** (June 2026) | Thousands | Millions of sellers | Established base |
-| **LIVE third-party integrations** | **0 LIVE** (7 BETA + 1 PLACEHOLDER) | Mature marketplace | Mature app ecosystem | Strong partner network |
+| **LIVE third-party integrations** | **17 LIVE** (7 BETA + 1 PLACEHOLDER) | Mature marketplace | Mature app ecosystem | Strong partner network |
 | **In-person payments / hardware** | Software POS — browser/tablet | **Leader** — terminals + ecosystem | **Leader** — Reader ecosystem | Strong hardware partners |
 | **Unified ops breadth (code)** | **Broad** — order hub, KDS, production, packing, marketplace scaffold | Strong ops stack | POS-first; less kitchen depth | Restaurant + retail variants |
 | **AI modules (engineering)** | **7 proprietary modules shipped** (22/22 tracker) — **unproven in market** | Toast IQ / xtraCHEF (mature narrative) | Square AI features (payments-led) | Analytics + integrations |

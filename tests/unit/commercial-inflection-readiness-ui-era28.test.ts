@@ -7,6 +7,7 @@ import {
   formatCommercialInflectionScorecardLabel,
 } from "@/lib/commercial/commercial-inflection-readiness-ui-era28";
 import { evaluateCommercialInflectionReadiness } from "@/lib/commercial/commercial-inflection-readiness-era28";
+import { LIVE_INTEGRATION_REGISTRY_LIVE_COUNT } from "@/lib/integrations/live-integration-dod-smoke-era17-policy";
 
 describe("commercial-inflection-readiness-ui-era28", () => {
   it("builds blocked slice locally with honest registry LIVE counts", () => {
@@ -15,7 +16,7 @@ describe("commercial-inflection-readiness-ui-era28", () => {
     expect(slice?.policyId).toBe(COMMERCIAL_INFLECTION_READINESS_UI_ERA28_POLICY_ID);
     expect(slice?.milestone).toBe("p0_ops_vault_blocked");
     expect(slice?.p0VaultMissingCount).toBe(11);
-    expect(slice?.integrationRegistryLiveCount).toBe(0);
+    expect(slice?.integrationRegistryLiveCount).toBe(LIVE_INTEGRATION_REGISTRY_LIVE_COUNT);
     expect(slice?.platformOpsHref).toContain("#commercial-inflection-readiness");
     expect(slice?.integrationHealthHref).toContain("#integration-health-commercial-inflection");
   });

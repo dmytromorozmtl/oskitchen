@@ -29,6 +29,22 @@ vi.mock("@/lib/prisma", () => ({
 
 vi.mock("@/lib/scope/workspace-resource-scope", () => ({
   resolveOwnerScopedWhere: vi.fn().mockResolvedValue({ userId: "user-1" }),
+  orderListWhereForOwner: vi.fn().mockResolvedValue({ userId: "user-1" }),
+}));
+
+vi.mock("@/services/ai/digital-twin-data-gate-service", () => ({
+  loadDigitalTwinDataGate: vi.fn().mockResolvedValue({
+    gateStatus: "open",
+    confidenceCap: 1,
+    reasons: [],
+    snapshot: {
+      productionStationCount: 3,
+      activeStaffCount: 2,
+      todayShiftCount: 1,
+      ordersLast30Days: 10,
+      menuMixSynthetic: false,
+    },
+  }),
 }));
 
 describe("digital twin service (integration)", () => {

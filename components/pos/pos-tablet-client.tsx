@@ -13,6 +13,7 @@ import type {
 } from "@/components/dashboard/pos-terminal-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { posTouchCompactClass } from "@/lib/pos/touch-targets";
 import {
   getTabletOrientation,
   posTabletShellClass,
@@ -53,7 +54,7 @@ export function PosTabletClient(props: {
             {POS_TABLET_POS_MIN_TOUCH_PX}px targets
           </Badge>
         </div>
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
+        <Button asChild variant="ghost" size="sm" className={`rounded-full ${posTouchCompactClass}`}>
           <Link href="/dashboard/pos/terminal">Desktop terminal</Link>
         </Button>
       </div>
