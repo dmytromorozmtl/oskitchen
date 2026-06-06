@@ -5896,4 +5896,12 @@ Task: 3 — Remove DEPLOY_SKIP_VITEST from prod pipeline (P0)
 Category: ci
 Result: done — deploy-prebuilt-prod.sh rejects DEPLOY_SKIP_VITEST=1; vitest always runs before build; added .github/workflows/deploy-prod-gate.yml (vitest-deploy-gate job)
 Tests: tests/unit/deploy-prebuilt-prod-gate.test.ts 2/2 pass
+Commit: c1f73d93
+
+---
+Cycle: 20260606-200500
+Task: 4 — Add error.tsx to 20 critical dashboard routes (P0)
+Category: fix
+Result: done — 15 new route error boundaries (RouteError); 5 already present (today, pos/terminal, kitchen, menus, catering)
+Tests: tests/unit/critical-dashboard-error-boundaries.test.ts 2/2 pass
 Commit: pending
