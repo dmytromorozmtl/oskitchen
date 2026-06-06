@@ -5741,3 +5741,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T00:40:00Z | Cycle 93 | Phase 2 ext | Feature 93: Tablet POS era93 wiring cert | PASS — era93 wiring cert 10/10, 44px targets + portrait/landscape + PWA manifest, smoke:pos-tablet-terminal-era93 PASSED
 2026-06-06T00:55:00Z | Cycle 94 | Phase 2 ext | Feature 94: Mobile POS era94 wiring cert | PASS — era94 wiring cert 10/10, swipe-to-add + one-hand checkout + PWA manifest, smoke:pos-mobile-terminal-era94 PASSED
 2026-06-06T01:10:00Z | Cycle 95 | Phase 2 ext | Feature 95: Offline POS era95 wiring cert | PASS — era95 wiring cert 10/10, IndexedDB + PCI encryption + card capture + auto-sync, smoke:pos-offline-queue-era95 PASSED
+2026-06-06T01:25:00Z | Cycle 96 | Phase 2 ext | Feature 96: Handheld POS era96 wiring cert | PASS — era96 wiring cert 9/9, table→cart→fire KDS→tab sync, smoke:pos-handheld-terminal-era96 PASSED
