@@ -5889,3 +5889,11 @@ Result: BLOCKED — SENTRY_DSN not in .env.production.local or Vercel Production
 Delivered: npm run sentry:production:verify gate, post-deploy verify in push script, docs/SENTRY_ALERT_RULES.md §6 error-rate >1% alert
 Human gate: SENTRY_DSN=https://... npm run sentry:production:activate -- --apply --deploy --mirror-public-dsn && npm run sentry:production:verify
 Tests: tests/unit/sentry-production-verify.test.ts 3/3 pass
+
+---
+Cycle: 20260606-200100
+Task: 3 — Remove DEPLOY_SKIP_VITEST from prod pipeline (P0)
+Category: ci
+Result: done — deploy-prebuilt-prod.sh rejects DEPLOY_SKIP_VITEST=1; vitest always runs before build; added .github/workflows/deploy-prod-gate.yml (vitest-deploy-gate job)
+Tests: tests/unit/deploy-prebuilt-prod-gate.test.ts 2/2 pass
+Commit: pending

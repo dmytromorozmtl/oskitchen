@@ -99,11 +99,12 @@ echo "[3/6] OpenAPI manifest + tests..."
 export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=16384}"
 node scripts/generate-openapi-manifest.cjs
 if [[ "${DEPLOY_SKIP_VITEST:-0}" == "1" ]]; then
-  echo "  → skipping vitest (DEPLOY_SKIP_VITEST=1)"
-else
-  echo "  → unit tests (vitest)..."
-  run_with_log_tail 8 node ./node_modules/vitest/vitest.mjs run
+  echo "❌ DEPLOY_SKIP_VITEST=1 is no longer supported — tests must pass before production deploy."
+  echo "   Run: npm test && npm run deploy:prod"
+  exit 1
 fi
+echo "  → unit tests (vitest) — required gate before deploy..."
+run_with_log_tail 8 node ./node_modules/vitest/vitest.mjs run
 echo "  (TypeScript is checked during next build — standalone tsc is too slow on Desktop/iCloud.)"
 
 echo ""

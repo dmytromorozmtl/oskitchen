@@ -1,0 +1,49 @@
+name: Deploy production gate
+
+# Required check before `npm run deploy:prod` — vitest must pass on main/PR.
+# Branch protection: add job "vitest-deploy-gate" as required on main.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vitest-deploy-gate:
+    name: vitest pass (required before deploy:prod)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Unit tests (deploy gate)
+        run: npm test
+
+      - name: Assert DEPLOY_SKIP_VITEST is rejected in deploy script
+        run: |
+          if grep -q 'skipping vitest (DEPLOY_SKIP_VITEST=1)' scripts/deploy-prebuilt-prod.sh; then
+            echo "deploy-prebuilt-prod.sh still allows DEPLOY_SKIP_VITEST skip"
+            exit 1
+          fi
+          if ! grep -q 'DEPLOY_SKIP_VITEST=1 is no longer supported' scripts/deploy-prebuilt-prod.sh; then
+            echo "deploy-prebuilt-prod.sh must reject DEPLOY_SKIP_VITEST=1"
+            exit 1
+          fi
