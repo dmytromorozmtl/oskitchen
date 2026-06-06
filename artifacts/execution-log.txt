@@ -5928,4 +5928,4 @@ Task: 7 — Authed RSC smoke test in CI — 46 dashboard routes (P0)
 Category: test
 Result: done — lib/smoke route list (46) + probe library; scripts/probe-authed-dashboard.ts refactored; npm run smoke:rsc-authed-dashboard; .github/workflows/rsc-smoke.yml (daily + PR path filter)
 Tests: tests/unit/authed-rsc-smoke-policy.test.ts 4/4 pass
-Commit: pending
+Commit: c98c691e
