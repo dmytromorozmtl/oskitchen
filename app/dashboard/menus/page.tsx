@@ -2,6 +2,8 @@ import { endOfDay, startOfDay } from "date-fns";
 
 import { MenuCenter, type MenuCenterRow } from "@/components/dashboard/menu-center";
 import type { MenuBucket } from "@/components/dashboard/menu-center";
+import { EmptyState } from "@/components/dashboard/empty-state";
+import { CalendarRange } from "lucide-react";
 import { findOwnerKitchenSettings } from "@/lib/scope/owner-kitchen-settings";
 import { requireTenantActor } from "@/lib/scope/require-tenant-actor";
 import { parseCollectionStorefrontSettings } from "@/lib/storefront/collection-settings";
@@ -14,6 +16,25 @@ import { prisma } from "@/lib/prisma";
 import { loadStorefrontMediaAssetsForUser } from "@/lib/storefront/load-media-assets-for-user";
 
 export default async function MenusPage() {
+  try {
+    return await MenusPageContent();
+  } catch (error) {
+    console.error("[menus] page render failed", error);
+    return (
+      <EmptyState
+        icon={CalendarRange}
+        title="Menus temporarily unavailable"
+        description="We could not load your menus. Refresh the page or try again in a moment."
+        primaryLabel="Refresh"
+        primaryHref="/dashboard/menus"
+        secondaryLabel="Today"
+        secondaryHref="/dashboard/today"
+      />
+    );
+  }
+}
+
+async function MenusPageContent() {
   const { userId } = await requireTenantActor();
   await ensureCatalogMenu(userId);
 

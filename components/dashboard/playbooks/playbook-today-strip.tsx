@@ -23,20 +23,42 @@ type Props = {
 };
 
 export async function PlaybookTodayStrip({ userId, email, businessMode }: Props) {
-  const scope = { userId, email };
-  const [recommended, activeRuns, kpis] = await Promise.all([
-    recommendedPlaybooksForMode(scope, businessMode),
-    listRuns(scope, { statuses: ["RUNNING", "BLOCKED"], limit: 4 }),
-    getPlaybookKpis(scope),
-  ]);
+  try {
+    const scope = { userId, email };
+    const [recommended, activeRuns, kpis] = await Promise.all([
+      recommendedPlaybooksForMode(scope, businessMode),
+      listRuns(scope, { statuses: ["RUNNING", "BLOCKED"], limit: 4 }),
+      getPlaybookKpis(scope),
+    ]);
 
-  const topPick = recommended[0];
+    const topPick = recommended[0];
 
-  if (!topPick && activeRuns.length === 0) {
+    if (!topPick && activeRuns.length === 0) {
+      return null;
+    }
+
+    return (
+      <PlaybookTodayStripContent
+        topPick={topPick}
+        activeRuns={activeRuns}
+        kpis={kpis}
+      />
+    );
+  } catch (error) {
+    console.error("[PlaybookTodayStrip] render failed", error);
     return null;
   }
+}
 
-  return (
+function PlaybookTodayStripContent({
+  topPick,
+  activeRuns,
+  kpis,
+}: {
+  topPick: Awaited<ReturnType<typeof recommendedPlaybooksForMode>>[number] | undefined;
+  activeRuns: Awaited<ReturnType<typeof listRuns>>;
+  kpis: Awaited<ReturnType<typeof getPlaybookKpis>>;
+}) {
     <Card className="border-border/80 bg-card/90 shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 text-lg">

@@ -19,6 +19,7 @@ import {
 import { resolveOperatorHomePersona } from "@/lib/navigation/operator-home-era18";
 import { showInternalOpsDashboardUi } from "@/lib/ui/customer-facing-dashboard";
 import { emptyTodayCommandCenterPayload } from "@/lib/dashboard/empty-today-command-center";
+import { emptyGettingStartedPayload } from "@/lib/dashboard/empty-getting-started";
 import { safeRequireWorkspacePermissionActor } from "@/lib/permissions/safe-workspace-permission-actor";
 import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { TodayPageLoadError } from "@/components/dashboard/today-page-load-error";
@@ -130,7 +131,10 @@ export default async function TodayOperationsPage({
   const gettingStarted = await loadGettingStartedStatus(
     dataUserId,
     profile?.createdAt ?? new Date(),
-  );
+  ).catch((error) => {
+    console.error("[today] getting started load failed", error);
+    return emptyGettingStartedPayload();
+  });
   let breakthroughEra25 = null;
   if (showPilotOwnerBriefing) {
     try {

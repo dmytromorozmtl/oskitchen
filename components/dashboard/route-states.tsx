@@ -8,6 +8,7 @@ import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { ROUTE_LOADING_MIN_HEIGHT_CLASS } from "@/lib/design/route-loading-patterns";
 import {
+  isRscRenderError,
   isStaleServerActionError,
   reloadForStaleServerAction,
   STALE_SERVER_ACTION_USER_MESSAGE,
@@ -25,6 +26,7 @@ export function RouteError({
   reset: () => void;
 }) {
   const stale = isStaleServerActionError(error);
+  const rscCrash = isRscRenderError(error);
 
   React.useEffect(() => {
     if (stale) reloadForStaleServerAction();
@@ -38,10 +40,12 @@ export function RouteError({
         description={
           stale
             ? STALE_SERVER_ACTION_USER_MESSAGE
-            : error.message || "An unexpected error occurred while loading this page."
+            : rscCrash
+              ? "This page failed to render. Hard-refresh the browser (Cmd+Shift+R) or tap Reload — if it keeps happening, contact support."
+              : error.message || "An unexpected error occurred while loading this page."
         }
-        retryLabel={stale ? "Reload now" : "Try again"}
-        onRetry={stale ? reloadForStaleServerAction : reset}
+        retryLabel={stale || rscCrash ? "Reload page" : "Try again"}
+        onRetry={stale || rscCrash ? reloadForStaleServerAction : reset}
       />
     </div>
   );

@@ -26,10 +26,23 @@ export function LaunchWizardTodayStrip(props: {
   briefingActive?: boolean;
   rolePack?: "owner" | "manager" | "kitchen" | "cashier" | "support_admin" | null;
 }) {
+  try {
+    return <LaunchWizardTodayStripInner {...props} />;
+  } catch (error) {
+    console.error("[LaunchWizardTodayStrip] render failed", error);
+    return null;
+  }
+}
+
+function LaunchWizardTodayStripInner(props: {
+  model: LaunchWizardModel;
+  briefingActive?: boolean;
+  rolePack?: "owner" | "manager" | "kitchen" | "cashier" | "support_admin" | null;
+}) {
   const displayMode: LaunchWizardTodayStripDisplayMode = resolveLaunchWizardTodayStripDisplayMode({
     briefingActive: props.briefingActive ?? false,
     rolePack: props.rolePack ?? null,
-    commercialBlockerCount: props.model.commercialBlockers.blockers.length,
+    commercialBlockerCount: props.model.commercialBlockers?.blockers?.length ?? 0,
   });
   const internalOps = showInternalOpsDashboardUi();
 

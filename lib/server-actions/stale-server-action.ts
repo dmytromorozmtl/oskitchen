@@ -28,3 +28,19 @@ export function reloadForStaleServerAction(): void {
 
 export const STALE_SERVER_ACTION_USER_MESSAGE =
   "The app was updated. Reload the page, then try again.";
+
+const RSC_RENDER_ERROR_PATTERNS = [
+  /An error occurred in the Server Components render/i,
+  /Server Components render/i,
+] as const;
+
+export function isRscRenderError(error: unknown): boolean {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : "";
+  if (!message) return false;
+  return RSC_RENDER_ERROR_PATTERNS.some((re) => re.test(message));
+}
