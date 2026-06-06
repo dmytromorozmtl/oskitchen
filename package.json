@@ -1576,7 +1576,7 @@
     "redis": "^4.7.1",
     "resend": "^4.0.1",
     "sonner": "^1.7.1",
-    "stripe": "^17.5.0",
+    "stripe": "^22.2.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "victory-vendor": "^36.9.2",
