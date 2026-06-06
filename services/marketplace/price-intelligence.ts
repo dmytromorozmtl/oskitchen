@@ -10,9 +10,9 @@ import {
 import {
   mergePriceIntelligenceIntoSettingsCenter,
   priceIntelligenceFromSettingsCenter,
-  type PriceIntelligenceAutoSwitchPolicy,
 } from "@/lib/marketplace/price-intelligence-preferences";
 import type {
+  PriceIntelligenceAutoSwitchPolicy,
   PriceIntelligenceCheapestLeader,
   PriceIntelligenceSnapshot,
   PriceIntelligenceSwitchRecommendation,
