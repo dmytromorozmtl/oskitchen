@@ -5921,3 +5921,11 @@ Category: perf
 Result: done — brand-analytics groupBy; order-hub Promise.allSettled; pos-shift batch txn load; beta cohort batch; export mapWithConcurrency(5); partner-oauth batch app lookup; cron SLA bulk resolve; vendor webhook concurrency 5
 Tests: tests/unit/n-plus-one-p0-fixes.test.ts 10/10 pass; pos-shift + support-engagement pass
 Commit: 158dfcf4
+
+---
+Cycle: 20260606-202000
+Task: 7 — Authed RSC smoke test in CI — 46 dashboard routes (P0)
+Category: test
+Result: done — lib/smoke route list (46) + probe library; scripts/probe-authed-dashboard.ts refactored; npm run smoke:rsc-authed-dashboard; .github/workflows/rsc-smoke.yml (daily + PR path filter)
+Tests: tests/unit/authed-rsc-smoke-policy.test.ts 4/4 pass
+Commit: pending

@@ -1,11 +1,22 @@
 #!/usr/bin/env npx tsx
 /**
- * Authenticated production dashboard probe — detects RSC crash text in HTML.
- * Usage: npx tsx scripts/probe-authed-dashboard.ts [/dashboard/today]
+ * Authenticated production dashboard probe — detects RSC crash text in HTML/flight.
+ *
+ * Usage:
+ *   npm run smoke:rsc-authed-dashboard
+ *   npx tsx scripts/probe-authed-dashboard.ts [/dashboard/today ...]
+ *
+ * Env: SMOKE_BASE_URL (default https://os-kitchen.com), E2E_LOGIN_EMAIL,
+ * E2E_LOGIN_PASSWORD, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { createClient } from "@supabase/supabase-js";
+
+import {
+  resolveAuthedDashboardProbePaths,
+  runAuthedDashboardRscProbe,
+  signInForDashboardProbe,
+} from "@/lib/smoke/probe-authed-dashboard-rsc";
 
 function loadEnv() {
   for (const name of [".env", ".env.local", ".env.e2e.local"]) {
@@ -30,19 +41,10 @@ function loadEnv() {
   }
 }
 
-const RSC_PATTERNS = [
-  /Something went wrong/i,
-  /An error occurred in the Server Components render/i,
-  /Application error: a server-side exception has occurred/i,
-];
-
 async function main() {
   loadEnv();
   const base = (process.env.SMOKE_BASE_URL ?? "https://os-kitchen.com").replace(/\/$/, "");
-  const paths = process.argv.slice(2);
-  const targets = paths.length
-    ? paths
-    : ["/dashboard/today", "/dashboard/menus", "/dashboard/marketplace", "/dashboard/pos/terminal"];
+  const paths = resolveAuthedDashboardProbePaths(process.argv.slice(2));
   const email = process.env.E2E_LOGIN_EMAIL?.trim();
   const password = process.env.E2E_LOGIN_PASSWORD?.trim();
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -53,74 +55,43 @@ async function main() {
     process.exit(1);
   }
 
-  const supabase = createClient(url, anon);
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error || !data.session) {
-    console.error("Login failed:", error?.message ?? "no session");
+  const { cookie } = await signInForDashboardProbe({
+    supabaseUrl: url,
+    supabaseAnonKey: anon,
+    email,
+    password,
+  });
+
+  console.log(`Probing ${paths.length} dashboard routes (document + RSC) against ${base}`);
+  const summary = await runAuthedDashboardRscProbe({ baseUrl: base, cookie, paths });
+
+  for (const result of summary.results) {
+    const label = result.mode === "rsc" ? `${result.path} [RSC]` : result.path;
+    console.log(`\n--- ${label} ---`);
+    console.log(`URL: ${result.url}`);
+    console.log(`Status: ${result.status}`);
+    if (result.ok) {
+      console.log(
+        result.mode === "document"
+          ? "✅ OK — document"
+          : `✅ OK — ${result.bodyBytes} bytes flight`,
+      );
+      continue;
+    }
+    console.error(`❌ ${result.error ?? "failed"}`);
+    if (result.digest) console.error("Digest:", result.digest);
+  }
+
+  console.log(
+    `\nSummary: ${summary.routeCount} routes, ${summary.probeCount} probes, ${summary.failed} failed`,
+  );
+
+  if (summary.failed > 0) {
     process.exit(1);
   }
-
-  const accessToken = data.session.access_token;
-  const refreshToken = data.session.refresh_token;
-  const projectRef = new URL(url).hostname.split(".")[0];
-  const cookie = [
-    `sb-${projectRef}-auth-token=${encodeURIComponent(
-      JSON.stringify({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        expires_at: data.session.expires_at,
-        expires_in: data.session.expires_in,
-        token_type: "bearer",
-        user: data.user,
-      }),
-    )}`,
-  ].join("; ");
-
-  let failed = 0;
-  for (const path of targets) {
-    for (const mode of ["document", "rsc"] as const) {
-      const headers: Record<string, string> = {
-        Cookie: cookie,
-        Accept: mode === "rsc" ? "text/x-component" : "text/html",
-      };
-      if (mode === "rsc") {
-        headers.RSC = "1";
-        headers["Next-Router-Prefetch"] = "1";
-      }
-
-      const res = await fetch(`${base}${path}`, {
-        headers,
-        redirect: "follow",
-      });
-
-      const body = await res.text();
-      const label = mode === "rsc" ? `${path} [RSC]` : path;
-      console.log(`\n--- ${label} ---`);
-      console.log(`URL: ${res.url}`);
-      console.log(`Status: ${res.status}`);
-
-      const hits = RSC_PATTERNS.filter((p) => p.test(body));
-      if (hits.length) {
-        failed++;
-        console.error("❌ RSC failure");
-        const digest = body.match(/"digest":"[^"]+"/)?.[0];
-        if (digest) console.error("Digest:", digest);
-        continue;
-      }
-
-      if (mode === "document") {
-        const title = body.match(/<h1[^>]*>([^<]+)/i)?.[1]?.trim();
-        console.log(`✅ OK — h1=${title ?? "(none)"}`);
-      } else {
-        console.log(`✅ OK — ${body.length} bytes flight`);
-      }
-    }
-  }
-
-  if (failed) process.exit(1);
 }
 
-main().catch((e) => {
-  console.error(e);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });

@@ -61,6 +61,7 @@
     "test:e2e:sprint5": "node scripts/check-e2e-storefront-authed.mjs && playwright test e2e/menu-item-media-authed.spec.ts e2e/sprint5-webhook-authed.spec.ts --project=storefront-authed",
     "test:e2e:sprint5-lifecycle": "node scripts/check-e2e-storefront-authed.mjs && playwright test e2e/sprint5-experiment-lifecycle.spec.ts --project=storefront-authed",
     "smoke:sprint5": "bash scripts/sprint5-smoke.sh",
+    "smoke:rsc-authed-dashboard": "tsx scripts/probe-authed-dashboard.ts",
     "smoke:edge-experiment": "tsx scripts/staging-edge-experiment-smoke.ts",
     "smoke:team-invites": "tsx scripts/smoke-storefront-team-invites.ts",
     "smoke:woo-shopify": "tsx scripts/smoke-woo-shopify-certification.ts",
