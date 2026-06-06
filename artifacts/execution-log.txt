@@ -5743,3 +5743,4 @@ Result: DONE — Poster Gaps 10/10 live on https://os-kitchen.com
 2026-06-06T01:10:00Z | Cycle 95 | Phase 2 ext | Feature 95: Offline POS era95 wiring cert | PASS — era95 wiring cert 10/10, IndexedDB + PCI encryption + card capture + auto-sync, smoke:pos-offline-queue-era95 PASSED
 2026-06-06T01:25:00Z | Cycle 96 | Phase 2 ext | Feature 96: Handheld POS era96 wiring cert | PASS — era96 wiring cert 9/9, table→cart→fire KDS→tab sync, smoke:pos-handheld-terminal-era96 PASSED
 2026-06-06T01:40:00Z | Cycle 97 | Phase 2 ext | Feature 97: POS Hardware Compatibility era97 doc cert | PASS — era97 wiring cert 9/9, Epson/PAX/Star/scanners doc↔catalog, smoke:pos-hardware-compatibility-era97 PASSED
+2026-06-06T01:55:00Z | Cycle 98 | Phase 2 ext | Feature 98: POS Cash Management era98 wiring cert | PASS — era98 wiring cert 10/10, open→count→close→report, smoke:pos-cash-management-era98 PASSED
