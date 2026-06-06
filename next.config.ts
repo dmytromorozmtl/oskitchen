@@ -63,6 +63,12 @@ const nextConfig: NextConfig = {
     remotePatterns: storefrontImageRemotePatterns(),
   },
   experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "recharts",
+      "date-fns",
+      "@radix-ui/react-icons",
+    ],
     serverActions: {
       bodySizeLimit: "4mb",
       // Custom domain + Vercel previews: Origin/Host must match or actions abort (CSRF guard).

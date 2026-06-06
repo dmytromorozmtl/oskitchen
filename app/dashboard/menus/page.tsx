@@ -8,7 +8,7 @@ import { parseCollectionStorefrontSettings } from "@/lib/storefront/collection-s
 import { ensureCatalogMenu } from "@/lib/products/ensure-catalog-menu";
 import {
   menuListWhereForOwnerAnd,
-  orderListWhereForOwnerAnd,
+  orderListWhereForOwner,
 } from "@/lib/scope/workspace-resource-scope";
 import { prisma } from "@/lib/prisma";
 import { loadStorefrontMediaAssetsForUser } from "@/lib/storefront/load-media-assets-for-user";
@@ -35,49 +35,72 @@ export default async function MenusPage() {
   ]);
 
   const now = new Date();
+  const menuIds = menus.map((m) => m.id);
+  const orderCountsByMenuId = new Map<string, number>();
 
-  const rows: MenuCenterRow[] = await Promise.all(
-    menus.map(async (m) => {
-      const orderCount = await prisma.order.count({
-        where: await orderListWhereForOwnerAnd(userId, {
-          orderItems: { some: { product: { menuId: m.id } } },
-        }),
-      });
+  if (menuIds.length > 0) {
+    const orderScope = await orderListWhereForOwner(userId);
+    const orderItems = await prisma.orderItem.findMany({
+      where: {
+        product: { menuId: { in: menuIds } },
+        order: orderScope,
+      },
+      select: {
+        orderId: true,
+        product: { select: { menuId: true } },
+      },
+    });
 
-      const start = startOfDay(m.startDate);
-      const end = endOfDay(m.endDate);
+    const distinctOrdersByMenu = new Map<string, Set<string>>();
+    for (const item of orderItems) {
+      const menuId = item.product?.menuId;
+      if (!menuId) continue;
+      let orders = distinctOrdersByMenu.get(menuId);
+      if (!orders) {
+        orders = new Set();
+        distinctOrdersByMenu.set(menuId, orders);
+      }
+      orders.add(item.orderId);
+    }
+    for (const [menuId, orders] of distinctOrdersByMenu) {
+      orderCountsByMenuId.set(menuId, orders.size);
+    }
+  }
 
-      let status: "active" | "draft" | "closed";
-      if (now > end) status = "closed";
-      else if (m.active) status = "active";
-      else status = "draft";
+  const rows: MenuCenterRow[] = menus.map((m) => {
+    const start = startOfDay(m.startDate);
+    const end = endOfDay(m.endDate);
 
-      let bucket: MenuBucket;
-      if (now > end) bucket = "archived";
-      else if (m.active) bucket = "active";
-      else if (now < start) bucket = "scheduled";
-      else bucket = "draft";
+    let status: "active" | "draft" | "closed";
+    if (now > end) status = "closed";
+    else if (m.active) status = "active";
+    else status = "draft";
 
-      return {
-        id: m.id,
-        title: m.title,
-        strategy: m.strategy,
-        description: m.description,
-        startDate: m.startDate.toISOString(),
-        endDate: m.endDate.toISOString(),
-        preorderDeadline: m.preorderDeadline.toISOString(),
-        active: m.active,
-        published: m.published,
-        productCount: m._count.products,
-        orderCount,
-        status,
-        bucket,
-        storefrontLinked: storefront?.activeMenuId === m.id,
-        collectionSlug: m.collectionSlug,
-        collectionHero: parseCollectionStorefrontSettings(m.storefrontSettingsJson),
-      };
-    }),
-  );
+    let bucket: MenuBucket;
+    if (now > end) bucket = "archived";
+    else if (m.active) bucket = "active";
+    else if (now < start) bucket = "scheduled";
+    else bucket = "draft";
+
+    return {
+      id: m.id,
+      title: m.title,
+      strategy: m.strategy,
+      description: m.description,
+      startDate: m.startDate.toISOString(),
+      endDate: m.endDate.toISOString(),
+      preorderDeadline: m.preorderDeadline.toISOString(),
+      active: m.active,
+      published: m.published,
+      productCount: m._count.products,
+      orderCount: orderCountsByMenuId.get(m.id) ?? 0,
+      status,
+      bucket,
+      storefrontLinked: storefront?.activeMenuId === m.id,
+      collectionSlug: m.collectionSlug,
+      collectionHero: parseCollectionStorefrontSettings(m.storefrontSettingsJson),
+    };
+  });
 
   const mediaAssets = await loadStorefrontMediaAssetsForUser(userId);
 
