@@ -253,6 +253,7 @@ export async function provisionVirtualBrand(
               allergens: product.allergens,
               ingredients: product.ingredients,
               portionSize: product.portionSize,
+              preparedDate: product.preparedDate,
               active: true,
               price: product.price,
               image: product.image,
