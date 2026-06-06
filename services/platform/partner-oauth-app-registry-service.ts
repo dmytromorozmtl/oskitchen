@@ -65,11 +65,33 @@ export async function listMergedPartnerOAuthAppDefinitions(): Promise<PartnerOAu
 export async function getMergedPartnerOAuthAppByClientId(
   clientId: string,
 ): Promise<PartnerOAuthAppDefinition | null> {
-  const dbRow = await prisma.partnerOAuthAppRegistry.findUnique({
-    where: { clientId },
+  const apps = await getMergedPartnerOAuthAppsByClientIds([clientId]);
+  return apps.get(clientId) ?? null;
+}
+
+export async function getMergedPartnerOAuthAppsByClientIds(
+  clientIds: readonly string[],
+): Promise<Map<string, PartnerOAuthAppDefinition>> {
+  const uniqueIds = [...new Set(clientIds.map((id) => id.trim()).filter(Boolean))];
+  const byClientId = new Map<string, PartnerOAuthAppDefinition>();
+  if (uniqueIds.length === 0) {
+    return byClientId;
+  }
+
+  const dbRows = await prisma.partnerOAuthAppRegistry.findMany({
+    where: { clientId: { in: uniqueIds } },
   });
-  if (dbRow) return rowToDefinition(dbRow);
-  return getConfigAppByClientId(clientId);
+  for (const row of dbRows) {
+    byClientId.set(row.clientId, rowToDefinition(row));
+  }
+  for (const clientId of uniqueIds) {
+    if (byClientId.has(clientId)) continue;
+    const configApp = getConfigAppByClientId(clientId);
+    if (configApp) {
+      byClientId.set(clientId, configApp);
+    }
+  }
+  return byClientId;
 }
 
 export function isPartnerOAuthAppInstallable(status: PartnerOAuthAppStatus): boolean {

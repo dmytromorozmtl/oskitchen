@@ -13,8 +13,12 @@ import { getProductionCronOpsMetadata } from "@/services/cron/cron-ops-catalog";
 import { pageCronEscalationEvent } from "@/services/cron/cron-escalation-paging";
 import { resolveCronEscalationAssignment } from "@/services/cron/cron-escalation-routing";
 import { PLATFORM_OPEN_TICKET_STATUSES } from "@/services/platform/platform-service";
+import { addMinutes } from "@/lib/support/support-sla";
 import {
-  computeSupportTicketFirstResponseDueAt,
+  loadActiveSlaPolicyRows,
+  resolveSlaFirstResponseMinutesFromPolicies,
+} from "@/services/support/sla-service";
+import {
   deriveSupportEscalationEngagementState,
   type SupportEscalationEngagementState,
 } from "@/services/support/support-engagement-service";
@@ -341,26 +345,24 @@ async function loadAutoEscalationSupportState(
     },
   })) as AutoEscalationSupportTicketRow[];
   const supportTicketById = new Map(supportTickets.map((ticket) => [ticket.id, ticket]));
-  const firstResponseDueAtEntries = await Promise.all(
-    supportTickets.map(async (ticket) => {
-      if (!PLATFORM_OPEN_TICKET_STATUSES.includes(ticket.status)) {
-        return [ticket.id, null] as const;
-      }
-      return [
-        ticket.id,
-        await computeSupportTicketFirstResponseDueAt({
-          createdAt: ticket.createdAt,
-          workspaceId: ticket.workspaceId,
-          priority: ticket.priority,
-          category: ticket.category,
-        }),
-      ] as const;
-    }),
-  );
+  const slaPolicies = await loadActiveSlaPolicyRows();
+  const firstResponseDueAtByTicketId = new Map<string, Date | null>();
+  for (const ticket of supportTickets) {
+    if (!PLATFORM_OPEN_TICKET_STATUSES.includes(ticket.status)) {
+      firstResponseDueAtByTicketId.set(ticket.id, null);
+      continue;
+    }
+    const minutes = resolveSlaFirstResponseMinutesFromPolicies(slaPolicies, {
+      workspaceId: ticket.workspaceId,
+      priority: ticket.priority,
+      category: ticket.category,
+    });
+    firstResponseDueAtByTicketId.set(ticket.id, addMinutes(ticket.createdAt, minutes));
+  }
 
   return {
     supportTicketById,
-    firstResponseDueAtByTicketId: new Map(firstResponseDueAtEntries),
+    firstResponseDueAtByTicketId,
   };
 }
 

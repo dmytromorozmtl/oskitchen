@@ -173,28 +173,47 @@ export async function listOpenShiftCloseoutPreviews(
     include: { register: { select: { name: true } } },
   });
 
-  return Promise.all(
-    openShifts.map(async (shift) => {
-      const { cashSalesTotals, cashTransactionCount } = await loadShiftCashSales(userId, {
-        id: shift.id,
-        registerId: shift.registerId,
-      });
-      const closeout = computeShiftCloseout({
-        openingCash: Number(shift.openingCashAmount),
-        cashSalesTotals,
-        closingCash: 0,
-      });
-      return {
-        shiftId: shift.id,
-        registerName: shift.register.name,
-        openedAtIso: shift.openedAt.toISOString(),
-        openingCash: Number(shift.openingCashAmount),
-        cashSalesTotal: closeout.cashSalesTotal,
-        expectedCash: closeout.expectedCash,
-        cashTransactionCount,
-      };
-    }),
-  );
+  if (openShifts.length === 0) {
+    return [];
+  }
+
+  const shiftIds = openShifts.map((shift) => shift.id);
+  const registerIds = [...new Set(openShifts.map((shift) => shift.registerId))];
+  const txnWhere = (await ownerScopedAnd(userId, {
+    registerId: { in: registerIds },
+    shiftId: { in: shiftIds },
+    paymentMode: "CASH",
+    status: "COMPLETED",
+  })) as Prisma.POSTransactionWhereInput;
+  const cashRows = await prisma.pOSTransaction.findMany({
+    where: txnWhere,
+    select: { shiftId: true, total: true },
+  });
+
+  const cashByShiftId = new Map<string, number[]>();
+  for (const row of cashRows) {
+    const totals = cashByShiftId.get(row.shiftId) ?? [];
+    totals.push(Number(row.total));
+    cashByShiftId.set(row.shiftId, totals);
+  }
+
+  return openShifts.map((shift) => {
+    const cashSalesTotals = cashByShiftId.get(shift.id) ?? [];
+    const closeout = computeShiftCloseout({
+      openingCash: Number(shift.openingCashAmount),
+      cashSalesTotals,
+      closingCash: 0,
+    });
+    return {
+      shiftId: shift.id,
+      registerName: shift.register.name,
+      openedAtIso: shift.openedAt.toISOString(),
+      openingCash: Number(shift.openingCashAmount),
+      cashSalesTotal: closeout.cashSalesTotal,
+      expectedCash: closeout.expectedCash,
+      cashTransactionCount: cashSalesTotals.length,
+    };
+  });
 }
 
 /** Server-side variance for close validation — same math as closePosShift. */

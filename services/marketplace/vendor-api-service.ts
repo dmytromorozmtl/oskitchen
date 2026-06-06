@@ -7,6 +7,7 @@ import {
   type VendorWebhookEvent,
 } from "@/lib/marketplace/vendor-api-types";
 import { parseVendorCabinetSettings, type VendorWebhookConfig } from "@/lib/marketplace/vendor-settings-types";
+import { mapWithConcurrency } from "@/lib/async/map-with-concurrency";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
 import {
@@ -110,32 +111,33 @@ export async function dispatchVendorWebhookEvent(input: {
   };
   const body = JSON.stringify(payload);
 
+  const deliveryResults = await mapWithConcurrency(hooks, 5, async (hook) => {
+    try {
+      const signature = signPayload(hook.secretHash!, body);
+      const response = await fetch(hook.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-KitchenOS-Event": input.event,
+          "X-KitchenOS-Signature": signature,
+          "User-Agent": "KitchenOS-VendorWebhook/1.0",
+        },
+        body,
+        signal: AbortSignal.timeout(10_000),
+      });
+      return response.ok;
+    } catch (error) {
+      logger.warn("[vendor-api] webhook delivery failed", { hookId: hook.id, error });
+      return false;
+    }
+  });
+
   let delivered = 0;
   let failed = 0;
-
-  await Promise.all(
-    hooks.map(async (hook) => {
-      try {
-        const signature = signPayload(hook.secretHash!, body);
-        const response = await fetch(hook.url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-KitchenOS-Event": input.event,
-            "X-KitchenOS-Signature": signature,
-            "User-Agent": "KitchenOS-VendorWebhook/1.0",
-          },
-          body,
-          signal: AbortSignal.timeout(10_000),
-        });
-        if (response.ok) delivered += 1;
-        else failed += 1;
-      } catch (error) {
-        failed += 1;
-        logger.warn("[vendor-api] webhook delivery failed", { hookId: hook.id, error });
-      }
-    }),
-  );
+  for (const ok of deliveryResults) {
+    if (ok) delivered += 1;
+    else failed += 1;
+  }
 
   return { delivered, failed };
 }

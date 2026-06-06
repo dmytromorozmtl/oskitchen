@@ -155,8 +155,8 @@ describe("pos-shift-service", () => {
       register: { id: "reg-1" },
     } as never);
     vi.mocked(prisma.pOSTransaction.findMany).mockResolvedValue([
-      { total: new Prisma.Decimal(20) },
-      { total: new Prisma.Decimal(10) },
+      { shiftId: "shift-1", total: new Prisma.Decimal(20) },
+      { shiftId: "shift-1", total: new Prisma.Decimal(10) },
     ] as never);
     vi.mocked(prisma.pOSShift.update).mockResolvedValue({
       id: "shift-1",
@@ -248,8 +248,8 @@ describe("pos-shift-service", () => {
       },
     ] as never);
     vi.mocked(prisma.pOSTransaction.findMany).mockResolvedValue([
-      { total: new Prisma.Decimal(20) },
-      { total: new Prisma.Decimal(10) },
+      { shiftId: "shift-1", total: new Prisma.Decimal(20) },
+      { shiftId: "shift-1", total: new Prisma.Decimal(10) },
     ] as never);
 
     const previews = await listOpenShiftCloseoutPreviews("owner-1");
@@ -275,8 +275,8 @@ describe("pos-shift-service", () => {
       openingCashAmount: new Prisma.Decimal(50),
     } as never);
     vi.mocked(prisma.pOSTransaction.findMany).mockResolvedValue([
-      { total: new Prisma.Decimal(20) },
-      { total: new Prisma.Decimal(10) },
+      { shiftId: "shift-1", total: new Prisma.Decimal(20) },
+      { shiftId: "shift-1", total: new Prisma.Decimal(10) },
     ] as never);
 
     const result = await getShiftCloseoutVariance("owner-1", "shift-1", 75);

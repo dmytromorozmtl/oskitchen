@@ -5,7 +5,7 @@
   "3-remove-deploy-skip-vitest": "done",
   "4-add-error-tsx-top-20": "done",
   "5-suspense-wrap-today": "done",
-  "6-fix-n-plus-one-8": "pending",
+  "6-fix-n-plus-one-8": "done",
   "7-authed-rsc-smoke-ci": "pending",
   "8-rate-limit-192-routes": "pending",
   "9-eslint-aschild-guard": "pending",

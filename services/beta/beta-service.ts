@@ -263,22 +263,33 @@ export async function getBetaOperationsSnapshot(): Promise<BetaOperationsSnapsho
       where: { programStage: "CHURNED", betaCohortId: { not: null } },
       _count: { _all: true },
     });
-    const churnByCohort = await Promise.all(
-      churnRows.map(async (row) => {
-        const cohort = await prisma.betaCohort.findUnique({
-          where: { id: row.betaCohortId! },
-          select: { name: true },
-        });
-        const members = await prisma.betaLead.count({
-          where: { betaCohortId: row.betaCohortId },
-        });
-        return {
-          cohortName: cohort?.name ?? "Cohort",
-          churned: row._count._all,
-          members,
-        };
-      }),
+    const cohortIds = churnRows
+      .map((row) => row.betaCohortId)
+      .filter((id): id is string => id != null);
+    const [cohortRowsById, memberCountsByCohort] = await Promise.all([
+      cohortIds.length > 0
+        ? prisma.betaCohort.findMany({
+            where: { id: { in: cohortIds } },
+            select: { id: true, name: true },
+          })
+        : Promise.resolve([]),
+      cohortIds.length > 0
+        ? prisma.betaLead.groupBy({
+            by: ["betaCohortId"],
+            where: { betaCohortId: { in: cohortIds } },
+            _count: { _all: true },
+          })
+        : Promise.resolve([]),
+    ]);
+    const cohortNameById = new Map(cohortRowsById.map((cohort) => [cohort.id, cohort.name]));
+    const membersByCohortId = new Map(
+      memberCountsByCohort.map((row) => [row.betaCohortId, row._count._all]),
     );
+    const churnByCohort = churnRows.map((row) => ({
+      cohortName: cohortNameById.get(row.betaCohortId!) ?? "Cohort",
+      churned: row._count._all,
+      members: membersByCohortId.get(row.betaCohortId!) ?? 0,
+    }));
 
     const feats = await prisma.betaLead.findMany({
       select: { interestedFeatures: true },

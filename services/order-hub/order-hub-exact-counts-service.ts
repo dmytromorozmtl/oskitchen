@@ -239,7 +239,7 @@ export async function loadOrderHubExactTabCounts(userId: string): Promise<OrderH
     capped: triageRows.length === INTERNAL_TRIAGE_SCAN_CAP,
   };
 
-  return Promise.all(
+  const tabResults = await Promise.allSettled(
     ORDER_HUB_TABS.map(async (tab) => {
       const [intR, ext] = await Promise.all([
         countInternal(userId, tab.id, triageCache),
@@ -255,4 +255,19 @@ export async function loadOrderHubExactTabCounts(userId: string): Promise<OrderH
       } satisfies OrderHubExactTabCount;
     }),
   );
+
+  return tabResults.map((result, index) => {
+    if (result.status === "fulfilled") {
+      return result.value;
+    }
+    console.error("[order-hub] exact tab count failed", ORDER_HUB_TABS[index]?.id, result.reason);
+    const tab = ORDER_HUB_TABS[index]!;
+    return {
+      id: tab.id,
+      label: tab.label,
+      internal: 0,
+      external: 0,
+      total: 0,
+    } satisfies OrderHubExactTabCount;
+  });
 }

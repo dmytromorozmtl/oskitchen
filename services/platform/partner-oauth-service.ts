@@ -13,6 +13,7 @@ import {
 } from "@/lib/developer/partner-oauth-scopes";
 import {
   getMergedPartnerOAuthAppByClientId,
+  getMergedPartnerOAuthAppsByClientIds,
   isPartnerOAuthAppInstallable,
 } from "@/services/platform/partner-oauth-app-registry-service";
 import {
@@ -291,23 +292,23 @@ export async function listPartnerAppInstallationsForOwner(
     orderBy: { installedAt: "desc" },
   });
 
-  return Promise.all(
-    rows.map(async (row) => {
-      const app = await getMergedPartnerOAuthAppByClientId(row.clientId);
-      return {
-        id: row.id,
-        clientId: row.clientId,
-        appName: app?.name ?? row.clientId,
-        publisher: app?.publisher ?? "Unknown publisher",
-        scopesGranted: row.scopesGranted as PartnerOAuthScope[],
-        status: row.status,
-        tokenPrefix: row.tokenPrefix,
-        installedAt: row.installedAt,
-        lastUsedAt: row.lastUsedAt,
-        embedUrl: app?.embedUrl ?? null,
-      };
-    }),
-  );
+  const appsByClientId = await getMergedPartnerOAuthAppsByClientIds(rows.map((row) => row.clientId));
+
+  return rows.map((row) => {
+    const app = appsByClientId.get(row.clientId);
+    return {
+      id: row.id,
+      clientId: row.clientId,
+      appName: app?.name ?? row.clientId,
+      publisher: app?.publisher ?? "Unknown publisher",
+      scopesGranted: row.scopesGranted as PartnerOAuthScope[],
+      status: row.status,
+      tokenPrefix: row.tokenPrefix,
+      installedAt: row.installedAt,
+      lastUsedAt: row.lastUsedAt,
+      embedUrl: app?.embedUrl ?? null,
+    };
+  });
 }
 
 export async function revokePartnerAppInstallation(input: {

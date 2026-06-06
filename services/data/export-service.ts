@@ -7,6 +7,7 @@ import {
   DATA_EXPORT_LANE_DOMAINS,
 } from "@/lib/data/export-builders";
 import type { DataPortabilitySnapshot } from "@/lib/data/export-types";
+import { mapWithConcurrency } from "@/lib/async/map-with-concurrency";
 import { resolveVisibleExportTypes } from "@/lib/import-export/export-page-access";
 import type { ExportType } from "@/lib/import-export/export-types";
 import { prisma } from "@/lib/prisma";
@@ -139,11 +140,15 @@ export async function loadDataPortabilitySnapshot(input: {
       where: { id: input.userId },
       select: { companyName: true },
     }),
-    Promise.all(
-      (Object.values(DATA_EXPORT_LANE_DOMAINS).flat() as ExportType[]).map(async (type) => ({
-        type,
-        rowCount: await countExportDomainRows(input.userId, type),
-      })),
+    Promise.resolve(
+      mapWithConcurrency(
+        Object.values(DATA_EXPORT_LANE_DOMAINS).flat() as ExportType[],
+        5,
+        async (type) => ({
+          type,
+          rowCount: await countExportDomainRows(input.userId, type),
+        }),
+      ),
     ),
   ]);
 

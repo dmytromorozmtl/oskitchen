@@ -7,6 +7,64 @@ import {
   addMinutes,
 } from "@/lib/support/support-sla";
 
+type SlaPolicyMatchRow = {
+  workspaceId: string | null;
+  priority: SupportTicketPriority | null;
+  category: SupportTicketCategory | null;
+  firstResponseMinutes: number;
+  resolutionMinutes: number;
+};
+
+function scoreSlaPolicyMatch(
+  row: Pick<SlaPolicyMatchRow, "workspaceId" | "priority" | "category">,
+  params: {
+    workspaceId: string | null;
+    priority: SupportTicketPriority;
+    category: SupportTicketCategory;
+  },
+): number {
+  let score = 0;
+  if (row.workspaceId) score += 4;
+  if (row.priority === params.priority) score += 2;
+  if (row.category === params.category) score += 1;
+  return score;
+}
+
+export function resolveSlaFirstResponseMinutesFromPolicies(
+  rows: readonly SlaPolicyMatchRow[],
+  params: {
+    workspaceId: string | null;
+    priority: SupportTicketPriority;
+    category: SupportTicketCategory;
+  },
+): number {
+  let best = rows[0];
+  let bestScore = -1;
+  for (const row of rows) {
+    if (row.workspaceId != null && row.workspaceId !== params.workspaceId) continue;
+    const score = scoreSlaPolicyMatch(row, params);
+    if (score > bestScore) {
+      bestScore = score;
+      best = row;
+    }
+  }
+  if (best && bestScore > 0) return best.firstResponseMinutes;
+  return DEFAULT_FIRST_RESPONSE_SLA_MINUTES[params.priority];
+}
+
+export async function loadActiveSlaPolicyRows(): Promise<SlaPolicyMatchRow[]> {
+  return prisma.supportSlaPolicy.findMany({
+    where: { active: true },
+    select: {
+      workspaceId: true,
+      priority: true,
+      category: true,
+      firstResponseMinutes: true,
+      resolutionMinutes: true,
+    },
+  });
+}
+
 export async function resolveSlaResolutionMinutes(params: {
   workspaceId: string | null;
   priority: SupportTicketPriority;
@@ -18,17 +76,10 @@ export async function resolveSlaResolutionMinutes(params: {
       OR: [{ workspaceId: null }, ...(params.workspaceId ? [{ workspaceId: params.workspaceId }] : [])],
     },
   });
-  const score = (r: { workspaceId: string | null; priority: SupportTicketPriority | null; category: SupportTicketCategory | null }) => {
-    let s = 0;
-    if (r.workspaceId) s += 4;
-    if (r.priority === params.priority) s += 2;
-    if (r.category === params.category) s += 1;
-    return s;
-  };
   let best = rows[0];
   let bestScore = -1;
   for (const r of rows) {
-    const sc = score(r);
+    const sc = scoreSlaPolicyMatch(r, params);
     if (sc > bestScore) {
       bestScore = sc;
       best = r;
@@ -43,30 +94,8 @@ export async function resolveSlaFirstResponseMinutes(params: {
   priority: SupportTicketPriority;
   category: SupportTicketCategory;
 }): Promise<number> {
-  const rows = await prisma.supportSlaPolicy.findMany({
-    where: {
-      active: true,
-      OR: [{ workspaceId: null }, ...(params.workspaceId ? [{ workspaceId: params.workspaceId }] : [])],
-    },
-  });
-  const score = (r: { workspaceId: string | null; priority: SupportTicketPriority | null; category: SupportTicketCategory | null }) => {
-    let s = 0;
-    if (r.workspaceId) s += 4;
-    if (r.priority === params.priority) s += 2;
-    if (r.category === params.category) s += 1;
-    return s;
-  };
-  let best = rows[0];
-  let bestScore = -1;
-  for (const r of rows) {
-    const sc = score(r);
-    if (sc > bestScore) {
-      bestScore = sc;
-      best = r;
-    }
-  }
-  if (best && bestScore > 0) return best.firstResponseMinutes;
-  return DEFAULT_FIRST_RESPONSE_SLA_MINUTES[params.priority];
+  const rows = await loadActiveSlaPolicyRows();
+  return resolveSlaFirstResponseMinutesFromPolicies(rows, params);
 }
 
 export async function computeSlaDueAt(params: {
