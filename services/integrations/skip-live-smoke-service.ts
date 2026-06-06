@@ -1,8 +1,8 @@
 import type { PrismaClient } from "@prisma/client";
 
-import { isPlaceholderSkipMerchantId } from "@/lib/integrations/skip-live-smoke-summary";
+import { isPlaceholderSkipRestaurantId } from "@/lib/integrations/skip-live-smoke-summary";
 
-export { isPlaceholderSkipMerchantId };
+export { isPlaceholderSkipRestaurantId };
 
 export async function waitForKitchenImport(input: {
   prisma: PrismaClient;
