@@ -51,7 +51,7 @@ async function loadRecentReorderForLane(
 ): Promise<SupplierOneClickReorder | null> {
   if (categoryIds.length === 0) return null;
 
-  const line = await prisma.marketplacePurchaseOrderItem.findFirst({
+  const line = await prisma.marketplacePOLineItem.findFirst({
     where: {
       purchaseOrder: {
         workspaceId,
