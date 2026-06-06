@@ -184,4 +184,5 @@ npm run smoke:pilot-metrics-baseline
 | [`pilot-week1-checklist.md`](./pilot-week1-checklist.md) | Week 1 execution template |
 | [`pilot-metrics-baseline-era17.md`](./pilot-metrics-baseline-era17.md) | Full six-KPI baseline (Week 2+) |
 | [`PILOT_FEEDBACK_TEMPLATE.md`](./PILOT_FEEDBACK_TEMPLATE.md) | Operator survey |
-| [`case-study-template.md`](./case-study-template.md) | Next: case study after Gate C (cycle 75) |
+| [`case-study-1.md`](./case-study-1.md) | First case study — Riverbend internal draft (era75) |
+| [`case-study-template.md`](./case-study-template.md) | Master template (MKT-11) |

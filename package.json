@@ -361,6 +361,8 @@
     "test:ci:loi-signed-era73:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/loi-signed-era73.test.ts",
     "test:ci:pilot-week1-report-era74": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-report-era74.test.ts tests/unit/pilot-week1-execution-orchestrator.test.ts",
     "test:ci:pilot-week1-report-era74:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-report-era74.test.ts",
+    "test:ci:case-study-1-era75": "node ./node_modules/vitest/vitest.mjs run tests/unit/case-study-1-era75.test.ts tests/unit/case-study-template-policy.test.ts",
+    "test:ci:case-study-1-era75:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/case-study-1-era75.test.ts",
     "predeploy:verify": "bash scripts/predeploy-verify.sh",
     "test:e2e:workspace-smoke": "playwright test e2e/workspace-post-not-null-smoke.spec.ts e2e/smoke.spec.ts e2e/ci-smoke.spec.ts --project=setup --project=chromium-authed",
     "e2e:bootstrap": "tsx scripts/bootstrap-e2e-credentials.ts",
