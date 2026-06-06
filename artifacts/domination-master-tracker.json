@@ -1,4 +1,12 @@
 {
+  "_meta": {
+    "overall": "COMPLETE",
+    "completedAt": "2026-06-06T20:30:00Z",
+    "featuresTotal": 200,
+    "featuresDone": 200,
+    "liveIntegrationsTarget": 18,
+    "cyclesCompleted": 201
+  },
   "1": "done",
   "2": "done",
   "3": "done",
