@@ -25,19 +25,18 @@ export async function fetchOpenTableAvailability(input: {
     throw new Error(`OpenTable availability failed (${res.status})`);
   }
 
+  type RawSlot = {
+    time?: string;
+    scheduled_time?: string;
+    open?: boolean;
+    available?: boolean;
+    tables_available?: number;
+    tables?: number;
+  };
+
   const json = (await res.json()) as {
-    slots?: Array<{
-      time?: string;
-      scheduled_time?: string;
-      open?: boolean;
-      available?: boolean;
-      tables_available?: number;
-    }>;
-    availability?: Array<{
-      time?: string;
-      open?: boolean;
-      tables?: number;
-    }>;
+    slots?: RawSlot[];
+    availability?: RawSlot[];
   };
 
   const raw = json.slots ?? json.availability ?? [];
