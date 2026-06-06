@@ -95,7 +95,8 @@ export async function loadMealPrepOsDashboard(workspaceId: string) {
   const upcomingCycles: UpcomingCycleRow[] = cycles.map((cycle) => ({
     cycleId: cycle.id,
     planName: cycle.mealPlan.name,
-    customerName: cycle.mealPlan.customer.displayName ?? cycle.mealPlan.customer.name,
+    customerName:
+      cycle.mealPlan.customer.displayName ?? cycle.mealPlan.customer.name ?? "",
     cycleStartIso: cycle.cycleStartDate.toISOString().slice(0, 10),
     status: cycle.status,
     mealsPlanned: cycle.mealsPlanned,
