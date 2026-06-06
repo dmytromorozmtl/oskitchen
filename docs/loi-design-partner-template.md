@@ -199,7 +199,8 @@ Runbooks: [`PILOT_ONBOARDING_RUNBOOK.md`](./PILOT_ONBOARDING_RUNBOOK.md) · [`co
 ## After signature — internal updates
 
 1. Store countersigned PDF in customer evidence folder (not in git if PII).
-2. Update GO/NO-GO inputs:
+2. Record signed LOI in [`loi-signed.md`](./loi-signed.md) (era73-first-loi-signed-v1).
+3. Update GO/NO-GO inputs:
    - Set `customerName` and `loiSignedDate` in evidence pack / env for `npm run smoke:pilot-gono-go`.
    - Re-run `npm run cert:commercial-pilot-evidence-era16` if staging credentials are available.
 3. Record in CRM: design partner stage → **LOI signed**.
