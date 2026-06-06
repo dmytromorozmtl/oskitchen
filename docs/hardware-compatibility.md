@@ -121,7 +121,7 @@ Pair at **Settings → Payment hardware** (`/dashboard/settings/hardware`). Full
 | Device | Status | Notes |
 | --- | --- | --- |
 | Cash drawer (printer kick) | placeholder | Requires ESC/POS pulse — not wired; use manual drawer until adapter ships. |
-| Customer-facing display | placeholder | Secondary monitor / casting planned; see POS customer display roadmap. |
+| Customer-facing display | supported | Second monitor at `/dashboard/pos/terminal/customer-display` — F8 toggle; live cart via BroadcastChannel. |
 
 ---
 
