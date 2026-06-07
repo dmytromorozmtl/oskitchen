@@ -1,5 +1,10 @@
-import { RouteLoadingSimple } from "@/components/dashboard/route-states";
+import { POSSkeleton } from "@/components/dashboard/pos-skeleton";
+import { PageShell } from "@/components/layout/page-shell";
 
 export default function Loading() {
-  return <RouteLoadingSimple />;
+  return (
+    <PageShell>
+      <POSSkeleton />
+    </PageShell>
+  );
 }

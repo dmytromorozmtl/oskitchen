@@ -6035,3 +6035,11 @@ Category: test
 Result: done — 429 + Retry-After + X-RateLimit-* + user message audits; middleware mutation gate; 503 when backend unavailable
 Tests: tests/unit/rate-limit-response.test.ts + rate-limit-facade + api-mutation-rate-limit 20/20 pass
 Commit: 0b0cd3e6
+
+---
+Cycle: 20260606-214000
+Task: 21 — Skeleton screens for async pages (P1)
+Category: feat
+Result: done — MarketplaceSkeleton, POSSkeleton, KDSSkeleton (+ existing TodaySkeleton); pulse + dark mode tokens; wired to marketplace/pos/kitchen loading.tsx
+Tests: tests/unit/async-page-skeletons.test.ts + loading-skeleton-audit 13/13 pass
+Commit: pending

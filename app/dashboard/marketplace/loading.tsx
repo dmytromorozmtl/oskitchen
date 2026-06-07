@@ -1,10 +1,10 @@
-import { KDSSkeleton } from "@/components/dashboard/kds-skeleton";
+import { MarketplaceSkeleton } from "@/components/dashboard/marketplace-skeleton";
 import { PageShell } from "@/components/layout/page-shell";
 
 export default function Loading() {
   return (
     <PageShell>
-      <KDSSkeleton />
+      <MarketplaceSkeleton />
     </PageShell>
   );
 }
