@@ -6523,3 +6523,11 @@ Category: feat
 Result: done — /commission-comparison calculator; marketplace vs own-channel; shared delivery benchmark rates; embedded on /pricing; policy + audit
 Tests: npm run test:ci:commission-comparison-calculator:cert 6/6 pass
 Commit: aba09d46
+
+---
+Cycle: 20260606-221900
+Task: 82 — "Own your channel" upsell flow (P2)
+Category: feat
+Result: done — /own-your-channel 3-step flow (assess → compare → launch); dashboard strip on delivery-commissions; wired from commission calculator; policy + audit
+Tests: npm run test:ci:own-your-channel-upsell:cert 4/4 pass
+Commit: aa858eca
