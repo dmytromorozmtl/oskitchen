@@ -6554,4 +6554,4 @@ Task: 85 — Product Hunt launch prep (P2)
 Category: docs
 Result: done — docs/product-hunt-launch-prep.md (T-30→T+7 timeline, assets, runbook, HG1–HG10); artifacts/product-hunt-launch/ archive; wired from defer doc; policy + audit
 Tests: npm run test:ci:product-hunt-launch-prep:cert 4/4 pass
-Commit: pending
+Commit: 8f784196
