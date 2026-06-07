@@ -128,10 +128,14 @@ export default withSentryConfig(configWithAnalyzer, {
   authToken: process.env.SENTRY_AUTH_TOKEN,
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  reactComponentAnnotation: { enabled: true },
   tunnelRoute: "/monitoring",
-  disableLogger: true,
-  automaticVercelMonitors: true,
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+    automaticVercelMonitors: true,
+    reactComponentAnnotation: { enabled: true },
+  },
   sourcemaps: {
     disable: !process.env.SENTRY_AUTH_TOKEN,
   },

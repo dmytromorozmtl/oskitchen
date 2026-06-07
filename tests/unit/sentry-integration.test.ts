@@ -35,7 +35,11 @@ describe("Sentry integration wiring", () => {
     expect(nextConfig).toContain("withSentryConfig");
     expect(nextConfig).toContain("os-kitchen");
     expect(nextConfig).toContain('tunnelRoute: "/monitoring"');
-    expect(nextConfig).toContain("automaticVercelMonitors");
+    expect(nextConfig).not.toContain("disableLogger");
+    expect(nextConfig).toContain("webpack:");
+    expect(nextConfig).toContain("removeDebugLogging: true");
+    expect(nextConfig).toContain("automaticVercelMonitors: true");
+    expect(nextConfig).toContain("reactComponentAnnotation: { enabled: true }");
     expect(nextConfig).toContain("SENTRY_AUTH_TOKEN");
   });
 

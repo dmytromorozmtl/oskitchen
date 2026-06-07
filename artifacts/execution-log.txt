@@ -5961,3 +5961,11 @@ Category: chore
 Result: done — prisma.config.ts (schema, migrations path, seed tsx prisma/seed.ts); removed deprecated package.json#prisma; prisma validate/generate load config without deprecation warning
 Tests: tests/unit/prisma-config.test.ts 1/1 pass
 Commit: cf2cc5ab
+
+---
+Cycle: 20260606-204500
+Task: 12 — Remove deprecated Sentry options (P1)
+Category: fix
+Result: done — migrated withSentryConfig options to webpack.treeshake.removeDebugLogging, webpack.automaticVercelMonitors, webpack.reactComponentAnnotation; removed disableLogger / top-level deprecated keys
+Tests: tests/unit/sentry-integration.test.ts 15/15 pass
+Commit: pending
