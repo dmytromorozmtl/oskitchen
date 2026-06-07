@@ -6875,3 +6875,11 @@ Category: design
 Result: done — hero banner + badge row + summary/pillar/capability card dark-mode polish on white-label-storefront-depth-panel.tsx, 8 cert tests; ChowNow/DNS honesty preserved
 Tests: npm run test:ci:design-full-polish-10-white-label:cert 8/8 pass
 Commit: a424210c
+
+---
+Cycle: 20260607-004900
+Task: 126 — Design full polish chart of accounts mapping (P3)
+Category: design
+Result: done — hero banner + badge row + mapping table card + nav row dark-mode polish on chart-of-accounts-mapping-panel.tsx, 8 cert tests; certified GL/accountant review honesty preserved
+Tests: npm run test:ci:design-full-polish-11-coa-mapping:cert 8/8 pass
+Commit: 1fe3bda3
