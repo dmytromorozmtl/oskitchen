@@ -19,7 +19,7 @@ OS Kitchen’s **first paid pilot** targets owner-operated food businesses that 
 | **Commissary** | P0 — primary | `/dashboard/commissary/*`, marketplace B2B angle |
 | **Meal prep** | P0 — primary | `/landing/meal-prep`, `/landing/weekly-preorder` |
 
-**Secondary (qualified, not headline ICP):** catering, small fast-casual, single-location café with owned kitchen.
+**Secondary (qualified, not headline ICP):** catering ([`/catering-management`](/catering-management)), small fast-casual, single-location café with owned kitchen.
 
 **Non-target:** pure marketplace dropship, QSR needing in-store POS parity, enterprise requiring SSO/SOC2/SCIM in pilot term.
 
@@ -290,6 +290,8 @@ Do **not** spend LOI cycles on:
 | Pilot ICP contract template | `docs/pilot-icp-contract-template-era17.md` | Legal/SOW |
 | ICP qualification JSON | `PILOT_GONOGO_ICP_INPUT_JSON` | GO/NO-GO gate |
 | Ghost kitchen landing | `/landing/ghost-kitchen` | Outbound + ads |
+| Commissary landing | `/commissary-kitchen-software` | Outbound + ads |
+| Catering landing (secondary ICP) | `/catering-management` | Outbound + SEO |
 | Meal prep landing | `/landing/meal-prep` | Outbound + ads |
 | Weekly preorder landing | `/landing/weekly-preorder` | Meal prep variant |
 | First paid pilot package | `docs/era20-first-paid-pilot-package-2026-05-28.md` | Scope + checklists |

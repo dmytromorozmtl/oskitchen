@@ -110,12 +110,12 @@ export const SEO_10_ICP_KEYWORDS: readonly IcpSeoKeywordEntry[] = [
   },
   {
     id: "catering-production-software",
-    primaryKeyword: "catering production software",
+    primaryKeyword: "catering management software",
     icpSegment: "cross_icp",
     searchIntent: "commercial",
-    targetPath: "/solutions/catering",
+    targetPath: "/catering-management",
     secondaryKeywords: [
-      "catering management software",
+      "catering production software",
       "catering production workflow",
       "event catering kitchen software",
     ],

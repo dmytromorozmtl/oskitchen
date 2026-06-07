@@ -690,6 +690,8 @@
     "test:ci:meal-prep-software-landing:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/meal-prep-software-landing-absolute-final.test.ts",
     "test:ci:commissary-kitchen-software-landing": "node ./node_modules/vitest/vitest.mjs run tests/unit/commissary-kitchen-software-landing-absolute-final.test.ts",
     "test:ci:commissary-kitchen-software-landing:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/commissary-kitchen-software-landing-absolute-final.test.ts",
+    "test:ci:catering-management-landing": "node ./node_modules/vitest/vitest.mjs run tests/unit/catering-management-landing-absolute-final.test.ts",
+    "test:ci:catering-management-landing:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/catering-management-landing-absolute-final.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",

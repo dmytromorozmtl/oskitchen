@@ -26,7 +26,7 @@ Ten **canonical primary keywords** for pilot-era SEO — not a 200-keyword enter
 | 7 | kitchen display system software | Cross-ICP | `/product` | Commercial |
 | 8 | restaurant order management software | Cross-ICP | `/product` | Commercial |
 | 9 | food production planning software | Cross-ICP | `/resources/kitchen-production-planning` | Informational |
-| 10 | catering production software | Secondary ICP | `/solutions/catering` | Commercial |
+| 10 | catering management software | Secondary ICP | `/catering-management` | Commercial |
 
 **P0 coverage:** keywords 1–6 map directly to [`icp-definition-final.md`](./icp-definition-final.md) ghost kitchen, commissary, and meal prep segments. Keywords 7–10 support discovery without diluting ICP focus.
 
@@ -114,13 +114,13 @@ Ten **canonical primary keywords** for pilot-era SEO — not a 200-keyword enter
 | **Target** | `/resources/kitchen-production-planning` |
 | **Intent** | Informational — link to trial/demo in CTA, not fake case studies |
 
-### 10 — catering production software
+### 10 — catering management software
 
 | Field | Value |
 |-------|-------|
-| **Primary** | catering production software |
-| **Target** | `/solutions/catering` |
-| **Existing config** | `lib/marketing/solution-seo.ts` → `catering` |
+| **Primary** | catering management software |
+| **Target** | `/catering-management` |
+| **Note** | Dedicated landing at [`/catering-management`](/catering-management) — quote-to-production, packing, dispatch (BETA) |
 
 ---
 
@@ -184,7 +184,7 @@ No ranking guarantees in internal OKRs until 90 days of GSC data.
 | `kitchen-display-system-software` | `/product` page metadata |
 | `restaurant-order-management-software` | `/product` page metadata |
 | `food-production-planning-software` | resource page metadata |
-| `catering-production-software` | `solution-seo.ts` → `catering` |
+| `catering-production-software` | `app/catering-management/page.tsx` |
 
 ---
 
