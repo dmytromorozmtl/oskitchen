@@ -7003,3 +7003,11 @@ Category: pm-marketing
 Result: done — chart-of-accounts-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; BETA/not a certified GL/accountant review/QuickBooks/Do not claim honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-11-coa-mapping:cert 8/8 pass
 Commit: 5cbc0873
+
+---
+Cycle: 20260607-014100
+Task: 142 — PM marketing full scale journal entry export GTM (P3)
+Category: pm-marketing
+Result: done — journal-entry-export-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; BETA/not a certified GL/accountant review/QuickBooks/Do not claim honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-12-journal-export:cert 8/8 pass
+Commit: 2496dbbd
