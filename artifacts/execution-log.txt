@@ -6379,3 +6379,11 @@ Category: fix
 Result: done — new-components-dark-mode-audit-policy (14 modules); fleet audit; dark variants on margin bars, schedule conflict cells, offline sync pulse; fixed offline-indicator dismiss hover
 Tests: npm run test:ci:new-components-dark-mode-audit:cert 5/5 pass
 Commit: bd4eed53
+
+---
+Cycle: 20260606-214400
+Task: 64 — Design system documentation components tokens patterns (P2)
+Category: docs
+Result: done — extended docs/design-system.md (top-20 catalog, data viz, enterprise/labor, offline UI, AF Tasks 56–63); design-system-documentation-absolute-final-policy + audit; extended DES-39 anchors/modules
+Tests: npm run test:ci:design-system-documentation:cert 5/5 pass; era135 cert 6/6 pass
+Commit: pending
