@@ -5977,4 +5977,4 @@ Category: ci
 Result: done — npm run audit:dependencies:high (npm audit --audit-level=high); CI quality job + deploy-prod-gate.yml step after npm ci
 Tests: tests/unit/npm-audit-ci-gate.test.ts 2/2 pass
 Note: local audit reports high-severity findings — gate will fail CI until dependencies remediated
-Commit: pending
+Commit: e874db88
