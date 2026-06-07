@@ -784,6 +784,8 @@
     "test:ci:pm-marketing-full-scale-03-regional-tax:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-pm-marketing-full-scale-03-regional-tax.test.ts",
     "test:ci:pm-marketing-full-scale-04-app-marketplace": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-pm-marketing-full-scale-04-app-marketplace.test.ts tests/unit/app-marketplace-third-party-absolute-final.test.ts",
     "test:ci:pm-marketing-full-scale-04-app-marketplace:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-pm-marketing-full-scale-04-app-marketplace.test.ts",
+    "test:ci:pm-marketing-full-scale-05-device-status": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-pm-marketing-full-scale-05-device-status.test.ts tests/unit/device-status-dashboard-absolute-final.test.ts",
+    "test:ci:pm-marketing-full-scale-05-device-status:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-pm-marketing-full-scale-05-device-status.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",
