@@ -6450,4 +6450,4 @@ Task: 72 — Data migration wizard Toast Square Lightspeed (P2)
 Category: feat
 Result: done — 9 POS profiles (3 sources × menu/customers/orders); enhanced MigrationWizardClient; CSV templates; policy + audit; migrate page copy
 Tests: npm run test:ci:data-migration-wizard:cert 7/7 pass
-Commit: pending
+Commit: a7dc8eee
