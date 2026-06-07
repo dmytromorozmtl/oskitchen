@@ -6827,3 +6827,11 @@ Category: design
 Result: done — hero banner + card/table row dark-mode polish on app-marketplace-third-party.tsx, 8 cert tests; honesty markers preserved
 Tests: npm run test:ci:design-full-polish-04-app-marketplace:cert 8/8 pass
 Commit: 607012c0
+
+---
+Cycle: 20260607-003700
+Task: 120 — Design full polish device status dashboard (P3)
+Category: design
+Result: done — hero banner + summary/device card + location row dark-mode polish on device-status-dashboard.tsx, 8 cert tests; Clover parity honesty preserved
+Tests: npm run test:ci:design-full-polish-05-device-status:cert 8/8 pass
+Commit: c799a345
