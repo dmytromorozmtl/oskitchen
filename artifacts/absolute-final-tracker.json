@@ -107,5 +107,6 @@
   "105-qa-full-coverage-device-status": "done",
   "106-qa-full-coverage-data-migration": "done",
   "107-qa-full-coverage-floor-plan": "done",
-  "108-qa-full-coverage-kds-daisy-chain": "done"
+  "108-qa-full-coverage-kds-daisy-chain": "done",
+  "109-qa-full-coverage-kds-expedite": "done"
 }
