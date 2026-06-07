@@ -164,7 +164,7 @@ Software-first **kitchen OS** for operators who **own fulfillment** — not a To
 | Offer | Terms | Gate |
 |-------|-------|------|
 | **90-day design partner** | Staging → production, weekly feedback | Signed LOI — see [`loi-design-partner-template.md`](./loi-design-partner-template.md) |
-| **Free pilot tier (first 5)** | Documented separately — Task 71 | Human gate — not public until program live |
+| **Free pilot tier (first 5)** | 90-day Pro/Team waiver with signed LOI | [`free-pilot-tier-program.md`](./free-pilot-tier-program.md) |
 
 **Do not quote** custom MRR or “free forever” without founder approval and LOI appendix.
 

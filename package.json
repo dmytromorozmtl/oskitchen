@@ -676,6 +676,8 @@
     "test:ci:meal-prep-vertical-golden-path:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/meal-prep-vertical-golden-path-absolute-final.test.ts",
     "test:ci:integration-health-center-product": "node ./node_modules/vitest/vitest.mjs run tests/unit/integration-health-center-product-absolute-final.test.ts tests/unit/hardware-device-fleet.test.ts",
     "test:ci:integration-health-center-product:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/integration-health-center-product-absolute-final.test.ts",
+    "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
+    "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",
