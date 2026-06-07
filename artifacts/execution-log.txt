@@ -6210,4 +6210,12 @@ Task: 42 — Tableside ordering flow TouchBistro parity (P2)
 Category: feat
 Result: done — tableside-ordering-flow-policy (5-step flow) + flow strip in handheld POS; floor plan → handheld deep link (?tableId=); readiness assessment service; fire KDS + cash pay path preserved
 Tests: npm run test:ci:tableside-ordering-flow 15/15 pass
+Commit: aa6ab787
+
+---
+Cycle: 20260606-233000
+Task: 43 — Delivery dispatch optimization Olo parity (P2)
+Category: feat
+Result: done — delivery-dispatch-optimization-policy (nearest-neighbor + window priority + Google Routes); loadDeliveryDispatchOptimizationModel; /dashboard/routes/optimize panel with apply optimized order; applyOptimizedStopOrder + applyDispatchOptimizationAction
+Tests: npm run test:ci:delivery-dispatch-optimization 8/8 pass
 Commit: pending

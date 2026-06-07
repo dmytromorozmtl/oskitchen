@@ -53,6 +53,9 @@ export default async function RoutesOverviewPage() {
             <Button variant="secondary" asChild>
               <Link href="/dashboard/routes/planner#manual">Create manual route</Link>
             </Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/routes/optimize">Optimize dispatch</Link>
+            </Button>
           </div>
         </div>
 
@@ -75,7 +78,11 @@ export default async function RoutesOverviewPage() {
           <CardHeader>
             <CardTitle className="text-lg">Quick build by pickup date</CardTitle>
             <CardDescription>
-              Pulls open delivery orders sharing the same pickup date. Manual stop order — optimization is a future placeholder.
+              Pulls open delivery orders sharing the same pickup date. Reorder manually or use{" "}
+              <Link href="/dashboard/routes/optimize" className="text-primary underline-offset-2 hover:underline">
+                dispatch optimization
+              </Link>
+              .
             </CardDescription>
           </CardHeader>
           <CardContent>

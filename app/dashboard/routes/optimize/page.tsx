@@ -1,27 +1,37 @@
 import Link from "next/link";
 
-import { PageShell } from "@/components/layout/page-shell";
-import { isGoogleRoutesConfigured } from "@/services/delivery/route-optimization-service";
+import { DispatchOptimizationPanel } from "@/components/dashboard/routes/dispatch-optimization-panel";
+import { PlanGate } from "@/components/plans/plan-gate";
+import { getTenantActor } from "@/lib/scope/cached-tenant";
+import { loadDeliveryDispatchOptimizationModel } from "@/services/delivery/delivery-dispatch-optimization-service";
 
-export default function RouteOptimizePage() {
-  const ok = isGoogleRoutesConfigured();
+export default async function RouteOptimizePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ routeId?: string }>;
+}) {
+  const { routeId } = await searchParams;
+  const { userId } = await getTenantActor();
+  const model = await loadDeliveryDispatchOptimizationModel(userId, routeId ?? null);
+
   return (
-    <PageShell narrow>
-      <h1 className="text-2xl font-semibold tracking-tight">Route optimization</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Google Routes API (optimizeWaypointOrder) for delivery stop ordering.
-      </p>
-      <p className="mt-4 text-sm">
-        Status:{" "}
-        <span className={ok ? "text-green-600 font-medium" : "text-amber-600 font-medium"}>
-          {ok ? "GOOGLE_ROUTES_API_KEY set" : "Not configured"}
-        </span>
-      </p>
-      <p className="mt-6 text-sm">
-        <Link href="/dashboard/routes" className="text-primary underline-offset-4 hover:underline">
-          ← Routes
-        </Link>
-      </p>
-    </PageShell>
+    <PlanGate userId={userId} feature="delivery_routes" title="Dispatch optimization">
+      <div className="mx-auto max-w-5xl space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Dispatch optimization</h1>
+            <p className="text-sm text-muted-foreground">
+              Olo-parity stop ordering — delivery window priority, nearest-neighbor routing, optional
+              Google Routes API.
+            </p>
+          </div>
+          <Link href="/dashboard/routes" className="text-sm text-primary hover:underline">
+            ← Routes
+          </Link>
+        </div>
+
+        <DispatchOptimizationPanel model={model} />
+      </div>
+    </PlanGate>
   );
 }

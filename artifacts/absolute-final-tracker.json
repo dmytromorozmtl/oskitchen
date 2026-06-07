@@ -41,5 +41,6 @@
   "39-offline-pos-pci-review": "done",
   "40-hardware-device-fleet-management": "done",
   "41-gl-depth-accounting-sync": "done",
-  "42-tableside-ordering-flow": "done"
+  "42-tableside-ordering-flow": "done",
+  "43-delivery-dispatch-optimization": "done"
 }

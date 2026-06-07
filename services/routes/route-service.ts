@@ -115,6 +115,48 @@ export async function createManualRoute(input: CreateManualRouteInput): Promise<
   return route.id;
 }
 
+export async function applyOptimizedStopOrder(
+  scope: OwnerScope,
+  routeId: string,
+  stopIdsInOrder: readonly string[],
+) {
+  const route = await prisma.deliveryRoute.findFirst({
+    where: { id: routeId, userId: scope.userId },
+    include: { stops: { select: { id: true } } },
+  });
+  if (!route) throw new Error("Route not found.");
+
+  const existingIds = new Set(route.stops.map((s) => s.id));
+  if (stopIdsInOrder.length !== route.stops.length) {
+    throw new Error("Optimized stop list must include every stop on the route.");
+  }
+  for (const id of stopIdsInOrder) {
+    if (!existingIds.has(id)) throw new Error("Invalid stop in optimized order.");
+  }
+
+  await prisma.$transaction(
+    stopIdsInOrder.map((id, sequence) =>
+      prisma.deliveryStop.update({ where: { id }, data: { sequence } }),
+    ),
+  );
+
+  await prisma.deliveryRoute.update({
+    where: { id: routeId },
+    data: { estimatedDistance: null, estimatedDuration: null },
+  });
+
+  await prisma.deliveryEvent.create({
+    data: {
+      routeId,
+      eventType: DeliveryEventType.ROUTE_UPDATED,
+      metadataJson: {
+        source: "dispatch_optimization",
+        stopOrder: [...stopIdsInOrder],
+      } as Prisma.InputJsonValue,
+    },
+  });
+}
+
 export type ReorderStopInput = { routeId: string; stopId: string; toIndex: number };
 
 export async function reorderStop(scope: OwnerScope, input: ReorderStopInput) {

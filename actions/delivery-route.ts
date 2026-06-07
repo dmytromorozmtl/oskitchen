@@ -19,6 +19,7 @@ import { startOfUtcDay } from "@/lib/routes/route-planning";
 import { isRouteMode } from "@/lib/routes/route-types";
 import { safeError } from "@/lib/security";
 import {
+  applyOptimizedStopOrder,
   assignDriver,
   createManualRoute,
   recordRouteEvent,
@@ -37,6 +38,7 @@ function revalidateRoutes(routeId?: string) {
   revalidatePath("/dashboard/routes/drivers");
   revalidatePath("/dashboard/routes/zones");
   revalidatePath("/dashboard/routes/uber-direct");
+  revalidatePath("/dashboard/routes/optimize");
   revalidatePath("/dashboard/calendar");
   if (routeId) revalidatePath(`/dashboard/routes/${routeId}`);
 }
@@ -437,4 +439,35 @@ export async function recordUberQuotePlaceholderAction(routeId: string) {
   } catch (e) {
     return { error: safeError(e) };
   }
+}
+
+const applyOptimizationSchema = z.object({
+  routeId: z.string().uuid(),
+  stopIds: z.array(z.string().uuid()).min(2),
+});
+
+export async function applyDispatchOptimizationAction(raw: z.infer<typeof applyOptimizationSchema>) {
+  try {
+    const access = await requireRouteMutation({ operation: "delivery_route.apply_dispatch_optimization" });
+    if (!access.ok) return { error: access.error };
+    const { dataUserId } = access.actor;
+    const parsed = applyOptimizationSchema.safeParse(raw);
+    if (!parsed.success) return { error: "Invalid optimization payload." };
+
+    await applyOptimizedStopOrder({ userId: dataUserId }, parsed.data.routeId, parsed.data.stopIds);
+    revalidateRoutes(parsed.data.routeId);
+    return { ok: true as const, routeId: parsed.data.routeId };
+  } catch (e) {
+    return { error: safeError(e) };
+  }
+}
+
+export async function applyDispatchOptimizationFormAction(formData: FormData) {
+  const routeId = String(formData.get("routeId") ?? "");
+  const stopIds = formData.getAll("stopIds").map(String);
+  const result = await applyDispatchOptimizationAction({ routeId, stopIds });
+  if ("error" in result && result.error) {
+    return fail(result.error);
+  }
+  return ok(result);
 }

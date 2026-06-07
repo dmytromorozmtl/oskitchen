@@ -581,6 +581,7 @@
     "test:ci:hardware-device-fleet": "node ./node_modules/vitest/vitest.mjs run tests/unit/hardware-device-fleet.test.ts",
     "test:ci:gl-depth-accounting": "node ./node_modules/vitest/vitest.mjs run tests/unit/gl-depth-accounting.test.ts",
     "test:ci:tableside-ordering-flow": "node ./node_modules/vitest/vitest.mjs run tests/unit/tableside-ordering-flow.test.ts tests/unit/handheld-ordering.test.ts tests/unit/handheld-kds-fire.test.ts",
+    "test:ci:delivery-dispatch-optimization": "node ./node_modules/vitest/vitest.mjs run tests/unit/delivery-dispatch-optimization.test.ts",
     "test:ci:navigation-workflow-ia": "node ./node_modules/vitest/vitest.mjs run tests/unit/navigation-workflow-ia.test.ts",
     "test:ci:error-skeleton-dark-mode": "node ./node_modules/vitest/vitest.mjs run tests/unit/error-skeleton-dark-mode-audit.test.ts tests/unit/async-page-skeletons.test.ts tests/unit/error-state-design-system.test.ts",
     "test:ci:rate-limit": "node ./node_modules/vitest/vitest.mjs run tests/unit/rate-limit-response.test.ts tests/unit/rate-limit-facade.test.ts tests/unit/api-mutation-rate-limit.test.ts",
