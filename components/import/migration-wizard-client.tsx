@@ -7,6 +7,13 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
+import {
   DATA_MIGRATION_ENTITIES,
   DATA_MIGRATION_POS_SOURCES,
   DATA_MIGRATION_UPLOAD_ROUTE,
@@ -71,21 +78,25 @@ export function MigrationWizardClient() {
 
   return (
     <div className="space-y-6" data-testid="data-migration-wizard">
-      <div className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm text-muted-foreground">
-        <strong className="text-foreground">CSV export path — not live API.</strong> Export from Toast,
-        Square, or Lightspeed, paste sample rows here, then continue to Import Center upload for{" "}
-        <strong>manual review</strong>. Live POS API migration remains <Badge variant="secondary">BETA</Badge>.
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Data migration wizard (Beta)</p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
+          <strong className="text-foreground">CSV export path — not live API.</strong> Export from
+          Toast, Square, or Lightspeed, paste sample rows here, then continue to Import Center upload
+          for <strong className="text-foreground">manual review</strong>. Live POS API migration
+          remains <Badge variant="secondary">BETA</Badge>.
+        </p>
       </div>
 
-      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-muted dark:bg-muted/50">
         <div
-          className="h-full bg-primary transition-all duration-300"
+          className="h-full bg-primary transition-all duration-300 dark:bg-primary/90"
           style={{ width: `${progressPct}%` }}
           data-testid="data-migration-wizard-progress"
         />
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
         {DATA_MIGRATION_ENTITIES.map((e) => (
           <button
             key={e}
@@ -94,8 +105,10 @@ export function MigrationWizardClient() {
               setEntity(e);
               setStep("pick");
             }}
-            className={`rounded-full border px-3 py-1 text-sm ${
-              entity === e ? "border-primary bg-primary/10 text-primary" : "text-muted-foreground"
+            className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+              entity === e
+                ? "border-primary bg-primary/10 text-primary dark:border-primary/70 dark:bg-primary/15"
+                : "text-muted-foreground dark:border-border/60 dark:hover:bg-muted/20"
             }`}
             data-testid={`data-migration-entity-${e}`}
           >
@@ -108,7 +121,9 @@ export function MigrationWizardClient() {
         {DATA_MIGRATION_POS_SOURCES.map((src) => (
           <Card
             key={src}
-            className={`cursor-pointer ${source === src ? "ring-2 ring-primary" : ""}`}
+            className={`cursor-pointer ${DESIGN_POLISH_CARD_CLASS} ${
+              source === src ? "ring-2 ring-primary dark:ring-primary/70" : ""
+            }`}
             onClick={() => {
               setSource(src);
               setStep("pick");
@@ -119,14 +134,15 @@ export function MigrationWizardClient() {
               <CardTitle className="text-base capitalize">{src}</CardTitle>
               <CardDescription>{getDataMigrationProfile(src, entity)?.label}</CardDescription>
             </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              {Object.keys(getDataMigrationProfile(src, entity)?.fieldMap ?? {}).length} field mappings
+            <CardContent className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+              {Object.keys(getDataMigrationProfile(src, entity)?.fieldMap ?? {}).length} field
+              mappings
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card>
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-base">{profile?.label ?? "Migration preview"}</CardTitle>
           <CardDescription>{profile?.exportHint}</CardDescription>
@@ -136,25 +152,29 @@ export function MigrationWizardClient() {
             value={csvText}
             onChange={(e) => setCsvText(e.target.value)}
             placeholder="Paste CSV header + up to 5 sample rows from your export…"
-            className="min-h-[120px] w-full rounded-xl border px-3 py-2 font-mono text-sm"
+            className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 font-mono text-sm dark:border-border/60 dark:bg-background/95"
             data-testid="data-migration-csv-input"
           />
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={handlePreview}
-              className="rounded-xl bg-primary px-4 py-2 text-sm text-primary-foreground"
+              className="rounded-xl bg-primary px-4 py-2 text-sm text-primary-foreground dark:bg-primary/90"
             >
               Preview mapping
             </button>
             {step === "preview" ? (
-              <button type="button" onClick={handleRollback} className="rounded-xl border px-4 py-2 text-sm">
+              <button
+                type="button"
+                onClick={handleRollback}
+                className="rounded-xl border px-4 py-2 text-sm dark:border-border/60"
+              >
                 Rollback draft
               </button>
             ) : null}
             <Link
               href={`${DATA_MIGRATION_UPLOAD_ROUTE}${buildMigrationUploadQuery(source, entity)}`}
-              className="rounded-xl border px-4 py-2 text-sm"
+              className="rounded-xl border px-4 py-2 text-sm dark:border-border/60"
               onClick={() => setStep("upload")}
               data-testid="data-migration-continue-upload"
             >
@@ -163,14 +183,18 @@ export function MigrationWizardClient() {
           </div>
 
           {step === "preview" && preview ? (
-            <div className="space-y-3 overflow-x-auto rounded-lg border p-3 text-xs">
+            <div
+              className={`space-y-3 overflow-x-auto p-3 text-xs ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}
+            >
               {preview.unmappedColumns.length > 0 ? (
                 <p className="text-amber-700 dark:text-amber-300">
                   Unmapped columns (manual review): {preview.unmappedColumns.join(", ")}
                 </p>
               ) : null}
               {preview.rows.length === 0 ? (
-                <p className="text-muted-foreground">No rows parsed — check CSV format.</p>
+                <p className="text-muted-foreground dark:text-muted-foreground/90">
+                  No rows parsed — check CSV format.
+                </p>
               ) : (
                 preview.rows.map((row, i) => (
                   <pre key={i} className="whitespace-pre-wrap">
@@ -183,9 +207,10 @@ export function MigrationWizardClient() {
         </CardContent>
       </Card>
 
-      <p className="font-mono text-[10px] text-muted-foreground">
+      <p className="font-mono text-[10px] text-muted-foreground dark:text-muted-foreground/90">
         Policy {DATA_MIGRATION_WIZARD_ABSOLUTE_FINAL_POLICY_ID}
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
