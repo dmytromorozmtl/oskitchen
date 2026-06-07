@@ -6355,3 +6355,11 @@ Category: feat
 Result: done — multi-location-map-view-policy; MultiLocationMapView (pins + switcher + floor plan links); wired enterprise panel; floor-plans locationId context banner
 Tests: npm run test:ci:multi-location-map-view:cert 4/4 pass
 Commit: eb6946a6
+
+---
+Cycle: 20260606-213800
+Task: 61 — Schedule grid design drag-drop conflict labour overlay (P2)
+Category: feat
+Result: done — schedule-grid-design-policy; labour heatmap on day headers + cell tint; conflict legend; daily labor overlay row with % share; wired schedule-grid-drag-drop.tsx
+Tests: npm run test:ci:schedule-grid-design:cert 5/5 pass
+Commit: pending

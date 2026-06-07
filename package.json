@@ -655,6 +655,8 @@
     "test:ci:kds-multi-station-era179:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-multi-station-era179.test.ts",
     "test:ci:kds-station-routing-rules": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-station-routing-rules.test.ts tests/unit/kds-multi-station.test.ts",
     "test:ci:schedule-grid-drag-drop": "node ./node_modules/vitest/vitest.mjs run tests/unit/schedule-grid-drag-drop.test.ts tests/unit/labor-schedule-rbac.test.ts",
+    "test:ci:schedule-grid-design": "node ./node_modules/vitest/vitest.mjs run tests/unit/schedule-grid-design.test.ts tests/unit/schedule-grid-drag-drop.test.ts",
+    "test:ci:schedule-grid-design:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/schedule-grid-design.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",
