@@ -6258,4 +6258,12 @@ Task: 48 — Screen reader tests for icon-only buttons (P2)
 Category: test
 Result: done — screen-reader-icon-button-policy (5 static + dynamic POS cart names); e2e/screen-reader-icon-buttons.spec.ts role+name queries; cart-panel added to icon-button audit modules
 Tests: npm run test:ci:screen-reader-icon-buttons 11/11 pass
+Commit: ee7e1a0d
+
+---
+Cycle: 20260606-240000
+Task: 49 — Mobile touch target 44px validation (P2)
+Category: test
+Result: done — mobile-touch-target-44px-policy (375px viewport, 5 surfaces); e2e/mobile-touch-target-44px.spec.ts boundingBox ≥44px; touch-target-assertions helper
+Tests: npm run test:ci:mobile-touch-target-44px 10/10 pass
 Commit: pending
