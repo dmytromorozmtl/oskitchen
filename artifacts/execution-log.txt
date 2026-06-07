@@ -6099,3 +6099,11 @@ Category: docs
 Result: done — docs/pilot-week1-roadmap.md with T-0 onboarding, T+1 KDS, T+3 first order, T+7 briefing; pilot-week1-roadmap-policy + human gate checklist
 Tests: tests/unit/pilot-week1-roadmap.test.ts 4/4 pass
 Commit: 0310d79c
+
+---
+Cycle: 20260606-222000
+Task: 29 — Competitor feature tracker 8/8 sales-safe claims (P1)
+Category: docs
+Result: done — salesSafeCompetitorClaims for Toast/Square/Lightspeed/Clover/TouchBistro/Revel/SpotOn/Olo; competitor-sales-safe-claims-policy + auditReconciliation 8/8
+Tests: tests/unit/competitor-sales-safe-claims.test.ts + competitor-feature-tracker-filled 6/6 pass
+Commit: pending

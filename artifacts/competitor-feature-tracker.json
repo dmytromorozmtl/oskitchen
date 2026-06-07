@@ -12,7 +12,13 @@
     "engineeringShippedKeys": 57,
     "priorInflatedClaim": "25/25 done (v12 gap closure — engineering only)",
     "honestyRule": "PASS > SKIPPED — live_proven requires smoke artifact PASS, not wiring-only",
-    "note": "Reconciled 2026-06-01 per forensic audit; 2026-06-02 Toast/Square/Lightspeed head-to-head added (task 52); 2026-06-02 all 7 competitor head-to-head profiles filled (task 101). Use salesSafeFeatures for GTM; engineeringDelivery for eng ledger only."
+    "note": "Reconciled 2026-06-01 per forensic audit; 2026-06-02 Toast/Square/Lightspeed head-to-head added (task 52); 2026-06-02 all 7 competitor head-to-head profiles filled (task 101). Use salesSafeFeatures for GTM; engineeringDelivery for eng ledger only.",
+    "absoluteFinalSalesSafeCompetitorClaims": {
+      "filled": 8,
+      "total": 8,
+      "reconciledAt": "2026-06-06T20:35:00.000Z",
+      "policyId": "competitor-sales-safe-claims-absolute-final-v1"
+    }
   },
   "competitorComparison": {
     "reconciledAt": "2026-06-02T20:00:00.000Z",
@@ -468,6 +474,145 @@
     "restaurant-capital-phase4-multi-lender": "shipped",
     "restaurant-capital-phase5-live-lenders": "shipped",
     "restaurant-capital-phase6-lender-oauth": "shipped"
+  },
+  "salesSafeCompetitorClaims": {
+    "schemaVersion": "absolute-final-v1",
+    "filledAt": "2026-06-06T20:35:00.000Z",
+    "policyId": "competitor-sales-safe-claims-absolute-final-v1",
+    "honestyRule": "Each claim defers incumbent strengths and qualifies OS Kitchen wins — no parity or customer-count language",
+    "filledCount": 8,
+    "totalCount": 8,
+    "toast": {
+      "displayName": "Toast",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "Software-first unified order hub with Integration Health honesty UI — no proprietary terminal lock-in.",
+      "competitorWinsWeDefer": [
+        "Toast Go hardware and KDS devices",
+        "Payment processing at scale",
+        "Reference customers and Toast Capital"
+      ],
+      "osKitchenWedge": "B2B marketplace buyer scaffold + 7 AI modules in one OS (engineering — pilot unproven)",
+      "evidenceRefs": [
+        "docs/competitor-comparison-honest.md",
+        "components/dashboard/integration-health/"
+      ],
+      "safeTalkTrack": "Toast owns in-restaurant hardware and scale. We target operators who want a unified cloud OS with honest BETA labels — pre-customer on LIVE integrations."
+    },
+    "square": {
+      "displayName": "Square",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "Production kitchen → packing → routes depth for commissary and multi-channel operators — beyond counter POS.",
+      "competitorWinsWeDefer": [
+        "In-person payments and Reader ecosystem",
+        "SMB brand recognition",
+        "App marketplace maturity"
+      ],
+      "osKitchenWedge": "Today Command Center briefing + commissary / ghost kitchen / meal-prep ICP focus",
+      "evidenceRefs": [
+        "app/dashboard/kitchen/",
+        "app/dashboard/today/",
+        "docs/icp-definition-final.md"
+      ],
+      "safeTalkTrack": "Square is the default for simple retail POS. We build for operators who run production kitchens and multi-channel fulfillment — still early on proof."
+    },
+    "lightspeed": {
+      "displayName": "Lightspeed",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "AI module breadth and B2B HoReCa marketplace buyer UX in one codebase — for independent multi-concept operators.",
+      "competitorWinsWeDefer": [
+        "Established restaurant and retail install base",
+        "Partner and hardware channels",
+        "Multi-location deployments at scale (proven)"
+      ],
+      "osKitchenWedge": "7 proprietary AI modules + digital twin simulation (BETA) on Today hub",
+      "evidenceRefs": [
+        "artifacts/ai-moats-tracker.json",
+        "docs/ai-moats-honest-positioning.md"
+      ],
+      "safeTalkTrack": "Lightspeed has proven multi-site deployments. We match on software ambition but not on LIVE integrations or customer proof yet."
+    },
+    "clover": {
+      "displayName": "Clover",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "Browser/tablet POS with order-to-fulfillment software depth — no Fiserv terminal bundle required.",
+      "competitorWinsWeDefer": [
+        "Fiserv-backed payments and SMB brand",
+        "Clover Station / Mini / Flex hardware",
+        "Simple in-venue counter POS maturity"
+      ],
+      "osKitchenWedge": "Production board, packing workflows, and B2B supply marketplace angle",
+      "evidenceRefs": [
+        "app/dashboard/pos/",
+        "app/dashboard/marketplace/"
+      ],
+      "safeTalkTrack": "Clover wins simple counter POS and payments bundles. We target production kitchens and multi-channel fulfillment — honest BETA labels."
+    },
+    "touchbistro": {
+      "displayName": "TouchBistro",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "Multi-channel order hub and kitchen production truth for hybrid operators — not table-management parity.",
+      "competitorWinsWeDefer": [
+        "Full-service dine-in table service focus",
+        "Reservations and floor-plan narrative",
+        "Established SMB restaurant customer base"
+      ],
+      "osKitchenWedge": "Order hub → KDS → packing path + integration honesty UI for pre-LIVE posture",
+      "evidenceRefs": [
+        "app/dashboard/order-hub/",
+        "app/dashboard/kitchen/"
+      ],
+      "safeTalkTrack": "TouchBistro fits dine-in table service. OS Kitchen fits hybrid operators who need kitchen production truth and B2B supply."
+    },
+    "revel": {
+      "displayName": "Revel",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "Cloud-native commissary and multi-brand operating system — faster iteration UX for ≤5-location operators.",
+      "competitorWinsWeDefer": [
+        "Legacy iPad POS install base",
+        "Established reseller channels",
+        "Proven QSR franchise deployments"
+      ],
+      "osKitchenWedge": "Commissary / meal-prep vertical depth + AI modules without legacy migration timeline",
+      "evidenceRefs": [
+        "app/dashboard/enterprise/commissary/",
+        "app/dashboard/meal-prep/",
+        "docs/pilot-week1-roadmap.md"
+      ],
+      "safeTalkTrack": "Revel serves established QSR installs. We target commissaries and multi-concept operators starting fresh — no legacy parity claim."
+    },
+    "spoton": {
+      "displayName": "SpotOn",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "Unified order-to-fulfillment software with deterministic Owner Daily Briefing — not bundled payments-first POS.",
+      "competitorWinsWeDefer": [
+        "Mid-market restaurant POS + payments bundle",
+        "US field sales and growing install base",
+        "Marketing and loyalty add-on packages"
+      ],
+      "osKitchenWedge": "Today hub briefing + marketplace buyer catalog → PO path (BETA)",
+      "evidenceRefs": [
+        "app/dashboard/today/",
+        "components/dashboard/briefing/"
+      ],
+      "safeTalkTrack": "SpotOn competes on bundled payments and mid-market restaurant POS. We sell a kitchen operating system with AI modules — still proving pilot KPIs."
+    },
+    "olo": {
+      "displayName": "Olo",
+      "salesClaimVerdict": "YES",
+      "salesSafeClaim": "White-label storefront and order hub in one operator OS — own-your-channel story without aggregator-only dependency.",
+      "competitorWinsWeDefer": [
+        "Dispatch and delivery network at scale",
+        "Enterprise digital ordering brand",
+        "Proven marketplace aggregator partnerships"
+      ],
+      "osKitchenWedge": "Storefront + Order Hub + KDS in one codebase with channel sync health UI (BETA integrations)",
+      "evidenceRefs": [
+        "app/dashboard/storefront/",
+        "app/dashboard/order-hub/",
+        "docs/live-integration-definition-of-done.md"
+      ],
+      "safeTalkTrack": "Olo wins dispatch network and enterprise digital ordering. We help independent operators own storefront + kitchen ops — not Olo dispatch parity."
+    }
   },
   "legacyFlatKeysDeprecated": "Top-level done strings removed 2026-06-01 — use salesSafeFeatures + engineeringDelivery"
 }

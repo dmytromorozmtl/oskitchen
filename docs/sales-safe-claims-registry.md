@@ -30,7 +30,7 @@ This document is the **human-readable sales registry** — what reps, decks, and
 |-------|------|---------|
 | **This doc** | `docs/sales-safe-claims-registry.md` | Sales playbook + GTM training |
 | **Marketing rows** | `config/marketing/claims-registry.json` | Page-level claim audit (CI) |
-| **Feature ledger** | `artifacts/competitor-feature-tracker.json` | 25 sales-safe feature verdicts |
+| **Feature ledger** | `artifacts/competitor-feature-tracker.json` | 25 sales-safe feature verdicts + **8/8 competitor wedge claims** (`salesSafeCompetitorClaims`) |
 | **AI modules** | `docs/ai-moats-honest-positioning.md` | Seven-module honest wording |
 | **Integrations** | `docs/live-integration-definition-of-done.md` | LIVE vs BETA gate |
 | **Forbidden scan** | `lib/governance/marketing-claims-governance-policy.ts` | CI phrase blocklist |
