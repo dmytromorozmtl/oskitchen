@@ -7067,3 +7067,11 @@ Category: security
 Result: done — absolute-final-owasp-top-10 policy + audit wiring, SECURITY_REVIEW.md Task 149 cert table (A01–A10), 8 cert tests; RBAC/CSRF/webhook/npm-audit/rate-limit controls consolidated; Sentry DSN remains blocked (Task 2)
 Tests: npm run test:ci:owasp-top-10-absolute-final:cert 8/8 pass
 Commit: 0867a409
+
+---
+Cycle: 20260607-021800
+Task: 150 — Full competitor parity check 21 competitors (P3)
+Category: competitor
+Result: done — absolute-final-competitor-parity-21 policy + audit wiring, full-competitor-parity-check.md 21-row matrix (3 LIVE, 18 PARTIAL), 8 cert tests; consolidates battle cards 8/8, sales-safe claims, gap matrix
+Tests: npm run test:ci:competitor-parity-absolute-final:cert 8/8 pass
+Commit: b747ea48
