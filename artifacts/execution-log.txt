@@ -6539,3 +6539,11 @@ Category: feat
 Result: done — /sync-health per-channel table; 7 illustrative channels; embedded on IHC marketing landing; sales deck updated; policy + audit
 Tests: npm run test:ci:sync-health-dashboard-marketing:cert 4/4 pass
 Commit: 61cf8381
+
+---
+Cycle: 20260606-222400
+Task: 84 — invoice AI accuracy metrics public (P2)
+Category: feat
+Result: done — /invoice-ai-accuracy public pilot metrics (8 field-level rows, cohort 48); dashboard strip on invoice-scanner; KB link; policy + audit
+Tests: npm run test:ci:invoice-ai-accuracy-metrics:cert 4/4 pass
+Commit: pending
