@@ -6643,3 +6643,11 @@ Category: feat
 Result: done — /dashboard/accounting/chart-of-accounts P&L→GL mapping (8 lines); QuickBooks account linking; settingsCenterJson storage; gl-sync strip; policy + audit + 6 tests
 Tests: npm run test:ci:chart-of-accounts-mapping:cert 6/6 pass
 Commit: 0b343af8
+
+---
+Cycle: 20260606-231100
+Task: 97 — journal entry export (P3)
+Category: feat
+Result: done — /dashboard/accounting/journal-export with CSV/JSON/QuickBooks CSV formats; COA mapping overlay; /api/export/gl-journal/json; gl-sync strip; policy + audit + 4 tests
+Tests: npm run test:ci:journal-entry-export:cert 4/4 pass
+Commit: b4739cb6
