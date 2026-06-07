@@ -6490,3 +6490,4 @@ Task: 77 — /commissary-kitchen-software landing page (P2)
 Category: feat
 Result: done — /commissary-kitchen-software SEO landing; multi-tenant production + B2B BETA; policy + audit; SEO 10 ICP targetPath updated; icp-definition-final linked
 Tests: npm run test:ci:commissary-kitchen-software-landing:cert 5/5 pass
+Commit: 4a96130d
