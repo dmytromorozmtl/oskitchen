@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ExpoViewClient } from "@/components/kitchen/expo-view-client";
+import { KdsDriverEtaStrip } from "@/components/kitchen/kds-driver-eta-strip";
 import { PermissionDeniedSurfaceCard } from "@/components/dashboard/permission-denied-surface-card";
 import { Button } from "@/components/ui/button";
 import { hasPermission } from "@/lib/permissions/guards";
@@ -36,10 +37,15 @@ export default async function KdsExpoViewPage() {
             <Link href="/dashboard/kitchen/expedite">Expedite screen</Link>
           </Button>
           <Button asChild variant="outline" size="sm" className="rounded-full">
+            <Link href="/dashboard/kitchen/driver-eta">Driver ETA</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="rounded-full">
             <Link href="/dashboard/kitchen">Back to KDS</Link>
           </Button>
         </div>
       </div>
+
+      <KdsDriverEtaStrip />
 
       <ExpoViewClient snapshot={snapshot} />
 
