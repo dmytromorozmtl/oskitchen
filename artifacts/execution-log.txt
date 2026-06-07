@@ -6578,4 +6578,4 @@ Task: 88 — regional tax compliance doc (P3)
 Category: docs
 Result: done — docs/regional-tax-compliance.md (4 jurisdiction modes, 6 region gaps, 6-phase timeline, TaxJar optional path); wired from intl expansion + EU residency; policy + audit
 Tests: npm run test:ci:regional-tax-compliance:cert 4/4 pass
-Commit: pending
+Commit: 5f49fc87
