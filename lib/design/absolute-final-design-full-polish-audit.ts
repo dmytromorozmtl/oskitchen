@@ -8,7 +8,10 @@ import {
   getDesignFullPolishSlot,
   type DesignFullPolishSlot,
 } from "@/lib/design/absolute-final-design-full-polish-policy";
-import { DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID } from "@/lib/design/absolute-final-design-polish-tokens";
+import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  docUsesDesignPolishTokens,
+} from "@/lib/design/absolute-final-design-polish-tokens";
 
 export type DesignFullPolishAudit = {
   ok: boolean;
@@ -53,6 +56,11 @@ export function auditDesignFullPolishSlot(
       !targetSource.includes("DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID")
     ) {
       failures.push(`component missing polish policy id marker: ${slot.targetPath}`);
+    }
+  } else if (slot.targetKind === "doc") {
+    const targetSource = readFileSync(join(root, slot.targetPath), "utf8");
+    if (!docUsesDesignPolishTokens(targetSource)) {
+      failures.push(`doc missing design polish markers: ${slot.targetPath}`);
     }
   }
 

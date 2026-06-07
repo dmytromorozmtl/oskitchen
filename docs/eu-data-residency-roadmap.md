@@ -1,5 +1,13 @@
 # EU Data Residency Roadmap
 
+<!-- design-polish: absolute-final-design-polish-tokens-v1 task-117 feature-87 -->
+
+> **design-polish-hero-banner** · Internal roadmap — **no EU-dedicated production region today**
+>
+> US-primary hosting · ~15% readiness · Do **not** claim EU residency or GDPR certification until Phase 5 exit criteria pass.
+>
+> **design-polish-dark-mode-note:** Plain markdown tables and blockquotes — readable in GitHub light and dark themes without custom HTML colors.
+
 **Status:** Internal roadmap — **no EU-dedicated production region today**  
 **Audience:** Founder, engineering, ops, enterprise sales (EU/UK prospects)  
 **Policy:** `eu-data-residency-roadmap-absolute-final-v1` (`lib/compliance/eu-data-residency-roadmap-absolute-final-policy.ts`)  
@@ -15,7 +23,7 @@ Single **quarter-by-quarter roadmap** for EU/EEA data residency options — from
 
 ---
 
-## Current posture
+## Current posture · design-polish-status-card
 
 | Dimension | Status | Notes |
 |-----------|--------|-------|
@@ -28,7 +36,7 @@ Single **quarter-by-quarter roadmap** for EU/EEA data residency options — from
 
 ---
 
-## Timeline
+## Timeline · design-polish-phase-timeline
 
 | Phase | Window | Goal | Exit criteria |
 |-------|--------|------|---------------|

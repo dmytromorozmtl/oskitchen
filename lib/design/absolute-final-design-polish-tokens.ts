@@ -39,3 +39,26 @@ export const DESIGN_POLISH_TOKEN_NAMES = [
   "DESIGN_POLISH_ROW_SURFACE_CLASS",
   "DESIGN_POLISH_BADGE_ROW_CLASS",
 ] as const;
+
+/** Markdown / internal doc surfaces (tasks 117–118) — mirrors hero + card + dark-mode intent. */
+export const DESIGN_POLISH_DOC_MARKER_PREFIX = "design-polish:" as const;
+
+export const DESIGN_POLISH_DOC_HERO_MARKER = "design-polish-hero-banner" as const;
+
+export const DESIGN_POLISH_DOC_STATUS_MARKER = "design-polish-status-card" as const;
+
+export const DESIGN_POLISH_DOC_TIMELINE_MARKER = "design-polish-phase-timeline" as const;
+
+export const DESIGN_POLISH_DOC_DARK_MODE_MARKER = "design-polish-dark-mode-note" as const;
+
+export const DESIGN_POLISH_DOC_REQUIRED_MARKERS = [
+  `${DESIGN_POLISH_DOC_MARKER_PREFIX} ${DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}`,
+  DESIGN_POLISH_DOC_HERO_MARKER,
+  DESIGN_POLISH_DOC_STATUS_MARKER,
+  DESIGN_POLISH_DOC_TIMELINE_MARKER,
+  DESIGN_POLISH_DOC_DARK_MODE_MARKER,
+] as const;
+
+export function docUsesDesignPolishTokens(source: string): boolean {
+  return DESIGN_POLISH_DOC_REQUIRED_MARKERS.every((marker) => source.includes(marker));
+}
