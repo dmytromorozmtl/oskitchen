@@ -46,5 +46,6 @@
   "44-kds-station-routing-rules": "done",
   "45-schedule-grid-drag-drop": "done",
   "46-e2e-accessibility-axe-10-pages": "done",
-  "47-pos-terminal-keyboard-navigation": "done"
+  "47-pos-terminal-keyboard-navigation": "done",
+  "48-screen-reader-icon-buttons": "done"
 }

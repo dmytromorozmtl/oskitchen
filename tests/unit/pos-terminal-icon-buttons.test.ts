@@ -57,15 +57,15 @@ describe("POS terminal icon button labels (Task 23)", () => {
     expect(report.passed).toBe(true);
   });
 
-  it("pos-terminal-client cart controls expose item-specific aria-labels", () => {
+  it("pos-terminal cart controls expose item-specific aria-labels", () => {
     const source = readFileSync(
-      join(ROOT, "components/dashboard/pos-terminal-client.tsx"),
+      join(ROOT, "components/dashboard/pos-terminal/cart-panel.tsx"),
       "utf8",
     );
     expect(source).toContain("posTerminalDecreaseQuantityLabel(line.title)");
     expect(source).toContain("posTerminalIncreaseQuantityLabel(line.title)");
     const audit = auditPosTerminalIconButtonModule(
-      "components/dashboard/pos-terminal-client.tsx",
+      "components/dashboard/pos-terminal/cart-panel.tsx",
       ROOT,
     );
     expect(audit.passed).toBe(true);

@@ -14,6 +14,7 @@ export function posTerminalIncreaseQuantityLabel(itemTitle: string): string {
 }
 
 export const POS_TERMINAL_ICON_BUTTON_MODULES = [
+  "components/dashboard/pos-terminal/cart-panel.tsx",
   "components/dashboard/pos-terminal-client.tsx",
   "components/pos/pos-mobile-client.tsx",
   "components/pos/pos-desktop-shortcuts-overlay.tsx",
