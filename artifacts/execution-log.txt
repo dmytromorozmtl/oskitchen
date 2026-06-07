@@ -6651,3 +6651,10 @@ Category: feat
 Result: done — /dashboard/accounting/journal-export with CSV/JSON/QuickBooks CSV formats; COA mapping overlay; /api/export/gl-journal/json; gl-sync strip; policy + audit + 4 tests
 Tests: npm run test:ci:journal-entry-export:cert 4/4 pass
 Commit: b4739cb6
+
+---
+Cycle: 20260606-231400
+Task: 98 — P&L reconciliation view (P3)
+Category: feat
+Result: done — /dashboard/accounting/pnl-reconciliation with synced/minor/material severity bands, variance %, GL codes; CSV export; gl-sync strip; policy + audit + 6 tests
+Tests: npm run test:ci:pnl-reconciliation-view:cert 6/6 pass

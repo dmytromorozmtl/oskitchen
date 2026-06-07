@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ChartOfAccountsMappingStrip } from "@/components/dashboard/accounting/chart-of-accounts-mapping-strip";
 import { JournalEntryExportStrip } from "@/components/dashboard/accounting/journal-entry-export-strip";
+import { PnlReconciliationViewStrip } from "@/components/dashboard/accounting/pnl-reconciliation-view-strip";
 import { GlDepthSyncPanel } from "@/components/dashboard/accounting/gl-depth-sync-panel";
 import { canExportReports } from "@/lib/reports/report-export-access";
 import { requireReportsPageAccess } from "@/lib/reports/reports-page-access";
@@ -54,6 +55,7 @@ export default async function GlDepthAccountingSyncPage({
 
       <ChartOfAccountsMappingStrip />
       <JournalEntryExportStrip />
+      <PnlReconciliationViewStrip />
 
       <div className="flex flex-wrap gap-2">
         {PERIODS.map((p) => (
