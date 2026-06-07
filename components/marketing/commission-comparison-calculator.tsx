@@ -18,10 +18,10 @@ import { OWN_YOUR_CHANNEL_UPSELL_ROUTE } from '@/lib/marketing/own-your-channel-
 type MixField = 'doordashMixPct' | 'uberEatsMixPct' | 'grubhubMixPct' | 'uberDirectMixPct';
 
 const MIX_FIELDS: Array<{ key: MixField; label: string }> = [
-  { key: 'doordashMixPct', label: 'DoorDash mix %' },
-  { key: 'uberEatsMixPct', label: 'Uber Eats mix %' },
-  { key: 'grubhubMixPct', label: 'Grubhub mix %' },
-  { key: 'uberDirectMixPct', label: 'Uber Direct mix %' },
+  { key: 'doordashMixPct', label: 'DoorDash mix % (roadmap benchmark)' },
+  { key: 'uberEatsMixPct', label: 'Uber Eats mix % (partner-gated / roadmap)' },
+  { key: 'grubhubMixPct', label: 'Grubhub mix % (roadmap benchmark)' },
+  { key: 'uberDirectMixPct', label: 'Uber Direct mix % (roadmap benchmark)' },
 ];
 
 export function CommissionComparisonCalculator({ compact = false }: { compact?: boolean }) {
