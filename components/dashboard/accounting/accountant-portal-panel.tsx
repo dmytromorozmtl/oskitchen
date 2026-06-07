@@ -17,12 +17,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
+import {
   ACCOUNTANT_PORTAL_PILLARS,
   ACCOUNTANT_PORTAL_ROUTE,
   type AccountantPortalDeliverable,
   type AccountantPortalModel,
 } from "@/lib/accounting/accountant-portal-absolute-final-policy";
 import { ACCOUNTANT_PORTAL_ONBOARDING } from "@/lib/accounting/accountant-portal-content";
+import { cn } from "@/lib/utils";
 
 function pillarLabel(pillar: (typeof ACCOUNTANT_PORTAL_PILLARS)[number]) {
   switch (pillar) {
@@ -71,22 +80,24 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
 
   return (
     <div className="space-y-6" data-testid="accountant-portal-panel">
-      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm">
-        <p className="font-semibold">{ACCOUNTANT_PORTAL_ONBOARDING.title} · BETA</p>
-        <p className="mt-1 text-muted-foreground">
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">
+          {ACCOUNTANT_PORTAL_ONBOARDING.title} · BETA
+        </p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
           {ACCOUNTANT_PORTAL_ONBOARDING.subtitle} read-only navigation and export downloads —
           not a certified GL or multi-tenant CPA login. Do not claim audit-grade handoff.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 text-sm">
-        <Badge variant="outline" className="rounded-full">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
+        <Badge variant="outline" className="rounded-full tabular-nums">
           {summary.liveCount} LIVE · {summary.betaCount} BETA
         </Badge>
-        <Badge variant="secondary" className="rounded-full">
+        <Badge variant="secondary" className="rounded-full tabular-nums">
           {summary.coaCoveragePercent}% COA mapped
         </Badge>
-        <Badge variant="outline" className="rounded-full">
+        <Badge variant="outline" className="rounded-full tabular-nums">
           {summary.reconciliationPercent}% reconciled
         </Badge>
         {summary.periodCloseReady ? (
@@ -101,13 +112,15 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
         )}
       </div>
 
-      <Card className="border-border/70 shadow-sm">
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-lg">Period-close checklist</CardTitle>
-          <CardDescription>{periodLabel} — accountant review before posting</CardDescription>
+          <CardDescription className="dark:text-muted-foreground/90">
+            {periodLabel} — accountant review before posting
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <ul className="list-inside list-disc space-y-2 text-sm text-muted-foreground">
+        <CardContent className={DESIGN_POLISH_ROW_SURFACE_CLASS}>
+          <ul className="list-inside list-disc space-y-2 text-sm text-muted-foreground dark:text-muted-foreground/90">
             {ACCOUNTANT_PORTAL_ONBOARDING.checklist.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -117,20 +130,26 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
 
       <div className="grid gap-4 lg:grid-cols-5">
         {byPillar.map(({ pillar, items }) => (
-          <Card key={pillar} className="border-border/70 shadow-sm" data-testid="accountant-portal-pillar">
+          <Card
+            key={pillar}
+            className={DESIGN_POLISH_CARD_CLASS}
+            data-testid="accountant-portal-pillar"
+          >
             <CardHeader className="pb-2">
-              <Briefcase className="h-4 w-4 text-primary" aria-hidden />
+              <Briefcase className={`h-4 w-4 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />
               <CardTitle className="text-sm">{pillarLabel(pillar)}</CardTitle>
-              <CardDescription className="text-xs">{items.length} deliverable(s)</CardDescription>
+              <CardDescription className="text-xs dark:text-muted-foreground/90">
+                {items.length} deliverable(s)
+              </CardDescription>
             </CardHeader>
           </Card>
         ))}
       </div>
 
-      <Card className="border-border/70 shadow-sm">
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-lg">Finance deliverables</CardTitle>
-          <CardDescription>
+          <CardDescription className="dark:text-muted-foreground/90">
             Export package hub — COA mapping, journals, reconciliation, QuickBooks handoff
           </CardDescription>
         </CardHeader>
@@ -138,7 +157,10 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
           {deliverables.map((item) => (
             <div
               key={item.id}
-              className="flex flex-col gap-3 rounded-xl border border-border/70 p-4 sm:flex-row sm:items-center sm:justify-between"
+              className={cn(
+                "flex flex-col gap-3 rounded-xl border border-border/70 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-border/50",
+                DESIGN_POLISH_ROW_SURFACE_CLASS,
+              )}
               data-testid="accountant-portal-deliverable"
             >
               <div className="min-w-0 space-y-1">
@@ -149,20 +171,30 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
                     {item.statusLabel}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
-                <p className="text-xs text-muted-foreground">{pillarLabel(item.pillar)}</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+                  {item.description}
+                </p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
+                  {pillarLabel(item.pillar)}
+                </p>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
                 <Button asChild size="sm" variant="outline" className="rounded-full">
                   <Link href={item.route}>
                     Open
-                    <ExternalLink className="ml-1 h-3 w-3" aria-hidden />
+                    <ExternalLink
+                      className={`ml-1 h-3 w-3 ${DESIGN_POLISH_STRIPE_OK_CLASS}`}
+                      aria-hidden
+                    />
                   </Link>
                 </Button>
                 {item.exportRoute && summary.canExport ? (
                   <Button asChild size="sm" variant="ghost" className="rounded-full">
                     <a href={`${item.exportRoute}?period=${period}`} download>
-                      <Download className="mr-1 h-3.5 w-3.5" aria-hidden />
+                      <Download
+                        className={`mr-1 h-3.5 w-3.5 ${DESIGN_POLISH_STRIPE_OK_CLASS}`}
+                        aria-hidden
+                      />
                       Export
                     </a>
                   </Button>
@@ -174,17 +206,17 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
       </Card>
 
       {summary.canExport ? (
-        <Card className="border-primary/20 bg-primary/5 shadow-sm">
+        <Card className={cn("border-primary/20 bg-primary/5 dark:bg-primary/10", DESIGN_POLISH_CARD_CLASS)}>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-primary" aria-hidden />
+              <FileSpreadsheet className={`h-5 w-5 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />
               <CardTitle className="text-lg">Quick export bundle</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="dark:text-muted-foreground/90">
               Download journal + reconciliation for {periodLabel.toLowerCase()} period
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
+          <CardContent className={`flex flex-wrap gap-2 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}>
             <Button asChild size="sm" variant="outline" className="rounded-full">
               <a href={`/api/export/gl-journal?period=${period}`} download>
                 Journal CSV
@@ -204,9 +236,10 @@ export function AccountantPortalPanel({ model }: { model: AccountantPortalModel 
         </Card>
       ) : null}
 
-      <p className="text-xs text-muted-foreground">
+      <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
         Policy: accountant-portal-absolute-final-v1 · Route: {ACCOUNTANT_PORTAL_ROUTE}
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
