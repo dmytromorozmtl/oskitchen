@@ -3,9 +3,9 @@
   "2-delete-duplicates": "done",
   "3-git-remote": "done",
   "4-staging-deploy": "done",
-  "5-p0-orchestrator": "todo",
-  "6-sso-smoke": "todo",
-  "7-live-smoke": "todo",
+  "5-p0-orchestrator": "blocked",
+  "6-sso-smoke": "blocked",
+  "7-live-smoke": "blocked",
   "8-hide-preview-nav": "done",
   "9-reconcile-tracker": "done",
   "10-kds-slo": "done",
@@ -29,9 +29,15 @@
   "28-npm-trim": "done",
   "29-investor-hold": "done",
   "30-native-defer": "done",
+  "31-final-execution-sync": "blocked",
   "_meta": {
     "1-vault-secrets-note": "local .env.staging.local seeded 11/11 (2026-06-01); SSO provider ref pending Supabase SAML UUID",
     "2-delete-duplicates-note": "cycle 61: 0 duplicate paths (clean scan)",
-    "10-kds-slo-note": "docs/kds-slo-proof-plan.md pre-existed with p50/p95/p99 targets"
+    "10-kds-slo-note": "docs/kds-slo-proof-plan.md pre-existed with p50/p95/p99 targets",
+    "5-p0-orchestrator-note": "agent closed 2026-06-06 — orchestrator wired; ops-blocked until vault 11/11 PASS (npm run ops:run-p0-staging-proof-execution -- --execute --write)",
+    "6-sso-smoke-note": "agent closed 2026-06-06 — IdP smoke plan + scripts wired; ops-blocked until vault PASS (npm run smoke:enterprise-sso-idp-staging -- --execute)",
+    "7-live-smoke-note": "agent closed 2026-06-06 — Woo/Shopify live smoke wired; ops-blocked until vault PASS (npm run smoke:woo-live && npm run smoke:shopify-live)",
+    "31-final-execution-sync-note": "agent closed 2026-06-06 — sync-final-execution-report wired; ready:true blocked until actions 5–7 PASS per docs/investor-narrative-hold.md",
+    "closure-summary": "31/31 agent-closed (27 done + 4 ops-blocked) — absolute-final task 27"
   }
 }

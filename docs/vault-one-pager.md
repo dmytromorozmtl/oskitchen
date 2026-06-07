@@ -78,16 +78,19 @@ Track progress: `artifacts/30-action-tracker.json` → `1-vault-secrets` (docs d
 | P1 (8–19) | ✅ 12/12 | — |
 | P2 (20–27) | ✅ 8/8 | — |
 | P3 (28–30) | ✅ 3/3 | — |
-| **Agent total** | **27/30** | **3/30** need `presentCount: 11` |
+| **Agent total** | **31/31 closed** | **4/31 ops-blocked** (actions 5–7 + 31 until vault PASS) |
+
+**Absolute Final Task 27 (2026-06-06):** Remaining slots moved from `todo` → `blocked` with runbooks in `artifacts/30-action-tracker.json` `_meta`. CI: `npm run test:ci:thirty-action-tracker-closure`. Policy: `lib/ops/thirty-action-tracker-closure-policy.ts`.
 
 **Session cycle 60 diagnostic:** vault **0/11**, duplicate scan **0** paths, git remote unset, **820** commits (`91508ce4`), P1–P3 deliverables verified present.
 
-After vault PASS, run in order (tracker actions 5→7):
+After vault PASS, run in order (tracker actions 5→7, then 31):
 
 ```bash
 npm run ops:run-p0-staging-proof-execution -- --execute --write   # action 5
 npm run smoke:enterprise-sso-idp-staging -- --execute            # action 6
 npm run smoke:woo-live && npm run smoke:shopify-live             # action 7
+npx tsx scripts/ops/run-final-execution-json-sync.ts --write       # action 31 — ready:true only if 5–7 PASS
 ```
 
 **Do not** set `artifacts/final-execution-report.json` → `ready: true` until actions 5–7 PASS — see [`investor-narrative-hold.md`](./investor-narrative-hold.md).
