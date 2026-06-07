@@ -3,7 +3,7 @@
 **Policy:** `free-pilot-tier-program-absolute-final-v1`  
 **Date:** 2026-06-06  
 **Status:** **INTERNAL GTM** — founder-approved outreach only; not a public homepage claim until slot 5/5 or explicit launch  
-**Parent:** [`loi-signed.md`](./loi-signed.md) · [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) · [`icp-definition-final.md`](./icp-definition-final.md) · [`pilot-week1-roadmap.md`](./pilot-week1-roadmap.md)
+**Parent:** [`loi-signed.md`](./loi-signed.md) · [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) · [`icp-definition-final.md`](./icp-definition-final.md) · [`pilot-week1-roadmap.md`](./pilot-week1-roadmap.md) · [`referral-program.md`](./referral-program.md)
 
 OS Kitchen offers a **limited free pilot tier** for the **first five** qualified restaurant operators (ghost kitchen, meal prep, or commissary ICP). Software subscription is waived for the 90-day design-partner term in exchange for weekly feedback, honest BETA acceptance, and pilot metrics capture.
 
