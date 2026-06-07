@@ -6170,4 +6170,12 @@ Task: 37 — Split shopify-markets-panel 1477→4 section files (P2)
 Category: perf
 Result: done — extracted ShopifyMarketsActionToolbar (365L), RoutingSection (257L), B2bSection (443L), SyncSection (362L) + market-row + types; shopify-markets-panel.tsx 253L orchestrator; shopify-markets-split-policy
 Tests: npm run test:ci:shopify-markets-split 3/3 pass
+Commit: e77680de
+
+---
+Cycle: 20260606-230500
+Task: 38 — Split onboarding-wizard 940→StepIndicator + StepContent + StepNavigation (P2)
+Category: perf
+Result: done — extracted step-indicator (15L), step-content (756L), step-navigation (27L) + types; onboarding-wizard.tsx 198L orchestrator; onboarding-wizard-split-policy
+Tests: npm run test:ci:onboarding-wizard-split 3/3 pass
 Commit: pending
