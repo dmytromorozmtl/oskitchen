@@ -39,5 +39,6 @@
   "37-split-shopify-markets-panel": "done",
   "38-split-onboarding-wizard": "done",
   "39-offline-pos-pci-review": "done",
-  "40-hardware-device-fleet-management": "done"
+  "40-hardware-device-fleet-management": "done",
+  "41-gl-depth-accounting-sync": "done"
 }

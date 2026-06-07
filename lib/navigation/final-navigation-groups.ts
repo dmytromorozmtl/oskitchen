@@ -174,6 +174,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/accounting/vendor-payments", labelKey: "nav.vendorPayments", icon: Wallet },
       { href: "/dashboard/finance/bank-import", labelKey: "nav.bankStatementImport", icon: FileSpreadsheet },
       { href: "/dashboard/accounting/bank-reconciliation", labelKey: "nav.bankReconciliation", icon: FileSpreadsheet },
+      { href: "/dashboard/accounting/gl-sync", labelKey: "nav.glDepthAccounting", icon: BookOpen },
       { href: "/dashboard/accounting/cash-counts", labelKey: "nav.cashCounts", icon: Coins },
       { href: "/dashboard/inventory/invoice-scanner", labelKey: "nav.invoiceScanner", icon: Package },
       { href: "/dashboard/inventory/receiving", labelKey: "nav.receivingReconciliation", icon: Package },

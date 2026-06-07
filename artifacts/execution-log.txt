@@ -6194,4 +6194,12 @@ Task: 40 — Hardware device fleet management in Integration Health Center (P2)
 Category: feat
 Result: done — hardware-device-fleet-policy + loadHardwareDeviceFleetModel (POS registers, terminals, Stripe readers); HardwareDeviceFleetPanel with summary badges + device table; wired into /dashboard/integration-health after summary panel
 Tests: npm run test:ci:hardware-device-fleet 5/5 pass
+Commit: 6ca48b21
+
+---
+Cycle: 20260606-232000
+Task: 41 — GL-depth accounting sync: chart of accounts, journal entry, P&L reconciliation (P2)
+Category: feat
+Result: done — restaurant-coa-template (13 accounts) + gl-depth-accounting-policy/service; /dashboard/accounting/gl-sync with COA table, balanced journal entries from operational P&L, line-by-line reconciliation; /api/export/gl-journal CSV; nav + i18n
+Tests: npm run test:ci:gl-depth-accounting 7/7 pass
 Commit: pending
