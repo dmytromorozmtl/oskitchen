@@ -6459,3 +6459,11 @@ Category: feat
 Result: done — /dashboard/analytics/delivery-commissions; per-order commission rows (reported vs estimated benchmark); policy + metrics + audit + service + panel; analytics subnav link
 Tests: npm run test:ci:delivery-commission-tracking:cert 6/6 pass
 Commit: 26401af9
+
+---
+Cycle: 20260606-220400
+Task: 74 — Referral program for restaurateurs (P2)
+Category: feat
+Result: done — ReferralProgramPanel; /dashboard/referrals + settings/referrals unified; absolute final policy + audit; docs/referral-program.md restaurateur section; linked from free-pilot-tier
+Tests: npm run test:ci:referral-program:cert 8/8 pass
+Commit: 02b88591
