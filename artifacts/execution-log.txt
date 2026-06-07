@@ -5968,4 +5968,4 @@ Task: 12 — Remove deprecated Sentry options (P1)
 Category: fix
 Result: done — migrated withSentryConfig options to webpack.treeshake.removeDebugLogging, webpack.automaticVercelMonitors, webpack.reactComponentAnnotation; removed disableLogger / top-level deprecated keys
 Tests: tests/unit/sentry-integration.test.ts 15/15 pass
-Commit: pending
+Commit: b3183b93
