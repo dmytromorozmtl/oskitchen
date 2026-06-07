@@ -768,6 +768,8 @@
     "test:ci:design-full-polish-10-white-label:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-10-white-label.test.ts",
     "test:ci:design-full-polish-11-coa-mapping": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-11-coa-mapping.test.ts tests/unit/chart-of-accounts-mapping-absolute-final.test.ts",
     "test:ci:design-full-polish-11-coa-mapping:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-11-coa-mapping.test.ts",
+    "test:ci:design-full-polish-12-journal-export": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-12-journal-export.test.ts tests/unit/journal-entry-export-absolute-final.test.ts",
+    "test:ci:design-full-polish-12-journal-export:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-12-journal-export.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",
