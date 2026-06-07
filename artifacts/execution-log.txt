@@ -6563,3 +6563,11 @@ Category: feat
 Result: done — /dashboard/settings/currency with workspace base + per-location overrides; storefront Stripe alignment; honest no-FX network rollup; policy + 8 tests
 Tests: npm run test:ci:multi-currency-support:cert 8/8 pass
 Commit: 8eb89ca2
+
+---
+Cycle: 20260606-223100
+Task: 87 — EU data residency roadmap (P3)
+Category: docs
+Result: done — docs/eu-data-residency-roadmap.md (6 phases, gap analysis, subprocessor flows, sales guidance); wired from SOC2 + enterprise trust docs; policy + audit
+Tests: npm run test:ci:eu-data-residency-roadmap:cert 4/4 pass
+Commit: pending
