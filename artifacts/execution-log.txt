@@ -6555,3 +6555,11 @@ Category: docs
 Result: done — docs/product-hunt-launch-prep.md (T-30→T+7 timeline, assets, runbook, HG1–HG10); artifacts/product-hunt-launch/ archive; wired from defer doc; policy + audit
 Tests: npm run test:ci:product-hunt-launch-prep:cert 4/4 pass
 Commit: 8f784196
+
+---
+Cycle: 20260606-222900
+Task: 86 — multi-currency support Lightspeed parity (P3)
+Category: feat
+Result: done — /dashboard/settings/currency with workspace base + per-location overrides; storefront Stripe alignment; honest no-FX network rollup; policy + 8 tests
+Tests: npm run test:ci:multi-currency-support:cert 8/8 pass
+Commit: 8eb89ca2
