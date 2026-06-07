@@ -26,7 +26,7 @@ type OrderRow = {
   status: OrderStatus;
   total: Prisma.Decimal | null;
   createdAt: Date;
-  channelProvider: IntegrationProvider | null;
+  channelProvider: string | null;
   importedFromExternal: {
     externalOrderId: string;
     provider: IntegrationProvider;
@@ -34,7 +34,7 @@ type OrderRow = {
   } | null;
 };
 
-function resolveProvider(row: OrderRow): IntegrationProvider | null {
+function resolveProvider(row: OrderRow): IntegrationProvider | string | null {
   if (row.importedFromExternal?.provider) return row.importedFromExternal.provider;
   return row.channelProvider;
 }
