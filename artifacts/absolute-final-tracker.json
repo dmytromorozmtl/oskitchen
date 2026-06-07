@@ -12,5 +12,6 @@
   "10-bundle-budget-ci-gate": "done",
   "11-prisma-config-migration": "done",
   "12-remove-deprecated-sentry-options": "done",
-  "13-npm-audit-ci-gate": "done"
+  "13-npm-audit-ci-gate": "done",
+  "14-static-generation-max-concurrency": "done"
 }

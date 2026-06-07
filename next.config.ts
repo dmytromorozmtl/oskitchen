@@ -5,12 +5,15 @@ import bundleAnalyzer from "@next/bundle-analyzer";
 import { withSentryConfig } from "@sentry/nextjs";
 
 import { storefrontImageRemotePatterns } from "@/lib/storefront/image-cdn-config";
+import { resolveStaticGenerationMaxConcurrency } from "@/lib/performance/static-generation-concurrency-policy";
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
   openAnalyzer: false,
   analyzerMode: "json",
 });
+
+const staticGenerationMaxConcurrency = resolveStaticGenerationMaxConcurrency();
 
 const require = createRequire(import.meta.url);
 
@@ -80,10 +83,10 @@ const nextConfig: NextConfig = {
         "*.vercel.app",
       ],
     },
-    // Reduce parallel SSG — lowers peak RAM on Vercel (655+ static paths).
-    staticGenerationMaxConcurrency: process.env.VERCEL
-      ? Number(process.env.NEXT_STATIC_GENERATION_MAX_CONCURRENCY ?? 1)
-      : 2,
+    // Vercel only: concurrency=1 OOM guard (655+ SSG paths). Local uses Next default unless env set.
+    ...(staticGenerationMaxConcurrency != null
+      ? { staticGenerationMaxConcurrency }
+      : {}),
     // Fewer webpack workers on remote builders to avoid OOM alongside SSG.
     ...(process.env.VERCEL ? { cpus: 1 as const } : {}),
   },

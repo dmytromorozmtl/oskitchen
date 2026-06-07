@@ -5,7 +5,7 @@ set -euo pipefail
 # Remote Vercel builders: force heap high (dashboard NODE_OPTIONS env must not cap at 4 GB).
 if [[ -n "${VERCEL:-}" ]]; then
   export NODE_OPTIONS="--max-old-space-size=14336"
-  export NEXT_STATIC_GENERATION_MAX_CONCURRENCY="1"
+  export NEXT_STATIC_GENERATION_MAX_CONCURRENCY="1" # lib/performance/static-generation-concurrency-policy.ts
   # Webpack cache warnings flood the build log (>4 MB) and fail the deployment on Vercel.
   export NEXT_WEBPACK_CACHE=0
   echo "▶ Vercel remote build (${NODE_OPTIONS}, SSG concurrency=1, webpack cache off)"

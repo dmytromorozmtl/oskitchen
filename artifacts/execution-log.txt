@@ -5978,3 +5978,11 @@ Result: done — npm run audit:dependencies:high (npm audit --audit-level=high);
 Tests: tests/unit/npm-audit-ci-gate.test.ts 2/2 pass
 Note: local audit reports high-severity findings — gate will fail CI until dependencies remediated
 Commit: e874db88
+
+---
+Cycle: 20260606-205500
+Task: 14 — Investigate staticGenerationMaxConcurrency (P1)
+Category: perf
+Result: done — investigation: keep concurrency=1 on Vercel (655+ SSG OOM guard); removed unnecessary local cap (was 2); policy module + env override; vercel-build.sh unchanged
+Tests: tests/unit/static-generation-concurrency-policy.test.ts 5/5 pass
+Commit: pending
