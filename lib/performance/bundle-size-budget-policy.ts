@@ -11,6 +11,10 @@ export const BUNDLE_SIZE_BASELINE_ARTIFACT = "artifacts/bundle-size-baseline.jso
 
 export const BUNDLE_SIZE_DEFAULT_TOLERANCE_PERCENT = 15 as const;
 
+/** Absolute Final P0 — per-route First Load JS tiers (kB). */
+export const BUNDLE_FIRST_LOAD_WARN_KB = 500 as const;
+export const BUNDLE_FIRST_LOAD_FAIL_KB = 1000 as const;
+
 export const BUNDLE_SHARED_MAX_KB = 130 as const;
 
 export type BundleSurface =
@@ -53,7 +57,14 @@ export type ParsedBuildLogSizes = {
 
 export type BundleRegressionViolation = {
   route: string;
-  kind: "baseline_regression" | "surface_budget" | "shared_budget";
+  kind: "baseline_regression" | "surface_budget" | "shared_budget" | "absolute_fail";
+  measuredKb: number;
+  limitKb: number;
+  message: string;
+};
+
+export type BundleBudgetWarning = {
+  route: string;
   measuredKb: number;
   limitKb: number;
   message: string;
@@ -155,6 +166,61 @@ export function findBundleSizeViolations(
   }
 
   return violations;
+}
+
+export function findAbsoluteBundleBudgetWarnings(
+  measured: ParsedBuildLogSizes,
+): BundleBudgetWarning[] {
+  const warnings: BundleBudgetWarning[] = [];
+
+  for (const [route, measuredKb] of measured.routes) {
+    if (measuredKb > BUNDLE_FIRST_LOAD_WARN_KB && measuredKb <= BUNDLE_FIRST_LOAD_FAIL_KB) {
+      warnings.push({
+        route,
+        measuredKb,
+        limitKb: BUNDLE_FIRST_LOAD_WARN_KB,
+        message: `${route} First Load JS ${measuredKb} kB exceeds warning budget ${BUNDLE_FIRST_LOAD_WARN_KB} kB`,
+      });
+    }
+  }
+
+  return warnings.sort((a, b) => b.measuredKb - a.measuredKb);
+}
+
+export function findAbsoluteBundleBudgetFails(
+  measured: ParsedBuildLogSizes,
+): BundleRegressionViolation[] {
+  const fails: BundleRegressionViolation[] = [];
+
+  for (const [route, measuredKb] of measured.routes) {
+    if (measuredKb > BUNDLE_FIRST_LOAD_FAIL_KB) {
+      fails.push({
+        route,
+        kind: "absolute_fail",
+        measuredKb,
+        limitKb: BUNDLE_FIRST_LOAD_FAIL_KB,
+        message: `${route} First Load JS ${measuredKb} kB exceeds fail budget ${BUNDLE_FIRST_LOAD_FAIL_KB} kB`,
+      });
+    }
+  }
+
+  return fails.sort((a, b) => b.measuredKb - a.measuredKb);
+}
+
+export function mergeBundleViolations(
+  ...groups: BundleRegressionViolation[][]
+): BundleRegressionViolation[] {
+  const seen = new Set<string>();
+  const merged: BundleRegressionViolation[] = [];
+  for (const group of groups) {
+    for (const violation of group) {
+      const key = `${violation.kind}:${violation.route}:${violation.message}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push(violation);
+    }
+  }
+  return merged;
 }
 
 export function assertNoBundleSizeViolations(

@@ -4,12 +4,16 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
+  assertNoBundleSizeViolations,
+  BUNDLE_FIRST_LOAD_FAIL_KB,
+  BUNDLE_FIRST_LOAD_WARN_KB,
   BUNDLE_SIZE_BASELINE_ARTIFACT,
   BUNDLE_SIZE_BUDGET_POLICY_ID,
   BUNDLE_SIZE_DEFAULT_TOLERANCE_PERCENT,
   BUNDLE_SHARED_MAX_KB,
   BUNDLE_SURFACE_MAX_KB,
-  assertNoBundleSizeViolations,
+  findAbsoluteBundleBudgetFails,
+  findAbsoluteBundleBudgetWarnings,
   findBundleSizeViolations,
   parseFirstLoadJsFromBuildLog,
   parseSizeToKb,
@@ -40,6 +44,8 @@ describe("bundle size regression", () => {
     expect(BUNDLE_SIZE_BUDGET_POLICY_ID).toBe("bundle-size-budget-v1");
     expect(BUNDLE_SIZE_DEFAULT_TOLERANCE_PERCENT).toBe(15);
     expect(BUNDLE_SHARED_MAX_KB).toBe(130);
+    expect(BUNDLE_FIRST_LOAD_WARN_KB).toBe(500);
+    expect(BUNDLE_FIRST_LOAD_FAIL_KB).toBe(1000);
     expect(BUNDLE_SURFACE_MAX_KB.marketing).toBeGreaterThanOrEqual(200);
   });
 
@@ -95,6 +101,25 @@ describe("bundle size regression", () => {
     ).toBe(true);
   });
 
+  it("warns above 500 kB and fails above 1000 kB First Load JS", () => {
+    const warnLog = `
+├ ƒ /dashboard/heavy                       1 kB           550 kB
++ First Load JS shared by all              102 kB
+`;
+    const failLog = `
+├ ƒ /dashboard/too-heavy                   1 kB         1.1 MB
++ First Load JS shared by all              102 kB
+`;
+
+    const warnMeasured = parseFirstLoadJsFromBuildLog(warnLog);
+    const failMeasured = parseFirstLoadJsFromBuildLog(failLog);
+
+    expect(findAbsoluteBundleBudgetWarnings(warnMeasured)).toHaveLength(1);
+    expect(findAbsoluteBundleBudgetFails(warnMeasured)).toHaveLength(0);
+    expect(findAbsoluteBundleBudgetFails(failMeasured)).toHaveLength(1);
+    expect(findAbsoluteBundleBudgetFails(failMeasured)[0]?.kind).toBe("absolute_fail");
+  });
+
   it("documents regression test in bundle analysis guide", () => {
     const doc = readFileSync(join(ROOT, "docs/bundle-analysis.md"), "utf8");
     expect(doc).toContain("tests/unit/bundle-size-regression.test.ts");
@@ -122,5 +147,9 @@ describe("bundle size regression", () => {
     expect(ci).toContain("Performance regression (bundle size)");
     expect(ci).toContain("test:ci:bundle-size-regression");
     expect(ci).toContain("build-route-sizes.log");
+
+    const script = readFileSync(join(ROOT, "scripts/check-bundle-size-regression.ts"), "utf8");
+    expect(script).toContain("BUNDLE_FIRST_LOAD_WARN_KB");
+    expect(script).toContain("BUNDLE_FIRST_LOAD_FAIL_KB");
   });
 });
