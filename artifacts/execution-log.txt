@@ -6538,3 +6538,4 @@ Task: 83 — sync health dashboard marketing per channel (P2)
 Category: feat
 Result: done — /sync-health per-channel table; 7 illustrative channels; embedded on IHC marketing landing; sales deck updated; policy + audit
 Tests: npm run test:ci:sync-health-dashboard-marketing:cert 4/4 pass
+Commit: 61cf8381
