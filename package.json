@@ -684,6 +684,8 @@
     "test:ci:delivery-commission-tracking:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/delivery-commission-tracking-absolute-final.test.ts",
     "test:ci:referral-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/referral-program-absolute-final.test.ts",
     "test:ci:referral-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/referral-program-absolute-final.test.ts",
+    "test:ci:local-partner-network": "node ./node_modules/vitest/vitest.mjs run tests/unit/local-partner-network-absolute-final.test.ts",
+    "test:ci:local-partner-network:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/local-partner-network-absolute-final.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",
