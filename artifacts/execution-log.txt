@@ -5960,4 +5960,4 @@ Task: 11 — Migrate Prisma config to prisma.config.ts (P1)
 Category: chore
 Result: done — prisma.config.ts (schema, migrations path, seed tsx prisma/seed.ts); removed deprecated package.json#prisma; prisma validate/generate load config without deprecation warning
 Tests: tests/unit/prisma-config.test.ts 1/1 pass
-Commit: pending
+Commit: cf2cc5ab
