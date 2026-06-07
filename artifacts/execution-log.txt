@@ -6803,3 +6803,11 @@ Category: design
 Result: done — shared design polish tokens registry (116–130 slots), hero banner + card/row dark-mode polish on multi-currency settings panel, 8 cert tests; Design batch 116/130 started
 Tests: npm run test:ci:design-full-polish-01-multi-currency:cert 8/8 pass
 Commit: 0e34b793
+
+---
+Cycle: 20260607-003100
+Task: 117 — Design full polish EU data residency roadmap (P3)
+Category: design
+Result: done — doc polish markers (hero/status/timeline/dark-mode), blockquote hero callout on eu-data-residency-roadmap.md, doc audit branch in design polish gate, 8 cert tests
+Tests: npm run test:ci:design-full-polish-02-eu-data-residency:cert 8/8 pass
+Commit: b3e27882
