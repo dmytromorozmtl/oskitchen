@@ -9,5 +9,6 @@ Lightweight log of significant technical decisions. Format based on [Michael Nyg
 | [0003](0003-inline-webhook-queue.md) | INLINE_LOW_VOLUME webhook processing | Accepted |
 | [0004](0004-supabase-postgres-stack.md) | Supabase Postgres + PgBouncer + Realtime | Accepted |
 | [0005](0005-production-cron-allowlist.md) | Production cron allowlist vs experimental routes | Accepted |
+| [0006](0006-engineering-knowledge-transfer.md) | Engineering knowledge transfer (bus factor) | Accepted |
 
 When adding an ADR: copy the template from any `000x-*.md` file, increment the number, and update this table.

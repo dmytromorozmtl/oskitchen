@@ -6403,3 +6403,11 @@ Category: docs
 Result: done — docs/soc2-roadmap-with-timeline.md (6 phases Jun 2026→H2 2027); gap analysis CC1–CC9 + P0–P2 backlog; soc2-roadmap-absolute-final-policy + audit; linked readiness assessment
 Tests: npm run test:ci:soc2-roadmap:cert 5/5 pass
 Commit: 171fd123
+
+---
+Cycle: 20260606-215000
+Task: 67 — Bus factor mitigation onboarding ADRs video walkthrough (P2)
+Category: docs
+Result: done — engineering-onboarding.md (2-week checklist); engineering-video-walkthrough.md (8 chapters); ADR 0006; updated bus-factor-mitigation.md + adr README; policy + audit
+Tests: npm run test:ci:bus-factor-mitigation:cert 5/5 pass
+Commit: pending

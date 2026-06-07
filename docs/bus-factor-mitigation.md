@@ -1,7 +1,7 @@
 # Bus factor mitigation plan
 
-**Policy:** `bus-factor-mitigation-v1`  
-**Updated:** 2026-06-02  
+**Policy:** `bus-factor-mitigation-v1` · **Absolute Final:** `bus-factor-mitigation-absolute-final-v1` (Task 67)  
+**Updated:** 2026-06-06  
 **Owner:** Founder  
 **Review cadence:** Quarterly (or after first engineering hire)  
 **Snapshot:** Engineering headcount **1** · bus factor **1** · ~566 dashboard routes · 399 Prisma models · 1,300+ internal docs
@@ -70,8 +70,11 @@ High-complexity areas where tacit knowledge is highest risk:
 | Sales-safe claims | [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md) | Yes — CS can read |
 | CI / smoke matrix | [`ci-e2e-tier-matrix.md`](./ci-e2e-tier-matrix.md) | Yes — run documented npm scripts |
 | Architecture surface | [`navigation-audit.md`](./navigation-audit.md) · [`component-library.md`](./component-library.md) | Browse-only |
+| **Engineering onboarding** | [`engineering-onboarding.md`](./engineering-onboarding.md) | Yes — 2-week checklist |
+| **Repo video walkthrough** | [`engineering-video-walkthrough.md`](./engineering-video-walkthrough.md) | Yes — async tour |
+| **ADRs** | [`docs/adr/README.md`](./adr/README.md) (6 records) | Yes — read before structural changes |
 
-**Gap:** No ADR folder — add lightweight `docs/adr/` for major decisions (Task backlog).
+**Gap closed (Task 67):** ADR folder + onboarding doc + video walkthrough script published.
 
 ---
 
@@ -129,11 +132,18 @@ Per [`ultimate-audit-24may2026.md`](./ultimate-audit-24may2026.md) recommendatio
 
 **First hire onboarding (minimum 2 weeks):**
 
+See **[`engineering-onboarding.md`](./engineering-onboarding.md)** — full Day 1–10 checklist.
+
+Summary:
+
 1. Read this doc + [`INCIDENT_RESPONSE_RUNBOOK.md`](./INCIDENT_RESPONSE_RUNBOOK.md)
-2. Shadow staging deploy ([`migration-deployment-process.md`](./migration-deployment-process.md))
-3. Run `npm run test:ci:governance-bundles` locally
-4. Execute one webhook runbook drill on staging
-5. Pair on Integration Health demo path
+2. Watch [`engineering-video-walkthrough.md`](./engineering-video-walkthrough.md) (record when ready)
+3. Read [`docs/adr/README.md`](./adr/README.md) — ADRs 0001–0006
+4. Shadow staging deploy ([`migration-deployment-process.md`](./migration-deployment-process.md))
+5. Run `npm run test:ci:governance-bundles` locally
+6. Execute one webhook runbook drill on staging
+7. Pair on Integration Health demo path
+8. Pass `npm run test:ci:bus-factor-mitigation:cert`
 
 ### 5 — Pilot & customer continuity
 
@@ -158,7 +168,8 @@ Reference: [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) · [
 |--------|---------|
 | Complete access continuity checklist (§3) | Second admin on GitHub + Vercel |
 | Share staging checklist with trusted advisor | Someone can verify `/api/health` |
-| Record 90s Today demo video (Task 63) | Sales continues without live founder demo |
+| Record engineering repo walkthrough (~40 min) | [`engineering-video-walkthrough.md`](./engineering-video-walkthrough.md) |
+| Record 90s Today demo video (sales) | [`demo-video-script-today.md`](./demo-video-script-today.md) |
 | Publish this plan | Diligence-ready honesty |
 
 ### Days 31–60
@@ -167,7 +178,7 @@ Reference: [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) · [
 |--------|---------|
 | Contract part-time DevOps for smoke execution | P0 smokes PASS with shared creds |
 | Start hire #2 pipeline | Recruiting in flight |
-| Add 3 ADRs (marketplace, tenancy, integrations) | Knowledge not only in founder head |
+| Add ADR 0006 + refresh video quarterly | Knowledge transfer maintained |
 | Quarterly bus-factor review #1 | Update this doc |
 
 ### Days 61–90
@@ -190,7 +201,7 @@ Reference: [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) · [
 | People who can deploy production | 1 | 1* | 2 |
 | People with vault access | 1 | 2 | 2 |
 | Documented runbooks | 37+ | 40+ | 45+ |
-| ADRs | 0 | 3 | 8 |
+| ADRs | 6 | 6 | 8 |
 | On-call rotation | None | Advisor backup | 2-person rota |
 
 \*Production deploy may remain founder-only until hire #2 completes 30-day onboarding — document explicitly in investor updates.
@@ -215,7 +226,9 @@ Reference: [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) · [
 | [`staging-environment-checklist.md`](./staging-environment-checklist.md) | Infra handoff |
 | [`commercial-pilot-runbook.md`](./commercial-pilot-runbook.md) | Pilot ops |
 | [`migration-deployment-process.md`](./migration-deployment-process.md) | Schema deploy |
-| [`CONTRIBUTING.md`](../CONTRIBUTING.md) | Contributor onboarding (expand) |
+| [`engineering-onboarding.md`](./engineering-onboarding.md) | Hire #2 checklist (Task 67) |
+| [`engineering-video-walkthrough.md`](./engineering-video-walkthrough.md) | Repo tour script (Task 67) |
+| [`docs/adr/README.md`](./adr/README.md) | Architecture decisions |
 | Task 61 | `incident-response-process.md` |
 | Task 99 | `customer-success-playbook.md` |
 | Task 114 | `support-tier-plan.md` |
@@ -226,6 +239,7 @@ Reference: [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) · [
 
 | Date | Reviewer | Change |
 |------|----------|--------|
+| 2026-06-06 | Founder | v1.1 Absolute Final Task 67 — onboarding doc, video walkthrough, ADR 0006 |
 | 2026-06-02 | Founder | v1.0 initial plan — bus factor 1 acknowledged |
 
 **Next review due:** 2026-09-02 (or within 14 days of first engineering hire).
