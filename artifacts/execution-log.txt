@@ -7035,3 +7035,11 @@ Category: pm-marketing
 Result: done — kds-driver-eta-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; Driver ETA/BETA/estimated ETA/not live GPS certified/Do not claim honesty preserved — PM slot 145/145 complete
 Tests: npm run test:ci:pm-marketing-full-scale-15-driver-eta:cert 8/8 pass
 Commit: bc34d1f7
+
+---
+Cycle: 20260607-020100
+Task: 146 — Full TypeScript strict mode (P3)
+Category: typescript
+Result: done — tsconfig.base.json extended strict bundle (strict + noImplicitReturns + noFallthroughCasesInSwitch + forceConsistentCasingInFileNames), policy + audit wiring, 8 cert tests; phased noUncheckedIndexedAccess/exactOptionalPropertyTypes documented
+Tests: npm run test:ci:typescript-strict-absolute-final:cert 8/8 pass
+Commit: b41a3392
