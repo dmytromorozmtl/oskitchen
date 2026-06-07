@@ -5993,4 +5993,4 @@ Task: 15 — Lazy-load OTEL to resolve protobufjs warning (P1)
 Category: fix
 Result: done — split experiment-otel into init/span/url/state; dynamic import from experiment-trace; instrumentation gates on OTEL env; serverExternalPackages for @opentelemetry/*
 Tests: tests/unit/experiment-otel-lazy-load.test.ts 4/4 pass
-Commit: pending
+Commit: a401c155
