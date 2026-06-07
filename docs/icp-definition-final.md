@@ -292,6 +292,7 @@ Do **not** spend LOI cycles on:
 | Ghost kitchen landing | `/landing/ghost-kitchen` | Outbound + ads |
 | Commissary landing | `/commissary-kitchen-software` | Outbound + ads |
 | Catering landing (secondary ICP) | `/catering-management` | Outbound + SEO |
+| Vertical messaging hub | `/solutions` — "Built for multi-concept operators" | GTM + SEO |
 | Meal prep landing | `/landing/meal-prep` | Outbound + ads |
 | Weekly preorder landing | `/landing/weekly-preorder` | Meal prep variant |
 | First paid pilot package | `docs/era20-first-paid-pilot-package-2026-05-28.md` | Scope + checklists |
