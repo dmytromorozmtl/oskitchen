@@ -5,7 +5,7 @@
 **Updated:** 2026-06-02  
 **Owner:** Marketing + CS + Legal  
 **Audience:** GTM, Sales, CS, Founder  
-**Related:** [`founding-customer-story.md`](./founding-customer-story.md) · [`pilot-acceptance-criteria.md`](./pilot-acceptance-criteria.md) · [`feature-announcement-template.md`](./feature-announcement-template.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md)  
+**Related:** [`founding-customer-story.md`](./founding-customer-story.md) · [`case-study-template-pre-pilot.md`](./case-study-template-pre-pilot.md) · [`pilot-acceptance-criteria.md`](./pilot-acceptance-criteria.md) · [`feature-announcement-template.md`](./feature-announcement-template.md) · [`sales-safe-claims-registry.md`](./sales-safe-claims-registry.md)  
 **Proof wiring:** [`pilot-case-study-draft-era17.md`](./pilot-case-study-draft-era17.md) · [`pilot-week1-checklist.md`](./pilot-week1-checklist.md)  
 **Code surface:** `lib/marketing/case-studies.ts` → `/case-studies/[slug]`  
 **Legacy (non-canonical):** [`templates/CASE_STUDY_TEMPLATE.md`](./templates/CASE_STUDY_TEMPLATE.md)
@@ -15,6 +15,8 @@
 ## Before you write
 
 OS Kitchen has **no published customer case study** as of June 2026 (`loiSignedDate: null` in [`artifacts/pilot-gono-go-summary.json`](../artifacts/pilot-gono-go-summary.json)). This template is the **fill-in scaffold** for the first signed pilot — not marketing copy you can ship today.
+
+**Pre-pilot (no LOI yet):** use [`case-study-template-pre-pilot.md`](./case-study-template-pre-pilot.md) for founder story + design partner outreach — not this doc.
 
 | Customer stage | Case study usage | See |
 |----------------|------------------|-----|

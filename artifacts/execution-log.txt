@@ -6131,3 +6131,11 @@ Category: docs
 Result: done — BC1–BC8 (Toast, Square, Lightspeed, Clover, Revel, TouchBistro, SpotOn, Olo); BC-S1–S3 supplementary (Deliverect, Shopify/Woo, status quo); competitor-battle-cards-eight-policy + updated competitive-battle-cards-policy
 Tests: npm run test:ci:competitor-battle-cards-eight 10/10 pass
 Commit: 0bb1628b
+
+---
+Cycle: 20260606-224000
+Task: 33 — Case study template pre-pilot with founder story (P1)
+Category: docs
+Result: done — docs/case-study-template-pre-pilot.md + _PRE_PILOT_TEMPLATE.md; founder story, operator archetype, design partner CTA, upgrade path to MKT-11; case-study-template-pre-pilot-policy + lint
+Tests: npm run test:ci:case-study-template-pre-pilot 6/6 pass
+Commit: 05bae489

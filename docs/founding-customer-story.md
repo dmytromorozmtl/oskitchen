@@ -169,7 +169,8 @@ We’re looking for **one founding design partner** in [segment] to run a 90-day
 |----------|-------|
 | [`loi-design-partner-template.md`](./loi-design-partner-template.md) | First legal step |
 | [`design-partner-email-sequence.md`](./design-partner-email-sequence.md) | Task 66 outreach |
-| [`case-study-template.md`](./case-study-template.md) | Task 69 — post-convert |
+| [`case-study-template-pre-pilot.md`](./case-study-template-pre-pilot.md) | Pre-pilot founder story + design partner CTA |
+| [`case-study-template.md`](./case-study-template.md) | Post-pilot — Task 69 / MKT-11 |
 | [`competitor-comparison-honest.md`](./competitor-comparison-honest.md) | Competitive context |
 | [`ai-moats-honest-positioning.md`](./ai-moats-honest-positioning.md) | AI narrative |
 | [`sales-limitation-sheet.md`](./sales-limitation-sheet.md) | Prospect attachment |
