@@ -105,5 +105,6 @@
   "103-qa-full-coverage-regional-tax": "done",
   "104-qa-full-coverage-app-marketplace": "done",
   "105-qa-full-coverage-device-status": "done",
-  "106-qa-full-coverage-data-migration": "done"
+  "106-qa-full-coverage-data-migration": "done",
+  "107-qa-full-coverage-floor-plan": "done"
 }
