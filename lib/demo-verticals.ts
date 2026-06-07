@@ -288,6 +288,8 @@ export function solutionSlugToDemoVertical(
       return "restaurant";
     case "multi-brand":
       return "ghost-kitchen";
+    case "commissary":
+      return "meal-prep";
     default:
       return slug;
   }
