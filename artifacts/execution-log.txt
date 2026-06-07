@@ -6082,4 +6082,4 @@ Task: 26 — LOI pipeline and ICP targeting (P1)
 Category: docs
 Result: done — extended docs/loi-signed.md with 7-stage LOI pipeline, P0 ICP segments, human gate checklist; loi-pipeline-icp-policy + evaluatePilotIcpQualification wiring
 Tests: tests/unit/loi-pipeline-icp.test.ts + loi-signed-era73 10/10 pass
-Commit: pending
+Commit: 5b7ac595
