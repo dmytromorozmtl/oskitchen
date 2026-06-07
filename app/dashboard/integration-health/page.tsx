@@ -59,6 +59,7 @@ import {
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
 import { IntegrationHealthRecoveryFlowProofPanel } from "@/components/dashboard/integration-health/integration-health-recovery-flow-proof-panel";
+import { HardwareDeviceFleetPanel } from "@/components/dashboard/integration-health/hardware-device-fleet-panel";
 import { IntegrationHealthRecoveryPanel } from "@/components/dashboard/integration-health-recovery-panel";
 import {
   buildIntegrationHealthRecoveryFlowProofSlice,
@@ -70,6 +71,7 @@ import { buildIntegrationHealthRecoveryModel } from "@/lib/integrations/integrat
 import { loadIntegrationHealthChannelCardsModel } from "@/services/integrations/integration-health-channel-cards-service";
 import { loadIntegrationHealthSmokeArtifactsModel } from "@/services/integrations/integration-health-smoke-artifacts-service";
 import { loadIntegrationHealthSupportAdminModel } from "@/services/integrations/integration-health-support-admin-service";
+import { loadHardwareDeviceFleetModel } from "@/services/integration-health/hardware-device-fleet-service";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
 
 function tierBadge(tier: IntegrationMaturityTier) {
@@ -105,7 +107,7 @@ export default async function IntegrationHealthDashboardPage({
   const supportCompact = resolvedSearchParams.mode === "support";
   const env = getServerEnv();
   const webhookWhere = await getCachedWebhookEventListWhere();
-  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards, supportAdmin] =
+  const [connections, kitchen, failedHooks, healthCards, liveProofSlices, smokeArtifacts, channelCards, supportAdmin, hardwareFleet] =
     await Promise.all([
     prisma.integrationConnection.findMany({
       where: await integrationConnectionListWhereForOwner(dataUserId),
@@ -136,6 +138,7 @@ export default async function IntegrationHealthDashboardPage({
       workspaceRole: actor.workspaceRole,
       platformBypass: actor.platformBypass,
     }),
+    loadHardwareDeviceFleetModel(dataUserId),
   ]);
 
   const workspaceDemo = kitchen?.demoMode ?? false;
@@ -203,6 +206,8 @@ export default async function IntegrationHealthDashboardPage({
       <IntegrationHealthSupportAdminPanel model={supportAdmin} compact={supportCompact} />
 
       <IntegrationHealthSummaryPanel summary={healthSummary} />
+
+      <HardwareDeviceFleetPanel model={hardwareFleet} />
 
       {channelCards.p0Trust ? (
         <IntegrationHealthP0TrustBannerPanel banner={channelCards.p0Trust} />

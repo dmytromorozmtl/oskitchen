@@ -6186,4 +6186,12 @@ Task: 39 — Offline POS queue PCI review doc (P2)
 Category: docs
 Result: done — docs/offline-pos-pci-review.md (CHD boundary, AES-GCM, SAQ assessment, R1–R8 checklist, sales guardrails); offline-pos-pci-review-policy + lint
 Tests: npm run test:ci:offline-pos-pci-review 6/6 pass
+Commit: 55486714
+
+---
+Cycle: 20260606-231500
+Task: 40 — Hardware device fleet management in Integration Health Center (P2)
+Category: feat
+Result: done — hardware-device-fleet-policy + loadHardwareDeviceFleetModel (POS registers, terminals, Stripe readers); HardwareDeviceFleetPanel with summary badges + device table; wired into /dashboard/integration-health after summary panel
+Tests: npm run test:ci:hardware-device-fleet 5/5 pass
 Commit: pending
