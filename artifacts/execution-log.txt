@@ -6579,3 +6579,11 @@ Category: docs
 Result: done — docs/regional-tax-compliance.md (4 jurisdiction modes, 6 region gaps, 6-phase timeline, TaxJar optional path); wired from intl expansion + EU residency; policy + audit
 Tests: npm run test:ci:regional-tax-compliance:cert 4/4 pass
 Commit: 5f49fc87
+
+---
+Cycle: 20260606-223600
+Task: 89 — app marketplace for 3rd party extensions (P3)
+Category: feat
+Result: done — /app-marketplace public catalog (8 extensions, 70/30 rev share); dashboard strip on integrations/extensions; policy + audit
+Tests: npm run test:ci:app-marketplace-third-party:cert 4/4 pass
+Commit: pending

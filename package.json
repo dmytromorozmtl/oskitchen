@@ -694,6 +694,8 @@
     "test:ci:eu-data-residency-roadmap:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/eu-data-residency-roadmap-absolute-final.test.ts",
     "test:ci:regional-tax-compliance": "node ./node_modules/vitest/vitest.mjs run tests/unit/regional-tax-compliance-absolute-final.test.ts",
     "test:ci:regional-tax-compliance:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/regional-tax-compliance-absolute-final.test.ts",
+    "test:ci:app-marketplace-third-party": "node ./node_modules/vitest/vitest.mjs run tests/unit/app-marketplace-third-party-absolute-final.test.ts",
+    "test:ci:app-marketplace-third-party:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/app-marketplace-third-party-absolute-final.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",
