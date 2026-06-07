@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AccountantPortalStrip } from "@/components/dashboard/accounting/accountant-portal-strip";
 import { ChartOfAccountsMappingStrip } from "@/components/dashboard/accounting/chart-of-accounts-mapping-strip";
 import { JournalEntryExportStrip } from "@/components/dashboard/accounting/journal-entry-export-strip";
 import { PnlReconciliationViewStrip } from "@/components/dashboard/accounting/pnl-reconciliation-view-strip";
@@ -53,6 +54,7 @@ export default async function GlDepthAccountingSyncPage({
         </Link>
       </div>
 
+      <AccountantPortalStrip />
       <ChartOfAccountsMappingStrip />
       <JournalEntryExportStrip />
       <PnlReconciliationViewStrip />
