@@ -6434,4 +6434,4 @@ Task: 70 — Integration Health Center product page (P2)
 Category: feat
 Result: done — /product/integration-health-center; IntegrationHealthCenterProductPage (6 features); wired from /product index + dashboard integration-health; policy + audit + CI cert
 Tests: npm run test:ci:integration-health-center-product:cert 5/5 pass
-Commit: pending
+Commit: 0baf1a39
