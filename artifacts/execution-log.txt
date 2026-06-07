@@ -5969,3 +5969,12 @@ Category: fix
 Result: done — migrated withSentryConfig options to webpack.treeshake.removeDebugLogging, webpack.automaticVercelMonitors, webpack.reactComponentAnnotation; removed disableLogger / top-level deprecated keys
 Tests: tests/unit/sentry-integration.test.ts 15/15 pass
 Commit: b3183b93
+
+---
+Cycle: 20260606-205000
+Task: 13 — npm audit gate before deploy (P1)
+Category: ci
+Result: done — npm run audit:dependencies:high (npm audit --audit-level=high); CI quality job + deploy-prod-gate.yml step after npm ci
+Tests: tests/unit/npm-audit-ci-gate.test.ts 2/2 pass
+Note: local audit reports high-severity findings — gate will fail CI until dependencies remediated
+Commit: pending

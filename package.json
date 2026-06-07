@@ -41,6 +41,7 @@
     "audit:api-mutation-rate-limit": "tsx scripts/audit-api-mutation-rate-limit.ts",
     "audit:workspace-scope": "tsx scripts/audit-workspace-scope.ts",
     "audit:crons": "tsx scripts/audit-cron-production-allowlist.ts",
+    "audit:dependencies:high": "npm audit --audit-level=high",
     "validate:startup-readiness": "tsx scripts/validate-startup-readiness.ts",
     "backfill:order-pii": "tsx scripts/backfill-order-pii.ts",
     "backfill:order-pii:execute": "tsx scripts/backfill-order-pii.ts --execute",
