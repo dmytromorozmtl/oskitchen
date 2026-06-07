@@ -3,7 +3,15 @@ import { MapPin, Navigation, Truck } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
 import {
   KDS_DRIVER_ETA_MIN_TOUCH_PX,
   KDS_DRIVER_ETA_TRACKING_PILLARS,
@@ -45,24 +53,23 @@ export function KdsDriverEtaScreen({ model }: { model: KdsDriverEtaTrackingModel
   const { tickets, summary } = model;
 
   return (
-    <div className="space-y-6" data-testid="kds-driver-eta-screen">
-      {/* large_touch_targets · 44px min touch per ticket card */}
-      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm">
-        <p className="font-semibold">Driver ETA tracking · BETA</p>
-        <p className="mt-1 text-muted-foreground">
+    <div className="space-y-6 landscape:space-y-4" data-testid="kds-driver-eta-screen">
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Driver ETA tracking · BETA</p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
           estimated ETA from dispatch status and GPS pings — not live GPS certified. Do not claim
           third-party courier accuracy. Kitchen uses this to time expo handoff.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 text-sm">
-        <Badge variant="outline" className="rounded-full">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
+        <Badge variant="outline" className="rounded-full tabular-nums">
           {summary.activeDeliveryCount} delivery tickets
         </Badge>
-        <Badge variant="secondary" className="rounded-full">
+        <Badge variant="secondary" className="rounded-full tabular-nums">
           {summary.gpsLiveCount} GPS live
         </Badge>
-        <Badge variant="outline" className="rounded-full">
+        <Badge variant="outline" className="rounded-full tabular-nums">
           {summary.onTimeCount} on time · {summary.atRiskCount} at risk · {summary.lateCount} late
         </Badge>
       </div>
@@ -72,20 +79,21 @@ export function KdsDriverEtaScreen({ model }: { model: KdsDriverEtaTrackingModel
         large_touch_targets · min {KDS_DRIVER_ETA_MIN_TOUCH_PX}px
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 landscape:grid-cols-2">
         {tickets.map((ticket) => (
           <div
             key={ticket.orderId}
             data-testid="kds-driver-eta-ticket"
             className={cn(
-              "flex flex-col gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm",
-              ticket.band === "late" && "border-destructive/40",
+              "flex min-h-[44px] flex-col gap-3 p-4",
+              DESIGN_POLISH_CARD_CLASS,
+              ticket.band === "late" && "border-destructive/40 dark:border-destructive/50",
             )}
             style={{ minHeight: KDS_DRIVER_ETA_MIN_TOUCH_PX * 2 }}
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="font-mono text-xs font-bold text-muted-foreground">
+                <p className="font-mono text-xs font-bold text-muted-foreground dark:text-muted-foreground/90">
                   {ticket.ticketNumber}
                 </p>
                 <p className="font-semibold">{ticket.customerName}</p>
@@ -113,28 +121,28 @@ export function KdsDriverEtaScreen({ model }: { model: KdsDriverEtaTrackingModel
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              <Navigation className="h-4 w-4 text-primary" aria-hidden />
+              <Navigation className={`h-4 w-4 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />
               <span className="font-medium">eta_countdown_labels · {ticket.etaLabel}</span>
             </div>
 
             {ticket.driverLabel ? (
-              <p className="flex items-center gap-1 text-xs text-muted-foreground">
+              <p className="flex items-center gap-1 text-xs text-muted-foreground dark:text-muted-foreground/90">
                 <Truck className="h-3.5 w-3.5" aria-hidden />
                 {ticket.driverLabel}
               </p>
             ) : null}
 
-            <div className="mt-auto flex flex-wrap items-center gap-2">
-              <span className="text-xs text-muted-foreground">
+            <div className={`mt-auto flex flex-wrap items-center gap-2 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}>
+              <span className="text-xs text-muted-foreground dark:text-muted-foreground/90">
                 kds_ticket_cross_link · KDS {ticket.kdsStatus}
               </span>
-              <Button asChild size="sm" variant="secondary" className="h-9 rounded-full px-3 text-xs">
+              <Button asChild size="sm" variant="secondary" className="min-h-[44px] rounded-full px-3 text-xs">
                 <Link href={ticket.href}>View ticket</Link>
               </Button>
               {ticket.trackingUrl ? (
-                <Button asChild size="sm" variant="ghost" className="h-9 rounded-full px-3 text-xs">
+                <Button asChild size="sm" variant="ghost" className="min-h-[44px] rounded-full px-3 text-xs">
                   <a href={ticket.trackingUrl} target="_blank" rel="noopener noreferrer">
-                    <MapPin className="mr-1 h-3 w-3" aria-hidden />
+                    <MapPin className={`mr-1 h-3 w-3 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />
                     Track
                   </a>
                 </Button>
@@ -145,19 +153,20 @@ export function KdsDriverEtaScreen({ model }: { model: KdsDriverEtaTrackingModel
       </div>
 
       {!tickets.length ? (
-        <Card className="border-border/70 shadow-sm">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader>
             <CardTitle className="text-lg">No active delivery tickets</CardTitle>
-            <CardDescription>
+            <CardDescription className="dark:text-muted-foreground/90">
               Delivery orders appear here when fulfillment type is DELIVERY and status is active.
             </CardDescription>
           </CardHeader>
         </Card>
       ) : null}
 
-      <p className="text-xs text-muted-foreground">
+      <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
         Policy: kds-driver-eta-tracking-absolute-final-v1 · Route: {KDS_DRIVER_ETA_TRACKING_ROUTE}
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
