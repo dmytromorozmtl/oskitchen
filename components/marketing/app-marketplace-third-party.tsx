@@ -6,6 +6,13 @@ import { MarketingButton } from '@/components/marketing/button';
 import { SectionHeader } from '@/components/marketing/section-header';
 import { Badge } from '@/components/ui/badge';
 import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+} from '@/lib/design/absolute-final-design-polish-tokens';
+import {
   APP_MARKETPLACE_THIRD_PARTY_CTA,
   APP_MARKETPLACE_THIRD_PARTY_EXTENSIONS,
   APP_MARKETPLACE_THIRD_PARTY_H1,
@@ -30,7 +37,7 @@ type Props = {
 export function AppMarketplaceThirdParty({ compact = false, showHeader = true }: Props) {
   return (
     <section
-      className={compact ? 'space-y-6' : 'border-t border-border/60 py-16 sm:py-20'}
+      className={compact ? 'space-y-6' : 'border-t border-border/60 py-16 sm:py-20 dark:border-border/50'}
       data-testid="app-marketplace-third-party"
     >
       {showHeader ? (
@@ -43,7 +50,14 @@ export function AppMarketplaceThirdParty({ compact = false, showHeader = true }:
         />
       ) : null}
 
-      <div className="flex flex-wrap gap-2 text-sm">
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Third-party app marketplace (Beta)</p>
+        <p className="mt-1 text-muted-foreground dark:text-muted-foreground/90">
+          {APP_MARKETPLACE_THIRD_PARTY_HONESTY_NOTE} OAuth apps require platform review — not a self-serve public store without security sign-off.
+        </p>
+      </div>
+
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
         <Badge variant="outline" className="rounded-full">
           <Percent className="mr-1 h-3 w-3" aria-hidden />
           {APP_MARKETPLACE_THIRD_PARTY_REVENUE_SHARE.summary}
@@ -53,9 +67,9 @@ export function AppMarketplaceThirdParty({ compact = false, showHeader = true }:
         </Badge>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-border/80">
+      <div className={`overflow-x-auto ${DESIGN_POLISH_CARD_CLASS}`}>
         <table className="w-full min-w-[720px] text-sm" aria-label="Third-party app marketplace">
-          <thead className="bg-muted/40">
+          <thead className="bg-muted/40 dark:bg-muted/20">
             <tr>
               <th className="px-4 py-3 text-left font-medium">Extension</th>
               <th className="px-4 py-3 text-left font-medium">Type</th>
@@ -69,12 +83,14 @@ export function AppMarketplaceThirdParty({ compact = false, showHeader = true }:
             {APP_MARKETPLACE_THIRD_PARTY_EXTENSIONS.map((ext) => (
               <tr
                 key={ext.id}
-                className="border-t border-border/60"
+                className={`border-t border-border/60 transition-colors hover:bg-muted/20 dark:border-border/50 dark:hover:bg-muted/10 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}
                 data-testid={`app-marketplace-extension-${ext.id}`}
               >
                 <td className="px-4 py-3">
                   <p className="font-medium">{ext.name}</p>
-                  <p className="text-xs text-muted-foreground">{ext.publisher}</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
+                    {ext.publisher}
+                  </p>
                 </td>
                 <td className="px-4 py-3">
                   <span className="inline-flex items-center gap-1 text-muted-foreground">
@@ -88,18 +104,15 @@ export function AppMarketplaceThirdParty({ compact = false, showHeader = true }:
                   </Badge>
                 </td>
                 {!compact ? (
-                  <td className="px-4 py-3 text-muted-foreground">{ext.honestyNote}</td>
+                  <td className="px-4 py-3 text-muted-foreground dark:text-muted-foreground/90">
+                    {ext.honestyNote}
+                  </td>
                 ) : null}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      <p className="text-xs text-muted-foreground">
-        {APP_MARKETPLACE_THIRD_PARTY_HONESTY_NOTE} OAuth apps require platform review — not a self-serve
-        public store without security sign-off.
-      </p>
 
       <div className="flex flex-wrap items-center gap-3">
         <MarketingButton href={APP_MARKETPLACE_THIRD_PARTY_CTA.primaryHref}>
@@ -114,6 +127,8 @@ export function AppMarketplaceThirdParty({ compact = false, showHeader = true }:
           </MarketingButton>
         ) : null}
       </div>
+
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </section>
   );
 }
