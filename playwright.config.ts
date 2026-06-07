@@ -63,6 +63,7 @@ if (dashboardE2EEnabled) {
       testMatch: [
         "**/dashboard-auth.spec.ts",
         "**/dashboard-rsc-regression.spec.ts",
+        "**/dashboard-accessibility-axe.spec.ts",
         "**/workspace-post-not-null-smoke.spec.ts",
         "**/pos-checkout-flow.spec.ts",
         "**/pos-checkout-staging.spec.ts",
@@ -201,6 +202,7 @@ projects.push({
     "**/pilot-staff-auth.setup.ts",
     "**/dashboard-auth.spec.ts",
     "**/dashboard-rsc-regression.spec.ts",
+    "**/dashboard-accessibility-axe.spec.ts",
     "**/pos-checkout-flow.spec.ts",
     "**/pos-checkout-staging.spec.ts",
     "**/pos-checkout-shift-close-report.spec.ts",

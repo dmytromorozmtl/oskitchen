@@ -6234,4 +6234,12 @@ Task: 45 — Schedule grid drag-drop 7shifts parity (P2)
 Category: feat
 Result: done — schedule-grid-drag-drop-policy (staff×day cells, overlap + overtime conflicts); ScheduleGridDragDrop table with dnd-kit; moveScheduleGridShiftAction reassigns staff+day; labor footer row on /dashboard/staff/schedule
 Tests: npm run test:ci:schedule-grid-drag-drop 9/9 pass
-Commit: 6032cee5
+Commit: 30a08328
+
+---
+Cycle: 20260606-234500
+Task: 46 — E2E accessibility axe-core 10 key dashboard pages (P2)
+Category: test
+Result: done — e2e-accessibility-axe-policy (10 routes, WCAG 2.1 AA tags); e2e/dashboard-accessibility-axe.spec.ts chromium-authed; axe-playwright-analyze helper; GHA e2e-accessibility-axe.yml
+Tests: npm run test:ci:e2e-accessibility-axe 3/3 pass
+Commit: pending
