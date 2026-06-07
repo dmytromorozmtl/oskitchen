@@ -6522,3 +6522,4 @@ Task: 81 — commission comparison calculator (P2)
 Category: feat
 Result: done — /commission-comparison calculator; marketplace vs own-channel; shared delivery benchmark rates; embedded on /pricing; policy + audit
 Tests: npm run test:ci:commission-comparison-calculator:cert 6/6 pass
+Commit: aba09d46
