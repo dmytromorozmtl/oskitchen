@@ -13,6 +13,25 @@ import {
   DESIGN_POLISH_ROW_SURFACE_CLASS,
 } from '@/lib/design/absolute-final-design-polish-tokens';
 import {
+  PM_GTM_ABSOLUTE_FINAL_POLICY_ID,
+  PM_GTM_DOC_CTA_MARKER,
+  PM_GTM_DOC_DEMO_MARKER,
+  PM_GTM_DOC_HERO_MARKER,
+  PM_GTM_DOC_HONESTY_MARKER,
+  PM_GTM_DOC_ICP_MARKER,
+  PM_GTM_DOC_OBJECTIONS_MARKER,
+  PM_GTM_DOC_PRICING_MARKER,
+} from '@/lib/marketing/absolute-final-pm-marketing-full-scale-tokens';
+import {
+  APP_MARKETPLACE_GTM_DEMO_HOOK,
+  APP_MARKETPLACE_GTM_HONESTY_SUMMARY,
+  APP_MARKETPLACE_GTM_ICP_SUMMARY,
+  APP_MARKETPLACE_GTM_OBJECTION_REPLY,
+  APP_MARKETPLACE_GTM_PRICING_TRACK,
+  APP_MARKETPLACE_GTM_PRIMARY_CTA,
+} from '@/lib/marketing/app-marketplace-gtm-scale-content';
+import { APP_MARKETPLACE_GTM_SCALE_ABSOLUTE_FINAL_POLICY_ID } from '@/lib/marketing/app-marketplace-gtm-scale-absolute-final-policy';
+import {
   APP_MARKETPLACE_THIRD_PARTY_CTA,
   APP_MARKETPLACE_THIRD_PARTY_EXTENSIONS,
   APP_MARKETPLACE_THIRD_PARTY_H1,
@@ -128,7 +147,75 @@ export function AppMarketplaceThirdParty({ compact = false, showHeader = true }:
         ) : null}
       </div>
 
-      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
+      {!compact ? (
+        <div
+          className="space-y-6 border-t border-border/60 pt-10 dark:border-border/50"
+          data-pm-gtm={PM_GTM_ABSOLUTE_FINAL_POLICY_ID}
+        >
+          {/* pm-gtm: absolute-final-pm-marketing-full-scale-v1 task-134 feature-89 · /app-marketplace · app-marketplace-third-party-absolute-final-v1 · app-marketplace-gtm-scale-absolute-final-v1 */}
+          <div className={`${DESIGN_POLISH_CARD_CLASS} space-y-3 p-6`} data-pm-gtm={PM_GTM_DOC_HERO_MARKER}>
+            <p className="text-sm font-medium text-foreground">pm-gtm-hero-banner</p>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+              GTM scale playbook embedded on /app-marketplace — pm-gtm-dark-mode-note
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className={`${DESIGN_POLISH_CARD_CLASS} p-5`} data-pm-gtm={PM_GTM_DOC_ICP_MARKER}>
+              <h3 className="text-sm font-semibold">pm-gtm-icp-profile</h3>
+              <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground/90">
+                {APP_MARKETPLACE_GTM_ICP_SUMMARY}
+              </p>
+            </div>
+            <div className={`${DESIGN_POLISH_CARD_CLASS} p-5`} data-pm-gtm={PM_GTM_DOC_DEMO_MARKER}>
+              <h3 className="text-sm font-semibold">pm-gtm-demo-hook</h3>
+              <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground/90">
+                {APP_MARKETPLACE_GTM_DEMO_HOOK}
+              </p>
+            </div>
+            <div
+              className={`${DESIGN_POLISH_CARD_CLASS} p-5`}
+              data-pm-gtm={PM_GTM_DOC_OBJECTIONS_MARKER}
+            >
+              <h3 className="text-sm font-semibold">pm-gtm-objection-handling</h3>
+              <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground/90">
+                {APP_MARKETPLACE_GTM_OBJECTION_REPLY}
+              </p>
+            </div>
+            <div
+              className={`${DESIGN_POLISH_CARD_CLASS} p-5`}
+              data-pm-gtm={PM_GTM_DOC_PRICING_MARKER}
+            >
+              <h3 className="text-sm font-semibold">pm-gtm-pricing-talk-track</h3>
+              <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground/90">
+                {APP_MARKETPLACE_GTM_PRICING_TRACK}
+              </p>
+            </div>
+          </div>
+
+          <div className={`${DESIGN_POLISH_CARD_CLASS} p-5`} data-pm-gtm={PM_GTM_DOC_CTA_MARKER}>
+            <h3 className="text-sm font-semibold">pm-gtm-primary-cta</h3>
+            <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground/90">
+              {APP_MARKETPLACE_GTM_PRIMARY_CTA}
+            </p>
+          </div>
+
+          <div
+            className={`${DESIGN_POLISH_HERO_BANNER_CLASS} space-y-2`}
+            data-pm-gtm={PM_GTM_DOC_HONESTY_MARKER}
+            role="note"
+          >
+            <h3 className="text-sm font-semibold">pm-gtm-honesty-guardrails</h3>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+              {APP_MARKETPLACE_GTM_HONESTY_SUMMARY}
+            </p>
+          </div>
+        </div>
+      ) : null}
+
+      <p className="sr-only">
+        {DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID} {APP_MARKETPLACE_GTM_SCALE_ABSOLUTE_FINAL_POLICY_ID}
+      </p>
     </section>
   );
 }
