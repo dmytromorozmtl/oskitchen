@@ -6594,4 +6594,4 @@ Task: 90 — device status dashboard Clover parity (P3)
 Category: feat
 Result: done — /dashboard/devices location-grouped Clover parity grid (online/offline badges, attention alerts, last-seen labels); strip on Integration Health Center; reuses hardware fleet service + Stripe reader sync; policy + audit + 6 tests
 Tests: npm run test:ci:device-status-dashboard:cert 6/6 pass
-Commit: pending
+Commit: 41b97aac
