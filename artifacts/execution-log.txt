@@ -6731,3 +6731,11 @@ Category: test
 Result: done — slot 107 behavioral tests for MICROS floor plan editor (7 pillars, shapes/sections, honesty markers, realtime hook, location context, table mutations); 8 tests
 Tests: npm run test:ci:qa-full-coverage-07-floor-plan:cert 8/8 pass
 Commit: b58a8422
+
+---
+Cycle: 20260607-000500
+Task: 108 — QA full coverage KDS daisy-chain config (P3)
+Category: test
+Result: done — slot 108 behavioral tests for NCR Aloha daisy-chain (merge/parse/resolve, chain paths, honesty markers, toggle UI, wiring audit); 8 tests
+Tests: npm run test:ci:qa-full-coverage-08-kds-daisy-chain:cert 8/8 pass
+Commit: 39dbab1c
