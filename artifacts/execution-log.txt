@@ -6091,3 +6091,11 @@ Category: chore
 Result: done — 27/31 → 31/31 agent-closed; actions 5–7 + 31 moved todo→blocked with runbook notes; added thirty-action-tracker-closure-policy + action 31-final-execution-sync; vault-one-pager updated
 Tests: tests/unit/thirty-action-tracker-closure.test.ts 4/4 pass
 Commit: 0ca261cc
+
+---
+Cycle: 20260606-221500
+Task: 28 — Pilot Week 1 roadmap (P1)
+Category: docs
+Result: done — docs/pilot-week1-roadmap.md with T-0 onboarding, T+1 KDS, T+3 first order, T+7 briefing; pilot-week1-roadmap-policy + human gate checklist
+Tests: tests/unit/pilot-week1-roadmap.test.ts 4/4 pass
+Commit: pending
