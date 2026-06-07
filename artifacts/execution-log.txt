@@ -6739,3 +6739,11 @@ Category: test
 Result: done — slot 108 behavioral tests for NCR Aloha daisy-chain (merge/parse/resolve, chain paths, honesty markers, toggle UI, wiring audit); 8 tests
 Tests: npm run test:ci:qa-full-coverage-08-kds-daisy-chain:cert 8/8 pass
 Commit: 39dbab1c
+
+---
+Cycle: 20260607-000700
+Task: 109 — QA full coverage expedite screen polish (P3)
+Category: test
+Result: done — slot 109 behavioral tests for expedite screen (hero/queue, rush summary, honesty markers, 44px touch, dark mode, polish pillars, wiring audit); 8 tests
+Tests: npm run test:ci:qa-full-coverage-09-kds-expedite:cert 8/8 pass
+Commit: 413787e6
