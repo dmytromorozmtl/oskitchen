@@ -6666,3 +6666,4 @@ Task: 99 — accountant portal (P3)
 Category: feat
 Result: done — /dashboard/accounting/accountant-portal read-only export hub (7 deliverables, period-close checklist, quick export bundle); gl-sync strip; policy + audit + 5 tests
 Tests: npm run test:ci:accountant-portal:cert 5/5 pass
+Commit: 89667026
