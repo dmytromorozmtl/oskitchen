@@ -6475,3 +6475,10 @@ Category: docs
 Result: done — docs/local-partner-network-onboarding.md (5 segments, 7-step checklist, 3 tiers, enable gate); policy + audit; linked from restaurant-partnerships-strategy
 Tests: npm run test:ci:local-partner-network:cert 6/6 pass
 Commit: 0daed8d5
+
+---
+Cycle: 20260606-220800
+Task: 76 — /meal-prep-software landing page (P2)
+Category: feat
+Result: done — /meal-prep-software SEO landing (MealPrepSoftwareLanding); content + policy + audit; SEO 10 ICP targetPath updated; solutions hub + golden path linked
+Tests: npm run test:ci:meal-prep-software-landing:cert 5/5 pass

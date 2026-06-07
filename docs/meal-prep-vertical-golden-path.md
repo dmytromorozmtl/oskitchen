@@ -86,7 +86,8 @@ Software-first **kitchen OS** for operators who **own fulfillment** — not a To
 
 | Surface | URL |
 |---------|-----|
-| Primary landing | `/landing/meal-prep` |
+| Primary landing | `/meal-prep-software` |
+| ICP landing | `/landing/meal-prep` |
 | Preorder variant | `/landing/weekly-preorder` |
 | Compare page | `/compare/meal-prep-software` |
 | Dashboard | `/dashboard/meal-prep` |
@@ -214,7 +215,7 @@ flowchart LR
 | Audit | `lib/marketing/meal-prep-vertical-golden-path-audit.ts` |
 | Meal Prep OS service | `services/meal-prep/meal-prep-os-service.ts` |
 | Golden demo | `lib/demo/golden-demo-scenarios.ts` → `meal-prep-weekly` |
-| Landing | `app/landing/meal-prep/page.tsx` |
+| Landing | `app/meal-prep-software/page.tsx` · `app/landing/meal-prep/page.tsx` |
 | CI cert | `npm run test:ci:meal-prep-vertical-golden-path:cert` |
 
 ---

@@ -21,6 +21,8 @@ export const MEAL_PREP_VERTICAL_DASHBOARD_PATH = "/dashboard/meal-prep" as const
 
 export const MEAL_PREP_VERTICAL_LANDING_PATH = "/landing/meal-prep" as const;
 
+export const MEAL_PREP_VERTICAL_SEO_LANDING_PATH = "/meal-prep-software" as const;
+
 export const MEAL_PREP_VERTICAL_RECOMMENDED_PLAN = "PRO" as const;
 
 export const MEAL_PREP_VERTICAL_RECOMMENDED_PRICE_USD = 79 as const;
@@ -61,6 +63,7 @@ export const MEAL_PREP_VERTICAL_WIRING_PATHS = [
   "lib/demo/golden-demo-scenarios.ts",
   "services/meal-prep/meal-prep-os-service.ts",
   "app/landing/meal-prep/page.tsx",
+  "app/meal-prep-software/page.tsx",
   "tests/unit/meal-prep-vertical-golden-path-absolute-final.test.ts",
 ] as const;
 
