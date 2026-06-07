@@ -146,5 +146,6 @@
   "144-pm-marketing-full-scale-accountant-portal": "done",
   "145-pm-marketing-full-scale-driver-eta": "done",
   "146-full-typescript-strict-mode": "done",
-  "147-full-wcag-21-aa-accessibility": "done"
+  "147-full-wcag-21-aa-accessibility": "done",
+  "148-full-lighthouse-95-performance": "done"
 }
