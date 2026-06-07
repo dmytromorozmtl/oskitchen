@@ -6058,4 +6058,4 @@ Task: 23 — POS terminal icon-only buttons aria-label (P1)
 Category: fix
 Result: done — item-specific aria-label on cart +/- controls in pos-terminal-client + pos-mobile-client; DES-35 fleet audit for 4 terminal modules; aria-hidden on Minus/Plus icons
 Tests: tests/unit/pos-terminal-icon-buttons.test.ts 7/7 pass
-Commit: pending
+Commit: d3c20c9e
