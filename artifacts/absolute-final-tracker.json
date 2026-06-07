@@ -106,5 +106,6 @@
   "104-qa-full-coverage-app-marketplace": "done",
   "105-qa-full-coverage-device-status": "done",
   "106-qa-full-coverage-data-migration": "done",
-  "107-qa-full-coverage-floor-plan": "done"
+  "107-qa-full-coverage-floor-plan": "done",
+  "108-qa-full-coverage-kds-daisy-chain": "done"
 }
