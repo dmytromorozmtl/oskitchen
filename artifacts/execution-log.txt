@@ -6619,3 +6619,11 @@ Category: feat
 Result: done — /dashboard/kitchen/daisy-chain with 20 Prep→line→Expo bump handoff links; settingsCenterJson storage; toggle per link; routing-rules cross-link; nav + i18n; policy + audit + 5 tests
 Tests: npm run test:ci:kds-daisy-chain-config:cert 5/5 pass
 Commit: be9389b6
+
+---
+Cycle: 20260606-225700
+Task: 94 — expedite screen polish (P3)
+Category: feat
+Result: done — /dashboard/kitchen/expedite hero ticket + priority queue + rush banner; 44px touch targets; tablet landscape; expo page link; nav + i18n; policy + audit + 5 tests
+Tests: npm run test:ci:kds-expedite-screen:cert 5/5 pass
+Commit: pending

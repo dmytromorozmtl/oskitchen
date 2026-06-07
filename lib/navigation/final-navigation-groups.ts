@@ -84,6 +84,7 @@ export const FINAL_NAVIGATION_GROUPS: NavGroupDef[] = [
       { href: "/dashboard/kitchen", labelKey: "nav.kitchen", icon: MonitorDot },
       { href: "/dashboard/kitchen/production", labelKey: "nav.kitchenProduction", icon: ChefHat },
       { href: "/dashboard/kitchen/expo", labelKey: "nav.kitchenExpo", icon: ClipboardList },
+      { href: "/dashboard/kitchen/expedite", labelKey: "nav.kitchenExpedite", icon: Zap },
       { href: "/dashboard/kitchen/manager", labelKey: "nav.kitchenManager", icon: BarChart3 },
       { href: "/dashboard/kitchen/routing-rules", labelKey: "nav.kitchenRoutingRules", icon: Route },
       { href: "/dashboard/kitchen/daisy-chain", labelKey: "nav.kitchenDaisyChain", icon: GitBranch },
