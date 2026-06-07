@@ -6363,3 +6363,11 @@ Category: feat
 Result: done — schedule-grid-design-policy; labour heatmap on day headers + cell tint; conflict legend; daily labor overlay row with % share; wired schedule-grid-drag-drop.tsx
 Tests: npm run test:ci:schedule-grid-design:cert 5/5 pass
 Commit: 22d357d3
+
+---
+Cycle: 20260606-214100
+Task: 62 — Offline mode UI indicator status bar queue badge sync animation (P2)
+Category: feat
+Result: done — offline-mode-ui-indicator-policy; OfflineModeQueueBadge + OfflineModeSyncPulse; enhanced OfflineSyncStatusBar + global OfflineIndicator; header badge in dashboard-shell
+Tests: npm run test:ci:offline-mode-ui-indicator:cert 5/5 pass
+Commit: pending

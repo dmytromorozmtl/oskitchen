@@ -7,6 +7,7 @@ import type { BusinessType, UserRole } from "@prisma/client";
 import { MenuSquare, Shield, User, Bell, KeyRound, Users, Sparkles } from "lucide-react";
 
 import { DashboardSkipLink } from "@/components/a11y/dashboard-skip-link";
+import { OfflineModeQueueBadge } from "@/components/dashboard/offline-mode-ui-indicator";
 import { BillingAccessGuard } from "@/components/billing/billing-access-guard";
 import { TrialBanner } from "@/components/billing/trial-banner";
 
@@ -223,6 +224,7 @@ export function DashboardShell({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            <OfflineModeQueueBadge compact />
             <BrandSwitcher brands={[...workspaceBrands]} />
             <CommandPalette
               locale={locale}
