@@ -18,6 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
 import type {
   DeviceStatusConnectivity,
   DeviceStatusDashboardModel,
@@ -57,17 +65,20 @@ function connectivityBadge(connectivity: DeviceStatusConnectivity) {
 
 function connectivityIcon(connectivity: DeviceStatusConnectivity) {
   if (connectivity === "online" || connectivity === "configured") {
-    return <Wifi className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden />;
+    return <Wifi className={`h-4 w-4 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />;
   }
   if (connectivity === "offline") {
-    return <WifiOff className="h-4 w-4 text-destructive" aria-hidden />;
+    return <WifiOff className="h-4 w-4 text-destructive dark:text-destructive/90" aria-hidden />;
   }
   return <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" aria-hidden />;
 }
 
 function LocationGroup({ group }: { group: DeviceStatusLocationGroup }) {
   return (
-    <section className="space-y-3" data-testid="device-status-location-group">
+    <section
+      className={`space-y-3 p-4 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}
+      data-testid="device-status-location-group"
+    >
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-semibold">{group.locationName}</h2>
         <Badge variant="outline" className="rounded-full text-[10px] font-normal">
@@ -80,13 +91,13 @@ function LocationGroup({ group }: { group: DeviceStatusLocationGroup }) {
           return (
             <Card
               key={device.id}
-              className="border-border/70 shadow-sm"
+              className={DESIGN_POLISH_CARD_CLASS}
               data-testid="device-status-card"
             >
               <CardHeader className="space-y-2 pb-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 text-muted-foreground" aria-hidden />
+                    <Icon className="h-4 w-4 text-muted-foreground dark:text-muted-foreground/90" aria-hidden />
                     <CardTitle className="text-base">{device.label}</CardTitle>
                   </div>
                   {connectivityIcon(device.connectivity)}
@@ -102,9 +113,13 @@ function LocationGroup({ group }: { group: DeviceStatusLocationGroup }) {
                     </Badge>
                   ) : null}
                 </div>
-                <p className="text-xs text-muted-foreground">{device.lastSeenLabel}</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
+                  {device.lastSeenLabel}
+                </p>
                 {device.detail ? (
-                  <p className="truncate text-xs text-muted-foreground">{device.detail}</p>
+                  <p className="truncate text-xs text-muted-foreground dark:text-muted-foreground/90">
+                    {device.detail}
+                  </p>
                 ) : null}
                 <Button asChild size="sm" variant="outline" className="w-full rounded-full">
                   <Link href={device.manageHref}>Manage device</Link>
@@ -123,15 +138,24 @@ export function DeviceStatusDashboard({ model }: { model: DeviceStatusDashboardM
 
   return (
     <div className="space-y-6" data-testid="device-status-dashboard">
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Device status dashboard (Beta)</p>
+        <p className="mt-1 text-muted-foreground dark:text-muted-foreground/90">
+          Clover parity grid — status reflects saved configuration and Stripe reader sync, not
+          proprietary hub telemetry. POS registers and terminals show Configuration only until live
+          heartbeat ships.
+        </p>
+      </div>
+
       {summary.needsAttentionCount > 0 ? (
         <div
-          className="flex items-start gap-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-4"
+          className="flex items-start gap-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 dark:border-destructive/40 dark:bg-destructive/10"
           data-testid="device-status-attention-banner"
         >
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden />
           <div>
             <p className="font-semibold">Device attention required</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
               {summary.needsAttentionCount} device(s) are offline, inactive, or pending pairing.
               Clover parity view — status reflects saved configuration and Stripe reader sync, not
               proprietary hub telemetry.
@@ -141,25 +165,25 @@ export function DeviceStatusDashboard({ model }: { model: DeviceStatusDashboardM
       ) : null}
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-border/70">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>Total devices</CardDescription>
             <CardTitle className="text-2xl">{summary.totalDevices}</CardTitle>
           </CardHeader>
         </Card>
-        <Card className="border-border/70">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>Online / active</CardDescription>
             <CardTitle className="text-2xl">{summary.onlineCount}</CardTitle>
           </CardHeader>
         </Card>
-        <Card className="border-border/70">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>Configured (no heartbeat)</CardDescription>
             <CardTitle className="text-2xl">{summary.configuredCount}</CardTitle>
           </CardHeader>
         </Card>
-        <Card className="border-border/70">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>Offline / inactive</CardDescription>
             <CardTitle className="text-2xl">{summary.offlineCount}</CardTitle>
@@ -167,7 +191,7 @@ export function DeviceStatusDashboard({ model }: { model: DeviceStatusDashboardM
         </Card>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
         <Badge variant="outline" className="rounded-full">
           {summary.registerCount} register(s)
         </Badge>
@@ -187,15 +211,15 @@ export function DeviceStatusDashboard({ model }: { model: DeviceStatusDashboardM
       {groups.length ? (
         groups.map((group) => <LocationGroup key={group.locationName} group={group} />)
       ) : (
-        <Card className="border-dashed border-border/70">
-          <CardContent className="py-10 text-center text-sm text-muted-foreground">
+        <Card className={`border-dashed ${DESIGN_POLISH_CARD_CLASS}`}>
+          <CardContent className="py-10 text-center text-sm text-muted-foreground dark:text-muted-foreground/90">
             No devices registered yet. Pair a Stripe reader or create a POS register to populate
             this Clover parity status grid.
           </CardContent>
         </Card>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground dark:text-muted-foreground/90">
         <p>
           Refreshed {formatDistanceToNow(new Date(refreshedAt), { addSuffix: true })} on page load.
           Clover parity grid — not proprietary hub telemetry. POS registers and terminals show
@@ -214,6 +238,7 @@ export function DeviceStatusDashboard({ model }: { model: DeviceStatusDashboardM
 
       <p className="sr-only">{DEVICE_STATUS_DASHBOARD_ROUTE}</p>
       <p className="sr-only">device-status-dashboard-absolute-final-v1</p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
