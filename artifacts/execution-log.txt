@@ -6042,4 +6042,4 @@ Task: 21 — Skeleton screens for async pages (P1)
 Category: feat
 Result: done — MarketplaceSkeleton, POSSkeleton, KDSSkeleton (+ existing TodaySkeleton); pulse + dark mode tokens; wired to marketplace/pos/kitchen loading.tsx
 Tests: tests/unit/async-page-skeletons.test.ts + loading-skeleton-audit 13/13 pass
-Commit: pending
+Commit: 86cb8072
