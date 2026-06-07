@@ -48,5 +48,6 @@
   "46-e2e-accessibility-axe-10-pages": "done",
   "47-pos-terminal-keyboard-navigation": "done",
   "48-screen-reader-icon-buttons": "done",
-  "49-mobile-touch-target-44px": "done"
+  "49-mobile-touch-target-44px": "done",
+  "50-lighthouse-ci-core-web-vitals": "done"
 }

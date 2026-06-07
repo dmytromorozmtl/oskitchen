@@ -6266,4 +6266,12 @@ Task: 49 — Mobile touch target 44px validation (P2)
 Category: test
 Result: done — mobile-touch-target-44px-policy (375px viewport, 5 surfaces); e2e/mobile-touch-target-44px.spec.ts boundingBox ≥44px; touch-target-assertions helper
 Tests: npm run test:ci:mobile-touch-target-44px 10/10 pass
+Commit: 8786a259
+
+---
+Cycle: 20260606-240500
+Task: 50 — Lighthouse CI Core Web Vitals gate (P2)
+Category: ci
+Result: done — lighthouse-core-web-vitals-policy (FCP 2000ms, LCP 3500ms, CLS 0.1); lighthouserc.core-web-vitals.cjs; GHA lighthouse.yml runs CWV gate on PR
+Tests: npm run test:ci:lighthouse-core-web-vitals 3/3 pass
 Commit: pending

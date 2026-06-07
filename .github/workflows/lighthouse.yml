@@ -1,5 +1,5 @@
-# Marketing Lighthouse CI — performance / a11y / SEO regression on PRs.
-# See docs/monitoring.md and lighthouserc.marketing.cjs.
+# Lighthouse CI — Core Web Vitals gate (FCP <2s, LCP <3.5s, CLS <0.1).
+# See lighthouserc.core-web-vitals.cjs and lib/performance/lighthouse-core-web-vitals-policy.ts.
 
 name: Lighthouse CI
 
@@ -9,6 +9,7 @@ on:
       - "app/**"
       - "components/**"
       - "lib/**"
+      - "lighthouserc.core-web-vitals.cjs"
       - "lighthouserc.marketing.cjs"
       - ".github/workflows/lighthouse.yml"
   workflow_dispatch:
@@ -22,6 +23,7 @@ concurrency:
 
 jobs:
   lighthouse:
+    name: Core Web Vitals gate
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -47,13 +49,13 @@ jobs:
           DIRECT_URL: postgresql://postgres:postgres@localhost:5432/kitchenos_ci
           CRON_SECRET: ci-lighthouse-cron-secret
 
-      - name: Start server and run Lighthouse CI
+      - name: Start server and run Lighthouse CI (Core Web Vitals)
         run: |
           npm run start -- -p 3000 &
           for i in $(seq 1 60); do
             curl -sf http://127.0.0.1:3000/login >/dev/null && break
             sleep 2
           done
-          npx @lhci/cli autorun --config=lighthouserc.marketing.cjs
+          npx @lhci/cli autorun --config=lighthouserc.core-web-vitals.cjs
         env:
           LHCI_BASE_URL: http://127.0.0.1:3000
