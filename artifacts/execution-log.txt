@@ -6274,4 +6274,4 @@ Task: 50 — Lighthouse CI Core Web Vitals gate (P2)
 Category: ci
 Result: done — lighthouse-core-web-vitals-policy (FCP 2000ms, LCP 3500ms, CLS 0.1); lighthouserc.core-web-vitals.cjs; GHA lighthouse.yml runs CWV gate on PR
 Tests: npm run test:ci:lighthouse-core-web-vitals 3/3 pass
-Commit: pending
+Commit: fa0da534
