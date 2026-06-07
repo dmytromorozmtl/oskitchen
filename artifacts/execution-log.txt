@@ -6979,3 +6979,11 @@ Category: pm-marketing
 Result: done — kds-daisy-chain-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; NCR Aloha parity/BETA/bump handoff/not proprietary honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-08-kds-daisy-chain:cert 8/8 pass
 Commit: 2b119fe9
+
+---
+Cycle: 20260607-013200
+Task: 139 — PM marketing full scale KDS expedite screen GTM (P3)
+Category: pm-marketing
+Result: done — kds-expedite-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; Expedite screen/BETA/priority routing/not rush-hour certified honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-09-kds-expedite:cert 8/8 pass
+Commit: f655c066
