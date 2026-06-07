@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { progressForRun, isOverdue } from "@/lib/playbooks/playbook-runner";
+import { shouldRenderPlaybookTodayStrip } from "@/lib/safety/null-reference-guards";
 import {
   getPlaybookKpis,
   listRuns,
@@ -33,7 +34,7 @@ export async function PlaybookTodayStrip({ userId, email, businessMode }: Props)
 
     const topPick = recommended[0];
 
-    if (!topPick && activeRuns.length === 0) {
+    if (!shouldRenderPlaybookTodayStrip(recommended, activeRuns)) {
       return null;
     }
 

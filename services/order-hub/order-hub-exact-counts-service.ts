@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { orderHubWhere } from "@/lib/order-hub/order-hub-query-scope";
+import { resolveSettledOrderHubTabCounts } from "@/lib/safety/null-reference-guards";
 import {
   ORDER_HUB_TABS,
   type OrderHubTabId,
@@ -256,18 +257,15 @@ export async function loadOrderHubExactTabCounts(userId: string): Promise<OrderH
     }),
   );
 
-  return tabResults.map((result, index) => {
-    if (result.status === "fulfilled") {
-      return result.value;
+  for (const [index, result] of tabResults.entries()) {
+    if (result.status === "rejected") {
+      console.error(
+        "[order-hub] exact tab count failed",
+        ORDER_HUB_TABS[index]?.id,
+        result.reason,
+      );
     }
-    console.error("[order-hub] exact tab count failed", ORDER_HUB_TABS[index]?.id, result.reason);
-    const tab = ORDER_HUB_TABS[index]!;
-    return {
-      id: tab.id,
-      label: tab.label,
-      internal: 0,
-      external: 0,
-      total: 0,
-    } satisfies OrderHubExactTabCount;
-  });
+  }
+
+  return resolveSettledOrderHubTabCounts(tabResults, ORDER_HUB_TABS);
 }

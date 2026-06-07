@@ -15,5 +15,6 @@
   "13-npm-audit-ci-gate": "done",
   "14-static-generation-max-concurrency": "done",
   "15-lazy-load-otel-protobufjs": "done",
-  "16-live-integration-smoke-staging": "done"
+  "16-live-integration-smoke-staging": "done",
+  "17-null-reference-regression-suite": "done"
 }

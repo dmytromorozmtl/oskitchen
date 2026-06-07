@@ -4,6 +4,7 @@ import { buildMealPrepOsDashboard } from "@/lib/meal-prep/meal-prep-os-builders"
 import type { UpcomingCycleRow, WeeklyMenuRow } from "@/lib/meal-prep/meal-prep-os-types";
 import { MEAL_PREP_FORECAST_HORIZON_DAYS } from "@/lib/meal-prep/meal-prep-os-policy";
 import { prisma } from "@/lib/prisma";
+import { resolveMealPrepCustomerName } from "@/lib/safety/null-reference-guards";
 import { resolveOwnerWorkspaceId, resolveWorkspaceOwnerUserId } from "@/lib/scope/resolve-owner-workspace-id";
 import { menuListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
 import { loadMealPlanOverviewKpis } from "@/services/meal-plans/meal-plan-service";
@@ -95,8 +96,10 @@ export async function loadMealPrepOsDashboard(workspaceId: string) {
   const upcomingCycles: UpcomingCycleRow[] = cycles.map((cycle) => ({
     cycleId: cycle.id,
     planName: cycle.mealPlan.name,
-    customerName:
-      cycle.mealPlan.customer.displayName ?? cycle.mealPlan.customer.name ?? "",
+    customerName: resolveMealPrepCustomerName(
+      cycle.mealPlan.customer.displayName,
+      cycle.mealPlan.customer.name,
+    ),
     cycleStartIso: cycle.cycleStartDate.toISOString().slice(0, 10),
     status: cycle.status,
     mealsPlanned: cycle.mealsPlanned,

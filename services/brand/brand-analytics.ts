@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { orderListWhereForOwnerAnd } from '@/lib/scope/workspace-resource-scope';
+import { filterRecordsWithId } from '@/lib/safety/null-reference-guards';
 
 export interface BrandOverview {
   brandId: string;
@@ -23,7 +24,12 @@ export async function getBrandsOverview(userId: string): Promise<BrandOverview[]
     return [];
   }
 
-  const brandIds = brands.map((brand) => brand.id);
+  const validBrands = filterRecordsWithId(brands);
+  if (validBrands.length === 0) {
+    return [];
+  }
+
+  const brandIds = validBrands.map((brand) => brand.id);
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
@@ -75,7 +81,7 @@ export async function getBrandsOverview(userId: string): Promise<BrandOverview[]
     ]),
   );
 
-  return brands.map((brand) => {
+  return validBrands.map((brand) => {
     const allTime = allTimeByBrand.get(brand.id) ?? { orders: 0, revenue: 0 };
     const month = monthByBrand.get(brand.id) ?? { orders: 0, revenue: 0 };
     const totalOrders = allTime.orders;
