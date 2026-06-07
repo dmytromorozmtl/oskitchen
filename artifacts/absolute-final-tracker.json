@@ -110,5 +110,6 @@
   "108-qa-full-coverage-kds-daisy-chain": "done",
   "109-qa-full-coverage-kds-expedite": "done",
   "110-qa-full-coverage-white-label": "done",
-  "111-qa-full-coverage-coa-mapping": "done"
+  "111-qa-full-coverage-coa-mapping": "done",
+  "112-qa-full-coverage-journal-export": "done"
 }
