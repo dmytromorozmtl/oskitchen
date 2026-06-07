@@ -6995,3 +6995,11 @@ Category: pm-marketing
 Result: done — white-label-storefront-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; ChowNow parity/BETA/SKIPPED/DNS is not automatic/Do not promise custom domains honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-10-white-label:cert 8/8 pass
 Commit: 840fe814
+
+---
+Cycle: 20260607-013800
+Task: 141 — PM marketing full scale chart of accounts mapping GTM (P3)
+Category: pm-marketing
+Result: done — chart-of-accounts-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; BETA/not a certified GL/accountant review/QuickBooks/Do not claim honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-11-coa-mapping:cert 8/8 pass
+Commit: 5cbc0873
