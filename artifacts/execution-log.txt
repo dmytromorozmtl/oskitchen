@@ -6346,4 +6346,4 @@ Task: 59 — Data viz standards waterfall + contribution margin (P2)
 Category: feat
 Result: done — data-viz-standards-policy; buildProfitWaterfallData; buildContributionMarginRows; WaterfallChart (Recharts); ContributionMarginChart; wired real-time-profit-dashboard
 Tests: npm run test:ci:data-viz-standards:cert 5/5 pass
-Commit: pending
+Commit: 35c7a6b3
