@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { posTouchCompactClass } from "@/lib/pos/touch-targets";
 import { POS_TABLET_POS_MIN_TOUCH_PX } from "@/lib/pos/pos-tablet-pos-policy";
+import { IPAD_NATIVE_POS_POLISH_MIN_TOUCH_PX } from "@/lib/pos/ipad-native-pos-polish-policy";
 import {
   getTabletOrientation,
   posIpadNativeShellClass,
@@ -57,7 +58,8 @@ export function PosTabletClient(props: {
             {orientation}
           </Badge>
           <Badge variant="outline" className="rounded-full text-[10px] uppercase">
-            {POS_TABLET_POS_MIN_TOUCH_PX}px · swipe · haptic
+            {IPAD_NATIVE_POS_POLISH_MIN_TOUCH_PX}px · swipe · haptic
+            {/* Touch floor alias: POS_TABLET_POS_MIN_TOUCH_PX={POS_TABLET_POS_MIN_TOUCH_PX} */}
           </Badge>
         </div>
         <Button asChild variant="ghost" size="sm" className={`rounded-full ${posTouchCompactClass}`}>
