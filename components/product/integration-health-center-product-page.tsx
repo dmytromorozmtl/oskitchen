@@ -135,6 +135,9 @@ export function IntegrationHealthCenterProductPage() {
           <Button variant="ghost" className="rounded-full" asChild>
             <Link href="/integrations">Integrations index</Link>
           </Button>
+          <Button variant="ghost" className="rounded-full" asChild>
+            <Link href="/integration-health-center">Marketing overview</Link>
+          </Button>
         </div>
 
         <p className="font-mono text-[10px] text-muted-foreground">

@@ -293,6 +293,8 @@ Do **not** spend LOI cycles on:
 | Commissary landing | `/commissary-kitchen-software` | Outbound + ads |
 | Catering landing (secondary ICP) | `/catering-management` | Outbound + SEO |
 | Vertical messaging hub | `/solutions` — "Built for multi-concept operators" | GTM + SEO |
+| Integration Health marketing | `/integration-health-center` | Outbound + moat positioning |
+| Integration Health product | `/product/integration-health-center` | Product deep-dive |
 | Meal prep landing | `/landing/meal-prep` | Outbound + ads |
 | Weekly preorder landing | `/landing/weekly-preorder` | Meal prep variant |
 | First paid pilot package | `docs/era20-first-paid-pilot-package-2026-05-28.md` | Scope + checklists |

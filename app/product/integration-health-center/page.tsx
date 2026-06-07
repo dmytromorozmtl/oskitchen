@@ -7,6 +7,9 @@ import {
   INTEGRATION_HEALTH_CENTER_PRODUCT_HEADLINE,
 } from "@/lib/integrations/integration-health-center-product-content";
 import { INTEGRATION_HEALTH_CENTER_PRODUCT_ROUTE } from "@/lib/integrations/integration-health-center-product-absolute-final-policy";
+import { INTEGRATION_HEALTH_CENTER_MARKETING_ROUTE } from "@/lib/marketing/integration-health-center-marketing-absolute-final-policy";
+
+/** Standalone marketing: {INTEGRATION_HEALTH_CENTER_MARKETING_ROUTE} */
 
 export const metadata: Metadata = {
   title: `Integration Health Center — ${APP_NAME}`,
