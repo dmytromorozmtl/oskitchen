@@ -6634,3 +6634,4 @@ Task: 95 — white-label storefront depth ChowNow parity (P3)
 Category: feat
 Result: done — /dashboard/storefront/white-label depth panel (5 ChowNow pillars, 11 capabilities, readiness %); theme + settings wiring strips; policy + audit + 5 tests
 Tests: npm run test:ci:white-label-storefront-depth:cert 5/5 pass
+Commit: 141440b7
