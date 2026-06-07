@@ -6859,3 +6859,11 @@ Category: design
 Result: done — hero banner + card/table row dark-mode polish on kds-daisy-chain-config-panel.tsx, 8 cert tests; NCR Aloha bump handoff honesty preserved
 Tests: npm run test:ci:design-full-polish-08-kds-daisy-chain:cert 8/8 pass
 Commit: 17ea2441
+
+---
+Cycle: 20260607-004500
+Task: 124 — Design full polish KDS expedite screen (P3)
+Category: design
+Result: done — hero banner + badge row + hero/queue card + nav row dark-mode polish on kds-expedite-screen.tsx, 8 cert tests; BETA/rush-hour honesty preserved
+Tests: npm run test:ci:design-full-polish-09-kds-expedite:cert 8/8 pass
+Commit: 06219aba
