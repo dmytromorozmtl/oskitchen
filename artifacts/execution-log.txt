@@ -6427,3 +6427,11 @@ Category: docs
 Result: done — docs/meal-prep-vertical-golden-path.md; policy + audit; linked from icp-definition-final; Pro $79 recommendation; meal-prep-weekly demo script
 Tests: npm run test:ci:meal-prep-vertical-golden-path:cert 6/6 pass
 Commit: f7dd11fc
+
+---
+Cycle: 20260606-215600
+Task: 70 — Integration Health Center product page (P2)
+Category: feat
+Result: done — /product/integration-health-center; IntegrationHealthCenterProductPage (6 features); wired from /product index + dashboard integration-health; policy + audit + CI cert
+Tests: npm run test:ci:integration-health-center-product:cert 5/5 pass
+Commit: pending
