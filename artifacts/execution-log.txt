@@ -6442,4 +6442,4 @@ Task: 71 — Free pilot tier program first 5 restaurants (P2)
 Category: docs
 Result: done — docs/free-pilot-tier-program.md (5 slots, 90-day Pro/Team waiver); linked from loi-signed + meal-prep golden path; policy + audit; CI cert
 Tests: npm run test:ci:free-pilot-tier-program:cert 4/4 pass
-Commit: pending
+Commit: bb0cb78e
