@@ -6242,4 +6242,12 @@ Task: 46 — E2E accessibility axe-core 10 key dashboard pages (P2)
 Category: test
 Result: done — e2e-accessibility-axe-policy (10 routes, WCAG 2.1 AA tags); e2e/dashboard-accessibility-axe.spec.ts chromium-authed; axe-playwright-analyze helper; GHA e2e-accessibility-axe.yml
 Tests: npm run test:ci:e2e-accessibility-axe 3/3 pass
+Commit: a7781484
+
+---
+Cycle: 20260606-235000
+Task: 47 — Keyboard navigation tests POS terminal (P2)
+Category: test
+Result: done — pos-terminal-keyboard-navigation-policy (8 flows, desktop ?speed=0); e2e/pos-terminal-keyboard-navigation.spec.ts (F1/F7/F9/F3, quick-add, +/-, Escape, Tab); preparePosDesktopTerminal helper
+Tests: npm run test:ci:pos-terminal-keyboard-navigation 8/8 pass
 Commit: pending
