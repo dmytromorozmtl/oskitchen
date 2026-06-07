@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { AlertTriangle } from "lucide-react";
-
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
+import { ERROR_STATE_ROUTE_WRAPPER_CLASS } from "@/lib/design/error-state-patterns";
 import { ROUTE_LOADING_MIN_HEIGHT_CLASS } from "@/lib/design/route-loading-patterns";
 import {
   isRscRenderError,
@@ -21,9 +20,17 @@ export function RouteLoading({ message = "Loading..." }: { message?: string }) {
 export function RouteError({
   error,
   reset,
+  title,
+  description,
+  homeHref,
+  homeLabel,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
+  title?: string;
+  description?: React.ReactNode;
+  homeHref?: string;
+  homeLabel?: string;
 }) {
   const stale = isStaleServerActionError(error);
   const rscCrash = isRscRenderError(error);
@@ -32,20 +39,24 @@ export function RouteError({
     if (stale) reloadForStaleServerAction();
   }, [stale]);
 
+  const resolvedTitle = title ?? (stale ? "App updated" : "Something went wrong");
+  const resolvedDescription =
+    description ??
+    (stale
+      ? STALE_SERVER_ACTION_USER_MESSAGE
+      : rscCrash
+        ? "This page failed to render. Hard-refresh the browser (Cmd+Shift+R) or tap Reload — if it keeps happening, contact support."
+        : error.message || "An unexpected error occurred while loading this page.");
+
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 px-4">
-      <AlertTriangle className="h-10 w-10 shrink-0 text-amber-500" aria-hidden />
+    <div className={ERROR_STATE_ROUTE_WRAPPER_CLASS}>
       <ErrorState
-        title={stale ? "App updated" : "Something went wrong"}
-        description={
-          stale
-            ? STALE_SERVER_ACTION_USER_MESSAGE
-            : rscCrash
-              ? "This page failed to render. Hard-refresh the browser (Cmd+Shift+R) or tap Reload — if it keeps happening, contact support."
-              : error.message || "An unexpected error occurred while loading this page."
-        }
+        title={resolvedTitle}
+        description={resolvedDescription}
         retryLabel={stale || rscCrash ? "Reload page" : "Try again"}
         onRetry={stale || rscCrash ? reloadForStaleServerAction : reset}
+        homeHref={homeHref}
+        homeLabel={homeLabel}
       />
     </div>
   );

@@ -572,6 +572,7 @@
     "test:ci:dashboard-error-boundaries": "node ./node_modules/vitest/vitest.mjs run tests/unit/critical-dashboard-error-boundaries.test.ts tests/unit/dashboard-error-boundary-render.test.ts",
     "test:ci:suspense-skeleton": "node ./node_modules/vitest/vitest.mjs run tests/unit/suspense-skeleton.test.ts tests/unit/today-page-suspense.test.ts tests/unit/loading-skeleton-audit-policy.test.ts",
     "test:ci:async-page-skeletons": "node ./node_modules/vitest/vitest.mjs run tests/unit/async-page-skeletons.test.ts tests/unit/loading-skeleton-audit-policy.test.ts",
+    "test:ci:error-state-design-system": "node ./node_modules/vitest/vitest.mjs run tests/unit/error-state-design-system.test.ts tests/unit/error-state-audit-policy.test.ts",
     "test:ci:rate-limit": "node ./node_modules/vitest/vitest.mjs run tests/unit/rate-limit-response.test.ts tests/unit/rate-limit-facade.test.ts tests/unit/api-mutation-rate-limit.test.ts",
     "test:ci:pos-desktop-terminal-era92": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-desktop-terminal-era92.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:pos-desktop-terminal-era92:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-desktop-terminal-era92.test.ts",

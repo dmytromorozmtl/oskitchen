@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { RouteError } from "@/components/dashboard/route-states";
 
 export default function PosCashManagementError({
   error,
@@ -10,12 +10,13 @@ export default function PosCashManagementError({
   reset: () => void;
 }) {
   return (
-    <div className="mx-auto max-w-lg space-y-4 rounded-2xl border border-border/80 p-6">
-      <h2 className="text-lg font-semibold">Cash management unavailable</h2>
-      <p className="text-sm text-muted-foreground">{error.message || "Something went wrong loading cash controls."}</p>
-      <Button type="button" onClick={reset} className="rounded-full">
-        Try again
-      </Button>
-    </div>
+    <RouteError
+      error={error}
+      reset={reset}
+      title="Cash management unavailable"
+      description={error.message || "Something went wrong loading cash controls."}
+      homeHref="/dashboard/pos"
+      homeLabel="Back to POS"
+    />
   );
 }

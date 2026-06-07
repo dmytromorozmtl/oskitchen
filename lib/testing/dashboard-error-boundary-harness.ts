@@ -39,6 +39,10 @@ export function auditErrorBoundaryMarkup(markup: string): {
     failures.push("missing ErrorState data-testid");
   }
 
+  if (!markup.includes('data-testid="error-state-illustration"')) {
+    failures.push("missing ErrorState illustration");
+  }
+
   if (!/Try again|Reload page/.test(markup)) {
     failures.push("missing retry button label");
   }
