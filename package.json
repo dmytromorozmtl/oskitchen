@@ -638,6 +638,7 @@
     "test:ci:kds-multi-station-era179": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-multi-station-era179.test.ts tests/unit/kds-multi-station-era104.test.ts tests/unit/kds-multi-station.test.ts",
     "test:ci:kds-multi-station-era179:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-multi-station-era179.test.ts",
     "test:ci:kds-station-routing-rules": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-station-routing-rules.test.ts tests/unit/kds-multi-station.test.ts",
+    "test:ci:schedule-grid-drag-drop": "node ./node_modules/vitest/vitest.mjs run tests/unit/schedule-grid-drag-drop.test.ts tests/unit/labor-schedule-rbac.test.ts",
     "test:ci:kds-voice-alerts-era105": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-voice-alerts-era105.test.ts tests/unit/kds-voice-alerts.test.ts",
     "test:ci:kds-voice-alerts-era105:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-voice-alerts-era105.test.ts",
     "test:ci:kds-voice-alerts-era180": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-voice-alerts-era180.test.ts tests/unit/kds-voice-alerts-era105.test.ts tests/unit/kds-voice-alerts.test.ts",

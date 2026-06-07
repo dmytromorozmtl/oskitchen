@@ -98,6 +98,7 @@ export async function updateScheduledShift(
   shiftId: string,
   userId: string,
   data: {
+    staffMemberId?: string;
     shiftDate?: Date;
     startTime?: string;
     endTime?: string;
@@ -116,6 +117,7 @@ export async function updateScheduledShift(
   return prisma.staffShift.update({
     where: { id: existing.id },
     data: {
+      staffMemberId: data.staffMemberId,
       shiftDate: data.shiftDate,
       startTime,
       endTime,

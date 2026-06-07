@@ -1,17 +1,16 @@
 import Link from "next/link";
 
 import { createShiftAction } from "@/actions/labor/schedule";
-import { WeeklyScheduleBoard } from "@/components/dashboard/staff/weekly-schedule-board";
+import { ScheduleGridDragDrop } from "@/components/dashboard/staff/schedule-grid-drag-drop";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { hasPermission } from "@/lib/permissions/guards";
 import { requireWorkspacePermissionActor } from "@/lib/permissions/require-workspace-permission";
-import { getTenantActor } from "@/lib/scope/cached-tenant";
 import { prisma } from "@/lib/prisma";
 import {
   getLaborVsSales,
-  getWeeklySchedule,
   weekStartMonday,
 } from "@/services/labor/schedule-service";
+import { loadScheduleGridDragDropModel } from "@/services/labor/schedule-grid-drag-drop-service";
 
 export default async function StaffSchedulePage({
   searchParams,
@@ -30,8 +29,8 @@ export default async function StaffSchedulePage({
   const nextWeek = new Date(weekStart);
   nextWeek.setDate(nextWeek.getDate() + 7);
 
-  const [shifts, staff, locations, laborOverlay] = await Promise.all([
-    getWeeklySchedule(userId, weekStart),
+  const [gridModel, staff, locations, laborOverlay] = await Promise.all([
+    loadScheduleGridDragDropModel(userId, weekStart),
     prisma.staffMember.findMany({
       where: { userId, status: "ACTIVE" },
       select: { id: true, name: true },
@@ -45,25 +44,13 @@ export default async function StaffSchedulePage({
     getLaborVsSales(userId, new Date()),
   ]);
 
-  const shiftRows = shifts.map((s) => ({
-    id: s.id,
-    shiftDate: s.shiftDate.toISOString().slice(0, 10),
-    startTime: s.startTime,
-    endTime: s.endTime,
-    roleLabel: s.roleLabel,
-    status: s.status,
-    laborCost: Number(s.laborCost),
-    staffName: s.staffMember.name,
-    locationName: s.location?.name ?? null,
-  }));
-
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Labor schedule</h1>
           <p className="text-sm text-muted-foreground">
-            Drag shifts between days · labor {laborOverlay.laborPct}% of today&apos;s sales
+            Drag shifts across team members and days · labor {laborOverlay.laborPct}% of today&apos;s sales
           </p>
         </div>
         <div className="flex gap-2 text-sm">
@@ -151,11 +138,7 @@ export default async function StaffSchedulePage({
       </Card>
       )}
 
-      <WeeklyScheduleBoard
-        weekStartIso={weekStart.toISOString()}
-        shifts={shiftRows}
-        canManage={canManageSchedule}
-      />
+      <ScheduleGridDragDrop model={gridModel} canManage={canManageSchedule} />
     </div>
   );
 }
