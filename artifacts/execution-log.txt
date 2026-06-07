@@ -6066,4 +6066,4 @@ Task: 24 — Navigation IA workflow sections (P1)
 Category: feat
 Result: done — FOH/BOH/Finance/Settings collapsible super-sections in nav drawer; role-based default open (cashier→FOH, kitchen→BOH, support_admin→Settings); search bypasses workflow grouping
 Tests: tests/unit/navigation-workflow-ia.test.ts 6/6 pass; nav-personas 10/10 pass
-Commit: pending
+Commit: 474009b4
