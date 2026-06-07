@@ -5953,3 +5953,11 @@ Category: ci
 Result: done — BUNDLE_FIRST_LOAD_WARN_KB=500 / FAIL_KB=1000 in bundle-size-budget-policy; check-bundle-size-regression.ts warns/fails; CI step Performance regression (bundle size) via test:ci:bundle-size-regression after build tee
 Tests: tests/unit/bundle-size-regression.test.ts 10/10 pass
 Commit: 8a03bc4b
+
+---
+Cycle: 20260606-204000
+Task: 11 — Migrate Prisma config to prisma.config.ts (P1)
+Category: chore
+Result: done — prisma.config.ts (schema, migrations path, seed tsx prisma/seed.ts); removed deprecated package.json#prisma; prisma validate/generate load config without deprecation warning
+Tests: tests/unit/prisma-config.test.ts 1/1 pass
+Commit: pending

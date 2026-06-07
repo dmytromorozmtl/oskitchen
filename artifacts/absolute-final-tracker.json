@@ -9,5 +9,6 @@
   "7-authed-rsc-smoke-ci": "done",
   "8-rate-limit-192-routes": "done",
   "9-eslint-aschild-guard": "done",
-  "10-bundle-budget-ci-gate": "done"
+  "10-bundle-budget-ci-gate": "done",
+  "11-prisma-config-migration": "done"
 }

@@ -1590,9 +1590,6 @@
   "overrides": {
     "react-is": "^19.0.5"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@eslint/eslintrc": "^3.2.0",
