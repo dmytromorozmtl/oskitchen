@@ -1,11 +1,9 @@
 import Link from "next/link";
 
-import { ChartOfAccountsMappingStrip } from "@/components/dashboard/accounting/chart-of-accounts-mapping-strip";
-import { JournalEntryExportStrip } from "@/components/dashboard/accounting/journal-entry-export-strip";
-import { GlDepthSyncPanel } from "@/components/dashboard/accounting/gl-depth-sync-panel";
+import { JournalEntryExportPanel } from "@/components/dashboard/accounting/journal-entry-export-panel";
 import { canExportReports } from "@/lib/reports/report-export-access";
 import { requireReportsPageAccess } from "@/lib/reports/reports-page-access";
-import { loadGlDepthAccountingModel } from "@/services/accounting/gl-depth-accounting-service";
+import { loadJournalEntryExportModel } from "@/services/accounting/journal-entry-export-service";
 import type { PnlPeriod } from "@/services/accounting/restaurant-pnl-service";
 
 const PERIODS: { key: PnlPeriod; label: string }[] = [
@@ -16,7 +14,7 @@ const PERIODS: { key: PnlPeriod; label: string }[] = [
   { key: "year", label: "Year" },
 ];
 
-export default async function GlDepthAccountingSyncPage({
+export default async function JournalEntryExportPage({
   searchParams,
 }: {
   searchParams: Promise<{ period?: string }>;
@@ -30,36 +28,28 @@ export default async function GlDepthAccountingSyncPage({
     return access.deny;
   }
 
-  const { actor } = access;
-  const model = await loadGlDepthAccountingModel(actor.dataUserId, period);
-  const canExport = canExportReports(actor);
+  const canExport = canExportReports(access.actor);
+  const model = await loadJournalEntryExportModel(access.actor.dataUserId, period, canExport);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">GL-depth accounting sync</h1>
-          <p className="text-sm text-muted-foreground">
-            Chart of accounts · journal entries · P&L reconciliation — operational finance depth,
-            not a certified native GL.
-          </p>
-        </div>
-        <Link
-          href="/dashboard/reports/financial/pnl"
-          className="text-sm text-primary hover:underline"
-        >
-          Open restaurant P&L →
-        </Link>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Accounting · Journal export
+        </p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight">Journal entry export</h1>
+        <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+          Export balanced journal entries in CSV, JSON, or QuickBooks-mapped CSV — BETA operational
+          finance layer with COA mapping overlays. Accountant review required; Do not claim native
+          GL certification.
+        </p>
       </div>
-
-      <ChartOfAccountsMappingStrip />
-      <JournalEntryExportStrip />
 
       <div className="flex flex-wrap gap-2">
         {PERIODS.map((p) => (
           <Link
             key={p.key}
-            href={`/dashboard/accounting/gl-sync?period=${p.key}`}
+            href={`/dashboard/accounting/journal-export?period=${p.key}`}
             className={`rounded-md px-3 py-1.5 text-sm ${
               period === p.key
                 ? "bg-primary text-primary-foreground"
@@ -71,7 +61,7 @@ export default async function GlDepthAccountingSyncPage({
         ))}
       </div>
 
-      <GlDepthSyncPanel model={model} canExport={canExport} />
+      <JournalEntryExportPanel model={model} />
     </div>
   );
 }
