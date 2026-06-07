@@ -28,6 +28,8 @@ This assessment maps OS Kitchen controls against **AICPA Trust Services Criteria
 
 **Bottom line (June 2026):** OS Kitchen has **credible technical controls** for a pre-revenue SaaS (RBAC CI, audit logs, staging checklist, incident process) but lacks **policy corpus, access governance, vendor risk program, penetration testing, and evidence collection** required for SOC 2 Type II. Target **readiness phase** Q4 2026 → **observation start** Q1 2027 → **report** H2 2027 (indicative, budget-dependent).
 
+**Canonical timeline:** [`soc2-roadmap-with-timeline.md`](./soc2-roadmap-with-timeline.md) (`soc2-roadmap-absolute-final-v1`, Absolute Final Task 66).
+
 ---
 
 ## In-scope trust services criteria

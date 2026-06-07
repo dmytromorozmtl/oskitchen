@@ -666,6 +666,8 @@
     "test:ci:design-system-documentation:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/design-system-documentation.test.ts",
     "test:ci:storybook-top20": "node ./node_modules/vitest/vitest.mjs run tests/unit/storybook-top20.test.ts tests/unit/design-system-documentation.test.ts",
     "test:ci:storybook-top20:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/storybook-top20.test.ts",
+    "test:ci:soc2-roadmap": "node ./node_modules/vitest/vitest.mjs run tests/unit/soc2-roadmap-absolute-final.test.ts tests/unit/soc2-readiness-assessment.test.ts",
+    "test:ci:soc2-roadmap:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/soc2-roadmap-absolute-final.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",

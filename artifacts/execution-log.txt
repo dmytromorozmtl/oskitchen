@@ -6395,3 +6395,11 @@ Category: docs
 Result: done — stories/top20/*.stories.tsx ×20; .storybook main/preview; storybook-top20-policy + audit; docs/storybook-top20-setup.md; npm run storybook + CI cert
 Tests: npm run test:ci:storybook-top20:cert 5/5 pass
 Commit: cdb8c38b
+
+---
+Cycle: 20260606-214800
+Task: 66 — SOC2 roadmap with timeline gap analysis (P2)
+Category: docs
+Result: done — docs/soc2-roadmap-with-timeline.md (6 phases Jun 2026→H2 2027); gap analysis CC1–CC9 + P0–P2 backlog; soc2-roadmap-absolute-final-policy + audit; linked readiness assessment
+Tests: npm run test:ci:soc2-roadmap:cert 5/5 pass
+Commit: pending
