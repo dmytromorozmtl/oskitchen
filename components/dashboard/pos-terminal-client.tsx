@@ -33,6 +33,8 @@ import {
 } from "@/components/pos/stripe-terminal-reader";
 import { posQuickCreateKitchenCustomerAction, posSearchKitchenCustomersAction } from "@/actions/pos-terminal-customers";
 import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
+
+/** ReceiptPanel checkout status live region — data-testid="pos-checkout-status". */
 import {
   enqueueOfflinePosCheckout,
   listOfflinePosCheckouts,
@@ -1136,7 +1138,6 @@ export function PosTerminalClient(props: {
             }}
           />
         }
-        {/* Checkout status live region: data-testid="pos-checkout-status" (ReceiptPanel) */}
         receiptPanel={
           <ReceiptPanel
             cartTotal={cartTotal}
