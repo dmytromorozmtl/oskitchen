@@ -6098,4 +6098,4 @@ Task: 28 — Pilot Week 1 roadmap (P1)
 Category: docs
 Result: done — docs/pilot-week1-roadmap.md with T-0 onboarding, T+1 KDS, T+3 first order, T+7 briefing; pilot-week1-roadmap-policy + human gate checklist
 Tests: tests/unit/pilot-week1-roadmap.test.ts 4/4 pass
-Commit: pending
+Commit: 0310d79c
