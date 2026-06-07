@@ -6683,3 +6683,11 @@ Category: test
 Result: done — QA registry (15 slots for features 86–100); slot 101 behavioral tests for multi-currency (inheritance, Stripe alignment, actions wiring); policy + audit + 8 tests
 Tests: npm run test:ci:qa-full-coverage-01-multi-currency:cert 8/8 pass
 Commit: 4c35b78a
+
+---
+Cycle: 20260606-234800
+Task: 102 — QA full coverage EU data residency (P3)
+Category: test
+Result: done — slot 102 behavioral tests for EU residency roadmap (phase/gap audit, honesty markers, human gate, sales guidance, DSR/forbidden-claims wiring); 8 tests
+Tests: npm run test:ci:qa-full-coverage-02-eu-data-residency:cert 8/8 pass
+Commit: 1f875296
