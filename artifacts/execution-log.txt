@@ -6114,4 +6114,4 @@ Task: 30 — Navigation release profile Pilot/Enterprise (P1)
 Category: feat
 Result: done — PILOT_TIER_NAV_HREFS 20-page allowlist; enterprise/full unfiltered sidebar; isPilotDeepLinkHiddenHref for deep-link banner; .env.example pilot|enterprise|full
 Tests: tests/unit/navigation-release-profile.test.ts + release-navigation + navigation-workflow-ia 12/12 pass
-Commit: pending
+Commit: 4b7a847e
