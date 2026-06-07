@@ -6907,3 +6907,11 @@ Category: design
 Result: done — hero banner + badge row + checklist/pillar/deliverable/export card dark-mode polish on accountant-portal-panel.tsx, 8 cert tests; read-only/certified GL honesty preserved
 Tests: npm run test:ci:design-full-polish-14-accountant-portal:cert 8/8 pass
 Commit: 8acd29b9
+
+---
+Cycle: 20260607-005700
+Task: 130 — Design full polish KDS driver ETA screen (P3)
+Category: design
+Result: done — hero banner + badge row + ticket card dark-mode polish on kds-driver-eta-screen.tsx, 8 cert tests; estimated ETA/GPS honesty preserved — Design Full Polish 116–130 complete
+Tests: npm run test:ci:design-full-polish-15-driver-eta:cert 8/8 pass
+Commit: c684d5e7
