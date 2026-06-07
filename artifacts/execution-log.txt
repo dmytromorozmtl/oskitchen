@@ -6330,4 +6330,4 @@ Task: 57 — Skip link + main landmark in dashboard-shell (P2)
 Category: fix
 Result: done — skip-link-main-landmark-policy; DashboardSkipLink component; main id=dashboard-main-content tabIndex={-1} aria-label; wiring audit
 Tests: npm run test:ci:skip-link-main-landmark:cert 3/3 pass
-Commit: pending
+Commit: a7192e82
