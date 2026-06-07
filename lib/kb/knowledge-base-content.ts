@@ -66,6 +66,7 @@ export const KB_CATEGORIES: KbCategory[] = [
     articleSlugs: [
       "integrations/woocommerce",
       "integrations/shopify",
+      "integrations/stripe-connect",
       "integrations/marketplaces",
     ],
   },
@@ -110,30 +111,37 @@ export const KB_ARTICLES: KbArticle[] = [
       es: "Nombra tu restaurante, añade un plato y registra tu primer pedido POS.",
     },
     body: {
-      en: `Open **Dashboard → Quick Start** for a three-step wizard with a live timer.
+      en: `Open **Dashboard → Quick Start** for a three-step wizard with a live timer (~15 minutes).
 
-1. **Name & cuisine** — pick your venue type (full service, QSR, café, ghost kitchen, etc.).
-2. **First menu item** — add at least one dish with price; skip templates if you prefer.
-3. **First order** — open the POS terminal tutorial and complete a checkout (confetti on success).
+**Step 1 — Account and location:** Sign up at os-kitchen.com/signup (14-day trial, no card). Complete onboarding — business name, vertical, timezone. Confirm **Settings → Locations**. Bookmark **Today** (\`/dashboard/today\`) as your command center.
 
-Demo data seeds a supplier, staff member, and register automatically. No integration credentials required to finish.`,
-      fr: `Ouvrez **Tableau de bord → Quick Start** pour un assistant en trois étapes avec minuterie.
+**Step 2 — First menu item:** From **Menus**, create an active menu and add one dish with price and category. Set preorder cutoffs if running weekly menus.
 
-1. **Nom et cuisine** — choisissez votre type d'établissement.
-2. **Premier plat** — ajoutez au moins un article avec prix.
-3. **Première commande** — ouvrez le tutoriel POS et finalisez un encaissement.
+**Step 3 — First order:** Open **POS Terminal**, open a shift, add the item, and checkout (cash works without Stripe). Order appears in **Order Hub**.
 
-Les données de démo créent un fournisseur, un employé et une caisse automatiquement.`,
-      es: `Abre **Panel → Quick Start** para un asistente de tres pasos con temporizador.
+Demo data seeds supplier, staff, and register automatically. No integration credentials required. Full guide: \`/kb/getting-started/quick-start\` · docs/kb/quick-start-guide.md`,
+      fr: `Ouvrez **Tableau de bord → Quick Start** — assistant en trois étapes (~15 min).
 
-1. **Nombre y cocina** — elige el tipo de local.
-2. **Primer plato** — añade al menos un artículo con precio.
-3. **Primer pedido** — abre el tutorial POS y completa un cobro.
+1. **Compte et site** — inscription, onboarding, fuseau horaire, **Today**.
+2. **Premier plat** — menu actif + un article avec prix.
+3. **Première commande** — terminal POS, encaissement, commande dans Order Hub.
 
-Los datos demo crean proveedor, personal y caja automáticamente.`,
+Données démo créées automatiquement. Guide : \`/kb/getting-started/quick-start\`.`,
+      es: `Abre **Panel → Quick Start** — asistente de tres pasos (~15 min).
+
+1. **Cuenta y ubicación** — registro, onboarding, zona horaria, **Today**.
+2. **Primer plato** — menú activo + un artículo con precio.
+3. **Primer pedido** — terminal POS, cobro, pedido en Order Hub.
+
+Datos demo automáticos. Guía: \`/kb/getting-started/quick-start\`.`,
     },
     tags: ["onboarding", "quick start", "pos", "demo"],
-    relatedSlugs: ["getting-started/first-menu", "operations/pos-terminal", "billing/plans-and-trials"],
+    relatedSlugs: [
+      "getting-started/first-menu",
+      "operations/pos-terminal",
+      "integrations/stripe-connect",
+      "billing/plans-and-trials",
+    ],
   },
   {
     slug: "getting-started/first-menu",
@@ -301,11 +309,29 @@ Features include open tabs, bill splitting, shift close reports, and handheld mo
       es: "Claves REST, webhooks y mapeo de productos.",
     },
     body: {
-      en: `From **Integrations**, add WooCommerce with REST API keys (read/write orders).
+      en: `**Prerequisites:** HTTPS WooCommerce store, REST Read/Write keys, webhook secret, Pro plan+.
 
-Configure the webhook URL shown in OS Kitchen. Unmatched SKUs route to **Product mapping** before orders hit production. Test on staging before go-live.`,
-      fr: `Ajoutez WooCommerce avec clés REST. Les SKU non mappés passent par **Product mapping**.`,
-      es: `Añade WooCommerce con claves REST. Los SKU sin mapear pasan por **Product mapping**.`,
+**Dashboard steps:**
+1. **Integrations → WooCommerce** — store URL, consumer key/secret, webhook secret → **Save**.
+2. **Test connection** — verifies \`/wp-json/wc/v3/system_status\`.
+3. **Sync products / Sync orders** — pulls catalog and open orders.
+4. **Product mapping** — link unmatched SKUs before production routing.
+
+**Webhooks:** \`https://YOUR_APP/api/webhooks/woocommerce?cid=<connection-id>\` with \`X-WC-Webhook-Signature\`. Topics: order.*, product.*.
+
+**Troubleshooting:** 401 → regenerate keys; signature mismatch → align webhook secret; NEEDS_AUTH → re-save and test.
+
+Full guide: docs/kb/integrations/woocommerce-setup.md`,
+      fr: `**Prérequis :** boutique HTTPS, clés REST, secret webhook, forfait Pro+.
+
+**Étapes :** Intégrations → WooCommerce → Test → Sync → Product mapping.
+
+**Webhooks :** URL avec \`cid\` et signature HMAC.`,
+      es: `**Requisitos:** tienda HTTPS, claves REST, secreto webhook, plan Pro+.
+
+**Pasos:** Integraciones → WooCommerce → Test → Sync → Product mapping.
+
+**Webhooks:** URL con \`cid\` y firma HMAC.`,
     },
     tags: ["woocommerce", "webhook", "integration"],
     relatedSlugs: ["integrations/shopify", "getting-started/first-order"],
@@ -324,14 +350,70 @@ Configure the webhook URL shown in OS Kitchen. Unmatched SKUs route to **Product
       es: "App personalizada OAuth y sync de pedidos.",
     },
     body: {
-      en: `Create a custom app in Shopify Admin with the scopes listed in **Integrations → Shopify**.
+      en: `**Prerequisites:** Custom app Admin API token (orders + products scopes), webhook signing secret, Pro plan+.
 
-Paste the admin token and webhook signing secret. OS Kitchen coordinates the kitchen after Shopify captures the sale — it does not replace your storefront.`,
-      fr: `Créez une app custom Shopify avec les scopes listés. OS Kitchen coordonne la cuisine après la vente.`,
-      es: `Crea una app custom en Shopify con los scopes listados. OS Kitchen coordina la cocina tras la venta.`,
+**Dashboard steps:**
+1. **Integrations → Shopify** — \`your-store.myshopify.com\`, token, webhook secret, API version → **Save**.
+2. **Test connection** — GraphQL \`shop { name }\`.
+3. **Sync products / orders** — first page MVP sizes; re-sync for pagination.
+4. Map external products to menu items where SKUs differ.
+
+**Webhooks:** Register \`/api/webhooks/shopify/orders-create\`, \`orders-updated\`, \`products-update\`, \`app-uninstalled\`. HMAC via \`X-Shopify-Hmac-Sha256\`.
+
+**Troubleshooting:** Scope errors → expand token; HMAC fail → match custom app secret; BETA until live smoke PASS.
+
+Full guide: docs/kb/integrations/shopify-setup.md`,
+      fr: `**Prérequis :** token Admin API, secret webhook, forfait Pro+.
+
+**Étapes :** Intégrations → Shopify → Test → Sync → mapping.
+
+**Webhooks :** chemins orders-create, orders-updated, products-update.`,
+      es: `**Requisitos:** token Admin API, secreto webhook, plan Pro+.
+
+**Pasos:** Integraciones → Shopify → Test → Sync → mapping.
+
+**Webhooks:** rutas orders-create, orders-updated, products-update.`,
     },
     tags: ["shopify", "oauth", "integration"],
-    relatedSlugs: ["integrations/woocommerce", "operations/order-hub"],
+    relatedSlugs: ["integrations/woocommerce", "integrations/stripe-connect", "operations/order-hub"],
+  },
+  {
+    slug: "integrations/stripe-connect",
+    categoryId: "integrations",
+    title: {
+      en: "Connect Stripe (payments)",
+      fr: "Connecter Stripe (paiements)",
+      es: "Conectar Stripe (pagos)",
+    },
+    summary: {
+      en: "Stripe Connect for storefront checkout, POS card payments, and subscription billing.",
+      fr: "Stripe Connect pour vitrine, POS et abonnement.",
+      es: "Stripe Connect para tienda, POS y suscripción.",
+    },
+    body: {
+      en: `**Prerequisites:** OS Kitchen account, Stripe account, bank account for payouts, online connectivity for cards.
+
+**Dashboard steps:**
+1. **Billing → Connect Stripe** — complete Connect onboarding (business info, bank, verification).
+2. Wait for **charges_enabled** before live checkout.
+3. **Storefront** — Stripe Checkout on your slug (PCI SAQ-A — no card storage in OS Kitchen).
+4. **POS Terminal** — card tender via Stripe Terminal when online; cash works without Stripe.
+5. **Subscription** — upgrade plans from Billing; Checkout at /pricing.
+
+**Webhooks:** \`https://YOUR_DOMAIN/api/webhooks/stripe\` — events: checkout.session.completed, subscription updated/deleted, invoice paid/failed. Secret → STRIPE_WEBHOOK_SECRET.
+
+**Troubleshooting:** Incomplete onboarding → Stripe Dashboard holds; webhook 400 → signing secret; test card 4242... in test mode only.
+
+Full guide: docs/kb/integrations/stripe-connect-setup.md`,
+      fr: `**Connect Stripe :** onboarding Connect, vitrine Checkout, POS carte en ligne, abonnement via Billing.
+
+**Webhooks :** \`/api/webhooks/stripe\` avec secret de signature.`,
+      es: `**Connect Stripe:** onboarding Connect, checkout tienda, POS tarjeta online, suscripción vía Billing.
+
+**Webhooks:** \`/api/webhooks/stripe\` con secreto de firma.`,
+    },
+    tags: ["stripe", "payments", "connect", "checkout"],
+    relatedSlugs: ["billing/plans-and-trials", "getting-started/quick-start", "operations/pos-terminal"],
   },
   {
     slug: "integrations/marketplaces",
@@ -347,11 +429,30 @@ Paste the admin token and webhook signing secret. OS Kitchen coordinates the kit
       es: "Adaptadores partner — BETA hasta credenciales activas.",
     },
     body: {
-      en: `Marketplace adapters require partner approval and your API credentials.
+      en: `**Prerequisites:** Team plan+, partner-approved API credentials per marketplace (Uber Eats, DoorDash, Grubhub).
 
-Integration Health shows CONNECTED, NEEDS_AUTH, or ERROR per channel. We never claim official endorsement until your integration is verified live. Uber Direct courier dispatch is on the roadmap.`,
-      fr: `Les adaptateurs marketplace exigent l'approbation partenaire et vos identifiants API.`,
-      es: `Los adaptadores marketplace requieren aprobación partner y tus credenciales API.`,
+**Dashboard steps:**
+1. **Integrations** hub → select marketplace adapter.
+2. Enter partner credentials → **Save** (encrypted at rest).
+3. **Test connection** — may show NEEDS_AUTH until partner enables API access.
+4. Review **Integration Health** — CONNECTED / NEEDS_AUTH / ERROR per channel.
+5. Map marketplace menu items before accepting live orders.
+
+**Webhooks:** Partner-specific URLs shown on Integrations card — register in partner portal. Inbound log at **Integrations → Webhook log**.
+
+**Troubleshooting:** NEEDS_AUTH → contact partner support; orders missing → check mapping + webhook log; never claim LIVE without CONNECTED on your tenant.
+
+Full guide: docs/kb/integrations/delivery-marketplaces-setup.md`,
+      fr: `**Prérequis :** forfait Team+, identifiants partenaires approuvés.
+
+**Étapes :** Intégrations → credentials → Test → Integration Health → mapping.
+
+**Webhooks :** URLs partenaires depuis la carte Intégrations.`,
+      es: `**Requisitos:** plan Team+, credenciales partner aprobadas.
+
+**Pasos:** Integraciones → credenciales → Test → Integration Health → mapping.
+
+**Webhooks:** URLs partner desde tarjeta Integraciones.`,
     },
     tags: ["uber eats", "doordash", "grubhub", "delivery"],
     relatedSlugs: ["operations/order-hub", "billing/limits-and-upgrades"],

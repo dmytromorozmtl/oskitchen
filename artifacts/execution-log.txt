@@ -6139,3 +6139,11 @@ Category: docs
 Result: done — docs/case-study-template-pre-pilot.md + _PRE_PILOT_TEMPLATE.md; founder story, operator archetype, design partner CTA, upgrade path to MKT-11; case-study-template-pre-pilot-policy + lint
 Tests: npm run test:ci:case-study-template-pre-pilot 6/6 pass
 Commit: 05bae489
+
+---
+Cycle: 20260606-224500
+Task: 34 — /kb content Quick Start + 4 integration guides (P1)
+Category: docs
+Result: done — docs/kb/quick-start-guide.md + woocommerce/shopify/stripe-connect/delivery-marketplaces setup guides; expanded KB_ARTICLES + integrations/stripe-connect; kb-content-absolute-final-policy
+Tests: npm run test:ci:kb-content-absolute-final 5/5 pass
+Commit: pending
