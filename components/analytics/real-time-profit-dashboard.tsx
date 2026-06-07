@@ -4,9 +4,12 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 
+import { ContributionMarginChart } from "@/components/analytics/contribution-margin-chart";
 import { ProfitGauge } from "@/components/analytics/profit-gauge";
 import { ProfitItemMarginBars } from "@/components/analytics/profit-item-margin-bars";
 import { ProfitMarginBreakdownBar } from "@/components/analytics/profit-margin-breakdown-bar";
+import { WaterfallChart } from "@/components/analytics/waterfall-chart";
+import { sortContributionMarginByDollars } from "@/lib/analytics/contribution-margin-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
@@ -93,6 +96,7 @@ export function RealTimeProfitDashboard({
         <CardContent className="pt-6">
           <ProfitGauge marginPercent={data.marginPercent} zone={data.marginZone} />
           <ProfitMarginBreakdownBar snapshot={data} currency={currency} className="mt-6" />
+          <WaterfallChart snapshot={data} currency={currency} className="mt-6" />
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
             <div>
               <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" /> 55%+
@@ -176,6 +180,20 @@ export function RealTimeProfitDashboard({
           ))}
         </div>
       ) : null}
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Contribution margin leaders</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ContributionMarginChart
+            items={sortContributionMarginByDollars(data.topItems)}
+            title="Top contributors today"
+            emptyLabel="No item sales yet today."
+            currency={currency}
+          />
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
