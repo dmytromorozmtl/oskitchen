@@ -6322,4 +6322,4 @@ Task: 56 — Mobile-first redesign POS mobile + KDS tablet landscape (P2)
 Category: feat
 Result: done — mobile-first-redesign-absolute-final-policy; kds-tablet-landscape-layout (1024×768); POS mobile 375px shell; KDS lane/grid layout; E2E mobile-first-redesign-pos-kds.spec.ts; GHA e2e-mobile-first-redesign-pos-kds.yml
 Tests: npm run test:ci:mobile-first-redesign-absolute-final:cert 5/5 pass
-Commit: pending
+Commit: 58ca542d
