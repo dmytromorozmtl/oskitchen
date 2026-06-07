@@ -19,6 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
 import { KDS_DAISY_CHAIN_CONFIG_ROUTE } from "@/lib/kitchen/kds-daisy-chain-config-absolute-final-policy";
 import type { KdsDaisyChainConfigModel } from "@/services/kitchen/kds-daisy-chain-config-service";
 
@@ -27,14 +35,17 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
 
   return (
     <div className="space-y-6" data-testid="kds-daisy-chain-config-panel">
-      <div className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm text-muted-foreground">
-        <strong className="text-foreground">NCR Aloha parity — BETA daisy-chain config.</strong>{" "}
-        Defines bump handoff links between KDS screens (Prep → line → Expo). Routing rules still
-        assign the first station; daisy-chain controls the next screen after bump. Not a proprietary
-        terminal hub sync.
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">KDS daisy-chain config (Beta)</p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
+          <strong className="text-foreground">NCR Aloha parity — BETA daisy-chain config.</strong>{" "}
+          Defines bump handoff links between KDS screens (Prep → line → Expo). Routing rules still
+          assign the first station; daisy-chain controls the next screen after bump. Not a proprietary
+          terminal hub sync.
+        </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 text-sm">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
         <Badge variant="outline" className="rounded-full">
           {enabledLinkCount}/{links.length} links enabled
         </Badge>
@@ -46,7 +57,7 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
         </Badge>
       </div>
 
-      <Card>
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-lg">Chain paths</CardTitle>
           <CardDescription>
@@ -62,27 +73,29 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
                 className="rounded-full font-normal"
                 data-testid="kds-daisy-chain-path"
               >
-                <GitBranch className="mr-1 h-3 w-3" aria-hidden />
+                <GitBranch className={`mr-1 h-3 w-3 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />
                 {path}
               </Badge>
             ))
           ) : (
-            <p className="text-sm text-muted-foreground">No enabled chain paths — enable links below.</p>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+              No enabled chain paths — enable links below.
+            </p>
           )}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-lg">Bump handoff links</CardTitle>
           <CardDescription>
             Toggle each from → to link. Disabled links skip that bump handoff step.
           </CardDescription>
         </CardHeader>
-        <CardContent className="overflow-x-auto rounded-xl border border-border/70">
+        <CardContent className={`overflow-x-auto ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}>
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="dark:border-border/50">
                 <TableHead>Link</TableHead>
                 <TableHead>From</TableHead>
                 <TableHead>To</TableHead>
@@ -92,7 +105,11 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
             </TableHeader>
             <TableBody>
               {links.map((link) => (
-                <TableRow key={link.id} data-testid="kds-daisy-chain-link-row">
+                <TableRow
+                  key={link.id}
+                  className="dark:border-border/50"
+                  data-testid="kds-daisy-chain-link-row"
+                >
                   <TableCell className="font-medium">{link.label}</TableCell>
                   <TableCell className="font-mono text-xs">{link.fromStationId}</TableCell>
                   <TableCell className="font-mono text-xs">{link.toStationId}</TableCell>
@@ -120,28 +137,35 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-lg">Bump preview</CardTitle>
           <CardDescription>
             Next station after bump for each configured screen — used by production KDS handoff.
           </CardDescription>
         </CardHeader>
-        <CardContent className="overflow-x-auto rounded-xl border border-border/70">
+        <CardContent className={`overflow-x-auto ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}>
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="dark:border-border/50">
                 <TableHead>Current screen</TableHead>
                 <TableHead>Next after bump</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {bumpPreview.map((row) => (
-                <TableRow key={row.linkId} data-testid="kds-daisy-chain-bump-preview-row">
+                <TableRow
+                  key={row.linkId}
+                  className="dark:border-border/50"
+                  data-testid="kds-daisy-chain-bump-preview-row"
+                >
                   <TableCell className="font-medium">{row.fromStation}</TableCell>
                   <TableCell>
                     <span className="inline-flex items-center gap-1">
-                      <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
+                      <ArrowRight
+                        className={`h-3.5 w-3.5 ${DESIGN_POLISH_STRIPE_OK_CLASS}`}
+                        aria-hidden
+                      />
                       {row.nextStation}
                     </span>
                   </TableCell>
@@ -164,6 +188,7 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
       <p className="sr-only">
         {KDS_DAISY_CHAIN_CONFIG_ROUTE} · kds-daisy-chain-config-absolute-final-v1
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
