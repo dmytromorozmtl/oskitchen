@@ -6378,4 +6378,4 @@ Task: 63 — Dark mode audit all new components Tasks 56–62 (P2)
 Category: fix
 Result: done — new-components-dark-mode-audit-policy (14 modules); fleet audit; dark variants on margin bars, schedule conflict cells, offline sync pulse; fixed offline-indicator dismiss hover
 Tests: npm run test:ci:new-components-dark-mode-audit:cert 5/5 pass
-Commit: pending
+Commit: bd4eed53
