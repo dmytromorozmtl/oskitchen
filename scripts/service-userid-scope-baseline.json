@@ -1,4 +1,0 @@
-{
-  "maxHits": 0,
-  "note": "Sprint 21: all services/ where:{ userId } patterns scoped via workspace helpers. Enable workspace:audit:services:strict in CI."
-}

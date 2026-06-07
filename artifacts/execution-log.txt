@@ -6411,3 +6411,11 @@ Category: docs
 Result: done — engineering-onboarding.md (2-week checklist); engineering-video-walkthrough.md (8 chapters); ADR 0006; updated bus-factor-mitigation.md + adr README; policy + audit
 Tests: npm run test:ci:bus-factor-mitigation:cert 5/5 pass
 Commit: a550d682
+
+---
+Cycle: 20260606-215200
+Task: 68 — KPI dashboard MRR NPS TTF uptime error rate DAU (P2)
+Category: feat
+Result: done — /platform/kpi page; kpi-dashboard-service snapshot; KpiDashboardPanel; policy + metrics + audit; docs/kpi-dashboard.md; platform nav link; CI cert
+Tests: npm run test:ci:kpi-dashboard:cert 8/8 pass
+Commit: pending

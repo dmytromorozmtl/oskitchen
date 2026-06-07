@@ -21,6 +21,7 @@ export const PLATFORM_NAV_GROUPS: PlatformNavGroup[] = [
     label: "Overview",
     items: [
       { href: "/platform/dashboard", label: "Dashboard", permission: "platform:access" },
+      { href: "/platform/kpi", label: "KPI dashboard", permission: "platform:access" },
       { href: "/platform/search", label: "Search", permission: "platform:access" },
       { href: "/platform/health", label: "Health", permission: "platform:access" },
       { href: "/platform/system-health", label: "System health (ops)", permission: "platform:access" },
