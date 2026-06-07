@@ -6003,3 +6003,11 @@ Result: done — fleet policy + summary + orchestrator (17 merchant live smokes 
 Tests: tests/unit/live-integrations-staging-smoke.test.ts 9/9 pass
 Scripts: smoke:live-integrations-staging, test:ci:live-integrations-staging-smoke:cert
 Commit: 42e5fb22
+
+---
+Cycle: 20260606-212000
+Task: 17 — Null reference regression suite (P1)
+Category: test
+Result: done — 6 guard functions + policy; wired into today page, playbook strip, meal-prep, brand-analytics, order-hub; unit tests 9/9
+Tests: tests/unit/null-reference-regression.test.ts 9/9 pass
+Commit: 1f255532
