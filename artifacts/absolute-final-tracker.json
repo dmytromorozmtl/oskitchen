@@ -99,5 +99,6 @@
   "97-journal-entry-export": "done",
   "98-pnl-reconciliation-view": "done",
   "99-accountant-portal": "done",
-  "100-driver-eta-tracking-kds": "done"
+  "100-driver-eta-tracking-kds": "done",
+  "101-qa-full-coverage-multi-currency": "done"
 }
