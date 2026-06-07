@@ -50,6 +50,11 @@ import { announceKdsVoiceAlert } from "@/services/kitchen/voice-alerts";
 import type { KdsRealtimeSloSnapshot } from "@/lib/kitchen/kds-realtime-slo-metrics";
 import type { KdsDailyOrder } from "@/services/kitchen-screen/daily-kds-service";
 import type { KdsRealtimeTransport } from "@/services/kds-websocket";
+import {
+  kdsTabletLandscapeLaneLayoutClass,
+  kdsTabletLandscapeShellClass,
+  kdsTabletLandscapeTicketGridClass,
+} from "@/lib/kitchen/kds-tablet-landscape-layout";
 import { cn } from "@/lib/utils";
 
 export type KdsDailyServiceRealtimeProps = {
@@ -240,7 +245,10 @@ export function KdsDailyService({
   }
 
   return (
-    <div className="space-y-4">
+    <div
+      className={cn("space-y-4", kdsTabletLandscapeShellClass())}
+      data-testid="kds-tablet-landscape-shell"
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">Kitchen Display</h2>
@@ -324,7 +332,7 @@ export function KdsDailyService({
           showDemoLink={false}
         />
       ) : (
-        <div className="space-y-6">
+        <div className={kdsTabletLandscapeLaneLayoutClass()}>
           {preparing.length > 0 ? (
             <KdsTicketSection title="On the line" count={preparing.length}>
               {preparing.map((order) => (
@@ -385,7 +393,7 @@ function KdsTicketSection({
         </h3>
         <span className="text-xs tabular-nums text-muted-foreground">{count}</span>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{children}</div>
+      <div className={kdsTabletLandscapeTicketGridClass()}>{children}</div>
     </section>
   );
 }

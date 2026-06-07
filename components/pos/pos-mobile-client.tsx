@@ -15,6 +15,7 @@ import {
   type PosMobileCartLine,
   type PosMobileProduct,
 } from "@/lib/pos/pos-mobile-cart";
+import { MOBILE_FIRST_REDESIGN_POS_VIEWPORT_PX } from "@/lib/design/mobile-first-redesign-absolute-final-policy";
 import { POS_MOBILE_POS_MIN_TOUCH_PX } from "@/lib/pos/pos-mobile-pos-policy";
 import {
   posTerminalDecreaseQuantityLabel,
@@ -221,8 +222,9 @@ export function PosMobileClient(props: PosMobileClientProps) {
 
   return (
     <div
-      className="relative mx-auto max-w-md space-y-3 pb-36"
+      className="relative mx-auto max-w-md space-y-3 pb-36 touch-manipulation"
       data-testid="pos-mobile-shell"
+      data-mobile-first-viewport={MOBILE_FIRST_REDESIGN_POS_VIEWPORT_PX}
     >
       <div className="sticky top-0 z-20 space-y-2 rounded-2xl border border-border/70 bg-background/95 p-3 backdrop-blur">
         <div className="flex items-start justify-between gap-2">
