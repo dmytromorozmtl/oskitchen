@@ -7027,3 +7027,11 @@ Category: pm-marketing
 Result: done — accountant-portal-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; BETA/read-only/not a certified GL/accountant review/Do not claim honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-14-accountant-portal:cert 8/8 pass
 Commit: 7554237d
+
+---
+Cycle: 20260607-015100
+Task: 145 — PM marketing full scale driver ETA tracking in KDS GTM (P3)
+Category: pm-marketing
+Result: done — kds-driver-eta-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; Driver ETA/BETA/estimated ETA/not live GPS certified/Do not claim honesty preserved — PM slot 145/145 complete
+Tests: npm run test:ci:pm-marketing-full-scale-15-driver-eta:cert 8/8 pass
+Commit: bc34d1f7
