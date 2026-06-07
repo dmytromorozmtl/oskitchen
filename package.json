@@ -651,6 +651,7 @@
     "test:ci:lighthouse-core-web-vitals": "node ./node_modules/vitest/vitest.mjs run tests/unit/lighthouse-core-web-vitals-policy.test.ts",
     "test:ci:visual-regression-dark-mode": "node ./node_modules/vitest/vitest.mjs run tests/unit/visual-regression-dark-mode-policy.test.ts",
     "test:ci:pos-offline-mode": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-offline-mode-e2e.test.ts tests/unit/offline-mode-queue-sync-e2e.test.ts",
+    "test:ci:n-plus-one-regression": "node ./node_modules/vitest/vitest.mjs run tests/unit/n-plus-one-regression.test.ts tests/unit/n-plus-one-regression-policy.test.ts tests/unit/n-plus-one-p0-fixes.test.ts",
     "test:ci:kds-voice-alerts-era105": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-voice-alerts-era105.test.ts tests/unit/kds-voice-alerts.test.ts",
     "test:ci:kds-voice-alerts-era105:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-voice-alerts-era105.test.ts",
     "test:ci:kds-voice-alerts-era180": "node ./node_modules/vitest/vitest.mjs run tests/unit/kds-voice-alerts-era180.test.ts tests/unit/kds-voice-alerts-era105.test.ts tests/unit/kds-voice-alerts.test.ts",

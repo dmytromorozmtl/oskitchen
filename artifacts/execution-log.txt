@@ -6291,3 +6291,11 @@ Category: test
 Result: done — pos-offline-mode-e2e-policy (disconnect, queue, sync); pos-offline-mode.spec.ts 3 phases; GHA e2e-pos-offline-mode.yml
 Tests: npm run test:ci:pos-offline-mode 7/7 pass
 Commit: 3df763cf
+
+---
+Cycle: 20260606-212600
+Task: 53 — N+1 regression tests with query count assertions (P2)
+Category: test
+Result: done — prisma-query-count-harness; n-plus-one-regression-policy (8 targets); query count + sub-linear scale tests for partner oauth, pos shift, brand analytics, SLA, vendor webhooks
+Tests: npm run test:ci:n-plus-one-regression 21/21 pass
+Commit: d5ba8431
