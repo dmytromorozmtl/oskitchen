@@ -6002,4 +6002,4 @@ Category: test
 Result: done — fleet policy + summary + orchestrator (17 merchant live smokes + Integration Health staging probe); GHA workflow; `.env.smoke.local` staging merchant creds; SKIPPED when creds missing
 Tests: tests/unit/live-integrations-staging-smoke.test.ts 9/9 pass
 Scripts: smoke:live-integrations-staging, test:ci:live-integrations-staging-smoke:cert
-Commit: pending
+Commit: 42e5fb22
