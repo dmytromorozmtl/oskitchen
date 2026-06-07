@@ -5944,4 +5944,4 @@ Task: 9 — ESLint guard for Button asChild multi-child (P0)
 Category: lint
 Result: done — eslint/rules/no-children-only-with-as-child.js; kitchenos/no-children-only-with-as-child on app/** and components/**; .eslintrc.js legacy pointer; eslint.config.mjs consolidated kitchenos plugin
 Tests: tests/unit/no-children-only-with-as-child.test.ts 1/1 pass (RuleTester valid/invalid cases)
-Commit: pending
+Commit: 1abd420e
