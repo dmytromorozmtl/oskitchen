@@ -148,5 +148,6 @@
   "146-full-typescript-strict-mode": "done",
   "147-full-wcag-21-aa-accessibility": "done",
   "148-full-lighthouse-95-performance": "done",
-  "149-full-owasp-top-10-security": "done"
+  "149-full-owasp-top-10-security": "done",
+  "150-full-competitor-parity-check": "done"
 }
