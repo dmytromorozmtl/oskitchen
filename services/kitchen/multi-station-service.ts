@@ -17,6 +17,7 @@ import {
   type ProductionViewWorkItemInput,
 } from "@/lib/kitchen/kds-production-view";
 import { productionWorkItemListWhereForOwner } from "@/lib/scope/workspace-resource-scope";
+import { loadKdsStationRoutingRules } from "@/lib/kitchen/kds-station-routing-rules-storage";
 
 function toIso(value: Date | null): string | null {
   return value ? value.toISOString() : null;
@@ -60,6 +61,7 @@ async function loadActiveProductionWorkItems(userId: string): Promise<Production
       dueAt: true,
       createdAt: true,
       startedAt: true,
+      productId: true,
       product: { select: { category: true } },
     },
     orderBy: [{ dueAt: "asc" }, { createdAt: "asc" }],
@@ -77,16 +79,18 @@ async function loadActiveProductionWorkItems(userId: string): Promise<Production
     createdAtIso: row.createdAt.toISOString(),
     startedAtIso: toIso(row.startedAt),
     productCategory: row.product?.category ?? null,
+    productId: row.productId,
   }));
 }
 
 export async function loadKdsMultiStationSnapshot(userId: string): Promise<KdsMultiStationSnapshot> {
-  const [registry, items] = await Promise.all([
+  const [registry, items, rules] = await Promise.all([
     loadKdsStationRegistry(userId),
     loadActiveProductionWorkItems(userId),
+    loadKdsStationRoutingRules(userId),
   ]);
 
-  return buildKdsMultiStationSnapshot(items, registry);
+  return buildKdsMultiStationSnapshot(items, registry, { rules });
 }
 
 export async function loadKdsProductionViewWithRouting(userId: string): Promise<ProductionViewSnapshot> {
@@ -95,12 +99,13 @@ export async function loadKdsProductionViewWithRouting(userId: string): Promise<
 }
 
 export async function routeKdsWorkItemsForUser(userId: string): Promise<KdsRoutedWorkItem[]> {
-  const [registry, items] = await Promise.all([
+  const [registry, items, rules] = await Promise.all([
     loadKdsStationRegistry(userId),
     loadActiveProductionWorkItems(userId),
+    loadKdsStationRoutingRules(userId),
   ]);
 
-  return applyKdsMultiStationRouting(items, registry);
+  return applyKdsMultiStationRouting(items, registry, rules);
 }
 
 /** Backward-compatible loader used by production and manager views. */

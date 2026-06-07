@@ -9,6 +9,7 @@ import { orderByIdWhereForOwner } from "@/lib/scope/workspace-order-scope";
 import { ownerScopedAnd } from "@/lib/scope/workspace-resource-scope";
 
 import { posRoutingForProductCategory } from "@/lib/pos/pos-routing-rules";
+import { resolveKdsStationForPosLine } from "@/services/kitchen/kds-station-routing-rules-service";
 
 /**
  * Creates `ProductionWorkItem` rows for POS orders when routing says kitchen prep is required.
@@ -63,6 +64,11 @@ export async function enqueueKitchenRoutingForPosOrder(userId: string, orderId: 
     for (const line of eligible) {
       const pr = line.product!;
       const route = posRoutingForProductCategory(pr.category);
+      const station = await resolveKdsStationForPosLine(userId, {
+        productId: line.productId!,
+        title: pr.title,
+        category: pr.category,
+      });
 
       const exists = await tx.productionWorkItem.findFirst({
         where: { AND: [workItemScope, { orderItemId: line.id }] },
@@ -82,7 +88,7 @@ export async function enqueueKitchenRoutingForPosOrder(userId: string, orderId: 
           productId: line.productId!,
           title: pr.title,
           quantity: line.quantity,
-          station: "POS",
+          station,
           stage: "To prep",
           status: "TO_PREP",
           sourceType: "ORDER" as ProductionSourceType,

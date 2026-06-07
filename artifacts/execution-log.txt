@@ -6218,4 +6218,12 @@ Task: 43 — Delivery dispatch optimization Olo parity (P2)
 Category: feat
 Result: done — delivery-dispatch-optimization-policy (nearest-neighbor + window priority + Google Routes); loadDeliveryDispatchOptimizationModel; /dashboard/routes/optimize panel with apply optimized order; applyOptimizedStopOrder + applyDispatchOptimizationAction
 Tests: npm run test:ci:delivery-dispatch-optimization 8/8 pass
+Commit: a5e8275b
+
+---
+Cycle: 20260606-233500
+Task: 44 — KDS station routing rules NCR Aloha parity (P2)
+Category: feat
+Result: done — kds-station-routing-rules-policy (product→category→keyword→default) + settingsCenterJson storage; multi-station + POS enqueue integration; /dashboard/kitchen/routing-rules panel with toggle + preview; nav + i18n
+Tests: npm run test:ci:kds-station-routing-rules 9/9 pass
 Commit: pending

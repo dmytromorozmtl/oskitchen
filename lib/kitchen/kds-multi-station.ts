@@ -5,6 +5,10 @@ import {
   type ProductionViewWorkItemInput,
 } from "@/lib/kitchen/kds-production-view";
 import {
+  evaluateKdsStationRoutingRules,
+  type KdsStationRoutingRule,
+} from "@/lib/kitchen/kds-station-routing-rules-policy";
+import {
   DEFAULT_KDS_STATIONS,
   KDS_CATEGORY_FOOD_TYPE_MAP,
   KDS_MULTI_STATION_MIN_STATIONS,
@@ -13,7 +17,7 @@ import {
   type KdsStationDefinition,
 } from "@/lib/kitchen/kds-multi-station-policy";
 
-export type KdsRoutingReason = "assigned" | "keyword" | "food_type" | "fallback";
+export type KdsRoutingReason = "assigned" | "rule" | "keyword" | "food_type" | "fallback";
 
 export type KdsRoutedWorkItem = ProductionViewWorkItemInput & {
   routedStation: string;
@@ -95,8 +99,9 @@ export function resolveKdsFoodTypeFromCategory(category: string | null | undefin
 }
 
 export function routeKdsWorkItemToStation(
-  item: ProductionViewWorkItemInput & { productCategory?: string | null },
+  item: ProductionViewWorkItemInput & { productCategory?: string | null; productId?: string | null },
   registry: readonly KdsStationDefinition[],
+  rules?: readonly KdsStationRoutingRule[],
 ): KdsRoutedWorkItem {
   const assigned = item.station?.trim();
   if (assigned) {
@@ -109,6 +114,30 @@ export function routeKdsWorkItemToStation(
       foodType: match?.foodType ?? resolveKdsFoodTypeFromCategory(item.productCategory),
       routingReason: "assigned",
     };
+  }
+
+  if (rules?.length) {
+    const ruleMatch = evaluateKdsStationRoutingRules(
+      {
+        id: item.id,
+        title: item.title,
+        productId: item.productId ?? null,
+        productCategory: item.productCategory ?? null,
+      },
+      rules,
+    );
+    if (ruleMatch) {
+      const station =
+        registry.find(
+          (row) => row.name.toLowerCase() === ruleMatch.stationName.toLowerCase(),
+        ) ?? registry.find((row) => row.foodType === foodTypeForStationName(ruleMatch.stationName));
+      return {
+        ...item,
+        routedStation: ruleMatch.stationName,
+        foodType: station?.foodType ?? resolveKdsFoodTypeFromCategory(item.productCategory),
+        routingReason: "rule",
+      };
+    }
   }
 
   const keywordMatch = stationByKeyword(registry, item.title);
@@ -131,11 +160,18 @@ export function routeKdsWorkItemToStation(
   };
 }
 
+function foodTypeForStationName(name: string): KdsFoodType | undefined {
+  return DEFAULT_KDS_STATIONS.find(
+    (station) => station.name.toLowerCase() === name.trim().toLowerCase(),
+  )?.foodType;
+}
+
 export function applyKdsMultiStationRouting(
-  items: readonly (ProductionViewWorkItemInput & { productCategory?: string | null })[],
+  items: readonly (ProductionViewWorkItemInput & { productCategory?: string | null; productId?: string | null })[],
   registry: readonly KdsStationDefinition[],
+  rules?: readonly KdsStationRoutingRule[],
 ): KdsRoutedWorkItem[] {
-  return items.map((item) => routeKdsWorkItemToStation(item, registry));
+  return items.map((item) => routeKdsWorkItemToStation(item, registry, rules));
 }
 
 function emptyStationSnapshot(station: string) {
@@ -181,11 +217,11 @@ export function mergeRegistryStationsIntoSnapshot(
 }
 
 export function buildKdsMultiStationSnapshot(
-  items: readonly (ProductionViewWorkItemInput & { productCategory?: string | null })[],
+  items: readonly (ProductionViewWorkItemInput & { productCategory?: string | null; productId?: string | null })[],
   registry: readonly KdsStationDefinition[],
-  options?: { now?: Date },
+  options?: { now?: Date; rules?: readonly KdsStationRoutingRule[] },
 ): KdsMultiStationSnapshot {
-  const routedItems = applyKdsMultiStationRouting(items, registry);
+  const routedItems = applyKdsMultiStationRouting(items, registry, options?.rules);
   const routedForProduction: ProductionViewWorkItemInput[] = routedItems.map((item) => ({
     ...item,
     station: item.routedStation,
