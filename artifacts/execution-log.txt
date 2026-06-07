@@ -6106,4 +6106,4 @@ Task: 29 — Competitor feature tracker 8/8 sales-safe claims (P1)
 Category: docs
 Result: done — salesSafeCompetitorClaims for Toast/Square/Lightspeed/Clover/TouchBistro/Revel/SpotOn/Olo; competitor-sales-safe-claims-policy + auditReconciliation 8/8
 Tests: tests/unit/competitor-sales-safe-claims.test.ts + competitor-feature-tracker-filled 6/6 pass
-Commit: pending
+Commit: 0fd08c5b
