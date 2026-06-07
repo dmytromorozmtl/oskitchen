@@ -28,10 +28,11 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default async function HandheldPOSPage(
-  props: { searchParams?: Promise<{ tableId?: string }> } = {},
-) {
-  const { searchParams = Promise.resolve({}) } = props;
+export default async function HandheldPOSPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tableId?: string }>;
+}) {
   const { tableId } = await searchParams;
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "pos.access")) {
