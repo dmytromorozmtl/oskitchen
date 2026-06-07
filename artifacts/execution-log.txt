@@ -6018,4 +6018,4 @@ Task: 18 — Error boundary tests for 20 pages (P1)
 Category: test
 Result: done — SSR render harness simulates throw on all 20 error.tsx routes; asserts ErrorState + retry + back link; RouteError RSC/PilotRouteError retry wiring
 Tests: tests/unit/dashboard-error-boundary-render.test.ts + critical-dashboard-error-boundaries.test.ts 27/27 pass
-Commit: pending
+Commit: 7c336e29
