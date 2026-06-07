@@ -6331,3 +6331,11 @@ Category: fix
 Result: done — skip-link-main-landmark-policy; DashboardSkipLink component; main id=dashboard-main-content tabIndex={-1} aria-label; wiring audit
 Tests: npm run test:ci:skip-link-main-landmark:cert 3/3 pass
 Commit: a7192e82
+
+---
+Cycle: 20260606-213400
+Task: 58 — iPad-native POS polish touch targets, haptic, swipe (P2)
+Category: feat
+Result: done — ipad-native-pos-polish-policy; haptics (tap/success/error); swipe-right add on tablet tiles; posIpadNativeShellClass; wired pos-tablet-client + pos-terminal-client tabletMode
+Tests: npm run test:ci:ipad-native-pos-polish:cert 6/6 pass
+Commit: pending

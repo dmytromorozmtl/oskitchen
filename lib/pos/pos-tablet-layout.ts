@@ -42,3 +42,13 @@ export function posTabletCartPanelClass(
     orientation === "landscape" ? "md:max-w-md" : "sticky bottom-0 z-10 max-h-[48vh] overflow-y-auto",
   );
 }
+
+/** iPad-native polish — touch-manipulation, press scale, swipe-friendly shell. */
+export function posIpadNativeShellClass(): string {
+  return cn("pos-ipad-native touch-manipulation select-none");
+}
+
+/** Product tile press feedback on tablet counter. */
+export function posIpadNativeProductTileClass(): string {
+  return cn("active:scale-[0.98] motion-reduce:active:scale-100");
+}

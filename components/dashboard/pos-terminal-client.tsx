@@ -101,8 +101,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   posTabletMainLayoutClass,
+  posIpadNativeProductTileClass,
   type TabletOrientation,
 } from "@/lib/pos/pos-tablet-layout";
+import { triggerIpadNativePosHaptic } from "@/lib/pos/ipad-native-pos-haptics";
+import { createPosTabletSwipeHandlers } from "@/lib/pos/ipad-native-pos-swipe";
 import { cn } from "@/lib/utils";
 import { fireCelebrationConfetti } from "@/components/ui/celebration-confetti";
 
@@ -207,6 +210,10 @@ export function PosTerminalClient(props: {
 
   function showCheckoutStatus(text: string, kind?: PosCheckoutStatusKind) {
     setCheckoutStatus(toPosCheckoutStatus(text, kind));
+    if (tabletMode) {
+      if (kind === "success") triggerIpadNativePosHaptic("success");
+      else if (kind === "error") triggerIpadNativePosHaptic("error");
+    }
   }
 
   function resetDiscountState() {
@@ -538,6 +545,7 @@ export function PosTerminalClient(props: {
   }
 
   function addProduct(p: Pick<PosTerminalProduct, "id" | "title" | "price">) {
+    if (tabletMode) triggerIpadNativePosHaptic("tap");
     setCart((prev) => {
       const existing = prev.find((l) => l.productId === p.id);
       if (existing) {
@@ -940,15 +948,36 @@ export function PosTerminalClient(props: {
               className="col-span-full"
             />
           ) : (
-          filtered.map((p) => (
+          filtered.map((p) => {
+            const tabletSwipe = tabletMode
+              ? createPosTabletSwipeHandlers({
+                  onSwipeRight: () => addProduct(p),
+                  onTap: () => addProduct(p),
+                })
+              : null;
+            const { touchAction, ...swipeHandlers } = tabletSwipe ?? {
+              touchAction: undefined,
+              onPointerDown: undefined,
+              onPointerUp: undefined,
+              onPointerCancel: undefined,
+            };
+
+            return (
             <button
               type="button"
               key={p.id}
               data-testid="pos-product-tile"
-              onClick={() => addProduct(p)}
+              data-ipad-native-polish={tabletMode ? "true" : undefined}
+              {...(tabletMode
+                ? {
+                    style: { touchAction },
+                    ...swipeHandlers,
+                  }
+                : { onClick: () => addProduct(p) })}
               className={cn(
                 `flex ${posTouchTileClass} flex-col rounded-2xl border border-border/80 bg-card text-left shadow-sm transition hover:border-primary/40 hover:shadow-md`,
                 posCashierSpeedProductTileClass(speedMode),
+                tabletMode && posIpadNativeProductTileClass(),
               )}
             >
               {!speedMode ? (
@@ -971,7 +1000,8 @@ export function PosTerminalClient(props: {
                 ${p.price.toFixed(2)}
               </span>
             </button>
-          ))
+            );
+          })
           )}
         </div>
       </div>

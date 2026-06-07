@@ -16,11 +16,13 @@ import { Button } from "@/components/ui/button";
 import { posTouchCompactClass } from "@/lib/pos/touch-targets";
 import {
   getTabletOrientation,
+  posIpadNativeShellClass,
   posTabletShellClass,
   subscribeTabletOrientation,
 } from "@/lib/pos/pos-tablet-layout";
-import { POS_TABLET_POS_MIN_TOUCH_PX } from "@/lib/pos/pos-tablet-pos-policy";
+import { IPAD_NATIVE_POS_POLISH_MIN_TOUCH_PX } from "@/lib/pos/ipad-native-pos-polish-policy";
 import type { PosConflictResolutionStrategy } from "@/lib/pos/pos-settings";
+import { cn } from "@/lib/utils";
 
 export function PosTabletClient(props: {
   registers: PosTerminalRegister[];
@@ -42,7 +44,11 @@ export function PosTabletClient(props: {
   );
 
   return (
-    <div className={posTabletShellClass(orientation)} data-testid="pos-tablet-shell">
+    <div
+      className={cn(posTabletShellClass(orientation), posIpadNativeShellClass())}
+      data-testid="pos-tablet-shell"
+      data-ipad-native-polish="true"
+    >
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <TabletSmartphone className="h-5 w-5 text-primary" aria-hidden />
@@ -51,7 +57,7 @@ export function PosTabletClient(props: {
             {orientation}
           </Badge>
           <Badge variant="outline" className="rounded-full text-[10px] uppercase">
-            {POS_TABLET_POS_MIN_TOUCH_PX}px targets
+            {IPAD_NATIVE_POS_POLISH_MIN_TOUCH_PX}px · swipe · haptic
           </Badge>
         </div>
         <Button asChild variant="ghost" size="sm" className={`rounded-full ${posTouchCompactClass}`}>

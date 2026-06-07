@@ -603,6 +603,8 @@
     "test:ci:pos-tablet-terminal-era93:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-tablet-terminal-era93.test.ts",
     "test:ci:pos-tablet-terminal-era168": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-tablet-terminal-era168.test.ts tests/unit/pos-tablet-terminal-era93.test.ts tests/unit/pos-tablet-pos.test.ts",
     "test:ci:pos-tablet-terminal-era168:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-tablet-terminal-era168.test.ts",
+    "test:ci:ipad-native-pos-polish": "node ./node_modules/vitest/vitest.mjs run tests/unit/ipad-native-pos-polish.test.ts tests/unit/pos-tablet-terminal-era168.test.ts",
+    "test:ci:ipad-native-pos-polish:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/ipad-native-pos-polish.test.ts",
     "test:ci:pos-mobile-terminal-era94": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-mobile-terminal-era94.test.ts tests/unit/pos-mobile-pos.test.ts",
     "test:ci:pos-mobile-terminal-era94:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-mobile-terminal-era94.test.ts",
     "test:ci:pos-mobile-terminal-era169": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-mobile-terminal-era169.test.ts tests/unit/pos-mobile-terminal-era94.test.ts tests/unit/pos-mobile-pos.test.ts",
