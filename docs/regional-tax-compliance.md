@@ -1,5 +1,13 @@
 # Regional Tax Compliance Guide
 
+<!-- design-polish: absolute-final-design-polish-tokens-v1 task-118 feature-88 -->
+
+> **design-polish-hero-banner** · Internal compliance guide — **not tax advice**, **not automated filing**
+>
+> Operators configure rates · ~25% readiness · Do **not** claim automated tax compliance, filing, or nexus determination.
+>
+> **design-polish-dark-mode-note:** Plain markdown tables and blockquotes — readable in GitHub light and dark themes without custom HTML colors.
+
 **Status:** Internal compliance guide — **not tax advice**, **not automated filing**  
 **Audience:** Founder, finance, engineering, enterprise sales, operators  
 **Policy:** `regional-tax-compliance-absolute-final-v1` (`lib/compliance/regional-tax-compliance-absolute-final-policy.ts`)  
@@ -15,7 +23,7 @@ Single reference for **what OS Kitchen supports today** vs **what operators must
 
 ---
 
-## Current posture
+## Current posture · design-polish-status-card
 
 | Dimension | Status | Notes |
 |-----------|--------|-------|
@@ -70,7 +78,7 @@ Configured under **Storefront → Ordering → Tax settings** (`StorefrontTaxSet
 
 ---
 
-## Timeline
+## Timeline · design-polish-phase-timeline
 
 | Phase | Window | Goal | Exit criteria |
 |-------|--------|------|---------------|
