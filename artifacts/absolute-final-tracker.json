@@ -112,5 +112,6 @@
   "110-qa-full-coverage-white-label": "done",
   "111-qa-full-coverage-coa-mapping": "done",
   "112-qa-full-coverage-journal-export": "done",
-  "113-qa-full-coverage-pnl-reconciliation": "done"
+  "113-qa-full-coverage-pnl-reconciliation": "done",
+  "114-qa-full-coverage-accountant-portal": "done"
 }
