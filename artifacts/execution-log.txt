@@ -6939,3 +6939,11 @@ Category: pm-marketing
 Result: done — regional-tax-compliance-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; not tax advice/operator responsibility/~25%/Not available honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-03-regional-tax:cert 8/8 pass
 Commit: d0c226aa
+
+---
+Cycle: 20260607-011700
+Task: 134 — PM marketing full scale app marketplace 3rd party GTM (P3)
+Category: pm-marketing
+Result: done — GTM sections embedded in app-marketplace-third-party.tsx (ICP/demo/objections/pricing/CTA/honesty), gtm-scale content/policy/audit, 8 cert tests; BETA/platform review/not a self-serve/Illustrative honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-04-app-marketplace:cert 8/8 pass
+Commit: 52db284c
