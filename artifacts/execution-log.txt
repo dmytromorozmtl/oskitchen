@@ -6323,3 +6323,11 @@ Category: feat
 Result: done — mobile-first-redesign-absolute-final-policy; kds-tablet-landscape-layout (1024×768); POS mobile 375px shell; KDS lane/grid layout; E2E mobile-first-redesign-pos-kds.spec.ts; GHA e2e-mobile-first-redesign-pos-kds.yml
 Tests: npm run test:ci:mobile-first-redesign-absolute-final:cert 5/5 pass
 Commit: 58ca542d
+
+---
+Cycle: 20260606-213200
+Task: 57 — Skip link + main landmark in dashboard-shell (P2)
+Category: fix
+Result: done — skip-link-main-landmark-policy; DashboardSkipLink component; main id=dashboard-main-content tabIndex={-1} aria-label; wiring audit
+Tests: npm run test:ci:skip-link-main-landmark:cert 3/3 pass
+Commit: pending

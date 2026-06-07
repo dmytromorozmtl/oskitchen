@@ -55,5 +55,6 @@
   "53-n-plus-one-regression-tests": "done",
   "54-performance-regression-cwv-ci": "done",
   "55-integration-smoke-suite-order-kds": "done",
-  "56-mobile-first-redesign-pos-kds": "done"
+  "56-mobile-first-redesign-pos-kds": "done",
+  "57-skip-link-main-landmark": "done"
 }

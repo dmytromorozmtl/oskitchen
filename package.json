@@ -652,6 +652,8 @@
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",
+    "test:ci:skip-link-main-landmark": "node ./node_modules/vitest/vitest.mjs run tests/unit/skip-link-main-landmark.test.ts tests/unit/e2e-accessibility-axe-policy.test.ts",
+    "test:ci:skip-link-main-landmark:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/skip-link-main-landmark.test.ts",
     "test:ci:mobile-touch-target-44px": "node ./node_modules/vitest/vitest.mjs run tests/unit/mobile-touch-target-44px.test.ts tests/unit/mobile-first-redesign-policy.test.ts",
     "test:ci:lighthouse-core-web-vitals": "node ./node_modules/vitest/vitest.mjs run tests/unit/lighthouse-core-web-vitals-policy.test.ts",
     "test:ci:visual-regression-dark-mode": "node ./node_modules/vitest/vitest.mjs run tests/unit/visual-regression-dark-mode-policy.test.ts",

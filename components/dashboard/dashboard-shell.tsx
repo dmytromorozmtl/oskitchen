@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import type { BusinessType, UserRole } from "@prisma/client";
 import { MenuSquare, Shield, User, Bell, KeyRound, Users, Sparkles } from "lucide-react";
 
+import { DashboardSkipLink } from "@/components/a11y/dashboard-skip-link";
 import { BillingAccessGuard } from "@/components/billing/billing-access-guard";
 import { TrialBanner } from "@/components/billing/trial-banner";
 
@@ -44,6 +45,10 @@ import {
   dashboardChromeNavTriggerClass,
 } from "@/lib/design/mobile-first-redesign-patterns";
 import { dashboardMainMobileClass } from "@/lib/design/mobile-first-redesign-policy";
+import {
+  DASHBOARD_MAIN_LANDMARK_ARIA_LABEL,
+  DASHBOARD_MAIN_LANDMARK_ID,
+} from "@/lib/accessibility/skip-link-main-landmark-policy";
 import { APP_NAME } from "@/lib/constants";
 import type { Locale, MessageKey } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
@@ -150,6 +155,7 @@ export function DashboardShell({
 
   return (
     <div className={dashboardShellRootClass}>
+      <DashboardSkipLink />
       <div className="flex min-h-screen flex-1 flex-col">
         <header className={dashboardShellHeaderClass}>
           <div className="flex min-w-0 items-center gap-2">
@@ -168,9 +174,11 @@ export function DashboardShell({
               <SheetContent
                 side="left"
                 className="flex w-[min(100vw-1rem,20rem)] flex-col gap-0 p-0 sm:max-w-none md:w-80"
-                {...navSwipeHandlers}
               >
-                <SheetHeader className="shrink-0 border-b border-border/70 px-6 py-4 text-left">
+                <SheetHeader
+                  className="shrink-0 border-b border-border/70 px-6 py-4 text-left"
+                  {...navSwipeHandlers}
+                >
                   <SheetTitle className="font-display">
                     <OSKitchenLogo href={null} size="sm" />
                   </SheetTitle>
@@ -351,7 +359,14 @@ export function DashboardShell({
             />
           ) : null}
           <BrandContextProvider>
-            <main className={dashboardMainMobileClass}>{children}</main>
+            <main
+              id={DASHBOARD_MAIN_LANDMARK_ID}
+              tabIndex={-1}
+              aria-label={DASHBOARD_MAIN_LANDMARK_ARIA_LABEL}
+              className={dashboardMainMobileClass}
+            >
+              {children}
+            </main>
           </BrandContextProvider>
         </BillingAccessGuard>
       </div>
