@@ -6602,4 +6602,4 @@ Task: 91 — data migration wizard Toast/Square/Lightspeed (P3)
 Category: feat
 Result: done — P3 alias of Task 72; Import Center strip → /dashboard/import-center/migrate; 9 CSV templates wired in policy audit; 3×3 POS profiles unchanged
 Tests: npm run test:ci:data-migration-wizard:cert 10/10 pass
-Commit: pending
+Commit: e6a67ae4
