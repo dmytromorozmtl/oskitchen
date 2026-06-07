@@ -6899,3 +6899,11 @@ Category: design
 Result: done — hero banner + badge row + summary/reconciliation card dark-mode polish on pnl-reconciliation-view-panel.tsx, 8 cert tests; operational P&L/certified GL honesty preserved
 Tests: npm run test:ci:design-full-polish-13-pnl-reconciliation:cert 8/8 pass
 Commit: 94531885
+
+---
+Cycle: 20260607-005500
+Task: 129 — Design full polish accountant portal (P3)
+Category: design
+Result: done — hero banner + badge row + checklist/pillar/deliverable/export card dark-mode polish on accountant-portal-panel.tsx, 8 cert tests; read-only/certified GL honesty preserved
+Tests: npm run test:ci:design-full-polish-14-accountant-portal:cert 8/8 pass
+Commit: 8acd29b9
