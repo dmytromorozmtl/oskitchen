@@ -50,5 +50,6 @@
   "48-screen-reader-icon-buttons": "done",
   "49-mobile-touch-target-44px": "done",
   "50-lighthouse-ci-core-web-vitals": "done",
-  "51-visual-regression-dark-mode-parity": "done"
+  "51-visual-regression-dark-mode-parity": "done",
+  "52-pos-offline-mode-e2e": "done"
 }

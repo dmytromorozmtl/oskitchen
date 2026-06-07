@@ -1,0 +1,51 @@
+# POS offline mode E2E — network disconnect, IndexedDB queue, reconnect sync.
+# Required secrets: E2E_LOGIN_EMAIL, E2E_LOGIN_PASSWORD
+# Optional: E2E_STAGING_BASE_URL or RSC_SMOKE_BASE_URL (default https://os-kitchen.com)
+
+name: E2E POS offline mode
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 7 * * *"
+  pull_request:
+    paths:
+      - "app/dashboard/pos/**"
+      - "components/dashboard/pos-terminal-client.tsx"
+      - "components/pos/**"
+      - "lib/pos/offline-pos-queue.ts"
+      - "lib/pos/offline-mode-queue-sync-e2e-policy.ts"
+      - "lib/pos/pos-offline-mode-e2e-policy.ts"
+      - "e2e/pos-offline-mode.spec.ts"
+      - "e2e/helpers/pos-offline-mode.ts"
+      - "e2e/helpers/offline-mode-queue-sync-flow.ts"
+      - "playwright.config.ts"
+      - ".github/workflows/e2e-pos-offline-mode.yml"
+
+jobs:
+  pos-offline-mode:
+    if: >-
+      ${{ secrets.E2E_LOGIN_EMAIL != '' && secrets.E2E_LOGIN_PASSWORD != '' }}
+    name: POS offline mode — disconnect, queue, sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PLAYWRIGHT_BASE_URL: ${{ secrets.E2E_STAGING_BASE_URL || secrets.RSC_SMOKE_BASE_URL || 'https://os-kitchen.com' }}
+      E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+      E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD || secrets.E2E_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: POS offline mode E2E
+        run: npm run test:e2e:pos-offline-mode

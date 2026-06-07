@@ -6283,3 +6283,11 @@ Category: test
 Result: done — visual-regression-dark-mode-policy; dark-mode-parity.spec.ts (10 light+dark pairs); /visual-test/dark-mode-parity fixture; PublicThemeLock bypass for /visual-test; chromatic-visual.yml
 Tests: npm run test:ci:visual-regression-dark-mode 3/3 pass
 Commit: e8176473
+
+---
+Cycle: 20260606-212500
+Task: 52 — POS offline mode E2E (P2)
+Category: test
+Result: done — pos-offline-mode-e2e-policy (disconnect, queue, sync); pos-offline-mode.spec.ts 3 phases; GHA e2e-pos-offline-mode.yml
+Tests: npm run test:ci:pos-offline-mode 7/7 pass
+Commit: 3df763cf
