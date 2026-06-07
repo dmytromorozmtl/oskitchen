@@ -67,6 +67,8 @@ export const RATE_LIMIT_POLICIES = {
   ai_ocr: { windowMs: 60_000, max: 8 },
   /** AI forecasting / narrative — per workspace per minute. */
   ai_forecast: { windowMs: 60_000, max: 15 },
+  /** Authenticated dashboard + integration API mutations — per IP + route scope. */
+  api_mutation: { windowMs: 60_000, max: 120 },
 } satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyKey = keyof typeof RATE_LIMIT_POLICIES;
@@ -87,6 +89,7 @@ export const PRODUCTION_CRITICAL_RATE_LIMIT_POLICIES: RateLimitPolicyKey[] = [
   "storefront_account_session",
   "billing_portal",
   "iot_ingest",
+  "api_mutation",
 ];
 
 export function isProductionCriticalRateLimitPolicy(

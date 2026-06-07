@@ -7,7 +7,7 @@
   "5-suspense-wrap-today": "done",
   "6-fix-n-plus-one-8": "done",
   "7-authed-rsc-smoke-ci": "done",
-  "8-rate-limit-192-routes": "pending",
+  "8-rate-limit-192-routes": "done",
   "9-eslint-aschild-guard": "pending",
   "10-bundle-budget-ci-gate": "pending"
 }

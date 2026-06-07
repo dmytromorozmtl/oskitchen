@@ -16,6 +16,7 @@ import { stripLocalePrefixFromInternalPath } from "@/lib/storefront/locale-path"
 import { parseStorefrontInternalPath } from "@/lib/storefront/storefront-redirects";
 import { mapVanityPathToInternal } from "@/lib/storefront/middleware-paths";
 import { enforceApiSessionMiddleware } from "@/lib/api/middleware-api-auth";
+import { enforceApiMutationRateLimitMiddleware } from "@/lib/api/middleware-api-rate-limit";
 import { isUuid } from "@/lib/platform/is-uuid";
 import { PLATFORM_IMPERSONATION_COOKIE } from "@/lib/platform/platform-impersonation";
 import { updateSession } from "@/lib/supabase/middleware";
@@ -130,6 +131,9 @@ function stampStorefrontCdnTags(res: NextResponse, pathname: string, marketId?: 
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  const apiRateLimitBlock = await enforceApiMutationRateLimitMiddleware(request);
+  if (apiRateLimitBlock) return apiRateLimitBlock;
 
   const apiAuthBlock = await enforceApiSessionMiddleware(request);
   if (apiAuthBlock) return apiAuthBlock;

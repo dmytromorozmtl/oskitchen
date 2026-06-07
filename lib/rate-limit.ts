@@ -12,6 +12,11 @@ import {
 
 export { RATE_LIMIT_POLICIES, type RateLimitPolicyKey } from "@/lib/rate-limit/rate-limit-policies";
 export { getClientIpFromRequest } from "@/lib/rate-limit/client-ip";
+export {
+  apiMutationScopeKey,
+  enforceApiRateLimit,
+  enforceApiRateLimitOrNull,
+} from "@/lib/api/middleware-api-rate-limit";
 
 export type RateLimitSnapshot = {
   limit: number;

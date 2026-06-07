@@ -5929,3 +5929,11 @@ Category: test
 Result: done — lib/smoke route list (46) + probe library; scripts/probe-authed-dashboard.ts refactored; npm run smoke:rsc-authed-dashboard; .github/workflows/rsc-smoke.yml (daily + PR path filter)
 Tests: tests/unit/authed-rsc-smoke-policy.test.ts 4/4 pass
 Commit: c98c691e
+
+---
+Cycle: 20260606-202500
+Task: 8 — Rate-limit 192 API routes (P0)
+Category: security
+Result: done — middleware enforceApiMutationRateLimitMiddleware for POST/PUT/PATCH/DELETE; api_mutation policy (120/min); lib/api/middleware-api-rate-limit.ts; audit script (199 mutation routes: 77 middleware + 20 dedicated + 102 exempt_class)
+Tests: tests/unit/api-mutation-rate-limit.test.ts 7/7 pass
+Commit: pending
