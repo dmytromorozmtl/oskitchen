@@ -6955,3 +6955,11 @@ Category: pm-marketing
 Result: done — device-status-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; Configuration only/Clover parity/Stripe/not proprietary hub telemetry honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-05-device-status:cert 8/8 pass
 Commit: 59681aab
+
+---
+Cycle: 20260607-012300
+Task: 136 — PM marketing full scale data migration wizard GTM (P3)
+Category: pm-marketing
+Result: done — data-migration-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; CSV export/not live API/BETA/manual review honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-06-data-migration:cert 8/8 pass
+Commit: 09635c3d
