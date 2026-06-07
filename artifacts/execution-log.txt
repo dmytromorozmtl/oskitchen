@@ -6867,3 +6867,11 @@ Category: design
 Result: done — hero banner + badge row + hero/queue card + nav row dark-mode polish on kds-expedite-screen.tsx, 8 cert tests; BETA/rush-hour honesty preserved
 Tests: npm run test:ci:design-full-polish-09-kds-expedite:cert 8/8 pass
 Commit: 06219aba
+
+---
+Cycle: 20260607-004700
+Task: 125 — Design full polish white-label storefront depth (P3)
+Category: design
+Result: done — hero banner + badge row + summary/pillar/capability card dark-mode polish on white-label-storefront-depth-panel.tsx, 8 cert tests; ChowNow/DNS honesty preserved
+Tests: npm run test:ci:design-full-polish-10-white-label:cert 8/8 pass
+Commit: a424210c
