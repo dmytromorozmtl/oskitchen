@@ -6458,3 +6458,4 @@ Task: 73 — Commission tracking per delivery order (P2)
 Category: feat
 Result: done — /dashboard/analytics/delivery-commissions; per-order commission rows (reported vs estimated benchmark); policy + metrics + audit + service + panel; analytics subnav link
 Tests: npm run test:ci:delivery-commission-tracking:cert 6/6 pass
+Commit: 26401af9
