@@ -8,6 +8,7 @@ import { posCheckoutAction } from "@/actions/pos";
 import { fireHandheldToKdsAction } from "@/actions/pos/handheld";
 import { createTabAction } from "@/actions/pos/tabs";
 import { OfflineSyncStatusBar } from "@/components/dashboard/offline-sync-status-bar";
+import { TablesideOrderingFlowStrip } from "@/components/pos/tableside-ordering-flow-strip";
 import { broadcastOfflineSyncState } from "@/hooks/use-offline-sync-status";
 import { getActionError, isActionSuccess } from "@/lib/action-result";
 import {
@@ -49,6 +50,7 @@ type HandheldOrderingClientProps = {
   openShiftsByRegisterId: Record<string, { id: string } | null>;
   offlineQueueEnabled?: boolean;
   conflictResolution?: PosConflictResolutionStrategy;
+  initialTableId?: string | null;
 };
 
 export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
@@ -60,7 +62,11 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
   const [online, setOnline] = useState(() =>
     typeof navigator === "undefined" ? true : navigator.onLine,
   );
-  const [selectedTableId, setSelectedTableId] = useState<string | null>(props.tables[0]?.id ?? null);
+  const [selectedTableId, setSelectedTableId] = useState<string | null>(() => {
+    const initial = props.initialTableId ?? props.tables[0]?.id ?? null;
+    if (initial && props.tables.some((table) => table.id === initial)) return initial;
+    return props.tables[0]?.id ?? null;
+  });
   const [category, setCategory] = useState<string>("All");
   const [cart, setCart] = useState<HandheldCartLine[]>([]);
   const [tabs, setTabs] = useState(props.tabs);
@@ -311,6 +317,17 @@ export function HandheldOrderingClient(props: HandheldOrderingClientProps) {
 
   return (
     <div className="space-y-4 pb-28" data-testid="handheld-ordering-root">
+      <div data-testid="tableside-ordering-root">
+        <TablesideOrderingFlowStrip
+        state={{
+          selectedTableId,
+          hasOpenTab: Boolean(activeTab),
+          tabItemCount: activeTab?.items.length ?? 0,
+          cartLineCount: cart.length,
+          lastKdsOrderId,
+        }}
+        />
+      </div>
       <div className="sticky top-0 z-sticky-header space-y-3 rounded-2xl border border-border/70 bg-background/95 p-3 backdrop-blur">
         <div className="flex items-start justify-between gap-3">
           <div>

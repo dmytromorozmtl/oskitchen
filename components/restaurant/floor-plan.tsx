@@ -5,7 +5,8 @@ import { getActionError, isActionSuccess } from "@/lib/action-result";
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { Plus, Trash2, UtensilsCrossed } from 'lucide-react';
 import { toast } from 'sonner';
 
 import {
@@ -14,6 +15,7 @@ import {
   updateTableStatusAction,
 } from '@/actions/restaurant/tables';
 import { useSyncedServerState } from '@/hooks/use-synced-server-state';
+import { tablesideOrderHref } from '@/lib/pos/tableside-ordering-flow-policy';
 
 export interface TableData {
   id: string;
@@ -240,6 +242,16 @@ export function FloorPlan({ tables: initialTables }: { tables: TableData[] }) {
                           {label}
                         </button>
                       ))}
+                      <hr className="my-1" />
+                      <Link
+                        href={tablesideOrderHref(table.id)}
+                        className="flex w-full items-center gap-1 px-3 py-1.5 text-xs rounded-lg hover:bg-muted text-primary"
+                        data-testid="floor-plan-tableside-order-link"
+                        onClick={() => setShowStatusMenu(null)}
+                      >
+                        <UtensilsCrossed className="h-3 w-3" aria-hidden />
+                        Order at table
+                      </Link>
                       <hr className="my-1" />
                       <button
                         type="button"

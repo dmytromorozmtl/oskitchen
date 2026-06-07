@@ -6202,4 +6202,12 @@ Task: 41 — GL-depth accounting sync: chart of accounts, journal entry, P&L rec
 Category: feat
 Result: done — restaurant-coa-template (13 accounts) + gl-depth-accounting-policy/service; /dashboard/accounting/gl-sync with COA table, balanced journal entries from operational P&L, line-by-line reconciliation; /api/export/gl-journal CSV; nav + i18n
 Tests: npm run test:ci:gl-depth-accounting 7/7 pass
+Commit: e85787d6
+
+---
+Cycle: 20260606-232500
+Task: 42 — Tableside ordering flow TouchBistro parity (P2)
+Category: feat
+Result: done — tableside-ordering-flow-policy (5-step flow) + flow strip in handheld POS; floor plan → handheld deep link (?tableId=); readiness assessment service; fire KDS + cash pay path preserved
+Tests: npm run test:ci:tableside-ordering-flow 15/15 pass
 Commit: pending
