@@ -570,6 +570,7 @@
     "test:ci:live-integrations-staging-smoke:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/live-integrations-staging-smoke.test.ts",
     "test:ci:null-reference-regression": "node ./node_modules/vitest/vitest.mjs run tests/unit/null-reference-regression.test.ts",
     "test:ci:dashboard-error-boundaries": "node ./node_modules/vitest/vitest.mjs run tests/unit/critical-dashboard-error-boundaries.test.ts tests/unit/dashboard-error-boundary-render.test.ts",
+    "test:ci:suspense-skeleton": "node ./node_modules/vitest/vitest.mjs run tests/unit/suspense-skeleton.test.ts tests/unit/today-page-suspense.test.ts tests/unit/loading-skeleton-audit-policy.test.ts",
     "test:ci:pos-desktop-terminal-era92": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-desktop-terminal-era92.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:pos-desktop-terminal-era92:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-desktop-terminal-era92.test.ts",
     "test:ci:pos-desktop-terminal-era167": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-desktop-terminal-era167.test.ts tests/unit/pos-desktop-terminal-era92.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
