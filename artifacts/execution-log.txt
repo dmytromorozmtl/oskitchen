@@ -5985,4 +5985,4 @@ Task: 14 — Investigate staticGenerationMaxConcurrency (P1)
 Category: perf
 Result: done — investigation: keep concurrency=1 on Vercel (655+ SSG OOM guard); removed unnecessary local cap (was 2); policy module + env override; vercel-build.sh unchanged
 Tests: tests/unit/static-generation-concurrency-policy.test.ts 5/5 pass
-Commit: pending
+Commit: 434e754b
