@@ -6963,3 +6963,11 @@ Category: pm-marketing
 Result: done — data-migration-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; CSV export/not live API/BETA/manual review honesty preserved
 Tests: npm run test:ci:pm-marketing-full-scale-06-data-migration:cert 8/8 pass
 Commit: 09635c3d
+
+---
+Cycle: 20260607-012600
+Task: 137 — PM marketing full scale visual floor plan editor GTM (P3)
+Category: pm-marketing
+Result: done — floor-plan-gtm-scale.md playbook (ICP/demo/objections/pricing/CTA/honesty), policy + audit wiring, 8 cert tests; Oracle MICROS parity/BETA/not certified live occupancy/Supabase Realtime honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-07-floor-plan:cert 8/8 pass
+Commit: 20bf028a
