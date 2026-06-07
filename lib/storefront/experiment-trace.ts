@@ -1,5 +1,5 @@
 import { logger } from "@/lib/logger";
-import { recordExperimentOtelSpan } from "@/lib/observability/experiment-otel";
+import { isOtelExportEnabled } from "@/lib/observability/experiment-otel-state";
 
 export const KOS_TRACE_ID_HEADER = "x-kos-trace-id";
 export const KOS_SPAN_ID_HEADER = "x-kos-span-id";
@@ -90,7 +90,7 @@ export function recordExperimentSpan(input: {
     ...input.fields,
   });
 
-  recordExperimentOtelSpan({
+  recordExperimentOtelSpanLazy({
     traceId: input.traceId,
     spanId: input.spanId,
     parentSpanId: input.parentSpanId,
@@ -98,4 +98,17 @@ export function recordExperimentSpan(input: {
     durationMs: input.durationMs,
     attributes: input.fields as Record<string, string | number | boolean | null | undefined>,
   });
+}
+
+function recordExperimentOtelSpanLazy(
+  input: Parameters<
+    typeof import("@/lib/observability/experiment-otel-span")["recordExperimentOtelSpan"]
+  >[0],
+): void {
+  if (!isOtelExportEnabled()) return;
+  void import("@/lib/observability/experiment-otel-span")
+    .then(({ recordExperimentOtelSpan }) => recordExperimentOtelSpan(input))
+    .catch(() => {
+      /* OTEL optional — never break experiment tracing */
+    });
 }

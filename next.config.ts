@@ -20,7 +20,15 @@ const require = createRequire(import.meta.url);
 const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   staticPageGenerationTimeout: 120,
-  serverExternalPackages: ["stripe"],
+  serverExternalPackages: [
+    "stripe",
+    "@opentelemetry/api",
+    "@opentelemetry/sdk-trace-node",
+    "@opentelemetry/exporter-trace-otlp-http",
+    "@opentelemetry/resources",
+    "@opentelemetry/semantic-conventions",
+    "@opentelemetry/otlp-transformer",
+  ],
   ...(process.env.SKIP_TYPECHECK === "1"
     ? {
         typescript: { ignoreBuildErrors: true },

@@ -5986,3 +5986,11 @@ Category: perf
 Result: done — investigation: keep concurrency=1 on Vercel (655+ SSG OOM guard); removed unnecessary local cap (was 2); policy module + env override; vercel-build.sh unchanged
 Tests: tests/unit/static-generation-concurrency-policy.test.ts 5/5 pass
 Commit: 434e754b
+
+---
+Cycle: 20260606-210000
+Task: 15 — Lazy-load OTEL to resolve protobufjs warning (P1)
+Category: fix
+Result: done — split experiment-otel into init/span/url/state; dynamic import from experiment-trace; instrumentation gates on OTEL env; serverExternalPackages for @opentelemetry/*
+Tests: tests/unit/experiment-otel-lazy-load.test.ts 4/4 pass
+Commit: pending

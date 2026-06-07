@@ -1,4 +1,4 @@
-import { experimentTraceUrl } from "@/lib/observability/experiment-otel";
+import { experimentTraceUrl } from "@/lib/observability/experiment-otel-url";
 
 /** Deep links and runbook hints for PagerDuty / Slack experiment incidents. */
 export function experimentRunbookLinks(input: { storeSlug: string; traceId?: string | null }) {

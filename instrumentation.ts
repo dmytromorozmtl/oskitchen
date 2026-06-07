@@ -8,8 +8,10 @@ export async function register() {
     );
     assertNodeStartupReadiness();
     await import("./sentry.server.config");
-    const { initExperimentOtel } = await import("./lib/observability/experiment-otel");
-    await initExperimentOtel();
+    if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT?.trim() && process.env.EXPERIMENT_OTEL !== "0") {
+      const { initExperimentOtel } = await import("./lib/observability/experiment-otel-init");
+      await initExperimentOtel();
+    }
   }
   if (process.env.NEXT_RUNTIME === "edge") {
     await import("./sentry.edge.config");
