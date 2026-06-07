@@ -6779,3 +6779,11 @@ Category: test
 Result: done — slot 113 behavioral tests for P&L reconciliation (severity bands, GL enrichment, summary/CSV export, honesty markers, UI wiring, export API); 8 tests
 Tests: npm run test:ci:qa-full-coverage-13-pnl-reconciliation:cert 8/8 pass
 Commit: daba395b
+
+---
+Cycle: 20260607-001900
+Task: 114 — QA full coverage accountant portal (P3)
+Category: test
+Result: done — slot 114 behavioral tests for accountant portal (5 pillars, deliverables, period-close readiness, honesty markers, export bundle, service aggregation); 8 tests
+Tests: npm run test:ci:qa-full-coverage-14-accountant-portal:cert 8/8 pass
+Commit: 14117386
