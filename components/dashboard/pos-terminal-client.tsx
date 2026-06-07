@@ -78,6 +78,10 @@ import {
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 import { POS_CASHIER_SPEED_MODE_ALL_CATEGORY } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
 import {
+  posTerminalDecreaseQuantityLabel,
+  posTerminalIncreaseQuantityLabel,
+} from "@/lib/pos/pos-terminal-icon-button-labels";
+import {
   matchPosShortcut,
   quickAddIndexFromAction,
 } from "@/lib/keyboard/shortcuts";
@@ -1507,9 +1511,10 @@ export function PosTerminalClient(props: {
                     size="icon"
                     variant="outline"
                     className={posTouchCompactClass}
+                    aria-label={posTerminalDecreaseQuantityLabel(line.title)}
                     onClick={() => bump(line.key, -1)}
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-4 w-4" aria-hidden />
                   </Button>
                   <span className="w-8 text-center text-base font-semibold">{line.quantity}</span>
                   <Button
@@ -1517,9 +1522,10 @@ export function PosTerminalClient(props: {
                     size="icon"
                     variant="outline"
                     className={posTouchCompactClass}
+                    aria-label={posTerminalIncreaseQuantityLabel(line.title)}
                     onClick={() => bump(line.key, 1)}
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-4 w-4" aria-hidden />
                   </Button>
                   <Button
                     type="button"

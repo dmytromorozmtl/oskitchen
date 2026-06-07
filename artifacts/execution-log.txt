@@ -6051,3 +6051,11 @@ Category: feat
 Result: done — ErrorStateIllustration + dark mode tokens; RouteError/PilotRouteError unified layout; fleet audit 521/521 dashboard error.tsx; migrated 19 outlier routes (storefront, integrations, POS cash, KDS views)
 Tests: tests/unit/error-state-design-system.test.ts + error-state-audit-policy 9/9 pass; dashboard-error-boundaries 27/27 pass
 Commit: 46db2440
+
+---
+Cycle: 20260606-215000
+Task: 23 — POS terminal icon-only buttons aria-label (P1)
+Category: fix
+Result: done — item-specific aria-label on cart +/- controls in pos-terminal-client + pos-mobile-client; DES-35 fleet audit for 4 terminal modules; aria-hidden on Minus/Plus icons
+Tests: tests/unit/pos-terminal-icon-buttons.test.ts 7/7 pass
+Commit: pending

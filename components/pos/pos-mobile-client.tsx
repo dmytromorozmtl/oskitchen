@@ -17,6 +17,10 @@ import {
 } from "@/lib/pos/pos-mobile-cart";
 import { POS_MOBILE_POS_MIN_TOUCH_PX } from "@/lib/pos/pos-mobile-pos-policy";
 import {
+  posTerminalDecreaseQuantityLabel,
+  posTerminalIncreaseQuantityLabel,
+} from "@/lib/pos/pos-terminal-icon-button-labels";
+import {
   classifyOfflineCheckoutError,
   resolveOfflineSyncConflict,
 } from "@/lib/pos/offline-sync";
@@ -357,9 +361,10 @@ export function PosMobileClient(props: PosMobileClientProps) {
                     size="icon"
                     variant="outline"
                     className={posTouchCompactClass}
+                    aria-label={posTerminalDecreaseQuantityLabel(line.title)}
                     onClick={() => adjustLine(line.key, -1)}
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-4 w-4" aria-hidden />
                   </Button>
                   <span className="w-6 text-center text-sm font-semibold tabular-nums">
                     {line.quantity}
@@ -369,9 +374,10 @@ export function PosMobileClient(props: PosMobileClientProps) {
                     size="icon"
                     variant="outline"
                     className={posTouchCompactClass}
+                    aria-label={posTerminalIncreaseQuantityLabel(line.title)}
                     onClick={() => adjustLine(line.key, 1)}
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-4 w-4" aria-hidden />
                   </Button>
                 </div>
               </div>
