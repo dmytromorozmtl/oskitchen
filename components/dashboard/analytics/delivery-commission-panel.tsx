@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { AnalyticsBars } from "@/components/dashboard/analytics-bars";
+import { OwnYourChannelUpsellStrip } from "@/components/dashboard/analytics/own-your-channel-upsell-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +33,8 @@ export function DeliveryCommissionPanel({ snapshot }: Props) {
           <Link href="/dashboard/analytics/delivery-channels">Delivery channels</Link>
         </Button>
       </div>
+
+      <OwnYourChannelUpsellStrip />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi label="Delivery orders" value={snapshot.totalOrders} hint={snapshot.rangeLabel} />

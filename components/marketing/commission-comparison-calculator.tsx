@@ -13,6 +13,7 @@ import {
   type CommissionComparisonInputs,
 } from '@/lib/marketing/commission-comparison-calculator-content';
 import { COMMISSION_COMPARISON_DASHBOARD_ROUTE } from '@/lib/marketing/commission-comparison-calculator-absolute-final-policy';
+import { OWN_YOUR_CHANNEL_UPSELL_ROUTE } from '@/lib/marketing/own-your-channel-upsell-absolute-final-policy';
 
 type MixField = 'doordashMixPct' | 'uberEatsMixPct' | 'grubhubMixPct' | 'uberDirectMixPct';
 
@@ -170,6 +171,9 @@ export function CommissionComparisonCalculator({ compact = false }: { compact?: 
         </MarketingButton>
         <MarketingButton href={COMMISSION_COMPARISON_DASHBOARD_ROUTE} variant="secondary" size="sm">
           Track live commissions
+        </MarketingButton>
+        <MarketingButton href={OWN_YOUR_CHANNEL_UPSELL_ROUTE} variant="ghost" size="sm">
+          Own your channel flow
         </MarketingButton>
         {!compact ? (
           <MarketingButton href="/pricing" variant="ghost" size="sm">
