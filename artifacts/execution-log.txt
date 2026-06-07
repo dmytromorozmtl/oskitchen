@@ -6627,3 +6627,10 @@ Category: feat
 Result: done — /dashboard/kitchen/expedite hero ticket + priority queue + rush banner; 44px touch targets; tablet landscape; expo page link; nav + i18n; policy + audit + 5 tests
 Tests: npm run test:ci:kds-expedite-screen:cert 5/5 pass
 Commit: 11b329a5
+
+---
+Cycle: 20260606-230200
+Task: 95 — white-label storefront depth ChowNow parity (P3)
+Category: feat
+Result: done — /dashboard/storefront/white-label depth panel (5 ChowNow pillars, 11 capabilities, readiness %); theme + settings wiring strips; policy + audit + 5 tests
+Tests: npm run test:ci:white-label-storefront-depth:cert 5/5 pass
