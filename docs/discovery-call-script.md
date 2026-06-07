@@ -214,7 +214,7 @@ Run: `lintDiscoveryCallScriptCopy()` before updating slides or call notes.
 | [`pilot-proposal-template.md`](./pilot-proposal-template.md) | Post-demo proposal email/PDF (MKT-24) |
 | [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) | Live LOI review after demo (MKT-28) |
 | [`roi-calculator-conservative.md`](./roi-calculator-conservative.md) | Illustrative ROI on calls (MKT-25) |
-| [`competitive-battle-cards.md`](./competitive-battle-cards.md) | BC1–BC7 when prospect names incumbent (MKT-26) |
+| [`competitive-battle-cards.md`](./competitive-battle-cards.md) | BC1–BC8 when prospect names incumbent POS |
 | [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) | Post-LOI |
 
 **Book demo CTA:** [`/book-demo?utm_source=discovery&utm_medium=call&utm_campaign=discovery-script-mkt21`](/book-demo?utm_source=discovery&utm_medium=call&utm_campaign=discovery-script-mkt21)

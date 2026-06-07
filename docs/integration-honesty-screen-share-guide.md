@@ -20,7 +20,7 @@ Technical routes: [`/dashboard/integration-health`](../app/dashboard/integration
 |--------|---------------|
 | Objection O5 — "Integrations aren't live / SKIPPED" | S1 frame → S5 SKIPPED row |
 | Demo segment 4 ([`demo-script-15min.md`](./demo-script-15min.md)) | S1–S7 full walkthrough |
-| Competitive deal (BC4 Deliverect, BC5 Shopify) | S4 BETA + S6 PLACEHOLDER |
+| Competitive deal (BC-S1 Deliverect, BC-S2 Shopify) | S4 BETA + S6 PLACEHOLDER |
 | Technical validator on call | S3 full matrix + smoke artifact viewer |
 | Post-webinar follow-up | S2 Today strip + `/trust` |
 
@@ -144,7 +144,7 @@ Total ~390 seconds. Policy: [`integration-honesty-screen-share-policy.ts`](../li
 1. Placeholder badge on channel card ([`channel-card.tsx`](../components/channels/channel-card.tsx))  
 2. No fake health score on placeholder providers  
 
-**Pairs with:** BC4 in [`competitive-battle-cards.md`](./competitive-battle-cards.md)
+**Pairs with:** BC-S1 in [`competitive-battle-cards.md`](./competitive-battle-cards.md)
 
 ---
 
@@ -169,7 +169,7 @@ Total ~390 seconds. Policy: [`integration-honesty-screen-share-policy.ts`](../li
 - [ ] Know which rows are BETA vs SKIPPED vs PLACEHOLDER in this tenant  
 - [ ] [`forbidden-claims-training.md`](./forbidden-claims-training.md) certification current  
 - [ ] Technical reviewer? — open smoke artifact viewer (S3)  
-- [ ] Competitive incumbent noted — open matching battle card (BC4/BC5)  
+- [ ] Competitive incumbent noted — open matching battle card (BC-S1/BC-S2 when middleware/ecommerce)
 
 ---
 
@@ -221,7 +221,7 @@ Run `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before recording demo vide
 | [`demo-script-15min.md`](./demo-script-15min.md) | Segment 4 Integration Health (2 min) |
 | [`integration-health-sales-deck-v2.md`](./integration-health-sales-deck-v2.md) | Scoring + recovery playbooks depth |
 | [`objection-handling.md`](./objection-handling.md) | O5 integrations SKIPPED |
-| [`competitive-battle-cards.md`](./competitive-battle-cards.md) | BC4 Deliverect · BC5 Shopify |
+| [`competitive-battle-cards.md`](./competitive-battle-cards.md) | BC-S1 Deliverect · BC-S2 Shopify |
 | [`woocommerce-live-smoke-setup.md`](./woocommerce-live-smoke-setup.md) | When SKIPPED → PASS path |
 | [`shopify-live-smoke-setup.md`](./shopify-live-smoke-setup.md) | When SKIPPED → PASS path |
 

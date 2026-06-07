@@ -5,18 +5,19 @@ import {
   BATTLE_CARD_FRAMEWORK,
   COMPETITIVE_BATTLE_CARDS,
   COMPETITIVE_BATTLE_CARDS_POLICY_ID,
+  COMPETITIVE_BATTLE_CARDS_SUPPLEMENTARY,
   getBattleCardById,
   getBattleCardBySlug,
   lintBattleCardCopy,
   listCompetitiveBattleCardIds,
 } from "@/lib/marketing/competitive-battle-cards-policy";
 
-describe("competitive battle cards policy (MKT-26)", () => {
-  it("locks MKT-26 policy id and seven battle cards", () => {
+describe("competitive battle cards policy (eight core + supplementary)", () => {
+  it("locks eight-card policy id and BC1–BC8", () => {
     expect(COMPETITIVE_BATTLE_CARDS_POLICY_ID).toBe(
-      "competitive-battle-cards-mkt26-v1",
+      "competitive-battle-cards-eight-absolute-final-v1",
     );
-    expect(COMPETITIVE_BATTLE_CARDS).toHaveLength(7);
+    expect(COMPETITIVE_BATTLE_CARDS).toHaveLength(8);
     expect(BATTLE_CARD_FRAMEWORK).toBe("WIN-TRAP-REDIRECT");
     expect(listCompetitiveBattleCardIds()).toEqual([
       "BC1",
@@ -26,21 +27,31 @@ describe("competitive battle cards policy (MKT-26)", () => {
       "BC5",
       "BC6",
       "BC7",
+      "BC8",
     ]);
   });
 
-  it("maps BC4 deliverect battle card with compare path", () => {
-    const bc4 = getBattleCardById("BC4");
-    expect(bc4?.slug).toBe("deliverect");
-    expect(bc4?.comparePath).toBe("/compare/deliverect");
+  it("maps BC4 clover and BC8 olo with compare paths", () => {
+    expect(getBattleCardById("BC4")?.slug).toBe("clover");
+    expect(getBattleCardById("BC4")?.comparePath).toBe("/compare/restaurant-pos");
+    expect(getBattleCardById("BC8")?.slug).toBe("olo");
+    expect(getBattleCardById("BC8")?.comparePath).toBe("/compare/olo");
     expect(getBattleCardBySlug("toast")?.id).toBe("BC1");
+  });
+
+  it("retains supplementary deliverect card as BC-S1", () => {
+    const deliverect = COMPETITIVE_BATTLE_CARDS_SUPPLEMENTARY.find(
+      (card) => card.slug === "deliverect",
+    );
+    expect(deliverect?.id).toBe("BC-S1");
+    expect(deliverect?.comparePath).toBe("/compare/deliverect");
   });
 
   it("passes audit on canonical competitive battle cards doc", () => {
     const audit = auditCompetitiveBattleCardsDoc();
     expect(audit.passed).toBe(true);
     expect(audit.missingHeadings).toEqual([]);
-    expect(audit.battleCardCount).toBe(7);
+    expect(audit.battleCardCount).toBe(8);
   });
 
   it("flags forbidden battle card override claims", () => {

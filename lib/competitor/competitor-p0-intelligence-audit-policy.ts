@@ -12,7 +12,10 @@ import {
   COMPETITOR_P0_INTELLIGENCE_POLICY_ID,
   COMPETITOR_P0_INTELLIGENCE_SUB_POLICIES,
 } from "@/lib/competitor/competitor-p0-intelligence-patterns";
-import { auditCompetitiveBattleCardsDoc } from "@/lib/marketing/competitive-battle-cards-policy";
+import {
+  auditCompetitiveBattleCardsDoc,
+  COMPETITIVE_BATTLE_CARDS_POLICY_ID,
+} from "@/lib/marketing/competitive-battle-cards-policy";
 import { auditToastGapPublicSummaryDoc } from "@/lib/marketing/toast-gap-analysis-public-summary-policy";
 
 /**
@@ -119,7 +122,7 @@ const SUB_AUDIT_RUNNERS: Record<string, (root: string) => { policyId: string; pa
       passed: auditCompetitorTracker(root),
     }),
     "COMP-01c": (root) => ({
-      policyId: "competitive-battle-cards-mkt26-v1",
+      policyId: COMPETITIVE_BATTLE_CARDS_POLICY_ID,
       passed: auditCompetitiveBattleCardsDoc(root).passed,
     }),
     "COMP-01d": (root) => ({

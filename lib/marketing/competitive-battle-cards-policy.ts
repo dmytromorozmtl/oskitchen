@@ -2,21 +2,23 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 /**
- * MKT-26 — competitive battle cards policy (seven core competitors).
+ * MKT-26 + Absolute Final Task 32 — competitive battle cards (eight core competitors).
  *
  * @see docs/competitive-battle-cards.md
- * @see docs/competitor-comparison-honest.md
- * @see lib/marketing/compare-content.ts
+ * @see lib/competitor/competitor-battle-cards-eight-policy.ts
  */
 
 export const COMPETITIVE_BATTLE_CARDS_POLICY_ID =
+  "competitive-battle-cards-eight-absolute-final-v1" as const;
+
+export const COMPETITIVE_BATTLE_CARDS_LEGACY_POLICY_ID =
   "competitive-battle-cards-mkt26-v1" as const;
 
 export const COMPETITIVE_BATTLE_CARDS_DOC = "docs/competitive-battle-cards.md" as const;
 
 export const BATTLE_CARD_FRAMEWORK = "WIN-TRAP-REDIRECT" as const;
 
-/** Seven canonical battle cards — ids BC1–BC7. */
+/** Eight canonical battle cards — ids BC1–BC8 (Absolute Final Task 32). */
 export const COMPETITIVE_BATTLE_CARDS = [
   {
     id: "BC1",
@@ -41,17 +43,17 @@ export const COMPETITIVE_BATTLE_CARDS = [
   },
   {
     id: "BC4",
-    slug: "deliverect",
-    label: "Deliverect",
-    comparePath: "/compare/deliverect",
-    icpFit: "aggregator middleware only — kitchen elsewhere",
+    slug: "clover",
+    label: "Clover",
+    comparePath: "/compare/restaurant-pos",
+    icpFit: "counter POS with payments bundle — not production kitchen depth",
   },
   {
     id: "BC5",
-    slug: "shopify-woocommerce",
-    label: "Shopify / WooCommerce + spreadsheets",
-    comparePath: "/compare/meal-prep-software",
-    icpFit: "storefront-only with manual kitchen ops",
+    slug: "revel",
+    label: "Revel",
+    comparePath: "/compare/restaurant-pos",
+    icpFit: "legacy QSR iPad installs — not commissary greenfield",
   },
   {
     id: "BC6",
@@ -62,10 +64,39 @@ export const COMPETITIVE_BATTLE_CARDS = [
   },
   {
     id: "BC7",
+    slug: "spoton",
+    label: "SpotOn",
+    comparePath: "/compare/restaurant-pos",
+    icpFit: "mid-market bundled payments POS — not kitchen OS depth",
+  },
+  {
+    id: "BC8",
+    slug: "olo",
+    label: "Olo",
+    comparePath: "/compare/olo",
+    icpFit: "enterprise digital ordering — not independent storefront ownership",
+  },
+] as const;
+
+/** Supplementary cards retained from MKT-26 (Deliverect, Shopify/Woo, status quo). */
+export const COMPETITIVE_BATTLE_CARDS_SUPPLEMENTARY = [
+  {
+    id: "BC-S1",
+    slug: "deliverect",
+    label: "Deliverect",
+    comparePath: "/compare/deliverect",
+  },
+  {
+    id: "BC-S2",
+    slug: "shopify-woocommerce",
+    label: "Shopify / WooCommerce + spreadsheets",
+    comparePath: "/compare/meal-prep-software",
+  },
+  {
+    id: "BC-S3",
     slug: "spreadsheets-status-quo",
     label: "Spreadsheets / status quo",
     comparePath: "/compare/meal-prep-software",
-    icpFit: "under ~40 meals/week, errors cheap to fix",
   },
 ] as const;
 
@@ -91,10 +122,11 @@ export const COMPETITIVE_BATTLE_CARDS_FORBIDDEN_CLAIMS = [
 
 export const COMPETITIVE_BATTLE_CARDS_DOC_REQUIRED_HEADINGS = [
   "Battle card framework (WIN-TRAP-REDIRECT)",
-  "Seven battle cards",
+  "Eight battle cards",
   "Quick reference matrix",
   "Forbidden battle card claims",
   "Pre-call checklist",
+  "Supplementary battle cards",
 ] as const;
 
 export type CompetitiveBattleCardsDocAudit = {

@@ -21,7 +21,7 @@ export const COMPETITOR_P0_INTELLIGENCE_SUB_POLICIES = [
   },
   {
     id: "COMP-01c",
-    policyId: "competitive-battle-cards-mkt26-v1",
+    policyId: "competitive-battle-cards-eight-absolute-final-v1",
     surface: "docs/competitive-battle-cards.md",
   },
   {

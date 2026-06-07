@@ -6123,3 +6123,11 @@ Category: docs
 Result: done — 183 baseline reconciled (121 policy + 59 negation + 3 remediated); liveScan 103 matches, 0 real_claim; forbidden-claims-manual-audit policy + artifact + audit script
 Tests: tests/unit/forbidden-claims-manual-audit.test.ts 5/5 pass
 Commit: de1bf7a6
+
+---
+Cycle: 20260606-223500
+Task: 32 — Competitor battle cards ×8 (P1)
+Category: docs
+Result: done — BC1–BC8 (Toast, Square, Lightspeed, Clover, Revel, TouchBistro, SpotOn, Olo); BC-S1–S3 supplementary (Deliverect, Shopify/Woo, status quo); competitor-battle-cards-eight-policy + updated competitive-battle-cards-policy
+Tests: npm run test:ci:competitor-battle-cards-eight 10/10 pass
+Commit: 0bb1628b

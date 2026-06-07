@@ -24,7 +24,7 @@ export const MARKETING_P1_STABILIZATION_SUB_POLICIES = [
   { id: "MKT-23", policyId: "objection-handling-mkt23-v1" },
   { id: "MKT-24", policyId: "pilot-proposal-template-mkt24-v1" },
   { id: "MKT-25", policyId: "roi-calculator-conservative-mkt25-v1" },
-  { id: "MKT-26", policyId: "competitive-battle-cards-mkt26-v1" },
+  { id: "MKT-26", policyId: "competitive-battle-cards-eight-absolute-final-v1" },
   { id: "MKT-27", policyId: "integration-honesty-screen-share-mkt27-v1" },
   { id: "MKT-28", policyId: "loi-template-walkthrough-mkt28-v1" },
 ] as const;

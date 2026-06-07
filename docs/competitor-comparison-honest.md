@@ -150,5 +150,5 @@ Run `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` before updating compare pa
 | [`ai-moats-honest-positioning.md`](./ai-moats-honest-positioning.md) | AI differentiation |
 | [`kitchen-camera-honest-positioning.md`](./kitchen-camera-honest-positioning.md) | Camera vs vision vendors |
 | [`loi-design-partner-template.md`](./loi-design-partner-template.md) | First customer path |
-| [`competitive-battle-cards.md`](./competitive-battle-cards.md) | Live-call battle cards BC1–BC7 (MKT-26) |
+| [`competitive-battle-cards.md`](./competitive-battle-cards.md) | Live-call battle cards BC1–BC8 (+ BC-S1–S3 supplementary) |
 | [`toast-gap-analysis.md`](./toast-gap-analysis.md) | Deep Toast analysis (Task 93) |

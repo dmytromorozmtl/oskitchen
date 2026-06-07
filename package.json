@@ -769,6 +769,7 @@
     "test:ci:thirty-action-tracker-closure": "node ./node_modules/vitest/vitest.mjs run tests/unit/thirty-action-tracker-closure.test.ts",
     "test:ci:pilot-week1-roadmap": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-roadmap.test.ts",
     "test:ci:competitor-sales-safe-claims": "node ./node_modules/vitest/vitest.mjs run tests/unit/competitor-sales-safe-claims.test.ts tests/unit/competitor-feature-tracker-filled.test.ts",
+    "test:ci:competitor-battle-cards-eight": "node ./node_modules/vitest/vitest.mjs run tests/unit/competitor-battle-cards-eight.test.ts tests/unit/competitive-battle-cards-policy.test.ts",
     "test:ci:navigation-release-profile": "node ./node_modules/vitest/vitest.mjs run tests/unit/navigation-release-profile.test.ts tests/unit/release-navigation.test.ts tests/unit/navigation-workflow-ia.test.ts",
     "test:ci:forbidden-claims-manual-audit": "node ./node_modules/vitest/vitest.mjs run tests/unit/forbidden-claims-manual-audit.test.ts",
     "test:ci:pilot-week1-report-era74": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-report-era74.test.ts tests/unit/pilot-week1-execution-orchestrator.test.ts",
