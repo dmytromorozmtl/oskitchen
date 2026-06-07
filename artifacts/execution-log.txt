@@ -6851,3 +6851,11 @@ Category: design
 Result: done — hero banner + canvas/aside card + section row dark-mode polish on floor-plan-editor.tsx, 8 cert tests; Oracle MICROS honesty preserved
 Tests: npm run test:ci:design-full-polish-07-floor-plan:cert 8/8 pass
 Commit: 5eb1d2e0
+
+---
+Cycle: 20260607-004300
+Task: 123 — Design full polish KDS daisy-chain config (P3)
+Category: design
+Result: done — hero banner + card/table row dark-mode polish on kds-daisy-chain-config-panel.tsx, 8 cert tests; NCR Aloha bump handoff honesty preserved
+Tests: npm run test:ci:design-full-polish-08-kds-daisy-chain:cert 8/8 pass
+Commit: 17ea2441
