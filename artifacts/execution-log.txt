@@ -6891,3 +6891,11 @@ Category: design
 Result: done — hero banner + badge row + format/preview card dark-mode polish on journal-entry-export-panel.tsx, 8 cert tests; certified GL/accountant review honesty preserved
 Tests: npm run test:ci:design-full-polish-12-journal-export:cert 8/8 pass
 Commit: 11a06199
+
+---
+Cycle: 20260607-005300
+Task: 128 — Design full polish P&L reconciliation view (P3)
+Category: design
+Result: done — hero banner + badge row + summary/reconciliation card dark-mode polish on pnl-reconciliation-view-panel.tsx, 8 cert tests; operational P&L/certified GL honesty preserved
+Tests: npm run test:ci:design-full-polish-13-pnl-reconciliation:cert 8/8 pass
+Commit: 94531885
