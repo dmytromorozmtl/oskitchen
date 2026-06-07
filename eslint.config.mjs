@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import requireOwnerScope from "./eslint/rules/require-owner-scope.js";
 import requireActionResult from "./eslint/rules/require-action-result.js";
+import noChildrenOnlyWithAsChild from "./eslint/rules/no-children-only-with-as-child.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,9 +35,23 @@ const cronForbiddenUiPatterns = [
   },
 ];
 
+/** Custom rules (incl. react/no-children-only-with-as-child for Button asChild). */
+const kitchenosPlugin = {
+  rules: {
+    "require-owner-scope": requireOwnerScope,
+    "require-action-result": requireActionResult,
+    "no-children-only-with-as-child": noChildrenOnlyWithAsChild,
+  },
+};
+
 const eslintConfig = [
   { ignores: ["scripts/**", "services/storefront/_experiments/**", "archive/cron-routes/**"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    plugins: {
+      kitchenos: kitchenosPlugin,
+    },
+  },
   {
     rules: {
       "no-restricted-imports": [
@@ -61,14 +76,12 @@ const eslintConfig = [
     },
   },
   {
-    plugins: {
-      kitchenos: {
-        rules: {
-          "require-owner-scope": requireOwnerScope,
-          "require-action-result": requireActionResult,
-        },
-      },
+    files: ["app/**/*.{tsx,jsx}", "components/**/*.{tsx,jsx}"],
+    rules: {
+      "kitchenos/no-children-only-with-as-child": "error",
     },
+  },
+  {
     files: ["services/**/*.ts", "actions/**/*.ts"],
     rules: {
       "no-restricted-syntax": [

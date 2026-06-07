@@ -5937,3 +5937,11 @@ Category: security
 Result: done — middleware enforceApiMutationRateLimitMiddleware for POST/PUT/PATCH/DELETE; api_mutation policy (120/min); lib/api/middleware-api-rate-limit.ts; audit script (199 mutation routes: 77 middleware + 20 dedicated + 102 exempt_class)
 Tests: tests/unit/api-mutation-rate-limit.test.ts 7/7 pass
 Commit: 50a14c2c
+
+---
+Cycle: 20260606-203000
+Task: 9 — ESLint guard for Button asChild multi-child (P0)
+Category: lint
+Result: done — eslint/rules/no-children-only-with-as-child.js; kitchenos/no-children-only-with-as-child on app/** and components/**; .eslintrc.js legacy pointer; eslint.config.mjs consolidated kitchenos plugin
+Tests: tests/unit/no-children-only-with-as-child.test.ts 1/1 pass (RuleTester valid/invalid cases)
+Commit: pending
