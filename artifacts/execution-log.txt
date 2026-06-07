@@ -6835,3 +6835,11 @@ Category: design
 Result: done — hero banner + summary/device card + location row dark-mode polish on device-status-dashboard.tsx, 8 cert tests; Clover parity honesty preserved
 Tests: npm run test:ci:design-full-polish-05-device-status:cert 8/8 pass
 Commit: c799a345
+
+---
+Cycle: 20260607-003900
+Task: 121 — Design full polish data migration wizard (P3)
+Category: design
+Result: done — hero banner + source/preview card + row dark-mode polish on migration-wizard-client.tsx, 8 cert tests; CSV/manual-review honesty preserved
+Tests: npm run test:ci:design-full-polish-06-data-migration:cert 8/8 pass
+Commit: fae8e189
