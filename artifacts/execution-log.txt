@@ -6338,4 +6338,4 @@ Task: 58 — iPad-native POS polish touch targets, haptic, swipe (P2)
 Category: feat
 Result: done — ipad-native-pos-polish-policy; haptics (tap/success/error); swipe-right add on tablet tiles; posIpadNativeShellClass; wired pos-tablet-client + pos-terminal-client tabletMode
 Tests: npm run test:ci:ipad-native-pos-polish:cert 6/6 pass
-Commit: pending
+Commit: cdf54a14
