@@ -6419,3 +6419,11 @@ Category: feat
 Result: done — /platform/kpi page; kpi-dashboard-service snapshot; KpiDashboardPanel; policy + metrics + audit; docs/kpi-dashboard.md; platform nav link; CI cert
 Tests: npm run test:ci:kpi-dashboard:cert 8/8 pass
 Commit: 6c472791
+
+---
+Cycle: 20260606-215400
+Task: 69 — Meal prep vertical golden path product brief ICP demo pricing (P2)
+Category: docs
+Result: done — docs/meal-prep-vertical-golden-path.md; policy + audit; linked from icp-definition-final; Pro $79 recommendation; meal-prep-weekly demo script
+Tests: npm run test:ci:meal-prep-vertical-golden-path:cert 6/6 pass
+Commit: pending

@@ -672,6 +672,8 @@
     "test:ci:bus-factor-mitigation:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/bus-factor-mitigation-absolute-final.test.ts",
     "test:ci:kpi-dashboard": "node ./node_modules/vitest/vitest.mjs run tests/unit/kpi-dashboard-absolute-final.test.ts",
     "test:ci:kpi-dashboard:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/kpi-dashboard-absolute-final.test.ts",
+    "test:ci:meal-prep-vertical-golden-path": "node ./node_modules/vitest/vitest.mjs run tests/unit/meal-prep-vertical-golden-path-absolute-final.test.ts tests/unit/meal-prep-os.test.ts",
+    "test:ci:meal-prep-vertical-golden-path:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/meal-prep-vertical-golden-path-absolute-final.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",
