@@ -6027,3 +6027,11 @@ Category: test
 Result: done — slow network throttle + hang guard harness; SSR skeleton markup audit (pulse, aria-busy, fixed heights); Today 3 Suspense sections + critical loading.tsx modules
 Tests: tests/unit/suspense-skeleton.test.ts + today-page-suspense + loading-skeleton-audit 21/21 pass
 Commit: b406db85
+
+---
+Cycle: 20260606-213500
+Task: 20 — Rate limit tests (P1)
+Category: test
+Result: done — 429 + Retry-After + X-RateLimit-* + user message audits; middleware mutation gate; 503 when backend unavailable
+Tests: tests/unit/rate-limit-response.test.ts + rate-limit-facade + api-mutation-rate-limit 20/20 pass
+Commit: pending

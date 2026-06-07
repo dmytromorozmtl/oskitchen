@@ -18,5 +18,6 @@
   "16-live-integration-smoke-staging": "done",
   "17-null-reference-regression-suite": "done",
   "18-error-boundary-tests-20-pages": "done",
-  "19-suspense-skeleton-tests": "done"
+  "19-suspense-skeleton-tests": "done",
+  "20-rate-limit-tests": "done"
 }
