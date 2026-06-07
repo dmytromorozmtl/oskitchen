@@ -6571,3 +6571,11 @@ Category: docs
 Result: done — docs/eu-data-residency-roadmap.md (6 phases, gap analysis, subprocessor flows, sales guidance); wired from SOC2 + enterprise trust docs; policy + audit
 Tests: npm run test:ci:eu-data-residency-roadmap:cert 4/4 pass
 Commit: 38f1cc0c
+
+---
+Cycle: 20260606-223300
+Task: 88 — regional tax compliance doc (P3)
+Category: docs
+Result: done — docs/regional-tax-compliance.md (4 jurisdiction modes, 6 region gaps, 6-phase timeline, TaxJar optional path); wired from intl expansion + EU residency; policy + audit
+Tests: npm run test:ci:regional-tax-compliance:cert 4/4 pass
+Commit: pending

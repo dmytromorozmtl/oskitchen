@@ -126,6 +126,7 @@ Before answering EU residency or GDPR hosting questionnaires:
 - [`soc2-roadmap-with-timeline.md`](./soc2-roadmap-with-timeline.md) — parallel GRC program (Absolute Final #66)
 - [`soc2-readiness-assessment.md`](./soc2-readiness-assessment.md) — vendor risk + CC mapping
 - [`ENTERPRISE_TRUST_COMPLIANCE_READINESS.md`](./ENTERPRISE_TRUST_COMPLIANCE_READINESS.md) — trust posture summary
+- [`regional-tax-compliance.md`](./regional-tax-compliance.md) — tax presets vs operator responsibility (Absolute Final #88)
 - [`enterprise-procurement-pack.md`](./enterprise-procurement-pack.md) — questionnaire templates
 - [`forbidden-claims-training.md`](./forbidden-claims-training.md) — sales-safe language
 
