@@ -6747,3 +6747,11 @@ Category: test
 Result: done — slot 109 behavioral tests for expedite screen (hero/queue, rush summary, honesty markers, 44px touch, dark mode, polish pillars, wiring audit); 8 tests
 Tests: npm run test:ci:qa-full-coverage-09-kds-expedite:cert 8/8 pass
 Commit: 413787e6
+
+---
+Cycle: 20260607-001000
+Task: 110 — QA full coverage white-label storefront depth (P3)
+Category: test
+Result: done — slot 110 behavioral tests for ChowNow white-label depth (custom domain, maturity/readiness, 5 pillars, honesty markers, UI wiring, service overlay); 8 tests
+Tests: npm run test:ci:qa-full-coverage-10-white-label:cert 8/8 pass
+Commit: e5dabd5c
