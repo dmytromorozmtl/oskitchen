@@ -88,7 +88,7 @@ describe(`Design full polish — KDS daisy-chain (Absolute Final Task ${TASK}, f
     expect(panel).toContain('data-testid="kds-daisy-chain-path"');
     expect(panel).toContain('data-testid="kds-daisy-chain-link-row"');
     expect(panel).toContain('data-testid="kds-daisy-chain-bump-preview-row"');
-    expect(panel).toContain("toggleKdsDaisyChainLinkAction");
+    expect(panel).toContain("toggleKdsDaisyChainLinkFormAction");
     expect(panel).toContain("/dashboard/kitchen/routing-rules");
   });
 

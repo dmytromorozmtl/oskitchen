@@ -132,7 +132,7 @@ describe(`QA full coverage — KDS daisy-chain config (Absolute Final Task ${TAS
     expect(panel).toContain('data-testid="kds-daisy-chain-path"');
     expect(panel).toContain('data-testid="kds-daisy-chain-link-row"');
     expect(panel).toContain('data-testid="kds-daisy-chain-bump-preview-row"');
-    expect(panel).toContain("toggleKdsDaisyChainLinkAction");
+    expect(panel).toContain("toggleKdsDaisyChainLinkFormAction");
     expect(panel).toContain("/dashboard/kitchen/routing-rules");
     expect(page).toContain("KdsDaisyChainConfigPanel");
     expect(page).toContain("kitchen.configure");
