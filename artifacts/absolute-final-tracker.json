@@ -22,5 +22,6 @@
   "20-rate-limit-tests": "done",
   "21-async-page-skeletons": "done",
   "22-error-state-design-system": "done",
-  "23-pos-terminal-icon-button-aria-labels": "done"
+  "23-pos-terminal-icon-button-aria-labels": "done",
+  "24-navigation-workflow-ia": "done"
 }

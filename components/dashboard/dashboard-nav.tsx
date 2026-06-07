@@ -41,8 +41,15 @@ import {
   NAV_PERSONA_HEADLINE,
   NAV_PERSONA_LABEL,
   NAV_PERSONA_OPTIONS,
+  resolveEffectiveNavPersona,
   type NavPersonaSelection,
 } from "@/lib/navigation/nav-personas";
+import {
+  defaultWorkflowSectionOpen,
+  partitionNavGroupsByWorkflow,
+  type NavWorkflowPartition,
+  workflowSectionHasActivePath,
+} from "@/lib/navigation/navigation-workflow-ia-policy";
 import { listPreviewSidebarLinks } from "@/lib/navigation/preview-route-hiding-confirmation-policy";
 
 export type { NavLinkItem } from "@/lib/nav-config";
@@ -64,6 +71,107 @@ const TOUR_TARGETS: Record<string, string> = {
   "/dashboard/storefront": "nav-storefront",
   "/dashboard/kitchen": "nav-kitchen",
 };
+
+function NavWorkflowSection({
+  partition,
+  pathname,
+  persona,
+  locale,
+  businessType,
+  onNavigate,
+  navQuery,
+  pins,
+  onTogglePin,
+  onRecordVisit,
+  defaultOpenForGroup,
+}: {
+  partition: NavWorkflowPartition;
+  pathname: string;
+  persona: ReturnType<typeof resolveEffectiveNavPersona>;
+  locale: Locale;
+  businessType: BusinessType | null;
+  onNavigate?: () => void;
+  navQuery: string;
+  pins: Set<string>;
+  onTogglePin: (href: string) => void;
+  onRecordVisit?: (href: string) => void;
+  defaultOpenForGroup: (groupId: string) => boolean;
+}) {
+  const hasActive = workflowSectionHasActivePath(partition, pathname);
+  const [open, setOpen] = React.useState(
+    defaultWorkflowSectionOpen(partition.section.id, persona, hasActive),
+  );
+  const panelId = `nav-workflow-${partition.section.id}`;
+
+  React.useEffect(() => {
+    if (hasActive) setOpen(true);
+  }, [hasActive]);
+
+  const visibleGroups = React.useMemo(() => {
+    const q = navQuery.trim().toLowerCase();
+    if (!q) return partition.groups;
+    return partition.groups
+      .map((group) => ({
+        ...group,
+        links: group.links.filter((link) => {
+          const label = navLabelForBusinessType(locale, businessType, link.labelKey).toLowerCase();
+          return label.includes(q) || link.href.toLowerCase().includes(q);
+        }),
+      }))
+      .filter((group) => group.links.length > 0);
+  }, [partition.groups, navQuery, locale, businessType]);
+
+  if (visibleGroups.length === 0) return null;
+
+  return (
+    <div
+      className="space-y-2 rounded-xl border border-border/60 bg-muted/10 p-2"
+      data-testid={`nav-workflow-${partition.section.id}`}
+    >
+      <button
+        type="button"
+        id={`${panelId}-trigger`}
+        onClick={() => setOpen((value) => !value)}
+        className="flex w-full items-start justify-between gap-2 rounded-lg px-2 py-1.5 text-left outline-none ring-offset-background hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring"
+        aria-expanded={open}
+        aria-controls={panelId}
+      >
+        <span className="min-w-0">
+          <span className="block text-xs font-semibold uppercase tracking-wide text-foreground">
+            {partition.section.shortTitle}
+          </span>
+          <span className="block text-[11px] leading-snug text-muted-foreground">
+            {partition.section.description}
+          </span>
+        </span>
+        <ChevronDown
+          className={cn("mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform", open ? "rotate-180" : "")}
+          aria-hidden
+        />
+      </button>
+      {open ? (
+        <div id={panelId} role="region" aria-labelledby={`${panelId}-trigger`} className="space-y-3">
+          {visibleGroups.map((group) => (
+            <NavGroup
+              key={group.id}
+              title={group.title}
+              links={group.links}
+              pathname={pathname}
+              locale={locale}
+              businessType={businessType}
+              defaultOpen={defaultOpenForGroup(group.id)}
+              onNavigate={onNavigate}
+              navQuery=""
+              pins={pins}
+              onTogglePin={onTogglePin}
+              onRecordVisit={onRecordVisit}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 function NavGroup({
   title,
@@ -342,6 +450,19 @@ export function DashboardSidebarNav({
     return applyNavReleaseProfile(base, effectiveRelease);
   }, [navContext, businessType, navScopeAll, navPersona, disabledSet, navReleaseProfile]);
 
+  const effectivePersona = React.useMemo(
+    () =>
+      resolveEffectiveNavPersona({
+        selection: navPersona,
+        workspaceRole: navContext.userRole ?? "OWNER",
+        staffRoleType: navContext.staffRoleType ?? null,
+        platformBypass: Boolean(navContext.fullNavAccess),
+      }),
+    [navPersona, navContext.userRole, navContext.staffRoleType, navContext.fullNavAccess],
+  );
+
+  const workflowPartitions = React.useMemo(() => partitionNavGroupsByWorkflow(groups), [groups]);
+
   const linkIndex = React.useMemo(() => {
     const m = new Map<string, NavLinkItem>();
     for (const g of groups) {
@@ -375,9 +496,8 @@ export function DashboardSidebarNav({
     return (
       id === "core" ||
       id === "operations" ||
-      id === "menus" ||
-      id === "commerce" ||
-      id === "customers"
+      id === "inventoryFinance" ||
+      id === "admin"
     );
   };
 
@@ -499,22 +619,41 @@ export function DashboardSidebarNav({
       ) : null}
 
       <nav className="flex flex-col gap-4" aria-label="Workspace">
-        {groups.map((group) => (
-          <NavGroup
-            key={group.id}
-            title={group.title}
-            links={group.links}
-            pathname={pathname}
-            locale={locale}
-            businessType={businessType}
-            defaultOpen={defaultOpenForGroup(group.id)}
-            onNavigate={onNavigate}
-            navQuery={navQuery}
-            pins={pins}
-            onTogglePin={togglePin}
-            onRecordVisit={recordVisit}
-          />
-        ))}
+        {navQuery.trim() ? (
+          groups.map((group) => (
+            <NavGroup
+              key={group.id}
+              title={group.title}
+              links={group.links}
+              pathname={pathname}
+              locale={locale}
+              businessType={businessType}
+              defaultOpen={defaultOpenForGroup(group.id)}
+              onNavigate={onNavigate}
+              navQuery={navQuery}
+              pins={pins}
+              onTogglePin={togglePin}
+              onRecordVisit={recordVisit}
+            />
+          ))
+        ) : (
+          workflowPartitions.map((partition) => (
+            <NavWorkflowSection
+              key={partition.section.id}
+              partition={partition}
+              pathname={pathname}
+              persona={effectivePersona}
+              locale={locale}
+              businessType={businessType}
+              onNavigate={onNavigate}
+              navQuery={navQuery}
+              pins={pins}
+              onTogglePin={togglePin}
+              onRecordVisit={recordVisit}
+              defaultOpenForGroup={defaultOpenForGroup}
+            />
+          ))
+        )}
         {ownerExtras.length > 0 ? (
           <NavGroup
             title="Platform"

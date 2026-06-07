@@ -6059,3 +6059,11 @@ Category: fix
 Result: done — item-specific aria-label on cart +/- controls in pos-terminal-client + pos-mobile-client; DES-35 fleet audit for 4 terminal modules; aria-hidden on Minus/Plus icons
 Tests: tests/unit/pos-terminal-icon-buttons.test.ts 7/7 pass
 Commit: d3c20c9e
+
+---
+Cycle: 20260606-215500
+Task: 24 — Navigation IA workflow sections (P1)
+Category: feat
+Result: done — FOH/BOH/Finance/Settings collapsible super-sections in nav drawer; role-based default open (cashier→FOH, kitchen→BOH, support_admin→Settings); search bypasses workflow grouping
+Tests: tests/unit/navigation-workflow-ia.test.ts 6/6 pass; nav-personas 10/10 pass
+Commit: pending
