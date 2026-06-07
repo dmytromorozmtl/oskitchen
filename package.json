@@ -764,6 +764,8 @@
     "test:ci:design-full-polish-08-kds-daisy-chain:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-08-kds-daisy-chain.test.ts",
     "test:ci:design-full-polish-09-kds-expedite": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-09-kds-expedite.test.ts tests/unit/kds-expedite-screen-absolute-final.test.ts",
     "test:ci:design-full-polish-09-kds-expedite:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-09-kds-expedite.test.ts",
+    "test:ci:design-full-polish-10-white-label": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-10-white-label.test.ts tests/unit/white-label-storefront-depth-absolute-final.test.ts",
+    "test:ci:design-full-polish-10-white-label:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-10-white-label.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",

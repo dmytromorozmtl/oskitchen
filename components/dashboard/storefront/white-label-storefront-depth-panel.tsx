@@ -18,12 +18,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
+import {
   WHITE_LABEL_STOREFRONT_DEPTH_CHOWNOW_PARITY_PILLARS,
   WHITE_LABEL_STOREFRONT_DEPTH_ROUTE,
   type WhiteLabelDepthCapability,
   type WhiteLabelDepthMaturity,
   type WhiteLabelStorefrontDepthModel,
 } from "@/lib/storefront/white-label-storefront-depth-absolute-final-policy";
+import { cn } from "@/lib/utils";
 
 function pillarIcon(pillar: (typeof WHITE_LABEL_STOREFRONT_DEPTH_CHOWNOW_PARITY_PILLARS)[number]) {
   switch (pillar) {
@@ -69,7 +78,10 @@ function maturityBadgeVariant(maturity: WhiteLabelDepthMaturity) {
 function CapabilityRow({ capability }: { capability: WhiteLabelDepthCapability }) {
   return (
     <li
-      className="flex flex-col gap-2 border-b border-border/60 px-4 py-3 last:border-0 sm:flex-row sm:items-center sm:justify-between"
+      className={cn(
+        "flex flex-col gap-2 border-b border-border/60 px-4 py-3 last:border-0 sm:flex-row sm:items-center sm:justify-between dark:border-border/50",
+        DESIGN_POLISH_ROW_SURFACE_CLASS,
+      )}
       data-testid="white-label-depth-capability"
     >
       <div className="min-w-0 space-y-1">
@@ -79,10 +91,12 @@ function CapabilityRow({ capability }: { capability: WhiteLabelDepthCapability }
             {capability.maturity}
           </Badge>
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
           ChowNow parity: {capability.chowNowLabel}
         </p>
-        <p className="text-sm text-muted-foreground">{capability.detail}</p>
+        <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+          {capability.detail}
+        </p>
       </div>
       <Button asChild size="sm" variant="outline" className="shrink-0 rounded-full">
         <Link href={capability.manageHref}>Manage</Link>
@@ -101,58 +115,75 @@ export function WhiteLabelStorefrontDepthPanel({ model }: { model: WhiteLabelSto
 
   return (
     <div className="space-y-6" data-testid="white-label-storefront-depth-panel">
-      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm">
-        <p className="font-semibold">ChowNow parity · BETA depth dashboard</p>
-        <p className="mt-1 text-muted-foreground">
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">ChowNow parity · BETA depth dashboard</p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
           Honest maturity labels — SKIPPED when DNS automation or App Store binaries are not shipped.
           Do not promise custom domains until verified at your registrar. Payment processing fees
           still apply on commission-free direct ordering.
         </p>
       </div>
 
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
+        <Badge variant="outline" className="rounded-full tabular-nums">
+          {summary.readinessPercent}% readiness
+        </Badge>
+        <Badge variant="default" className="rounded-full tabular-nums">
+          {summary.liveCount} LIVE
+        </Badge>
+        <Badge variant="secondary" className="rounded-full tabular-nums">
+          {summary.betaCount + summary.roadmapCount} BETA / ROADMAP
+        </Badge>
+        <Badge variant="outline" className="rounded-full tabular-nums">
+          {summary.skippedCount} SKIPPED
+        </Badge>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-border/70 shadow-sm">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>Readiness</CardDescription>
             <CardTitle className="text-3xl">{summary.readinessPercent}%</CardTitle>
           </CardHeader>
-          <CardContent className="text-xs text-muted-foreground">
+          <CardContent className="text-xs text-muted-foreground dark:text-muted-foreground/90">
             Weighted LIVE/BETA/ROADMAP score across {capabilities.length} capabilities
           </CardContent>
         </Card>
-        <Card className="border-border/70 shadow-sm">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>LIVE</CardDescription>
             <CardTitle className="text-3xl text-emerald-600 dark:text-emerald-400">
               {summary.liveCount}
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-xs text-muted-foreground">Shipped today in workspace</CardContent>
+          <CardContent className="text-xs text-muted-foreground dark:text-muted-foreground/90">
+            Shipped today in workspace
+          </CardContent>
         </Card>
-        <Card className="border-border/70 shadow-sm">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>BETA / ROADMAP</CardDescription>
             <CardTitle className="text-3xl">
               {summary.betaCount + summary.roadmapCount}
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-xs text-muted-foreground">
+          <CardContent className="text-xs text-muted-foreground dark:text-muted-foreground/90">
             {summary.skippedCount} SKIPPED — blocked or partner-gated
           </CardContent>
         </Card>
-        <Card className="border-border/70 shadow-sm">
+        <Card className={DESIGN_POLISH_CARD_CLASS}>
           <CardHeader className="pb-2">
             <CardDescription>Storefront preview</CardDescription>
             <CardTitle className="flex items-center gap-2 text-base">
               <span
-                className="inline-block h-4 w-4 rounded-full border border-border"
+                className="inline-block h-4 w-4 rounded-full border border-border dark:border-border/50"
                 style={{ backgroundColor: summary.previewThemeColor }}
                 aria-hidden
               />
               {summary.hasLogo ? "Logo set" : "No logo"}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-xs text-muted-foreground">
+          <CardContent className="space-y-2 text-xs text-muted-foreground dark:text-muted-foreground/90">
             {summary.storefrontUrl ? (
               <a
                 href={summary.storefrontUrl}
@@ -161,7 +192,10 @@ export function WhiteLabelStorefrontDepthPanel({ model }: { model: WhiteLabelSto
                 className="inline-flex items-center gap-1 text-primary underline-offset-4 hover:underline"
               >
                 {summary.storefrontUrl}
-                <ExternalLink className="h-3 w-3" aria-hidden />
+                <ExternalLink
+                  className={`h-3 w-3 ${DESIGN_POLISH_STRIPE_OK_CLASS}`}
+                  aria-hidden
+                />
               </a>
             ) : (
               "Publish storefront slug to preview"
@@ -180,11 +214,15 @@ export function WhiteLabelStorefrontDepthPanel({ model }: { model: WhiteLabelSto
           const Icon = pillarIcon(pillar);
           const liveInPillar = items.filter((i) => i.maturity === "LIVE").length;
           return (
-            <Card key={pillar} className="border-border/70 shadow-sm" data-testid="white-label-depth-pillar">
+            <Card
+              key={pillar}
+              className={DESIGN_POLISH_CARD_CLASS}
+              data-testid="white-label-depth-pillar"
+            >
               <CardHeader className="space-y-2 pb-2">
-                <Icon className="h-5 w-5 text-primary" aria-hidden />
+                <Icon className={`h-5 w-5 ${DESIGN_POLISH_STRIPE_OK_CLASS}`} aria-hidden />
                 <CardTitle className="text-sm">{pillarLabel(pillar)}</CardTitle>
-                <CardDescription className="text-xs">
+                <CardDescription className="text-xs dark:text-muted-foreground/90">
                   {liveInPillar}/{items.length} LIVE
                 </CardDescription>
               </CardHeader>
@@ -193,16 +231,16 @@ export function WhiteLabelStorefrontDepthPanel({ model }: { model: WhiteLabelSto
         })}
       </div>
 
-      <Card className="border-border/70 shadow-sm">
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle>Capability depth</CardTitle>
-          <CardDescription>
+          <CardDescription className="dark:text-muted-foreground/90">
             ChowNow parity checklist — DNS is not automatic for custom domains. Enterprise hide-branding
             is partner-gated.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-0">
-          <ul className="divide-y divide-border/60">
+        <CardContent className={`p-0 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}>
+          <ul className="divide-y divide-border/60 dark:divide-border/50">
             {capabilities.map((capability) => (
               <CapabilityRow key={capability.id} capability={capability} />
             ))}
@@ -210,9 +248,10 @@ export function WhiteLabelStorefrontDepthPanel({ model }: { model: WhiteLabelSto
         </CardContent>
       </Card>
 
-      <p className="text-xs text-muted-foreground">
+      <p className="text-xs text-muted-foreground dark:text-muted-foreground/90">
         Policy: white-label-storefront-depth-absolute-final-v1 · Route: {WHITE_LABEL_STOREFRONT_DEPTH_ROUTE}
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
