@@ -16,6 +16,14 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
+import {
   formatMultiCurrencyAmount,
   MULTI_CURRENCY_NETWORK_ROLLUP_LABEL,
   MULTI_CURRENCY_SUPPORTED_CURRENCIES,
@@ -28,7 +36,15 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
 
   return (
     <div className="space-y-6" data-testid="multi-currency-settings-panel">
-      <div className="flex flex-wrap gap-2">
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Multi-currency network (Beta)</p>
+        <p className="mt-1 text-muted-foreground dark:text-muted-foreground/90">
+          Lightspeed-style per-location display currency.{" "}
+          {MULTI_CURRENCY_NETWORK_ROLLUP_LABEL.toLowerCase()}.
+        </p>
+      </div>
+
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
         <Badge variant="outline" className="rounded-full">
           <Globe2 className="mr-1 h-3 w-3" aria-hidden />
           Workspace: {assessment.workspaceCurrency}
@@ -44,7 +60,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
         ) : null}
       </div>
 
-      <Card className="border-border/80 shadow-sm">
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-base">Workspace base currency</CardTitle>
           <CardDescription>
@@ -60,7 +76,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
                 id="workspaceCurrency"
                 name="currency"
                 defaultValue={assessment.workspaceCurrency}
-                className="flex h-10 min-w-[140px] rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 min-w-[140px] rounded-xl border border-input bg-background px-3 py-2 text-sm dark:border-border/60 dark:bg-background/95"
               >
                 {MULTI_CURRENCY_SUPPORTED_CURRENCIES.map((c) => (
                   <option key={c} value={c}>
@@ -79,7 +95,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
         </CardContent>
       </Card>
 
-      <Card className="border-border/80 shadow-sm">
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-base">Per-location currency</CardTitle>
           <CardDescription>
@@ -101,7 +117,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
               <form
                 key={row.locationId}
                 action={updateLocationCurrencyFormAction}
-                className="flex flex-col gap-3 rounded-xl border border-border/60 p-4 sm:flex-row sm:items-end sm:justify-between"
+                className={`flex flex-col gap-3 p-4 sm:flex-row sm:items-end sm:justify-between ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}
                 data-testid={`multi-currency-location-${row.locationId}`}
               >
                 <input type="hidden" name="locationId" value={row.locationId} />
@@ -115,7 +131,10 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
                     )}
                     {row.stripeSupported ? (
                       <Badge variant="outline" className="rounded-full text-[10px]">
-                        <CheckCircle2 className="mr-1 h-3 w-3 text-emerald-600" aria-hidden />
+                        <CheckCircle2
+                          className={`mr-1 h-3 w-3 ${DESIGN_POLISH_STRIPE_OK_CLASS}`}
+                          aria-hidden
+                        />
                         Stripe card OK
                       </Badge>
                     ) : (
@@ -135,7 +154,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
                       id={`currency-${row.locationId}`}
                       name="currency"
                       defaultValue={row.currency}
-                      className="flex h-10 min-w-[120px] rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                      className="flex h-10 min-w-[120px] rounded-xl border border-input bg-background px-3 py-2 text-sm dark:border-border/60 dark:bg-background/95"
                     >
                       {MULTI_CURRENCY_SUPPORTED_CURRENCIES.map((c) => (
                         <option key={c} value={c}>
@@ -154,7 +173,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
         </CardContent>
       </Card>
 
-      <Card className="border-border/80 shadow-sm">
+      <Card className={DESIGN_POLISH_CARD_CLASS}>
         <CardHeader>
           <CardTitle className="text-base">Storefront checkout currency</CardTitle>
           <CardDescription>
@@ -174,7 +193,7 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
             assessment.storefrontRows.map((row) => (
               <div
                 key={row.storefrontId}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 px-4 py-3"
+                className={`flex flex-wrap items-center justify-between gap-3 px-4 py-3 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}
                 data-testid={`multi-currency-storefront-${row.storefrontId}`}
               >
                 <div>
@@ -202,6 +221,8 @@ export function MultiCurrencySettingsPanel({ model }: { model: MultiCurrencySett
           )}
         </CardContent>
       </Card>
+
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }

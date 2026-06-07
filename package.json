@@ -746,6 +746,8 @@
     "test:ci:qa-full-coverage-14-accountant-portal:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-qa-full-coverage-14-accountant-portal.test.ts",
     "test:ci:qa-full-coverage-15-driver-eta": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-qa-full-coverage-15-driver-eta.test.ts tests/unit/kds-driver-eta-tracking-absolute-final.test.ts",
     "test:ci:qa-full-coverage-15-driver-eta:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-qa-full-coverage-15-driver-eta.test.ts",
+    "test:ci:design-full-polish-01-multi-currency": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-01-multi-currency.test.ts tests/unit/multi-currency-support.test.ts",
+    "test:ci:design-full-polish-01-multi-currency:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-design-full-polish-01-multi-currency.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",
