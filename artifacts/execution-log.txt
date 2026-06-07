@@ -6707,3 +6707,11 @@ Category: test
 Result: done — slot 104 behavioral tests for app marketplace (8 extensions, 70/30 revenue share, maturity/kind labels, honesty markers, marketing/extensions/strip wiring); 8 tests
 Tests: npm run test:ci:qa-full-coverage-04-app-marketplace:cert 8/8 pass
 Commit: bb4b6a13
+
+---
+Cycle: 20260606-235800
+Task: 105 — QA full coverage device status dashboard (P3)
+Category: test
+Result: done — slot 105 behavioral tests for device status dashboard (Clover connectivity mapping, category summary, location grouping, honesty markers, UI wiring, fleet/Stripe service); 8 tests
+Tests: npm run test:ci:qa-full-coverage-05-device-status:cert 8/8 pass
+Commit: beac578f

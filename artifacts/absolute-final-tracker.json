@@ -103,5 +103,6 @@
   "101-qa-full-coverage-multi-currency": "done",
   "102-qa-full-coverage-eu-data-residency": "done",
   "103-qa-full-coverage-regional-tax": "done",
-  "104-qa-full-coverage-app-marketplace": "done"
+  "104-qa-full-coverage-app-marketplace": "done",
+  "105-qa-full-coverage-device-status": "done"
 }
