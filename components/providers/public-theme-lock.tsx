@@ -14,7 +14,8 @@ export function PublicThemeLock() {
     const authenticatedApp =
       path.startsWith("/dashboard") ||
       path.startsWith("/platform") ||
-      path.startsWith("/onboarding");
+      path.startsWith("/onboarding") ||
+      path.startsWith("/visual-test");
     if (authenticatedApp) return;
     if (resolvedTheme !== "light") {
       setTheme("light");

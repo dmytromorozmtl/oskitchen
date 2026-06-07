@@ -49,5 +49,6 @@
   "47-pos-terminal-keyboard-navigation": "done",
   "48-screen-reader-icon-buttons": "done",
   "49-mobile-touch-target-44px": "done",
-  "50-lighthouse-ci-core-web-vitals": "done"
+  "50-lighthouse-ci-core-web-vitals": "done",
+  "51-visual-regression-dark-mode-parity": "done"
 }

@@ -1,4 +1,5 @@
 # Visual regression: Playwright snapshot baselines (no Storybook required).
+# Light + dark parity: tests/visual/dark-mode-parity.spec.ts (Task 51).
 # Committed baselines: tests/visual/**/*-snapshots/
 # CI uploads baselines on every run; diff artifacts only on failure.
 #
@@ -20,6 +21,8 @@ on:
       - "components/storefront-builder/**"
       - "app/visual-test/**"
       - "tests/visual/**"
+      - "lib/testing/visual-regression-dark-mode-policy.ts"
+      - "components/providers/public-theme-lock.tsx"
       - "playwright.config.ts"
   push:
     branches: [main]
@@ -28,6 +31,7 @@ on:
       - "components/storefront-builder/**"
       - "app/visual-test/**"
       - "tests/visual/**"
+      - "lib/testing/visual-regression-dark-mode-policy.ts"
 
 permissions:
   contents: read
@@ -59,7 +63,7 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps
 
-      - name: Visual snapshot tests
+      - name: Visual snapshot tests (light + dark parity)
         env:
           CI: true
         run: |
