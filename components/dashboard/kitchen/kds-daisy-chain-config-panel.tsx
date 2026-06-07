@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, GitBranch } from "lucide-react";
 
-import { toggleKdsDaisyChainLinkAction } from "@/actions/kitchen/daisy-chain";
+import { toggleKdsDaisyChainLinkFormAction } from "@/actions/kitchen/daisy-chain";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -122,7 +122,7 @@ export function KdsDaisyChainConfigPanel({ model }: { model: KdsDaisyChainConfig
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <form action={toggleKdsDaisyChainLinkAction}>
+                    <form action={toggleKdsDaisyChainLinkFormAction}>
                       <input type="hidden" name="linkId" value={link.id} />
                       <input type="hidden" name="enabled" value={link.enabled ? "false" : "true"} />
                       <Button type="submit" size="sm" variant="ghost" className="rounded-full">

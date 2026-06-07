@@ -10,7 +10,7 @@ import { loadKdsDaisyChainConfigModel } from "@/services/kitchen/kds-daisy-chain
 export default async function KdsDaisyChainConfigPage() {
   const actor = await requireWorkspacePermissionActor();
   if (!hasPermission(actor.granted, "kitchen.configure")) {
-    return <PermissionDeniedSurfaceCard surfaceId="kitchen_ops" />;
+    return <PermissionDeniedSurfaceCard surfaceId="kds" />;
   }
 
   const model = await loadKdsDaisyChainConfigModel(actor.userId);

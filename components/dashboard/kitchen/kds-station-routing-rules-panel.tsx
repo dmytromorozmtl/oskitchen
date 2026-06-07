@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Route } from "lucide-react";
 
-import { toggleKdsRoutingRuleAction } from "@/actions/kitchen/routing-rules";
+import { toggleKdsRoutingRuleFormAction } from "@/actions/kitchen/routing-rules";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -84,7 +84,7 @@ export function KdsStationRoutingRulesPanel({ model }: { model: KdsStationRoutin
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <form action={toggleKdsRoutingRuleAction}>
+                    <form action={toggleKdsRoutingRuleFormAction}>
                       <input type="hidden" name="ruleId" value={rule.id} />
                       <input type="hidden" name="enabled" value={rule.enabled ? "false" : "true"} />
                       <Button type="submit" size="sm" variant="ghost" className="rounded-full">

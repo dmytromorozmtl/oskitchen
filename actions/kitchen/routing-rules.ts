@@ -4,41 +4,40 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { fail, ok } from "@/lib/action-result";
-import { toggleKdsDaisyChainLink } from "@/lib/kitchen/kds-daisy-chain-config-storage";
+import { toggleKdsStationRoutingRule } from "@/lib/kitchen/kds-station-routing-rules-storage";
 import { requireMutationPermission } from "@/lib/permissions/mutation-access";
 
 const toggleSchema = z.object({
-  linkId: z.string().min(1),
+  ruleId: z.string().min(1),
   enabled: z.enum(["true", "false"]),
 });
 
-function revalidateDaisyChain() {
-  revalidatePath("/dashboard/kitchen/daisy-chain");
+function revalidateRoutingRules() {
   revalidatePath("/dashboard/kitchen/routing-rules");
   revalidatePath("/dashboard/kitchen/production");
   revalidatePath("/dashboard/kitchen");
 }
 
-export async function toggleKdsDaisyChainLinkAction(formData: FormData) {
+export async function toggleKdsRoutingRuleAction(formData: FormData) {
   const access = await requireMutationPermission("kitchen.configure");
   if (!access.ok) return fail(access.error);
 
   const parsed = toggleSchema.safeParse({
-    linkId: formData.get("linkId"),
+    ruleId: formData.get("ruleId"),
     enabled: formData.get("enabled"),
   });
-  if (!parsed.success) return fail("Invalid daisy-chain toggle.");
+  if (!parsed.success) return fail("Invalid rule toggle.");
 
-  await toggleKdsDaisyChainLink(
+  await toggleKdsStationRoutingRule(
     access.actor.userId,
-    parsed.data.linkId,
+    parsed.data.ruleId,
     parsed.data.enabled === "true",
   );
-  revalidateDaisyChain();
-  return ok({ linkId: parsed.data.linkId });
+  revalidateRoutingRules();
+  return ok({ ruleId: parsed.data.ruleId });
 }
 
 /** Native `<form action>` handler — void return for React 19 form action typing. */
-export async function toggleKdsDaisyChainLinkFormAction(formData: FormData): Promise<void> {
-  await toggleKdsDaisyChainLinkAction(formData);
+export async function toggleKdsRoutingRuleFormAction(formData: FormData): Promise<void> {
+  await toggleKdsRoutingRuleAction(formData);
 }

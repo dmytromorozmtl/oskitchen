@@ -11,15 +11,14 @@ function str(formData: FormData, key: string): string {
   return typeof v === "string" ? v.trim() : "";
 }
 
-export async function updateCoaMappingRowAction(formData: FormData) {
+/** Native `<form action>` handler — returns void for React 19 form action typing. */
+export async function updateCoaMappingRowAction(formData: FormData): Promise<void> {
   const access = await requireReportsPageAccess("reports.read.financial");
-  if (!access.ok) return { error: access.error };
+  if (!access.ok) return;
 
   const pnlLineKey = str(formData, "pnlLineKey");
   const glAccountCode = str(formData, "glAccountCode");
-  if (!pnlLineKey || !glAccountCode) {
-    return { error: "P&L line and GL account code are required." };
-  }
+  if (!pnlLineKey || !glAccountCode) return;
 
   const externalAccountId = str(formData, "externalAccountId") || null;
   const externalAccountName = str(formData, "externalAccountName") || null;
@@ -39,6 +38,4 @@ export async function updateCoaMappingRowAction(formData: FormData) {
 
   revalidatePath(CHART_OF_ACCOUNTS_MAPPING_ROUTE);
   revalidatePath("/dashboard/accounting/gl-sync");
-
-  return { ok: true as const };
 }
