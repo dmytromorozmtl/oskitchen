@@ -101,5 +101,6 @@
   "99-accountant-portal": "done",
   "100-driver-eta-tracking-kds": "done",
   "101-qa-full-coverage-multi-currency": "done",
-  "102-qa-full-coverage-eu-data-residency": "done"
+  "102-qa-full-coverage-eu-data-residency": "done",
+  "103-qa-full-coverage-regional-tax": "done"
 }

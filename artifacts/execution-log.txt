@@ -6691,3 +6691,11 @@ Category: test
 Result: done — slot 102 behavioral tests for EU residency roadmap (phase/gap audit, honesty markers, human gate, sales guidance, DSR/forbidden-claims wiring); 8 tests
 Tests: npm run test:ci:qa-full-coverage-02-eu-data-residency:cert 8/8 pass
 Commit: 1f875296
+
+---
+Cycle: 20260606-235100
+Task: 103 — QA full coverage regional tax compliance (P3)
+Category: test
+Result: done — slot 103 behavioral tests for regional tax guide (phase/gap audit, 4 jurisdiction modes, honesty markers, human gate, sales guidance, tax-settings wiring); 8 tests
+Tests: npm run test:ci:qa-full-coverage-03-regional-tax:cert 8/8 pass
+Commit: 7bb64f65
