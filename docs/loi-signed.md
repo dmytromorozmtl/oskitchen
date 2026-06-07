@@ -1,14 +1,79 @@
-# First design partner LOI — signed record
+# First design partner LOI — signed record & human gate
 
-**Policy:** `era73-first-loi-signed-v1`  
+**Policy:** `era73-first-loi-signed-v1` · **Pipeline:** `loi-pipeline-icp-absolute-final-v1` (Task 26)  
 **LOI SKU:** `LOI-DP-001`  
 **Status:** **SIGNED** — first countersigned design partner LOI on file  
 **Effective date:** 2026-06-05  
-**Parent:** [`loi-design-partner-template.md`](./loi-design-partner-template.md) · [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) · [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md)
+**Parent:** [`loi-design-partner-template.md`](./loi-design-partner-template.md) · [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) · [`pilot-icp-contract-template-era17.md`](./pilot-icp-contract-template-era17.md) · [`icp-definition-final.md`](./icp-definition-final.md)
 
-This document is the **internal signed LOI record** for OS Kitchen’s first design partner. It is **non-binding** except confidentiality (§5) and optional exclusivity if initialed. A paid pilot SOW may follow after the engagement term.
+This document is the **internal human gate** for OS Kitchen LOI pipeline and ICP targeting. It holds the **signed LOI record** for the first design partner and the **founder/ops checkpoints** required before any new LOI goes out. It is **non-binding** except confidentiality (§5) and optional exclusivity if initialed. A paid pilot SOW may follow after the engagement term.
 
-**Honesty rule:** This LOI records **design-partner intent** — not production certification, LIVE integrations, paid pilot conversion, or investor-grade KPIs. Run `npm run smoke:pilot-gono-go` only after ops sets `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` from this record.
+**Honesty rule:** This LOI records **design-partner intent** — not production certification, LIVE integrations, paid pilot conversion, or investor-grade KPIs. Run `npm run smoke:pilot-gono-go` only after ops sets `PILOT_GONOGO_CUSTOMER_NAME` + `PILOT_GONOGO_LOI_SIGNED_DATE` from a countersigned record below.
+
+---
+
+## LOI pipeline — human gates
+
+| Stage | Owner | Exit criteria | Artifact |
+|-------|-------|---------------|----------|
+| **1. Prospect** | Founder / sales | Inbound or outbound fit one P0 ICP segment | CRM lead |
+| **2. ICP qualified** | Founder | `evaluatePilotIcpQualification` → `qualified: true` | [`icp-definition-final.md`](./icp-definition-final.md) checklist |
+| **3. LOI draft** | Founder + legal | Exhibit A modules match [`feature-maturity-matrix.md`](./feature-maturity-matrix.md) | [`loi-design-partner-template.md`](./loi-design-partner-template.md) |
+| **4. Live walkthrough** | Founder | Prospect accepts qualified beta / pilot_ready labels | [`loi-template-walkthrough.md`](./loi-template-walkthrough.md) |
+| **5. Legal review** | Legal (async) | No forbidden claims; Delaware governing law noted | `MARKETING_CLAIMS_STRICT=1 npm run verify-claims` |
+| **6. Countersigned** | Both parties | PDF archived; LOI SKU assigned (`LOI-DP-00N`) | **Signed LOI record** (below) |
+| **7. Pilot Week 0** | CS + ops | Staging workspace + kickoff scheduled | [`pilot-execution-checklist.md`](./pilot-execution-checklist.md) |
+
+**Pipeline rule:** Do not skip Stage 2 — an unsigned LOI does not unblock engineering vault work or external GO claims.
+
+**Signed LOI count (internal):** 1 on file (`LOI-DP-001`). Target for pilot era: **5 design partners** before paid SOW push.
+
+---
+
+## ICP targeting — qualification gates
+
+**Canonical ICP:** [`icp-definition-final.md`](./icp-definition-final.md) · **Evaluator:** `lib/commercial/pilot-icp-contract-era17.ts` → `evaluatePilotIcpQualification`
+
+### P0 segments (headline outreach)
+
+| Segment | Why OS Kitchen wins | Demo / landing |
+|---------|---------------------|----------------|
+| **Ghost kitchen** | Order hub + multi-brand production without hardware lock-in | `/landing/ghost-kitchen` |
+| **Commissary** | Shared production + B2B pickup / marketplace buyer path | `/dashboard/enterprise/commissary` |
+| **Meal prep** | Weekly menus, preorder windows, packing labels | `/landing/meal-prep` |
+
+### Required criteria (all must be true)
+
+1. Single-location or ≤5 locations in pilot scope.
+2. Owner or ops lead committed to weekly sync during engagement term.
+3. Needs order hub + storefront and/or in-browser POS + KDS bump/recall path.
+4. Accepts BETA / pilot_ready labels — no demand for blanket production certification for every tenant.
+
+### Hard disqualifiers (stop pipeline)
+
+- Production SSO/SAML, SOC 2 Type II, or SCIM in pilot term.
+- Unified cross-channel inventory or rewards ledger.
+- Rush-hour KDS SLA or live DoorDash/Uber Eats/Grubhub marketplace ops.
+- Offline POS or Toast/Square hardware parity.
+- Refusal of qualified wording ([`forbidden-claims-training.md`](./forbidden-claims-training.md)).
+
+Export real answers via `PILOT_GONOGO_ICP_INPUT_JSON` when running `npm run smoke:pilot-gono-go`.
+
+---
+
+## Human gate checklist
+
+Founder **must** tick all boxes before countersignature (Stage 6):
+
+- [ ] ICP qualification documented in CRM (segment + criteria pass).
+- [ ] Exhibit A modules reviewed against maturity matrix — no PREVIEW-only rows without explicit opt-in.
+- [ ] Prospect named in writing; legal entity + signer title confirmed.
+- [ ] Staging workspace slug reserved (no production traffic until golden path).
+- [ ] `verify-claims` strict run green for sales deck used on call.
+- [ ] Countersigned PDF path recorded (legal folder — not git if PII).
+- [ ] Post-signature ops steps assigned (see **Post-signature ops** below).
+
+**Gate owner:** Founder/CEO. **Escalation:** defer LOI if any disqualifier is present — offer referral or enterprise roadmap instead of pilot overpromise.
 
 ---
 

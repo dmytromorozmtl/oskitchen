@@ -6075,3 +6075,11 @@ Category: fix
 Result: done — DES-37 fleet audit for 11 error/skeleton modules; shared SKELETON_SURFACE_CLASS + SKELETON_PULSE_CLASS tokens; LoadingSkeleton + Today/Marketplace/POS/KDS skeletons normalized for dark mode
 Tests: tests/unit/error-skeleton-dark-mode-audit.test.ts + async-page-skeletons + error-state-design-system 22/22 pass
 Commit: 8e4f6489
+
+---
+Cycle: 20260606-220500
+Task: 26 — LOI pipeline and ICP targeting (P1)
+Category: docs
+Result: done — extended docs/loi-signed.md with 7-stage LOI pipeline, P0 ICP segments, human gate checklist; loi-pipeline-icp-policy + evaluatePilotIcpQualification wiring
+Tests: tests/unit/loi-pipeline-icp.test.ts + loi-signed-era73 10/10 pass
+Commit: pending
