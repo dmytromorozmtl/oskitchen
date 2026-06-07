@@ -6178,4 +6178,12 @@ Task: 38 — Split onboarding-wizard 940→StepIndicator + StepContent + StepNav
 Category: perf
 Result: done — extracted step-indicator (15L), step-content (756L), step-navigation (27L) + types; onboarding-wizard.tsx 198L orchestrator; onboarding-wizard-split-policy
 Tests: npm run test:ci:onboarding-wizard-split 3/3 pass
+Commit: 639108ca
+
+---
+Cycle: 20260606-231000
+Task: 39 — Offline POS queue PCI review doc (P2)
+Category: docs
+Result: done — docs/offline-pos-pci-review.md (CHD boundary, AES-GCM, SAQ assessment, R1–R8 checklist, sales guardrails); offline-pos-pci-review-policy + lint
+Tests: npm run test:ci:offline-pos-pci-review 6/6 pass
 Commit: pending

@@ -577,6 +577,7 @@
     "test:ci:pos-terminal-split": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-split.test.ts",
     "test:ci:shopify-markets-split": "node ./node_modules/vitest/vitest.mjs run tests/unit/shopify-markets-split.test.ts",
     "test:ci:onboarding-wizard-split": "node ./node_modules/vitest/vitest.mjs run tests/unit/onboarding-wizard-split.test.ts",
+    "test:ci:offline-pos-pci-review": "node ./node_modules/vitest/vitest.mjs run tests/unit/offline-pos-pci-review.test.ts",
     "test:ci:navigation-workflow-ia": "node ./node_modules/vitest/vitest.mjs run tests/unit/navigation-workflow-ia.test.ts",
     "test:ci:error-skeleton-dark-mode": "node ./node_modules/vitest/vitest.mjs run tests/unit/error-skeleton-dark-mode-audit.test.ts tests/unit/async-page-skeletons.test.ts tests/unit/error-state-design-system.test.ts",
     "test:ci:rate-limit": "node ./node_modules/vitest/vitest.mjs run tests/unit/rate-limit-response.test.ts tests/unit/rate-limit-facade.test.ts tests/unit/api-mutation-rate-limit.test.ts",
