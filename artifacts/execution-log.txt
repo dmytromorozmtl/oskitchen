@@ -6299,3 +6299,11 @@ Category: test
 Result: done — prisma-query-count-harness; n-plus-one-regression-policy (8 targets); query count + sub-linear scale tests for partner oauth, pos shift, brand analytics, SLA, vendor webhooks
 Tests: npm run test:ci:n-plus-one-regression 21/21 pass
 Commit: d5ba8431
+
+---
+Cycle: 20260606-212700
+Task: 54 — Performance regression CI Core Web Vitals gate (P2)
+Category: ci
+Result: done — cwv-performance-regression-policy; artifacts/cwv-performance-baseline.json; check-cwv-performance-regression.ts; lighthouse.yml Performance regression step
+Tests: npm run test:ci:performance-regression-cwv 7/7 pass
+Commit: 0ede694c

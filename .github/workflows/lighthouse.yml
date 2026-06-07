@@ -10,6 +10,9 @@ on:
       - "components/**"
       - "lib/**"
       - "lighthouserc.core-web-vitals.cjs"
+      - "artifacts/cwv-performance-baseline.json"
+      - "lib/performance/cwv-performance-regression-policy.ts"
+      - "scripts/check-cwv-performance-regression.ts"
       - "lighthouserc.marketing.cjs"
       - ".github/workflows/lighthouse.yml"
   workflow_dispatch:
@@ -59,3 +62,6 @@ jobs:
           npx @lhci/cli autorun --config=lighthouserc.core-web-vitals.cjs
         env:
           LHCI_BASE_URL: http://127.0.0.1:3000
+
+      - name: Performance regression (Core Web Vitals)
+        run: npm run test:ci:performance-regression-cwv

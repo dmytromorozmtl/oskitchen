@@ -52,5 +52,6 @@
   "50-lighthouse-ci-core-web-vitals": "done",
   "51-visual-regression-dark-mode-parity": "done",
   "52-pos-offline-mode-e2e": "done",
-  "53-n-plus-one-regression-tests": "done"
+  "53-n-plus-one-regression-tests": "done",
+  "54-performance-regression-cwv-ci": "done"
 }
