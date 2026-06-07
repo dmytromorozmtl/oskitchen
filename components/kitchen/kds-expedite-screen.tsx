@@ -24,6 +24,7 @@ import {
   KDS_EXPEDITE_SCREEN_ROUTE,
   type KdsExpediteScreenModel,
 } from "@/lib/kitchen/kds-expedite-screen-absolute-final-policy";
+import { formatKdsRushLevelLabel } from "@/lib/kitchen/kds-rush-mode";
 import { cn } from "@/lib/utils";
 
 function ExpediteQueueCard({ item }: { item: KdsPriorityLaneItem }) {
