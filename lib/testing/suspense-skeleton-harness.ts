@@ -134,8 +134,12 @@ export function auditSkeletonLayoutStability(source: string): {
     failures.push("too few explicit height classes for CLS prevention");
   }
 
-  if (!/bg-muted|bg-card/.test(source)) {
-    failures.push("missing dark-mode-safe surface token (bg-muted/bg-card)");
+  if (!/bg-muted|bg-card|SKELETON_SURFACE_CLASS|SKELETON_PULSE_CLASS/.test(source)) {
+    failures.push("missing dark-mode-safe surface token (bg-muted/bg-card or skeleton pattern)");
+  }
+
+  if (!/dark:|SKELETON_SURFACE_CLASS|SKELETON_WIZARD_SURFACE_CLASS|SKELETON_PULSE_CLASS/.test(source)) {
+    failures.push("missing explicit dark-mode skeleton variant");
   }
 
   return { ok: failures.length === 0, failures };

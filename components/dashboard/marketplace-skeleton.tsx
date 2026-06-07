@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { LoadingSkeleton } from "@/components/feedback/loading-skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SKELETON_SURFACE_CLASS } from "@/lib/design/loading-skeleton-patterns";
 
 /** B2B marketplace hub — hero, metrics, vendor/product grids (DES-28). */
 export function MarketplaceSkeleton({ className }: { className?: string }) {
@@ -11,7 +12,7 @@ export function MarketplaceSkeleton({ className }: { className?: string }) {
       aria-busy="true"
       aria-label="Loading marketplace"
     >
-      <LoadingSkeleton className="h-36 w-full rounded-2xl bg-muted/60 dark:bg-muted/40" />
+      <LoadingSkeleton className="h-36 w-full rounded-2xl" />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <LoadingSkeleton className="h-10 w-full max-w-xl" />
@@ -24,7 +25,7 @@ export function MarketplaceSkeleton({ className }: { className?: string }) {
         ))}
       </div>
 
-      <Card className="border-border/80 bg-card/90 shadow-sm dark:bg-card/80">
+      <Card className={cn(SKELETON_SURFACE_CLASS, "shadow-sm")}>
         <CardHeader className="space-y-2">
           <LoadingSkeleton className="h-6 w-40" />
           <LoadingSkeleton className="h-4 w-64" />

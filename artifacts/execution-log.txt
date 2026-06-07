@@ -6067,3 +6067,11 @@ Category: feat
 Result: done — FOH/BOH/Finance/Settings collapsible super-sections in nav drawer; role-based default open (cashier→FOH, kitchen→BOH, support_admin→Settings); search bypasses workflow grouping
 Tests: tests/unit/navigation-workflow-ia.test.ts 6/6 pass; nav-personas 10/10 pass
 Commit: 474009b4
+
+---
+Cycle: 20260606-220000
+Task: 25 — Dark mode audit for error and skeleton components (P1)
+Category: fix
+Result: done — DES-37 fleet audit for 11 error/skeleton modules; shared SKELETON_SURFACE_CLASS + SKELETON_PULSE_CLASS tokens; LoadingSkeleton + Today/Marketplace/POS/KDS skeletons normalized for dark mode
+Tests: tests/unit/error-skeleton-dark-mode-audit.test.ts + async-page-skeletons + error-state-design-system 22/22 pass
+Commit: pending

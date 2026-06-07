@@ -23,5 +23,6 @@
   "21-async-page-skeletons": "done",
   "22-error-state-design-system": "done",
   "23-pos-terminal-icon-button-aria-labels": "done",
-  "24-navigation-workflow-ia": "done"
+  "24-navigation-workflow-ia": "done",
+  "25-error-skeleton-dark-mode-audit": "done"
 }

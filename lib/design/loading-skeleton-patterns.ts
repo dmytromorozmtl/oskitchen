@@ -36,6 +36,39 @@ export const LOADING_SKELETON_EXCEPTION_MARKER = "LOADING_SKELETON_EXCEPTION" as
 
 export const LOADING_SKELETON_IMPORT = "@/components/feedback/loading-skeleton" as const;
 
+/** Shared skeleton surfaces — dark-mode safe (DES-37). */
+export const SKELETON_SURFACE_CLASS = "border-border/80 bg-card/90 dark:bg-card/80" as const;
+
+export const SKELETON_WIZARD_SURFACE_CLASS =
+  "border-primary/20 bg-primary/[0.03] shadow-sm dark:border-primary/30 dark:bg-primary/10" as const;
+
+export const SKELETON_PULSE_CLASS = "bg-muted/60 dark:bg-muted/40" as const;
+
+export const SKELETON_DARK_MODE_TOKENS = [
+  "dark:bg-muted/40",
+  "dark:bg-card/80",
+  "dark:border-primary/30",
+  "dark:bg-primary/10",
+] as const;
+
+export const ERROR_SKELETON_DARK_MODE_AUDIT_POLICY_ID =
+  "error-skeleton-dark-mode-audit-des37-v1" as const;
+
+/** Error + skeleton components audited for dark mode (Task 25). */
+export const ERROR_SKELETON_DARK_MODE_MODULES = [
+  "components/feedback/error-state.tsx",
+  "components/feedback/error-state-illustration.tsx",
+  "components/feedback/retryable-error-state.tsx",
+  "components/ui/api-error-state.tsx",
+  "components/dashboard/route-states.tsx",
+  "components/dashboard/pilot-route-states.tsx",
+  "components/feedback/loading-skeleton.tsx",
+  "components/dashboard/today-skeleton.tsx",
+  "components/dashboard/marketplace-skeleton.tsx",
+  "components/dashboard/pos-skeleton.tsx",
+  "components/dashboard/kds-skeleton.tsx",
+] as const;
+
 export const LOADING_SKELETON_PRIMITIVE_PATTERN =
   /PageSkeleton|DashboardPageSkeleton|LoadingSkeleton|TableSkeleton|TodaySkeleton|MarketplaceSkeleton|POSSkeleton|KDSSkeleton/;
 

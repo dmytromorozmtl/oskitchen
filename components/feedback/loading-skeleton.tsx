@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
 import { PageShell } from "@/components/layout/page-shell";
+import { SKELETON_PULSE_CLASS } from "@/lib/design/loading-skeleton-patterns";
 
 export function LoadingSkeleton({ className }: { className?: string }) {
-  return <div className={cn("animate-pulse rounded-xl bg-muted/60", className)} aria-hidden />;
+  return (
+    <div className={cn("animate-pulse rounded-xl", SKELETON_PULSE_CLASS, className)} aria-hidden />
+  );
 }
 
 export function PageSkeleton() {

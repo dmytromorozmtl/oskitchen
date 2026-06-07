@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { LoadingSkeleton } from "@/components/feedback/loading-skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SKELETON_SURFACE_CLASS } from "@/lib/design/loading-skeleton-patterns";
 
 export type KDSSkeletonSection = "board" | "production";
 
@@ -23,7 +24,7 @@ export function KDSSkeleton({
         <LoadingSkeleton className="h-8 w-56" />
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
-            <LoadingSkeleton key={index} className="h-36 w-full rounded-xl" />
+            <LoadingSkeleton key={index} className="h-36 w-full rounded-xl border border-border/60" />
           ))}
         </div>
       </div>
@@ -43,19 +44,13 @@ export function KDSSkeleton({
       </div>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, columnIndex) => (
-          <Card
-            key={columnIndex}
-            className="border-border/80 bg-card/90 shadow-sm dark:bg-card/80"
-          >
+          <Card key={columnIndex} className={cn(SKELETON_SURFACE_CLASS, "shadow-sm")}>
             <CardHeader className="pb-2">
               <LoadingSkeleton className="h-5 w-28" />
             </CardHeader>
             <CardContent className="space-y-2">
               {Array.from({ length: 3 }).map((_, ticketIndex) => (
-                <LoadingSkeleton
-                  key={ticketIndex}
-                  className="h-24 w-full rounded-lg bg-muted/60 dark:bg-muted/40"
-                />
+                <LoadingSkeleton key={ticketIndex} className="h-24 w-full rounded-lg" />
               ))}
             </CardContent>
           </Card>

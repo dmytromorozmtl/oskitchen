@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { LoadingSkeleton } from "@/components/feedback/loading-skeleton";
+import { SKELETON_SURFACE_CLASS } from "@/lib/design/loading-skeleton-patterns";
 
 export type POSSkeletonSection = "hub" | "register";
 
@@ -22,7 +23,7 @@ export function POSSkeleton({
         aria-busy="true"
         aria-label="Loading POS register"
       >
-        <div className="flex min-h-[420px] flex-col gap-3 rounded-xl border border-border/80 bg-card/90 p-3 dark:bg-card/80">
+        <div className={cn("flex min-h-[420px] flex-col gap-3 rounded-xl border p-3", SKELETON_SURFACE_CLASS)}>
           <LoadingSkeleton className="h-10 w-full max-w-md" />
           <div className="grid flex-1 grid-cols-3 gap-2 sm:grid-cols-4">
             {Array.from({ length: 12 }).map((_, index) => (
@@ -30,7 +31,7 @@ export function POSSkeleton({
             ))}
           </div>
         </div>
-        <div className="space-y-3 rounded-xl border border-border/80 bg-card/90 p-3 dark:bg-card/80">
+        <div className={cn("space-y-3 rounded-xl border p-3", SKELETON_SURFACE_CLASS)}>
           <LoadingSkeleton className="h-6 w-24" />
           <LoadingSkeleton className="h-32 w-full" />
           <LoadingSkeleton className="h-11 w-full rounded-full" />
@@ -55,7 +56,7 @@ export function POSSkeleton({
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, index) => (
-          <LoadingSkeleton key={index} className="h-28 w-full rounded-xl" />
+          <LoadingSkeleton key={index} className="h-28 w-full rounded-xl border border-border/60" />
         ))}
       </div>
     </div>

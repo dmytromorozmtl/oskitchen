@@ -1,13 +1,17 @@
 import { cn } from "@/lib/utils";
 import { LoadingSkeleton } from "@/components/feedback/loading-skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  SKELETON_SURFACE_CLASS,
+  SKELETON_WIZARD_SURFACE_CLASS,
+} from "@/lib/design/loading-skeleton-patterns";
 
 export type TodaySkeletonSection = "hero" | "wizard" | "playbook";
 
 function TodayHeroSkeleton() {
   return (
     <Card
-      className="border-border/80 bg-card/90 shadow-sm"
+      className={cn(SKELETON_SURFACE_CLASS, "shadow-sm")}
       data-testid="today-skeleton-hero"
       aria-busy="true"
       aria-label="Loading daily briefing"
@@ -31,7 +35,7 @@ function TodayHeroSkeleton() {
 function TodayWizardSkeleton() {
   return (
     <Card
-      className="border-primary/20 bg-primary/[0.03] shadow-sm"
+      className={SKELETON_WIZARD_SURFACE_CLASS}
       data-testid="today-skeleton-wizard"
       aria-busy="true"
       aria-label="Loading workspace setup"
@@ -52,7 +56,7 @@ function TodayWizardSkeleton() {
 function TodayPlaybookSkeleton() {
   return (
     <Card
-      className="border-border/80 bg-card/90 shadow-sm"
+      className={cn(SKELETON_SURFACE_CLASS, "shadow-sm")}
       data-testid="today-skeleton-playbook"
       aria-busy="true"
       aria-label="Loading operations playbooks"
