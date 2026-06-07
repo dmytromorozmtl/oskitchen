@@ -5994,3 +5994,12 @@ Category: fix
 Result: done — split experiment-otel into init/span/url/state; dynamic import from experiment-trace; instrumentation gates on OTEL env; serverExternalPackages for @opentelemetry/*
 Tests: tests/unit/experiment-otel-lazy-load.test.ts 4/4 pass
 Commit: a401c155
+
+---
+Cycle: 20260606-211500
+Task: 16 — Smoke tests for 18 LIVE integrations (P1)
+Category: test
+Result: done — fleet policy + summary + orchestrator (17 merchant live smokes + Integration Health staging probe); GHA workflow; `.env.smoke.local` staging merchant creds; SKIPPED when creds missing
+Tests: tests/unit/live-integrations-staging-smoke.test.ts 9/9 pass
+Scripts: smoke:live-integrations-staging, test:ci:live-integrations-staging-smoke:cert
+Commit: pending
