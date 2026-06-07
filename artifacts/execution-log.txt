@@ -6763,3 +6763,11 @@ Category: test
 Result: done — slot 111 behavioral tests for COA mapping (default rows, parse/merge, coverage summary, honesty markers, UI wiring, QuickBooks integration); 8 tests
 Tests: npm run test:ci:qa-full-coverage-11-coa-mapping:cert 8/8 pass
 Commit: f2a56e4a
+
+---
+Cycle: 20260607-001400
+Task: 112 — QA full coverage journal entry export (P3)
+Category: test
+Result: done — slot 112 behavioral tests for journal export (COA overlay, balance summary, CSV/JSON/QB formats, honesty markers, UI wiring, API route); 8 tests
+Tests: npm run test:ci:qa-full-coverage-12-journal-export:cert 8/8 pass
+Commit: ca7abd98
