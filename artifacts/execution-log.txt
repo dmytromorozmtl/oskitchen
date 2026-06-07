@@ -6715,3 +6715,11 @@ Category: test
 Result: done — slot 105 behavioral tests for device status dashboard (Clover connectivity mapping, category summary, location grouping, honesty markers, UI wiring, fleet/Stripe service); 8 tests
 Tests: npm run test:ci:qa-full-coverage-05-device-status:cert 8/8 pass
 Commit: beac578f
+
+---
+Cycle: 20260607-000100
+Task: 106 — QA full coverage data migration wizard (P3)
+Category: test
+Result: done — slot 106 behavioral tests for Toast/Square/Lightspeed migration wizard (9 profiles, unmapped columns, upload handoff, honesty markers, wizard steps, CSV templates); 8 tests
+Tests: npm run test:ci:qa-full-coverage-06-data-migration:cert 8/8 pass
+Commit: 5f35d0d8
