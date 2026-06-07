@@ -6915,3 +6915,11 @@ Category: design
 Result: done — hero banner + badge row + ticket card dark-mode polish on kds-driver-eta-screen.tsx, 8 cert tests; estimated ETA/GPS honesty preserved — Design Full Polish 116–130 complete
 Tests: npm run test:ci:design-full-polish-15-driver-eta:cert 8/8 pass
 Commit: c684d5e7
+
+---
+Cycle: 20260607-005900
+Task: 131 — PM marketing full scale multi-currency GTM (P3)
+Category: pm-marketing
+Result: done — PM GTM infrastructure (tokens/policy/audit) + multi-currency-gtm-scale.md playbook with ICP/demo/objections/pricing/CTA, 8 cert tests; Lightspeed/No FX honesty preserved
+Tests: npm run test:ci:pm-marketing-full-scale-01-multi-currency:cert 8/8 pass
+Commit: d372d64a
