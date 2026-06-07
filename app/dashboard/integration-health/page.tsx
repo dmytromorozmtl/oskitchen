@@ -59,6 +59,7 @@ import {
   summarizeIntegrationHealth,
 } from "@/services/developer/integration-health-service";
 import { IntegrationHealthRecoveryFlowProofPanel } from "@/components/dashboard/integration-health/integration-health-recovery-flow-proof-panel";
+import { DeviceStatusDashboardStrip } from "@/components/dashboard/integration-health/device-status-dashboard-strip";
 import { HardwareDeviceFleetPanel } from "@/components/dashboard/integration-health/hardware-device-fleet-panel";
 import { IntegrationHealthRecoveryPanel } from "@/components/dashboard/integration-health-recovery-panel";
 import {
@@ -210,6 +211,7 @@ export default async function IntegrationHealthDashboardPage({
 
       <IntegrationHealthSummaryPanel summary={healthSummary} />
 
+      <DeviceStatusDashboardStrip />
       <HardwareDeviceFleetPanel model={hardwareFleet} />
 
       {channelCards.p0Trust ? (
