@@ -18,6 +18,7 @@ import { SiteFooter } from '@/components/marketing/site-footer';
 import { SiteHeaderClient } from '@/components/marketing/site-header-client';
 import { SolutionComparisonTable } from '@/components/marketing/solution-comparison-table';
 import { SolutionFinalCta } from '@/components/marketing/solution-final-cta';
+import { SyncHealthDashboardMarketing } from '@/components/marketing/sync-health-dashboard-marketing';
 import { SectionHeader } from '@/components/marketing/section-header';
 import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo/schema-org';
@@ -233,6 +234,23 @@ export function IntegrationHealthCenterMarketingLanding() {
             <p className="mt-4 text-sm text-muted-foreground">
               Health scores and playbooks are operational signals — <strong>not guaranteed uptime</strong>.
             </p>
+          </div>
+        </section>
+
+        <SyncHealthDashboardMarketing compact showHeader={false} />
+
+        <section className="border-t border-border/60 py-16 sm:py-20">
+          <SectionHeader
+            tag="Full sync health story"
+            title="Per-channel dashboard — not one green tile"
+            description="See the marketing sync health table at /sync-health or open Integration Health Center in your trial workspace."
+            centered
+            className="mx-auto"
+          />
+          <div className="mt-6 flex justify-center">
+            <MarketingButton href="/sync-health" variant="secondary">
+              View sync health dashboard
+            </MarketingButton>
           </div>
         </section>
 

@@ -4,7 +4,7 @@
 **Audience:** Sales, VP Operations, enterprise support leads  
 **Supersedes:** [`integration-health-sales-deck.md`](./integration-health-sales-deck.md) (May 2026 preview)  
 **Technical:** [`health-scoring-engine.ts`](../services/integration-health/health-scoring-engine.ts) · [`recovery-playbook-service.ts`](../services/integration-health/recovery-playbook-service.ts) · [`/dashboard/integrations/health`](../app/dashboard/integrations/health/page.tsx)  
-**Public surfaces:** [`/integration-health-center`](/integration-health-center) marketing landing · [`/product/integration-health-center`](/product/integration-health-center) product deep-dive
+**Public surfaces:** [`/integration-health-center`](/integration-health-center) marketing landing · [`/sync-health`](/sync-health) per-channel sync health · [`/product/integration-health-center`](/product/integration-health-center) product deep-dive
 
 ---
 

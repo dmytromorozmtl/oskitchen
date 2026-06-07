@@ -6531,3 +6531,10 @@ Category: feat
 Result: done — /own-your-channel 3-step flow (assess → compare → launch); dashboard strip on delivery-commissions; wired from commission calculator; policy + audit
 Tests: npm run test:ci:own-your-channel-upsell:cert 4/4 pass
 Commit: aa858eca
+
+---
+Cycle: 20260606-222100
+Task: 83 — sync health dashboard marketing per channel (P2)
+Category: feat
+Result: done — /sync-health per-channel table; 7 illustrative channels; embedded on IHC marketing landing; sales deck updated; policy + audit
+Tests: npm run test:ci:sync-health-dashboard-marketing:cert 4/4 pass
