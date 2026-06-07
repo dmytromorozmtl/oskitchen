@@ -816,6 +816,8 @@
     "test:ci:owasp-top-10-absolute-final:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-owasp-top-10-security.test.ts",
     "test:ci:competitor-parity-absolute-final": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-competitor-parity-check.test.ts tests/unit/competitor-battle-cards-eight.test.ts tests/unit/competitor-sales-safe-claims.test.ts",
     "test:ci:competitor-parity-absolute-final:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-competitor-parity-check.test.ts",
+    "test:ci:absolute-final-completion": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-completion.test.ts tests/unit/absolute-final-competitor-parity-check.test.ts tests/unit/absolute-final-owasp-top-10-security.test.ts tests/unit/absolute-final-lighthouse-95-performance.test.ts tests/unit/absolute-final-wcag-21-aa-accessibility.test.ts tests/unit/absolute-final-typescript-strict.test.ts",
+    "test:ci:absolute-final-completion:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-completion.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",
