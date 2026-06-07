@@ -6451,3 +6451,10 @@ Category: feat
 Result: done — 9 POS profiles (3 sources × menu/customers/orders); enhanced MigrationWizardClient; CSV templates; policy + audit; migrate page copy
 Tests: npm run test:ci:data-migration-wizard:cert 7/7 pass
 Commit: a7dc8eee
+
+---
+Cycle: 20260606-220200
+Task: 73 — Commission tracking per delivery order (P2)
+Category: feat
+Result: done — /dashboard/analytics/delivery-commissions; per-order commission rows (reported vs estimated benchmark); policy + metrics + audit + service + panel; analytics subnav link
+Tests: npm run test:ci:delivery-commission-tracking:cert 6/6 pass
