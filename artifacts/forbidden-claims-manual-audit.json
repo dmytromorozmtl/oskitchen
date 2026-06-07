@@ -1,0 +1,78 @@
+{
+  "version": "forbidden-claims-manual-audit-absolute-final-v1",
+  "generatedAt": "2026-06-07T00:45:48.813Z",
+  "baselineReconciliation": {
+    "rawMatches": 183,
+    "policyDoc": 121,
+    "negation": 59,
+    "realClaimReviewed": 3,
+    "realClaimRemediated": 3,
+    "note": "Full-repo grep counted policy lists, negated training copy, and 3 marketing-adjacent lines — all remediated or reclassified June 2026."
+  },
+  "liveScan": {
+    "policyId": "forbidden-claims-manual-audit-absolute-final-v1",
+    "totalMatches": 103,
+    "policyDocCount": 102,
+    "negationCount": 1,
+    "realClaimCount": 0,
+    "baselineTotal": 183,
+    "reconciled": true,
+    "passed": true
+  },
+  "topFiles": [
+    {
+      "filePath": "docs/sales-safe-claims-registry.md",
+      "count": 29
+    },
+    {
+      "filePath": "docs/commercial-pilot-runbook.md",
+      "count": 25
+    },
+    {
+      "filePath": "docs/forbidden-claims-training.md",
+      "count": 22
+    },
+    {
+      "filePath": "docs/sales-limitation-sheet.md",
+      "count": 5
+    },
+    {
+      "filePath": "docs/forbidden-claims-manual-audit.md",
+      "count": 3
+    },
+    {
+      "filePath": "docs/investor-narrative-hold.md",
+      "count": 3
+    },
+    {
+      "filePath": "docs/objection-handling.md",
+      "count": 3
+    },
+    {
+      "filePath": "docs/sales-forbidden-claims-training-era20.md",
+      "count": 3
+    },
+    {
+      "filePath": "marketing/forbidden-claims-training.md",
+      "count": 3
+    },
+    {
+      "filePath": "docs/ai-moats-honest-positioning.md",
+      "count": 2
+    },
+    {
+      "filePath": "docs/competitor-comparison-honest.md",
+      "count": 2
+    },
+    {
+      "filePath": "docs/feature-maturity-matrix.md",
+      "count": 2
+    },
+    {
+      "filePath": "components/marketing/trust-maturity-labels-section.tsx",
+      "count": 1
+    }
+  ],
+  "realClaimSamples": [],
+  "scannedFileCount": 106
+}

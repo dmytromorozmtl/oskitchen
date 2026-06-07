@@ -6115,3 +6115,11 @@ Category: feat
 Result: done — PILOT_TIER_NAV_HREFS 20-page allowlist; enterprise/full unfiltered sidebar; isPilotDeepLinkHiddenHref for deep-link banner; .env.example pilot|enterprise|full
 Tests: tests/unit/navigation-release-profile.test.ts + release-navigation + navigation-workflow-ia 12/12 pass
 Commit: 4b7a847e
+
+---
+Cycle: 20260606-223000
+Task: 31 — Forbidden claims manual audit (P1)
+Category: docs
+Result: done — 183 baseline reconciled (121 policy + 59 negation + 3 remediated); liveScan 103 matches, 0 real_claim; forbidden-claims-manual-audit policy + artifact + audit script
+Tests: tests/unit/forbidden-claims-manual-audit.test.ts 5/5 pass
+Commit: pending
