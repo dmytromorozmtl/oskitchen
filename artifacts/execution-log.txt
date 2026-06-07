@@ -6811,3 +6811,11 @@ Category: design
 Result: done — doc polish markers (hero/status/timeline/dark-mode), blockquote hero callout on eu-data-residency-roadmap.md, doc audit branch in design polish gate, 8 cert tests
 Tests: npm run test:ci:design-full-polish-02-eu-data-residency:cert 8/8 pass
 Commit: b3e27882
+
+---
+Cycle: 20260607-003300
+Task: 118 — Design full polish regional tax compliance (P3)
+Category: design
+Result: done — doc polish markers on regional-tax-compliance.md (hero/status/timeline/dark-mode blockquote), 8 cert tests; jurisdiction modes + gap regions preserved
+Tests: npm run test:ci:design-full-polish-03-regional-tax:cert 8/8 pass
+Commit: 5502a022
