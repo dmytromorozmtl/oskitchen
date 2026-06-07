@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { CreditCard, Minus, Percent, Plus, ShoppingCart, Tag, UserRound, Wifi, WifiOff } from "lucide-react";
+import { Tag, Wifi, WifiOff } from "lucide-react";
 
 import { posCheckoutAction } from "@/actions/pos";
 import {
@@ -18,11 +18,7 @@ import {
 import { QuickOrderButtons, type QuickOrderItem } from "@/components/pos/quick-order-buttons";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
-  posCheckoutButtonClass,
   posTouchCompactClass,
-  posTouchInputClass,
-  posTouchSelectClass,
-  posTouchSelectLargeClass,
   posTouchTileClass,
 } from "@/lib/pos/touch-targets";
 import {
@@ -33,8 +29,6 @@ import {
 } from "@/lib/pos/pos-checkout-status";
 import {
   StripeTerminalProvider,
-  StripeTerminalReaderPanel,
-  StripeTerminalCheckout,
 } from "@/components/pos/stripe-terminal-reader";
 import { posQuickCreateKitchenCustomerAction, posSearchKitchenCustomersAction } from "@/actions/pos-terminal-customers";
 import { POS_OFFLINE_LIMITATIONS } from "@/lib/pos/pos-offline";
@@ -64,7 +58,6 @@ import {
   filterPosTerminalPaymentModes,
   parsePosTerminalFixedDiscountInput,
   parsePosTerminalPercentDiscountInput,
-  POS_TERMINAL_DISCOUNT_PERCENT_PRESETS,
   type PosTerminalDiscountMode,
 } from "@/lib/pos/pos-terminal-discount-ui";
 import {
@@ -78,10 +71,6 @@ import {
 } from "@/lib/pos/pos-cashier-speed-mode-era19";
 import { POS_CASHIER_SPEED_MODE_ALL_CATEGORY } from "@/lib/pos/pos-cashier-speed-mode-era19-policy";
 import {
-  posTerminalDecreaseQuantityLabel,
-  posTerminalIncreaseQuantityLabel,
-} from "@/lib/pos/pos-terminal-icon-button-labels";
-import {
   matchPosShortcut,
   quickAddIndexFromAction,
 } from "@/lib/keyboard/shortcuts";
@@ -91,70 +80,40 @@ import {
 } from "@/lib/pos/pos-multi-monitor";
 import { PosDesktopShortcutsOverlay } from "@/components/pos/pos-desktop-shortcuts-overlay";
 import { PosDesktopToolbar } from "@/components/pos/pos-desktop-toolbar";
-import { PosManagerOverrideChecklist } from "@/components/dashboard/pos-manager-override-checklist";
-import { PosManagerOverrideHero } from "@/components/dashboard/pos-manager-override-hero";
+import { CartPanel } from "@/components/dashboard/pos-terminal/cart-panel";
+import { ModifierPanel } from "@/components/dashboard/pos-terminal/modifier-panel";
+import { PaymentPanel } from "@/components/dashboard/pos-terminal/payment-panel";
+import { ReceiptPanel } from "@/components/dashboard/pos-terminal/receipt-panel";
+import {
+  type PosCustomerPick,
+  type PosTerminalCartLine,
+  type PosTerminalProduct,
+  type PosTerminalRecentCustomer,
+  type PosTerminalRegister,
+  type PosTerminalStaff,
+} from "@/components/dashboard/pos-terminal/pos-terminal-types";
 import {
   shouldShowPosManagerOverrideHero,
   type PosManagerOverrideChecklistInput,
 } from "@/lib/pos/pos-manager-override-clarity-era19";
 import { POS_MANAGER_OVERRIDE_ANCHOR } from "@/lib/pos/pos-manager-override-clarity-era19-policy";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  posTabletCartPanelClass,
   posTabletMainLayoutClass,
   type TabletOrientation,
 } from "@/lib/pos/pos-tablet-layout";
 import { cn } from "@/lib/utils";
 import { fireCelebrationConfetti } from "@/components/ui/celebration-confetti";
 
-export type PosTerminalProduct = {
-  id: string;
-  title: string;
-  price: number;
-  category: string;
-  barcode: string | null;
-  image: string | null;
-};
+export type {
+  PosTerminalProduct,
+  PosTerminalRegister,
+  PosTerminalStaff,
+  PosTerminalRecentCustomer,
+} from "@/components/dashboard/pos-terminal/pos-terminal-types";
 
-export type PosTerminalRegister = {
-  id: string;
-  name: string;
-  location: { id: string; name: string } | null;
-};
-
-export type PosTerminalStaff = { id: string; name: string };
-
-export type PosTerminalRecentCustomer = {
-  id: string;
-  email: string;
-  label: string;
-  phone: string | null;
-};
-
-type PosCustomerPick = {
-  id: string;
-  email: string;
-  label: string;
-  phone: string | null;
-};
-
-type CartLine = {
-  key: string;
-  productId?: string;
-  title: string;
-  quantity: number;
-  unitPrice: number;
-};
+type CartLine = PosTerminalCartLine;
 
 export function PosTerminalClient(props: {
   registers: PosTerminalRegister[];
@@ -1017,644 +976,153 @@ export function PosTerminalClient(props: {
         </div>
       </div>
 
-      <Card className={posTabletCartPanelClass(layoutOrientation, tabletMode)}>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-xl">
-            <ShoppingCart className="h-5 w-5" />
-            Cart
-          </CardTitle>
-          <CardDescription>
-            {speedMode
-              ? "Speed mode — register, cart, and complete sale first."
-              : "Large tap targets for counter service."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label>Register</Label>
-            <Select value={registerId} onValueChange={setRegisterId}>
-              <SelectTrigger className={posTouchSelectLargeClass}>
-                <SelectValue placeholder="Choose register" />
-              </SelectTrigger>
-              <SelectContent>
-                {props.registers.map((r) => (
-                  <SelectItem key={r.id} value={r.id}>
-                    {r.name}
-                    {r.location ? ` · ${r.location.name}` : ""}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Staff member</Label>
-            <Select value={staffId} onValueChange={setStaffId}>
-              <SelectTrigger className={posTouchSelectLargeClass}>
-                <SelectValue placeholder="Staff on sale" />
-              </SelectTrigger>
-              <SelectContent>
-                {props.staff.map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {customerAttachEnabled && showSecondaryPanels ? (
-          <div className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3">
-            <div className="flex items-center justify-between gap-2">
-              <Label className="flex items-center gap-2">
-                <UserRound className="h-4 w-4 text-muted-foreground" aria-hidden />
-                Customer
-              </Label>
-              <Button
-                variant="link"
-                className={cn("text-xs", posTouchCompactClass)}
-                asChild
-              >
-                <Link href="/dashboard/customers">CRM</Link>
-              </Button>
-            </div>
-
-            {selectedCustomer ? (
-              <div className="space-y-2">
-                <div className="flex items-start justify-between gap-2 rounded-lg border border-border/60 bg-background/80 px-3 py-2">
-                  <div className="min-w-0">
-                    <p className="truncate font-medium leading-tight">{selectedCustomer.label}</p>
-                    <p className="truncate text-xs text-muted-foreground">{selectedCustomer.email}</p>
-                  </div>
-                  <div className="flex shrink-0 flex-col gap-1">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className={cn("rounded-lg text-xs", posTouchCompactClass)}
-                      onClick={() => {
-                        setSelectedCustomer(null);
-                        setCustomerQuery("");
-                        setSearchHits([]);
-                        setCustomerProfileNotice(null);
-                      }}
-                    >
-                      Walk-in
-                    </Button>
-                  </div>
-                </div>
-                {customerProfileNotice ? (
-                  <p className="rounded-lg bg-background/60 px-3 py-2 text-xs leading-snug text-muted-foreground">
-                    {customerProfileNotice}
-                  </p>
-                ) : null}
-              </div>
-            ) : (
-              <>
-                <p className="text-xs text-muted-foreground">
-                  Optional — attach this sale to a CRM profile for history and receipts.
-                </p>
-                <Input
-                  ref={customerSearchRef}
-                  data-testid="pos-customer-query"
-                  value={customerQuery}
-                  onChange={(e) => setCustomerQuery(e.target.value)}
-                  placeholder="Search name, email, or phone…"
-                  className="h-11 rounded-lg text-sm"
-                  autoComplete="off"
-                />
-                {searchingCustomer ? (
-                  <p className="text-xs text-muted-foreground">Searching…</p>
-                ) : null}
-                {customerSearchError ? (
-                  <p className="text-xs text-destructive">{customerSearchError}</p>
-                ) : null}
-                {searchHits.length ? (
-                  <div className="max-h-40 space-y-1 overflow-y-auto">
-                    {searchHits.map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        data-testid={`pos-customer-select-${c.id}`}
-                        className={`flex w-full ${posTouchCompactClass} flex-col rounded-lg border border-border/60 bg-background/90 px-3 py-2 text-left text-sm transition hover:border-primary/40`}
-                        onClick={() => {
-                          setSelectedCustomer(c);
-                          setCustomerQuery("");
-                          setSearchHits([]);
-                          setQuickCustomerError(null);
-                          setCustomerProfileNotice(null);
-                        }}
-                      >
-                        <span className="font-medium leading-tight">{c.label}</span>
-                        <span className="text-xs text-muted-foreground">{c.email}</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : customerQuery.trim().length >= 2 && !searchingCustomer ? (
-                  <p className="text-xs text-muted-foreground">No matches — try another term or create below.</p>
-                ) : null}
-
-                {recentCustomers.length ? (
-                  <div className="space-y-1.5">
-                    <p className="text-xs font-medium text-muted-foreground">Recent</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {recentCustomers.map((c) => (
-                        <Button
-                          key={c.id}
-                          type="button"
-                          variant="secondary"
-                          size="sm"
-                          className={cn(
-                            "max-w-[11rem] truncate rounded-full px-3 text-xs font-normal",
-                            posTouchCompactClass,
-                          )}
-                          title={c.email}
-                          onClick={() => {
-                            setSelectedCustomer({
-                              id: c.id,
-                              email: c.email,
-                              label: c.label,
-                              phone: c.phone,
-                            });
-                            setQuickCustomerError(null);
-                            setCustomerProfileNotice(null);
-                          }}
-                        >
-                          {c.label}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-
-                <div className="space-y-2 border-t border-border/50 pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className={cn("w-full rounded-lg text-xs", posTouchCompactClass)}
-                    onClick={() => {
-                      setShowQuickCustomer((v) => !v);
-                      setQuickCustomerError(null);
-                    }}
-                  >
-                    {showQuickCustomer ? "Hide quick add" : "Quick new customer"}
-                  </Button>
-                  {showQuickCustomer ? (
-                    <div className="space-y-2">
-                      <Input
-                        value={quickName}
-                        onChange={(e) => setQuickName(e.target.value)}
-                        placeholder="Name"
-                        className="h-11 rounded-lg text-sm"
-                        autoComplete="name"
-                      />
-                      <Input
-                        value={quickEmail}
-                        onChange={(e) => setQuickEmail(e.target.value)}
-                        placeholder="Email (required)"
-                        type="email"
-                        className="h-11 rounded-lg text-sm"
-                        autoComplete="email"
-                      />
-                      <Input
-                        value={quickPhone}
-                        onChange={(e) => setQuickPhone(e.target.value)}
-                        placeholder="Phone (optional)"
-                        className="h-11 rounded-lg text-sm"
-                        autoComplete="tel"
-                      />
-                      {quickCustomerError ? (
-                        <p className="text-xs text-destructive">{quickCustomerError}</p>
-                      ) : null}
-                      <Button
-                        type="button"
-                        className="h-11 w-full rounded-lg text-sm"
-                        disabled={quickCustomerPending}
-                        data-testid="pos-customer-quick-create"
-                        onClick={() => {
-                          setQuickCustomerError(null);
-                          startQuickCustomer(async () => {
-                            const res = await posQuickCreateKitchenCustomerAction({
-                              name: quickName.trim(),
-                              email: quickEmail.trim(),
-                              phone: quickPhone.trim(),
-                            });
-                            if (!res.ok) {
-                              setQuickCustomerError(res.error);
-                              return;
-                            }
-                            setSelectedCustomer({
-                              id: res.customer.id,
-                              email: res.customer.email,
-                              label: res.customer.label,
-                              phone: res.customer.phone,
-                            });
-                            setCustomerProfileNotice(
-                              res.mergedFromExisting
-                                ? "This email already had a CRM profile — we linked that record. Empty fields were filled only where your rules allow."
-                                : "New CRM profile created and linked to this sale.",
-                            );
-                            setQuickName("");
-                            setQuickEmail("");
-                            setQuickPhone("");
-                            setShowQuickCustomer(false);
-                          });
-                        }}
-                      >
-                        {quickCustomerPending ? "Saving…" : "Create and attach"}
-                      </Button>
-                    </div>
-                  ) : null}
-                </div>
-              </>
-            )}
-          </div>
-          ) : (
-            <div className="rounded-lg border border-dashed border-border/60 bg-muted/20 px-3 py-2 text-xs text-muted-foreground leading-relaxed">
-              Linking counter sales to saved CRM customers requires the{" "}
-              <span className="font-medium text-foreground">customer CRM</span> entitlement. Walk-in
-              checkout is unchanged.
-            </div>
-          )}
-
-          <div className="rounded-xl border border-dashed border-border/80 bg-muted/30 px-3 py-2 text-sm">
-            <p className="font-medium">Shift</p>
-            <p className="text-muted-foreground">
-              {shiftId ? `Open shift ${shiftId.slice(0, 8)}…` : "No open shift — cash variance tracking optional."}
-            </p>
-          </div>
-          <div className="space-y-2">
-            <Label>Fulfillment</Label>
-            <Select value={fulfillment} onValueChange={(v) => setFulfillment(v as typeof fulfillment)}>
-              <SelectTrigger className={posTouchSelectLargeClass}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PICKUP">Pickup</SelectItem>
-                <SelectItem value="DINE_IN">Dine-in</SelectItem>
-                <SelectItem value="DELIVERY">Delivery</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Payment</Label>
-            <Select value={paymentMode} onValueChange={(v) => setPaymentMode(v as PaymentModeKey)}>
-              <SelectTrigger className={posTouchSelectLargeClass}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {availablePaymentModes.map((k) => (
-                  <SelectItem key={k} value={k}>
-                    {PAYMENT_MODE_LABEL[k]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {paymentMode === "CARD_TERMINAL_PLACEHOLDER" ? (
-              <StripeTerminalReaderPanel compact className="mt-2" />
-            ) : null}
-            {paymentMode === "OFFLINE_CARD_QUEUED" ? (
-              <div className="mt-2 space-y-2 rounded-lg border border-dashed p-3" data-testid="offline-card-fields">
-                <p className="text-xs text-muted-foreground">
-                  PCI-safe offline card — last4 and brand only. Full capture when Stripe Terminal is online.
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-xs">Last 4 digits</Label>
-                    <Input
-                      inputMode="numeric"
-                      maxLength={4}
-                      value={offlineCardLast4}
-                      onChange={(e) => setOfflineCardLast4(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                      placeholder="4242"
-                      data-testid="offline-card-last4"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Brand</Label>
-                    <Select value={offlineCardBrand} onValueChange={setOfflineCardBrand}>
-                      <SelectTrigger className={posTouchSelectClass}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="visa">Visa</SelectItem>
-                        <SelectItem value="mastercard">Mastercard</SelectItem>
-                        <SelectItem value="amex">Amex</SelectItem>
-                        <SelectItem value="discover">Discover</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-            {!canApplyPosDiscount ? (
-              <p className="text-xs text-muted-foreground">
-                Discounts and comps require manager approval (`pos.discount.apply`).
-              </p>
-            ) : null}
-          </div>
-
-          {showSecondaryPanels ? (
-          <div
-            id={POS_MANAGER_OVERRIDE_ANCHOR}
-            className="space-y-3 rounded-xl border border-border/70 bg-muted/15 p-3 scroll-mt-24"
-          >
-            <PosManagerOverrideChecklist {...managerOverrideInput} />
-            {showManagerOverrideHero ? <PosManagerOverrideHero {...managerOverrideInput} /> : null}
-            <div className="flex items-center justify-between gap-2">
-              <Label className="flex items-center gap-2">
-                <Tag className="h-4 w-4 text-muted-foreground" aria-hidden />
-                Manager discount
-              </Label>
-              {canApplyPosDiscount && (discountMode !== "none" || paymentMode === "COMPED") ? (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className={cn("text-xs", posTouchCompactClass)}
-                  onClick={() => {
-                    resetDiscountState();
-                    if (paymentMode === "COMPED") setPaymentMode("CASH");
-                  }}
-                >
-                  Clear
-                </Button>
-              ) : null}
-            </div>
-
-            {canApplyPosDiscount ? (
-              <>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    variant={discountMode === "fixed" ? "default" : "outline"}
-                    size="sm"
-                    className={cn("rounded-full", posTouchCompactClass)}
-                    data-testid="pos-discount-mode-fixed"
-                    onClick={() => {
-                      setDiscountMode("fixed");
-                      if (paymentMode === "COMPED") setPaymentMode("CASH");
-                    }}
-                  >
-                    $ Amount
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={discountMode === "percent" ? "default" : "outline"}
-                    size="sm"
-                    className={cn("rounded-full", posTouchCompactClass)}
-                    data-testid="pos-discount-mode-percent"
-                    onClick={() => {
-                      setDiscountMode("percent");
-                      if (paymentMode === "COMPED") setPaymentMode("CASH");
-                    }}
-                  >
-                    <Percent className="mr-1 h-3.5 w-3.5" aria-hidden />
-                    Percent
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={paymentMode === "COMPED" ? "default" : "outline"}
-                    size="sm"
-                    className={cn("rounded-full", posTouchCompactClass)}
-                    data-testid="pos-discount-comp-sale"
-                    onClick={() => {
-                      setPaymentMode("COMPED");
-                      resetDiscountState();
-                    }}
-                  >
-                    Comp sale
-                  </Button>
-                </div>
-
-                {discountMode === "fixed" && paymentMode !== "COMPED" ? (
-                  <div className="space-y-1">
-                    <Input
-                      data-testid="pos-discount-fixed-input"
-                      value={fixedDiscountInput}
-                      onChange={(e) => setFixedDiscountInput(e.target.value)}
-                      placeholder="Discount amount (e.g. 5.00)"
-                      inputMode="decimal"
-                      className="h-11 rounded-lg text-sm"
-                    />
-                    {fixedDiscountInvalid ? (
-                      <p className="text-xs text-destructive">Enter a valid discount amount.</p>
-                    ) : null}
-                  </div>
-                ) : null}
-
-                {discountMode === "percent" && paymentMode !== "COMPED" ? (
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap gap-1.5">
-                      {POS_TERMINAL_DISCOUNT_PERCENT_PRESETS.map((pct) => (
-                        <Button
-                          key={pct}
-                          type="button"
-                          variant="secondary"
-                          size="sm"
-                          className={cn("rounded-full px-3", posTouchCompactClass)}
-                          data-testid={`pos-discount-preset-${pct}`}
-                          onClick={() => setPercentDiscountInput(String(pct))}
-                        >
-                          {pct}%
-                        </Button>
-                      ))}
-                    </div>
-                    <Input
-                      data-testid="pos-discount-percent-input"
-                      value={percentDiscountInput}
-                      onChange={(e) => setPercentDiscountInput(e.target.value)}
-                      placeholder="Custom percent (0–100)"
-                      inputMode="decimal"
-                      className="h-11 rounded-lg text-sm"
-                    />
-                    {percentDiscountInvalid ? (
-                      <p className="text-xs text-destructive">Enter a percent between 0 and 100.</p>
-                    ) : null}
-                  </div>
-                ) : null}
-
-                {paymentMode === "COMPED" ? (
-                  <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
-                    Comp mode — entire sale recorded as manager-approved comp.
-                  </p>
-                ) : null}
-              </>
-            ) : (
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Ask a manager to sign in or grant <span className="font-medium">POS discount apply</span>{" "}
-                to comp items or apply checkout discounts on this register.
-              </p>
-            )}
-          </div>
-          ) : null}
-
-          <div className={cn("max-h-72 space-y-3 overflow-y-auto pr-1", pending && "opacity-60")}>
-            {pending ? (
-              <div className="space-y-2" aria-hidden>
-                <div className="h-16 animate-pulse rounded-xl bg-muted" />
-                <div className="h-16 animate-pulse rounded-xl bg-muted" />
-              </div>
-            ) : null}
-            {cart.map((line) => (
-              <div
-                key={line.key}
-                className="flex items-start justify-between gap-2 rounded-xl border border-border/70 bg-background/80 p-3"
-              >
-                <div>
-                  <p className="font-medium leading-snug">{line.title}</p>
-                  <p className="text-xs text-muted-foreground">${line.unitPrice.toFixed(2)} each</p>
-                </div>
-                <div className="flex flex-wrap items-center justify-end gap-1">
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    className={posTouchCompactClass}
-                    aria-label={posTerminalDecreaseQuantityLabel(line.title)}
-                    onClick={() => bump(line.key, -1)}
-                  >
-                    <Minus className="h-4 w-4" aria-hidden />
-                  </Button>
-                  <span className="w-8 text-center text-base font-semibold">{line.quantity}</span>
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    className={posTouchCompactClass}
-                    aria-label={posTerminalIncreaseQuantityLabel(line.title)}
-                    onClick={() => bump(line.key, 1)}
-                  >
-                    <Plus className="h-4 w-4" aria-hidden />
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    className={cn("text-destructive", posTouchCompactClass)}
-                    onClick={() => removeLine(line.key)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))}
-            {!cart.length ? (
-              <EmptyState
-                icon={ShoppingCart}
-                variant="inline"
-                title="Cart is empty"
-                description="Tap a product tile to start a sale."
-                showDemoLink={false}
-              />
-            ) : null}
-          </div>
-
-          <div className="rounded-xl border border-border/80 bg-muted/20 px-3 py-3 text-sm">
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span className="font-medium tabular-nums">${cartTotal.toFixed(2)}</span>
-            </div>
-            {appliedDiscountAmount > 0 ? (
-              <div className="mt-1 flex items-center justify-between gap-2 text-emerald-700 dark:text-emerald-300">
-                <span>Discount</span>
-                <span className="font-medium tabular-nums">−${appliedDiscountAmount.toFixed(2)}</span>
-              </div>
-            ) : null}
-            <div className="mt-2 flex items-center justify-between gap-2 border-t border-border/60 pt-2">
-              <span className="font-semibold">Amount due</span>
-              <span className="text-lg font-semibold tabular-nums">${amountDue.toFixed(2)}</span>
-            </div>
-          </div>
-
-          {showSecondaryPanels ? (
-          <div className="grid gap-2 sm:grid-cols-2">
-            <div>
-              <Label className="text-xs">Redeem loyalty points</Label>
-              <Input
-                value={loyaltyPointsRedeem}
-                onChange={(e) => setLoyaltyPointsRedeem(e.target.value)}
-                placeholder="e.g. 100"
-                className={cn("rounded-xl", posTouchInputClass)}
-                disabled={!selectedCustomer}
-              />
-              {selectedCustomer && loyaltyBalance != null ? (
-                <p className="mt-1 text-xs text-muted-foreground">{loyaltyBalance} points available</p>
-              ) : null}
-            </div>
-            <div>
-              <Label className="text-xs">Gift card code</Label>
-              <Input
-                value={giftCardCode}
-                onChange={(e) => setGiftCardCode(e.target.value.toUpperCase())}
-                placeholder="GC-XXXX"
-                className={cn("rounded-xl font-mono uppercase", posTouchInputClass)}
-              />
-              {giftCardBalance != null ? (
-                <p className="mt-1 text-xs text-muted-foreground">${giftCardBalance.toFixed(2)} balance</p>
-              ) : null}
-            </div>
-          </div>
-          ) : null}
-
-          {checkoutStatus ? (
-            <p
-              className={posCheckoutStatusClassName(checkoutStatus.kind)}
-              role="status"
-              aria-live="polite"
-              data-testid="pos-checkout-status"
-            >
-              {checkoutStatus.text}
-            </p>
-          ) : null}
-
-          {pendingTerminal ? (
-            <StripeTerminalCheckout
-              amount={pendingTerminal.amount}
-              orderId={pendingTerminal.orderId}
-              onSuccess={() => {
-                const orderRef = pendingTerminal.orderId.slice(0, 8);
-                setPendingTerminal(null);
-                showCheckoutStatus(`Card payment captured — order ${orderRef}…`, "success");
-              }}
-              onError={(error) => showCheckoutStatus(error, "error")}
-            />
-          ) : null}
-
-          <div
-            className={cn(
-              speedMode &&
-                "sticky bottom-2 z-10 rounded-2xl border border-border/70 bg-card/95 p-2 shadow-lg backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none",
-            )}
-          >
-          <Button
-            type="button"
-            data-testid="pos-complete-sale"
-            className={cn(
-              posCheckoutButtonClass,
-              speedMode && "min-h-16 h-16 text-xl",
-            )}
-            disabled={pending}
-            onClick={() => checkout()}
-          >
-            <CreditCard className="mr-2 h-5 w-5" />
-            {pending ? "Submitting…" : speedMode ? "Complete sale — speed" : "Complete sale"}
-          </Button>
-          </div>
-          {!speedMode ? (
-          <p className="text-xs text-muted-foreground">
-            Cash and comp modes record operational intent only. Select{" "}
-            <span className="font-medium text-foreground">Card terminal</span> to use Stripe Terminal
-            tap-to-pay when configured.
-          </p>
-          ) : (
-          <p className="text-xs text-muted-foreground">
-            Speed mode hides CRM, discounts, and loyalty — switch to standard layout for full controls.
-          </p>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+      <CartPanel
+        speedMode={speedMode}
+        tabletMode={tabletMode}
+        layoutOrientation={layoutOrientation}
+        registers={props.registers}
+        staff={props.staff}
+        registerId={registerId}
+        staffId={staffId}
+        shiftId={shiftId}
+        fulfillment={fulfillment}
+        cart={cart}
+        pending={pending}
+        customerAttachEnabled={customerAttachEnabled}
+        showSecondaryPanels={showSecondaryPanels}
+        recentCustomers={recentCustomers}
+        selectedCustomer={selectedCustomer}
+        customerQuery={customerQuery}
+        searchHits={searchHits}
+        searchingCustomer={searchingCustomer}
+        customerSearchError={customerSearchError}
+        customerProfileNotice={customerProfileNotice}
+        showQuickCustomer={showQuickCustomer}
+        quickName={quickName}
+        quickEmail={quickEmail}
+        quickPhone={quickPhone}
+        quickCustomerError={quickCustomerError}
+        quickCustomerPending={quickCustomerPending}
+        customerSearchRef={customerSearchRef}
+        onRegisterChange={setRegisterId}
+        onStaffChange={setStaffId}
+        onFulfillmentChange={setFulfillment}
+        onBumpLine={bump}
+        onRemoveLine={removeLine}
+        onCustomerQueryChange={setCustomerQuery}
+        onSelectCustomer={(c) => {
+          setSelectedCustomer(c);
+          setCustomerQuery("");
+          setSearchHits([]);
+          setQuickCustomerError(null);
+          setCustomerProfileNotice(null);
+        }}
+        onClearCustomer={() => {
+          setSelectedCustomer(null);
+          setCustomerQuery("");
+          setSearchHits([]);
+          setCustomerProfileNotice(null);
+        }}
+        onToggleQuickCustomer={() => {
+          setShowQuickCustomer((v) => !v);
+          setQuickCustomerError(null);
+        }}
+        onQuickNameChange={setQuickName}
+        onQuickEmailChange={setQuickEmail}
+        onQuickPhoneChange={setQuickPhone}
+        onQuickCreateCustomer={() => {
+          setQuickCustomerError(null);
+          startQuickCustomer(async () => {
+            const res = await posQuickCreateKitchenCustomerAction({
+              name: quickName.trim(),
+              email: quickEmail.trim(),
+              phone: quickPhone.trim(),
+            });
+            if (!res.ok) {
+              setQuickCustomerError(res.error);
+              return;
+            }
+            setSelectedCustomer({
+              id: res.customer.id,
+              email: res.customer.email,
+              label: res.customer.label,
+              phone: res.customer.phone,
+            });
+            setCustomerProfileNotice(
+              res.mergedFromExisting
+                ? "This email already had a CRM profile — we linked that record. Empty fields were filled only where your rules allow."
+                : "New CRM profile created and linked to this sale.",
+            );
+            setQuickName("");
+            setQuickEmail("");
+            setQuickPhone("");
+            setShowQuickCustomer(false);
+          });
+        }}
+        paymentPanel={
+          <PaymentPanel
+            availablePaymentModes={availablePaymentModes}
+            paymentMode={paymentMode}
+            canApplyPosDiscount={canApplyPosDiscount}
+            showSecondaryPanels={showSecondaryPanels}
+            offlineCardLast4={offlineCardLast4}
+            offlineCardBrand={offlineCardBrand}
+            selectedCustomer={selectedCustomer}
+            loyaltyPointsRedeem={loyaltyPointsRedeem}
+            giftCardCode={giftCardCode}
+            loyaltyBalance={loyaltyBalance}
+            giftCardBalance={giftCardBalance}
+            onPaymentModeChange={setPaymentMode}
+            onOfflineCardLast4Change={setOfflineCardLast4}
+            onOfflineCardBrandChange={setOfflineCardBrand}
+            onLoyaltyPointsRedeemChange={setLoyaltyPointsRedeem}
+            onGiftCardCodeChange={setGiftCardCode}
+          />
+        }
+        modifierPanel={
+          <ModifierPanel
+            showSecondaryPanels={showSecondaryPanels}
+            canApplyPosDiscount={canApplyPosDiscount}
+            managerOverrideInput={managerOverrideInput}
+            showManagerOverrideHero={showManagerOverrideHero}
+            discountMode={discountMode}
+            paymentMode={paymentMode}
+            fixedDiscountInput={fixedDiscountInput}
+            percentDiscountInput={percentDiscountInput}
+            fixedDiscountInvalid={fixedDiscountInvalid}
+            percentDiscountInvalid={percentDiscountInvalid}
+            onResetDiscount={resetDiscountState}
+            onDiscountModeChange={setDiscountMode}
+            onFixedDiscountInputChange={setFixedDiscountInput}
+            onPercentDiscountInputChange={setPercentDiscountInput}
+            onCompSale={() => {
+              setPaymentMode("COMPED");
+              resetDiscountState();
+            }}
+            onClearCompIfNeeded={() => {
+              if (paymentMode === "COMPED") setPaymentMode("CASH");
+            }}
+          />
+        }
+        receiptPanel={
+          <ReceiptPanel
+            cartTotal={cartTotal}
+            appliedDiscountAmount={appliedDiscountAmount}
+            amountDue={amountDue}
+            speedMode={speedMode}
+            pending={pending}
+            checkoutStatus={checkoutStatus}
+            pendingTerminal={pendingTerminal}
+            onCheckout={checkout}
+            onTerminalSuccess={() => {
+              const orderRef = pendingTerminal!.orderId.slice(0, 8);
+              setPendingTerminal(null);
+              showCheckoutStatus(`Card payment captured — order ${orderRef}…`, "success");
+            }}
+            onTerminalError={(error) => showCheckoutStatus(error, "error")}
+          />
+        }
+      />    </div>
     </div>
     </StripeTerminalProvider>
   );

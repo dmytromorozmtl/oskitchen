@@ -6155,3 +6155,11 @@ Category: feat
 Result: done — verified PLAN_REGISTRY $49/$79/$199/$499 sync; PricingCompetitorBenchmark on /pricing (Toast/Square/Lightspeed/TouchBistro); pricing-competitor-benchmark + pricing-transparency-absolute-final-policy; fixed transparent-pricing-sales-guide Starter $49
 Tests: npm run test:ci:pricing-transparency-absolute-final 8/8 pass
 Commit: f3c0ac39
+
+---
+Cycle: 20260606-225500
+Task: 36 — Split pos-terminal-client 1655→4 panel files (P2)
+Category: perf
+Result: done — extracted CartPanel (350L), PaymentPanel (121L), ModifierPanel (156L), ReceiptPanel (86L) + pos-terminal-types.ts; pos-terminal-client.tsx 1152L with slot composition; pos-terminal-split-policy + index barrel; fixed maintenance-guardrails-footer.tsx syntax
+Tests: npm run test:ci:pos-terminal-split 4/4 pass
+Commit: pending

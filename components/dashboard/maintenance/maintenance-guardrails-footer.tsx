@@ -6,9 +6,8 @@ import type { MaintenancePanelContext } from "@/components/dashboard/maintenance
 export function MaintenanceGuardrailsFooter({ slice, isCompact, isPlatform }: MaintenancePanelContext) {
   if (isCompact) return null;
   return (
-{!isCompact ? (
-  <>
-    <div className="rounded-lg border border-dashed px-3 py-2 text-xs">
+    <>
+      <div className="rounded-lg border border-dashed px-3 py-2 text-xs">
       <p className="font-medium">Guardrails (never)</p>
       <ul className="mt-2 list-disc space-y-1 pl-4 opacity-90">
         {slice.guardrails.map((rule) => (
@@ -58,7 +57,6 @@ export function MaintenanceGuardrailsFooter({ slice, isCompact, isPlatform }: Ma
         <Link href={slice.orderHubHref}>Order Hub</Link>
       </Button>
     </div>
-  </>
-) : null}
+    </>
   );
 }
