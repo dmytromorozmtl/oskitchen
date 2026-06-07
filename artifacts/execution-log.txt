@@ -6107,3 +6107,11 @@ Category: docs
 Result: done — salesSafeCompetitorClaims for Toast/Square/Lightspeed/Clover/TouchBistro/Revel/SpotOn/Olo; competitor-sales-safe-claims-policy + auditReconciliation 8/8
 Tests: tests/unit/competitor-sales-safe-claims.test.ts + competitor-feature-tracker-filled 6/6 pass
 Commit: 0fd08c5b
+
+---
+Cycle: 20260606-222500
+Task: 30 — Navigation release profile Pilot/Enterprise (P1)
+Category: feat
+Result: done — PILOT_TIER_NAV_HREFS 20-page allowlist; enterprise/full unfiltered sidebar; isPilotDeepLinkHiddenHref for deep-link banner; .env.example pilot|enterprise|full
+Tests: tests/unit/navigation-release-profile.test.ts + release-navigation + navigation-workflow-ia 12/12 pass
+Commit: pending

@@ -1,8 +1,17 @@
 import type { NavGroupDef } from "@/lib/navigation/nav-types";
 
+import {
+  filterNavGroupsForPilotTier,
+  isPilotDeepLinkHiddenHref,
+  isPilotTierNavHref,
+  PILOT_TIER_NAV_HREFS,
+} from "@/lib/navigation/navigation-release-profile-policy";
+
+export { PILOT_TIER_NAV_HREFS, isPilotTierNavHref };
+
 /**
- * Secondary / deep modules hidden for **pilot** navigation profile to reduce shallow-surface risk.
- * Routes remain reachable by direct URL and module preferences — this only affects the default sidebar IA.
+ * @deprecated Prefer `isPilotDeepLinkHiddenHref` — pilot tier uses a 20-page allowlist.
+ * Kept for deep-link banner + legacy docs; true when href is outside pilot allowlist.
  */
 export const PILOT_HIDDEN_HREF_PREFIXES: readonly string[] = [
   "/dashboard/forecast",
@@ -24,17 +33,9 @@ export const PILOT_HIDDEN_HREF_PREFIXES: readonly string[] = [
 ];
 
 export function isPilotHiddenHref(href: string): boolean {
-  const h = href.endsWith("/") && href.length > 1 ? href.slice(0, -1) : href;
-  return PILOT_HIDDEN_HREF_PREFIXES.some(
-    (p) => h === p || h.startsWith(`${p}/`),
-  );
+  return isPilotDeepLinkHiddenHref(href);
 }
 
 export function filterNavGroupsForPilotRelease(groups: NavGroupDef[]): NavGroupDef[] {
-  return groups
-    .map((g) => ({
-      ...g,
-      links: g.links.filter((l) => !isPilotHiddenHref(l.href)),
-    }))
-    .filter((g) => g.links.length > 0);
+  return filterNavGroupsForPilotTier(groups);
 }
