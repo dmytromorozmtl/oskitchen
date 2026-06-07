@@ -6122,4 +6122,4 @@ Task: 31 — Forbidden claims manual audit (P1)
 Category: docs
 Result: done — 183 baseline reconciled (121 policy + 59 negation + 3 remediated); liveScan 103 matches, 0 real_claim; forbidden-claims-manual-audit policy + artifact + audit script
 Tests: tests/unit/forbidden-claims-manual-audit.test.ts 5/5 pass
-Commit: pending
+Commit: de1bf7a6
