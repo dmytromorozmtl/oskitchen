@@ -6635,3 +6635,11 @@ Category: feat
 Result: done — /dashboard/storefront/white-label depth panel (5 ChowNow pillars, 11 capabilities, readiness %); theme + settings wiring strips; policy + audit + 5 tests
 Tests: npm run test:ci:white-label-storefront-depth:cert 5/5 pass
 Commit: 141440b7
+
+---
+Cycle: 20260606-230700
+Task: 96 — chart of accounts mapping (P3)
+Category: feat
+Result: done — /dashboard/accounting/chart-of-accounts P&L→GL mapping (8 lines); QuickBooks account linking; settingsCenterJson storage; gl-sync strip; policy + audit + 6 tests
+Tests: npm run test:ci:chart-of-accounts-mapping:cert 6/6 pass
+Commit: 0b343af8
