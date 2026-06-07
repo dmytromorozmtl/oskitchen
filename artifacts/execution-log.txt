@@ -6394,4 +6394,4 @@ Task: 65 — Storybook stories top 20 design system components (P2)
 Category: docs
 Result: done — stories/top20/*.stories.tsx ×20; .storybook main/preview; storybook-top20-policy + audit; docs/storybook-top20-setup.md; npm run storybook + CI cert
 Tests: npm run test:ci:storybook-top20:cert 5/5 pass
-Commit: pending
+Commit: cdb8c38b
