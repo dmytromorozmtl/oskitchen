@@ -6658,3 +6658,4 @@ Task: 98 — P&L reconciliation view (P3)
 Category: feat
 Result: done — /dashboard/accounting/pnl-reconciliation with synced/minor/material severity bands, variance %, GL codes; CSV export; gl-sync strip; policy + audit + 6 tests
 Tests: npm run test:ci:pnl-reconciliation-view:cert 6/6 pass
+Commit: ec9457df
