@@ -8,6 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+  DESIGN_POLISH_STRIPE_OK_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
+import {
   formatKdsPriorityReasonLabel,
   type KdsPriorityLaneItem,
 } from "@/lib/kitchen/kds-priority-lane-era19";
@@ -25,7 +33,8 @@ function ExpediteQueueCard({ item }: { item: KdsPriorityLaneItem }) {
       href={item.href}
       data-testid={`kds-expedite-queue-${item.rank}`}
       className={cn(
-        "flex min-h-[44px] min-w-[44px] flex-col justify-center rounded-2xl border border-border/70 bg-card p-4 shadow-sm transition-colors hover:bg-muted/40 dark:border-border/60",
+        "flex min-h-[44px] min-w-[44px] flex-col justify-center p-4 transition-colors hover:bg-muted/40 dark:hover:bg-muted/20",
+        DESIGN_POLISH_CARD_CLASS,
         item.lane === "expo" && "border-amber-300/60 dark:border-amber-800/50",
       )}
       style={{ minHeight: KDS_EXPEDITE_SCREEN_MIN_TOUCH_PX }}
@@ -36,7 +45,7 @@ function ExpediteQueueCard({ item }: { item: KdsPriorityLaneItem }) {
             <Badge variant="outline" className="rounded-full font-mono text-[10px]">
               #{item.rank}
             </Badge>
-            <span className="font-mono text-xs font-bold uppercase tracking-wide text-muted-foreground">
+            <span className="font-mono text-xs font-bold uppercase tracking-wide text-muted-foreground dark:text-muted-foreground/90">
               {item.ticketNumber}
             </span>
             <Badge variant="secondary" className="rounded-full text-[10px] uppercase">
@@ -46,7 +55,7 @@ function ExpediteQueueCard({ item }: { item: KdsPriorityLaneItem }) {
           <p className="truncate text-base font-semibold">
             {item.order.customerName ?? "Guest order"}
           </p>
-          <p className="font-mono text-sm tabular-nums text-muted-foreground">
+          <p className="font-mono text-sm tabular-nums text-muted-foreground dark:text-muted-foreground/90">
             {item.elapsedLabel} elapsed
           </p>
           <div className="flex flex-wrap gap-1 pt-1">
@@ -57,7 +66,10 @@ function ExpediteQueueCard({ item }: { item: KdsPriorityLaneItem }) {
             ))}
           </div>
         </div>
-        <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+        <ArrowRight
+          className={`h-5 w-5 shrink-0 ${DESIGN_POLISH_STRIPE_OK_CLASS}`}
+          aria-hidden
+        />
       </div>
     </Link>
   );
@@ -72,13 +84,16 @@ export function KdsExpediteScreen({ model }: { model: KdsExpediteScreenModel }) 
       className="space-y-6 landscape:space-y-4"
       data-testid="kds-expedite-screen"
     >
-      <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm text-muted-foreground dark:border-amber-500/30 dark:bg-amber-500/10">
-        <strong className="text-foreground">Expedite screen — BETA polish.</strong> Full-screen
-        priority routing for rush service — not rush-hour certified for every venue. Uses the same
-        priority routing engine as main KDS rush mode.
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Expedite screen (Beta)</p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
+          <strong className="text-foreground">Expedite screen — BETA polish.</strong> Full-screen
+          priority routing for rush service — not rush-hour certified for every venue. Uses the same
+          priority routing engine as main KDS rush mode.
+        </p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS}>
         <Badge variant="outline" className="rounded-full tabular-nums">
           {activeCount} active
         </Badge>
@@ -99,6 +114,7 @@ export function KdsExpediteScreen({ model }: { model: KdsExpediteScreenModel }) 
         <Card
           className={cn(
             "border-2 shadow-md dark:shadow-none",
+            DESIGN_POLISH_CARD_CLASS,
             rush.level === "rush"
               ? "border-rose-400/70 bg-rose-50/40 dark:border-rose-800/60 dark:bg-rose-950/30"
               : "border-violet-400/60 bg-violet-50/30 dark:border-violet-800/50 dark:bg-violet-950/25",
@@ -114,12 +130,14 @@ export function KdsExpediteScreen({ model }: { model: KdsExpediteScreenModel }) 
               <HeroIcon
                 className={cn(
                   "h-7 w-7",
-                  rush.level === "rush" ? "text-rose-600 dark:text-rose-400" : "text-violet-600",
+                  rush.level === "rush"
+                    ? "text-rose-600 dark:text-rose-400"
+                    : "text-violet-600 dark:text-violet-400",
                 )}
                 aria-hidden
               />
               {hero.ticketNumber}
-              <span className="text-lg font-medium text-muted-foreground">
+              <span className="text-lg font-medium text-muted-foreground dark:text-muted-foreground/90">
                 {hero.order.customerName ?? "Guest order"}
               </span>
             </CardTitle>
@@ -141,15 +159,18 @@ export function KdsExpediteScreen({ model }: { model: KdsExpediteScreenModel }) 
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-dashed border-border/80" data-testid="kds-expedite-hero-empty">
-          <CardContent className="py-10 text-center text-sm text-muted-foreground">
+        <Card
+          className={`border-dashed ${DESIGN_POLISH_CARD_CLASS}`}
+          data-testid="kds-expedite-hero-empty"
+        >
+          <CardContent className="py-10 text-center text-sm text-muted-foreground dark:text-muted-foreground/90">
             No expedite candidates — queue is clear or within SLA.
           </CardContent>
         </Card>
       )}
 
       <div className="space-y-3" data-testid="kds-expedite-queue">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground dark:text-muted-foreground/90">
           Priority expedite queue
         </h2>
         {queue.length ? (
@@ -159,11 +180,13 @@ export function KdsExpediteScreen({ model }: { model: KdsExpediteScreenModel }) 
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">No additional priority tickets queued.</p>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground/90">
+            No additional priority tickets queued.
+          </p>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className={`flex flex-wrap gap-2 p-3 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}>
         <Button asChild variant="outline" size="sm" className="min-h-[44px] rounded-full">
           <Link href="/dashboard/kitchen">Main KDS</Link>
         </Button>
@@ -178,6 +201,7 @@ export function KdsExpediteScreen({ model }: { model: KdsExpediteScreenModel }) 
       <p className="sr-only">
         {KDS_EXPEDITE_SCREEN_ROUTE} · kds-expedite-screen-absolute-final-v1
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
