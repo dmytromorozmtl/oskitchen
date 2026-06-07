@@ -6667,3 +6667,11 @@ Category: feat
 Result: done — /dashboard/accounting/accountant-portal read-only export hub (7 deliverables, period-close checklist, quick export bundle); gl-sync strip; policy + audit + 5 tests
 Tests: npm run test:ci:accountant-portal:cert 5/5 pass
 Commit: 89667026
+
+---
+Cycle: 20260606-232500
+Task: 100 — driver ETA tracking in KDS (P3)
+Category: feat
+Result: done — /dashboard/kitchen/driver-eta with dispatch status badges, estimated ETA labels, GPS freshness, KDS ticket cross-links; expo strip + nav; policy + service + audit + 7 tests
+Tests: npm run test:ci:kds-driver-eta-tracking:cert 7/7 pass
+Commit: 043a4e3f

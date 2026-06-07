@@ -98,5 +98,6 @@
   "96-chart-of-accounts-mapping": "done",
   "97-journal-entry-export": "done",
   "98-pnl-reconciliation-view": "done",
-  "99-accountant-portal": "done"
+  "99-accountant-portal": "done",
+  "100-driver-eta-tracking-kds": "done"
 }
