@@ -6795,3 +6795,11 @@ Category: test
 Result: done — slot 115 behavioral tests for KDS driver ETA (GPS parse/freshness, ETA bands, summary counts, honesty markers, 5 pillars UI, expo strip wiring); 8 tests — QA batch 101–115 complete
 Tests: npm run test:ci:qa-full-coverage-15-driver-eta:cert 8/8 pass
 Commit: 5f368909
+
+---
+Cycle: 20260607-002800
+Task: 116 — Design full polish multi-currency support (P3)
+Category: design
+Result: done — shared design polish tokens registry (116–130 slots), hero banner + card/row dark-mode polish on multi-currency settings panel, 8 cert tests; Design batch 116/130 started
+Tests: npm run test:ci:design-full-polish-01-multi-currency:cert 8/8 pass
+Commit: 0e34b793
