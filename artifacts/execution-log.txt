@@ -6819,3 +6819,11 @@ Category: design
 Result: done — doc polish markers on regional-tax-compliance.md (hero/status/timeline/dark-mode blockquote), 8 cert tests; jurisdiction modes + gap regions preserved
 Tests: npm run test:ci:design-full-polish-03-regional-tax:cert 8/8 pass
 Commit: 5502a022
+
+---
+Cycle: 20260607-003500
+Task: 119 — Design full polish app marketplace 3rd party (P3)
+Category: design
+Result: done — hero banner + card/table row dark-mode polish on app-marketplace-third-party.tsx, 8 cert tests; honesty markers preserved
+Tests: npm run test:ci:design-full-polish-04-app-marketplace:cert 8/8 pass
+Commit: 607012c0
