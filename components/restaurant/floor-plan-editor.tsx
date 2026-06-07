@@ -15,6 +15,13 @@ import {
 } from "@/actions/restaurant/tables";
 import type { TableData } from "@/components/restaurant/floor-plan";
 import { getActionError, isActionSuccess } from "@/lib/action-result";
+import {
+  DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID,
+  DESIGN_POLISH_BADGE_ROW_CLASS,
+  DESIGN_POLISH_CARD_CLASS,
+  DESIGN_POLISH_HERO_BANNER_CLASS,
+  DESIGN_POLISH_ROW_SURFACE_CLASS,
+} from "@/lib/design/absolute-final-design-polish-tokens";
 import { useFloorPlanRealtime } from "@/hooks/use-floor-plan-realtime";
 import { useSyncedServerState } from "@/hooks/use-synced-server-state";
 import {
@@ -253,10 +260,13 @@ export function FloorPlanEditor({
 
   return (
     <div className="space-y-6" data-testid="visual-floor-plan-editor">
-      <div className="rounded-lg border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-sm text-muted-foreground">
-        <strong className="text-foreground">Oracle MICROS parity — BETA visual editor.</strong> Drag-and-drop
-        canvas with section zones and table shapes. Supabase Realtime when configured; polling fallback
-        otherwise. Not certified live occupancy sync for all venues.
+      <div className={DESIGN_POLISH_HERO_BANNER_CLASS} role="note">
+        <p className="font-medium text-foreground">Visual floor plan editor (Beta)</p>
+        <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground/90">
+          <strong className="text-foreground">Oracle MICROS parity — BETA visual editor.</strong>{" "}
+          Drag-and-drop canvas with section zones and table shapes. Supabase Realtime when configured;
+          polling fallback otherwise — not certified live occupancy sync for all venues.
+        </p>
       </div>
       <p
         className={cn(
@@ -290,20 +300,23 @@ export function FloorPlanEditor({
       </div>
 
       {showAddForm ? (
-        <form action={handleAdd} className="space-y-3 rounded-xl border bg-card p-4">
+        <form
+          action={handleAdd}
+          className={`space-y-3 p-4 ${DESIGN_POLISH_ROW_SURFACE_CLASS}`}
+        >
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <input
               name="name"
               placeholder="Table name (e.g. T12)"
               required
               disabled={pending}
-              className="h-10 rounded-xl border px-3 text-sm"
+              className="h-10 rounded-xl border border-input bg-background px-3 text-sm dark:border-border/60 dark:bg-background/95"
             />
             <input
               name="section"
               placeholder="Section (e.g. Patio)"
               disabled={pending}
-              className="h-10 rounded-xl border px-3 text-sm"
+              className="h-10 rounded-xl border border-input bg-background px-3 text-sm dark:border-border/60 dark:bg-background/95"
             />
             <input
               name="capacity"
@@ -312,13 +325,16 @@ export function FloorPlanEditor({
               min={1}
               max={20}
               disabled={pending}
-              className="h-10 rounded-xl border px-3 text-sm"
+              className="h-10 rounded-xl border border-input bg-background px-3 text-sm dark:border-border/60 dark:bg-background/95"
             />
           </div>
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Shape:</span>
+            <span className="text-muted-foreground dark:text-muted-foreground/90">Shape:</span>
             {VISUAL_FLOOR_PLAN_TABLE_SHAPES.map((shape) => (
-              <label key={shape} className="inline-flex items-center gap-1 rounded-lg border px-2 py-1">
+              <label
+                key={shape}
+                className="inline-flex items-center gap-1 rounded-lg border px-2 py-1 dark:border-border/60"
+              >
                 <input type="radio" name="shape" value={shape} defaultChecked={shape === "RECTANGLE"} />
                 {shape.toLowerCase()}
               </label>
@@ -328,7 +344,7 @@ export function FloorPlanEditor({
             <button
               type="submit"
               disabled={pending}
-              className="rounded-xl bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-60"
+              className="rounded-xl bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-60 dark:bg-primary/90"
             >
               {pending ? "Saving…" : "Save"}
             </button>
@@ -336,7 +352,7 @@ export function FloorPlanEditor({
               type="button"
               disabled={pending}
               onClick={() => setShowAddForm(false)}
-              className="rounded-xl border px-4 py-2 text-sm"
+              className="rounded-xl border px-4 py-2 text-sm dark:border-border/60"
             >
               Cancel
             </button>
@@ -353,13 +369,14 @@ export function FloorPlanEditor({
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-2" data-testid="floor-plan-section-zones">
+      <div className={DESIGN_POLISH_BADGE_ROW_CLASS} data-testid="floor-plan-section-zones">
         <button
           type="button"
           onClick={() => setSectionFilter(null)}
           className={cn(
-            "rounded-full border px-3 py-1 text-xs",
-            sectionFilter === null && "border-primary bg-primary/10 text-primary",
+            "rounded-full border px-3 py-1 text-xs transition-colors dark:border-border/60",
+            sectionFilter === null &&
+              "border-primary bg-primary/10 text-primary dark:border-primary/70 dark:bg-primary/15",
           )}
         >
           All sections
@@ -370,8 +387,9 @@ export function FloorPlanEditor({
             type="button"
             onClick={() => setSectionFilter(section)}
             className={cn(
-              "rounded-full border px-3 py-1 text-xs",
-              sectionFilter === section && "border-primary bg-primary/10 text-primary",
+              "rounded-full border px-3 py-1 text-xs transition-colors dark:border-border/60",
+              sectionFilter === section &&
+                "border-primary bg-primary/10 text-primary dark:border-primary/70 dark:bg-primary/15",
             )}
             data-testid={`floor-plan-section-${section.replace(/\s+/g, "-").toLowerCase()}`}
           >
@@ -384,7 +402,7 @@ export function FloorPlanEditor({
         <div
           ref={canvasRef}
           data-testid="floor-plan-canvas"
-          className="relative overflow-hidden rounded-2xl border border-border/80 bg-muted/20"
+          className={`relative overflow-hidden bg-muted/20 dark:bg-muted/10 ${DESIGN_POLISH_CARD_CLASS}`}
           style={{ width: "100%", maxWidth: CANVAS_WIDTH, height: CANVAS_HEIGHT }}
         >
           <div
@@ -444,7 +462,7 @@ export function FloorPlanEditor({
           ) : null}
         </div>
 
-        <aside className="rounded-xl border border-border/80 bg-card p-4 text-sm">
+        <aside className={`p-4 text-sm ${DESIGN_POLISH_CARD_CLASS}`}>
           <h2 className="font-semibold">Table details</h2>
           {!selected ? (
             <p className="mt-2 text-muted-foreground">Select a table on the canvas.</p>
@@ -519,6 +537,7 @@ export function FloorPlanEditor({
       <p className="sr-only">
         /dashboard/floor-plans · visual-floor-plan-editor-absolute-final-v1
       </p>
+      <p className="sr-only">{DESIGN_POLISH_ABSOLUTE_FINAL_POLICY_ID}</p>
     </div>
   );
 }
