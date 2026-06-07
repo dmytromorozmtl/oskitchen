@@ -6586,4 +6586,4 @@ Task: 89 — app marketplace for 3rd party extensions (P3)
 Category: feat
 Result: done — /app-marketplace public catalog (8 extensions, 70/30 rev share); dashboard strip on integrations/extensions; policy + audit
 Tests: npm run test:ci:app-marketplace-third-party:cert 4/4 pass
-Commit: pending
+Commit: 0b564e2a
