@@ -6570,4 +6570,4 @@ Task: 87 — EU data residency roadmap (P3)
 Category: docs
 Result: done — docs/eu-data-residency-roadmap.md (6 phases, gap analysis, subprocessor flows, sales guidance); wired from SOC2 + enterprise trust docs; policy + audit
 Tests: npm run test:ci:eu-data-residency-roadmap:cert 4/4 pass
-Commit: pending
+Commit: 38f1cc0c
