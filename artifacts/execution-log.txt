@@ -6883,3 +6883,11 @@ Category: design
 Result: done — hero banner + badge row + mapping table card + nav row dark-mode polish on chart-of-accounts-mapping-panel.tsx, 8 cert tests; certified GL/accountant review honesty preserved
 Tests: npm run test:ci:design-full-polish-11-coa-mapping:cert 8/8 pass
 Commit: 1fe3bda3
+
+---
+Cycle: 20260607-005100
+Task: 127 — Design full polish journal entry export (P3)
+Category: design
+Result: done — hero banner + badge row + format/preview card dark-mode polish on journal-entry-export-panel.tsx, 8 cert tests; certified GL/accountant review honesty preserved
+Tests: npm run test:ci:design-full-polish-12-journal-export:cert 8/8 pass
+Commit: 11a06199
