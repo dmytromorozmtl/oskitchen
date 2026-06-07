@@ -6499,3 +6499,11 @@ Category: feat
 Result: done — /catering-management SEO landing; quote-to-production, packing, dispatch BETA; policy + audit; SEO 10 ICP targetPath updated; icp-definition-final linked
 Tests: npm run test:ci:catering-management-landing:cert 5/5 pass
 Commit: 0f15331d
+
+---
+Cycle: 20260606-221300
+Task: 79 — vertical-specific messaging "Built for multi-concept operators" (P2)
+Category: feat
+Result: done — VerticalSpecificMessagingSection on /solutions; 5 segment cards; solutions hub headline updated; commissary + catering landing links; policy + audit
+Tests: npm run test:ci:vertical-specific-messaging:cert 5/5 pass
+Commit: 215eca2a
