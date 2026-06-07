@@ -6034,4 +6034,4 @@ Task: 20 — Rate limit tests (P1)
 Category: test
 Result: done — 429 + Retry-After + X-RateLimit-* + user message audits; middleware mutation gate; 503 when backend unavailable
 Tests: tests/unit/rate-limit-response.test.ts + rate-limit-facade + api-mutation-rate-limit 20/20 pass
-Commit: pending
+Commit: 0b0cd3e6
