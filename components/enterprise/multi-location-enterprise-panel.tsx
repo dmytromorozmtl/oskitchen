@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Building2, ChevronLeft, ChevronRight, GitCompare, MapPin, Search } from "lucide-react";
 
+import { MultiLocationMapView } from "@/components/enterprise/multi-location-map-view";
 import { AnalyticsBars, AnalyticsDailyArea } from "@/components/dashboard/analytics-bars";
 import { MultiLocationComparisonTable } from "@/components/dashboard/multi-location-comparison-table";
 import { MultiLocationPdfExportButton } from "@/components/dashboard/multi-location-pdf-export-button";
@@ -112,6 +113,12 @@ export function MultiLocationEnterprisePanel({ dashboard }: Props) {
           hint={`${formatCurrency(snapshot.unassignedRevenue)} revenue`}
         />
       </div>
+
+      <MultiLocationMapView
+        locations={snapshot.locations}
+        selectedLocationId={filters.locationId}
+        onSelectLocation={selectLocation}
+      />
 
       <Card data-testid="multi-location-rollup-summary">
         <CardHeader>

@@ -6347,3 +6347,11 @@ Category: feat
 Result: done — data-viz-standards-policy; buildProfitWaterfallData; buildContributionMarginRows; WaterfallChart (Recharts); ContributionMarginChart; wired real-time-profit-dashboard
 Tests: npm run test:ci:data-viz-standards:cert 5/5 pass
 Commit: 35c7a6b3
+
+---
+Cycle: 20260606-213700
+Task: 60 — Multi-location map view floor plan editor + location switcher (P2)
+Category: feat
+Result: done — multi-location-map-view-policy; MultiLocationMapView (pins + switcher + floor plan links); wired enterprise panel; floor-plans locationId context banner
+Tests: npm run test:ci:multi-location-map-view:cert 4/4 pass
+Commit: pending

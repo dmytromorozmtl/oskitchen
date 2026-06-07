@@ -607,6 +607,8 @@
     "test:ci:ipad-native-pos-polish:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/ipad-native-pos-polish.test.ts",
     "test:ci:data-viz-standards": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-viz-standards.test.ts tests/unit/profit-dashboard-margin-visualization-policy.test.ts",
     "test:ci:data-viz-standards:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-viz-standards.test.ts",
+    "test:ci:multi-location-map-view": "node ./node_modules/vitest/vitest.mjs run tests/unit/multi-location-map-view.test.ts tests/unit/multi-location-dashboard-2-policy.test.ts",
+    "test:ci:multi-location-map-view:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/multi-location-map-view.test.ts",
     "test:ci:pos-mobile-terminal-era94": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-mobile-terminal-era94.test.ts tests/unit/pos-mobile-pos.test.ts",
     "test:ci:pos-mobile-terminal-era94:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-mobile-terminal-era94.test.ts",
     "test:ci:pos-mobile-terminal-era169": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-mobile-terminal-era169.test.ts tests/unit/pos-mobile-terminal-era94.test.ts tests/unit/pos-mobile-pos.test.ts",
