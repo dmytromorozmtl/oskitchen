@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { RoiCalculator } from "@/components/marketing/roi-calculator";
 import { CompareFaqSection } from "@/components/marketing/compare-faq-section";
+import { PricingCompetitorBenchmark } from "@/components/marketing/pricing-competitor-benchmark";
 import { TcoCalculator } from "@/components/marketing/tco-calculator";
 import { PRICING_FAQ_ITEMS } from "@/lib/marketing/pricing-faq";
 import {
@@ -167,6 +168,8 @@ export function PricingPage() {
           credentials — we never imply official endorsement until your integration is verified live.
           Uber Direct courier dispatch is on the roadmap and is not included in any plan today.
         </div>
+
+        <PricingCompetitorBenchmark />
 
         <section className="mt-20" aria-labelledby="marketplace-pricing-heading">
           <div className="text-center">

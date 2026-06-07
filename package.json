@@ -769,6 +769,7 @@
     "test:ci:thirty-action-tracker-closure": "node ./node_modules/vitest/vitest.mjs run tests/unit/thirty-action-tracker-closure.test.ts",
     "test:ci:case-study-template-pre-pilot": "node ./node_modules/vitest/vitest.mjs run tests/unit/case-study-template-pre-pilot.test.ts",
     "test:ci:kb-content-absolute-final": "node ./node_modules/vitest/vitest.mjs run tests/unit/kb-content-absolute-final.test.ts",
+    "test:ci:pricing-transparency-absolute-final": "node ./node_modules/vitest/vitest.mjs run tests/unit/pricing-transparency-absolute-final.test.ts tests/unit/public-pricing-content.test.ts",
     "test:ci:pilot-week1-roadmap": "node ./node_modules/vitest/vitest.mjs run tests/unit/pilot-week1-roadmap.test.ts",
     "test:ci:competitor-sales-safe-claims": "node ./node_modules/vitest/vitest.mjs run tests/unit/competitor-sales-safe-claims.test.ts tests/unit/competitor-feature-tracker-filled.test.ts",
     "test:ci:competitor-battle-cards-eight": "node ./node_modules/vitest/vitest.mjs run tests/unit/competitor-battle-cards-eight.test.ts tests/unit/competitive-battle-cards-policy.test.ts",

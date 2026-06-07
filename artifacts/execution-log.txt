@@ -6146,4 +6146,12 @@ Task: 34 — /kb content Quick Start + 4 integration guides (P1)
 Category: docs
 Result: done — docs/kb/quick-start-guide.md + woocommerce/shopify/stripe-connect/delivery-marketplaces setup guides; expanded KB_ARTICLES + integrations/stripe-connect; kb-content-absolute-final-policy
 Tests: npm run test:ci:kb-content-absolute-final 5/5 pass
-Commit: pending
+Commit: f276fcdc
+
+---
+Cycle: 20260606-225000
+Task: 35 — /pricing transparency real prices + competitor benchmark (P1)
+Category: feat
+Result: done — verified PLAN_REGISTRY $49/$79/$199/$499 sync; PricingCompetitorBenchmark on /pricing (Toast/Square/Lightspeed/TouchBistro); pricing-competitor-benchmark + pricing-transparency-absolute-final-policy; fixed transparent-pricing-sales-guide Starter $49
+Tests: npm run test:ci:pricing-transparency-absolute-final 8/8 pass
+Commit: f3c0ac39

@@ -1,7 +1,10 @@
 import type { PlanKey } from "@/lib/billing/plan-registry";
 import { PLAN_REGISTRY } from "@/lib/billing/plan-registry";
 
-/** Universal benefits shown on every plan card and the pricing hero strip. */
+/** Single source of truth for /pricing — synced from PLAN_REGISTRY (verified June 2026). */
+export const PUBLIC_PRICING_SOURCE = "PLAN_REGISTRY" as const;
+
+export const PUBLIC_PRICING_LAST_VERIFIED = "2026-06-06" as const;
 export const PUBLIC_PRICING_UNIVERSAL_BENEFITS = [
   "14-day free trial",
   "No credit card required",

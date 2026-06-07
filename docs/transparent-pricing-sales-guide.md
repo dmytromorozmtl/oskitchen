@@ -26,10 +26,10 @@ Prices read from `PLAN_REGISTRY` — do not quote different numbers in sales wit
 
 | Plan | Monthly | Best for | Trial |
 |------|---------|----------|-------|
-| **Starter** | $29/mo | Small weekly ops, 1 menu, 100 orders/mo | 14 days, no card at signup |
+| **Starter** | $49/mo | Single-location cafés, 100 orders/mo | 14 days, no card at signup |
 | **Pro** | $79/mo | Meal prep, catering, Shopify/Woo | 14 days |
 | **Team** | $199/mo | Multi-channel, Uber modules, forecasting | 14 days |
-| **Enterprise** | Contact sales | Multi-location, API, SLA | Scoped SOW |
+| **Enterprise** | $499/mo list | Multi-location, API, SLA — contact for SOW | Scoped contract |
 
 **Annual billing:** ~17% effective discount on published monthly list (toggle on `/pricing`). Confirm enterprise numbers with sales before contract.
 
@@ -65,7 +65,7 @@ Prices read from `PLAN_REGISTRY` — do not quote different numbers in sales wit
 
 | Line item | Toast (typical) | Square (typical) | **OS Kitchen** |
 |-----------|-----------------|------------------|----------------|
-| Software | Bundled with hardware | Free tier + upsells | **$29–$199/mo published** |
+| Software | Bundled with hardware | Free tier + upsells | **$49–$199/mo published** |
 | Terminal | ~$799 proprietary | ~$299+ Square Terminal | **$0 required** (BYOD tablet) |
 | Contract | Often 2-year with hardware | Month-to-month software | **Month-to-month** |
 | Multi-location reporting | Enterprise tier | Add-ons | **Included** (Team+) |
@@ -80,6 +80,7 @@ Prices read from `PLAN_REGISTRY` — do not quote different numbers in sales wit
 
 | Section | Evidence |
 |---------|----------|
+| Competitor benchmark table | Toast / Square / Lightspeed / TouchBistro vs OS Kitchen |
 | 4 plan cards | `components/marketing/pricing-page.tsx` |
 | Feature comparison table | Starter / Pro / Team / Enterprise matrix |
 | Toast/hardware TCO model | `TcoCalculator` — 5-year tablet vs terminal bundle |
@@ -92,7 +93,7 @@ Prices read from `PLAN_REGISTRY` — do not quote different numbers in sales wit
 
 ## Sales pitch (30 seconds)
 
-> "Toast quotes you software plus a seven-hundred-dollar terminal and often a two-year contract — the real number isn't on their website. OS Kitchen publishes Starter at twenty-nine, Pro at seventy-nine, Team at one-ninety-nine. Run POS on the iPad you own. Processing goes through your Stripe account. Multi-location reporting and cross-channel inventory aren't eighty-nine-dollar addons — they're in the product. Fourteen-day trial, no credit card at signup."
+> "Toast quotes you software plus a seven-hundred-dollar terminal and often a two-year contract — the real number isn't on their website. OS Kitchen publishes Starter at forty-nine, Pro at seventy-nine, Team at one-ninety-nine, Enterprise at four-ninety-nine list. Run POS on the iPad you own. Processing goes through your Stripe account. Multi-location reporting and cross-channel inventory aren't eighty-nine-dollar addons — they're in the product. Fourteen-day trial, no credit card at signup."
 
 ---
 
