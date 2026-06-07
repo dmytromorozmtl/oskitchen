@@ -6050,4 +6050,4 @@ Task: 22 — Error state design system (P1)
 Category: feat
 Result: done — ErrorStateIllustration + dark mode tokens; RouteError/PilotRouteError unified layout; fleet audit 521/521 dashboard error.tsx; migrated 19 outlier routes (storefront, integrations, POS cash, KDS views)
 Tests: tests/unit/error-state-design-system.test.ts + error-state-audit-policy 9/9 pass; dashboard-error-boundaries 27/27 pass
-Commit: pending
+Commit: 46db2440
