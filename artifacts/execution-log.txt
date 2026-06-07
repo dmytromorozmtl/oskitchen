@@ -6771,3 +6771,11 @@ Category: test
 Result: done — slot 112 behavioral tests for journal export (COA overlay, balance summary, CSV/JSON/QB formats, honesty markers, UI wiring, API route); 8 tests
 Tests: npm run test:ci:qa-full-coverage-12-journal-export:cert 8/8 pass
 Commit: ca7abd98
+
+---
+Cycle: 20260607-001700
+Task: 113 — QA full coverage P&L reconciliation view (P3)
+Category: test
+Result: done — slot 113 behavioral tests for P&L reconciliation (severity bands, GL enrichment, summary/CSV export, honesty markers, UI wiring, export API); 8 tests
+Tests: npm run test:ci:qa-full-coverage-13-pnl-reconciliation:cert 8/8 pass
+Commit: daba395b
