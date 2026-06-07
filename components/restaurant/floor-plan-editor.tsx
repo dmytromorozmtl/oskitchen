@@ -21,7 +21,6 @@ import {
   listFloorPlanSections,
   resolveTableShapeClass,
   tableMatchesSectionFilter,
-  VISUAL_FLOOR_PLAN_EDITOR_ROUTE,
   VISUAL_FLOOR_PLAN_TABLE_SHAPES,
   type VisualFloorPlanTableShape,
 } from "@/lib/restaurant/visual-floor-plan-editor-absolute-final-policy";

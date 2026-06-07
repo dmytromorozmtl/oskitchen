@@ -6603,3 +6603,11 @@ Category: feat
 Result: done — P3 alias of Task 72; Import Center strip → /dashboard/import-center/migrate; 9 CSV templates wired in policy audit; 3×3 POS profiles unchanged
 Tests: npm run test:ci:data-migration-wizard:cert 10/10 pass
 Commit: e6a67ae4
+
+---
+Cycle: 20260606-224800
+Task: 92 — visual floor plan editor Oracle MICROS parity (P3)
+Category: feat
+Result: done — /dashboard/floor-plans MICROS parity (section zone filter, RECTANGLE/CIRCLE/SQUARE shapes, drag canvas, realtime badge); updateTableShapeAction; policy + audit + 4 tests
+Tests: npm run test:ci:visual-floor-plan-editor:cert 4/4 pass
+Commit: 5eeefe48
