@@ -812,6 +812,8 @@
     "test:ci:wcag-21-aa-absolute-final:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-wcag-21-aa-accessibility.test.ts",
     "test:ci:lighthouse-95-absolute-final": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-lighthouse-95-performance.test.ts tests/unit/lighthouse-core-web-vitals-policy.test.ts",
     "test:ci:lighthouse-95-absolute-final:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-lighthouse-95-performance.test.ts",
+    "test:ci:owasp-top-10-absolute-final": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-owasp-top-10-security.test.ts tests/unit/npm-audit-ci-gate.test.ts tests/unit/api-mutation-rate-limit.test.ts tests/unit/webhook-security-matrix.test.ts tests/unit/mutation-access.test.ts",
+    "test:ci:owasp-top-10-absolute-final:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/absolute-final-owasp-top-10-security.test.ts",
     "test:ci:free-pilot-tier-program": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts tests/unit/loi-pipeline-icp.test.ts",
     "test:ci:free-pilot-tier-program:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/free-pilot-tier-program-absolute-final.test.ts",
     "test:ci:data-migration-wizard": "node ./node_modules/vitest/vitest.mjs run tests/unit/data-migration-wizard-absolute-final.test.ts",
