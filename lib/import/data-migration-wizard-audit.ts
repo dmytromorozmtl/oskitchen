@@ -7,6 +7,7 @@ import {
   DATA_MIGRATION_HONESTY_MARKERS,
   DATA_MIGRATION_POS_SOURCES,
   DATA_MIGRATION_WIZARD_ROUTE,
+  DATA_MIGRATION_WIZARD_STRIP_PATH,
   DATA_MIGRATION_WIZARD_WIRING_PATHS,
 } from "@/lib/import/data-migration-wizard-absolute-final-policy";
 
@@ -74,6 +75,22 @@ export function auditDataMigrationWizardWiring(root = process.cwd()): DataMigrat
   }
   if (!pageSource.includes("Toast") || !pageSource.includes("Square") || !pageSource.includes("Lightspeed")) {
     failures.push("migrate page missing POS source mention");
+  }
+
+  const stripSource = readFileSync(join(root, DATA_MIGRATION_WIZARD_STRIP_PATH), "utf8");
+  const importCenterPage = readFileSync(
+    join(root, "app/dashboard/import-center/page.tsx"),
+    "utf8",
+  );
+
+  if (!stripSource.includes("/dashboard/import-center/migrate")) {
+    failures.push("strip missing migration wizard route");
+  }
+  if (!stripSource.includes("CSV export")) {
+    failures.push("strip missing CSV export honesty marker");
+  }
+  if (!importCenterPage.includes("DataMigrationWizardStrip")) {
+    failures.push("import center page missing DataMigrationWizardStrip");
   }
 
   if (!serviceSource.includes(DATA_MIGRATION_WIZARD_ROUTE)) {

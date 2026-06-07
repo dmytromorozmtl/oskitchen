@@ -6595,3 +6595,11 @@ Category: feat
 Result: done — /dashboard/devices location-grouped Clover parity grid (online/offline badges, attention alerts, last-seen labels); strip on Integration Health Center; reuses hardware fleet service + Stripe reader sync; policy + audit + 6 tests
 Tests: npm run test:ci:device-status-dashboard:cert 6/6 pass
 Commit: 41b97aac
+
+---
+Cycle: 20260606-224400
+Task: 91 — data migration wizard Toast/Square/Lightspeed (P3)
+Category: feat
+Result: done — P3 alias of Task 72; Import Center strip → /dashboard/import-center/migrate; 9 CSV templates wired in policy audit; 3×3 POS profiles unchanged
+Tests: npm run test:ci:data-migration-wizard:cert 10/10 pass
+Commit: pending

@@ -9,6 +9,7 @@ import {
   DATA_MIGRATION_POS_SOURCES,
   DATA_MIGRATION_WIZARD_ABSOLUTE_FINAL_POLICY_ID,
   DATA_MIGRATION_WIZARD_CI_SCRIPTS,
+  DATA_MIGRATION_WIZARD_P3_TASK_ID,
   DATA_MIGRATION_WIZARD_ROUTE,
   DATA_MIGRATION_WIZARD_UNIT_TEST,
 } from "@/lib/import/data-migration-wizard-absolute-final-policy";
@@ -89,5 +90,33 @@ describe("Data migration wizard (Absolute Final Task 72)", () => {
     expect(DATA_MIGRATION_WIZARD_UNIT_TEST).toBe(
       "tests/unit/data-migration-wizard-absolute-final.test.ts",
     );
+  });
+});
+
+describe("Data migration wizard P3 (Absolute Final Task 91)", () => {
+  it("aliases Task 72 with Toast, Square, Lightspeed POS sources", () => {
+    expect(DATA_MIGRATION_WIZARD_P3_TASK_ID).toBe("91-data-migration-wizard");
+    expect(DATA_MIGRATION_WIZARD_ROUTE).toBe("/dashboard/import-center/migrate");
+    expect(DATA_MIGRATION_POS_SOURCES).toEqual(["toast", "square", "lightspeed"]);
+  });
+
+  it("wires migration wizard strip into Import Center", () => {
+    const importCenterPage = readFileSync(
+      join(ROOT, "app/dashboard/import-center/page.tsx"),
+      "utf8",
+    );
+    const stripSource = readFileSync(
+      join(ROOT, "components/dashboard/import-center/data-migration-wizard-strip.tsx"),
+      "utf8",
+    );
+    expect(importCenterPage).toContain("DataMigrationWizardStrip");
+    expect(stripSource).toContain('data-testid="data-migration-wizard-strip"');
+    expect(stripSource).toContain("/dashboard/import-center/migrate");
+  });
+
+  it("passes wiring audit with nine CSV templates", () => {
+    const audit = auditDataMigrationWizardWiring(ROOT);
+    expect(audit.ok, audit.failures.join("; ")).toBe(true);
+    expect(audit.profileCount).toBe(9);
   });
 });
