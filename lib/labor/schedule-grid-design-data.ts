@@ -113,7 +113,8 @@ export function scheduleGridLaborHeatBarClass(heat: ScheduleGridLaborHeatLevel):
 
 export function scheduleGridConflictShiftClass(hasConflict: boolean): string {
   return cn(
-    hasConflict && "border-amber-500/60 bg-amber-500/5 ring-1 ring-amber-500/30",
+    hasConflict &&
+      "border-amber-500/60 bg-amber-500/5 ring-1 ring-amber-500/30 dark:bg-amber-500/10 dark:ring-amber-400/30",
   );
 }
 

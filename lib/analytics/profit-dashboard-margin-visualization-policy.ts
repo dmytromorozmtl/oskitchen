@@ -38,11 +38,11 @@ export type ItemMarginBarRow = {
 export function marginBarClassForZone(zone: ReturnType<typeof marginZone>): string {
   switch (zone) {
     case "green":
-      return "bg-emerald-500";
+      return "bg-emerald-500 dark:bg-emerald-400";
     case "yellow":
-      return "bg-amber-500";
+      return "bg-amber-500 dark:bg-amber-400";
     default:
-      return "bg-rose-500";
+      return "bg-rose-500 dark:bg-rose-400";
   }
 }
 

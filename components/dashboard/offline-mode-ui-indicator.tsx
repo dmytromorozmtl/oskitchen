@@ -90,7 +90,7 @@ export function OfflineModeSyncPulse({
       aria-hidden
     >
       <RefreshCw className={offlineModeSyncAnimationClass(severity)} />
-      <span className="absolute inset-0 motion-safe:animate-ping rounded-full bg-sky-400/30" />
+      <span className="absolute inset-0 motion-safe:animate-ping rounded-full bg-sky-400/30 dark:bg-sky-300/20" />
     </span>
   );
 }

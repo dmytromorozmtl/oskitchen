@@ -63,7 +63,7 @@ export function OfflineIndicator() {
           type="button"
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0 rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+          className="h-7 w-7 shrink-0 rounded-full hover:bg-muted/80 dark:hover:bg-muted/40"
           aria-label="Dismiss offline notice"
           onClick={() => {
             sessionStorage.setItem(DISMISS_KEY, "1");

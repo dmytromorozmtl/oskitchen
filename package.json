@@ -659,6 +659,8 @@
     "test:ci:schedule-grid-design:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/schedule-grid-design.test.ts",
     "test:ci:offline-mode-ui-indicator": "node ./node_modules/vitest/vitest.mjs run tests/unit/offline-mode-ui-indicator.test.ts tests/unit/pos-offline-mode-e2e.test.ts",
     "test:ci:offline-mode-ui-indicator:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/offline-mode-ui-indicator.test.ts",
+    "test:ci:new-components-dark-mode-audit": "node ./node_modules/vitest/vitest.mjs run tests/unit/new-components-dark-mode-audit.test.ts tests/unit/error-skeleton-dark-mode-audit.test.ts",
+    "test:ci:new-components-dark-mode-audit:cert": "node ./node_modules/vitest/vitest.mjs run tests/unit/new-components-dark-mode-audit.test.ts",
     "test:ci:e2e-accessibility-axe": "node ./node_modules/vitest/vitest.mjs run tests/unit/e2e-accessibility-axe-policy.test.ts",
     "test:ci:pos-terminal-keyboard-navigation": "node ./node_modules/vitest/vitest.mjs run tests/unit/pos-terminal-keyboard-navigation.test.ts tests/unit/pos-desktop-shortcuts.test.ts",
     "test:ci:screen-reader-icon-buttons": "node ./node_modules/vitest/vitest.mjs run tests/unit/screen-reader-icon-buttons.test.ts tests/unit/pos-terminal-icon-buttons.test.ts",
