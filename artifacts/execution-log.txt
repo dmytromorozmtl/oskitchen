@@ -6387,3 +6387,11 @@ Category: docs
 Result: done — extended docs/design-system.md (top-20 catalog, data viz, enterprise/labor, offline UI, AF Tasks 56–63); design-system-documentation-absolute-final-policy + audit; extended DES-39 anchors/modules
 Tests: npm run test:ci:design-system-documentation:cert 5/5 pass; era135 cert 6/6 pass
 Commit: 39a2f4dc
+
+---
+Cycle: 20260606-214600
+Task: 65 — Storybook stories top 20 design system components (P2)
+Category: docs
+Result: done — stories/top20/*.stories.tsx ×20; .storybook main/preview; storybook-top20-policy + audit; docs/storybook-top20-setup.md; npm run storybook + CI cert
+Tests: npm run test:ci:storybook-top20:cert 5/5 pass
+Commit: pending

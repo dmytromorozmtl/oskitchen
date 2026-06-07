@@ -63,5 +63,6 @@
   "61-schedule-grid-design": "done",
   "62-offline-mode-ui-indicator": "done",
   "63-new-components-dark-mode-audit": "done",
-  "64-design-system-documentation": "done"
+  "64-design-system-documentation": "done",
+  "65-storybook-top20-stories": "done"
 }

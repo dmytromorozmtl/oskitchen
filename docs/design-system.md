@@ -276,6 +276,18 @@ Severity ladder: idle (emerald) → warning (amber) → syncing (sky) → danger
 
 Cert: `npm run test:ci:design-system-documentation:cert`
 
+### Storybook (Task 65)
+
+Interactive stories for all top-20 primitives — `stories/top20/*.stories.tsx`, title prefix `Design System/Top 20/*`.
+
+```bash
+npm run storybook          # localhost:6006
+npm run build-storybook    # static export
+npm run test:ci:storybook-top20:cert
+```
+
+Setup: `docs/storybook-top20-setup.md` · Policy: `storybook-top20-absolute-final-v1`
+
 ---
 
 ## Component primitives
