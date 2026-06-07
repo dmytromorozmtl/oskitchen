@@ -19,7 +19,7 @@ Ten **canonical primary keywords** for pilot-era SEO — not a 200-keyword enter
 |---|-----------------|-------------|------------|--------|
 | 1 | ghost kitchen software | Ghost kitchen | `/solutions/ghost-kitchens` | Commercial |
 | 2 | meal prep software | Meal prep | `/meal-prep-software` | Commercial |
-| 3 | commissary kitchen software | Commissary | `/solutions/meal-prep` | Commercial |
+| 3 | commissary kitchen software | Commissary | `/commissary-kitchen-software` | Commercial |
 | 4 | weekly meal prep software | Meal prep | `/landing/weekly-preorder` | Commercial |
 | 5 | virtual brand kitchen software | Ghost kitchen | `/landing/ghost-kitchen` | Commercial |
 | 6 | shopify meal prep software | Meal prep | `/shopify` | Commercial |
@@ -63,7 +63,7 @@ Ten **canonical primary keywords** for pilot-era SEO — not a 200-keyword enter
 | **Secondary** | shared kitchen software · commissary production management · multi-tenant kitchen ops |
 | **Title pattern** | Commissary Kitchen Software — Shared Production & Order Hub |
 | **Meta pattern** | Batch prep, packing, and multi-brand production for commissary operators — software-first, no hardware lease. |
-| **Note** | Shares solution page with meal prep until dedicated commissary landing ships — use commissary copy block on `/solutions/meal-prep` |
+| **Note** | Dedicated landing at [`/commissary-kitchen-software`](/commissary-kitchen-software) — multi-tenant production and B2B marketplace (BETA) |
 
 ### 4 — weekly meal prep software
 
@@ -177,7 +177,7 @@ No ranking guarantees in internal OKRs until 90 days of GSC data.
 |------------|-------------------------|
 | `ghost-kitchen-software` | `lib/marketing/solution-seo.ts` → `ghost-kitchens` |
 | `meal-prep-software` | `solution-seo.ts` → `meal-prep` |
-| `commissary-kitchen-software` | `solution-landing-content.ts` commissary block (future) |
+| `commissary-kitchen-software` | `app/commissary-kitchen-software/page.tsx` |
 | `weekly-meal-prep-software` | `icp-landing-content.ts` → `weekly-preorder` |
 | `virtual-brand-kitchen-software` | `icp-landing-content.ts` → `ghost-kitchen` |
 | `shopify-meal-prep-software` | `shopify-bundle-content.ts` |

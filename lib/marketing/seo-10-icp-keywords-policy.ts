@@ -53,7 +53,7 @@ export const SEO_10_ICP_KEYWORDS: readonly IcpSeoKeywordEntry[] = [
     primaryKeyword: "commissary kitchen software",
     icpSegment: "commissary",
     searchIntent: "commercial",
-    targetPath: "/solutions/meal-prep",
+    targetPath: "/commissary-kitchen-software",
     secondaryKeywords: [
       "shared kitchen software",
       "commissary production management",

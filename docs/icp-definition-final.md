@@ -172,8 +172,9 @@ Full ERP/MRP, automated tenant rent accounting, SOC2 multi-tenant attestation, l
 ### Product surface alignment
 
 - **Routes:** `/dashboard/commissary/*` (production, scheduling, tenant views)
+- **SEO landing:** `/commissary-kitchen-software`
 - **Marketplace angle:** B2B catalog — label **BETA** in all sales materials
-- **No dedicated `/landing/commissary` yet** — use ghost-kitchen landing + commissary demo narrative; add landing page in P1 if conversion data supports
+- **Legacy:** `/landing/ghost-kitchen` + commissary demo narrative for multi-brand overlap
 
 ---
 
